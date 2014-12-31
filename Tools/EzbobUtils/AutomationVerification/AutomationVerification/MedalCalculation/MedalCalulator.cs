@@ -66,7 +66,7 @@
 		decimal BusinessScoreFirstRepaymentWeightChange { get; }
 		decimal BusinessSeniorityFirstRepaymentWeightChange { get; }
 		decimal NetWorthFirstRepaymentWeightChange { get; }
-	}
+	} // interface IMedalWeightConstatns
 
 	/// <summary>
 	///     Base medal calculator abstract class implements the 2 interfaces and the common for all medals method for weight

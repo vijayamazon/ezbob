@@ -1,8 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
 	using System;
 	using ConfigManager;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class MedalCalculator1 {
 		public MedalCalculator1(
@@ -15,9 +13,7 @@
 			int numOfYodleeMps,
 			int numOfEbayAmazonPayPalMps,
 			DateTime? earliestHmrcLastUpdateDate,
-			DateTime? earliestYodleeLastUpdateDate,
-			AConnection db,
-			ASafeLog log
+			DateTime? earliestYodleeLastUpdateDate
 			) {
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
@@ -29,9 +25,6 @@
 			this.numOfEbayAmazonPayPalMps = numOfEbayAmazonPayPalMps;
 			this.earliestHmrcLastUpdateDate = earliestHmrcLastUpdateDate;
 			this.earliestYodleeLastUpdateDate = earliestYodleeLastUpdateDate;
-
-			this.db = db;
-			this.log = log;
 		} // constructor
 
 		public MedalResult CalculateMedal(
@@ -75,30 +68,30 @@
 				return ChooseNonLimitedCalculatorWithScore();
 
 			if (this.numOfEbayAmazonPayPalMps > 0)
-				return new OnlineNonLimitedNoBusinessScoreMedalCalculator1(this.db, this.log);
+				return new OnlineNonLimitedNoBusinessScoreMedalCalculator1();
 
 			if ((this.consumerScore > 0) && ((this.numOfHmrcMps > 0) || (this.numOfYodleeMps > 0)))
-				return new SoleTraderMedalCalculator1(this.db, this.log);
+				return new SoleTraderMedalCalculator1();
 
 			return null;
 		} // ChooseCalculator
 
 		private MedalCalculatorBase ChooseLimitedCalculator() {
 			if (this.numOfEbayAmazonPayPalMps > 0)
-				return new OnlineLimitedMedalCalculator1(this.db, this.log);
+				return new OnlineLimitedMedalCalculator1();
 
-			return new LimitedMedalCalculator1(this.db, this.log);
+			return new LimitedMedalCalculator1();
 		} // ChooseLimitedCalculator
 
 		private MedalCalculatorBase ChooseNonLimitedCalculatorWithScore() {
 			if (this.numOfEbayAmazonPayPalMps > 0)
-				return new OnlineNonLimitedWithBusinessScoreMedalCalculator1(this.db, this.log);
+				return new OnlineNonLimitedWithBusinessScoreMedalCalculator1();
 
-			return new NonLimitedMedalCalculator1(this.db, this.log);
+			return new NonLimitedMedalCalculator1();
 		} // ChooseNonLimitedCalculatorWithScore
 
 		private MedalResult SetNoMedal(string errorMessageFormat, params object[] args) {
-			this.log.Warn("No medal was calculated for customer {0}.", this.customerId);
+			Library.Instance.Log.Warn("No medal was calculated for customer {0}.", this.customerId);
 
 			return new MedalResult(this.customerId) {
 				CalculationTime = this.calculationTime,
@@ -106,9 +99,6 @@
 				Error = string.Format(errorMessageFormat, args),
 			};
 		} // SetNoMedal
-
-		private readonly AConnection db;
-		private readonly ASafeLog log;
 
 		private readonly int customerId;
 		private readonly DateTime calculationTime;

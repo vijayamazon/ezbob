@@ -3,14 +3,12 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Experian;
-	using Ezbob.Backend.Strategies.VatReturn;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzBob.Models.Marketplaces.Builders;
-	using EzBob.Models.Marketplaces.Yodlee;
 	using EZBob.DatabaseLib.Model.Database;
+// using Ezbob.Backend.Models;
+	// using Ezbob.Backend.Strategies.VatReturn;
 
 	public abstract class MedalCalculatorBase {
 		public MedalResult Results { get; set; }
@@ -34,6 +32,7 @@
 				SetInitialWeights();
 				AdjustCompanyScoreWeight();
 				AdjustConsumerScoreWeight();
+
 				if (Results.TurnoverType != TurnoverType.HMRC)
 					RedistributeFreeCashFlowWeight();
 				if (Results.FirstRepaymentDatePassed) {
@@ -57,26 +56,32 @@
 
 				CalculateOffer();
 			} catch (Exception e) {
-				this.log.Error("Failed calculating medal of type:{0} for customer: {1} with error: {2}", Results.MedalType, customerId, e);
+				this.log.Error(e,
+					"Failed calculating medal of type: {0} for customer: {1}",
+					Results.MedalType,
+					customerId
+					);
 				Results.Error = e.Message;
-			}
+			} // try
 
 			return Results;
-		}
+		} // CalculateMedalScore
 
 		public abstract void SetInitialWeights();
 
-		protected MedalCalculatorBase(AConnection db, ASafeLog log) {
-			this.log = log;
-			this.db = db;
-		}
+		protected MedalCalculatorBase() {
+			this.log = Library.Instance.Log;
+			this.db = Library.Instance.DB;
+		} // constructor
 
 		protected abstract void AdjustWeightsWithRatio(decimal ratio);
 
 		protected virtual void GatherInputData(DateTime calculationTime) {
-			SafeReader sr = this.db.GetFirst("GetDataForMedalCalculation1", CommandSpecies.StoredProcedure,
+			SafeReader sr = this.db.GetFirst(
+				"GetDataForMedalCalculation1", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", Results.CustomerId),
-				new QueryParameter("CalculationTime", Results.CalculationTime));
+				new QueryParameter("CalculationTime", Results.CalculationTime)
+				);
 
 			if (sr.IsEmpty)
 				throw new Exception("Couldn't gather required data for the medal calculation");
@@ -87,19 +92,23 @@
 			Results.ConsumerScore = sr["ConsumerScore"];
 			string maritalStatusStr = sr["MaritalStatus"];
 			MaritalStatus maritalStatus;
+
 			if (Enum.TryParse(maritalStatusStr, out maritalStatus))
 				Results.MaritalStatus = maritalStatus;
 			else {
-				this.log.Error("Unable to parse marital status for customer:{0} will use 'Other'. The value was:{1}", Results.CustomerId, maritalStatusStr);
+				this.log.Error(
+					"Unable to parse marital status for customer:{0} will use 'Other'. The value was:{1}",
+					Results.CustomerId,
+					maritalStatusStr
+					);
 				Results.MaritalStatus = MaritalStatus.Other;
-			}
+			} // if
 
 			Results.FirstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
 			Results.EzbobSeniority = sr["EzbobSeniority"];
 			Results.NumOfLoans = sr["OnTimeLoans"];
 			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
 			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
-			int hmrcId = sr["HmrcId"];
 			Results.ZooplaValue = sr["TotalZooplaValue"];
 			Results.NumOfHmrcMps = sr["NumOfHmrcMps"];
 			Results.NumberOfStores = sr["NumberOfOnlineStores"];
@@ -109,6 +118,9 @@
 			Results.AmazonPositiveFeedbacks = sr["AmazonPositiveFeedbacks"];
 			Results.EbayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
 			Results.NumberOfPaypalPositiveTransactions = sr["NumOfPaypalTransactions"];
+
+			/*
+			TODO: calculate all these
 
 			Results.OnlineAnnualTurnover = 0; // TODO: strategyHelper.GetOnlineAnnualTurnoverForMedal(Results.CustomerId);
 
@@ -126,10 +138,11 @@
 				}
 			}
 
-			CalculateBankAnnualTurnover();
+			Results.BankAnnualTurnover = 0; // TODO: fill it
+			*/
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
-		}
+		} // GatherInputData
 
 		protected abstract decimal GetCompanyScoreWeightForLowScore();
 
@@ -137,7 +150,7 @@
 
 		protected abstract decimal GetSumOfNonFixedWeights();
 
-		protected virtual void RedistributeFreeCashFlowWeight() { }
+		protected virtual void RedistributeFreeCashFlowWeight() {}
 
 		protected abstract void RedistributeWeightsForPayingCustomer();
 
@@ -149,12 +162,12 @@
 		private void AdjustCompanyScoreWeight() {
 			if (Results.BusinessScore <= 30)
 				Results.BusinessScoreWeight = GetCompanyScoreWeightForLowScore();
-		}
+		} // AdjustCompanyScoreWeight
 
 		private void AdjustConsumerScoreWeight() {
 			if (Results.ConsumerScore <= 800)
 				Results.ConsumerScoreWeight = GetConsumerScoreWeightForLowScore();
-		}
+		} // AdjustConsumerScoreWeight
 
 		private void AdjustSumOfWeights() {
 			decimal sumOfWeights = Results.BusinessScoreWeight + Results.FreeCashFlowWeight + Results.AnnualTurnoverWeight +
@@ -168,8 +181,8 @@
 				decimal sumOfNonFixedDestination = sumOfNonFixed - sumOfWeights + 100;
 				decimal ratioForDestination = sumOfNonFixedDestination / sumOfNonFixed;
 				AdjustWeightsWithRatio(ratioForDestination);
-			}
-		}
+			} // if
+		} // AdjustSumOfWeights
 
 		private void CalculateAnnualTurnoverGrade() {
 			if (Results.AnnualTurnover < 30000)
@@ -186,24 +199,7 @@
 				Results.AnnualTurnoverGrade = 5;
 			else
 				Results.AnnualTurnoverGrade = 6;
-		}
-
-		private void CalculateBankAnnualTurnover() {
-			var yodleeMps = new List<int>();
-
-			this.db.ForEachRowSafe((yodleeSafeReader, bRowsetStart) => {
-				int mpId = yodleeSafeReader["Id"];
-				yodleeMps.Add(mpId);
-				return ActionResult.Continue;
-			}, "GetYodleeMps", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", Results.CustomerId));
-
-			foreach (int mpId in yodleeMps) {
-				var yodleeModelBuilder = new YodleeMarketplaceModelBuilder();
-				YodleeModel yodleeModel = yodleeModelBuilder.BuildYodlee(mpId);
-
-				Results.BankAnnualTurnover += (decimal)yodleeModel.BankStatementAnnualizedModel.Revenues;
-			}
-		}
+		} // CalculateAnnualTurnoverGrade
 
 		private void CalculateBusinessScoreGrade() {
 			if (Results.BusinessScore < 11)
@@ -226,7 +222,7 @@
 				Results.BusinessScoreGrade = 8;
 			else
 				Results.BusinessScoreGrade = 9;
-		}
+		} // CalculateBusinessScoreGrade
 
 		private void CalculateBusinessSeniorityGrade() {
 			var dateOnlyCalculationTime = Results.CalculationTime.Date;
@@ -240,7 +236,7 @@
 				Results.BusinessSeniorityGrade = 3;
 			else
 				Results.BusinessSeniorityGrade = 4;
-		}
+		} // CalculateBusinessSeniorityGrade
 
 		private void CalculateConsumerScoreGrade() {
 			if (Results.ConsumerScore < 481)
@@ -261,7 +257,7 @@
 				Results.ConsumerScoreGrade = 7;
 			else
 				Results.ConsumerScoreGrade = 8;
-		}
+		} // CalculateConsumerScoreGrade
 
 		private void CalculateCustomerScore() {
 			Results.AnnualTurnoverScore = Results.AnnualTurnoverWeight * Results.AnnualTurnoverGrade;
@@ -284,7 +280,7 @@
 				Results.NetWorthScore + Results.MaritalStatusScore + Results.NumberOfStoresScore +
 				Results.PositiveFeedbacksScore + Results.EzbobSeniorityScore + Results.NumOfLoansScore +
 				Results.NumOfLateRepaymentsScore + Results.NumOfEarlyRepaymentsScore;
-		}
+		} // CalculateCustomerScore
 
 		private void CalculateEzbobSeniorityGrade() {
 			if (!Results.EzbobSeniority.HasValue)
@@ -299,13 +295,13 @@
 				Results.EzbobSeniorityGrade = 3;
 			else
 				Results.EzbobSeniorityGrade = 4;
-		}
+		} // CalculateEzbobSeniorityGrade
 
 		private void CalculateFeedbacks() {
 			Results.PositiveFeedbacks = Results.AmazonPositiveFeedbacks + Results.EbayPositiveFeedbacks;
 			if (Results.PositiveFeedbacks == 0)
 				Results.PositiveFeedbacks = Results.NumberOfPaypalPositiveTransactions != 0 ? Results.NumberOfPaypalPositiveTransactions : CurrentValues.Instance.DefaultFeedbackValue;
-		}
+		} // CalculateFeedbacks
 
 		private void CalculateFreeCashFlowGrade() {
 			if (Results.FreeCashFlow < -0.1m || Results.AnnualTurnover <= 0) // When turnover is zero we can't calc FCF, we want the min grade
@@ -322,7 +318,7 @@
 				Results.FreeCashFlowGrade = 5;
 			else
 				Results.FreeCashFlowGrade = 6;
-		}
+		} // CalculateFreeCashFlowGrade
 
 		private void CalculateGrades() {
 			CalculateBusinessScoreGrade();
@@ -339,7 +335,7 @@
 			CalculateNumOfLoansGrade();
 			CalculateNumOfLateRepaymentsGrade();
 			CalculateNumOfEarlyRepaymentsGrade();
-		}
+		} // CalculateGrades
 
 		private void CalculateMaritalStatusGrade() {
 			if (Results.MaritalStatus == MaritalStatus.Married || Results.MaritalStatus == MaritalStatus.Widowed)
@@ -348,7 +344,7 @@
 				Results.MaritalStatusGrade = 3;
 			else // Single, Separated, Other
 				Results.MaritalStatusGrade = 2;
-		}
+		} // CalculateMaritalStatusGrade
 
 		private void CalculateMedal() {
 			if (Results.TotalScoreNormalized <= 0.4m)
@@ -359,14 +355,14 @@
 				Results.MedalClassification = Medal.Platinum;
 			else
 				Results.MedalClassification = Medal.Diamond;
-		}
+		} // CalculateMedal
 
 		private void CalculateNetWorth() {
 			if (Results.ZooplaValue != 0)
 				Results.NetWorth = (Results.ZooplaValue - Results.MortgageBalance) / Results.ZooplaValue;
 			else
 				Results.NetWorth = 0;
-		}
+		} // CalculateNetWorth
 
 		private void CalculateNetWorthGrade() {
 			if (Results.NetWorth < 0.15m)
@@ -378,8 +374,8 @@
 			else {
 				// We know that we sometimes miss mortgages the customer has, so instead of grade=3 we give 1
 				Results.NetWorthGrade = 1;
-			}
-		}
+			} // if
+		} // CalculateNetWorthGrade
 
 		private void CalculateNumberOfStoresGrade() {
 			if (Results.NumberOfStores < 3)
@@ -388,7 +384,7 @@
 				Results.NumberOfStoresGrade = 3;
 			else
 				Results.NumberOfStoresGrade = 5;
-		}
+		} // CalculateNumberOfStoresGrade
 
 		private void CalculateNumOfEarlyRepaymentsGrade() {
 			if (Results.NumOfEarlyRepayments == 0)
@@ -397,7 +393,7 @@
 				Results.NumOfEarlyRepaymentsGrade = 3;
 			else
 				Results.NumOfEarlyRepaymentsGrade = 5;
-		}
+		} // CalculateNumOfEarlyRepaymentsGrade
 
 		private void CalculateNumOfLateRepaymentsGrade() {
 			if (Results.NumOfLateRepayments == 0)
@@ -406,7 +402,7 @@
 				Results.NumOfLateRepaymentsGrade = 2;
 			else
 				Results.NumOfLateRepaymentsGrade = 0;
-		}
+		} // CalculateNumOfLateRepaymentsGrade
 
 		private void CalculateNumOfLoansGrade() {
 			if (Results.NumOfLoans > 3)
@@ -415,7 +411,7 @@
 				Results.NumOfLoansGrade = 3;
 			else
 				Results.NumOfLoansGrade = 1;
-		}
+		} // CalculateNumOfLoansGrade
 
 		private void CalculateOffer() {
 			if (Results == null || !string.IsNullOrEmpty(Results.Error) || Results.MedalType == MedalType.NoMedal)
@@ -444,12 +440,13 @@
 					offerAccordingToValueAdded
 				}.Where(x => x >= CurrentValues.Instance.MedalMinOffer)
 					.ToList();
+
 				if (validOfferAmounts.Count > 0) {
 					decimal unroundedValue = validOfferAmounts.Min();
 					Results.OfferedLoanAmount = (int)unroundedValue;
-				}
-			}
-		}
+				} // if
+			} // if
+		} // CalculateOffer
 
 		private void CalculatePositiveFeedbacksGrade() {
 			if (Results.PositiveFeedbacks < 1)
@@ -460,7 +457,7 @@
 				Results.PositiveFeedbacksGrade = 3;
 			else
 				Results.PositiveFeedbacksGrade = 5;
-		}
+		} // CalculatePositiveFeedbacksGrade
 
 		private void CalculateRatiosOfAnnualTurnover() {
 			if (Results.AnnualTurnover > 0) {
@@ -470,8 +467,8 @@
 				Results.TangibleEquity = 0;
 				Results.AnnualTurnover = 0;
 				Results.FreeCashFlow = 0;
-			}
-		}
+			} // if
+		} // CalculateRatiosOfAnnualTurnover
 
 		private decimal CalculateScoreMax() {
 			const int annualTurnoverMaxGrade = 6;
@@ -508,7 +505,7 @@
 				businessSeniorityScoreMax + consumerScoreScoreMax + netWorthScoreMax + maritalStatusScoreMax +
 				numberOfStoresMax + positiveFeedbacksScoreMax + ezbobSeniorityScoreMax + ezbobNumOfLoansScoreMax +
 				ezbobNumOfLateRepaymentsScoreMax + ezbobNumOfEarlyRepaymentsScoreMax;
-		}
+		} // CalculateScoreMax
 
 		private decimal CalculateScoreMin() {
 			const int annualTurnoverMinGrade = 0;
@@ -545,7 +542,7 @@
 				businessSeniorityScoreMin + consumerScoreScoreMin + netWorthScoreMin + maritalStatusScoreMin +
 				numberOfStoresMin + positiveFeedbacksScoreMin + ezbobSeniorityScoreMin + ezbobNumOfLoansScoreMin +
 				ezbobNumOfLateRepaymentsScoreMin + ezbobNumOfEarlyRepaymentsScoreMin;
-		}
+		} // CalculateScoreMin
 
 		private void CalculateTangibleEquityGrade() {
 			if (Results.TangibleEquity < -0.05m || Results.AnnualTurnover <= 0) // When turnover is zero we can't calc tangible equity, we want the min grade
@@ -558,7 +555,7 @@
 				Results.TangibleEquityGrade = 3;
 			else
 				Results.TangibleEquityGrade = 4;
-		}
+		} // CalculateTangibleEquityGrade
 
 		private void DetermineFlow() {
 			if (Results.MedalType.IsOnline()) {
@@ -573,7 +570,7 @@
 				} else {
 					Results.TurnoverType = TurnoverType.Online;
 					Results.AnnualTurnover = Results.OnlineAnnualTurnover;
-				}
+				} // if
 			} else {
 				if (Results.NumOfHmrcMps == 1) {
 					Results.TurnoverType = TurnoverType.HMRC;
@@ -581,19 +578,19 @@
 				} else {
 					Results.TurnoverType = TurnoverType.Bank;
 					Results.AnnualTurnover = Results.BankAnnualTurnover;
-				}
-			}
-		}
+				} // if
+			} // if
+		} // DetermineFlow
 
 		private decimal GetMortgages(int customerId) {
 			var instance = new LoadExperianConsumerMortgageData(customerId);
 			instance.Execute();
 
 			return instance.Result.MortgageBalance;
-		}
+		} // GetMortgages
 
 		private bool IsOnlineMedalNotViaHmrcInnerFlow() {
 			return Results.MedalType.IsOnline() && Results.TurnoverType != TurnoverType.HMRC;
-		}
-	}
-}
+		} // IsOnlineMedalNotViaHmrcInnerFlow
+	} // class MedalCalculatorBase
+} // namespace

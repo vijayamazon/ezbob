@@ -1,47 +1,39 @@
-namespace EzBobTest
-{
+namespace EzBobTest {
 	using System;
-	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
-	using Ezbob.Database;
-	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
 	using NUnit.Framework;
 	using StructureMap;
 	using MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType;
 
-	public class LimitedMedalCalculator1NoGathering : LimitedMedalCalculator1
-	{
-		private readonly MedalResult resultInput;
-
-		public LimitedMedalCalculator1NoGathering(MedalResult resultInput, AConnection db, ASafeLog log)
-			: base(db, log)
-		{
+	public class LimitedMedalCalculator1NoGathering : LimitedMedalCalculator1 {
+		public LimitedMedalCalculator1NoGathering(MedalResult resultInput) {
 			this.resultInput = resultInput;
 		}
 
-		protected override void GatherInputData(DateTime calculationTime)
-		{
-			Results = resultInput;
+		protected override void GatherInputData(DateTime calculationTime) {
+			Results = this.resultInput;
 		}
+
+		private readonly MedalResult resultInput;
 	}
 
 	[TestFixture]
-	public class TestMedal : BaseTestFixtue
-	{
+	public class TestMedal : BaseTestFixtue {
 		[SetUp]
 		public new void Init() {
 			base.Init();
 
-			ObjectFactory.Configure(x => x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>());
+			ObjectFactory.Configure(x => x.For<IEzServiceAccessor>()
+				.Use<EzServiceAccessorShort>());
 
-			Ezbob.Backend.Strategies.Library.Initialize(m_oEnv, m_oDB, m_oLog);
+			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
 		[Test]
-		public void Test_FirstMedalTest()
-		{
+		public void Test_FirstMedalTest() {
 			DateTime calculationTime = new DateTime(2014, 11, 06);
 			int customerId = 18112;
 
@@ -65,7 +57,7 @@ namespace EzBobTest
 			resultsInput.ZooplaValue = 55;
 			resultsInput.MortgageBalance = 0;
 
-			var calculatorTester = new LimitedMedalCalculator1NoGathering(resultsInput, m_oDB, m_oLog);
+			var calculatorTester = new LimitedMedalCalculator1NoGathering(resultsInput);
 
 			MedalResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
 			Assert.AreEqual(resultsOutput.NetWorthGrade, 1);

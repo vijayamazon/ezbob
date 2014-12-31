@@ -1,49 +1,51 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using System;
 	using System.Collections.Generic;
-	using AutomationCalculator.Common;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
+	using TTurnoverType = AutomationCalculator.Common.TurnoverType;
 
 	public class CalculatedTurnover {
-		public decimal this[int monthCount] {
+		public virtual decimal this[int monthCount] {
 			get {
-				decimal res = Math.Max(this.getRelevantTurnover(monthCount), 0);
+				decimal res = Math.Max(GetRelevantTurnover(monthCount), 0);
 
-				this.log.Debug("turnover[{0}, '{1}'] = {2}", Grammar.Number(monthCount, "month"), this.turnoverType, res);
+				this.log.Debug("turnover[{0}, '{1}'] = {2}", Grammar.Number(monthCount, "month"), TurnoverType, res);
 
 				return res;
 			} // get
 		} // indexer
 
-		public CalculatedTurnover(TurnoverType? turnoverType, ASafeLog log) {
+		public CalculatedTurnover(TTurnoverType? turnoverType, ASafeLog log) {
 			this.log = log ?? new SafeLog();
 
 			this.turnoverType = turnoverType;
-
-			switch (this.turnoverType) {
-			case TurnoverType.HMRC:
-				this.getRelevantTurnover = GetHmrc;
-				break;
-			case TurnoverType.Bank:
-				this.getRelevantTurnover = GetYodlee;
-				break;
-			case TurnoverType.Online:
-				this.getRelevantTurnover = GetOnline;
-				break;
-			case null:
-				this.getRelevantTurnover = GetZero;
-				break;
-			default:
-				throw new ArgumentOutOfRangeException("turnoverType");
-			} // switch
 
 			this.online = new SortedDictionary<int, OneValue>();
 			this.hmrc = new SortedDictionary<int, decimal>();
 			this.yodlee = new SortedDictionary<int, decimal>();
 		} // constructor
 
-		public void Add(TurnoverDbRow r) {
+		public virtual void Init() {
+			switch (TurnoverType) {
+			case TTurnoverType.HMRC:
+				GetRelevantTurnover = GetHmrc;
+				break;
+			case TTurnoverType.Bank:
+				GetRelevantTurnover = GetYodlee;
+				break;
+			case TTurnoverType.Online:
+				GetRelevantTurnover = GetOnline;
+				break;
+			case null:
+				GetRelevantTurnover = GetZero;
+				break;
+			default:
+				throw new ArgumentOutOfRangeException("Unsupported turnover type: " + TurnoverType.Value, (Exception)null);
+			} // switch
+		} // Init
+
+		public virtual void Add(TurnoverDbRow r) {
 			r.WriteToLog(this.log);
 
 			if (r.MpTypeID == Hmrc) {
@@ -60,11 +62,44 @@
 			} // if
 		} // Add
 
+		protected virtual Func<int, decimal> GetRelevantTurnover { get; set; }
+
+		protected virtual TTurnoverType? TurnoverType {
+			get { return this.turnoverType; }
+			set { this.turnoverType = value; }
+		} // TurnoverType
+
+		protected virtual decimal GetHmrc(int monthCount) {
+			return this.hmrc.ContainsKey(monthCount) ? this.hmrc[monthCount] : 0;
+		} // GetHmrc
+
+		protected virtual decimal GetOneOnline(int monthCount) {
+			return this.online.ContainsKey(monthCount) ? this.online[monthCount].Value : 0;
+		} // GetOneOnline
+
+		protected virtual decimal GetOnline(int monthCount) {
+			if (monthCount != 12)
+				return GetOneOnline(monthCount);
+
+			return PositiveMin(
+				GetOneOnline(1) * 12,
+				GetOneOnline(3) * 4,
+				GetOneOnline(6) * 2,
+				GetOneOnline(12)
+				);
+		} // GetOnline
+
+		protected virtual decimal GetYodlee(int monthCount) {
+			return this.yodlee.ContainsKey(monthCount) ? this.yodlee[monthCount] : 0;
+		} // GetYodlee
+
+		protected virtual decimal GetZero(int monthCount) {
+			return 0;
+		} // GetZero
+
 		private class OneValue {
 			public decimal Value {
-				get {
-					return Math.Max(this.ebay, this.payPal) + this.amazon;
-				} // get
+				get { return Math.Max(this.ebay, this.payPal) + this.amazon; } // get
 			} // Value
 
 			public OneValue(TurnoverDbRow r) {
@@ -129,48 +164,17 @@
 				this.online[monthCount] = new OneValue(r);
 		} // Add
 
-		private decimal GetHmrc(int monthCount) {
-			return this.hmrc.ContainsKey(monthCount) ? this.hmrc[monthCount] : 0;
-		} // GetHmrc
-
-		private decimal GetOneOnline(int monthCount) {
-			return this.online.ContainsKey(monthCount) ? this.online[monthCount].Value : 0;
-		} // GetOneOnline
-
-		private decimal GetOnline(int monthCount) {
-			if (monthCount != 12)
-				return GetOneOnline(monthCount);
-
-			return PositiveMin(
-				GetOneOnline(1) * 12,
-				GetOneOnline(3) * 4,
-				GetOneOnline(6) * 2,
-				GetOneOnline(12)
-				);
-		} // GetOnline
-
-		private decimal GetYodlee(int monthCount) {
-			return this.yodlee.ContainsKey(monthCount) ? this.yodlee[monthCount] : 0;
-		} // GetYodlee
-
-		private decimal GetZero(int monthCount) {
-			return 0;
-		} // GetZero
-
 		private static readonly Guid Ebay = new Guid("A7120CB7-4C93-459B-9901-0E95E7281B59");
 		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
 		private static readonly Guid Amazon = new Guid("A4920125-411F-4BB9-A52D-27E8A00D0A3B");
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 		private static readonly Guid Yodlee = new Guid("107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF");
 
-		private readonly TurnoverType? turnoverType;
-
 		private readonly ASafeLog log;
-
-		private readonly Func<int, decimal> getRelevantTurnover;
-
 		private readonly SortedDictionary<int, OneValue> online;
 		private readonly SortedDictionary<int, decimal> hmrc;
 		private readonly SortedDictionary<int, decimal> yodlee;
+
+		private TTurnoverType? turnoverType;
 	} // class CalculatedTurnover
 } // namespace

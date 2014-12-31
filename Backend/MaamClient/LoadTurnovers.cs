@@ -7,7 +7,6 @@
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Utils;
 	using Ezbob.Utils.Html;
 	using Ezbob.Utils.Html.Attributes;
 	using Ezbob.Utils.Html.Tags;
@@ -41,7 +40,7 @@
 		} // Stringify
 	} // class SomeExt
 
-	class LoadTurnovers {
+	internal class LoadTurnovers {
 		public LoadTurnovers(Args args, AConnection db, ASafeLog log) {
 			Log = log ?? new SafeLog();
 			DB = db;
@@ -67,10 +66,29 @@
 		private Args Args { get; set; }
 
 		private class CrCuTi {
-			public long CashRequestID { get; [UsedImplicitly] set; }
-			public int CustomerID { get; [UsedImplicitly] set; }
-			public DateTime DecisionTime { get; [UsedImplicitly] set; }
-			public string UnderwriterDecision { get; [UsedImplicitly] set; }
+			public long CashRequestID {
+				get;
+				[UsedImplicitly]
+				set;
+			}
+
+			public int CustomerID {
+				get;
+				[UsedImplicitly]
+				set;
+			}
+
+			public DateTime DecisionTime {
+				get;
+				[UsedImplicitly]
+				set;
+			}
+
+			public string UnderwriterDecision {
+				get;
+				[UsedImplicitly]
+				set;
+			}
 		}
 
 		// class CrCuTi
@@ -106,7 +124,7 @@
 				GoodCount = 0;
 				BadCount = 0;
 
-				actualTurnovers = new SortedDictionary<decimal, int>();
+				this.actualTurnovers = new SortedDictionary<decimal, int>();
 			} // constructor
 
 			public void Add(DisplayTurnover dt, bool hasOther) {
@@ -123,17 +141,17 @@
 				else
 					BadCount++;
 
-				if (actualTurnovers.ContainsKey(dt.ActualRatio))
-					actualTurnovers[dt.ActualRatio]++;
+				if (this.actualTurnovers.ContainsKey(dt.ActualRatio))
+					this.actualTurnovers[dt.ActualRatio]++;
 				else
-					actualTurnovers[dt.ActualRatio] = 1;
+					this.actualTurnovers[dt.ActualRatio] = 1;
 
-				actualTurnoverMedian = null;
+				this.actualTurnoverMedian = null;
 			} // Add
 
 			public void LogRawActualTurnovers(ASafeLog log, string title) {
-				log.Debug("{0} actual turnover data ({1}) - begin", title, actualTurnovers.Sum(pair => pair.Value));
-				log.Debug("\n\t{0}", string.Join("\n\t", actualTurnovers.Select(pair => pair.Key + ": " + pair.Value)));
+				log.Debug("{0} actual turnover data ({1}) - begin", title, this.actualTurnovers.Sum(pair => pair.Value));
+				log.Debug("\n\t{0}", string.Join("\n\t", this.actualTurnovers.Select(pair => pair.Key + ": " + pair.Value)));
 				log.Debug("{0} actual turnover data - end", title);
 			} // LogRawActualTurnovers
 
@@ -153,7 +171,9 @@
 			public string ActualRatioStyle { get; private set; }
 			public decimal YearTurnover { get; private set; }
 
-			public bool IsGood { get { return ActualRatio >= RequestedRatio; } } // IsGood
+			public bool IsGood {
+				get { return ActualRatio >= RequestedRatio; }
+			} // IsGood
 
 			public DisplayTurnover(bool hasValue, int periodLen, decimal periodTurnover, decimal yearTurnover, decimal ratio) {
 				HasValue = hasValue;
@@ -183,19 +203,19 @@
 		private class CellValue {
 			public string ValueStr {
 				get {
-					if (storedValue is int)
-						return ((int)storedValue).Stringify();
+					if (this.storedValue is int)
+						return ((int)this.storedValue).Stringify();
 
-					if (storedValue is long)
-						return ((long)storedValue).Stringify();
+					if (this.storedValue is long)
+						return ((long)this.storedValue).Stringify();
 
-					if (storedValue is decimal)
-						return ((decimal)storedValue).Stringify();
+					if (this.storedValue is decimal)
+						return ((decimal)this.storedValue).Stringify();
 
-					if (storedValue is DateTime)
-						return ((DateTime)storedValue).Stringify();
+					if (this.storedValue is DateTime)
+						return ((DateTime)this.storedValue).Stringify();
 
-					return storedValue == null ? "&nbsp;" : storedValue.ToString();
+					return this.storedValue == null ? "&nbsp;" : this.storedValue.ToString();
 				}
 			} // ValueStr
 
@@ -206,7 +226,7 @@
 			public int Colspan { get; private set; }
 
 			public CellValue(object v, string s = null, int colspan = 1) {
-				storedValue = v;
+				this.storedValue = v;
 				Style = s;
 				Colspan = colspan;
 
@@ -232,37 +252,31 @@
 				new CellValue("Customer ID", header),
 				new CellValue("Manual decision", header),
 				new CellValue("Decision time", header),
-
 				new CellValue("Online data time", header),
 				new CellValue("Online 1Y turnover", header),
-
 				new CellValue("Online 1M requested ratio", header),
 				new CellValue("Online 1M turnover", header),
 				new CellValue("Online annualized 1M turnover", header),
 				new CellValue("Online 1M watermark value", header),
 				new CellValue("Online 1M actual ratio", header),
-
 				new CellValue("Online 3M requested ratio", header),
 				new CellValue("Online 3M turnover", header),
 				new CellValue("Online annualized 3M turnover", header),
 				new CellValue("Online 3M watermark value", header),
 				new CellValue("Online 3M actual ratio", header),
-
 				new CellValue("HMRC data time", header),
 				new CellValue("HMRC 1Y turnover", header),
-
 				new CellValue("HMRC 3M requested ratio", header),
 				new CellValue("HMRC 3M turnover", header),
 				new CellValue("HMRC annualized 3M turnover", header),
 				new CellValue("HMRC 3M watermark value", header),
 				new CellValue("HMRC 3M actual ratio", header),
-
 				new CellValue("HMRC 6M requested ratio", header),
 				new CellValue("HMRC 6M turnover", header),
 				new CellValue("HMRC annualized 6M turnover", header),
 				new CellValue("HMRC 6M watermark value", header),
 				new CellValue("HMRC 6M actual ratio", header)
-			));
+				));
 
 			var online1Total = new DisplayTurnoverTotals();
 			var online3Total = new DisplayTurnoverTotals();
@@ -342,7 +356,6 @@
 				new CellValue("Total cash requests", colspan: 3),
 				new CellValue(Result.Count),
 				new CellValue(null, colspan: 2),
-
 				new CellValue("Total count", colspan: 4),
 				new CellValue(online1Total.AllCount),
 				new CellValue("Total count", colspan: 4),
@@ -352,13 +365,12 @@
 				new CellValue(hmrc3Total.AllCount),
 				new CellValue("Total count", colspan: 4),
 				new CellValue(hmrc6Total.AllCount)
-			));
+				));
 
 			totalsBody.Append(AddTotalRow<Td>(
 				new CellValue("Both online and HMRC", colspan: 3),
 				new CellValue(hasBothCount),
 				new CellValue(null, colspan: 2),
-
 				new CellValue("Good count", colspan: 4),
 				new CellValue(online1Total.GoodCount),
 				new CellValue("Good count", colspan: 4),
@@ -368,7 +380,7 @@
 				new CellValue(hmrc3Total.GoodCount),
 				new CellValue("Good count", colspan: 4),
 				new CellValue(hmrc6Total.GoodCount)
-			));
+				));
 
 			totalsBody.Append(AddTotalRow<Td>(
 				new CellValue(null, colspan: 6),
@@ -381,7 +393,7 @@
 				new CellValue(hmrc3Total.BadCount),
 				new CellValue("Bad count", colspan: 4),
 				new CellValue(hmrc6Total.BadCount)
-			));
+				));
 
 			totalsBody.Append(AddTotalRow<Td>(
 				new CellValue(null, colspan: 6),
@@ -394,7 +406,7 @@
 				new CellValue(hmrc3Total.ActualTurnoverMedian),
 				new CellValue("Actual turnover median", colspan: 4),
 				new CellValue(hmrc6Total.ActualTurnoverMedian)
-			));
+				));
 
 			Email = new Body().Append(tbl);
 
@@ -408,7 +420,7 @@
 			string sEmail = CurrentValues.Instance.MaamEmailReceiver;
 
 			if (string.IsNullOrWhiteSpace(sEmail))
-				this.Log.Debug("Not sending:\n{0}", Email);
+				Log.Debug("Not sending:\n{0}", Email);
 			else {
 				new Mail().Send(
 					sEmail,
@@ -417,7 +429,7 @@
 					CurrentValues.Instance.MailSenderEmail,
 					CurrentValues.Instance.MailSenderName,
 					"Man Against A Machine - Turnover data"
-				);
+					);
 			} // if
 		} // Send
 
@@ -467,6 +479,7 @@
 		foreach (CrCuTi crcuti in lst) {
 			Input[crcuti.CashRequestID] = crcuti;
 			var turnover = new CalculatedTurnover();
+			turnover.Init();
 
 			Result[crcuti.CashRequestID] = turnover;
 

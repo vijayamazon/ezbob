@@ -623,6 +623,9 @@
 		ActionMetaData UpdateCurrencyRates();
 
 		[OperationContract]
+		ActionMetaData UpdateCustomerAnalyticsOnCompanyChange(int customerID);
+
+		[OperationContract]
 		ActionMetaData UpdateExperianDirectorDetails(int? nCustomerID, int? nUnderwriterID, Esigner oDetails);
 
 		[OperationContract]

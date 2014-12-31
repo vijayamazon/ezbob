@@ -132,6 +132,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_VerifyEnoughAvailableFunds_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyEnoughAvailableFunds" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyEnoughAvailableFunds_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyEnoughAvailableFundsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_VerifyReapproval_InputMessage">
     <wsdl:part name="parameters" element="tns:VerifyReapproval" />
   </wsdl:message>
@@ -588,6 +594,12 @@
   <wsdl:message name="IEzService_UpdateCurrencyRates_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateCurrencyRatesResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UpdateCustomerAnalyticsOnCompanyChange_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateCustomerAnalyticsOnCompanyChange" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateCustomerAnalyticsOnCompanyChange_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateCustomerAnalyticsOnCompanyChangeResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UpdateExperianDirectorDetails_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateExperianDirectorDetails" />
   </wsdl:message>
@@ -665,12 +677,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_VerifyApproval_OutputMessage">
     <wsdl:part name="parameters" element="tns:VerifyApprovalResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_VerifyEnoughAvailableFunds_InputMessage">
-    <wsdl:part name="parameters" element="tns:VerifyEnoughAvailableFunds" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_VerifyEnoughAvailableFunds_OutputMessage">
-    <wsdl:part name="parameters" element="tns:VerifyEnoughAvailableFundsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -1217,6 +1223,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="VerifyEnoughAvailableFunds">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" message="tns:IEzService_VerifyEnoughAvailableFunds_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse" message="tns:IEzService_VerifyEnoughAvailableFunds_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="VerifyReapproval">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyReapproval" message="tns:IEzService_VerifyReapproval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyReapprovalResponse" message="tns:IEzService_VerifyReapproval_OutputMessage" />
@@ -1521,6 +1531,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRates" message="tns:IEzService_UpdateCurrencyRates_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCurrencyRatesResponse" message="tns:IEzService_UpdateCurrencyRates_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="UpdateCustomerAnalyticsOnCompanyChange">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChange" message="tns:IEzService_UpdateCustomerAnalyticsOnCompanyChange_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChangeResponse" message="tns:IEzService_UpdateCustomerAnalyticsOnCompanyChange_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateExperianDirectorDetails">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" message="tns:IEzService_UpdateExperianDirectorDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse" message="tns:IEzService_UpdateExperianDirectorDetails_OutputMessage" />
@@ -1572,10 +1586,6 @@
     <wsdl:operation name="VerifyApproval">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyApproval" message="tns:IEzService_VerifyApproval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyApprovalResponse" message="tns:IEzService_VerifyApproval_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="VerifyEnoughAvailableFunds">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" message="tns:IEzService_VerifyEnoughAvailableFunds_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse" message="tns:IEzService_VerifyEnoughAvailableFunds_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -1999,6 +2009,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="VerifyEnoughAvailableFunds">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="VerifyReapproval">
       <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyReapproval" style="document" />
       <wsdl:input>
@@ -2683,6 +2702,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="UpdateCustomerAnalyticsOnCompanyChange">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChange" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="UpdateExperianDirectorDetails">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" style="document" />
       <wsdl:input>
@@ -2793,15 +2821,6 @@
     </wsdl:operation>
     <wsdl:operation name="VerifyApproval">
       <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyApproval" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="VerifyEnoughAvailableFunds">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

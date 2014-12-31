@@ -61,12 +61,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	UPDATE CustomerAnalyticsCompany SET
-		IsActive = 0
-	WHERE
-		CustomerID = @CustomerID
-		AND
-		ISActive = 1
+	EXECUTE ClearCustomerAnalyticsCompany @CustomerID
 
 	------------------------------------------------------------------------------
 

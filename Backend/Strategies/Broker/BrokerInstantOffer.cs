@@ -6,21 +6,27 @@
 	using MedalCalculations;
 
 	public class BrokerInstantOffer : AStrategy {
+		public override string Name {
+			get { return "BrokerInstantOffer"; }
+		}
+
+		public BrokerInstantOfferResponse Response { get; private set; }
+
 		public BrokerInstantOffer(BrokerInstantOfferRequest request) {
 			_request = request;
 		} // constructor
 
-		public override string Name {
-			get { return "BrokerInstantOffer"; }
-		} // Name
+		// Name
 
 		public override void Execute() {
 			SaveRequest();
 			CalculateInstantOffer();
 			SaveResponse();
 		}
-
-		public BrokerInstantOfferResponse Response { get; private set; }
+		public decimal GetBasicInterestRate(int experianScore) {
+			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
+			return sr["Value"];
+		}
 
 		private void SaveRequest() {
 			_requestId = DB.ExecuteScalar<int>(
@@ -33,35 +39,33 @@
 			//TODO retrieve experian company data (cache/new)
 			int businessScore = 60; //todo
 			decimal tangibleEquity = 20000M; //todo
-			DateTime businessSeniority = new DateTime(1990,1,1);
+			DateTime businessSeniority = new DateTime(1990, 1, 1);
 
 			int consumerScore = 0;
 			switch (_request.MainApplicantCreditScore) {
-				case "ok":
-					consumerScore = 700;//todo real number
-					break;
-				case "excellent":
-					consumerScore = 1000;//todo real number
-					break;
-				case "low":
-					consumerScore = 500;//todo real number
-					break;
+			case "ok":
+				consumerScore = 700;//todo real number
+				break;
+			case "excellent":
+				consumerScore = 1000;//todo real number
+				break;
+			case "low":
+				consumerScore = 500;//todo real number
+				break;
 			}
 
 			var netWorth = 0;
 			if (_request.IsHomeOwner) {
 				netWorth = 100000; //todo get the net worth
 			}
-			var calculator = new LimitedMedalCalculatorForInstantOffer(businessScore, _request.AnnualProfit, _request.AnnualTurnover, tangibleEquity, businessSeniority, consumerScore, netWorth, DB, Log);
-			MedalResult medalScore = calculator.CalculateMedalScore(0, DateTime.UtcNow);
 
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {
 				BrokerInstantOfferRequestId = _requestId,
-				ApprovedSum = CalcAndCapOffer((int)Math.Round((int)((int)medalScore.MedalClassification * _request.AnnualTurnover * GetLoanOfferMultiplier(consumerScore) / 100) / 100d, 0, MidpointRounding.AwayFromZero) * 100),
+				ApprovedSum = CalcAndCapOffer((int)Math.Round((int)(1/* TODO: put MedalClassification here */ * _request.AnnualTurnover * GetLoanOfferMultiplier(consumerScore) / 100) / 100d, 0, MidpointRounding.AwayFromZero) * 100),
 				InterestRate = GetBasicInterestRate(consumerScore),
 				RepaymentPeriod = 12,
-				UseSetupFee = rand.Next(0,2) > 0,
+				UseSetupFee = rand.Next(0, 2) > 0,
 				UseBrokerSetupFee = true,
 				LoanSourceId = rand.Next(1, 3), // todo make use calculator to decide weather to give EU or reg loan
 				LoanTypeId = 1 //default loan type regular (not halfway) ?
@@ -71,15 +75,7 @@
 				Response.InterestRate = 0.02M;
 			}
 		}
-
-		public decimal GetBasicInterestRate(int experianScore)
-		{
-			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "BasicInterestRate"), new QueryParameter("Key", experianScore));
-			return sr["Value"];
-		}
-
-		private decimal GetLoanOfferMultiplier(int experianScore)
-		{
+		private decimal GetLoanOfferMultiplier(int experianScore) {
 			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "LoanOfferMultiplier"), new QueryParameter("Key", experianScore));
 			return sr["Value"];
 		}

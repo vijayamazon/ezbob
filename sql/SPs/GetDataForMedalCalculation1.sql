@@ -6,10 +6,22 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetDataForMedalCalculation1
-	(@CustomerId INT,
-	 @CalculationTime DATETIME)
+@CustomerId INT,
+@CalculationTime DATETIME
 AS
 BEGIN
+	SET NOCOUNT ON;
+
+	------------------------------------------------------------------------------
+
+	DECLARE @eBay   UNIQUEIDENTIFIER = 'A7120CB7-4C93-459B-9901-0E95E7281B59'
+	DECLARE @Amazon UNIQUEIDENTIFIER = 'A4920125-411F-4BB9-A52D-27E8A00D0A3B'
+	DECLARE @PayPal UNIQUEIDENTIFIER = '3FA5E327-FCFD-483B-BA5A-DC1815747A28'
+	DECLARE @Yodlee UNIQUEIDENTIFIER = '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'
+	DECLARE @HMRC   UNIQUEIDENTIFIER = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
+
+	------------------------------------------------------------------------------
+
 	DECLARE 
 		@FirstRepaymentDate DATETIME, 
 		@FirstRepaymentDatePassed BIT, 
@@ -22,7 +34,6 @@ BEGIN
 		@BusinessSeniority DATETIME,
 		@EzbobSeniority DATETIME,
 		@MaritalStatus NVARCHAR(50),
-		@HmrcId INT,
 		@Threshold DECIMAL(18,6),
 		@LoanScheduleId INT,
 		@ScheduleDate DATETIME,
@@ -49,9 +60,13 @@ BEGIN
 		@FirstYodleeDate DATETIME,
 		@FirstYodleePostDate DATETIME,
 		@FirstYodleeTransactionDate DATETIME
-		
+
+	------------------------------------------------------------------------------
+
 	SET @Threshold = 2
-			
+
+	------------------------------------------------------------------------------
+
 	SELECT 
 		@EzbobSeniority = GreetingMailSentDate, 
 		@MaritalStatus = MaritalStatus,
@@ -60,21 +75,19 @@ BEGIN
 		Customer 
 	WHERE 
 		Id = @CustomerId
-	
-	CREATE TABLE #LateLoans
-	(
-		LoanId INT
-	)	
-	
+
+	------------------------------------------------------------------------------
+
 	SELECT
 		@RefNumber = ExperianRefNum
 	FROM
-		Customer,
-		Company
+		Customer
+		INNER JOIN Company ON Customer.CompanyId = Company.Id
 	WHERE
-		Customer.Id = @CustomerId AND
-		Customer.CompanyId = Company.Id
-	
+		Customer.Id = @CustomerId
+
+	------------------------------------------------------------------------------
+
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
 		SELECT 
@@ -84,257 +97,233 @@ BEGIN
 		FROM 
 			CustomerAnalyticsCompany 
 		WHERE 
-			CustomerID = @CustomerId AND
+			CustomerID = @CustomerId
+			AND
 			IsActive = 1
 	END
-	ELSE
-	BEGIN	
+	ELSE BEGIN	
 		SELECT 
 			@BusinessScore = CommercialDelphiScore,
 			@BusinessSeniority = IncorporationDate 
 		FROM 
 			ExperianNonLimitedResults
 		WHERE
-			RefNumber = @RefNumber AND
+			RefNumber = @RefNumber
+			AND
 			IsActive = 1
 	END
-	
+
+	------------------------------------------------------------------------------
+
 	IF @BusinessSeniority IS NULL
 	BEGIN
 		SELECT
-			@FirstHmrcDate = MIN(MP_VatReturnRecords.DateFrom)
+			@FirstHmrcDate = MIN(r.DateFrom)
 		FROM
-			MP_VatReturnRecords,
-			MP_CustomerMarketPlace,
-			MP_MarketplaceType
+			MP_VatReturnRecords r
+			INNER JOIN MP_CustomerMarketPlace m
+				ON r.CustomerMarketPlaceId = m.Id
+				AND m.Disabled = 0
+			INNER JOIN MP_MarketplaceType t
+				ON t.Id = m.MarketPlaceId
+				AND t.InternalId = @HMRC
+			INNER JOIN Business b
+				ON r.BusinessId = b.Id
+				AND b.BelongsToCustomer = 1
 		WHERE
-			MP_VatReturnRecords.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
-			MP_CustomerMarketPlace.CustomerId = @CustomerId AND
-			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-			MP_MarketplaceType.Name = 'HMRC' AND
-			MP_CustomerMarketPlace.Disabled = 0
-			
-		
+			m.CustomerId = @CustomerId
+
+		-----------------------------------------------------------------------------
+
 		SELECT
-			@FirstYodleePostDate = MIN(MP_YodleeOrderItemBankTransaction.postDate), @FirstYodleeTransactionDate = MIN(MP_YodleeOrderItemBankTransaction.transactionDate)
+			@FirstYodleePostDate = MIN(t.postDate),
+			@FirstYodleeTransactionDate = MIN(t.transactionDate)
 		FROM
-			MP_YodleeOrderItemBankTransaction,
-			MP_YodleeOrderItem,
-			MP_YodleeOrder,
-			MP_CustomerMarketPlace,
-			MP_MarketplaceType
+			MP_YodleeOrderItemBankTransaction t
+			INNER JOIN MP_YodleeOrderItem i
+				ON t.OrderItemId = i.Id
+			INNER JOIN MP_YodleeOrder o
+				ON i.OrderId = o.Id
+			INNER JOIN MP_CustomerMarketPlace m
+				ON o.CustomerMarketPlaceId = m.Id
+				AND m.Disabled = 0
+			INNER JOIN MP_MarketplaceType mt
+				ON mt.Id = m.MarketPlaceId
+				AND mt.InternalId = @Yodlee
 		WHERE
-			MP_CustomerMarketPlace.CustomerId = @CustomerId AND
-			MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-			MP_MarketplaceType.Name = 'Yodlee' AND
-			MP_YodleeOrder.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
-			MP_YodleeOrderItem.OrderId = MP_YodleeOrder.Id AND
-			MP_YodleeOrderItemBankTransaction.OrderItemId = MP_YodleeOrderItem.Id  AND
-			MP_CustomerMarketPlace.Disabled = 0
-			
-		IF @FirstYodleePostDate IS NULL
-			SELECT @FirstYodleeDate = @FirstYodleeTransactionDate
-		ELSE IF @FirstYodleeTransactionDate IS NULL
-			SELECT @FirstYodleeDate = @FirstYodleePostDate
-		ELSE IF @FirstYodleePostDate < @FirstYodleeTransactionDate
-			SELECT @FirstYodleeDate = @FirstYodleePostDate
-		ELSE 
-			SELECT @FirstYodleeDate = @FirstYodleeTransactionDate
+			m.CustomerId = @CustomerId
+
+		-----------------------------------------------------------------------------
+
+		SET @FirstYodleeDate = dbo.udfMinDate(
+			@FirstYodleePostDate,
+			@FirstYodleeTransactionDate
+		)
 	
-		IF @FirstHmrcDate IS NULL AND @FirstYodleeDate IS NOT NULL
-			SET @BusinessSeniority = @FirstYodleeDate
-		ELSE IF @FirstHmrcDate IS NOT NULL AND @FirstYodleeDate IS NULL
-			SET @BusinessSeniority = @FirstHmrcDate
-		ELSE IF @FirstHmrcDate IS NULL AND @FirstYodleeDate IS NULL
+		-----------------------------------------------------------------------------
+
+		SET @BusinessSeniority = dbo.udfMinDate(@FirstHmrcDate, @FirstYodleeDate)
+
+		IF @BusinessSeniority IS NULL
 			SET @BusinessSeniority = CONVERT(DATE, DATEADD(yy, -1, @CalculationTime)) 
-		ELSE
-		BEGIN -- Both are not null
-			IF @FirstHmrcDate > @FirstYodleeDate
-				SET @BusinessSeniority = @FirstYodleeDate
-			ELSE
-				SET @BusinessSeniority = @FirstHmrcDate
-		END
 	END
-	
-	SELECT @ConsumerScore = MIN(ExperianConsumerScore)
-	FROM
-	(
+
+	------------------------------------------------------------------------------
+
+	SELECT
+		@ConsumerScore = MIN(ExperianConsumerScore)
+	FROM	(
 		SELECT ExperianConsumerScore
 		FROM Customer
-		WHERE Id = @CustomerId AND ExperianConsumerScore IS NOT NULL
+		WHERE Id = @CustomerId
+		AND ExperianConsumerScore IS NOT NULL
+		--
 		UNION
+		--
 		SELECT ExperianConsumerScore
 		FROM Director
-		WHERE CustomerId = @CustomerId AND ExperianConsumerScore IS NOT NULL
+		WHERE CustomerId = @CustomerId
+		AND ExperianConsumerScore IS NOT NULL
 	) AS X
 
-	SELECT @FirstRepaymentDatePassed = 0
+	------------------------------------------------------------------------------
+
+	SET @FirstRepaymentDatePassed = 0
+
+	------------------------------------------------------------------------------
+
 	SELECT 
-		@FirstRepaymentDate = MIN(LoanSchedule.Date) 
+		@FirstRepaymentDate = MIN(s.Date) 
 	FROM 
-		LoanSchedule, 
-		Loan 
+		LoanSchedule s
+		INNER JOIN Loan l ON l.Id = s.LoanId
 	WHERE 
-		Loan.Id = LoanSchedule.LoanId AND 
-		Loan.CustomerId = @CustomerId
+		l.CustomerId = @CustomerId
+
+	------------------------------------------------------------------------------
 
 	IF @FirstRepaymentDate IS NOT NULL AND @FirstRepaymentDate < @CalculationTime
-		SELECT @FirstRepaymentDatePassed = 1
-	
-	SELECT @OnTimeLoans = COUNT(1) FROM Loan WHERE CustomerId = @CustomerId AND Status = 'PaidOff'
-	
-	DECLARE cur CURSOR FOR 
-	SELECT 
-		Id,
-		Status
-	FROM 
-		Loan
-	WHERE 
-		CustomerId = @CustomerId
-		
-	OPEN cur
-	FETCH NEXT FROM cur INTO @LoanId, @LoanStatus
-	WHILE @@FETCH_STATUS = 0
-	BEGIN
-		DECLARE cur2 CURSOR FOR 
-		SELECT 
-			Id,
-			Date
-		FROM 
-			LoanSchedule
-		WHERE 
-			LoanId = @LoanId
-		OPEN cur2
-		FETCH NEXT FROM cur2 INTO @LoanScheduleId, @ScheduleDate
-		WHILE @@FETCH_STATUS = 0
-		BEGIN
-			IF NOT EXISTS (SELECT 1 FROM #LateLoans WHERE LoanId = @LoanId)
-			BEGIN
-				SELECT 
-					@LastTransactionId = Max(TransactionID) 
-				FROM 
-					LoanScheduleTransaction 
-				WHERE 
-					ScheduleID = @LoanScheduleId AND 
-					ABS(PrincipalDelta) + ABS(FeesDelta) + ABS(InterestDelta) > @Threshold
+		SET @FirstRepaymentDatePassed = 1
 
-				IF @LastTransactionId IS NOT NULL
-				BEGIN
-					SELECT @LastTransactionDate = PostDate FROM LoanTransaction WHERE Id = @LastTransactionId
-					SELECT @StatusAfterLastTransaction = StatusAfter FROM LoanScheduleTransaction WHERE ScheduleID = @LoanScheduleId AND TransactionID = @LastTransactionId
-				END
+	------------------------------------------------------------------------------
 
-				IF @LastTransactionDate IS NOT NULL AND 
-					(
-						@StatusAfterLastTransaction = 'Paid' OR 
-						@StatusAfterLastTransaction = 'PaidOnTime' OR 
-						@StatusAfterLastTransaction = 'PaidEarly'
-					)
-					SELECT @LateDays = datediff(dd, @ScheduleDate, @LastTransactionDate)
-				ELSE
-					SELECT @LateDays = datediff(dd, @ScheduleDate, @CalculationTime)
-					
-				IF @LateDays >= 7 
-				BEGIN
-					IF @LoanStatus = 'PaidOff'
-						SET @OnTimeLoans = @OnTimeLoans - 1
-						
-					INSERT INTO #LateLoans VALUES (@LoanId)
-				END
-			END
-			
-			FETCH NEXT FROM cur2 INTO @LoanScheduleId, @ScheduleDate
-		END
-		CLOSE cur2
-		DEALLOCATE cur2
+	;WITH late_loans AS (
+		SELECT DISTINCT
+			lst.LoanID
+		FROM
+			LoanScheduleTransaction lst
+			INNER JOIN Loan l ON lst.LoanId = l.Id AND l.CustomerId = @CustomerID
+			INNER JOIN LoanSchedule s ON s.Id = lst.ScheduleID
+			INNER JOIN LoanTransaction t ON t.Id = lst.TransactionID
+		WHERE
+			DATEDIFF(day, s.[Date], t.PostDate) > 7
+			AND
+			(ABS(lst.PrincipalDelta) + ABS(lst.FeesDelta) + ABS(lst.InterestDelta)) > 2
+	)
+	SELECT
+		@OnTimeLoans = ISNULL(COUNT(DISTINCT l.Id), 0)
+	FROM
+		Loan l
+		LEFT JOIN late_loans ll ON l.Id = ll.LoanID
+	WHERE
+		ll.LoanID IS NULL
+		AND
+		l.CustomerId = @CustomerID
+		AND
+		l.DateClosed IS NOT NULL
 
-		FETCH NEXT FROM cur INTO @LoanId, @LoanStatus
-	END
-	CLOSE cur
-	DEALLOCATE cur
-	
-	DROP TABLE #LateLoans
+	------------------------------------------------------------------------------
 
 	SELECT 
-		@NumOfLatePayments = COUNT(LoanCharges.Id) 
+		@NumOfLatePayments = COUNT(lc.Id) 
 	FROM 
-		LoanCharges,
-		ConfigurationVariables,  
-		Loan
+		LoanCharges lc
+		INNER JOIN ConfigurationVariables v
+			ON v.Id = lc.ConfigurationVariableId
+			AND v.Name = 'LatePaymentCharge'
+		INNER JOIN Loan l
+			ON l.Id = lc.LoanId
 	WHERE 
-		ConfigurationVariables.Name = 'LatePaymentCharge' AND
-		ConfigurationVariables.Id = LoanCharges.ConfigurationVariableId AND
-		Loan.Id = LoanCharges.LoanId AND
-		Loan.CustomerId = @CustomerId
+		l.CustomerId = @CustomerId
+
+	------------------------------------------------------------------------------
 
 	SELECT 
-		@NumOfEarlyPayments = COUNT(LoanSchedule.id) 
+		@NumOfEarlyPayments = COUNT(s.id) 
 	FROM 
-		LoanSchedule, 
-		Loan
+		LoanSchedule s
+		INNER JOIN Loan l ON l.Id = s.LoanId
 	WHERE 
-		LoanSchedule.Status = 'PaidEarly' AND
-		Loan.Id = LoanSchedule.LoanId AND
-		Loan.CustomerId = @CustomerId
-		
+		s.Status = 'PaidEarly'
+		AND
+		l.CustomerId = @CustomerId
+
+	------------------------------------------------------------------------------
+
 	SELECT
 		@NumOfHmrcMps = COUNT(1),
-		@EarliestHmrcLastUpdateDate = MIN(UpdatingEnd)
+		@EarliestHmrcLastUpdateDate = MIN(m.UpdatingEnd)
 	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t
+			ON t.Id = m.MarketPlaceId
+			AND t.InternalId = @HMRC
+		INNER JOIN MP_VatReturnRecords r
+			ON m.Id = r.CustomerMarketPlaceId
+		INNER JOIN Business b
+			ON r.BusinessId = b.Id
+			AND b.BelongsToCustomer = 1
 	WHERE
-		MP_MarketplaceType.Name = 'HMRC' AND
-		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
-		MP_CustomerMarketPlace.Disabled = 0
-		
+		m.CustomerId = @CustomerId
+		AND
+		m.Disabled = 0
+
+	------------------------------------------------------------------------------
+
 	SELECT
-		@EarliestYodleeLastUpdateDate = MIN(UpdatingEnd)
+		@EarliestYodleeLastUpdateDate = MIN(m.UpdatingEnd)
 	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t
+			ON t.Id = m.MarketPlaceId
+			AND t.InternalId = @Yodlee
 	WHERE
-		MP_MarketplaceType.Name = 'Yodlee' AND
-		MP_MarketplaceType.Id = MP_CustomerMarketPlace.MarketPlaceId AND
-		MP_CustomerMarketPlace.CustomerId = @CustomerId	AND
-		MP_CustomerMarketPlace.Disabled = 0
-	
-	SELECT TOP 1
-		@HmrcId = MP_CustomerMarketplace.Id
-	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
-	WHERE
-		CustomerId = @CustomerId AND
-		MP_CustomerMarketplace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name = 'HMRC' AND
-		MP_CustomerMarketPlace.Disabled = 0
-		
-	IF @HmrcId IS NULL
-		SELECT @HmrcId = 0
-	
+		m.CustomerId = @CustomerId
+		AND
+		m.Disabled = 0
+
+	------------------------------------------------------------------------------
+
 	SELECT 
-		@TotalZooplaValue = SUM(CASE WHEN ZooplaEstimateValue IS NOT NULL AND ZooplaEstimateValue != 0 THEN ZooplaEstimateValue ELSE ISNULL(AverageSoldPrice1Year, 0) END)
+		@TotalZooplaValue = SUM(CASE
+			WHEN ZooplaEstimateValue IS NOT NULL AND ZooplaEstimateValue != 0
+				THEN ZooplaEstimateValue
+			ELSE ISNULL(AverageSoldPrice1Year, 0)
+		END)
 	FROM 
-		Zoopla, 
-		CustomerAddress 
+		Zoopla z
+		INNER JOIN CustomerAddress a
+			ON a.addressId = z.CustomerAddressId
+			AND a.IsOwnerAccordingToLandRegistry = 1
 	WHERE 
-		CustomerId = @CustomerId AND 
-		CustomerAddress.addressId = Zoopla.CustomerAddressId AND 
-		CustomerAddress.IsOwnerAccordingToLandRegistry = 1
+		CustomerId = @CustomerId
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		@NumberOfOnlineStores = COUNT(1) 
 	FROM
-		MP_CustomerMarketPlace,
-		MP_MarketplaceType
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t
+			ON m.MarketPlaceId = t.Id
+			AND t.InternalId IN (@eBay, @Amazon, @PayPal)
 	WHERE
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
-		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name IN ('eBay', 'Amazon', 'Pay Pal') AND
-		MP_CustomerMarketPlace.Disabled = 0
+		m.CustomerId = @CustomerId
+		AND
+		m.Disabled = 0
 			
+	------------------------------------------------------------------------------
+
 	SELECT
 		cmp.Id AS CustomerMarketPlaceId,
 		MAX(fb.Created) AS MaxCreated
@@ -349,6 +338,8 @@ BEGIN
 	GROUP BY
 		cmp.Id
 
+	------------------------------------------------------------------------------
+
 	SELECT
 		@AmazonPositiveFeedbacks = SUM(fbi.Positive)
 	FROM
@@ -360,6 +351,8 @@ BEGIN
 			ON fbi.AmazonFeedbackId = fb.Id
 			AND fbi.TimePeriodId = 5 -- 'Lifetime'
 
+	------------------------------------------------------------------------------
+
 	SELECT
 		cmp.Id AS CustomerMarketPlaceId,
 		MAX(fb.Created) AS MaxCreated
@@ -370,9 +363,11 @@ BEGIN
 		INNER JOIN MP_CustomerMarketPlace cmp ON fb.CustomerMarketPlaceId = cmp.Id
 	WHERE
 		cmp.CustomerId = @CustomerId AND
-		cmp.Disabled=0
+		cmp.Disabled = 0
 	GROUP BY
 		cmp.Id
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		@EbayPositiveFeedbacks = SUM(fbi.Positive)
@@ -385,25 +380,32 @@ BEGIN
 			ON fbi.EbayFeedbackId = fb.Id
 			AND fbi.TimePeriodId = 6 -- '0'
 	
+	------------------------------------------------------------------------------
+
 	DROP TABLE #MaxAmazonCreated
 	DROP TABLE #MaxEbayCreated
 	
+	------------------------------------------------------------------------------
+
 	SELECT
 		@NumOfPaypalTransactions = COUNT(1)
 	FROM
-		MP_CustomerMarketPlace,
-		MP_PayPalTransaction,
-		MP_PayPalTransactionItem2,
-		MP_MarketplaceType
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_PayPalTransaction t
+			ON t.CustomerMarketPlaceId = m.Id
+		INNER JOIN MP_PayPalTransactionItem2 ti
+			ON ti.TransactionId = t.Id
+			AND ti.GrossAmount > 0
+		INNER JOIN MP_MarketplaceType mt
+			ON m.MarketPlaceId = mt.Id
+			AND mt.InternalId = @PayPal
 	WHERE
-		MP_CustomerMarketPlace.CustomerId = @CustomerId AND
-		MP_CustomerMarketPlace.MarketPlaceId = MP_MarketplaceType.Id AND
-		MP_MarketplaceType.Name = 'Pay Pal' AND
-		MP_PayPalTransaction.CustomerMarketPlaceId = MP_CustomerMarketPlace.Id AND
-		MP_PayPalTransactionItem2.TransactionId = MP_PayPalTransaction.Id AND
-		MP_PayPalTransactionItem2.GrossAmount > 0 AND
-		MP_CustomerMarketPlace.Disabled = 0
-				
+		m.CustomerId = @CustomerId
+		AND
+		m.Disabled = 0
+
+	------------------------------------------------------------------------------
+
 	SELECT
 		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
 		@OnTimeLoans AS OnTimeLoans, 
@@ -415,7 +417,6 @@ BEGIN
 		@BusinessSeniority AS BusinessSeniority,
 		@EzbobSeniority AS EzbobSeniority,
 		@MaritalStatus AS MaritalStatus,
-		@HmrcId AS HmrcId,
 		@NumOfHmrcMps AS NumOfHmrcMps,
 		@TotalZooplaValue AS TotalZooplaValue,
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
@@ -424,7 +425,7 @@ BEGIN
 		@AmazonPositiveFeedbacks AS AmazonPositiveFeedbacks,
 		@EbayPositiveFeedbacks AS EbayPositiveFeedbacks,
 		@NumOfPaypalTransactions AS NumOfPaypalTransactions
+
+	------------------------------------------------------------------------------
 END
-
 GO
-

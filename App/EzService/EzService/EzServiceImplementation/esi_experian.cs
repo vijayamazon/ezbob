@@ -1,11 +1,10 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
-	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
-
 		public ActionMetaData BackfillCustomerAnalyticsCompany() {
 			return Execute<BackfillCustomerAnalyticsCompany>(null, null);
 		} // BackfillCustomerAnalyticsCompany
@@ -22,19 +21,17 @@
 			return Execute<ExperianConsumerCheck>(nCustomerID, userId, nCustomerID, nDirectorID, bForceCheck);
 		} // ExperianConsumerCheck
 
-		public DateTimeActionResult GetExperianCompanyCacheDate(int userId, string refNumber)
-		{
+		public DateTimeActionResult GetExperianCompanyCacheDate(int userId, string refNumber) {
 			DateTime cacheDate = DateTime.UtcNow;
 			try {
 				SafeReader sr = DB.GetFirst(
 					"GetExperianCompanyCacheDate",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("RefNumber", refNumber)
-				);
+					);
 
 				cacheDate = sr["LastUpdateDate"];
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.Error(e, "Exception occurred during execution of GetExperianCompanyCacheDate. userId {0} refNumber {1}", userId, refNumber);
 			}
 
@@ -90,86 +87,71 @@
 			};
 		} // CheckLtdCompanyCache
 
-		public ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId)
-		{
+		public ExperianConsumerActionResult ParseExperianConsumer(long nServiceLogId) {
 			ParseExperianConsumerData oInstance;
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nServiceLogId);
 
-			return new ExperianConsumerActionResult
-			{
+			return new ExperianConsumerActionResult {
 				MetaData = oMetaData,
 				Value = oInstance.Result,
 			};
-
 		}
 
-		public ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId)
-		{
+		public ExperianConsumerActionResult LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId) {
 			LoadExperianConsumerData oInstance;
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, userId, customerId, directorId, nServiceLogId);
 
-			return new ExperianConsumerActionResult
-			{
+			return new ExperianConsumerActionResult {
 				MetaData = oMetaData,
 				Value = oInstance.Result,
 			};
 		}
 
-		public ActionMetaData BackfillExperianConsumer()
-		{
+		public ActionMetaData BackfillExperianConsumer() {
 			return Execute<BackfillExperianConsumer>(null, null);
 		}
 
-		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId)
-		{
+		public ExperianConsumerMortgageActionResult LoadExperianConsumerMortgageData(int userId, int customerId) {
 			LoadExperianConsumerMortgageData oInstance;
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, userId, customerId);
 
-			return new ExperianConsumerMortgageActionResult
-			{
+			return new ExperianConsumerMortgageActionResult {
 				MetaData = oMetaData,
 				Value = oInstance.Result,
 			};
 		}
 
-		public IntActionResult GetExperianConsumerScore(int customerId)
-		{
+		public IntActionResult GetExperianConsumerScore(int customerId) {
 			GetExperianConsumerScore oInstance;
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, customerId, null, customerId);
 
-			return new IntActionResult
-			{
+			return new IntActionResult {
 				MetaData = oMetaData,
 				Value = oInstance.Score,
 			};
 		}
 
-		public CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber)
-		{
+		public CompanyDataForCompanyScoreActionResult GetCompanyDataForCompanyScore(int underwriterId, string refNumber) {
 			GetCompanyDataForCompanyScore strategyInstance;
 			var result = ExecuteSync(out strategyInstance, null, underwriterId, refNumber);
 
-			return new CompanyDataForCompanyScoreActionResult
-			{
+			return new CompanyDataForCompanyScoreActionResult {
 				MetaData = result,
 				Data = strategyInstance.Data
 			};
 		}
 
-		public CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber)
-		{
+		public CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
 			GetCompanyDataForCreditBureau strategyInstance;
 
 			var result = ExecuteSync(out strategyInstance, null, underwriterId, refNumber);
 
-			return new CompanyDataForCreditBureauActionResult
-			{
+			return new CompanyDataForCreditBureauActionResult {
 				MetaData = result,
-				Result = new CompanyDataForCreditBureau
-				{
+				Result = new CompanyDataForCreditBureau {
 					LastUpdate = strategyInstance.LastUpdate,
 					Score = strategyInstance.Score,
 					Errors = strategyInstance.Errors
@@ -177,19 +159,21 @@
 			};
 		}
 
-		public CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId)
-		{
+		public CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId) {
 			GetCompanyCaisDataForAlerts strategyInstance;
 
 			var result = ExecuteSync(out strategyInstance, customerId, underwriterId, customerId);
 
-			return new CompanyCaisDataActionResult
-			{
+			return new CompanyCaisDataActionResult {
 				MetaData = result,
 				Accounts = strategyInstance.Accounts,
 				NumOfCurrentDefaultAccounts = strategyInstance.NumOfCurrentDefaultAccounts,
 				NumOfSettledDefaultAccounts = strategyInstance.NumOfSettledDefaultAccounts
 			};
 		}
+
+		public ActionMetaData UpdateCustomerAnalyticsOnCompanyChange(int customerID) {
+			return Execute<UpdateCustomerAnalyticsOnCompanyChange>(customerID, null, customerID);
+		} // UpdateCustomerAnalyticsOnCompanyChange
 	} // class EzServiceImplementation
 } // namespace EzService

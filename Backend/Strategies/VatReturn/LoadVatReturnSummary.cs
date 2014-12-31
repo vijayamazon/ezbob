@@ -3,23 +3,25 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using Experian;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Exceptions;
 	using JetBrains.Annotations;
 
 	public class LoadVatReturnSummary : AStrategy {
-
-		public LoadVatReturnSummary(int nCustomerID, int nMarketplaceID) {
-			m_oSp = new SpLoadVatReturnSummary(nMarketplaceID, DB, Log);
-			m_nCustomerID = nCustomerID;
-			Summary = new VatReturnSummary[0];
-		} // constructor
+		public VatReturnSummary[] Summary { get; private set; }
 
 		public override string Name {
 			get { return "Load VAT return summary"; }
 		} // Name
+
+		public LoadVatReturnSummary(int nCustomerID, int nMarketplaceID) {
+			this.m_oSp = new SpLoadVatReturnSummary(nMarketplaceID, DB, Log);
+			this.m_nCustomerID = nCustomerID;
+			Summary = new VatReturnSummary[0];
+		} // constructor
 
 		public override void Execute() {
 			var oResults = new SortedDictionary<int, VatReturnSummary>();
@@ -30,9 +32,12 @@
 
 			Action<SortedDictionary<int, VatReturnSummary>, SafeReader> oCurAction = null;
 
-			m_oSp.ForEachRowSafe((sr, bRowsetStart) => {
+			this.m_oSp.ForEachRowSafe((sr, bRowsetStart) => {
 				if (bRowsetStart)
 					oCurAction = oProcessors.Dequeue();
+
+				if (oCurAction == null) // should never happen
+					throw new Alert(Log, "Something went extremely awful: 'current action' is undefined.");
 
 				oCurAction(oResults, sr);
 
@@ -42,18 +47,16 @@
 			decimal factor = CurrentValues.Instance.FCFFactor;
 
 			if (Math.Abs(factor) > 0.0000001m) {
-				var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(m_nCustomerID);
+				var getExperianAccountsCurrentBalance = new GetExperianAccountsCurrentBalance(this.m_nCustomerID);
 				getExperianAccountsCurrentBalance.Execute();
+
 				decimal newActualLoansRepayment = 0;
+
 				if (factor != 0)
-				{
 					newActualLoansRepayment = getExperianAccountsCurrentBalance.CurrentBalance / factor;
-				}
 
 				if (newActualLoansRepayment < 0)
-				{
 					newActualLoansRepayment = 0;
-				}
 
 				foreach (KeyValuePair<int, VatReturnSummary> pair in oResults) {
 					pair.Value.ActualLoanRepayment = newActualLoansRepayment;
@@ -66,22 +69,18 @@
 			Summary = oResults.Values.ToArray();
 		} // Execute
 
-		public VatReturnSummary[] Summary { get; private set; }
-
-		private readonly int m_nCustomerID;
-		private readonly SpLoadVatReturnSummary m_oSp;
-
 		private class SpLoadVatReturnSummary : AStoredProc {
-			public SpLoadVatReturnSummary(int nMarketplaceID, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			[UsedImplicitly]
+			public int MarketplaceID { get; set; }
+
+			public SpLoadVatReturnSummary(int nMarketplaceID, AConnection oDB, ASafeLog oLog)
+				: base(oDB, oLog) {
 				MarketplaceID = nMarketplaceID;
 			} // constructor
 
 			public override bool HasValidParameters() {
 				return MarketplaceID > 0;
 			} // HasValidParameters
-
-			[UsedImplicitly]
-			public int MarketplaceID { get; set; }
 		} // class SpLoadVatReturnSummary
 
 		private static void ProcessSummary(SortedDictionary<int, VatReturnSummary> oResults, SafeReader sr) {
@@ -94,5 +93,7 @@
 			oResults[oQuarter.SummaryID].Quarters.Add(oQuarter);
 		} // ProcessQuarter
 
+		private readonly int m_nCustomerID;
+		private readonly SpLoadVatReturnSummary m_oSp;
 	} // class LoadVatReturnSummary
 } // namespace

@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies {
+﻿namespace AutomationCalculator {
 	using Ezbob.Database;
 	using Ezbob.LibraryGlobals;
 	using Ezbob.Logger;
@@ -31,9 +31,6 @@
 					} // if
 				} // lock
 			} // if
-
-			Ezbob.Models.Library.Initialize(env, db, log);
-			AutomationCalculator.Library.Initialize(env, db, log);
 		} // Initialize
 
 		private Library() {} // constructor

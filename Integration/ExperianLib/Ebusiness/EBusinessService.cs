@@ -7,24 +7,23 @@
 	using System.Text;
 	using System.Web;
 	using ConfigManager;
-	using EBusiness;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Repository;
-	using EzServiceAccessor;
+	using ExperianLib.EBusiness;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
+	using EzServiceAccessor;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 
 	public class EBusinessService {
-
 		public EBusinessService(AConnection oDB) {
-			m_oRetryer = new SqlRetryer(oLog: ms_oLog);
-			eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
-			nonLimitedParser = new NonLimitedParser();
+			this.m_oRetryer = new SqlRetryer(oLog: ms_oLog);
+			this.eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
+			this.nonLimitedParser = new NonLimitedParser();
 
-			m_oDB = oDB;
+			this.m_oDB = oDB;
 		} // constructor
 
 		public TargetResults TargetBusiness(string companyName, string postCode, int customerId, TargetResults.LegalStatus nFilter, string regNum = "") {
@@ -40,15 +39,14 @@
 					regNum,
 					isNonLimited,
 					isLimited
-				);
+					);
 
 				string response = MakeRequest(requestXml);
 
 				Utils.WriteLog(requestXml, response, ExperianServiceType.Targeting, customerId, companyRefNum: regNum);
 
 				return new TargetResults(response);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Error(e, "Target business failed.");
 				throw;
 			} // try
@@ -74,7 +72,7 @@
 				ms_oLog.Debug(
 					"GetLimitedBusinessData({0}, {1}, {2}, {3}): current owner reg num is '{4}'.",
 					regNumber, customerId, checkInCacheOnly, forceCheck, sOwnerRegNum
-				);
+					);
 
 				LimitedResults parentCompanyResult = GetOneLimitedBusinessData(sOwnerRegNum, customerId, checkInCacheOnly, forceCheck);
 
@@ -96,8 +94,7 @@
 
 		public NonLimitedResults GetNotLimitedBusinessData(string regNumber, int customerId, bool checkInCacheOnly, bool forceCheck) {
 			var oRes = GetOneNotLimitedBusinessData(regNumber, customerId, checkInCacheOnly, forceCheck);
-			if (oRes == null)
-			{
+			if (oRes == null) {
 				ms_oLog.Warn("Failed fetching non limited data. Customer:{0} RefNumber:{1}", customerId, regNumber);
 				return null;
 			}
@@ -108,17 +105,18 @@
 		} // GetNotLimitedBusinessData
 
 		public CompanyInfo TargetCache(int customerId, string refNumber) {
-			return m_oRetryer.Retry(() => {
+			return this.m_oRetryer.Retry(() => {
 				var repo = ObjectFactory.GetInstance<ServiceLogRepository>();
-				IQueryable<MP_ServiceLog> oCachedValues = repo.GetAll().Where(c => c.Customer != null && c.Customer.Id == customerId && c.ServiceType == "ESeriesTargeting");
+				IQueryable<MP_ServiceLog> oCachedValues = repo.GetAll()
+					.Where(c => c.Customer != null && c.Customer.Id == customerId && c.ServiceType == "ESeriesTargeting");
 
-				foreach (var oVal in oCachedValues)
-				{
+				foreach (var oVal in oCachedValues) {
 					var targets = new TargetResults(oVal.ResponseData);
 
-					foreach (var target in targets.Targets)
+					foreach (var target in targets.Targets) {
 						if (target.BusRefNum == refNumber)
 							return target;
+					}
 				} // for each cached value
 
 				return null;
@@ -137,7 +135,8 @@
 					oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
 
 				if (oExperianLtd == null) {
-					oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>().CheckLtdCompanyCache(1, regNumber);
+					oExperianLtd = ObjectFactory.GetInstance<IEzServiceAccessor>()
+						.CheckLtdCompanyCache(1, regNumber);
 
 					if ((oExperianLtd == null) || (oExperianLtd.ID == 0)) {
 						oExperianLtd = null;
@@ -145,12 +144,11 @@
 						ms_oLog.Debug(
 							"GetOneLimitedBusinessData({0}, {1}, {2}, {3}): no data found in cache.",
 							regNumber, customerId, checkInCacheOnly, forceCheck
-						);
+							);
 
 						if (!checkInCacheOnly)
 							oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
-					}
-					else {
+					} else {
 						if ((DateTime.UtcNow - oExperianLtd.ReceivedTime).TotalDays > CurrentValues.Instance.UpdateCompanyDataPeriodDays) {
 							oExperianLtd = DownloadOneLimitedFromExperian(regNumber, customerId);
 
@@ -160,10 +158,9 @@
 								ms_oLog.Debug(
 									"GetOneLimitedBusinessData({0}, {1}, {2}, {3}): no data downloaded nor data found in cache.",
 									regNumber, customerId, checkInCacheOnly, forceCheck
-								);
+									);
 							}
-						}
-						else
+						} else
 							bCacheHit = true;
 					}
 				} // if
@@ -172,17 +169,16 @@
 					"GetOneLimitedBusinessData({0}, {1}, {2}, {3}) = (cache hit: {4}):\n{5}",
 					regNumber, customerId, checkInCacheOnly, forceCheck, bCacheHit,
 					oExperianLtd == null ? "-- null --" : oExperianLtd.StringifyAll()
-				);
+					);
 
 				return oExperianLtd == null ? null : new LimitedResults(oExperianLtd, bCacheHit);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Error(e,
 					"Failed to get limited results for a company {0} and customer {1} (cache only: {2}, force: {3}).",
 					regNumber, customerId,
 					checkInCacheOnly ? "yes" : "no",
 					forceCheck ? "yes" : "no"
-				);
+					);
 				return new LimitedResults(e);
 			} // try
 		} // GetOneLimitedBusinessData
@@ -219,10 +215,10 @@
 					string requestXml = GetResource("ExperianLib.Ebusiness.NonLimitedBusinessRequest.xml", refNumber);
 
 					var newResponse = MakeRequest(requestXml);
-					
+
 					var writelog = Utils.WriteLog(requestXml, newResponse, ExperianServiceType.NonLimitedData, customerId, companyRefNum: refNumber);
 
-					nonLimitedParser.ParseAndStore(newResponse, refNumber, writelog.ServiceLog.Id);
+					this.nonLimitedParser.ParseAndStore(newResponse, refNumber, writelog.ServiceLog.Id);
 
 					return BuildResponseFromDb(refNumber);
 				} // if
@@ -233,14 +229,13 @@
 				NonLimitedResults res = BuildResponseFromDb(refNumber);
 				res.CacheHit = true;
 				return res;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Error(e,
 					"Failed to get one non limited result for a company {0} and customer {1} (cache only: {2}, force: {3}).",
 					refNumber, customerId,
 					checkInCacheOnly ? "yes" : "no",
 					forceCheck ? "yes" : "no"
-				);
+					);
 				return new NonLimitedResults(e);
 			} // try
 		}
@@ -248,11 +243,11 @@
 		private DateTime? GetNonLimitedCreationTime(string refNumber) {
 			DateTime? created = null;
 
-			SafeReader sr = m_oDB.GetFirst(
+			SafeReader sr = this.m_oDB.GetFirst(
 				"GetNonLimitedCompanyCreationTime",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("RefNumber", refNumber)
-			);
+				);
 
 			if (!sr.IsEmpty)
 				created = sr["Created"];
@@ -261,11 +256,11 @@
 		}
 
 		private NonLimitedResults BuildResponseFromDb(string refNumber) {
-			SafeReader sr = m_oDB.GetFirst(
+			SafeReader sr = this.m_oDB.GetFirst(
 				"GetNonLimitedCompanyBasicDetails",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("RefNumber", refNumber)
-			);
+				);
 
 			if (!sr.IsEmpty) {
 				decimal creditLimit;
@@ -298,11 +293,12 @@
 		} // BuildResponseFromDb
 
 		private string MakeRequest(string post) {
-			string sRequestID = Guid.NewGuid().ToString("N");
+			string sRequestID = Guid.NewGuid()
+				.ToString("N");
 
-			ms_oLog.Debug("Request {2} to URL: {0} with data: {1}", eSeriesUrl, post, sRequestID);
+			ms_oLog.Debug("Request {2} to URL: {0} with data: {1}", this.eSeriesUrl, post, sRequestID);
 
-			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(eSeriesUrl);
+			HttpWebRequest request = (HttpWebRequest)WebRequest.Create(this.eSeriesUrl);
 			request.Method = "POST";
 			request.AllowAutoRedirect = false;
 			request.ContentType = "application/xml";
@@ -333,7 +329,8 @@
 		} // MakeRequest
 
 		private string GetResource(string resName, params object[] p) {
-			using (Stream s = Assembly.GetExecutingAssembly().GetManifestResourceStream(resName)) {
+			using (Stream s = Assembly.GetExecutingAssembly()
+				.GetManifestResourceStream(resName)) {
 				if (s == null)
 					return null;
 
@@ -345,12 +342,11 @@
 			} // using
 		} // GetResource
 
+		private static readonly SafeILog ms_oLog = new SafeILog(typeof(EBusinessService));
 		private readonly SqlRetryer m_oRetryer;
 		private readonly NonLimitedParser nonLimitedParser;
 		private readonly string eSeriesUrl;
 
 		private readonly AConnection m_oDB;
-		private static readonly SafeILog ms_oLog = new SafeILog(typeof(EBusinessService));
-
 	} // class EBusinessService
 } // namespace

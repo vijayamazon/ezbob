@@ -49,6 +49,7 @@
 			WorstStatuses = new SortedSet<string>();
 
 			Turnover = new CalculatedTurnover(Args.TurnoverType, Log);
+			Turnover.Init();
 
 			OriginationTime = new OriginationTime(Log);
 

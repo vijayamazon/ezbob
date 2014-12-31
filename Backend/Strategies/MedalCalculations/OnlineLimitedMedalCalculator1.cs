@@ -1,11 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
-	using Ezbob.Database;
-	using Ezbob.Logger;
-
 	public class OnlineLimitedMedalCalculator1 : MedalCalculatorBase {
-		public OnlineLimitedMedalCalculator1(AConnection db, ASafeLog log)
-			: base(db, log) {}
-
 		public override void SetInitialWeights() {
 			Results.BusinessScoreWeight = 20;
 			Results.FreeCashFlowWeight = 13;
@@ -21,19 +15,19 @@
 			Results.NumOfLoansWeight = 0;
 			Results.NumOfLateRepaymentsWeight = 0;
 			Results.NumOfEarlyRepaymentsWeight = 0;
-		}
+		} // SetInitialWeights
 
 		protected override void SetMedalType() {
 			Results.MedalType = MedalType.OnlineLimited;
-		}
+		} // SetMedalType
 
 		protected override decimal GetConsumerScoreWeightForLowScore() {
 			return 27.5m;
-		}
+		} // GetConsumerScoreWeightForLowScore
 
 		protected override decimal GetCompanyScoreWeightForLowScore() {
 			return 27.5m;
-		}
+		} // GetCompanyScoreWeightForLowScore
 
 		protected override void RedistributeFreeCashFlowWeight() {
 			Results.FreeCashFlowWeight = 0;
@@ -41,13 +35,13 @@
 			Results.BusinessScoreWeight += 3;
 			Results.ConsumerScoreWeight += 3;
 			Results.BusinessSeniorityWeight += 2;
-		}
+		} // RedistributeFreeCashFlowWeight
 
 		protected override void RedistributeWeightsForPayingCustomer() {
 			Results.BusinessScoreWeight -= 4;
 			Results.BusinessSeniorityWeight -= 2;
 			Results.ConsumerScoreWeight -= 4;
-		}
+		} // RedistributeWeightsForPayingCustomer
 
 		protected override decimal GetSumOfNonFixedWeights() {
 			return
@@ -56,7 +50,7 @@
 					Results.MaritalStatusWeight +
 					Results.NumberOfStoresWeight +
 					Results.PositiveFeedbacksWeight;
-		}
+		} // GetSumOfNonFixedWeights
 
 		protected override void AdjustWeightsWithRatio(decimal ratio) {
 			Results.TangibleEquityWeight *= ratio;
@@ -64,6 +58,6 @@
 			Results.MaritalStatusWeight *= ratio;
 			Results.NumberOfStoresWeight *= ratio;
 			Results.PositiveFeedbacksWeight *= ratio;
-		}
-	}
-}
+		} // AdjustWeightsWithRatio
+	} // OnlineLimitedMedalCalculator1
+} // namespace

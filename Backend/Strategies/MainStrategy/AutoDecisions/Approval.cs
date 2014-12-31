@@ -67,6 +67,7 @@
 				);
 
 			this.m_oTurnover = new CalculatedTurnover(this.turnoverType, this.log);
+			this.m_oTurnover.Init();
 		} // constructor
 
 		public Approval Init() {

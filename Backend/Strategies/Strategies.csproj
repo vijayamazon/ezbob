@@ -109,9 +109,9 @@
     <Compile Include="Experian\ExperianDirector.cs" />
     <Compile Include="Experian\LoadExperianLtd.cs" />
     <Compile Include="Experian\ParseExperianLtd.cs" />
+    <Compile Include="Experian\UpdateCustomerAnalyticsOnCompanyChange.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
-    <Compile Include="Broker\LimitedMedalCalculatorForInstantOffer.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Arguments.cs" />
@@ -234,7 +234,7 @@
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_BusinessDataOutput.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_BusinessData.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_LoadRtiMonthForVatReturnSummary.cs" />
-    <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs.cs" />
+    <Compile Include="VatReturn\CalculateVatReturnSummary\CalculateVatReturnSummary.cs" />
     <Compile Include="Misc\EncryptChannelGrabberMarketplaces.cs" />
     <Compile Include="Exceptions\StrategyWarning.cs" />
     <Compile Include="Exceptions\StrategyAlert.cs" />

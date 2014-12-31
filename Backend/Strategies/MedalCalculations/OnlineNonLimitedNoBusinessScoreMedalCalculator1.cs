@@ -1,22 +1,6 @@
-﻿namespace Ezbob.Backend.Strategies.MedalCalculations
-{
-	using Ezbob.Database;
-	using Ezbob.Logger;
-
-	public class OnlineNonLimitedNoBusinessScoreMedalCalculator1 : MedalCalculatorBase
-	{
-		public OnlineNonLimitedNoBusinessScoreMedalCalculator1(AConnection db, ASafeLog log)
-			: base(db, log)
-		{
-		}
-
-		protected override void SetMedalType()
-		{
-			Results.MedalType = MedalType.OnlineNonLimitedNoBusinessScore;
-		}
-
-		public override void SetInitialWeights()
-		{
+﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
+	public class OnlineNonLimitedNoBusinessScoreMedalCalculator1 : MedalCalculatorBase {
+		public override void SetInitialWeights() {
 			Results.BusinessScoreWeight = 0;
 			Results.FreeCashFlowWeight = 0;
 			Results.AnnualTurnoverWeight = 11;
@@ -33,34 +17,38 @@
 			Results.NumOfEarlyRepaymentsWeight = 0;
 		}
 
-		protected override decimal GetConsumerScoreWeightForLowScore()
-		{
+		protected override void SetMedalType() {
+			Results.MedalType = MedalType.OnlineNonLimitedNoBusinessScore;
+		} // SetMedalType
+
+		// SetInitialWeights
+
+		protected override decimal GetConsumerScoreWeightForLowScore() {
 			return 55;
-		}
+		} // GetConsumerScoreWeightForLowScore
 
-		protected override decimal GetCompanyScoreWeightForLowScore()
-		{
+		protected override decimal GetCompanyScoreWeightForLowScore() {
 			return 0;
-		}
+		} // GetCompanyScoreWeightForLowScore
 
-		protected override void RedistributeWeightsForPayingCustomer()
-		{
+		protected override void RedistributeWeightsForPayingCustomer() {
 			Results.NetWorthWeight -= 2;
 			Results.BusinessSeniorityWeight -= 3;
 			Results.ConsumerScoreWeight -= 5;
-		}
+		} // RedistributeWeightsForPayingCustomer
 
-		protected override decimal GetSumOfNonFixedWeights()
-		{
-			return Results.MaritalStatusWeight + Results.NumberOfStoresWeight + Results.PositiveFeedbacksWeight + Results.AnnualTurnoverWeight;
-		}
+		protected override decimal GetSumOfNonFixedWeights() {
+			return Results.MaritalStatusWeight +
+				Results.NumberOfStoresWeight +
+				Results.PositiveFeedbacksWeight +
+				Results.AnnualTurnoverWeight;
+		} // GetSumOfNonFixedWeights
 
-		protected override void AdjustWeightsWithRatio(decimal ratio)
-		{
+		protected override void AdjustWeightsWithRatio(decimal ratio) {
 			Results.MaritalStatusWeight *= ratio;
 			Results.NumberOfStoresWeight *= ratio;
 			Results.PositiveFeedbacksWeight *= ratio;
 			Results.AnnualTurnoverWeight *= ratio;
-		}
-	}
-}
+		} // AdjustWeightsWithRatio
+	} // class OnlineNonLimitedNoBusinessScoreMedalCalculator1
+} // namespace

@@ -25,11 +25,10 @@
 
 				Log.Debug("Backfill for company {0} of customer {1}: data found.", sCompanyRegNum, nCustomerID);
 
-				ExperianCompanyCheck.UpdateAnalyticsForLimited(oData.MaxBureauScore, oData, nCustomerID, DB, Log);
+				ExperianCompanyCheck.UpdateAnalyticsForLimited(oData, nCustomerID);
 
 				Log.Debug("Backfill for company {0} of customer {1}: analytics updated.", sCompanyRegNum, nCustomerID);
 			} // for each row
 		} // Execute
-
 	} // class BackfillCustomerAnalyticsCompany
 } // namespace

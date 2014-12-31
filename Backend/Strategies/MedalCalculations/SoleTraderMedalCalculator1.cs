@@ -1,22 +1,6 @@
-﻿namespace Ezbob.Backend.Strategies.MedalCalculations
-{
-	using Ezbob.Database;
-	using Ezbob.Logger;
-
-	public class SoleTraderMedalCalculator1 : MedalCalculatorBase
-	{
-		public SoleTraderMedalCalculator1(AConnection db, ASafeLog log)
-			: base(db, log)
-		{
-		}
-
-		protected override void SetMedalType()
-		{
-			Results.MedalType = MedalType.SoleTrader;
-		}
-
-		public override void SetInitialWeights()
-		{
+﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
+	public class SoleTraderMedalCalculator1 : MedalCalculatorBase {
+		public override void SetInitialWeights() {
 			Results.BusinessScoreWeight = 0;
 			Results.FreeCashFlowWeight = 25;
 			Results.AnnualTurnoverWeight = 16;
@@ -33,39 +17,39 @@
 			Results.NumOfEarlyRepaymentsWeight = 0;
 		}
 
-		protected override decimal GetConsumerScoreWeightForLowScore()
-		{
+		protected override void SetMedalType() {
+			Results.MedalType = MedalType.SoleTrader;
+		} // SetMedalType
+
+		// SetInitialWeights
+
+		protected override decimal GetConsumerScoreWeightForLowScore() {
 			return 55;
-		}
+		} // GetConsumerScoreWeightForLowScore
 
-		protected override decimal GetCompanyScoreWeightForLowScore()
-		{
+		protected override decimal GetCompanyScoreWeightForLowScore() {
 			return 0;
-		}
+		} // GetCompanyScoreWeightForLowScore
 
-		protected override void RedistributeFreeCashFlowWeight()
-		{
+		protected override void RedistributeFreeCashFlowWeight() {
 			Results.FreeCashFlowWeight = 0;
 			Results.AnnualTurnoverWeight += 10;
 			Results.ConsumerScoreWeight += 13;
 			Results.BusinessSeniorityWeight += 2;
-		}
+		} // RedistributeFreeCashFlowWeight
 
-		protected override void RedistributeWeightsForPayingCustomer()
-		{
+		protected override void RedistributeWeightsForPayingCustomer() {
 			Results.BusinessSeniorityWeight -= 1;
 			Results.ConsumerScoreWeight -= 9;
-		}
+		} // RedistributeWeightsForPayingCustomer
 
-		protected override decimal GetSumOfNonFixedWeights()
-		{
+		protected override decimal GetSumOfNonFixedWeights() {
 			return Results.NetWorthWeight + Results.MaritalStatusWeight;
-		}
+		} // GetSumOfNonFixedWeights
 
-		protected override void AdjustWeightsWithRatio(decimal ratio)
-		{
+		protected override void AdjustWeightsWithRatio(decimal ratio) {
 			Results.NetWorthWeight *= ratio;
 			Results.MaritalStatusWeight *= ratio;
-		}
-	}
-}
+		} // AdjustWeightsWithRatio
+	} // class SoleTraderMedalCalculator1
+} // namespace

@@ -1,22 +1,6 @@
-﻿namespace Ezbob.Backend.Strategies.MedalCalculations
-{
-	using Ezbob.Database;
-	using Ezbob.Logger;
-
-	public class LimitedMedalCalculator1 : MedalCalculatorBase
-	{
-		public LimitedMedalCalculator1(AConnection db, ASafeLog log)
-			: base(db, log)
-		{
-		}
-
-		protected override void SetMedalType()
-		{
-			Results.MedalType = MedalType.Limited;
-		}
-
-		public override void SetInitialWeights()
-		{
+﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
+	public class LimitedMedalCalculator1 : MedalCalculatorBase {
+		public override void SetInitialWeights() {
 			Results.BusinessScoreWeight = 30;
 			Results.FreeCashFlowWeight = 19;
 			Results.AnnualTurnoverWeight = 10;
@@ -31,44 +15,44 @@
 			Results.NumOfLoansWeight = 0;
 			Results.NumOfLateRepaymentsWeight = 0;
 			Results.NumOfEarlyRepaymentsWeight = 0;
-		}
+		} // SetInitialWeights
 
-		protected override decimal GetConsumerScoreWeightForLowScore()
-		{
+		protected override void SetMedalType() {
+			Results.MedalType = MedalType.Limited;
+		} // SetMedalType
+
+		// SetInitialWeights
+
+		protected override decimal GetConsumerScoreWeightForLowScore() {
 			return 13.75m;
-		}
+		} // GetConsumerScoreWeightForLowScore
 
-		protected override decimal GetCompanyScoreWeightForLowScore()
-		{
+		protected override decimal GetCompanyScoreWeightForLowScore() {
 			return 41.25m;
-		}
+		} // GetCompanyScoreWeightForLowScore
 
-		protected override void RedistributeFreeCashFlowWeight()
-		{
+		protected override void RedistributeFreeCashFlowWeight() {
 			Results.FreeCashFlowWeight = 0;
 			Results.AnnualTurnoverWeight += 7;
 			Results.BusinessScoreWeight += 5;
 			Results.ConsumerScoreWeight += 3;
 			Results.BusinessSeniorityWeight += 4;
-		}
+		} // RedistributeFreeCashFlowWeight
 
-		protected override void RedistributeWeightsForPayingCustomer()
-		{
+		protected override void RedistributeWeightsForPayingCustomer() {
 			Results.BusinessScoreWeight -= 6.25m;
 			Results.BusinessSeniorityWeight -= 1.67m;
 			Results.ConsumerScoreWeight -= 2.08m;
-		}
+		} // RedistributeWeightsForPayingCustomer
 
-		protected override decimal GetSumOfNonFixedWeights()
-		{
+		protected override decimal GetSumOfNonFixedWeights() {
 			return Results.TangibleEquityWeight + Results.NetWorthWeight + Results.MaritalStatusWeight;
-		}
+		} // GetSumOfNonFixedWeights
 
-		protected override void AdjustWeightsWithRatio(decimal ratio)
-		{
+		protected override void AdjustWeightsWithRatio(decimal ratio) {
 			Results.TangibleEquityWeight *= ratio;
 			Results.NetWorthWeight *= ratio;
 			Results.MaritalStatusWeight *= ratio;
-		}
-	}
-}
+		} // AdjustWeightsWithRatio
+	} // class LimitedMedalCalculator1
+} // namespace

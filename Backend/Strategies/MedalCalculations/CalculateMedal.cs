@@ -75,9 +75,7 @@
 					this.numOfYodleeMps,
 					this.numOfEbayAmazonPayPalMps,
 					this.earliestHmrcLastUpdateDate,
-					this.earliestYodleeLastUpdateDate,
-					DB,
-					Log
+					this.earliestYodleeLastUpdateDate
 					).CalculateMedal();
 
 				var verification = new MedalChooser(DB, Log);
