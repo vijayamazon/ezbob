@@ -31,6 +31,10 @@ EzBob.Underwriter.SettingsPricingModelView = Backbone.Marionette.ItemView.extend
 			selector: "input[name='EuCollectionRate']",
 			converter: EzBob.BindingConverters.percentsFormat
 		},
+		CosmeCollectionRate: {
+			selector: "input[name='CosmeCollectionRate']",
+			converter: EzBob.BindingConverters.percentsFormat
+		},
 		DebtPercentOfCapital: {
 			selector: "input[name='DebtPercentOfCapital']",
 			converter: EzBob.BindingConverters.percentsFormat
@@ -107,6 +111,7 @@ EzBob.Underwriter.SettingsPricingModelView = Backbone.Marionette.ItemView.extend
 		this.$el.find("input[name='DefaultRateCompanyShare']").percentFormat();
 		this.$el.find("input[name='CollectionRate']").percentFormat();
 		this.$el.find("input[name='EuCollectionRate']").percentFormat();
+		this.$el.find("input[name='CosmeCollectionRate']").percentFormat();
 		this.$el.find("input[name='DebtPercentOfCapital']").percentFormat();
 		this.$el.find("input[name='CostOfDebt']").percentFormat();
 		this.$el.find("input[name='ProfitMarkup']").percentFormat();

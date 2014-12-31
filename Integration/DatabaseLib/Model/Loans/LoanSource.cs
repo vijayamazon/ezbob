@@ -5,7 +5,11 @@ using FluentNHibernate.Mapping;
 using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans {
-	#region class LoanSource
+	public enum LoanSourceName {
+		Standard,
+		EU,
+		COSME,
+	}
 
 	public class LoanSource {
 		#region public
@@ -27,10 +31,6 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 		#endregion public
 	} // class LoanSource
 
-	#endregion class LoanSource
-
-	#region LoanSourceRepository
-
 	public interface ILoanSourceRepository : IRepository<LoanSource> {
 		LoanSource GetDefault();
 		LoanSource GetByName(string name);
@@ -45,10 +45,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 			return GetAll().FirstOrDefault(x => x.Name == name);
 		}
 
-// GetDefault
 	} // class LoanSourceRepository
 
-	#endregion LoanSourceRepository
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {

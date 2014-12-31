@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Linq;
 	using System.Text;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -11,18 +12,14 @@
 	using Ezbob.Logger;
 	using PaymentServices.Calculators;
 	
-	public class PricingModelCalculator
+	public class PricingModelCalculator: AStrategy
 	{
 		private readonly int customerId;
-		private readonly AConnection db;
-		private readonly ASafeLog log;
 
-		public PricingModelCalculator(int customerId, PricingModelModel model, AConnection db, ASafeLog log)
+		public PricingModelCalculator(int customerId, PricingModelModel model, AConnection db, ASafeLog log):base(db,log)
 		{
 			Model = model;
 			this.customerId = customerId;
-			this.db = db;
-			this.log = log;
 		}
 
 		public PricingModelModel Model { get; private set; }
@@ -75,39 +72,57 @@
 		private void CalculateFullModelAfterInterestRate()
 		{
 			Loan loan = CreateLoan(Model.MonthlyInterestRate, Model.FeesRevenue + Model.BrokerSetupFeePounds);
-			Model.Apr = GetApr(loan);
-
+			
 			Model.CostOfDebtOutput = GetCostOfDebt(loan.Schedule);
 			Model.InterestRevenue = GetInterestRevenue(loan.Schedule);
-
 			Model.Revenue = Model.FeesRevenue + Model.InterestRevenue;
-
-			var scoreStrat = new GetExperianConsumerScore(customerId, db, log);
-			scoreStrat.Execute();
-
-			int consumerScore = scoreStrat.Score;
-
-			Model.EuLoanPercentages = GetEuLoanMonthlyInterest(consumerScore);
 			Model.CogsOutput = Model.Cogs;
 			Model.OpexAndCapexOutput = Model.OpexAndCapex;
 			Model.GrossProfit = Model.Revenue - Model.Cogs;
 			Model.Ebitda = Model.GrossProfit - Model.OpexAndCapex;
 			Model.NetLossFromDefaults = (1 - Model.CollectionRate) * Model.LoanAmount * Model.DefaultRate;
 			Model.ProfitMarkupOutput = Model.ProfitMarkup * Model.Revenue;
-			Model.AnnualizedInterestRate = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0;
 			Model.TotalCost = Model.CostOfDebtOutput + Model.Cogs + Model.OpexAndCapex + Model.NetLossFromDefaults;
 
-			decimal annualizedInterestRateEu2, aprEu2;
-			Model.SetupFeeForEuLoanHigh = GetSetupFeeForEu(0.02m, out annualizedInterestRateEu2, out aprEu2);
-			Model.AnnualizedInterestRateEu2 = annualizedInterestRateEu2;
-			Model.AprEu2 = aprEu2;
+			Model.PricingSourceModels = new List<PricingSourceModel>();
+			Model.PricingSourceModels.Add(new PricingSourceModel {
+				Source = "Ezbob loan",
+				InterestRate = Model.MonthlyInterestRate,
+				SetupFee = Model.SetupFeePercents,
+				AIR = Model.TenureMonths != 0 ? (Model.MonthlyInterestRate * 12) + (Model.SetupFeePercents * 12 / Model.TenureMonths) : 0,
+				APR = GetApr(loan)
+			});
 
-			decimal annualizedInterestRateEu175, aprEu175;
-			Model.SetupFeeForEuLoanLow = GetSetupFeeForEu(0.0175m, out annualizedInterestRateEu175, out aprEu175);
-			Model.AnnualizedInterestRateEu175 = annualizedInterestRateEu175;
-			Model.AprEu175 = aprEu175;
+			var scoreStrat = new GetExperianConsumerScore(customerId, DB, Log);
+			scoreStrat.Execute();
+
+			int consumerScore = scoreStrat.Score;
+
+			decimal preferableEUInterest = GetEuLoanMonthlyInterest(consumerScore);
+			Model.PricingSourceModels.Add(GetPricingSourceForEU("EU Loan (2%)", 0.02M, Model.EuCollectionRate, preferableEUInterest));
+			Model.PricingSourceModels.Add(GetPricingSourceForEU("EU Loan (1.75%)", 0.0175M, Model.EuCollectionRate, preferableEUInterest));
+
+			int companyScore = GetCompanyScore();
+			decimal preferableCOSMEInterest = GetCOSMELoanMonthlyInterest(consumerScore, companyScore);
+			Log.Info("Pricing calculator: Customer {0} Consumer score: {1} Company Score: {2} preferable COSME interest {3} preferable EU interest {4}", customerId, consumerScore, companyScore, preferableCOSMEInterest, preferableEUInterest);
+			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (2.25%)", 0.0225M, Model.CosmeCollectionRate, preferableCOSMEInterest));
+			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (2%)", 0.02M, Model.CosmeCollectionRate, preferableCOSMEInterest));
+			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (1.75%)", 0.0175M, Model.CosmeCollectionRate, preferableCOSMEInterest));
 		}
 
+		private PricingSourceModel GetPricingSourceForEU(string sourceName, decimal interestRate, decimal collectionRate, decimal preferableInterestRate) {
+			decimal air, apr;
+			decimal setupFee = GetSetupFeeForEu(interestRate, collectionRate, out air, out apr);
+			bool isPreferable = interestRate == preferableInterestRate;
+			return new PricingSourceModel {
+				Source = sourceName,
+				InterestRate = interestRate,
+				SetupFee = setupFee,
+				AIR = air,
+				APR = apr,
+				IsPreferable = isPreferable
+			};
+		}
 		private decimal GetApr(Loan loan)
 		{
 			var aprCalc = new APRCalculator();
@@ -135,12 +150,12 @@
 			return loan;
 		}
 
-		private decimal GetSetupFeeForEu(decimal monthlyInterestRate, out decimal annualizedInterestRate, out decimal apr)
+		private decimal GetSetupFeeForEu(decimal monthlyInterestRate, decimal collectionRate, out decimal annualizedInterestRate, out decimal apr)
 		{
 			Loan loan = CreateLoan(monthlyInterestRate, Model.FeesRevenue);
 			decimal costOfDebtEu = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
-			decimal netLossFromDefaults = (1 - Model.EuCollectionRate) * Model.LoanAmount * Model.DefaultRate;
+			decimal netLossFromDefaults = (1 - collectionRate) * Model.LoanAmount * Model.DefaultRate;
 			decimal setupFeePounds = Model.ProfitMarkupOutput - interestRevenue + Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
 			decimal setupFee = setupFeePounds / Model.LoanAmount;
 			loan = CreateLoan(monthlyInterestRate, setupFeePounds + Model.BrokerSetupFeePounds);
@@ -247,13 +262,14 @@
 			inputs.Append("TenureMonths:").Append(Model.TenureMonths).Append("\r\n");
 			inputs.Append("CollectionRate:").Append(Model.CollectionRate).Append("\r\n");
 			inputs.Append("EuCollectionRate:").Append(Model.EuCollectionRate).Append("\r\n");
+			inputs.Append("CosmeCollectionRate:").Append(Model.CosmeCollectionRate).Append("\r\n");
 			inputs.Append("Cogs:").Append(Model.Cogs).Append("\r\n");
 			inputs.Append("DebtPercentOfCapital:").Append(Model.DebtPercentOfCapital).Append("\r\n");
 			inputs.Append("CostOfDebt:").Append(Model.CostOfDebt).Append("\r\n");
 			inputs.Append("OpexAndCapex:").Append(Model.OpexAndCapex).Append("\r\n");
 			inputs.Append("ProfitMarkup:").Append(Model.ProfitMarkup).Append("\r\n");
 
-			log.Warn("Inputs were:\r\n{0}", inputs);
+			Log.Warn("Inputs were:\r\n{0}", inputs);
 		}
 
 		private decimal GetCostOfDebt(IEnumerable<LoanScheduleItem> schedule)
@@ -291,8 +307,65 @@
 
 		private decimal GetEuLoanMonthlyInterest(int key)
 		{
-			SafeReader sr = db.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "EuLoanMonthlyInterest"), new QueryParameter("Key", key));
+			SafeReader sr = DB.GetFirst("GetConfigTableValue", CommandSpecies.StoredProcedure, new QueryParameter("ConfigTableName", "EuLoanMonthlyInterest"), new QueryParameter("Key", key));
 			return sr["Value"];
+		}
+
+		/// <summary>
+		/// Retrieve the preferable COSME interest rate based on customers personal and business score
+		/// TODO make configurable in DB
+		/// </summary>
+		/// <returns>preferable interest rate</returns>
+		private decimal GetCOSMELoanMonthlyInterest(int consumerScore, int companyScore) {
+			if (consumerScore < 1040 && companyScore == 0) {
+				return 0.0225M;
+			} 
+			if (consumerScore >= 1040 && companyScore == 0) {
+				return 0.0175M;
+			}
+			if (consumerScore < 1040 && companyScore >= 50) {
+				return 0.02M;
+			}
+			if (consumerScore >= 1040 && companyScore >= 50) {
+				return 0.0175M;
+			}
+			//if companyScore < 50
+			return 0.0225M;
+		}
+		private int GetCompanyScore() {
+			var outputScore = new QueryParameter("CompanyScore") {
+				Type = DbType.Int32,
+				Direction = ParameterDirection.Output,
+			};
+
+			var outputDate = new QueryParameter("IncorporationDate") {
+				Type = DbType.DateTime2,
+				Direction = ParameterDirection.Output,
+			};
+
+			DB.ExecuteNonQuery(
+				"GetCompanyScoreAndIncorporationDate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId),
+				new QueryParameter("TakeMinScore", false),
+				outputScore,
+				outputDate
+				);
+
+			int score;
+			if (int.TryParse(outputScore.SafeReturnedValue, out score)) {
+				Log.Info("Business score for customer {0} is {1}", customerId, score);
+				return score;
+			}
+			return 0;
+		}
+
+		public override string Name {
+			get {return "Pricing Model Calculator";}
+		}
+
+		public override void Execute() {
+			Calculate();
 		}
 	}
 }

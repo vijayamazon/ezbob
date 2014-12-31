@@ -2,7 +2,7 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
-    template: "#dashboard-template",
+    template: '#dashboard-template',
     initialize: function (options) {
         this.crmModel = options.crmModel;
         this.personalModel = options.personalModel;
@@ -11,14 +11,14 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.loanModel = options.loanModel;
         this.companyModel = options.companyModel;
         this.affordability = options.affordability;
-        this.bindTo(this.model, "change sync", this.render, this);
-        this.bindTo(this.crmModel, "change sync", this.render, this);
-        this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
-        this.bindTo(this.experianModel, "change sync", this.render, this);
-        this.bindTo(this.companyModel, "change sync", this.render, this);
-        this.bindTo(this.propertiesModel, "change sync", this.render, this);
-        this.bindTo(this.loanModel, "change sync", this.render, this);
-        this.bindTo(this.affordability, "change sync", this.render, this);
+        this.bindTo(this.model, 'change sync', this.render, this);
+        this.bindTo(this.crmModel, 'change sync', this.render, this);
+        this.bindTo(this.personalModel, 'change sync', this.personalModelChanged, this);
+        this.bindTo(this.experianModel, 'change sync', this.render, this);
+        this.bindTo(this.companyModel, 'change sync', this.render, this);
+        this.bindTo(this.propertiesModel, 'change sync', this.render, this);
+        this.bindTo(this.loanModel, 'change sync', this.render, this);
+        this.bindTo(this.affordability, 'change sync', this.render, this);
 
         this.expCompany = [];
         this.journal = [];
@@ -50,14 +50,14 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         };
     },
     rotateTable: function () {
-        this.$el.find("#affordabilityTable").each(function () {
+        this.$el.find('#affordabilityTable').each(function () {
             var $this = $(this);
             var newrows = [];
-            $this.find("tr").each(function () {
+            $this.find('tr').each(function () {
                 var i = 0;
-                $(this).find("td").each(function () {
+                $(this).find('td').each(function () {
                     i++;
-                    if (newrows[i] === undefined) { newrows[i] = $("<tr></tr>"); }
+                    if (newrows[i] === undefined) { newrows[i] = $('<tr></tr>'); }
                     newrows[i].append($(this));
                 });
             });
@@ -67,16 +67,16 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             });
         });
 
-        this.$el.find("#affordabilityTable tr:first-child td").each(function () {
+        this.$el.find('#affordabilityTable tr:first-child td').each(function () {
             $(this).replaceWith('<th>' + $(this).html() + '</th>');
         });
 
-        $($("#affordabilityTable tr")[2]).addClass("green-row");
+        $($('#affordabilityTable tr')[2]).addClass('green-row');
     },
     buildJournal: function () {
         this.journal = [];
-        if (this.crmModel && this.crmModel.get("CustomerRelations")) {
-            _.each(this.crmModel.get("CustomerRelations"), (function (_this) {
+        if (this.crmModel && this.crmModel.get('CustomerRelations')) {
+            _.each(this.crmModel.get('CustomerRelations'), (function (_this) {
                 return function (crm) {
                     return _this.journal.push({
                         Action: crm.Action,
@@ -111,10 +111,10 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                         Interest: dh.InterestRate,
                         RepaymentPeriod: dh.RepaymentPeriod,
                         LoanType: dh.LoanType.split(" ")[0],
-                        SetupFee: (dh.UseSetupFee || dh.UseBrokerSetupFee ? "yes (todo %)" : "-"),
+                        SetupFee: (dh.UseSetupFee || dh.UseBrokerSetupFee ? 'yes (todo %)' : '-'),
                         DiscountPlan: dh.DiscountPlan,
-                        LoanSource: (dh.LoanSourceName === "EU" ? "EU" : ""),
-                        CustomerSelection: (dh.IsLoanTypeSelectionAllowed === 1 ? "Yes" : "No"),
+                        LoanSource: (dh.LoanSourceName === 'Standard' ? '' : dh.LoanSourceName),
+                        CustomerSelection: (dh.IsLoanTypeSelectionAllowed === 1 ? 'Yes' : 'No'),
                         UW: dh.UnderwriterName,
                         Comment: dh.Comment,
                         IsCrm: false
@@ -146,7 +146,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
                         }
                     ],
                     //bDestroy: true,
-                    bDeferRender: true,
+                    bDeferRender: true
                 });
                 EzBob.DataTables.Helper.initCustomFiltering();
             }catch(ex) {
@@ -155,28 +155,27 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
     },
     events: {
-        'click a[href^="#companyExperian"]': "companyChanged",
-        'click a[href="#customerExperian"]': "consumerChanged",
-        'click a[href^="#director"]': "consumerChanged",
+        'click a[href^="#companyExperian"]': 'companyChanged',
+        'click a[href="#customerExperian"]': 'consumerChanged',
+        'click a[href^="#director"]': 'consumerChanged',
         'change label.journal-filter input': 'journalFilter'
     },
     journalFilter: function (e) {
-        var allJournal = this.$el.find("#allJournal");
-        if ($(e.currentTarget).attr("id") != "allJournal" && allJournal.is(":checked")) {
+        var allJournal = this.$el.find('#allJournal');
+        if ($(e.currentTarget).attr('id') !== 'allJournal' && allJournal.is(':checked')) {
             allJournal.parent().click();
             return false;
         }
         this.journalTable.fnDraw();
+	    return false;
     },
     companyChanged: function (e) {
-        var obj;
-        obj = e.currentTarget;
+	    var obj = e.currentTarget;
         this.$el.find('.company-name').text($(obj).data('companyname') + ' ' + $(obj).data('companyref'));
         this.drawSparklineGraphs();
     },
     consumerChanged: function (e) {
-        var obj;
-        obj = e.currentTarget;
+        var obj = e.currentTarget;
         this.$el.find('.applicant-name').text($(obj).data('applicantname'));
         this.drawSparklineGraphs();
     },
@@ -199,7 +198,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         });
 
         var that = this;
-        this.$el.find('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+        this.$el.find('a[data-toggle="tab"]').on('shown.bs.tab', function () {
             that.drawSparklineGraphs();
         });
 
@@ -309,16 +308,15 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         }
     },
     halfDonut: function (el, fillColor, fillPercent) {
-        var canvas, context, endAngle, lineWidth, radius, startAngle, x, y;
-        canvas = el[0];
+	    var canvas = el[0];
         if (!canvas) return false;
-        context = canvas.getContext('2d');
-        x = canvas.width / 2;
-        y = canvas.height / 2;
-        radius = 40;
-        startAngle = 1 * Math.PI;
-        endAngle = 2 * Math.PI;
-        lineWidth = 15;
+        var context = canvas.getContext('2d');
+        var x = canvas.width / 2;
+        var y = canvas.height / 2;
+        var radius = 40;
+        var startAngle = 1 * Math.PI;
+        var endAngle = 2 * Math.PI;
+        var lineWidth = 15;
         context.beginPath();
         context.arc(x, y, radius, startAngle, endAngle, false);
         context.lineWidth = lineWidth;
@@ -328,26 +326,27 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         context.arc(x, y, radius, startAngle, Math.PI * (1 + fillPercent), false);
         context.strokeStyle = fillColor;
         context.stroke();
+	    return false;
     },
     drawDonut: function (el, fillColor, fillPercent) {
-        var canvas, context, endAngle, lineWidth, radius, startAngle, x, y;
-        canvas = el[0];
+	    var canvas = el[0];
         if (!canvas) return false;
-        context = canvas.getContext("2d");
-        x = canvas.width / 2;
-        y = canvas.height / 2;
-        radius = 70;
-        startAngle = 1 * Math.PI;
-        endAngle = 4 * Math.PI;
-        lineWidth = 25;
+        var context = canvas.getContext('2d');
+        var x = canvas.width / 2;
+        var y = canvas.height / 2;
+        var radius = 70;
+        var startAngle = 1 * Math.PI;
+        var endAngle = 4 * Math.PI;
+        var lineWidth = 25;
         context.beginPath();
         context.arc(x, y, radius, startAngle, endAngle, false);
         context.lineWidth = lineWidth;
-        context.strokeStyle = "#ebebeb";
+        context.strokeStyle = '#ebebeb';
         context.stroke();
         context.beginPath();
         context.arc(x, y, radius, startAngle, Math.PI * (1 + fillPercent * 2), false);
         context.strokeStyle = fillColor;
         context.stroke();
+	    return false;
     }
 });

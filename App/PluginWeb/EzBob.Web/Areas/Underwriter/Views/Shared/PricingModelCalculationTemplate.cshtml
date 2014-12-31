@@ -121,27 +121,15 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>Ezbob Loan</td>
-                                        <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.SetupFeePercents)%></td>
-                                        <td class="pricing-model-highlight-ezbob-loan"><%-EzBob.formatPercents(model.MonthlyInterestRate)%></td>
-                                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRate)%></td>
-                                        <td><%-EzBob.formatPercents(model.Apr)%></td>
+                                    <%if(model.PricingSourceModels && model.PricingSourceModels.length > 0){ _.each(model.PricingSourceModels, function(source, i){%>
+                                    <tr class="<%-i == 0 ? 'pricing-model-highlight-ezbob-loan' : ''%> <%- source.IsPreferable ? 'pricing-model-highlight-eu-loan' : ''%>">
+                                        <td><%-source.Source%></td>
+                                        <td><%-EzBob.formatPercents(source.SetupFee)%></td>
+                                        <td><%-EzBob.formatPercents(source.InterestRate)%></td>
+                                        <td><%-EzBob.formatPercents(source.AIR)%></td>
+                                        <td><%-EzBob.formatPercents(source.APR)%></td>
                                     </tr>
-                                    <tr>
-                                        <td>EU Loan (2%)</td>
-                                        <td class="<%-model.EuLoan2MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanHigh)%></td>
-                                        <td class="<%-model.EuLoan2MainFieldsClass%>">2.00%</td>
-                                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu2)%></td>
-                                        <td><%-EzBob.formatPercents(model.AprEu2)%></td>
-                                    </tr>
-                                    <tr>
-                                        <td>EU Loan (1.75%)</td>
-                                        <td class="<%-model.EuLoan175MainFieldsClass%>"><%-EzBob.formatPercents(model.SetupFeeForEuLoanLow)%></td>
-                                        <td class="<%-model.EuLoan175MainFieldsClass%>">1.75%</td>
-                                        <td><%-EzBob.formatPercents(model.AnnualizedInterestRateEu175)%></td>
-                                        <td><%-EzBob.formatPercents(model.AprEu175)%></td>
-                                    </tr>
+                                   <%});}%>
                                 </tbody>
                             </table>
                             <table class="table">

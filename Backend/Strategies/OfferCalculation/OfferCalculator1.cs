@@ -114,7 +114,7 @@
 			PricingModelModel lowerBoundaryModel = templateModel.Clone();
 			lowerBoundaryModel.SetupFeePercents = lowerBoundary / 100;
 			lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
-			var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel, db, log);
+			var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel,db,log);
 			if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate())
 			{
 				result.Error = lowerBoundaryPricingModelCalculator.Error;

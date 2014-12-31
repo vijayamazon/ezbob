@@ -690,7 +690,7 @@
 								LoanDate = loan.Date,
 								InterestRate = loan.InterestRate,
 								IsLate = loan.Status == LoanStatus.Late,
-								IsEU = loan.LoanSource.Name == "EU",
+							IsEU = loan.LoanSource.Name == LoanSourceName.EU.ToString() || loan.LoanSource.Name == LoanSourceName.COSME.ToString(),
 								BalanceWidthPercent = loan.CashRequest.ManagerApprovedSum.HasValue && loan.CashRequest.ManagerApprovedSum.Value > 0
 										? loan.Principal / (decimal)loan.CashRequest.ManagerApprovedSum.Value : 0,
 								BalancePercent = loan.LoanAmount > 0 ? loan.Principal / loan.LoanAmount : 0,

@@ -12,16 +12,16 @@
 		private decimal opexAndCapex;
 		private int interestOnlyPeriod;
 		private decimal euCollectionRate;
+		private decimal cosmeCollectionRate;
 		private decimal defaultRateCompanyShare;
 		private decimal debtPercentOfCapital;
 		private decimal costOfDebtPA;
 		private decimal collectionRate;
 		private decimal cogs;
 		private decimal brokerSetupFee;
-
-		public GetPricingModelModel(int customerId, string scenarioName, AConnection oDb, ASafeLog oLog)
-			: base(oDb, oLog)
-		{
+		
+		public GetPricingModelModel(int customerId, string scenarioName, AConnection db, ASafeLog log)
+			:base(db,log) {
 			this.customerId = customerId;
 			ReadConfigurations(scenarioName);
 		}
@@ -41,6 +41,7 @@
 				opexAndCapex = sr["OpexAndCapex"];
 				interestOnlyPeriod = sr["InterestOnlyPeriod"];
 				euCollectionRate = sr["EuCollectionRate"];
+				cosmeCollectionRate = sr["COSMECollectionRate"];
 				defaultRateCompanyShare = sr["DefaultRateCompanyShare"];
 				debtPercentOfCapital = sr["DebtPercentOfCapital"];
 				costOfDebtPA = sr["CostOfDebtPA"];
@@ -80,6 +81,7 @@
 					TenureMonths = tenureMonths,
 					CollectionRate = collectionRate,
 					EuCollectionRate = euCollectionRate,
+				CosmeCollectionRate = cosmeCollectionRate,
 					Cogs = cogs,
 					DebtPercentOfCapital = debtPercentOfCapital,
 					CostOfDebt = costOfDebtPA,

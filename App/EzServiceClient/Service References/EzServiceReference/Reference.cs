@@ -1675,24 +1675,6 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AnnualizedInterestRateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AnnualizedInterestRateEu175Field;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AnnualizedInterestRateEu2Field;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AprField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AprEu175Field;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AprEu2Field;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal BrokerSetupFeePercentsField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -1706,6 +1688,9 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal CollectionRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal CosmeCollectionRateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal CostOfDebtField;
@@ -1730,9 +1715,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal EuCollectionRateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal EuLoanPercentagesField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal FeesRevenueField;
@@ -1765,6 +1747,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal OpexAndCapexOutputField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private ServiceClientProxy.EzServiceReference.PricingSourceModel[] PricingSourceModelsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal ProfitMarkupField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -1772,12 +1757,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal RevenueField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal SetupFeeForEuLoanHighField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal SetupFeeForEuLoanLowField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal SetupFeePercentsField;
@@ -1801,84 +1780,6 @@ namespace ServiceClientProxy.EzServiceReference {
             }
             set {
                 this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AnnualizedInterestRate {
-            get {
-                return this.AnnualizedInterestRateField;
-            }
-            set {
-                if ((this.AnnualizedInterestRateField.Equals(value) != true)) {
-                    this.AnnualizedInterestRateField = value;
-                    this.RaisePropertyChanged("AnnualizedInterestRate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AnnualizedInterestRateEu175 {
-            get {
-                return this.AnnualizedInterestRateEu175Field;
-            }
-            set {
-                if ((this.AnnualizedInterestRateEu175Field.Equals(value) != true)) {
-                    this.AnnualizedInterestRateEu175Field = value;
-                    this.RaisePropertyChanged("AnnualizedInterestRateEu175");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AnnualizedInterestRateEu2 {
-            get {
-                return this.AnnualizedInterestRateEu2Field;
-            }
-            set {
-                if ((this.AnnualizedInterestRateEu2Field.Equals(value) != true)) {
-                    this.AnnualizedInterestRateEu2Field = value;
-                    this.RaisePropertyChanged("AnnualizedInterestRateEu2");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal Apr {
-            get {
-                return this.AprField;
-            }
-            set {
-                if ((this.AprField.Equals(value) != true)) {
-                    this.AprField = value;
-                    this.RaisePropertyChanged("Apr");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AprEu175 {
-            get {
-                return this.AprEu175Field;
-            }
-            set {
-                if ((this.AprEu175Field.Equals(value) != true)) {
-                    this.AprEu175Field = value;
-                    this.RaisePropertyChanged("AprEu175");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AprEu2 {
-            get {
-                return this.AprEu2Field;
-            }
-            set {
-                if ((this.AprEu2Field.Equals(value) != true)) {
-                    this.AprEu2Field = value;
-                    this.RaisePropertyChanged("AprEu2");
-                }
             }
         }
         
@@ -1943,6 +1844,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.CollectionRateField.Equals(value) != true)) {
                     this.CollectionRateField = value;
                     this.RaisePropertyChanged("CollectionRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal CosmeCollectionRate {
+            get {
+                return this.CosmeCollectionRateField;
+            }
+            set {
+                if ((this.CosmeCollectionRateField.Equals(value) != true)) {
+                    this.CosmeCollectionRateField = value;
+                    this.RaisePropertyChanged("CosmeCollectionRate");
                 }
             }
         }
@@ -2047,19 +1961,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.EuCollectionRateField.Equals(value) != true)) {
                     this.EuCollectionRateField = value;
                     this.RaisePropertyChanged("EuCollectionRate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal EuLoanPercentages {
-            get {
-                return this.EuLoanPercentagesField;
-            }
-            set {
-                if ((this.EuLoanPercentagesField.Equals(value) != true)) {
-                    this.EuLoanPercentagesField = value;
-                    this.RaisePropertyChanged("EuLoanPercentages");
                 }
             }
         }
@@ -2195,6 +2096,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public ServiceClientProxy.EzServiceReference.PricingSourceModel[] PricingSourceModels {
+            get {
+                return this.PricingSourceModelsField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PricingSourceModelsField, value) != true)) {
+                    this.PricingSourceModelsField = value;
+                    this.RaisePropertyChanged("PricingSourceModels");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public decimal ProfitMarkup {
             get {
                 return this.ProfitMarkupField;
@@ -2229,32 +2143,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.RevenueField.Equals(value) != true)) {
                     this.RevenueField = value;
                     this.RaisePropertyChanged("Revenue");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal SetupFeeForEuLoanHigh {
-            get {
-                return this.SetupFeeForEuLoanHighField;
-            }
-            set {
-                if ((this.SetupFeeForEuLoanHighField.Equals(value) != true)) {
-                    this.SetupFeeForEuLoanHighField = value;
-                    this.RaisePropertyChanged("SetupFeeForEuLoanHigh");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal SetupFeeForEuLoanLow {
-            get {
-                return this.SetupFeeForEuLoanLowField;
-            }
-            set {
-                if ((this.SetupFeeForEuLoanLowField.Equals(value) != true)) {
-                    this.SetupFeeForEuLoanLowField = value;
-                    this.RaisePropertyChanged("SetupFeeForEuLoanLow");
                 }
             }
         }
@@ -2320,6 +2208,131 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.TotalCostField.Equals(value) != true)) {
                     this.TotalCostField = value;
                     this.RaisePropertyChanged("TotalCost");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="PricingSourceModel", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel")]
+    [System.SerializableAttribute()]
+    public partial class PricingSourceModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AIRField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal APRField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal InterestRateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsPreferableField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal SetupFeeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SourceField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal AIR {
+            get {
+                return this.AIRField;
+            }
+            set {
+                if ((this.AIRField.Equals(value) != true)) {
+                    this.AIRField = value;
+                    this.RaisePropertyChanged("AIR");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal APR {
+            get {
+                return this.APRField;
+            }
+            set {
+                if ((this.APRField.Equals(value) != true)) {
+                    this.APRField = value;
+                    this.RaisePropertyChanged("APR");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal InterestRate {
+            get {
+                return this.InterestRateField;
+            }
+            set {
+                if ((this.InterestRateField.Equals(value) != true)) {
+                    this.InterestRateField = value;
+                    this.RaisePropertyChanged("InterestRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsPreferable {
+            get {
+                return this.IsPreferableField;
+            }
+            set {
+                if ((this.IsPreferableField.Equals(value) != true)) {
+                    this.IsPreferableField = value;
+                    this.RaisePropertyChanged("IsPreferable");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal SetupFee {
+            get {
+                return this.SetupFeeField;
+            }
+            set {
+                if ((this.SetupFeeField.Equals(value) != true)) {
+                    this.SetupFeeField = value;
+                    this.RaisePropertyChanged("SetupFee");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Source {
+            get {
+                return this.SourceField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SourceField, value) != true)) {
+                    this.SourceField = value;
+                    this.RaisePropertyChanged("Source");
                 }
             }
         }

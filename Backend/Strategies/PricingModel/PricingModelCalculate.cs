@@ -12,7 +12,7 @@
 			: base(db, log)
 		{
 			Model = model;
-			pricingModelCalculator = new PricingModelCalculator(customerId, model, db, log);
+			pricingModelCalculator = new PricingModelCalculator(customerId, model, db,log);
 		}
 
 		public override string Name {
@@ -21,9 +21,8 @@
 
 		public PricingModelModel Model { get; private set; }
 
-		public override void Execute()
-		{
-			pricingModelCalculator.Calculate();
+		public override void Execute(){
+			pricingModelCalculator.Execute();
 			if (!string.IsNullOrEmpty(pricingModelCalculator.Error))
 			{
 				throw new StrategyWarning(this, pricingModelCalculator.Error);
