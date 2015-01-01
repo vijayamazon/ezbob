@@ -28,7 +28,7 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
             _session = session;
         }
 
-        public JsonResult Index(SortField sortField, string sortType)
+        public JsonResult Index(int sortField, string sortType)
         {
             List<SupportModel> models =
                 (from mp in _session.Query<MP_CustomerMarketPlace>()
@@ -43,8 +43,9 @@ namespace EzBob.Web.Areas.Underwriter.Controllers
                                UpdateStartDate = mp.UpdatingStart,
                                Status = mp.GetUpdatingStatus(null)
                            }).ToList();
-
-            switch (sortField)
+			
+	        SortField sortFieldEnum = sortField == 0 ? SortField.UpdateStartDate : (SortField)sortField;
+            switch (sortFieldEnum)
             {
                 case SortField.Umi:
                     models = sortType == "asc"

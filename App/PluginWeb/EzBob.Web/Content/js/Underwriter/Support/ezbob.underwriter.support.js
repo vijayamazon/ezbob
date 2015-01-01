@@ -147,6 +147,8 @@ EzBob.Underwriter.SupportModel = Backbone.Model.extend({
 	},
 
 	urlRoot: function() {
-		return "" + window.gRootPath + "Underwriter/Support/Index?sortField=" + (this.get('sortField')) + "&sortType=" + (this.get('sortType'));
+		var sortField = this.get('sortField') || 4;
+		var sortType = this.get('sortType') || 'desc';
+		return "" + window.gRootPath + "Underwriter/Support/Index?sortField=" + sortField + "&sortType=" + sortType;
 	},
 });
