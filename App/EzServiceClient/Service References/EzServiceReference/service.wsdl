@@ -79,7 +79,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.MedalCalculations" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>

@@ -29,7 +29,6 @@
 			}
 			Model = pricingModelCalculator.Model;
 
-			Log.Info("Pricing Model Result: \n {0}", Model);
 		}
 	}
 }
