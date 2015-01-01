@@ -93,6 +93,7 @@ namespace EzBob.Models {
 		public bool HasRollovers { get; set; }
 
 		public decimal TotalLatePayment { get; set; }
+		public bool IsLastApprovedLoanSourceCOSME { get; set; }
 
 		public bool IsLoanDetailsFixed { get; set; }
 

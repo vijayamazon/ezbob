@@ -17,6 +17,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 		public virtual bool PrivateCompanyLoanAgreementAgreed { get; set; }
 		public virtual bool GuarantyAgreementAgreed { get; set; }
 		public virtual bool EUAgreementAgreed { get; set; }
+		public virtual bool COSMEAgreementAgreed { get; set; }
 		public virtual string SignedName { get; set; }
 	} // class LoanLegal
 
@@ -50,6 +51,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.PrivateCompanyLoanAgreementAgreed);
 			Map(x => x.GuarantyAgreementAgreed);
 			Map(x => x.EUAgreementAgreed);
+			Map(x => x.COSMEAgreementAgreed);
 			Map(x => x.SignedName).Length(250);
 		} // constructor
 	} // class LoanLegalMap

@@ -3,14 +3,14 @@ var EzBob = EzBob || {};
 EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
-	template: "#apply-forloan-template",
+	template: '#apply-forloan-template',
 
 	initialize: function(options) {
 		this.customer = options.customer;
 
-		if (this.customer.get("CreditSum") < EzBob.Config.XMinLoan) {
-			this.trigger("back");
-			document.location.href = "#";
+		if (this.customer.get('CreditSum') < EzBob.Config.XMinLoan) {
+			this.trigger('back');
+			document.location.href = '#';
 			return;
 		} // if
 
@@ -26,8 +26,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.timerId = setInterval(_.bind(this.refreshTimer, this), 1000);
 
 		this.model.set({
-			"CreditSum": this.customer.get("CreditSum"),
-			"OfferValid": this.customer.offerValidFormatted()
+			'CreditSum': this.customer.get('CreditSum'),
+			'OfferValid': this.customer.offerValidFormatted()
 		});
 
 		this.agreementView = null;
@@ -35,54 +35,56 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		if (this.fixed)
 			return;
 
-		this.model.on("change:neededCash", this.neededCashChanged, this);
-		this.isLoanSourceEU = options.model.get("isLoanSourceEU");
+		this.model.on('change:neededCash', this.neededCashChanged, this);
+		this.isLoanSourceEU = options.model.get('isLoanSourceEU');
+		this.isLoanSourceCOSME = options.model.get('isLoanSourceCOSME');
 
-	    this.isAlibaba = this.customer.get("IsAlibaba");
+		this.isAlibaba = this.customer.get('IsAlibaba');
 	}, // initialize
 
 	events: {
-		"click .submit": "submit",
-		"change .preAgreementTermsRead": "preAgreementTermsReadChange",
-		"change .agreementTermsRead": "showSubmit",
-		"change .euAgreementTermsRead": "showSubmit",
-		"change .directorConsentRead": "showSubmit",
-		"change #signedName": "showSubmit",
-		"blur #signedName": "showSubmit",
-		"keyup #signedName": "showSubmit",
-		"paste #signedName": "showSubmit",
-		"click .print": "print"
+		'click .submit': 'submit',
+		'change .preAgreementTermsRead': 'preAgreementTermsReadChange',
+		'change .agreementTermsRead': 'showSubmit',
+		'change .euAgreementTermsRead': 'showSubmit',
+		'change .cosmeAgreementTermsRead': 'showSubmit',
+		'change .directorConsentRead': 'showSubmit',
+		'change #signedName': 'showSubmit',
+		'blur #signedName': 'showSubmit',
+		'keyup #signedName': 'showSubmit',
+		'paste #signedName': 'showSubmit',
+		'click .print': 'print'
 	}, // events
 
 	ui: {
-		submit: ".submit",
-		agreement: ".agreement",
-		form: "form"
+		submit: '.submit',
+		agreement: '.agreement',
+		form: 'form'
 	}, // ui
 
 	preAgreementTermsReadChange: function() {
-		var readPreAgreement = $(".preAgreementTermsRead").is(":checked");
+		var readPreAgreement = $('.preAgreementTermsRead').is(':checked');
 
-		$(".agreementTermsRead").attr("disabled", !readPreAgreement);
+		$('.agreementTermsRead').attr('disabled', !readPreAgreement);
 
 		if (readPreAgreement)
-			this.$el.find("a[href=\"#tab4\"]").tab("show");
+			this.$el.find('a[href="#tab4"]').tab('show');
 		else {
-			this.$el.find("a[href=\"#tab3\"]").tab("show");
-			$(".agreementTermsRead").attr("checked", false);
+			this.$el.find('a[href="#tab3"]').tab('show');
+			$('.agreementTermsRead').attr('checked', false);
 		} // if
 
 		return this.showSubmit();
 	}, // preAgreementTermsReadChange
 
-	loanSelectionChanged: function(e) {
+	loanSelectionChanged: function() {
 		this.currentRepaymentPeriod = this.$('#loan-sliders .period-slider').slider('value');
 
 		var amount = this.$('#loan-sliders .amount-slider').slider('value');
 
-		this.model.set("neededCash", parseInt(amount, 10));
-		this.model.set("loanType", this.currentLoanTypeID);
-		this.model.set("repaymentPeriod", this.currentRepaymentPeriod);
+		this.model.set('neededCash', parseInt(amount, 10));
+		this.model.set('loanType', this.currentLoanTypeID);
+		this.model.set('repaymentPeriod', this.currentRepaymentPeriod);
 
 		this.neededCashChanged(true);
 	}, // loanSelectionChanged
@@ -90,8 +92,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	showSubmit: function() {
 		var enabled = EzBob.Validation.checkForm(this.validator);
 
-		this.model.set("agree", enabled);
-		this.ui.submit.toggleClass("disabled", !enabled);
+		this.model.set('agree', enabled);
+		this.ui.submit.toggleClass('disabled', !enabled);
 	}, // showSubmit
 
 	recalculateSchedule: function(args) {
@@ -100,22 +102,22 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		/*
 		unless args.reloadSelectedOnly is true
-		$.getJSON("#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}").done (data) =>
+		$.getJSON('#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}').done (data) =>
 		for loanKey, offer of data
 		$('#loan-type-' + loanKey + ' .Interest').text EzBob.formatPounds offer.TotalInterest
 		$('#loan-type-' + loanKey + ' .Total').text EzBob.formatPounds offer.Total
 		*/
 
-		BlockUi("on", this.$el.find('#block-loan-schedule'));
-		BlockUi("on", this.$el.find('#block-agreement'));
+		BlockUi('on', this.$el.find('#block-loan-schedule'));
+		BlockUi('on', this.$el.find('#block-agreement'));
 
 		var sMoreParams = '&loanType=' + this.currentLoanTypeID + '&repaymentPeriod=' + this.currentRepaymentPeriod;
 
-		$.getJSON(("" + window.gRootPath + "Customer/Schedule/Calculate?amount=" + (parseInt(val))) + sMoreParams).done(function(data) {
+		$.getJSON(('' + window.gRootPath + 'Customer/Schedule/Calculate?amount=' + (parseInt(val))) + sMoreParams).done(function(data) {
 			self.renderSchedule(data);
 
-			BlockUi("off", self.$el.find('#block-loan-schedule'));
-			BlockUi("off", self.$el.find('#block-agreement'));
+			BlockUi('off', self.$el.find('#block-loan-schedule'));
+			BlockUi('off', self.$el.find('#block-agreement'));
 		});
 	}, // recalculateSchedule
 
@@ -123,12 +125,12 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.lastPaymentDate = moment(schedule.Schedule[schedule.Schedule.length - 1].Date);
 
 		var scheduleView = new EzBob.LoanScheduleView({
-			el: this.$el.find(".loan-schedule"),
+			el: this.$el.find('.loan-schedule'),
 			schedule: schedule,
 			isShowGift: false,
 			isShowExportBlock: false,
 			isShowExceedMaxInterestForSource: false,
-			isPersonal: _.contains([0, 4, 2], this.customer.get("CustomerPersonalInfo").TypeOfBusiness)
+			isPersonal: _.contains([0, 4, 2], this.customer.get('CustomerPersonalInfo').TypeOfBusiness)
 		});
 
 		scheduleView.render();
@@ -137,11 +139,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	}, // renderSchedule
 
 	neededCashChanged: function(reloadSelectedOnly) {
-		this.$el.find('.preAgreementTermsRead, .agreementTermsRead, .euAgreementTermsRead').prop('checked', false);
+		this.$el.find('.preAgreementTermsRead, .agreementTermsRead, .euAgreementTermsRead, .cosmeAgreementTermsRead').prop('checked', false);
 
-		var value = this.model.get("neededCash");
+		var value = this.model.get('neededCash');
 
-		this.ui.submit.attr("href", this.model.get("url"));
+		this.ui.submit.attr('href', this.model.get('url'));
 
 		return this.recalculateThrottled({
 			value: value,
@@ -151,7 +153,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 	onRender: function() {
 		if (this.fixed)
-			this.$(".cash-question").hide();
+			this.$('.cash-question').hide();
 
 		if (this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU || this.isAlibaba)
 			this.$('.duration-select-allowed').hide();
@@ -159,43 +161,46 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		if (!this.isLoanSourceEU)
 			this.$('.eu-agreement-section').hide();
 
-        if (this.isAlibaba) {
-            this.$('.loan-amount-header-start').text('Review loan schedule');
-        }
+		if (!this.isLoanSourceCOSME) {
+			this.$('.cosme-agreement-section').hide();
+		}
+		if (this.isAlibaba) {
+			this.$('.loan-amount-header-start').text('Review loan schedule');
+		}
 		var self = this;
 
 		if (this.model.get('isCurrentCashRequestFromQuickOffer'))
 			this.$('.loan-amount-header-start').text('Confirm loan amount');
 		else {
 			this.$('.quick-offer-section').remove();
-		    if (!this.isAlibaba) {
-		        InitAmountPeriodSliders({
-		            container: this.$('#loan-sliders'),
-		            amount: {
-		                min: this.model.get('minCash'),
-		                max: this.model.get('maxCash'),
-		                start: this.model.get('maxCash'),
-		                step: 100,
-		            },
-		            period: {
-		                min: 3,
-		                max: 12,
-		                start: this.model.get('repaymentPeriod'),
-		                step: 1,
-		                hide: this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU,
-		            },
-		            callback: function(ignored, sEvent) {
-		                if (sEvent === 'change')
-		                    self.loanSelectionChanged();
-		            } // callback
-		        });
-		    }
+			if (!this.isAlibaba) {
+				InitAmountPeriodSliders({
+					container: this.$('#loan-sliders'),
+					amount: {
+						min: this.model.get('minCash'),
+						max: this.model.get('maxCash'),
+						start: this.model.get('maxCash'),
+						step: 100
+					},
+					period: {
+						min: 3,
+						max: 12,
+						start: this.model.get('repaymentPeriod'),
+						step: 1,
+						hide: this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU
+					},
+					callback: function(ignored, sEvent) {
+						if (sEvent === 'change')
+							self.loanSelectionChanged();
+					} // callback
+				});
+			}
 		} // else
 
 		this.neededCashChanged();
 
-		this.$el.find("img[rel]").setPopover('right');
-		this.$el.find("li[rel]").setPopover('left');
+		this.$el.find('img[rel]').setPopover('right');
+		this.$el.find('li[rel]').setPopover('left');
 
 		var pi = this.customer.get('CustomerPersonalInfo');
 
@@ -213,19 +218,19 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	}, // onRender
 
 	refreshTimer: function() {
-		return this.$el.find(".offerValidFor").text(this.customer.offerValidFormatted());
+		return this.$el.find('.offerValidFor').text(this.customer.offerValidFormatted());
 	}, // refreshTimer
 
 	submit: function(e) {
 		e.preventDefault();
 
-		var creditSum = this.model.get("neededCash");
-		var max = this.model.get("maxCash");
-		var min = this.model.get("minCash");
+		var creditSum = this.model.get('neededCash');
+		var max = this.model.get('maxCash');
+		var min = this.model.get('minCash');
 
-		this.model.set("neededCash", creditSum);
-		this.model.set("loanType", this.currentLoanTypeID);
-		this.model.set("repaymentPeriod", this.currentRepaymentPeriod);
+		this.model.set('neededCash', creditSum);
+		this.model.set('loanType', this.currentLoanTypeID);
+		this.model.set('repaymentPeriod', this.currentRepaymentPeriod);
 
 		if (creditSum > max || creditSum < min)
 			return false;
@@ -237,12 +242,12 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			return false;
 		} // if
 
-		this.trigger("submit");
+		this.trigger('submit');
 		return false;
 	}, // submit
 
 	getCurrentViewId: function() {
-		return this.$el.find("li.active a").attr("page-name");
+		return this.$el.find('li.active a').attr('page-name');
 	}, // getCurrentViewId
 
 	print: function() {
@@ -254,12 +259,12 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		if (!this.agreementView)
 			return;
 
-		var amount = parseInt(this.model.get("neededCash"), 10);
+		var amount = parseInt(this.model.get('neededCash'), 10);
 		var loanType = this.currentLoanTypeID;
 		var repaymentPeriod = this.currentRepaymentPeriod;
 		var view = this.getCurrentViewId();
-		this.agreementView.$el.find('.download').attr('href', "" + window.gRootPath + "Customer/Agreement/Download?amount=" + amount + "&viewName=" + view + "&loanType=" + loanType + "&repaymentPeriod=" + repaymentPeriod + "&isAlibaba=" + this.isAlibaba);
-        }, // updateDownloadLink
+		this.agreementView.$el.find('.download').attr('href', '' + window.gRootPath + 'Customer/Agreement/Download?amount=' + amount + '&viewName=' + view + '&loanType=' + loanType + '&repaymentPeriod=' + repaymentPeriod + '&isAlibaba=' + this.isAlibaba);
+	}, // updateDownloadLink
 
 	createAgreementView: function(agreementdata) {
 		var oViewArgs = {
@@ -268,7 +273,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			isAlibaba: this.isAlibaba
 		};
 
-		if (_.contains([0, 4, 2], this.customer.get("CustomerPersonalInfo").TypeOfBusiness))
+		if (_.contains([0, 4, 2], this.customer.get('CustomerPersonalInfo').TypeOfBusiness))
 			this.agreementView = new EzBob.Profile.ConsumersAgreementView(oViewArgs);
 		else
 			this.agreementView = new EzBob.Profile.CompaniesAgreementView(oViewArgs);
@@ -284,5 +289,5 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		clearInterval(this.timerId);
 		this.model.off();
 		ApplyForLoanView.__super__.close.call(this);
-	}, // close
+	} // close
 }); // EzBob.Profile.ApplyForLoanView

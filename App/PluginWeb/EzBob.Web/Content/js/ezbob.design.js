@@ -1564,6 +1564,7 @@ EzBob.validateLoanLegalForm = function (el, aryCustomerName) {
             "preAgreementTermsRead": { required: true },
             "agreementTermsRead": { required: true },
             "euAgreementTermsRead": { required: true },
+            "cosmeAgreementTermsRead": { required: true },
             "directorConsentRead": { required: true },
             'signedName': { validateSignerName: aryCustomerName, },
         },
