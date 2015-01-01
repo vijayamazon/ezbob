@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
+	using Ezbob.Logger;
 	using Ezbob.Utils.Serialization;
 	using EzBob.Models;
 	using EzBob.Web.Areas.Customer.Controllers;
@@ -12,7 +13,6 @@
 	using EzBob.Web.Infrastructure.csrf;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using log4net;
 	using LandRegistryLib;
 	using MoreLinq;
 	using NHibernate;
@@ -23,11 +23,11 @@
 			CustomerRepository customerRepository,
 			CustomerAddressRepository customerAddressRepository,
 			ISession oSession, IWorkplaceContext context) {
-			m_oServiceClient = new ServiceClient();
-			_customerRepository = customerRepository;
-			_customerAddressRepository = customerAddressRepository;
-			m_oSession = oSession;
-			_context = context;
+			this.m_oServiceClient = new ServiceClient();
+			this._customerRepository = customerRepository;
+			this._customerAddressRepository = customerAddressRepository;
+			this.m_oSession = oSession;
+			this._context = context;
 		} // constructor
 
 		[Ajax]
@@ -35,7 +35,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[Transactional]
 		public JsonResult AddDirector(int nCustomerID, DirectorModel director) {
-			var customer = _customerRepository.Get(nCustomerID);
+			var customer = this._customerRepository.Get(nCustomerID);
 
 			if (customer == null) {
 				return Json(new {
@@ -43,21 +43,21 @@
 				});
 			}
 
-			return Json(CustomerDetailsController.AddDirectorToCustomer(director, customer, m_oSession, false));
+			return Json(CustomerDetailsController.AddDirectorToCustomer(director, customer, this.m_oSession, false));
 		}
 
 		[Ajax]
 		[HttpGet]
 		public ActionResult Index(int id) {
-			var model = new CrossCheckModel(_context.UserId, _customerRepository.Get(id));
+			var model = new CrossCheckModel(this._context.UserId, this._customerRepository.Get(id));
 			return View(model);
 		} // Index
 
 		[Ajax]
 		[HttpPost]
 		public JsonResult LandRegistry(int customerId, string titleNumber = null) {
-			ms_oLog.DebugFormat("Loading Land Registry data for customer id {0} and title number {1}...", customerId, titleNumber ?? "--null--");
-			m_oServiceClient.Instance.LandRegistryRes(_context.UserId, customerId, titleNumber);
+			ms_oLog.Debug("Loading Land Registry data for customer id {0} and title number {1}...", customerId, titleNumber ?? "--null--");
+			this.m_oServiceClient.Instance.LandRegistryRes(this._context.UserId, customerId, titleNumber);
 			return Json(new {}, JsonRequestBehavior.AllowGet);
 		}
 
@@ -65,7 +65,7 @@
 		[Ajax]
 		[HttpPost]
 		public JsonResult LandRegistryEnquiries(int customerId) {
-			var customer = _customerRepository.Get(customerId);
+			var customer = this._customerRepository.Get(customerId);
 			var b = new LandRegistryModelBuilder();
 			var landRegistryEnquiries = new List<LandRegistryEnquiryTitle>();
 			var lrEnqs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Enquiry)
@@ -75,7 +75,9 @@
 					var lrModel = b.BuildEnquiryModel(lr);
 
 					landRegistryEnquiries.AddRange(lrModel.Titles);
-				} catch (Exception ex) {}
+				} catch (Exception ex) {
+					ms_oLog.Info(ex, "Exception during building enquiry model.");
+				}
 			}
 
 			landRegistryEnquiries = landRegistryEnquiries.DistinctBy(x => x.TitleNumber)
@@ -89,14 +91,14 @@
 		[HttpPost]
 		public JsonResult LandRegistryEnquiry(int customerId, string titleNumber, string buildingNumber, string buildingName, string streetName, string cityName, string postCode) {
 			if (!string.IsNullOrEmpty(titleNumber)) {
-				m_oServiceClient.Instance.LandRegistryRes(_context.UserId, customerId, titleNumber);
+				this.m_oServiceClient.Instance.LandRegistryRes(this._context.UserId, customerId, titleNumber);
 				return Json(new {
 					isTitle = true
 				});
 			} else {
-				var landregistryXml = m_oServiceClient
+				var landregistryXml = this.m_oServiceClient
 					.Instance
-					.LandRegistryEnquiry(_context.UserId,
+					.LandRegistryEnquiry(this._context.UserId,
 						customerId,
 						buildingNumber,
 						buildingName,
@@ -127,7 +129,7 @@
 			string addr4,
 			string postcode
 			) {
-			var customer = _customerRepository.Get(customerId);
+			var customer = this._customerRepository.Get(customerId);
 
 			var company = customer.Company;
 
@@ -149,7 +151,7 @@
 				} // postcode is not empty
 			} // if company is not null
 
-			_customerRepository.Update(customer);
+			this._customerRepository.Update(customer);
 		}
 
 		// TODO: this method should be removed after testing is done
@@ -157,7 +159,7 @@
 		[Transactional]
 		[HttpGet]
 		public JsonResult Zoopla(int customerId, bool recheck) {
-			var address = _customerAddressRepository.GetAll()
+			var address = this._customerAddressRepository.GetAll()
 				.FirstOrDefault(a => a.Customer.Id == customerId && a.AddressType == CustomerAddressType.PersonalAddress);
 
 			if (address == null) {
@@ -169,7 +171,7 @@
 			var zoopla = address.Zoopla.LastOrDefault();
 
 			if (zoopla == null || recheck) {
-				m_oServiceClient.Instance.GetZooplaData(customerId, recheck);
+				this.m_oServiceClient.Instance.GetZooplaData(customerId, recheck);
 				zoopla = address.Zoopla.LastOrDefault();
 
 				if (zoopla == null) {
@@ -182,7 +184,7 @@
 			return Json(zoopla, JsonRequestBehavior.AllowGet);
 		} // Zoopla
 
-		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof (CrossCheckController));
+		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CrossCheckController));
 		private readonly IWorkplaceContext _context;
 		private readonly CustomerAddressRepository _customerAddressRepository;
 		private readonly CustomerRepository _customerRepository;

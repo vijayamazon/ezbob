@@ -1,47 +1,25 @@
-﻿namespace EzBob.Web.Code
-{
+﻿namespace EzBob.Web.Code {
+	using System;
 	using System.IO;
 	using Aspose.Words;
-	using Backend.Models;
+	using EzBob.Backend.Models;
 	using Nustache.Core;
-	using System;
 
-	public class AgreementRenderer
-    {
-        public byte[] RenderAgreementToPdf(string view, AgreementModel model)
-        {
-            return ConvertToPdf(RenderAgreement(view, model));
-        }
-
-        public string RenderAgreement(string view, AgreementModel model)
-        {
-            var html = Render.StringToString(view, model);
-            return html;
-        }
-
-		public string AggrementToBase64String(string view, AgreementModel model)
-		{
-			byte[] pdfData = ConvertToPdf(RenderAgreement(view, model));
-			return Convert.ToBase64String(pdfData);
+	public class AgreementRenderer {
+		public static byte[] ConvertToPdf(string htmlForConvert) {
+			return ConvertFormat(htmlForConvert, SaveFormat.Pdf);
 		}
 
-        public static byte[] ConvertToPdf(string htmlForConvert)
-        {
-            return ConvertFormat(htmlForConvert, SaveFormat.Pdf);
-        }
+		public static byte[] ConvertFormat(string htmlForConvert, SaveFormat format) {
+			var doc = new Document();
+			var docBuilder = new DocumentBuilder(doc);
+			docBuilder.InsertHtml(htmlForConvert);
 
-        public static byte[] ConvertFormat(string htmlForConvert, SaveFormat format)
-        {
-            var doc = new Document();
-            var docBuilder = new DocumentBuilder(doc);
-            docBuilder.InsertHtml(htmlForConvert);
-            
-            using (var streamForDoc = new MemoryStream())
-            {
-                doc.Save(streamForDoc, format);
-                return streamForDoc.ToArray();
-            }            
-        }
+			using (var streamForDoc = new MemoryStream()) {
+				doc.Save(streamForDoc, format);
+				return streamForDoc.ToArray();
+			}
+		}
 
 		public static byte[] ConvertToPdf(byte[] file, LoadFormat loadFormat = LoadFormat.Auto, SaveFormat saveFormat = SaveFormat.Pdf) {
 			try {
@@ -52,10 +30,23 @@
 					doc.Save(streamForDoc, saveFormat);
 					return streamForDoc.ToArray();
 				}
-			}
-			catch (Exception ex) {
+			} catch (Exception) {
 				return null;
 			}
 		}
-    }
+
+		public byte[] RenderAgreementToPdf(string view, AgreementModel model) {
+			return ConvertToPdf(RenderAgreement(view, model));
+		}
+
+		public string RenderAgreement(string view, AgreementModel model) {
+			var html = Render.StringToString(view, model);
+			return html;
+		}
+
+		public string AggrementToBase64String(string view, AgreementModel model) {
+			byte[] pdfData = ConvertToPdf(RenderAgreement(view, model));
+			return Convert.ToBase64String(pdfData);
+		}
+	}
 }

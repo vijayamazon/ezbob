@@ -1,41 +1,35 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
-
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Net;
 	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.Helpers;
 	using System.Web.Mvc;
-	using Code;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
 	using ExperianLib.Ebusiness;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Utils.MimeTypes;
-	using Infrastructure;
-	using Infrastructure.csrf;
-	using Ezbob.Utils;
-	using Infrastructure.Attributes;
-	using Infrastructure.Filters;
-	using Models;
+	using EzBob.Web.Areas.Broker.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
+	using EzBob.Web.Infrastructure.csrf;
+	using EzBob.Web.Infrastructure.Filters;
+	using EzBob.Web.Models;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using PaymentServices.Calculators;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
-	using Web.Controllers;
-	using PaymentServices.Calculators;
-	using EzBob.Web.Models;
 
 	public partial class BrokerHomeController : Controller {
-
 		public BrokerHomeController() {
-			m_oServiceClient = new ServiceClient();
-			m_oHelper = new BrokerHelper(m_oServiceClient, ms_oLog);
-
+			this.m_oServiceClient = new ServiceClient();
+			this.m_oHelper = new BrokerHelper(this.m_oServiceClient, ms_oLog);
 		} // constructor
 
 		// GET: /Broker/BrokerHome/
@@ -43,11 +37,16 @@
 			var oModel = new BrokerHomeModel();
 
 			if (!string.IsNullOrWhiteSpace(sourceref)) {
-				var cookie = new HttpCookie(Constant.SourceRef, sourceref) { Expires = DateTime.Now.AddMonths(3), HttpOnly = true, Secure = true };
+				var cookie = new HttpCookie(Constant.SourceRef, sourceref) {
+					Expires = DateTime.Now.AddMonths(3),
+					HttpOnly = true,
+					Secure = true
+				};
 				Response.Cookies.Add(cookie);
 			} // if
 
-			oModel.MessageOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString().Trim();
+			oModel.MessageOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString()
+				.Trim();
 
 			if (!string.IsNullOrWhiteSpace(oModel.MessageOnStart)) {
 				oModel.MessageOnStartSeverity = (Session[Constant.Broker.MessageOnStartSeverity] ?? string.Empty).ToString();
@@ -57,12 +56,13 @@
 			} // if
 
 			if (User.Identity.IsAuthenticated) {
-				oModel.Auth = m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Broker.Forbidden;
+				oModel.Auth = this.m_oHelper.IsBroker(User.Identity.Name) ? User.Identity.Name : Constant.Broker.Forbidden;
 
 				ms_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", oModel.Auth, User.Identity.Name);
 			} // if
 
-			oModel.Terms = (Session[Constant.Broker.Terms] ?? string.Empty).ToString().Trim();
+			oModel.Terms = (Session[Constant.Broker.Terms] ?? string.Empty).ToString()
+				.Trim();
 			Session[Constant.Broker.Terms] = null;
 
 			if (!string.IsNullOrWhiteSpace(oModel.Terms)) {
@@ -92,7 +92,7 @@
 			int EstimatedMonthlyAppCount,
 			int IsCaptchaEnabled,
 			int TermsID
-		) {
+			) {
 			string sReferredBy = "";
 
 			if (Request.Cookies.AllKeys.Contains(Constant.SourceRef)) {
@@ -104,19 +104,19 @@
 
 			ms_oLog.Debug(
 				"Broker sign up request:" +
-				"\n\tFirm name: {0}" +
-				"\n\tFirm reg num: {1}" +
-				"\n\tContact person name: {2}" +
-				"\n\tContact person email: {3}" +
-				"\n\tContact person mobile: {4}" +
-				"\n\tMobile code: {5}" +
-				"\n\tContact person other phone: {6}" +
-				"\n\tEstimated monthly amount: {7}" +
-				"\n\tFirm web site URL: {8}" +
-				"\n\tEstimated monthly application count: {9}" +
-				"\n\tCaptcha enabled: {10}" +
-				"\n\tTerms ID: {11}" +
-				"\n\tReferred by (sourceref): {12}",
+					"\n\tFirm name: {0}" +
+					"\n\tFirm reg num: {1}" +
+					"\n\tContact person name: {2}" +
+					"\n\tContact person email: {3}" +
+					"\n\tContact person mobile: {4}" +
+					"\n\tMobile code: {5}" +
+					"\n\tContact person other phone: {6}" +
+					"\n\tEstimated monthly amount: {7}" +
+					"\n\tFirm web site URL: {8}" +
+					"\n\tEstimated monthly application count: {9}" +
+					"\n\tCaptcha enabled: {10}" +
+					"\n\tTerms ID: {11}" +
+					"\n\tReferred by (sourceref): {12}",
 				FirmName,
 				FirmRegNum,
 				ContactName,
@@ -130,12 +130,13 @@
 				IsCaptchaEnabled == 0 ? "no" : "yes",
 				TermsID,
 				sReferredBy
-			);
+				);
 
 			if (!ModelState.IsValid) {
 				return new BrokerForJsonResult(string.Join("; ",
-					ModelState.Values.SelectMany(x => x.Errors).Select(x => x.ErrorMessage)
-				));
+					ModelState.Values.SelectMany(x => x.Errors)
+						.Select(x => x.ErrorMessage)
+					));
 			} // if
 
 			if (User.Identity.IsAuthenticated) {
@@ -146,7 +147,7 @@
 			BrokerPropertiesActionResult bp;
 
 			try {
-				bp = m_oServiceClient.Instance.BrokerSignup(
+				bp = this.m_oServiceClient.Instance.BrokerSignup(
 					FirmName,
 					FirmRegNum,
 					ContactName,
@@ -161,7 +162,7 @@
 					IsCaptchaEnabled != 0,
 					TermsID,
 					sReferredBy
-				);
+					);
 
 				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg)) {
 					ms_oLog.Warn("Failed to sign up as a broker. {0}", bp.Properties.ErrorMsg);
@@ -176,7 +177,10 @@
 
 			ms_oLog.Debug("Broker sign up succeeded for: {0}", ContactEmail);
 
-			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) { antiforgery_token = AntiForgery.GetHtml().ToString() };
+			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) {
+				antiforgery_token = AntiForgery.GetHtml()
+					.ToString()
+			};
 		} // Signup
 
 		[HttpPost]
@@ -185,18 +189,21 @@
 		public JsonResult Logoff(string sContactEmail) {
 			bool bGoodToLogOff =
 				string.IsNullOrWhiteSpace(sContactEmail) ||
-				(User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail));
+					(User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail));
 
 			if (bGoodToLogOff) {
-				m_oHelper.Logoff(User.Identity.Name, HttpContext);
-				return new BrokerForJsonResult { antiforgery_token = AntiForgery.GetHtml().ToString() };
+				this.m_oHelper.Logoff(User.Identity.Name, HttpContext);
+				return new BrokerForJsonResult {
+					antiforgery_token = AntiForgery.GetHtml()
+						.ToString()
+				};
 			} // if
 
 			ms_oLog.Warn(
 				"Logoff request with contact email {0} while {1} logged in.",
 				sContactEmail,
 				User.Identity.IsAuthenticated ? "broker " + User.Identity.Name + " is" : "not"
-			);
+				);
 
 			return new BrokerForJsonResult(bExplicitSuccess: false);
 		} // Logoff
@@ -212,14 +219,17 @@
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
-			BrokerProperties bp = m_oHelper.TryLogin(LoginEmail, LoginPassword);
+			BrokerProperties bp = this.m_oHelper.TryLogin(LoginEmail, LoginPassword);
 
 			if (bp == null)
 				return new BrokerForJsonResult("Failed to log in.");
 
 			ms_oLog.Debug("Broker login succeeded for: {0}", LoginEmail);
 
-			return new PropertiesBrokerForJsonResult(oProperties: bp) { antiforgery_token = AntiForgery.GetHtml().ToString() };
+			return new PropertiesBrokerForJsonResult(oProperties: bp) {
+				antiforgery_token = AntiForgery.GetHtml()
+					.ToString()
+			};
 		} // Login
 
 		[HttpPost]
@@ -233,7 +243,7 @@
 				return oIsAuthResult;
 
 			try {
-				m_oServiceClient.Instance.BrokerAcceptTerms(nTermsID, sContactEmail);
+				this.m_oServiceClient.Instance.BrokerAcceptTerms(nTermsID, sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to save terms acceptance request for contact email {0} and terms id {1}.", sContactEmail, nTermsID);
 				return new BrokerForJsonResult("Failed to save terms acceptance.");
@@ -256,7 +266,7 @@
 			StringListActionResult slar;
 
 			try {
-				slar = m_oServiceClient.Instance.BrokerLoadSignedTerms(sContactEmail);
+				slar = this.m_oServiceClient.Instance.BrokerLoadSignedTerms(sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load signed terms for contact email {0}.", sContactEmail);
 				return new SignedTermsBrokerForJsonResult("Failed to load signed terms.");
@@ -279,7 +289,7 @@
 			} // if
 
 			try {
-				m_oServiceClient.Instance.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
+				this.m_oServiceClient.Instance.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to restore password for a broker with phone # {0}.", ForgottenMobile);
 				return new BrokerForJsonResult("Failed to restore password.");
@@ -303,7 +313,7 @@
 			BrokerPropertiesActionResult oResult;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail);
+				oResult = this.m_oServiceClient.Instance.BrokerLoadOwnProperties(sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load properties request for contact email {0}", sContactEmail);
 				return new PropertiesBrokerForJsonResult("Failed to load broker properties.");
@@ -327,7 +337,7 @@
 			BrokerCustomersActionResult oResult;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail);
+				oResult = this.m_oServiceClient.Instance.BrokerLoadCustomerList(sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load customers request for contact email {0}", sContactEmail);
 				return new CustomerListBrokerForJsonResult("Failed to load customer list.");
@@ -351,7 +361,7 @@
 			BrokerCustomerDetailsActionResult oDetails;
 
 			try {
-				oDetails = m_oServiceClient.Instance.BrokerLoadCustomerDetails(sCustomerID, sContactEmail);
+				oDetails = this.m_oServiceClient.Instance.BrokerLoadCustomerDetails(sCustomerID, sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load customer details request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 				return new CustomerDetailsBrokerForJsonResult("Failed to load customer details.");
@@ -371,7 +381,7 @@
 			BrokerStaticDataActionResult oResult;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerLoadStaticData(false);
+				oResult = this.m_oServiceClient.Instance.BrokerLoadStaticData(false);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Broker loading static data failed.");
 
@@ -386,7 +396,10 @@
 
 			ms_oLog.Debug("Broker loading CRM details complete.");
 
-			return Json(new { success = true, data = oResult, }, JsonRequestBehavior.AllowGet);
+			return Json(new {
+				success = true,
+				data = oResult,
+			}, JsonRequestBehavior.AllowGet);
 		} // LoadStaticData
 
 		[HttpPost]
@@ -395,14 +408,14 @@
 		public JsonResult SaveCrmEntry(string type, int action, int status, string comment, string customerId, string sContactEmail) {
 			ms_oLog.Debug(
 				"\nBroker saving CRM entry started:" +
-				"\n\ttype: {0}" +
-				"\n\taction: {1}" +
-				"\n\tstatus: {2}" +
-				"\n\tcustomer id: {3}" +
-				"\n\tcontact email: {4}" +
-				"\n\tcomment: {5}\n",
+					"\n\ttype: {0}" +
+					"\n\taction: {1}" +
+					"\n\tstatus: {2}" +
+					"\n\tcustomer id: {3}" +
+					"\n\tcontact email: {4}" +
+					"\n\tcomment: {5}\n",
 				type, action, status, customerId, sContactEmail, comment
-			);
+				);
 
 			BrokerForJsonResult oIsAuthResult = IsAuth("Save CRM entry for customer " + customerId, sContactEmail);
 			if (oIsAuthResult != null)
@@ -411,33 +424,33 @@
 			StringActionResult oResult;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerSaveCrmEntry(type, action, status, comment, customerId, sContactEmail);
+				oResult = this.m_oServiceClient.Instance.BrokerSaveCrmEntry(type, action, status, comment, customerId, sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e,
 					"\nBroker saving CRM entry failed for:" +
-					"\n\ttype: {0}" +
-					"\n\taction: {1}" +
-					"\n\tstatus: {2}" +
-					"\n\tcustomer id: {3}" +
-					"\n\tcontact email: {4}",
+						"\n\ttype: {0}" +
+						"\n\taction: {1}" +
+						"\n\tstatus: {2}" +
+						"\n\tcustomer id: {3}" +
+						"\n\tcontact email: {4}",
 					type, action, status, customerId, sContactEmail
-				);
+					);
 
 				return new BrokerForJsonResult("Failed to save CRM entry.");
 			} // try
 
 			ms_oLog.Debug(
 				"\nBroker saving CRM entry {5} for:" +
-				"\n\ttype: {0}" +
-				"\n\taction: {1}" +
-				"\n\tstatus: {2}" +
-				"\n\tcustomer id: {3}" +
-				"\n\tcontact email: {4}\n" +
-				"\n\terror message: {6}\n",
+					"\n\ttype: {0}" +
+					"\n\taction: {1}" +
+					"\n\tstatus: {2}" +
+					"\n\tcustomer id: {3}" +
+					"\n\tcontact email: {4}\n" +
+					"\n\terror message: {6}\n",
 				type, action, status, customerId, sContactEmail,
 				string.IsNullOrWhiteSpace(oResult.Value) ? "complete" : "failed",
 				string.IsNullOrWhiteSpace(oResult.Value) ? "no error" : oResult.Value
-			);
+				);
 
 			return new BrokerForJsonResult(oResult.Value);
 		} // SaveCrmEntry
@@ -455,7 +468,7 @@
 			BrokerCustomerFilesActionResult oFiles;
 
 			try {
-				oFiles = m_oServiceClient.Instance.BrokerLoadCustomerFiles(sCustomerID, sContactEmail);
+				oFiles = this.m_oServiceClient.Instance.BrokerLoadCustomerFiles(sCustomerID, sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to load customer files request for customer {1} and contact email {0}", sContactEmail, sCustomerID);
 				return new FileListBrokerForJsonResult("Failed to load customer files.");
@@ -502,7 +515,7 @@
 					ms_oLog.Alert(
 						"Failed to fully read file #{0}: {2} out of {1}; only {3} bytes out of {4} have been read.",
 						(i + 1), nFileCount, oFile.FileName, nRead, oFile.ContentLength
-					);
+						);
 					continue;
 				} // if
 
@@ -511,13 +524,13 @@
 				ms_oLog.Debug(
 					"File #{0} out of {1}: {2}; file size is {3} bytes, detected MIME type: {4}",
 					(i + 1), nFileCount, oFile.FileName, nRead, sMimeType
-				);
+					);
 
 				if (string.IsNullOrWhiteSpace(sMimeType))
 					oErrorList.Add("Not saving file #" + (i + 1) + ": " + oFile.FileName + " because it has unsupported MIME type.");
 				else {
 					try {
-						m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(sCustomerID, sContactEmail, oFileContents, oFile.FileName);
+						this.m_oServiceClient.Instance.BrokerSaveUploadedCustomerFile(sCustomerID, sContactEmail, oFileContents, oFile.FileName);
 					} catch (Exception e) {
 						ms_oLog.Alert(e, "Failed to save file #{0}: {2} out of {1}.", (i + 1), nFileCount, oFile.FileName);
 						oErrorList.Add("Failed to save file #" + (i + 1) + ": " + oFile.FileName);
@@ -541,7 +554,7 @@
 			BrokerCustomerFileContentsActionResult oFile;
 
 			try {
-				oFile = m_oServiceClient.Instance.BrokerDownloadCustomerFile(sCustomerID, sContactEmail, nFileID);
+				oFile = this.m_oServiceClient.Instance.BrokerDownloadCustomerFile(sCustomerID, sContactEmail, nFileID);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to download customer file for customer {1} and contact email {0} with file id {2}", sContactEmail, sCustomerID, nFileID);
 				throw new Exception("Failed to download requested file.");
@@ -592,7 +605,7 @@
 				return oIsAuthResult;
 
 			try {
-				m_oServiceClient.Instance.BrokerDeleteCustomerFiles(sCustomerID, sContactEmail, aryFileIDs);
+				this.m_oServiceClient.Instance.BrokerDeleteCustomerFiles(sCustomerID, sContactEmail, aryFileIDs);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to delete customer files request for customer {1} and contact email {0}; file ids: {2}", sContactEmail, sCustomerID, sFileIDList);
 				return new BrokerForJsonResult("Failed to delete customer files.");
@@ -614,7 +627,7 @@
 				return oIsAuthResult;
 
 			try {
-				m_oServiceClient.Instance.BrokerAddCustomerLead(LeadFirstName, LeadLastName, LeadEmail, LeadAddMode, ContactEmail);
+				this.m_oServiceClient.Instance.BrokerAddCustomerLead(LeadFirstName, LeadLastName, LeadEmail, LeadAddMode, ContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to add lead for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
 				return new BrokerForJsonResult("Failed to add customer lead.");
@@ -636,7 +649,7 @@
 				return oIsAuthResult;
 
 			try {
-				m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail);
+				this.m_oServiceClient.Instance.BrokerLeadSendInvitation(nLeadID, sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to send invitation request for contact email {0} and lead id {1}.", sContactEmail, nLeadID);
 				return new BrokerForJsonResult("Failed to send an invitation.");
@@ -658,7 +671,9 @@
 				Session[Constant.Broker.MessageOnStart] = oIsAuthResult.error;
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
+				return RedirectToAction("Index", "BrokerHome", new {
+					Area = "Broker",
+				});
 			} // if
 
 			if ((nLeadID > 0) && !string.IsNullOrWhiteSpace(sLeadEmail)) {
@@ -667,20 +682,24 @@
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
+				return RedirectToAction("Index", "BrokerHome", new {
+					Area = "Broker",
+				});
 			} // if
 
 			BrokerLeadDetailsActionResult bld;
 
 			try {
-				bld = m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID.Value, sLeadEmail, sContactEmail);
+				bld = this.m_oServiceClient.Instance.BrokerLeadCanFillWizard(nLeadID.Value, sLeadEmail, sContactEmail);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to process fill wizard request for contact email {0} and lead id {1} lead email {2}.", sContactEmail, nLeadID, sLeadEmail);
 
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
+				return RedirectToAction("Index", "BrokerHome", new {
+					Area = "Broker",
+				});
 			} // try
 
 			if (bld.LeadID < 1) {
@@ -689,10 +708,12 @@
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
+				return RedirectToAction("Index", "BrokerHome", new {
+					Area = "Broker",
+				});
 			} // if
 
-			m_oHelper.Logoff(User.Identity.Name, HttpContext);
+			this.m_oHelper.Logoff(User.Identity.Name, HttpContext);
 			if (bld.CustomerID > 0)
 				BrokerHelper.SetAuth(bld.LeadEmail, HttpContext, "Customer");
 
@@ -705,12 +726,14 @@
 				bld.FirstName,
 				bld.LastName,
 				true
-			);
+				);
 			// ReSharper restore ObjectCreationAsStatement
 
 			ms_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);
 
-			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+			return RedirectToAction("Index", "Wizard", new {
+				Area = "Customer"
+			});
 		} // FillWizard
 
 		[HttpGet]
@@ -723,7 +746,7 @@
 				StringActionResult sar = null;
 
 				try {
-					sar = m_oServiceClient.Instance.BrokerBackFromCustomerWizard(blm.LeadID);
+					sar = this.m_oServiceClient.Instance.BrokerBackFromCustomerWizard(blm.LeadID);
 				} catch (Exception e) {
 					ms_oLog.Warn(e, "Failed to retrieve broker details, falling back to customer's dashboard.");
 				} // try
@@ -737,14 +760,18 @@
 					BrokerHelper.SetAuth(sar.Value);
 
 					blm.Unset();
-					return RedirectToAction("Index", "BrokerHome", new { Area = "Broker" });
+					return RedirectToAction("Index", "BrokerHome", new {
+						Area = "Broker"
+					});
 				} // if
 			} // if
 
 			ms_oLog.Debug("Broker fill wizard later request failed, redirecting back to customer wizard.");
 
 			blm.Unset();
-			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+			return RedirectToAction("Index", "Wizard", new {
+				Area = "Customer"
+			});
 		} // FinishWizardLater
 
 		public System.Web.Mvc.ActionResult DownloadFile(string fid) {
@@ -755,7 +782,7 @@
 
 			string sFileName = fid.Trim();
 
-			var oFiles = new MarketingFiles(m_oServiceClient);
+			var oFiles = new MarketingFiles(this.m_oServiceClient);
 
 			ms_oLog.Debug("Broker download file request: file with id {0}.", sFileName);
 
@@ -802,11 +829,11 @@
 			ActionMetaData oResult;
 
 			try {
-				oResult = m_oServiceClient.Instance.BrokerUpdatePassword(
+				oResult = this.m_oServiceClient.Instance.BrokerUpdatePassword(
 					ContactEmail,
 					new Password(OldPassword),
 					new Password(NewPassword, NewPassword2)
-				);
+					);
 			} catch (Exception e) {
 				ms_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);
 				return new BrokerForJsonResult("Failed to update password.");
@@ -837,7 +864,7 @@
 			string town,
 			string county,
 			string postcode
-		) {
+			) {
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Save Experian director details for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
@@ -853,7 +880,7 @@
 				county,
 				postcode,
 				sContactEmail
-			);
+				);
 
 			var m = new Esigner {
 				DirectorID = directorID,
@@ -873,7 +900,7 @@
 				return new BrokerForJsonResult(sValidation);
 
 			try {
-				m_oServiceClient.Instance.UpdateExperianDirectorDetails(null, null, m);
+				this.m_oServiceClient.Instance.UpdateExperianDirectorDetails(null, null, m);
 			} catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to save Experian director details.");
 				return new BrokerForJsonResult("Failed to save director details.");
@@ -886,9 +913,8 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult GetOffer(GetInstantOfferModel model, CompanyInfo company) {
-
 			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-			var response = m_oServiceClient.Instance.BrokerInstantOffer(new BrokerInstantOfferRequest {
+			var response = this.m_oServiceClient.Instance.BrokerInstantOffer(new BrokerInstantOfferRequest {
 				Created = DateTime.UtcNow,
 				BrokerId = context.UserId,
 				CompanyNameNumber = model.CompanyNameNumber,
@@ -939,24 +965,23 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult TargetBusiness(string companyNameNumber) {
-			if (string.IsNullOrEmpty(companyNameNumber)) {
+			if (string.IsNullOrEmpty(companyNameNumber))
 				return new BrokerForJsonResult("Company name/number not provided");
-			}
 
 			string companyName = "";
 			string companyNumber = "";
 			var legalStatus = TargetResults.LegalStatus.DontCare;
 			//company ref num is alpha numeric 8 chars length string, digits only or 2 letters and 6 digits.
 			if (companyNameNumber.Length <= 8 &&
-				(Regex.IsMatch(companyNameNumber, @"^\d+$") || Regex.IsMatch(companyNameNumber, @"^[a-zA-Z]{2}\d+$"))) {
+				(Regex.IsMatch(companyNameNumber, @"^\d+$") || Regex.IsMatch(companyNameNumber, @"^[a-zA-Z]{2}\d+$")))
 				companyNumber = companyNameNumber;
-			} else {
+			else
 				companyName = companyNameNumber;
-			}
 
-			if (companyNameNumber.ToLowerInvariant().Contains("ltd") || companyNameNumber.ToLowerInvariant().Contains("limited")) {
+			if (companyNameNumber.ToLowerInvariant()
+				.Contains("ltd") || companyNameNumber.ToLowerInvariant()
+					.Contains("limited"))
 				legalStatus = TargetResults.LegalStatus.Limited;
-			}
 
 			try {
 				var service = new EBusinessService(m_oDB);
@@ -973,6 +998,5 @@
 				throw;
 			} // try
 		}
-
 	} // class BrokerHomeController
 } // namespace

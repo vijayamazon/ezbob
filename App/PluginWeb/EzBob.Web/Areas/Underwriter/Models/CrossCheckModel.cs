@@ -1,21 +1,24 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Models
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Models {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Text;
 	using AutoMapper;
-	using EZBob.DatabaseLib.Model.Database;
-	using System.Linq;
-	using EZBob.DatabaseLib.Model.Database.Mapping;
-	using EzBob.Models;
 	using Ezbob.Backend.Models;
-	using Infrastructure;
+	using EzBob.Models;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using LandRegistryLib;
 	using ServiceClientProxy;
 	using StructureMap;
 
-	public class CrossCheckModel
-	{
+	public class CrossCheckModel {
+		public enum TriState {
+			NoData,
+			No,
+			Yes
+		} // enum TriState
+
 		public PersonalInfo Application { get; set; }
 		public PersonalInfo EBay { get; set; }
 		public PersonalInfo PayPal { get; set; }
@@ -36,10 +39,7 @@
 		public int AssetWorth { get; set; }
 		public List<LandRegistryResModel> LandRegistries { get; set; }
 
-		private static readonly ServiceClient serviceClient;
-		private readonly IEzbobWorkplaceContext _context;
-		static CrossCheckModel()
-		{
+		static CrossCheckModel() {
 			Mapper.CreateMap<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>();
 			Mapper.CreateMap<MP_PayPalPersonalInfo, PersonalInfo>()
 				.ForMember(x => x.Fullname, y => y.MapFrom(z => z.FullName))
@@ -61,22 +61,9 @@
 				.ForMember(x => x.Town, y => y.MapFrom(z => z.City));
 
 			serviceClient = new ServiceClient();
-		}
+		} // static constructor
 
-		public static void GetZooplaData(Customer customer, int zooplaEstimate, int zoopla1YearAvg, out int zooplaValue)
-		{
-			zooplaValue = zooplaEstimate != 0 ? zooplaEstimate : zoopla1YearAvg;
-		}
-
-		public static void GetMortgagesData(int userId, Customer customer, out int mortgageBalance, out int mortgageCount)
-		{
-			var data = serviceClient.Instance.LoadExperianConsumerMortgageData(userId, customer.Id);
-			mortgageBalance = data.Value.MortgageBalance;
-			mortgageCount = data.Value.NumMortgages;
-		}
-
-		public CrossCheckModel(int userId, Customer customer)
-		{
+		public CrossCheckModel(int userId, Customer customer) {
 			Customer = customer;
 
 			Application = new PersonalInfo();
@@ -90,14 +77,15 @@
 			Directors = new List<Director>();
 			CrossCheckStatus = new CrossCheckStatus();
 
-			ExperianDirectors = GetExperianDirectors(customer).DirectorNames;
+			ExperianDirectors = GetExperianDirectors(customer)
+				.DirectorNames;
 
 			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
 			Zoopla zoopla = null;
-			if (current != null) zoopla = current.Zoopla.LastOrDefault();
+			if (current != null)
+				zoopla = current.Zoopla.LastOrDefault();
 
-			if (zoopla != null)
-			{
+			if (zoopla != null) {
 				current.ZooplaEstimate = zoopla.ZooplaEstimate;
 				current.ZooplaEstimateValue = zoopla.ZooplaEstimateValue;
 
@@ -115,136 +103,129 @@
 			}
 			var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
 			CurrentAddress = current;
-			if (prev != null) PrevAddress = prev;
-			if (customer.PersonalInfo != null)
-			{
+			if (prev != null)
+				PrevAddress = prev;
+			if (customer.PersonalInfo != null) {
 				Application = Mapper.Map<EZBob.DatabaseLib.Model.Database.PersonalInfo, PersonalInfo>(customer.PersonalInfo);
 				Application.Email = customer.Name;
 			}
 
-			if (customer.PropertyStatus != null)
-			{
-				PropertyStatus = new PropertyStatusModel
-					{
-						Id = customer.PropertyStatus.Id,
-						Description = customer.PropertyStatus.Description,
-						IsOwnerOfMainAddress = customer.PropertyStatus.IsOwnerOfMainAddress,
-						IsOwnerOfOtherProperties = customer.PropertyStatus.IsOwnerOfOtherProperties
-					};
+			if (customer.PropertyStatus != null) {
+				PropertyStatus = new PropertyStatusModel {
+					Id = customer.PropertyStatus.Id,
+					Description = customer.PropertyStatus.Description,
+					IsOwnerOfMainAddress = customer.PropertyStatus.IsOwnerOfMainAddress,
+					IsOwnerOfOtherProperties = customer.PropertyStatus.IsOwnerOfOtherProperties
+				};
 			}
 
-			var ebay = customer.GetEbayCustomerMarketPlaces().FirstOrDefault();
-			if (ebay != null)
-			{
+			var ebay = customer.GetEbayCustomerMarketPlaces()
+				.FirstOrDefault();
+			if (ebay != null) {
 				var eBayUserData = ebay.EbayUserData.LastOrDefault();
-				if (eBayUserData != null)
-				{
+				if (eBayUserData != null) {
 					EBay = Mapper.Map<MP_EbayUserData, PersonalInfo>(eBayUserData);
 					if (EBay.SellerInfo.SellerPaymentAddress != null)
-					{
 						SellerAddress = Mapper.Map<MP_EbayUserAddressData, CustomerAddress>(EBay.SellerInfo.SellerPaymentAddress);
-					}
 					if (eBayUserData.RegistrationAddress != null)
-					{
 						EBayAddress = Mapper.Map<MP_EbayUserAddressData, CustomerAddress>(eBayUserData.RegistrationAddress);
-					}
 				}
-				if (eBayUserData != null && eBayUserData.RegistrationAddress != null)
-				{
+				if (eBayUserData != null && eBayUserData.RegistrationAddress != null) {
 					EBay.Fullname = eBayUserData.RegistrationAddress.Name;
 					EBay.DaytimePhone = eBayUserData.RegistrationAddress.Phone;
 					EBay.MobilePhone = eBayUserData.RegistrationAddress.Phone2;
 				}
 			}
-			var paypal = customer.GetPayPalCustomerMarketPlaces().FirstOrDefault();
-			if (paypal != null)
-			{
+			var paypal = customer.GetPayPalCustomerMarketPlaces()
+				.FirstOrDefault();
+			if (paypal != null) {
 				PayPal = Mapper.Map<MP_PayPalPersonalInfo, PersonalInfo>(paypal.PersonalInfo);
 				PayPalAddress = Mapper.Map<MP_PayPalPersonalInfo, CustomerAddress>(paypal.PersonalInfo);
 			}
 
 			if (customer.Company != null)
-			{
 				Directors.AddRange(customer.Company.Directors);
-			}
 
 			CrossCheckStatus.BuildMarkerStatusForPersonalInfo(Application, PayPal, EBay);
 			CrossCheckStatus.BuildMarkerStatusForCustomerAddress(CurrentAddress, EBayAddress, PayPalAddress);
 
-			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res).Select(x => new { Response = x.Response, Title = x.TitleNumber });
+			var lrs = customer.LandRegistries.Where(x => x.RequestType == LandRegistryRequestType.Res)
+				.Select(x => new {
+					Response = x.Response,
+					Title = x.TitleNumber
+				});
 			var b = new LandRegistryModelBuilder();
 			LandRegistries = new List<LandRegistryResModel>();
 			foreach (var lr in lrs)
-			{
 				LandRegistries.Add(b.BuildResModel(lr.Response, lr.Title));
-			}
-		}
+		} // constructor
 
-		public static ExperianDirectorsModel GetExperianDirectors(Customer customer)
-		{
+		public static void GetZooplaData(Customer customer, int zooplaEstimate, int zoopla1YearAvg, out int zooplaValue) {
+			zooplaValue = zooplaEstimate != 0 ? zooplaEstimate : zoopla1YearAvg;
+		} // GetZooplaData
+
+		public static void GetMortgagesData(int userId, Customer customer, out int mortgageBalance, out int mortgageCount) {
+			var data = serviceClient.Instance.LoadExperianConsumerMortgageData(userId, customer.Id);
+			mortgageBalance = data.Value.MortgageBalance;
+			mortgageCount = data.Value.NumMortgages;
+		} // GetMortgagesData
+
+		public static ExperianDirectorsModel GetExperianDirectors(Customer customer) {
 			var expDirRepo = ObjectFactory.GetInstance<ExperianDirectorRepository>();
 			var dirs = expDirRepo.Find(customer.Id);
 			var directorsModel = new ExperianDirectorsModel();
 
-			if (dirs.Any())
-			{
+			if (dirs.Any()) {
 				directorsModel.NumOfDirectors = dirs.Count(x => x.IsDirector);
 				directorsModel.NumOfShareHolders = dirs.Count(x => x.IsShareholder);
 				directorsModel.DirectorNames = new List<string>();
 				foreach (var expDir in dirs)
-				{
 					directorsModel.DirectorNames.Add(DetailsToName(expDir.FirstName, expDir.MiddleName, expDir.LastName));
-				}
 			}
 			return directorsModel;
-		}
+		} // GetExperianDirectors
 
-		public enum TriState { NoData, No, Yes }
-
-		public TriState IsExperianDirector(PersonalInfo oInfo)
-		{
+		public TriState IsExperianDirector(PersonalInfo oInfo) {
 			if (ExperianDirectors == null)
 				return TriState.NoData;
 
 			return ExperianDirectors.Contains(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
 		} // IsExperianDirector
 
-		public TriState IsExperianDirector(Director oInfo)
-		{
+		public TriState IsExperianDirector(Director oInfo) {
 			if (ExperianDirectors == null)
 				return TriState.NoData;
 
 			return ExperianDirectors.Contains(DetailsToName(oInfo)) ? TriState.Yes : TriState.No;
 		} // IsExperianDirector
 
-		private string DetailsToName(PersonalInfo oInfo)
-		{
-			return oInfo == null ? "" : DetailsToName(oInfo.FirstName, oInfo.MiddleInitial, oInfo.Surname);
-		} // DetailsToName
-
-		private string DetailsToName(Director oInfo)
-		{
-			return oInfo == null ? "" : DetailsToName(oInfo.Name, oInfo.Middle, oInfo.Surname);
-		} // DetailsToName
-
-		private static string DetailsToName(params string[] aryNames)
-		{
+		private static string DetailsToName(params string[] aryNames) {
 			var os = new StringBuilder();
 
-			foreach (string sName in aryNames)
-			{
-				string s = (sName ?? string.Empty).Trim().ToLower();
+			foreach (string sName in aryNames) {
+				string s = (sName ?? string.Empty).Trim()
+					.ToLower();
 
 				if (s != string.Empty)
 					os.AppendFormat(" {0}", s);
 			} // for each
 
-			return os.ToString().Trim();
+			return os.ToString()
+				.Trim();
 		} // DetailsToName
-	}
 
-	public class PersonalInfo : EZBob.DatabaseLib.Model.Database.PersonalInfo
-	{
+		private string DetailsToName(PersonalInfo oInfo) {
+			return oInfo == null ? "" : DetailsToName(oInfo.FirstName, oInfo.MiddleInitial, oInfo.Surname);
+		} // DetailsToName
+
+		private string DetailsToName(Director oInfo) {
+			return oInfo == null ? "" : DetailsToName(oInfo.Name, oInfo.Middle, oInfo.Surname);
+		} // DetailsToName
+
+		private static readonly ServiceClient serviceClient;
+	} // class CrossCheckModel
+
+	public class PersonalInfo : EZBob.DatabaseLib.Model.Database.PersonalInfo {
 		public string Email { get; set; }
 		public string BusinessName { get; set; }
 		public string PlayerId { get; set; }
@@ -255,17 +236,14 @@
 		public string Site { get; set; }
 		public string SkypeID { get; set; }
 
-		public PersonalInfo()
-		{
+		public PersonalInfo() {
 			SellerInfo = new EbaySellerInfo();
-		}
+		} // constructor
+	} // class PersonalInfo
 
-	}
-
-	public class ExperianDirectorsModel
-	{
+	public class ExperianDirectorsModel {
 		public List<string> DirectorNames { get; set; }
 		public int NumOfDirectors { get; set; }
 		public int NumOfShareHolders { get; set; }
-	}
-}
+	} // class ExperianDirectorsModel
+} // namespace
