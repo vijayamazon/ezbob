@@ -411,7 +411,7 @@
 				cr.ExpirianRating = dataGatherer.ExperianConsumerScore;
 				cr.AnnualTurnover = (int)dataGatherer.TotalSumOfOrders1YTotal;
 				cr.LoanType = loanTypeIdToUse;
-				cr.LoanSource = isEuToUse ? _loanSourceRepository.GetByName("EU") : _loanSourceRepository.GetDefault();
+				cr.LoanSource = isEuToUse ? this._loanSourceRepository.GetByName(LoanSourceName.EU.ToString()) : this._loanSourceRepository.GetDefault();
 
 				if (autoDecisionResponse.DecidedToApprove)
 					cr.InterestRate = interestRateToUse;
@@ -432,6 +432,10 @@
 					cr.IsCustomerRepaymentPeriodSelectionAllowed = dataGatherer.IsCustomerRepaymentPeriodSelectionAllowed != 0;
 					cr.DiscountPlan = _discountPlanRepository.Get(dataGatherer.LoanOfferDiscountPlanId);
 					cr.UseBrokerSetupFee = dataGatherer.UseBrokerSetupFee;
+					cr.LoanSource = _loanSourceRepository.Get(this.dataGatherer.LoanSourceId);
+					cr.LoanType = _loanTypeRepository.Get(this.dataGatherer.LoanOfferLoanTypeId);
+					cr.ManualSetupFeeAmount = dataGatherer.ManualSetupFeeAmount;
+					cr.ManualSetupFeePercent = dataGatherer.ManualSetupFeePercent;
 				}
 			}
 

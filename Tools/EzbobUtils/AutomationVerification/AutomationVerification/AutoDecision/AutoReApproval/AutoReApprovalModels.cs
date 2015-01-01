@@ -25,6 +25,7 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 		public int AutoReApproveMaxLacrAge { get; set; }
 		public int AutoReApproveMaxLatePayment { get; set; }
 		public int AutoReApproveMaxNumOfOutstandingLoans { get; set; }
+		public int MinLoan { get; set; }
 	}
 
 	public class ReApprovalInputData : ITrailInputData
@@ -49,6 +50,7 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 			AutoReApproveMaxLacrAge = data.AutoReApproveMaxLacrAge;
 			AutoReApproveMaxLatePayment = data.AutoReApproveMaxLatePayment;
 			AutoReApproveMaxNumOfOutstandingLoans = data.AutoReApproveMaxNumOfOutstandingLoans;
+			MinLoan = data.MinLoan;
 		}
 
 		public DateTime DataAsOf { get; private set; }
@@ -66,7 +68,7 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 		public int AutoReApproveMaxLacrAge { get; set; }
 		public int AutoReApproveMaxLatePayment { get; set; }
 		public int AutoReApproveMaxNumOfOutstandingLoans { get; set; }
-
+		public int MinLoan { get; set; }
 		public string Serialize()
 		{
 			return JsonConvert.SerializeObject(this, Formatting.Indented);

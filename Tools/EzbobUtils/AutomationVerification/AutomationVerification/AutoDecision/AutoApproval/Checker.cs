@@ -468,9 +468,9 @@
 			decimal nApprovedAmount = ApprovedAmount;
 
 			if (nApprovedAmount > 0)
-				StepDone<Complete>().Init(nApprovedAmount);
+				StepDone<Complete>().Init(nApprovedAmount, 0);
 			else
-				StepFailed<Complete>().Init(nApprovedAmount);
+				StepFailed<Complete>().Init(nApprovedAmount, 0);
 		} // Complete
 
 		#endregion method Complete

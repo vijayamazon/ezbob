@@ -110,6 +110,7 @@ BEGIN
     DECLARE @AutoReApproveMaxLacrAge INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='AutoReApproveMaxLacrAge')
     DECLARE @AutoReApproveMaxLatePayment INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='AutoReApproveMaxLatePayment')
     DECLARE @AutoReApproveMaxNumOfOutstandingLoans INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='AutoReApproveMaxNumOfOutstandingLoans')
+	DECLARE @MinLoan INT = (SELECT CAST(Value AS INT) FROM ConfigurationVariables WHERE Name='MinLoan')
 	 
 ----------------------------data---------------------------------------
 SELECT 
@@ -128,7 +129,8 @@ SELECT
 		
 		@AutoReApproveMaxLacrAge AS AutoReApproveMaxLacrAge,
 		@AutoReApproveMaxLatePayment AS AutoReApproveMaxLatePayment,
-		@AutoReApproveMaxNumOfOutstandingLoans AS AutoReApproveMaxNumOfOutstandingLoans
+		@AutoReApproveMaxNumOfOutstandingLoans AS AutoReApproveMaxNumOfOutstandingLoans,
+		@MinLoan AS MinLoan
 		
 END
 GO

@@ -74,10 +74,10 @@
 				SetApprovedAmount((int)data.ReApproveAmount);
 				CheckAvailableFunds();
 
-				if (m_nApprovedAmount > 0)
-					StepDone<Complete>().Init(m_nApprovedAmount);
+				if (m_nApprovedAmount > Trail.MyInputData.MinLoan)
+					StepDone<Complete>().Init(m_nApprovedAmount, Trail.MyInputData.MinLoan);
 				else
-					StepFailed<Complete>().Init(m_nApprovedAmount);
+					StepFailed<Complete>().Init(m_nApprovedAmount, Trail.MyInputData.MinLoan);
 			}
 			catch (Exception e) {
 				m_oLog.Error(e, "Exception during auto approval.");
