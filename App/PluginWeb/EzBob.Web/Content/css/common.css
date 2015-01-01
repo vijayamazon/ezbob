@@ -2295,7 +2295,7 @@ img.help-btn {
 .amount-period-sliders .period-slider { margin: 0 0 20px 0; }
 
 .amount-period-sliders .amount-textbox,
-.amount-period-sliders .period-textbox { position: absolute; right: 10px; text-align: right; width: 60px; padding-right: 3px; font-size: 12px; font-weight: bold; }
+.amount-period-sliders .period-textbox { position: absolute; right: 10px; text-align: right; width: 70px; padding-right: 3px; font-size: 12px; font-weight: bold; }
 
 .amount-period-sliders .amount-textbox { top:  50px; }
 .amount-period-sliders .period-textbox { top: 120px; }
