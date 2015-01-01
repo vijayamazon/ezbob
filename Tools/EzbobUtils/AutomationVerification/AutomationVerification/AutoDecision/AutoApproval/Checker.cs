@@ -403,10 +403,10 @@
 
 			if (nApprovedAmount > 0) {
 				StepDone<Complete>()
-					.Init(nApprovedAmount);
+					.Init(nApprovedAmount, 0);
 			} else {
 				StepFailed<Complete>()
-					.Init(nApprovedAmount);
+					.Init(nApprovedAmount, 0);
 			}
 		} // Complete
 

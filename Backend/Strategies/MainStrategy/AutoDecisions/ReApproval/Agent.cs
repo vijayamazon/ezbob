@@ -121,6 +121,7 @@
 			Trail.MyInputData.AutoReApproveMaxLacrAge = Cfg.MaxLacrAge;
 			Trail.MyInputData.AutoReApproveMaxLatePayment = Cfg.MaxLatePayment;
 			Trail.MyInputData.AutoReApproveMaxNumOfOutstandingLoans = Cfg.MaxNumOfOutstandingLoans;
+			Trail.MyInputData.MinLoan = ConfigManager.CurrentValues.Instance.MinLoan;
 		} // GatherData
 
 		protected virtual AConnection DB { get; private set; }
@@ -163,10 +164,10 @@
 		} // RunSecondary
 
 		private void CheckComplete() {
-			if (ApprovedAmount > 0)
-				StepDone<Complete>().Init(ApprovedAmount);
+			if (ApprovedAmount > Trail.MyInputData.MinLoan)
+				StepDone<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);
 			else
-				StepFailed<Complete>().Init(ApprovedAmount);
+				StepFailed<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);
 		} // CheckComplete
 
 		private void CheckInit() {
