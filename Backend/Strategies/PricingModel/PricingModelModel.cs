@@ -2,6 +2,7 @@
 {
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using System.Text;
 
 	[DataContract]
 	public class PricingModelModel
@@ -126,6 +127,40 @@
 				TotalCost = TotalCost,
 				ProfitMarkupOutput = ProfitMarkupOutput,
 			};
+		}
+
+		public override string ToString() {
+			var sb = new StringBuilder();
+			sb.Append("LoanAmount:").Append(LoanAmount).Append("\r\n");
+			sb.Append("DefaultRate:").Append(DefaultRate).Append("\r\n");
+			sb.Append("DefaultRateCompanyShare:").Append(DefaultRateCompanyShare).Append("\r\n");
+			sb.Append("DefaultRateCustomerShare:").Append(DefaultRateCustomerShare).Append("\r\n");
+			sb.Append("SetupFeePounds:").Append(SetupFeePounds).Append("\r\n");
+			sb.Append("SetupFeePercents:").Append(SetupFeePercents).Append("\r\n");
+			sb.Append("BrokerSetupFeePounds:").Append(BrokerSetupFeePounds).Append("\r\n");
+			sb.Append("BrokerSetupFeePercents:").Append(BrokerSetupFeePercents).Append("\r\n");
+			sb.Append("LoanTerm:").Append(LoanTerm).Append("\r\n");
+			sb.Append("InterestOnlyPeriod:").Append(InterestOnlyPeriod).Append("\r\n");
+			sb.Append("TenurePercents:").Append(TenurePercents).Append("\r\n");
+			sb.Append("TenureMonths:").Append(TenureMonths).Append("\r\n");
+			sb.Append("CollectionRate:").Append(CollectionRate).Append("\r\n");
+			sb.Append("EuCollectionRate:").Append(EuCollectionRate).Append("\r\n");
+			sb.Append("CosmeCollectionRate:").Append(CosmeCollectionRate).Append("\r\n");
+			sb.Append("Cogs:").Append(Cogs).Append("\r\n");
+			sb.Append("DebtPercentOfCapital:").Append(DebtPercentOfCapital).Append("\r\n");
+			sb.Append("CostOfDebt:").Append(CostOfDebt).Append("\r\n");
+			sb.Append("OpexAndCapex:").Append(OpexAndCapex).Append("\r\n");
+			sb.Append("ProfitMarkup:").Append(ProfitMarkup).Append("\r\n");
+			foreach (var source in PricingSourceModels) {
+				sb.Append(" Source:").Append(source.Source).Append("\r\n");
+				sb.Append("  InterestRate:").Append(source.InterestRate).Append("\r\n");
+				sb.Append("  SetupFee:").Append(source.SetupFee).Append("\r\n");
+				sb.Append("  AIR:").Append(source.AIR).Append("\r\n");
+				sb.Append("  APR:").Append(source.APR).Append("\r\n");
+				sb.Append("  IsPreferable:").Append(source.IsPreferable).Append("\r\n");
+			}
+			
+			return sb.ToString();
 		}
 	}
 	[DataContract]
