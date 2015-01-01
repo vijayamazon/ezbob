@@ -118,6 +118,11 @@
 		NonLimited,
 	} // enum TypeOfBusinessReduced
 
+	public enum TypeOfBusinessAgreementReduced {
+		Personal,
+		Business,
+	} // enum TypeOfBusinessAgreementReduced
+
 	public static class TypeOfBusinessExtenstions
 	{
 		public static TypeOfBusinessReduced Reduce(this TypeOfBusiness business)
@@ -139,6 +144,23 @@
 
 			return TypeOfBusinessReduced.Personal;
 		} // Reduse
+
+		public static TypeOfBusinessAgreementReduced AgreementReduce(this TypeOfBusiness typeOfBusiness) {
+			switch (typeOfBusiness) {
+			case TypeOfBusiness.Entrepreneur:
+			case TypeOfBusiness.PShip3P:
+			case TypeOfBusiness.SoleTrader:
+				return TypeOfBusinessAgreementReduced.Personal;
+
+			case TypeOfBusiness.LLP:
+			case TypeOfBusiness.Limited:
+			case TypeOfBusiness.PShip:
+				return TypeOfBusinessAgreementReduced.Business;
+			}
+
+			return TypeOfBusinessAgreementReduced.Personal;
+		}
+
 
 		public static string TypeOfBussinessForWeb(TypeOfBusiness businessReduced)
 		{

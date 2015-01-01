@@ -33,9 +33,8 @@
 
 		public void RenderAgreements(Loan loan, bool isRebuld)
 		{
-			var typeOfBusinessReduced = loan.Customer.PersonalInfo.TypeOfBusiness.Reduce();
-			var isConsumer = typeOfBusinessReduced == TypeOfBusinessReduced.Personal || typeOfBusinessReduced == TypeOfBusinessReduced.NonLimited;
-
+			var typeOfBusinessReduced = loan.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
+			
 			var model = !isRebuld ? _builder.Build(loan.Customer, loan.LoanAmount, loan) : _builder.ReBuild(loan.Customer, loan);
 
 			var isAlibaba = loan.Customer.IsAlibaba;
@@ -44,7 +43,7 @@
 			string path1;
 			string path2;
 			TemplateModel template;
-			if (isConsumer)
+			if (typeOfBusinessReduced == TypeOfBusinessAgreementReduced.Personal)
 			{
 				var preContract = _templates.GetTemplateByName(alibaba + "Pre-Contract-Agreement");
 				var preContractAgreement = new LoanAgreement("precontract", loan, 
