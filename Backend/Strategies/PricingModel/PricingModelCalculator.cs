@@ -269,7 +269,20 @@
 			inputs.Append("OpexAndCapex:").Append(Model.OpexAndCapex).Append("\r\n");
 			inputs.Append("ProfitMarkup:").Append(Model.ProfitMarkup).Append("\r\n");
 
-			Log.Warn("Inputs were:\r\n{0}", inputs);
+			if (Model.PricingSourceModels != null) {
+				foreach (var source in Model.PricingSourceModels) {
+					inputs.Append(" Source:").Append(source.Source).Append("\r\n");
+					inputs.Append("  InterestRate:").Append(source.InterestRate).Append("\r\n");
+					inputs.Append("  SetupFee:").Append(source.SetupFee).Append("\r\n");
+					inputs.Append("  AIR:").Append(source.AIR).Append("\r\n");
+					inputs.Append("  APR:").Append(source.APR).Append("\r\n");
+					inputs.Append("  IsPreferable:").Append(source.IsPreferable).Append("\r\n");
+				}
+			} else {
+				inputs.AppendLine("PricingSourceModels NULL!!!!!");
+			}
+
+			Log.Info("Pricing Model:\n{0}", inputs);
 		}
 
 		private decimal GetCostOfDebt(IEnumerable<LoanScheduleItem> schedule)
@@ -366,6 +379,7 @@
 
 		public override void Execute() {
 			Calculate();
+			LogInputs();
 		}
 	}
 }
