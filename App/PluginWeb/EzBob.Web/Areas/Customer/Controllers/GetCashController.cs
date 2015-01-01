@@ -268,15 +268,17 @@
 
 		[Transactional]
 		[HttpPost]
-		public JsonResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false, string signedName = "")
+		public JsonResult LoanLegalSigned(bool preAgreementTermsRead = false, bool agreementTermsRead = false, bool euAgreementTermsRead = false, bool cosmeAgreementTermsRead = false, string signedName = "")
 		{
-			_log.DebugFormat("LoanLegalModel agreementTermsRead: {0} preAgreementTermsRead: {1} euAgreementTermsRead: {2}", agreementTermsRead, preAgreementTermsRead, euAgreementTermsRead);
+			_log.DebugFormat("LoanLegalModel agreementTermsRead: {0} preAgreementTermsRead: {1} euAgreementTermsRead: {2} cosmeAgreementTermsRead: {3}", 
+				agreementTermsRead, preAgreementTermsRead, euAgreementTermsRead, cosmeAgreementTermsRead);
 
 			var cashRequest = _context.Customer.LastCashRequest;
 			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness.Reduce();
 
 			if (!preAgreementTermsRead || !agreementTermsRead ||
-				(cashRequest.LoanSource.Name == "EU" && !euAgreementTermsRead))
+				(cashRequest.LoanSource.Name == LoanSourceName.EU.ToString() && !euAgreementTermsRead) || 
+				(cashRequest.LoanSource.Name == LoanSourceName.COSME.ToString() && !cosmeAgreementTermsRead))
 			{
 				return Json(new { error = "You must agree to all agreements." });
 			}
@@ -285,7 +287,8 @@
 				{
 					CashRequest = cashRequest,
 					Created = DateTime.UtcNow,
-					EUAgreementAgreed = cashRequest.LoanSource.Name == "EU",
+					EUAgreementAgreed = euAgreementTermsRead,
+					COSMEAgreementAgreed = cosmeAgreementTermsRead,
 					CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
 					PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
 					PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,

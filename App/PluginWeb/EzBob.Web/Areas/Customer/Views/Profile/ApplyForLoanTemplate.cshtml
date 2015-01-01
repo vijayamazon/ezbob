@@ -29,18 +29,32 @@
 	<div class="eu-agreement-section">
 		<div class="overview loan-agreement simple-well clearfix">
 			<div class="eu-agreement-header">
-				<h3 class="eu-agreement-header-text">Your loan will be included in the EU program, please confirm:</h3>
+				<h3 class="eu-agreement-header-text">Your loan will be included in the EU EPMF program, please confirm:</h3>
 				<div class="eu-agreement-image"></div>
 			</div>
 			<ol>
 				<li>I Employ less than 10 persons.</li>
-				<li>Annual turnover is less then 1.5M Pounds.</li>
+				<li>Annual turnover is less then £ 1.5M.</li>
 				<li>Autonomous enterprise – no other enterprise owns more than 25% of the borrower, I do not own more than 25% in another enterprise.</li>
 				<li>Loan is for business purposes.</li>
 				<li>Not involved in the following sectors: arms production and trading; human cloning; tobacco; gambling.</li>
 			</ol>
 		</div>
 	</div>
+    
+    <div class="cosme-agreement-section">
+        <div class="overview loan-agreement simple-well clearfix">
+            <div class="eu-agreement-header">
+                <h3 class="eu-agreement-header-text">Your loan will be included in the EU COSME program, please confirm:</h3>
+                <div class="eu-agreement-image"></div>
+            </div>
+            <ol>
+                <li>I Employ less than 250 persons.</li>
+                <li>Annual turnover is less then £ 40M.</li>
+                <li>does not have a substantial focus on one or more of the following sectors: arms production and trading; human cloning; genetically modified organisms; tobacco or alcohol; gambling, pornography, internet piracy.</li>
+            </ol>
+        </div>
+    </div>
 
 	@using (Html.BeginForm("LoanLegalSigned", "GetCash", new { Area = "Customer" }, FormMethod.Post, new { @class = "LoanLegal" })) {
 		<div class="controls">
@@ -58,6 +72,10 @@
 				<input type="checkbox" id="euAgreementTermsRead" name="euAgreementTermsRead" class="euAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-eu-agreement" />
 				I agree to the EU program terms
 			</label>
+            <label class="checkbox cosme-agreement-section">
+                <input type="checkbox" id="cosmeAgreementTermsRead" name="cosmeAgreementTermsRead" class="cosmeAgreementTermsRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-cosme-agreement" />
+                I agree to the EU COSME program terms
+            </label>
 			<!-- label class="checkbox quick-offer-section">
 				<input type="checkbox" id="directorConsentRead" class="directorConsentRead" name="directorConsentRead" value="true" ui-event-control-id="loan-legal:apply-for-loan-director" />
 				I have read and agree to the directors' consent declaration

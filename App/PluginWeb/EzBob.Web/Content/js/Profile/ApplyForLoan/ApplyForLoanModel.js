@@ -43,6 +43,7 @@ EzBob.Profile.ApplyForLoanModel = Backbone.Model.extend({
 			loanType: this.get("loanType"),
 			repaymentPeriod: this.get("repaymentPeriod"),
 			isLoanSourceEU: this.get("isLoanSourceEU"),
+			isLoanSourceCOSME: this.get('isLoanSourceCOSME')
 		});
 	}, // initialize
 

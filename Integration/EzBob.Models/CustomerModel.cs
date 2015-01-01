@@ -116,6 +116,7 @@ namespace EzBob.Models {
 		public bool IsEarly { get; set; }
 
 		public bool IsLastApprovedLoanSourceEu { get; set; }
+		public bool IsLastApprovedLoanSourceCOSME { get; set; }
 
 		public bool IsLoanDetailsFixed { get; set; }
 

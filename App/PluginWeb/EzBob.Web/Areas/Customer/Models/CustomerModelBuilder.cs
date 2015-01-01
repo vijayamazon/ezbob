@@ -114,7 +114,8 @@
 
 			customerModel.LastApprovedLoanTypeID = customer.LastCashRequest != null ? customer.LastCashRequest.LoanType.Id : 0;
 			customerModel.LastApprovedRepaymentPeriod = customer.LastCashRequest != null ? customer.LastCashRequest.RepaymentPeriod : 0;
-			customerModel.IsLastApprovedLoanSourceEu = customer.LastCashRequest != null && customer.LastCashRequest.LoanSource.Name == "EU";
+			customerModel.IsLastApprovedLoanSourceEu = customer.LastCashRequest != null && customer.LastCashRequest.LoanSource.Name == LoanSourceName.EU.ToString();
+			customerModel.IsLastApprovedLoanSourceCOSME = customer.LastCashRequest != null && customer.LastCashRequest.LoanSource.Name == LoanSourceName.COSME.ToString();
 			customerModel.Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 
 			customerModel.CreditSum = customer.CreditSum;

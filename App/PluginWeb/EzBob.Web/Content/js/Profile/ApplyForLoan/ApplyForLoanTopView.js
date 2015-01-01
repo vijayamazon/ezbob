@@ -19,6 +19,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 			loanType: this.customer.get("LastApprovedLoanTypeID"),
 			repaymentPeriod: this.customer.get("LastApprovedRepaymentPeriod"),
 			isLoanSourceEU: this.customer.get("IsLastApprovedLoanSourceEu"),
+			isLoanSourceCOSME: this.customer.get("IsLastApprovedLoanSourceCOSME"),
 			isCurrentCashRequestFromQuickOffer: this.customer.get("IsCurrentCashRequestFromQuickOffer")
 		});
 		this.states = {
@@ -97,9 +98,8 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 		if (view.cards.length > 0) {
 			view.on('select', (function (_this) {
 				return function (cardId) {
-					var xhr;
-					BlockUi("on");
-					xhr = $.post("" + window.gRootPath + "Customer/GetCash/Now", {
+					BlockUi();
+					var xhr = $.post("" + window.gRootPath + "Customer/GetCash/Now", {
 						cardId: cardId,
 						amount: _this.applyForLoanViewModel.get("neededCash")
 					});
@@ -111,7 +111,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 						}
 					});
 					return xhr.complete(function () {
-						BlockUi("off");
+						UnBlockUi();
 					});
 				};
 			})(this));
@@ -133,7 +133,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 		return false;
 	},
 	_submit: function () {
-		BlockUi("on");
+		BlockUi();
 		this.applyForLoanViewModel.buildUrl();
 		document.location.href = this.applyForLoanViewModel.get('url');
 	}
