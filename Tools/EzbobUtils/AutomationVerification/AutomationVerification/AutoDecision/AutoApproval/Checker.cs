@@ -56,24 +56,16 @@
 		} // StepFailed
 
 		private ApprovalTrail Trail {
-			get {
-				return this.m_oAgent.Trail;
-			}
+			get { return this.m_oAgent.Trail; }
 		} // Trail
 
 		private decimal ApprovedAmount {
-			get {
-				return this.m_oAgent.ApprovedAmount;
-			}
-			set {
-				this.m_oAgent.ApprovedAmount = value;
-			}
+			get { return this.m_oAgent.ApprovedAmount; }
+			set { this.m_oAgent.ApprovedAmount = value; }
 		} // ApprovedAmount
 
 		private DateTime Now {
-			get {
-				return this.m_oAgent.Now;
-			}
+			get { return this.m_oAgent.Now; }
 		} // Now
 
 		private void IsDirector() {
@@ -403,10 +395,10 @@
 
 			if (nApprovedAmount > 0) {
 				StepDone<Complete>()
-					.Init(nApprovedAmount, 0);
+					.Init(nApprovedAmount);
 			} else {
 				StepFailed<Complete>()
-					.Init(nApprovedAmount, 0);
+					.Init(nApprovedAmount);
 			}
 		} // Complete
 

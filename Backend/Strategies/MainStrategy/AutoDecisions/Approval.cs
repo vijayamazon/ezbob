@@ -417,10 +417,10 @@
 
 			if (nAutoApprovedAmount > 0) {
 				StepDone<Complete>()
-					.Init(nAutoApprovedAmount, 0);
+					.Init(nAutoApprovedAmount);
 			} else {
 				StepFailed<Complete>()
-					.Init(nAutoApprovedAmount, 0);
+					.Init(nAutoApprovedAmount);
 			}
 		}
 

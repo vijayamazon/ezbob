@@ -61,6 +61,7 @@
     <Compile Include="AutoDecision\AutoApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="AutoDecision\AutoApproval\MetaData.cs" />
     <Compile Include="AutoDecision\AutoApproval\Name.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
     <Compile Include="Turnover\ACalculatedTurnoverBase.cs" />
     <Compile Include="Turnover\TurnoverDbRow.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Agent.cs" />
@@ -132,7 +133,7 @@
     <Compile Include="ProcessHistory\AutoReRejection\MarketPlaceWasAdded.cs" />
     <Compile Include="ProcessHistory\AutoReRejection\LastDecisionWasReject.cs" />
     <Compile Include="ProcessHistory\Common\SameAmount.cs" />
-    <Compile Include="ProcessHistory\Common\Complete.cs" />
+    <Compile Include="ProcessHistory\ReApproval\Complete.cs" />
     <Compile Include="ProcessHistory\AutoApproval\BusinessScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ConsumerScore.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Age.cs" />

@@ -13,6 +13,10 @@
 
 	public class Agent {
 
+		public ReApprovalResult Result { get; private set; }
+
+		public ReapprovalTrail Trail { get; private set; }
+
 		public Agent(AConnection oDB, ASafeLog oLog, int customerId, DateTime? dataAsOf = null) {
 			m_oDB = oDB;
 			m_oLog = oLog ?? new SafeLog();
@@ -71,8 +75,7 @@
 					StepDone<Complete>().Init(m_nApprovedAmount, Trail.MyInputData.MinLoan);
 				else
 					StepFailed<Complete>().Init(m_nApprovedAmount, Trail.MyInputData.MinLoan);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				m_oLog.Error(e, "Exception during auto approval.");
 				StepFailed<ExceptionThrown>().Init(e);
 			} // try
@@ -85,10 +88,9 @@
 				Result == null ? string.Empty : Result + "."
 			);
 		} // MakeDecision
+		protected readonly DateTime Now;
 
-		public ReApprovalResult Result { get; private set; }
-
-		public ReapprovalTrail Trail { get; private set; }
+		protected readonly int CustomerId;
 
 		private void SetApprovedAmount(int nApprovedAmount) {
 			if (Trail.HasDecided)
@@ -197,10 +199,6 @@
 			m_nApprovedAmount = 0;
 			return Trail.Negative<T>(true);
 		}
-
-		protected readonly DateTime Now;
-		protected readonly int CustomerId;
-
 		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
 		private int m_nApprovedAmount;
