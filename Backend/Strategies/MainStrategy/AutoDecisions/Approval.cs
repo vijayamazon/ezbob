@@ -23,6 +23,7 @@
 	using MailApi;
 	using OfferCalculation;
 	using StructureMap;
+	using InitialAssignment = AutomationCalculator.ProcessHistory.AutoApproval.InitialAssignment;
 
 	public class Approval {
 		public Approval(
@@ -66,29 +67,27 @@
 			stra.Execute();
 
 			m_oConsumerData = stra.Result;
-			
+
 			if (customer == null) {
 				this.isBrokerCustomer = false;
 				this.hasLoans = false;
-			}
-			else {
+			} else {
 				this.isBrokerCustomer = customer.Broker != null;
 				this.hasLoans = customer.Loans.Any();
 			} // if
-			
+
 			if (customer != null && customer.Company != null) {
-				if(customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && customer.Company.ExperianRefNum != "NotFound") {
+				if (customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && customer.Company.ExperianRefNum != "NotFound") {
 					var limited = new LoadExperianLtd(customer.Company.ExperianRefNum, 0, db, log);
 					limited.Execute();
 					this.directors = new List<Name>();
-					foreach (var row in limited.Result.Children)
-					{
-						if (row.GetType() == typeof (ExperianLtdDL72)) {
-							var dataRow = (ExperianLtdDL72) row;
+					foreach (var row in limited.Result.Children) {
+						if (row.GetType() == typeof(ExperianLtdDL72)) {
+							var dataRow = (ExperianLtdDL72)row;
 							directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
 						}
-						if (row.GetType() == typeof (ExperianLtdDLB5)) {
-							var dataRow = (ExperianLtdDLB5) row;
+						if (row.GetType() == typeof(ExperianLtdDLB5)) {
+							var dataRow = (ExperianLtdDLB5)row;
 							directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
 						}
 					} // for each
@@ -165,8 +164,7 @@
 				if (autoApprovedAmount == m_oSecondaryImplementation.Result.ApprovedAmount) {
 					m_oTrail.Affirmative<SameAmount>(false).Init(autoApprovedAmount);
 					m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
-				}
-				else {
+				} else {
 					m_oTrail.Negative<SameAmount>(false).Init(autoApprovedAmount);
 					m_oSecondaryImplementation.Trail.Negative<SameAmount>(false).Init(m_oSecondaryImplementation.Result.ApprovedAmount);
 					bSuccess = false;
@@ -187,8 +185,7 @@
 				if (bSuccess) {
 					log.Info("Both Auto Approval implementations have reached the same decision: {0}", m_oTrail.HasDecided ? "approved" : "not approved");
 					response.AutoApproveAmount = autoApprovedAmount;
-				}
-				else {
+				} else {
 					log.Alert(
 						"Switching to manual decision: Auto Approval implementations " +
 						"have not reached the same decision for customer {0}, diff id is {1}.",
@@ -222,21 +219,16 @@
 							response.CreditResult = CreditResultStatus.WaitingForDecision;
 							response.UserStatus = Status.Manual;
 							response.SystemDecision = SystemDecision.Manual;
-						}
-						else
-						{
+						} else {
 							var offerDualCalculator = new OfferDualCalculator(db, log);
 							OfferResult offerResult = offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, response.AutoApproveAmount, hasLoans, medalClassification);
-							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error))
-							{
+							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
 								log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", customerId);
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
 								response.LoanOfferUnderwriterComment = "Calculator failure - " + m_oTrail.DiffID;
-							}
-							else
-							{
+							} else {
 								response.CreditResult = CreditResultStatus.Approved;
 								response.UserStatus = Status.Approved;
 								response.SystemDecision = SystemDecision.Approve;
@@ -256,8 +248,7 @@
 						} // if is silent
 					} // if there are enough funds
 				} // if auto approved amount is not 0
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.Error(e, "Exception during auto approval.");
 				response.LoanOfferUnderwriterComment = "Exception - " + m_oTrail.DiffID;
 			} // try
@@ -330,7 +321,7 @@
 
 				ExperianCompanyName = (customer != null) && (customer.Company != null) ? customer.Company.ExperianCompanyName : null,
 				EnteredCompanyName = (customer != null) && (customer.Company != null) ? customer.Company.CompanyName : null,
-				IsLimitedCompanyType =  (this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
+				IsLimitedCompanyType = (this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
 			});
 
 			FindOutstandingLoans();
@@ -407,8 +398,7 @@
 				CheckAllowedRange();
 
 				CheckComplete();
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				StepFailed<ExceptionThrown>().Init(ex);
 			} // try
 
@@ -448,7 +438,7 @@
 
 			if (m_oTrail.MyInputData.DirectorNames.Count < 1) {
 				StepFailed<CustomerIsDirector>().Init(
-					m_oTrail.MyInputData.CustomerName.ToString() 
+					m_oTrail.MyInputData.CustomerName.ToString()
 				);
 				return;
 			} // if
@@ -462,18 +452,17 @@
 
 			if (!isDirector) {
 				StepFailed<CustomerIsDirector>().Init(
-					m_oTrail.MyInputData.CustomerName.ToString(), 
+					m_oTrail.MyInputData.CustomerName.ToString(),
 					m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
 				);
-			}
-			else {
+			} else {
 				StepDone<CustomerIsDirector>().Init(
-					m_oTrail.MyInputData.CustomerName.ToString(), 
+					m_oTrail.MyInputData.CustomerName.ToString(),
 					m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
 				);
 			} // if
 		} // CheckIsDirector
-		
+
 		private void CheckHmrcIsCompany() {
 			bool isCompany = false;
 
@@ -494,8 +483,7 @@
 					m_oTrail.MyInputData.HmrcBusinessNames,
 					m_oTrail.MyInputData.CompanyName
 				);
-			}
-			else {
+			} else {
 				StepDone<HmrcIsOfBusiness>().Init(
 					m_oTrail.MyInputData.HmrcBusinessNames,
 					m_oTrail.MyInputData.CompanyName
@@ -785,8 +773,7 @@
 		private void CheckAllowedRange() {
 			if (m_oTrail.MyInputData.Configuration.IsSilent) {
 				StepDone<AmountOutOfRangle>().Init(autoApprovedAmount, m_oTrail.MyInputData.Configuration.IsSilent);
-			}
-			else {
+			} else {
 				int autoApproveMinAmount = m_oTrail.MyInputData.Configuration.MinAmount;
 				int autoApproveMaxAmount = m_oTrail.MyInputData.Configuration.MaxAmount;
 
@@ -869,8 +856,7 @@
 					CurrentValues.Instance.MailSenderName,
 					"#SilentApprove for customer " + customerId
 				);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.Error(e, "Failed sending alert mail - silent auto approval.");
 			} // try
 		} // NotifyAutoApproveSilentMode
@@ -888,24 +874,19 @@
 		private readonly Customer customer;
 		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
+		private readonly List<string> consumerCaisDetailWorstStatuses;
+		private readonly int customerId;
+		private readonly Medal medalClassification;
+		private readonly ApprovalTrail m_oTrail;
+		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
+		private readonly ASafeLog log;
 		private bool isBrokerCustomer;
 		private int minExperianScore;
 		private int minCompanyScore;
 		private bool hasLoans;
 
 		private ExperianConsumerData m_oConsumerData;
-
-		private readonly List<string> consumerCaisDetailWorstStatuses;
-		private readonly int customerId;
-		private readonly Medal medalClassification;
-
 		private int autoApprovedAmount;
-
-		private readonly ApprovalTrail m_oTrail;
-
-		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
-
-		private readonly ASafeLog log;
 		private List<Name> directors;
 		private List<String> hmrcNames;
 	} // class Approval
