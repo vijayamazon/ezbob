@@ -5,56 +5,57 @@
 	using Ezbob.Database;
 
 	public class LoadExperianConsumerData : AStrategy {
+		public override string Name {
+			get { return "LoadExperianConsumerData"; }
+		} // Name
+
+		public ExperianConsumerData Result { get; private set; }
 
 		public LoadExperianConsumerData(int customerId, int? directorId, long? nServiceLogId) {
 			Result = new ExperianConsumerData();
 
 			if (nServiceLogId.HasValue)
-				m_nWorkMode = WorkMode.ServiceLog;
+				this.m_nWorkMode = WorkMode.ServiceLog;
 			else if (directorId.HasValue && directorId.Value != 0)
-				m_nWorkMode = WorkMode.CacheDirector;
+				this.m_nWorkMode = WorkMode.CacheDirector;
 			else
-				m_nWorkMode = WorkMode.CacheCustomer;
+				this.m_nWorkMode = WorkMode.CacheCustomer;
 
-			m_nCustomerId = customerId;
-			m_nDirectorId = directorId;
-			m_nServiceLogID = nServiceLogId;
+			this.m_nCustomerId = customerId;
+			this.m_nDirectorId = directorId;
+			this.m_nServiceLogID = nServiceLogId;
 		} // constructor
-
-		public override string Name {
-			get { return "LoadExperianConsumerData"; }
-		} // Name
 
 		public override void Execute() {
 			IEnumerable<SafeReader> data;
 
-			switch (m_nWorkMode) {
+			switch (this.m_nWorkMode) {
 			case WorkMode.ServiceLog:
 				data = DB.ExecuteEnumerable(
 					"LoadFullExperianConsumer",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("ServiceLogId", m_nServiceLogID)
-				);
+					new QueryParameter("ServiceLogId", this.m_nServiceLogID)
+					);
 				break;
 
 			case WorkMode.CacheCustomer:
 				data = DB.ExecuteEnumerable(
 					"LoadExperianConsumerForCustomer",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", m_nCustomerId)
-				);
+					new QueryParameter("CustomerId", this.m_nCustomerId)
+					);
 				break;
 
 			case WorkMode.CacheDirector:
 				data = DB.ExecuteEnumerable(
 					"LoadExperianConsumerForDirector",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("DirectorId", m_nDirectorId)
-				);
+					new QueryParameter("DirectorId", this.m_nDirectorId)
+					);
 				break;
 
 			default:
-				Log.Alert("Unsupported work mode: {0}", m_nWorkMode.ToString());
+				Log.Alert("Unsupported work mode: {0}", this.m_nWorkMode.ToString());
 				return;
 			} // switch
 
@@ -124,7 +125,7 @@
 				caisCards.Count,
 				Result.Cais.Count,
 				Result.ServiceLogId
-			);
+				);
 
 			if (!Result.Cais.Any())
 				return;
@@ -149,10 +150,8 @@
 				var cais = Result.Cais.FirstOrDefault(x => x.Id == c.ExperianConsumerDataCaisId);
 				if (cais != null)
 					cais.CardHistories.Add(c);
-			}
+			} // for each
 		} // Execute
-
-		public ExperianConsumerData Result { get; private set; }
 
 		private enum WorkMode {
 			ServiceLog,
@@ -165,6 +164,5 @@
 		private readonly long? m_nServiceLogID;
 		private readonly int m_nCustomerId;
 		private readonly int? m_nDirectorId;
-
 	} // class LoadExperianConsumerData
 } // namespace

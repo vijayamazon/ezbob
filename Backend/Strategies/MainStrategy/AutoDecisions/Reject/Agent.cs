@@ -10,18 +10,18 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
 	using DbConstants;
-	using EZBob.DatabaseLib.Model.Database;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover;
-	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
-	using Ezbob.Utils.Lingvo;
+	using EZBob.DatabaseLib.Model.Database;
+
+	// using Ezbob.Utils.Lingvo;
 
 	public class Agent {
-
 		public virtual RejectionTrail Trail { get; private set; }
 
 		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
@@ -31,7 +31,13 @@
 		} // constructor
 
 		public virtual Agent Init() {
-			Trail = new RejectionTrail(Args.CustomerID, Log, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
+			Trail = new RejectionTrail(
+				Args.CustomerID,
+				Log,
+				CurrentValues.Instance.AutomationExplanationMailReciever,
+				CurrentValues.Instance.MailSenderEmail,
+				CurrentValues.Instance.MailSenderName
+				);
 
 			Now = DateTime.UtcNow;
 			Cfg = InitCfg();
@@ -61,10 +67,10 @@
 
 			try {
 				bSuccess = MakeAndVerifyDecision();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
-				StepNoReject<ExceptionThrown>().Init(e);
+				StepNoReject<ExceptionThrown>()
+					.Init(e);
 			} // try
 
 			if (bSuccess && Trail.HasDecided) {
@@ -94,9 +100,9 @@
 
 			GatherData();
 
-			new Checker(this.Trail, this.Log).Run();
+			new Checker(Trail, Log).Run();
 
-			this.Trail.DecideIfNotDecided();
+			Trail.DecideIfNotDecided();
 
 			Log.Debug("Primary: checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
 		} // RunPrimary
@@ -111,7 +117,7 @@
 				"LoadAutoRejectData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", Args.CustomerID)
-			);
+				);
 
 			MetaData.Validate();
 		} // LoadData
@@ -130,7 +136,7 @@
 			return ltd.Result;
 		} // LoadCompanyData
 
-		protected  virtual void ProcessRow(SafeReader sr) {
+		protected virtual void ProcessRow(SafeReader sr) {
 			RowType nRowType;
 
 			string sRowType = sr["RowType"];
@@ -162,6 +168,13 @@
 			} // switch
 		} // ProcessRow
 
+		private enum RowType {
+			MetaData,
+			MpError,
+			OriginationTime,
+			Turnover,
+		} // enum RowType
+
 		private void GatherData() {
 			Cfg.Load();
 
@@ -186,16 +199,16 @@
 			if (lcd == null)
 				return;
 
-			Log.Debug("Consumer score before: {0}, bureau score '{1}'", MetaData.ConsumerScore, lcd.BureauScore);
+			// Log.Debug("Consumer score before: {0}, bureau score '{1}'", MetaData.ConsumerScore, lcd.BureauScore);
 
 			if (lcd.BureauScore != null)
 				MetaData.ConsumerScore = MetaData.ConsumerScore.Max(lcd.BureauScore.Value);
 
-			Log.Debug("Consumer score after: {0}", MetaData.ConsumerScore);
+			// Log.Debug("Consumer score after: {0}", MetaData.ConsumerScore);
 		} // FillFromConsumerData
 
 		private void FillFromCompanyData() {
-			m_nNumOfDefaultBusinessAccounts = 0;
+			this.m_nNumOfDefaultBusinessAccounts = 0;
 
 			if (!MetaData.IsLtd || string.IsNullOrWhiteSpace(MetaData.CompanyRefNum))
 				return;
@@ -213,12 +226,12 @@
 
 			foreach (var dl97 in oDL97List) {
 				// Log.Debug(
-					// "DL97 entry: id '{0}', default balance '{1}', current balance '{4}', last updated '{2}', statuses '{3}'",
-					// dl97.ID,
-					// dl97.DefaultBalance.HasValue ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
-					// dl97.CAISLastUpdatedDate.HasValue ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
-					// dl97.AccountStatusLast12AccountStatuses,
-					// dl97.CurrentBalance.HasValue ? dl97.CurrentBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --"
+				// "DL97 entry: id '{0}', default balance '{1}', current balance '{4}', last updated '{2}', statuses '{3}'",
+				// dl97.ID,
+				// dl97.DefaultBalance.HasValue ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
+				// dl97.CAISLastUpdatedDate.HasValue ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+				// dl97.AccountStatusLast12AccountStatuses,
+				// dl97.CurrentBalance.HasValue ? dl97.CurrentBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --"
 				// );
 
 				decimal nBalance = Math.Max(dl97.DefaultBalance ?? 0, dl97.CurrentBalance ?? 0);
@@ -256,7 +269,7 @@
 
 					if ((status == '8') || (status == '9')) {
 						// Log.Debug("DL97 id {0}: is a default account.", dl97.ID);
-						m_nNumOfDefaultBusinessAccounts++;
+						this.m_nNumOfDefaultBusinessAccounts++;
 						break;
 					} // if
 
@@ -285,22 +298,19 @@
 				HasMpError = UpdateErrors.Count > 0,
 				HasCompanyFiles = MetaData.CompanyFilesCount > 0,
 				CustomerStatus = MetaData.CustomerStatusName,
-
-				NumOfDefaultConsumerAccounts = m_nNumOfDefaultConsumerAccounts,
+				NumOfDefaultConsumerAccounts = this.m_nNumOfDefaultConsumerAccounts,
 				DefaultAmountInConsumerAccounts = 0,
-				NumOfDefaultBusinessAccounts = m_nNumOfDefaultBusinessAccounts,
+				NumOfDefaultBusinessAccounts = this.m_nNumOfDefaultBusinessAccounts,
 				DefaultAmountInBusinessAccounts = 0,
-				NumOfLateConsumerAccounts = m_nNumOfLateConsumerAccounts,
+				NumOfLateConsumerAccounts = this.m_nNumOfLateConsumerAccounts,
 				ConsumerLateDays = 0,
-
 				BusinessSeniorityDays = OriginationTime.Seniority,
-
 				ConsumerDataTime = MetaData.ConsumerDataTime,
 			};
 		} // ToInputData
 
 		private void FillNumOfPersonalDefaults(ExperianConsumerData oData) {
-			m_nNumOfDefaultConsumerAccounts = 0;
+			this.m_nNumOfDefaultConsumerAccounts = 0;
 
 			if ((oData == null) || (oData.Cais == null) || (oData.Cais.Count < 1))
 				return;
@@ -310,43 +320,44 @@
 
 				return
 					(nBalance > Cfg.Values.Reject_Defaults_Amount) &&
-					(cais.MatchTo == 1) &&
-					cais.LastUpdatedDate.HasValue &&
-					!string.IsNullOrWhiteSpace(cais.AccountStatusCodes);
-			}).ToList();
+						(cais.MatchTo == 1) &&
+						cais.LastUpdatedDate.HasValue &&
+						!string.IsNullOrWhiteSpace(cais.AccountStatusCodes);
+			})
+				.ToList();
 
-			Log.Debug("Fill personal defaults: {0} found.", Grammar.Number(lst.Count, "relevant account"));
+			// Log.Debug("Fill personal defaults: {0} found.", Grammar.Number(lst.Count, "relevant account"));
 
 			DateTime oThen = Trail.MyInputData.MonthsNumAgo;
 
-			Log.Debug("Fill personal defaults: interested in data after {0}.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+			// Log.Debug("Fill personal defaults: interested in data after {0}.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
 			foreach (var cais in lst) {
 				// ReSharper disable PossibleInvalidOperationException
-				Log.Debug(
-					"Fill personal defaults cais {0}: updated on {1}, statuses is '{2}', now is {3}",
-					cais.Id,
-					cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
-					cais.AccountStatusCodes,
-					Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				);
+				// Log.Debug(
+				// "Fill personal defaults cais {0}: updated on {1}, statuses is '{2}', now is {3}",
+				// cais.Id,
+				// cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				// cais.AccountStatusCodes,
+				// Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				// );
 
 				DateTime cur = cais.LastUpdatedDate.Value;
 				// ReSharper restore PossibleInvalidOperationException
 
 				for (int i = 1; i <= cais.AccountStatusCodes.Length; i++) {
 					if (cur < oThen) {
-						Log.Debug("Fill personal defaults cais {0} ain't no default: cur ({1}) is too early.", cais.Id, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+						// Log.Debug("Fill personal defaults cais {0} ain't no default: cur ({1}) is too early.", cais.Id, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
 						break;
 					} // if
 
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
-					Log.Debug("Fill personal defaults cais {0} ain't no default: status[{1}] = '{2}' cur ({3}).", cais.Id, i, status, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+					// Log.Debug("Fill personal defaults cais {0} ain't no default: status[{1}] = '{2}' cur ({3}).", cais.Id, i, status, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
 					if ((status == '8') || (status == '9')) {
-						Log.Debug("Fill personal defaults cais {0} is default.", cais.Id);
-						m_nNumOfDefaultConsumerAccounts++;
+						// Log.Debug("Fill personal defaults cais {0} is default.", cais.Id);
+						this.m_nNumOfDefaultConsumerAccounts++;
 						break;
 					} // if
 
@@ -356,42 +367,43 @@
 		} // FillNumOfPersonalDefaults
 
 		private void FillNumOfLateConsumerAccounts(ExperianConsumerData oData) {
-			m_nNumOfLateConsumerAccounts = 0;
+			this.m_nNumOfLateConsumerAccounts = 0;
 
 			if ((oData == null) || (oData.Cais == null) || (oData.Cais.Count < 1))
 				return;
 
 			List<ExperianConsumerDataCais> lst = oData.Cais.Where(cais =>
 				cais.LastUpdatedDate.HasValue &&
-				(cais.MatchTo == 1) &&
-				!string.IsNullOrWhiteSpace(cais.AccountStatusCodes) &&
-				(cais.LastUpdatedDate.Value <= Trail.InputData.DataAsOf) &&
-				(MiscUtils.CountMonthsBetween(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf) < 1)
-			).ToList();
+					(cais.MatchTo == 1) &&
+					!string.IsNullOrWhiteSpace(cais.AccountStatusCodes) &&
+					(cais.LastUpdatedDate.Value <= Trail.InputData.DataAsOf) &&
+					(MiscUtils.CountMonthsBetween(cais.LastUpdatedDate.Value, Trail.InputData.DataAsOf) < 1)
+				)
+				.ToList();
 
-			Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
+			// Log.Debug("Fill num of lates: {0} found.", Grammar.Number(lst.Count, "relevant account"));
 
 			foreach (var cais in lst) {
-				Log.Debug(
-					"Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
-					cais.Id,
-					cais.LastUpdatedDate.HasValue ? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
-					cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
-					cais.AccountStatusCodes,
-					Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				);
+				// Log.Debug(
+				// "Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
+				// cais.Id,
+				// cais.LastUpdatedDate.HasValue ? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+				// cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
+				// cais.AccountStatusCodes,
+				// Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				// );
 
 				int nMonthCount = Math.Min(Trail.MyInputData.Reject_LateLastMonthsNum, cais.AccountStatusCodes.Length);
 
-				Log.Debug("Fill num of lates cais id {0}: month count is {1}, status count is {2}.", cais.Id, nMonthCount, cais.AccountStatusCodes.Length);
+				// Log.Debug("Fill num of lates cais id {0}: month count is {1}, status count is {2}.", cais.Id, nMonthCount, cais.AccountStatusCodes.Length);
 
 				for (int i = 1; i <= nMonthCount; i++) {
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
-					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, status);
+					// Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, status);
 
 					if (!ms_oLateStatuses.Contains(status)) {
-						Log.Debug("Fill num of lates cais id {0} ain't no late: not a late status.", cais.Id);
+						// Log.Debug("Fill num of lates cais id {0} ain't no late: not a late status.", cais.Id);
 						continue;
 					} // if
 
@@ -399,33 +411,32 @@
 
 					int.TryParse(status.ToString(CultureInfo.InvariantCulture), out nStatus);
 
-					Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, nStatus);
+					// Log.Debug("Fill num of lates cais id {0}: status[{1}] = '{2}'.", cais.Id, i, nStatus);
 
 					if (nStatus > Trail.MyInputData.RejectionLastValidLate) {
-						Log.Debug("Fill num of lates cais id {0} is late.", cais.Id);
-						m_nNumOfLateConsumerAccounts++;
+						// Log.Debug("Fill num of lates cais id {0} is late.", cais.Id);
+						this.m_nNumOfLateConsumerAccounts++;
 						break;
 					} // if
 				} // for i
 			} // for each account
 		} // FillLateConsumerAccounts
 
-		private enum RowType {
-			MetaData,
-			MpError,
-			OriginationTime,
-			Turnover,
-		} // enum RowType
-
 		private T StepNoReject<T>() where T : ATrace {
 			return Trail.Negative<T>(true);
 		} // StepNoReject
 
-		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> { '1', '2', '3', '4', '5', '6', };
+		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> {
+			'1',
+			'2',
+			'3',
+			'4',
+			'5',
+			'6',
+		};
 
 		private int m_nNumOfDefaultConsumerAccounts;
 		private int m_nNumOfLateConsumerAccounts;
 		private int m_nNumOfDefaultBusinessAccounts;
-
 	} // class Agent
 } // namespace

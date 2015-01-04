@@ -1,5 +1,5 @@
 IF OBJECT_ID('LoadExperianConsumerForCustomer') IS NULL
-	EXECUTE('CREATE PROCEDURE LoadExperianConsumerForCustomer AS SELECT 1')
+EXECUTE('CREATE PROCEDURE LoadExperianConsumerForCustomer AS SELECT 1')
 GO
 
 SET QUOTED_IDENTIFIER ON
@@ -15,10 +15,12 @@ BEGIN
 
 	DECLARE @ServiceLogID BIGINT
 	DECLARE @InsertDate DATETIME
+
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
-		@ServiceLogID = Id, @InsertDate = InsertDate
+		@ServiceLogID = Id,
+		@InsertDate = InsertDate
 	FROM
 		MP_ServiceLog l
 	WHERE
@@ -30,29 +32,34 @@ BEGIN
 	ORDER BY
 		l.InsertDate DESC,
 		l.Id DESC
-	
+
+	------------------------------------------------------------------------------
+
 	IF @ServiceLogId IS NULL
 	BEGIN
 		SELECT TOP 1
-		   @ServiceLogID=l.Id, @InsertDate = l.InsertDate
+			@ServiceLogID = l.Id,
+			@InsertDate = l.InsertDate
 		FROM
-		 Customer c 
-		 INNER JOIN CustomerAddress a ON a.CustomerId = c.Id AND a.addressType=1
-		 INNER JOIN MP_ServiceLog l on
-		  l.Firstname = c.FirstName AND
-		  l.Surname = c.Surname AND 
-		  l.DateOfBirth = c.DateOfBirth AND
-		  l.Postcode = a.Postcode AND
-		  l.ServiceType = 'Consumer Request'
-		  
-		  WHERE
-		   c.Id=@CustomerId
-		  ORDER BY
-		   l.InsertDate DESC,
-		   l.Id DESC
+			Customer c 
+			INNER JOIN CustomerAddress a
+				ON a.CustomerId = c.Id
+				AND a.addressType = 1
+			INNER JOIN MP_ServiceLog l
+				ON l.Firstname = c.FirstName
+				AND l.Surname = c.Surname
+				AND l.DateOfBirth = c.DateOfBirth
+				AND l.Postcode = a.Postcode
+				AND l.ServiceType = 'Consumer Request'
+			WHERE
+				c.Id = @CustomerId
+			ORDER BY
+				l.InsertDate DESC,
+				l.Id DESC
 	END
-	------------------------------------------------------------------------------
 
+	------------------------------------------------------------------------------
+	
 	EXECUTE LoadFullExperianConsumer @ServiceLogID, @InsertDate
 END
 GO

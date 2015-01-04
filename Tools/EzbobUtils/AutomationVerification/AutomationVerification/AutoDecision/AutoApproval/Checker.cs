@@ -147,7 +147,7 @@
 		private void Init() {
 			decimal approvedAmount = ApprovedAmount;
 
-			if ((approvedAmount > 0) && (Trail.MyInputData.MetaData.ValidationErrors.Count == 0)) {
+			if (approvedAmount > 0) {
 				StepDone<InitialAssignment>()
 					.Init(approvedAmount, Trail.MyInputData.MetaData.ValidationErrors);
 			} else {
