@@ -276,7 +276,7 @@
 				agreementTermsRead, preAgreementTermsRead, euAgreementTermsRead, cosmeAgreementTermsRead);
 
 			var cashRequest = _context.Customer.LastCashRequest;
-			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness.Reduce();
+			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
 
 			if (!preAgreementTermsRead || !agreementTermsRead ||
 				(cashRequest.LoanSource.Name == LoanSourceName.EU.ToString() && !euAgreementTermsRead) || 
@@ -291,10 +291,10 @@
 					Created = DateTime.UtcNow,
 					EUAgreementAgreed = euAgreementTermsRead,
 					COSMEAgreementAgreed = cosmeAgreementTermsRead,
-					CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
-					PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Personal || typeOfBusiness == TypeOfBusinessReduced.NonLimited,
-					PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
-					GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessReduced.Limited,
+					CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Personal,
+					PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Personal,
+					PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
+					GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
 					SignedName = signedName,
 				});
 
