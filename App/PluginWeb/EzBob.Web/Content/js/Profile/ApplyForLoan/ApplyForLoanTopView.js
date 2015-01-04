@@ -86,7 +86,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 			};
 		})(this));
 		return xhr.always(function () {
-			return BlockUi("off");
+			BlockUi("off");
 		});
 	},
 	submit: function () {
@@ -105,7 +105,7 @@ EzBob.Profile.ApplyForLoanTopView = Backbone.Marionette.ItemView.extend({
 					});
 					xhr.done(function (data) {
 						if (data.error !== void 0) {
-							EzBob.ShowMessage(data.error, "Error occured");
+							EzBob.ShowMessage(data.error, "Error occurred");
 						} else {
 							document.location.href = data.url;
 						}
