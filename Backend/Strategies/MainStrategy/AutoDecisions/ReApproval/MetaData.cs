@@ -4,10 +4,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class MetaData {
-		public MetaData() {
-			ValidationErrors = new List<string>();
-		} // constructor
-
 		public string RowType { get; set; }
 		public int LacrID { get; set; }
 		public int RejectAfterLacrID { get; set; }
@@ -26,7 +22,7 @@
 		public int FraudStatusValue {
 			get { return (int)FraudStatus; }
 			set {
-				FraudStatus = Enum.IsDefined(typeof (FraudStatus), value)
+				FraudStatus = Enum.IsDefined(typeof(FraudStatus), value)
 					? (FraudStatus)value
 					: FraudStatus.UnderInvestigation;
 			} // set
@@ -49,6 +45,23 @@
 
 		public List<string> ValidationErrors { get; private set; }
 
+		public int? LacrAge {
+			get {
+				if (!LacrTime.HasValue)
+					return null;
+
+				return (int)(DateTime.UtcNow - LacrTime.Value).TotalDays;
+			} // get
+		} // LacrAge
+
+		public decimal ApprovedAmount {
+			get { return ManagerApprovedSum - TakenLoanAmount; } // get
+		} // ApprovedAmount
+
+		public MetaData() {
+			ValidationErrors = new List<string>();
+		} // constructor
+
 		public void Validate() {
 			if (string.IsNullOrWhiteSpace(RowType))
 				throw new Exception("Meta data was not loaded.");
@@ -60,23 +73,8 @@
 				ValidationErrors.Add("last approved cash request time not filled");
 		} // Validate
 
-		public int? LacrAge {
-			get {
-				if (!LacrTime.HasValue)
-					return null;
-
-				return (int)(DateTime.UtcNow - LacrTime.Value).TotalDays;
-			} // get
-		} // LacrAge
-
 		public bool LacrIsTooOld(int nAge) {
 			return !LacrAge.HasValue || LacrAge.Value > nAge;
 		} // LacrIsTooOld
-
-		public decimal ApprovedAmount {
-			get {
-				return ManagerApprovedSum - TakenLoanAmount + RepaidPrincipal + SetupFees;
-			} // get
-		} // ApprovedAmount
 	} // class MetaData
 } // namespace
