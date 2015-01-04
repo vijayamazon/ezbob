@@ -21,7 +21,7 @@
 		public virtual int MaxAllowedDaysLate { get; set; }
 		public virtual int MaxNumOfOutstandingLoans { get; set; }
 		public virtual decimal MinRepaidPortion { get; set; }
-		public virtual int MinAmount { get; set; }
+		public virtual int MinLoan { get; set; }
 		public virtual int MaxAmount { get; set; }
 		public virtual bool IsSilent { get; set; }
 		public virtual string SilentTemplateName { get; set; }
@@ -36,21 +36,13 @@
 		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
 
 		public virtual string AllowedCaisStatusesWithLoan {
-			get {
-				return string.Join(", ", this.m_oAllowedCaisStatusesWithLoan);
-			} // get
-			set {
-				SaveCaisStatuses(value, this.m_oAllowedCaisStatusesWithLoan);
-			} // set
+			get { return string.Join(", ", this.m_oAllowedCaisStatusesWithLoan); } // get
+			set { SaveCaisStatuses(value, this.m_oAllowedCaisStatusesWithLoan); } // set
 		} // AllowedCaisStatusesWithoutLoan
 
 		public virtual string AllowedCaisStatusesWithoutLoan {
-			get {
-				return string.Join(", ", this.m_oAllowedCaisStatusesWithoutLoan);
-			} // get
-			set {
-				SaveCaisStatuses(value, this.m_oAllowedCaisStatusesWithoutLoan);
-			} // set
+			get { return string.Join(", ", this.m_oAllowedCaisStatusesWithoutLoan); } // get
+			set { SaveCaisStatuses(value, this.m_oAllowedCaisStatusesWithoutLoan); } // set
 		}
 
 		public Configuration() {
@@ -103,15 +95,15 @@
 
 				switch ((sValue ?? string.Empty).Trim()
 					.ToLowerInvariant()) {
-				case "1":
-				case "true":
-				case "yes":
-					pi.SetValue(this, true);
-					break;
+					case "1":
+					case "true":
+					case "yes":
+						pi.SetValue(this, true);
+						break;
 
-				default:
-					pi.SetValue(this, false);
-					break;
+					default:
+						pi.SetValue(this, false);
+						break;
 				} // switch
 			} else
 				pi.SetValue(this, sr["Value"].ToType(pi.PropertyType));

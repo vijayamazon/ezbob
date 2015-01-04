@@ -377,16 +377,16 @@
 
 			if (Trail.MyInputData.Configuration.IsSilent) {
 				StepDone<AmountOutOfRangle>()
-					.Init(nApprovedAmount, Trail.MyInputData.Configuration.MinAmount, Trail.MyInputData.Configuration.MaxAmount);
+					.Init(nApprovedAmount, Trail.MyInputData.Configuration.MinLoan, Trail.MyInputData.Configuration.MaxAmount);
 				return;
 			} // if
 
-			if ((Trail.MyInputData.Configuration.MinAmount <= nApprovedAmount) && (nApprovedAmount <= Trail.MyInputData.Configuration.MaxAmount)) {
+			if ((Trail.MyInputData.Configuration.MinLoan <= nApprovedAmount) && (nApprovedAmount <= Trail.MyInputData.Configuration.MaxAmount)) {
 				StepDone<AmountOutOfRangle>()
-					.Init(nApprovedAmount, Trail.MyInputData.Configuration.MinAmount, Trail.MyInputData.Configuration.MaxAmount);
+					.Init(nApprovedAmount, Trail.MyInputData.Configuration.MinLoan, Trail.MyInputData.Configuration.MaxAmount);
 			} else {
 				StepFailed<AmountOutOfRangle>()
-					.Init(nApprovedAmount, Trail.MyInputData.Configuration.MinAmount, Trail.MyInputData.Configuration.MaxAmount);
+					.Init(nApprovedAmount, Trail.MyInputData.Configuration.MinLoan, Trail.MyInputData.Configuration.MaxAmount);
 			}
 		} // AllowedRange
 

@@ -48,7 +48,6 @@ namespace ConfigManager {
 		AutoApproveMaxNumOfOutstandingLoans,
 		AutoApproveMaxOutstandingOffers,
 		AutoApproveMaxTodayLoans,
-		AutoApproveMinAmount,
 		AutoApproveMinMPSeniorityDays,
 		AutoApproveMinRepaidPortion,
 		AutoApproveMinTurnover1M,
@@ -271,7 +270,6 @@ namespace ConfigManager {
 		MinDectForDefault,
 		MinInterestRateToReuse,
 		MinLoan,
-		MinLoanAmount,
 
 		NHibernateEnableProfiler,
 		NotEnoughFundsTemplateName,

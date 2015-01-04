@@ -213,7 +213,7 @@
 					response.SystemDecision = SystemDecision.Manual;
 				} // if
 
-				decimal minLoanAmount = CurrentValues.Instance.MinLoanAmount;
+				decimal minLoanAmount = CurrentValues.Instance.GetCashSliderStep;
 
 				response.AutoApproveAmount = (int)(
 					Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
@@ -327,7 +327,7 @@
 				StepDone<AmountOutOfRangle>()
 					.Init(this.autoApprovedAmount, this.m_oTrail.MyInputData.Configuration.IsSilent);
 			} else {
-				int autoApproveMinAmount = this.m_oTrail.MyInputData.Configuration.MinAmount;
+				int autoApproveMinAmount = this.m_oTrail.MyInputData.Configuration.MinLoan;
 				int autoApproveMaxAmount = this.m_oTrail.MyInputData.Configuration.MaxAmount;
 
 				if (this.autoApprovedAmount < autoApproveMinAmount || this.autoApprovedAmount > autoApproveMaxAmount) {
@@ -823,7 +823,7 @@
 				MaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate,
 				MaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans,
 				MinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion,
-				MinAmount = CurrentValues.Instance.AutoApproveMinAmount,
+				MinLoan = CurrentValues.Instance.MinLoan,
 				MaxAmount = CurrentValues.Instance.AutoApproveMaxAmount,
 				IsSilent = CurrentValues.Instance.AutoApproveIsSilent,
 				SilentTemplateName = CurrentValues.Instance.AutoApproveSilentTemplateName,

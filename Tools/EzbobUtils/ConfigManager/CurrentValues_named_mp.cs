@@ -72,10 +72,6 @@ namespace ConfigManager {
 			get { return this[Variables.MinLoan]; }
 		}
 
-		public virtual VariableValue MinLoanAmount {
-			get { return this[Variables.MinLoanAmount]; }
-		}
-
 		public virtual VariableValue NHibernateEnableProfiler {
 			get { return this[Variables.NHibernateEnableProfiler]; }
 		}

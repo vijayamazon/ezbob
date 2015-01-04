@@ -20,5 +20,13 @@ BEGIN
 		ConfigurationVariables
 	WHERE
 		Name LIKE 'AutoApprove%'
+	UNION
+	SELECT
+		'AutoApprove' + Name,
+		Value
+	FROM
+		ConfigurationVariables
+	WHERE
+		Name = 'MinLoan'
 END
 GO

@@ -173,7 +173,7 @@
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.MaxAllowedDaysLate);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.MaxNumOfOutstandingLoans);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.MinRepaidPortion);
-				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.MinAmount);
+				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.MinLoan);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.MaxAmount);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.IsSilent);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.SilentTemplateName);

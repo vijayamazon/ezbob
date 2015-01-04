@@ -164,10 +164,6 @@
 			get { return this[Variables.AutoApproveMaxTodayLoans]; }
 		}
 
-		public virtual VariableValue AutoApproveMinAmount {
-			get { return this[Variables.AutoApproveMinAmount]; }
-		}
-
 		public virtual VariableValue AutoApproveMinMPSeniorityDays {
 			get { return this[Variables.AutoApproveMinMPSeniorityDays]; }
 		}
