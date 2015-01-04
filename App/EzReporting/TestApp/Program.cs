@@ -1,32 +1,27 @@
-﻿// ReSharper disable UnusedMember.Local
-
-namespace TestApp {
+﻿namespace TestApp {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using System.Data.Common;
-	// using System.Data.SqlClient;
-	using System.Diagnostics;
 	using System.IO;
 	using ConfigManager;
-	using EzBob.Backend.Models;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
-	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Html;
 	using Ezbob.Utils.Security;
 	using Ezbob.ValueIntervals;
-	using Ezbob.Utils.Html;
-	using JetBrains.Annotations;
+	using EzBob.Backend.Models;
 	using Reports;
 	using Reports.Alibaba.DataSharing;
 	using Reports.Alibaba.Funnel;
 	using Reports.EarnedInterest;
-	using SqlConnection = Ezbob.Database.SqlConnection;
 
-	class Program {
+	// using System.Data.SqlClient;
+
+	internal class Program {
 		private class A {
 			public int F1 { get; set; }
 			public int F2 { get; private set; }
@@ -41,9 +36,60 @@ namespace TestApp {
 			public virtual int V4 { get; private set; }
 		} // class B
 
-		private static ASafeLog ms_oLog;
+		private class UpdateBroker : AStoredProcedure {
+			public UpdateBroker(AConnection oDB, ASafeLog oLog)
+				: base(oDB, oLog, CommandSpecies.Text) { } // constructor
 
-		static void Main(string[] args) {
+			public override bool HasValidParameters() {
+				return true;
+			}
+
+			protected override string GetName() {
+				return "UPDATE Broker SET FirmRegNum = '034343434' WHERE BrokerID = 2";
+			}
+		}
+
+		private class BrokerLoadCustomerList : AStoredProcedure {
+			[FieldName("@ContactEmail")]
+			public string Email { get; set; }
+
+			public class ResultRow : AResultRow {
+				public int CustomerID { get; set; }
+				public string FirstName { get; set; }
+				public string LastName { get; set; }
+				public string Email { get; set; }
+				public string WizardStep { get; set; }
+				public string Status { get; set; }
+				public DateTime ApplyDate { get; set; }
+				public string MpTypeName { get; set; }
+				public string LoanAmount { get; set; }
+				public DateTime LoanDate { get; set; }
+
+				public override string ToString() {
+					return string.Join(", ",
+						CustomerID,
+						FirstName,
+						LastName,
+						Email,
+						WizardStep,
+						Status,
+						ApplyDate,
+						MpTypeName,
+						LoanAmount,
+						LoanDate
+						);
+				} // ToString
+			}
+
+			public BrokerLoadCustomerList(AConnection oDB, ASafeLog oLog)
+				: base(oDB, oLog) { } // constructor
+
+			public override bool HasValidParameters() {
+				return true;
+			}
+		}
+
+		private static void Main(string[] args) {
 			var log = new ConsoleLog(new LegacyLog());
 
 			ms_oLog = log;
@@ -63,8 +109,6 @@ namespace TestApp {
 			// TestVectorSpArgument(oDB, log);
 
 			// TestRetryerWithArguments(oDB, log);
-
-			// TestEarnedInterestForAudit(oDB, log);
 
 			// TestHashPassword(oDB, log);
 
@@ -97,7 +141,7 @@ namespace TestApp {
 			// TestAddBrokers(oDB, log);
 
 			// TestReapproval(oDB, log);
-		} // Main
+		}
 
 		private static void TestBadPeriods(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
@@ -110,7 +154,7 @@ namespace TestApp {
 			bp.Add(new DateTime(2006, 5, 13), false);
 
 			oLog.Debug("{0}", bp);
-		} // TestBadPeriods
+		}
 
 		private static void UpdateBrokerPasswords(AConnection oDB, ASafeLog oLog) {
 			var oQueries = new List<string>();
@@ -121,25 +165,45 @@ namespace TestApp {
 						"UPDATE Broker SET Password = '{0}' WHERE BrokerID = {1}",
 						SecurityUtils.HashPassword((string)sr["ContactEmail"], "123456"),
 						(int)sr["BrokerID"]
-					));
+						));
 					return ActionResult.Continue;
 				},
 				"SELECT BrokerID, ContactEmail FROM Broker",
 				CommandSpecies.Text
-			);
+				);
 
 			oQueries.ForEach(sQuery => oDB.ExecuteNonQuery(sQuery, CommandSpecies.Text));
-		} // UpdateBrokerPasswords
+		}
 
 		private static void TestTableSpArgument(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
 
 			var lst = new List<ConfigTable> {
-				new ConfigTable { Start = 1, End = 2, Value = 1.2m, },
-				new ConfigTable { Start = 2, End = 3, Value = 2.3m, },
-				new ConfigTable { Start = 3, End = 4, Value = 3.4m, },
-				new ConfigTable { Start = 4, End = 5, Value = 4.5m, },
-				new ConfigTable { Start = 5, End = 6, Value = 5.6m, },
+				new ConfigTable {
+					Start = 1,
+					End = 2,
+					Value = 1.2m,
+				},
+				new ConfigTable {
+					Start = 2,
+					End = 3,
+					Value = 2.3m,
+				},
+				new ConfigTable {
+					Start = 3,
+					End = 4,
+					Value = 3.4m,
+				},
+				new ConfigTable {
+					Start = 4,
+					End = 5,
+					Value = 4.5m,
+				},
+				new ConfigTable {
+					Start = 5,
+					End = 6,
+					Value = 5.6m,
+				},
 			};
 
 			oLog.Debug("Results - begin:");
@@ -151,15 +215,16 @@ namespace TestApp {
 				},
 				"TestIntIntDecimalListType",
 				CommandSpecies.StoredProcedure,
-				oDB.CreateTableParameter<ConfigTable>("@TheList", lst, objbir =>
-				{
+				oDB.CreateTableParameter<ConfigTable>("@TheList", lst, objbir => {
 					var bir = (ConfigTable)objbir;
-					return new object[] { bir.Start, bir.End, bir.Value, };
+					return new object[] {
+						bir.Start, bir.End, bir.Value,
+					};
 				})
-			);
+				);
 
 			oLog.Debug("Results - end");
-		} // TestTableSpArgument
+		}
 
 		private static void TestVectorSpArgument(AConnection oDB, ASafeLog oLog) {
 			oDB.LogVerbosityLevel = LogVerbosityLevel.Verbose;
@@ -174,10 +239,10 @@ namespace TestApp {
 				"TestIntListType",
 				CommandSpecies.StoredProcedure,
 				oDB.CreateVectorParameter<int>("@TheList", 1, 2, 2, 2, 5, 5, 38, 1)
-			);
+				);
 
 			oLog.Debug("Results - end");
-		} // TestVectorSpArgument
+		}
 
 		private static void TestRetryerWithArguments(AConnection oDB, ASafeLog log) {
 			var oRetryer = new SqlRetryer(nRetryCount: 8, nSleepBeforeRetryMilliseconds: 1000, oLog: log) {
@@ -197,9 +262,7 @@ namespace TestApp {
 			ms_nActionTestCounter = 0;
 
 			oTwoRetryer.Retry(oAction, "just a test action for 2 retries");
-		} // TestRetryerWithArguments
-
-		private static int ms_nActionTestCounter;
+		}
 
 		private static void ActionTest(int x, string s, AConnection oDB, ASafeLog log) {
 			log.Info("ActionTest started...");
@@ -225,69 +288,7 @@ namespace TestApp {
 			log.Info("ActionTest: x = {0}", x);
 			log.Info("ActionTest: s = {0}", s);
 			log.Info("ActionTest complete.");
-		} // ActionTest
-
-		private class UpdateBroker : AStoredProcedure {
-			public UpdateBroker(AConnection oDB, ASafeLog oLog) : base(oDB, oLog, CommandSpecies.Text) {} // constructor
-
-			public override bool HasValidParameters() { return true; }
-
-			protected override string GetName() {
-				return "UPDATE Broker SET FirmRegNum = '034343434' WHERE BrokerID = 2";
-			}
 		}
-
-		private class BrokerLoadCustomerList : AStoredProcedure {
-			public BrokerLoadCustomerList(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
-
-			public override bool HasValidParameters() { return true; }
-
-			[FieldName("@ContactEmail")]
-			public string Email { get; set; } // Email
-
-			public class ResultRow : AResultRow {
-				public int CustomerID { get; set; }
-				public string FirstName { get; set; }
-				public string LastName { get; set; }
-				public string Email { get; set; }
-				public string WizardStep { get; set; }
-				public string Status { get; set; }
-				public DateTime ApplyDate { get; set; }
-				public string MpTypeName { get; set; }
-				public string LoanAmount { get; set; }
-				public DateTime LoanDate { get; set; }
-
-				public override string ToString() {
-					return string.Join(", ",
-						CustomerID,
-						FirstName,
-						LastName,
-						Email,
-						WizardStep,
-						Status,
-						ApplyDate,
-						MpTypeName,
-						LoanAmount,
-						LoanDate
-					);
-				} // ToString
-			} // class ResultRow
-		} // BrokerLoadCustomerList
-
-		private static void TestEarnedInterestForAudit(AConnection oDB, ASafeLog log) {
-			var ea = new EarnedInterest(
-				oDB,
-				EarnedInterest.WorkingMode.AccountingLoanBalance,
-				false,
-				new DateTime(2014, 1, 15),
-				new DateTime(2014, 2, 15),
-				log
-			) {
-				VerboseLogging = true
-			};
-
-			ea.Run();
-		} // TestEarnedInterestForAudit
 
 		private static void TestHashPassword(AConnection oDB, ASafeLog oLog) {
 			var aryPasswords = new string[] {
@@ -304,7 +305,7 @@ namespace TestApp {
 				string sHash = Ezbob.Utils.Security.SecurityUtils.HashPassword(sPassword);
 				oLog.Msg("Password: '{0}', hash size: {1}, hash: {2}\n", sPassword, sHash.Length, sHash);
 			} // for each password
-		} // TestHashPassword
+		}
 
 		private static void TestParsedValues(AConnection oDB, ASafeLog oLog) {
 			oLog.Info("Using row - begin");
@@ -325,7 +326,7 @@ namespace TestApp {
 			oLog.Info("Using reader - begin");
 			oDB.ForEachRow(TestParsedValuesPrint, "SELECT Id, Name, IsOffline, GreetingMailSentDate FROM Customer ORDER BY Id", CommandSpecies.Text);
 			oLog.Info("Using reader - end");
-		} // TestParsedValues
+		}
 
 		private static ActionResult TestParsedValuesPrint(DbDataReader row, bool bRowsetStarts) {
 			var sr = new SafeReader(row);
@@ -338,20 +339,24 @@ namespace TestApp {
 			ms_oLog.Info("{0}: {1} - {2} {3}", nCustomerID, sName, bIsOffline, dt);
 
 			return ActionResult.Continue;
-		} // TestParsedValuesPrint
+		}
 
 		private static void TestUiReportExt(AConnection oDB, ASafeLog log) {
-			var rpt = new UiReportExt(oDB, new DateTime(2013, 12, 23), new DateTime(2013, 12, 31), log) { VerboseLogging = true };
+			var rpt = new UiReportExt(oDB, new DateTime(2013, 12, 23), new DateTime(2013, 12, 31), log) {
+				VerboseLogging = true
+			};
 
 			rpt.Run();
 
 			log.Debug("Report start");
 
 			log.Debug("Report end");
-		} // TestUiReportExt
+		}
 
 		private static void TestLoanDateScore(AConnection oDB, ASafeLog log) {
-			var rpt = new LoanDateScore(oDB, log) { VerboseLogging = true };
+			var rpt = new LoanDateScore(oDB, log) {
+				VerboseLogging = true
+			};
 
 			rpt.Run();
 
@@ -360,7 +365,7 @@ namespace TestApp {
 			rpt.ToOutput(@"c:\temp\loan_date_score.csv");
 
 			log.Debug("Report end");
-		} // TestLoanDateScore
+		}
 
 		private static void TestExperianLimitedCompanyData(AConnection oDB, ASafeLog log) {
 			var rpt = new ExperianLimitedCompanyData(oDB, log);
@@ -373,7 +378,7 @@ namespace TestApp {
 			ExperianLimitedCompanyData.ToOutput(@"c:\temp\dl99.csv", oOutput);
 
 			log.Debug("Report end");
-		} // TestExperianLimitedCompanyData
+		}
 
 		private static void TestUiReport(AConnection oDB, ASafeLog log) {
 			var rpt = new UiReport(oDB, new DateTime(2013, 12, 1), new DateTime(2013, 12, 10), log);
@@ -387,7 +392,7 @@ namespace TestApp {
 				log.Debug(oItem.ToString());
 
 			log.Debug("Report end");
-		} // TestUiReport
+		}
 
 		private static void TestInterestFreeze(AConnection oDB, ASafeLog log) {
 			var oPeriods = new SortedDictionary<int, InterestFreezePeriods>();
@@ -413,28 +418,28 @@ namespace TestApp {
 				},
 				"RptEarnedInterest_Freeze",
 				CommandSpecies.StoredProcedure
-			);
+				);
 
 			foreach (var pair in oPeriods)
 				log.Msg("LoanID: {0} Freeze Periods: {1}", pair.Key, pair.Value);
-		} // TestInerestFreeze
+		}
 
 		private static void TestIntervalsOperations() {
 			TestIntervalsOperations(
 				new FreezeInterval(new DateTime(1976, 7, 1), null, 0.3m),
 				new FreezeInterval(null, new DateTime(1982, 9, 1), 0.6m)
-			);
+				);
 
 			TestIntervalsOperations(
 				new FreezeInterval(new DateTime(1976, 7, 1), new DateTime(1982, 9, 1), 0.3m),
 				new FreezeInterval(new DateTime(1979, 5, 9), new DateTime(1979, 11, 14), 0.6m)
-			);
+				);
 
 			TestIntervalsOperations(
 				new FreezeInterval(new DateTime(1976, 7, 1), new DateTime(1982, 9, 1), 0.3m),
 				new FreezeInterval(new DateTime(1979, 5, 9), new DateTime(1979, 5, 9), 0.6m)
-			);
-		} // TestIntervalOperations
+				);
+		}
 
 		private static void TestIntervalsOperations(FreezeInterval di, FreezeInterval di2) {
 			Console.WriteLine("\n***\n\n");
@@ -448,12 +453,12 @@ namespace TestApp {
 			Console.WriteLine("{0} - {1} = {2}", di2, di, di2 - di);
 
 			Console.WriteLine("\n***\n\n");
-		} // TestIntervalOperations
+		}
 
 		private static void TestLoanStats(AConnection oDB, ASafeLog log) {
 			var sender = new ReportDispatcher(oDB, log);
 			sender.Dispatch("loan_stats", DateTime.Today, null, new LoanStats(oDB, log).Xls(), ReportDispatcher.ToDropbox);
-		} // TestLoanStats
+		}
 
 		private static void TestLoansIssuedReport(AConnection oDB, ASafeLog log) {
 			var brh = new BaseReportHandler(oDB, log);
@@ -461,7 +466,7 @@ namespace TestApp {
 			var rpt = new Report(oDB, Reports.ReportType.RPT_LOANS_GIVEN.ToString());
 
 			ATag oTag = brh.BuildLoansIssuedReport(rpt, new DateTime(2013, 7, 1), new DateTime(2013, 7, 15));
-		} // TestLoansIssuedReport
+		}
 
 		private static void TestEarnedInterest(AConnection oDB, ASafeLog log) {
 			var ea = new EarnedInterest(
@@ -471,12 +476,12 @@ namespace TestApp {
 				new DateTime(2012, 9, 1),
 				new DateTime(2018, 3, 8),
 				log
-			) {
-				VerboseLogging = true
-			};
+				) {
+					VerboseLogging = true
+				};
 
 			ea.Run();
-		} // TestEarnedInterest
+		}
 
 		private static void TestLoanIntegrity(AConnection oDB, ASafeLog log) {
 			var ea = new LoanIntegrity(oDB, log) {
@@ -484,7 +489,46 @@ namespace TestApp {
 			};
 
 			ea.Run();
-		} // TestLoanIntegrity
+		}
+
+		private static void TestDataSharing(AConnection oDB, ASafeLog oLog) {
+			DataSharing ds = new DataSharing(false, oDB, oLog);
+			ds.Generate();
+
+			ds.Report.SaveAs(new FileInfo(@".\data\data_sharing_test.xlsx"));
+
+			FunnelCreator f = new FunnelCreator(null, oDB, oLog);
+			f.Generate();
+
+			f.Report.SaveAs(new FileInfo(@".\data\funnel_test.xlsx"));
+		}
+
+		private static void TestAddBrokers(AConnection oDB, ASafeLog oLog) {
+			var oBrokers = new List<BrokerData> {
+				// In Excel:
+				// =CONCATENATE("new BrokerData(""",F2, """, """, A2,""", """, B2, """, """, C2, """, """, D2, """, """, E2, """),")
+			};
+
+			foreach (BrokerData bd in oBrokers) {
+				try {
+					bd.Signup(oDB, oLog);
+				} catch (Exception e) {
+					oLog.Alert(e, "Failed to create a broker {0}", bd.Email);
+				} // try
+			} // for each
+		}
+
+		private static void TestReapproval(AConnection oDB, ASafeLog oLog) {
+			var adr = new AutoDecisionResponse();
+
+			var ra = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, oDB, oLog).Init();
+
+			ra.MakeDecision(adr);
+		}
+
+		private static ASafeLog ms_oLog;
+
+		private static int ms_nActionTestCounter;
 
 		/*
 
@@ -579,46 +623,21 @@ namespace TestApp {
 		} // class SpBrokerLogin
 
 		*/
-
-		private static void TestDataSharing(AConnection oDB, ASafeLog oLog) {
-			DataSharing ds = new DataSharing(false, oDB, oLog);
-			ds.Generate();
-
-			ds.Report.SaveAs(new FileInfo(@".\data\data_sharing_test.xlsx"));
-
-			FunnelCreator f = new FunnelCreator(null, oDB, oLog);
-			f.Generate();
-
-			f.Report.SaveAs(new FileInfo(@".\data\funnel_test.xlsx"));
-		} // TestDataSharing
-
-		private static void TestAddBrokers(AConnection oDB, ASafeLog oLog) {
-			var oBrokers = new List<BrokerData> {
-			// In Excel:
-			// =CONCATENATE("new BrokerData(""",F2, """, """, A2,""", """, B2, """, """, C2, """, """, D2, """, """, E2, """),")
-			};
-
-			foreach (BrokerData bd in oBrokers) {
-				try {
-					bd.Signup(oDB, oLog);
-				}
-				catch (Exception e) {
-					oLog.Alert(e, "Failed to create a broker {0}", bd.Email);
-				} // try
-			} // for each
-		} // TestAddBrokers
-
-		private static void TestReapproval(AConnection oDB, ASafeLog oLog) {
-			var adr = new AutoDecisionResponse();
-
-			var ra = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, oDB, oLog).Init();
-
-			ra.MakeDecision(adr);
-		} // TestReapproval
-
 	} // class Program
 
 	internal class BrokerData {
+		public string FirstName { get; private set; }
+
+		public string LastName { get; private set; }
+
+		public string Company { get; private set; }
+
+		public string PrimaryPhone { get; private set; }
+
+		public string OtherPhone { get; private set; }
+
+		public string Email { get; private set; }
+
 		public BrokerData(string sEmail, string sFirstName, string sLastName, string sCompany, string sPrimaryPhone, string sOtherPhone) {
 			FirstName = sFirstName;
 			LastName = sLastName;
@@ -627,19 +646,6 @@ namespace TestApp {
 			OtherPhone = sOtherPhone;
 			Email = sEmail;
 		} // BrokerData
-
-		public string FirstName { get; private set; }
-		public string LastName { get; private set; }
-		public string Company { get; private set; }
-		public string PrimaryPhone { get; private set; }
-		public string OtherPhone { get; private set; }
-		public string Email { get; private set; }
-
-		private string ContactName {
-			get { return 
-				(FirstName.Trim() + " " + LastName.Trim()).Trim();
-			} // get
-		} // ContactName
 
 		public void Signup(AConnection oDB, ASafeLog oLog) {
 			var stra = new BrokerSignup(
@@ -657,12 +663,18 @@ namespace TestApp {
 				true, // bool bIsCaptchaEnabled,
 				6, // int nBrokerTermsID,
 				"Finance Professional Show - Nov 2014" // string sReferredBy
-			);
+				);
 
 			stra.Execute();
-		} // Signup
+		}
+
+		private string ContactName {
+			get {
+				return
+					(FirstName.Trim() + " " + LastName.Trim()).Trim();
+			} // get
+		} // ContactName
+
+		// Signup
 	} // class BrokerData
-
 } // namespace
-
-// ReSharper restore UnusedMember.Local
