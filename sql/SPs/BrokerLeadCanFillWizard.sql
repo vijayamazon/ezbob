@@ -2,6 +2,7 @@ IF OBJECT_ID('BrokerLeadCanFillWizard') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerLeadCanFillWizard AS SELECT 1')
 GO
 
+
 ALTER PROCEDURE BrokerLeadCanFillWizard
 @LeadID INT,
 @LeadEmail NVARCHAR(255),
@@ -40,7 +41,8 @@ BEGIN
 			@OutLeadEmail = Email,
 			@OutLeadID = BrokerLeadID,
 			@OutFirstName = FirstName,
-			@OutLastName = LastName
+			@OutLastName = LastName,
+			@CustomerID = CustomerID
 		FROM
 			BrokerLeads
 		WHERE
@@ -55,15 +57,18 @@ BEGIN
 			AND
 			BrokerLeadDeletedReasonID IS NULL
 
-		SELECT
-			@CustomerID = Id
-		FROM
-			Customer
-		WHERE
-			BrokerID = @BrokerID
-			AND
-			Name = @OutLeadEmail
-
+		IF(@CustomerID IS NULL)
+		BEGIN
+			SELECT
+				@CustomerID = Id
+			FROM
+				Customer
+			WHERE
+				BrokerID = @BrokerID
+				AND
+				Name = @OutLeadEmail
+		END 
+		
 		IF @OutLeadID IS NOT NULL
 			SELECT
 				@OutLeadID AS LeadID,
@@ -73,4 +78,6 @@ BEGIN
 				@OutLastName AS LastName
 	END
 END
+
 GO
+
