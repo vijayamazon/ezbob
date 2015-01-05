@@ -22,7 +22,10 @@
 		private BrokerForJsonResult IsAuth(string sRequestDescription, string sContactEmail) {
 			return IsAuth<BrokerForJsonResult>(sRequestDescription, sContactEmail);
 		} // IsAuth
-
+		
+		/// <summary>
+		/// Checks if broker is logged in session if OK returned null else return error message
+		/// </summary>
 		private T IsAuth<T>(string sRequestDescription, string sContactEmail) where T : BrokerForJsonResult {
 			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
 				ms_oLog.Alert(
