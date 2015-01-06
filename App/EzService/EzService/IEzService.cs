@@ -10,6 +10,7 @@
 	using EzBob.Backend.Models;
 	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database;
+	using SalesForceLib.Models;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
@@ -553,6 +554,25 @@
 
 		[OperationContract]
 		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
+
+		
+		[OperationContract]
+		ActionMetaData SalesForceAddUpdateLeadAccount(int? userID, string email, int? customerID, bool isBrokerLead, bool isVipLead);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddTask(int? userID, int customerID, TaskModel model);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddEvent(int? userID, int customerID, EventModel model);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddOpportunity(int? userID, int customerID, OpportunityModel model);
+
+		[OperationContract]
+		ActionMetaData SalesForceUpdateOpportunity(int? userID, int customerID, OpportunityModel model);
 
 		[OperationContract]
 		ActionMetaData SaveAgreement(

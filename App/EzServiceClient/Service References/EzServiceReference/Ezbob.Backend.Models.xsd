@@ -2,6 +2,13 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:complexType name="Password">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="m_sConfirmation" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="m_sPrimary" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="Password" nillable="true" type="tns:Password" />
   <xs:complexType name="CustomerManualAnnualizedRevenue">
     <xs:sequence>
       <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
@@ -362,13 +369,6 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
-  <xs:complexType name="Password">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="m_sConfirmation" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="m_sPrimary" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="Password" nillable="true" type="tns:Password" />
   <xs:complexType name="BrokerCustomerDetails">
     <xs:sequence>
       <xs:element minOccurs="0" name="CrmData" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />

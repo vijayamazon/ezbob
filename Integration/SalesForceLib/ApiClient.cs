@@ -17,11 +17,19 @@
 			}
 		}
 
-		public void CreateUpdateOpportunity(OpportunityModel model) {
-			Log.DebugFormat("CreateUpdateOpportunity\n {0}", model.ToStringExtension());
-			ApiResponse response = api.CreateUpdateOpportunity(model);
+		public void CreateOpportunity(OpportunityModel model) {
+			Log.DebugFormat("CreateOpportunity\n {0}", model.ToStringExtension());
+			ApiResponse response = api.CreateOpportunity(model);
 			if (!response.Success) {
-				Log.ErrorFormat("SalesForce CreateUpdateOpportunity failed for customer {0}, error: {1}", model.Email, response.Error);
+				Log.ErrorFormat("SalesForce CreateOpportunity failed for customer {0}, error: {1}", model.Email, response.Error);
+			}
+		}
+
+		public void UpdateOpportunity(OpportunityModel model) {
+			Log.DebugFormat("UpdateOpportunity\n {0}", model.ToStringExtension());
+			ApiResponse response = api.UpdateOpportunity(model);
+			if (!response.Success) {
+				Log.ErrorFormat("SalesForce UpdateOpportunity failed for customer {0}, error: {1}", model.Email, response.Error);
 			}
 		}
 

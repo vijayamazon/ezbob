@@ -1,0 +1,36 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace EzService.EzServiceImplementation {
+	using Ezbob.Backend.Strategies.SalesForce;
+	using SalesForceLib.Models;
+
+	public partial class EzServiceImplementation {
+		public ActionMetaData SalesForceAddUpdateLeadAccount(int? userID, string email, int? customerID, bool isBrokerLead, bool isVipLead) {
+			return Execute<AddUpdateLeadAccount>(customerID, userID, email, customerID, isBrokerLead, isVipLead);
+		}
+
+		public ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID) {
+			return Execute<AddUpdateContact>(customerID, userID, customerID, directorID);
+		}
+
+		public ActionMetaData SalesForceAddTask(int? userID, int customerID, TaskModel model) {
+			return Execute<AddTask>(customerID, userID, customerID, model);
+		}
+
+		public ActionMetaData SalesForceAddEvent(int? userID, int customerID, EventModel model) {
+			return Execute<AddEvent>(customerID, userID, customerID, model);
+		}
+
+		public ActionMetaData SalesForceAddOpportunity(int? userID, int customerID, OpportunityModel model) {
+			return Execute<AddOpportunity>(customerID, userID, customerID, model);
+		}
+
+		public ActionMetaData SalesForceUpdateOpportunity(int? userID, int customerID, OpportunityModel model) {
+			return Execute<UpdateOpportunity>(customerID, userID, customerID, model);
+		}
+	}
+}

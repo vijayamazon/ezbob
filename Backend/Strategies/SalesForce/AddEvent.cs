@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
-	using Ezbob.Database;
 	using SalesForceLib;
 	using SalesForceLib.Models;
 

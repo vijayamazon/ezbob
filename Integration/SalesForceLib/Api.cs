@@ -7,7 +7,11 @@
 			return new ApiResponse(true);
 		}
 
-		public ApiResponse CreateUpdateOpportunity(OpportunityModel model) {
+		public ApiResponse CreateOpportunity(OpportunityModel model) {
+			return new ApiResponse(true);
+		}
+
+		public ApiResponse UpdateOpportunity(OpportunityModel model) {
 			return new ApiResponse(true);
 		}
 

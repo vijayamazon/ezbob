@@ -120,6 +120,7 @@
     <Compile Include="EzServiceImplementation\esi_customer_manual_annualized_revenue.cs" />
     <Compile Include="EzServiceImplementation\esi_esign.cs" />
     <Compile Include="EzServiceImplementation\esi_funding.cs" />
+    <Compile Include="EzServiceImplementation\esi_salesforce.cs" />
     <Compile Include="EzServiceImplementation\esi_vat_return.cs" />
     <Compile Include="EzServiceImplementation\esi_pricing_model.cs" />
     <Compile Include="EzServiceImplementation\esi_user_management.cs" />
@@ -178,6 +179,10 @@
     <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
       <Name>FraudChecker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\SalesForceLib\SalesForceLib.csproj">
+      <Project>{198579CB-CD05-46F6-AFAC-75A982B3216A}</Project>
+      <Name>SalesForceLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>

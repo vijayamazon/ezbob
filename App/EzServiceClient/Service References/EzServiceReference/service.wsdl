@@ -72,11 +72,12 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
@@ -131,6 +132,42 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserLogin" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserLoginResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserResetPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserResetPassword" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserResetPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserResetPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserUpdateSecurityQuestion_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserUpdateSecurityQuestion" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserUpdateSecurityQuestion_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserUpdateSecurityQuestionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateAndUpdateLinkedHmrcPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateAndUpdateLinkedHmrcPassword" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateAndUpdateLinkedHmrcPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateAndUpdateLinkedHmrcPasswordResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyApproval_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyApproval" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyApproval_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyApprovalResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_VerifyEnoughAvailableFunds_InputMessage">
     <wsdl:part name="parameters" element="tns:VerifyEnoughAvailableFunds" />
@@ -504,6 +541,42 @@
   <wsdl:message name="IEzService_ResetPassword123456_OutputMessage">
     <wsdl:part name="parameters" element="tns:ResetPassword123456Response" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddUpdateLeadAccount_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateLeadAccount" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddUpdateLeadAccount_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateLeadAccountResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddUpdateContact_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateContact" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddUpdateContact_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateContactResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddTask_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddTask" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddTask_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddTaskResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddEvent_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddEvent" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddEvent_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddEventResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddOpportunity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddOpportunity" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddOpportunity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddOpportunityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceUpdateOpportunity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceUpdateOpportunity" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceUpdateOpportunity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceUpdateOpportunityResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
   </wsdl:message>
@@ -641,42 +714,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_UserChangePassword_OutputMessage">
     <wsdl:part name="parameters" element="tns:UserChangePasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserLogin_InputMessage">
-    <wsdl:part name="parameters" element="tns:UserLogin" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserLogin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UserLoginResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserResetPassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:UserResetPassword" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserResetPassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UserResetPasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserUpdateSecurityQuestion_InputMessage">
-    <wsdl:part name="parameters" element="tns:UserUpdateSecurityQuestion" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserUpdateSecurityQuestion_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UserUpdateSecurityQuestionResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateAndUpdateLinkedHmrcPassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateAndUpdateLinkedHmrcPassword" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateAndUpdateLinkedHmrcPassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateAndUpdateLinkedHmrcPasswordResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_InputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCode" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
-    <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_VerifyApproval_InputMessage">
-    <wsdl:part name="parameters" element="tns:VerifyApproval" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_VerifyApproval_OutputMessage">
-    <wsdl:part name="parameters" element="tns:VerifyApprovalResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -1223,6 +1260,30 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="UserLogin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserResetPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="UserUpdateSecurityQuestion">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion" message="tns:IEzService_UserUpdateSecurityQuestion_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse" message="tns:IEzService_UserUpdateSecurityQuestion_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateAndUpdateLinkedHmrcPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword" message="tns:IEzService_ValidateAndUpdateLinkedHmrcPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPasswordResponse" message="tns:IEzService_ValidateAndUpdateLinkedHmrcPassword_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMobileCode">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="VerifyApproval">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyApproval" message="tns:IEzService_VerifyApproval_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyApprovalResponse" message="tns:IEzService_VerifyApproval_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="VerifyEnoughAvailableFunds">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" message="tns:IEzService_VerifyEnoughAvailableFunds_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse" message="tns:IEzService_VerifyEnoughAvailableFunds_OutputMessage" />
@@ -1471,6 +1532,30 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456" message="tns:IEzService_ResetPassword123456_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456Response" message="tns:IEzService_ResetPassword123456_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SalesForceAddUpdateLeadAccount">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccount" message="tns:IEzService_SalesForceAddUpdateLeadAccount_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccountResponse" message="tns:IEzService_SalesForceAddUpdateLeadAccount_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddUpdateContact">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateContact" message="tns:IEzService_SalesForceAddUpdateContact_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateContactResponse" message="tns:IEzService_SalesForceAddUpdateContact_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddTask">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddTask" message="tns:IEzService_SalesForceAddTask_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddTaskResponse" message="tns:IEzService_SalesForceAddTask_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddEvent">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddEvent" message="tns:IEzService_SalesForceAddEvent_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddEventResponse" message="tns:IEzService_SalesForceAddEvent_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddOpportunity">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddOpportunity" message="tns:IEzService_SalesForceAddOpportunity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddOpportunityResponse" message="tns:IEzService_SalesForceAddOpportunity_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceUpdateOpportunity">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceUpdateOpportunity" message="tns:IEzService_SalesForceUpdateOpportunity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceUpdateOpportunityResponse" message="tns:IEzService_SalesForceUpdateOpportunity_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveAgreementResponse" message="tns:IEzService_SaveAgreement_OutputMessage" />
@@ -1562,30 +1647,6 @@
     <wsdl:operation name="UserChangePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangePassword" message="tns:IEzService_UserChangePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangePasswordResponse" message="tns:IEzService_UserChangePassword_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UserLogin">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UserResetPassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UserUpdateSecurityQuestion">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion" message="tns:IEzService_UserUpdateSecurityQuestion_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse" message="tns:IEzService_UserUpdateSecurityQuestion_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ValidateAndUpdateLinkedHmrcPassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword" message="tns:IEzService_ValidateAndUpdateLinkedHmrcPassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPasswordResponse" message="tns:IEzService_ValidateAndUpdateLinkedHmrcPassword_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="ValidateMobileCode">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="VerifyApproval">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyApproval" message="tns:IEzService_VerifyApproval_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyApprovalResponse" message="tns:IEzService_VerifyApproval_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -2009,6 +2070,60 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="UserLogin">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserLogin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserResetPassword">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserResetPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserUpdateSecurityQuestion">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestion" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateAndUpdateLinkedHmrcPassword">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ValidateMobileCode">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyApproval">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyApproval" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="VerifyEnoughAvailableFunds">
       <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds" style="document" />
       <wsdl:input>
@@ -2567,6 +2682,60 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SalesForceAddUpdateLeadAccount">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccount" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddUpdateContact">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddUpdateContact" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddTask">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddTask" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddEvent">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddEvent" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddOpportunity">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddOpportunity" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceUpdateOpportunity">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceUpdateOpportunity" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveAgreement" style="document" />
       <wsdl:input>
@@ -2767,60 +2936,6 @@
     </wsdl:operation>
     <wsdl:operation name="UserChangePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UserChangePassword" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UserLogin">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UserLogin" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UserResetPassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UserResetPassword" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UserUpdateSecurityQuestion">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestion" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ValidateAndUpdateLinkedHmrcPassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="ValidateMobileCode">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="VerifyApproval">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyApproval" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

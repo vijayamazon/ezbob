@@ -184,17 +184,18 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ConfigTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingModelModelActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringStringMapActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EsignatureFileActionResult))]
@@ -206,7 +207,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.QuickOfferActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomerFileContentsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerLeadDetailsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerCustomerDetailsActionResult))]
@@ -261,6 +261,91 @@ namespace ServiceClientProxy.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="UserLoginActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class UserLoginActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int SessionIDField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StatusField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int SessionID {
+            get {
+                return this.SessionIDField;
+            }
+            set {
+                if ((this.SessionIDField.Equals(value) != true)) {
+                    this.SessionIDField = value;
+                    this.RaisePropertyChanged("SessionID");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Status {
+            get {
+                return this.StatusField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusField, value) != true)) {
+                    this.StatusField = value;
+                    this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StringActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class StringActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="BoolActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class BoolActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
             }
         }
     }
@@ -361,29 +446,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.CustomerManualAnnualizedRevenue Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="StringActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class StringActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Value {
             get {
                 return this.ValueField;
             }
@@ -522,29 +584,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.NumberOfMobileCodeAttemptsField.Equals(value) != true)) {
                     this.NumberOfMobileCodeAttemptsField = value;
                     this.RaisePropertyChanged("NumberOfMobileCodeAttempts");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="BoolActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class BoolActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private bool ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public bool Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((this.ValueField.Equals(value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
                 }
             }
         }
@@ -942,45 +981,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="UserLoginActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class UserLoginActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int SessionIDField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string StatusField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int SessionID {
-            get {
-                return this.SessionIDField;
-            }
-            set {
-                if ((this.SessionIDField.Equals(value) != true)) {
-                    this.SessionIDField = value;
-                    this.RaisePropertyChanged("SessionID");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Status {
-            get {
-                return this.StatusField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.StatusField, value) != true)) {
-                    this.StatusField = value;
-                    this.RaisePropertyChanged("Status");
                 }
             }
         }
@@ -2358,6 +2358,445 @@ namespace ServiceClientProxy.EzServiceReference {
         Broker = 1,
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TaskModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
+    [System.SerializableAttribute()]
+    public partial class TaskModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CreateDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime DueDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OriginatorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string StatusField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string SubjectField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime CreateDate {
+            get {
+                return this.CreateDateField;
+            }
+            set {
+                if ((this.CreateDateField.Equals(value) != true)) {
+                    this.CreateDateField = value;
+                    this.RaisePropertyChanged("CreateDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime DueDate {
+            get {
+                return this.DueDateField;
+            }
+            set {
+                if ((this.DueDateField.Equals(value) != true)) {
+                    this.DueDateField = value;
+                    this.RaisePropertyChanged("DueDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Originator {
+            get {
+                return this.OriginatorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OriginatorField, value) != true)) {
+                    this.OriginatorField = value;
+                    this.RaisePropertyChanged("Originator");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Status {
+            get {
+                return this.StatusField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.StatusField, value) != true)) {
+                    this.StatusField = value;
+                    this.RaisePropertyChanged("Status");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Subject {
+            get {
+                return this.SubjectField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.SubjectField, value) != true)) {
+                    this.SubjectField = value;
+                    this.RaisePropertyChanged("Subject");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="EventModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
+    [System.SerializableAttribute()]
+    public partial class EventModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime DateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DesciptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OriginatorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TypeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Date {
+            get {
+                return this.DateField;
+            }
+            set {
+                if ((this.DateField.Equals(value) != true)) {
+                    this.DateField = value;
+                    this.RaisePropertyChanged("Date");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Desciption {
+            get {
+                return this.DesciptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DesciptionField, value) != true)) {
+                    this.DesciptionField = value;
+                    this.RaisePropertyChanged("Desciption");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Originator {
+            get {
+                return this.OriginatorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OriginatorField, value) != true)) {
+                    this.OriginatorField = value;
+                    this.RaisePropertyChanged("Originator");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Type {
+            get {
+                return this.TypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TypeField, value) != true)) {
+                    this.TypeField = value;
+                    this.RaisePropertyChanged("Type");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OpportunityModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
+    [System.SerializableAttribute()]
+    public partial class OpportunityModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> ApprovedAmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<System.DateTime> CloseDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime CreateDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DealCloseTypeField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DealLostReasonField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string EmailField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ExpectedEndDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> RequestedAmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int StageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.Nullable<int> TookAmountField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string TypeField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> ApprovedAmount {
+            get {
+                return this.ApprovedAmountField;
+            }
+            set {
+                if ((this.ApprovedAmountField.Equals(value) != true)) {
+                    this.ApprovedAmountField = value;
+                    this.RaisePropertyChanged("ApprovedAmount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<System.DateTime> CloseDate {
+            get {
+                return this.CloseDateField;
+            }
+            set {
+                if ((this.CloseDateField.Equals(value) != true)) {
+                    this.CloseDateField = value;
+                    this.RaisePropertyChanged("CloseDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime CreateDate {
+            get {
+                return this.CreateDateField;
+            }
+            set {
+                if ((this.CreateDateField.Equals(value) != true)) {
+                    this.CreateDateField = value;
+                    this.RaisePropertyChanged("CreateDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DealCloseType {
+            get {
+                return this.DealCloseTypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DealCloseTypeField, value) != true)) {
+                    this.DealCloseTypeField = value;
+                    this.RaisePropertyChanged("DealCloseType");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string DealLostReason {
+            get {
+                return this.DealLostReasonField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DealLostReasonField, value) != true)) {
+                    this.DealLostReasonField = value;
+                    this.RaisePropertyChanged("DealLostReason");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Email {
+            get {
+                return this.EmailField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.EmailField, value) != true)) {
+                    this.EmailField = value;
+                    this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime ExpectedEndDate {
+            get {
+                return this.ExpectedEndDateField;
+            }
+            set {
+                if ((this.ExpectedEndDateField.Equals(value) != true)) {
+                    this.ExpectedEndDateField = value;
+                    this.RaisePropertyChanged("ExpectedEndDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> RequestedAmount {
+            get {
+                return this.RequestedAmountField;
+            }
+            set {
+                if ((this.RequestedAmountField.Equals(value) != true)) {
+                    this.RequestedAmountField = value;
+                    this.RaisePropertyChanged("RequestedAmount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Stage {
+            get {
+                return this.StageField;
+            }
+            set {
+                if ((this.StageField.Equals(value) != true)) {
+                    this.StageField = value;
+                    this.RaisePropertyChanged("Stage");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Nullable<int> TookAmount {
+            get {
+                return this.TookAmountField;
+            }
+            set {
+                if ((this.TookAmountField.Equals(value) != true)) {
+                    this.TookAmountField = value;
+                    this.RaisePropertyChanged("TookAmount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Type {
+            get {
+                return this.TypeField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.TypeField, value) != true)) {
+                    this.TypeField = value;
+                    this.RaisePropertyChanged("Type");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Medal", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
     public enum Medal : int {
@@ -2526,6 +2965,42 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserResetPassword", ReplyAction="http://tempuri.org/IEzService/UserResetPasswordResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserResetPassword", ReplyAction="http://tempuri.org/IEzService/UserResetPasswordResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPasswordResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPasswordResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
+        ServiceClientProxy.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
@@ -2899,6 +3374,42 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ResetPassword123456", ReplyAction="http://tempuri.org/IEzService/ResetPassword123456Response")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ResetPassword123456Async(int nUnderwriterID, int nTargetID, ServiceClientProxy.EzServiceReference.PasswordResetTarget nTarget);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccount", ReplyAction="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccountResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateLeadAccount(System.Nullable<int> userID, string email, System.Nullable<int> customerID, bool isBrokerLead, bool isVipLead);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccount", ReplyAction="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccountResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateLeadAccountAsync(System.Nullable<int> userID, string email, System.Nullable<int> customerID, bool isBrokerLead, bool isVipLead);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddUpdateContact", ReplyAction="http://tempuri.org/IEzService/SalesForceAddUpdateContactResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateContact(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddUpdateContact", ReplyAction="http://tempuri.org/IEzService/SalesForceAddUpdateContactResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateContactAsync(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddTask", ReplyAction="http://tempuri.org/IEzService/SalesForceAddTaskResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddTask(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.TaskModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddTask", ReplyAction="http://tempuri.org/IEzService/SalesForceAddTaskResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddTaskAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.TaskModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddEvent", ReplyAction="http://tempuri.org/IEzService/SalesForceAddEventResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddEvent(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddEvent", ReplyAction="http://tempuri.org/IEzService/SalesForceAddEventResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddEventAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddOpportunity", ReplyAction="http://tempuri.org/IEzService/SalesForceAddOpportunityResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddOpportunity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddOpportunity", ReplyAction="http://tempuri.org/IEzService/SalesForceAddOpportunityResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddOpportunityAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceUpdateOpportunity", ReplyAction="http://tempuri.org/IEzService/SalesForceUpdateOpportunityResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceUpdateOpportunity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceUpdateOpportunity", ReplyAction="http://tempuri.org/IEzService/SalesForceUpdateOpportunityResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceUpdateOpportunityAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveAgreement", ReplyAction="http://tempuri.org/IEzService/SaveAgreementResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2);
         
@@ -3036,42 +3547,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserResetPassword", ReplyAction="http://tempuri.org/IEzService/UserResetPasswordResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserResetPassword", ReplyAction="http://tempuri.org/IEzService/UserResetPasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserUpdateSecurityQuestion", ReplyAction="http://tempuri.org/IEzService/UserUpdateSecurityQuestionResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPasswordResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/ValidateAndUpdateLinkedHmrcPasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
-        ServiceClientProxy.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
@@ -3611,6 +4086,54 @@ namespace ServiceClientProxy.EzServiceReference {
                 base(binding, remoteAddress) {
         }
         
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
+            return base.Channel.UserLogin(sEmail, sPassword, sRemoteIp);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
+            return base.Channel.UserLoginAsync(sEmail, sPassword, sRemoteIp);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail) {
+            return base.Channel.UserResetPassword(sEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail) {
+            return base.Channel.UserResetPasswordAsync(sEmail);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
+            return base.Channel.UserUpdateSecurityQuestion(sEmail, oPassword, nQuestionID, sAnswer);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
+            return base.Channel.UserUpdateSecurityQuestionAsync(sEmail, oPassword, nQuestionID, sAnswer);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
+            return base.Channel.ValidateAndUpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword, sHash);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
+            return base.Channel.ValidateAndUpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword, sHash);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code) {
+            return base.Channel.ValidateMobileCode(phone, code);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code) {
+            return base.Channel.ValidateMobileCodeAsync(phone, code);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyApproval(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyApprovalAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount) {
             return base.Channel.VerifyEnoughAvailableFunds(underwriterId, deductAmount);
         }
@@ -4107,6 +4630,54 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ResetPassword123456Async(nUnderwriterID, nTargetID, nTarget);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateLeadAccount(System.Nullable<int> userID, string email, System.Nullable<int> customerID, bool isBrokerLead, bool isVipLead) {
+            return base.Channel.SalesForceAddUpdateLeadAccount(userID, email, customerID, isBrokerLead, isVipLead);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateLeadAccountAsync(System.Nullable<int> userID, string email, System.Nullable<int> customerID, bool isBrokerLead, bool isVipLead) {
+            return base.Channel.SalesForceAddUpdateLeadAccountAsync(userID, email, customerID, isBrokerLead, isVipLead);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateContact(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID) {
+            return base.Channel.SalesForceAddUpdateContact(userID, customerID, directorID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateContactAsync(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID) {
+            return base.Channel.SalesForceAddUpdateContactAsync(userID, customerID, directorID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddTask(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.TaskModel model) {
+            return base.Channel.SalesForceAddTask(userID, customerID, model);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddTaskAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.TaskModel model) {
+            return base.Channel.SalesForceAddTaskAsync(userID, customerID, model);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddEvent(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model) {
+            return base.Channel.SalesForceAddEvent(userID, customerID, model);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddEventAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model) {
+            return base.Channel.SalesForceAddEventAsync(userID, customerID, model);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddOpportunity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model) {
+            return base.Channel.SalesForceAddOpportunity(userID, customerID, model);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddOpportunityAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model) {
+            return base.Channel.SalesForceAddOpportunityAsync(userID, customerID, model);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceUpdateOpportunity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model) {
+            return base.Channel.SalesForceUpdateOpportunity(userID, customerID, model);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceUpdateOpportunityAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model) {
+            return base.Channel.SalesForceUpdateOpportunityAsync(userID, customerID, model);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData SaveAgreement(int customerId, EzBob.Backend.Models.AgreementModel model, string refNumber, string name, Ezbob.Backend.Models.TemplateModel template, string path1, string path2) {
             return base.Channel.SaveAgreement(customerId, model, refNumber, name, template, path1, path2);
         }
@@ -4289,54 +4860,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
             return base.Channel.UserChangePasswordAsync(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
-            return base.Channel.UserLogin(sEmail, sPassword, sRemoteIp);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
-            return base.Channel.UserLoginAsync(sEmail, sPassword, sRemoteIp);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail) {
-            return base.Channel.UserResetPassword(sEmail);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserResetPasswordAsync(string sEmail) {
-            return base.Channel.UserResetPasswordAsync(sEmail);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserUpdateSecurityQuestion(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
-            return base.Channel.UserUpdateSecurityQuestion(sEmail, oPassword, nQuestionID, sAnswer);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserUpdateSecurityQuestionAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, int nQuestionID, string sAnswer) {
-            return base.Channel.UserUpdateSecurityQuestionAsync(sEmail, oPassword, nQuestionID, sAnswer);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.ValidateAndUpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword, sHash);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> ValidateAndUpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.ValidateAndUpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword, sHash);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.BoolActionResult ValidateMobileCode(string phone, string code) {
-            return base.Channel.ValidateMobileCode(phone, code);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code) {
-            return base.Channel.ValidateMobileCodeAsync(phone, code);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyApproval(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyApprovalAsync(nCustomerCount, nLastCheckedCustomerID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
