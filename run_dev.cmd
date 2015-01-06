@@ -6,11 +6,15 @@ taskkill /IM EzServiceHost.exe
 rem Kill all running iisexpress and iisexpresstray instances
 taskkill /IM iisexpress*
 
+set CUR_DISK=c:
+
+%CUR_DISK%
+
 rem EzServiceHost build output
-set SOURCE_PATH=c:\ezbob\App\EzService\EzServiceHost\bin\Debug
+set SOURCE_PATH=%CUR_DISK%\ezbob\App\EzService\EzServiceHost\bin\Debug
 
 rem Run EzServiceHost from this location
-set TARGET_PATH=c:\temp\EzServiceHost
+set TARGET_PATH=%CUR_DISK%\temp\EzServiceHost
 
 rem Create target location
 if not exist %TARGET_PATH% (mkdir %TARGET_PATH%)
