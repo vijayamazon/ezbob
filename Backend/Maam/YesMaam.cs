@@ -24,7 +24,7 @@
 			int nLastCheckedID,
 			AConnection oDB,
 			ASafeLog oLog
-			) {
+		) {
 			this.topCount = nTopCount;
 			this.lastCheckedID = nLastCheckedID;
 
@@ -74,7 +74,7 @@
 					CurrentValues.Instance.MailSenderEmail,
 					CurrentValues.Instance.MailSenderName,
 					"Man Against A Machine Result"
-					);
+				);
 			} // if
 		} // Execute
 
@@ -109,21 +109,18 @@
 
 			cell.Add<Ezbob.Utils.Html.Attributes.Style>(
 				"border:1px solid black;" +
-					"padding:3px;"
-				);
+				"padding:3px;"
+			);
 
 			if (typeof(T) == typeof(Th)) {
 				cell.Add<Ezbob.Utils.Html.Attributes.Style>(
 					"background-color:darkmagenta;" +
-						"color:white;"
-					);
+					"color:white;"
+				);
 			} // if
 
-			if (bMismatch.HasValue && bMismatch.Value) {
-				cell.Add<Ezbob.Utils.Html.Attributes.Style>(
-					"color:red;"
-					);
-			} // if)
+			if (bMismatch.HasValue && bMismatch.Value)
+				cell.Add<Ezbob.Utils.Html.Attributes.Style>("color:red;");
 
 			cell.Append(new Text(sText));
 
@@ -135,44 +132,39 @@
 
 			tr.Append(CreateCell<Td>(
 				row.Input.CustomerID.ToString(CultureInfo.InvariantCulture)
-				)
-				.Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			tr.Append(CreateCell<Td>(
 				row.Input.CollectionStatus
-				));
+			));
 
 			tr.Append(CreateCell<Td>(
 				row.Input.UnderwriterName
-				));
+			));
 			tr.Append(CreateCell<Td>(
 				row.Input.UnderwriterID.ToString(CultureInfo.InvariantCulture)
-				)
-				.Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			tr.Append(CreateCell<Td>(
 				row.Input.Decision
-				));
+			));
 			tr.Append(CreateCell<Td>(
 				row.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				)
-				.Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 			tr.Append(CreateCell<Td>(
 				row.Input.ApprovedAmount.ToString("C0", CultureInfo.InvariantCulture)
-				)
-				.Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			tr.Append(CreateCell<Td>(
 				row.AutoReject.Data, !row.AutoReject.Data.StartsWith(row.Input.Decision)
-				));
+			));
 
 			tr.Append(CreateCell<Td>(
 				row.AutoApprove.Data, !row.AutoApprove.Data.StartsWith(row.Input.Decision)
-				));
+			));
 			tr.Append(CreateCell<Td>(
 				row.AutoApprove.Amount.ToString("C0", CultureInfo.InvariantCulture), row.AutoApprove.Amount != row.Input.ApprovedAmount
-				)
-				.Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
+			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			return tr;
 		} // CreateDatumRow
@@ -183,16 +175,11 @@
 			var tr = new Tr();
 			thead.Append(tr);
 
-			tr.Append(CreateCell<Th>("Customer")
-				.Add<Colspan>("2"));
-			tr.Append(CreateCell<Th>("Underwriter")
-				.Add<Colspan>("2"));
-			tr.Append(CreateCell<Th>("Manual decision")
-				.Add<Colspan>("3"));
-			tr.Append(CreateCell<Th>("Auto reject")
-				.Add<Rowspan>("2"));
-			tr.Append(CreateCell<Th>("Auto approve")
-				.Add<Colspan>("2"));
+			tr.Append(CreateCell<Th>("Customer").Add<Colspan>("2"));
+			tr.Append(CreateCell<Th>("Underwriter").Add<Colspan>("2"));
+			tr.Append(CreateCell<Th>("Manual decision").Add<Colspan>("3"));
+			tr.Append(CreateCell<Th>("Auto reject").Add<Rowspan>("2"));
+			tr.Append(CreateCell<Th>("Auto approve").Add<Colspan>("2"));
 
 			var tr2 = new Tr();
 			thead.Append(tr2);
@@ -231,7 +218,7 @@
 					ymr.Input.DecisionTime,
 					DB,
 					Log
-					);
+				);
 
 				agent.Init();
 
@@ -247,7 +234,7 @@
 
 				ymr.AutoApprove.Amount = (int)(
 					Math.Round(ymr.AutoApprove.Amount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
-					);
+				);
 			} catch (Exception e) {
 				ymr.AutoApprove.Data = "Exception";
 
@@ -259,7 +246,7 @@
 					"Exception thrown while executing Approve(customer {0}, time {1}).",
 					ymr.Input.CustomerID,
 					ymr.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss z", CultureInfo.InvariantCulture)
-					);
+				);
 			} // try
 		} // DoApprove
 
@@ -272,11 +259,13 @@
 					ymr.Input.DecisionTime,
 					DB,
 					Log
-					);
+				);
 
 				agent.Init();
 
-				ymr.AutoReject.Data = (agent.Decide(ymr.Input.CashRequestID, this.tag) ? "Rejected" : "Not rejected") + "<br>" + agent.Trail.UniqueID;
+				ymr.AutoReject.Data = (agent.Decide(ymr.Input.CashRequestID, this.tag)
+					? "Rejected"
+					: "Not rejected") + "<br>" + agent.Trail.UniqueID;
 			} catch (Exception e) {
 				ymr.AutoReject.Data = "Exception";
 
@@ -288,7 +277,7 @@
 					"Exception thrown while executing Reject(customer {0}, time {1}).",
 					ymr.Input.CustomerID,
 					ymr.Input.DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
-					);
+				);
 			} // try
 		} // DoReject
 

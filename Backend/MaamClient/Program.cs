@@ -59,13 +59,13 @@
 
 			Ezbob.Backend.Strategies.Library.Initialize(env, DB, Log);
 
-			CompareMaam(args);
+			// CompareMaam(args);
 
 			// LoadFromJson();
 
 			// LoadTurnovers(args);
 
-			// ExportApprovalData.Run(args, DB, Log);
+			ExportApprovalData.Run(args, DB, Log);
 
 			Log.NotifyStop();
 		} // Main

@@ -65,7 +65,7 @@ SELECT {0}
 	ISNULL(r.ManagerApprovedSum, 0) AS ApprovedAmount
 FROM
 	CashRequests r
-	INNER JOIN Customer c ON r.IdCustomer = c.Id
+	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
 	INNER JOIN Security_User u ON r.IdUnderwriter = u.UserId
 	INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 WHERE
