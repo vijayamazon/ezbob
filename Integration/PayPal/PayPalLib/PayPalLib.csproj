@@ -58,7 +58,6 @@
   <ItemGroup>
     <Compile Include="PayPalMarketPlace.cs" />
     <Compile Include="PayPalRetriveDataHelper.cs" />
-    <Compile Include="PayPalTest.cs" />
     <Compile Include="PluginRegistry.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">

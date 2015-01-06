@@ -50,9 +50,19 @@ namespace EzBob.PayPalServiceLib
 
 			var response = per.getAccessToken( getAccessTokenRequest );
 
-            if ( per.isSuccess.ToUpper() == "FAILURE" )
-			{
-                throw new PayPalException(new []{ new FaultDetailFaultMessageError{message = "Get access token failed"}});
+            if ( per.isSuccess.ToUpper() == "FAILURE" ) {
+	            if (per.LastError != null && per.LastError.ErrorDetails != null && per.LastError.ErrorDetails.Length > 0) {
+		            _log.ErrorFormat("failed to get access token for {5} {6}. category {0} domain {1} errorId {2} message {3} severity {4}",
+			            per.LastError.ErrorDetails[0].category,
+			            per.LastError.ErrorDetails[0].domain,
+			            per.LastError.ErrorDetails[0].errorId,
+			            per.LastError.ErrorDetails[0].message,
+						per.LastError.ErrorDetails[0].severity, requestToken, verificationCode);
+				} else {
+					_log.ErrorFormat("failed to get access token for {0} {1}. response {2}",
+						requestToken, verificationCode, per.LastResponse);
+				}
+	            throw new PayPalException(new []{ new FaultDetailFaultMessageError{message = "Get access token failed"}});
 			}
 
 			return new PayPalPermissionsGranted

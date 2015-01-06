@@ -59,8 +59,9 @@
 		}
 
 		[Transactional]
-		public ViewResult Success(string request_token, string verification_code)
-		{
+		public ViewResult Success(string request_token, string verification_code) {
+			Log.InfoFormat("PayPal Add callback, token:{0} verification code:{1}", request_token, verification_code);
+
 			if (string.IsNullOrEmpty(verification_code) && string.IsNullOrEmpty(request_token))
 			{
 				Log.InfoFormat("PayPal adding was canceled by customer");
@@ -71,10 +72,11 @@
 
 			var customer = _context.Customer;
 
-			PayPalPermissionsGranted permissionsGranted = PayPalServiceHelper.GetAccessToken(request_token, verification_code);
+			PayPalPermissionsGranted permissionsGranted;
 			PayPalPersonalData personalData;
 			try
 			{
+				permissionsGranted = PayPalServiceHelper.GetAccessToken(request_token, verification_code);
 				personalData = PayPalServiceHelper.GetAccountInfo(permissionsGranted);
 				_mpChecker.Check(paypal.InternalId, customer, personalData.Email);
 			}
