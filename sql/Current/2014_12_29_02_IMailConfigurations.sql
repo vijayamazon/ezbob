@@ -3,12 +3,12 @@ SELECT @Environment = Value FROM ConfigurationVariables WHERE Name = 'Environmen
 
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='ImailUserName')
 BEGIN
-	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('ImailUserName', 'Emma123456', 'imail user name')
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('ImailUserName', 'ezbobapiuser', 'imail user name')
 END
 
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IMailPassword')
 BEGIN
-	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IMailPassword', 'Ezbob123', 'imail password')
+	INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IMailPassword', 'Ezbob2014#', 'imail password')
 END
 
 IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IMailDebugModeEnabled')
