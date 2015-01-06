@@ -4,9 +4,11 @@
 	using System.Globalization;
 	using System.IO;
 	using Aspose.Words;
+	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MailApi;
+	using SalesForceLib.Models;
 
 	public class StrategiesMailer {
 
@@ -67,6 +69,16 @@
 						new QueryParameter("Creation", DateTime.UtcNow),
 						new QueryParameter("CustomerMail", addr.Recipient)
 					);
+
+
+					var salesForceAddEvent = new AddEvent(null, new EventModel {
+						Date = DateTime.UtcNow,
+						Desciption = oMeta.TemplateName,
+						Email = addr.Recipient,
+						Originator = "System",
+						Type = "Email"
+					});
+					salesForceAddEvent.Execute();
 				} // if should register
 			} // foreach
 		} // SendMailViaMandrill
