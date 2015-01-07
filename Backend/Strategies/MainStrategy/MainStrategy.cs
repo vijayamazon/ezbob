@@ -17,6 +17,8 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using LandRegistryLib;
 	using NHibernate;
 	using StructureMap;
 
@@ -39,6 +41,8 @@
 			this._loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
 			this._loanTypeRepository = ObjectFactory.GetInstance<LoanTypeRepository>();
 			this._discountPlanRepository = ObjectFactory.GetInstance<DiscountPlanRepository>();
+			this.customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
+			this.landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
 
 			this.medalScoreCalculator = new MedalScoreCalculator(DB, Log);
 
@@ -244,11 +248,78 @@
 			customerAddressesHelper.Execute();
 
 			try {
-				this.strategyHelper.GetLandRegistryData(this.customerId, customerAddressesHelper.OwnedAddresses);
+				GetLandRegistryData(customerAddressesHelper.OwnedAddresses);
 			} catch (Exception e) {
 				Log.Error("Error while getting land registry data: {0}", e);
 			} // try
 		} // GetLandRegistry
+
+		private void GetLandRegistryData(List<CustomerAddressModel> addresses) {
+			foreach (CustomerAddressModel address in addresses) {
+				LandRegistryDataModel model = null;
+
+				if (!string.IsNullOrEmpty(address.HouseName)) {
+					model = LandRegistryEnquiry.Get(
+						customerId,
+						null,
+						address.HouseName,
+						null,
+						null,
+						address.PostCode
+					);
+				} else if (!string.IsNullOrEmpty(address.HouseNumber)) {
+					model = LandRegistryEnquiry.Get(
+						customerId,
+						address.HouseNumber,
+						null,
+						null,
+						null,
+						address.PostCode
+					);
+				} else if (!string.IsNullOrEmpty(address.FlatOrApartmentNumber) && string.IsNullOrEmpty(address.HouseNumber)) {
+					model = LandRegistryEnquiry.Get(
+						customerId,
+						address.FlatOrApartmentNumber,
+						null,
+						null,
+						null,
+						address.PostCode
+					);
+				}
+
+				if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success && model.Enquery.Titles != null &&
+					model.Enquery.Titles.Count == 1) {
+
+					var lrr = new LandRegistryRes(customerId, model.Enquery.Titles[0].TitleNumber);
+					lrr.PartialExecute();
+					LandRegistry dbLandRegistry = lrr.LandRegistry;
+					LandRegistryDataModel landRegistryDataModel = lrr.RawResult;
+
+					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success) {
+						// Verify customer is among owners
+						Customer customer = _customers.Get(customerId);
+						bool isOwnerAccordingToLandRegistry = LandRegistryRes.IsOwner(customer, landRegistryDataModel.Response, landRegistryDataModel.Res.TitleNumber);
+						CustomerAddress dbAdress = customerAddressRepository.Get(address.AddressId);
+
+						dbLandRegistry.CustomerAddress = dbAdress;
+						landRegistryRepository.SaveOrUpdate(dbLandRegistry);
+
+						if (isOwnerAccordingToLandRegistry) {
+							dbAdress.IsOwnerAccordingToLandRegistry = true;
+							customerAddressRepository.SaveOrUpdate(dbAdress);
+						}
+					}
+				} else {
+					int num = 0;
+					if (model != null && model.Enquery != null && model.Enquery.Titles != null)
+						num = model.Enquery.Titles.Count;
+					Log.Warn(
+						"No land registry retrieved for customer id: {5}, house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
+						address.HouseName, address.HouseNumber,
+						address.FlatOrApartmentNumber, address.PostCode, num, customerId);
+				}
+			}
+		}
 
 		private void GetLandRegistryDataIfNotRejected() {
 			if (!this.autoDecisionResponse.DecidedToReject && this.isHomeOwner) {
@@ -709,6 +780,8 @@
 		private readonly LoanTypeRepository _loanTypeRepository;
 		private readonly ISession _session;
 		private readonly int avoidAutomaticDecision;
+		private readonly CustomerAddressRepository customerAddressRepository;
+		private readonly LandRegistryRepository landRegistryRepository;
 
 		// Inputs
 		private readonly int customerId;
@@ -720,7 +793,6 @@
 		private readonly MedalScoreCalculator medalScoreCalculator;
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly Staller staller;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 		private AutoDecisionResponse autoDecisionResponse;
 
 		private bool isFirstLoan;

@@ -32,18 +32,34 @@
 
 			log.InfoFormat("Starting to send first of month status mails");
 
-			var strategyHelper = new StrategyHelper();
-
 			foreach (Customer customer in customersToWorkOn) {
-				List<Loan> outstandingLoans = strategyHelper.GetOutstandingLoans(customer.Id);
+				List<Loan> outstandingLoans = GetOutstandingLoans(customer.Id);
 
 				if (outstandingLoans.Count > 0) {
-					List<Loan> closedLoans = strategyHelper.GetLastMonthClosedLoans(customer.Id);
+					List<Loan> closedLoans = GetLastMonthClosedLoans(customer.Id);
 					log.InfoFormat("Customer {0} has {1} outstanding loans. Will send status mail to him", customer.Id, outstandingLoans.Count);
 					SendStatusMailToCustomer(customer, outstandingLoans, closedLoans, firstOfMonthStatusMailCopyTo, firstOfMonthEnableCustomerMail);
 				}
 			}
 		}
+
+		public static List<Loan> GetOutstandingLoans(int customerId) {
+			return ObjectFactory.GetInstance<LoanRepository>()
+				.ByCustomer(customerId)
+				.Where(l => l.Status != LoanStatus.PaidOff)
+				.ToList();
+		} // GetOutstandingLoans
+
+		private static List<Loan> GetLastMonthClosedLoans(int customerId) {
+			DateTime now = DateTime.UtcNow;
+			DateTime startOfMonth = new DateTime(now.Year, now.Month, 1);
+			DateTime endOfLastMonth = startOfMonth.Subtract(TimeSpan.FromMilliseconds(1));
+			DateTime startOfLastMonth = new DateTime(endOfLastMonth.Year, endOfLastMonth.Month, 1);
+
+			return ObjectFactory.GetInstance<LoanRepository>().ByCustomer(customerId)
+				.Where(l => l.Status == LoanStatus.PaidOff && l.DateClosed.HasValue && l.DateClosed >= startOfLastMonth && l.DateClosed <= endOfLastMonth)
+				.ToList();
+		} // GetLastMonthClosedLoans
 
 		private static string CreateHtmlTable(string body, params string[] headers) {
 			var tableHeader = new StringBuilder();

@@ -18,6 +18,7 @@
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -33,7 +34,7 @@
 			AutomationCalculator.Common.TurnoverType? turnoverType,
 			AConnection db,
 			ASafeLog log
-			) {
+		) {
 			Now = DateTime.UtcNow;
 
 			this.db = db;
@@ -43,6 +44,7 @@
 			var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 			this.cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 			this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
+			this.customerAnalytics = ObjectFactory.GetInstance<CustomerAnalyticsRepository>();
 
 			this.customerId = customerId;
 			this.autoApprovedAmount = offeredCreditLine;
@@ -274,8 +276,53 @@
 		}
 
 		private int CalculateSeniority() {
-			return this.customer == null ? -1 : this.strategyHelper.MarketplaceSeniority(this.customer);
+			if (this.customer == null)
+				return -1;
+
+			DateTime oMpOriginationDate = this.customer.GetMarketplaceOriginationDate(oIncludeMp: mp =>
+				!mp.Marketplace.IsPaymentAccount ||
+				mp.Marketplace.InternalId == PayPal ||
+				mp.Marketplace.InternalId == Hmrc
+			);
+
+			DateTime oIncorporationDate = GetCustomerIncorporationDate();
+
+			DateTime oDate = (oMpOriginationDate < oIncorporationDate) ? oMpOriginationDate : oIncorporationDate;
+
+			return (int)(DateTime.UtcNow - oDate).TotalDays;
 		}
+
+		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
+		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
+
+		public DateTime GetCustomerIncorporationDate() {
+			if (customer == null)
+				return DateTime.UtcNow;
+
+			bool bIsLimited =
+				(customer.Company != null) &&
+				(customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited);
+
+			if (bIsLimited) {
+				CustomerAnalytics oAnalytics = this.customerAnalytics.GetAll()
+					.FirstOrDefault(ca => ca.Id == customer.Id);
+
+				DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
+
+				if (oIncorporationDate.Year < 1000)
+					oIncorporationDate = DateTime.UtcNow;
+
+				return oIncorporationDate;
+			} // if ltd
+
+			DateTime? oDate = db.ExecuteScalar<DateTime?>(
+				"GetNoLtdIncorporationDate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", customer.Id)
+			);
+
+			return oDate ?? DateTime.UtcNow;
+		} // GetCustomerIncorporationDate
 
 		private int CalculateTodaysApprovals() {
 			DateTime today = Now;
@@ -743,7 +790,7 @@
 		private void FindOutstandingLoans() {
 			MetaData oMeta = this.m_oTrail.MyInputData.MetaData; // just a shortcut
 
-			List<Loan> outstandingLoans = this.strategyHelper.GetOutstandingLoans(this.customerId);
+			List<Loan> outstandingLoans = FirstOfMonthStatusStrategyHelper.GetOutstandingLoans(this.customerId);
 
 			oMeta.OpenLoanCount = outstandingLoans.Count;
 			oMeta.TakenLoanAmount = 0;
@@ -861,7 +908,7 @@
 				CustomerStatusEnabled = this.customer != null && this.customer.CollectionStatus.CurrentStatus.IsEnabled,
 				CompanyScore = this.minCompanyScore,
 				ConsumerScore = this.minExperianScore,
-				IncorporationDate = this.strategyHelper.GetCustomerIncorporationDate(this.customer),
+				IncorporationDate = GetCustomerIncorporationDate(),
 				DateOfBirth = ((this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.DateOfBirth.HasValue) ? this.customer.PersonalInfo.DateOfBirth.Value : Now,
 				NumOfDefaultAccounts = FindNumOfDefaultAccounts(),
 				NumOfRollovers = CalculateRollovers(),
@@ -929,7 +976,7 @@
 		private readonly Medal medalClassification;
 		private readonly AutomationCalculator.Common.TurnoverType? turnoverType;
 		private readonly AutomationCalculator.Common.MedalType medalType;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
+		private readonly CustomerAnalyticsRepository customerAnalytics;
 
 		private int autoApprovedAmount;
 		private List<Name> directors;

@@ -165,6 +165,7 @@
     <Compile Include="MailStrategies\SendPendingMail.cs" />
     <Compile Include="Misc\FirstOfMonthStatusStrategyHelper.cs" />
     <Compile Include="Misc\GetCurrentCustomerAnnualTurnover.cs" />
+    <Compile Include="Misc\LandRegistryRes.cs" />
     <Compile Include="Misc\SendPendingMails.cs" />
     <Compile Include="Misc\GetConfigTable.cs" />
     <Compile Include="Misc\LoadCustomerLeadFieldNames.cs" />
@@ -195,7 +196,7 @@
     <Compile Include="SalesForce\AddUpdateLeadAccount.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="Misc\UpdateGoogleAnalytics.cs" />
-    <Compile Include="StrategyHelper.cs" />
+    <Compile Include="extensions.cs" />
     <Compile Include="Tasks\DailyFetchGoogleAnalyticsAndRunDependent.cs" />
     <Compile Include="UserManagement\AddCciHistory.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
@@ -275,7 +276,7 @@
     <Compile Include="Broker\BrokerDownloadCustomerFile.cs" />
     <Compile Include="Broker\BrokerSaveUploadedCustomerFile.cs" />
     <Compile Include="Misc\CrmLoadLookups.cs" />
-    <Compile Include="Misc\LandRegistry.cs" />
+    <Compile Include="Misc\LandRegistryEnquiry.cs" />
     <Compile Include="Broker\BrokerLoadCustomerList.cs" />
     <Compile Include="Broker\BrokerSignup.cs" />
     <Compile Include="Broker\BrokerLogin.cs" />

@@ -1,12 +1,14 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
-	using EzBob.Models;
-	using Ezbob.Database;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
+	using Ezbob.Database;
 	using ExperianLib.CaisFile;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
+	using EZBob.DatabaseLib.Repository;
+	using StructureMap;
 
 	public class CaisGenerate : AStrategy {
 		public CaisGenerate(int underwriterId) {
@@ -16,6 +18,7 @@
 			caisPath = sr["CaisPath"];
 			caisPath2 = sr["CaisPath2"];
 			this.underwriterId = underwriterId;
+			this.caisReportsHistoryRepository = ObjectFactory.GetInstance<CaisReportsHistoryRepository>();
 		}
 
 		public override string Name {
@@ -69,9 +72,7 @@
 				DateTime? minLsDate = null;
 				DateTime tmp = sr["MinLSDate"];
 				if (tmp != default(DateTime))
-				{
 					minLsDate = tmp;
-				}
 				decimal loanAmount = sr["LoanAmount"];
 				int scheduledRepayments = sr["ScheduledRepayments"];
 				string companyType = sr["CompanyType"];
@@ -83,17 +84,13 @@
 				string maritalStatus = sr["MaritalStatus"];
 				int customerId = sr["CustomerId"];
 				string genderPrefix;
-				if (gender == "M") {
+				if (gender == "M")
 					genderPrefix = "Mr.";
-				}
-				else {
+				else
 					genderPrefix = maritalStatus == "Married" ? "Mrs." : "Ms.";
-				}
 				
 				if (!string.IsNullOrEmpty(caisAccountStatus) && caisAccountStatus != "Calculated value")
-				{
 					accountStatus = caisAccountStatus;
-				}
 				else
 				{
 					accountStatus = GetAccountStatus(minLsDate, dateClose, startDate, isDefaulted, currentBalance);
@@ -104,33 +101,26 @@
 						dateClose = DateTime.UtcNow;
 					}
 					else
-					{
 						originalDefaultBalance = 0;
-					}
 				}
 
 				string line23 = string.Format("{0} {1}", line2, line3);
 				string fullName = string.Format("{0} {1} {2} {3}", genderPrefix, firstName, middleInitial, surname);
 
-				if (scheduledRepayments != 0) {
+				if (scheduledRepayments != 0)
 					monthlyPayment = loanAmount / scheduledRepayments;
-				}
-				else {
+				else
 					monthlyPayment = 0;
-				}
 
-				if (accountStatus != "8" && dateClose > startDate) {
+				if (accountStatus != "8" && dateClose > startDate)
 					currentBalance = 0;
-				}
 
 				string transferredToCollectionFlag = customerState == "Collection" ? "Y" : string.Empty;
 				string accountNumber = refNumber + loanId;
 
 				string caisFlag = null;
 				if (!string.IsNullOrEmpty(manualCaisFlag) && manualCaisFlag != "Calculated value")
-				{
 					caisFlag = manualCaisFlag;
-				}
 
 				if (companyType == "Entrepreneur")
 				{
@@ -147,12 +137,10 @@
 					file.Accounts.Add(account);
 
 					consumerCounter++;
-					if (accountStatus == "0") {
+					if (accountStatus == "0")
 						consumerGoodCounter++;
-					}
-					else if (accountStatus == "8") {
+					else if (accountStatus == "8")
 						consumerDefaultsCounter++;
-					}
 				}
 				else
 				{
@@ -163,16 +151,12 @@
 						{
 							case "LLP":
 							case "Limited":
-								{
 									companyTypeCode = "L";
-								}
 								break;
 							case "PShip":
 							case "SoleTrader":
 							case "PShip3P":
-								{
 									companyTypeCode = "N";
-								}
 								break;
 						}
 						fullName = target.BusName;
@@ -194,9 +178,8 @@
 									if (res != null)
 									{
 										if (!string.IsNullOrEmpty(res.CompanyName))
-										{
 											fullName = res.CompanyName;
-										}
+
 										if (!string.IsNullOrEmpty(res.PostCode))
 										{
 											line1 = res.AddressLine1;
@@ -222,12 +205,12 @@
 									{
 										Log.Warn("Exception during retrieval of non limited data. For customer:{0} experianRefNum:{1} Error:{2}", customerId, experianRefNum, e);
 									}
+
 									if (res != null)
 									{
 										if (!string.IsNullOrEmpty(res.CompanyName))
-										{
 											fullName = res.CompanyName;
-										}
+
 										if (!string.IsNullOrEmpty(res.PostCode))
 										{
 											line1 = res.AddressLine1;
@@ -252,13 +235,11 @@
 					cais.Accounts.Add(record);
 
 					businessCounter++;
-					if (accountStatus == "0") {
+					if (accountStatus == "0")
 						businessGoodCounter++;
-					}
-					else if (accountStatus == "8") {
+					else if (accountStatus == "8")
 						businessDefaultsCounter++;
-					}
-				}
+				} // if
 
 				DB.ExecuteNonQuery("UpdateLastReportedCAISstatus",
 					CommandSpecies.StoredProcedure,
@@ -277,27 +258,44 @@
 			var businessCaisFileData = CaisFileManager.GetBusinessCaisFileData();
 			businessCaisFileData.WriteToFile(dirPath + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");
 			businessCaisFileData.WriteToFile(dirPath2 + "\\F1364.D.COMCAIS.ORMO.DI55CUST.INPUT");
-			strategyHelper.SaveCAISFile(businessCaisFileData.WriteToString(), "F1364.D.COMCAIS.ORMO.DI55CUST.INPUT", dirPath, 2, businessCounter,
-										businessGoodCounter, businessDefaultsCounter);
+			SaveCAISFile(
+				businessCaisFileData.WriteToString(),
+				"F1364.D.COMCAIS.ORMO.DI55CUST.INPUT",
+				dirPath,
+				2,
+				businessCounter,
+				businessGoodCounter,
+				businessDefaultsCounter
+			);
 			CaisFileManager.RemoveBusinessCaisFileData();
 
 			var consumerCaisFileData = CaisFileManager.GetCaisFileData();
 			consumerCaisFileData.WriteToFile(dirPath + "\\F530.E.OMO.MSTEI49.XMIT");
 			consumerCaisFileData.WriteToFile(dirPath2 + "\\F530.E.OMO.MSTEI49.XMIT");
-			strategyHelper.SaveCAISFile(consumerCaisFileData.WriteToString(), "F530.E.OMO.MSTEI49.XMIT", dirPath, 1, consumerCounter, consumerGoodCounter,
-										consumerDefaultsCounter);
+			SaveCAISFile(
+				consumerCaisFileData.WriteToString(),
+				"F530.E.OMO.MSTEI49.XMIT",
+				dirPath,
+				1,
+				consumerCounter,
+				consumerGoodCounter,
+				consumerDefaultsCounter
+			);
 			CaisFileManager.RemoveCaisFileData();
 		}
+
+		private void SaveCAISFile(string data, string name, string foldername, int type, int ofItems, int goodUsers, int defaults) {
+			this.caisReportsHistoryRepository.AddFile(ZipString.Zip(data), name, foldername, type, ofItems, goodUsers, defaults);
+		} // SaveCAISFile
 
 		private string GetAccountStatus(DateTime? minLsDate, DateTime dateClose, DateTime startDate, bool isDefaulted, decimal currentBalance)
 		{
 			int daysBetween;
-			if (!minLsDate.HasValue) {
+
+			if (!minLsDate.HasValue)
 				daysBetween = 0;
-			}
-			else {
+			else
 				daysBetween = (int)(DateTime.UtcNow - minLsDate.Value).TotalDays;
-			}
 
 			if (dateClose < startDate) {
 				if (isDefaulted)
@@ -480,7 +478,6 @@
 		}
 
 		private readonly StrategiesMailer mailer;
-		private readonly StrategyHelper strategyHelper = new StrategyHelper();
 
 		private static readonly object caisGenerationLock = new object();
 		private int caisGenerationTriggerer = -1;
@@ -497,5 +494,6 @@
 		private int consumerDefaultsCounter;
 		private string companyTypeCode;
 		private readonly int underwriterId;
+		private readonly CaisReportsHistoryRepository caisReportsHistoryRepository;
 	} // CaisGenerator
 } // namespace
