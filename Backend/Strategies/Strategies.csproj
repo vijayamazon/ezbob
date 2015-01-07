@@ -150,7 +150,6 @@
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
-    <Compile Include="MainStrategy\AdditionalStrategiesCaller.cs" />
     <Compile Include="MainStrategy\Utils.cs" />
     <Compile Include="MainStrategy\DataGatherer.cs" />
     <Compile Include="MainStrategy\Staller.cs" />
