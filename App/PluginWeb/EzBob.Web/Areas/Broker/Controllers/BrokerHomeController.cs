@@ -633,6 +633,12 @@
 				return new BrokerForJsonResult("Failed to add customer lead.");
 			} // try
 
+			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(
+				(int?)null,
+				LeadEmail,
+				(int?)null,
+				true,false);
+
 			ms_oLog.Debug("Broker add lead request for contact email {0}: {1} {2}, {3} - {4} complete.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
 
 			return new BrokerForJsonResult();

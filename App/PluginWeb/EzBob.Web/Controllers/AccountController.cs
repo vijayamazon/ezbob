@@ -378,6 +378,7 @@
 				else
 					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(customer.Id, customer.Name, customer.IsAlibaba, customer.ReferenceSource, link); // Add is Alibaba, or do after saving it to DB
 
+				m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
 

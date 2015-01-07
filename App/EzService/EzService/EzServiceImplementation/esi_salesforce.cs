@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace EzService.EzServiceImplementation {
+﻿namespace EzService.EzServiceImplementation {
 	using Ezbob.Backend.Strategies.SalesForce;
 	using SalesForceLib.Models;
 
@@ -13,8 +7,8 @@ namespace EzService.EzServiceImplementation {
 			return Execute<AddUpdateLeadAccount>(customerID, userID, email, customerID, isBrokerLead, isVipLead);
 		}
 
-		public ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID) {
-			return Execute<AddUpdateContact>(customerID, userID, customerID, directorID);
+		public ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID, string directorEmail) {
+			return Execute<AddUpdateContact>(customerID, userID, customerID, directorID, directorEmail);
 		}
 
 		public ActionMetaData SalesForceAddTask(int? userID, int customerID, TaskModel model) {

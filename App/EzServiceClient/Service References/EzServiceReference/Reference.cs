@@ -3381,10 +3381,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateLeadAccountAsync(System.Nullable<int> userID, string email, System.Nullable<int> customerID, bool isBrokerLead, bool isVipLead);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddUpdateContact", ReplyAction="http://tempuri.org/IEzService/SalesForceAddUpdateContactResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateContact(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID);
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateContact(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID, string directorEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddUpdateContact", ReplyAction="http://tempuri.org/IEzService/SalesForceAddUpdateContactResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateContactAsync(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateContactAsync(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID, string directorEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddTask", ReplyAction="http://tempuri.org/IEzService/SalesForceAddTaskResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddTask(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.TaskModel model);
@@ -4638,12 +4638,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SalesForceAddUpdateLeadAccountAsync(userID, email, customerID, isBrokerLead, isVipLead);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateContact(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID) {
-            return base.Channel.SalesForceAddUpdateContact(userID, customerID, directorID);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddUpdateContact(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID, string directorEmail) {
+            return base.Channel.SalesForceAddUpdateContact(userID, customerID, directorID, directorEmail);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateContactAsync(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID) {
-            return base.Channel.SalesForceAddUpdateContactAsync(userID, customerID, directorID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddUpdateContactAsync(System.Nullable<int> userID, int customerID, System.Nullable<int> directorID, string directorEmail) {
+            return base.Channel.SalesForceAddUpdateContactAsync(userID, customerID, directorID, directorEmail);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddTask(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.TaskModel model) {

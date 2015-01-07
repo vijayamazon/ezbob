@@ -42,8 +42,9 @@
 					error = "Customer not found"
 				});
 			}
-
-			return Json(CustomerDetailsController.AddDirectorToCustomer(director, customer, this.m_oSession, false));
+			var response = CustomerDetailsController.AddDirectorToCustomer(director, customer, this.m_oSession, false);
+			m_oServiceClient.Instance.SalesForceAddUpdateContact(this._context.UserId, customer.Id, null, director.Email);
+			return Json(response);
 		}
 
 		[Ajax]

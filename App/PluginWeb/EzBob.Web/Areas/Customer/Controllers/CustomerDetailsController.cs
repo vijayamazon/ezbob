@@ -70,6 +70,7 @@
 			customer.Company.Directors.Add(dbDirector);
 
 			session.Flush();
+
 			return new { success = true };
 		} // AddDirectorToCustomer
 
@@ -208,11 +209,14 @@
 
 			if (!string.IsNullOrWhiteSpace(sErrorMsg))
 				return Json(new { error = sErrorMsg });
+			
+			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
 
 			if (nBusinessType != TypeOfBusiness.Entrepreneur) {
 				IQueryable<Director> directors = m_oDirectorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
 
 				foreach (Director director in directors) {
+					m_oServiceClient.Instance.SalesForceAddUpdateContact(customer.Id, customer.Id, director.Id, director.Email);
 					try {
 						m_oServiceClient.Instance.ExperianConsumerCheck(1, customer.Id, director.Id, false);
 					}
@@ -272,6 +276,8 @@
 				ms_oLog.Error(e, "Something went pretty not so excellent while starting an AML check for customer {0}.", +customer.Id);
 			} // try
 
+			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
+
 			if (!customer.IsTest) {
 				try {
 					m_oServiceClient.Instance.NotifySalesOnNewCustomer(customer.Id);
@@ -292,8 +298,9 @@
 
 			if (customer == null)
 				return Json(new { error = "Customer not found" });
-
-			return Json(AddDirectorToCustomer(director, customer, m_oSession, true));
+			var response = AddDirectorToCustomer(director, customer, m_oSession, true);
+			m_oServiceClient.Instance.SalesForceAddUpdateContact(customer.Id, customer.Id, null, director.Email); 
+			return Json(response);
 		} // AddDirector
 
 		[Ajax]
@@ -819,6 +826,8 @@
 			// Updates broker lead state if needed and sends "Email Under Review".
 			m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
 
+			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
+			
 			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
 			m_oServiceClient.Instance.MainStrategy1(m_oContext.User.Id, m_oContext.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));

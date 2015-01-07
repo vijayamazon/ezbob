@@ -20,6 +20,7 @@
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using Web.Models;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -128,12 +129,12 @@
 
 		[Ajax]
 		[HttpPost]
-		[Transactional]
+		
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Vip(VipModel model) {
 			var customer = _context.Customer;
-			var vip = new VipRequest
-				{
+			Transactional.Execute(() => {
+				var vip = new VipRequest {
 					Customer = customer,
 					Email = model.VipEmail,
 					FullName = model.VipFullName,
@@ -141,13 +142,28 @@
 					Phone = model.VipPhone,
 					RequestDate = DateTime.UtcNow
 				};
-			_vipRequestRepository.SaveOrUpdate(vip);
-			if (customer != null)
-			{
-				customer.Vip = true;
-			}
+				_vipRequestRepository.SaveOrUpdate(vip);
+
+
+				if (customer != null) {
+					customer.Vip = true;
+				}
+			});
+
 			var c = new ServiceClient();
 			c.Instance.VipRequest(customer != null ? customer.Id : 0, model.VipFullName, model.VipEmail, model.VipPhone);
+			c.Instance.SalesForceAddUpdateLeadAccount(
+				customer != null ? customer.Id : (int?)null,
+				model.VipEmail,
+				customer != null ? customer.Id : (int?)null,
+				false, customer == null);
+			c.Instance.SalesForceAddTask(customer != null ? customer.Id : (int?)null, customer != null ? customer.Id : 0, new TaskModel() {
+				Email = model.VipEmail,
+				Originator = "System",
+				CreateDate = DateTime.UtcNow,
+				DueDate = DateTime.UtcNow.AddDays(1),
+				Subject = "VIP request"
+			});
 			return Json(new {});
 		} // Vip
 

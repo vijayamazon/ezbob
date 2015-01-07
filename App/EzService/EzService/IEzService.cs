@@ -560,7 +560,7 @@
 		ActionMetaData SalesForceAddUpdateLeadAccount(int? userID, string email, int? customerID, bool isBrokerLead, bool isVipLead);
 
 		[OperationContract]
-		ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID);
+		ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID, string directorEmail);
 
 		[OperationContract]
 		ActionMetaData SalesForceAddTask(int? userID, int customerID, TaskModel model);

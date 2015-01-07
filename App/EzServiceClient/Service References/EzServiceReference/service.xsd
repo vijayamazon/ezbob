@@ -1168,6 +1168,7 @@
         <xs:element minOccurs="0" name="userID" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
         <xs:element minOccurs="0" name="directorID" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="directorEmail" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
