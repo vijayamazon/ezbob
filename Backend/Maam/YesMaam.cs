@@ -229,12 +229,6 @@
 				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, this.tag);
 
 				ymr.AutoApprove.Amount = agent.Result == null ? 0 : agent.Result.ApprovedAmount;
-
-				decimal minLoanAmount = CurrentValues.Instance.GetCashSliderStep;
-
-				ymr.AutoApprove.Amount = (int)(
-					Math.Round(ymr.AutoApprove.Amount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
-				);
 			} catch (Exception e) {
 				ymr.AutoApprove.Data = "Exception";
 

@@ -29,6 +29,7 @@ GO
 
 CREATE PROCEDURE SaveDecisionTrail
 @CustomerID INT,
+@Amount NUMERIC(18, 2),
 @DecisionID INT,
 @DecisionTime DATETIME,
 @UniqueID UNIQUEIDENTIFIER,
@@ -51,10 +52,10 @@ BEGIN
 
 	INSERT INTO DecisionTrail (
 		CustomerID, DecisionID, DecisionTime, UniqueID,
-		DecisionStatusID, InputData, IsPrimary, CashRequestID, Tag
+		DecisionStatusID, InputData, IsPrimary, CashRequestID, Tag, Amount
 	) VALUES (
 		@CustomerID, @DecisionID, @DecisionTime, @UniqueID,
-		@DecisionStatusID, @InputData, @IsPrimary, @CashRequestID, @Tag
+		@DecisionStatusID, @InputData, @IsPrimary, @CashRequestID, @Tag, @Amount
 	)
 
 	------------------------------------------------------------------------------

@@ -44,6 +44,8 @@
 
 		public abstract string Name { get; }
 
+		public decimal? Amount { get; set; }
+
 		public virtual DecisionStatus DecisionStatus {
 			get { return m_nDecisionStatus; }
 			protected set { m_nDecisionStatus = value; }
@@ -169,6 +171,24 @@
 				} // if
 			} // if
 
+			if (this.Amount != oTrail.Amount) {
+				bResult = false;
+
+				string sMsg = string.Format(
+					"Different amount for '{2}' have been reached: '{0}' in this vs '{1}' in the second.",
+					this.Amount.HasValue ? this.Amount.Value.ToString(CultureInfo.InvariantCulture) : "no value",
+					oTrail.Amount.HasValue ? oTrail.Amount.Value.ToString(CultureInfo.InvariantCulture) : "no value",
+					this.Decision
+				);
+
+				m_oDiffNotes.Add(sMsg);
+
+				if (!bQuiet) {
+					m_oLog.Warn("Trails are different: {0}", sMsg);
+					SendExplanationMail(oTrail, sMsg);
+				} // if
+			} // if
+
 			if (this.Length != oTrail.Length) {
 				string sMsg = string.Format(
 					"Different number of steps in the trail: {0} in this vs {1} in the second.",
@@ -270,7 +290,7 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				SaveDecisionTrail sp = new SaveDecisionTrail(this, this.UniqueID, true, cashRequestID, tag, oDB, this.m_oLog);
+				var sp = new SaveDecisionTrail(this, this.UniqueID, true, cashRequestID, tag, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
@@ -396,6 +416,14 @@
 			public int CustomerID { get; set; }
 
 			[UsedImplicitly]
+			public decimal? Amount {
+				get { return m_oTrail == null ? null : m_oTrail.Amount; }
+				// ReSharper disable ValueParameterNotUsed
+				set { }
+				// ReSharper restore ValueParameterNotUsed
+			} // Amount
+
+			[UsedImplicitly]
 			public int DecisionID { get; set; }
 
 			[UsedImplicitly]
@@ -471,7 +499,14 @@
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize())
 			);
 
-			new Mail().Send(m_sToExplanationEmailAddress, null, message, m_sFromEmailAddress, m_sFromEmailName, "#Mismatch in " + Name + " for customer " + CustomerID);
+			new Mail().Send(
+				m_sToExplanationEmailAddress,
+				null,
+				message,
+				m_sFromEmailAddress,
+				m_sFromEmailName,
+				"#Mismatch in " + Name + " for customer " + CustomerID
+			);
 		} // SendExplanationMail
 
 		private const string EmailFormat =

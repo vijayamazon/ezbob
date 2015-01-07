@@ -29,7 +29,7 @@
 			AutomationCalculator.Common.TurnoverType? turnoverType,
 			AConnection oDB,
 			ASafeLog oLog
-			) {
+		) {
 			Result = null;
 
 			DB = oDB;
@@ -77,8 +77,15 @@
 					.Init(e);
 			} // try
 
-			if (Trail.HasDecided)
-				Result = new Result((int)ApprovedAmount, (int)MetaData.OfferLength, MetaData.IsEmailSendingBanned);
+			if (Trail.HasDecided) {
+				decimal minLoanAmount = Trail.MyInputData.Configuration.MinLoan;
+
+				Trail.Amount = (int)(
+					Math.Round(ApprovedAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
+				);
+
+				Result = new Result((int)Trail.Amount, (int)MetaData.OfferLength, MetaData.IsEmailSendingBanned);
+			} // if
 
 			Log.Debug(
 				"Secondary: checking if auto approval should take place for customer {0} complete; {1}\n{2}",

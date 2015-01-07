@@ -66,7 +66,7 @@
 				turnoverType,
 				db,
 				log
-				);
+			);
 
 			this.m_oTurnover = new AutoApprovalTurnover {
 				TurnoverType = this.turnoverType,
@@ -173,13 +173,11 @@
 
 			if (bSuccess && this.m_oTrail.HasDecided) {
 				if (this.autoApprovedAmount == this.m_oSecondaryImplementation.Result.ApprovedAmount) {
-					this.m_oTrail.Affirmative<SameAmount>(false)
-						.Init(this.autoApprovedAmount);
+					this.m_oTrail.Affirmative<SameAmount>(false).Init(this.autoApprovedAmount);
 					this.m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false)
 						.Init(this.m_oSecondaryImplementation.Result.ApprovedAmount);
 				} else {
-					this.m_oTrail.Negative<SameAmount>(false)
-						.Init(this.autoApprovedAmount);
+					this.m_oTrail.Negative<SameAmount>(false).Init(this.autoApprovedAmount);
 					this.m_oSecondaryImplementation.Trail.Negative<SameAmount>(false)
 						.Init(this.m_oSecondaryImplementation.Result.ApprovedAmount);
 					bSuccess = false;
@@ -214,12 +212,6 @@
 					response.UserStatus = Status.Manual;
 					response.SystemDecision = SystemDecision.Manual;
 				} // if
-
-				decimal minLoanAmount = CurrentValues.Instance.GetCashSliderStep;
-
-				response.AutoApproveAmount = (int)(
-					Math.Round(response.AutoApproveAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
-					);
 
 				this.log.Info("Decided to auto approve rounded amount: {0}", response.AutoApproveAmount);
 
@@ -431,6 +423,12 @@
 				ReduceOutstandingPrincipal();
 
 				CheckAllowedRange();
+
+				decimal minLoanAmount = CurrentValues.Instance.GetCashSliderStep;
+
+				this.autoApprovedAmount = (int)(
+					Math.Round(this.autoApprovedAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
+				);
 
 				CheckComplete();
 			} catch (Exception ex) {
