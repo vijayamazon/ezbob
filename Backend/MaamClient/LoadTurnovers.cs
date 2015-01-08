@@ -89,9 +89,8 @@
 				[UsedImplicitly]
 				set;
 			}
-		}
+		} // class CrCuTi
 
-		// class CrCuTi
 		private class DisplayTurnoverTotals {
 			public int AllCount { get; private set; }
 			public int GoodCount { get; private set; }

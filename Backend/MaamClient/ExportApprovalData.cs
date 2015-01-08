@@ -41,9 +41,11 @@
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class OneRowData {
 			public long TrailID { get; set; }
+			public int CustomerID { get; set; }
 			public string ManualDecision { get; set; }
 			public int ManuallyApprovedSum { get; set; }
 			public string AutoDecision { get; set; }
+			public decimal? AutoApprovedSum { get; set; }
 
 			static OneRowData() {
 				RuleNames = new SortedSet<string>();
@@ -57,10 +59,12 @@
 
 			public static string[] GetColumnNames() {
 				var lst = new List<string> {
-					"TrailId",
+					"TrailID",
+					"CustomerID",
 					"ManualDecision",
 					"ManuallyApprovedSum",
 					"AutoDecision",
+					"AutoApprovedSum",
 					"CompanyName",
 					"Cfg_ExperianScoreThreshold",
 					"Cfg_CustomerMinAge",
@@ -155,9 +159,11 @@
 				int cellNum = 1;
 
 				cellNum = sheet.SetCellValue(rowNum, cellNum, TrailID);
+				cellNum = sheet.SetCellValue(rowNum, cellNum, CustomerID);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, ManualDecision);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, ManuallyApprovedSum);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, AutoDecision);
+				cellNum = sheet.SetCellValue(rowNum, cellNum, AutoApprovedSum);
 
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.CompanyName);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.ExperianScoreThreshold);
@@ -248,10 +254,12 @@
 			string inputDataQuery = @"
 SELECT
 	t.TrailID,
+	t.CustomerID,
 	d.DecisionName + ' ' + s.DecisionStatus AS AutoDecision,
 	r.UnderwriterDecision AS ManualDecision,
 	CASE WHEN r.UnderwriterDecision = 'Approved' THEN r.ManagerApprovedSum ELSE 0 END AS ManuallyApprovedSum,
-	t.InputData
+	t.InputData,
+	t.Amount AS AutoApprovedSum
 FROM
 	DecisionTrail t
 	INNER JOIN DecisionStatuses s ON t.DecisionStatusID = s.DecisionStatusID
