@@ -4,7 +4,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 ALTER PROCEDURE RptDefaultsDetailed
 
                 (@CutoffDate DATETIME, @MinPct NUMERIC(18,6))
@@ -677,45 +676,49 @@ SET @MinPct = 0.2
 
     DECLARE @tmp_sp1 TABLE
 
-                                                                                                (
+                                                                                                                (
 
-                                                                                                CustomerId INT
+                                                                                                                CustomerId INT
 
-                                                                                                , LoanID INT
+                                                                                                                , LoanID INT
 
-                                                                                                , LoanDate DATETIME
+                                                                                                                , LoanDate DATETIME
 
-                                                                                                , IssueMonth DATETIME
+                                                                                                                , IssueMonth DATETIME
 
-                                                                                                , LoanAmount NUMERIC (18, 0)
+                                                                                                                , LoanAmount NUMERIC (18, 0)
 
-                                                                                                , InterestRate DECIMAL (18, 4)
+                                                                                                                , InterestRate DECIMAL (18, 4)
 
-                                                                                                , RepaymentPeriod INT
+                                                                                                                , RepaymentPeriod INT
 
-                                                                                                , OutstandingPrincipal DECIMAL (18, 2)
+                                                                                                                , OutstandingPrincipal DECIMAL (18, 2)
 
-                                                                                                , SetupFee DECIMAL (18, 4)
+                                                                                                                , SetupFee DECIMAL (18, 4)
 
-                                                                                                , LoanNumber BIGINT
+                                                                                                                , LoanNumber BIGINT
 
-                                                                                                , CustomerRequestedAmount DECIMAL (18, 0)
+                                                                                                                , CustomerRequestedAmount DECIMAL (18, 0)
 
-                                                                                                , ReferenceSource NVARCHAR (1000)
+                                                                                                                , ReferenceSource NVARCHAR (1000)
 
-                                                                                                , SourceRefGroup VARCHAR (16)
+                                                                                                                , SourceRefGroup NVARCHAR (255)
 
-                                                                                                , IsOffline BIT
+                                                                                                                , SourceRefMedium NVARCHAR (255)
 
-                                                                                                , Loan_Type VARCHAR (8)
+                                                                                                                , IsOffline BIT
 
-                                                                                                , BrokerOrNot VARCHAR (12)
+                                                                                                                , Loan_Type VARCHAR (8)
 
-                                                                                                , Quarter VARCHAR (7)
+                                                                                                                , BrokerOrNot VARCHAR (12)
 
-                                                                                                , NewOldLoan VARCHAR (3)
+                                                                                                                , Quarter VARCHAR (7)
 
-                                                                                                );
+                                                                                                                , NewOldLoan VARCHAR (3)
+
+                                                                                                                , AlibabaOrNot VARCHAR (10)
+
+                                                                                                                );
 
     INSERT INTO @tmp_sp1
 
@@ -968,5 +971,3 @@ DROP TABLE #CollectionPayments
 END
 
 GO
-
- 
