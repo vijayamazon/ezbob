@@ -13,6 +13,7 @@
         <!-- Nav tabs -->
         <ul class="nav nav-tabs" role="tablist" id="salesforce_tabs">
             <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+            <li role="presentation"><a href="#datasources" aria-controls="datasources" role="tab" data-toggle="tab">Data Sources</a></li>
             <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
             <li role="presentation"><a href="#fraud" aria-controls="fraud" role="tab" data-toggle="tab">Fraud</a></li>
             <li role="presentation"><a href="#crm" aria-controls="crm" role="tab" data-toggle="tab">Old CRM</a></li>
@@ -44,6 +45,54 @@
                             </ul>
                         </dd>
                     </dl>
+                }
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="datasources">
+                @if (Model.MarketPlaces.Any()) {
+                    <h4>Data sources</h4>
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <td>Type</td>
+                                <td>Name</td>
+                                <td>Created</td>
+                                <td>Updated</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var mp in Model.MarketPlaces) {
+                                string error = string.IsNullOrEmpty(mp.UpdateError) ? "" : "danger";
+                                <tr data-toggle="tooltip" data-placement="top" title="@mp.UpdateError" class="@error">
+                                    <td>@mp.MpName</td>
+                                    <td>@mp.displayName</td>
+                                    <td>@mp.Created</td>
+                                    <td>@mp.Updated</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    if (Model.CompanyFiles.Any()) {
+                        <h4>Financial documents</h4>
+                        <table class="table table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <td>Date</td>
+                                    <td>File Name</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var cf in Model.CompanyFiles) {
+                                    <tr>
+                                        <td>@cf.FileName</td>
+                                        <td>@cf.Uploaded.ToString("dd/MM/yyyy")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                } else {
+                    <h3>Customer don't have any data source connected</h3>
                 }
             </div>
             <div role="tabpanel" class="tab-pane fade" id="messages">

@@ -15,15 +15,10 @@
     @AntiForgery.GetHtml()
     @RenderBody()
 
-    <a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i class="fa fa-chevron-up"></i></a>
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
     </script>
-
     @BundleHelper.RenderSalesForceJs()
-    <script id="login-template" type="text/template">
-        @{ Html.RenderPartial("_LoginSimple"); }
-    </script>
     <script>
         $(document).ready(function () {
             $('[data-toggle="tooltip"]').tooltip();
