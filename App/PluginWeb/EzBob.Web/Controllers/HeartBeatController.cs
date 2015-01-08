@@ -3,6 +3,7 @@
 
 	public class HeartBeatController : Controller {
 		public JsonResult Index() {
+			Response.AddHeader("X-FRAME-OPTIONS", "");
 			return Json(new { }, JsonRequestBehavior.AllowGet);
 		}
 	}

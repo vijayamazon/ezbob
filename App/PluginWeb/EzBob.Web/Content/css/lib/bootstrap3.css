@@ -1106,7 +1106,7 @@ pre code {
 
 @media (min-width: 768px) {
   .container {
-    min-width: 960px;
+    min-width: 768px;
   }
   .col-sm-1,
   .col-sm-2,

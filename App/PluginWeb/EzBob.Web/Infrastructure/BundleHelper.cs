@@ -97,6 +97,17 @@
 				.MvcRender("~/Content/css/min/combined_#.css");
 		} // RenderUnderwriterCss
 
+		public static MvcHtmlString RenderSalesForceCss() {
+			return Bundle.Css()
+				//libs
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/bootstrap3.css")
+				//custom
+				.Add("~/Content/css/salesforce.css")
+				.MvcRender("~/Content/css/min/salesforce_#.css");
+		} // RenderUnderwriterCss
+
+
 		public static MvcHtmlString RenderPrintCss()
 		{
 			return Bundle.Css()
@@ -505,5 +516,12 @@
 				.MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
 		} // RenderPaypointTemplateJs
 
+		public static MvcHtmlString RenderSalesForceJs() {
+			return Bundle.JavaScript()
+				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/lib/flaty/bootstrap3.js")
+				.Add("~/Content/js/ezbob.csrf.js")
+				.MvcRender("~/Content/js/min/jsSalesForce_#.js");
+	}
 	} // class BundleHelper
 } // namespace

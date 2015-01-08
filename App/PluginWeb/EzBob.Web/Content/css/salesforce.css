@@ -1,0 +1,8 @@
+﻿.no-border{
+	border: none;
+}
+
+ul.list-group li.list-group-item.list-group-item-success{
+	color: #468847;
+	background-color: #dff0d8;
+}

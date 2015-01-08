@@ -1,0 +1,136 @@
+﻿@model EzBob.Web.Areas.Underwriter.Models.SalesForceModel
+
+@{
+    ViewBag.Title = "SalesForce";
+    Layout = "~/Areas/Underwriter/Views/Shared/_LayoutSalesForce.cshtml";
+}
+
+@if (Model == null) {
+    <div>customer not found</div>
+} else {
+    <h2>Sales Force IFrame</h2>
+    <div role="tabpanel">
+        <!-- Nav tabs -->
+        <ul class="nav nav-tabs" role="tablist" id="salesforce_tabs">
+            <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab">Profile</a></li>
+            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+            <li role="presentation"><a href="#fraud" aria-controls="fraud" role="tab" data-toggle="tab">Fraud</a></li>
+            <li role="presentation"><a href="#crm" aria-controls="crm" role="tab" data-toggle="tab">Old CRM</a></li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane  fade in active" id="profile">
+                @Description("ID", Model.ID.ToString())
+                @Description("Email", Model.Email)
+                @Description("Name", Model.Name)
+                @Description("FraudStatus", Model.FraudStatus)
+                @Description("CreditStatus", Model.CreditStatus)
+
+                @if (Model.Phones.Any()) {
+                    <dl class="dl-horizontal">
+                        <dt>Phones</dt>
+                        <dd>
+                            <ul class="list-group col-sm-4 col-md-2">
+                                @foreach (var phone in Model.Phones) {
+                                    string verified = "";
+                                    string verifiedTooltip = "";
+                                    if (phone.IsVerified) {
+                                        verified = "list-group-item-success";
+                                        verifiedTooltip = "Verified phone";
+                                    }
+                                    <li class="list-group-item no-border @verified" data-toggle="tooltip" data-placement="top" title="@verifiedTooltip"><span class="badge">@phone.Type</span>@phone.Number</li>
+                                }
+                            </ul>
+                        </dd>
+                    </dl>
+                }
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="messages">
+                <table class="table table-hover table-condensed">
+                    <thead>
+                        <tr>
+                            <td>Date</td>
+                            <td>File Name</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var message in Model.Messages) {
+                            <tr>
+                                <td>@message.CreationDate</td>
+                                <td>@message.FileName</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="fraud">
+                @Description("Check Date", Model.Fraud.LastCheckDate.HasValue ? Model.Fraud.LastCheckDate.Value.ToString("dd/MM/yyyy") : "Never performed a check")
+                @if (Model.Fraud.LastCheckDate.HasValue && !Model.Fraud.FraudDetectionLogRows.Any()) {
+                    <strong>Not a fraud</strong>
+                }
+                @if (Model.Fraud.FraudDetectionLogRows.Any()) {
+                    <div class="table-responsive">
+                        <table class="table table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <td>Type</td>
+                                    <td>Field</td>
+                                    <td>Concurrence</td>
+                                    <td>Value</td>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var fraudRow in Model.Fraud.FraudDetectionLogRows) {
+                                    <tr>
+                                        <td>@fraudRow.Type</td>
+                                        <td>@fraudRow.CurrentField</td>
+                                        <td>@fraudRow.Concurrence</td>
+                                        <td>@fraudRow.Value</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                }
+            </div>
+            <div id="crm" class="tab-pane fade">
+                @if (Model.OldCrm.Any()) {
+                    <table class="table table-hover table-condensed">
+                        <thead>
+                            <tr>
+                                <td>Date</td>
+                                <td>Type</td>
+                                <td>Action</td>
+                                <td>Status</td>
+                                <td>User</td>
+                                <td>Comment</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var crm in Model.OldCrm) {
+                                <tr>
+                                    <td>@crm.DateTime.ToString("dd/MM/yyyy")</td>
+                                    <td>@crm.Type</td>
+                                    <td>@crm.Action</td>
+                                    <td>@crm.Status</td>
+                                    <td>@crm.User</td>
+                                    <td>@crm.Comment</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                } else {
+                    <h3>There is no old crm records</h3>
+                }
+            </div>
+        </div>
+    </div>
+}
+
+@helper Description(string key, string value) {
+    <dl class="dl-horizontal">
+        <dt>@key</dt>
+        <dd>@value</dd>
+    </dl>
+}

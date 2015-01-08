@@ -59,6 +59,7 @@
 		} // constructor
 
 		public ActionResult AdminLogOn(string returnUrl) {
+			Response.AddHeader("X-FRAME-OPTIONS", "");
 			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"])) {
 				return RedirectToAction("LogOn", "Account");
 			}

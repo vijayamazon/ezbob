@@ -182,8 +182,10 @@
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\SalesForceController.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
     <Compile Include="Code\ControllerExt.cs" />
     <Compile Include="Code\CustomerExt.cs" />
     <Compile Include="Code\UiEvents\UiActionNames.cs" />
@@ -652,6 +654,7 @@
     <Content Include="Content\css\lib\notifications.css" />
     <Content Include="Content\css\mobile.css" />
     <Content Include="Content\css\Permission.css" />
+    <Content Include="Content\css\salesforce.css" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
     <Content Include="Content\img\basket-diamond-32.png" />
     <Content Include="Content\img\basket-gold-32.png" />
@@ -770,6 +773,8 @@
     <Content Include="Areas\Customer\Views\Agreement\AlibabaPre-Contract-Agreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\AlibabaPrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CollectionStatus.cshtml" />
+    <Content Include="Areas\Underwriter\Views\SalesForce\Index.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_LayoutSalesForce.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
