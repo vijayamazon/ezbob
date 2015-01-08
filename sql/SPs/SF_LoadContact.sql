@@ -27,7 +27,7 @@ BEGIN
 	SELECT
 		c.Name AS Email,
 		d.Email AS ContactEmail,
-		isnull(d.Name, '') + ' ' isnull(d.Middle, '') + ' ' + isnull(d.Surname, '') AS Name,
+		isnull(d.Name, '') + ' ' + isnull(d.Middle, '') + ' ' + isnull(d.Surname, '') AS Name,
 		'Director' AS Type,
 		d.Gender AS Gender,
 		d.Phone AS PhoneNumber,
