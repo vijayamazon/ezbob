@@ -187,6 +187,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LotteryActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ConfigTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
@@ -343,6 +344,29 @@ namespace ServiceClientProxy.EzServiceReference {
             }
             set {
                 if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="LotteryActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class LotteryActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.LotteryResult ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.LotteryResult Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
                 }
@@ -3038,6 +3062,18 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/XDaysDue", ReplyAction="http://tempuri.org/IEzService/XDaysDueResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ChangeLotteryPlayerStatus", ReplyAction="http://tempuri.org/IEzService/ChangeLotteryPlayerStatusResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData ChangeLotteryPlayerStatus(int customerID, System.Guid playerID, Ezbob.Backend.Models.LotteryPlayerStatus newStatus);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ChangeLotteryPlayerStatus", ReplyAction="http://tempuri.org/IEzService/ChangeLotteryPlayerStatusResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ChangeLotteryPlayerStatusAsync(int customerID, System.Guid playerID, Ezbob.Backend.Models.LotteryPlayerStatus newStatus);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PlayLottery", ReplyAction="http://tempuri.org/IEzService/PlayLotteryResponse")]
+        ServiceClientProxy.EzServiceReference.LotteryActionResult PlayLottery(int customerID, System.Guid playerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PlayLottery", ReplyAction="http://tempuri.org/IEzService/PlayLotteryResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LotteryActionResult> PlayLotteryAsync(int customerID, System.Guid playerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         byte[] GetCompanyFile(int userId, int companyFileId);
         
@@ -4180,6 +4216,22 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> XDaysDueAsync() {
             return base.Channel.XDaysDueAsync();
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ChangeLotteryPlayerStatus(int customerID, System.Guid playerID, Ezbob.Backend.Models.LotteryPlayerStatus newStatus) {
+            return base.Channel.ChangeLotteryPlayerStatus(customerID, playerID, newStatus);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ChangeLotteryPlayerStatusAsync(int customerID, System.Guid playerID, Ezbob.Backend.Models.LotteryPlayerStatus newStatus) {
+            return base.Channel.ChangeLotteryPlayerStatusAsync(customerID, playerID, newStatus);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.LotteryActionResult PlayLottery(int customerID, System.Guid playerID) {
+            return base.Channel.PlayLottery(customerID, playerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LotteryActionResult> PlayLotteryAsync(int customerID, System.Guid playerID) {
+            return base.Channel.PlayLotteryAsync(customerID, playerID);
         }
         
         public byte[] GetCompanyFile(int userId, int companyFileId) {

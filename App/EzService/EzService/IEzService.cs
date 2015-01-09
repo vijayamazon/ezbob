@@ -711,5 +711,11 @@
 
 		[OperationContract]
 		ActionMetaData XDaysDue();
+
+		[OperationContract]
+		ActionMetaData ChangeLotteryPlayerStatus(int customerID, Guid playerID, LotteryPlayerStatus newStatus);
+
+		[OperationContract]
+		LotteryActionResult PlayLottery(int customerID, Guid playerID);
 	} // interface IEzService
 } // namespace EzService

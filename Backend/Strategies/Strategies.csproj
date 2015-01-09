@@ -113,6 +113,8 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
+    <Compile Include="Lottery\PlayLottery.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Arguments.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Checker.cs" />

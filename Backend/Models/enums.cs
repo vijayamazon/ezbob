@@ -2,8 +2,7 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public enum NewCreditLineOption
-	{
+	public enum NewCreditLineOption {
 		[EnumMember]
 		SkipEverything = 1,
 
@@ -68,7 +67,7 @@
 		Psp,
 
 		[EnumMember]
-		Ecomm, 
+		Ecomm,
 
 		[EnumMember]
 		Accounting,
@@ -138,4 +137,24 @@
 		OtherError
 	} // enum EmailConfirmationResponse
 
+	[DataContract]
+	public enum LotteryPlayerStatus {
+		[EnumMember]
+		Unknown = 0,
+
+		[EnumMember]
+		NotInvited = 1,
+
+		[EnumMember]
+		NotPlayed = 2,
+
+		[EnumMember]
+		Excluded = 3,
+
+		[EnumMember]
+		Played = 4,
+
+		[EnumMember]
+		Reserved = 5,
+	} // enum LotteryPlayerStatus
 } // namespace

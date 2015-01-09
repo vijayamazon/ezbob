@@ -193,7 +193,10 @@ namespace EzBob.Models {
 		public int TrustPilotStatusID { get; set; }
 
 		public string userName { get; set; }
+
 		public int WhiteLabelId { get; set; }
+
+		public string LotteryPlayerID { get; set; }
 	} // class CustomerModel
 
 	public class InvitedFriend {

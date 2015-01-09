@@ -9,6 +9,33 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Password" nillable="true" type="tns:Password" />
+  <xs:simpleType name="LotteryPlayerStatus">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Unknown" />
+      <xs:enumeration value="NotInvited" />
+      <xs:enumeration value="NotPlayed" />
+      <xs:enumeration value="Excluded" />
+      <xs:enumeration value="Played" />
+      <xs:enumeration value="Reserved" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="LotteryPlayerStatus" nillable="true" type="tns:LotteryPlayerStatus" />
+  <xs:complexType name="LotteryResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CanWin" type="xs:boolean" />
+      <xs:element minOccurs="0" name="HasPlayed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PlayTime" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="PlayedNow" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PlayerID" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="PlayerStatus" type="tns:LotteryPlayerStatus" />
+      <xs:element minOccurs="0" name="PrizeID" nillable="true" type="xs:long" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StatusID" type="xs:long" />
+      <xs:element minOccurs="0" name="UniqueID" nillable="true" type="ser:guid" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="LotteryResult" nillable="true" type="tns:LotteryResult" />
   <xs:complexType name="CustomerManualAnnualizedRevenue">
     <xs:sequence>
       <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />

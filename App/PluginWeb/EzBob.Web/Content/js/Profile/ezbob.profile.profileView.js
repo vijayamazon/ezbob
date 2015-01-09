@@ -7,8 +7,6 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 			$(_.template($("#profile-main-template").html(), {}))
 		);
 
-		this.scratchView = new EzBob.Profile.Ny2015ScratchView();
-
 		this.profileMain = $('#profile-main');
 
 		this.customer = options;
@@ -31,6 +29,11 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 		this.processingMessageView.on('getCash', this.getCash, this);
 		this.processingMessageView.on('payEarly', this.makePayment, this);
+
+		this.scratchView = new EzBob.Profile.Ny2015ScratchView({
+			customerID: this.customer.get('Id'),
+			playerID: this.customer.get('LotteryPlayerID'),
+		});
 
 		this.router = new EzBob.Profile.ProfileRouter(this.customer);
 		this.router.on("details", this.loanDetails, this);
@@ -104,9 +107,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	showProfile: function() {
 		this.profileMain.show();
-
-		// TODO: show only if needed
-		this.scratchView.show();
+		this.scratchView.render();
 	}, // showProfile
 
 	hideProfile: function() {
