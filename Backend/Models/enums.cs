@@ -1,11 +1,8 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System.Runtime.Serialization;
 
-	#region enum NewCreditLineOption
-
 	[DataContract]
-	public enum NewCreditLineOption
-	{
+	public enum NewCreditLineOption {
 		[EnumMember]
 		SkipEverything = 1,
 
@@ -18,10 +15,6 @@
 		[EnumMember]
 		UpdateEverythingAndGoToManualDecision = 4,
 	} // enum NewCreditLineOption
-
-	#endregion enum NewCreditLineOption
-
-	#region enum FraudMode
 
 	[DataContract]
 	public enum FraudMode {
@@ -37,10 +30,6 @@
 		[EnumMember]
 		MarketplacesCheck,
 	} // enum FraudMode
-
-	#endregion enum FraudMode
-
-	#region enum ConfigTableType
 
 	[DataContract]
 	public enum ConfigTableType {
@@ -60,19 +49,11 @@
 		DefaultRateCustomer,
 	} // enum ConfigTableType
 
-	#endregion enum ConfigTableType
-
-	#region enum VatReturnSourceType
-
 	public enum VatReturnSourceType {
 		Linked = 1,
 		Uploaded = 2,
 		Manual = 3,
 	} // enum VatReturnSourceType
-
-	#endregion enum VatReturnSourceType
-
-	#region enum AffordabilityType
 
 	[DataContract]
 	public enum AffordabilityType {
@@ -86,15 +67,11 @@
 		Psp,
 
 		[EnumMember]
-		Ecomm, 
+		Ecomm,
 
 		[EnumMember]
 		Accounting,
 	} // AffordabilityType
-
-	#endregion enum AffordabilityType
-
-	#region enum EmailConfirmationRequestState
 
 	[DataContract]
 	public enum EmailConfirmationRequestState {
@@ -133,10 +110,6 @@
 		_MAX_
 	} // enum EmailConfirmationRequestState
 
-	#endregion enum EmailConfirmationRequestState
-
-	#region enum EmailConfirmationResponse
-
 	[DataContract]
 	public enum EmailConfirmationResponse {
 		/// <summary>
@@ -164,5 +137,24 @@
 		OtherError
 	} // enum EmailConfirmationResponse
 
-	#endregion enum EmailConfirmationResponse
+	[DataContract]
+	public enum LotteryPlayerStatus {
+		[EnumMember]
+		Unknown = 0,
+
+		[EnumMember]
+		NotInvited = 1,
+
+		[EnumMember]
+		NotPlayed = 2,
+
+		[EnumMember]
+		Excluded = 3,
+
+		[EnumMember]
+		Played = 4,
+
+		[EnumMember]
+		Reserved = 5,
+	} // enum LotteryPlayerStatus
 } // namespace

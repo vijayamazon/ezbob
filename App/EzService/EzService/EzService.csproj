@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
+    <Compile Include="ActionResults\LotteryActionResult.cs" />
     <Compile Include="ActionResults\BoolActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFileContentsActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomersActionResult.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
     <Compile Include="EzServiceImplementation\esi_automation_verification.cs" />
     <Compile Include="EzServiceImplementation\esi_customer_manual_annualized_revenue.cs" />
+    <Compile Include="EzServiceImplementation\esi_lottery.cs" />
     <Compile Include="EzServiceImplementation\esi_esign.cs" />
     <Compile Include="EzServiceImplementation\esi_funding.cs" />
     <Compile Include="EzServiceImplementation\esi_vat_return.cs" />

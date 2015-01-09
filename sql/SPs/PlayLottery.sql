@@ -41,10 +41,15 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	DECLARE @StatusReserved INT = 5
+
+	------------------------------------------------------------------------------
+
 	DECLARE @UserID INT
 	DECLARE @LotteryID BIGINT
 
 	DECLARE @PlayerID BIGINT
+	DECLARE @UniqueID UNIQUEIDENTIFIER
 	DECLARE @StatusID BIGINT
 	DECLARE @LotteryName NVARCHAR(255)
 	DECLARE @CanWin BIT
@@ -68,6 +73,7 @@ BEGIN
 
 	SELECT
 		@UserID = lp.UserID,
+		@UniqueID = lp.UniqueID,
 		@LotteryID = lp.LotteryID,
 		@PlayerID = lp.PlayerID,
 		@StatusID = lp.StatusID,
@@ -75,6 +81,7 @@ BEGIN
 		@CanWin = s.CanWin,
 		@HasPlayed = s.HasPlayed,
 		@PlayTime = lp.PlayTime,
+		@PrizeID = lp.PrizeID,
 		@Amount = p.Amount
 	FROM
 		LotteryPlayers lp
@@ -86,6 +93,10 @@ BEGIN
 		LEFT JOIN LotteryPrizes p ON lp.PrizeID = p.PrizeID
 	WHERE
 		lp.UniqueID = @LotteryPlayerID
+
+	------------------------------------------------------------------------------
+
+	SET @StatusID = ISNULL(@StatusID, 0)
 
 	------------------------------------------------------------------------------
 
@@ -175,7 +186,7 @@ BEGIN
 
 		-------------------------------------------------------------------------
 
-		SET @StatusID = 4 -- Played
+		SET @StatusID = @StatusReserved
 		SET @PlayTime = @Now
 
 		UPDATE LotteryPlayers SET
@@ -199,6 +210,7 @@ BEGIN
 	SELECT
 		PlayedNow = @PlayedNow,
 		PlayerID = @PlayerID,
+		UniqueID = @UniqueID,
 		StatusID = @StatusID,
 		Status = s.Status,
 		CanWin = s.CanWin,

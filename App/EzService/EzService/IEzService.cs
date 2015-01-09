@@ -628,7 +628,10 @@
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);
 
 		[OperationContract]
-		ActionMetaData Temp_BackFillMedals();
+		ActionMetaData ChangeLotteryPlayerStatus(int customerID, Guid playerID, LotteryPlayerStatus newStatus);
+
+		[OperationContract]
+		LotteryActionResult PlayLottery(int customerID, Guid playerID);
 	} // interface IEzService
 } // namespace EzService
 

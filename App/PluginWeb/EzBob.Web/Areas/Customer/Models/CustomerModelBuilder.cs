@@ -19,6 +19,8 @@
 	using Ezbob.Backend.Models;
 	using Infrastructure;
 	using System.Web;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using Web.Models;
 
 	public class CustomerModelBuilder {
@@ -69,9 +71,8 @@
 
 			var customer = m_oCustomerRepository.GetAndInitialize(cus.Id);
 
-			if (customer == null) {
+			if (customer == null)
 				return wizardModel;
-			}
 
 			var user = m_oUsers.Get(cus.Id);
 
@@ -284,6 +285,15 @@
 
 			customerModel.IsBrokerFill = customer.FilledByBroker;
 			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;
+
+			SafeReader sr = DbConnectionGenerator.Get(new SafeILog(this)).GetFirst(
+				"LoadActiveLotteries",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserID", customer.Id),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+
+			customerModel.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 
 			return wizardModel;
 		} // BuildWizardModel

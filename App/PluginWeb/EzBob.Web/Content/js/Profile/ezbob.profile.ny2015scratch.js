@@ -2,22 +2,14 @@
 EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
-	initialize: function() {
+	initialize: function(options) {
+		this.customerID = options.customerID;
+		this.playerID = options.playerID;
+
 		this.$mainPage = $('.main-page');
 		this.$el = $('#ny2015scratch');
 
-		var eventHandler = _.bind(this.onScratch, this);
-
 		this.$scratchArea = this.$el.find('.scratch-area');
-		this.$scratchArea.wScratchPad({
-			size: 7,
-			bg: window.gRootPath + 'Content/img/ny2015scratch/win.png',
-			fg: window.gRootPath + 'Content/img/ny2015scratch/scratch.png',
-			realtime: false,
-			scratchDown: eventHandler,
-			scratchMove: eventHandler,
-			scratchUp: eventHandler,
-		});
 
 		this.$won = this.$el.find('.won');
 		this.$decline = this.$el.find('.decline');
@@ -25,27 +17,72 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		this.$amount = this.$won.find('.amount');
 
 		this.isOpen = false;
+		this.hasWon = false;
+		this.amount = 0;
 	}, // initialize
 
 	events: {
 		'click .decline-game': 'decline',
-		'click .claim': 'claim',
 		'click .leave': 'hide',
 	}, // events
 
 	decline: function() {
-		// TODO: notify server about this
+		$.post(
+			window.gRootPath + 'Customer/Ny2015Scratch/Decline',
+			{ playerID: this.playerID, }
+		);
 
 		this.hide();
 	}, // decline
 
-	claim: function() {
-		// TODO: notify server about this
+	render: function() {
+		this.$scratchArea.empty();
 
-		this.hide();
-	}, // claim
+		if (!this.playerID) {
+			this.hide();
+			return;
+		} // if
 
-	render: function() {}, // render
+		var self = this;
+
+		var request = $.getJSON(
+			window.gRootPath + 'Customer/Ny2015Scratch/PlayLottery',
+			{ playerID: this.playerID, }
+		);
+
+		request.fail(function() {
+			self.hasWon = false;
+			self.amount = 0;
+			self.hide();
+		});
+
+		request.done(function(response) {
+			var eventHandler = _.bind(self.onScratch, self);
+
+			if (response.PlayedNow || (response.StatusID === 5)) {
+				self.show();
+
+				self.hasWon = !!response.PrizeID;
+				self.amount = response.Amount;
+
+				var picName = self.hasWon ? 'win' : 'sorry';
+
+				self.$scratchArea.wScratchPad({
+					size: 7,
+					bg: window.gRootPath + 'Content/img/ny2015scratch/' + picName + '.png',
+					fg: window.gRootPath + 'Content/img/ny2015scratch/scratch.png',
+					realtime: false,
+					scratchDown: eventHandler,
+					scratchMove: eventHandler,
+					scratchUp: eventHandler,
+				});
+			} else {
+				self.hasWon = false;
+				self.amount = 0;
+				self.hide();
+			} // if
+		});
+	}, // render
 
 	onScratch: function(evt, pct) {
 		this.$decline.hide();
@@ -60,9 +97,17 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		this.$scratchArea.wScratchPad('clear');
 
-		// TODO: if lost - { this.$close.show(); return; }
+		$.post(
+			window.gRootPath + 'Customer/Ny2015Scratch/Claim',
+			{ playerID: this.playerID, }
+		);
 
-		var sAmount = '' + 1234; // TODO: real amount
+		if (!this.hasWon) {
+			this.$close.show();
+			return;
+		} // if
+
+		var sAmount = '' + this.amount;
 
 		this.$amount.empty();
 
@@ -82,6 +127,7 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 	}, // show
 
 	hide: function() {
+		this.$scratchArea.empty();
 		this.$won.hide();
 		this.$el.hide();
 		this.$mainPage.show();
