@@ -250,6 +250,8 @@ namespace ConfigManager {
 		LogOffMode,
 		LoginValidationStringForWeb,
 		LoginValidity,
+		LotteryForBrokers,
+		LotteryForCustomers,
 		LowCreditScore,
 
 		MaamEmailReceiver,

@@ -6,9 +6,7 @@
 	using ConfigManager;
 
 	public class NotifySalesOnNewCustomer : AMailStrategyBase {
-
-		public NotifySalesOnNewCustomer(int nCustomerID)
-			: base(nCustomerID, false) {
+		public NotifySalesOnNewCustomer(int nCustomerID) : base(nCustomerID, false) {
 		} // constructor
 
 		public override string Name {
@@ -39,7 +37,5 @@
 
 			return sEmail.Split(',').Select(addr => new Addressee(addr)).ToArray();
 		} // GetRecipients
-
 	} // class NotifySalesOnNewCustomer
-
 } // namespace Ezbob.Backend.Strategies.MailStrategies

@@ -22,11 +22,7 @@
 				Log.Debug("Customer data: {0}", CustomerData);
 				Log.Debug("Variables:\n\t{0}", string.Join("\n\t", Variables.Select(kv => kv.Key + ": " + kv.Value)));
 
-				Addressee[] aryRecipients = GetRecipients() ?? new Addressee[0];
-
-				Log.Debug("Sending an email to staff{0}...", aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty);
-				this.mailer.Send(TemplateName, Variables, aryRecipients);
-				Log.Debug("Sending an email to staff{0} complete.", aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty);
+				SendEmail();
 
 				Log.Debug("Performing ActionAtEnd()...");
 				ActionAtEnd();
@@ -56,6 +52,22 @@
 
 		protected abstract void SetTemplateAndVariables();
 
+		protected virtual void SendEmail() {
+			Addressee[] aryRecipients = GetRecipients() ?? new Addressee[0];
+
+			Log.Debug(
+				"Sending an email to staff{0}...",
+				aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty
+			);
+
+			this.mailer.Send(TemplateName, Variables, aryRecipients);
+
+			Log.Debug(
+				"Sending an email to staff{0} complete.",
+				aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty
+			);
+		} // SendEmail
+
 		protected AMailStrategyBase(int customerId, bool bSendToCustomer) {
 			this.toTrustPilot = false;
 			this.mailer = new StrategiesMailer();
@@ -71,7 +83,12 @@
 
 		protected virtual Addressee[] GetRecipients() {
 			return SendToCustomer
-				? new[] { new Addressee(CustomerData.Mail, ToTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "") }
+				? new[] {
+					new Addressee(
+						CustomerData.Mail,
+						ToTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : ""
+					)
+				}
 				: new Addressee[0];
 		} // GetRecipients
 

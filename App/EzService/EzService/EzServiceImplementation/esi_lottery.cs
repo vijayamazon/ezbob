@@ -2,6 +2,7 @@
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Lottery;
+	using Ezbob.Backend.Strategies.MailStrategies;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData ChangeLotteryPlayerStatus(int customerID, Guid playerID, LotteryPlayerStatus newStatus) {
@@ -18,5 +19,9 @@
 				MetaData = amd,
 			};
 		} // PlayLottery
+
+		public ActionMetaData EnlistLottery(int customerID) {
+			return Execute<EnlistLottery>(customerID, null, customerID);
+		} // EnlistLottery
 	} // class EzServiceImplementation
 } // namespace

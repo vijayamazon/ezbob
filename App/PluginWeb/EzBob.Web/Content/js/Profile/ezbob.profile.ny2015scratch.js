@@ -11,14 +11,25 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		this.$scratchArea = this.$el.find('.scratch-area');
 
+		this.$alphaScratchArea = this.$el.find('.alpha-scratch-area');
+		this.$betaScratchArea = this.$el.find('.beta-scratch-area');
+		this.$gammaScratchArea = this.$el.find('.gamma-scratch-area');
+
 		this.$won = this.$el.find('.won');
 		this.$decline = this.$el.find('.decline');
 		this.$close = this.$el.find('.close-lost');
 		this.$amount = this.$won.find('.amount');
 
 		this.isOpen = false;
+
+		this.isAlphaOpen = false;
+		this.isBetaOpen = false;
+		this.isGammaOpen = false;
+
 		this.hasWon = false;
 		this.amount = 0;
+
+		this.pctToScratch = 40;
 	}, // initialize
 
 	events: {
@@ -37,6 +48,9 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 	render: function() {
 		this.$scratchArea.empty();
+		this.$alphaScratchArea.empty();
+		this.$betaScratchArea.empty();
+		this.$gammaScratchArea.empty();
 
 		if (!this.playerID) {
 			this.hide();
@@ -57,25 +71,17 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		});
 
 		request.done(function(response) {
-			var eventHandler = _.bind(self.onScratch, self);
-
 			if (response.PlayedNow || (response.StatusID === 5)) {
 				self.show();
 
 				self.hasWon = !!response.PrizeID;
 				self.amount = response.Amount;
 
-				var picName = self.hasWon ? 'win' : 'sorry';
+				self.$scratchArea.wScratchPad(self.getScratchArgs('onScratch', self.hasWon));
 
-				self.$scratchArea.wScratchPad({
-					size: 7,
-					bg: window.gRootPath + 'Content/img/ny2015scratch/' + picName + '.png',
-					fg: window.gRootPath + 'Content/img/ny2015scratch/scratch.png',
-					realtime: false,
-					scratchDown: eventHandler,
-					scratchMove: eventHandler,
-					scratchUp: eventHandler,
-				});
+				self.$alphaScratchArea.wScratchPad(self.getScratchArgs('onAlphaScratch'));
+				self.$betaScratchArea.wScratchPad(self.getScratchArgs('onBetaScratch'));
+				self.$gammaScratchArea.wScratchPad(self.getScratchArgs('onGammaScratch'));
 			} else {
 				self.hasWon = false;
 				self.amount = 0;
@@ -84,13 +90,55 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		});
 	}, // render
 
+	getScratchArgs: function(upEventHandlerName, hasWon) {
+		return {
+			size: 7,
+			bg: window.gRootPath + 'Content/img/ny2015scratch/' + (hasWon ? 'win' : 'sorry') + '.png',
+			fg: window.gRootPath + 'Content/img/ny2015scratch/scratch.png',
+			realtime: false,
+			scratchUp: _.bind(this[upEventHandlerName], this),
+		};
+	}, // getScratchArgs
+
+	onAlphaScratch: function(evt, pct) {
+		this.onScratchOther(pct, 'Alpha');
+	}, // onAlphaScratch
+
+	onBetaScratch: function(evt, pct) {
+		this.onScratchOther(pct, 'Beta');
+	}, // onBetaScratch
+
+	onGammaScratch: function(evt, pct) {
+		this.onScratchOther(pct, 'Gamma');
+	}, // onGammaScratch
+
+	onScratchOther: function(pct, name) {
+		var areaName = '$' + name.toLowerCase() + 'ScratchArea';
+		var flagName = 'is' + name + 'Open';
+
+		this.$decline.hide();
+
+
+		if (this[flagName])
+			return;
+
+		if (pct < this.pctToScratch)
+			return;
+
+		this[flagName] = true;
+
+		this[areaName].wScratchPad('clear');
+
+		this.showClose();
+	}, // onScratchOther
+
 	onScratch: function(evt, pct) {
 		this.$decline.hide();
 
 		if (this.isOpen)
 			return;
 
-		if (pct < 45)
+		if (pct < this.pctToScratch)
 			return;
 
 		this.isOpen = true;
@@ -103,7 +151,7 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		);
 
 		if (!this.hasWon) {
-			this.$close.show();
+			this.showClose();
 			return;
 		} // if
 
@@ -119,6 +167,11 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		this.$won.show();
 	}, // onScratch
+
+	showClose: function() {
+		if (this.isOpen && this.isAlphaOpen && this.isBetaOpen && this.isGammaOpen)
+			this.$close.show();
+	}, // showClose
 
 	show: function() {
 		this.$mainPage.hide();

@@ -217,6 +217,12 @@
   <wsdl:message name="IEzService_PlayLottery_OutputMessage">
     <wsdl:part name="parameters" element="tns:PlayLotteryResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_EnlistLottery_InputMessage">
+    <wsdl:part name="parameters" element="tns:EnlistLottery" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_EnlistLottery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:EnlistLotteryResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyFile" />
   </wsdl:message>
@@ -1328,6 +1334,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PlayLottery" message="tns:IEzService_PlayLottery_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PlayLotteryResponse" message="tns:IEzService_PlayLottery_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="EnlistLottery">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EnlistLottery" message="tns:IEzService_EnlistLottery_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EnlistLotteryResponse" message="tns:IEzService_EnlistLottery_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyFile">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
@@ -2209,6 +2219,15 @@
     </wsdl:operation>
     <wsdl:operation name="PlayLottery">
       <soap12:operation soapAction="http://tempuri.org/IEzService/PlayLottery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="EnlistLottery">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/EnlistLottery" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

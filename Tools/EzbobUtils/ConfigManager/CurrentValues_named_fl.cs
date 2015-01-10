@@ -238,10 +238,16 @@
 			get { return this[Variables.LogOffMode]; }
 		}
 
+		public virtual VariableValue LotteryForBrokers {
+			get { return this[Variables.LotteryForBrokers]; }
+		}
+
+		public virtual VariableValue LotteryForCustomers {
+			get { return this[Variables.LotteryForCustomers]; }
+		}
+
 		public virtual VariableValue LowCreditScore {
 			get { return this[Variables.LowCreditScore]; }
 		}
-
-
-	}
+	} // class CurrentValues
 } // namespace
