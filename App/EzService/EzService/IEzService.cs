@@ -632,6 +632,9 @@
 
 		[OperationContract]
 		LotteryActionResult PlayLottery(int customerID, Guid playerID);
+
+		[OperationContract]
+		ActionMetaData EnlistLottery(int customerID);
 	} // interface IEzService
 } // namespace EzService
 

@@ -18,7 +18,8 @@
 				"UpdatePlayerStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("PlayerID", this.playerID),
-				new QueryParameter("StatusID", (long)(int)this.newStatus)
+				new QueryParameter("StatusID", (long)(int)this.newStatus),
+				new QueryParameter("Now", DateTime.UtcNow)
 			);
 		} // Execute
 

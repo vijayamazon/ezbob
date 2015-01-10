@@ -1,6 +1,6 @@
-﻿namespace EzBob.Web.Code
-{
+﻿namespace EzBob.Web.Code {
 	using System;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model;
@@ -12,30 +12,18 @@
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;
 	using Agreements;
+	using Ezbob.Logger;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using StructureMap;
-	using log4net;
 
-	public interface ILoanCreator
-	{
+	public interface ILoanCreator {
 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
-	}
+	} // interface ILoanCreator
 
-	public class LoanCreator : ILoanCreator
-	{
-		private readonly IPacnetService _pacnetService;
-		private readonly ServiceClient m_oServiceClient;
-		private readonly IAgreementsGenerator _agreementsGenerator;
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly LoanBuilder _loanBuilder;
-		private readonly ISession _session;
-		private readonly LoanTransactionMethodRepository m_oTranMethodRepo;
-
-		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanCreator));
-
+	public class LoanCreator : ILoanCreator {
 		public LoanCreator(
 			IPacnetService pacnetService,
 			IAgreementsGenerator agreementsGenerator,
@@ -59,31 +47,37 @@
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1));
 
 			bool isFakeLoanCreate = (card == null);
+
 			var cr = cus.LastCashRequest;
 
-			var calculator = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+			var calculator = new SetupFeeCalculator(
+				cr.UseSetupFee,
+				cr.UseBrokerSetupFee,
+				cr.ManualSetupFeeAmount,
+				cr.ManualSetupFeePercent
+			);
+
 			var fee = calculator.Calculate(loanAmount);
 
 			var transfered = loanAmount - fee;
+
 			PacnetReturnData ret;
-			if (PacnetSafeGuard(cus, transfered))
-			{
+
+			if (PacnetSafeGuard(cus, transfered)) {
 				if (!isFakeLoanCreate && !cus.IsAlibaba) {
 					ret = SendMoney(cus, transfered);
 					VerifyAvailableFunds(transfered);
 				} else {
-					Log.DebugFormat("Not sending money via pacnet. isFake: {0}, isAlibaba: {1}", isFakeLoanCreate, cus.IsAlibaba);
+					Log.Debug("Not sending money via pacnet. isFake: {0}, isAlibaba: {1}", isFakeLoanCreate, cus.IsAlibaba);
 					ret = new PacnetReturnData {
 						Status = "Done",
 						TrackingNumber = "fake"
 					};
 				}
-			}
-			else
-			{
-				Log.ErrorFormat("PacnetSafeGuard stopped money transfer");
+			} else {
+				Log.Error("PacnetSafeGuard stopped money transfer");
 				throw new Exception("PacnetSafeGuard stopped money transfer");
-			}
+			} // if
 
 			cr.HasLoans = true;
 
@@ -108,10 +102,8 @@
 					Fees = fee,
 					LoanTransactionMethod = m_oTranMethodRepo.FindOrDefault("Pacnet"),
 				};
-			}
-			else {
-				loanTransaction = new PacnetTransaction
-				{
+			} else {
+				loanTransaction = new PacnetTransaction {
 					Amount = loan.LoanAmount,
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
 					PostDate = now,
@@ -122,7 +114,7 @@
 					LoanTransactionMethod = m_oTranMethodRepo.FindOrDefault("Manual"),
 				};
 				Log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
-			}
+			} // if
 
 			loan.AddTransaction(loanTransaction);
 			
@@ -145,12 +137,18 @@
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
 
 			_session.Flush();
+
 			if (!isFakeLoanCreate) {
-				m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
-			}
+				bool isFirstLoan = cus.Loans.Count() == 1;
+
+				m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, isFirstLoan);
+
+				if (isFirstLoan)
+					m_oServiceClient.Instance.EnlistLottery(cus.Id);
+			} // if
 
 			return loan;
-		}
+		} // CreateLoan
 
 		/// <summary>
 		/// not yet implemented function that is
@@ -161,109 +159,121 @@
 		/// true if every thing is ok with this money transfer, else false 
 		/// currently always true
 		/// </returns>
-		private bool PacnetSafeGuard(Customer cus, decimal transfered)
-		{
+		[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+		private bool PacnetSafeGuard(Customer cus, decimal transfered) {
 			return true;
-		}
+		} // PacnetSafeGuard
 
-		private PacnetReturnData SendMoney(Customer cus, decimal transfered)
-		{
+		private PacnetReturnData SendMoney(Customer cus, decimal transfered) {
 			var name = GetCustomerNameForPacNet(cus);
 
 			if (!cus.HasBankAccount)
-			{
 				throw new Exception("bank account should be added in order to send money");
-			}
-			Log.DebugFormat("SendMoney customerId: {0}, amount: {1}, sortcode: {2}, account number: {3}, name: {4}, {5} {6} {7} ",
-				cus.Id, transfered, cus.BankAccount.SortCode, cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
 
-			var sendResponse = _pacnetService.SendMoney(cus.Id, transfered, cus.BankAccount.SortCode,
-											   cus.BankAccount.AccountNumber, name, "ezbob", "GBP", "EZBOB");
+			Log.Debug(
+				"SendMoney customerId: {0}, amount: {1}, sortcode: {2}, account number: {3}, name: {4}, ezbob GBP EZBOB",
+				cus.Id,
+				transfered,
+				cus.BankAccount.SortCode,
+				cus.BankAccount.AccountNumber,
+				name
+			);
+
+			var sendResponse = _pacnetService.SendMoney(
+				cus.Id,
+				transfered,
+				cus.BankAccount.SortCode,
+				cus.BankAccount.AccountNumber,
+				name,
+				"ezbob",
+				"GBP",
+				"EZBOB"
+			);
+
+			Log.Debug(
+				"SendMoney response: tracking: {0}, status {1} {2} ",
+				sendResponse.TrackingNumber,
+				sendResponse.Status,
+				sendResponse.HasError ? ",Error: " + sendResponse.Error : ""
+			);
+
 			var closeResponse = _pacnetService.CloseFile(cus.Id, "ezbob");
 
-			Log.DebugFormat("SendMoney response: tracking: {0}, status {1} {2} ", sendResponse.TrackingNumber, sendResponse.Status, sendResponse.HasError ? ",Error: " + sendResponse.Error : "");
-			Log.DebugFormat("CloseFile response: tracking: {0}, status {1} {2} ", closeResponse.TrackingNumber, closeResponse.Status, closeResponse.HasError ? ",Error: " + closeResponse.Error : "");
+			Log.Debug(
+				"CloseFile response: tracking: {0}, status {1} {2} ",
+				closeResponse.TrackingNumber,
+				closeResponse.Status,
+				closeResponse.HasError ? ",Error: " + closeResponse.Error : ""
+			);
 
 			return sendResponse;
-		}
+		} // SendMoney
 
-		public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period)
-		{
+		public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period) {
 			var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();
-			if (lastLoan == null) return;
+
+			if (lastLoan == null)
+				return;
+
 			var diff = now.Subtract(lastLoan.Date);
-			if (diff < period)
-			{
+
+			if (diff < period) {
 				var msg = string.Format("Please try again in {0} seconds.", (int)(period.TotalSeconds - diff.TotalSeconds));
 				Log.Error(msg);
 				throw new LoanDelayViolationException(msg);
-			}
-		}
+			} // if
+		} // ValidateLoanDelay
 
-		public virtual void ValidateOffer(Customer cus)
-		{
+		public virtual void ValidateOffer(Customer cus) {
 			cus.ValidateOfferDate();
-		}
+		} // ValidateOffer
 
-		public virtual void VerifyAvailableFunds(decimal transfered)
-		{
+		public virtual void VerifyAvailableFunds(decimal transfered) {
 			m_oServiceClient.Instance.VerifyEnoughAvailableFunds(_context.UserId, transfered);
-		}
+		} // VerifyAvailableFunds
 
-		public virtual void ValidateCustomer(Customer cus)
-		{
+		public virtual void ValidateCustomer(Customer cus) {
 			if (cus == null || cus.PersonalInfo == null || cus.BankAccount == null)
-			{
 				throw new CustomerIsNotFullyRegisteredException();
-			}
 
 			if (cus.Status != Status.Approved)
-			{
 				throw new CustomerIsNotApprovedException();
-			}
 
 			if (!cus.WizardStep.TheLastOne)
 				throw new CustomerIsNotFullyRegisteredException();
 
-			if (
-				!cus.CreditSum.HasValue ||
-				!cus.Status.HasValue ||
-				cus.Status.Value != Status.Approved ||
-				!cus.CollectionStatus.CurrentStatus.IsEnabled)
-			{
+			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.CurrentStatus.IsEnabled)
 				throw new Exception("Invalid customer state");
-			}
+		} // ValidateCustomer
 
-		}
-
-		public virtual void ValidateAmount(decimal loanAmount, Customer customer)
-		{
+		public virtual void ValidateAmount(decimal loanAmount, Customer customer) {
 			if (loanAmount <= 0)
-			{
 				throw new ArgumentException();
-			}
 
 			if (customer.CreditSum < loanAmount)
-			{
 				throw new ArgumentException();
-			}
-		}
+		} // ValidateAmount
 
-		public virtual string GetCustomerNameForPacNet(Customer customer)
-		{
+		public virtual string GetCustomerNameForPacNet(Customer customer) {
 			string name = string.Format("{0} {1}", customer.PersonalInfo.FirstName, customer.PersonalInfo.Surname);
 
 			if (name.Length > 18)
-			{
 				name = customer.PersonalInfo.Surname;
-			}
 
 			if (name.Length > 18)
-			{
 				name = name.Substring(0, 17);
-			}
 
 			return name;
-		}
-	}
-}
+		} // GetCustomerNameForPacNet
+
+		private readonly IPacnetService _pacnetService;
+		private readonly ServiceClient m_oServiceClient;
+		private readonly IAgreementsGenerator _agreementsGenerator;
+		private readonly IEzbobWorkplaceContext _context;
+		private readonly LoanBuilder _loanBuilder;
+		private readonly ISession _session;
+		private readonly LoanTransactionMethodRepository m_oTranMethodRepo;
+
+		private static readonly ASafeLog Log = new SafeILog(typeof(LoanCreator));
+	} // class LoanCreator
+} // namespace

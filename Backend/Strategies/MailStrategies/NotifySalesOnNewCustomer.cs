@@ -11,9 +11,6 @@
 
 	public class NotifySalesOnNewCustomer : AMailStrategyBase {
 		#region public
-
-		#region constructor
-
 		public NotifySalesOnNewCustomer(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(nCustomerID, false, oDB, oLog) {
 		} // constructor
 
@@ -61,11 +58,9 @@
 
 			return sEmail.Split(',').Select(addr => new Addressee(addr)).ToArray();
 		} // GetRecipients
-
 		#endregion method GetCustomerEmail
 
 		#endregion protected
 	} // class NotifySalesOnNewCustomer
-
 	#endregion class NotifySalesOnNewCustomer
 } // namespace EzBob.Backend.Strategies.MailStrategies

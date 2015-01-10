@@ -3074,6 +3074,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PlayLottery", ReplyAction="http://tempuri.org/IEzService/PlayLotteryResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LotteryActionResult> PlayLotteryAsync(int customerID, System.Guid playerID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EnlistLottery", ReplyAction="http://tempuri.org/IEzService/EnlistLotteryResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData EnlistLottery(int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EnlistLottery", ReplyAction="http://tempuri.org/IEzService/EnlistLotteryResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EnlistLotteryAsync(int customerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         byte[] GetCompanyFile(int userId, int companyFileId);
         
@@ -4232,6 +4238,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LotteryActionResult> PlayLotteryAsync(int customerID, System.Guid playerID) {
             return base.Channel.PlayLotteryAsync(customerID, playerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData EnlistLottery(int customerID) {
+            return base.Channel.EnlistLottery(customerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EnlistLotteryAsync(int customerID) {
+            return base.Channel.EnlistLotteryAsync(customerID);
         }
         
         public byte[] GetCompanyFile(int userId, int companyFileId) {
