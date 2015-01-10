@@ -21,6 +21,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		$('body').removeAttr('data-auth');
 
 		$('#user-menu').hide().removeClass('hide');
+
+		this.scratchView = null;
 	}, // initialize
 
 	followReturnUrl: function() {
@@ -87,6 +89,20 @@ EzBob.Broker.Router = Backbone.Router.extend({
 
 		// console.log('prop set to', this.getBrokerProperties());
 		// console.log('auth email is', this.authEmail);
+
+		var props = this.getBrokerProperties();
+
+		if (!props.LotteryPlayerID)
+			return;
+
+		this.scratchView = new EzBob.Profile.Ny2015ScratchView({
+			customerID: props.BrokerID,
+			playerID: props.LotteryPlayerID,
+			customerMode: false,
+			mainPageClass: '.broker-page-content',
+		});
+
+		this.scratchView.render();
 	}, // setBrokerProperties
 
 	isMyBroker: function(oBrokerProperties) {
@@ -134,6 +150,11 @@ EzBob.Broker.Router = Backbone.Router.extend({
 	}, // loadBrokerProperties
 
 	logoff: function() {
+		if (this.scratchView) {
+			this.scratchView.hide();
+			this.scratchView = null;
+		} // if
+
 		if (this.views.dashboard)
 			this.views.dashboard.clear();
 

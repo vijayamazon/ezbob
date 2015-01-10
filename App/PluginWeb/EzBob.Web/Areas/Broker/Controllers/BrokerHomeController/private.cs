@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
 	#region using
-
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -17,7 +16,6 @@
 
 	public partial class BrokerHomeController : Controller {
 		#region static constructor
-
 		static BrokerHomeController() {
 			ms_oLog = new SafeILog(typeof(BrokerHomeController));
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
@@ -289,7 +287,6 @@
 				return oResult;
 			} // Load
 		} // class MarketingFiles
-
 		#endregion downloadable file descriptor
 	} // class BrokerHomeController
 } // namespace

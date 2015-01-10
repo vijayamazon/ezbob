@@ -187,6 +187,7 @@
     <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
     <Compile Include="Code\ControllerExt.cs" />
     <Compile Include="Code\CustomerExt.cs" />
+    <Compile Include="Code\Ny2015ScratchHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionNames.cs" />
     <Compile Include="Infrastructure\Email\EmailConfirmationState.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManagerException.cs" />

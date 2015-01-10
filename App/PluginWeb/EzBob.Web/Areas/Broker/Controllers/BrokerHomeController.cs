@@ -1078,5 +1078,28 @@
 			} // try
 		}
 		#endregion action TargetBusiness
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult PlayLottery(string playerID, int userID) {
+			var ny2015ScratchHelper = new Ny2015ScratchHelper(userID, playerID);
+			return Json(ny2015ScratchHelper.PlayLottery(), JsonRequestBehavior.AllowGet);
+		} // PlayLottery
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public void Claim(string playerID, int userID) {
+			var ny2015ScratchHelper = new Ny2015ScratchHelper(userID, playerID);
+			ny2015ScratchHelper.Claim();
+		} // Claim
+
+		[Ajax]
+		[HttpPost]
+		[ValidateJsonAntiForgeryToken]
+		public void Decline(string playerID, int userID) {
+			var ny2015ScratchHelper = new Ny2015ScratchHelper(userID, playerID);
+			ny2015ScratchHelper.Decline();
+		} // Decline
 	} // class BrokerHomeController
 } // namespace
