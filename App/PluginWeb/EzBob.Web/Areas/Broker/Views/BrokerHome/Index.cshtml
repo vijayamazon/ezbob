@@ -54,18 +54,17 @@
 			.Add("~/Content/css/broker.css")
 			.Add("~/Content/css/edit-experian-director-data.css")
 			.Add("~/Content/css/mobile.css")
+			.Add("~/Content/css/profile-ny2015scratch.css")
 			.MvcRender("~/Content/css/min/broker_#.css")
 		);
 	}
 </head>
 
-<body
-	data-auth="@Model.Auth"
-	data-msg-on-start="@Model.MessageOnStart"
-	data-msg-on-start-severity="@Model.MessageOnStartSeverity"
-	data-request-accept-terms="@Model.HasTermsStr"
-	data-user-name="@Model.Auth"
->
+<body data-auth="@Model.Auth"
+	  data-msg-on-start="@Model.MessageOnStart"
+	  data-msg-on-start-severity="@Model.MessageOnStartSeverity"
+	  data-request-accept-terms="@Model.HasTermsStr"
+	  data-user-name="@Model.Auth">
 	@AntiForgery.GetHtml()
 
 	<div id="wrapper">
@@ -92,9 +91,8 @@
 				</ul>
 			</div>
 		</div>
-		<div class="row-fluid">
+		<div class="row-fluid broker-page-content">
 			<div class="inner">
-
 				<div class="inner main-page">
 					<section class="broker">
 						<div class="notifications"></div>
@@ -315,8 +313,8 @@
 										<li class="divider-vertical"></li>
 										<li><a href="#section-dashboard-terms-and-conditions">Terms and conditions</a></li>
 										@if (CurrentValues.Instance.BrokerInstantOfferEnabled) {
-											<li class="divider-vertical"></li>
-											<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
+										<li class="divider-vertical"></li>
+										<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
 										}
 									</ul>
 								</div>
@@ -712,7 +710,7 @@
 							<h2>You are not authorised to see this page.</h2>
 						</div>
 						<!-- section-forbidden -->
-						
+
 						<div class="page-section hide section-requestacceptterms">
 							<h2>Our terms and conditions have been updated</h2>
 
@@ -731,6 +729,48 @@
 				</div>
 			</div>
 		</div>
+
+		<div id="ny2015scratch">
+			<div class="logo"></div>
+			<div class="content">
+				<div class="title">New Year's Revolution</div>
+				<div class="slogan">Scratch and win Cash Back up to</div>
+				<div class="slogan-amount">
+					<img src="~/Content/img/ny2015scratch/pound.png" />
+					<img src="~/Content/img/ny2015scratch/2.png" />
+					<img src="~/Content/img/ny2015scratch/0.png" />
+					<img src="~/Content/img/ny2015scratch/1.png" />
+					<img src="~/Content/img/ny2015scratch/5.png" />
+				</div>
+
+				<div class="frame">
+					<div class="scratch-card">
+						<div class="scratch-area"></div>
+
+						<div class="alpha-scratch-area"></div>
+						<div class="beta-scratch-area"></div>
+						<div class="gamma-scratch-area"></div>
+					</div>
+					<div class="hoops"></div>
+				</div>
+			</div>
+
+			<div class="decline"><a class="decline-game">I don't want to play</a></div>
+			<div class="close-lost"><a class="leave">Close</a></div>
+
+			<div class="won">
+				<div class="frame">
+					<div class="title">You won!</div>
+
+					<div class="amount-row">
+						<img src="~/Content/img/ny2015scratch/pound.png" />
+						<span class="amount"></span>
+					</div>
+
+					<div class="close"><a class="leave">Close</a></div>
+				</div>
+			</div>
+		</div>
 		<div id="modalRegion" class="modal hide fade"></div>
 		<div class="push"></div>
 	</div>
@@ -745,18 +785,17 @@
 		</div>
 
 		<div style="display: none;" class="hide" id="broker-sms-count"
-			data-force-captcha="@Model.ForceCaptcha"
-			data-max-per-number="@Model.MaxPerNumber"
-			data-max-per-page="@Model.MaxPerPage"
-		></div>
+			 data-force-captcha="@Model.ForceCaptcha"
+			 data-max-per-number="@Model.MaxPerNumber"
+			 data-max-per-page="@Model.MaxPerPage"></div>
 
 		<div id="broker-terms-and-conditions" title="Terms and Conditions" data-terms-version="0"></div>
 	</div>
 
-<!-- scripts - begin -->
-<!--[if lt IE 9]>
-<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
-<![endif]-->
+	<!-- scripts - begin -->
+	<!--[if lt IE 9]>
+	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
 	@{
 		Html.RenderPartial("~/Areas/Customer/Views/Profile/CompanyDirectorsTemplate.cshtml");
 		Html.RenderPartial("EditExperianDirectorData");
@@ -765,7 +804,7 @@
 		Html.RenderPartial("security_template");
 		Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
 		Html.RenderPartial("_LoanScheduleTemplate");
-		
+
 		WriteLiteral(Bundle.JavaScript()
 			.Add("~/Content/js/lib/jquery-1.8.3.js")
 			.Add("~/Content/js/ezbob.csrf.js")
@@ -827,6 +866,7 @@
 			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
 			.AddString(BundleHelper.GetDbStrings())
 			.Add("~/Content/js/ezbob.view.js")
+			.Add("~/Content/js/Profile/ezbob.profile.ny2015scratch.js")
 			.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 			.Add("~/Content/js/Broker/broker.base.view.js")
 			.Add("~/Content/js/Broker/broker.submit.view.js")

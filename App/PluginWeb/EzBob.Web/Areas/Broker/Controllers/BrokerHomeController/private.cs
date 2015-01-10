@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
-
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -13,7 +12,6 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public partial class BrokerHomeController : Controller {
-
 		static BrokerHomeController() {
 			ms_oLog = new SafeILog(typeof(BrokerHomeController));
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
@@ -228,6 +226,5 @@
 				return oResult;
 			} // Load
 		} // class MarketingFiles
-
 	} // class BrokerHomeController
 } // namespace

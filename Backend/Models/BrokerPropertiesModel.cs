@@ -48,6 +48,9 @@
 		[DataMember]
 		public string CurrentTerms { get; set; }
 
+		[DataMember]
+		public string LotteryPlayerID { get; set; }
+
 		public override string ToString() {
 			return string.Format(
 @"

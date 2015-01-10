@@ -33,6 +33,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.scratchView = new EzBob.Profile.Ny2015ScratchView({
 			customerID: this.customer.get('Id'),
 			playerID: this.customer.get('LotteryPlayerID'),
+			customerMode: true,
+			mainPageClass: '.main-page',
 		});
 
 		this.router = new EzBob.Profile.ProfileRouter(this.customer);

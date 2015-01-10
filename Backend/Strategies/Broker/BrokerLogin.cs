@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
+	using System;
 	using Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
@@ -27,6 +28,15 @@
 
 			if (!string.IsNullOrWhiteSpace(Properties.ErrorMsg))
 				throw new StrategyWarning(this, Properties.ErrorMsg);
+
+			SafeReader sr = DB.GetFirst(
+				"LoadActiveLotteries",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserID", Properties.BrokerID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+
+			Properties.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 		} // Execute
 
 		private readonly SpBrokerLogin m_oSp;

@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
+	using System;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database;
 
 	public class BrokerLoadOwnProperties : AStrategy {
 
@@ -18,6 +20,15 @@
 
 		public override void Execute() {
 			m_oSp.FillFirst(Properties);
+
+			SafeReader sr = DB.GetFirst(
+				"LoadActiveLotteries",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserID", Properties.BrokerID),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
+
+			Properties.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 		} // Execute
 
 		public BrokerProperties Properties { get; private set; }

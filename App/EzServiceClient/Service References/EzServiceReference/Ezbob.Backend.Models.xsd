@@ -497,6 +497,7 @@
       <xs:element minOccurs="0" name="CurrentTermsID" type="xs:int" />
       <xs:element minOccurs="0" name="CurrentTextID" type="xs:int" />
       <xs:element minOccurs="0" name="ErrorMsg" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LotteryPlayerID" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SignedTermsID" type="xs:int" />
       <xs:element minOccurs="0" name="SignedTextID" type="xs:int" />
       <xs:element minOccurs="0" name="SourceRef" nillable="true" type="xs:string" />

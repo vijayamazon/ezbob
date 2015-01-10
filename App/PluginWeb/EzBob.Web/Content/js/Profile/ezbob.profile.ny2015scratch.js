@@ -5,15 +5,16 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 	initialize: function(options) {
 		this.customerID = options.customerID;
 		this.playerID = options.playerID;
+		this.controllerName = window.gRootPath +
+			(options.customerMode ? 'Customer/Ny2015Scratch' : 'Broker/BrokerHome') + '/';
 
-		this.$mainPage = $('.main-page');
+		this.$mainPage = $(options.mainPageClass);
 		this.$el = $('#ny2015scratch');
 
-		this.$scratchArea = this.$el.find('.scratch-area');
-
-		this.$alphaScratchArea = this.$el.find('.alpha-scratch-area');
-		this.$betaScratchArea = this.$el.find('.beta-scratch-area');
-		this.$gammaScratchArea = this.$el.find('.gamma-scratch-area');
+		this.$scratchArea = null;
+		this.$alphaScratchArea = null;
+		this.$betaScratchArea = null;
+		this.$gammaScratchArea = null;
 
 		this.$won = this.$el.find('.won');
 		this.$decline = this.$el.find('.decline');
@@ -38,19 +39,19 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 	}, // events
 
 	decline: function() {
-		$.post(
-			window.gRootPath + 'Customer/Ny2015Scratch/Decline',
-			{ playerID: this.playerID, }
-		);
+		$.post(this.controllerName + 'Decline', {
+			playerID: this.playerID,
+			userID: this.customerID,
+		});
 
 		this.hide();
 	}, // decline
 
 	render: function() {
-		this.$scratchArea.empty();
-		this.$alphaScratchArea.empty();
-		this.$betaScratchArea.empty();
-		this.$gammaScratchArea.empty();
+		this.$scratchArea = this.renewArea('scratch-area');
+		this.$alphaScratchArea = this.renewArea('alpha-scratch-area');
+		this.$betaScratchArea = this.renewArea('beta-scratch-area');
+		this.$gammaScratchArea = this.renewArea('gamma-scratch-area');
 
 		if (!this.playerID) {
 			this.hide();
@@ -59,10 +60,10 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		var self = this;
 
-		var request = $.getJSON(
-			window.gRootPath + 'Customer/Ny2015Scratch/PlayLottery',
-			{ playerID: this.playerID, }
-		);
+		var request = $.getJSON(this.controllerName + 'PlayLottery', {
+			playerID: this.playerID,
+			userID: this.customerID,
+		});
 
 		request.fail(function() {
 			self.hasWon = false;
@@ -145,10 +146,10 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		this.$scratchArea.wScratchPad('clear');
 
-		$.post(
-			window.gRootPath + 'Customer/Ny2015Scratch/Claim',
-			{ playerID: this.playerID, }
-		);
+		$.post(this.controllerName + 'Claim', {
+			playerID: this.playerID,
+			userID: this.customerID,
+		});
 
 		if (!this.hasWon) {
 			this.showClose();
@@ -180,9 +181,21 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 	}, // show
 
 	hide: function() {
-		this.$scratchArea.empty();
+		this.$scratchArea = this.renewArea('scratch-area');
+		this.$alphaScratchArea = this.renewArea('alpha-scratch-area');
+		this.$betaScratchArea = this.renewArea('beta-scratch-area');
+		this.$gammaScratchArea = this.renewArea('gamma-scratch-area');
+
 		this.$won.hide();
 		this.$el.hide();
 		this.$mainPage.show();
 	}, // hide
+
+	renewArea: function(className) {
+		var newArea = $('<div></div>').attr('class', className);
+
+		this.$el.find('.' + className).replaceWith(newArea);
+
+		return newArea;
+	}, // renewArea
 }); // EzBob.Profile.Ny2015ScratchView
