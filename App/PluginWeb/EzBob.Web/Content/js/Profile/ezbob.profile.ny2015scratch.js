@@ -78,11 +78,11 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 				self.hasWon = !!response.PrizeID;
 				self.amount = response.Amount;
 
-				self.$scratchArea.wScratchPad(self.getScratchArgs('onScratch', self.hasWon));
+				self.$scratchArea.wScratchPad(self.getScratchArgs('onScratch', '2', self.hasWon));
 
-				self.$alphaScratchArea.wScratchPad(self.getScratchArgs('onAlphaScratch'));
-				self.$betaScratchArea.wScratchPad(self.getScratchArgs('onBetaScratch'));
-				self.$gammaScratchArea.wScratchPad(self.getScratchArgs('onGammaScratch'));
+				self.$alphaScratchArea.wScratchPad(self.getScratchArgs('onAlphaScratch', '1'));
+				self.$betaScratchArea.wScratchPad(self.getScratchArgs('onBetaScratch', '3'));
+				self.$gammaScratchArea.wScratchPad(self.getScratchArgs('onGammaScratch', '4'));
 			} else {
 				self.hasWon = false;
 				self.amount = 0;
@@ -91,11 +91,11 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		});
 	}, // render
 
-	getScratchArgs: function(upEventHandlerName, hasWon) {
+	getScratchArgs: function(upEventHandlerName, idx, hasWon) {
 		return {
 			size: 7,
-			bg: window.gRootPath + 'Content/img/ny2015scratch/' + (hasWon ? 'win' : 'sorry') + '.png',
-			fg: window.gRootPath + 'Content/img/ny2015scratch/scratch.png',
+			bg: window.gRootPath + 'Content/img/ny2015scratch/' + (hasWon ? 'win' : 'sorry') + '_' + idx + '.png',
+			fg: window.gRootPath + 'Content/img/ny2015scratch/scratch_' + idx + '.png',
 			realtime: false,
 			scratchUp: _.bind(this[upEventHandlerName], this),
 		};

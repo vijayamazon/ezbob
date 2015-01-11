@@ -21,6 +21,8 @@ BEGIN
 	DECLARE @Email NVARCHAR(255)
 	DECLARE @ContactName NVARCHAR(255)
 
+	DECLARE @LoanCount INT = 1 -- This SP is called only when customer takes the first loan.
+
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -52,7 +54,20 @@ BEGIN
 			Broker
 		WHERE
 			BrokerID = @UserID
+
+		SELECT
+			@LoanCount = COUNT(*)
+		FROM
+			Loan l
+			INNER JOIN Customer c
+				ON l.CustomerId = c.Id
+				AND c.BrokerID = @BrokerID
 	END
+
+	------------------------------------------------------------------------------
+
+	IF @LoanCount != 1
+		RETURN
 
 	------------------------------------------------------------------------------
 
