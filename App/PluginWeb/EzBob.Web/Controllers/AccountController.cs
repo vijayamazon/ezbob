@@ -78,7 +78,7 @@
 				try {
 					if (m_oBrokerHelper.IsBroker(model.UserName)) {
 						ms_oLog.Alert("Broker '{0}' tried to log in as an underwriter!", model.UserName);
-						ModelState.AddModelError("", "Wrong user name/password.");
+						ModelState.AddModelError("LoginError", "Wrong user name/password.");
 						return View(model);
 					} // if is broker
 				}
@@ -88,12 +88,14 @@
 
 				if (m_oCustomers.TryGetByEmail(model.UserName) != null) {
 					ms_oLog.Alert("Customer '{0}' tried to log in as an underwriter!", model.UserName);
-					ModelState.AddModelError("", "Wrong user name/password.");
+					ModelState.AddModelError("LoginError", "Wrong user name/password.");
 					return View(model);
 				} // if
 
 				try {
-					if (MembershipCreateStatus.Success == ValidateUser(model.UserName, model.Password)) {
+					string loginError;
+					var membershipCreateStatus = ValidateUser(model.UserName, model.Password, out loginError);
+					if (MembershipCreateStatus.Success == membershipCreateStatus) {
 						model.SetCookie(LogOnModel.Roles.Underwriter);
 
 						bool bRedirectToUrl =
@@ -108,13 +110,17 @@
 
 						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 					} // if
+					
+					loginError = string.IsNullOrEmpty(loginError) ? "Wrong user name/password." : loginError;
+					ModelState.AddModelError("LoginError", loginError);
 				}
 				catch (UserNotFoundException ex) {
 					ms_oLog.Warn(ex, "Failed to log in as underwriter '{0}'.", model.UserName);
+					ModelState.AddModelError("LoginError", "Wrong user name/password.");
 				} // try
 			} // if
 
-			ModelState.AddModelError("", "Wrong user name/password.");
+			
 			return View(model);
 		} // AdminLogOn
 
@@ -245,8 +251,8 @@
 
 				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
 			} // if user is disabled
-
-			var nStatus = ValidateUser(model.UserName, model.Password);
+			string loginError;
+			var nStatus = ValidateUser(model.UserName, model.Password, out loginError);
 
 			if (MembershipCreateStatus.Success == nStatus) {
 				model.SetCookie(LogOnModel.Roles.Customer);
@@ -859,12 +865,12 @@
 			return null;
 		} // GetAndRemoveCookie
 
-		private MembershipCreateStatus ValidateUser(string username, string password) {
+		private MembershipCreateStatus ValidateUser(string username, string password, out string error) {
 			ms_oLog.Debug("Validating user '{0}' password...", username);
 
 			int nSessionID;
 			MembershipCreateStatus nStatus;
-
+			error = null;
 			try {
 				UserLoginActionResult ular = m_oServiceClient.Instance.UserLogin(
 					username,
@@ -874,6 +880,7 @@
 
 				nSessionID = ular.SessionID;
 				nStatus = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
+				error = ular.ErrorMessage;
 			}
 			catch (Exception e) {
 				ms_oLog.Error(e, "Failed to validate user '{0}' credentials.", username);

@@ -133,6 +133,8 @@
 			get { return m_oResult.HasValue ? m_oResult.Value.ToString() : string.Empty; } // get
 		} // Result
 
+		public string ErrorMessage { get { return m_oSpResult.ErrorMessage; } }
+
 		public int SessionID { get; private set; } // SessionID
 
 		private MembershipCreateStatus? m_oResult;

@@ -93,6 +93,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
+          <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="SessionID" type="xs:int" />
           <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
         </xs:sequence>

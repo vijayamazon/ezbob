@@ -40,6 +40,7 @@
 				MetaData = oMetaData,
 				SessionID = oInstance.SessionID,
 				Status = oInstance.Result,
+				ErrorMessage = oInstance.ErrorMessage,
 			};
 		} // UserLogin
 

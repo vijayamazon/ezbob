@@ -1,4 +1,5 @@
-﻿var EzBob = EzBob || {}; EzBob.Validation = EzBob.Validation || {};
+﻿var EzBob = EzBob || {};
+EzBob.Validation = EzBob.Validation || {};
 
 //-----------------------------------------------------------------
 

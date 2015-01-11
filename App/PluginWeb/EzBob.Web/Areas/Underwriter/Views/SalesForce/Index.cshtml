@@ -22,160 +22,185 @@
         <!-- Tab panes -->
         <div class="tab-content">
             <div role="tabpanel" class="tab-pane  fade in active" id="profile">
-                @Description("ID", Model.ID.ToString())
-                @Description("Email", Model.Email)
-                @Description("Name", Model.Name)
-                @Description("FraudStatus", Model.FraudStatus)
-                @Description("CreditStatus", Model.CreditStatus)
-
-                @if (Model.Phones.Any()) {
-                    <dl class="dl-horizontal">
-                        <dt>Phones</dt>
-                        <dd>
-                            <ul class="list-group col-sm-4 col-md-2">
-                                @foreach (var phone in Model.Phones) {
-                                    string verified = "";
-                                    string verifiedTooltip = "";
-                                    if (phone.IsVerified) {
-                                        verified = "list-group-item-success";
-                                        verifiedTooltip = "Verified phone";
-                                    }
-                                    <li class="list-group-item no-border @verified" data-toggle="tooltip" data-placement="top" title="@verifiedTooltip"><span class="badge">@phone.Type</span>@phone.Number</li>
-                                }
-                            </ul>
-                        </dd>
-                    </dl>
-                }
+                @ProfileDetails()
             </div>
             <div role="tabpanel" class="tab-pane fade" id="datasources">
-                @if (Model.MarketPlaces.Any()) {
-                    <h4>Data sources</h4>
-                    <table class="table table-hover table-condensed">
-                        <thead>
-                            <tr>
-                                <td>Type</td>
-                                <td>Name</td>
-                                <td>Created</td>
-                                <td>Updated</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var mp in Model.MarketPlaces) {
-                                string error = string.IsNullOrEmpty(mp.UpdateError) ? "" : "danger";
-                                <tr data-toggle="tooltip" data-placement="top" title="@mp.UpdateError" class="@error">
-                                    <td>@mp.MpName</td>
-                                    <td>@mp.displayName</td>
-                                    <td>@mp.Created</td>
-                                    <td>@mp.Updated</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-
-                    if (Model.CompanyFiles.Any()) {
-                        <h4>Financial documents</h4>
-                        <table class="table table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <td>Date</td>
-                                    <td>File Name</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var cf in Model.CompanyFiles) {
-                                    <tr>
-                                        <td>@cf.FileName</td>
-                                        <td>@cf.Uploaded.ToString("dd/MM/yyyy")</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    }
-                } else {
-                    <h3>Customer don't have any data source connected</h3>
-                }
+                @DataSources()
             </div>
             <div role="tabpanel" class="tab-pane fade" id="messages">
+                @Messages()
+            </div>
+            <div role="tabpanel" class="tab-pane fade" id="fraud">
+                @Fraud()
+            </div>
+            <div id="crm" class="tab-pane fade">
+                @Crm()
+            </div>
+        </div>
+    </div>
+}
+
+@helper ProfileDetails() {
+    <div>
+        @Description("ID", Model.ID.ToString())
+        @Description("Email", Model.Email)
+        @Description("Name", Model.Name)
+        @Description("FraudStatus", Model.FraudStatus)
+        @Description("CreditStatus", Model.CreditStatus)
+
+        @if (Model.Phones.Any()) {
+            <dl class="dl-horizontal">
+                <dt>Phones</dt>
+                <dd>
+                    <ul class="list-group col-sm-4 col-md-2">
+                        @foreach (var phone in Model.Phones) {
+                            string verified = "";
+                            string verifiedTooltip = "";
+                            if (phone.IsVerified) {
+                                verified = "list-group-item-success";
+                                verifiedTooltip = "Verified phone";
+                            }
+                            <li class="list-group-item no-border @verified" data-toggle="tooltip" data-placement="top" title="@verifiedTooltip"><span class="badge">@phone.Type</span>@phone.Number</li>
+                        }
+                    </ul>
+                </dd>
+            </dl>
+        }
+    </div>
+}
+
+@helper DataSources() {
+    if (Model.MarketPlaces.Any()) {
+        <h4>Data sources</h4>
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>Name</th>
+                    <th>Created</th>
+                    <th>Updated</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var mp in Model.MarketPlaces) {
+                    string error = string.IsNullOrEmpty(mp.UpdateError) ? "" : "danger";
+                    <tr data-toggle="tooltip" data-placement="top" title="@mp.UpdateError" class="@error">
+                        <td>@mp.MpName</td>
+                        <td>@mp.displayName</td>
+                        <td>@mp.Created</td>
+                        <td>@mp.Updated</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+        if (Model.CompanyFiles.Any()) {
+            <h4>Financial documents</h4>
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>File Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var cf in Model.CompanyFiles) {
+                        <tr>
+                            <td>@cf.FileName</td>
+                            <td>@cf.Uploaded.ToString("dd/MM/yyyy")</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    } else {
+        <h3>Customer don't have any data source connected</h3>
+    }
+}
+
+@helper Messages() {
+    <table class="table table-hover table-condensed">
+        <thead>
+            <tr>
+                <th>Date</th>
+                <th>File Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var message in Model.Messages) {
+                <tr>
+                    <td>@message.CreationDate</td>
+                    <td>@message.FileName</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@helper Fraud() {
+    <div>
+        @Description("Check Date", Model.Fraud.LastCheckDate.HasValue ? Model.Fraud.LastCheckDate.Value.ToString("dd/MM/yyyy") : "Never performed a check")
+        @if (Model.Fraud.LastCheckDate.HasValue && !Model.Fraud.FraudDetectionLogRows.Any()) {
+            <strong>Not a fraud</strong>
+        }
+        @if (Model.Fraud.FraudDetectionLogRows.Any()) {
+            <div class="table-responsive">
                 <table class="table table-hover table-condensed">
                     <thead>
                         <tr>
-                            <td>Date</td>
-                            <td>File Name</td>
+                            <th>Type</th>
+                            <th>Field</th>
+                            <th>Concurrence</th>
+                            <th>Value</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach (var message in Model.Messages) {
+                        @foreach (var fraudRow in Model.Fraud.FraudDetectionLogRows) {
                             <tr>
-                                <td>@message.CreationDate</td>
-                                <td>@message.FileName</td>
+                                <td>@fraudRow.Type</td>
+                                <td>@fraudRow.CurrentField</td>
+                                <td>@fraudRow.Concurrence</td>
+                                <td>@fraudRow.Value</td>
                             </tr>
                         }
                     </tbody>
                 </table>
             </div>
-            <div role="tabpanel" class="tab-pane fade" id="fraud">
-                @Description("Check Date", Model.Fraud.LastCheckDate.HasValue ? Model.Fraud.LastCheckDate.Value.ToString("dd/MM/yyyy") : "Never performed a check")
-                @if (Model.Fraud.LastCheckDate.HasValue && !Model.Fraud.FraudDetectionLogRows.Any()) {
-                    <strong>Not a fraud</strong>
-                }
-                @if (Model.Fraud.FraudDetectionLogRows.Any()) {
-                    <div class="table-responsive">
-                        <table class="table table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <td>Type</td>
-                                    <td>Field</td>
-                                    <td>Concurrence</td>
-                                    <td>Value</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach (var fraudRow in Model.Fraud.FraudDetectionLogRows) {
-                                    <tr>
-                                        <td>@fraudRow.Type</td>
-                                        <td>@fraudRow.CurrentField</td>
-                                        <td>@fraudRow.Concurrence</td>
-                                        <td>@fraudRow.Value</td>
-                                    </tr>
-                                }
-                            </tbody>
-                        </table>
-                    </div>
-                }
-            </div>
-            <div id="crm" class="tab-pane fade">
-                @if (Model.OldCrm.Any()) {
-                    <table class="table table-hover table-condensed">
-                        <thead>
-                            <tr>
-                                <td>Date</td>
-                                <td>Type</td>
-                                <td>Action</td>
-                                <td>Status</td>
-                                <td>User</td>
-                                <td>Comment</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var crm in Model.OldCrm) {
-                                <tr>
-                                    <td>@crm.DateTime.ToString("dd/MM/yyyy")</td>
-                                    <td>@crm.Type</td>
-                                    <td>@crm.Action</td>
-                                    <td>@crm.Status</td>
-                                    <td>@crm.User</td>
-                                    <td>@crm.Comment</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                } else {
-                    <h3>There is no old crm records</h3>
-                }
-            </div>
-        </div>
+        }
     </div>
 }
+
+@helper Crm() {
+    if (Model.OldCrm.Any()) {
+        <table class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Action</th>
+                    <th>Status</th>
+                    <th>User</th>
+                    <th>Comment</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var crm in Model.OldCrm) {
+                    <tr>
+                        <td>@crm.DateTime.ToString("dd/MM/yyyy")</td>
+                        <td>@crm.Type</td>
+                        <td>@crm.Action</td>
+                        <td>@crm.Status</td>
+                        <td>@crm.User</td>
+                        <td>@crm.Comment</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    } else {
+        <h3>There is no old crm records</h3>
+    }
+}
+
 
 @helper Description(string key, string value) {
     <dl class="dl-horizontal">

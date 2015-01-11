@@ -100,6 +100,16 @@
 				.MvcRender("~/Content/css/min/salesforce_#.css");
 		} // RenderUnderwriterCss
 
+		public static MvcHtmlString RenderAdminLoginCss() {
+			return Bundle.Css()
+				//libs
+				.Add("~/Content/css/lib/bootstrap3.css")
+				.Add("~/Content/css/lib/notifications.css")
+				.Add("~/Content/css/lib/flaty.css")
+				//custom
+				.Add("~/Content/css/adminlogin.css")
+				.MvcRender("~/Content/css/min/adminlogin_#.css");
+		}
 
 		public static MvcHtmlString RenderPrintCss()
 		{
@@ -478,6 +488,27 @@
 				.Add("~/Content/js/login/ezbob.login.view.js")
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderLoginJs
+
+		public static MvcHtmlString RenderAdminLoginJs() {
+			return Bundle.JavaScript()
+				//libs
+				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/lib/jquery.validate.js")
+				.Add("~/Content/js/lib/notifications.js")
+				.Add("~/Content/js/lib/flaty/bootstrap3.js")
+				.Add("~/Content/js/lib/underscore.js")
+				.Add("~/Content/js/lib/backbone.js")
+				.Add("~/Content/js/lib/backbone.marionette.js")
+				//custom
+				.Add("~/Content/js/ezbob.csrf.js")
+				.Add("~/Content/js/controls/ezbob.modal.js")
+				.Add("~/Content/js/controls/ezbob.jqmodal.js")
+				.Add("~/Content/js/App/ezbob.app.js")
+				.Add("~/Content/js/App/ezbob.validation.js")
+				.Add("~/Content/js/controls/ezbob.notifications.js")
+				.Add("~/Content/js/Underwriter/ezbob.underwriter.adminlogin.js")
+				.MvcRender("~/Content/js/min/adminlogin_#.js");
+		} // RenderAdminLoginJs
 
 		public static MvcHtmlString RenderCreatePasswordJs() {
 			return Bundle.JavaScript()

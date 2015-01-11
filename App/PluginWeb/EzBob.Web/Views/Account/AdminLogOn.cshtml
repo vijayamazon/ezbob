@@ -1,7 +1,7 @@
 ﻿@model EzBob.Web.Models.LogOnModel
 @{
     ViewBag.Title = " Login to your EZBOB Account";
-    Layout = "../../Areas/Underwriter/Views/Shared/_Layout.cshtml";
+    Layout = "../../Areas/Underwriter/Views/Shared/_LayoutLogin.cshtml";
 }
 <div class="login-page">
     <div class="login-wrapper">
@@ -18,7 +18,7 @@
             EzBob.validateAdminLoginForm();
             var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
             if (!isValid) {
-                EzBob.App.trigger('error', '@Html.ValidationMessage("")');
+                EzBob.App.trigger('error', '@Html.ValidationMessage("LoginError")');
             }
         });
     </script>

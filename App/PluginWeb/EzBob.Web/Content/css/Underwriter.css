@@ -449,30 +449,8 @@ ul.left-underwriter-menu li label {
     white-space: nowrap;
 }
 
-a.ezbob-logo {
-    width: 100px;
-    height: 100%;
-    background-image: url(../img/ezbob-logo.png);
-    background-repeat: no-repeat;
-    -moz-background-size: contain;
-    -webkit-background-size: contain;
-    background-size: contain;
-}
-
 .header-logo {
     padding: 40px 0 0 0 !important;
-}
-
-a.ezbob-logo-login {
-    display: inline-block;
-    vertical-align: middle;
-    margin-top: -5px;
-    height: 40px;
-}
-
-.btn.btn-login {
-    background-color: #58b1fc;
-    color: white;
 }
 
 .roleImg {

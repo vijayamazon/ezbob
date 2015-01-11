@@ -1,0 +1,21 @@
+﻿a.ezbob-logo {
+    width: 100px;
+    height: 100%;
+    background-image: url(../img/ezbob-logo.png);
+    background-repeat: no-repeat;
+    -moz-background-size: contain;
+    -webkit-background-size: contain;
+    background-size: contain;
+}
+
+a.ezbob-logo-login {
+    display: inline-block;
+    vertical-align: middle;
+    margin-top: -5px;
+    height: 40px;
+}
+
+.btn.btn-login {
+    background-color: #58b1fc;
+    color: white;
+}

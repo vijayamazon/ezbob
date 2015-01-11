@@ -446,6 +446,7 @@
     <None Include="..\..\..\connection-strings.xml">
       <Link>connection-strings.xml</Link>
     </None>
+    <Content Include="Content\css\adminlogin.css" />
     <Content Include="Content\css\broker.css" />
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
@@ -772,6 +773,7 @@
     <Content Include="Content\js\Underwriter\editLoan\editLoanView.js" />
     <Content Include="Content\js\Underwriter\editLoan\installmentEditor.js" />
     <Content Include="Content\js\Underwriter\editLoan\loanModel.js" />
+    <Content Include="Content\js\Underwriter\ezbob.underwriter.adminlogin.js" />
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
@@ -800,6 +802,7 @@
     <Content Include="Areas\Underwriter\Views\SalesForce\Index.cshtml" />
     <Content Include="Content\css\profile-ny2015scratch.css" />
     <Content Include="Areas\Underwriter\Views\Shared\_LayoutSalesForce.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_LayoutLogin.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

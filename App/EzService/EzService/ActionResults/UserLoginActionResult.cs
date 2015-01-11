@@ -8,5 +8,8 @@
 
 		[DataMember]
 		public int SessionID { get; set; }
+
+		[DataMember]
+		public string ErrorMessage { get; set; }
 	} // class UserLoginActionResult
 } // namespace EzService

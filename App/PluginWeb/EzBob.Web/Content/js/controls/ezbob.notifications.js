@@ -23,7 +23,7 @@ EzBob.NotificationsView = Backbone.View.extend({
 	makeAlert: function(msg, alertClass) {
 		if (!msg) return;
 		var alert = $('<div class="' + alertClass + '"> ' + msg + ' </div>');
-		scrollTop();
+		this.scrollTop();
 		this.$el.html(alert);
 		alert.alert();
 		this.$el.notification();

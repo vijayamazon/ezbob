@@ -154,10 +154,7 @@
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
     </script>
-    <script id="login-template" type="text/template">
-        @{ Html.RenderPartial("_LoginSimple"); }
-    </script>
-
+    
     @if (IsSectionDefined("customJs"))
     {
         @RenderSection("customJs")

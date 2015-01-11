@@ -1079,19 +1079,6 @@ EzBob.validateLoginForm = function (el) {
     });
 };
 
-EzBob.validateAdminLoginForm = function (el) {
-    var e = el || $(".simple-login");
-    return e.validate({
-        rules: {
-            UserName: { required: true },
-            Password: { required: true }
-        },
-        errorPlacement: EzBob.Validation.errorPlacement,
-        unhighlight: EzBob.Validation.unhighlightFS,
-        highlight: EzBob.Validation.highlightFS
-    });
-};
-
 EzBob.createPasswordValidationPolicy = function() {
 	var passPolicy = { required: true, minlength: 6, maxlength: 60 };
 	var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
