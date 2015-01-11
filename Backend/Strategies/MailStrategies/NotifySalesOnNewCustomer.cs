@@ -10,25 +10,12 @@
 	#region class NotifySalesOnNewCustomer
 
 	public class NotifySalesOnNewCustomer : AMailStrategyBase {
-		#region public
 		public NotifySalesOnNewCustomer(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(nCustomerID, false, oDB, oLog) {
 		} // constructor
-
-		#endregion constructor
-
-		#region property Name
 
 		public override string Name {
 			get { return "Notify sales on new customer"; }
 		} // Name
-
-		#endregion property Name
-
-		#endregion public
-
-		#region protected
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			Log.Debug("Notifying sales about customer {0}", CustomerData);
@@ -46,10 +33,6 @@
 			};
 		} // SetTemplateAndVariables
 
-		#endregion method SetTemplateAndVariables
-
-		#region method GetRecipients
-
 		protected override Addressee[] GetRecipients() {
 			string sEmail = CurrentValues.Instance.SalesEmail;
 
@@ -58,9 +41,5 @@
 
 			return sEmail.Split(',').Select(addr => new Addressee(addr)).ToArray();
 		} // GetRecipients
-		#endregion method GetCustomerEmail
-
-		#endregion protected
 	} // class NotifySalesOnNewCustomer
-	#endregion class NotifySalesOnNewCustomer
 } // namespace EzBob.Backend.Strategies.MailStrategies

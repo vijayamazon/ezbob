@@ -15,19 +15,17 @@
 			int customerId,
 			decimal amount,
 			string loanRefNum,
-			bool isFirst
-		) : base(customerId, true, true) {
+			bool isFirst,
+			AConnection db,
+			ASafeLog log
+		) : base(customerId, true, db, log, true) {
 			this.amount = amount;
 			this.loanRefNum = loanRefNum;
 			this.isFirst = isFirst;
 			this.amountInUsd = CalculateLoanAmountInUsd();
 		} // constructor
 
-		#endregion consturctor
-
 		public override string Name { get { return "Cash Transferred"; } }
-
-		#region method SetTemplateAndVariables
 
 		protected override void SetTemplateAndVariables() {
 			ToTrustPilot = true;
@@ -52,8 +50,6 @@
 			else
 				TemplateName = "Mandrill - Took Loan (not 1st loan)";
 		} // SetTemplateAndVariables
-
-		#endregion method SetTemplateAndVariables
 
 		protected override void ActionAtEnd() {
 			if (CustomerData.IsAlibaba) {

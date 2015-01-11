@@ -10,10 +10,6 @@
 	using Ezbob.Utils.Exceptions;
 
 	public abstract class AMailStrategyBase : AStrategy {
-		#region public
-
-		#region method Execute
-
 		public override void Execute() {
 			try {
 				Log.Debug("Execute() started...");
@@ -44,12 +40,8 @@
 			} // try
 		} // Execute
 
-		#endregion method Execute
-
 		public virtual CustomerData CustomerData { get; set; }
 		public virtual int CustomerId { get; set; }
-
-		#region property SendToCustomer
 
 		public virtual bool SendToCustomer {
 			get { return m_bSendToCustomer; }
@@ -74,13 +66,6 @@
 			);
 		} // SendEmail
 
-
-		#endregion public
-
-		#region protected
-
-		#region constructor
-
 		protected AMailStrategyBase(int customerId, bool bSendToCustomer, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			ToTrustPilot = false;
 			m_oMailer = new StrategiesMailer(DB, Log);
@@ -90,11 +75,7 @@
 			Log.Debug("initialisation complete.");
 		} // constructor
 
-		#endregion constructor
-
 		protected bool ToTrustPilot { get; set; }
-
-		#region method GetRecipients
 
 		protected virtual Addressee[] GetRecipients() {
 			return SendToCustomer
@@ -107,23 +88,11 @@
 				: new Addressee[0];
 		} // GetRecipients
 
-		#endregion method GetCustomerEmail
-
-		#region method SetTemplateAndVariables
-
 		protected abstract void SetTemplateAndVariables();
-
-		#endregion method SetTemplateAndVariables
-
-		#region method ActionAtEnd
 
 		protected virtual void ActionAtEnd() {
 			Log.Debug("default action - nothing to do.");
 		} // ActionAtEnd
-
-		#endregion method ActionAtEnd
-
-		#region method LoadRecipientData
 
 		protected virtual void LoadRecipientData() {
 			Log.Debug("Loading customer data...");
@@ -134,27 +103,15 @@
 			Log.Debug("Loading customer data complete.");
 		} // LoadRecipientData
 
-		#endregion method LoadRecipientData
-
 		protected void SendCostumeMail(string templateName, Dictionary<string, string> variables, Addressee[] addresses)
 		{
 			var meta = new MailMetaData(templateName);
 			m_oMailer.Send(meta, variables, addresses);
 		}
 
-		#region properties
-
 		protected virtual string TemplateName { get; set; }
 		protected virtual Dictionary<string, string> Variables { get; set; }
 
-		#endregion properties
-
-		#endregion protected
-
-		#region private
-
 		private readonly StrategiesMailer m_oMailer;
-
-		#endregion private
 	} // class MailStrategyBase
 } // namespace
