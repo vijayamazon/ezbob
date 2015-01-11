@@ -7,8 +7,6 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	#region class NotifySalesOnNewCustomer
-
 	public class NotifySalesOnNewCustomer : AMailStrategyBase {
 		public NotifySalesOnNewCustomer(int nCustomerID, AConnection oDB, ASafeLog oLog) : base(nCustomerID, false, oDB, oLog) {
 		} // constructor
