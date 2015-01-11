@@ -124,8 +124,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		'click .reset-password-123456': 'resetPassword123456',
 		'click .change-broker': 'startChangeBroker',
 		'click .go-to-broker': 'goToBroker',
-		"click button[name=\"verifyMobile\"]": "verifyMobile",
-		"click button[name=\"verifyDaytime\"]": "verifyDaytime",
+		"click button[name=\"verifyMobile\"]": "verifyPhone",
+		"click button[name=\"verifyDaytime\"]": "verifyPhone",
 	}, // events
 
 	goToBroker: function() {
@@ -397,21 +397,28 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		return false;
 	}, // editEmail
 
-	verifyMobile: function () {
+	verifyPhone: function(elem) {
 	    var that = this;
-	    BlockUi("on");
-	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyMobilePhone", { customerId: this.model.get('Id'), verifiedPreviousState: this.model.get('MobilePhoneVerified') }).done(function () {
-	        BlockUi("off");
-	        that.model.fetch();
-	    });
-	    return false;
-	},
-
-	verifyDaytime: function () {
-	    var that = this;
-	    BlockUi("on");
-	    $.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyDaytimePhone", { customerId: this.model.get('Id'), verifiedPreviousState: this.model.get('DaytimePhoneVerified') }).done(function () {
-	        BlockUi("off");
+	    BlockUi();
+	    var phoneType;
+		var previousStatus;
+		if (elem.currentTarget.name === 'verifyDaytime') {
+			phoneType = 'Daytime';
+			previousStatus = this.model.get('DaytimePhoneVerified');
+		}
+	    else if (elem.currentTarget.name === 'verifyMobile') {
+	    	phoneType = 'Mobile';
+	    	previousStatus = this.model.get('MobilePhoneVerified');
+	    } else {
+	    	EzBob.ShowMessage("Unknown phone type", "Error", function() {
+	    		UnBlockUi();
+	    	});
+		    return false;
+	    }
+		
+		$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/VerifyPhone", { customerId: this.model.get('Id'), phoneType: phoneType, verifiedPreviousState: previousStatus })
+		 .done(function() {
+	        UnBlockUi();
 	        that.model.fetch();
 	    });
 	    return false;

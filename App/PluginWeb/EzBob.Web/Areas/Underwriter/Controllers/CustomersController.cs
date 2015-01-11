@@ -22,6 +22,7 @@
 	using Code;
 	using Infrastructure.csrf;
 	using log4net;
+	using ServiceClientProxy.EzServiceReference;
 	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class CustomersController : Controller {
@@ -285,7 +286,7 @@
 			var workplaceContext = ObjectFactory.GetInstance<IWorkplaceContext>();
 			var user = workplaceContext.User;
 			var customer = _customers.GetChecked(model.id);
-
+			DateTime now = DateTime.UtcNow;
 			customer.CreditResult = model.status;
 			customer.UnderwriterName = user.Name;
 
@@ -300,9 +301,9 @@
 
 			if (model.status != CreditResultStatus.ApprovedPending)
 				customer.IsWaitingForSignature = false;
-
+			int stage = 0;
 			switch (model.status) {
-				case CreditResultStatus.Approved:
+			case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
 					try {
 						customer.AddAlibabaDefaultBankAccount();
@@ -317,7 +318,7 @@
 					} // try
 				} // if
 
-				customer.DateApproved = DateTime.UtcNow;
+				customer.DateApproved = now;
 				customer.Status = Status.Approved;
 				customer.ApprovedReason = model.reason;
 
@@ -370,11 +371,16 @@
 						m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
 					} // try
 				} // if
-
+				stage = 6;//todo
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel {
+					Email = customer.Name,
+					ApprovedAmount = (int)sum,
+					Stage = stage
+				}); 
 				break;
 
 			case CreditResultStatus.Rejected:
-				customer.DateRejected = DateTime.UtcNow;
+				customer.DateRejected = now;
 				customer.RejectedReason = model.reason;
 				customer.Status = Status.Rejected;
 				//var rejections = model.rejectionReasons.Select(int.Parse);
@@ -399,6 +405,13 @@
 					} // try
 				} // if
 
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel 
+				{
+					Email = customer.Name,
+					CloseDate = now,
+					DealCloseType = "Lost",
+					DealLostReason = customer.RejectedReason
+				}); 
 				break;
 
 			case CreditResultStatus.Escalated:
@@ -406,7 +419,7 @@
 				customer.DateEscalated = DateTime.UtcNow;
 				customer.EscalationReason = model.reason;
 				_historyRepository.LogAction(DecisionActions.Escalate, model.reason, user, customer);
-
+				stage = 2;//todo
 				try {
 					m_oServiceClient.Instance.Escalated(customer.Id, _context.UserId);
 				}
@@ -414,7 +427,7 @@
 					sWarning = "Failed to send 'escalated' email: " + e.Message;
 					m_oLog.Warn(e, "Failed to send 'escalated' email.");
 				} // try
-
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel { Email = customer.Name, Stage = stage }); 
 				break;
 
 			case CreditResultStatus.ApprovedPending:
@@ -422,14 +435,21 @@
 				customer.CreditResult = CreditResultStatus.ApprovedPending;
 				customer.PendingStatus = PendingStatus.Manual;
 				_historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
+
+				stage = model.signature == 1 ? 4 : 3; //TODO define stages for pending and signature
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel {Email = customer.Name,Stage = stage}); 
 				break;
 
 			case CreditResultStatus.WaitingForDecision:
 				customer.CreditResult = CreditResultStatus.WaitingForDecision;
 				_historyRepository.LogAction(DecisionActions.Waiting, "", user, customer);
+				stage = 1;//todo
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel { Email = customer.Name, Stage = stage }); 
 
 				break;
 			} // switch
+
+			
 
 			return Json(new { warning = sWarning });
 		} // ChangeStatus

@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies;
@@ -10,6 +11,7 @@
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Backend.Strategies.ScoreCalculation;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
@@ -20,6 +22,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using LandRegistryLib;
 	using NHibernate;
+	using SalesForceLib.Models;
 	using StructureMap;
 
 	public class MainStrategy : AStrategy {
@@ -718,7 +721,37 @@
 					this._session.Get<User>(1), customer
 				);
 			} // if
-		} // UpdateCustomerAndCashRequest
+
+			UpdateSalesForceOpportunity(customer.Name);
+		}// UpdateCustomerAndCashRequest
+
+		private void UpdateSalesForceOpportunity(string customerEmail) {
+			new AddUpdateLeadAccount(customerEmail, customerId, false, false).Execute();
+
+			if (!autoDecisionResponse.Decision.HasValue) {
+				return;
+			}
+
+			switch (autoDecisionResponse.Decision.Value) {
+			case DecisionActions.Approve:
+			case DecisionActions.ReApprove:
+				new UpdateOpportunity(customerId, new OpportunityModel {
+					ApprovedAmount = autoDecisionResponse.AutoApproveAmount,
+					Email = customerEmail,
+					Stage = 6 //todo
+				}).Execute();
+				break;
+			case DecisionActions.Reject:
+			case DecisionActions.ReReject:
+				new UpdateOpportunity(customerId, new OpportunityModel {
+					Email = customerEmail,
+					DealCloseType = "Lost",
+					DealLostReason = "Auto " + autoDecisionResponse.Decision.Value.ToString(),
+					CloseDate = DateTime.UtcNow
+				}).Execute();
+				break;
+			}
+		}
 
 		private static void ExecuteAdditionalStrategies(
 			int customerId,

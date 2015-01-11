@@ -42,11 +42,14 @@
 
 @helper ProfileDetails() {
     <div>
-        @Description("ID", Model.ID.ToString())
-        @Description("Email", Model.Email)
-        @Description("Name", Model.Name)
-        @Description("FraudStatus", Model.FraudStatus)
-        @Description("CreditStatus", Model.CreditStatus)
+        @Description("ID", Model.PersonalModel.ID.ToString())
+        @Description("Email", Model.PersonalModel.Email)
+        @Description("Name", Model.PersonalModel.Name)
+        @Description("FraudStatus", Model.PersonalModel.FraudStatus)
+        @Description("CreditStatus", Model.PersonalModel.CreditStatus)
+        @Description("Experian score", Model.PersonalModel.ExperianScore.ToString())
+        @Description("Aml Score", Model.PersonalModel.AmlScore.ToString())
+        @Description("Aml Description", Model.PersonalModel.AmlDescription)
 
         @if (Model.Phones.Any()) {
             <dl class="dl-horizontal">
@@ -144,28 +147,26 @@
             <strong>Not a fraud</strong>
         }
         @if (Model.Fraud.FraudDetectionLogRows.Any()) {
-            <div class="table-responsive">
-                <table class="table table-hover table-condensed">
-                    <thead>
+            <table class="table table-hover table-condensed">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>Field</th>
+                        <th>Concurrence</th>
+                        <th>Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var fraudRow in Model.Fraud.FraudDetectionLogRows) {
                         <tr>
-                            <th>Type</th>
-                            <th>Field</th>
-                            <th>Concurrence</th>
-                            <th>Value</th>
+                            <td>@fraudRow.Type</td>
+                            <td>@fraudRow.CurrentField</td>
+                            <td>@fraudRow.Concurrence</td>
+                            <td>@fraudRow.Value</td>
                         </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var fraudRow in Model.Fraud.FraudDetectionLogRows) {
-                            <tr>
-                                <td>@fraudRow.Type</td>
-                                <td>@fraudRow.CurrentField</td>
-                                <td>@fraudRow.Concurrence</td>
-                                <td>@fraudRow.Value</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+                    }
+                </tbody>
+            </table>
         }
     </div>
 }

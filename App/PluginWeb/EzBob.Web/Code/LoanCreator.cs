@@ -17,6 +17,7 @@
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	public interface ILoanCreator {
@@ -134,6 +135,13 @@
 
 			var loanHistoryRepository = new LoanHistoryRepository(_session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
+
+			m_oServiceClient.Instance.SalesForceUpdateOpportunity(cus.Id, cus.Id, new OpportunityModel {
+				Email = cus.Name,
+				CloseDate = now,
+				TookAmount = (int)loan.LoanAmount,
+				DealCloseType = "Won"
+			});
 
 			_session.Flush();
 

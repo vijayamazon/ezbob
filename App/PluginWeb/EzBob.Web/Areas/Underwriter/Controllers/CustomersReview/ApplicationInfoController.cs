@@ -92,40 +92,31 @@
 			return Json(m, JsonRequestBehavior.AllowGet);
 		}
 
-		private void VerifyPhone(CustomerPhone customerPhone, bool verified)
+		[Ajax]
+		[HttpPost]
+		public JsonResult VerifyPhone(int customerId,string phoneType, bool verifiedPreviousState)
 		{
+			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == phoneType && x.IsCurrent);
+			if (customerPhone == null) {
+				return Json(new { });
+			}
+
 			customerPhone.IsCurrent = false;
 			customerPhoneRepository.SaveOrUpdate(customerPhone);
 
-			var newCustomerPhoneEntry = new CustomerPhone
-				{
-					CustomerId = customerPhone.CustomerId,
-					IsCurrent = true,
-					Phone = customerPhone.Phone,
-					PhoneType = customerPhone.PhoneType,
-					IsVerified = verified,
-					VerificationDate = DateTime.UtcNow,
-					VerifiedBy = User.Identity.Name
-				};
+			var newCustomerPhoneEntry = new CustomerPhone {
+				CustomerId = customerPhone.CustomerId,
+				IsCurrent = true,
+				Phone = customerPhone.Phone,
+				PhoneType = customerPhone.PhoneType,
+				IsVerified = !verifiedPreviousState,
+				VerificationDate = DateTime.UtcNow,
+				VerifiedBy = User.Identity.Name
+			};
 			customerPhoneRepository.SaveOrUpdate(newCustomerPhoneEntry);
+			return Json(new {});
 		}
-
-		[Ajax]
-		[HttpPost]
-		public void VerifyMobilePhone(int customerId, bool verifiedPreviousState)
-		{
-			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Mobile" && x.IsCurrent);
-			VerifyPhone(customerPhone, !verifiedPreviousState);
-		}
-
-		[Ajax]
-		[HttpPost]
-		public void VerifyDaytimePhone(int customerId, bool verifiedPreviousState)
-		{
-			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == "Daytime" && x.IsCurrent);
-			VerifyPhone(customerPhone, !verifiedPreviousState);
-		}
-
+		
 		[HttpPost]
 		[Transactional]
 		[Ajax]

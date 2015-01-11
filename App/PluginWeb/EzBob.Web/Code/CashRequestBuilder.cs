@@ -37,7 +37,7 @@
 			var loanSource = _loanSources.GetDefault();
 
 			int? experianScore = customer.ExperianConsumerScore;
-
+			DateTime now = DateTime.UtcNow;
 			var cashRequest = new CashRequest
 				{
 					CreationDate = DateTime.UtcNow,
@@ -50,8 +50,8 @@
 					UseBrokerSetupFee = (customer.Broker != null) || CurrentValues.Instance.BrokerCommissionEnabled,
 					DiscountPlan = _discounts.GetDefault(),
 					IsLoanTypeSelectionAllowed = 1,
-					OfferValidUntil = DateTime.UtcNow.AddDays(1),
-					OfferStart = DateTime.UtcNow,
+					OfferValidUntil = now.AddDays(1),
+					OfferStart = now,
 					LoanSource = loanSource,
 					IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
 					ExpirianRating = experianScore,
@@ -59,6 +59,18 @@
 				};
 
 			customer.CashRequests.Add(cashRequest);
+
+			if (originator != CashRequestOriginator.FinishedWizard) {
+				CustomerRequestedLoan requestedLoan = customer.CustomerRequestedLoan.LastOrDefault();
+				m_oServiceClient.Instance.SalesForceAddOpportunity(customer.Id, customer.Id,
+					new OpportunityModel {
+						Email = customer.Name,
+						CreateDate = now,
+						ExpectedEndDate = now.AddDays(7),
+						RequestedAmount = requestedLoan != null ? (int?)requestedLoan.Amount : null,
+						Type = originator.ToString()
+					});
+			}
 
 			return cashRequest;
 		} // CreateCashRequest
