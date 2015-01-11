@@ -2,13 +2,15 @@
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
+	using Ezbob.Logger;
+	using EzBob.Backend.Strategies;
 
 	public class PlayLottery : AStrategy {
 		public override string Name {
 			get { return "PlayLottery"; }
 		} // Name
 
-		public PlayLottery(Guid playerID) {
+		public PlayLottery(Guid playerID, AConnection db, ASafeLog log) : base(db, log) {
 			this.playerID = playerID;
 			Result = new LotteryResult();
 		} // constructor

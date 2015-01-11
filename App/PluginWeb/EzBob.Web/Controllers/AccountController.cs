@@ -1071,7 +1071,7 @@ namespace EzBob.Web.Controllers {
 
 				if (int.TryParse(m_oContext.SessionId, out nSessionID)) {
 					try {
-						m_oServiceClient.Instance.MarkSessionEnded(nSessionID);
+						m_oServiceClient.Instance.MarkSessionEnded(nSessionID, "", m_oContext.Customer != null ? m_oContext.Customer.Id : (int?)null);
 					}
 					catch (Exception e) {
 						ms_oLog.Debug(e, "Failed to mark customer session as ended.");

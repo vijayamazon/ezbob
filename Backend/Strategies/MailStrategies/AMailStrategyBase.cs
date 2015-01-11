@@ -58,7 +58,7 @@
 				aryRecipients.Length > 0 ? " and " + (aryRecipients.Length) + " other recipient(s)" : string.Empty
 			);
 
-			this.mailer.Send(TemplateName, Variables, aryRecipients);
+			this.m_oMailer.Send(TemplateName, Variables, aryRecipients);
 
 			Log.Debug(
 				"Sending an email to staff{0} complete.",

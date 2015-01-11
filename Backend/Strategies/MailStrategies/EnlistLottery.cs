@@ -2,11 +2,13 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Database;
+	using Ezbob.Logger;
+	using EzBob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.MailStrategies.API;
 
 	public class EnlistLottery : AMailStrategyBase {
-		public EnlistLottery(int customerID) : base(customerID, false) {
+		public EnlistLottery(int customerID, AConnection db, ASafeLog log) : base(customerID, false, db, log) {
 			this.doSend = false;
 			this.emailAddress = string.Empty;
 			this.playerID = Guid.NewGuid();
