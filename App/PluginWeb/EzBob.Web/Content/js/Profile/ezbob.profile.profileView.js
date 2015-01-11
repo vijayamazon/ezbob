@@ -2,162 +2,181 @@
 EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.ProfileView = Backbone.View.extend({
-    initialize: function (options) {
-        $('#profile-main-to-be-replaced').html(
-            $(_.template($("#profile-main-template").html(), { }))
-        );
+	initialize: function(options) {
+		$('#profile-main-to-be-replaced').html(
+			$(_.template($("#profile-main-template").html(), {}))
+		);
 
-        this.profileMain = $('#profile-main');
+		this.scratchView = new EzBob.Profile.Ny2015ScratchView();
 
-        this.customer = options;
-        this.payEarlyView = new EzBob.Profile.PayEarlyView({ model: options });
+		this.profileMain = $('#profile-main');
 
-        this.getCashModel = new EzBob.Profile.GetCashModel({ customer: options });
-        this.getCashView = new EzBob.Profile.GetCashView({ model: this.getCashModel, customer: options });
+		this.customer = options;
+		this.payEarlyView = new EzBob.Profile.PayEarlyView({ model: options });
 
-        this.signWidget = new EzBob.Profile.SignWidget({ customerModel: options });
-        this.signWidget.on('payEarly', this.makePayment, this);
+		this.getCashModel = new EzBob.Profile.GetCashModel({ customer: options });
+		this.getCashView = new EzBob.Profile.GetCashView({ model: this.getCashModel, customer: options });
 
-        this.processingMessageView = new EzBob.Profile.ProccessingMessageView({ model: options });
-        this.processingMessageContainer = $('.proccessing-message').empty();
+		this.signWidget = new EzBob.Profile.SignWidget({ customerModel: options });
+		this.signWidget.on('payEarly', this.makePayment, this);
 
-        this.widgetsContainer = $('.d-widgets').empty();
+		this.processingMessageView = new EzBob.Profile.ProccessingMessageView({ model: options });
+		this.processingMessageContainer = $('.proccessing-message').empty();
 
-        this.getCashRegion = new Backbone.Marionette.Region({ el: "#get-cash" });
+		this.widgetsContainer = $('.d-widgets').empty();
 
-        this.signContainer = $("#message-sign");
+		this.getCashRegion = new Backbone.Marionette.Region({ el: "#get-cash" });
 
-        this.processingMessageView.on('getCash', this.getCash, this);
-        this.processingMessageView.on('payEarly', this.makePayment, this);
+		this.signContainer = $("#message-sign");
 
-        this.router = new EzBob.Profile.ProfileRouter(this.customer);
-        this.router.on("details", this.loanDetails, this);
-        this.router.on("getCash", this.getCash, this);
-        this.router.on("payEarly", this.makePayment, this);
-        this.router.on("menuWidgetShown", this.menuWidgetShown, this);
-    },
+		this.processingMessageView.on('getCash', this.getCash, this);
+		this.processingMessageView.on('payEarly', this.makePayment, this);
 
-    render: function () {
-        this.profileMain.show();
+		this.router = new EzBob.Profile.ProfileRouter(this.customer);
+		this.router.on("details", this.loanDetails, this);
+		this.router.on("getCash", this.getCash, this);
+		this.router.on("payEarly", this.makePayment, this);
+		this.router.on("menuWidgetShown", this.menuWidgetShown, this);
+	},
 
-        this.getCashView.render();
-        this.payEarlyView.render();
-        this.signWidget.render();
-        this.processingMessageView.render();
+	render: function() {
+		this.profileMain.show();
 
-        this.payEarlyView.$el.appendTo(this.widgetsContainer);
-        this.getCashView.$el.appendTo(this.widgetsContainer);
-        this.signWidget.$el.appendTo(this.signContainer);
-        this.processingMessageView.$el.appendTo(this.processingMessageContainer);
+		this.getCashView.render();
+		this.payEarlyView.render();
+		this.signWidget.render();
+		this.processingMessageView.render();
 
-	    EzBob.UiAction.registerView(this);
-	    EzBob.UiAction.registerChildren(this.profileMain);
+		this.payEarlyView.$el.appendTo(this.widgetsContainer);
+		this.getCashView.$el.appendTo(this.widgetsContainer);
+		this.signWidget.$el.appendTo(this.signContainer);
+		this.processingMessageView.$el.appendTo(this.processingMessageContainer);
 
-        /*
-        if (this.customer.get('state') == 'get' && !this.customer.get('hasLoans'))
-            window.location.href = "#GetCash";
-        */
-        if (this.customer.get('hasLoans'))
-        	window.location.href = "#AccountActivity";
+		EzBob.UiAction.registerView(this);
+		EzBob.UiAction.registerChildren(this.profileMain);
 
-	    if (this.customer.get('IsWhiteLabel')) {
-	    	$('.header-info').show();
-		    $('.header-info-text').html('<div class="whiteLabel"></div>');
-	    } else {
-		    $('.header-info').show();
-		    $('.header-info-text').text('MY ACCOUNT');
-	    }
-	    return this;
-    },
+		/*
+		if (this.customer.get('state') == 'get' && !this.customer.get('hasLoans'))
+			window.location.href = "#GetCash";
+		*/
+		if (this.customer.get('hasLoans'))
+			window.location.href = "#AccountActivity";
 
-    loanDetails: function (id) {
-        EzBob.App.GA.trackPage('/Customer/Profile/LoanDetails');
+		if (this.customer.get('IsWhiteLabel')) {
+			$('.header-info').show();
+			$('.header-info-text').html('<div class="whiteLabel"></div>');
+		} else {
+			$('.header-info').show();
+			$('.header-info-text').text('MY ACCOUNT');
+		}
 
-        var loan = new EzBob.Profile.LoanModel();
-        loan.loanId = id;
-        loan.fetch();
+		return this;
+	},
 
-        var loanDetailView = new EzBob.Profile.LoanDetailsView({ model: loan, customer: this.customer });
-        loanDetailView.render();
+	loanDetails: function(id) {
+		EzBob.App.GA.trackPage('/Customer/Profile/LoanDetails');
 
-        this.profileMain.hide();
-        this.getCashRegion.show(loanDetailView);
-        this.marketing("LoanDetails");
-    },
-    getCash: function () {
-        $(document).attr("title", "Get Cash: Select Loan Amount | EZBOB");
-        EzBob.App.GA.trackPage('/Customer/Profile/GetCash');
+		var loan = new EzBob.Profile.LoanModel();
+		loan.loanId = id;
+		loan.fetch();
 
-        var applyForLoanView = new EzBob.Profile.ApplyForLoanTopView({ customer: this.customer, model: new EzBob.Profile.ApplyForLoanTopViewModel() });
+		var loanDetailView = new EzBob.Profile.LoanDetailsView({ model: loan, customer: this.customer });
+		loanDetailView.render();
 
-        applyForLoanView.on('back', this.applyForLoanBack, this);
-        applyForLoanView.on('submit', this.applyForLoanSubmit, this);
+		this.hidePorifle();
+		this.getCashRegion.show(loanDetailView);
+		this.marketing("LoanDetails");
+	},
 
-        this.getCashRegion.show(applyForLoanView);
-        this.profileMain.hide();
-        this.marketing("GetCash");
-    },
-    menuWidgetShown: function () {
-        $(document).attr("title", "Dashboard: User Dashboard | EZBOB");
-        this.getCashRegion.close();
-        this.profileMain.show();
-        scrollTop();
-        this.marketing("Dashboard");
-    },
-    applyForLoanBack: function () {
-        this.router.navigate("");
-        this.menuWidgetShown();
-    },
+	getCash: function() {
+		$(document).attr("title", "Get Cash: Select Loan Amount | EZBOB");
+		EzBob.App.GA.trackPage('/Customer/Profile/GetCash');
 
-    payEarlyBack: function () {
-        this.router.previous();
-    },
+		var applyForLoanView = new EzBob.Profile.ApplyForLoanTopView({ customer: this.customer, model: new EzBob.Profile.ApplyForLoanTopViewModel() });
 
-    applyForLoanSubmit: function (creditSum) {
-        this.applyForLoanBack();
-        this.getCashModel.set('availableCredit', this.getCashModel.get('availableCredit') - creditSum);
-    },
-    makePayment: function (id) {
-        var title = (this.customer.get("hasLateLoans") ? "Pay Late:" : "Pay Early:") + " User Payment | EZBOB";
-        $(document).attr("title", title);
+		applyForLoanView.on('back', this.applyForLoanBack, this);
+		applyForLoanView.on('submit', this.applyForLoanSubmit, this);
 
-        EzBob.App.GA.trackPage('/Customer/Profile/MakePayment');
+		this.getCashRegion.show(applyForLoanView);
+		this.hidePorifle();
+		this.marketing("GetCash");
+	},
 
-        var payEarlyView = new EzBob.Profile.MakeEarlyPayment({ el: this.payEarlyDiv, customerModel: this.customer, loanId: id });
-        payEarlyView.on('submit back', this.payEarlyBack, this);
+	showProfile: function() {
+		this.profileMain.show();
 
-        this.getCashRegion.show(payEarlyView);
-        this.profileMain.hide();
-        this.marketing("MakePayment");
-    },
+		// TODO: show only if needed
+		this.scratchView.show();
+	}, // showProfile
 
-    marketing: function (page) {
-        var marketing;
-        var isDashboard = true;
-        switch (page) {
-            case "Dashboard":
-                marketing = EzBob.dbStrings.MarketingDashboard;
-                break;
-            case "MakePayment":
-                marketing = EzBob.dbStrings.MarketingDashboardMakePayment;
-                break;
-            case "GetCash":
-                marketing = EzBob.dbStrings.MarketingDashboardGetCash;
-                break;
-            case "LoanDetails":
-                marketing = EzBob.dbStrings.MarketingDashboardLoanDetails;
-                break;
-            default:
-                isDashboard = false;
-                marketing = EzBob.dbStrings.MarketingDefault;
-                break;
-        }
-        if (isDashboard && marketing) {
-            $("#defaultMarketing").hide();
-            $("#marketingProggress").show().html(marketing);
-        } else {
-            $("#defaultMarketing").show();
-            $("#marketingProggress").hide().html(marketing);
-        }
-    }
+	hideProfile: function() {
+		this.profileMain.hide();
+		this.scratchView.hide();
+	}, // hideProfile
+
+	menuWidgetShown: function() {
+		$(document).attr("title", "Dashboard: User Dashboard | EZBOB");
+		this.getCashRegion.close();
+		this.showProfile();
+		scrollTop();
+		this.marketing("Dashboard");
+	},
+
+	applyForLoanBack: function() {
+		this.router.navigate("");
+		this.menuWidgetShown();
+	},
+
+	payEarlyBack: function() {
+		this.router.previous();
+	},
+
+	applyForLoanSubmit: function(creditSum) {
+		this.applyForLoanBack();
+		this.getCashModel.set('availableCredit', this.getCashModel.get('availableCredit') - creditSum);
+	},
+
+	makePayment: function(id) {
+		var title = (this.customer.get("hasLateLoans") ? "Pay Late:" : "Pay Early:") + " User Payment | EZBOB";
+		$(document).attr("title", title);
+
+		EzBob.App.GA.trackPage('/Customer/Profile/MakePayment');
+
+		var payEarlyView = new EzBob.Profile.MakeEarlyPayment({ el: this.payEarlyDiv, customerModel: this.customer, loanId: id });
+		payEarlyView.on('submit back', this.payEarlyBack, this);
+
+		this.getCashRegion.show(payEarlyView);
+		this.hidePorifle();
+		this.marketing("MakePayment");
+	},
+
+	marketing: function(page) {
+		var marketing;
+		var isDashboard = true;
+		switch (page) {
+			case "Dashboard":
+				marketing = EzBob.dbStrings.MarketingDashboard;
+				break;
+			case "MakePayment":
+				marketing = EzBob.dbStrings.MarketingDashboardMakePayment;
+				break;
+			case "GetCash":
+				marketing = EzBob.dbStrings.MarketingDashboardGetCash;
+				break;
+			case "LoanDetails":
+				marketing = EzBob.dbStrings.MarketingDashboardLoanDetails;
+				break;
+			default:
+				isDashboard = false;
+				marketing = EzBob.dbStrings.MarketingDefault;
+				break;
+		}
+		if (isDashboard && marketing) {
+			$("#defaultMarketing").hide();
+			$("#marketingProggress").show().html(marketing);
+		} else {
+			$("#defaultMarketing").show();
+			$("#marketingProggress").hide().html(marketing);
+		}
+	}
 });

@@ -33,11 +33,6 @@
         display: none;
     }
 
-    div.full_width {
-        width: 100%;
-        overflow-x: hidden;
-    }
-
     .inner {
         min-width: 320px;
         width: 100%;

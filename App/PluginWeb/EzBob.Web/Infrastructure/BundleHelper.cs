@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Infrastructure
-{
+﻿namespace EzBob.Web.Infrastructure {
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
@@ -9,12 +8,8 @@
 	using SquishIt.Mvc;
 	using StructureMap;
 
-	public class BundleHelper
-	{
-		#region CSS
-
-		public static MvcHtmlString RenderCustomerCss()
-		{
+	public class BundleHelper {
+		public static MvcHtmlString RenderCustomerCss() {
 			return Bundle.Css()
 				//libs
 				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
@@ -29,11 +24,11 @@
 				//custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/customer.css")
+				.Add("~/Content/css/profile-ny2015scratch.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
 
-		public static MvcHtmlString RenderProfileCss()
-		{
+		public static MvcHtmlString RenderProfileCss() {
 			return Bundle.Css()
 				//libs
 				.Add("~/Content/css/lib/jquery.jscrollpane.css")
@@ -45,8 +40,7 @@
 				.MvcRender("~/Content/css/min/profile_combined_#.css");
 		} // RenderProfileCss
 
-		public static MvcHtmlString RenderWizardCss()
-		{
+		public static MvcHtmlString RenderWizardCss() {
 			return Bundle.Css()
 				//custom css
 				.Add("~/Content/css/wizard.css")
@@ -55,16 +49,14 @@
 				.MvcRender("~/Content/css/min/wizard_combined_#.css");
 		} // RenderProfileCss
 
-		public static MvcHtmlString RenderLoginCss()
-		{
+		public static MvcHtmlString RenderLoginCss() {
 			return Bundle.Css()
 				//custom css
 				.Add("~/Content/css/mobile.css")
 				.MvcRender("~/Content/css/min/login_combined_#.css");
 		} // RenderProfileCss
 
-		public static MvcHtmlString RenderUnderwriterCss()
-		{
+		public static MvcHtmlString RenderUnderwriterCss() {
 			return Bundle.Css()
 				//libs
 				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
@@ -105,15 +97,8 @@
 				.WithAttribute("media", "print")
 				.MvcRender("~/Content/css/min/print_combined_#.css");
 		} // RenderPrintCss
-
-		#endregion CSS
-
-		#region JS
-
-		#region Common JS
-
-		public static MvcHtmlString RenderCommonJs()
-		{
+		
+		public static MvcHtmlString RenderCommonJs() {
 			return Bundle.JavaScript()
 				//libs
 				.Add("~/Content/js/lib/jquery-1.8.3.js")
@@ -187,20 +172,14 @@
 				.MvcRender("~/Content/js/min/jslib_#.js");
 		} // RenderCommonJs
 
-		public static string GetDbStrings()
-		{
+		public static string GetDbStrings() {
 			var strings = ObjectFactory.GetInstance<IDbStringRepository>();
 			Dictionary<string, string> dict = strings.GetAllStrings().ToDictionary(s => s.Key, s => s.Value);
 			string json = JsonConvert.SerializeObject(dict);
 			return "var EzBob = EzBob || {};" + "EzBob.dbStrings = " + json + ";";
 		} // GetDbStrings
 
-		#endregion Common JS
-
-		#region underwriter js
-
-		public static MvcHtmlString RenderUnderwriterJs()
-		{
+		public static MvcHtmlString RenderUnderwriterJs() {
 			return Bundle.JavaScript()
 				//3rd party libs
 				.Add("~/Content/js/lib/alertify.js")
@@ -365,12 +344,7 @@
 				.MvcRender("~/Content/js/min/underwriter_#.js");
 		} // RenderUnderwriterJs
 
-		#endregion underwriter js
-
-		#region customer js
-
-		public static MvcHtmlString RenderWizardJs()
-		{
+		public static MvcHtmlString RenderWizardJs() {
 			return Bundle.JavaScript()
 				.Add("~/Content/js/ezbob.customerModel.js")
 				.Add("~/Content/js/Wizard/wizardStepSequence.js")
@@ -412,14 +386,14 @@
 				.MvcRender("~/Content/js/min/wizard_#.js");
 		} // RenderWizardJs
 
-		public static MvcHtmlString RenderProfileJs()
-		{
+		public static MvcHtmlString RenderProfileJs() {
 			return Bundle.JavaScript()
 				//3rd party
 				.Add("~/Content/js/lib/bootstrap.js")
 				.Add("~/Content/js/lib/bootstrap-datepicker.js")
 				.Add("~/Content/js/lib/bootstrap-modal.js")
 				.Add("~/Content/js/lib/bootstrap-modalmanager.js")
+				.Add("~/Content/js/lib/wScratchPad.min.js")
 
 				//Customer Model
 				.Add("~/Content/js/ezbob.customerModel.js")
@@ -478,6 +452,7 @@
 				.Add("~/Content/js/Profile/ezbob.profile.loanTaken.js")
 				.Add("~/Content/js/Profile/ezbob.profile.inviteFriend.js")
 				.Add("~/Content/js/Profile/ezbob.profile.perks.js")
+				.Add("~/Content/js/Profile/ezbob.profile.ny2015scratch.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMain.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMaster.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")
@@ -500,11 +475,7 @@
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderCreatePasswordJs
 
-		#endregion customer js
-
-		#region paypoint js
-		public static MvcHtmlString RenderPaypointTemplateJs()
-		{
+		public static MvcHtmlString RenderPaypointTemplateJs() {
 			return Bundle.JavaScript()
 				.Add("~/Content/js/lib/jquery-1.8.3.js")
 				.Add("~/Content/js/lib/jquery.browser.min.js")
@@ -523,8 +494,5 @@
 				.Add("~/Content/js/lib/attardi.labels.js")
 				.MvcRender("~/Content/js/min/jsPaypojntTemplate_#.js");
 		} // RenderPaypointTemplateJs
-		#endregion
-
-		#endregion JS
 	} // class BundleHelper
 } // namespace

@@ -90,10 +90,46 @@
         </div>
 
         <div class="main-page">
-            <section id="full_width">
-                @RenderBody()
-            </section>
+            @RenderBody()
         </div>
+
+		<div id="ny2015scratch">
+			<div class="logo"></div>
+			<div class="content">
+				<div class="title">New Year's Revolution</div>
+				<div class="slogan">Scratch and win Cash Back up to</div>
+				<div class="slogan-amount">
+					<img src="~/Content/img/ny2015scratch/pound.png" />
+					<img src="~/Content/img/ny2015scratch/2.png" />
+					<img src="~/Content/img/ny2015scratch/0.png" />
+					<img src="~/Content/img/ny2015scratch/1.png" />
+					<img src="~/Content/img/ny2015scratch/5.png" />
+				</div>
+				
+				<div class="frame">
+					<div class="scratch-card">
+						<div class="scratch-area"></div>
+					</div>
+					<div class="hoops"></div>
+				</div>
+			</div>
+			
+			<div class="decline"><a class="decline-game">I don't want to play</a></div>
+			<div class="close-lost"><a class="leave">Close</a></div>
+			
+			<div class="won">
+				<div class="frame">
+					<div class="title">You won!</div>
+					
+					<div class="amount-row">
+						<img src="~/Content/img/ny2015scratch/pound.png" />
+						<span class="amount"></span>
+					</div>
+
+					<div class="close"><a class="claim">Close</a></div>
+				</div>
+			</div>
+		</div>
 
         <div id="modalRegion" class="modal hide fade"></div>
         @if (!IsSectionDefined("customJs"))
