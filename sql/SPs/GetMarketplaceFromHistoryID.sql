@@ -5,7 +5,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-ALTER PROCEDURE GetMarketplaceFromHistoryID
+ALTER PROCEDURE [dbo].[GetMarketplaceFromHistoryID]
 @MpType NVARCHAR(32),
 @HistoryID INT,
 @MpID INT OUTPUT
@@ -32,16 +32,17 @@ BEGIN
 	FROM
 		MP_CustomerMarketPlaceUpdatingHistory h
 	WHERE
-		h.Id = @HistoryID
+		h.Id = @HistoryID and h.Error is null
 
 	------------------------------------------------------------------------------
 
 	IF @MpID IS NULL
 	BEGIN
-		RAISERROR('No marketplace id found for %s marketplace with history id %d.', 11, 2, @MpType, @HistoryID)
+		RAISERROR('No marketplace found for %s marketplace with history id %d and no error.', 11, 2, @MpType, @HistoryID)
 		RETURN
 	END
 
 	------------------------------------------------------------------------------
 END
+
 GO
