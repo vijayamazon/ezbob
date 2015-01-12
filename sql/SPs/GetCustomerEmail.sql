@@ -1,0 +1,16 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('GetCustomerEmail') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCustomerEmail AS SELECT 1')
+GO
+
+
+ALTER PROCEDURE GetCustomerEmail
+@CustomerID INT
+AS
+BEGIN
+	SELECT Name FROM Customer WHERE Id=@CustomerID
+END
+
+GO
