@@ -435,6 +435,8 @@ BEGIN
 			r.IdUnderwriter != 1
 			AND
 			r.UnderwriterDecisionDate < @Now
+			AND
+			r.IdCustomer = @CustomerID
 	), 0)
 
 	------------------------------------------------------------------------------
