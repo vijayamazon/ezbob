@@ -88,7 +88,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		var loanDetailView = new EzBob.Profile.LoanDetailsView({ model: loan, customer: this.customer });
 		loanDetailView.render();
 
-		this.hidePorifle();
+		this.hideProfile();
 		this.getCashRegion.show(loanDetailView);
 		this.marketing("LoanDetails");
 	},
@@ -103,7 +103,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		applyForLoanView.on('submit', this.applyForLoanSubmit, this);
 
 		this.getCashRegion.show(applyForLoanView);
-		this.hidePorifle();
+		this.hideProfile();
 		this.marketing("GetCash");
 	},
 
@@ -149,9 +149,10 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		payEarlyView.on('submit back', this.payEarlyBack, this);
 
 		this.getCashRegion.show(payEarlyView);
-		this.hidePorifle();
+		this.hideProfile();
 		this.marketing("MakePayment");
 	},
+
 
 	marketing: function(page) {
 		var marketing;
