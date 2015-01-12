@@ -738,6 +738,7 @@
 				new UpdateOpportunity(customerId, new OpportunityModel {
 					ApprovedAmount = autoDecisionResponse.AutoApproveAmount,
 					Email = customerEmail,
+					ExpectedEndDate = autoDecisionResponse.AppValidFor,
 					Stage = 6 //todo
 				}).Execute();
 				break;

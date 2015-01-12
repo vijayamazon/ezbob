@@ -375,7 +375,8 @@
 				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel {
 					Email = customer.Name,
 					ApprovedAmount = (int)sum,
-					Stage = stage
+					Stage = stage,
+					ExpectedEndDate = request.OfferValidUntil
 				}); 
 				break;
 
@@ -383,7 +384,6 @@
 				customer.DateRejected = now;
 				customer.RejectedReason = model.reason;
 				customer.Status = Status.Rejected;
-				//var rejections = model.rejectionReasons.Select(int.Parse);
 				_historyRepository.LogAction(DecisionActions.Reject, model.reason, user, customer, model.rejectionReasons);
 
 				request.ManagerApprovedSum = null;
@@ -448,8 +448,6 @@
 
 				break;
 			} // switch
-
-			
 
 			return Json(new { warning = sWarning });
 		} // ChangeStatus

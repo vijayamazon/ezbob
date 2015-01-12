@@ -57,6 +57,14 @@
 			}
 		}
 
+		public void ChangeEmail(string currentEmail, string newEmail) {
+			Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", currentEmail, newEmail);
+			ApiResponse response = api.ChangeEmail(currentEmail, newEmail);
+			if (!response.Success) {
+				Log.ErrorFormat("SalesForce ChangeEmail failed from {0} to {1} failed, error: {2}", currentEmail, newEmail, response.Error);
+			}
+		}
+
 
 		private readonly Api api;
 		private readonly ILog Log = LogManager.GetLogger(typeof (ApiClient));

@@ -28,7 +28,7 @@
 
 		public override void Execute() {
 			Log.Debug("User '{0}': request to change email to {1}...", m_oSpUpdate.UserID, m_oData.Email);
-
+			string oldEmail = DB.ExecuteScalar<string>("GetCustomerEmail", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", m_oSpUpdate.UserID));
 			m_oData.ValidateEmail();
 			m_oData.ValidateNewPassword();
 
@@ -50,6 +50,9 @@
 				new EmailChanged(m_oSpUpdate.UserID, sAddress).Execute()
 			).Start();
 
+			
+			var salesForceApiClient = new SalesForceLib.ApiClient();
+			salesForceApiClient.ChangeEmail(oldEmail, m_oData.Email);
 			Log.Debug("User '{0}': request to change email to {1} fully processed.", m_oSpUpdate.UserID, m_oData.Email);
 		} // Execute
 

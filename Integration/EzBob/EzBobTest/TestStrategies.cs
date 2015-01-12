@@ -66,7 +66,7 @@
 		}
 
 		[SetUp]
-		public void Init() {
+		public new void Init() {
 			base.Init();
 
 			ObjectFactory.Configure(x => {
@@ -359,7 +359,8 @@
 			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
 			Assert.AreEqual(5.5M, offer1.SetupFee);
 			Assert.AreEqual(4.5M, offer1.InterestRate);
-			return;
+			//todo uncomment to run once 
+			//return;
 			int calculatedOffers = 0;
 			int failedVerificationOffers = 0;
 			this.m_oDB.ForEachRowSafe(sr => {

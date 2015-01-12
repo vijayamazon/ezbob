@@ -2648,7 +2648,7 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Nullable<System.DateTime> CloseDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime CreateDateField;
+        private System.Nullable<System.DateTime> CreateDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string DealCloseTypeField;
@@ -2660,13 +2660,13 @@ namespace ServiceClientProxy.EzServiceReference {
         private string EmailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime ExpectedEndDateField;
+        private System.Nullable<System.DateTime> ExpectedEndDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> RequestedAmountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int StageField;
+        private System.Nullable<int> StageField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> TookAmountField;
@@ -2711,7 +2711,7 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime CreateDate {
+        public System.Nullable<System.DateTime> CreateDate {
             get {
                 return this.CreateDateField;
             }
@@ -2763,7 +2763,7 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime ExpectedEndDate {
+        public System.Nullable<System.DateTime> ExpectedEndDate {
             get {
                 return this.ExpectedEndDateField;
             }
@@ -2789,7 +2789,7 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Stage {
+        public System.Nullable<int> Stage {
             get {
                 return this.StageField;
             }

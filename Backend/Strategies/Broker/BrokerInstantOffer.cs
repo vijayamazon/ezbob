@@ -37,8 +37,8 @@
 
 		private void CalculateInstantOffer() {
 			//TODO retrieve experian company data (cache/new)
-			int businessScore = 60; //todo
-			decimal tangibleEquity = 20000M; //todo
+			//int businessScore = 60; //todo
+			//decimal tangibleEquity = 20000M; //todo
 			DateTime businessSeniority = new DateTime(1990, 1, 1);
 
 			int consumerScore = 0;
@@ -54,10 +54,10 @@
 				break;
 			}
 
-			var netWorth = 0;
-			if (_request.IsHomeOwner) {
-				netWorth = 100000; //todo get the net worth
-			}
+			//var netWorth = 0;
+			//if (_request.IsHomeOwner) {
+			//	netWorth = 100000; //todo get the net worth
+			//}
 
 			var rand = new Random(_requestId);
 			Response = new BrokerInstantOfferResponse {

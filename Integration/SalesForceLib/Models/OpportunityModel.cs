@@ -8,9 +8,9 @@
 		[DataMember]
 		public string Email { get; set; }
 		[DataMember]
-		public DateTime CreateDate { get; set; }
+		public DateTime? CreateDate { get; set; }
 		[DataMember]
-		public DateTime ExpectedEndDate { get; set; }
+		public DateTime? ExpectedEndDate { get; set; }
 		[DataMember]
 		public DateTime? CloseDate { get; set; }
 		[DataMember]
@@ -22,7 +22,7 @@
 		[DataMember]
 		public string Type { get; set; } //??? is it needed
 		[DataMember]
-		public int Stage { get; set; }
+		public int? Stage { get; set; }
 		[DataMember]
 		public string DealCloseType { get; set; }
 		[DataMember]

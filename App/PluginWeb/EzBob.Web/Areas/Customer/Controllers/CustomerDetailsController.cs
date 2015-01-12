@@ -431,6 +431,9 @@
 
 			SaveEditHistory(oldPersonalInfo, newPersonalInfo);
 
+			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
+			m_oServiceClient.Instance.SalesForceAddUpdateContact(customer.Id, customer.Id, null, null);
+
 			return Json(new { });
 		} // Edit
 

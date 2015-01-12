@@ -25,13 +25,13 @@
     <xs:sequence>
       <xs:element minOccurs="0" name="ApprovedAmount" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="CloseDate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="CreateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="CreateDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DealCloseType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DealLostReason" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="ExpectedEndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ExpectedEndDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="RequestedAmount" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Stage" type="xs:int" />
+      <xs:element minOccurs="0" name="Stage" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="TookAmount" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
     </xs:sequence>

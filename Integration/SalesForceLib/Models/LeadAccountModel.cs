@@ -37,7 +37,7 @@
 		[DataMember]
 		public DateTime? RegistrationDate { get; set; }
 
-		//Company fields
+		//Company data
 		[DataMember]
 		public string CompanyName { get; set; }
 		[DataMember]
@@ -47,7 +47,7 @@
 		[DataMember]
 		public string Industry { get; set; }
 
-		//state source
+		//state source data
 		[DataMember]
 		public string EzbobStatus { get; set; }
 		[DataMember]
@@ -56,6 +56,5 @@
 		public string LeadSource { get; set; }
 		[DataMember]
 		public int RequestedLoanAmount { get; set; }
-		
 	}
 }

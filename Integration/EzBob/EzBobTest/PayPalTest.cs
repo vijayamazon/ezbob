@@ -59,7 +59,7 @@ namespace EzBobTest {
 	[TestFixture]
 	internal class Test:BaseTestFixtue {
 		[SetUp]
-		public void Init() {
+		public new void Init() {
 			base.Init();
 
 			ObjectFactory.Configure(x => {x.For<IServiceEndPointFactory>().Use<ServiceEndPointFactory>();});
