@@ -181,15 +181,15 @@ BEGIN
 
 					SET @i = @i + 1
 				END
-
-				SELECT TOP 1
-					@PrizeID = p.PrizeID,
-					@Amount = p.Amount
-				FROM
-					#prizes p
-				ORDER BY
-					p.Rnd
 			END
+
+			SELECT TOP 1
+				@PrizeID = p.PrizeID,
+				@Amount = p.Amount
+			FROM
+				#prizes p
+			ORDER BY
+				p.Rnd
 		END
 
 		-------------------------------------------------------------------------
