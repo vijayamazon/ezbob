@@ -62,6 +62,21 @@ BEGIN
 
 	DECLARE @PlayerCount INT = 0
 	DECLARE @PrizeCount INT = 0
+	DECLARE @MinPlayerCount INT = 0
+
+	------------------------------------------------------------------------------
+
+	BEGIN TRY
+		SELECT
+			@MinPlayerCount = CONVERT(INT, Value)
+		FROM
+			ConfigurationVariables
+		WHERE
+			Name = 'LotteryMinParticipantCount'
+	END TRY
+	BEGIN CATCH
+		SET @MinPlayerCount = 0
+	END CATCH
 
 	------------------------------------------------------------------------------
 
@@ -123,6 +138,10 @@ BEGIN
 				AND s.CanWin = 1
 		WHERE
 			lp.LotteryID = @LotteryID
+
+		-------------------------------------------------------------------------
+
+		SET @PlayerCount = dbo.udfMaxInt(@PlayerCount, @MinPlayerCount)
 
 		-------------------------------------------------------------------------
 
