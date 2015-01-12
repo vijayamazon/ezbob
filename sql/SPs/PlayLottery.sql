@@ -62,21 +62,7 @@ BEGIN
 
 	DECLARE @PlayerCount INT = 0
 	DECLARE @PrizeCount INT = 0
-	DECLARE @MinPlayerCount INT = 0
-
-	------------------------------------------------------------------------------
-
-	BEGIN TRY
-		SELECT
-			@MinPlayerCount = CONVERT(INT, Value)
-		FROM
-			ConfigurationVariables
-		WHERE
-			Name = 'LotteryMinParticipantCount'
-	END TRY
-	BEGIN CATCH
-		SET @MinPlayerCount = 0
-	END CATCH
+	DECLARE @MinParticipantCount INT = 0
 
 	------------------------------------------------------------------------------
 
@@ -97,7 +83,8 @@ BEGIN
 		@HasPlayed = s.HasPlayed,
 		@PlayTime = lp.PlayTime,
 		@PrizeID = lp.PrizeID,
-		@Amount = p.Amount
+		@Amount = p.Amount,
+		@MinParticipantCount = l.MinParticipantCount
 	FROM
 		LotteryPlayers lp
 		INNER JOIN Lotteries l
@@ -110,6 +97,8 @@ BEGIN
 		lp.UniqueID = @LotteryPlayerID
 
 	------------------------------------------------------------------------------
+
+	SET @MinParticipantCount = ISNULL(@MinParticipantCount, 0)
 
 	SET @StatusID = ISNULL(@StatusID, 0)
 
@@ -141,7 +130,7 @@ BEGIN
 
 		-------------------------------------------------------------------------
 
-		SET @PlayerCount = dbo.udfMaxInt(@PlayerCount, @MinPlayerCount)
+		SET @PlayerCount = dbo.udfMaxInt(@PlayerCount, @MinParticipantCount)
 
 		-------------------------------------------------------------------------
 
