@@ -59,6 +59,8 @@
 
 		public string EnteredCompanyName { get; set; }
 
+		public int PreviousManualApproveCount { get; set; }
+
 		[JsonIgnore]
 		public FraudStatus FraudStatus { get; private set; }
 

@@ -33,7 +33,7 @@
 
 			this.medalChooser = new MedalChooser(DB, Log);
 
-			this.tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid()
+			Tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid()
 				.ToString("N");
 		} // constructor
 
@@ -77,6 +77,8 @@
 				);
 			} // if
 		} // Execute
+
+		public string Tag { get; private set; }
 
 		private AConnection DB { get; set; }
 
@@ -226,7 +228,7 @@
 
 				ymr.AutoApprove.Data = (agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" + agent.Trail.UniqueID;
 
-				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, this.tag);
+				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, Tag);
 
 				ymr.AutoApprove.Amount = agent.Result == null ? 0 : agent.Result.ApprovedAmount;
 			} catch (Exception e) {
@@ -257,7 +259,7 @@
 
 				agent.Init();
 
-				ymr.AutoReject.Data = (agent.Decide(ymr.Input.CashRequestID, this.tag)
+				ymr.AutoReject.Data = (agent.Decide(ymr.Input.CashRequestID, Tag)
 					? "Rejected"
 					: "Not rejected") + "<br>" + agent.Trail.UniqueID;
 			} catch (Exception e) {
@@ -292,8 +294,6 @@
 		private readonly int lastCheckedID;
 
 		private readonly MedalChooser medalChooser;
-
-		private readonly string tag;
 
 		private readonly int topCount;
 	} // class YesMaam

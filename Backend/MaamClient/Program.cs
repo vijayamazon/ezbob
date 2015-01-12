@@ -15,7 +15,7 @@
 
 		private static ASafeLog Log { get; set; }
 
-		private static void CompareMaam(string[] args) {
+		private static string CompareMaam(string[] args) {
 			var oArgs = new Args(AppName, args, Log);
 
 			if (oArgs.IsGood) {
@@ -23,7 +23,11 @@
 
 				var stra = new YesMaam(oArgs.Count, oArgs.LastCheckedID, DB, Log);
 				stra.Execute();
+
+				return stra.Tag;
 			} // if
+
+			return null;
 		} // CompareMaam
 
 		private static void LoadFromJson() {
@@ -45,6 +49,13 @@
 			} // if
 		} // LoadTurnovers
 
+		private static void CompareAndExport(string[] args, AConnection db, ASafeLog log) {
+			string tag = CompareMaam(args);
+
+			if (!string.IsNullOrWhiteSpace(tag))
+				ExportApprovalData.Run(new [] { tag }, db, log);
+		} // CompareAndExport
+
 		private static void Main(string[] args) {
 			AppName = Assembly.GetExecutingAssembly()
 				.GetName()
@@ -65,7 +76,9 @@
 
 			// LoadTurnovers(args);
 
-			ExportApprovalData.Run(args, DB, Log);
+			// ExportApprovalData.Run(args, DB, Log);
+
+			CompareAndExport(args, DB, Log);
 
 			Log.NotifyStop();
 		} // Main

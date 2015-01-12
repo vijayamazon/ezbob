@@ -157,13 +157,14 @@
 		} // Init
 
 		private void IsFraud() {
-			if (Trail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok) {
-				StepDone<FraudSuspect>()
-					.Init(Trail.MyInputData.MetaData.FraudStatus);
-			} else {
-				StepFailed<FraudSuspect>()
-					.Init(Trail.MyInputData.MetaData.FraudStatus);
-			}
+			bool isFraudOk =
+				(Trail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
+				(Trail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok);
+
+			if (isFraudOk)
+				StepDone<FraudSuspect>().Init(Trail.MyInputData.MetaData.FraudStatus);
+			else
+				StepFailed<FraudSuspect>().Init(Trail.MyInputData.MetaData.FraudStatus);
 		} // IsFraud
 
 		private void IsBrokerCustomer() {
@@ -207,13 +208,16 @@
 		} // OutstandingOffers
 
 		private void Aml() {
-			if (0 == string.Compare(Trail.MyInputData.MetaData.AmlResult, "passed", StringComparison.InvariantCultureIgnoreCase)) {
-				StepDone<AmlCheck>()
-					.Init(Trail.MyInputData.MetaData.AmlResult);
-			} else {
-				StepFailed<AmlCheck>()
-					.Init(Trail.MyInputData.MetaData.AmlResult);
-			}
+			bool isAmlOk =
+				(Trail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
+				(0 == string.Compare(
+					Trail.MyInputData.MetaData.AmlResult, "passed", StringComparison.InvariantCultureIgnoreCase)
+				);
+
+			if (isAmlOk)
+				StepDone<AmlCheck>().Init(Trail.MyInputData.MetaData.AmlResult);
+			else
+				StepFailed<AmlCheck>().Init(Trail.MyInputData.MetaData.AmlResult);
 		} // Aml
 
 		private void CustomerStatus() {

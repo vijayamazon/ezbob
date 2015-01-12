@@ -23,7 +23,8 @@ BEGIN
 	DECLARE
 		@OfferValidUntil DATETIME, 
 		@OfferStart DATETIME,
-		@ValidForHours INT
+		@ValidForHours INT,
+		@PreviousManualApproveCount INT = 0
 
 	------------------------------------------------------------------------------
 	
@@ -419,41 +420,63 @@ BEGIN
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
+	SET @PreviousManualApproveCount = ISNULL((
+		SELECT
+			COUNT(*)
+		FROM
+			CashRequests r
+		WHERE
+			r.IdUnderwriter IS NOT NULL
+			AND
+			r.UnderwriterDecision = 'Approved'
+			AND
+			r.IdUnderwriter IS NOT NULL
+			AND
+			r.IdUnderwriter != 1
+			AND
+			r.UnderwriterDecisionDate < @Now
+	), 0)
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
 	SELECT
-		RowType                = 'MetaData',
+		RowType                    = 'MetaData',
 
-		FirstName              = c.FirstName,
-		LastName               = c.Surname,
+		FirstName                  = c.FirstName,
+		LastName                   = c.Surname,
 
-		IsBrokerCustomer       = CONVERT(BIT, (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END)),
-		IsLimitedCompanyType   = CONVERT(BIT, (CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END)),
-		NumOfTodayAutoApproval = @TodayAutoApprovalCount,
-		TodayLoanSum           = @TodayLoanSum,
+		IsBrokerCustomer           = CONVERT(BIT, (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END)),
+		IsLimitedCompanyType       = CONVERT(BIT, (CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END)),
+		NumOfTodayAutoApproval     = @TodayAutoApprovalCount,
+		TodayLoanSum               = @TodayLoanSum,
 
-		FraudStatusValue       = @FraudStatus,
-		AmlResult              = c.AMLResult,
-		CustomerStatusName     = @CustomerStatus,
-		CustomerStatusEnabled  = @CustomerStatusEnabled,
-		CompanyScore           = ISNULL(@CompanyScore, 0),
-		ConsumerScore          = @ConsumerScore,
-		IncorporationDate      = @IncorporationDate,
-		DateOfBirth            = c.DateOfBirth,
+		FraudStatusValue           = @FraudStatus,
+		AmlResult                  = c.AMLResult,
+		CustomerStatusName         = @CustomerStatus,
+		CustomerStatusEnabled      = @CustomerStatusEnabled,
+		CompanyScore               = ISNULL(@CompanyScore, 0),
+		ConsumerScore              = @ConsumerScore,
+		IncorporationDate          = @IncorporationDate,
+		DateOfBirth                = c.DateOfBirth,
 
-		NumOfDefaultAccounts   = @NumOfDefaultAccounts,
-		NumOfRollovers         = @NumOfRollovers,
+		NumOfDefaultAccounts       = @NumOfDefaultAccounts,
+		NumOfRollovers             = @NumOfRollovers,
 
-		TotalLoanCount         = @TotalLoanCount,
-		OpenLoanCount          = ISNULL(@OpenLoanCount, 0),
-		TakenLoanAmount        = ISNULL(@TakenLoanAmount, 0),
-		RepaidPrincipal        = @RepaidPrincipal,
-		SetupFees              = @SetupFees,
+		TotalLoanCount             = @TotalLoanCount,
+		OpenLoanCount              = ISNULL(@OpenLoanCount, 0),
+		TakenLoanAmount            = ISNULL(@TakenLoanAmount, 0),
+		RepaidPrincipal            = @RepaidPrincipal,
+		SetupFees                  = @SetupFees,
 
-		OfferValidUntil        = @OfferValidUntil,
-		OfferStart             = @OfferStart,
-		EmailSendingBanned     = @EmailSendingBanned,
+		OfferValidUntil            = @OfferValidUntil,
+		OfferStart                 = @OfferStart,
+		EmailSendingBanned         = @EmailSendingBanned,
 
-		ExperianCompanyName    = co.ExperianCompanyName,
-		EnteredCompanyName     = co.CompanyName
+		ExperianCompanyName        = co.ExperianCompanyName,
+		EnteredCompanyName         = co.CompanyName,
+
+		PreviousManualApproveCount = @PreviousManualApproveCount
 	FROM
 		Customer c
 		LEFT JOIN Company co ON c.CompanyId = co.Id
