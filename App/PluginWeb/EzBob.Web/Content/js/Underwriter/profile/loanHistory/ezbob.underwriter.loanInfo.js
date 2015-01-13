@@ -127,6 +127,20 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		},
 
 		editRepaymentPeriod: function() {
+			var self = this;
+			var loanSourceModel = this.model.get('LoanSource') || {};
+
+			if (loanSourceModel.DefaultRepaymentPeriod === -1) {
+				self.editRepaymentPeriodDialog();
+			} else {
+				EzBob.ShowMessage("The source type have default value of " + loanSourceModel.DefaultRepaymentPeriod, "Are you sure?", function() {
+					self.editRepaymentPeriodDialog();
+				}, "Ok" ,self.model.fetch(), "Cancel" );
+			}
+		},
+
+		editRepaymentPeriodDialog: function () {
+			var self = this;
 			var d = new EzBob.Dialogs.IntegerEdit({
 				model: this.model,
 				propertyName: "RepaymentPerion",
@@ -141,9 +155,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 
 			d.render();
-
-			var self = this;
-
 			d.on("done", function() {
 				self.model.fetch();
 			});
@@ -380,10 +391,10 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 			this.validateInterestVsSource(loanSourceModel.MaxInterest);
 
-			if (loanSourceModel.DefaultRepaymentPeriod === -1)
-				this.$el.find('button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
-			else
-				this.$el.find('button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
+			//if (loanSourceModel.DefaultRepaymentPeriod === -1)
+			//	this.$el.find('button[name=repaymentPeriodChangeButton]').removeAttr('disabled');
+			//else
+			//	this.$el.find('button[name=repaymentPeriodChangeButton]').attr('disabled', 'disabled');
 
 			this.parentView.clearDecisionNotes();
 
