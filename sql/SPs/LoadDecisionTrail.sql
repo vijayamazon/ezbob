@@ -54,7 +54,8 @@ BEGIN
 		SELECT
 			trc.TraceID,
 			trc.Position,
-			trc.Name,
+			n.TraceNameID,
+			n.TraceName AS Name,
 			trc.DecisionStatusID,
 			s.DecisionStatus,
 			trc.HasLockedDecision,
@@ -66,12 +67,14 @@ BEGIN
 				AND trl.IsPrimary = 1
 				AND trl.UniqueID = @DiffID
 			INNER JOIN DecisionStatuses s ON trc.DecisionStatusID = s.DecisionStatusID
+			INNER JOIN DecisionTraceNames n ON trc.TraceNameID = n.TraceNameID
 	),
 	sec AS (
 		SELECT
 			trc.TraceID,
 			trc.Position,
-			trc.Name,
+			n.TraceNameID,
+			n.TraceName AS Name,
 			trc.DecisionStatusID,
 			s.DecisionStatus,
 			trc.HasLockedDecision,
@@ -83,21 +86,24 @@ BEGIN
 				AND trl.IsPrimary = 0
 				AND trl.UniqueID = @DiffID
 			INNER JOIN DecisionStatuses s ON trc.DecisionStatusID = s.DecisionStatusID
+			INNER JOIN DecisionTraceNames n ON trc.TraceNameID = n.TraceNameID
 	)
 	SELECT
 		RowType = 'Trace',
 		Position = ISNULL(prim.Position, sec.Position),
 		--
 		PrimID       = prim.TraceID,
+		PrimNameID   = prim.TraceNameID,
 		PrimName     = prim.Name,
 		PrimStatusID = prim.DecisionStatusID,
 		PrimStatus   = prim.DecisionStatus,
 		PrimLocked   = prim.HasLockedDecision,
 		PrimComment  = prim.Comment,
 		--
-		SameName     = CASE WHEN prim.Name = sec.Name THEN 1 ELSE 0 END,
+		SameName     = CASE WHEN prim.TraceNameID = sec.TraceNameID THEN 1 ELSE 0 END,
 		--
 		SecID        = sec.TraceID,
+		SecNameID    = sec.TraceNameID,
 		SecName      = sec.Name,
 		SecStatusID  = sec.DecisionStatusID,
 		SecStatus    = sec.DecisionStatus,

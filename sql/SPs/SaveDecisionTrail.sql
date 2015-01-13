@@ -48,14 +48,36 @@ BEGIN
 
 	DECLARE @TrailID BIGINT
 
+	DECLARE @TagID BIGINT = NULL
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	SELECT
+		@TagID = TrailTagID
+	FROM
+		DecisionTrailTags
+	WHERE
+		TrailTag = @Tag
+
+	------------------------------------------------------------------------------
+
+	IF @TagID IS NULL
+	BEGIN
+		INSERT INTO DecisionTrailTags (TrailTag) VALUES (@Tag)
+
+		SET @TagID = SCOPE_IDENTITY()
+	END
+
+	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	INSERT INTO DecisionTrail (
 		CustomerID, DecisionID, DecisionTime, UniqueID,
-		DecisionStatusID, InputData, IsPrimary, CashRequestID, Tag, Amount
+		DecisionStatusID, InputData, IsPrimary, CashRequestID, TrailTagID, Amount
 	) VALUES (
 		@CustomerID, @DecisionID, @DecisionTime, @UniqueID,
-		@DecisionStatusID, @InputData, @IsPrimary, @CashRequestID, @Tag, @Amount
+		@DecisionStatusID, @InputData, @IsPrimary, @CashRequestID, @TagID, @Amount
 	)
 
 	------------------------------------------------------------------------------
@@ -63,17 +85,45 @@ BEGIN
 	SELECT @TrailID = SCOPE_IDENTITY()
 
 	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
-	INSERT INTO DecisionTrace (TrailID, Position, Name, DecisionStatusID, HasLockedDecision, Comment)
-	SELECT
-		@TrailID,
-		Position,
-		Name,
-		DecisionStatusID,
-		HasLockedDecision,
-		Comment
+	SELECT DISTINCT
+		Name
+	INTO
+		#n
 	FROM
 		@Traces
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO DecisionTraceNames (TraceName, IsEnabled)
+	SELECT
+		#n.Name,
+		1
+	FROM
+		#n
+		LEFT JOIN DecisionTraceNames n ON #n.Name = n.TraceName
+	WHERE
+		n.TraceNameID IS NULL
+
+	------------------------------------------------------------------------------
+
+	DROP TABLE #n
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	INSERT INTO DecisionTrace (TrailID, Position, TraceNameID, DecisionStatusID, HasLockedDecision, Comment)
+	SELECT
+		@TrailID,
+		t.Position,
+		n.TraceNameID,
+		t.DecisionStatusID,
+		t.HasLockedDecision,
+		t.Comment
+	FROM
+		@Traces t
+		INNER JOIN DecisionTraceNames n ON t.Name = n.TraceName
 
 	------------------------------------------------------------------------------
 
