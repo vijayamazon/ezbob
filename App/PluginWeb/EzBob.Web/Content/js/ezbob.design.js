@@ -506,7 +506,8 @@ BlockUi = function(action, element) {
 			'-webkit-border-radius': '10px',
 			'-moz-border-radius': '10px',
 			opacity: 0.5,
-			color: '#fff'
+			color: '#fff',
+			top: '40%'
 		};
 
 		$.blockUI.defaults.overlayCSS.backgroundColor = '#ffffff';
@@ -515,10 +516,21 @@ BlockUi = function(action, element) {
 
 		element ? $(element).block(options) : $.blockUI(options);
 
+		$('html, body').css({
+			'overflow': 'hidden',
+			'height': '100%'
+		});
+
 		break;
 
 	default:
 		element ? $(element).unblock() : $.unblockUI();
+
+		$('html, body').css({
+			'overflow': 'auto',
+			'height': 'auto'
+		});
+
 		break;
 	} // switch
 }; // BlockUi

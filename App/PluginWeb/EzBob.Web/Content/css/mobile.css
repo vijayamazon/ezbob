@@ -19,14 +19,14 @@
     
     ul#user-menu {
         margin: 0;
-        width: 170px;
+        width: 180px;
         top: 0;
-        right: 0;
+        right: -10px;
         line-height: inherit;
     }
 
     ul#user-menu li {
-        margin: 0 0 0 17px; 
+        margin: 0 0 0 15px; 
     }
     
     footer {
