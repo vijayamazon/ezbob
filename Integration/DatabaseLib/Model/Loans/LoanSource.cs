@@ -6,9 +6,9 @@ using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans {
 	public enum LoanSourceName {
-		Standard,
-		EU,
-		COSME,
+		Standard = 1,
+		EU = 2,
+		COSME = 3,
 	}
 
 	public class LoanSource {

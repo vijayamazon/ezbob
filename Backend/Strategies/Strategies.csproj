@@ -116,6 +116,7 @@
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
     <Compile Include="Lottery\PlayLottery.cs" />
     <Compile Include="MailStrategies\EnlistLottery.cs" />
+    <Compile Include="MainStrategy\AutoDecisionMails.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Arguments.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Checker.cs" />

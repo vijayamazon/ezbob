@@ -217,16 +217,23 @@
 
 				if (response.AutoApproveAmount != 0) {
 					if (this.m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
-						if (CurrentValues.Instance.AutoApproveIsSilent) {
-							NotifyAutoApproveSilentMode(response);
-
-							response.LoanOfferUnderwriterComment = "Silent Approve - " + this.m_oTrail.UniqueID;
-							response.CreditResult = CreditResultStatus.WaitingForDecision;
-							response.UserStatus = Status.Manual;
-							response.SystemDecision = SystemDecision.Manual;
-						} else {
-							var offerDualCalculator = new OfferDualCalculator(this.db, this.log);
+						var offerDualCalculator = new OfferDualCalculator(this.db, this.log);
 							OfferResult offerResult = offerDualCalculator.CalculateOffer(this.customerId, Now, response.AutoApproveAmount, this.hasLoans, this.medalClassification);
+						if (CurrentValues.Instance.AutoApproveIsSilent) {
+							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
+								this.log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", this.customerId);
+								response.CreditResult = CreditResultStatus.WaitingForDecision;
+								response.UserStatus = Status.Manual;
+								response.SystemDecision = SystemDecision.Manual;
+								response.LoanOfferUnderwriterComment = "Calculator failure - " + this.m_oTrail.UniqueID;
+							} else {
+								response.LoanOfferUnderwriterComment = "Silent Approve - " + this.m_oTrail.UniqueID;
+								response.CreditResult = CreditResultStatus.WaitingForDecision;
+								response.UserStatus = Status.Manual;
+								response.SystemDecision = SystemDecision.Manual;
+							}
+							NotifyAutoApproveSilentMode(response);
+						} else {
 							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
 								this.log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", this.customerId);
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
@@ -245,8 +252,8 @@
 
 								// Use offer calculated data
 								response.RepaymentPeriod = offerResult.Period;
-								response.IsEu = offerResult.IsEu;
-								response.LoanTypeId = offerResult.LoanTypeId;
+								response.LoanSourceID = offerResult.IsEu ? (int)LoanSourceName.EU : (int)LoanSourceName.Standard; //TODO replace with Loan source and not IsEU
+								response.LoanTypeID = offerResult.LoanTypeId;
 								response.InterestRate = offerResult.InterestRate / 100;
 								response.SetupFee = offerResult.SetupFee / 100;
 							}
