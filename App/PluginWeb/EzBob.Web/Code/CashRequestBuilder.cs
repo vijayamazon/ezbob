@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
+	using SalesForceLib.Models;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
@@ -63,12 +64,13 @@
 			if (originator != CashRequestOriginator.FinishedWizard) {
 				CustomerRequestedLoan requestedLoan = customer.CustomerRequestedLoan.LastOrDefault();
 				m_oServiceClient.Instance.SalesForceAddOpportunity(customer.Id, customer.Id,
-					new OpportunityModel {
+					new ServiceClientProxy.EzServiceReference.OpportunityModel {
 						Email = customer.Name,
 						CreateDate = now,
 						ExpectedEndDate = now.AddDays(7),
 						RequestedAmount = requestedLoan != null ? (int?)requestedLoan.Amount : null,
-						Type = originator.ToString()
+						Type = originator.ToString(),
+						Stage = (int)OpportunityStage.s5 //todo
 					});
 			}
 

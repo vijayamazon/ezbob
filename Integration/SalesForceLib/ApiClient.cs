@@ -49,9 +49,9 @@
 			}
 		}
 
-		public void CreateEvent(EventModel model) {
+		public void CreateActivity(ActivityModel model) {
 			Log.InfoFormat("SalesForce CreateEvent\n {0}", model.ToStringExtension());
-			ApiResponse response = api.CreateEvent(model);
+			ApiResponse response = api.CreateActivity(model);
 			if (!response.Success) {
 				Log.ErrorFormat("SalesForce CreateEvent failed for customer {0}, error: {1}", model.Email, response.Error);
 			}

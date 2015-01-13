@@ -11,7 +11,7 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="TaskModel" nillable="true" type="tns:TaskModel" />
-  <xs:complexType name="EventModel">
+  <xs:complexType name="ActivityModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Desciption" nillable="true" type="xs:string" />
@@ -20,7 +20,7 @@
       <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="EventModel" nillable="true" type="tns:EventModel" />
+  <xs:element name="ActivityModel" nillable="true" type="tns:ActivityModel" />
   <xs:complexType name="OpportunityModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ApprovedAmount" nillable="true" type="xs:int" />

@@ -2,9 +2,9 @@
 	using SalesForceLib;
 	using SalesForceLib.Models;
 
-	public class AddEvent : AStrategy {
+	public class AddActivity : AStrategy {
 
-		public AddEvent(int? customerID, EventModel model) {
+		public AddActivity(int? customerID, ActivityModel model) {
 			salesForce = new ApiClient();
 			this.customerID = customerID;
 			this.eventModel = model;
@@ -16,10 +16,10 @@
 				Log.Info("Adding SalesForce event {1} to customer {0} ", eventModel.Type, customerID.Value);
 			}
 			
-			salesForce.CreateEvent(eventModel);
+			salesForce.CreateActivity(eventModel);
 		}
 		private readonly ApiClient salesForce;
 		private readonly int? customerID;
-		private readonly EventModel eventModel;
+		private readonly ActivityModel eventModel;
 	}
 }

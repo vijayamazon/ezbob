@@ -44,7 +44,7 @@
 		/// <summary>
 		/// When Email, Imail, Sms, Note, Call, Chat where performed from system / UW
 		/// </summary>
-		public ApiResponse CreateEvent(EventModel model) {
+		public ApiResponse CreateActivity(ActivityModel model) {
 			return new ApiResponse(true);
 		}
 

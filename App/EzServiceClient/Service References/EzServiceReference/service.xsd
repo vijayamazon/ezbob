@@ -1240,19 +1240,19 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SalesForceAddEvent">
+  <xs:element name="SalesForceAddActivity">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" nillable="true" type="xs:int" />
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element xmlns:q93="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" minOccurs="0" name="model" nillable="true" type="q93:EventModel" />
+        <xs:element xmlns:q93="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" minOccurs="0" name="model" nillable="true" type="q93:ActivityModel" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="SalesForceAddEventResponse">
+  <xs:element name="SalesForceAddActivityResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SalesForceAddEventResult" nillable="true" type="q94:ActionMetaData" />
+        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SalesForceAddActivityResult" nillable="true" type="q94:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

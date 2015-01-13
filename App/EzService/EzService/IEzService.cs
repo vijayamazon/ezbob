@@ -566,7 +566,7 @@
 		ActionMetaData SalesForceAddTask(int? userID, int customerID, TaskModel model);
 
 		[OperationContract]
-		ActionMetaData SalesForceAddEvent(int? userID, int customerID, EventModel model);
+		ActionMetaData SalesForceAddActivity(int? userID, int customerID, ActivityModel model);
 
 		[OperationContract]
 		ActionMetaData SalesForceAddOpportunity(int? userID, int customerID, OpportunityModel model);

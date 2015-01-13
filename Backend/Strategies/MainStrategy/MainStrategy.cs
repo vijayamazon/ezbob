@@ -739,14 +739,14 @@
 					ApprovedAmount = autoDecisionResponse.AutoApproveAmount,
 					Email = customerEmail,
 					ExpectedEndDate = autoDecisionResponse.AppValidFor,
-					Stage = 6 //todo
+					Stage = (int)OpportunityStage.s90 //todo
 				}).Execute();
 				break;
 			case DecisionActions.Reject:
 			case DecisionActions.ReReject:
 				new UpdateOpportunity(customerId, new OpportunityModel {
 					Email = customerEmail,
-					DealCloseType = "Lost",
+					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
 					DealLostReason = "Auto " + autoDecisionResponse.Decision.Value.ToString(),
 					CloseDate = DateTime.UtcNow
 				}).Execute();

@@ -577,11 +577,11 @@
   <wsdl:message name="IEzService_SalesForceAddTask_OutputMessage">
     <wsdl:part name="parameters" element="tns:SalesForceAddTaskResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddEvent_InputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddEvent" />
+  <wsdl:message name="IEzService_SalesForceAddActivity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddActivity" />
   </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddEvent_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddEventResponse" />
+  <wsdl:message name="IEzService_SalesForceAddActivity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddActivityResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SalesForceAddOpportunity_InputMessage">
     <wsdl:part name="parameters" element="tns:SalesForceAddOpportunity" />
@@ -1574,9 +1574,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddTask" message="tns:IEzService_SalesForceAddTask_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddTaskResponse" message="tns:IEzService_SalesForceAddTask_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="SalesForceAddEvent">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddEvent" message="tns:IEzService_SalesForceAddEvent_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddEventResponse" message="tns:IEzService_SalesForceAddEvent_OutputMessage" />
+    <wsdl:operation name="SalesForceAddActivity">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddActivity" message="tns:IEzService_SalesForceAddActivity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddActivityResponse" message="tns:IEzService_SalesForceAddActivity_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SalesForceAddOpportunity">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddOpportunity" message="tns:IEzService_SalesForceAddOpportunity_InputMessage" />
@@ -2766,8 +2766,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="SalesForceAddEvent">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddEvent" style="document" />
+    <wsdl:operation name="SalesForceAddActivity">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddActivity" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

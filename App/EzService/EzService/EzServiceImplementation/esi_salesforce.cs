@@ -2,7 +2,7 @@
 	using Ezbob.Backend.Strategies.SalesForce;
 	using SalesForceLib.Models;
 
-	public partial class EzServiceImplementation {
+	public partial class EzServiceImplementation : IEzService {
 		public ActionMetaData SalesForceAddUpdateLeadAccount(int? userID, string email, int? customerID, bool isBrokerLead, bool isVipLead) {
 			return Execute<AddUpdateLeadAccount>(customerID, userID, email, customerID, isBrokerLead, isVipLead);
 		}
@@ -15,8 +15,8 @@
 			return Execute<AddTask>(customerID, userID, customerID, model);
 		}
 
-		public ActionMetaData SalesForceAddEvent(int? userID, int customerID, EventModel model) {
-			return Execute<AddEvent>(customerID, userID, customerID, model);
+		public ActionMetaData SalesForceAddActivity(int? userID, int customerID, ActivityModel model) {
+			return Execute<AddActivity>(customerID, userID, customerID, model);
 		}
 
 		public ActionMetaData SalesForceAddOpportunity(int? userID, int customerID, OpportunityModel model) {

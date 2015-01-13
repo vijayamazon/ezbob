@@ -49,7 +49,7 @@
     <Compile Include="Api.cs" />
     <Compile Include="ApiClient.cs" />
     <Compile Include="Models\ApiResponse.cs" />
-    <Compile Include="Models\EventModel.cs" />
+    <Compile Include="Models\ActivityModel.cs" />
     <Compile Include="Models\ContactModel.cs" />
     <Compile Include="Models\TaskModel.cs" />
     <Compile Include="Models\OpportunityModel.cs" />

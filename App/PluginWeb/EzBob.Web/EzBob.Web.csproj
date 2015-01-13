@@ -1667,6 +1667,10 @@
       <Project>{a4c5e0af-f627-4b08-808c-de8edde725d5}</Project>
       <Name>Sage</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\SalesForceLib\SalesForceLib.csproj">
+      <Project>{198579cb-cd05-46f6-afac-75a982b3216a}</Project>
+      <Name>SalesForceLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\YodleeLib\YodleeLib.csproj">
       <Project>{241a8baf-f486-44b9-93bd-baa5ca8091f3}</Project>
       <Name>YodleeLib</Name>

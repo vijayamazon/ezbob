@@ -22,7 +22,7 @@
 	using Code;
 	using Infrastructure.csrf;
 	using log4net;
-	using ServiceClientProxy.EzServiceReference;
+	using SalesForceLib.Models;
 	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class CustomersController : Controller {
@@ -301,7 +301,7 @@
 
 			if (model.status != CreditResultStatus.ApprovedPending)
 				customer.IsWaitingForSignature = false;
-			int stage = 0;
+			int stage = (int)OpportunityStage.s5;
 			switch (model.status) {
 			case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
@@ -371,8 +371,8 @@
 						m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
 					} // try
 				} // if
-				stage = 6;//todo
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel {
+				stage = (int)OpportunityStage.s90;//todo
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {
 					Email = customer.Name,
 					ApprovedAmount = (int)sum,
 					Stage = stage,
@@ -405,11 +405,11 @@
 					} // try
 				} // if
 
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel 
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel 
 				{
 					Email = customer.Name,
 					CloseDate = now,
-					DealCloseType = "Lost",
+					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
 					DealLostReason = customer.RejectedReason
 				}); 
 				break;
@@ -419,7 +419,7 @@
 				customer.DateEscalated = DateTime.UtcNow;
 				customer.EscalationReason = model.reason;
 				_historyRepository.LogAction(DecisionActions.Escalate, model.reason, user, customer);
-				stage = 2;//todo
+				stage = (int)OpportunityStage.s20;//todo
 				try {
 					m_oServiceClient.Instance.Escalated(customer.Id, _context.UserId);
 				}
@@ -427,7 +427,7 @@
 					sWarning = "Failed to send 'escalated' email: " + e.Message;
 					m_oLog.Warn(e, "Failed to send 'escalated' email.");
 				} // try
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel { Email = customer.Name, Stage = stage }); 
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage }); 
 				break;
 
 			case CreditResultStatus.ApprovedPending:
@@ -436,15 +436,15 @@
 				customer.PendingStatus = PendingStatus.Manual;
 				_historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
 
-				stage = model.signature == 1 ? 4 : 3; //TODO define stages for pending and signature
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel {Email = customer.Name,Stage = stage}); 
+				stage = model.signature == 1 ? (int)OpportunityStage.s75 : (int)OpportunityStage.s50; //TODO define stages for pending and signature
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {Email = customer.Name,Stage = stage}); 
 				break;
 
 			case CreditResultStatus.WaitingForDecision:
 				customer.CreditResult = CreditResultStatus.WaitingForDecision;
 				_historyRepository.LogAction(DecisionActions.Waiting, "", user, customer);
-				stage = 1;//todo
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new OpportunityModel { Email = customer.Name, Stage = stage }); 
+				stage = (int)OpportunityStage.s40;//todo
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage }); 
 
 				break;
 			} // switch

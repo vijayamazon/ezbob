@@ -2525,9 +2525,9 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="EventModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ActivityModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
     [System.SerializableAttribute()]
-    public partial class EventModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+    public partial class ActivityModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
         [System.NonSerializedAttribute()]
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
@@ -3450,11 +3450,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddTask", ReplyAction="http://tempuri.org/IEzService/SalesForceAddTaskResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddTaskAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.TaskModel model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddEvent", ReplyAction="http://tempuri.org/IEzService/SalesForceAddEventResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddEvent(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddActivity", ReplyAction="http://tempuri.org/IEzService/SalesForceAddActivityResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddActivity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.ActivityModel model);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddEvent", ReplyAction="http://tempuri.org/IEzService/SalesForceAddEventResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddEventAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddActivity", ReplyAction="http://tempuri.org/IEzService/SalesForceAddActivityResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddActivityAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.ActivityModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SalesForceAddOpportunity", ReplyAction="http://tempuri.org/IEzService/SalesForceAddOpportunityResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddOpportunity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model);
@@ -4736,12 +4736,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SalesForceAddTaskAsync(userID, customerID, model);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddEvent(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model) {
-            return base.Channel.SalesForceAddEvent(userID, customerID, model);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddActivity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.ActivityModel model) {
+            return base.Channel.SalesForceAddActivity(userID, customerID, model);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddEventAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.EventModel model) {
-            return base.Channel.SalesForceAddEventAsync(userID, customerID, model);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SalesForceAddActivityAsync(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.ActivityModel model) {
+            return base.Channel.SalesForceAddActivityAsync(userID, customerID, model);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SalesForceAddOpportunity(System.Nullable<int> userID, int customerID, ServiceClientProxy.EzServiceReference.OpportunityModel model) {

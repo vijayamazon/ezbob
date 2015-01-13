@@ -71,12 +71,12 @@
 					);
 
 
-					var salesForceAddEvent = new AddEvent(null, new EventModel {
+					var salesForceAddEvent = new AddActivity(null, new ActivityModel {
 						Date = DateTime.UtcNow,
 						Desciption = oMeta.TemplateName,
 						Email = addr.Recipient,
 						Originator = "System",
-						Type = "Email"
+						Type = ActivityType.Email.ToString()
 					});
 					salesForceAddEvent.Execute();
 				} // if should register

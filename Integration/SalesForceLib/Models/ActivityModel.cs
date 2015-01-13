@@ -4,7 +4,7 @@
 
 	//todo use auto generated object from sales force
 	[DataContract]
-	public class EventModel {
+	public class ActivityModel {
 		[DataMember]
 		public string Email { get; set; }
 		//----------------------------------------//
@@ -18,7 +18,7 @@
 		public string Originator { get; set; }
 	}
 
-	public enum EventType {
+	public enum ActivityType {
 		Email,
 		Imail,
 		Sms,
