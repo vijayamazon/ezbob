@@ -149,11 +149,11 @@ BEGIN
 			ABS(CHECKSUM(NewId()))
 		FROM
 			LotteryPrizes p
-			LEFT JOIN LotteryPlayers lp
-				ON p.PrizeID = lp.PrizeID
-				AND p.LotteryID = @LotteryID
+			LEFT JOIN LotteryPlayers lp ON p.PrizeID = lp.PrizeID
 		WHERE
 			lp.PrizeID IS NULL
+			AND
+			p.LotteryID = @LotteryID
 
 		-------------------------------------------------------------------------
 
