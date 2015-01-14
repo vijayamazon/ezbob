@@ -101,7 +101,8 @@ BEGIN
 			#t
 		FROM
 			DecisionTrail
-
+		WHERE 
+			Tag IS NOT NULL
 		INSERT INTO DecisionTrailTags (TrailTag)
 		SELECT
 			#t.Tag

@@ -40,8 +40,9 @@
 
                 <li>Copy and Paste from Amazon Services:
                     <form class = "AmazonForm">
-                        @EzForm.InputText("amazonMerchantId", "Seller ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 30, uiEventControlID: "link-account:amazon_merchant_id")
-                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15, uiEventControlID: "link-account:amazon_marketplace_id")
+                        @EzForm.InputText("amazonMerchantId", "Seller ID", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 30, uiEventControlID: "link-account:amazon_merchant_id")
+                        @EzForm.InputText("amazonMarketplaceId", "Marketplace ID", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 15, uiEventControlID: "link-account:amazon_marketplace_id")
+                        @EzForm.InputText("amazonMWSAccessToken", "MWS Authorisation Token", cls: "form_field amazon_field", isRequired: true, statusIcon: true, isDisabled: true, maxLength: 50, uiEventControlID: "link-account:amazon_token")
                     </form>
                 </li>
             </ol>

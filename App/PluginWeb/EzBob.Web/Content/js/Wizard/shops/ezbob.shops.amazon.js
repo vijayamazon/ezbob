@@ -10,6 +10,8 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 		this.validator = EzBob.validateAmazonForm(this.form);
 		this.marketplaceId = this.$el.find('#amazonMarketplaceId');
 		this.merchantId = this.$el.find('#amazonMerchantId');
+		this.amazonMWSAccessToken = this.$el.find('#amazonMWSAccessToken');
+
 		this.marketplaceId.withoutSpaces();
 		this.merchantId.withoutSpaces();
 		EzBob.UiAction.registerView(this);
@@ -26,13 +28,15 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 		'keyup input': 'inputChanged'
 	},
 	enableControls: function () {
-		this.$el.find('#amazonMarketplaceId, #amazonMerchantId').removeAttr('disabled');
+		this.$el.find('.amazon_field').removeAttr('disabled');
 		if (this.marketplaceId.val().length === 0) {
-			this.$el.find('#amazonMarketplaceIdImage').field_status('clear', 'right away');
-			return;
+			this.marketplaceId.field_status('clear', 'right away');
 		}
 		if (this.merchantId.val().length === 0) {
-			this.$el.find('#amazonMerchantIdImage').field_status('clear', 'right away');
+			this.merchantId.field_status('clear', 'right away');
+		}
+		if (this.amazonMWSAccessToken.val().length === 0) {
+			this.amazonMWSAccessToken.field_status('clear', 'right away');
 		}
 	},
 	inputChanged: function () {
@@ -84,12 +88,12 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 		if (this.$el.find('a.connect-amazon').hasClass('disabled')) {
 			return false;
 		}
-		marketplaceId = this.$el.find('#amazonMarketplaceId');
-		merchantId = this.$el.find('#amazonMerchantId');
+		
 		this.blockBtn(true);
 		$.post(window.gRootPath + 'Customer/AmazonMarketplaces/ConnectAmazon', {
-			marketplaceId: marketplaceId.val(),
-			merchantId: merchantId.val()
+			marketplaceId: this.marketplaceId.val(),
+			merchantId: this.merchantId.val(),
+			mwsAccessToken: this.amazonMWSAccessToken.val()
 		})
 		
 		.success((function (_this) {

@@ -134,12 +134,11 @@
 		[Authorize]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		public JsonResult ConnectAmazon(string marketplaceId, string merchantId)
+		public JsonResult ConnectAmazon(string marketplaceId, string merchantId, string mwsAccessToken)
 		{
 			try
 			{
-				//TODO pass MWS auth token
-				int mpId = ConnectAmazonTrn(marketplaceId, merchantId);
+				int mpId = ConnectAmazonTrn(marketplaceId, merchantId, mwsAccessToken);
 				if (mpId == -1)
 				{
 					return Json(new {});
@@ -164,7 +163,7 @@
 
 		[NonAction]
 		[Transactional]
-		private int ConnectAmazonTrn(string marketplaceId, string merchantId, string mwsAuthToken = null /*todo*/)
+		private int ConnectAmazonTrn(string marketplaceId, string merchantId, string mwsAuthToken)
 		{
 			Log.InfoFormat("Adding Marketplace '{0}' to customer {1} with MerchantId '{2}'", marketplaceId, _context.User.Id, merchantId);
 

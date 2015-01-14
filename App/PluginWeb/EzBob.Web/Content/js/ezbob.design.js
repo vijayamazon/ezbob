@@ -1293,7 +1293,8 @@ EzBob.validateAmazonForm = function (el) {
     return e.validate({
         rules: {
             amazonMerchantId: { remote: { url: window.gRootPath + "AmazonMarketPlaces/IsAmazonUserCorrect" }, required: true },
-            amazonMarketplaceId: { required: true, rangelength: [10, 15], amazonMPValidator: true }
+            amazonMarketplaceId: { required: true, rangelength: [10, 15], amazonMPValidator: true },
+            amazonMWSAccessToken: { required: true, minlength: 40 }
         },
         messages: {
             amazonMerchantId: { remote: "Account does not exist" }
