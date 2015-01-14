@@ -341,37 +341,36 @@
 		} // GetLandRegistryDataIfNotRejected
 
 		private void ProcessApprovals() {
-			if (this.autoDecisionResponse.DecidedToReject) {
+			bool bContinue = true; 
+			if (this.autoDecisionResponse.DecidedToReject && bContinue) {
 				Log.Info("Not processing approvals: reject decision has been made.");
-				return;
+				bContinue = false;
 			} // if
 
-			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision) {
+			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision && bContinue) {
 				Log.Info("Not processing approvals: {0} option selected.", this.newCreditLineOption);
-				return;
+				bContinue = false;
 			} // if
 
-			if (this.avoidAutomaticDecision == 1) {
+			if (this.avoidAutomaticDecision == 1 && bContinue) {
 				Log.Info("Not processing approvals: automatic decisions should be avoided.");
-				return;
+				bContinue = false;
 			} // if
 
-			if (!this.dataGatherer.CustomerStatusIsEnabled) {
+			if (!this.dataGatherer.CustomerStatusIsEnabled && bContinue) {
 				Log.Info("Not processing approvals: customer status is not enabled.");
-				return;
+				bContinue = false;
 			} // if
 
-			if (this.dataGatherer.CustomerStatusIsWarning) {
+			if (this.dataGatherer.CustomerStatusIsWarning && bContinue) {
 				Log.Info("Not processing approvals: customer status is 'warning'.");
-				return;
+				bContinue = false;
 			} // if
 
-			if (!this.dataGatherer.EnableAutomaticReRejection || !this.dataGatherer.EnableAutomaticRejection) {
+			if ((!this.dataGatherer.EnableAutomaticReRejection || !this.dataGatherer.EnableAutomaticRejection) && bContinue) {
 				Log.Info("Not processing approvals: auto rejection or auto re-rejection is disabled.");
-				return;
+				bContinue = false;
 			} // if
-
-			bool bContinue = true;
 
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (this.dataGatherer.EnableAutomaticReApproval && bContinue) {
@@ -419,7 +418,7 @@
 				);
 			} // if
 
-			if (bContinue) { // No decision is made so far
+			if (!this.autoDecisionResponse.SystemDecision.HasValue) { // No decision is made so far
 				this.autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
