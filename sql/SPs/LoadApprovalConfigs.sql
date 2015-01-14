@@ -14,6 +14,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
+		RowType = 'Cfg',
 		Name,
 		Value
 	FROM
@@ -22,11 +23,21 @@ BEGIN
 		Name LIKE 'AutoApprove%'
 	UNION
 	SELECT
+		RowType = 'Cfg',
 		'AutoApprove' + Name,
 		Value
 	FROM
 		ConfigurationVariables
 	WHERE
 		Name = 'MinLoan'
+	UNION
+	SELECT
+		RowType = 'TraceEnabled',
+		Name = TraceName,
+		Value = '1'
+	FROM
+		DecisionTraceNames
+	WHERE
+		IsEnabled = 1
 END
 GO

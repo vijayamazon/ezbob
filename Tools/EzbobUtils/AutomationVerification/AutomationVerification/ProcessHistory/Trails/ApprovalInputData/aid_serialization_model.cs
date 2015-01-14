@@ -17,6 +17,9 @@
 			public Configuration Configuration { get; set; }
 
 			[UsedImplicitly]
+			public List<string> EnabledTraces { get; set; }
+
+			[UsedImplicitly]
 			public int CustomerID { get; set; }
 
 			[UsedImplicitly]
@@ -67,6 +70,11 @@
 			public List<string> WorstStatusList { get; set; }
 
 			public void FlushTo(ApprovalInputData dst) {
+				Configuration.EnabledTraces.Clear();
+
+				foreach (string traceName in EnabledTraces)
+					Configuration.EnabledTraces.Add(traceName);
+
 				dst.Clean();
 
 				dst.SetDataAsOf(DataAsOf);
@@ -106,6 +114,8 @@
 					MetaDataValidationErrors.AddRange(src.MetaData.ValidationErrors);
 
 				Configuration = src.Configuration;
+				EnabledTraces = new List<string>(src.Configuration.EnabledTraces);
+
 				CustomerID = src.CustomerID;
 				SystemCalculatedAmount = src.SystemCalculatedAmount;
 				Medal = src.Medal;

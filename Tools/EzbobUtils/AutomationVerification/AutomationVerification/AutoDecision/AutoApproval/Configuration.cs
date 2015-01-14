@@ -1,4 +1,5 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
+	using System;
 	using System.Collections.Generic;
 	using System.Reflection;
 	using Ezbob.Database;
@@ -43,23 +44,29 @@
 		public virtual string AllowedCaisStatusesWithoutLoan {
 			get { return string.Join(", ", this.m_oAllowedCaisStatusesWithoutLoan); } // get
 			set { SaveCaisStatuses(value, this.m_oAllowedCaisStatusesWithoutLoan); } // set
-		}
+		} // AllowedCaisStatusesWithLoan
+
+		public virtual SortedSet<string> EnabledTraces { get; private set; }
 
 		public Configuration() {
+			EnabledTraces = new SortedSet<string>();
 			this.m_oAllowedCaisStatusesWithLoan = new List<string>();
 			this.m_oAllowedCaisStatusesWithoutLoan = new List<string>();
 		} // constructor
 
-		public Configuration(AConnection oDB, ASafeLog oLog)
-			: this() {
+		public Configuration(AConnection oDB, ASafeLog oLog) : this() {
 			DB = oDB;
 			Log = oLog;
 		} // constructor
 
+		public virtual bool IsTraceEnabled<T>() {
+			return EnabledTraces.Contains(typeof(T).FullName);
+		} // IsTraceEnabled
+
 		public virtual void Load() {
+			EnabledTraces.Clear();
 			DB.ForEachRowSafe(SetValue, "LoadApprovalConfigs", CommandSpecies.StoredProcedure);
 		} // Load
-		// AllowedCaisStatusesWithLoan
 
 		public virtual List<string> GetAllowedCaisStatusesWithLoan() {
 			return this.m_oAllowedCaisStatusesWithLoan;
@@ -73,7 +80,32 @@
 
 		private AConnection DB { get; set; }
 
+		private enum RowType {
+			Cfg,
+			TraceEnabled,
+		} // enum RowType
+
 		private void SetValue(SafeReader sr) {
+			RowType rt;
+
+			if (!Enum.TryParse(sr["RowType"], out rt))
+				return;
+
+			switch (rt) {
+			case RowType.Cfg:
+				SetCfgValue(sr);
+				break;
+
+			case RowType.TraceEnabled:
+				EnabledTraces.Add(sr["Name"]);
+				break;
+
+			default:
+				throw new ArgumentOutOfRangeException();
+			} // switch
+		} // SetValue
+
+		private void SetCfgValue(SafeReader sr) {
 			string sName = sr["Name"];
 
 			if (sName.StartsWith(StandardPrefix))
@@ -109,7 +141,7 @@
 				pi.SetValue(this, sr["Value"].ToType(pi.PropertyType));
 
 			Log.Debug("Auto approval configuration: '{0}' was set to {1}.", sName, pi.GetValue(this));
-		} // SetValue
+		} // SetCfgValue
 
 		private void SaveCaisStatuses(string sList, List<string> oList) {
 			oList.Clear();

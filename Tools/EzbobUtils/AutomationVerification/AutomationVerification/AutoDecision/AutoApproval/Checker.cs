@@ -50,10 +50,10 @@
 			Complete();
 		} // Run
 
-		public T StepFailed<T>() where T : ATrace {
+		public T StepForceFailed<T>() where T : ATrace {
 			ApprovedAmount = 0;
 			return Trail.Negative<T>(false);
-		} // StepFailed
+		} // StepForceFailed
 
 		private ApprovalTrail Trail {
 			get { return this.m_oAgent.Trail; }
@@ -439,6 +439,12 @@
 
 		private T StepDone<T>() where T : ATrace {
 			return Trail.Affirmative<T>(false);
+		} // StepFailed
+
+		private T StepFailed<T>() where T : ATrace {
+			return Trail.MyInputData.Configuration.IsTraceEnabled<T>()
+				? StepForceFailed<T>()
+				: StepDone<T>();
 		} // StepFailed
 
 		private readonly Agent m_oAgent;

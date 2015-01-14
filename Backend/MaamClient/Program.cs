@@ -57,9 +57,7 @@
 		} // CompareAndExport
 
 		private static void Main(string[] args) {
-			AppName = Assembly.GetExecutingAssembly()
-				.GetName()
-				.Name;
+			AppName = Assembly.GetExecutingAssembly().GetName().Name;
 
 			Log = new FileLog(AppName);
 			Log.NotifyStart();
@@ -70,15 +68,13 @@
 
 			Ezbob.Backend.Strategies.Library.Initialize(env, DB, Log);
 
-			// CompareMaam(args);
-
 			// LoadFromJson();
 
 			// LoadTurnovers(args);
 
-			// ExportApprovalData.Run(args, DB, Log);
+			ExportApprovalData.Run(args, DB, Log);
 
-			CompareAndExport(args, DB, Log);
+			// CompareAndExport(args, DB, Log);
 
 			Log.NotifyStop();
 		} // Main

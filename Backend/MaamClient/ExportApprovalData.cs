@@ -94,7 +94,7 @@
 					"Cfg_HmrcTurnoverDropHalfYearRatio",
 					"Cfg_AllowedCaisStatusesWithLoan",
 					"Cfg_AllowedCaisStatusesWithoutLoan",
-					"CustomerID",
+					"Cfg_EnabledTraces",
 					"CustomerName",
 					"DataAsOf",
 					"DirectorNames",
@@ -131,6 +131,7 @@
 					"Meta_EnteredCompanyName",
 					"Meta_OutstandingPrincipal",
 					"Meta_RepaidRatio",
+					"Meta_PreviousManualApproveCount",
 					"ReservedFunds",
 					"SystemCalculatedAmount",
 					"WorstStatuses"
@@ -194,7 +195,7 @@
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.HmrcTurnoverDropHalfYearRatio);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.AllowedCaisStatusesWithLoan);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.Configuration.AllowedCaisStatusesWithoutLoan);
-				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.CustomerID);
+				cellNum = sheet.SetCellValue(rowNum, cellNum, string.Join("|", this.aid.Configuration.EnabledTraces));
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.CustomerName.ToString());
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.DataAsOf);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, string.Join("|", this.aid.DirectorNames.Select(x => x.ToString())));
@@ -231,6 +232,7 @@
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.MetaData.EnteredCompanyName);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.MetaData.OutstandingPrincipal);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.MetaData.RepaidRatio);
+				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.MetaData.PreviousManualApproveCount);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.ReservedFunds);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.SystemCalculatedAmount);
 				cellNum = sheet.SetCellValue(rowNum, cellNum, this.aid.WorstStatuses);
@@ -265,8 +267,9 @@ FROM
 	INNER JOIN DecisionStatuses s ON t.DecisionStatusID = s.DecisionStatusID
 	INNER JOIN Decisions d ON t.DecisionID = d.DecisionID
 	INNER JOIN CashRequests r ON t.CashRequestID = r.Id
+	INNER JOIN DecisionTrailTags tt ON t.TrailTagID = tt.TrailTagID
 WHERE
-	t.Tag = '" + tag + "'";
+	tt.TrailTag = '" + tag + "'";
 
 			SortedDictionary<long, OneRowData> rows = new SortedDictionary<long, OneRowData>();
 
@@ -277,7 +280,7 @@ WHERE
 				},
 				inputDataQuery,
 				CommandSpecies.Text
-				);
+			);
 
 			return rows;
 		} // LoadInputData
@@ -286,14 +289,16 @@ WHERE
 			string query = @"
 SELECT
 	t.TrailID,
-	tc.Name,
+	n.TraceName AS Name,
 	s.DecisionStatus
 FROM
 	DecisionTrail t
 	INNER JOIN DecisionTrace tc ON t.TrailID = tc.TrailID
+	INNER JOIN DecisionTraceNames n ON tc.TraceNameID = n.TraceNameID
 	INNER JOIN DecisionStatuses s ON tc.DecisionStatusID = s.DecisionStatusID
+	INNER JOIN DecisionTrailTags tt ON t.TrailTagID = tt.TrailTagID
 WHERE
-	t.Tag = '" + tag + "'";
+	tt.TrailTag = '" + tag + "'";
 
 			db.ForEachRowSafe(
 				sr => {
@@ -305,7 +310,7 @@ WHERE
 				},
 				query,
 				CommandSpecies.Text
-				);
+			);
 		} // LoadRuleDecisions
 	} // class ExportApprovalData
 } // namespace

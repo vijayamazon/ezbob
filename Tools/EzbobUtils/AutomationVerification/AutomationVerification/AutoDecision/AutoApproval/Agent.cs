@@ -73,8 +73,7 @@
 				this.m_oCheck.Run();
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto approval.");
-				this.m_oCheck.StepFailed<ExceptionThrown>()
-					.Init(e);
+				this.m_oCheck.StepForceFailed<ExceptionThrown>().Init(e);
 			} // try
 
 			if (Trail.HasDecided) {
@@ -92,7 +91,7 @@
 				Args.CustomerID,
 				Trail,
 				Result == null ? string.Empty : "Approved " + Result + "."
-				);
+			);
 		} // MakeDecision
 
 		protected virtual Arguments Args { get; private set; }
@@ -117,9 +116,8 @@
 		protected virtual SortedSet<string> WorstStatuses { get; private set; }
 
 		protected virtual void GatherAvailableFunds() {
-			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure)
-				.Fill(Funds);
-		}
+			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(Funds);
+		} // GatherAvailableFunds
 
 		/// <summary>
 		///     Collects customer data from DB. Can be overridden to provide
