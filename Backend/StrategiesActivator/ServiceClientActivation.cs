@@ -790,7 +790,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			} // if
 
-			m_oServiceClient.Temp_BackFillMedals();
+			//m_oServiceClient.Temp_BackFillMedals();
 		}
 
 		[Activation]

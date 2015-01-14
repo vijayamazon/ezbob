@@ -3,9 +3,9 @@
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
   <xs:complexType name="ActionMetaData">
     <xs:sequence>
@@ -89,37 +89,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ActionResult" nillable="true" type="tns:ActionResult" />
-  <xs:complexType name="UserLoginActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="SessionID" type="xs:int" />
-          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="UserLoginActionResult" nillable="true" type="tns:UserLoginActionResult" />
-  <xs:complexType name="StringActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="StringActionResult" nillable="true" type="tns:StringActionResult" />
-  <xs:complexType name="BoolActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:boolean" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BoolActionResult" nillable="true" type="tns:BoolActionResult" />
   <xs:complexType name="LotteryActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -130,26 +99,150 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="LotteryActionResult" nillable="true" type="tns:LotteryActionResult" />
-  <xs:complexType name="NullableDateTimeActionResult">
+  <xs:complexType name="ExperianLtdActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:dateTime" />
+          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="History" nillable="true" type="q3:ArrayOfScoreAtDate" />
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" minOccurs="0" name="Value" nillable="true" type="q4:ExperianLtd" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="NullableDateTimeActionResult" nillable="true" type="tns:NullableDateTimeActionResult" />
+  <xs:element name="ExperianLtdActionResult" nillable="true" type="tns:ExperianLtdActionResult" />
+  <xs:complexType name="ExperianConsumerActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" minOccurs="0" name="Value" nillable="true" type="q5:ExperianConsumerData" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerActionResult" nillable="true" type="tns:ExperianConsumerActionResult" />
+  <xs:complexType name="ExperianConsumerMortgageActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" minOccurs="0" name="Value" nillable="true" type="q6:ExperianConsumerMortgagesData" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ExperianConsumerMortgageActionResult" nillable="true" type="tns:ExperianConsumerMortgageActionResult" />
+  <xs:complexType name="IntActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
+  <xs:complexType name="CompanyDataForCompanyScoreActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q7:CompanyData" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanyDataForCompanyScoreActionResult" nillable="true" type="tns:CompanyDataForCompanyScoreActionResult" />
+  <xs:complexType name="CompanyDataForCreditBureauActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Result" nillable="true" type="q8:CompanyDataForCreditBureau" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CompanyDataForCreditBureauActionResult" nillable="true" type="tns:CompanyDataForCreditBureauActionResult" />
+  <xs:complexType name="BoolActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" type="xs:boolean" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="BoolActionResult" nillable="true" type="tns:BoolActionResult" />
+  <xs:complexType name="CrmLookupsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Actions" nillable="true" type="q9:ArrayOfIdNameModel" />
+          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Ranks" nillable="true" type="q10:ArrayOfIdNameModel" />
+          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Statuses" nillable="true" type="q11:ArrayOfCrmStatusGroup" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="CrmLookupsActionResult" nillable="true" type="tns:CrmLookupsActionResult" />
   <xs:complexType name="ConfigTableActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" minOccurs="0" name="Table" nillable="true" type="q3:ArrayOfConfigTable" />
+          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" minOccurs="0" name="Table" nillable="true" type="q12:ArrayOfConfigTable" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ConfigTableActionResult" nillable="true" type="tns:ConfigTableActionResult" />
+  <xs:complexType name="AccountsToUpdateActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="AccountInfo" nillable="true" type="q13:AccountsToUpdate" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AccountsToUpdateActionResult" nillable="true" type="tns:AccountsToUpdateActionResult" />
+  <xs:complexType name="StringActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StringActionResult" nillable="true" type="tns:StringActionResult" />
+  <xs:complexType name="MarketplacesActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Affordability" nillable="true" type="q14:ArrayOfAffordabilityData" />
+          <xs:element minOccurs="0" name="Models" nillable="true" type="xs:string" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="MarketplacesActionResult" nillable="true" type="tns:MarketplacesActionResult" />
+  <xs:complexType name="StringStringMapActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q15="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Map" nillable="true" type="q15:ArrayOfKeyValueOfstringstring" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="StringStringMapActionResult" nillable="true" type="tns:StringStringMapActionResult" />
+  <xs:complexType name="PricingModelModelActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/EzBob.Backend.Strategies.PricingModel" minOccurs="0" name="Value" nillable="true" type="q16:PricingModelModel" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="PricingModelModelActionResult" nillable="true" type="tns:PricingModelModelActionResult" />
   <xs:complexType name="DecimalActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -161,56 +254,83 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="DecimalActionResult" nillable="true" type="tns:DecimalActionResult" />
-  <xs:complexType name="CustomerManualAnnualizedRevenueActionResult">
+  <xs:complexType name="QuickOfferActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q4:CustomerManualAnnualizedRevenue" />
+          <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
+          <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q17:QuickOfferModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="CustomerManualAnnualizedRevenueActionResult" nillable="true" type="tns:CustomerManualAnnualizedRevenueActionResult" />
-  <xs:complexType name="IntActionResult">
+  <xs:element name="QuickOfferActionResult" nillable="true" type="tns:QuickOfferActionResult" />
+  <xs:complexType name="UserLoginActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:int" />
+          <xs:element minOccurs="0" name="SessionID" type="xs:int" />
+          <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="IntActionResult" nillable="true" type="tns:IntActionResult" />
-  <xs:complexType name="DateTimeActionResult">
+  <xs:element name="UserLoginActionResult" nillable="true" type="tns:UserLoginActionResult" />
+  <xs:complexType name="CustomerDetailsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Value" type="xs:dateTime" />
+          <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q18:CustomerDetails" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
-  <xs:complexType name="PricingModelModelActionResult">
+  <xs:element name="CustomerDetailsActionResult" nillable="true" type="tns:CustomerDetailsActionResult" />
+  <xs:complexType name="EmailConfirmationTokenActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" minOccurs="0" name="Value" nillable="true" type="q5:PricingModelModel" />
+          <xs:element minOccurs="0" name="Address" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Token" type="ser:guid" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PricingModelModelActionResult" nillable="true" type="tns:PricingModelModelActionResult" />
-  <xs:complexType name="PropertyStatusesActionResult">
+  <xs:element name="EmailConfirmationTokenActionResult" nillable="true" type="tns:EmailConfirmationTokenActionResult" />
+  <xs:complexType name="VatReturnDataActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Groups" nillable="true" type="q6:ArrayOfPropertyStatusGroupModel" />
+          <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatement" nillable="true" type="q19:BankStatementDataModel" />
+          <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatementAnnualized" nillable="true" type="q20:BankStatementDataModel" />
+          <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RtiTaxMonthRawData" nillable="true" type="q21:ArrayOfRtiTaxMonthRawData" />
+          <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Summary" nillable="true" type="q22:ArrayOfVatReturnSummary" />
+          <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="VatReturnRawData" nillable="true" type="q23:ArrayOfVatReturnRawData" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="PropertyStatusesActionResult" nillable="true" type="tns:PropertyStatusesActionResult" />
+  <xs:element name="VatReturnDataActionResult" nillable="true" type="tns:VatReturnDataActionResult" />
+  <xs:complexType name="VatReturnPeriodsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Periods" nillable="true" type="q24:ArrayOfVatReturnPeriod" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="VatReturnPeriodsActionResult" nillable="true" type="tns:VatReturnPeriodsActionResult" />
+  <xs:complexType name="ElapsedTimeInfoActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/Ezbob.Utils" minOccurs="0" name="Value" nillable="true" type="q25:ElapsedTimeInfo" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="ElapsedTimeInfoActionResult" nillable="true" type="tns:ElapsedTimeInfoActionResult" />
   <xs:complexType name="WizardConfigsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -222,125 +342,80 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="WizardConfigsActionResult" nillable="true" type="tns:WizardConfigsActionResult" />
-  <xs:complexType name="CustomerDetailsActionResult">
+  <xs:complexType name="AvailableFundsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q7:CustomerDetails" />
+          <xs:element minOccurs="0" name="AvailableFunds" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ReservedAmount" type="xs:decimal" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="CustomerDetailsActionResult" nillable="true" type="tns:CustomerDetailsActionResult" />
-  <xs:complexType name="StringStringMapActionResult">
+  <xs:element name="AvailableFundsActionResult" nillable="true" type="tns:AvailableFundsActionResult" />
+  <xs:complexType name="PropertyStatusesActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Map" nillable="true" type="q8:ArrayOfKeyValueOfstringstring" />
+          <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Groups" nillable="true" type="q26:ArrayOfPropertyStatusGroupModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="StringStringMapActionResult" nillable="true" type="tns:StringStringMapActionResult" />
-  <xs:complexType name="EsignatureFileActionResult">
+  <xs:element name="PropertyStatusesActionResult" nillable="true" type="tns:PropertyStatusesActionResult" />
+  <xs:complexType name="CompanyCaisDataActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Contents" nillable="true" type="xs:base64Binary" />
-          <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="MimeType" nillable="true" type="xs:string" />
+          <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Accounts" nillable="true" type="q27:ArrayOfCompanyCaisAccount" />
+          <xs:element minOccurs="0" name="NumOfCurrentDefaultAccounts" type="xs:int" />
+          <xs:element minOccurs="0" name="NumOfSettledDefaultAccounts" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="EsignatureFileActionResult" nillable="true" type="tns:EsignatureFileActionResult" />
-  <xs:complexType name="EsignatureListActionResult">
+  <xs:element name="CompanyCaisDataActionResult" nillable="true" type="tns:CompanyCaisDataActionResult" />
+  <xs:complexType name="BrokerPropertiesActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q9:ArrayOfEsignature" />
-          <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="PotentialSigners" nillable="true" type="q10:ArrayOfEsigner" />
+          <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Properties" nillable="true" type="q28:BrokerProperties" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="EsignatureListActionResult" nillable="true" type="tns:EsignatureListActionResult" />
-  <xs:complexType name="ExperianConsumerActionResult">
+  <xs:element name="BrokerPropertiesActionResult" nillable="true" type="tns:BrokerPropertiesActionResult" />
+  <xs:complexType name="BrokerCustomersActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" minOccurs="0" name="Value" nillable="true" type="q11:ExperianConsumerData" />
+          <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Customers" nillable="true" type="q29:ArrayOfBrokerCustomerEntry" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ExperianConsumerActionResult" nillable="true" type="tns:ExperianConsumerActionResult" />
-  <xs:complexType name="ExperianConsumerMortgageActionResult">
+  <xs:element name="BrokerCustomersActionResult" nillable="true" type="tns:BrokerCustomersActionResult" />
+  <xs:complexType name="BrokerCustomerDetailsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" minOccurs="0" name="Value" nillable="true" type="q12:ExperianConsumerMortgagesData" />
+          <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q30:BrokerCustomerDetails" />
+          <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="PotentialSigners" nillable="true" type="q31:ArrayOfEsigner" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ExperianConsumerMortgageActionResult" nillable="true" type="tns:ExperianConsumerMortgageActionResult" />
-  <xs:complexType name="ExperianLtdActionResult">
+  <xs:element name="BrokerCustomerDetailsActionResult" nillable="true" type="tns:BrokerCustomerDetailsActionResult" />
+  <xs:complexType name="BrokerCustomerFilesActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="History" nillable="true" type="q13:ArrayOfScoreAtDate" />
-          <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" minOccurs="0" name="Value" nillable="true" type="q14:ExperianLtd" />
+          <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q32:ArrayOfBrokerCustomerFile" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="ExperianLtdActionResult" nillable="true" type="tns:ExperianLtdActionResult" />
-  <xs:complexType name="VatReturnPeriodsActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Periods" nillable="true" type="q15:ArrayOfVatReturnPeriod" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="VatReturnPeriodsActionResult" nillable="true" type="tns:VatReturnPeriodsActionResult" />
-  <xs:complexType name="VatReturnDataActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatement" nillable="true" type="q16:BankStatementDataModel" />
-          <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="BankStatementAnnualized" nillable="true" type="q17:BankStatementDataModel" />
-          <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="RtiTaxMonthRawData" nillable="true" type="q18:ArrayOfRtiTaxMonthRawData" />
-          <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Summary" nillable="true" type="q19:ArrayOfVatReturnSummary" />
-          <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="VatReturnRawData" nillable="true" type="q20:ArrayOfVatReturnRawData" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="VatReturnDataActionResult" nillable="true" type="tns:VatReturnDataActionResult" />
-  <xs:complexType name="QuickOfferActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="HasValue" type="xs:boolean" />
-          <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q21:QuickOfferModel" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="QuickOfferActionResult" nillable="true" type="tns:QuickOfferActionResult" />
-  <xs:complexType name="ElapsedTimeInfoActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q22="http://schemas.datacontract.org/2004/07/Ezbob.Utils" minOccurs="0" name="Value" nillable="true" type="q22:ElapsedTimeInfo" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="ElapsedTimeInfoActionResult" nillable="true" type="tns:ElapsedTimeInfoActionResult" />
+  <xs:element name="BrokerCustomerFilesActionResult" nillable="true" type="tns:BrokerCustomerFilesActionResult" />
   <xs:complexType name="BrokerCustomerFileContentsActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -366,53 +441,12 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerLeadDetailsActionResult" nillable="true" type="tns:BrokerLeadDetailsActionResult" />
-  <xs:complexType name="BrokerCustomerDetailsActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q23="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q23:BrokerCustomerDetails" />
-          <xs:element xmlns:q24="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="PotentialSigners" nillable="true" type="q24:ArrayOfEsigner" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BrokerCustomerDetailsActionResult" nillable="true" type="tns:BrokerCustomerDetailsActionResult" />
-  <xs:complexType name="BrokerCustomerFilesActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q25="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q25:ArrayOfBrokerCustomerFile" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BrokerCustomerFilesActionResult" nillable="true" type="tns:BrokerCustomerFilesActionResult" />
-  <xs:complexType name="BrokerCustomersActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q26="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Customers" nillable="true" type="q26:ArrayOfBrokerCustomerEntry" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BrokerCustomersActionResult" nillable="true" type="tns:BrokerCustomersActionResult" />
-  <xs:complexType name="BrokerPropertiesActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Properties" nillable="true" type="q27:BrokerProperties" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="BrokerPropertiesActionResult" nillable="true" type="tns:BrokerPropertiesActionResult" />
   <xs:complexType name="BrokerStaticDataActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q28="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Crm" nillable="true" type="q28:CrmStaticModel" />
-          <xs:element xmlns:q29="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q29:ArrayOfFileDescription" />
+          <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Crm" nillable="true" type="q33:CrmStaticModel" />
+          <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Files" nillable="true" type="q34:ArrayOfFileDescription" />
           <xs:element minOccurs="0" name="MaxPerNumber" type="xs:int" />
           <xs:element minOccurs="0" name="MaxPerPage" type="xs:int" />
           <xs:element minOccurs="0" name="Terms" nillable="true" type="xs:string" />
@@ -422,91 +456,57 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerStaticDataActionResult" nillable="true" type="tns:BrokerStaticDataActionResult" />
-  <xs:complexType name="MarketplacesActionResult">
+  <xs:complexType name="CustomerManualAnnualizedRevenueActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q30="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Affordability" nillable="true" type="q30:ArrayOfAffordabilityData" />
-          <xs:element minOccurs="0" name="Models" nillable="true" type="xs:string" />
+          <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Value" nillable="true" type="q35:CustomerManualAnnualizedRevenue" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="MarketplacesActionResult" nillable="true" type="tns:MarketplacesActionResult" />
-  <xs:complexType name="CrmLookupsActionResult">
+  <xs:element name="CustomerManualAnnualizedRevenueActionResult" nillable="true" type="tns:CustomerManualAnnualizedRevenueActionResult" />
+  <xs:complexType name="EsignatureListActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Actions" nillable="true" type="q31:ArrayOfIdNameModel" />
-          <xs:element xmlns:q32="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Ranks" nillable="true" type="q32:ArrayOfIdNameModel" />
-          <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Statuses" nillable="true" type="q33:ArrayOfCrmStatusGroup" />
+          <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q36:ArrayOfEsignature" />
+          <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="PotentialSigners" nillable="true" type="q37:ArrayOfEsigner" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="CrmLookupsActionResult" nillable="true" type="tns:CrmLookupsActionResult" />
-  <xs:complexType name="EmailConfirmationTokenActionResult">
+  <xs:element name="EsignatureListActionResult" nillable="true" type="tns:EsignatureListActionResult" />
+  <xs:complexType name="EsignatureFileActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Address" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Token" type="ser:guid" />
+          <xs:element minOccurs="0" name="Contents" nillable="true" type="xs:base64Binary" />
+          <xs:element minOccurs="0" name="FileName" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="MimeType" nillable="true" type="xs:string" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="EmailConfirmationTokenActionResult" nillable="true" type="tns:EmailConfirmationTokenActionResult" />
-  <xs:complexType name="AccountsToUpdateActionResult">
+  <xs:element name="EsignatureFileActionResult" nillable="true" type="tns:EsignatureFileActionResult" />
+  <xs:complexType name="DateTimeActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="AccountInfo" nillable="true" type="q34:AccountsToUpdate" />
+          <xs:element minOccurs="0" name="Value" type="xs:dateTime" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="AccountsToUpdateActionResult" nillable="true" type="tns:AccountsToUpdateActionResult" />
-  <xs:complexType name="AvailableFundsActionResult">
+  <xs:element name="DateTimeActionResult" nillable="true" type="tns:DateTimeActionResult" />
+  <xs:complexType name="NullableDateTimeActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element minOccurs="0" name="AvailableFunds" type="xs:decimal" />
-          <xs:element minOccurs="0" name="ReservedAmount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="Value" nillable="true" type="xs:dateTime" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="AvailableFundsActionResult" nillable="true" type="tns:AvailableFundsActionResult" />
-  <xs:complexType name="CompanyCaisDataActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q35="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Accounts" nillable="true" type="q35:ArrayOfCompanyCaisAccount" />
-          <xs:element minOccurs="0" name="NumOfCurrentDefaultAccounts" type="xs:int" />
-          <xs:element minOccurs="0" name="NumOfSettledDefaultAccounts" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CompanyCaisDataActionResult" nillable="true" type="tns:CompanyCaisDataActionResult" />
-  <xs:complexType name="CompanyDataForCompanyScoreActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q36="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Data" nillable="true" type="q36:CompanyData" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CompanyDataForCompanyScoreActionResult" nillable="true" type="tns:CompanyDataForCompanyScoreActionResult" />
-  <xs:complexType name="CompanyDataForCreditBureauActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element xmlns:q37="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Result" nillable="true" type="q37:CompanyDataForCreditBureau" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="CompanyDataForCreditBureauActionResult" nillable="true" type="tns:CompanyDataForCreditBureauActionResult" />
+  <xs:element name="NullableDateTimeActionResult" nillable="true" type="tns:NullableDateTimeActionResult" />
 </xs:schema>
