@@ -77,7 +77,7 @@
     <Compile Include="Config\AmazonMarketPlaceTypeConnection.cs" />
     <Compile Include="Config\AmazonMarketPlaceTypeConnectionBase.cs" />
     <Compile Include="Config\IAmazonMarketPlaceTypeConnection.cs" />
-    <Compile Include="MarketplaceWebServiceProducts\MarketplaceWebServiceProducts.cs" />
+    <Compile Include="MarketplaceWebServiceProducts\IMarketplaceWebServiceProducts.cs" />
     <Compile Include="MarketplaceWebServiceProducts\MarketplaceWebServiceProductsSample.cs" />
     <Compile Include="MarketplaceWebServiceProducts\Model\ErrorDetail.cs" />
     <Compile Include="MarketplaceWebServiceProducts\Model\IMWSResponse.cs" />
