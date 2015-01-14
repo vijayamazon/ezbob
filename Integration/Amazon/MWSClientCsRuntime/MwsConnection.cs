@@ -20,6 +20,7 @@ namespace MWSClientCsRuntime
 {
     public class MwsConnection : ICloneable
     {
+        #region Fields and Constructors
 
         private readonly object lockThis = new object();
 
@@ -68,6 +69,8 @@ namespace MWSClientCsRuntime
             this.awsAccessKeyId = awsAccessKeyId;
             this.awsSecretKeyId = awsSecretKeyId;
         }
+
+        #endregion
 
         private void freeze()
         {
@@ -155,7 +158,7 @@ namespace MWSClientCsRuntime
             {
                 throw type.WrapException(e);
             }
-
+           
         }
         /// <summary>
         /// Clones the connection and resets the state as if it was never used
@@ -176,6 +179,8 @@ namespace MWSClientCsRuntime
                 throw new InvalidOperationException("Cannot change MwsConnection properties once connected");
             }
         }
+
+        #region User Agent
 
         private void SetDefaultUserAgent()
         {
@@ -286,6 +291,10 @@ namespace MWSClientCsRuntime
                 this.userAgent = value;
             }
         }
+
+        #endregion
+
+        #region Properties
 
         public string AwsAccessKeyId
         {
@@ -457,6 +466,10 @@ namespace MWSClientCsRuntime
             }
         }
 
+        #endregion
+
+        #region ServiceEndpoint Definition
+
         /// <summary>
         /// Immutable service and version URI for an endpoint
         /// </summary>
@@ -492,6 +505,8 @@ namespace MWSClientCsRuntime
                 this.URI = new Uri(baseUri, "/" + servicePath);
             }
         }
+
+        #endregion
 
     }
 }

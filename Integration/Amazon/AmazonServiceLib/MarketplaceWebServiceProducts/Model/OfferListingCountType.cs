@@ -1,144 +1,115 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Offer Listing Count Type
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class OfferListingCountType
+    public class OfferListingCountType : AbstractMwsObject
     {
 
-        private  String conditionField;
-        private  Decimal valueField;
+        private decimal _value;
+        private string _condition;
 
         /// <summary>
-        /// Gets and sets  the condition property.
+        /// Gets and sets the Value property.
+        /// </summary>
+        [XmlElementAttribute(ElementName = "Value")]
+        public decimal Value
+        {
+            get { return this._value; }
+            set { this._value = value; }
+        }
+
+        /// <summary>
+        /// Sets the Value property.
+        /// </summary>
+        /// <param name="value">Value property.</param>
+        /// <returns>this instance.</returns>
+        public OfferListingCountType WithValue(decimal value)
+        {
+            this._value = value;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if Value property is set.
+        /// </summary>
+        /// <returns>true if Value property is set.</returns>
+        public bool IsSetValue()
+        {
+            return this._value != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the condition property.
         /// </summary>
         [XmlAttributeAttribute(AttributeName = "condition")]
-        public String condition
+        public string condition
         {
-            get { return this.conditionField ; }
-            set { this.conditionField = value; }
+            get { return this._condition; }
+            set { this._condition = value; }
         }
 
         /// <summary>
-        /// Sets the condition property
+        /// Sets the condition property.
         /// </summary>
-        /// <param name="condition">condition property</param>
-        /// <returns>this instance</returns>
-        public OfferListingCountType Withcondition(String condition)
+        /// <param name="condition">condition property.</param>
+        /// <returns>this instance.</returns>
+        public OfferListingCountType Withcondition(string condition)
         {
-            this.conditionField = condition;
+            this._condition = condition;
             return this;
         }
 
         /// <summary>
-        /// Checks if condition property is set
+        /// Checks if condition property is set.
         /// </summary>
-        /// <returns>true if condition property is set</returns>
-        public Boolean IsSetcondition()
+        /// <returns>true if condition property is set.</returns>
+        public bool IsSetcondition()
         {
-            return this.conditionField  != null;
-
+            return this._condition != null;
         }
 
-        /// <summary>
-        /// Gets and sets  the Value property.
-        /// </summary>
-        [XmlTextAttribute()]
-        public Decimal Value
+
+        public override void ReadFragmentFrom(IMwsReader reader)
         {
-            get { return this.valueField ; }
-            set { this.valueField = value; }
+            _condition = reader.ReadAttribute<string>("condition");
+            _value = reader.ReadValue<decimal>();
         }
 
-        /// <summary>
-        /// Sets the Value property
-        /// </summary>
-        /// <param name="value">Value property</param>
-        /// <returns>this instance</returns>
-        public OfferListingCountType WithValue(Decimal value)
+        public override void WriteFragmentTo(IMwsWriter writer)
         {
-            this.valueField = value;
-            return this;
+            writer.WriteAttribute("condition",_condition);
+            writer.WriteValue(_value);
         }
 
-        /// <summary>
-        /// Checks if Value property is set
-        /// </summary>
-        /// <returns>true if Value property is set</returns>
-        public Boolean IsSetValue()
+        public override void WriteTo(IMwsWriter writer)
         {
-            return true;
-
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "OfferListingCountType", this);
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
-
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            return xml.ToString();
+        public OfferListingCountType() : base()
+        {
         }
-
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
-        }
-
     }
-
 }

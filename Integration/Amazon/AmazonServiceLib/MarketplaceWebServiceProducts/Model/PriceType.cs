@@ -1,34 +1,35 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Price Type
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class PriceType
+    public class PriceType : AbstractMwsObject
     {
 
-        private  MoneyType landedPriceField;
-        private  MoneyType listingPriceField;
-        private  MoneyType shippingField;
+        private MoneyType _landedPrice;
+        private MoneyType _listingPrice;
+        private MoneyType _shipping;
 
         /// <summary>
         /// Gets and sets the LandedPrice property.
@@ -36,28 +37,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "LandedPrice")]
         public MoneyType LandedPrice
         {
-            get { return this.landedPriceField ; }
-            set { this.landedPriceField = value; }
+            get { return this._landedPrice; }
+            set { this._landedPrice = value; }
         }
 
         /// <summary>
-        /// Sets the LandedPrice property
+        /// Sets the LandedPrice property.
         /// </summary>
-        /// <param name="landedPrice">LandedPrice property</param>
-        /// <returns>this instance</returns>
+        /// <param name="landedPrice">LandedPrice property.</param>
+        /// <returns>this instance.</returns>
         public PriceType WithLandedPrice(MoneyType landedPrice)
         {
-            this.landedPriceField = landedPrice;
+            this._landedPrice = landedPrice;
             return this;
         }
 
         /// <summary>
-        /// Checks if LandedPrice property is set
+        /// Checks if LandedPrice property is set.
         /// </summary>
-        /// <returns>true if LandedPrice property is set</returns>
-        public Boolean IsSetLandedPrice()
+        /// <returns>true if LandedPrice property is set.</returns>
+        public bool IsSetLandedPrice()
         {
-            return this.landedPriceField != null;
+            return this._landedPrice != null;
         }
 
         /// <summary>
@@ -66,28 +67,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "ListingPrice")]
         public MoneyType ListingPrice
         {
-            get { return this.listingPriceField ; }
-            set { this.listingPriceField = value; }
+            get { return this._listingPrice; }
+            set { this._listingPrice = value; }
         }
 
         /// <summary>
-        /// Sets the ListingPrice property
+        /// Sets the ListingPrice property.
         /// </summary>
-        /// <param name="listingPrice">ListingPrice property</param>
-        /// <returns>this instance</returns>
+        /// <param name="listingPrice">ListingPrice property.</param>
+        /// <returns>this instance.</returns>
         public PriceType WithListingPrice(MoneyType listingPrice)
         {
-            this.listingPriceField = listingPrice;
+            this._listingPrice = listingPrice;
             return this;
         }
 
         /// <summary>
-        /// Checks if ListingPrice property is set
+        /// Checks if ListingPrice property is set.
         /// </summary>
-        /// <returns>true if ListingPrice property is set</returns>
-        public Boolean IsSetListingPrice()
+        /// <returns>true if ListingPrice property is set.</returns>
+        public bool IsSetListingPrice()
         {
-            return this.listingPriceField != null;
+            return this._listingPrice != null;
         }
 
         /// <summary>
@@ -96,96 +97,52 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "Shipping")]
         public MoneyType Shipping
         {
-            get { return this.shippingField ; }
-            set { this.shippingField = value; }
+            get { return this._shipping; }
+            set { this._shipping = value; }
         }
 
         /// <summary>
-        /// Sets the Shipping property
+        /// Sets the Shipping property.
         /// </summary>
-        /// <param name="shipping">Shipping property</param>
-        /// <returns>this instance</returns>
+        /// <param name="shipping">Shipping property.</param>
+        /// <returns>this instance.</returns>
         public PriceType WithShipping(MoneyType shipping)
         {
-            this.shippingField = shipping;
+            this._shipping = shipping;
             return this;
         }
 
         /// <summary>
-        /// Checks if Shipping property is set
+        /// Checks if Shipping property is set.
         /// </summary>
-        /// <returns>true if Shipping property is set</returns>
-        public Boolean IsSetShipping()
+        /// <returns>true if Shipping property is set.</returns>
+        public bool IsSetShipping()
         {
-            return this.shippingField != null;
+            return this._shipping != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetLandedPrice()) {
-                MoneyType  landedPriceObj = this.LandedPrice;
-                xml.Append("<LandedPrice>");
-                xml.Append(landedPriceObj.ToXMLFragment());
-                xml.Append("</LandedPrice>");
-            } 
-            if (IsSetListingPrice()) {
-                MoneyType  listingPriceObj = this.ListingPrice;
-                xml.Append("<ListingPrice>");
-                xml.Append(listingPriceObj.ToXMLFragment());
-                xml.Append("</ListingPrice>");
-            } 
-            if (IsSetShipping()) {
-                MoneyType  shippingObj = this.Shipping;
-                xml.Append("<Shipping>");
-                xml.Append(shippingObj.ToXMLFragment());
-                xml.Append("</Shipping>");
-            } 
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _landedPrice = reader.Read<MoneyType>("LandedPrice");
+            _listingPrice = reader.Read<MoneyType>("ListingPrice");
+            _shipping = reader.Read<MoneyType>("Shipping");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("LandedPrice", _landedPrice);
+            writer.Write("ListingPrice", _listingPrice);
+            writer.Write("Shipping", _shipping);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "PriceType", this);
+        }
+
+        public PriceType() : base()
+        {
+        }
     }
-
 }

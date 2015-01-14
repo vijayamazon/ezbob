@@ -76,7 +76,7 @@
                     EndDate = endDate,
                     MarketplaceId = securityInfo.MarketplaceId,
                     MerchantId = securityInfo.MerchantId,
-					ErrorRetryingInfo = errorRetryingInfo
+					ErrorRetryingInfo = errorRetryingInfo,
                 };
 
             List<OrderItemTwo> orders;

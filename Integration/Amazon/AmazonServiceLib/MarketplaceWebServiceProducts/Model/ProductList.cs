@@ -1,32 +1,34 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Product List
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
-using System.Xml.Serialization;
+using System.Xml;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class ProductList
+    public class ProductList : AbstractMwsObject
     {
 
-        private  List<Product> productField;
+        private List<Product> _product;
 
         /// <summary>
         /// Gets and sets the Product property.
@@ -36,92 +38,53 @@ namespace MarketplaceWebServiceProducts.Model
         {
             get
             {
-                if (this.productField == null)
+                if(this._product == null)
                 {
-                    this.productField = new List<Product>();
+                    this._product = new List<Product>();
                 }
-                return this.productField;
+                return this._product;
             }
-            set { this.productField =  value; }
+            set { this._product = value; }
         }
 
         /// <summary>
-        /// Sets the Product property
+        /// Sets the Product property.
         /// </summary>
-        /// <param name="list">Product property</param>
-        /// <returns>this instance</returns>
-        public ProductList WithProduct(params Product[] list)
+        /// <param name="product">Product property.</param>
+        /// <returns>this instance.</returns>
+        public ProductList WithProduct(Product[] product)
         {
-            foreach (Product item in list)
-            {
-                Product.Add(item);
-            }
+            this._product.AddRange(product);
             return this;
-        }          
+        }
 
         /// <summary>
-        /// Checks if Product property is set
+        /// Checks if Product property is set.
         /// </summary>
-        /// <returns>true if Product property is set</returns>
-        public Boolean IsSetProduct()
+        /// <returns>true if Product property is set.</returns>
+        public bool IsSetProduct()
         {
-            return (Product.Count > 0);
+            return this.Product.Count > 0;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            List<Product> productObjList = this.Product;
-            foreach (Product productObj in productObjList) {
-                xml.Append("<Product>");
-                xml.Append(productObj.ToXMLFragment());
-                xml.Append("</Product>");
-            }
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _product = reader.ReadList<Product>("Product");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.WriteList("Product", _product);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "ProductList", this);
+        }
+
+        public ProductList() : base()
+        {
+        }
     }
-
 }

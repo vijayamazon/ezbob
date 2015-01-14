@@ -1,155 +1,115 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Message
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class Message
+    public class Message : AbstractMwsObject
     {
 
-        private String localeField;
-
-        private String textField;
+        private string _locale;
+        private string _text;
 
         /// <summary>
         /// Gets and sets the Locale property.
         /// </summary>
         [XmlElementAttribute(ElementName = "Locale")]
-        public String Locale
+        public string Locale
         {
-            get { return this.localeField ; }
-            set { this.localeField= value; }
+            get { return this._locale; }
+            set { this._locale = value; }
         }
 
         /// <summary>
-        /// Sets the Locale property
+        /// Sets the Locale property.
         /// </summary>
-        /// <param name="locale">Locale property</param>
-        /// <returns>this instance</returns>
-        public Message WithLocale(String locale)
+        /// <param name="locale">Locale property.</param>
+        /// <returns>this instance.</returns>
+        public Message WithLocale(string locale)
         {
-            this.localeField = locale;
+            this._locale = locale;
             return this;
         }
 
         /// <summary>
-        /// Checks if Locale property is set
+        /// Checks if Locale property is set.
         /// </summary>
-        /// <returns>true if Locale property is set</returns>
-        public Boolean IsSetLocale()
+        /// <returns>true if Locale property is set.</returns>
+        public bool IsSetLocale()
         {
-            return  this.localeField != null;
-
+            return this._locale != null;
         }
 
         /// <summary>
         /// Gets and sets the Text property.
         /// </summary>
         [XmlElementAttribute(ElementName = "Text")]
-        public String Text
+        public string Text
         {
-            get { return this.textField ; }
-            set { this.textField= value; }
+            get { return this._text; }
+            set { this._text = value; }
         }
 
         /// <summary>
-        /// Sets the Text property
+        /// Sets the Text property.
         /// </summary>
-        /// <param name="text">Text property</param>
-        /// <returns>this instance</returns>
-        public Message WithText(String text)
+        /// <param name="text">Text property.</param>
+        /// <returns>this instance.</returns>
+        public Message WithText(string text)
         {
-            this.textField = text;
+            this._text = text;
             return this;
         }
 
         /// <summary>
-        /// Checks if Text property is set
+        /// Checks if Text property is set.
         /// </summary>
-        /// <returns>true if Text property is set</returns>
-        public Boolean IsSetText()
+        /// <returns>true if Text property is set.</returns>
+        public bool IsSetText()
         {
-            return  this.textField != null;
-
+            return this._text != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetLocale()) {
-                xml.Append("<Locale>");
-                xml.Append(EscapeXML(this.Locale));
-                xml.Append("</Locale>");
-            }
-            if (IsSetText()) {
-                xml.Append("<Text>");
-                xml.Append(EscapeXML(this.Text));
-                xml.Append("</Text>");
-            }
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _locale = reader.Read<string>("Locale");
+            _text = reader.Read<string>("Text");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("Locale", _locale);
+            writer.Write("Text", _text);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "Message", this);
+        }
+
+        public Message() : base()
+        {
+        }
     }
-
 }

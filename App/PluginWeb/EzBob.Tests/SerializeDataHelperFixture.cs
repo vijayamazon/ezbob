@@ -23,7 +23,7 @@ namespace EzBob.Tests
         [Test]
         public void can_serialize_amazon_non_generic()
         {
-            var data = new AmazonSecurityInfo("A2W2IDM5CJ5O1K");
+            var data = new AmazonSecurityInfo("A2W2IDM5CJ5O1K", null /*todo*/);
             var serialized = new Serialized(data);
             var actual = Serialized.Deserialize<AmazonSecurityInfo>(serialized);
             Assert.That(actual.MerchantId, Is.EqualTo("A2W2IDM5CJ5O1K"));

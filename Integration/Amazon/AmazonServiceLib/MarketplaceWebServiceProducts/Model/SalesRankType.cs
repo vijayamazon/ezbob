@@ -1,155 +1,115 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Sales Rank Type
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class SalesRankType
+    public class SalesRankType : AbstractMwsObject
     {
 
-        private String productCategoryIdField;
-
-        private Decimal? rankField;
+        private string _productCategoryId;
+        private decimal _rank;
 
         /// <summary>
         /// Gets and sets the ProductCategoryId property.
         /// </summary>
         [XmlElementAttribute(ElementName = "ProductCategoryId")]
-        public String ProductCategoryId
+        public string ProductCategoryId
         {
-            get { return this.productCategoryIdField ; }
-            set { this.productCategoryIdField= value; }
+            get { return this._productCategoryId; }
+            set { this._productCategoryId = value; }
         }
 
         /// <summary>
-        /// Sets the ProductCategoryId property
+        /// Sets the ProductCategoryId property.
         /// </summary>
-        /// <param name="productCategoryId">ProductCategoryId property</param>
-        /// <returns>this instance</returns>
-        public SalesRankType WithProductCategoryId(String productCategoryId)
+        /// <param name="productCategoryId">ProductCategoryId property.</param>
+        /// <returns>this instance.</returns>
+        public SalesRankType WithProductCategoryId(string productCategoryId)
         {
-            this.productCategoryIdField = productCategoryId;
+            this._productCategoryId = productCategoryId;
             return this;
         }
 
         /// <summary>
-        /// Checks if ProductCategoryId property is set
+        /// Checks if ProductCategoryId property is set.
         /// </summary>
-        /// <returns>true if ProductCategoryId property is set</returns>
-        public Boolean IsSetProductCategoryId()
+        /// <returns>true if ProductCategoryId property is set.</returns>
+        public bool IsSetProductCategoryId()
         {
-            return  this.productCategoryIdField != null;
-
+            return this._productCategoryId != null;
         }
 
         /// <summary>
         /// Gets and sets the Rank property.
         /// </summary>
         [XmlElementAttribute(ElementName = "Rank")]
-        public Decimal Rank
+        public decimal Rank
         {
-            get { return this.rankField.GetValueOrDefault() ; }
-            set { this.rankField= value; }
+            get { return this._rank; }
+            set { this._rank = value; }
         }
 
         /// <summary>
-        /// Sets the Rank property
+        /// Sets the Rank property.
         /// </summary>
-        /// <param name="rank">Rank property</param>
-        /// <returns>this instance</returns>
-        public SalesRankType WithRank(Decimal rank)
+        /// <param name="rank">Rank property.</param>
+        /// <returns>this instance.</returns>
+        public SalesRankType WithRank(decimal rank)
         {
-            this.rankField = rank;
+            this._rank = rank;
             return this;
         }
 
         /// <summary>
-        /// Checks if Rank property is set
+        /// Checks if Rank property is set.
         /// </summary>
-        /// <returns>true if Rank property is set</returns>
-        public Boolean IsSetRank()
+        /// <returns>true if Rank property is set.</returns>
+        public bool IsSetRank()
         {
-            return  this.rankField.HasValue;
-
+            return this._rank != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetProductCategoryId()) {
-                xml.Append("<ProductCategoryId>");
-                xml.Append(EscapeXML(this.ProductCategoryId));
-                xml.Append("</ProductCategoryId>");
-            }
-            if (IsSetRank()) {
-                xml.Append("<Rank>");
-                xml.Append(this.Rank);
-                xml.Append("</Rank>");
-            }
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _productCategoryId = reader.Read<string>("ProductCategoryId");
+            _rank = reader.Read<decimal>("Rank");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("ProductCategoryId", _productCategoryId);
+            writer.Write("Rank", _rank);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "SalesRankType", this);
+        }
+
+        public SalesRankType() : base()
+        {
+        }
     }
-
 }

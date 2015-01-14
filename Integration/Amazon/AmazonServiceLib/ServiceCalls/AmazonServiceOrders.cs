@@ -44,6 +44,7 @@
 			var request = new ListOrdersRequest {
 				MarketplaceId = requestInfo.MarketplaceId,
 				SellerId = requestInfo.MerchantId,
+				MWSAuthToken = requestInfo.MWSAuthToken
 			};
 
 			if (requestInfo.StartDate.HasValue) {
@@ -81,7 +82,8 @@
 
 			var req = new ListOrdersByNextTokenRequest {
 				NextToken = nextToken,
-				SellerId = sellerId
+				SellerId = sellerId,
+				MWSAuthToken = requestInfo.MWSAuthToken
 			};
 			var response = AmazonWaitBeforeRetryHelper.DoServiceAction(
 									requestInfo.ErrorRetryingInfo,
@@ -266,7 +268,8 @@
 			var sellerId = requestInfo.MerchantId;
 			var req = new ListOrderItemsByNextTokenRequest {
 				NextToken = nextToken,
-				SellerId = sellerId
+				SellerId = sellerId,
+				MWSAuthToken = requestInfo.MWSAuthToken
 			};
 
 			var response = AmazonWaitBeforeRetryHelper.DoServiceAction(

@@ -135,7 +135,7 @@
 
             foreach (var si in siList)
             {
-                var amazonSecurityInfo = new AmazonSecurityInfo(si.Id);
+				var amazonSecurityInfo = new AmazonSecurityInfo(si.Id, null /*todo*/);
                 amazonSecurityInfo.AddMarketplace("A1F83G8C2ARO7P");
 
                 AmazonRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo(databaseCustomer, amazonSecurityInfo, si.Name);

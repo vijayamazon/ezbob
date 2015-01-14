@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright 2009-2014 Amazon Services. All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  *
@@ -10,8 +10,8 @@
  *******************************************************************************
  * Marketplace Web Service Orders
  * API Version: 2013-09-01
- * Library Version: 2013-09-01
- * Generated: Fri Jun 06 15:20:51 UTC 2014
+ * Library Version: 2014-09-30
+ * Generated: Thu Oct 02 16:23:34 GMT 2014
  */
 
 using MarketplaceWebServiceOrders.Model;
@@ -109,6 +109,8 @@ namespace MarketplaceWebServiceOrders {
             GetOrderRequest request = new GetOrderRequest();
             string sellerId = "example";
             request.SellerId = sellerId;
+            string mwsAuthToken = "example";
+            request.MWSAuthToken = mwsAuthToken;
             List<string> amazonOrderId = new List<string>();
             request.AmazonOrderId = amazonOrderId;
             return this.client.GetOrder(request);
@@ -120,6 +122,8 @@ namespace MarketplaceWebServiceOrders {
             GetServiceStatusRequest request = new GetServiceStatusRequest();
             string sellerId = "example";
             request.SellerId = sellerId;
+            string mwsAuthToken = "example";
+            request.MWSAuthToken = mwsAuthToken;
             return this.client.GetServiceStatus(request);
         }
 
@@ -129,6 +133,8 @@ namespace MarketplaceWebServiceOrders {
             ListOrderItemsRequest request = new ListOrderItemsRequest();
             string sellerId = "example";
             request.SellerId = sellerId;
+            string mwsAuthToken = "example";
+            request.MWSAuthToken = mwsAuthToken;
             string amazonOrderId = "example";
             request.AmazonOrderId = amazonOrderId;
             return this.client.ListOrderItems(request);
@@ -140,6 +146,8 @@ namespace MarketplaceWebServiceOrders {
             ListOrderItemsByNextTokenRequest request = new ListOrderItemsByNextTokenRequest();
             string sellerId = "example";
             request.SellerId = sellerId;
+            string mwsAuthToken = "example";
+            request.MWSAuthToken = mwsAuthToken;
             string nextToken = "example";
             request.NextToken = nextToken;
             return this.client.ListOrderItemsByNextToken(request);
@@ -151,6 +159,8 @@ namespace MarketplaceWebServiceOrders {
             ListOrdersRequest request = new ListOrdersRequest();
             string sellerId = "example";
             request.SellerId = sellerId;
+            string mwsAuthToken = "example";
+            request.MWSAuthToken = mwsAuthToken;
             DateTime createdAfter = new DateTime();
             request.CreatedAfter = createdAfter;
             DateTime createdBefore = new DateTime();
@@ -184,10 +194,13 @@ namespace MarketplaceWebServiceOrders {
             ListOrdersByNextTokenRequest request = new ListOrdersByNextTokenRequest();
             string sellerId = "example";
             request.SellerId = sellerId;
+            string mwsAuthToken = "example";
+            request.MWSAuthToken = mwsAuthToken;
             string nextToken = "example";
             request.NextToken = nextToken;
             return this.client.ListOrdersByNextToken(request);
         }
+
 
     }
 }

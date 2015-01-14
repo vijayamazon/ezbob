@@ -77,8 +77,12 @@
     <Compile Include="Config\AmazonMarketPlaceTypeConnection.cs" />
     <Compile Include="Config\AmazonMarketPlaceTypeConnectionBase.cs" />
     <Compile Include="Config\IAmazonMarketPlaceTypeConnection.cs" />
+    <Compile Include="MarketplaceWebServiceProducts\MarketplaceWebServiceProducts.cs" />
+    <Compile Include="MarketplaceWebServiceProducts\MarketplaceWebServiceProductsSample.cs" />
+    <Compile Include="MarketplaceWebServiceProducts\Model\ErrorDetail.cs" />
+    <Compile Include="MarketplaceWebServiceProducts\Model\IMWSResponse.cs" />
+    <Compile Include="MarketplaceWebServiceProducts\Model\ProductsUtil.cs" />
     <Compile Include="Products\AmazonProductsRequestInfoBySellerSku.cs" />
-    <Compile Include="MarketplaceWebServiceProducts\IMarketplaceWebServiceProducts.cs" />
     <Compile Include="MarketplaceWebServiceProducts\MarketplaceWebServiceProductsClient.cs" />
     <Compile Include="MarketplaceWebServiceProducts\MarketplaceWebServiceProductsConfig.cs" />
     <Compile Include="MarketplaceWebServiceProducts\MarketplaceWebServiceProductsException.cs" />
@@ -373,40 +377,18 @@
     <EmbeddedResource Include="MarketplaceWebService\Mock\UpdateReportAcknowledgementsResponse.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetCompetitivePricingForASINResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetCompetitivePricingForSKUResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetLowestOfferListingsForASINResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetLowestOfferListingsForSKUResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMatchingProductForIdResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMatchingProductResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMyPriceForASINResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetMyPriceForSKUResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetProductCategoriesForASINResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetProductCategoriesForSKUResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\GetServiceStatusResponse.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="MarketplaceWebServiceProducts\Mock\ListMatchingProductsResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetCompetitivePricingForASINResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetCompetitivePricingForSKUResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetLowestOfferListingsForASINResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetLowestOfferListingsForSKUResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetMatchingProductForIdResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetMatchingProductResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetMyPriceForASINResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetMyPriceForSKUResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetProductCategoriesForASINResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetProductCategoriesForSKUResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.GetServiceStatusResponse.xml" />
+    <Content Include="MarketplaceWebServiceProducts\Mock\MarketplaceWebServiceProducts.Model.ListMatchingProductsResponse.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

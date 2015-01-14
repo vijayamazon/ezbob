@@ -12,5 +12,6 @@ namespace EzBob.AmazonServiceLib.Common
 		public List<string> MarketplaceId { get; set; }
 		public int CustomerId { get; set; }
 		public ErrorRetryingInfo ErrorRetryingInfo { get; set; }
+		public string MWSAuthToken { get; set; }
 	}
 }

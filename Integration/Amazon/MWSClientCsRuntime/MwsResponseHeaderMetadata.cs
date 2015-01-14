@@ -48,6 +48,7 @@ namespace MWSClientCsRuntime
         public MwsResponseHeaderMetadata(string requestId, List<string> responseContext, string timestamp) 
             : this(requestId, responseContext, timestamp, null, null, null) { }
 
+
         public MwsResponseHeaderMetadata(string requestId, string responseContext, string timestamp)
             : this(requestId, responseContext != null ? new List<string>(responseContext.Split(',')) : new List<string>(), timestamp) { }
 

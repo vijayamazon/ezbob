@@ -1,127 +1,90 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Seller SKU List Type
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
-using System.Xml.Serialization;
+using System.Xml;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class SellerSKUListType
+    public class SellerSKUListType : AbstractMwsObject
     {
 
-        private List<String> sellerSKUField;
+        private List<string> _sellerSKU;
 
         /// <summary>
         /// Gets and sets the SellerSKU property.
         /// </summary>
         [XmlElementAttribute(ElementName = "SellerSKU")]
-        public List<String> SellerSKU
+        public List<string> SellerSKU
         {
             get
             {
-                if (this.sellerSKUField == null)
+                if(this._sellerSKU == null)
                 {
-                    this.sellerSKUField = new List<String>();
+                    this._sellerSKU = new List<string>();
                 }
-                return this.sellerSKUField;
+                return this._sellerSKU;
             }
-            set { this.sellerSKUField =  value; }
+            set { this._sellerSKU = value; }
         }
 
         /// <summary>
-        /// Sets the SellerSKU property
+        /// Sets the SellerSKU property.
         /// </summary>
-        /// <param name="list">SellerSKU property</param>
-        /// <returns>this instance</returns>
-        public SellerSKUListType WithSellerSKU(params String[] list)
+        /// <param name="sellerSKU">SellerSKU property.</param>
+        /// <returns>this instance.</returns>
+        public SellerSKUListType WithSellerSKU(string[] sellerSKU)
         {
-            foreach (String item in list)
-            {
-                SellerSKU.Add(item);
-            }
+            this._sellerSKU.AddRange(sellerSKU);
             return this;
-        }          
+        }
 
         /// <summary>
-        /// Checks of SellerSKU property is set
+        /// Checks if SellerSKU property is set.
         /// </summary>
-        /// <returns>true if SellerSKU property is set</returns>
-        public Boolean IsSetSellerSKU()
+        /// <returns>true if SellerSKU property is set.</returns>
+        public bool IsSetSellerSKU()
         {
-            return (SellerSKU.Count > 0);
+            return this.SellerSKU.Count > 0;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            List<String> sellerSKUObjList  =  this.SellerSKU;
-            foreach (String sellerSKUObj in sellerSKUObjList) { 
-                xml.Append("<SellerSKU>");
-                xml.Append(EscapeXML(sellerSKUObj));
-                xml.Append("</SellerSKU>");
-            }	
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _sellerSKU = reader.ReadList<string>("SellerSKU");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.WriteList("SellerSKU", _sellerSKU);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "SellerSKUListType", this);
+        }
+
+        public SellerSKUListType() : base()
+        {
+        }
     }
-
 }

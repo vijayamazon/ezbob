@@ -1,34 +1,36 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Get Matching Product For Id Response
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
-using System.Xml.Serialization;
+using System.Xml;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class GetMatchingProductForIdResponse
+    public class GetMatchingProductForIdResponse : AbstractMwsObject, IMWSResponse
     {
 
-        private  List<GetMatchingProductForIdResult> getMatchingProductForIdResultField;
-
-        private  ResponseMetadata responseMetadataField;
+        private List<GetMatchingProductForIdResult> _getMatchingProductForIdResult;
+        private ResponseMetadata _responseMetadata;
+        private ResponseHeaderMetadata _responseHeaderMetadata;
 
         /// <summary>
         /// Gets and sets the GetMatchingProductForIdResult property.
@@ -38,36 +40,33 @@ namespace MarketplaceWebServiceProducts.Model
         {
             get
             {
-                if (this.getMatchingProductForIdResultField == null)
+                if(this._getMatchingProductForIdResult == null)
                 {
-                    this.getMatchingProductForIdResultField = new List<GetMatchingProductForIdResult>();
+                    this._getMatchingProductForIdResult = new List<GetMatchingProductForIdResult>();
                 }
-                return this.getMatchingProductForIdResultField;
+                return this._getMatchingProductForIdResult;
             }
-            set { this.getMatchingProductForIdResultField =  value; }
+            set { this._getMatchingProductForIdResult = value; }
         }
 
         /// <summary>
-        /// Sets the GetMatchingProductForIdResult property
+        /// Sets the GetMatchingProductForIdResult property.
         /// </summary>
-        /// <param name="list">GetMatchingProductForIdResult property</param>
-        /// <returns>this instance</returns>
-        public GetMatchingProductForIdResponse WithGetMatchingProductForIdResult(params GetMatchingProductForIdResult[] list)
+        /// <param name="getMatchingProductForIdResult">GetMatchingProductForIdResult property.</param>
+        /// <returns>this instance.</returns>
+        public GetMatchingProductForIdResponse WithGetMatchingProductForIdResult(GetMatchingProductForIdResult[] getMatchingProductForIdResult)
         {
-            foreach (GetMatchingProductForIdResult item in list)
-            {
-                GetMatchingProductForIdResult.Add(item);
-            }
+            this._getMatchingProductForIdResult.AddRange(getMatchingProductForIdResult);
             return this;
-        }          
+        }
 
         /// <summary>
-        /// Checks if GetMatchingProductForIdResult property is set
+        /// Checks if GetMatchingProductForIdResult property is set.
         /// </summary>
-        /// <returns>true if GetMatchingProductForIdResult property is set</returns>
-        public Boolean IsSetGetMatchingProductForIdResult()
+        /// <returns>true if GetMatchingProductForIdResult property is set.</returns>
+        public bool IsSetGetMatchingProductForIdResult()
         {
-            return (GetMatchingProductForIdResult.Count > 0);
+            return this.GetMatchingProductForIdResult.Count > 0;
         }
 
         /// <summary>
@@ -76,95 +75,80 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "ResponseMetadata")]
         public ResponseMetadata ResponseMetadata
         {
-            get { return this.responseMetadataField ; }
-            set { this.responseMetadataField = value; }
+            get { return this._responseMetadata; }
+            set { this._responseMetadata = value; }
         }
 
         /// <summary>
-        /// Sets the ResponseMetadata property
+        /// Sets the ResponseMetadata property.
         /// </summary>
-        /// <param name="responseMetadata">ResponseMetadata property</param>
-        /// <returns>this instance</returns>
+        /// <param name="responseMetadata">ResponseMetadata property.</param>
+        /// <returns>this instance.</returns>
         public GetMatchingProductForIdResponse WithResponseMetadata(ResponseMetadata responseMetadata)
         {
-            this.responseMetadataField = responseMetadata;
+            this._responseMetadata = responseMetadata;
             return this;
         }
 
         /// <summary>
-        /// Checks if ResponseMetadata property is set
+        /// Checks if ResponseMetadata property is set.
         /// </summary>
-        /// <returns>true if ResponseMetadata property is set</returns>
-        public Boolean IsSetResponseMetadata()
+        /// <returns>true if ResponseMetadata property is set.</returns>
+        public bool IsSetResponseMetadata()
         {
-            return this.responseMetadataField != null;
+            return this._responseMetadata != null;
         }
 
         /// <summary>
-        /// XML Representation for this object
+        /// Gets and sets the ResponseHeaderMetadata property.
         /// </summary>
-        /// <returns>XML String</returns>
-
-        public String ToXML() {
-            StringBuilder xml = new StringBuilder();
-            xml.Append("<GetMatchingProductForIdResponse xmlns=\"http://mws.amazonservices.com/schema/Products/2011-10-01\">");
-            List<GetMatchingProductForIdResult> getMatchingProductForIdResultList = this.GetMatchingProductForIdResult;
-            foreach (GetMatchingProductForIdResult getMatchingProductForIdResult in getMatchingProductForIdResultList) {
-                xml.Append("<GetMatchingProductForIdResult Id=" + "\"" +  EscapeXML(getMatchingProductForIdResult.Id)  + "\"" +  " IdType=" + "\"" +  EscapeXML(getMatchingProductForIdResult.IdType)  + "\"" +  " status=" + "\"" +  EscapeXML(getMatchingProductForIdResult.status)  + "\"" +  ">");
-                xml.Append(getMatchingProductForIdResult.ToXMLFragment());
-                xml.Append("</GetMatchingProductForIdResult>");
-            }
-            if (IsSetResponseMetadata()) {
-                ResponseMetadata  responseMetadata = this.ResponseMetadata;
-                xml.Append("<ResponseMetadata>");
-                xml.Append(responseMetadata.ToXMLFragment());
-                xml.Append("</ResponseMetadata>");
-            } 
-            xml.Append("</GetMatchingProductForIdResponse>");
-            return xml.ToString();
-        }
-
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
-        }
-
-        private ResponseHeaderMetadata responseHeaderMetadata;
-                public ResponseHeaderMetadata ResponseHeaderMetadata
+        [XmlElementAttribute(ElementName = "ResponseHeaderMetadata")]
+        public ResponseHeaderMetadata ResponseHeaderMetadata
         {
-            get { return responseHeaderMetadata; }
-            set { this.responseHeaderMetadata = value; }
+            get { return this._responseHeaderMetadata; }
+            set { this._responseHeaderMetadata = value; }
         }
 
-    }
+        /// <summary>
+        /// Sets the ResponseHeaderMetadata property.
+        /// </summary>
+        /// <param name="responseHeaderMetadata">ResponseHeaderMetadata property.</param>
+        /// <returns>this instance.</returns>
+        public GetMatchingProductForIdResponse WithResponseHeaderMetadata(ResponseHeaderMetadata responseHeaderMetadata)
+        {
+            this._responseHeaderMetadata = responseHeaderMetadata;
+            return this;
+        }
 
+        /// <summary>
+        /// Checks if ResponseHeaderMetadata property is set.
+        /// </summary>
+        /// <returns>true if ResponseHeaderMetadata property is set.</returns>
+        public bool IsSetResponseHeaderMetadata()
+        {
+            return this._responseHeaderMetadata != null;
+        }
+
+
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _getMatchingProductForIdResult = reader.ReadList<GetMatchingProductForIdResult>("GetMatchingProductForIdResult");
+            _responseMetadata = reader.Read<ResponseMetadata>("ResponseMetadata");
+        }
+
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.WriteList("GetMatchingProductForIdResult", _getMatchingProductForIdResult);
+            writer.Write("ResponseMetadata", _responseMetadata);
+        }
+
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "GetMatchingProductForIdResponse", this);
+        }
+
+        public GetMatchingProductForIdResponse() : base()
+        {
+        }
+    }
 }

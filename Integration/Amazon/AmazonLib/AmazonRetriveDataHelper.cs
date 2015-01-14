@@ -150,7 +150,8 @@
 				MarketplaceId = securityInfo.MarketplaceId,
 				MerchantId = securityInfo.MerchantId,
 				ErrorRetryingInfo = this.amazonSettings,
-				CustomerId = databaseCustomerMarketPlace.Customer.Id
+				CustomerId = databaseCustomerMarketPlace.Customer.Id,
+				MWSAuthToken = securityInfo.MWSAuthToken
 			};
 
 			DateTime submittedDate = now;
@@ -279,7 +280,8 @@
 					MarketplaceId = securityInfo.MarketplaceId,
 					MerchantId = securityInfo.MerchantId,
 					SellerSku = sellerSku,
-					ErrorRetryingInfo = this.amazonSettings
+					ErrorRetryingInfo = this.amazonSettings,
+					MWSAuthToken = securityInfo.MWSAuthToken
 				};
 				categories = GetAndSaveAmazonProcuctCategory(databaseCustomerMarketPlace, requestInfo, access, requestCounter, elapsedTimeInfo);
 			}
@@ -299,7 +301,8 @@
 				MarketplaceId = securityInfo.MarketplaceId,
 				MerchantId = securityInfo.MerchantId,
 				OrderId = orderItem2.OrderId,
-				ErrorRetryingInfo = this.amazonSettings
+				ErrorRetryingInfo = this.amazonSettings,
+				MWSAuthToken = securityInfo.MWSAuthToken
 			};
 
 			AmazonOrderItemDetailsList orderItems = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(

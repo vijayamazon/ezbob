@@ -1,97 +1,94 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Categories
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class Categories
+    public class Categories : AbstractMwsObject
     {
 
-        private String productCategoryIdField;
-
-        private String productCategoryNameField;
-
-        private  Categories parentField;
+        private string _productCategoryId;
+        private string _productCategoryName;
+        private Categories _parent;
 
         /// <summary>
         /// Gets and sets the ProductCategoryId property.
         /// </summary>
         [XmlElementAttribute(ElementName = "ProductCategoryId")]
-        public String ProductCategoryId
+        public string ProductCategoryId
         {
-            get { return this.productCategoryIdField ; }
-            set { this.productCategoryIdField= value; }
+            get { return this._productCategoryId; }
+            set { this._productCategoryId = value; }
         }
 
         /// <summary>
-        /// Sets the ProductCategoryId property
+        /// Sets the ProductCategoryId property.
         /// </summary>
-        /// <param name="productCategoryId">ProductCategoryId property</param>
-        /// <returns>this instance</returns>
-        public Categories WithProductCategoryId(String productCategoryId)
+        /// <param name="productCategoryId">ProductCategoryId property.</param>
+        /// <returns>this instance.</returns>
+        public Categories WithProductCategoryId(string productCategoryId)
         {
-            this.productCategoryIdField = productCategoryId;
+            this._productCategoryId = productCategoryId;
             return this;
         }
 
         /// <summary>
-        /// Checks if ProductCategoryId property is set
+        /// Checks if ProductCategoryId property is set.
         /// </summary>
-        /// <returns>true if ProductCategoryId property is set</returns>
-        public Boolean IsSetProductCategoryId()
+        /// <returns>true if ProductCategoryId property is set.</returns>
+        public bool IsSetProductCategoryId()
         {
-            return  this.productCategoryIdField != null;
-
+            return this._productCategoryId != null;
         }
 
         /// <summary>
         /// Gets and sets the ProductCategoryName property.
         /// </summary>
         [XmlElementAttribute(ElementName = "ProductCategoryName")]
-        public String ProductCategoryName
+        public string ProductCategoryName
         {
-            get { return this.productCategoryNameField ; }
-            set { this.productCategoryNameField= value; }
+            get { return this._productCategoryName; }
+            set { this._productCategoryName = value; }
         }
 
         /// <summary>
-        /// Sets the ProductCategoryName property
+        /// Sets the ProductCategoryName property.
         /// </summary>
-        /// <param name="productCategoryName">ProductCategoryName property</param>
-        /// <returns>this instance</returns>
-        public Categories WithProductCategoryName(String productCategoryName)
+        /// <param name="productCategoryName">ProductCategoryName property.</param>
+        /// <returns>this instance.</returns>
+        public Categories WithProductCategoryName(string productCategoryName)
         {
-            this.productCategoryNameField = productCategoryName;
+            this._productCategoryName = productCategoryName;
             return this;
         }
 
         /// <summary>
-        /// Checks if ProductCategoryName property is set
+        /// Checks if ProductCategoryName property is set.
         /// </summary>
-        /// <returns>true if ProductCategoryName property is set</returns>
-        public Boolean IsSetProductCategoryName()
+        /// <returns>true if ProductCategoryName property is set.</returns>
+        public bool IsSetProductCategoryName()
         {
-            return  this.productCategoryNameField != null;
-
+            return this._productCategoryName != null;
         }
 
         /// <summary>
@@ -100,94 +97,52 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "Parent")]
         public Categories Parent
         {
-            get { return this.parentField ; }
-            set { this.parentField = value; }
+            get { return this._parent; }
+            set { this._parent = value; }
         }
 
         /// <summary>
-        /// Sets the Parent property
+        /// Sets the Parent property.
         /// </summary>
-        /// <param name="parent">Parent property</param>
-        /// <returns>this instance</returns>
+        /// <param name="parent">Parent property.</param>
+        /// <returns>this instance.</returns>
         public Categories WithParent(Categories parent)
         {
-            this.parentField = parent;
+            this._parent = parent;
             return this;
         }
 
         /// <summary>
-        /// Checks if Parent property is set
+        /// Checks if Parent property is set.
         /// </summary>
-        /// <returns>true if Parent property is set</returns>
-        public Boolean IsSetParent()
+        /// <returns>true if Parent property is set.</returns>
+        public bool IsSetParent()
         {
-            return this.parentField != null;
+            return this._parent != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetProductCategoryId()) {
-                xml.Append("<ProductCategoryId>");
-                xml.Append(EscapeXML(this.ProductCategoryId));
-                xml.Append("</ProductCategoryId>");
-            }
-            if (IsSetProductCategoryName()) {
-                xml.Append("<ProductCategoryName>");
-                xml.Append(EscapeXML(this.ProductCategoryName));
-                xml.Append("</ProductCategoryName>");
-            }
-            if (IsSetParent()) {
-                Categories  parentObj = this.Parent;
-                xml.Append("<Parent>");
-                xml.Append(parentObj.ToXMLFragment());
-                xml.Append("</Parent>");
-            } 
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _productCategoryId = reader.Read<string>("ProductCategoryId");
+            _productCategoryName = reader.Read<string>("ProductCategoryName");
+            _parent = reader.Read<Categories>("Parent");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("ProductCategoryId", _productCategoryId);
+            writer.Write("ProductCategoryName", _productCategoryName);
+            writer.Write("Parent", _parent);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "Categories", this);
+        }
+
+        public Categories() : base()
+        {
+        }
     }
-
 }

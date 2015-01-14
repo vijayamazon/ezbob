@@ -1,32 +1,34 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Offers List
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
-using System.Xml.Serialization;
+using System.Xml;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class OffersList
+    public class OffersList : AbstractMwsObject
     {
 
-        private  List<OfferType> offerField;
+        private List<OfferType> _offer;
 
         /// <summary>
         /// Gets and sets the Offer property.
@@ -36,92 +38,53 @@ namespace MarketplaceWebServiceProducts.Model
         {
             get
             {
-                if (this.offerField == null)
+                if(this._offer == null)
                 {
-                    this.offerField = new List<OfferType>();
+                    this._offer = new List<OfferType>();
                 }
-                return this.offerField;
+                return this._offer;
             }
-            set { this.offerField =  value; }
+            set { this._offer = value; }
         }
 
         /// <summary>
-        /// Sets the Offer property
+        /// Sets the Offer property.
         /// </summary>
-        /// <param name="list">Offer property</param>
-        /// <returns>this instance</returns>
-        public OffersList WithOffer(params OfferType[] list)
+        /// <param name="offer">Offer property.</param>
+        /// <returns>this instance.</returns>
+        public OffersList WithOffer(OfferType[] offer)
         {
-            foreach (OfferType item in list)
-            {
-                Offer.Add(item);
-            }
+            this._offer.AddRange(offer);
             return this;
-        }          
+        }
 
         /// <summary>
-        /// Checks if Offer property is set
+        /// Checks if Offer property is set.
         /// </summary>
-        /// <returns>true if Offer property is set</returns>
-        public Boolean IsSetOffer()
+        /// <returns>true if Offer property is set.</returns>
+        public bool IsSetOffer()
         {
-            return (Offer.Count > 0);
+            return this.Offer.Count > 0;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            List<OfferType> offerObjList = this.Offer;
-            foreach (OfferType offerObj in offerObjList) {
-                xml.Append("<Offer>");
-                xml.Append(offerObj.ToXMLFragment());
-                xml.Append("</Offer>");
-            }
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _offer = reader.ReadList<OfferType>("Offer");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.WriteList("Offer", _offer);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "OffersList", this);
+        }
+
+        public OffersList() : base()
+        {
+        }
     }
-
 }

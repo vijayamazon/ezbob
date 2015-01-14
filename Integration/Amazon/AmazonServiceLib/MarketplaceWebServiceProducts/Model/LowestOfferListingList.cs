@@ -1,32 +1,34 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Lowest Offer Listing List
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
-using System.Xml.Serialization;
+using System.Xml;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class LowestOfferListingList
+    public class LowestOfferListingList : AbstractMwsObject
     {
 
-        private  List<LowestOfferListingType> lowestOfferListingField;
+        private List<LowestOfferListingType> _lowestOfferListing;
 
         /// <summary>
         /// Gets and sets the LowestOfferListing property.
@@ -36,92 +38,53 @@ namespace MarketplaceWebServiceProducts.Model
         {
             get
             {
-                if (this.lowestOfferListingField == null)
+                if(this._lowestOfferListing == null)
                 {
-                    this.lowestOfferListingField = new List<LowestOfferListingType>();
+                    this._lowestOfferListing = new List<LowestOfferListingType>();
                 }
-                return this.lowestOfferListingField;
+                return this._lowestOfferListing;
             }
-            set { this.lowestOfferListingField =  value; }
+            set { this._lowestOfferListing = value; }
         }
 
         /// <summary>
-        /// Sets the LowestOfferListing property
+        /// Sets the LowestOfferListing property.
         /// </summary>
-        /// <param name="list">LowestOfferListing property</param>
-        /// <returns>this instance</returns>
-        public LowestOfferListingList WithLowestOfferListing(params LowestOfferListingType[] list)
+        /// <param name="lowestOfferListing">LowestOfferListing property.</param>
+        /// <returns>this instance.</returns>
+        public LowestOfferListingList WithLowestOfferListing(LowestOfferListingType[] lowestOfferListing)
         {
-            foreach (LowestOfferListingType item in list)
-            {
-                LowestOfferListing.Add(item);
-            }
+            this._lowestOfferListing.AddRange(lowestOfferListing);
             return this;
-        }          
+        }
 
         /// <summary>
-        /// Checks if LowestOfferListing property is set
+        /// Checks if LowestOfferListing property is set.
         /// </summary>
-        /// <returns>true if LowestOfferListing property is set</returns>
-        public Boolean IsSetLowestOfferListing()
+        /// <returns>true if LowestOfferListing property is set.</returns>
+        public bool IsSetLowestOfferListing()
         {
-            return (LowestOfferListing.Count > 0);
+            return this.LowestOfferListing.Count > 0;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            List<LowestOfferListingType> lowestOfferListingObjList = this.LowestOfferListing;
-            foreach (LowestOfferListingType lowestOfferListingObj in lowestOfferListingObjList) {
-                xml.Append("<LowestOfferListing>");
-                xml.Append(lowestOfferListingObj.ToXMLFragment());
-                xml.Append("</LowestOfferListing>");
-            }
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _lowestOfferListing = reader.ReadList<LowestOfferListingType>("LowestOfferListing");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.WriteList("LowestOfferListing", _lowestOfferListing);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "LowestOfferListingList", this);
+        }
+
+        public LowestOfferListingList() : base()
+        {
+        }
     }
-
 }

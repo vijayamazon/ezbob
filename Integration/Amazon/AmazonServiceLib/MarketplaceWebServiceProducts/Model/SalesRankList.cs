@@ -1,32 +1,34 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Sales Rank List
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
-using System.Xml.Serialization;
+using System.Xml;
 using System.Collections.Generic;
-using System.Text;
+using System.Xml.Serialization;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class SalesRankList
+    public class SalesRankList : AbstractMwsObject
     {
 
-        private  List<SalesRankType> salesRankField;
+        private List<SalesRankType> _salesRank;
 
         /// <summary>
         /// Gets and sets the SalesRank property.
@@ -36,92 +38,53 @@ namespace MarketplaceWebServiceProducts.Model
         {
             get
             {
-                if (this.salesRankField == null)
+                if(this._salesRank == null)
                 {
-                    this.salesRankField = new List<SalesRankType>();
+                    this._salesRank = new List<SalesRankType>();
                 }
-                return this.salesRankField;
+                return this._salesRank;
             }
-            set { this.salesRankField =  value; }
+            set { this._salesRank = value; }
         }
 
         /// <summary>
-        /// Sets the SalesRank property
+        /// Sets the SalesRank property.
         /// </summary>
-        /// <param name="list">SalesRank property</param>
-        /// <returns>this instance</returns>
-        public SalesRankList WithSalesRank(params SalesRankType[] list)
+        /// <param name="salesRank">SalesRank property.</param>
+        /// <returns>this instance.</returns>
+        public SalesRankList WithSalesRank(SalesRankType[] salesRank)
         {
-            foreach (SalesRankType item in list)
-            {
-                SalesRank.Add(item);
-            }
+            this._salesRank.AddRange(salesRank);
             return this;
-        }          
+        }
 
         /// <summary>
-        /// Checks if SalesRank property is set
+        /// Checks if SalesRank property is set.
         /// </summary>
-        /// <returns>true if SalesRank property is set</returns>
-        public Boolean IsSetSalesRank()
+        /// <returns>true if SalesRank property is set.</returns>
+        public bool IsSetSalesRank()
         {
-            return (SalesRank.Count > 0);
+            return this.SalesRank.Count > 0;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            List<SalesRankType> salesRankObjList = this.SalesRank;
-            foreach (SalesRankType salesRankObj in salesRankObjList) {
-                xml.Append("<SalesRank>");
-                xml.Append(salesRankObj.ToXMLFragment());
-                xml.Append("</SalesRank>");
-            }
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _salesRank = reader.ReadList<SalesRankType>("SalesRank");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.WriteList("SalesRank", _salesRank);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "SalesRankList", this);
+        }
+
+        public SalesRankList() : base()
+        {
+        }
     }
-
 }

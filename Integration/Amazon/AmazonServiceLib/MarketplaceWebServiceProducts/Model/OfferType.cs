@@ -1,42 +1,39 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Offer Type
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class OfferType
+    public class OfferType : AbstractMwsObject
     {
 
-        private  PriceType buyingPriceField;
-        private  MoneyType regularPriceField;
-        private String fulfillmentChannelField;
-
-        private String itemConditionField;
-
-        private String itemSubConditionField;
-
-        private String sellerIdField;
-
-        private String sellerSKUField;
+        private PriceType _buyingPrice;
+        private MoneyType _regularPrice;
+        private string _fulfillmentChannel;
+        private string _itemCondition;
+        private string _itemSubCondition;
+        private string _sellerId;
+        private string _sellerSKU;
 
         /// <summary>
         /// Gets and sets the BuyingPrice property.
@@ -44,28 +41,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "BuyingPrice")]
         public PriceType BuyingPrice
         {
-            get { return this.buyingPriceField ; }
-            set { this.buyingPriceField = value; }
+            get { return this._buyingPrice; }
+            set { this._buyingPrice = value; }
         }
 
         /// <summary>
-        /// Sets the BuyingPrice property
+        /// Sets the BuyingPrice property.
         /// </summary>
-        /// <param name="buyingPrice">BuyingPrice property</param>
-        /// <returns>this instance</returns>
+        /// <param name="buyingPrice">BuyingPrice property.</param>
+        /// <returns>this instance.</returns>
         public OfferType WithBuyingPrice(PriceType buyingPrice)
         {
-            this.buyingPriceField = buyingPrice;
+            this._buyingPrice = buyingPrice;
             return this;
         }
 
         /// <summary>
-        /// Checks if BuyingPrice property is set
+        /// Checks if BuyingPrice property is set.
         /// </summary>
-        /// <returns>true if BuyingPrice property is set</returns>
-        public Boolean IsSetBuyingPrice()
+        /// <returns>true if BuyingPrice property is set.</returns>
+        public bool IsSetBuyingPrice()
         {
-            return this.buyingPriceField != null;
+            return this._buyingPrice != null;
         }
 
         /// <summary>
@@ -74,270 +71,210 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "RegularPrice")]
         public MoneyType RegularPrice
         {
-            get { return this.regularPriceField ; }
-            set { this.regularPriceField = value; }
+            get { return this._regularPrice; }
+            set { this._regularPrice = value; }
         }
 
         /// <summary>
-        /// Sets the RegularPrice property
+        /// Sets the RegularPrice property.
         /// </summary>
-        /// <param name="regularPrice">RegularPrice property</param>
-        /// <returns>this instance</returns>
+        /// <param name="regularPrice">RegularPrice property.</param>
+        /// <returns>this instance.</returns>
         public OfferType WithRegularPrice(MoneyType regularPrice)
         {
-            this.regularPriceField = regularPrice;
+            this._regularPrice = regularPrice;
             return this;
         }
 
         /// <summary>
-        /// Checks if RegularPrice property is set
+        /// Checks if RegularPrice property is set.
         /// </summary>
-        /// <returns>true if RegularPrice property is set</returns>
-        public Boolean IsSetRegularPrice()
+        /// <returns>true if RegularPrice property is set.</returns>
+        public bool IsSetRegularPrice()
         {
-            return this.regularPriceField != null;
+            return this._regularPrice != null;
         }
 
         /// <summary>
         /// Gets and sets the FulfillmentChannel property.
         /// </summary>
         [XmlElementAttribute(ElementName = "FulfillmentChannel")]
-        public String FulfillmentChannel
+        public string FulfillmentChannel
         {
-            get { return this.fulfillmentChannelField ; }
-            set { this.fulfillmentChannelField= value; }
+            get { return this._fulfillmentChannel; }
+            set { this._fulfillmentChannel = value; }
         }
 
         /// <summary>
-        /// Sets the FulfillmentChannel property
+        /// Sets the FulfillmentChannel property.
         /// </summary>
-        /// <param name="fulfillmentChannel">FulfillmentChannel property</param>
-        /// <returns>this instance</returns>
-        public OfferType WithFulfillmentChannel(String fulfillmentChannel)
+        /// <param name="fulfillmentChannel">FulfillmentChannel property.</param>
+        /// <returns>this instance.</returns>
+        public OfferType WithFulfillmentChannel(string fulfillmentChannel)
         {
-            this.fulfillmentChannelField = fulfillmentChannel;
+            this._fulfillmentChannel = fulfillmentChannel;
             return this;
         }
 
         /// <summary>
-        /// Checks if FulfillmentChannel property is set
+        /// Checks if FulfillmentChannel property is set.
         /// </summary>
-        /// <returns>true if FulfillmentChannel property is set</returns>
-        public Boolean IsSetFulfillmentChannel()
+        /// <returns>true if FulfillmentChannel property is set.</returns>
+        public bool IsSetFulfillmentChannel()
         {
-            return  this.fulfillmentChannelField != null;
-
+            return this._fulfillmentChannel != null;
         }
 
         /// <summary>
         /// Gets and sets the ItemCondition property.
         /// </summary>
         [XmlElementAttribute(ElementName = "ItemCondition")]
-        public String ItemCondition
+        public string ItemCondition
         {
-            get { return this.itemConditionField ; }
-            set { this.itemConditionField= value; }
+            get { return this._itemCondition; }
+            set { this._itemCondition = value; }
         }
 
         /// <summary>
-        /// Sets the ItemCondition property
+        /// Sets the ItemCondition property.
         /// </summary>
-        /// <param name="itemCondition">ItemCondition property</param>
-        /// <returns>this instance</returns>
-        public OfferType WithItemCondition(String itemCondition)
+        /// <param name="itemCondition">ItemCondition property.</param>
+        /// <returns>this instance.</returns>
+        public OfferType WithItemCondition(string itemCondition)
         {
-            this.itemConditionField = itemCondition;
+            this._itemCondition = itemCondition;
             return this;
         }
 
         /// <summary>
-        /// Checks if ItemCondition property is set
+        /// Checks if ItemCondition property is set.
         /// </summary>
-        /// <returns>true if ItemCondition property is set</returns>
-        public Boolean IsSetItemCondition()
+        /// <returns>true if ItemCondition property is set.</returns>
+        public bool IsSetItemCondition()
         {
-            return  this.itemConditionField != null;
-
+            return this._itemCondition != null;
         }
 
         /// <summary>
         /// Gets and sets the ItemSubCondition property.
         /// </summary>
         [XmlElementAttribute(ElementName = "ItemSubCondition")]
-        public String ItemSubCondition
+        public string ItemSubCondition
         {
-            get { return this.itemSubConditionField ; }
-            set { this.itemSubConditionField= value; }
+            get { return this._itemSubCondition; }
+            set { this._itemSubCondition = value; }
         }
 
         /// <summary>
-        /// Sets the ItemSubCondition property
+        /// Sets the ItemSubCondition property.
         /// </summary>
-        /// <param name="itemSubCondition">ItemSubCondition property</param>
-        /// <returns>this instance</returns>
-        public OfferType WithItemSubCondition(String itemSubCondition)
+        /// <param name="itemSubCondition">ItemSubCondition property.</param>
+        /// <returns>this instance.</returns>
+        public OfferType WithItemSubCondition(string itemSubCondition)
         {
-            this.itemSubConditionField = itemSubCondition;
+            this._itemSubCondition = itemSubCondition;
             return this;
         }
 
         /// <summary>
-        /// Checks if ItemSubCondition property is set
+        /// Checks if ItemSubCondition property is set.
         /// </summary>
-        /// <returns>true if ItemSubCondition property is set</returns>
-        public Boolean IsSetItemSubCondition()
+        /// <returns>true if ItemSubCondition property is set.</returns>
+        public bool IsSetItemSubCondition()
         {
-            return  this.itemSubConditionField != null;
-
+            return this._itemSubCondition != null;
         }
 
         /// <summary>
         /// Gets and sets the SellerId property.
         /// </summary>
         [XmlElementAttribute(ElementName = "SellerId")]
-        public String SellerId
+        public string SellerId
         {
-            get { return this.sellerIdField ; }
-            set { this.sellerIdField= value; }
+            get { return this._sellerId; }
+            set { this._sellerId = value; }
         }
 
         /// <summary>
-        /// Sets the SellerId property
+        /// Sets the SellerId property.
         /// </summary>
-        /// <param name="sellerId">SellerId property</param>
-        /// <returns>this instance</returns>
-        public OfferType WithSellerId(String sellerId)
+        /// <param name="sellerId">SellerId property.</param>
+        /// <returns>this instance.</returns>
+        public OfferType WithSellerId(string sellerId)
         {
-            this.sellerIdField = sellerId;
+            this._sellerId = sellerId;
             return this;
         }
 
         /// <summary>
-        /// Checks if SellerId property is set
+        /// Checks if SellerId property is set.
         /// </summary>
-        /// <returns>true if SellerId property is set</returns>
-        public Boolean IsSetSellerId()
+        /// <returns>true if SellerId property is set.</returns>
+        public bool IsSetSellerId()
         {
-            return  this.sellerIdField != null;
-
+            return this._sellerId != null;
         }
 
         /// <summary>
         /// Gets and sets the SellerSKU property.
         /// </summary>
         [XmlElementAttribute(ElementName = "SellerSKU")]
-        public String SellerSKU
+        public string SellerSKU
         {
-            get { return this.sellerSKUField ; }
-            set { this.sellerSKUField= value; }
+            get { return this._sellerSKU; }
+            set { this._sellerSKU = value; }
         }
 
         /// <summary>
-        /// Sets the SellerSKU property
+        /// Sets the SellerSKU property.
         /// </summary>
-        /// <param name="sellerSKU">SellerSKU property</param>
-        /// <returns>this instance</returns>
-        public OfferType WithSellerSKU(String sellerSKU)
+        /// <param name="sellerSKU">SellerSKU property.</param>
+        /// <returns>this instance.</returns>
+        public OfferType WithSellerSKU(string sellerSKU)
         {
-            this.sellerSKUField = sellerSKU;
+            this._sellerSKU = sellerSKU;
             return this;
         }
 
         /// <summary>
-        /// Checks if SellerSKU property is set
+        /// Checks if SellerSKU property is set.
         /// </summary>
-        /// <returns>true if SellerSKU property is set</returns>
-        public Boolean IsSetSellerSKU()
+        /// <returns>true if SellerSKU property is set.</returns>
+        public bool IsSetSellerSKU()
         {
-            return  this.sellerSKUField != null;
-
+            return this._sellerSKU != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetBuyingPrice()) {
-                PriceType  buyingPriceObj = this.BuyingPrice;
-                xml.Append("<BuyingPrice>");
-                xml.Append(buyingPriceObj.ToXMLFragment());
-                xml.Append("</BuyingPrice>");
-            } 
-            if (IsSetRegularPrice()) {
-                MoneyType  regularPriceObj = this.RegularPrice;
-                xml.Append("<RegularPrice>");
-                xml.Append(regularPriceObj.ToXMLFragment());
-                xml.Append("</RegularPrice>");
-            } 
-            if (IsSetFulfillmentChannel()) {
-                xml.Append("<FulfillmentChannel>");
-                xml.Append(EscapeXML(this.FulfillmentChannel));
-                xml.Append("</FulfillmentChannel>");
-            }
-            if (IsSetItemCondition()) {
-                xml.Append("<ItemCondition>");
-                xml.Append(EscapeXML(this.ItemCondition));
-                xml.Append("</ItemCondition>");
-            }
-            if (IsSetItemSubCondition()) {
-                xml.Append("<ItemSubCondition>");
-                xml.Append(EscapeXML(this.ItemSubCondition));
-                xml.Append("</ItemSubCondition>");
-            }
-            if (IsSetSellerId()) {
-                xml.Append("<SellerId>");
-                xml.Append(EscapeXML(this.SellerId));
-                xml.Append("</SellerId>");
-            }
-            if (IsSetSellerSKU()) {
-                xml.Append("<SellerSKU>");
-                xml.Append(EscapeXML(this.SellerSKU));
-                xml.Append("</SellerSKU>");
-            }
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _buyingPrice = reader.Read<PriceType>("BuyingPrice");
+            _regularPrice = reader.Read<MoneyType>("RegularPrice");
+            _fulfillmentChannel = reader.Read<string>("FulfillmentChannel");
+            _itemCondition = reader.Read<string>("ItemCondition");
+            _itemSubCondition = reader.Read<string>("ItemSubCondition");
+            _sellerId = reader.Read<string>("SellerId");
+            _sellerSKU = reader.Read<string>("SellerSKU");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("BuyingPrice", _buyingPrice);
+            writer.Write("RegularPrice", _regularPrice);
+            writer.Write("FulfillmentChannel", _fulfillmentChannel);
+            writer.Write("ItemCondition", _itemCondition);
+            writer.Write("ItemSubCondition", _itemSubCondition);
+            writer.Write("SellerId", _sellerId);
+            writer.Write("SellerSKU", _sellerSKU);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "OfferType", this);
+        }
+
+        public OfferType() : base()
+        {
+        }
     }
-
 }

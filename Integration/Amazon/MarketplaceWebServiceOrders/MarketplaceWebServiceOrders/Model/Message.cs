@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright 2009-2014 Amazon Services. All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  *
@@ -10,9 +10,10 @@
  *******************************************************************************
  * Message
  * API Version: 2013-09-01
- * Library Version: 2013-09-01
- * Generated: Fri Jun 06 15:20:51 UTC 2014
+ * Library Version: 2014-09-30
+ * Generated: Thu Oct 02 16:23:34 GMT 2014
  */
+
 
 using System;
 using System.Xml;
@@ -83,6 +84,7 @@ namespace MarketplaceWebServiceOrders.Model
         {
             return this._text != null;
         }
+
 
         public override void ReadFragmentFrom(IMwsReader reader)
         {

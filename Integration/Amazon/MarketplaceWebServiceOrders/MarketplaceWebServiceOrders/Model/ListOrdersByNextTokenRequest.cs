@@ -1,4 +1,4 @@
-﻿/*******************************************************************************
+/*******************************************************************************
  * Copyright 2009-2014 Amazon Services. All Rights Reserved.
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  *
@@ -10,9 +10,10 @@
  *******************************************************************************
  * List Orders By Next Token Request
  * API Version: com.amazon.maws.coral
- * Library Version: 2013-09-01
- * Generated: Fri Jun 06 15:20:51 UTC 2014
+ * Library Version: 2014-09-30
+ * Generated: Thu Oct 02 16:23:34 GMT 2014
  */
+
 
 using System;
 using System.Xml;
@@ -24,6 +25,7 @@ namespace MarketplaceWebServiceOrders.Model
     {
 
         private string _sellerId;
+        private string _mwsAuthToken;
         private string _nextToken;
 
         /// <summary>
@@ -56,6 +58,35 @@ namespace MarketplaceWebServiceOrders.Model
         }
 
         /// <summary>
+        /// Gets and sets the MWSAuthToken property.
+        /// </summary>
+        public string MWSAuthToken
+        {
+            get { return this._mwsAuthToken; }
+            set { this._mwsAuthToken = value; }
+        }
+
+        /// <summary>
+        /// Sets the MWSAuthToken property.
+        /// </summary>
+        /// <param name="mwsAuthToken">MWSAuthToken property.</param>
+        /// <returns>this instance.</returns>
+        public ListOrdersByNextTokenRequest WithMWSAuthToken(string mwsAuthToken)
+        {
+            this._mwsAuthToken = mwsAuthToken;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if MWSAuthToken property is set.
+        /// </summary>
+        /// <returns>true if MWSAuthToken property is set.</returns>
+        public bool IsSetMWSAuthToken()
+        {
+            return this._mwsAuthToken != null;
+        }
+
+        /// <summary>
         /// Gets and sets the NextToken property.
         /// </summary>
         public string NextToken
@@ -84,15 +115,18 @@ namespace MarketplaceWebServiceOrders.Model
             return this._nextToken != null;
         }
 
+
         public override void ReadFragmentFrom(IMwsReader reader)
         {
             _sellerId = reader.Read<string>("SellerId");
+            _mwsAuthToken = reader.Read<string>("MWSAuthToken");
             _nextToken = reader.Read<string>("NextToken");
         }
 
         public override void WriteFragmentTo(IMwsWriter writer)
         {
             writer.Write("SellerId", _sellerId);
+            writer.Write("MWSAuthToken", _mwsAuthToken);
             writer.Write("NextToken", _nextToken);
         }
 

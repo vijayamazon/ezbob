@@ -43,40 +43,45 @@ namespace MWSClientCsRuntime
         /// <param name="xml">Compete XML found in response</param>
         /// <param name="rhmd">Response header information</param>
         public MwsException(int statusCode, string message, string errorCode, string errorType, string xml, MwsResponseHeaderMetadata rhmd)
+            : this(statusCode, message, errorCode, errorType, xml, rhmd, null) { }
+        
+        /// <summary>
+        /// Initializes exception with information available from the service plus from an exception
+        /// Needed for backwards compatibility
+        /// </summary>
+        /// <param name="statusCode">HTTP status code for error response (as an int)</param>
+        /// <param name="message">Error message from HTTP header</param>
+        /// <param name="errorCode">Error code from response XML</param>
+        /// <param name="errorType">Error type from response XML</param>
+        /// <param name="xml">Compete XML found in response</param>
+        /// <param name="rhmd">Response header information</param>
+        /// <param name="cause">Wrapped exception</param>
+        public MwsException(int statusCode, string message, string errorCode, string errorType, string xml, MwsResponseHeaderMetadata rhmd, Exception cause)
             : base()
         {
             this.statusCode = statusCode;
             this.rhmd = rhmd;
             this.xml = xml;
-
             this.errorType = errorType;
             this.errorCode = errorCode;
             this.message = message;
 
             if (xml != null)
             {
-                try
-                {
-                    MwsXmlReader r = new MwsXmlReader(xml);
-                    XmlMwsException parsed = r.Read<XmlMwsException>("Error");
-
-                    this.errorType = parsed.ErrorType;
-                    this.errorCode = parsed.ErrorCode;
-                    this.message = parsed.Message;
-                    this.detail = parsed.Detail;
-                }
-                catch (Exception)
-                {
-                    // Just eat it
-                }
+                populateFromXML(xml);
             }
-        }
+            
+            if (cause is MwsException)
+            {
+                populateFromMWSException((MwsException)cause);
+            }
+        }       
         
         /// <summary>
         /// Initialize and set cause from another exception.
         /// <para>
         /// If cause is an MwsException, copies exception's attributes to this
-        /// one, ignoring the statusCode and message parameters that were passed in.
+        /// one, overwriting the statusCode and message parameters that were passed in.
         /// </para>
         /// </summary>
         /// <param name="statusCode">HTTP status code for error response.</param>
@@ -86,21 +91,12 @@ namespace MWSClientCsRuntime
         public MwsException(int statusCode, string message, Exception cause) 
             : base(message, cause)
         {
+            this.statusCode = statusCode;
+            this.message = message;
+
             if (cause is MwsException)
             {
-                MwsException e = (MwsException)cause;
-                this.statusCode = (int)e.StatusCode;
-                this.message = e.Message;
-                this.errorCode = e.ErrorCode;
-                this.errorType = e.ErrorType;
-                this.detail = e.Detail;
-                this.xml = e.XML;
-                this.rhmd = e.ResponseHeaderMetadata;
-            }
-            else
-            {
-                this.statusCode = statusCode;
-                this.message = message;
+                populateFromMWSException((MwsException)cause);
             }
         }
 
@@ -175,7 +171,33 @@ namespace MWSClientCsRuntime
         {
             get { return rhmd; }
         }
+        
+        private void populateFromMWSException( MwsException e ) {            
+            if (e.StatusCode != null) this.statusCode = (int)e.StatusCode;
+            if (e.Message != null) this.message = e.Message;
+            if (e.errorCode != null) this.errorCode = e.ErrorCode;
+            if (e.errorType != null) this.errorType = e.ErrorType;
+            if (e.detail != null) this.detail = e.Detail;
+            if (e.xml != null) this.xml = e.XML;
+            if (e.ResponseHeaderMetadata != null) this.rhmd = e.ResponseHeaderMetadata;            
+        }
 
+        private void populateFromXML( string xml ) {
+            try
+            {
+                MwsXmlReader r = new MwsXmlReader(xml);
+                XmlMwsException parsed = r.Read<XmlMwsException>("Error");
+                if (parsed.ErrorType != null) this.errorType = parsed.ErrorType;                
+                if (parsed.ErrorCode != null) this.errorCode = parsed.ErrorCode;                
+                if (parsed.Message != null) this.message = parsed.Message;                
+                if (parsed.Detail != null) this.detail = parsed.Detail;
+            }
+            catch (Exception)
+            {
+                // Just eat it
+            }        
+        }
+        
         internal class XmlMwsException : AbstractMwsObject {
 
             public string ErrorCode { get; private set; }

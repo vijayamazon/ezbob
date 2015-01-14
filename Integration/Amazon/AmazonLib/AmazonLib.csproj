@@ -95,6 +95,10 @@
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\MWSClientCsRuntime\MWSClientCsRuntime.csproj">
+      <Project>{49DF8166-2274-4E8A-B551-6A8DDCCB4756}</Project>
+      <Name>MWSClientCsRuntime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

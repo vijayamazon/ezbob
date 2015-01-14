@@ -138,6 +138,7 @@
 		{
 			try
 			{
+				//TODO pass MWS auth token
 				int mpId = ConnectAmazonTrn(marketplaceId, merchantId);
 				if (mpId == -1)
 				{
@@ -163,7 +164,7 @@
 
 		[NonAction]
 		[Transactional]
-		private int ConnectAmazonTrn(string marketplaceId, string merchantId)
+		private int ConnectAmazonTrn(string marketplaceId, string merchantId, string mwsAuthToken = null /*todo*/)
 		{
 			Log.InfoFormat("Adding Marketplace '{0}' to customer {1} with MerchantId '{2}'", marketplaceId, _context.User.Id, merchantId);
 
@@ -180,7 +181,7 @@
 
 			_mpChecker.Check(amazon.InternalId, customer, sellerInfo.Name);
 
-			var amazonSecurityInfo = new AmazonSecurityInfo(merchantId);
+			var amazonSecurityInfo = new AmazonSecurityInfo(merchantId, mwsAuthToken);
 			amazonSecurityInfo.AddMarketplace(marketplaceId);
 
 			var marketplace = _helper.SaveOrUpdateCustomerMarketplace(sellerInfo.Name, amazon, amazonSecurityInfo, customer, marketplaceId);

@@ -44,7 +44,8 @@ namespace EzBob.AmazonServiceLib.ServiceCalls
 			{
 				MarketplaceId = requestInfo.MarketplaceId.First(),
 				SellerId = requestInfo.MerchantId,
-				SellerSKU = requestInfo.SellerSku
+				SellerSKU = requestInfo.SellerSku,
+				MWSAuthToken = requestInfo.MWSAuthToken
 			};			
 
 			var response = AmazonWaitBeforeRetryHelper.DoServiceAction(

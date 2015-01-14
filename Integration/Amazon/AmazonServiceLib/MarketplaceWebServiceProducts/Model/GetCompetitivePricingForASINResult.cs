@@ -1,35 +1,36 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Get Competitive Pricing For ASIN Result
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class GetCompetitivePricingForASINResult
+    public class GetCompetitivePricingForASINResult : AbstractMwsObject
     {
 
-        private  String ASINField;
-        private  String statusField;
-        private  Product productField;
-        private  Error errorField;
+        private Product _product;
+        private Error _error;
+        private string _asin;
+        private string _status;
 
         /// <summary>
         /// Gets and sets the Product property.
@@ -37,28 +38,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "Product")]
         public Product Product
         {
-            get { return this.productField ; }
-            set { this.productField = value; }
+            get { return this._product; }
+            set { this._product = value; }
         }
 
         /// <summary>
-        /// Sets the Product property
+        /// Sets the Product property.
         /// </summary>
-        /// <param name="product">Product property</param>
-        /// <returns>this instance</returns>
+        /// <param name="product">Product property.</param>
+        /// <returns>this instance.</returns>
         public GetCompetitivePricingForASINResult WithProduct(Product product)
         {
-            this.productField = product;
+            this._product = product;
             return this;
         }
 
         /// <summary>
-        /// Checks if Product property is set
+        /// Checks if Product property is set.
         /// </summary>
-        /// <returns>true if Product property is set</returns>
-        public Boolean IsSetProduct()
+        /// <returns>true if Product property is set.</returns>
+        public bool IsSetProduct()
         {
-            return this.productField != null;
+            return this._product != null;
         }
 
         /// <summary>
@@ -67,152 +68,114 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "Error")]
         public Error Error
         {
-            get { return this.errorField ; }
-            set { this.errorField = value; }
+            get { return this._error; }
+            set { this._error = value; }
         }
 
         /// <summary>
-        /// Sets the Error property
+        /// Sets the Error property.
         /// </summary>
-        /// <param name="error">Error property</param>
-        /// <returns>this instance</returns>
+        /// <param name="error">Error property.</param>
+        /// <returns>this instance.</returns>
         public GetCompetitivePricingForASINResult WithError(Error error)
         {
-            this.errorField = error;
+            this._error = error;
             return this;
         }
 
         /// <summary>
-        /// Checks if Error property is set
+        /// Checks if Error property is set.
         /// </summary>
-        /// <returns>true if Error property is set</returns>
-        public Boolean IsSetError()
+        /// <returns>true if Error property is set.</returns>
+        public bool IsSetError()
         {
-            return this.errorField != null;
+            return this._error != null;
         }
 
         /// <summary>
-        /// Gets and sets  the ASIN property.
+        /// Gets and sets the ASIN property.
         /// </summary>
         [XmlAttributeAttribute(AttributeName = "ASIN")]
-        public String ASIN
+        public string ASIN
         {
-            get { return this.ASINField ; }
-            set { this.ASINField = value; }
+            get { return this._asin; }
+            set { this._asin = value; }
         }
 
         /// <summary>
-        /// Sets the ASIN property
+        /// Sets the ASIN property.
         /// </summary>
-        /// <param name="ASIN">ASIN property</param>
-        /// <returns>this instance</returns>
-        public GetCompetitivePricingForASINResult WithASIN(String ASIN)
+        /// <param name="asin">ASIN property.</param>
+        /// <returns>this instance.</returns>
+        public GetCompetitivePricingForASINResult WithASIN(string asin)
         {
-            this.ASINField = ASIN;
+            this._asin = asin;
             return this;
         }
 
         /// <summary>
-        /// Checks if ASIN property is set
+        /// Checks if ASIN property is set.
         /// </summary>
-        /// <returns>true if ASIN property is set</returns>
-        public Boolean IsSetASIN()
+        /// <returns>true if ASIN property is set.</returns>
+        public bool IsSetASIN()
         {
-            return this.ASINField  != null;
-
+            return this._asin != null;
         }
 
         /// <summary>
-        /// Gets and sets  the status property.
+        /// Gets and sets the status property.
         /// </summary>
         [XmlAttributeAttribute(AttributeName = "status")]
-        public String status
+        public string status
         {
-            get { return this.statusField ; }
-            set { this.statusField = value; }
+            get { return this._status; }
+            set { this._status = value; }
         }
 
         /// <summary>
-        /// Sets the status property
+        /// Sets the status property.
         /// </summary>
-        /// <param name="status">status property</param>
-        /// <returns>this instance</returns>
-        public GetCompetitivePricingForASINResult Withstatus(String status)
+        /// <param name="status">status property.</param>
+        /// <returns>this instance.</returns>
+        public GetCompetitivePricingForASINResult Withstatus(string status)
         {
-            this.statusField = status;
+            this._status = status;
             return this;
         }
 
         /// <summary>
-        /// Checks if status property is set
+        /// Checks if status property is set.
         /// </summary>
-        /// <returns>true if status property is set</returns>
-        public Boolean IsSetstatus()
+        /// <returns>true if status property is set.</returns>
+        public bool IsSetstatus()
         {
-            return this.statusField  != null;
-
+            return this._status != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetProduct()) {
-                Product  productObj = this.Product;
-                xml.Append("<Product>");
-                xml.Append(productObj.ToXMLFragment());
-                xml.Append("</Product>");
-            } 
-            if (IsSetError()) {
-                Error  errorObj = this.Error;
-                xml.Append("<Error>");
-                xml.Append(errorObj.ToXMLFragment());
-                xml.Append("</Error>");
-            } 
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _asin = reader.ReadAttribute<string>("ASIN");
+            _status = reader.ReadAttribute<string>("status");
+            _product = reader.Read<Product>("Product");
+            _error = reader.Read<Error>("Error");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.WriteAttribute("ASIN",_asin);
+            writer.WriteAttribute("status",_status);
+            writer.Write("Product", _product);
+            writer.Write("Error", _error);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "GetCompetitivePricingForASINResult", this);
+        }
+
+        public GetCompetitivePricingForASINResult() : base()
+        {
+        }
     }
-
 }

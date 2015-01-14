@@ -35,7 +35,7 @@ namespace EzBob.AmazonLib
 
 			foreach (var si in siList)
 			{
-				var amazonSecurityInfo = new AmazonSecurityInfo( si );
+				var amazonSecurityInfo = new AmazonSecurityInfo( si, null /*todo*/ );
 				amazonSecurityInfo.AddMarketplace( "A1F83G8C2ARO7P" );
 				amazons.Add( amazonSecurityInfo );	
 			}
@@ -88,7 +88,7 @@ namespace EzBob.AmazonLib
 		{
 			var databaseCustomer = GetCustomerInfo(customerId);
 
-			var amazonSecurityInfo = new AmazonSecurityInfo( "A1OXZLJTRHTZJ3" );
+			var amazonSecurityInfo = new AmazonSecurityInfo("A1OXZLJTRHTZJ3", null /*todo*/ );
 			amazonSecurityInfo.AddMarketplace( "A1F83G8C2ARO7P" );
 
             AmazonRetriveDataHelper.StoreOrUpdateCustomerSecurityInfo(databaseCustomer, amazonSecurityInfo, "Real Amazon Account");

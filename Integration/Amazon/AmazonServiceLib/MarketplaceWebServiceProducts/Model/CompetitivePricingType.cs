@@ -1,34 +1,35 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Competitive Pricing Type
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class CompetitivePricingType
+    public class CompetitivePricingType : AbstractMwsObject
     {
 
-        private  CompetitivePriceList competitivePricesField;
-        private  NumberOfOfferListingsList numberOfOfferListingsField;
-        private  MoneyType tradeInValueField;
+        private CompetitivePriceList _competitivePrices;
+        private NumberOfOfferListingsList _numberOfOfferListings;
+        private MoneyType _tradeInValue;
 
         /// <summary>
         /// Gets and sets the CompetitivePrices property.
@@ -36,28 +37,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "CompetitivePrices")]
         public CompetitivePriceList CompetitivePrices
         {
-            get { return this.competitivePricesField ; }
-            set { this.competitivePricesField = value; }
+            get { return this._competitivePrices; }
+            set { this._competitivePrices = value; }
         }
 
         /// <summary>
-        /// Sets the CompetitivePrices property
+        /// Sets the CompetitivePrices property.
         /// </summary>
-        /// <param name="competitivePrices">CompetitivePrices property</param>
-        /// <returns>this instance</returns>
+        /// <param name="competitivePrices">CompetitivePrices property.</param>
+        /// <returns>this instance.</returns>
         public CompetitivePricingType WithCompetitivePrices(CompetitivePriceList competitivePrices)
         {
-            this.competitivePricesField = competitivePrices;
+            this._competitivePrices = competitivePrices;
             return this;
         }
 
         /// <summary>
-        /// Checks if CompetitivePrices property is set
+        /// Checks if CompetitivePrices property is set.
         /// </summary>
-        /// <returns>true if CompetitivePrices property is set</returns>
-        public Boolean IsSetCompetitivePrices()
+        /// <returns>true if CompetitivePrices property is set.</returns>
+        public bool IsSetCompetitivePrices()
         {
-            return this.competitivePricesField != null;
+            return this._competitivePrices != null;
         }
 
         /// <summary>
@@ -66,28 +67,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "NumberOfOfferListings")]
         public NumberOfOfferListingsList NumberOfOfferListings
         {
-            get { return this.numberOfOfferListingsField ; }
-            set { this.numberOfOfferListingsField = value; }
+            get { return this._numberOfOfferListings; }
+            set { this._numberOfOfferListings = value; }
         }
 
         /// <summary>
-        /// Sets the NumberOfOfferListings property
+        /// Sets the NumberOfOfferListings property.
         /// </summary>
-        /// <param name="numberOfOfferListings">NumberOfOfferListings property</param>
-        /// <returns>this instance</returns>
+        /// <param name="numberOfOfferListings">NumberOfOfferListings property.</param>
+        /// <returns>this instance.</returns>
         public CompetitivePricingType WithNumberOfOfferListings(NumberOfOfferListingsList numberOfOfferListings)
         {
-            this.numberOfOfferListingsField = numberOfOfferListings;
+            this._numberOfOfferListings = numberOfOfferListings;
             return this;
         }
 
         /// <summary>
-        /// Checks if NumberOfOfferListings property is set
+        /// Checks if NumberOfOfferListings property is set.
         /// </summary>
-        /// <returns>true if NumberOfOfferListings property is set</returns>
-        public Boolean IsSetNumberOfOfferListings()
+        /// <returns>true if NumberOfOfferListings property is set.</returns>
+        public bool IsSetNumberOfOfferListings()
         {
-            return this.numberOfOfferListingsField != null;
+            return this._numberOfOfferListings != null;
         }
 
         /// <summary>
@@ -96,96 +97,52 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "TradeInValue")]
         public MoneyType TradeInValue
         {
-            get { return this.tradeInValueField ; }
-            set { this.tradeInValueField = value; }
+            get { return this._tradeInValue; }
+            set { this._tradeInValue = value; }
         }
 
         /// <summary>
-        /// Sets the TradeInValue property
+        /// Sets the TradeInValue property.
         /// </summary>
-        /// <param name="tradeInValue">TradeInValue property</param>
-        /// <returns>this instance</returns>
+        /// <param name="tradeInValue">TradeInValue property.</param>
+        /// <returns>this instance.</returns>
         public CompetitivePricingType WithTradeInValue(MoneyType tradeInValue)
         {
-            this.tradeInValueField = tradeInValue;
+            this._tradeInValue = tradeInValue;
             return this;
         }
 
         /// <summary>
-        /// Checks if TradeInValue property is set
+        /// Checks if TradeInValue property is set.
         /// </summary>
-        /// <returns>true if TradeInValue property is set</returns>
-        public Boolean IsSetTradeInValue()
+        /// <returns>true if TradeInValue property is set.</returns>
+        public bool IsSetTradeInValue()
         {
-            return this.tradeInValueField != null;
+            return this._tradeInValue != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetCompetitivePrices()) {
-                CompetitivePriceList  competitivePricesObj = this.CompetitivePrices;
-                xml.Append("<CompetitivePrices>");
-                xml.Append(competitivePricesObj.ToXMLFragment());
-                xml.Append("</CompetitivePrices>");
-            } 
-            if (IsSetNumberOfOfferListings()) {
-                NumberOfOfferListingsList  numberOfOfferListingsObj = this.NumberOfOfferListings;
-                xml.Append("<NumberOfOfferListings>");
-                xml.Append(numberOfOfferListingsObj.ToXMLFragment());
-                xml.Append("</NumberOfOfferListings>");
-            } 
-            if (IsSetTradeInValue()) {
-                MoneyType  tradeInValueObj = this.TradeInValue;
-                xml.Append("<TradeInValue>");
-                xml.Append(tradeInValueObj.ToXMLFragment());
-                xml.Append("</TradeInValue>");
-            } 
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _competitivePrices = reader.Read<CompetitivePriceList>("CompetitivePrices");
+            _numberOfOfferListings = reader.Read<NumberOfOfferListingsList>("NumberOfOfferListings");
+            _tradeInValue = reader.Read<MoneyType>("TradeInValue");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("CompetitivePrices", _competitivePrices);
+            writer.Write("NumberOfOfferListings", _numberOfOfferListings);
+            writer.Write("TradeInValue", _tradeInValue);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "CompetitivePricingType", this);
+        }
+
+        public CompetitivePricingType() : base()
+        {
+        }
     }
-
 }

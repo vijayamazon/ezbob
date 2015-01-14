@@ -12,12 +12,12 @@ namespace EzBob.AmazonServiceLib
             MarketplaceId = new List<string>();
         }
 
-        public AmazonSecurityInfo(string merchantId)
+		public AmazonSecurityInfo(string merchantId, string mwsAuthToken)
             : this()
         {
             MerchantId = merchantId;
-
-        }
+			MWSAuthToken = mwsAuthToken;
+		}
 
         public void AddMarketplace(string marketplaceId)
         {
@@ -25,6 +25,7 @@ namespace EzBob.AmazonServiceLib
         }
 
         public string MerchantId { get; set; }
+		public string MWSAuthToken { get; set; }
         public List<string> MarketplaceId { get; set; }
     }
 }

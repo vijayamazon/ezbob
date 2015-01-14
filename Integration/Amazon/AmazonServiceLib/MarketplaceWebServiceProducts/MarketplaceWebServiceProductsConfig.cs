@@ -1,149 +1,203 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Marketplace Web Service Products
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
 using System;
-using System.Text;
-using System.Text.RegularExpressions;
+using MarketplaceWebServiceProducts.Model;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts
 {
 
     /// <summary>
-    /// Configuration for accessing Marketplace Web Service Products  service
+    /// Configuration for a connection
     /// </summary>
-    public class MarketplaceWebServiceProductsConfig
-    {
+    public class MarketplaceWebServiceProductsConfig {
 
-        private String serviceVersion = "2011-10-01";
-        private String serviceURL = null;
-        private String userAgent = null;
-        private String signatureVersion = "2";
-        private String signatureMethod = "HmacSHA256";
-        private String proxyHost = null;
-        private int proxyPort = -1;
-        private int maxErrorRetry = 3;
+        private const string DEFAULT_SERVICE_PATH = "Products/2011-10-01";
+        private const string SERVICE_VERSION = "2011-10-01";
 
-        // Client Library User-Agent 
-        private String mwsClientVersion = "2012-07-01";
+        private string servicePath;
+
+        private MwsConnection cc = new MwsConnection();
 
         /// <summary>
-        /// Gets Service Version
+        /// Get a clone of the configured connection
         /// </summary>
-        public String ServiceVersion
+        /// <returns>A clone of the configured connection</returns>
+        internal MwsConnection CopyConnection()
         {
-            get { return this.serviceVersion ; }
-        }
-        /// <summary>
-        /// Gets and sets of the signatureMethod property.
-        /// </summary>
-        public String SignatureMethod
-        {
-            get { return this.signatureMethod; }
-            set { this.signatureMethod = value; }
+            return (MwsConnection) cc.Clone();
         }
 
         /// <summary>
-        /// Sets the SignatureMethod property
+        /// Gets the service version this client library is compatible with
         /// </summary>
-        /// <param name="signatureMethod">SignatureMethod property</param>
+        public string ServiceVersion
+        {
+            get { return SERVICE_VERSION; }
+        }
+
+        /// <summary>
+        /// Gets and sets of the SignatureMethod used to authenticate with MWS
+        /// </summary>
+        public string SignatureMethod
+        {
+            get { return cc.SignatureMethod; }
+            set { cc.SignatureMethod = value; }
+        }
+
+        /// <summary>
+        /// Sets the SignatureMethod used to authenticate with MWS
+        /// </summary>
+        /// <param name="signatureMethod">Signature method to use (ex: HmacSHA256)</param>
         /// <returns>this instance</returns>
-        public MarketplaceWebServiceProductsConfig WithSignatureMethod(String signatureMethod)
+        public MarketplaceWebServiceProductsConfig WithSignatureMethod(string signatureMethod)
         {
-            this.signatureMethod = signatureMethod;
+            this.SignatureMethod = signatureMethod;
             return this;
         }
 
         /// <summary>
-        /// Checks if SignatureMethod property is set
+        /// Checks if SignatureMethod is set
         /// </summary>
-        /// <returns>true if SignatureMethod property is set</returns>
-        public Boolean IsSetSignatureMethod()
+        /// <returns>true if SignatureMethod is set</returns>
+        public bool IsSetSignatureMethod()
         {
-            return this.signatureMethod != null;
-        }
-        /// <summary>
-        /// Gets and sets of the SignatureVersion property.
-        /// </summary>
-        public String SignatureVersion
-        {
-            get { return this.signatureVersion ; }
-            set { this.signatureVersion = value; }
+            return this.SignatureMethod != null;
         }
 
         /// <summary>
-        /// Sets the SignatureVersion property
+        /// Gets and sets of the SignatureVersion used to authenticate with MWS
         /// </summary>
-        /// <param name="signatureVersion">SignatureVersion property</param>
-        /// <returns>this instance</returns>
-        public MarketplaceWebServiceProductsConfig WithSignatureVersion(String signatureVersion)
+        public string SignatureVersion
         {
-            this.signatureVersion = signatureVersion;
+            get { return cc.SignatureVersion; }
+            set { cc.SignatureVersion = value; }
+        }
+
+        /// <summary>
+        /// Sets the SignatureVersion used to authenticate with MWS
+        /// </summary>
+        /// <param name="signatureMethod">Signature version to use (ex: 2)</param>
+        /// <returns>this instance</returns>
+        public MarketplaceWebServiceProductsConfig WithSignatureVersion(string signatureVersion)
+        {
+            this.SignatureVersion = signatureVersion;
             return this;
         }
 
         /// <summary>
-        /// Checks if SignatureVersion property is set
+        /// Checks if SignatureVersion is set
         /// </summary>
-        /// <returns>true if SignatureVersion property is set</returns>
-        public Boolean IsSetSignatureVersion()
+        /// <returns>true if SignatureVersion is set</returns>
+        public bool IsSetSignatureVersion()
         {
-            return this.signatureVersion != null;
+            return this.SignatureVersion != null;
         }
 
         /// <summary>
-        /// Gets the UserAgent property.
+        /// Gets the UserAgent
         /// </summary>
-        public String UserAgent
+        public string UserAgent
         {
-            get { return this.userAgent ; }
+            get { return cc.UserAgent ; }
         }
 
         /// <summary>
         /// Sets the UserAgent property
         /// </summary>
-        /// <param name="applicationName">Your application's name, e.g. "MyMWSApp"</param>
-        /// <param name="applicationVersion">Your application's version, e.g. "1.0"</param>
+        /// <param name="userAgent">UserAgent property</param>
         /// <returns>this instance</returns>
-        public MarketplaceWebServiceProductsConfig WithUserAgent(String applicationName, String applicationVersion)
+        public MarketplaceWebServiceProductsConfig WithUserAgent(String userAgent)
         {
-            this.ConfigureUserAgentHeader(applicationName, applicationVersion);
+            cc.UserAgent = userAgent;
             return this;
         }
 
-        public void SetUserAgent(String applicationName, String applicationVersion)
+        public void SetUserAgentHeader(
+            string applicationName,
+            string applicationVersion,
+            string programmingLanguage,
+            params string[] additionalNameValuePairs)
         {
-            this.ConfigureUserAgentHeader(applicationName, applicationVersion);
+            cc.SetUserAgent(applicationName,applicationVersion,programmingLanguage,additionalNameValuePairs);
         }
 
         /// <summary>
-        /// Checks if UserAgent property is set
+        /// Sets the UserAgent
         /// </summary>
-        /// <returns>true if UserAgent property is set</returns>
-        public Boolean IsSetUserAgent()
+        /// <param name="applicationName">Your application's name, e.g. "MyMWSApp"</param>
+        /// <param name="applicationVersion">Your application's version, e.g. "1.0"</param>
+        /// <returns>this instance</returns>
+        public MarketplaceWebServiceProductsConfig WithUserAgent(string applicationName, string applicationVersion)
         {
-            return this.userAgent != null;
+            SetUserAgent(applicationName, applicationVersion);
+            return this;
+        }
+
+        public void SetUserAgent(string applicationName, string applicationVersion)
+        {
+            cc.ApplicationName = applicationName;
+            cc.ApplicationVersion = applicationVersion;
         }
 
         /// <summary>
-        /// Gets and sets of the ServiceURL property.
+        /// Checks if UserAgent is set
         /// </summary>
-        public String ServiceURL
+        /// <returns>true if UserAgent is set</returns>
+        public bool IsSetUserAgent()
         {
-            get { return this.serviceURL ; }
-            set { this.serviceURL = value; }
+            return this.UserAgent != null;
+        }
+
+        /// <summary>
+        /// Gets and sets of the URL to base MWS calls on
+        /// May include the path to make MWS calls to. Defaults to Products/2011-10-01
+        /// </summary>
+        public string ServiceURL
+        {
+            get { return new Uri(cc.Endpoint, servicePath).ToString(); }
+            set
+            {
+                try
+                {
+                    Uri fullUri = new Uri(value);
+                    cc.Endpoint = new Uri(fullUri.Scheme + "://" + fullUri.Authority);
+
+                    // Strip slashes
+                    String path = fullUri.PathAndQuery;
+                    if(path != null)
+                    {
+                        path = path.Trim(new[] {'/'});
+                    }
+
+                    if(String.IsNullOrEmpty(path))
+                    {
+                        this.servicePath = DEFAULT_SERVICE_PATH;
+                    }
+                    else
+                    {
+                        this.servicePath = path;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw MwsUtil.Wrap(e);
+                }
+            }
         }
 
         /// <summary>
@@ -151,220 +205,211 @@ namespace MarketplaceWebServiceProducts
         /// </summary>
         /// <param name="serviceURL">ServiceURL property</param>
         /// <returns>this instance</returns>
-        public MarketplaceWebServiceProductsConfig WithServiceURL(String serviceURL)
+        public MarketplaceWebServiceProductsConfig WithServiceURL(string serviceURL)
         {
-            this.serviceURL = serviceURL;
+            this.ServiceURL = serviceURL;
             return this;
         }
 
         /// <summary>
-        /// Checks if ServiceURL property is set
+        /// Checks if Service URL is set
         /// </summary>
-        /// <returns>true if ServiceURL property is set</returns>
-        public Boolean IsSetServiceURL()
+        /// <returns>true if Service URL is set</returns>
+        public bool IsSetServiceURL()
         {
-            return this.serviceURL != null;
+            return cc.Endpoint != null;
+        }
+
+        internal string ServicePath
+        {
+            get { return servicePath; }
         }
 
         /// <summary>
-        /// Gets and sets of the ProxyHost property.
+        /// Gets and sets the host to use as a proxy server
         /// </summary>
-        public String ProxyHost
+        public string ProxyHost
         {
-            get { return this.proxyHost; }
-            set { this.proxyHost = value; }
+            get { return cc.ProxyHost; }
+            set { cc.ProxyHost = value; }
         }
 
         /// <summary>
-        /// Sets the ProxyHost property
+        /// Sets the host to use as a proxy server
         /// </summary>
-        /// <param name="proxyHost">ProxyHost property</param>
+        /// <param name="proxyHost">proxy host</param>
         /// <returns>this instance</returns>
-        public MarketplaceWebServiceProductsConfig WithProxyHost(String proxyHost)
+        public MarketplaceWebServiceProductsConfig WithProxyHost(string proxyHost)
         {
-            this.proxyHost = proxyHost;
+            this.ProxyHost = proxyHost;
             return this;
         }
 
         /// <summary>
-        /// Checks if ProxyHost property is set
+        /// Checks if proxy host is set
         /// </summary>
-        /// <returns>true if ProxyHost property is set</returns>
-        public Boolean IsSetProxyHost()
+        /// <returns>true if proxy host is set</returns>
+        public bool IsSetProxyHost()
         {
-            return this.proxyHost != null;
+            return this.ProxyHost != null;
         }
 
         /// <summary>
-        /// Gets and sets of the ProxyPort property.
+        /// Gets and sets the port on your proxy server to use
         /// </summary>
         public int ProxyPort
         {
-            get { return this.proxyPort; }
-            set { this.proxyPort = value; }
+        get { return cc.ProxyPort; }
+        set { cc.ProxyPort = value; }
         }
 
         /// <summary>
-        /// Sets the ProxyPort property
+        /// Sets the port on your proxy server to use
         /// </summary>
-        /// <param name="proxyPort">ProxyPort property</param>
+        /// <param name="proxyPort">port number</param>
         /// <returns>this instance</returns>
         public MarketplaceWebServiceProductsConfig WithProxyPort(int proxyPort)
         {
-            this.proxyPort = proxyPort;
+            this.ProxyPort = proxyPort;
             return this;
         }
 
         /// <summary>
-        /// Checks if ProxyPort property is set
+        /// Checks if proxy port is set
         /// </summary>
-        /// <returns>true if ProxyPort property is set</returns>
-        public Boolean IsSetProxyPort()
+        /// <returns>true if proxy port is set</returns>
+        public bool IsSetProxyPort()
         {
-            return this.proxyPort != -1;
+            return cc.ProxyPort != -1;
         }
 
         /// <summary>
-        /// Gets and sets of the MaxErrorRetry property.
+        /// Gets and sets the username to use with your proxy server
+        /// </summary>
+        public string ProxyUsername
+        {
+            get { return cc.ProxyUsername; }
+            set { cc.ProxyUsername = value; }
+        }
+
+        /// <summary>
+        /// Sets the username to use with your proxy server
+        /// </summary>
+        /// <param name="proxyUsername">proxy username</param>
+        /// <returns>this instance</returns>
+        public MarketplaceWebServiceProductsConfig WithProxyUsername(string proxyUsername)
+        {
+            this.ProxyUsername = proxyUsername;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if proxy username is set
+        /// </summary>
+        /// <returns>true if proxy username is set</returns>
+        public bool IsSetProxyUsername()
+        {
+            return this.ProxyUsername != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the password to use with your proxy server
+        /// </summary>
+        public string ProxyPassword
+        {
+            get { return cc.ProxyPassword; }
+            set { cc.ProxyPassword = value; }
+        }
+
+        /// <summary>
+        /// Sets the password to use with your proxy server
+        /// </summary>
+        /// <param name="proxyPassword">proxy password</param>
+        /// <returns>this instance</returns>
+        public MarketplaceWebServiceProductsConfig WithProxyPassword(string proxyPassword)
+        {
+            this.ProxyPassword = proxyPassword;
+            return this;
+        }
+
+        /// <summary>
+        /// Checks if proxy password is set
+        /// </summary>
+        /// <returns>true if proxy password is set</returns>
+        public bool IsSetProxyPassword()
+        {
+            return this.ProxyPassword != null;
+        }
+
+        /// <summary>
+        /// Gets and sets the maximum number of times to retry failed requests
         /// </summary>
         public int MaxErrorRetry
         {
-            get { return this.maxErrorRetry; }
-            set { this.maxErrorRetry = value; }
+            get { return cc.MaxErrorRetry; }
+            set { cc.MaxErrorRetry = value; }
         }
 
         /// <summary>
-        /// Sets the MaxErrorRetry property
+        /// Sets the maximum number of times to retry failed requests
         /// </summary>
-        /// <param name="maxErrorRetry">MaxErrorRetry property</param>
+        /// <param name="maxErrorRetry">times to retry</param>
         /// <returns>this instance</returns>
         public MarketplaceWebServiceProductsConfig WithMaxErrorRetry(int maxErrorRetry)
         {
-            this.maxErrorRetry = maxErrorRetry;
+            cc.MaxErrorRetry = maxErrorRetry;
             return this;
         }
 
         /// <summary>
-        /// Checks if MaxErrorRetry property is set
+        /// Checks if MaxErrorRetry is set
         /// </summary>
-        /// <returns>true if MaxErrorRetry property is set</returns>
-        public Boolean IsSetMaxErrorRetry()
+        /// <returns>true if MaxErrorRetry is set</returns>
+        public bool IsSetMaxErrorRetry()
         {
-            return this.maxErrorRetry != -1;
-        }
-
-        private void ConfigureUserAgentHeader(String applicationName, String applicationVersion)
-        {
-            SetUserAgentHeader(
-                applicationName,
-                applicationVersion,
-                "C#",
-                "CLI", Environment.Version.ToString(),
-                "Platform", Environment.OSVersion.Platform + "/" + Environment.OSVersion.Version,
-                "MWSClientVersion", mwsClientVersion);
-        }
-
-        private void SetUserAgentHeader(
-            string applicationName,
-            string applicationVersion,
-            string programmingLanguage,
-            params string[] additionalNameValuePairs)
-        {
-            if (applicationName == null)
-            {
-                throw new ArgumentNullException("applicationName", "Value cannot be null.");
-            }
-
-            if (applicationVersion == null)
-            {
-                throw new ArgumentNullException("applicationVersion", "Value cannot be null.");
-            }
-
-            if (programmingLanguage == null)
-            {
-                throw new ArgumentNullException("programmingLanguage", "Value cannot be null.");
-            }
-
-            if (additionalNameValuePairs.Length % 2 != 0)
-            {
-                throw new ArgumentException("additionalNameValuePairs", "Every name must have a corresponding value.");
-            }
-
-            StringBuilder sb = new StringBuilder();
-
-            sb.Append(QuoteApplicationName(applicationName));
-            sb.Append("/");
-            sb.Append(QuoteApplicationVersion(applicationVersion));
-            sb.Append(" (");
-            sb.Append("Language=");
-            sb.Append(QuoteAttributeValue(programmingLanguage));
-
-            int i = 0;
-            while (i < additionalNameValuePairs.Length)
-            {
-                string name = additionalNameValuePairs[i];
-                string value = additionalNameValuePairs[++i];
-                sb.Append("; ");
-                sb.Append(QuoteAttributeName(name));
-                sb.Append("=");
-                sb.Append(QuoteAttributeValue(value));
-
-                i++;
-            }
-
-            sb.Append(")");
-
-            this.userAgent = sb.ToString();
+            return cc.MaxErrorRetry != -1;
         }
 
         /// <summary>
-        /// Replace all whitespace characters by a single space.
+        /// Sets the value of a request header to be included on every request
         /// </summary>
-        private static string Clean(string s)
+        /// <param name="name">the name of the header to set</param>
+        /// <param name="value">value to send with header</param>
+        public void IncludeRequestHeader(string name, string value)
         {
-            // matched character sequences are passed to a MatchEvaluator
-            // delegate. The returned string from the delegate replaces
-            // the matched sequence.
-            return Regex.Replace(s, @" {2,}|\s", delegate(Match m)
-            {
-                return " ";
-            });
+            cc.IncludeRequestHeader(name, value);
         }
 
         /// <summary>
-        /// Collapse whitespace, and escape the following characters are escaped:
-        /// '\', and '/'.
+        /// Sets the value of a request header to be included on every request
         /// </summary>
-        private static string QuoteApplicationName(string s)
+        /// <param name="name">the name of the header to set</param>
+        /// <param name="value">value to send with header</param>
+        /// <returns>the current config object</returns>
+        public MarketplaceWebServiceProductsConfig WithRequestHeader(string name, string value)
         {
-            return Clean(s).Replace(@"\", @"\\").Replace("@/", @"\/");
+            cc.IncludeRequestHeader(name, value);
+            return this;
         }
 
         /// <summary>
-        /// Collapse whitespace, and escape the following characters are escaped:
-        /// '\', and '('.
+        /// Gets the currently set value of a request header
         /// </summary>
-        private static string QuoteApplicationVersion(string s)
+        /// <param name="name">name the name of the header to get</param>
+        /// <returns>value of specified header, or null if not defined</returns>
+        public string GetRequestHeader(string name)
         {
-            return Clean(s).Replace(@"\", @"\\").Replace(@"(", @"\(");
+            return cc.GetRequestHeader(name);
         }
 
         /// <summary>
-        /// Collapse whitespace, and escape the following characters are escaped:
-        /// '\', and '='.
+        /// Checks if a request header is set
         /// </summary>
-        private static string QuoteAttributeName(string s)
+        /// <param name="name">the name of the header to check</param>
+        /// <returns>true, if the header is set</returns>
+        public bool IsSetRequestHeader(string name)
         {
-            return Clean(s).Replace(@"\", @"\\").Replace(@"=", @"\=");
-        }
-
-        /// <summary>
-        /// Collapse whitespace, and escape the following characters are escaped:
-        /// ')', '\', and ';'.
-        /// </summary>
-        private static string QuoteAttributeValue(string s)
-        {
-            return Clean(s).Replace(@"\", @"\\").Replace(@";", @"\;").Replace(@")", @"\)");
+            return cc.GetRequestHeader(name) != null;
         }
 
     }

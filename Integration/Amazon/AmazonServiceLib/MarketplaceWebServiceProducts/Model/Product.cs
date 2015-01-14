@@ -1,38 +1,39 @@
-﻿/******************************************************************************* 
- *  Copyright 2008-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
- *  Licensed under the Apache License, Version 2.0 (the "License"); 
- *  
- *  You may not use this file except in compliance with the License. 
- *  You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
- *  This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
- *  CONDITIONS OF ANY KIND, either express or implied. See the License for the 
- *  specific language governing permissions and limitations under the License.
- * ***************************************************************************** 
- * 
- *  Marketplace Web Service Products CSharp Library
- *  API Version: 2011-10-01
- * 
+/*******************************************************************************
+ * Copyright 2009-2014 Amazon Services. All Rights Reserved.
+ * Licensed under the Apache License, Version 2.0 (the "License"); 
+ *
+ * You may not use this file except in compliance with the License. 
+ * You may obtain a copy of the License at: http://aws.amazon.com/apache2.0
+ * This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR 
+ * CONDITIONS OF ANY KIND, either express or implied. See the License for the 
+ * specific language governing permissions and limitations under the License.
+ *******************************************************************************
+ * Product
+ * API Version: 2011-10-01
+ * Library Version: 2014-12-16
+ * Generated: Tue Dec 16 20:43:21 GMT 2014
  */
 
+
 using System;
+using System.Xml;
 using System.Xml.Serialization;
-using System.Collections.Generic;
-using System.Text;
+using MWSClientCsRuntime;
 
 namespace MarketplaceWebServiceProducts.Model
 {
     [XmlTypeAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01")]
     [XmlRootAttribute(Namespace = "http://mws.amazonservices.com/schema/Products/2011-10-01", IsNullable = false)]
-    public class Product
+    public class Product : AbstractMwsObject
     {
 
-        private  IdentifierType identifiersField;
-        private  AttributeSetList attributeSetsField;
-        private  RelationshipList relationshipsField;
-        private  CompetitivePricingType competitivePricingField;
-        private  SalesRankList salesRankingsField;
-        private  LowestOfferListingList lowestOfferListingsField;
-        private  OffersList offersField;
+        private IdentifierType _identifiers;
+        private AttributeSetList _attributeSets;
+        private RelationshipList _relationships;
+        private CompetitivePricingType _competitivePricing;
+        private SalesRankList _salesRankings;
+        private LowestOfferListingList _lowestOfferListings;
+        private OffersList _offers;
 
         /// <summary>
         /// Gets and sets the Identifiers property.
@@ -40,28 +41,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "Identifiers")]
         public IdentifierType Identifiers
         {
-            get { return this.identifiersField ; }
-            set { this.identifiersField = value; }
+            get { return this._identifiers; }
+            set { this._identifiers = value; }
         }
 
         /// <summary>
-        /// Sets the Identifiers property
+        /// Sets the Identifiers property.
         /// </summary>
-        /// <param name="identifiers">Identifiers property</param>
-        /// <returns>this instance</returns>
+        /// <param name="identifiers">Identifiers property.</param>
+        /// <returns>this instance.</returns>
         public Product WithIdentifiers(IdentifierType identifiers)
         {
-            this.identifiersField = identifiers;
+            this._identifiers = identifiers;
             return this;
         }
 
         /// <summary>
-        /// Checks if Identifiers property is set
+        /// Checks if Identifiers property is set.
         /// </summary>
-        /// <returns>true if Identifiers property is set</returns>
-        public Boolean IsSetIdentifiers()
+        /// <returns>true if Identifiers property is set.</returns>
+        public bool IsSetIdentifiers()
         {
-            return this.identifiersField != null;
+            return this._identifiers != null;
         }
 
         /// <summary>
@@ -70,28 +71,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "AttributeSets")]
         public AttributeSetList AttributeSets
         {
-            get { return this.attributeSetsField ; }
-            set { this.attributeSetsField = value; }
+            get { return this._attributeSets; }
+            set { this._attributeSets = value; }
         }
 
         /// <summary>
-        /// Sets the AttributeSets property
+        /// Sets the AttributeSets property.
         /// </summary>
-        /// <param name="attributeSets">AttributeSets property</param>
-        /// <returns>this instance</returns>
+        /// <param name="attributeSets">AttributeSets property.</param>
+        /// <returns>this instance.</returns>
         public Product WithAttributeSets(AttributeSetList attributeSets)
         {
-            this.attributeSetsField = attributeSets;
+            this._attributeSets = attributeSets;
             return this;
         }
 
         /// <summary>
-        /// Checks if AttributeSets property is set
+        /// Checks if AttributeSets property is set.
         /// </summary>
-        /// <returns>true if AttributeSets property is set</returns>
-        public Boolean IsSetAttributeSets()
+        /// <returns>true if AttributeSets property is set.</returns>
+        public bool IsSetAttributeSets()
         {
-            return this.attributeSetsField != null;
+            return this._attributeSets != null;
         }
 
         /// <summary>
@@ -100,28 +101,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "Relationships")]
         public RelationshipList Relationships
         {
-            get { return this.relationshipsField ; }
-            set { this.relationshipsField = value; }
+            get { return this._relationships; }
+            set { this._relationships = value; }
         }
 
         /// <summary>
-        /// Sets the Relationships property
+        /// Sets the Relationships property.
         /// </summary>
-        /// <param name="relationships">Relationships property</param>
-        /// <returns>this instance</returns>
+        /// <param name="relationships">Relationships property.</param>
+        /// <returns>this instance.</returns>
         public Product WithRelationships(RelationshipList relationships)
         {
-            this.relationshipsField = relationships;
+            this._relationships = relationships;
             return this;
         }
 
         /// <summary>
-        /// Checks if Relationships property is set
+        /// Checks if Relationships property is set.
         /// </summary>
-        /// <returns>true if Relationships property is set</returns>
-        public Boolean IsSetRelationships()
+        /// <returns>true if Relationships property is set.</returns>
+        public bool IsSetRelationships()
         {
-            return this.relationshipsField != null;
+            return this._relationships != null;
         }
 
         /// <summary>
@@ -130,28 +131,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "CompetitivePricing")]
         public CompetitivePricingType CompetitivePricing
         {
-            get { return this.competitivePricingField ; }
-            set { this.competitivePricingField = value; }
+            get { return this._competitivePricing; }
+            set { this._competitivePricing = value; }
         }
 
         /// <summary>
-        /// Sets the CompetitivePricing property
+        /// Sets the CompetitivePricing property.
         /// </summary>
-        /// <param name="competitivePricing">CompetitivePricing property</param>
-        /// <returns>this instance</returns>
+        /// <param name="competitivePricing">CompetitivePricing property.</param>
+        /// <returns>this instance.</returns>
         public Product WithCompetitivePricing(CompetitivePricingType competitivePricing)
         {
-            this.competitivePricingField = competitivePricing;
+            this._competitivePricing = competitivePricing;
             return this;
         }
 
         /// <summary>
-        /// Checks if CompetitivePricing property is set
+        /// Checks if CompetitivePricing property is set.
         /// </summary>
-        /// <returns>true if CompetitivePricing property is set</returns>
-        public Boolean IsSetCompetitivePricing()
+        /// <returns>true if CompetitivePricing property is set.</returns>
+        public bool IsSetCompetitivePricing()
         {
-            return this.competitivePricingField != null;
+            return this._competitivePricing != null;
         }
 
         /// <summary>
@@ -160,28 +161,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "SalesRankings")]
         public SalesRankList SalesRankings
         {
-            get { return this.salesRankingsField ; }
-            set { this.salesRankingsField = value; }
+            get { return this._salesRankings; }
+            set { this._salesRankings = value; }
         }
 
         /// <summary>
-        /// Sets the SalesRankings property
+        /// Sets the SalesRankings property.
         /// </summary>
-        /// <param name="salesRankings">SalesRankings property</param>
-        /// <returns>this instance</returns>
+        /// <param name="salesRankings">SalesRankings property.</param>
+        /// <returns>this instance.</returns>
         public Product WithSalesRankings(SalesRankList salesRankings)
         {
-            this.salesRankingsField = salesRankings;
+            this._salesRankings = salesRankings;
             return this;
         }
 
         /// <summary>
-        /// Checks if SalesRankings property is set
+        /// Checks if SalesRankings property is set.
         /// </summary>
-        /// <returns>true if SalesRankings property is set</returns>
-        public Boolean IsSetSalesRankings()
+        /// <returns>true if SalesRankings property is set.</returns>
+        public bool IsSetSalesRankings()
         {
-            return this.salesRankingsField != null;
+            return this._salesRankings != null;
         }
 
         /// <summary>
@@ -190,28 +191,28 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "LowestOfferListings")]
         public LowestOfferListingList LowestOfferListings
         {
-            get { return this.lowestOfferListingsField ; }
-            set { this.lowestOfferListingsField = value; }
+            get { return this._lowestOfferListings; }
+            set { this._lowestOfferListings = value; }
         }
 
         /// <summary>
-        /// Sets the LowestOfferListings property
+        /// Sets the LowestOfferListings property.
         /// </summary>
-        /// <param name="lowestOfferListings">LowestOfferListings property</param>
-        /// <returns>this instance</returns>
+        /// <param name="lowestOfferListings">LowestOfferListings property.</param>
+        /// <returns>this instance.</returns>
         public Product WithLowestOfferListings(LowestOfferListingList lowestOfferListings)
         {
-            this.lowestOfferListingsField = lowestOfferListings;
+            this._lowestOfferListings = lowestOfferListings;
             return this;
         }
 
         /// <summary>
-        /// Checks if LowestOfferListings property is set
+        /// Checks if LowestOfferListings property is set.
         /// </summary>
-        /// <returns>true if LowestOfferListings property is set</returns>
-        public Boolean IsSetLowestOfferListings()
+        /// <returns>true if LowestOfferListings property is set.</returns>
+        public bool IsSetLowestOfferListings()
         {
-            return this.lowestOfferListingsField != null;
+            return this._lowestOfferListings != null;
         }
 
         /// <summary>
@@ -220,120 +221,60 @@ namespace MarketplaceWebServiceProducts.Model
         [XmlElementAttribute(ElementName = "Offers")]
         public OffersList Offers
         {
-            get { return this.offersField ; }
-            set { this.offersField = value; }
+            get { return this._offers; }
+            set { this._offers = value; }
         }
 
         /// <summary>
-        /// Sets the Offers property
+        /// Sets the Offers property.
         /// </summary>
-        /// <param name="offers">Offers property</param>
-        /// <returns>this instance</returns>
+        /// <param name="offers">Offers property.</param>
+        /// <returns>this instance.</returns>
         public Product WithOffers(OffersList offers)
         {
-            this.offersField = offers;
+            this._offers = offers;
             return this;
         }
 
         /// <summary>
-        /// Checks if Offers property is set
+        /// Checks if Offers property is set.
         /// </summary>
-        /// <returns>true if Offers property is set</returns>
-        public Boolean IsSetOffers()
+        /// <returns>true if Offers property is set.</returns>
+        public bool IsSetOffers()
         {
-            return this.offersField != null;
+            return this._offers != null;
         }
 
-        /// <summary>
-        /// XML fragment representation of this object
-        /// </summary>
-        /// <returns>XML fragment for this object.</returns>
-        /// <remarks>
-        /// Name for outer tag expected to be set by calling method. 
-        /// This fragment returns inner properties representation only
-        /// </remarks>
 
-        protected internal String ToXMLFragment() {
-            StringBuilder xml = new StringBuilder();
-            if (IsSetIdentifiers()) {
-                IdentifierType  identifiersObj = this.Identifiers;
-                xml.Append("<Identifiers>");
-                xml.Append(identifiersObj.ToXMLFragment());
-                xml.Append("</Identifiers>");
-            } 
-            if (IsSetAttributeSets()) {
-                AttributeSetList  attributeSetsObj = this.AttributeSets;
-                xml.Append("<AttributeSets>");
-                xml.Append(attributeSetsObj.ToXMLFragment());
-                xml.Append("</AttributeSets>");
-            } 
-            if (IsSetRelationships()) {
-                RelationshipList  relationshipsObj = this.Relationships;
-                xml.Append("<Relationships>");
-                xml.Append(relationshipsObj.ToXMLFragment());
-                xml.Append("</Relationships>");
-            } 
-            if (IsSetCompetitivePricing()) {
-                CompetitivePricingType  competitivePricingObj = this.CompetitivePricing;
-                xml.Append("<CompetitivePricing>");
-                xml.Append(competitivePricingObj.ToXMLFragment());
-                xml.Append("</CompetitivePricing>");
-            } 
-            if (IsSetSalesRankings()) {
-                SalesRankList  salesRankingsObj = this.SalesRankings;
-                xml.Append("<SalesRankings>");
-                xml.Append(salesRankingsObj.ToXMLFragment());
-                xml.Append("</SalesRankings>");
-            } 
-            if (IsSetLowestOfferListings()) {
-                LowestOfferListingList  lowestOfferListingsObj = this.LowestOfferListings;
-                xml.Append("<LowestOfferListings>");
-                xml.Append(lowestOfferListingsObj.ToXMLFragment());
-                xml.Append("</LowestOfferListings>");
-            } 
-            if (IsSetOffers()) {
-                OffersList  offersObj = this.Offers;
-                xml.Append("<Offers>");
-                xml.Append(offersObj.ToXMLFragment());
-                xml.Append("</Offers>");
-            } 
-            return xml.ToString();
+        public override void ReadFragmentFrom(IMwsReader reader)
+        {
+            _identifiers = reader.Read<IdentifierType>("Identifiers");
+            _attributeSets = reader.Read<AttributeSetList>("AttributeSets");
+            _relationships = reader.Read<RelationshipList>("Relationships");
+            _competitivePricing = reader.Read<CompetitivePricingType>("CompetitivePricing");
+            _salesRankings = reader.Read<SalesRankList>("SalesRankings");
+            _lowestOfferListings = reader.Read<LowestOfferListingList>("LowestOfferListings");
+            _offers = reader.Read<OffersList>("Offers");
         }
 
-        /**
-         * 
-         * Escape XML special characters
-         */
-        private String EscapeXML(String str) {
-            if (str == null)
-                return "null";
-            StringBuilder sb = new StringBuilder();
-            foreach (Char c in str)
-            {
-                switch (c) {
-                case '&':
-                    sb.Append("&amp;");
-                    break;
-                case '<':
-                    sb.Append("&lt;");
-                    break;
-                case '>':
-                    sb.Append("&gt;");
-                    break;
-                case '\'':
-                    sb.Append("&#039;");
-                    break;
-                case '"':
-                    sb.Append("&quot;");
-                    break;
-                default:
-                    sb.Append(c);
-                    break;
-                }
-            }
-            return sb.ToString();
+        public override void WriteFragmentTo(IMwsWriter writer)
+        {
+            writer.Write("Identifiers", _identifiers);
+            writer.Write("AttributeSets", _attributeSets);
+            writer.Write("Relationships", _relationships);
+            writer.Write("CompetitivePricing", _competitivePricing);
+            writer.Write("SalesRankings", _salesRankings);
+            writer.Write("LowestOfferListings", _lowestOfferListings);
+            writer.Write("Offers", _offers);
         }
 
+        public override void WriteTo(IMwsWriter writer)
+        {
+            writer.Write("http://mws.amazonservices.com/schema/Products/2011-10-01", "Product", this);
+        }
+
+        public Product() : base()
+        {
+        }
     }
-
 }
