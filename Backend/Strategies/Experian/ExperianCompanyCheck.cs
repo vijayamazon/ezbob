@@ -132,6 +132,12 @@
 			) {
 			var service = new EBusinessService(Library.Instance.DB);
 
+			//Never run check ezbob company
+			const string ezbobRefNum = "07852687";
+			if (experianRefNum == ezbobRefNum) {
+				checkInCacheOnly = true;
+			}
+
 			// ReSharper disable RedundantCast
 			return isLimited
 				? (BusinessReturnData)service.GetLimitedBusinessData(experianRefNum, customerId, checkInCacheOnly, forceCheck)
