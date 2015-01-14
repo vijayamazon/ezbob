@@ -142,7 +142,7 @@ namespace PacnetBalance {
 		/// <summary>
 		/// Returns the value (string representing a number without commas
 		/// </summary>
-		/// <param name="strList">line seperated by spaces</param>
+		/// <param name="strList">line separated by spaces</param>
 		/// <param name="name">Name of before value</param>
 		/// <returns></returns>
 		private static string GetValue(string[] strList, string name) {
@@ -159,7 +159,7 @@ namespace PacnetBalance {
 		/// <returns> Fee per transfer </returns>
 		private static decimal GetFee() {
 			decimal feeSum = fee.Sum();
-			decimal feePerTransfer = feeSum / fee.Count * 2;
+			decimal feePerTransfer = feeSum / fasterPayment.Count;
 			Logger.Info("FeeSum: {0} Fee for each transfer: {1}", feeSum, feePerTransfer);
 			return feePerTransfer;
 		} // GetFee
