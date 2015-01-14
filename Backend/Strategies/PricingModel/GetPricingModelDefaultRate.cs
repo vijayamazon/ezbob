@@ -25,6 +25,8 @@
 			decimal customerValue = sr["ConsumerDefaultRate"];
 
 			DefaultRate = companyShare * companyValue + customerShare * customerValue;
+
+			Log.Info("GetPricingModelDefaultRate company value {0}, company share {1}, customer value {2}, customer share {3}, default rate {4}", companyValue, companyShare, customerValue, customerShare, DefaultRate);
 		}
 	}
 }
