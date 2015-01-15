@@ -1,13 +1,10 @@
 ﻿namespace EzBob.Backend.Strategies.MainStrategy {
 	using System;
-	using System.Collections.Generic;
-	using System.Globalization;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
-	using MailStrategies;
 	using MailStrategies.API;
 	using AutoDecisions;
 	using MedalCalculations;
@@ -21,7 +18,7 @@
 	using EzBob.Models;
 	using StructureMap;
 
-	public class MainStrategy : AStrategy {
+	public partial class MainStrategy : AStrategy {
 		public override string Name { get { return "Main strategy"; } }
 
 		public MainStrategy(
@@ -170,52 +167,37 @@
 				offeredCreditLine = 0;
 			}
 		}
-
-		private void SendEmails() {
-			if (autoDecisionResponse.DecidedToReject) {
-				new RejectUser(customerId, true, DB, Log).Execute();
-			}
-			else if (autoDecisionResponse.IsAutoApproval) {
-				SendApprovalMails();
-			}
-			else if (autoDecisionResponse.IsAutoBankBasedApproval) {
-				SendBankBasedApprovalMails();
-			}
-			else if (autoDecisionResponse.IsAutoReApproval) {
-				SendReApprovalMails();
-			}
-			else if (!autoDecisionResponse.HasAutomaticDecision)
-				SendWaitingForDecisionMail();
-		}
-
+		
 		private void ProcessApprovals() {
-			if (autoDecisionResponse.DecidedToReject) {
-				Log.Debug("Not processing approvals: reject decision has been made.");
-				return;
+			bool bContinue = true; 
+			if (this.autoDecisionResponse.DecidedToReject && bContinue) {
+				Log.Info("Not processing approvals: reject decision has been made.");
+				bContinue = false;
 			} // if
 
-			if (newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision) {
-				Log.Debug("Not processing approvals: {0} option selected.", newCreditLineOption);
-				return;
+			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision && bContinue) {
+				Log.Info("Not processing approvals: {0} option selected.", this.newCreditLineOption);
+				bContinue = false;
 			} // if
 
-			if (avoidAutomaticDecision == 1) {
-				Log.Debug("Not processing approvals: automatic decisions should be avoided.");
-				return;
+			if (this.avoidAutomaticDecision == 1 && bContinue) {
+				Log.Info("Not processing approvals: automatic decisions should be avoided.");
+				bContinue = false;
 			} // if
 
-			if (!dataGatherer.CustomerStatusIsEnabled) {
-				Log.Debug("Not processing approvals: customer status is not enabled.");
-				return;
+			if (!this.dataGatherer.CustomerStatusIsEnabled && bContinue) {
+				Log.Info("Not processing approvals: customer status is not enabled.");
+				bContinue = false;
 			} // if
 
-			if (dataGatherer.CustomerStatusIsWarning) {
-				Log.Debug("Not processing approvals: customer status is 'warning'.");
-				return;
+			if (this.dataGatherer.CustomerStatusIsWarning && bContinue) {
+				Log.Info("Not processing approvals: customer status is 'warning'.");
+				bContinue = false;
 			} // if
 
-			bool bContinue = true;
-
+			if ((!this.dataGatherer.EnableAutomaticReRejection || !this.dataGatherer.EnableAutomaticRejection) && bContinue) {
+				bContinue = false;
+			} //if	
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (dataGatherer.EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
@@ -261,7 +243,7 @@
 			else
 				Log.Debug("Not processed bank based approval: it is currently disabled in configuration or decision has already been made earlier.");
 
-			if (bContinue) { // No decision is made so far
+			if (!this.autoDecisionResponse.SystemDecision.HasValue) { // No decision is made so far
 				autoDecisionResponse.CreditResult = CreditResultStatus.WaitingForDecision;
 				autoDecisionResponse.UserStatus = Status.Manual;
 				autoDecisionResponse.SystemDecision = SystemDecision.Manual;
@@ -340,7 +322,8 @@
 			var now = DateTime.UtcNow;
 
 			decimal interestRateToUse;
-			decimal setupFeePercentToUse, setupFeeAmountToUse;
+			decimal setupFeePercentToUse = 0;
+			decimal setupFeeAmountToUse = 0;
 			int repaymentPeriodToUse;
 			LoanType loanTypeIdToUse;
 			bool isEuToUse = false;
@@ -350,13 +333,13 @@
 				setupFeePercentToUse = autoDecisionResponse.SetupFee;
 				setupFeeAmountToUse = setupFeePercentToUse * offeredCreditLine;
 				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
-				isEuToUse = autoDecisionResponse.IsEu;
-				loanTypeIdToUse = _loanTypeRepository.Get(autoDecisionResponse.LoanTypeId) ?? _loanTypeRepository.GetDefault();
+				isEuToUse = false; //todo implement when there are requirement
+				loanTypeIdToUse = _loanTypeRepository.Get(autoDecisionResponse.LoanTypeID) ?? _loanTypeRepository.GetDefault();
 			}
 			else {
 				interestRateToUse = dataGatherer.LoanOfferInterestRate;
-				setupFeePercentToUse = dataGatherer.ManualSetupFeePercent;
-				setupFeeAmountToUse = dataGatherer.ManualSetupFeeAmount;
+
+				//TODO check this code!!!
 				repaymentPeriodToUse = autoDecisionResponse.RepaymentPeriod;
 				loanTypeIdToUse = _loanTypeRepository.GetDefault();
 			}
@@ -427,15 +410,15 @@
 				cr.APR = dataGatherer.LoanOfferApr;
 
 				if (autoDecisionResponse.IsAutoReApproval) {
-					cr.UseSetupFee = dataGatherer.LoanOfferUseSetupFee != 0;
+					cr.UseSetupFee = autoDecisionResponse.SetupFeeEnabled;
 					cr.EmailSendingBanned = autoDecisionResponse.LoanOfferEmailSendingBannedNew;
-					cr.IsCustomerRepaymentPeriodSelectionAllowed = dataGatherer.IsCustomerRepaymentPeriodSelectionAllowed != 0;
-					cr.DiscountPlan = _discountPlanRepository.Get(dataGatherer.LoanOfferDiscountPlanId);
-					cr.UseBrokerSetupFee = dataGatherer.UseBrokerSetupFee;
-					cr.LoanSource = _loanSourceRepository.Get(this.dataGatherer.LoanSourceId);
-					cr.LoanType = _loanTypeRepository.Get(this.dataGatherer.LoanOfferLoanTypeId);
-					cr.ManualSetupFeeAmount = dataGatherer.ManualSetupFeeAmount;
-					cr.ManualSetupFeePercent = dataGatherer.ManualSetupFeePercent;
+					cr.IsCustomerRepaymentPeriodSelectionAllowed = autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
+					cr.DiscountPlan = autoDecisionResponse.DiscountPlanID.HasValue ? _discountPlanRepository.Get(autoDecisionResponse.DiscountPlanID.Value) : null;
+					cr.UseBrokerSetupFee = autoDecisionResponse.BrokerSetupFeeEnabled;
+					cr.LoanSource = _loanSourceRepository.Get(autoDecisionResponse.LoanSourceID);
+					cr.LoanType = _loanTypeRepository.Get(autoDecisionResponse.LoanTypeID);
+					cr.ManualSetupFeeAmount = autoDecisionResponse.ManualSetupFeeAmount;
+					cr.ManualSetupFeePercent = autoDecisionResponse.ManualSetupFeePercent;
 				}
 			}
 
@@ -446,109 +429,6 @@
 					autoDecisionResponse.Decision.Value, autoDecisionResponse.DecisionName, _session.Get<User>(1), customer
 				);
 			}
-		}
-
-		private void SendWaitingForDecisionMail() {
-			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", "WaitingForDecision"}
-			});
-		}
-
-		private void SendReApprovalMails() {
-			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
-				{"ApprovedReApproved", "Re-Approved"},
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
-				{"ApprovalAmount", offeredCreditLine.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
-						: string.Empty
-				}
-			});
-
-			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", dataGatherer.AppFirstName},
-				{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-			};
-
-			mailer.Send(dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
-		}
-		
-		private void SendApprovalMails() {
-			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
-				{"ApprovedReApproved", "Approved"},
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
-				{"ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture)},
-				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
-						: string.Empty
-				}
-			});
-
-			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", dataGatherer.AppFirstName},
-				{"LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-			};
-
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
-		}
-
-		private void SendBankBasedApprovalMails() {
-			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
-				{"ApprovedReApproved", "Approved"},
-				{"RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture)},
-				{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-				{"Name", dataGatherer.AppEmail},
-				{"FirstName", dataGatherer.AppFirstName},
-				{"Surname", dataGatherer.AppSurname},
-				{"MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture)},
-				{"MedalType", medalClassification.ToString()},
-				{"SystemDecision", autoDecisionResponse.SystemDecision.ToString()},
-				{"ApprovalAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture)},
-				{"InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture)},
-				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
-						: string.Empty
-				}
-			});
-
-			var customerMailVariables = new Dictionary<string, string> {
-				{"FirstName", dataGatherer.AppFirstName},
-				{"LoanAmount", autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)},
-				{"ValidFor", autoDecisionResponse.AppValidFor.HasValue ? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture) : string.Empty}
-			};
-
-			mailer.Send("Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables, new Addressee(dataGatherer.AppEmail));
 		}
 
 		private ScoreMedalOffer CalculateScoreAndMedal() {

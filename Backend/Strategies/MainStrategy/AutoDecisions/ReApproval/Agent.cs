@@ -83,6 +83,17 @@
 					response.DecisionName = "Re-Approval";
 					response.AppValidFor = DateTime.UtcNow.AddDays(MetaData.OfferLength);
 					response.LoanOfferEmailSendingBannedNew = MetaData.IsEmailSendingBanned;
+
+					var sr = DB.GetFirst("RapprovalGetLastApproveTerms", CommandSpecies.StoredProcedure, new QueryParameter("LacrID", MetaData.LacrID));
+					response.InterestRate = sr["InterestRate"];
+					response.SetupFeeEnabled = sr["UseSetupFee"];
+					response.RepaymentPeriod = sr["RepaymentPeriod"];
+					response.BrokerSetupFeeEnabled = sr["UseBrokerSetupFee"];
+					response.ManualSetupFeeAmount = sr["ManualSetupFeeAmount"];
+					response.ManualSetupFeePercent = sr["ManualSetupFeePercent"];
+					response.LoanTypeID = sr["LoanTypeID"];
+					response.LoanSourceID = sr["LoanSourceID"];
+					response.IsCustomerRepaymentPeriodSelectionAllowed = sr["IsCustomerRepaymentPeriodSelectionAllowed"];
 				} // if
 			} catch (Exception e) {
 				Log.Error(e, "Exception during re-approval.");
