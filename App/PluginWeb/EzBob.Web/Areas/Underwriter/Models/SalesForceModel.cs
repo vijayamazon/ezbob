@@ -15,6 +15,9 @@
 		public List<MessagesModel> Messages { get; set; }
 		public List<CustomerRelationsModel> OldCrm { get; set; }
 
+		public List<LoanHistoryModel> Loans { get; set;}
+		public List<DecisionHistoryModel> Decisions { get; set; } 
+
 		public void FromCustomer(EZBob.DatabaseLib.Model.Database.Customer customer) {
 			PersonalModel = new PersonalModel {
 				ID = customer.Id,
@@ -38,8 +41,19 @@
 					Updated = x.UpdatingEnd
 				})
 				.ToList();
-			
 
+			Decisions = customer
+				.CashRequests
+				.SelectMany(x => x.DecisionHistories)
+				.Select(DecisionHistoryModel.Create)
+				.OrderBy(x => x.Date)
+				.ToList();
+
+			Loans = customer
+				.Loans
+				.Select(LoanHistoryModel.Create)
+				.OrderBy(x => x.DateApplied)
+				.ToList();
 		}
 	}
 
