@@ -27,6 +27,19 @@
 		) {
 			this.topCount = nTopCount;
 			this.lastCheckedID = nLastCheckedID;
+			this.cashRequestID = 0;
+
+			this.Init(oDB, oLog);
+		} // constructor
+
+		public YesMaam(
+			int cashRequestID,
+			AConnection oDB,
+			ASafeLog oLog
+		) {
+			this.topCount = 0;
+			this.lastCheckedID = 0;
+			this.cashRequestID = cashRequestID;
 
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
@@ -40,7 +53,9 @@
 		public void Execute() {
 			Log.Debug("Loading relevant cash requests...");
 
-			List<YesMaamInputRow> lst = YesMaamInputRow.Load(DB, this.topCount, this.lastCheckedID);
+			List<YesMaamInputRow> lst = this.cashRequestID > 0
+				? YesMaamInputRow.Load(DB, this.cashRequestID)
+				: YesMaamInputRow.Load(DB, this.topCount, this.lastCheckedID);
 
 			Log.Debug("Loading relevant cash requests complete, {0} loaded.", Grammar.Number(lst.Count, "row"));
 
@@ -291,10 +306,20 @@
 			return new Body().Append(tbl);
 		} // ToEmail
 
+		private void Init(AConnection db, ASafeLog log) {
+			DB = db;
+			Log = log ?? new SafeLog();
+
+			this.medalChooser = new MedalChooser(DB, Log);
+
+			Tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid()
+				.ToString("N");
+		} // Init
+
+		private MedalChooser medalChooser;
+
 		private readonly int lastCheckedID;
-
-		private readonly MedalChooser medalChooser;
-
 		private readonly int topCount;
+		private readonly int cashRequestID;
 	} // class YesMaam
 } // namespace

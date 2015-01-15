@@ -132,7 +132,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", Args.CustomerID),
 				new QueryParameter("Now", Now)
-				);
+			);
 
 			OriginationTime.FromExperian(MetaData.IncorporationDate);
 
@@ -150,7 +150,7 @@
 				Funds,
 				DirectorNames,
 				HmrcBusinessNames
-				);
+			);
 
 			MetaData.Validate();
 		} // GatherData
@@ -178,6 +178,8 @@
 				Log.Alert("Unsupported row type encountered: '{0}'.", sRowType);
 				return;
 			} // if
+
+			Log.Debug("Auto approve agent, processing input row of type {0}.", sRowType);
 
 			switch (nRowType) {
 			case RowType.MetaData:

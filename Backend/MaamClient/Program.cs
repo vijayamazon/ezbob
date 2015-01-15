@@ -30,6 +30,21 @@
 			return null;
 		} // CompareMaam
 
+		private static string MaamForCashRequest(string[] args) {
+			var oArgs = new Args(AppName, args, Log);
+
+			if (oArgs.IsGood) {
+				CurrentValues.Init(DB, Log);
+
+				var stra = new YesMaam(oArgs.Count, DB, Log);
+				stra.Execute();
+
+				return stra.Tag;
+			} // if
+
+			return null;
+		} // CompareMaam
+
 		private static void LoadFromJson() {
 			var log = new ConsoleLog(Log);
 
@@ -68,13 +83,17 @@
 
 			Ezbob.Backend.Strategies.Library.Initialize(env, DB, Log);
 
+			// CompareMaam(args);
+
+			// MaamForCashRequest(args);
+
 			// LoadFromJson();
 
 			// LoadTurnovers(args);
 
-			ExportApprovalData.Run(args, DB, Log);
+			// ExportApprovalData.Run(args, DB, Log);
 
-			// CompareAndExport(args, DB, Log);
+			CompareAndExport(args, DB, Log);
 
 			Log.NotifyStop();
 		} // Main

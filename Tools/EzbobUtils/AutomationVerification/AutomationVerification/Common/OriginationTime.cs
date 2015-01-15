@@ -9,7 +9,6 @@
 	/// Contains time of the first transaction for calculating customer business seniority.
 	/// </summary>
 	public class OriginationTime {
-
 		public OriginationTime(ASafeLog oLog) {
 			m_oRow = null;
 			m_oLog = oLog ?? new SafeLog();
@@ -36,10 +35,13 @@
 		public void Process(SafeReader sr) {
 			Row r = sr.Fill<Row>().SetTime();
 
+			m_oLog.Debug("Origination time: processing row {0}", r);
+
 			if (r.Time == null)
 				return;
 
 			if (Since == null) {
+				m_oLog.Debug("Marketplace origination time set from {0}.", r);
 				m_oRow = r;
 				return;
 			} // if

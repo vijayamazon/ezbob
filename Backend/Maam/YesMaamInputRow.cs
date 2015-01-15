@@ -51,6 +51,14 @@
 				? "AND r.Id < " + lastCheckedID
 				: string.Empty;
 
+			return Load(oDB, top, condition);
+		} // Load
+
+		public static List<YesMaamInputRow> Load(AConnection oDB, int cashRequestID) {
+			return Load(oDB, string.Empty, "AND r.Id = " + cashRequestID);
+		} // Load
+
+		private static List<YesMaamInputRow> Load(AConnection db, string top, string condition) {
 			const string sQueryFormat = @"
 SELECT {0}
 	r.Id AS CashRequestID,
@@ -81,7 +89,7 @@ ORDER BY
 	r.Id DESC
 ";
 
-			return oDB.Fill<YesMaamInputRow>(
+			return db.Fill<YesMaamInputRow>(
 				string.Format(sQueryFormat, top, condition),
 				CommandSpecies.Text
 			);
