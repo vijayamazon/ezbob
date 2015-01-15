@@ -12,7 +12,6 @@
 	using MailApi;
 
 	public abstract class ATrail {
-
 		public virtual string GetDecisionName(DecisionStatus? nStatus = null) {
 			if (nStatus == null)
 				nStatus = this.DecisionStatus;
@@ -31,6 +30,11 @@
 				throw new ArgumentOutOfRangeException();
 			} // switch
 		} // GetDecisionName
+
+		public virtual void AddNote(string note) {
+			if (!string.IsNullOrWhiteSpace(note))
+				m_oDiffNotes.Add(note.Trim());
+		} // AddNote
 
 		public virtual int CustomerID { get; private set; }
 
@@ -122,7 +126,7 @@
 		public virtual bool EqualsTo(ATrail oTrail, bool bQuiet = false) {
 			if (oTrail == null) {
 				const string sMsg = "The second trail is not specified.";
-				m_oDiffNotes.Add(sMsg);
+				AddNote(sMsg);
 
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
@@ -141,7 +145,7 @@
 					oTrail.Decision
 				);
 
-				m_oDiffNotes.Add(sMsg);
+				AddNote(sMsg);
 
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
@@ -163,7 +167,7 @@
 					this.Decision
 				);
 
-				m_oDiffNotes.Add(sMsg);
+				AddNote(sMsg);
 
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
@@ -181,7 +185,7 @@
 					this.Decision
 				);
 
-				m_oDiffNotes.Add(sMsg);
+				AddNote(sMsg);
 
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
@@ -195,7 +199,7 @@
 					this.Length, oTrail.Length
 				);
 
-				m_oDiffNotes.Add(sMsg);
+				AddNote(sMsg);
 
 				if (!bQuiet) {
 					m_oLog.Warn("Trails are different: {0}", sMsg);
@@ -220,7 +224,7 @@
 						this.Decision
 					);
 
-					m_oDiffNotes.Add(sMsg);
+					AddNote(sMsg);
 
 					if (!bQuiet)
 						m_oLog.Warn("Trails are different: {0}", sMsg);
@@ -238,7 +242,7 @@
 						this.Decision
 					);
 
-					m_oDiffNotes.Add(sMsg);
+					AddNote(sMsg);
 
 					if (!bQuiet) {
 						m_oLog.Warn("Trails are different: {0}", sMsg);
@@ -258,7 +262,7 @@
 						this.Decision
 					);
 
-					m_oDiffNotes.Add(sMsg);
+					AddNote(sMsg);
 
 					if (!bQuiet) {
 						m_oLog.Warn("Trails are different: {0}", sMsg);

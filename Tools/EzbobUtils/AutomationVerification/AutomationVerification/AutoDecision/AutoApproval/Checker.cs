@@ -442,7 +442,15 @@
 		} // StepFailed
 
 		private T StepFailed<T>() where T : ATrace {
-			return Trail.MyInputData.Configuration.IsTraceEnabled<T>()
+			bool isStepEnabled = Trail.MyInputData.Configuration.IsTraceEnabled<T>();
+
+			if (!isStepEnabled) {
+				Trail.AddNote(
+					"Step '" + typeof(T).FullName + "' has failed but is disabled hence marked as passed."
+				);
+			} // if
+
+			return isStepEnabled
 				? StepForceFailed<T>()
 				: StepDone<T>();
 		} // StepFailed

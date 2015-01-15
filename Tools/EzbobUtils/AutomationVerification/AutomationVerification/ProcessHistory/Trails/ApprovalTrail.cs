@@ -3,10 +3,13 @@
 	using Ezbob.Logger;
 
 	public class ApprovalTrail : ATrail {
-
-		public ApprovalTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
-			: base(nCustomerID, DecisionStatus.Affirmative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
-		{
+		public ApprovalTrail(
+			int nCustomerID,
+			ASafeLog oLog,
+			string toExplanationMailAddress = null,
+			string fromEmailAddress = null,
+			string fromEmailName = null
+		) : base(nCustomerID, DecisionStatus.Affirmative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName) {
 			MyInputData = new ApprovalInputData();
 		} // constructor
 
@@ -34,6 +37,5 @@
 			if (nDecisionStatus != DecisionStatus.Affirmative)
 				DecisionStatus = DecisionStatus.Negative;
 		} // UpdateDecision
-
 	} // class ApprovalTrail
 } // namespace

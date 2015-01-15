@@ -56,7 +56,13 @@
 
 			this.customer = customerRepo.ReallyTryGet(customerId);
 
-			this.m_oTrail = new ApprovalTrail(customerId, this.log, CurrentValues.Instance.AutomationExplanationMailReciever, CurrentValues.Instance.MailSenderEmail, CurrentValues.Instance.MailSenderName);
+			this.m_oTrail = new ApprovalTrail(
+				customerId,
+				this.log,
+				CurrentValues.Instance.AutomationExplanationMailReciever,
+				CurrentValues.Instance.MailSenderEmail,
+				CurrentValues.Instance.MailSenderName
+			);
 
 			this.m_oSecondaryImplementation = new Agent(
 				customerId,
@@ -88,36 +94,44 @@
 				this.hasLoans = this.customer.Loans.Any();
 			} // if
 
-			if (this.customer != null && this.customer.Company != null) {
-				if (this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited && this.customer.Company.ExperianRefNum != "NotFound") {
-					var limited = new LoadExperianLtd(this.customer.Company.ExperianRefNum, 0);
-					limited.Execute();
+			bool hasLtd =
+				(this.customer != null) &&
+				(this.customer.Company != null) &&
+				(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) &&
+				(this.customer.Company.ExperianRefNum != "NotFound");
 
-					this.directors = new List<Name>();
+			if (hasLtd) {
+				var limited = new LoadExperianLtd(this.customer.Company.ExperianRefNum, 0);
+				limited.Execute();
 
-					foreach (ExperianLtdDL72 dataRow in limited.Result.GetChildren<ExperianLtdDL72>())
-						this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+				this.directors = new List<Name>();
 
-					foreach (ExperianLtdDLB5 dataRow in limited.Result.GetChildren<ExperianLtdDLB5>())
-						this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
-				}
-			}
+				foreach (ExperianLtdDL72 dataRow in limited.Result.GetChildren<ExperianLtdDL72>())
+					this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+
+				foreach (ExperianLtdDLB5 dataRow in limited.Result.GetChildren<ExperianLtdDLB5>())
+					this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+			} // if
 
 			this.hmrcNames = new List<string>();
 
-			this.db.ForEachRowSafe((names, hren) => {
-				string name = AutomationCalculator.Utils.AdjustCompanyName(names["BusinessName"]);
-				if (name != string.Empty)
-					this.hmrcNames.Add(name);
-				return ActionResult.Continue;
-			}, "GetHmrcBusinessNames", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", this.customerId));
+			this.db.ForEachRowSafe(
+				names => {
+					string name = AutomationCalculator.Utils.AdjustCompanyName(names["BusinessName"]);
+					if (name != string.Empty)
+						this.hmrcNames.Add(name);
+				},
+				"GetHmrcBusinessNames",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerId)
+			);
 
 			SafeReader sr = this.db.GetFirst(
 				"GetExperianMinMaxConsumerDirectorsScore",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", this.customerId),
 				new QueryParameter("Now", Now)
-				);
+			);
 
 			if (!sr.IsEmpty)
 				this.minExperianScore = sr["MinExperianScore"];
@@ -139,7 +153,7 @@
 				new QueryParameter("TakeMinScore", true),
 				oScore,
 				oDate
-				);
+			);
 
 			int nScore;
 			if (int.TryParse(oScore.SafeReturnedValue, out nScore))
@@ -151,7 +165,7 @@
 			if (this.m_oConsumerData.Cais != null) {
 				foreach (var c in this.m_oConsumerData.Cais)
 					oWorstStatuses.Add(c.WorstStatus.Trim());
-			}
+			} // if
 
 			this.consumerCaisDetailWorstStatuses.AddRange(oWorstStatuses);
 
@@ -196,13 +210,18 @@
 				bool bSuccess = MakeAndVerifyDecision();
 
 				if (bSuccess) {
-					this.log.Info("Both Auto Approval implementations have reached the same decision: {0}", this.m_oTrail.HasDecided ? "approved" : "not approved");
+					this.log.Info(
+						"Both Auto Approval implementations have reached the same decision: {0}",
+						this.m_oTrail.HasDecided ? "approved" : "not approved"
+					);
 					response.AutoApproveAmount = this.autoApprovedAmount;
 				} else {
 					this.log.Alert(
 						"Switching to manual decision: Auto Approval implementations " +
-							"have not reached the same decision for customer {0}, diff id is {1}.", this.customerId, this.m_oTrail.UniqueID.ToString("N")
-						);
+						"have not reached the same decision for customer {0}, diff id is {1}.",
+						this.customerId,
+						this.m_oTrail.UniqueID.ToString("N")
+					);
 
 					response.LoanOfferUnderwriterComment = "Mismatch - " + this.m_oTrail.UniqueID;
 
@@ -218,10 +237,23 @@
 				if (response.AutoApproveAmount != 0) {
 					if (this.m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
 						var offerDualCalculator = new OfferDualCalculator(this.db, this.log);
-							OfferResult offerResult = offerDualCalculator.CalculateOffer(this.customerId, Now, response.AutoApproveAmount, this.hasLoans, this.medalClassification);
+
+						OfferResult offerResult = offerDualCalculator.CalculateOffer(
+							this.customerId,
+							Now,
+							response.AutoApproveAmount,
+							this.hasLoans,
+							this.medalClassification
+						);
+
 						if (CurrentValues.Instance.AutoApproveIsSilent) {
 							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
-								this.log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", this.customerId);
+								this.log.Alert(
+									"Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}",
+									offerResult != null ? offerResult.Error : "",
+									this.customerId
+								);
+
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
@@ -231,11 +263,17 @@
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
-							}
+							} // if
+
 							NotifyAutoApproveSilentMode(response);
 						} else {
 							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
-								this.log.Alert("Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}", offerResult != null ? offerResult.Error : "", this.customerId);
+								this.log.Alert(
+									"Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}",
+									offerResult != null ? offerResult.Error : "",
+									this.customerId
+								);
+
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
@@ -248,11 +286,14 @@
 								response.DecisionName = "Approval";
 								response.AppValidFor = Now.AddDays(this.m_oTrail.MyInputData.MetaData.OfferLength);
 								response.Decision = DecisionActions.Approve;
-								response.LoanOfferEmailSendingBannedNew = this.m_oTrail.MyInputData.MetaData.IsEmailSendingBanned;
+								response.LoanOfferEmailSendingBannedNew =
+									this.m_oTrail.MyInputData.MetaData.IsEmailSendingBanned;
 
 								// Use offer calculated data
 								response.RepaymentPeriod = offerResult.Period;
-								response.LoanSourceID = offerResult.IsEu ? (int)LoanSourceName.EU : (int)LoanSourceName.Standard; //TODO replace with Loan source and not IsEU
+								response.LoanSourceID = offerResult.IsEu
+									? (int)LoanSourceName.EU
+									: (int)LoanSourceName.Standard; // TODO replace with Loan source and not IsEU
 								response.LoanTypeID = offerResult.LoanTypeId;
 								response.InterestRate = offerResult.InterestRate / 100;
 								response.SetupFee = offerResult.SetupFee / 100;
@@ -272,7 +313,7 @@
 			return this.loanRepository.ByCustomer(this.customerId)
 				.SelectMany(loan => loan.Schedule)
 				.Sum(sch => sch.Rollovers.Count());
-		}
+		} // CalculateRollovers
 
 		private int CalculateSeniority() {
 			if (this.customer == null)
@@ -289,7 +330,7 @@
 			DateTime oDate = (oMpOriginationDate < oIncorporationDate) ? oMpOriginationDate : oIncorporationDate;
 
 			return (int)(DateTime.UtcNow - oDate).TotalDays;
-		}
+		} // CalculateSeniority
 
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
@@ -325,9 +366,15 @@
 
 		private int CalculateTodaysApprovals() {
 			DateTime today = Now;
-			return this.cashRequestsRepository.GetAll()
-				.Count(cr => cr.CreationDate.HasValue && cr.CreationDate.Value.Year == today.Year && cr.CreationDate.Value.Month == today.Month && cr.CreationDate.Value.Day == today.Day && cr.UnderwriterComment == "Auto Approval");
-		}
+
+			return this.cashRequestsRepository.GetAll().Count(cr =>
+				cr.CreationDate.HasValue &&
+				cr.CreationDate.Value.Year == today.Year &&
+				cr.CreationDate.Value.Month == today.Month &&
+				cr.CreationDate.Value.Day == today.Day &&
+				cr.UnderwriterComment == "Auto Approval"
+			);
+		} // CalculateTodaysApprovals
 
 		private decimal CalculateTodaysLoans() {
 			DateTime today = Now;
@@ -341,15 +388,19 @@
 				todayLoansAmount = todayLoans.Sum(l => l.LoanAmount);
 
 			return todayLoansAmount;
-		}
+		} // CalculateTodaysLoans
 
 		private void CheckAge() {
 			int autoApproveCustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge;
 			int autoApproveCustomerMaxAge = CurrentValues.Instance.AutoApproveCustomerMaxAge;
 
-			if ((this.customer == null) || (this.customer.PersonalInfo == null) || (this.customer.PersonalInfo.DateOfBirth == null)) {
-				StepFailed<Age>()
-					.Init(-1, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
+			bool hasNoBirthdate = 
+				(this.customer == null) ||
+				(this.customer.PersonalInfo == null) ||
+				(this.customer.PersonalInfo.DateOfBirth == null);
+
+			if (hasNoBirthdate) {
+				StepFailed<Age>().Init(-1, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
 			} else {
 				DateTime now = Now;
 
@@ -358,15 +409,12 @@
 				if (now < this.customer.PersonalInfo.DateOfBirth.Value.AddYears(customerAge))
 					customerAge--;
 
-				if (customerAge < autoApproveCustomerMinAge || customerAge > autoApproveCustomerMaxAge) {
-					StepFailed<Age>()
-						.Init(customerAge, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
-				} else {
-					StepDone<Age>()
-						.Init(customerAge, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
-				}
+				if (customerAge < autoApproveCustomerMinAge || customerAge > autoApproveCustomerMaxAge)
+					StepFailed<Age>().Init(customerAge, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
+				else
+					StepDone<Age>().Init(customerAge, autoApproveCustomerMinAge, autoApproveCustomerMaxAge);
 			} // if
-		}
+		} // CheckAge
 
 		private void CheckAllowedRange() {
 			if (this.m_oTrail.MyInputData.Configuration.IsSilent) {
@@ -377,24 +425,31 @@
 				int autoApproveMaxAmount = this.m_oTrail.MyInputData.Configuration.MaxAmount;
 
 				if (this.autoApprovedAmount < autoApproveMinAmount || this.autoApprovedAmount > autoApproveMaxAmount) {
-					StepFailed<AmountOutOfRangle>()
-						.Init(this.autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
+					StepFailed<AmountOutOfRangle>().Init(
+						this.autoApprovedAmount,
+						autoApproveMinAmount,
+						autoApproveMaxAmount
+					);
 				} else {
-					StepDone<AmountOutOfRangle>()
-						.Init(this.autoApprovedAmount, autoApproveMinAmount, autoApproveMaxAmount);
+					StepDone<AmountOutOfRangle>().Init(
+						this.autoApprovedAmount,
+						autoApproveMinAmount,
+						autoApproveMaxAmount
+					);
 				}
-			}
-		}
+			} // if
+		} // CheckAllowedRange
 
 		private void CheckAMLResult() {
-			if (this.m_oTrail.MyInputData.MetaData.AmlResult != "Passed") {
-				StepFailed<AmlCheck>()
-					.Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
-			} else {
-				StepDone<AmlCheck>()
-					.Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
-			}
-		}
+			bool amlPassed =
+				(this.m_oTrail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
+				(this.m_oTrail.MyInputData.MetaData.AmlResult != "Passed");
+
+			if (amlPassed)
+				StepFailed<AmlCheck>().Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
+			else
+				StepDone<AmlCheck>().Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
+		} // CheckAMLResult
 
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
 			this.log.Debug("Primary: checking if auto approval should take place for customer {0}...", this.customerId);
@@ -422,7 +477,7 @@
 				CheckWorstCaisStatus(this.m_oTrail.MyInputData.MetaData.TotalLoanCount > 0
 					? CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan
 					: CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan
-					);
+				);
 				CheckRollovers();
 				CheckLateDays();
 				CheckCustomerOpenLoans();
@@ -439,94 +494,83 @@
 
 				CheckComplete();
 			} catch (Exception ex) {
-				StepFailed<ExceptionThrown>()
-					.Init(ex);
+				StepForceFailed<ExceptionThrown>().Init(ex);
 			} // try
 
-			this.log.Debug("Primary: checking if auto approval should take place for customer {0} complete.", this.customerId);
+			this.log.Debug(
+				"Primary: checking if auto approval should take place for customer {0} complete.",
+				this.customerId
+			);
 
 			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.autoApprovedAmount, this.m_oTrail);
-		}
+		} // CheckAutoApprovalConformance
 
 		private void CheckBusinessScore() {
 			int nThreshold = CurrentValues.Instance.AutoApproveBusinessScoreThreshold;
 			int nScore = this.m_oTrail.MyInputData.MetaData.CompanyScore;
 
-			if (nScore <= 0) {
-				StepDone<BusinessScore>()
-					.Init(nScore, nThreshold);
-			} else if (nScore < nThreshold) {
-				StepFailed<BusinessScore>()
-					.Init(nScore, nThreshold);
-			} else {
-				StepDone<BusinessScore>()
-					.Init(nScore, nThreshold);
-			}
-		}
+			if (nScore <= 0)
+				StepDone<BusinessScore>().Init(nScore, nThreshold);
+			else if (nScore < nThreshold)
+				StepFailed<BusinessScore>().Init(nScore, nThreshold);
+			else
+				StepDone<BusinessScore>().Init(nScore, nThreshold);
+		} // CheckBusinessScore
 
 		private void CheckComplete() {
 			int nAutoApprovedAmount = this.autoApprovedAmount;
 
-			if (nAutoApprovedAmount > 0) {
-				StepDone<Complete>()
-					.Init(nAutoApprovedAmount);
-			} else {
-				StepFailed<Complete>()
-					.Init(nAutoApprovedAmount);
-			}
-		}
+			if (nAutoApprovedAmount > 0)
+				StepDone<Complete>().Init(nAutoApprovedAmount);
+			else
+				StepFailed<Complete>().Init(nAutoApprovedAmount);
+		} // CheckComplete
 
 		private void CheckCustomerOpenLoans() {
 			int autoApproveMaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans;
 
 			if (this.m_oTrail.MyInputData.MetaData.OpenLoanCount > autoApproveMaxNumOfOutstandingLoans) {
-				StepFailed<OutstandingLoanCount>()
-					.Init(this.m_oTrail.MyInputData.MetaData.OpenLoanCount, autoApproveMaxNumOfOutstandingLoans);
+				StepFailed<OutstandingLoanCount>().Init(
+					this.m_oTrail.MyInputData.MetaData.OpenLoanCount,
+					autoApproveMaxNumOfOutstandingLoans
+				);
 			} else {
-				StepDone<OutstandingLoanCount>()
-					.Init(this.m_oTrail.MyInputData.MetaData.OpenLoanCount, autoApproveMaxNumOfOutstandingLoans);
-			}
-		}
+				StepDone<OutstandingLoanCount>().Init(
+					this.m_oTrail.MyInputData.MetaData.OpenLoanCount,
+					autoApproveMaxNumOfOutstandingLoans
+				);
+			} // if
+		} // CheckCustomerOpenLoans
 
 		private void CheckCustomerStatus() {
-			if (!this.m_oTrail.MyInputData.MetaData.CustomerStatusEnabled) {
-				StepFailed<CustomerStatus>()
-					.Init(this.m_oTrail.MyInputData.MetaData.CustomerStatusName);
-			} else {
-				StepDone<CustomerStatus>()
-					.Init(this.m_oTrail.MyInputData.MetaData.CustomerStatusName);
-			}
-		}
+			if (!this.m_oTrail.MyInputData.MetaData.CustomerStatusEnabled)
+				StepFailed<CustomerStatus>().Init(this.m_oTrail.MyInputData.MetaData.CustomerStatusName);
+			else
+				StepDone<CustomerStatus>().Init(this.m_oTrail.MyInputData.MetaData.CustomerStatusName);
+		} // CheckCustomerStatus
 
 		private void CheckDefaultAccounts() {
-			if (this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts > 0) {
-				StepFailed<DefaultAccounts>()
-					.Init(this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
-			} else {
-				StepDone<DefaultAccounts>()
-					.Init(this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
-			}
-		}
+			if (this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts > 0)
+				StepFailed<DefaultAccounts>().Init(this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
+			else
+				StepDone<DefaultAccounts>().Init(this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
+		} // CheckDefaultAccounts
 
 		private void CheckExperianScore() {
 			int nThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold;
 			int nScore = this.m_oTrail.MyInputData.MetaData.ConsumerScore;
 
-			if (nScore < nThreshold) {
-				StepFailed<ConsumerScore>()
-					.Init(nScore, nThreshold);
-			} else {
-				StepDone<ConsumerScore>()
-					.Init(nScore, nThreshold);
-			}
-		}
+			if (nScore < nThreshold)
+				StepFailed<ConsumerScore>().Init(nScore, nThreshold);
+			else
+				StepDone<ConsumerScore>().Init(nScore, nThreshold);
+		} // CheckExperianScore
 
 		private void CheckHmrcIsCompany() {
 			bool isCompany = false;
 
 			if (this.m_oTrail.MyInputData.HmrcBusinessNames.Count < 1) {
-				StepDone<HmrcIsOfBusiness>()
-					.Init();
+				StepDone<HmrcIsOfBusiness>().Init();
 				return;
 			} // if
 
@@ -538,61 +582,60 @@
 			} // for
 
 			if (!isCompany) {
-				StepFailed<HmrcIsOfBusiness>()
-					.Init(this.m_oTrail.MyInputData.HmrcBusinessNames, this.m_oTrail.MyInputData.CompanyName
-					);
+				StepFailed<HmrcIsOfBusiness>().Init(
+					this.m_oTrail.MyInputData.HmrcBusinessNames,
+					this.m_oTrail.MyInputData.CompanyName
+				);
 			} else {
-				StepDone<HmrcIsOfBusiness>()
-					.Init(this.m_oTrail.MyInputData.HmrcBusinessNames, this.m_oTrail.MyInputData.CompanyName
-					);
+				StepDone<HmrcIsOfBusiness>().Init(
+					this.m_oTrail.MyInputData.HmrcBusinessNames,
+					this.m_oTrail.MyInputData.CompanyName
+				);
 			} // if
-		}
+		} // CheckHmrcIsCompany
 
 		private void CheckTurnovers() {
 			if (this.m_oTrail.MyInputData.IsTurnoverGood()) {
-				StepDone<ThreeMonthsTurnover>()
-					.Init(this.m_oTrail.MyInputData.Turnover3M, this.m_oTrail.MyInputData.Turnover1Y, this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio);
+				StepDone<ThreeMonthsTurnover>().Init(
+					this.m_oTrail.MyInputData.Turnover3M,
+					this.m_oTrail.MyInputData.Turnover1Y,
+					this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio
+				);
 			} else {
-				StepFailed<ThreeMonthsTurnover>()
-					.Init(this.m_oTrail.MyInputData.Turnover3M, this.m_oTrail.MyInputData.Turnover1Y, this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio);
-			}
-		}
+				StepFailed<ThreeMonthsTurnover>().Init(
+					this.m_oTrail.MyInputData.Turnover3M,
+					this.m_oTrail.MyInputData.Turnover1Y,
+					this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio
+				);
+			} // if
+		} // CheckTurnovers
 
 		private void CheckInit() {
 			int nAutoApprovedAmount = this.autoApprovedAmount;
 
-			if (nAutoApprovedAmount > 0) {
-				StepDone<InitialAssignment>()
-					.Init(this.autoApprovedAmount);
-			} else {
-				StepFailed<InitialAssignment>()
-					.Init(this.autoApprovedAmount);
-			}
-		}
+			if (nAutoApprovedAmount > 0)
+				StepDone<InitialAssignment>().Init(this.autoApprovedAmount);
+			else
+				StepFailed<InitialAssignment>().Init(this.autoApprovedAmount);
+		} // CheckInit
 
 		private void CheckIsBroker() {
-			if (this.isBrokerCustomer) {
-				StepFailed<IsBrokerCustomer>()
-					.Init();
-			} else {
-				StepDone<IsBrokerCustomer>()
-					.Init();
-			}
-		}
+			if (this.isBrokerCustomer)
+				StepFailed<IsBrokerCustomer>().Init();
+			else
+				StepDone<IsBrokerCustomer>().Init();
+		} // CheckIsBroker
 
 		private void CheckIsDirector() {
 			if (!this.m_oTrail.MyInputData.MetaData.IsLimitedCompanyType) {
-				StepDone<CustomerIsDirector>()
-					.Init(this.m_oTrail.MyInputData.MetaData.IsLimitedCompanyType);
+				StepDone<CustomerIsDirector>().Init(this.m_oTrail.MyInputData.MetaData.IsLimitedCompanyType);
 				return;
-			}
+			} // if
 
 			bool isDirector = false;
 
 			if (this.m_oTrail.MyInputData.DirectorNames.Count < 1) {
-				StepFailed<CustomerIsDirector>()
-					.Init(this.m_oTrail.MyInputData.CustomerName.ToString()
-					);
+				StepFailed<CustomerIsDirector>().Init(this.m_oTrail.MyInputData.CustomerName.ToString());
 				return;
 			} // if
 
@@ -604,161 +647,152 @@
 			} // for
 
 			if (!isDirector) {
-				StepFailed<CustomerIsDirector>()
-					.Init(this.m_oTrail.MyInputData.CustomerName.ToString(), this.m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString())
-						.ToList()
-					);
+				StepFailed<CustomerIsDirector>().Init(
+					this.m_oTrail.MyInputData.CustomerName.ToString(),
+					this.m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
+				);
 			} else {
-				StepDone<CustomerIsDirector>()
-					.Init(this.m_oTrail.MyInputData.CustomerName.ToString(), this.m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString())
-						.ToList()
-					);
+				StepDone<CustomerIsDirector>().Init(
+					this.m_oTrail.MyInputData.CustomerName.ToString(),
+					this.m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
+				);
 			} // if
-		}
+		} // CheckIsDirector
 
 		private void CheckIsFraud() {
-			if (this.m_oTrail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok) {
-				StepDone<FraudSuspect>()
-					.Init(this.m_oTrail.MyInputData.MetaData.FraudStatus);
-			} else {
-				StepFailed<FraudSuspect>()
-					.Init(this.m_oTrail.MyInputData.MetaData.FraudStatus);
-			}
-		}
+			bool fraudPassed =
+				(this.m_oTrail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
+				(this.m_oTrail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok);
+
+			if (fraudPassed)
+				StepDone<FraudSuspect>().Init(this.m_oTrail.MyInputData.MetaData.FraudStatus);
+			else
+				StepFailed<FraudSuspect>().Init(this.m_oTrail.MyInputData.MetaData.FraudStatus);
+		} // CheckIsFraud
 
 		private void CheckLateDays() {
 			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 
 			if (this.m_oTrail.MyInputData.LatePayments.Count < 1) {
-				StepDone<LatePayment>()
-					.Init(0, 0, Now, 0, Now, autoApproveMaxAllowedDaysLate);
+				StepDone<LatePayment>().Init(0, 0, Now, 0, Now, autoApproveMaxAllowedDaysLate);
 				return;
 			} // if
 
 			foreach (Payment oPayment in this.m_oTrail.MyInputData.LatePayments) {
-				StepFailed<LatePayment>()
-					.Init(
-						oPayment.LoanID,
-						oPayment.ScheduleID, oPayment.ScheduleDate,
-						oPayment.TransactionID, oPayment.TransactionTime,
-						autoApproveMaxAllowedDaysLate
-					);
+				StepFailed<LatePayment>().Init(
+					oPayment.LoanID,
+					oPayment.ScheduleID, oPayment.ScheduleDate,
+					oPayment.TransactionID, oPayment.TransactionTime,
+					autoApproveMaxAllowedDaysLate
+				);
 			} // for
-		}
+		} // CheckLateDays
 
 		private void CheckMedal() {
-			if (this.medalClassification == Medal.NoClassification) {
-				StepFailed<MedalIsGood>()
-					.Init((AutomationCalculator.Common.Medal)this.medalClassification);
-			} else {
-				StepDone<MedalIsGood>()
-					.Init((AutomationCalculator.Common.Medal)this.medalClassification);
-			}
-		}
+			if (this.medalClassification == Medal.NoClassification)
+				StepFailed<MedalIsGood>().Init((AutomationCalculator.Common.Medal)this.medalClassification);
+			else
+				StepDone<MedalIsGood>().Init((AutomationCalculator.Common.Medal)this.medalClassification);
+		} // CheckMedal
 
 		private void CheckOutstandingOffers(decimal outstandingOffers) {
 			int autoApproveMaxOutstandingOffers = CurrentValues.Instance.AutoApproveMaxOutstandingOffers;
 
-			if (outstandingOffers >= autoApproveMaxOutstandingOffers) {
-				StepFailed<OutstandingOffers>()
-					.Init(outstandingOffers, autoApproveMaxOutstandingOffers);
-			} else {
-				StepDone<OutstandingOffers>()
-					.Init(outstandingOffers, autoApproveMaxOutstandingOffers);
-			}
-		}
+			if (outstandingOffers >= autoApproveMaxOutstandingOffers)
+				StepFailed<OutstandingOffers>().Init(outstandingOffers, autoApproveMaxOutstandingOffers);
+			else
+				StepDone<OutstandingOffers>().Init(outstandingOffers, autoApproveMaxOutstandingOffers);
+		} // CheckOutstandingOffers
 
 		private void CheckRepaidRatio() {
 			decimal autoApproveMinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion;
 
 			if (this.m_oTrail.MyInputData.MetaData.RepaidRatio >= autoApproveMinRepaidPortion) {
-				StepDone<OutstandingRepayRatio>()
-					.Init(this.m_oTrail.MyInputData.MetaData.RepaidRatio, autoApproveMinRepaidPortion);
+				StepDone<OutstandingRepayRatio>().Init(
+					this.m_oTrail.MyInputData.MetaData.RepaidRatio,
+					autoApproveMinRepaidPortion
+				);
 			} else {
-				StepFailed<OutstandingRepayRatio>()
-					.Init(this.m_oTrail.MyInputData.MetaData.RepaidRatio, autoApproveMinRepaidPortion);
-			}
-		}
+				StepFailed<OutstandingRepayRatio>().Init(
+					this.m_oTrail.MyInputData.MetaData.RepaidRatio,
+					autoApproveMinRepaidPortion
+				);
+			} // if
+		} // CheckRepaidRatio
 
 		private void CheckRollovers() {
-			if (this.m_oTrail.MyInputData.MetaData.NumOfRollovers > 0) {
-				StepFailed<Rollovers>()
-					.Init();
-			} else {
-				StepDone<Rollovers>()
-					.Init();
-			}
-		}
+			if (this.m_oTrail.MyInputData.MetaData.NumOfRollovers > 0)
+				StepFailed<Rollovers>().Init();
+			else
+				StepDone<Rollovers>().Init();
+		} // CheckRollovers
 
 		private void CheckSeniority() {
 			int autoApproveMinMpSeniorityDays = CurrentValues.Instance.AutoApproveMinMPSeniorityDays;
 
 			if (this.m_oTrail.MyInputData.MarketplaceSeniority < autoApproveMinMpSeniorityDays) {
-				StepFailed<MarketplaceSeniority>()
-					.Init(this.m_oTrail.MyInputData.MarketplaceSeniority, autoApproveMinMpSeniorityDays);
+				StepFailed<MarketplaceSeniority>().Init(
+					this.m_oTrail.MyInputData.MarketplaceSeniority,
+					autoApproveMinMpSeniorityDays
+				);
 			} else {
-				StepDone<MarketplaceSeniority>()
-					.Init(this.m_oTrail.MyInputData.MarketplaceSeniority, autoApproveMinMpSeniorityDays);
-			}
-		}
+				StepDone<MarketplaceSeniority>().Init(
+					this.m_oTrail.MyInputData.MarketplaceSeniority,
+					autoApproveMinMpSeniorityDays
+				);
+			} // if
+		} // CheckSeniority
 
 		private void CheckTodaysApprovals() {
 			int autoApproveMaxDailyApprovals = CurrentValues.Instance.AutoApproveMaxDailyApprovals;
 
 			if (this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval >= autoApproveMaxDailyApprovals) {
-				StepFailed<TodayApprovalCount>()
-					.Init(this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval, autoApproveMaxDailyApprovals);
+				StepFailed<TodayApprovalCount>().Init(
+					this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval,
+					autoApproveMaxDailyApprovals
+				);
 			} else {
-				StepDone<TodayApprovalCount>()
-					.Init(this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval, autoApproveMaxDailyApprovals);
-			}
-		}
+				StepDone<TodayApprovalCount>().Init(
+					this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval,
+					autoApproveMaxDailyApprovals
+				);
+			} // if
+		} // CheckTodaysApprovals
 
 		private void CheckTodaysLoans() {
 			int autoApproveMaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans;
 
-			if (this.m_oTrail.MyInputData.MetaData.TodayLoanSum >= autoApproveMaxTodayLoans) {
-				StepFailed<TodayLoans>()
-					.Init(this.m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
-			} else {
-				StepDone<TodayLoans>()
-					.Init(this.m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
-			}
-		}
+			if (this.m_oTrail.MyInputData.MetaData.TodayLoanSum >= autoApproveMaxTodayLoans)
+				StepFailed<TodayLoans>().Init(this.m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
+			else
+				StepDone<TodayLoans>().Init(this.m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
+		} // CheckTodaysLoans
 
 		private void CheckTotalLoanCount() {
-			StepDone<TotalLoanCount>()
-				.Init(this.m_oTrail.MyInputData.MetaData.TotalLoanCount);
-		}
+			StepDone<TotalLoanCount>().Init(this.m_oTrail.MyInputData.MetaData.TotalLoanCount);
+		} // CheckTotalLoanCount
 
 		private void CheckWorstCaisStatus(string allowedStatuses) {
-			List<string> oAllowedStatuses = allowedStatuses.Split(',')
-				.ToList();
+			List<string> oAllowedStatuses = allowedStatuses.Split(',').ToList();
 
 			List<string> diff = this.consumerCaisDetailWorstStatuses.Except(oAllowedStatuses)
 				.ToList();
 
-			if (diff.Count > 1) {
-				StepFailed<WorstCaisStatus>()
-					.Init(diff, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
-			} else {
-				StepDone<WorstCaisStatus>()
-					.Init(null, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
-			}
-		}
+			if (diff.Count > 1)
+				StepFailed<WorstCaisStatus>().Init(diff, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
+			else
+				StepDone<WorstCaisStatus>().Init(null, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
+		} // CheckWorstCaisStatus
 
 		private void FindLatePayments() {
 			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 
-			List<int> customerLoanIds = this.loanRepository.ByCustomer(this.customerId)
-				.Select(d => d.Id)
-				.ToList();
+			List<int> customerLoanIds = this.loanRepository.ByCustomer(this.customerId).Select(d => d.Id).ToList();
 
 			foreach (int loanId in customerLoanIds) {
 				int innerLoanId = loanId;
 
-				IQueryable<LoanScheduleTransaction> backfilledMapping = this.loanScheduleTransactionRepository
-					.GetAll()
+				IQueryable<LoanScheduleTransaction> backfilledMapping = this.loanScheduleTransactionRepository.GetAll()
 					.Where(x =>
 						x.Loan.Id == innerLoanId &&
 							x.Schedule.Date.Date < x.Transaction.PostDate.Date &&
@@ -783,7 +817,7 @@
 					} // if
 				} // for
 			} // for
-		}
+		} // FindLatePayments
 
 		private int FindNumOfDefaultAccounts() {
 			if (this.m_oConsumerData.Cais.Count == 0)
@@ -807,7 +841,7 @@
 				oMeta.RepaidPrincipal += loan.LoanAmount - loan.Principal;
 				oMeta.SetupFees += loan.SetupFee;
 			} // for
-		}
+		} // FindOutstandingLoans
 
 		private void NotifyAutoApproveSilentMode(AutoDecisionResponse data) {
 			try {
@@ -841,7 +875,7 @@
 			} catch (Exception e) {
 				this.log.Error(e, "Failed sending alert mail - silent auto approval.");
 			} // try
-		}
+		} // NotifyAutoApproveSilentMode
 
 		private void ReduceOutstandingPrincipal() {
 			this.autoApprovedAmount -= (int)this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal;
@@ -850,13 +884,17 @@
 				this.autoApprovedAmount = 0;
 
 			if (this.autoApprovedAmount > 0.00000001m) {
-				StepDone<ReduceOutstandingPrincipal>()
-					.Init(this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal, this.autoApprovedAmount);
+				StepDone<ReduceOutstandingPrincipal>().Init(
+					this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal,
+					this.autoApprovedAmount
+				);
 			} else {
-				StepFailed<ReduceOutstandingPrincipal>()
-					.Init(this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal, this.autoApprovedAmount);
-			}
-		}
+				StepFailed<ReduceOutstandingPrincipal>().Init(
+					this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal,
+					this.autoApprovedAmount
+				);
+			} // if
+		} // ReduceOutstandingPrincipal
 
 		private void SaveTrailInputData(GetAvailableFunds availFunds) {
 			this.m_oTrail.MyInputData.SetDataAsOf(Now);
@@ -892,36 +930,65 @@
 				TurnoverDropQuarterRatio = CurrentValues.Instance.AutoApproveTurnoverDropQuarterRatio,
 			});
 
+			this.db.ForEachRowSafe(
+				srName => this.m_oTrail.MyInputData.Configuration.EnabledTraces.Add(srName["Name"]),
+				"LoadEnabledTraces",
+				CommandSpecies.StoredProcedure
+			);
+
 			this.m_oTrail.MyInputData.SetArgs(
 				this.customerId,
 				this.autoApprovedAmount,
 				(AutomationCalculator.Common.Medal)this.medalClassification,
 				this.medalType,
 				this.turnoverType
-				);
+			);
 
 			this.m_oTrail.MyInputData.SetMetaData(new MetaData {
 				RowType = "MetaData",
-				FirstName = (this.customer != null) && (this.customer.PersonalInfo != null) ? this.customer.PersonalInfo.FirstName : null,
-				LastName = (this.customer != null) && (this.customer.PersonalInfo != null) ? this.customer.PersonalInfo.Surname : null,
+				FirstName = (this.customer != null) && (this.customer.PersonalInfo != null)
+					? this.customer.PersonalInfo.FirstName
+					: null,
+				LastName = (this.customer != null) && (this.customer.PersonalInfo != null)
+					? this.customer.PersonalInfo.Surname
+					: null,
 				IsBrokerCustomer = this.isBrokerCustomer,
 				NumOfTodayAutoApproval = CalculateTodaysApprovals(),
 				TodayLoanSum = CalculateTodaysLoans(),
-				FraudStatusValue = (int)((this.customer == null) ? FraudStatus.UnderInvestigation : this.customer.FraudStatus),
+				FraudStatusValue = (int)(
+					(this.customer == null) ? FraudStatus.UnderInvestigation : this.customer.FraudStatus
+				),
 				AmlResult = (this.customer == null) ? "failed because customer not found" : this.customer.AMLResult,
 				CustomerStatusName = this.customer == null ? "unknown" : this.customer.CollectionStatus.CurrentStatus.Name,
 				CustomerStatusEnabled = this.customer != null && this.customer.CollectionStatus.CurrentStatus.IsEnabled,
 				CompanyScore = this.minCompanyScore,
 				ConsumerScore = this.minExperianScore,
 				IncorporationDate = GetCustomerIncorporationDate(),
-				DateOfBirth = ((this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.DateOfBirth.HasValue) ? this.customer.PersonalInfo.DateOfBirth.Value : Now,
+				DateOfBirth = (
+					(this.customer != null) &&
+					(this.customer.PersonalInfo != null) &&
+					this.customer.PersonalInfo.DateOfBirth.HasValue
+				) ? this.customer.PersonalInfo.DateOfBirth.Value : Now,
 				NumOfDefaultAccounts = FindNumOfDefaultAccounts(),
 				NumOfRollovers = CalculateRollovers(),
-				TotalLoanCount = this.loanRepository.ByCustomer(this.customerId)
-					.Count(),
-				ExperianCompanyName = (this.customer != null) && (this.customer.Company != null) ? this.customer.Company.ExperianCompanyName : null,
-				EnteredCompanyName = (this.customer != null) && (this.customer.Company != null) ? this.customer.Company.CompanyName : null,
-				IsLimitedCompanyType = (this.customer != null) && (this.customer.PersonalInfo != null) && this.customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited
+				TotalLoanCount = this.loanRepository.ByCustomer(this.customerId).Count(),
+				ExperianCompanyName = (this.customer != null) && (this.customer.Company != null)
+					? this.customer.Company.ExperianCompanyName
+					: null,
+				EnteredCompanyName = (this.customer != null) && (this.customer.Company != null)
+					? this.customer.Company.CompanyName
+					: null,
+				IsLimitedCompanyType =
+					(this.customer != null) &&
+					(this.customer.PersonalInfo != null) &&
+					(this.customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited),
+				PreviousManualApproveCount = (this.customer != null) && (this.customer.CashRequests != null)
+					? this.customer.CashRequests.Count(cr =>
+						cr.UnderwriterDecision == CreditResultStatus.Approved &&
+						cr.UnderwriterDecisionDate.HasValue &&
+						cr.UnderwriterDecisionDate.Value < Now
+					)
+					: 0,
 			});
 
 			FindOutstandingLoans();
@@ -931,7 +998,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", this.customerId),
 				new QueryParameter("Now", Now)
-				);
+			);
 
 			this.m_oTrail.MyInputData.MetaData.EmailSendingBanned = sr["EmailSendingBanned"];
 			this.m_oTrail.MyInputData.MetaData.OfferStart = sr["OfferStart"];
@@ -951,7 +1018,7 @@
 				new QueryParameter("IsForApprove", true),
 				new QueryParameter("CustomerID", this.customerId),
 				new QueryParameter("Now", Now)
-				);
+			);
 
 			this.m_oTrail.MyInputData.SetTurnoverData(this.m_oTurnover);
 
@@ -963,9 +1030,23 @@
 		} // StepDone
 
 		private T StepFailed<T>() where T : ATrace {
+			bool isStepEnabled = this.m_oTrail.MyInputData.Configuration.IsTraceEnabled<T>();
+
+			if (!isStepEnabled) {
+				this.m_oTrail.AddNote(
+					"Step '" + typeof(T).FullName + "' has failed but is disabled hence marked as passed."
+				);
+			} // if
+
+			return isStepEnabled
+				? StepForceFailed<T>()
+				: StepDone<T>();
+		} // StepFailed
+
+		private T StepForceFailed<T>() where T : ATrace {
 			this.autoApprovedAmount = 0;
 			return this.m_oTrail.Negative<T>(false);
-		} // StepFailed
+		} // StepForceFailed
 
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly List<string> consumerCaisDetailWorstStatuses;
