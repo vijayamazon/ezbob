@@ -69,8 +69,7 @@
 				bSuccess = MakeAndVerifyDecision();
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
-				StepNoReject<ExceptionThrown>()
-					.Init(e);
+				StepNoReject<ExceptionThrown>().Init(e);
 			} // try
 
 			if (bSuccess && Trail.HasDecided) {
@@ -104,7 +103,11 @@
 
 			Trail.DecideIfNotDecided();
 
-			Log.Debug("Primary: checking if auto reject should take place for customer {0} complete, {1}", Args.CustomerID, Trail);
+			Log.Debug(
+				"Primary: checking if auto reject should take place for customer {0} complete, {1}",
+				Args.CustomerID,
+				Trail
+			);
 		} // RunPrimary
 
 		protected virtual Configuration InitCfg() {
@@ -220,7 +223,10 @@
 
 			DateTime oThen = Trail.MyInputData.CompanyMonthsNumAgo;
 
-			// Log.Debug("DL97 searcher: then is '{0}'.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+			// Log.Debug(
+			// "DL97 searcher: then is '{0}'.",
+			// oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			// );
 
 			IEnumerable<ExperianLtdDL97> oDL97List = ltd.GetChildren<ExperianLtdDL97>();
 
@@ -228,10 +234,16 @@
 				// Log.Debug(
 				// "DL97 entry: id '{0}', default balance '{1}', current balance '{4}', last updated '{2}', statuses '{3}'",
 				// dl97.ID,
-				// dl97.DefaultBalance.HasValue ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
-				// dl97.CAISLastUpdatedDate.HasValue ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+				// dl97.DefaultBalance.HasValue
+				// ? dl97.DefaultBalance.Value.ToString(CultureInfo.InvariantCulture)
+				// : "-- null --",
+				// dl97.CAISLastUpdatedDate.HasValue
+				// ? dl97.CAISLastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				// : "-- null --",
 				// dl97.AccountStatusLast12AccountStatuses,
-				// dl97.CurrentBalance.HasValue ? dl97.CurrentBalance.Value.ToString(CultureInfo.InvariantCulture) : "-- null --"
+				// dl97.CurrentBalance.HasValue
+				// ? dl97.CurrentBalance.Value.ToString(CultureInfo.InvariantCulture)
+				// : "-- null --"
 				// );
 
 				decimal nBalance = Math.Max(dl97.DefaultBalance ?? 0, dl97.CurrentBalance ?? 0);
@@ -256,14 +268,19 @@
 				DateTime cur = dl97.CAISLastUpdatedDate.Value;
 
 				for (int i = 1; i <= dl97.AccountStatusLast12AccountStatuses.Length; i++) {
-					// Log.Debug("DL97 id {0}: cur date is '{1}'.", dl97.ID, cur.ToString("d/MMM/yyy H:mm:ss", CultureInfo.InvariantCulture));
+					// Log.Debug(
+					// "DL97 id {0}: cur date is '{1}'.",
+					// dl97.ID,
+					// cur.ToString("d/MMM/yyy H:mm:ss", CultureInfo.InvariantCulture)
+					// );
 
 					if (cur < oThen) {
 						// Log.Debug("DL97 id {0}: stopped looking for defaults - 'cur' is before 'then'.", dl97.ID);
 						break;
 					} // if
 
-					char status = dl97.AccountStatusLast12AccountStatuses[dl97.AccountStatusLast12AccountStatuses.Length - i];
+					char status =
+						dl97.AccountStatusLast12AccountStatuses[dl97.AccountStatusLast12AccountStatuses.Length - i];
 
 					// Log.Debug("DL97 id {0}: status[{1}] = '{2}'.", dl97.ID, i, status);
 
@@ -320,17 +337,19 @@
 
 				return
 					(nBalance > Cfg.Values.Reject_Defaults_Amount) &&
-						(cais.MatchTo == 1) &&
-						cais.LastUpdatedDate.HasValue &&
-						!string.IsNullOrWhiteSpace(cais.AccountStatusCodes);
-			})
-				.ToList();
+					(cais.MatchTo == 1) &&
+					cais.LastUpdatedDate.HasValue &&
+					!string.IsNullOrWhiteSpace(cais.AccountStatusCodes);
+			}).ToList();
 
 			// Log.Debug("Fill personal defaults: {0} found.", Grammar.Number(lst.Count, "relevant account"));
 
 			DateTime oThen = Trail.MyInputData.MonthsNumAgo;
 
-			// Log.Debug("Fill personal defaults: interested in data after {0}.", oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+			// Log.Debug(
+			// "Fill personal defaults: interested in data after {0}.",
+			// oThen.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			// );
 
 			foreach (var cais in lst) {
 				// ReSharper disable PossibleInvalidOperationException
@@ -347,13 +366,23 @@
 
 				for (int i = 1; i <= cais.AccountStatusCodes.Length; i++) {
 					if (cur < oThen) {
-						// Log.Debug("Fill personal defaults cais {0} ain't no default: cur ({1}) is too early.", cais.Id, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+						// Log.Debug(
+						// "Fill personal defaults cais {0} ain't no default: cur ({1}) is too early.",
+						// cais.Id,
+						// cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+						// );
 						break;
 					} // if
 
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
 
-					// Log.Debug("Fill personal defaults cais {0} ain't no default: status[{1}] = '{2}' cur ({3}).", cais.Id, i, status, cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture));
+					// Log.Debug(
+					// "Fill personal defaults cais {0} ain't no default: status[{1}] = '{2}' cur ({3}).",
+					// cais.Id,
+					// i,
+					// status,
+					// cur.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					// );
 
 					if ((status == '8') || (status == '9')) {
 						// Log.Debug("Fill personal defaults cais {0} is default.", cais.Id);
@@ -387,7 +416,9 @@
 				// Log.Debug(
 				// "Fill num of lates cais id {0}: last updated = '{1}', match to = '{2}', statues = '{3}', now = {4}",
 				// cais.Id,
-				// cais.LastUpdatedDate.HasValue ? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+				// cais.LastUpdatedDate.HasValue
+				// ? cais.LastUpdatedDate.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				// : "-- null --",
 				// cais.MatchTo.HasValue ? cais.MatchTo.Value.ToString(CultureInfo.InvariantCulture) : "-- null --",
 				// cais.AccountStatusCodes,
 				// Trail.InputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
@@ -395,7 +426,12 @@
 
 				int nMonthCount = Math.Min(Trail.MyInputData.Reject_LateLastMonthsNum, cais.AccountStatusCodes.Length);
 
-				// Log.Debug("Fill num of lates cais id {0}: month count is {1}, status count is {2}.", cais.Id, nMonthCount, cais.AccountStatusCodes.Length);
+				// Log.Debug(
+				// "Fill num of lates cais id {0}: month count is {1}, status count is {2}.",
+				// cais.Id,
+				// nMonthCount,
+				// cais.AccountStatusCodes.Length
+				// );
 
 				for (int i = 1; i <= nMonthCount; i++) {
 					char status = cais.AccountStatusCodes[cais.AccountStatusCodes.Length - i];
@@ -426,14 +462,7 @@
 			return Trail.Negative<T>(true);
 		} // StepNoReject
 
-		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> {
-			'1',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-		};
+		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> { '1', '2', '3', '4', '5', '6', };
 
 		private int m_nNumOfDefaultConsumerAccounts;
 		private int m_nNumOfLateConsumerAccounts;
