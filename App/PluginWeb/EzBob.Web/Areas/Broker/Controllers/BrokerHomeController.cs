@@ -629,7 +629,7 @@
 			try {
 				this.m_oServiceClient.Instance.BrokerAddCustomerLead(LeadFirstName, LeadLastName, LeadEmail, LeadAddMode, ContactEmail);
 			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to add lead for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
+				ms_oLog.Warn(e, "Failed to add lead for contact email {0}: {1} {2}, {3} - {4}.", ContactEmail, LeadFirstName, LeadLastName, LeadEmail, LeadAddMode);
 				return new BrokerForJsonResult("Failed to add customer lead.");
 			} // try
 

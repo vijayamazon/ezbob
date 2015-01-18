@@ -113,7 +113,7 @@
 
 		private void WriteError(TeraPeakSellerInfo sellerInfo, SearchQueryDatesRange queryDates, string error)
 		{
-			WriteToLog( string.Format( "Terapeak SearchBySellerRequester [{1} {2}] user: {0}, errors: \n{3} ", sellerInfo.Id, queryDates.StartDate, queryDates.EndDate, error ), WriteLogType.Error );
+			WriteToLog( string.Format( "Terapeak SearchBySellerRequester [{1} {2}] user: {0}, errors: \n{3} ", sellerInfo.Id, queryDates.StartDate, queryDates.EndDate, error ), WriteLogType.Warning );
 		}
 
 		private bool HasDataInResult( GetSellerResearchResults data )
