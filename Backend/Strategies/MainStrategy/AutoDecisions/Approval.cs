@@ -819,13 +819,6 @@
 			} // for
 		} // FindLatePayments
 
-		private int FindNumOfDefaultAccounts() {
-			if (this.m_oConsumerData.Cais.Count == 0)
-				return 0;
-
-			return this.m_oConsumerData.Cais.Count(c => c.AccountStatus == "F");
-		} // FindNumOfDefaultAccounts
-
 		private void FindOutstandingLoans() {
 			MetaData oMeta = this.m_oTrail.MyInputData.MetaData; // just a shortcut
 
@@ -899,7 +892,7 @@
 		private void SaveTrailInputData(GetAvailableFunds availFunds) {
 			this.m_oTrail.MyInputData.SetDataAsOf(Now);
 
-			this.m_oTrail.MyInputData.SetConfiguration(new Configuration {
+			var cfg = new Configuration {
 				ExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold,
 				CustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge,
 				CustomerMaxAge = CurrentValues.Instance.AutoApproveCustomerMaxAge,
@@ -928,7 +921,11 @@
 				HmrcTurnoverDropQuarterRatio = CurrentValues.Instance.AutoApproveHmrcTurnoverDropQuarterRatio,
 				HmrcTurnoverDropHalfYearRatio = CurrentValues.Instance.AutoApproveHmrcTurnoverDropHalfYearRatio,
 				TurnoverDropQuarterRatio = CurrentValues.Instance.AutoApproveTurnoverDropQuarterRatio,
-			});
+				Reject_Defaults_Amount = CurrentValues.Instance.Reject_Defaults_Amount,
+				Reject_Defaults_MonthsNum = CurrentValues.Instance.Reject_Defaults_MonthsNum,
+			};
+			
+			this.m_oTrail.MyInputData.SetConfiguration(cfg);
 
 			this.db.ForEachRowSafe(
 				srName => this.m_oTrail.MyInputData.Configuration.EnabledTraces.Add(srName["Name"]),
@@ -969,7 +966,10 @@
 					(this.customer.PersonalInfo != null) &&
 					this.customer.PersonalInfo.DateOfBirth.HasValue
 				) ? this.customer.PersonalInfo.DateOfBirth.Value : Now,
-				NumOfDefaultAccounts = FindNumOfDefaultAccounts(),
+				NumOfDefaultAccounts = this.m_oConsumerData.FindNumOfPersonalDefaults(
+					cfg.Reject_Defaults_Amount,
+					Now.AddMonths(-1 * cfg.Reject_Defaults_MonthsNum)
+				),
 				NumOfRollovers = CalculateRollovers(),
 				TotalLoanCount = this.loanRepository.ByCustomer(this.customerId).Count(),
 				ExperianCompanyName = (this.customer != null) && (this.customer.Company != null)
