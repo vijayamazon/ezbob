@@ -3,6 +3,7 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
+	using EzBob.Web.Models;
 	using Infrastructure;
 
 	public class PacnetStatusController : Controller

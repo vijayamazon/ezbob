@@ -88,7 +88,7 @@
             var timestamp = DateTime.UtcNow.Ticks;
 
 	        var offer = new LoanOffer();
-			offer.Schedule = loan.Schedule.Select(LoanScheduleItemModel.FromLoanScheduleItem).ToArray();
+			offer.Schedule = loan.Schedule.Select(LoanScheduleExtention.FromLoanScheduleItem).ToArray();
 			offer.Apr = apr;
 			offer.SetupFee = loan.SetupFee;
 			offer.Total = total;

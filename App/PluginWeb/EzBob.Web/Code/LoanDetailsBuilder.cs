@@ -8,7 +8,7 @@ using EzBob.Web.Areas.Underwriter.Models;
 
 namespace EzBob.Web.Code
 {
-	using Ezbob.Backend.Models;
+	using EzBob.Web.Models;
 
 	public class LoansDetailsBuilder 
     {

@@ -12,6 +12,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using EzBob.Web.Models;
 	using PaymentServices.Calculators;
 	using StructureMap;
 
@@ -50,7 +51,7 @@
 		private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr)
 		{
 			var model = new AgreementModel();
-			model.Schedule = loan.Schedule.Select(LoanScheduleItemModel.FromLoanScheduleItem).ToList();
+			model.Schedule = loan.Schedule.Select(LoanScheduleExtention.FromLoanScheduleItem).ToList();
 			model.CustomerEmail = customer.Name;
 			model.FullName = customer.PersonalInfo.Fullname;
 			model.TypeOfBusinessName = customer.PersonalInfo.TypeOfBusinessName;

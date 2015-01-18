@@ -220,6 +220,7 @@
     <Compile Include="Code\ServerLog\ServerLogCachePkgModel.cs" />
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
     <Compile Include="Controllers\ServerLogController.cs" />
+    <Compile Include="Models\LoanScheduleExtention.cs" />
     <Compile Include="Models\PersonalInfoModel.cs" />
     <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
