@@ -50,23 +50,31 @@ BEGIN
 
 	DECLARE @TagID BIGINT = NULL
 
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
+	SET @Tag = ISNULL(LTRIM(RTRIM(ISNULL(@Tag, ''))), '')
 
-	SELECT
-		@TagID = TrailTagID
-	FROM
-		DecisionTrailTags
-	WHERE
-		TrailTag = @Tag
+	IF @Tag = ''
+		SET @Tag = NULL
 
 	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
-	IF @TagID IS NULL
+	IF @Tag IS NOT NULL
 	BEGIN
-		INSERT INTO DecisionTrailTags (TrailTag) VALUES (@Tag)
+		SELECT
+			@TagID = TrailTagID
+		FROM
+			DecisionTrailTags
+		WHERE
+			TrailTag = @Tag
 
-		SET @TagID = SCOPE_IDENTITY()
+		-------------------------------------------------------------------------
+
+		IF @TagID IS NULL
+		BEGIN
+			INSERT INTO DecisionTrailTags (TrailTag) VALUES (@Tag)
+
+			SET @TagID = SCOPE_IDENTITY()
+		END
 	END
 
 	------------------------------------------------------------------------------
