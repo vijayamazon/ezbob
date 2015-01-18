@@ -1,12 +1,11 @@
-﻿namespace Ezbob.Backend.ModelsWithDB.Experian 
-{
+﻿namespace Ezbob.Backend.ModelsWithDB.Experian {
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-	using Database;
-	using Logger;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using Newtonsoft.Json;
-	using Utils;
 
 	[DataContract]
 	public class ExperianConsumerData {
@@ -16,7 +15,7 @@
 			Nocs = new List<ExperianConsumerDataNoc>();
 			Residencies = new List<ExperianConsumerDataResidency>();
 			Locations = new List<ExperianConsumerDataLocation>();
-		}
+		} // constructor
 
 		[NonTraversable]
 		[DataMember]
@@ -123,37 +122,38 @@
 		public List<ExperianConsumerDataCais> Cais { get; set; }
 
 		public override string ToString() {
-			return JsonConvert.SerializeObject(this, new JsonSerializerSettings {Formatting = Formatting.Indented});
-		}
+			return JsonConvert.SerializeObject(this, new JsonSerializerSettings { Formatting = Formatting.Indented });
+		} // ToString
 
 		/// <summary>
 		/// Loads only the consumer data table without all the detailed data
 		/// </summary>
 		public static ExperianConsumerData Load(long nServiceLogID, AConnection oDB, ASafeLog m_oLog) {
 			var result = new ExperianConsumerData();
-			var data = oDB.ExecuteEnumerable(
+
+			IEnumerable<SafeReader> data = oDB.ExecuteEnumerable(
 				"LoadFullExperianConsumer",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("ServiceLogID", nServiceLogID)
-				);
+			);
 
 			foreach (SafeReader sr in data) {
 				string sType = sr["DatumType"];
 
 				switch (sType) {
-					case "ExperianConsumerData":
-						sr.Fill(result);
-						result.Id = sr["Id"];
-						break;
-				}
-			}
+				case "ExperianConsumerData":
+					sr.Fill(result);
+					result.Id = sr["Id"];
+					break;
+				} // switch
+			} // for
+
 			return result;
-		}
-	}
+		} // Load
+	} // class ExperianConsumerData
 
 	[DataContract]
-	public class ExperianConsumerDataApplicant
-	{
+	public class ExperianConsumerDataApplicant {
 		[DataMember]
 		[NonTraversable]
 		public long Id { get; set; }
@@ -177,11 +177,10 @@
 		public DateTime? DateOfBirth { get; set; }
 		[DataMember]
 		public string Gender { get; set; }
-	}
+	} // class ExperianConsumerDataApplicant
 
 	[DataContract]
-	public class ExperianConsumerDataNoc
-	{
+	public class ExperianConsumerDataNoc {
 		[DataMember]
 		[NonTraversable]
 		public long Id { get; set; }
@@ -192,11 +191,10 @@
 		public string Reference { get; set; }
 		[DataMember]
 		public string TextLine { get; set; }
-	}
+	} // class ExperianConsumerDataNoc
 
 	[DataContract]
-	public class ExperianConsumerDataLocation
-	{
+	public class ExperianConsumerDataLocation {
 		[DataMember]
 		[NonTraversable]
 		public long Id { get; set; }
@@ -239,11 +237,10 @@
 		public string TimeAtYears { get; set; }
 		[DataMember]
 		public string TimeAtMonths { get; set; }
-	}
+	} // class ExperianConsumerDataLocation
 
 	[DataContract]
-	public class ExperianConsumerDataResidency
-	{
+	public class ExperianConsumerDataResidency {
 		[DataMember]
 		[NonTraversable]
 		public long Id { get; set; }
@@ -264,20 +261,37 @@
 		public string TimeAtYears { get; set; }
 		[DataMember]
 		public string TimeAtMonths { get; set; }
-	}
+	} // class ExperianConsumerDataResidency
 
 	[DataContract]
-	public class ExperianConsumerDataCais
-	{
-		public ExperianConsumerDataCais()
-		{
-			AccountBalances = new List<ExperianConsumerDataCaisBalance>();
-			CardHistories = new List<ExperianConsumerDataCaisCardHistory>();
-		}
-
+	public class ExperianConsumerDataCaisAccounts {
 		[DataMember]
 		[NonTraversable]
 		public long Id { get; set; }
+
+		[DataMember]
+		public int? Balance { get; set; }
+
+		[DataMember]
+		public int? CurrentDefBalance { get; set; }
+
+		[DataMember]
+		public int? MatchTo { get; set; }
+
+		[DataMember]
+		public DateTime? LastUpdatedDate { get; set; }
+
+		[DataMember]
+		public string AccountStatusCodes { get; set; }
+	} // class ExperianConsumerDataCaisAccounts
+
+	[DataContract]
+	public class ExperianConsumerDataCais : ExperianConsumerDataCaisAccounts {
+		public ExperianConsumerDataCais() {
+			AccountBalances = new List<ExperianConsumerDataCaisBalance>();
+			CardHistories = new List<ExperianConsumerDataCaisCardHistory>();
+		} // constructor
+
 		[DataMember]
 		public long? ExperianConsumerDataId { get; set; }
 
@@ -286,19 +300,9 @@
 		[DataMember]
 		public DateTime? SettlementDate { get; set; } //Default Date is displayed if CAIS status 8/9 is returned
 		[DataMember]
-		public DateTime? LastUpdatedDate { get; set; }
-		[DataMember]
-		public int? MatchTo { get; set; }
-		[DataMember]
 		public int? CreditLimit { get; set; }
 		[DataMember]
-		public int? Balance { get; set; }
-		[DataMember]
-		public int? CurrentDefBalance { get; set; }
-		[DataMember]
 		public int? DelinquentBalance { get; set; }
-		[DataMember]
-		public string AccountStatusCodes { get; set; }
 		[DataMember]
 		public string Status1To2 { get; set; }
 		[DataMember]
@@ -327,27 +331,26 @@
 		[DataMember]
 		[NonTraversable]
 		public List<ExperianConsumerDataCaisCardHistory> CardHistories { get; set; }
-
-	}
+	} // class ExperianConsumerDataCais
 
 	[DataContract]
-	public class ExperianConsumerDataCaisBalance
-	{
+	public class ExperianConsumerDataCaisBalance {
 		[DataMember]
 		[NonTraversable]
 		public long Id { get; set; }
+
 		[DataMember]
 		public long? ExperianConsumerDataCaisId { get; set; }
 
 		[DataMember]
 		public int? AccountBalance { get; set; }
+
 		[DataMember]
 		public string Status { get; set; }
-	}
+	} // class ExperianConsumerDataCaisBalance
 
 	[DataContract]
-	public class ExperianConsumerDataCaisCardHistory
-	{
+	public class ExperianConsumerDataCaisCardHistory {
 		[DataMember]
 		[NonTraversable]
 		public long Id { get; set; }
@@ -366,14 +369,13 @@
 		public int? CashAdvanceAmount { get; set; }
 		[DataMember]
 		public string PaymentCode { get; set; }
-	}
+	} // class ExperianConsumerDataCaisCardHistory
 
 	[DataContract]
-	public class ExperianConsumerMortgagesData
-	{
+	public class ExperianConsumerMortgagesData {
 		[DataMember]
 		public int NumMortgages { get; set; }
 		[DataMember]
 		public int MortgageBalance { get; set; }
-	}
-}
+	} // class ExperianConsumerMortgagesData
+} // namespace

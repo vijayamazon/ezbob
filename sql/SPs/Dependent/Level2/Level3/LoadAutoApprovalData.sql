@@ -280,19 +280,6 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	DECLARE @NumOfDefaultAccounts INT = ISNULL((
-		SELECT
-			COUNT(*)
-		FROM
-			ExperianConsumerDataCais c
-		WHERE
-			c.ExperianConsumerDataId = @ExperianConsumerDataID
-			AND
-			c.AccountStatus = 'F'
-	), 0)
-
-	------------------------------------------------------------------------------
-
 	DECLARE @ConsumerScore INT = ISNULL((
 		SELECT
 			MIN(x.ExperianConsumerScore)
@@ -462,7 +449,7 @@ BEGIN
 		IncorporationDate          = @IncorporationDate,
 		DateOfBirth                = c.DateOfBirth,
 
-		NumOfDefaultAccounts       = @NumOfDefaultAccounts,
+		NumOfDefaultAccounts       = CONVERT(INT, 0), -- done in the code using below LoadExperianConsumerDataCais
 		NumOfRollovers             = @NumOfRollovers,
 
 		TotalLoanCount             = @TotalLoanCount,
@@ -536,6 +523,12 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	EXECUTE LoadHmrcBusinessNames @CustomerID, @Now, 0
+
+	------------------------------------------------------------------------------
+
+	DECLARE @ExperianConsumerId BIGINT = dbo.udfLoadExperianConsumerIdForCustomerAndDate(@CustomerId, @Now)
+
+	EXECUTE LoadExperianConsumerDataCais @ExperianConsumerId
 
 	------------------------------------------------------------------------------
 END

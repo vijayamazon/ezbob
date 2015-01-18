@@ -81,6 +81,7 @@
     <Compile Include="Experian\Attributes\SummaryLineAttribute.cs" />
     <Compile Include="Experian\ExperianConsumerData.cs" />
     <Compile Include="Experian\DisplayMetaData.cs" />
+    <Compile Include="Experian\ExperianConsumerDataExt.cs" />
     <Compile Include="Experian\ExperianLtdErrors.cs" />
     <Compile Include="Experian\ExperianLtdCaisMonthly.cs" />
     <Compile Include="Experian\ExperianLtd.cs" />

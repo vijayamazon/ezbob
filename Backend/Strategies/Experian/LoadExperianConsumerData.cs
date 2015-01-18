@@ -35,7 +35,7 @@
 					"LoadFullExperianConsumer",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("ServiceLogId", this.m_nServiceLogID)
-					);
+				);
 				break;
 
 			case WorkMode.CacheCustomer:
@@ -43,7 +43,7 @@
 					"LoadExperianConsumerForCustomer",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", this.m_nCustomerId)
-					);
+				);
 				break;
 
 			case WorkMode.CacheDirector:
@@ -51,7 +51,7 @@
 					"LoadExperianConsumerForDirector",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("DirectorId", this.m_nDirectorId)
-					);
+				);
 				break;
 
 			default:
@@ -125,15 +125,15 @@
 				caisCards.Count,
 				Result.Cais.Count,
 				Result.ServiceLogId
-				);
+			);
 
 			if (!Result.Cais.Any())
 				return;
 
-			foreach (var c in Result.Cais)
+			foreach (ExperianConsumerDataCais c in Result.Cais)
 				Log.Debug("caisid {0}", c.Id);
 
-			foreach (var b in caisBalance) {
+			foreach (ExperianConsumerDataCaisBalance b in caisBalance) {
 				if (b.ExperianConsumerDataCaisId.HasValue) {
 					var cais = Result.Cais.FirstOrDefault(x => x.Id == b.ExperianConsumerDataCaisId.Value);
 
@@ -142,12 +142,13 @@
 					if (cais != null) {
 						Log.Debug("cais id {0} cais balance {1}", cais.Id, b.Id);
 						cais.AccountBalances.Add(b);
-					}
-				}
-			}
+					} // if
+				} // if
+			} // for
 
 			foreach (var c in caisCards) {
 				var cais = Result.Cais.FirstOrDefault(x => x.Id == c.ExperianConsumerDataCaisId);
+
 				if (cais != null)
 					cais.CardHistories.Add(c);
 			} // for each

@@ -5,6 +5,7 @@
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using AutomationCalculator.Turnover;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -36,6 +37,7 @@
 			Log = oLog ?? new SafeLog();
 			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal, medalType, turnoverType);
 			this.m_oCheck = new Checker(this);
+			this.caisAccounts = new List<ExperianConsumerDataCaisAccounts>();
 		} // constructor
 
 		public virtual Agent Init() {
@@ -124,6 +126,8 @@
 		///     specific customer data instead of the current one.
 		/// </summary>
 		protected virtual void GatherData() {
+			this.caisAccounts.Clear();
+
 			Cfg.Load();
 
 			DB.ForEachRowSafe(
@@ -132,6 +136,12 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", Args.CustomerID),
 				new QueryParameter("Now", Now)
+			);
+
+			MetaData.NumOfDefaultAccounts = ExperianConsumerDataExt.FindNumOfPersonalDefaults(
+				this.caisAccounts, 
+				Cfg.Reject_Defaults_Amount,
+				Now.AddMonths(-1 * Cfg.Reject_Defaults_MonthsNum)
 			);
 
 			OriginationTime.FromExperian(MetaData.IncorporationDate);
@@ -167,12 +177,13 @@
 			Turnover,
 			DirectorName,
 			HmrcBusinessName,
+			ExperianConsumerDataCais,
 		} // enum RowType
 
 		private void ProcessRow(SafeReader sr) {
 			RowType nRowType;
 
-			string sRowType = sr["RowType"];
+			string sRowType = sr.ContainsField("DatumType", "RowType") ? sr["DatumType"] : sr["RowType"];
 
 			if (!Enum.TryParse(sRowType, out nRowType)) {
 				Log.Alert("Unsupported row type encountered: '{0}'.", sRowType);
@@ -210,11 +221,16 @@
 				HmrcBusinessNames.Add(AutomationCalculator.Utils.AdjustCompanyName(sr["Name"]));
 				break;
 
+			case RowType.ExperianConsumerDataCais:
+				this.caisAccounts.Add(sr.Fill<ExperianConsumerDataCaisAccounts>());
+				break;
+
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
 		} // ProcessRow
 
 		private readonly Checker m_oCheck;
+		private readonly List<ExperianConsumerDataCaisAccounts> caisAccounts;
 	} // class Agent
 } // namespace

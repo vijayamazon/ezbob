@@ -4,6 +4,7 @@
 	using System.Reflection;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Newtonsoft.Json;
 
 	/// <summary>
 	///     Contains auto approval configuration parameters (max and min amount to approve, silent mode, etc.).
@@ -35,6 +36,8 @@
 		public virtual int HmrcTurnoverAge { get; set; }
 		public virtual decimal HmrcTurnoverDropQuarterRatio { get; set; }
 		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
+		public virtual int Reject_Defaults_Amount { get; set; }
+		public virtual int Reject_Defaults_MonthsNum { get; set; }
 
 		public virtual string AllowedCaisStatusesWithLoan {
 			get { return string.Join(", ", this.m_oAllowedCaisStatusesWithLoan); } // get

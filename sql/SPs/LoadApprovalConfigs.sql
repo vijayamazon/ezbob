@@ -29,7 +29,7 @@ BEGIN
 	FROM
 		ConfigurationVariables
 	WHERE
-		Name = 'MinLoan'
+		Name IN ('MinLoan', 'Reject_Defaults_Amount', 'Reject_Defaults_MonthsNum')
 	UNION
 	SELECT
 		RowType = 'TraceEnabled',
