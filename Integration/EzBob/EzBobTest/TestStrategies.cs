@@ -269,7 +269,7 @@
 
 		[Test]
 		public void testFraud() {
-			var s = new FraudChecker(21340, FraudMode.FullCheck);
+			var s = new FraudChecker(21394, FraudMode.FullCheck);
 			s.Execute();
 		}
 

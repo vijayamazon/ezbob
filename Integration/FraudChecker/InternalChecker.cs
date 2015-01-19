@@ -13,6 +13,7 @@
 	using StructureMap;
 	using System.Text.RegularExpressions;
 	using NHibernate.Criterion;
+	using NHibernate.Transform;
 
 	public class InternalChecker
 	{
@@ -293,33 +294,7 @@
 
 			//TODO Sage Check (not using sage mp name (always the same))
 		}
-
-		private void InternalYodleeMpCheck(IEnumerable<MP_CustomerMarketPlace> customerYodlees, Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers)
-		{
-			var yodlees = customers
-				.SelectMany(c => c.CustomerMarketPlaces).Where(x => x.Marketplace.Name == "Yodlee")
-				.SelectMany(y => y.YodleeOrders)
-				.SelectMany(o => o.OrderItems)
-				.Select(i => new { Name = i.accountName, Number = i.accountNumber, CustomerId = i.Order.CustomerMarketPlace.Customer.Id })
-				.Distinct()
-				.ToList();
-
-			var customerYodleesItems =
-				customerYodlees.SelectMany(y => y.YodleeOrders)
-							   .SelectMany(o => o.OrderItems)
-							   .Select(i => new { Name = i.accountName, Number = i.accountNumber })
-							   .Distinct()
-							   .ToList();
-
-			fraudDetections.AddRange(
-				from m in yodlees
-				from cm in customerYodleesItems
-				where m.Name == cm.Name && m.Number == cm.Number
-				select
-					Helper.CreateDetection("Customer Bank Account Name And Number", customer, _session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
-									null, string.Format("{0}: {1}", m.Name, m.Number)));
-		}
-
+		
 		private void InternalAddressCheck(Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers)
 		{
 			//Address (any of home, business, directors, previous addresses)
@@ -374,6 +349,43 @@
 				fraudDetections.Add(Helper.CreateDetection("Customer.DateOfBirth < 21", customer, null, "", null,
 													FormattingUtils.FormatDateTimeToString(
 														customer.PersonalInfo.DateOfBirth)));
+			}
+		}
+
+		private void InternalYodleeMpCheck(IEnumerable<MP_CustomerMarketPlace> customerYodlees, Customer customer, List<FraudDetection> fraudDetections, IEnumerable<Customer> customers) {
+			var yodlees = customers
+				.SelectMany(c => c.CustomerMarketPlaces).Where(x => x.Marketplace.Name == "Yodlee")
+				.SelectMany(y => y.YodleeOrders)
+				.SelectMany(o => o.OrderItems)
+				.Select(i => new { Name = i.accountName, Number = i.accountNumber, CustomerId = i.Order.CustomerMarketPlace.Customer.Id })
+				.Distinct()
+				.ToList();
+
+			var customerYodleesItems =
+				customerYodlees.SelectMany(y => y.YodleeOrders)
+							   .SelectMany(o => o.OrderItems)
+							   .Select(i => new { Name = i.accountName, Number = i.accountNumber })
+							   .Distinct()
+							   .ToList();
+
+			fraudDetections.AddRange(
+				from m in yodlees
+				from cm in customerYodleesItems
+				where m.Name == cm.Name && m.Number == cm.Number
+				select
+					Helper.CreateDetection("Customer Bank Account Name And Number", customer, _session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
+									null, string.Format("{0}: {1}", m.Name, m.Number)));
+
+			if (customer.CustomerMarketPlaces.Any(x => x.DisplayName == "ParsedBank")) {
+				var parsedBankMatchedCustomers = _session.CreateSQLQuery("EXEC FraudGetDetectionsParsedBank :CustomerID")
+					.SetParameter("CustomerID", customer.Id)
+					.SetResultTransformer(new AliasToBeanResultTransformer(typeof(ParsedBank)))
+					.List<ParsedBank>().ToList();
+				foreach (var match in parsedBankMatchedCustomers) {
+					var matchCustomer = _session.Get<Customer>(match.CustomerId);
+					fraudDetections.Add(Helper.CreateDetection("Customer ParsedBank", customer, matchCustomer, "Customer ParsedBank transactions ",
+									null, string.Format("same transactions {0}", match.MatchedTransactions)));
+				}
 			}
 		}
 
