@@ -1,5 +1,5 @@
-IF OBJECT_ID('GetCustomerTurnoverForAutoDecision]') IS NULL
-	EXECUTE('CREATE PROCEDURE GetCustomerTurnoverForAutoDecision] AS SELECT 1')
+IF OBJECT_ID('GetCustomerTurnoverForAutoDecision') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCustomerTurnoverForAutoDecision AS SELECT 1')
 GO
 
 SET ANSI_NULLS ON
@@ -7,7 +7,6 @@ GO
 
 SET QUOTED_IDENTIFIER ON
 GO
-
 
 ALTER PROCEDURE [dbo].[GetCustomerTurnoverForAutoDecision]
 @IsForApprove BIT,
