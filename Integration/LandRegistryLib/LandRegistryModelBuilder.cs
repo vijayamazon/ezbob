@@ -81,144 +81,164 @@
 		public LandRegistryResModel BuildResModel(ResponseOCWithSummaryV2_1Type response, string titleNumber = "titleNumber") {
 			var model = new LandRegistryResModel();
 			if (response.GatewayResponse.Acknowledgement != null) {
-				var ack = response.GatewayResponse.Acknowledgement.AcknowledgementDetails;
-				model.Acknowledgement = new LandRegistryAcknowledgementModel {
-					PollDate = ack.ExpectedResponseDateTime != null ? ack.ExpectedResponseDateTime.Value : new DateTime(1900, 01, 01),
-					Description = ack.MessageDescription != null ? ack.MessageDescription.Value : null,
-					UniqueId = ack.UniqueID != null ? ack.UniqueID.Value : null
-				};
+				model.Acknowledgement = GetAcknowledgement(response.GatewayResponse.Acknowledgement.AcknowledgementDetails);
 				model.TitleNumber = titleNumber;
 			} else if (response.GatewayResponse.Rejection != null) {
-				var rej = response.GatewayResponse.Rejection.RejectionResponse;
-				model.Rejection = new LandRegistryRejectionModel {
-					Reason = rej.Reason != null ? rej.Reason.Value : "Some error occurred",
-					OtherDescription = rej.OtherDescription != null ? rej.OtherDescription.Value : null
-				};
+				model.Rejection = GetRejection(response.GatewayResponse.Rejection.RejectionResponse);
 				model.TitleNumber = titleNumber;
 			} else {
 				var data = response.GatewayResponse.Results.OCSummaryData;
-				model.TitleNumber = data.Title.TitleNumber.Value;
 				model.Indicators = new List<string>();
 				try {
-					if (data.Title.CommonholdIndicator != null && data.Title.CommonholdIndicator.Value == false) {
-						model.Indicators.Add(LandRegistryIndicatorText.CommonholdIndicator);
-					}
-
-					if (data.PricePaidEntry != null && data.PricePaidEntry.EntryDetails != null) {
-						model.PricePaidInfills = GetInfills(data.PricePaidEntry.EntryDetails.Infills);
-					}
-
-					model.PropertyAddresses = GetAddresses(data.PropertyAddress);
-
-					model.Proprietorship = new LandRegistryProprietorshipModel {
-						CurrentProprietorshipDate = data.Proprietorship.CurrentProprietorshipDate != null ? DateTime.SpecifyKind(data.Proprietorship.CurrentProprietorshipDate.Value, DateTimeKind.Utc) : (DateTime?)null,
-						ProprietorshipParties = new List<ProprietorshipPartyModel>()
-					};
-
-					if (data.Proprietorship.Items != null) {
-						for (int i = 0; i < data.Proprietorship.Items.Length; ++i) {
-							var proprietorship = data.Proprietorship.Items[i];
-							ItemsChoiceType type = data.Proprietorship.ItemsElementName[i];
-							var lrProprietorship = new ProprietorshipPartyModel();
-							if (type == ItemsChoiceType.CautionerParty) {
-								lrProprietorship.ProprietorshipType = "Cautioner Party";
-							} else if (type == ItemsChoiceType.RegisteredProprietorParty) {
-								lrProprietorship.ProprietorshipType = "Registered Proprietorship Party";
-							}
-							if (proprietorship.Item.GetType() == typeof(Q1PrivateIndividualType)) {
-								lrProprietorship.ProprietorshipPartyType = "Private Individual";
-								lrProprietorship.PrivateIndividualForename =
-									((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName.Value : string.Empty;
-								lrProprietorship.PrivateIndividualSurname =
-									((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName.Value : string.Empty;
-							} else if (proprietorship.Item.GetType() == typeof(Q1OrganizationType)) {
-								lrProprietorship.ProprietorshipPartyType = "Organization";
-								lrProprietorship.CompanyRegistrationNumber =
-									((Q1OrganizationType)proprietorship.Item).CompanyRegistrationNumber != null
-										? ((Q1OrganizationType)proprietorship.Item).CompanyRegistrationNumber.Value : string.Empty;
-								lrProprietorship.CompanyName = ((Q1OrganizationType)proprietorship.Item).Name != null ? ((Q1OrganizationType)proprietorship.Item).Name.Value : string.Empty;
-							}
-							lrProprietorship.ProprietorshipAddresses = GetAddresses(proprietorship.Address);
-
-							model.Proprietorship.ProprietorshipParties.Add(lrProprietorship);
-						}
-					}
-
-					model.Restrictions = new List<LandRegistryRestrictionModel>();
-
-					if (data.RestrictionDetails != null) {
-						foreach (var restriction in data.RestrictionDetails) {
-							var lrRestriction = new LandRegistryRestrictionModel();
-							switch (restriction.ItemElementName) {
-							case ItemChoiceType.ChargeRestriction:
-								lrRestriction.Type = "Charge Restriction";
-								break;
-							case ItemChoiceType.ChargeRelatedRestriction:
-								lrRestriction.Type = "Charge Related Restriction";
-								break;
-
-							case ItemChoiceType.NonChargeRestriction:
-								lrRestriction.Type = "Non Charge Restriction";
-								break;
-							}
-
-							lrRestriction.TypeCode = (RestrictionTypeCode)(int)restriction.Item.RestrictionTypeCode.Value;
-							lrRestriction.EntryText = restriction.Item.EntryDetails.EntryText != null ? restriction.Item.EntryDetails.EntryText.Value : string.Empty;
-							lrRestriction.EntryNumber = restriction.Item.EntryDetails.EntryNumber != null ? restriction.Item.EntryDetails.EntryNumber.Value : string.Empty;
-							if (restriction.Item.EntryDetails.Item.GetType() == typeof(ScheduleCodeType)) {
-								var code = (RestictionScheduleCode)(int)((ScheduleCodeType)restriction.Item.EntryDetails.Item);
-								lrRestriction.ScheduleCode = code.DescriptionAttr();
-							} else if (restriction.Item.EntryDetails.Item.GetType() == typeof(SubRegisterCodeType)) {
-								var code = (RestrictionSubRegisterCode)(int)((SubRegisterCodeType)restriction.Item.EntryDetails.Item);
-								lrRestriction.SubRegisterCode = code.DescriptionAttr();
-							}
-
-							lrRestriction.Infills = GetInfills(restriction.Item.EntryDetails.Infills);
-
-							model.Restrictions.Add(lrRestriction);
-						}
-					}
-
-					model.Indicators.AddRange(GetIndicators(data.RegisterEntryIndicators));
-
-					model.Charges = new List<LandRegistryChargeModel>();
-					if (data.Charge != null && data.Charge.Length > 0) {
-						foreach (var charge in data.Charge) {
-							var lrCharge = new LandRegistryChargeModel();
-							lrCharge.ChargeDate = charge.ChargeDate != null ? DateTime.SpecifyKind(charge.ChargeDate.Value, DateTimeKind.Utc) : new DateTime(1900, 1, 1);
-							lrCharge.Description = charge.RegisteredCharge.EntryDetails.EntryText != null ? charge.RegisteredCharge.EntryDetails.EntryText.Value : string.Empty;
-							var lrProprietorship = new LandRegistryProprietorshipModel {
-								ProprietorshipParties = new List<ProprietorshipPartyModel>()
-							};
-
-							foreach (var proprietorship in charge.ChargeProprietor.ChargeeParty) {
-								var lrProprietor = new ProprietorshipPartyModel();
-								if (proprietorship.Item.GetType() == typeof(Q1PrivateIndividualType)) {
-									lrProprietor.ProprietorshipPartyType = "Private Individual";
-									lrProprietor.PrivateIndividualForename =
-										((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName.Value : string.Empty;
-									lrProprietor.PrivateIndividualSurname =
-										((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName.Value : string.Empty;
-								} else if (proprietorship.Item.GetType() == typeof(Q1OrganizationType)) {
-									lrProprietor.ProprietorshipPartyType = "Organization";
-									lrProprietor.CompanyName = ((Q1OrganizationType)proprietorship.Item).Name != null ? ((Q1OrganizationType)proprietorship.Item).Name.Value : string.Empty;
-								}
-								lrProprietor.ProprietorshipAddresses = GetAddresses(proprietorship.Address);
-								lrProprietorship.ProprietorshipParties.Add(lrProprietor);
-							}
-							lrCharge.Proprietorship = lrProprietorship;
-							model.Charges.Add(lrCharge);
-						}
-					}
+					FillSummaryData(model, data);
 				} catch (Exception ex) {
-					ms_oLog.Error("Error parsing lr data", ex);
+					ms_oLog.ErrorFormat("Error parsing lr data for title {0} {1}\n{2}", titleNumber, model.TitleNumber, ex);
 					model.Indicators.Add("Error parsing the data (tell dev)");
 				}
 			}
 			return model;
 		}
 
-		private List<LandRegistryAddressModel> GetAddresses(IEnumerable<Q1AddressType> propertyAddress) {
+		private void FillSummaryData(LandRegistryResModel model, Q1OCSummaryDataType data) {
+			model.TitleNumber = data.Title.TitleNumber.Value;
+
+			if (data.Title.CommonholdIndicator != null && data.Title.CommonholdIndicator.Value == false) {
+				model.Indicators.Add(LandRegistryIndicatorText.CommonholdIndicator);
+			}
+
+			if (data.PricePaidEntry != null && data.PricePaidEntry.EntryDetails != null) {
+				model.PricePaidInfills = GetInfills(data.PricePaidEntry.EntryDetails.Infills);
+			}
+
+			model.PropertyAddresses = GetAddresses(data.PropertyAddress);
+
+			model.Proprietorship = new LandRegistryProprietorshipModel {
+				CurrentProprietorshipDate = data.Proprietorship.CurrentProprietorshipDate != null ? DateTime.SpecifyKind(data.Proprietorship.CurrentProprietorshipDate.Value, DateTimeKind.Utc) : (DateTime?)null,
+				ProprietorshipParties = new List<ProprietorshipPartyModel>()
+			};
+
+			if (data.Proprietorship.Items != null) {
+				for (int i = 0; i < data.Proprietorship.Items.Length; ++i) {
+					model.Proprietorship.ProprietorshipParties.Add(GetProprietorship(data.Proprietorship.Items[i], data.Proprietorship.ItemsElementName[i]));
+				}
+			}
+
+			model.Restrictions = new List<LandRegistryRestrictionModel>();
+
+			if (data.RestrictionDetails != null) {
+				foreach (var restriction in data.RestrictionDetails) {
+					model.Restrictions.Add(GetRestriction(restriction));
+				}
+			}
+
+			model.Indicators.AddRange(GetIndicators(data.RegisterEntryIndicators));
+
+			model.Charges = new List<LandRegistryChargeModel>();
+			if (data.Charge != null && data.Charge.Length > 0) {
+				foreach (var charge in data.Charge) {
+					model.Charges.Add(GetCharge(charge));
+				}
+			}
+		}
+
+		private LandRegistryRejectionModel GetRejection(LRResServiceNS.Q1RejectionResponseType rej) {
+			return new LandRegistryRejectionModel {
+				Reason = rej.Reason != null ? rej.Reason.Value : "Some error occurred",
+				OtherDescription = rej.OtherDescription != null ? rej.OtherDescription.Value : null
+			};
+		}
+
+		private LandRegistryAcknowledgementModel GetAcknowledgement(LRResServiceNS.Q1AcknowledgementDetailsType ack) {
+			 return new LandRegistryAcknowledgementModel {
+					PollDate = ack.ExpectedResponseDateTime != null ? ack.ExpectedResponseDateTime.Value : new DateTime(1900, 01, 01),
+					Description = ack.MessageDescription != null ? ack.MessageDescription.Value : null,
+					UniqueId = ack.UniqueID != null ? ack.UniqueID.Value : null
+				};
+		}
+
+		private LandRegistryChargeModel GetCharge(Q1ChargeDetailsType charge) {
+			var lrCharge = new LandRegistryChargeModel {
+				ChargeDate = charge.ChargeDate != null ? DateTime.SpecifyKind(charge.ChargeDate.Value, DateTimeKind.Utc) : new DateTime(1900, 1, 1),
+				Description = charge.RegisteredCharge.EntryDetails.EntryText != null ? charge.RegisteredCharge.EntryDetails.EntryText.Value : string.Empty
+			};
+			var lrProprietorship = new LandRegistryProprietorshipModel {
+				ProprietorshipParties = new List<ProprietorshipPartyModel>()
+			};
+
+			foreach (var proprietorship in charge.ChargeProprietor.ChargeeParty) {
+				var lrProprietor = new ProprietorshipPartyModel();
+				if (proprietorship.Item.GetType() == typeof(Q1PrivateIndividualType)) {
+					lrProprietor.ProprietorshipPartyType = "Private Individual";
+					lrProprietor.PrivateIndividualForename =
+						((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName.Value : string.Empty;
+					lrProprietor.PrivateIndividualSurname =
+						((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName.Value : string.Empty;
+				} else if (proprietorship.Item.GetType() == typeof(Q1OrganizationType)) {
+					lrProprietor.ProprietorshipPartyType = "Organization";
+					lrProprietor.CompanyName = ((Q1OrganizationType)proprietorship.Item).Name != null ? ((Q1OrganizationType)proprietorship.Item).Name.Value : string.Empty;
+				}
+				lrProprietor.ProprietorshipAddresses = GetAddresses(proprietorship.Address);
+				lrProprietorship.ProprietorshipParties.Add(lrProprietor);
+			}
+			lrCharge.Proprietorship = lrProprietorship;
+			return lrCharge;
+		}
+
+		private LandRegistryRestrictionModel GetRestriction(Q1RestrictionEntryType restriction) {
+			var lrRestriction = new LandRegistryRestrictionModel();
+			switch (restriction.ItemElementName) {
+			case ItemChoiceType.ChargeRestriction:
+				lrRestriction.Type = "Charge Restriction";
+				break;
+			case ItemChoiceType.ChargeRelatedRestriction:
+				lrRestriction.Type = "Charge Related Restriction";
+				break;
+
+			case ItemChoiceType.NonChargeRestriction:
+				lrRestriction.Type = "Non Charge Restriction";
+				break;
+			}
+
+			lrRestriction.TypeCode = (RestrictionTypeCode)(int)restriction.Item.RestrictionTypeCode.Value;
+			lrRestriction.EntryText = restriction.Item.EntryDetails.EntryText != null ? restriction.Item.EntryDetails.EntryText.Value : string.Empty;
+			lrRestriction.EntryNumber = restriction.Item.EntryDetails.EntryNumber != null ? restriction.Item.EntryDetails.EntryNumber.Value : string.Empty;
+			if (restriction.Item.EntryDetails.Item.GetType() == typeof(ScheduleCodeType)) {
+				var code = (RestictionScheduleCode)(int)((ScheduleCodeType)restriction.Item.EntryDetails.Item);
+				lrRestriction.ScheduleCode = code.DescriptionAttr();
+			} else if (restriction.Item.EntryDetails.Item.GetType() == typeof(SubRegisterCodeType)) {
+				var code = (RestrictionSubRegisterCode)(int)((SubRegisterCodeType)restriction.Item.EntryDetails.Item);
+				lrRestriction.SubRegisterCode = code.DescriptionAttr();
+			}
+
+			lrRestriction.Infills = GetInfills(restriction.Item.EntryDetails.Infills);
+			return lrRestriction;
+		}
+
+		private ProprietorshipPartyModel GetProprietorship(Q1PartyType proprietorship, ItemsChoiceType type) {
+			var lrProprietorship = new ProprietorshipPartyModel();
+			if (type == ItemsChoiceType.CautionerParty) {
+				lrProprietorship.ProprietorshipType = "Cautioner Party";
+			} else if (type == ItemsChoiceType.RegisteredProprietorParty) {
+				lrProprietorship.ProprietorshipType = "Registered Proprietorship Party";
+			}
+			if (proprietorship.Item.GetType() == typeof(Q1PrivateIndividualType)) {
+				lrProprietorship.ProprietorshipPartyType = "Private Individual";
+				lrProprietorship.PrivateIndividualForename =
+					((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.ForenamesName.Value : string.Empty;
+				lrProprietorship.PrivateIndividualSurname =
+					((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName != null ? ((Q1PrivateIndividualType)proprietorship.Item).Name.SurnameName.Value : string.Empty;
+			} else if (proprietorship.Item.GetType() == typeof(Q1OrganizationType)) {
+				lrProprietorship.ProprietorshipPartyType = "Organization";
+				lrProprietorship.CompanyRegistrationNumber =
+					((Q1OrganizationType)proprietorship.Item).CompanyRegistrationNumber != null
+						? ((Q1OrganizationType)proprietorship.Item).CompanyRegistrationNumber.Value : string.Empty;
+				lrProprietorship.CompanyName = ((Q1OrganizationType)proprietorship.Item).Name != null ? ((Q1OrganizationType)proprietorship.Item).Name.Value : string.Empty;
+			}
+			lrProprietorship.ProprietorshipAddresses = GetAddresses(proprietorship.Address);
+			return lrProprietorship;
+		}
+
+		private List<LandRegistryAddressModel> GetAddresses(Q1AddressType[] propertyAddress) {
 			var addresses = new List<LandRegistryAddressModel>();
 			if (propertyAddress == null) {
 				return addresses;
