@@ -65,6 +65,8 @@
 
 				DateTime calculationTime = DateTime.UtcNow;
 
+                // The first scenario (1) for checking medal type and getting medal value
+                // namespace Ezbob.Backend.Strategies.MainStrategy 
 				MedalResult result1 = new MedalCalculator1(
 					this.customerId,
 					calculationTime,
@@ -78,6 +80,8 @@
 					this.earliestYodleeLastUpdateDate
 					).CalculateMedal();
 
+                //  Alternative scenario (2) for checking medal type and getting medal value
+                //  namespace AutomationCalculator.MedalCalculation
 				var verification = new MedalChooser(DB, Log);
 				MedalOutputModel result2 = verification.GetMedal(this.customerId, calculationTime);
 

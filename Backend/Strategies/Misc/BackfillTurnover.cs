@@ -14,6 +14,7 @@
 	using Sage;
 	using YodleeLib.connector;
 
+
 	public class BackfillTurnover : AStrategy {
 		public override string Name {
 			get {
@@ -22,7 +23,7 @@
 		} // Name
 
 		public BackfillTurnover() {
-			types = new SortedDictionary<Guid, ServiceInfo>();
+			this.types = new SortedDictionary<Guid, ServiceInfo>();
 
 			Add(new AmazonServiceInfo(), "Amazon");
 
@@ -40,28 +41,37 @@
 		} // constructor
 
 		public override void Execute() {
-			Prerequisite();
+
+            Prerequisite();
 
 			List<SourceData> lst = DB.Fill<SourceData>(LoadSourceQuery, CommandSpecies.Text);
 
 			var pc = new ProgressCounter("{0} of " + lst.Count + " history items processed.", Log, 100);
 
 			foreach (SourceData sd in lst) {
-				if (!types.ContainsKey(sd.InternalId)) {
+                if (!this.types.ContainsKey(sd.InternalId))
+                {
 					Log.Alert("Unexpected marketplace type internal id: {0}", sd.InternalId);
 					pc++;
 					continue;
 				} // if
 
-				ServiceInfo si = types[sd.InternalId];
+                ServiceInfo si = this.types[sd.InternalId];
+                Log.Info("Start to update for {0} with history id {1}...", si.Info.DisplayName, sd.Id);
 
-				Log.Info("Updating totals for {0} with history id {1}...", si.Info.DisplayName, sd.Id);
-
-				DB.ExecuteNonQuery(si.SpName, CommandSpecies.StoredProcedure, new QueryParameter("HistoryID", sd.Id));
-
-				Log.Info("Updating totals for {0} with history id {1} complete.", si.Info.DisplayName, sd.Id);
-
-				pc++;
+			    try {
+			        DB.ExecuteNonQuery(si.SpName, CommandSpecies.StoredProcedure, new QueryParameter("HistoryID", sd.Id));
+			        Log.Info("End to update for {0} with history id {1} completed.", si.Info.DisplayName, sd.Id);
+			        pc++;
+			    } 
+                catch (Ezbob.Database.DbException dbex) 
+                {
+                    Log.Info("Update for {0} with history id {1} failed. DBException: {2}", si.Info.DisplayName, sd.Id, dbex.Message);
+			    }
+                catch (Exception ex)
+                {
+                   Log.Info("Update for {0} with history id {1} failed. Error: {2}", si.Info.DisplayName, sd.Id, ex.Message );
+                }
 			} // for each
 
 			pc.Log();
@@ -84,7 +94,7 @@
 		} // class SourceData
 
 		private void Add(IMarketplaceServiceInfo info, string spName) {
-			types[info.InternalId] = new ServiceInfo(info, spName);
+			this.types[info.InternalId] = new ServiceInfo(info, spName);
 		} // Add
 
 		private void Prerequisite() {

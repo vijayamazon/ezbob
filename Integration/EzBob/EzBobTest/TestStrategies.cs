@@ -346,7 +346,7 @@
 		[Test]
 		public void TestMedalCalculation() {
 			var customers = new[] {
-				6982, 6840
+				234,103,270
 			};
 			foreach (var customer in customers)
 				new CalculateMedal(customer).Execute();
@@ -430,5 +430,8 @@
 		// TestGetBankModel
 
 		// TestCalculateModelsAndAffordability
+
+
+
 	}
 }
