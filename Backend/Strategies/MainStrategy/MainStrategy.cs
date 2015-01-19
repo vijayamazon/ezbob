@@ -5,7 +5,6 @@
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Experian;
-	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using Ezbob.Backend.Strategies.MedalCalculations;
@@ -287,7 +286,7 @@
 						null,
 						address.PostCode
 					);
-				}
+				} // if
 
 				if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success && model.Enquery.Titles != null &&
 					model.Enquery.Titles.Count == 1) {
@@ -309,8 +308,8 @@
 						if (isOwnerAccordingToLandRegistry) {
 							dbAdress.IsOwnerAccordingToLandRegistry = true;
 							customerAddressRepository.SaveOrUpdate(dbAdress);
-						}
-					}
+						} // if
+					} // if
 				} else {
 					int num = 0;
 					if (model != null && model.Enquery != null && model.Enquery.Titles != null)
@@ -319,9 +318,9 @@
 						"No land registry retrieved for customer id: {5}, house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
 						address.HouseName, address.HouseNumber,
 						address.FlatOrApartmentNumber, address.PostCode, num, customerId);
-				}
-			}
-		}
+				} // if
+			} // for each
+		} // GetLandRegistryData
 
 		private void GetLandRegistryDataIfNotRejected() {
 			if (!this.autoDecisionResponse.DecidedToReject && this.isHomeOwner) {
@@ -450,8 +449,12 @@
 		} // ProcessRejections
 
 		private int RoundOfferedAmount(decimal amount) {
-			return (int)Math.Truncate(amount / CurrentValues.Instance.GetCashSliderStep) *
-				CurrentValues.Instance.GetCashSliderStep;
+			decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
+
+			if (roundTo < 0.0000001m)
+				roundTo = 1;
+
+			return (int)(Math.Truncate(amount / roundTo) * roundTo);
 		} // RoundOfferedAmount
 		
 		private void UpdateCustomerAndCashRequest() {

@@ -28,7 +28,7 @@
 			int numOfEbayAmazonPayPalMps,
 			DateTime? earliestHmrcLastUpdateDate,
 			DateTime? earliestYodleeLastUpdateDate
-			) {
+		) {
 			this.useInternalLoad = false;
 			this.customerId = customerId;
 
@@ -49,7 +49,7 @@
 						"GetCustomerDataForMedalCalculation",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerId", this.customerId)
-						);
+					);
 
 					if (!sr.IsEmpty) {
 						this.typeOfBusiness = sr["TypeOfBusiness"];
@@ -65,8 +65,8 @@
 
 				DateTime calculationTime = DateTime.UtcNow;
 
-                // The first scenario (1) for checking medal type and getting medal value
-                // namespace Ezbob.Backend.Strategies.MainStrategy 
+				// The first scenario (1) for checking medal type and getting medal value
+				// namespace Ezbob.Backend.Strategies.MainStrategy 
 				MedalResult result1 = new MedalCalculator1(
 					this.customerId,
 					calculationTime,
@@ -78,10 +78,10 @@
 					this.numOfEbayAmazonPayPalMps,
 					this.earliestHmrcLastUpdateDate,
 					this.earliestYodleeLastUpdateDate
-					).CalculateMedal();
+				).CalculateMedal();
 
-                //  Alternative scenario (2) for checking medal type and getting medal value
-                //  namespace AutomationCalculator.MedalCalculation
+				// Alternative scenario (2) for checking medal type and getting medal value
+				// namespace AutomationCalculator.MedalCalculation
 				var verification = new MedalChooser(DB, Log);
 				MedalOutputModel result2 = verification.GetMedal(this.customerId, calculationTime);
 
