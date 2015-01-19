@@ -77,7 +77,11 @@ SELECT T.CustomerId,
                    WHEN T.LoanNumber = 1 THEN R.Amount
                    END AS CustomerRequestedAmount,
                    C.ReferenceSource,
-                   S.RSource AS SourceRefGroup,
+                   CASE
+                   WHEN C.BrokerID IS NOT NULL THEN 'Broker'
+                   WHEN (S.RSource = 'Money_co_uk' OR S.RSource = 'moneycouk') THEN 'Money.co.uk'
+                   ELSE S.RSource
+                   END AS SourceRefGroup,
                    S.RMedium,
                    C.IsOffline,
                    CASE
@@ -105,8 +109,11 @@ SELECT T.CustomerId,
                                                 WHEN T.LoanDate BETWEEN '2015-10-01' AND '2016-01-01' THEN 'Q4-2015'
                                                
                                                 ELSE 'No Q'
-                                END AS Quarter
- 
+                   END AS Quarter,
+                   CASE
+                   WHEN C.AlibabaId IS NULL THEN 'NotAlibaba'
+                   ELSE 'Alibaba'
+                   END AS AlibabaOrNot
                   
 INTO #temp2       
 FROM #temp1 T
@@ -152,7 +159,8 @@ SELECT T.CustomerId,
                    WHEN T.LoanNumber = 1 THEN 'New'
                    WHEN (T.LoanNumber = 2 AND (datediff(day,T3.FirstLoanDate,T.LoanDate) < 2)) THEN 'New'
                    ELSE 'Old'
-                   END AS NewOldLoan
+                   END AS NewOldLoan,
+                   T.AlibabaOrNot
                   
 FROM #temp2 T
 JOIN #temp3 T3 ON T3.CustomerId = T.CustomerId
