@@ -47,7 +47,6 @@
 			this.customerAnalytics = ObjectFactory.GetInstance<CustomerAnalyticsRepository>();
 
 			this.customerId = customerId;
-			this.autoApprovedAmount = offeredCreditLine;
 			this.medalClassification = medalClassification;
 			this.medalType = medalType;
 			this.turnoverType = turnoverType;
@@ -62,7 +61,9 @@
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
-			);
+			) {
+				Amount = offeredCreditLine,
+			};
 
 			this.m_oSecondaryImplementation = new Agent(
 				customerId,
@@ -186,14 +187,14 @@
 			bool bSuccess = this.m_oTrail.EqualsTo(this.m_oSecondaryImplementation.Trail);
 
 			if (bSuccess && this.m_oTrail.HasDecided) {
-				if (this.autoApprovedAmount == this.m_oSecondaryImplementation.Result.ApprovedAmount) {
-					this.m_oTrail.Affirmative<SameAmount>(false).Init(this.autoApprovedAmount);
+				if (this.m_oTrail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
+					this.m_oTrail.Affirmative<SameAmount>(false).Init(this.m_oTrail.RoundedAmount);
 					this.m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false)
-						.Init(this.m_oSecondaryImplementation.Result.ApprovedAmount);
+						.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
 				} else {
-					this.m_oTrail.Negative<SameAmount>(false).Init(this.autoApprovedAmount);
+					this.m_oTrail.Negative<SameAmount>(false).Init(this.m_oTrail.RoundedAmount);
 					this.m_oSecondaryImplementation.Trail.Negative<SameAmount>(false)
-						.Init(this.m_oSecondaryImplementation.Result.ApprovedAmount);
+						.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
 					bSuccess = false;
 				} // if
 			} // if
@@ -214,7 +215,7 @@
 						"Both Auto Approval implementations have reached the same decision: {0}",
 						this.m_oTrail.HasDecided ? "approved" : "not approved"
 					);
-					response.AutoApproveAmount = this.autoApprovedAmount;
+					response.AutoApproveAmount = this.m_oTrail.RoundedAmount;
 				} else {
 					this.log.Alert(
 						"Switching to manual decision: Auto Approval implementations " +
@@ -419,20 +420,20 @@
 		private void CheckAllowedRange() {
 			if (this.m_oTrail.MyInputData.Configuration.IsSilent) {
 				StepDone<AmountOutOfRangle>()
-					.Init(this.autoApprovedAmount, this.m_oTrail.MyInputData.Configuration.IsSilent);
+					.Init(this.m_oTrail.RoundedAmount, this.m_oTrail.MyInputData.Configuration.IsSilent);
 			} else {
 				int autoApproveMinAmount = this.m_oTrail.MyInputData.Configuration.MinLoan;
 				int autoApproveMaxAmount = this.m_oTrail.MyInputData.Configuration.MaxAmount;
 
-				if (this.autoApprovedAmount < autoApproveMinAmount || this.autoApprovedAmount > autoApproveMaxAmount) {
+				if (this.m_oTrail.RoundedAmount < autoApproveMinAmount || this.m_oTrail.RoundedAmount > autoApproveMaxAmount) {
 					StepFailed<AmountOutOfRangle>().Init(
-						this.autoApprovedAmount,
+						this.m_oTrail.RoundedAmount,
 						autoApproveMinAmount,
 						autoApproveMaxAmount
 					);
 				} else {
 					StepDone<AmountOutOfRangle>().Init(
-						this.autoApprovedAmount,
+						this.m_oTrail.RoundedAmount,
 						autoApproveMinAmount,
 						autoApproveMaxAmount
 					);
@@ -443,12 +444,12 @@
 		private void CheckAMLResult() {
 			bool amlPassed =
 				(this.m_oTrail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
-				(this.m_oTrail.MyInputData.MetaData.AmlResult != "Passed");
+				(this.m_oTrail.MyInputData.MetaData.AmlResult == "Passed");
 
 			if (amlPassed)
-				StepFailed<AmlCheck>().Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
-			else
 				StepDone<AmlCheck>().Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
+			else
+				StepFailed<AmlCheck>().Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
 		} // CheckAMLResult
 
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
@@ -486,10 +487,25 @@
 
 				CheckAllowedRange();
 
-				decimal minLoanAmount = CurrentValues.Instance.GetCashSliderStep;
+				decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
 
-				this.autoApprovedAmount = (int)(
-					Math.Round(this.autoApprovedAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
+				if (roundTo < 0.00000001m)
+					roundTo = 1m;
+
+				this.log.Debug(
+					"Primary before rounding: amount = {0}, minLoanAmount = {1}",
+					this.m_oTrail.SafeAmount,
+					roundTo
+				);
+
+				this.m_oTrail.Amount = roundTo * Math.Round(
+					this.m_oTrail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
+				);
+
+				this.log.Debug(
+					"Primary after rounding: amount = {0}, minLoanAmount = {1}",
+					this.m_oTrail.SafeAmount,
+					roundTo
 				);
 
 				CheckComplete();
@@ -502,7 +518,7 @@
 				this.customerId
 			);
 
-			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.autoApprovedAmount, this.m_oTrail);
+			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.m_oTrail.RoundedAmount, this.m_oTrail);
 		} // CheckAutoApprovalConformance
 
 		private void CheckBusinessScore() {
@@ -518,7 +534,7 @@
 		} // CheckBusinessScore
 
 		private void CheckComplete() {
-			int nAutoApprovedAmount = this.autoApprovedAmount;
+			int nAutoApprovedAmount = this.m_oTrail.RoundedAmount;
 
 			if (nAutoApprovedAmount > 0)
 				StepDone<Complete>().Init(nAutoApprovedAmount);
@@ -611,12 +627,12 @@
 		} // CheckTurnovers
 
 		private void CheckInit() {
-			int nAutoApprovedAmount = this.autoApprovedAmount;
+			int nAutoApprovedAmount = this.m_oTrail.RoundedAmount;
 
 			if (nAutoApprovedAmount > 0)
-				StepDone<InitialAssignment>().Init(this.autoApprovedAmount);
+				StepDone<InitialAssignment>().Init(this.m_oTrail.RoundedAmount);
 			else
-				StepFailed<InitialAssignment>().Init(this.autoApprovedAmount);
+				StepFailed<InitialAssignment>().Init(this.m_oTrail.RoundedAmount);
 		} // CheckInit
 
 		private void CheckIsBroker() {
@@ -871,20 +887,20 @@
 		} // NotifyAutoApproveSilentMode
 
 		private void ReduceOutstandingPrincipal() {
-			this.autoApprovedAmount -= (int)this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal;
+			this.m_oTrail.Amount = this.m_oTrail.SafeAmount - this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal;
 
-			if (this.autoApprovedAmount < 0)
-				this.autoApprovedAmount = 0;
+			if (this.m_oTrail.RoundedAmount < 0)
+				this.m_oTrail.Amount = 0;
 
-			if (this.autoApprovedAmount > 0.00000001m) {
+			if (this.m_oTrail.SafeAmount > 0.00000001m) {
 				StepDone<ReduceOutstandingPrincipal>().Init(
 					this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal,
-					this.autoApprovedAmount
+					this.m_oTrail.SafeAmount
 				);
 			} else {
 				StepFailed<ReduceOutstandingPrincipal>().Init(
 					this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal,
-					this.autoApprovedAmount
+					this.m_oTrail.SafeAmount
 				);
 			} // if
 		} // ReduceOutstandingPrincipal
@@ -935,7 +951,7 @@
 
 			this.m_oTrail.MyInputData.SetArgs(
 				this.customerId,
-				this.autoApprovedAmount,
+				this.m_oTrail.SafeAmount,
 				(AutomationCalculator.Common.Medal)this.medalClassification,
 				this.medalType,
 				this.turnoverType
@@ -1044,7 +1060,7 @@
 		} // StepFailed
 
 		private T StepForceFailed<T>() where T : ATrace {
-			this.autoApprovedAmount = 0;
+			this.m_oTrail.Amount = 0;
 			return this.m_oTrail.Negative<T>(false);
 		} // StepForceFailed
 
@@ -1064,7 +1080,6 @@
 		private readonly AutomationCalculator.Common.MedalType medalType;
 		private readonly CustomerAnalyticsRepository customerAnalytics;
 
-		private int autoApprovedAmount;
 		private List<Name> directors;
 		private bool hasLoans;
 		private List<String> hmrcNames;

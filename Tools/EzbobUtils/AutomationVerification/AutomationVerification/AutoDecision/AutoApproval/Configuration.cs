@@ -38,6 +38,7 @@
 		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
 		public virtual decimal Reject_Defaults_Amount { get; set; }
 		public virtual int Reject_Defaults_MonthsNum { get; set; }
+		public virtual decimal GetCashSliderStep { get; set; }
 
 		public virtual string AllowedCaisStatusesWithLoan {
 			get { return string.Join(", ", this.m_oAllowedCaisStatusesWithLoan); } // get

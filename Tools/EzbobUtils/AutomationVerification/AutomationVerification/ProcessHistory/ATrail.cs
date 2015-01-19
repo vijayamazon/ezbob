@@ -50,6 +50,10 @@
 
 		public decimal? Amount { get; set; }
 
+		public decimal SafeAmount { get { return Amount ?? 0; } }
+
+		public int RoundedAmount { get { return (int)SafeAmount; } }
+
 		public virtual DecisionStatus DecisionStatus {
 			get { return m_nDecisionStatus; }
 			protected set { m_nDecisionStatus = value; }

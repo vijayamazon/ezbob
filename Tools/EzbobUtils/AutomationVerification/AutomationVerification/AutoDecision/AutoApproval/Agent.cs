@@ -8,17 +8,14 @@
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils.Lingvo;
 
 	/// <summary>
 	///     Executes auto approval logic. Based on customer data and system calculated amount
 	///     decides whether this amount should be approved.
 	/// </summary>
 	public class Agent {
-		public virtual decimal ApprovedAmount { get; set; }
-
 		public virtual DateTime Now { get; protected set; }
-
-		public virtual Result Result { get; private set; }
 
 		public virtual ApprovalTrail Trail { get; private set; }
 
@@ -31,8 +28,6 @@
 			AConnection oDB,
 			ASafeLog oLog
 		) {
-			Result = null;
-
 			DB = oDB;
 			Log = oLog ?? new SafeLog();
 			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal, medalType, turnoverType);
@@ -42,8 +37,6 @@
 
 		public virtual Agent Init() {
 			Now = DateTime.UtcNow;
-
-			ApprovedAmount = Args.SystemCalculatedAmount;
 
 			MetaData = new MetaData();
 			Payments = new List<Payment>();
@@ -58,7 +51,7 @@
 
 			OriginationTime = new OriginationTime(Log);
 
-			Trail = new ApprovalTrail(Args.CustomerID, Log);
+			Trail = new ApprovalTrail(Args.CustomerID, Log) { Amount = Args.SystemCalculatedAmount, };
 			Cfg = InitCfg();
 
 			DirectorNames = new List<Name>();
@@ -78,21 +71,43 @@
 				this.m_oCheck.StepForceFailed<ExceptionThrown>().Init(e);
 			} // try
 
-			if (Trail.HasDecided) {
-				decimal minLoanAmount = Trail.MyInputData.Configuration.MinLoan;
+			string logMsg = string.Empty;
 
-				Trail.Amount = (int)(
-					Math.Round(ApprovedAmount / minLoanAmount, 0, MidpointRounding.AwayFromZero) * minLoanAmount
+			if (Trail.HasDecided) {
+				decimal roundTo = Trail.MyInputData.Configuration.GetCashSliderStep;
+
+				if (roundTo < 0.00000001m)
+					roundTo = 1m;
+
+				Log.Debug(
+					"Secondary before rounding: amount = {0}, minLoanAmount = {1}",
+					Trail.SafeAmount,
+					roundTo
 				);
 
-				Result = new Result((int)Trail.Amount, (int)MetaData.OfferLength, MetaData.IsEmailSendingBanned);
+				Trail.Amount = roundTo * Math.Round(
+					Trail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
+				);
+
+				Log.Debug(
+					"Secondary after rounding: amount = {0}, minLoanAmount = {1}",
+					Trail.SafeAmount,
+					roundTo
+				);
+
+				logMsg = string.Format(
+					"Approved amount {0} for {1}, email banned: {2}",
+					Trail.RoundedAmount,
+					Grammar.Number((int)MetaData.OfferLength, "day"),
+					MetaData.IsEmailSendingBanned ? "yes" : "no"
+				);
 			} // if
 
 			Log.Debug(
 				"Secondary: checking if auto approval should take place for customer {0} complete; {1}\n{2}",
 				Args.CustomerID,
 				Trail,
-				Result == null ? string.Empty : "Approved " + Result + "."
+				logMsg
 			);
 		} // MakeDecision
 

@@ -73,7 +73,6 @@
     <Compile Include="Common\OriginationTime.cs" />
     <Compile Include="AutoDecision\AutoApproval\Payment.cs" />
     <Compile Include="AutoDecision\AutoApproval\AutoApprovalTurnover.cs" />
-    <Compile Include="AutoDecision\AutoApproval\Result.cs" />
     <Compile Include="AutoDecision\AutoReApproval\Agent.cs" />
     <Compile Include="AutoDecision\AutoReApproval\AutoReApprovalModels.cs" />
     <Compile Include="AutoDecision\AutoRejection\Agent.cs" />

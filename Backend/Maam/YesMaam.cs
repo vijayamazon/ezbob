@@ -245,7 +245,7 @@
 
 				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, Tag);
 
-				ymr.AutoApprove.Amount = agent.Result == null ? 0 : agent.Result.ApprovedAmount;
+				ymr.AutoApprove.Amount = agent.Trail.RoundedAmount;
 			} catch (Exception e) {
 				ymr.AutoApprove.Data = "Exception";
 

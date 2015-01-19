@@ -60,8 +60,8 @@
 		} // Trail
 
 		private decimal ApprovedAmount {
-			get { return this.m_oAgent.ApprovedAmount; }
-			set { this.m_oAgent.ApprovedAmount = value; }
+			get { return this.m_oAgent.Trail.SafeAmount; }
+			set { this.m_oAgent.Trail.Amount = value; }
 		} // ApprovedAmount
 
 		private DateTime Now {
