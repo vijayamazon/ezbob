@@ -15,7 +15,7 @@
 			AConnection oDB,
 			int nTopCount,
 			int nLastCheckedCustomerID
-			) {
+		) {
 			string sTop = (nTopCount > 0) ? "TOP " + nTopCount : string.Empty;
 
 			string sCondition = (nLastCheckedCustomerID > 0)

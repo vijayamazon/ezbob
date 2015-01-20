@@ -3036,6 +3036,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/MaamMedalAndPricingResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/MaamMedalAndPricingResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
         
@@ -4182,6 +4188,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code) {
             return base.Channel.ValidateMobileCodeAsync(phone, code);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID) {
+            return base.Channel.MaamMedalAndPricing(nCustomerCount, nLastCheckedCashRequestID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID) {
+            return base.Channel.MaamMedalAndPricingAsync(nCustomerCount, nLastCheckedCashRequestID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {

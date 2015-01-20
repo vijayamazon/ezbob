@@ -692,6 +692,9 @@
 		BoolActionResult ValidateMobileCode(string phone, string code);
 
 		[OperationContract]
+		ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
+
+		[OperationContract]
 		ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
 
 		[OperationContract]

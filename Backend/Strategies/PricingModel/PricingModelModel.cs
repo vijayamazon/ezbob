@@ -83,16 +83,20 @@
 
 		public PricingModelModel Clone() {
 			List<PricingSourceModel> pricingSourceModels = new List<PricingSourceModel>();
-			foreach (var pricingSourceModel in PricingSourceModels) {
-				pricingSourceModels.Add(new PricingSourceModel {
-					AIR = pricingSourceModel.AIR,
-					APR = pricingSourceModel.APR,
-					InterestRate = pricingSourceModel.InterestRate,
-					IsPreferable = pricingSourceModel.IsPreferable,
-					SetupFee = pricingSourceModel.SetupFee,
-					Source = pricingSourceModel.Source
-				});
-			}
+
+			if (PricingSourceModels != null) {
+				foreach (var pricingSourceModel in PricingSourceModels) {
+					pricingSourceModels.Add(new PricingSourceModel {
+						AIR = pricingSourceModel.AIR,
+						APR = pricingSourceModel.APR,
+						InterestRate = pricingSourceModel.InterestRate,
+						IsPreferable = pricingSourceModel.IsPreferable,
+						SetupFee = pricingSourceModel.SetupFee,
+						Source = pricingSourceModel.Source,
+					});
+				} // for
+			} // if
+
 			return new PricingModelModel {
 				PricingSourceModels = pricingSourceModels,
 				LoanAmount = LoanAmount,

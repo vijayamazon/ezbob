@@ -1322,6 +1322,14 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		}
 
 		[Activation]
+		private void MaamMedalAndPricing() {
+			var i = new VerificationInput("MaamMedalAndPricing", cmdLineArgs, log);
+
+			if (i.IsGood)
+				serviceClient.MaamMedalAndPricing(i.CustomerCount, i.LastCheckedCustomerID);
+		} // MaamMedalAndPricing
+
+		[Activation]
 		private void WriteToLog() {
 			if (cmdLineArgs.Length < 3) {
 				log.Msg("Usage: WriteToLog <severity> <arg1> <arg2> ... <argN>");

@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 
 	public abstract class AVerificationBase : AStrategy {
-
 		public override string Name {
 			get { return "Verify " + DecisionName; }
 		} // Name
@@ -39,6 +38,7 @@
 			m_nTopCount = nTopCount;
 			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
 		} // constructor
+
 		protected abstract bool MakeAndVerifyDecision(AutoApproveInputRow oRow);
 
 		private string VerifyOne(AutoApproveInputRow oRow) {

@@ -163,6 +163,12 @@
   <wsdl:message name="IEzService_ValidateMobileCode_OutputMessage">
     <wsdl:part name="parameters" element="tns:ValidateMobileCodeResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MaamMedalAndPricing_InputMessage">
+    <wsdl:part name="parameters" element="tns:MaamMedalAndPricing" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MaamMedalAndPricing_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MaamMedalAndPricingResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_VerifyApproval_InputMessage">
     <wsdl:part name="parameters" element="tns:VerifyApproval" />
   </wsdl:message>
@@ -1298,6 +1304,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCode" message="tns:IEzService_ValidateMobileCode_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ValidateMobileCodeResponse" message="tns:IEzService_ValidateMobileCode_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="MaamMedalAndPricing">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MaamMedalAndPricing" message="tns:IEzService_MaamMedalAndPricing_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MaamMedalAndPricingResponse" message="tns:IEzService_MaamMedalAndPricing_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="VerifyApproval">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyApproval" message="tns:IEzService_VerifyApproval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyApprovalResponse" message="tns:IEzService_VerifyApproval_OutputMessage" />
@@ -2138,6 +2148,15 @@
     </wsdl:operation>
     <wsdl:operation name="ValidateMobileCode">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ValidateMobileCode" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MaamMedalAndPricing">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MaamMedalAndPricing" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

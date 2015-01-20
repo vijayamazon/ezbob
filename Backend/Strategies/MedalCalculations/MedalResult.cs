@@ -3,6 +3,7 @@
 	using System.Globalization;
 	using System.Text;
 	using AutomationCalculator.Common;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus;
@@ -112,21 +113,41 @@
 			CustomerId = customerID;
 		}
 
+		public static int RoundOfferedAmount(decimal amount) {
+			decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
+
+			if (roundTo < 0.0000001m)
+				roundTo = 1;
+
+			return (int)(Math.Truncate(amount / roundTo) * roundTo);
+		} // RoundOfferedAmount
+
+		public int RoundOfferedAmount() {
+			return RoundOfferedAmount(OfferedLoanAmount);
+		} // RoundOfferedAmount
+
+		public bool IsLike(MedalOutputModel other) {
+			return other == null || IsIdentical(other);
+		} // IsLike
+
 		public bool IsIdentical(MedalOutputModel other) {
-			//if NoMedal no need to compare any other field
+			if (other == null)
+				return false;
+
+			// if NoMedal no need to compare any other field
 			if (MedalType == MedalType.NoMedal && other.MedalType == AutomationCalculator.Common.MedalType.NoMedal)
 				return true;
 
-			if (MedalType.ToString() != other.MedalType.ToString() ||
+			bool notIdentical =
+				MedalType.ToString() != other.MedalType.ToString() ||
 				Math.Abs(ValueAdded - other.ValueAdded) > 0.001M ||
 				Math.Abs(TotalScore - other.Score * 100) > 0.001M ||
 				Math.Abs(TotalScoreNormalized - other.NormalizedScore) > 0.001M ||
 				MedalClassification.ToString() != other.Medal.ToString() ||
-				Math.Abs(OfferedLoanAmount - other.OfferedLoanAmount) > 100) //TODO understand the difference in yodlee calculation and change the allowed diff to 0.01M
-				return false;
+				Math.Abs(OfferedLoanAmount - other.OfferedLoanAmount) > 100; // TODO understand the difference in yodlee calculation and change the allowed diff to 0.01M
 
-			return true;
-		}
+			return !notIdentical;
+		} // IsIdentical
 
 		public void SaveToDb(AConnection db) {
 			db.ExecuteNonQuery("StoreMedal", CommandSpecies.StoredProcedure,

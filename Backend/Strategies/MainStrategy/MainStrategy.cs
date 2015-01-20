@@ -133,9 +133,9 @@
 
 		private void AdjustOfferredCreditLine() {
 			if (this.autoDecisionResponse.IsAutoReApproval || this.autoDecisionResponse.IsAutoApproval)
-				this.offeredCreditLine = RoundOfferedAmount(this.autoDecisionResponse.AutoApproveAmount);
+				this.offeredCreditLine = MedalResult.RoundOfferedAmount(this.autoDecisionResponse.AutoApproveAmount);
 			else if (this.autoDecisionResponse.IsAutoBankBasedApproval)
-				this.offeredCreditLine = RoundOfferedAmount(this.autoDecisionResponse.BankBasedAutoApproveAmount);
+				this.offeredCreditLine = MedalResult.RoundOfferedAmount(this.autoDecisionResponse.BankBasedAutoApproveAmount);
 			else if (this.autoDecisionResponse.DecidedToReject)
 				this.offeredCreditLine = 0;
 		} // AdjustOfferredCreditLine
@@ -159,7 +159,7 @@
 			this.medalType = instance.Result.MedalType;
 			this.turnoverType = instance.Result.TurnoverType;
 
-			this.modelLoanOffer = RoundOfferedAmount(instance.Result.OfferedLoanAmount);
+			this.modelLoanOffer = instance.Result.RoundOfferedAmount();
 		} // CalculateNewMedal
 
 		private ScoreMedalOffer CalculateScoreAndMedal() {
@@ -471,15 +471,6 @@
 			new AutoDecisions.Reject.Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
 		} // ProcessRejections
 
-		private int RoundOfferedAmount(decimal amount) {
-			decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
-
-			if (roundTo < 0.0000001m)
-				roundTo = 1;
-
-			return (int)(Math.Truncate(amount / roundTo) * roundTo);
-		} // RoundOfferedAmount
-		
 		private void UpdateCustomerAndCashRequest() {
 			var now = DateTime.UtcNow;
 
