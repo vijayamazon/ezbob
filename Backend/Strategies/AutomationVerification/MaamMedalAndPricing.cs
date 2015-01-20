@@ -41,6 +41,8 @@
 				var instance = new CalculateMedal(d.CustomerID, d.DecisionTime, true);
 				instance.Execute();
 
+				Log.Debug("{0}", instance.Result);
+
 				int amount = instance.Result.RoundOfferedAmount();
 				d.Auto.Amount = amount;
 
@@ -230,7 +232,7 @@ FROM
 WHERE
 	r.IdUnderwriter IS NOT NULL
 	AND
-	r.UnderwriterDecision IN ('Approved', 'Rejected')
+	r.UnderwriterDecision IN ('Approved', 'Rejected', 'ApprovedPending')
 	AND
 	r.IdUnderwriter IS NOT NULL
 	AND

@@ -41,6 +41,7 @@
 		public decimal OnlineAnnualTurnover { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
 		public int NumOfHmrcMps { get; set; }
+		public int NumOfBanks { get; set; }
 		public int ZooplaValue { get; set; }
 		public DateTime? EarliestHmrcLastUpdateDate { get; set; }
 		public DateTime? EarliestYodleeLastUpdateDate { get; set; }
@@ -239,11 +240,29 @@
 
 		public override string ToString() {
 			var sb = new StringBuilder();
-			sb.AppendFormat("Calculation Num 1 .........Medal Type {2} Medal: {0} NormalizedScore: {1}% Score: {3}\n", MedalClassification,
-				StringBuilderExtention.ToPercent(TotalScoreNormalized), MedalType, TotalScore);
-			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8} \n", "Parameter".PadRight(25), "Weight".PadRight(10),
-				"MinScore".PadRight(10), "MaxScore".PadRight(10), "MinGrade".PadRight(10), "MaxGrade".PadRight(10),
-				"Grade".PadRight(10), "Score".PadRight(10), "Value");
+
+			sb.AppendFormat(
+				"Calculation Num 1 .........Medal Type {2} Medal: {0} " +
+				"NormalizedScore: {1}% Score: {3} Offered amount: {4}\n",
+				MedalClassification,
+				StringBuilderExtention.ToPercent(TotalScoreNormalized),
+				MedalType,
+				TotalScore,
+				OfferedLoanAmount
+			);
+
+			sb.AppendFormat(
+				"{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8} \n",
+				"Parameter".PadRight(25),
+				"Weight".PadRight(10),
+				"MinScore".PadRight(10),
+				"MaxScore".PadRight(10),
+				"MinGrade".PadRight(10),
+				"MaxGrade".PadRight(10),
+				"Grade".PadRight(10),
+				"Score".PadRight(10),
+				"Value"
+			);
 
 			var summary = new Weight();
 
@@ -358,7 +377,12 @@
 			};
 			sb.AddWeight(weight, "NetWorth", ref summary);
 
-			if (MedalType == MedalType.OnlineLimited || MedalType == MedalType.OnlineNonLimitedNoBusinessScore || MedalType == MedalType.OnlineNonLimitedWithBusinessScore) {
+			bool isOnline =
+				MedalType == MedalType.OnlineLimited ||
+				MedalType == MedalType.OnlineNonLimitedNoBusinessScore ||
+				MedalType == MedalType.OnlineNonLimitedWithBusinessScore;
+
+			if (isOnline) {
 				weight = new Weight {
 					Value = NumberOfStores.ToString(CultureInfo.InvariantCulture),
 					FinalWeight = NumberOfStoresWeight,
@@ -377,6 +401,7 @@
 			}
 
 			sb.AppendLine("----------------------------------------------------------------------------------------------------------------------------------------");
+
 			sb.AppendFormat("{0}| {1}| {2}| {3}| {4}| {5}| {6}| {7}| {8}\n",
 				"Sum".PadRight(25),
 				StringBuilderExtention.ToShort(summary.FinalWeight)

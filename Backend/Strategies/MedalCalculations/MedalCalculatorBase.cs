@@ -51,11 +51,11 @@
 			SetMedalType();
 
 			try {
-				GatherInputData(calculationTime);
+				GatherInputData();
 
 				// Process raw input data to data
 				CalculateFeedbacks();
-				DetermineFlow();
+				CalculateTurnoverForMedal();
 				CalculateRatiosOfAnnualTurnover();
 				CalculateNetWorth();
 
@@ -116,14 +116,14 @@
 		/// <summary>
 		///     The gather input data.
 		/// </summary>
-		/// <param name="calculationTime">The calculation time.</param>
 		/// <exception cref="Exception"></exception>
-		protected virtual void GatherInputData(DateTime calculationTime) {
+		protected virtual void GatherInputData() {
 			SafeReader sr = this.db.GetFirst(
 				"GetDataForMedalCalculation1",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", Results.CustomerId),
-				new QueryParameter("CalculationTime", Results.CalculationTime));
+				new QueryParameter("CalculationTime", Results.CalculationTime)
+			);
 
 			if (sr.IsEmpty)
 				throw new Exception("Couldn't gather required data for the medal calculation");
@@ -141,7 +141,8 @@
 				this.log.Error(
 					"Unable to parse marital status for customer:{0} will use 'Other'. The value was:{1}",
 					Results.CustomerId,
-					maritalStatusStr);
+					maritalStatusStr
+				);
 				Results.MaritalStatus = MaritalStatus.Other;
 			} // if
 
@@ -152,6 +153,7 @@
 			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
 			Results.ZooplaValue = sr["TotalZooplaValue"];
 			Results.NumOfHmrcMps = sr["NumOfHmrcMps"];
+			Results.NumOfBanks = sr["NumOfBanks"];
 			Results.NumberOfStores = sr["NumberOfOnlineStores"];
 
 			Results.EarliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
@@ -159,8 +161,6 @@
 			Results.AmazonPositiveFeedbacks = sr["AmazonPositiveFeedbacks"];
 			Results.EbayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
 			Results.NumberOfPaypalPositiveTransactions = sr["NumOfPaypalTransactions"];
-
-			Results.AnnualTurnover = CalculateTurnoverForMedal(calculationTime);
 
 			/**
 			*  medal type: https://drive.draw.io/?#G0B1Io_qu9i44SVzVqV19nbnMxRW8
@@ -187,9 +187,7 @@
 		   */
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
-		}
-
-
+		} // GatherInputData
 
 		/// <summary>
 		///     The get company score weight for low score.
@@ -562,39 +560,49 @@
 		///     The calculate offer.
 		/// </summary>
 		private void CalculateOffer() {
-			if (Results == null || !string.IsNullOrEmpty(Results.Error)
-				|| Results.MedalType == MedalType.NoMedal)
+			if (Results == null || !string.IsNullOrEmpty(Results.Error) || Results.MedalType == MedalType.NoMedal)
 				return;
 
 			SafeReader sr = this.db.GetFirst(
 				"GetMedalCoefficients",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MedalClassification", Results.MedalClassification.ToString()));
+				new QueryParameter("MedalClassification", Results.MedalClassification.ToString())
+			);
 
-			if (!sr.IsEmpty) {
-				decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
-				decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
-				decimal valueAddedMedalFactor = sr["ValueAdded"];
-				decimal offerAccordingToAnnualTurnover = Results.AnnualTurnover * annualTurnoverMedalFactor / 100;
-				decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor / 100;
-				decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor / 100;
+			if (sr.IsEmpty) {
+				this.log.Warn("EXEC GetMedalCoefficients({0}) returned no coefficients", Results.MedalClassification);
+				return;
+			} // if
 
-				if (IsOnlineMedalNotViaHmrcInnerFlow())
-					offerAccordingToValueAdded = 0;
+			decimal annualTurnoverMedalFactor = sr["AnnualTurnover"];
+			decimal freeCashFlowMedalFactor = sr["FreeCashFlow"];
+			decimal valueAddedMedalFactor = sr["ValueAdded"];
 
-				List<decimal> validOfferAmounts =
-                    new[] {
-                        offerAccordingToAnnualTurnover, offerAccordingToFreeCashFlow, offerAccordingToValueAdded
-                    }.Where(
-						x => x >= CurrentValues.Instance.MedalMinOffer)
-						.ToList();
+			decimal offerAccordingToAnnualTurnover = Results.AnnualTurnover * annualTurnoverMedalFactor / 100;
+			decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor / 100;
+			decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor / 100;
 
-				if (validOfferAmounts.Count > 0) {
-					decimal unroundedValue = validOfferAmounts.Min();
-					Results.OfferedLoanAmount = (int)unroundedValue;
-				}// if
-			}// if
-		}// CalculateOffer
+			if (IsOnlineMedalNotViaHmrcInnerFlow())
+				offerAccordingToValueAdded = 0;
+
+			decimal[] allOfferAmounts = new[] {
+				offerAccordingToAnnualTurnover,
+				offerAccordingToFreeCashFlow,
+				offerAccordingToValueAdded
+			};
+
+			List<decimal> validOfferAmounts = allOfferAmounts.Where(x => x >= CurrentValues.Instance.MedalMinOffer).ToList();
+
+			this.log.Debug("All   offer amounts: {0}", string.Join(", ", allOfferAmounts));
+			this.log.Debug("Valid offer amounts: {0}", string.Join(", ", validOfferAmounts));
+
+			if (validOfferAmounts.Count > 0) {
+				decimal unroundedValue = validOfferAmounts.Min();
+				Results.OfferedLoanAmount = (int)unroundedValue;
+				this.log.Debug("Offered loan amount calculated to be {0}.", Results.OfferedLoanAmount);
+			} else
+				this.log.Debug("All the offer amounts are not valid.");
+		} // CalculateOffer
 
 		/// <summary>
 		///     The calculate positive feedbacks grade.
@@ -722,35 +730,7 @@
 				Results.TangibleEquityGrade = 3;
 			else
 				Results.TangibleEquityGrade = 4;
-		}// CalculateTangibleEquityGrade
-
-		/// <summary>
-		///     The determine flow.
-		/// </summary>
-		private void DetermineFlow() {
-			if (Results.MedalType.IsOnline()) {
-				decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
-
-				if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover) {
-					Results.TurnoverType = TurnoverType.HMRC;
-					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
-				} else if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover) {
-					Results.TurnoverType = TurnoverType.Bank;
-					Results.AnnualTurnover = Results.BankAnnualTurnover;
-				} else {
-					Results.TurnoverType = TurnoverType.Online;
-					Results.AnnualTurnover = Results.OnlineAnnualTurnover;
-				}// if
-			} else {
-				if (Results.NumOfHmrcMps == 1) {
-					Results.TurnoverType = TurnoverType.HMRC;
-					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
-				} else {
-					Results.TurnoverType = TurnoverType.Bank;
-					Results.AnnualTurnover = Results.BankAnnualTurnover;
-				}// if
-			}// if
-		} // DetermineFlow
+		} // CalculateTangibleEquityGrade
 
 		/// <summary>
 		///     The get mortgages.
@@ -770,17 +750,18 @@
 		/// <returns>The <see cref="bool" />.</returns>
 		private bool IsOnlineMedalNotViaHmrcInnerFlow() {
 			return Results.MedalType.IsOnline() && Results.TurnoverType != TurnoverType.HMRC;
-		}
+		} // IsOnlineMedalNotViaHmrcInnerFlow
 
 		/// <summary>
 		///     Turnover for Medal (https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28)
 		/// </summary>
-		/// <param name="calculationTime"></param>
-		/// <returns>annual turnover</returns>
-		protected virtual decimal CalculateTurnoverForMedal(DateTime calculationTime) {
+		protected virtual void CalculateTurnoverForMedal() {
 			try {
 				List<TurnoverDbRow> turnovers = new List<TurnoverDbRow>();
-				decimal annualTurnover = 0;
+				Results.AnnualTurnover = 0;
+				Results.HmrcAnnualTurnover = 0;
+				Results.BankAnnualTurnover = 0;
+				Results.OnlineAnnualTurnover = 0;
 
 				// get monthly aggregated turnovers for the customer for all his market places. 
 				// "IsForApprove" parameter: for  medal and for approval use true.
@@ -789,37 +770,50 @@
 					"GetCustomerTurnoverForAutoDecision",
 					new QueryParameter("IsForApprove", true),
 					new QueryParameter("CustomerID", Results.CustomerId),
-					new QueryParameter("Now", calculationTime));
+					new QueryParameter("Now", Results.CalculationTime)
+				);
 
 				// extract hmrc data only
-				var hmrcList = (from TurnoverDbRow r in turnovers
-								where r.MpTypeID.Equals(TurnoverDbRow.hmrc)
-								select r).AsQueryable();
+				var hmrcList = (
+					from TurnoverDbRow r in turnovers
+					where r.MpTypeID.Equals(TurnoverDbRow.hmrc)
+					select r
+				).AsQueryable();
 
 				// get hmrc turnover for all months received
-				decimal hmrcAnnualTurnover = hmrcList.Sum(t => t.Turnover);
+				Results.HmrcAnnualTurnover = hmrcList.Sum(t => t.Turnover);
+				Results.HmrcAnnualTurnover = (Results.HmrcAnnualTurnover < 0) ? 0 : Results.HmrcAnnualTurnover;
 
 				// this is non-online medal type and has a hmrc
-				if (!Results.MedalType.IsOnline() && Enumerable.Count(hmrcList) > 0)
-					return (hmrcAnnualTurnover < 0) ? 0 : hmrcAnnualTurnover;
+				if (!Results.MedalType.IsOnline() && Results.NumOfHmrcMps > 0) {
+					Results.TurnoverType = TurnoverType.HMRC;
+					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+					return;
+				} // if
 
 				// extract yodlee data only
-				var yodleeList = (from TurnoverDbRow r in turnovers
-								  where r.MpTypeID.Equals(TurnoverDbRow.yodlee)
-								  select r).AsQueryable();
+				var yodleeList = (
+					from TurnoverDbRow r in turnovers
+					where r.MpTypeID.Equals(TurnoverDbRow.yodlee)
+					select r
+				).AsQueryable();
 
 				// get yoodlee turnover for all months received
-				decimal yoodleeAnnualTurnover = yodleeList.Sum(t => t.Turnover);
+				Results.BankAnnualTurnover = yodleeList.Sum(t => t.Turnover);
+				Results.BankAnnualTurnover = (Results.BankAnnualTurnover < 0) ? 0 : Results.BankAnnualTurnover;
 
 				// this is non-online medal type
 				if (!Results.MedalType.IsOnline()) {
 					// and has a yodlee (bank) data
-					if (Enumerable.Count(yodleeList) > 0)
-						return (yoodleeAnnualTurnover < 0) ? 0 : yoodleeAnnualTurnover;
+					if (Results.NumOfBanks > 0) {
+						Results.TurnoverType = TurnoverType.Bank;
+						Results.AnnualTurnover = Results.BankAnnualTurnover;
+						return;
+					} // if
 
 					// no turnover
-					return 0;
-				}
+					return;
+				} // if
 
 				// Continue for "Online" medal type
 
@@ -843,9 +837,11 @@
 				List<decimal> list_t12 = new List<decimal>();
 
 				// extact amazon data
-				var amazonList = (from TurnoverDbRow r in turnovers
-								  where r.MpTypeID.Equals(TurnoverDbRow.amazon)
-								  select r).AsQueryable();
+				var amazonList = (
+					from TurnoverDbRow r in turnovers
+					where r.MpTypeID.Equals(TurnoverDbRow.amazon)
+					select r
+				).AsQueryable();
 
 				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for amazon
 				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T1, Ec1));
@@ -854,9 +850,11 @@
 				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T12, Ec12));
 
 				// extact ebay data
-				var ebayList = (from TurnoverDbRow r in turnovers
-								where r.MpTypeID.Equals(TurnoverDbRow.ebay)
-								select r).AsQueryable();
+				var ebayList = (
+					from TurnoverDbRow r in turnovers
+					where r.MpTypeID.Equals(TurnoverDbRow.ebay)
+					select r
+				).AsQueryable();
 
 				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for ebay
 				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T1, Ec1));
@@ -865,9 +863,11 @@
 				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T12, Ec12));
 
 				// extact paypal data
-				var paypalList = (from TurnoverDbRow r in turnovers
-								  where r.MpTypeID.Equals(TurnoverDbRow.paypal)
-								  select r).AsQueryable();
+				var paypalList = (
+					from TurnoverDbRow r in turnovers
+					where r.MpTypeID.Equals(TurnoverDbRow.paypal)
+					select r
+				).AsQueryable();
 
 				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for paypal
 				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T1, Ec1));
@@ -881,7 +881,7 @@
 				// ebay: index 1
 				// paypal: index 2
 
-				annualTurnover = Min(
+				Results.OnlineAnnualTurnover = Min(
 					list_t1.ElementAt(0) + Math.Max(list_t1.ElementAt(1), list_t1.ElementAt(2)),
 					list_t3.ElementAt(0) + Math.Max(list_t3.ElementAt(1), list_t3.ElementAt(2)),
 					list_t6.ElementAt(0) + Math.Max(list_t6.ElementAt(1), list_t6.ElementAt(2)),
@@ -890,21 +890,28 @@
 
 				decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
 
-				if (hmrcAnnualTurnover > onlineMedalTurnoverCutoff * annualTurnover)
-					return (hmrcAnnualTurnover < 0) ? 0 : hmrcAnnualTurnover;
+				if (Results.HmrcAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover) {
+					Results.TurnoverType = TurnoverType.HMRC;
+					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+					return;
+				} // if
 
-				if (yoodleeAnnualTurnover > onlineMedalTurnoverCutoff * annualTurnover)
-					return (yoodleeAnnualTurnover < 0) ? 0 : yoodleeAnnualTurnover;
+				if (Results.BankAnnualTurnover > onlineMedalTurnoverCutoff * Results.OnlineAnnualTurnover) {
+					Results.TurnoverType = TurnoverType.Bank;
+					Results.AnnualTurnover = Results.BankAnnualTurnover;
+					return;
+				} // if
 
-				return (annualTurnover < 0) ? 0 : annualTurnover;
+				Results.TurnoverType = TurnoverType.Online;
+				Results.AnnualTurnover = Results.OnlineAnnualTurnover;
 			} catch (Exception ex) {
 				this.log.Error(
 					ex,
 					"Failed to get|calculate annual turnover for medal. customerID: {0}, calculationTime: {1}, IsForApprove: true",
 					Results.CustomerId,
-					calculationTime);
-			}// try
-			return 0;
+					Results.CalculationTime
+				);
+			} // try
 		} // CalculateTurnoverForMedal
 
 		private static decimal Min(params decimal[] args) {
@@ -923,7 +930,9 @@
 					result = x;
 			} // for each
 
-			return result ?? 0;
+			decimal output = result ?? 0;
+
+			return output <= 0 ? 0 : output;
 		} // Min
 
 		/// <summary>
@@ -931,12 +940,16 @@
 		///     Annualize the figures and take the minimum among them.
 		/// </summary>
 		/// <param name="list"></param>
-		/// <param name="monthsBefore"></param>
+		/// <param name="monthAfter"></param>
 		/// <param name="extrapolationCoefficient"></param>
 		/// <returns></returns>
-		protected virtual decimal CalcAnnualTurnoverBasedOnPartialData(IQueryable<TurnoverDbRow> list, int monthAfter, int extrapolationCoefficient) {
+		protected virtual decimal CalcAnnualTurnoverBasedOnPartialData(
+			IQueryable<TurnoverDbRow> list,
+			int monthAfter,
+			int extrapolationCoefficient
+		) {
 			return list.Where(t => (t.Distance < monthAfter)).Sum(t => t.Turnover) * extrapolationCoefficient;
-		}
+		} // CalcAnnualTurnoverBasedOnPartialData
 
 	} // class MedalCalculatorBase
 } // namespace

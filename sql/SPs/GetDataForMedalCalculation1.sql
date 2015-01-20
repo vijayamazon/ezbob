@@ -43,6 +43,7 @@ BEGIN
 		@StatusAfterLastTransaction NVARCHAR(50),
 		@LateDays INT,
 		@NumOfHmrcMps INT,
+		@NumOfBanks INT,
 		@TotalZooplaValue INT,
 		@MpId INT,
 		@LastUpdateTime DATETIME,
@@ -281,6 +282,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
+		@NumOfBanks = COUNT(1),
 		@EarliestYodleeLastUpdateDate = MIN(m.UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace m
@@ -418,6 +420,7 @@ BEGIN
 		@EzbobSeniority AS EzbobSeniority,
 		@MaritalStatus AS MaritalStatus,
 		@NumOfHmrcMps AS NumOfHmrcMps,
+		@NumOfBanks AS NumOfBanks,
 		@TotalZooplaValue AS TotalZooplaValue,
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
 		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
