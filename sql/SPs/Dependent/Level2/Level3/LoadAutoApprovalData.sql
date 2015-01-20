@@ -286,7 +286,9 @@ BEGIN
 		FROM	(
 			SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
 			FROM ExperianConsumerData d
+			INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
 			WHERE d.Id = @ExperianConsumerDataID
+			AND l.InsertDate < @Now
 
 			UNION
 

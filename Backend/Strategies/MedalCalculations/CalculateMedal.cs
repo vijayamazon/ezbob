@@ -13,9 +13,10 @@
 
 		public MedalResult Result { get; private set; }
 
-		public CalculateMedal(int customerId) {
+		public CalculateMedal(int customerId, DateTime calculationTime) {
 			this.useInternalLoad = true;
 			this.customerId = customerId;
+			this.calculationTime = calculationTime;
 		} // constructor
 
 		public CalculateMedal(
@@ -48,7 +49,8 @@
 					SafeReader sr = DB.GetFirst(
 						"GetCustomerDataForMedalCalculation",
 						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerId", this.customerId)
+						new QueryParameter("CustomerId", this.customerId),
+						new QueryParameter("Now", this.calculationTime)
 					);
 
 					if (!sr.IsEmpty) {
@@ -63,13 +65,11 @@
 					} // if
 				} // if
 
-				DateTime calculationTime = DateTime.UtcNow;
-
 				// The first scenario (1) for checking medal type and getting medal value
 				// namespace Ezbob.Backend.Strategies.MainStrategy 
 				MedalResult result1 = new MedalCalculator1(
 					this.customerId,
-					calculationTime,
+					this.calculationTime,
 					this.typeOfBusiness,
 					this.consumerScore,
 					this.companyScore,
@@ -83,7 +83,7 @@
 				// Alternative scenario (2) for checking medal type and getting medal value
 				// namespace AutomationCalculator.MedalCalculation
 				var verification = new MedalChooser(DB, Log);
-				MedalOutputModel result2 = verification.GetMedal(this.customerId, calculationTime);
+				MedalOutputModel result2 = verification.GetMedal(this.customerId, this.calculationTime);
 
 				result2.SaveToDb(DB, Log);
 
@@ -152,6 +152,7 @@
 
 		private readonly int customerId;
 		private readonly bool useInternalLoad;
+		private readonly DateTime calculationTime;
 
 		private string typeOfBusiness;
 		private int consumerScore;

@@ -349,7 +349,7 @@
 				234,103,270
 			};
 			foreach (var customer in customers)
-				new CalculateMedal(customer).Execute();
+				new CalculateMedal(customer, DateTime.UtcNow).Execute();
 		}
 
 		[Test]

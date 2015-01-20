@@ -6,7 +6,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE GetCustomerDataForMedalCalculation
-@CustomerId INT
+@CustomerId INT,
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -55,52 +56,73 @@ BEGIN
 
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
-		SELECT 
-			@CompanyScore = ISNULL(Score, 0)
+		SELECT TOP 1
+			@CompanyScore = cac.Score
 		FROM 
-			CustomerAnalyticsCompany 
+			CustomerAnalyticsCompany cac
 		WHERE 
-			CustomerID = @CustomerId
+			cac.CustomerID = @CustomerId
 			AND
-			IsActive = 1
+			cac.AnalyticsDate < @Now
+		ORDER BY
+			cac.AnalyticsDate DESC
 	END
-	ELSE BEGIN	
-		SELECT 
-			@CompanyScore = ISNULL(CommercialDelphiScore, 0)
+	ELSE BEGIN
+		SELECT TOP 1
+			@CompanyScore = r.CommercialDelphiScore
 		FROM 
-			ExperianNonLimitedResults
+			ExperianNonLimitedResults r
+			INNER JOIN MP_ServiceLog l ON r.ServiceLogId = l.Id
 		WHERE
-			RefNumber = @RefNumber
+			r.RefNumber = @RefNumber
 			AND
-			IsActive = 1
+			l.InsertDate < @Now
+		ORDER BY
+			l.InsertDate DESC
 	END
-	
+
+	SET @CompanyScore = ISNULL(@CompanyScore, 0)
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	DECLARE @ServiceLogId BIGINT
+
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @Now
+
+	------------------------------------------------------------------------------
+
+	DECLARE @ExperianConsumerDataID BIGINT
+
+	SELECT
+		@ExperianConsumerDataID = e.Id
+	FROM
+		ExperianConsumerData e
+	WHERE
+		e.ServiceLogId = @ServiceLogId
+
 	------------------------------------------------------------------------------
 
 	SELECT
-		@ConsumerScore = ISNULL(MIN(ExperianConsumerScore), 0)
+		@ConsumerScore = MIN(x.ExperianConsumerScore)
 	FROM	(
-		SELECT
-			ExperianConsumerScore
-		FROM
-			Customer
-		WHERE
-			Id = @CustomerId
-		AND
-			ExperianConsumerScore IS NOT NULL
-		--
+		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
+		FROM ExperianConsumerData d
+		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
+		WHERE d.Id = @ExperianConsumerDataID
+		AND l.InsertDate < @Now
+
 		UNION
-		--
-		SELECT
-			ExperianConsumerScore
-		FROM
-			Director
-		WHERE
-			CustomerId = @CustomerId
-		AND
-			ExperianConsumerScore IS NOT NULL
-	) AS X
+
+		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
+		FROM CustomerAnalyticsDirector d
+		WHERE d.CustomerID = @CustomerID
+		AND d.AnalyticsDate < @Now
+	) x
+
+	SET @ConsumerScore = ISNULL(@ConsumerScore, 0)
 	
+	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -119,6 +141,8 @@ BEGIN
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
+		AND
+		m.Created < @Now
 
 	------------------------------------------------------------------------------
 
@@ -134,6 +158,8 @@ BEGIN
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
+		AND
+		m.Created < @Now
 
 	------------------------------------------------------------------------------
 
@@ -148,6 +174,8 @@ BEGIN
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
+		AND
+		m.Created < @Now
 
 	------------------------------------------------------------------------------
 

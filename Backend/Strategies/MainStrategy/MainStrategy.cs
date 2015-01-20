@@ -277,7 +277,10 @@
 						null,
 						address.PostCode
 					);
-				} else if (!string.IsNullOrEmpty(address.FlatOrApartmentNumber) && string.IsNullOrEmpty(address.HouseNumber)) {
+				} else if (
+					!string.IsNullOrEmpty(address.FlatOrApartmentNumber) &&
+					string.IsNullOrEmpty(address.HouseNumber)
+				) {
 					model = LandRegistryEnquiry.Get(
 						customerId,
 						address.FlatOrApartmentNumber,
@@ -288,9 +291,14 @@
 					);
 				} // if
 
-				if (model != null && model.Enquery != null && model.ResponseType == LandRegistryResponseType.Success && model.Enquery.Titles != null &&
-					model.Enquery.Titles.Count == 1) {
+				bool doLandRegistry = 
+					(model != null) &&
+					(model.Enquery != null) &&
+					(model.ResponseType == LandRegistryResponseType.Success) &&
+					(model.Enquery.Titles != null) &&
+					(model.Enquery.Titles.Count == 1);
 
+				if (doLandRegistry) {
 					var lrr = new LandRegistryRes(customerId, model.Enquery.Titles[0].TitleNumber);
 					lrr.PartialExecute();
 					LandRegistry dbLandRegistry = lrr.LandRegistry;
@@ -299,7 +307,13 @@
 					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success) {
 						// Verify customer is among owners
 						Customer customer = _customers.Get(customerId);
-						bool isOwnerAccordingToLandRegistry = LandRegistryRes.IsOwner(customer, landRegistryDataModel.Response, landRegistryDataModel.Res.TitleNumber);
+
+						bool isOwnerAccordingToLandRegistry = LandRegistryRes.IsOwner(
+							customer,
+							landRegistryDataModel.Response,
+							landRegistryDataModel.Res.TitleNumber
+						);
+
 						CustomerAddress dbAdress = customerAddressRepository.Get(address.AddressId);
 
 						dbLandRegistry.CustomerAddress = dbAdress;
@@ -315,7 +329,8 @@
 					if (model != null && model.Enquery != null && model.Enquery.Titles != null)
 						num = model.Enquery.Titles.Count;
 					Log.Warn(
-						"No land registry retrieved for customer id: {5}, house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
+						"No land registry retrieved for customer id: {5}," +
+						"house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
 						address.HouseName, address.HouseNumber,
 						address.FlatOrApartmentNumber, address.PostCode, num, customerId);
 				} // if
@@ -341,6 +356,7 @@
 
 		private void ProcessApprovals() {
 			bool bContinue = true; 
+
 			if (this.autoDecisionResponse.DecidedToReject && bContinue) {
 				Log.Info("Not processing approvals: reject decision has been made.");
 				bContinue = false;
@@ -366,8 +382,13 @@
 				bContinue = false;
 			} // if
 
-			if ((!this.dataGatherer.EnableAutomaticReRejection || !this.dataGatherer.EnableAutomaticRejection) && bContinue) {
-				Log.Info("Not processing approvals: auto rejection or auto re-rejection is disabled.");
+			if (!this.dataGatherer.EnableAutomaticReRejection && bContinue) {
+				Log.Info("Not processing approvals: auto rejection is disabled.");
+				bContinue = false;
+			} // if
+
+			if (!this.dataGatherer.EnableAutomaticRejection && bContinue) {
+				Log.Info("Not processing approvals: auto re-rejection is disabled.");
 				bContinue = false;
 			} // if
 
@@ -384,13 +405,15 @@
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
 
 			if (this.dataGatherer.EnableAutomaticApproval && bContinue) {
-				new Approval(this.customerId, this.offeredCreditLine, this.medalClassification,
+				new Approval(
+					this.customerId,
+					this.offeredCreditLine,
+					this.medalClassification,
 					(AutomationCalculator.Common.MedalType)this.medalType,
 					(AutomationCalculator.Common.TurnoverType?)this.turnoverType,
 					DB,
 					Log
-					).Init()
-					.MakeDecision(this.autoDecisionResponse);
+				).Init().MakeDecision(this.autoDecisionResponse);
 
 				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
 
@@ -476,7 +499,6 @@
 					this._loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID) ??
 					this._loanTypeRepository.GetDefault();
 			} else {
-
 				//TODO check this code!!!
 				interestRateToUse = this.dataGatherer.LoanOfferInterestRate;
 				setupFeePercentToUse = this.dataGatherer.ManualSetupFeePercent;
@@ -557,8 +579,11 @@
 				if (autoDecisionResponse.IsAutoReApproval) {
 					cr.UseSetupFee = autoDecisionResponse.SetupFeeEnabled;
 					cr.EmailSendingBanned = autoDecisionResponse.LoanOfferEmailSendingBannedNew;
-					cr.IsCustomerRepaymentPeriodSelectionAllowed = autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
-					cr.DiscountPlan = autoDecisionResponse.DiscountPlanID.HasValue ? _discountPlanRepository.Get(autoDecisionResponse.DiscountPlanID.Value) : null;
+					cr.IsCustomerRepaymentPeriodSelectionAllowed =
+						autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
+					cr.DiscountPlan = autoDecisionResponse.DiscountPlanID.HasValue
+						? _discountPlanRepository.Get(autoDecisionResponse.DiscountPlanID.Value)
+						: null;
 					cr.UseBrokerSetupFee = autoDecisionResponse.BrokerSetupFeeEnabled;
 					cr.LoanSource = _loanSourceRepository.Get(autoDecisionResponse.LoanSourceID);
 					cr.LoanType = _loanTypeRepository.Get(autoDecisionResponse.LoanTypeID);
@@ -580,14 +605,13 @@
 			} // if
 
 			UpdateSalesForceOpportunity(customer.Name);
-		}// UpdateCustomerAndCashRequest
+		} // UpdateCustomerAndCashRequest
 
 		private void UpdateSalesForceOpportunity(string customerEmail) {
 			new AddUpdateLeadAccount(customerEmail, customerId, false, false).Execute();
 
-			if (!autoDecisionResponse.Decision.HasValue) {
+			if (!autoDecisionResponse.Decision.HasValue)
 				return;
-			}
 
 			switch (autoDecisionResponse.Decision.Value) {
 			case DecisionActions.Approve:
@@ -596,9 +620,10 @@
 					ApprovedAmount = autoDecisionResponse.AutoApproveAmount,
 					Email = customerEmail,
 					ExpectedEndDate = autoDecisionResponse.AppValidFor,
-					Stage = (int)OpportunityStage.s90 //todo
+					Stage = (int)OpportunityStage.s90 // TODO
 				}).Execute();
 				break;
+
 			case DecisionActions.Reject:
 			case DecisionActions.ReReject:
 				new UpdateOpportunity(customerId, new OpportunityModel {
@@ -608,8 +633,8 @@
 					CloseDate = DateTime.UtcNow
 				}).Execute();
 				break;
-			}
-		}
+			} // switch
+		} // UpdateSalesForceOpportunity
 
 		private static void ExecuteAdditionalStrategies(
 			int customerId,
