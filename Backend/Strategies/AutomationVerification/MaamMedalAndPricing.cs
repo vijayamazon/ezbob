@@ -99,8 +99,6 @@
 				).Init();
 				approveAgent.MakeDecision();
 
-				amount = approveAgent.Trail.RoundedAmount;
-
 				d.Auto.Amount = amount;
 				d.AutoDecision = approveAgent.Trail.GetDecisionName();
 
