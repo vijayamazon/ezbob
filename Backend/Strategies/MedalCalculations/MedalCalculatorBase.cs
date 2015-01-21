@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
@@ -56,6 +57,18 @@
 				// Process raw input data to data
 				CalculateFeedbacks();
 				CalculateTurnoverForMedal();
+
+				this.log.Debug(
+					"Turnover for customer {5} on {6}: type {0}, final {1}, HMRC {2}, bank {3}, online {4}.",
+					Results.TurnoverType,
+					Results.AnnualTurnover,
+					Results.HmrcAnnualTurnover,
+					Results.BankAnnualTurnover,
+					Results.OnlineAnnualTurnover,
+					Results.CustomerId,
+					Results.CalculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				);
+
 				CalculateRatiosOfAnnualTurnover();
 				CalculateNetWorth();
 
@@ -168,7 +181,6 @@
 			*  
 			*  19/01/2015: FreeCashFlow, ValueAdded: NO NEED HERE (elina)
 			* 
-			*  Results.OnlineAnnualTurnover = 0; // TODO: strategyHelper.GetOnlineAnnualTurnoverForMedal(Results.CustomerId);
 			   if (Results.NumOfHmrcMps == 1)
 				   {
 				   var loadVatReturnSummary = new LoadVatReturnSummary(Results.CustomerId, hmrcId);
@@ -177,13 +189,11 @@
 
 				   if (summaryData != null && summaryData.Length != 0) {
 					   foreach (VatReturnSummary singleSummary in summaryData) {
-						   Results.HmrcAnnualTurnover += singleSummary.AnnualizedTurnover.HasValue ? singleSummary.AnnualizedTurnover.Value : 0;
 						   Results.FreeCashFlowValue += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
 						   Results.ValueAdded += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
 					   }
 				   }
 			   }
-			   Results.BankAnnualTurnover = 0; // TODO: fill it
 		   */
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
@@ -554,7 +564,7 @@
 				Results.NumOfLoansGrade = 3;
 			else
 				Results.NumOfLoansGrade = 1;
-		}// CalculateNumOfLoansGrade
+		} // CalculateNumOfLoansGrade
 
 		/// <summary>
 		///     The calculate offer.
@@ -627,10 +637,9 @@
 				Results.FreeCashFlow = Results.FreeCashFlowValue / Results.AnnualTurnover;
 			} else {
 				Results.TangibleEquity = 0;
-				Results.AnnualTurnover = 0;
 				Results.FreeCashFlow = 0;
-			}// if
-		}// CalculateRatiosOfAnnualTurnover
+			} // if
+		} // CalculateRatiosOfAnnualTurnover
 
 		/// <summary>
 		///     The calculate score max.
