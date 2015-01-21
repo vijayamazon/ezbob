@@ -11,7 +11,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
+	SELECT
 		CurrentBalanceSum AS CurrentBalance
 	FROM 
 		CustomerAnalyticsCompany 

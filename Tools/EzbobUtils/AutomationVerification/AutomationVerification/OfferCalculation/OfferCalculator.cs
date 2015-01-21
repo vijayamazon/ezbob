@@ -26,8 +26,8 @@
 		public OfferOutputModel GetOfferBySeek(OfferInputModel input)
 		{
 			var dbHelper = new DbHelper(DB, Log);
-			var setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
-			var interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
+			OfferSetupFeeRangeModelDb setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
+			OfferInterestRateRangeModelDb interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
 			interestRateRange.MaxInterestRate = interestRateRange.MaxInterestRate / 100;
 			interestRateRange.MinInterestRate = interestRateRange.MinInterestRate / 100;
 
@@ -73,7 +73,7 @@
 			}
 
 			if (!input.AspireToMinSetupFee) {
-				var wasTooBigIneteres = false;
+				var wasTooBigIneterest = false;
 				var setupFee = setupFeeRange.MaxSetupFee;
 				do
 				{
@@ -86,29 +86,26 @@
 						return outModel;
 					}
 
-					if (interest < interestRateRange.MinInterestRate && wasTooBigIneteres)
+					if (interest < interestRateRange.MinInterestRate && wasTooBigIneterest)
 					{
 						outModel.InterestRate = RoundInterest(interest);
 						outModel.SetupFee = RoundSetupFee(setupFee/100);
 						return outModel;
 					}
 
-					if (interest > interestRateRange.MaxInterestRate)
-					{
-						wasTooBigIneteres = true;
-					}
-					else
-					{
-						wasTooBigIneteres = false;
-					}
+					wasTooBigIneterest = interest > interestRateRange.MaxInterestRate;
 
 					setupFee -= SetupFeeStep;
 				} while (setupFee <= setupFeeRange.MaxSetupFee);
 			}
 
 			outModel.Error = "No interest rate found in range";
+
+			outModel.InterestRate = RoundInterest(interestRateRange.MaxInterestRate);
+			outModel.SetupFee = RoundSetupFee(setupFeeRange.MaxSetupFee/100);
+
 			return outModel;
-		}
+		} // GetOfferBySeek
 
 		/// <summary>
 		/// calc setup fee for max interest rate (f1) and for min interest rate (f2) find if any (f1,f2) ∩ (x1, x2) min max interest rate configuration based on medal
@@ -148,6 +145,9 @@
 			if (intersect == null) {
 				outModel.Error = string.Format("No setup fee intersection found between (min max interest rate) {0} and {1} (configuration range)", calcSetupfees, configSetupfees);
 				Log.Warn("No setup fee intersect found between {0} and {1}", calcSetupfees, configSetupfees);
+
+				outModel.SetupFee = RoundSetupFee(setupFeeRange.MaxSetupFee / 100);
+				outModel.InterestRate = RoundInterest(interestRateRange.MaxInterestRate);
 			}
 			else {
 				decimal setupFee;

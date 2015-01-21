@@ -91,27 +91,33 @@ BEGIN
 
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
-		SELECT 
-			@BusinessScore = Score, 
-			@TangibleEquity = TangibleEquity, 
-			@BusinessSeniority = IncorporationDate 
-		FROM 
-			CustomerAnalyticsCompany 
-		WHERE 
-			CustomerID = @CustomerId
+		SELECT TOP 1
+			@BusinessScore = cac.Score,
+			@TangibleEquity = cac.TangibleEquity,
+			@BusinessSeniority = cac.IncorporationDate
+		FROM
+			CustomerAnalyticsCompany cac
+		WHERE
+			cac.CustomerID = @CustomerId
 			AND
-			IsActive = 1
+			cac.AnalyticsDate < @CalculationTime
+		ORDER BY
+			cac.AnalyticsDate DESC
 	END
 	ELSE BEGIN	
-		SELECT 
-			@BusinessScore = CommercialDelphiScore,
-			@BusinessSeniority = IncorporationDate 
+		SELECT TOP 1 
+			@BusinessScore = r.CommercialDelphiScore,
+			@BusinessSeniority = r.IncorporationDate 
 		FROM 
-			ExperianNonLimitedResults
+			ExperianNonLimitedResults r
+			INNER JOIN MP_ServiceLog l ON r.ServiceLogId = l.Id
 		WHERE
-			RefNumber = @RefNumber
+			r.RefNumber = @RefNumber
 			AND
-			IsActive = 1
+			l.InsertDate < @CalculationTime
+		ORDER BY
+			l.InsertDate DESC,
+			l.Id DESC
 	END
 
 	------------------------------------------------------------------------------
@@ -133,12 +139,16 @@ BEGIN
 				AND b.BelongsToCustomer = 1
 		WHERE
 			m.CustomerId = @CustomerId
+			AND
+			m.Created < @CalculationTime
 
 		-----------------------------------------------------------------------------
 
-		SELECT
-			@FirstYodleePostDate = MIN(t.postDate),
-			@FirstYodleeTransactionDate = MIN(t.transactionDate)
+		SELECT DISTINCT
+			t.postDate,
+			t.transactionDate
+		INTO
+			#yd
 		FROM
 			MP_YodleeOrderItemBankTransaction t
 			INNER JOIN MP_YodleeOrderItem i
@@ -153,6 +163,29 @@ BEGIN
 				AND mt.InternalId = @Yodlee
 		WHERE
 			m.CustomerId = @CustomerId
+			AND
+			m.Created < @CalculationTime
+			AND (
+				t.postDate IS NOT NULL
+				OR
+				t.transactionDate IS NOT NULL
+			)
+
+		SELECT
+			@FirstYodleePostDate = MIN(#yd.postDate)
+		FROM
+			#yd
+		WHERE
+			#yd.postDate IS NOT NULL
+
+		SELECT
+			@FirstYodleeTransactionDate = MIN(#yd.transactionDate)
+		FROM
+			#yd
+		WHERE
+			#yd.transactionDate IS NOT NULL
+
+		DROP TABLE #yd
 
 		-----------------------------------------------------------------------------
 
@@ -170,23 +203,45 @@ BEGIN
 	END
 
 	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	DECLARE @ServiceLogId BIGINT
+
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @CalculationTime
+
+	------------------------------------------------------------------------------
+
+	DECLARE @ExperianConsumerDataID BIGINT
 
 	SELECT
-		@ConsumerScore = MIN(ExperianConsumerScore)
-	FROM	(
-		SELECT ExperianConsumerScore
-		FROM Customer
-		WHERE Id = @CustomerId
-		AND ExperianConsumerScore IS NOT NULL
-		--
-		UNION
-		--
-		SELECT ExperianConsumerScore
-		FROM Director
-		WHERE CustomerId = @CustomerId
-		AND ExperianConsumerScore IS NOT NULL
-	) AS X
+		@ExperianConsumerDataID = e.Id
+	FROM
+		ExperianConsumerData e
+	WHERE
+		e.ServiceLogId = @ServiceLogId
 
+	------------------------------------------------------------------------------
+
+	SELECT
+		@ConsumerScore = MIN(x.ExperianConsumerScore)
+	FROM	(
+		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
+		FROM ExperianConsumerData d
+		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
+		WHERE d.Id = @ExperianConsumerDataID
+		AND l.InsertDate < @CalculationTime
+
+		UNION
+
+		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
+		FROM CustomerAnalyticsDirector d
+		WHERE d.CustomerID = @CustomerID
+		AND d.AnalyticsDate < @CalculationTime
+	) x
+
+	SET @ConsumerScore = ISNULL(@ConsumerScore, 0)
+
+	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	SET @FirstRepaymentDatePassed = 0
@@ -200,6 +255,8 @@ BEGIN
 		INNER JOIN Loan l ON l.Id = s.LoanId
 	WHERE 
 		l.CustomerId = @CustomerId
+		AND
+		l.[Date] < @CalculationTime
 
 	------------------------------------------------------------------------------
 
@@ -217,6 +274,8 @@ BEGIN
 			INNER JOIN LoanSchedule s ON s.Id = lst.ScheduleID
 			INNER JOIN LoanTransaction t ON t.Id = lst.TransactionID
 		WHERE
+			l.[Date] < @CalculationTime
+			AND
 			DATEDIFF(day, s.[Date], t.PostDate) > 7
 			AND
 			(ABS(lst.PrincipalDelta) + ABS(lst.FeesDelta) + ABS(lst.InterestDelta)) > 2
@@ -227,6 +286,8 @@ BEGIN
 		Loan l
 		LEFT JOIN late_loans ll ON l.Id = ll.LoanID
 	WHERE
+		l.[Date] < @CalculationTime
+		AND
 		ll.LoanID IS NULL
 		AND
 		l.CustomerId = @CustomerID
@@ -246,6 +307,8 @@ BEGIN
 			ON l.Id = lc.LoanId
 	WHERE 
 		l.CustomerId = @CustomerId
+		AND
+		l.[Date] < @CalculationTime
 
 	------------------------------------------------------------------------------
 
@@ -258,6 +321,8 @@ BEGIN
 		s.Status = 'PaidEarly'
 		AND
 		l.CustomerId = @CustomerId
+		AND
+		l.[Date] < @CalculationTime
 
 	------------------------------------------------------------------------------
 
@@ -278,6 +343,8 @@ BEGIN
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
+		AND
+		m.Created < @CalculationTime
 
 	------------------------------------------------------------------------------
 
@@ -293,6 +360,8 @@ BEGIN
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
+		AND
+		m.Created < @CalculationTime
 
 	------------------------------------------------------------------------------
 
@@ -323,7 +392,9 @@ BEGIN
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
-			
+		AND
+		m.Created < @CalculationTime
+
 	------------------------------------------------------------------------------
 
 	SELECT
@@ -335,8 +406,11 @@ BEGIN
 		MP_AmazonFeedback fb
 		INNER JOIN MP_CustomerMarketPlace cmp ON fb.CustomerMarketPlaceId = cmp.Id
 	WHERE
-		cmp.CustomerId = @CustomerId AND 
+		cmp.CustomerId = @CustomerId
+		AND
 		cmp.Disabled = 0
+		AND
+		cmp.Created < @CalculationTime
 	GROUP BY
 		cmp.Id
 
@@ -364,8 +438,11 @@ BEGIN
 		MP_EbayFeedback fb
 		INNER JOIN MP_CustomerMarketPlace cmp ON fb.CustomerMarketPlaceId = cmp.Id
 	WHERE
-		cmp.CustomerId = @CustomerId AND
+		cmp.CustomerId = @CustomerId
+		AND
 		cmp.Disabled = 0
+		AND
+		cmp.Created < @CalculationTime
 	GROUP BY
 		cmp.Id
 
@@ -405,6 +482,8 @@ BEGIN
 		m.CustomerId = @CustomerId
 		AND
 		m.Disabled = 0
+		AND
+		m.Created < @CalculationTime
 
 	------------------------------------------------------------------------------
 

@@ -18,7 +18,7 @@
 				"GetExperianAccountsCurrentBalance",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", this.customerId)
-				);
+			);
 		} // Execute
 
 		private readonly int customerId;

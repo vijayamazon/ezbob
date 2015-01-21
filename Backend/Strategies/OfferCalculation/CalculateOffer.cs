@@ -10,7 +10,7 @@
 		private readonly Medal medalClassification;
 
 		public CalculateOffer(int customerId, int amount, bool hasLoans, Medal medalClassification) {
-			offerDualCalculator = new OfferDualCalculator(DB, Log);
+			offerDualCalculator = new OfferDualCalculator();
 			this.customerId = customerId;
 			this.amount = amount;
 			this.hasLoans = hasLoans;

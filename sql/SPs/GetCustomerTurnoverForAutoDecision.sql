@@ -2,6 +2,9 @@ IF OBJECT_ID('GetCustomerTurnoverForAutoDecision') IS NULL
 	EXECUTE('CREATE PROCEDURE GetCustomerTurnoverForAutoDecision AS SELECT 1')
 GO
 
+SET ANSI_NULLS ON
+GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -13,8 +16,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	------------------------------------------------------------------------------
-
 	DECLARE @eBay   UNIQUEIDENTIFIER = 'A7120CB7-4C93-459B-9901-0E95E7281B59'
 	DECLARE @Amazon UNIQUEIDENTIFIER = 'A4920125-411F-4BB9-A52D-27E8A00D0A3B'
 	DECLARE @PayPal UNIQUEIDENTIFIER = '3FA5E327-FCFD-483B-BA5A-DC1815747A28'
@@ -22,21 +23,29 @@ BEGIN
 	DECLARE @HMRC   UNIQUEIDENTIFIER = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
 
 	------------------------------------------------------------------------------
+
+	CREATE TABLE #mp(
+		MpID int,
+		LastUpdated DATETIME,
+		CurrentMonth DATETIME,
+		YearAgo DATETIME default NULL,
+		MpTypeID UNIQUEIDENTIFIER default NULL,
+		IsPaymentAccount bit default NULL 
+	)
+
+	INSERT INTO #mp (MpID,LastUpdated,CurrentMonth )
 	SELECT
 		MpID = h.CustomerMarketPlaceId,
 		LastUpdated = MAX(h.UpdatingEnd),
-		CurrentMonth = CONVERT(DATETIME, NULL),
-		YearAgo = CONVERT(DATETIME, NULL),
-		MpTypeID = CONVERT(UNIQUEIDENTIFIER, NULL),
-		IsPaymentAccount = CONVERT(BIT, NULL)
-	INTO
-		#mp
+		CurrentMonth = dbo.udfMonthEnd(
+			dbo.udfGetLatestTotalsMonth(h.CustomerMarketPlaceId, @Now)
+		)	-- with "month tail" consideration	
 	FROM
-		MP_CustomerMarketPlaceUpdatingHistory h
-		INNER JOIN MP_CustomerMarketPlace m
+		dbo.MP_CustomerMarketPlaceUpdatingHistory h
+		INNER JOIN dbo.MP_CustomerMarketPlace m
 			ON h.CustomerMarketPlaceId = m.Id
 			AND m.CustomerId = @CustomerID
-		INNER JOIN MP_MarketplaceType t
+		INNER JOIN dbo.MP_MarketplaceType t
 			ON m.MarketPlaceId = t.Id
 			AND (
 				ISNULL(@IsForApprove, 0) = 0
@@ -48,29 +57,27 @@ BEGIN
 		AND
 		ISNULL(m.Disabled, 0) = 0
 		AND
-		LTRIM(RTRIM(ISNULL(h.Error, ''))) = ''
+		(LEN(h.Error) = 0 OR h.Error IS NULL)
 	GROUP BY
 		h.CustomerMarketPlaceId
 
+	-- RELEVANT RECORDS NOT FOUND
+	IF (SELECT COUNT(*) FROM #mp ) = 0
+	BEGIN
+		DROP TABLE #mp
+		RETURN
+	END
+
 	------------------------------------------------------------------------------
 
 	UPDATE #mp SET
-		CurrentMonth = dbo.udfMonthEnd(dbo.udfGetLatestTotalsMonth(MpID, @Now))
-
-	------------------------------------------------------------------------------
-
-	UPDATE #mp SET
+		MpTypeID = mt.InternalId,		
+		IsPaymentAccount = mt.IsPaymentAccount,
 		YearAgo = dbo.udfMonthStart(DATEADD(month, -11, CurrentMonth))
-
-	------------------------------------------------------------------------------
-
-	UPDATE #mp SET
-		MpTypeID = mt.InternalId,
-		IsPaymentAccount = mt.IsPaymentAccount
 	FROM
 		#mp
-		INNER JOIN MP_CustomerMarketPlace m ON #mp.MpID = m.Id
-		INNER JOIN MP_MarketplaceType mt ON m.MarketPlaceId = mt.Id
+		INNER JOIN dbo.MP_CustomerMarketPlace m ON #mp.MpID = m.Id
+		INNER JOIN dbo.MP_MarketplaceType mt ON m.MarketPlaceId = mt.Id
 
 	------------------------------------------------------------------------------
 
@@ -81,14 +88,25 @@ BEGIN
 		m.MpID,
 		m.MpTypeID,
 		m.IsPaymentAccount,
-		RowNum = ROW_NUMBER() OVER (PARTITION BY m.MpID, t.TheMonth ORDER BY t.CustomerMarketPlaceUpdatingHistoryID DESC)
+		RowNum = ROW_NUMBER() OVER (
+			PARTITION BY m.MpID, t.TheMonth
+			ORDER BY t.CustomerMarketPlaceUpdatingHistoryID DESC
+		)
 	INTO
 		#raw
 	FROM
-		MarketplaceTurnover t
+		dbo.MarketplaceTurnover t
 		INNER JOIN #mp m
 			ON t.CustomerMarketPlaceId = m.MpID
 			AND t.TheMonth BETWEEN m.YearAgo AND m.CurrentMonth
+
+	-- RELEVANT RECORDS NOT FOUND
+	IF (SELECT COUNT(*) FROM #raw ) = 0 
+	BEGIN
+		DROP TABLE #raw
+		DROP TABLE #mp
+		RETURN
+	END
 
 	------------------------------------------------------------------------------
 

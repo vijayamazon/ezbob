@@ -349,12 +349,12 @@
 				234,103,270
 			};
 			foreach (var customer in customers)
-				new CalculateMedal(customer, DateTime.UtcNow, false).Execute();
+				new CalculateMedal(customer, DateTime.UtcNow, false, true).Execute();
 		}
 
 		[Test]
 		public void TestOfferCalculation() {
-			var calc = new OfferDualCalculator(this.m_oDB, this.m_oLog);
+			var calc = new OfferDualCalculator();
 
 			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
 			Assert.AreEqual(5.5M, offer1.SetupFee);

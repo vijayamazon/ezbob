@@ -13,11 +13,12 @@
 
 		public MedalResult Result { get; private set; }
 
-		public CalculateMedal(int customerId, DateTime calculationTime, bool primaryOnly) {
+		public CalculateMedal(int customerId, DateTime calculationTime, bool primaryOnly, bool doStoreMedal) {
 			this.useInternalLoad = true;
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
 			this.primaryOnly = primaryOnly;
+			this.doStoreMedal = doStoreMedal;
 		} // constructor
 
 		public CalculateMedal(
@@ -31,6 +32,7 @@
 			DateTime? earliestHmrcLastUpdateDate,
 			DateTime? earliestYodleeLastUpdateDate
 		) {
+			this.doStoreMedal = true;
 			this.primaryOnly = false;
 			this.useInternalLoad = false;
 			this.customerId = customerId;
@@ -90,11 +92,14 @@
 					var verification = new MedalChooser(DB, Log);
 					result2 = verification.GetMedal(this.customerId, this.calculationTime);
 
-					result2.SaveToDb(DB, Log);
+					if (this.doStoreMedal)
+						result2.SaveToDb(DB, Log);
 				} // if
 
 				if ((result1 != null) && result1.IsLike(result2)) {
-					result1.SaveToDb(DB);
+					if (this.doStoreMedal)
+						result1.SaveToDb(DB);
+
 					Result = result1;
 					return;
 				} // if
@@ -107,7 +112,9 @@
 				result1.PrintToLog(Log);
 				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
 				result1.Error = "Mismatch found in the 2 medal calculations";
-				result1.SaveToDb(DB);
+
+				if (this.doStoreMedal)
+					result1.SaveToDb(DB);
 
 				SendExplanationMail(result1, result2);
 				Log.Error("Mismatch found in the 2 medal calculations of customer: {0}.", this.customerId);
@@ -179,6 +186,7 @@
 		private readonly bool useInternalLoad;
 		private readonly DateTime calculationTime;
 		private readonly bool primaryOnly;
+		private readonly bool doStoreMedal;
 
 		private string typeOfBusiness;
 		private int consumerScore;

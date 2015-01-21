@@ -38,11 +38,10 @@ BEGIN
 
 	IF @MpID IS NULL
 	BEGIN
-		RAISERROR('No marketplace found for %s marketplace with history id %d and no error.', 11, 2, @MpType, @HistoryID)
+		-- RAISERROR('No marketplace found for %s marketplace with history id %d and no error.', 11, 2, @MpType, @HistoryID)
 		RETURN
 	END
 
 	------------------------------------------------------------------------------
 END
-
 GO

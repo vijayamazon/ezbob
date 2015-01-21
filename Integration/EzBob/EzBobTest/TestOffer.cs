@@ -19,7 +19,7 @@ namespace EzBobTest {
 
 		[Test]
 		public void Test_FirstOfferTest() {
-			var offer = new OfferCalculator1(m_oDB, m_oLog);
+			var offer = new OfferCalculator1();
 			OfferResult res = offer.CalculateOffer(14029, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
 		}
 	}

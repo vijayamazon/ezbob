@@ -237,7 +237,7 @@
 
 				if (response.AutoApproveAmount != 0) {
 					if (this.m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
-						var offerDualCalculator = new OfferDualCalculator(this.db, this.log);
+						var offerDualCalculator = new OfferDualCalculator();
 
 						OfferResult offerResult = offerDualCalculator.CalculateOffer(
 							this.customerId,

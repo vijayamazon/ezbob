@@ -11,7 +11,9 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	/// <summary>
-	///     The medal calculator base.
+	/// The medal calculator base.
+	/// Medal type: https://drive.draw.io/?#G0B1Io_qu9i44SVzVqV19nbnMxRW8
+	/// Medal type and medal value: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
 	/// </summary>
 	public abstract class MedalCalculatorBase {
 		/// <summary>
@@ -30,7 +32,7 @@
 		protected MedalCalculatorBase() {
 			this.log = Library.Instance.Log;
 			this.db = Library.Instance.DB;
-		}
+		} // constructor
 
 		/// <summary>
 		///     Gets or sets the results.
@@ -175,29 +177,47 @@
 			Results.EbayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
 			Results.NumberOfPaypalPositiveTransactions = sr["NumOfPaypalTransactions"];
 
-			/**
-			*  medal type: https://drive.draw.io/?#G0B1Io_qu9i44SVzVqV19nbnMxRW8
-			*  medal type and medal value: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
-			*  
-			*  19/01/2015: FreeCashFlow, ValueAdded: NO NEED HERE (elina)
-			* 
-			   if (Results.NumOfHmrcMps == 1)
-				   {
-				   var loadVatReturnSummary = new LoadVatReturnSummary(Results.CustomerId, hmrcId);
-				   loadVatReturnSummary.Execute();
-				   VatReturnSummary[] summaryData = loadVatReturnSummary.Summary;
+			Results.FreeCashFlow = 0;
+			Results.ValueAdded = 0;
 
-				   if (summaryData != null && summaryData.Length != 0) {
-					   foreach (VatReturnSummary singleSummary in summaryData) {
-						   Results.FreeCashFlowValue += singleSummary.AnnualizedFreeCashFlow.HasValue ? singleSummary.AnnualizedFreeCashFlow.Value : 0;
-						   Results.ValueAdded += singleSummary.AnnualizedValueAdded.HasValue ? singleSummary.AnnualizedValueAdded.Value : 0;
-					   }
-				   }
-			   }
-		   */
+			decimal newActualLoansRepayment = 0;
+
+			this.db.ForEachRowSafe(
+				srfv => {
+					RowType rt;
+
+					if (!Enum.TryParse(sr["RowType"], out rt))
+						return;
+
+					switch (rt) {
+					case RowType.FcfValueAdded:
+						Results.FreeCashFlow += srfv["FreeCashFlow"];
+						Results.ValueAdded += srfv["ValueAdded"];
+						break;
+
+					case RowType.NewActualLoansRepayment:
+						newActualLoansRepayment = sr["NewActualLoansRepayment"];
+						break;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+					} // switch
+				},
+				"GetCustomerAnnualFcfValueAdded",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", Results.CustomerId),
+				new QueryParameter("Now", Results.CalculationTime)
+			);
+
+			Results.FreeCashFlow -= newActualLoansRepayment;
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
 		} // GatherInputData
+
+		private enum RowType {
+			NewActualLoansRepayment,
+			FcfValueAdded,
+		} // enum RowType
 
 		/// <summary>
 		///     The get company score weight for low score.

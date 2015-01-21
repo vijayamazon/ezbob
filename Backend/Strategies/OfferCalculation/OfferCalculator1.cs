@@ -1,76 +1,79 @@
-﻿namespace Ezbob.Backend.Strategies.OfferCalculation
-{
+﻿namespace Ezbob.Backend.Strategies.OfferCalculation {
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using System;
-	using MedalCalculations;
 	using PricingModel;
 
-	public class OfferCalculator1
-	{
+	public class OfferCalculator1 {
 		private readonly ASafeLog log;
 		private readonly AConnection db;
 
 		private const decimal SetupFeeStep = 0.0005M;
 
-		public OfferCalculator1(AConnection db, ASafeLog log)
-		{
-			this.log = log;
-			this.db = db;
-		}
+		public OfferCalculator1() {
+			this.log = Library.Instance.Log;
+			this.db = Library.Instance.DB;
+		} // constructor
 
-		public OfferResult CalculateOffer(int customerId, DateTime calculationTime, int amount, bool hasLoans, Medal medalClassification)
-		{
+		public OfferResult CalculateOffer(
+			int customerId,
+			DateTime calculationTime,
+			int amount,
+			bool hasLoans,
+			Medal medalClassification
+		) {
 			var result = new OfferResult {
 				CustomerId = customerId,
 				CalculationTime = calculationTime,
 				Amount = amount,
 				MedalClassification = medalClassification,
 				Period = 12, // Period is always 12
-				IsEu = false
+				IsEu = false,
 			};
 
 			// We always use standard loan type
 			// We use standard loan type
 			SafeReader sr = db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
-			if (sr.IsEmpty)
-			{
+
+			if (sr.IsEmpty) {
 				result.Error = "Can't load standard loan type";
 				return result;
-			}
+			} // if
 
 			result.LoanTypeId = sr["Id"];
 
 			// Choose scenario
 			if (amount <= CurrentValues.Instance.SmallLoanScenarioLimit)
-			{
 				result.ScenarioName = "Small Loan";
-			}
 			else if (!hasLoans)
-			{
 				result.ScenarioName = "Basic New";
-			}
 			else
-			{
 				result.ScenarioName = "Basic Repeating";
-			}
 
 			var getPricingModelModelInstance = new GetPricingModelModel(customerId, result.ScenarioName);
 			getPricingModelModelInstance.Execute();
+
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
 			templateModel.LoanAmount = amount;
 			templateModel.LoanTerm = result.Period;
-			templateModel.TenureMonths = result.Period*templateModel.TenurePercents;
+			templateModel.TenureMonths = result.Period * templateModel.TenurePercents;
+
 			CalculateInterestRateAndSetupFee(customerId, amount, medalClassification, result, templateModel);
 
 			return result;
-		}
+		} // CalculateOffer
 
-		private void CalculateInterestRateAndSetupFee(int customerId, int amount, Medal medalClassification, OfferResult result, PricingModelModel templateModel)
-		{
+		private void CalculateInterestRateAndSetupFee(
+			int customerId,
+			int amount,
+			Medal medalClassification,
+			OfferResult result,
+			PricingModelModel templateModel
+		) {
 			bool aspireToMinSetupFee = CurrentValues.Instance.AspireToMinSetupFee;
+
 			SafeReader sr = db.GetFirst(
 				"LoadOfferRanges",
 				CommandSpecies.StoredProcedure,
@@ -78,32 +81,34 @@
 				new QueryParameter("@MedalClassification", medalClassification.ToString())
 			);
 
-			if (sr.IsEmpty)
-			{
-				string errorMessage = string.Format("Can't load ranges for amount:{0} and medal classification:{1}", amount, medalClassification);
+			if (sr.IsEmpty) {
+				string errorMessage = string.Format(
+					"Can't load ranges for amount:{0} and medal classification:{1}",
+					amount,
+					medalClassification
+				);
+
 				log.Alert(errorMessage);
 				result.Error = errorMessage;
+
 				return;
-			}
+			} // if
 
 			decimal minSetupFee = sr["MinSetupFee"];
 			decimal maxSetupFee = sr["MaxSetupFee"];
 			decimal minInterestRate = sr["MinInterestRate"];
 			decimal maxInterestRate = sr["MaxInterestRate"];
 
-			if (!CheckBounderies(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate,minInterestRate)) {
-				return;
-			}
+			if (CheckBounderies(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate, minInterestRate)) {
+				if (aspireToMinSetupFee)
+					CalculateLowestSetupFee(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate, minInterestRate);
+				else
+					CalculateHighestSetupFee(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate, minInterestRate);
+			} // if
 
-			if (aspireToMinSetupFee)
-			{
-				CalculateLowestSetupFee(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate, minInterestRate);
-			}
-			else
-			{
-				CalculateHighestSetupFee(customerId, amount, result, templateModel, minSetupFee, maxSetupFee, maxInterestRate, minInterestRate);
-			}
-		}
+			if (!string.IsNullOrWhiteSpace(result.Error))
+				SetRounded(result, maxInterestRate / 100.0m, maxSetupFee / 100.0m);
+		} // CalculateInterestRateAndSetupFee
 
 		private bool CheckBounderies(int customerId, int amount, OfferResult result, PricingModelModel templateModel, decimal minSetupFee, decimal maxSetupFee, decimal maxInterestRate, decimal minInterestRate) {
 			decimal lowerBoundary = minSetupFee;
@@ -113,8 +118,7 @@
 			lowerBoundaryModel.SetupFeePercents = lowerBoundary / 100;
 			lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
 			var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel);
-			if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate())
-			{
+			if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate()) {
 				result.Error = lowerBoundaryPricingModelCalculator.Error;
 				return false;
 			}
@@ -124,33 +128,37 @@
 			upperBoundaryModel.SetupFeePercents = upperBoundary / 100;
 			upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
 			var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel);
-			if (!upperBoundaryPricingModelCalculator.CalculateInterestRate())
-			{
+			if (!upperBoundaryPricingModelCalculator.CalculateInterestRate()) {
 				result.Error = lowerBoundaryPricingModelCalculator.Error;
 				return false;
 			}
 			upperBoundaryModel = upperBoundaryPricingModelCalculator.Model;
 
 			if (
-				(upperBoundaryModel.MonthlyInterestRate*100 < minInterestRate || upperBoundaryModel.MonthlyInterestRate*100 > maxInterestRate) 
+				(upperBoundaryModel.MonthlyInterestRate * 100 < minInterestRate || upperBoundaryModel.MonthlyInterestRate * 100 > maxInterestRate)
 				&&
 				(lowerBoundaryModel.MonthlyInterestRate * 100 < minInterestRate || lowerBoundaryModel.MonthlyInterestRate * 100 > maxInterestRate)
-				)
-			{
+				) {
 				result.Error =
 					string.Format("No interest rate found in range (min max setup fee) [{0:N2} - {1:N2}] and [{2:N2} - {3:N2}] (config)",
-								  upperBoundaryModel.MonthlyInterestRate*100, lowerBoundaryModel.MonthlyInterestRate*100,
+								  upperBoundaryModel.MonthlyInterestRate * 100, lowerBoundaryModel.MonthlyInterestRate * 100,
 								  minInterestRate, maxInterestRate);
 				return false;
-			}
+			} // if
 
 			return true;
-		}
+		} // CheckBounderies
 
-		private void CalculateLowestSetupFee(int customerId, int amount, OfferResult result, PricingModelModel templateModel,
-		                                      decimal minSetupFee, decimal maxSetupFee, decimal maxInterestRate,
-		                                      decimal minInterestRate)
-		{
+		private void CalculateLowestSetupFee(
+			int customerId,
+			int amount,
+			OfferResult result,
+			PricingModelModel templateModel,
+			decimal minSetupFee,
+			decimal maxSetupFee,
+			decimal maxInterestRate,
+			decimal minInterestRate
+		) {
 			PricingModelModel lowerBoundaryModel = templateModel.Clone();
 			lowerBoundaryModel.SetupFeePercents = minSetupFee / 100;
 			lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
@@ -163,26 +171,33 @@
 				}
 				lowerBoundaryModel = lowerBoundaryPricingModelCalculator.Model;
 
-				if (lowerBoundaryModel.SetupFeePercents*100 > maxSetupFee) {
+				if (lowerBoundaryModel.SetupFeePercents * 100 > maxSetupFee) {
 					result.Error = "No interest rate found";
 					return;
 				}
 
-				if (lowerBoundaryModel.MonthlyInterestRate*100 <= maxInterestRate &&
-				    lowerBoundaryModel.MonthlyInterestRate*100 >= minInterestRate) {
+				if (lowerBoundaryModel.MonthlyInterestRate * 100 <= maxInterestRate &&
+					lowerBoundaryModel.MonthlyInterestRate * 100 >= minInterestRate) {
 					break;
 				}
 
 				lowerBoundaryModel.SetupFeePercents += SetupFeeStep;
 				lowerBoundaryModel.SetupFeePounds = lowerBoundaryModel.SetupFeePercents * amount;
-			} while ((lowerBoundaryModel.MonthlyInterestRate*100 > maxInterestRate));
+			} while ((lowerBoundaryModel.MonthlyInterestRate * 100 > maxInterestRate));
 
 			RoundSetupFeeAndRecalculateInterestRate(lowerBoundaryModel.SetupFeePercents, result, templateModel);
-		}
+		} // CalculateLowestSetupFee
 
-		private void CalculateHighestSetupFee(int customerId, int amount, OfferResult result, PricingModelModel templateModel,
-		                        decimal minSetupFee, decimal maxSetupFee, decimal maxInterestRate, decimal minInterestRate)
-		{
+		private void CalculateHighestSetupFee(
+			int customerId,
+			int amount,
+			OfferResult result,
+			PricingModelModel templateModel,
+			decimal minSetupFee,
+			decimal maxSetupFee,
+			decimal maxInterestRate,
+			decimal minInterestRate
+		) {
 			PricingModelModel upperBoundaryModel = templateModel.Clone();
 			upperBoundaryModel.SetupFeePercents = maxSetupFee / 100;
 			upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
@@ -195,26 +210,24 @@
 				}
 				upperBoundaryModel = upperBoundaryPricingModelCalculator.Model;
 
-				if (upperBoundaryModel.SetupFeePercents*100 < minSetupFee) {
+				if (upperBoundaryModel.SetupFeePercents * 100 < minSetupFee) {
 					result.Error = "No interest rate found";
 					return;
 				}
 
 				if (upperBoundaryModel.MonthlyInterestRate * 100 <= maxInterestRate &&
-					upperBoundaryModel.MonthlyInterestRate * 100 >= minInterestRate)
-				{
+					upperBoundaryModel.MonthlyInterestRate * 100 >= minInterestRate) {
 					break;
 				}
 
 				upperBoundaryModel.SetupFeePercents -= SetupFeeStep;
 				upperBoundaryModel.SetupFeePounds = upperBoundaryModel.SetupFeePercents * amount;
-			} while (upperBoundaryModel.MonthlyInterestRate*100 < minInterestRate);
+			} while (upperBoundaryModel.MonthlyInterestRate * 100 < minInterestRate);
 
 			RoundSetupFeeAndRecalculateInterestRate(upperBoundaryModel.SetupFeePercents, result, templateModel);
-		}
+		} // CalculateHighestSetupFee
 
-		private void RoundSetupFeeAndRecalculateInterestRate(decimal setupFee, OfferResult result, PricingModelModel templateModel)
-		{
+		private void RoundSetupFeeAndRecalculateInterestRate(decimal setupFee, OfferResult result, PricingModelModel templateModel) {
 			PricingModelModel model = templateModel.Clone();
 			model.SetupFeePercents = setupFee;
 			model.SetupFeePounds = setupFee * model.LoanAmount;
@@ -222,12 +235,12 @@
 			var pricingModelCalculator = new PricingModelCalculator(result.CustomerId, model);
 			pricingModelCalculator.Calculate();
 
-			decimal roundedInterestRate = Math.Ceiling(pricingModelCalculator.Model.MonthlyInterestRate * 2000)/20;
-			result.InterestRate = roundedInterestRate;
+			SetRounded(result, pricingModelCalculator.Model.MonthlyInterestRate, setupFee);
+		} // RoundSetupFeeAndRecalculateInterestRate
 
-			decimal roundedSetupFee = Math.Ceiling(setupFee * 200) / 2;
-			result.SetupFee = roundedSetupFee;
-
-		}
-	}
-}
+		private void SetRounded(OfferResult result, decimal interestRate, decimal setupFee) {
+			result.InterestRate = Math.Ceiling(interestRate * 2000) / 20;
+			result.SetupFee = Math.Ceiling(setupFee * 200) / 2;
+		} // SetRounded
+	} // class OfferCalculator1
+} // namespace

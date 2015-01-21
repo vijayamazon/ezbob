@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using ConfigManager;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
@@ -14,6 +15,7 @@
 			this.topCount = topCount;
 			this.lastCheckedID = lastCheckedCashRequestID;
 			this.data = new List<Datum>();
+			this.homeOwners = new SortedDictionary<int, bool>();
 		} // constructor
 
 		public override string Name {
@@ -35,25 +37,30 @@
 				CommandSpecies.Text
 			);
 
-			var pc = new ProgressCounter("{0} cash requests processed.", Log, 100);
+			var pc = new ProgressCounter("{0} cash requests processed.", Log, 50);
 
 			foreach (Datum d in this.data) {
-				var instance = new CalculateMedal(d.CustomerID, d.DecisionTime, true);
+				var instance = new CalculateMedal(d.CustomerID, d.DecisionTime, true, false);
 				instance.Execute();
 
-				Log.Debug("{0}", instance.Result);
+				Log.Debug("Before capping the offer: {0}", instance.Result);
 
-				int amount = instance.Result.RoundOfferedAmount();
+				int amount = Math.Min(
+					instance.Result.RoundOfferedAmount(),
+					IsHomeOwner(d.CustomerID)
+						? CurrentValues.Instance.MaxCapHomeOwner
+						: CurrentValues.Instance.MaxCapNotHomeOwner
+				);
 				d.Auto.Amount = amount;
 
 				if (amount == 0) {
-					d.Auto.InterestRate = 0;
 					d.Auto.RepaymentPeriod = 0;
+					d.Auto.InterestRate = 0;
 					d.Auto.SetupFee = 0;
 				} else {
-					var offerDualCalculator = new OfferDualCalculator(DB, Log);
+					var odc = new OfferDualCalculator();
 
-					OfferResult offerResult = offerDualCalculator.CalculateOffer(
+					odc.CalculateOffer(
 						d.CustomerID,
 						d.DecisionTime,
 						amount,
@@ -61,9 +68,9 @@
 						instance.Result.MedalClassification
 					);
 
-					d.Auto.InterestRate = offerResult.InterestRate;
-					d.Auto.RepaymentPeriod = offerResult.Period;
-					d.Auto.SetupFee = offerResult.SetupFee;
+					d.Auto.RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
+					d.Auto.InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
+					d.Auto.SetupFee = odc.VerifyBoundaries.SetupFee / 100.0m;
 				} // if
 
 				pc++;
@@ -71,13 +78,39 @@
 
 			pc.Log();
 
+			var lst = new List<string>();
+
 			Log.Debug("Output data - begin:");
 
-			foreach (Datum d in this.data)
+			foreach (Datum d in this.data) {
 				Log.Debug("{0}", d);
 
+				lst.Add(d.ToCsv());
+			} // for each
+
 			Log.Debug("Output data - end.");
+
+			Log.Debug(
+				"\n\nCSV output - begin:\n{0}\n{1}\nCSV output - end.\n",
+				Datum.CsvTitles(),
+				string.Join("\n", lst)
+			);
 		} // Execute
+
+		private bool IsHomeOwner(int customerID) {
+			if (homeOwners.ContainsKey(customerID))
+				return homeOwners[customerID];
+
+			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
+				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerID)
+			);
+
+			homeOwners[customerID] = isHomeOwnerAccordingToLandRegistry;
+
+			return isHomeOwnerAccordingToLandRegistry;
+		} // IsHomeOwner
 
 		private void ProcessRow(SafeReader sr) {
 			Datum d = sr.Fill<Datum>();
@@ -141,6 +174,32 @@
 					ManualCfg
 				);
 			} // ToString
+
+			public static string CsvTitles() {
+				return string.Join(";",
+					"Cash Request ID",
+					"Customer ID",
+					"Broker ID",
+					"Manual decision",
+					"Manual decision time",
+					MedalAndPricing.CsvTitles("Auto"),
+					MedalAndPricing.CsvTitles("Manual"),
+					SetupFeeConfiguration.CsvTitles()
+				);
+			} // CsvTitles
+
+			public string ToCsv() {
+				return string.Join(";",
+					CashRequestID.ToString(CultureInfo.InvariantCulture),
+					CustomerID.ToString(CultureInfo.InvariantCulture),
+					BrokerID.ToString(CultureInfo.InvariantCulture),
+					Decision,
+					DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					Auto.ToCsv(),
+					Manual.ToCsv(),
+					ManualCfg.ToCsv()
+				);
+			} // ToCsv
 		} // class Datum
 
 		private class SetupFeeConfiguration {
@@ -180,6 +239,19 @@
 					Amount.HasValue ? Amount.Value.ToString("N2", CultureInfo.InvariantCulture) : "--"
 				);
 			} // ToString
+
+			public static string CsvTitles() {
+				return "Cfg: Use Setup Fee;Cfg: Use Broker Setup Fee;Cfg: Setup Fee Pct;Cfg: Setup Fee Value";
+			} // ToCsv
+
+			public string ToCsv() {
+				return string.Join(";",
+					UseSetupFee == 1,
+					UseBrokerSetupFee,
+					Percent.HasValue ? Percent.Value.ToString(CultureInfo.InvariantCulture) : "",
+					Amount.HasValue ? Amount.Value.ToString(CultureInfo.InvariantCulture) : ""
+				);
+			} // ToCsv
 		} // class SetupFeeConfiguration
 
 		private class MedalAndPricing {
@@ -203,12 +275,26 @@
 					SetupFee.ToString("N2", CultureInfo.InvariantCulture)
 				);
 			} // ToString
+
+			public static string CsvTitles(string prefix) {
+				return string.Format("{0} Amount;{0} Interest Rate;{0} Repayment Period;{0} Setup Fee", prefix);
+			} // ToCsv
+
+			public string ToCsv() {
+				return string.Join(";",
+					Amount.ToString(CultureInfo.InvariantCulture),
+					InterestRate.ToString(CultureInfo.InvariantCulture),
+					RepaymentPeriod.ToString(CultureInfo.InvariantCulture),
+					SetupFee.ToString(CultureInfo.InvariantCulture)
+				);
+			} // ToCsv
 		} // class MedalAndPricing
 
 		private readonly int topCount;
 		private readonly int lastCheckedID;
 
-		private readonly List<Datum> data; 
+		private readonly List<Datum> data;
+		private readonly SortedDictionary<int, bool> homeOwners; 
 
 		private const string QueryTemplate = @"
 SELECT {0}
