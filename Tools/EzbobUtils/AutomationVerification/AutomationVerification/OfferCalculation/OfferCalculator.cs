@@ -33,7 +33,7 @@
 
 			var pricingScenario = dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
 
-			var pricingCalculator = new PricingCalculator(Log);
+			var pricingCalculator = new PricingCalculator(DB, Log);
 
 			var outModel = new OfferOutputModel {
 				ScenarioName = pricingScenario.ScenarioName,
@@ -121,7 +121,7 @@
 			interestRateRange.MinInterestRate = interestRateRange.MinInterestRate / 100;
 			var pricingScenario = dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
 
-			var pricingCalculator = new PricingCalculator(Log);
+			var pricingCalculator = new PricingCalculator(DB, Log);
 
 			var outModel = new OfferOutputModel
 			{

@@ -60,7 +60,7 @@ namespace ConfigurationBase {
 			Logger.Info("Reading configurations");
 
 			try {
-				var oDB = new SqlConnection();
+				var oDB = DbConnectionGenerator.Get(Logger);
 
 				oDB.ForEachRow((row, bRowsetStart) => {
 					AddSingleConfiguration(row["CfgKey"].ToString(), row["CfgValue"].ToString());
@@ -82,7 +82,7 @@ namespace ConfigurationBase {
 			Logger.Info("Refreshing configurations");
 
 			try {
-				var oDB = new SqlConnection();
+				var oDB = DbConnectionGenerator.Get(Logger);
 
 				oDB.ForEachRow((row, bRowsetStart) => {
 					RefreshSingleConfiguration(row["CfgKey"].ToString(), row["CfgValue"].ToString());

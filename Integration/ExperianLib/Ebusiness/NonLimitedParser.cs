@@ -106,11 +106,9 @@
 		//Errors
 		string errors = string.Empty;
 
-		public NonLimitedParser()
-		{
-			log = new SafeILog(LogManager.GetLogger(typeof(NonLimitedParser)));
-			var env = new Ezbob.Context.Environment(log);
-			db = new SqlConnection(env, log);
+		public NonLimitedParser(AConnection db, ASafeLog log) {
+			this.log = new SafeILog(log);
+			this.db = db;
 		}
 
 		private void Init()

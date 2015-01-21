@@ -8,7 +8,7 @@
 
 	public class BackfillNonLimitedCompanies : AStrategy {
 		public BackfillNonLimitedCompanies() {
-			this.parser = new NonLimitedParser();
+			this.parser = new NonLimitedParser(DB, Log);
 			this.experianHistoryRepository = ObjectFactory.GetInstance<ExperianHistoryRepository>();
 			this.serviceLogRepository = ObjectFactory.GetInstance<ServiceLogRepository>();
 		} // constructor

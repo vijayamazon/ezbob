@@ -21,7 +21,7 @@
 		public EBusinessService(AConnection oDB) {
 			this.m_oRetryer = new SqlRetryer(oLog: ms_oLog);
 			this.eSeriesUrl = CurrentValues.Instance.ExperianESeriesUrl;
-			this.nonLimitedParser = new NonLimitedParser();
+			this.nonLimitedParser = new NonLimitedParser(oDB, ms_oLog);
 
 			this.m_oDB = oDB;
 		} // constructor

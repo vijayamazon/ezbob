@@ -65,7 +65,7 @@ namespace ConfigurationBase {
 			Info("Reading configurations");
 
 			try {
-				var oDB = new SqlConnection();
+				AConnection oDB = DbConnectionGenerator.Get(this);
 
 				oDB.ForEachRow((row, bRowsetStart) => {
 					AddSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());
@@ -81,7 +81,7 @@ namespace ConfigurationBase {
 			Info("Refreshing configurations");
 
 			try {
-				var oDB = new SqlConnection();
+				AConnection oDB = DbConnectionGenerator.Get(this);
 
 				oDB.ForEachRow((row, bRowsetStart) => {
 					RefreshSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());

@@ -41,7 +41,7 @@
 			to = DateTime.SpecifyKind(to, DateTimeKind.Utc);
 			var rptDef = new ReportQuery(report, from, to, customer, nonCash);
 			var oColumnTypes = new List<string>();
-			var oDB = new SqlConnection();
+			AConnection oDB = DbConnectionGenerator.Get();
 			var reportHandler = new ReportHandler(oDB);
 			bool isError;
 
@@ -63,7 +63,7 @@
 		public FileResult DownloadReportDates(int reportId, DateTime from, DateTime to, string customer, bool? nonCash) {
 			var report = GetReport(reportId);
 			var rptDef = new ReportQuery(report, from, to, customer, nonCash);
-			var oDB = new SqlConnection();
+			AConnection oDB = DbConnectionGenerator.Get();
 			var reportHandler = new ReportHandler(oDB);
 
 			var excel = reportHandler.GetWorkBook(report, rptDef);
