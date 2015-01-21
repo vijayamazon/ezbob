@@ -7,7 +7,6 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
 ALTER PROCEDURE RptChannelMarketing
 @DateStart DATE,
 @DateEnd DATE
@@ -18,16 +17,22 @@ BEGIN
 	-- customers
 	WITH 
 	CustomerDecisions AS 
-	(SELECT c.Id CustomerID, 
-	CASE WHEN cr.UnderwriterDecision='Approved' THEN 1 ELSE 0 END AS NumApproves,
-	CASE WHEN cr.UnderwriterDecision='Rejected' THEN 1 ELSE 0 END AS NumRejects,
-	CASE WHEN c.BrokerId IS NULL THEN 0 ELSE 1 END AS IsBroker
+	(
+	 SELECT c.Id CustomerID, 
+	 CASE WHEN cr.UnderwriterDecision='Approved' THEN 1 ELSE 0 END AS NumApproves,
+	 CASE WHEN cr.UnderwriterDecision='Rejected' THEN 1 ELSE 0 END AS NumRejects,
+	 CASE WHEN c.BrokerId IS NULL THEN 0 ELSE 1 END AS IsBroker
 	 FROM Customer c LEFT JOIN CashRequests cr ON c.Id=cr.IdCustomer
-	WHERE c.GreetingMailSentDate>'2014-01-01'),
+	 WHERE @DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
+	),
 	CustomerApprovesRejects AS 
-	(	SELECT cd.CustomerID CustomerID, isnull(sum(cd.NumApproves),0) AS NumApproves, isnull(sum(cd.NumRejects),0) AS NumRejects, cd.IsBroker
-	    FROM CustomerDecisions cd
-		GROUP BY cd.CustomerID, cd.IsBroker
+	(
+	 SELECT cd.CustomerID CustomerID, 
+	 		isnull(sum(cd.NumApproves),0) AS NumApproves,
+	 		isnull(sum(cd.NumRejects),0) AS NumRejects,
+	 		cd.IsBroker
+	 FROM CustomerDecisions cd
+	 GROUP BY cd.CustomerID, cd.IsBroker
 	)
 	SELECT
 		SUM(crl.Amount) RequestedAmount,
@@ -75,7 +80,7 @@ BEGIN
 		AND 
 		@DateStart <= l.[Date] AND l.[Date] < @DateEnd
 		AND 
-		l.CustomerId NOT IN (SELECT customerId FROM Loan WHERE [Date] < @DateStart)
+		l.CustomerId NOT IN (SELECT CustomerId FROM Loan WHERE [Date] < @DateStart)
 	GROUP BY
 		s.RSource,
 		s.RMedium,
