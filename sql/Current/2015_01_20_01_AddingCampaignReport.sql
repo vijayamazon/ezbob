@@ -2,7 +2,7 @@
 DECLARE @Type NVARCHAR(100) = 'RPT_CAMPAIGN_REPORT'
 DECLARE @Title NVARCHAR(100) = 'Campaign traffic'
 DECLARE @Sp NVARCHAR(100) = 'RptCampaignReport'
-DECLARE @Emails NVARCHAR(200) = 'stasd+report@ezbob.com,sivans@ezbob.com'
+DECLARE @Emails NVARCHAR(200) = 'stasd+report@ezbob.com,sivanc@ezbob.com'
 DECLARE @Headers NVARCHAR(200) = 'Source,Medium,Name,Registrations,Personal,Company,DataSources,Applications,NumOfApproved,NumOfRejected,RequestedAmount,NumOfLoans,LoanAmount'
 DECLARE @Fields NVARCHAR(200) = 'Source,Medium,Name,Registrations,Personal,Company,DataSources,Applications,NumOfApproved,NumOfRejected,RequestedAmount,NumOfLoans,LoanAmount'
 
