@@ -173,6 +173,13 @@
 				ms_oLog.Error(cge, "Failed to validate {0} account, continuing with registration.", model.accountTypeName);
 
 				// Error is logged but not written into state.
+			} catch (ConfigException cex) {
+				if (cex.IsWarn) {
+					ms_oLog.Warn(cex, "Failed to validate {0} account.", model.accountTypeName);
+				} else {
+					ms_oLog.Error(cex, "Failed to validate {0} account.", model.accountTypeName);
+				}
+				oState.Error = CreateError(cex);
 			}
 			catch (ApiException cge) {
 				ms_oLog.Error(cge, "Failed to validate {0} account.", model.accountTypeName);

@@ -3,8 +3,10 @@
 namespace Integration.ChannelGrabberConfig {
 
 	public class ConfigException : Exception {
-
-		public ConfigException(string sMsg) : base(sMsg) {} // constructor
+		public bool IsWarn { get; set; }
+		public ConfigException(string sMsg, bool isWarn = false) : base(sMsg) {
+			IsWarn = isWarn;
+		} // constructor
 
 	} // class ConfigException
 

@@ -18,10 +18,10 @@ namespace Integration.ChannelGrabberConfig {
 
 		public void Validate() {
 			if (minlength < 0)
-				throw new ConfigException("Invalid minlength value.");
+				throw new ConfigException("Invalid minlength value.", isWarn: true);
 
 			if (maxlength < minlength)
-				throw new ConfigException("maxlength is less than minlength.");
+				throw new ConfigException("maxlength is less than minlength.", isWarn: true);
 		} // Validate
 
 		public override string ToString() {

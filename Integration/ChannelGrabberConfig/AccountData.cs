@@ -63,7 +63,7 @@ namespace Integration.ChannelGrabberConfig {
 			ScanAccounts(doc, SaveAccountID);
 
 			if (m_nAccountID < 1)
-				throw new ConfigException("Shop is not registered.");
+				throw new ConfigException("Shop is not registered.", isWarn: true);
 		} // VerifyAccountID
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace Integration.ChannelGrabberConfig {
 				throw new ConfigException("Service response is not well formatted.");
 
 			if (!XmlUtil.IsComplete(doc))
-				throw new ConfigException("Validation is not complete.");
+				throw new ConfigException("Validation is not complete.", isWarn: true);
 
 			if (!XmlUtil.IsEqual(doc, "validity", "true"))
 				throw new InvalidCredentialsException(AccountTypeName() + ": " + VendorInfo.ClientSide.ErrorMessage(ClientSide.SupportedErrorMessages.CannotValidate));
@@ -165,7 +165,7 @@ namespace Integration.ChannelGrabberConfig {
 			foreach (XmlNode oNode in doc.DocumentElement.ChildNodes) {
 				if (IsMe(oNode, false)) {
 					if (!XmlUtil.IsEqual(oNode, "validity", "true"))
-						throw new ConfigException("Cannot validate: invalid credentials.");
+						throw new ConfigException("Cannot validate: invalid credentials.", isWarn: true);
 
 					if (onFound(oNode))
 						break;
@@ -174,7 +174,7 @@ namespace Integration.ChannelGrabberConfig {
 		} // ScanAccounts
 
 		private bool ThrowAlreadyExists(XmlNode oNode) {
-			throw new ConfigException("Shop already registered.");
+			throw new ConfigException("Shop already registered.",isWarn: true);
 		} // ThrowAlreadyExists
 
 		private bool SaveAccountID(XmlNode oNode) {
