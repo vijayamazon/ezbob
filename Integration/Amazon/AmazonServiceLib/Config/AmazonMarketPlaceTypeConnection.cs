@@ -10,7 +10,7 @@ namespace EzBob.AmazonServiceLib.Config
 			SecretKeyId = "4yQzxltFZjlytmkKmlHhkAAcZTTZUbHpJekTOFj2";
 			MarketCountry = AmazonServiceCountry.UK;
 			ServiceType = AmazonServiceType.Live;
-            AskvilleAmazonLogin = "liat@ibai.co.il";
+            AskvilleAmazonLogin = "it@ezbob.com";
 		    AskvilleAmazonPass = "1qazxsw2";
 		}
 	}
