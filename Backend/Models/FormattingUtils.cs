@@ -44,7 +44,7 @@
 		}
 
 		public static string FormatShort(decimal value) {
-			return string.Format("{0:0.0}", Math.Truncate(value * 10) / 10);
+			return string.Format("{0:0.00}", Math.Truncate(value * 10) / 10);
 		}
 
 		public static string FormatMiddle(decimal value) {
