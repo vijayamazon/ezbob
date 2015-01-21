@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MedalCalculations;
@@ -8,7 +9,13 @@
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using PaymentServices.Calculators;
+
+	using TCrLoans = System.Collections.Generic.SortedDictionary<
+		int,
+		System.Collections.Generic.List<MaamMedalAndPricing.LoanMetaData>
+	>;
 
 	public class MaamMedalAndPricing : AStrategy {
 		public MaamMedalAndPricing(int topCount, int lastCheckedCashRequestID) {
@@ -16,6 +23,9 @@
 			this.lastCheckedID = lastCheckedCashRequestID;
 			this.data = new List<Datum>();
 			this.homeOwners = new SortedDictionary<int, bool>();
+			this.defaultCustomers = new SortedSet<int>();
+			this.crLoans = new TCrLoans();
+			this.loanSources = new SortedSet<string>();
 		} // constructor
 
 		public override string Name {
@@ -23,6 +33,29 @@
 		} // Name
 
 		public override void Execute() {
+			this.loanSources.Clear();
+			this.crLoans.Clear();
+			this.defaultCustomers.Clear();
+
+			DB.ForEachRowSafe(
+				srdc => defaultCustomers.Add(srdc["CustomerID"]),
+				"LoadDefaultCustomers",
+				CommandSpecies.StoredProcedure
+			);
+
+			DB.ForEachResult<LoanMetaData>(
+				lmd => {
+					if (this.crLoans.ContainsKey(lmd.CashRequestID))
+						this.crLoans[lmd.CashRequestID].Add(lmd);
+					else
+						this.crLoans[lmd.CashRequestID] = new List<LoanMetaData> { lmd };
+
+					this.loanSources.Add(lmd.LoanSourceName);
+				},
+				"LoadAllLoansMetaData",
+				CommandSpecies.StoredProcedure
+			);
+
 			string top = (topCount > 0) ? "TOP " + topCount : string.Empty;
 
 			string condition = (lastCheckedID > 0)
@@ -40,6 +73,8 @@
 			var pc = new ProgressCounter("{0} cash requests processed.", Log, 50);
 
 			foreach (Datum d in this.data) {
+				d.IsDefault = defaultCustomers.Contains(d.CustomerID);
+
 				var instance = new CalculateMedal(d.CustomerID, d.DecisionTime, true, false);
 				instance.Execute();
 
@@ -51,7 +86,23 @@
 						? CurrentValues.Instance.MaxCapHomeOwner
 						: CurrentValues.Instance.MaxCapNotHomeOwner
 				);
+
+				var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
+					d.CustomerID,
+					amount,
+					(AutomationCalculator.Common.Medal)instance.Result.MedalClassification,
+					(AutomationCalculator.Common.MedalType)instance.Result.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)instance.Result.TurnoverType,
+					d.DecisionTime,
+					DB,
+					Log
+				).Init();
+				approveAgent.MakeDecision();
+
+				amount = approveAgent.Trail.RoundedAmount;
+
 				d.Auto.Amount = amount;
+				d.AutoDecision = approveAgent.Trail.GetDecisionName();
 
 				if (amount == 0) {
 					d.Auto.RepaymentPeriod = 0;
@@ -85,14 +136,14 @@
 			foreach (Datum d in this.data) {
 				Log.Debug("{0}", d);
 
-				lst.Add(d.ToCsv());
+				lst.Add(d.ToCsv(crLoans, loanSources));
 			} // for each
 
 			Log.Debug("Output data - end.");
 
 			Log.Debug(
 				"\n\nCSV output - begin:\n{0}\n{1}\nCSV output - end.\n",
-				Datum.CsvTitles(),
+				Datum.CsvTitles(loanSources),
 				string.Join("\n", lst)
 			);
 		} // Execute
@@ -123,6 +174,73 @@
 			this.data.Add(d);
 		} // ProcessRow
 
+		internal class LoanMetaData : AResultRow {
+			public int CashRequestID { get; set; }
+			public int LoanID { get; set; }
+			public string LoanSourceName { get; set; }
+			public DateTime LoanDate { get; set; }
+			public decimal LoanAmount { get; set; }
+			public string Status {
+				get { return LoanStatus.ToString(); }
+				set {
+					LoanStatus ls;
+					Enum.TryParse(value, true, out ls);
+					LoanStatus = ls;
+				} // set
+			} // Status
+			public decimal RepaidPrincipal { get; set; }
+
+			public LoanStatus LoanStatus { get; protected set; }
+		} // class LoanMetaData
+
+		internal class LoanSummaryData : LoanMetaData {
+			public LoanSummaryData() {
+				Counter = 0;
+			} // constructor
+
+			public void Add(LoanMetaData lmd) {
+				if (Counter == 0) {
+					LoanAmount = lmd.LoanAmount;
+					RepaidPrincipal = lmd.RepaidPrincipal;
+					LoanStatus = lmd.LoanStatus;
+				} else {
+					LoanAmount += lmd.LoanAmount;
+					RepaidPrincipal += lmd.RepaidPrincipal;
+
+					if (lmd.LoanStatus == LoanStatus.Late)
+						LoanStatus = LoanStatus.Late;
+					else if (lmd.LoanStatus == LoanStatus.Live) {
+						if (LoanStatus != LoanStatus.Late)
+							LoanStatus = LoanStatus.Live;
+					} else {
+						if ((LoanStatus != LoanStatus.Late) && (LoanStatus != LoanStatus.Live))
+							LoanStatus = LoanStatus.PaidOff;
+					} // if
+				} // if
+
+				Counter++;
+			} // Add
+
+			public int Counter { get; private set; }
+
+			/// <summary>
+			/// Returns a string that represents the current object.
+			/// </summary>
+			/// <returns>
+			/// A string that represents the current object.
+			/// </returns>
+			public override string ToString() {
+				return string.Join(";",
+					Counter,
+					LoanStatus.ToString(),
+					LoanAmount,
+					RepaidPrincipal
+				);
+			} // ToString
+		} // LoanSummaryData
+
+		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class Datum {
 			public Datum() {
 				Manual = new MedalAndPricing();
@@ -141,6 +259,10 @@
 			public string Decision { get; set; }
 
 			public MedalAndPricing Manual { get; private set; }
+
+			public string AutoDecision { get; set; }
+			public bool IsDefault { get; set; }
+
 			public MedalAndPricing Auto { get; private set; }
 			public SetupFeeConfiguration ManualCfg { get; private set; }
 
@@ -163,45 +285,76 @@
 			/// </returns>
 			public override string ToString() {
 				return string.Format(
-					"cash request: {0}, customer: {1}, broker: {2}, decision: {3} at {4}; auto: {5}; manual: {6}, cfg: {7}",
+					"cash request: {0}, customer: {1}, broker: {2}, decision: {3} at {4}; auto: {5}; manual: {6}",
 					CashRequestID,
 					CustomerID,
 					BrokerID,
 					Decision,
 					DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
 					Auto,
-					Manual,
-					ManualCfg
+					Manual
 				);
 			} // ToString
 
-			public static string CsvTitles() {
+			public static string CsvTitles(SortedSet<string> sources) {
+				var os = new List<string>();
+
+				foreach (var s in sources) {
+					os.Add(string.Format(
+						"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount",
+						s
+					));
+				} // for each
+
 				return string.Join(";",
 					"Cash Request ID",
 					"Customer ID",
 					"Broker ID",
+					"Is Default Now",
+					"Decision time",
 					"Manual decision",
-					"Manual decision time",
-					MedalAndPricing.CsvTitles("Auto"),
 					MedalAndPricing.CsvTitles("Manual"),
-					SetupFeeConfiguration.CsvTitles()
+					"Auto decision",
+					MedalAndPricing.CsvTitles("Auto"),
+					string.Join(";", os)
 				);
 			} // CsvTitles
 
-			public string ToCsv() {
+			public string ToCsv(TCrLoans crLoans, SortedSet<string> sources) {
+				List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
+					? crLoans[CashRequestID]
+					: new List<LoanMetaData>();
+
+				var bySource = new SortedDictionary<string, LoanSummaryData>();
+
+				foreach (var s in sources)
+					bySource[s] = new LoanSummaryData();
+
+				foreach (var lmd in lst)
+					bySource[lmd.LoanSourceName].Add(lmd);
+
+				var os = new List<string>();
+
+				foreach (var s in sources)
+					os.Add(bySource[s].ToString());
+
 				return string.Join(";",
 					CashRequestID.ToString(CultureInfo.InvariantCulture),
 					CustomerID.ToString(CultureInfo.InvariantCulture),
 					BrokerID.ToString(CultureInfo.InvariantCulture),
-					Decision,
+					IsDefault,
 					DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
-					Auto.ToCsv(),
+					Decision,
 					Manual.ToCsv(),
-					ManualCfg.ToCsv()
+					AutoDecision,
+					Auto.ToCsv(),
+					string.Join(";", os)
 				);
 			} // ToCsv
 		} // class Datum
 
+		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class SetupFeeConfiguration {
 			public int UseSetupFee { get; set; }
 			public bool UseBrokerSetupFee { get; set; }
@@ -239,21 +392,9 @@
 					Amount.HasValue ? Amount.Value.ToString("N2", CultureInfo.InvariantCulture) : "--"
 				);
 			} // ToString
-
-			public static string CsvTitles() {
-				return "Cfg: Use Setup Fee;Cfg: Use Broker Setup Fee;Cfg: Setup Fee Pct;Cfg: Setup Fee Value";
-			} // ToCsv
-
-			public string ToCsv() {
-				return string.Join(";",
-					UseSetupFee == 1,
-					UseBrokerSetupFee,
-					Percent.HasValue ? Percent.Value.ToString(CultureInfo.InvariantCulture) : "",
-					Amount.HasValue ? Amount.Value.ToString(CultureInfo.InvariantCulture) : ""
-				);
-			} // ToCsv
 		} // class SetupFeeConfiguration
 
+		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class MedalAndPricing {
 			public decimal Amount { get; set; }
 			public decimal InterestRate { get; set; }
@@ -294,7 +435,10 @@
 		private readonly int lastCheckedID;
 
 		private readonly List<Datum> data;
-		private readonly SortedDictionary<int, bool> homeOwners; 
+		private readonly SortedDictionary<int, bool> homeOwners;
+		private readonly SortedSet<int> defaultCustomers;
+		private readonly TCrLoans crLoans;
+		private readonly SortedSet<string> loanSources; 
 
 		private const string QueryTemplate = @"
 SELECT {0}
