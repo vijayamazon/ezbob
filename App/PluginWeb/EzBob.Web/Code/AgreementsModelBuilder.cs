@@ -148,7 +148,7 @@
 				Fees = "0",
 				Date = FormattingUtils.FormatDateToString(installment.Date),
 				StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
-				InterestRate = string.Format("{0:0.0}", installment.InterestRate * 100),
+				InterestRate = string.Format("{0:0.00}", installment.InterestRate * 100),
 				Iterration = i + 1,
 			}).ToList();
 		}
