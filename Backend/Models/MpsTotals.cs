@@ -6,9 +6,6 @@
 	public class MpsTotals
 	{
 		[DataMember]
-		public double TotalSumOfOrders1YTotal { get; set; }
-
-		[DataMember]
 		public double TotalSumOfOrders3MTotal { get; set; }
 
 		[DataMember]

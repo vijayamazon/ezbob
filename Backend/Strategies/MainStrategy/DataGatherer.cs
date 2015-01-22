@@ -75,7 +75,6 @@
 		public bool FirstRepaymentDatePassed { get; private set; }
 
 		// Turnovers and seniority
-		public double TotalSumOfOrders1YTotal { get; private set; }
 		public double TotalSumOfOrders1YTotalForRejection { get; private set; }
 		public double TotalSumOfOrders3MTotalForRejection { get; private set; }
 		public double Yodlee1YForRejection { get; private set; }
@@ -174,7 +173,6 @@
 		private void GatherTurnoversAndSeniority() {
 			this.log.Info("Getting turnovers and seniority");
 			MpsTotals totals = new MpsTotals(); // TODO: load marketplace totals by customer id
-			TotalSumOfOrders1YTotal = totals.TotalSumOfOrders1YTotal;
 			TotalSumOfOrders1YTotalForRejection = totals.TotalSumOfOrders1YTotalForRejection;
 			TotalSumOfOrders3MTotalForRejection = totals.TotalSumOfOrders3MTotalForRejection;
 			Yodlee1YForRejection = totals.Yodlee1YForRejection;

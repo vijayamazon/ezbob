@@ -158,6 +158,7 @@
 			this.medalScore = instance.Result.TotalScoreNormalized;
 			this.medalType = instance.Result.MedalType;
 			this.turnoverType = instance.Result.TurnoverType;
+			this.turnoverUsedInMedal = instance.Result.AnnualTurnover;
 
 			this.modelLoanOffer = instance.Result.RoundOfferedAmount();
 		} // CalculateNewMedal
@@ -200,7 +201,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", this.customerId),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("AnnualTurnover", this.dataGatherer.TotalSumOfOrders1YTotal),
+				new QueryParameter("AnnualTurnover", this.turnoverUsedInMedal),
 				new QueryParameter("TotalSumOfOrdersForLoanOffer", this.dataGatherer.TotalSumOfOrdersForLoanOffer),
 				new QueryParameter("MarketplaceSeniorityYears", this.dataGatherer.MarketplaceSeniorityYears),
 				new QueryParameter("MaxFeedback", this.dataGatherer.ModelMaxFeedback),
@@ -548,7 +549,7 @@
 				cr.MedalType = this.medalClassification;
 				cr.ScorePoints = (double)this.medalScore;
 				cr.ExpirianRating = this.dataGatherer.ExperianConsumerScore;
-				cr.AnnualTurnover = (int)this.dataGatherer.TotalSumOfOrders1YTotal;
+				cr.AnnualTurnover = (int)this.turnoverUsedInMedal;
 				cr.LoanType = loanTypeIdToUse;
 				cr.LoanSource = isEuToUse
 					? this._loanSourceRepository.GetByName(LoanSourceName.EU.ToString())
@@ -708,6 +709,7 @@
 		private bool isHomeOwner;
 		private Medal medalClassification;
 		private TurnoverType? turnoverType;
+		private decimal turnoverUsedInMedal;
 		private decimal medalScore;
 		private Ezbob.Backend.Strategies.MedalCalculations.MedalType medalType;
 		private int modelLoanOffer;

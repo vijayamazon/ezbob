@@ -97,6 +97,7 @@
 
 		public virtual IList<LoanLegal> LoanLegals { get; set; }
 
+		// This property contains customer turnover used to calculate customer medal.
 		public virtual int AnnualTurnover { get; set; }
 
 		public virtual QuickOffer QuickOffer { get; set; }
