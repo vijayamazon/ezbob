@@ -88,6 +88,8 @@ BEGIN
 		)
 		AND
 		o.CustomerMarketPlaceId = @MpID
+		AND
+		o.Created < @Now
 	GROUP BY
 		o.DateFrom,
 		o.DateTo
