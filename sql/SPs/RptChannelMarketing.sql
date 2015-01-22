@@ -63,30 +63,37 @@ BEGIN
 		car.IsBroker
 
 	-- loans (new loans)
-	
+	;WITH LoanCampaignSource AS 
+	(
 	SELECT
 		isnull(COUNT(l.Id),0) AS NumOfLoans,
 		isnull(SUM(L.loanAmount),0) AS LoanAmount, 
 		CASE WHEN c.BrokerID IS NULL THEN s.RSource ELSE 'Broker' END  AS Source,
 		CASE WHEN c.BrokerID IS NULL THEN s.RMedium ELSE '' END AS Medium
-	INTO
-		#temp2	
 	FROM
 		Loan l
 		INNER JOIN Customer c ON l.CustomerId = c.Id
-		INNER JOIN CampaignSourceRef s ON s.CustomerId = c.Id
+		LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
 	WHERE
 		c.IsTest = 0
 		AND 
-		@DateStart <= l.[Date] AND l.[Date] < @DateEnd
+		l.[Date]>=@DateStart AND l.[Date]<=@DateEnd
 		AND 
 		l.CustomerId NOT IN (SELECT CustomerId FROM Loan WHERE [Date] < @DateStart)
 	GROUP BY
 		s.RSource,
 		s.RMedium,
 		c.BrokerID
-
-	-- total
+	)
+	SELECT sum(lcs.NumOfLoans) AS NumOfLoans,
+		   SUM(lcs.loanAmount) AS LoanAmount, 
+		   lcs.Source,
+		   lcs.Medium
+	INTO
+		#temp2		   
+	FROM LoanCampaignSource	lcs
+	GROUP BY lcs.Source, lcs.Medium
+   	-- total
 
 	SELECT
 		A.Source, 
@@ -99,16 +106,18 @@ BEGIN
 		sum(A.NumOfApproved) AS NumOfApproved, 
 		sum(A.NumOfRejected) AS NumOfRejected, 
 		sum(A.RequestedAmount) AS RequestedAmount,
-		isnull(sum(B.NumOfLoans),0) AS NumOfLoans, 
-		isnull(sum(B.LoanAmount),0) AS LoanAmount
+		isnull(B.NumOfLoans,0) AS NumOfLoans, 
+		isnull(B.LoanAmount,0) AS LoanAmount
 		
 	FROM
 		#temp1 A
-		FULL JOIN #temp2 B ON A.Source = B.Source AND A.Medium = B.Medium
+		FULL JOIN #temp2 B ON A.Source = B.Source AND (A.Medium = B.Medium OR (A.Medium IS NULL AND B.Medium IS NULL))
 	WHERE A.Registrations IS NOT NULL
 	GROUP BY 
 		A.Source, 
-		A.Medium
+		A.Medium,
+		B.NumOfLoans,
+		B.LoanAmount
 				
 	DROP TABLE #temp2
 	DROP TABLE #temp1

@@ -19,14 +19,14 @@ BEGIN
 	CASE WHEN cr.UnderwriterDecision='Approved' THEN 1 ELSE 0 END AS NumApproves,
 	CASE WHEN cr.UnderwriterDecision='Rejected' THEN 1 ELSE 0 END AS NumRejects
 	 FROM Customer c LEFT JOIN CashRequests cr ON c.Id=cr.IdCustomer
-	WHERE c.GreetingMailSentDate>'2014-01-01'),
+	WHERE @DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd),
 	CustomerApprovesRejects AS 
 	(	SELECT cd.CustomerID CustomerID, isnull(sum(cd.NumApproves),0) AS NumApproves, isnull(sum(cd.NumRejects),0) AS NumRejects FROM
 		CustomerDecisions cd
 		GROUP BY cd.CustomerID
 	)
 	SELECT
-		SUM(crl.Amount) RequestedAmount,
+		SUM(isnull(crl.Amount,0)) RequestedAmount,
 		SUM(CASE WHEN c.WizardStep IN (1,5,6,2,4) THEN 1 ELSE 0 END) AS Registrations, 
 		SUM(CASE WHEN c.WizardStep IN (5,6,2,4) THEN 1 ELSE 0 END) AS Personal, 
 		SUM(CASE WHEN c.WizardStep IN (6,2,4) THEN 1 ELSE 0 END) AS 'Company', 
@@ -41,7 +41,7 @@ BEGIN
 		#temp1
 	FROM
 		Customer c
-		INNER JOIN CustomerRequestedLoan crl ON crl.CustomerId = c.Id
+		LEFT JOIN CustomerRequestedLoan crl ON crl.CustomerId = c.Id
 		LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
 		LEFT JOIN Loan l ON l.CustomerId = c.Id
 		LEFT JOIN CustomerApprovesRejects car ON car.CustomerID = c.Id
@@ -79,12 +79,12 @@ BEGIN
 		AND 
 		@DateStart <= l.[Date] AND l.[Date] < @DateEnd
 		AND 
-		l.CustomerId NOT IN (SELECT customerId FROM Loan WHERE [Date] < @DateStart)
+		l.CustomerId NOT IN (SELECT CustomerId FROM Loan WHERE [Date] < @DateStart)
 		AND
-		s.RSource IN ('Google', 'Gmail', 'Facebook')
-		AND 
-		s.RSource IS NOT NULL
-		AND
+	    s.RSource IN ('Google', 'Gmail', 'Facebook')
+	   	AND 
+	  	s.RSource IS NOT NULL
+	  	AND
 		c.BrokerID IS NULL
 	GROUP BY
 		s.RSource,
@@ -104,17 +104,16 @@ BEGIN
 		A.Applications, 
 		A.NumOfApproved, 
 		A.NumOfRejected, 
-		isnull(B.NumOfLoans,0) AS NumOfLoans, 
 		A.RequestedAmount,
+		isnull(B.NumOfLoans,0) AS NumOfLoans, 
 		isnull(B.LoanAmount,0) AS LoanAmount
 		
 	FROM
 		#temp1 A
-		FULL JOIN #temp2 B ON A.Source = B.Source AND A.Medium = B.Medium	AND A.Name = B.Name
+		FULL OUTER JOIN #temp2 B ON A.Source = B.Source AND (A.Medium = B.Medium OR (A.Medium IS NULL AND B.Medium IS NULL)) AND (A.Name = B.Name OR (A.Name IS NULL AND B.Name IS NULL))
 	WHERE A.Registrations IS NOT NULL
-	
+  	
 	DROP TABLE #temp2
 	DROP TABLE #temp1
 END
-
 GO
