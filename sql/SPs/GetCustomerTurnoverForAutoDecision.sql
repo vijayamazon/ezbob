@@ -56,8 +56,11 @@ BEGIN
 		h.UpdatingEnd <= @Now
 		AND
 		ISNULL(m.Disabled, 0) = 0
-		AND
-		(LEN(h.Error) = 0 OR h.Error IS NULL)
+		AND (
+			h.Error IS NULL
+			OR
+			LTRIM(RTRIM(h.Error)) = ''
+		)
 	GROUP BY
 		h.CustomerMarketPlaceId
 

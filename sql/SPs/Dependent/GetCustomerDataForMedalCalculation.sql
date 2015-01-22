@@ -126,7 +126,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@NumOfHmrcMps = COUNT(1),
+		@NumOfHmrcMps = COUNT(DISTINCT m.Id),
 		@EarliestHmrcLastUpdateDate = MIN(m.UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace m
@@ -147,7 +147,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@NumOfYodleeMps = COUNT(1),
+		@NumOfYodleeMps = COUNT(DISTINCT m.Id),
 		@EarliestYodleeLastUpdateDate = MIN(m.UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace m

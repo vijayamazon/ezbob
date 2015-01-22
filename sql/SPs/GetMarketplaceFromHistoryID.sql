@@ -32,7 +32,14 @@ BEGIN
 	FROM
 		MP_CustomerMarketPlaceUpdatingHistory h
 	WHERE
-		h.Id = @HistoryID and h.Error is null
+		h.Id = @HistoryID
+		AND
+		h.UpdatingEnd IS NOT NULL
+		AND (
+			h.Error IS NULL
+			OR
+			LTRIM(RTRIM(h.Error)) = ''
+		)
 
 	------------------------------------------------------------------------------
 
