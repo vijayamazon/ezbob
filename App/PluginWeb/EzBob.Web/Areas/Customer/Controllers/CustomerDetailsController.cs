@@ -761,7 +761,7 @@
 
 			if (companyAddress != null) {
 				foreach (var val in companyAddress) {
-					val.AddressType = CustomerAddressType.LimitedCompanyAddress; //TODO
+					val.AddressType = CustomerAddressType.LimitedCompanyAddress; //TODO set proper address type?
 					val.Customer = customer;
 					val.Company = company;
 				} // for each

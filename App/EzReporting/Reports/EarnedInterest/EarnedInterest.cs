@@ -82,7 +82,7 @@
 				break;
 
 			default:
-				throw new NotImplementedException("Unsupported working mode: " + this.m_nMode.ToString());
+				throw new ArgumentOutOfRangeException("Unsupported working mode: " + this.m_nMode, (Exception)null);
 			} // switch
 
 			FillFreezeIntervals();

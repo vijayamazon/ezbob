@@ -67,11 +67,7 @@
 			case TypeOfBusinessReduced.Limited:
 				address.AddressType = CustomerAddressType.LimitedCompanyAddress;
 				break;
-			case TypeOfBusinessReduced.NonLimited:
-				address.AddressType = CustomerAddressType.NonLimitedCompanyAddress;
-				break;
-			case TypeOfBusinessReduced.Personal:
-				//TODO not sure about it
+			default:
 				address.AddressType = CustomerAddressType.NonLimitedCompanyAddress;
 				break;
 			} // switch
