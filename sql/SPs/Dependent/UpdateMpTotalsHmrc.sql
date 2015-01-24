@@ -89,7 +89,7 @@ BEGIN
 		AND
 		o.CustomerMarketPlaceId = @MpID
 		AND
-		o.Created < @Now
+		o.CustomerMarketPlaceUpdatingHistoryRecordId <= @HistoryID
 	GROUP BY
 		o.DateFrom,
 		o.DateTo
