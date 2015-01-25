@@ -17,7 +17,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		public MarketplaceModelBuilder(ISession session) {
 			_session = session ?? ObjectFactory.GetInstance<ISession>();
 		}
-
+		/*
 		public static IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault) {
 			int closestTime = 0;
 			IAnalysisDataParameterInfo closestSoFar = null;
@@ -55,13 +55,10 @@ namespace EzBob.Models.Marketplaces.Builders {
 			}
 			return null;
 		}
+		*/
+
 
 		public MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history) {
-			var data = new Dictionary<string, string> { // TODO: fill with real aggregation data
-				{"some key", "0"},
-				{"some other key", "1"},
-			};
-
 			var model = new MarketPlaceModel {
 				Id = mp.Id,
 				Type = mp.DisplayName,
@@ -69,7 +66,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 				LastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress",
 				UpdatingStatus = mp.GetUpdatingStatus(history),
 				UpdateError = mp.GetUpdatingError(history),
-				AnalysisDataInfo = data,
 				AccountAge = GetAccountAge(mp),
 				PositiveFeedbacks = 0,
 				NegativeFeedbacks = 0,
@@ -86,7 +82,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			};
 
 			InitializeSpecificData(mp, model, history);
-
+			SetAggregationData(model, mp, history);
 			return model;
 		}
 
@@ -133,6 +129,14 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 		public void UpdateOriginationDate(MP_CustomerMarketPlace mp) {
 			mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
+		}
+
+		public virtual void SetAggregationData(MarketPlaceModel model, MP_CustomerMarketPlace mp, DateTime? history) {
+			var data = new Dictionary<string, string> { // TODO: fill with real aggregation data for each mp
+				{"some key", "0"},
+				{"some other key", "1"},
+			};
+			model.AnalysisDataInfo = data;
 		}
 
 		protected virtual void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
