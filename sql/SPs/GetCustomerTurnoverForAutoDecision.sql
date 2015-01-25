@@ -53,7 +53,7 @@ BEGIN
 				t.InternalId IN (@HMRC, @Yodlee, @eBay, @Amazon, @PayPal)
 			)
 	WHERE
-		h.UpdatingEnd <= @Now
+		h.UpdatingEnd < @Now
 		AND
 		ISNULL(m.Disabled, 0) = 0
 		AND (
@@ -102,6 +102,8 @@ BEGIN
 		INNER JOIN #mp m
 			ON t.CustomerMarketPlaceId = m.MpID
 			AND t.TheMonth BETWEEN m.YearAgo AND m.CurrentMonth
+	WHERE
+		t.UpdatingEnd < @Now
 
 	-- RELEVANT RECORDS NOT FOUND
 	IF (SELECT COUNT(*) FROM #raw ) = 0 
