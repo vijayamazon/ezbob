@@ -6,8 +6,6 @@
 
 	public class YodleeAggregation {
 
-		//public YodleeAggregation() {}
-
 		public virtual long YodleeAggregationID {get;set;}		
 		public virtual System.DateTime TheMonth {get;set;}
 		public virtual bool IsActive {get;set;}

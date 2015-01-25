@@ -8,7 +8,6 @@
 
 	public class AmazonAggregation {
 		public virtual long AmazonAggregationID { get; set; }
-		
 		public virtual System.DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }
@@ -56,10 +55,6 @@
 			Map(x => x.TotalSumOfOrders);
 
 			References(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
-
-			//References(x => x.CustomerMarketPlaceUpdatingHistory).Column("CustomerMarketPlaceUpdatingHistoryID"); //.ForeignKey("CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
-			//References(x => x.CustomerMarketPlaceUpdatingHistory).ForeignKey("MP_CustomerMarketplaceUpdatingHistory").Column("Id").Cascade.None();
-			//		References(x => x.CustomerMarketPlaceUpdatingHistoryID, "CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
 
 		} // constructor
 	}

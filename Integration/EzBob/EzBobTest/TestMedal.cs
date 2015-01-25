@@ -58,6 +58,28 @@ namespace EzBobTest {
 			this.resultInput = resultInput;
 		}
 	}
+
+	class OnlineNonLimitedNoBusinessScoreMedalCalculator1NoGathering : OnlineNonLimitedNoBusinessScoreMedalCalculator1 {
+		private readonly MedalResult resultsInput;
+		public OnlineNonLimitedNoBusinessScoreMedalCalculator1NoGathering(MedalResult resultsInput) {
+			this.resultsInput = resultsInput;
+		}
+	}
+	
+	class SoleTraderMedalCalculator1NoGathering : SoleTraderMedalCalculator1 {
+		private readonly MedalResult resultsInput;
+		public SoleTraderMedalCalculator1NoGathering(MedalResult resultsInput) {
+			this.resultsInput = resultsInput;
+		}
+	}
+	
+
+	class OfflineLimitedMedalCalculator1NoGathering : LimitedMedalCalculator1 {
+		private readonly MedalResult resultsInput;
+		public OfflineLimitedMedalCalculator1NoGathering(MedalResult resultsInput) {
+			this.resultsInput = resultsInput;
+		}
+	}
 	
 
 	/// <summary>
@@ -134,12 +156,9 @@ namespace EzBobTest {
 
 			resultsInput.MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType.OnlineLimited;
 			var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
-
 			MedalResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
-
 			resultsInput.MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType.NonLimited;
 			var calculatorTester1 = new NonLimitedMedalCalculator1NoGathering(resultsInput);
-
 			MedalResult resultsOutput1 = calculatorTester1.CalculateMedalScore(customerId, calculationTime);
 
 			// Assert.AreEqual(resultsOutput.NetWorthGrade, 1); Assert.AreEqual(resultsOutput.EzbobSeniorityGrade, 3);
@@ -148,7 +167,6 @@ namespace EzBobTest {
 		[Test]
 		public void TestMaamMedalAndPricing() {
 			var stra = new MaamMedalAndPricing(1, 16431);
-
 			stra.Execute();
 		} // TestMaamMedalAndPricing
 
@@ -162,110 +180,81 @@ namespace EzBobTest {
 			if ((daysInMonth - calculationDate.Date.Day) >= 3 && (daysInMonth - lastUpdate.Date.Day) >= 3) {
 				return calculationDate.AddMonths(-12);
 			}
-
 			return calculationDate.AddMonths(-13);
 		}
-
-		[Test]
-		public void Test_TurnoverForMedalTest_NH() 
-		{
-			var rep = ObjectFactory.GetInstance<CustomerMarketPlaceUpdatingHistoryRepository>();
-			int customerId = 211; //171 ; //348; // 363; //290; // 178; //;363
-			//DateTime calculationTime = new DateTime(2013, 11, 30);
-			//DateTime calculationTime = new DateTime(2014, 01, 01);
-			DateTime calculationTime = new DateTime(2015, 09, 28);
-			DateTime yearAgo = calculationTime.AddMonths(-13);
-
-			//Console.WriteLine("yearAgo: {0}", yearAgo);
-
-			Console.WriteLine("daysInmonth: {0}", DateTime.DaysInMonth(calculationTime.Year, calculationTime.Month));
-
-			var c = rep.GetByCustomerId(customerId);
-
-			var lastUpdate = c.Where(x => x.UpdatingEnd < calculationTime)
-				.Where(x => x.Error == null)
-				.SelectMany(y => y.AmazonAggregations)
-				.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id)
-				.First();
-				//.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-
-			DateTime lastUpdateDate = (DateTime)lastUpdate.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-
-			DateTime yearAgo1 = this.getPeriodAgo(calculationTime, lastUpdateDate);
-			Console.WriteLine(yearAgo1);
-			return;
-
-		//	Console.WriteLine("??? {0}", (calculationTime.AddDays(-3).Date == lastUpdate.Date));
-		//	Console.WriteLine("calculationTime: {0}, calculationTime-3 days: {1}, lastupd: {2}", calculationTime, calculationTime.AddDays(-3), lastUpdate.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
-			//Console.WriteLine("{0}, {1}, {2}, {3}, {4}", lastUpdate.CustomerMarketPlaceUpdatingHistory.Id, lastUpdate.TheMonth, lastUpdate.Turnover, lastUpdate.AmazonAggregationID,
-	//lastUpdate.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
-
-			var amazons = c.Where(x => x.UpdatingEnd < calculationTime).Where(x => x.Error == null).SelectMany(y => y.AmazonAggregations)
-					.Where(z => z.TheMonth >= yearAgo).OrderByDescending(yy => yy.TheMonth).AsEnumerable();
-			
-			Console.WriteLine("=========all=={0}=======", amazons.Count());
-			foreach (var y in amazons)
-				Console.WriteLine("{0}, {1}, {2}, {3}, {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.AmazonAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
-
-
-			if (amazons.Count() > 0) {
-
-				var amazonList = amazons.GroupBy(p => p.TheMonth).Select(g => g.Last());
-
-				Console.WriteLine("=========filtered=={0}=======", amazonList.Count());
-				foreach (var y in amazonList) 
-	Console.WriteLine("{0}, {1}, {2}, {3}, {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.AmazonAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
-			
-			
-			}
-
-			/*		var amazonHistoryID = amazons.OrderByDescending(x => x.CustomerMarketPlaceUpdatingHistory.Id).First().CustomerMarketPlaceUpdatingHistory.Id;
-		    		var amazonList = amazons.Where(x => x.CustomerMarketPlaceUpdatingHistory.Id == amazonHistoryID).Where(z => z.TheMonth >= yearAgo).OrderByDescending(xx => xx.TheMonth);
-					Console.WriteLine("=========filtered=={0}=======", amazonList.Count());
-					amazonList.ForEach(y => Console.WriteLine("{0}, {1}, {2}, {3}, {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.AmazonAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd));
-			*/
-		}
-
+		
 
 		[Test]
 		public void Test_TurnoverForMedalTest_NH_AV() {
 			//DateTime calculationTime = new DateTime(2013, 11, 30);
+			DateTime calculationTime = new DateTime(2013, 08, 31);
 			//DateTime calculationTime = new DateTime(2013, 10, 02);
-			DateTime calculationTime = new DateTime(2014, 01, 01);
-			int customerId = 171 ;  //211 ; //348; // 363; //290; // 178; //;363
-			
+			//DateTime calculationTime = new DateTime(2014, 01, 01);
+			int customerId = 211;  //  171; //348; // 363; //290; // 178; //;363
+			// 171: amazon, pp, ebay
+			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
+
+			this.m_oLog.Info("START TURVOBER FOR MEDAL customerID: {0}; calculationTime: {1}", customerId, calculationTime.Date);
+
+			this.m_oLog.Info("-------------------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
 			// OnlineNonLimitedWithBusinessScoreMedalCalculator
-			// Primary
 			MedalResult resultsInput = new MedalResult(customerId);
 			var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
 			MedalResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
 			//AV
 			var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
 			var data = msc.GetInputParameters(customerId, calculationTime);
+			this.m_oLog.Info("--------###-----------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
 
-			/*// NonLimitedMedalCalculator
-			// Primary
+			this.m_oLog.Info("-------------------NonLimitedMedalCalculator----------------------");
+			// NonLimitedMedalCalculator
 			MedalResult resultsInput1 = new MedalResult(customerId);
 			var calculatorTester1 = new NonLimitedMedalCalculator1NoGathering(resultsInput1);
 			MedalResult resultsOutput1 = calculatorTester1.CalculateMedalScore(customerId, calculationTime);
 			//AV
 			var msc1 = new NonLimitedMedalCalculator(this.m_oDB, this.m_oLog);
-			var data1 = msc.GetInputParameters(customerId, calculationTime);
-			 
-			// NonLimitedMedalCalculator
-			// Primary
+			var data1 = msc1.GetInputParameters(customerId, calculationTime);
+			this.m_oLog.Info("--------###-----------NonLimitedMedalCalculator----------------------");
+
+			this.m_oLog.Info("-------------------OnlineLImitedMedalCalculator----------------------");
+			// OnlineLImitedMedalCalculator
 			MedalResult resultsInput2 = new MedalResult(customerId);
 			var calculatorTester2 = new OnlineLimitedMedalCalculator1NoGathering(resultsInput2);
 			MedalResult resultsOutput2 = calculatorTester2.CalculateMedalScore(customerId, calculationTime);
 			//AV
-			var msc2 = new OfflineLImitedMedalCalculator(this.m_oDB, this.m_oLog);
-			var data2 = msc2.GetInputParameters(customerId, calculationTime);*/
+			var msc2 = new OnlineLImitedMedalCalculator(this.m_oDB, this.m_oLog);
+			var data2 = msc2.GetInputParameters(customerId, calculationTime);
+			this.m_oLog.Info("--------###-----------OnlineLImitedMedalCalculator----------------------");
 
-			/*resultsInput.MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType.NonLimited;
-			var calculatorTester1 = new NonLimitedMedalCalculator1NoGathering(resultsInput);
-			MedalResult resultsOutput1 = calculatorTester1.CalculateMedalScore(customerId, calculationTime);*/
-			// 171: amazon, pp, ebay
-			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
+			this.m_oLog.Info("-------------------OnlineNonLimitedNoBusinessScoreMedalCalculator----------------------");
+			// OnlineNonLimitedNoBusinessScoreMedalCalculator
+			MedalResult resultsInput3 = new MedalResult(customerId);
+			var calculatorTester3 = new OnlineNonLimitedNoBusinessScoreMedalCalculator1NoGathering(resultsInput3);
+			MedalResult resultsOutput3 = calculatorTester3.CalculateMedalScore(customerId, calculationTime);
+			//AV
+			var msc3 = new OnlineNonLimitedNoBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
+			var data3 = msc3.GetInputParameters(customerId, calculationTime);
+			this.m_oLog.Info("--------###-----------OnlineNonLimitedNoBusinessScoreMedalCalculator----------------------");
+
+			this.m_oLog.Info("-------------------SoleTraderMedalCalculator----------------------");
+			// SoleTraderMedalCalculator
+			MedalResult resultsInput4 = new MedalResult(customerId);
+			var calculatorTester4 = new SoleTraderMedalCalculator1NoGathering(resultsInput4);
+			MedalResult resultsOutput4 = calculatorTester4.CalculateMedalScore(customerId, calculationTime);
+			//AV
+			var msc4 = new SoleTraderMedalCalculator(this.m_oDB, this.m_oLog);
+			var data4 = msc4.GetInputParameters(customerId, calculationTime);
+			this.m_oLog.Info("--------###-----------SoleTraderMedalCalculator----------------------");
+
+			this.m_oLog.Info("-------------------OfflineLImitedMedalCalculator----------------------");
+			// OfflineLImitedMedalCalculator
+			MedalResult resultsInput5 = new MedalResult(customerId);
+			var calculatorTester5 = new OfflineLimitedMedalCalculator1NoGathering(resultsInput5);
+			MedalResult resultsOutput5 = calculatorTester5.CalculateMedalScore(customerId, calculationTime);
+			//AV
+			var msc5 = new OfflineLImitedMedalCalculator(this.m_oDB, this.m_oLog);
+			var data5 = msc5.GetInputParameters(customerId, calculationTime);
+			this.m_oLog.Info("--------###-----------OfflineLImitedMedalCalculator----------------------");
 		}
 
 

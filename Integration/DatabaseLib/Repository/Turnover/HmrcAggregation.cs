@@ -8,7 +8,6 @@
 	public class HmrcAggregation {
 		
 		public virtual long HmrcAggregationID { get; set; }
-		//public virtual byte[] TimestampCounter { get; set; }
 		public virtual System.DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }
@@ -38,9 +37,7 @@
 			Map(x => x.FreeCashFlow);
 
 			References(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
-
-			//References(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID");//.ForeignKey("CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
-
+	
 		} // constructorCustomerMarketPlaceUpdatingHistoryID
 	}
 }
