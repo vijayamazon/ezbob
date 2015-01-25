@@ -36,7 +36,8 @@ BEGIN
 		SUM(CASE WHEN car.NumRejects > 0 AND c.NumApproves = 0 THEN 1 ELSE 0 END) AS NumOfRejected, 
 		s.RSource AS Source,
 		s.RMedium AS Medium,
-		s.RName AS Name
+		s.RName AS Name,
+		s.RTerm AS Term
 	INTO
 		#temp1
 	FROM
@@ -58,7 +59,8 @@ BEGIN
 	GROUP BY
 		s.RSource,
 		s.RMedium,
-		s.RName
+		s.RName,
+		s.RTerm
 
 	-- loans (new loans)
 
@@ -67,7 +69,8 @@ BEGIN
 		isnull(SUM(L.loanAmount),0) AS LoanAmount, 
 		s.RSource AS Source,
 		s.RMedium AS Medium,
-		s.RName AS Name
+		s.RName AS Name,
+		s.RTerm AS Term
 	INTO
 		#temp2	
 	FROM
@@ -89,13 +92,15 @@ BEGIN
 	GROUP BY
 		s.RSource,
 		s.RMedium,
-		s.RName
+		s.RName,
+		s.RTerm
 
 	-- total
 
 	SELECT
 		A.Source, 
 		A.Medium,
+		A.Term,
 		A.Name,
 		A.Registrations,
 		A.Personal,
@@ -110,7 +115,15 @@ BEGIN
 		
 	FROM
 		#temp1 A
-		FULL OUTER JOIN #temp2 B ON A.Source = B.Source AND (A.Medium = B.Medium OR (A.Medium IS NULL AND B.Medium IS NULL)) AND (A.Name = B.Name OR (A.Name IS NULL AND B.Name IS NULL))
+		FULL OUTER JOIN #temp2 B 
+		ON 
+			A.Source = B.Source 
+			AND 
+			(A.Medium = B.Medium OR (A.Medium IS NULL AND B.Medium IS NULL)) 
+			AND 
+			(A.Name = B.Name OR (A.Name IS NULL AND B.Name IS NULL))
+			AND 
+			(A.Term = B.Term OR (A.Term IS NULL AND B.Term IS NULL))
 	WHERE A.Registrations IS NOT NULL
   	
 	DROP TABLE #temp2
