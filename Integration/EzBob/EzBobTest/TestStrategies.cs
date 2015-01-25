@@ -345,11 +345,18 @@
 
 		[Test]
 		public void TestMedalCalculation() {
-			var customers = new[] {
-				234,103,270
+			/*var customers = new[] {
+				234, 103, 270
 			};
 			foreach (var customer in customers)
-				new CalculateMedal(customer, DateTime.UtcNow, false, true).Execute();
+				new CalculateMedal(customer, DateTime.UtcNow, false, true).Execute();*/
+
+			
+			this.m_oDB.ForEachRowSafe(sr => {
+				int customerId = sr["Id"];
+				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
+			}, "select top 10 Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);
+
 		}
 
 		[Test]

@@ -171,30 +171,19 @@ namespace EzBobTest {
 		} // TestMaamMedalAndPricing
 
 
-		public DateTime getPeriodAgo(DateTime calculationDate, DateTime lastUpdate ) {
-
-			Console.WriteLine("calculationTime: {0}, lastUpdate: {1}", calculationDate, lastUpdate);
-
-			int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
-
-			if ((daysInMonth - calculationDate.Date.Day) >= 3 && (daysInMonth - lastUpdate.Date.Day) >= 3) {
-				return calculationDate.AddMonths(-12);
-			}
-			return calculationDate.AddMonths(-13);
-		}
 		
 
 		[Test]
 		public void Test_TurnoverForMedalTest_NH_AV() {
 			//DateTime calculationTime = new DateTime(2013, 11, 30);
-			DateTime calculationTime = new DateTime(2013, 08, 31);
+			//DateTime calculationTime = new DateTime(2013, 08, 31);
 			//DateTime calculationTime = new DateTime(2013, 10, 02);
-			//DateTime calculationTime = new DateTime(2014, 01, 01);
-			int customerId = 211;  //  171; //348; // 363; //290; // 178; //;363
+			DateTime calculationTime = new DateTime(2014, 01, 01);
+			int customerId = 211 ; //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363
 			// 171: amazon, pp, ebay
 			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
 
-			this.m_oLog.Info("START TURVOBER FOR MEDAL customerID: {0}; calculationTime: {1}", customerId, calculationTime.Date);
+			this.m_oLog.Info("START TURNOVER FOR MEDAL customerID: {0}; calculationTime: {1}", customerId, calculationTime.Date);
 
 			this.m_oLog.Info("-------------------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
 			// OnlineNonLimitedWithBusinessScoreMedalCalculator
@@ -202,11 +191,11 @@ namespace EzBobTest {
 			var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
 			MedalResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
 			//AV
-			var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
+			/*var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
 			var data = msc.GetInputParameters(customerId, calculationTime);
-			this.m_oLog.Info("--------###-----------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
+			this.m_oLog.Info("--------###-----------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");*/
 
-			this.m_oLog.Info("-------------------NonLimitedMedalCalculator----------------------");
+			/*this.m_oLog.Info("-------------------NonLimitedMedalCalculator----------------------");
 			// NonLimitedMedalCalculator
 			MedalResult resultsInput1 = new MedalResult(customerId);
 			var calculatorTester1 = new NonLimitedMedalCalculator1NoGathering(resultsInput1);
@@ -254,7 +243,7 @@ namespace EzBobTest {
 			//AV
 			var msc5 = new OfflineLImitedMedalCalculator(this.m_oDB, this.m_oLog);
 			var data5 = msc5.GetInputParameters(customerId, calculationTime);
-			this.m_oLog.Info("--------###-----------OfflineLImitedMedalCalculator----------------------");
+			this.m_oLog.Info("--------###-----------OfflineLImitedMedalCalculator----------------------");*/
 		}
 
 
