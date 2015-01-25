@@ -11,7 +11,10 @@ GO
 
 CREATE TYPE BusinessRelevanceList AS TABLE (
 	BusinessID INT,
-	BelongsToCustomer BIT
+	BelongsToCustomer BIT,
+	Name NVARCHAR(1024),
+	OtherName NVARCHAR(1024),
+	FullName NVARCHAR(1024)
 )
 GO
 
@@ -22,7 +25,16 @@ BEGIN
 	SET NOCOUNT ON;
 
 	UPDATE Business SET
-		BelongsToCustomer = p.BelongsToCustomer
+		BelongsToCustomer = CASE p.BelongsToCustomer
+			WHEN 1 THEN 1
+			ELSE CASE
+				WHEN DIFFERENCE(p.Name, p.OtherName) >= 3 THEN 1
+				ELSE CASE
+					WHEN DIFFERENCE(p.Name, p.FullName) >= 3 THEN 1
+					ELSE 0
+				END
+			END
+		END
 	FROM
 		Business b
 		INNER JOIN @RelevanceList p ON b.Id = p.BusinessID

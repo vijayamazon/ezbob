@@ -12,7 +12,7 @@
 				sr => { new UpdateHmrcBusinessRelevance(sr["Id"]).Execute(); },
 				"SELECT Id FROM Customer",
 				CommandSpecies.Text
-				);
+			);
 		} // Execute
 	} // class BackfillHmrcBusinessRelevance
 } // namespace
