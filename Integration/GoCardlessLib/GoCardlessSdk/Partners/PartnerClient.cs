@@ -6,7 +6,9 @@ using RestSharp;
 
 namespace GoCardlessSdk.Partners
 {
-    public class PartnerClient
+	using System;
+
+	public class PartnerClient
     {
         public string NewMerchantUrl(string redirectUri, Merchant merchant = null, string state = null)
         {
@@ -36,7 +38,7 @@ namespace GoCardlessSdk.Partners
 
             var client = new RestClient
                              {
-                                 BaseUrl = GoCardless.BaseUrl,
+                                 BaseUrl = new Uri(GoCardless.BaseUrl),
                                  UserAgent = GoCardless.UserAgent
                              };
             client.Authenticator = new HttpBasicAuthenticator(GoCardless.AccountDetails.AppId, GoCardless.AccountDetails.AppSecret);

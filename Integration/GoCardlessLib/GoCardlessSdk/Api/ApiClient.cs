@@ -133,7 +133,7 @@ namespace GoCardlessSdk.Api
         {
             var client = new RestClient
                              {
-                                 BaseUrl = ApiUrl,
+                                 BaseUrl = new Uri(ApiUrl),
                                  UserAgent = GoCardless.UserAgent
                              };
             var serializer = new Newtonsoft.Json.JsonSerializer
