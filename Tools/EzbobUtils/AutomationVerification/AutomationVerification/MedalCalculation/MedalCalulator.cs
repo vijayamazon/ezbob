@@ -206,9 +206,9 @@
 			// --------start new turnover calculation for medal ----------------//
 			//	Flow: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
 			model.TurnoverType = null;
-			List<TurnoverDbRow> turnovers = new List<TurnoverDbRow>();
+			model.Turnovers = new List<TurnoverDbRow>();
 
-			this.DB.ForEachResult<TurnoverDbRow>(r => turnovers.Add(r),
+			this.DB.ForEachResult<TurnoverDbRow>(r => model.Turnovers.Add(r),
 					"GetCustomerTurnoverForAutoDecision",
 					new QueryParameter("IsForApprove", true),
 					new QueryParameter("CustomerID", customerId),
@@ -217,9 +217,9 @@
 			//foreach (var t in turnovers)  Console.WriteLine("Allturnovers: {0}, {1}, {2}", t.TheMonth, t.Distance, t.MpTypeID);
 
 			// extract hmrc data 
-			var hmrcList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.hmrc) select r).AsQueryable();
+			var hmrcList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(TurnoverDbRow.hmrc) select r).AsQueryable();
 			// extract yodlee data only
-			var yodleeList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.yodlee) select r).AsQueryable();
+			var yodleeList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(TurnoverDbRow.yodlee) select r).AsQueryable();
 
 			decimal hmrcTurnover = 0;
 			decimal yoodleeTurnover = 0;
@@ -229,6 +229,7 @@
 				// get hmrc turnover for all months received
 				hmrcTurnover = hmrcList.Sum(t => t.Turnover);
 				model.AnnualTurnover = (hmrcTurnover < 0) ? 0 : hmrcTurnover;
+				model.HmrcAnnualTurnover = model.AnnualTurnover;
 				model.TurnoverType = TurnoverType.HMRC;
 			}
 
@@ -238,37 +239,22 @@
 					// get yoodlee turnover for all months received
 					yoodleeTurnover = yodleeList.Sum(t => t.Turnover);
 					model.AnnualTurnover = (yoodleeTurnover < 0) ? 0 : yoodleeTurnover;
+					model.YodleeAnnualTurnover = model.AnnualTurnover;
 					model.TurnoverType = TurnoverType.Bank;
 				}
 			}
-
-			// has only online instead
-			if (model.TurnoverType.Equals(null))
-				CalculateTurnoverForMedal(model, turnovers, hmrcTurnover, yoodleeTurnover);
 
 			Log.Info("AV; TurnoverFormedal: annualTurnover: {0}, type:{1}", model.AnnualTurnover, model.TurnoverType);
 
 			// --------end new turnover calculation for medal----------------//
 
-			/*	// This Logic is good only for OfflineLimited,SoleTrader,NonLimited Medals
-			List<MarketPlace> yodlees = dbHelper.GetCustomerYodlees(customerId);
-			var mpHelper = new MarketPlacesHelper(this.DB, this.Log);
-			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, this.Log);
-			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
-			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;			
-			
-			if (dbData.HasHmrc)
-				model.TurnoverType = TurnoverType.HMRC;
-			else if (yodlees.Count > 0)
-				model.TurnoverType = TurnoverType.Bank;
-			else
-				model.TurnoverType = null;	*/
-
-			// ?????? elina?
+			// TODO: free cash flow value, value added
 			model.FreeCashFlowValue = dbData.HmrcFreeCashFlow - (dbData.CurrentBalanceSum / dbData.FCFFactor);
+			model.ValueAdded = dbData.HmrcValueAdded;
+			// end of TODO
+
 			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
-			model.ValueAdded = dbData.HmrcValueAdded;
 			model.CustomerId = customerId;
 			return model;
 		}
@@ -295,19 +281,15 @@
 		/// </summary>
 		protected MedalInputModel GetOnlineInputParameters(int customerId, MedalInputModel intputModel) {
 			var usingHmrc = false;
-			var dbHelper = new DbHelper(this.DB, this.Log);
-			var mpHelper = new MarketPlacesHelper(this.DB, this.Log);
-			var yodlees = dbHelper.GetCustomerYodlees(customerId);
-			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, this.Log);
 
-			// elina?
-			var onlineTurnover = mpHelper.GetOnlineTurnoverAnnualized(customerId);
+			var onlineTurnover = GetOnlineTurnover(intputModel.Turnovers);
+
 			if (intputModel.MedalInputModelDb.HmrcRevenues > onlineTurnover * intputModel.MedalInputModelDb.OnlineMedalTurnoverCutoff) {
 				usingHmrc = true;
 				intputModel.AnnualTurnover = intputModel.MedalInputModelDb.HmrcRevenues;
 				intputModel.TurnoverType = TurnoverType.HMRC;
-			} else if (yodleeIncome > onlineTurnover * intputModel.MedalInputModelDb.OnlineMedalTurnoverCutoff) {
-				intputModel.AnnualTurnover = yodleeIncome;
+			} else if (intputModel.YodleeAnnualTurnover > onlineTurnover * intputModel.MedalInputModelDb.OnlineMedalTurnoverCutoff) {
+				intputModel.AnnualTurnover = intputModel.YodleeAnnualTurnover;
 				intputModel.TurnoverType = TurnoverType.Bank;
 			} else {
 				intputModel.AnnualTurnover = onlineTurnover;
@@ -322,7 +304,7 @@
 			intputModel.TangibleEquity = intputModel.AnnualTurnover == 0 ? 0 : intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
 			intputModel.NumOfStores = intputModel.MedalInputModelDb.NumOfStores;
 
-			intputModel.PositiveFeedbacks = mpHelper.GetPositiveFeedbacks(customerId);
+			intputModel.PositiveFeedbacks = new MarketPlacesHelper(DB, Log).GetPositiveFeedbacks(customerId);
 			intputModel.UseHmrc = usingHmrc;
 
 			return intputModel;
@@ -542,20 +524,8 @@
 		}
 
 
-		/// <summary>
-		/// Calculate online turnover
-		/// 	Calculate for "last month", "last three months", "last six months", and "last twelve months". 
-		///		Annualize the figures and take the minimum among them. 
-		///		If a figure is zero it does NOT participate in minimum calculation. 
-		/// </summary>
-		/// <param name="model"></param>
-		/// <param name="turnovers"></param>
-		/// <param name="hmrcTurnover"></param>
-		/// <param name="yoodleeTrunover"></param>
-		protected virtual void CalculateTurnoverForMedal(MedalInputModel model, List<TurnoverDbRow> turnovers, decimal hmrcTurnover, decimal yoodleeTrunover) {
+		protected virtual decimal GetOnlineTurnover(List<TurnoverDbRow> turnovers) {
 			try {
-				decimal annualTurnover = 0;
-
 				const int T1 = 1;
 				const int T3 = 3;
 				const int T6 = 6;
@@ -624,27 +594,12 @@
 				onlineList.Add(list_t6.ElementAt(0) + Math.Max(list_t6.ElementAt(1), list_t6.ElementAt(2)));
 				onlineList.Add(list_t12.ElementAt(0) + Math.Max(list_t12.ElementAt(1), list_t12.ElementAt(2)));
 				
-				annualTurnover = (from decimal r in onlineList where r > 0 select r).AsQueryable().DefaultIfEmpty(0).Min();
+				decimal annualTurnover = (from decimal r in onlineList where r > 0 select r).AsQueryable().DefaultIfEmpty(0).Min();
 
-				decimal onlineMedalTurnoverCutoff = model.MedalInputModelDb.OnlineMedalTurnoverCutoff;
-
-				if (hmrcTurnover > onlineMedalTurnoverCutoff * annualTurnover) {
-					model.TurnoverType = TurnoverType.HMRC;
-					model.AnnualTurnover = hmrcTurnover;
-					return;
-				}
-
-				if (yoodleeTrunover > onlineMedalTurnoverCutoff * annualTurnover) {
-					model.TurnoverType = TurnoverType.Bank;
-					model.AnnualTurnover = yoodleeTrunover;
-					return;
-				}
-
-				model.TurnoverType = TurnoverType.Online;
-				model.AnnualTurnover = annualTurnover;
-
+				return annualTurnover < 0 ? 0 : annualTurnover;
 			} catch (Exception ex) {
 				this.Log.Error(ex, "Failed to calculate online annual turnover for medal");
+				return 0;
 			} // try
 		} // CalculateTurnoverForMedal
 

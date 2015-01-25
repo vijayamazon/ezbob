@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Text;
+	using AutomationCalculator.Turnover;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Extensions;
@@ -317,6 +318,7 @@
 	}
 
 	public class MedalInputModel {
+		public List<TurnoverDbRow> Turnovers { get; set; }
 		public TurnoverType? TurnoverType { get; set; }
 		public int CustomerId { get; set; }
 		public DateTime CalculationDate { get; set; }
@@ -330,6 +332,9 @@
 		public int NumOfLatePayments { get; set; }
 		public int NumOfEarlyPayments { get; set; }
 		public decimal AnnualTurnover { get; set; }
+		public decimal HmrcAnnualTurnover { get; set; }
+		public decimal YodleeAnnualTurnover { get; set; }
+		public decimal OnlineAnnualTurnover { get; set; }
 		public decimal FreeCashFlow { get; set; }
 		public decimal FreeCashFlowValue { get; set; }
 		public decimal ValueAdded { get; set; }

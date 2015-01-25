@@ -187,13 +187,14 @@ BEGIN
 	--HMRC
 	DECLARE @NumOfHmrc INT 
 	DECLARE @HasHmrc BIT = 0
-	DECLARE @HasMoreThenOneHmrc BIT = 0
 
 	SELECT
 		@NumOfHmrc = COUNT(mp.Id)
 	FROM
 		MP_CustomerMarketPlace mp
 		INNER JOIN MP_MarketplaceType t ON t.Id = mp.MarketPlaceId 
+		INNER JOIN MP_VatReturnRecords r ON mp.Id = r.CustomerMarketPlaceId
+		INNER JOIN Business b ON r.BusinessId = b.Id AND b.BelongsToCustomer = 1
 	WHERE
 		t.InternalId = 'AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA'
 		AND
@@ -202,31 +203,9 @@ BEGIN
 		mp.Disabled = 0
 
 	DECLARE @FCFFactor DECIMAL(18,4)
-	DECLARE @HmrcRevenues DECIMAL(18,4) = 0
-	DECLARE @HmrcFreeCashFlow DECIMAL(18,4) = 0
-	DECLARE @HmrcValueAdded DECIMAL(18,4) = 0
 	
 	IF @NumOfHmrc > 0 SET @HasHmrc = 1
 
-	IF @NumOfHmrc > 1 SET @HasMoreThenOneHmrc = 1
-
-	IF @NumOfHmrc = 1
-	BEGIN
-		SELECT
-			@HmrcFreeCashFlow = ISNULL(SUM(ISNULL(v.AnnualizedFreeCashFlow, 0)), 0),
-			@HmrcRevenues = ISNULL(SUM(ISNULL(v.AnnualizedTurnover, 0)), 0),
-			@HmrcValueAdded = ISNULL(SUM(ISNULL(v.AnnualizedValueAdded, 0)), 0)
-		FROM
-			MP_VatReturnSummary v
-			INNER JOIN MP_CustomerMarketPlace mp ON v.CustomerMarketplaceID = mp.Id
-		WHERE
-			v.IsActive = 1
-			AND
-			mp.CustomerId = @CustomerId
-			AND
-			mp.Disabled = 0
-	END
-	
 	SELECT
 		@FCFFactor = CAST(Value AS DECIMAL(18, 4))
 	FROM
@@ -356,10 +335,6 @@ BEGIN
 		@NumOfLatePayments AS NumOfLatePayments,
 		@NumOfEarlyPayments AS NumOfEarlyPayments,
 		@HasHmrc AS HasHmrc,
-		@HasMoreThenOneHmrc AS HasMoreThenOneHmrc,
-		@HmrcRevenues AS HmrcRevenues,
-		@HmrcFreeCashFlow AS HmrcFreeCashFlow,
-		@HmrcValueAdded AS HmrcValueAdded,
 		@FCFFactor AS FCFFactor,
 		@CurrentBalanceSum AS CurrentBalanceSum,
 		@ZooplaValue AS ZooplaValue,
