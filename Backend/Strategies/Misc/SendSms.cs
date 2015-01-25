@@ -4,6 +4,7 @@
 	using Ezbob.Database;
 	using Twilio;
 	using System.Collections.Generic;
+	using System.Linq;
 
 	public class SendSms : AStrategy {
 		public SendSms(int userId, int underwriterId, string sMobilePhone, string content) {
@@ -37,15 +38,22 @@
 				return;
 			}
 
+			if (string.IsNullOrEmpty(m_sContent)) {
+				Log.Info("Empty content message is not sent");
+				return;
+			}
+
+			
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
 			_sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
 			_dateSent = DateTime.UtcNow;
-			twilio.SendSmsMessage(m_sFromNumber, _sendMobilePhone, m_sContent, SaveSms);
+			Log.Info("Sending sms to customer:{2}, number {0}, content:{1}", _sendMobilePhone, m_sContent, m_nUserId);
+			twilio.SendMessage(m_sFromNumber, _sendMobilePhone, m_sContent, SaveSms);
 			Result = true;
 		}
 
-		private void SaveSms(SMSMessage smsResponse) {
-			var message = EzbobSmsMessage.FromSmsMessage(smsResponse);
+		private void SaveSms(Message smsResponse) {
+			var message = EzbobSmsMessage.FromMessage(smsResponse);
 			message.UserId = m_nUserId;
 			message.UnderwriterId = m_nUnderwriterId;
 			message.DateSent = _dateSent;
@@ -60,7 +68,7 @@
 
 			if (message.Status == null) {
 				Result = false;
-				Log.Warn("Failed sending SMS to number:{0}", _sendMobilePhone);
+				Log.Warn("Failed sending SMS to number:{0}\n{1}", _sendMobilePhone, message.GetRestException());
 				return;
 			} // if
 

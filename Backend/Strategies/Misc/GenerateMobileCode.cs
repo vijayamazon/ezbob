@@ -85,11 +85,11 @@
 			this._sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, this.m_sMobilePhone.Substring(1));
 
 			this._dateSent = DateTime.UtcNow;
-			twilio.SendSmsMessage(this.m_sFromNumber, this._sendMobilePhone, content, SaveSms);
+			twilio.SendMessage(this.m_sFromNumber, this._sendMobilePhone, content, SaveSms);
 		} // GenerateCodeAndSend
 
-		private void SaveSms(SMSMessage twilioResponse) {
-			EzbobSmsMessage message = EzbobSmsMessage.FromSmsMessage(twilioResponse);
+		private void SaveSms(Message twilioResponse) {
+			EzbobSmsMessage message = EzbobSmsMessage.FromMessage(twilioResponse);
 			message.UserId = null;
 			message.UnderwriterId = 1; //system id
 			message.DateSent = this._dateSent;

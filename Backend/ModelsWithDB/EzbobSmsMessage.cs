@@ -4,12 +4,12 @@
 	using Twilio;
 	using System;
 
-	public class EzbobSmsMessage : SMSMessage
+	public class EzbobSmsMessage : Message
 	{
-		public static EzbobSmsMessage FromSmsMessage(SMSMessage smsMessage) {
+		public static EzbobSmsMessage FromMessage(Message smsMessage) {
 			var model = new EzbobSmsMessage();
 			if (smsMessage != null) {
-				smsMessage.Traverse((inst, propInfo) => propInfo.SetValue((SMSMessage) model, propInfo.GetValue(smsMessage)));
+				smsMessage.Traverse((inst, propInfo) => propInfo.SetValue((Message) model, propInfo.GetValue(smsMessage)));
 
 				if (smsMessage.DateSent == default(DateTime) || smsMessage.DateCreated == default(DateTime) || smsMessage.DateUpdated == default(DateTime))
 				{
@@ -46,6 +46,13 @@
 		public override string ToString()
 		{
 			return string.Format("userid {0} uwId {1} dates {2} {3} {4} to {5} from {6} sid {7} status {8} body {9} direction {10} accountsid {11}", UserId, UnderwriterId, DateCreated, DateSent, DateUpdated, To, From, Sid, Status, Body, Direction, AccountSid);
+		}
+
+		public string GetRestException() {
+			if (RestException != null) {
+				return string.Format("RestException Code:{0}, Status:{3}, Message:{1}, MoreInfo:{2}", RestException.Code, RestException.Message, RestException.MoreInfo, RestException.Status);
+			}
+			return "";
 		}
 	}
 }

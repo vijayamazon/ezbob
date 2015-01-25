@@ -264,7 +264,7 @@
 				Email = sr["email"],
 				DueDate = scheduleDate,
 				LateDays = lateDays,
-				PhoneNumber = string.IsNullOrEmpty(dayPhone) ? mobilePhone : dayPhone,
+				PhoneNumber = string.IsNullOrEmpty(mobilePhone) ? dayPhone : mobilePhone,
 				SmsSendingAllowed = sr["SmsSendingAllowed"],
 				EmailSendingAllowed = sr["EmailSendingAllowed"],
 				ImailSendingAllowed = sr["MailSendingAllowed"],
@@ -388,7 +388,7 @@
 				mailer.Send(emailTemplateName, variables, new Addressee(model.Email));
 				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Email);
 			} else {
-				Log.Debug("Collection sending email is not allowed, email is not sent to customer {0}\n email template {1}", model.CustomerID, emailTemplateName);
+				Log.Info("Collection sending email is not allowed, email is not sent to customer {0}\n email template {1}", model.CustomerID, emailTemplateName);
 			}
 		}
 
@@ -424,7 +424,7 @@
 					Log.Error(ex, "Sending Imail failed for customer {0}", model.CustomerID);
 				}
 			} else {
-				Log.Debug("Collection sending mail is not allowed, mail is not sent to customer {0}\n template {1}", model.CustomerID, type);
+				Log.Info("Collection sending mail is not allowed, mail is not sent to customer {0}\n template {1}", model.CustomerID, type);
 			}
 
 		}
@@ -433,11 +433,11 @@
 			if (model.SmsSendingAllowed && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
 				new SendSms(model.CustomerID, 1, model.PhoneNumber, smsTemplate).Execute();
 			} else if (model.SmsSendingAllowed) {
-				Log.Debug("Collection sending sms is in test mode, sms is not sent to customer {0} phone number {1}\n content {2}",
+				Log.Info("Collection sending sms is in test mode, sms is not sent to customer {0} phone number {1}\n content {2}",
 					model.CustomerID, model.PhoneNumber, smsTemplate);
 				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Sms);
 			} else {
-				Log.Debug("Collection sending sms is not allowed, sms is not sent to customer {0} phone number {1}\n content {2}",
+				Log.Info("Collection sending sms is not allowed, sms is not sent to customer {0} phone number {1}\n content {2}",
 					model.CustomerID, model.PhoneNumber, smsTemplate);
 			}
 		}
