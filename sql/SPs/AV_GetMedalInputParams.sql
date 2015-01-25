@@ -294,6 +294,22 @@ BEGIN
 		ORDER BY ls.[Date]
 	)
 
+	--Num of banks (yodlee)
+
+	DECLARE @NumOfBanks INT 
+	
+	SELECT
+		@NumOfBanks = ISNULL(COUNT(mp.Id), 0)
+	FROM
+		MP_CustomerMarketPlace mp
+		INNER JOIN MP_MarketplaceType t ON t.Id = mp.MarketPlaceId
+	WHERE
+		mp.CustomerId = @CustomerId
+		AND
+		mp.Disabled = 0
+		AND
+		t.InternalId = '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'
+
 	--Num of ebay amazon and paypal stores
 
 	DECLARE @NumOfStores INT 
@@ -340,6 +356,7 @@ BEGIN
 		@ZooplaValue AS ZooplaValue,
 		@Mortages AS Mortages,
 		@FirstRepaymentDate AS FirstRepaymentDate,
+		ISNULL(@NumOfBanks, 0) AS NumOfBanks,
 		@NumOfStores AS NumOfStores,
 		@OnlineMedalTurnoverCutoff AS OnlineMedalTurnoverCutoff
 END

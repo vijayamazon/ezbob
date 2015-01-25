@@ -161,11 +161,6 @@
 			throw new NotImplementedException();
 		}
 
-		public MedalInputModelDb GetMedalInputModel(int customerId) {
-			var model = _db.FillFirst<MedalInputModelDb>("AV_GetMedalInputParams", new QueryParameter("@CustomerId", customerId));
-			return model;
-		}
-
 		public PositiveFeedbacksModelDb GetPositiveFeedbacks(int customerId) {
 			var model = _db.FillFirst<PositiveFeedbacksModelDb>("AV_GetFeedbacks", new QueryParameter("@CustomerId", customerId));
 			return model;

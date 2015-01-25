@@ -351,12 +351,15 @@
 			foreach (var customer in customers)
 				new CalculateMedal(customer, DateTime.UtcNow, false, true).Execute();*/
 
+			int counter = 1;
 			
-			this.m_oDB.ForEachRowSafe(sr => {
+			this.m_oDB.ForEachRowSafe((sr, rowsetStart) => {
+				counter++;
 				int customerId = sr["Id"];
 				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
-			}, "select top 10 Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);
 
+				return counter < 10 ? ActionResult.Continue : ActionResult.SkipAll;
+			}, "select top 10 Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);
 		}
 
 		[Test]

@@ -181,7 +181,7 @@
 			Results.EbayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
 			Results.NumberOfPaypalPositiveTransactions = sr["NumOfPaypalTransactions"];
 
-			Results.FreeCashFlow = 0;
+			Results.FreeCashFlowValue = 0;
 			Results.ValueAdded = 0;
 
 			decimal newActualLoansRepayment = 0;
@@ -190,17 +190,19 @@
 				srfv => {
 					RowType rt;
 
-					if (!Enum.TryParse(sr["RowType"], out rt))
+					if (!Enum.TryParse(srfv["RowType"], out rt)) {
+						log.Alert("MedalCalculatorBase.GatherInputData: Cannot parse row type from {0}", srfv["RowType"]);
 						return;
+					}
 
 					switch (rt) {
 					case RowType.FcfValueAdded:
-						Results.FreeCashFlow += srfv["FreeCashFlow"];
+						Results.FreeCashFlowValue += srfv["FreeCashFlow"];
 						Results.ValueAdded += srfv["ValueAdded"];
 						break;
 
 					case RowType.NewActualLoansRepayment:
-						newActualLoansRepayment = sr["NewActualLoansRepayment"];
+						newActualLoansRepayment = srfv["NewActualLoansRepayment"];
 						break;
 
 					default:
@@ -213,7 +215,7 @@
 				new QueryParameter("Now", Results.CalculationTime)
 			);
 
-			Results.FreeCashFlow -= newActualLoansRepayment;
+			Results.FreeCashFlowValue -= newActualLoansRepayment;
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
 		} // GatherInputData

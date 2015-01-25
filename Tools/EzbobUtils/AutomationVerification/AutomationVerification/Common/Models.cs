@@ -293,6 +293,7 @@
 	}
 
 	public class MedalInputModelDb {
+		public int NumOfBanks { get; set; }
 		public int BusinessScore { get; set; }
 		public DateTime? IncorporationDate { get; set; }
 		public decimal TangibleEquity { get; set; }

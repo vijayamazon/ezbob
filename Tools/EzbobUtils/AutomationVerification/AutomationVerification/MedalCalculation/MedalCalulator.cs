@@ -176,13 +176,16 @@
 		}
 
 		public virtual MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null) {
-			var dbHelper = new DbHelper(this.DB, this.Log);
-			var dbData = dbHelper.GetMedalInputModel(customerId);
+			MedalInputModelDb dbData = this.DB.FillFirst<MedalInputModelDb>(
+				"AV_GetMedalInputParams",
+				new QueryParameter("@CustomerId", customerId)
+			);
+
 			var model = new MedalInputModel {
 				MedalInputModelDb = dbData
 			};
 
-			var today = calculationDate.HasValue ? calculationDate.Value : DateTime.Today;
+			var today = calculationDate ?? DateTime.Today;
 			model.CalculationDate = today;
 
 			model.HasHmrc = dbData.HasHmrc;
@@ -225,7 +228,7 @@
 			decimal yoodleeTurnover = 0;
 
 			// has a hmrc
-			if (Enumerable.Count(hmrcList) > 0) {
+			if (model.HasHmrc) {
 				// get hmrc turnover for all months received
 				hmrcTurnover = hmrcList.Sum(t => t.Turnover);
 				model.AnnualTurnover = (hmrcTurnover < 0) ? 0 : hmrcTurnover;
@@ -235,7 +238,7 @@
 
 			// has bank instead
 			if (model.TurnoverType.Equals(null)) {
-				if (Enumerable.Count(yodleeList) > 0) {
+				if (dbData.NumOfBanks > 0) {
 					// get yoodlee turnover for all months received
 					yoodleeTurnover = yodleeList.Sum(t => t.Turnover);
 					model.AnnualTurnover = (yoodleeTurnover < 0) ? 0 : yoodleeTurnover;
@@ -248,16 +251,52 @@
 
 			// --------end new turnover calculation for medal----------------//
 
-			// TODO: free cash flow value, value added
-			model.FreeCashFlowValue = dbData.HmrcFreeCashFlow - (dbData.CurrentBalanceSum / dbData.FCFFactor);
-			model.ValueAdded = dbData.HmrcValueAdded;
-			// end of TODO
+			model.FreeCashFlowValue = 0;
+			model.ValueAdded = 0;
+
+			decimal newActualLoansRepayment = 0;
+
+			this.DB.ForEachRowSafe(
+				srfv => {
+					RowType rt;
+
+					if (!Enum.TryParse(srfv["RowType"], out rt)) {
+						Log.Alert("MedalCalculator.GetInputParameters: Cannot parse row type from {0}", srfv["RowType"]);
+						return;
+					} // if
+
+					switch (rt) {
+					case RowType.FcfValueAdded:
+						model.FreeCashFlowValue += srfv["FreeCashFlow"];
+						model.ValueAdded += srfv["ValueAdded"];
+						break;
+
+					case RowType.NewActualLoansRepayment:
+						newActualLoansRepayment = srfv["NewActualLoansRepayment"];
+						break;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+					} // switch
+				},
+				"GetCustomerAnnualFcfValueAdded",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", customerId),
+				new QueryParameter("Now", today)
+			);
+
+			model.FreeCashFlowValue -= newActualLoansRepayment;
 
 			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
 			model.CustomerId = customerId;
 			return model;
 		}
+
+		private enum RowType {
+			NewActualLoansRepayment,
+			FcfValueAdded,
+		} // enum RowType
 
 		public abstract MedalOutputModel CalculateMedal(MedalInputModel model);
 
@@ -600,7 +639,7 @@
 				this.Log.Error(ex, "Failed to calculate online annual turnover for medal");
 				return 0;
 			} // try
-		} // CalculateTurnoverForMedal
+		} // GetOnlineTurnover
 
 
 		/// <summary>
