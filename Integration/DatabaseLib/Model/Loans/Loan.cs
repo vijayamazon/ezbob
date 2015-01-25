@@ -72,7 +72,7 @@
 		}
 
 		public virtual List<PaypointTransaction> TransactionsWithPaypointSuccesefull {
-			get { return Transactions.OfType<PaypointTransaction>().Where(t => t.Status != LoanTransactionStatus.Error).ToList(); }
+			get { return Transactions.OfType<PaypointTransaction>().Where(t => t.Status == LoanTransactionStatus.Done).ToList(); }
 		}
 
 		public virtual List<PacnetTransaction> PacnetTransactions {
@@ -380,6 +380,7 @@
 		} // UpdateStatus
 
 		public virtual void UpdateBalance() {
+			DateTime now = DateTime.UtcNow;
 			Balance = Schedule.Sum(x => x.AmountDue);
 			Interest = Schedule.Sum(x => x.Interest);
 			InterestPaid = TransactionsWithPaypointSuccesefull.Sum(x => x.Interest);
@@ -389,6 +390,11 @@
 			RepaymentsNum = TransactionsWithPaypointSuccesefull.Count();
 			Principal = Math.Abs(LoanAmount - TransactionsWithPaypointSuccesefull.Sum(x => x.LoanRepayment));
 			OnTimeNum = Schedule.Count(s => s.Status == LoanScheduleStatus.PaidOnTime);
+			OnTime = Schedule.Where(s => s.Status == LoanScheduleStatus.PaidOnTime).Sum(s => s.LoanRepayment);
+			Late30Num = Schedule.Count(s => s.DatePaid.HasValue && (s.DatePaid.Value - s.Date).TotalDays >= 30) + Schedule.Count(s => s.Status == LoanScheduleStatus.Late && (now - s.Date).TotalDays >= 30);
+			Late60Num = Schedule.Count(s => s.DatePaid.HasValue && (s.DatePaid.Value - s.Date).TotalDays >= 60) + Schedule.Count(s => s.Status == LoanScheduleStatus.Late && (now - s.Date).TotalDays >= 60);
+			Late90Num = Schedule.Count(s => s.DatePaid.HasValue && (s.DatePaid.Value - s.Date).TotalDays >= 90) + Schedule.Count(s => s.Status == LoanScheduleStatus.Late && (now - s.Date).TotalDays >= 90);
+			LastRecalculation = now;
 		} // UpdateBalance
 
 		public virtual Loan Clone() {

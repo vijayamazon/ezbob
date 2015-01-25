@@ -3,7 +3,11 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 	using NHibernate;
 	using System.Linq;
 
-	public class LoanTransactionMethodRepository: NHibernateRepositoryBase<LoanTransactionMethod> {
+	public interface ILoanTransactionMethodRepository : IRepository<LoanTransactionMethod> {
+		LoanTransactionMethod FindOrDefault(string sName, string sOtherName = null);
+	}
+
+	public class LoanTransactionMethodRepository : NHibernateRepositoryBase<LoanTransactionMethod>, ILoanTransactionMethodRepository {
 		public LoanTransactionMethodRepository(ISession session) : base(session) { } // constructor
 
 		public LoanTransactionMethod FindOrDefault(string sName, string sOtherName = null) {

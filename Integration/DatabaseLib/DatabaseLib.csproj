@@ -160,7 +160,7 @@
     <Compile Include="Model\Loans\LoanScheduleTransaction.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethodMap.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethodRepository.cs" />
-    <Compile Include="Model\Loans\NumericDelta.cs" />
+    <Compile Include="Common\NumericDelta.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceType.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceTypeMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\Business.cs" />
@@ -341,8 +341,6 @@
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrderMap.cs" />
     <Compile Include="Model\Database\OfferExpiredException.cs" />
     <Compile Include="Model\Database\PacnetPaypointServiceLog.cs" />
-    <Compile Include="Model\Loans\ILoanScheduleRepository.cs" />
-    <Compile Include="Model\Loans\ILoanTransactionRepository.cs" />
     <Compile Include="Model\Loans\LoanHistory.cs" />
     <Compile Include="Model\Loans\LoanScheduleRepository.cs" />
     <Compile Include="Model\Loans\LoanTransactionRepository.cs" />

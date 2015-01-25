@@ -97,7 +97,7 @@ namespace EzBob.Tests
             _calculator.Calculate(1000, loan1, date);
             _customer.Loans.Add(loan1);
 
-            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan1, new DateTime(2012, 12, 26));
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan1, new DateTime(2012, 12, 26), 0);
             var state = payEarlyCalc.GetState();
             
             Console.Write(state.AmountDue);

@@ -5,6 +5,9 @@ using NHibernate;
 
 namespace EZBob.DatabaseLib.Model.Database.Loans
 {
+	public interface ILoanScheduleRepository : IRepository<LoanScheduleItem> {
+		IQueryable<LoanScheduleItem> GetByDate(DateTime fromDate, DateTime toDate);
+	}
     public class LoanScheduleRepository : NHibernateRepositoryBase<LoanScheduleItem>, ILoanScheduleRepository
     {
         public LoanScheduleRepository(ISession session)

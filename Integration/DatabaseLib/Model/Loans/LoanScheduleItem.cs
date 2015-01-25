@@ -16,15 +16,19 @@
 		/// Sum that client paid for this installment
 		/// Сумма, которую клиент заплатил за этот платеж
 		/// </summary>
-		[Obsolete]
 		public virtual decimal RepaymentAmount { get; set; }
 		public virtual Loan Loan { get; set; }
 
 		/// <summary>
-		/// principal repayment
+		/// principal to be repaid
 		/// Выплата по телу кредита
 		/// </summary>
 		public virtual decimal LoanRepayment { get; set; }
+
+		/// <summary>
+		/// Principal that was repaid
+		/// </summary>
+		public virtual decimal Principal { get; set; }
 
 		/// <summary>
 		///Sum to be repaid, including principal, interest and fees
@@ -33,18 +37,15 @@
 		public virtual decimal AmountDue { get; set; }
 
 		/// <summary>
-		/// Interest that will recieve after the whole repayment
+		/// Interest to be repaid
 		/// Доход банка от кредита. Имеется в виду, доход, который банк получит после выплаты всего платежа.
 		/// </summary>
 		public virtual decimal Interest { get; set; }
 
 		/// <summary>
-		/// Interest that was recieved from client in this installment
-		/// will be removed soon
+		/// Interest that was repaid
 		/// Доход банка, который был уплачен клиентом в рамках этого платежа.
-		/// Будет удалено в ближайшее время.
 		/// </summary>
-		[Obsolete]
 		public virtual decimal InterestPaid { get; set; }
 
 		/// <summary>
@@ -54,8 +55,7 @@
 		public virtual decimal Fees { get; set; }
 
 		/// <summary>
-		/// Fees that have to be paid
-		/// Комиссии которые надо заплатить
+		/// Fees that where repaid
 		/// </summary>
 		public virtual decimal FeesPaid { get; set; }
 
@@ -87,6 +87,11 @@
 		public virtual DateTime? CustomInstallmentDate { get; set; }
 
 		public virtual bool LastNoticeSent { get; set; }
+
+		/// <summary>
+		/// The date when the payment that closed the schedule was performed
+		/// </summary>
+		public virtual DateTime? DatePaid { get; set; }
 
 		private decimal _interestRate;
 
@@ -159,7 +164,7 @@
 					Fees = this.Fees,
 					FeesPaid = this.FeesPaid,
 					Status = this.Status,
-					LastNoticeSent = this.LastNoticeSent
+					LastNoticeSent = this.LastNoticeSent,
 				};
 			return newItem;
 		}
@@ -208,6 +213,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Id(x => x.Id).GeneratedBy.Native();
 			Map(x => x.Date).CustomType<UtcDateTimeType>();
 			Map(x => x.RepaymentAmount);
+			Map(x => x.Principal);
 			Map(x => x.LoanRepayment);
 			Map(x => x.Interest);
 			Map(x => x.InterestPaid);
@@ -220,6 +226,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Fees);
 			Map(x => x.FeesPaid);
 			Map(x => x.LastNoticeSent);
+			Map(x => x.DatePaid).Nullable().CustomType<UtcDateTimeType>();
 			References(x => x.Loan, "LoanId");
 			HasMany(x => x.Rollovers)
 			   .AsSet()

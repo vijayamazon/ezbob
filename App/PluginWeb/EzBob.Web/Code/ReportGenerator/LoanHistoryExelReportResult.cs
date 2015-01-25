@@ -6,7 +6,9 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Web.Code.ReportGenerator
 {
-    public class LoanHistoryExelReportResult:ActionResult
+	using ConfigManager;
+
+	public class LoanHistoryExelReportResult:ActionResult
     {
         private readonly Customer _customer;
 
@@ -18,7 +20,7 @@ namespace EzBob.Web.Code.ReportGenerator
         public override void ExecuteResult(ControllerContext context)
         { 
             var generator = new ExelReportGenarator.LoanHistoryExelReportGenerator();
-            var loans = _customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null)) ).ToList();
+			var loans = _customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null, CurrentValues.Instance.AmountToChargeFrom))).ToList();
             var content = generator.GenerateReport( loans, _customer.PersonalInfo.Fullname);
             var f = new FileContentResult(content, "application/xls") { FileDownloadName = "LoanHistory(" + _customer.PersonalInfo.Fullname + ").xls" };
             f.ExecuteResult(context);

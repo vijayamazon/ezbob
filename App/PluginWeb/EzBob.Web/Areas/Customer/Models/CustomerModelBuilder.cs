@@ -129,7 +129,7 @@
 			customerModel.Loans = customer.Loans
 				.OrderBy(l => l.Status)
 				.ThenByDescending(l => l.Date)
-				.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null), new LoanRepaymentScheduleCalculator(l, DateTime.UtcNow)))
+				.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null, CurrentValues.Instance.AmountToChargeFrom), new LoanRepaymentScheduleCalculator(l, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom)))
 				.ToList();
 
 			customerModel.TotalBalance = customerModel.Loans.Sum(l => l.Balance);
@@ -322,7 +322,7 @@
 		} // BuildQuickOfferModel
 
 		private decimal GetRolloverPayValue(Loan loan) {
-			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
+			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
 			return state.Fees + state.Interest;

@@ -194,6 +194,10 @@
 					throw new Exception("The date is more than now");
 				}
 
+				if (date < DateTime.UtcNow.AddDays(-7)) {
+					throw new Exception("The date is less than a week ago");
+				}
+
 				string payPointTransactionId = PaypointTransaction.Manual;
 				
 				if (model.ChargeClient) {
@@ -245,7 +249,7 @@
 
 			var hasRollover = _rolloverRepository.GetByLoanId(loanId).Any(x => x.Status == RolloverStatus.New);
 
-			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentDate);
+			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentDate, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
 			var model = new LoanPaymentDetails
@@ -277,7 +281,7 @@
 		{
 			var loan = _loanRepository.Get(loanId);
 			var rollover = _rolloverRepository.GetByLoanId(loanId).FirstOrDefault(x => x.Status == RolloverStatus.New);
-			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
+			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
 			var rolloverCharge = CurrentValues.Instance.RolloverCharge;

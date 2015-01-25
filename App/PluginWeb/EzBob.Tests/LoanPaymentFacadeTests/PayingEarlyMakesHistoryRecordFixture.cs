@@ -16,18 +16,18 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
         private LoanPaymentFacade _facade;
         private Customer _customer;
         private Mock<ILoanHistoryRepository> _historyRepoMock;
-	    private Mock<LoanTransactionMethodRepository> _loanTransatioMethodReporsitory; 
+	    private Mock<ILoanTransactionMethodRepository> _loanTransatioMethodReporsitory; 
 
         [SetUp]
         public void SetUp()
         {
             _historyRepoMock = new Mock<ILoanHistoryRepository>();
-	        _loanTransatioMethodReporsitory = new Mock<LoanTransactionMethodRepository>();
+	        _loanTransatioMethodReporsitory = new Mock<ILoanTransactionMethodRepository>();
             _loan = new Loan() { Id = 1, Status = LoanStatus.Live };
             var calculator = new LoanScheduleCalculator();
             _startDate = new DateTime(2012, 1, 1);
             calculator.Calculate(_takenMoney, _loan, _startDate);
-			_facade = new LoanPaymentFacade(_historyRepoMock.Object, _loanTransatioMethodReporsitory.Object);
+			_facade = new LoanPaymentFacade(_historyRepoMock.Object, _loanTransatioMethodReporsitory.Object, 0);
             _customer = new Customer();
             _customer.Loans.Add(_loan);
             _loan.Customer = _customer;

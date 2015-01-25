@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EzBob.Models;
 	using Code;
+	using ConfigManager;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
@@ -41,7 +42,7 @@
 		{
 			var loan = _loans.Get(id);
 
-			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
 			var model = _builder.BuildModel(loan);
@@ -85,7 +86,7 @@
 
 			_loans.SaveOrUpdate(oLoan);
 
-			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow);
+			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
 			EditLoanDetailsModel model = _builder.BuildModel(oLoan);
@@ -107,7 +108,7 @@
 
 			_loans.SaveOrUpdate(oLoan);
 
-			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow);
+			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
 			EditLoanDetailsModel model = _builder.BuildModel(oLoan);
@@ -159,7 +160,7 @@
 
 			_loanModelBuilder.UpdateLoan(model, loan);
 
-			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
 			return Json(_loanModelBuilder.BuildModel(loan));
@@ -177,7 +178,7 @@
 
 			try
 			{
-				var calc = new LoanRepaymentScheduleCalculator(loan, now);
+				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 				calc.GetState();
 			}
 			catch (Exception e)

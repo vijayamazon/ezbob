@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -11,29 +12,23 @@
 	public class LoanPaymentFacade {
 		private readonly ILoanHistoryRepository _historyRepository;
 		private static ILog Log = LogManager.GetLogger(typeof(LoanPaymentFacade));
-		private readonly LoanTransactionMethodRepository loanTransactionMethodRepository;
-
+		private readonly ILoanTransactionMethodRepository loanTransactionMethodRepository;
+		private readonly int amountToChargeFrom;
 		public LoanPaymentFacade() {
 			loanTransactionMethodRepository = ObjectFactory.GetInstance<LoanTransactionMethodRepository>();
+			this.amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
 		}
 
-		public LoanPaymentFacade(ILoanHistoryRepository historyRepository, LoanTransactionMethodRepository loanTransactionMethodRepository) {
+		public LoanPaymentFacade(ILoanHistoryRepository historyRepository, ILoanTransactionMethodRepository loanTransactionMethodRepository, int? amountToChargeFrom = null) {
 			_historyRepository = historyRepository;
 			this.loanTransactionMethodRepository = loanTransactionMethodRepository;
+			this.amountToChargeFrom = amountToChargeFrom ?? CurrentValues.Instance.AmountToChargeFrom;
 		}
 
 		/// <summary>
-		/// Заплатить за кредит. Платёж может быть произвольный. Early, Ontime, Late.
+		/// Заплатить за кредит. Платёж может быть произвольный. Early, On time, Late.
+		/// Perform loan payment. Payment can be manual. Early, On time, Late.
 		/// </summary>
-		/// <param name="loan"></param>
-		/// <param name="transId"></param>
-		/// <param name="amount"></param>
-		/// <param name="ip"></param>
-		/// <param name="term"></param>
-		/// <param name="description"></param>
-		/// <param name="interestOnly"></param>
-		/// <param name="sManualPaymentMethod"></param>
-		/// <returns></returns>
 		public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer", bool interestOnly = false, string sManualPaymentMethod = null) {
 			var paymentTime = term ?? DateTime.UtcNow;
 
@@ -59,7 +54,7 @@
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
-			var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime);
+			var calculator = new LoanRepaymentScheduleCalculator(loan, paymentTime, this.amountToChargeFrom);
 			calculator.RecalculateSchedule();
 
 			if (_historyRepository != null) {
@@ -141,7 +136,7 @@
 				if (amount <= 0)
 					break;
 
-				var c = new LoanRepaymentScheduleCalculator(loan, term);
+				var c = new LoanRepaymentScheduleCalculator(loan, term, this.amountToChargeFrom);
 				var state = c.GetState();
 				var late = loan.Schedule.Where(s => s.Status == LoanScheduleStatus.Late).Sum(s => s.LoanRepayment) +
 						   state.Interest + state.Fees + state.LateCharges;
@@ -241,12 +236,12 @@
 		}
 
 		public LoanScheduleItem GetStateAt(Loan loan, DateTime dateTime) {
-			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
+			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, this.amountToChargeFrom);
 			return payEarlyCalc.GetState();
 		}
 
 		public void Recalculate(Loan loan, DateTime dateTime) {
-			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime);
+			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, dateTime, this.amountToChargeFrom);
 			payEarlyCalc.GetState();
 		}
 	}

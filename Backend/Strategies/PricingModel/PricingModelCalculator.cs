@@ -5,6 +5,7 @@
 	using System.Data;
 	using System.Linq;
 	using System.Text;
+	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Experian;
@@ -144,7 +145,7 @@
 			};
 			calculator.Calculate(Model.LoanAmount, loan, loan.Date, Model.InterestOnlyPeriod);
 
-			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
+			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
 			return loan;

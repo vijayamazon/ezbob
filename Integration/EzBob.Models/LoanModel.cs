@@ -9,6 +9,7 @@
 	using PaymentServices;
 	using Web.Areas.Customer.Models;
 	using Ezbob.Backend.Models;
+	using Ezbob.Utils.Extensions;
 
 	[Serializable]
     public class LoanModel
@@ -69,7 +70,7 @@
                     RefNumber = loan.RefNumber,
                     LoanAmount = loan.LoanAmount,
                     Status = loan.Status.ToString(),
-                    StatusDescription = loan.Status.ToDescription(),
+                    StatusDescription = loan.Status.DescriptionAttr(),
                     Balance = loan.Schedule.Sum(s => s.LoanRepayment),
                     TotalBalance = loan.Schedule.Sum(s => s.AmountDue),
                     Principal = loan.Principal,
@@ -112,8 +113,8 @@
 				}
 			}
 
-			loanModel.LoanSourceName = loan.LoanSource.Name;
-            if (loan.CashRequest!= null)
+			loanModel.LoanSourceName = loan.LoanSource == null ? "" : loan.LoanSource.Name;
+			if (loan.CashRequest != null && loan.CashRequest.DiscountPlan != null)
             {
                 loanModel.DiscountPlan = loan.CashRequest.DiscountPlan.Name;
             }

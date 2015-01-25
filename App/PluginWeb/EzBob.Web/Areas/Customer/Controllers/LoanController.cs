@@ -7,6 +7,7 @@
 	using EzBob.Models;
 	using Infrastructure.Attributes;
 	using Code;
+	using ConfigManager;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using PaymentServices;
@@ -51,7 +52,7 @@
 			var customer = _context.Customer;
 			var loan = customer.Loans.SingleOrDefault(l => l.Id == id);
 
-			ILoanRepaymentScheduleCalculator calculator = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow);
+			ILoanRepaymentScheduleCalculator calculator = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 
 			var loanModel = LoanModel.FromLoan(loan, calculator);
 

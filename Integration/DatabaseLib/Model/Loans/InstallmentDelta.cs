@@ -1,4 +1,5 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
+	using EZBob.DatabaseLib.Common;
 
 	public class InstallmentDelta {
 

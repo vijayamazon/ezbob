@@ -58,7 +58,7 @@ namespace EzBob.Tests
             var date = new DateTime(2012, 12, 18);
             _calculator.Calculate(600, loan, date);
 
-            var c = new LoanRepaymentScheduleCalculator(loan, date);
+			var c = new LoanRepaymentScheduleCalculator(loan, date, 0);
             
             Console.WriteLine(loan);
 
@@ -78,7 +78,7 @@ namespace EzBob.Tests
 
         private decimal TotalEarlyPayment(Loan loan, DateTime dateTime)
         {
-            var c = new LoanRepaymentScheduleCalculator(loan, dateTime);
+			var c = new LoanRepaymentScheduleCalculator(loan, dateTime, 0);
             var totalEarlyPayment = c.TotalEarlyPayment();
             return totalEarlyPayment;
         }

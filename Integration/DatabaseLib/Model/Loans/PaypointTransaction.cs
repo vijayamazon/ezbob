@@ -14,6 +14,7 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
         /// <summary>
         /// Оставшееся тело кредита
+        /// Remaining loan principal
         /// </summary>
         public virtual decimal Principal { get; set; }
 
@@ -24,22 +25,26 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
         /// <summary>
         /// Сумма, которая ушла на оплату процентов
+        /// Amount used for interest repayment
         /// </summary>
         public virtual decimal Interest { get; set; }
 
         /// <summary>
         /// Сумма, которая ушла на оплату Rollover
+        /// Amount used for rollover repayment
         /// </summary>
         public virtual decimal Rollover { get; set; }
 
         /// <summary>
         /// Оставшиеся выплаты по кредиту учитывая проценты и комиссии
+        /// remaining loan balance including interest and fees
         /// </summary>
         [Obsolete]
         public virtual decimal Balance { get; set; }
 
         /// <summary>
         /// Сумма, которая ушла на выплату тела кредита
+        /// Amount used for principal repayment
         /// </summary>
         public virtual decimal LoanRepayment { get; set; }
 

@@ -1,6 +1,5 @@
 ﻿namespace EzBob.Tests.LoanCreatorTests
 {
-	using EZBob.DatabaseLib.Model.Loans;
 	using Models;
 	using Web.Code;
 	using Web.Code.Agreements;

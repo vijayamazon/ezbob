@@ -46,7 +46,7 @@
 
 			var collectionStatus = customer.CollectionStatus;
 
-			var loans = customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null))).ToList();
+			var loans = customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null, CurrentValues.Instance.AmountToChargeFrom))).ToList();
 			var loansNonClosed = loans.Where(l => l.DateClosed == null).ToList();
 
 			var data = new CollectionStatusModel {

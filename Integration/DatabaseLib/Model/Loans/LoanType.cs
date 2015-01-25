@@ -31,14 +31,6 @@ namespace EZBob.DatabaseLib.Model.Loans
             }
         }
 
-        //клиент погасил тело installment. проценты переносятся на следущий месяц
-        public virtual void BalanceReachedExpected(LoanScheduleItem installment)
-        {
-            installment.Interest = 0;
-            installment.LoanRepayment = 0;
-            installment.AmountDue = 0;
-        }
-
         public virtual decimal NextInterestPayment(Database.Loans.Loan loan)
         {
             return 0;
@@ -67,12 +59,7 @@ namespace EZBob.DatabaseLib.Model.Loans
 
             return Enumerable.Repeat(total, first).Concat(base.GetBalances(total, term - first));
         }
-
-        public override void BalanceReachedExpected(LoanScheduleItem installment)
-        {
-            //base.BalanceReachedExpected(installment);
-        }
-
+		
         public override decimal NextInterestPayment(Database.Loans.Loan loan)
         {
             var installment = loan.Schedule.FirstOrDefault(i => i.Status == LoanScheduleStatus.StillToPay && i.LoanRepayment == 0);
@@ -93,11 +80,6 @@ namespace EZBob.DatabaseLib.Model.Loans
 		public override IEnumerable<decimal> GetBalances(decimal total, int term, int interstOnlyTerm = 0)
 		{
 			return Enumerable.Repeat(total, 2).Concat(base.GetBalances(total, term - 2));
-		}
-
-		public override void BalanceReachedExpected(LoanScheduleItem installment)
-		{
-			//base.BalanceReachedExpected(installment);
 		}
 
 		public override decimal NextInterestPayment(Database.Loans.Loan loan)

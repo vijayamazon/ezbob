@@ -5,12 +5,12 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public static class PayEarlyExtensions {
-		public static decimal NextEarlyPayment(this Loan loan, DateTime? term = null) {
-			return new LoanRepaymentScheduleCalculator(loan, term).NextEarlyPayment();
+		public static decimal NextEarlyPayment(this Loan loan, DateTime? term = null, int amountToChargeFrom = 0) {
+			return new LoanRepaymentScheduleCalculator(loan, term, amountToChargeFrom).NextEarlyPayment();
 		}
 
-		public static decimal TotalEarlyPayment(this Loan loan, DateTime? term = null) {
-			return new LoanRepaymentScheduleCalculator(loan, term).TotalEarlyPayment();
+		public static decimal TotalEarlyPayment(this Loan loan, DateTime? term = null, int amountToChargeFrom = 0) {
+			return new LoanRepaymentScheduleCalculator(loan, term, amountToChargeFrom).TotalEarlyPayment();
 		}
 
 		public static decimal TotalEarlyPayment(this Customer customer, DateTime? term = null) {

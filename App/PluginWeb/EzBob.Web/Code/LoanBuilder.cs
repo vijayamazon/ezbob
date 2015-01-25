@@ -7,6 +7,8 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Web.Code
 {
+	using ConfigManager;
+
 	public class LoanBuilder
 	{
 		private readonly ChangeLoanDetailsModelBuilder _builder;
@@ -57,7 +59,7 @@ namespace EzBob.Web.Code
 			AdjustDates(now, loan);
 			AdjustBalances(amount, loan);
 
-			var c = new LoanRepaymentScheduleCalculator(loan, now);
+			var c = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 			c.GetState();
 			loan.LoanSource = cr.LoanSource;
 			return loan;

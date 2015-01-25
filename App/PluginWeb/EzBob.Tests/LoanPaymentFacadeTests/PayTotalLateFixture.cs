@@ -31,10 +31,10 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var now = Parse("2013-01-15 13:52:25.000");
 
-            var c1 = new LoanRepaymentScheduleCalculator(loan1, now);
+            var c1 = new LoanRepaymentScheduleCalculator(loan1, now, 0);
             var lm1 = LoanModel.FromLoan(loan1, c1, c1);
             
-            var c2 = new LoanRepaymentScheduleCalculator(loan2, now);
+            var c2 = new LoanRepaymentScheduleCalculator(loan2, now, 0);
             var lm2 = LoanModel.FromLoan(loan2, c2, c2);
 
             _customer.Loans.Add(loan1);
@@ -74,7 +74,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var now = Parse("2013-02-28 16:40:13.000");
 
-            var c1 = new LoanRepaymentScheduleCalculator(loan1, now);
+			var c1 = new LoanRepaymentScheduleCalculator(loan1, now, 0);
             var lm1 = LoanModel.FromLoan(loan1, c1, c1);
 
             Console.WriteLine(loan1);
@@ -102,7 +102,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var now = Parse("2013-02-28 16:40:13.000");
 
-            var c1 = new LoanRepaymentScheduleCalculator(loan1, now);
+			var c1 = new LoanRepaymentScheduleCalculator(loan1, now, 0);
 
             _facade.PayLoan(loan1, "", 10000, "ip", now);
 
@@ -127,10 +127,10 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 
             var now = Parse("2013-01-15 13:52:25.000");
 
-            var c1 = new LoanRepaymentScheduleCalculator(loan1, now);
+			var c1 = new LoanRepaymentScheduleCalculator(loan1, now, 0);
             var lm1 = LoanModel.FromLoan(loan1, c1, c1);
             
-            var c2 = new LoanRepaymentScheduleCalculator(loan2, now);
+            var c2 = new LoanRepaymentScheduleCalculator(loan2, now, 0);
             var lm2 = LoanModel.FromLoan(loan2, c2, c2);
 
             _customer.Loans.Add(loan1);

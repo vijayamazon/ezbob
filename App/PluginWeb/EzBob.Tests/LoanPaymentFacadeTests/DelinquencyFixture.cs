@@ -55,7 +55,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             CreateLoan(Parse("2013-07-25 00:00:00.000"), 1000);
             MakePayment(235.0m, Parse("2013-08-25 00:00:00.000"));
 
-            var p = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-08-30 00:00:00.000")).NextEarlyPayment();
+            var p = new LoanRepaymentScheduleCalculator(_loan, Parse("2013-08-30 00:00:00.000"), 0).NextEarlyPayment();
 
             Console.Write(_loan);
 
@@ -72,7 +72,7 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
             MakePayment(236.0m, Parse("2013-08-25 00:00:00.000"));
             MakePayment(164.0m, Parse("2013-08-25 00:00:00.000"));
 
-            LoanModel.FromLoan(_loan, new LoanRepaymentScheduleCalculator(_loan, Parse("2013-08-30 16:52:00.000")));
+            LoanModel.FromLoan(_loan, new LoanRepaymentScheduleCalculator(_loan, Parse("2013-08-30 16:52:00.000"), 0));
 
             Console.Write(_loan);
 

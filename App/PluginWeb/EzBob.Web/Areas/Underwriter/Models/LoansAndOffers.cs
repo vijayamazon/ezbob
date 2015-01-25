@@ -6,7 +6,9 @@ using PaymentServices.Calculators;
 
 namespace EzBob.Web.Areas.Underwriter.Models
 {
-    public class LoansAndOffers
+	using ConfigManager;
+
+	public class LoansAndOffers
     {
         public List<LoanModel> loans { get; set; }
         public List<CashRequestModel> offers { get; set; }
@@ -19,7 +21,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 
         public LoansAndOffers(EZBob.DatabaseLib.Model.Database.Customer customer)
         {
-            loans = customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null))).ToList();
+			loans = customer.Loans.Select(l => LoanModel.FromLoan(l, new LoanRepaymentScheduleCalculator(l, null, CurrentValues.Instance.AmountToChargeFrom))).ToList();
             offers = customer.CashRequests
                 .OrderBy(c => c.CreationDate)
                 .Select(c => CashRequestModel.Create(c))

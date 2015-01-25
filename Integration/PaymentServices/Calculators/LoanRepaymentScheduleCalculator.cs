@@ -18,35 +18,68 @@
 
         //state variables
 
-        //деньги, которые реально находятся у клиента на руках. баланс кредита без процентов и fee
+		/// <summary>
+        ///деньги, которые реально находятся у клиента на руках. баланс кредита без процентов и fee
+		///money, that really have customer. loan balance without interest and fees
+		/// </summary>
         private decimal _principal;
 
-        //ожидаемый баланс.
+		/// <summary>
+        /// ожидаемый баланс.
+		/// expected balance
+		/// </summary>
         private decimal _expectedPrincipal;
 
-        //Ожидаемый баланс. При каждом installment увеличивается, в независимости от того в будущем этот installment, или нет
+		/// <summary>
+        /// Ожидаемый баланс. При каждом installment увеличивается, в независимости от того в будущем этот installment, или нет
+        /// expected balance. In each installment increases, no matter if this installment is in future or not
+		/// </summary>
         private decimal _totalPrincipalToPay;
 
-        //Сумма реально оплаченного principal
+		/// <summary>
+        /// Сумма реально оплаченного principal
+        /// Amount of really paid principal
+		/// </summary>
         private decimal _paidPrincipal;
 
-        //дата последнего действия. нужна для расчета процентов
+		/// <summary>
+        /// дата последнего действия. нужна для расчета процентов
+        /// date of last action. Needed for interest calculation
+		/// </summary>
         private DateTime _lastActionDate;
         private DateTime? _lastPaymentDate;
 
-        //список обработанных installment'ов
+        
+		/// <summary>
+		/// список обработанных installment'ов
+		/// list of processed installments
+		/// </summary>
         private List<LoanScheduleItem> _processed = new List<LoanScheduleItem>();
 
-        //последовательность событий, относящихся к кредиту
+		/// <summary>
+        /// последовательность событий, относящихся к кредиту
+        /// events sequence, related to loan
+		/// </summary>
         private List<LoanRepaymentScheduleCalculatorEvent> _events = new List<LoanRepaymentScheduleCalculatorEvent>();
-
-        //Доход банка за все время заема
+		
+		/// <summary>
+		/// Доход банка за все время заема
+		/// total loan interest
+		/// </summary>
         private decimal _totalInterestToPay = 0;
 
-        //Сколько всего клиент заплатил процентов
+        
+		/// <summary>
+		/// Сколько всего клиент заплатил процентов
+		/// total repaid interest
+		/// </summary>
         private decimal _paidInterest = 0;
 
-        //Штрафы, которые надо было заплатить
+        
+		/// <summary>
+		/// Штрафы, которые надо было заплатить
+		/// Total fees that have to be paid
+		/// </summary>
         private decimal _totalFeesToPay = 0;
 
         //Штрафы, уплаченные клиентом
@@ -58,14 +91,26 @@
         private LoanRepaymentScheduleCalculatorEvent _eventDayStart;
         private LoanRepaymentScheduleCalculatorEvent _eventDayEnd;
 
-        //количество дней в месяце, в текущем периоде
+        
+		/// <summary>
+		/// количество дней в месяце, в текущем периоде
+		/// Num of days in month, for current period
+		/// </summary>
         private int _daysInMonth;
 
-        //текущий roll over, который должен быть оплачен при платеже
+        
+		/// <summary>
+		/// текущий roll over, который должен быть оплачен при платеже
+		/// current roll over, that have to be paid during repayment
+		/// </summary>
         private List<PaymentRollover> _currentRollover = new List<PaymentRollover>();
         private List<PaymentRollover> _rollovers;
 
-        //было ли расписание сдвинуто
+        
+		/// <summary>
+		/// было ли расписание сдвинуто
+		/// was the schedule shifted
+		/// </summary>
         private bool _shifted = false;
 
         private List<LoanScheduleItem> _rescentLate = new List<LoanScheduleItem>(); 
@@ -76,7 +121,7 @@
 
         private readonly decimal _amountToChargeFrom = 0;
 
-        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term)
+        public LoanRepaymentScheduleCalculator(Loan loan, DateTime? term, int amountToChargeFrom)
         {
             _loan = loan;
             _schedule = loan.Schedule;
@@ -88,7 +133,7 @@
             _eventDayStart = new LoanRepaymentScheduleCalculatorEvent(_term);
             _eventDayEnd = new LoanRepaymentScheduleCalculatorEvent(_term.AddHours(23).AddMinutes(59).AddSeconds(59));
 
-            _amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
+			_amountToChargeFrom = amountToChargeFrom;
 
             Init();
         }
@@ -156,6 +201,7 @@
                 var principal = _loan.LoanAmount - _paidPrincipal;
 
                 //если пользователь пропустил платеж
+				//if user missed payment
                 if (principal > _expectedPrincipal)
                 {
                     amount = Math.Round(principal - _expectedPrincipal + InterestToPay, 2);
@@ -511,6 +557,8 @@
             {
                 var money = Math.Min(installment.Fees, amount);
                 installment.Fees -= money;
+	            installment.FeesPaid += money;
+				installment.RepaymentAmount += money;
                 installment.AmountDue -= money;
                 amount = amount - money;
             }
@@ -536,6 +584,8 @@
             {
                 var money = Math.Min(installment.Interest, amount);
                 installment.Interest -= money;
+	            installment.InterestPaid += money;
+				installment.RepaymentAmount += money;
                 installment.AmountDue -= money;
             }
         }
@@ -543,11 +593,13 @@
 		// in case of late payment, need to update all not closed installments
         private void RecordPrincipalPayment(decimal amount)
         {
-            foreach (var installment in _processed.Where(i => i.LoanRepayment > 0))
+            foreach (LoanScheduleItem installment in _processed.Where(i => i.LoanRepayment > 0))
             {
                 var money = Math.Min(installment.LoanRepayment, amount);
                 installment.LoanRepayment -= money;
                 installment.AmountDue -= money;
+	            installment.RepaymentAmount += money;
+	            installment.Principal += money;
                 _totalPrincipalToPay -= money;
                 amount = amount - money;
             }
@@ -567,6 +619,8 @@
                     {
                         installment.Status = LoanScheduleStatus.PaidOnTime;
                     }
+
+	                installment.DatePaid = _lastPaymentDate;
                 } else if (installment.AmountDue <= _amountToChargeFrom && _schedule.Last().Date != installment.Date)
                 {
                     installment.Status = LoanScheduleStatus.AlmostPaid;
@@ -594,13 +648,12 @@
 
             installment.Status = LoanScheduleStatus.StillToPay;
 
-            //if the moment of installment client have less money than had to be, than the payment considered as payed.
+            //if the moment of installment client have less money than had to be, than the payment considered as paid.
 
             var diff = _principal - _expectedPrincipal;
 
             if (diff <= 0)
             {
-                _loan.LoanType.BalanceReachedExpected(installment);
                 CloseInstallment(installment);
             }
 
@@ -624,7 +677,7 @@
             installment.LoanRepayment = Math.Round(Math.Max(0, principalToPay), 2);
             installment.AmountDue = installment.LoanRepayment + installment.Interest + installment.Fees;
 
-            //for future installments, that have to be payed, will consider that client pays exactly on schedule 
+            //for future installments, that have to be paid, will consider that client pays exactly on schedule 
             if (_term <= installment.Date && _principal > installment.Balance && installment.Status == LoanScheduleStatus.StillToPay)
             {
                 _principal = installment.Balance;
@@ -664,6 +717,8 @@
             installment.Interest = 0;
             installment.LoanRepayment = 0;
             installment.AmountDue = 0;
+
+	        installment.DatePaid = paymentDate;
         }
     }
 }

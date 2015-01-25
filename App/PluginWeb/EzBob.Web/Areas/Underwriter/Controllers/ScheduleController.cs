@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code;
 	using Code.ReportGenerator;
+	using ConfigManager;
 	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
 	using Web.Models;
@@ -50,7 +51,7 @@
 				cr.OfferStart.HasValue? cr.OfferStart.Value : DateTime.UtcNow, 
 				cr.ApprovedRepaymentPeriod.HasValue ? cr.ApprovedRepaymentPeriod.Value : 12);
 
-			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date);
+			var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
 			var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);

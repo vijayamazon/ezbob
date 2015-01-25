@@ -25,11 +25,11 @@ namespace EzBob.Tests.LoanPaymentFacadeTests
 		[SetUp]
 		public void Init()
 		{
-			Assert.AreEqual(CurrentValues.Instance.AmountToChargeFrom, GetAmountToChargeFrom());
+			Assert.AreEqual(0, GetAmountToChargeFrom());
 
 			_loan = new Loan();
 			// _configurationVariablesRepository = config.Object;
-			_facade = new LoanPaymentFacade(null, null);
+			_facade = new LoanPaymentFacade(new Mock<ILoanHistoryRepository>().Object, new Mock<ILoanTransactionMethodRepository>().Object, 0);
 			_calculator = new LoanScheduleCalculator() { Interest = 0.06M };
 
 			_customer = new Customer();

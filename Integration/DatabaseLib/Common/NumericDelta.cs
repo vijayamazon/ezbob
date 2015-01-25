@@ -1,4 +1,4 @@
-﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
+﻿namespace EZBob.DatabaseLib.Common {
 
 	public class NumericDelta<TNum> {
 
