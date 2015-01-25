@@ -1,8 +1,11 @@
 ﻿namespace AutomationCalculator.MedalCalculation {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using AutomationCalculator.Common;
+	using AutomationCalculator.Turnover;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -200,20 +203,68 @@
 			model.MaritalStatus = (MaritalStatus)Enum.Parse(typeof(MaritalStatus), dbData.MaritalStatus);
 			model.NetWorth = dbData.ZooplaValue == 0 ? 0 : (dbData.ZooplaValue - dbData.Mortages) / (decimal)dbData.ZooplaValue;
 
-			// This Logic is good only for OfflineLimited,SoleTrader,NonLimited Medals
+			// --------start new turnover calculation for medal ----------------//
+			//	Flow: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
+			model.TurnoverType = null;
+			List<TurnoverDbRow> turnovers = new List<TurnoverDbRow>();
+
+			this.DB.ForEachResult<TurnoverDbRow>(r => turnovers.Add(r),
+					"GetCustomerTurnoverForAutoDecision",
+					new QueryParameter("IsForApprove", true),
+					new QueryParameter("CustomerID", customerId),
+					new QueryParameter("Now", model.CalculationDate));
+
+			//foreach (var t in turnovers)  Console.WriteLine("Allturnovers: {0}, {1}, {2}", t.TheMonth, t.Distance, t.MpTypeID);
+
+			// extract hmrc data 
+			var hmrcList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.hmrc) select r).AsQueryable();
+			// extract yodlee data only
+			var yodleeList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.yodlee) select r).AsQueryable();
+
+			decimal hmrcTurnover = 0;
+			decimal yoodleeTurnover = 0;
+
+			// has a hmrc
+			if (Enumerable.Count(hmrcList) > 0) {
+				// get hmrc turnover for all months received
+				hmrcTurnover = hmrcList.Sum(t => t.Turnover);
+				model.AnnualTurnover = (hmrcTurnover < 0) ? 0 : hmrcTurnover;
+				model.TurnoverType = TurnoverType.HMRC;
+			}
+
+			// has bank instead
+			if (model.TurnoverType.Equals(null)) {
+				if (Enumerable.Count(yodleeList) > 0) {
+					// get yoodlee turnover for all months received
+					yoodleeTurnover = yodleeList.Sum(t => t.Turnover);
+					model.AnnualTurnover = (yoodleeTurnover < 0) ? 0 : yoodleeTurnover;
+					model.TurnoverType = TurnoverType.Bank;
+				}
+			}
+
+			// has only online instead
+			if (model.TurnoverType.Equals(null))
+				CalculateTurnoverForMedal(model, turnovers, hmrcTurnover, yoodleeTurnover);
+
+			Log.Info("AV; TurnoverFormedal: annualTurnover: {0}, type:{1}", model.AnnualTurnover, model.TurnoverType);
+
+			// --------end new turnover calculation for medal----------------//
+
+			/*	// This Logic is good only for OfflineLimited,SoleTrader,NonLimited Medals
 			List<MarketPlace> yodlees = dbHelper.GetCustomerYodlees(customerId);
 			var mpHelper = new MarketPlacesHelper(this.DB, this.Log);
 			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, this.Log);
 			model.AnnualTurnover = dbData.HasHmrc ? dbData.HmrcRevenues : yodleeIncome;
-			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;
-
+			model.AnnualTurnover = model.AnnualTurnover < 0 ? 0 : model.AnnualTurnover;			
+			
 			if (dbData.HasHmrc)
 				model.TurnoverType = TurnoverType.HMRC;
 			else if (yodlees.Count > 0)
 				model.TurnoverType = TurnoverType.Bank;
 			else
-				model.TurnoverType = null;
+				model.TurnoverType = null;	*/
 
+			// ?????? elina?
 			model.FreeCashFlowValue = dbData.HmrcFreeCashFlow - (dbData.CurrentBalanceSum / dbData.FCFFactor);
 			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
@@ -248,6 +299,8 @@
 			var mpHelper = new MarketPlacesHelper(this.DB, this.Log);
 			var yodlees = dbHelper.GetCustomerYodlees(customerId);
 			var yodleeIncome = mpHelper.GetYodleeAnnualized(yodlees, this.Log);
+
+			// elina?
 			var onlineTurnover = mpHelper.GetOnlineTurnoverAnnualized(customerId);
 			if (intputModel.MedalInputModelDb.HmrcRevenues > onlineTurnover * intputModel.MedalInputModelDb.OnlineMedalTurnoverCutoff) {
 				usingHmrc = true;
@@ -487,6 +540,127 @@
 
 			return consumerScoreWeight;
 		}
+
+
+		/// <summary>
+		/// Calculate online turnover
+		/// 	Calculate for "last month", "last three months", "last six months", and "last twelve months". 
+		///		Annualize the figures and take the minimum among them. 
+		///		If a figure is zero it does NOT participate in minimum calculation. 
+		/// </summary>
+		/// <param name="model"></param>
+		/// <param name="turnovers"></param>
+		/// <param name="hmrcTurnover"></param>
+		/// <param name="yoodleeTrunover"></param>
+		protected virtual void CalculateTurnoverForMedal(MedalInputModel model, List<TurnoverDbRow> turnovers, decimal hmrcTurnover, decimal yoodleeTrunover) {
+			try {
+				decimal annualTurnover = 0;
+
+				const int T1 = 1;
+				const int T3 = 3;
+				const int T6 = 6;
+				const int T12 = 12;
+
+				const int Ec1 = 12;
+				const int Ec3 = 4;
+				const int Ec6 = 2;
+				const int Ec12 = 1;
+
+				List<decimal> list_t1 = new List<decimal>();
+				List<decimal> list_t3 = new List<decimal>();
+				List<decimal> list_t6 = new List<decimal>();
+				List<decimal> list_t12 = new List<decimal>();
+
+				// extact amazon data
+				var amazonList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.amazon) select r).AsQueryable();
+
+				foreach (var y in amazonList)  Console.WriteLine("{0}, {1}, {2}, {3}", y.Distance, y.TheMonth, y.Turnover, y.CurrentMonth);
+
+				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for amazon
+				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T1, Ec1));
+				list_t3.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T3, Ec3));
+				list_t6.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T6, Ec6));
+				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(amazonList, T12, Ec12));
+
+				Console.WriteLine("Amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1[0], list_t3[0], list_t6[0], list_t12[0]);
+
+				// extact ebay data
+				var ebayList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.ebay) select r).AsQueryable();
+
+				foreach (var y in ebayList) Console.WriteLine("{0}, {1}, {2}, {3}", y.Distance, y.TheMonth, y.Turnover, y.CurrentMonth);
+
+				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for ebay
+				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T1, Ec1));
+				list_t3.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T3, Ec3));
+				list_t6.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T6, Ec6));
+				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(ebayList, T12, Ec12));
+
+				Console.WriteLine("Ebay TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1[1], list_t3[1], list_t6[1], list_t12[1]);
+
+				// extact paypal data
+				var paypalList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.paypal) select r).AsQueryable();
+
+				foreach (var y in paypalList)
+					Console.WriteLine("PP: {0}, {1}, {2}, {3}", y.Distance, y.TheMonth, y.Turnover, y.CurrentMonth);
+
+				// calculate "last month", "last three months", "last six months", and "last twelve months"/annualize for paypal
+				list_t1.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T1, Ec1));
+				list_t3.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T3, Ec3));
+				list_t6.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T6, Ec6));
+				list_t12.Add(CalcAnnualTurnoverBasedOnPartialData(paypalList, T12, Ec12));
+
+				Console.WriteLine("Paypal TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1[2], list_t3[2], list_t6[2], list_t12[2]);
+
+				// Online turnover: Amazon + MAX(eBay, Pay Pal)
+
+				// amazon: index 0
+				// ebay: index 1
+				// paypal: index 2
+
+				var onlineList = new ArrayList();
+
+				onlineList.Add(list_t1.ElementAt(0) + Math.Max(list_t1.ElementAt(1), list_t1.ElementAt(2)));
+				onlineList.Add(list_t3.ElementAt(0) + Math.Max(list_t3.ElementAt(1), list_t3.ElementAt(2)));
+				onlineList.Add(list_t6.ElementAt(0) + Math.Max(list_t6.ElementAt(1), list_t6.ElementAt(2)));
+				onlineList.Add(list_t12.ElementAt(0) + Math.Max(list_t12.ElementAt(1), list_t12.ElementAt(2)));
+				
+				annualTurnover = (from decimal r in onlineList where r > 0 select r).AsQueryable().DefaultIfEmpty(0).Min();
+
+				decimal onlineMedalTurnoverCutoff = model.MedalInputModelDb.OnlineMedalTurnoverCutoff;
+
+				if (hmrcTurnover > onlineMedalTurnoverCutoff * annualTurnover) {
+					model.TurnoverType = TurnoverType.HMRC;
+					model.AnnualTurnover = hmrcTurnover;
+					return;
+				}
+
+				if (yoodleeTrunover > onlineMedalTurnoverCutoff * annualTurnover) {
+					model.TurnoverType = TurnoverType.Bank;
+					model.AnnualTurnover = yoodleeTrunover;
+					return;
+				}
+
+				model.TurnoverType = TurnoverType.Online;
+				model.AnnualTurnover = annualTurnover;
+
+			} catch (Exception ex) {
+				this.Log.Error(ex, "Failed to calculate online annual turnover for medal");
+			} // try
+		} // CalculateTurnoverForMedal
+
+
+		/// <summary>
+		///     Calculates for "last month", "last three months", "last six months", and "last twelve months".
+		///     Annualize the figures and take the minimum among them.
+		/// </summary>
+		/// <param name="list"></param>
+		/// <param name="monthsBefore"></param>
+		/// <param name="extrapolationCoefficient"></param>
+		/// <returns></returns>
+		protected virtual decimal CalcAnnualTurnoverBasedOnPartialData(IQueryable<TurnoverDbRow> list, int monthAfter, int extrapolationCoefficient) {
+			return list.Where(t => (t.Distance < monthAfter)).Sum(t => t.Turnover) * extrapolationCoefficient;
+		}
+
 
 		protected readonly ASafeLog Log;
 		protected readonly AConnection DB;

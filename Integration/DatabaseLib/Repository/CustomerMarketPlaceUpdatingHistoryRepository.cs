@@ -20,5 +20,11 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		{
 			return GetAll().Where(x => x.CustomerMarketPlace.Id == marketplaceId).OrderByDescending(x => x.UpdatingStart);
 		}
+
+		public IQueryable<MP_CustomerMarketplaceUpdatingHistory> GetByCustomerId(int customerID)
+		{
+			return GetAll().Where(x => x.CustomerMarketPlace.Customer.Id == customerID);
+		}
+
 	}
 }

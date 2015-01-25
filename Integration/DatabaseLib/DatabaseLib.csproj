@@ -383,6 +383,21 @@
     <Compile Include="Repository\PaymentRolloverRepository.cs" />
     <Compile Include="Repository\PostcodeServiceLogRepository.cs" />
     <Compile Include="Repository\ServiceLogRepository.cs" />
+    <Compile Include="Repository\Turnover\AmazonAggregation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repository\Turnover\EbayAggregation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repository\Turnover\HmrcAggregation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repository\Turnover\PayPalAggregation.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Repository\Turnover\YodleeAggregation.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="ServiceFaultDetail.cs" />
     <Compile Include="ServiceRequestException.cs" />
     <Compile Include="ServiceRequestExceptionFactory.cs" />

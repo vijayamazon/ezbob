@@ -5,7 +5,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 	public class MP_CustomerMarketplaceUpdatingHistoryMap : ClassMap<MP_CustomerMarketplaceUpdatingHistory> {
 		public MP_CustomerMarketplaceUpdatingHistoryMap() {
 			Table("MP_CustomerMarketplaceUpdatingHistory");
+
 			Id(x => x.Id);
+
 			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId");
 			Map(x => x.UpdatingStart).CustomType<UtcDateTimeType>();
 			Map(x => x.UpdatingEnd).CustomType<UtcDateTimeType>();
@@ -70,6 +72,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 			HasOne(x => x.YodleeOrder)
 				.PropertyRef(p => p.HistoryRecord)
 				.Cascade.All();
+			
+			HasMany(x => x.HmrcAggregations).KeyColumn("CustomerMarketPlaceUpdatingHistoryID").LazyLoad().Inverse().Cascade.All();
+			HasMany(x => x.YodleeAggregations).KeyColumn("CustomerMarketPlaceUpdatingHistoryID").LazyLoad().Inverse().Cascade.All();
+			HasMany(x => x.PayPalAggregations).KeyColumn("CustomerMarketPlaceUpdatingHistoryID").LazyLoad().Inverse().Cascade.All();
+			HasMany(x => x.EbayAggregations).KeyColumn("CustomerMarketPlaceUpdatingHistoryID").LazyLoad().Inverse().Cascade.All();
+			HasMany(x => x.AmazonAggregations).KeyColumn("CustomerMarketPlaceUpdatingHistoryID").LazyLoad().Inverse().Cascade.All();
+
 		}
 	}
 }
