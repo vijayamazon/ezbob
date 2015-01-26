@@ -7,8 +7,8 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 	using Ezbob.Utils;
-	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using PaymentServices.Calculators;
 
@@ -74,53 +74,10 @@
 
 			foreach (Datum d in this.data) {
 				d.IsDefault = defaultCustomers.Contains(d.CustomerID);
+				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
-				var instance = new CalculateMedal(d.CustomerID, d.DecisionTime, true, false);
-				instance.Execute();
-
-				Log.Debug("Before capping the offer: {0}", instance.Result);
-
-				int amount = Math.Min(
-					instance.Result.RoundOfferedAmount(),
-					IsHomeOwner(d.CustomerID)
-						? CurrentValues.Instance.MaxCapHomeOwner
-						: CurrentValues.Instance.MaxCapNotHomeOwner
-				);
-
-				var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
-					d.CustomerID,
-					amount,
-					(AutomationCalculator.Common.Medal)instance.Result.MedalClassification,
-					(AutomationCalculator.Common.MedalType)instance.Result.MedalType,
-					(AutomationCalculator.Common.TurnoverType?)instance.Result.TurnoverType,
-					d.DecisionTime,
-					DB,
-					Log
-				).Init();
-				approveAgent.MakeDecision();
-
-				d.Auto.Amount = amount;
-				d.AutoDecision = approveAgent.Trail.GetDecisionName();
-
-				if (amount == 0) {
-					d.Auto.RepaymentPeriod = 0;
-					d.Auto.InterestRate = 0;
-					d.Auto.SetupFee = 0;
-				} else {
-					var odc = new OfferDualCalculator();
-
-					odc.CalculateOffer(
-						d.CustomerID,
-						d.DecisionTime,
-						amount,
-						d.LoanCount > 0,
-						instance.Result.MedalClassification
-					);
-
-					d.Auto.RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
-					d.Auto.InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
-					d.Auto.SetupFee = odc.VerifyBoundaries.SetupFee / 100.0m;
-				} // if
+				d.AutoThen.Calculate(d.CustomerID, isHomeOwner, DB, Log);
+				d.AutoNow.Calculate(d.CustomerID, isHomeOwner, DB, Log);
 
 				pc++;
 			} // for
@@ -239,11 +196,13 @@
 
 		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+		[SuppressMessage("ReSharper", "UnusedMember.Local")]
 		private class Datum {
 			public Datum() {
-				Manual = new MedalAndPricing();
+				Manual = new ManualMedalAndPricing();
 				ManualCfg = new SetupFeeConfiguration();
-				Auto = new MedalAndPricing();
+				AutoThen = new AutoMedalAndPricing();
+				AutoNow = new AutoMedalAndPricing { DecisionTime = DateTime.UtcNow, };
 			} // constructor
 
 			public int CashRequestID { get; set; }
@@ -251,48 +210,35 @@
 			public int BrokerID { get; set; }
 
 			[FieldName("UnderwriterDecisionDate")]
-			public DateTime DecisionTime { get; set; }
+			public DateTime DecisionTime {
+				get { return Manual.DecisionTime; }
+				set {
+					Manual.DecisionTime = value;
+					AutoThen.DecisionTime = value;
+				} // set
+			} // DecisionTime
+
+			public DateTime Now { get; set; }
 
 			[FieldName("UnderwriterDecision")]
-			public string Decision { get; set; }
+			public string Decision {
+				get { return Manual.Decision; }
+				set { Manual.Decision = value; }
+			} // Decision
 
-			public MedalAndPricing Manual { get; private set; }
+			public AMedalAndPricing Manual { get; private set; }
 
-			public string AutoDecision { get; set; }
 			public bool IsDefault { get; set; }
 
-			public MedalAndPricing Auto { get; private set; }
+			public AMedalAndPricing AutoThen { get; private set; }
+			public AMedalAndPricing AutoNow { get; private set; }
+
 			public SetupFeeConfiguration ManualCfg { get; private set; }
 
-			public int LoanCount { get; private set; } // LoanCount
-
 			public void LoadLoans(AConnection db) {
-				LoanCount = db.ExecuteScalar<int>(
-					"GetCustomerLoanCount",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", CustomerID),
-					new QueryParameter("Now", DecisionTime)
-				);
+				AutoThen.LoadLoans(CustomerID, db);
+				AutoNow.LoadLoans(CustomerID, db);
 			} // LoadLoans
-
-			/// <summary>
-			/// Returns a string that represents the current object.
-			/// </summary>
-			/// <returns>
-			/// A string that represents the current object.
-			/// </returns>
-			public override string ToString() {
-				return string.Format(
-					"cash request: {0}, customer: {1}, broker: {2}, decision: {3} at {4}; auto: {5}; manual: {6}",
-					CashRequestID,
-					CustomerID,
-					BrokerID,
-					Decision,
-					DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
-					Auto,
-					Manual
-				);
-			} // ToString
 
 			public static string CsvTitles(SortedSet<string> sources) {
 				var os = new List<string>();
@@ -309,11 +255,9 @@
 					"Customer ID",
 					"Broker ID",
 					"Is Default Now",
-					"Decision time",
-					"Manual decision",
-					MedalAndPricing.CsvTitles("Manual"),
-					"Auto decision",
-					MedalAndPricing.CsvTitles("Auto"),
+					AMedalAndPricing.CsvTitles("Manual"),
+					AMedalAndPricing.CsvTitles("Auto then"),
+					AMedalAndPricing.CsvTitles("Auto now"),
 					string.Join(";", os)
 				);
 			} // CsvTitles
@@ -341,11 +285,9 @@
 					CustomerID.ToString(CultureInfo.InvariantCulture),
 					BrokerID.ToString(CultureInfo.InvariantCulture),
 					IsDefault,
-					DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
-					Decision,
 					Manual.ToCsv(),
-					AutoDecision,
-					Auto.ToCsv(),
+					AutoThen.ToCsv(),
+					AutoNow.ToCsv(),
 					string.Join(";", os)
 				);
 			} // ToCsv
@@ -363,7 +305,7 @@
 			[FieldName("ManualSetupFeeAmount")]
 			public decimal? Amount { get; set; }
 
-			public void Calculate(MedalAndPricing map) {
+			public void Calculate(AMedalAndPricing map) {
 				if (map == null)
 					return;
 
@@ -392,41 +334,138 @@
 			} // ToString
 		} // class SetupFeeConfiguration
 
+		private class ManualMedalAndPricing : AMedalAndPricing {
+			protected override decimal SetupFeeAmount {
+				get { return SetupFee; }
+			} // SetupFeeAmount
+
+			protected override decimal SetupFeePct {
+				get { return Amount <= 0 ? 0 : SetupFee / Amount; }
+			} // SetupFeePct
+		} // ManualMedalAndPricing
+
+		private class AutoMedalAndPricing : AMedalAndPricing {
+			protected override decimal SetupFeeAmount {
+				get { return SetupFee * Amount; }
+			} // SetupFeeAmount
+
+			protected override decimal SetupFeePct {
+				get { return SetupFee; }
+			} // SetupFeePct
+		} // AutoMedalAndPricing
+
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
-		private class MedalAndPricing {
+		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
+		private abstract class AMedalAndPricing {
+			public int LoanCount { get; private set; }
+			[NonTraversable]
+			public DateTime DecisionTime { get; set; }
+			[NonTraversable]
+			public string Decision { get; set; }
+
+			public string DecisionStr {
+				get {
+					switch (Decision) {
+					case "approved":
+						return "Approved";
+
+					case "ApprovedPending":
+						return "Pending";
+
+					case "not approved":
+						return "manual";
+
+					default:
+						return Decision;
+					} // switch
+				} // get
+			} // DecisionStr
+
 			public decimal Amount { get; set; }
 			public decimal InterestRate { get; set; }
 			public decimal SetupFee { get; set; }
 			public int RepaymentPeriod { get; set; }
 
-			/// <summary>
-			/// Returns a string that represents the current object.
-			/// </summary>
-			/// <returns>
-			/// A string that represents the current object.
-			/// </returns>
-			public override string ToString() {
-				return string.Format(
-					"{0} at {1} for {2} with fee {3}",
-					Amount.ToString("N2", CultureInfo.InvariantCulture),
-					InterestRate.ToString("P2", CultureInfo.InvariantCulture),
-					Grammar.Number(RepaymentPeriod, "month"),
-					SetupFee.ToString("N2", CultureInfo.InvariantCulture)
+			public void Calculate(int customerID, bool isHomeOwner, AConnection db, ASafeLog log) {
+				var instance = new CalculateMedal(customerID, DecisionTime, true, false);
+				instance.Execute();
+
+				log.Debug("Before capping the offer: {0}", instance.Result);
+
+				int amount = Math.Min(
+					instance.Result.RoundOfferedAmount(),
+					isHomeOwner
+						? CurrentValues.Instance.MaxCapHomeOwner
+						: CurrentValues.Instance.MaxCapNotHomeOwner
 				);
-			} // ToString
+
+				var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
+					customerID,
+					amount,
+					(AutomationCalculator.Common.Medal)instance.Result.MedalClassification,
+					(AutomationCalculator.Common.MedalType)instance.Result.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)instance.Result.TurnoverType,
+					DecisionTime,
+					db,
+					log
+				).Init();
+				approveAgent.MakeDecision();
+
+				Amount = amount;
+				Decision = approveAgent.Trail.GetDecisionName();
+
+				if (amount == 0) {
+					RepaymentPeriod = 0;
+					InterestRate = 0;
+					SetupFee = 0;
+				} else {
+					var odc = new OfferDualCalculator();
+
+					odc.CalculateOffer(
+						customerID,
+						DecisionTime,
+						amount,
+						LoanCount > 0,
+						instance.Result.MedalClassification
+					);
+
+					RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
+					InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
+					SetupFee = odc.VerifyBoundaries.SetupFee / 100.0m;
+				} // if
+			} // Calculate
+
+			public void LoadLoans(int customerID, AConnection db) {
+				LoanCount = db.ExecuteScalar<int>(
+					"GetCustomerLoanCount",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerID", customerID),
+					new QueryParameter("Now", DecisionTime)
+				);
+			} // LoadLoans
 
 			public static string CsvTitles(string prefix) {
-				return string.Format("{0} Amount;{0} Interest Rate;{0} Repayment Period;{0} Setup Fee", prefix);
+				return string.Format(
+					"{0} Decision time;{0} Decision;{0} Amount;{0} Interest Rate;" +
+					"{0} Repayment Period;{0} Setup Fee %;{0} Setup Fee Amount",
+					prefix
+				);
 			} // ToCsv
 
 			public string ToCsv() {
 				return string.Join(";",
+					DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					DecisionStr,
 					Amount.ToString(CultureInfo.InvariantCulture),
 					InterestRate.ToString(CultureInfo.InvariantCulture),
 					RepaymentPeriod.ToString(CultureInfo.InvariantCulture),
-					SetupFee.ToString(CultureInfo.InvariantCulture)
+					SetupFeePct.ToString(CultureInfo.InvariantCulture),
+					SetupFeeAmount.ToString(CultureInfo.InvariantCulture)
 				);
 			} // ToCsv
+
+			protected abstract decimal SetupFeePct { get; }
+			protected abstract decimal SetupFeeAmount { get; }
 		} // class MedalAndPricing
 
 		private readonly int topCount;
