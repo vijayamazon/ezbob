@@ -45,10 +45,7 @@
 			if (r.MpTypeID == MpType.Yodlee)
 				return new TurnoverTargetMetaData(this.yodlee, () => new SimpleOneMonthValue());
 
-			if (r.MpTypeID == MpType.Amazon)
-				return new TurnoverTargetMetaData(this.online, () => new OnlineOneMonthValue());
-
-			return null;
+			return new TurnoverTargetMetaData(this.online, () => new OnlineOneMonthValue());
 		} // FindTarget
 
 		protected virtual decimal GetOnline(int monthCount) {

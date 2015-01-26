@@ -1,5 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
+	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
@@ -348,17 +349,43 @@
 		[Test]
 		public void TestAutoRejectTurnover() {
 			var turnover = new AutoRejectTurnover();
+			turnover.Init();
 
 			this.m_oDB.ForEachResult<TurnoverDbRow>(
 				row => turnover.Add(row),
 				"GetCustomerTurnoverForAutoDecision",
 				new QueryParameter("@IsForApprove", false),
-				new QueryParameter("@CustomerID", 19970),
+				new QueryParameter("@CustomerID", 211),
 				new QueryParameter("@Now", DateTime.UtcNow)
 			);
 
 			this.m_oLog.Info("Turnover for year is {0}, for quarter is {1}.", turnover[12], turnover[3]);
 		} // TestAutoRejectTurnover
+
+		[Test]
+		public void TestAutoApprovalTurnover() {
+			var turnover = new AutoApprovalTurnover();
+
+			this.m_oDB.ForEachResult<TurnoverDbRow>(
+				row => turnover.Add(row),
+				"GetCustomerTurnoverForAutoDecision",
+				new QueryParameter("@IsForApprove", true),
+				new QueryParameter("@CustomerID", 211),
+				new QueryParameter("@Now", DateTime.UtcNow)
+			);
+
+			turnover.TurnoverType = AutomationCalculator.Common.TurnoverType.HMRC;
+			turnover.Init();
+			this.m_oLog.Info("HMRC turnover for year is {0}.", turnover[12]);
+
+			turnover.TurnoverType = AutomationCalculator.Common.TurnoverType.Bank;
+			turnover.Init();
+			this.m_oLog.Info("Bank turnover for year is {0}.", turnover[12]);
+
+			turnover.TurnoverType = AutomationCalculator.Common.TurnoverType.Online;
+			turnover.Init();
+			this.m_oLog.Info("Online turnover for year is {0}.", turnover[12]);
+		} // TestAutoApprovalTurnover
 
 		[Test]
 		public void TestMedalCalculation() {

@@ -61,6 +61,12 @@ namespace AutomationCalculator.Turnover {
 		public bool IsPaymentAccount { get; set; }
 
 		/// <summary>
+		/// Gets or sets the name of the mp type.
+		/// </summary>
+		[UsedImplicitly]
+		public string MpTypeName { get; set; }
+
+		/// <summary>
 		/// Gets the month count.
 		/// </summary>
 		public int MonthCount {
@@ -76,14 +82,16 @@ namespace AutomationCalculator.Turnover {
 				return;
 
 			oLog.Debug(
-				"One month turnover for customer marketplace {0} ('{1}'...'{2}' - {3}) - mp id {4} ({5}) of type {6}",
+				"One month turnover for customer marketplace {0} ('{1}'...'{2}' - {3}) - mp id {4} ({5}) of type {7} ({6})",
 				this.Turnover,
 				this.TheMonth.ToString("MMM yyyy", CultureInfo.InvariantCulture),
 				this.CurrentMonth.ToString("d/MMM/yyyy", CultureInfo.InvariantCulture),
 				Grammar.Number(this.Distance, "month"),
 				this.MpID,
 				this.IsPaymentAccount ? "payment account" : "online marketplace",
-				this.MpTypeID);
+				this.MpTypeID,
+				this.MpTypeName
+			);
 		} // WriteToLog
 	} // class TurnoverDbRow
 } // namespace

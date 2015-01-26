@@ -123,11 +123,17 @@ BEGIN
 		r.CurrentMonth,
 		r.MpID,
 		r.MpTypeID,
-		r.IsPaymentAccount
+		r.IsPaymentAccount,
+		MpTypeName = t.Name
 	FROM
 		#raw r
+		INNER JOIN MP_MarketplaceType t ON r.MpTypeID = t.InternalId
 	WHERE
 		r.RowNum = 1
+	ORDER BY
+		t.Name,
+		r.MpID,
+		r.TheMonth
 
 	------------------------------------------------------------------------------
 

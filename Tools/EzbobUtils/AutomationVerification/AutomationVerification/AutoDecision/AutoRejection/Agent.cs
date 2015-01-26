@@ -432,6 +432,7 @@
 		/// <returns>Rejection turnover, annual and quarter.</returns>
 		private RejectionTurnover GetTurnoverForRejection(DateTime now) {
 			var turnover = new AutoRejectTurnover();
+			turnover.Init();
 
 			this.db.ForEachResult<TurnoverDbRow>(
 				row => turnover.Add(row),
