@@ -226,7 +226,7 @@ BEGIN
 		NetNumOfRefundsAndReturns = dbo.udfPayPalFormula(@order_items, TheMonth, NextMonth, NULL, 'NetNumOfRefundsAndReturns'), -- formula 5
 		TransferAndWireOut        = dbo.udfPayPalFormula(@order_items, TheMonth, NextMonth, NULL, 'TransferAndWireOut'),        -- formula 6
 		TransferAndWireIn         = dbo.udfPayPalFormula(@order_items, TheMonth, NextMonth, NULL, 'TransferAndWireIn'),         -- formula 7
-		NetSumOfRefundsAndReturns = dbo.udfPayPalFormula(@order_items, TheMonth, NextMonth, NULL, 'NetNumOfRefundsAndReturns'), -- formula 5a
+		NetSumOfRefundsAndReturns = dbo.udfPayPalFormula(@order_items, TheMonth, NextMonth, NULL, 'NetSumOfRefundsAndReturns'), -- formula 5a
 		NumTransfersOut           = dbo.udfPayPalFormula(@order_items, TheMonth, NextMonth,    0, 'TransferAndWireOut'),        -- formula 6a
 		NumTransfersIn            = dbo.udfPayPalFormula(@order_items, TheMonth, NextMonth,    0, 'TransferAndWireIn')          -- formula 7a
 
