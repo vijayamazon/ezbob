@@ -1,5 +1,7 @@
 ﻿namespace EzBobTest {
 	using System;
+	using AutomationCalculator.AutoDecision.AutoRejection;
+	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
@@ -342,6 +344,21 @@
 			s.Execute();
 			Assert.IsNotNullOrEmpty(s.Result);
 		}
+
+		[Test]
+		public void TestAutoRejectTurnover() {
+			var turnover = new AutoRejectTurnover();
+
+			this.m_oDB.ForEachResult<TurnoverDbRow>(
+				row => turnover.Add(row),
+				"GetCustomerTurnoverForAutoDecision",
+				new QueryParameter("@IsForApprove", false),
+				new QueryParameter("@CustomerID", 19970),
+				new QueryParameter("@Now", DateTime.UtcNow)
+			);
+
+			this.m_oLog.Info("Turnover for year is {0}, for quarter is {1}.", turnover[12], turnover[3]);
+		} // TestAutoRejectTurnover
 
 		[Test]
 		public void TestMedalCalculation() {
