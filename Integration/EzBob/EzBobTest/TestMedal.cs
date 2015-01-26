@@ -179,7 +179,7 @@ namespace EzBobTest {
 			//DateTime calculationTime = new DateTime(2013, 08, 31);
 			//DateTime calculationTime = new DateTime(2013, 10, 02);
 			DateTime calculationTime = new DateTime(2014, 01, 01);
-			int customerId = 211 ; //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363
+			int customerId = 19834; //211; //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363
 			// 171: amazon, pp, ebay
 			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
 

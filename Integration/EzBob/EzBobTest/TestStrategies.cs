@@ -395,10 +395,10 @@
 			foreach (var customer in customers)
 				new CalculateMedal(customer, DateTime.UtcNow, false, true).Execute();*/
 
-			this.m_oDB.ForEachRowSafe(sr => {
+			this.m_oDB.ForEachRowSafe((sr) => {
 				int customerId = sr["Id"];
 				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
-			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);
+			}, "select top 100 Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);
 		}
 
 		[Test]
