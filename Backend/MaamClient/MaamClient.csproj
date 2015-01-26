@@ -58,7 +58,6 @@
     <Compile Include="ExcelPackageExt.cs" />
     <Compile Include="ExcelWorksheetExt.cs" />
     <Compile Include="ExportApprovalData.cs" />
-    <Compile Include="LoadTurnovers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -63,6 +63,11 @@
     <Compile Include="AutoDecision\AutoApproval\Name.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
     <Compile Include="Turnover\ACalculatedTurnoverBase.cs" />
+    <Compile Include="Turnover\AOneMonthValue.cs" />
+    <Compile Include="Turnover\AutoRejectTurnover.cs" />
+    <Compile Include="Turnover\MpType.cs" />
+    <Compile Include="Turnover\OnlineOneMonthValue.cs" />
+    <Compile Include="Turnover\SimpleOneMonthValue.cs" />
     <Compile Include="Turnover\TurnoverDbRow.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Agent.cs" />
     <Compile Include="AutoDecision\AutoReRejection\Arguments.cs" />
@@ -178,6 +183,7 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Common\Range.cs" />
+    <Compile Include="Turnover\TurnoverTargetMetaData.cs" />
     <Compile Include="Utils.cs" />
   </ItemGroup>
   <ItemGroup>

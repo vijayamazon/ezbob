@@ -55,15 +55,6 @@
 			log.Debug("Data read from file:\n{0}", aid.Serialize());
 		} // LoadFromJson
 
-		private static void LoadTurnovers(string[] args) {
-			var oArgs = new Args(AppName, args, Log);
-
-			if (oArgs.IsGood) {
-				CurrentValues.Init(DB, Log);
-				new LoadTurnovers(oArgs, DB, Log).Run();
-			} // if
-		} // LoadTurnovers
-
 		private static void CompareAndExport(string[] args, AConnection db, ASafeLog log) {
 			string tag = CompareMaam(args);
 
@@ -88,8 +79,6 @@
 			// MaamForCashRequest(args);
 
 			// LoadFromJson();
-
-			// LoadTurnovers(args);
 
 			// ExportApprovalData.Run(args, DB, Log);
 

@@ -1,7 +1,5 @@
-﻿namespace AutomationCalculator.ProcessHistory.AutoRejection
-{
-	public class Turnover: ATrace
-	{
+﻿namespace AutomationCalculator.ProcessHistory.AutoRejection {
+	public class Turnover : ATrace {
 		public Turnover(DecisionStatus nDecisionStatus) : base(nDecisionStatus) { }
 
 		/// <summary>

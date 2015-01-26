@@ -1,10 +1,12 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
-	using ProcessHistory.AutoRejection;
-	using ProcessHistory.Trails;
-	using Common;
-	using ProcessHistory;
-	using ProcessHistory.Common;
+	using System.Collections.Generic;
+	using AutomationCalculator.Common;
+	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.AutoRejection;
+	using AutomationCalculator.ProcessHistory.Common;
+	using AutomationCalculator.ProcessHistory.Trails;
+	using AutomationCalculator.Turnover;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -12,25 +14,25 @@
 	/// Rejection Agent is will determine weather client should be auto rejected or not
 	/// </summary>
 	public class RejectionAgent {
-		private readonly DbHelper _dbHelper;
-		private readonly MarketPlacesHelper _mpHelper;
-
 		/// <summary>
 		/// Constructor get db, log customer id and rejection configuration variables
 		/// </summary>
 		public RejectionAgent(AConnection oDB, ASafeLog oLog, int nCustomerID, RejectionConfigs configs = null) {
-			_customerId = nCustomerID;
 			IsAutoRejected = false;
-			m_oLog = oLog;
-			m_oDB = oDB;
-			_mpHelper = new MarketPlacesHelper(oDB, m_oLog);
-			_dbHelper = new DbHelper(oDB, oLog);
-			if (configs == null) {
-				configs = _dbHelper.GetRejectionConfigs();
-			}
-			_configs = configs;
+
+			this.customerId = nCustomerID;
+
+			this.log = oLog;
+			this.db = oDB;
+
+			this.dbHelper = new DbHelper(oDB, oLog);
+
+			this.configs = configs ?? this.dbHelper.GetRejectionConfigs();
+
 			Trail = new RejectionTrail(nCustomerID, oLog);
 		} // constructor
+
+		public bool IsAutoRejected { get; private set; }
 
 		/// <summary>
 		/// Retrieves customer's rejection input data
@@ -38,35 +40,60 @@
 		/// <param name="dataAsOf">optional parameter to retrieve historical data for rejection</param>
 		/// <returns></returns>
 		public RejectionInputData GetRejectionInputData(DateTime? dataAsOf) {
-			DateTime now = dataAsOf.HasValue ? dataAsOf.Value : DateTime.UtcNow;
-			var model = new RejectionInputData();
-			var dbData = _dbHelper.GetRejectionData(_customerId);
+			DateTime now = dataAsOf ?? DateTime.UtcNow;
 
-			var originationTime = new OriginationTime(m_oLog);
-			m_oDB.ForEachRowSafe(originationTime.Process, "LoadCustomerMarketplaceOriginationTimes",
-								 CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", _customerId));
+			var model = new RejectionInputData();
+
+			AutoRejectionInputDataModelDb dbData = this.db.FillFirst<AutoRejectionInputDataModelDb>(
+				"AV_GetRejectionData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerId", this.customerId)
+			);
+
+			var originationTime = new OriginationTime(this.log);
+
+			this.db.ForEachRowSafe(
+				originationTime.Process,
+				"LoadCustomerMarketplaceOriginationTimes",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerId)
+			);
+
 			originationTime.FromExperian(dbData.IncorporationDate);
 
-			var days = originationTime.Since.HasValue ? (now - originationTime.Since.Value).TotalDays : 0;
+			double days = originationTime.Since.HasValue ? (now - originationTime.Since.Value).TotalDays : 0;
 
-			var consumerCaisStatusesCalculation = new CaisStatusesCalculation(m_oDB, m_oLog);
-			var consumerCais = consumerCaisStatusesCalculation.GetConsumerCaisStatuses(_customerId);
-			var lates = consumerCaisStatusesCalculation.GetLates(_customerId, now,
-																 _configs.RejectionLastValidLate,
-																 _configs.Reject_LateLastMonthsNum,
-																 consumerCais);
+			CaisStatusesCalculation consumerCaisStatusesCalculation = new CaisStatusesCalculation(this.db, this.log);
 
-			var consumerDefaults = consumerCaisStatusesCalculation.GetDefaults(_customerId, now,
-																			   _configs.Reject_Defaults_Amount,
-																			   _configs.Reject_Defaults_MonthsNum,
-																			   consumerCais);
+			List<CaisStatus> consumerCais = consumerCaisStatusesCalculation.GetConsumerCaisStatuses(this.customerId);
 
-			var businessCais = _dbHelper.GetBusinessCaisStatuses(_customerId);
-			var businessDefaults = consumerCaisStatusesCalculation.GetDefaults(_customerId, now,
-																			   _configs.Reject_Defaults_CompanyAmount,
-																			   _configs.Reject_Defaults_CompanyMonthsNum,
-																			   businessCais);
-			var turnover = _mpHelper.GetTurnoverForRejection(_customerId);
+			ConsumerLatesModel lates = consumerCaisStatusesCalculation.GetLates(
+				this.customerId,
+				now,
+				this.configs.RejectionLastValidLate,
+				this.configs.Reject_LateLastMonthsNum,
+				consumerCais
+			);
+
+			var consumerDefaults = consumerCaisStatusesCalculation.GetDefaults(
+				this.customerId,
+				now,
+				this.configs.Reject_Defaults_Amount,
+				this.configs.Reject_Defaults_MonthsNum,
+				consumerCais
+			);
+
+			var businessCais = this.dbHelper.GetBusinessCaisStatuses(this.customerId);
+
+			var businessDefaults = consumerCaisStatusesCalculation.GetDefaults(
+				this.customerId, 
+				now,
+				this.configs.Reject_Defaults_CompanyAmount,
+				this.configs.Reject_Defaults_CompanyMonthsNum,
+				businessCais
+			);
+
+			RejectionTurnover turnover = GetTurnoverForRejection(now);
 
 			var data = new RejectionInputData {
 				IsBrokerClient = dbData.IsBrokerClient,
@@ -81,16 +108,16 @@
 				HasMpError = dbData.HasErrorMp,
 				HasCompanyFiles = dbData.HasCompanyFiles,
 				BusinessSeniorityDays = (int)days,
-				AnnualTurnover = turnover.Item1,
-				QuarterTurnover = turnover.Item2,
+				AnnualTurnover = turnover.Annual,
+				QuarterTurnover = turnover.Quarter,
 				NumOfLateConsumerAccounts = lates.NumOfLates,
 				ConsumerLateDays = lates.LateDays,
 				ConsumerDataTime = dbData.ConsumerDataTime,
 			};
 
-			model.Init(now, data, _configs);
+			model.Init(now, data, this.configs);
 			return model;
-		}
+		} // GetRejectionInputData
 
 		/// <summary>
 		/// Main logic flow function to determine weather to auto reject the customer or not 
@@ -99,15 +126,14 @@
 		public void MakeDecision(RejectionInputData data) {
 			Trail.Init(data);
 
-			m_oLog.Debug("Secondary: checking if auto reject should take place for customer {0}...", _customerId);
+			this.log.Debug("Secondary: checking if auto reject should take place for customer {0}...", this.customerId);
 
 			try {
 				CheckRejectionExceptions();
 				Trail.LockDecision();
 				CheckRejections();
-			}
-			catch (Exception e) {
-				m_oLog.Error(e, "Exception during auto rejection.");
+			} catch (Exception e) {
+				this.log.Error(e, "Exception during auto rejection.");
 				StepNoDecision<ExceptionThrown>().Init(e);
 			} // try
 
@@ -116,12 +142,12 @@
 			if (Trail.HasDecided)
 				IsAutoRejected = true;
 
-			m_oLog.Debug(
+			this.log.Debug(
 				"Secondary: checking if auto reject should take place for customer {0} complete; {1}",
-				_customerId,
+				this.customerId,
 				Trail
 			);
-		}
+		} // MakeDecision
 
 		public RejectionTrail Trail { get; private set; }
 
@@ -136,52 +162,63 @@
 			CheckHighBusinessScore();
 			CheckMpError();
 			CheckConsumerDataTime();
-		}
+		} // CheckRejectionExceptions
 
 		private void CheckWasApproved() {
-			if (Trail.MyInputData.WasApproved) {
+			if (Trail.MyInputData.WasApproved)
 				StepNoReject<WasApprovedPreventer>(true).Init(Trail.MyInputData.WasApproved);
-			}
-			else {
+			else
 				StepNoDecision<WasApprovedPreventer>().Init(Trail.MyInputData.WasApproved);
-			}
-		}
+		} // CheckWasApproved
 
 		private void CheckHighAnnualTurnover() {
 			if (Trail.MyInputData.AnnualTurnover > Trail.MyInputData.AutoRejectionException_AnualTurnover) {
-				StepNoReject<AnnualTurnoverPreventer>(true).Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+				StepNoReject<AnnualTurnoverPreventer>(true).Init(
+					Trail.MyInputData.AnnualTurnover,
+					Trail.MyInputData.AutoRejectionException_AnualTurnover
+				);
+			} else {
+				StepNoDecision<AnnualTurnoverPreventer>().Init(
+					Trail.MyInputData.AnnualTurnover,
+					Trail.MyInputData.AutoRejectionException_AnualTurnover
+				);
 			}
-			else {
-				StepNoDecision<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
-			}
-		}
+		} // CheckHighAnnualTurnover
 
 		private void CheckBrokerClient() {
-			if (Trail.MyInputData.IsBrokerClient) {
+			if (Trail.MyInputData.IsBrokerClient)
 				StepNoReject<BrokerClientPreventer>(true).Init(Trail.MyInputData.IsBrokerClient);
-			}
-			else {
+			else
 				StepNoDecision<BrokerClientPreventer>().Init(Trail.MyInputData.IsBrokerClient);
-			}
-		}
+		} // CheckBrokerClient
 
 		private void CheckHighConsumerScore() {
 			if (Trail.MyInputData.ConsumerScore > Trail.MyInputData.AutoRejectionException_CreditScore) {
-				StepNoReject<ConsumerScorePreventer>(true).Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
-			}
-			else {
-				StepNoDecision<ConsumerScorePreventer>().Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
-			}
-		}
+				StepNoReject<ConsumerScorePreventer>(true).Init(
+					Trail.MyInputData.ConsumerScore,
+					Trail.MyInputData.AutoRejectionException_CreditScore
+				);
+			} else {
+				StepNoDecision<ConsumerScorePreventer>().Init(
+					Trail.MyInputData.ConsumerScore,
+					Trail.MyInputData.AutoRejectionException_CreditScore
+				);
+			} // if
+		} // CheckHighConsumerScore
 
 		private void CheckHighBusinessScore() {
 			if (Trail.MyInputData.BusinessScore > Trail.MyInputData.RejectionExceptionMaxCompanyScore) {
-				StepNoReject<BusinessScorePreventer>(true).Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
-			}
-			else {
-				StepNoDecision<BusinessScorePreventer>().Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
-			}
-		}
+				StepNoReject<BusinessScorePreventer>(true).Init(
+					Trail.MyInputData.BusinessScore,
+					Trail.MyInputData.RejectionExceptionMaxCompanyScore
+				);
+			} else {
+				StepNoDecision<BusinessScorePreventer>().Init(
+					Trail.MyInputData.BusinessScore,
+					Trail.MyInputData.RejectionExceptionMaxCompanyScore
+				);
+			} // if
+		} // CheckHighBusinessScore
 
 		private void CheckMpError() {
 			var data = new MarketPlaceWithErrorPreventer.DataModel {
@@ -192,25 +229,29 @@
 				MaxConsumerScoreThreshhold = Trail.MyInputData.RejectionExceptionMaxConsumerScoreForMpError
 			};
 
-			if (Trail.MyInputData.HasMpError &&
-				(Trail.MyInputData.ConsumerScore > Trail.MyInputData.RejectionExceptionMaxConsumerScoreForMpError ||
-				 Trail.MyInputData.BusinessScore > Trail.MyInputData.RejectionExceptionMaxCompanyScoreForMpError)) {
+			if (data.NotRejectStep)
 				StepNoReject<MarketPlaceWithErrorPreventer>(true).Init(data);
-			}
-			else {
+			else
 				StepNoDecision<MarketPlaceWithErrorPreventer>().Init(data);
-			}
-		}
+		} // CheckMpError
 
 		private void CheckConsumerDataTime() {
-			if (Trail.MyInputData.ConsumerDataIsTooOld)
-				StepNoReject<ConsumerDataTooOldPreventer>(true).Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
-			else
-				StepNoDecision<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
-		}
+			if (Trail.MyInputData.ConsumerDataIsTooOld) {
+				StepNoReject<ConsumerDataTooOldPreventer>(true).Init(
+					Trail.MyInputData.ConsumerDataTime,
+					Trail.InputData.DataAsOf
+				);
+			} else {
+				StepNoDecision<ConsumerDataTooOldPreventer>().Init(
+					Trail.MyInputData.ConsumerDataTime,
+					Trail.InputData.DataAsOf
+				);
+			} // if
+		} // CheckConsumerDataTime
 
 		/// <summary>
-		/// rejection steps - if one of the steps determine reject - the client will be rejected (if none of the rejection exception rules where true)
+		/// Rejection steps - if one of the steps determine reject -
+		/// the client will be rejected (if none of the rejection preventer rules where true).
 		/// </summary>
 		private void CheckRejections() {
 			CheckLowConsumerScore();
@@ -221,25 +262,47 @@
 			CheckCustomerStatus();
 			CheckLowTurnover();
 			CheckConsumerLates();
-		}
+		} // CheckRejections
 
 		private void CheckLowConsumerScore() {
 			if (Trail.MyInputData.ConsumerScore > 0 && Trail.MyInputData.ConsumerScore < Trail.MyInputData.LowCreditScore) {
-				StepReject<ConsumerScore>(true).Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
-			}
-			else {
-				StepNoDecision<ConsumerScore>().Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
-			}
-		}
+				StepReject<ConsumerScore>(true).Init(
+					Trail.MyInputData.ConsumerScore,
+					0,
+					Trail.MyInputData.LowCreditScore,
+					false
+				);
+			} else {
+				StepNoDecision<ConsumerScore>().Init(
+					Trail.MyInputData.ConsumerScore,
+					0,
+					Trail.MyInputData.LowCreditScore,
+					false
+				);
+			} // if
+		} // CheckLowConsumerScore
 
 		private void CheckLowBusinessScore() {
-			if (Trail.MyInputData.BusinessScore > 0 && Trail.MyInputData.BusinessScore < Trail.MyInputData.RejectionCompanyScore) {
-				StepReject<BusinessScore>(true).Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
-			}
-			else {
-				StepNoDecision<BusinessScore>().Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
-			}
-		}
+			bool lowScore =
+				(Trail.MyInputData.BusinessScore > 0) &&
+				(Trail.MyInputData.BusinessScore < Trail.MyInputData.RejectionCompanyScore);
+
+			if (lowScore) {
+				StepReject<BusinessScore>(true).Init(
+					Trail.MyInputData.BusinessScore,
+					0,
+					Trail.MyInputData.RejectionCompanyScore,
+					false
+				);
+			} else {
+				StepNoDecision<BusinessScore>().Init(
+					Trail.MyInputData.BusinessScore,
+					0,
+					Trail.MyInputData.RejectionCompanyScore,
+					false
+				);
+			} // if
+		} // CheckLowBusinessScore
 
 		private void CheckConsumerDefaults() {
 			var data = new ConsumerDefaults.DataModel {
@@ -251,14 +314,11 @@
 				NumDefaultAccountsThreshhold = Trail.MyInputData.Reject_Defaults_AccountsNum
 			};
 
-			if (Trail.MyInputData.NumOfDefaultConsumerAccounts >= Trail.MyInputData.Reject_Defaults_AccountsNum &&
-				Trail.MyInputData.ConsumerScore < Trail.MyInputData.Reject_Defaults_CreditScore) {
+			if (data.RejectStep)
 				StepReject<ConsumerDefaults>(true).Init(data);
-			}
-			else {
+			else
 				StepNoDecision<ConsumerDefaults>().Init(data);
-			}
-		}
+		} // CheckConsumerDefaults
 
 		private void CheckCompanyDefaults() {
 			var data = new BusinessDefaults.DataModel {
@@ -270,32 +330,40 @@
 				NumDefaultAccountsThreshhold = Trail.MyInputData.Reject_Defaults_CompanyAccountsNum
 			};
 
-			if (Trail.MyInputData.NumOfDefaultBusinessAccounts >= Trail.MyInputData.Reject_Defaults_CompanyAccountsNum &&
-				Trail.MyInputData.BusinessScore < Trail.MyInputData.Reject_Defaults_CompanyScore) {
+			if (data.RejectStep)
 				StepReject<BusinessDefaults>(true).Init(data);
-			}
-			else {
+			else
 				StepNoDecision<BusinessDefaults>().Init(data);
-			}
-		}
+		} // CheckCompanyDefaults
 
 		private void CheckSeniority() {
-			if (Trail.MyInputData.BusinessSeniorityDays > 0 && Trail.MyInputData.BusinessSeniorityDays < Trail.MyInputData.Reject_Minimal_Seniority) {
-				StepReject<Seniority>(true).Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
-			}
-			else {
-				StepNoDecision<Seniority>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
-			}
-		}
+			bool rejectStep =
+				0 < Trail.MyInputData.BusinessSeniorityDays &&
+				Trail.MyInputData.BusinessSeniorityDays < Trail.MyInputData.Reject_Minimal_Seniority;
+
+			if (rejectStep) {
+				StepReject<Seniority>(true).Init(
+					Trail.MyInputData.BusinessSeniorityDays, 
+					0,
+					Trail.MyInputData.Reject_Minimal_Seniority,
+					false
+				);
+			} else {
+				StepNoDecision<Seniority>().Init(
+					Trail.MyInputData.BusinessSeniorityDays,
+					0,
+					Trail.MyInputData.Reject_Minimal_Seniority,
+					false
+				);
+			} // if
+		} // CheckSeniority
 
 		private void CheckCustomerStatus() {
-			if (Trail.MyInputData.CustomerStatus == "Enabled" || Trail.MyInputData.CustomerStatus == "Fraud Suspect") {
+			if (Trail.MyInputData.CustomerStatus == "Enabled" || Trail.MyInputData.CustomerStatus == "Fraud Suspect")
 				StepNoDecision<CustomerStatus>().Init(Trail.MyInputData.CustomerStatus);
-			}
-			else {
+			else
 				StepReject<CustomerStatus>(true).Init(Trail.MyInputData.CustomerStatus);
-			}
-		}
+		} // CheckCustomerStatus
 
 		private void CheckLowTurnover() {
 			var data = new Turnover.DataModel {
@@ -306,13 +374,17 @@
 				HasCompanyFiles = Trail.MyInputData.HasCompanyFiles
 			};
 
-			if ((data.AnnualTurnover < data.AnnualTurnoverThreshhold || data.QuarterTurnover < data.QuarterTurnoverThreshhold) && !data.HasCompanyFiles) {
+			bool rejectStep = (
+					data.AnnualTurnover < data.AnnualTurnoverThreshhold ||
+					data.QuarterTurnover < data.QuarterTurnoverThreshhold
+				) &&
+				!data.HasCompanyFiles;
+
+			if (rejectStep)
 				StepReject<Turnover>(true).Init(data);
-			}
-			else {
+			else
 				StepNoDecision<Turnover>().Init(data);
-			}
-		}
+		} // CheckLowTurnover
 
 		private void CheckConsumerLates() {
 			var data = new ConsumerLates.DataModel {
@@ -320,16 +392,13 @@
 				LateDaysThreshhold = Trail.MyInputData.RejectionLastValidLate,
 				NumOfLates = Trail.MyInputData.NumOfLateConsumerAccounts,
 				NumOfLatesThreshhold = Trail.MyInputData.Reject_NumOfLateAccounts
-
 			};
 
-			if (data.LateDays > data.LateDaysThreshhold && data.NumOfLates >= data.NumOfLatesThreshhold) {
+			if (data.LateDays > data.LateDaysThreshhold && data.NumOfLates >= data.NumOfLatesThreshhold)
 				StepReject<ConsumerLates>(true).Init(data);
-			}
-			else {
+			else
 				StepNoDecision<ConsumerLates>().Init(data);
-			}
-		}
+		} // CheckConsumerLates
 
 		private T StepReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
 			return Trail.Affirmative<T>(bLockDecisionAfterAddingAStep);
@@ -343,12 +412,44 @@
 			return Trail.Dunno<T>();
 		} // StepReject
 
-		private readonly AConnection m_oDB;
-		private readonly ASafeLog m_oLog;
+		public class RejectionTurnover : Tuple<decimal, decimal> {
+			public RejectionTurnover(decimal annual, decimal quarter) : base(annual, quarter) { } // constructor
 
-		private readonly int _customerId;
-		public bool IsAutoRejected { get; private set; }
-		private readonly RejectionConfigs _configs;
+			public decimal Annual {
+				get { return Item1; }
+			} // Annual
 
-	} // class Agent
+			public decimal Quarter {
+				get { return Item2; }
+			} // Annual
+		} // RejectionTurnover
+
+		/// <summary>
+		/// Calculates figures for 4 categories annual (max of annualized 1m 3m 6m and 1y),
+		/// and quarter (max of 3 month not annualized): hmrc, yodlee, online, payment.
+		/// Returns max of 4 categories for annual turnover and quarter turnover.
+		/// </summary>
+		/// <returns>Rejection turnover, annual and quarter.</returns>
+		private RejectionTurnover GetTurnoverForRejection(DateTime now) {
+			var turnover = new AutoRejectTurnover();
+
+			this.db.ForEachResult<TurnoverDbRow>(
+				row => turnover.Add(row),
+				"GetCustomerTurnoverForAutoDecision",
+				new QueryParameter("@IsForApprove", false),
+				new QueryParameter("@CustomerID", customerId),
+				new QueryParameter("@Now", now)
+			);
+
+			return new RejectionTurnover(turnover[12], turnover[3]);
+		} // GetTurnoverForRejection
+
+		private readonly AConnection db;
+		private readonly ASafeLog log;
+
+		private readonly int customerId;
+		private readonly RejectionConfigs configs;
+
+		private readonly DbHelper dbHelper;
+	} // class RejectionAgent
 } // namespace

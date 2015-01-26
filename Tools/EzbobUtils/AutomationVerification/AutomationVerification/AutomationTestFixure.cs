@@ -62,14 +62,6 @@
 		}
 
 		[Test]
-		public void TestJoin() {
-			var db = new DbHelper(_db, Log);
-			var mps = db.GetCustomerPaymentMarketPlaces(16241);
-			var s = string.Join(",", mps);
-			Assert.IsNotNullOrEmpty(s);
-		}
-
-		[Test]
 		public void TestFeedbacks() {
 			var mpHelper = new MarketPlacesHelper(_db, Log);
 			var feedbacks = mpHelper.GetPositiveFeedbacks(14166);
@@ -202,15 +194,6 @@
 
 			Assert.AreEqual(180, lates.LateDays);
 			Assert.AreEqual(3, lates.NumOfLates);
-		}
-
-		[Test]
-		public void TestRejectionTurnover() {
-			int[] customerIds = new int[] { 25, 26, 27, 28, 29, 30, 14210, 14214, 14215, 14216, 14217, 14218, 14219, 14220, 14221, 14222, 14223, 14226, 14227, 14228, 14229, 15227, 15228, 15230, 15231, 15232, 16232, 16236, 16237, 16238, 16240, 16241, 16242, 16243, 16244, 16245, 16246, 16247, 16248, 16249, 16250, 17250, 17251, 17252, 17253, 17254, 17256, 17258, 17259, 17260, 17261, 17262, 17263, 17264, 17265, 17266, 17267, 18268, 18269, 18270, 18271, 18273, 18274, 18275, 18285, 18286, 18287, 18289, 18290, 20290, 20291, 20292, 20302, 20304, 20319, 20321, 21322, 21323, 21327, 21333, 21335, 21336, 21337, 21338, 21340, 21341, 21342, 21343, 21344, 21345, 21364, 21370, 21371, 21372, 21377, 21378, 21387, 21388, 21389, 21390, 21394, 21399, 21400, 21402, 21403, 21404 };
-			var mpHelper = new MarketPlacesHelper(_db, Log);
-			foreach (var customerId in customerIds) {
-				mpHelper.GetTurnoverForRejection(customerId);
-			}
 		}
 
 		[Test]

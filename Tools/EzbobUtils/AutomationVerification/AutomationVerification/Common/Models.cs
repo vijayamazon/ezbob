@@ -234,34 +234,6 @@
 		public int LoanAmount { get; set; }
 	}
 
-	public class RejectionData {
-		//from sp
-		public string CustomerStatus { get; set; }
-
-		public int ExperianScore { get; set; }
-		public int CompanyScore { get; set; }
-
-		public bool WasApproved { get; set; }
-
-		public int DefaultAccountsNum { get; set; }
-		public int DefaultAccountAmount { get; set; }
-
-		public int DefaultCompanyAccountsNum { get; set; }
-		public int DefaultCompanyAccountAmount { get; set; }
-
-		public int NumLateAccounts { get; set; } // todo personal/company?
-
-		public bool HasErrorMp { get; set; }
-		public bool HasCompanyFiles { get; set; }
-
-		//Calculated
-		public double AnualTurnover { get; set; }
-		public double ThreeMonthTurnover { get; set; }
-		public int MpsSeniority { get; set; }
-
-		public bool IsBrokerLead { get; set; }
-	}
-
 	public class ReApprovalData {
 		public DateTime? ManualApproveDate { get; set; }
 		public bool IsNewClient { get; set; }

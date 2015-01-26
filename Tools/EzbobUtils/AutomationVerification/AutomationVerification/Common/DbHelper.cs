@@ -33,16 +33,6 @@
 		}
 
 		/// <summary>
-		///     Retrieve all yodlee accounts
-		/// </summary>
-		/// <param name="customerId">Customer Id</param>
-		/// <returns></returns>
-		public List<MarketPlace> GetCustomerYodlees(int customerId) {
-			var mps = _db.Fill<MarketPlace>("AV_GetCustomerYodlees", new QueryParameter("@CustomerId", customerId));
-			return mps;
-		}
-
-		/// <summary>
 		///     Retrieve all payment accounts without paypal
 		/// </summary>
 		/// <param name="customerId">Customer Id</param>
@@ -102,17 +92,6 @@
 
 		public IEnumerable<SafeReader> GetAutoDecisions(DateTime from, DateTime to) {
 			return _db.ExecuteEnumerable("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
-		}
-
-		//TODO retire
-		public RejectionData GetRejectionDataOld(int customerId) {
-			return _db.FillFirst<RejectionData>("AV_GetRejectionData", CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerId", customerId));
-		}
-
-		public AutoRejectionInputDataModelDb GetRejectionData(int customerId) {
-			return _db.FillFirst<AutoRejectionInputDataModelDb>(
-				"AV_GetRejectionData", CommandSpecies.StoredProcedure, new QueryParameter("@CustomerId", customerId));
 		}
 
 		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId) {
@@ -386,13 +365,6 @@
 		public List<CaisStatus> GetBusinessCaisStatuses(int customerId) {
 			return _db.Fill<CaisStatus>("AV_GetBusinessCaisStatuses", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", customerId));
-		}
-
-		public void GetHmrcRevenuesForRejection(int customerId, out decimal hmrcRevenueAnnualized, out decimal hmrcRevenueQuarter) {
-			var sr = _db.GetFirst("AV_GetHmrcTurnoverForRejection", CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId));
-			hmrcRevenueAnnualized = sr["HmrcRevenueAnnualized"];
-			hmrcRevenueQuarter = sr["HmrcRevenueQuarter"];
 		}
 
 		public void SaveOffer(OfferOutputModel offerOutputModel, OfferCalculationType type) {

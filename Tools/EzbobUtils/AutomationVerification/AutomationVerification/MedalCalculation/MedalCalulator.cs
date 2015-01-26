@@ -220,9 +220,9 @@
 			//foreach (var t in turnovers)  Console.WriteLine("Allturnovers: {0}, {1}, {2}", t.TheMonth, t.Distance, t.MpTypeID);
 
 			// extract hmrc data 
-			var hmrcList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(TurnoverDbRow.hmrc) select r).AsQueryable();
+			var hmrcList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(MpType.Hmrc) select r).AsQueryable();
 			// extract yodlee data only
-			var yodleeList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(TurnoverDbRow.yodlee) select r).AsQueryable();
+			var yodleeList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(MpType.Yodlee) select r).AsQueryable();
 
 			decimal hmrcTurnover = 0;
 			decimal yoodleeTurnover = 0;
@@ -581,7 +581,7 @@
 				List<decimal> list_t12 = new List<decimal>();
 
 				// extact amazon data
-				var amazonList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.amazon) select r).AsQueryable();
+				var amazonList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(MpType.Amazon) select r).AsQueryable();
 
 				//		foreach (var y in amazonList) Log.Info("AmazonList: Distance: {0}, TheMonth: {1}, Turnover: {2}, CurrentMonth: {3}", y.Distance, y.TheMonth, y.Turnover, y.CurrentMonth);
 
@@ -594,7 +594,7 @@
 				//		Log.Info("Amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1[0], list_t3[0], list_t6[0], list_t12[0]);
 
 				// extact ebay data
-				var ebayList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.ebay) select r).AsQueryable();
+				var ebayList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(MpType.Ebay) select r).AsQueryable();
 
 				//foreach (var y in ebayList) Log.Info("ebayList: Distance: {0}, TheMonth: {1}, Turnover: {2}, CurrentMonth: {3}", y.Distance, y.TheMonth, y.Turnover, y.CurrentMonth);
 
@@ -607,7 +607,7 @@
 				//		Log.Info("Ebay TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1[1], list_t3[1], list_t6[1], list_t12[1]);
 
 				// extact paypal data
-				var paypalList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(TurnoverDbRow.paypal) select r).AsQueryable();
+				var paypalList = (from TurnoverDbRow r in turnovers where r.MpTypeID.Equals(MpType.PayPal) select r).AsQueryable();
 
 				//		foreach (var y in paypalList) Log.Info("paypalList: Distance: {0}, TheMonth: {1}, Turnover: {2}, CurrentMonth: {3}", y.Distance, y.TheMonth, y.Turnover, y.CurrentMonth);
 

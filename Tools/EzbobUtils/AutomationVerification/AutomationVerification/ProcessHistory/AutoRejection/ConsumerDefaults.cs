@@ -1,7 +1,5 @@
-﻿namespace AutomationCalculator.ProcessHistory.AutoRejection
-{
-	public class ConsumerDefaults: ATrace
-	{
+﻿namespace AutomationCalculator.ProcessHistory.AutoRejection {
+	public class ConsumerDefaults : ATrace {
 		public ConsumerDefaults(DecisionStatus nDecisionStatus) : base(nDecisionStatus) { }
 
 		public DataModel Model { get; private set; }
@@ -12,7 +10,7 @@
 				"customer has {0} default accounts ({1} allowed) with default amount of {2} (allowed {3}) and consumer score of {4} (allowed {5})",
 				model.NumOfDefaults, model.NumDefaultAccountsThreshhold,
 				model.AmountOfDefaults, model.AmountDefaultAccountsThreshhold,
-				model.MaxConsumerScore,model.MaxConsumerScoreThreshhold);
+				model.MaxConsumerScore, model.MaxConsumerScoreThreshhold);
 		} // Init
 
 		public class DataModel {
@@ -24,6 +22,13 @@
 			public int NumDefaultAccountsThreshhold { get; set; }
 			public int AmountDefaultAccountsThreshhold { get; set; }
 
-		}
-	}
-}
+			public bool RejectStep {
+				get {
+					return
+						(NumOfDefaults >= NumDefaultAccountsThreshhold) &&
+						(MaxConsumerScore < MaxConsumerScoreThreshhold);
+				} // get
+			} // RejectStep
+		} // class DataModel
+	} // class ConsumerDefaults
+} // namespace
