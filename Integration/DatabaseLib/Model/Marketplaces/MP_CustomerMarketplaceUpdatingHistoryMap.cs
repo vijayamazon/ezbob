@@ -11,7 +11,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId");
 			Map(x => x.UpdatingStart).CustomType<UtcDateTimeType>();
 			Map(x => x.UpdatingEnd).CustomType<UtcDateTimeType>();
-			Map(x => x.Error);
+			Map(x => x.Error).Nullable();
 
 			HasMany(x => x.ActionLog)
 				.KeyColumn("CustomerMarketplaceUpdatingHistoryRecordId")

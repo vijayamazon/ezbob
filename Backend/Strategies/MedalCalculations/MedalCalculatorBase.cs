@@ -62,6 +62,7 @@
 
 				// Process raw input data to data
 				CalculateFeedbacks();
+
 				CalculateTurnoverForMedal();
 
 				this.log.Debug(
@@ -794,25 +795,28 @@
 
 				var c = this.updatingHistoryRep.GetByCustomerId(Results.CustomerId);
 
-				if (c == null || c.Count() == 0)
+				if (c == null || c.Count() == 0) {
+					log.Info("Updating historied for customer {0} not found", Results.CustomerId);
 					return;
+				}
 
-				var lastUpdateHmrc = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-					.Where(x => x.Error == null)
-					.SelectMany(y => y.HmrcAggregations)
+				var h = c.Where(x => x.UpdatingEnd < Results.CalculationTime && (x.Error == null || x.Error.Trim()
+					.Length == 0));
+
+				var lastUpdateHmrc = h.SelectMany(y => y.HmrcAggregations)
 					.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id)
 					.FirstOrDefault();
 
 				if (lastUpdateHmrc != null) {
 
+					log.Info("{0}", lastUpdateHmrc.TheMonth);
+
 					lastUpdateDate = (DateTime)lastUpdateHmrc.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
 					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
-					//	log.Info("HMRC: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
+	//				log.Info("HMRC: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
 
-					var hmrs = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-						.Where(x => x.Error == null)
-						.SelectMany(y => y.HmrcAggregations)
+					var hmrs = h.SelectMany(y => y.HmrcAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
 						.OrderByDescending(yy => yy.TheMonth)
 						.AsEnumerable();
@@ -832,12 +836,13 @@
 				if (!Results.MedalType.IsOnline() && Results.NumOfHmrcMps > 0) {
 					Results.TurnoverType = TurnoverType.HMRC;
 					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
+
+		//			log.Info("Base: (HMRC) AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+
 					return;
 				} // if
 
-				var lastUpdateYodlee = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-					.Where(x => x.Error == null)
-					.SelectMany(y => y.YodleeAggregations)
+				var lastUpdateYodlee = h.SelectMany(y => y.YodleeAggregations)
 					.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id)
 					.FirstOrDefault();
 
@@ -846,11 +851,9 @@
 					lastUpdateDate = (DateTime)lastUpdateYodlee.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
 					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
-					//	log.Info("Yodlee: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
+	//				log.Info("Yodlee: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
 
-					var yodlees = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-						.Where(x => x.Error == null)
-						.SelectMany(y => y.YodleeAggregations)
+					var yodlees = h.SelectMany(y => y.YodleeAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
 						.OrderByDescending(yy => yy.TheMonth)
 						.AsEnumerable();
@@ -872,6 +875,9 @@
 					if (Results.NumOfBanks > 0) {
 						Results.TurnoverType = TurnoverType.Bank;
 						Results.AnnualTurnover = Results.BankAnnualTurnover;
+
+		//				log.Info("Base: (bank) AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+
 						return;
 					} // if
 
@@ -884,10 +890,15 @@
 				// Calculate for "last month", "last three months", "last six months", and "last twelve months". 
 				// Annualize the figures and take the minimum among them. 
 				// If a figure is zero it does NOT participate in minimum calculation. 
+				DateTime t1 = Results.CalculationTime.AddMonths(-1);
+				DateTime t3 = Results.CalculationTime.AddMonths(-3);
+				DateTime t6 = Results.CalculationTime.AddMonths(-6);
 
-				DateTime T1 = Results.CalculationTime.AddMonths(-1);
-				DateTime T3 = Results.CalculationTime.AddMonths(-3);
-				DateTime T6 = Results.CalculationTime.AddMonths(-6);
+				DateTime T1 = new DateTime(t1.Year, t1.Month, 1, 0, 0, 0);
+				DateTime T3 = new DateTime(t3.Year, t3.Month, 1, 0, 0, 0);
+				DateTime T6 = new DateTime(t6.Year, t6.Month, 1, 0, 0, 0);
+
+				Console.WriteLine("t1: {0}, t3: {0}, t6: {0},", T1, T3, T6);
 
 				const int Ec1 = 12;
 				const int Ec3 = 4;
@@ -899,9 +910,7 @@
 				List<decimal> list_t6 = new List<decimal>(filltt);
 				List<decimal> list_t12 = new List<decimal>(filltt);
 
-				var lastUpdateAmazon = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-					.Where(x => x.Error == null)
-					.SelectMany(y => y.AmazonAggregations)
+				var lastUpdateAmazon = h.SelectMany(y => y.AmazonAggregations)
 					.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id)
 					.FirstOrDefault();
 
@@ -910,11 +919,9 @@
 					lastUpdateDate = (DateTime)lastUpdateAmazon.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
 					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
-					//		log.Info("Amazon: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
+			//		log.Info("BB: Amazon: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
 
-					var amazons = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-						.Where(x => x.Error == null)
-						.SelectMany(y => y.AmazonAggregations)
+					var amazons = h.SelectMany(y => y.AmazonAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
 						.OrderByDescending(yy => yy.TheMonth)
 						.AsEnumerable();
@@ -923,26 +930,24 @@
 
 						var amazonList = amazons.GroupBy(p => new { p.TheMonth, p.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id }).Select(g => g.Last());
 
-						//		log.Info("AmazonList size: {0}", amazonList.Count());
+			//			log.Info("BB: AmazonList size: {0}", amazonList.Count());
 
 						if (amazonList.Count() > 0) {
 
-							//		foreach (var y in amazonList)log.Info("UpdatingHistory.Id: {0}, TheMonth: {1}, Turnover: {2}, AggregationID: {3}, UpdatingEnd: {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.AmazonAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
+			//				foreach (var y in amazonList)log.Info("UpdatingHistory.Id: {0}, TheMonth: {1}, Turnover: {2}, AggregationID: {3}, UpdatingEnd: {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.AmazonAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
 
 							// Amazon: calculate "last month", "last three months", "last six months", and "last twelve months"/annualize 
-							list_t1.Insert(0, amazonList.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover) * Ec1);
+							list_t1.Insert(0, amazonList.Where(t => t.TheMonth.Date >= T1.Date).Sum(t => t.Turnover) * Ec1);
 							list_t3.Insert(0, amazonList.Where(t => t.TheMonth >= T3).Sum(t => t.Turnover) * Ec3);
 							list_t6.Insert(0, amazonList.Where(t => t.TheMonth >= T6).Sum(t => t.Turnover) * Ec6);
 							list_t12.Insert(0, amazonList.Sum(t => t.Turnover));
 
-							//			log.Info("Amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(0), list_t3.ElementAtOrDefault(0), list_t6.ElementAtOrDefault(0), list_t12.ElementAtOrDefault(0));
+		//					log.Info("BB: Amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(0), list_t3.ElementAtOrDefault(0), list_t6.ElementAtOrDefault(0), list_t12.ElementAtOrDefault(0));
 						}
 					} // if amazons count
 				}
 
-				var lastUpdateEbay = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-					.Where(x => x.Error == null)
-					.SelectMany(y => y.EbayAggregations)
+				var lastUpdateEbay = h.SelectMany(y => y.EbayAggregations)
 					.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id)
 					.FirstOrDefault();
 
@@ -951,12 +956,10 @@
 					lastUpdateDate = (DateTime)lastUpdateEbay.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
 					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
-					//		log.Info("Ebay: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
+			//		log.Info("BB: Ebay: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
 
 					// extact ebay data
-					var ebays = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-						.Where(x => x.Error == null)
-						.SelectMany(y => y.EbayAggregations)
+					var ebays = h.SelectMany(y => y.EbayAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
 						.OrderByDescending(yy => yy.TheMonth)
 						.AsEnumerable();
@@ -965,11 +968,11 @@
 
 						var ebayList = ebays.GroupBy(p => new { p.TheMonth, p.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id }).Select(g => g.Last());
 
-						//		log.Info("ebayList size: {0}", ebayList.Count());
+			//			log.Info("BB: ebayList size: {0}", ebayList.Count());
 
 						if (ebayList.Count() > 0) {
 
-							//	foreach (var y in ebayList)log.Info("UpdatingHistory.Id: {0}, TheMonth: {1}, Turnover: {2}, AggregationID: {3}, UpdatingEnd: {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.EbayAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
+			//				foreach (var y in ebayList) log.Info("BB: UpdatingHistory.Id: {0}, TheMonth: {1}, Turnover: {2}, AggregationID: {3}, UpdatingEnd: {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.EbayAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
 
 							// Ebay: calculate "last month", "last three months", "last six months", and "last twelve months"/annualize 
 							list_t1.Insert(1, ebayList.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover) * Ec1);
@@ -977,27 +980,24 @@
 							list_t6.Insert(1, ebayList.Where(t => t.TheMonth >= T6).Sum(t => t.Turnover) * Ec6);
 							list_t12.Insert(1, ebayList.Sum(t => t.Turnover));
 
-							//				log.Info("Ebay TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1[1], list_t3[1], list_t6[1], list_t12[1]);
+			//				log.Info("BB: Ebay TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1[1], list_t3[1], list_t6[1], list_t12[1]);
 						}
 					} //if ebays count
 				}
 
-				var lastUpdatePP = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-					.Where(x => x.Error == null)
-					.SelectMany(y => y.PayPalAggregations)
+				var lastUpdatePP = h.SelectMany(y => y.PayPalAggregations)
 					.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id)
 					.FirstOrDefault();
+
 
 				if (lastUpdatePP != null) {
 					lastUpdateDate = (DateTime)lastUpdatePP.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
 					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
-					//		log.Info("Paypal: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
+			//		log.Info("BB: Paypal: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
 
 					// extact paypal data
-					var paypals = c.Where(x => x.UpdatingEnd < Results.CalculationTime)
-						.Where(x => x.Error == null)
-						.SelectMany(y => y.PayPalAggregations)
+					var paypals = h.SelectMany(y => y.PayPalAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
 						.OrderByDescending(yy => yy.TheMonth)
 						.AsEnumerable();
@@ -1006,11 +1006,11 @@
 
 						var paypalList = paypals.GroupBy(p => new { p.TheMonth, p.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id }).Select(g => g.Last());
 
-						//			log.Info("paypalList size: {0}", paypalList.Count());
+			//			log.Info("BB: paypalList size: {0}", paypalList.Count());
 
 						if (paypalList.Count() > 0) {
 
-							//		foreach (var y in paypalList)log.Info("UpdatingHistory.Id: {0}, TheMonth: {1}, Turnover: {2}, AggregationID: {3}, UpdatingEnd: {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.PayPalAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
+				///			foreach (var y in paypalList)log.Info("BB: UpdatingHistory.Id: {0}, TheMonth: {1}, Turnover: {2}, AggregationID: {3}, UpdatingEnd: {4}", y.CustomerMarketPlaceUpdatingHistory.Id, y.TheMonth, y.Turnover, y.PayPalAggregationID, y.CustomerMarketPlaceUpdatingHistory.UpdatingEnd);
 
 							// Paypal: calculate "last month", "last three months", "last six months", and "last twelve months"/annualize
 							list_t1.Insert(2, paypalList.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover) * Ec1);
@@ -1018,7 +1018,7 @@
 							list_t6.Insert(2, paypalList.Where(t => t.TheMonth >= T6).Sum(t => t.Turnover) * Ec6);
 							list_t12.Insert(2, paypalList.Sum(t => t.Turnover));
 
-							//				log.Info("Paypal TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(2), list_t3.ElementAtOrDefault(2), list_t6.ElementAtOrDefault(2), list_t12.ElementAtOrDefault(2));
+					//		log.Info("BB: Paypal TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(2), list_t3.ElementAtOrDefault(2), list_t6.ElementAtOrDefault(2), list_t12.ElementAtOrDefault(2));
 						}
 					}
 				}
@@ -1060,7 +1060,7 @@
 				Results.TurnoverType = TurnoverType.Online;
 				Results.AnnualTurnover = Results.OnlineAnnualTurnover;
 
-				//log.Info("Base: AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+				log.Info("Base: AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
 
 			} catch (Exception ex) {
 				this.log.Error(
@@ -1082,10 +1082,12 @@
 
 		public static DateTime getPeriodAgo(DateTime calculationDate, DateTime lastUpdate) {
 			int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
+			DateTime months = new DateTime();
 			if ((daysInMonth - calculationDate.Date.Day) <= 3 && (daysInMonth - lastUpdate.Date.Day) <= 3 && (calculationDate.Month == lastUpdate.Month && calculationDate.Year == lastUpdate.Year)) {
-				return calculationDate.AddMonths(-11);
-			}
-			return calculationDate.AddMonths(-12);
+				months = calculationDate.AddMonths(-11);
+			} else
+				months = calculationDate.AddMonths(-12);
+			return new DateTime(months.Year, months.Month, 1, 0, 0, 0);
 		}
 
 		private EZBob.DatabaseLib.Model.Database.Repository.CustomerMarketPlaceUpdatingHistoryRepository updatingHistoryRep;

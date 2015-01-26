@@ -5,6 +5,7 @@
 	using Marketplaces.Yodlee;
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Repository.Turnover;
 	using Iesi.Collections.Generic;
 
@@ -19,7 +20,9 @@
 		public virtual MP_EbayUserAccountData EbayUserAccountData { get; set; }
 		public virtual MP_EbayUserData EbayUserData { get; set; }
 		public virtual MP_EkmOrder EkmOrder { get; set; }
+
 		public virtual string Error { get; set; }
+
 		public virtual MP_FreeAgentRequest FreeAgentRequest { get; set; }
 		public virtual int Id { get; set; }
 		public virtual MP_PayPalTransaction PayPalTransaction { get; set; }
@@ -33,7 +36,7 @@
 
 		public virtual Iesi.Collections.Generic.ISet<HmrcAggregation> HmrcAggregations { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<AmazonAggregation> AmazonAggregations { get; set; }
-		 public virtual Iesi.Collections.Generic.ISet<EbayAggregation> EbayAggregations { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<EbayAggregation> EbayAggregations { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<PayPalAggregation> PayPalAggregations { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<YodleeAggregation> YodleeAggregations { get; set; }
 
@@ -41,7 +44,7 @@
 			ActionLog = new HashedSet<MP_CustomerMarketplaceUpdatingActionLog>();
 
 			this.HmrcAggregations = new HashedSet<HmrcAggregation>();
-			this.AmazonAggregations = new HashedSet<AmazonAggregation>();			
+			this.AmazonAggregations = new HashedSet<AmazonAggregation>();
 			this.YodleeAggregations = new HashedSet<YodleeAggregation>();
 			this.EbayAggregations = new HashedSet<EbayAggregation>();
 			this.PayPalAggregations = new HashedSet<PayPalAggregation>();
