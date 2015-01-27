@@ -14,12 +14,9 @@
 	using Sage;
 	using YodleeLib.connector;
 
-
 	public class BackfillTurnover : AStrategy {
 		public override string Name {
-			get {
-				return "BackfillTurnover";
-			}
+			get { return "BackfillTurnover"; }
 		} // Name
 
 		public BackfillTurnover() {
@@ -29,7 +26,7 @@
 
 			Configuration.Instance.ForEachVendor(
 				vi => Add(new Integration.ChannelGrabberFrontend.ServiceInfo(vi.Name), "ChaGra")
-				);
+			);
 
 			Add(new eBayServiceInfo(), "Ebay");
 			Add(new EkmServiceInfo(), "Ekm");
@@ -41,37 +38,30 @@
 		} // constructor
 
 		public override void Execute() {
-
-            Prerequisite();
+			Prerequisite();
 
 			List<SourceData> lst = DB.Fill<SourceData>(LoadSourceQuery, CommandSpecies.Text);
 
 			var pc = new ProgressCounter("{0} of " + lst.Count + " history items processed.", Log, 100);
 
 			foreach (SourceData sd in lst) {
-                if (!this.types.ContainsKey(sd.InternalId))
-                {
+				if (!this.types.ContainsKey(sd.InternalId)) {
 					Log.Alert("Unexpected marketplace type internal id: {0}", sd.InternalId);
 					pc++;
 					continue;
 				} // if
 
-                ServiceInfo si = this.types[sd.InternalId];
-                Log.Info("Start to update for {0} with history id {1}...", si.Info.DisplayName, sd.Id);
+				ServiceInfo si = this.types[sd.InternalId];
+				Log.Info("Start to update for {0} with history id {1}...", si.Info.DisplayName, sd.Id);
 
-			    try {
-			        DB.ExecuteNonQuery(si.SpName, CommandSpecies.StoredProcedure, new QueryParameter("HistoryID", sd.Id));
-			        Log.Info("End to update for {0} with history id {1} completed.", si.Info.DisplayName, sd.Id);
-			        pc++;
-			    } 
-                catch (Ezbob.Database.DbException dbex) 
-                {
-                    Log.Info("Update for {0} with history id {1} failed. DBException: {2}", si.Info.DisplayName, sd.Id, dbex.Message);
-			    }
-                catch (Exception ex)
-                {
-                   Log.Info("Update for {0} with history id {1} failed. Error: {2}", si.Info.DisplayName, sd.Id, ex.Message );
-                }
+				try {
+					DB.ExecuteNonQuery(si.SpName, CommandSpecies.StoredProcedure, new QueryParameter("HistoryID", sd.Id));
+					Log.Info("End to update for {0} with history id {1} completed.", si.Info.DisplayName, sd.Id);
+				} catch (Exception ex) {
+					Log.Warn(ex, "Update for {0} with history id {1} failed.", si.Info.DisplayName, sd.Id);
+				} // try
+
+				pc++;
 			} // for each
 
 			pc.Log();
