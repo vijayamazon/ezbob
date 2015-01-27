@@ -19,7 +19,7 @@
 			return GetDateFromList(mp, WhichDateToTake.Max);
 		} // GetLastTransaction
 
-		public override PaymentAccountsModel GetPaymentAccountModel(
+		protected override PaymentAccountsModel GetPaymentAccountModel(
 			MP_CustomerMarketPlace mp,
 			MarketPlaceModel model,
 			DateTime? history,

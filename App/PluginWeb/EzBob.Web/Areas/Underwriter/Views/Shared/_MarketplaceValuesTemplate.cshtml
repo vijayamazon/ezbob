@@ -11,60 +11,6 @@
 		var y = m.Yodlee;
 		var marketplaceType = m.Name;
 
-		var
-			sumReview1M = ai.NegativeFeedbackrate1M * 1.0 + ai.PositiveFeedbackRate1M * 1.0 + ai.NeutralFeedbackrate1M * 1.0,
-			sumReview3M = ai.NegativeFeedbackrate3M * 1.0 + ai.PositiveFeedbackRate3M * 1.0 + ai.NeutralFeedbackrate3M * 1.0,
-			sumReview6M = ai.NegativeFeedbackrate6M * 1.0 + ai.PositiveFeedbackRate6M * 1.0 + ai.NeutralFeedbackrate6M * 1.0,
-			sumReview12M = ai.NegativeFeedbackrate12M * 1.0 + ai.PositiveFeedbackRate12M * 1.0 + ai.NeutralFeedbackrate12M * 1.0,
-			sumReviewLifetime = ai.NegativeFeedbackrateLifetime * 1.0 + ai.PositiveFeedbackRateLifetime * 1.0 + ai.NeutralFeedbackrateLifetime * 1.0,
-			
-			positivePercent1M = (sumReview1M != 0 ? ai.PositiveFeedbackRate1M / sumReview1M * 100 : 0).toFixed(0),
-			negativePercent1M = (sumReview1M != 0 ? ai.NegativeFeedbackrate1M / sumReview1M * 100 : 0).toFixed(0),
-			neutralPercent1M  = (sumReview1M != 0 ? ai.NeutralFeedbackrate1M  / sumReview1M * 100 : 0).toFixed(0),
-
-			positivePercent3M = (sumReview3M != 0 ? ai.PositiveFeedbackRate3M / sumReview3M * 100 : 0).toFixed(0),
-			negativePercent3M = (sumReview3M != 0 ? ai.NegativeFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),
-			neutralPercent3M  = (sumReview3M != 0 ? ai.NeutralFeedbackrate3M / sumReview3M * 100 : 0).toFixed(0),
-			
-			positivePercent6M = (sumReview6M != 0 ? ai.PositiveFeedbackRate6M / sumReview6M * 100 : 0).toFixed(0),
-			negativePercent6M = (sumReview6M != 0 ? ai.NegativeFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),
-			neutralPercent6M  = (sumReview6M != 0 ? ai.NeutralFeedbackrate6M / sumReview6M * 100 : 0).toFixed(0),
-
-			positivePercent12M = (sumReview12M != 0 ? ai.PositiveFeedbackRate12M / sumReview12M * 100 : 0).toFixed(0),
-			negativePercent12M = (sumReview12M != 0 ? ai.NegativeFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0),
-			neutralPercent12M  = (sumReview12M != 0 ? ai.NeutralFeedbackrate12M / sumReview12M * 100 : 0).toFixed(0),
-
-			positivePercentLifetime = (sumReviewLifetime != 0 ? ai.PositiveFeedbackRateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),
-			negativePercentLifetime = (sumReviewLifetime != 0 ? ai.NegativeFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0),
-			neutralPercentLifetime  = (sumReviewLifetime != 0 ? ai.NeutralFeedbackrateLifetime / sumReviewLifetime * 100 : 0).toFixed(0)
-		;
-
-		positivePercent1M = isNaN(positivePercent1M) ? " - " : positivePercent1M;
-		negativePercent1M = isNaN(negativePercent1M) ? " - " : negativePercent1M;
-		neutralPercent1M = isNaN(neutralPercent1M) ? " - " : neutralPercent1M;
-
-		positivePercent3M = isNaN(positivePercent3M) ? " - " : positivePercent3M;
-		negativePercent3M = isNaN(negativePercent3M) ? " - " : negativePercent3M;
-		neutralPercent3M = isNaN(neutralPercent3M) ? " - " : neutralPercent3M;
-
-		positivePercent6M = isNaN(positivePercent6M) ? " - " : positivePercent6M;
-		negativePercent6M = isNaN(negativePercent6M) ? " - " : negativePercent6M;
-		neutralPercent6M = isNaN(neutralPercent6M) ? " - " : neutralPercent6M;
-
-		positivePercent12M = isNaN(positivePercent12M) ? " - " : positivePercent12M;
-		negativePercent12M = isNaN(negativePercent12M) ? " - " : negativePercent12M;
-		neutralPercent12M = isNaN(neutralPercent12M) ? " - " : neutralPercent12M;
-	
-		positivePercentLifetime = isNaN(positivePercentLifetime) ? " - " : positivePercentLifetime;
-		negativePercentLifetime = isNaN(negativePercentLifetime) ? " - " : negativePercentLifetime;
-		neutralPercentLifetime = isNaN(neutralPercentLifetime) ? " - " : neutralPercentLifetime;
-
-		sumReview1M = isNaN(sumReview1M) ? "-" : sumReview1M;
-		sumReview3M = isNaN(sumReview3M) ? "-" : sumReview3M;
-		sumReview6M = isNaN(sumReview6M) ? "-" : sumReview6M;
-		sumReview12M = isNaN(sumReview12M) ? "-" : sumReview12M;
-		sumReviewLifetime = isNaN(sumReview12M) ? "-" : sumReviewLifetime;
-
 		cancellationRateFactor = 100;
 		cancellationRateRound = 2;
 		cancellationValueFactor = 100;
@@ -193,7 +139,7 @@
                     <th>Rating</th>
                     <th>Disabled</th>
                     <th>Updated</th>
-                    <th><%if(marketplaces[0] && marketplaces[0].IsHistory) print("History for");%></th>
+                    <th><%if(marketplaces[0] && marketplaces[0].IsHistory){ print("History for");} else{%>&nbsp;&nbsp;&nbsp;&nbsp;<%}%></th>
                 </tr>
             </thead>
             <tbody class="box-content">
@@ -239,20 +185,20 @@
                         <td class="<%- disabled%>"><% if(m.Disabled) print ("Disabled") %></td>
                         <td class="<%- disabled%>"><%- m.UpdatingStatus %> <%- m.LastChecked%>
 							<% if (m.UpdateError) { %>
-								<button class="btn btn-primary btn-mini mp-error-description" data-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
+                            <button class="btn btn-primary btn-mini mp-error-description" data-original-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
                             <br />
                             <% } %>
                         </td>
                         <td class="centered">
-                            <div style="width: 100px;">
+                            <div>
                                 <%if(m.IsHistory) { print(EzBob.formatDateWithoutTime(m.History)); } else {%>
 					            <% if (m.Disabled) { %>
                                 <a href="#" class="btn btn-mini btn-primary show-tooltip enable-shop %>" data-original-title="Enable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-play"></i></a>
-                                <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+                                <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-original-title="Report Bug"><i class="fa fa-bug"></i></a>
                                 <% }
 					            else { %>
 					            <a href="#" class="btn btn-mini btn-primary show-tooltip reCheckMP <%- sShopName.toLowerCase() %>" data-original-title="Recheck" data-placement="top" umi="<%- m.Id %>" marketplacetype="<%- m.Name %>"><i class="fa fa-refresh"></i></a>
-                                <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+                                <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-original-title="Report Bug"><i class="fa fa-bug"></i></a>
                                 <a href="#" class="btn btn-mini btn-primary show-tooltip disable-shop %>" data-original-title="Disable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
                                 <% if (m.UpdateError && m.Name == 'eBay') { %>
 					            <button class="btn btn-mini btn-primary show-tooltip renew-token" data-original-title="Renew token" data-placement="top" data-umi="<%- m.Id %>"><i class="fa fa-retweet"></i></button>
@@ -328,7 +274,7 @@
                     <td class="centered <%- disabled%>"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll('TotalNetOutPayments') %></td>
                     <td class="<%- disabled%>"><%- m.UpdatingStatus %> <%- m.LastChecked%>
 						<% if(m.UpdateError){%>
-							<button class="btn btn-mini btn-primary mp-error-description" data-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
+                        <button class="btn btn-mini btn-primary mp-error-description" data-original-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>
                         <%}%>
                     </td>
                     <td><%if(m.IsHistory) { print(EzBob.formatDateWithoutTime(m.History)); } else {%>
@@ -338,10 +284,10 @@
 				            else { 
 				            if (m.Name.toLowerCase() !== 'yodlee') { %>
 				            <a href="#" class="btn btn-mini btn-primary reCheckMP <%- sShopName.toLowerCase() %>" umi="<%- m.Id %>" data-original-title="Recheck" data-placement="top" marketplacetype="<%- m.Name %>"><i class="fa fa-refresh"></i></a>
-                        <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+                        <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-original-title="Report Bug"><i class="fa fa-bug"></i></a>
                         <% } else { %>
 				            <a href='@Url.Action("TryRecheckYodlee", "MarketPlaces", new { Area = "Underwriter" }, "https")/?umi=<%- m.Id %>' target="_blank" data-original-title="Recheck" data-placement="top" class="tryRecheckYodlee btn btn-mini btn-primary" data-mp-id="<%-m.id%>"><i class="fa fa-refresh"></i></a>
-                        <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-title="Report Bug"><i class="fa fa-bug"></i></a>
+                        <a href="#" class="btn btn-mini btn-primary" data-bug-type="<%- m.Name %>" data-bug-customer="<%-customerId%>" data-bug-mp="<%-m.Id%>" data-original-title="Report Bug"><i class="fa fa-bug"></i></a>
                         <% } %>
 				            <a href="#" class="btn btn-mini btn-primary disable-shop %>" data-original-title="Disable" data-placement="top" umi="<%- m.Id %>"><i class="fa fa-ban"></i></a>
                         <% } %>

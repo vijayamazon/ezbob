@@ -68,6 +68,9 @@
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOrders), AggregationFunction.TotalSumOfOrders));
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOtherOrders), AggregationFunction.TotalSumOfOtherOrders));
 
+			if (time.MonthsInPeriod <= MonthsInYear) {
+				parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOrders) * (MonthsInYear / (decimal)time.MonthsInPeriod), AggregationFunction.TotalSumOfOrdersAnnualized));
+			}
 			return parameterInfos;
 		}//GetAnalysisDataParameters
 	}//class EKMMarketPlaceType

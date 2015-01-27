@@ -67,6 +67,10 @@
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfUnpaidPurchaseInvoices), AggregationFunction.TotalSumOfUnpaidPurchaseInvoices));
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfUnpaidSalesInvoices), AggregationFunction.TotalSumOfUnpaidSalesInvoices));
 
+			if (time.MonthsInPeriod <= MonthsInYear) {
+				parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOrders) * (MonthsInYear / (decimal)time.MonthsInPeriod), AggregationFunction.TotalSumOfOrdersAnnualized));
+			}
+
 			return parameterInfos;
 		}//GetAnalysisDataParameters
 	}//class SageMarketPlaceType

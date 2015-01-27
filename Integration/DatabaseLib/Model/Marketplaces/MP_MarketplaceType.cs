@@ -25,6 +25,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
 			return new List<IAnalysisDataParameterInfo>();
 		}
+
+		protected const int MonthsInYear = 12;
 	}
 
 	public class MP_MarketplaceTypeMap : ClassMap<MP_MarketplaceType> {

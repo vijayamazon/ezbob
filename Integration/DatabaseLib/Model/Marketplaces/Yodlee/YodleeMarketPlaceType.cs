@@ -56,6 +56,11 @@
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.NumberOfTransactions), AggregationFunction.NumberOfTransactions));
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalExpense), AggregationFunction.TotalExpense));
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalIncome), AggregationFunction.TotalIncome));
+
+			if (time.MonthsInPeriod <= MonthsInYear) {
+				parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalIncome) * (MonthsInYear / (decimal)time.MonthsInPeriod), AggregationFunction.TotalIncomeAnnualized));
+			}
+
 			return parameterInfos;
 		}//GetAnalysisDataParameters
 	}//class YodleeMarketPlaceType

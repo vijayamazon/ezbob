@@ -169,31 +169,31 @@
                 <tbody>
                     <tr>
                         <td>Positive</td>
-                        <td><%-ai.PositiveFeedbackRate1M || "-"%> (<%-positivePercent1M%>%)</td>
-                        <td><%-ai.PositiveFeedbackRate6M || "-"%> (<%-positivePercent6M%>%)</td>
-                        <td><%-ai.PositiveFeedbackRate12M || "-"%> (<%-positivePercent12M%>%)</td>
-                        <td><%-ai.PositiveFeedbackRateLifetime || "-"%> (<%-positivePercentLifetime%>%)</td>
+                        <td><%-ai.PositiveFeedbackRate1M || "-"%> (<%-EzBob.formatPercents0(ai.PositiveFeedbackPercentRate1M)%>)</td>
+                        <td><%-ai.PositiveFeedbackRate6M || "-"%> (<%-EzBob.formatPercents0(ai.PositiveFeedbackPercentRate6M)%>)</td>
+                        <td><%-ai.PositiveFeedbackRate12M || "-"%> (<%-EzBob.formatPercents0(ai.PositiveFeedbackPercentRate12M)%>)</td>
+                        <td><%-ai.PositiveFeedbackRateLifetime || "-"%> (<%-EzBob.formatPercents0(ai.PositiveFeedbackPercentRateLifetime)%>)</td>
                     </tr>
                     <tr>
                         <td>Neutral</td>
-                        <td><%-ai.NeutralFeedbackrate1M || "-"%> (<%-neutralPercent1M%>%)</td>
-                        <td><%-ai.NeutralFeedbackrate6M || "-"%> (<%-neutralPercent6M%>%)</td>
-                        <td><%-ai.NeutralFeedbackrate12M || "-"%> (<%-neutralPercent12M%>%)</td>
-                        <td><%-ai.NeutralFeedbackrateLifetime || "-"%> (<%-neutralPercentLifetime%>%)</td>
+                        <td><%-ai.NeutralFeedbackrate1M || "-"%> (<%-EzBob.formatPercents0(ai.NeutralFeedbackPercentRate1M)%>)</td>
+                        <td><%-ai.NeutralFeedbackrate6M || "-"%> (<%-EzBob.formatPercents0(ai.NeutralFeedbackPercentRate6M)%>)</td>
+                        <td><%-ai.NeutralFeedbackrate12M || "-"%> (<%-EzBob.formatPercents0(ai.NeutralFeedbackPercentRate12M)%>)</td>
+                        <td><%-ai.NeutralFeedbackrateLifetime || "-"%> (<%-EzBob.formatPercents0(ai.NeutralFeedbackPercentRateLifetime)%>)</td>
                     </tr>
                     <tr>
                         <td>Negative</td>
-                        <td><%-ai.NegativeFeedbackrate1M || "-"%> (<%-negativePercent1M%>%)</td>
-                        <td><%-ai.NegativeFeedbackrate6M || "-"%> (<%-negativePercent6M%>%)</td>
-                        <td><%-ai.NegativeFeedbackrate12M || "-"%> (<%-negativePercent12M%>%)</td>
-                        <td><%-ai.NegativeFeedbackrateLifetime || "-"%> (<%-negativePercentLifetime%>%)</td>
+                        <td><%-ai.NegativeFeedbackrate1M || "-"%> (<%-EzBob.formatPercents0(ai.NegativeFeedbackPercentRate1M)%>)</td>
+                        <td><%-ai.NegativeFeedbackrate6M || "-"%> (<%-EzBob.formatPercents0(ai.NegativeFeedbackPercentRate6M)%>)</td>
+                        <td><%-ai.NegativeFeedbackrate12M || "-"%> (<%-EzBob.formatPercents0(ai.NegativeFeedbackPercentRate12M)%>)</td>
+                        <td><%-ai.NegativeFeedbackrateLifetime || "-"%> (<%-EzBob.formatPercents0(ai.NegativeFeedbackPercentRateLifetime)%>)</td>
                     </tr>
                     <tr>
                         <td>Number of reviews</td>
-                        <td><%-sumReview1M%></td>
-                        <td><%-sumReview6M%></td>
-                        <td><%-sumReview12M%></td>
-                        <td><%-sumReviewLifetime%></td>
+                        <td><%-ai.NumberOfReviews1M%></td>
+                        <td><%-ai.NumberOfReviews6M%></td>
+                        <td><%-ai.NumberOfReviews12M%></td>
+                        <td><%-ai.NumberOfReviewsLifetime%></td>
                     </tr>
                 </tbody>
             </table>
@@ -261,7 +261,7 @@
                         <th>15M</th>
                         <th>18M</th>
                         <th>24M</th>
-                        <th>24M+</th>
+                        <th>Lifetime</th>
                     </tr>
                 </thead>
                 <tbody>

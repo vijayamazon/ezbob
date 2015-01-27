@@ -68,6 +68,18 @@
 		OrdersAverage,
 		CancellationValue,
 		NumOfFailures,
-		SumOfAuthorisedOrders
+		SumOfAuthorisedOrders,
+		TotalSumOfOrdersAnnualized,
+		TotalNetInPaymentsAnnualized,
+		TotalIncomeAnnualized,
+
+		NumberOfReviews,
+		NegativeFeedbackRate,
+		NeutralFeedbackRate,
+		PositiveFeedbackRate,
+		PositiveFeedbackPercentRate,
+		NeutralFeedbackPercentRate,
+		NegativeFeedbackPercentRate,
+		UserRating
 	}
 }

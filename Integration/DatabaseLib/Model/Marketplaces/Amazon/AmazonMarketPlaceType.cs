@@ -43,6 +43,7 @@
 			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, year2, firstOfMonth));
 			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, all, firstOfMonth));
 
+			calculatedAggregations.AddRange(GetFeedbacks(mp, history));
 			return calculatedAggregations;
 		}
 
@@ -63,13 +64,59 @@
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalItemsOrdered), AggregationFunction.TotalItemsOrdered));
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOrders), AggregationFunction.TotalSumOfOrders));
 
+			if (time.MonthsInPeriod <= MonthsInYear) {
+				parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalSumOfOrders) * (MonthsInYear / (decimal)time.MonthsInPeriod), AggregationFunction.TotalSumOfOrdersAnnualized));
+			}
+
 			return parameterInfos;
 		}
-	}
+
+		protected IEnumerable<IAnalysisDataParameterInfo> GetFeedbacks(MP_CustomerMarketPlace mp, DateTime? history) {
+			MP_AmazonFeedback feedbacks;
+			if (history == null) {
+				feedbacks = mp.AmazonFeedback
+					.OrderByDescending(x => x.Created)
+					.FirstOrDefault();
+			} else {
+				feedbacks = mp.AmazonFeedback
+					.Where(x => x.Created <= history)
+					.OrderByDescending(x => x.Created)
+					.FirstOrDefault();
+			}//if
+
+			var feedBackParams = new List<IAnalysisDataParameterInfo>();
+
+			if (feedbacks == null)
+				return feedBackParams;
+
+			feedBackParams.Add(new AnalysisDataParameterInfo(TimePeriodFactory.Create(TimePeriodEnum.Zero), feedbacks.UserRaining, AggregationFunction.UserRating));
+
+			foreach (MP_AmazonFeedbackItem afp in feedbacks.FeedbackByPeriodItems) {
+				var timePeriod = TimePeriodFactory.CreateById(afp.TimePeriod.InternalId);
+
+				var c = new AnalysisDataParameterInfo(timePeriod, afp.Count, AggregationFunction.NumberOfReviews);
+				var g = new AnalysisDataParameterInfo(timePeriod, afp.Negative, AggregationFunction.NegativeFeedbackRate);
+				var n = new AnalysisDataParameterInfo(timePeriod, afp.Neutral, AggregationFunction.NeutralFeedbackRate);
+				var p = new AnalysisDataParameterInfo(timePeriod, afp.Positive, AggregationFunction.PositiveFeedbackRate);
+
+				var sum = afp.Positive + afp.Neutral + afp.Negative;
+				decimal positivePercent = sum != 0 ? ((afp.Positive ?? 0)) / (decimal)sum.Value : 0M;
+				decimal neutralPercent = sum != 0 ? ((afp.Neutral ?? 0)) / (decimal)sum.Value : 0M;
+				decimal negativePercent = sum != 0 ? ((afp.Negative ?? 0)) / (decimal)sum.Value : 0M;
+				var pp = new AnalysisDataParameterInfo(timePeriod, positivePercent, AggregationFunction.PositiveFeedbackPercentRate);
+				var np = new AnalysisDataParameterInfo(timePeriod, neutralPercent, AggregationFunction.NeutralFeedbackPercentRate);
+				var gp = new AnalysisDataParameterInfo(timePeriod, negativePercent, AggregationFunction.NegativeFeedbackPercentRate);
+
+				feedBackParams.AddRange(new[] { c, n, g, p, pp, np, gp });
+			} // for each
+
+			return feedBackParams;
+		}//GetFeedbacks
+	}//class AmazonMarketPlaceType
 
 	public class AmazonMarketPlaceTypeMap : SubclassMap<AmazonMarketPlaceType> {
 		public AmazonMarketPlaceTypeMap() {
 			DiscriminatorValue("Amazon");
 		}
-	}
-}
+	}//AmazonMarketPlaceTypeMap
+}//ns

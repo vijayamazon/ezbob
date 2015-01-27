@@ -8,8 +8,12 @@ using NHibernate.Linq;
 
 namespace EzBob.Models.Marketplaces.Builders
 {
+	using System.Collections.Generic;
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Backend.Models;
+	using EzBob.CommonLib.TimePeriodLogic;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Marketplaces;
 
 	class EBayMarketplaceModelBuilder : MarketplaceModelBuilder
     {
@@ -24,29 +28,27 @@ namespace EzBob.Models.Marketplaces.Builders
         {
             var ebayFeedBack = mp.EbayFeedback.LastOrDefault();
 
-            var feedbackByPeriodEbay = ebayFeedBack != null
-                                           ? ebayFeedBack.FeedbackByPeriodItems.FirstOrDefault(
-                                               x => x.TimePeriod.Id == 4)
-                                           : null;
-
-            var negative = feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Negative : null;
-            var positive = feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Positive : null;
-            var neutral = feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Neutral : null;
-
-            var raiting = (positive + negative + neutral) != 0
-                              ? (positive * 100) / (positive + negative + neutral)
-                              : 0;
-
-            model.PositiveFeedbacks = positive ?? 0;
-            model.NegativeFeedbacks = negative ?? 0;
-            model.NeutralFeedbacks = neutral ?? 0;
-
-            model.RaitingPercent = raiting != null ? raiting.ToString() : "-";
-
             model.Categories = _ebayAmazonCategoryRepository.GetEbayCategories(mp);
 
             model.EBay = BuildEBay(mp.EbayUserData.LastOrDefault(), mp.EbayUserAccountData.LastOrDefault(), ebayFeedBack);
         }
+
+		protected virtual new void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
+			var raitingPercent = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackPercentRate.ToString());
+			model.RaitingPercent = raitingPercent == null ? null : (decimal?)raitingPercent.Value;
+			var yearAggregations = aggregations.Where(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year).ToList();
+			if (!yearAggregations.Any()){
+				return;
+			}
+
+			var positive = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackRate.ToString());
+			var negative = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.NegativeFeedbackRate.ToString());
+			var neutral = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.NegativeFeedbackRate.ToString());
+
+			model.PositiveFeedbacks = positive == null ? null : (int?)positive.Value;
+			model.NegativeFeedbacks = negative == null ? null : (int?)negative.Value;
+			model.NeutralFeedbacks = neutral == null ? null : (int?)neutral.Value;
+		}
 
         private static EBayModel BuildEBay(MP_EbayUserData ebayUserData, MP_EbayUserAccountData ebayAccount, MP_EbayFeedback ebayFeedBack)
         {

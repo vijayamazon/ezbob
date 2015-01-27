@@ -80,6 +80,10 @@
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TransactionsNumber), AggregationFunction.TransactionsNumber));
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TransferAndWireIn), AggregationFunction.TransferAndWireIn));
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TransferAndWireOut), AggregationFunction.TransferAndWireOut));
+
+			if (time.MonthsInPeriod <= MonthsInYear) {
+				parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.TotalNetInPayments) * (MonthsInYear / (decimal)time.MonthsInPeriod), AggregationFunction.TotalNetInPaymentsAnnualized));
+			}
 			return parameterInfos;
 		}
 	}

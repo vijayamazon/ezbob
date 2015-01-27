@@ -19,47 +19,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		public MarketplaceModelBuilder(ISession session) {
 			_session = session ?? ObjectFactory.GetInstance<ISession>();
 		}
-		/*
-		public static IAnalysisDataParameterInfo GetClosestToYear(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault) {
-			int closestTime = 0;
-			IAnalysisDataParameterInfo closestSoFar = null;
-			foreach (var x in firstOrDefault) {
-				switch (x.TimePeriod.TimePeriodType) {
-				case TimePeriodEnum.Year:
-					return x;
-				case TimePeriodEnum.Month6:
-					closestSoFar = x;
-					closestTime = 6;
-					break;
-				case TimePeriodEnum.Month3:
-					if (closestTime < 6) {
-						closestSoFar = x;
-						closestTime = 3;
-					}
-					break;
-				case TimePeriodEnum.Month:
-					if (closestTime < 3) {
-						closestSoFar = x;
-						closestTime = 1;
-					}
-					break;
-				}
-			}
-			return closestSoFar;
-		}
-
-		public static IAnalysisDataParameterInfo GetMonth(IEnumerable<IAnalysisDataParameterInfo> firstOrDefault) {
-			foreach (var x in firstOrDefault) {
-				switch (x.TimePeriod.TimePeriodType) {
-				case TimePeriodEnum.Month:
-					return x;
-				}
-			}
-			return null;
-		}
-		*/
-
-
+		
 		public MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history) {
 			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
 			var updatingStatus = mp.GetUpdatingStatus(history);
@@ -79,7 +39,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				PositiveFeedbacks = 0,
 				NegativeFeedbacks = 0,
 				NeutralFeedbacks = 0,
-				RaitingPercent = "-",
+				RaitingPercent = null,
 				SellerInfoStoreURL = url,
 				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
 				UWPriority = mp.Marketplace.UWPriority,
@@ -100,10 +60,16 @@ namespace EzBob.Models.Marketplaces.Builders {
 			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
 
 			InitializeSpecificData(mp, model, history);
+			InitializeFeedbackData(model, aggregations);
+
 			if (model.IsPaymentAccount) {
 				model.PaymentAccountBasic = GetPaymentAccountModel(mp, model, history, aggregations);
 			}
 			return model;
+		}
+
+		protected virtual void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
+		
 		}
 
 		public string GetAccountAge(MP_CustomerMarketPlace mp) {
@@ -122,7 +88,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return mp.LastTransactionDate;
 		}
 
-		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+		protected virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
 			return null;
 		}
 

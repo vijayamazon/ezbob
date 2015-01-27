@@ -18,7 +18,7 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
 			var payPalModel = new PayPalPaymentAccountsModel(mp, history);
 			payPalModel.Load(av);
 			return payPalModel;

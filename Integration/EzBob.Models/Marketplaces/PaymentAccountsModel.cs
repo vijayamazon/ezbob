@@ -42,7 +42,7 @@
 		public decimal TotalNetOutPayments { get; set; }
 
 		[Traversable]
-		public decimal TransactionsNumber { get; set; }
+		public int TransactionsNumber { get; set; }
 
 		public virtual void Load(List<IAnalysisDataParameterInfo> av) {
 			var monthIncome = av.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Month && x.ParameterName == AggregationFunction.Turnover.ToString());
@@ -93,7 +93,7 @@
 			var totalNetOutPayments = av.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.TotalNetOutPayments.ToString());
 			var transactionsNumber = av.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.TransactionsNumber.ToString());
 			TotalNetOutPayments = totalNetOutPayments == null ? 0 : (decimal)totalNetOutPayments.Value;
-			TransactionsNumber = transactionsNumber == null ? 0 : (decimal)transactionsNumber.Value;
+			TransactionsNumber = transactionsNumber == null ? 0 : (int)transactionsNumber.Value;
 		} // Load
 	} // class PayPalPaymentAccountsModel
 

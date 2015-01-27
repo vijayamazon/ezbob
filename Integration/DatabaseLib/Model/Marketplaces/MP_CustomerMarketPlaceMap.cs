@@ -23,70 +23,87 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.LastTransactionDate).CustomType<UtcDateTimeType>();
 			HasMany(x => x.PayPalTransactions).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.AmazonOrders).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.EbayOrders).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.UpdatingHistory).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.EbayUserData).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.EbayUserAccountData).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.EbayFeedback).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.AmazonFeedback).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.TeraPeakOrders).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.EkmOrders).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.FreeAgentRequests).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.SageRequests).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.PayPointOrders).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.ChannelGrabberOrders).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.VatReturnRecords).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.RtiTaxMonthRecords).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.YodleeOrders).
 				KeyColumn("CustomerMarketPlaceId")
+				.LazyLoad()
 				.Cascade.All();
 
 			Map(x => x.Disabled);

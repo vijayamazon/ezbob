@@ -1,11 +1,15 @@
 ﻿namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using AmazonServiceLib;
+	using EzBob.CommonLib.TimePeriodLogic;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Marketplaces;
 	using NHibernate;
 	using NHibernate.Linq;
 	using StructureMap;
@@ -26,35 +30,7 @@
         }
 
         protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
-			MP_AmazonFeedback amazonFeedback = null;
-
-			if ((mp.AmazonFeedback != null) && !mp.AmazonFeedback.IsEmpty)
-				amazonFeedback = mp.AmazonFeedback.OrderBy(x => x.Created).Last();
-
-            var amazonSellerRating = amazonFeedback != null ? amazonFeedback.UserRaining : 0;
-
-            var feedbackByPeriodAmazon = amazonFeedback != null
-                                             ? amazonFeedback.FeedbackByPeriodItems.FirstOrDefault(
-                                                 x => x.TimePeriod.Id == 4)
-                                             : null;
-
-            var negative = feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Negative : null;
-            var positive = feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Positive : null;
-            var neutral = feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Neutral : null;
-
-            var raiting = (positive + negative + neutral) != 0
-                              ? (positive * 100) / (positive + negative + neutral)
-                              : 0;
-
-            model.PositiveFeedbacks = positive ?? 0;
-            model.NegativeFeedbacks = negative ?? 0;
-            model.NeutralFeedbacks = neutral ?? 0;
-
-            model.RaitingPercent = raiting != null ? raiting.ToString() : "-";
-
-            model.AmazonSelerRating = amazonSellerRating;
-
-            var askville = ObjectFactory.GetInstance<AskvilleRepository>();
+			var askville = ObjectFactory.GetInstance<AskvilleRepository>();
             var askvilleTmp = askville.GetAskvilleByMarketplace(mp);
 
             model.AskvilleStatus =
@@ -66,6 +42,27 @@
 
             model.Categories = _ebayAmazonCategoryRepository.GetAmazonCategories(mp);
         }
+
+		protected virtual new  void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
+			var sellerRating = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.UserRating.ToString());
+			model.AmazonSelerRating = sellerRating == null ? 0 : (double)sellerRating.Value;
+
+			var raitingPercent = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackPercentRate.ToString() && x.TimePeriod.TimePeriodType == TimePeriodEnum.Year);
+			model.RaitingPercent = raitingPercent == null ? null : (decimal?)raitingPercent.Value;
+
+			var yearAggregations = aggregations.Where(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year).ToList();
+			if (!yearAggregations.Any()) {
+				return;
+			}
+
+			var positive = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackRate.ToString());
+			var negative = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.NegativeFeedbackRate.ToString());
+			var neutral = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.NegativeFeedbackRate.ToString());
+
+			model.PositiveFeedbacks = positive == null ? null : (int?)positive.Value;
+			model.NegativeFeedbacks = negative == null ? null : (int?)negative.Value;
+			model.NeutralFeedbacks = neutral == null ? null : (int?)neutral.Value;
+		}
 
         public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
         {

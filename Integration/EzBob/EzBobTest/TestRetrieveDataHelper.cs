@@ -327,16 +327,24 @@
 		[Test]
 		public  void TestMarketPlaceModelBuilder() {
 			ISession session = ObjectFactory.GetInstance<ISession>();
-			var m = new MarketplaceModelBuilder(session);
+			//var m = new MarketplaceModelBuilder(session);
 			//var mp = session.Get<MP_CustomerMarketPlace>(18350); //sage not work
 			//var mp = session.Get<MP_CustomerMarketPlace>(18289); //hmrc work 
-			var mp = session.Get<MP_CustomerMarketPlace>(18309); //ekm not work
+			//var mp = session.Get<MP_CustomerMarketPlace>(18309); //ekm not work
+			var mp = session.Get<MP_CustomerMarketPlace>(18362); //paypal not work
 
-			var ag = mp.Marketplace.GetAggregations(mp, null);
-			Assert.True(ag.Any());
-			foreach (var a in ag) {
-				Console.WriteLine("{0} {1} {2}", a.ParameterName, a.TimePeriod, a.Value);
-			}
+			IMarketplaceModelBuilder builder =
+						ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString()) ??
+						ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
+
+			//var ag = mp.Marketplace.GetAggregations(mp, null);
+			var m = builder.Create(mp, null);
+			
+			Assert.True(m.PayPal != null);
+			Assert.True(m.PayPal.PersonalInfo != null);
+			//foreach (var a in ag) {
+			//	Console.WriteLine("{0} {1} {2}", a.ParameterName, a.TimePeriod, a.Value);
+			//}
 
 		}
     }

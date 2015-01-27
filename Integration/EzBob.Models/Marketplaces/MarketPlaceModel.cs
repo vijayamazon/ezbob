@@ -21,7 +21,7 @@
 		public string LastChecked { get; set; }
 		public string UpdatingStatus { get; set; }
 		public string UpdateError { get; set; }
-		public string RaitingPercent { get; set; }
+		public decimal? RaitingPercent { get; set; }
 		public string SellerInfoStoreURL { get; set; }
 		public IEnumerable<string> Categories { get; set; }
 		
@@ -46,9 +46,9 @@
 		public decimal AnnualSales { get; set; }
 
 		//Feedbacks
-		public int PositiveFeedbacks { get; set; }
-		public int NegativeFeedbacks { get; set; }
-		public int NeutralFeedbacks { get; set; }
+		public int? PositiveFeedbacks { get; set; }
+		public int? NegativeFeedbacks { get; set; }
+		public int? NeutralFeedbacks { get; set; }
 
 		//Yodlee
 		public YodleeModel Yodlee { get; set; }

@@ -394,16 +394,6 @@
 			);
 		} // UpdateClientOrdersInfo
 
-		// CustomerMarketplaceUpdateAction
-
-		// GetOrderItems
-		// GetAndSaveAmazonProcuctCategory
-
-		// GetAndSaveAmazonProcuctCategoryByProductSellerSku
-
-		// UpdateClientFeedbackInfo
-
-		// ParceAndSaveUserFeedbackInfo
 		private static readonly ILog log = LogManager.GetLogger(typeof(AmazonRetriveDataHelper));
 		private readonly ErrorRetryingInfo amazonSettings;
 		private readonly AmazonServiceConnectionInfo connectionInfo;
