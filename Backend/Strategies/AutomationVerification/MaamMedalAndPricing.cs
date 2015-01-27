@@ -76,6 +76,8 @@
 				d.IsDefault = defaultCustomers.Contains(d.CustomerID);
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
+				d.CheckAutoReject(DB, Log);
+
 				d.AutoThen.Calculate(d.CustomerID, isHomeOwner, DB, Log);
 				d.AutoNow.Calculate(d.CustomerID, isHomeOwner, DB, Log);
 
@@ -230,10 +232,21 @@
 
 			public bool IsDefault { get; set; }
 
+			public bool IsAutoRejected { get; private set; }
+
 			public AMedalAndPricing AutoThen { get; private set; }
 			public AMedalAndPricing AutoNow { get; private set; }
 
 			public SetupFeeConfiguration ManualCfg { get; private set; }
+
+			public void CheckAutoReject(AConnection db, ASafeLog log) {
+				AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
+					new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, log, CustomerID);
+
+				oSecondary.MakeDecision(oSecondary.GetRejectionInputData(DecisionTime));
+
+				IsAutoRejected = oSecondary.Trail.HasDecided;
+			} // CheckAutoReject
 
 			public void LoadLoans(AConnection db) {
 				AutoThen.LoadLoans(CustomerID, db);
@@ -256,6 +269,7 @@
 					"Broker ID",
 					"Is Default Now",
 					AMedalAndPricing.CsvTitles("Manual"),
+					"Auto reject",
 					AMedalAndPricing.CsvTitles("Auto then"),
 					AMedalAndPricing.CsvTitles("Auto now"),
 					string.Join(";", os)
@@ -286,6 +300,7 @@
 					BrokerID.ToString(CultureInfo.InvariantCulture),
 					IsDefault,
 					Manual.ToCsv(),
+					IsAutoRejected ? "Rejected" : "Manual",
 					AutoThen.ToCsv(),
 					AutoNow.ToCsv(),
 					string.Join(";", os)
@@ -373,7 +388,7 @@
 						return "Pending";
 
 					case "not approved":
-						return "manual";
+						return "Manual";
 
 					default:
 						return Decision;
