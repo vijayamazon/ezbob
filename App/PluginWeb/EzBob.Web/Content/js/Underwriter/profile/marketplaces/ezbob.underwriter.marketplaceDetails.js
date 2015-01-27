@@ -79,6 +79,10 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
                 that.yodleeShowGraph();
             }
         });
+
+        _.each(this.$el.find('[data-original-title]'), function(elem) {
+        	$(elem).tooltip({ title: elem.getAttribute('data-original-title') });
+        });
         return this;
     },
 

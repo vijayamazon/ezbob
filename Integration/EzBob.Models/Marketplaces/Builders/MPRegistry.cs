@@ -1,5 +1,14 @@
 ﻿namespace EzBob.Models.Marketplaces.Builders {
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Marketplaces.Amazon;
+	using EZBob.DatabaseLib.Model.Marketplaces.ChannelGrabber;
+	using EZBob.DatabaseLib.Model.Marketplaces.Ebay;
+	using EZBob.DatabaseLib.Model.Marketplaces.EKM;
+	using EZBob.DatabaseLib.Model.Marketplaces.FreeAgent;
+	using EZBob.DatabaseLib.Model.Marketplaces.PayPal;
+	using EZBob.DatabaseLib.Model.Marketplaces.PayPoint;
+	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
+	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
 	using StructureMap.Configuration.DSL;
 
 	public class MPRegistry : Registry {

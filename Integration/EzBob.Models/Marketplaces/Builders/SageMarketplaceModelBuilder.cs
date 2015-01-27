@@ -65,9 +65,9 @@
 			return dates.Max();
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
-			var paymentAccountModel = new SagePaymentAccountsModel();
-			paymentAccountModel.Load(mp.Id, history, Library.Instance.DB);
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+			var paymentAccountModel = new SagePaymentAccountsModel(mp, history);
+			paymentAccountModel.Load(av);
 			return paymentAccountModel;
 		}
 

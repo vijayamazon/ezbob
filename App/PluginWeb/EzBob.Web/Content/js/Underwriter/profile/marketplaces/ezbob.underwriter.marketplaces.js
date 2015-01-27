@@ -11,31 +11,8 @@ EzBob.Underwriter.MarketPlaceModel = Backbone.Model.extend({
 	},
 
 	recalculate: function() {
-		var ai = this.get('AnalysisDataInfo');
-		var accountAge = this.get('AccountAge');
-		var monthSales = ai ? (ai.TotalSumofOrders1M || 0) * 1 : 0;
-		var monthAnnualizedSales = ai ? (ai.TotalSumofOrdersAnnualized1M || 0) * 1 : 0;
-		var anualSales = ai ? (ai.TotalSumofOrders12M || ai.TotalSumofOrders6M || ai.TotalSumofOrders3M || ai.TotalSumofOrders1M || 0) * 1 : 0;
-		var inventory = ai && !isNaN(ai.TotalValueofInventoryLifetime * 1) ? ai.TotalValueofInventoryLifetime * 1 : "-";
-		var pp = this.get("PayPal");
-
-		if (pp) {
-			monthSales = pp.GeneralInfo.MonthInPayments;
-			monthAnnualizedSales = pp.GeneralInfo.MonthInPaymentsAnnualized;
-			anualSales = pp.GeneralInfo.TotalNetInPayments;
-		}
-
-		var age = accountAge !== "-" && accountAge !== 'undefined' ? EzBob.SeniorityFormat(accountAge, 0) : "-";
-
-		this.set({
-			age: age,
-			monthSales: monthSales,
-			monthAnnualizedSales: monthAnnualizedSales,
-			anualSales: anualSales,
-			inventory: inventory
-		}, {
-			silent: true
-		});
+		var age = EzBob.SeniorityFormat(this.get('AccountAge'), 0);
+		this.set({age: age}, {silent: true});
 	}
 });
 
@@ -318,29 +295,19 @@ EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 	},
 
 	serializeData: function() {
-		var isMarketplace = function(x) {
-			var cg;
-			if (!(EzBob.CgVendors.all()[x.get('Name')])) {
-				return !x.get('IsPaymentAccount');
-			}
-			cg = EzBob.CgVendors.all()[x.get('Name')];
-			return (cg.Behaviour === 0) && !cg.HasExpenses;
-		};
-
 		var data = {
 			customerId: this.model.customerId,
-			marketplaces: _.sortBy(_.pluck(_.filter(this.model.models, function(x) {
-				return x && isMarketplace(x);
+			marketplaces: _.sortBy(_.pluck(_.filter(this.model.models, function(mp) {
+				return mp && !mp.get('IsPaymentAccount');
 			}), "attributes"), "UWPriority"),
-			accounts: _.sortBy(_.pluck(_.filter(this.model.models, function(x) {
-				return x && !isMarketplace(x);
+			accounts: _.sortBy(_.pluck(_.filter(this.model.models, function(mp) {
+				return mp && mp.get('IsPaymentAccount');
 			}), "attributes"), "UWPriority"),
 			hideAccounts: false,
 			hideMarketplaces: false,
 			summary: {
 				monthSales: 0,
 				anualSales: 0,
-				inventory: 0,
 				positive: 0,
 				negative: 0,
 				neutral: 0,
@@ -351,21 +318,15 @@ EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 		for (var i = 0; i < data.marketplaces.length; i++) {
 			var m = data.marketplaces[i];
 
-			if (m.Disabled === false)
-				data.summary.monthSales += m.monthSales;
-
-			if (m.Disabled === false)
-				data.summary.anualSales += m.anualSales;
-
-			if (m.Disabled === false)
-				data.summary.monthAnnualizedSales += m.monthAnnualizedSales;
-
-			if (m.Disabled === false)
-				data.summary.inventory += m.inventory;
-
-			data.summary.positive += m.PositiveFeedbacks;
-			data.summary.negative += m.NegativeFeedbacks;
-			data.summary.neutral += m.NeutralFeedbacks;
+			if (m.Disabled === false) {
+				data.summary.monthSales += m.MonthSales;
+				data.summary.anualSales += m.AnnualSales;
+				data.summary.monthAnnualizedSales += m.MonthSalesAnnualized;
+				
+				data.summary.positive += m.PositiveFeedbacks;
+				data.summary.negative += m.NegativeFeedbacks;
+				data.summary.neutral += m.NeutralFeedbacks;
+			}
 		}
 
 		var total = data.summary.positive + data.summary.negative + data.summary.neutral;

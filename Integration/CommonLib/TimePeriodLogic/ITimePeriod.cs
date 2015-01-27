@@ -10,5 +10,6 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		string Name { get; }
 		string DisplayName { get; }
 		int DaysInPeriod { get; }
+		int MonthsInPeriod { get; }
 	}
 }

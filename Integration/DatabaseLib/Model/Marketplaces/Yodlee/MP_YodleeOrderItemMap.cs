@@ -13,7 +13,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
 			Table("MP_YodleeOrderItem");
 			Id(x => x.Id);
 			References(x => x.Order).Column("OrderId");
-			HasMany(x => x.OrderItemBankTransactions).KeyColumn("OrderItemId").Cascade.All();
+			HasMany(x => x.OrderItemBankTransactions).KeyColumn("OrderItemId").LazyLoad().Cascade.All();
 
 			Map(x => x.isSeidFromDataSource, "isSeidFromDataSource").Nullable();
 			//Map(x => x.isSeidFromDataSourceSpecified, "isSeidFromDataSourceSpecified");

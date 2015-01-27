@@ -32,9 +32,7 @@
 		public ProfileSummaryModel CreateProfile(Customer customer, CreditBureauModel creditBureau) {
 			var summary = new ProfileSummaryModel();
 			BuildCustomerSummary(summary, customer);
-			BuildMarketplaces(customer, summary);
 			BuildCreditBureau(customer, summary, creditBureau);
-			BuildPaymentAccounts(customer, summary);
 			AddDecisionHistory(summary, customer);
 			BuildRequestedLoan(summary, customer);
 			BuildAlerts(summary, customer);
@@ -44,9 +42,7 @@
 		public ProfileSummaryModel CreateProfile(Customer customer) {
 			var summary = new ProfileSummaryModel();
 			BuildCustomerSummary(summary, customer);
-			BuildMarketplaces(customer, summary);
 			BuildCreditBureau(customer, summary);
-			BuildPaymentAccounts(customer, summary);
 			AddDecisionHistory(summary, customer);
 			BuildRequestedLoan(summary, customer);
 			BuildAlerts(summary, customer);
@@ -495,77 +491,6 @@
 			}
 
 			return false;
-		}
-
-		private void BuildMarketplaces(Customer customer, ProfileSummaryModel summary) {
-			double? totalPositiveReviews = 0;
-			double? totalNegativeReviews = 0;
-			double? totalNeutralReviews = 0;
-
-			var marketplacesAll = customer.CustomerMarketPlaces
-				.Where(mp => mp.Marketplace.IsPaymentAccount == false)
-				.ToList();
-
-			var marketplaces = marketplacesAll.Where(mp =>
-				!mp.Disabled && string.IsNullOrEmpty(mp.UpdateError)
-				)
-				.ToList();
-
-			var isNewExist = marketplacesAll.Any(mp => mp.IsNew);
-
-			foreach (var mp in marketplaces) {
-				var isAmazon = mp.Marketplace.Name == "Amazon";
-				var amazonFeedback = mp.AmazonFeedback.LastOrDefault();
-				var ebayFeedBack = mp.EbayFeedback.LastOrDefault();
-
-				var feedbackByPeriodAmazon = amazonFeedback != null
-					? amazonFeedback.FeedbackByPeriodItems.FirstOrDefault(x => x.TimePeriod.Id == 4)
-					: null;
-				var feedbackByPeriodEbay = ebayFeedBack != null
-					? ebayFeedBack.FeedbackByPeriodItems.FirstOrDefault(x => x.TimePeriod.Id == 4)
-					: null;
-
-				totalNegativeReviews += isAmazon
-					? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Negative : 0)
-					: (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Negative : 0);
-				totalPositiveReviews += isAmazon
-					? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Positive : 0)
-					: (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Positive : 0);
-				totalNeutralReviews += isAmazon
-					? (feedbackByPeriodAmazon != null ? feedbackByPeriodAmazon.Neutral : 0)
-					: (feedbackByPeriodEbay != null ? feedbackByPeriodEbay.Neutral : 0);
-			}
-
-			var totalReviews = totalNegativeReviews + totalPositiveReviews + totalNeutralReviews;
-
-			summary.MarketPlaces = new MarketPlaces {
-				NumberOfStores = String.Format("{0} / {1}", marketplaces.Count, marketplacesAll.Count),
-				AnualTurnOver = new ServiceClient().Instance.GetCurrentCustomerAnnualTurnover(customer.Id)
-					.Value,
-				Inventory = Money(0),
-				Seniority = Money(GetSeniority(customer, false)),
-				TotalPositiveReviews = string.Format(
-					"{0:0.#} ({1:0.#}%)",
-					totalPositiveReviews,
-					(totalReviews != 0 ? totalPositiveReviews / totalReviews * 100 : 0)
-					),
-				Lighter = new Lighter(ObtainMarketPlacesState(marketplaces)),
-				IsNew = isNewExist
-			};
-		}
-
-		private void BuildPaymentAccounts(Customer customer, ProfileSummaryModel summary) {
-			var paymentAccounts = customer.GetPaymentAccounts();
-			summary.PaymentAccounts =
-				new PaymentAccounts {
-					NumberOfPayPalAccounts = String.Format("{0}", paymentAccounts.Count()),
-					Balance = "Not implemented now",
-					NetExpences = String.Format("{0}", paymentAccounts.Sum(x => x.TotalNetOutPayments)),
-					NetIncome = paymentAccounts.Sum(x => x.TotalNetInPayments),
-					Lighter = new Lighter(ObtainPaymentsAccountsState(customer)),
-					Seniority = Money(GetSeniority(customer, true)),
-					IsNew = paymentAccounts.Any(x => x.IsNew)
-				};
 		}
 
 		private LoanActivity CreateLoanActivity(Customer customer) {

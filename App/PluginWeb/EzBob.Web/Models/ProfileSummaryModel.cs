@@ -273,10 +273,8 @@
 
 		public LoanActivity LoanActivity { get; set; }
 
-		public MarketPlaces MarketPlaces { get; set; }
 		public decimal? OverallTurnOver { get; set; }
 
-		public PaymentAccounts PaymentAccounts { get; set; }
 		public CustomerRequestedLoanModel RequestedLoan { get; set; }
 
 		public decimal? WebSiteTurnOver { get; set; }

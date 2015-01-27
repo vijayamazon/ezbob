@@ -14,5 +14,9 @@ namespace EzBob.CommonLib.TimePeriodLogic
 		{
 			get { return (int) (new DateTime(12, 12, 2012) - _LeftBoundary).TotalDays; }
 		}
+
+		public override int MonthsInPeriod {
+			get { return 1000; }
+		}
 	}
 }

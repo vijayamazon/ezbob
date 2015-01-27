@@ -15,5 +15,9 @@ namespace EzBob.CommonLib.TimePeriodLogic
 			get { return 0; }
 		}
 
+		public override int MonthsInPeriod {
+			get { return 0; }
+		}
+
 	}
 }

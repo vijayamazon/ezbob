@@ -412,19 +412,6 @@
 								mp.Marketplace.Name
 							);
 						} // using
-
-						using (m_oTimeCounter.AddStep(
-							"Payment model build time for mp {0}: {1} of type {2}",
-							mp.Id, mp.DisplayName, mp.Marketplace.Name
-						)) {
-							model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, m_oHistory);
-
-							Log.Debug(
-								"Payment account model has been built for marketplace {0} of type {1}.",
-								mp.Id,
-								mp.Marketplace.Name
-							);
-						} // using
 					} // if
 				}
 				catch (Exception e) {
@@ -460,10 +447,7 @@
 				Type = mp.DisplayName,
 				Name = mp.Marketplace.Name,
 				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
-				PaymentAccountBasic = new PaymentAccountsModel
-				{
-					displayName = mp.DisplayName,
-				},
+				PaymentAccountBasic = new PaymentAccountsModel(mp, null),
 				Disabled = mp.Disabled
 			};
 		}

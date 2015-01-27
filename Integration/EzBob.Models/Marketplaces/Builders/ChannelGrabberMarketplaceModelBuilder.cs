@@ -3,9 +3,11 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using Ezbob.Models;
+	using EzBob.CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzServiceAccessor;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Marketplaces;
 	using Integration.ChannelGrabberConfig;
 	using NHibernate.Linq;
 	using StructureMap;
@@ -20,17 +22,16 @@
 		public override PaymentAccountsModel GetPaymentAccountModel(
 			MP_CustomerMarketPlace mp,
 			MarketPlaceModel model,
-			DateTime? history
+			DateTime? history,
+			List<IAnalysisDataParameterInfo> av
 		) {
 			VendorInfo vi = Configuration.Instance.GetVendorInfo(mp.Marketplace.Name);
 
 			if (!vi.HasExpenses && (vi.Behaviour == Behaviour.Default))
 				return null;
 
-			var paymentAccountModel = new ChannelGrabberPaymentAccountsModel();
-			paymentAccountModel.Init();
-
-			paymentAccountModel.Load(mp.Id, history, Library.Instance.DB);
+			var paymentAccountModel = new HmrcPaymentAccountsModel(mp, history);
+			paymentAccountModel.Load(av);
 
 			return paymentAccountModel;
 		} // GetPaymentAccountModel
@@ -77,6 +78,7 @@
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
+
 		} // InitializeSpecificData
 
 		private enum WhichDateToTake {

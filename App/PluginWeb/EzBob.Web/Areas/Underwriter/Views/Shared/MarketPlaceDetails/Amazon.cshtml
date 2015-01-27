@@ -2,7 +2,6 @@
     <ul class="nav nav-tabs">
         <li class="active"><a href="#tab1" data-toggle="tab">Orders</a></li>
         <li><a href="#tab2" data-toggle="tab">Feedbacks</a></li>
-        <li><a href="#tab3" data-toggle="tab">Inventory</a></li>
         <li><a href="#tab4" data-toggle="tab">Categories</a></li>
         <li><a href="#tab6" data-toggle="tab">Account details</a></li>
     </ul>
@@ -25,21 +24,21 @@
                 <tbody>
                     <tr>
                         <td>Total sum of orders</td>
-                        <td><%-ai.TotalSumofOrders1M!=undefined ? GBPValues(ai.TotalSumofOrders1M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders3M!=undefined ? GBPValues(ai.TotalSumofOrders3M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders6M!=undefined ? GBPValues(ai.TotalSumofOrders6M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders12M!=undefined ? GBPValues(ai.TotalSumofOrders12M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders15M!=undefined ? GBPValues(ai.TotalSumofOrders15M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders18M!=undefined ? GBPValues(ai.TotalSumofOrders18M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrders24M!=undefined ? GBPValues(ai.TotalSumofOrders24M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrdersLifetime!=undefined ? GBPValues(ai.TotalSumofOrdersLifetime, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrders1M!=undefined ? GBPValues(ai.TotalSumOfOrders1M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrders3M!=undefined ? GBPValues(ai.TotalSumOfOrders3M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrders6M!=undefined ? GBPValues(ai.TotalSumOfOrders6M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrders12M!=undefined ? GBPValues(ai.TotalSumOfOrders12M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrders15M!=undefined ? GBPValues(ai.TotalSumOfOrders15M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrders18M!=undefined ? GBPValues(ai.TotalSumOfOrders18M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrders24M!=undefined ? GBPValues(ai.TotalSumOfOrders24M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrdersLifetime!=undefined ? GBPValues(ai.TotalSumOfOrdersLifetime, true): "-"%></td>
                     </tr>
                     <tr>
                         <td>Total sum of orders (Annualized)</td>
-                        <td><%-ai.TotalSumofOrdersAnnualized1M!=undefined ? GBPValues(ai.TotalSumofOrdersAnnualized1M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrdersAnnualized3M!=undefined ? GBPValues(ai.TotalSumofOrdersAnnualized3M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrdersAnnualized6M!=undefined ? GBPValues(ai.TotalSumofOrdersAnnualized6M, true): "-"%></td>
-                        <td><%-ai.TotalSumofOrdersAnnualized12M!=undefined ? GBPValues(ai.TotalSumofOrdersAnnualized12M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrdersAnnualized1M!=undefined ? GBPValues(ai.TotalSumOfOrdersAnnualized1M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrdersAnnualized3M!=undefined ? GBPValues(ai.TotalSumOfOrdersAnnualized3M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrdersAnnualized6M!=undefined ? GBPValues(ai.TotalSumOfOrdersAnnualized6M, true): "-"%></td>
+                        <td><%-ai.TotalSumOfOrdersAnnualized12M!=undefined ? GBPValues(ai.TotalSumOfOrdersAnnualized12M, true): "-"%></td>
                         <td>-</td>
                         <td>-</td>
                         <td>-</td>
@@ -47,14 +46,14 @@
                     </tr>
                     <tr>
                         <td>Number of orders</td>
-                        <td><%-ai.NumofOrders1M  || "-"%></td>
-                        <td><%-ai.NumofOrders3M  || "-"%></td>
-                        <td><%-ai.NumofOrders6M  || "-"%></td>
-                        <td><%-ai.NumofOrders12M  || "-"%></td>
-                        <td><%-ai.NumofOrders15M  || "-"%></td>
-                        <td><%-ai.NumofOrders18M  || "-"%></td>
-                        <td><%-ai.NumofOrders24M  || "-"%></td>
-                        <td><%-ai.NumofOrdersLifetime  || "-"%></td>
+                        <td><%-ai.NumOfOrders1M  || "-"%></td>
+                        <td><%-ai.NumOfOrders3M  || "-"%></td>
+                        <td><%-ai.NumOfOrders6M  || "-"%></td>
+                        <td><%-ai.NumOfOrders12M  || "-"%></td>
+                        <td><%-ai.NumOfOrders15M  || "-"%></td>
+                        <td><%-ai.NumOfOrders18M  || "-"%></td>
+                        <td><%-ai.NumOfOrders24M  || "-"%></td>
+                        <td><%-ai.NumOfOrdersLifetime  || "-"%></td>
                     </tr>
                     <tr>
                         <td>Total items ordered</td>
@@ -69,25 +68,25 @@
                     </tr>
                     <tr>
                         <td>Average items per order</td>
-                        <td><%-ai.AverageItemsperOrder1M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder1M, 1) + "x" : "-"%></td>
-                        <td><%-ai.AverageItemsperOrder3M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder3M, 1)+"x" : "-"%></td>
-                        <td><%-ai.AverageItemsperOrder6M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder6M, 1)+"x" : "-"%></td>
-                        <td><%-ai.AverageItemsperOrder12M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder12M, 1)+"x" : "-"%></td>
-                        <td><%-ai.AverageItemsperOrder15M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder15M, 1)+"x" : "-"%></td>
-                        <td><%-ai.AverageItemsperOrder18M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder18M, 1)+"x" : "-"%></td>
-                        <td><%-ai.AverageItemsperOrder24M != undefined ? EzBob.roundNumber( ai.AverageItemsperOrder24M, 1)+"x" : "-"%></td>
-                        <td><%-ai.AverageItemsperOrderLifetime != undefined ? EzBob.roundNumber( ai.AverageItemsperOrderLifetime, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrder1M != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrder1M, 1) + "x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrder3M != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrder3M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrder6M != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrder6M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrder12M != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrder12M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrder15M != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrder15M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrder18M != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrder18M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrder24M != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrder24M, 1)+"x" : "-"%></td>
+                        <td><%-ai.AverageItemsPerOrderLifetime != undefined ? EzBob.roundNumber( ai.AverageItemsPerOrderLifetime, 1)+"x" : "-"%></td>
                     </tr>
                     <tr>
                         <td>Average sum of order</td>
-                        <td><%-ai.AverageSumofOrder1M!=undefined ? GBPValues(ai.AverageSumofOrder1M, true) + "x" : "-"%></td>
-                        <td><%-ai.AverageSumofOrder3M!=undefined ? GBPValues(ai.AverageSumofOrder3M, true) + "x" : "-"%></td>
-                        <td><%-ai.AverageSumofOrder6M!=undefined ? GBPValues(ai.AverageSumofOrder6M, true) + "x" : "-"%></td>
-                        <td><%-ai.AverageSumofOrder12M!=undefined ? GBPValues(ai.AverageSumofOrder12M, true) + "x" : "-"%></td>
-                        <td><%-ai.AverageSumofOrder15M!=undefined ? GBPValues(ai.AverageSumofOrder15M, true) + "x" : "-"%></td>
-                        <td><%-ai.AverageSumofOrder18M!=undefined ? GBPValues(ai.AverageSumofOrder18M, true) + "x" : "-"%></td>
-                        <td><%-ai.AverageSumofOrder24M!=undefined ? GBPValues(ai.AverageSumofOrder24M, true) + "x" : "-"%></td>
-                        <td><%-ai.AverageSumofOrderLifetime!=undefined ? GBPValues(ai.AverageSumofOrderLifetime, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrder1M!=undefined ? GBPValues(ai.AverageSumOfOrder1M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrder3M!=undefined ? GBPValues(ai.AverageSumOfOrder3M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrder6M!=undefined ? GBPValues(ai.AverageSumOfOrder6M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrder12M!=undefined ? GBPValues(ai.AverageSumOfOrder12M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrder15M!=undefined ? GBPValues(ai.AverageSumOfOrder15M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrder18M!=undefined ? GBPValues(ai.AverageSumOfOrder18M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrder24M!=undefined ? GBPValues(ai.AverageSumOfOrder24M, true) + "x" : "-"%></td>
+                        <td><%-ai.AverageSumOfOrderLifetime!=undefined ? GBPValues(ai.AverageSumOfOrderLifetime, true) + "x" : "-"%></td>
                     </tr>
                     <tr>
                         <td>Cancelled orders count</td>
@@ -155,26 +154,6 @@
                         <td><%-sumReview3M%></td>
                         <td><%-sumReview12M%></td>
                         <td><%-sumReviewLifetime%></td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="tab-pane" id="tab3">
-            <table class="table centered">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th>Parameter name</th>
-                        <th>Value</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Total Items in Inventory</td>
-                        <td><%-m.AnalysisDataInfo.TotalItemsinInventoryLifetime || "-"%></td>
-                    </tr>
-                    <tr>
-                        <td>Total Value of Inventory</td>
-                        <td><%-GBPValues( m.AnalysisDataInfo.TotalValueofInventoryLifetime  || 0, true )%></td>
                     </tr>
                 </tbody>
             </table>

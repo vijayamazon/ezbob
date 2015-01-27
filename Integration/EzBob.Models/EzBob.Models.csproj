@@ -114,7 +114,6 @@
     <Compile Include="Marketplaces\Yodlee\YodleeRunningBalanceModel.cs" />
     <Compile Include="Marketplaces\Yodlee\YodleeSearchWordsModel.cs" />
     <Compile Include="Marketplaces\Yodlee\YodleeTransactionModel.cs" />
-    <Compile Include="PayPalModelBuilder.cs" />
     <Compile Include="PayPointCardModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">

@@ -14,8 +14,6 @@
 {
     <text>
     <% 
-        var mp = m.MarketPlaces || {}, 
-        pa = m.PaymentAccounts || {}, 
         aa = m.AffordabilityAnalysis || {}, 
         la = m.LoanActivity || {}, 
         ab = m.AmlBwa || {}, 
@@ -26,114 +24,13 @@
 
 		if (cec.Created == '@{ WriteLiteral(CompanyEmployeeCount.LongAgo().ToString("yyyy-MM-dd'T'HH:mm:ssK")); }')
 			cec = {};
-
-		mp.Lighter = mp.Lighter || {};
-        pa.Lighter = pa.Lighter || {};
+        
         aa.Lighter = aa.Lighter || {};
         la.Lighter =la.Lighter || {};
         ab.Lighter = ab.Lighter || {};
         cb.Lighter = cb.Lighter || {};
         %>
     </text>
-    <div class="row">
-        <div class="col-md-6 col-sm-12">
-            <table class="table rright box">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th colspan="2">Marketplaces @ButtonLights("<%- mp.Lighter.ButtonStyle %>", "<%- mp.Lighter.Icon %>", "<%- mp.Lighter.Caption %>", "$('[href=\\'#marketplaces\\']').tab('show')")</th>
-                    </tr>
-                </thead>
-                <tbody class="box-content">
-                    <tr>
-                        <td width="60%">
-                            <b>Number of stores:</b> &nbsp; &nbsp;<span class="<%-Convert.toBool(mp.IsNew) ? '' : 'hidden-field'%> btn-success btn-mini">
-                                <i class="icon-white icon-star-empty"></i>new
-                            </span>
-                        </td>
-                        <td width="40%"><%-mp!=null ? mp.NumberOfStores : "-"%> 
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Annual Turnover £:</b>
-                        </td>
-                        <td><%-mp!=null ? EzBob.formatPoundsNoDecimals( mp.AnualTurnOver, true ) : "-"%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Inventory £:</b>
-                        </td>
-                        <td><%-mp!=null ? EzBob.formatPoundsNoDecimals(mp.Inventory, true ) : "-"%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Total positive reviews:</b>
-                        </td>
-                        <td><%-mp!=null ? mp.TotalPositiveReviews : "-"%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Seniority:</b>
-                        </td>
-                        <td><%-mp!=null ? EzBob.SeniorityFormat(mp.Seniority) : "-"%>
-                        </td>
-                    </tr>
-                    <tr>
-		                <td class="">@Html.Raw("<b>Overall Turnover</b>")</td>
-		                <td>@Html.Raw("<%- EzBob.formatPoundsNoDecimals(m.OverallTurnOver) %>")</td>
-	                </tr>
-                    <tr>
-		                <td class="">@Html.Raw("<b>WebSite Turnover</b>")</td>
-		                <td>@Html.Raw("<%- EzBob.formatPoundsNoDecimals(m.WebSiteTurnOver) %>")</td>
-	                </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="col-md-6 col-sm-12">
-            <table class="table rright box">
-                <thead class="box">
-                    <tr class="box-title">
-                        <th colspan="2">Payment accounts</th>
-                    </tr>
-                </thead>
-                <tbody class="box-content">
-                    <tr>
-                        <td>
-                            <b>Number of payment accounts:</b> <span class="<%-pa.IsNew ? '' : 'hidden-field'%> btn-success btn-small">
-                                <i class="icon-white icon-star-empty"></i>new
-                            </span>
-                        </td>
-                        <td width="35%"><%-pa!=undefined ? pa.NumberOfPayPalAccounts : "-"%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Net income £:</b>
-                        </td>
-                        <td><%-pa!=undefined ? GBPValues( pa.NetIncome, true ) : "-"%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Net Expenses £:</b>
-                        </td>
-                        <td><%-pa!=undefined ? GBPValues(  pa.NetExpences, true ) : "-"%>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <b>Seniority:</b>
-                        </td>
-                        <td><%-mp!=null ? EzBob.SeniorityFormat(pa.Seniority) : "-"%>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
     <div class="row">
         <div class="col-md-6 col-sm-12">
             <table class="table rright box">

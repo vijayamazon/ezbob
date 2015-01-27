@@ -1,12 +1,10 @@
-using FluentNHibernate.Mapping;
-using Integration.ChannelGrabberConfig;
-
-namespace EZBob.DatabaseLib.Model.Database
-{
+namespace EZBob.DatabaseLib.Model.Database {
+	using System;
+	using FluentNHibernate.Mapping;
+	using System.Collections.Generic;
 	using Marketplaces;
 
-	public class MP_MarketplaceType
-	{
+	public class MP_MarketplaceType {
 		public virtual int Id { get; set; }
 		public virtual string Name { get; set; }
 		public virtual System.Guid InternalId { get; set; }
@@ -23,13 +21,15 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual string Ribbon { get; set; }
 		public virtual bool MandatoryOnline { get; set; }
 		public virtual bool MandatoryOffline { get; set; }
+
+		public virtual IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
+			return new List<IAnalysisDataParameterInfo>();
+		}
 	}
 
-	public class MP_MarketplaceTypeMap : ClassMap<MP_MarketplaceType>
-	{
+	public class MP_MarketplaceTypeMap : ClassMap<MP_MarketplaceType> {
 
-		public MP_MarketplaceTypeMap()
-		{
+		public MP_MarketplaceTypeMap() {
 			Table("MP_MarketplaceType");
 			Not.LazyLoad();
 			Cache.ReadWrite().Region("Longest").ReadWrite();
@@ -57,133 +57,13 @@ namespace EZBob.DatabaseLib.Model.Database
 		}
 	}
 
-	public class AmazonMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 2; } }
-	}
-
-	public class AmazonMarketPlaceTypeMap : SubclassMap<AmazonMarketPlaceType>
-	{
-		public AmazonMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("Amazon");
-		}
-	}
-
-	public class eBayMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 1; } }
-	}
-
-	public class eBayMarketPlaceTypeMap : SubclassMap<eBayMarketPlaceType>
-	{
-		public eBayMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("eBay");
-		}
-	}
-
-	public class PayPalMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 1; } }
-	}
-
-	public class PayPalMarketPlaceTypeMap : SubclassMap<PayPalMarketPlaceType>
-	{
-		public PayPalMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("Pay Pal");
-		}
-	}
-
-	public class EKMMarketPlaceType : MP_MarketplaceType
-	{
+	public class CompanyFilesMarketPlaceType : MP_MarketplaceType {
 		public override int UWPriority { get { return 3; } }
 	}
 
-	public class EKMMarketPlaceTypeMap : SubclassMap<EKMMarketPlaceType>
-	{
-		public EKMMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("EKM");
-		}
-	}
-
-	public class CompanyFilesMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 3; } }
-	}
-
-	public class CompanyFilesMarketPlaceTypeMap : SubclassMap<CompanyFilesMarketPlaceType>
-	{
-		public CompanyFilesMarketPlaceTypeMap()
-		{
+	public class CompanyFilesMarketPlaceTypeMap : SubclassMap<CompanyFilesMarketPlaceType> {
+		public CompanyFilesMarketPlaceTypeMap() {
 			DiscriminatorValue("CompanyFiles");
 		}
 	}
-
-	public class FreeAgentMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 4; } }
-	}
-
-	public class FreeAgentMarketPlaceTypeMap : SubclassMap<FreeAgentMarketPlaceType>
-	{
-		public FreeAgentMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("FreeAgent");
-		}
-	}
-
-	public class SageMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 14; } }
-	}
-
-	public class SageMarketPlaceTypeMap : SubclassMap<SageMarketPlaceType>
-	{
-		public SageMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("Sage");
-		}
-	}
-
-	public class PayPointMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 2; } }
-	}
-
-	public class PayPointMarketPlaceTypeMap : SubclassMap<PayPointMarketPlaceType>
-	{
-		public PayPointMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("PayPoint");
-		}
-	}
-
-	public class YodleeMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 3; } }
-	}
-
-	public class YodleeMarketPlaceTypeMap : SubclassMap<YodleeMarketPlaceType>
-	{
-		public YodleeMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("Yodlee");
-		}
-	}
-
-	public class ChannelGrabberMarketPlaceType : MP_MarketplaceType
-	{
-		public override int UWPriority { get { return 4; } } // UWPriority
-	} // class ChannelGrabberMarketPlaceType
-
-	public class ChannelGrabberMarketPlaceTypeMap : SubclassMap<ChannelGrabberMarketPlaceType>
-	{
-		public ChannelGrabberMarketPlaceTypeMap()
-		{
-			DiscriminatorValue("ChannelGrabber");
-		} // constructor
-	} // class ChannelGrabberMarketPlaceTypeMap
 } // namespace EZBob.DatabaseLib.Model.Database

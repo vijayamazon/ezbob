@@ -5,7 +5,6 @@
         <%
 		var m = marketplaces[0] || accounts[0];
 		var ai = m.AnalysisDataInfo;
-
 		if (!ai)
 			ai = new Object();
 
@@ -192,7 +191,6 @@
                     <th>Month Sales</th>
                     <th>Annual Sales</th>
                     <th>Rating</th>
-                    <th>Inventory</th>
                     <th>Disabled</th>
                     <th>Updated</th>
                     <th><%if(marketplaces[0] && marketplaces[0].IsHistory) print("History for");%></th>
@@ -209,7 +207,6 @@
                         </td>
                         <td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.anualSales) %> </td>
                         <td class="centered"><%= EzBob.formatPercents(summary.rating, 1) %> </td>
-                        <td class="centered"><%- EzBob.formatPoundsNoDecimals(summary.inventory, true) %> </td>
                         <td></td>
                         <td></td>
                         <td></td>
@@ -234,12 +231,11 @@
                         </td>
                         <td class="<%- disabled%>"><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                         <td class="centered <%- disabled%>"><%- m.age %></td>
-                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals( m.monthSales) %><br />
-                            <label class="small-text"><%- m.monthAnnualizedSales != 0 ? EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) : '' %> </label>
+                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals( m.MonthSales) %><br />
+                            <label class="small-text"><%- m.MonthSalesAnnualized != 0 ? EzBob.formatPoundsNoDecimals(m.MonthSalesAnnualized) : '' %> </label>
                         </td>
-                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals( m.anualSales) %></td>
+                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals( m.AnnualSales) %></td>
                         <td class="centered <%- disabled%>"><%- m.RaitingPercent%> %</td>
-                        <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals(m.inventory, true) %></td>
                         <td class="<%- disabled%>"><% if(m.Disabled) print ("Disabled") %></td>
                         <td class="<%- disabled%>"><%- m.UpdatingStatus %> <%- m.LastChecked%>
 							<% if (m.UpdateError) { %>
@@ -262,7 +258,6 @@
 					            <button class="btn btn-mini btn-primary show-tooltip renew-token" data-original-title="Renew token" data-placement="top" data-umi="<%- m.Id %>"><i class="fa fa-retweet"></i></button>
                                 <% } %>
 					            <% } %>
-                                
                             <%}%>
                             </div>
                         </td>

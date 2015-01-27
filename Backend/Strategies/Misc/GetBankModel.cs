@@ -38,8 +38,6 @@
 
 				var model = builder.Create(oYodleeMp, null);
 
-				model.PaymentAccountBasic = builder.GetPaymentAccountModel(oYodleeMp, model, null);
-
 				Result = model;
 
 				Log.Debug("Getting a bank model for customer {0} complete.", customer.Stringify());

@@ -56,6 +56,8 @@ namespace EzBob.CommonLib.TimePeriodLogic
 
 		public abstract int DaysInPeriod { get; }
 
+		public abstract int MonthsInPeriod { get; }
+
 		public static ITimePeriod GetById(Guid id)
 		{
 			return AllTimePeriods.FirstOrDefault( tp => tp.InternalId.Equals( id ) );

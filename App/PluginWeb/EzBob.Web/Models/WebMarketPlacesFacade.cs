@@ -20,8 +20,6 @@
 
 					var model = builder.Create(mp, history);
 
-					model.PaymentAccountBasic = builder.GetPaymentAccountModel(mp, model, history);
-
 					return model;
 				}
 				catch (Exception e) {
@@ -32,9 +30,7 @@
 						Type = mp.DisplayName,
 						Name = mp.Marketplace.Name,
 						IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
-						PaymentAccountBasic = new PaymentAccountsModel {
-							displayName = mp.DisplayName,
-						},
+						PaymentAccountBasic = new PaymentAccountsModel(mp,history)
 					};
 				} // try
 			}).ToList();

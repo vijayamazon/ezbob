@@ -3,6 +3,7 @@ namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using NHibernate;
@@ -27,18 +28,8 @@ namespace EzBob.Models.Marketplaces.Builders
 			return null;
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
-		{
-			var companyFiles = new PaymentAccountsModel
-			{
-				displayName = mp.DisplayName,
-				TotalNetInPayments = 0,
-				MonthInPayments = 0,
-				TotalNetOutPayments = 0,
-				TransactionsNumber = 0,
-				id = mp.Id,
-				Status = ""  ,
-			};
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+			var companyFiles = new PaymentAccountsModel(mp, history);
 			return companyFiles;
 		}
 

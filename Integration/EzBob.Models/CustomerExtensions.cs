@@ -20,14 +20,7 @@
 			var paypal = new PayPalDatabaseMarketPlace();
 			return customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == paypal.InternalId);
 		}
-
-		public static List<PaymentAccountsModel> GetPaymentAccounts(this Customer customer) {
-			return
-				customer.CustomerMarketPlaces.Where(m => m.Marketplace.IsPaymentAccount)
-					.Select(m => PayPalModelBuilder.CreatePayPalAccountModel(m))
-					.ToList();
-		}
-
+		
 		public static IEnumerable<SimpleMarketPlaceModel> GetYodleeAccounts(this Customer customer) {
 			var yodleeServiceInfo = new YodleeServiceInfo();
 			var marketplaces = customer.CustomerMarketPlaces.Where(m => m.Marketplace.InternalId == yodleeServiceInfo.InternalId);

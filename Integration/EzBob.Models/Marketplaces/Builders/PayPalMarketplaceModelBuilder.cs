@@ -2,12 +2,15 @@ using System;
 using System.Linq;
 using EZBob.DatabaseLib.Common;
 using EZBob.DatabaseLib.Model.Database;
-using EzBob.Web.Areas.Customer.Models;
 using NHibernate;
 using NHibernate.Linq;
 
 namespace EzBob.Models.Marketplaces.Builders
 {
+	using System.Collections.Generic;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EZBob.DatabaseLib;
+
 	public class PayPalMarketplaceModelBuilder : MarketplaceModelBuilder
 	{
 		public PayPalMarketplaceModelBuilder(ISession session)
@@ -15,9 +18,10 @@ namespace EzBob.Models.Marketplaces.Builders
 		{
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
-		{
-			return model.PayPal.GeneralInfo;
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+			var payPalModel = new PayPalPaymentAccountsModel(mp, history);
+			payPalModel.Load(av);
+			return payPalModel;
 		}
 
 		public override string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo)
@@ -56,7 +60,9 @@ namespace EzBob.Models.Marketplaces.Builders
 
 		protected override void InitializeSpecificData(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history)
 		{
-			model.PayPal = PayPalModelBuilder.CreatePayPal(mp, history);
+			model.PayPal = new PayPalAccountModel {
+				PersonalInfo = new PayPalAccountInfoModel(mp.PersonalInfo),
+			};
 		}
 	}
 }

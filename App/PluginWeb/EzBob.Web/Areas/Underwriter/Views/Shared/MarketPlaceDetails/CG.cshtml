@@ -5,16 +5,16 @@
 	var sOrders = bHasExpenses ? 'Invoices' : 'Orders';
 
 	var aryOrdersTable = [
-		{ caption: 'Sum of ' + sOrders,            field: 'TotalSumofOrders',           display: function(x) { return GBPValues(x, true); } },
-		{ caption: 'Annualized sum of ' + sOrders, field: 'TotalSumofOrdersAnnualized', display: function(x) { return GBPValues(x, true); } },
-		{ caption: 'Number of ' + sOrders,         field: 'NumofOrders',                display: function(x) { return x; }                  },
-		{ caption: sOrders + ' Average',           field: 'AverageSumofOrders',         display: function(x) { return x; }                  }
+		{ caption: 'Sum of ' + sOrders,            field: 'TotalSumOfOrders',           display: function(x) { return GBPValues(x, true); } },
+		{ caption: 'Annualized sum of ' + sOrders, field: 'TotalSumOfOrdersAnnualized', display: function(x) { return GBPValues(x, true); } },
+		{ caption: 'Number of ' + sOrders,         field: 'NumOfOrders',                display: function(x) { return x; }                  },
+		{ caption: sOrders + ' Average',           field: 'AverageSumOfOrders',         display: function(x) { return x; }                  }
 	];
 
 	var aryExpensesTable = bHasExpenses ? [
-		{ caption: 'Sum of Expenses',    field: 'TotalSumofExpenses',   display: function(x) { return GBPValues(x, true); } },
-		{ caption: 'Number of Expenses', field: 'NumofExpenses',        display: function(x) { return x; }                  },
-		{ caption: 'Expenses Average',   field: 'AverageSumofExpenses', display: function(x) { return x; }                  }
+		{ caption: 'Sum of Expenses',    field: 'TotalSumOfExpenses',   display: function(x) { return GBPValues(x, true); } },
+		{ caption: 'Number of Expenses', field: 'NumOfExpenses',        display: function(x) { return x; }                  },
+		{ caption: 'Expenses Average',   field: 'AverageSumOfExpenses', display: function(x) { return x; }                  }
 	] : null;
 
 	function DrawOneTable(aryTableStruct) {

@@ -24,7 +24,7 @@
 		public string RaitingPercent { get; set; }
 		public string SellerInfoStoreURL { get; set; }
 		public IEnumerable<string> Categories { get; set; }
-		public string AccountAge { get; set; }
+		
 		public DateTime? LastTransactionDate { get; set; }
 
 		//Amazon
@@ -39,6 +39,11 @@
 
 		//Aggregates
 		public Dictionary<string, string> AnalysisDataInfo { get; set; }
+
+		public string AccountAge { get; set; }
+		public decimal MonthSales { get; set; }
+		public decimal MonthSalesAnnualized { get { return MonthSales * 12; } }
+		public decimal AnnualSales { get; set; }
 
 		//Feedbacks
 		public int PositiveFeedbacks { get; set; }

@@ -72,6 +72,7 @@ namespace EZBob.DatabaseLib.Repository.Turnover {
 			Map(x => x.RatioNetSumOfRefundsAndReturnsToNetRevenuesNumerator);
 			Map(x => x.RevenuesForTransactions);
 			Map(x => x.TotalNetExpenses);
+			Map(x => x.TotalNetRevenues);
 			Map(x => x.TotalNetInPayments);
 			Map(x => x.TotalNetOutPayments);
 			Map(x => x.TransactionsNumber);
@@ -80,6 +81,7 @@ namespace EZBob.DatabaseLib.Repository.Turnover {
 			Map(x => x.AmountPerTransferInNumerator);
 			Map(x => x.AmountPerTransferInDenominator);
 			Map(x => x.AmountPerTransferOutNumerator);
+			Map(x => x.AmountPerTransferOutDenominator);
 			Map(x => x.GrossProfitMarginNumerator);
 			Map(x => x.GrossProfitMarginDenominator);
 			Map(x => x.RevenuePerTrasnactionNumerator);

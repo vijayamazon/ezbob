@@ -11,7 +11,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.Yodlee
             Id(x => x.Id);
             Map(x => x.Created).CustomType<UtcDateTimeType>().Not.Nullable();
             References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId");
-            HasMany(x => x.OrderItems).KeyColumn("OrderId").Cascade.All();
+			HasMany(x => x.OrderItems).KeyColumn("OrderId").LazyLoad().Cascade.All();
             References(x => x.HistoryRecord)
                 .Column("CustomerMarketPlaceUpdatingHistoryRecordId")
                 .Unique()

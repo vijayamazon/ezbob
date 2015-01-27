@@ -205,9 +205,9 @@ namespace EzBob.Models {
 	} // class InvitedFriend
 
 	public class SimpleMarketPlaceModel {
-		public virtual string displayName { get; set; }
-		public virtual int MpId { get; set; }
-		public virtual string MpName { get; set; }
+		public string displayName { get; set; }
+		public int MpId { get; set; }
+		public string MpName { get; set; }
 		//public string storeInfoStepModelShops { get; set; }
 	} // class SimpleMarketPlaceModel
 } // namespace

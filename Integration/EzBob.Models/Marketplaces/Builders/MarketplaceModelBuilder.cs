@@ -2,6 +2,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using System.Web;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
@@ -11,6 +12,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Marketplaces;
 	using StructureMap;
 
 	public class MarketplaceModelBuilder : IMarketplaceModelBuilder {
@@ -59,30 +61,48 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 
 		public MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history) {
+			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
+			var updatingStatus = mp.GetUpdatingStatus(history);
+			var updatingError = mp.GetUpdatingError(history);
+			var age = GetAccountAge(mp);
+			var url = GetUrl(mp, mp.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(mp.Id));
+			var lastTransactionDate = GetLastTransactionDate(mp);
+
 			var model = new MarketPlaceModel {
 				Id = mp.Id,
 				Type = mp.DisplayName,
 				Name = mp.Marketplace.Name,
-				LastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress",
-				UpdatingStatus = mp.GetUpdatingStatus(history),
-				UpdateError = mp.GetUpdatingError(history),
-				AccountAge = GetAccountAge(mp),
+				LastChecked = lastChecked,
+				UpdatingStatus = updatingStatus,
+				UpdateError = updatingError,
+				AccountAge = age,
 				PositiveFeedbacks = 0,
 				NegativeFeedbacks = 0,
 				NeutralFeedbacks = 0,
 				RaitingPercent = "-",
-				SellerInfoStoreURL = GetUrl(mp, mp.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(mp.Id)),
+				SellerInfoStoreURL = url,
 				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
 				UWPriority = mp.Marketplace.UWPriority,
 				Disabled = mp.Disabled,
 				IsNew = mp.IsNew,
 				IsHistory = history.HasValue,
 				History = history.HasValue ? history.Value : (DateTime?)null,
-				LastTransactionDate = GetLastTransactionDate(mp)
+				LastTransactionDate = lastTransactionDate
 			};
 
+			var aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
+			SetAggregationData(model, aggregations);
+
+			var monthSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Month && x.ParameterName == AggregationFunction.Turnover.ToString());
+			model.MonthSales = monthSales == null ? 0 : (decimal)monthSales.Value;
+
+			var yearSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.Turnover.ToString());
+			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
+
 			InitializeSpecificData(mp, model, history);
-			SetAggregationData(model, mp, history);
+			if (model.IsPaymentAccount) {
+				model.PaymentAccountBasic = GetPaymentAccountModel(mp, model, history, aggregations);
+			}
 			return model;
 		}
 
@@ -102,7 +122,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return mp.LastTransactionDate;
 		}
 
-		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
+		public virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
 			return null;
 		}
 
@@ -131,11 +151,23 @@ namespace EzBob.Models.Marketplaces.Builders {
 			mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
 		}
 
-		public virtual void SetAggregationData(MarketPlaceModel model, MP_CustomerMarketPlace mp, DateTime? history) {
-			var data = new Dictionary<string, string> { // TODO: fill with real aggregation data for each mp
-				{"some key", "0"},
-				{"some other key", "1"},
-			};
+		public virtual void SetAggregationData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> av) {
+			var data = new Dictionary<string, string>();
+
+			if (av != null) {
+				foreach (var info in av) {
+					if (!string.IsNullOrEmpty(info.ParameterName)) {
+						var val = info.ParameterName.Replace(" ", "")
+							.Replace("%", "") + info.TimePeriod;
+						string temp;
+						data.TryGetValue(val, out temp);
+						if (temp == null) {
+							data.Add(val, info.Value.ToString());
+						}
+					}
+				}
+			}
+
 			model.AnalysisDataInfo = data;
 		}
 

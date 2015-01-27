@@ -161,11 +161,14 @@
     <Compile Include="Model\Loans\LoanTransactionMethodMap.cs" />
     <Compile Include="Model\Loans\LoanTransactionMethodRepository.cs" />
     <Compile Include="Common\NumericDelta.cs" />
+    <Compile Include="Model\Marketplaces\AggregationFunction.cs" />
+    <Compile Include="Model\Marketplaces\Amazon\AmazonMarketPlaceType.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceType.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonMarketplaceTypeMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\Business.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\BusinessMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\BusinessRepository.cs" />
+    <Compile Include="Model\Marketplaces\ChannelGrabber\ChannelGrabberMarketPlaceType.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_RtiTaxMonthEntryMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_RtiTaxMonthEntry.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_RtiTaxMonthRecordMap.cs" />
@@ -178,10 +181,16 @@
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryNameMap.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnEntryName.cs" />
     <Compile Include="Model\Marketplaces\ChannelGrabber\MP_VatReturnSummary.cs" />
+    <Compile Include="Model\Marketplaces\Ebay\EbayMarketPlaceType.cs" />
+    <Compile Include="Model\Marketplaces\EKM\EkmMarketPlaceType.cs" />
+    <Compile Include="Model\Marketplaces\FreeAgent\FreeAgentMarketPlaceType.cs" />
     <Compile Include="Model\Marketplaces\MP_CompanyFiles.cs" />
     <Compile Include="Model\Marketplaces\MP_MarketplaceGroup.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2.cs" />
     <Compile Include="Model\Marketplaces\PayPal\MP_PayPalTransactionItem2Map.cs" />
+    <Compile Include="Model\Marketplaces\PayPal\PayPalMarketPlaceType.cs" />
+    <Compile Include="Model\Marketplaces\PayPoint\PayPointMarketPlaceType.cs" />
+    <Compile Include="Model\Marketplaces\Sage\SageMarketPlaceType.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeGroupRuleMap.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeRule.cs" />
     <Compile Include="Model\Marketplaces\Yodlee\MP_YodleeGroup.cs" />
@@ -333,6 +342,7 @@
     <Compile Include="Model\Database\DailyReportRowMap.cs" />
     <Compile Include="Model\Database\ExportResult.cs" />
     <Compile Include="Model\Database\EzbobMailNodeAttachRelation.cs" />
+    <Compile Include="Model\Marketplaces\Yodlee\YodleeMarketPlaceType.cs" />
     <Compile Include="Model\PayPointAccount.cs" />
     <Compile Include="Model\PayPointCard.cs" />
     <Compile Include="Model\Marketplaces\PayPoint\MP_PayPointOrder.cs" />
@@ -381,12 +391,17 @@
     <Compile Include="Repository\PaymentRolloverRepository.cs" />
     <Compile Include="Repository\PostcodeServiceLogRepository.cs" />
     <Compile Include="Repository\ServiceLogRepository.cs" />
+    <Compile Include="Repository\Turnover\PayPointAggregation.cs" />
+    <Compile Include="Repository\Turnover\SageAggregation.cs" />
+    <Compile Include="Repository\Turnover\FreeAgentAggregation.cs" />
+    <Compile Include="Repository\Turnover\EkmAggregation.cs" />
     <Compile Include="Repository\Turnover\AmazonAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Repository\Turnover\EbayAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Repository\Turnover\ChannelGrabberAggregation.cs" />
     <Compile Include="Repository\Turnover\HmrcAggregation.cs">
       <SubType>Code</SubType>
     </Compile>

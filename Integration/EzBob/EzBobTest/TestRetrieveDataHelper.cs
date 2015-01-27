@@ -40,6 +40,7 @@
 	using System.IO;
 	using Ezbob.HmrcHarvester;
 	using Ezbob.Logger;
+	using EzBob.Models.Marketplaces.Builders;
 	using Integration.ChannelGrabberFrontend;
 
 	[TestFixture]
@@ -72,7 +73,7 @@
             });
 
             _Helper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-
+	        
 			var oLog4NetCfg = new Log4Net().Init();
 
 			m_oLog = new ConsoleLog(new SafeILog(this));
@@ -321,6 +322,22 @@
 			var connection = AmazonServiceConnectionFactory.CreateConnection(connectionInfo);
 			var orders = amazonTester.GetOrders(18363, elapsedTimeInfo, connection, 7, false);
 			amazonTester.DisplayOrders(elapsedTimeInfo, orders);
+		}
+
+		[Test]
+		public  void TestMarketPlaceModelBuilder() {
+			ISession session = ObjectFactory.GetInstance<ISession>();
+			var m = new MarketplaceModelBuilder(session);
+			//var mp = session.Get<MP_CustomerMarketPlace>(18350); //sage not work
+			//var mp = session.Get<MP_CustomerMarketPlace>(18289); //hmrc work 
+			var mp = session.Get<MP_CustomerMarketPlace>(18309); //ekm not work
+
+			var ag = mp.Marketplace.GetAggregations(mp, null);
+			Assert.True(ag.Any());
+			foreach (var a in ag) {
+				Console.WriteLine("{0} {1} {2}", a.ParameterName, a.TimePeriod, a.Value);
+			}
+
 		}
     }
 

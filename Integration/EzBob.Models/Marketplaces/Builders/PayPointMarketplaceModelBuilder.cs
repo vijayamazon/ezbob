@@ -1,25 +1,17 @@
 namespace EzBob.Models.Marketplaces.Builders {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
+	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate.Linq;
 
 	class PayPointMarketplaceModelBuilder : MarketplaceModelBuilder {
 		public PayPointMarketplaceModelBuilder() : base(null) { }
 
-		public PaymentAccountsModel CreatePayPointAccountModelModel(MP_CustomerMarketPlace m, DateTime? history) {
-			var status = m.GetUpdatingStatus(history);
-
-			var payPointModel = new PaymentAccountsModel {
-				displayName = m.DisplayName,
-				MonthInPayments = 0, // TODO: if this connector is used fill this number with real data
-				TotalNetInPayments = 0, // TODO: if this connector is used fill this number with real data
-				TotalNetOutPayments = 0, // TODO: if this connector is used fill this number with real data
-				TransactionsNumber = 0, // TODO: if this connector is used fill this number with real data
-				id = m.Id,
-				Status = status,
-			};
-
+		public PaymentAccountsModel CreatePayPointAccountModelModel(MP_CustomerMarketPlace m, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+			var payPointModel = new PayPointAccountsModel(m, history);
+			payPointModel.Load(av);
 			return payPointModel;
 		}
 
@@ -34,8 +26,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return null;
 		}
 
-		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history) {
-			return CreatePayPointAccountModelModel(mp, history);
+		public override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+			return CreatePayPointAccountModelModel(mp, history, av);
 		}
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
 			var s = _session.Query<MP_PayPointOrderItem>()

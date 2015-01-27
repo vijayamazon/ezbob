@@ -39,15 +39,25 @@
 		public virtual Iesi.Collections.Generic.ISet<EbayAggregation> EbayAggregations { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<PayPalAggregation> PayPalAggregations { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<YodleeAggregation> YodleeAggregations { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<ChannelGrabberAggregation> CGAggregations { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<EkmAggregation> EkmAggregations { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<PayPointAggregation> PayPointAggregations { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<SageAggregation> SageAggregations { get; set; }
+		public virtual Iesi.Collections.Generic.ISet<FreeAgentAggregation> FreeAgentAggregations { get; set; }
 
 		public MP_CustomerMarketplaceUpdatingHistory() {
-			ActionLog = new HashedSet<MP_CustomerMarketplaceUpdatingActionLog>();
+			this.ActionLog = new HashedSet<MP_CustomerMarketplaceUpdatingActionLog>();
 
 			this.HmrcAggregations = new HashedSet<HmrcAggregation>();
 			this.AmazonAggregations = new HashedSet<AmazonAggregation>();
 			this.YodleeAggregations = new HashedSet<YodleeAggregation>();
 			this.EbayAggregations = new HashedSet<EbayAggregation>();
 			this.PayPalAggregations = new HashedSet<PayPalAggregation>();
+			this.CGAggregations = new HashedSet<ChannelGrabberAggregation>();
+			this.EkmAggregations = new HashedSet<EkmAggregation>();
+			this.PayPointAggregations = new HashedSet<PayPointAggregation>();
+			this.SageAggregations = new HashedSet<SageAggregation>();
+			this.FreeAgentAggregations = new HashedSet<FreeAgentAggregation>();
 		}
 	}
 }
