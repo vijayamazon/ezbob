@@ -614,7 +614,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	UPDATE #months SET
-		Turnover = ISNULL(d.Value, 0),
+		Turnover = TotalSumOfOrders + ISNULL(d.Value, 0),
 		TotalSumOfIncomes = ISNULL(d.Value, 0)
 	FROM
 		#months m
