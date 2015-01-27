@@ -27,7 +27,6 @@
 
 			var dict = new Dictionary<Parameter, Weight>
 				{
-
 					{Parameter.BusinessScore,      GetBusinessScoreWeight(model.BusinessScore, model.FirstRepaymentDatePassed, model.UseHmrc)},
 					{Parameter.BusinessSeniority,  GetBusinessSeniorityWeight(model.BusinessSeniority, model.FirstRepaymentDatePassed, model.UseHmrc)},
 					{Parameter.ConsumerScore,      GetConsumerScoreWeight(model.ConsumerScore, model.FirstRepaymentDatePassed, model.UseHmrc)},

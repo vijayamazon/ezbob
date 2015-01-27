@@ -179,29 +179,25 @@ namespace EzBobTest {
 			//DateTime calculationTime = new DateTime(2013, 11, 30);
 			//DateTime calculationTime = new DateTime(2013, 08, 31);
 			//DateTime calculationTime = new DateTime(2013, 10, 02);
-			DateTime calculationTime = new DateTime(2015, 01, 26);
-			calculationTime = DateTime.UtcNow;
-			int customerId = 19970; // 211; // 1871; // //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363 // 171: amazon, pp, ebay
+			DateTime calculationTime = DateTime.UtcNow; //new DateTime(2015, 01, 26);
+			int customerId = 739; //19856; // 211; // 1871; // //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363 // 171: amazon, pp, ebay
 			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
 
 			this.m_oLog.Info("START TURNOVER FOR MEDAL customerID: {0}; calculationTime: {1}", customerId, calculationTime.Date);
 			this.m_oLog.Info("-------------------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
 
-			/*MedalResult resultsInput = new MedalResult(customerId);
+			MedalResult resultsInput = new MedalResult(customerId);
 			var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
-			MedalResult result = calculatorTester.CalculateMedalScore(customerId, calculationTime);*/
-	
+			MedalResult result = calculatorTester.CalculateMedalScore(customerId, calculationTime);
 			// both
-			new CalculateMedal(customerId, calculationTime, false, true).Execute();
-
+			//	new CalculateMedal(customerId, calculationTime, false, true).Execute();
 			//AV
-			/*var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
+			var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
 			var model = msc.GetInputParameters(customerId, calculationTime);
-			
 			this.m_oLog.Info("AV : AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, YodleeAnnualTurnover:{2}, OnlineAnnualTurnover: {3}, Type: {4}", model.AnnualTurnover, model.HmrcAnnualTurnover, model.YodleeAnnualTurnover, model.OnlineAnnualTurnover, model.TurnoverType);
+		
 			this.m_oLog.Info("--------###-----------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
-			*/
-
+	
 			/*this.m_oLog.Info("-------------------NonLimitedMedalCalculator----------------------");
 			MedalResult resultsInput1 = new MedalResult(customerId);
 			var calculatorTester1 = new NonLimitedMedalCalculator1NoGathering(resultsInput1);

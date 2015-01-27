@@ -391,15 +391,17 @@
 		public void TestMedalCalculation() {
 			DateTime calculationTime = new DateTime(2014, 01, 01);
 			var customers = new[] {
-				19970, //234, 103, 270
+				270,  19271, 19856, 19970, 234, 103, 211, 739
 			};
 			foreach (var customer in customers)
-				new CalculateMedal(customer, calculationTime /*DateTime.UtcNow*/, false, true).Execute();
+				new CalculateMedal(customer, DateTime.UtcNow, false, true).Execute();
 
-		/*	this.m_oDB.ForEachRowSafe((sr) => {
+			/*this.m_oDB.ForEachRowSafe((sr) => {
 					int customerId = sr["Id"];
 					new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
-				}, "select top 10 Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);*/
+				}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);
+		
+			 */
 		}
 
 		[Test]
