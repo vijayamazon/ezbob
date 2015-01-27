@@ -105,12 +105,6 @@
 
 			StoreUsersData(mpRequest, freeAgentUsers, elapsedTimeInfo, databaseCustomerMarketPlace.Id);
 
-			DbConnectionGenerator.Get().ExecuteNonQuery(
-				"UpdateMpTotalsFreeAgent",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("HistoryID", historyRecord.Id)
-			);
-
 			return elapsedTimeInfo;
 		} // RetrieveAndAggregate
 

@@ -55,12 +55,6 @@
 				() => Helper.StoreEkmOrdersData(databaseCustomerMarketPlace, newOrders, historyRecord)
 			);
 
-			DbConnectionGenerator.Get().ExecuteNonQuery(
-				"UpdateMpTotalsEkm",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("HistoryID", historyRecord.Id)
-			);
-
 			return elapsedTimeInfo;
 		} // RetrieveAndAggregate
 

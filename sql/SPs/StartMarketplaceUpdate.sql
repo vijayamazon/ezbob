@@ -15,6 +15,8 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @HistoryRecordID INT
+
 	UPDATE MP_CustomerMarketPlace SET
 		UpdatingStart = @UpdatingStart,
 		UpdatingEnd = NULL
@@ -27,6 +29,15 @@ BEGIN
 		@MarketplaceID, @UpdatingStart, NULL, NULL
 	)
 
-	SELECT SCOPE_IDENTITY() AS HistoryRecordId
+	SET @HistoryRecordID = CONVERT(INT, SCOPE_IDENTITY())
+	
+	SELECT
+		HistoryRecordID   = @HistoryRecordID,
+		MarketplaceTypeID = t.InternalId
+	FROM
+		MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t ON m.MarketPlaceId = t.Id
+	WHERE
+		m.Id = @MarketplaceID
 END
 GO

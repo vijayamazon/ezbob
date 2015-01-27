@@ -110,17 +110,8 @@
 				)
 			);
 
-			/*
-
-			This stored procedure does not exist as of today (December 25 2014, Merry Xmas!).
-			It should be created similarly to other UpdateMpTotals*** procedures based on PayPointOrdersAggregator.cs.
-
-			DbConnectionGenerator.Get().ExecuteNonQuery(
-				"UpdateMpTotalsPayPoint",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("HistoryID", historyRecord.Id)
-			);
-			*/
+			// Stored procedure UpdateMpTotalsPayPoint does not exist as of today (December 25 2014, Merry Xmas!).
+			// It should be created similarly to other UpdateMpTotals*** procedures based on PayPointOrdersAggregator.cs.
 
 			return elapsedTimeInfo;
 		}

@@ -88,12 +88,6 @@
 				() => Helper.StoreSagePaymentStatuses(paymentStatuses)
 			);
 
-			DbConnectionGenerator.Get().ExecuteNonQuery(
-				"UpdateMpTotalsSage",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("HistoryID", historyRecord.Id)
-			);
-
 			return elapsedTimeInfo;
 		}
 

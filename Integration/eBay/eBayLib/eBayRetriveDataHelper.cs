@@ -328,12 +328,6 @@
 						() => Helper.StoretoDatabaseTeraPeakOrdersData(databaseCustomerMarketPlace, teraPeakDatabaseSellerDataByRange, historyRecord)
 					);
 
-					DbConnectionGenerator.Get().ExecuteNonQuery(
-						"UpdateMpTotalsEbay",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("HistoryID", historyRecord.Id)
-					);
-
 					return new UpdateActionResultInfo {
 						Name = UpdateActionResultType.TeraPeakOrdersCount,
 						Value = teraPeakDatabaseSellerDataByRange.Count,

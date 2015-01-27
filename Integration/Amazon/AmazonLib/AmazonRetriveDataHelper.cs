@@ -221,12 +221,6 @@
 				);
 			} // if
 
-			DbConnectionGenerator.Get().ExecuteNonQuery(
-				"UpdateMpTotalsAmazon",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("HistoryID", historyRecord.Id)
-			);
-
 			return new UpdateActionResultInfo {
 				Name = UpdateActionResultType.OrdersCount,
 				Value = (object)allOrders.Count,

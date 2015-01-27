@@ -9,7 +9,7 @@
 				"UpdateMpTotalsHmrc",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("HistoryID")
-				);
+			);
 		} // UpdateBusinessRelevanceAndTotals
 	} // class CalculateVatReturnSummary
 } // namespace

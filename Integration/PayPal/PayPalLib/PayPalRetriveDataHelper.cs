@@ -112,14 +112,7 @@ namespace EzBob.PayPal {
 					mpTransaction = Helper.SavePayPalTransactionInfo(databaseCustomerMarketPlace, data, historyRecord, mpTransaction);
 					return trnList.TryAddNewData(data);
 				})
-				);
-
-			DbConnectionGenerator.Get()
-				.ExecuteNonQuery(
-					"UpdateMpTotalsPayPal",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("HistoryID", historyRecord.Id)
-				);
+			);
 
 			return new UpdateActionResultInfo {
 				Name = UpdateActionResultType.TransactionItemsCount,

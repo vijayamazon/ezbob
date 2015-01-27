@@ -214,12 +214,6 @@
 					oHarvester.SourceID
 			));
 
-			DbConnectionGenerator.Get().ExecuteNonQuery(
-				"UpdateMpTotalsChaGra",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("HistoryID", historyRecord.Id)
-			);
-
 			return elapsedTimeInfo;
 		} // ProcessRetrieved
 

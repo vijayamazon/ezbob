@@ -5,7 +5,6 @@
 	using JetBrains.Annotations;
 
 	public class MarketplaceInstantUpdate : AStrategy {
-
 		public MarketplaceInstantUpdate(int nMarketplaceID) {
 			m_oStart = new StartMarketplaceUpdate(DB, Log) { MarketplaceID = nMarketplaceID };
 			m_oEnd = new EndMarketplaceUpdate(DB, Log) { MarketplaceID = nMarketplaceID };
@@ -21,7 +20,10 @@
 		} // Execute
 
 		public void Start() {
-			m_oEnd.HistoryRecordID = (int)m_oStart.ExecuteScalar<decimal>();
+			SafeReader sr = m_oStart.GetFirst();
+
+			m_oEnd.HistoryRecordID = sr["HistoryRecordID"];
+			m_oEnd.MarketplaceTypeID = sr["MarketplaceTypeID"];
 		} // Start
 
 		public void End(string sError, int nTokenExpired) {
@@ -33,7 +35,7 @@
 		private readonly StartMarketplaceUpdate m_oStart;
 		private readonly EndMarketplaceUpdate m_oEnd;
 
-// ReSharper disable ValueParameterNotUsed
+		// ReSharper disable ValueParameterNotUsed
 
 		private class StartMarketplaceUpdate : AStoredProcedure {
 			public StartMarketplaceUpdate(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
@@ -66,6 +68,9 @@
 			public int HistoryRecordID { get; set; }
 
 			[UsedImplicitly]
+			public Guid MarketplaceTypeID { get; set; }
+
+			[UsedImplicitly]
 			public DateTime UpdatingEnd {
 				get { return DateTime.UtcNow; }
 				set { }
@@ -78,7 +83,6 @@
 			public int TokenExpired { get; set; }
 		} // class EndMarketplaceUpdate
 
-// ReSharper restore ValueParameterNotUsed
-
+		// ReSharper restore ValueParameterNotUsed
 	} // class MarketplaceInstantUpdate
 } // namespace Ezbob.Backend.Strategies

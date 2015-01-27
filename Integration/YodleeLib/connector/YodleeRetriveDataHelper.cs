@@ -134,13 +134,6 @@
 					);
 			}
 
-			DbConnectionGenerator.Get()
-				.ExecuteNonQuery(
-					"UpdateMpTotalsYodlee",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("HistoryID", historyRecord.Id)
-				);
-
 			return elapsedTimeInfo;
 		} // UpdateClientsOrderInfo
 	} // class YodleeRetrieveDAtaHelper

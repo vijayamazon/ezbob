@@ -591,6 +591,7 @@
 			}
 
 			DateTime submittedDate = DateTime.UtcNow;
+
 			var mpOrder = new MP_EkmOrder {
 				CustomerMarketPlace = customerMarketPlace,
 				Created = submittedDate,

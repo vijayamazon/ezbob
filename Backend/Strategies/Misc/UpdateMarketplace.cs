@@ -17,7 +17,6 @@
 	using YodleeLib.connector;
 
 	public class UpdateMarketplace : AStrategy {
-
 		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
 			mailer = new StrategiesMailer();
 			this.customerId = customerId;
@@ -114,8 +113,7 @@
 
 				if (oRetrieveDataHelper != null)
 					oRetrieveDataHelper.Update(marketplaceId);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				errorMessage = e.Message;
 				Log.Warn("Exception occurred during marketplace update, id: {0}.", marketplaceId);
 
@@ -143,15 +141,13 @@
 					variables.Add("ErrorCode", e.Message);
 
 					sTemplateName = "Mandrill - Update MP Error Code";
-				}
-				else {
+				} else {
 					variables.Add("UpdateCMP_Error", e.Message);
 					sTemplateName = "Mandrill - UpdateCMP Error";
 				} // if
 
 				mailer.Send(sTemplateName, variables);
-			} // try
-			finally {
+			} finally {
 				Log.Info("End update data for umi: id: {0}, name: {1}. {2}", marketplaceId, marketplaceDisplayName, string.IsNullOrEmpty(errorMessage) ? "Successfully" : "With error!");
 
 				oMpUpdateTimesSetter.End(errorMessage, tokenExpired);

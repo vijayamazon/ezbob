@@ -4,8 +4,6 @@
 	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
 	using System;
-	using System.Collections.Generic;
-	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Repository.Turnover;
 	using Iesi.Collections.Generic;
 
@@ -58,6 +56,6 @@
 			this.PayPointAggregations = new HashedSet<PayPointAggregation>();
 			this.SageAggregations = new HashedSet<SageAggregation>();
 			this.FreeAgentAggregations = new HashedSet<FreeAgentAggregation>();
-		}
-	}
-}
+		} // constructor
+	} // class MP_CustomerMarketplaceUpdatingHistory
+} // namespace
