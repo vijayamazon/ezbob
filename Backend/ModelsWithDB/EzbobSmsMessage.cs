@@ -40,12 +40,22 @@
 		[NonTraversable]
 		public RestException RestException { get; set; }
 
+		
 		[NonTraversable]
-		public Uri Uri { get; set; }
+		public int NumSegments { get; set; }
+
+		[NonTraversable]
+		public int NumImages { get; set; }
+		
+		[NonTraversable]
+		public int? ErrorCode { get; set; }
+
+		[NonTraversable]
+		public string ErrorMessage { get; set; }
 
 		public override string ToString()
 		{
-			return string.Format("userid {0} uwId {1} dates {2} {3} {4} to {5} from {6} sid {7} status {8} body {9} direction {10} accountsid {11}", UserId, UnderwriterId, DateCreated, DateSent, DateUpdated, To, From, Sid, Status, Body, Direction, AccountSid);
+			return string.Format("userid {0} uwId {1} dates {2} {3} {4} to {5} from {6} sid {7} status {8} body {9} direction {10} accountsid {11}, NumSegments {14}, NumImages {15}, errorCode {12}, errorMessage {13}, ", UserId, UnderwriterId, DateCreated, DateSent, DateUpdated, To, From, Sid, Status, Body, Direction, AccountSid, ErrorCode, ErrorMessage, NumSegments, NumImages);
 		}
 
 		public string GetRestException() {
