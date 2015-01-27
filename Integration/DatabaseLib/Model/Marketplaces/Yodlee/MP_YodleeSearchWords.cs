@@ -35,7 +35,7 @@
 
 		public bool IsExists(string word)
 		{
-			return _session.QueryOver<MP_YodleeSearchWords>().Where(c => c.SearchWords == word).SingleOrDefault<MP_YodleeSearchWords>() != null;
+			return Session.QueryOver<MP_YodleeSearchWords>().Where(c => c.SearchWords == word).SingleOrDefault<MP_YodleeSearchWords>() != null;
 		}
 
 		public void AddWord(string word)
@@ -55,7 +55,7 @@
 				return;
 			}
 
-			var property = _session.QueryOver<MP_YodleeSearchWords>().Where(c => c.SearchWords == word).SingleOrDefault<MP_YodleeSearchWords>();
+			var property = Session.QueryOver<MP_YodleeSearchWords>().Where(c => c.SearchWords == word).SingleOrDefault<MP_YodleeSearchWords>();
 			Delete(property);
 		}
 	}

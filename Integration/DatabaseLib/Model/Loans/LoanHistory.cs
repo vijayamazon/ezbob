@@ -151,7 +151,7 @@
 						.OrderBy(i => i.Date)
 						.ToFutureValue();
 
-			var l = _session.QueryOver<Loan>()
+			var l = Session.QueryOver<Loan>()
 					.Where(x => x.Id == loan.Id)
 					.Fetch(x => x.Customer).Eager
 					.FutureValue<Loan>();

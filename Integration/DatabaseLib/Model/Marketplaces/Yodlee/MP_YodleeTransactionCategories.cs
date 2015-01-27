@@ -33,13 +33,13 @@
         {
             MP_YodleeTransactionCategories category;
 
-                category = _session
+                category = Session
                 .Query<MP_YodleeTransactionCategories>()
                 .FirstOrDefault(t => t.CategoryId == categoryId);
 
 			if(category == null)
 			{
-                category = _session
+                category = Session
                 .Query<MP_YodleeTransactionCategories>()
                 .FirstOrDefault(t => t.CategoryId == "1");
             }

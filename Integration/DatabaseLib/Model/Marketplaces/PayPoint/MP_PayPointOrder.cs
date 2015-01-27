@@ -37,7 +37,7 @@
 
         public List<MP_PayPointOrderItem> GetOrdersItemsByMakretplaceId(int marketplaceId)
         {
-            return _session
+            return Session
                 .Query<MP_PayPointOrderItem>()
                 .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
                 .ToList();

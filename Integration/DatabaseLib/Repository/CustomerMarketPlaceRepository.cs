@@ -65,7 +65,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
         public bool Exists(Guid marketplace, string displayName)
         {
-            return _session
+            return Session
                 .QueryOver<MP_CustomerMarketPlace>()
                 .Where(m => m.DisplayName == displayName)
                 .JoinQueryOver(m => m.Marketplace)
@@ -75,7 +75,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
         public bool Exists(Guid marketplace, Customer customer, string displayName)
         {
-            return _session
+            return Session
                 .QueryOver<MP_CustomerMarketPlace>()
                 .Where(m => m.Customer.Id == customer.Id && m.DisplayName == displayName)
                 .JoinQueryOver(m => m.Marketplace)

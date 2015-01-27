@@ -22,7 +22,7 @@ namespace EZBob.DatabaseLib.Model.Database
         {
             Save(new PacnetPaypointServiceLog
                 {
-                    Customer = _session.Load<Customer>(customerId),
+                    Customer = Session.Load<Customer>(customerId),
                     InsertDate = insertDate,
                     RequestType = requestType,
                     Status = status,

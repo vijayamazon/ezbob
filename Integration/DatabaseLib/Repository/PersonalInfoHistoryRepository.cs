@@ -17,7 +17,7 @@
 
         public PersonalInfoHistory Get(int id)
         {
-            return _session.Get<PersonalInfoHistory>(id);
+            return Session.Get<PersonalInfoHistory>(id);
         }
     }
 }

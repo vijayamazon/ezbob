@@ -36,7 +36,7 @@ namespace EZBob.DatabaseLib.Repository {
 		} // GetCurrencyOrCreate
 
 		public bool IsContainsHistory(string currencyName) {
-			return _session.Query<CurrencyRateHistory>().Any(rh => rh.CurrencyData.Name == currencyName);
+			return Session.Query<CurrencyRateHistory>().Any(rh => rh.CurrencyData.Name == currencyName);
 		} // IsContainsHistory
 
 		public double GetCurrencyHistoricalRate(DateTime? purchaseDate, string currencyCode) {
@@ -46,7 +46,7 @@ namespace EZBob.DatabaseLib.Repository {
 					purchaseDate.HasValue ? purchaseDate.ToString() : "no date"
 				);
 
-				IFutureValue<CurrencyData> currency = _session
+				IFutureValue<CurrencyData> currency = Session
 					.Query<CurrencyData>()
 					.Where(c => c.Name == currencyCode)
 					.Take(1)
@@ -58,7 +58,7 @@ namespace EZBob.DatabaseLib.Repository {
 					return 1;
 				} // if
 
-				IFutureValue<CurrencyRateHistory> data = _session
+				IFutureValue<CurrencyRateHistory> data = Session
 					.Query<CurrencyRateHistory>()
 					.Where(rh => ((rh.CurrencyData.Name == currencyCode) && (rh.Updated <= purchaseDate)))
 					.OrderByDescending(rh => rh.Updated)
@@ -74,7 +74,7 @@ namespace EZBob.DatabaseLib.Repository {
 		} // GetCurrencyHistoricalRate
 
 		public void SaveHistoryItem(CurrencyRateHistory historyItem) {
-			EnsureTransaction(() => _session.Save(historyItem));
+			EnsureTransaction(() => Session.Save(historyItem));
 		} // SaveHistoryItem
 	}
 

@@ -19,9 +19,9 @@ namespace EZBob.DatabaseLib.Model.Loans
                 new LoanCharge
                     {
                         Amount = amount,
-                        ChargesType = _session.Load<ConfigurationVariable>(loanChargesTypeId),
+                        ChargesType = Session.Load<ConfigurationVariable>(loanChargesTypeId),
                         Date = DateTime.UtcNow,
-                        Loan = _session.Load<Database.Loans.Loan>(loanId)
+                        Loan = Session.Load<Database.Loans.Loan>(loanId)
                     }
                 );
         }

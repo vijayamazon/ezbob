@@ -43,7 +43,7 @@
 		} // SearchNotAllocated
 
 		public YodleeAccounts CreateAccount(Func<string> generatePassword) {
-			decimal maxId = (decimal)_session.CreateSQLQuery("SELECT IDENT_CURRENT('YodleeAccounts')").UniqueResult();
+			decimal maxId = (decimal)Session.CreateSQLQuery("SELECT IDENT_CURRENT('YodleeAccounts')").UniqueResult();
 			var account = new YodleeAccounts {
 				CreationDate = DateTime.UtcNow,
 				Customer = null,

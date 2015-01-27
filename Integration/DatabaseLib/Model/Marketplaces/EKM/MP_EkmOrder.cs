@@ -38,7 +38,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public List<MP_EkmOrderItem> GetOrdersItemsByMakretplaceId(int marketplaceId)
         {
-            return _session
+            return Session
                 .Query<MP_EkmOrderItem>()
                 .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
                 .ToList();

@@ -13,7 +13,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository {
 		}
 
 		public MP_MarketplaceType Get(Guid internalMarketPlaceId) {
-			return _session
+			return Session
 					.QueryOver<MP_MarketplaceType>()
 					.Where(mp => mp.InternalId == internalMarketPlaceId)
 					.CacheMode(CacheMode.Normal)

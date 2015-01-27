@@ -40,7 +40,7 @@
 
 		public List<MP_FreeAgentRequest> GetRequestsByMakretplaceId(int marketplaceId)
 		{
-			return _session
+			return Session
 				.Query<MP_FreeAgentRequest>()
 				.Where(oi => oi.CustomerMarketPlace.Id == marketplaceId)
 				.ToList();

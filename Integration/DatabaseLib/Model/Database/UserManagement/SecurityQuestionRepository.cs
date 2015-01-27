@@ -17,7 +17,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement
 		public IList<SecurityQuestion> GetQuestions()
 		{
 			return (
-				from q in _session.QueryOver<SecurityQuestion>()
+				from q in Session.QueryOver<SecurityQuestion>()
 				where q.Name != null
 				select q).Cacheable().CacheRegion("Longest").List();
 		}

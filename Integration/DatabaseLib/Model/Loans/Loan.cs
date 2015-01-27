@@ -519,7 +519,7 @@
 		}
 
 		public IEnumerable<Loan> GetLoansWithoutAgreements() {
-			return _session
+			return Session
 				.CreateCriteria<Loan>()
 				.CreateAlias("Customer", "cus")
 				.Add(Restrictions.IsNull("AgreementModel"))

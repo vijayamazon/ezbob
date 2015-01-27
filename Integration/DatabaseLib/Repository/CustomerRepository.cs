@@ -29,7 +29,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		public Customer Get(int clientId)
 		{
 			var m_oRetryer = new SqlRetryer(nSleepBeforeRetryMilliseconds: 500);
-			var customer = m_oRetryer.Retry(() => _session.Get<Customer>(clientId));
+			var customer = m_oRetryer.Retry(() => Session.Get<Customer>(clientId));
 			if (customer == null)
 			{
 				throw new InvalidCustomerException(clientId);
@@ -56,31 +56,31 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 		public bool RefNumberExists(string refnumber)
 		{
-			return _session.QueryOver<Customer>().Where(c => c.RefNumber == refnumber).RowCount() > 0;
+			return Session.QueryOver<Customer>().Where(c => c.RefNumber == refnumber).RowCount() > 0;
 		}
 
 		public Customer GetCustomerByRefNum(string refnumber)
 		{
-			var customer = _session.QueryOver<Customer>().Where(c => c.RefNumber == refnumber).SingleOrDefault<Customer>();
+			var customer = Session.QueryOver<Customer>().Where(c => c.RefNumber == refnumber).SingleOrDefault<Customer>();
 			if (customer == null) throw new InvalidCustomerException(string.Format("Customer ref. #{0} was not found", refnumber));
 			return customer;
 		}
 
 		public Customer TryGetByEmail(string sEmail)
 		{
-			return _session.QueryOver<Customer>().Where(c => c.Name == sEmail).SingleOrDefault<Customer>();
+			return Session.QueryOver<Customer>().Where(c => c.Name == sEmail).SingleOrDefault<Customer>();
 		} // TryGetByEmail
 
 		public Customer GetChecked(int id)
 		{
-			var customer = _session.Get<Customer>(id);
+			var customer = Session.Get<Customer>(id);
 			if (customer == null) throw new InvalidCustomerException(id);
 			return customer;
 		}
 
 		public Customer GetAndInitialize(int id)
 		{
-			var customer = _session
+			var customer = Session
 								.QueryOver<Customer>()
 								.Where(c => c.Id == id)
 								.Fetch(x => x.Loans).Eager

@@ -20,7 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
         public IList<MedalStatisticDataRow> GetData(DateTime start, DateTime end)
         {
-            return _session.GetNamedQuery("GetMedalStatisticReport")
+            return Session.GetNamedQuery("GetMedalStatisticReport")
                 .SetParameter("dateStart", start)
                 .SetParameter("dateEnd", end)
                 .List<MedalStatisticDataRow>();

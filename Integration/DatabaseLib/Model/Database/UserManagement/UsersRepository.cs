@@ -30,7 +30,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 			return user;
 		}
 		public bool IsUserInRole(int userId, string role) {
-			return _session.Load<User>(userId).Roles.Any(r => r.Name.ToUpper() == role);
+			return Session.Load<User>(userId).Roles.Any(r => r.Name.ToUpper() == role);
 		}
 
 		public bool CheckUserLogin(int userId, string userName) {
@@ -49,7 +49,7 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 		}
 
 		public void Refresh(User user) {
-			_session.Refresh(user);
+			Session.Refresh(user);
 		}
 	}
 }

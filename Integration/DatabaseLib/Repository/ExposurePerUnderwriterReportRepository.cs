@@ -21,7 +21,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
         public IList<ExposurePerMedalDataRow> GetData(DateTime start, DateTime end)
         {
-            return _session.GetNamedQuery("ExposurePerMedalReport")
+            return Session.GetNamedQuery("ExposurePerMedalReport")
                 .SetParameter("dateStart", start)
                 .SetParameter("dateEnd", end)
                 .List<ExposurePerMedalDataRow>();

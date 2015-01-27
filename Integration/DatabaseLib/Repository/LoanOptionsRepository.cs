@@ -17,7 +17,7 @@ namespace EZBob.DatabaseLib.Repository
 
         public LoanOptions GetByLoanId(int loanId)
         {
-            return  _session.QueryOver<LoanOptions>().Where(opt=>opt.LoanId == loanId).SingleOrDefault<LoanOptions>();
+            return  Session.QueryOver<LoanOptions>().Where(opt=>opt.LoanId == loanId).SingleOrDefault<LoanOptions>();
         }
     }
 }

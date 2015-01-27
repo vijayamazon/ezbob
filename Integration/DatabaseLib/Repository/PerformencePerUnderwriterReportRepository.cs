@@ -20,7 +20,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
         public IList<PerformencePerUnderwriterDataRow> GetData(DateTime start, DateTime end)
         {
-            return _session.GetNamedQuery("PerformencePerUnderwriterReport")
+            return Session.GetNamedQuery("PerformencePerUnderwriterReport")
                 .SetParameter("dateStart", start)
                 .SetParameter("dateEnd", end)
                 .List<PerformencePerUnderwriterDataRow>();

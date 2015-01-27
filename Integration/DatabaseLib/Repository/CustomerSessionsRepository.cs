@@ -20,7 +20,7 @@ namespace EZBob.DatabaseLib.Repository
 
 		public IList<CustomerSession> GetSessionIpLogByCustomerId(int id)
 		{
-			return _session.QueryOver<CustomerSession>().Where(c => c.CustomerId == id).List<CustomerSession>();
+			return Session.QueryOver<CustomerSession>().Where(c => c.CustomerId == id).List<CustomerSession>();
 		}
 		public void AddSessionIpLog(CustomerSession cs)
 		{

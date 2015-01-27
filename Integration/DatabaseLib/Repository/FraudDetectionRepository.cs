@@ -24,7 +24,7 @@ namespace EZBob.DatabaseLib.Repository
 
 		public IEnumerable<FraudDetection> GetLastDetections(int customerId, out DateTime? lastDateCheck)
 		{
-			var lastCheck = _session.Query<FraudRequest>().OrderByDescending(x=> x.CheckDate).FirstOrDefault(x => x.Customer.Id == customerId);
+			var lastCheck = Session.Query<FraudRequest>().OrderByDescending(x=> x.CheckDate).FirstOrDefault(x => x.Customer.Id == customerId);
 			if (lastCheck != null)
 			{
 				lastDateCheck = lastCheck.CheckDate;

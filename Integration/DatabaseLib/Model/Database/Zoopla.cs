@@ -87,11 +87,11 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		}
 		public bool ExistsByAddress(CustomerAddress address)
 		{
-			return _session.Query<Zoopla>().Any(z => z.CustomerAddress == address);
+			return Session.Query<Zoopla>().Any(z => z.CustomerAddress == address);
 		}
 		public Zoopla GetByAddress(CustomerAddress address)
 		{
-			return _session.Query<Zoopla>().FirstOrDefault(z => z.CustomerAddress == address);
+			return Session.Query<Zoopla>().FirstOrDefault(z => z.CustomerAddress == address);
 		}
 	}
 }

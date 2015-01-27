@@ -38,7 +38,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public List<MP_EbayOrderItem> GetOrdersItemsByMakretplaceId(int marketplaceId)
         {
-            return _session
+            return Session
                 .Query<MP_EbayOrderItem>()
                 .Where(oi => oi.Order.CustomerMarketPlace.Id == marketplaceId)
                 .Fetch(oi => oi.ShippingAddress)
@@ -58,7 +58,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
 		public List<MP_EbayTransaction> GetAllItemsWithItemsID( string itemID )
 		{
-			return _session
+			return Session
 				.Query<MP_EbayTransaction>()				
 				.Where( t => t.ItemID == itemID && t.OrderItemDetail == null ).ToList();
 		}

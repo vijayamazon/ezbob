@@ -124,7 +124,7 @@
 		[NoCache]
 		public RedirectToRouteResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, decimal loan_amount, string card_no, string customer, string expiry)
 		{
-			//_session.Lock(_context.Customer, LockMode.Upgrade);
+			//Session.Lock(_context.Customer, LockMode.Upgrade);
 
 			if (test_status == "true")
 			{

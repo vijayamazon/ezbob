@@ -49,7 +49,7 @@ namespace EZBob.DatabaseLib.Model.Database
 
         public List<MP_TeraPeakOrderItem> GetTeraPeakOrderItems(int customerMarketPlaceId)
         {
-            return _session
+            return Session
                 .Query<MP_TeraPeakOrderItem>()
                 .Where(o => o.Order.CustomerMarketPlace.Id == customerMarketPlaceId)
                 .OrderBy(o => o.StartDate)

@@ -124,7 +124,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
 		public void RemoveEzbobCategorization()
 		{
-			var q = _session.CreateSQLQuery("UPDATE MP_YodleeOrderItemBankTransaction SET ezbobCategory = NULL");
+			var q = Session.CreateSQLQuery("UPDATE MP_YodleeOrderItemBankTransaction SET ezbobCategory = NULL");
 			q.ExecuteUpdate();
 		}
 	}

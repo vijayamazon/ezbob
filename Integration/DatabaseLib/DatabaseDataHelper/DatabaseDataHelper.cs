@@ -574,7 +574,7 @@
 			}
 		}
 
-		//public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { _session.Evict(_CustomerLoyaltyPoints); return _CustomerLoyaltyPoints; } }
+		//public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { Session.Evict(_CustomerLoyaltyPoints); return _CustomerLoyaltyPoints; } }
 
 		public void SaveCustomer(Customer oCustomer) {
 			if (oCustomer != null)

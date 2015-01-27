@@ -19,7 +19,7 @@ namespace EZBob.DatabaseLib.Repository
 
         public IList<DailyReportRow> GetData(DateTime date)
         {
-            return _session.GetNamedQuery("GetDailyReport")
+            return Session.GetNamedQuery("GetDailyReport")
                 .SetParameter("date", date)
                 .List<DailyReportRow>();
         }

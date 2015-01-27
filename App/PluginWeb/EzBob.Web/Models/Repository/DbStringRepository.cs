@@ -18,12 +18,12 @@ namespace EzBob.Web.Models.Repository
 
         public IList<DbString> GetAllStrings()
         {
-            return _session.QueryOver<DbString>().Cacheable().CacheRegion("DbStrings").List();
+            return Session.QueryOver<DbString>().Cacheable().CacheRegion("DbStrings").List();
         }
 
         public string GetByKey(string key)
         {
-            return _session.QueryOver<DbString>()
+            return Session.QueryOver<DbString>()
                 .Where(s => s.Key == key)
                 .Select(s => s.Value)
                 .Cacheable()

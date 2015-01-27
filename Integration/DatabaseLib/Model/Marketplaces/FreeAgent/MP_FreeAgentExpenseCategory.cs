@@ -30,7 +30,7 @@ namespace EZBob.DatabaseLib.Model.Marketplaces.FreeAgent
 
 		public MP_FreeAgentExpenseCategory GetSimilarCategory(FreeAgentExpenseCategory category)
 		{
-			return _session
+			return Session
 					.QueryOver<MP_FreeAgentExpenseCategory>()
 					.Where(c => c.allowable_for_tax == category.allowable_for_tax &&
 							    c.auto_sales_tax_rate == category.auto_sales_tax_rate &&

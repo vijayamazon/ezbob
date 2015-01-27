@@ -21,7 +21,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 
         public IList<ExposurePerUnderwriterDataRow> GetData(DateTime start, DateTime end)
         {
-            return _session.GetNamedQuery("ExposurePerUnderwriterReport")
+            return Session.GetNamedQuery("ExposurePerUnderwriterReport")
                 .SetParameter("dateStart", start)
                 .SetParameter("dateEnd", end)
                 .List<ExposurePerUnderwriterDataRow>();

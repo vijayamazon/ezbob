@@ -44,7 +44,7 @@
 
 		public List<MP_SageRequest> GetRequestsByMakretplaceId(int marketplaceId)
 		{
-			return _session
+			return Session
 				.Query<MP_SageRequest>()
 				.Where(oi => oi.CustomerMarketPlace.Id == marketplaceId)
 				.ToList();

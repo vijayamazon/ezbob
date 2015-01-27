@@ -38,7 +38,7 @@
                 return categories;
             }
 
-            return _session.Query<MP_EbayTransaction>()
+            return Session.Query<MP_EbayTransaction>()
                 .Where(x => x.OrderItem.Order.CustomerMarketPlace.Id == marketplace.Id)
                 .Where(x => x.OrderItemDetail.PrimaryCategory != null)
                 .Select(x => x.OrderItemDetail.PrimaryCategory.Name)
@@ -48,7 +48,7 @@
 
 	    public List<string> GetAmazonCategories(MP_CustomerMarketPlace marketplace)
 	    {
-            return _session.Query<MP_AmazonOrderItemDetailCatgory>()
+            return Session.Query<MP_AmazonOrderItemDetailCatgory>()
                 .Where(x => x.OrderItemDetail.OrderItem.Order.CustomerMarketPlace.Id == marketplace.Id)
                 .Select(x => x.Category.Name)
                 .Distinct()

@@ -65,7 +65,7 @@
 				};
 
 				if (rejectionReasons != null) {
-					var repo = new RejectReasonRepository(_session);
+					var repo = new RejectReasonRepository(Session);
 
 					foreach (var rejectionReason in rejectionReasons) {
 						var reason = repo.Get(rejectionReason);
