@@ -1,11 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview
 {
-	using System.Data;
 	using System;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -22,6 +20,7 @@
 	using PaymentServices.PayPoint;
 	using ServiceClientProxy;
 	using log4net;
+	using StructureMap;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class LoanHistoryController : Controller
@@ -30,7 +29,6 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly CustomerRepository _customerRepository;
-		private readonly LoanPaymentFacade _loanRepaymentFacade;
 		private readonly LoanRepository _loanRepository;
 		private readonly LoanScheduleRepository _loanScheduleRepository;
 		private readonly IPacnetPaypointServiceLogRepository _logRepository;
@@ -41,7 +39,7 @@
 		public LoanHistoryController(CustomerRepository customersRepository,
 									 PaymentRolloverRepository rolloverRepository,
 									 LoanScheduleRepository loanScheduleRepository, IEzbobWorkplaceContext context,
-									 LoanPaymentFacade loanRepaymentFacade,
+									 
 									 IPacnetPaypointServiceLogRepository logRepository, LoanRepository loanRepository,
 									 IUsersRepository users,
 									 PayPointApi paypoint)
@@ -50,7 +48,7 @@
 			_rolloverRepository = rolloverRepository;
 			_loanScheduleRepository = loanScheduleRepository;
 			_context = context;
-			_loanRepaymentFacade = loanRepaymentFacade;
+
 			m_oServiceClient = new ServiceClient();
 			_logRepository = logRepository;
 			_loanRepository = loanRepository;
@@ -217,11 +215,13 @@
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
 												   model.Description, Environment.NewLine);
 
-				_loanRepaymentFacade.MakePayment(payPointTransactionId, realAmount, null,
+				var facade = ObjectFactory.GetInstance<LoanPaymentFacade>();
+
+				facade.MakePayment(payPointTransactionId, realAmount, null,
 												 "other", model.LoanId, customer,
 												 date, description, null, model.PaymentMethod);
 
-				_loanRepaymentFacade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
+				facade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
 
 				if (model.SendEmail)
 					m_oServiceClient.Instance.PayEarly(_users.Get(customer.Id).Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
