@@ -57,6 +57,8 @@
 					this.earliestYodleeLastUpdateDate
 				).CalculateMedal();
 
+				Log.Debug("\n\nPrimary medal:\n{0}", result1);
+
 				MedalOutputModel result2 = null;
 
 				if (!primaryOnly) {
@@ -73,6 +75,8 @@
 					if (this.doStoreMedal)
 						result1.SaveToDb(DB);
 
+					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}.", this.customerId);
+
 					Result = result1;
 					return;
 				} // if
@@ -82,7 +86,6 @@
 				if (result1 == null)
 					result1 = new MedalResult(this.customerId, Log);
 
-				Log.Debug("{0}", result1);
 				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
 				result1.Error = "Mismatch found in the 2 medal calculations";
 

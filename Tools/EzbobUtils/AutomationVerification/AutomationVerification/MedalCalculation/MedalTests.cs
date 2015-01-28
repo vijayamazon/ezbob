@@ -93,7 +93,7 @@
 				var medal = calulator.CalculateMedal(model);
 
 				if (Math.Abs(medal.NormalizedScore - medalComparisonModel.TotalScoreNormalized) > 0.009M ) {
-					medal.PrintDict(Log);
+					Log.Debug("{0}", medal);
 					if (medal.Medal != medalComparisonModel.Medal) {
 						passed = false;
 						Log.Error("Medal Mismatch for customerid {0} 1st {1} 2nd {2}", medalComparisonModel.CustomerId,

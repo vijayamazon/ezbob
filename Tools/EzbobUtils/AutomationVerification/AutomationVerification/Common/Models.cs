@@ -47,14 +47,10 @@
 		public bool UseHmrc { get; set; }
 
 		public void SaveToDb(AConnection db, ASafeLog log) {
-			PrintDict(log);
+			log.Debug("\n\nSecondary medal:\n{0}", ToString());
 			var dbHelper = new DbHelper(db, log);
 			dbHelper.StoreMedalVerification(this);
-		}
-
-		public void PrintDict(ASafeLog log) {
-			log.Debug(ToString());
-		}
+		} // SaveToDb
 
 		public override string ToString() {
 			Dictionary<Parameter, Weight> dict = WeightsDict ?? new Dictionary<Parameter, Weight>();

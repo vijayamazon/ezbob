@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator.MedalCalculation
 {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using Common;
@@ -10,7 +9,7 @@
 	/// <summary>
 	/// Medal calculated for customers that have limited company with score and have online market places (ebay,amazon,paypal)
 	/// </summary>
-	public class OnlineLImitedMedalCalculator : MedalCalculator
+	public class OnlineLImitedMedalCalculator : OnlineCalculator
 	{
 		public OnlineLImitedMedalCalculator(AConnection db, ASafeLog log) : base(db, log) { }
 
