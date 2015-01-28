@@ -72,6 +72,9 @@
 	                    <div class="newlogo" ></div>
                     </a>
                 </div>
+
+				<!-- <button type="button" class="btn-show-valentine-scratch-remove-me">Valentine</button> -->
+
                 <div class="header-info" style="display: none;">
                     <div class="header-info-left"></div>
                     <div class="header-info-text"></div>
@@ -92,6 +95,13 @@
         <div class="main-page">
             @RenderBody()
         </div>
+
+		<div id="valentine2015scratch">
+			<div class="content">
+				<div class="title">Win a romantic weekend</div>
+				<div class="slogan">Scratch and win a ticket to a romantic vacation</div>
+			</div>
+		</div>
 
 		<div id="ny2015scratch">
 			<div class="content">
@@ -198,6 +208,8 @@
 			EzBob_CgVendors_init();
 
 			EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
+
+	        // $('.btn-show-valentine-scratch-remove-me').click(function() { $('.main-page').hide(); $('#valentine2015scratch').show(); });
         });
 
         function EzBob_CgVendors_init() {

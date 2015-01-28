@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
 	using System;
+	using System.Globalization;
 	using System.Web;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 	using MailApi;
 
 	public class CalculateMedal : AStrategy {
@@ -14,59 +16,30 @@
 		public MedalResult Result { get; private set; }
 
 		public CalculateMedal(int customerId, DateTime calculationTime, bool primaryOnly, bool doStoreMedal) {
-			this.useInternalLoad = true;
+			this.doStoreMedal = doStoreMedal;
+			this.primaryOnly = primaryOnly;
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
-			this.primaryOnly = primaryOnly;
-			this.doStoreMedal = doStoreMedal;
-		} // constructor
-
-		public CalculateMedal(
-			int customerId,
-			string typeOfBusiness,
-			int consumerScore,
-			int companyScore,
-			int numOfHmrcMps,
-			int numOfYodleeMps,
-			int numOfEbayAmazonPayPalMps,
-			DateTime? earliestHmrcLastUpdateDate,
-			DateTime? earliestYodleeLastUpdateDate
-		) {
-			this.doStoreMedal = true;
-			this.primaryOnly = false;
-			this.useInternalLoad = false;
-			this.customerId = customerId;
-
-			this.typeOfBusiness = typeOfBusiness;
-			this.consumerScore = consumerScore;
-			this.companyScore = companyScore;
-			this.numOfHmrcMps = numOfHmrcMps;
-			this.numOfYodleeMps = numOfYodleeMps;
-			this.numOfEbayAmazonPayPalMps = numOfEbayAmazonPayPalMps;
-			this.earliestHmrcLastUpdateDate = earliestHmrcLastUpdateDate;
-			this.earliestYodleeLastUpdateDate = earliestYodleeLastUpdateDate;
 		} // constructor
 
 		public override void Execute() {
 			try {
-				if (this.useInternalLoad) {
-					SafeReader sr = DB.GetFirst(
-						"GetCustomerDataForMedalCalculation",
-						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerId", this.customerId),
-						new QueryParameter("Now", this.calculationTime)
-					);
+				SafeReader sr = DB.GetFirst(
+					"GetCustomerDataForMedalCalculation",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", this.customerId),
+					new QueryParameter("Now", this.calculationTime)
+				);
 
-					if (!sr.IsEmpty) {
-						this.typeOfBusiness = sr["TypeOfBusiness"];
-						this.consumerScore = sr["ConsumerScore"];
-						this.companyScore = sr["CompanyScore"];
-						this.numOfHmrcMps = sr["NumOfHmrcMps"];
-						this.numOfYodleeMps = sr["NumOfYodleeMps"];
-						this.numOfEbayAmazonPayPalMps = sr["NumOfEbayAmazonPayPalMps"];
-						this.earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
-						this.earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
-					} // if
+				if (!sr.IsEmpty) {
+					this.typeOfBusiness = sr["TypeOfBusiness"];
+					this.consumerScore = sr["ConsumerScore"];
+					this.companyScore = sr["CompanyScore"];
+					this.numOfHmrcMps = sr["NumOfHmrcMps"];
+					this.numOfYodleeMps = sr["NumOfYodleeMps"];
+					this.numOfEbayAmazonPayPalMps = sr["NumOfEbayAmazonPayPalMps"];
+					this.earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
+					this.earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
 				} // if
 
 				// The first scenario (1) for checking medal type and getting medal value
@@ -107,9 +80,9 @@
 				// Mismatch in medal calculations
 
 				if (result1 == null)
-					result1 = new MedalResult(this.customerId);
+					result1 = new MedalResult(this.customerId, Log);
 
-				result1.PrintToLog(Log);
+				Log.Debug("{0}", result1);
 				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
 				result1.Error = "Mismatch found in the 2 medal calculations";
 
@@ -123,14 +96,14 @@
 			} catch (Exception e) {
 				Log.Warn(e, "Medal calculation for customer {0} failed with exception.", this.customerId);
 
-				Result = new MedalResult(this.customerId) {
+				Result = new MedalResult(this.customerId, Log) {
 					Error = "Exception thrown: " + e.Message,
 				};
 			} // try
 		} // Execute
 
 		private void SendExplanationMail(MedalResult result1, MedalOutputModel result2) {
-			string medal2 = result2 == null ? string.Empty : result2.Medal.ToString();
+			string medal2 = result2 == null ? string.Empty : result2.Medal.Stringify();
 			string medalType2 = result2 == null ? string.Empty : result2.MedalType.ToString();
 			string score2 = result2 == null ? string.Empty : (result2.Score * 100).ToString("N2");
 			string normalizedScore2 = result2 == null ? string.Empty : result2.NormalizedScore.ToString("P2");
@@ -138,10 +111,11 @@
 			string error2 = result2 == null ? string.Empty : result2.Error;
 
 			string msg = string.Format(
+				"calculation time (UTC): {12}\n\n" +
 				"main:         medal:{0} medal type:{1} score:{2} normalized score:{3} offered amount:£ {4} error:{5} \n" +
 				"verification: medal:{6} medal type:{7} score:{8} normalized score:{9} offered amount:£ {10} error:{11}",
 
-				result1.MedalClassification.ToString().PadRight(10),
+				result1.MedalClassification.Stringify(10),
 				result1.MedalType.ToString().PadRight(30),
 				result1.TotalScore.ToString("N2").PadRight(10),
 				result1.TotalScoreNormalized.ToString("P2").PadRight(10),
@@ -153,7 +127,9 @@
 				score2.PadRight(10),
 				normalizedScore2.PadRight(10),
 				offeredLoanAmount2.PadRight(15),
-				error2
+				error2,
+
+				result1.CalculationTime.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
 			);
 
 			var message = string.Format(
@@ -183,7 +159,6 @@
 		} // SendExplanationMail
 
 		private readonly int customerId;
-		private readonly bool useInternalLoad;
 		private readonly DateTime calculationTime;
 		private readonly bool primaryOnly;
 		private readonly bool doStoreMedal;

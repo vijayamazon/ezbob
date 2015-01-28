@@ -141,17 +141,7 @@
 		} // AdjustOfferredCreditLine
 
 		private void CalculateNewMedal() {
-			var instance = new CalculateMedal(
-				this.customerId,
-				this.dataGatherer.TypeOfBusiness,
-				this.dataGatherer.MaxExperianConsumerScore,
-				this.dataGatherer.MaxCompanyScore,
-				this.dataGatherer.NumOfHmrcMps,
-				this.dataGatherer.NumOfYodleeMps,
-				this.dataGatherer.NumOfEbayAmazonPayPalMps,
-				this.dataGatherer.EarliestHmrcLastUpdateDate,
-				this.dataGatherer.EarliestYodleeLastUpdateDate
-			);
+			var instance = new CalculateMedal(this.customerId, DateTime.UtcNow, false, true);
 			instance.Execute();
 
 			this.medalClassification = instance.Result.MedalClassification;

@@ -4,16 +4,12 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using AutomationCalculator.ProcessHistory.AutoRejection;
-	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository.Turnover;
-	using NHibernate.Linq;
 	using StructureMap;
 
 	/// <summary>
@@ -23,38 +19,55 @@
 	/// </summary>
 	public abstract class MedalCalculatorBase {
 		/// <summary>
-		///     The db.
+		///     The set initial weights.
 		/// </summary>
-		protected readonly AConnection db;
-
-		/// <summary>
-		///     The log.
-		/// </summary>
-		protected readonly ASafeLog log;
-
-		/// <summary>
-		///     Initializes a new instance of the <see cref="MedalCalculatorBase" /> class.
-		/// </summary>
-		protected MedalCalculatorBase() {
-			this.log = Library.Instance.Log;
-			this.db = Library.Instance.DB;
-		} // constructor
+		public abstract void SetInitialWeights();
 
 		/// <summary>
 		///     Gets or sets the results.
 		/// </summary>
 		public MedalResult Results { get; set; }
 
+		public void Init(
+			int customerId,
+			DateTime calculationTime,
+			int consumerScore,
+			int businessScore,
+			int hmrcCount,
+			int bankCount,
+			int onlineCount,
+			DateTime? earliestHmrcLastUpdateDate,
+			DateTime? earliestYodleeLastUpdateDate
+		) {
+			Results = new MedalResult(customerId, this.log) {
+				CalculationTime = calculationTime,
+
+				BusinessScore = businessScore,
+				ConsumerScore = consumerScore,
+
+				NumOfHmrcMps = hmrcCount,
+				NumOfBanks = bankCount,
+				NumberOfStores = onlineCount,
+
+				EarliestHmrcLastUpdateDate = earliestHmrcLastUpdateDate,
+				EarliestYodleeLastUpdateDate = earliestYodleeLastUpdateDate,
+			};
+
+			this.isInitialized = true;
+		} // Init
+
 		/// <summary>
 		///     The calculate medal score.
 		/// </summary>
-		/// <param name="customerId">The customer id.</param>
-		/// <param name="calculationTime">The calculation time.</param>
 		/// <returns>The <see cref="MedalResult" />.</returns>
-		public MedalResult CalculateMedalScore(int customerId, DateTime calculationTime) {
-			Results = new MedalResult(customerId) {
-				CalculationTime = calculationTime
-			};
+		public MedalResult CalculateMedalScore() {
+			if (this.isCalculated)
+				return Results;
+
+			if (!this.isInitialized)
+				throw new Exception("Medal calculator should be initialized first.");
+
+			this.isCalculated = true;
 
 			// set medal type here per each extending class
 			SetMedalType();
@@ -96,7 +109,7 @@
 					Results.NumOfEarlyRepaymentsWeight = 2;
 
 					RedistributeWeightsForPayingCustomer();
-				}
+				} // if
 
 				AdjustSumOfWeights();
 
@@ -115,18 +128,33 @@
 					e,
 					"Failed calculating medal of type: {0} for customer: {1}",
 					Results.MedalType,
-					customerId);
+					Results.CustomerId);
 				Results.Error = e.Message;
-			}
+			} // try
 
-			// try
 			return Results;
-		}
+		} // CalculateMedalScore
 
 		/// <summary>
-		///     The set initial weights.
+		///     The db.
 		/// </summary>
-		public abstract void SetInitialWeights();
+		protected readonly AConnection db;
+
+		/// <summary>
+		///     The log.
+		/// </summary>
+		protected readonly ASafeLog log;
+
+		/// <summary>
+		///     Initializes a new instance of the <see cref="MedalCalculatorBase" /> class.
+		/// </summary>
+		protected MedalCalculatorBase() {
+			this.isInitialized = false;
+			this.isCalculated = false;
+
+			this.log = Library.Instance.Log;
+			this.db = Library.Instance.DB;
+		} // constructor
 
 		/// <summary>
 		///     The adjust weights with ratio.
@@ -150,39 +178,7 @@
 			if (sr.IsEmpty)
 				throw new Exception("Couldn't gather required data for the medal calculation");
 
-			Results.BusinessScore = sr["BusinessScore"];
-			Results.TangibleEquityValue = sr["TangibleEquity"];
-			Results.BusinessSeniority = sr["BusinessSeniority"];
-			Results.ConsumerScore = sr["ConsumerScore"];
-			string maritalStatusStr = sr["MaritalStatus"];
-			MaritalStatus maritalStatus;
-
-			if (Enum.TryParse(maritalStatusStr, out maritalStatus))
-				Results.MaritalStatus = maritalStatus;
-			else {
-				this.log.Error(
-					"Unable to parse marital status for customer:{0} will use 'Other'. The value was:{1}",
-					Results.CustomerId,
-					maritalStatusStr
-				);
-				Results.MaritalStatus = MaritalStatus.Other;
-			} // if
-
-			Results.FirstRepaymentDatePassed = sr["FirstRepaymentDatePassed"];
-			Results.EzbobSeniority = sr["EzbobSeniority"];
-			Results.NumOfLoans = sr["OnTimeLoans"];
-			Results.NumOfLateRepayments = sr["NumOfLatePayments"];
-			Results.NumOfEarlyRepayments = sr["NumOfEarlyPayments"];
-			Results.ZooplaValue = sr["TotalZooplaValue"];
-			Results.NumOfHmrcMps = sr["NumOfHmrcMps"];
-			Results.NumOfBanks = sr["NumOfBanks"];
-			Results.NumberOfStores = sr["NumberOfOnlineStores"];
-
-			Results.EarliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
-			Results.EarliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
-			Results.AmazonPositiveFeedbacks = sr["AmazonPositiveFeedbacks"];
-			Results.EbayPositiveFeedbacks = sr["EbayPositiveFeedbacks"];
-			Results.NumberOfPaypalPositiveTransactions = sr["NumOfPaypalTransactions"];
+			sr.Fill(Results);
 
 			Results.FreeCashFlowValue = 0;
 			Results.ValueAdded = 0;
@@ -196,7 +192,7 @@
 					if (!Enum.TryParse(srfv["RowType"], out rt)) {
 						log.Alert("MedalCalculatorBase.GatherInputData: Cannot parse row type from {0}", srfv["RowType"]);
 						return;
-					}
+					} // if
 
 					switch (rt) {
 					case RowType.FcfValueAdded:
@@ -788,8 +784,6 @@
 		protected virtual void CalculateTurnoverForMedal() {
 			this.updatingHistoryRep = ObjectFactory.GetInstance<CustomerMarketPlaceUpdatingHistoryRepository>();
 			try {
-				List<TurnoverDbRow> turnovers = new List<TurnoverDbRow>();
-
 				DateTime yearAgo = new DateTime();
 				DateTime lastUpdateDate = new DateTime();
 				Results.AnnualTurnover = 0;
@@ -800,38 +794,39 @@
 				var c = this.updatingHistoryRep.GetByCustomerId(Results.CustomerId);
 
 				if (c == null) {
-					log.Info("Updating historied for customer {0} not found", Results.CustomerId);
+					log.Info("Updating history for customer {0} not found", Results.CustomerId);
 					return;
-				}
+				} // if
 
 				var h = c.Where(x => x.UpdatingEnd < Results.CalculationTime && (x.Error == null || x.Error.Trim().Length == 0));
 
 				var lastUpdateHmrc = h.SelectMany(y => y.HmrcAggregations).OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id).FirstOrDefault();
 
 				if (lastUpdateHmrc != null) {
-
 					lastUpdateDate = (DateTime)lastUpdateHmrc.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
+					yearAgo = GetPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
-					var hmrs = h.SelectMany(y => y.HmrcAggregations)
+					var hmrc = h.SelectMany(y => y.HmrcAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
 						.AsEnumerable();
 
-					if (hmrs != null) {
-						var hmrcList = (from ag in hmrs
-										group ag by new { ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id, ag.TheMonth } into grouping
-										select new {
-											TheMonth = grouping.First().TheMonth,
-											MpId = grouping.First().CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-											Turnover = hmrs.Where(xx => xx.TheMonth == grouping.First().TheMonth && xx.CustomerMarketPlaceUpdatingHistory.Id == grouping.Max(p => p.CustomerMarketPlaceUpdatingHistory.Id)).First().Turnover
-										});
+					if (hmrc != null) {
+						var hmrcList = (
+							from ag in hmrc
+							group ag by new { ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id, ag.TheMonth } into grouping
+							select new {
+								TheMonth = grouping.First().TheMonth,
+								MpId = grouping.First().CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+								Turnover = hmrc.Where(xx => xx.TheMonth == grouping.First().TheMonth && xx.CustomerMarketPlaceUpdatingHistory.Id == grouping.Max(p => p.CustomerMarketPlaceUpdatingHistory.Id)).First().Turnover
+							}
+						);
 
 						// get hmrc turnover for all months received
 						Results.HmrcAnnualTurnover = hmrcList.Sum(t => t.Turnover);
 						Results.HmrcAnnualTurnover = (Results.HmrcAnnualTurnover < 0) ? 0 : Results.HmrcAnnualTurnover;
 
 					} // if hmrc count
-				}
+				} // if
 
 				// this is non-online medal type and has a hmrc
 				if (!Results.MedalType.IsOnline() && Results.NumOfHmrcMps > 0) {
@@ -850,7 +845,7 @@
 				if (lastUpdateYodlee != null) {
 
 					lastUpdateDate = (DateTime)lastUpdateYodlee.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
+					yearAgo = GetPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
 					var yodlees = h.SelectMany(y => y.YodleeAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
@@ -917,7 +912,7 @@
 				if (lastUpdateAmazon != null) {
 
 					lastUpdateDate = (DateTime)lastUpdateAmazon.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
+					yearAgo = GetPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
 					var amazons = h.SelectMany(y => y.AmazonAggregations)
 						.Where(z => z.TheMonth >= yearAgo)
@@ -948,7 +943,7 @@
 				if (lastUpdateEbay != null) {
 
 					lastUpdateDate = (DateTime)lastUpdateEbay.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
+					yearAgo = GetPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
 					// extact ebay data
 					var ebays = h.SelectMany(y => y.EbayAggregations).Where(z => z.TheMonth >= yearAgo).AsEnumerable();
@@ -976,7 +971,7 @@
 
 				if (lastUpdatePP != null) {
 					lastUpdateDate = (DateTime)lastUpdatePP.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-					yearAgo = getPeriodAgo(Results.CalculationTime, lastUpdateDate);
+					yearAgo = GetPeriodAgo(Results.CalculationTime, lastUpdateDate);
 
 					//	log.Info("BB: Paypal: CalculationTime: {0}, lastUpdateDate: {1}, yearAgo: {2}", Results.CalculationTime, lastUpdateDate, yearAgo);
 
@@ -1065,16 +1060,6 @@
 			return Results.MedalType.IsOnline() && Results.TurnoverType != TurnoverType.HMRC;
 		} // IsOnlineMedalNotViaHmrcInnerFlow
 
-		public static DateTime getPeriodAgo(DateTime calculationDate, DateTime lastUpdate) {
-			int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
-			DateTime months = new DateTime();
-			if ((daysInMonth - calculationDate.Date.Day) <= 3 && (daysInMonth - lastUpdate.Date.Day) <= 3 && (calculationDate.Month == lastUpdate.Month && calculationDate.Year == lastUpdate.Year)) {
-				months = calculationDate.AddMonths(-11);
-			} else
-				months = calculationDate.AddMonths(-12);
-			return new DateTime(months.Year, months.Month, 1, 0, 0, 0);
-		}
-
 		/*private void FilterAggregationList(IEnumerable<MarketPlaceAggregation> inputList, List<FilteredAggregationResult> filtered) {
 
 			 filtered =
@@ -1089,5 +1074,19 @@
 
 		private EZBob.DatabaseLib.Model.Database.Repository.CustomerMarketPlaceUpdatingHistoryRepository updatingHistoryRep;
 
+		private static DateTime GetPeriodAgo(DateTime calculationDate, DateTime lastUpdate) {
+			int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
+			DateTime months = new DateTime();
+
+			if ((daysInMonth - calculationDate.Date.Day) <= 3 && (daysInMonth - lastUpdate.Date.Day) <= 3 && (calculationDate.Month == lastUpdate.Month && calculationDate.Year == lastUpdate.Year)) {
+				months = calculationDate.AddMonths(-11);
+			} else
+				months = calculationDate.AddMonths(-12);
+
+			return new DateTime(months.Year, months.Month, 1, 0, 0, 0);
+		} // GetPeriodAgo
+
+		private bool isInitialized;
+		private bool isCalculated;
 	} // class MedalCalculatorBase
 } // namespace

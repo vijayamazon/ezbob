@@ -43,15 +43,6 @@
 		}
 
 		[Test]
-		public void TestMedalCalculation2() {
-			var msc = new OfflineLImitedMedalCalculator(_db, Log);
-			var data = msc.GetInputParameters(14223);
-			var medal = msc.CalculateMedal(data);
-
-			Assert.AreEqual(medal.Medal, Medal.Gold);
-		}
-
-		[Test]
 		public void TestIsOffline() {
 			var db = new DbHelper(_db, Log);
 			var isOffline = db.IsOffline(25);

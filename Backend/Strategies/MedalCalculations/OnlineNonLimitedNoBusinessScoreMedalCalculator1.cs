@@ -15,13 +15,11 @@
 			Results.NumOfLoansWeight = 0;
 			Results.NumOfLateRepaymentsWeight = 0;
 			Results.NumOfEarlyRepaymentsWeight = 0;
-		}
+		} // SetInitialWeights
 
 		protected override void SetMedalType() {
 			Results.MedalType = MedalType.OnlineNonLimitedNoBusinessScore;
 		} // SetMedalType
-
-		// SetInitialWeights
 
 		protected override decimal GetConsumerScoreWeightForLowScore() {
 			return 55;

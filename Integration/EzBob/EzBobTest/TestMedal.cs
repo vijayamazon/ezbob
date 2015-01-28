@@ -25,63 +25,6 @@ namespace EzBobTest {
 	using NHibernate.Linq;
 
 	
-	public class LimitedMedalCalculator1NoGathering : LimitedMedalCalculator1 {
-		/*
-		 * temprary disabled (elinar)
-		 * protected override void GatherInputData(DateTime calculationTime) {
-			Results = this.resultInput;
-		}*/
-		
-		private readonly MedalResult resultInput;
-		public LimitedMedalCalculator1NoGathering(MedalResult resultInput) {
-			this.resultInput = resultInput;
-		}
-	}
-	
-	public class OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering :
-		OnlineNonLimitedWithBusinessScoreMedalCalculator1 {
-		private readonly MedalResult resultInput;
-		public OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(MedalResult resultInput) {
-			this.resultInput = resultInput;
-		}
-	}
-	
-	public class NonLimitedMedalCalculator1NoGathering : NonLimitedMedalCalculator1 {
-		private readonly MedalResult resultInput;
-		public NonLimitedMedalCalculator1NoGathering(MedalResult resultInput) {
-			this.resultInput = resultInput;
-		}
-	}
-
-	public class OnlineLimitedMedalCalculator1NoGathering : OnlineLimitedMedalCalculator1 {
-		private readonly MedalResult resultInput;
-		public OnlineLimitedMedalCalculator1NoGathering(MedalResult resultInput) {
-			this.resultInput = resultInput;
-		}
-	}
-
-	class OnlineNonLimitedNoBusinessScoreMedalCalculator1NoGathering : OnlineNonLimitedNoBusinessScoreMedalCalculator1 {
-		private readonly MedalResult resultsInput;
-		public OnlineNonLimitedNoBusinessScoreMedalCalculator1NoGathering(MedalResult resultsInput) {
-			this.resultsInput = resultsInput;
-		}
-	}
-	
-	class SoleTraderMedalCalculator1NoGathering : SoleTraderMedalCalculator1 {
-		private readonly MedalResult resultsInput;
-		public SoleTraderMedalCalculator1NoGathering(MedalResult resultsInput) {
-			this.resultsInput = resultsInput;
-		}
-	}
-	
-
-	class OfflineLimitedMedalCalculator1NoGathering : LimitedMedalCalculator1 {
-		private readonly MedalResult resultsInput;
-		public OfflineLimitedMedalCalculator1NoGathering(MedalResult resultsInput) {
-			this.resultsInput = resultsInput;
-		}
-	}
-	
 
 	/// <summary>
 	/// The test medal.
@@ -96,75 +39,7 @@ namespace EzBobTest {
 		} // Init
 
 		
-		public void Test_FirstMedalTest() {
-			DateTime calculationTime = new DateTime(2014, 01, 01);
-			int customerId = 18112;
-
-			MedalResult resultsInput = new MedalResult(customerId);
-			resultsInput.CalculationTime = calculationTime;
-			resultsInput.MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType.Limited;
-			resultsInput.BusinessScore = 0;
-			resultsInput.TangibleEquityValue = 0;
-			resultsInput.BusinessSeniority = null;
-			resultsInput.ConsumerScore = 0;
-			resultsInput.MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus.Single;
-			resultsInput.FirstRepaymentDatePassed = false;
-			resultsInput.EzbobSeniority = new DateTime(2013, 12, 10);
-			resultsInput.NumOfLoans = 0;
-			resultsInput.NumOfLateRepayments = 0;
-			resultsInput.NumOfEarlyRepayments = 0;
-			resultsInput.PositiveFeedbacks = 0;
-			resultsInput.OnlineAnnualTurnover = 22954;
-			resultsInput.BankAnnualTurnover = 22954;
-			resultsInput.HmrcAnnualTurnover = 22954;
-			resultsInput.ZooplaValue = 55;
-			resultsInput.MortgageBalance = 0;
-
-			var calculatorTester = new LimitedMedalCalculator1NoGathering(resultsInput);
-
-			MedalResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
-			Assert.AreEqual(resultsOutput.NetWorthGrade, 1);
-			Assert.AreEqual(resultsOutput.EzbobSeniorityGrade, 3);
-		}
-
 	
-		[Test]
-		public void Test_TurnoverForMedalTest() {
-			DateTime calculationTime = new DateTime(2013, 11, 30);
-			int customerId = 211; //171  // ; //348; // 363; //290; // 178; //;363
-
-			// 171: amazon, pp, ebay
-			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
-
-			MedalResult resultsInput = new MedalResult(customerId);
-			resultsInput.CalculationTime = calculationTime;
-			resultsInput.BusinessScore = 0;
-			resultsInput.TangibleEquityValue = 0;
-			resultsInput.BusinessSeniority = null;
-			resultsInput.ConsumerScore = 0;
-			resultsInput.MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus.Single;
-			resultsInput.FirstRepaymentDatePassed = false;
-			resultsInput.EzbobSeniority = new DateTime(2013, 12, 10);
-			resultsInput.NumOfLoans = 0;
-			resultsInput.NumOfLateRepayments = 0;
-			resultsInput.NumOfEarlyRepayments = 0;
-			resultsInput.PositiveFeedbacks = 0;
-			resultsInput.OnlineAnnualTurnover = 22954;
-			resultsInput.BankAnnualTurnover = 22954;
-			resultsInput.HmrcAnnualTurnover = 22954;
-			resultsInput.ZooplaValue = 55;
-			resultsInput.MortgageBalance = 0;
-
-			resultsInput.MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType.OnlineLimited;
-			var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
-			MedalResult resultsOutput = calculatorTester.CalculateMedalScore(customerId, calculationTime);
-			resultsInput.MedalType = Ezbob.Backend.Strategies.MedalCalculations.MedalType.NonLimited;
-			var calculatorTester1 = new NonLimitedMedalCalculator1NoGathering(resultsInput);
-			MedalResult resultsOutput1 = calculatorTester1.CalculateMedalScore(customerId, calculationTime);
-
-			// Assert.AreEqual(resultsOutput.NetWorthGrade, 1); Assert.AreEqual(resultsOutput.EzbobSeniorityGrade, 3);
-		}
-
 		[Test]
 		public void TestMaamMedalAndPricing() {
 			var stra = new MaamMedalAndPricing(1, 16431);
@@ -186,15 +61,15 @@ namespace EzBobTest {
 			this.m_oLog.Info("START TURNOVER FOR MEDAL customerID: {0}; calculationTime: {1}", customerId, calculationTime.Date);
 			this.m_oLog.Info("-------------------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
 
-			MedalResult resultsInput = new MedalResult(customerId);
-			var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
-			MedalResult result = calculatorTester.CalculateMedalScore(customerId, calculationTime);
+			MedalResult resultsInput = new MedalResult(customerId, this.m_oLog);
+			// var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
+			// MedalResult result = calculatorTester.CalculateMedalScore(customerId, calculationTime);
 			// both
 			//	new CalculateMedal(customerId, calculationTime, false, true).Execute();
 			//AV
 			var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
-			var model = msc.GetInputParameters(customerId, calculationTime);
-			this.m_oLog.Info("AV : AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, YodleeAnnualTurnover:{2}, OnlineAnnualTurnover: {3}, Type: {4}", model.AnnualTurnover, model.HmrcAnnualTurnover, model.YodleeAnnualTurnover, model.OnlineAnnualTurnover, model.TurnoverType);
+			// var model = msc.GetInputParameters(customerId, calculationTime);
+			// this.m_oLog.Info("AV : AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, YodleeAnnualTurnover:{2}, OnlineAnnualTurnover: {3}, Type: {4}", model.AnnualTurnover, model.HmrcAnnualTurnover, model.YodleeAnnualTurnover, model.OnlineAnnualTurnover, model.TurnoverType);
 		
 			this.m_oLog.Info("--------###-----------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
 	

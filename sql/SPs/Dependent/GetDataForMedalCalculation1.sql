@@ -28,8 +28,6 @@ BEGIN
 		@OnTimeLoans INT, 
 		@NumOfLatePayments INT, 
 		@NumOfEarlyPayments INT,
-		@BusinessScore INT,
-		@ConsumerScore INT,
 		@TangibleEquity DECIMAL(18,6),
 		@BusinessSeniority DATETIME,
 		@EzbobSeniority DATETIME,
@@ -42,16 +40,11 @@ BEGIN
 		@LastTransactionDate DATETIME,
 		@StatusAfterLastTransaction NVARCHAR(50),
 		@LateDays INT,
-		@NumOfHmrcMps INT,
-		@NumOfBanks INT,
 		@TotalZooplaValue INT,
 		@MpId INT,
 		@LastUpdateTime DATETIME,
 		@CurrentMpTurnoverValue FLOAT,
 		@LoanStatus NVARCHAR(50),
-		@EarliestHmrcLastUpdateDate DATETIME,
-		@EarliestYodleeLastUpdateDate DATETIME,
-		@NumberOfOnlineStores INT,
 		@AmazonPositiveFeedbacks INT,
 		@EbayPositiveFeedbacks INT,
 		@NumOfPaypalTransactions INT,
@@ -92,7 +85,6 @@ BEGIN
 	IF @TypeOfBusiness = 'LLP' OR @TypeOfBusiness = 'Limited'
 	BEGIN
 		SELECT TOP 1
-			@BusinessScore = cac.Score,
 			@TangibleEquity = cac.TangibleEquity,
 			@BusinessSeniority = cac.IncorporationDate
 		FROM
@@ -106,7 +98,6 @@ BEGIN
 	END
 	ELSE BEGIN	
 		SELECT TOP 1 
-			@BusinessScore = r.CommercialDelphiScore,
 			@BusinessSeniority = r.IncorporationDate 
 		FROM 
 			ExperianNonLimitedResults r
@@ -203,46 +194,6 @@ BEGIN
 	END
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	DECLARE @ServiceLogId BIGINT
-
-	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @CalculationTime
-
-	------------------------------------------------------------------------------
-
-	DECLARE @ExperianConsumerDataID BIGINT
-
-	SELECT
-		@ExperianConsumerDataID = e.Id
-	FROM
-		ExperianConsumerData e
-	WHERE
-		e.ServiceLogId = @ServiceLogId
-
-	------------------------------------------------------------------------------
-
-	SELECT
-		@ConsumerScore = MIN(x.ExperianConsumerScore)
-	FROM	(
-		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
-		FROM ExperianConsumerData d
-		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
-		WHERE d.Id = @ExperianConsumerDataID
-		AND l.InsertDate < @CalculationTime
-
-		UNION
-
-		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
-		FROM CustomerAnalyticsDirector d
-		WHERE d.CustomerID = @CustomerID
-		AND d.AnalyticsDate < @CalculationTime
-	) x
-
-	SET @ConsumerScore = ISNULL(@ConsumerScore, 0)
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
 	SET @FirstRepaymentDatePassed = 0
 
@@ -326,45 +277,6 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT
-		@NumOfHmrcMps = COUNT(1),
-		@EarliestHmrcLastUpdateDate = MIN(m.UpdatingEnd)
-	FROM
-		MP_CustomerMarketPlace m
-		INNER JOIN MP_MarketplaceType t
-			ON t.Id = m.MarketPlaceId
-			AND t.InternalId = @HMRC
-		INNER JOIN MP_VatReturnRecords r
-			ON m.Id = r.CustomerMarketPlaceId
-		INNER JOIN Business b
-			ON r.BusinessId = b.Id
-			AND b.BelongsToCustomer = 1
-	WHERE
-		m.CustomerId = @CustomerId
-		AND
-		m.Disabled = 0
-		AND
-		m.Created < @CalculationTime
-
-	------------------------------------------------------------------------------
-
-	SELECT
-		@NumOfBanks = COUNT(1),
-		@EarliestYodleeLastUpdateDate = MIN(m.UpdatingEnd)
-	FROM
-		MP_CustomerMarketPlace m
-		INNER JOIN MP_MarketplaceType t
-			ON t.Id = m.MarketPlaceId
-			AND t.InternalId = @Yodlee
-	WHERE
-		m.CustomerId = @CustomerId
-		AND
-		m.Disabled = 0
-		AND
-		m.Created < @CalculationTime
-
-	------------------------------------------------------------------------------
-
 	SELECT 
 		@TotalZooplaValue = SUM(CASE
 			WHEN ZooplaEstimateValue IS NOT NULL AND ZooplaEstimateValue != 0
@@ -378,22 +290,6 @@ BEGIN
 			AND a.IsOwnerAccordingToLandRegistry = 1
 	WHERE 
 		CustomerId = @CustomerId
-
-	------------------------------------------------------------------------------
-
-	SELECT
-		@NumberOfOnlineStores = COUNT(1) 
-	FROM
-		MP_CustomerMarketPlace m
-		INNER JOIN MP_MarketplaceType t
-			ON m.MarketPlaceId = t.Id
-			AND t.InternalId IN (@eBay, @Amazon, @PayPal)
-	WHERE
-		m.CustomerId = @CustomerId
-		AND
-		m.Disabled = 0
-		AND
-		m.Created < @CalculationTime
 
 	------------------------------------------------------------------------------
 
@@ -488,25 +384,18 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
-		@OnTimeLoans AS OnTimeLoans, 
+		@TangibleEquity AS TangibleEquityValue,
+		@BusinessSeniority AS BusinessSeniority,
+		@MaritalStatus AS MaritalStatus,
+		@EzbobSeniority AS EzbobSeniority,
+		@OnTimeLoans AS NumOfLoans, 
 		@NumOfLatePayments AS NumOfLatePayments, 
 		@NumOfEarlyPayments AS NumOfEarlyPayments,
-		@BusinessScore AS BusinessScore,
-		@ConsumerScore AS ConsumerScore,
-		@TangibleEquity AS TangibleEquity,
-		@BusinessSeniority AS BusinessSeniority,
-		@EzbobSeniority AS EzbobSeniority,
-		@MaritalStatus AS MaritalStatus,
-		@NumOfHmrcMps AS NumOfHmrcMps,
-		@NumOfBanks AS NumOfBanks,
-		@TotalZooplaValue AS TotalZooplaValue,
-		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
-		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
-		@NumberOfOnlineStores AS NumberOfOnlineStores,
+		@FirstRepaymentDatePassed AS FirstRepaymentDatePassed, 
+		@TotalZooplaValue AS ZooplaValue,
 		@AmazonPositiveFeedbacks AS AmazonPositiveFeedbacks,
 		@EbayPositiveFeedbacks AS EbayPositiveFeedbacks,
-		@NumOfPaypalTransactions AS NumOfPaypalTransactions
+		@NumOfPaypalTransactions AS NumOfPaypalPositiveTransactions
 
 	------------------------------------------------------------------------------
 END

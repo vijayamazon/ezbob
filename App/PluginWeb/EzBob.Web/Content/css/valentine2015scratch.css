@@ -1,0 +1,44 @@
+﻿@font-face {
+	font-family: TitilliumWebBold;
+	src: url(../img/ny2015scratch/titilliumweb-bold-webfont.ttf), url(../img/ny2015scratch/titilliumweb-bold-webfont.eot);
+}
+
+@font-face {
+	font-family: TitilliumWebExtraLight;
+	src: url(../img/ny2015scratch/titilliumweb-extralight-webfont.ttf), url(../img/ny2015scratch/titilliumweb-extralight-webfont.eot);
+}
+
+#valentine2015scratch {
+	display: none;
+	background-image: url(../img/valentine2015scratch/bg.jpg);
+	background-position: center 77px;
+	background-size: contain;
+	background-repeat: no-repeat;
+	min-height: 1200px;
+	height: 1200px;
+	padding-top: 77px;
+	background-color: black;
+	position: relative;
+}
+
+#valentine2015scratch > .content {
+	position: absolute;
+	top: 100px;
+	left: 0;
+	width: 100%;
+	text-align: center;
+	color: white;
+}
+
+#valentine2015scratch > .content > .title {
+	text-align: center;
+	font-family: TitilliumWebExtraLight;
+	font-size: 87px;
+	color: #ffcc83;
+}
+
+#valentine2015scratch > .content > .slogan {
+	font-size: 37px;
+	font-family: TitilliumWebBold;
+}
+

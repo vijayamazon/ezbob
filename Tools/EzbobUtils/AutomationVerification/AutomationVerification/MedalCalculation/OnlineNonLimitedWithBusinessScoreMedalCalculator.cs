@@ -14,13 +14,6 @@
 	{
 		public OnlineNonLimitedWithBusinessScoreMedalCalculator(AConnection db, ASafeLog log) : base(db, log) { }
 
-		public override MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null)
-		{
-			var model = base.GetInputParameters(customerId, calculationDate);
-			model = GetOnlineInputParameters(customerId, model);
-			return model;
-		}
-
 		public override MedalOutputModel CalculateMedal(MedalInputModel model)
 		{
 			//Log.Debug(model.ToString());

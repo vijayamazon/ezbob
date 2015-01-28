@@ -389,12 +389,14 @@
 
 		[Test]
 		public void TestMedalCalculation() {
-			DateTime calculationTime = new DateTime(2014, 01, 01);
+			DateTime calculationTime = DateTime.UtcNow;
+
 			var customers = new[] {
-				270,  19271, 19856, 19970, 234, 103, 211, 739
+				492,
 			};
-			foreach (var customer in customers)
-				new CalculateMedal(customer, DateTime.UtcNow, false, true).Execute();
+
+			foreach (var customerID in customers)
+				new CalculateMedal(customerID, calculationTime, false, true).Execute();
 
 			/*this.m_oDB.ForEachRowSafe((sr) => {
 					int customerId = sr["Id"];

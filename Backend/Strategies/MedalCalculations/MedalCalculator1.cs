@@ -17,6 +17,7 @@
 		) {
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
+
 			this.typeOfBusiness = typeOfBusiness;
 			this.consumerScore = consumerScore;
 			this.companyScore = companyScore;
@@ -59,15 +60,36 @@
 				);
 			} // if
 
-			// choose medal type
-			MedalCalculatorBase calculator = ChooseCalculator();
+			Type calculatorType = ChooseCalculator();
 
-			return (calculator == null)
-				? SetNoMedal("Customer doesn't fit any of the existing medals")
-				: calculator.CalculateMedalScore(this.customerId, this.calculationTime);
+			if (calculatorType == null)
+				return SetNoMedal("Customer doesn't fit any of the existing medals");
+
+			// choose medal type
+			MedalCalculatorBase calculator = Activator.CreateInstance(calculatorType) as MedalCalculatorBase;
+
+			if (calculator == null)
+				return SetNoMedal("Failed to create medal of type " + calculatorType);
+
+			calculator.Init(
+				this.customerId,
+				this.calculationTime,
+
+				this.consumerScore,
+				this.companyScore,
+
+				this.numOfHmrcMps,
+				this.numOfYodleeMps,
+				this.numOfEbayAmazonPayPalMps,
+
+				this.earliestHmrcLastUpdateDate,
+				this.earliestYodleeLastUpdateDate
+			);
+
+			return calculator.CalculateMedalScore();
 		} // CalculateMedal
 
-		private MedalCalculatorBase ChooseCalculator() {
+		private Type ChooseCalculator() {
 			if (this.typeOfBusiness == "LLP" || this.typeOfBusiness == "Limited")
 				return ChooseLimitedCalculator();
 
@@ -75,32 +97,32 @@
 				return ChooseNonLimitedCalculatorWithScore();
 
 			if (this.numOfEbayAmazonPayPalMps > 0)
-				return new OnlineNonLimitedNoBusinessScoreMedalCalculator1();
+				return typeof(OnlineNonLimitedNoBusinessScoreMedalCalculator1);
 
 			if ((this.consumerScore > 0) && ((this.numOfHmrcMps > 0) || (this.numOfYodleeMps > 0)))
-				return new SoleTraderMedalCalculator1();
+				return typeof(SoleTraderMedalCalculator1);
 
 			return null;
 		} // ChooseCalculator
 
-		private MedalCalculatorBase ChooseLimitedCalculator() {
+		private Type ChooseLimitedCalculator() {
 			if (this.numOfEbayAmazonPayPalMps > 0)
-				return new OnlineLimitedMedalCalculator1();
+				return typeof(OnlineLimitedMedalCalculator1);
 
-			return new LimitedMedalCalculator1();
+			return typeof(LimitedMedalCalculator1);
 		} // ChooseLimitedCalculator
 
-		private MedalCalculatorBase ChooseNonLimitedCalculatorWithScore() {
+		private Type ChooseNonLimitedCalculatorWithScore() {
 			if (this.numOfEbayAmazonPayPalMps > 0)
-				return new OnlineNonLimitedWithBusinessScoreMedalCalculator1();
+				return typeof(OnlineNonLimitedWithBusinessScoreMedalCalculator1);
 
-			return new NonLimitedMedalCalculator1();
+			return typeof(NonLimitedMedalCalculator1);
 		} // ChooseNonLimitedCalculatorWithScore
 
 		private MedalResult SetNoMedal(string errorMessageFormat, params object[] args) {
 			Library.Instance.Log.Warn("No medal was calculated for customer {0}.", this.customerId);
 
-			return new MedalResult(this.customerId) {
+			return new MedalResult(this.customerId, Library.Instance.Log) {
 				CalculationTime = this.calculationTime,
 				MedalType = MedalType.NoMedal,
 				Error = string.Format(errorMessageFormat, args),

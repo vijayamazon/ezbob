@@ -6,6 +6,7 @@
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus;
 	using Medal = EZBob.DatabaseLib.Model.Database.Medal;
 
@@ -24,29 +25,62 @@
 		// Gathered data
 		public int BusinessScore { get; set; }
 		public decimal FreeCashFlowValue { get; set; }
+		[Traversable]
 		public decimal TangibleEquityValue { get; set; }
+		[Traversable]
 		public DateTime? BusinessSeniority { get; set; }
 		public int ConsumerScore { get; set; }
 		public decimal NetWorth { get; set; }
-		public MaritalStatus MaritalStatus { get; set; }
+
+		[Traversable]
+		[FieldName("MaritalStatus")]
+		public string MaritalStatusStr {
+			get { return MaritalStatus.ToString(); }
+			set {
+				MaritalStatus maritalStatus;
+
+				if (Enum.TryParse(value, out maritalStatus))
+					MaritalStatus = maritalStatus;
+				else {
+					this.log.Error(
+						"Unable to parse marital status for customer: {0} will use 'Other'. The value was: '{1}'.",
+						CustomerId,
+						value
+					);
+					MaritalStatus = MaritalStatus.Other;
+				} // if
+			} // set
+		} // MaritalStatus
+
+		public MaritalStatus MaritalStatus { get; private set; }
+
 		public int NumberOfStores { get; set; }
 		public int PositiveFeedbacks { get; set; }
+		[Traversable]
 		public DateTime? EzbobSeniority { get; set; }
+		[Traversable]
 		public int NumOfLoans { get; set; }
+		[Traversable]
 		public int NumOfLateRepayments { get; set; }
+		[Traversable]
 		public int NumOfEarlyRepayments { get; set; }
 		public decimal ValueAdded { get; set; }
 		public decimal HmrcAnnualTurnover { get; set; }
 		public decimal BankAnnualTurnover { get; set; }
 		public decimal OnlineAnnualTurnover { get; set; }
+		[Traversable]
 		public bool FirstRepaymentDatePassed { get; set; }
 		public int NumOfHmrcMps { get; set; }
 		public int NumOfBanks { get; set; }
+		[Traversable]
 		public int ZooplaValue { get; set; }
 		public DateTime? EarliestHmrcLastUpdateDate { get; set; }
 		public DateTime? EarliestYodleeLastUpdateDate { get; set; }
+		[Traversable]
 		public int AmazonPositiveFeedbacks { get; set; }
+		[Traversable]
 		public int EbayPositiveFeedbacks { get; set; }
+		[Traversable]
 		public int NumberOfPaypalPositiveTransactions { get; set; }
 		public decimal MortgageBalance { get; set; }
 
@@ -107,12 +141,13 @@
 		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
 
-		public MedalResult(int customerID) {
+		public MedalResult(int customerID, ASafeLog log) {
 			MedalClassification = Medal.NoClassification;
 			OfferedLoanAmount = 0;
 			TotalScoreNormalized = 0;
 			CustomerId = customerID;
-		}
+			this.log = log;
+		} // constructor
 
 		public static int RoundOfferedAmount(decimal amount) {
 			decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
@@ -232,11 +267,7 @@
 				new QueryParameter("EbayPositiveFeedbacks", EbayPositiveFeedbacks),
 				new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
 				new QueryParameter("MortgageBalance", MortgageBalance));
-		}
-
-		public void PrintToLog(ASafeLog log) {
-			log.Debug(ToString());
-		}
+		} // SaveToDb
 
 		public override string ToString() {
 			var sb = new StringBuilder();
@@ -276,7 +307,7 @@
 					Score = BusinessScoreScore
 				};
 				sb.AddWeight(weight, "BusinessScore", ref summary);
-			}
+			} // if
 
 			if (MedalType == MedalType.Limited || MedalType == MedalType.OnlineLimited) {
 				weight = new Weight {
@@ -286,7 +317,7 @@
 					Score = TangibleEquityScore
 				};
 				sb.AddWeight(weight, "TangibleEquity", ref summary);
-			}
+			} // if
 
 			DateTime calcTime = CalculationTime;
 			int businessSeniorityYears = 0;
@@ -398,7 +429,7 @@
 					Score = PositiveFeedbacksScore
 				};
 				sb.AddWeight(weight, "PositiveFeedbacks", ref summary);
-			}
+			} // if
 
 			sb.AppendLine("----------------------------------------------------------------------------------------------------------------------------------------");
 
@@ -416,8 +447,10 @@
 					.PadRight(10), summary.Value);
 
 			return sb.ToString();
-		}
-	}
+		} // ToString
+
+		private readonly ASafeLog log;
+	} // class MedalResult
 
 	internal static class StringBuilderExtention {
 		public static void AddWeight(this StringBuilder sb, Weight weight, string name, ref Weight summary) {
@@ -444,17 +477,15 @@
 				summary.MaximumScore += weight.MaximumScore;
 				summary.Score += weight.Score;
 				summary.Grade += weight.Grade;
-			}
-		}
+			} // if
+		} // AddWeight
 
 		public static string ToPercent(decimal val) {
-			return String.Format("{0:F2}", val * 100)
-				.PadRight(6);
-		}
+			return String.Format("{0:F2}", val * 100).PadRight(6);
+		} // ToPercent
 
 		public static string ToShort(decimal val) {
-			return String.Format("{0:F2}", val)
-				.PadRight(6);
-		}
-	}
-}
+			return String.Format("{0:F2}", val).PadRight(6);
+		} // ToShort
+	} // class StringBuilderExtention
+} // namespace

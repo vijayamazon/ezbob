@@ -54,6 +54,13 @@
 		Diamond,
 	} // enum Medal
 
+	public static class MedalExt {
+		public static string Stringify(this Medal medal, int padLength = -1) {
+			string output = medal == Medal.NoClassification ? "NoClass" : medal.ToString();
+			return padLength > 0 ? output.PadRight(padLength) : output;
+		} // Stringify
+	} // MedalExt
+
 	public enum MedalType {
 		NoMedal,
 		Limited,
