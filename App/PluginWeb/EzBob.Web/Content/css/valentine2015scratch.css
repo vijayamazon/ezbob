@@ -10,7 +10,7 @@
 
 #valentine2015scratch {
 	display: none;
-	background-image: url(../img/valentine2015scratch/bg.jpg);
+	background-image: url(../img/valentine2015scratch/valentine_promotion_bg.jpg);
 	background-position: center 77px;
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -30,15 +30,73 @@
 	color: white;
 }
 
-#valentine2015scratch > .content > .title {
-	text-align: center;
-	font-family: TitilliumWebExtraLight;
-	font-size: 87px;
-	color: #ffcc83;
+#valentine2015scratch > .content > img.title {
+	position: absolute;
+	width: 841px;
+	height: 108px;
+	top: 0;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
 }
 
-#valentine2015scratch > .content > .slogan {
-	font-size: 37px;
-	font-family: TitilliumWebBold;
+#valentine2015scratch > .content > .scratch-card {
+	background-image: url(../img/valentine2015scratch/ribbon.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+	position: absolute;
+	top: 109px;
+	margin: 0 auto;
+	width: 672px;
+	height: 527px;
+	left: 0;
+	right: 0;
 }
 
+#valentine2015scratch > .content > .scratch-card > img.slogan {
+	position: absolute;
+	top: 0;
+	margin: 0 auto;
+	width: 672px;
+	height: 167px;
+	left: 0;
+	right: 0;
+}
+
+#valentine2015scratch > .content > .scratch-card > .scratch-area {
+	width: 277px;
+	height: 360px;
+	position: absolute;
+	top: 20px;
+	margin: 0 auto;
+	left: 0;
+	right: 0;
+}
+
+#valentine2015scratch > .content > .scratch-card > .scratch-area > canvas {
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+
+#valentine2015scratch > .content > .scratch-card > .alpha-scratch-area {
+	width: 277px;
+	height: 360px;
+	position: absolute;
+	top: 20px;
+	left: 0;
+	background-image: url(../img/valentine2015scratch/scratch_card.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+}
+
+#valentine2015scratch > .content > .scratch-card > .beta-scratch-area {
+	width: 277px;
+	height: 360px;
+	position: absolute;
+	top: 20px;
+	right: 0;
+	background-image: url(../img/valentine2015scratch/scratch_card.png);
+	background-repeat: no-repeat;
+	background-position: center top;
+}

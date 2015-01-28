@@ -73,7 +73,7 @@
                     </a>
                 </div>
 
-				<!-- <button type="button" class="btn-show-valentine-scratch-remove-me">Valentine</button> -->
+				<button type="button" class="btn-show-valentine-scratch-remove-me">Valentine</button>
 
                 <div class="header-info" style="display: none;">
                     <div class="header-info-left"></div>
@@ -98,8 +98,16 @@
 
 		<div id="valentine2015scratch">
 			<div class="content">
-				<div class="title">Win a romantic weekend</div>
-				<div class="slogan">Scratch and win a ticket to a romantic vacation</div>
+				<img class="title" src="~/Content/img/valentine2015scratch/headline.png" />
+
+				<div class="scratch-card">
+					<div class="scratch-area"></div>
+
+					<div class="alpha-scratch-area"></div>
+					<div class="beta-scratch-area"></div>
+
+					<img class="slogan" src="~/Content/img/valentine2015scratch/ribbon.png" />
+				</div>
 			</div>
 		</div>
 
@@ -209,7 +217,17 @@
 
 			EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
 
-	        // $('.btn-show-valentine-scratch-remove-me').click(function() { $('.main-page').hide(); $('#valentine2015scratch').show(); });
+	        // $('.btn-show-valentine-scratch-remove-me').click(function() {
+		        $('.main-page').hide(); $('#valentine2015scratch').show();
+
+				$('.scratch-area', '#valentine2015scratch').wScratchPad({
+					size: 7,
+					bg: window.gRootPath + 'Content/img/valentine2015scratch/prize_rome.png',
+					fg: window.gRootPath + 'Content/img/valentine2015scratch/scratch_card.png',
+					realtime: false,
+				});
+
+        	// });
         });
 
         function EzBob_CgVendors_init() {
