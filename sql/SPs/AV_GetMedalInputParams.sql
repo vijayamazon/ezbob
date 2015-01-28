@@ -108,23 +108,6 @@ BEGIN
 		WHERE x.MinDate IS NOT NULL
 	END 
 
-	-- Minimal Consumer/Directors score
-	DECLARE @ConsumerScore INT
-
-	SELECT
-		@ConsumerScore = ISNULL(MIN(ISNULL(x.ExperianConsumerScore, 0)), 0)
-	FROM (
-		SELECT ExperianConsumerScore
-		FROM Customer
-		WHERE Id = @CustomerId
-		AND ExperianConsumerScore IS NOT NULL
-		UNION
-		SELECT ExperianConsumerScore
-		FROM Director
-		WHERE CustomerId = @CustomerId
-		AND ExperianConsumerScore IS NOT NULL
-	) x
-	
 	--NumOfOnTimeLoans
 	DECLARE @NumOfOnTimeLoans INT 
 	;WITH late_loans AS (
@@ -230,45 +213,14 @@ BEGIN
 		AND
 		IsOwnerAccordingToLandRegistry = 1
 	
-	--Mortgages
-	DECLARE @ServiceLogId BIGINT
-	
-	SELECT TOP 1
-		@ServiceLogId = Id
-	FROM
-		MP_ServiceLog l
-	WHERE
-		l.CustomerId = @CustomerId
-		AND
-		l.ServiceType = 'Consumer Request'
-		AND
-		l.DirectorId IS NULL
-	ORDER BY
-		l.InsertDate DESC,
-		l.Id DESC
-	
-	IF @ServiceLogId IS NULL
-	BEGIN
-		SELECT TOP 1
-			@ServiceLogId = l.Id
-		FROM
-			Customer c 
-			INNER JOIN CustomerAddress a
-		 	ON a.CustomerId = c.Id
-		 	AND a.addressType=1
-		INNER JOIN MP_ServiceLog l
-			ON l.Firstname = c.FirstName
-			AND l.Surname = c.Surname
-			AND l.DateOfBirth = c.DateOfBirth
-			AND l.Postcode = a.Postcode
-			AND l.ServiceType = 'Consumer Request'
-		WHERE
-			c.Id = @CustomerId
-		ORDER BY
-		   l.InsertDate DESC,
-		   l.Id DESC
-	END
+	------------------------------------------------------------------------------
 
+	DECLARE @ServiceLogId BIGINT
+	EXEC GetExperianConsumerServiceLog @CustomerId, @ServiceLogId OUTPUT
+
+	------------------------------------------------------------------------------
+
+	--Mortgages
 	DECLARE @Mortages INT
 
 	SELECT
@@ -284,6 +236,45 @@ BEGIN
 		MatchTo = 1 
 		AND
 		AccountStatus <> 'S'
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
+
+	-- Minimal Consumer/Directors score
+
+	DECLARE @ExperianConsumerDataID BIGINT
+
+	SELECT
+		@ExperianConsumerDataID = e.Id
+	FROM
+		ExperianConsumerData e
+	WHERE
+		e.ServiceLogId = @ServiceLogId
+
+	------------------------------------------------------------------------------
+
+	DECLARE @ConsumerScore INT
+
+	SELECT
+		@ConsumerScore = MIN(x.ExperianConsumerScore)
+	FROM	(
+		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
+		FROM ExperianConsumerData d
+		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
+		WHERE d.Id = @ExperianConsumerDataID
+
+		UNION
+
+		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
+		FROM CustomerAnalyticsDirector d
+		WHERE d.CustomerID = @CustomerId
+		AND d.IsActive = 1
+	) x
+
+	SET @ConsumerScore = ISNULL(@ConsumerScore, 0)
+
+	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
 	-- First Repayment Date
 
