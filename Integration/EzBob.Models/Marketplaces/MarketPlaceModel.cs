@@ -21,7 +21,7 @@
 		public string LastChecked { get; set; }
 		public string UpdatingStatus { get; set; }
 		public string UpdateError { get; set; }
-		public decimal? RaitingPercent { get; set; }
+		public decimal RaitingPercent { get; set; }
 		public string SellerInfoStoreURL { get; set; }
 		public IEnumerable<string> Categories { get; set; }
 		

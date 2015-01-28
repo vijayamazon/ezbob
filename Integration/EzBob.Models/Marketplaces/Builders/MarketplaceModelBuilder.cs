@@ -39,7 +39,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				PositiveFeedbacks = 0,
 				NegativeFeedbacks = 0,
 				NeutralFeedbacks = 0,
-				RaitingPercent = null,
+				RaitingPercent = 0,
 				SellerInfoStoreURL = url,
 				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
 				UWPriority = mp.Marketplace.UWPriority,

@@ -33,9 +33,11 @@ namespace EzBob.Models.Marketplaces.Builders
             model.EBay = BuildEBay(mp.EbayUserData.LastOrDefault(), mp.EbayUserAccountData.LastOrDefault(), ebayFeedBack);
         }
 
-		protected virtual new void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
+		protected override void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
 			var raitingPercent = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackPercentRate.ToString());
-			model.RaitingPercent = raitingPercent == null ? null : (decimal?)raitingPercent.Value;
+			decimal? raitingPercentValue = raitingPercent == null ? 0 : (decimal?)raitingPercent.Value;
+			model.RaitingPercent = raitingPercentValue ?? 0;
+			
 			var yearAggregations = aggregations.Where(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year).ToList();
 			if (!yearAggregations.Any()){
 				return;

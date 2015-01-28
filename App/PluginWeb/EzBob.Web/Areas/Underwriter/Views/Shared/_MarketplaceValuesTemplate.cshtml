@@ -181,7 +181,7 @@
                             <label class="small-text"><%- m.MonthSalesAnnualized != 0 ? EzBob.formatPoundsNoDecimals(m.MonthSalesAnnualized) : '' %> </label>
                         </td>
                         <td class="centered <%- disabled%>"><%- EzBob.formatPoundsNoDecimals( m.AnnualSales) %></td>
-                        <td class="centered <%- disabled%>"><%- m.RaitingPercent%> %</td>
+                        <td class="centered <%- disabled%>"><%- EzBob.formatPercents(m.RaitingPercent,1)%></td>
                         <td class="<%- disabled%>"><% if(m.Disabled) print ("Disabled") %></td>
                         <td class="<%- disabled%>"><%- m.UpdatingStatus %> <%- m.LastChecked%>
 							<% if (m.UpdateError) { %>

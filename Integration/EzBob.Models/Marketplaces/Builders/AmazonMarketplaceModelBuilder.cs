@@ -43,12 +43,13 @@
             model.Categories = _ebayAmazonCategoryRepository.GetAmazonCategories(mp);
         }
 
-		protected virtual new  void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
+		protected override void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
 			var sellerRating = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.UserRating.ToString());
 			model.AmazonSelerRating = sellerRating == null ? 0 : (double)sellerRating.Value;
 
 			var raitingPercent = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackPercentRate.ToString() && x.TimePeriod.TimePeriodType == TimePeriodEnum.Year);
-			model.RaitingPercent = raitingPercent == null ? null : (decimal?)raitingPercent.Value;
+			decimal? raitingPercentValue = raitingPercent == null ? 0 : (decimal?)raitingPercent.Value;
+			model.RaitingPercent = raitingPercentValue ?? 0;
 
 			var yearAggregations = aggregations.Where(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year).ToList();
 			if (!yearAggregations.Any()) {
