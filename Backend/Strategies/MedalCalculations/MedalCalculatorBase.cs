@@ -900,8 +900,6 @@
 				DateTime T3 = monthStart.AddMonths(-3);
 				DateTime T6 = monthStart.AddMonths(-6);
 
-				Console.WriteLine("t1: {0}, t3: {1}, t6: {2},", T1, T3, T6);
-
 				const int Ec1 = 12;
 				const int Ec3 = 4;
 				const int Ec6 = 2;
