@@ -29,6 +29,11 @@
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
 
+		public static MvcHtmlString RenderEverlineCss() {
+			return Bundle.Css()
+			.Add("~/Content/css/everline.css")				
+			.MvcRender("~/Content/css/min/everline_#.css");
+		}
 		public static MvcHtmlString RenderProfileCss() {
 			return Bundle.Css()
 				//libs
@@ -159,6 +164,7 @@
 				.Add("~/Content/js/lib/mousetrap_1.4.0.js")
 				.Add("~/Content/js/lib/jquery.colorbox-min.js")
 				.Add("~/Content/js/lib/jquery.dataTables.min.js")
+				.Add("~/Content/js/lib/footer.min.js")
 
 				//controls
 				.Add("~/Content/js/controls/ezbob.modal.js")

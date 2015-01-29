@@ -44,7 +44,7 @@
 
 		[IsSuccessfullyRegisteredFilter]
 		public ViewResult Index() {
-			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
+			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, this.Request.Url.Host, true);
 			ViewData["ShowChangePasswordPage"] = m_oContext.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = m_oSession
@@ -67,7 +67,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Details() {
-			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
+			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, this.Request.Url.Host, true);
 			return Json(details.Customer, JsonRequestBehavior.AllowGet);
 		} // Details
 

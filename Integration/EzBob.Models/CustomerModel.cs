@@ -197,6 +197,8 @@ namespace EzBob.Models {
 		public int WhiteLabelId { get; set; }
 
 		public string LotteryPlayerID { get; set; }
+
+		public string Origin { get; set; }
 	} // class CustomerModel
 
 	public class InvitedFriend {

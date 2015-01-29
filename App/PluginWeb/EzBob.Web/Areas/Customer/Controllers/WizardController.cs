@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using System.Linq;
+	using System.Web;
 	using System.Web.Mvc;
 	using Code;
 	using Code.UiEvents;
@@ -68,8 +69,8 @@
 			ViewData["MarketPlaceGroups"] = _session
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
-
-			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, provider);
+			HttpRequest request = this.HttpContext.ApplicationInstance.Context.Request;
+			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, request.Url.Host, provider);
 
 			SavePageLoadEvent();
 

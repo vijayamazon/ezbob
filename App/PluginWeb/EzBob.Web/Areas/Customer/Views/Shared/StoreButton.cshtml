@@ -1,33 +1,34 @@
 ﻿@model dynamic
 <script id="store-button-template" type="text/template">
-	<a href="#" class="marketplace-button-account-<%- shopClass %>" ui-event-control-id="link-account:add_name_link_<%- shopClass %>">
-		<img alt="<%- shopClass %>" src="/Content/css/images/accounts/<%- shopClass %>.png" />
-		<div class="onhover"><div class="onhover-cell">Add <%- shopDescription %></div></div>
-	</a>
+    <a href="#" class="marketplace-button-account-<%- shopClass %>" ui-event-control-id="link-account:add_name_link_<%- shopClass %>">
+        <img alt="<%- shopClass %>" src="/Content/css/images/accounts/<%- shopClass %>.png" />
+        <div class="onhover"><div class="onhover-cell">Add <%- shopDescription %></div></div>
+    </a>
 </script>
 
 <script id="store-button-help-window-links" type="text/template">
 {
-	"eBay": "@Url.Action("AttachEbay", "EbayMarketPlaces", new { Area = "Customer" })",
-	"paypal": "@Url.Action("AttachPayPal", "PaymentAccounts", new { Area = "Customer" })",
-	"FreeAgent": "@Url.Action("AttachFreeAgent", "FreeAgentMarketPlaces", new { Area = "Customer" })",
-	"Sage": "@Url.Action("AttachSage", "SageMarketPlaces", new { Area = "Customer" })"
+    "eBay": "@Url.Action("AttachEbay", "EbayMarketPlaces", new { Area = "Customer" })",
+    "paypal": "@Url.Action("AttachPayPal", "PaymentAccounts", new { Area = "Customer" })",
+    "FreeAgent": "@Url.Action("AttachFreeAgent", "FreeAgentMarketPlaces", new { Area = "Customer" })",
+    "Sage": "@Url.Action("AttachSage", "SageMarketPlaces", new { Area = "Customer" })"
 }
 </script>
 
 <script id="store-button-help-window-template" type="text/template">
-	<div class="hide">
-		<div id="<%- shopClass %>_help" class="help_window">
-			<h2>Link <%- shopClass %> Account</h2>
-			<p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
-			<div class="help_image help_<%- shopClass %>"></div>
-			<br>
-			<div class="buttons_container">
-				<a href="#" target="_blank" class="help-window-continue-link button btn-green pull-right" ui-event-control-id="link-account:help_popup_continue_<%- shopClass %>">Continue</a>
-			</div>
-			<div class="clear"></div>
-			<hr>
-			<div class="help_security"></div>
-		</div>
-	</div>
+    <div class="hide">
+        <div id="<%- shopClass %>_help" class="help_window">
+            <h2>Link <%- shopClass %> Account</h2>
+            <p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
+            
+            <div class="help_image help_<%- shopClass %> help_<%- origin %>"></div>
+            <br>
+            <div class="buttons_container">
+                <a href="#" target="_blank" class="help-window-continue-link button btn-green pull-right" ui-event-control-id="link-account:help_popup_continue_<%- shopClass %>">Continue</a>
+            </div>
+            <div class="clear"></div>
+            <hr>
+            <div class="help_security"></div>
+        </div>
+    </div>
 </script>

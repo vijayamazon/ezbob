@@ -452,6 +452,7 @@
     <Content Include="Content\css\common.css" />
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
+    <Content Include="Content\css\everline.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.svg" />
@@ -660,6 +661,17 @@
     <Content Include="Content\css\Permission.css" />
     <Content Include="Content\css\salesforce.css" />
     <Content Include="Content\css\valentine2015scratch.css" />
+    <Content Include="Content\everline\EverlineLogo.png" />
+    <Content Include="Content\everline\EverlineLogo.svg" />
+    <Content Include="Content\everline\favicons\120x120.png" />
+    <Content Include="Content\everline\favicons\152x152.png" />
+    <Content Include="Content\everline\favicons\60x60.png" />
+    <Content Include="Content\everline\favicons\76x76.png" />
+    <Content Include="Content\everline\favicons\faviconeverline.ico" />
+    <Content Include="Content\everline\help\help_ebay_everline.jpg" />
+    <Content Include="Content\everline\help\help_freeagent_everline.jpg" />
+    <Content Include="Content\everline\help\help_paypal_everline.jpg" />
+    <Content Include="Content\everline\help\help_sage_everline.jpg" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
     <Content Include="Content\img\basket-diamond-32.png" />
     <Content Include="Content\img\basket-gold-32.png" />
@@ -785,6 +797,7 @@
     <Content Include="Content\js\App\ezbob.GA.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
+    <Content Include="Content\js\lib\footer.min.js" />
     <Content Include="Content\js\lib\log.js" />
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
@@ -1327,9 +1340,6 @@
     <None Include="Content\img\customer-sidebar\icons-source\Preview Image Set_v1.0.psd" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.enterHmrc.js" />
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
-    <Content Include="Views\Shared\_Copyright.cshtml">
-      <SubType>Code</SubType>
-    </Content>
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
@@ -1507,6 +1517,8 @@
     <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
     <Content Include="Views\Shared\EditExperianDirectorData.cshtml" />
     <Content Include="Views\Account\CreatePassword.cshtml" />
+    <Content Include="Views\Shared\_Header.cshtml" />
+    <Content Include="Views\Shared\_Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />

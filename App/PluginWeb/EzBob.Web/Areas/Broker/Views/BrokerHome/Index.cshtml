@@ -12,6 +12,10 @@
 
 	Model.LogoUrl = Url.Content("~/Content/css/images/header/ezbob_logo-white.png");
 	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
+    
+    if (string.IsNullOrEmpty(ViewBag.Origin)) {
+        ViewBag.Origin = "ezbob";
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -776,9 +780,9 @@
 		<div class="push"></div>
 	</div>
 
-	<footer>
-		@{ Html.RenderPartial("_Copyright"); }
-	</footer>
+	
+	@{ Html.RenderPartial("_Footer"); }
+	
 
 	<div id="hidden-container" class="hide" style="display: none !important;">
 		<div class="common-customer-sidebar">

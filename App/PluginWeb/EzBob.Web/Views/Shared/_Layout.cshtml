@@ -11,20 +11,30 @@
     var controller = (string)ViewContext.RouteData.Values["controller"];
     var authCookie = Request.IsAuthenticated ? "auth" : "";
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-	if(string.IsNullOrEmpty(ViewBag.Phone))
-	{
-		ViewBag.Phone = "0800-011-4787";
-	}
+    if (string.IsNullOrEmpty(ViewBag.Phone)) {
+        ViewBag.Phone = "0800-011-4787";
+    }
 
-	string sCustomerLeadFieldName = "{}";
 
-	try {
-		StringStringMapActionResult clfnar = new ServiceClient().Instance.LoadCustomerLeadFieldNames();
-		sCustomerLeadFieldName = JsonConvert.SerializeObject(clfnar.Map);
-	}
-	catch {
-		sCustomerLeadFieldName = "{}";
-	}
+    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
+        ViewBag.Origin = "everline";
+    }
+
+    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
+        ViewBag.Origin = "ezbob";
+    }
+
+    if (string.IsNullOrEmpty(ViewBag.Origin)) {
+        ViewBag.Origin = "ezbob";
+    }
+
+    string sCustomerLeadFieldName = "{}";
+    try {
+        StringStringMapActionResult clfnar = new ServiceClient().Instance.LoadCustomerLeadFieldNames();
+        sCustomerLeadFieldName = JsonConvert.SerializeObject(clfnar.Map);
+    } catch {
+        sCustomerLeadFieldName = "{}";
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -34,9 +44,13 @@
 
     @RenderSection("head", false)
 
-    @if (controller == "Wizard")
-    {
-        <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
+    @if (controller == "Wizard") {
+        if (ViewBag.Origin == "ezbob") {
+            <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
+        }
+        if (ViewBag.Origin == "everline") {
+            <meta name="description" content="Everline provides a fast, flexible and convenient source of credit to entrepreneurs and looking to expand their business or manage working capital.">
+        }
     }
 
     <title>@ViewBag.Title</title>
@@ -44,11 +58,17 @@
     <meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
 
     <meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css">
 
     @{ Html.RenderPartial("_FavIcon"); }
 
     @BundleHelper.RenderPrintCss()
     @BundleHelper.RenderCustomerCss()
+
+    @if (ViewBag.Origin == "everline") {
+        @BundleHelper.RenderEverlineCss()
+    }
+
     @RenderSection("css", false)
 
     <!--[if lt IE 9]>
@@ -61,125 +81,93 @@
     @{Html.RenderPartial("_GoogleTagManager");}
     @RenderSection("afterHead", false)
 
-    @AntiForgery.GetHtml() 
+    @AntiForgery.GetHtml()
 
     <div id="wrapper">
-        <div id="header">
-            <div class="header-bg-strip"></div>
-            <div class="header-inner">
-                <div class="header-logo">
-                    <a href="http://www.ezbob.com">
-	                    <div class="newlogo" ></div>
-                    </a>
-                </div>
-
-				<button type="button" class="btn-show-valentine-scratch-remove-me">Valentine</button>
-
-                <div class="header-info" style="display: none;">
-                    <div class="header-info-left"></div>
-                    <div class="header-info-text"></div>
-                    <div class="header-info-right"></div>
-                </div>
-
-                <ul id="user-menu">
-                    <li id="logoff-li" class="login" style="display: none;">
-                        <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="button btn-grey">Log Off</a>
-                    </li>
-                    <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">Login</a></li>
-                    <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">Sign Up</a></li>
-                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;@ViewBag.Phone</div></li>
-                </ul>
-            </div>
-        </div>
-
+        @{ Html.RenderPartial("_Header"); }
+        
         <div class="main-page">
             @RenderBody()
         </div>
 
-		<div id="valentine2015scratch">
-			<div class="content">
-				<img class="title" src="~/Content/img/valentine2015scratch/headline.png" />
+        <div id="valentine2015scratch">
+            <div class="content">
+                <img class="title" src="~/Content/img/valentine2015scratch/headline.png" />
 
-				<div class="scratch-card">
-					<div class="scratch-area"></div>
+                <div class="scratch-card">
+                    <div class="scratch-area"></div>
 
-					<div class="alpha-scratch-area"></div>
-					<div class="beta-scratch-area"></div>
+                    <div class="alpha-scratch-area"></div>
+                    <div class="beta-scratch-area"></div>
 
-					<img class="slogan" src="~/Content/img/valentine2015scratch/ribbon.png" />
-				</div>
-			</div>
-		</div>
+                    <img class="slogan" src="~/Content/img/valentine2015scratch/ribbon.png" />
+                </div>
+            </div>
+        </div>
 
-		<div id="ny2015scratch">
-			<div class="content">
-				<div class="title">New Year's Revolution</div>
-				<div class="slogan">Scratch and win Cash Back up to</div>
-				<div class="slogan-amount">
-					<img src="~/Content/img/ny2015scratch/pound.png" />
-					<img src="~/Content/img/ny2015scratch/2.png" />
-					<img src="~/Content/img/ny2015scratch/0.png" />
-					<img src="~/Content/img/ny2015scratch/1.png" />
-					<img src="~/Content/img/ny2015scratch/5.png" />
-				</div>
-				
-				<div class="frame">
-					<div class="scratch-card">
-						<div class="scratch-area"></div>
+        <div id="ny2015scratch">
+            <div class="content">
+                <div class="title">New Year's Revolution</div>
+                <div class="slogan">Scratch and win Cash Back up to</div>
+                <div class="slogan-amount">
+                    <img src="~/Content/img/ny2015scratch/pound.png" />
+                    <img src="~/Content/img/ny2015scratch/2.png" />
+                    <img src="~/Content/img/ny2015scratch/0.png" />
+                    <img src="~/Content/img/ny2015scratch/1.png" />
+                    <img src="~/Content/img/ny2015scratch/5.png" />
+                </div>
 
-						<div class="alpha-scratch-area"></div>
-						<div class="beta-scratch-area"></div>
-						<div class="gamma-scratch-area"></div>
-					</div>
-					<div class="hoops"></div>
-				</div>
-			</div>
-			
-			<div class="decline"><a class="decline-game">I don't want to play</a></div>
-			<div class="close-lost"><a class="leave">Close</a></div>
-			
-			<div class="won">
-				<div class="fire">
-					<div class="frame">
-						<div class="title">You won!</div>
-						
-						<div class="amount-row">
-							<img src="~/Content/img/ny2015scratch/pound.png" />
-							<span class="amount"></span>
-						</div>
+                <div class="frame">
+                    <div class="scratch-card">
+                        <div class="scratch-area"></div>
 
-						<div class="close"><a class="leave">Close</a></div>
-					</div>
-				</div>
-			</div>
-		</div>
+                        <div class="alpha-scratch-area"></div>
+                        <div class="beta-scratch-area"></div>
+                        <div class="gamma-scratch-area"></div>
+                    </div>
+                    <div class="hoops"></div>
+                </div>
+            </div>
+
+            <div class="decline"><a class="decline-game">I don't want to play</a></div>
+            <div class="close-lost"><a class="leave">Close</a></div>
+
+            <div class="won">
+                <div class="fire">
+                    <div class="frame">
+                        <div class="title">You won!</div>
+
+                        <div class="amount-row">
+                            <img src="~/Content/img/ny2015scratch/pound.png" />
+                            <span class="amount"></span>
+                        </div>
+
+                        <div class="close"><a class="leave">Close</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <div id="modalRegion" class="modal hide fade"></div>
-        @if (!IsSectionDefined("customJs"))
-        {
+        @if (!IsSectionDefined("customJs")) {
             <div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
             <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
             <div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
             <div style="display: none;" class="hide" id="customer-name"></div>
             <div class="push"></div>
         }
-		<div style="display: none;" class="hide" id="customer-lead-field-names">@sCustomerLeadFieldName</div>
+        <div style="display: none;" class="hide" id="customer-lead-field-names">@sCustomerLeadFieldName</div>
     </div>
     
-    <footer>
-        @{ Html.RenderPartial("_Copyright"); }
-    </footer>
-
+    @{ Html.RenderPartial("_Footer"); }
+    
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
     </script>
-    
-    @if (IsSectionDefined("customJs"))
-    {
+
+    @if (IsSectionDefined("customJs")) {
         @RenderSection("customJs")
-    }
-    else
-    {
+    } else {
         @BundleHelper.RenderCommonJs()
         @BundleHelper.RenderProfileJs()
     }
@@ -189,23 +177,23 @@
         var EzBob = EzBob || {};
 
         window.ShowHideSignLogOnOff = function() {
-	        var sEmail = $('body').attr('data-user-name');
-	        if (sEmail) {
-				$('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
-				$('#user-menu .login_btn, .signup_btn').hide();
-			}
-	        else {
-				$('#logoff-li').hide();
+            var sEmail = $('body').attr('data-user-name');
+            if (sEmail) {
+                $('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
+                $('#user-menu .login_btn, .signup_btn').hide();
+            }
+            else {
+                $('#logoff-li').hide();
 
-				if ($('.login-form-user-name').length) {
-					$('.login_btn').hide();
-					$('.signup_btn').show();
-				}
-				else {
-					$('.login_btn').show();
-					$('.signup_btn').hide();
-				} // if
-			} // if
+                if ($('.login-form-user-name').length) {
+                    $('.login_btn').hide();
+                    $('.signup_btn').show();
+                }
+                else {
+                    $('.login_btn').show();
+                    $('.signup_btn').hide();
+                } // if
+            } // if
         }; // ShowHideSignLogOnOff
 
         $(document).ready(function() {
@@ -213,21 +201,21 @@
 
             window.ShowHideSignLogOnOff();
 
-			EzBob_CgVendors_init();
+            EzBob_CgVendors_init();
 
-			EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
+            EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
 
-	        // $('.btn-show-valentine-scratch-remove-me').click(function() {
-		        $('.main-page').hide(); $('#valentine2015scratch').show();
+            // $('.btn-show-valentine-scratch-remove-me').click(function() {
+            //$('.main-page').hide(); $('#valentine2015scratch').show();
 
-				$('.scratch-area', '#valentine2015scratch').wScratchPad({
-					size: 7,
-					bg: window.gRootPath + 'Content/img/valentine2015scratch/prize_rome.png',
-					fg: window.gRootPath + 'Content/img/valentine2015scratch/scratch_card.png',
-					realtime: false,
-				});
+            $('.scratch-area', '#valentine2015scratch').wScratchPad({
+                size: 7,
+                bg: window.gRootPath + 'Content/img/valentine2015scratch/prize_rome.png',
+                fg: window.gRootPath + 'Content/img/valentine2015scratch/scratch_card.png',
+                realtime: false,
+            });
 
-        	// });
+            // });
         });
 
         function EzBob_CgVendors_init() {
@@ -235,7 +223,6 @@
                 EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
         } // EzBob_CgVendors_init
     </script>
-	
-	 @{ Html.RenderPartial("_Iovation"); }
+    @{ Html.RenderPartial("_Iovation"); }
 </body>
 </html>

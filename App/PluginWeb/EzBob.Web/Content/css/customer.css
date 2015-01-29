@@ -10,18 +10,17 @@ table { border-collapse: collapse; border-spacing: 0; }
 hr { display: block; height: 1px; border: 0; border-top: 1px solid #ccc; margin: 1em 0; padding: 0; }
 input, select { vertical-align: middle; }
 
-
-html {
-    overflow-y: scroll;
-}
 body
 {
     text-rendering: optimizeLegibility !important;
     -webkit-font-smoothing: antialiased !important;
     margin: 0;
-    padding: 0;
     background: #fff;
     font-size: 18px;
+	position: static;
+	padding-top: 77px;
+	overflow-x: hidden;
+	font-size: 62.5%;
 }
 
 /*-- login bar --*/
