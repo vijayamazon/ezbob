@@ -51,6 +51,9 @@
 		[DataMember]
 		public string LotteryPlayerID { get; set; }
 
+		[DataMember]
+		public string LotteryCode { get; set; }
+
 		public override string ToString() {
 			return string.Format(
 @"

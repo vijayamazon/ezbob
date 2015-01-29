@@ -13,7 +13,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		lp.UniqueID
+		lp.UniqueID,
+		l.LotteryCode
 	FROM
 		LotteryPlayers lp
 		INNER JOIN Lotteries l

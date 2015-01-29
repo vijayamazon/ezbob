@@ -116,8 +116,11 @@
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
+    <Compile Include="Lottery\EnlistLottery.cs" />
+    <Compile Include="Lottery\LotteryDataForEnlisting.cs" />
+    <Compile Include="Lottery\LotteryEnlistingType.cs" />
     <Compile Include="Lottery\PlayLottery.cs" />
-    <Compile Include="MailStrategies\EnlistLottery.cs" />
+    <Compile Include="MailStrategies\EmailEnlistedLottery.cs" />
     <Compile Include="MainStrategy\AutoDecisionMails.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Agent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Arguments.cs" />

@@ -474,6 +474,7 @@
 				.Add("~/Content/js/Profile/ezbob.profile.inviteFriend.js")
 				.Add("~/Content/js/Profile/ezbob.profile.perks.js")
 				.Add("~/Content/js/Profile/ezbob.profile.ny2015scratch.js")
+				.Add("~/Content/js/Profile/ezbob.profile.valentine2015scratch.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMain.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMaster.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")

@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using API;
 	using ConfigManager;
+	using Ezbob.Backend.Strategies.Lottery;
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Utils;
 	using StructureMap;
@@ -53,6 +54,8 @@
 				Log.Info("Sending Alibaba internal took loan mail");
 				SendCostumeMail("Mandrill - Alibaba - Internal Took Loan", Variables, new[] { address });
 			} // if
+
+			new EnlistLottery(CustomerId).Execute();
 		} // ActionAtEnd
 
 		private double CalculateLoanAmountInUsd() {

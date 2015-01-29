@@ -143,13 +143,15 @@ BEGIN
 		-------------------------------------------------------------------------
 
 		INSERT INTO #prizes (PrizeID, Amount, Rnd)
-		SELECT
+		SELECT DISTINCT
 			p.PrizeID,
 			p.Amount,
 			ABS(CHECKSUM(NewId()))
 		FROM
 			LotteryPrizes p
-			LEFT JOIN LotteryPlayers lp ON p.PrizeID = lp.PrizeID
+			LEFT JOIN LotteryPlayers lp
+				ON p.PrizeID = lp.PrizeID
+				OR p.LinkedPrizeID = lp.PrizeID
 		WHERE
 			lp.PrizeID IS NULL
 			AND

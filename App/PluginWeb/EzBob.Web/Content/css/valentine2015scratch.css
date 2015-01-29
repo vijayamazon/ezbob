@@ -67,10 +67,8 @@
 	width: 177px;
 	height: 279px;
 	position: absolute;
-	top: 60px;
-	margin: 0 auto;
-	left: 0;
-	right: 0;
+	top: 50px;
+	left: 209px;
 }
 
 #valentine2015scratch > .content > .scratch-card > .scratch-area > canvas {
@@ -83,8 +81,8 @@
 	width: 177px;
 	height: 279px;
 	position: absolute;
-	top: 60px;
-	left: 55px;
+	top: 50px;
+	left: 27px;
 	background-image: url(../img/valentine2015scratch/scratch_card.png);
 	background-repeat: no-repeat;
 	background-position: center top;
@@ -94,8 +92,8 @@
 	width: 177px;
 	height: 279px;
 	position: absolute;
-	top: 60px;
-	right: 55px;
+	top: 50px;
+	left: 391px;
 	background-image: url(../img/valentine2015scratch/scratch_card.png);
 	background-repeat: no-repeat;
 	background-position: center top;

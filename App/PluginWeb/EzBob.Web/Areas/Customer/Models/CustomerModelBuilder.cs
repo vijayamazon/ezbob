@@ -293,6 +293,7 @@
 			);
 
 			customerModel.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
+			customerModel.LotteryCode = sr["LotteryCode"];
 
 			return wizardModel;
 		} // BuildWizardModel

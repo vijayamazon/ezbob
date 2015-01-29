@@ -6,47 +6,31 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE EnlistLottery
-@CustomerID INT,
+@UserID INT,
 @UniqueID UNIQUEIDENTIFIER,
+@LotteryID BIGINT,
+@IsBroker BIT,
 @Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @BrokerID INT
-	DECLARE @UserID INT = @CustomerID
-	DECLARE @LotteryID BIGINT = 0
-	DECLARE @CfgLotteryName NVARCHAR(256) = 'LotteryForCustomers'
-
 	DECLARE @Email NVARCHAR(255)
 	DECLARE @ContactName NVARCHAR(255)
 
-	DECLARE @LoanCount INT = 1 -- This SP is called only when customer takes the first loan.
-
 	------------------------------------------------------------------------------
 
-	SELECT
-		@UserID = Id,
-		@BrokerID = BrokerID,
-		@Email = Name,
-		@ContactName = FirstName
-	FROM
-		Customer c
-	WHERE
-		c.Id = @CustomerID
-
-	------------------------------------------------------------------------------
-
-	IF @UserID != @CustomerID -- wrong customer id specified
-		RETURN
-
-	------------------------------------------------------------------------------
-
-	IF @BrokerID > 0
+	IF @IsBroker = 0
 	BEGIN
-		SET @UserID = @BrokerID
-		SET @CfgLotteryName = 'LotteryForBrokers'
-
+		SELECT
+			@Email = Name,
+			@ContactName = FirstName
+		FROM
+			Customer c
+		WHERE
+			c.Id = @UserID
+	END
+	ELSE BEGIN
 		SELECT
 			@Email = ContactEmail,
 			@ContactName = ContactName
@@ -54,34 +38,7 @@ BEGIN
 			Broker
 		WHERE
 			BrokerID = @UserID
-
-		SELECT
-			@LoanCount = COUNT(*)
-		FROM
-			Loan l
-			INNER JOIN Customer c
-				ON l.CustomerId = c.Id
-				AND c.BrokerID = @BrokerID
 	END
-
-	------------------------------------------------------------------------------
-
-	IF @LoanCount != 1
-		RETURN
-
-	------------------------------------------------------------------------------
-
-	BEGIN TRY
-		SELECT
-			@LotteryID = CONVERT(BIGINT, v.Value)
-		FROM
-			ConfigurationVariables v
-		WHERE
-			v.Name = @CfgLotteryName
-	END TRY
-	BEGIN CATCH
-		RETURN -- configuration is not valid lottery id
-	END CATCH
 
 	------------------------------------------------------------------------------
 
@@ -96,7 +53,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF EXISTS (SELECT * FROM LotteryPlayers WHERE LotteryID = LotteryID AND UserID = @UserID)
+	IF EXISTS (SELECT * FROM LotteryPlayers WHERE LotteryID = @LotteryID AND UserID = @UserID)
 	BEGIN
 		COMMIT TRANSACTION
 		RETURN
