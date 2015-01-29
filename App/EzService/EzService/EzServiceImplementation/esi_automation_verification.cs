@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 
 	partial class EzServiceImplementation {
@@ -22,5 +23,8 @@
 			return Execute<VerifyReject>(null, null, nCustomerCount, nLastCheckedCustomerID);
 		} // VerifyReject
 
+		public ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, DateTime? calculationTime) {
+			return Execute<VerifyMedal>(null, null, topCount, lastCheckedID, includeTest, calculationTime);
+		} // VerifyMedal
 	} // class EzServiceImplementation
 } // namespace

@@ -695,6 +695,9 @@
 		ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
 
 		[OperationContract]
+		ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, DateTime? calculationTime);
+
+		[OperationContract]
 		ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
 
 		[OperationContract]

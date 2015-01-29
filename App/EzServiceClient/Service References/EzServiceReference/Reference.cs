@@ -3042,6 +3042,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/MaamMedalAndPricingResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyMedal", ReplyAction="http://tempuri.org/IEzService/VerifyMedalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyMedal", ReplyAction="http://tempuri.org/IEzService/VerifyMedalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyMedalAsync(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
         
@@ -4196,6 +4202,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID) {
             return base.Channel.MaamMedalAndPricingAsync(nCustomerCount, nLastCheckedCashRequestID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime) {
+            return base.Channel.VerifyMedal(topCount, lastCheckedID, includeTest, calculationTime);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyMedalAsync(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime) {
+            return base.Channel.VerifyMedalAsync(topCount, lastCheckedID, includeTest, calculationTime);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {

@@ -169,6 +169,12 @@
   <wsdl:message name="IEzService_MaamMedalAndPricing_OutputMessage">
     <wsdl:part name="parameters" element="tns:MaamMedalAndPricingResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_VerifyMedal_InputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyMedal" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_VerifyMedal_OutputMessage">
+    <wsdl:part name="parameters" element="tns:VerifyMedalResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_VerifyApproval_InputMessage">
     <wsdl:part name="parameters" element="tns:VerifyApproval" />
   </wsdl:message>
@@ -1308,6 +1314,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MaamMedalAndPricing" message="tns:IEzService_MaamMedalAndPricing_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MaamMedalAndPricingResponse" message="tns:IEzService_MaamMedalAndPricing_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="VerifyMedal">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyMedal" message="tns:IEzService_VerifyMedal_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyMedalResponse" message="tns:IEzService_VerifyMedal_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="VerifyApproval">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/VerifyApproval" message="tns:IEzService_VerifyApproval_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/VerifyApprovalResponse" message="tns:IEzService_VerifyApproval_OutputMessage" />
@@ -2157,6 +2167,15 @@
     </wsdl:operation>
     <wsdl:operation name="MaamMedalAndPricing">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MaamMedalAndPricing" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="VerifyMedal">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/VerifyMedal" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

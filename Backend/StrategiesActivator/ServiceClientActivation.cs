@@ -88,47 +88,6 @@
 			log.NotifyStop();
 		} // Execute
 
-		private class VerificationInput {
-			public int CustomerCount { get; private set; }
-
-			public bool IsGood { get; private set; }
-			public int LastCheckedCustomerID { get; private set; }
-
-			public VerificationInput(string sName, string[] args, ASafeLog oLog) {
-				CustomerCount = -1;
-				LastCheckedCustomerID = -1;
-
-				IsGood = false;
-				int n;
-
-				if (args.Length == 1) {
-					CustomerCount = -1;
-					LastCheckedCustomerID = -1;
-					IsGood = true;
-				} else if (args.Length == 2) {
-					IsGood = int.TryParse(args[1], out n);
-					if (IsGood)
-						CustomerCount = n;
-
-					LastCheckedCustomerID = -1;
-				} else if (args.Length == 3) {
-					IsGood = int.TryParse(args[1], out n);
-					if (IsGood)
-						CustomerCount = n;
-
-					IsGood = IsGood && int.TryParse(args[2], out n);
-					if (IsGood)
-						LastCheckedCustomerID = n;
-				} // if
-
-				if (!IsGood) {
-					oLog.Msg("Usage: {0} [ <customer count>  [ <last checked customer id> ] ]", sName);
-					oLog.Msg("Specify customer count 0 or negative to run on all the customers.");
-					oLog.Msg("Specify customer count 0 or negative to start from the beginning.");
-				} // if
-			} // constructor
-		}
-
 		[Activation]
 		private void AmlChecker() {
 			int customerId;
@@ -1293,6 +1252,8 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void VerifyApproval() {
 			var i = new VerificationInput("VerifyApproval", cmdLineArgs, log);
 
+			i.Init();
+
 			if (i.IsGood)
 				serviceClient.VerifyApproval(i.CustomerCount, i.LastCheckedCustomerID);
 		}
@@ -1300,6 +1261,8 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		[Activation]
 		private void VerifyReapproval() {
 			var i = new VerificationInput("VerifyReapproval", cmdLineArgs, log);
+
+			i.Init();
 
 			if (i.IsGood)
 				serviceClient.VerifyReapproval(i.CustomerCount, i.LastCheckedCustomerID);
@@ -1309,6 +1272,8 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void VerifyReject() {
 			var i = new VerificationInput("VerifyReject", cmdLineArgs, log);
 
+			i.Init();
+
 			if (i.IsGood)
 				serviceClient.VerifyReject(i.CustomerCount, i.LastCheckedCustomerID);
 		}
@@ -1316,6 +1281,8 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		[Activation]
 		private void VerifyRerejection() {
 			var i = new VerificationInput("VerifyRerejection", cmdLineArgs, log);
+
+			i.Init();
 
 			if (i.IsGood)
 				serviceClient.VerifyRerejection(i.CustomerCount, i.LastCheckedCustomerID);
@@ -1325,9 +1292,23 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void MaamMedalAndPricing() {
 			var i = new VerificationInput("MaamMedalAndPricing", cmdLineArgs, log);
 
+			i.Init();
+
 			if (i.IsGood)
 				serviceClient.MaamMedalAndPricing(i.CustomerCount, i.LastCheckedCustomerID);
 		} // MaamMedalAndPricing
+
+		[Activation]
+		private void VerifyMedal() {
+			var i = new MedalVerificationInput("VerifyMedal", cmdLineArgs, log);
+
+			i.Init();
+
+			this.log.Debug("Arguments: {0}", i);
+
+			if (i.IsGood)
+				serviceClient.VerifyMedal(i.CustomerCount, i.LastCheckedCustomerID, i.IncludeTest, i.CalculationTime);
+		} // VerifyMedal
 
 		[Activation]
 		private void WriteToLog() {

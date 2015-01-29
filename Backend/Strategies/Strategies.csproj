@@ -82,6 +82,7 @@
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
     <Compile Include="AutomationVerification\MaamMedalAndPricing.cs" />
+    <Compile Include="AutomationVerification\VerifyMedal.cs" />
     <Compile Include="AutomationVerification\VerifyReject.cs" />
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
     <Compile Include="AutomationVerification\VerifyApproval.cs" />

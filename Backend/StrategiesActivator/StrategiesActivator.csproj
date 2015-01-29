@@ -59,12 +59,14 @@
   <ItemGroup>
     <Compile Include="ActivationAttribute.cs" />
     <Compile Include="ExitException.cs" />
+    <Compile Include="MedalVerificationInput.cs" />
     <Compile Include="ServiceClientActivation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="VerificationInput.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
