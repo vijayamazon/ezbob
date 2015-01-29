@@ -3,11 +3,16 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate.Linq;
 
 	class PayPointMarketplaceModelBuilder : MarketplaceModelBuilder {
 		public PayPointMarketplaceModelBuilder() : base(null) { }
+
+		public override string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo) {
+			return "#";
+		}
 
 		public PaymentAccountsModel CreatePayPointAccountModelModel(MP_CustomerMarketPlace m, DateTime? history, List<IAnalysisDataParameterInfo> av) {
 			var payPointModel = new PayPointAccountsModel(m, history);

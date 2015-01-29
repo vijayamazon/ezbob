@@ -10,6 +10,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
 	using Ezbob.Models;
+	using EZBob.DatabaseLib.Common;
 	using NHibernate.Linq;
 	using Yodlee;
 	using YodleeLib.connector;
@@ -22,6 +23,10 @@ namespace EzBob.Models.Marketplaces.Builders {
 			: base(session) {
 			customerMarketPlaceRepository = new CustomerMarketPlaceRepository(_session);
 			_currencyConvertor = new CurrencyConvertor(new CurrencyRateRepository(_session));
+		}
+
+		public override string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo) {
+			return "#";
 		}
 
 		public YodleeModel BuildYodlee(int mpId) {

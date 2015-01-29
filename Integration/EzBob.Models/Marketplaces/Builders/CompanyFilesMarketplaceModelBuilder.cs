@@ -4,6 +4,7 @@ namespace EzBob.Models.Marketplaces.Builders
 	using System;
 	using System.Collections.Generic;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using NHibernate;
@@ -16,6 +17,10 @@ namespace EzBob.Models.Marketplaces.Builders
 			: base(session)
 		{
 			_companyFiles = new CompanyFilesMetaDataRepository(session);
+		}
+
+		public override string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo) {
+			return "#";
 		}
 
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)

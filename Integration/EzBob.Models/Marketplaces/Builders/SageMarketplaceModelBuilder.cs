@@ -6,6 +6,7 @@
 	using EZBob.DatabaseLib.DatabaseWrapper.Order;
 	using EZBob.DatabaseLib.Model.Marketplaces.Sage;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate;
 	using NHibernate.Linq;
@@ -16,6 +17,10 @@
 			foreach (var status in sagePaymentStatusRepository.GetAll()) {
 				_invoiceStatuses.Add(status.SageId.ToString(), status.name);
 			}
+		}
+
+		public override string GetUrl(MP_CustomerMarketPlace mp, IMarketPlaceSecurityInfo securityInfo) {
+			return "#";
 		}
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp) {
