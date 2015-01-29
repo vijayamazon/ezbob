@@ -4,7 +4,7 @@
 	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Infrastructure.csrf;
 
-	public class Ny2015ScratchController : Controller {
+	public class ScratchController : Controller {
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
@@ -28,5 +28,5 @@
 			var ny2015ScratchHelper = new ScratchHelper(userID, playerID);
 			ny2015ScratchHelper.Decline();
 		} // Decline
-	} // class Ny2015ScratchController
+	} // class ScratchController
 } // namespace

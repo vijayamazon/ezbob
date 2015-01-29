@@ -106,6 +106,18 @@
 					<img class="slogan" src="~/Content/img/valentine2015scratch/ribbon.png" />
 				</div>
 			</div>
+
+			<div class="decline"><a class="decline-game">I don't want to play</a></div>
+			<div class="close-lost"><a class="leave">Close</a></div>
+			
+			<div class="won">
+				<div class="popup">
+					<div class="title">Go Pack!</div>
+					<div class="msg">You won 2 tickets to <span class="city"></span></div>
+				</div>
+
+				<div class="close"><a class="leave">Close</a></div>
+			</div>
 		</div>
 
 		<div id="ny2015scratch">
@@ -213,15 +225,6 @@
 			EzBob_CgVendors_init();
 
 			EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
-
-			$('.main-page').hide(); $('#valentine2015scratch').show();
-
-			$('.scratch-area', '#valentine2015scratch').wScratchPad({
-				size: 7,
-				bg: window.gRootPath + 'Content/img/valentine2015scratch/prize_rome.png',
-				fg: window.gRootPath + 'Content/img/valentine2015scratch/scratch_card.png',
-				realtime: false,
-			});
         });
 
         function EzBob_CgVendors_init() {
