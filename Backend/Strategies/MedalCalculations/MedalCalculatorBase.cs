@@ -11,6 +11,7 @@
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository.Turnover;
 	using StructureMap;
 
 	/// <summary>
