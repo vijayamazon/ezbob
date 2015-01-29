@@ -43,6 +43,9 @@
 		public virtual Iesi.Collections.Generic.ISet<SageAggregation> SageAggregations { get; set; }
 		public virtual Iesi.Collections.Generic.ISet<FreeAgentAggregation> FreeAgentAggregations { get; set; }
 
+		// view
+		public virtual Iesi.Collections.Generic.ISet<MarketplaceTurnover> MarketplaceTurnovers { get; set; }
+
 		public MP_CustomerMarketplaceUpdatingHistory() {
 			this.ActionLog = new HashedSet<MP_CustomerMarketplaceUpdatingActionLog>();
 
@@ -56,6 +59,11 @@
 			this.PayPointAggregations = new HashedSet<PayPointAggregation>();
 			this.SageAggregations = new HashedSet<SageAggregation>();
 			this.FreeAgentAggregations = new HashedSet<FreeAgentAggregation>();
+
+			// view
+			this.MarketplaceTurnovers = new HashedSet<MarketplaceTurnover>();
+
+
 		} // constructor
 	} // class MP_CustomerMarketplaceUpdatingHistory
 } // namespace

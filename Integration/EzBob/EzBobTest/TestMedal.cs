@@ -14,17 +14,27 @@ namespace EzBobTest {
 	using StructureMap;
 	using System;
 	using System.Collections.Generic;
+	using System.Data.SqlTypes;
 	using System.Globalization;
 	using System.Linq;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.MedalCalculation;
+	using AutomationCalculator.Turnover;
 	using ExcelLibrary.BinaryFileFormat;
 	using Ezbob.Backend.Strategies.AutomationVerification;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository.Turnover;
 	using NHibernate.Linq;
 
-	
+
+
+
+
+
+
+
 
 	/// <summary>
 	/// The test medal.
@@ -38,7 +48,8 @@ namespace EzBobTest {
 			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
-		
+
+
 	
 		[Test]
 		public void TestMaamMedalAndPricing() {
@@ -47,7 +58,15 @@ namespace EzBobTest {
 		} // TestMaamMedalAndPricing
 
 
-		
+		[Test]
+		public void Test_TurnoverForRejectThrougtMarketPlaceTurnoverView() {
+			int customerId = 20602;
+			DateTime calculationTime = new DateTime(2015, 01, 29);
+			Agent agent = new Agent(customerId, this.m_oDB, this.m_oLog);
+			agent.Init();
+			agent.CalculateTurnoverForReject(customerId, calculationTime); 
+		}
+
 
 		[Test]
 		public void Test_TurnoverForMedalTest_NH_AV() {
@@ -55,12 +74,11 @@ namespace EzBobTest {
 			//DateTime calculationTime = new DateTime(2013, 08, 31);
 			//DateTime calculationTime = new DateTime(2013, 10, 02);
 			DateTime calculationTime = DateTime.UtcNow; //new DateTime(2015, 01, 26);
-			int customerId = 739; //19856; // 211; // 1871; // //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363 // 171: amazon, pp, ebay
+			int customerId = 20366; //19271; // 739; //19856; // 211; // 1871; // //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363 // 171: amazon, pp, ebay
 			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
 
 			this.m_oLog.Info("START TURNOVER FOR MEDAL customerID: {0}; calculationTime: {1}", customerId, calculationTime.Date);
-			this.m_oLog.Info("-------------------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
-
+			//this.m_oLog.Info("-------------------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
 			MedalResult resultsInput = new MedalResult(customerId, this.m_oLog);
 			// var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
 			// MedalResult result = calculatorTester.CalculateMedalScore(customerId, calculationTime);
@@ -69,10 +87,8 @@ namespace EzBobTest {
 			//AV
 			var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
 			// var model = msc.GetInputParameters(customerId, calculationTime);
-			// this.m_oLog.Info("AV : AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, YodleeAnnualTurnover:{2}, OnlineAnnualTurnover: {3}, Type: {4}", model.AnnualTurnover, model.HmrcAnnualTurnover, model.YodleeAnnualTurnover, model.OnlineAnnualTurnover, model.TurnoverType);
-		
-			this.m_oLog.Info("--------###-----------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
-	
+			//this.m_oLog.Info("--------###-----------OnlineNonLimitedWithBusinessScoreMedalCalculator----------------------");
+
 			/*this.m_oLog.Info("-------------------NonLimitedMedalCalculator----------------------");
 			MedalResult resultsInput1 = new MedalResult(customerId);
 			var calculatorTester1 = new NonLimitedMedalCalculator1NoGathering(resultsInput1);
@@ -131,7 +147,7 @@ namespace EzBobTest {
 		}
 
 
-		
+
 
 
 	} // class TestMedal

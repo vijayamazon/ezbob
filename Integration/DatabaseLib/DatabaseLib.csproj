@@ -391,6 +391,7 @@
     <Compile Include="Repository\PaymentRolloverRepository.cs" />
     <Compile Include="Repository\PostcodeServiceLogRepository.cs" />
     <Compile Include="Repository\ServiceLogRepository.cs" />
+    <Compile Include="Repository\Turnover\MarketplaceTurnover.cs" />
     <Compile Include="Repository\Turnover\PayPointAggregation.cs" />
     <Compile Include="Repository\Turnover\SageAggregation.cs" />
     <Compile Include="Repository\Turnover\FreeAgentAggregation.cs" />
@@ -408,6 +409,7 @@
     <Compile Include="Repository\Turnover\PayPalAggregation.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Repository\Turnover\FilteredAggregationResult.cs" />
     <Compile Include="Repository\Turnover\YodleeAggregation.cs">
       <SubType>Code</SubType>
     </Compile>

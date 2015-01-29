@@ -119,28 +119,28 @@
 				} // switch
 			} // for each row
 
-			Log.Debug(
-				"ServiceLogID: {3}, cais {2} caisBalance {0} caisCards {1}",
-				caisBalance.Count,
-				caisCards.Count,
-				Result.Cais.Count,
-				Result.ServiceLogId
-			);
+			//Log.Debug(
+			//	"ServiceLogID: {3}, cais {2} caisBalance {0} caisCards {1}",
+			//	caisBalance.Count,
+			//	caisCards.Count,
+			//	Result.Cais.Count,
+			//	Result.ServiceLogId
+			//);
 
 			if (!Result.Cais.Any())
 				return;
 
-			foreach (ExperianConsumerDataCais c in Result.Cais)
-				Log.Debug("caisid {0}", c.Id);
+			//foreach (ExperianConsumerDataCais c in Result.Cais)
+				//Log.Debug("caisid {0}", c.Id);
 
 			foreach (ExperianConsumerDataCaisBalance b in caisBalance) {
 				if (b.ExperianConsumerDataCaisId.HasValue) {
 					var cais = Result.Cais.FirstOrDefault(x => x.Id == b.ExperianConsumerDataCaisId.Value);
 
-					Log.Debug("cais found {0} cais id {1}", cais != null, b.ExperianConsumerDataCaisId);
+				//	Log.Debug("cais found {0} cais id {1}", cais != null, b.ExperianConsumerDataCaisId);
 
 					if (cais != null) {
-						Log.Debug("cais id {0} cais balance {1}", cais.Id, b.Id);
+				//		Log.Debug("cais id {0} cais balance {1}", cais.Id, b.Id);
 						cais.AccountBalances.Add(b);
 					} // if
 				} // if

@@ -15,6 +15,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			References( x => x.HistoryRecord )
 				.Column( "CustomerMarketPlaceUpdatingHistoryRecordId" )
 				.Unique()
+				.LazyLoad()
 				.Cascade.None();
 		}
 	}

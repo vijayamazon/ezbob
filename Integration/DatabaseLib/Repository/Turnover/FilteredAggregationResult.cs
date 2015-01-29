@@ -9,7 +9,6 @@ namespace EZBob.DatabaseLib.Repository.Turnover {
 
 		public virtual DateTime TheMonth { get; set; }
 		public virtual decimal Turnover { get; set; }
-
 		public virtual int MpId { get; set; }
 
 	}

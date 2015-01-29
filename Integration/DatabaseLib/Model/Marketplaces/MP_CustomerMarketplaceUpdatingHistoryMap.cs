@@ -138,6 +138,14 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Inverse()
 				.Cascade.All();
 
+
+			// view
+			HasMany(x => x.MarketplaceTurnovers)
+				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
+				.LazyLoad()
+				.Inverse()
+				.Cascade.All();
+
 		}
 	}
 }

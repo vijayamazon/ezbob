@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
+	using System.Collections.Specialized;
 	using System.Globalization;
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoRejection;
@@ -8,6 +10,7 @@
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
+	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -18,6 +21,10 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Repository.Turnover;
+	using NHibernate.Linq;
+	using NHibernate.Util;
+	using StructureMap;
 
 	// using Ezbob.Utils.Lingvo;
 
@@ -42,9 +49,12 @@
 			Now = DateTime.UtcNow;
 			Cfg = InitCfg();
 			MetaData = new MetaData();
-			Turnover = new CalculatedTurnover();
+			//	Turnover = new CalculatedTurnover();
 			OriginationTime = new OriginationTime(Log);
 			UpdateErrors = new List<MpError>();
+
+			this.AnnualTurnover = 0;
+			this.QuarterTurnover = 0;
 
 			return this;
 		} // Init
@@ -61,6 +71,10 @@
 
 			return bSuccess;
 		} // MakeAndVerifyDecision
+
+		public virtual void RunPrimaryOnly() {
+			RunPrimary();
+		} // RunPrimaryOnly
 
 		public virtual void MakeDecision(AutoDecisionResponse response) {
 			bool bSuccess = false;
@@ -123,7 +137,12 @@
 				);
 
 			MetaData.Validate();
-		} // LoadData
+
+			// elinar - load turnovers
+
+			CalculateTurnoverForReject(Args.CustomerID, Now);
+
+		}// LoadData
 
 		protected virtual ExperianConsumerData LoadConsumerData() {
 			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, null);
@@ -163,7 +182,7 @@
 				break;
 
 			case RowType.Turnover:
-				Turnover.Add(sr, Log);
+				//Turnover.Add(sr, Log); neutral SP data collection (elinar)
 				break;
 
 			default:
@@ -174,7 +193,8 @@
 		private enum RowType {
 			MetaData,
 			MpError,
-			OriginationTime,
+			OriginationTime
+			,
 			Turnover,
 		} // enum RowType
 
@@ -312,8 +332,8 @@
 			return new RejectionInputData {
 				WasApproved = MetaData.ApprovedCrID > 0,
 				IsBrokerClient = MetaData.BrokerID > 0,
-				AnnualTurnover = Turnover.Annual,
-				QuarterTurnover = Turnover.Quarter,
+				AnnualTurnover = this.AnnualTurnover, //Turnover.Annual,
+				QuarterTurnover = this.QuarterTurnover, //Turnover.Quarter,
 				ConsumerScore = MetaData.ConsumerScore,
 				BusinessScore = MetaData.BusinessScore,
 				HasMpError = UpdateErrors.Count > 0,
@@ -397,10 +417,167 @@
 			return Trail.Negative<T>(true);
 		} // StepNoReject
 
+		/// <summary>
+		/// Calculate annual and quarter turnover for R
+		/// </summary>
+		/// <param name="customerId"></param>
+		/// <param name="calculationTime"></param>
+		public virtual void CalculateTurnoverForReject(int customerId, DateTime calculationTime) {
+			try {
+				MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
+				this.AnnualTurnover = 0;
+				this.QuarterTurnover = 0;
+
+				// all histories of customer that updateEnd is relevant
+				var h = mpTurnoverRep.GetByCustomerAndDate(customerId, calculationTime).ToList();
+
+				if (h.Equals(null)) {
+					Log.Info("Updating historied (customer {0}, @now {1}) not exists in MarketplaceTurnover view", customerId, calculationTime);
+					return;
+				}
+
+				// all MP types of selection
+				var mpTypes = from t in h group t by t.CustomerMarketPlace.Marketplace into mpt select mpt;
+
+				List<FilteredAggregationResult> accounting = new List<FilteredAggregationResult>();
+				List<FilteredAggregationResult> ecommerce = new List<FilteredAggregationResult>();
+				List<FilteredAggregationResult> hmrc = new List<FilteredAggregationResult>();
+				List<FilteredAggregationResult> bank = new List<FilteredAggregationResult>();
+				List<FilteredAggregationResult> ebay = new List<FilteredAggregationResult>();
+				List<FilteredAggregationResult> paypal = new List<FilteredAggregationResult>();
+
+				foreach (var mpType in mpTypes) {
+
+					if (mpType.Key.InternalId.Equals(MpType.Hmrc)) {
+						hmrc.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.Hmrc, calculationTime));
+
+						//	hmrc.ForEach(x => Log.Info(" HMRC: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+
+					} else if (mpType.Key.InternalId.Equals(MpType.Yodlee)) {
+						bank.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.Yodlee, calculationTime));
+
+						//	bank.ForEach(x => Log.Info(" bank: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+
+					} else if (mpType.Key.InternalId.Equals(MpType.Ebay)) {
+						ebay.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.Ebay, calculationTime));
+
+						//	ebay.ForEach(x => Log.Info(" ebay: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+
+					} else if (mpType.Key.InternalId.Equals(MpType.PayPal)) {
+						paypal.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.PayPal, calculationTime));
+
+						//	paypal.ForEach(x => Log.Info(" paypal: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+
+					} else {
+
+						// isPayment
+						if (mpType.Key.IsPaymentAccount == true) {
+							accounting.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, mpType.Key.InternalId, calculationTime));
+						} else {
+							ecommerce.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, mpType.Key.InternalId, calculationTime));
+						}
+					}
+				}
+
+				//accounting.ForEach(x => Log.Info(" accounting: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+				//ecommerce.ForEach(x => Log.Info(" ecommerce: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+
+				DateTime monthStart = new DateTime(calculationTime.Year, calculationTime.Month, 1, 0, 0, 0);
+				DateTime T1 = monthStart.AddMonths(-1);
+				DateTime T3 = monthStart.AddMonths(-3);
+				DateTime T6 = monthStart.AddMonths(-6);
+
+				//	Log.Info("t1: {0}, t3: {1}, t6: {2},", T1, T3, T6);
+
+				decimal[] fillannual = { 0, 0, 0, 0 };
+
+				// annualize and get max
+				fillannual[0] = this.MaxAnnualizedTurnover(hmrc, T1, T3, T6);
+				fillannual[1] = this.MaxAnnualizedTurnover(bank, T1, T3, T6);
+				fillannual[2] = this.MaxAnnualizedTurnover(accounting, T1, T3, T6);
+				fillannual[3] = this.MaxAnnualizedTurnover(ecommerce, T1, T3, T6) + Math.Max(this.MaxAnnualizedTurnover(paypal, T1, T3, T6), this.MaxAnnualizedTurnover(ebay, T1, T3, T6));
+
+				decimal[] fillquarter = { 0, 0, 0, 0 };
+				fillquarter[0] = this.MaxQuarterTurnover(hmrc, T1, T3);
+				fillquarter[1] = this.MaxQuarterTurnover(bank, T1, T3);
+				fillquarter[2] = this.MaxQuarterTurnover(accounting, T1, T3);
+				fillquarter[3] = this.MaxQuarterTurnover(ecommerce, T1, T3) + Math.Max(this.MaxQuarterTurnover(paypal, T1, T3), this.MaxQuarterTurnover(ebay, T1, T3));
+
+				this.AnnualTurnover = fillannual.AsEnumerable().Max();
+				this.QuarterTurnover = fillquarter.AsEnumerable().Max();
+
+				//		Log.Info("customerID {0}, calculationDate {1}, annual: {2}, quarter: {3}", customerId, calculationTime, this.AnnualTurnover, this.QuarterTurnover);
+
+			} catch (Exception ex) {
+				this.Log.Alert(ex, "Failed to calculate turnover for Reject, customerID {0}, calculationDate {1}", customerId, calculationTime);
+			}
+		}
+
+		public decimal MaxAnnualizedTurnover(List<FilteredAggregationResult> list, DateTime T1, DateTime T3, DateTime T6, int Ec1 = 12, int Ec3 = 4, int Ec6 = 2) {
+			decimal[] filltt = { 0, 0, 0, 0 };
+			filltt[0] = list.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover) * Ec1;
+			filltt[1] = list.Where(t => t.TheMonth >= T3).Sum(t => t.Turnover) * Ec3;
+			filltt[2] = list.Where(t => t.TheMonth >= T6).Sum(t => t.Turnover) * Ec6;
+			filltt[3] = list.Sum(t => t.Turnover);
+			decimal totalTurnover = filltt.Max();
+			return totalTurnover = totalTurnover < 0 ? 0 : totalTurnover;
+		}
+
+		public decimal MaxQuarterTurnover(List<FilteredAggregationResult> list, DateTime T1, DateTime T3) {
+			decimal[] filltt = { 0, 0 };
+			// annualize
+			filltt[0] = list.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover);
+			filltt[1] = list.Where(t => t.TheMonth >= T3).Sum(t => t.Turnover);
+			decimal totalTurnover = filltt.Max();
+			return totalTurnover = totalTurnover < 0 ? 0 : totalTurnover;
+		}
+
+		public virtual IEnumerable<FilteredAggregationResult> LastUpdedEndHistoryTurnoversByMpType(List<MarketplaceTurnover> inputList, Guid type, DateTime calculationTime) {
+
+			var ofcurrentType = inputList.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == type);
+
+			if (ofcurrentType.Equals(null))
+				return null;
+
+			// check type
+			var lastUpdated = ofcurrentType.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id).First();
+
+			if (lastUpdated.Equals(null))
+				return null;
+
+			DateTime lastUpdateDate = (DateTime)lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
+			DateTime periodStart = MiscUtils.getPeriodAgo(calculationTime, lastUpdateDate);
+			DateTime periodEnd = periodStart.AddMonths(11);
+
+			//		Log.Info("calculationTime: {2}, lastUpdateDate: {1}, yearAgo: {0}, yearAgoEnd: {3}", periodStart, lastUpdateDate, calculationTime,  periodEnd);
+
+			var histories = ofcurrentType.Where(z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd).ToList();
+
+			//	histories.ForEach(x => Log.Info(" filtered: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.CustomerMarketPlaceUpdatingHistory.Id, x.CustomerMarketPlace.Id));
+
+			if (histories.Equals(null))
+				return null;
+
+			var result = from ag in histories
+						 group ag by new { ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id, ag.TheMonth } into grouping
+						 select new FilteredAggregationResult {
+							 TheMonth = grouping.First().TheMonth,
+							 MpId = grouping.First().CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+							 Turnover = histories.Where(xx => xx.TheMonth == grouping.First().TheMonth && xx.CustomerMarketPlaceUpdatingHistory.Id == grouping.Max(p => p.CustomerMarketPlaceUpdatingHistory.Id)).First().Turnover
+						 };
+
+			return result;
+		}
+
+
 		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> { '1', '2', '3', '4', '5', '6', };
 
 		private int m_nNumOfDefaultConsumerAccounts;
 		private int m_nNumOfLateConsumerAccounts;
 		private int m_nNumOfDefaultBusinessAccounts;
+
+		private decimal QuarterTurnover;
+		private decimal AnnualTurnover;
+		
 	} // class Agent
 } // namespace
