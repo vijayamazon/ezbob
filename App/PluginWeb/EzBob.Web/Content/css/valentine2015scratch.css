@@ -64,10 +64,10 @@
 }
 
 #valentine2015scratch > .content > .scratch-card > .scratch-area {
-	width: 277px;
-	height: 360px;
+	width: 177px;
+	height: 279px;
 	position: absolute;
-	top: 20px;
+	top: 60px;
 	margin: 0 auto;
 	left: 0;
 	right: 0;
@@ -80,22 +80,22 @@
 }
 
 #valentine2015scratch > .content > .scratch-card > .alpha-scratch-area {
-	width: 277px;
-	height: 360px;
+	width: 177px;
+	height: 279px;
 	position: absolute;
-	top: 20px;
-	left: 0;
+	top: 60px;
+	left: 55px;
 	background-image: url(../img/valentine2015scratch/scratch_card.png);
 	background-repeat: no-repeat;
 	background-position: center top;
 }
 
 #valentine2015scratch > .content > .scratch-card > .beta-scratch-area {
-	width: 277px;
-	height: 360px;
+	width: 177px;
+	height: 279px;
 	position: absolute;
-	top: 20px;
-	right: 0;
+	top: 60px;
+	right: 55px;
 	background-image: url(../img/valentine2015scratch/scratch_card.png);
 	background-repeat: no-repeat;
 	background-position: center top;
