@@ -1,5 +1,6 @@
 ﻿namespace AutomationCalculator.MedalCalculation {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using AutomationCalculator.Common;
 	using Ezbob.Database;
@@ -138,20 +139,40 @@
 		protected ASafeLog Log;
 
 		private int GetOfferedAmount(MedalOutputModel medal, int minApprovalAmount) {
-			var dbHelper = new DbHelper(this.DB, this.Log);
-			var medalCoefficients = dbHelper.GetMedalCoefficients();
-			var coefficients = medalCoefficients.First(x => x.Medal == medal.Medal);
-			var annualTurnoverOffer = decimal.Parse(medal.WeightsDict[Parameter.AnnualTurnover].Value) *
-				coefficients.AnnualTurnover / 100.0M;
-			var freeCashflowOffer = medal.UseHmrc ? medal.FreeCashflow * coefficients.FreeCashFlow / 100.0M : 0;
-			var valueAddedOffer = medal.UseHmrc ? medal.ValueAdded * coefficients.ValueAdded / 100.0M : 0;
+			var medalCoefficients = new List<MedalCoefficientsModelDb>();
 
-			var offers = new[] {
-				annualTurnoverOffer, freeCashflowOffer, valueAddedOffer
-			};
-			var positiveOffers = offers.Where(x => x >= minApprovalAmount)
-				.ToList();
-			return positiveOffers.Any() ? positiveOffers.Min(x => (int)x) : 0;
+			DB.ForEachRowSafe(sr => {
+				Medal medalValue = (Medal)Enum.Parse(typeof(Medal), sr["Medal"]);
+
+				medalCoefficients.Add(new MedalCoefficientsModelDb {
+					Medal = medalValue,
+					AnnualTurnover = sr["AnnualTurnover"],
+					ValueAdded = sr["ValueAdded"],
+					FreeCashFlow = sr["FreeCashFlow"],
+				});
+			}, "SELECT * FROM MedalCoefficients", CommandSpecies.Text);
+
+			MedalCoefficientsModelDb coefficients = medalCoefficients.First(x => x.Medal == medal.Medal);
+
+			decimal annualTurnoverOffer = decimal.Parse(medal.WeightsDict[Parameter.AnnualTurnover].Value) * coefficients.AnnualTurnover / 100.0M;
+			decimal freeCashflowOffer = medal.UseHmrc ? medal.FreeCashflow * coefficients.FreeCashFlow / 100.0M : 0;
+			decimal valueAddedOffer = medal.UseHmrc ? medal.ValueAdded * coefficients.ValueAdded / 100.0M : 0;
+
+			decimal[] offers = { annualTurnoverOffer, freeCashflowOffer, valueAddedOffer, };
+
+			List<decimal> positiveOffers = offers.Where(x => x >= minApprovalAmount).ToList();
+
+			Log.Debug("Secondary medal - all   offer amounts: {0}", string.Join(", ", offers));
+			Log.Debug("Secondary medal - valid offer amounts: {0}", string.Join(", ", positiveOffers));
+
+			if (positiveOffers.Any()) {
+				int theOffer = positiveOffers.Min(x => (int)x);
+				Log.Debug("Secondary medal - offered loan amount calculated to be {0}.", theOffer);
+				return theOffer;
+			} // if
+
+			Log.Debug("Secondary medal - all the offer amounts are not valid.");
+			return 0;
 		} // GetOfferedAmount
 
 		private static bool AccountIsTooOld(DateTime today, bool hasAccounts, DateTime? lastUpdated, int threshold) {

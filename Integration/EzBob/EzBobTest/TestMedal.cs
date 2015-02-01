@@ -152,7 +152,7 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestMedalDiscrepancy() {
-			new CalculateMedal(7293, new DateTime(2015, 2, 1, 0, 0, 0, DateTimeKind.Utc), false, true).Execute();
+			new CalculateMedal(3977, new DateTime(2015, 2, 1, 0, 0, 0, DateTimeKind.Utc), false, true).Execute();
 		} // TestMedalDiscrepancy
 	} // class TestMedal
 } // namespace

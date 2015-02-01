@@ -293,21 +293,6 @@
 			return model;
 		}
 
-		public List<MedalCoefficientsModelDb> GetMedalCoefficients() {
-			var model = new List<MedalCoefficientsModelDb>();
-			_db.ForEachRowSafe((sr, hren) => {
-				var medal = (Medal)Enum.Parse(typeof(Medal), sr["Medal"]);
-				model.Add(new MedalCoefficientsModelDb {
-					Medal = medal,
-					AnnualTurnover = sr["AnnualTurnover"],
-					ValueAdded = sr["ValueAdded"],
-					FreeCashFlow = sr["FreeCashFlow"],
-				});
-				return ActionResult.Continue;
-			}, "SELECT * FROM MedalCoefficients", CommandSpecies.Text);
-			return model;
-		}
-
 		public OfferSetupFeeRangeModelDb GetOfferSetupFeeRange(int amount) {
 			return _db.FillFirst<OfferSetupFeeRangeModelDb>("AV_GetOfferSetupFeeRange", CommandSpecies.StoredProcedure,
 				new QueryParameter("Amount", amount));

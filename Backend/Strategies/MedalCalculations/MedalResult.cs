@@ -183,6 +183,10 @@
 			return RoundOfferedAmount(OfferedLoanAmount);
 		} // RoundOfferedAmount
 
+		public bool UseHmrc() {
+			return (NumOfHmrcMps > 0) && (TurnoverType == Ezbob.Backend.Strategies.MedalCalculations.TurnoverType.HMRC);
+		} // UseHmrc
+
 		public bool IsLike(MedalOutputModel other) {
 			return other == null || IsIdentical(other);
 		} // IsLike

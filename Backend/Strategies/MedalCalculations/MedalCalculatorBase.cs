@@ -456,7 +456,7 @@
 			else
 				Results.FreeCashFlowGrade = 6;
 
-			if ((Results.NumOfHmrcMps <= 0) || (Results.TurnoverType != TurnoverType.HMRC))
+			if (!Results.UseHmrc())
 				Results.FreeCashFlowGrade = 0;
 		}// CalculateFreeCashFlowGrade
 
@@ -606,13 +606,17 @@
 			decimal valueAddedMedalFactor = sr["ValueAdded"];
 
 			decimal offerAccordingToAnnualTurnover = Results.AnnualTurnover * annualTurnoverMedalFactor / 100;
-			decimal offerAccordingToFreeCashFlow = Results.FreeCashFlowValue * freeCashFlowMedalFactor / 100;
-			decimal offerAccordingToValueAdded = Results.ValueAdded * valueAddedMedalFactor / 100;
+			decimal offerAccordingToFreeCashFlow = Results.UseHmrc()
+				? Results.FreeCashFlowValue * freeCashFlowMedalFactor / 100
+				: 0;
+			decimal offerAccordingToValueAdded = Results.UseHmrc()
+				? Results.ValueAdded * valueAddedMedalFactor / 100
+				: 0;
 
 			if (IsOnlineMedalNotViaHmrcInnerFlow())
 				offerAccordingToValueAdded = 0;
 
-			decimal[] allOfferAmounts = new[] {
+			decimal[] allOfferAmounts = {
 				offerAccordingToAnnualTurnover,
 				offerAccordingToFreeCashFlow,
 				offerAccordingToValueAdded
@@ -620,15 +624,15 @@
 
 			List<decimal> validOfferAmounts = allOfferAmounts.Where(x => x >= CurrentValues.Instance.MedalMinOffer).ToList();
 
-			this.log.Debug("All   offer amounts: {0}", string.Join(", ", allOfferAmounts));
-			this.log.Debug("Valid offer amounts: {0}", string.Join(", ", validOfferAmounts));
+			this.log.Debug("Primary medal - all   offer amounts: {0}", string.Join(", ", allOfferAmounts));
+			this.log.Debug("Primary medal - valid offer amounts: {0}", string.Join(", ", validOfferAmounts));
 
 			if (validOfferAmounts.Count > 0) {
 				decimal unroundedValue = validOfferAmounts.Min();
 				Results.OfferedLoanAmount = (int)unroundedValue;
-				this.log.Debug("Offered loan amount calculated to be {0}.", Results.OfferedLoanAmount);
+				this.log.Debug("Primary medal - offered loan amount calculated to be {0}.", Results.OfferedLoanAmount);
 			} else
-				this.log.Debug("All the offer amounts are not valid.");
+				this.log.Debug("Primary medal - all the offer amounts are not valid.");
 		} // CalculateOffer
 
 		/// <summary>
