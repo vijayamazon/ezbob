@@ -405,28 +405,10 @@ Drupal.behaviors.captchaAdmin = function (context) {
   var xmlhttp;
 
   $(document).ready(function () {
-    $('#clickBlock').click(function () {
-      if ($('#livechat-form').hasClass('sleeping')) {
-        $('#livechat-form').removeClass('sleeping').animate({ 'right': '+=354px' }, 'fast').addClass('activated');
-      }
-      else {
-        $('#livechat-form').removeClass('activated').addClass('sleeping').animate({ 'right': '-=354px' }, 'fast');
-      }
-    });
-    if ($("#livechat-media-wrapper").is(":hidden")) {
-      $("#livechat-deploy").remove();
-      chat_running = false;
-    }
-
-    $('#startchat-btn').click(
-      function (event) {
-        if (chat_running) {
-          $('#startchat-btn').addClass('disabled');
-          setChatDetails();
-          initialiseAndStartLiveChat();
-        }
-      }
-    );
+	  $('#livechat-form').hide();
+	  $("#livechat-media-wrapper").hide();
+	  $("#kampylink").hide();
+	  chat_running = false;
   });
 
 
@@ -441,14 +423,6 @@ Drupal.behaviors.captchaAdmin = function (context) {
       eval(xmlhttp.responseText);
     }
   };
-
-  function setChatDetails() {
-    liveagent.setName($('#visitor-name').val());
-    liveagent.addCustomDetail('Message', $('#visitor-message').val());
-    var nPage = window.location.pathname;
-    nPage = nPage.substring(nPage.lastIndexOf('index.html') + 1);
-    liveagent.addCustomDetail('Chat started from', nPage).saveToTranscript('Page__c');
-  }
 
   function sendGaEvent(event_name, label_name) {
     if (typeof ga != 'undefined') {
@@ -498,22 +472,6 @@ Drupal.behaviors.captchaAdmin = function (context) {
     }
   }
 
-  var poll_interval = window.setInterval(poll, refresh_timeout);
-
-  function poll() {
-    if (chat_running) {
-      xmlhttp.open('GET.html',
-        link + '/rest/Visitor/Availability.jsonp?' +
-          'Availability.ids=' + buttonId + '&' +
-          'callback=checkresult&' +
-          'deployment_id=' + deployment_id + '&' +
-          'org_id=' + org_id + '&' +
-          'version=28',
-        true);
-      xmlhttp.send();
-    }
-  }
-
   function showButton() {
     if (!button_removed) {
       if (document.getElementById(chat_id).style.display == 'none') {
@@ -522,23 +480,6 @@ Drupal.behaviors.captchaAdmin = function (context) {
     }
   }
 
-  function initialiseAndStartLiveChat() {
-    liveagent.init(link, deployment_id, org_id);
-    chat_running = false;
-    var chatwindow = window.open('', 'livechatwindow', 'width=500,height=500,menubar=no,status=no,location=no,titlebar=no,toolbar=no');
-    var init_timeout = 1000;
-    var init_interval = window.setInterval(function () {
-      if (liveagent.getSid() !== null) {
-        window.clearInterval(init_interval);
-        removeButton();
-        liveagent.startChatWithWindow(buttonId, 'livechatwindow');
-        chatwindow.focus();
-        sendGaEvent('Start Chat', button_name);
-        window.clearInterval(poll_interval);
-      }
-    },
-    init_timeout);
-  }
 })();;
 /**
  * @license 
