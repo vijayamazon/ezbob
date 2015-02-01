@@ -456,7 +456,7 @@
 			else
 				Results.FreeCashFlowGrade = 6;
 
-			if (Results.NumOfHmrcMps <= 0)
+			if ((Results.NumOfHmrcMps <= 0) || (Results.TurnoverType != TurnoverType.HMRC))
 				Results.FreeCashFlowGrade = 0;
 		}// CalculateFreeCashFlowGrade
 
