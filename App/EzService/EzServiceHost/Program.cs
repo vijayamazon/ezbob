@@ -135,16 +135,7 @@
 			ObjectFactory.Configure(x => {
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
-				x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>();
-
-				x.For<IServiceEndPointFactory>().Use(new ServiceEndPointFactory());
-				x.For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
-				x.For<IBugRepository>().Use<BugRepository>();
-				x.For<ICustomerStatusesRepository>().Use<CustomerStatusesRepository>();
-				x.For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
-				x.For<ILoanRepository>().Use<LoanRepository>();
-				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
-				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
+				x.AddRegistry<ServiceRegistry>();
 			});
 		} // constructor
 

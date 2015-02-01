@@ -1,11 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
 	using SalesForceLib;
 	using SalesForceLib.Models;
+	using StructureMap;
 
 	public class AddTask : AStrategy {
 
 		public AddTask(int? customerID, TaskModel model) {
-			salesForce = new ApiClient();
+			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
 			this.taskModel = model;
 		}
@@ -17,7 +18,7 @@
 			}
 			salesForce.CreateTask(taskModel);
 		}
-		private readonly ApiClient salesForce;
+		private readonly ISalesForceAppClient salesForce;
 		private readonly int? customerID;
 		private readonly TaskModel taskModel;
 	}

@@ -3,6 +3,7 @@ namespace SalesForceLib {
 	using System;
 	using System.Reflection;
 	using System.Text;
+	using Newtonsoft.Json;
 
 	public static class StringExtensions {
 		public static string ToStringExtension(this object obj) {
@@ -20,6 +21,11 @@ namespace SalesForceLib {
 			}
 
 			return sb.ToString();
+		}
+
+		public static string ToJsonExtension(this object obj) {
+			string jsonInput = JsonConvert.SerializeObject(obj, Formatting.Indented);
+			return jsonInput;
 		}
 	}
 }

@@ -1,11 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
 	using SalesForceLib;
 	using SalesForceLib.Models;
+	using StructureMap;
 
 	public class UpdateOpportunity : AStrategy {
 
 		public UpdateOpportunity(int customerID, OpportunityModel model) {
-			salesForce = new ApiClient();
+			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
 			this.opportunityModel = model;
 		}
@@ -15,7 +16,7 @@
 			Log.Info("Updating SalesForce opportunity to customer {0} ", customerID);
 			salesForce.UpdateOpportunity(opportunityModel);
 		}
-		private readonly ApiClient salesForce;
+		private readonly ISalesForceAppClient salesForce;
 		private readonly int customerID;
 		private readonly OpportunityModel opportunityModel;
 	}

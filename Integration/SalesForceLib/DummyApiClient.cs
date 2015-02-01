@@ -3,10 +3,10 @@
 	using log4net;
 	using SalesForceLib.Models;
 
-	public class ApiClient
+	public class DummyApiClient : ISalesForceAppClient
     {
-		public ApiClient() {
-			api = new Api(); //todo replace with real service client
+		public DummyApiClient() {
+			api = new Api();
 		}
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
@@ -65,8 +65,7 @@
 			}
 		}
 
-
 		private readonly Api api;
-		private readonly ILog Log = LogManager.GetLogger(typeof (ApiClient));
+		private readonly ILog Log = LogManager.GetLogger(typeof (DummyApiClient));
 	}
 }

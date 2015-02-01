@@ -6,6 +6,8 @@
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 	using MailStrategies;
+	using SalesForceLib;
+	using StructureMap;
 
 	public class UserChangeEmail : AStrategy {
 		public UserChangeEmail(int nUserID, string sNewEmail) {
@@ -51,7 +53,7 @@
 			).Start();
 
 			
-			var salesForceApiClient = new SalesForceLib.ApiClient();
+			ISalesForceAppClient salesForceApiClient = ObjectFactory.GetInstance<ISalesForceAppClient>();
 			salesForceApiClient.ChangeEmail(oldEmail, m_oData.Email);
 			Log.Debug("User '{0}': request to change email to {1} fully processed.", m_oSpUpdate.UserID, m_oData.Email);
 		} // Execute

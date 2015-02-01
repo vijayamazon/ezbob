@@ -2,11 +2,12 @@
 	using Ezbob.Database;
 	using SalesForceLib;
 	using SalesForceLib.Models;
+	using StructureMap;
 
 	public class AddUpdateContact : AStrategy {
 
 		public AddUpdateContact(int customerID, int? directorID, string directorEmail) {
-			salesForce = new ApiClient();
+			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
 			this.directorID = directorID;
 			this.directorEmail = directorEmail;
@@ -27,7 +28,7 @@
 
 			salesForce.CreateUpdateContact(model);
 		}
-		private readonly ApiClient salesForce;
+		private readonly ISalesForceAppClient salesForce;
 		private readonly int customerID;
 		private readonly int? directorID;
 		private readonly string directorEmail;

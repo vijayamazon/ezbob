@@ -1,11 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
 	using SalesForceLib;
 	using SalesForceLib.Models;
+	using StructureMap;
 
 	public class AddActivity : AStrategy {
 
 		public AddActivity(int? customerID, ActivityModel model) {
-			salesForce = new ApiClient();
+			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
 			this.eventModel = model;
 		}
@@ -18,7 +19,7 @@
 			
 			salesForce.CreateActivity(eventModel);
 		}
-		private readonly ApiClient salesForce;
+		private readonly ISalesForceAppClient salesForce;
 		private readonly int? customerID;
 		private readonly ActivityModel eventModel;
 	}

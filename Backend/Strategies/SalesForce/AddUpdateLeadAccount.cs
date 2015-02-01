@@ -2,10 +2,11 @@
 	using Ezbob.Database;
 	using SalesForceLib;
 	using SalesForceLib.Models;
+	using StructureMap;
 
 	public class AddUpdateLeadAccount : AStrategy {
 		public AddUpdateLeadAccount(string email, int? customerID, bool isBrokerLead, bool isVipLead) {
-			salesForce = new ApiClient();
+			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
 			this.email = email;
 			this.customerID = customerID;
 			this.isBrokerLead = isBrokerLead;
@@ -25,7 +26,7 @@
 			salesForce.CreateUpdateLeadAccount(model);
 		}
 
-		private readonly ApiClient salesForce;
+		private readonly ISalesForceAppClient salesForce;
 		private readonly string email;
 		private readonly int? customerID;
 		private readonly bool isBrokerLead;
