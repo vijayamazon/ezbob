@@ -255,7 +255,8 @@
 		public bool HasCompanyScore { get; set; }
 		public bool HasPersonalScore { get; set; }
 		public bool HasBank { get; set; }
-		public DateTime? LastBankHmrcUpdateDate { get; set; }
+		public DateTime? LastBankUpdateDate { get; set; }
+		public DateTime? LastHmrcUpdateDate { get; set; }
 		public int MedalDaysOfMpRelevancy { get; set; }
 		public int MinApprovalAmount { get; set; }
 	}

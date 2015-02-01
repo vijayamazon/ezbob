@@ -69,7 +69,8 @@ BEGIN
 				MIN(v.DateFrom) MinDate
 			FROM
 				MP_VatReturnRecords v
-				INNER JOIN MP_CustomerMarketPlace m ON m.Id = v.CustomerMarketPlaceId 
+				INNER JOIN MP_CustomerMarketPlace m ON m.Id = v.CustomerMarketPlaceId
+				INNER JOIN Business b ON v.BusinessId = b.Id AND b.BelongsToCustomer = 1
 			WHERE
 				m.CustomerId = @CustomerId
 				AND

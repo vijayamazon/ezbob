@@ -53,14 +53,6 @@
 		}
 
 		[Test]
-		public void TestFeedbacks() {
-			var mpHelper = new MarketPlacesHelper(_db, Log);
-			var feedbacks = mpHelper.GetPositiveFeedbacks(14166);
-			Assert.AreEqual(33885, feedbacks);
-
-		}
-
-		[Test]
 		public void TestMedalChooser() {
 			var medalChooser = new MedalChooser(_db, Log);
 			var medal = medalChooser.GetMedal(18539, new DateTime(2014, 11, 10));

@@ -327,7 +327,7 @@ BEGIN
 
 	SELECT
 		cmp.Id AS CustomerMarketPlaceId,
-		MAX(fb.Created) AS MaxCreated
+		MAX(fb.Id) AS FbId
 	INTO
 		#MaxEbayCreated
 	FROM
@@ -349,12 +349,14 @@ BEGIN
 	FROM
 		MP_EbayFeedback fb
 		INNER JOIN #MaxEbayCreated mc
-			ON fb.CustomerMarketPlaceId = mc.CustomerMarketPlaceId
-			AND fb.Created = mc.MaxCreated
+			ON fb.Id = mc.FbId
 		INNER JOIN MP_EbayFeedbackItem fbi
 			ON fbi.EbayFeedbackId = fb.Id
-			AND fbi.TimePeriodId = 6 -- '0'
-	
+		INNER JOIN
+			MP_AnalysisFunctionTimePeriod tp
+				ON tp.Id = fbi.TimePeriodId
+				AND tp.InternalId = '16619B19-ABF5-4AE0-9040-93EFD2E71FDB' -- 0 all data
+
 	------------------------------------------------------------------------------
 
 	DROP TABLE #MaxAmazonCreated

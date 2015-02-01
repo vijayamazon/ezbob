@@ -52,10 +52,30 @@
 			} // set
 		} // MaritalStatus
 
+		public void CalculateFeedbacks(int defaultValue) {
+			PositiveFeedbacks = AmazonPositiveFeedbacks + EbayPositiveFeedbacks;
+
+			if (PositiveFeedbacks == 0)
+				PositiveFeedbacks = NumberOfPaypalPositiveTransactions;
+
+			if (PositiveFeedbacks == 0)
+				PositiveFeedbacks = defaultValue;
+
+			this.log.Debug(
+				"Primary medal - positive feedbacks:\n" +
+				"\tAmazon: {0}\n\teBay: {1}\n\tPay Pal: {2}\n\tDefault: {3}\n\tFinal: {4}",
+				AmazonPositiveFeedbacks,
+				EbayPositiveFeedbacks,
+				NumberOfPaypalPositiveTransactions,
+				defaultValue,
+				PositiveFeedbacks
+			);
+		} // CalculateFeedbacks
+
 		public MaritalStatus MaritalStatus { get; private set; }
 
 		public int NumberOfStores { get; set; }
-		public int PositiveFeedbacks { get; set; }
+		public int PositiveFeedbacks { get; private set; }
 		[Traversable]
 		public DateTime? EzbobSeniority { get; set; }
 		[Traversable]
@@ -81,6 +101,7 @@
 		[Traversable]
 		public int EbayPositiveFeedbacks { get; set; }
 		[Traversable]
+		[FieldName("NumOfPaypalPositiveTransactions")]
 		public int NumberOfPaypalPositiveTransactions { get; set; }
 		public decimal MortgageBalance { get; set; }
 

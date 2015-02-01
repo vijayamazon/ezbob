@@ -33,8 +33,8 @@
 			intputModel.TangibleEquity = intputModel.AnnualTurnover == 0 ? 0 : intputModel.MedalInputModelDb.TangibleEquity / intputModel.AnnualTurnover;
 			intputModel.NumOfStores = intputModel.MedalInputModelDb.NumOfStores;
 
-			intputModel.PositiveFeedbacks = new MarketPlacesHelper(DB, Log).GetPositiveFeedbacks(customerId);
-			intputModel.UseHmrc = (intputModel.TurnoverType == TurnoverType.HMRC) ? true : false;
+			intputModel.PositiveFeedbacks = LoadFeedbacks(customerId);
+			intputModel.UseHmrc = (intputModel.TurnoverType == TurnoverType.HMRC);
 
 			return intputModel;
 		} // GetOnlineInputParameters
@@ -149,5 +149,31 @@
 			return list.Where(t => (t.Distance < monthAfter)).Sum(t => t.Turnover) * extrapolationCoefficient;
 		} // CalcAnnualTurnoverBasedOnPartialData
 
+		private int LoadFeedbacks(int customerId) {
+			var feedbacksDb = DB.FillFirst<PositiveFeedbacksModelDb>(
+				"AV_GetFeedbacks",
+				new QueryParameter("@CustomerId", customerId)
+			);
+
+			int feedbacks = feedbacksDb.AmazonFeedbacks + feedbacksDb.EbayFeedbacks;
+
+			if (feedbacks == 0)
+				feedbacks = feedbacksDb.PaypalFeedbacks;
+
+			if (feedbacks == 0)
+				feedbacks = feedbacksDb.DefaultFeedbacks;
+
+			Log.Debug(
+				"Secondary medal - positive feedbacks:\n" +
+				"\tAmazon: {0}\n\teBay: {1}\n\tPay Pal: {2}\n\tDefault: {3}\n\tFinal: {4}",
+				feedbacksDb.AmazonFeedbacks,
+				feedbacksDb.EbayFeedbacks,
+				feedbacksDb.PaypalFeedbacks,
+				feedbacksDb.DefaultFeedbacks,
+				feedbacks
+			);
+
+			return feedbacks;
+		} // LoadFeedbacks
 	} // class OnlineCalculator
 } // namespace

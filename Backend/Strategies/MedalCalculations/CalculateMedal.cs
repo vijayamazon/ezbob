@@ -24,6 +24,12 @@
 
 		public override void Execute() {
 			try {
+				Log.Debug(
+					"Loading customer data for medal calculation, customer = {0}, calculation time = {1}.",
+					this.customerId,
+					this.calculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+				);
+
 				SafeReader sr = DB.GetFirst(
 					"GetCustomerDataForMedalCalculation",
 					CommandSpecies.StoredProcedure,
@@ -41,6 +47,31 @@
 					this.earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
 					this.earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
 				} // if
+
+				Log.Debug(
+					"customerId = {0}, " +
+					"calc time = {1}, " +
+					"sr.IsEmpty = {2}, " +
+					"type of business = {3}, " +
+					"consumer score = {4}, " +
+					"company score = {5}, " +
+					"HMRC count = {6}, " +
+					"Yodlee count = {7}, " +
+					"Online count = {8}, " +
+					"earliest HMRC update = '{9}', " +
+					"earliest Yodlee update = '{10}'.",
+					this.customerId,
+					this.calculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					sr.IsEmpty,
+					this.typeOfBusiness,
+					this.consumerScore,
+					this.companyScore,
+					this.numOfHmrcMps,
+					this.numOfYodleeMps,
+					this.numOfEbayAmazonPayPalMps,
+					this.earliestHmrcLastUpdateDate,
+					this.earliestYodleeLastUpdateDate
+				);
 
 				// The first scenario (1) for checking medal type and getting medal value
 				// namespace Ezbob.Backend.Strategies.MainStrategy 

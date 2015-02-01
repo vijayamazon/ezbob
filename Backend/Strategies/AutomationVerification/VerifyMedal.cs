@@ -38,8 +38,10 @@
 				if (this.customerCount != null)
 					return this.customerCount.Value;
 
-				this.customerCount = DB.ExecuteScalar<int>(this.condition.Apply("COUNT(*)", false), CommandSpecies.Text);
-				
+				int loadedCount = DB.ExecuteScalar<int>(this.condition.Apply("COUNT(*)", false), CommandSpecies.Text);
+
+				this.customerCount = (this.topCount > 0) ? Math.Min(this.topCount, loadedCount) : loadedCount;
+
 				return this.customerCount.Value;
 			} // get
 		} // CustomerCount
@@ -50,7 +52,7 @@
 			} catch (Exception e) {
 				Log.Alert(
 					e,
-					"Medal verification failed for customer {0} and calcuation time {1}.",
+					"Medal verification failed for customer {0} and calculation time {1}.",
 					customerID,
 					this.calculationTime.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
 				);
@@ -68,7 +70,7 @@
 				return string.Format(
 					QueryTemplate,
 					selectedFields,
-					withOrderBy ? string.Empty : Top,
+					withOrderBy ? Top : string.Empty,
 					LastChecked,
 					WithTest,
 					withOrderBy ? OrderBy : string.Empty

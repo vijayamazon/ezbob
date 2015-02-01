@@ -192,8 +192,10 @@
 			model.UseHmrc = dbData.HasHmrc;
 			model.BusinessScore = dbData.BusinessScore;
 
-			const int defaultBusinessSeniority = 1;
-			model.BusinessSeniority = dbData.IncorporationDate.HasValue ? today.Year - dbData.IncorporationDate.Value.Year : defaultBusinessSeniority;
+			model.BusinessSeniority = dbData.IncorporationDate.HasValue
+				? today.Year - dbData.IncorporationDate.Value.Year
+				: 1;
+
 			if (dbData.IncorporationDate.HasValue && dbData.IncorporationDate.Value > today.AddYears(-model.BusinessSeniority))
 				model.BusinessSeniority--;
 

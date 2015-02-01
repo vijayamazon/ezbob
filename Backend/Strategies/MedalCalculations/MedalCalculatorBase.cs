@@ -77,8 +77,7 @@
 			try {
 				GatherInputData();
 
-				// Process raw input data to data
-				CalculateFeedbacks();
+				Results.CalculateFeedbacks(CurrentValues.Instance.DefaultFeedbackValue);
 
 				CalculateTurnoverForMedal();
 
@@ -438,25 +437,13 @@
 		}// CalculateEzbobSeniorityGrade
 
 		/// <summary>
-		///     The calculate feedbacks.
-		/// </summary>
-		private void CalculateFeedbacks() {
-			Results.PositiveFeedbacks = Results.AmazonPositiveFeedbacks + Results.EbayPositiveFeedbacks;
-			if (Results.PositiveFeedbacks == 0) {
-				Results.PositiveFeedbacks = Results.NumberOfPaypalPositiveTransactions != 0
-					? Results.NumberOfPaypalPositiveTransactions
-					: CurrentValues.Instance.DefaultFeedbackValue;
-			}
-		}// CalculateFeedbacks
-
-		/// <summary>
 		///     The calculate free cash flow grade.
 		/// </summary>
 		private void CalculateFreeCashFlowGrade() {
-			if (Results.FreeCashFlow < -0.1m || Results.AnnualTurnover <= 0) {
-				// When turnover is zero we can't calc FCF, we want the min grade
+			// When turnover is zero we can't calc FCF, we want the min grade
+			if (Results.FreeCashFlow < -0.1m || Results.AnnualTurnover <= 0)
 				Results.FreeCashFlowGrade = 0;
-			} else if (Results.FreeCashFlow < 0)
+			else if (Results.FreeCashFlow < 0)
 				Results.FreeCashFlowGrade = 1;
 			else if (Results.FreeCashFlow < 0.1m)
 				Results.FreeCashFlowGrade = 2;
@@ -468,6 +455,9 @@
 				Results.FreeCashFlowGrade = 5;
 			else
 				Results.FreeCashFlowGrade = 6;
+
+			if (Results.NumOfHmrcMps <= 0)
+				Results.FreeCashFlowGrade = 0;
 		}// CalculateFreeCashFlowGrade
 
 		/// <summary>

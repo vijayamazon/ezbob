@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MedalCalculations {
 	using System;
+	using System.Globalization;
 	using ConfigManager;
 
 	public class MedalCalculator1 {
@@ -36,27 +37,47 @@
 		public MedalResult CalculateMedal() {
 			double relevancyLen = CurrentValues.Instance.MedalDaysOfMpRelevancy;
 
-			bool badHmrc =
-				(this.numOfHmrcMps > 0) &&
-				this.earliestHmrcLastUpdateDate.HasValue &&
-				(this.earliestHmrcLastUpdateDate.Value.AddDays(relevancyLen) < this.calculationTime);
+			bool? badHmrc;
 
-			if (badHmrc) {
+			if (this.numOfHmrcMps > 0) {
+				if (this.earliestHmrcLastUpdateDate.HasValue)
+					badHmrc = (this.earliestHmrcLastUpdateDate.Value.AddDays(relevancyLen) < this.calculationTime);
+				else
+					badHmrc = true; // Has accounts which have never been checked (or always failed to check) - it's bad.
+			} else
+				badHmrc = false; // No accounts -> there are no bad accounts.
+
+			if (badHmrc.Value) {
 				return SetNoMedal(
-					"Customer has out of date HMRC marketplace that its last update was at:{0}",
-					this.earliestHmrcLastUpdateDate.Value
+					"Customer has out of date HMRC marketplace that its last update was at: {0}",
+					this.earliestHmrcLastUpdateDate.HasValue
+						? this.earliestHmrcLastUpdateDate.Value.ToString(
+							"MMM d yyyy H:mm:ss",
+							CultureInfo.InvariantCulture
+						)
+						: "never"
 				);
 			} // if
 
-			bool badYodlee =
-				(this.numOfYodleeMps > 0) &&
-				this.earliestYodleeLastUpdateDate.HasValue &&
-				(this.earliestYodleeLastUpdateDate.Value.AddDays(relevancyLen) < this.calculationTime);
+			bool? badYodlee;
 
-			if (badYodlee) {
+			if (this.numOfYodleeMps > 0) {
+				if (this.earliestYodleeLastUpdateDate.HasValue)
+					badYodlee = (this.earliestYodleeLastUpdateDate.Value.AddDays(relevancyLen) < this.calculationTime);
+				else
+					badYodlee = true; // Has accounts which have never been checked (or always failed to check) - it's bad.
+			} else 
+				badYodlee = false; // No accounts -> there are no bad accounts.
+
+			if (badYodlee.Value) {
 				return SetNoMedal(
-					"Customer has out of date Yodlee marketplace that its last update was at:{0}",
-					this.earliestYodleeLastUpdateDate.Value
+					"Customer has out of date Yodlee marketplace that its last update was at: {0}",
+					this.earliestYodleeLastUpdateDate.HasValue
+						? this.earliestYodleeLastUpdateDate.Value.ToString(
+							"MMM d yyyy H:mm:ss",
+							CultureInfo.InvariantCulture
+						)
+						: "never"
 				);
 			} // if
 

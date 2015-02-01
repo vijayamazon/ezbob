@@ -31,21 +31,43 @@
 		/// </param>
 		/// <returns>Calculated medal model.</returns>
 		public MedalOutputModel GetMedal(int customerId, DateTime? calculationDate = null) {
-			var dbHelper = new DbHelper(this.DB, this.Log);
-
-			var medalChooserData = dbHelper.GetMedalChooserData(customerId);
+			var medalChooserData = DB.FillFirst<MedalChooserInputModelDb>(
+				"AV_GetMedalChooserInputParams",
+				new QueryParameter("@CustomerId", customerId)
+			);
 
 			DateTime today = calculationDate ?? DateTime.Today;
 
-			bool isAccountDataTooOld = medalChooserData.LastBankHmrcUpdateDate.HasValue &&
-				(today - medalChooserData.LastBankHmrcUpdateDate.Value).TotalDays > medalChooserData.MedalDaysOfMpRelevancy;
+			bool hmrcTooOld = AccountIsTooOld(
+				today,
+				medalChooserData.HasHmrc,
+				medalChooserData.LastHmrcUpdateDate,
+				medalChooserData.MedalDaysOfMpRelevancy
+			);
 
-			if (isAccountDataTooOld) {
+			if (hmrcTooOld) {
 				return new MedalOutputModel {
 					MedalType = MedalType.NoMedal,
 					Medal = Medal.NoClassification,
 					TurnoverType = null,
-					Error = "Bank or Hmrc data is too old",
+					Error = "Hmrc data is too old",
+					CustomerId = customerId,
+				};
+			} // if
+
+			bool bankTooOld = AccountIsTooOld(
+				today,
+				medalChooserData.HasBank,
+				medalChooserData.LastBankUpdateDate,
+				medalChooserData.MedalDaysOfMpRelevancy
+			);
+
+			if (bankTooOld) {
+				return new MedalOutputModel {
+					MedalType = MedalType.NoMedal,
+					Medal = Medal.NoClassification,
+					TurnoverType = null,
+					Error = "Bank data is too old",
 					CustomerId = customerId,
 				};
 			} // if
@@ -131,5 +153,15 @@
 				.ToList();
 			return positiveOffers.Any() ? positiveOffers.Min(x => (int)x) : 0;
 		} // GetOfferedAmount
+
+		private static bool AccountIsTooOld(DateTime today, bool hasAccounts, DateTime? lastUpdated, int threshold) {
+			if (!hasAccounts)
+				return false;
+
+			if (lastUpdated == null)
+				return true;
+
+			return (today - lastUpdated.Value).TotalDays > threshold;
+		} // AccountIsTooOld
 	} // class MedalChooser
 } // namespace

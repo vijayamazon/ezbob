@@ -24,7 +24,8 @@ BEGIN
 	DECLARE @NumOfHmrc INT = 0
 	DECLARE @HasCompanyScore BIT = 0
 	DECLARE @HasPersonalScore BIT = 0
-	DECLARE @LastBankHmrcUpdateDate DATETIME
+	DECLARE @LastHmrcUpdateDate DATETIME
+	DECLARE @LastBankUpdateDate DATETIME
 	DECLARE @TypeOfBusiness NVARCHAR(30)
 	DECLARE @CompanyRefNum NVARCHAR(30)
 	DECLARE @PersonalScore INT = 0
@@ -99,8 +100,6 @@ BEGIN
 		SET @HasBank = 1
 	END
 
-	DECLARE @LastHmrcUpdateDate DATETIME
-
 	SELECT
 		@NumOfHmrc = COUNT(*),
 		@LastHmrcUpdateDate = MIN(m.UpdatingEnd)
@@ -124,7 +123,7 @@ BEGIN
 		SET @HasHmrc = 1
 
 	SELECT
-		@LastBankHmrcUpdateDate = MIN(m.UpdatingEnd)
+		@LastBankUpdateDate = MIN(m.UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace m
 		INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId
@@ -136,8 +135,6 @@ BEGIN
 		t.InternalId = @Yodlee
 		AND
 		m.UpdatingEnd IS NOT NULL
-
-	SET @LastBankHmrcUpdateDate = dbo.udfMinDate(@LastBankHmrcUpdateDate, @LastHmrcUpdateDate)
 
 	DECLARE @MinApprovalAmount INT = (
 		SELECT CAST(Value AS INT)
@@ -158,7 +155,8 @@ BEGIN
 		@HasBank AS HasBank,
 		@HasCompanyScore AS HasCompanyScore,
 		@HasPersonalScore AS HasPersonalScore,
-		@LastBankHmrcUpdateDate AS LastBankHmrcUpdateDate,
+		@LastHmrcUpdateDate AS LastHmrcUpdateDate,
+		@LastBankUpdateDate AS LastBankUpdateDate,
 		@MedalDaysOfMpRelevancy AS MedalDaysOfMpRelevancy,
 		@MinApprovalAmount AS MinApprovalAmount
 END 

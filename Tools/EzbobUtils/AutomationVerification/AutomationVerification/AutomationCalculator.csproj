@@ -98,7 +98,6 @@
     <Compile Include="MedalCalculation\OfflineLimitedMedalCalculator.cs" />
     <Compile Include="Common\DbHelper.cs" />
     <Compile Include="Common\Enums.cs" />
-    <Compile Include="Common\MarketPlacesHelper.cs" />
     <Compile Include="Common\Models.cs" />
     <Compile Include="OfferCalculation\OfferCalculator.cs" />
     <Compile Include="OfferCalculation\PricingCalculator.cs" />

@@ -140,18 +140,6 @@
 			throw new NotImplementedException();
 		}
 
-		public PositiveFeedbacksModelDb GetPositiveFeedbacks(int customerId) {
-			var model = _db.FillFirst<PositiveFeedbacksModelDb>("AV_GetFeedbacks", new QueryParameter("@CustomerId", customerId));
-			return model;
-		}
-
-		public MedalChooserInputModelDb GetMedalChooserData(int customerId) {
-			return _db.FillFirst<MedalChooserInputModelDb>(
-				"AV_GetMedalChooserInputParams",
-				new QueryParameter("@CustomerId", customerId)
-				);
-		}
-
 		public List<MedalComparisonModel> GetMedalTestData() {
 			var model = new List<MedalComparisonModel>();
 			_db.ForEachRowSafe((sr, bRowsetStart) => {
