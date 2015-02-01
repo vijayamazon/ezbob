@@ -59,15 +59,16 @@
 					Log.Error("Failed sending mail. template:{0} to:{1} cc:{2}", oMeta.TemplateName, addr.Recipient, addr.CarbonCopy);
 
 				if (addr.ShouldRegister) {
-					string filename = string.Format("{0}({1}).docx", oMeta.TemplateName, DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
+					string filename = string.Format("{0}({1}).html", oMeta.TemplateName, DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
 
 					DB.ExecuteNonQuery(
 						"RecordMail",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("Filename", filename),
-						new QueryParameter("Body", HtmlToDocxBinary(renderedHtml)),
+						new QueryParameter("Body", HtmlToBinary(renderedHtml)),
 						new QueryParameter("Creation", DateTime.UtcNow),
-						new QueryParameter("CustomerMail", addr.Recipient)
+						new QueryParameter("CustomerMail", addr.Recipient),
+						new QueryParameter("UserID", addr.UserID)
 					);
 
 
@@ -96,6 +97,10 @@
 				doc.Save(streamForDoc, SaveFormat.Docx);
 				return streamForDoc.ToArray();
 			} // using
+		} // HtmlToDocxBinary
+
+		private byte[] HtmlToBinary(string html) {
+			return System.Text.Encoding.Default.GetBytes(html);
 		} // HtmlToDocxBinary
 
 		private readonly Mail m_oMail;

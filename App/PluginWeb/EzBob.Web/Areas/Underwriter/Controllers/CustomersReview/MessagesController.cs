@@ -58,30 +58,34 @@
 				fs = File(askvilleData, "application/pdf");
 				fileName = string.Format("Askville({0}).pdf", FormattingUtils.FormatDateTimeToStringWithoutSpaces(askville.CreationDate));
 			} else {
+				
 				var f = _exportResultRepository.Get(Convert.ToInt32(id));
 				if (f == null) {
 					throw new Exception(String.Format("File id={0} not found", id));
 				}
-
+				fileName = f.FileName.Replace(",", "").Replace("£", "");
 				if (f.FileType == 1) {
 					fs = File(f.BinaryBody, "application/pdf");
 				} else {
-					if (download) {
-						fs = File(f.BinaryBody, "application/msoffice");
-					}
-					else {
-						var pdfDocument = AgreementRenderer.ConvertToPdf(f.BinaryBody, LoadFormat.Docx);
-						fs = File(pdfDocument, "application/pdf");
+					if (f.FileName.EndsWith("html")) {
+						fs = File(f.BinaryBody, "text/html");
+					} else {
+
+						if (download) {
+							fs = File(f.BinaryBody, "application/msoffice");
+						} else {
+							var pdfDocument = AgreementRenderer.ConvertToPdf(f.BinaryBody, LoadFormat.Docx);
+							fs = File(pdfDocument, "application/pdf");
+							fileName.Replace("docx", "pdf");
+						}
 					}
 				}
-
-				fileName = f.FileName.Replace(",", "").Replace("£", "");
 			}
 
 			if (download) {
 				fs.FileDownloadName = fileName;
 			} else {
-				fileName.Replace("docx", "pdf");
+				
 				var cd = new System.Net.Mime.ContentDisposition {
 					FileName = fileName,
 					Inline = true,

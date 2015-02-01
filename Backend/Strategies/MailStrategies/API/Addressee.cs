@@ -1,10 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies.API {
 	public sealed class Addressee {
 
-		public Addressee(string sRecipient = "", string sCarbonCopy = "", bool bShouldRegister = true) {
+		public Addressee(string sRecipient = "", string sCarbonCopy = "", bool bShouldRegister = true, int? userID = null) {
 			Recipient = sRecipient;
 			CarbonCopy = sCarbonCopy;
 			ShouldRegister = bShouldRegister;
+			UserID = userID;
 		} // constructor
 
 		public string Recipient {
@@ -22,6 +23,7 @@
 		private string m_sCarbonCopy;
 
 		public bool ShouldRegister { get; set; } // ShouldRegister
+		public int? UserID { get; set; }
 
 		public bool IsValid {
 			get { return (Recipient != string.Empty) || (CarbonCopy != string.Empty); } // get
