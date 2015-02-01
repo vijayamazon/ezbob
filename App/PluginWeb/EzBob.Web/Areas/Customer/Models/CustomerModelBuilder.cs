@@ -34,8 +34,7 @@
 			ICustomerInviteFriendRepository customerInviteFriendRepository,
 			PerksRepository perksRepository,
 			DatabaseDataHelper oDbHelper, 
-			WhiteLabelProviderRepository whiteLabelProviderRepository,
-			CustomerOriginRepository customerOriginRepository
+			WhiteLabelProviderRepository whiteLabelProviderRepository
 		) {
 			m_oQuestions = questions;
 			m_oCustomerRepository = customerRepository;
@@ -46,7 +45,6 @@
 			m_oChangeLoanDetailsModelBuilder = new ChangeLoanDetailsModelBuilder();
 			m_oExperianDirectors = oDbHelper.ExperianDirectorRepository;
 			_whiteLabelProviderRepository = whiteLabelProviderRepository;
-			this.customerOriginRepository = customerOriginRepository;
 		} // constructor
 
 		public WizardModel BuildWizardModel(Customer cus, HttpSessionStateBase session, string profile,string requestUrl, bool isProfile = false) {
@@ -158,15 +156,9 @@
 			} // if
 
 			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
-			customerModel.ApplyCount = customer.ApplyCount;
+			
 			customerModel.CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
-			customerModel.IsDefaultCustomerStatus = customer.CollectionStatus.CurrentStatus.IsDefault;
-			customerModel.HasRollovers = customerModel.ActiveRollovers.Any();
-
-			var cr = cus.LastCashRequest;
-			customerModel.IsCurrentCashRequestFromQuickOffer = !ReferenceEquals(cr, null) && !ReferenceEquals(cr.QuickOffer, null);
-			customerModel.IsLoanDetailsFixed = !m_oChangeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
-
+			
 			//customerModel.LoyaltyPoints = customer.LoyaltyPoints();
 			customerModel.IsOffline = customer.IsOffline;
 			customerModel.IsDisabled = !customer.CollectionStatus.CurrentStatus.IsEnabled;
@@ -177,6 +169,10 @@
 			customerModel.RequestedAmount = ReferenceEquals(oRequestedAmount, null) || !oRequestedAmount.Amount.HasValue ? 0 : (decimal)oRequestedAmount.Amount;
 			customerModel.IsBrokerFill = customer.FilledByBroker;
 			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;
+
+			var cr = customer.LastCashRequest;
+			customerModel.IsCurrentCashRequestFromQuickOffer = !ReferenceEquals(cr, null) && !ReferenceEquals(cr.QuickOffer, null);
+			customerModel.IsLoanDetailsFixed = !m_oChangeLoanDetailsModelBuilder.IsAmountChangingAllowed(cr);
 
 			if (isProfile) {
 				BuildProfileModel(customerModel, customer);
@@ -286,8 +282,10 @@
 					RolloverPayValue = GetRolloverPayValue(x.LoanSchedule.Loan)
 				});
 
+			customerModel.ApplyCount = customer.ApplyCount;
+			customerModel.IsDefaultCustomerStatus = customer.CollectionStatus.CurrentStatus.IsDefault;
+			customerModel.HasRollovers = customerModel.ActiveRollovers.Any();
 			
-
 			var inviteFriend = customer.CustomerInviteFriend.FirstOrDefault();
 			if (inviteFriend == null) {
 				customer.CustomerInviteFriend = new List<CustomerInviteFriend>();
@@ -359,7 +357,6 @@
 		private readonly PerksRepository m_oPerksRepository;
 		private readonly ExperianDirectorRepository m_oExperianDirectors;
 		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
-		private readonly CustomerOriginRepository customerOriginRepository;
 		private readonly ILog Log = LogManager.GetLogger(typeof(CustomerModelBuilder));
 	} // CustomerModelBuilder
 } // namespace

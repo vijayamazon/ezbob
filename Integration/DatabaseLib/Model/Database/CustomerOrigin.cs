@@ -33,5 +33,13 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public CustomerOrigin GetCustomerOrigin(CustomerOriginEnum origin) {
 			return GetAll().First(x => x.Name == origin.ToString());
 		}
+
+		public CustomerOrigin GetByHostname(string hostname) {
+			if(hostname.Contains("everline"))
+			{
+				return GetAll().First(x => x.Name == CustomerOriginEnum.everline.ToString());
+			}
+			return GetAll().First(x => x.Name == CustomerOriginEnum.ezbob.ToString());
+		}
 	}
 }

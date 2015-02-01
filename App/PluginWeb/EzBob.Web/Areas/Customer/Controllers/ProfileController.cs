@@ -42,9 +42,16 @@
 			this.payPointAccountRepository = payPointAccountRepository;
 		} // constructor
 
+		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
+			hostname = requestContext.HttpContext.Request.Url.Host;
+			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			base.Initialize(requestContext);
+		}
+
+
 		[IsSuccessfullyRegisteredFilter]
 		public ViewResult Index() {
-			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, this.Request.Url.Host, true);
+			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, hostname, true);
 			ViewData["ShowChangePasswordPage"] = m_oContext.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = m_oSession
@@ -292,6 +299,6 @@
 		private readonly IPayPointFacade m_oPayPointFacade;
 		private readonly PayPointAccountRepository payPointAccountRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
-
+		private string hostname;
 	} // class ProfileController
 } // namespace

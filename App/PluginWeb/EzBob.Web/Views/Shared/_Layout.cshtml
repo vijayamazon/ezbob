@@ -180,7 +180,7 @@
             var sEmail = $('body').attr('data-user-name');
             if (sEmail) {
                 $('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
-                $('#user-menu .login_btn, .signup_btn').hide();
+                $('.login_btn, .signup_btn').hide();
             }
             else {
                 $('#logoff-li').hide();
