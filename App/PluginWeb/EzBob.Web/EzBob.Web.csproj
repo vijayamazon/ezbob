@@ -786,8 +786,9 @@
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
-    <Content Include="Content\js\Profile\ezbob.profile.valentine2015scratch.js" />
-    <Content Include="Content\js\Profile\ezbob.profile.ny2015scratch.js" />
+    <Content Include="Content\js\ScratchCards\ezbob.scratchcard.selectcard.js" />
+    <Content Include="Content\js\ScratchCards\ezbob.scratchcard.valentine2015.js" />
+    <Content Include="Content\js\ScratchCards\ezbob.scratchcard.ny2015.js" />
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.js" />
     <Content Include="Content\js\Underwriter\CAIS\ezbob.underwriter.CAIS.caisManage.js" />
     <Content Include="Content\js\Underwriter\editLoan\editFee.js" />

@@ -27,6 +27,7 @@ BEGIN
 	WHERE
 		lp.UserID = @UserID
 	ORDER BY
+		dbo.udfMaxInt(0, l.LotteryPriority) DESC,
 		l.StartDate,
 		l.LotteryName
 END

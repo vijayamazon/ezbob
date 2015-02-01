@@ -7,12 +7,16 @@
 
 	public class EmailEnlistedLottery : AMailStrategyBase {
 		public EmailEnlistedLottery(int userID, Guid playerID, long lotteryID, bool isBroker) : base(userID, false) {
+			Enlisted = false;
+
 			this.isBroker = isBroker;
 			this.lotteryID = lotteryID;
 			this.doSend = false;
 			this.emailAddress = string.Empty;
 			this.playerID = playerID;
 		} // constructor
+
+		public bool Enlisted { get; private set; }
 
 		public override string Name {
 			get { return "EmailEnlistedLottery"; }
@@ -40,6 +44,7 @@
 			} // if
 
 			this.doSend = !string.IsNullOrWhiteSpace(this.emailAddress);
+			Enlisted = this.doSend;
 		} // LoadRecipientData
 
 		protected override Addressee[] GetRecipients() {

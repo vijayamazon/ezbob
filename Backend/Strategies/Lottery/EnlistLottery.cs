@@ -56,17 +56,21 @@
 			} // if
 
 			foreach (LotteryDataForEnlisting ld in this.lotteries)
-				Enlist(ld);
+				if (Enlist(ld))
+					break;
 		} // Execute
 
-		private void Enlist(LotteryDataForEnlisting ld) {
+		private bool Enlist(LotteryDataForEnlisting ld) {
 			if (!ld.Fits(this.metaData.LoanCount, this.metaData.LoanAmount))
-				return;
+				return false;
 
 			try {
-				new EmailEnlistedLottery(UserID, Guid.NewGuid(), ld.LotteryID, IsBroker).Execute();
+				var eel = new EmailEnlistedLottery(UserID, Guid.NewGuid(), ld.LotteryID, IsBroker);
+				eel.Execute();
+				return eel.Enlisted;
 			} catch (Exception e) {
-				Log.Warn("Failed to enlist user {0} to lottery {1}.", UserID, ld.LotteryID);
+				Log.Warn(e, "Failed to enlist user {0} to lottery {1}.", UserID, ld.LotteryID);
+				return false;
 			} // try
 		} // Enlist
 

@@ -95,29 +95,12 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		if (!props.LotteryPlayerID)
 			return;
 
-		var scratchArgs = {
+		this.scratchView = EzBob.ScratchCards.Select(props.LotteryCode, {
 			customerID: props.BrokerID,
 			playerID: props.LotteryPlayerID,
 			customerMode: false,
 			mainPageClass: '.broker-page-content',
-		};
-
-		if (props.LotteryCode) {
-			switch (props.LotteryCode) {
-			case 'ny2015':
-				this.scratchView = new EzBob.Profile.Ny2015ScratchView(scratchArgs);
-				break;
-
-			case 'valentine2015':
-				this.scratchView = new EzBob.Profile.Valentine2015ScratchView(scratchArgs);
-				break;
-
-			default:
-				this.scratchView = null;
-				break;
-			} // switch
-		} else
-			this.scratchView = null;
+		});
 
 		if (this.scratchView)
 			this.scratchView.render();

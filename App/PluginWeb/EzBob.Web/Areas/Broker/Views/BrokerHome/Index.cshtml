@@ -314,8 +314,8 @@
 										<li class="divider-vertical"></li>
 										<li><a href="#section-dashboard-terms-and-conditions">Terms and conditions</a></li>
 										@if (CurrentValues.Instance.BrokerInstantOfferEnabled) {
-										<li class="divider-vertical"></li>
-										<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
+											<li class="divider-vertical"></li>
+											<li><a href="#section-dashboard-instant-offer">Instant offer</a></li>
 										}
 									</ul>
 								</div>
@@ -746,7 +746,7 @@
 
 			<div class="decline"><a class="decline-game">I don't want to play</a></div>
 			<div class="close-lost"><a class="leave">Close</a></div>
-			
+
 			<div class="won">
 				<div class="popup">
 					<div class="title">Go Pack!</div>
@@ -894,8 +894,9 @@
 			.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
 			.AddString(BundleHelper.GetDbStrings())
 			.Add("~/Content/js/ezbob.view.js")
-			.Add("~/Content/js/Profile/ezbob.profile.ny2015scratch.js")
-			.Add("~/Content/js/Profile/ezbob.profile.valentine2015scratch.js")
+			.Add("~/Content/js/ScratchCards/ezbob.scratchcard.selectcard.js")
+			.Add("~/Content/js/ScratchCards/ezbob.scratchcard.ny2015.js")
+			.Add("~/Content/js/ScratchCards/ezbob.scratchcard.valentine2015.js")
 			.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 			.Add("~/Content/js/Broker/broker.base.view.js")
 			.Add("~/Content/js/Broker/broker.submit.view.js")

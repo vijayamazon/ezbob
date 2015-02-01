@@ -29,18 +29,15 @@
 			);
 		} // constructor
 
-		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients)
-		{
-			var oMeta = new MailMetaData(templateName)
-				{
-					new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false)
-				};
+		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients) {
+			var oMeta = new MailMetaData(templateName) {
+				new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false)
+			};
 
 			Send(oMeta, variables, aryRecipients);
 		} // Send
 
-		public void Send(MailMetaData meta, Dictionary<string, string> variables, params Addressee[] aryRecipients)
-		{
+		public void Send(MailMetaData meta, Dictionary<string, string> variables, params Addressee[] aryRecipients) {
 			foreach (KeyValuePair<string, string> oVar in variables)
 				meta.Add(oVar.Key, oVar.Value);
 
@@ -48,7 +45,7 @@
 				meta.Add(sAddr);
 
 			SendMailViaMandrill(meta);
-		}
+		} // Send
 
 		public void SendMailViaMandrill(MailMetaData oMeta) {
 			foreach (Addressee addr in oMeta) {
@@ -70,7 +67,6 @@
 						new QueryParameter("CustomerMail", addr.Recipient)
 					);
 
-
 					var salesForceAddEvent = new AddActivity(null, new ActivityModel {
 						Date = DateTime.UtcNow,
 						Desciption = oMeta.TemplateName,
@@ -85,9 +81,8 @@
 
 		private byte[] HtmlToDocxBinary(string html) {
 			if (html == null)
-			{
 				return new byte[0];
-			}
+
 			var doc = new Document();
 			var docBuilder = new DocumentBuilder(doc);
 			docBuilder.InsertHtml(html);
