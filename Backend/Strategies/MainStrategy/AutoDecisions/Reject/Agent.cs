@@ -1,8 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
-	using System.Collections.Specialized;
 	using System.Globalization;
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoRejection;
@@ -15,15 +13,12 @@
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.Experian;
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Turnover;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository.Turnover;
-	using NHibernate.Linq;
-	using NHibernate.Util;
 	using StructureMap;
 
 	// using Ezbob.Utils.Lingvo;
@@ -105,7 +100,6 @@
 		protected virtual MetaData MetaData { get; private set; }
 
 		protected virtual List<MpError> UpdateErrors { get; private set; }
-		protected virtual CalculatedTurnover Turnover { get; private set; }
 		protected virtual OriginationTime OriginationTime { get; private set; }
 
 		protected virtual void RunPrimary() {
@@ -134,7 +128,7 @@
 				"LoadAutoRejectData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", Args.CustomerID)
-				);
+			);
 
 			MetaData.Validate();
 
@@ -193,8 +187,7 @@
 		private enum RowType {
 			MetaData,
 			MpError,
-			OriginationTime
-			,
+			OriginationTime,
 			Turnover,
 		} // enum RowType
 
@@ -469,9 +462,8 @@
 						//	paypal.ForEach(x => Log.Info(" paypal: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
 
 					} else {
-
 						// isPayment
-						if (mpType.Key.IsPaymentAccount == true) {
+						if (mpType.Key.IsPaymentAccount) {
 							accounting.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, mpType.Key.InternalId, calculationTime));
 						} else {
 							ecommerce.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, mpType.Key.InternalId, calculationTime));

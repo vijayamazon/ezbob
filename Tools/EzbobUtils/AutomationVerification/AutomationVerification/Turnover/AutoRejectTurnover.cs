@@ -29,7 +29,7 @@
 			if (r.MpTypeID == MpType.Yodlee)
 				return new TurnoverTargetMetaData(this.yodlee, () => new SimpleOneMonthValue());
 
-			return (r.IsPaymentAccount && r.MpTypeID == MpType.PayPal)
+			return (r.IsPaymentAccount && (r.MpTypeID != MpType.PayPal))
 				? new TurnoverTargetMetaData(this.accounting, () => new SimpleOneMonthValue())
 				: new TurnoverTargetMetaData(this.online, () => new OnlineOneMonthValue());
 		} // FindTarget

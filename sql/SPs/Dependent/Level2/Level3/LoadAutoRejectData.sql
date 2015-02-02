@@ -229,6 +229,13 @@ BEGIN
 			COUNT(*)
 		FROM
 			MP_CompanyFilesMetaData f
+			INNER JOIN MP_CustomerMarketPlace m
+				ON m.CustomerId = @CustomerID
+				AND (@Now IS NULL OR m.Created < @Now)
+				AND ISNULL(m.Disabled, 0) = 0
+			INNER JOIN MP_MarketplaceType t
+				ON m.MarketPlaceId = t.Id
+				AND t.InternalId = '1C077670-6D6C-4CE9-BEBC-C1F9A9723908'
 		WHERE
 			f.CustomerId = @CustomerID
 			AND

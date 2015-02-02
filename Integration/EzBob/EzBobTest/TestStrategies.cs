@@ -494,5 +494,19 @@
 			test.Execute();
 
 		}
+
+		[Test]
+		public void Test_RejectTurnover() {
+			var turnover = new AutoRejectTurnover();
+			turnover.Init();
+
+			this.m_oDB.ForEachResult<TurnoverDbRow>(
+				row => turnover.Add(row),
+				"GetCustomerTurnoverForAutoDecision",
+				new QueryParameter("@IsForApprove", false),
+				new QueryParameter("@CustomerID", 18416),
+				new QueryParameter("@Now", new DateTime(2015, 2, 2))
+			);
+		}
 	}
 }

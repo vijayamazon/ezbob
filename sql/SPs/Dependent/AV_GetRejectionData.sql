@@ -88,8 +88,18 @@ END
 
 -- Has Company Files
 DECLARE @HasCompanyFiles BIT = 0
-IF EXISTS ( SELECT * FROM MP_CustomerMarketPlace mp INNER JOIN MP_MarketplaceType m ON m.Id = mp.MarketPlaceId 
-			WHERE mp.CustomerId	= @CustomerId AND m.InternalId='1C077670-6D6C-4CE9-BEBC-C1F9A9723908' AND mp.Disabled=0)
+IF EXISTS (
+	SELECT *
+	FROM	MP_CustomerMarketPlace mp
+	INNER JOIN MP_MarketplaceType m
+		ON m.Id = mp.MarketPlaceId
+		AND m.InternalId='1C077670-6D6C-4CE9-BEBC-C1F9A9723908'
+	INNER JOIN MP_CompanyFilesMetaData f ON f.CustomerId = @CustomerId
+	WHERE
+		mp.CustomerId = @CustomerId
+		AND
+		mp.Disabled = 0
+)
 BEGIN			
 	SET @HasCompanyFiles = 1
 END

@@ -127,17 +127,8 @@
     <Compile Include="MainStrategy\AutoDecisions\Reject\Checker.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\MpError.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\AccountingPeriodValue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\ASimplePeriodValue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\CalculatedTurnover.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\HmrcPeriodValue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\YodleePeriodValue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\EcommPeriodValue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\GroupTurnover.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Configuration.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\MetaData.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\IPeriodValue.cs" />
-    <Compile Include="MainStrategy\AutoDecisions\Reject\Turnover\Row.cs" />
     <Compile Include="MedalCalculations\MedalCalculator1.cs" />
     <Compile Include="MedalCalculations\MedalType.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedNoBusinessScoreMedalCalculator1.cs" />
