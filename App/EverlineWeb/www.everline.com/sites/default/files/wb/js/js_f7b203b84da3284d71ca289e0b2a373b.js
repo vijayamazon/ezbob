@@ -393,7 +393,7 @@ Drupal.behaviors.captchaAdmin = function (context) {
 ;
 (function() {
   /*jshint evil:true */
-  var link = 'https://d.la1c1.salesforceliveagent.com/chat';
+  var link = '';
   var deployment_id = '572D000000000c4';
   var org_id = '00D20000000Mrf2';
   var button_name = 'Everline';
@@ -408,6 +408,9 @@ Drupal.behaviors.captchaAdmin = function (context) {
 	  $('#livechat-form').hide();
 	  $("#livechat-media-wrapper").hide();
 	  $("#kampylink").hide();
+	  $('#k_slogan').hide();
+	  $('#k_close_button').hide();
+	  console.log('load 1');
 	  chat_running = false;
   });
 
