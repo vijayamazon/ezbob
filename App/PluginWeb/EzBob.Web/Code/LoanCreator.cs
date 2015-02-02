@@ -138,14 +138,8 @@
 
 			_session.Flush();
 
-			if (!isFakeLoanCreate) {
-				bool isFirstLoan = cus.Loans.Count() == 1;
-
-				m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, isFirstLoan);
-
-				if (isFirstLoan)
-					m_oServiceClient.Instance.EnlistLottery(cus.Id);
-			} // if
+			if (!isFakeLoanCreate)
+				m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
 			return loan;
 		} // CreateLoan

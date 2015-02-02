@@ -9,7 +9,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult PlayLottery(string playerID, int userID) {
-			var ny2015ScratchHelper = new Ny2015ScratchHelper(userID, playerID);
+			var ny2015ScratchHelper = new ScratchHelper(userID, playerID);
 			return Json(ny2015ScratchHelper.PlayLottery(), JsonRequestBehavior.AllowGet);
 		} // PlayLottery
 
@@ -17,7 +17,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public void Claim(string playerID, int userID) {
-			var ny2015ScratchHelper = new Ny2015ScratchHelper(userID, playerID);
+			var ny2015ScratchHelper = new ScratchHelper(userID, playerID);
 			ny2015ScratchHelper.Claim();
 		} // Claim
 
@@ -25,7 +25,7 @@
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
 		public void Decline(string playerID, int userID) {
-			var ny2015ScratchHelper = new Ny2015ScratchHelper(userID, playerID);
+			var ny2015ScratchHelper = new ScratchHelper(userID, playerID);
 			ny2015ScratchHelper.Decline();
 		} // Decline
 	} // class Ny2015ScratchController

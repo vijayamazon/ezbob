@@ -5,8 +5,8 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
-	public class Ny2015ScratchHelper {
-		public Ny2015ScratchHelper(int userID, string playerID) {
+	public class ScratchHelper {
+		public ScratchHelper(int userID, string playerID) {
 			this.serviceClient = new ServiceClient();
 			this.userID = userID;
 			this.lotteryPlayerID = ParsePlayerID(playerID);
@@ -68,10 +68,10 @@
 			} // try
 		} // ParsePlayerID
 
-		private static readonly ASafeLog log = new SafeILog(typeof(Ny2015ScratchHelper));
+		private static readonly ASafeLog log = new SafeILog(typeof(ScratchHelper));
 
 		private readonly ServiceClient serviceClient;
 		private readonly int userID;
 		private readonly Guid? lotteryPlayerID;
-	} // class Ny2015ScratchHelper
+	} // class ScratchHelper
 } // namespace

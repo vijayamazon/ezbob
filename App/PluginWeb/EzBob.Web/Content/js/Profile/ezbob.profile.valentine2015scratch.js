@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
 EzBob.Profile = EzBob.Profile || {};
 
-EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
+EzBob.Profile.Valendtine2015ScratchView = EzBob.View.extend({
 	initialize: function(options) {
 		this.customerID = options.customerID;
 		this.playerID = options.playerID;
@@ -9,12 +9,11 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 			(options.customerMode ? 'Customer/Scratch' : 'Broker/BrokerHome') + '/';
 
 		this.$mainPage = $(options.mainPageClass);
-		this.$el = $('#ny2015scratch');
+		this.$el = $('#valentine2015scratch');
 
 		this.$scratchArea = null;
 		this.$alphaScratchArea = null;
 		this.$betaScratchArea = null;
-		this.$gammaScratchArea = null;
 
 		this.$won = this.$el.find('.won');
 		this.$decline = this.$el.find('.decline');
@@ -25,12 +24,11 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		this.isAlphaOpen = false;
 		this.isBetaOpen = false;
-		this.isGammaOpen = false;
 
 		this.hasWon = false;
 		this.amount = 0;
 
-		this.pctToScratch = 40;
+		this.pctToScratch = 30;
 	}, // initialize
 
 	events: {
@@ -51,7 +49,6 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		this.$scratchArea = this.renewArea('scratch-area');
 		this.$alphaScratchArea = this.renewArea('alpha-scratch-area');
 		this.$betaScratchArea = this.renewArea('beta-scratch-area');
-		this.$gammaScratchArea = this.renewArea('gamma-scratch-area');
 
 		if (!this.playerID) {
 			this.hide();
@@ -78,11 +75,10 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 				self.hasWon = !!response.PrizeID;
 				self.amount = response.Amount;
 
-				self.$scratchArea.wScratchPad(self.getScratchArgs('onScratch', '2', self.hasWon));
+				self.$scratchArea.wScratchPad(self.getScratchArgs('onScratch', self.hasWon, self.amount));
 
-				self.$alphaScratchArea.wScratchPad(self.getScratchArgs('onAlphaScratch', '1'));
-				self.$betaScratchArea.wScratchPad(self.getScratchArgs('onBetaScratch', '3'));
-				self.$gammaScratchArea.wScratchPad(self.getScratchArgs('onGammaScratch', '4'));
+				self.$alphaScratchArea.wScratchPad(self.getScratchArgs('onAlphaScratch'));
+				self.$betaScratchArea.wScratchPad(self.getScratchArgs('onBetaScratch'));
 			} else {
 				self.hasWon = false;
 				self.amount = 0;
@@ -91,11 +87,11 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		});
 	}, // render
 
-	getScratchArgs: function(upEventHandlerName, idx, hasWon) {
+	getScratchArgs: function(upEventHandlerName, hasWon, amount) {
 		return {
 			size: 7,
-			bg: window.gRootPath + 'Content/img/ny2015scratch/' + (hasWon ? 'win' : 'sorry') + '_' + idx + '.png',
-			fg: window.gRootPath + 'Content/img/ny2015scratch/scratch_' + idx + '.png',
+			bg: window.gRootPath + 'Content/img/ny2015scratch/' + (hasWon ? 'prize_' + amount : 'sorry') + '.png',
+			fg: window.gRootPath + 'Content/img/ny2015scratch/scratch_card.png',
 			realtime: false,
 			scratchUp: _.bind(this[upEventHandlerName], this),
 		};
@@ -108,10 +104,6 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 	onBetaScratch: function(evt, pct) {
 		this.onScratchOther(pct, 'Beta');
 	}, // onBetaScratch
-
-	onGammaScratch: function(evt, pct) {
-		this.onScratchOther(pct, 'Gamma');
-	}, // onGammaScratch
 
 	onScratchOther: function(pct, name) {
 		var areaName = '$' + name.toLowerCase() + 'ScratchArea';
@@ -170,7 +162,7 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 	}, // onScratch
 
 	showClose: function() {
-		if (this.isOpen && this.isAlphaOpen && this.isBetaOpen && this.isGammaOpen)
+		if (this.isOpen && this.isAlphaOpen && this.isBetaOpen)
 			this.$close.show();
 	}, // showClose
 
@@ -184,7 +176,6 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 		this.$scratchArea = this.renewArea('scratch-area');
 		this.$alphaScratchArea = this.renewArea('alpha-scratch-area');
 		this.$betaScratchArea = this.renewArea('beta-scratch-area');
-		this.$gammaScratchArea = this.renewArea('gamma-scratch-area');
 
 		this.$won.hide();
 		this.$el.hide();
@@ -198,4 +189,4 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		return newArea;
 	}, // renewArea
-}); // EzBob.Profile.Ny2015ScratchView
+}); // EzBob.Profile.Valendtine2015ScratchView

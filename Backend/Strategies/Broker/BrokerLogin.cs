@@ -54,6 +54,7 @@
 			);
 
 			Properties.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
+			Properties.LotteryCode = sr["LotteryCode"];
 		} // Execute
 
 		#endregion method Execute

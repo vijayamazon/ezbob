@@ -7,24 +7,28 @@
 	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.MailStrategies.API;
 
-	public class EnlistLottery : AMailStrategyBase {
+	public class EmailEnlistedLottery : AMailStrategyBase {
 		public EnlistLottery(int customerID, AConnection db, ASafeLog log) : base(customerID, false, db, log) {
+			this.isBroker = isBroker;
+			this.lotteryID = lotteryID;
 			this.doSend = false;
 			this.emailAddress = string.Empty;
-			this.playerID = Guid.NewGuid();
+			this.playerID = playerID;
 		} // constructor
 
 		public override string Name {
-			get { return "EnlistLottery"; }
+			get { return "EmailEnlistedLottery"; }
 		} // Name
 
 		protected override void LoadRecipientData() {
 			SafeReader sr = DB.GetFirst(
 				"EnlistLottery",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", CustomerId),
+				new QueryParameter("UserID", CustomerId),
 				new QueryParameter("UniqueID", this.playerID),
-				new QueryParameter("Now", DateTime.UtcNow)
+				new QueryParameter("LotteryID", this.lotteryID),
+				new QueryParameter("IsBroker", this.isBroker),
+				new QueryParameter("Now", DateTime.Now)
 			);
 
 			if (!sr.IsEmpty) {
@@ -69,6 +73,7 @@
 		private readonly Guid playerID;
 		private bool doSend;
 		private string emailAddress;
-	} // class EnlistLottery
+		private readonly long lotteryID;
+		private readonly bool isBroker;
+	} // class EmailEnlistedLottery
 } // namespace
-
