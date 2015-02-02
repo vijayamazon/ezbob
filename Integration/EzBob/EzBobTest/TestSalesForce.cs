@@ -92,7 +92,7 @@
 				Desciption = "Description",
 				Type = "Mail",
 				Originator = "Originator",
-				Date = new DateTime(2015, 01, 27)
+				StartDate = new DateTime(2015, 01, 27)
 			};
 			Console.WriteLine(JsonConvert.SerializeObject(aModel, Formatting.Indented));
 
