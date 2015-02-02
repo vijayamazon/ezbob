@@ -42,7 +42,7 @@
 			if (loanCount <= 0)
 				return false;
 
-			return ((LoanCount == null) || (LoanCount <= 0)) && (loanCount <= LoanCount); 
+			return (LoanCount == null) || (LoanCount <= 0) || (loanCount <= LoanCount); 
 		} // FitsCount
 
 		private bool FitsCountOrAmount(int loanCount, decimal loanAmount) {
