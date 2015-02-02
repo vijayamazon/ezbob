@@ -487,7 +487,20 @@
 				fillannual[0] = this.MaxAnnualizedTurnover(hmrc, T1, T3, T6);
 				fillannual[1] = this.MaxAnnualizedTurnover(bank, T1, T3, T6);
 				fillannual[2] = this.MaxAnnualizedTurnover(accounting, T1, T3, T6);
-				fillannual[3] = this.MaxAnnualizedTurnover(ecommerce, T1, T3, T6) + Math.Max(this.MaxAnnualizedTurnover(paypal, T1, T3, T6), this.MaxAnnualizedTurnover(ebay, T1, T3, T6));
+
+				// get all T for pp, evay, other ecommerce
+
+				decimal[] tPaypal = this.CalculateTTurnover(paypal, T1, T3, T6);
+				decimal[] tEbay = this.CalculateTTurnover(ebay, T1, T3, T6);
+				decimal[] tEcommerce = this.CalculateTTurnover(ecommerce, T1, T3, T6);
+
+				decimal[] annualEcommerce = { 0, 0, 0, 0 };
+				annualEcommerce[0] = (tEcommerce[0] + Math.Max(tPaypal[0], tEbay[0])) * 12;
+				annualEcommerce[1] = (tEcommerce[1] + Math.Max(tPaypal[1], tEbay[1])) * 4;
+				annualEcommerce[2] = (tEcommerce[2] + Math.Max(tPaypal[2], tEbay[2])) * 2;
+				annualEcommerce[3] = (tEcommerce[3] + Math.Max(tPaypal[3], tEbay[3]));
+
+				fillannual[3] = annualEcommerce.Max();
 
 				decimal[] fillquarter = { 0, 0, 0, 0 };
 				fillquarter[0] = this.MaxQuarterTurnover(hmrc, T1, T3);
@@ -495,10 +508,10 @@
 				fillquarter[2] = this.MaxQuarterTurnover(accounting, T1, T3);
 				fillquarter[3] = this.MaxQuarterTurnover(ecommerce, T1, T3) + Math.Max(this.MaxQuarterTurnover(paypal, T1, T3), this.MaxQuarterTurnover(ebay, T1, T3));
 
-				this.AnnualTurnover = fillannual.AsEnumerable().Max();
-				this.QuarterTurnover = fillquarter.AsEnumerable().Max();
+				this.AnnualTurnover = fillannual.Max();
+				this.QuarterTurnover = fillquarter.Max();
 
-				//		Log.Info("customerID {0}, calculationDate {1}, annual: {2}, quarter: {3}", customerId, calculationTime, this.AnnualTurnover, this.QuarterTurnover);
+				Log.Info("customerID {0}, calculationDate {1}, annual: {2}, quarter: {3}", customerId, calculationTime, this.AnnualTurnover, this.QuarterTurnover);
 
 			} catch (Exception ex) {
 				this.Log.Alert(ex, "Failed to calculate turnover for Reject, customerID {0}, calculationDate {1}", customerId, calculationTime);
@@ -562,6 +575,15 @@
 		}
 
 
+		public decimal[] CalculateTTurnover(List<FilteredAggregationResult> list, DateTime T1, DateTime T3, DateTime T6) {
+			decimal[] filltt = { 0, 0, 0, 0 };
+			filltt[0] = list.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover);
+			filltt[1] = list.Where(t => t.TheMonth >= T3).Sum(t => t.Turnover);
+			filltt[2] = list.Where(t => t.TheMonth >= T6).Sum(t => t.Turnover);
+			filltt[3] = list.Sum(t => t.Turnover);
+			return filltt;
+		}
+
 		private static readonly SortedSet<char> ms_oLateStatuses = new SortedSet<char> { '1', '2', '3', '4', '5', '6', };
 
 		private int m_nNumOfDefaultConsumerAccounts;
@@ -570,6 +592,6 @@
 
 		private decimal QuarterTurnover;
 		private decimal AnnualTurnover;
-		
+
 	} // class Agent
 } // namespace
