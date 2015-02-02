@@ -35,10 +35,15 @@
 	font-family: TitilliumWebExtraLight;
 	font-size: 87px;
 	color: #ffcc83;
+	width: 177px;
+	height: 279px;
+	top: 60px;
 }
 
 #valentine2015scratch > .content > .slogan {
-	font-size: 37px;
-	font-family: TitilliumWebBold;
+	width: 177px;
+	height: 279px;
+	top: 60px;
+	left: 55px;
 }
 
