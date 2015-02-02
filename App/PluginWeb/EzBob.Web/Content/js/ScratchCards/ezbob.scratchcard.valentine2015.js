@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
-EzBob.Profile = EzBob.Profile || {};
+EzBob.ScratchCards = EzBob.ScratchCards || {};
 
-EzBob.Profile.Valentine2015ScratchView = EzBob.View.extend({
+EzBob.ScratchCards.Valentine2015 = EzBob.View.extend({
 	initialize: function(options) {
 		this.customerID = options.customerID;
 		this.playerID = options.playerID;

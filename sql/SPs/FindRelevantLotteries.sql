@@ -77,5 +77,8 @@ BEGIN
 		l.IsActive = 1
 		AND
 		l.IsForCustomer = @IsForCustomer
+	ORDER BY
+		dbo.udfMaxInt(0, l.LotteryPriority) DESC,
+		l.StartDate
 END
 GO

@@ -8,13 +8,17 @@
 	using EzBob.Backend.Strategies.MailStrategies.API;
 
 	public class EmailEnlistedLottery : AMailStrategyBase {
-		public EnlistLottery(int customerID, AConnection db, ASafeLog log) : base(customerID, false, db, log) {
+		public EmailEnlistLottery(int customerID, AConnection db, ASafeLog log) : base(customerID, false, db, log) {
+			Enlisted = false;
+
 			this.isBroker = isBroker;
 			this.lotteryID = lotteryID;
 			this.doSend = false;
 			this.emailAddress = string.Empty;
 			this.playerID = playerID;
 		} // constructor
+
+		public bool Enlisted { get; private set; }
 
 		public override string Name {
 			get { return "EmailEnlistedLottery"; }
@@ -42,6 +46,7 @@
 			} // if
 
 			this.doSend = !string.IsNullOrWhiteSpace(this.emailAddress);
+			Enlisted = this.doSend;
 		} // LoadRecipientData
 
 		protected override Addressee[] GetRecipients() {

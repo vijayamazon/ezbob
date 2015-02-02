@@ -54,8 +54,6 @@
 	left: 27px;
 }
 
-}
-
 #valentine2015scratch > .decline,
 #valentine2015scratch > .close-lost {
 	position: absolute;
@@ -82,7 +80,7 @@
 #valentine2015scratch > .won {
 	display: none;
 	background-color: #000000;
-	background-color: rgba(0, 0, 0, 0.9);
+	background-color: rgba(0, 0, 0, 0.7);
 	width: 100%;
 	position: absolute;
 	top: 30px;
@@ -134,3 +132,4 @@
 	right: 0;
 	margin: 0 auto;
 	top: 500px;
+}

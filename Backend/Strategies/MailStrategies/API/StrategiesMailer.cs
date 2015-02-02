@@ -32,20 +32,17 @@
 
 		#endregion constructor
 
+		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients) {
+			var oMeta = new MailMetaData(templateName) {
 		#region method Send
 
-		public void Send(string templateName, Dictionary<string, string> variables, params Addressee[] aryRecipients)
-		{
-			var oMeta = new MailMetaData(templateName)
-				{
-					new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false)
-				};
+				new Addressee(m_sEzbobCopyTo, m_sEzbobCopyCc, false)
+			};
 
 			Send(oMeta, variables, aryRecipients);
 		} // Send
 
-		public void Send(MailMetaData meta, Dictionary<string, string> variables, params Addressee[] aryRecipients)
-		{
+		public void Send(MailMetaData meta, Dictionary<string, string> variables, params Addressee[] aryRecipients) {
 			foreach (KeyValuePair<string, string> oVar in variables)
 				meta.Add(oVar.Key, oVar.Value);
 
@@ -53,7 +50,7 @@
 				meta.Add(sAddr);
 
 			SendMailViaMandrill(meta);
-		}
+		} // Send
 
 		#endregion method Send
 
@@ -92,9 +89,8 @@
 
 		private byte[] HtmlToDocxBinary(string html) {
 			if (html == null)
-			{
 				return new byte[0];
-			}
+
 			var doc = new Document();
 			var docBuilder = new DocumentBuilder(doc);
 			docBuilder.InsertHtml(html);
