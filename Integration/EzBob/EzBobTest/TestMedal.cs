@@ -60,8 +60,8 @@ namespace EzBobTest {
 
 		[Test]
 		public void Test_TurnoverForRejectThrougtMarketPlaceTurnoverView() {
-			int customerId = 20602;
-			DateTime calculationTime = new DateTime(2015, 01, 29);
+			int customerId = 5935; // 6500; // 9582; //10331;
+			DateTime calculationTime = new DateTime(2015, 02, 02);
 			Agent agent = new Agent(customerId, this.m_oDB, this.m_oLog);
 			agent.Init();
 			agent.CalculateTurnoverForReject(customerId, calculationTime); 

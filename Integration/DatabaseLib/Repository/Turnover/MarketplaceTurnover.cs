@@ -61,7 +61,7 @@ namespace EZBob.DatabaseLib.Repository.Turnover {
 		}
 
 		public IQueryable<MarketplaceTurnover> GetByCustomerAndDate(int customerID, DateTime calculationDate) {
-			return GetAll().Where(x => x.Customer.Id == customerID && x.UpdatingEnd < calculationDate);
+			return GetAll().Where(x => x.Customer.Id == customerID && x.UpdatingEnd < calculationDate && x.CustomerMarketPlace.Disabled == false );
 		}
 
 	}
