@@ -21,7 +21,13 @@ BEGIN
 			ON lp.LotteryID = l.LotteryID
 			AND @Now BETWEEN l.StartDate AND l.EndDate
 			AND l.IsActive = 1
+		INNER JOIN LotteryPlayerStatuses ls
+			ON lp.StatusID = ls.StatusID
+			AND (ls.CanWin = 1 OR ls.HasClaimed = 0)
 	WHERE
 		lp.UserID = @UserID
+	ORDER BY
+		l.StartDate,
+		l.LotteryName
 END
 GO

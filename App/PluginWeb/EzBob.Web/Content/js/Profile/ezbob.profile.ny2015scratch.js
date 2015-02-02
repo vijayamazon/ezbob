@@ -119,7 +119,6 @@ EzBob.Profile.Ny2015ScratchView = EzBob.View.extend({
 
 		this.$decline.hide();
 
-
 		if (this[flagName])
 			return;
 

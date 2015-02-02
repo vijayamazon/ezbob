@@ -98,7 +98,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SET @MinParticipantCount = dbo.MaxInt(@MinParticipantCount, 1)
+	SET @MinParticipantCount = dbo.udfMaxInt(@MinParticipantCount, 1)
 
 	SET @StatusID = ISNULL(@StatusID, 0)
 

@@ -18,7 +18,7 @@ EzBob.Profile.Valentine2015ScratchView = EzBob.View.extend({
 		this.$won = this.$el.find('.won');
 		this.$decline = this.$el.find('.decline');
 		this.$close = this.$el.find('.close-lost');
-		this.$amount = this.$won.find('.amount');
+		this.$city = this.$won.find('.city');
 
 		this.isOpen = false;
 
@@ -28,7 +28,7 @@ EzBob.Profile.Valentine2015ScratchView = EzBob.View.extend({
 		this.hasWon = false;
 		this.amount = 0;
 
-		this.pctToScratch = 30;
+		this.pctToScratch = 60;
 	}, // initialize
 
 	events: {
@@ -90,8 +90,8 @@ EzBob.Profile.Valentine2015ScratchView = EzBob.View.extend({
 	getScratchArgs: function(upEventHandlerName, hasWon, amount) {
 		return {
 			size: 7,
-			bg: window.gRootPath + 'Content/img/ny2015scratch/' + (hasWon ? 'prize_' + amount : 'sorry') + '.png',
-			fg: window.gRootPath + 'Content/img/ny2015scratch/scratch_card.png',
+			bg: window.gRootPath + 'Content/img/valentine2015scratch/' + (hasWon ? 'prize_' + amount : 'sorry') + '.png',
+			fg: window.gRootPath + 'Content/img/valentine2015scratch/scratch_card.png',
 			realtime: false,
 			scratchUp: _.bind(this[upEventHandlerName], this),
 		};
@@ -110,7 +110,6 @@ EzBob.Profile.Valentine2015ScratchView = EzBob.View.extend({
 		var flagName = 'is' + name + 'Open';
 
 		this.$decline.hide();
-
 
 		if (this[flagName])
 			return;
@@ -148,15 +147,26 @@ EzBob.Profile.Valentine2015ScratchView = EzBob.View.extend({
 			return;
 		} // if
 
-		var sAmount = '' + this.amount;
+		var city = '';
 
-		this.$amount.empty();
+		switch (this.amount) {
+		case '1':
+		case 1:
+			city = 'Barcelona';
+			break;
 
-		for (var i = 0; i < sAmount.length; i++) {
-			this.$amount.append(
-				$('<img>').attr('src', window.gRootPath + 'Content/img/ny2015scratch/' + sAmount[i] + '.png')
-			);
-		} // for
+		case '2':
+		case 2:
+			city = 'Paris';
+			break;
+
+		case '3':
+		case 3:
+			city = 'Rome';
+			break;
+		} // switch
+
+		this.$city.empty().text(city);
 
 		this.$won.show();
 	}, // onScratch
