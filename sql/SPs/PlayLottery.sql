@@ -98,7 +98,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SET @MinParticipantCount = ISNULL(@MinParticipantCount, 0)
+	SET @MinParticipantCount = dbo.MaxInt(@MinParticipantCount, 1)
 
 	SET @StatusID = ISNULL(@StatusID, 0)
 
@@ -170,11 +170,13 @@ BEGIN
 
 		IF @PrizeCount > 0
 		BEGIN
-			IF @PrizeCount < @PlayerCount
+			DECLARE @PlayerCountForProbability INT = @PrizeCount * @PlayerCount
+
+			IF @PrizeCount < @PlayerCountForProbability
 			BEGIN
 				DECLARE @i INT = 1
 
-				WHILE @i <= @PlayerCount - @PrizeCount
+				WHILE @i <= @PlayerCountForProbability - @PrizeCount
 				BEGIN
 					INSERT INTO #prizes (PrizeID, Amount, Rnd)
 						VALUES (NULL, 0, ABS(CHECKSUM(NewId())))

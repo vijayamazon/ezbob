@@ -767,6 +767,14 @@
     <Content Include="Content\img\ny2015scratch\win_2.png" />
     <Content Include="Content\img\ny2015scratch\win_3.png" />
     <Content Include="Content\img\ny2015scratch\win_4.png" />
+    <Content Include="Content\img\valentine2015scratch\headline.png" />
+    <Content Include="Content\img\valentine2015scratch\ribbon.png" />
+    <Content Include="Content\img\valentine2015scratch\scratch_card.png" />
+    <Content Include="Content\img\valentine2015scratch\prize_barcelona.png" />
+    <Content Include="Content\img\valentine2015scratch\prize_paris.png" />
+    <Content Include="Content\img\valentine2015scratch\prize_rome.png" />
+    <Content Include="Content\img\valentine2015scratch\valentine_promotion_bg.jpg" />
+    <Content Include="Content\img\valentine2015scratch\win.png" />
     <Content Include="Content\js\App\ezbob.bindings.js" />
     <Content Include="Content\js\App\ezbob.GA.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
