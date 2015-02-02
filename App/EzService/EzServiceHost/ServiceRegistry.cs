@@ -22,6 +22,7 @@
 			For<ILoanRepository>().Use<LoanRepository>();
 			For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
+			For<ILoanTransactionMethodRepository>().Use<LoanTransactionMethodRepository>();
 
 			bool isSalesForceProd = false;//TODO
 			if (isSalesForceProd) {

@@ -215,7 +215,7 @@
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
 												   model.Description, Environment.NewLine);
 
-				var facade = ObjectFactory.GetInstance<LoanPaymentFacade>();
+				var facade = new LoanPaymentFacade();
 
 				facade.MakePayment(payPointTransactionId, realAmount, null,
 												 "other", model.LoanId, customer,

@@ -136,6 +136,7 @@
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 				x.AddRegistry<ServiceRegistry>();
+				
 			});
 		} // constructor
 

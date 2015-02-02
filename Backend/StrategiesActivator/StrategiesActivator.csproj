@@ -85,6 +85,10 @@
       <Project>{8ad07daa-3f09-4279-a390-17acde79b44f}</Project>
       <Name>ChannelGrabberConfig</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
       <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
       <Name>RegistryScanner</Name>

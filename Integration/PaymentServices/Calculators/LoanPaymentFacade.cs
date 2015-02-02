@@ -11,11 +11,12 @@
 
 	public class LoanPaymentFacade {
 		private readonly ILoanHistoryRepository _historyRepository;
-		private static ILog Log = LogManager.GetLogger(typeof(LoanPaymentFacade));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanPaymentFacade));
 		private readonly ILoanTransactionMethodRepository loanTransactionMethodRepository;
 		private readonly int amountToChargeFrom;
 		public LoanPaymentFacade() {
 			loanTransactionMethodRepository = ObjectFactory.GetInstance<LoanTransactionMethodRepository>();
+			_historyRepository = ObjectFactory.GetInstance<LoanHistoryRepository>();
 			this.amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
 		}
 

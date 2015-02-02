@@ -4,6 +4,8 @@
 	using NHibernate;
 	using NHibernateWrapper.NHibernate;
 	using Ezbob.RegistryScanner;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
 	using ServiceClientProxy;
 	using StructureMap;
 	using StructureMap.Pipeline;
@@ -23,6 +25,9 @@
 				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 				x.For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
+				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
+				x.For<ILoanTransactionMethodRepository>().Use<LoanTransactionMethodRepository>();
+				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 			});
 
 			try {

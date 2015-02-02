@@ -122,7 +122,7 @@
 		public PayPointReturnData MakeAutomaticPayment(int loanScheduleId, decimal amount)
 		{
 			var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
-			var loanPaymentFacade = ObjectFactory.GetInstance<LoanPaymentFacade>();
+			var loanPaymentFacade = new LoanPaymentFacade();
 
 			PayPointReturnData payPointReturnData = null;
 
@@ -294,7 +294,7 @@
 				Log.InfoFormat("Calculating payment for installment {0}", installmentId);
 
 				var installments = ObjectFactory.GetInstance<ILoanScheduleRepository>();
-				var facade = ObjectFactory.GetInstance<LoanPaymentFacade>();
+				var facade = new LoanPaymentFacade();
 
 				var installment = installments.Get(installmentId);
 				var loan = installment.Loan;
