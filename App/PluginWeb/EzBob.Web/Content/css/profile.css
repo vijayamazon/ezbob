@@ -627,19 +627,22 @@ textarea.invite_friend {
     background-position: center;
     background-size: contain;
     display: block;
-    height: 90px;
+    height: 105px;
+	margin: 0
 }
 
 .whats-new-main {
-    width: inherit;
+	width: inherit;
+	margin-bottom: 10px;
+	position: relative;
 }
 
 .whats-new-buttons {
-    display: block;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    z-index: 1;
+	display: block;
+	position: absolute;
+	right: 0;
+	top: 70px;
+	z-index: 1;
 }
 
 div.addAddressContainer span.attardi-has-data { display: none; }
