@@ -30,12 +30,31 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.processingMessageView.on('getCash', this.getCash, this);
 		this.processingMessageView.on('payEarly', this.makePayment, this);
 
-		this.scratchView = new EzBob.Profile.Ny2015ScratchView({
-			customerID: this.customer.get('Id'),
-			playerID: this.customer.get('LotteryPlayerID'),
-			customerMode: true,
-			mainPageClass: '.main-page',
-		});
+		var lotteryCode = this.customer.get('LotteryCode');
+
+		if (lotteryCode) {
+			var scratchArgs = {
+				customerID: this.customer.get('Id'),
+				playerID: this.customer.get('LotteryPlayerID'),
+				customerMode: true,
+				mainPageClass: '.main-page',
+			};
+
+			switch (lotteryCode) {
+			case 'ny2015':
+				this.scratchView = new EzBob.Profile.Ny2015ScratchView(scratchArgs);
+				break;
+
+			case 'valentine2015':
+				this.scratchView = new EzBob.Profile.Valentine2015ScratchView(scratchArgs);
+				break;
+
+			default:
+				this.scratchView = null;
+				break;
+			} // switch
+		} else
+			this.scratchView = null;
 
 		this.router = new EzBob.Profile.ProfileRouter(this.customer);
 		this.router.on("details", this.loanDetails, this);
@@ -109,12 +128,16 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	showProfile: function() {
 		this.profileMain.show();
-		this.scratchView.render();
+
+		if (this.scratchView)
+			this.scratchView.render();
 	}, // showProfile
 
 	hideProfile: function() {
 		this.profileMain.hide();
-		this.scratchView.hide();
+
+		if (this.scratchView)
+			this.scratchView.hide();
 	}, // hideProfile
 
 	menuWidgetShown: function() {

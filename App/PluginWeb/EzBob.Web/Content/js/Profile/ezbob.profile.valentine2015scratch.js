@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
 EzBob.Profile = EzBob.Profile || {};
 
-EzBob.Profile.Valendtine2015ScratchView = EzBob.View.extend({
+EzBob.Profile.Valentine2015ScratchView = EzBob.View.extend({
 	initialize: function(options) {
 		this.customerID = options.customerID;
 		this.playerID = options.playerID;
@@ -189,4 +189,4 @@ EzBob.Profile.Valendtine2015ScratchView = EzBob.View.extend({
 
 		return newArea;
 	}, // renewArea
-}); // EzBob.Profile.Valendtine2015ScratchView
+}); // EzBob.Profile.Valentine2015ScratchView
