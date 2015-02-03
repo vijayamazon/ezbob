@@ -7,7 +7,6 @@
 
 	public static class TypeUtils {
 		#region static constructor
-
 		static TypeUtils() {
 			ms_oSimpleTypes = new SortedSet<string> {
 				typeof (bool).ToString(),

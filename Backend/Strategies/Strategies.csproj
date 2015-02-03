@@ -114,6 +114,15 @@
     <Compile Include="Broker\LimitedMedalCalculatorForInstantOffer.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
     <Compile Include="Lottery\EnlistLottery.cs" />
+    <Compile Include="Lottery\FitConditions\AAmount.cs" />
+    <Compile Include="Lottery\FitConditions\ABase.cs" />
+    <Compile Include="Lottery\FitConditions\CountAmount.cs" />
+    <Compile Include="Lottery\FitConditions\IFittable.cs" />
+    <Compile Include="Lottery\FitConditions\ACount.cs" />
+    <Compile Include="Lottery\FitConditions\MaxAmount.cs" />
+    <Compile Include="Lottery\FitConditions\MaxCount.cs" />
+    <Compile Include="Lottery\FitConditions\MinAmount.cs" />
+    <Compile Include="Lottery\FitConditions\MinCount.cs" />
     <Compile Include="Lottery\LotteryDataForEnlisting.cs" />
     <Compile Include="Lottery\LotteryEnlistingType.cs" />
     <Compile Include="Lottery\PlayLottery.cs" />

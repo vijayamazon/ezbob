@@ -16,6 +16,7 @@ namespace EzBobTest
 	using EzServiceShortcut;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
@@ -446,5 +447,26 @@ namespace EzBobTest
 			Console.WriteLine(sOutDec);
 			Assert.IsNotNullOrEmpty(sOutDec);
 		}
+
+		[Test]
+		public void TestLotteryEnlistingType() {
+			var let0 = new LotteryDataForEnlisting();
+			let0.LotteryEnlistingTypeStr = "MinCount";
+			let0.LotteryEnlistingTypeStr = "MaxCount";
+			let0.LotteryEnlistingTypeStr = "MaxAmount";
+			let0.LotteryEnlistingTypeStr = "MinAmount";
+
+			let0.LotteryEnlistingTypeStr = "MinCountOrMinAmount";
+			let0.LotteryEnlistingTypeStr = "MinCountAndMinAmount";
+
+			let0.LotteryEnlistingTypeStr = "MaxCountOrMinAmount";
+			let0.LotteryEnlistingTypeStr = "MaxCountAndMinAmount";
+
+			let0.LotteryEnlistingTypeStr = "MaxCountOrMaxAmount";
+			let0.LotteryEnlistingTypeStr = "MaxCountAndMaxAmount";
+
+			let0.LotteryEnlistingTypeStr = "MinCountOrMaxAmount";
+			let0.LotteryEnlistingTypeStr = "MinCountAndMaxAmount";
+		} // TestLotteryEnlistingType
 	}
 }

@@ -1,7 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.Lottery {
 	public enum LotteryEnlistingType {
 		Unknown,
-		LoanCount,
-		LoanOrAmount,
+		MinCount,
+		MaxCount,
+		MinAmount,
+		MaxAmount,
+		Constructed,
 	} // enum LotteryEnlistingType
 } // namespace
