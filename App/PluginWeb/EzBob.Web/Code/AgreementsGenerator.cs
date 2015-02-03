@@ -38,14 +38,17 @@
 			var model = !isRebuld ? _builder.Build(loan.Customer, loan.LoanAmount, loan) : _builder.ReBuild(loan.Customer, loan);
 
 			var isAlibaba = loan.Customer.IsAlibaba;
-			var alibaba = isAlibaba ? "Alibaba" : string.Empty;
+			var isEverline = loan.Customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString();
+			
+			var origin = isAlibaba ? "Alibaba" : string.Empty;
+			origin = isEverline ? "EVL" : origin;
 
 			string path1;
 			string path2;
 			TemplateModel template;
 			if (typeOfBusinessReduced == TypeOfBusinessAgreementReduced.Personal)
 			{
-				var preContract = _templates.GetTemplateByName(alibaba + "Pre-Contract-Agreement");
+				var preContract = _templates.GetTemplateByName(origin + "Pre-Contract-Agreement");
 				var preContractAgreement = new LoanAgreement("precontract", loan, 
 					_helper.GetOrCreateLoanAgreementTemplate(preContract, isAlibaba ? LoanAgreementTemplateType.AlibabaPreContractAgreement : LoanAgreementTemplateType.PreContractAgreement ));
 				loan.Agreements.Add(preContractAgreement);
@@ -55,7 +58,7 @@
 				template = new TemplateModel {Template = preContract};
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "precontract", template, path1, path2);
 
-				var contract = _templates.GetTemplateByName(alibaba + "CreditActAgreement");
+				var contract = _templates.GetTemplateByName(origin + "CreditActAgreement");
 				var contractAgreement = new LoanAgreement("Contract", loan, 
 					_helper.GetOrCreateLoanAgreementTemplate(contract, isAlibaba ? LoanAgreementTemplateType.AlibabaCreditActAgreement : LoanAgreementTemplateType.CreditActAgreement ));
 				loan.Agreements.Add(contractAgreement);
@@ -67,7 +70,7 @@
 			}
 			else
 			{
-				var guarantee = _templates.GetTemplateByName(alibaba + "GuarantyAgreement");
+				var guarantee = _templates.GetTemplateByName(origin + "GuarantyAgreement");
 				var guaranteeAgreement = new LoanAgreement("guarantee", loan, 
 					_helper.GetOrCreateLoanAgreementTemplate(guarantee, isAlibaba ? LoanAgreementTemplateType.AlibabaGuarantyAgreement : LoanAgreementTemplateType.GuarantyAgreement ));
 				loan.Agreements.Add(guaranteeAgreement);
@@ -77,7 +80,7 @@
 				template = new TemplateModel { Template = guarantee };
 				m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "guarantee", template, path1, path2);
 
-				var agreement = _templates.GetTemplateByName(alibaba + "PrivateCompanyLoanAgreement");
+				var agreement = _templates.GetTemplateByName(origin + "PrivateCompanyLoanAgreement");
 				var agreementAgreement = new LoanAgreement("agreement", loan,
 					_helper.GetOrCreateLoanAgreementTemplate(agreement, isAlibaba ? LoanAgreementTemplateType.AlibabaPrivateCompanyLoanAgreement : LoanAgreementTemplateType.PrivateCompanyLoanAgreement));
 				loan.Agreements.Add(agreementAgreement);

@@ -229,7 +229,8 @@
 					Area = "Customer",
 					customerId = oCustomer.Id,
 					cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
-					hideSteps = true
+					hideSteps = true,
+					origin = oCustomer.CustomerOrigin.Name
 				}, "https");
 			var url = m_oPayPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
 

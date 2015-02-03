@@ -1,6 +1,6 @@
 ﻿@{
     Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "PayPoint: Fill Debit Card Details | " + ViewBag.Origin;
+    ViewBag.Title = "PayPoint: Fill Debit Card Details";
     string baseUrl = string.Empty;
 }
 
@@ -313,6 +313,7 @@
                 $('#amount-group').show();
             }
             
+            var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
@@ -320,8 +321,8 @@
             $('#user-menu .login_btn, .signup_btn').hide();
 
             //set url for back button
-            var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
-            var testUrlBack = !isPayEarly ? "@baseUrl/EzBob/EzBob.Web/Customer/Profile#GetCash" : "@baseUrl/EzBob/EzBob.Web/Customer/Profile#PayEarly";
+            var ulrBack = !isPayEarly ? 'https://app.' + origin + '.com/Customer/Profile#GetCash' : 'https://app.'  + origin + '.com/Customer/Profile#PayEarly';
+            var testUrlBack = !isPayEarly ? '@baseUrl/EzBob/EzBob.Web/Customer/Profile#GetCash' : '@baseUrl/EzBob/EzBob.Web/Customer/Profile#PayEarly';
 
             $(".btn-back").attr("href", isTest ? testUrlBack : ulrBack);
 

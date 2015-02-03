@@ -198,7 +198,8 @@
 					username = (_context.User != null ? _context.User.Name : ""),
 					cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
 					hideSteps = true,
-					payEarly = true
+					payEarly = true,
+					origin = oCustomer.CustomerOrigin.Name
 				}, "https");
 
 				var url = _payPointFacade.GeneratePaymentUrl(oCustomer, amount, callback);
