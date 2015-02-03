@@ -51,12 +51,12 @@
 			foreach (Addressee addr in oMeta) {
 				var sendStatus = m_oMail.Send(oMeta, addr.Recipient, oMeta.TemplateName, string.Empty, addr.CarbonCopy);
 				var renderedHtml = m_oMail.GetRenderedTemplate(oMeta, oMeta.TemplateName);
-
+				var now = DateTime.UtcNow;
 				if (sendStatus == null || renderedHtml == null)
 					Log.Error("Failed sending mail. template:{0} to:{1} cc:{2}", oMeta.TemplateName, addr.Recipient, addr.CarbonCopy);
 
 				if (addr.ShouldRegister) {
-					string filename = string.Format("{0}({1}).docx", oMeta.TemplateName, DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
+					string filename = string.Format("{0}({1}).docx", oMeta.TemplateName, now.ToString("yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture));
 
 					DB.ExecuteNonQuery(
 						"RecordMail",
@@ -68,7 +68,8 @@
 					);
 
 					var salesForceAddEvent = new AddActivity(null, new ActivityModel {
-						Date = DateTime.UtcNow,
+						StartDate = now,
+						EndDate = now,
 						Desciption = oMeta.TemplateName,
 						Email = addr.Recipient,
 						Originator = "System",
