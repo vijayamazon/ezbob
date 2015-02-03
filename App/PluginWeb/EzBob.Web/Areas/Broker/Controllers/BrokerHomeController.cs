@@ -229,7 +229,7 @@
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
-			BrokerProperties bp = this.m_oHelper.TryLogin(LoginEmail, LoginPassword);
+			BrokerProperties bp = this.m_oHelper.TryLogin(LoginEmail, LoginPassword, null, null);
 
 			if (bp == null)
 				return new BrokerForJsonResult("Failed to log in.");
