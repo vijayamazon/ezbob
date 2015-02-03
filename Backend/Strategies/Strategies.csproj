@@ -123,8 +123,8 @@
     <Compile Include="Lottery\FitConditions\MaxCount.cs" />
     <Compile Include="Lottery\FitConditions\MinAmount.cs" />
     <Compile Include="Lottery\FitConditions\MinCount.cs" />
+    <Compile Include="Lottery\LoanData.cs" />
     <Compile Include="Lottery\LotteryDataForEnlisting.cs" />
-    <Compile Include="Lottery\LotteryEnlistingType.cs" />
     <Compile Include="Lottery\PlayLottery.cs" />
     <Compile Include="MailStrategies\EmailEnlistedLottery.cs" />
     <Compile Include="MainStrategy\AutoDecisionMails.cs" />

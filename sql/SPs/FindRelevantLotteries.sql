@@ -14,8 +14,6 @@ BEGIN
 
 	DECLARE @UserID INT
 	DECLARE @BrokerID INT
-	DECLARE @LoanCount INT
-	DECLARE @LoanAmount DECIMAL(18, 2)
 
 	SELECT
 		@UserID = c.Id,
@@ -33,8 +31,9 @@ BEGIN
 	IF @BrokerID = 0
 	BEGIN
 		SELECT
-			@LoanCount = COUNT(*),
-			@LoanAmount = SUM(l.LoanAmount)
+			RowType = 'Loan',
+			l.LoanAmount,
+			IssuedTime = l.[Date]
 		FROM
 			Loan l
 			INNER JOIN CashRequests r ON l.RequestCashId = r.Id
@@ -43,21 +42,22 @@ BEGIN
 	END
 	ELSE BEGIN
 		SELECT
-			@LoanCount = COUNT(*),
-			@LoanAmount = SUM(l.LoanAmount)
+			RowType = 'Loan',
+			l.LoanAmount,
+			IssuedTime = l.[Date]
 		FROM
 			Loan l
 			INNER JOIN CashRequests r ON l.RequestCashId = r.Id
 			INNER JOIN Customer c ON r.IdCustomer = c.Id
 		WHERE
 			c.BrokerID = @BrokerID
+			AND
+			l.Position = 0
 	END
 
 	SELECT
 		RowType = 'MetaData',
-		BrokerID = @BrokerID,
-		LoanCount = ISNULL(@LoanCount, 0),
-		LoanAmount = ISNULL(@LoanAmount, 0)
+		BrokerID = @BrokerID
 
 	DECLARE @IsForCustomer BIT = CASE WHEN @BrokerID = 0 THEN 1 ELSE 0 END
 
@@ -67,7 +67,10 @@ BEGIN
 		l.LoanCount,
 		l.LoanAmount,
 		l.LotteryEnlistingTypeID,
-		et.LotteryEnlistingType
+		et.LotteryEnlistingType,
+		l.IsForNew,
+		l.StartDate,
+		l.EndDate
 	FROM
 		Lotteries l
 		INNER JOIN LotteryEnlistingTypes et ON l.LotteryEnlistingTypeID = et.LotteryEnlistingTypeID

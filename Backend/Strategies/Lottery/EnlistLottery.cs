@@ -7,8 +7,10 @@
 	public class EnlistLottery : AStrategy {
 		public EnlistLottery(int customerID) {
 			this.customerID = customerID;
-			this.metaData = new MetaData();
+			this.isFilled = false;
+			this.brokerID = 0;
 			this.lotteries = new List<LotteryDataForEnlisting>();
+			this.loans = new List<LoanData>();
 		} // constructor
 
 		public override string Name {
@@ -25,12 +27,16 @@
 
 					switch (rt) {
 					case RowType.MetaData:
-						sr.Fill(this.metaData);
-						this.metaData.IsFilled = true;
+						this.isFilled = true;
+						this.brokerID = sr["BrokerID"];
 						break;
 
 					case RowType.Lottery:
 						this.lotteries.Add(sr.Fill<LotteryDataForEnlisting>());
+						break;
+
+					case RowType.Loan:
+						this.loans.Add(sr.Fill<LoanData>());
 						break;
 
 					default:
@@ -44,13 +50,14 @@
 			);
 
 			Log.Info(
-				"Customer {0} meta data: {1}; lotteries count: {2}.",
+				"Customer id: {0}, broker id: {1}; lotteries count: {2}; total loan count: {3}.",
 				this.customerID,
-				this.metaData,
-				this.lotteries.Count
+				this.brokerID,
+				this.lotteries.Count,
+				this.loans.Count
 			);
 
-			if (!this.metaData.IsFilled || (this.lotteries.Count < 1)) {
+			if (!this.isFilled || (this.lotteries.Count < 1)) {
 				Log.Debug("Exiting (either no lotteries or no meta data).");
 				return;
 			} // if
@@ -61,7 +68,7 @@
 		} // Execute
 
 		private bool Enlist(LotteryDataForEnlisting ld) {
-			if (!ld.Fits(this.metaData.LoanCount, this.metaData.LoanAmount))
+			if (!ld.Fits(this.loans))
 				return false;
 
 			try {
@@ -75,48 +82,24 @@
 		} // Enlist
 
 		private bool IsBroker {
-			get { return this.metaData.BrokerID > 0; }
+			get { return this.brokerID > 0; }
 		} // IsBroker
 
 		private int UserID {
-			get { return this.IsBroker ? this.metaData.BrokerID : this.customerID; }
+			get { return IsBroker ? this.brokerID : this.customerID; }
 		} // UserID
 
 		private enum RowType {
 			MetaData,
 			Lottery,
+			Loan,
 		} // enum RowType
 
 		private readonly int customerID;
+		private readonly List<LoanData> loans; 
 
-		private class MetaData {
-			public MetaData() {
-				IsFilled = false;
-			} // constructor
-
-			public bool IsFilled { get; set; }
-			public int BrokerID { get; set; }
-			public int LoanCount { get; set; }
-			public decimal LoanAmount { get; set; }
-
-			/// <summary>
-			/// Returns a string that represents the current object.
-			/// </summary>
-			/// <returns>
-			/// A string that represents the current object.
-			/// </returns>
-			public override string ToString() {
-				return string.Format(
-					"is filled: {0}, broker id: {1}, loan count: {2}, amount: {3}",
-					IsFilled,
-					BrokerID,
-					LoanCount,
-					LoanAmount
-				);
-			} // ToString
-		} // class MetaData
-
-		private readonly MetaData metaData;
+		private bool isFilled;
+		private int brokerID;
 		private readonly List<LotteryDataForEnlisting> lotteries;
 	} // class EnlistLottery
 } // namespace
