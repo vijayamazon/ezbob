@@ -412,6 +412,11 @@ Drupal.behaviors.captchaAdmin = function (context) {
 	  $('#k_close_button').hide();
 	  console.log('load 1');
 	  chat_running = false;
+	  
+	  if(window.location.hostname == 'localhost'){
+		  $('a.apply-now-btn').attr('href', 'https://test.everline.com:44300/Customer/Wizard');
+		  $('a.login').attr('href', 'https://test.everline.com:44300/Account/Logon');
+	  }
   });
 
 

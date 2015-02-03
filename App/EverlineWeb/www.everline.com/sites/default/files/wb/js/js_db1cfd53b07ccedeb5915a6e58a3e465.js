@@ -373,8 +373,14 @@ jQuery(document).ready(function() {
 	  $("#kampylink").hide();
 	  $('#k_slogan').hide();
 	  $('#k_close_button').hide();
-	  console.log('load 1');
+	  
 	  chat_running = false;
+	  
+	  console.log('load 2', window.location.hostname);
+	  if(window.location.hostname == 'localhost'){
+		  $('a.apply-now-btn').attr('href', 'https://test.everline.com:44300/Customer/Wizard');
+		  $('a.login').attr('href', 'https://test.everline.com:44300/Account/Logon');
+	  }
   });
 
 
