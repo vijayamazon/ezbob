@@ -14,6 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Customer.Models;
 	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using ServiceClientProxy;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -22,7 +23,6 @@
 		private readonly CustomerRepository _customers;
 		private readonly ICustomerMarketPlaceRepository _customerMarketplaces;
 		private readonly ISortCodeChecker _sortCodeChecker;
-		private readonly IPayPointFacade _payPointFacade;
 		private readonly IWorkplaceContext _context;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly PayPointAccountRepository payPointAccountRepository;
@@ -30,7 +30,6 @@
 		public PaymentAccountsController(
 			CustomerRepository customers,
 			ICustomerMarketPlaceRepository customerMarketplaces,
-			IPayPointFacade payPointFacade,
 			IWorkplaceContext context,
 			PayPointAccountRepository payPointAccountRepository
 		)
@@ -43,7 +42,6 @@
 				? (ISortCodeChecker)new SortCodeChecker(CurrentValues.Instance.PostcodeAnywhereMaxBankAccountValidationAttempts)
 				: (ISortCodeChecker)new FakeSortCodeChecker();
 
-			_payPointFacade = payPointFacade;
 			_context = context;
 			this.payPointAccountRepository = payPointAccountRepository;
 		}
@@ -149,7 +147,9 @@
 			int payPointCardExpiryMonths = payPointAccountRepository.GetDefaultAccount().CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate), hideSteps = true }, "https");
-			var url = _payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
+			bool isDefaultCard = !oCustomer.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
 
 			return Redirect(url);
 		}
@@ -158,6 +158,7 @@
 		[HttpGet]
 		public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId)
 		{
+			var cus = _customers.GetChecked(customerId);
 			if (test_status == "true")
 			{
 				// Use last 4 random digits as card number (to enable useful tests)
@@ -175,13 +176,12 @@
 				TempData["message"] = message;
 				return View("Error");
 			}
-
-			if (!_payPointFacade.CheckHash(hash, Request.Url))
+			bool isDefaultCard = !cus.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			if (!payPointFacade.CheckHash(hash, Request.Url))
 			{
 				throw new Exception("check hash failed");
 			}
-
-			var cus = _customers.GetChecked(customerId);
 
 			AddPayPointCardToCustomer(trans_id, card_no, cus, expiry);
 
