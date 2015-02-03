@@ -1,4 +1,4 @@
-IF object_i('RecordMail') IS NULL
+IF OBJECT_ID('RecordMail') IS NULL
 BEGIN
 	EXECUTE('CREATE PROCEDURE RecordMail AS SELECT 1')
 END
