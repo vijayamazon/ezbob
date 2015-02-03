@@ -9,11 +9,12 @@
 	using JetBrains.Annotations;
 
 	public class BrokerLogin : AStrategy {
-
-		public BrokerLogin(string sEmail, Password oPassword) {
+		public BrokerLogin(string sEmail, Password oPassword, string promotionName, DateTime? promotionPageVisitTime) {
 			m_oSp = new SpBrokerLogin(DB, Log) {
 				Email = sEmail,
 				Password = oPassword.Primary,
+				LotteryCode = promotionName,
+				PageVisitTime = promotionPageVisitTime,
 			};
 
 			Properties = new BrokerProperties();
@@ -43,7 +44,6 @@
 		private readonly SpBrokerLogin m_oSp;
 
 		private class SpBrokerLogin : AStoredProc {
-
 			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			public override bool HasValidParameters() {
@@ -62,8 +62,13 @@
 				set { m_sPassword = value; }
 			} // Password
 
-			private string m_sPassword;
+			[UsedImplicitly]
+			public string LotteryCode { get; set; }
 
+			[UsedImplicitly]
+			public DateTime? PageVisitTime { get; set; }
+
+			private string m_sPassword;
 		} // class SpBrokerLogin
 
 	} // class BrokerLogin

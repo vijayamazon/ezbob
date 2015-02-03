@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Controllers {
-
 	using System;
 	using System.Collections.Generic;
 	using System.Configuration;
@@ -60,7 +59,13 @@
 		} // constructor
 
 		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
-			hostname = requestContext.HttpContext.Request.Url.Host;
+			bool hasHost =
+				(requestContext != null) &&
+				(requestContext.HttpContext != null) &&
+				(requestContext.HttpContext.Request != null) &&
+				(requestContext.HttpContext.Request.Url != null);
+
+			hostname = hasHost ? requestContext.HttpContext.Request.Url.Host : string.Empty;
 			ms_oLog.Info("WizardController Initialize {0}", hostname);
 			base.Initialize(requestContext);
 		}
@@ -101,7 +106,7 @@
 
 				try {
 					string loginError;
-					var membershipCreateStatus = ValidateUser(model.UserName, model.Password, out loginError);
+					var membershipCreateStatus = ValidateUser(model.UserName, model.Password, null, null, out loginError);
 					if (MembershipCreateStatus.Success == membershipCreateStatus) {
 						model.SetCookie(LogOnModel.Roles.Underwriter);
 
@@ -132,8 +137,41 @@
 		} // AdminLogOn
 
 		[IsSuccessfullyRegisteredFilter]
-		public ActionResult LogOn(string returnUrl) {
-			return View(new LogOnModel { ReturnUrl = returnUrl });
+		public ActionResult LogOn(string returnUrl, string scratch_promotion = null) {
+			scratch_promotion = (scratch_promotion ?? string.Empty).Trim();
+
+			ms_oLog.Debug("Scratch promotion data: '{0}'.", scratch_promotion);
+
+			string promotionName = null;
+			DateTime? promotionPageVisitTime = null;
+
+			if (!string.IsNullOrWhiteSpace(scratch_promotion)) {
+				string[] tokens = scratch_promotion.Trim().Split(';');
+
+				DateTime ppvt = DateTime.UtcNow;
+
+				bool hasGoodTokens =
+					(tokens.Length == 2) &&
+					!string.IsNullOrWhiteSpace(tokens[0]) &&
+					DateTime.TryParseExact(
+						tokens[1],
+						"yyyy-M-d_H-m-s",
+						CultureInfo.InvariantCulture,
+						DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeLocal,
+						out ppvt
+					);
+
+				if (hasGoodTokens) {
+					promotionName = tokens[0];
+					promotionPageVisitTime = ppvt;
+				} // if
+			} // if
+
+			return View(new LogOnModel {
+				ReturnUrl = returnUrl,
+				PromotionName = promotionName,
+				PromotionPageVisitTime = promotionPageVisitTime,
+			});
 		} // LogOn
 
 		[HttpPost]
@@ -158,15 +196,21 @@
 			} // if
 
 			ms_oLog.Debug(
-				"Customer log on attempt from remote IP {0} received with user name '{1}' and hash '{2}'...",
+				"Customer log on attempt from remote IP {0} received with user name '{1}' and hash '{2}' (promotion: {3})...",
 				customerIp,
 				model.UserName,
-				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password)
+				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password),
+				model.PromotionDisplayData
 			);
 
 			try {
 				if (m_oBrokerHelper.IsBroker(model.UserName)) {
-					BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
+					BrokerProperties bp = m_oBrokerHelper.TryLogin(
+						model.UserName,
+						model.Password,
+						model.PromotionName,
+						model.PromotionPageVisitTime
+					);
 
 					if ((bp != null) && (bp.CurrentTermsID != bp.SignedTermsID)) {
 						Session[Constant.Broker.Terms] = bp.CurrentTerms;
@@ -269,7 +313,13 @@
 			}
 
 			string loginError;
-			var nStatus = ValidateUser(model.UserName, model.Password, out loginError);
+			var nStatus = ValidateUser(
+				model.UserName,
+				model.Password,
+				model.PromotionName,
+				model.PromotionPageVisitTime,
+				out loginError
+			);
 
 			if (MembershipCreateStatus.Success == nStatus) {
 				model.SetCookie(LogOnModel.Roles.Customer);
@@ -889,7 +939,13 @@
 			return null;
 		} // GetAndRemoveCookie
 
-		private MembershipCreateStatus ValidateUser(string username, string password, out string error) {
+		private MembershipCreateStatus ValidateUser(
+			string username,
+			string password,
+			string promotionName,
+			DateTime? promotionPageVisitTime,
+			out string error
+		) {
 			ms_oLog.Debug("Validating user '{0}' password...", username);
 
 			int nSessionID;
@@ -899,7 +955,9 @@
 				UserLoginActionResult ular = m_oServiceClient.Instance.UserLogin(
 					username,
 					new Password(password),
-					RemoteIp()
+					RemoteIp(),
+					promotionName,
+					promotionPageVisitTime
 				);
 
 				nSessionID = ular.SessionID;

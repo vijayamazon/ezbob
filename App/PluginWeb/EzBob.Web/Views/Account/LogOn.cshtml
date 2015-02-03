@@ -38,6 +38,8 @@
                 <h1>Login</h1>
                 <h2>Welcome back!</h2>
                 @Html.TextBoxFor(x => x.ReturnUrl, new { type = "hidden" })
+                @Html.TextBoxFor(x => x.PromotionName, new { type = "hidden" })
+                @Html.TextBoxFor(x => x.PromotionPageVisitTime, new { type = "hidden" })
 
                 @{
                     var oForgottenAttr = new Dictionary<string, Object>();

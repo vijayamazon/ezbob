@@ -8,8 +8,13 @@
 	using JetBrains.Annotations;
 
 	public class UserLogin : AStrategy {
-
-		public UserLogin(string sEmail, Password oPassword, string sRemoteIp) {
+		public UserLogin(
+			string sEmail,
+			Password oPassword,
+			string sRemoteIp,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		) {
 			m_oResult = null;
 
 			m_oData = new UserSecurityData(this) {
@@ -23,6 +28,8 @@
 
 			m_oSpResult = new UserLoginCheckResult(DB, Log) {
 				Ip = sRemoteIp,
+				LotteryCode = promotionName,
+				PageVisitTime = promotionPageVisitTime,
 			};
 		} // constructor
 
@@ -144,14 +151,6 @@
 
 		private class UserLoginCheckResult : AStoredProcedure {
 			public UserLoginCheckResult(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
-				UserID = 0;
-				EzPassword = null;
-				IsDeleted = null;
-				LastBadLogin = null;
-				LoginFailedCount = null;
-				Success = false;
-				ErrorMessage = null;
-				Ip = null;
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -165,6 +164,8 @@
 			public int? LoginFailedCount { [UsedImplicitly] get; set; }
 			public bool Success { [UsedImplicitly] get; set; }
 			public string ErrorMessage { [UsedImplicitly] get; set; }
+			public string LotteryCode { [UsedImplicitly] get; set; }
+			public DateTime? PageVisitTime { [UsedImplicitly] get; set; }
 
 			public string Ip {
 				[UsedImplicitly]

@@ -11,7 +11,9 @@ ALTER PROCEDURE UserLoginCheckResult
 @Success BIT,
 @ErrorMessage NVARCHAR(50),
 @Ip NVARCHAR(50),
-@Now DATETIME
+@Now DATETIME,
+@LotteryCode NVARCHAR(64),
+@PageVisitTime DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -30,5 +32,7 @@ BEGIN
 	SET @EndSession = CASE @Success WHEN 1 THEN NULL ELSE @Now END
 
 	EXECUTE CreateCustomerSession @UserID, @Now, @Ip, @Success, @ErrorMessage, @EndSession, @SessionID OUTPUT
+
+	EXECUTE SaveUserLotteryCodeHistory @UserID, @LotteryCode, @PageVisitTime
 END
 GO

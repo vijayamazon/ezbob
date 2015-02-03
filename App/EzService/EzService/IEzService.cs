@@ -151,7 +151,12 @@
 		BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
 
 		[OperationContract]
-		BrokerPropertiesActionResult BrokerLogin(string sEmail, Password oPassword);
+		BrokerPropertiesActionResult BrokerLogin(
+			string sEmail,
+			Password oPassword,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		);
 
 		[OperationContract]
 		ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
@@ -278,7 +283,7 @@
 			int nPasswordQuestion,
 			string sPasswordAnswer,
 			string sRemoteIp
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData DeleteExperianDirector(int nDirectorID, int nUnderwriterID);
@@ -669,10 +674,16 @@
 			Password oOldPassword,
 			Password oNewPassword,
 			bool bForceChangePassword
-			);
+		);
 
 		[OperationContract]
-		UserLoginActionResult UserLogin(string sEmail, Password sPassword, string sRemoteIp);
+		UserLoginActionResult UserLogin(
+			string sEmail,
+			Password sPassword,
+			string sRemoteIp,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		);
 
 		[OperationContract]
 		StringActionResult UserResetPassword(string sEmail);

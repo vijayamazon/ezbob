@@ -6,7 +6,6 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
-
 		public UserLoginActionResult CustomerSignup(
 			string sEmail,
 			Password oPassword,
@@ -31,10 +30,25 @@
 			return ExecuteSync<UserSignup>(null, null, name, password.Primary, roleName);
 		} // UnderwriterSignup
 
-		public UserLoginActionResult UserLogin(string sEmail, Password oPassword, string sRemoteIp) {
+		public UserLoginActionResult UserLogin(
+			string sEmail,
+			Password oPassword,
+			string sRemoteIp,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		) {
 			UserLogin oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword, sRemoteIp);
+			ActionMetaData oMetaData = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				sEmail,
+				oPassword,
+				sRemoteIp,
+				promotionName,
+				promotionPageVisitTime
+			);
 
 			return new UserLoginActionResult {
 				MetaData = oMetaData,

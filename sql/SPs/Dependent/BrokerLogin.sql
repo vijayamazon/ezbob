@@ -4,7 +4,9 @@ GO
 
 ALTER PROCEDURE BrokerLogin
 @Email NVARCHAR(255),
-@Password NVARCHAR(255)
+@Password NVARCHAR(255),
+@LotteryCode NVARCHAR(64),
+@PageVisitTime DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -31,6 +33,7 @@ BEGIN
 	END
 	ELSE BEGIN
 		EXECUTE BrokerLoadOwnProperties @BrokerID = @BrokerId
+		EXECUTE SaveUserLotteryCodeHistory @BrokerID, @LotteryCode, @PageVisitTime
 	END
 END
 GO

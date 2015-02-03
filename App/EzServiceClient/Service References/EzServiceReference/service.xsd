@@ -128,6 +128,8 @@
         <xs:element minOccurs="0" name="sEmail" nillable="true" type="xs:string" />
         <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="sPassword" nillable="true" type="q10:Password" />
         <xs:element minOccurs="0" name="sRemoteIp" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="promotionName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="promotionPageVisitTime" nillable="true" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2199,6 +2201,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="sEmail" nillable="true" type="xs:string" />
         <xs:element xmlns:q176="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="oPassword" nillable="true" type="q176:Password" />
+        <xs:element minOccurs="0" name="promotionName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="promotionPageVisitTime" nillable="true" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
