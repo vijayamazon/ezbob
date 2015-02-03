@@ -1,5 +1,12 @@
 ﻿@model dynamic
-@{ ViewBag.Phone = ViewBag.Phone ?? "0800-011-4787"; }
+@{
+    if (ViewBag.Origin == "everline") {
+        ViewBag.Phone = "0203-371-0322";
+    } else {
+        ViewBag.Phone = "0800-011-4787";
+    }
+}
+    
 
 <div class="customer-sidebar-content">
     <div class="item-fully-secured">

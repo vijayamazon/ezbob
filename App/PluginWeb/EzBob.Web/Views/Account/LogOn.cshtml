@@ -2,12 +2,20 @@
 @model EzBob.Web.Models.LogOnModel
 
 @{
-    ViewBag.Title = " Login to your EZBOB Account";
+    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
+        ViewBag.Origin = "everline";
+    }
+    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
+        ViewBag.Origin = "ezbob";
+    }
+    
+    ViewBag.Title = " Login to your " + ViewBag.Origin + " Account";
+    
 }
 
 @section head
 {
-    <meta name="description" content="Login to your EZBOB online business loan account." />
+    <meta name="description" content="@string.Format("Login to your " + ViewBag.Origin + " online business loan account.")" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 }
 
@@ -68,7 +76,7 @@
             </section>
         </section>
         <aside class="customer-sidebar login">
-            @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
+            @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData));}
         </aside>
         <div class="clear" />
         <div id="DontHaveAccount">

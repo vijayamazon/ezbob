@@ -17,6 +17,7 @@
 
 
     if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
+        ViewBag.Phone = "0203-371-0322";
         ViewBag.Origin = "everline";
     }
 
@@ -84,7 +85,7 @@
     @AntiForgery.GetHtml()
 
     <div id="wrapper">
-        @{ Html.RenderPartial("_Header"); }
+        @{ Html.RenderPartial("_Header", new ViewDataDictionary(ViewData)); }
         
         <div class="main-page">
             @RenderBody()
@@ -159,10 +160,12 @@
         <div style="display: none;" class="hide" id="customer-lead-field-names">@sCustomerLeadFieldName</div>
     </div>
     
-    @{ Html.RenderPartial("_Footer"); }
+    @{ Html.RenderPartial("_Footer", new ViewDataDictionary(ViewData)); }
     
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
+        var Drupal = Drupal || {};
+        Drupal.behaviors = Drupal.behaviors || {}; 
     </script>
 
     @if (IsSectionDefined("customJs")) {
