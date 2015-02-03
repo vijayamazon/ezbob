@@ -71,14 +71,17 @@ BEGIN
 		c.IsAlibaba,
 		c.AlibabaId,
 		c.OverallTurnOver AS ReportedAnnualTurnover,
-		ISNULL(crl.Amount, 0) AS RequestedLoanAmount
+		ISNULL(crl.Amount, 0) AS RequestedLoanAmount,
+		o.Name AS Origin
 	FROM
 		Customer c
 		LEFT JOIN CustomerAddress a
 			ON c.Id = a.CustomerId
 			AND a.addressType = 1
 		LEFT JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
+		LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 	WHERE
 		c.Id = @CustomerId
 END
+
 GO

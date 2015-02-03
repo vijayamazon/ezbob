@@ -6,8 +6,13 @@
 @using StructureMap
 @model EzBob.Web.Models.WizardModel
 @{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-    ViewBag.Title = "Create an EZBOB account";
+    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
+        ViewBag.Origin = "everline";
+    }
+    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
+        ViewBag.Origin = "ezbob";
+    }
+    ViewBag.Title = "Create an  " + ViewBag.Origin + "  account";
 	ViewBag.WhiteLabel = Model.WhiteLabel == null ? null : Model.WhiteLabel.Name;
 	ViewBag.Phone = Model.WhiteLabel == null ? "1-800-011-4787" : Model.WhiteLabel.Phone;
 	ViewBag.FooterText = Model.WhiteLabel == null ? null : Model.WhiteLabel.FooterText;
@@ -63,7 +68,7 @@
 <div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
 
 @section Js{
-    @{Html.RenderPartial("_Wizard");}
+    @{Html.RenderPartial("_Wizard", new ViewDataDictionary(ViewData));}
     @{Html.RenderPartial("_SignUpTemplate");}
     @{Html.RenderPartial("_CompanyDetails");}
     @{Html.RenderPartial("StoreInfoMain");}

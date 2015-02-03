@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using System.Linq;
+	using System.Web;
 	using System.Web.Mvc;
 	using Code;
 	using Code.UiEvents;
@@ -45,6 +46,12 @@
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 		} // constructor
 
+		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
+			hostname = requestContext.HttpContext.Request.Url.Host;
+			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			base.Initialize(requestContext);
+		}
+
 		[IsSuccessfullyRegisteredFilter]
 		public ActionResult Index(string provider = "") {
 			ViewData["Questions"] = _questions.GetAll().ToList();
@@ -69,7 +76,9 @@
 				.Query<MP_MarketplaceGroup>()
 				.ToArray();
 
-			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, provider);
+			ms_oLog.Info("WizardController Index {0}", hostname);
+
+			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, provider, hostname);
 
 			SavePageLoadEvent();
 
@@ -176,7 +185,7 @@
 		private readonly IVipRequestRepository _vipRequestRepository;
 		private readonly AConnection m_oDB;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (WizardController));
-
+		private string hostname;
 		private string GetCookie(string cookieName) {
 			var reqCookie = Request.Cookies[cookieName];
 

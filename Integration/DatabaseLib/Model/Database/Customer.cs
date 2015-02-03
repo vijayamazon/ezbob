@@ -8,7 +8,6 @@
 	using CustomerRelations;
 	using Loans;
 	using Iesi.Collections.Generic;
-	using NHibernate.Linq;
 	using NHibernate.Type;
 	using NHibernateWrapper.NHibernate.Types;
 
@@ -599,6 +598,8 @@
 		public virtual bool IsAlibaba { get; set; }
 
 		public virtual string AlibabaId { get; set; }
+
+		public virtual CustomerOrigin CustomerOrigin { get; set; }
 	} // class Customer
 
 	public static class CustomerExt {

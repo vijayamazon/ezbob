@@ -9,13 +9,15 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 		this.mpAccounts = options.mpAccounts.get('customer').get('mpAccounts');
 		this.shops = this.mpAccounts ? _.where(this.mpAccounts, { MpName: this.name }) : [];
 		this.shopClass = options.name.replace(' ', '');
+		this.origin = options.mpAccounts.get('customer').get('Origin');
 	}, // initialize
 
 	serializeData: function() {
 		return {
 			name: this.name,
 			shopClass: this.shopClass,
-			shopDescription: this.description
+			shopDescription: this.description,
+			origin: this.origin
 		};
 	}, // serializeData
 

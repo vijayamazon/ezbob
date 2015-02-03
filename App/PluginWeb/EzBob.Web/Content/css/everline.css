@@ -1,0 +1,252 @@
+﻿body {
+	font-family: 'Open Sans',sans-serif;
+	position: static;
+	padding-top: 129px;
+	max-width: 100%;
+	overflow-x: hidden;
+	font-size: 62.5%;
+	margin: 0;
+}
+
+.row {
+	clear: both;
+}
+
+nav {
+	position: absolute;
+	right: 0;
+	top: 0;
+}
+
+header.everline_header li, header.everline_header .desktop {
+	display: inline-block;
+	zoom: 1;
+}
+
+header.everline_header {
+	background: #28211f;
+	border-top: 18px solid #f0f0f0;
+	top: 0;
+	left: 0;
+	opacity: 1;
+	position: fixed;
+	width: 100%;
+	z-index: 10;
+	padding-top: 11px;
+	height: 100px;
+	-webkit-transition: margin .2s ease-out,opacity .4s ease-out;
+	-moz-transition: margin .2s ease-out,opacity .4s ease-out;
+	-ms-transition: margin .2s ease-out,opacity .4s ease-out;
+	-o-transition: margin .2s ease-out,opacity .4s ease-out;
+	transition: margin .2s ease-out,opacity .4s ease-out;
+}
+
+	header.everline_header:before {
+		border-top: 11px solid #8dc641;
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		right: 0;
+		bottom: 0;
+	}
+
+	header.everline_header nav {
+		max-width: 960px;
+		margin: 0 auto;
+		position: relative;
+	}
+
+		header.everline_header nav div.pin {
+			position: relative;
+			margin-top: -22px;
+			float: right;
+			margin-right: 12px;
+		}
+
+			header.everline_header nav div.pin span {
+				display: block;
+				width: 23px;
+				height: 23px;
+				background: #8dc641;
+				border: 6px solid #f0f0f0;
+				-webkit-border-radius: 10px;
+				-moz-border-radius: 10px;
+				border-radius: 30px;
+			}
+
+		header.everline_header nav a, header nav span {
+			color: #fff;
+			font-size: 1.4em;
+			font-weight: 600;
+			text-decoration: none;
+		}
+
+			header.everline_header nav a.svg, header nav span.svg {
+				background: url(../everline/EverlineLogo.png) no-repeat 0 center;
+				background-image: url(../everline/EverlineLogo.svg),none;
+				-ms-background-size: contain;
+				background-size: contain;
+				height: 5em;
+				margin-top: 17px;
+				width: 11.7em;
+				display: inline-block;
+				float: left;
+				text-align: left;
+				text-indent: -9999px;
+				position: relative;
+				left: 6px;
+			}
+
+		header.everline_header nav ul.sub-links li:first-child a {
+			font-weight: 600;
+			font-size: 1.8em;
+		}
+
+		header.everline_header nav ul.sub-links a {
+			font-weight: 600;
+			font-size: 1.4em;
+			display: block;
+			padding: 36px 15px;
+			position: relative;
+			z-index: 10;
+		}
+
+		header.everline_header nav ul.sub-links {
+			position: absolute;
+			right: 0;
+		}
+
+			header.everline_header nav ul.sub-links a.telephone:before {
+				margin: 0 7px 0 0;
+			}
+
+			header.everline_header nav ul.sub-links a.org-btn {
+				padding: 7px 26px;
+				margin-right: 20px;
+			}
+
+			header.everline_header nav ul.sub-links a.login:hover {
+				color: #939393;
+			}
+
+			header.everline_header nav ul.sub-links a.login.active {
+				color: #fff;
+				border-bottom: 2px solid #fff;
+				padding: 0 0 7px;
+			}
+
+			header.everline_header nav ul.sub-links a.login:before {
+				content: "\f023";
+			}
+
+			header.everline_header nav ul.sub-links > .active:after {
+				-webkit-transform: rotate(90deg);
+				-moz-transform: rotate(90deg);
+				-ms-transform: rotate(90deg);
+				-o-transform: rotate(90deg);
+				transform: rotate(90deg);
+			}
+
+			header.everline_header nav ul.sub-links li.active {
+				padding: 0 15px;
+			}
+
+	header.everline_header li, header .desktop {
+		display: inline-block;
+		zoom: 1;
+	}
+
+a {
+	-webkit-tap-highlight-color: transparent;
+}
+
+footer.everline_footer {
+	background: #28211f;
+	border-top: 6px solid #8dc641;
+	height: 100px;
+	/*height: 100%;*/
+}
+
+	footer.everline_footer .legal-links {
+		margin: 0 auto;
+		float: none;
+		clear: both;
+		padding: 0 20px 0 20px;
+		font-size: 1.2em;
+	}
+
+	footer.everline_footer p {
+		color: #ddd;
+		font-size: 1em;
+	}
+
+
+.help_everline.help_eBay {
+	background: url(../everline/help/help_ebay_everline.jpg) no-repeat center 0;
+	background-size: contain;
+}
+
+.help_everline.help_FreeAgent {
+	background: url(../everline/help/help_freeagent_everline.jpg) no-repeat center 0;
+	background-size: contain;
+}
+
+.help_everline.help_paypal {
+	background: url(../everline/help/help_paypal_everline.jpg) no-repeat center 0;
+	background-size: contain;
+}
+
+.help_everline.help_Sage {
+	background: url(../everline/help/help_sage_everline.jpg) no-repeat center 0;
+	background-size: contain;
+}
+
+.org-btn {
+padding: .6em 2em;
+-webkit-transition: all .1s ease-out;
+-moz-transition: all .1s ease-out;
+-ms-transition: all .1s ease-out;
+-o-transition: all .1s ease-out;
+transition: all .1s ease-out;
+background: #e28023;
+border-left: 0;
+border-right: 0;
+border-bottom: 2px solid #c86d14;
+border-top: 2px solid #f39e4b;
+color: #fff;
+font-size: 1.8em;
+font-weight: 600;
+text-decoration: none;
+-webkit-border-radius: 0;
+-moz-border-radius: 0;
+-ms-border-radius: 0;
+-o-border-radius: 0;
+border-radius: 0;
+}
+
+.org-btn, .grn-btn, .blue-btn {
+color: #fff;
+font-size: 1.8em;
+font-weight: 600;
+text-decoration: none;
+}
+
+header nav ul.sub-links a.org-btn {
+padding: 7px 26px;
+margin-right: 20px;
+}
+
+header nav ul.sub-links a {
+display: block;
+padding: 36px 15px;
+position: relative;
+z-index: 10;
+font-weight: 600;
+font-size: 1.4em;
+}
+
+header nav .org-btn {
+font-size: 1.4em;
+}

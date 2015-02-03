@@ -9,7 +9,7 @@
             <div class='pages'></div>
         </section>
         <aside class="customer-sidebar wizard">
-            @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
+            @{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData));}
         </aside>
     </div>
     <div class="clear" />

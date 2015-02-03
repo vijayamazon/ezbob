@@ -241,6 +241,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			Map(x => x.IsAlibaba);
 			Map(x => x.AlibabaId).Length(300);
+
+			References(x => x.CustomerOrigin, "OriginID").Cascade.All();
+
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

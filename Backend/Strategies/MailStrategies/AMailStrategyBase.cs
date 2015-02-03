@@ -20,6 +20,13 @@
 
 				Log.Debug("Template name: {0}", TemplateName);
 				Log.Debug("Customer data: {0}", CustomerData);
+
+
+				if (CustomerData.Origin == "everline") {
+					Log.Debug("Customer's origin is everline adding EL to template name");
+					TemplateName = string.Format("EVL {0}", TemplateName);
+				}
+
 				Log.Debug("Variables:\n\t{0}", string.Join("\n\t", Variables.Select(kv => kv.Key + ": " + kv.Value)));
 
 				SendEmail();
@@ -86,7 +93,8 @@
 				? new[] {
 					new Addressee(
 						CustomerData.Mail,
-						ToTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : ""
+						ToTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "",
+						userID:this.CustomerId
 					)
 				}
 				: new Addressee[0];

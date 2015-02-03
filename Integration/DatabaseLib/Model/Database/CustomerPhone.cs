@@ -1,5 +1,4 @@
-namespace EZBob.DatabaseLib.Model.Database
-{
+namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
@@ -7,8 +6,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	using NHibernate.Type;
 
 	[Serializable]
-	public class CustomerPhone
-	{
+	public class CustomerPhone {
 		public virtual int Id { get; set; }
 		public virtual int CustomerId { get; set; }
 		public virtual string PhoneType { get; set; }
@@ -19,10 +17,8 @@ namespace EZBob.DatabaseLib.Model.Database
 		public virtual bool IsCurrent { get; set; }
 	}
 
-	public class CustomerPhoneMap : ClassMap<CustomerPhone>
-	{
-		public CustomerPhoneMap()
-		{
+	public class CustomerPhoneMap : ClassMap<CustomerPhone> {
+		public CustomerPhoneMap() {
 			Table("CustomerPhones");
 			LazyLoad();
 			Id(x => x.Id);
@@ -36,15 +32,12 @@ namespace EZBob.DatabaseLib.Model.Database
 		}
 	}
 
-	public interface ICustomerPhoneRepository : IRepository<CustomerPhone>
-	{
+	public interface ICustomerPhoneRepository : IRepository<CustomerPhone> {
 	}
 
-	public class CustomerPhoneRepository : NHibernateRepositoryBase<CustomerPhone>, ICustomerPhoneRepository
-	{
+	public class CustomerPhoneRepository : NHibernateRepositoryBase<CustomerPhone>, ICustomerPhoneRepository {
 		public CustomerPhoneRepository(ISession session)
-			: base(session)
-		{
+			: base(session) {
 		}
 	}
 }

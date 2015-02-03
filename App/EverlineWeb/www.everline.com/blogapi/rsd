@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<rsd version="1.0" xmlns="http://archipelago.phrasewise.com/rsd">
+  <service>
+    <engineName>Drupal</engineName>
+    <engineLink>http://drupal.org/</engineLink>
+    <homePageLink>https://www.everline.com/</homePageLink>
+    <apis>
+      <api name="MetaWeblog" preferred="false" apiLink="https://www.everline.com/xmlrpc.php" blogID="1" />
+      <api name="Blogger" preferred="false" apiLink="https://www.everline.com/xmlrpc.php" blogID="1" />
+      <api name="MovableType" preferred="true" apiLink="https://www.everline.com/xmlrpc.php" blogID="1" />
+    </apis>
+  </service>
+</rsd>

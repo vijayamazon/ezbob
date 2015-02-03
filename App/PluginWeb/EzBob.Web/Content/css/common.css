@@ -105,11 +105,6 @@ body, .ui-dialog {
     color: #4d4d4d;
     font-weight: normal;
     font-style: normal;
-    -webkit-transform: translateZ(0);
-    -moz-transform: translateZ(0);
-    -ms-transform: translateZ(0);
-    -o-transform: translateZ(0);
-    transform: translateZ(0);
 }
 
 select, .tooltip {
@@ -2545,6 +2540,7 @@ img.help-btn {
     -webkit-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.35);
     -moz-box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.35);
     box-shadow: 0px 1px 1px 0px rgba(0,0,0,0.35);
+	margin-top: -77px;
 }
 
 .header-inner {
@@ -2683,16 +2679,6 @@ ul#user-menu {
         line-height: 30px;
         padding: 5px 12px;
     }
-
-.pass-restore,
-.loginTemplate,
-.createPasswordTemplate,
-#wizard,
-#profile-main,
-.wizard-steps
-{
-    margin-top: 77px;
-}
 
 .renew-ebay-token,
 #get-cash {

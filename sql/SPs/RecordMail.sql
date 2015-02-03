@@ -1,15 +1,23 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[RecordMail]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[RecordMail]
+IF object_i('RecordMail') IS NULL
+BEGIN
+	EXECUTE('CREATE PROCEDURE RecordMail AS SELECT 1')
+END
 GO
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[RecordMail] 
-	(@Filename NVARCHAR(3000),
-	@Body VARBINARY(MAX),
-	@Creation DATETIME,
-	@CustomerMail NVARCHAR(200))
+
+ALTER PROCEDURE [dbo].[RecordMail] 
+	(
+	 @Filename NVARCHAR(3000),
+	 @Body VARBINARY(MAX),
+	 @Creation DATETIME,
+	 @CustomerMail NVARCHAR(200),
+	 @UserID INT
+	)
+	
 AS
 BEGIN
 	INSERT INTO Export_Results
@@ -17,6 +25,7 @@ BEGIN
 	VALUES
 		(@Filename, @Body, 0, @Creation, NULL, -1, NULL, NULL, 'No nodes - New flow', NULL)
 	
-	INSERT INTO EzbobMailNodeAttachRelation (ExportId, ToField) VALUES (@@Identity, @CustomerMail)
+	INSERT INTO EzbobMailNodeAttachRelation (ExportId, ToField, UserID) VALUES (@@Identity, @CustomerMail, @UserID)
 END
+
 GO

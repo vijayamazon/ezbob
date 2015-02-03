@@ -56,7 +56,14 @@
 			m_oVipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 			_whiteLabelProviderRepository = ObjectFactory.GetInstance <WhiteLabelProviderRepository>();
+			customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
 		} // constructor
+
+		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
+			hostname = requestContext.HttpContext.Request.Url.Host;
+			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			base.Initialize(requestContext);
+		}
 
 		public ActionResult AdminLogOn(string returnUrl) {
 			Response.AddHeader("X-FRAME-OPTIONS", "");
@@ -197,7 +204,7 @@
 				return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
 			} // if user not found
 
-			var isUnderwriter = user.Roles.Any(r => r.Id == 31 || r.Id == 32 || r.Id == 33);
+			var isUnderwriter = user.BranchId == 1;
 
 			ms_oLog.Debug("{1} log on attempt with login '{0}'.", model.UserName, isUnderwriter ? "Underwriter" : "Customer");
 
@@ -251,6 +258,16 @@
 
 				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
 			} // if user is disabled
+
+			string customerOrigin = customer.CustomerOrigin.Name;
+			if (!hostname.Contains(customerOrigin) && !hostname.Contains("localhost")) {
+				ms_oLog.Warn("customer {0} origin is {1} tried to login from host {2}.", user.Id, customerOrigin, hostname);
+				return Json(new {
+					success = false,
+					errorMessage = "User not found or invalid password."
+				}, JsonRequestBehavior.AllowGet);
+			}
+
 			string loginError;
 			var nStatus = ValidateUser(model.UserName, model.Password, out loginError);
 
@@ -267,7 +284,7 @@
 			} // if logged in successfully
 
 			string errorMessage = MembershipCreateStatus.InvalidProviderUserKey == nStatus
-				? @"Three unsuccessful login attempts have been made. <span class='bold'>ezbob</span> has issued you with a temporary password. Please check your e-mail."
+				? @"Three unsuccessful login attempts have been made. <span class='bold'>" + customerOrigin + "</span> has issued you with a temporary password. Please check your e-mail."
 				: @"User not found or incorrect password.";
 
 			ms_oLog.Warn(
@@ -290,7 +307,11 @@
 			case LogOffMode.LogOnOfEnv:
 				return RedirectToAction("LogOn", "Account", new { Area = "" });
 			default:
-				return Redirect(@"http://www.ezbob.com");
+				string defaultRedirect = @"http://www.ezbob.com";
+				if(hostname.Contains("everline")) {
+					defaultRedirect = @"https://www.everline.com";
+				}
+				return Redirect(defaultRedirect);
 			} // switch
 		} // LogOff
 
@@ -766,6 +787,9 @@
 				Broker = broker,
 			};
 
+			CustomerOrigin origin = customerOriginRepository.GetByHostname(hostname);
+			customer.CustomerOrigin = origin;
+
 			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
 			CampaignSourceRef campaignSourceRef = null;
 
@@ -1002,6 +1026,7 @@
 		private readonly IVipRequestRepository m_oVipRequestRepository;
 		private readonly AConnection m_oDB;
 		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
-
+		private readonly CustomerOriginRepository customerOriginRepository;
+		private string hostname;
 	} // class AccountController
 } // namespace

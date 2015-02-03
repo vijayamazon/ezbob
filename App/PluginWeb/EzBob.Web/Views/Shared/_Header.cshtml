@@ -1,0 +1,53 @@
+﻿@model dynamic
+
+@if (ViewBag.Origin == "ezbob") { 
+    <div id="header">
+        <div class="header-bg-strip"></div>
+        <div class="header-inner">
+            <div class="header-logo">
+                <a href="http://www.ezbob.com">
+                    <div class="newlogo"></div>
+                </a>
+            </div>
+
+            <button type="button" class="btn-show-valentine-scratch-remove-me">Valentine</button>
+
+            <div class="header-info" style="display: none;">
+                <div class="header-info-left"></div>
+                <div class="header-info-text"></div>
+                <div class="header-info-right"></div>
+            </div>
+
+            <ul id="user-menu">
+                <li id="logoff-li" class="login" style="display: none;">
+                    <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="button btn-grey">Log Off</a>
+                </li>
+                <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">Login</a></li>
+                <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">Sign Up</a></li>
+                <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;@ViewBag.Phone</div></li>
+            </ul>
+        </div>
+    </div>
+}
+
+@if (ViewBag.Origin == "everline") {
+    <header class="everline_header">
+        <nav>
+            <div class="pin"><span></span></div>
+            <span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
+            <ul class="flt-r sub-links">
+                <li><a href="tel:02033710322"><i class="fa fa-phone"></i>&nbsp;0203 371 0322</a></li>
+                <li id="logoff-li" class="login" style="display: none;">
+                    <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="">Log Off</a>
+                </li>
+                <li class="login login_btn" style="display: none;">
+                    <a href="@Url.Action("LogOn", "Account", new { Area = "" })" class=""><i class="fa fa-lock"></i>&nbsp;Login</a>
+                </li>
+                <li class="sign-up signup_btn" style="display: none">
+                    <a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="org-btn">Apply now</a>
+                </li>
+            </ul>
+        </nav>
+        <br class="clearfix">
+    </header>
+}

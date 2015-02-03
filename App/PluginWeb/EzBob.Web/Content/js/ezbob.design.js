@@ -526,10 +526,7 @@ BlockUi = function(action, element) {
 	default:
 		element ? $(element).unblock() : $.unblockUI();
 
-		$('html, body').css({
-			'overflow': 'auto',
-			'height': 'auto'
-		});
+		$('html, body').removeAttr('style');
 
 		break;
 	} // switch

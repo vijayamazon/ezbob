@@ -42,9 +42,16 @@
 			this.payPointAccountRepository = payPointAccountRepository;
 		} // constructor
 
+		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
+			hostname = requestContext.HttpContext.Request.Url.Host;
+			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			base.Initialize(requestContext);
+		}
+
+
 		[IsSuccessfullyRegisteredFilter]
 		public ViewResult Index() {
-			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
+			var wizardModel = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, hostname, true);
 			ViewData["ShowChangePasswordPage"] = m_oContext.User.IsPasswordRestored;
 
 			ViewData["MarketPlaces"] = m_oSession
@@ -67,7 +74,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult Details() {
-			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, true);
+			var details = m_oCustomerModelBuilder.BuildWizardModel(m_oContext.Customer, Session, null, this.Request.Url.Host, true);
 			return Json(details.Customer, JsonRequestBehavior.AllowGet);
 		} // Details
 
@@ -222,7 +229,8 @@
 					Area = "Customer",
 					customerId = oCustomer.Id,
 					cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
-					hideSteps = true
+					hideSteps = true,
+					origin = oCustomer.CustomerOrigin.Name
 				}, "https");
 			var url = m_oPayPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
 
@@ -292,6 +300,6 @@
 		private readonly IPayPointFacade m_oPayPointFacade;
 		private readonly PayPointAccountRepository payPointAccountRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
-
+		private string hostname;
 	} // class ProfileController
 } // namespace

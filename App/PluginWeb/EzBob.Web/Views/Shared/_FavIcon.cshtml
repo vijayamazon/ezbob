@@ -1,9 +1,20 @@
 ﻿@model dynamic
 
-<link rel="icon shortcut" type="image/png" href="@Url.Content("~/Content/img/favicon/favicon_57x57.png")" />
-<!-- for mobile -->
-<link rel="apple-touch-icon" href="@Url.Content("~/Content/img/favicon/favicon_57x57.png")" />
-<link rel="apple-touch-icon" sizes="72x72" href="@Url.Content("~/Content/img/favicon/favicon_72x72.png")" />
-<!-- todo
-<link rel="apple-touch-icon" sizes="114x114" href="@Url.Content("~/Content/img/favicon114x114.png")" />
--->
+@if (ViewBag.Origin == "ezbob") {
+    <link rel="icon shortcut" type="image/png" href="@Url.Content("~/Content/img/favicon/favicon_57x57.png")"/>
+    <!-- for mobile -->
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/img/favicon/favicon_57x57.png")"/>
+    <link rel="apple-touch-icon" sizes="72x72" href="@Url.Content("~/Content/img/favicon/favicon_72x72.png")"/>
+    <!-- todo
+    <link rel="apple-touch-icon" sizes="114x114" href="@Url.Content("~/Content/img/favicon114x114.png")"/>
+    -->
+} 
+
+@if (ViewBag.Origin == "everline") {
+    <link rel="icon shortcut" type="image/x-icon" href="@Url.Content("~/Content/everline/favicons/faviconeverline.ico")" />
+    <!-- for mobile -->
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/everline/favicons/60x60.png")" />
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/everline/favicons/76x76.png")" />
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/everline/favicons/120x120.png")" />
+    <link rel="apple-touch-icon" href="@Url.Content("~/Content/everline/favicons/152x152.png")" />
+}

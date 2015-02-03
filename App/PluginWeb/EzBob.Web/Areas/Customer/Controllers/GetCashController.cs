@@ -83,7 +83,8 @@
 												 loan_amount,
 												 fee,
 												 username = _context.User.Name,
-												 cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate)
+												 cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
+												 origin = customer.CustomerOrigin.Name
 											 },
 										 "https");
 

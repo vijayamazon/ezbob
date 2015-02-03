@@ -1,5 +1,5 @@
-﻿html {
-    overflow-y: scroll;
+﻿.broker-page-content{
+	margin-top: 77px;
 }
 
 .ui-widget {
@@ -12,10 +12,6 @@
     font-family: "Titillium Web Semi Bold";
     background-color: inherit !important;
     border: none !important;
-}
-
-.broker {
-    margin-top: 90px;
 }
 
 input[type="button"],
