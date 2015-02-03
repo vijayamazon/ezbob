@@ -842,7 +842,6 @@
     <Content Include="Areas\Customer\Views\Agreement\EVLPrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLPre-Contract-Agreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLGuarantyAgreement.cshtml" />
-    <Content Include="Areas\Customer\Views\Agreement\EVLDirectorsConsentDeclaration.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLCreditActAgreement.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
