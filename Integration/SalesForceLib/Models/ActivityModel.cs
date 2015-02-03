@@ -9,9 +9,7 @@
 		public string Email { get; set; }
 		//----------------------------------------//
 		[DataMember]
-		public DateTime StartDate { get; set; }
-		[DataMember]
-		public DateTime EndDate { get; set; }
+		public DateTime Date { get; set; }
 		[DataMember]
 		public string Type { get; set; }
 		[DataMember]

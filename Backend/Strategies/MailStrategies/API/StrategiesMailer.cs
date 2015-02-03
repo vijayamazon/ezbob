@@ -73,7 +73,7 @@
 
 
 					var salesForceAddEvent = new AddActivity(null, new ActivityModel {
-						StartDate = DateTime.UtcNow,
+						Date = DateTime.UtcNow,
 						Desciption = oMeta.TemplateName,
 						Email = addr.Recipient,
 						Originator = "System",
