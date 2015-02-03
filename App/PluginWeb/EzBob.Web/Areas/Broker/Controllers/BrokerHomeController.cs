@@ -32,8 +32,18 @@
 			this.m_oHelper = new BrokerHelper(this.m_oServiceClient, ms_oLog);
 		} // constructor
 
+		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
+			hostname = requestContext.HttpContext.Request.Url.Host;
+			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			base.Initialize(requestContext);
+		}
+
 		// GET: /Broker/BrokerHome/
-		public ViewResult Index(string sourceref = "") {
+		public System.Web.Mvc.ActionResult Index(string sourceref = "") {
+			if (hostname.Contains("everline.com")) {
+				return RedirectToActionPermanent("Index", User.Identity.IsAuthenticated ? "Profile" : "Wizard", new { Area = "Customer" });
+			}
+
 			var oModel = new BrokerHomeModel();
 
 			if (!string.IsNullOrWhiteSpace(sourceref)) {
@@ -1024,5 +1034,7 @@
 			var ny2015ScratchHelper = new Ny2015ScratchHelper(userID, playerID);
 			ny2015ScratchHelper.Decline();
 		} // Decline
+
+		private string hostname;
 	} // class BrokerHomeController
 } // namespace
