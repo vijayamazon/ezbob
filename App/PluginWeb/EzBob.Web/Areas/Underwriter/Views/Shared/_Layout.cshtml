@@ -50,10 +50,13 @@
     <a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i class="fa fa-chevron-up"></i></a>
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
+        var Drupal = Drupal || {};
+        Drupal.behaviors = Drupal.behaviors || {};
     </script>
     @BundleHelper.RenderCommonJs()
     @BundleHelper.RenderUnderwriterJs()
     <script type="text/javascript">
+
         $('.navbar.menu .roleImg').tooltip({ placement: "bottom" });
         var EzBob = EzBob || {};
         EzBob.CrmActions = [];
