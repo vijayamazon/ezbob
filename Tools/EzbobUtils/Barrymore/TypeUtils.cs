@@ -6,7 +6,6 @@
 	using Ezbob.Logger;
 
 	public static class TypeUtils {
-
 		static TypeUtils() {
 			ms_oSimpleTypes = new SortedSet<string> {
 				typeof (bool).ToString(),

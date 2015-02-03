@@ -49,6 +49,11 @@
     <Compile Include="ARetryer.cs" />
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="Formula\Boolean\ABinaryBoolOperator.cs" />
+    <Compile Include="Formula\Boolean\Or.cs" />
+    <Compile Include="Formula\Boolean\And.cs" />
+    <Compile Include="Formula\Boolean\IBooleanFormula.cs" />
+    <Compile Include="Formula\Boolean\Not.cs" />
     <Compile Include="Html\AAttribute.cs" />
     <Compile Include="Html\ATag.cs" />
     <Compile Include="Html\Attributes\attributes.cs" />

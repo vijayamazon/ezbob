@@ -9,6 +9,7 @@
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
@@ -508,5 +509,26 @@
 				new QueryParameter("@Now", new DateTime(2015, 2, 2))
 			);
 		}
+
+		[Test]
+		public void TestLotteryEnlistingType() {
+			var let0 = new LotteryDataForEnlisting();
+			let0.LotteryEnlistingTypeStr = "MinCount";
+			let0.LotteryEnlistingTypeStr = "MaxCount";
+			let0.LotteryEnlistingTypeStr = "MaxAmount";
+			let0.LotteryEnlistingTypeStr = "MinAmount";
+
+			let0.LotteryEnlistingTypeStr = "MinCountOrMinAmount";
+			let0.LotteryEnlistingTypeStr = "MinCountAndMinAmount";
+
+			let0.LotteryEnlistingTypeStr = "MaxCountOrMinAmount";
+			let0.LotteryEnlistingTypeStr = "MaxCountAndMinAmount";
+
+			let0.LotteryEnlistingTypeStr = "MaxCountOrMaxAmount";
+			let0.LotteryEnlistingTypeStr = "MaxCountAndMaxAmount";
+
+			let0.LotteryEnlistingTypeStr = "MinCountOrMaxAmount";
+			let0.LotteryEnlistingTypeStr = "MinCountAndMaxAmount";
+		} // TestLotteryEnlistingType
 	}
 }
