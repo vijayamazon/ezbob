@@ -1835,7 +1835,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\_PaymentAccountsTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_MedalCalculationTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SignUpButton.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\_SecureDisclaimer.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_Messages.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\DailyReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\_LayoutDayReport.cshtml" />

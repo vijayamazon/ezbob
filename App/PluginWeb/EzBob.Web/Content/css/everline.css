@@ -8,6 +8,10 @@
 	margin: 0;
 }
 
+.main-page{
+	font-size: 16px;
+}
+
 .row {
 	clear: both;
 }

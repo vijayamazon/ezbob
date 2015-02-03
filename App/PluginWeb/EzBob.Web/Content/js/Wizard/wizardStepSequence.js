@@ -39,7 +39,7 @@ EzBob.WizardStepSequence = function(args) {
 
 	var oSignupStep = {
 		name: 'signup',
-		documentTitle: 'Create an EZBOB account',
+		documentTitle: 'Create an account',
 		title: 'create',
 		trackPage: '/Customer/Wizard/SignUp',
 		marketingStrKey: 'MarketingWizardStepSignup',

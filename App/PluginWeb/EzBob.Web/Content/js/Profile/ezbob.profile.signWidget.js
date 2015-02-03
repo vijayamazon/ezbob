@@ -143,7 +143,7 @@ EzBob.Profile.SignWidget = Backbone.View.extend({
         if (isNew && state == "wait") {
             this.model.set({
                 color: 'green',
-                text: '<span><span class="client-name">' + name + '</span>, welcome to the ezbob family</span>',
+                text: '<span><span class="client-name">' + name + '</span>, your application is under review, we will revert as soon as possible</span>',
                 signTemplate: "welcome"
             });
             return;

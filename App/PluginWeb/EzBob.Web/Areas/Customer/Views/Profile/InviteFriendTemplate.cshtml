@@ -10,31 +10,29 @@
 		Model.Customer.InviteFriendSource
 	);
 
-	const string summary = @"
-I would like to recommend you to ezbob a financial provider of working capital to small businesses to help them grow.
+	string summary = @"I would like to recommend you to " + ViewBag.Origin + @" a financial provider of working capital to small businesses to help them grow.
 You can sign up and get as much as £100,000 in within 30 minutes for up to 12 months. Sign up is fast, free, with no paperwork and there is no obligation to take the funds. Once you complete the application you get an instant decision, but you can decide to take the amount you need whenever you need it.
 See how much funds you qualify for today. If you qualify and take the funds, you get £100 deposited to your bank account.
-please click here: {0} to be directed to ezbob and see how much you qualify for.
-if you need more information please visit ezbob site or contact customer care.
+please click here: {0} to be directed to " + ViewBag.Origin + @" and see how much you qualify for.
+if you need more information please visit " + ViewBag.Origin + @" site or contact customer care.
 Join today.
-The ezbob team
-";
+The " + ViewBag.Origin + " team";
 
 	//var encodedSummary = Uri.EscapeDataString(summary);
 	var text = string.Format(summary, @url);
 	var encodedSummary = Uri.EscapeDataString(text);
 	string urlEncoded = Uri.EscapeDataString(url);
-	string subject = Uri.EscapeDataString("Join ezbob and get £100 deposited to your bank account");
+	string subject = Uri.EscapeDataString("Join " + ViewBag.Origin + " and get £100 deposited to your bank account");
 	string utImageUrl = "http://www.ezbob.com/wp-content/uploads/ezbob_logo.jpg";
 	var customer = (CustomerModel)Model.Customer;
 }
 
 <script id="invite-friend-template" type="text/template">
-	<h2>Refer a small business to <span class="bold">ezbob</span> and both you and your friend can get £100!</h2>
+	<h2>Refer a small business to <span class="bold">@ViewBag.Origin</span> and both you and your friend can get £100!</h2>
 
 	<p>
-		Help your friends grow their small business with up to £100,000 in <span class="bold">ezbob</span>
-		instant funds. Refer them to <span class="bold">ezbob</span> and you will earn £100 for each
+		Help your friends grow their small business with up to £100,000 in <span class="bold">@ViewBag.Origin</span>
+		instant funds. Refer them to <span class="bold">@ViewBag.Origin</span> and you will earn £100 for each
 		business that signs up and takes a loan. The small business that you refer
 		will also receive £100 when they sign up and take the funds. There is
 		no limit to the number of referrals you can send or the amount of cash you can 
