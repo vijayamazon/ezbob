@@ -2,8 +2,10 @@
 @{
     if (ViewBag.Origin == "everline") {
         ViewBag.Phone = "0203-371-0322";
+        ViewBag.Email = "customercare@everline.com";
     } else {
         ViewBag.Phone = "0800-011-4787";
+        ViewBag.Email = "customercare@ezbob.com";
     }
 }
     
@@ -102,17 +104,17 @@
     </div>
 	@if (string.IsNullOrEmpty(ViewBag.WhiteLabel)) {
 		<div class="item-email-us">
-			<a href="mailto:customercare@ezbob.com">
-				<div class="item">
-					<div class="icon">
-						<img src="@Url.Content("~/Content/img/customer-sidebar/email.png")" alt="Email us" width="50" height="45" class="sb-icon" />
-					</div>
-					<div class="text">
-						<h3>Email us</h3>
-						customercare@ezbob.com
-					</div>
-				</div>
-			</a>
+            <a href="mailto:@ViewBag.Email">
+                <div class="item">
+                    <div class="icon">
+                        <img src="@Url.Content("~/Content/img/customer-sidebar/email.png")" alt="Email us" width="50" height="45" class="sb-icon" />
+                    </div>
+                    <div class="text">
+                        <h3>Email us</h3>
+                        @ViewBag.Email
+                    </div>
+                </div>
+            </a>
 		</div>
 
 		<div class="item-chat-now">
