@@ -66,10 +66,15 @@ EzBob.CustomerLoginView = Backbone.View.extend({
 
 			if (status === 'success') {
 				if (result.success) {
-					if (result.broker)
+					if (result.broker) {
 						document.location.href = '' + window.gRootPath + 'Broker#login';
-					else
+					} else if (result.everlineWizard) {
+						document.location.href = '' + window.gRootPath + 'Customer/Wizard?isEverline=true';
+					} else if (result.everlineAccount) {
+						document.location.href = 'https://accounts.everline.com/login';
+					} else {
 						document.location.href = '' + window.gRootPath + 'Customer/Profile';
+					}
 				}
 				else {
 					EzBob.App.trigger('error', result.errorMessage);

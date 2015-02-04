@@ -98,6 +98,15 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				$.colorbox({ inline: true, open: true, href: oDialog });
 		} // if
 
+		this.showEverlineHelp = this.model.get('IsEverline');
+		if (this.showEverlineHelp) {
+			this.showEverlineHelp = false;
+
+			var oEverlineDialog = this.$el.find('#everline_help');
+			if (oEverlineDialog.length > 0)
+				$.colorbox({ inline: true, open: true, href: oEverlineDialog });
+		} // if
+
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });

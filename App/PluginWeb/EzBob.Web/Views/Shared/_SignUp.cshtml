@@ -3,20 +3,19 @@
 @using ConfigManager
 @model dynamic
 @{
-	var securityQuestions = ViewData["Questions"] as List<SecurityQuestion>;
-	string captchamode = CurrentValues.Instance.CaptchaMode;
-	bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
-	var bml = new WizardBrokerLeadModel(Session);
-	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
-	var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
+    var securityQuestions = ViewData["Questions"] as List<SecurityQuestion>;
+    string captchamode = CurrentValues.Instance.CaptchaMode;
+    bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
+    var bml = new WizardBrokerLeadModel(Session);
+    var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
+    var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
 }
 
-@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))
-{
-	@*
-	The following control is only used to save customer name for Alibaba customer.
-	ui-event-control-id attribute is used to copy a value from cookie to the control.
-	*@
+@using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
+    @*
+        The following control is only used to save customer name for Alibaba customer.
+        ui-event-control-id attribute is used to copy a value from cookie to the control.
+    *@
     <input type="hidden" name="FirstName" ui-event-control-id="personal-info:first_name" />
     <input type="hidden" name="Surname" ui-event-control-id="personal-info:last_name" />
 
@@ -52,11 +51,9 @@
             <span>Secret question</span>
             <select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
                 <option value=""></option>
-                @if (securityQuestions != null)
-                {
-                    foreach (var item in securityQuestions)
-                    {
-                    <option value="@item.Id">@item.Name</option>
+                @if (securityQuestions != null) {
+                    foreach (var item in securityQuestions) {
+                        <option value="@item.Id">@item.Name</option>
                     } // foreach
                 } // if
             </select>
@@ -87,7 +84,7 @@
             <img id="amountImage" class="field_status required" />
         </label>
     </div>
-    
+
     <div id="twilioDiv" class="hide">
         <div class="form_field_container">
             <label class="attardi-input">
@@ -110,7 +107,7 @@
             </label>
         </div>
     </div>
-    
+
     <div id="captchaDiv" class="hide">
         <div class="form_field_container">
             @EzForm.Captcha(captchamode)
@@ -123,22 +120,45 @@
         </div>
     </div>
 
-    if (instructionsEnabled)
-    {
     <div class="hide">
-        <div id="offline_help" class="help_window">
-            <h2>Welcome to the @ViewBag.Origin application process</h2>
-            <p>Please find below what you need to complete your application successfully.</p>
-            <div class="help_image help_offline"></div>
-            <p>Complete it in five minutes.</p>
-            <br>
-            <div class="alignright" style="padding: 0 10px 0 0;">
-                <a href="javascript:$.colorbox.close()" target="_blank" class="button btn-green pull-right" ui-event-control-id="signup:offline-popup-continue">Continue</a>
+        @if (instructionsEnabled) {
+            <div id="offline_help" class="help_window">
+                <h2>Welcome to the @ViewBag.Origin application process</h2>
+                <p>Please find below what you need to complete your application successfully.</p>
+                <div class="help_image help_offline"></div>
+                <p>Complete it in five minutes.</p>
+                <br>
+                <div class="alignright" style="padding: 0 10px 0 0;">
+                    <a href="javascript:$.colorbox.close()" target="_blank" class="button btn-green pull-right" ui-event-control-id="signup:offline-popup-continue">Continue</a>
+                </div>
+                <div class="clear"></div>
+                <hr>
+                <div class="help_security"></div>
             </div>
-            <div class="clear"></div>
-            <hr>
-            <div class="help_security"></div>
+        }
+        <div id="everline_help" class="help_window">
+            <p>
+                Everline is pleased to announce that it has been acquired by Orange Money Ltd, a UK Government backed business lender, who solely focuses on providing business loans in the UK.
+            </p>
+            <p>
+                This change allows us to provide you with an expanded, more flexible product offering such as:
+            </p>
+            <p>
+                <ol>
+                    <li>Access to larger loans for longer periods (up to £120,000 for up to 15 months).</li>
+                    <li>Improved interest rate (1.75-2.25% monthly).</li>
+                    <li>Funds in your account within an hour, once the loan has been approved.</li>
+                </ol>
+            </p>
+            <p>
+                {CTA}Apply now and give your business a boost for 2015.
+            </p>
+            <p>
+                The Everline Team
+            </p>
+            <p>
+                <i>Everline is now part of Orange Money, an EU and European Investment Fund backed business</i>
+            </p>
         </div>
     </div>
-    }
 }

@@ -239,13 +239,33 @@
 			} // try
 
 			if (user == null) {
-				ms_oLog.Warn(
-					"Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",
-					customerIp,
-					model.UserName
-				);
+				if (hostname.Contains("everline")) {
+					//TODO call everline api to check if customer have open everline loan or not
+					bool hasOpenEverlineLoan = false;
+					if (hasOpenEverlineLoan) {
+						return Json(new {
+							success = true,
+							everlineAccount = true,
+						}, JsonRequestBehavior.AllowGet);
+					} else {
+						return Json(new {
+							success = true,
+							everlineWizard = true,
+						}, JsonRequestBehavior.AllowGet);
+					}
 
-				return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
+				} else {
+					ms_oLog.Warn(
+						"Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",
+						customerIp,
+						model.UserName
+						);
+
+					return Json(new {
+						success = false,
+						errorMessage = @"User not found or incorrect password."
+					}, JsonRequestBehavior.AllowGet);
+				}
 			} // if user not found
 
 			var isUnderwriter = user.BranchId == 1;

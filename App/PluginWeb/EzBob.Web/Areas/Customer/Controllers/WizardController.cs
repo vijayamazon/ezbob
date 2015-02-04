@@ -53,12 +53,11 @@
 		}
 
 		[IsSuccessfullyRegisteredFilter]
-		public ActionResult Index(string provider = "") {
+		public ActionResult Index(string provider = "", bool isEverline = false) {
 			ViewData["Questions"] = _questions.GetAll().ToList();
 			ViewData["Reasons"] = _reasons.GetAll().OrderBy(x => x.Id).ToList();
 			ViewData["Sources"] = _sourcesOfRepayment.GetAll().OrderBy(x => x.Id).ToList();
 			ViewData["CaptchaMode"] = CurrentValues.Instance.CaptchaMode.Value;
-
 			bool wizardTopNaviagtionEnabled = CurrentValues.Instance.WizardTopNaviagtionEnabled;
 			ViewData["WizardTopNaviagtionEnabled"] = wizardTopNaviagtionEnabled;
 
@@ -81,7 +80,7 @@
 			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, provider, hostname);
 
 			SavePageLoadEvent();
-
+			wizardModel.Customer.IsEverline = isEverline;
 			return View(wizardModel);
 		} // Index
 

@@ -114,6 +114,10 @@ html, body {
     height: 100%;
 }
 
+i{
+	font-style: italic;
+}
+
 #wrapper {
     min-height: 100%;
     height: auto !important;
@@ -1039,6 +1043,7 @@ table.dashboard_sources {
 
 #colorbox {
     outline: 0;
+	font-size: 16px;
 }
 
 #cboxContent {
