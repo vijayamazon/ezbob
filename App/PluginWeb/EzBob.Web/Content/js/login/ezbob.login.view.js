@@ -69,7 +69,7 @@ EzBob.CustomerLoginView = Backbone.View.extend({
 					if (result.broker) {
 						document.location.href = '' + window.gRootPath + 'Broker#login';
 					} else if (result.everlineWizard) {
-						document.location.href = '' + window.gRootPath + 'Customer/Wizard?isEverline=true';
+						document.location.href = '' + window.gRootPath + 'Customer/Wizard';
 					} else if (result.everlineAccount) {
 						document.location.href = 'https://accounts.everline.com/login';
 					} else {

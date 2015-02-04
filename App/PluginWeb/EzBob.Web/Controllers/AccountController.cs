@@ -248,6 +248,7 @@
 							everlineAccount = true,
 						}, JsonRequestBehavior.AllowGet);
 					} else {
+						TempData["IsEverline"] = true;
 						return Json(new {
 							success = true,
 							everlineWizard = true,
