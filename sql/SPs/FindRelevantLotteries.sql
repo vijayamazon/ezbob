@@ -32,6 +32,7 @@ BEGIN
 	BEGIN
 		SELECT
 			RowType = 'Loan',
+			LoanID = l.Id,
 			l.LoanAmount,
 			IssuedTime = l.[Date]
 		FROM
@@ -43,6 +44,7 @@ BEGIN
 	ELSE BEGIN
 		SELECT
 			RowType = 'Loan',
+			LoanID = l.Id,
 			l.LoanAmount,
 			IssuedTime = l.[Date]
 		FROM

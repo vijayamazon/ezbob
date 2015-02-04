@@ -90,6 +90,9 @@
 					inTerm.Add(ld);
 			} // for each
 
+			Log.Debug("Lottery {0} pre-term loans: {1}.", LotteryID, preTerm);
+			Log.Debug("Lottery {0} in-term loans: {1}.", LotteryID, inTerm);
+
 			if (IsForNew.HasValue) {
 				if (IsForNew.Value) {
 					if (preTerm.HasLoans) {
@@ -99,16 +102,27 @@
 						);
 						return false;
 					} // if
+
+					Log.Debug(
+						"User might fit lottery '{0}': the lottery is for new users while user has no loans.",
+						LotteryID
+					);
 				} else {
 					if (!preTerm.HasLoans) {
 						Log.Debug(
 							"User ain't no fits lottery '{0}': the lottery is for old users while user has no loans.",
 							LotteryID
-						);
+							);
 						return false;
 					} // if
+
+					Log.Debug(
+						"User might fit lottery '{0}': the lottery is for old users while user has loans.",
+						LotteryID
+					);
 				} // if
-			} // if
+			} else
+				Log.Debug("Lottery {0} has no 'IsForNew' defined.", LotteryID);
 
 			Constructed.Init(inTerm.Count, LoanCount, inTerm.Amount, LoanAmount);
 
@@ -126,7 +140,7 @@
 
 		private class LoanStat {
 			public LoanStat() {
-				Count = 0;
+				this.loans = new List<LoanData>();
 				Amount = 0;
 			} // constructor
 
@@ -135,12 +149,29 @@
 			} // HasLoans
 
 			public void Add(LoanData ld) {
-				Count++;
 				Amount += ld.Amount;
+				this.loans.Add(ld);
 			} // Add
 
-			public int Count { get; private set; }
+			public int Count { get { return this.loans.Count; } }
 			public decimal Amount { get; private set; }
+
+			/// <summary>
+			/// Returns a string that represents the current object.
+			/// </summary>
+			/// <returns>
+			/// A string that represents the current object.
+			/// </returns>
+			public override string ToString() {
+				return string.Format(
+					"{0} loans, total {1}: {2}",
+					Count,
+					Amount.ToString("N0"),
+					string.Join(", ", this.loans)
+				);
+			} // ToString
+
+			private readonly List<LoanData> loans;
 		} // LoanStat
 
 		private void TryToConstruct(string formulaPattern) {
