@@ -69,21 +69,40 @@
 				return;
 			} // if
 
-			foreach (LotteryDataForEnlisting ld in this.lotteries)
-				if (Enlist(ld))
+			Log.Debug("Traversing available lotteries...");
+
+			foreach (LotteryDataForEnlisting ld in this.lotteries) {
+				Log.Debug("Checking lottery {0}...", ld.LotteryID);
+
+				if (Enlist(ld)) {
+					Log.Debug("Enlisted to lottery {0}.", ld.LotteryID);
 					break;
+				} // if
+
+				Log.Debug("Not enlisted to lottery {0}.", ld.LotteryID);
+			} // for each
+
+			Log.Debug("Traversing available lotteries complete.");
 		} // Execute
 
 		private bool Enlist(LotteryDataForEnlisting ld) {
-			if (!ld.Fits(this.loans))
+			Log.Debug("Enlist(lottery {0}) started...", ld.LotteryID);
+
+			if (!ld.Fits(this.loans)) {
+				Log.Debug("Enlist(lottery {0}) complete: ain't no fits.", ld.LotteryID);
 				return false;
+			} // if
 
 			try {
 				var eel = new EmailEnlistedLottery(UserID, Guid.NewGuid(), ld.LotteryID, IsBroker, DB, Log);
 				eel.Execute();
+
+				Log.Debug("Enlist(lottery {0}) complete: {1}fits.", ld.LotteryID, eel.Enlisted ? string.Empty : "ain't no ");
+
 				return eel.Enlisted;
 			} catch (Exception e) {
 				Log.Warn(e, "Failed to enlist user {0} to lottery {1}.", UserID, ld.LotteryID);
+				Log.Debug("Enlist(lottery {0}) complete: ain't no fits.", ld.LotteryID);
 				return false;
 			} // try
 		} // Enlist
