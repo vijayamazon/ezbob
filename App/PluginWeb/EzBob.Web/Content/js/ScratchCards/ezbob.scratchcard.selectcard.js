@@ -9,7 +9,7 @@ EzBob.ScratchCards.Select = function(lotteryCode, scratchArgs) {
 	case 'ny2015':
 		return new EzBob.ScratchCards.Ny2015(scratchArgs);
 
-	case 'valentine2015':
+	case 'val2015':
 		return new EzBob.ScratchCards.Valentine2015(scratchArgs);
 
 	default:
