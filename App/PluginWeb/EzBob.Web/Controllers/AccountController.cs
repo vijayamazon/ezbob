@@ -304,7 +304,7 @@
 			} // if user is disabled
 
 			string customerOrigin = customer.CustomerOrigin.Name;
-			if (!hostname.Contains(customerOrigin) && !hostname.Contains("localhost")) {
+			if (!hostname.Contains(customerOrigin) && !hostname.Contains("localhost") && !customer.IsTest) {
 				ms_oLog.Warn("customer {0} origin is {1} tried to login from host {2}.", user.Id, customerOrigin, hostname);
 				return Json(new {
 					success = false,
