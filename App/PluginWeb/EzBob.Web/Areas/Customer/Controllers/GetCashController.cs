@@ -11,23 +11,21 @@
 	using CommonLib;
 	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
-	using Models;
 	using Code;
+	using EzBob.Web.Areas.Customer.Models;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
-	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 
 	public class GetCashController : Controller {
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly IPayPointFacade _payPointFacade;
 		private readonly ICustomerNameValidator _validator;
-		private static readonly ILog _log = LogManager.GetLogger("EzBob.Web.Areas.Customer.Controllers.GetCashController");
+		private static readonly ILog _log = LogManager.GetLogger(typeof(GetCashController));
 		private readonly IPacnetPaypointServiceLogRepository _logRepository;
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ILoanCreator _loanCreator;
@@ -35,7 +33,6 @@
 
 		public GetCashController(
 			IEzbobWorkplaceContext context,
-			IPayPointFacade payPointFacade,
 			ICustomerNameValidator validator,
 			IPacnetPaypointServiceLogRepository logRepository,
 			ICustomerRepository customerRepository,
@@ -43,7 +40,6 @@
 			PayPointAccountRepository payPointAccountRepository
 		) {
 			_context = context;
-			_payPointFacade = payPointFacade;
 			m_oServiceClient = new ServiceClient();
 			_validator = validator;
 			_logRepository = logRepository;
@@ -65,6 +61,8 @@
 			}
 			var cr = customer.LastCashRequest;
 
+			bool isDefaultCard = !customer.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
 			if (customer.IsLoanTypeSelectionAllowed == 1)
 			{
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
@@ -87,9 +85,8 @@
 											 },
 										 "https");
 
-			
+			string url = payPointFacade.GeneratePaymentUrl(customer, 5.00m, callback);
 
-			string url = _payPointFacade.GeneratePaymentUrl(customer, 5.00m, callback);
 			_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Redirect to " + url, "Successful", "");
 			return Redirect(url);
 		}
@@ -141,7 +138,7 @@
 			}
 
 			DateTime now = DateTime.UtcNow;
-
+			Customer cus = _context.Customer;
 			try
 			{
 				if (!valid || code != "A")
@@ -173,8 +170,9 @@
 
 					return RedirectToAction("Error", "Paypoint", new { Area = "Customer" });
 				}
-
-				if (!_payPointFacade.CheckHash(hash, Request.Url))
+				bool isDefaultCard = !cus.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+				PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+				if (!payPointFacade.CheckHash(hash, Request.Url))
 				{
 					_log.ErrorFormat("Paypoint callback is not authenticated for user {0}", _context.Customer.Id);
 					_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
@@ -184,7 +182,7 @@
 					throw new Exception("check hash failed");
 				}
 
-				Customer cus = _context.Customer;
+				
 
 				ValidateCustomerName(customer, cus);
 

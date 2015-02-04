@@ -43,6 +43,7 @@ namespace EZBob.DatabaseLib.Model {
 
 	public interface IPayPointAccountRepository : IRepository<PayPointAccount> {
 		PayPointAccount GetDefaultAccount();
+		PayPointAccount GetOldAccount();
 	}
 
 	public class PayPointAccountRepository : NHibernateRepositoryBase<PayPointAccount>, IPayPointAccountRepository {
@@ -52,6 +53,15 @@ namespace EZBob.DatabaseLib.Model {
 
 		public PayPointAccount GetDefaultAccount() {
 			return GetAll().FirstOrDefault(x => x.IsDefault);
+		}
+
+		public PayPointAccount GetOldAccount() {
+			var account = GetAll().FirstOrDefault(x => x.Mid == "orange06");
+			if (account == null) {
+				account = GetAll().FirstOrDefault(x => x.Mid == "secpay");
+			}
+
+			return account;
 		}
 	}
 

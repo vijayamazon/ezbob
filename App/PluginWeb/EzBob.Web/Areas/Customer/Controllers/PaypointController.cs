@@ -12,7 +12,6 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using log4net;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
@@ -21,21 +20,15 @@
 	public class PaypointController : Controller {
 		public PaypointController(
 			IEzbobWorkplaceContext context,
-			PayPointFacade payPointFacade,
-			LoanPaymentFacade loanPaymentFacade,
 			IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository,
 			IPaypointTransactionRepository paypointTransactionRepository,
 			PayPointApi paypoint,
-			ICustomerRepository customerRepository,
 			PayPointAccountRepository payPointAccountRepository) {
 			_context = context;
-			_payPointFacade = payPointFacade;
 			m_oServiceClient = new ServiceClient();
 			_logRepository = pacnetPaypointServiceLogRepository;
 			_paypointTransactionRepository = paypointTransactionRepository;
-			_loanRepaymentFacade = loanPaymentFacade;
 			_paypoint = paypoint;
-			_customerRepository = customerRepository;
 			this.payPointAccountRepository = payPointAccountRepository;
 		}
 
@@ -55,8 +48,9 @@
 			}
 
 			var customerContext = _context.Customer;
-
-			if (!_payPointFacade.CheckHash(hash, Request.Url)) {
+			bool isDefaultCard = !customerContext.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			if (!payPointFacade.CheckHash(hash, Request.Url)) {
 				Log.ErrorFormat("Paypoint callback is not authenticated for user {0}", customerContext.Id);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint callback is not authenticated for user {0}", customerContext.Id));
 				return View("Error");
@@ -95,8 +89,8 @@
 				}
 				return View(TempData.Get<PaymentConfirmationModel>());
 			}
-
-			var res = _loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
+			LoanPaymentFacade loanRepaymentFacade= new LoanPaymentFacade();
+			var res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
 
 			SendEmails(loanId, amount.Value, customerContext);
 
@@ -201,7 +195,9 @@
 					payEarly = true
 				}, "https");
 
-				var url = _payPointFacade.GeneratePaymentUrl(oCustomer, amount, callback);
+				bool isDefaultCard = !oCustomer.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+				PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+				var url = payPointFacade.GeneratePaymentUrl(oCustomer, amount, callback);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
 
 				return Redirect(url);
@@ -241,8 +237,8 @@
 					throw new Exception("Card not found");
 
 				_paypoint.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
-
-				var payFastModel = _loanRepaymentFacade.MakePayment(card.TransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "manual payment from customer", paymentType, "CustomerAuto");
+				LoanPaymentFacade loanRepaymentFacade= new LoanPaymentFacade();
+				var payFastModel = loanRepaymentFacade.MakePayment(card.TransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "manual payment from customer", paymentType, "CustomerAuto");
 				payFastModel.CardNo = card.CardNo;
 
 				SendEmails(loanId, realAmount, customer);
@@ -285,11 +281,8 @@
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof (PaypointController));
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly ICustomerRepository _customerRepository;
-		private readonly LoanPaymentFacade _loanRepaymentFacade;
 		private readonly IPacnetPaypointServiceLogRepository _logRepository;
 		private readonly PayPointApi _paypoint;
-		private readonly PayPointFacade _payPointFacade;
 		private readonly IPaypointTransactionRepository _paypointTransactionRepository;
 		private readonly ServiceClient m_oServiceClient;
 		private readonly PayPointAccountRepository payPointAccountRepository;

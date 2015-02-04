@@ -23,6 +23,7 @@
 	using NHibernate.Linq;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	#endregion using
 
@@ -36,7 +37,6 @@
 			IEzbobWorkplaceContext oContext,
 			CashRequestBuilder oCashRequestBuilder,
 			ISession oSession,
-			IPayPointFacade oPayPointFacade,
 			PayPointAccountRepository payPointAccountRepository
 		) {
 			m_oCustomerModelBuilder = oCustomerModelBuilder;
@@ -44,7 +44,6 @@
 			m_oServiceClient = new ServiceClient();
 			m_oCashRequestBuilder = oCashRequestBuilder;
 			m_oSession = oSession;
-			m_oPayPointFacade = oPayPointFacade;
 			this.payPointAccountRepository = payPointAccountRepository;
 		} // constructor
 
@@ -270,7 +269,10 @@
 					cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
 					hideSteps = true
 				}, "https");
-			var url = m_oPayPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
+
+			bool isDefaultCard = !oCustomer.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
 
 			return Redirect(url);
 		} // AddPayPoint
@@ -298,11 +300,13 @@
 				TempData["message"] = message;
 				return View(new { error = "Failed to add debit card" });
 			} // if
-
-			if (!m_oPayPointFacade.CheckHash(hash, Request.Url))
-				return View(new { error = "Failed to add debit card" });
-
 			var cust = m_oContext.Customer;
+
+			bool isDefaultCard = !cust.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
+			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			if (!payPointFacade.CheckHash(hash, Request.Url))
+				return View(new { error = "Failed to add debit card" });
+			
 			var defaultPaypointAccount = payPointAccountRepository.GetDefaultAccount();
 			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname, defaultPaypointAccount);
 			
@@ -351,7 +355,6 @@
 		private readonly ServiceClient m_oServiceClient;
 		private readonly CashRequestBuilder m_oCashRequestBuilder;
 		private readonly ISession m_oSession;
-		private readonly IPayPointFacade m_oPayPointFacade;
 		private readonly PayPointAccountRepository payPointAccountRepository;
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof (ProfileController));
 

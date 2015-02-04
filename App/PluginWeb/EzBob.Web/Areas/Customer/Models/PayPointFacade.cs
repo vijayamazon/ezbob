@@ -26,13 +26,18 @@
 		private readonly string templateUrl;
 		private readonly string paypointOptions;
 
-		public PayPointFacade() {
+		public PayPointFacade(bool isDefault = true) {
 			var payPointAccountRepository = ObjectFactory.GetInstance<PayPointAccountRepository>();
-			var defaultPayPoint = payPointAccountRepository.GetDefaultAccount();
-			remotePassword = defaultPayPoint.RemotePassword;
-			mid = defaultPayPoint.Mid;
-			templateUrl = defaultPayPoint.TemplateUrl;
-			paypointOptions = defaultPayPoint.Options;
+			PayPointAccount payPointAccount;
+			if (isDefault) {
+				payPointAccount = payPointAccountRepository.GetDefaultAccount();
+			} else {
+				payPointAccount = payPointAccountRepository.GetOldAccount();
+			}
+			remotePassword = payPointAccount.RemotePassword;
+			mid = payPointAccount.Mid;
+			templateUrl = payPointAccount.TemplateUrl;
+			paypointOptions = payPointAccount.Options;
 		}
 
 		public virtual bool CheckHash(string hash, Uri url)
