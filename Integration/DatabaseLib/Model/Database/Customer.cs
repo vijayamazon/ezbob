@@ -600,6 +600,8 @@
 		public virtual string AlibabaId { get; set; }
 
 		public virtual CustomerOrigin CustomerOrigin { get; set; }
+
+		public virtual CampaignSource CampaignSource { get; set; }
 	} // class Customer
 
 	public static class CustomerExt {

@@ -10,6 +10,9 @@
 @{
     var controller = (string)ViewContext.RouteData.Values["controller"];
     var authCookie = Request.IsAuthenticated ? "auth" : "";
+    var context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
+    var refNum = context.Customer == null ? "" : context.Customer.RefNumber;
+    var term = context.Customer == null || context.Customer.CampaignSource == null ? "" : context.Customer.CampaignSource.RTerm;
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
     if (string.IsNullOrEmpty(ViewBag.Phone)) {
         ViewBag.Phone = "0800-011-4787";
@@ -78,7 +81,7 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body auth="@authCookie" data-user-name="">
+<body auth="@authCookie" data-user-name="" data-ref="@refNum" data-term="@term">
     @{Html.RenderPartial("_GoogleTagManager");}
     @RenderSection("afterHead", false)
 
