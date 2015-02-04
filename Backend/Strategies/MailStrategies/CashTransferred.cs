@@ -4,7 +4,7 @@
 	using System.Collections.Generic;
 	using API;
 	using ConfigManager;
-	using Ezbob.Backend.Strategies.Lottery;
+	using EzBob.Backend.Strategies.Lottery;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Repository;

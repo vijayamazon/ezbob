@@ -1,14 +1,13 @@
-﻿namespace Ezbob.Backend.Strategies.Lottery {
+﻿namespace EzBob.Backend.Strategies.Lottery {
 	using System;
 	using System.Collections.Generic;
-	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzBob.Backend.Strategies;
+	using EzBob.Backend.Strategies.MailStrategies;
 
 	public class EnlistLottery : AStrategy {
-		public EnlistLottery(int customerID, AConnection db, ASafeLog log)
-			: base(db, log) {
+		public EnlistLottery(int customerID, AConnection db, ASafeLog log) : base(db, log) {
 			this.customerID = customerID;
 			this.isFilled = false;
 			this.brokerID = 0;
@@ -75,7 +74,7 @@
 				return false;
 
 			try {
-				var eel = new EmailEnlistedLottery(UserID, DB, Log);
+				var eel = new EmailEnlistedLottery(UserID, Guid.NewGuid(), ld.LotteryID, IsBroker, DB, Log);
 				eel.Execute();
 				return eel.Enlisted;
 			} catch (Exception e) {

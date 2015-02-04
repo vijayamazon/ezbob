@@ -1,15 +1,13 @@
-﻿namespace Ezbob.Backend.Strategies.MailStrategies {
+﻿namespace EzBob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using EzBob.Backend.Strategies.MailStrategies;
 	using EzBob.Backend.Strategies.MailStrategies.API;
 
 	public class EmailEnlistedLottery : AMailStrategyBase {
-		public EmailEnlistedLottery(int customerID, AConnection db, ASafeLog log)
-			: base(customerID, false, db, log) {
+		public EmailEnlistedLottery(int userID, Guid playerID, long lotteryID, bool isBroker, AConnection db, ASafeLog log ) : base(userID, false, db, log) {
 			Enlisted = false;
 
 			this.isBroker = isBroker;

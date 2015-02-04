@@ -2,7 +2,7 @@
 	using System;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.Lottery;
-	using Ezbob.Backend.Strategies.MailStrategies;
+	using EzBob.Backend.Strategies.Lottery;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData ChangeLotteryPlayerStatus(int customerID, Guid playerID, LotteryPlayerStatus newStatus) {
