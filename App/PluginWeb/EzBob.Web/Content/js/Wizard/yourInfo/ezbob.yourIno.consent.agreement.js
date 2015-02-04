@@ -17,7 +17,9 @@ EzBob.ConsentAgreement = Backbone.Marionette.ItemView.extend({
 		'click .print': 'onPrint',
         'click .download': 'onDownload'
 	}, // events
-
+	onRender:function(){
+		EzBob.UiAction.registerView(this);
+	},
 	onDownload: function() {
 		var id = this.model.get('id');
 		var firstName = this.model.get('firstName');
