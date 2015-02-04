@@ -373,7 +373,6 @@
     <Compile Include="Repository\AskvilleRepository.cs" />
     <Compile Include="Repository\ExperianConsentAgreementRepository.cs" />
     <Compile Include="Repository\ExportResultRepository.cs" />
-    <Compile Include="Repository\EzbobMailNodeAttachRelationRepository.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemDetailCatgoryMap.cs" />
     <Compile Include="Model\Marketplaces\Amazon\MP_AmazonOrderItemDetailMap.cs" />
     <Compile Include="Model\Marketplaces\Ebay\MP_EbayAmazonCategory.cs" />

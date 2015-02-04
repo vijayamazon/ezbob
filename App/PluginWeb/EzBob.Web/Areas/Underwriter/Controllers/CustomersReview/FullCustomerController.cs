@@ -11,7 +11,6 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models.Marketplaces;
 	using Ezbob.Backend.Models;
-	using Ezbob.Logger;
 	using Ezbob.Utils;
 	using Infrastructure;
 	using Models;
@@ -21,6 +20,8 @@
 	using Web.Models;
 	using NHibernate;
 	using System;
+	using System.Text;
+	using log4net;
 
 	public class FullCustomerController : Controller {
 
@@ -65,7 +66,7 @@
 
 		[HttpGet]
 		public JsonResult Index(int id, string history = null) {
-			Log.Debug("Build full customer model begin for customer {0} and history = {1}.", id, history);
+			Log.DebugFormat("Build full customer model begin for customer {0} and history = {1}.", id, history);
 
 			var model = new FullCustomerModel();
 
@@ -96,11 +97,17 @@
 				using (tc.AddStep("MarketPlaces and Affordability Time taken")) {
 					DateTime historyDate;
 					bool bHasHistoryDate = DateTime.TryParseExact(history, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out historyDate);
+					try {
+						var ar = serviceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, bHasHistoryDate ? historyDate : (DateTime?)null);
 
-					var ar = serviceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, bHasHistoryDate ? historyDate : (DateTime?)null);
-
-					model.MarketPlaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models).ToList();
-					model.Affordability = ar.Affordability.ToList();
+						model.MarketPlaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models)
+							.ToList();
+						model.Affordability = ar.Affordability.ToList();
+					} catch (Exception ex) {
+						Log.ErrorFormat("Failed to retrieve mp and affordability data for customer {0}\n{1}", customer.Id, ex);
+						model.Affordability = new List<AffordabilityData>();
+						model.MarketPlaces = new List<MarketPlaceModel>();
+					}
 				} // using
 
 				using (tc.AddStep("LoansAndOffers Time taken"))
@@ -126,7 +133,7 @@
 						model.PricingModelCalculations = getPricingModelModelResponse.Value;
 					}
 					catch (Exception ex) {
-						Log.Error(ex, "Failed to load pricing model.");
+						Log.ErrorFormat("Failed to load pricing model. \n{0}", ex);
 					}
 				} // using
 
@@ -176,13 +183,21 @@
 				} // using
 			} // using "Total" step
 
-			tc.Log(Log);
-
-			Log.Debug("Build full customer model end for customer {0} and history = {1}.", id, history);
+			WriteToLog(tc);
+			
+			Log.DebugFormat("Build full customer model end for customer {0} and history = {1}.", id, history);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		} // Index
 
+		private void WriteToLog(TimeCounter tc) {
+			var sb = new StringBuilder();
+			sb.AppendLine(tc.Title);
+			foreach (var time in tc.Checkpoints)
+				sb.AppendFormat("\t{0}: {1}ms\n", time.Item1, time.Item2);
+
+			Log.InfoFormat("{0}", sb);
+		}
 		// ReSharper disable UnusedAutoPropertyAccessor.Local
 
 		private class FullCustomerModel {
@@ -229,7 +244,7 @@
 		private readonly IBugRepository _bugs;
 		private readonly ServiceClient serviceClient;
 		private readonly IWorkplaceContext _context;
-		private static readonly ASafeLog Log = new SafeILog(typeof(FullCustomerController));
+		private static readonly ILog Log = LogManager.GetLogger(typeof(FullCustomerController));
 
 	} // class FullCustomerController
 } // namespace

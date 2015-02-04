@@ -7,6 +7,8 @@
 			<th>PayPoint Card Transaction ID</th>
 			<th>Card No</th>
 			<th>Expire Date</th>
+            <th>Card Holder</th>
+            <th>Account Name</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -22,6 +24,8 @@
 				<td><%- pp.TransactionId %></td>
 				<td><%- pp.CardNo %></td>
 				<td><%- EzBob.formatDateHumanFull(pp.ExpireDate) || 'Unknown'%></td>
+                <td><%- pp.CardHolder %></td>
+                <td><%- pp.AccountName %></td>
 				<td class="buttons_container"><%
 					if (!pp.IsDefault) {
 						%><button class="btn btn-mini btn-primary set-paypoint-default" data-transactionid="<%- pp.TransactionId %>">

@@ -2,7 +2,10 @@
 
 namespace EZBob.DatabaseLib.Model.Database
 {
-    public class EzbobMailNodeAttachRelation
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	public class EzbobMailNodeAttachRelation
     {
         public virtual int Id { get; set; }
         public virtual string To { get; set; }
@@ -21,4 +24,10 @@ namespace EZBob.DatabaseLib.Model.Database
                 References(x => x.Export, "ExportId");
             }
     }
+
+	public class EzbobMailNodeAttachRelationRepository : NHibernateRepositoryBase<EzbobMailNodeAttachRelation> {
+		public EzbobMailNodeAttachRelationRepository(ISession session)
+			: base(session) {
+		}
+	}
 }

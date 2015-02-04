@@ -7,6 +7,7 @@
 			<th>Sort Code</th>
 			<th>Bank Account Check</th>
 			<th>Type</th>
+            <th>Bank Name</th>
 			<th></th>
 		</tr>
 	</thead>
@@ -26,6 +27,7 @@
 				<td><%- ba.SortCode %></td>
 				<td><%- ba.StatusInformation || "-" %></td>
 				<td><%- ba.Type %></td>
+                <td><%- ba.Bank %></td>
 				<td class="buttons_container">
 					<button class="btn btn-primary btn-mini checkeBankAccount">Check</button><%
 					if (!ba.isDefault) {

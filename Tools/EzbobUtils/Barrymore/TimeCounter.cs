@@ -49,6 +49,8 @@
 		} // Log
 
 		private readonly List<Tuple<string, double>> m_oCheckpoints;
+		public List<Tuple<string, double>> Checkpoints { get { return m_oCheckpoints; } }
+		public string Title { get { return m_sTitle; } }
 		private readonly string m_sTitle;
 
 	} // class TimeCounter
