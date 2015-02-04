@@ -357,21 +357,6 @@
 				new QueryParameter("Type", type.ToString()));
 		}
 
-		/// <summary>
-		///     Retrieves customer's consumer and business default rate
-		/// </summary>
-		/// <param name="customerId"></param>
-		/// <returns>Item1 : consumerDefault rate, Item2: businessDefaultRate</returns>
-		public Tuple<decimal, decimal> GetOfferDefaultRate(int customerId) {
-			var sr = _db.GetFirst("GetOfferConsumerBusinessDefaultRates", CommandSpecies.StoredProcedure, new QueryParameter("CustomerId", customerId));
-
-			decimal consumerDefautRate = sr["ConsumerDefaultRate"];
-			decimal businessDefautRate = sr["BusinessDefaultRate"];
-
-			var customerConsumerBusinessDefaultRate = new Tuple<decimal, decimal>(consumerDefautRate, businessDefautRate);
-			return customerConsumerBusinessDefaultRate;
-		}
-
 		public void StoreMedalVerification(MedalOutputModel model) {
 			if (model.WeightsDict != null) {
 				if (!model.WeightsDict.ContainsKey(Parameter.BusinessScore))

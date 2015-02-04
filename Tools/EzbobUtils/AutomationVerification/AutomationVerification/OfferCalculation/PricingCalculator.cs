@@ -19,11 +19,18 @@ namespace AutomationCalculator.OfferCalculation {
 		/// </summary>
 		/// <returns>default rate</returns>
 		public decimal GetDefaultRate(int customerId, PricingScenarioModel pricingScenario) {
-			var dbHelper = new DbHelper(this.db, Log);
-			var customerDefaultRate = dbHelper.GetOfferDefaultRate(customerId);
+			var sr = this.db.GetFirst(
+				"GetOfferConsumerBusinessDefaultRates",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", customerId)
+			);
 
-			var defaultRate = customerDefaultRate.Item1 * (1 - pricingScenario.DefaultRateCompanyShare) +
-				customerDefaultRate.Item2 * pricingScenario.DefaultRateCompanyShare;
+			decimal consumerDefautRate = sr["ConsumerDefaultRate"];
+			decimal businessDefautRate = sr["BusinessDefaultRate"];
+
+			decimal defaultRate =
+				consumerDefautRate * (1 - pricingScenario.DefaultRateCompanyShare) +
+				businessDefautRate * pricingScenario.DefaultRateCompanyShare;
 
 			return defaultRate;
 		}
