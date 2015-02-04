@@ -138,40 +138,11 @@
 
 		[IsSuccessfullyRegisteredFilter]
 		public ActionResult LogOn(string returnUrl, string scratch_promotion = null) {
-			scratch_promotion = (scratch_promotion ?? string.Empty).Trim();
+			var model = new LogOnModel { ReturnUrl = returnUrl, };
 
-			ms_oLog.Debug("Scratch promotion data: '{0}'.", scratch_promotion);
+			FillPromotionData(model, scratch_promotion);
 
-			string promotionName = null;
-			DateTime? promotionPageVisitTime = null;
-
-			if (!string.IsNullOrWhiteSpace(scratch_promotion)) {
-				string[] tokens = scratch_promotion.Trim().Split(';');
-
-				DateTime ppvt = DateTime.UtcNow;
-
-				bool hasGoodTokens =
-					(tokens.Length == 2) &&
-					!string.IsNullOrWhiteSpace(tokens[0]) &&
-					DateTime.TryParseExact(
-						tokens[1],
-						"yyyy-M-d_H-m-s",
-						CultureInfo.InvariantCulture,
-						DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeLocal,
-						out ppvt
-					);
-
-				if (hasGoodTokens) {
-					promotionName = tokens[0];
-					promotionPageVisitTime = ppvt;
-				} // if
-			} // if
-
-			return View(new LogOnModel {
-				ReturnUrl = returnUrl,
-				PromotionName = promotionName,
-				PromotionPageVisitTime = promotionPageVisitTime,
-			});
+			return View(model);
 		} // LogOn
 
 		[HttpPost]
@@ -1089,6 +1060,50 @@
 			FormsAuthentication.SignOut();
 			HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
 		} // EndSession
+
+		private void FillPromotionData(LogOnModel model, string scratchPromotion) {
+			model.PromotionName = null;
+			model.PromotionPageVisitTime = null;
+
+			scratchPromotion = (scratchPromotion ?? string.Empty).Trim();
+
+			ms_oLog.Debug("Scratch promotion data: '{0}'.", scratchPromotion);
+
+			if (string.IsNullOrWhiteSpace(scratchPromotion))
+				return;
+
+			string[] tokens = scratchPromotion.Trim().Split(';');
+
+			DateTime ppvt = DateTime.UtcNow;
+
+			bool hasGoodTokens = true;
+
+			if (tokens.Length != 2) {
+				hasGoodTokens = false;
+				ms_oLog.Debug("Scratch promotion has {0} tokens, while 2 expected.", tokens.Length);
+			} // if
+
+			if (!string.IsNullOrWhiteSpace(tokens[0])) {
+				hasGoodTokens = false;
+				ms_oLog.Debug("Scratch promotion name is empty.");
+			} // if
+
+			if (!DateTime.TryParseExact(
+				tokens[1],
+				"yyyy-M-d_H-m-s",
+				CultureInfo.InvariantCulture,
+				DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeLocal,
+				out ppvt
+			)) {
+				hasGoodTokens = false;
+				ms_oLog.Debug("Failed to parse page visit time using pattern 'yyyy-M-d_H-m-s' from {0}.", tokens[1]);
+			} // if
+
+			if (hasGoodTokens) {
+				model.PromotionName = tokens[0];
+				model.PromotionPageVisitTime = ppvt;
+			} // if
+		} // FillPromotionData
 
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(AccountController));
 
