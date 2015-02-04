@@ -21,7 +21,7 @@
 		} // PlayLottery
 
 		public ActionMetaData EnlistLottery(int customerID) {
-			return Execute<EnlistLottery>(customerID, null, customerID, DB, Log);
+			return Execute<EnlistLottery>(customerID, null, customerID);
 		} // EnlistLottery
 	} // class EzServiceImplementation
 } // namespace
