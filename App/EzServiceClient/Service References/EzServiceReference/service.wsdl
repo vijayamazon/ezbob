@@ -444,12 +444,6 @@
   <wsdl:message name="IEzService_UnderwriterSignup_OutputMessage">
     <wsdl:part name="parameters" element="tns:UnderwriterSignupResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UserLogin_InputMessage">
-    <wsdl:part name="parameters" element="tns:UserLogin" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserLogin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UserLoginResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_UserResetPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UserResetPassword" />
   </wsdl:message>
@@ -546,6 +540,12 @@
   <wsdl:message name="IEzService_LoadVatReturnSummary_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoadVatReturnSummaryResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnRawData_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnRawData" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoadVatReturnRawData_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoadVatReturnRawDataResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage">
     <wsdl:part name="parameters" element="tns:AndRecalculateVatReturnSummaryForAll" />
   </wsdl:message>
@@ -564,11 +564,11 @@
   <wsdl:message name="IEzService_SaveVatReturnData_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveVatReturnDataResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoadVatReturnRawData_InputMessage">
-    <wsdl:part name="parameters" element="tns:LoadVatReturnRawData" />
+  <wsdl:message name="IEzService_UserLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserLogin" />
   </wsdl:message>
-  <wsdl:message name="IEzService_LoadVatReturnRawData_OutputMessage">
-    <wsdl:part name="parameters" element="tns:LoadVatReturnRawDataResponse" />
+  <wsdl:message name="IEzService_UserLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserLoginResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoadVatReturnFullData_InputMessage">
     <wsdl:part name="parameters" element="tns:LoadVatReturnFullData" />
@@ -750,12 +750,6 @@
   <wsdl:message name="IEzService_BrokerSignup_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerSignupResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLogin_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLogin" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_BrokerLogin_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerLoginResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_BrokerRestorePassword_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerRestorePassword" />
   </wsdl:message>
@@ -834,6 +828,12 @@
   <wsdl:message name="IEzService_BrokerCustomerWizardComplete_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerCustomerWizardCompleteResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BrokerAttachCustomer_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerAttachCustomer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BrokerAttachCustomer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerAttachCustomerResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_BrokerBackFromCustomerWizard_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerBackFromCustomerWizard" />
   </wsdl:message>
@@ -876,11 +876,11 @@
   <wsdl:message name="IEzService_BrokerLoadStaticData_OutputMessage">
     <wsdl:part name="parameters" element="tns:BrokerLoadStaticDataResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_BrokerAttachCustomer_InputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerAttachCustomer" />
+  <wsdl:message name="IEzService_BrokerLogin_InputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLogin" />
   </wsdl:message>
-  <wsdl:message name="IEzService_BrokerAttachCustomer_OutputMessage">
-    <wsdl:part name="parameters" element="tns:BrokerAttachCustomerResponse" />
+  <wsdl:message name="IEzService_BrokerLogin_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BrokerLoginResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BrokerAcceptTerms_InputMessage">
     <wsdl:part name="parameters" element="tns:BrokerAcceptTerms" />
@@ -1413,10 +1413,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UnderwriterSignup" message="tns:IEzService_UnderwriterSignup_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UnderwriterSignupResponse" message="tns:IEzService_UnderwriterSignup_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UserLogin">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="UserResetPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
@@ -1481,6 +1477,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummary" message="tns:IEzService_LoadVatReturnSummary_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse" message="tns:IEzService_LoadVatReturnSummary_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnRawData">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnRawData" message="tns:IEzService_LoadVatReturnRawData_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse" message="tns:IEzService_LoadVatReturnRawData_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse" message="tns:IEzService_AndRecalculateVatReturnSummaryForAll_OutputMessage" />
@@ -1493,9 +1493,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveVatReturnData" message="tns:IEzService_SaveVatReturnData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveVatReturnDataResponse" message="tns:IEzService_SaveVatReturnData_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="LoadVatReturnRawData">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnRawData" message="tns:IEzService_LoadVatReturnRawData_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse" message="tns:IEzService_LoadVatReturnRawData_OutputMessage" />
+    <wsdl:operation name="UserLogin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoadVatReturnFullData">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnFullData" message="tns:IEzService_LoadVatReturnFullData_InputMessage" />
@@ -1617,10 +1617,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerSignup" message="tns:IEzService_BrokerSignup_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerSignupResponse" message="tns:IEzService_BrokerSignup_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="BrokerLogin">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLogin" message="tns:IEzService_BrokerLogin_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoginResponse" message="tns:IEzService_BrokerLogin_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="BrokerRestorePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePassword" message="tns:IEzService_BrokerRestorePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerRestorePasswordResponse" message="tns:IEzService_BrokerRestorePassword_OutputMessage" />
@@ -1673,6 +1669,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete" message="tns:IEzService_BrokerCustomerWizardComplete_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse" message="tns:IEzService_BrokerCustomerWizardComplete_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BrokerAttachCustomer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerAttachCustomer" message="tns:IEzService_BrokerAttachCustomer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerAttachCustomerResponse" message="tns:IEzService_BrokerAttachCustomer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="BrokerBackFromCustomerWizard">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard" message="tns:IEzService_BrokerBackFromCustomerWizard_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse" message="tns:IEzService_BrokerBackFromCustomerWizard_OutputMessage" />
@@ -1701,9 +1701,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLoadStaticData" message="tns:IEzService_BrokerLoadStaticData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoadStaticDataResponse" message="tns:IEzService_BrokerLoadStaticData_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="BrokerAttachCustomer">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerAttachCustomer" message="tns:IEzService_BrokerAttachCustomer_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerAttachCustomerResponse" message="tns:IEzService_BrokerAttachCustomer_OutputMessage" />
+    <wsdl:operation name="BrokerLogin">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerLogin" message="tns:IEzService_BrokerLogin_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BrokerLoginResponse" message="tns:IEzService_BrokerLogin_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BrokerAcceptTerms">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BrokerAcceptTerms" message="tns:IEzService_BrokerAcceptTerms_InputMessage" />
@@ -2447,15 +2447,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UserLogin">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UserLogin" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="UserResetPassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UserResetPassword" style="document" />
       <wsdl:input>
@@ -2600,6 +2591,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="LoadVatReturnRawData">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnRawData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AndRecalculateVatReturnSummaryForAll">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll" style="document" />
       <wsdl:input>
@@ -2627,8 +2627,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="LoadVatReturnRawData">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/LoadVatReturnRawData" style="document" />
+    <wsdl:operation name="UserLogin">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserLogin" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2906,15 +2906,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="BrokerLogin">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLogin" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="BrokerRestorePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerRestorePassword" style="document" />
       <wsdl:input>
@@ -3032,6 +3023,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BrokerAttachCustomer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerAttachCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="BrokerBackFromCustomerWizard">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard" style="document" />
       <wsdl:input>
@@ -3095,8 +3095,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="BrokerAttachCustomer">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerAttachCustomer" style="document" />
+    <wsdl:operation name="BrokerLogin">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BrokerLogin" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3539,20 +3539,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

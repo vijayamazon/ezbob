@@ -2382,54 +2382,6 @@ namespace ServiceClientProxy.EzServiceReference {
         Broker = 1,
     }
     
-        private string PriorityField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        public string Priority {
-            get {
-                return this.PriorityField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.PriorityField, value) != true)) {
-                    this.PriorityField = value;
-                    this.RaisePropertyChanged("Priority");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        private System.DateTime EndDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime StartDateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        public System.DateTime EndDate {
-            get {
-                return this.EndDateField;
-            }
-            set {
-                if ((this.EndDateField.Equals(value) != true)) {
-                    this.EndDateField = value;
-                    this.RaisePropertyChanged("EndDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime StartDate {
-            get {
-                return this.StartDateField;
-            }
-            set {
-                if ((this.StartDateField.Equals(value) != true)) {
-                    this.StartDateField = value;
-                    this.RaisePropertyChanged("StartDate");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Medal", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
     public enum Medal : int {
@@ -2911,12 +2863,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UnderwriterSignup", ReplyAction="http://tempuri.org/IEzService/UnderwriterSignupResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UnderwriterSignupAsync(string name, Ezbob.Backend.Models.Password password, string role);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
-        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserResetPassword", ReplyAction="http://tempuri.org/IEzService/UserResetPasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail);
         
@@ -3013,6 +2959,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnSummary", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnSummaryResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.VatReturnDataActionResult> LoadVatReturnSummaryAsync(int nCustomerID, int nMarketplaceID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnRawData", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse")]
+        ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnRawData", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.VatReturnDataActionResult> LoadVatReturnRawDataAsync(int nCustomerMarketplaceID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAll", ReplyAction="http://tempuri.org/IEzService/AndRecalculateVatReturnSummaryForAllResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll();
         
@@ -3031,11 +2983,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveVatReturnData", ReplyAction="http://tempuri.org/IEzService/SaveVatReturnDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult> SaveVatReturnDataAsync(int nCustomerMarketplaceID, int nHistoryRecordID, int nSourceID, Ezbob.Backend.Models.VatReturnRawData[] oVatReturn, Ezbob.Backend.Models.RtiTaxMonthRawData[] oRtiMonths);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnRawData", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse")]
-        ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
+        ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnRawData", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnRawDataResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.VatReturnDataActionResult> LoadVatReturnRawDataAsync(int nCustomerMarketplaceID);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoadVatReturnFullData", ReplyAction="http://tempuri.org/IEzService/LoadVatReturnFullDataResponse")]
         ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
@@ -3217,12 +3169,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerSignup", ReplyAction="http://tempuri.org/IEzService/BrokerSignupResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerSignupAsync(string sFirmName, string sFirmRegNum, string sContactName, string sContactEmail, string sContactMobile, string sMobileCode, string sContactOtherPhone, decimal nEstimatedMonthlyClientAmount, Ezbob.Backend.Models.Password oPassword, string sFirmWebSiteUrl, int nEstimatedMonthlyApplicationCount, bool bIsCaptchEnabled, int nBrokerTermsID, string sReferredBy);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.Password oPassword);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerRestorePassword", ReplyAction="http://tempuri.org/IEzService/BrokerRestorePasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
         
@@ -3301,6 +3247,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerCustomerWizardComplete", ReplyAction="http://tempuri.org/IEzService/BrokerCustomerWizardCompleteResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerCustomerWizardCompleteAsync(int nCustomerID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAttachCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerAttachCustomerResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAttachCustomer(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAttachCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerAttachCustomerResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAttachCustomerAsync(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerBackFromCustomerWizard", ReplyAction="http://tempuri.org/IEzService/BrokerBackFromCustomerWizardResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID);
         
@@ -3343,11 +3295,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLoadStaticData", ReplyAction="http://tempuri.org/IEzService/BrokerLoadStaticDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAttachCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerAttachCustomerResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAttachCustomer(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
+        ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAttachCustomer", ReplyAction="http://tempuri.org/IEzService/BrokerAttachCustomerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAttachCustomerAsync(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerLogin", ReplyAction="http://tempuri.org/IEzService/BrokerLoginResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzService/BrokerAcceptTermsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
@@ -4081,14 +4033,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.UnderwriterSignupAsync(name, password, role);
         }
         
-        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
-            return base.Channel.UserLogin(sEmail, sPassword, sRemoteIp);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp) {
-            return base.Channel.UserLoginAsync(sEmail, sPassword, sRemoteIp);
-        }
-        
         public ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail) {
             return base.Channel.UserResetPassword(sEmail);
         }
@@ -4217,6 +4161,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.LoadVatReturnSummaryAsync(nCustomerID, nMarketplaceID);
         }
         
+        public ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID) {
+            return base.Channel.LoadVatReturnRawData(nCustomerMarketplaceID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.VatReturnDataActionResult> LoadVatReturnRawDataAsync(int nCustomerMarketplaceID) {
+            return base.Channel.LoadVatReturnRawDataAsync(nCustomerMarketplaceID);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData AndRecalculateVatReturnSummaryForAll() {
             return base.Channel.AndRecalculateVatReturnSummaryForAll();
         }
@@ -4241,12 +4193,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SaveVatReturnDataAsync(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
         }
         
-        public ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID) {
-            return base.Channel.LoadVatReturnRawData(nCustomerMarketplaceID);
+        public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+            return base.Channel.UserLogin(sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.VatReturnDataActionResult> LoadVatReturnRawDataAsync(int nCustomerMarketplaceID) {
-            return base.Channel.LoadVatReturnRawDataAsync(nCustomerMarketplaceID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+            return base.Channel.UserLoginAsync(sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
         }
         
         public ServiceClientProxy.EzServiceReference.VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
@@ -4489,14 +4441,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerSignupAsync(sFirmName, sFirmRegNum, sContactName, sContactEmail, sContactMobile, sMobileCode, sContactOtherPhone, nEstimatedMonthlyClientAmount, oPassword, sFirmWebSiteUrl, nEstimatedMonthlyApplicationCount, bIsCaptchEnabled, nBrokerTermsID, sReferredBy);
         }
         
-        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword) {
-            return base.Channel.BrokerLogin(sEmail, oPassword);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.Password oPassword) {
-            return base.Channel.BrokerLoginAsync(sEmail, oPassword);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerRestorePassword(string sMobile, string sCode) {
             return base.Channel.BrokerRestorePassword(sMobile, sCode);
         }
@@ -4599,6 +4543,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerCustomerWizardCompleteAsync(int nCustomerID) {
             return base.Channel.BrokerCustomerWizardCompleteAsync(nCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAttachCustomer(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID) {
+            return base.Channel.BrokerAttachCustomer(nCustomerID, nBrokerID, nUnderwriterID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAttachCustomerAsync(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID) {
+            return base.Channel.BrokerAttachCustomerAsync(nCustomerID, nBrokerID, nUnderwriterID);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult BrokerBackFromCustomerWizard(int nLeadID) {

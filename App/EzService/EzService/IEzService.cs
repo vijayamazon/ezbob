@@ -6,7 +6,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EchoSignLib;
 	using EzBob.Backend.Models;
-	using EzBob.Backend.Strategies.MedalCalculations;
 	using EzBob.Backend.Strategies.PricingModel;
 	using EzBob.Backend.Strategies.UserManagement;
 	using Ezbob.Backend.Models;
@@ -14,12 +13,8 @@
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
-		#region Agreements
-
 		[OperationContract]
 		ActionMetaData SaveAgreement(int customerId, AgreementModel model, string refNumber, string name, TemplateModel template, string path1, string path2);
-
-		#endregion Agreements
 
 		[OperationContract]
 		ActionMetaData BackfillAml();
@@ -33,8 +28,6 @@
 		[OperationContract]
 		ActionMetaData BackfillNonLimitedCompanies();
 
-		#region AML and BWA
-
 		[OperationContract]
 		ActionMetaData CheckAml(int customerId, int userId);
 
@@ -47,10 +40,6 @@
 		[OperationContract]
 		ActionMetaData CheckBwaCustom(int userId, int customerId, string idhubHouseNumber, string idhubHouseName, string idhubStreet, string idhubDistrict, string idhubTown, string idhubCounty, string idhubPostCode, string idhubBranchCode, string idhubAccountNumber);
 
-		#endregion AML and BWA
-
-		#region Automation verification
-
 		[OperationContract]
 		ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
 
@@ -62,10 +51,6 @@
 
 		[OperationContract]
 		ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
-
-		#endregion Automation verification
-
-		#region Broker
 
 		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail);
@@ -87,9 +72,6 @@
 			int nBrokerTermsID,
 			string sReferredBy
 		);
-
-		[OperationContract]
-		BrokerPropertiesActionResult BrokerLogin(string sEmail, Password oPassword);
 
 		[OperationContract]
 		ActionMetaData BrokerRestorePassword(string sMobile, string sCode);
@@ -131,6 +113,9 @@
 		ActionMetaData BrokerCustomerWizardComplete(int nCustomerID);
 
 		[OperationContract]
+		ActionMetaData BrokerAttachCustomer(int nCustomerID, int? nBrokerID, int nUnderwriterID);
+
+		[OperationContract]
 		StringActionResult BrokerBackFromCustomerWizard(int nLeadID);
 
 		[OperationContract]
@@ -167,9 +152,6 @@
 
 		[OperationContract]
 		BrokerInstantOfferResponseActionResult BrokerInstantOffer(BrokerInstantOfferRequest request);
-		#endregion Broker
-
-		#region CAIS
 
 		[OperationContract]
 		ActionMetaData CaisGenerate(int underwriterId);
@@ -177,29 +159,17 @@
 		[OperationContract]
 		ActionMetaData CaisUpdate(int userId, int caisId);
 
-		#endregion CAIS
-
-		#region Company Files
-
 		[OperationContract]
 		ActionMetaData CompanyFilesUpload(int customerId, string fileName, byte[] fileContent, string fileContentType);
 
 		[OperationContract]
 		byte[] GetCompanyFile(int userId, int companyFileId);
 
-		#endregion
-
-		#region Customer manual annualized revenue
-
 		[OperationContract]
 		CustomerManualAnnualizedRevenueActionResult GetCustomerManualAnnualizedRevenue(int nCustomerID);
 
 		[OperationContract]
 		CustomerManualAnnualizedRevenueActionResult SetCustomerManualAnnualizedRevenue(int nCustomerID, decimal nRevenue, string sComment);
-
-		#endregion Customer manual annualized revenue
-
-		#region email strategies
 
 		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
@@ -273,10 +243,6 @@
 		[OperationContract]
 		ActionMetaData BrokerApproveAndResetCustomerPassword(int nUnderwriterID, int nCustomerID, decimal nLoanAmount, int nValidHours, bool isFirst);
 
-		#endregion email strategies
-
-		#region Esign
-
 		[OperationContract]
 		ActionMetaData EsignProcessPending(int? nCustomerID);
 
@@ -288,10 +254,6 @@
 
 		[OperationContract]
 		StringActionResult EsignSend(int userId, EchoSignEnvelope[] oPackage);
-
-		#endregion Esign
-
-		#region Experian
 
 		[OperationContract]
 		ActionMetaData BackfillCustomerAnalyticsCompany();
@@ -354,29 +316,17 @@
 		[OperationContract]
 		CompanyDataForCreditBureauActionResult GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 
-		#endregion Experian
-
-		#region Land Registry
-
 		[OperationContract]
 		string LandRegistryEnquiry(int userId, int customerId, string buildingNumber, string buildingName, string streetName, string cityName, string postCode);
 		
 		[OperationContract]
 		string LandRegistryRes(int userId, int customerId, string titleNumber);
 		
-		#endregion Land Registry
-
-		#region Main
-
 		[OperationContract]
 		ActionMetaData MainStrategy1(int uderwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
 
 		[OperationContract]
 		ActionMetaData MainStrategySync1(int underwriterId, int customerId, NewCreditLineOption newCreditLine, int avoidAutoDescison);
-
-		#endregion Main
-
-		#region mobile phone code
 
 		[OperationContract]
 		BoolActionResult GenerateMobileCode(string phone);
@@ -387,10 +337,6 @@
 		[OperationContract]
 		BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
 		
-		#endregion mobile phone code
-
-		#region other strategies
-
 		[OperationContract]
 		ActionMetaData FirstOfMonthStatusNotifier();
 
@@ -470,10 +416,6 @@
 		[OperationContract]
 		ActionMetaData UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate);
 
-		#endregion other strategies
-
-		#region pricing model
-
 		[OperationContract]
 		PricingModelModelActionResult GetPricingModelModel(int customerId, int underwriterId, string scenarioName);
 
@@ -488,9 +430,6 @@
 
 		[OperationContract]
 		ActionMetaData SavePricingModelSettings(int underwriterId, string scenarioName, PricingModelModel model);
-		#endregion pricing model
-
-		#region Quick offer
 
 		[OperationContract]
 		QuickOfferActionResult QuickOffer(int customerId, bool saveOfferToDB);
@@ -498,18 +437,11 @@
 		[OperationContract]
 		QuickOfferActionResult QuickOfferWithPrerequisites(int customerId, bool saveOfferToDB);
 		
-		#endregion Quick offer
-
-		#region User Management
-
 		[OperationContract]
 		UserLoginActionResult CustomerSignup(string sEmail, Password oPassword, int nPasswordQuestion, string sPasswordAnswer, string sRemoteIp);
 
 		[OperationContract]
 		ActionMetaData UnderwriterSignup(string name, Password password, string role);
-
-		[OperationContract]
-		UserLoginActionResult UserLogin(string sEmail, Password sPassword, string sRemoteIp);
 
 		[OperationContract]
 		StringActionResult UserResetPassword(string sEmail);
@@ -553,15 +485,14 @@
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
 
-		#endregion User Management
-
-		#region VAT
-
 		[OperationContract]
 		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
 
 		[OperationContract]
 		VatReturnDataActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID);
+
+		[OperationContract]
+		VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID);
 
 		[OperationContract]
 		ActionMetaData AndRecalculateVatReturnSummaryForAll();
@@ -593,10 +524,6 @@
 		[OperationContract]
 		ActionMetaData RemoveManualVatReturnPeriod(Guid oPeriodID);
 
-		#endregion VAT
-
-		#region Wizard
-
 		[OperationContract]
 		WizardConfigsActionResult GetWizardConfigs();
 
@@ -606,8 +533,6 @@
 		[OperationContract]
 		StringActionResult GetCustomerState(int customerId);
 		
-		#endregion Wizard
-
 		[OperationContract]
 		AvailableFundsActionResult GetAvailableFunds(int underwriterId);
 

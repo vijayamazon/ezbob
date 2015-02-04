@@ -8,10 +8,15 @@
 	using Ezbob.Utils.Security;
 	using JetBrains.Annotations;
 
-	#region class BrokerLogin
-
 	public class BrokerLogin : AStrategy {
-		public BrokerLogin(string sEmail, Password oPassword, string promotionName, DateTime? promotionPageVisitTime, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLogin(
+			string sEmail,
+			Password oPassword,
+			string promotionName,
+			DateTime? promotionPageVisitTime,
+			AConnection oDB,
+			ASafeLog oLog
+		) : base(oDB, oLog) {
 			m_oSp = new SpBrokerLogin(DB, Log) {
 				Email = sEmail,
 				Password = oPassword.Primary,
@@ -22,21 +27,9 @@
 			Properties = new BrokerProperties();
 		} // constructor
 
-		#endregion constructor
-
-		#region property Name
-
 		public override string Name { get { return "Broker login"; } } // Name
 
-		#endregion property Name
-
-		#region property Properties
-
 		public BrokerProperties Properties { get; private set; }
-
-		#endregion property Properties
-
-		#region method Execute
 
 		public override void Execute() {
 			m_oSp.FillFirst(Properties);
@@ -55,23 +48,10 @@
 			Properties.LotteryCode = sr["LotteryCode"];
 		} // Execute
 
-		#endregion method Execute
-
-		#endregion public
-
-		#region private
-
 		private readonly SpBrokerLogin m_oSp;
 
-		#region class SpBrokerLogin
-
 		private class SpBrokerLogin : AStoredProc {
-			#region constructor
-			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
-
-			#endregion constructor
-
-			#region method HasValidParameters
+			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) { } // constructor
 
 			public override bool HasValidParameters() {
 				Email = MiscUtils.ValidateStringArg(Email, "Email");
@@ -80,16 +60,8 @@
 				return true;
 			} // HasValidParameters
 
-			#endregion method HasValidParameters
-
-			#region property Email
-
 			[UsedImplicitly]
 			public string Email { get; set; }
-
-			#endregion property Email
-
-			#region property Password
 
 			public string Password {
 				[UsedImplicitly]
@@ -105,11 +77,5 @@
 
 			private string m_sPassword;
 		} // class SpBrokerLogin
-
-		#endregion class SpBrokerLogin
-
-		#endregion private
 	} // class BrokerLogin
-
-	#endregion class BrokerLogin
 } // namespace EzBob.Backend.Strategies.Broker
