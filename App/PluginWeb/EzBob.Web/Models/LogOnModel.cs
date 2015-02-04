@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Models {
+	using System;
 	using System.ComponentModel.DataAnnotations;
 	using System.Security.Principal;
 	using System.Web;
@@ -47,14 +48,20 @@
 
 		public string ReturnUrl { get; set; }
 
-		#endregion property ReturnUrl
+		public string PromotionName { get; set; }
+		public DateTime? PromotionPageVisitTime { get; set; }
 
-		#region method SetCookie
 
 		public void SetCookie(Roles nRole) {
 			SetCookie(nRole, UserName, RememberMe);
 		} // SetCookie
 
-		#endregion method SetCookie
+		public string PromotionDisplayData {
+			get {
+				return (!string.IsNullOrWhiteSpace(PromotionName) && PromotionPageVisitTime.HasValue)
+					? PromotionName + " at " + PromotionPageVisitTime.Value.ToString("MMM d yyyy H:mm:ss")
+					: "none";
+			} // get
+		} // PromotionDisplayData
 	} // class LogOnModel
 } // namespace

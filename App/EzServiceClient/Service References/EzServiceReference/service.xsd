@@ -127,6 +127,8 @@
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
         <xs:element xmlns:q10="http://schemas.microsoft.com/2003/10/Serialization/" minOccurs="0" name="playerID" type="q10:guid" />
         <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="newStatus" type="q11:LotteryPlayerStatus" />
+        <xs:element minOccurs="0" name="promotionName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="promotionPageVisitTime" nillable="true" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2008,7 +2010,8 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="nCustomerID" type="xs:int" />
         <xs:element minOccurs="0" name="nBrokerID" nillable="true" type="xs:int" />
-        <xs:element minOccurs="0" name="nUnderwriterID" type="xs:int" />
+        <xs:element minOccurs="0" name="promotionName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="promotionPageVisitTime" nillable="true" type="xs:dateTime" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="TaskModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CreateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Originator" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Priority" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TaskModel" nillable="true" type="tns:TaskModel" />
+  <xs:complexType name="ActivityModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Desciption" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EndDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Originator" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ActivityModel" nillable="true" type="tns:ActivityModel" />
+  <xs:complexType name="OpportunityModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ApprovedAmount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CloseDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="CreateDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DealCloseType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DealLostReason" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ExpectedEndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RequestedAmount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Stage" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="TookAmount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="OpportunityModel" nillable="true" type="tns:OpportunityModel" />
+</xs:schema>

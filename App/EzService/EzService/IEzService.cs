@@ -152,7 +152,12 @@
 		BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
 
 		[OperationContract]
-		ActionMetaData BrokerAttachCustomer(int nCustomerID, int? nBrokerID, int nUnderwriterID);
+		BrokerPropertiesActionResult BrokerLogin(
+			string sEmail,
+			Password oPassword,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		);
 
 		[OperationContract]
 		ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
@@ -574,7 +579,13 @@
 		);
 
 		[OperationContract]
-		VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID);
+		UserLoginActionResult UserLogin(
+			string sEmail,
+			Password sPassword,
+			string sRemoteIp,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		);
 
 		[OperationContract]
 		VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);

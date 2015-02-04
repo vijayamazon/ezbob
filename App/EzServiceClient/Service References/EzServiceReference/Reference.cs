@@ -2382,6 +2382,54 @@ namespace ServiceClientProxy.EzServiceReference {
         Broker = 1,
     }
     
+        private string PriorityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        public string Priority {
+            get {
+                return this.PriorityField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.PriorityField, value) != true)) {
+                    this.PriorityField = value;
+                    this.RaisePropertyChanged("Priority");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        private System.DateTime EndDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime StartDateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        public System.DateTime EndDate {
+            get {
+                return this.EndDateField;
+            }
+            set {
+                if ((this.EndDateField.Equals(value) != true)) {
+                    this.EndDateField = value;
+                    this.RaisePropertyChanged("EndDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime StartDate {
+            get {
+                return this.StartDateField;
+            }
+            set {
+                if ((this.StartDateField.Equals(value) != true)) {
+                    this.StartDateField = value;
+                    this.RaisePropertyChanged("StartDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="Medal", Namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database")]
     public enum Medal : int {
@@ -4609,12 +4657,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLoadStaticDataAsync(bLoadFilesOnly);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAttachCustomer(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID) {
-            return base.Channel.BrokerAttachCustomer(nCustomerID, nBrokerID, nUnderwriterID);
+        public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+            return base.Channel.BrokerLogin(sEmail, oPassword, promotionName, promotionPageVisitTime);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BrokerAttachCustomerAsync(int nCustomerID, System.Nullable<int> nBrokerID, int nUnderwriterID) {
-            return base.Channel.BrokerAttachCustomerAsync(nCustomerID, nBrokerID, nUnderwriterID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult> BrokerLoginAsync(string sEmail, Ezbob.Backend.Models.Password oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
+            return base.Channel.BrokerLoginAsync(sEmail, oPassword, promotionName, promotionPageVisitTime);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {

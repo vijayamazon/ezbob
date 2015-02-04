@@ -1,6 +1,5 @@
 namespace EzBob.Web.Controllers {
 	#region using
-
 	using System;
 	using System.Collections.Generic;
 	using System.Configuration;
@@ -64,9 +63,17 @@ namespace EzBob.Web.Controllers {
 			_whiteLabelProviderRepository = ObjectFactory.GetInstance <WhiteLabelProviderRepository>();
 		} // constructor
 
-		#endregion constructor
+		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
+			bool hasHost =
+				(requestContext != null) &&
+				(requestContext.HttpContext != null) &&
+				(requestContext.HttpContext.Request != null) &&
+				(requestContext.HttpContext.Request.Url != null);
 
-		#region action AdminLogOn
+			hostname = hasHost ? requestContext.HttpContext.Request.Url.Host : string.Empty;
+			ms_oLog.Info("WizardController Initialize {0}", hostname);
+			base.Initialize(requestContext);
+		}
 
 		public ActionResult AdminLogOn(string returnUrl) {
 			if (!bool.Parse(ConfigurationManager.AppSettings["UnderwriterEnabled"])) {
@@ -102,7 +109,9 @@ namespace EzBob.Web.Controllers {
 				} // if
 
 				try {
-					if (MembershipCreateStatus.Success == ValidateUser(model.UserName, model.Password)) {
+					string loginError;
+					var membershipCreateStatus = ValidateUser(model.UserName, model.Password, null, null, out loginError);
+					if (MembershipCreateStatus.Success == membershipCreateStatus) {
 						model.SetCookie(LogOnModel.Roles.Underwriter);
 
 						bool bRedirectToUrl =
@@ -132,8 +141,41 @@ namespace EzBob.Web.Controllers {
 		#region action LogOn
 
 		[IsSuccessfullyRegisteredFilter]
-		public ActionResult LogOn(string returnUrl) {
-			return View(new LogOnModel { ReturnUrl = returnUrl });
+		public ActionResult LogOn(string returnUrl, string scratch_promotion = null) {
+			scratch_promotion = (scratch_promotion ?? string.Empty).Trim();
+
+			ms_oLog.Debug("Scratch promotion data: '{0}'.", scratch_promotion);
+
+			string promotionName = null;
+			DateTime? promotionPageVisitTime = null;
+
+			if (!string.IsNullOrWhiteSpace(scratch_promotion)) {
+				string[] tokens = scratch_promotion.Trim().Split(';');
+
+				DateTime ppvt = DateTime.UtcNow;
+
+				bool hasGoodTokens =
+					(tokens.Length == 2) &&
+					!string.IsNullOrWhiteSpace(tokens[0]) &&
+					DateTime.TryParseExact(
+						tokens[1],
+						"yyyy-M-d_H-m-s",
+						CultureInfo.InvariantCulture,
+						DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeLocal,
+						out ppvt
+					);
+
+				if (hasGoodTokens) {
+					promotionName = tokens[0];
+					promotionPageVisitTime = ppvt;
+				} // if
+			} // if
+
+			return View(new LogOnModel {
+				ReturnUrl = returnUrl,
+				PromotionName = promotionName,
+				PromotionPageVisitTime = promotionPageVisitTime,
+			});
 		} // LogOn
 
 		#endregion action LogOn
@@ -162,15 +204,21 @@ namespace EzBob.Web.Controllers {
 			} // if
 
 			ms_oLog.Debug(
-				"Customer log on attempt from remote IP {0} received with user name '{1}' and hash '{2}'...",
+				"Customer log on attempt from remote IP {0} received with user name '{1}' and hash '{2}' (promotion: {3})...",
 				customerIp,
 				model.UserName,
-				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password)
+				Ezbob.Utils.Security.SecurityUtils.HashPassword(model.UserName, model.Password),
+				model.PromotionDisplayData
 			);
 
 			try {
 				if (m_oBrokerHelper.IsBroker(model.UserName)) {
-					BrokerProperties bp = m_oBrokerHelper.TryLogin(model.UserName, model.Password);
+					BrokerProperties bp = m_oBrokerHelper.TryLogin(
+						model.UserName,
+						model.Password,
+						model.PromotionName,
+						model.PromotionPageVisitTime
+					);
 
 					if ((bp != null) && (bp.CurrentTermsID != bp.SignedTermsID)) {
 						Session[Constant.Broker.Terms] = bp.CurrentTerms;
@@ -260,7 +308,23 @@ namespace EzBob.Web.Controllers {
 				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
 			} // if user is disabled
 
-			var nStatus = ValidateUser(model.UserName, model.Password);
+			string customerOrigin = customer.CustomerOrigin.Name;
+			if (!hostname.Contains(customerOrigin) && !hostname.Contains("localhost")) {
+				ms_oLog.Warn("customer {0} origin is {1} tried to login from host {2}.", user.Id, customerOrigin, hostname);
+				return Json(new {
+					success = false,
+					errorMessage = "User not found or invalid password."
+				}, JsonRequestBehavior.AllowGet);
+			}
+
+			string loginError;
+			var nStatus = ValidateUser(
+				model.UserName,
+				model.Password,
+				model.PromotionName,
+				model.PromotionPageVisitTime,
+				out loginError
+			);
 
 			if (MembershipCreateStatus.Success == nStatus) {
 				model.SetCookie(LogOnModel.Roles.Customer);
@@ -940,9 +1004,13 @@ namespace EzBob.Web.Controllers {
 			return null;
 		} // GetAndRemoveCookie
 
-		#region method ValidateUser
-
-		private MembershipCreateStatus ValidateUser(string username, string password) {
+		private MembershipCreateStatus ValidateUser(
+			string username,
+			string password,
+			string promotionName,
+			DateTime? promotionPageVisitTime,
+			out string error
+		) {
 			ms_oLog.Debug("Validating user '{0}' password...", username);
 
 			int nSessionID;
@@ -952,7 +1020,9 @@ namespace EzBob.Web.Controllers {
 				UserLoginActionResult ular = m_oServiceClient.Instance.UserLogin(
 					username,
 					new Password(password),
-					RemoteIp()
+					RemoteIp(),
+					promotionName,
+					promotionPageVisitTime
 				);
 
 				nSessionID = ular.SessionID;

@@ -66,17 +66,23 @@
 			return bIsBroker;
 		} // IsBroker
 
-		#endregion method IsBroker
-
-		#region method TryLogin
-
-		public BrokerProperties TryLogin(string sLoginEmail, string sPassword) {
+		public BrokerProperties TryLogin(
+			string sLoginEmail,
+			string sPassword,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		) {
 			m_oLog.Debug("Trying to login as broker '{0}'...", sLoginEmail);
 
 			BrokerPropertiesActionResult bp = null;
 
 			try {
-				bp = m_oServiceClient.Instance.BrokerLogin(sLoginEmail, new Password(sPassword));
+				bp = m_oServiceClient.Instance.BrokerLogin(
+					sLoginEmail,
+					new Password(sPassword),
+					promotionName,
+					promotionPageVisitTime
+				);
 			}
 			catch (Exception e) {
 				m_oLog.Alert(e, "Error encountered while trying to login as a broker '{0}'.", sLoginEmail);

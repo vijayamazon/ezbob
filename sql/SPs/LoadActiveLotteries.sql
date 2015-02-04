@@ -14,7 +14,7 @@ BEGIN
 
 	SELECT
 		lp.UniqueID,
-		l.LotteryCode
+		lc.Code AS LotteryCode
 	FROM
 		LotteryPlayers lp
 		INNER JOIN Lotteries l
@@ -24,6 +24,8 @@ BEGIN
 		INNER JOIN LotteryPlayerStatuses ls
 			ON lp.StatusID = ls.StatusID
 			AND (ls.CanWin = 1 OR ls.HasClaimed = 0)
+		INNER JOIN LotteryCodes lc
+			ON l.CodeID = lc.CodeID
 	WHERE
 		lp.UserID = @UserID
 	ORDER BY

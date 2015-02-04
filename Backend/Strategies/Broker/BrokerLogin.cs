@@ -11,14 +11,12 @@
 	#region class BrokerLogin
 
 	public class BrokerLogin : AStrategy {
-		#region public
-
-		#region constructor
-
-		public BrokerLogin(string sEmail, Password oPassword, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+		public BrokerLogin(string sEmail, Password oPassword, string promotionName, DateTime? promotionPageVisitTime, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 			m_oSp = new SpBrokerLogin(DB, Log) {
 				Email = sEmail,
 				Password = oPassword.Primary,
+				LotteryCode = promotionName,
+				PageVisitTime = promotionPageVisitTime,
 			};
 
 			Properties = new BrokerProperties();
@@ -69,7 +67,6 @@
 
 		private class SpBrokerLogin : AStoredProc {
 			#region constructor
-
 			public SpBrokerLogin(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			#endregion constructor
@@ -100,9 +97,13 @@
 				set { m_sPassword = value; }
 			} // Password
 
-			private string m_sPassword;
+			[UsedImplicitly]
+			public string LotteryCode { get; set; }
 
-			#endregion property Password
+			[UsedImplicitly]
+			public DateTime? PageVisitTime { get; set; }
+
+			private string m_sPassword;
 		} // class SpBrokerLogin
 
 		#endregion class SpBrokerLogin

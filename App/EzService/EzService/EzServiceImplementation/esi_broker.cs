@@ -129,13 +129,22 @@
 			};
 		} // BrokerSignup
 
-		#endregion method BrokerSignup
-
-		#region method BrokerLogin
-
-		public BrokerPropertiesActionResult BrokerLogin(string sEmail, Password oPassword) {
+		public BrokerPropertiesActionResult BrokerLogin(
+			string sEmail,
+			Password oPassword,
+			string promotionName,
+			DateTime? promotionPageVisitTime
+		) {
 			BrokerLogin oInstance;
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, sEmail, oPassword);
+			ActionMetaData oMetaData = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				sEmail,
+				oPassword,
+				promotionName,
+				promotionPageVisitTime
+			);
 
 			return new BrokerPropertiesActionResult {
 				MetaData = oMetaData,
