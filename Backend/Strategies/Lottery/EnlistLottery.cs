@@ -13,6 +13,8 @@
 			this.brokerID = 0;
 			this.lotteries = new List<LotteryDataForEnlisting>();
 			this.loans = new List<LoanData>();
+
+			LotteryDataForEnlisting.Log = Log;
 		} // constructor
 
 		public override string Name {

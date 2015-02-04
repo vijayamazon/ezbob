@@ -197,9 +197,19 @@
 			Constructed = new CountAmount(opType, leftTerm, rightTerm);
 		} // TryToConstruct
 
-		private static ASafeLog Log {
-			get { return new SafeLog(); }
+		public static ASafeLog Log {
+			get {
+				lock (LotteryDataForEnlisting.logLock)
+					return LotteryDataForEnlisting.log;
+			} // get
+			set {
+				lock (LotteryDataForEnlisting.logLock)
+					LotteryDataForEnlisting.log = value;
+			} // set
 		} // Log
+
+		private static volatile ASafeLog log;
+		private static readonly object logLock = new object();
 
 		private enum LotteryEnlistingType {
 			Unknown,
