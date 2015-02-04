@@ -24,11 +24,16 @@
 				sr => {
 					RowType rt;
 
-					if (!Enum.TryParse(sr["RowType"], true, out rt))
+					string rowType = sr["RowType"];
+
+					if (!Enum.TryParse(rowType, true, out rt)) {
+						Log.Warn("Failed to parse row type {0} received from FindRelevantLotteries.", rowType);
 						return;
+					} // if
 
 					switch (rt) {
 					case RowType.MetaData:
+						Log.Debug("FindRelevantLotteries: meta data has been loaded.");
 						this.isFilled = true;
 						this.brokerID = sr["BrokerID"];
 						break;
