@@ -167,7 +167,7 @@
 		} // TryToConstruct
 
 		private static ASafeLog Log {
-			get { return Library.Instance.Log; }
+			get { return new SafeLog(); }
 		} // Log
 
 		private enum LotteryEnlistingType {

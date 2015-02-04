@@ -59,7 +59,7 @@
 				SendCostumeMail("Mandrill - Alibaba - Internal Took Loan", Variables, new[] { address });
 			} // if
 
-			new EnlistLottery(CustomerId).Execute();
+			new EnlistLottery(CustomerId, DB, Log).Execute();
 		} // ActionAtEnd
 
 		private double CalculateLoanAmountInUsd() {

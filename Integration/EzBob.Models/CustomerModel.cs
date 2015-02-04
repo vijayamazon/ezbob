@@ -131,6 +131,7 @@ namespace EzBob.Models {
 		public bool IsAlibaba { get; set; }
 
 		public string LotteryPlayerID { get; set; }
+		public string LotteryCode { get; set; }
 	} // class CustomerModel
 
 	#endregion class CustomerModel

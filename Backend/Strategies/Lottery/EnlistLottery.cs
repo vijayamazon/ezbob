@@ -3,9 +3,12 @@
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Database;
+	using Ezbob.Logger;
+	using EzBob.Backend.Strategies;
 
 	public class EnlistLottery : AStrategy {
-		public EnlistLottery(int customerID) {
+		public EnlistLottery(int customerID, AConnection db, ASafeLog log)
+			: base(db, log) {
 			this.customerID = customerID;
 			this.isFilled = false;
 			this.brokerID = 0;
@@ -72,7 +75,7 @@
 				return false;
 
 			try {
-				var eel = new EmailEnlistedLottery(UserID, Guid.NewGuid(), ld.LotteryID, IsBroker);
+				var eel = new EmailEnlistedLottery(UserID, DB, Log);
 				eel.Execute();
 				return eel.Enlisted;
 			} catch (Exception e) {
