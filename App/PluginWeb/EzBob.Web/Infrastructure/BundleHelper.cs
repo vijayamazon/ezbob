@@ -25,6 +25,7 @@
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/customer.css")
 				.Add("~/Content/css/profile-ny2015scratch.css")
+				.Add("~/Content/css/valentine2015scratch.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
 
