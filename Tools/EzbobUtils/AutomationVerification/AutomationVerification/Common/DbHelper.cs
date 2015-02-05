@@ -14,9 +14,19 @@
 		}
 
 		public RejectionConfigs GetRejectionConfigs() {
-			var consts = _db.FillFirst<RejectionConfigs>("AV_RejectionConstants", CommandSpecies.StoredProcedure);
+			RejectionConfigs consts = _db.FillFirst<RejectionConfigs>(
+				"AV_RejectionConstants",
+				CommandSpecies.StoredProcedure
+			);
+
+			_db.ForEachRowSafe(
+				srName => consts.EnabledTraces.Add(srName["Name"]),
+				"LoadEnabledTraces",
+				CommandSpecies.StoredProcedure
+			);
+
 			return consts;
-		}
+		} // GetRejectionConfigs
 
 		public DateTime? GetCustomerBirthDate(int customerId) {
 			return _db.ExecuteScalar<DateTime?>("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));

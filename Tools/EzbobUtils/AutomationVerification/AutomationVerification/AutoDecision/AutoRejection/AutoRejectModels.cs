@@ -1,5 +1,6 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoRejection {
 	using System;
+	using System.Collections.Generic;
 	using Newtonsoft.Json;
 	using ProcessHistory;
 
@@ -17,6 +18,14 @@
 	} // class AutoRejectionInputDataModelDb
 
 	public class RejectionConfigs {
+		public RejectionConfigs() {
+			EnabledTraces = new SortedSet<string>();
+		} // constructor
+
+		public virtual bool IsTraceEnabled<T>() {
+			return EnabledTraces.Contains(typeof(T).FullName);
+		} // IsTraceEnabled
+
 		public int AutoRejectConsumerCheckAge { get; set; }
 		public int AutoRejectionException_AnualTurnover { get; set; }
 		public int AutoRejectionException_CreditScore { get; set; }
@@ -40,6 +49,8 @@
 		public int Reject_LateLastMonthsNum { get; set; }
 		public int Reject_NumOfLateAccounts { get; set; }
 		public int RejectionLastValidLate { get; set; }
+
+		public virtual SortedSet<string> EnabledTraces { get; private set; }
 	} // class RejectionConfigs
 
 	public class RejectionInputData : RejectionConfigs, ITrailInputData {

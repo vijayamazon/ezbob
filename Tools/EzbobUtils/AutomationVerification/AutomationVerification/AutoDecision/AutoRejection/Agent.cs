@@ -186,6 +186,15 @@
 		} // CheckHighAnnualTurnover
 
 		private void CheckBrokerClient() {
+			// Pay attention, the trace being checked is Auto Approve trace - this is not an error.
+			bool isBrokerTraceEnabled =
+				Trail.MyInputData.IsTraceEnabled<AutomationCalculator.ProcessHistory.AutoApproval.IsBrokerCustomer>();
+
+			if (!isBrokerTraceEnabled) {
+				StepNoDecision<BrokerClientPreventer>().Init(Trail.MyInputData.IsBrokerClient);
+				return;
+			} // if
+
 			if (Trail.MyInputData.IsBrokerClient)
 				StepNoReject<BrokerClientPreventer>(true).Init(Trail.MyInputData.IsBrokerClient);
 			else

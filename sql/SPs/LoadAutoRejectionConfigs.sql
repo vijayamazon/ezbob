@@ -11,6 +11,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
+		RowType = 'Cfg',
 		v.Name,
 		v.Value
 	FROM
@@ -40,5 +41,14 @@ BEGIN
 			'TotalAnnualTurnover',
 			'TotalThreeMonthTurnover'
 		)
+	UNION
+	SELECT
+		RowType = 'TraceEnabled',
+		Name = TraceName,
+		Value = '1'
+	FROM
+		DecisionTraceNames
+	WHERE
+		IsEnabled = 1
 END
 GO
