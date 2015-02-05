@@ -1083,7 +1083,7 @@
 				ms_oLog.Debug("Scratch promotion has {0} tokens, while 2 expected.", tokens.Length);
 			} // if
 
-			if (!string.IsNullOrWhiteSpace(tokens[0])) {
+			if (string.IsNullOrWhiteSpace(tokens[0])) {
 				hasGoodTokens = false;
 				ms_oLog.Debug("Scratch promotion name is empty.");
 			} // if

@@ -304,11 +304,11 @@
 				});
 
 			SafeReader sr = DbConnectionGenerator.Get(new SafeILog(this)).GetFirst(
-			"LoadActiveLotteries",
-			CommandSpecies.StoredProcedure,
-			new QueryParameter("UserID", customer.Id),
-			new QueryParameter("Now", DateTime.UtcNow)
-		);
+				"LoadActiveLotteries",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("UserID", customer.Id),
+				new QueryParameter("Now", DateTime.UtcNow)
+			);
 
 			customerModel.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 			customerModel.LotteryCode = sr["LotteryCode"];
