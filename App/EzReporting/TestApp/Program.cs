@@ -662,7 +662,8 @@
 				5, // int nEstimatedMonthlyApplicationCount,
 				true, // bool bIsCaptchaEnabled,
 				6, // int nBrokerTermsID,
-				"Finance Professional Show - Nov 2014" // string sReferredBy
+				"Finance Professional Show - Nov 2014", // string sReferredBy,
+				"license"
 				);
 
 			stra.Execute();

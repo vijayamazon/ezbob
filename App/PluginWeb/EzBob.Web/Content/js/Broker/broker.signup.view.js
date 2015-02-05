@@ -50,7 +50,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			'#FirmName, #FirmRegNum, #FirmWebSite, ' +
 			'#ContactName, #ContactEmail, #ContactOtherPhone, #EstimatedMonthlyAppCount, ' +
 			'#EstimatedMonthlyClientAmount, #Password, #Password2, ' +
-			'#AgreeToTerms, #AgreeToPrivacyPolicy'
+			'#AgreeToTerms, #AgreeToPrivacyPolicy,#LicenseNumber'
 		).val('').blur();
 
 		this.inputChanged();
@@ -179,6 +179,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 				EstimatedMonthlyAppCount: { required: true, maxlength: 6, regex: '^[1-9]\\d*', },
 				AgreeToTerms: { required: true, },
 				AgreeToPrivacyPolicy: { required: true, },
+				LicenseNumber: { required:true, maxlength: 50 }
 			},
 
 			messages: {

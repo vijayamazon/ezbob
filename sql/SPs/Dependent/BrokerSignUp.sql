@@ -20,7 +20,8 @@ ALTER PROCEDURE BrokerSignUp
 @AgreedToTermsDate DATETIME,
 @AgreedToPrivacyPolicyDate DATETIME,
 @BrokerTermsID INT,
-@ReferredBy NVARCHAR(255)
+@ReferredBy NVARCHAR(255),
+@LicenseNumber NVARCHAR(255)
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -74,12 +75,12 @@ BEGIN
 				BrokerID, FirmName, FirmRegNum, ContactName, ContactEmail, ContactMobile,
 				ContactOtherPhone, SourceRef, EstimatedMonthlyClientAmount, Password,
 				FirmWebSiteUrl, EstimatedMonthlyApplicationCount, AgreedToTermsDate, AgreedToPrivacyPolicyDate,
-				BrokerTermsID, IsTest, ReferredBy
+				BrokerTermsID, IsTest, ReferredBy,LicenseNumber
 			) VALUES (
 				@BrokerID, @FirmName, @FirmRegNum, @ContactName, @ContactEmail, @ContactMobile,
 				@ContactOtherPhone, @TempSourceRef, @EstimatedMonthlyClientAmount, 'not used',
 				@FirmWebSiteUrl, @EstimatedMonthlyApplicationCount, @AgreedToTermsDate, @AgreedToPrivacyPolicyDate,
-				@BrokerTermsID, @IsTest, @ReferredBy
+				@BrokerTermsID, @IsTest, @ReferredBy,@LicenseNumber
 			)
 		END TRY
 		BEGIN CATCH

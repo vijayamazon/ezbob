@@ -2281,6 +2281,7 @@
         <xs:element minOccurs="0" name="bIsCaptchEnabled" type="xs:boolean" />
         <xs:element minOccurs="0" name="nBrokerTermsID" type="xs:int" />
         <xs:element minOccurs="0" name="sReferredBy" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sLicenseNumber" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

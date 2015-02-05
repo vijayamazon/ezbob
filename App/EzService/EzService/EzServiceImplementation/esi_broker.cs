@@ -61,7 +61,8 @@
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchEnabled,
 			int nBrokerTermsID,
-			string sReferredBy
+			string sReferredBy,
+			string sLicenseNumber
 		) {
 			BrokerSignup oInstance;
 
@@ -79,7 +80,8 @@
 				nEstimatedMonthlyApplicationCount,
 				bIsCaptchEnabled,
 				nBrokerTermsID,
-				sReferredBy
+				sReferredBy,
+				sLicenseNumber
 			);
 
 			if (oInstance != null) {

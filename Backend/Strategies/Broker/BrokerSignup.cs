@@ -25,7 +25,8 @@
 			int nEstimatedMonthlyApplicationCount,
 			bool bIsCaptchaEnabled,
 			int nBrokerTermsID,
-			string sReferredBy
+			string sReferredBy,
+			string sLicenseNumber
 		) {
 			m_bIsCaptchaEnabled = bIsCaptchaEnabled;
 			m_sMobileCode = sMobileCode;
@@ -45,6 +46,7 @@
 				BrokerTermsID = nBrokerTermsID,
 				ReferredBy = sReferredBy,
 				Strategy = this,
+				LicenseNumber = sLicenseNumber
 			};
 
 			Properties = new BrokerProperties();
@@ -172,6 +174,9 @@
 
 			[UsedImplicitly]
 			public string ReferredBy { get; set; }
+
+			[UsedImplicitly]
+			public string LicenseNumber { get; set; }
 
 			[NonTraversable]
 			public AStrategy Strategy { private get; set; }

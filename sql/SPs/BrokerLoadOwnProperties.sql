@@ -74,7 +74,8 @@ BEGIN
 		(CASE
 			WHEN ts.BrokerTermsID IS NULL OR ts.TermsTextID != tc.TermsTextID THEN tc.BrokerTerms
 			ELSE ''
-		END) AS CurrentTerms
+		END) AS CurrentTerms,
+		b.LicenseNumber
 	FROM
 		Broker b
 		INNER JOIN BrokerTerms tc ON tc.BrokerTermsID = @BrokerTermsID -- current terms

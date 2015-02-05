@@ -101,7 +101,8 @@
 			string FirmWebSite,
 			int EstimatedMonthlyAppCount,
 			int IsCaptchaEnabled,
-			int TermsID
+			int TermsID,
+			string LicenseNumber
 			) {
 			string sReferredBy = "";
 
@@ -126,7 +127,8 @@
 					"\n\tEstimated monthly application count: {9}" +
 					"\n\tCaptcha enabled: {10}" +
 					"\n\tTerms ID: {11}" +
-					"\n\tReferred by (sourceref): {12}",
+					"\n\tReferred by (sourceref): {12}" + 
+					"\n\tLicense Number: {13}",
 				FirmName,
 				FirmRegNum,
 				ContactName,
@@ -139,7 +141,8 @@
 				EstimatedMonthlyAppCount,
 				IsCaptchaEnabled == 0 ? "no" : "yes",
 				TermsID,
-				sReferredBy
+				sReferredBy,
+				LicenseNumber
 				);
 
 			if (!ModelState.IsValid) {
@@ -171,7 +174,8 @@
 					EstimatedMonthlyAppCount,
 					IsCaptchaEnabled != 0,
 					TermsID,
-					sReferredBy
+					sReferredBy, 
+					LicenseNumber
 					);
 
 				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg)) {
