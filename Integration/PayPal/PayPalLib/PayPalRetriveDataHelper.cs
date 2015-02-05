@@ -2,7 +2,6 @@ namespace EzBob.PayPal {
 	using System;
 	using System.Threading;
 	using ConfigManager;
-	using Ezbob.Database;
 	using Ezbob.Utils;
 	using EzBob.CommonLib;
 	using EzBob.PayPalDbLib.Models;
@@ -12,7 +11,6 @@ namespace EzBob.PayPal {
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.DatabaseWrapper;
 	using EZBob.DatabaseLib.DatabaseWrapper.AccountInfo;
-	using EZBob.DatabaseLib.DatabaseWrapper.Transactions;
 	using EZBob.DatabaseLib.Model.Database;
 	using log4net;
 
@@ -103,21 +101,22 @@ namespace EzBob.PayPal {
 			};
 
 			MP_PayPalTransaction mpTransaction = null;
-			var trnList = new PayPalTransactionsList(DateTime.UtcNow);
-			trnList.RequestsCounter = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
+			int numOfTransactions = 0;
+			RequestsCounterData requestsCounter = ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(
 				elapsedTimeInfo,
 				databaseCustomerMarketPlace.Id,
 				ElapsedDataMemberType.RetrieveDataFromExternalService,
 				() => PayPalServiceHelper.GetTransactionData(reqInfo, data => {
 					mpTransaction = Helper.SavePayPalTransactionInfo(databaseCustomerMarketPlace, data, historyRecord, mpTransaction);
-					return trnList.TryAddNewData(data);
+					numOfTransactions += (data == null ? 0 : data.Count);
+					return true;
 				})
 			);
 
 			return new UpdateActionResultInfo {
 				Name = UpdateActionResultType.TransactionItemsCount,
-				Value = trnList.Count,
-				RequestsCounter = trnList.RequestsCounter,
+				Value = numOfTransactions,
+				RequestsCounter = requestsCounter,
 				ElapsedTime = elapsedTimeInfo
 			};
 		}
