@@ -52,6 +52,8 @@ BEGIN
 		MP_VatReturnEntryNames n
 	WHERE
 		n.Name LIKE '%(Box 6)%'
+		OR
+		n.Name LIKE '%(Box 8)%'
 
 	INSERT INTO #boxes (Id, BoxNum)
 	SELECT
@@ -61,6 +63,8 @@ BEGIN
 		MP_VatReturnEntryNames n
 	WHERE
 		n.Name LIKE '%(Box 7)%'
+		OR
+		n.Name LIKE '%(Box 9)%'
 
 	-- 2. Select all the marketplace periods (entire aggragation data is updated).
 
