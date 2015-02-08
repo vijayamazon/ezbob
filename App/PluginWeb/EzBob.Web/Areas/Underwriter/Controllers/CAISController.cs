@@ -3,6 +3,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
 	using System.Text;
 	using System.Web.Mvc;
 	using EZBob.DatabaseLib.Model.Database;
@@ -61,9 +62,12 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult ListOfFiles()
-		{
-			var cais = CaisModel.FromModel(_caisReportsHistoryRepository.GetAll());
+		public JsonResult ListOfFiles() {
+			var cais = _caisReportsHistoryRepository
+				.GetAll()
+				.Select(CaisModel.FromModel)
+				.OrderByDescending(x => x.Date);
+
 			return Json(new { cais }, JsonRequestBehavior.AllowGet);
 		}
 

@@ -18,21 +18,17 @@ namespace EzBob.Web.Areas.Underwriter.Models.CAIS
         public string Defaults { get; set; }
         public int Id { get; set; }
 
-        public static List<CaisModel> FromModel(IEnumerable<CaisReportsHistory>  reportsHistory)
-        {
-            var model = reportsHistory.OrderByDescending(x => x.Date);
-            return model
-                .Select(x => new CaisModel
-                    {
-                        Id = x.Id,
-                        CaisUploadStatus = x.UploadStatus.ToString(),
-                        Date = FormattingUtils.FormatDateTimeToString(x.Date),
-                        GoodUsers = x.GoodUsers.ToString(),
-                        FileName = x.FileName,
-                        Type = x.Type.ToString(),
-                        OfItems = x.OfItems.ToString(),
-                        Defaults = x.Defaults.HasValue ? x.Defaults.Value.ToString(CultureInfo.InvariantCulture) : "-"
-                    }).ToList();
+        public static CaisModel FromModel(CaisReportsHistory caisReport) {
+	        return new CaisModel {
+		        Id = caisReport.Id,
+		        CaisUploadStatus = caisReport.UploadStatus.ToString(),
+		        Date = FormattingUtils.FormatDateTimeToString(caisReport.Date),
+		        GoodUsers = caisReport.GoodUsers.ToString(),
+		        FileName = caisReport.FileName,
+		        Type = caisReport.Type.ToString(),
+		        OfItems = caisReport.OfItems.ToString(),
+		        Defaults = caisReport.Defaults.HasValue ? caisReport.Defaults.Value.ToString(CultureInfo.InvariantCulture) : "-"
+	        };
         }
     }
 
