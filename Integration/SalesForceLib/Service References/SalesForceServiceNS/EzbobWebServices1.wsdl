@@ -85,6 +85,20 @@
           <xsd:pattern value="[a-zA-Z0-9]{18}" />
         </xsd:restriction>
       </xsd:simpleType>
+      <xsd:element name="ChangeEmail">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="jsonInput" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="ChangeEmailResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
       <xsd:element name="ContactService">
         <xsd:complexType>
           <xsd:sequence>
@@ -99,6 +113,20 @@
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
+      <xsd:element name="CreateActivity">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="jsonInput" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CreateActivityResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
       <xsd:element name="CreateOpportunityService">
         <xsd:complexType>
           <xsd:sequence>
@@ -107,6 +135,20 @@
         </xsd:complexType>
       </xsd:element>
       <xsd:element name="CreateOpportunityServiceResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CreateTask">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="jsonInput" nillable="true" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="CreateTaskResponse">
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element name="result" nillable="true" type="xsd:string" />
@@ -150,17 +192,35 @@
     <part name="DebuggingInfo" element="tns:DebuggingInfo" />
     <part name="SessionHeader" element="tns:SessionHeader" />
   </message>
+  <message name="ChangeEmailRequest">
+    <part name="parameters" element="tns:ChangeEmail" />
+  </message>
+  <message name="ChangeEmailResponse">
+    <part name="parameters" element="tns:ChangeEmailResponse" />
+  </message>
   <message name="ContactServiceRequest">
     <part name="parameters" element="tns:ContactService" />
   </message>
   <message name="ContactServiceResponse">
     <part name="parameters" element="tns:ContactServiceResponse" />
   </message>
+  <message name="CreateActivityRequest">
+    <part name="parameters" element="tns:CreateActivity" />
+  </message>
+  <message name="CreateActivityResponse">
+    <part name="parameters" element="tns:CreateActivityResponse" />
+  </message>
   <message name="CreateOpportunityServiceRequest">
     <part name="parameters" element="tns:CreateOpportunityService" />
   </message>
   <message name="CreateOpportunityServiceResponse">
     <part name="parameters" element="tns:CreateOpportunityServiceResponse" />
+  </message>
+  <message name="CreateTaskRequest">
+    <part name="parameters" element="tns:CreateTask" />
+  </message>
+  <message name="CreateTaskResponse">
+    <part name="parameters" element="tns:CreateTaskResponse" />
   </message>
   <message name="LeadAccountServiceRequest">
     <part name="parameters" element="tns:LeadAccountService" />
@@ -175,13 +235,25 @@
     <part name="parameters" element="tns:UpdateCloseOpportunityServiceResponse" />
   </message>
   <portType name="EzbobWebServicesPortType">
+    <operation name="ChangeEmail">
+      <input message="tns:ChangeEmailRequest" />
+      <output message="tns:ChangeEmailResponse" />
+    </operation>
     <operation name="ContactService">
       <input message="tns:ContactServiceRequest" />
       <output message="tns:ContactServiceResponse" />
     </operation>
+    <operation name="CreateActivity">
+      <input message="tns:CreateActivityRequest" />
+      <output message="tns:CreateActivityResponse" />
+    </operation>
     <operation name="CreateOpportunityService">
       <input message="tns:CreateOpportunityServiceRequest" />
       <output message="tns:CreateOpportunityServiceResponse" />
+    </operation>
+    <operation name="CreateTask">
+      <input message="tns:CreateTaskRequest" />
+      <output message="tns:CreateTaskResponse" />
     </operation>
     <operation name="LeadAccountService">
       <input message="tns:LeadAccountServiceRequest" />
@@ -194,6 +266,20 @@
   </portType>
   <binding name="EzbobWebServicesBinding" type="tns:EzbobWebServicesPortType">
     <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="ChangeEmail">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:header message="tns:Header" part="SessionHeader" use="literal" />
+        <soap:header message="tns:Header" part="CallOptions" use="literal" />
+        <soap:header message="tns:Header" part="DebuggingHeader" use="literal" />
+        <soap:header message="tns:Header" part="AllowFieldTruncationHeader" use="literal" />
+        <soap:body use="literal" parts="parameters" />
+      </input>
+      <output>
+        <soap:header message="tns:Header" part="DebuggingInfo" use="literal" />
+        <soap:body use="literal" />
+      </output>
+    </operation>
     <operation name="ContactService">
       <soap:operation soapAction="" />
       <input>
@@ -208,7 +294,35 @@
         <soap:body use="literal" />
       </output>
     </operation>
+    <operation name="CreateActivity">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:header message="tns:Header" part="SessionHeader" use="literal" />
+        <soap:header message="tns:Header" part="CallOptions" use="literal" />
+        <soap:header message="tns:Header" part="DebuggingHeader" use="literal" />
+        <soap:header message="tns:Header" part="AllowFieldTruncationHeader" use="literal" />
+        <soap:body use="literal" parts="parameters" />
+      </input>
+      <output>
+        <soap:header message="tns:Header" part="DebuggingInfo" use="literal" />
+        <soap:body use="literal" />
+      </output>
+    </operation>
     <operation name="CreateOpportunityService">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:header message="tns:Header" part="SessionHeader" use="literal" />
+        <soap:header message="tns:Header" part="CallOptions" use="literal" />
+        <soap:header message="tns:Header" part="DebuggingHeader" use="literal" />
+        <soap:header message="tns:Header" part="AllowFieldTruncationHeader" use="literal" />
+        <soap:body use="literal" parts="parameters" />
+      </input>
+      <output>
+        <soap:header message="tns:Header" part="DebuggingInfo" use="literal" />
+        <soap:body use="literal" />
+      </output>
+    </operation>
+    <operation name="CreateTask">
       <soap:operation soapAction="" />
       <input>
         <soap:header message="tns:Header" part="SessionHeader" use="literal" />

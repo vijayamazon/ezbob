@@ -7,7 +7,11 @@
 	public class AddUpdateContact : AStrategy {
 
 		public AddUpdateContact(int customerID, int? directorID, string directorEmail) {
-			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
+			salesForce = ObjectFactory
+				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
+				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
+				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
+				.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
 			this.directorID = directorID;
 			this.directorEmail = directorEmail;

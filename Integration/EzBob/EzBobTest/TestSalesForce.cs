@@ -2,10 +2,17 @@
 	using System;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
+	using SalesForceLib;
 	using SalesForceLib.Models;
+	using StructureMap;
 
 	[TestFixture]
 	public class TestSalesForce {
+		//[SetUp]
+		//public void Init() {
+		//	log4net.Config.XmlConfigurator.Configure();
+		//}
+
 		[Test]
 		public void TestRequestsToJson() {
 			Console.WriteLine("call CreateUpdateLeadAccount");
@@ -110,8 +117,49 @@
 			Console.WriteLine();
 			Console.WriteLine("All methods response");
 
-			var rModel = new ApiResponse(true, "");
+			var rModel = new ApiResponse("", "");
 			Console.WriteLine(JsonConvert.SerializeObject(rModel, Formatting.Indented));
+		}
+
+		[Test]
+		public void TestLogin() {
+			ObjectFactory.Configure(x => {
+				x.For<ISalesForceAppClient>().Use<SalesForceApiClient>();
+			});
+
+			ISalesForceAppClient client = ObjectFactory
+				.With("userName").EqualTo("yarons@ezbob.com.sandbox")
+				.With("password").EqualTo("yaron123")
+				.With("token").EqualTo("iaUmAG5GDkpXfpeqNEPi2rmt")
+				.GetInstance<ISalesForceAppClient>();
+			
+			//new SalesForceApiClient("yarons@ezbob.com.sandbox", "yaron123", "iaUmAG5GDkpXfpeqNEPi2rmt");
+			LeadAccountModel model = new LeadAccountModel {
+				Email = "a@b.c",
+				AddressCountry = "Country",
+				AddressCounty = "County",
+				AddressLine1 = "Line1",
+				AddressLine2 = "Line2",
+				AddressLine3 = "Line3",
+				AddressPostcode = "Postcode",
+				AddressTown = "Town",
+				CompanyName = "CompanyName",
+				Name = "CustomerName",
+				TypeOfBusiness = "Limited",
+				CompanyNumber = "056456446",
+				DateOfBirth = new DateTime(1966, 12, 11),
+				EzbobSource = "EzbobSource",
+				EzbobStatus = "Status",
+				Gender = "M",
+				Industry = "Building",
+				IsBroker = false,
+				LeadSource = "LeadSource",
+				PhoneNumber = "0564564654",
+				RegistrationDate = new DateTime(2015, 01, 27),
+				RequestedLoanAmount = 10000,
+			};
+
+			client.CreateUpdateLeadAccount(model);
 		}
 
 	}

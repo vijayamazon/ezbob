@@ -52,8 +52,13 @@
 				new EmailChanged(m_oSpUpdate.UserID, sAddress).Execute()
 			).Start();
 
-			
-			ISalesForceAppClient salesForceApiClient = ObjectFactory.GetInstance<ISalesForceAppClient>();
+
+			ISalesForceAppClient salesForceApiClient = ObjectFactory
+				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
+				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
+				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
+				.GetInstance<ISalesForceAppClient>();
+
 			salesForceApiClient.ChangeEmail(oldEmail, m_oData.Email);
 			Log.Debug("User '{0}': request to change email to {1} fully processed.", m_oSpUpdate.UserID, m_oData.Email);
 		} // Execute

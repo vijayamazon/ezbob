@@ -6,7 +6,11 @@
 	public class AddOpportunity : AStrategy {
 
 		public AddOpportunity(int customerID, OpportunityModel model) {
-			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
+			salesForce = ObjectFactory
+				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
+				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
+				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
+				.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
 			this.opportunityModel = model;
 		}

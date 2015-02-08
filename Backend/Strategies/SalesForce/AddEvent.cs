@@ -6,7 +6,11 @@
 	public class AddActivity : AStrategy {
 
 		public AddActivity(int? customerID, ActivityModel model) {
-			salesForce = ObjectFactory.GetInstance<ISalesForceAppClient>();
+			salesForce = ObjectFactory
+				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
+				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
+				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
+				.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
 			this.eventModel = model;
 		}

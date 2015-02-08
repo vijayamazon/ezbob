@@ -130,14 +130,6 @@
 			NHibernateManager.FluentAssemblies.Add(typeof(SageDatabaseMarketPlace).Assembly);
 			NHibernateManager.FluentAssemblies.Add(typeof(CompanyFilesDatabaseMarketPlace).Assembly);
 
-			Ezbob.RegistryScanner.Scanner.Register();
-
-			ObjectFactory.Configure(x => {
-				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
-				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
-				x.AddRegistry<ServiceRegistry>();
-				
-			});
 		} // constructor
 
 		private bool InitInstanceName() {
@@ -206,6 +198,16 @@
 
 			CurrentValues.Init(m_oDB, m_oLog);
 			CurrentValues.Instance.RefreshIntervalMinutes = CurrentValues.Instance.EzServiceUpdateConfiguration;
+
+			Ezbob.RegistryScanner.Scanner.Register();
+
+			ObjectFactory.Configure(x => {
+				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
+				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
+				x.AddRegistry<ServiceRegistry>();
+
+			});
+
 			oOnTimer();
 			CurrentValues.OnReloadByTimer += oOnTimer;
 

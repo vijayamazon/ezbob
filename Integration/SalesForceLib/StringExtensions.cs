@@ -24,8 +24,19 @@ namespace SalesForceLib {
 		}
 
 		public static string ToJsonExtension(this object obj) {
-			string jsonInput = JsonConvert.SerializeObject(obj, Formatting.Indented);
-			return jsonInput;
+
+			JsonSerializerSettings dateFormatSettings = new JsonSerializerSettings
+		    {
+				DateFormatString = "yyyy-MM-dd"
+			};
+
+			string jsonInput = JsonConvert.SerializeObject(obj, Formatting.Indented, dateFormatSettings);
+			return "[" + jsonInput + "]";
+		}
+
+		public static T JsonStringToObject<T>(this string strObj) {
+			T obj = JsonConvert.DeserializeObject<T>(strObj);
+			return obj;
 		}
 	}
 }

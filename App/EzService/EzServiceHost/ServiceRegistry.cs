@@ -1,4 +1,5 @@
 ﻿namespace EzServiceHost {
+	using ConfigManager;
 	using EzBob.CommonLib;
 	using EzBob.PayPalServiceLib.Common;
 	using EzServiceAccessor;
@@ -24,11 +25,11 @@
 			For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 			For<ILoanTransactionMethodRepository>().Use<LoanTransactionMethodRepository>();
 
-			bool isSalesForceProd = false;//TODO
-			if (isSalesForceProd) {
-				For<ISalesForceAppClient>().Use<SalesForceApiClient>();
+			
+			if (CurrentValues.Instance.SalesForceFakeMode) {
+				For<ISalesForceAppClient>().Use<FakeApiClient>();
 			} else {
-				For<ISalesForceAppClient>().Use<DummyApiClient>();
+				For<ISalesForceAppClient>().Use<SalesForceApiClient>();
 			}
 		}
 	}

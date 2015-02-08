@@ -41,6 +41,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -53,7 +54,7 @@
     </Compile>
     <Compile Include="Api.cs" />
     <Compile Include="SalesForceApiClient.cs" />
-    <Compile Include="DummyApiClient.cs" />
+    <Compile Include="FakeApiClient.cs" />
     <Compile Include="ISalesForceAppClient.cs" />
     <Compile Include="Models\ApiResponse.cs" />
     <Compile Include="Models\ActivityModel.cs" />
@@ -62,6 +63,11 @@
     <Compile Include="Models\OpportunityModel.cs" />
     <Compile Include="Models\LeadAccountModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\SalesForcePartnersServiceNS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Service References\SalesForceServiceNS\Reference.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -74,11 +80,309 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Service References\SalesForceServiceNS\EzbobWebServices.wsdl" />
+    <None Include="Service References\SalesForcePartnersServiceNS\EzBobPartnerwsdl.wsdl" />
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.convertLeadResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.createResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DebuggingInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.deleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DeleteResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeAllTabsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeAppMenuItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeAppMenuResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeApprovalLayout.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeApprovalLayoutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeAvailableQuickActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeAvailableQuickActionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeCompactLayout.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeCompactLayoutsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeCompactLayoutsResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeDataCategoryGroupResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeDataCategoryGroupsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeDataCategoryGroupStructureResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeDataCategoryGroupStructuresResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeFlexiPageResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeFlexiPagesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeGlobalResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeGlobalResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeGlobalTheme.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeGlobalThemeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeKnowledgeSettingsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeLayoutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeLayoutResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describePrimaryCompactLayoutsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeQuickActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeQuickActionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeSearchLayoutResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSearchLayoutsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSearchScopeOrderResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeSearchScopeOrderResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSObjectResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeSObjectResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSObjectsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSoftphoneLayoutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeSoftphoneLayoutResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeSoqlListView.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSoqlListViewsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeTab.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeTabSetResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeTabsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeThemeItem.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeThemeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.emptyRecycleBinResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.EmptyRecycleBinResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.executeListViewResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.ExecuteListViewResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.getDeletedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.GetDeletedResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.getServerTimestampResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.GetServerTimestampResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.getUpdatedResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.GetUpdatedResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.getUserInfoResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.GetUserInfoResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.invalidateSessionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.InvalidateSessionsResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.KnowledgeSettings.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.LeadConvertResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.LimitInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.loginResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.LoginResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.logoutResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.mergeResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.MergeResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.PerformQuickActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.performQuickActionsResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.processResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.ProcessResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.queryAllResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.queryMoreResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.queryResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.QueryResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.QuickActionTemplateResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.resetPasswordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.ResetPasswordResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.retrieveQuickActionTemplatesResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.retrieveResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.SaveResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.searchResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.SearchResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.sendEmailMessageResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.sendEmailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.SendEmailResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.setPasswordResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.SetPasswordResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.sObject.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.undeleteResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.UndeleteResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.updateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.upsertResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.UpsertResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForceServiceNS\EzbobWebServices1.wsdl" />
+    <None Include="Service References\SalesForceServiceNS\SalesForceLib.SalesForceServiceNS.ChangeEmailResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\SalesForceServiceNS\SalesForceLib.SalesForceServiceNS.ContactServiceResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\SalesForceServiceNS\SalesForceLib.SalesForceServiceNS.CreateActivityResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\SalesForceServiceNS\SalesForceLib.SalesForceServiceNS.CreateOpportunityServiceResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForceServiceNS\SalesForceLib.SalesForceServiceNS.CreateTaskResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\SalesForceServiceNS\SalesForceLib.SalesForceServiceNS.DebuggingInfo.datasource">
@@ -92,6 +396,7 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <WCFMetadataStorage Include="Service References\SalesForcePartnersServiceNS\" />
     <WCFMetadataStorage Include="Service References\SalesForceServiceNS\" />
   </ItemGroup>
   <ItemGroup>
@@ -102,6 +407,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\SalesForceServiceNS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SalesForcePartnersServiceNS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SalesForcePartnersServiceNS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\SalesForcePartnersServiceNS\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
     </None>

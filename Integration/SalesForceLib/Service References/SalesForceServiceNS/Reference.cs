@@ -15,6 +15,14 @@ namespace SalesForceLib.SalesForceServiceNS {
     [System.ServiceModel.ServiceContractAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices", ConfigurationName="SalesForceServiceNS.EzbobWebServicesPortType")]
     public interface EzbobWebServicesPortType {
         
+        // CODEGEN: Generating message contract since message ChangeEmailRequest has headers
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        SalesForceLib.SalesForceServiceNS.ChangeEmailResponse ChangeEmail(SalesForceLib.SalesForceServiceNS.ChangeEmailRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.ChangeEmailResponse> ChangeEmailAsync(SalesForceLib.SalesForceServiceNS.ChangeEmailRequest request);
+        
         // CODEGEN: Generating message contract since message ContactServiceRequest has headers
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -23,6 +31,14 @@ namespace SalesForceLib.SalesForceServiceNS {
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.ContactServiceResponse> ContactServiceAsync(SalesForceLib.SalesForceServiceNS.ContactServiceRequest request);
         
+        // CODEGEN: Generating message contract since message CreateActivityRequest has headers
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        SalesForceLib.SalesForceServiceNS.CreateActivityResponse CreateActivity(SalesForceLib.SalesForceServiceNS.CreateActivityRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.CreateActivityResponse> CreateActivityAsync(SalesForceLib.SalesForceServiceNS.CreateActivityRequest request);
+        
         // CODEGEN: Generating message contract since message CreateOpportunityServiceRequest has headers
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
@@ -30,6 +46,14 @@ namespace SalesForceLib.SalesForceServiceNS {
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.CreateOpportunityServiceResponse> CreateOpportunityServiceAsync(SalesForceLib.SalesForceServiceNS.CreateOpportunityServiceRequest request);
+        
+        // CODEGEN: Generating message contract since message CreateTaskRequest has headers
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        SalesForceLib.SalesForceServiceNS.CreateTaskResponse CreateTask(SalesForceLib.SalesForceServiceNS.CreateTaskRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.CreateTaskResponse> CreateTaskAsync(SalesForceLib.SalesForceServiceNS.CreateTaskRequest request);
         
         // CODEGEN: Generating message contract since message LeadAccountServiceRequest has headers
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -361,6 +385,62 @@ namespace SalesForceLib.SalesForceServiceNS {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="ChangeEmail", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
+    public partial class ChangeEmailRequest {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.CallOptions CallOptions;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string jsonInput;
+        
+        public ChangeEmailRequest() {
+        }
+        
+        public ChangeEmailRequest(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput) {
+            this.SessionHeader = SessionHeader;
+            this.CallOptions = CallOptions;
+            this.DebuggingHeader = DebuggingHeader;
+            this.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            this.jsonInput = jsonInput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="ChangeEmailResponse", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
+    public partial class ChangeEmailResponse {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.DebuggingInfo DebuggingInfo;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string result;
+        
+        public ChangeEmailResponse() {
+        }
+        
+        public ChangeEmailResponse(SalesForceLib.SalesForceServiceNS.DebuggingInfo DebuggingInfo, string result) {
+            this.DebuggingInfo = DebuggingInfo;
+            this.result = result;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="ContactService", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
     public partial class ContactServiceRequest {
         
@@ -417,6 +497,62 @@ namespace SalesForceLib.SalesForceServiceNS {
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="CreateActivity", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
+    public partial class CreateActivityRequest {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.CallOptions CallOptions;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string jsonInput;
+        
+        public CreateActivityRequest() {
+        }
+        
+        public CreateActivityRequest(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput) {
+            this.SessionHeader = SessionHeader;
+            this.CallOptions = CallOptions;
+            this.DebuggingHeader = DebuggingHeader;
+            this.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            this.jsonInput = jsonInput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="CreateActivityResponse", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
+    public partial class CreateActivityResponse {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.DebuggingInfo DebuggingInfo;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string result;
+        
+        public CreateActivityResponse() {
+        }
+        
+        public CreateActivityResponse(SalesForceLib.SalesForceServiceNS.DebuggingInfo DebuggingInfo, string result) {
+            this.DebuggingInfo = DebuggingInfo;
+            this.result = result;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
     [System.ServiceModel.MessageContractAttribute(WrapperName="CreateOpportunityService", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
     public partial class CreateOpportunityServiceRequest {
         
@@ -465,6 +601,62 @@ namespace SalesForceLib.SalesForceServiceNS {
         }
         
         public CreateOpportunityServiceResponse(SalesForceLib.SalesForceServiceNS.DebuggingInfo DebuggingInfo, string result) {
+            this.DebuggingInfo = DebuggingInfo;
+            this.result = result;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="CreateTask", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
+    public partial class CreateTaskRequest {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.CallOptions CallOptions;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string jsonInput;
+        
+        public CreateTaskRequest() {
+        }
+        
+        public CreateTaskRequest(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput) {
+            this.SessionHeader = SessionHeader;
+            this.CallOptions = CallOptions;
+            this.DebuggingHeader = DebuggingHeader;
+            this.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            this.jsonInput = jsonInput;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="CreateTaskResponse", WrapperNamespace="http://soap.sforce.com/schemas/class/EzbobWebServices", IsWrapped=true)]
+    public partial class CreateTaskResponse {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices")]
+        public SalesForceLib.SalesForceServiceNS.DebuggingInfo DebuggingInfo;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="http://soap.sforce.com/schemas/class/EzbobWebServices", Order=0)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true)]
+        public string result;
+        
+        public CreateTaskResponse() {
+        }
+        
+        public CreateTaskResponse(SalesForceLib.SalesForceServiceNS.DebuggingInfo DebuggingInfo, string result) {
             this.DebuggingInfo = DebuggingInfo;
             this.result = result;
         }
@@ -610,6 +802,38 @@ namespace SalesForceLib.SalesForceServiceNS {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        SalesForceLib.SalesForceServiceNS.ChangeEmailResponse SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.ChangeEmail(SalesForceLib.SalesForceServiceNS.ChangeEmailRequest request) {
+            return base.Channel.ChangeEmail(request);
+        }
+        
+        public SalesForceLib.SalesForceServiceNS.DebuggingInfo ChangeEmail(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput, out string result) {
+            SalesForceLib.SalesForceServiceNS.ChangeEmailRequest inValue = new SalesForceLib.SalesForceServiceNS.ChangeEmailRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.DebuggingHeader = DebuggingHeader;
+            inValue.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            inValue.jsonInput = jsonInput;
+            SalesForceLib.SalesForceServiceNS.ChangeEmailResponse retVal = ((SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType)(this)).ChangeEmail(inValue);
+            result = retVal.result;
+            return retVal.DebuggingInfo;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.ChangeEmailResponse> SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.ChangeEmailAsync(SalesForceLib.SalesForceServiceNS.ChangeEmailRequest request) {
+            return base.Channel.ChangeEmailAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.ChangeEmailResponse> ChangeEmailAsync(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput) {
+            SalesForceLib.SalesForceServiceNS.ChangeEmailRequest inValue = new SalesForceLib.SalesForceServiceNS.ChangeEmailRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.DebuggingHeader = DebuggingHeader;
+            inValue.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            inValue.jsonInput = jsonInput;
+            return ((SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType)(this)).ChangeEmailAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         SalesForceLib.SalesForceServiceNS.ContactServiceResponse SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.ContactService(SalesForceLib.SalesForceServiceNS.ContactServiceRequest request) {
             return base.Channel.ContactService(request);
         }
@@ -642,6 +866,38 @@ namespace SalesForceLib.SalesForceServiceNS {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        SalesForceLib.SalesForceServiceNS.CreateActivityResponse SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.CreateActivity(SalesForceLib.SalesForceServiceNS.CreateActivityRequest request) {
+            return base.Channel.CreateActivity(request);
+        }
+        
+        public SalesForceLib.SalesForceServiceNS.DebuggingInfo CreateActivity(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput, out string result) {
+            SalesForceLib.SalesForceServiceNS.CreateActivityRequest inValue = new SalesForceLib.SalesForceServiceNS.CreateActivityRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.DebuggingHeader = DebuggingHeader;
+            inValue.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            inValue.jsonInput = jsonInput;
+            SalesForceLib.SalesForceServiceNS.CreateActivityResponse retVal = ((SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType)(this)).CreateActivity(inValue);
+            result = retVal.result;
+            return retVal.DebuggingInfo;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.CreateActivityResponse> SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.CreateActivityAsync(SalesForceLib.SalesForceServiceNS.CreateActivityRequest request) {
+            return base.Channel.CreateActivityAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.CreateActivityResponse> CreateActivityAsync(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput) {
+            SalesForceLib.SalesForceServiceNS.CreateActivityRequest inValue = new SalesForceLib.SalesForceServiceNS.CreateActivityRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.DebuggingHeader = DebuggingHeader;
+            inValue.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            inValue.jsonInput = jsonInput;
+            return ((SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType)(this)).CreateActivityAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
         SalesForceLib.SalesForceServiceNS.CreateOpportunityServiceResponse SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.CreateOpportunityService(SalesForceLib.SalesForceServiceNS.CreateOpportunityServiceRequest request) {
             return base.Channel.CreateOpportunityService(request);
         }
@@ -671,6 +927,38 @@ namespace SalesForceLib.SalesForceServiceNS {
             inValue.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
             inValue.jsonInput = jsonInput;
             return ((SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType)(this)).CreateOpportunityServiceAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        SalesForceLib.SalesForceServiceNS.CreateTaskResponse SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.CreateTask(SalesForceLib.SalesForceServiceNS.CreateTaskRequest request) {
+            return base.Channel.CreateTask(request);
+        }
+        
+        public SalesForceLib.SalesForceServiceNS.DebuggingInfo CreateTask(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput, out string result) {
+            SalesForceLib.SalesForceServiceNS.CreateTaskRequest inValue = new SalesForceLib.SalesForceServiceNS.CreateTaskRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.DebuggingHeader = DebuggingHeader;
+            inValue.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            inValue.jsonInput = jsonInput;
+            SalesForceLib.SalesForceServiceNS.CreateTaskResponse retVal = ((SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType)(this)).CreateTask(inValue);
+            result = retVal.result;
+            return retVal.DebuggingInfo;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.CreateTaskResponse> SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType.CreateTaskAsync(SalesForceLib.SalesForceServiceNS.CreateTaskRequest request) {
+            return base.Channel.CreateTaskAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<SalesForceLib.SalesForceServiceNS.CreateTaskResponse> CreateTaskAsync(SalesForceLib.SalesForceServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForceServiceNS.CallOptions CallOptions, SalesForceLib.SalesForceServiceNS.DebuggingHeader DebuggingHeader, SalesForceLib.SalesForceServiceNS.AllowFieldTruncationHeader AllowFieldTruncationHeader, string jsonInput) {
+            SalesForceLib.SalesForceServiceNS.CreateTaskRequest inValue = new SalesForceLib.SalesForceServiceNS.CreateTaskRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.DebuggingHeader = DebuggingHeader;
+            inValue.AllowFieldTruncationHeader = AllowFieldTruncationHeader;
+            inValue.jsonInput = jsonInput;
+            return ((SalesForceLib.SalesForceServiceNS.EzbobWebServicesPortType)(this)).CreateTaskAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

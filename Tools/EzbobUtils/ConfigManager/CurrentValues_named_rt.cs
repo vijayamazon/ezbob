@@ -148,6 +148,22 @@
 			get { return this[Variables.SalesEmail]; }
 		}
 
+		public virtual VariableValue SalesForceFakeMode {
+			get { return this[Variables.SalesForceFakeMode]; }
+		}
+		
+		public virtual VariableValue SalesForceUserName {
+			get { return this[Variables.SalesForceUserName]; }
+		}
+
+		public virtual VariableValue SalesForcePassword {
+			get { return this[Variables.SalesForcePassword]; }
+		}
+
+		public virtual VariableValue SalesForceToken {
+			get { return this[Variables.SalesForceToken]; }
+		}
+
 		public virtual VariableValue SessionTimeout {
 			get { return this[Variables.SessionTimeout]; }
 		}

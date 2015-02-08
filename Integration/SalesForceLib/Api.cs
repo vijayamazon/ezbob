@@ -13,7 +13,7 @@
 		/// only non null fields should be updated
 		/// </summary>
 		public ApiResponse CreateUpdateLeadAccount(LeadAccountModel model) {
-			return new ApiResponse(true);
+			return new ApiResponse();
 		}
 
 		/// <summary>
@@ -21,7 +21,7 @@
 		/// should close all open opportunities with status Lost
 		/// </summary>
 		public ApiResponse CreateOpportunity(OpportunityModel model) {
-			return new ApiResponse(true);
+			return new ApiResponse();
 		}
 
 		/// <summary>
@@ -31,21 +31,21 @@
 		/// only non null fields should be updated
 		/// </summary>
 		public ApiResponse UpdateOpportunity(OpportunityModel model) {
-			return new ApiResponse(true);
+			return new ApiResponse();
 		}
 
 		/// <summary>
 		/// When Vip requested
 		/// </summary>
 		public ApiResponse CreateTask(TaskModel model) {
-			return new ApiResponse(true);
+			return new ApiResponse();
 		}
 
 		/// <summary>
 		/// When Email, Imail, Sms, Note, Call, Chat where performed from system / UW
 		/// </summary>
 		public ApiResponse CreateActivity(ActivityModel model) {
-			return new ApiResponse(true);
+			return new ApiResponse();
 		}
 
 		/// <summary>
@@ -55,7 +55,7 @@
 		/// only non null fields should be updated
 		/// </summary>
 		public ApiResponse CreateUpdateContact(ContactModel model) {
-			return new ApiResponse(true);
+			return new ApiResponse();
 		}
 
 		/// <summary>
@@ -63,7 +63,7 @@
 		/// as it is unique identifier of lead / account / MainApplicant contact should be updated
 		/// </summary>
 		public ApiResponse ChangeEmail(string currentEmail, string newEmail) {
-			return new ApiResponse(true);
+			return new ApiResponse();
 		}
 	}
 }

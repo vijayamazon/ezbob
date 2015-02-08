@@ -1,12 +1,13 @@
 ﻿namespace SalesForceLib.Models {
 	public class ApiResponse {
-		public ApiResponse(bool success, string error) {
+		public ApiResponse() { }
+		public ApiResponse(string success, string error) {
 			Success = success;
 			Error = error;
 		}
-		public ApiResponse(bool success) : this(success, null) { }
 
-		public bool Success { get; private set; }
+		public string Success { get; private set; }
+		public bool IsSuccess { get { return string.IsNullOrEmpty(Error);} }
 		public string Error { get; private set; }
 	}
 }

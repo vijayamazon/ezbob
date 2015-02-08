@@ -19,10 +19,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="c:\Users\stasd\Downloads\EzbobWebServices.xml" Protocol="file" SourceId="1" />
+    <MetadataSource Address="c:\ezbob\Integration\SalesForceLib\wsdls\EzbobWebServices.wsdl" Protocol="file" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="EzbobWebServices.wsdl" MetadataType="Wsdl" ID="6139cbb9-e15e-44ac-9384-552bfc4699c5" SourceId="1" SourceUrl="file:///c:/Users/stasd/Downloads/EzbobWebServices.xml" />
+    <MetadataFile FileName="EzbobWebServices1.wsdl" MetadataType="Wsdl" ID="e6973008-4e7c-4b4d-950c-77e0afe18360" SourceId="1" SourceUrl="file:///c:/ezbob/Integration/SalesForceLib/wsdls/EzbobWebServices.wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
