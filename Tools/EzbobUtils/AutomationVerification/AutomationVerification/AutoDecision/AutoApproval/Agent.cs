@@ -15,6 +15,8 @@
 	///     decides whether this amount should be approved.
 	/// </summary>
 	public class Agent {
+		public virtual AConnection DB { get; private set; }
+
 		public virtual DateTime Now { get; protected set; }
 
 		public virtual ApprovalTrail Trail { get; private set; }
@@ -115,7 +117,6 @@
 
 		protected virtual Configuration Cfg { get; private set; }
 
-		protected virtual AConnection DB { get; private set; }
 		protected virtual List<Name> DirectorNames { get; private set; }
 
 		protected virtual AvailableFunds Funds { get; private set; }

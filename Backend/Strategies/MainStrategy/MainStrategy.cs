@@ -7,6 +7,7 @@
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.SalesForce;

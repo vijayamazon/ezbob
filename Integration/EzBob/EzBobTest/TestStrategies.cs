@@ -1,7 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
 	using AutomationCalculator.AutoDecision.AutoApproval;
-	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
@@ -13,6 +12,7 @@
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
@@ -176,7 +176,7 @@
 		public void TestAutoReRejection() {
 			var rerejection = new ReRejection(21334, this.m_oDB, this.m_oLog);
 			var rejection = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, this.m_oDB, this.m_oLog);
-			var approve = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, AutomationCalculator.Common.TurnoverType.HMRC, this.m_oDB, this.m_oLog);
+			var approve = new Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, AutomationCalculator.Common.TurnoverType.HMRC, this.m_oDB, this.m_oLog);
 			var reapprove = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, this.m_oDB, this.m_oLog);
 
 			//rerejection.MakeDecision(rejectionDecision);

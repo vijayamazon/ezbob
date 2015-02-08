@@ -11,7 +11,7 @@
 		public string LastName { get; private set; }
 
 		public bool IsEmpty {
-			get { return FirstName == string.Empty && LastName == string.Empty; }
+			get { return (FirstName == string.Empty) && (LastName == string.Empty); }
 		} // IsEmpty
 
 		public bool Equals(Name other) {

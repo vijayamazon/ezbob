@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.AutoApproval;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -87,6 +88,27 @@
 					break;
 				} // if
 			} // for each name
+
+			if (!bIsDirector) {
+				var nc = new NameComparer(
+					Trail.MyInputData.CustomerName,
+					Trail.MyInputData.DirectorNames,
+					this.m_oAgent.DB
+				);
+
+				foreach (Name name in Trail.MyInputData.DirectorNames) {
+					StringDifference firstNameDiff = nc[Trail.MyInputData.CustomerName.FirstName, name.FirstName];
+
+					if ((int)firstNameDiff >= (int)StringDifference.SoundVerySimilar) {
+						StringDifference lastNameDiff = nc[Trail.MyInputData.CustomerName.LastName, name.LastName];
+						
+						if ((int)lastNameDiff >= (int)StringDifference.SoundVerySimilar) {
+							bIsDirector = true;
+							break;
+						} // if
+					} // if
+				} // for each name
+			} // if
 
 			if (bIsDirector) {
 				StepDone<CustomerIsDirector>().Init(

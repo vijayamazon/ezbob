@@ -1,17 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval;
 
 	public class VerifyApproval : AVerificationBase {
-		public VerifyApproval(
-			int nTopCount,
-			int nLastCheckedCustomerID
-			)
-			: base(nTopCount, nLastCheckedCustomerID) {} // constructor
+		public VerifyApproval(int nTopCount, int nLastCheckedCustomerID) : base(nTopCount, nLastCheckedCustomerID) {}
 
 		protected override string DecisionName {
-			get {
-				return "Auto approval";
-			}
+			get { return "Auto approval"; }
 		} // DecisionName
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
@@ -23,8 +17,7 @@
 				oRow.GetTurnoverType(),
 				DB,
 				Log
-				).Init()
-				.MakeAndVerifyDecision();
+			).Init().MakeAndVerifyDecision();
 		} // MakeAndVerifyDecision
 	} // class VerifyApproval
 } // namespace

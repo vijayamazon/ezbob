@@ -112,4 +112,14 @@
 		Lifetime = 8,
 		Zero = 9
 	}
+
+	public enum StringDifference {
+		NotEqual = -1,
+		SoundNotEqual = 0,
+		SoundNotSimilar = 1,
+		SoundSimilar = 2,
+		SoundVerySimilar = 3,
+		SoundEqual = 4,
+		Equal = 5,
+	} // enum StringDifference
 }
