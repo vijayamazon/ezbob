@@ -3,7 +3,7 @@ EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.AgreementViewBase = Backbone.View.extend({
     initialize: function () {
-        this.template = Handlebars.compile($(this.getTemplate(this.options.isAlibaba)).html());
+        this.template = Handlebars.compile($(this.getTemplate(this.options.isAlibaba, this.options.isEverline)).html());
         this.onTabSwitch = this.options.onTabSwitch;
     }, // initialize
 
@@ -32,13 +32,19 @@ EzBob.Profile.AgreementViewBase = Backbone.View.extend({
 }); // EzBob.Profile.AgreementViewBase
 
 EzBob.Profile.CompaniesAgreementView = EzBob.Profile.AgreementViewBase.extend({
-    getTemplate: function (isAlibaba) {
+	getTemplate: function(isAlibaba, isEverline) {
+		if (isEverline) {
+			return "#evl-companies-agreement-template";
+		}
         return isAlibaba ? "#alibaba-companies-agreement-template" : "#companies-agreement-template";
     }, // getTemplate
 }); // EzBob.Profile.CompaniesAgreementView
 
 EzBob.Profile.ConsumersAgreementView = EzBob.Profile.AgreementViewBase.extend({
-    getTemplate: function (isAlibaba) {
+	getTemplate: function(isAlibaba, isEverline) {
+		if (isEverline) {
+			return "#evl-consumers-agreement-template";
+		}
         return isAlibaba ? "#alibaba-consumers-agreement-template" : "#consumers-agreement-template";
     }, // getTemplate
 

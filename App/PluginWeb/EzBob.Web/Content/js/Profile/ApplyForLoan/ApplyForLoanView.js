@@ -40,6 +40,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.isLoanSourceCOSME = options.model.get('isLoanSourceCOSME');
 
 		this.isAlibaba = this.customer.get('IsAlibaba');
+		this.isEverline = this.customer.get('Origin') === 'everline';
+
 	}, // initialize
 
 	events: {
@@ -263,14 +265,15 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		var loanType = this.currentLoanTypeID;
 		var repaymentPeriod = this.currentRepaymentPeriod;
 		var view = this.getCurrentViewId();
-		this.agreementView.$el.find('.download').attr('href', '' + window.gRootPath + 'Customer/Agreement/Download?amount=' + amount + '&viewName=' + view + '&loanType=' + loanType + '&repaymentPeriod=' + repaymentPeriod + '&isAlibaba=' + this.isAlibaba);
+		this.agreementView.$el.find('.download').attr('href', '' + window.gRootPath + 'Customer/Agreement/Download?amount=' + amount + '&viewName=' + view + '&loanType=' + loanType + '&repaymentPeriod=' + repaymentPeriod + '&isAlibaba=' + this.isAlibaba + '&isEverline=' + this.isEverline);
 	}, // updateDownloadLink
 
 	createAgreementView: function(agreementdata) {
 		var oViewArgs = {
 			el: this.ui.agreement,
 			onTabSwitch: _.bind(this.updateDownloadLink, this),
-			isAlibaba: this.isAlibaba
+			isAlibaba: this.isAlibaba,
+			isEverline: this.isEverline
 		};
 
 		if (_.contains([0, 4, 2], this.customer.get('CustomerPersonalInfo').TypeOfBusiness))

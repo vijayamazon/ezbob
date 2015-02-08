@@ -146,6 +146,54 @@
 	</div>
 </script>
 
+<script id="evl-consumers-agreement-template" type="text/template">
+    <div style="padding-right: 15px;" class="simple-well clearfix">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active agreement-tab"><a href="#tab3" data-toggle="tab" page-name="Pre-Contract-Agreement">Pre-Contract</a></li>
+                <li class="agreement-tab"><a href="#tab4" data-toggle="tab" page-name="CreditActAgreement">Contract</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab3">
+                    <div class="overview loan-agreement" id="Pre-Contract-Agreement">
+                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLPre-Contract-Agreement.cshtml");}
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab4">
+                    <div class="overview loan-agreement" id="CreditActAgreement">
+                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLCreditActAgreement.cshtml");}
+                    </div>
+                </div>
+            </div>
+        </div>
+        @PrintDownload()
+    </div>
+</script>
+
+<script id="evl-companies-agreement-template" type="text/template">
+    <div style="padding-right: 15px;" class="simple-well clearfix">
+        <div class="tabbable">
+            <ul class="nav nav-tabs">
+                <li class="active agreement-tab"><a href="#tab1" data-toggle="tab" page-name="PrivateCompanyLoanAgreement">Agreement</a></li>
+                <li class="agreement-tab"><a href="#tab2" data-toggle="tab" page-name="GuarantyAgreement">Guaranty</a></li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab1">
+                    <div class="overview loan-agreement" id="PrivateCompanyLoanAgreement">
+                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLPrivateCompanyLoanAgreement.cshtml");}
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab2">
+                    <div class="overview loan-agreement" id="GuarantyAgreement">
+                        @{Html.RenderPartial("~/Areas/Customer/Views/Agreement/EVLGuarantyAgreement.cshtml");}
+                    </div>
+                </div>
+            </div>
+        </div>
+        @PrintDownload()
+    </div>
+</script>
+
 <script id="alibaba-consumers-agreement-template" type="text/template">
 	<div style="padding-right: 15px;" class="simple-well clearfix">
 		<div class="tabbable">

@@ -653,7 +653,7 @@ div.shop-connected {
     background-size: contain;
     background-position: left center;
     border-radius: 50%;
-    cursor: pointer;
+    cursor: help;
     width: 24px;
     height: 24px;
     margin-left: 10px;
@@ -663,34 +663,12 @@ div.shop-connected {
 
 .hmrc-info-button:hover {
     background: url(../img/info_hover.png) no-repeat 0 0;
-    -moz-background-size: contain;
-    -o-background-size: contain;
-    -webkit-background-size: contain;
-    background-size: contain;
-    background-position: left center;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    margin-left: 10px;
-    margin-top: 7px;
-    display: inline-block;
+	background-size: contain;
 }
 
 .hmrc-info-button:active {
     background: url(../img/info_active.png) no-repeat 0 0;
-    -moz-background-size: contain;
-    -o-background-size: contain;
-    -webkit-background-size: contain;
-    background-size: contain;
-    background-position: left center;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    margin-left: 10px;
-    margin-top: 7px;
-    display: inline-block;
+	background-size: contain;
 }
 
 .hmrc-question-button {
@@ -701,7 +679,7 @@ div.shop-connected {
     background-size: contain;
     background-position: left center;
     border-radius: 50%;
-    cursor: pointer;
+    cursor: help;
     width: 84px;
     height: 84px;
     float: left;
@@ -710,31 +688,12 @@ div.shop-connected {
 
 .hmrc-question-button:hover {
     background: url(../img/button_question_icon_hover.png) no-repeat 0 0;
-    -moz-background-size: contain;
-    -o-background-size: contain;
-    -webkit-background-size: contain;
-    background-size: contain;
-    background-position: left center;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 84px;
-    height: 84px;
-    float: left;
-    display: inline-block;
+	background-size: contain;
 }
 
 .hmrc-question-button:active {
     background: url(../img/button_question_icon_active.png) no-repeat 0 0;
-    -moz-background-size: contain;
-    -o-background-size: contain;
-    -webkit-background-size: contain;
-    background-size: contain;
-    background-position: left center;
-    border-radius: 50%;
-    width: 84px;
-    height: 84px;
-    float: left;
-    display: inline-block;
+	background-size: contain;
 }
 
 .hmrc-why {
@@ -1923,6 +1882,7 @@ a.pdf-link {
     height: 28px;
     line-height: 28px;
     padding-left: 32px;
+	cursor: pointer;
 }
 
 button.print-link, a.print-link {
