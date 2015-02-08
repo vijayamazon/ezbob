@@ -42,7 +42,7 @@ IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('Lotteries') AND na
 	ALTER TABLE Lotteries ADD LoanAmount DECIMAL(18, 2) NULL
 GO
 
-IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('Lotteries') AND name = 'LotteryCode')
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('Lotteries') AND name IN ('LotteryCode', 'CodeID'))
 BEGIN
 	ALTER TABLE Lotteries ADD LotteryCode NVARCHAR(64) NULL
 
