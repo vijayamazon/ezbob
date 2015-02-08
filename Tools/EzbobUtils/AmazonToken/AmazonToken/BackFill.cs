@@ -20,7 +20,16 @@ namespace AmazonToken
             {
                 connectionString.Open();
 
-                SqlCommand sqlCommand = new SqlCommand("select mp.Id, cast(mp.SecurityData as varchar(max)) Data from MP_CustomerMarketPlace mp inner join MP_MarketplaceType t on mp.MarketPlaceId=t.Id where t.InternalId='A4920125-411F-4BB9-A52D-27E8A00D0A3B'", connectionString);
+				SqlCommand sqlCommand = new SqlCommand(
+														@"SELECT mp.Id, CAST(mp.SecurityData AS VARCHAR(max)) AS Data 
+														FROM MP_CustomerMarketPlace mp 
+														INNER JOIN MP_MarketplaceType t ON mp.MarketPlaceId=t.Id 
+														WHERE 
+															t.InternalId='A4920125-411F-4BB9-A52D-27E8A00D0A3B'
+														AND 
+															mp.Disabled=0
+														AND 
+															mp.DisplayName<>'Geltology inc'", connectionString);
                 SqlDataReader sqlReader = sqlCommand.ExecuteReader();
 
 				using (StreamWriter file = new StreamWriter(@"C:\Temp\AmazonAuth\results.sql"))
