@@ -211,32 +211,23 @@
 
 			if (user == null) {
 				if (hostname.Contains("everline")) {
-					//TODO call everline api to check if customer have open everline loan or not
-					bool hasOpenEverlineLoan = false;
-					if (hasOpenEverlineLoan) {
-						return Json(new {
-							success = true,
-							everlineAccount = true,
-						}, JsonRequestBehavior.AllowGet);
-					} else {
-						TempData["IsEverline"] = true;
-						return Json(new {
-							success = true,
-							everlineWizard = true,
-						}, JsonRequestBehavior.AllowGet);
+					var loginLoanChecker = new EverlineLoginLoanChecker();
+					var status = loginLoanChecker.GetLoginStatus(model.UserName);
+					switch (status.status) {
+						case EverlineLoanStatus.Error:
+							ms_oLog.Error("Failed to retrieve everline customer loan status \n{0}", status.Message);
+							return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
+						case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
+							return Json(new {success = true,everlineAccount = true}, JsonRequestBehavior.AllowGet);
+						case EverlineLoanStatus.ExistsWithNoLiveLoan:
+							TempData["IsEverline"] = true;
+							return Json(new {success = true,everlineWizard = true}, JsonRequestBehavior.AllowGet);
+						case EverlineLoanStatus.DoesNotExist:
+							return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
 					}
-
 				} else {
-					ms_oLog.Warn(
-						"Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",
-						customerIp,
-						model.UserName
-						);
-
-					return Json(new {
-						success = false,
-						errorMessage = @"User not found or incorrect password."
-					}, JsonRequestBehavior.AllowGet);
+					ms_oLog.Warn("Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",customerIp,model.UserName);
+					return Json(new {success = false,errorMessage = @"User not found or incorrect password."}, JsonRequestBehavior.AllowGet);
 				}
 			} // if user not found
 

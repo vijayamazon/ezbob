@@ -117,6 +117,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\ReCaptcha\Recaptcha.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp, Version=105.0.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\RestSharp\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="SquishIt.CoffeeScript">
       <HintPath>..\..\..\Lib\3rdparty\SquishIt\SquishIt.CoffeeScript.dll</HintPath>
     </Reference>
@@ -189,6 +193,7 @@
     <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
     <Compile Include="Code\ControllerExt.cs" />
     <Compile Include="Code\CustomerExt.cs" />
+    <Compile Include="Code\EverlineLoginLoanChecker.cs" />
     <Compile Include="Code\ScratchHelper.cs" />
     <Compile Include="Code\UiEvents\UiActionNames.cs" />
     <Compile Include="Infrastructure\Email\EmailConfirmationState.cs" />
