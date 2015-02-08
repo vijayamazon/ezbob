@@ -43,8 +43,8 @@
 				};
 			} // if
 
-			this.doSend = !string.IsNullOrWhiteSpace(this.emailAddress);
-			Enlisted = this.doSend;
+			Enlisted = !string.IsNullOrWhiteSpace(this.emailAddress);
+			this.doSend = Enlisted && !string.IsNullOrWhiteSpace(TemplateName);
 		} // LoadRecipientData
 
 		protected override Addressee[] GetRecipients() {
@@ -61,7 +61,7 @@
 		} // SendEmail
 
 		protected override void ActionAtEnd() {
-			if (!this.doSend)
+			if (!Enlisted)
 				return;
 
 			DB.ExecuteNonQuery(
