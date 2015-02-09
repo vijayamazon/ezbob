@@ -41,13 +41,22 @@
 		public string Message { get; set; }
 	}
 
-	//[TestFixture]
-	//public class test {
-	//	[Test]
-	//	public void testLogin() {
-	//		EverlineLoginLoanChecker c = new EverlineLoginLoanChecker();
-	//		var respose = c.GetLoginStatus("test@everline.com");
-	//		Console.WriteLine(respose);
-	//	}
-	//}
+	/*[TestFixture]
+	public class test {
+		[Test]
+		public void testLogin() {
+			EverlineLoginLoanChecker c = new EverlineLoginLoanChecker();
+
+			var respose = c.GetLoginStatus("locksheathfruiterers@googlemail.com"); //ExistsWithCurrentLiveLoan
+			Console.WriteLine(respose.status);
+			Assert.AreEqual(EverlineLoanStatus.ExistsWithCurrentLiveLoan, respose.status);
+			respose = c.GetLoginStatus("nick.brown@findtheengineer.com"); //ExistsWithNoLiveLoan
+			Console.WriteLine(respose.status);
+			Assert.AreEqual(EverlineLoanStatus.ExistsWithNoLiveLoan, respose.status);
+			respose = c.GetLoginStatus("test@test.com"); //DoesNotExist
+			Console.WriteLine(respose.status);
+			Assert.AreEqual(EverlineLoanStatus.DoesNotExist, respose.status);
+			
+		}
+	}*/
 }
