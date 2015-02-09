@@ -36,7 +36,8 @@
 		public bool IsBroker { get; set; }
 		[DataMember]
 		public DateTime? RegistrationDate { get; set; }
-
+		[DataMember]
+		public string Origin { get; set; }
 		//Company data
 		[DataMember]
 		public string CompanyName { get; set; }

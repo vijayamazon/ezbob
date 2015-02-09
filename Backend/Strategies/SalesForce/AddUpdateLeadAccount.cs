@@ -10,6 +10,7 @@
 				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
 				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
 				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
+				.With("environment").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceEnvironment.Value)
 				.GetInstance<ISalesForceAppClient>();
 			this.email = email;
 			this.customerID = customerID;
@@ -27,6 +28,14 @@
 				new QueryParameter("IsBrokerLead", isBrokerLead),
 				new QueryParameter("IsVipLead", isVipLead));
 
+
+			if (string.IsNullOrEmpty(model.CompanyName)) {
+				model.CompanyName = model.Name;
+			}
+
+			if (string.IsNullOrEmpty(model.CompanyName)) {
+				model.CompanyName = "No name";
+			}
 			salesForce.CreateUpdateLeadAccount(model);
 		}
 

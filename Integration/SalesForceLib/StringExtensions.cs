@@ -9,15 +9,23 @@ namespace SalesForceLib {
 		public static string ToStringExtension(this object obj) {
 			var sb = new StringBuilder();
 			foreach (PropertyInfo property in obj.GetType().GetProperties()) {
-				sb.Append(property.Name);
-				sb.Append(": ");
-				if (property.GetIndexParameters().Length > 0) {
-					sb.Append("Indexed Property cannot be used");
-				} else {
-					sb.Append(property.GetValue(obj, null));
+				try {
+					var val = property.GetValue(obj, null);
+					string valStr = val == null ? null : val.ToString();
+					if (!string.IsNullOrEmpty(valStr)) {
+						sb.Append(property.Name);
+						sb.Append(": ");
+						if (property.GetIndexParameters()
+							.Length > 0) {
+							sb.Append("Indexed Property cannot be used");
+						} else {
+							sb.Append(valStr);
+						}
+						sb.Append(Environment.NewLine);
+					}
+				} catch { 
+					//doesn't care
 				}
-
-				sb.Append(Environment.NewLine);
 			}
 
 			return sb.ToString();

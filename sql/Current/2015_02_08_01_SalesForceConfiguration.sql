@@ -23,6 +23,12 @@ BEGIN
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'iaUmAG5GDkpXfpeqNEPi2rmt', 'Used for calls from non white list IPs')
 	END
+	
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceEnvironment', 'Sandbox', 'Sandbox or Prod')
+	END
+	
 END
 
 IF @Environment = 'QA' OR @Environment = 'UAT'
@@ -47,6 +53,12 @@ BEGIN
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'iaUmAG5GDkpXfpeqNEPi2rmt', 'Used for calls from non white list IPs')
 	END
+	
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceEnvironment', 'Sandbox', 'Sandbox or Prod')
+	END
+	
 END
 
 IF @Environment = 'Prod'
@@ -71,5 +83,11 @@ BEGIN
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', '', 'Used for calls from non white list IPs')
 	END
+	
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceEnvironment', 'Prod', 'Sandbox or Prod')
+	END
+	
 END
 GO

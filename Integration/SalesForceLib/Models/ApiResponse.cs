@@ -1,4 +1,6 @@
 ﻿namespace SalesForceLib.Models {
+	using Newtonsoft.Json;
+
 	public class ApiResponse {
 		public ApiResponse() { }
 		public ApiResponse(string success, string error) {
@@ -6,8 +8,11 @@
 			Error = error;
 		}
 
-		public string Success { get; private set; }
-		public bool IsSuccess { get { return string.IsNullOrEmpty(Error);} }
-		public string Error { get; private set; }
+		public string Success { get; set; }
+		
+		public string Error { get; set; }
+
+		[JsonIgnore]
+		public bool IsSuccess { get { return string.IsNullOrEmpty(Error); } }
 	}
 }

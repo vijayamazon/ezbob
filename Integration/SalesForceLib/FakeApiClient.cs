@@ -5,7 +5,7 @@
 
 	public class FakeApiClient : ISalesForceAppClient
     {
-		public FakeApiClient(string userName, string password, string token) {
+		public FakeApiClient(string userName, string password, string token, string environment) {
 			api = new Api();
 		}
 

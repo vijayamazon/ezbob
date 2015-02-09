@@ -372,6 +372,7 @@ namespace ConfigManager {
 		SalesForceUserName,
 		SalesForcePassword,
 		SalesForceToken,
+		SalesForceEnvironment,
 		SessionTimeout,
 		SetupFeeEnabled,
 		SetupFeeFixed,

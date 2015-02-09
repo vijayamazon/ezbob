@@ -164,6 +164,10 @@
 			get { return this[Variables.SalesForceToken]; }
 		}
 
+		public virtual VariableValue SalesForceEnvironment {
+			get { return this[Variables.SalesForceEnvironment]; }
+		}
+		
 		public virtual VariableValue SessionTimeout {
 			get { return this[Variables.SessionTimeout]; }
 		}

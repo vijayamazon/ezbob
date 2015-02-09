@@ -96,7 +96,7 @@
 			var aModel = new ActivityModel {
 
 				Email = "a@b.c",
-				Desciption = "Description",
+				Description = "Description",
 				Type = "Mail",
 				Originator = "Originator",
 				StartDate = new DateTime(2015, 01, 27),
@@ -121,8 +121,7 @@
 			Console.WriteLine(JsonConvert.SerializeObject(rModel, Formatting.Indented));
 		}
 
-		[Test]
-		public void TestLogin() {
+		private ISalesForceAppClient GetClient(){
 			ObjectFactory.Configure(x => {
 				x.For<ISalesForceAppClient>().Use<SalesForceApiClient>();
 			});
@@ -131,9 +130,16 @@
 				.With("userName").EqualTo("yarons@ezbob.com.sandbox")
 				.With("password").EqualTo("yaron123")
 				.With("token").EqualTo("iaUmAG5GDkpXfpeqNEPi2rmt")
+				.With("environment").EqualTo("Sandbox")
 				.GetInstance<ISalesForceAppClient>();
-			
-			//new SalesForceApiClient("yarons@ezbob.com.sandbox", "yaron123", "iaUmAG5GDkpXfpeqNEPi2rmt");
+
+			return client;
+		}
+
+		[Test]
+		public void TestLead() {
+			ISalesForceAppClient client = GetClient();
+
 			LeadAccountModel model = new LeadAccountModel {
 				Email = "a@b.c",
 				AddressCountry = "Country",
@@ -160,6 +166,39 @@
 			};
 
 			client.CreateUpdateLeadAccount(model);
+
+		}
+
+		[Test]
+		public void TestTask() {
+			ISalesForceAppClient client = GetClient();
+			var tModel = new TaskModel {
+
+				Email = "a@b.c",
+				CreateDate = new DateTime(2015, 01, 27),
+				DueDate = new DateTime(2015, 01, 29),
+				Originator = "Originator",
+				Status = "Status",
+				Subject = "Subject"
+			};
+
+			client.CreateTask(tModel);
+		}
+
+		[Test]
+		public void TestActivity() {
+			ISalesForceAppClient client = GetClient();
+			var aModel = new ActivityModel {
+
+				Email = "a@b.c",
+				Description = "Description",
+				Type = "Mail",
+				Originator = "Originator",
+				StartDate = new DateTime(2015, 01, 27),
+				EndDate = new DateTime(2015, 01, 28)
+			};
+
+			client.CreateActivity(aModel);
 		}
 
 	}

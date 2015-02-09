@@ -6,9 +6,9 @@
 	using SalesForceLib.SalesForceServiceNS;
 
 	public class SalesForceApiClient : ISalesForceAppClient {
-		public SalesForceApiClient(string userName, string password, string token) {
-			api = new EzbobWebServicesPortTypeClient("EzbobWebServices");
-			partnersClient = new SoapClient("PartnersServices");
+		public SalesForceApiClient(string userName, string password, string token, string environment) {
+			api = new EzbobWebServicesPortTypeClient("EzbobWebServices" + environment);
+			partnersClient = new SoapClient("PartnersServices" + environment); 
 			Login(userName, password, token);
 		}
 
@@ -49,7 +49,7 @@
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateUpdateLeadAccount failed for customer {0}, error: {1}", model.Email, res.Error);
 			} else {
-				Log.InfoFormat("SalesForce CreateUpdateLeadAccount success for customer {0}, {1}", model.Email, res.Success);
+				Log.InfoFormat("SalesForce CreateUpdateLeadAccount success for customer {0}, {1}", model.Email, result);
 			}
 		}
 
@@ -70,7 +70,7 @@
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateOpportunity failed for customer {0}, error: {1}", model.Email, res.Error);
 			} else {
-				Log.InfoFormat("SalesForce CreateOpportunity success for customer {0}, {1}", model.Email, res.Success);
+				Log.InfoFormat("SalesForce CreateOpportunity success for customer {0}, {1}", model.Email, result);
 			}
 		}
 
@@ -91,7 +91,7 @@
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce UpdateOpportunity failed for customer {0}, error: {1}", model.Email, res.Error);
 			} else {
-				Log.InfoFormat("SalesForce UpdateOpportunity success for customer {0}, {1}", model.Email, res.Success);
+				Log.InfoFormat("SalesForce UpdateOpportunity success for customer {0}, {1}", model.Email, result);
 			}
 		}
 
@@ -112,7 +112,7 @@
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateUpdateContact failed for customer {0}, error: {1}", model.Email, res.Error);
 			} else {
-				Log.InfoFormat("SalesForce CreateUpdateContact success for customer {0}, {1}", model.Email, res.Success);
+				Log.InfoFormat("SalesForce CreateUpdateContact success for customer {0}, {1}", model.Email, result);
 			}
 		}
 
@@ -133,7 +133,7 @@
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateTask failed for customer {0}, error: {1}", model.Email, res.Error);
 			} else {
-				Log.InfoFormat("SalesForce CreateTask success for customer {0}, {1}", model.Email, res.Success);
+				Log.InfoFormat("SalesForce CreateTask success for customer {0}, {1}", model.Email, result);
 			}
 		}
 
@@ -154,7 +154,7 @@
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateActivity failed for customer {0}, error: {1}", model.Email, res.Error);
 			} else {
-				Log.InfoFormat("SalesForce CreateActivity success for customer {0}, {1}", model.Email, res.Success);
+				Log.InfoFormat("SalesForce CreateActivity success for customer {0}, {1}", model.Email, result);
 			}
 		}
 
@@ -175,7 +175,7 @@
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce ChangeEmail failed for customer {0}, error: {1}", newEmail, res.Error);
 			} else {
-				Log.InfoFormat("SalesForce ChangeEmail success for customer {0}, {1}", newEmail, res.Success);
+				Log.InfoFormat("SalesForce ChangeEmail success for customer {0}, {1}", newEmail, result);
 			}
 		}
 

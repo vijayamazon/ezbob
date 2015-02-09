@@ -43,13 +43,15 @@ BEGIN
 		'Wizard' AS EzbobSource,
 		w.WizardStepTypeDescription AS EzbobStatus,
 		s.RSource AS LeadSource,
-		r.Amount AS RequestedLoanAmount
+		r.Amount AS RequestedLoanAmount,
+		o.Name AS Origin
 	FROM Customer c 
 	LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType=1
 	LEFT JOIN Company co ON co.Id = c.CompanyId
 	INNER JOIN WizardStepTypes w ON w.WizardStepTypeID = c.WizardStep
 	LEFT JOIN CampaignSourceRef s ON s.CustomerId = c.Id
 	LEFT JOIN CustomerRequestedLoan r ON r.CustomerId = c.Id
+	LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 	WHERE c.Id=@CustomerID
 	
 	RETURN
@@ -90,4 +92,6 @@ SELECT @Email AS Email,
 
 END
 
+
 GO
+

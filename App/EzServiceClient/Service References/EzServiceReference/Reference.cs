@@ -2549,7 +2549,7 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DesciptionField;
+        private string DescriptionField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string EmailField;
@@ -2577,14 +2577,14 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Desciption {
+        public string Description {
             get {
-                return this.DesciptionField;
+                return this.DescriptionField;
             }
             set {
-                if ((object.ReferenceEquals(this.DesciptionField, value) != true)) {
-                    this.DesciptionField = value;
-                    this.RaisePropertyChanged("Desciption");
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
                 }
             }
         }

@@ -2,7 +2,6 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	//todo use auto generated object from sales force
 	[DataContract]
 	public class ActivityModel {
 		[DataMember]
@@ -15,7 +14,7 @@
 		[DataMember]
 		public string Type { get; set; }
 		[DataMember]
-		public string Desciption { get; set; }
+		public string Description { get; set; }
 		[DataMember]
 		public string Originator { get; set; }
 	}
