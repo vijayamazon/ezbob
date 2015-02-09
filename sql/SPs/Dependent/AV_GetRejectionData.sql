@@ -106,11 +106,22 @@ END
 
 --Has Mp errors
 DECLARE @HasErrorMp BIT = 0
-IF EXISTS (SELECT * FROM MP_CustomerMarketPlace mp
-		   WHERE mp.CustomerId = @CustomerId 
-		   AND mp.UpdateError IS NOT NULL 
-		   AND mp.UpdateError <> '' 
-		   AND mp.Disabled=0)
+
+IF EXISTS (
+	SELECT
+		*
+	FROM
+		MP_CustomerMarketPlace mp
+	WHERE
+		mp.CustomerId = @CustomerId 
+		AND (
+			(mp.UpdateError IS NOT NULL AND mp.UpdateError <> '')
+			OR
+			(mp.UpdatingStart IS NOT NULL AND mp.UpdatingEnd IS NULL)
+		)
+		AND
+		mp.Disabled = 0
+)
 BEGIN			
 	SET @HasErrorMp = 1
 END

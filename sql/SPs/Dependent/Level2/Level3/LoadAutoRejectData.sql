@@ -309,7 +309,11 @@ BEGIN
 	WHERE
 		mp.CustomerId = @CustomerID
 		AND
-		RTRIM(LTRIM(ISNULL(mp.UpdateError, ''))) != ''
+		(
+			RTRIM(LTRIM(ISNULL(mp.UpdateError, ''))) != ''
+			OR
+			(mp.UpdatingStart IS NOT NULL AND mp.UpdatingEnd IS NULL)
+		)
 		AND
 		ISNULL(mp.Disabled, 0) = 0
 		AND
