@@ -67,7 +67,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	IF @ErrorMessage IS NOT NULL
+	IF @ErrorMessage IS NULL
 	BEGIN
 		IF @MarketplaceTypeID = @Amazon
 			EXECUTE UpdateMpTotalsAmazon @HistoryRecordID
