@@ -30,8 +30,8 @@ BEGIN
 		c.MobilePhone MobilePhone,
 		ls.Fees Fees,
 		CAST(CASE WHEN o.EmailSendingAllowed IS NULL THEN 1 ELSE o.EmailSendingAllowed END AS BIT) EmailSendingAllowed,
-		CAST(CASE WHEN o.MailSendingAllowed IS NULL THEN 1 ELSE o.EmailSendingAllowed END AS BIT) MailSendingAllowed,
-		CAST(CASE WHEN o.SmsSendingAllowed IS NULL THEN 1 ELSE o.EmailSendingAllowed END AS BIT) SmsSendingAllowed
+		CAST(CASE WHEN o.MailSendingAllowed IS NULL THEN 1 ELSE o.MailSendingAllowed END AS BIT) MailSendingAllowed,
+		CAST(CASE WHEN o.SmsSendingAllowed IS NULL THEN 1 ELSE o.SmsSendingAllowed END AS BIT) SmsSendingAllowed
 		
 	FROM 
 		LoanSchedule ls 
@@ -42,4 +42,6 @@ BEGIN
 		LEFT JOIN LoanOptions o ON o.LoanId = l.Id
 END
 
+
 GO
+
