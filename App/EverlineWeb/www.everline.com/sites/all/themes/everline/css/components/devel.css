@@ -1,0 +1,67 @@
+.wonga-devel-bar {
+  background-color: #ebeff2;
+  border-top: 1px solid #ccc;
+  color: #444;
+  bottom: 0;
+  padding: 0 20px;
+  position: fixed;
+  width: 100%;
+  z-index: 99999;
+}
+.wonga-devel-bar .wonga-devel-bar-item {
+  display: inline-block;
+  font-size: 1.4em;
+  margin-right: 20px;
+  padding: 20px 0;
+  position: relative;
+}
+.wonga-devel-bar .wonga-devel-bar-item a {
+  color: #444;
+  text-decoration: none;
+}
+.wonga-devel-bar .wonga-devel-bar-item a:hover {
+  text-decoration: underline;
+}
+.wonga-devel-bar .wonga-devel-bar-item .wonga-devel-bar-content {
+  background-color: #ebeff2;
+  border-left: 1px solid #ccc;
+  border-right: 1px solid #ccc;
+  border-top: 1px solid #ccc;
+  bottom: 100%;
+  display: none;
+  left: -10px;
+  max-height: 800px;
+  overflow-y: scroll;
+  padding: 20px;
+  position: absolute;
+}
+.wonga-devel-bar .wonga-devel-bar-item:hover .wonga-devel-bar-content,
+.wonga-devel-bar .wonga-devel-bar-content:hover {
+  display: block;
+}
+.wonga-devel-bar .wonga-devel-bar-key-value {
+  list-style-type: none;
+  white-space: nowrap;
+}
+.wonga-journey-simple-devel-context {
+  background-color: #444;
+  bottom: 0;
+  left: 0;
+  opacity: 0.95;
+  position: fixed;
+  right: 0;
+  top: 0;
+  z-index: 25;
+}
+.wonga-journey-simple-devel-context .wonga-journey-simple-devel-code {
+  background-color: #fff;
+  left: 50%;
+  max-height: 800px;
+  opacity: 1.0;
+  overflow-y: scroll;
+  padding: 10px;
+  position: fixed;
+  right: 5%;
+  top: 20%;
+}
+/*# sourceMappingURL=devel.css.map */
