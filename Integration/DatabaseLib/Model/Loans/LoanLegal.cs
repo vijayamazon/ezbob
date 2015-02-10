@@ -1,14 +1,9 @@
-﻿using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate;
-using System;
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
+	using ApplicationMng.Repository;
+	using NHibernate;
+	using System;
 
-namespace EZBob.DatabaseLib.Model.Database.Loans
-{
-	public class LoanLegal
-	{
-
+	public class LoanLegal {
 		public virtual int Id { get; set; }
 		public virtual DateTime Created { get; set; }
 		public virtual CashRequest CashRequest { get; set; }
@@ -19,27 +14,24 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 		public virtual bool EUAgreementAgreed { get; set; }
 		public virtual bool COSMEAgreementAgreed { get; set; }
 		public virtual string SignedName { get; set; }
+		public virtual bool? NotInBankruptcy { get; set; }
 	} // class LoanLegal
 
-	public interface ILoanLegalRepository : IRepository<LoanLegal>
-	{
+	public interface ILoanLegalRepository : IRepository<LoanLegal> {
 	} // interface ILoanLegalRepository
 
-	public class LoanLegalRepository : NHibernateRepositoryBase<LoanLegal>, ILoanLegalRepository
-	{
+	public class LoanLegalRepository : NHibernateRepositoryBase<LoanLegal>, ILoanLegalRepository {
 		public LoanLegalRepository(ISession session) : base(session) { } // constructor
 	} // class LoanLegalRepository
-
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
-namespace EZBob.DatabaseLib.Model.Database.Mapping
-{
+namespace EZBob.DatabaseLib.Model.Database.Mapping {
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 
-	public sealed class LoanLegalMap : ClassMap<LoanLegal>
-	{
-		public LoanLegalMap()
-		{
+	public sealed class LoanLegalMap : ClassMap<LoanLegal> {
+		public LoanLegalMap() {
 			Table("LoanLegal");
 			Cache.ReadOnly().Region("LongTerm").ReadOnly();
 
@@ -53,7 +45,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.EUAgreementAgreed);
 			Map(x => x.COSMEAgreementAgreed);
 			Map(x => x.SignedName).Length(250);
+			Map(x => x.NotInBankruptcy);
 		} // constructor
 	} // class LoanLegalMap
-
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping
