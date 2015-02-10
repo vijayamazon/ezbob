@@ -29,7 +29,7 @@
 
 		[Test]
 		public void TestCollectionMails() {
-			CollectionMail cm = new CollectionMail("Emma123456", "Ezbob123", true, "stasd@ezbob.com");
+			CollectionMail cm = new CollectionMail("ezbobapiuser", "Ezbob2014#", true, "stasd@ezbob.com");
 			var model = new CollectionMailModel {
 				CustomerAddress = new Address {
 					Line1 = "cl1",
@@ -98,7 +98,7 @@
 				Log.InfoFormat(ex.ToString());
 			}
 			try {
-				cm.SendDefaultWarningComm7Guarantor(model);
+				//cm.SendDefaultWarningComm7Guarantor(model);
 			} catch (Exception ex) {
 				Log.InfoFormat(ex.ToString());
 			}

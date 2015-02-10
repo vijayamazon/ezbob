@@ -395,6 +395,7 @@
 		private void SendCollectionImail(CollectionDataModel model, CollectionType type) {
 			if (model.ImailSendingAllowed) {
 				try {
+					Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 					IMailLib.CollectionMailModel mailModel = GetCollectionMailModel(model);
 					switch (type) {
 					case CollectionType.CollectionDay7:

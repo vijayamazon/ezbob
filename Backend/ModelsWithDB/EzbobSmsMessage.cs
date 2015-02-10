@@ -4,28 +4,32 @@
 	using Twilio;
 	using System;
 
-	public class EzbobSmsMessage : Message
+	public class EzbobSmsMessage
 	{
 		public static EzbobSmsMessage FromMessage(Message smsMessage) {
-			var model = new EzbobSmsMessage();
-			if (smsMessage != null) {
-				smsMessage.Traverse((inst, propInfo) => propInfo.SetValue((Message) model, propInfo.GetValue(smsMessage)));
-
-				if (smsMessage.DateSent == default(DateTime) || smsMessage.DateCreated == default(DateTime) || smsMessage.DateUpdated == default(DateTime))
-				{
-					var now = DateTime.UtcNow;
-					model.DateSent = now;
-					model.DateCreated = now;
-					model.DateUpdated = now;
-				}
-			} else {
-				model.Status = "null";
+			if (smsMessage == null) {
+				return new EzbobSmsMessage {
+					Status = "null"
+				};
 			}
+
+			var model = new EzbobSmsMessage{
+				AccountSid = smsMessage.AccountSid,
+				Sid = smsMessage.Sid,
+				DateCreated = smsMessage.DateCreated,
+				DateSent = smsMessage.DateSent,
+				DateUpdated = smsMessage.DateUpdated,
+				From = smsMessage.From,
+				To = smsMessage.To,
+				Body = smsMessage.Body,
+				Status = smsMessage.Status,
+				Direction = smsMessage.Direction,
+				Price = smsMessage.Price,
+				ApiVersion = smsMessage.ApiVersion,
+			};
+			
 			return model;
 		}
-
-		[NonTraversable]
-		public int Id { get; set; }
 
 		/// <summary>
 		/// sms sent to CustomerId or BrokerId
@@ -37,32 +41,119 @@
 		/// </summary>
 		public int UnderwriterId { get; set; }
 
-		[NonTraversable]
-		public RestException RestException { get; set; }
+		/// <summary>
+		/// A 34 character string that uniquely identifies this resource.
+		/// 
+		/// </summary>
+		public string Sid { get; set; }
 
-		
-		[NonTraversable]
+		/// <summary>
+		/// The date that this resource was created
+		/// 
+		/// </summary>
+		public DateTime DateCreated { get; set; }
+
+		/// <summary>
+		/// The date that this resource was last updated
+		/// 
+		/// </summary>
+		public DateTime DateUpdated { get; set; }
+
+		/// <summary>
+		/// The date that the Message was sent
+		/// 
+		/// </summary>
+		public DateTime DateSent { get; set; }
+
+		/// <summary>
+		/// The unique id of the Account that sent this Message.
+		/// 
+		/// </summary>
+		public string AccountSid { get; set; }
+
+		/// <summary>
+		/// The phone number that initiated the message in E.164 format. For
+		///             incoming messages, this will be the remote phone. For outgoing messages,
+		///             this will be one of your Twilio phone numbers.
+		/// 
+		/// </summary>
+		public string From { get; set; }
+
+		/// <summary>
+		/// The phone number that received the message in E.164 format. For
+		///             incoming messages, this will be one of your Twilio phone numbers.
+		///             For outgoing messages, this will be the remote phone.
+		/// 
+		/// </summary>
+		public string To { get; set; }
+
+		/// <summary>
+		/// The text body of the Message.
+		/// 
+		/// </summary>
+		public string Body { get; set; }
+
+		/// <summary>
+		/// The number of body segments associated with this message. In
+		///             a common case, an ASCII message of 180 characters will be split into
+		///             one segment with 160 characters and one with 20 characters, so
+		///             NumSegments would be 2 for that message.
+		/// 
+		/// </summary>
 		public int NumSegments { get; set; }
 
-		[NonTraversable]
+		/// <summary>
+		/// The number of images associated with this MMS
+		/// 
+		/// </summary>
 		public int NumImages { get; set; }
-		
-		[NonTraversable]
+
+		/// <summary>
+		/// The status of this Message. Either queued, sending, sent, or failed.
+		/// 
+		/// </summary>
+		public string Status { get; set; }
+
+		/// <summary>
+		/// The direction of this Message. incoming for incoming messages,
+		///             outbound-api for messages initiated via the REST API, outbound-call
+		///             for messages initiated during a call or outbound-reply for messages
+		///             initiated in response to an incoming Message.
+		/// 
+		/// </summary>
+		public string Direction { get; set; }
+
+		/// <summary>
+		/// The amount billed for the Message.
+		/// 
+		/// </summary>
+		public Decimal Price { get; set; }
+
+		/// <summary>
+		/// The version of the Twilio API used to process the Message.
+		/// 
+		/// </summary>
+		public string ApiVersion { get; set; }
+
+		/// <summary>
+		/// The error code of this message. If the message was unable to be delivered
+		///             this property will contain the error code.  Error codes are listed in
+		///             the Message docs: https://www.twilio.com/docs/api/rest/message.
+		/// 
+		/// </summary>
 		public int? ErrorCode { get; set; }
 
-		[NonTraversable]
+		/// <summary>
+		/// The error message for this message. If the message was unable to be delivered
+		///             this property will contain the error message.
+		/// 
+		/// </summary>
 		public string ErrorMessage { get; set; }
 
 		public override string ToString()
 		{
-			return string.Format("userid {0} uwId {1} dates {2} {3} {4} to {5} from {6} sid {7} status {8} body {9} direction {10} accountsid {11}, NumSegments {14}, NumImages {15}, errorCode {12}, errorMessage {13}, ", UserId, UnderwriterId, DateCreated, DateSent, DateUpdated, To, From, Sid, Status, Body, Direction, AccountSid, ErrorCode, ErrorMessage, NumSegments, NumImages);
-		}
-
-		public string GetRestException() {
-			if (RestException != null) {
-				return string.Format("RestException Code:{0}, Status:{3}, Message:{1}, MoreInfo:{2}", RestException.Code, RestException.Message, RestException.MoreInfo, RestException.Status);
-			}
-			return "";
+			return string.Format("userid {0} uwId {1} dates {2} {3} {4} to {5} from {6} sid {7} status {8} body {9} direction {10} accountsid {11}, NumSegments {14}, NumImages {15}, errorCode {12}, errorMessage {13}, ",
+				UserId, UnderwriterId, DateCreated, DateSent, DateUpdated, To, From, Sid, Status, Body, Direction, AccountSid, ErrorCode, ErrorMessage, NumSegments, NumImages);
 		}
 	}
 }
