@@ -29,6 +29,7 @@ SELECT l.Id AS loanID
 , LoanAmount.ScheduledRepayments AS ScheduledRepayments
 , c.TypeOfBusiness as CompanyType
 , co.ExperianRefNum
+, co.ExperianCompanyName
 , c.CreditResult as CustomerState
 , c.SortCode
 , CONVERT(BIT, l.IsDefaulted) AS IsDefaulted
@@ -62,9 +63,12 @@ WHERE c.IsTest <> 1 and
  ((c.TypeOfBusiness = 'Limited' OR c.TypeOfBusiness = 'LLP')and  (ca.addressType = 3)) OR 
   (c.TypeOfBusiness = 'Entrepreneur' and  (ca.addressType = 1))
  )
- GROUP BY l.Id, l.CustomerId, l.[Date], l.DateClosed, l.MaxDelinquencyDays, l.RepaymentsNum, l.Balance, c.Gender, c.FirstName, c.MiddleInitial, c.Surname, c.RefNumber, ca.Line1, ca.Line2, ca.Line3, ca.Town, ca.County
- , ca.Postcode, c.DateOfBirth, ld.lsdate, LoanAmount.am, LoanAmount.ScheduledRepayments, c.TypeOfBusiness, co.ExperianRefNum, c.CreditResult
- , c.SortCode, l.IsDefaulted, lo.CaisAccountStatus, cs.IsEnabled, c.CollectionStatus, c.MaritalStatus, lo.ManualCaisFlag, cs.IsDefault, l.Status
+ GROUP BY l.Id, l.CustomerId, l.[Date], l.DateClosed, l.MaxDelinquencyDays, l.RepaymentsNum, l.Balance, l.IsDefaulted,l.Status,
+  c.DateOfBirth, c.Gender, c.FirstName, c.MiddleInitial, c.Surname, c.RefNumber,c.CreditResult,c.SortCode,c.TypeOfBusiness, c.CollectionStatus, c.MaritalStatus,
+  ca.Line1, ca.Line2, ca.Line3, ca.Town, ca.County, ca.Postcode,
+  ld.lsdate, LoanAmount.am, LoanAmount.ScheduledRepayments, lo.CaisAccountStatus, lo.ManualCaisFlag, 
+  co.ExperianRefNum, co.ExperianCompanyName,
+  cs.IsDefault, cs.IsEnabled
 
 GO
 

@@ -30,6 +30,7 @@ BEGIN
 		ScheduledRepayments,
 		CompanyType,
 		ExperianRefNum,
+		ExperianCompanyName,
 		CustomerState,
 		SortCode,
 		CONVERT(BIT, IsDefaulted) AS IsDefaulted,
@@ -40,4 +41,7 @@ BEGIN
 	FROM 
 		vw_NotClose
 END
+
 GO
+
+
