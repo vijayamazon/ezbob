@@ -8383,6 +8383,57 @@ Drupal.behaviors.Ajax = Drupal.Ajax.init;
       units: units
     };
   };
+  
+  	// monthly calculation recalculation 
+	Drupal.WongaFinance.SimpleInterest.calcRepaymentsTable = function(loan_period, loan_amount, interest_rate) {
+		var total_repayment = 0;
+		var total_interest = 0;
+		console.log('interest_rate', interest_rate, loan_amount, loan_period);
+		// calculate the repayments table
+		for (var i = 0; i < loan_period; i++) {
+			var month_id = i;
+			var principal = loan_amount / loan_period;
+			var remaining_balance = loan_amount * (loan_period - month_id) / loan_period;
+			var interest = remaining_balance * interest_rate;
+			var total_monthly = principal + interest;
+			
+			// payments_array.push(monthly_repayment);
+			total_repayment += total_monthly;
+			total_interest += interest;
+			/*
+			if (this.calculator_table) {
+				jQuery('tr:last', this.calculator_table).after('<tr><td>'+(i+1)+'</td><td>£'+g_calc_utils.formatForPrint(monthly_repayment.getPrincipal())+'</td><td>£'+g_calc_utils.formatForPrint(monthly_repayment.getInterest())+'</td><td>£'+g_calc_utils.formatForPrint(monthly_repayment.getTotal())+'</td></tr>');
+			}
+			*/
+		}
+		
+		return {
+		  interest: total_interest.toPrecision(10),
+		  interestRate: interest_rate,
+		  principal: loan_amount,
+		  total: total_repayment,
+		  units: loan_period
+		};
+		
+	
+	}
+ 
+	/* 
+	*	CalculatorUtils Scope 
+	
+	function CalculatorUtils() {
+		this.roundDecimalPlaces = function(value, num_decimal_places) {
+			return value.toFixed(num_decimal_places);
+		}
+		
+		this.numberWithCommas = function(x) {
+			return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		}
+		
+		this.formatForPrint = function(x) {
+			return this.numberWithCommas(this.roundDecimalPlaces(x, 0));
+		}
+	} */
 })(jQuery, Drupal);
 ;
 (function($, Drupal) {
@@ -8410,27 +8461,34 @@ Drupal.behaviors.Ajax = Drupal.Ajax.init;
             // 0.03), we must scale them before passing them off to the
             // calculate() function.
             calculation =
-              Drupal.WongaFinance.SimpleInterest.calculate(
-                amountSlider.getOffset(), product.WeeklyInterest / 100,
-                durationSlider.getOffset(), product.Fee / 100),
+				Drupal.WongaFinance.SimpleInterest.calcRepaymentsTable(
+					durationSlider.getOffset(), 
+					amountSlider.getOffset(),
+					product.WeeklyInterest / 100
+				),
+			
+              // Drupal.WongaFinance.SimpleInterest.calculate(
+                // amountSlider.getOffset(), product.WeeklyInterest / 100,
+                // durationSlider.getOffset(), product.Fee / 100),
 
             format = Drupal.WongaFinance.Currency.format;
 
         $summary.
           find('.amount').html(format(calculation.principal)).end().
-          find('.fee').html(format(calculation.fees)).end().
+          // find('.fee').html(format(calculation.fees)).end().
           find('.interest').
             html(format(calculation.interest)).end().
 
-          find('.interestRate').html(
-            format(calculation.actualInterestRate,
-              { symbol: '' })).end().
+          // find('.interestRate').html(
+            // format(calculation.actualInterestRate,
+              // { symbol: '' })).end().
 
           find('.total').html(format(calculation.total));
 
         $overview.
-          find('.length').html(calculation.units).end().
-          find('.repayment').html(format(calculation.repayment));
+          // find('.length').html(calculation.units).end().
+          // find('.repayment').html(format(calculation.repayment)).
+		  find('.total').html(format(calculation.total));
       }
     };
   };
