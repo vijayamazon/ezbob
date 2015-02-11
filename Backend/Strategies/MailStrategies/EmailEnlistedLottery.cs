@@ -23,6 +23,9 @@
 		} // Name
 
 		protected override void LoadRecipientData() {
+			CustomerData = new CustomerData(this, CustomerId, DB);
+			// No need to call to CustomerData.Load() as it is not used in this strategy.
+
 			SafeReader sr = DB.GetFirst(
 				"EnlistLottery",
 				CommandSpecies.StoredProcedure,
@@ -52,17 +55,23 @@
 		} // GetRecipients
 
 		protected override void SetTemplateAndVariables() {
-			// Template name and variables are set in LoadRecipinetData().
+			// Template name is set in LoadRecipinetData().
+
+			Variables = new Dictionary<string, string>(); // Not used in this strategy but should not be empty.
 		} // SetTemplateAndVariables
 
 		protected override void SendEmail() {
 			if (this.doSend)
 				base.SendEmail();
+			else
+				Log.Debug("Not sending email: enlisted = {0}, template name = '{1}'.", Enlisted, TemplateName);
 		} // SendEmail
 
 		protected override void ActionAtEnd() {
-			if (!Enlisted)
+			if (!Enlisted) {
+				Log.Debug("Not updating player status: not enlisted.");
 				return;
+			} // if
 
 			DB.ExecuteNonQuery(
 				"UpdatePlayerStatus",

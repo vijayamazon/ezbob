@@ -21,11 +21,10 @@
 				Log.Debug("Template name: {0}", TemplateName);
 				Log.Debug("Customer data: {0}", CustomerData);
 
-
 				if (CustomerData.Origin == "everline") {
 					Log.Debug("Customer's origin is everline adding EL to template name");
 					TemplateName = string.Format("EVL {0}", TemplateName);
-				}
+				} // if
 
 				Log.Debug("Variables:\n\t{0}", string.Join("\n\t", Variables.Select(kv => kv.Key + ": " + kv.Value)));
 
@@ -36,11 +35,9 @@
 				Log.Debug("Performing ActionAtEnd() complete.");
 
 				Log.Debug("Execute() complete.");
-			}
-			catch (AException) {
+			} catch (AException) {
 				throw;
-			} // try
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new StrategyAlert(this, "Something went terribly wrong during Execute().", e);
 			} // try
 		} // Execute
