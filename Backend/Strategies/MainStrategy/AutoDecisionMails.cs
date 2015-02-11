@@ -2,150 +2,160 @@
 	using System.Globalization;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using System.Collections.Generic;
+	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.Strategies.MailStrategies;
 
 	partial class MainStrategy {
 		private void SendEmails() {
-			if (this.autoDecisionResponse.DecidedToReject)
-				new RejectUser(this.customerId, true).Execute();
-			else if (this.autoDecisionResponse.IsAutoApproval)
+			if (autoDecisionResponse.DecidedToReject) {
+				bool sendToCustomer = true;
+				var customer = _customers.ReallyTryGet(customerId);
+				if (customer != null) {
+					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
+					if (customer.FilledByBroker && numOfPreviousApprovals == 0) {
+						sendToCustomer = false;
+					}
+				}
+				new RejectUser(customerId, sendToCustomer).Execute();
+			} else if (autoDecisionResponse.IsAutoApproval)
 				SendApprovalMails();
-			else if (this.autoDecisionResponse.IsAutoBankBasedApproval)
+			else if (autoDecisionResponse.IsAutoBankBasedApproval)
 				SendBankBasedApprovalMails();
-			else if (this.autoDecisionResponse.IsAutoReApproval)
+			else if (autoDecisionResponse.IsAutoReApproval)
 				SendReApprovalMails();
-			else if (!this.autoDecisionResponse.HasAutomaticDecision)
+			else if (!autoDecisionResponse.HasAutomaticDecision)
 				SendWaitingForDecisionMail();
 		} // SendEmails
 
 		private void SendApprovalMails() {
-			this.mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
+			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Approved" },
-				{ "RegistrationDate", this.dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
-				{ "userID", this.customerId.ToString(CultureInfo.InvariantCulture) },
-				{ "Name", this.dataGatherer.AppEmail },
-				{ "FirstName", this.dataGatherer.AppFirstName },
-				{ "Surname", this.dataGatherer.AppSurname },
-				{ "MP_Counter", this.dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
-				{ "MedalType", this.medalClassification.ToString() },
-				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
-				{ "ApprovalAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture) },
-				{ "RepaymentPeriod", this.dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture) },
-				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture) },
+				{ "RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
+				{ "userID", customerId.ToString(CultureInfo.InvariantCulture) },
+				{ "Name", dataGatherer.AppEmail },
+				{ "FirstName", dataGatherer.AppFirstName },
+				{ "Surname", dataGatherer.AppSurname },
+				{ "MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
+				{ "MedalType", medalClassification.ToString() },
+				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
+				{ "ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture) },
+				{ "RepaymentPeriod", dataGatherer.LoanOfferRepaymentPeriod.ToString(CultureInfo.InvariantCulture) },
+				{ "InterestRate", autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture) },
 				{
-					"OfferValidUntil", this.autoDecisionResponse.AppValidFor.HasValue
-						? this.autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
 			});
 
 			var customerMailVariables = new Dictionary<string, string> {
-				{ "FirstName", this.dataGatherer.AppFirstName },
-				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture) },
+				{ "FirstName", dataGatherer.AppFirstName },
+				{ "LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture) },
 				{
-					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
-						? this.autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+					"ValidFor", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
 			};
 
-			this.mailer.Send(
-				"Mandrill - Approval (" + (this.isFirstLoan ? "" : "not ") + "1st time)",
+			mailer.Send(
+				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
 				customerMailVariables,
-				new Addressee(this.dataGatherer.AppEmail)
+				new Addressee(dataGatherer.AppEmail)
 			);
 		} // SendApprovalMails
 
 		private void SendBankBasedApprovalMails() {
-			this.mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
+			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Approved" },
-				{ "RegistrationDate", this.dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
-				{ "userID", this.customerId.ToString(CultureInfo.InvariantCulture) },
-				{ "Name", this.dataGatherer.AppEmail },
-				{ "FirstName", this.dataGatherer.AppFirstName },
-				{ "Surname", this.dataGatherer.AppSurname },
-				{ "MP_Counter", this.dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
-				{ "MedalType", this.medalClassification.ToString() },
-				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
+				{ "RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
+				{ "userID", customerId.ToString(CultureInfo.InvariantCulture) },
+				{ "Name", dataGatherer.AppEmail },
+				{ "FirstName", dataGatherer.AppFirstName },
+				{ "Surname", dataGatherer.AppSurname },
+				{ "MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
+				{ "MedalType", medalClassification.ToString() },
+				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
 				{
 					"ApprovalAmount",
-					this.autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)
+					autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)
 				},
-				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture) },
-				{ "InterestRate", this.dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture) },
+				{ "RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture) },
+				{ "InterestRate", dataGatherer.LoanOfferInterestRate.ToString(CultureInfo.InvariantCulture) },
 				{
-					"OfferValidUntil", this.autoDecisionResponse.AppValidFor.HasValue
-						? this.autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
 			});
 
 			var customerMailVariables = new Dictionary<string, string> {
-				{ "FirstName", this.dataGatherer.AppFirstName },
+				{ "FirstName", dataGatherer.AppFirstName },
 				{
 					"LoanAmount",
-					this.autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)
+					autoDecisionResponse.BankBasedAutoApproveAmount.ToString(CultureInfo.InvariantCulture)
 				},
-				{ "ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
-					? this.autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+				{ "ValidFor", autoDecisionResponse.AppValidFor.HasValue
+					? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 					: string.Empty
 				}
 			};
 
-			this.mailer.Send(
-				"Mandrill - Approval (" + (this.isFirstLoan ? "" : "not ") + "1st time)",
+			mailer.Send(
+				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
 				customerMailVariables,
-				new Addressee(this.dataGatherer.AppEmail)
+				new Addressee(dataGatherer.AppEmail)
 			);
 		} // SendBankBasedApprovalMails
 
 		private void SendReApprovalMails() {
-			this.mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
+			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Re-Approved" },
-				{ "RegistrationDate", this.dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
-				{ "userID", this.customerId.ToString(CultureInfo.InvariantCulture) },
-				{ "Name", this.dataGatherer.AppEmail },
-				{ "FirstName", this.dataGatherer.AppFirstName },
-				{ "Surname", this.dataGatherer.AppSurname },
-				{ "MP_Counter", this.dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
-				{ "MedalType", this.medalClassification.ToString() },
-				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
-				{ "ApprovalAmount", this.offeredCreditLine.ToString(CultureInfo.InvariantCulture) },
-				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture) },
-				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture) },
+				{ "RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
+				{ "userID", customerId.ToString(CultureInfo.InvariantCulture) },
+				{ "Name", dataGatherer.AppEmail },
+				{ "FirstName", dataGatherer.AppFirstName },
+				{ "Surname", dataGatherer.AppSurname },
+				{ "MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
+				{ "MedalType", medalClassification.ToString() },
+				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
+				{ "ApprovalAmount", offeredCreditLine.ToString(CultureInfo.InvariantCulture) },
+				{ "RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(CultureInfo.InvariantCulture) },
+				{ "InterestRate", autoDecisionResponse.InterestRate.ToString(CultureInfo.InvariantCulture) },
 				{
-					"OfferValidUntil", this.autoDecisionResponse.AppValidFor.HasValue
-						? this.autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
 			});
 
 			var customerMailVariables = new Dictionary<string, string> {
-				{ "FirstName", this.dataGatherer.AppFirstName },
-				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture) },
+				{ "FirstName", dataGatherer.AppFirstName },
+				{ "LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(CultureInfo.InvariantCulture) },
 				{
-					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
-						? this.autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
+					"ValidFor", autoDecisionResponse.AppValidFor.HasValue
+						? autoDecisionResponse.AppValidFor.Value.ToString(CultureInfo.InvariantCulture)
 						: string.Empty
 				}
 			};
 
-			this.mailer.Send(
-				this.dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)",
+			mailer.Send(
+				dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)",
 				customerMailVariables,
-				new Addressee(this.dataGatherer.AppEmail)
+				new Addressee(dataGatherer.AppEmail)
 			);
 		} // SendReApprovalMails
 
 		private void SendWaitingForDecisionMail() {
-			this.mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
-				{ "RegistrationDate", this.dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
-				{ "userID", this.customerId.ToString(CultureInfo.InvariantCulture) },
-				{ "Name", this.dataGatherer.AppEmail },
-				{ "FirstName", this.dataGatherer.AppFirstName },
-				{ "Surname", this.dataGatherer.AppSurname },
-				{ "MP_Counter", this.dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
-				{ "MedalType", this.medalClassification.ToString() },
+			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
+				{ "RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
+				{ "userID", customerId.ToString(CultureInfo.InvariantCulture) },
+				{ "Name", dataGatherer.AppEmail },
+				{ "FirstName", dataGatherer.AppFirstName },
+				{ "Surname", dataGatherer.AppSurname },
+				{ "MP_Counter", dataGatherer.AllMPsNum.ToString(CultureInfo.InvariantCulture) },
+				{ "MedalType", medalClassification.ToString() },
 				{ "SystemDecision", "WaitingForDecision" }
 			});
 		} // SendWaitingForDecisionMail
