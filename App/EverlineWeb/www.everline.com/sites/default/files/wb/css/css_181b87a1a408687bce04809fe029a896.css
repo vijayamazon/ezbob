@@ -400,7 +400,7 @@ Reasons!
 }
 
 .csstransforms .impact-reasons-item {
-	opacity: 0;
+	opacity: 1;
 	transition: all 0.4s linear;
 }
 
@@ -477,6 +477,11 @@ position: static;
  display: table; 
 }
 
+.impact .row:after {
+	clear: both;
+}
+
+
 .impact .org-btn {
 	display: inline-block;
 	text-align: center;
@@ -496,4 +501,21 @@ position: static;
 
 .impact .btn-sm:after {
 	display: none;
+}
+
+.impact .row > .col:first-child {
+	padding-left: 20px !important;
+}
+
+.impact .span_third {
+	width: 33%;
+	padding-left: 20px;
+}
+
+.impact .col {
+	margin-top: 0 !important;
+}
+
+.impact .text-primary {
+	color: #7ac143;
 }
