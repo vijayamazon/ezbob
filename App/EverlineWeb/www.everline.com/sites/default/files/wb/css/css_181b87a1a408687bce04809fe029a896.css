@@ -198,7 +198,7 @@ Managed and controlled by you
 @media (min-width: 801px) {
 	.impact-managed .container {
 		position: relative;
-		min-height: 360px;
+		min-height: 260px;
 	}
 
 	.impact-managed-iphone {
@@ -512,6 +512,22 @@ position: static;
 	padding-left: 20px;
 }
 
+@media (max-width: 800px) {
+	.impact .span_1,
+	.impact .span_2, 
+	.impact .span_3, 
+	.impact .span_4, 
+	.impact .span_5, 
+	.impact .span_6, 
+	.impact .span_7, 
+	.impact .span_8, 
+	.impact .span_third {
+		margin-left: 0; 
+		width: 100%;
+	}
+}
+
+
 .impact .col {
 	margin-top: 0 !important;
 }
@@ -519,3 +535,4 @@ position: static;
 .impact .text-primary {
 	color: #7ac143;
 }
+
