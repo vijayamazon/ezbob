@@ -25,6 +25,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using NUnit.Framework;
 	using StructureMap;
+	using Twilio;
 
 	[TestFixture]
 	public class TestStrategies : BaseTestFixtue {
@@ -530,5 +531,24 @@
 			let0.LotteryEnlistingTypeStr = "MinCountOrMaxAmount";
 			let0.LotteryEnlistingTypeStr = "MinCountAndMaxAmount";
 		} // TestLotteryEnlistingType
+
+		[Test]
+		public void TestSendSms() {
+			var sms = new SendSms(21436, 1, "07778572417", "test sms");
+			sms.Execute();
+			Assert.AreEqual(true, sms.Result);
+		}
+
+		[Test]
+		public void TestGetSmsDetails() {
+			//In case we need to retrieve the status of sms need to invoke this method and update sms message table
+			string m_sAccountSid = ConfigManager.CurrentValues.Instance.TwilioAccountSid;
+			string m_sAuthToken = ConfigManager.CurrentValues.Instance.TwilioAuthToken;
+			
+			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
+			var smsDetails = twilio.GetSmsMessage("SM1511753ccca64868b73c9cf7469a1bc8");
+		}
 	}
+
+
 }

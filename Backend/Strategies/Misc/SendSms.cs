@@ -4,7 +4,6 @@
 	using Ezbob.Database;
 	using Twilio;
 	using System.Collections.Generic;
-	using System.Linq;
 
 	public class SendSms : AStrategy {
 		public SendSms(int userId, int underwriterId, string sMobilePhone, string content) {
@@ -14,16 +13,10 @@
 			m_sMobilePhone = sMobilePhone;
 			m_sContent = content;
 
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					m_sAccountSid = sr["TwilioAccountSid"];
-					m_sAuthToken = sr["TwilioAuthToken"];
-					m_sFromNumber = sr["TwilioSendingNumber"];
-					return ActionResult.SkipAll;
-				},
-				"GetTwilioConfigs",
-				CommandSpecies.StoredProcedure
-			);
+			m_sAccountSid = ConfigManager.CurrentValues.Instance.TwilioAccountSid;
+			m_sAuthToken = ConfigManager.CurrentValues.Instance.TwilioAuthToken;
+			m_sFromNumber = ConfigManager.CurrentValues.Instance.TwilioSendingNumber;
+			
 		} // constructor
 
 		public override string Name {
@@ -48,8 +41,9 @@
 			_sendMobilePhone = string.Format("{0}{1}", UkMobilePrefix, m_sMobilePhone.Substring(1));
 			_dateSent = DateTime.UtcNow;
 			Log.Info("Sending sms to customer:{2}, number {0}, content:{1}", _sendMobilePhone, m_sContent, m_nUserId);
-			twilio.SendMessage(m_sFromNumber, _sendMobilePhone, m_sContent, SaveSms);
-			Result = true;
+			var smsResponse = twilio.SendMessage(m_sFromNumber, _sendMobilePhone, m_sContent);
+			
+			SaveSms(smsResponse);
 		}
 
 		private void SaveSms(Message smsResponse) {
@@ -59,17 +53,19 @@
 				message.UnderwriterId = m_nUnderwriterId;
 				message.DateSent = _dateSent;
 
-				if (message.Status == null) {
-					Result = false;
-					string restException = "";
-					if (smsResponse.RestException != null) {
-						restException = string.Format("RestException Code:{0}, Status:{3}, Message:{1}, MoreInfo:{2}",
-							smsResponse.RestException.Code, smsResponse.RestException.Message, smsResponse.RestException.MoreInfo, smsResponse.RestException.Status);
-					}
+				if (smsResponse.RestException != null) {
+					string restException = string.Format("RestException Code:{0}, Status:{3}, Message:{1}, MoreInfo:{2}",
+						smsResponse.RestException.Code, smsResponse.RestException.Message, smsResponse.RestException.MoreInfo, smsResponse.RestException.Status);
 					Log.Warn("Failed sending SMS to number:{0}\n{1}", _sendMobilePhone, restException);
+					Result = false;
 					return;
-				} // if
-
+				}
+				
+				if(smsResponse.ErrorCode.HasValue || !string.IsNullOrEmpty(smsResponse.ErrorMessage)){
+					Log.Warn("Failed sending SMS to number:{0}\n{1} {2}", _sendMobilePhone, smsResponse.ErrorCode, smsResponse.ErrorMessage);
+					message.Status = smsResponse.ErrorCode + " " + smsResponse.ErrorMessage;
+				}
+				
 				DB.ExecuteNonQuery("SaveSmsMessage", CommandSpecies.StoredProcedure,
 								DB.CreateTableParameter<EzbobSmsMessage>("Tbl", new List<EzbobSmsMessage> { message }));
 
@@ -80,8 +76,6 @@
 				Result = false;
 			}
 		}
-
-		// Execute
 
 		public bool Result { get; private set; }
 		private readonly int m_nUserId;

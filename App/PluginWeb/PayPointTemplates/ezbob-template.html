@@ -83,184 +83,63 @@
 
 
 
-    <title>PayPoint: Fill Debit Card Details | EZBOB</title>
+    <title>PayPoint: Fill Debit Card Details</title>
 
     <meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
 
     <meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
-
-<link rel="icon shortcut" type="image/png" href="/Content/img/favicon/favicon_57x57.png" />
-<!-- for mobile -->
-<link rel="apple-touch-icon" href="/Content/img/favicon/favicon_57x57.png" />
-<link rel="apple-touch-icon" sizes="72x72" href="/Content/img/favicon/favicon_72x72.png" />
-<!-- todo
-<link rel="apple-touch-icon" sizes="114x114" href="/Content/img/favicon114x114.png" />
--->
-
-
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" type="text/css" media="print" href="/Content/css/print.css" />
-
     <link rel="stylesheet" type="text/css" href="/Content/css/lib/jquery-ui-1.8.16.custom.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/lib/jquery.ui.1.8.16.ie.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/lib/bootstrap2.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/lib/dropzone.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/lib/font-awesome.min.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/lib/notifications.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/lib/coin-slider-styles.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/lib/chosen.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/common.css" />
-<link rel="stylesheet" type="text/css" href="/Content/css/customer.css" />
-
-    
+	<link rel="stylesheet" type="text/css" href="/Content/css/lib/jquery.ui.1.8.16.ie.css" />
+	<link rel="stylesheet" type="text/css" href="/Content/css/lib/bootstrap2.css" />
+	<link rel="stylesheet" type="text/css" href="/Content/css/lib/font-awesome.min.css" />
+	<link rel="stylesheet" type="text/css" href="/Content/css/lib/notifications.css" />
+	<link rel="stylesheet" type="text/css" href="/Content/css/common.css" />
+	<link rel="stylesheet" type="text/css" href="/Content/css/customer.css" />
+    <link rel="stylesheet" type="text/css" href="/Content/css/everline.css" />
 
     <!--[if lt IE 9]>
             <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
         <![endif]-->
-<script type="text/javascript">
-     dn = "www.ezbob.com";
-     lang = "en";
-     tpt = "opaque";
-     vrsn_style = "WW";
-     splash_url = "https://trustsealinfo.verisign.com";
-     rStr = "";
-     seal_url = "https://seal.verisign.com";
-
-     u1 = splash_url + "/splash?form_file=fdf/splash.fdf&dn=" + dn + "&lang=" + lang;
-     u2 = seal_url + "/getseal?at=0&sealid=2&dn=" + dn + "&lang=" + lang + rStr;
-     var sopener;
-
-     function vrsn_splash() {
-         if (sopener && !sopener.closed) {
-             sopener.focus();
-         } else {
-             tbar = "location=yes,status=yes,resizable=yes,scrollbars=yes,width=560,height=500";
-             var sw = window.open(u1, 'VRSN_Splash', tbar);
-             if (sw) {
-                 sw.focus();
-                 sopener = sw;
-             }
-         }
-     }
-
-     var ver = -1;
-     var v_ua = navigator.userAgent.toLowerCase();
-     var re = new RegExp("msie ([0-9]{1,}[\.0-9]{0,})");
-     if (re.exec(v_ua) !== null) {
-         ver = parseFloat(RegExp.$1);
-     }
-     var v_old_ie = (v_ua.indexOf("msie") != -1);
-     if (v_old_ie) {
-         v_old_ie = ver < 5;
-     }
-
-     function v_mact(e) {
-         var s;
-         if (document.addEventListener) {
-             s = (e.target.name == "seal");
-             if (s) {
-                 vrsn_splash();
-                 return false;
-             }
-         } else if (document.captureEvents) {
-             var tgt = e.target.toString();
-             s = (tgt.indexOf("splash") != -1);
-             if (s) {
-                 vrsn_splash();
-                 return false;
-             }
-         }
-         return true;
-     }
-
-     function v_mDown(event) {
-         if (document.addEventListener) {
-             return true;
-         }
-         event = event || window.event;
-         if (event) {
-             if (event.button == 1) {
-                 if (v_old_ie) {
-                     return true;
-                 } else {
-                     vrsn_splash();
-                     return false;
-                 }
-             } else if (event.button == 2) {
-                 vrsn_splash();
-                 return false;
-             }
-         } else {
-             return true;
-         }
-     }
-
-     if (document.addEventListener) {
-         document.addEventListener('mouseup', v_mact, true);
-     } else {
-         if (document.layers) {
-             document.captureEvents(Event.MOUSEDOWN);
-             document.onmousedown = v_mact;
-         }
-     }
-
-     function v_resized() {
-         if (pageWidth != innerWidth || pageHeight != innerHeight) {
-             self.history.go(0);
-         }
-     }
-
-     if (document.layers) {
-         pageWidth = innerWidth;
-         pageHeight = innerHeight;
-         window.onresize = v_resized;
-     }
- </script>
 </head>
 
-<body auth="" data-user-name="">
-<!-- Google Tag Manager -->
-<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-NQVH6M"
-height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-})(window,document,'script','dataLayer','GTM-NQVH6M');</script>
-<!-- End Google Tag Manager -->
-
-    
-
-    <input name="__RequestVerificationToken" type="hidden" value="p1DUr59SCLlKL9i5745zPDjJ_vRpUcftSwy6xueIvP6CGJAkfu6-TdMn2z1dQz9P1TII9oQUI64d6zl4ZD92iLVVI3Fbfssqp2D6ybNx6eHYGmSuBiZScMQaWo1lyJ8ePG-plBlhg7MVLWB46rLkc2-6iwcuzAfzJguaCjE4p0I1" /> 
-
+<body auth="auth" data-user-name="" data-ref="" data-term="">
     <div id="wrapper">
-        <div id="header">
-            <div class="header-bg-strip"></div>
-            <div class="header-inner">
-                <div class="header-logo">
-                    <a href="http://www.ezbob.com">
-                        <img src="/Content/css/images/header/ezbob_logo-white.png" class="newlogo" width="128" height="34">
-                    </a>
-                </div>
-                <div class="header-info" style="display: none;">
-                    <div class="header-info-left"></div>
-                    <div class="header-info-text"></div>
-                    <div class="header-info-right"></div>
-                </div>
-
-                <ul id="user-menu">
-                    <li id="logoff-li" class="login" style="display: none;">
-                        <a href="/Account/LogOff" class="button btn-grey">Log Off</a>
-                    </li>
-                    <li class="login login_btn" style="display: none;"><a href="/Account/LogOn" class="button btn-grey">Login</a></li>
-                    <li class="sign-up signup_btn" style="display: none"><a href="https://localhost:44300/Customer/Wizard#SignUp" class="button btn-green">Sign Up</a></li>
-                    <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
-                </ul>
+    <div id="header" class="ezbob_header" style="display: none;">
+        <div class="header-bg-strip"></div>
+        <div class="header-inner">
+            <div class="header-logo">
+                <a href="http://www.ezbob.com">
+                    <div class="newlogo"></div>
+                </a>
             </div>
-        </div>
 
+            <div class="header-info" style="display: none;">
+                <div class="header-info-left"></div>
+                <div class="header-info-text"></div>
+                <div class="header-info-right"></div>
+            </div>
+
+            <ul id="user-menu">
+                <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div></li>
+            </ul>
+        </div>
+    </div>
+	<header class="everline_header" style="display: none;">
+        <nav>
+            <div class="pin"><span></span></div>
+            <span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
+            <ul class="flt-r sub-links">
+                <li><a href="tel:02033710322"><i class="fa fa-phone"></i>&nbsp;0203 371 0322</a></li>
+            </ul>
+        </nav>
+        <br class="clearfix">
+    </header>
+
+        
         <div class="main-page">
-            <section id="full_width">
-                
+            
 
 <div class="row-fluid">
     <div class="dashboard-header">
@@ -549,57 +428,41 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </div>
     </div>
 </div>
-
-
-
-
-
-            </section>
         </div>
-
         <div id="modalRegion" class="modal hide fade"></div>
+        <div style="display: none;" class="hide" id="customer-lead-field-names">{}</div>
     </div>
     
-    <footer>
-<div id="copyrights">
-	<div class="copyrights-inner">
-		<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687
-		ICO Registration Number: Z2946778.<br/>
-		<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
-		Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br/>
-		&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
-	</div>
-</div>
+    <footer class="ezbob_footer" style="display: none;">
+        <div id="copyrights">
+            <div class="copyrights-inner">
 
+				<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br/>
+				<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
+				Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br/>
+				&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
+			            </div>
+        </div>
     </footer>
+
+	<footer class="row everline_footer" style="display: none;">
+        <div id="copyrights">
+            <div class="copyrights-inner">
+                <div class="legal-links col">
+                    &nbsp;
+                    <p class="col">
+                        Everline Financial Services Limited<br> Registered Address: Greater London House, Hampstead Road, London, NW1 7EJ
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    
     <script type="text/javascript">
         window.gRootPath = '/';
-    </script>
-    <script id="login-template" type="text/template">
-<form action="/Account/AdminLogOn" class="simple-login" method="post">    <div class="notifications"></div>
-    <div>
-        <div class="pager"><h3>Login to <a href="#" class="ezbob-logo ezbob-logo-login"></a></h3></div>
-        <hr />
-        <div class="form-group">
-            <div class="controls">
-                <input autofocus="autofocus" class="form_control" id="UserName" name="UserName" placeholder="user name" tabindex="11" type="text" value="" />
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="controls">
-                <input autocomplete="off" class="form_control" id="Password" name="Password" placeholder="password" tabindex="12" type="password" value="" />
-            </div>
-        </div>
-        <input id="returnUrl" name="returnUrl" type="hidden" value="" />
-        <br />
-        <div class="form-group">
-            <div class="controls">
-                <input class="btn btn-login form-control" type="submit" value="Log In" tabindex="13" id="loginSubmitBtn" />
-            </div>
-        </div>
-        <hr/>
-    </div>
-</form>
+        var Drupal = Drupal || {};
+        Drupal.behaviors = Drupal.behaviors || {}; 
     </script>
 
 
@@ -612,7 +475,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <script type="text/javascript" src="/Content/js/lib/moment.js"></script>
 <script type="text/javascript" src="/Content/js/lib/jsuri-1.1.1.js"></script>
 <script type="text/javascript" src="/Content/js/lib/bootstrap.js"></script>
-<script type="text/javascript" src="/Content/js/lib/cookies.js"></script>
+<script type="text/javascript" src="/Content/js/lib/jquery.cookie.js"></script>
 <script type="text/javascript" src="/Content/js/lib/underscore.js"></script>
 <script type="text/javascript" src="/Content/js/lib/backbone.js"></script>
 <script type="text/javascript" src="/Content/js/App/ezbob.validation.js"></script>
@@ -680,6 +543,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                 $('#amount-group').show();
             }
             
+            var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
+			$('.' + origin + '_header').show();
+			$('.' + origin + '_footer').show();
+			
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
@@ -687,8 +554,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
             $('#user-menu .login_btn, .signup_btn').hide();
 
             //set url for back button
-            var ulrBack = !isPayEarly ? 'https://app.ezbob.com/Customer/Profile#GetCash' : "https://app.ezbob.com/Customer/Profile#PayEarly";
-            var testUrlBack = !isPayEarly ? "https://app.ezbob.com/EzBob/EzBob.Web/Customer/Profile#GetCash" : "https://app.ezbob.com/EzBob/EzBob.Web/Customer/Profile#PayEarly";
+            var ulrBack = !isPayEarly ? 'https://app.' + origin + '.com/Customer/Profile#GetCash' : 'https://app.'  + origin + '.com/Customer/Profile#PayEarly';
+            var testUrlBack = !isPayEarly ? 'https://localhost:44300/EzBob/EzBob.Web/Customer/Profile#GetCash' : 'https://localhost:44300/EzBob/EzBob.Web/Customer/Profile#PayEarly';
 
             $(".btn-back").attr("href", isTest ? testUrlBack : ulrBack);
 
@@ -777,11 +644,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
 
     <script type="text/javascript">
-        function ShowHideSignLogOnOff() {
+        var EzBob = EzBob || {};
+
+        window.ShowHideSignLogOnOff = function() {
             var sEmail = $('body').attr('data-user-name');
             if (sEmail) {
                 $('#logoff-li').show().tooltip({ placement: 'bottom', title: sEmail }).tooltip("enable").tooltip('fixTitle');
-                $('#user-menu .login_btn, .signup_btn').hide();
+                $('.login_btn, .signup_btn').hide();
             }
             else {
                 $('#logoff-li').hide();
@@ -795,14 +664,11 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
                     $('.signup_btn').hide();
                 } // if
             } // if
-        } // ShowHideSignLogOnOff
+        }; // ShowHideSignLogOnOff
 
         $(document).ready(function() {
-            $('body').attr('data-user-name', '');
-            ShowHideSignLogOnOff();
-
+            window.ShowHideSignLogOnOff();
         });
-
     </script>
 </body>
 </html>

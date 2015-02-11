@@ -1,27 +1,31 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB
 {
-	using Utils;
 	using Twilio;
 	using System;
 
 	public class EzbobSmsMessage
 	{
 		public static EzbobSmsMessage FromMessage(Message smsMessage) {
+			DateTime now = DateTime.UtcNow;
 			if (smsMessage == null) {
+				
 				return new EzbobSmsMessage {
-					Status = "null"
+					Status = "null",
+					DateCreated = now,
+					DateSent = now,
+					DateUpdated = now
 				};
 			}
 
 			var model = new EzbobSmsMessage{
 				AccountSid = smsMessage.AccountSid,
 				Sid = smsMessage.Sid,
-				DateCreated = smsMessage.DateCreated,
-				DateSent = smsMessage.DateSent,
-				DateUpdated = smsMessage.DateUpdated,
+				DateCreated = smsMessage.DateCreated == default(DateTime) ? now : smsMessage.DateCreated,
+				DateSent = smsMessage.DateSent == default(DateTime) ? now : smsMessage.DateSent,
+				DateUpdated = smsMessage.DateUpdated  == default(DateTime) ? now : smsMessage.DateUpdated,
 				From = smsMessage.From,
 				To = smsMessage.To,
-				Body = smsMessage.Body,
+				Body = smsMessage.Body == null ? "" : (smsMessage.Body.Length > 255 ? smsMessage.Body.Substring(0, 255) : smsMessage.Body),
 				Status = smsMessage.Status,
 				Direction = smsMessage.Direction,
 				Price = smsMessage.Price,
@@ -93,20 +97,7 @@
 		/// </summary>
 		public string Body { get; set; }
 
-		/// <summary>
-		/// The number of body segments associated with this message. In
-		///             a common case, an ASCII message of 180 characters will be split into
-		///             one segment with 160 characters and one with 20 characters, so
-		///             NumSegments would be 2 for that message.
-		/// 
-		/// </summary>
-		public int NumSegments { get; set; }
-
-		/// <summary>
-		/// The number of images associated with this MMS
-		/// 
-		/// </summary>
-		public int NumImages { get; set; }
+		
 
 		/// <summary>
 		/// The status of this Message. Either queued, sending, sent, or failed.
@@ -134,26 +125,11 @@
 		/// 
 		/// </summary>
 		public string ApiVersion { get; set; }
-
-		/// <summary>
-		/// The error code of this message. If the message was unable to be delivered
-		///             this property will contain the error code.  Error codes are listed in
-		///             the Message docs: https://www.twilio.com/docs/api/rest/message.
-		/// 
-		/// </summary>
-		public int? ErrorCode { get; set; }
-
-		/// <summary>
-		/// The error message for this message. If the message was unable to be delivered
-		///             this property will contain the error message.
-		/// 
-		/// </summary>
-		public string ErrorMessage { get; set; }
-
+		
 		public override string ToString()
 		{
-			return string.Format("userid {0} uwId {1} dates {2} {3} {4} to {5} from {6} sid {7} status {8} body {9} direction {10} accountsid {11}, NumSegments {14}, NumImages {15}, errorCode {12}, errorMessage {13}, ",
-				UserId, UnderwriterId, DateCreated, DateSent, DateUpdated, To, From, Sid, Status, Body, Direction, AccountSid, ErrorCode, ErrorMessage, NumSegments, NumImages);
+			return string.Format("userid {0} uwId {1} dates {2} {3} {4} to {5} from {6} sid {7} status {8} body {9} direction {10} accountsid {11}",
+				UserId, UnderwriterId, DateCreated, DateSent, DateUpdated, To, From, Sid, Status, Body, Direction, AccountSid);
 		}
 	}
 }
