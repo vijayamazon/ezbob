@@ -228,6 +228,7 @@
 			success = api.Authenticate(userName, password);
 			if (!success) {
 				Log.ErrorFormat("Imail authentication failed\n{0}", api.GetErrorMessage());
+				return;
 				//throw new Exception(api.GetErrorMessage());
 			}
 			if (isDebugMode) {
@@ -236,10 +237,12 @@
 					success = api.SetEmailPreview(debugModeEmail);
 					if (!success) {
 						Log.ErrorFormat("Imail authentication failed\n{0}", api.GetErrorMessage());
+						return;
 						//throw new Exception(api.GetErrorMessage());
 					}
 				} else {
 					Log.ErrorFormat("Imail Debug mode and email is not provided");
+					return;
 					//throw new Exception("Debug mode and email is not provided");
 				}
 			}
@@ -247,6 +250,7 @@
 			success = api.ProcessPrintReadyPDF(pdfData, null, false);
 			if (!success) {
 				Log.ErrorFormat("Imail ProcessPrintReadyPDF failed\n{0}", api.GetErrorMessage());
+				return;
 				//throw new Exception(api.GetErrorMessage());
 			}
 			if (!string.IsNullOrEmpty(savePath)) {
