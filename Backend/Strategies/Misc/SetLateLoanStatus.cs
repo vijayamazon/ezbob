@@ -53,6 +53,7 @@
 		}//Execute
 
 		private void AddCollectionLog(int customerID, int loanID, CollectionType type, CollectionMethod method) {
+			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", customerID, loanID, type, method);
 			DB.ExecuteNonQuery("AddCollectionLog",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerID),
@@ -79,6 +80,7 @@
 		}
 
 		private void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type) {
+			Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", customerID, loanID, type, status);
 			DB.ExecuteNonQuery("UpdateCollectionStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerID),
@@ -395,32 +397,33 @@
 		private void SendCollectionImail(CollectionDataModel model, CollectionType type) {
 			if (model.ImailSendingAllowed) {
 				try {
-					Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 					IMailLib.CollectionMailModel mailModel = GetCollectionMailModel(model);
 					switch (type) {
 					case CollectionType.CollectionDay7:
 						if (mailModel.IsLimited) {
+							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 							collectionIMailer.SendDefaultTemplateComm7(mailModel);
 							AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 						}
 						break;
 					case CollectionType.CollectionDay15:
 						if (mailModel.IsLimited) {
+							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 							collectionIMailer.SendDefaultNoticeComm7Borrower(mailModel);
 							//TODO uncomment when guarantor is implemented: 
 							//collectionIMailer.SendDefaultWarningComm7Guarantor(mailModel);
 						} else {
+							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 							collectionIMailer.SendDefaultTemplateConsumer14(mailModel);
 						}
 						AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 						break;
 					case CollectionType.CollectionDay31:
+						Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
 						collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
 						AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 						break;
 					}
-
-					
 				} catch (Exception ex) {
 					Log.Error(ex, "Sending Imail failed for customer {0}", model.CustomerID);
 				}
@@ -432,7 +435,10 @@
 
 		private void SendCollectionSms(string smsTemplate, CollectionDataModel model, CollectionType type) {
 			if (model.SmsSendingAllowed && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
+				Log.Info("Collection sending sms to customer {0} phone number {1}\n content {2}",
+					model.CustomerID, model.PhoneNumber, smsTemplate);
 				new SendSms(model.CustomerID, 1, model.PhoneNumber, smsTemplate).Execute();
+				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Sms);
 			} else if (model.SmsSendingAllowed) {
 				Log.Info("Collection sending sms is in test mode, sms is not sent to customer {0} phone number {1}\n content {2}",
 					model.CustomerID, model.PhoneNumber, smsTemplate);

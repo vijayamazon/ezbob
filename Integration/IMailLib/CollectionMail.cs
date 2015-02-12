@@ -226,21 +226,29 @@
 			Log.InfoFormat("Sending mail to customer {0} template {1}", customerID, templateName);
 			bool success = false;
 			success = api.Authenticate(userName, password);
-			if (!success)
-				throw new Exception(api.GetErrorMessage());
+			if (!success) {
+				Log.ErrorFormat("Imail authentication failed\n{0}", api.GetErrorMessage());
+				//throw new Exception(api.GetErrorMessage());
+			}
 			if (isDebugMode) {
+				Log.InfoFormat("Sending mail to customer {0} template {1} in debug mode to email {2}", customerID, templateName, debugModeEmail);
 				if (!string.IsNullOrEmpty(debugModeEmail)) {
 					success = api.SetEmailPreview(debugModeEmail);
-					if (!success)
-						throw new Exception(api.GetErrorMessage());
-				} else
-					throw new Exception("Debug mode and email is not provided");
+					if (!success) {
+						Log.ErrorFormat("Imail authentication failed\n{0}", api.GetErrorMessage());
+						//throw new Exception(api.GetErrorMessage());
+					}
+				} else {
+					Log.ErrorFormat("Imail Debug mode and email is not provided");
+					//throw new Exception("Debug mode and email is not provided");
+				}
 			}
 
 			success = api.ProcessPrintReadyPDF(pdfData, null, false);
-			if (!success)
-				throw new Exception(api.GetErrorMessage());
-
+			if (!success) {
+				Log.ErrorFormat("Imail ProcessPrintReadyPDF failed\n{0}", api.GetErrorMessage());
+				//throw new Exception(api.GetErrorMessage());
+			}
 			if (!string.IsNullOrEmpty(savePath)) {
 				try {
 					PrepareMail.SaveFile(pdfData, savePath, customerID, templateName);
