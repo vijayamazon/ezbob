@@ -201,6 +201,12 @@
 			client.CreateActivity(aModel);
 		}
 
+		[Test]
+		public void TestChangeEmail() {
+			ISalesForceAppClient client = GetClient();
+			client.ChangeEmail("a@b.c", "b@a.c");
+		}
+
 	}
 
 

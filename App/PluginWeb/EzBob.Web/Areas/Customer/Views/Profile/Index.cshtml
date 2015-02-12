@@ -10,7 +10,7 @@
     if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
         ViewBag.Origin = "ezbob";
     }
-	ViewBag.WhiteLabel = Model.WhiteLabel == null ? null : Model.WhiteLabel.Name;
+    ViewBag.WhiteLabel = Model.WhiteLabel == null ? null : Model.WhiteLabel.Name;
     var customer = Model.Customer;
     customer.IsProfile = true;
     var currVals = CurrentValues.Instance;
@@ -19,8 +19,8 @@
 @section css{
     @BundleHelper.RenderProfileCss()
 
-	@if (Model.WhiteLabel != null) {
-		<style>
+    @if (Model.WhiteLabel != null) {
+        <style>
 			.whiteLabel {
 				background-image:url(data:@Model.WhiteLabel.LogoImageType;base64,@Model.WhiteLabel.Logo);
 				background-repeat: no-repeat;
@@ -30,8 +30,8 @@
 				vertical-align: middle;
 				display: inline-block;
 			}
-		</style>
-	}
+        </style>
+    }
 }
 
 <script id="profile-main-template" type="text/template">
@@ -68,13 +68,11 @@
                     <li><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Settings</a></li>
                     <li class="divider-vertical"></li>
                     <li><a href="#InviteFriend" ui-event-control-id="dashboard:tab-refer-a-friend">Refer A Friend</a></li>
-                    @if (Model.Customer.Perks != null)
-                    {
+                    @if (Model.Customer.Perks != null) {
                         <li class="divider-vertical"></li>
                         <li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
                     }
-                    @if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors)
-                    {
+                    @if (CurrentValues.Instance.EchoSignEnabledCustomer && Model.Customer.CanHaveDirectors) {
                         <li class="divider-vertical"></li>
                         <li><a href="#CompanyDirectors" ui-event-control-id="dashboard:tab-companydirectors">Company Directors</a></li>
                     }
@@ -144,12 +142,11 @@
             <dt>Offer Valid:</dt>
             <dd class="dashes">---</dd>
         </dl>
-        <button
-            rel="popover"
-            data-content="To get more cash, please pay your minimum amount due."
-            data-original-title="Get More Cash"
-            class="button btn-green disabled get-cash"
-            ui-event-control-id="dashboard:get-more-cash">
+        <button rel="popover"
+                data-content="To get more cash, please pay your minimum amount due."
+                data-original-title="Get More Cash"
+                class="button btn-green disabled get-cash"
+                ui-event-control-id="dashboard:get-more-cash">
             Get More Cash
         </button>
 
@@ -360,52 +357,52 @@
 
         EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
 
-		@{
+        @{
 			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
 			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
 		}
 
-		EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
-		EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
+        EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
+        EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
 
-		EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
-		EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
+        EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
+        EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
 
         $(function() {
-			@{
+            @{
                 string wizardComplete = "false";
 
                 if (ViewData["WizardComplete"] != null)
                 {
                     wizardComplete = ViewData["WizardComplete"].ToString().ToLower();
                     ViewData["WizardComplete"] = false;
-                } 
+                }
 			}
 
-		    var finishedWizard = @wizardComplete;
+            var finishedWizard = @wizardComplete;
 
-		    if (finishedWizard === true) {
-		        var oDialog = $('#thankyou_help');
-		        if (oDialog.length > 0)
-		            $.colorbox({ inline: true, transition: 'elastic',href: oDialog, open: true, show: true, width: 600, scrolling: false });
-		    }
+            if (finishedWizard === true) {
+                var oDialog = $('#thankyou_help');
+                if (oDialog.length > 0)
+                    $.colorbox({ inline: true, transition: 'elastic',href: oDialog, open: true, show: true, width: 600, scrolling: false });
+            }
 
-		    var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
-			options.createdInProfile = true;
+            var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
+            options.createdInProfile = true;
 
-			var profileView = new EzBob.Profile.ProfileView(options);
-			profileView.render();
+            var profileView = new EzBob.Profile.ProfileView(options);
+            profileView.render();
 
-			var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
-			notifications.render();
+            var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
+            notifications.render();
 
-			var whatsNew = new EzBob.WhatsNewView({ el: $('.whats-new-main') });
-			whatsNew.render();
+            var whatsNew = new EzBob.WhatsNewView({ el: $('.whats-new-main') });
+            whatsNew.render();
 
-			new EzBob.LiveChat.LiveChatRouter();
+            new EzBob.LiveChat.LiveChatRouter();
 
-			Backbone.history.start();
-		});
+            Backbone.history.start();
+        });
     </script>
 
     @BundleHelper.RenderProfileJs()
@@ -413,39 +410,47 @@
 
 <div class="hide">
     <div id="thankyou_help" class="help_window">
-	    <h2 class="form_section">Your application is complete!</h2>
-		@if (Model.WhiteLabel != null && Model.WhiteLabel.Id != 0) {
-			@Html.Raw(Model.WhiteLabel.FinishWizardText)
-		}
-		else {
-			if (customer.IsOffline.HasValue && customer.IsOffline.Value) {
-				 <div class="offline">
-					 <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
-					 <p>
-						 In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
-						 If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
-					 </p>
-					 <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-				 </div>
-			 }
-			 else {
-				 <div class="notoffline">
-					 <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
-					 <p>
-						 In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
-						 If you still have not received an email, please contact our customer care department by phone: 0800 011 4787 or by emailing: <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>.
-					 </p>
-					 <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-				 </div>
-			 }
-			<p>
-				Thank You,<br>
-				          The <span class="bold">@ViewBag.Origin</span> Team
-			</p>
-		}
-        <div class="alignright" style="padding: 0 10px 0 0;">
-            <button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:thank-you-popup">Continue</button>
+        <h2 class="form_section">Your application is complete!</h2>
+        @if (Model.WhiteLabel != null && Model.WhiteLabel.Id != 0) {
+            @Html.Raw(Model.WhiteLabel.FinishWizardText)
+        } else {
+            if (customer.IsOffline.HasValue && customer.IsOffline.Value) {
+                <div class="offline">
+                    <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
+                    <p>
+                        In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
+                        If you still have not received an email, please contact our customer care department by phone: @ViewBag.Phone or by emailing:
+                        @if (@ViewBag.Origin == "ezbob") {
+                            <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>
+                        } else if (@ViewBag.Origin == "everline") {
+                            <a href="mailto:customercare@everline.com">customercare@everline.com</a>
+                        }.
+                    </p>
+                    <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+                </div>
+            } else {
+                <div class="notoffline">
+            <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
+            <p>
+                In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
+                If you still have not received an email, please contact our customer care department by phone: @ViewBag.Phone or by emailing: 
+                @if (@ViewBag.Origin == "ezbob") {
+                    <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>
+                } else if (@ViewBag.Origin == "everline") {
+                    <a href="mailto:customercare@everline.com">customercare@everline.com</a>
+                }.
+            </p>
+            <p>If you have additional accounts we recommend that you link them to ezbob, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
         </div>
-        <div class="clear"></div>
-    </div>
-</div>
+            }
+                        <p>
+                            Thank You,<br>
+                            The <span class="bold">@ViewBag.Origin</span> Team
+                        </p>
+                        }
+                        <div class="alignright" style="padding: 0 10px 0 0;">
+                            <button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:thank-you-popup">Continue</button>
+                        </div>
+                        <div class="clear"></div>
+                    </div>
+                </div>

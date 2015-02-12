@@ -62,7 +62,7 @@ EzBob.AmazonStoreInfoView = Backbone.View.extend({
 				return div.empty();
 			},
 			dialogClass: 'amazon-tutor-dlg',
-			title: 'Link Your Amazon Shop to EZBOB'
+			title: 'Link Your Amazon Shop'
 		});
 		div.find('.amazon-tutorial-slider').coinslider({
 			width: 930,
