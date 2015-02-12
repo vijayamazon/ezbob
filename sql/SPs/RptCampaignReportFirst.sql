@@ -7,6 +7,7 @@ GO
 
 
 
+
 ALTER PROCEDURE RptCampaignReportFirst
 @DateStart DATE,
 @DateEnd DATE
@@ -53,7 +54,7 @@ BEGIN
 		AND
 		c.IsTest = 0
 		AND
-		s.FSource IN ('Google', 'Gmail', 'Facebook')
+		s.FSource IN ('Google', 'Gmail', 'Facebook', 'Bing')
 		AND 
 		s.FSource IS NOT NULL
 		AND
@@ -86,7 +87,7 @@ BEGIN
 		AND 
 		l.CustomerId NOT IN (SELECT CustomerId FROM Loan WHERE [Date] < @DateStart)
 		AND
-	    s.FSource IN ('Google', 'Gmail', 'Facebook')
+	    s.FSource IN ('Google', 'Gmail', 'Facebook', 'Bing')
 	   	AND 
 	  	s.FSource IS NOT NULL
 	  	AND
@@ -132,3 +133,4 @@ BEGIN
 	DROP TABLE #temp1
 END
 GO
+

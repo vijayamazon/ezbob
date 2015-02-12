@@ -51,7 +51,7 @@ BEGIN
 		AND
 		c.IsTest = 0
 		AND
-		s.RSource IN ('Google', 'Gmail', 'Facebook')
+		s.RSource IN ('Google', 'Gmail', 'Facebook', 'Bing')
 		AND 
 		s.RSource IS NOT NULL
 		AND
@@ -84,7 +84,7 @@ BEGIN
 		AND 
 		l.CustomerId NOT IN (SELECT CustomerId FROM Loan WHERE [Date] < @DateStart)
 		AND
-	    s.RSource IN ('Google', 'Gmail', 'Facebook')
+	    s.RSource IN ('Google', 'Gmail', 'Facebook', 'Bing')
 	   	AND 
 	  	s.RSource IS NOT NULL
 	  	AND
