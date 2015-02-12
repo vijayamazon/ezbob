@@ -96,6 +96,7 @@
 
 			Id = customer.Id;
 			SegmentType = customer.SegmentType();
+			Origin = customer.CustomerOrigin.Name;
 			IsAvoid = customer.IsAvoid;
 			IsAlibaba = customer.IsAlibaba;
 			FraudCheckStatus = customer.FraudStatus.Description();
@@ -301,6 +302,7 @@
 
 		public bool IsAvoid { get; set; }
 		public string SegmentType { get; set; }
+		public string Origin { get; set; }
 
 		public string TrustPilotStatusDescription { get; set; }
 		public string TrustPilotStatusName { get; set; }
