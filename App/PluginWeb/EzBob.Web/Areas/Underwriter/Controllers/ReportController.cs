@@ -68,7 +68,7 @@
 
 			var excel = reportHandler.GetWorkBook(report, rptDef);
 			var fc = new FileContentResult(excel.GetAsByteArray(), "Application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
-				FileDownloadName = report.Title.Replace(" ", "")
+				FileDownloadName = report.Title.Replace(" ", "") + from.ToString("yyyy-MM-dd") + to.ToString("yyyy-MM-dd") + ".xlsx"
 			};
 
 			return fc;
