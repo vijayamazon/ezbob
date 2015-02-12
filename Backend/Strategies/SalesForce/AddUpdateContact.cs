@@ -1,11 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
+	using System.Threading;
 	using Ezbob.Database;
 	using SalesForceLib;
 	using SalesForceLib.Models;
 	using StructureMap;
 
 	public class AddUpdateContact : AStrategy {
-
 		public AddUpdateContact(int customerID, int? directorID, string directorEmail) {
 			salesForce = ObjectFactory
 				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
@@ -25,6 +25,7 @@
 		/// executed when directors are added in wizard/dashboard/UW or when customer/directors data is updated in dashboard
 		/// </summary>
 		public override void Execute() {
+			Thread.Sleep(60000); // Solves race condition in converting lead to account on finish wizard, in order to improve sleep only when invoked from finish wizard flow
 			ContactModel model = DB.FillFirst<ContactModel>("SF_LoadContact",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerID),

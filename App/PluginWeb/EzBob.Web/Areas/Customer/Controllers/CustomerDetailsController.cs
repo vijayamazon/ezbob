@@ -216,7 +216,6 @@
 				IQueryable<Director> directors = m_oDirectorRepository.GetAll().Where(x => x.Customer.Id == customer.Id);
 
 				foreach (Director director in directors) {
-					m_oServiceClient.Instance.SalesForceAddUpdateContact(customer.Id, customer.Id, director.Id, director.Email);
 					try {
 						m_oServiceClient.Instance.ExperianConsumerCheck(1, customer.Id, director.Id, false);
 					}
@@ -830,7 +829,13 @@
 			m_oServiceClient.Instance.BrokerCustomerWizardComplete(customer.Id);
 
 			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
-			
+
+			if (customer.Company != null && customer.Company.Directors.Any()) {
+				foreach (Director director in customer.Company.Directors) {
+					m_oServiceClient.Instance.SalesForceAddUpdateContact(customer.Id, customer.Id, director.Id, director.Email);
+				}
+			}
+
 			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
 			m_oServiceClient.Instance.MainStrategy1(m_oContext.User.Id, m_oContext.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));

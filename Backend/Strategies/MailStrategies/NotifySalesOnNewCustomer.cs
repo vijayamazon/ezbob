@@ -35,7 +35,7 @@
 			if (string.IsNullOrWhiteSpace(sEmail))
 				return new Addressee[0];
 
-			return sEmail.Split(',').Select(addr => new Addressee(addr)).ToArray();
+			return sEmail.Split(',').Select(addr => new Addressee(addr, bShouldRegister: false)).ToArray();
 		} // GetRecipients
 	} // class NotifySalesOnNewCustomer
 } // namespace Ezbob.Backend.Strategies.MailStrategies

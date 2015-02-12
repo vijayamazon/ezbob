@@ -138,7 +138,7 @@
 		}
 
 		public void CreateActivity(ActivityModel model) {
-			Log.InfoFormat("SalesForce CreateEvent\n {0}", model.ToStringExtension());
+			Log.InfoFormat("SalesForce CreateActivity\n {0}", model.ToStringExtension());
 			string result = "";
 			var response = api.CreateActivity(
 				new SalesForceServiceNS.SessionHeader {
