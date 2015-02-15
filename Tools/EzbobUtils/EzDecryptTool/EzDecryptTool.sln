@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barrymore", "..\Barrymore\Barrymore.csproj", "{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\Logger\Logger.csproj", "{F92CA169-9532-4C4D-8D84-6F48ACE5719C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniResharper", "..\MiniResharper\MiniResharper.csproj", "{805F29C1-D575-49C5-A95D-4D393E65481F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzDecryptTool", "EzDecryptTool\EzDecryptTool.csproj", "{11B5B13B-9AA6-4781-9F49-2D1BEFDB0F58}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{11B5B13B-9AA6-4781-9F49-2D1BEFDB0F58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{11B5B13B-9AA6-4781-9F49-2D1BEFDB0F58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{11B5B13B-9AA6-4781-9F49-2D1BEFDB0F58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{11B5B13B-9AA6-4781-9F49-2D1BEFDB0F58}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
