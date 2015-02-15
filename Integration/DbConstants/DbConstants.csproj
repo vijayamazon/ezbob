@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CollectionStatusNames.cs" />
     <Compile Include="customer_enums.cs" />
     <Compile Include="DecisionActions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

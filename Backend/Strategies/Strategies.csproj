@@ -87,6 +87,7 @@
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
+    <Compile Include="CalculateLoan\BadPeriods.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
@@ -115,6 +116,7 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="CalculateLoan\LoanCalculator.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
     <Compile Include="Lottery\EnlistLottery.cs" />
     <Compile Include="Lottery\FitConditions\AAmount.cs" />
