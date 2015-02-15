@@ -223,6 +223,7 @@
 											@RawCell("Number of defaults", "<%- consumerData.NumberOfDefaults %>")
 											@RawCell("Number of CCJs", "<%- consumerData.NumberOfCCJs %>")
 											@RawCell("Age of most recent CCJ", "<%- consumerData.AgeOfMostRecentCCJ %>")
+                                            @RawCell("Total CCJ Value", "<%- consumerData.TotalCCJValueStr %>")
 											@RawCell("Number credit cards over limit", "<%- consumerData.NumberOfCCOverLimit %>")
 										</tbody>
 									</table>
@@ -648,6 +649,7 @@
 						<td><%- summary.CCJs  %></td>
 					</tr>
 					@RawCell("Most recent CCJ", "<%- summary.MostrecentCCJ  %>")
+                    @RawCell("Total CCJ Value", "<%- summary.TotalCCJValue  %>")
 					@RawCell("Credit card utilization", "<%- summary.Creditcardutilization  %>")
 					@RawCell("Enquiries in last 6 months", "<%- summary.Enquiriesinlast6months  %>")
 					@RawCell("Enquiries in last 3 months", "<%- summary.Enquiriesinlast3months  %>")

@@ -152,7 +152,7 @@
 			model.ScoreColor = CreditBureauModelBuilder.GetScorePositionAndColor(model.Score, CompanyScoreMax, CompanyScoreMin).Color;
 
 			model.CcjMonths = data.AgeOfMostRecentJudgmentDuringOwnershipMonths ?? -1;
-
+			model.CcjValue = data.TotalJudgmentValueLast24Months ?? 0 + data.TotalAssociatedJudgmentValueLast24Months ?? 0;
 			model.Ccjs = data.TotalJudgmentCountLast24Months ?? 0 + data.TotalAssociatedJudgmentCountLast24Months ?? 0;
 			model.CompanyHistories = new List<CompanyHistory>();
 
@@ -186,7 +186,7 @@
 			oModel.CcjMonths = oExperianLtd.GetAgeOfMostRecentCCJDecreeMonths();
 
 			oModel.Ccjs = oExperianLtd.GetNumberOfCcjsInLast24Months();
-
+			oModel.CcjValue = oExperianLtd.GetSumOfCcjsInLast24Months();
 			if (data.History != null)
 			{
 				foreach (ScoreAtDate scoreAtDate in data.History) {

@@ -179,6 +179,8 @@
 			model.NOCsOnCCJ = eInfo.NOCsOnCCJ;
 			model.NOCsOnCAIS = eInfo.NOCsOnCAIS;
 			model.NumberOfCCJs = eInfo.NumCCJs;
+			model.TotalCCJValueStr = GetClass1String(eInfo.TotalCCJValue1);
+			model.TotalCCJValue = (eInfo.TotalCCJValue1.HasValue && eInfo.TotalCCJValue1.Value > 0) ? eInfo.TotalCCJValue1.Value * 100 : (int?)null;
 			model.SatisfiedJudgements = eInfo.SatisfiedJudgement;
 			model.AgeOfMostRecentCCJ = eInfo.CCJLast2Years;
 			model.CAISSpecialInstructionFlag = eInfo.CAISSpecialInstructionFlag;
@@ -373,6 +375,22 @@
 			return model;
 		}
 
+		private string GetClass1String(int? totalCcjValue1) {
+			if (!totalCcjValue1.HasValue) {
+				return "";
+			}
+			switch (totalCcjValue1.Value) {
+			case -1:
+				return "No trace block";
+			case 0:
+				return "No relevant CAIS";
+			case 999:
+				return "£99,801+";
+			default:
+				return string.Format("£{0:N0} - £{1:N0}", ((totalCcjValue1.Value - 1) * 100), (totalCcjValue1.Value * 100));
+			}
+		}
+
 		private static string PrintErrorList(List<string> errorList)
 		{
 			var sb = new StringBuilder();
@@ -491,6 +509,7 @@
 			summary.Accounts = model.Consumer.NumberOfAccounts;
 			summary.CCJs = model.Consumer.NumberOfCCJs;
 			summary.MostrecentCCJ = model.Consumer.AgeOfMostRecentCCJ;
+			summary.TotalCCJValue = model.Consumer.TotalCCJValueStr;
 			summary.Creditcardutilization = model.Consumer.CreditCardUtilization;
 			summary.Enquiriesinlast6months = model.Consumer.EnquiriesLast6M;
 			summary.Enquiriesinlast3months = model.Consumer.EnquiriesLast3M;

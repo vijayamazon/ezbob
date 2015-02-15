@@ -73,6 +73,7 @@
 		public FinDataModel LastFinData { get; set; }
 		public int Ccjs { get; set; }
 		public int CcjMonths { get; set; }
+		public int CcjValue { get; set; }
 		public int DefaultAccounts { get; set; }
 		public decimal DefaultAmount { get; set; }
 		public int LateAccounts { get; set; }

@@ -68,6 +68,8 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int? NumberOfDefaults { get; set; }
 		public int? NumberOfCCJs { get; set; }
 		public int? AgeOfMostRecentCCJ { get; set; }
+		public int? TotalCCJValue { get; set; }
+		public string TotalCCJValueStr { get; set; }
 		public int? NumberOfCCOverLimit { get; set; }
 		public int? EnquiriesLast3M { get; set; }
 		public int? EnquiriesLast6M { get; set; }
@@ -191,6 +193,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public int? Accounts { get; set; }
 		public int? CCJs { get; set; }
 		public int? MostrecentCCJ { get; set; }
+		public string TotalCCJValue { get; set; }
 		public int? Creditcardutilization { get; set; }
 		public int? Enquiriesinlast6months { get; set; }
 		public int? Enquiriesinlast3months { get; set; }

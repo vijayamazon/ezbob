@@ -1431,6 +1431,11 @@ td a.edit-loan {
     margin: 0;
 }
 
+.tabbable.tabs-left{
+	margin-top: 2px;
+	margin-bottom: 2px;
+}
+
     .tabbable .tab-content {
         border-right: transparent;
         overflow: initial;
