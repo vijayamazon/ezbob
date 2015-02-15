@@ -197,18 +197,144 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		});
 
 		this.showed = true;
-
+		
+		this.restoreState();
 		this.$el.find('.nav-list a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
 			self.setLastShownProfileSection($(e.target).attr('href').substr(1));
-
-			if ($(e.currentTarget).attr('href') === '#dashboard')
-				self.dashboardInfoView.render();
+			if ($(e.currentTarget).attr('href') === '#customer-info')
+				self.crossCheckView.render({ customerId: self.customerId });
 		}));
 
 		this.gotoCustomer();
 
 		return this;
 	}, // render
+
+	show: function(id, isHistory, history) {
+		this.hide();
+
+		BlockUi('on');
+
+		scrollTop();
+
+		this.customerId = id;
+
+		var fullModel = new EzBob.Underwriter.CustomerFullModel({
+			customerId: id,
+			history: EzBob.parseDate(history),
+		});
+
+		var self = this;
+
+		fullModel.fetch().done(function(res) {
+			if (fullModel.get('State') === 'NotFound') {
+				EzBob.ShowMessage(res.error, 'Customer id. #' + id + ' was not found');
+				self.router.navigate('', { trigger: true, replace: true, });
+				return;
+			} // if
+
+			self.$el.show();
+			self.recordRecentCustomers(id);
+			//console.log('Full customer model is', fullModel);
+
+			self.personalInfoModel.set({ Id: id }, { silent: true });
+			self.personalInfoModel.set(fullModel.get('PersonalInfoModel'), { silent: true });
+			self.personalInfoModel.trigger('sync');
+
+			self.loanInfoModel.set({ Id: id }, { silent: true });
+			self.loanInfoModel.set(fullModel.get('ApplicationInfoModel'), { silent: true });
+			self.loanInfoModel.trigger('sync');
+
+			self.marketPlaces.customerId = id;
+			self.marketPlaces.history = history;
+			self.marketPlaces.reset(fullModel.get('MarketPlaces'), { silent: true });
+			self.marketPlaces.trigger('sync');
+
+			self.affordability.customerId = id;
+			self.affordability.clear().set(fullModel.get('Affordability'), { silent: true });
+			self.affordability.trigger('sync');
+
+			self.loanHistory.customerId = id;
+			self.loanHistoryView.idCustomer = id;
+			self.loanHistory.set(fullModel.get('LoansAndOffers'), { silent: true });
+			self.loanHistory.trigger('sync');
+
+			self.summaryInfoModel.set({ Id: id, success: true }, { silent: true });
+			self.summaryInfoModel.set(fullModel.get('SummaryModel'), { silent: true });
+			self.summaryInfoModel.trigger('sync');
+
+			self.experianInfoModel.set({ Id: id }, { silent: true });
+			self.experianInfoModel.set(fullModel.get('CreditBureauModel'), { silent: true });
+			self.experianInfoModel.trigger('sync');
+
+			self.paymentAccountsModel.customerId = id;
+			self.paymentAccountsModel.set(fullModel.get('PaymentAccountModel'), { silent: true });
+			self.paymentAccountsModel.trigger('sync');
+
+			self.medalCalculationModel.set({ Id: id }, { silent: true });
+			self.medalCalculationModel.set(fullModel.get('MedalCalculations'), { silent: true });
+			self.medalCalculationModel.trigger('sync');
+
+			self.pricingModelCalculationsModel.set({ Id: id }, { silent: true });
+			self.pricingModelCalculationsModel.set(fullModel.get('PricingModelCalculations'), { silent: true });
+			self.pricingModelCalculationsModel.trigger('sync');
+
+			self.PropertiesModel.set({ Id: id }, { silent: true });
+			self.PropertiesModel.set(fullModel.get('Properties'), { silent: true });
+			self.PropertiesModel.trigger('sync');
+
+			self.FraudDetectionLogs.customerId = id;
+			self.FraudDetectionLogView.customerId = id;
+			self.FraudDetectionLogs.set(fullModel.get('FraudDetectionLog'), { silent: true });
+			self.FraudDetectionLogs.trigger('sync');
+
+			self.ApicCheckLogs.customerId = id;
+			self.ApiChecksLogView.idCustomer = id;
+			self.ApicCheckLogs.reset(fullModel.get('ApiCheckLogs'), { silent: true });
+			self.ApicCheckLogs.trigger('sync');
+
+			self.messagesModel.set({ Id: id }, { silent: true });
+			self.messagesModel.set({ attaches: fullModel.get('Messages'), silent: true });
+			self.messagesModel.trigger('sync');
+
+			self.crmModel.customerId = id;
+			self.crmModel.set(fullModel.get('CustomerRelations'), { silent: true });
+			self.crmModel.trigger('sync');
+
+			self.alertDocs.reset(fullModel.get('AlertDocs'), { silent: true });
+			self.alertDocsView.create(id);
+			self.alertDocs.trigger('sync');
+
+			self.companyScoreModel.customerId = id;
+			self.companyScoreModel.set(fullModel.get('CompanyScore'), { silent: true });
+			self.companyScoreModel.trigger('sync');
+
+			self.crossCheckView.marketPlaces = self.marketPlaces;
+			self.crossCheckView.companyScore = self.companyScoreModel;
+			self.crossCheckView.experianDirectors = fullModel.get('ExperianDirectors');
+			self.crossCheckView.fullModel = fullModel;
+
+			self.PropertiesView.customerId = id;
+
+			if (isHistory)
+				$('a[href=#marketplaces]').click();
+
+			$('a.common-bug').attr('data-bug-customer', id);
+
+			self.signatureMonitorView.reload(id);
+
+			self.fillFunds();
+			self.fundingModel.fetch();
+
+			EzBob.InitBugs();
+
+			EzBob.UpdateBugsIcons(fullModel.get('Bugs'));
+
+			UnBlockUi();
+		}); // fullModel.fetch().done
+
+		EzBob.handleUserLayoutSetting();
+	}, // show
 
 	gotoCustomer: function() {
 		var goToCustomerId = new EzBob.Underwriter.goToCustomerId();
@@ -233,8 +359,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 	restoreState: function() {
 		this.$el.find('a.customer-tab').filter(
 			'[href="#' + this.getLastShownProfileSection(this.$el.find('a.customer-tab:first'
-		).attr('href').substr(1)) + '"]'
-	).tab('show');
+			).attr('href').substr(1)) + '"]'
+		).tab('show');
 
 		EzBob.handleUserLayoutSetting();
 	}, // restoreState
@@ -328,21 +454,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			localStorage.setItem('RecentCustomers', JSON.stringify(recentCustomersModel.RecentCustomers));
 		});
 	}, // recordRecentCustomers
-
-	checkCustomerAvailability: function(model) {
-		var data = model.toJSON();
-
-		if (data.success === false)
-			EzBob.ShowMessage(data.error, 'Error', (function() { Redirect('#'); }), 'OK');
-		else {
-			if (this.showed)
-				this.$el.show();
-
-			this.restoreState();
-		} // if
-
-		return false;
-	}, // checkCustomerAvailability
 
 	mpRechecked: function(parameter) {
 		var model = this;
@@ -501,134 +612,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.loanHistory.fetch();
 	}, // changedSystemDecision
 
-	show: function(id, isHistory, history) {
-		this.hide();
-
-		BlockUi('on');
-
-		scrollTop();
-
-		this.customerId = id;
-
-		var fullModel = new EzBob.Underwriter.CustomerFullModel({
-			customerId: id,
-			history: EzBob.parseDate(history),
-		});
-
-		var self = this;
-
-		fullModel.fetch().done(function(res) {
-			if (fullModel.get('State') === 'NotFound') {
-				EzBob.ShowMessage(res.error, 'Customer id. #' + id + ' was not found');
-				self.router.navigate('', { trigger: true, replace: true, });
-				return;
-			} // if
-
-			//console.log('Full customer model is', fullModel);
-
-			self.personalInfoModel.set({ Id: id }, { silent: true });
-			self.personalInfoModel.set(fullModel.get('PersonalInfoModel'), { silent: true });
-			self.personalInfoModel.trigger('sync');
-
-			self.loanInfoModel.set({ Id: id }, { silent: true });
-			self.loanInfoModel.set(fullModel.get('ApplicationInfoModel'), { silent: true });
-			self.loanInfoModel.trigger('sync');
-
-			self.marketPlaces.customerId = id;
-			self.marketPlaces.history = history;
-			self.marketPlaces.reset(fullModel.get('MarketPlaces'), { silent: true });
-			self.marketPlaces.trigger('sync');
-
-			self.affordability.customerId = id;
-			self.affordability.clear().set(fullModel.get('Affordability'), { silent: true });
-			self.affordability.trigger('sync');
-
-			self.loanHistory.customerId = id;
-			self.loanHistoryView.idCustomer = id;
-			self.loanHistory.set(fullModel.get('LoansAndOffers'), { silent: true });
-			self.loanHistory.trigger('sync');
-
-			self.summaryInfoModel.set({ Id: id, success: true }, { silent: true });
-			self.summaryInfoModel.set(fullModel.get('SummaryModel'), { silent: true });
-			self.summaryInfoModel.trigger('sync');
-
-			self.checkCustomerAvailability(self.summaryInfoModel);
-
-			self.recordRecentCustomers(id);
-
-			self.experianInfoModel.set({ Id: id }, { silent: true });
-			self.experianInfoModel.set(fullModel.get('CreditBureauModel'), { silent: true });
-			self.experianInfoModel.trigger('sync');
-
-			self.paymentAccountsModel.customerId = id;
-			self.paymentAccountsModel.set(fullModel.get('PaymentAccountModel'), { silent: true });
-			self.paymentAccountsModel.trigger('sync');
-
-			self.medalCalculationModel.set({ Id: id }, { silent: true });
-			self.medalCalculationModel.set(fullModel.get('MedalCalculations'), { silent: true });
-			self.medalCalculationModel.trigger('sync');
-
-			self.pricingModelCalculationsModel.set({ Id: id }, { silent: true });
-			self.pricingModelCalculationsModel.set(fullModel.get('PricingModelCalculations'), { silent: true });
-			self.pricingModelCalculationsModel.trigger('sync');
-
-			self.PropertiesModel.set({ Id: id }, { silent: true });
-			self.PropertiesModel.set(fullModel.get('Properties'), { silent: true });
-			self.PropertiesModel.trigger('sync');
-
-			self.FraudDetectionLogs.customerId = id;
-			self.FraudDetectionLogView.customerId = id;
-			self.FraudDetectionLogs.set(fullModel.get('FraudDetectionLog'), { silent: true });
-			self.FraudDetectionLogs.trigger('sync');
-
-			self.ApicCheckLogs.customerId = id;
-			self.ApiChecksLogView.idCustomer = id;
-			self.ApicCheckLogs.reset(fullModel.get('ApiCheckLogs'), { silent: true });
-			self.ApicCheckLogs.trigger('sync');
-
-			self.messagesModel.set({ Id: id }, { silent: true });
-			self.messagesModel.set({ attaches: fullModel.get('Messages'), silent: true });
-			self.messagesModel.trigger('sync');
-
-			self.crmModel.customerId = id;
-			self.crmModel.set(fullModel.get('CustomerRelations'), { silent: true });
-			self.crmModel.trigger('sync');
-
-			self.alertDocs.reset(fullModel.get('AlertDocs'), { silent: true });
-			self.alertDocsView.create(id);
-			self.alertDocs.trigger('sync');
-
-			self.companyScoreModel.customerId = id;
-			self.companyScoreModel.set(fullModel.get('CompanyScore'), { silent: true });
-			self.companyScoreModel.trigger('sync');
-
-			self.crossCheckView.marketPlaces = self.marketPlaces;
-			self.crossCheckView.companyScore = self.companyScoreModel;
-			self.crossCheckView.experianDirectors = fullModel.get('ExperianDirectors');
-			self.crossCheckView.fullModel = fullModel;
-			self.crossCheckView.render({ customerId: id });
-
-			self.PropertiesView.customerId = id;
-
-			if (isHistory)
-				$('a[href=#marketplaces]').click();
-
-			$('a.common-bug').attr('data-bug-customer', id);
-
-			self.signatureMonitorView.reload(id);
-
-			self.fillFunds();
-			self.fundingModel.fetch();
-
-			EzBob.InitBugs();
-
-			EzBob.UpdateBugsIcons(fullModel.get('Bugs'));
-
-			UnBlockUi();
-		}); // fullModel.fetch().done
-
-		EzBob.handleUserLayoutSetting();
-	}, // show
+	
 
 	fillFunds: function() {
 		var fundingAlert = this.$el.find('.fundingAlert');
