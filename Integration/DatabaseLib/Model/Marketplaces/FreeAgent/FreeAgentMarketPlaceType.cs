@@ -49,7 +49,7 @@
 
 		private IEnumerable<IAnalysisDataParameterInfo> GetAnalysisDataParameters(List<FreeAgentAggregation> ag, ITimePeriod time, DateTime firstOfMonth) {
 			if (time.TimePeriodType != TimePeriodEnum.Lifetime) {
-				ag = ag.Where(x => x.TheMonth >= firstOfMonth.AddMonths(-time.MonthsInPeriod)).ToList();
+				ag = ag.Where(x => x.TheMonth > firstOfMonth.AddMonths(-time.MonthsInPeriod)).ToList();
 			}
 			var parameterInfos = new List<IAnalysisDataParameterInfo>();
 			parameterInfos.Add(new AnalysisDataParameterInfo(time, ag.Sum(x => x.Turnover), AggregationFunction.Turnover));
