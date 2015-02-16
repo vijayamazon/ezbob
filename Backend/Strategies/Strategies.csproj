@@ -88,6 +88,11 @@
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="CalculateLoan\BadPeriods.cs" />
+    <Compile Include="CalculateLoan\Fee.cs" />
+    <Compile Include="CalculateLoan\InterestFreezePeriods.cs" />
+    <Compile Include="CalculateLoan\LoanCalculatorModel.cs" />
+    <Compile Include="CalculateLoan\ScheduledPayment.cs" />
+    <Compile Include="CalculateLoan\ActualRepayment.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />

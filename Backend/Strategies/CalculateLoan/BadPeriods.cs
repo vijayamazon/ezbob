@@ -7,7 +7,7 @@
 	using DbConstants;
 	using Ezbob.ValueIntervals;
 
-	internal class BadPeriods {
+	public class BadPeriods {
 		public static bool IsBad(CollectionStatusNames status) {
 			switch (status) {
 			case CollectionStatusNames.Enabled:
@@ -46,14 +46,16 @@
 			} // switch
 		} // IsBad
 
-		public BadPeriods(DateTime firstChangeToBadTime) {
+		public BadPeriods() {
 			this.badPeriods = new List<DateInterval>();
-
 			this.extremumPoints = new List<ExtremumPoint>();
-
-			Add(firstChangeToBadTime.AddYears(-200), false);
-			Add(firstChangeToBadTime, true);
+			Add(DateTime.MinValue, false);
 		} // constructor
+
+		public void Clear() {
+			this.badPeriods.Clear();
+			this.extremumPoints.Clear();
+		} // Clear
 
 		public bool IsLastKnownGood {
 			get {
@@ -83,6 +85,22 @@
 			} // get
 		} // Count
 
+		public void DeepCloneFrom(BadPeriods source = null) {
+			if (source == null)
+				return;
+
+			bool first = true;
+
+			foreach (ExtremumPoint point in source.extremumPoints) {
+				if (first) {
+					first = false;
+					continue;
+				} // if
+
+				this.extremumPoints.Add(point.DeepClone());
+			} // for each
+		} // DeepCloneFrom
+
 		public override string ToString() {
 			CreateIntervals();
 
@@ -93,17 +111,22 @@
 			foreach (ExtremumPoint p in this.extremumPoints) {
 				os.AppendFormat(
 					" ({0} {1})",
-					p.ChangeTime.ToString("MMM dd yyyy", CultureInfo.InvariantCulture),
+					p.ChangeTime.ToString("MMM dd yyyy", Culture),
 					p.IsNewStatusBad ? "bad" : "good"
 				);
 			} // for each
 
-			os.Append(". Intervals:");
+			os.Append(". ");
 
-			foreach (var di in this.badPeriods)
-				os.AppendFormat(" {0}", di);
+			if (this.badPeriods.Count > 0) {
+				os.Append("Intervals:");
 
-			os.Append(".");
+				foreach (var di in this.badPeriods)
+					os.AppendFormat(" {0}", di);
+
+				os.Append(".");
+			} else
+				os.Append("No bad periods.");
 
 			return os.ToString();
 		} // ToString
@@ -139,9 +162,17 @@
 
 			public DateTime ChangeTime { get; private set; }
 			public bool IsNewStatusBad { get; private set; }
+
+			public ExtremumPoint DeepClone() {
+				return new ExtremumPoint(ChangeTime, IsNewStatusBad);
+			} // DeepClone
 		} // class ExtremumPoint
 
 		private readonly List<DateInterval> badPeriods;
 		private readonly List<ExtremumPoint> extremumPoints;
+
+		private static CultureInfo Culture {
+			get { return Library.Instance.Culture; }
+		} // Culture
 	} // class BadPeriods
 } // namespace

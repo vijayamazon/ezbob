@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Ezbob.ValueIntervals {
+﻿namespace Ezbob.ValueIntervals {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
 
 	public class TDisjointIntervals<TFinite> : SortedSet<TInterval<TFinite>> where TFinite : IComparable<TFinite>  {
-
-		public static TDisjointIntervals<TFinite> operator +(TDisjointIntervals<TFinite> oSet, TInterval<TFinite> oInterval) {
+		public static TDisjointIntervals<TFinite> operator +(
+			TDisjointIntervals<TFinite> oSet,
+			TInterval<TFinite> oInterval
+		) {
 			return ReferenceEquals(oSet, null) ? null : oSet.Add(oInterval);
 		} // operator +
 
-		public static TDisjointIntervals<TFinite> operator +(TDisjointIntervals<TFinite> oSet, TDisjointIntervals<TFinite> oOther) {
+		public static TDisjointIntervals<TFinite> operator +(
+			TDisjointIntervals<TFinite> oSet,
+			TDisjointIntervals<TFinite> oOther
+		) {
 			return ReferenceEquals(oSet, null) ? null : oSet.Add(oOther);
 		} // operator +
 
@@ -58,14 +62,12 @@ namespace Ezbob.ValueIntervals {
 
 			os.Append("{");
 
-			foreach (var i in this)
+			foreach (TInterval<TFinite> i in this)
 				os.AppendFormat(" {0}", i);
 
 			os.Append(" }");
 
 			return os.ToString();
 		} // ToString
-
 	} // class TDisjointIntervals
-
-} // namespace Ezbob.ValueIntervals
+} // namespace

@@ -3,10 +3,12 @@
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
+	using Ezbob.Backend.Strategies.CalculateLoan;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
@@ -530,5 +532,25 @@
 			let0.LotteryEnlistingTypeStr = "MinCountOrMaxAmount";
 			let0.LotteryEnlistingTypeStr = "MinCountAndMaxAmount";
 		} // TestLotteryEnlistingType
+
+		[Test]
+		public void TestLoanCalculator() {
+			var lcm = new LoanCalculatorModel {
+				LoanAmount = 1200,
+				LoanIssueTime = new DateTime(2015, 1, 31, 14, 15, 16, DateTimeKind.Utc),
+				RepaymentIntervalType = RepaymentIntervalTypes.TenDays,
+				RepaymentCount = 6,
+				InterestRate = 0.1m,
+				InterestOnlyMonths = 2,
+			};
+
+			var lc = new LoanCalculator(lcm);
+
+			this.m_oLog.Debug("Loan calculator model before schedule:\n{0}", lc.Model);
+
+			lc.CreateSchedule();
+
+			this.m_oLog.Debug("Loan calculator model after schedule:\n{0}", lc.Model);
+		} // TestLoanCalculator
 	}
 }
