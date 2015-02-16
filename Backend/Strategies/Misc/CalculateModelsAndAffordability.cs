@@ -473,8 +473,8 @@
 		private const string PaypalRevenues = "TotalNetRevenues";
 		private const string PaypalOpex = "TotalNetExpenses";
 
-		private const string CommonRevenues = "TotalSumofOrders";
-		private const string CommonRevenuesAnnualized = "TotalSumofOrdersAnnualized";
+		private const string CommonRevenues = "TotalSumOfOrders";
+		private const string CommonRevenuesAnnualized = "TotalSumOfOrdersAnnualized";
 
 		private static readonly List<Tuple<string, int>> ms_oYearParts = new List<Tuple<string/*period*/, int/*factor*/>> {
 			new Tuple<string, int>("12M", 1),
