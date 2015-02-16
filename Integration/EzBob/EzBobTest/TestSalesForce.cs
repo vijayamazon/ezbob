@@ -1,5 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
+	using log4net;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using SalesForceLib;
@@ -8,14 +9,16 @@
 
 	[TestFixture]
 	public class TestSalesForce {
-		//[SetUp]
-		//public void Init() {
-		//	log4net.Config.XmlConfigurator.Configure();
-		//}
+		protected readonly ILog Log = LogManager.GetLogger(typeof (TestSalesForce));
+
+		[SetUp]
+		public void Init() {
+			log4net.Config.XmlConfigurator.Configure();
+		}
 
 		[Test]
 		public void TestRequestsToJson() {
-			Console.WriteLine("call CreateUpdateLeadAccount");
+			Log.Debug("call CreateUpdateLeadAccount");
 			LeadAccountModel model = new LeadAccountModel {
 				Email = "a@b.c",
 				AddressCountry = "Country",
@@ -40,9 +43,8 @@
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
 			};
-			Console.WriteLine(JsonConvert.SerializeObject(model, Formatting.Indented));
-			Console.WriteLine();
-			Console.WriteLine("call CreateOpportunity/UpdateOpportunity");
+			Log.Debug(JsonConvert.SerializeObject(model, Formatting.Indented));
+			Log.Debug("call CreateOpportunity/UpdateOpportunity");
 
 			var opModel = new OpportunityModel {
 				ApprovedAmount = 10000,
@@ -51,10 +53,10 @@
 				Stage = (int)OpportunityStage.s90,
 				
 			};
-			Console.WriteLine(JsonConvert.SerializeObject(opModel, Formatting.Indented));
+			Log.Debug(JsonConvert.SerializeObject(opModel, Formatting.Indented));
 
-			Console.WriteLine();
-			Console.WriteLine("call CreateUpdateContact");
+
+			Log.Debug("call CreateUpdateContact");
 
 			var cModel = new ContactModel {
 				
@@ -73,10 +75,10 @@
 				Type = "Director",
 				PhoneNumber = "065645745"
 			};
-			Console.WriteLine(JsonConvert.SerializeObject(cModel, Formatting.Indented));
+			Log.Debug(JsonConvert.SerializeObject(cModel, Formatting.Indented));
 
-			Console.WriteLine();
-			Console.WriteLine("call CreateTask");
+
+			Log.Debug("call CreateTask");
 
 			var tModel = new TaskModel {
 
@@ -88,10 +90,8 @@
 				Subject = "Subject"
 			};
 
-			Console.WriteLine(JsonConvert.SerializeObject(tModel, Formatting.Indented));
-
-			Console.WriteLine();
-			Console.WriteLine("call CreateActivity");
+			Log.Debug(JsonConvert.SerializeObject(tModel, Formatting.Indented));
+			Log.Debug("call CreateActivity");
 
 			var aModel = new ActivityModel {
 
@@ -102,23 +102,19 @@
 				StartDate = new DateTime(2015, 01, 27),
 				EndDate = new DateTime(2015, 01, 28)
 			};
-			Console.WriteLine(JsonConvert.SerializeObject(aModel, Formatting.Indented));
-
-			Console.WriteLine();
-			Console.WriteLine("call ChangeEmail");
+			Log.Debug(JsonConvert.SerializeObject(aModel, Formatting.Indented));
+			Log.Debug("call ChangeEmail");
 
 			var changeModel = new {
 				currentEmail = "a@b.c",
 				newEmail = "b@a.c"
 			};
 
-			Console.WriteLine(JsonConvert.SerializeObject(changeModel, Formatting.Indented));
-
-			Console.WriteLine();
-			Console.WriteLine("All methods response");
+			Log.Debug(JsonConvert.SerializeObject(changeModel, Formatting.Indented));
+			Log.Debug("All methods response");
 
 			var rModel = new ApiResponse("", "");
-			Console.WriteLine(JsonConvert.SerializeObject(rModel, Formatting.Indented));
+			Log.Debug(JsonConvert.SerializeObject(rModel, Formatting.Indented));
 		}
 
 		private ISalesForceAppClient GetClient(){
