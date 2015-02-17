@@ -7,6 +7,9 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		this.SignersList = null;
 
 		this.personalInfoModel = this.options.personalInfoModel;
+
+		this.boardResolutionTemplateID = 1;
+		this.personalGuaranteeTemplateID = 2;
 	}, // initialize
 
 	events: {
@@ -35,7 +38,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 			var oData = oRow.data('for-edit');
 
-			var oRequest = $.post(window.gRootPath + 'Underwriter/Esignatures/DeleteExperianDirector', { nDirectorID: oData.directorID, });
+			var oRequest = $.post(
+				window.gRootPath + 'Underwriter/Esignatures/DeleteExperianDirector',
+				{ nDirectorID: oData.directorID, }
+			);
 
 			oRequest.done(function(oResponse) {
 				if (oResponse.success) {
@@ -272,6 +278,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			return null;
 		} // if
 
+		var self = this;
+
 		this.$el.find('.selected-signer').each(function() {
 			var oChk = $(this);
 
@@ -280,23 +288,23 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 			var oSigner = oChk.data();
 
-			if (oSigner.IsDirector && oPackage[1]) {
+			if (oSigner.IsDirector && oPackage[self.boardResolutionTemplateID]) {
 				if (oSigner.DirectorID) {
 					if (oSigner.Type === 'experian')
-						oPackage[1].ExperianDirectors.push(oSigner.DirectorID);
+						oPackage[self.boardResolutionTemplateID].ExperianDirectors.push(oSigner.DirectorID);
 					else
-						oPackage[1].Directors.push(oSigner.DirectorID);
+						oPackage[self.boardResolutionTemplateID].Directors.push(oSigner.DirectorID);
 				}
 				else
-					oPackage[1].SendToCustomer = true;
+					oPackage[self.boardResolutionTemplateID].SendToCustomer = true;
 			} // if
 
-			if (oSigner.IsShareholder && oPackage[2]) {
+			if (oSigner.IsShareholder && oPackage[self.personalGuaranteeTemplateID]) {
 				if (oSigner.DirectorID) {
 					if (oSigner.Type === 'experian')
-						oPackage[2].ExperianDirectors.push(oSigner.DirectorID);
+						oPackage[self.personalGuaranteeTemplateID].ExperianDirectors.push(oSigner.DirectorID);
 					else
-						oPackage[2].Directors.push(oSigner.DirectorID);
+						oPackage[self.personalGuaranteeTemplateID].Directors.push(oSigner.DirectorID);
 				} // if
 			} // if
 		});
@@ -323,7 +331,6 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 	}, // cancelSend
 
 	toggleShowSigners: function() {
-
 		var nSignatureID = $(event.target).closest('button').data('SignatureID');
 		this.$el.find('.signature' + nSignatureID).toggleClass('hide');
 	}, // toggleShowSigners
@@ -351,7 +358,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		if (bPollStatus)
 			BlockUi();
 
-		var oRequest = $.getJSON(window.gRootPath + 'Underwriter/Esignatures/Load', { nCustomerID: nCustomerID, bPollStatus: bPollStatus, });
+		var oRequest = $.getJSON(
+			window.gRootPath + 'Underwriter/Esignatures/Load',
+			{ nCustomerID: nCustomerID, bPollStatus: bPollStatus, }
+		);
 		
 		oRequest.done(function(oResponse) {
 			var oSignatures = self.prepareSignatures(oResponse.signatures);
@@ -394,7 +404,9 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 						break;
 					} // sType
 
-					var sHtml = '<i class="fa ' + sClass + '" title="' + sSource + '" ' + (bHide ? 'style="visibility: hidden;"' : '') + '></i>';
+					var sHtml = '<i class="fa ' + sClass + '" title="' + sSource + '" ' +
+						(bHide ? 'style="visibility: hidden;"' : '') + '></i>';
+
 					return sHtml +
 						'<i class="fa fa-legal IsDirector" title="Company director"></i>' +
 						'<i class="fa fa-money IsShareholder" title="Company shareholder"></i>';
@@ -403,7 +415,10 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 			oSignersListOpts.aoColumns.push(
 				{ sClass: 'grid-item-Address', mData: null, mRender: function(ignored, sType, oData) {
-					return _.filter([oData.Line1, oData.Line2, oData.Line3, oData.Town, oData.County, oData.Postcode], $.trim).join(', ');
+					return _.filter(
+						[oData.Line1, oData.Line2, oData.Line3, oData.Town, oData.County, oData.Postcode],
+						$.trim
+					).join(', ');
 				}},
 				{ sClass: 'grid-item-Controls narrow-as-possible', mData: null, }
 			);
@@ -422,6 +437,17 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		oRequest.always(function() {
 			if (bPollStatus)
 				UnBlockUi();
+
+			self.boardResolutionTemplateID = self.personalInfoModel.get('BoardResolutionTemplateID');
+			self.personalGuaranteeTemplateID = self.personalInfoModel.get('PersonalGuaranteeTemplateID');
+
+			self.$el.find('#esign-board-resolution').data('template-id', self.boardResolutionTemplateID);
+			self.$el.find('#esign-personal-guarantee').data('template-id', self.personalGuaranteeTemplateID);
+
+			self.$el.find('#add-director-from-esign').toggleClass(
+				'hide',
+				self.personalInfoModel.get('CompanyType') === 'Entrepreneur'
+			);
 		});
 	}, // reload
 
@@ -470,7 +496,9 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 				.append($(
 					'<div class=edit-and-delete>' +
 					'<button class="btn btn-primary btn-edit-director"><i class="fa fa-edit"></i> Edit</button>' +
-					'<button class="btn btn-primary btn-delete-director" title="Delete this director"><i class="fa fa-times"></i></button>' +
+					'<button class="btn btn-primary btn-delete-director" title="Delete this director">' +
+						'<i class="fa fa-times"></i>' +
+					'</button>' +
 					'</div>' +
 
 					'<button class="btn btn-primary btn-save-director hide"><i class="fa fa-save"></i> Save</button>' +

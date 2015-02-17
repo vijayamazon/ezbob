@@ -72,6 +72,7 @@
     </script>
     @RenderSection("Js", false)
     <div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
+	@AddDirectorInfoTemplate.Render(this, Url.Action("AddDirector", "CrossCheck", new { Area = "Underwriter" }))
 </body>
 </html>
 

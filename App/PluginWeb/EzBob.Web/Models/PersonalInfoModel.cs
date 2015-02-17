@@ -12,6 +12,8 @@
 	using Infrastructure.Email;
 	using NHibernate;
 	using CommonLib;
+	using Ezbob.Database;
+	using Ezbob.Logger;
 	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
@@ -80,6 +82,8 @@
 		public bool IsWizardComplete { get; set; }
 		public List<string> ExperianDirectors { get; set; }
 		public bool IsAlibaba { get; set; }
+		public int BoardResolutionTemplateID { get; set; }
+		public int PersonalGuaranteeTemplateID { get; set; }
 
 		public PersonalInfoModel() {
 			IndustryFields = new List<string>();
@@ -298,6 +302,23 @@
 			CustomerAddress oAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			if (oAddress != null)
 				PostCode = oAddress.Rawpostcode;
+
+			DbConnectionGenerator.Get(new SafeILog(this)).ForEachRowSafe(
+				sr => {
+					switch ((string)sr["DocumentName"]) {
+					case "Board resolution":
+						BoardResolutionTemplateID = sr["EsignTemplateID"];
+						break;
+
+					case "Personal guarantee":
+						PersonalGuaranteeTemplateID = sr["EsignTemplateID"];
+						break;
+					} // switch
+				},
+				"LoadEsignTemplatesByCustomer",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", customer.Id)
+			);
 		} // InitFromCustomer
 
 		public bool IsAvoid { get; set; }
