@@ -7,14 +7,9 @@
 	using Ezbob.Utils;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {
-
 		public EzServiceAccessorLong() {
 			m_oServiceClient = new ServiceClient();
 		} // constructor
-
-		public void CalculateVatReturnSummary(int nCustomerMarketplaceID) {
-			m_oServiceClient.Instance.CalculateVatReturnSummary(nCustomerMarketplaceID);
-		} // CalculateVatReturnSummary
 
 		public ElapsedTimeInfo SaveVatReturnData(
 			int nCustomerMarketplaceID,
@@ -40,14 +35,12 @@
 			};
 		} // LoadVatReturnFullData
 
-		public ExperianConsumerData ParseExperianConsumer(long nServiceLogId)
-		{
+		public ExperianConsumerData ParseExperianConsumer(long nServiceLogId) {
 			var res = m_oServiceClient.Instance.ParseExperianConsumer(nServiceLogId);
 			return res.Value;
 		}
 
-		public ExperianConsumerData LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId)
-		{
+		public ExperianConsumerData LoadExperianConsumer(int userId, int customerId, int? directorId, long? nServiceLogId) {
 			var res = m_oServiceClient.Instance.LoadExperianConsumer(userId, customerId, directorId, nServiceLogId);
 			return res.Value;
 		}
@@ -81,6 +74,5 @@
 		}
 
 		private readonly ServiceClient m_oServiceClient;
-
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

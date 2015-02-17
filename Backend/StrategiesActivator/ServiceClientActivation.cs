@@ -296,9 +296,7 @@
 				return;
 			} // if
 
-			var serviceAccessor = ObjectFactory.GetInstance<IEzServiceAccessor>();
-
-			serviceAccessor.CalculateVatReturnSummary(nCustomerMarketplaceID);
+			serviceClient.CalculateVatReturnSummary(nCustomerMarketplaceID);
 		}
 
 		[Activation]

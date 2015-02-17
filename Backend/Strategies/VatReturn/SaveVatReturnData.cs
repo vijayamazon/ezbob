@@ -64,7 +64,13 @@
 
 					int nRead = oReader.GetValues(vals);
 
-					os.AppendFormat("\nRow {0}{3}: {1} fields, {2} read.\n", nRowNum, oReader.FieldCount, nRead, bRowsetStart ? " NEW ROWSET" : string.Empty);
+					os.AppendFormat(
+						"\nRow {0}{3}: {1} fields, {2} read.\n",
+						nRowNum,
+						oReader.FieldCount,
+						nRead,
+						bRowsetStart ? " NEW ROWSET" : string.Empty
+					);
 
 					for (int i = 0; i < nRead; i++)
 						os.AppendFormat("\t{2} - {0}: {1}\n", oReader.GetName(i), vals[i], i);
@@ -78,7 +84,8 @@
 
 			Log.Debug("\n{0}\n", os);
 
-			var oSummary = new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID);
+			var oSummary = new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID)
+				.SetHistoryRecordID(m_oSp.HistoryRecordID);
 			oSummary.Execute();
 
 			ElapsedTimeInfo.MergeData(oSummary.Stopper.ElapsedTimeInfo);
@@ -110,7 +117,8 @@
 			} // IsEmptyInput
 
 			public void AddHistoryItem(VatReturnRawData oOld, VatReturnRawData oNew) {
-				// At this point oOld and oNew have overlapping date intervals and same registration # and oNew is not deleted.
+				// At this point oOld and oNew have overlapping date intervals
+				// and same registration # and oNew is not deleted.
 
 				DeleteReasons nReason;
 				VatReturnRawData oDeletedItem;
@@ -126,7 +134,9 @@
 					else {
 						oDeletedItem = oNew;
 						oReasonItem = oOld;
-						nReason = oNew.SourceType == VatReturnSourceType.Manual ? DeleteReasons.ManualRejectedByLinked : DeleteReasons.UploadedRejectedByLinked;
+						nReason = oNew.SourceType == VatReturnSourceType.Manual
+							? DeleteReasons.ManualRejectedByLinked
+							: DeleteReasons.UploadedRejectedByLinked;
 					}
 					break;
 
@@ -151,7 +161,7 @@
 						break;
 
 					default:
-						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType.ToString());
+						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
 					} // switch
 
 					break;
@@ -174,13 +184,13 @@
 						break;
 
 					default:
-						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType.ToString());
+						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
 					} // switch
 
 					break;
 
 				default:
-					throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType.ToString());
+					throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
 				} // switch
 
 				oDeletedItem.IsDeleted = true;
@@ -219,7 +229,12 @@
 			public override string ToString() {
 				var os = new StringBuilder();
 
-				os.AppendFormat("MP ID: {0}, History ID: {1}, Source ID: {2}\n", CustomerMarketplaceID, HistoryRecordID, SourceID);
+				os.AppendFormat(
+					"MP ID: {0}, History ID: {1}, Source ID: {2}\n",
+					CustomerMarketplaceID,
+					HistoryRecordID,
+					SourceID
+				);
 
 				var sd = new List<Tuple<string, IEnumerable>> {
 					new Tuple<string, IEnumerable>("records", VatReturnRecords),
