@@ -96,6 +96,9 @@
 		} // HtmlToDocxBinary
 
 		private byte[] HtmlToBinary(string html) {
+			if (html == null)
+				return new byte[0];
+
 			return System.Text.Encoding.Default.GetBytes(html);
 		} // HtmlToDocxBinary
 
