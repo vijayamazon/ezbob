@@ -250,6 +250,12 @@
 				Created = submittedDate,
 				HistoryRecord = historyRecord
 			};
+			Customer customer = databaseCustomerMarketPlace.Customer;
+			int customerId = customer.Id;
+			string customerSurName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.Surname;
+			List<MP_YodleeGroup> yodleeGroups = new YodleeGroupRepository(_session).GetAll().ToList();
+			List<MP_YodleeGroupRuleMap> yodleeGroupRules = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
+			var directors = GetExperianDirectors(customer);
 
 			foreach (var item in ordersData.Data.Keys) {
 				var avaliableBalance = CurrencyXchg(item.availableBalance, item.asOfDate);
@@ -362,6 +368,14 @@
 						checkNumber = bankTransaction.checkNumber,
 						description = bankTransaction.description,
 						categorizationKeyword = bankTransaction.categorizationKeyword,
+						ezbobCategory = CategorizeTransaction(
+						yodleeGroups, 
+						yodleeGroupRules,
+						bankTransaction.description, 
+						bankTransaction.transactionBaseType,
+						transactionAmount != null ? (int)transactionAmount.Value : 0,
+						customerId, 
+						customerSurName, directors)
 					};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
 				}
@@ -489,8 +503,7 @@
 					(int)(oTransaction.transactionAmount.HasValue ? oTransaction.transactionAmount.Value : 0),
 					mp.Customer.Id,
 					mp.Customer.PersonalInfo.Surname,
-					directors
-					);
+					directors);
 			} catch (Exception e) {
 				_Log.Debug("Yodlee Categorize transaction failed.", e);
 			} // try
