@@ -31,7 +31,12 @@
 		} // Init
 
 		protected virtual CultureInfo CreateCultureInfo() {
-			return new CultureInfo("en-GB", false);
+			var ci = new CultureInfo("en-GB", false);
+
+			ci.NumberFormat.PercentPositivePattern = 1;
+			ci.NumberFormat.PercentNegativePattern = 1;
+
+			return ci;
 		} // CreateCultureInfo
 	} // class GloLib
 } // namespace

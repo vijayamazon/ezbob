@@ -1,57 +1,120 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
 	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Linq;
+	using NHibernate.Linq;
 
 	public class LoanCalculator {
 		public LoanCalculator(LoanCalculatorModel model) {
 			if (model == null)
 				throw new ArgumentNullException("model", "No data for loan calculation.");
 
-			Model = model;
+			WorkingModel = model;
 		} // constructor
 
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
 		/// </summary>
 		public virtual void CreateSchedule() {
-			if (Model.InterestOnlyMonths >= Model.RepaymentCount) {
+			if (WorkingModel.InterestOnlyMonths >= WorkingModel.RepaymentCount) {
 				throw new ArgumentOutOfRangeException(
 					"Interest only months count is not less than repayment count.",
 					(Exception)null
 				);
 			} // if
 
-			int principalRepaymentCount = Model.RepaymentCount - Model.InterestOnlyMonths;
+			int principalRepaymentCount = WorkingModel.RepaymentCount - WorkingModel.InterestOnlyMonths;
 
-			decimal otherPayments = Math.Floor(Model.LoanAmount / principalRepaymentCount);
+			decimal otherPayments = Math.Floor(WorkingModel.LoanAmount / principalRepaymentCount);
 
-			decimal firstPayment = Model.LoanAmount - otherPayments * (principalRepaymentCount - 1);
+			decimal firstPayment = WorkingModel.LoanAmount - otherPayments * (principalRepaymentCount - 1);
 
-			Model.Schedule.Clear();
+			WorkingModel.Schedule.Clear();
 
-			for (int i = 1; i <= Model.RepaymentCount; i++) {
+			for (int i = 1; i <= WorkingModel.RepaymentCount; i++) {
 				var sp = new ScheduledPayment();
 
 				sp.Date = (
-					Model.IsMonthly
-						? Model.LoanIssueTime.AddMonths(i)
-						: Model.LoanIssueTime.AddDays(i * (int)Model.RepaymentIntervalType)
+					WorkingModel.IsMonthly
+						? WorkingModel.LoanIssueTime.AddMonths(i)
+						: WorkingModel.LoanIssueTime.AddDays(i * (int)WorkingModel.RepaymentIntervalType)
 				).Date;
 
-				if (i <= Model.InterestOnlyMonths)
-					sp.Amount = 0;
-				else if (i == Model.InterestOnlyMonths + 1)
-					sp.Amount = firstPayment;
+				if (i <= WorkingModel.InterestOnlyMonths)
+					sp.Principal = 0;
+				else if (i == WorkingModel.InterestOnlyMonths + 1)
+					sp.Principal = firstPayment;
 				else
-					sp.Amount = otherPayments;
+					sp.Principal = otherPayments;
 
-				sp.InterestRate = Model.InterestRate;
+				sp.InterestRate = WorkingModel.MonthlyInterestRate;
 
-				if (i <= Model.DiscountPlan.Count)
-					sp.InterestRate *= 1 + Model.DiscountPlan[i - 1];
+				if (i <= WorkingModel.DiscountPlan.Count)
+					sp.InterestRate *= 1 + WorkingModel.DiscountPlan[i - 1];
 
-				Model.Schedule.Add(sp);
+				WorkingModel.Schedule.Add(sp);
 			} // for
 		} // CreateSchedule
+
+		/// <summary>
+		/// Calculates loan plan (the one that is written in loan agreement).
+		/// Repayments, fees, bad periods, and interest freeze periods are ignored.
+		/// </summary>
+		/// <returns>Loan plan.</returns>
+		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
+		public virtual List<Repayment> CalculatePlan() {
+			if (WorkingModel.Schedule.Count < 1)
+				throw new Exception("No loan schedule found.");
+
+			for (int i = 0; i < WorkingModel.Schedule.Count; i++)
+				if (WorkingModel.Schedule[i].Date == null)
+					throw new Exception("No date specified for scheduled payment #" + (i + 1));
+
+			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
+
+			DateTime lastInterestDay = WorkingModel.Schedule[WorkingModel.Schedule.Count - 1].Date.Value.Date;
+
+			var days = new List<CurrentLoanStatus>();
+
+			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
+				days.Add(new CurrentLoanStatus(d, WorkingModel.LoanAmount));
+
+			DateTime prevTime = WorkingModel.LoanIssueTime;
+
+			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
+				ScheduledPayment sp = WorkingModel.Schedule[i];
+
+				days.Where(cls => cls.Date > sp.Date.Value).ForEach(cls => cls.OpenPrincipal -= sp.Principal);
+
+				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
+
+				days
+					.Where(cls => prevTime < cls.Date && cls.Date <= sp.Date.Value)
+					.ForEach(cls =>
+						cls.DailyInterest = cls.OpenPrincipal *
+							GetDailyInterestRate(sp.InterestRate, preScheduleEnd, sp.Date.Value)
+					);
+
+				prevTime = sp.Date.Value;
+			} // for each scheduled payment
+
+			var result = new List<Repayment>(
+				WorkingModel.Schedule.Select(sp => new Repayment(sp.Date.Value, sp.Principal, 0, 0))
+			);
+
+			prevTime = WorkingModel.LoanIssueTime;
+
+			for (int i = 0; i < result.Count; i++) {
+				Repayment r = result[i];
+
+				r.Interest = days.Where(cls => prevTime < cls.Date && cls.Date <= r.Time).Sum(cls => cls.DailyInterest);
+
+				prevTime = r.Time;
+			} // for
+
+			return result;
+		} // CalculatePlan
 
 		/// <summary>
 		/// Calculates current loan balance.
@@ -69,6 +132,24 @@
 			return 0;
 		} // CalculateEarnedInterest
 
-		public virtual LoanCalculatorModel Model { get; private set; }
+		public virtual LoanCalculatorModel WorkingModel { get; private set; }
+
+		/// <summary>
+		/// Calculates interest rate for one day based on monthly interest rate.
+		/// If either of period start date or end date is null both dates are considered to be null.
+		/// In current implementation period dates are completely ignored: we just multiply monthly rate
+		/// by number of months in year and divide by number of days in year.
+		/// </summary>
+		/// <param name="monthlyInterestRate">Monthly interest rate.</param>
+		/// <param name="periodStartDate">Period start date (the first day of the period).</param>
+		/// <param name="periodEndDate">Period end date (the last day of the period).</param>
+		/// <returns>Daily interest rate.</returns>
+		protected virtual decimal GetDailyInterestRate(
+			decimal monthlyInterestRate,
+			DateTime? periodStartDate = null,
+			DateTime? periodEndDate = null
+		) {
+			return monthlyInterestRate * 12.0m / 365.0m;
+		} // GetDailyInterestRate
 	} // class LoanCalculator
 } // namespace

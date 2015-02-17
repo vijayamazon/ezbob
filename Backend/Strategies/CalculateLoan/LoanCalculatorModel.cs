@@ -11,15 +11,20 @@
 			this.loanAmount = 0;
 			this.repaymentCount = 1;
 			this.interestOnlyMonths = 0;
-			this.interestRate = 0.06m;
+			this.monthlyInterestRate = 0.06m;
 
 			DiscountPlan = new List<decimal>();
 			Schedule = new List<ScheduledPayment>();
-			Repayments = new List<ActualRepayment>();
+			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
 			BadPeriods = new BadPeriods();
 			FreezePeriods = new InterestFreezePeriods();
 		} // constructor
+
+		public void SetDiscountPlan(params decimal[] deltas) {
+			DiscountPlan.Clear();
+			DiscountPlan.AddRange(deltas);
+		} // SetDiscountPlan
 
 		/// <summary>
 		/// Creates a deep copy of current model.
@@ -32,7 +37,7 @@
 				RepaymentCount = RepaymentCount,
 				InterestOnlyMonths = InterestOnlyMonths,
 				RepaymentIntervalType = RepaymentIntervalType,
-				InterestRate = InterestRate,
+				MonthlyInterestRate = MonthlyInterestRate,
 			};
 
 			lcm.DiscountPlan.AddRange(DiscountPlan);
@@ -65,9 +70,12 @@
 					: Grammar.Number((int)RepaymentIntervalType, "month")
 			);
 
-			if (DiscountPlan.Count > 0)
-				os.AppendFormat("\tDiscount plan: {0}.\n", string.Join(", ", DiscountPlan.Select(x => x.ToString("P6"))));
-			else
+			if (DiscountPlan.Count > 0) {
+				os.AppendFormat(
+					"\tDiscount plan: {0}.\n",
+					string.Join(", ", DiscountPlan.Select(x => x.ToString("P1", Library.Instance.Culture)))
+				);
+			} else
 				os.Append("\tNo discount plan.\n");
 
 			if (Schedule.Count > 0)
@@ -130,15 +138,19 @@
 			} // set
 		} // LoanAmount
 
-		public decimal InterestRate {
-			get { return this.interestRate; }
+		public decimal MonthlyInterestRate {
+			get { return this.monthlyInterestRate; }
 			set {
-				if (value < 0)
-					throw new ArgumentOutOfRangeException("Interest rate is out of range: " + value + ".", (Exception)null);
+				if (value < 0) {
+					throw new ArgumentOutOfRangeException(
+						"Monthly interest rate is out of range: " + value + ".",
+						(Exception)null
+					);
+				} // if
 
-				this.interestRate = value;
+				this.monthlyInterestRate = value;
 			} // set
-		} // InterestRate
+		} // MonthlyInterestRate
 
 		public bool IsMonthly {
 			get { return RepaymentIntervalType == RepaymentIntervalTypes.Month; }
@@ -149,7 +161,7 @@
 		public List<decimal> DiscountPlan { get; private set; }
 
 		public List<ScheduledPayment> Schedule { get; private set; }
-		public List<ActualRepayment> Repayments { get; private set; }
+		public List<Repayment> Repayments { get; private set; }
 		public List<Fee> Fees { get; private set; }
 		public BadPeriods BadPeriods { get; private set; }
 		public InterestFreezePeriods FreezePeriods { get; private set; }
@@ -157,6 +169,6 @@
 		private int repaymentCount;
 		private int interestOnlyMonths;
 		private decimal loanAmount;
-		private decimal interestRate;
+		private decimal monthlyInterestRate;
 	} // class LoanCalculatorModel
 } // namespace

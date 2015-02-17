@@ -1,5 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
+	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
@@ -540,17 +541,23 @@
 				LoanIssueTime = new DateTime(2015, 1, 31, 14, 15, 16, DateTimeKind.Utc),
 				RepaymentIntervalType = RepaymentIntervalTypes.TenDays,
 				RepaymentCount = 6,
-				InterestRate = 0.1m,
+				MonthlyInterestRate = 0.1m,
 				InterestOnlyMonths = 2,
 			};
 
+			lcm.SetDiscountPlan(0, 0, -0.1m, 0.2m);
+
 			var lc = new LoanCalculator(lcm);
 
-			this.m_oLog.Debug("Loan calculator model before schedule:\n{0}", lc.Model);
+			this.m_oLog.Debug("Loan calculator model before schedule:\n{0}", lc.WorkingModel);
 
 			lc.CreateSchedule();
 
-			this.m_oLog.Debug("Loan calculator model after schedule:\n{0}", lc.Model);
+			this.m_oLog.Debug("Loan calculator model after schedule:\n{0}", lc.WorkingModel);
+
+			List<Repayment> plan = lc.CalculatePlan();
+
+			this.m_oLog.Debug("Loan plan:\n\t{0}.", string.Join("; ", plan));
 		} // TestLoanCalculator
 	}
 }
