@@ -183,8 +183,12 @@
                                         value="Confirm"
                                         id="paypoint-submit"
                                         class="submit pull-right button btn-green disabled confirm" tabindex="6" />
-
-                                    <a href="#" class="button btn-grey pull-right back">Back</a>
+                                    <input 
+                                        action="action" 
+                                        type="button" 
+                                        value="Back"
+                                        class="button btn-grey pull-right back"  
+                                        onclick="window.history.go(-1); return false;" />
                                 </div>
 
                                 @Hiddens()
@@ -320,11 +324,6 @@
             $('#logoff-li').show().tooltip({ placement: 'bottom', title: decodeURIComponent(getCallbackValue('username') || "") }).tooltip("enable").tooltip('fixTitle');
             $('#user-menu .login_btn, .signup_btn').hide();
 
-            //back button click
-            $(".btn-back").click(function() {
-                return history.go(-1);
-            });
-
             if (!isTest) {
                 $("select option[value='Visa']").remove();
             }
@@ -332,11 +331,7 @@
             $("#card_no").mask("9999999999999999");
             
             $('li[rel]').popover({ placement: 'left' });
-
-            $('input[name="back"]').click(function () {
-                history.go(-1);
-            });
-
+            
             $('input[type="submit"]').click(function (e) {
                 if ($('#paypoint-submit').hasClass('disabled')) {
                     return false;
