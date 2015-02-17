@@ -2,6 +2,9 @@ IF OBJECT_ID('GetSecondStepCustomers') IS NULL
 	EXECUTE('CREATE PROCEDURE GetSecondStepCustomers AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE GetSecondStepCustomers
 @DateStart DATETIME,
 @DateEnd DATETIME,
@@ -207,7 +210,8 @@ BEGIN
 	INTO
 		#temp3
 	FROM
-		Customer C
+		Customer C 
+	LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = C.OriginID 	
 	WHERE
 		(
 			@IncludeTest = 1
@@ -219,6 +223,8 @@ BEGIN
 		)
 		AND
 		C.Name NOT LIKE '%liatvanir%'
+		AND o.Name='ezbob'
+		 
 
 	------------------------------------------------------------------------------
 	--

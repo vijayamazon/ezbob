@@ -2,6 +2,9 @@ IF OBJECT_ID('GetLastStepCustomers') IS NULL
 	EXECUTE('CREATE PROCEDURE GetLastStepCustomers AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE GetLastStepCustomers
 @DateStart DATETIME,
 @DateEnd DATETIME,
@@ -41,6 +44,7 @@ BEGIN
 		CashRequests cr
 		INNER JOIN Customer c ON cr.IdCustomer = c.Id AND (@IncludeTest = 0 OR c.IsTest = 0)
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
+		LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 		LEFT JOIN (
 			SELECT DISTINCT
 				l.CustomerId
@@ -54,6 +58,7 @@ BEGIN
 		lt.CustomerId IS NULL 
 		AND cs.IsDefault = 0
 		AND c.IsAlibaba = 0
+		AND o.Name = 'ezbob'
 		AND (
 			(cr.IdUnderwriter IS NOT NULL AND cr.UnderwriterDecision = 'Approved')
 			OR

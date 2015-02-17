@@ -2,6 +2,9 @@ IF OBJECT_ID('GetFirstStepCustomers') IS NULL
 	EXECUTE('CREATE PROCEDURE GetFirstStepCustomers AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE GetFirstStepCustomers
 @DateStart DATETIME,
 @DateEnd DATETIME,
@@ -16,27 +19,8 @@ BEGIN
 	--
 	--------------------------------------------------------------------------
 	
-	IF OBJECT_ID('tempdb..#Shops') IS NOT NULL
-		DROP TABLE #Shops
-
 	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
 		DROP TABLE #raw
-
-	--------------------------------------------------------------------------
-	--
-	-- # OF SHOPS PER CUSTOMER
-	--
-	--------------------------------------------------------------------------
-
-	SELECT
-		CustomerId,
-		COUNT(MarketPlaceId) AS Shops
-	INTO
-		#Shops
-	FROM
-		MP_CustomerMarketPlace
-	GROUP BY
-		CustomerId
 
 	--------------------------------------------------------------------------
 	--
@@ -45,33 +29,28 @@ BEGIN
 	--------------------------------------------------------------------------
 
 	SELECT
-		Customer.Id AS CustomerID,
-		Customer.Name AS eMail
+		c.Id AS CustomerID,
+		c.Name AS eMail
 	INTO
 		#raw
 	FROM
-		Customer
-		LEFT JOIN #Shops ON #Shops.CustomerId = Customer.Id
+		Customer c
+		LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 	WHERE
 		(
 			@IncludeTest = 1
-			OR (
-				Customer.IsTest = 0
-				AND
-				Customer.Name NOT like '%ezbob%'
-			)
+			OR (c.IsTest = 0 AND c.Name NOT LIKE '%ezbob%')
 		)
 		AND
-		Customer.Name NOT LIKE '%liatvanir%'
+			c.Name NOT LIKE '%liatvanir%'
 		AND
-		@DateStart <= Customer.GreetingMailSentDate AND Customer.GreetingMailSentDate < @DateEnd
+			@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 		AND
-		Customer.FirstName IS NULL
-		AND
-		Customer.SurName IS NULL
-		AND
-		#Shops.Shops IS NULL
-		AND Customer.IsAlibaba = 0
+			c.WizardStep=1
+		AND 
+			c.IsAlibaba = 0
+		AND 
+			o.Name = 'ezbob'
 
 	--------------------------------------------------------------------------
 	--
@@ -102,9 +81,6 @@ BEGIN
 	--
 	--------------------------------------------------------------------------
 
-	IF OBJECT_ID('tempdb..#Shops') IS NOT NULL
-		DROP TABLE #Shops
-
 	IF OBJECT_ID('tempdb..#raw') IS NOT NULL
 		DROP TABLE #raw
 
@@ -114,5 +90,7 @@ BEGIN
 	--
 	--------------------------------------------------------------------------
 END
+
 GO
+
 
