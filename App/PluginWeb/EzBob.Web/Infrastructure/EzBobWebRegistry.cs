@@ -100,6 +100,7 @@ namespace EzBob.Web.Infrastructure
 			For<IVipRequestRepository>().Use<VipRequestRepository>();
 			For<IWhatsNewCustomerMapRepository>().Use<WhatsNewCustomerMapRepository>();
 			For<IWhatsNewRepository>().Use<WhatsNewRepository>();
+			For<IWhatsNewExcludeCustomerOriginRepository>().Use<WhatsNewExcludeCustomerOriginRepository>();
 
 			For<IUsersRepository>().Use<UsersRepository>();
 			For<IRolesRepository>().Use<RolesRepository>();

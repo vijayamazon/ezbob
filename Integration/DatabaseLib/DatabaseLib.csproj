@@ -104,6 +104,7 @@
     <Compile Include="Model\Database\CustomerOrigin.cs" />
     <Compile Include="Model\Database\CustomerPhone.cs" />
     <Compile Include="Model\Database\PropertyStatus.cs" />
+    <Compile Include="Model\Database\WhatsNewExcludeCustomerOrigin.cs" />
     <Compile Include="Model\Experian\ExperianDirector.cs" />
     <Compile Include="Model\Database\MedalCalculations.cs" />
     <Compile Include="Model\Database\LandRegistryOwner.cs" />
