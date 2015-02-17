@@ -15,10 +15,14 @@ BEGIN
 
 	DECLARE @RecordID INT = 0
 
+	DECLARE @MpID INT = NULL
+	DECLARE @HistoryID INT = NULL
+
 	------------------------------------------------------------------------------
 
 	SELECT
-		@RecordID = Id
+		@RecordID = Id,
+		@MpID = CustomerMarketPlaceID
 	FROM
 		MP_VatReturnRecords
 	WHERE
@@ -44,16 +48,22 @@ BEGIN
 
 		-------------------------------------------------------------------------
 
+		INSERT INTO MP_CustomerMarketPlaceUpdatingHistory (CustomerMarketPlaceId, UpdatingStart, UpdatingEnd, Error)
+			VALUES (@MpID, @Now, @Now, NULL)
+
+		-------------------------------------------------------------------------
+
+		SELECT @HistoryID = SCOPE_IDENTITY()
+
+		-------------------------------------------------------------------------
+
 		COMMIT TRAN
 	END
 
 	------------------------------------------------------------------------------
 
 	SELECT
-		CustomerMarketPlaceID
-	FROM
-		MP_VatReturnRecords
-	WHERE
-		Id = @RecordID
+		CustomerMarketPlaceID = @MpID,
+		HistoryID = @HistoryID
 END
 GO

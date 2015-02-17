@@ -14,10 +14,13 @@
 		} // Name
 
 		public override void Execute() {
-			int nCustomerMarketplaceID = m_oSp.ExecuteScalar<int>();
+			SafeReader sr = m_oSp.GetFirst();
+
+			int nCustomerMarketplaceID = sr.IsEmpty ? 0 : sr["CustomerMarketPlaceID"];
+			int nHistoryID = sr.IsEmpty ? 0 : sr["HistoryID"];
 
 			if (nCustomerMarketplaceID > 0)
-				new CalculateVatReturnSummary(nCustomerMarketplaceID).Execute();
+				new CalculateVatReturnSummary(nCustomerMarketplaceID).SetHistoryRecordID(nHistoryID).Execute();
 		} // Execute
 
 		private readonly SpRemoveManualVatReturnPeriod m_oSp;

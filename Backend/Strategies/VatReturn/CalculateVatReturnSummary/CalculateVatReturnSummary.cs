@@ -19,6 +19,8 @@
 			m_oRtiMonths = new SortedDictionary<DateTime, decimal>();
 
 			Stopper = new Stopper();
+
+			this.historyRecordID = 0;
 		} // constructor
 
 		public override string Name {
@@ -119,6 +121,11 @@
 
 		public Stopper Stopper { get; private set; } // Stopper
 
+		public CalculateVatReturnSummary SetHistoryRecordID(int recordID) {
+			this.historyRecordID = recordID;
+			return this;
+		} // SetHistoryRecordID
+
 		private void SaveCustomerID(LoadRtiMonthForVatReturnSummary.ResultRow oRow) {
 			m_nCustomerID = oRow.CustomerID;
 			m_oCurrentRtiMonthAction = SaveSalary;
@@ -141,7 +148,8 @@
 		private decimal? m_nOneMonthSalary;
 		private readonly SortedDictionary<DateTime, decimal> m_oRtiMonths;
 		private readonly SortedDictionary<int, long> m_oBusinessRegNums; 
-		private readonly SortedDictionary<long, TimedBusinessID> m_oRegNumBusinesses; 
+		private readonly SortedDictionary<long, TimedBusinessID> m_oRegNumBusinesses;
+		private int historyRecordID;
 
 		private static bool IsZero(decimal? x) {
 			if (x == null)

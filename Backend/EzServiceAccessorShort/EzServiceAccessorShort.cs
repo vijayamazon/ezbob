@@ -9,11 +9,6 @@
 	using Ezbob.Utils;
 
 	public class EzServiceAccessorShort : IEzServiceAccessor {
-		public void CalculateVatReturnSummary(int nCustomerMarketplaceID) {
-			var stra = new CalculateVatReturnSummary(nCustomerMarketplaceID);
-			stra.Execute();
-		} // CalculateVatReturnSummary
-
 		public ElapsedTimeInfo SaveVatReturnData(
 			int nCustomerMarketplaceID,
 			int nHistoryRecordID,
@@ -24,7 +19,7 @@
 			var stra = new SaveVatReturnData(nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
 			stra.Execute();
 			return stra.ElapsedTimeInfo;
-		} // CalculateVatReturnSummary
+		} // SaveVatReturnData
 
 		public VatReturnFullData LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID) {
 			var stra = new LoadVatReturnFullData(nCustomerID, nCustomerMarketplaceID);
