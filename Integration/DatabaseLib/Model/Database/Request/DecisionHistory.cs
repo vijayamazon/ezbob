@@ -44,9 +44,6 @@
 				if ((customer == null) || (customer.LastCashRequest == null))
 					return;
 
-				customer.SystemCalculatedSum = 0;
-				customer.ManagerApprovedSum = 0;
-
 				var lastAction = customer.DecisionHistory.OrderBy(d => d.Date).LastOrDefault();
 
 				customer.LastStatus = lastAction == null ? "N/A" : lastAction.Action.ToString();

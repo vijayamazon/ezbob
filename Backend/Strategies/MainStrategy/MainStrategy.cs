@@ -509,7 +509,7 @@
 				? this.autoDecisionResponse.CreditResult.ToString()
 				: "N/A";
 			customer.SystemCalculatedSum = this.modelLoanOffer;
-
+			customer.ManagerApprovedSum = this.offeredCreditLine;
 			if (this.autoDecisionResponse.DecidedToReject) {
 				customer.DateRejected = now;
 				customer.RejectedReason = this.autoDecisionResponse.DecisionName;

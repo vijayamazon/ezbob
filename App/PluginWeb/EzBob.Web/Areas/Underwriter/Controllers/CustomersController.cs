@@ -329,6 +329,8 @@
 				_limit.Check(sum);
 
 				customer.CreditSum = sum;
+				customer.ManagerApprovedSum = sum;
+				customer.NumApproves++;
 				customer.IsLoanTypeSelectionAllowed = request.IsLoanTypeSelectionAllowed;
 				request.ManagerApprovedSum = (double?)sum;
 
@@ -384,6 +386,7 @@
 				customer.DateRejected = now;
 				customer.RejectedReason = model.reason;
 				customer.Status = Status.Rejected;
+				customer.NumRejects++;
 				_historyRepository.LogAction(DecisionActions.Reject, model.reason, user, customer, model.rejectionReasons);
 
 				request.ManagerApprovedSum = null;
