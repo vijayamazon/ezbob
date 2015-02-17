@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Threading;
 	using BankTransactionsParser;
 	using Ezbob.Database;
 	using Ezbob.Utils;
@@ -133,7 +134,14 @@
 						historyRecord)
 					);
 			}
+			
+			List<string> directors;
+			ElapsedTimeHelper.CalculateAndStoreElapsedTimeForCallInSeconds(elapsedTimeInfo,
+				databaseCustomerMarketPlace.Id,
+				ElapsedDataMemberType.AggregateData,
+				() => Helper.GetAllYodleeOrdersData(DateTime.Now, databaseCustomerMarketPlace, false, out directors));
 
+			//Thread.Sleep(15000);
 			return elapsedTimeInfo;
 		} // UpdateClientsOrderInfo
 	} // class YodleeRetrieveDAtaHelper

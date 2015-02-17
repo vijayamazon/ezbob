@@ -122,6 +122,15 @@
 				nCurTransactionPosition++;
 			} // for
 
+			using (var tx = _session.BeginTransaction()) {
+				_session.SetBatchSize(1000);
+				foreach (var trn in transactions) {
+					_session.SaveOrUpdate(trn);
+				}
+				tx.Commit();
+				_Log.InfoFormat("Finished saving categorization for mp {0} num of transactions {1}", mp.Id, transactions.Count);
+
+			}
 			_session.Flush();
 		} // CalculateYodleeRunningBalance
 
@@ -184,7 +193,7 @@
 
 				orders.Data.Add(bankData, bankTransactionsDataList);
 			} // for each order item
-
+			_session.Flush();
 			return orders;
 		} // GetAllYodleeOrdersData
 

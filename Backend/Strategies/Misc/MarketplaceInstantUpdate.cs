@@ -27,6 +27,7 @@
 		} // Start
 
 		public void End(string sError, int nTokenExpired) {
+			Log.Info("Executing end update for mp {0} ", m_oStart.MarketplaceID);
 			m_oEnd.ErrorMessage = sError;
 			m_oEnd.TokenExpired = nTokenExpired;
 			m_oEnd.ExecuteNonQuery();
