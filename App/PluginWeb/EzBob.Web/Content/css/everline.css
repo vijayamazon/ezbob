@@ -254,3 +254,8 @@ font-size: 1.4em;
 header nav .org-btn {
 font-size: 1.4em;
 }
+
+.copyrights-inner {
+padding-bottom: 5px;
+padding-top: 5px;
+}
