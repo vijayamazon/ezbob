@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
-	using NHibernate.Linq;
 
 	public class LoanCalculator {
 		public LoanCalculator(LoanCalculatorModel model) {
@@ -85,16 +84,13 @@
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
 				ScheduledPayment sp = WorkingModel.Schedule[i];
 
-				days.Where(cls => cls.Date > sp.Date.Value).ForEach(cls => cls.OpenPrincipal -= sp.Principal);
+				foreach (var cls in days.Where(cls => cls.Date > sp.Date.Value))
+					cls.OpenPrincipal -= sp.Principal;
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				days
-					.Where(cls => prevTime < cls.Date && cls.Date <= sp.Date.Value)
-					.ForEach(cls =>
-						cls.DailyInterest = cls.OpenPrincipal *
-							GetDailyInterestRate(sp.InterestRate, preScheduleEnd, sp.Date.Value)
-					);
+				foreach (var cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date.Value))
+					cls.DailyInterestRate = GetDailyInterestRate(sp.InterestRate, preScheduleEnd, sp.Date.Value);
 
 				prevTime = sp.Date.Value;
 			} // for each scheduled payment
@@ -112,6 +108,18 @@
 
 				prevTime = r.Time;
 			} // for
+
+			Library.Instance.Log.Debug(
+				"\n\nLoanCalculator.CreatePlan - begin:" +
+				"\n\nLoan calculator model:\n{0}" +
+				"\n\nLoan plan:\n\t\t{1}" +
+				"\n\nDaily data:\n\t\t{2}" +
+				"\n\nLoanCalculator.CreatePlan - end." +
+				"\n\n",
+				WorkingModel,
+				string.Join("\n\t\t", result),
+				string.Join("\n\t\t", days)
+			);
 
 			return result;
 		} // CalculatePlan

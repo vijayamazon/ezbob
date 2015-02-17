@@ -1,17 +1,43 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
 	using System;
+	using System.Globalization;
 
 	internal class CurrentLoanStatus {
 		public CurrentLoanStatus(DateTime d, decimal openPrincipal) {
 			Date = d;
 			OpenPrincipal = openPrincipal;
-			DailyInterest = 0;
 			AssignedFees = 0;
+			DailyInterestRate = 0;
 		} // constructor
 
 		public DateTime Date { get; set; }
 		public decimal OpenPrincipal { get; set; }
-		public decimal DailyInterest { get; set; }
 		public decimal AssignedFees { get; set; }
+		public decimal DailyInterestRate { get; set; }
+
+		public decimal DailyInterest {
+			get { return OpenPrincipal * DailyInterestRate; }
+		} // DailyInterest
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			return string.Format(
+				"on {0}: p{1} i{2} f{3} (dr {4})",
+				Date.DateStr(),
+				OpenPrincipal.ToString("C2", Culture),
+				DailyInterest.ToString("C2", Culture),
+				AssignedFees.ToString("C2", Culture),
+				DailyInterestRate.ToString("P4", Culture)
+			);
+		} // ToString
+
+		private static CultureInfo Culture {
+			get { return Library.Instance.Culture; }
+		} // Culture
 	} // class CurrentLoanStatus
 } // namespace

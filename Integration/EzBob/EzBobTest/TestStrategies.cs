@@ -549,15 +549,15 @@
 
 			var lc = new LoanCalculator(lcm);
 
-			this.m_oLog.Debug("Loan calculator model before schedule:\n{0}", lc.WorkingModel);
+			// this.m_oLog.Debug("Loan calculator model before schedule:\n{0}", lc.WorkingModel);
 
 			lc.CreateSchedule();
 
-			this.m_oLog.Debug("Loan calculator model after schedule:\n{0}", lc.WorkingModel);
+			// this.m_oLog.Debug("Loan calculator model after schedule:\n{0}", lc.WorkingModel);
 
 			List<Repayment> plan = lc.CalculatePlan();
 
-			this.m_oLog.Debug("Loan plan:\n\t{0}.", string.Join("; ", plan));
+			// this.m_oLog.Debug("Loan plan:\n\t\t{0}", string.Join("\n\t\t", plan));
 		} // TestLoanCalculator
 	}
 }

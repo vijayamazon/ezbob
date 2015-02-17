@@ -61,13 +61,15 @@
 		public override string ToString() {
 			var os = new StringBuilder();
 
+			os.Append("\tLoan calculation model - begin:\n");
+
 			os.AppendFormat(
 				"\tIssued on {0} for {1} each {2}.\n",
 				LoanIssueTime.MomentStr(),
 				Grammar.Number(RepaymentCount, "repayment"),
 				RepaymentIntervalType == RepaymentIntervalTypes.Month
 					? "month"
-					: Grammar.Number((int)RepaymentIntervalType, "month")
+					: Grammar.Number((int)RepaymentIntervalType, "day")
 			);
 
 			if (DiscountPlan.Count > 0) {
@@ -79,17 +81,17 @@
 				os.Append("\tNo discount plan.\n");
 
 			if (Schedule.Count > 0)
-				os.AppendFormat("\tSchedule: {0}.\n", string.Join("; ", Schedule));
+				os.AppendFormat("\tSchedule:\n\t\t{0}.\n", string.Join("\n\t\t", Schedule));
 			else
 				os.Append("\tNo schedule.\n");
 
 			if (Repayments.Count > 0)
-				os.AppendFormat("\tRepayments: {0}.\n", string.Join("; ", Repayments));
+				os.AppendFormat("\tRepayments:\n\t\t{0}.\n", string.Join("\n\t\t", Repayments));
 			else
 				os.Append("\tNo repayments.\n");
 
 			if (Fees.Count > 0)
-				os.AppendFormat("\tFees: {0}.\n", string.Join("; ", Fees));
+				os.AppendFormat("\tFees:\n\t\t{0}.\n", string.Join("\n\t\t", Fees));
 			else
 				os.Append("\tNo fees.\n");
 
@@ -99,6 +101,8 @@
 				os.AppendFormat("\tInterest freeze periods: {0}.\n", FreezePeriods);
 			else
 				os.Append("\tNo interest freeze periods.\n");
+
+			os.Append("\tLoan calculation model - end.\n");
 
 			return os.ToString();
 		} // ToString
