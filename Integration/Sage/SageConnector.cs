@@ -182,8 +182,14 @@
 
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage)
 		{
-			string accessTokenRequest = string.Format("{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}",
-													  config.OAuthTokenEndpoint, code, redirectVal, config.OAuthSecret, config.OAuthIdentifier);
+			string accessTokenRequest = string.Format(
+				"{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}",
+				config.OAuthTokenEndpoint,
+				code,
+				redirectVal,
+				config.OAuthSecret,
+				config.OAuthIdentifier
+			);
 			
 			var request = new RestRequest(Method.POST) { Resource = accessTokenRequest };
 			request.AddHeader("Accept", "application / json");
@@ -192,17 +198,23 @@
 			try
 			{
 				IRestResponse response = client.Execute(request);
-				if (response != null)
-				{
+				if (response != null) {
 					var js = new JavaScriptSerializer();
 					var deserializedResponse = (AccessTokenContainer)js.Deserialize(response.Content, typeof(AccessTokenContainer));
 					if (deserializedResponse != null && deserializedResponse.access_token != null)
-					{
 						return deserializedResponse;
-					}
-					log.ErrorFormat("Failed parsing access token. Request:{0} Response:{1}", request.Resource, response.Content);
+
+					log.ErrorFormat(
+						"Failed parsing access token.\nRequest:{0}\nError msg: {2}\nResponse:{1}",
+						request.Resource,
+						response.Content,
+						response.ErrorMessage
+					);
+
 					throw new Exception("Failed getting token but parsing didn't threw exception"); 
 				}
+
+				log.Error("SageOne response to token request is null.");
 			}
 			catch (Exception e)
 			{
