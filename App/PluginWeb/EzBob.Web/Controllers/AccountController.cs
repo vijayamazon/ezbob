@@ -474,9 +474,29 @@
 
 			var user = m_oUsers.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
 
-			return user == null ?
-				Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet) :
+			if(user != null){
 				Json(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" }, JsonRequestBehavior.AllowGet);
+			}
+
+			if (hostname.Contains("everline")) {
+				var loginLoanChecker = new EverlineLoginLoanChecker();
+				var status = loginLoanChecker.GetLoginStatus(email);
+				switch (status.status) {
+				case EverlineLoanStatus.Error:
+					ms_oLog.Error("Failed to retrieve everline customer loan status \n{0}", status.Message);
+					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+				case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
+					return Json(new { everlineAccount = true }, JsonRequestBehavior.AllowGet);
+				case EverlineLoanStatus.ExistsWithNoLiveLoan:
+					TempData["IsEverline"] = true;
+					return Json(new { everlineWizard = true }, JsonRequestBehavior.AllowGet);
+				case EverlineLoanStatus.DoesNotExist:
+					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+				}
+			}
+
+			return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+
 		} // QuestionForEmail
 
 		[Transactional]

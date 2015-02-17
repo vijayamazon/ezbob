@@ -18,6 +18,12 @@
 				};
 				request.AddHeader("X-Authentication", "c83c4951-d205-4452-bce0-f0bc24d3e8b2,00000000-0000-0000-0000-000000000000,5a4690c72b1723a54530700250d90e5b35aa283ffb884525a031c3dc0a164c5c");
 				var response = client.Execute(request);
+				if (string.IsNullOrEmpty(response.Content)) {
+					return new EverlineLoginLoanCheckerResult {
+						Message = response.ErrorMessage,
+						status = EverlineLoanStatus.Error
+					};
+				}
 				var result = JsonConvert.DeserializeObject<EverlineLoginLoanCheckerResult>(response.Content);
 				return result;
 			} catch (Exception ex) {

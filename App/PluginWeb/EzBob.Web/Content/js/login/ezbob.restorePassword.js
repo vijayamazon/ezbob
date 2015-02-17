@@ -160,9 +160,20 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 
 		var self = this;
 
-		$.post('QuestionForEmail', this.ui.form.serialize()).done(function(response) {
+		$.post('QuestionForEmail', this.ui.form.serialize())
+		 .done(function(response) {
 			if (response.broker) {
 				document.location.href = '' + window.gRootPath + 'Broker#ForgotPassword';
+				return true;
+			}
+
+			if (response.everlineAccount) {
+				document.location.href = 'https://accounts.everline.com/login';
+				return true;
+			}
+
+			if (response.everlineWizard) {
+				document.location.href = '' + window.gRootPath + 'Customer/Wizard';
 				return true;
 			}
 
