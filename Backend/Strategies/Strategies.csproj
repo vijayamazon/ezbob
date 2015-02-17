@@ -88,7 +88,8 @@
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="CalculateLoan\BadPeriods.cs" />
-    <Compile Include="CalculateLoan\CurrentLoanStatus.cs" />
+    <Compile Include="CalculateLoan\DailyLoanStatus.cs" />
+    <Compile Include="CalculateLoan\OneDayLoanStatus.cs" />
     <Compile Include="CalculateLoan\Fee.cs" />
     <Compile Include="CalculateLoan\InterestFreezePeriods.cs" />
     <Compile Include="CalculateLoan\LoanCalculatorModel.cs" />

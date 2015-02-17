@@ -108,20 +108,15 @@
 
 			os.Append("Points:");
 
-			foreach (ExtremumPoint p in this.extremumPoints) {
-				os.AppendFormat(
-					" ({0} {1})",
-					p.ChangeTime.ToString("MMM dd yyyy", Culture),
-					p.IsNewStatusBad ? "bad" : "good"
-				);
-			} // for each
+			foreach (ExtremumPoint p in this.extremumPoints)
+				os.AppendFormat(" ({1} on {0})", p.ChangeTime.DateStr(), p.IsNewStatusBad ? "bad" : "good");
 
 			os.Append(". ");
 
 			if (this.badPeriods.Count > 0) {
 				os.Append("Intervals:");
 
-				foreach (var di in this.badPeriods)
+				foreach (DateInterval di in this.badPeriods)
 					os.AppendFormat(" {0}", di);
 
 				os.Append(".");

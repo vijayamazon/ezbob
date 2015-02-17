@@ -2,15 +2,19 @@
 	using System;
 	using System.Globalization;
 
-	internal class CurrentLoanStatus {
-		public CurrentLoanStatus(DateTime d, decimal openPrincipal) {
+	internal class OneDayLoanStatus {
+		public OneDayLoanStatus(DateTime d, decimal openPrincipal) {
 			Date = d;
 			OpenPrincipal = openPrincipal;
 			AssignedFees = 0;
 			DailyInterestRate = 0;
 		} // constructor
 
-		public DateTime Date { get; set; }
+		public DateTime Date {
+			get { return this.date; }
+			set { this.date = value.Date; }
+		} // Date
+
 		public decimal OpenPrincipal { get; set; }
 		public decimal AssignedFees { get; set; }
 		public decimal DailyInterestRate { get; set; }
@@ -39,5 +43,7 @@
 		private static CultureInfo Culture {
 			get { return Library.Instance.Culture; }
 		} // Culture
-	} // class CurrentLoanStatus
+
+		private DateTime date;
+	} // class OneDayLoanStatus
 } // namespace

@@ -545,7 +545,7 @@
 				InterestOnlyMonths = 2,
 			};
 
-			lcm.SetDiscountPlan(0, 0, -0.1m, 0.2m);
+			lcm.SetDiscountPlan(0, 0, -0.5m, 0.6m);
 
 			var lc = new LoanCalculator(lcm);
 

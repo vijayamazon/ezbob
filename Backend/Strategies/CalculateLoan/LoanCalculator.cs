@@ -63,43 +63,13 @@
 		/// <returns>Loan plan.</returns>
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		public virtual List<Repayment> CalculatePlan() {
-			if (WorkingModel.Schedule.Count < 1)
-				throw new Exception("No loan schedule found.");
-
-			for (int i = 0; i < WorkingModel.Schedule.Count; i++)
-				if (WorkingModel.Schedule[i].Date == null)
-					throw new Exception("No date specified for scheduled payment #" + (i + 1));
-
-			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
-
-			DateTime lastInterestDay = WorkingModel.Schedule[WorkingModel.Schedule.Count - 1].Date.Value.Date;
-
-			var days = new List<CurrentLoanStatus>();
-
-			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
-				days.Add(new CurrentLoanStatus(d, WorkingModel.LoanAmount));
-
-			DateTime prevTime = WorkingModel.LoanIssueTime;
-
-			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
-				ScheduledPayment sp = WorkingModel.Schedule[i];
-
-				foreach (var cls in days.Where(cls => cls.Date > sp.Date.Value))
-					cls.OpenPrincipal -= sp.Principal;
-
-				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
-
-				foreach (var cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date.Value))
-					cls.DailyInterestRate = GetDailyInterestRate(sp.InterestRate, preScheduleEnd, sp.Date.Value);
-
-				prevTime = sp.Date.Value;
-			} // for each scheduled payment
+			var days = CreateDailyLoanStatus();
 
 			var result = new List<Repayment>(
 				WorkingModel.Schedule.Select(sp => new Repayment(sp.Date.Value, sp.Principal, 0, 0))
 			);
 
-			prevTime = WorkingModel.LoanIssueTime;
+			DateTime prevTime = WorkingModel.LoanIssueTime;
 
 			for (int i = 0; i < result.Count; i++) {
 				Repayment r = result[i];
@@ -127,8 +97,10 @@
 		/// <summary>
 		/// Calculates current loan balance.
 		/// </summary>
+		/// <param name="now">Date to calculate balance to (current date if null).</param>
 		/// <returns>Current loan balance.</returns>
-		public virtual decimal CalculateBalance() {
+		public virtual decimal CalculateBalance(DateTime? now = null) {
+			now = now ?? DateTime.UtcNow;
 			return 0;
 		} // CalculateBalance
 
@@ -159,5 +131,47 @@
 		) {
 			return monthlyInterestRate * 12.0m / 365.0m;
 		} // GetDailyInterestRate
+
+		/// <summary>
+		/// Creates daily loan status from loan issue date till the last payment.
+		/// Bad periods and interest freeze periods are ignored.
+		/// </summary>
+		/// <returns></returns>
+		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
+		private DailyLoanStatus CreateDailyLoanStatus() {
+			if (WorkingModel.Schedule.Count < 1)
+				throw new Exception("No loan schedule found.");
+
+			for (int i = 0; i < WorkingModel.Schedule.Count; i++)
+				if (WorkingModel.Schedule[i].Date == null)
+					throw new Exception("No date specified for scheduled payment #" + (i + 1));
+
+			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
+
+			DateTime lastInterestDay = WorkingModel.Schedule[WorkingModel.Schedule.Count - 1].Date.Value.Date;
+
+			var days = new DailyLoanStatus();
+
+			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
+				days.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount));
+
+			DateTime prevTime = WorkingModel.LoanIssueTime;
+
+			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
+				ScheduledPayment sp = WorkingModel.Schedule[i];
+
+				foreach (var cls in days.Where(cls => cls.Date > sp.Date.Value))
+					cls.OpenPrincipal -= sp.Principal;
+
+				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
+
+				foreach (var cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date.Value))
+					cls.DailyInterestRate = GetDailyInterestRate(sp.InterestRate, preScheduleEnd, sp.Date.Value);
+
+				prevTime = sp.Date.Value;
+			} // for each scheduled payment
+
+			return days;
+		} // CreateDailyLoanStatus
 	} // class LoanCalculator
 } // namespace
