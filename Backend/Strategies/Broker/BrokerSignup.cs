@@ -26,6 +26,7 @@
 			bool bIsCaptchaEnabled,
 			int nBrokerTermsID,
 			string sReferredBy,
+			bool bFCARegistered,
 			string sLicenseNumber
 		) {
 			m_bIsCaptchaEnabled = bIsCaptchaEnabled;
@@ -46,6 +47,7 @@
 				BrokerTermsID = nBrokerTermsID,
 				ReferredBy = sReferredBy,
 				Strategy = this,
+				FCARegistered = bFCARegistered,
 				LicenseNumber = sLicenseNumber
 			};
 
@@ -174,6 +176,9 @@
 
 			[UsedImplicitly]
 			public string ReferredBy { get; set; }
+
+			[UsedImplicitly]
+			public bool FCARegistered { get; set; }
 
 			[UsedImplicitly]
 			public string LicenseNumber { get; set; }

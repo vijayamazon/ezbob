@@ -17,7 +17,6 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 			Map(x => x.ContactOtherPhone).Nullable().Length(255);
 			Map(x => x.SourceRef).Not.Nullable().Length(255);
 			Map(x => x.EstimatedMonthlyClientAmount);
-			Map(x => x.Password).Not.Nullable().Length(255);
 			References(x => x.WhiteLabel, "WhiteLabelId").Cascade.All();
 		} // constructor
 	} // class BrokerMap

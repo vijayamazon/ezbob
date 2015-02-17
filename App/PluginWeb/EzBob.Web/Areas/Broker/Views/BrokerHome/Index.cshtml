@@ -193,6 +193,13 @@
 								</div>
                                 
                                 <div class="form_field_container">
+                                    <div class="form_read_and_accept">
+                                        <input type="checkbox" name="FCARegistered" id="FCARegistered" value="false" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:fca-registered" />
+                                        <label for="FCARegistered">FCA Registered</label>
+                                    </div>
+                                </div>
+
+                                <div class="form_field_container license_number_field_container" style="display: none">
                                     <label class="attardi-input">
                                         <span>Licence number</span>
                                         <input type="text" name="LicenseNumber" id="LicenseNumber" maxlength="50" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-license-number" />

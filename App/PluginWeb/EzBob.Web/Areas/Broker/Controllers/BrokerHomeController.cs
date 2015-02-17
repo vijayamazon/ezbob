@@ -87,23 +87,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[CaptchaValidationFilter(Order = 999999)]
-		public JsonResult Signup(
-			string FirmName,
-			string FirmRegNum,
-			string ContactName,
-			string ContactEmail,
-			string ContactMobile,
-			string MobileCode,
-			string ContactOtherPhone,
-			decimal EstimatedMonthlyClientAmount,
-			string Password,
-			string Password2,
-			string FirmWebSite,
-			int EstimatedMonthlyAppCount,
-			int IsCaptchaEnabled,
-			int TermsID,
-			string LicenseNumber
-			) {
+		public JsonResult Signup(BrokerSignupModel model) {
 			string sReferredBy = "";
 
 			if (Request.Cookies.AllKeys.Contains(Constant.SourceRef)) {
@@ -127,22 +111,24 @@
 					"\n\tEstimated monthly application count: {9}" +
 					"\n\tCaptcha enabled: {10}" +
 					"\n\tTerms ID: {11}" +
-					"\n\tReferred by (sourceref): {12}" + 
-					"\n\tLicense Number: {13}",
-				FirmName,
-				FirmRegNum,
-				ContactName,
-				ContactEmail,
-				ContactMobile,
-				MobileCode,
-				ContactOtherPhone,
-				EstimatedMonthlyClientAmount,
-				FirmWebSite,
-				EstimatedMonthlyAppCount,
-				IsCaptchaEnabled == 0 ? "no" : "yes",
-				TermsID,
+					"\n\tReferred by (sourceref): {12}" +
+					"\n\tFCARegistered: {13}" + 
+					"\n\tLicense Number: {14}",
+				model.FirmName,
+				model.FirmRegNum,
+				model.ContactName,
+				model.ContactEmail,
+				model.ContactMobile,
+				model.MobileCode,
+				model.ContactOtherPhone,
+				model.EstimatedMonthlyClientAmount,
+				model.FirmWebSite,
+				model.EstimatedMonthlyAppCount,
+				model.IsCaptchaEnabled == 0 ? "no" : "yes",
+				model.TermsID,
 				sReferredBy,
-				LicenseNumber
+				model.FCARegistered,
+				model.LicenseNumber
 				);
 
 			if (!ModelState.IsValid) {
@@ -153,7 +139,7 @@
 			} // if
 
 			if (User.Identity.IsAuthenticated) {
-				ms_oLog.Warn("Sign up request with contact email {0}: already authorised as {1}.", ContactEmail, User.Identity.Name);
+				ms_oLog.Warn("Sign up request with contact email {0}: already authorised as {1}.", model.ContactEmail, User.Identity.Name);
 				return new BrokerForJsonResult("You are already logged in.");
 			} // if
 
@@ -161,21 +147,22 @@
 
 			try {
 				bp = this.m_oServiceClient.Instance.BrokerSignup(
-					FirmName,
-					FirmRegNum,
-					ContactName,
-					ContactEmail,
-					ContactMobile,
-					MobileCode,
-					ContactOtherPhone,
-					EstimatedMonthlyClientAmount,
-					new Password(Password, Password2),
-					FirmWebSite,
-					EstimatedMonthlyAppCount,
-					IsCaptchaEnabled != 0,
-					TermsID,
-					sReferredBy, 
-					LicenseNumber
+					model.FirmName,
+					model.FirmRegNum,
+					model.ContactName,
+					model.ContactEmail,
+					model.ContactMobile,
+					model.MobileCode,
+					model.ContactOtherPhone,
+					model.EstimatedMonthlyClientAmount,
+					new Password(model.Password, model.Password2),
+					model.FirmWebSite,
+					model.EstimatedMonthlyAppCount,
+					model.IsCaptchaEnabled != 0,
+					model.TermsID,
+					sReferredBy,
+					model.FCARegistered,
+					model.LicenseNumber
 					);
 
 				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg)) {
@@ -187,9 +174,9 @@
 				return new BrokerForJsonResult("Registration failed. Please contact customer care.");
 			} // try
 
-			BrokerHelper.SetAuth(ContactEmail);
+			BrokerHelper.SetAuth(model.ContactEmail);
 
-			ms_oLog.Debug("Broker sign up succeeded for: {0}", ContactEmail);
+			ms_oLog.Debug("Broker sign up succeeded for: {0}", model.ContactEmail);
 
 			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) {
 				antiforgery_token = AntiForgery.GetHtml()

@@ -62,6 +62,7 @@
 			bool bIsCaptchEnabled,
 			int nBrokerTermsID,
 			string sReferredBy,
+			bool bFCARegistered,
 			string sLicenseNumber
 		) {
 			BrokerSignup oInstance;
@@ -81,6 +82,7 @@
 				bIsCaptchEnabled,
 				nBrokerTermsID,
 				sReferredBy,
+				bFCARegistered,
 				sLicenseNumber
 			);
 

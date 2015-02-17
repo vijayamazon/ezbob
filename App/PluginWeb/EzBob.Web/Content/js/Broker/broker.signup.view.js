@@ -34,6 +34,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		var evt = EzBob.Broker.SignupView.__super__.events.apply(this, arguments);
 
 		evt['click .show-terms-and-conditions'] = 'showConsent';
+		evt['change #FCARegistered'] = 'changeFCARegisered';
 		evt['click #switchToCaptcha'] = 'switchToCaptcha';
 
 		return evt;
@@ -43,6 +44,15 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.trigger('show-captcha');
 	}, // switchToCaptcha
 
+	changeFCARegisered: function(e) {
+		var isFcaRegistered = $(e.currentTarget).is(':checked');
+		$(e.currentTarget).val(isFcaRegistered);
+		if (!isFcaRegistered) {
+			this.$el.find('#LicenseNumber').val('');
+		}
+		this.$el.find('.license_number_field_container').toggle(isFcaRegistered);
+		this.inputChanged();
+	},
 	clear: function() {
 		EzBob.Broker.SignupView.__super__.clear.apply(this, arguments);
 

@@ -663,6 +663,7 @@
 				true, // bool bIsCaptchaEnabled,
 				6, // int nBrokerTermsID,
 				"Finance Professional Show - Nov 2014", // string sReferredBy,
+				true,
 				"license"
 				);
 
