@@ -14,19 +14,29 @@ BEGIN
 
 	DECLARE @UserID INT
 	DECLARE @BrokerID INT
+	DECLARE @CustomerOriginID INT
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		@UserID = c.Id,
-		@BrokerID = c.BrokerID
+		@BrokerID = c.BrokerID,
+		@CustomerOriginID = c.OriginID
 	FROM
 		Customer c
 	WHERE
 		c.Id = @CustomerID
 
+	------------------------------------------------------------------------------
+
 	IF @UserID != @CustomerID -- wrong customer ID specified
 		RETURN
 
+	------------------------------------------------------------------------------
+
 	SET @BrokerID = dbo.udfMaxInt(ISNULL(@BrokerID, 0), 0)
+
+	------------------------------------------------------------------------------
 
 	IF @BrokerID = 0
 	BEGIN
@@ -57,11 +67,17 @@ BEGIN
 			l.Position = 0
 	END
 
+	------------------------------------------------------------------------------
+
 	SELECT
 		RowType = 'MetaData',
 		BrokerID = @BrokerID
 
+	------------------------------------------------------------------------------
+
 	DECLARE @IsForCustomer BIT = CASE WHEN @BrokerID = 0 THEN 1 ELSE 0 END
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		RowType = 'Lottery',
@@ -76,12 +92,17 @@ BEGIN
 	FROM
 		Lotteries l
 		INNER JOIN LotteryEnlistingTypes et ON l.LotteryEnlistingTypeID = et.LotteryEnlistingTypeID
+		LEFT JOIN LotteryExcludedCustomerOrigins o
+			ON l.LotteryID = o.LotteryID
+			AND o.CustomerOriginID = @CustomerOriginID
 	WHERE
 		l.StartDate <= @Now AND @Now <= l.EndDate
 		AND
 		l.IsActive = 1
 		AND
 		l.IsForCustomer = @IsForCustomer
+		AND
+		o.EntryID IS NULL
 	ORDER BY
 		dbo.udfMaxInt(0, l.LotteryPriority) DESC,
 		l.StartDate
