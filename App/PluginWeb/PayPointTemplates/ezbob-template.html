@@ -553,11 +553,10 @@
             $('#logoff-li').show().tooltip({ placement: 'bottom', title: decodeURIComponent(getCallbackValue('username') || "") }).tooltip("enable").tooltip('fixTitle');
             $('#user-menu .login_btn, .signup_btn').hide();
 
-            //set url for back button
-            var ulrBack = !isPayEarly ? 'https://app.' + origin + '.com/Customer/Profile#GetCash' : 'https://app.'  + origin + '.com/Customer/Profile#PayEarly';
-            var testUrlBack = !isPayEarly ? 'https://localhost:44300/EzBob/EzBob.Web/Customer/Profile#GetCash' : 'https://localhost:44300/EzBob/EzBob.Web/Customer/Profile#PayEarly';
-
-            $(".btn-back").attr("href", isTest ? testUrlBack : ulrBack);
+              //back button click
+            $(".btn-back").click(function(){
+				return history.go(-1);
+			});
 
             if (!isTest) {
                 $("select option[value='Visa']").remove();
