@@ -77,7 +77,7 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 		this.focus = null;
 
 		var self = this;
-
+		BlockUi();
 		$.post('RestorePassword', this.ui.form.serializeArray()).done(function(data) {
 			if (!EzBob.isNullOrEmpty(data.errorMessage) || !EzBob.isNullOrEmpty(data.error)) {
 				EzBob.App.trigger('error', data.errorMessage || data.error);
@@ -99,6 +99,7 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 			self.initStatusIcons();
 			self.focus = self.focusCaptcha;
 		}).always(function() {
+			UnBlockUi();
 			self.ui.email.data('changed', false);
 			self.emailKeyuped();
 			self.captcha.reload(self.focus);
@@ -159,7 +160,7 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 		this.focus = null;
 
 		var self = this;
-
+		BlockUi();
 		$.post('QuestionForEmail', this.ui.form.serialize())
 		 .done(function(response) {
 			if (response.broker) {
@@ -208,7 +209,8 @@ EzBob.ResetPasswordView = Backbone.Marionette.ItemView.extend({
 			self.focus = self.focusAnswer;
 
 			return true;
-		}).always(function() {
+		 }).always(function() {
+		 	UnBlockUi();
 			self.captcha.reload(self.focus);
 		});
 		return false;
