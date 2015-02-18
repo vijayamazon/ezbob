@@ -13,7 +13,14 @@
 				return 0;
 
 			return FindNumOfPersonalDefaults(
-				oData.Cais.Select(cais => (ExperianConsumerDataCaisAccounts)cais),
+				oData.Cais.Select(cais => new ExperianConsumerDataCaisAccounts {
+					AccountStatusCodes = cais.AccountStatusCodes,
+					Balance = cais.Balance,
+					CurrentDefBalance = cais.CurrentDefBalance,
+					LastUpdatedDate = cais.LastUpdatedDate,
+					MatchTo = cais.MatchTo,
+					Id = cais.Id
+				}),
 				minDefaultBalance,
 				defaultAccountMinDate
 			);

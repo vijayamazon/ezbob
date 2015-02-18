@@ -84,7 +84,7 @@ namespace ExperianLib.Tests.Integration
 		{
 			var b = new ConsumerExperianModelBuilder();
 			var outputRootSerializer = new XmlSerializer(typeof(OutputRoot));
-			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(consumerData));
+			var outputRoot = (OutputRoot)outputRootSerializer.Deserialize(new StringReader(c62178));
 			var data = b.Build(outputRoot);
 
 			data.ServiceLogId = 1;
@@ -98,6 +98,42 @@ namespace ExperianLib.Tests.Integration
 			m_oDB.ExecuteNonQuery(con, "SaveExperianConsumerDataCais", CommandSpecies.StoredProcedure,
 			                      m_oDB.CreateTableParameter<ExperianConsumerDataCais>("Tbl", data.Cais));
 			con.Commit();
+		}
+
+		[Test]
+		[Ignore]
+		public void SaveCais() {
+			List<ExperianConsumerDataCais> cais = new List<ExperianConsumerDataCais>();
+			cais.Add(new ExperianConsumerDataCais() {
+				ExperianConsumerDataId = 262L,
+
+				CAISAccStartDate = new DateTime(1999, 9, 21),
+				LastUpdatedDate = new DateTime(2010, 12, 19),
+				SettlementDate = new DateTime(2010, 12, 19),
+
+				AccountStatus = "S",
+				AccountStatusCodes = "0000000D0000",
+				AccountType = "08",
+				CompanyType = "04",
+				Status1To2 = "5",
+				StatusTo3 = "0",
+				WorstStatus = "2",
+
+				CreditLimit = 450,
+				MatchTo = 3,
+				NumOfMonthsHistory = 36,
+				RepaymentPeriod = 0,
+
+				CurrentDefBalance = 1,
+				DelinquentBalance = 1,
+				NumAccountBalances = 1,
+				NumCardHistories = 1,
+				Payment = 1,
+				Balance = 1,
+			});
+
+			m_oDB.ExecuteNonQuery("SaveExperianConsumerDataCais", CommandSpecies.StoredProcedure,
+								  m_oDB.CreateTableParameter<ExperianConsumerDataCais>("Tbl", cais));
 		}
 
 		[Test]
@@ -3188,5 +3224,5585 @@ namespace ExperianLib.Tests.Integration
     </LocationDetails>
   </Output>
 </OutputRoot>";
+
+		private const string c11647 = @"<?xml version=""1.0"" encoding=""utf-16""?>
+<OutputRoot xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Output xmlns=""http://schema.uk.experian.com/experian/cems/msgs/v1.1/ConsumerData"">
+    <Applicant xmlns="""">
+      <ApplicantIdentifier>1</ApplicantIdentifier>
+      <Name>
+        <Forename>John</Forename>
+        <Surname>Hubbard</Surname>
+      </Name>
+      <Gender>M</Gender>
+      <DateOfBirth>
+        <CCYY>1981</CCYY>
+        <MM>5</MM>
+        <DD>18</DD>
+      </DateOfBirth>
+      <FormattedName> J Hubbard</FormattedName>
+      <FormattedDOB>18/05/1981</FormattedDOB>
+      <Age>
+        <Years>33</Years>
+        <Months>9</Months>
+      </Age>
+    </Applicant>
+    <ConsumerSummary xmlns="""">
+      <PremiumValueData>
+        <TPD>
+          <NDHHO>N</NDHHO>
+        </TPD>
+        <CII>
+          <NDSPCII>  1</NDSPCII>
+          <NDSPACII> -2</NDSPACII>
+        </CII>
+        <Mosaic>
+          <EA4M01>  7407</EA4M01>
+          <EA4M02>  1481</EA4M02>
+          <EA4M03>     0</EA4M03>
+          <EA4M04>   100</EA4M04>
+          <EA4M05>   592</EA4M05>
+          <EA4M06>   584</EA4M06>
+          <EA4M07>    25</EA4M07>
+          <EA4M08>000000</EA4M08>
+          <EA4M09>000000</EA4M09>
+          <EA4M10>000000</EA4M10>
+          <EA4M11>     0</EA4M11>
+          <EA4M12>     0</EA4M12>
+          <EA4T01>8</EA4T01>
+          <EA5T01>   0</EA5T01>
+          <EA5T02>   9</EA5T02>
+          <NDG01> 4</NDG01>
+          <EA4N01>   1088</EA4N01>
+          <EA4N02>   -544</EA4N02>
+          <EA4N03>    681</EA4N03>
+          <EA4N04>  -1500</EA4N04>
+          <EA4N05>    981</EA4N05>
+          <NDG02>  856</NDG02>
+          <NDG03>    15</NDG03>
+          <NDG04>   370</NDG04>
+          <NDG05>   115</NDG05>
+          <NDG06>  1481</NDG06>
+          <NDG07>  1481</NDG07>
+          <NDG08>  1111</NDG08>
+          <NDG09>  1111</NDG09>
+          <NDG10>  1111</NDG10>
+          <NDG11>   741</NDG11>
+          <NDG12>  5185</NDG12>
+        </Mosaic>
+        <Scoring>
+          <NDSI21>91BWN</NDSI21>
+          <E5S01>1</E5S01>
+          <E5S02>1</E5S02>
+          <E5S041>91</E5S041>
+          <E5S051> 1155</E5S051>
+          <E5S042>0</E5S042>
+          <E5S052> -999</E5S052>
+          <E5S043>  0</E5S043>
+          <E5S053> -999</E5S053>
+          <NDHHOSCORE> -999</NDHHOSCORE>
+          <NDVALSCORE>    0</NDVALSCORE>
+        </Scoring>
+        <AddrLink>
+          <NDLNK01>2</NDLNK01>
+        </AddrLink>
+        <Director>
+          <NDDIRSP>N</NDDIRSP>
+          <NDDIRSPA>N</NDDIRSPA>
+        </Director>
+        <AgeDoB>
+          <NDDOB>
+            <DD>18</DD>
+            <MM>5</MM>
+            <YY>81</YY>
+          </NDDOB>
+          <EA5S01> 33</EA5S01>
+          <EA4S01> 0</EA4S01>
+          <EA4S03> 0</EA4S03>
+          <EA4S05> 0</EA4S05>
+          <EA4S07> 0</EA4S07>
+        </AgeDoB>
+        <ImpairedCH />
+        <AdditDelphiBlocks>
+          <APACSCCBehavrlData>
+            <CCDATASUPPLIED>Y</CCDATASUPPLIED>
+            <NOMPMNPRL3M>  0</NOMPMNPRL3M>
+            <PTBRL3MNPRL3M>   108</PTBRL3MNPRL3M>
+            <PTBRL6MNPRL6M>    97</PTBRL6MNPRL6M>
+            <NOCAL1M>  4</NOCAL1M>
+            <NOCAL3M> 10</NOCAL3M>
+            <NOMLVCAL1M>  0</NOMLVCAL1M>
+            <NOMLVCAL3M>  0</NOMLVCAL3M>
+            <CLUCLIL6M>    37</CLUCLIL6M>
+            <CLUCLIL6MNPRL6M>    37</CLUCLIL6MNPRL6M>
+            <CLUNPRL1M>    19</CLUNPRL1M>
+            <NOCLDL3M>  0</NOCLDL3M>
+            <NOASBNPRL1M>  2</NOASBNPRL1M>
+          </APACSCCBehavrlData>
+          <Utilisationblock>
+            <SPA01>     -2</SPA01>
+            <SPA02>   5176</SPA02>
+            <SPA03>     -2</SPA03>
+            <SPA04>   2075</SPA04>
+            <SPA05>     -2</SPA05>
+            <SPA06>   3101</SPA06>
+            <SPA07>   5176</SPA07>
+            <SPA08>     -2</SPA08>
+            <SPA09>     -2</SPA09>
+            <SPA10>     -2</SPA10>
+            <SPB111>  3</SPB111>
+            <SPB112>  3</SPB112>
+            <SPB113>  2</SPB113>
+            <SPB114>  2</SPB114>
+            <SPB115>  1</SPB115>
+            <SPB116>  6</SPB116>
+            <SPB117>  4</SPB117>
+            <SPB218>   35</SPB218>
+            <SPB219>   73</SPB219>
+            <SPB220>   52</SPB220>
+            <SPB221>   98</SPB221>
+            <SPB322>   216</SPB322>
+            <SPB323>   512</SPB323>
+            <SPC24>N </SPC24>
+            <SPD25>  0</SPD25>
+            <SPE126> -2</SPE126>
+            <SPE127> -2</SPE127>
+            <SPE128>     -2</SPE128>
+            <SPF129>  0</SPF129>
+            <SPF130>  0</SPF130>
+            <SPF131>  0</SPF131>
+            <SPF232>  10750</SPF232>
+            <SPF233>   7000</SPF233>
+            <SPF334>   37</SPF334>
+            <SPF335>   19</SPF335>
+            <SPF336> 9999</SPF336>
+            <SPG37> 258</SPG37>
+            <SPG38>  68</SPG38>
+            <SPH39>      0</SPH39>
+            <SPH40>      0</SPH40>
+            <SPH41>      0</SPH41>
+            <SPCIICHECKDIGIT>       0</SPCIICHECKDIGIT>
+            <SPAA01>     -2</SPAA01>
+            <SPAA02>     -2</SPAA02>
+            <SPAA03>     -2</SPAA03>
+            <SPAA04>     -2</SPAA04>
+            <SPAA05>     -2</SPAA05>
+            <SPAA06>     -2</SPAA06>
+            <SPAA07>     -2</SPAA07>
+            <SPAA08>     -2</SPAA08>
+            <SPAA09>     -2</SPAA09>
+            <SPAA10>     -2</SPAA10>
+            <SPAB111> -2</SPAB111>
+            <SPAB112> -2</SPAB112>
+            <SPAB113> -2</SPAB113>
+            <SPAB114> -2</SPAB114>
+            <SPAB115> -2</SPAB115>
+            <SPAB116> -2</SPAB116>
+            <SPAB117> -2</SPAB117>
+            <SPAB218> 9999</SPAB218>
+            <SPAB219> 9999</SPAB219>
+            <SPAB220> 9999</SPAB220>
+            <SPAB221> 9999</SPAB221>
+            <SPAB322>    -2</SPAB322>
+            <SPAB323>    -2</SPAB323>
+            <SPAC24>N </SPAC24>
+            <SPAD25>  0</SPAD25>
+            <SPAE126> -2</SPAE126>
+            <SPAE127> -2</SPAE127>
+            <SPAE128>     -2</SPAE128>
+            <SPAF129> -2</SPAF129>
+            <SPAF130> -2</SPAF130>
+            <SPAF131> -2</SPAF131>
+            <SPAF232>     -2</SPAF232>
+            <SPAF233>     -2</SPAF233>
+            <SPAF334> 9999</SPAF334>
+            <SPAF335> 9999</SPAF335>
+            <SPAF336> 9999</SPAF336>
+            <SPAG37>  -2</SPAG37>
+            <SPAG38>  -2</SPAG38>
+            <SPAH39>      0</SPAH39>
+            <SPAH40>      0</SPAH40>
+            <SPAH41>      0</SPAH41>
+            <SPACIICHECKDIGIT>       0</SPACIICHECKDIGIT>
+          </Utilisationblock>
+          <NeverPaidDefsBlock />
+          <TelecommsBlock />
+          <BespokeBlock />
+        </AdditDelphiBlocks>
+      </PremiumValueData>
+      <Summary>
+        <ElectoralRoll>
+          <E4Q01>1</E4Q01>
+          <E4Q02>1</E4Q02>
+          <E4Q03>1</E4Q03>
+          <E4Q04>1</E4Q04>
+          <E4Q05>5</E4Q05>
+          <E4Q06>5</E4Q06>
+          <E4Q07>  0</E4Q07>
+          <E4Q08>0</E4Q08>
+          <E4Q09>5</E4Q09>
+          <E4Q10>5</E4Q10>
+          <E4Q11>  0</E4Q11>
+          <E4Q12>  0</E4Q12>
+          <E4Q13>5</E4Q13>
+          <E4Q14>5</E4Q14>
+          <E4Q15>0</E4Q15>
+          <E4Q16>0</E4Q16>
+          <E4Q17>2</E4Q17>
+          <E4Q18>1</E4Q18>
+          <E4R01>1</E4R01>
+          <E4R02>SG4 0NE</E4R02>
+          <EA4R01PM>0</EA4R01PM>
+          <EA4R01CJ>0</EA4R01CJ>
+          <EA4R01PJ>0</EA4R01PJ>
+          <NDERL01> 0</NDERL01>
+          <NDERL02> 0</NDERL02>
+          <EA2Q01>3</EA2Q01>
+          <EA2Q02>  0</EA2Q02>
+          <NDERLMACA>C</NDERLMACA>
+          <EA5U01> 2</EA5U01>
+          <EA5U02> 0</EA5U02>
+        </ElectoralRoll>
+        <PublicInfo>
+          <E1A01> 0</E1A01>
+          <E1A02>   0</E1A02>
+          <E1A03>  0</E1A03>
+          <EA1C01>N</EA1C01>
+          <EA1D01> 0</EA1D01>
+          <EA1D02>   0</EA1D02>
+          <EA1D03>  0</EA1D03>
+          <E2G01> 0</E2G01>
+          <E2G02>   0</E2G02>
+          <E2G03>  0</E2G03>
+          <EA2I01>N</EA2I01>
+          <EA2J01> 0</EA2J01>
+          <EA2J02>   0</EA2J02>
+          <EA2J03>  0</EA2J03>
+          <EA4Q06>N</EA4Q06>
+          <SPBRPRESENT>N</SPBRPRESENT>
+          <SPABRPRESENT>N</SPABRPRESENT>
+        </PublicInfo>
+        <CAIS>
+          <E1A04> 0</E1A04>
+          <E1A05>   0</E1A05>
+          <E1A06>  0</E1A06>
+          <E1A07> 0</E1A07>
+          <E1A08> 0</E1A08>
+          <E1A09> 0</E1A09>
+          <E1A10>   0</E1A10>
+          <E1A11>  0</E1A11>
+          <E1B01> 0</E1B01>
+          <E1B02>   0</E1B02>
+          <E1B03>0</E1B03>
+          <E1B04>   1</E1B04>
+          <E1B05>0</E1B05>
+          <E1B06>  52</E1B06>
+          <E1B07>0</E1B07>
+          <E1B08>0</E1B08>
+          <E1B09> 9</E1B09>
+          <E1B10>  52</E1B10>
+          <E1B11>  80</E1B11>
+          <E1B12> 0</E1B12>
+          <E1B13> 0</E1B13>
+          <NDECC01>   0</NDECC01>
+          <NDECC02>  43</NDECC02>
+          <NDECC03> 0</NDECC03>
+          <NDECC04> 999</NDECC04>
+          <NDECC07> 99</NDECC07>
+          <NDECC08>   1</NDECC08>
+          <E1C01>N</E1C01>
+          <E1C02> 0</E1C02>
+          <E1C03>   0</E1C03>
+          <E1C04> 0</E1C04>
+          <E1C05> 0</E1C05>
+          <E1C06> 0</E1C06>
+          <EA1B02> 0</EA1B02>
+          <E1D01> 0</E1D01>
+          <E1D02> 0</E1D02>
+          <E1D03> 0</E1D03>
+          <E1D04> 0</E1D04>
+          <NDHAC01>  1</NDHAC01>
+          <NDHAC02>  1</NDHAC02>
+          <NDHAC03>  1</NDHAC03>
+          <NDHAC04>  1</NDHAC04>
+          <NDHAC05>  1</NDHAC05>
+          <NDHAC09>  1</NDHAC09>
+          <NDINC01> 2</NDINC01>
+          <EA1F01>1</EA1F01>
+          <EA1F02>N</EA1F02>
+          <EA1F03>N</EA1F03>
+          <E2G04> 0</E2G04>
+          <E2G05>   0</E2G05>
+          <E2G06>  0</E2G06>
+          <E2G07> 0</E2G07>
+          <E2G08> 0</E2G08>
+          <E2G09> 0</E2G09>
+          <E2G10>   0</E2G10>
+          <E2G11>  0</E2G11>
+          <E2H01> 0</E2H01>
+          <E2H02>   0</E2H02>
+          <E2H03>N</E2H03>
+          <E2H04>   0</E2H04>
+          <E2H05>N</E2H05>
+          <E2H06>   0</E2H06>
+          <E2H07>N</E2H07>
+          <E2H08>N</E2H08>
+          <E2H09> 0</E2H09>
+          <E2H10>   0</E2H10>
+          <E2H11>   0</E2H11>
+          <E2H12> 0</E2H12>
+          <E2H13> 0</E2H13>
+          <NDECC05>   0</NDECC05>
+          <NDECC09>  0</NDECC09>
+          <NDECC10>   0</NDECC10>
+          <E2I01>N</E2I01>
+          <E2I02> 0</E2I02>
+          <E2I03>   0</E2I03>
+          <E2I04> 0</E2I04>
+          <E2I05> 0</E2I05>
+          <E2I06> 0</E2I06>
+          <EA2H02> 0</EA2H02>
+          <E2J01> 0</E2J01>
+          <E2J02> 0</E2J02>
+          <E2J03> 0</E2J03>
+          <E2J04> 0</E2J04>
+          <NDHAC10>  0</NDHAC10>
+          <NDHAC06>  0</NDHAC06>
+          <NDHAC07>  0</NDHAC07>
+          <NDHAC08>  0</NDHAC08>
+          <NDINC02> 0</NDINC02>
+          <EA2L02>N</EA2L02>
+          <EA2L03>N</EA2L03>
+          <NDECC06> 105</NDECC06>
+          <NDINC03> 2</NDINC03>
+        </CAIS>
+        <CAPS>
+          <E1E01> 0</E1E01>
+          <E1E02> 0</E1E02>
+          <EA1B01> 0</EA1B01>
+          <NDPSD01> 0</NDPSD01>
+          <NDPSD02> 0</NDPSD02>
+          <NDPSD03> 0</NDPSD03>
+          <NDPSD04> 0</NDPSD04>
+          <NDPSD05> 0</NDPSD05>
+          <NDPSD06> 0</NDPSD06>
+          <EA1E01> 0</EA1E01>
+          <EA1E02> 0</EA1E02>
+          <EA1E03> 0</EA1E03>
+          <EA1E04> 0</EA1E04>
+          <E2K01> 0</E2K01>
+          <E2K02> 0</E2K02>
+          <EA2H01> 0</EA2H01>
+          <NDPSD07> 0</NDPSD07>
+          <NDPSD08> 0</NDPSD08>
+          <NDPSD09> 0</NDPSD09>
+          <NDPSD10> 0</NDPSD10>
+          <EA2K01> 0</EA2K01>
+          <EA2K02> 0</EA2K02>
+          <EA2K03> 0</EA2K03>
+          <EA2K04> 0</EA2K04>
+          <NDPSD11> 2</NDPSD11>
+        </CAPS>
+        <CIFAS>
+          <EA1A01>N</EA1A01>
+          <EA2G01>N</EA2G01>
+          <EA4P01>N</EA4P01>
+        </CIFAS>
+        <CML>
+          <EA1C02>N</EA1C02>
+          <EA2I02>N</EA2I02>
+        </CML>
+        <GAIN>
+          <EA1G01>N</EA1G01>
+          <EA1G02>N</EA1G02>
+          <EA2M01>N</EA2M01>
+        </GAIN>
+        <NOC>
+          <EA4Q07>N</EA4Q07>
+          <EA4Q08>N</EA4Q08>
+          <EA4Q09>N</EA4Q09>
+          <EA4Q10>N</EA4Q10>
+          <EA4Q11>N</EA4Q11>
+          <EA4Q01>N</EA4Q01>
+          <EA4Q02>N</EA4Q02>
+          <EA4Q03>N</EA4Q03>
+          <EA4Q04>N</EA4Q04>
+          <EA4Q05>N</EA4Q05>
+        </NOC>
+        <TPD>
+          <NDOPTOUT>N</NDOPTOUT>
+        </TPD>
+      </Summary>
+    </ConsumerSummary>
+    <Control xmlns="""">
+      <ExperianReference>XBVKWHVM5B</ExperianReference>
+    </Control>
+    <FullConsumerData xmlns="""">
+      <ConsumerDataSummary>
+        <SummaryDetails>
+          <DataOverflow>N</DataOverflow>
+          <NoCCount>0</NoCCount>
+          <LocationConfirmCnt>4</LocationConfirmCnt>
+          <PublicInfoSummary>
+            <Number>0</Number>
+          </PublicInfoSummary>
+          <CAISSummary>
+            <Number>12</Number>
+            <WorstCurrent>U</WorstCurrent>
+            <WorstHistorical>2</WorstHistorical>
+            <TotalBalance>£83420   </TotalBalance>
+            <GoneAway>N</GoneAway>
+            <CAISPrevSearches>
+              <NumberUpTo3Months>0</NumberUpTo3Months>
+              <Num3To6Months>0</Num3To6Months>
+              <Num6To12Months>2</Num6To12Months>
+              <TotalNumber>2</TotalNumber>
+            </CAISPrevSearches>
+          </CAISSummary>
+          <SummaryFlags>
+            <CIFAS>N</CIFAS>
+            <CML>N</CML>
+            <PreviousOccupant>N</PreviousOccupant>
+            <NoConfirmAtPrevLoc>N</NoConfirmAtPrevLoc>
+            <Arrangement>N</Arrangement>
+            <ReportedDeceased>N</ReportedDeceased>
+            <ReportedGoneAway>N</ReportedGoneAway>
+            <ClaimedOnCreditIns>N</ClaimedOnCreditIns>
+            <DebtManagement>N</DebtManagement>
+            <AccountQuery>N</AccountQuery>
+            <Recourse>N</Recourse>
+            <VoluntaryTerm>N</VoluntaryTerm>
+            <PartSettle>N</PartSettle>
+            <DebtAssign>N</DebtAssign>
+            <OwnAccount>N</OwnAccount>
+            <OwnSearch>N</OwnSearch>
+            <PreviousLocation>Y</PreviousLocation>
+            <AdditionalLocation>N</AdditionalLocation>
+            <ForwardLocation>Y</ForwardLocation>
+          </SummaryFlags>
+          <LocationConfirm>
+            <Location>C</Location>
+            <Level>1</Level>
+            <Source>V</Source>
+          </LocationConfirm>
+          <LocationConfirm />
+          <LocationConfirm />
+          <LocationConfirm>
+            <Location>P</Location>
+            <Level>1</Level>
+            <Source>V</Source>
+          </LocationConfirm>
+        </SummaryDetails>
+      </ConsumerDataSummary>
+      <ConsumerData>
+        <VotersRollLocation>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <VRollStreetDetails>
+            <Location>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG4 0NE</Postcode>
+            </Location>
+            <StreetMatchLevel>4</StreetMatchLevel>
+            <InformationSource>N</InformationSource>
+            <MOSCAICCode>50</MOSCAICCode>
+            <PAFDistrictNumber>1</PAFDistrictNumber>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <ACORNCode>99</ACORNCode>
+            <BatchNumber>17400142</BatchNumber>
+          </VRollStreetDetails>
+        </VotersRollLocation>
+        <VotersRollLocation>
+          <LocationIndicator>1</LocationIndicator>
+          <ApplicantIndicator>U</ApplicantIndicator>
+          <VRollStreetDetails>
+            <Location>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG5 2DU</Postcode>
+            </Location>
+            <StreetMatchLevel>4</StreetMatchLevel>
+            <InformationSource>N</InformationSource>
+            <MOSCAICCode>4</MOSCAICCode>
+            <PAFDistrictNumber>1</PAFDistrictNumber>
+            <SegmentIDNumber>2</SegmentIDNumber>
+            <ACORNCode>99</ACORNCode>
+            <BatchNumber>17401042</BatchNumber>
+          </VRollStreetDetails>
+        </VotersRollLocation>
+        <VotersRollLocation>
+          <LocationIndicator>2</LocationIndicator>
+          <ApplicantIndicator>U</ApplicantIndicator>
+          <VRollStreetDetails>
+            <Location>
+              <Street>WILTON ROAD</Street>
+              <PostTown>BARNET</PostTown>
+              <County>HERTS</County>
+              <Postcode>EN4 9DX</Postcode>
+            </Location>
+            <StreetMatchLevel>4</StreetMatchLevel>
+            <InformationSource>N</InformationSource>
+            <MOSCAICCode>10</MOSCAICCode>
+            <PAFDistrictNumber>0</PAFDistrictNumber>
+            <SegmentIDNumber>3</SegmentIDNumber>
+            <ACORNCode>99</ACORNCode>
+            <BatchNumber>13300177</BatchNumber>
+          </VRollStreetDetails>
+        </VotersRollLocation>
+        <VotersRollPerson>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>JOHN</Forename>
+              <MiddleName>LE</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2015</SurnameReg>
+            <DatesRegLeft>102014</DatesRegLeft>
+            <HouseNumber>11</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>DAVID</Forename>
+              <Surname>WHEELER</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>5</BureauRefCategory>
+              <MatchTo>9</MatchTo>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2015</SurnameReg>
+            <DatesRegLeft>102014</DatesRegLeft>
+            <HouseNumber>11</HouseNumber>
+          </VRollPersonDetails>
+        </VotersRollPerson>
+        <VotersRollPerson>
+          <LocationIndicator>1</LocationIndicator>
+          <ApplicantIndicator>U</ApplicantIndicator>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>2</SegmentIDNumber>
+            <SurnameReg>2013</SurnameReg>
+            <POCCYear>2015</POCCYear>
+            <DatesRegLeft>102012102014</DatesRegLeft>
+            <HouseName>MILLERS HOUSE</HouseName>
+            <HouseNumber>89</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>NANCY</Forename>
+              <MiddleName>J</MiddleName>
+              <Surname>JOHNS</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>5</BureauRefCategory>
+              <MatchTo>9</MatchTo>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>F</Sex>
+            <SegmentIDNumber>2</SegmentIDNumber>
+            <SurnameReg>2015</SurnameReg>
+            <DatesRegLeft>102014</DatesRegLeft>
+            <HouseName>MILLERS HOUSE</HouseName>
+            <HouseNumber>89</HouseNumber>
+          </VRollPersonDetails>
+        </VotersRollPerson>
+        <VotersRollPerson>
+          <LocationIndicator>2</LocationIndicator>
+          <ApplicantIndicator>U</ApplicantIndicator>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>3</SegmentIDNumber>
+            <SurnameReg>2010</SurnameReg>
+            <POCCYear>2012</POCCYear>
+            <DatesRegLeft>012010102011</DatesRegLeft>
+            <HouseNumber>12</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>TRACEY</Forename>
+              <Surname>MACKEY</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>5</BureauRefCategory>
+              <MatchTo>9</MatchTo>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>F</Sex>
+            <SegmentIDNumber>3</SegmentIDNumber>
+            <SurnameReg>2010</SurnameReg>
+            <DatesRegLeft>012010</DatesRegLeft>
+            <HouseNumber>12</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>ANDREW</Forename>
+              <Surname>GRANBY</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>5</BureauRefCategory>
+              <MatchTo>9</MatchTo>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>3</SegmentIDNumber>
+            <SurnameReg>2013</SurnameReg>
+            <DatesRegLeft>102012</DatesRegLeft>
+            <HouseNumber>12</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>TANYA</Forename>
+              <Surname>RICHRAT</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>5</BureauRefCategory>
+              <MatchTo>9</MatchTo>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>F</Sex>
+            <SegmentIDNumber>3</SegmentIDNumber>
+            <SurnameReg>2013</SurnameReg>
+            <DatesRegLeft>102012</DatesRegLeft>
+            <HouseNumber>12</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>CATHAL</Forename>
+              <Surname>CULLINANE</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>5</BureauRefCategory>
+              <MatchTo>9</MatchTo>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>3</SegmentIDNumber>
+            <SurnameReg>2015</SurnameReg>
+            <DatesRegLeft>102014</DatesRegLeft>
+            <HouseNumber>12</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>NISHA</Forename>
+              <Surname>MATKAR</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>5</BureauRefCategory>
+              <MatchTo>9</MatchTo>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>3</SegmentIDNumber>
+            <SurnameReg>2015</SurnameReg>
+            <DatesRegLeft>102014</DatesRegLeft>
+            <HouseNumber>12</HouseNumber>
+          </VRollPersonDetails>
+        </VotersRollPerson>
+        <CAIS>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>L</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2014</CCYY>
+              <MM>3</MM>
+              <DD>6</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>11</HouseNumber>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG4 0NE</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>1</MM>
+              <DD>11</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>0000000000U </AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>11</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2014</CCYY>
+              <MM>3</MM>
+              <DD>4</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>11</HouseNumber>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG40NE</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>22</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Amount>£6      -</Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>00000000000 </AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>11</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>17</CompanyType>
+            <AccountType>18</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>LE HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>7</MM>
+              <DD>31</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>11</HouseNumber>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG4 0NE</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <JointAccount>M</JointAccount>
+            <CreditLimit />
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>1</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>1</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>LE HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>7</MM>
+              <DD>25</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>11</HouseNumber>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG4 0NE</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£500     </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>7</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>2</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2013</CCYY>
+              <MM>10</MM>
+              <DD>22</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>11</HouseNumber>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG40NE</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>1</MM>
+              <DD>25</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>15</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>17</CompanyType>
+            <AccountType>18</AccountType>
+          </CAISDetails>
+        </CAIS>
+        <CAIS>
+          <LocationIndicator>1</LocationIndicator>
+          <ApplicantIndicator>U</ApplicantIndicator>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>LASHAM</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseName>MILLERS HOUSE</HouseName>
+              <HouseNumber>89</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG5 2DU</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Amount>£78250   </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>1</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>1</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>420</RepaymentPeriod>
+            <Payment>£296  </Payment>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>03</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>LASHAM</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>6</MM>
+              <DD>21</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseName>MILLERS HOUSE</HouseName>
+              <HouseNumber>89</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG52DU</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Amount>£3101    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>60</RepaymentPeriod>
+            <Payment>£216  </Payment>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>02</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>LASHAM</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2008</CCYY>
+              <MM>1</MM>
+              <DD>23</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseName>MILLERS HOUSE</HouseName>
+              <HouseNumber>89</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG52DU</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2013</CCYY>
+              <MM>11</MM>
+              <DD>5</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>12</MM>
+              <DD>1</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£1300    </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>UU0000000UUU</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>LASHAM</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>1993</CCYY>
+              <MM>8</MM>
+              <DD>24</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseName>MILLERS HOUSE</HouseName>
+              <HouseNumber>89</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG52DU</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2013</CCYY>
+              <MM>11</MM>
+              <DD>5</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>12</MM>
+              <DD>1</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£850     </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>UU0000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>LASHAM</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>5</MM>
+              <DD>11</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseName>MILLERS HOUSE</HouseName>
+              <HouseNumber>89</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG52DU</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>25</AccountType>
+          </CAISDetails>
+        </CAIS>
+        <CAIS>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2008</CCYY>
+              <MM>9</MM>
+              <DD>3</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>11</HouseNumber>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG4 0NE</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£7000    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£691     </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000691</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>-000127</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0004515</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0004560</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000720</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0002700</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006262</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006326</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006701</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006769</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006837</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001445</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0004597</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0004724</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0004658</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000142</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0003819</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000046</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0002844</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0002937</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006376</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0003676</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006450</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000187</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006325</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000186</PaymentAmount>
+              <NumCashAdvances>1</NumCashAdvances>
+              <CashAdvanceAmount>0000150</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006904</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000702</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006946</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000177</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001483</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000053</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0002547</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0001102</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006871</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0004401</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0007500</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>08</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>LASHAM</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2014</CCYY>
+              <MM>1</MM>
+              <DD>8</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>11</HouseNumber>
+              <Street>PURWELL LANE</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG4 0NE</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>1</MM>
+              <DD>11</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£3750    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£1384    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>12</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001384</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001929</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000331</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0002435</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000683</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000920</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001304</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0001079</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0003004</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000029</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000740</PrevStatementBal>
+              <PaymentAmount>0000876</PaymentAmount>
+              <NumCashAdvances>4</NumCashAdvances>
+              <CashAdvanceAmount>0000760</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0002474</PrevStatementBal>
+              <PaymentAmount>0002474</PaymentAmount>
+              <NumCashAdvances>2</NumCashAdvances>
+              <CashAdvanceAmount>0000290</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000960</PrevStatementBal>
+              <PaymentAmount>0001122</PaymentAmount>
+              <NumCashAdvances>4</NumCashAdvances>
+              <CashAdvanceAmount>0000680</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000933</PrevStatementBal>
+              <PaymentAmount>0000933</PaymentAmount>
+              <NumCashAdvances>5</NumCashAdvances>
+              <CashAdvanceAmount>0000630</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001556</PrevStatementBal>
+              <PaymentAmount>0001556</PaymentAmount>
+              <NumCashAdvances>3</NumCashAdvances>
+              <CashAdvanceAmount>0000600</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0001507</PrevStatementBal>
+              <PaymentAmount>0001507</PaymentAmount>
+              <NumCashAdvances>3</NumCashAdvances>
+              <CashAdvanceAmount>0000380</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000038</PrevStatementBal>
+              <PaymentAmount>0002100</PaymentAmount>
+              <NumCashAdvances>12</NumCashAdvances>
+              <CashAdvanceAmount>0001830</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000001</PrevStatementBal>
+              <PaymentAmount>0003205</PaymentAmount>
+              <NumCashAdvances>5</NumCashAdvances>
+              <CashAdvanceAmount>0000729</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000002</PrevStatementBal>
+              <PaymentAmount>0002857</PaymentAmount>
+              <NumCashAdvances>1</NumCashAdvances>
+              <CashAdvanceAmount>0000082</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000029</PrevStatementBal>
+              <PaymentAmount>0001462</PaymentAmount>
+              <NumCashAdvances>2</NumCashAdvances>
+              <CashAdvanceAmount>0000404</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PaymentAmount>0000174</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0003000</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>01</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+        </CAIS>
+        <PreviousApplication>
+          <LocationIndicator>1</LocationIndicator>
+          <ApplicantIndicator>U</ApplicantIndicator>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>00</Years>
+              <Months>00</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseName>MILLERS HOUSE</HouseName>
+              <HouseNumber>89</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG5 2DU</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2014</CCYY>
+              <MM>3</MM>
+              <DD>6</DD>
+            </ApplicationDate>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <ApplicationType>EQ</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>06</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>00</Years>
+              <Months>00</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseName>MILLERS HOUSE</HouseName>
+              <HouseNumber>89B</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG5 2DU</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2014</CCYY>
+              <MM>3</MM>
+              <DD>2</DD>
+            </ApplicationDate>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <MiddleName>L E</MiddleName>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1981</CCYY>
+              <MM>5</MM>
+              <DD>18</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <ApplicationType>CA</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>06</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+        </PreviousApplication>
+        <LocationLink>
+          <LocationCode>01</LocationCode>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <LocationLinkDetails>
+            <Location>
+              <HouseNumber>44</HouseNumber>
+              <Street>MILTON WAY</Street>
+              <District>HOUGHTON REGIS</District>
+              <PostTown>DUNSTABLE</PostTown>
+              <County>BEDS</County>
+              <Postcode>LU5 5UF</Postcode>
+            </Location>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <LocationLinkDate>
+              <CCYY>2012</CCYY>
+              <MM>3</MM>
+              <DD>11</DD>
+            </LocationLinkDate>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>3</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <LocationLinkInd>O</LocationLinkInd>
+            <RelatedSegmentNum>03</RelatedSegmentNum>
+            <LocationKey>0044MILTOWAYDUNSBEDS</LocationKey>
+            <RMC>1040100</RMC>
+            <Region>7</Region>
+            <LevelNumber>1</LevelNumber>
+            <LocationLinkNumber>1</LocationLinkNumber>
+            <LocationLinkCaption>THIS ADDRESS IS LINKED TO CURRENT ADDRESS LINK 03 ON 03/2012                    </LocationLinkCaption>
+            <InformationSource>N</InformationSource>
+            <SourceOfData>C</SourceOfData>
+            <SuperSearchFlag>F</SuperSearchFlag>
+          </LocationLinkDetails>
+          <LocationLinkDetails>
+            <Location>
+              <HouseNumber>12</HouseNumber>
+              <Street>WILTON ROAD</Street>
+              <District>COCKFOSTERS</District>
+              <PostTown>BARNET</PostTown>
+              <County>HERTS</County>
+              <Postcode>EN4 9DX</Postcode>
+            </Location>
+            <Name>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <LocationLinkDate>
+              <CCYY>2012</CCYY>
+              <MM>9</MM>
+              <DD>19</DD>
+            </LocationLinkDate>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <LocationLinkInd>O</LocationLinkInd>
+            <RelatedSegmentNum>01</RelatedSegmentNum>
+            <LocationKey>0012WILTOROABARNHERT</LocationKey>
+            <RMC>0136000</RMC>
+            <Region>7</Region>
+            <LevelNumber>2</LevelNumber>
+            <LocationLinkNumber>2</LocationLinkNumber>
+            <LocationLinkCaption>THIS ADDRESS IS LINKED TO CURRENT ADDRESS LINK 01 ON 09/2012                    </LocationLinkCaption>
+            <InformationSource>N</InformationSource>
+            <SourceOfData>P</SourceOfData>
+            <SuperSearchFlag>2</SuperSearchFlag>
+          </LocationLinkDetails>
+          <LocationLinkDetails>
+            <Location>
+              <HouseNumber>89B</HouseNumber>
+              <Street>TILEHOUSE STREET</Street>
+              <PostTown>HITCHIN</PostTown>
+              <County>HERTS</County>
+              <Postcode>SG5 2DU</Postcode>
+            </Location>
+            <Name>
+              <Title>MR</Title>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <LocationLinkDate>
+              <CCYY>2014</CCYY>
+              <MM>3</MM>
+              <DD>23</DD>
+            </LocationLinkDate>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <LocationLinkInd>O</LocationLinkInd>
+            <RelatedSegmentNum>00</RelatedSegmentNum>
+            <LocationKey>0089TILEHSTRHITCHERT</LocationKey>
+            <RMC>0136400</RMC>
+            <Region>7</Region>
+            <LevelNumber>0</LevelNumber>
+            <LocationLinkNumber>3</LocationLinkNumber>
+            <LocationLinkCaption>THIS ADDRESS IS LINKED TO THE CURRENT ADDRESS ON 03/2014                        </LocationLinkCaption>
+            <InformationSource>N</InformationSource>
+            <SourceOfData>C</SourceOfData>
+            <SuperSearchFlag>1</SuperSearchFlag>
+          </LocationLinkDetails>
+          <LocationLinkDetails>
+            <Location>
+              <HouseNumber>259</HouseNumber>
+              <Street>NEW BEDFORD ROAD</Street>
+              <PostTown>LUTON</PostTown>
+              <County>BEDS</County>
+              <Postcode>LU3 1LW</Postcode>
+            </Location>
+            <Name>
+              <Forename>JOHN</Forename>
+              <Surname>HUBBARD</Surname>
+            </Name>
+            <LocationLinkDate>
+              <CCYY>2014</CCYY>
+              <MM>12</MM>
+              <DD>10</DD>
+            </LocationLinkDate>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <LocationLinkInd>N</LocationLinkInd>
+            <RelatedSegmentNum>03</RelatedSegmentNum>
+            <LocationKey>0259NEWBEROALUTOBEDS</LocationKey>
+            <RMC>1046100</RMC>
+            <Region>7</Region>
+            <LevelNumber>1</LevelNumber>
+            <LocationLinkNumber>4</LocationLinkNumber>
+            <LocationLinkCaption>THIS ADDRESS IS LINKED FROM CURRENT ADDRESS LINK 03 ON 12/2014                  </LocationLinkCaption>
+            <InformationSource>N</InformationSource>
+            <SourceOfData>P</SourceOfData>
+            <SuperSearchFlag>Y</SuperSearchFlag>
+          </LocationLinkDetails>
+        </LocationLink>
+      </ConsumerData>
+      <ControlDetails>
+        <AccountNumber>E8371</AccountNumber>
+        <CAISSource>402</CAISSource>
+        <CMLCode>000</CMLCode>
+        <SearchDate>
+          <CCYY>2015</CCYY>
+          <MM>2</MM>
+          <DD>18</DD>
+        </SearchDate>
+        <SearchTime>095511</SearchTime>
+      </ControlDetails>
+    </FullConsumerData>
+    <LocationDetails xmlns="""">
+      <LocationIdentifier>1</LocationIdentifier>
+      <UKLocation>
+        <HouseNumber>11</HouseNumber>
+        <Street>PURWELL LANE</Street>
+        <PostTown>HITCHIN</PostTown>
+        <County>HERTS</County>
+        <Postcode>SG4 0NE</Postcode>
+        <SharedLetterbox>N</SharedLetterbox>
+      </UKLocation>
+      <RMC>0136400</RMC>
+      <RegionNumber>7</RegionNumber>
+      <MultiLineLocation>
+        <LocationLine1>11,PURWELL LANE</LocationLine1>
+        <LocationLine2>HITCHIN</LocationLine2>
+        <LocationLine3>HERTS</LocationLine3>
+        <LocationLine4>SG40NE</LocationLine4>
+      </MultiLineLocation>
+      <FormattedLocation>11, Purwell Lane, Hitchin, Herts, SG40NE</FormattedLocation>
+    </LocationDetails>
+    <Residency xmlns="""">
+      <ApplicantIdentifier>1</ApplicantIdentifier>
+      <LocationIdentifier>1</LocationIdentifier>
+      <LocationCode>01</LocationCode>
+      <TimeAt>
+        <Years>5</Years>
+        <Months>1</Months>
+      </TimeAt>
+      <ResidencyDateFrom>
+        <CCYY>2010</CCYY>
+        <MM>1</MM>
+        <DD>1</DD>
+      </ResidencyDateFrom>
+      <ResidencyDateTo>
+        <CCYY>2015</CCYY>
+        <MM>2</MM>
+        <DD>18</DD>
+      </ResidencyDateTo>
+      <VRConfirmation>
+        <Confirmed>Y</Confirmed>
+        <YrsERSP>01</YrsERSP>
+        <YrsERSF>01</YrsERSF>
+      </VRConfirmation>
+    </Residency>
+    <ThirdPartyData xmlns="""">
+      <OutcomeCode />
+      <OptOut>N</OptOut>
+      <TransientAssocs>N</TransientAssocs>
+      <HHOAllowed>N</HHOAllowed>
+      <OptoutValidCutOff />
+    </ThirdPartyData>
+  </Output>
+</OutputRoot>";
+
+		private const string c62178 = @"<?xml version=""1.0"" encoding=""utf-16""?>
+<OutputRoot xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Output xmlns=""http://schema.uk.experian.com/experian/cems/msgs/v1.1/ConsumerData"">
+    <Applicant xmlns="""">
+      <ApplicantIdentifier>1</ApplicantIdentifier>
+      <Name>
+        <Forename>william</Forename>
+        <Surname>sawyer</Surname>
+      </Name>
+      <Gender>M</Gender>
+      <DateOfBirth>
+        <CCYY>1964</CCYY>
+        <MM>7</MM>
+        <DD>7</DD>
+      </DateOfBirth>
+      <FormattedName> W Sawyer</FormattedName>
+      <FormattedDOB>07/07/1964</FormattedDOB>
+      <Age>
+        <Years>50</Years>
+        <Months>7</Months>
+      </Age>
+    </Applicant>
+    <ConsumerSummary xmlns="""">
+      <PremiumValueData>
+        <TPD>
+          <NDHHO>N</NDHHO>
+        </TPD>
+        <CII>
+          <NDSPCII> 45</NDSPCII>
+          <NDSPACII> -2</NDSPACII>
+        </CII>
+        <Mosaic>
+          <EA4M01>  5855</EA4M01>
+          <EA4M02>  3058</EA4M02>
+          <EA4M03>     0</EA4M03>
+          <EA4M04>   100</EA4M04>
+          <EA4M05>   879</EA4M05>
+          <EA4M06>    48</EA4M06>
+          <EA4M07>    33</EA4M07>
+          <EA4M08>000000</EA4M08>
+          <EA4M09>000000</EA4M09>
+          <EA4M10>000000</EA4M10>
+          <EA4M11>     0</EA4M11>
+          <EA4M12>     0</EA4M12>
+          <EA4T01>42</EA4T01>
+          <EA5T01>   0</EA5T01>
+          <EA5T02>   5</EA5T02>
+          <NDG01> 1</NDG01>
+          <EA4N01>    495</EA4N01>
+          <EA4N02>  -1132</EA4N02>
+          <EA4N03>  -1777</EA4N03>
+          <EA4N04>   -106</EA4N04>
+          <EA4N05>   -329</EA4N05>
+          <NDG02>  988</NDG02>
+          <NDG03>     0</NDG03>
+          <NDG04>     0</NDG04>
+          <NDG05>     0</NDG05>
+          <NDG06>     0</NDG06>
+          <NDG07>     0</NDG07>
+          <NDG08>     0</NDG08>
+          <NDG09>     0</NDG09>
+          <NDG10>     0</NDG10>
+          <NDG11>     0</NDG11>
+          <NDG12>  7692</NDG12>
+        </Mosaic>
+        <Scoring>
+          <NDSI21>91BWN</NDSI21>
+          <E5S01>1</E5S01>
+          <E5S02>1</E5S02>
+          <E5S041>91</E5S041>
+          <E5S051>  525</E5S051>
+          <E5S042>0</E5S042>
+          <E5S052> -999</E5S052>
+          <E5S043>  0</E5S043>
+          <E5S053> -999</E5S053>
+          <NDHHOSCORE> -999</NDHHOSCORE>
+          <NDVALSCORE>    0</NDVALSCORE>
+        </Scoring>
+        <AddrLink>
+          <NDLNK01>N</NDLNK01>
+        </AddrLink>
+        <Director>
+          <NDDIRSP>N</NDDIRSP>
+          <NDDIRSPA>N</NDDIRSPA>
+        </Director>
+        <AgeDoB>
+          <NDDOB>
+            <DD>7</DD>
+            <MM>7</MM>
+            <YY>64</YY>
+          </NDDOB>
+          <EA5S01> 50</EA5S01>
+          <EA4S01> 0</EA4S01>
+          <EA4S03> 0</EA4S03>
+          <EA4S05> 0</EA4S05>
+          <EA4S07> 0</EA4S07>
+        </AgeDoB>
+        <ImpairedCH />
+        <AdditDelphiBlocks>
+          <APACSCCBehavrlData>
+            <CCDATASUPPLIED>Y</CCDATASUPPLIED>
+            <NOMPMNPRL3M>  3</NOMPMNPRL3M>
+            <PTBRL3MNPRL3M>     3</PTBRL3MNPRL3M>
+            <PTBRL6MNPRL6M>     5</PTBRL6MNPRL6M>
+            <NOCAL1M>  0</NOCAL1M>
+            <NOCAL3M>  0</NOCAL3M>
+            <NOMLVCAL1M>  0</NOMLVCAL1M>
+            <NOMLVCAL3M>  0</NOMLVCAL3M>
+            <CLUCLIL6M>    39</CLUCLIL6M>
+            <CLUCLIL6MNPRL6M>    39</CLUCLIL6MNPRL6M>
+            <CLUNPRL1M>    88</CLUNPRL1M>
+            <NOCLDL3M>  0</NOCLDL3M>
+            <NOASBNPRL1M>  5</NOASBNPRL1M>
+          </APACSCCBehavrlData>
+          <Utilisationblock>
+            <SPA01>     -2</SPA01>
+            <SPA02>  74619</SPA02>
+            <SPA03>     -2</SPA03>
+            <SPA04>  51849</SPA04>
+            <SPA05>     -2</SPA05>
+            <SPA06>  22770</SPA06>
+            <SPA07>  74619</SPA07>
+            <SPA08>     -2</SPA08>
+            <SPA09>     -2</SPA09>
+            <SPA10>     -2</SPA10>
+            <SPB111> 10</SPB111>
+            <SPB112>  8</SPB112>
+            <SPB113>  7</SPB113>
+            <SPB114>  7</SPB114>
+            <SPB115>  1</SPB115>
+            <SPB116> 13</SPB116>
+            <SPB117> 10</SPB117>
+            <SPB218>  115</SPB218>
+            <SPB219>   84</SPB219>
+            <SPB220>  102</SPB220>
+            <SPB221>  123</SPB221>
+            <SPB322>   499</SPB322>
+            <SPB323>  1724</SPB323>
+            <SPC24>N </SPC24>
+            <SPD25>  0</SPD25>
+            <SPE126> -2</SPE126>
+            <SPE127> -2</SPE127>
+            <SPE128>     -2</SPE128>
+            <SPF129>  6</SPF129>
+            <SPF130>  6</SPF130>
+            <SPF131>  0</SPF131>
+            <SPF232>  58525</SPF232>
+            <SPF233>  18000</SPF233>
+            <SPF334>   99</SPF334>
+            <SPF335>   88</SPF335>
+            <SPF336> 9999</SPF336>
+            <SPG37> 154</SPG37>
+            <SPG38>  71</SPG38>
+            <SPH39>      0</SPH39>
+            <SPH40>      0</SPH40>
+            <SPH41>      0</SPH41>
+            <SPCIICHECKDIGIT>       0</SPCIICHECKDIGIT>
+            <SPAA01>     -2</SPAA01>
+            <SPAA02>     -2</SPAA02>
+            <SPAA03>     -2</SPAA03>
+            <SPAA04>     -2</SPAA04>
+            <SPAA05>     -2</SPAA05>
+            <SPAA06>     -2</SPAA06>
+            <SPAA07>     -2</SPAA07>
+            <SPAA08>     -2</SPAA08>
+            <SPAA09>     -2</SPAA09>
+            <SPAA10>     -2</SPAA10>
+            <SPAB111> -2</SPAB111>
+            <SPAB112> -2</SPAB112>
+            <SPAB113> -2</SPAB113>
+            <SPAB114> -2</SPAB114>
+            <SPAB115> -2</SPAB115>
+            <SPAB116> -2</SPAB116>
+            <SPAB117> -2</SPAB117>
+            <SPAB218> 9999</SPAB218>
+            <SPAB219> 9999</SPAB219>
+            <SPAB220> 9999</SPAB220>
+            <SPAB221> 9999</SPAB221>
+            <SPAB322>    -2</SPAB322>
+            <SPAB323>    -2</SPAB323>
+            <SPAC24>N </SPAC24>
+            <SPAD25>  0</SPAD25>
+            <SPAE126> -2</SPAE126>
+            <SPAE127> -2</SPAE127>
+            <SPAE128>     -2</SPAE128>
+            <SPAF129> -2</SPAF129>
+            <SPAF130> -2</SPAF130>
+            <SPAF131> -2</SPAF131>
+            <SPAF232>     -2</SPAF232>
+            <SPAF233>     -2</SPAF233>
+            <SPAF334> 9999</SPAF334>
+            <SPAF335> 9999</SPAF335>
+            <SPAF336> 9999</SPAF336>
+            <SPAG37> 185</SPAG37>
+            <SPAG38> 146</SPAG38>
+            <SPAH39>      0</SPAH39>
+            <SPAH40>      0</SPAH40>
+            <SPAH41>      0</SPAH41>
+            <SPACIICHECKDIGIT>       0</SPACIICHECKDIGIT>
+          </Utilisationblock>
+          <NeverPaidDefsBlock />
+          <TelecommsBlock />
+          <BespokeBlock />
+        </AdditDelphiBlocks>
+      </PremiumValueData>
+      <Summary>
+        <ElectoralRoll>
+          <E4Q01>1</E4Q01>
+          <E4Q02>1</E4Q02>
+          <E4Q03>8</E4Q03>
+          <E4Q04>8</E4Q04>
+          <E4Q05>5</E4Q05>
+          <E4Q06>5</E4Q06>
+          <E4Q07>  0</E4Q07>
+          <E4Q08>0</E4Q08>
+          <E4Q09>5</E4Q09>
+          <E4Q10>5</E4Q10>
+          <E4Q11>  0</E4Q11>
+          <E4Q12>  0</E4Q12>
+          <E4Q13>5</E4Q13>
+          <E4Q14>5</E4Q14>
+          <E4Q15>0</E4Q15>
+          <E4Q16>0</E4Q16>
+          <E4Q17>2</E4Q17>
+          <E4Q18>1</E4Q18>
+          <E4R01>1</E4R01>
+          <E4R02>SP1 3GZ</E4R02>
+          <EA4R01PM>0</EA4R01PM>
+          <EA4R01CJ>0</EA4R01CJ>
+          <EA4R01PJ>0</EA4R01PJ>
+          <NDERL01> 0</NDERL01>
+          <NDERL02> 0</NDERL02>
+          <EA2Q01>1</EA2Q01>
+          <EA2Q02>  7</EA2Q02>
+          <NDERLMACA>C</NDERLMACA>
+          <EA5U01> 1</EA5U01>
+          <EA5U02> 0</EA5U02>
+        </ElectoralRoll>
+        <PublicInfo>
+          <E1A01> 0</E1A01>
+          <E1A02>   0</E1A02>
+          <E1A03>  0</E1A03>
+          <EA1C01>N</EA1C01>
+          <EA1D01> 0</EA1D01>
+          <EA1D02>   0</EA1D02>
+          <EA1D03>  0</EA1D03>
+          <E2G01> 0</E2G01>
+          <E2G02>   0</E2G02>
+          <E2G03>  0</E2G03>
+          <EA2I01>N</EA2I01>
+          <EA2J01> 0</EA2J01>
+          <EA2J02>   0</EA2J02>
+          <EA2J03>  0</EA2J03>
+          <EA4Q06>N</EA4Q06>
+          <SPBRPRESENT>N</SPBRPRESENT>
+          <SPABRPRESENT>N</SPABRPRESENT>
+        </PublicInfo>
+        <CAIS>
+          <E1A04> 0</E1A04>
+          <E1A05>   0</E1A05>
+          <E1A06>  0</E1A06>
+          <E1A07> 3</E1A07>
+          <E1A08> 1</E1A08>
+          <E1A09> 0</E1A09>
+          <E1A10>   0</E1A10>
+          <E1A11>  0</E1A11>
+          <E1B01> 0</E1B01>
+          <E1B02>   0</E1B02>
+          <E1B03>N</E1B03>
+          <E1B04>   0</E1B04>
+          <E1B05>0</E1B05>
+          <E1B06> 747</E1B06>
+          <E1B07>0</E1B07>
+          <E1B08>0</E1B08>
+          <E1B09> 9</E1B09>
+          <E1B10> 747</E1B10>
+          <E1B11> 273</E1B11>
+          <E1B12> 0</E1B12>
+          <E1B13> 0</E1B13>
+          <NDECC01>   0</NDECC01>
+          <NDECC02> 999</NDECC02>
+          <NDECC03> 0</NDECC03>
+          <NDECC04> 999</NDECC04>
+          <NDECC07> 91</NDECC07>
+          <NDECC08>   1</NDECC08>
+          <E1C01>N</E1C01>
+          <E1C02> 0</E1C02>
+          <E1C03>   0</E1C03>
+          <E1C04> 0</E1C04>
+          <E1C05> 0</E1C05>
+          <E1C06> 0</E1C06>
+          <EA1B02> 0</EA1B02>
+          <E1D01> 0</E1D01>
+          <E1D02> 2</E1D02>
+          <E1D03> 1</E1D03>
+          <E1D04> 0</E1D04>
+          <NDHAC01>  0</NDHAC01>
+          <NDHAC02>  1</NDHAC02>
+          <NDHAC03>  1</NDHAC03>
+          <NDHAC04>  1</NDHAC04>
+          <NDHAC05>  1</NDHAC05>
+          <NDHAC09>  1</NDHAC09>
+          <NDINC01> 3</NDINC01>
+          <EA1F01>1</EA1F01>
+          <EA1F02>0</EA1F02>
+          <EA1F03>N</EA1F03>
+          <E2G04> 0</E2G04>
+          <E2G05>   0</E2G05>
+          <E2G06>  0</E2G06>
+          <E2G07> 1</E2G07>
+          <E2G08> 0</E2G08>
+          <E2G09> 0</E2G09>
+          <E2G10>   0</E2G10>
+          <E2G11>  0</E2G11>
+          <E2H01> 0</E2H01>
+          <E2H02>   0</E2H02>
+          <E2H03>N</E2H03>
+          <E2H04>   0</E2H04>
+          <E2H05>N</E2H05>
+          <E2H06>   0</E2H06>
+          <E2H07>N</E2H07>
+          <E2H08>N</E2H08>
+          <E2H09> 0</E2H09>
+          <E2H10>   0</E2H10>
+          <E2H11>   0</E2H11>
+          <E2H12> 0</E2H12>
+          <E2H13> 0</E2H13>
+          <NDECC05>   0</NDECC05>
+          <NDECC09>  0</NDECC09>
+          <NDECC10>   0</NDECC10>
+          <E2I01>N</E2I01>
+          <E2I02> 0</E2I02>
+          <E2I03>   0</E2I03>
+          <E2I04> 0</E2I04>
+          <E2I05> 0</E2I05>
+          <E2I06> 0</E2I06>
+          <EA2H02> 0</EA2H02>
+          <E2J01> 0</E2J01>
+          <E2J02> 1</E2J02>
+          <E2J03> 0</E2J03>
+          <E2J04> 0</E2J04>
+          <NDHAC10>  0</NDHAC10>
+          <NDHAC06>  0</NDHAC06>
+          <NDHAC07>  0</NDHAC07>
+          <NDHAC08>  0</NDHAC08>
+          <NDINC02> 0</NDINC02>
+          <EA2L02>N</EA2L02>
+          <EA2L03>N</EA2L03>
+          <NDECC06> 999</NDECC06>
+          <NDINC03> 7</NDINC03>
+        </CAIS>
+        <CAPS>
+          <E1E01> 1</E1E01>
+          <E1E02> 1</E1E02>
+          <EA1B01> 0</EA1B01>
+          <NDPSD01> 1</NDPSD01>
+          <NDPSD02> 0</NDPSD02>
+          <NDPSD03> 0</NDPSD03>
+          <NDPSD04> 0</NDPSD04>
+          <NDPSD05> 0</NDPSD05>
+          <NDPSD06> 0</NDPSD06>
+          <EA1E01> 1</EA1E01>
+          <EA1E02> 1</EA1E02>
+          <EA1E03> 0</EA1E03>
+          <EA1E04> 0</EA1E04>
+          <E2K01> 0</E2K01>
+          <E2K02> 0</E2K02>
+          <EA2H01> 0</EA2H01>
+          <NDPSD07> 0</NDPSD07>
+          <NDPSD08> 0</NDPSD08>
+          <NDPSD09> 0</NDPSD09>
+          <NDPSD10> 0</NDPSD10>
+          <EA2K01> 0</EA2K01>
+          <EA2K02> 0</EA2K02>
+          <EA2K03> 0</EA2K03>
+          <EA2K04> 0</EA2K04>
+          <NDPSD11> 3</NDPSD11>
+        </CAPS>
+        <CIFAS>
+          <EA1A01>N</EA1A01>
+          <EA2G01>N</EA2G01>
+          <EA4P01>N</EA4P01>
+        </CIFAS>
+        <CML>
+          <EA1C02>N</EA1C02>
+          <EA2I02>N</EA2I02>
+        </CML>
+        <GAIN>
+          <EA1G01>N</EA1G01>
+          <EA1G02>N</EA1G02>
+          <EA2M01>N</EA2M01>
+        </GAIN>
+        <NOC>
+          <EA4Q07>N</EA4Q07>
+          <EA4Q08>N</EA4Q08>
+          <EA4Q09>N</EA4Q09>
+          <EA4Q10>N</EA4Q10>
+          <EA4Q11>N</EA4Q11>
+          <EA4Q01>N</EA4Q01>
+          <EA4Q02>N</EA4Q02>
+          <EA4Q03>N</EA4Q03>
+          <EA4Q04>N</EA4Q04>
+          <EA4Q05>N</EA4Q05>
+        </NOC>
+        <TPD>
+          <NDOPTOUT>N</NDOPTOUT>
+        </TPD>
+      </Summary>
+    </ConsumerSummary>
+    <Control xmlns="""">
+      <ExperianReference>XBVLDYRZCQ</ExperianReference>
+    </Control>
+    <FullConsumerData xmlns="""">
+      <ConsumerDataSummary>
+        <SummaryDetails>
+          <DataOverflow>N</DataOverflow>
+          <NoCCount>0</NoCCount>
+          <LocationConfirmCnt>1</LocationConfirmCnt>
+          <PublicInfoSummary>
+            <Number>0</Number>
+          </PublicInfoSummary>
+          <CAISSummary>
+            <Number>24</Number>
+            <WorstCurrent>0</WorstCurrent>
+            <WorstHistorical>2</WorstHistorical>
+            <TotalBalance>£346336  </TotalBalance>
+            <GoneAway>N</GoneAway>
+            <CAISPrevSearches>
+              <NumberUpTo3Months>1</NumberUpTo3Months>
+              <Num3To6Months>0</Num3To6Months>
+              <Num6To12Months>2</Num6To12Months>
+              <TotalNumber>3</TotalNumber>
+            </CAISPrevSearches>
+          </CAISSummary>
+          <SummaryFlags>
+            <CIFAS>N</CIFAS>
+            <CML>N</CML>
+            <PreviousOccupant>N</PreviousOccupant>
+            <NoConfirmAtPrevLoc>N</NoConfirmAtPrevLoc>
+            <Arrangement>N</Arrangement>
+            <ReportedDeceased>N</ReportedDeceased>
+            <ReportedGoneAway>N</ReportedGoneAway>
+            <ClaimedOnCreditIns>N</ClaimedOnCreditIns>
+            <DebtManagement>N</DebtManagement>
+            <AccountQuery>N</AccountQuery>
+            <Recourse>N</Recourse>
+            <VoluntaryTerm>N</VoluntaryTerm>
+            <PartSettle>N</PartSettle>
+            <DebtAssign>N</DebtAssign>
+            <OwnAccount>N</OwnAccount>
+            <OwnSearch>N</OwnSearch>
+            <PreviousLocation>N</PreviousLocation>
+            <AdditionalLocation>N</AdditionalLocation>
+            <ForwardLocation>N</ForwardLocation>
+          </SummaryFlags>
+          <LocationConfirm>
+            <Location>C</Location>
+            <Level>1</Level>
+            <Source>V</Source>
+          </LocationConfirm>
+        </SummaryDetails>
+      </ConsumerDataSummary>
+      <ConsumerData>
+        <VotersRollLocation>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <VRollStreetDetails>
+            <Location>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>HAMPTON PARK</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <StreetMatchLevel>3</StreetMatchLevel>
+            <InformationSource>N</InformationSource>
+            <MOSCAICCode>99</MOSCAICCode>
+            <PAFDistrictNumber>0</PAFDistrictNumber>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <ACORNCode>99</ACORNCode>
+            <BatchNumber>07501426</BatchNumber>
+          </VRollStreetDetails>
+        </VotersRollLocation>
+        <VotersRollPerson>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>CATHERINE</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>F</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2008</SurnameReg>
+            <DatesRegLeft>102007102011</DatesRegLeft>
+            <HouseNumber>6</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2008</SurnameReg>
+            <DatesRegLeft>102007</DatesRegLeft>
+            <HouseNumber>6</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>JAMES</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>3</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>M</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2008</SurnameReg>
+            <DatesRegLeft>102008</DatesRegLeft>
+            <HouseNumber>6</HouseNumber>
+          </VRollPersonDetails>
+          <VRollPersonDetails>
+            <Name>
+              <Forename>ELLEN</Forename>
+              <MiddleName>L</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <MatchDetails>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>3</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <Sex>F</Sex>
+            <SegmentIDNumber>1</SegmentIDNumber>
+            <SurnameReg>2008</SurnameReg>
+            <DatesRegLeft>102010</DatesRegLeft>
+            <HouseNumber>6</HouseNumber>
+          </VRollPersonDetails>
+        </VotersRollPerson>
+        <Association>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <AssociationDetails>
+            <InformationDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>18</DD>
+            </InformationDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <AssociateName>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </AssociateName>
+            <Name>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <Source>S</Source>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+            </MatchDetails>
+            <InformationType>F</InformationType>
+            <CompanyType>24</CompanyType>
+            <InformationSupplier>F2278</InformationSupplier>
+            <SupplierBranch>0000</SupplierBranch>
+          </AssociationDetails>
+          <AssociationDetails>
+            <InformationDate>
+              <CCYY>2007</CCYY>
+              <MM>6</MM>
+              <DD>27</DD>
+            </InformationDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <AssociateName>
+              <Title>MRS</Title>
+              <Forename>CATHERINE</Forename>
+              <MiddleName>MARGARET</MiddleName>
+              <Surname>SAWYER</Surname>
+            </AssociateName>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WIILIAM</Forename>
+              <MiddleName>ALLAN</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <DoBAssociateOrAlias>
+              <CCYY>1961</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </DoBAssociateOrAlias>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <Source>J</Source>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+            </MatchDetails>
+            <InformationType>F</InformationType>
+            <CompanyType>06</CompanyType>
+            <InformationSupplier>68839</InformationSupplier>
+            <SupplierBranch>0000</SupplierBranch>
+          </AssociationDetails>
+          <AssociationDetails>
+            <InformationDate>
+              <CCYY>2007</CCYY>
+              <MM>8</MM>
+              <DD>5</DD>
+            </InformationDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <AssociateName>
+              <Title>MRS</Title>
+              <Forename>CATHERINE</Forename>
+              <MiddleName>M</MiddleName>
+              <Surname>SAWYER</Surname>
+            </AssociateName>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WIILIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <DoBAssociateOrAlias>
+              <CCYY>1961</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </DoBAssociateOrAlias>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <Source>J</Source>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+            </MatchDetails>
+            <InformationType>F</InformationType>
+            <CompanyType>06</CompanyType>
+            <InformationSource>C</InformationSource>
+          </AssociationDetails>
+          <AssociationDetails>
+            <InformationDate>
+              <CCYY>2011</CCYY>
+              <MM>9</MM>
+              <DD>11</DD>
+            </InformationDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <AssociateName>
+              <Title>MRS</Title>
+              <Forename>CATHERINE</Forename>
+              <MiddleName>M</MiddleName>
+              <Surname>SAWYER</Surname>
+            </AssociateName>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <DoBAssociateOrAlias>
+              <CCYY>1961</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </DoBAssociateOrAlias>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <Source>J</Source>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+            </MatchDetails>
+            <InformationType>F</InformationType>
+            <CompanyType>06</CompanyType>
+            <InformationSource>C</InformationSource>
+          </AssociationDetails>
+        </Association>
+        <CAIS>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>CATHY</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>1999</CCYY>
+              <MM>9</MM>
+              <DD>21</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2010</CCYY>
+              <MM>12</MM>
+              <DD>19</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2010</CCYY>
+              <MM>12</MM>
+              <DD>19</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1961</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£450     </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>0000000D0000</AccountStatusCodes>
+            <Status1To2>5</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>2</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>F</Sex>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>04</CompanyType>
+            <AccountType>08</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2012</CCYY>
+              <MM>11</MM>
+              <DD>27</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2013</CCYY>
+              <MM>4</MM>
+              <DD>14</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2013</CCYY>
+              <MM>4</MM>
+              <DD>21</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£300     </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>00100       </AccountStatusCodes>
+            <Status1To2>1</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>5</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>1</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Payment>£5    </Payment>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>04</CompanyType>
+            <AccountType>08</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>5</MM>
+              <DD>9</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2009</CCYY>
+              <MM>12</MM>
+              <DD>31</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2010</CCYY>
+              <MM>1</MM>
+              <DD>3</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>43</RepaymentPeriod>
+            <Payment>£2338 </Payment>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>02</CompanyType>
+            <AccountType>01</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2013</CCYY>
+              <MM>5</MM>
+              <DD>9</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Amount>£22770   </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>21</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>49</RepaymentPeriod>
+            <Payment>£499  </Payment>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>02</CompanyType>
+            <AccountType>01</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>1</MM>
+              <DD>11</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£1000    </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>15</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2013</CCYY>
+              <MM>7</MM>
+              <DD>19</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP13GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Amount>£112     </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>19</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>17</CompanyType>
+            <AccountType>18</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2007</CCYY>
+              <MM>3</MM>
+              <DD>9</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP13GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>22</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>17</CompanyType>
+            <AccountType>59</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>CATHERINE</Forename>
+              <MiddleName>M</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>3</MM>
+              <DD>24</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2010</CCYY>
+              <MM>6</MM>
+              <DD>30</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2010</CCYY>
+              <MM>7</MM>
+              <DD>4</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1961</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000111110000</AccountStatusCodes>
+            <Status1To2>5</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>1</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>43</RepaymentPeriod>
+            <Payment>£6813 </Payment>
+            <Sex>F</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>02</CompanyType>
+            <AccountType>01</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>CATHERINE</Forename>
+              <MiddleName>MARGARET</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2007</CCYY>
+              <MM>7</MM>
+              <DD>28</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1961</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <JointAccount>M</JointAccount>
+            <CreditLimit />
+            <Balance>
+              <Amount>£193828  </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>264</RepaymentPeriod>
+            <Payment>£1225 </Payment>
+            <Sex>F</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>03</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>ALLAN</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2007</CCYY>
+              <MM>7</MM>
+              <DD>28</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <JointAccount>J</JointAccount>
+            <CreditLimit />
+            <Balance>
+              <Amount>£193828  </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>264</RepaymentPeriod>
+            <Payment>£1225 </Payment>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>03</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MRS</Title>
+              <Forename>CATHERINE</Forename>
+              <MiddleName>MARGARET</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>12</MM>
+              <DD>20</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP13GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1961</CCYY>
+              <MM>3</MM>
+              <DD>29</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>2</BureauRefCategory>
+              <MatchTo>3</MatchTo>
+              <MatchType>F</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <JointAccount>M</JointAccount>
+            <CreditLimit>
+              <Amount>£80390   </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£77889   </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>F</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>25</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>ALLAN</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2006</CCYY>
+              <MM>12</MM>
+              <DD>20</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP13GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <JointAccount>J</JointAccount>
+            <CreditLimit>
+              <Amount>£80390   </Amount>
+              <Caption>O</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£77889   </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>25</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>8</MM>
+              <DD>15</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2015</CCYY>
+              <MM>1</MM>
+              <DD>16</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£3000    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>3</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>2</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>04</CompanyType>
+            <AccountType>08</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2013</CCYY>
+              <MM>9</MM>
+              <DD>18</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£6500    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£5787    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>17</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>U</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>01</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2008</CCYY>
+              <MM>6</MM>
+              <DD>11</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2012</CCYY>
+              <MM>5</MM>
+              <DD>5</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2012</CCYY>
+              <MM>6</MM>
+              <DD>3</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>47</RepaymentPeriod>
+            <Payment>£169  </Payment>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>02</CompanyType>
+            <AccountType>01</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2007</CCYY>
+              <MM>11</MM>
+              <DD>27</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>1</MM>
+              <DD>11</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£2400    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£2320    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2012</CCYY>
+              <MM>7</MM>
+              <DD>11</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <SettlementDate>
+              <CCYY>2014</CCYY>
+              <MM>7</MM>
+              <DD>11</DD>
+            </SettlementDate>
+            <LastUpdatedDate>
+              <CCYY>2014</CCYY>
+              <MM>8</MM>
+              <DD>10</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit />
+            <Balance>
+              <Narrative>S</Narrative>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>25</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>24</RepaymentPeriod>
+            <Payment>£186  </Payment>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>S</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <CompanyType>02</CompanyType>
+            <AccountType>02</AccountType>
+          </CAISDetails>
+        </CAIS>
+        <CAIS>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2002</CCYY>
+              <MM>5</MM>
+              <DD>8</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£18000   </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£17766   </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0017766</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0017958</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0014334</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0014621</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010016</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010418</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010787</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0011175</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0011555</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0011900</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0012267</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0012635</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0017958</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0014334</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0014621</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010016</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010418</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010787</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0011175</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0011555</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0011900</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0012267</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0012635</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0012979</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000600</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0015000</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>08</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <MiddleName>A</MiddleName>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>10</MM>
+              <DD>24</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£100     </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance />
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>1</MM>
+              <DD>28</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£2100    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£815     </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>2</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>1</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000815</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000832</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000845</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000917</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000662</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000008</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000000</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000016</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000003</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000346</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000832</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000029</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000845</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000034</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000917</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000200</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000662</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000200</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000008</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000186</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000000</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000016</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000016</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000003</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000346</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000404</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000687</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000500</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0001400</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>11</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0004800</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>10</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2011</CCYY>
+              <MM>10</MM>
+              <DD>25</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£1025    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£419     </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000419</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000439</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000144</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000167</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000190</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000311</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000332</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000353</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000373</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000393</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000412</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0000929</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000439</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000144</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000167</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000190</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000311</PrevStatementBal>
+              <PaymentAmount>0000125</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000332</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000353</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000373</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000393</PrevStatementBal>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000412</PrevStatementBal>
+              <PromotionalRate>Y</PromotionalRate>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000929</PrevStatementBal>
+              <PromotionalRate>Y</PromotionalRate>
+              <PaymentAmount>0000525</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0000942</PrevStatementBal>
+              <PromotionalRate>Y</PromotionalRate>
+              <PaymentAmount>0000025</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0006600</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>08</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>01</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2004</CCYY>
+              <MM>2</MM>
+              <DD>27</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP13GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£10100   </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£8966    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008966</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0009051</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0009105</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007150</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007218</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007527</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007526</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007816</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008108</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008516</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0009281</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010048</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0009051</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000320</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0009105</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000284</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007150</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000266</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007218</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000263</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007218</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000500</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007526</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000500</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007816</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000500</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008746</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0001137</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008516</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0009281</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0001000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010048</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0001000</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010128</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000338</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>01</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2002</CCYY>
+              <MM>11</MM>
+              <DD>25</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£10300   </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£7802    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007802</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008138</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008226</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008310</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008412</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0009516</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0009571</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006633</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006966</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007801</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0008123</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0010040</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008138</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000256</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008226</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000265</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008310</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000268</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008912</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000789</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0009516</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000806</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0009571</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000268</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007133</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000736</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007722</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000755</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008301</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000759</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0008913</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000790</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010040</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0001329</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0010055</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000246</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0015300</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>07</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0015800</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>03</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0015000</CreditLimitChange>
+              <CreditLimitDate>
+                <CreditLimitDateMM>08</CreditLimitDateMM>
+              </CreditLimitDate>
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+          <CAISDetails>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <CAISAccStartDate>
+              <CCYY>2007</CCYY>
+              <MM>1</MM>
+              <DD>18</DD>
+            </CAISAccStartDate>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN FARM</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <LastUpdatedDate>
+              <CCYY>2015</CCYY>
+              <MM>2</MM>
+              <DD>8</DD>
+            </LastUpdatedDate>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <InformationSource>N</InformationSource>
+            <CreditLimit>
+              <Amount>£8000    </Amount>
+              <Caption>C</Caption>
+            </CreditLimit>
+            <Balance>
+              <Amount>£7862    </Amount>
+            </Balance>
+            <CurrentDefBalance />
+            <DelinquentBalance />
+            <AccountStatusCodes>000000000000</AccountStatusCodes>
+            <Status1To2>0</Status1To2>
+            <StatusTo3>0</StatusTo3>
+            <NumOfMonthsHistory>36</NumOfMonthsHistory>
+            <SettleDateCaption>S</SettleDateCaption>
+            <BankFlag>N</BankFlag>
+            <WorstStatus>0</WorstStatus>
+            <OwnData>N</OwnData>
+            <RepaymentPeriod>0</RepaymentPeriod>
+            <Sex>M</Sex>
+            <PaymentFrequency>M</PaymentFrequency>
+            <AccountStatus>A</AccountStatus>
+            <NumAddInfoBlocks>0</NumAddInfoBlocks>
+            <NumAccountBalances>12</NumAccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007862</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0007943</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006254</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0005913</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0005964</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006024</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006094</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006142</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006222</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006267</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006330</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <AccountBalances>
+              <AccountBalance>0006394</AccountBalance>
+              <Status>0</Status>
+            </AccountBalances>
+            <NumCardHistories>12</NumCardHistories>
+            <CardHistories>
+              <PrevStatementBal>0007943</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000251</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006254</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000184</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0005913</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000194</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0005964</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000187</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006024</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000189</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006094</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000200</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006142</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000189</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006222</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000208</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006267</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000192</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006330</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000194</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006394</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000196</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CardHistories>
+              <PrevStatementBal>0006468</PrevStatementBal>
+              <PromotionalRate>N</PromotionalRate>
+              <PaymentAmount>0000208</PaymentAmount>
+              <NumCashAdvances>0</NumCashAdvances>
+              <CashAdvanceAmount>0000000</CashAdvanceAmount>
+              <PaymentCode>M</PaymentCode>
+            </CardHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CredLimitHistories>
+              <CreditLimitChange>0000000</CreditLimitChange>
+              <CreditLimitDate />
+            </CredLimitHistories>
+            <CompanyType>09</CompanyType>
+            <AccountType>05</AccountType>
+          </CAISDetails>
+        </CAIS>
+        <PreviousApplication>
+          <LocationIndicator>C</LocationIndicator>
+          <ApplicantIndicator>1</ApplicantIndicator>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>06</Years>
+              <Months>00</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2015</CCYY>
+              <MM>1</MM>
+              <DD>20</DD>
+            </ApplicationDate>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <ApplicationType>HP</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>01</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>00</Years>
+              <Months>00</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2014</CCYY>
+              <MM>8</MM>
+              <DD>7</DD>
+            </ApplicationDate>
+            <Name>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <ApplicationType>EQ</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>27</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+          <PrevApplnDetails>
+            <TimeAtLocation>
+              <Years>00</Years>
+              <Months>00</Months>
+            </TimeAtLocation>
+            <Location>
+              <HouseNumber>6</HouseNumber>
+              <Street>SYCAMORE DRIVE</Street>
+              <District>BISHOPDOWN</District>
+              <PostTown>SALISBURY</PostTown>
+              <County>WILTS</County>
+              <Postcode>SP1 3GZ</Postcode>
+            </Location>
+            <ApplicationDate>
+              <CCYY>2014</CCYY>
+              <MM>8</MM>
+              <DD>7</DD>
+            </ApplicationDate>
+            <Name>
+              <Title>MR</Title>
+              <Forename>WILLIAM</Forename>
+              <Surname>SAWYER</Surname>
+            </Name>
+            <DateOfBirth>
+              <CCYY>1964</CCYY>
+              <MM>7</MM>
+              <DD>7</DD>
+            </DateOfBirth>
+            <MatchDetails>
+              <StreetMatchLevel>4</StreetMatchLevel>
+              <HouseMatchLevel>4</HouseMatchLevel>
+              <BureauRefCategory>1</BureauRefCategory>
+              <MatchTo>1</MatchTo>
+              <MatchType>I</MatchType>
+            </MatchDetails>
+            <ApplicationType>BA</ApplicationType>
+            <JointApplicant>C</JointApplicant>
+            <CompanyType>27</CompanyType>
+            <AccountNumber>00000</AccountNumber>
+          </PrevApplnDetails>
+        </PreviousApplication>
+      </ConsumerData>
+      <ControlDetails>
+        <AccountNumber>E8371</AccountNumber>
+        <CAISSource>402</CAISSource>
+        <CMLCode>000</CMLCode>
+        <SearchDate>
+          <CCYY>2015</CCYY>
+          <MM>2</MM>
+          <DD>18</DD>
+        </SearchDate>
+        <SearchTime>101058</SearchTime>
+      </ControlDetails>
+    </FullConsumerData>
+    <LocationDetails xmlns="""">
+      <LocationIdentifier>1</LocationIdentifier>
+      <UKLocation>
+        <HouseNumber>6</HouseNumber>
+        <Street>SYCAMORE DRIVE</Street>
+        <District>BISHOPDOWN</District>
+        <PostTown>SALISBURY</PostTown>
+        <County>WILTS</County>
+        <Postcode>SP1 3GZ</Postcode>
+        <SharedLetterbox>N</SharedLetterbox>
+      </UKLocation>
+      <RMC>6076100</RMC>
+      <RegionNumber>3</RegionNumber>
+      <MultiLineLocation>
+        <LocationLine1>6,SYCAMORE DRIVE</LocationLine1>
+        <LocationLine2>BISHOPDOWN</LocationLine2>
+        <LocationLine3>SALISBURY,WILTS</LocationLine3>
+        <LocationLine4>SP13GZ</LocationLine4>
+      </MultiLineLocation>
+      <FormattedLocation>6, Sycamore Drive, Bishopdown, Salisbury, Wilts, SP13GZ</FormattedLocation>
+    </LocationDetails>
+    <Residency xmlns="""">
+      <ApplicantIdentifier>1</ApplicantIdentifier>
+      <LocationIdentifier>1</LocationIdentifier>
+      <LocationCode>01</LocationCode>
+      <TimeAt>
+        <Years>5</Years>
+        <Months>1</Months>
+      </TimeAt>
+      <ResidencyDateFrom>
+        <CCYY>2010</CCYY>
+        <MM>1</MM>
+        <DD>1</DD>
+      </ResidencyDateFrom>
+      <ResidencyDateTo>
+        <CCYY>2015</CCYY>
+        <MM>2</MM>
+        <DD>18</DD>
+      </ResidencyDateTo>
+      <VRConfirmation>
+        <Confirmed>Y</Confirmed>
+        <YrsERSP>08</YrsERSP>
+        <YrsERSF>08</YrsERSF>
+      </VRConfirmation>
+    </Residency>
+    <ThirdPartyData xmlns="""">
+      <OutcomeCode />
+      <OptOut>N</OptOut>
+      <TransientAssocs>N</TransientAssocs>
+      <HHOAllowed>N</HHOAllowed>
+      <OptoutValidCutOff />
+    </ThirdPartyData>
+  </Output>
+</OutputRoot>";
+
+
+
 	}
 }
