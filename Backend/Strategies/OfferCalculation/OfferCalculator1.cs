@@ -33,7 +33,8 @@
 			SafeReader sr = db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
 
 			if (sr.IsEmpty) {
-				result.Error = "Can't load standard loan type";
+				result.IsError = true;
+				result.Message = "Can't load standard loan type";
 				return result;
 			} // if
 
@@ -84,7 +85,8 @@
 				);
 
 				log.Alert(errorMessage);
-				result.Error = errorMessage;
+				result.IsError = true;
+				result.Message = errorMessage;
 
 				return;
 			} // if
@@ -131,7 +133,7 @@
 				} // if
 			} // if
 
-			if (!string.IsNullOrWhiteSpace(result.Error)) {
+			if (!result.HasDecision) {
 				if (aspireToMinSetupFee)
 					SetRounded(result, maxInterestRate / 100.0m, minSetupFee / 100.0m);
 				else
@@ -160,7 +162,8 @@
 			var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel);
 
 			if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate()) {
-				result.Error = lowerBoundaryPricingModelCalculator.Error;
+				result.IsError = true;
+				result.Message = lowerBoundaryPricingModelCalculator.Error;
 				return false;
 			} // if
 
@@ -174,13 +177,14 @@
 			var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel);
 
 			if (!upperBoundaryPricingModelCalculator.CalculateInterestRate()) {
-				result.Error = lowerBoundaryPricingModelCalculator.Error;
+				result.IsError = true;
+				result.Message = lowerBoundaryPricingModelCalculator.Error;
 				return false;
 			} // if
 
 			upperBoundaryModel = upperBoundaryPricingModelCalculator.Model;
 
-			bool isError = (
+			bool isOutOfRange = (
 				(upperBoundaryModel.MonthlyInterestRate * 100 < minInterestRate) ||
 				(upperBoundaryModel.MonthlyInterestRate * 100 > maxInterestRate)
 			) && (
@@ -188,9 +192,10 @@
 				(lowerBoundaryModel.MonthlyInterestRate * 100 > maxInterestRate)
 			);
 
-			if (isError) {
-				result.Error = string.Format(
-					"No interest rate found in range (min max setup fee) [{0:N2} - {1:N2}] and [{2:N2} - {3:N2}] (config)",
+			if (isOutOfRange) {
+				result.Message = string.Format(
+					"No interest rate found in range (min max interest rate) " +
+					"[{0:N2} - {1:N2}] and [{2:N2} - {3:N2}] (config)",
 					upperBoundaryModel.MonthlyInterestRate * 100,
 					lowerBoundaryModel.MonthlyInterestRate * 100,
 					minInterestRate, maxInterestRate
@@ -199,6 +204,7 @@
 				return false;
 			} // if
 
+			result.HasDecision = true;
 			return true;
 		} // CheckBounderies
 
@@ -221,14 +227,16 @@
 				var lowerBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, lowerBoundaryModel);
 
 				if (!lowerBoundaryPricingModelCalculator.CalculateInterestRate()) {
-					result.Error = lowerBoundaryPricingModelCalculator.Error;
+					result.IsError = true;
+					result.Message = lowerBoundaryPricingModelCalculator.Error;
 					return;
 				} // if
 
 				lowerBoundaryModel = lowerBoundaryPricingModelCalculator.Model;
 
 				if (lowerBoundaryModel.SetupFeePercents * 100 > maxSetupFee) {
-					result.Error = "No interest rate found";
+					result.IsError = true;
+					result.Message = "No interest rate found";
 					return;
 				} // if
 
@@ -261,13 +269,15 @@
 			do {
 				var upperBoundaryPricingModelCalculator = new PricingModelCalculator(customerId, upperBoundaryModel);
 				if (!upperBoundaryPricingModelCalculator.CalculateInterestRate()) {
-					result.Error = upperBoundaryPricingModelCalculator.Error;
+					result.IsError = true;
+					result.Message = upperBoundaryPricingModelCalculator.Error;
 					return;
 				}
 				upperBoundaryModel = upperBoundaryPricingModelCalculator.Model;
 
 				if (upperBoundaryModel.SetupFeePercents * 100 < minSetupFee) {
-					result.Error = "No interest rate found";
+					result.IsError = true;
+					result.Message = "No interest rate found";
 					return;
 				}
 

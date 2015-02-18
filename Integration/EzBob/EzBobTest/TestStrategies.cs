@@ -413,39 +413,91 @@
 
 		[Test]
 		public void TestOfferCalculation() {
-			var calc = new OfferDualCalculator();
-
-			var offer1 = calc.CalculateOffer(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
+			/*
+			var calc = new OfferDualCalculator(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
+			var offer1 = calc.CalculateOffer();
 			Assert.AreEqual(5.5M, offer1.SetupFee);
 			Assert.AreEqual(4.5M, offer1.InterestRate);
 			//todo uncomment to run once 
 			//return;
+			*/
+
+			const string query = "SELECT " +
+				"CustomerId, Medal, OfferedLoanAmount, NumOfLoans, ZooplaValue " +
+				"FROM " +
+				"MedalCalculations " +
+				"WHERE IsActive = 1 " +
+				"AND Medal <> 'NoMedal' " +
+				"AND OfferedLoanAmount > 0 " +
+				"ORDER BY CustomerId DESC";
+
 			int calculatedOffers = 0;
 			int failedVerificationOffers = 0;
-			this.m_oDB.ForEachRowSafe(sr => {
-				int customerId = sr["CustomerId"];
-				EZBob.DatabaseLib.Model.Database.Medal medal = (EZBob.DatabaseLib.Model.Database.Medal)Enum.Parse(typeof(EZBob.DatabaseLib.Model.Database.Medal), sr["Medal"]);
-				int offeredLoanAmount = sr["OfferedLoanAmount"];
-				int numOfLoans = sr["NumOfLoans"];
-				int zooplaValue = sr["ZooplaValue"];
 
-				int roundedAmount = (int)Math.Truncate((decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep) * CurrentValues.Instance.GetCashSliderStep;
-				int cappedAmount = 0;
+			this.m_oDB.ForEachRowSafe(
+				sr => {
+					int customerId = sr["CustomerId"];
 
-				if (zooplaValue > 0)
-					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapHomeOwner);
-				else
-					cappedAmount = Math.Min(roundedAmount, CurrentValues.Instance.MaxCapNotHomeOwner);
+					EZBob.DatabaseLib.Model.Database.Medal medal = (EZBob.DatabaseLib.Model.Database.Medal)Enum.Parse(
+						typeof(EZBob.DatabaseLib.Model.Database.Medal),
+						sr["Medal"]
+					);
 
-				var offer = calc.CalculateOffer(customerId, DateTime.UtcNow, cappedAmount, numOfLoans > 0, medal);
-				calculatedOffers++;
-				if (offer == null || !string.IsNullOrEmpty(offer.Error))
-					failedVerificationOffers++;
-			}, "SELECT CustomerId, Medal, OfferedLoanAmount, NumOfLoans, ZooplaValue FROM MedalCalculations WHERE IsActive=1 AND Medal<>'NoMedal' AND OfferedLoanAmount>0", CommandSpecies.Text);
+					int offeredLoanAmount = sr["OfferedLoanAmount"];
+					int numOfLoans = sr["NumOfLoans"];
+					int zooplaValue = sr["ZooplaValue"];
+
+					int roundedAmount = (int)Math.Truncate(
+						(decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep
+					) * CurrentValues.Instance.GetCashSliderStep;
+
+					int cappedAmount = Math.Min(
+						roundedAmount,
+						zooplaValue > 0 ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
+					);
+
+					var calc = new OfferDualCalculator(
+						customerId,
+						DateTime.UtcNow,
+						cappedAmount,
+						numOfLoans > 0,
+						medal
+					);
+
+					OfferResult offer = calc.CalculateOffer();
+
+					calculatedOffers++;
+
+					string offerMsg;
+
+					if (offer == null) {
+						failedVerificationOffers++;
+						offerMsg = "mismatch - offer is null";
+					} else if (offer.IsError) {
+						failedVerificationOffers++;
+						offerMsg = "mismatch - error encountered, offer is: '" + offer + "'";
+					} else if (offer.IsMismatch) {
+						failedVerificationOffers++;
+						offerMsg = "mismatch - offer is: '" + offer + "'";
+					} else
+						offerMsg = "match - offer is: '" + offer + "'";
+
+					this.m_oLog.Info(
+						"\n\nCustomer #{0} id {1}: {2}.\n\nResult summary:\n{3}\n\n",
+						calculatedOffers,
+						customerId,
+						offerMsg,
+						calc.ResultSummary
+					);
+				},
+				query,
+				CommandSpecies.Text
+			);
 
 			this.m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
+
 			Assert.AreEqual(0, failedVerificationOffers);
-		}
+		} // TestOfferCalculation
 
 		// TestCalculateModelsAndAffordability
 		[Test]

@@ -27,8 +27,6 @@
 
 			var pricingScenario = dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
 
-			var pricingCalculator = new PricingCalculator(DB, Log);
-
 			var outModel = new OfferOutputModel {
 				ScenarioName = pricingScenario.ScenarioName,
 				Amount = input.Amount,
@@ -37,7 +35,13 @@
 				CalculationTime = DateTime.UtcNow
 			};
 
-			decimal defaultRate = pricingCalculator.GetDefaultRate(outModel.CustomerId, pricingScenario);
+			var pricingCalculator = new PricingCalculator(
+				input.CustomerId,
+				pricingScenario,
+				input.Amount,
+				outModel.RepaymentPeriod,
+				DB
+			);
 
 			if (input.AspireToMinSetupFee) {
 				bool wasTooSmallInterest = false;
@@ -47,23 +51,19 @@
 				do {
 					pricingScenario.SetupFee = setupFee;
 
-					decimal interest = pricingCalculator.GetInterestRate(
-						input.Amount,
-						outModel.RepaymentPeriod,
-						outModel.CustomerId,
-						defaultRate,
-						pricingScenario
-					);
+					decimal interest = pricingCalculator.GetInterestRate();
 
 					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
 						outModel.InterestRate = RoundInterest(interest);
 						outModel.SetupFee = RoundSetupFee(setupFee / 100);
+						outModel.HasDecision = true;
 						return outModel;
 					} // if
 
 					if (interest > interestRateRange.MaxInterestRate && wasTooSmallInterest) {
 						outModel.InterestRate = RoundInterest(interest);
 						outModel.SetupFee = RoundSetupFee(setupFee / 100);
+						outModel.HasDecision = true;
 						return outModel;
 					} // if
 
@@ -79,23 +79,19 @@
 				do {
 					pricingScenario.SetupFee = setupFee;
 
-					decimal interest = pricingCalculator.GetInterestRate(
-						input.Amount,
-						outModel.RepaymentPeriod,
-						outModel.CustomerId,
-						defaultRate,
-						pricingScenario
-					);
+					decimal interest = pricingCalculator.GetInterestRate();
 
 					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
 						outModel.InterestRate = RoundInterest(interest);
 						outModel.SetupFee = RoundSetupFee(setupFee / 100);
+						outModel.HasDecision = true;
 						return outModel;
 					} // if
 
 					if (interest < interestRateRange.MinInterestRate && wasTooBigIneterest) {
 						outModel.InterestRate = RoundInterest(interest);
 						outModel.SetupFee = RoundSetupFee(setupFee / 100);
+						outModel.HasDecision = true;
 						return outModel;
 					} // if
 
@@ -105,7 +101,7 @@
 				} while (setupFee <= setupFeeRange.MaxSetupFee);
 			} // if
 
-			outModel.Error = "No interest rate found in range";
+			outModel.Message = "No interest rate found in range.";
 
 			if (input.AspireToMinSetupFee) {
 				outModel.InterestRate = RoundInterest(interestRateRange.MaxInterestRate);
@@ -135,8 +131,6 @@
 
 			PricingScenarioModel pricingScenario = dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
 
-			var pricingCalculator = new PricingCalculator(DB, Log);
-
 			var outModel = new OfferOutputModel {
 				ScenarioName = pricingScenario.ScenarioName,
 				Amount = input.Amount,
@@ -145,25 +139,17 @@
 				CalculationTime = DateTime.UtcNow
 			};
 
-			decimal defaultRate = pricingCalculator.GetDefaultRate(outModel.CustomerId, pricingScenario);
-
-			decimal setupfeeRight = pricingCalculator.GetSetupfee(
+			var pricingCalculator = new PricingCalculator(
+				input.CustomerId,
+				pricingScenario,
 				input.Amount,
 				outModel.RepaymentPeriod,
-				interestRateRange.MinInterestRate,
-				outModel.CustomerId,
-				defaultRate,
-				pricingScenario
+				DB
 			);
 
-			decimal setupfeeLeft = pricingCalculator.GetSetupfee(
-				input.Amount,
-				outModel.RepaymentPeriod,
-				interestRateRange.MaxInterestRate,
-				outModel.CustomerId,
-				defaultRate,
-				pricingScenario
-			);
+			decimal setupfeeRight = pricingCalculator.GetSetupfee(interestRateRange.MinInterestRate);
+
+			decimal setupfeeLeft = pricingCalculator.GetSetupfee(interestRateRange.MaxInterestRate);
 
 			TInterval<decimal> calcSetupfees = new TInterval<decimal>(
 				new DecimalIntervalEdge(setupfeeLeft),
@@ -178,7 +164,7 @@
 			TInterval<decimal> intersect = calcSetupfees * configSetupfees;
 
 			if (intersect == null) {
-				outModel.Error = string.Format(
+				outModel.Message = string.Format(
 					"No setup fee intersection found between (min max interest rate) {0} and {1} (configuration range)",
 					calcSetupfees,
 					configSetupfees
@@ -194,32 +180,12 @@
 					outModel.InterestRate = RoundInterest(interestRateRange.MinInterestRate);
 				} // if
 			} else {
-				decimal setupFee;
-				decimal interestRate;
+				outModel.HasDecision = true;
 
-				if (input.AspireToMinSetupFee) {
-					setupFee = intersect.Left.Value;
-					pricingScenario.SetupFee = setupFee * 100;
+				decimal setupFee = input.AspireToMinSetupFee ? intersect.Left.Value : intersect.Right.Value;
 
-					interestRate = pricingCalculator.GetInterestRate(
-						input.Amount,
-						outModel.RepaymentPeriod,
-						outModel.CustomerId,
-						defaultRate,
-						pricingScenario
-					);
-				} else {
-					setupFee = intersect.Right.Value;
-					pricingScenario.SetupFee = setupFee * 100;
-
-					interestRate = pricingCalculator.GetInterestRate(
-						input.Amount,
-						outModel.RepaymentPeriod,
-						outModel.CustomerId,
-						defaultRate,
-						pricingScenario
-					);
-				} // if
+				pricingScenario.SetupFee = setupFee * 100;
+				decimal interestRate = pricingCalculator.GetInterestRate();
 
 				outModel.SetupFee = RoundSetupFee(setupFee);
 				outModel.InterestRate = RoundInterest(interestRate);

@@ -434,15 +434,15 @@
 					InterestRate = 0;
 					SetupFee = 0;
 				} else {
-					var odc = new OfferDualCalculator();
-
-					odc.CalculateOffer(
+					var odc = new OfferDualCalculator(
 						customerID,
 						DecisionTime,
 						amount,
 						LoanCount > 0,
 						instance.Result.MedalClassification
 					);
+
+					odc.CalculateOffer();
 
 					RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
 					InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;

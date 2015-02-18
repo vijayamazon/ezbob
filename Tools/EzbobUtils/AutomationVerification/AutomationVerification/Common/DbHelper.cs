@@ -363,7 +363,7 @@
 				new QueryParameter("LoanSource", offerOutputModel.LoanSource),
 				new QueryParameter("InterestRate", offerOutputModel.InterestRate),
 				new QueryParameter("SetupFee", offerOutputModel.SetupFee),
-				new QueryParameter("Error", offerOutputModel.Error),
+				new QueryParameter("Error", offerOutputModel.Description),
 				new QueryParameter("Type", type.ToString()));
 		}
 
