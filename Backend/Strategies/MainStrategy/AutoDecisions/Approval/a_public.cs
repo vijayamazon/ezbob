@@ -260,7 +260,12 @@
 								response.SystemDecision = SystemDecision.Manual;
 							} // if
 
-							NotifyAutoApproveSilentMode(response);
+							NotifyAutoApproveSilentMode(
+								response.AutoApproveAmount,
+								offerResult == null ? 0 : offerResult.Period,
+								offerResult == null ? 0 : offerResult.InterestRate / 100m,
+								offerResult == null ? 0 : offerResult.SetupFee / 100m
+							);
 						} else {
 							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
 								this.log.Alert(
