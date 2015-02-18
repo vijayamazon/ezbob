@@ -591,13 +591,6 @@
     {@FormattingUtils.FormatDateToString(d.Value)}
 }
 
-@{
-    Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
-    Html.RenderPartial("Zoopla");
-    Html.RenderPartial("LandRegistryEnquiry");
-    Html.RenderPartial("LandRegistryEnquiryResults");
-}
-
 @helper copyAddress(string name, CustomerAddress currentAddress)
 {
     if (currentAddress != null && currentAddress.FormattedAddress != null)

@@ -393,7 +393,12 @@
     Html.RenderPartial("Fraud/Fraud");
     Html.RenderPartial("../Reports/Report");
     Html.RenderPartial("Support/Funding");
+    Html.RenderPartial("~/Areas/Customer/Views/Shared/_TargetingTemplate.cshtml");
+    Html.RenderPartial("../CrossCheck/Zoopla");
+    Html.RenderPartial("../CrossCheck/LandRegistryEnquiry");
+    Html.RenderPartial("../CrossCheck/LandRegistryEnquiryResults");
 }
+
 @section Js{
     <script type="text/javascript">
         EzBob.Config.MinLoan = @CurrentValues.Instance.MinLoan.Value;
