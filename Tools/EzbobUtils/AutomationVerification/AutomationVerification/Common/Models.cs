@@ -408,23 +408,46 @@
 			get { return false; }
 		}
 
-		public string Error { get; set; }
+		public bool IsError { get; set; }
+		public bool IsMismatch { get; set; }
+		public bool HasDecision { get; set; }
+		public string Message { get; set; }
 
 		public bool Equals(OfferOutputModel other) {
-			if (ScenarioName != other.ScenarioName || InterestRate != other.InterestRate || SetupFee != other.SetupFee)
-				return false;
-			return true;
+			IsMismatch =
+				(ScenarioName != other.ScenarioName) ||
+				(InterestRate != other.InterestRate) ||
+				(SetupFee != other.SetupFee);
+
+			return !IsMismatch;
 		}
 
 		public override string ToString() {
-			return string.Format("InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, LoanSource: {4}, IsEu: {5}{6}",
-				InterestRate, SetupFee, RepaymentPeriod, LoanType.DescriptionAttr(), LoanSource, IsEu, Error == null ? "" : ", Error: " + Error);
+			return string.Format("InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, LoanSource: {4}, IsEu: {5}. {6}",
+				InterestRate, SetupFee, RepaymentPeriod, LoanType.DescriptionAttr(), LoanSource, IsEu, Description);
 		}
 
 		public void SaveToDb(ASafeLog log, AConnection db, OfferCalculationType type) {
 			var dbHelper = new DbHelper(db, log);
 			dbHelper.SaveOffer(this, type);
 		}
+
+		public string Description {
+			get {
+				if (!IsError && !IsMismatch)
+					return null;
+
+				string description = string.Format(
+					"{0}. {1}. {2} has been found in the requested range. {3}",
+					IsError ? "Error" : "No error",
+					IsMismatch ? "Mismatch" : "Match",
+					HasDecision ? "Decision" : "No decision",
+					(Message ?? string.Empty).Trim()
+				);
+
+				return description.Trim();
+			} // get
+		} // Description
 	}
 
 	public class OfferInterestRateRangeModelDb {

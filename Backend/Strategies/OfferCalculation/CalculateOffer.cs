@@ -3,18 +3,14 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class CalculateOffer : AStrategy {
-		private readonly OfferDualCalculator offerDualCalculator;
-		private readonly int customerId;
-		private readonly int amount;
-		private readonly bool hasLoans;
-		private readonly Medal medalClassification;
-
 		public CalculateOffer(int customerId, int amount, bool hasLoans, Medal medalClassification) {
-			offerDualCalculator = new OfferDualCalculator();
-			this.customerId = customerId;
-			this.amount = amount;
-			this.hasLoans = hasLoans;
-			this.medalClassification = medalClassification;
+			this.offerDualCalculator = new OfferDualCalculator(
+				customerId,
+				DateTime.UtcNow,
+				amount,
+				hasLoans,
+				medalClassification
+			);
 		}
 
 		public override string Name {
@@ -24,7 +20,9 @@
 		public OfferResult Result { get; private set; }
 
 		public override void Execute() {
-			Result = offerDualCalculator.CalculateOffer(customerId, DateTime.UtcNow, amount, hasLoans, medalClassification);
+			Result = this.offerDualCalculator.CalculateOffer();
 		}
+
+		private readonly OfferDualCalculator offerDualCalculator;
 	}
 }

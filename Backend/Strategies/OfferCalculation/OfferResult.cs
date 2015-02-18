@@ -2,6 +2,7 @@
 	using System;
 	using AutomationCalculator.Common;
 	using Ezbob.Database;
+	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 
 	public class OfferResult : IEquatable<OfferOutputModel> {
 		// Inputs
@@ -17,24 +18,32 @@
 		public int LoanTypeId { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
-		public string Error { get; set; }
+		public string Message { get; set; }
+		public bool IsError { get; set; }
+		public bool IsMismatch { get; set; }
+		public bool HasDecision { get; set; }
 
 		public bool Equals(OfferOutputModel other) {
-			Error = Error ?? string.Empty;
+			Message = Message ?? string.Empty;
 
 			if (ScenarioName != other.ScenarioName) {
-				Error += " Mismatch in pricing scenario";
+				Message += " Mismatch in pricing scenario";
+				IsMismatch = true;
+				IsError = true;
 				return false;
 			} // if
 
 			if (Math.Abs(InterestRate - other.InterestRate) == 0.05M || Math.Abs(SetupFee - other.SetupFee) == 0.5M) {
-				Error += " Mistmatch due to rounding issues";
+				Message += " Mismatch due to rounding issues";
+				IsMismatch = true;
 				return true;
 			} // if
 
 			if (InterestRate == other.InterestRate && SetupFee == other.SetupFee)
 				return true;
 
+			IsMismatch = true;
+			IsError = true;
 			return false;
 		} // Equals
 
@@ -52,14 +61,33 @@
 				new QueryParameter("LoanTypeId", LoanTypeId),
 				new QueryParameter("InterestRate", InterestRate),
 				new QueryParameter("SetupFee", SetupFee),
-				new QueryParameter("Error", Error)
+				new QueryParameter("Error", Description)
 			);
 		} // SaveToDb
 
 		public override string ToString() {
-			return string.Format("InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, IsEu: {4}{5}",
-				InterestRate, SetupFee, Period, LoanTypeId, IsEu, Error == null ? "" : ", Error: " + Error);
+			return string.Format(
+				"InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, IsEu: {4} {5}",
+				InterestRate, SetupFee, Period, LoanTypeId, IsEu, Description
+			);
 		} // ToString
+
+		public string Description {
+			get {
+				if (!IsError && !IsMismatch)
+					return null;
+
+				string description = string.Format(
+					"{0}. {1}. {2} has been found in the requested range. {3}",
+					IsError ? "Error" : "No error",
+					IsMismatch ? "Mismatch" : "Match",
+					HasDecision ? "Decision" : "No decision",
+					(Message ?? string.Empty).Trim()
+				);
+
+				return description.Trim();
+			} // get
+		} // Description
 	} // class OfferResult
 } // namespace
 

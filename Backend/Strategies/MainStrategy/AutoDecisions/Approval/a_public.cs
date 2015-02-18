@@ -231,9 +231,7 @@
 
 				if (response.AutoApproveAmount != 0) {
 					if (this.m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
-						var offerDualCalculator = new OfferDualCalculator();
-
-						OfferResult offerResult = offerDualCalculator.CalculateOffer(
+						var offerDualCalculator = new OfferDualCalculator(
 							this.customerId,
 							Now,
 							response.AutoApproveAmount,
@@ -241,11 +239,13 @@
 							this.medalClassification
 						);
 
+						OfferResult offerResult = offerDualCalculator.CalculateOffer();
+
 						if (CurrentValues.Instance.AutoApproveIsSilent) {
-							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
+							if (offerResult == null || offerResult.IsError) {
 								this.log.Alert(
-									"Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}",
-									offerResult != null ? offerResult.Error : "",
+									"Customer {1} - will use manual. Offer result: {0}",
+									offerResult != null ? offerResult.Description : "",
 									this.customerId
 								);
 
@@ -262,10 +262,10 @@
 
 							NotifyAutoApproveSilentMode(response);
 						} else {
-							if (offerResult == null || !string.IsNullOrEmpty(offerResult.Error)) {
+							if (offerResult == null || offerResult.IsError) {
 								this.log.Alert(
-									"Failed calculating offer for auto-approve error:{0}. Will use manual. Customer:{1}",
-									offerResult != null ? offerResult.Error : "",
+									"Customer {1} - will use manual. Offer result: {0}",
+									offerResult != null ? offerResult.Description : "",
 									this.customerId
 								);
 
