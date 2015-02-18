@@ -474,8 +474,16 @@
 
 			var user = m_oUsers.GetAll().FirstOrDefault(x => x.EMail == email || x.Name == email);
 
-			if(user != null){
-				Json(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" }, JsonRequestBehavior.AllowGet);
+			if(user != null) {
+				var customer = m_oCustomers.ReallyTryGet(user.Id);
+
+				if (customer != null) {
+					if (hostname.Contains(customer.CustomerOrigin.Name) || customer.IsTest || hostname.Contains("localhost")) {
+						return Json(new { question = user.SecurityQuestion != null ? user.SecurityQuestion.Name : "" }, JsonRequestBehavior.AllowGet);
+					}
+					ms_oLog.Warn("Customer {0} {1} tried to restore password from another origin {2}", customer.Id, customer.CustomerOrigin.Name, hostname);
+					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+				}
 			}
 
 			if (hostname.Contains("everline")) {
@@ -486,11 +494,14 @@
 					ms_oLog.Error("Failed to retrieve everline customer loan status \n{0}", status.Message);
 					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
 				case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
+					ms_oLog.Warn("Customer {0} ExistsWithCurrentLiveLoan in Everiline tried to restore password", email);
 					return Json(new { everlineAccount = true }, JsonRequestBehavior.AllowGet);
 				case EverlineLoanStatus.ExistsWithNoLiveLoan:
+					ms_oLog.Warn("Customer {0} ExistsWithNoLiveLoan in Everiline tried to restore password", email);
 					TempData["IsEverline"] = true;
 					return Json(new { everlineWizard = true }, JsonRequestBehavior.AllowGet);
 				case EverlineLoanStatus.DoesNotExist:
+					ms_oLog.Warn("Customer {0} DoesNotExist in Everiline tried to restore password", email);
 					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
 				}
 			}
