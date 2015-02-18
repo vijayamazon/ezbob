@@ -16,7 +16,9 @@ BEGIN
 		h.CustomerId AS CustomerID,
 		h.TimeStamp AS ChangeDate,
 		p.Name AS OldStatus,
-		n.Name AS NewStatus
+		p.IsDefault AS OldIsDefault,
+		n.Name AS NewStatus,
+		n.IsDefault AS NewIsDefault
 	FROM
 		CustomerStatusHistory h
 		INNER JOIN CustomerStatuses p ON h.PreviousStatus = p.Id

@@ -4,48 +4,9 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
-	using DbConstants;
 	using Ezbob.ValueIntervals;
 
 	public class BadPeriods {
-		public static bool IsBad(CollectionStatusNames status) {
-			switch (status) {
-			case CollectionStatusNames.Enabled:
-			case CollectionStatusNames.Disabled:
-			case CollectionStatusNames.Fraud:
-			case CollectionStatusNames.FraudSuspect:
-			case CollectionStatusNames.DebtManagement:
-			case CollectionStatusNames.Risky:
-			case CollectionStatusNames.DaysMissed1To14:
-			case CollectionStatusNames.DaysMissed15To30:
-			case CollectionStatusNames.DaysMissed31To45:
-			case CollectionStatusNames.DaysMissed46To60:
-			case CollectionStatusNames.DaysMissed61To90:
-			case CollectionStatusNames.DaysMissed90Plus:
-				return false;
-
-			case CollectionStatusNames.Legal:
-			case CollectionStatusNames.Default:
-			case CollectionStatusNames.Bad:
-			case CollectionStatusNames.WriteOff:
-			case CollectionStatusNames.LegalClaimProcess:
-			case CollectionStatusNames.LegalApplyForJudgment:
-			case CollectionStatusNames.LegalCCJ:
-			case CollectionStatusNames.LegalBailiff:
-			case CollectionStatusNames.LegalChargingOrder:
-			case CollectionStatusNames.CollectionTracing:
-			case CollectionStatusNames.CollectionSiteVisit:
-			case CollectionStatusNames.IVA_CVA:
-			case CollectionStatusNames.Liquidation:
-			case CollectionStatusNames.Insolvency:
-			case CollectionStatusNames.Bankruptcy:
-				return true;
-
-			default:
-				throw new ArgumentOutOfRangeException("status");
-			} // switch
-		} // IsBad
-
 		public BadPeriods() {
 			this.badPeriods = new List<DateInterval>();
 			this.extremumPoints = new List<ExtremumPoint>();
