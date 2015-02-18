@@ -6,6 +6,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 ALTER PROCEDURE GetDataForCollectionMail
 @CustomerID INT,
 @LoanID INT
@@ -17,7 +18,6 @@ DECLARE @CAddress1 VARCHAR(200)
 DECLARE @CAddress2 VARCHAR(200)
 DECLARE @CAddress3 VARCHAR(200)
 DECLARE @CAddress4 VARCHAR(200)
-DECLARE @CAddress5 VARCHAR(200)
 DECLARE @CPostcode VARCHAR(200)
 
 -- Business Address name and type
@@ -25,7 +25,6 @@ DECLARE @BAddress1 VARCHAR(200)
 DECLARE @BAddress2 VARCHAR(200)
 DECLARE @BAddress3 VARCHAR(200)
 DECLARE @BAddress4 VARCHAR(200)
-DECLARE @BAddress5 VARCHAR(200)
 DECLARE @BPostcode VARCHAR(200)
 DECLARE @CompanyName NVARCHAR(200)
 DECLARE @IsLimited BIT = 0
@@ -37,7 +36,6 @@ DECLARE @GAddress1 VARCHAR(200)
 DECLARE @GAddress2 VARCHAR(200)
 DECLARE @GAddress3 VARCHAR(200)
 DECLARE @GAddress4 VARCHAR(200)
-DECLARE @GAddress5 VARCHAR(200)
 DECLARE @GPostcode VARCHAR(200)
 
 --loan and missed payments details
@@ -78,7 +76,6 @@ SELECT
 	@CAddress2=x.Line2, 
 	@CAddress3=x.Line3, 
 	@CAddress4=x.Town, 
-	@CAddress5=x.County, 
 	@CPostcode=x.Postcode 
 FROM
 (
@@ -98,7 +95,6 @@ SELECT
 	 @BAddress2=y.Line2,
 	 @BAddress3=y.Line3, 
 	 @BAddress4=y.Town, 
-	 @BAddress5=y.County, 
 	 @BPostcode=y.Postcode 
 FROM
 (
@@ -167,11 +163,12 @@ SELECT @PreviousRepaidAmount = 0, @PreviousRepaidDate = NULL --TODO retrieve the
 -----------------------------------------------------------------
 --final select
 SELECT @CompanyName CompanyName, @IsLimited IsLimited,
-	   @CAddress1 CAddress1, @CAddress2 CAddress2, @CAddress3 CAddress3, @CAddress4 CAddress4, @CAddress5 CAddress5, @CPostcode CPostcode,
-	   @BAddress1 BAddress1, @BAddress2 BAddress2, @BAddress3 BAddress3, @BAddress4 BAddress4, @BAddress5 BAddress5, @BPostcode BPostcode,
-	   @GAddress1 GAddress1, @GAddress2 GAddress2, @GAddress3 GAddress3, @GAddress4 GAddress4, @GAddress5 GAddress5, @GPostcode GPostcode, @GuarantorName GuarantorName,
+	   @CAddress1 CAddress1, @CAddress2 CAddress2, @CAddress3 CAddress3, @CAddress4 CAddress4, @CPostcode CPostcode,
+	   @BAddress1 BAddress1, @BAddress2 BAddress2, @BAddress3 BAddress3, @BAddress4 BAddress4, @BPostcode BPostcode,
+	   @GAddress1 GAddress1, @GAddress2 GAddress2, @GAddress3 GAddress3, @GAddress4 GAddress4, @GPostcode GPostcode, @GuarantorName GuarantorName,
  	   @LoanAmount LoanAmount,@LoanDate LoanDate,@LoanRef LoanRef,@OutstandingBalance OutstandingBalance,@OutstandingPrincipal OutstandingPrincipal,
 	   @AmountDue AmountDue ,@SchedDate SchedDate,@Fees Fees,@Interest Interest,@RepaidAmount RepaidAmount,@RepaidDate RepaidDate,
 	   @PreviousAmountDue PreviousAmountDue,@PreviousSchedDate PreviousSchedDate,@PreviousFees PreviousFees,@PreviousInterest PreviousInterest,@PreviousRepaidAmount PreviousRepaidAmount,@PreviousRepaidDate PreviousRepaidDate
 END
+
 GO

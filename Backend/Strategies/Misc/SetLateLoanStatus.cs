@@ -5,9 +5,12 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using IMailLib;
 	using MailStrategies.API;
+	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
+	using StructureMap;
 
 	/// <summary>
 	/// Retrieves all loans that are late - updates customer, loan, loan schedule statuses,
@@ -194,7 +197,6 @@
 					Line2 = sr["CAddress2"],
 					Line3 = sr["CAddress3"],
 					Line4 = sr["CAddress4"],
-					Line5 = sr["CAddress5"],
 					Postcode = sr["CPostcode"],
 				},
 				CompanyAddress = new Address {
@@ -202,7 +204,6 @@
 					Line2 = sr["BAddress2"],
 					Line3 = sr["BAddress3"],
 					Line4 = sr["BAddress4"],
-					Line5 = sr["BAddress5"],
 					Postcode = sr["BPostcode"],
 				},
 				GuarantorAddress = new Address { //TODO implement
@@ -210,7 +211,6 @@
 					Line2 = sr["GAddress2"],
 					Line3 = sr["GAddress3"],
 					Line4 = sr["GAddress4"],
-					Line5 = sr["GAddress5"],
 					Postcode = sr["GPostcode"],
 				},
 				GuarantorName = sr["GuarantorName"], //TODO implement
@@ -221,7 +221,7 @@
 				LoanAmount = sr["LoanAmount"],
 				LoanRef = sr["LoanRef"],
 				LoanDate = sr["LoanDate"],
-				OutstandingBalance = sr["OutstandingBalance"],
+				//OutstandingBalance = sr["OutstandingBalance"],
 				OutstandingPrincipal = sr["OutstandingPrincipal"],
 				CustomerId = model.CustomerID,
 				MissedPayment = new MissedPaymentModel {
@@ -239,6 +239,12 @@
 					RepaidDate = sr["PreviousRepaidDate"]
 				},
 			};
+
+			var loanRepository = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRepository.Get(model.LoanID);
+			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
+			var balance = payEarlyCalc.TotalEarlyPayment();
+			mailModel.OutstandingBalance = balance;
 
 			return mailModel;
 		}
@@ -419,9 +425,11 @@
 						AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 						break;
 					case CollectionType.CollectionDay31:
-						Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-						collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
-						AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+						if (!mailModel.IsLimited) {
+							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
+							collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
+							AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
+						}
 						break;
 					}
 				} catch (Exception ex) {
@@ -430,7 +438,6 @@
 			} else {
 				Log.Info("Collection sending mail is not allowed, mail is not sent to customer {0}\n template {1}", model.CustomerID, type);
 			}
-
 		}
 
 		private void SendCollectionSms(string smsTemplate, CollectionDataModel model, CollectionType type) {
