@@ -7,26 +7,8 @@
 	using Ezbob.ValueIntervals;
 
 	public class BadPeriods {
-
 		public static bool IsBad(CustomerStatus nStatus) {
-			switch (nStatus) {
-			case CustomerStatus.WriteOff:
-			case CustomerStatus.Default:
-			case CustomerStatus.Legal:
-			case CustomerStatus.Bad:
-				return true;
-
-			case CustomerStatus.Enabled:
-			case CustomerStatus.Disabled:
-			case CustomerStatus.Fraud:
-			case CustomerStatus.FraudSuspect:
-			case CustomerStatus.Risky:
-			case CustomerStatus.DebtManagement:
-				return false;
-
-			default:
-				throw new ArgumentOutOfRangeException("nStatus");
-			} // switch
+			return nStatus != CustomerStatus.Enabled;
 		} // IsBad
 
 		public BadPeriods(DateTime oChangeDate) {

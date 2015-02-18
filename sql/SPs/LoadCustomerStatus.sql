@@ -14,7 +14,8 @@ BEGIN
 	SELECT
 		c.Id AS CustomerID,
 		c.GreetingMailSentDate AS SetDate,
-		s.Name AS Status
+		s.Name AS Status,
+		s.IsDefault
 	FROM
 		Customer c
 		INNER JOIN CustomerStatuses s ON c.CollectionStatus = s.Id

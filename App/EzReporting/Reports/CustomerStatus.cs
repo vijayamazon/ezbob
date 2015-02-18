@@ -6,20 +6,16 @@
 
 	public enum CustomerStatus {
 		Enabled,
-		Disabled,
-		Fraud,
-		Legal,
 		Default,
-		FraudSuspect,
-		Risky,
-		Bad,
 		WriteOff,
-		DebtManagement,
 	} // enum CustomerStatus
 
 	internal static class StringExt {
-		public static CustomerStatus ParseCustomerStatus(this string sStatus) {
-			return (CustomerStatus)Enum.Parse(typeof(CustomerStatus), (sStatus ?? string.Empty).Replace(" ", ""));
+		public static CustomerStatus ParseCustomerStatus(this string status, bool isDefault) {
+			if (string.Compare(status, CustomerStatus.WriteOff.ToString(), StringComparison.InvariantCultureIgnoreCase) == 0)
+				return CustomerStatus.WriteOff;
+
+			return isDefault ? CustomerStatus.Default : CustomerStatus.Enabled;
 		} // ParseCustomerStatus
 	} // class StringExt
 
@@ -30,9 +26,7 @@
 	} // class CustomerStatusChange
 
 	public class CustomerStatusHistory {
-
 		public class HistoryData {
-
 			public HistoryData(CustomerStatusHistory oFullHistory) {
 				Data = new SortedDictionary<int, List<CustomerStatusChange>>();
 				WriteOffDate = new SortedDictionary<int, DateTime>();
@@ -103,7 +97,7 @@
 			m_oCurrent[sr["CustomerID"]] = new CustomerStatusChange {
 				ChangeDate = sr["SetDate"],
 				OldStatus = CustomerStatus.Enabled,
-				NewStatus = ((string)sr["Status"]).ParseCustomerStatus(),
+				NewStatus = ((string)sr["Status"]).ParseCustomerStatus(sr["IsDefault"]),
 			};
 		} // LoadCurrent
 
@@ -112,8 +106,8 @@
 
 			var csc = new CustomerStatusChange {
 				ChangeDate = sr["ChangeDate"],
-				OldStatus = ((string)sr["OldStatus"]).ParseCustomerStatus(),
-				NewStatus = ((string)sr["NewStatus"]).ParseCustomerStatus(),
+				OldStatus = ((string)sr["OldStatus"]).ParseCustomerStatus(sr["OldIsDefault"]),
+				NewStatus = ((string)sr["NewStatus"]).ParseCustomerStatus(sr["NewIsDefault"]),
 			};
 
 			if (m_oDateEnd.HasValue && (csc.ChangeDate < m_oDateEnd.Value))
@@ -124,7 +118,5 @@
 
 		private readonly SortedDictionary<int, CustomerStatusChange> m_oCurrent;
 		private readonly DateTime? m_oDateEnd;
-
 	} // class CustomerStatusHistory
-
 } // namespace
