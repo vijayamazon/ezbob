@@ -21,7 +21,7 @@
 		public void test_get_graphs()
 		{
 			var postcode = "NR3 2SY";
-			postcode = "a";
+			//postcode = "a";
 			var z = new ZooplaApi();
 			var res = z.GetAreaValueGraphs(postcode);
 		}

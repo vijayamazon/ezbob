@@ -3,13 +3,17 @@
 	using System;
 	using System.Globalization;
 	using System.Xml;
+	using log4net;
 	using Newtonsoft.Json.Linq;
 	using RestSharp;
 
 	public class ZooplaApi
 	{
 		private const string ApiKey = "wrjsacazcrxfzm4gj5q56b58";
-		private readonly RestClient _client = new RestClient();
+		private readonly ILog Log = LogManager.GetLogger(typeof (ZooplaApi));
+		private readonly RestClient _client = new RestClient {
+			BaseUrl = new Uri("http://api.zoopla.co.uk/api/v1/")
+		};
 		/// <summary>
 		///Description: Retrieve the average sale price for houses in a particular area.
 		///Access URI: http://api.zoopla.co.uk/api/v1/average_area_sold_price
@@ -18,20 +22,25 @@
 		/// <returns></returns>
 		public AverageSoldPrices GetAverageSoldPrices(string postcode, bool retry = false)
 		{
-			var req = new RestRequest("http://api.zoopla.co.uk/api/v1/average_area_sold_price");
+			var req = new RestRequest("average_area_sold_price");
 			req.AddParameter("postcode", postcode);
 			req.AddParameter("output_type", "outcode");
 			req.AddParameter("area_type", "postcodes");
 			req.AddParameter("api_key", ApiKey);
 			IRestResponse res = _client.Get(req);
-
+			if(string.IsNullOrEmpty(res.Content) || !string.IsNullOrEmpty(res.ErrorMessage)) {
+				Log.ErrorFormat("GetAverageSoldPrices failedfor {0} error {1}", postcode, res.ErrorMessage);
+				return new AverageSoldPrices();
+			}
 			var x = new XmlDocument();
 			x.LoadXml(res.Content);
 			var error = x.SelectSingleNode("/response/error_string");
-			if (error != null)
-			{
-				throw new Exception(error.InnerText);
+			
+			if (error != null ) {
+				Log.ErrorFormat("GetAverageSoldPrices failed for {0} error {1}", postcode, error.InnerText);
+				return new AverageSoldPrices();
 			}
+
 			try
 			{
 				int averageSoldPrice1Year = 0;
@@ -76,7 +85,8 @@
 			}
 			catch (Exception)
 			{
-				throw new Exception("Couldn't parse the response");
+				Log.ErrorFormat("GetAverageSoldPrices failed for {0} parsing error", postcode);
+				return new AverageSoldPrices();
 			}
 
 		}
@@ -95,7 +105,7 @@
 			const int pagesize = 100;
 			do
 			{
-				var req2 = new RestRequest("http://api.zoopla.co.uk/api/v1/average_sold_prices");
+				var req2 = new RestRequest("average_sold_prices");
 				req2.AddParameter("postcode", postcode);
 				req2.AddParameter("output_type", "county");
 				req2.AddParameter("area_type", "outcodes");
@@ -104,12 +114,17 @@
 				req2.AddParameter("api_key", ApiKey);
 
 				IRestResponse res2 = _client.Get(req2);
+				if (string.IsNullOrEmpty(res2.Content) || !string.IsNullOrEmpty(res2.ErrorMessage)) {
+					Log.ErrorFormat("GetAverageSoldPrices failed for {0} error {1}", postcode, res2.ErrorMessage);
+					return 0;
+				}
+
 				var x = new XmlDocument();
 				x.LoadXml(res2.Content);
 				var error = x.SelectSingleNode("/response/error_string");
-				if (error != null)
-				{
-					throw new Exception(error.InnerText);
+				if (error != null) {
+					Log.ErrorFormat("GetAverageSoldPrices failed for {0} error {1}", postcode, error.InnerText);
+					return 0;
 				}
 				var collection = x.SelectNodes("/response/areas");
 				int results = int.Parse(x.SelectSingleNode("/response/result_count").InnerText);
@@ -136,18 +151,24 @@
 		/// <returns></returns>
 		public ZooplaGraphs GetAreaValueGraphs(string postcode)
 		{
-			var req = new RestRequest("http://api.zoopla.co.uk/api/v1/area_value_graphs.js");
+			var req = new RestRequest("area_value_graphs.js");
 			req.AddParameter("api_key", ApiKey);
 			req.AddParameter("postcode", postcode);
 			req.AddParameter("output_type", "outcode");
 			req.AddParameter("size", "large");
 
 			var res = _client.Get(req);
+			
+			if (string.IsNullOrEmpty(res.Content) || !string.IsNullOrEmpty(res.ErrorMessage)) {
+				Log.ErrorFormat("GetAreaValueGraphs failed for {0} error {1}", postcode, res.ErrorMessage);
+				return new ZooplaGraphs();
+			}
 
 			JToken token = JObject.Parse(res.Content);
 			if (token.SelectToken("error_string") != null)
 			{
-				throw new Exception(token.SelectToken("error_string").Value<string>());
+				Log.ErrorFormat("GetAreaValueGraphs failed for {0} error {1}", postcode, token.SelectToken("error_string").Value<string>());
+				return new ZooplaGraphs();
 			}
 
 			return new ZooplaGraphs
