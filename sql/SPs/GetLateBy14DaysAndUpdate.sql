@@ -19,7 +19,8 @@ BEGIN
 		Interest NUMERIC(18,2),
 		Fees NUMERIC(18,2),
 		Total NUMERIC(18,2),
-		Email NVARCHAR(128)
+		Email NVARCHAR(128),
+		CustomerId INT
 	)
 
 	DECLARE 
@@ -59,13 +60,15 @@ BEGIN
 				@Total NUMERIC(18,2),
 				@FirstName NVARCHAR(250),
 				@SignDate DATETIME,
-				@Email NVARCHAR(128)
+				@Email NVARCHAR(128),
+				@CustomerId INT
 			
 			SELECT 
 				@FirstName = Customer.FirstName, 
 				@SignDate = Loan.[Date], 
 				@LoanAmount = Loan.LoanAmount,
-					@Email = Customer.Name
+				@Email = Customer.Name,
+				@CustomerId = Customer.Id	
 			FROM 
 				Customer, 
 				Loan 
@@ -82,7 +85,7 @@ BEGIN
 				
 			SELECT @Total = @Principal + @Interest + @Fees
 				
-			INSERT INTO #LateBy14DaysLoans VALUES (@LoanId, @Is14DaysLate, @SignDate, @FirstName, @LoanAmount, @Principal, @Interest, @Fees, @Total, @Email)
+			INSERT INTO #LateBy14DaysLoans VALUES (@LoanId, @Is14DaysLate, @SignDate, @FirstName, @LoanAmount, @Principal, @Interest, @Fees, @Total, @Email, @CustomerId)
 		END
 
 		FETCH NEXT FROM cur INTO @LoanId, @Is14DaysLate
@@ -91,7 +94,7 @@ BEGIN
 	DEALLOCATE cur
 
 	UPDATE Loan SET Is14DaysLate = 0 WHERE Is14DaysLate = 1 AND Id NOT IN (SELECT LoanId FROM #LateBy14DaysLoans)
-	SELECT LoanId, Is14DaysLate, convert(VARCHAR(12), SignDate, 107) as SignDate, FirstName, LoanAmount, Principal, Interest, Fees, Total, Email FROM #LateBy14DaysLoans
+	SELECT LoanId, Is14DaysLate, convert(VARCHAR(12), SignDate, 107) as SignDate, FirstName, LoanAmount, Principal, Interest, Fees, Total, Email, CustomerId FROM #LateBy14DaysLoans
 	DROP TABLE #LateBy14DaysLoans
 END
 GO

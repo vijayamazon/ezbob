@@ -4,14 +4,10 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Database;
 
 	public class XDaysDue : AStrategy {
-
-		public XDaysDue() {
-			mailer = new StrategiesMailer();
-		} // constructor
-
 		public override string Name {
 			get { return "XDays Due"; }
 		} // Name
@@ -24,6 +20,7 @@
 				string mail = sr["Email"];
 				DateTime sceduledDate = sr["SceduledDate"];
 				string creditCard = sr["CreditCardNo"];
+				int customerId = sr["customerId"];
 
 				var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},
@@ -32,7 +29,8 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.Send("Mandrill - 5 days notice", variables, new Addressee(mail));
+				XDaysDueMails xDaysDueMails = new XDaysDueMails(customerId, "Mandrill - 5 days notice", variables);
+				xDaysDueMails.Execute();
 
 				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
@@ -54,6 +52,7 @@
 				string mail = sr["Email"];
 				DateTime sceduledDate = sr["SceduledDate"];
 				string creditCard = sr["CreditCardNo"];
+				int customerId = sr["customerId"];
 
 				var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},
@@ -62,7 +61,8 @@
 					{"DebitCard", creditCard}
 				};
 
-				mailer.Send("Mandrill - 2 days notice", variables, new Addressee(mail));
+				XDaysDueMails xDaysDueMails = new XDaysDueMails(customerId, "Mandrill - 2 days notice", variables);
+				xDaysDueMails.Execute();
 
 				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
 					CommandSpecies.StoredProcedure,
@@ -73,7 +73,5 @@
 				return ActionResult.Continue;
 			}, "GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
 		} // Execute
-
-		private readonly StrategiesMailer mailer;
 	} // class XDaysDue
 } // namespace

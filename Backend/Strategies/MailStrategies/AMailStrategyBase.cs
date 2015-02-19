@@ -18,13 +18,14 @@
 				SetTemplateAndVariables();
 				Log.Debug("Setting template and variables complete.");
 
-				Log.Debug("Template name: {0}", TemplateName);
-				Log.Debug("Customer data: {0}", CustomerData);
-
+				
 				if (CustomerData.Origin == "everline") {
-					Log.Debug("Customer's origin is everline adding EL to template name");
+					Log.Debug("Customer's origin is everline adding EVL to template name");
 					TemplateName = string.Format("EVL {0}", TemplateName);
 				} // if
+
+				Log.Debug("Template name: {0}", TemplateName);
+				Log.Debug("Customer data: {0}", CustomerData);
 
 				Log.Debug("Variables:\n\t{0}", string.Join("\n\t", Variables.Select(kv => kv.Key + ": " + kv.Value)));
 

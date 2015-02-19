@@ -272,8 +272,10 @@
 			return "Loans summary:<br>" + CreateHtmlTable(summarySection.ToString(), summaryHeaders.ToArray());
 		}
 
-		private void SendStatusMail(string toAddress, string firstName, string headerSection, string loanSummarySection, string closedLoansSection, string outstandingLoansSection) {
-			string firstOfMonthStatusMailMandrillTemplateName = CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
+		private void SendStatusMail(string toAddress, string firstName, 
+			string headerSection, string loanSummarySection, string closedLoansSection, string outstandingLoansSection, string origin) {
+
+			string firstOfMonthStatusMailMandrillTemplateName;
 			var mail = new Mail();
 
 			var vars = new Dictionary<string, string>
@@ -284,6 +286,12 @@
 					{"ClosedLoansSection", closedLoansSection},
 					{"OutstandingLoansSection", outstandingLoansSection} 
 				};
+			
+			if (origin == "everline") {
+				firstOfMonthStatusMailMandrillTemplateName = "EVL " + CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
+			} else {
+				firstOfMonthStatusMailMandrillTemplateName = CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
+			}
 
 			var result = mail.Send(vars, toAddress, firstOfMonthStatusMailMandrillTemplateName);
 			if (result == "OK") {
@@ -304,11 +312,11 @@
 
 			if (shouldSendToCustomer) {
 				SendStatusMail(customer.Name, customer.PersonalInfo.FirstName, headerSection, summarySection, closedLoansSection,
-							   outstandingLoansSection);
+							   outstandingLoansSection, customer.CustomerOrigin.Name);
 			}
 			if (!string.IsNullOrEmpty(copyToAddress)) {
 				SendStatusMail(copyToAddress, customer.PersonalInfo.FirstName, headerSection, summarySection, closedLoansSection,
-							   outstandingLoansSection);
+							   outstandingLoansSection, customer.CustomerOrigin.Name);
 			}
 		}
 

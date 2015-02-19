@@ -3,12 +3,9 @@
 	using System.Globalization;
 	using Ezbob.Database;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
+	using Ezbob.Backend.Strategies.MailStrategies.Collection;
 
 	public class LateBy14Days : AStrategy {
-		public LateBy14Days() {
-			mailer = new StrategiesMailer();
-		} // constructor
-
 		public override string Name { get { return "Late by 14 days"; } } // Name
 
 		public override void Execute() {
@@ -27,7 +24,7 @@
 				decimal fees = sr["Fees"];
 				decimal total = sr["Total"];
 				string mail = sr["Email"];
-
+				int customerId = sr["CustomerId"];
 				var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},
 					{"SignDate", signDate},
@@ -38,14 +35,13 @@
 					{"Total", total.ToString(CultureInfo.InvariantCulture)}
 				};
 
-				mailer.Send("Mandrill - 14 days notification email", variables, new Addressee(mail));
+				LateBy14DaysMail lateBy14DaysMail = new LateBy14DaysMail(customerId, "Mandrill - 14 days notification email", variables);
+				lateBy14DaysMail.Execute();
 
 				DB.ExecuteNonQuery("SetLateBy14Days", CommandSpecies.StoredProcedure, new QueryParameter("LoanId", loanId));
 
 				return ActionResult.Continue;
 			}, "GetLateBy14DaysAndUpdate", CommandSpecies.StoredProcedure);
 		} // Execute
-
-		private readonly StrategiesMailer mailer;
 	} // class LateBy14Days
 } // namespace

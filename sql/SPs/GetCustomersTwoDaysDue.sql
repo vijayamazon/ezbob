@@ -15,7 +15,8 @@ BEGIN
 		c.FirstName, 
 		c.Name AS Email, 
 		convert(date, ls.Date) AS SceduledDate, 
-		p.CardNo CreditCardNo
+		p.CardNo CreditCardNo,
+		c.Id AS customerId
 	FROM 
 		Customer c 
 		JOIN Loan l ON 

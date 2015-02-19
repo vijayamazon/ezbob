@@ -29,6 +29,7 @@
 		} // SendEmails
 
 		private void SendApprovalMails() {
+			
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Approved" },
 				{ "RegistrationDate", dataGatherer.AppRegistrationDate.ToString(CultureInfo.InvariantCulture) },
@@ -58,12 +59,8 @@
 						: string.Empty
 				}
 			};
-
-			mailer.Send(
-				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
-				customerMailVariables,
-				new Addressee(dataGatherer.AppEmail)
-			);
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(customerId, "Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables);
+			automationDecsionMails.Execute();
 		} // SendApprovalMails
 
 		private void SendBankBasedApprovalMails() {
@@ -101,12 +98,8 @@
 					: string.Empty
 				}
 			};
-
-			mailer.Send(
-				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
-				customerMailVariables,
-				new Addressee(dataGatherer.AppEmail)
-			);
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(customerId, "Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables);
+			automationDecsionMails.Execute();
 		} // SendBankBasedApprovalMails
 
 		private void SendReApprovalMails() {
@@ -140,11 +133,9 @@
 				}
 			};
 
-			mailer.Send(
-				dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)",
-				customerMailVariables,
-				new Addressee(dataGatherer.AppEmail)
-			);
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(customerId,
+				dataGatherer.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables);
+			automationDecsionMails.Execute();
 		} // SendReApprovalMails
 
 		private void SendWaitingForDecisionMail() {

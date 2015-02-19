@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ConfigManager;
+	using Ezbob.Backend.Strategies.MailStrategies;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -18,7 +19,6 @@
 	/// </summary>
 	public class SetLateLoanStatus : AStrategy {
 		public SetLateLoanStatus() {
-			mailer = new StrategiesMailer();
 			collectionIMailer = new CollectionMail(
 				ConfigManager.CurrentValues.Instance.ImailUserName,
 				ConfigManager.CurrentValues.Instance.IMailPassword,
@@ -393,7 +393,8 @@
 					{"AmountCharged", model.AmountDue.ToString(CultureInfo.InvariantCulture)},
 					{"ScheduledAmount", model.AmountDue.ToString(CultureInfo.InvariantCulture)},
 				};
-				mailer.Send(emailTemplateName, variables, new Addressee(model.Email));
+				CollectionMails collectionMails = new CollectionMails(model.CustomerID, emailTemplateName, variables);
+				collectionMails.Execute();
 				AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Email);
 			} else {
 				Log.Info("Collection sending email is not allowed, email is not sent to customer {0}\n email template {1}", model.CustomerID, emailTemplateName);
@@ -505,7 +506,6 @@
 		private const string CollectionDay0EmailTemplate     = "Mandrill - ezbob - you missed your payment";
 
 		private readonly IMailLib.CollectionMail collectionIMailer;
-		private readonly StrategiesMailer mailer;
 		private DateTime now;
 
 		public enum CollectionMethod {

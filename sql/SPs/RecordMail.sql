@@ -15,7 +15,8 @@ ALTER PROCEDURE [dbo].[RecordMail]
 	 @Body VARBINARY(MAX),
 	 @Creation DATETIME,
 	 @CustomerMail NVARCHAR(200),
-	 @UserID INT
+	 @UserID INT,
+	 @TemplateName NVARCHAR(500)
 	)
 	
 AS
@@ -23,7 +24,7 @@ BEGIN
 	INSERT INTO Export_Results
 		(FileName, BinaryBody, FileType, CreationDate, SourceTemplateId, ApplicationId, Status, StatusMode, NodeName, SignedDocumentId)
 	VALUES
-		(@Filename, @Body, 0, @Creation, NULL, -1, NULL, NULL, 'No nodes - New flow', NULL)
+		(@Filename, @Body, 0, @Creation, NULL, -1, NULL, NULL, @TemplateName, NULL)
 	
 	INSERT INTO EzbobMailNodeAttachRelation (ExportId, ToField, UserID) VALUES (@@Identity, @CustomerMail, @UserID)
 END

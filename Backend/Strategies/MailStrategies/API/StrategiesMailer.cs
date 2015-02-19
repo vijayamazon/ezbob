@@ -65,7 +65,8 @@
 						new QueryParameter("Body", HtmlToBinary(renderedHtml)),
 						new QueryParameter("Creation", DateTime.UtcNow),
 						new QueryParameter("CustomerMail", addr.Recipient),
-						new QueryParameter("UserID", addr.UserID)
+						new QueryParameter("UserID", addr.UserID),
+						new QueryParameter("TemplateName", oMeta.TemplateName)
 					);
 
 					var salesForceAddEvent = new AddActivity(null, new ActivityModel {

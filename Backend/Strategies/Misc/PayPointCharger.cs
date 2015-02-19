@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Database;
 	using PaymentServices.PayPoint;
 
@@ -16,12 +17,9 @@
 
 	public class PayPointCharger : AStrategy {
 		private readonly int amountToChargeFrom;
-		private readonly StrategiesMailer mailer;
 		private readonly PayPointApi payPointApi = new PayPointApi();
 
 		public PayPointCharger() {
-			mailer = new StrategiesMailer();
-
 			SafeReader sr = DB.GetFirst("PayPointChargerGetConfigs", CommandSpecies.StoredProcedure);
 			amountToChargeFrom = sr["AmountToChargeFrom"];
 		}
@@ -75,8 +73,8 @@
 			} // if
 
 			if (autoPaymentResult.PaymentCollectedSuccessfully) {
-				SendConfirmationMail(firstName, autoPaymentResult.ActualAmountCharged, refNum, customerMail);
-				SendLoanStatusMail(loanId, firstName, refNum, customerMail); // Will send mail for paid off loans
+				SendConfirmationMail(customerId, firstName, autoPaymentResult.ActualAmountCharged, refNum, customerMail);
+				SendLoanStatusMail(customerId, loanId, firstName, refNum, customerMail); // Will send mail for paid off loans
 			}
 		}
 
@@ -140,7 +138,7 @@
 			return result;
 		}
 
-		private void SendConfirmationMail(string firstName, decimal amountDue, string refNum, string customerMail) {
+		private void SendConfirmationMail(int customerId, string firstName, decimal amountDue, string refNum, string customerMail) {
 			var variables = new Dictionary<string, string>
 			{
 				{"AMOUNT", amountDue.ToString(CultureInfo.InvariantCulture)},
@@ -148,11 +146,11 @@
 				{"DATE", FormattingUtils.FormatDateToString(DateTime.UtcNow)},
 				{"RefNum", refNum}
 			};
-
-			mailer.Send("Mandrill - Repayment confirmation", variables, new Addressee(customerMail));
+			PayPointChargerMails payPointChargerMails = new PayPointChargerMails(customerId, "Mandrill - Repayment confirmation", variables);
+			payPointChargerMails.Execute();
 		}
 
-		private void SendLoanStatusMail(int loanId, string firstName, string refNum, string customerMail) {
+		private void SendLoanStatusMail(int customerId, int loanId, string firstName, string refNum, string customerMail) {
 			SafeReader sr = DB.GetFirst(
 				"GetLoanStatus",
 				CommandSpecies.StoredProcedure,
@@ -168,17 +166,23 @@
 						{"RefNum", refNum}
 					};
 
-				mailer.Send("Mandrill - Loan paid in full", variables, new Addressee(customerMail));
+				PayPointChargerMails payPointChargerMails = new PayPointChargerMails(customerId, "Mandrill - Loan paid in full", variables);
+				payPointChargerMails.Execute();
+				
 			}
 		}
 
 		private void SendExceptionMail(decimal initialAmountDue, int customerId, string customerMail, string fullName) {
-			mailer.Send("Mandrill - PayPoint Script Exception", new Dictionary<string, string> {
+
+			var variables = new Dictionary<string, string> {
 				{"UserID", customerId.ToString(CultureInfo.InvariantCulture)},
 				{"Email", customerMail},
 				{"FullName", fullName},
 				{"Amount", initialAmountDue.ToString(CultureInfo.InvariantCulture)}
-			});
+			};
+
+			PayPointChargerMails payPointChargerMails = new PayPointChargerMails(customerId, "Mandrill - PayPoint Script Exception", variables);
+			payPointChargerMails.Execute();
 		}
 
 		private bool ShouldCharge(bool lastInstallment, decimal amountDue) {

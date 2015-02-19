@@ -1,8 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies
 {
 	using API;
-	using Ezbob.Logger;
-	using Ezbob.Database;
 
 	public class VipRequest : AStrategy
 	{
@@ -49,7 +47,7 @@
 			_mailMetaData.Add("Email", _email);
 			_mailMetaData.Add("Phone", _phone);
 
-			_mailMetaData.Add(new Addressee(ConfigManager.CurrentValues.Instance.VipMailReceiver));
+			_mailMetaData.Add(new Addressee(ConfigManager.CurrentValues.Instance.VipMailReceiver, bShouldRegister: false));
 		} // SetTemplateAndVariables
 
 	} // class 

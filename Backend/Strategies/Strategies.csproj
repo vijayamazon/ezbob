@@ -129,6 +129,11 @@
     <Compile Include="Lottery\LoanData.cs" />
     <Compile Include="Lottery\LotteryDataForEnlisting.cs" />
     <Compile Include="Lottery\PlayLottery.cs" />
+    <Compile Include="MailStrategies\Collection\LateBy14DaysMail.cs" />
+    <Compile Include="MailStrategies\PayPointChargerMails.cs" />
+    <Compile Include="MailStrategies\AutomationDecsionMails.cs" />
+    <Compile Include="MailStrategies\XDaysDueMails.cs" />
+    <Compile Include="MailStrategies\Collection\CollectionMails.cs" />
     <Compile Include="MailStrategies\EmailEnlistedLottery.cs" />
     <Compile Include="MainStrategy\AutoDecisionMails.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Approval\a_private_calc-n-find.cs" />
