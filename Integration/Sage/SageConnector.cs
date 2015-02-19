@@ -54,7 +54,7 @@
 			var request = new RestRequest(Method.GET) { Resource = fullRequest };
 			request.AddHeader("Authorization", authorizationHeader);
 
-			var client = new RestClient();
+			var client = new RestClient(new Uri(SageConfig.SageBaseUri));
 
 			log.InfoFormat("Making sage request:{0}", fullRequest);
 			IRestResponse response = client.Execute(request);
@@ -187,7 +187,7 @@
 			
 			var request = new RestRequest(Method.POST) { Resource = accessTokenRequest };
 			request.AddHeader("Accept", "application / json");
-			var client = new RestClient();
+			var client = new RestClient(new Uri(SageConfig.SageBaseUri));
 			errorMessage = null;
 			try
 			{
@@ -214,8 +214,8 @@
 
 		public static string GetApprovalRequest(string redirectUri)
 		{
-			return string.Format("{0}?redirect_uri={1}&response_type=code&client_id={2}",
-			                     config.OAuthAuthorizationEndpoint, redirectUri, config.OAuthIdentifier);
+			return string.Format("{3}/{0}?redirect_uri={1}&response_type=code&client_id={2}",
+			                     config.OAuthAuthorizationEndpoint, redirectUri, config.OAuthIdentifier, SageConfig.SageBaseUri);
 		}
 	}
 }

@@ -15,6 +15,8 @@
 			RequestForDatesPart = CurrentValues.Instance.SageRequestForDatesPart.Value;
 		}
 
+		public const string SageBaseUri = "https://app.sageone.com";
+		
 		public string OAuthIdentifier { get; set; }
 		public string OAuthSecret { get; set; }
 		public string OAuthAuthorizationEndpoint { get; set; }
