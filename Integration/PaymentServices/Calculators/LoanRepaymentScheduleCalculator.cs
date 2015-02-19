@@ -654,6 +654,7 @@
 
             if (diff <= 0)
             {
+			   _loan.LoanType.BalanceReachedExpected(installment);
                 CloseInstallment(installment);
             }
 
