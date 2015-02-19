@@ -33,13 +33,13 @@ namespace ConfigurationBase {
 		private const string DefaultValueFieldName = "CfgValue";
 
 		private readonly Dictionary<string, PropertyInfo> configPropertyInfos = new Dictionary<string, PropertyInfo>();
-		private string spName;
+		protected string SpName { get; private set; }
 
 		public string KeyFieldName;
 		public string ValueFieldName;
 
 		public Configurations(string spNameInput, ASafeLog oLog = null) : base(oLog) {
-			spName = spNameInput;
+			SpName = spNameInput;
 			KeyFieldName = DefaultKeyFieldName;
 			ValueFieldName = DefaultValueFieldName;
 		} // constructor
@@ -70,7 +70,7 @@ namespace ConfigurationBase {
 				oDB.ForEachRow((row, bRowsetStart) => {
 					AddSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());
 					return ActionResult.Continue;
-				}, spName);
+				}, SpName);
 			}
 			catch (Exception e) {
 				throw new ConfigurationBaseException("Error reading configurations.", e);
@@ -86,7 +86,7 @@ namespace ConfigurationBase {
 				oDB.ForEachRow((row, bRowsetStart) => {
 					RefreshSingleConfiguration(row[KeyFieldName].ToString(), row[ValueFieldName].ToString());
 					return ActionResult.Continue;
-				}, spName);
+				}, SpName);
 			}
 			catch (Exception e) {
 				Error("Error reading configurations: {0}", e);
