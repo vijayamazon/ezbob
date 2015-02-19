@@ -64,12 +64,14 @@
 			os.Append("\tLoan calculation model - begin:\n");
 
 			os.AppendFormat(
-				"\tIssued on {0} for {1} each {2}.\n",
+				"\t{3} issued on {0} for {1} each {2} at monthly rate {4}.\n",
 				LoanIssueTime.MomentStr(),
 				Grammar.Number(RepaymentCount, "repayment"),
 				RepaymentIntervalType == RepaymentIntervalTypes.Month
 					? "month"
-					: Grammar.Number((int)RepaymentIntervalType, "day")
+					: Grammar.Number((int)RepaymentIntervalType, "day"),
+				LoanAmount.ToString("C2", Library.Instance.Culture),
+				MonthlyInterestRate.ToString("P2", Library.Instance.Culture)
 			);
 
 			if (DiscountPlan.Count > 0) {

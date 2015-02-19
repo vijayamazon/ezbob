@@ -599,7 +599,7 @@
 
 			lcm.SetDiscountPlan(0, 0, -0.5m, 0.6m);
 
-			var lc = new LoanCalculator(lcm);
+			var lc = new BankLikeLoanCalculator(lcm);
 
 			// this.m_oLog.Debug("Loan calculator model before schedule:\n{0}", lc.WorkingModel);
 
@@ -610,6 +610,17 @@
 			List<Repayment> plan = lc.CalculatePlan();
 
 			// this.m_oLog.Debug("Loan plan:\n\t\t{0}", string.Join("\n\t\t", plan));
+
+			lcm.Repayments.Add(new Repayment(
+				new DateTime(2015, 2, 17),
+				100,
+				25,
+				0
+			));
+
+			decimal balance = lc.CalculateBalance();
+
+			Assert.Less(Math.Abs(balance - 1149.96m), 0.01m);
 		} // TestLoanCalculator
 	}
 }

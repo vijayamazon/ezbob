@@ -19,6 +19,14 @@
 			get { return Dates.Values; }
 		} // Days
 
+		public bool IsEmpty {
+			get { return Dates.Count == 0; }
+		} // IsEmpty
+
+		public DateTime LastKnownDate {
+			get { return IsEmpty ? DateTime.UtcNow : Dates.Keys.Max(); }
+		} // LastKnownDate
+
 		public OneDayLoanStatus this[DateTime idx] {
 			get { return Dates.ContainsKey(idx.Date) ? Dates[idx.Date] : null; }
 		} // indexer
@@ -28,5 +36,15 @@
 		public IEnumerable<OneDayLoanStatus> Where(Func<OneDayLoanStatus, bool> filter) {
 			return Days.Where(filter);
 		} // Where
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			return string.Join("\n\t\t", Days);
+		} // ToString
 	} // class DailyLoanStatus
 } // namespace

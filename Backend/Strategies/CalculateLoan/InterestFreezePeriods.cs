@@ -61,6 +61,9 @@
 		public decimal? GetInterest(DateTime oDate) {
 			var d = new DateIntervalEdge(oDate, AIntervalEdge<DateTime>.EdgeType.Finite);
 
+			if (this.periods == null)
+				return null;
+
 			foreach (TInterval<DateTime> i in this.periods) {
 				if (i.Contains(d)) {
 					var fi = i as FreezeInterval;

@@ -87,8 +87,13 @@
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
+    <Compile Include="CalculateLoan\DailyInterestRate\ACalculator.cs" />
     <Compile Include="CalculateLoan\BadPeriods.cs" />
+    <Compile Include="CalculateLoan\DailyInterestRate\BankLikeCalculator.cs" />
+    <Compile Include="CalculateLoan\DailyInterestRate\LegacyCalculator.cs" />
     <Compile Include="CalculateLoan\DailyLoanStatus.cs" />
+    <Compile Include="CalculateLoan\BankLikeLoanCalculator.cs" />
+    <Compile Include="CalculateLoan\LegacyLoanCalculator.cs" />
     <Compile Include="CalculateLoan\OneDayLoanStatus.cs" />
     <Compile Include="CalculateLoan\Fee.cs" />
     <Compile Include="CalculateLoan\InterestFreezePeriods.cs" />
@@ -123,7 +128,7 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="Library.cs" />
-    <Compile Include="CalculateLoan\LoanCalculator.cs" />
+    <Compile Include="CalculateLoan\ALoanCalculator.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
     <Compile Include="Lottery\EnlistLottery.cs" />
     <Compile Include="Lottery\FitConditions\AAmount.cs" />
