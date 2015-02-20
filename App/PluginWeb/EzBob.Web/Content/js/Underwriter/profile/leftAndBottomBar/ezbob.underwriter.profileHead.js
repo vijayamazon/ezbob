@@ -49,8 +49,6 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		var isVisible = this.ui.editOfferDiv.is(":visible");
 		$.cookie('editOfferVisible', isVisible);
 		$(".profile-content").css({ "margin-top": (this.$el.height() + 10) + "px" });
-		if (isVisible)
-			this.loanInfoView.render();
 	},
 
 	collapseAll: function() {
@@ -93,7 +91,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 			personalInfo: this.personalModel,
 			parentView: this.parentView
 		});
-
+		this.loanInfoView.render();
 		var controlButtons = this.$el.find("#controlButtons");
 		this.controlButtonsView = new EzBob.Underwriter.ControlButtonsView(
             {
