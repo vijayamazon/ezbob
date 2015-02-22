@@ -294,7 +294,7 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
         scrollTop();
         BlockUi("On");
 
-        $.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode, filter: companyLegalStatus, refNum: companyNum })
+    	$.get(window.gRootPath + "Account/CheckingCompany", { companyName: companyName, postcode: postcode, filter: companyLegalStatus, refNum: companyNum, customerId: this.model.customerId })
             .success(function(reqData) {
                 if (reqData == undefined || reqData.success === false)
                     EzBob.ShowMessage("Targeting service is not responding", "Error", null, "OK");
