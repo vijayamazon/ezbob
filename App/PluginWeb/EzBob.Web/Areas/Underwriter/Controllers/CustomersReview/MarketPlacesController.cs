@@ -336,7 +336,7 @@
 				_context.UserId,
 				mp.Customer.Id,
 				mp.DisplayName,
-				"https://app.ezbob.com/Customer/Profile/RenewEbayToken/"
+				"Customer/Profile/RenewEbayToken/"
 			);
 		}
 

@@ -1,7 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using Ezbob.Database;
-	using Ezbob.Logger;
 
 	public class GetCashFailed : AMailStrategyBase {
 
@@ -14,7 +12,7 @@
 			TemplateName = "Mandrill - Debit card authorization problem";
 
 			Variables = new Dictionary<string, string> {
-				{"DashboardPage", "https://app.ezbob.com/Customer/Profile"},
+				{"DashboardPage", string.Format("{0}/Customer/Profile", CustomerData.OriginSite)},
 				{"FirstName", CustomerData.FirstName}
 			};
 		} // SetTemplateAndVariables

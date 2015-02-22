@@ -16,7 +16,7 @@
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
 				{"eBayName", marketplaceName},
-				{"eBayAddress", eBayAddress}
+				{"eBayAddress", string.Format("{0}/{1}",CustomerData.OriginSite, eBayAddress)}
 			};
 		} // SetTemplateAndVariables
 

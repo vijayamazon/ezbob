@@ -19,7 +19,7 @@
 			if (oToken == Guid.Empty)
 				throw new StrategyAlert(oStrategy, "Failed to generate a change password token for customer " + oStrategy.CustomerData);
 
-			return CurrentValues.Instance.CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N");
+			return CurrentValues.Instance.CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N"); //Currently broker only in ezbob
 		} // GetFromDB
 
 		public BrokerForceResetCustomerPassword(int nCustomerID) : base(nCustomerID, true) {
