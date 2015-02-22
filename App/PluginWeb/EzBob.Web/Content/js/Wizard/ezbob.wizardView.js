@@ -239,7 +239,7 @@ EzBob.WizardView = EzBob.View.extend({
             return;
 
         var currStep = this.steps[current];
-        EzBob.App.GA.trackPage(currStep.trackPage);
+        EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle);
         $(document).attr('title', currStep.documentTitle);
         EzBob.App.trigger('wizard:progress', currStep.progress);
 
