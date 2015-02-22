@@ -98,11 +98,24 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				$.colorbox({ inline: true, open: true, href: oDialog });
 		} // if
 
-		this.showEverlineHelp = this.model.get('IsEverline');
+		var oEverlineDialog = this.$el.find('#everline_help');
+		var email = this.model.get('Email');
+
+		if (email) {
+			this.$el.find("#Email").val(email);
+		}
+
+
+		if (this.model.get('IsEverline')) {
+			
+			oEverlineDialog.val(email);
+			//currently not showing the explanation popup but saving the email 
+			EzBob.UiAction.saveOne(EzBob.UiAction.evtLinked(), oEverlineDialog, true);
+		}
+		this.showEverlineHelp = false; 
 		if (this.showEverlineHelp) {
 			this.showEverlineHelp = false;
-
-			var oEverlineDialog = this.$el.find('#everline_help');
+			
 			if (oEverlineDialog.length > 0)
 				$.colorbox({ inline: true, open: true, href: oEverlineDialog });
 		} // if

@@ -221,6 +221,7 @@
 							return Json(new {success = true,everlineAccount = true}, JsonRequestBehavior.AllowGet);
 						case EverlineLoanStatus.ExistsWithNoLiveLoan:
 							TempData["IsEverline"] = true;
+							TempData["CustomerEmail"] = model.UserName;
 							return Json(new {success = true,everlineWizard = true}, JsonRequestBehavior.AllowGet);
 						case EverlineLoanStatus.DoesNotExist:
 							return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
@@ -499,6 +500,7 @@
 				case EverlineLoanStatus.ExistsWithNoLiveLoan:
 					ms_oLog.Warn("Customer {0} ExistsWithNoLiveLoan in Everiline tried to restore password", email);
 					TempData["IsEverline"] = true;
+					TempData["CustomerEmail"] = email;
 					return Json(new { everlineWizard = true }, JsonRequestBehavior.AllowGet);
 				case EverlineLoanStatus.DoesNotExist:
 					ms_oLog.Warn("Customer {0} DoesNotExist in Everiline tried to restore password", email);
