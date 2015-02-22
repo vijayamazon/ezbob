@@ -4,6 +4,7 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using Ezbob.Backend.Strategies.CalculateLoan.DailyInterestRate;
+	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
 
 	public abstract class ALoanCalculator {
 		/// <summary>
@@ -28,11 +29,7 @@
 			for (int i = 1; i <= WorkingModel.RepaymentCount; i++) {
 				var sp = new ScheduledPayment();
 
-				sp.Date = (
-					WorkingModel.IsMonthly
-						? WorkingModel.LoanIssueTime.AddMonths(i)
-						: WorkingModel.LoanIssueTime.AddDays(i * (int)WorkingModel.RepaymentIntervalType)
-				).Date;
+				sp.Date = AddPeriods(i).Date;
 
 				if (i <= WorkingModel.InterestOnlyMonths)
 					sp.Principal = 0;
@@ -171,7 +168,7 @@
 
 		public virtual LoanCalculatorModel WorkingModel { get; private set; }
 
-		protected ALoanCalculator(LoanCalculatorModel model, ACalculator dailyInterestRateCalculator) {
+		protected ALoanCalculator(LoanCalculatorModel model, ADailyInterestRate dailyInterestRateCalculator) {
 			if (model == null)
 				throw new ArgumentNullException("model", "No data for loan calculation.");
 
@@ -182,7 +179,15 @@
 			DailyInterestCalculator = dailyInterestRateCalculator;
 		} // constructor
 
-		protected ACalculator DailyInterestCalculator { get; private set; } // DailyInterestCalculator
+		protected virtual ADailyInterestRate DailyInterestCalculator { get; private set; } // DailyInterestCalculator
+
+		/// <summary>
+		/// Calculates date after requested number of periods have passed since loan issue date.
+		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
+		/// </summary>
+		/// <param name="periodCount">A number of periods to add.</param>
+		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
+		protected abstract DateTime AddPeriods(int periodCount);
 
 		/// <summary>
 		/// Calculates interest rate for one day based on monthly interest rate.

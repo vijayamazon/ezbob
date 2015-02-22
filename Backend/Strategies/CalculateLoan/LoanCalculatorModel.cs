@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Text;
 	using DbConstants;
+	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
 	using Ezbob.Utils.Lingvo;
 
 	public class LoanCalculatorModel {

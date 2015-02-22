@@ -10,6 +10,7 @@
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CalculateLoan;
+	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
@@ -618,7 +619,7 @@
 				0
 			));
 
-			decimal balance = lc.CalculateBalance();
+			decimal balance = lc.CalculateBalance(new DateTime(2015, 2, 19, 0, 0, 0, DateTimeKind.Utc));
 
 			Assert.Less(Math.Abs(balance - 1149.96m), 0.01m);
 		} // TestLoanCalculator

@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
+﻿namespace Ezbob.Backend.Strategies.CalculateLoan.Helpers {
 	using System;
 	using System.Globalization;
 
@@ -15,9 +15,9 @@
 
 		public ScheduledPayment DeepClone() {
 			return new ScheduledPayment {
-				Date = this.Date,
-				Principal = this.Principal,
-				InterestRate = this.InterestRate,
+				Date = Date,
+				Principal = Principal,
+				InterestRate = InterestRate,
 			};
 		} // DeepClone
 

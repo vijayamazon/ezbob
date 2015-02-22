@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
+﻿namespace Ezbob.Backend.Strategies.CalculateLoan.Helpers {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;

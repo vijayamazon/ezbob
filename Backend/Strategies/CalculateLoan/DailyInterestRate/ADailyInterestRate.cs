@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan.DailyInterestRate {
 	using System;
 
-	public abstract class ACalculator {
+	public abstract class ADailyInterestRate {
 		public abstract decimal GetRate(
 			DateTime currentDate,
 			decimal monthlyInterestRate,
@@ -20,5 +20,5 @@
 		} // ToString
 
 		protected virtual bool InitHasRun { get; set; }
-	} // class ACalculator
+	} // class ADailyInterestRate
 } // namespace

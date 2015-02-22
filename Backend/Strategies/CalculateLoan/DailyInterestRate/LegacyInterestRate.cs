@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan.DailyInterestRate {
 	using System;
 
-	internal class LegacyCalculator : ACalculator {
+	internal class LegacyInterestRate : ADailyInterestRate {
 		public override decimal GetRate(
 			DateTime currentDate,
 			decimal monthlyInterestRate,
@@ -19,5 +19,5 @@
 
 			return monthlyInterestRate / DateTime.DaysInMonth(d.Year, d.Month);
 		} // GetRate
-	} // class LegacyCalculator
+	} // class LegacyInterestRate
 } // namespace
