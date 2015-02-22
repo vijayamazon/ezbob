@@ -134,7 +134,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		if (sState !== 'apply' && sState !== 'bad' && sState !== 'disabled')
 			return;
 
-		if (this.customer.get('TrustPilotReviewEnabled') && this.customer.get("hasLoans")) {
+		if (this.customer.get('TrustPilotReviewEnabled') && this.customer.get("hasLoans") && this.customer.get('Origin') === 'ezbob') {
 			var nTrustPilotStatusID = this.customer.get('TrustPilotStatusID');
 
 			if (nTrustPilotStatusID === 0) {
