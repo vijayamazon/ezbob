@@ -148,19 +148,17 @@
 		}
 
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage) {
-			string accessTokenRequest = string.Format(
-				"{0}?grant_type=authorization_code&code={1}&redirect_uri={2}&scope=&client_secret={3}&client_id={4}",
-				config.OAuthTokenEndpoint,
-				code,
-				redirectVal,
-				config.OAuthSecret,
-				config.OAuthIdentifier
-			);
-
-			var request = new RestRequest(Method.POST) { Resource = accessTokenRequest };
+			var request = new RestRequest(Method.POST) { Resource = config.OAuthTokenRequestPath, };
 			request.AddHeader("Accept", "application / json");
 
-			var client = new RestClient(new Uri(SageConfig.SageBaseUri));
+			request.AddParameter("grant_type", "authorization_code");
+			request.AddParameter("scope", string.Empty);
+			request.AddParameter("code", code);
+			request.AddParameter("redirect_uri", redirectVal);
+			request.AddParameter("client_secret", config.OAuthSecret);
+			request.AddParameter("client_id", config.OAuthIdentifier);
+
+			var client = new RestClient(config.OAuthTokenRequestHost);
 
 			errorMessage = null;
 
@@ -171,7 +169,7 @@
 					if (response.StatusCode != HttpStatusCode.OK) {
 						log.Error(
 							"Not parsing for access token: status code is {2} ({3}).\n\tRequest:\n\t{0}\n\tResponse:\n\t{1}",
-							request.Resource,
+							config.OAuthTokenRequestHost + "/" + request.Resource,
 							response.Content,
 							response.StatusCode,
 							(int)response.StatusCode
@@ -182,7 +180,7 @@
 
 					log.Debug(
 						"Just before parsing access token.\n\tRequest:\n\t{0}\n\tResponse:\n\t{1}",
-						request.Resource,
+						config.OAuthTokenRequestHost + "/" + request.Resource,
 						response.Content
 					);
 
@@ -215,10 +213,10 @@
 		public static string GetApprovalRequest(string redirectUri) {
 			return string.Format(
 				"{3}/{0}?redirect_uri={1}&response_type=code&client_id={2}",
-				config.OAuthAuthorizationEndpoint,
+				config.OAuthApprovalRequestPath,
 				redirectUri,
 				config.OAuthIdentifier,
-				SageConfig.SageBaseUri
+				config.OAuthApprovalRequestHost
 			);
 		} // GetApprovalRequest
 
