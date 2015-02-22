@@ -188,7 +188,7 @@
 				name,
 				"ezbob",
 				"GBP",
-				"EZBOB"
+				"EZBOB" //TODO rename to orange money
 			);
 
 			Log.Debug(

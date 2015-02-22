@@ -95,11 +95,9 @@
             Confirm your store on Amazon.
 
             Your Amazon shop has been added on" + origin + @".
-            To confirm store please follow the link:
-            " + acceptUrl + @"
-
-            If you have not added the store on EZBOB please click the following link:
-            " + disAcceptUrl + @"
+            To confirm store please <a href=""" + acceptUrl + @""">click here</a>" + Environment.NewLine
+			+ @"If you have not added the store on " + origin + @" please <a href=""" + disAcceptUrl + @""">click here </a>" + Environment.NewLine
+			+ @"
 
             Thank you!
 
