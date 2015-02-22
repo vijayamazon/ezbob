@@ -80,11 +80,21 @@
 			                           "https");
 			var disAcceptUrl = Url.Action("ActivateStore", "Home",
 			                              new {Area = "", id = guid, approve = false.ToString().ToLower()}, "https");
+			var origin = marketplace.Customer.CustomerOrigin.Name;
+			string phone = "";
+			switch (origin) {
+			case "ezbob":
+				phone = "0800-011-4787";
+				break;
+			case "everline":
+				phone = "0800-840-7750";
+				break;
+			}
 
 			var message = @"
             Confirm your store on Amazon.
 
-            Your Amazon shop has been added on EZBOB (www.ezbob.com).
+            Your Amazon shop has been added on" + origin + @".
             To confirm store please follow the link:
             " + acceptUrl + @"
 
@@ -93,11 +103,10 @@
 
             Thank you!
 
-            Kindest regards,
-            EZBOB team,
-            www.ezbob.com
-            contacts@ezbob.com
-            +44.800.011.4787";
+            Kindest regards," + Environment.NewLine +
+            origin + @"team,
+            www."+ origin +@".com
+            customercare@" + origin + @".com" + Environment.NewLine + phone;
 
 			var sendingStatus = _askvilleService.AskQuestion(merchantId, marketplaceId, 31, message);
 			var askville = askvilleGuid == ""

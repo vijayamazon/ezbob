@@ -160,7 +160,7 @@
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, nUserID);
 			if (oMetaData.Status == ActionStatus.Done || oMetaData.Status == ActionStatus.Finished) {
-				return Execute<SendEmailVerification>(nUserID, null, nUserID, oInstance.Token);
+				return Execute<SendEmailVerification>(nUserID, null, nUserID, oInstance.Token.ToString());
 			}
 			return oMetaData;
 		} // EmailConfirmationGenerateAndSend
