@@ -20,7 +20,12 @@
 	public partial class Approval {
 		private DateTime Now { get; set; }
 
-		private void NotifyAutoApproveSilentMode(AutoDecisionResponse data) {
+		private void NotifyAutoApproveSilentMode(
+			decimal autoApprovedAmount,
+			int repaymentPeriod,
+			decimal interestRate,
+			decimal setupFee
+		) {
 			try {
 				var message = string.Format(
 					@"<h1><u>Silent auto approve for customer <b style='color:red'>{0}</b></u></h1><br>
@@ -33,13 +38,13 @@
 					<pre><h3>{5}</h3></pre><br>
 					<h2><b>Decision data:</b></h2>
 					<pre><h3>{6}</h3></pre>", this.customerId,
-					data.AutoApproveAmount,
-					data.RepaymentPeriod,
-					data.InterestRate,
-					data.SetupFee,
+					autoApprovedAmount.ToString("C0", Library.Instance.Culture),
+					repaymentPeriod,
+					interestRate.ToString("P2", Library.Instance.Culture),
+					setupFee.ToString("P2", Library.Instance.Culture),
 					HttpUtility.HtmlEncode(this.m_oTrail.ToString()),
 					HttpUtility.HtmlEncode(this.m_oTrail.InputData.Serialize())
-					);
+				);
 
 				new Mail().Send(
 					CurrentValues.Instance.AutoApproveSilentToAddress,
@@ -48,7 +53,7 @@
 					CurrentValues.Instance.MailSenderEmail,
 					CurrentValues.Instance.MailSenderName,
 					"#SilentApprove for customer " + this.customerId
-					);
+				);
 			} catch (Exception e) {
 				this.log.Error(e, "Failed sending alert mail - silent auto approval.");
 			} // try
