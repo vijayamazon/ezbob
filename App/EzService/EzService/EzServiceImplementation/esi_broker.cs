@@ -11,8 +11,8 @@
 
 	partial class EzServiceImplementation {
 
-		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sEmailConfirmationLink) {
-			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sEmailConfirmationLink);
+		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sConfirmationToken) {
+			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sConfirmationToken);
 		} // BrokerLeadAcquireCustomer
 
 		public ActionMetaData BrokerCustomerWizardComplete(int nCustomerID) {

@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
+	using ConfigManager;
 	using UserManagement.EmailConfirmation;
 
 	public class BrokerGreeting : ABrokerMailToo {
@@ -17,7 +18,7 @@
 			Variables = new Dictionary<string, string> {
 				{ "BrokerName", BrokerData.FirmName },
 				{ "ContactName", BrokerData.FullName },
-				{ "Link", string.Format("{0}/confirm/{1}", CustomerSite, ecg.Token) }
+				{ "Link", string.Format("{0}/confirm/{1}", CurrentValues.Instance.CustomerSite, ecg.Token) } //Currently broker only in ezbob
 			};
 		} // SetTemplateAndVariables
 

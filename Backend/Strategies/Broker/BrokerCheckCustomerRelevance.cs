@@ -10,7 +10,7 @@
 			string sCustomerEmail,
 			bool isAlibaba,
 			string sSourceRef,
-			string sConfirmEmailLink
+			string sConfirmationToken
 		) {
 			m_oSp = new SpBrokerCheckCustomerRelevance(DB, Log) {
 				CustomerID = nCustomerID,
@@ -19,9 +19,9 @@
 			};
 
 			if (isAlibaba)
-				m_oGreetingStrat = new AlibabaGreeting(nCustomerID, sConfirmEmailLink);
+				m_oGreetingStrat = new AlibabaGreeting(nCustomerID, sConfirmationToken);
 			else
-				m_oGreetingStrat = new Greeting(nCustomerID, sConfirmEmailLink);
+				m_oGreetingStrat = new Greeting(nCustomerID, sConfirmationToken);
 		} // constructor
 
 		public override string Name {

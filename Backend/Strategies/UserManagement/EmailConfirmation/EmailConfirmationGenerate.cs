@@ -8,8 +8,6 @@
 	public class EmailConfirmationGenerate : AStrategy {
 
 		public EmailConfirmationGenerate(int nUserID) {
-			Address = string.Empty;
-
 			m_oSp = new SpEmailConfirmationGenerate(nUserID, DB, Log);
 		} // constructor
 
@@ -19,14 +17,10 @@
 
 		public override void Execute() {
 			m_oSp.ExecuteNonQuery();
-			Address = string.Format("<a href='{0}/confirm/{1}'>click here</a>", CustomerSite, Token);
-
 			Log.Debug("Confirmation token {0} has been created for user {1}.", Token.ToString("N"), m_oSp.UserID);
 		} // Execute
 
 		public Guid Token { get { return m_oSp.Token; } } // Token
-
-		public string Address { get; private set; }
 
 		private readonly SpEmailConfirmationGenerate m_oSp;
 

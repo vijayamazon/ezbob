@@ -46,10 +46,8 @@
 			if (!string.IsNullOrWhiteSpace(ErrorMessage))
 				return;
 
-			string sAddress = string.Format("{0}/emailchanged/{1}", CustomerSite, m_oSpUpdate.RequestID);
-
 			new System.Threading.Thread(() =>
-				new EmailChanged(m_oSpUpdate.UserID, sAddress).Execute()
+				new EmailChanged(m_oSpUpdate.UserID, m_oSpUpdate.RequestID.ToString()).Execute()
 			).Start();
 
 

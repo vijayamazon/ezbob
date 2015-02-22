@@ -5,8 +5,8 @@
 
 	public class Greeting : ABrokerMailToo {
 
-		public Greeting(int customerId, string confirmEmailAddress) : base(customerId, true) {
-			this.confirmEmailAddress = confirmEmailAddress;
+		public Greeting(int customerId, string confirmationToken) : base(customerId, true) {
+			this.confirmationToken = confirmationToken;
 		} // constructor
 
 		public override string Name { get { return "Greeting"; } } // Name
@@ -24,7 +24,7 @@
 
 			Variables = new Dictionary<string, string> {
 				{"Email", CustomerData.Mail},
-				{"ConfirmEmailAddress", confirmEmailAddress}
+				{"ConfirmEmailAddress", string.Format("<a href='{0}/confirm/{1}'>click here</a>", CustomerData.OriginSite, confirmationToken)}
 			};
 		} // SetTemplateAndVariables
 
@@ -37,7 +37,7 @@
 			);
 		} // ActionAtEnd
 
-		private readonly string confirmEmailAddress;
+		private readonly string confirmationToken;
 
 	} // class Greeting
 } // namespace

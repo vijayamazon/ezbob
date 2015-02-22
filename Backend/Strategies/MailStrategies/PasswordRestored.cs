@@ -28,7 +28,7 @@
 				throw new StrategyAlert(this, "Failed to generate a change password token for customer " + CustomerData.Mail);
 
 			Variables = new Dictionary<string, string> {
-				{"Link", CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N")},
+				{"Link", CustomerData.OriginSite + "/Account/CreatePassword?token=" + oToken.ToString("N")},
 				{"FirstName", string.IsNullOrWhiteSpace(CustomerData.FirstName) ? Salutation : CustomerData.FirstName}
 			};
 

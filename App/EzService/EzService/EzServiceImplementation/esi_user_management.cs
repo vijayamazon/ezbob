@@ -152,7 +152,6 @@
 			return new EmailConfirmationTokenActionResult {
 				MetaData = oMetaData,
 				Token = oInstance.Token,
-				Address = oInstance.Address,
 			};
 		} // EmailConfirmationGenerate
 
@@ -160,11 +159,10 @@
 			EmailConfirmationGenerate oInstance;
 
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, nUserID, underwriterId, nUserID);
-
-			if (string.IsNullOrWhiteSpace(oInstance.Address))
-				return oMetaData;
-
-			return Execute<SendEmailVerification>(nUserID, null, nUserID, oInstance.Address);
+			if (oMetaData.Status == ActionStatus.Done || oMetaData.Status == ActionStatus.Finished) {
+				return Execute<SendEmailVerification>(nUserID, null, nUserID, oInstance.Token);
+			}
+			return oMetaData;
 		} // EmailConfirmationGenerateAndSend
 
 		public IntActionResult EmailConfirmationCheckOne(Guid oToken) {

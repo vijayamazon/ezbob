@@ -1933,7 +1933,7 @@
         <xs:element minOccurs="0" name="sCustomerEmail" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="isAlibaba" type="xs:boolean" />
         <xs:element minOccurs="0" name="sSourceRef" nillable="true" type="xs:string" />
-        <xs:element minOccurs="0" name="sConfirmEmailLink" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sConfirmationToken" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -2026,7 +2026,7 @@
         <xs:element minOccurs="0" name="nLeadID" type="xs:int" />
         <xs:element minOccurs="0" name="sFirstName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="bBrokerFillsForCustomer" type="xs:boolean" />
-        <xs:element minOccurs="0" name="sEmailConfirmationLink" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="sConfirmationToken" nillable="true" type="xs:string" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

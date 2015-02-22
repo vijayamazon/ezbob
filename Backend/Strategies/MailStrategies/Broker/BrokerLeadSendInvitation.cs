@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
+	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -33,7 +34,7 @@
 			Variables = new Dictionary<string, string> {
 				{ "CustomerName", LeadData.FullName },
 				{ "FirmName", LeadData.FirmName },
-				{ "InvitationLink", CustomerSite + "?bloken=" + m_oSp.Token.ToString("N") }
+				{ "InvitationLink", CurrentValues.Instance.CustomerSite + "?bloken=" + m_oSp.Token.ToString("N") } //Currently broker only in ezbob
 			};
 		} // SetTemplateAndVariables
 

@@ -259,7 +259,9 @@
 			customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
 
 			customerModel.TrustPilotStatusID = customer.TrustPilotStatus.ID;
-			customerModel.TrustPilotReviewEnabled = CurrentValues.Instance.TrustPilotReviewEnabled;
+
+			//Currently disabled trust pilot for EVL customers
+			customerModel.TrustPilotReviewEnabled = CurrentValues.Instance.TrustPilotReviewEnabled && customer.CustomerOrigin.Name == CustomerOriginEnum.ezbob.ToString();
 
 			customerModel.PayPointCards = FillPayPointCards(customer);
 

@@ -86,7 +86,7 @@
 			string sCustomerEmail,
 			bool isAlibaba,
 			string sSourceRef,
-			string sConfirmEmailLink
+			string sConfirmationToken
 			);
 
 		[OperationContract]
@@ -114,7 +114,7 @@
 			int nLeadID,
 			string sFirstName,
 			bool bBrokerFillsForCustomer,
-			string sEmailConfirmationLink
+			string sConfirmationToken
 			);
 
 		[OperationContract]

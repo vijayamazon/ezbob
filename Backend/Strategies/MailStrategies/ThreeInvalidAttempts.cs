@@ -25,8 +25,7 @@
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", string.IsNullOrEmpty(CustomerData.FirstName) ? "customer" : CustomerData.FirstName},
-				{"Link", CustomerSite + "/Account/CreatePassword?token=" + oToken.ToString("N")},
-				{"NIMRODTELEPHONENUMBER", "+44 800 011 4787"} // TODO: change name of variable here and in mandrill\mailchimp
+				{"Link", CustomerData.OriginSite + "/Account/CreatePassword?token=" + oToken.ToString("N")}
 			};
 		} // SetTemplateAndVariables
 

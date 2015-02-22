@@ -11,7 +11,7 @@
 			int nLeadID,
 			string sFirstName,
 			bool bBrokerFillsForCustomer,
-			string sEmailConfirmationLink
+			string sConfirmationToken
 		) {
 			m_oSp = new SpBrokerLeadAcquireCustomer(DB, Log) {
 				CustomerID = nCustomerID,
@@ -19,7 +19,7 @@
 				BrokerFillsForCustomer = bBrokerFillsForCustomer,
 			};
 
-			m_sEmailConfirmationLink = sEmailConfirmationLink;
+			m_sConfirmationToken = sConfirmationToken;
 			m_sFirstName = sFirstName;
 		} // constructor
 
@@ -31,10 +31,10 @@
 			m_oSp.ExecuteNonQuery();
 
 			if (!m_oSp.BrokerFillsForCustomer)
-				new Greeting(m_oSp.CustomerID, m_sEmailConfirmationLink).Execute();
+				new Greeting(m_oSp.CustomerID, m_sConfirmationToken).Execute();
 		} // Execute
 
-		private readonly string m_sEmailConfirmationLink;
+		private readonly string m_sConfirmationToken;
 		private readonly string m_sFirstName;
 
 		private readonly SpBrokerLeadAcquireCustomer m_oSp;

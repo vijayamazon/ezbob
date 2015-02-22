@@ -13,6 +13,8 @@ BEGIN
 
 	IF EXISTS (SELECT BrokerID FROM Broker WHERE BrokerID = @CustomerId)
 	BEGIN
+	
+		DECLARE @CustomerSite NVARCHAR(255) = (SELECT Value FROM ConfigurationVariables WHERE Name = 'CustomerSite')
 		SELECT
 			b.BrokerID AS Id,
 			b.ContactName AS FirstName,
@@ -35,7 +37,9 @@ BEGIN
 			CONVERT(BIT, 0) AS IsAlibaba,
 			CONVERT(NVARCHAR(300), '') AS AlibabaId,
 			0 AS ReportedAnnualTurnover,
-			0 AS RequestedLoanAmount
+			0 AS RequestedLoanAmount,
+			'ezbob' AS Origin,
+			@CustomerSite AS CustomerSite
 		FROM
 			Broker b
 		WHERE

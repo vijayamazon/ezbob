@@ -432,12 +432,12 @@
 					)
 				).Execute();
 
-				string link = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Address;
+				string token = m_oServiceClient.Instance.EmailConfirmationGenerate(customer.Id).Token.ToString();
 
 				if (blm.IsSet)
-					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.FirstName, blm.BrokerFillsForCustomer, link);
+					m_oServiceClient.Instance.BrokerLeadAcquireCustomer(customer.Id, blm.LeadID, blm.FirstName, blm.BrokerFillsForCustomer, token);
 				else
-					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(customer.Id, customer.Name, customer.IsAlibaba, customer.ReferenceSource, link); // Add is Alibaba, or do after saving it to DB
+					m_oServiceClient.Instance.BrokerCheckCustomerRelevance(customer.Id, customer.Name, customer.IsAlibaba, customer.ReferenceSource, token); // Add is Alibaba, or do after saving it to DB
 
 				m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(customer.Id, customer.Name, customer.Id, false, false);
 				FormsAuthentication.SetAuthCookie(model.EMail, false);

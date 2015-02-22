@@ -5,10 +5,10 @@
 
 		public EmailChanged(
 			int nUserID,
-			string sAddress
+			string sRequestId
 		)
 			: base(nUserID, true) {
-			m_sAddress = sAddress;
+				m_sRequestId = sRequestId;
 		} // constructor
 
 		public override string Name {
@@ -21,7 +21,7 @@
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
 				{ "Email", CustomerData.Mail },
-				{ "Link", m_sAddress },
+				{ "Link", string.Format("{0}/emailchanged/{1}", CustomerData.OriginSite, m_sRequestId) },
 			};
 		} // SetTemplateAndVariables
 
@@ -34,7 +34,7 @@
 			Log.Debug("Loading customer data complete.");
 		} // LoadRecipientData
 
-		private readonly string m_sAddress;
+		private readonly string m_sRequestId;
 
 	} // class EmailChanged
 } // namespace

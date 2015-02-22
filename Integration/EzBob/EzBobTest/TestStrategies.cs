@@ -67,7 +67,7 @@
 
 		[Test]
 		public void Greeting() {
-			var s = new Greeting(21401, "stasd+confirm@ezbob.com");
+			var s = new Greeting(21401, "torke");
 			s.Execute();
 		}
 

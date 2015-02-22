@@ -25,7 +25,10 @@
 		public override string Name { get { return "Cash Transferred"; } }
 
 		protected override void SetTemplateAndVariables() {
-			ToTrustPilot = true;
+			if (CustomerData.Origin == "ezbob") {
+				//currently trust pilot only for ezbob customers
+				ToTrustPilot = true;
+			}
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},

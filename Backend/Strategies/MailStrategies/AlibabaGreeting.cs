@@ -4,11 +4,11 @@
 	using Ezbob.Database;
 
 	public class AlibabaGreeting : ABrokerMailToo {
-		private readonly string confirmEmailAddress;
+		private readonly string confirmationToken;
 
-		public AlibabaGreeting(int customerId, string confirmEmailAddress)
+		public AlibabaGreeting(int customerId, string confirmationToken)
 			: base(customerId, true) {
-			this.confirmEmailAddress = confirmEmailAddress;
+				this.confirmationToken = confirmationToken;
 		}
 
 		public override string Name { get { return "AlibabaGreeting"; } }
@@ -27,7 +27,7 @@
 			Variables = new Dictionary<string, string> {
 				{"Email", CustomerData.Mail},
 				{"FirstName", CustomerData.FirstName},
-				{"ConfirmEmailAddress", confirmEmailAddress}
+				{"ConfirmEmailAddress", string.Format("<a href='{0}/confirm/{1}'>click here</a>", CustomerData.OriginSite, confirmationToken)}
 			};
 		}
 

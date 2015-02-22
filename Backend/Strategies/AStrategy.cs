@@ -40,12 +40,6 @@
 			get { return ObjectFactory.GetInstance<DatabaseDataHelper>(); }
 		} // DbHelper
 
-		protected virtual string CustomerSite {
-			get {
-				return RemoveLastSlash(CurrentValues.Instance.CustomerSite);
-			} // get
-		} // CustomerSite
-
 		protected virtual string BrokerSite {
 			get {
 				return RemoveLastSlash(CurrentValues.Instance.BrokerSite);
