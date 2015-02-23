@@ -114,7 +114,7 @@
 				{
 					string lastStatus = sr["CurrentStatus"];
 
-					if (lastStatus != "Done" && lastStatus != "Never Started" && lastStatus != "Finished" && lastStatus != "Failed" && lastStatus != "Terminated")
+					if (lastStatus == "In progress")
 					{
 						result = false;
 						return ActionResult.SkipAll;

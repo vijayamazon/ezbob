@@ -2,6 +2,10 @@ IF OBJECT_ID('dbo.udfGetLastMarketplaceStatus') IS NULL
 	EXECUTE('CREATE FUNCTION dbo.udfGetLastMarketplaceStatus() RETURNS NVARCHAR(255) AS BEGIN RETURN '''' END')
 GO
 
+
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER FUNCTION dbo.udfGetLastMarketplaceStatus(@MarketplaceId INT)
 RETURNS NVARCHAR(255)
 AS
@@ -17,7 +21,7 @@ BEGIN
 	SELECT
 		@UpdStart = UpdatingStart,
 		@UpdEnd = UpdatingEnd,
-		@HasError = CASE WHEN UpdateError IS NULL THEN 1 ELSE 0 END
+		@HasError = CASE WHEN LTRIM(RTRIM(ISNULL(UpdateError, ''))) = '' THEN 0 ELSE 1 END
 	FROM
 		MP_CustomerMarketPlace
 	WHERE
@@ -26,7 +30,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	IF @HasError = 1
-		SET @CurrentStatus = 'Error'
+		SET @CurrentStatus = 'Failed'
 	ELSE IF @UpdEnd IS NOT NULL
 		SET @CurrentStatus = 'Done'
 	ELSE IF @UpdStart IS NOT NULL
@@ -36,4 +40,5 @@ BEGIN
 
 	RETURN @CurrentStatus
 END
+
 GO
