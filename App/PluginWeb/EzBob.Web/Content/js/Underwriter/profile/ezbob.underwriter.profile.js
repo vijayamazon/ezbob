@@ -203,6 +203,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			self.setLastShownProfileSection($(e.target).attr('href').substr(1));
 			if ($(e.currentTarget).attr('href') === '#customer-info')
 				self.crossCheckView.render({ customerId: self.customerId });
+			if ($(e.currentTarget).attr('href') === '#dashboard')
+				self.dashboardInfoView.render();
 		}));
 
 		this.gotoCustomer();
