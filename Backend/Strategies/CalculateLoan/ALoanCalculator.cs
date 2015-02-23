@@ -53,12 +53,7 @@
 		/// <returns>Loan plan.</returns>
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		public virtual List<Repayment> CalculatePlan(bool writeToLog = true) {
-			if (WorkingModel.Schedule.Count < 1)
-				throw new Exception("No loan schedule found.");
-
-			for (int i = 0; i < WorkingModel.Schedule.Count; i++)
-				if (WorkingModel.Schedule[i].Date == null)
-					throw new Exception("No date specified for scheduled payment #" + (i + 1));
+			WorkingModel.ValidateSchedule();
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
@@ -151,6 +146,7 @@
 
 			if (writeToLog) {
 				AddScheduleNotes(days);
+				AddFeeNotes(days);
 				AddPaymentNotes(days);
 				days.AddNote(now, "Requested balance date.");
 
@@ -172,11 +168,47 @@
 		} // CalculateBalance
 
 		/// <summary>
-		/// Calculates current loan earned interest.
+		/// Calculates current loan earned interest between two dates including both dates.
 		/// </summary>
+		/// <param name="startDate">First day of the calculation period; loan issue date is used if omitted </param>
+		/// <param name="endDate">Last day of the calculation period; last scheduled payment date is used is omitted.</param>
+		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Current loan earned interest.</returns>
-		public virtual decimal CalculateEarnedInterest() {
-			return 0;
+		public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate, bool writeToLog = true) {
+			WorkingModel.ValidateSchedule();
+
+			DateTime firstDay = (startDate ?? WorkingModel.LoanIssueTime).Date;
+
+			DateTime lastDay = (endDate ?? WorkingModel.LastScheduledDate).Date;
+
+			DailyLoanStatus days = CreateActualDailyLoanStatus(lastDay);
+
+			decimal earnedInterest = days.Days
+				.Where(odls => firstDay <= odls.Date && odls.Date <= lastDay)
+				.Sum(odls => odls.DailyInterest);
+
+			if (writeToLog) {
+				AddScheduleNotes(days);
+				AddPaymentNotes(days);
+				days.AddNote(firstDay, "First earned interest period date.");
+				days.AddNote(lastDay, "Last earned interest period date.");
+
+				Library.Instance.Log.Debug(
+					"\n\nLoanCalculator.CalculateEarnedInterest - begin:" +
+					"\n\nLoan calculator model:\n{0}" +
+					"\n\nEarned interest between {3} and {4}:\n\t\t{1}" +
+					"\n\nDaily data:\n{2}" +
+					"\n\nLoanCalculator.CalculateEarnedInterest - end." +
+					"\n\n",
+					WorkingModel,
+					string.Join("\n\t\t", earnedInterest.ToString("C2", Library.Instance.Culture)),
+					days.ToFormattedString("\t\t"),
+					firstDay.DateStr(),
+					lastDay.DateStr()
+				);
+			} // if
+
+			return earnedInterest;
 		} // CalculateEarnedInterest
 
 		public virtual LoanCalculatorModel WorkingModel { get; private set; }
@@ -252,12 +284,7 @@
 
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		private DailyLoanStatus CreateActualDailyLoanStatus(DateTime now) {
-			if (WorkingModel.Schedule.Count < 1)
-				throw new Exception("No loan schedule found.");
-
-			for (int i = 0; i < WorkingModel.Schedule.Count; i++)
-				if (WorkingModel.Schedule[i].Date == null)
-					throw new Exception("No date specified for scheduled payment #" + (i + 1));
+			WorkingModel.ValidateSchedule();
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
@@ -371,5 +398,16 @@
 				);
 			} // for each
 		} // AddPaymentNotes
+
+		private void AddFeeNotes(DailyLoanStatus days) {
+			for(int i = 0; i < WorkingModel.Fees.Count; i++) {
+				var fee = WorkingModel.Fees[i];
+
+				days.AddNote(
+					fee.AssignDate,
+					"Fee assigned: " + fee.Amount.ToString("C2", Library.Instance.Culture)
+				);
+			} // for each
+		} // AddFeeNotes
 	} // class LoanCalculator
 } // namespace

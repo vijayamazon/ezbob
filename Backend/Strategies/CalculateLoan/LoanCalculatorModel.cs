@@ -22,6 +22,15 @@
 			FreezePeriods = new InterestFreezePeriods();
 		} // constructor
 
+		public void ValidateSchedule() {
+			if (Schedule.Count < 1)
+				throw new Exception("No loan schedule found.");
+
+			for (int i = 0; i < Schedule.Count; i++)
+				if (Schedule[i].Date == null)
+					throw new Exception("No date specified for scheduled payment #" + (i + 1));
+		} // ValidateSchedule
+
 		public void SetDiscountPlan(params decimal[] deltas) {
 			DiscountPlan.Clear();
 			DiscountPlan.AddRange(deltas);
@@ -111,6 +120,16 @@
 		} // ToString
 
 		public DateTime LoanIssueTime { get; set; }
+
+		public DateTime LastScheduledDate {
+			get {
+				ValidateSchedule();
+
+				// ReSharper disable once PossibleInvalidOperationException
+				// ValidateSchedule() eliminates arriving to this point if there are NULLs.
+				return Schedule.Last().Date.Value.Date;
+			} // get
+		} // LastScheduledDate
 
 		public int RepaymentCount {
 			get { return this.repaymentCount; }

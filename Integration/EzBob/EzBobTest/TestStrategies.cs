@@ -624,6 +624,11 @@
 			// Assert.Less(Math.Abs(balance - 1149.96m), 0.01m);
 
 			balance = lc.CalculateBalance(new DateTime(2015, 5, 19, 0, 0, 0, DateTimeKind.Utc));
+
+			balance = lc.CalculateEarnedInterest(
+				new DateTime(2015, 2, 10, 0, 0, 0, DateTimeKind.Utc),
+				new DateTime(2015, 3, 19, 0, 0, 0, DateTimeKind.Utc)
+			);
 		} // TestLoanCalculator
 	}
 }
