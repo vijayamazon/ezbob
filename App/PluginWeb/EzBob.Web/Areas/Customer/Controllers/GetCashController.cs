@@ -187,8 +187,8 @@
 				ValidateCustomerName(customer, cus);
 
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
-				var defaultAccount = payPointAccountRepository.GetDefaultAccount();
-				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, defaultAccount);
+
+				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
 				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
 

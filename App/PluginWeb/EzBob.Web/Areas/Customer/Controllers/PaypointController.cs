@@ -118,8 +118,8 @@
 
 			if (string.IsNullOrEmpty(customer))
 				customer = customerContext.PersonalInfo.Fullname;
-			var account = payPointAccountRepository.GetDefaultAccount();
-			customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer, account);
+
+			customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
 			var confirmation = new PaymentConfirmationModel {
 				amount = amount.Value.ToString(CultureInfo.InvariantCulture),

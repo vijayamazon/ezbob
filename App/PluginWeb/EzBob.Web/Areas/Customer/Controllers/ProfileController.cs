@@ -265,8 +265,7 @@
 			if (!payPointFacade.CheckHash(hash, Request.Url))
 				return View(new { error = "Failed to add debit card" });
 			
-			var defaultPaypointAccount = payPointAccountRepository.GetDefaultAccount();
-			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname, defaultPaypointAccount);
+			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname, payPointFacade.PayPointAccount);
 			
 			return View(new { success = true });
 		} // PayPointCallback
