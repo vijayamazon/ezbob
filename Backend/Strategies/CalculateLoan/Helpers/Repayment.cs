@@ -12,9 +12,9 @@
 
 		public DateTime Time { get; private set; }
 
-		public decimal Amount {
-			get { return Principal + Interest + Fees; }
-		} // Amount
+		public DateTime Date { get { return Time.Date; } }
+
+		public decimal Amount { get { return Principal + Interest + Fees; } }
 
 		public decimal Principal { get; set; }
 		public decimal Interest { get; set; }

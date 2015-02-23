@@ -1,9 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
 	using System;
-	using Ezbob.Backend.Strategies.CalculateLoan.DailyInterestRate;
 
 	public class BankLikeLoanCalculator : ALoanCalculator {
-		public BankLikeLoanCalculator(LoanCalculatorModel model) : base(model, new BankLikeInterestRate()) {
+		public BankLikeLoanCalculator(LoanCalculatorModel model) : base(model) {
 		} // constructor
 
 		/// <summary>
@@ -17,5 +16,14 @@
 				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
 				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
 		} // AddPeriods
+
+		protected override decimal CalculateDailyInterestRate(
+			DateTime currentDate,
+			decimal monthlyInterestRate,
+			DateTime? periodStartDate = null,
+			DateTime? periodEndDate = null
+		) {
+			return monthlyInterestRate * 12.0m / 365.0m;
+		} // CalculateDailyInterestRate
 	} // class BankLikeCalculator
 } // namespace

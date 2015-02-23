@@ -87,10 +87,7 @@
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
-    <Compile Include="CalculateLoan\DailyInterestRate\ADailyInterestRate.cs" />
     <Compile Include="CalculateLoan\Helpers\BadPeriods.cs" />
-    <Compile Include="CalculateLoan\DailyInterestRate\BankLikeInterestRate.cs" />
-    <Compile Include="CalculateLoan\DailyInterestRate\LegacyInterestRate.cs" />
     <Compile Include="CalculateLoan\Helpers\DailyLoanStatus.cs" />
     <Compile Include="CalculateLoan\BankLikeLoanCalculator.cs" />
     <Compile Include="CalculateLoan\LegacyLoanCalculator.cs" />

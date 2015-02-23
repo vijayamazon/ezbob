@@ -8,6 +8,8 @@
 			Amount = amount;
 		} // constructor
 
+		public DateTime AssignDate { get { return AssignTime.Date; } }
+
 		public DateTime AssignTime { get; private set; }
 		public decimal Amount { get; private set; }
 

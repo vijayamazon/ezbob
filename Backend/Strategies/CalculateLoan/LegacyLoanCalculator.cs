@@ -1,9 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
 	using System;
-	using Ezbob.Backend.Strategies.CalculateLoan.DailyInterestRate;
 
 	public class LegacyLoanCalculator : ALoanCalculator {
-		public LegacyLoanCalculator(LoanCalculatorModel model) : base(model, new LegacyInterestRate()) {
+		public LegacyLoanCalculator(LoanCalculatorModel model) : base(model) {
 		} // constructor
 
 		/// <summary>
@@ -15,5 +14,23 @@
 		protected override DateTime AddPeriods(int periodCount) {
 			return WorkingModel.LoanIssueTime.AddMonths(periodCount);
 		} // AddPeriods
+
+		protected override decimal CalculateDailyInterestRate(
+			DateTime currentDate,
+			decimal monthlyInterestRate,
+			DateTime? periodStartDate = null,
+			DateTime? periodEndDate = null
+		) {
+			if (periodEndDate == null) {
+				throw new ArgumentNullException(
+					"periodEndDate",
+					"Legacy daily interest rate calculator requires period end date."
+				);
+			} // if
+
+			DateTime d = periodEndDate.Value.AddMonths(-1);
+
+			return monthlyInterestRate / DateTime.DaysInMonth(d.Year, d.Month);
+		} // CalculateDailyInterestRate
 	} // class LegacyLoanCalculator
 } // namespace
