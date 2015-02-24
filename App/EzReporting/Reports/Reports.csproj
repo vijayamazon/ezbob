@@ -33,10 +33,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DropNet, Version=1.9.12.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\Lib\3rdparty\DropNet\DropNet\bin\Debug\DropNet.dll</HintPath>
-    </Reference>
     <Reference Include="EPPlus, Version=3.1.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
@@ -165,6 +161,10 @@
     <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Lib\3rdparty\DropNet\DropNet\DropNet.csproj">
+      <Project>{e9580efc-6014-4d3b-82a8-5f6d57213ce4}</Project>
+      <Name>DropNet</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
