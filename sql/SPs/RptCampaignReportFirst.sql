@@ -101,18 +101,18 @@ BEGIN
 	-- total
 
 	SELECT
-		A.Source, 
-		A.Medium,
-		A.Term,
-		A.Name,
-		A.Registrations,
-		A.Personal,
-		A.Company,
-		A.DataSources,
-		A.Applications, 
-		A.NumOfApproved, 
-		A.NumOfRejected, 
-		A.RequestedAmount,
+		CASE WHEN A.Source IS NULL THEN B.Source ELSE A.Source END AS Source, 
+		CASE WHEN A.Medium IS NULL THEN B.Medium ELSE A.Medium END AS Medium, 
+		CASE WHEN A.Term IS NULL THEN B.Term ELSE A.Term END AS Term, 
+		CASE WHEN A.Name IS NULL THEN B.Name ELSE A.Name END AS Name, 
+		isnull(A.Registrations, 0) Registrations,
+		isnull(A.Personal, 0) Personal,
+		isnull(A.Company, 0) Company,
+		isnull(A.DataSources, 0) DataSources,
+		isnull(A.Applications, 0) Applications, 
+		isnull(A.NumOfApproved, 0) NumOfApproved, 
+		isnull(A.NumOfRejected, 0) NumOfRejected, 
+		isnull(A.RequestedAmount, 0) RequestedAmount,
 		isnull(B.NumOfLoans,0) AS NumOfLoans, 
 		isnull(B.LoanAmount,0) AS LoanAmount
 		
@@ -127,7 +127,6 @@ BEGIN
 			(A.Name = B.Name OR (A.Name IS NULL AND B.Name IS NULL))
 			AND 
 			(A.Term = B.Term OR (A.Term IS NULL AND B.Term IS NULL))
-	WHERE A.Registrations IS NOT NULL
   	
 	DROP TABLE #temp2
 	DROP TABLE #temp1
