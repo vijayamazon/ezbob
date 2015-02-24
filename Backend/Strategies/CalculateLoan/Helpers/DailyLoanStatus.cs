@@ -28,6 +28,10 @@
 			Dates[odls.Date] = odls;
 		} // Add
 
+		public bool Contains(DateTime dt) {
+			return Dates.ContainsKey(dt.Date);
+		} // Contains
+
 		public IEnumerable<OneDayLoanStatus> Days {
 			get { return Dates.Values; }
 		} // Days

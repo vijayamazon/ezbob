@@ -589,6 +589,7 @@
 
 		[Test]
 		public void TestLoanCalculator() {
+			/*
 			var lcm = new LoanCalculatorModel {
 				LoanAmount = 1200,
 				LoanIssueTime = new DateTime(2015, 1, 31, 14, 15, 16, DateTimeKind.Utc),
@@ -629,6 +630,30 @@
 				new DateTime(2015, 2, 10, 0, 0, 0, DateTimeKind.Utc),
 				new DateTime(2015, 3, 19, 0, 0, 0, DateTimeKind.Utc)
 			);
+			*/
+
+			var lcm = new LoanCalculatorModel {
+				LoanAmount = 53000,
+				LoanIssueTime = new DateTime(2014, 11, 21, 11, 40, 15, DateTimeKind.Utc),
+				RepaymentIntervalType = RepaymentIntervalTypes.Month,
+				RepaymentCount = 12,
+				MonthlyInterestRate = 0.033m,
+			};
+
+			var lc = new LegacyLoanCalculator(lcm);
+
+			lc.CreateSchedule();
+
+			lc.WorkingModel.Schedule.RemoveAt(1);
+
+			this.m_oLog.Debug("Loan calculator model after schedule:\n{0}", lc.WorkingModel);
+
+			lcm.Repayments.Add(new Repayment(new DateTime(2014, 11, 21, 11, 40, 15, DateTimeKind.Utc), 0, 5, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2014, 12, 19, 11, 40, 15, DateTimeKind.Utc), 4540.75m, 1632.25m, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015,  1, 22, 11, 40, 15, DateTimeKind.Utc), 4261.84m, 1757.17m, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015,  2, 18, 11, 40, 15, DateTimeKind.Utc), 4603.11m, 1270.17m, 0));
+
+			lc.CalculateBalance(new DateTime(2015, 1, 22, 12, 0, 0, DateTimeKind.Utc));
 		} // TestLoanCalculator
 	}
 }

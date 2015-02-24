@@ -296,6 +296,8 @@
 			// Open principal is equal to full loan amount.
 			// Daily interest is 0 at this point.
 
+			days.Add(new OneDayLoanStatus(WorkingModel.LoanIssueTime, 0));
+
 			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
 				days.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount));
 
@@ -365,10 +367,18 @@
 			for (var i = 0; i < WorkingModel.Repayments.Count; i++) {
 				Repayment rp = WorkingModel.Repayments[i];
 
-				foreach (OneDayLoanStatus odls in days.Where(dd => dd.Date >= rp.Date))
+				foreach (OneDayLoanStatus odls in days.Where(dd => dd.Date > rp.Date))
 					odls.OpenPrincipal -= rp.Principal;
 
-				days[rp.Date].AddRepayment(rp);
+				if (days.Contains(rp.Date))
+					days[rp.Date].AddRepayment(rp);
+				else {
+					Library.Instance.Log.Alert(
+						"days list ain't no contains repayment date {0} for model {1}",
+						rp.Date,
+						WorkingModel
+					);
+				} // if
 			} // for
 
 			return days;
