@@ -384,6 +384,7 @@
             var finishedWizard = @wizardComplete;
 
             if (finishedWizard === true) {
+                dataLayer.push({'event': 'finished-wizard'});
                 var oDialog = $('#thankyou_help');
                 if (oDialog.length > 0)
                     $.colorbox({ inline: true, transition: 'elastic',href: oDialog, open: true, show: true, width: 600, scrolling: false });
