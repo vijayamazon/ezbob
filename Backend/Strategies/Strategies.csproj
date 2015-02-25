@@ -124,6 +124,9 @@
     <Compile Include="Experian\UpdateCustomerAnalyticsOnCompanyChange.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
+    <Compile Include="ExternalAPI\Alibaba\ParseSale.cs" />
+    <Compile Include="ExternalAPI\AvaliableCredit.cs" />
+    <Compile Include="ExternalAPI\RequalifyCustomer.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="CalculateLoan\ALoanCalculator.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
@@ -396,6 +399,10 @@
     <ProjectReference Include="..\..\App\EzReporting\Reports\Reports.csproj">
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
       <Name>Reports</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
+      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
+      <Name>EzServiceClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>

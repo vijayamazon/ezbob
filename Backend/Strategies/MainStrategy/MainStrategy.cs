@@ -35,6 +35,7 @@
 			int avoidAutoDecision,
 			FinishWizardArgs fwa
 		) {
+			
 			this.finishWizardArgs = fwa;
 
 			this._session = ObjectFactory.GetInstance<ISession>();
@@ -714,5 +715,11 @@
 		private bool overrideApprovedRejected;
 
 		private bool wasMainStrategyExecutedBefore;
+
+		public AutoDecisionResponse AutoDecisionResponse {
+			get { return this.autoDecisionResponse; }
+		//	set { this.autoDecisionResponse = value; }
+		}
+
 	} // class MainStrategy
 } // namespace

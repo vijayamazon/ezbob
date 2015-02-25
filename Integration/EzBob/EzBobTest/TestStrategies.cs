@@ -12,6 +12,7 @@
 	using Ezbob.Backend.Strategies.CalculateLoan;
 	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
@@ -30,6 +31,7 @@
 	using NUnit.Framework;
 	using StructureMap;
 	using Twilio;
+	using EZBob.DatabaseLib.Model.Database;
 
 	[TestFixture]
 	public class TestStrategies : BaseTestFixtue {
@@ -588,6 +590,21 @@
 			let0.LotteryEnlistingTypeStr = "MinCountAndMaxAmount";
 		} // TestLotteryEnlistingType
 
+
+		[Test]
+		public void RequalifyCustomer() {
+			var s = new RequalifyCustomer("caroles@ezbob.com.test.test");
+			s.Execute();
+			Console.WriteLine(s.Result);
+		}
+
+
+		[Test]
+		public void AvailableCredit() {
+			var s = new AvaliableCredit("caroles@ezbob.com.test.test");
+			s.Execute();
+			Console.WriteLine(s.Result.ToString());
+		}
 		[Test]
 		public void TestLoanCalculator() {
 			/*

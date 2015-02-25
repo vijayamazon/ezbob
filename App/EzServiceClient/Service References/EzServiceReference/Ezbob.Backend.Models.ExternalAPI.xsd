@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="AvailableCreditResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AliId" type="xs:int" />
+      <xs:element minOccurs="0" name="AlibabaId" type="xs:int" />
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerEmail" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="Decision" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DecisionDate" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OfferStart" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="OfferValidUntil" type="xs:dateTime" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AvailableCreditResult" nillable="true" type="tns:AvailableCreditResult" />
+</xs:schema>

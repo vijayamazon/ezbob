@@ -158,5 +158,19 @@
 			return new DateTime(months.Year, months.Month, 1, 0, 0, 0, DateTimeKind.Utc);
 		} // GetPeriodAgo
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="raw"></param>
+		/// <returns></returns>
+		public static string ByteArr2Hex(byte[] raw) {
+			string hex = null;
+			if (raw != null) {
+				hex = BitConverter.ToString(raw);
+				hex = (hex.Replace("-", "")).ToLower();
+			}
+			return hex;
+		}
+
 	} // class MiscUtils
 } // namespace

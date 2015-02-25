@@ -61,6 +61,7 @@
     <Compile Include="CompanyData.cs" />
     <Compile Include="CompanyCaisAccount.cs" />
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
+    <Compile Include="ExternalAPI\AvailableCreditResult.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="PropertyStatusModel.cs" />
     <Compile Include="CustomerDetailsModel.cs" />

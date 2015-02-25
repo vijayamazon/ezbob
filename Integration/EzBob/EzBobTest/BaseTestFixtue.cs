@@ -10,6 +10,7 @@
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Ezbob.RegistryScanner;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
 	using NHibernate;
@@ -20,6 +21,8 @@
 	using StructureMap;
 	using StructureMap.Pipeline;
 	using YodleeLib.connector;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Model.Loans;
 
 	[TestFixture]
 	public class BaseTestFixtue {
@@ -45,6 +48,10 @@
 				 .Use(ctx => NHibernateManager.SessionFactory.OpenSession());
 
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
+				x.For<ICustomerRepository>().Use<CustomerRepository>();
+				x.For<ILoanTypeRepository>().Use<LoanTypeRepository>();
+				x.For<ILoanSourceRepository>().Use<LoanSourceRepository>();
+				x.For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
 			});
 
 			var oLog4NetCfg = new Log4Net().Init();

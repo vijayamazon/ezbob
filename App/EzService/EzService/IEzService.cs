@@ -8,12 +8,14 @@
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
-	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database;
+	using EzService.ActionResults;
 	using SalesForceLib.Models;
+
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
+	
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
 
@@ -739,5 +741,12 @@
 
 		[OperationContract]
 		ActionMetaData EnlistLottery(int customerID);
+
+		[OperationContract]
+		AvailableCreditActionResult AvailableCredit(string customerEmail);
+
+		[OperationContract]
+		string RequalifyCustomer(string customerEmail);
+
 	} // interface IEzService
 } // namespace EzService

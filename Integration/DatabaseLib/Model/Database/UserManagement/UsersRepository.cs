@@ -1,7 +1,7 @@
 namespace EZBob.DatabaseLib.Model.Database.UserManagement {
+	using System;
 	using ApplicationMng.Repository;
 	using NHibernate;
-	using NHibernate.Criterion;
 	using NHibernate.Linq;
 	using System.Linq;
 
@@ -50,6 +50,16 @@ namespace EZBob.DatabaseLib.Model.Database.UserManagement {
 
 		public void Refresh(User user) {
 			Session.Refresh(user);
+		}
+
+		public int GetCustomerIdByEmail(string email) {
+			var checkUser =  GetAll().Where(x => x.EMail.Equals(email));
+			var user = checkUser.FirstOrDefault();
+			if (user != null) {
+				Console.WriteLine("userID: {0}", user.Id);
+				return user.Id;
+			}
+			return 0;
 		}
 	}
 }

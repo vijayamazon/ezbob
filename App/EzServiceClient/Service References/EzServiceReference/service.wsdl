@@ -73,6 +73,7 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
@@ -234,6 +235,18 @@
   </wsdl:message>
   <wsdl:message name="IEzService_EnlistLottery_OutputMessage">
     <wsdl:part name="parameters" element="tns:EnlistLotteryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AvailableCredit_InputMessage">
+    <wsdl:part name="parameters" element="tns:AvailableCredit" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AvailableCredit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AvailableCreditResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RequalifyCustomer_InputMessage">
+    <wsdl:part name="parameters" element="tns:RequalifyCustomer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_RequalifyCustomer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RequalifyCustomerResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyFile" />
@@ -1358,6 +1371,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EnlistLottery" message="tns:IEzService_EnlistLottery_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EnlistLotteryResponse" message="tns:IEzService_EnlistLottery_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="AvailableCredit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AvailableCredit" message="tns:IEzService_AvailableCredit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AvailableCreditResponse" message="tns:IEzService_AvailableCredit_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="RequalifyCustomer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomer" message="tns:IEzService_RequalifyCustomer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomerResponse" message="tns:IEzService_RequalifyCustomer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyFile">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
@@ -2266,6 +2287,24 @@
     </wsdl:operation>
     <wsdl:operation name="EnlistLottery">
       <soap12:operation soapAction="http://tempuri.org/IEzService/EnlistLottery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AvailableCredit">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/AvailableCredit" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="RequalifyCustomer">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/RequalifyCustomer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3806,20 +3845,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

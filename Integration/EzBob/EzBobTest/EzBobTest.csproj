@@ -81,6 +81,8 @@
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Data" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Xml" />
     <Reference Include="Twilio.Api, Version=3.4.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -97,6 +99,7 @@
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="PayPalTest.cs" />
+    <Compile Include="TestAlibaba.cs" />
     <Compile Include="TestMedal.cs" />
     <Compile Include="TestOffer.cs" />
     <Compile Include="Misc.cs" />
@@ -141,6 +144,10 @@
     <ProjectReference Include="..\..\..\backend\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\EzbobAPI\EzbobAPI.csproj">
+      <Project>{AA027EB4-4FE1-4236-ACC2-B4F9A0A8CA18}</Project>
+      <Name>EzbobAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
       <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
@@ -246,6 +253,10 @@
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\GoCardlessLib\GoCardlessSdk\GoCardlessSdk.csproj">
+      <Project>{36CDA1FB-4093-41ED-9879-CD18EFCCE80B}</Project>
+      <Name>GoCardlessSdk</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
@@ -276,7 +287,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\..\connection-strings.xml">

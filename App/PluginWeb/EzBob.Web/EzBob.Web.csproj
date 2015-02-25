@@ -452,6 +452,7 @@
   <ItemGroup>
     <None Include="..\..\..\connection-strings.xml">
       <Link>connection-strings.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <Content Include="Content\css\adminlogin.css" />
     <Content Include="Content\css\broker.css" />

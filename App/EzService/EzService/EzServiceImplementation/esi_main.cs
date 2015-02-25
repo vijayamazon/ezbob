@@ -196,6 +196,16 @@
 			return ExecuteSync(out oInstance, nCustomerID, nUserID, args);
 		} // ExecuteSync
 
+		/// <summary>
+		/// 
+		/// 
+		/// </summary>
+		/// <typeparam name="T">type of Strategy to execute</typeparam>
+		/// <param name="oInstance">output instance of executed strategy</param>
+		/// <param name="nCustomerID">customer ID nullable</param>
+		/// <param name="nUserID">underwriterID, nullable</param>
+		/// <param name="args">Strategy constructor parameters</param>
+		/// <returns></returns>
 		private ActionMetaData ExecuteSync<T>(out T oInstance, int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
 			return ExecuteSync(out oInstance, new ExecuteArguments(args) { CustomerID = nCustomerID, UserID = nUserID, });
 		} // ExecuteSync

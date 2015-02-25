@@ -5,6 +5,7 @@
 	using NHibernateWrapper.NHibernate;
 	using Ezbob.RegistryScanner;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
 	using ServiceClientProxy;
 	using StructureMap;
@@ -28,6 +29,9 @@
 				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 				x.For<ILoanTransactionMethodRepository>().Use<LoanTransactionMethodRepository>();
 				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
+
+				x.For<ICustomerRepository>().Use<CustomerRepository>();
+
 			});
 
 			try {

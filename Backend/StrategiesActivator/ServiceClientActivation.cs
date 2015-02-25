@@ -1329,6 +1329,32 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			serviceClient.XDaysDue();
 		}
 
+
+		[Activation]
+		private void RequalifyCustomer() {
+			string email;
+			if (cmdLineArgs.Length != 2 ) {
+				log.Msg("Usage: RequalifyCustomer <CustomerEmail>");
+				return;
+			}
+			email = cmdLineArgs[1];
+			var result = serviceClient.RequalifyCustomer(email);
+			//log.Debug("blablabla: {0}", result.ToString());
+		}
+
+
+		[Activation]
+		private void AvailableCredit() {
+			string email;
+			if (cmdLineArgs.Length < 2) {
+				log.Msg("Usage: AvailableCredit <CustomerEmail>");  // AvailableCredit "toby@jendens.com.test.test" //"2405kennedy@googlemail.com.test.test"
+				return;
+			}
+			email = cmdLineArgs[1];
+			AvailableCreditActionResult result = serviceClient.AvailableCredit(email);
+			log.Debug("blablabla: {0}",  result.Result.ToString());
+		}
+
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;
 		private readonly ASafeLog log;
