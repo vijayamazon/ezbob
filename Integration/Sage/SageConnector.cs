@@ -149,6 +149,7 @@
 
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage) {
 			var request = new RestRequest(Method.POST) { Resource = config.OAuthTokenRequestPath, };
+
 			request.AddHeader("Accept", "application / json");
 
 			request.AddParameter("grant_type", "authorization_code");
@@ -164,7 +165,6 @@
 
 			try {
 				IRestResponse response = client.Execute(request);
-
 				if (response != null) {
 					if (response.StatusCode != HttpStatusCode.OK) {
 						log.Error(
@@ -200,9 +200,11 @@
 						response.Content
 					);
 
+
 					throw new Exception("Failed getting token but parsing didn't threw exception");
 				} // if
 			} catch (Exception e) {
+				log.Error("SageOne response to token request is null.");
 				errorMessage = "Failure getting access token";
 				log.Warn(e, "{0}", errorMessage);
 			} // try

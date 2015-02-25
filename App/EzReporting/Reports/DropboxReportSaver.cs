@@ -88,7 +88,7 @@
 
 			Debug("Sending {0} report to Dropbox...", sReportName);
 
-			var client = new DropNetClient(m_sAppKey, m_sAppSecret, m_sUserKey, m_sUserSecret);
+			var client = new DropNetClient(m_sAppKey, m_sAppSecret, m_sUserKey, m_sUserSecret, null);
 
 			string sDir = m_sRootPath + "/" + sReportName.Replace(" ", "_");
 
@@ -103,8 +103,8 @@
 				}
 				catch (DropboxException e) {
 					Warn("Exception caught: {0}", e.Message);
-					Warn("Status code: {0}", e.StatusCode.ToString());
-					Warn("Response: {0}", e.Response.Content);
+					// Warn("Status code: {0}", e.StatusCode.ToString());
+					// Warn("Response: {0}", e.Response.Content);
 
 					if (i < nRetryCount)
 						Debug("Retrying to look for the target directory.");
@@ -119,8 +119,8 @@
 				}
 				catch (DropboxException e) {
 					Warn("Exception caught: {0}", e.Message);
-					Warn("Status code: {0}", e.StatusCode.ToString());
-					Warn("Response: {0}", e.Response.Content);
+					// Warn("Status code: {0}", e.StatusCode.ToString());
+					// Warn("Response: {0}", e.Response.Content);
 				} // try
 			}
 			else

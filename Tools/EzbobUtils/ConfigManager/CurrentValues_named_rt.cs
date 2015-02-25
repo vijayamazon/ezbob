@@ -252,6 +252,10 @@
 			get { return this[Variables.TotalTimeToWaitForMarketplacesUpdate]; }
 		}
 
+		public virtual VariableValue TotalsMonthTail {
+			get { return this[Variables.TotalsMonthTail]; }
+		}
+
 		public virtual VariableValue TradeTrackerPixelEnabled {
 			get { return this[Variables.TradeTrackerPixelEnabled]; }
 		}

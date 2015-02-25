@@ -18,7 +18,6 @@
 				SetTemplateAndVariables();
 				Log.Debug("Setting template and variables complete.");
 
-
 				if (SendToCustomer && CustomerData.Origin == "everline") {
 					Log.Debug("Customer's origin is everline adding EVL to template name");
 					TemplateName = string.Format("EVL {0}", TemplateName);

@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using DbConstants;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;

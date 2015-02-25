@@ -55,8 +55,32 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		'blur #signedName': 'showSubmit',
 		'keyup #signedName': 'showSubmit',
 		'paste #signedName': 'showSubmit',
-		'click .print': 'print'
+		'click .print': 'print',
+		'change .notInBankruptcy': 'notInBankruptcyChange',
 	}, // events
+
+	notInBankruptcyChange: function() {
+		var isChecked = !!this.$el.find('.notInBankruptcy').attr('checked');
+
+		if (isChecked) {
+			EzBob.ShowMessageEx({
+				message: this.$el.find('.loan-disclosure-text').html(),
+				dialogWidth: 600,
+				hideClose: true,
+				okText: 'Confirm',
+				closeOnEscape: false,
+				onOk: _.bind(this.onDisclosureClosed, this),
+			});
+		} else {
+			this.$el.find('.sign-full-name').hide();
+			this.showSubmit();
+		} // if
+	}, // notInBankruptcyChange
+
+	onDisclosureClosed: function() {
+		this.$el.find('.sign-full-name').show();
+		this.showSubmit();
+	}, // onDisclosureClosed
 
 	ui: {
 		submit: '.submit',
@@ -141,7 +165,11 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	}, // renderSchedule
 
 	neededCashChanged: function(reloadSelectedOnly) {
-		this.$el.find('.preAgreementTermsRead, .agreementTermsRead, .euAgreementTermsRead, .cosmeAgreementTermsRead').prop('checked', false);
+		this.$el.find(
+			'.preAgreementTermsRead, .agreementTermsRead, .euAgreementTermsRead, .cosmeAgreementTermsRead, .notInBankruptcy'
+		).prop('checked', false);
+
+		this.$el.find('.sign-full-name').hide();
 
 		var value = this.model.get('neededCash');
 
