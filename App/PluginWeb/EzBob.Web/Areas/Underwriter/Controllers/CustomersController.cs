@@ -437,6 +437,7 @@
 				customer.IsWaitingForSignature = model.signature == 1;
 				customer.CreditResult = CreditResultStatus.ApprovedPending;
 				customer.PendingStatus = PendingStatus.Manual;
+				customer.ManagerApprovedSum = request.ApprovedSum();
 				_historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
 
 				stage = model.signature == 1 ? (int)OpportunityStage.s75 : (int)OpportunityStage.s50; //TODO define stages for pending and signature

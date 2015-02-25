@@ -24,7 +24,9 @@ BEGIN
 		ISNULL(c.Fullname, '') AS FullName,
 		c.Name AS Email,
 		w.WizardStepTypeDescription AS WizardStep,
-		c.SystemCalculatedSum AS CalcAmount,
+		( 
+			CASE WHEN c.ManagerApprovedSum > 0 THEN c.ManagerApprovedSum ELSE c.SystemCalculatedSum END
+		) AS CalcAmount,
 		(
 			CASE c.IsOffline WHEN 1 THEN 'Offline' WHEN 0 THEN 'Online' ELSE '' END
 		) AS SegmentType,
@@ -88,4 +90,6 @@ BEGIN
 		c.Id DESC,
 		t.Id
 END
+
 GO
+

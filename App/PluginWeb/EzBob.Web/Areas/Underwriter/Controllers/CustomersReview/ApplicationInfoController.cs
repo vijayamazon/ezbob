@@ -127,7 +127,9 @@
 			_limit.Check(amount);
 			var cr = _cashRequestsRepository.Get(id);
 			int step = CurrentValues.Instance.GetCashSliderStep;
-			cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
+			int sum = (int)Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
+			cr.ManagerApprovedSum = sum;
+			cr.Customer.ManagerApprovedSum = sum;
 			cr.LoanTemplate = null;
 			_cashRequestsRepository.SaveOrUpdate(cr);
 
@@ -566,8 +568,9 @@
 			cr.LoanType = loanT;
 
 			int step = CurrentValues.Instance.GetCashSliderStep;
+			int sum = (int)Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
+			cr.ManagerApprovedSum = sum;
 
-			cr.ManagerApprovedSum = cr.ManagerApprovedSum = Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
 			cr.InterestRate = interestRate;
 			cr.RepaymentPeriod = repaymentPeriod;
 			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
@@ -587,7 +590,7 @@
 			Customer c = cr.Customer;
 			c.OfferStart = cr.OfferStart;
 			c.OfferValidUntil = cr.OfferValidUntil;
-
+			c.ManagerApprovedSum = sum;
 			_cashRequestsRepository.SaveOrUpdate(cr);
 			_customerRepository.SaveOrUpdate(c);
 
