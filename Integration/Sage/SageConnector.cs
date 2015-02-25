@@ -150,7 +150,7 @@
 		public static AccessTokenContainer GetToken(string code, string redirectVal, out string errorMessage) {
 			var request = new RestRequest(Method.POST) { Resource = config.OAuthTokenRequestPath, };
 
-			request.AddHeader("Accept", "application / json");
+			request.AddHeader("Accept", "application/json");
 
 			request.AddParameter("grant_type", "authorization_code");
 			request.AddParameter("scope", string.Empty);
@@ -199,7 +199,6 @@
 						request.Resource,
 						response.Content
 					);
-
 
 					throw new Exception("Failed getting token but parsing didn't threw exception");
 				} // if

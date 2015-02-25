@@ -656,7 +656,6 @@
 
 			lc.CalculateBalance(new DateTime(2015, 1, 22, 12, 0, 0, DateTimeKind.Utc));
 		} // TestLoanCalculator
-		}
 
 		[Test]
 		public void TestGetSmsDetails() {
