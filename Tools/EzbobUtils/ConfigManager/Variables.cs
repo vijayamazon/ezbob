@@ -395,6 +395,7 @@ namespace ConfigManager {
 		TotalTimeToWaitForExperianCompanyCheck,
 		TotalTimeToWaitForExperianConsumerCheck,
 		TotalTimeToWaitForMarketplacesUpdate,
+		TotalsMonthTail,
 		TradeTrackerPixelEnabled,
 		TrustPilotBccMail,
 		TrustPilotReviewEnabled,

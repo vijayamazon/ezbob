@@ -1015,7 +1015,7 @@
 				return null;
 
 			DateTime lastUpdateDate = (DateTime)lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-			DateTime periodStart = MiscUtils.getPeriodAgo(calculationTime, lastUpdateDate);
+			DateTime periodStart = MiscUtils.GetPeriodAgo(calculationTime, lastUpdateDate, CurrentValues.Instance.TotalsMonthTail);
 			DateTime periodEnd = periodStart.AddMonths(11);
 
 			this.log.Info("calculationTime: {2}, lastUpdateDate: {1}, yearAgo: {0}, yearAgoEnd: {3}", periodStart, lastUpdateDate, calculationTime, periodEnd);
