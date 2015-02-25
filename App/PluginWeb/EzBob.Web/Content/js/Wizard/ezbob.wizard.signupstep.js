@@ -303,7 +303,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				EzBob.App.trigger('clear');
 
 				$('body').attr('data-user-name', sEmail);
-
+				$('body').attr('data-ref', result.refNumber);
 				window.ShowHideSignLogOnOff();
 
 				that.model.set('loggedIn', true); // triggers 'ready' and 'next'

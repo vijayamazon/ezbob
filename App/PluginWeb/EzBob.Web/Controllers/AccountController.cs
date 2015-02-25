@@ -444,7 +444,7 @@
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
 
-				return Json(new { success = true, antiforgery_token = AntiForgery.GetHtml().ToString() }, JsonRequestBehavior.AllowGet);
+				return Json(new { success = true, antiforgery_token = AntiForgery.GetHtml().ToString(), refNumber = customer.RefNumber }, JsonRequestBehavior.AllowGet);
 			}
 			catch (Exception e) {
 				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString())
