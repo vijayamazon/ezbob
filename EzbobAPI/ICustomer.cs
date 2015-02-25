@@ -5,7 +5,6 @@ namespace EzbobAPI {
 	using System.Runtime.Serialization;
 	using System.ServiceModel;
 	using System.ServiceModel.Web;
-	using EzService;
 	using Newtonsoft.Json;
 
 	[ServiceContract(Namespace = "https://localhost:12498/2015/02")]

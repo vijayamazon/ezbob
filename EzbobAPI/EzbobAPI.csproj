@@ -116,10 +116,6 @@
       <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
       <Name>EzServiceClient</Name>
     </ProjectReference>
-    <ProjectReference Include="..\App\EzService\EzService\EzService.csproj">
-      <Project>{15B3E0D2-6217-493A-A690-158C497F5318}</Project>
-      <Name>EzService</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Backend\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
       <Name>Ezbob.Backend.Models</Name>

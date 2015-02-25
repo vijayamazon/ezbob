@@ -146,7 +146,7 @@
       <Name>Strategies</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\EzbobAPI\EzbobAPI.csproj">
-      <Project>{AA027EB4-4FE1-4236-ACC2-B4F9A0A8CA18}</Project>
+      <Project>{aa027eb4-4fe1-4236-acc2-b4f9a0a8ca18}</Project>
       <Name>EzbobAPI</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
@@ -252,10 +252,6 @@
     <ProjectReference Include="..\..\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\GoCardlessLib\GoCardlessSdk\GoCardlessSdk.csproj">
-      <Project>{36CDA1FB-4093-41ED-9879-CD18EFCCE80B}</Project>
-      <Name>GoCardlessSdk</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
