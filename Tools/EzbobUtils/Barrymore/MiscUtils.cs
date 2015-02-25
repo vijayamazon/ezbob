@@ -142,16 +142,21 @@
 		/// </summary>
 		/// <param name="calculationDate"></param>
 		/// <param name="lastUpdate"></param>
+		/// <param name="tailLength"></param>
 		/// <returns></returns>
-		public static DateTime getPeriodAgo(DateTime calculationDate, DateTime lastUpdate) {
+		public static DateTime GetPeriodAgo(DateTime calculationDate, DateTime lastUpdate, int tailLength) {
 			int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
-			DateTime months = new DateTime();
-			if ((daysInMonth - calculationDate.Date.Day) <= 3 && (daysInMonth - lastUpdate.Date.Day) <= 3 && (calculationDate.Month == lastUpdate.Month && calculationDate.Year == lastUpdate.Year)) {
-				months = calculationDate.AddMonths(-11);
-			} else
-				months = calculationDate.AddMonths(-12);
-			return new DateTime(months.Year, months.Month, 1, 0, 0, 0);
-		}
+
+			bool inTheSameTail =
+				((daysInMonth - calculationDate.Date.Day) < tailLength) &&
+				((daysInMonth - lastUpdate.Date.Day) < tailLength) &&
+				(calculationDate.Month == lastUpdate.Month) &&
+				(calculationDate.Year == lastUpdate.Year);
+
+			DateTime months = calculationDate.AddMonths(inTheSameTail ? -11 : -12);
+
+			return new DateTime(months.Year, months.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+		} // GetPeriodAgo
 
 	} // class MiscUtils
 } // namespace
