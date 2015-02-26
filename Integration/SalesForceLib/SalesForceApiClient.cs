@@ -33,7 +33,7 @@
 		}
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
-			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", model.ToStringExtension());
+			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", model.ToJsonExtension());
 			string result;
 			var response = api.LeadAccountService(
 				new SalesForceServiceNS.SessionHeader {
@@ -54,7 +54,7 @@
 		}
 
 		public void CreateOpportunity(OpportunityModel model) {
-			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", model.ToStringExtension());
+			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", model.ToJsonExtension());
 			string result;
 			var response = api.CreateOpportunityService(
 				new SalesForceServiceNS.SessionHeader {
@@ -75,7 +75,7 @@
 		}
 
 		public void UpdateOpportunity(OpportunityModel model) {
-			Log.InfoFormat("SalesForce UpdateOpportunity\n {0}", model.ToStringExtension());
+			Log.InfoFormat("SalesForce UpdateOpportunity\n {0}", model.ToJsonExtension());
 			string result;
 			var response = api.UpdateCloseOpportunityService(
 				new SalesForceServiceNS.SessionHeader {
@@ -96,7 +96,7 @@
 		}
 
 		public void CreateUpdateContact(ContactModel model) {
-			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", model.ToStringExtension());
+			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", model.ToJsonExtension());
 			string result;
 			var response = api.ContactService(
 				new SalesForceServiceNS.SessionHeader {
@@ -117,7 +117,7 @@
 		}
 
 		public void CreateTask(TaskModel model) {
-			Log.InfoFormat("SalesForce CreateTask\n {0}", model.ToStringExtension());
+			Log.InfoFormat("SalesForce CreateTask\n {0}", model.ToJsonExtension());
 			string result = "";
 			var response = api.CreateTask(
 				new SalesForceServiceNS.SessionHeader {
@@ -138,7 +138,7 @@
 		}
 
 		public void CreateActivity(ActivityModel model) {
-			Log.InfoFormat("SalesForce CreateActivity\n {0}", model.ToStringExtension());
+			Log.InfoFormat("SalesForce CreateActivity\n {0}", model.ToJsonExtension());
 			string result = "";
 			var response = api.CreateActivity(
 				new SalesForceServiceNS.SessionHeader {
