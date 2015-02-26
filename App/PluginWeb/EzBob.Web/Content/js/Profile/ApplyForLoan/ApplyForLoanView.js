@@ -41,7 +41,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.isAlibaba = this.customer.get('IsAlibaba');
 		this.isEverline = this.customer.get('Origin') === 'everline';
-
+		this.isEverlineRefinance = this.customer.get('IsEverlineRefinance');
 	}, // initialize
 
 	events: {
@@ -273,7 +273,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 			el: this.ui.agreement,
 			onTabSwitch: _.bind(this.updateDownloadLink, this),
 			isAlibaba: this.isAlibaba,
-			isEverline: this.isEverline
+			isEverline: this.isEverline,
+			isEverlineRefinance: this.isEverlineRefinance
 		};
 
 		if (_.contains([0, 4, 2], this.customer.get('CustomerPersonalInfo').TypeOfBusiness))

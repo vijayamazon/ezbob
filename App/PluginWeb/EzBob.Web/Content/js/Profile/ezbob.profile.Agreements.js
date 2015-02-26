@@ -1,14 +1,30 @@
 var EzBob = EzBob || {};
 EzBob.Profile = EzBob.Profile || {};
 
-EzBob.Profile.AgreementViewBase = Backbone.View.extend({
+EzBob.Profile.AgreementViewBase = Backbone.Marionette.ItemView.extend({
+	
     initialize: function () {
-        this.template = Handlebars.compile($(this.getTemplate(this.options.isAlibaba, this.options.isEverline)).html());
-        this.onTabSwitch = this.options.onTabSwitch;
+    	this.onTabSwitch = this.options.onTabSwitch;
+    	this.template = _.template($(this.getTemplate()).html());
     }, // initialize
-
-    render: function (data) {
-        this.$el.html(this.template(data));
+    getAgreementType: function() {
+	    var type = 'ezbob';
+	    if (this.options.isAlibaba) {
+		    type = 'alibaba';
+	    }
+	    if (this.options.isEverline) {
+		    type = 'everline';
+	    }
+	    if (this.options.isEverlineRefinance) {
+	    	type = 'everlineRefinance';
+	    }
+	    
+	    return type;
+    }, //serializeData
+    render: function(data) {
+    	data.agreementType = this.getAgreementType();
+	    var temp = Handlebars.compile(this.template(data));
+    	this.$el.html(temp(data));
 
         this.addScroll();
 
@@ -32,20 +48,14 @@ EzBob.Profile.AgreementViewBase = Backbone.View.extend({
 }); // EzBob.Profile.AgreementViewBase
 
 EzBob.Profile.CompaniesAgreementView = EzBob.Profile.AgreementViewBase.extend({
-	getTemplate: function(isAlibaba, isEverline) {
-		if (isEverline) {
-			return "#evl-companies-agreement-template";
-		}
-        return isAlibaba ? "#alibaba-companies-agreement-template" : "#companies-agreement-template";
+	getTemplate: function() {
+        return "#companies-agreement-template";
     }, // getTemplate
 }); // EzBob.Profile.CompaniesAgreementView
 
 EzBob.Profile.ConsumersAgreementView = EzBob.Profile.AgreementViewBase.extend({
-	getTemplate: function(isAlibaba, isEverline) {
-		if (isEverline) {
-			return "#evl-consumers-agreement-template";
-		}
-        return isAlibaba ? "#alibaba-consumers-agreement-template" : "#consumers-agreement-template";
+	getTemplate: function() {
+		return "#consumers-agreement-template";
     }, // getTemplate
 
     render: function (data) {

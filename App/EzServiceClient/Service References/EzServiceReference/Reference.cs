@@ -184,8 +184,8 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LotteryActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult))]
@@ -268,6 +268,29 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="StringActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class StringActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="UserLoginActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     public partial class UserLoginActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
@@ -316,29 +339,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.StatusField, value) != true)) {
                     this.StatusField = value;
                     this.RaisePropertyChanged("Status");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="StringActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class StringActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ValueField, value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
                 }
             }
         }
@@ -3038,6 +3038,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
         ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
@@ -3548,6 +3554,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendPendingMails", ReplyAction="http://tempuri.org/IEzService/SendPendingMailsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendPendingMailsAsync(int underwriterId, int customerId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails", ReplyAction="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, System.DateTime now, decimal amount);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails", ReplyAction="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEverlineRefinanceMailsAsync(int customerId, string customerName, System.DateTime now, decimal amount);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SendSms", ReplyAction="http://tempuri.org/IEzService/SendSmsResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
         
@@ -3643,12 +3655,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangeEmail", ReplyAction="http://tempuri.org/IEzService/UserChangeEmailResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
@@ -4218,6 +4224,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
+            return base.Channel.UserChangePassword(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
+            return base.Channel.UserChangePasswordAsync(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
         }
         
         public ServiceClientProxy.EzServiceReference.UserLoginActionResult UserLogin(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
@@ -4900,6 +4914,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SendPendingMailsAsync(underwriterId, customerId);
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, System.DateTime now, decimal amount) {
+            return base.Channel.SendEverlineRefinanceMails(customerId, customerName, now, amount);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SendEverlineRefinanceMailsAsync(int customerId, string customerName, System.DateTime now, decimal amount) {
+            return base.Channel.SendEverlineRefinanceMailsAsync(customerId, customerName, now, amount);
+        }
+        
         public ServiceClientProxy.EzServiceReference.BoolActionResult SendSms(int userId, int underwriterId, string phone, string content) {
             return base.Channel.SendSms(userId, underwriterId, phone, content);
         }
@@ -5026,14 +5048,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail) {
             return base.Channel.UserChangeEmailAsync(underwriterId, nUserID, sNewEmail);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
-            return base.Channel.UserChangePassword(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangePasswordAsync(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
-            return base.Channel.UserChangePasswordAsync(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {

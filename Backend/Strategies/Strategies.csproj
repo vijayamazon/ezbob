@@ -132,6 +132,7 @@
     <Compile Include="MailStrategies\Collection\LateBy14DaysMail.cs" />
     <Compile Include="MailStrategies\PayPointChargerMails.cs" />
     <Compile Include="MailStrategies\AutomationDecsionMails.cs" />
+    <Compile Include="MailStrategies\SendEverlineRefinanceMails.cs" />
     <Compile Include="MailStrategies\XDaysDueMails.cs" />
     <Compile Include="MailStrategies\Collection\CollectionMails.cs" />
     <Compile Include="MailStrategies\EmailEnlistedLottery.cs" />
