@@ -43,6 +43,14 @@
 			var origin = isAlibaba ? "Alibaba" : string.Empty;
 			origin = isEverline ? "EVL" : origin;
 
+			if (isEverline) {
+				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
+				var status = checker.GetLoginStatus(loan.Customer.Name);
+				if (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan) {
+					origin = origin + "Refinance";
+				}
+			}
+
 			string path1;
 			string path2;
 			TemplateModel template;

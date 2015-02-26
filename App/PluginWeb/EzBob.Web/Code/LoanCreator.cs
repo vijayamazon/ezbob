@@ -48,7 +48,7 @@
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1));
 
 			bool isFakeLoanCreate = (card == null);
-
+			bool isEverlineRefinance = ValidateEverlineRefinance(cus);
 			var cr = cus.LastCashRequest;
 
 			var calculator = new SetupFeeCalculator(
@@ -65,15 +65,19 @@
 			PacnetReturnData ret;
 
 			if (PacnetSafeGuard(cus, transfered)) {
-				if (!isFakeLoanCreate && !cus.IsAlibaba) {
+				if (!isFakeLoanCreate && !cus.IsAlibaba && !isEverlineRefinance) {
 					ret = SendMoney(cus, transfered);
 					VerifyAvailableFunds(transfered);
 				} else {
-					Log.Debug("Not sending money via pacnet. isFake: {0}, isAlibaba: {1}", isFakeLoanCreate, cus.IsAlibaba);
+					Log.Debug("Not sending money via pacnet. isFake: {0}, isAlibaba: {1}, isEverlineRefinance: {2}", isFakeLoanCreate, cus.IsAlibaba, isEverlineRefinance);
 					ret = new PacnetReturnData {
 						Status = "Done",
 						TrackingNumber = "fake"
 					};
+
+					if (isEverlineRefinance) {
+						SendEverlineRefinanceMails(cus.Id, cus.Name, now, transfered);
+					}
 				}
 			} else {
 				Log.Error("PacnetSafeGuard stopped money transfer");
@@ -149,7 +153,22 @@
 				m_oServiceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
 
 			return loan;
-		} // CreateLoan
+		}
+
+		private void SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal amount) {
+			m_oServiceClient.Instance.SendEverlineRefinanceMails(customerId, customerName, now, amount);
+		}
+
+		private bool ValidateEverlineRefinance(Customer cus) {
+			if (cus.CustomerOrigin.Name == "everline" && !cus.Loans.Any()) {
+				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
+				var status = checker.GetLoginStatus(cus.Name);
+				return (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan);
+			}
+			return false;
+		}
+
+// CreateLoan
 
 		/// <summary>
 		/// not yet implemented function that is

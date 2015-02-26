@@ -199,7 +199,8 @@ namespace EzBob.Models {
 		public string LotteryPlayerID { get; set; }
 		public string LotteryCode { get; set; }
 		public string Origin { get; set; }
-		public bool IsEverline { get; set; }
+		public bool IsEverline { get; set; } //used to show popup in wizard
+		public bool IsEverlineRefinance { get; set; }
 	} // class CustomerModel
 
 	public class InvitedFriend {

@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.MailStrategies;
 
@@ -96,5 +97,9 @@
 			return ExecuteSync<BrokerLeadSendInvitation>(null, null, nLeadID, sBrokerContactEmail);
 		} // BrokerLeadSendInvitation
 
+
+		public ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal amount) {
+			return Execute<SendEverlineRefinanceMails>(customerId, customerId, customerId, customerName, now, amount);
+		}
 	} // class EzServiceImplementation
 } // namespace EzService
