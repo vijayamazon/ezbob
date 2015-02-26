@@ -5,6 +5,10 @@
 	using System.Linq;
 	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
 
+	// TODO: missing functionality: calculate next scheduled payment.
+	// TODO: missing functionality: calculate next scheduled payment state on specific date (e.g. in three days).
+	// TODO: missing functionality: replace art of existing schedule with new schedule.
+
 	public abstract class ALoanCalculator {
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
