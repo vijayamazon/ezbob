@@ -197,6 +197,11 @@
 		public virtual VariableValue EverlineRefinanceEmailReciever {
 			get { return this[Variables.EverlineRefinanceEmailReciever]; }
 		}
+
+		public virtual VariableValue EverlineLoanStatusTestMode {
+			get { return this[Variables.EverlineLoanStatusTestMode]; }
+		}
+		
 		public virtual VariableValue ExperianAuthTokenService {
 			get { return this[Variables.ExperianAuthTokenService]; }
 		}

@@ -1,11 +1,21 @@
 ﻿namespace EzBob.Web.Code {
 	using System;
+	using ConfigManager;
 	using Newtonsoft.Json;
 	using RestSharp;
 
 	public class EverlineLoginLoanChecker {
 		public EverlineLoginLoanCheckerResult GetLoginStatus(string email) {
 			try {
+				if (!string.IsNullOrEmpty(CurrentValues.Instance.EverlineLoanStatusTestMode.Value)) {
+					EverlineLoanStatus status;
+					if (Enum.TryParse(CurrentValues.Instance.EverlineLoanStatusTestMode.Value, out status)) {
+						return new EverlineLoginLoanCheckerResult {
+							status = status
+						};
+					}
+				}
+
 				RestClient client = new RestClient("https://restapi.everline.com/1.0/ezbob/customerloanstatus");
 				var request = new RestRequest(Method.GET) {
 					Parameters = {
