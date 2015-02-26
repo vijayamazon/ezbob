@@ -1474,7 +1474,8 @@
         <xs:element minOccurs="0" name="customerId" type="xs:int" />
         <xs:element minOccurs="0" name="customerName" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="now" type="xs:dateTime" />
-        <xs:element minOccurs="0" name="amount" type="xs:decimal" />
+        <xs:element minOccurs="0" name="loanAmount" type="xs:decimal" />
+        <xs:element minOccurs="0" name="transferedAmount" type="xs:decimal" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

@@ -98,8 +98,8 @@
 		} // BrokerLeadSendInvitation
 
 
-		public ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal amount) {
-			return Execute<SendEverlineRefinanceMails>(customerId, customerId, customerId, customerName, now, amount);
+		public ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount) {
+			return Execute<SendEverlineRefinanceMails>(customerId, customerId, customerId, customerName, now, loanAmount, transferedAmount);
 		}
 	} // class EzServiceImplementation
 } // namespace EzService
