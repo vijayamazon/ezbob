@@ -10,6 +10,7 @@
 	using EzBob.Backend.Models;
 	using EzBob.Models;
 	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -302,6 +303,25 @@
 					Alert = "This customer shouldn't have new medal",
 					AlertType = AlertType.Info.DescriptionAttr()
 				});
+			}
+			if (customer.CustomerOrigin.Name == "everline") {
+				EverlineLoginLoanChecker evlLoanChecker = new EverlineLoginLoanChecker();
+				var response = evlLoanChecker.GetLoginStatus(customer.Name);
+				if (response.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan) {
+					summary.Alerts.Infos.Add(new AlertModel {
+						Abbreviation = "EVL",
+						Alert = "Everline customer has open loan",
+						AlertType = AlertType.Info.DescriptionAttr(),
+					});
+				}
+
+				if (response.status == EverlineLoanStatus.Error) {
+					summary.Alerts.Infos.Add(new AlertModel {
+						Abbreviation = "EVL",
+						Alert = "Everline retrieve loan status failed " + response.Message,
+						AlertType = AlertType.Error.DescriptionAttr(),
+					});
+				}
 			}
 		}
 
