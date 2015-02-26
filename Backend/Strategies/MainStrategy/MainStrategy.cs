@@ -11,7 +11,6 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.SalesForce;
-	using Ezbob.Backend.Strategies.ScoreCalculation;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -35,7 +34,6 @@
 			int avoidAutoDecision,
 			FinishWizardArgs fwa
 		) {
-			
 			this.finishWizardArgs = fwa;
 
 			this._session = ObjectFactory.GetInstance<ISession>();
@@ -47,15 +45,12 @@
 			this.customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
 			this.landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
 
-			this.medalScoreCalculator = new MedalScoreCalculator(DB, Log);
-
 			this.mailer = new StrategiesMailer();
 			this.customerId = customerId;
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = avoidAutoDecision;
 			this.overrideApprovedRejected = true;
 			this.staller = new Staller(customerId, this.newCreditLineOption, this.mailer, DB, Log);
-			this.dataGatherer = new DataGatherer(customerId, DB, Log);
 		} // constructor
 
 		public override void Execute() {
@@ -75,35 +70,19 @@
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
 				this.staller.Stall();
 
-			this.dataGatherer.GatherPreliminaryData();
-			this.wasMainStrategyExecutedBefore = this.dataGatherer.LastStartedMainStrategyEndTime.HasValue;
+			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
+				ExecuteAdditionalStrategies();
 
-			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
-				ExecuteAdditionalStrategies(
-					this.customerId,
-					this.wasMainStrategyExecutedBefore,
-					this.dataGatherer.TypeOfBusiness,
-					this.dataGatherer.BwaBusinessCheck,
-					this.dataGatherer.AppBankAccountType,
-					this.dataGatherer.AppAccountNumber,
-					this.dataGatherer.AppSortCode
-				);
-			} // if
+			this.customerDetails = new CustomerDetails(this.customerId);
 
-			this.dataGatherer.Gather();
-
-			if (!this.dataGatherer.IsTest) {
+			if (!this.customerDetails.IsTest) {
 				var fraudChecker = new FraudChecker(this.customerId, FraudMode.FullCheck);
 				fraudChecker.Execute();
 			} // if
 
 			// Processing logic
-			this.isHomeOwner = this.dataGatherer.IsOwnerOfMainAddress || this.dataGatherer.IsOwnerOfOtherProperties;
-			this.isFirstLoan = this.dataGatherer.NumOfLoans == 0;
-
-			// Calculate old medal
-			ScoreMedalOffer scoringResult = CalculateScoreAndMedal();
-			this.modelLoanOffer = scoringResult.MaxOffer;
+			this.isHomeOwner = this.customerDetails.IsOwnerOfMainAddress || this.customerDetails.IsOwnerOfOtherProperties;
+			this.isFirstLoan = this.customerDetails.NumOfLoans == 0;
 
 			ProcessRejections();
 
@@ -123,7 +102,11 @@
 
 			AdjustOfferredCreditLine();
 
+			this.lastOffer = new LastOfferData(this.customerId);
+
 			UpdateCustomerAndCashRequest();
+
+			UpdateCustomerAnalyticsLocalData();
 
 			SendEmails();
 		} // Execute
@@ -132,6 +115,51 @@
 			this.overrideApprovedRejected = bOverrideApprovedRejected;
 			return this;
 		} // SetOverrideApprovedRejected
+
+		public AutoDecisionResponse AutoDecisionResponse {
+			get { return this.autoDecisionResponse; }
+		} // AutoDecisionResponse
+
+		private void UpdateCustomerAnalyticsLocalData() {
+			SafeReader scoreCardResults = DB.GetFirst(
+				"GetScoreCardData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerId),
+				new QueryParameter("Today", DateTime.Today)
+			);
+
+			int ezbobSeniorityMonths = scoreCardResults["EzbobSeniorityMonths"];
+
+			int modelMaxFeedback = scoreCardResults["MaxFeedback", CurrentValues.Instance.DefaultFeedbackValue];
+
+			int numOfEbayAmazonPayPalMps = scoreCardResults["MPsNumber"];
+			int modelOnTimeLoans = scoreCardResults["OnTimeLoans"];
+			int modelLatePayments = scoreCardResults["LatePayments"];
+			int modelEarlyPayments = scoreCardResults["EarlyPayments"];
+
+			bool firstRepaymentDatePassed = false;
+
+			DateTime modelFirstRepaymentDate = scoreCardResults["FirstRepaymentDate"];
+			if (modelFirstRepaymentDate != default(DateTime))
+				firstRepaymentDatePassed = modelFirstRepaymentDate < DateTime.UtcNow;
+
+			DB.ExecuteNonQuery(
+				"CustomerAnalyticsUpdateLocalData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customerId),
+				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
+				new QueryParameter("AnnualTurnover", this.turnoverUsedInMedal),
+				new QueryParameter("TotalSumOfOrdersForLoanOffer", (decimal)0), // Not used any more, was part of old medal.
+				new QueryParameter("MarketplaceSeniorityYears", (decimal)0), // Not used any more, was part of old medal.
+				new QueryParameter("MaxFeedback", modelMaxFeedback),
+				new QueryParameter("MPsNumber", numOfEbayAmazonPayPalMps),
+				new QueryParameter("FirstRepaymentDatePassed", firstRepaymentDatePassed),
+				new QueryParameter("EzbobSeniorityMonths", ezbobSeniorityMonths),
+				new QueryParameter("OnTimeLoans", modelOnTimeLoans),
+				new QueryParameter("LatePayments", modelLatePayments),
+				new QueryParameter("EarlyPayments", modelEarlyPayments)
+			);
+		} // UpdateCustomerAnalyticsLocalData
 
 		private void AdjustOfferredCreditLine() {
 			if (this.autoDecisionResponse.IsAutoReApproval || this.autoDecisionResponse.IsAutoApproval)
@@ -155,59 +183,6 @@
 			this.modelLoanOffer = instance.Result.RoundOfferedAmount();
 		} // CalculateNewMedal
 
-		private ScoreMedalOffer CalculateScoreAndMedal() {
-			Log.Info("Calculating score & medal");
-
-			ScoreMedalOffer scoringResult = this.medalScoreCalculator.CalculateMedalScore(
-				this.dataGatherer.TotalSumOfOrdersForLoanOffer,
-				this.dataGatherer.MinExperianConsumerScore,
-				this.dataGatherer.MarketplaceSeniorityYears,
-				this.dataGatherer.ModelMaxFeedback,
-				this.dataGatherer.MaritalStatus,
-				this.dataGatherer.AppGender == "M" ? Gender.M : Gender.F,
-				this.dataGatherer.NumOfEbayAmazonPayPalMps,
-				this.dataGatherer.FirstRepaymentDatePassed,
-				this.dataGatherer.EzbobSeniorityMonths,
-				this.dataGatherer.ModelOnTimeLoans,
-				this.dataGatherer.ModelLatePayments,
-				this.dataGatherer.ModelEarlyPayments
-			);
-
-			// Save online medal
-			DB.ExecuteNonQuery(
-				"CustomerScoringResult_Insert",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("pCustomerId", this.customerId),
-				new QueryParameter("pAC_Parameters", scoringResult.AcParameters),
-				new QueryParameter("AC_Descriptors", scoringResult.AcDescriptors),
-				new QueryParameter("Result_Weight", scoringResult.ResultWeigts),
-				new QueryParameter("pResult_MAXPossiblePoints", scoringResult.ResultMaxPoints),
-				new QueryParameter("pMedal", scoringResult.Medal.ToString()),
-				new QueryParameter("pScorePoints", scoringResult.ScorePoints),
-				new QueryParameter("pScoreResult", scoringResult.ScoreResult)
-			);
-
-			// Update CustomerAnalyticsLocalData
-			DB.ExecuteNonQuery(
-				"CustomerAnalyticsUpdateLocalData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customerId),
-				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("AnnualTurnover", this.turnoverUsedInMedal),
-				new QueryParameter("TotalSumOfOrdersForLoanOffer", this.dataGatherer.TotalSumOfOrdersForLoanOffer),
-				new QueryParameter("MarketplaceSeniorityYears", this.dataGatherer.MarketplaceSeniorityYears),
-				new QueryParameter("MaxFeedback", this.dataGatherer.ModelMaxFeedback),
-				new QueryParameter("MPsNumber", this.dataGatherer.NumOfEbayAmazonPayPalMps),
-				new QueryParameter("FirstRepaymentDatePassed", this.dataGatherer.FirstRepaymentDatePassed),
-				new QueryParameter("EzbobSeniorityMonths", this.dataGatherer.EzbobSeniorityMonths),
-				new QueryParameter("OnTimeLoans", this.dataGatherer.ModelOnTimeLoans),
-				new QueryParameter("LatePayments", this.dataGatherer.ModelLatePayments),
-				new QueryParameter("EarlyPayments", this.dataGatherer.ModelEarlyPayments)
-			);
-
-			return scoringResult;
-		} // CalculateScoreAndMedal
-
 		private void CapOffer() {
 			Log.Info("Finalizing and capping offer");
 
@@ -221,10 +196,10 @@
 
 			if (isHomeOwnerAccordingToLandRegistry) {
 				Log.Info("Capped for home owner according to land registry");
-				this.offeredCreditLine = Math.Min(this.offeredCreditLine, this.dataGatherer.MaxCapHomeOwner);
+				this.offeredCreditLine = Math.Min(this.offeredCreditLine, MaxCapHomeOwner);
 			} else {
 				Log.Info("Capped for not home owner");
-				this.offeredCreditLine = Math.Min(this.offeredCreditLine, this.dataGatherer.MaxCapNotHomeOwner);
+				this.offeredCreditLine = Math.Min(this.offeredCreditLine, MaxCapNotHomeOwner);
 			} // if
 		} // CapOffer
 
@@ -335,14 +310,14 @@
 				Log.Debug(
 					"Retrieving LandRegistry system decision: {0} residential status: {1}",
 					this.autoDecisionResponse.DecisionName,
-					this.dataGatherer.PropertyStatusDescription
+					this.customerDetails.PropertyStatusDescription
 					);
 				GetLandRegistry();
 			} else {
 				Log.Info(
 					"Not retrieving LandRegistry system decision: {0} residential status: {1}",
 					this.autoDecisionResponse.DecisionName,
-					this.dataGatherer.PropertyStatusDescription
+					this.customerDetails.PropertyStatusDescription
 				);
 			} // if
 		} // GetLandRegistryDataIfNotRejected
@@ -350,6 +325,7 @@
 		private void ProcessApprovals() {
 			bool bContinue = true; 
 
+			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
 			if (this.autoDecisionResponse.DecidedToReject && bContinue) {
 				Log.Info("Not processing approvals: reject decision has been made.");
 				bContinue = false;
@@ -365,28 +341,28 @@
 				bContinue = false;
 			} // if
 
-			if (!this.dataGatherer.CustomerStatusIsEnabled && bContinue) {
+			if (!this.customerDetails.CustomerStatusIsEnabled && bContinue) {
 				Log.Info("Not processing approvals: customer status is not enabled.");
 				bContinue = false;
 			} // if
 
-			if (this.dataGatherer.CustomerStatusIsWarning && bContinue) {
+			if (this.customerDetails.CustomerStatusIsWarning && bContinue) {
 				Log.Info("Not processing approvals: customer status is 'warning'.");
 				bContinue = false;
 			} // if
 
-			if (!this.dataGatherer.EnableAutomaticReRejection && bContinue) {
-				Log.Info("Not processing approvals: auto rejection is disabled.");
-				bContinue = false;
-			} // if
-
-			if (!this.dataGatherer.EnableAutomaticRejection && bContinue) {
+			if (!EnableAutomaticReRejection && bContinue) {
 				Log.Info("Not processing approvals: auto re-rejection is disabled.");
 				bContinue = false;
 			} // if
 
+			if (!EnableAutomaticRejection && bContinue) {
+				Log.Info("Not processing approvals: auto rejection is disabled.");
+				bContinue = false;
+			} // if
+
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
-			if (this.dataGatherer.EnableAutomaticReApproval && bContinue) {
+			if (EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				new AutoDecisions.ReApproval.Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
 
@@ -397,7 +373,7 @@
 			} else
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
 
-			if (this.dataGatherer.EnableAutomaticApproval && bContinue) {
+			if (EnableAutomaticApproval && bContinue) {
 				new Approval(
 					this.customerId,
 					this.offeredCreditLine,
@@ -449,16 +425,16 @@
 			if (this.avoidAutomaticDecision == 1)
 				return;
 
-			if (this.dataGatherer.EnableAutomaticReRejection)
+			if (EnableAutomaticReRejection)
 				new ReRejection(this.customerId, DB, Log).MakeDecision(this.autoDecisionResponse);
 
 			if (this.autoDecisionResponse.IsReRejected)
 				return;
 
-			if (!this.dataGatherer.EnableAutomaticRejection)
+			if (!EnableAutomaticRejection)
 				return;
 
-			if (this.dataGatherer.IsAlibaba)
+			if (this.customerDetails.IsAlibaba)
 				return;
 
 			new AutoDecisions.Reject.Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
@@ -484,9 +460,9 @@
 					this._loanTypeRepository.GetDefault();
 			} else {
 				//TODO check this code!!!
-				interestRateToUse = this.dataGatherer.LoanOfferInterestRate;
-				setupFeePercentToUse = this.dataGatherer.ManualSetupFeePercent;
-				setupFeeAmountToUse = this.dataGatherer.ManualSetupFeeAmount;
+				interestRateToUse = this.lastOffer.LoanOfferInterestRate;
+				setupFeePercentToUse = this.lastOffer.ManualSetupFeePercent;
+				setupFeeAmountToUse = this.lastOffer.ManualSetupFeeAmount;
 				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
 				loanTypeIdToUse = this._loanTypeRepository.GetDefault();
 			} // if
@@ -540,7 +516,7 @@
 				cr.AutoDecisionID = this.autoDecisionResponse.DecisionCode;
 				cr.MedalType = this.medalClassification;
 				cr.ScorePoints = (double)this.medalScore;
-				cr.ExpirianRating = this.dataGatherer.ExperianConsumerScore;
+				cr.ExpirianRating = this.customerDetails.ExperianConsumerScore;
 				cr.AnnualTurnover = (int)this.turnoverUsedInMedal;
 				cr.LoanType = loanTypeIdToUse;
 				cr.LoanSource = isEuToUse
@@ -558,7 +534,7 @@
 				cr.ManualSetupFeeAmount = (int)setupFeeAmountToUse;
 				cr.ManualSetupFeePercent = setupFeePercentToUse;
 				cr.UseSetupFee = setupFeeAmountToUse > 0 || setupFeePercentToUse > 0;
-				cr.APR = this.dataGatherer.LoanOfferApr;
+				cr.APR = this.lastOffer.LoanOfferApr;
 
 				if (autoDecisionResponse.IsAutoReApproval) {
 					cr.UseSetupFee = autoDecisionResponse.SetupFeeEnabled;
@@ -620,19 +596,13 @@
 			} // switch
 		} // UpdateSalesForceOpportunity
 
-		private static void ExecuteAdditionalStrategies(
-			int customerId,
-			bool wasMainStrategyExecutedBefore,
-			string typeOfBusiness,
-			string bwaBusinessCheck,
-			string appBankAccountType,
-			string appAccountNumber,
-			string appSortCode
-		) {
+		private void ExecuteAdditionalStrategies() {
+			var preData = new PreliminaryData(this.customerId);
+
 			var strat = new ExperianConsumerCheck(customerId, null, false);
 			strat.Execute();
 
-			if (typeOfBusiness != "Entrepreneur") {
+			if (preData.TypeOfBusiness != "Entrepreneur") {
 				Library.Instance.DB.ForEachRowSafe(
 					sr => {
 						int appDirId = sr["DirId"];
@@ -651,20 +621,20 @@
 				);
 			} // if
 
-			if (wasMainStrategyExecutedBefore) {
+			if (preData.LastStartedMainStrategyEndTime.HasValue) {
 				Library.Instance.Log.Info("Performing experian company check");
 				var experianCompanyChecker = new ExperianCompanyCheck(customerId, false);
 				experianCompanyChecker.Execute();
 			} // if
 
-			if (wasMainStrategyExecutedBefore)
+			if (preData.LastStartedMainStrategyEndTime.HasValue)
 				new AmlChecker(customerId).Execute();
 
 			bool shouldRunBwa =
-				appBankAccountType == "Personal" &&
-				bwaBusinessCheck == "1" &&
-				appSortCode != null &&
-				appAccountNumber != null;
+				preData.AppBankAccountType == "Personal" &&
+				preData.BwaBusinessCheck == "1" &&
+				preData.AppSortCode != null &&
+				preData.AppAccountNumber != null;
 
 			if (shouldRunBwa)
 				new BwaChecker(customerId).Execute();
@@ -672,6 +642,13 @@
 			Library.Instance.Log.Info("Getting Zoopla data for customer {0}", customerId);
 			new ZooplaStub(customerId).Execute();
 		} // ExecuteAdditionalStrategies
+
+		private bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
+		private bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }
+		private bool EnableAutomaticRejection { get { return CurrentValues.Instance.EnableAutomaticRejection; } }
+		private bool EnableAutomaticReRejection { get { return CurrentValues.Instance.EnableAutomaticReRejection; } }
+		private int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
+		private int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
 		private readonly CustomerRepository _customers;
 		private readonly DecisionHistoryRepository _decisionHistory;
@@ -685,15 +662,16 @@
 
 		// Inputs
 		private readonly int customerId;
-		private readonly DataGatherer dataGatherer;
 		private readonly FinishWizardArgs finishWizardArgs;
 
 		// Helpers
 		private readonly StrategiesMailer mailer;
-		private readonly MedalScoreCalculator medalScoreCalculator;
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly Staller staller;
 		private AutoDecisionResponse autoDecisionResponse;
+
+		private CustomerDetails customerDetails;
+		private LastOfferData lastOffer;
 
 		private bool isFirstLoan;
 
@@ -713,13 +691,5 @@
 		///     then customer's status should not change.
 		/// </summary>
 		private bool overrideApprovedRejected;
-
-		private bool wasMainStrategyExecutedBefore;
-
-		public AutoDecisionResponse AutoDecisionResponse {
-			get { return this.autoDecisionResponse; }
-		//	set { this.autoDecisionResponse = value; }
-		}
-
 	} // class MainStrategy
 } // namespace

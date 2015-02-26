@@ -160,6 +160,8 @@
     <Compile Include="MainStrategy\AutoDecisions\Reject\MpError.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\Configuration.cs" />
     <Compile Include="MainStrategy\AutoDecisions\Reject\MetaData.cs" />
+    <Compile Include="MainStrategy\CustomerDetails.cs" />
+    <Compile Include="MainStrategy\PreliminaryData.cs" />
     <Compile Include="MedalCalculations\MedalCalculator1.cs" />
     <Compile Include="MedalCalculations\MedalType.cs" />
     <Compile Include="MedalCalculations\OnlineNonLimitedNoBusinessScoreMedalCalculator1.cs" />
@@ -182,7 +184,7 @@
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
     <Compile Include="MainStrategy\Utils.cs" />
-    <Compile Include="MainStrategy\DataGatherer.cs" />
+    <Compile Include="MainStrategy\LastOfferData.cs" />
     <Compile Include="MainStrategy\Staller.cs" />
     <Compile Include="Misc\BackfillHmrcBusinessRelevance.cs" />
     <Compile Include="Misc\BackfillTurnover.cs" />
@@ -381,10 +383,6 @@
     <Compile Include="MailStrategies\MailRecipientData\CustomerData.cs" />
     <Compile Include="MailStrategies\AMailStrategyBase.cs" />
     <Compile Include="MainStrategy\MainStrategy.cs" />
-    <Compile Include="ScoreCalculation\Constants.cs" />
-    <Compile Include="ScoreCalculation\Enums.cs" />
-    <Compile Include="ScoreCalculation\MedalScoreCalculator.cs" />
-    <Compile Include="ScoreCalculation\Models.cs" />
     <Compile Include="MailStrategies\API\StrategiesMailer.cs" />
     <Compile Include="Misc\CaisGenerate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

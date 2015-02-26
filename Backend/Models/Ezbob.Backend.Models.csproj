@@ -82,7 +82,6 @@
     <Compile Include="FinishWizardArgs.cs" />
     <Compile Include="FormattedSchedule.cs" />
     <Compile Include="LoanScheduleItemModel.cs" />
-    <Compile Include="MpsTotals.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
