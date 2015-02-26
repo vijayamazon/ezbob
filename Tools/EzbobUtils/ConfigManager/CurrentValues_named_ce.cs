@@ -194,6 +194,9 @@
 			get { return this[Variables.Environment]; }
 		}
 
+		public virtual VariableValue EverlineRefinanceEmailReciever {
+			get { return this[Variables.EverlineRefinanceEmailReciever]; }
+		}
 		public virtual VariableValue ExperianAuthTokenService {
 			get { return this[Variables.ExperianAuthTokenService]; }
 		}
