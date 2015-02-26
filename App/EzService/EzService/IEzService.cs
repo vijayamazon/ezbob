@@ -619,7 +619,7 @@
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);
 
 		[OperationContract]
-		ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal amount);
+		ActionMetaData SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount);
 
 		[OperationContract]
 		BoolActionResult SendSms(int userId, int underwriterId, string phone, string content);
