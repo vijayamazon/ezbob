@@ -10,14 +10,16 @@ namespace Ezbob.Backend.Strategies.MailStrategies {
 		private readonly int customerId;
 		private readonly string customerName;
 		private readonly DateTime now;
-		private readonly decimal amount;
+		private readonly decimal loanAmount;
+		private readonly decimal transferedAmount;
 
-		public SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal amount)
+		public SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount)
 			: base(customerId, false) {
 			this.customerId = customerId;
 			this.customerName = customerName;
 			this.now = now;
-			this.amount = amount;
+			this.loanAmount = loanAmount;
+			this.transferedAmount = transferedAmount;
 		}
 
 		public override string Name {
@@ -33,7 +35,8 @@ namespace Ezbob.Backend.Strategies.MailStrategies {
 				{"CustomerId", customerId.ToString() },
 				{"CustomerEmail", customerName},
 				{"LoanDate", now.ToString("dd/MM/yyyy") },
-				{"LoanAmount", amount.ToString("N2")}
+				{"LoanAmount", loanAmount.ToString("N2")},
+				{"TransferedAmount", transferedAmount.ToString("N2")}
 			};
 		}
 

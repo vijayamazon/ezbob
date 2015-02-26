@@ -76,7 +76,7 @@
 					};
 
 					if (isEverlineRefinance) {
-						SendEverlineRefinanceMails(cus.Id, cus.Name, now, transfered);
+						SendEverlineRefinanceMails(cus.Id, cus.Name, now, loanAmount, transfered);
 					}
 				}
 			} else {
@@ -155,8 +155,8 @@
 			return loan;
 		}
 
-		private void SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal amount) {
-			m_oServiceClient.Instance.SendEverlineRefinanceMails(customerId, customerName, now, amount);
+		private void SendEverlineRefinanceMails(int customerId, string customerName, DateTime now, decimal loanAmount, decimal transferedAmount) {
+			m_oServiceClient.Instance.SendEverlineRefinanceMails(customerId, customerName, now, loanAmount, transferedAmount);
 		}
 
 		private bool ValidateEverlineRefinance(Customer cus) {
