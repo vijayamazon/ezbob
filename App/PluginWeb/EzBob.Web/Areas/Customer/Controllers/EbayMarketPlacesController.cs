@@ -14,6 +14,7 @@
 	using Web.Models.Strings;
 	using eBayLib;
 	using eBayServiceLib;
+	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate;
 	using log4net;
 
@@ -56,12 +57,11 @@
 			return Json(marketplaces, JsonRequestBehavior.AllowGet);
 		}
 
-		public JsonResult CreateSessionId()
-		{
+		public JsonResult CreateSessionId() {
 			string sid = "";
 			try
 			{
-				sid = _eBayServiceHelper.CreateSessionId();
+				sid = _eBayServiceHelper.CreateSessionId(GetRuName());
 				Log.InfoFormat("SID: '{0}' was generated", sid);
 			}
 			catch (Exception e)
@@ -74,9 +74,9 @@
 		public JsonResult CreateUrl(string sid, bool isUpdate = false)
 		{
 			string urlValue = "";
-			try
-			{
-				var url = _eBayServiceHelper.CreateUrl(sid);
+			try {
+				string ruName = GetRuName();
+				var url = _eBayServiceHelper.CreateUrl(sid, ruName);
 				urlValue = url.Value;
 				Log.InfoFormat("Url: '{0}' was generated", urlValue);
 			}
@@ -87,10 +87,11 @@
 			return Json(new { url = urlValue }, JsonRequestBehavior.AllowGet);
 		}
 
-		public RedirectResult AttachEbay(bool isUpdate = false)
-		{
-			var sid = _eBayServiceHelper.CreateSessionId();
-			var url = _eBayServiceHelper.CreateUrl(sid);
+		public RedirectResult AttachEbay(bool isUpdate = false) {
+
+			string ruName = GetRuName();
+			var sid = _eBayServiceHelper.CreateSessionId(ruName);
+			var url = _eBayServiceHelper.CreateUrl(sid, ruName);
 			Log.InfoFormat("Url: '{0}' was generated", url.Value);
 			TempData["SID"] = sid;
 			TempData["isUpdate"] = isUpdate;
@@ -103,11 +104,12 @@
 		{
 			string urlValue = "";
 			string sid = "";
-			try
-			{
-				sid = _eBayServiceHelper.CreateSessionId();
+			string ruName = "";
+			try {
+				ruName = GetRuName();
+				sid = _eBayServiceHelper.CreateSessionId(ruName);
 				Log.InfoFormat("SID: '{0}' was generated", sid);
-				var url = _eBayServiceHelper.CreateUrl(sid);
+				var url = _eBayServiceHelper.CreateUrl(sid, ruName);
 				urlValue = url.Value;
 				Log.InfoFormat("Url: '{0}' was generated", urlValue);
 			}
@@ -193,5 +195,11 @@
 			return View();
 		}
 
+		[NonAction]
+		private string GetRuName(){
+			bool isEverline = (_context.Customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString());
+			string ruName = isEverline ? ConfigManager.CurrentValues.Instance.EbayRuNameEverline.Value : ConfigManager.CurrentValues.Instance.EbayRuName.Value;
+			return ruName;
+		}
 	}
 }

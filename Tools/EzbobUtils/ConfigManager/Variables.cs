@@ -143,6 +143,7 @@ namespace ConfigManager {
 		EbayDevId,
 		EbayPixelEnabled,
 		EbayRuName,
+		EbayRuNameEverline,
 		EbayServiceType,
 		EchoSignApiKey,
 		EchoSignDeadline,

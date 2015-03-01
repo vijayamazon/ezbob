@@ -16,14 +16,14 @@ namespace EzBob.eBayLib
 			_DataProvider = new EbayServiceDataProvider(dataInfoProduction);
 		}
 
-		public string CreateSessionId()
+		public string CreateSessionId(string ruName)
 		{
-			return _DataProvider.CreateSessionId();
+			return _DataProvider.CreateSessionId(ruName);
 		}
 
-		public Url CreateUrl(string sessionId)
+		public Url CreateUrl(string sessionId, string ruName)
 		{
-			return _DataProvider.GenerateUrl(sessionId);
+			return _DataProvider.GenerateUrl(sessionId, ruName);
 		}
 
 		public string FetchToken(string sessionId)
@@ -40,7 +40,6 @@ namespace EzBob.eBayLib
 				DevId = new ServiceProviderDataInfoDevId(connectionInfo.DevId),
 				AppId = new ServiceProviderDataInfoAppId(connectionInfo.AppId),
 				CertId = new ServiceProviderDataInfoCertId(connectionInfo.CertId),
-				RuName = new ServiceProviderDataInfoRuName(connectionInfo.RuName),
 			};
 		}
 

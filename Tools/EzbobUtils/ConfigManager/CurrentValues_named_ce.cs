@@ -146,6 +146,10 @@
 			get { return this[Variables.EbayRuName]; }
 		}
 
+		public virtual VariableValue EbayRuNameEverline {
+			get { return this[Variables.EbayRuNameEverline]; }
+		}
+
 		public virtual VariableValue EbayServiceType {
 			get { return this[Variables.EbayServiceType]; }
 		}

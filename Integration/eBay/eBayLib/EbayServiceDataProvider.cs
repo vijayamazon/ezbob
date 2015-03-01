@@ -17,27 +17,25 @@ namespace EzBob.eBayLib
 
 	class EbayServiceDataProvider
 	{
-		private readonly EbayServiceConnectionInfo _Info;
 		private readonly IEbayServiceProvider _ServiceProvider;
 
 		public EbayServiceDataProvider(EbayServiceConnectionInfo info)
 		{
-			_Info = info;
 			_ServiceProvider = new EbayTradingServiceProvider( info );
 		}
 
-		public string CreateSessionId()
+		public string CreateSessionId(string ruName)
 		{
 			var s = new DataProviderSessionID( _ServiceProvider );
-			var rez = s.GetSessionId( _Info.RuName );
+			var rez = s.GetSessionId(new ServiceProviderDataInfoRuName(ruName));
 			return rez.SessionId.Value;
 		}
 
-		public Url GenerateUrl( string sessionId )
+		public Url GenerateUrl(string sessionId, string ruName)
 		{
 			IServiceSignInUrlFactory signUrlFactory = new ServiceSignInUrlFactory();
 			Url signInUrl = signUrlFactory.Create( _ServiceProvider.EndPointType );
-			string finalUrl = signInUrl.Value + "&RuName=" + _Info.RuName.Value + "&SessID=" + HttpUtility.UrlEncode( sessionId );
+			string finalUrl = signInUrl.Value + "&RuName=" + ruName + "&SessID=" + HttpUtility.UrlEncode( sessionId );
 			return new Url( finalUrl );
 		}
 
