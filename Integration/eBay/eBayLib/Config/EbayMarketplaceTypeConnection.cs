@@ -12,7 +12,6 @@ namespace EzBob.eBayLib.Config
 			DevId = CurrentValues.Instance.EbayDevId;
 			AppId = CurrentValues.Instance.EbayAppId;
 			CertId = CurrentValues.Instance.EbayCertId;
-			RuName = CurrentValues.Instance.EbayRuName;
 			DownloadCategories = true;
 		}
 	}

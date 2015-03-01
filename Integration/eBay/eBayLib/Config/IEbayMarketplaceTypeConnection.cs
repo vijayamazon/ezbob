@@ -8,7 +8,5 @@ namespace EzBob.eBayLib.Config
 		string DevId { get; }
 		string AppId { get; }
 		string CertId { get; }
-		string RuName { get; }
-		
 	}
 }
