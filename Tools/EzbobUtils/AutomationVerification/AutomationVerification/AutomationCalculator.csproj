@@ -64,6 +64,7 @@
     <Compile Include="Common\NameComparer.cs" />
     <Compile Include="MedalCalculation\OnlineCalculator.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
+    <Compile Include="ProcessHistory\ProcessCheckpoints.cs" />
     <Compile Include="Turnover\ACalculatedTurnoverBase.cs" />
     <Compile Include="Turnover\AOneMonthValue.cs" />
     <Compile Include="Turnover\AutoRejectTurnover.cs" />

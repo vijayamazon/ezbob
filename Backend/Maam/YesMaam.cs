@@ -46,8 +46,9 @@
 
 			this.medalChooser = new MedalChooser(DB, Log);
 
-			Tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid()
-				.ToString("N");
+			Tag = DateTime.UtcNow.ToString(
+				"yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture
+			) + Guid.NewGuid().ToString("N");
 		} // constructor
 
 		public void Execute() {
@@ -180,7 +181,8 @@
 				row.AutoApprove.Data, !row.AutoApprove.Data.StartsWith(row.Input.Decision)
 			));
 			tr.Append(CreateCell<Td>(
-				row.AutoApprove.Amount.ToString("C0", CultureInfo.InvariantCulture), row.AutoApprove.Amount != row.Input.ApprovedAmount
+				row.AutoApprove.Amount.ToString("C0", CultureInfo.InvariantCulture),
+				row.AutoApprove.Amount != row.Input.ApprovedAmount
 			).Add<Ezbob.Utils.Html.Attributes.Style>("text-align:right;"));
 
 			return tr;
@@ -241,7 +243,9 @@
 
 				agent.MakeDecision();
 
-				ymr.AutoApprove.Data = (agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" + agent.Trail.UniqueID;
+				ymr.AutoApprove.Data =
+					(agent.Trail.HasDecided ? "Approved" : "Not approved") + "<br>" +
+					agent.Trail.UniqueID;
 
 				agent.Trail.Save(DB, null, ymr.Input.CashRequestID, Tag);
 
@@ -312,8 +316,9 @@
 
 			this.medalChooser = new MedalChooser(DB, Log);
 
-			Tag = DateTime.UtcNow.ToString("yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture) + Guid.NewGuid()
-				.ToString("N");
+			Tag = DateTime.UtcNow.ToString(
+				"yyyy-MM-dd_HH-mm-ss_", CultureInfo.InvariantCulture
+			) + Guid.NewGuid().ToString("N");
 		} // Init
 
 		private MedalChooser medalChooser;

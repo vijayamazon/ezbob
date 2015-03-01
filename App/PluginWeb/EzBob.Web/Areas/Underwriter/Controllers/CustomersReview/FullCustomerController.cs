@@ -193,8 +193,8 @@
 		private void WriteToLog(TimeCounter tc) {
 			var sb = new StringBuilder();
 			sb.AppendLine(tc.Title);
-			foreach (var time in tc.Checkpoints)
-				sb.AppendFormat("\t{0}: {1}ms\n", time.Item1, time.Item2);
+			foreach (var time in tc.Steps)
+				sb.AppendFormat("\t{0}: {1}ms\n", time.Name, time.Length);
 
 			Log.InfoFormat("{0}", sb);
 		}

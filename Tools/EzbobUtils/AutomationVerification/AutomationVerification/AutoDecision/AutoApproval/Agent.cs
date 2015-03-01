@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using AutomationCalculator.Common;
+	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using AutomationCalculator.Turnover;
@@ -38,79 +39,87 @@
 		} // constructor
 
 		public virtual Agent Init() {
-			Now = DateTime.UtcNow;
-
-			MetaData = new MetaData();
-			Payments = new List<Payment>();
-
-			Funds = new AvailableFunds();
-			WorstStatuses = new SortedSet<string>();
-
-			Turnover = new AutoApprovalTurnover {
-				TurnoverType = Args.TurnoverType,
-			};
-			Turnover.Init();
-
-			OriginationTime = new OriginationTime(Log);
-
 			Trail = new ApprovalTrail(Args.CustomerID, Log) { Amount = Args.SystemCalculatedAmount, };
-			Cfg = InitCfg();
 
-			DirectorNames = new List<Name>();
-			HmrcBusinessNames = new List<string>();
+			using (Trail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
+				Now = DateTime.UtcNow;
+
+				MetaData = new MetaData();
+				Payments = new List<Payment>();
+
+				Funds = new AvailableFunds();
+				WorstStatuses = new SortedSet<string>();
+
+				Turnover = new AutoApprovalTurnover {
+					TurnoverType = Args.TurnoverType,
+				};
+				Turnover.Init();
+
+				OriginationTime = new OriginationTime(Log);
+
+				Cfg = InitCfg();
+
+				DirectorNames = new List<Name>();
+				HmrcBusinessNames = new List<string>();
+			} // using timer step
 
 			return this;
 		} // Init
 
 		public virtual void MakeDecision() {
-			Log.Debug("Secondary: checking if auto approval should take place for customer {0}...", Args.CustomerID);
+			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+				Log.Debug("Secondary: checking if auto approval should take place for customer {0}...", Args.CustomerID);
 
-			try {
-				GatherData();
-				this.m_oCheck.Run();
-			} catch (Exception e) {
-				Log.Error(e, "Exception during auto approval.");
-				this.m_oCheck.StepForceFailed<ExceptionThrown>().Init(e);
-			} // try
+				try {
+					using (Trail.AddCheckpoint(ProcessCheckpoints.GatherData))
+						GatherData();
 
-			string logMsg = string.Empty;
+					using (Trail.AddCheckpoint(ProcessCheckpoints.RunCheck))
+						this.m_oCheck.Run();
+				} catch (Exception e) {
+					Log.Error(e, "Exception during auto approval.");
+					this.m_oCheck.StepForceFailed<ExceptionThrown>().Init(e);
+				} // try
 
-			if (Trail.HasDecided) {
-				decimal roundTo = Trail.MyInputData.Configuration.GetCashSliderStep;
+				string logMsg = string.Empty;
 
-				if (roundTo < 0.00000001m)
-					roundTo = 1m;
+				if (Trail.HasDecided) {
+					decimal roundTo = Trail.MyInputData.Configuration.GetCashSliderStep;
+
+					if (roundTo < 0.00000001m)
+						roundTo = 1m;
+
+					Log.Debug(
+						"Secondary before rounding: amount = {0}, minLoanAmount = {1}",
+						Trail.SafeAmount,
+						roundTo
+					);
+
+					Trail.Amount = roundTo * Math.Round(
+						Trail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
+					);
+
+					Log.Debug(
+						"Secondary after rounding: amount = {0}, minLoanAmount = {1}",
+						Trail.SafeAmount,
+						roundTo
+					);
+
+					logMsg = string.Format(
+						"Approved amount {0} for {1}, email banned: {2}",
+						Trail.RoundedAmount,
+						Grammar.Number((int)MetaData.OfferLength, "day"),
+						MetaData.IsEmailSendingBanned ? "yes" : "no"
+					);
+				} // if
 
 				Log.Debug(
-					"Secondary before rounding: amount = {0}, minLoanAmount = {1}",
-					Trail.SafeAmount,
-					roundTo
+					"Secondary: checking if auto approval should take place for customer {0} complete; {1}\n{2}",
+					Args.CustomerID,
+					Trail,
+					logMsg
 				);
-
-				Trail.Amount = roundTo * Math.Round(
-					Trail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
-				);
-
-				Log.Debug(
-					"Secondary after rounding: amount = {0}, minLoanAmount = {1}",
-					Trail.SafeAmount,
-					roundTo
-				);
-
-				logMsg = string.Format(
-					"Approved amount {0} for {1}, email banned: {2}",
-					Trail.RoundedAmount,
-					Grammar.Number((int)MetaData.OfferLength, "day"),
-					MetaData.IsEmailSendingBanned ? "yes" : "no"
-				);
-			} // if
-
-			Log.Debug(
-				"Secondary: checking if auto approval should take place for customer {0} complete; {1}\n{2}",
-				Args.CustomerID,
-				Trail,
-				logMsg
-			);
+			} // using timer step
 		} // MakeDecision
 
 		protected virtual Arguments Args { get; private set; }

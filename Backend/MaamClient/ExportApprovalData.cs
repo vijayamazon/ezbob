@@ -35,7 +35,7 @@
 			excel.AutoFitColumns();
 
 			excel.SaveAs(new FileInfo(@"c:\temp\" + args[0] + ".xlsx"));
-		} // InputDataToExcel
+		} // Run
 
 		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]

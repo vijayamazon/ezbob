@@ -36,12 +36,12 @@
 		) {
 			this.finishWizardArgs = fwa;
 
-			this._session = ObjectFactory.GetInstance<ISession>();
-			this._customers = ObjectFactory.GetInstance<CustomerRepository>();
-			this._decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
-			this._loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
-			this._loanTypeRepository = ObjectFactory.GetInstance<LoanTypeRepository>();
-			this._discountPlanRepository = ObjectFactory.GetInstance<DiscountPlanRepository>();
+			this.session = ObjectFactory.GetInstance<ISession>();
+			this.customers = ObjectFactory.GetInstance<CustomerRepository>();
+			this.decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
+			this.loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
+			this.loanTypeRepository = ObjectFactory.GetInstance<LoanTypeRepository>();
+			this.discountPlanRepository = ObjectFactory.GetInstance<DiscountPlanRepository>();
 			this.customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
 			this.landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
 
@@ -50,7 +50,7 @@
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = avoidAutoDecision;
 			this.overrideApprovedRejected = true;
-			this.staller = new Staller(customerId, this.newCreditLineOption, this.mailer, DB, Log);
+			this.staller = new Staller(customerId, this.mailer);
 		} // constructor
 
 		public override void Execute() {
@@ -67,11 +67,10 @@
 			} // if
 
 			// Wait for data to be filled by other strategies
-			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
+			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
 				this.staller.Stall();
-
-			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules)
 				ExecuteAdditionalStrategies();
+			} // if
 
 			this.customerDetails = new CustomerDetails(this.customerId);
 
@@ -94,7 +93,10 @@
 			if (!bSkip)
 				GetLandRegistryDataIfNotRejected();
 
-			CalculateNewMedal();
+			var instance = new CalculateMedal(this.customerId, DateTime.UtcNow, false, true);
+			instance.Execute();
+
+			this.medal = instance.Result;
 
 			CapOffer();
 
@@ -148,7 +150,7 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", this.customerId),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
-				new QueryParameter("AnnualTurnover", this.turnoverUsedInMedal),
+				new QueryParameter("AnnualTurnover", this.medal.AnnualTurnover),
 				new QueryParameter("TotalSumOfOrdersForLoanOffer", (decimal)0), // Not used any more, was part of old medal.
 				new QueryParameter("MarketplaceSeniorityYears", (decimal)0), // Not used any more, was part of old medal.
 				new QueryParameter("MaxFeedback", modelMaxFeedback),
@@ -170,23 +172,10 @@
 				this.offeredCreditLine = 0;
 		} // AdjustOfferredCreditLine
 
-		private void CalculateNewMedal() {
-			var instance = new CalculateMedal(this.customerId, DateTime.UtcNow, false, true);
-			instance.Execute();
-
-			this.medalClassification = instance.Result.MedalClassification;
-			this.medalScore = instance.Result.TotalScoreNormalized;
-			this.medalType = instance.Result.MedalType;
-			this.turnoverType = instance.Result.TurnoverType;
-			this.turnoverUsedInMedal = instance.Result.AnnualTurnover;
-
-			this.modelLoanOffer = instance.Result.RoundOfferedAmount();
-		} // CalculateNewMedal
-
 		private void CapOffer() {
 			Log.Info("Finalizing and capping offer");
 
-			this.offeredCreditLine = this.modelLoanOffer;
+			this.offeredCreditLine = this.medal.RoundOfferedAmount();
 
 			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
 				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
@@ -211,17 +200,6 @@
 
 			new FinishWizard(this.finishWizardArgs).Execute();
 		} // FinishWizard
-
-		private void GetLandRegistry() {
-			var customerAddressesHelper = new CustomerAddressHelper(this.customerId);
-			customerAddressesHelper.Execute();
-
-			try {
-				GetLandRegistryData(customerAddressesHelper.OwnedAddresses);
-			} catch (Exception e) {
-				Log.Error("Error while getting land registry data: {0}", e);
-			} // try
-		} // GetLandRegistry
 
 		private void GetLandRegistryData(List<CustomerAddressModel> addresses) {
 			foreach (CustomerAddressModel address in addresses) {
@@ -269,12 +247,14 @@
 				if (doLandRegistry) {
 					var lrr = new LandRegistryRes(customerId, model.Enquery.Titles[0].TitleNumber);
 					lrr.PartialExecute();
+
 					LandRegistry dbLandRegistry = lrr.LandRegistry;
+
 					LandRegistryDataModel landRegistryDataModel = lrr.RawResult;
 
 					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success) {
 						// Verify customer is among owners
-						Customer customer = _customers.Get(customerId);
+						Customer customer = customers.Get(customerId);
 
 						bool isOwnerAccordingToLandRegistry = LandRegistryRes.IsOwner(
 							customer,
@@ -294,13 +274,20 @@
 					} // if
 				} else {
 					int num = 0;
+
 					if (model != null && model.Enquery != null && model.Enquery.Titles != null)
 						num = model.Enquery.Titles.Count;
+
 					Log.Warn(
 						"No land registry retrieved for customer id: {5}," +
 						"house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
-						address.HouseName, address.HouseNumber,
-						address.FlatOrApartmentNumber, address.PostCode, num, customerId);
+						address.HouseName,
+						address.HouseNumber,
+						address.FlatOrApartmentNumber,
+						address.PostCode,
+						num,
+						customerId
+					);
 				} // if
 			} // for each
 		} // GetLandRegistryData
@@ -311,8 +298,16 @@
 					"Retrieving LandRegistry system decision: {0} residential status: {1}",
 					this.autoDecisionResponse.DecisionName,
 					this.customerDetails.PropertyStatusDescription
-					);
-				GetLandRegistry();
+				);
+
+				var customerAddressesHelper = new CustomerAddressHelper(this.customerId);
+				customerAddressesHelper.Execute();
+
+				try {
+					GetLandRegistryData(customerAddressesHelper.OwnedAddresses);
+				} catch (Exception e) {
+					Log.Error("Error while getting land registry data: {0}", e);
+				} // try
 			} else {
 				Log.Info(
 					"Not retrieving LandRegistry system decision: {0} residential status: {1}",
@@ -377,9 +372,9 @@
 				new Approval(
 					this.customerId,
 					this.offeredCreditLine,
-					this.medalClassification,
-					(AutomationCalculator.Common.MedalType)this.medalType,
-					(AutomationCalculator.Common.TurnoverType?)this.turnoverType,
+					this.medal.MedalClassification,
+					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
+					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
 					DB,
 					Log
 				).Init().MakeDecision(this.autoDecisionResponse);
@@ -447,27 +442,25 @@
 			decimal setupFeePercentToUse, setupFeeAmountToUse;
 			int repaymentPeriodToUse;
 			LoanType loanTypeIdToUse;
-			bool isEuToUse = false;
 
 			if (this.autoDecisionResponse.IsAutoApproval) {
 				interestRateToUse = this.autoDecisionResponse.InterestRate;
 				setupFeePercentToUse = this.autoDecisionResponse.SetupFee;
 				setupFeeAmountToUse = setupFeePercentToUse * this.offeredCreditLine;
 				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
-				isEuToUse = false; //todo implement when there are requirement
 				loanTypeIdToUse =
-					this._loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID) ??
-					this._loanTypeRepository.GetDefault();
+					this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID) ??
+					this.loanTypeRepository.GetDefault();
 			} else {
 				//TODO check this code!!!
 				interestRateToUse = this.lastOffer.LoanOfferInterestRate;
 				setupFeePercentToUse = this.lastOffer.ManualSetupFeePercent;
 				setupFeeAmountToUse = this.lastOffer.ManualSetupFeeAmount;
 				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
-				loanTypeIdToUse = this._loanTypeRepository.GetDefault();
+				loanTypeIdToUse = this.loanTypeRepository.GetDefault();
 			} // if
 
-			var customer = this._customers.Get(this.customerId);
+			var customer = this.customers.Get(this.customerId);
 
 			if (customer == null)
 				return;
@@ -480,12 +473,12 @@
 			customer.OfferStart = now;
 			customer.OfferValidUntil = now.AddHours(CurrentValues.Instance.OfferValidForHours);
 			customer.SystemDecision = this.autoDecisionResponse.SystemDecision;
-			customer.Medal = this.medalClassification;
+			customer.Medal = this.medal.MedalClassification;
 			customer.CreditSum = this.offeredCreditLine;
 			customer.LastStatus = this.autoDecisionResponse.CreditResult.HasValue
 				? this.autoDecisionResponse.CreditResult.ToString()
 				: "N/A";
-			customer.SystemCalculatedSum = this.modelLoanOffer;
+			customer.SystemCalculatedSum = this.medal.RoundOfferedAmount();
 			customer.ManagerApprovedSum = this.offeredCreditLine;
 			if (this.autoDecisionResponse.DecidedToReject) {
 				customer.DateRejected = now;
@@ -507,21 +500,19 @@
 				cr.OfferValidUntil = customer.OfferValidUntil;
 
 				cr.SystemDecision = this.autoDecisionResponse.SystemDecision;
-				cr.SystemCalculatedSum = this.modelLoanOffer;
+				cr.SystemCalculatedSum = this.medal.RoundOfferedAmount();
 				cr.SystemDecisionDate = now;
 				cr.ManagerApprovedSum = this.offeredCreditLine;
 				cr.UnderwriterDecision = this.autoDecisionResponse.CreditResult;
 				cr.UnderwriterDecisionDate = now;
 				cr.UnderwriterComment = this.autoDecisionResponse.DecisionName;
 				cr.AutoDecisionID = this.autoDecisionResponse.DecisionCode;
-				cr.MedalType = this.medalClassification;
-				cr.ScorePoints = (double)this.medalScore;
+				cr.MedalType = this.medal.MedalClassification;
+				cr.ScorePoints = (double)this.medal.TotalScoreNormalized;
 				cr.ExpirianRating = this.customerDetails.ExperianConsumerScore;
-				cr.AnnualTurnover = (int)this.turnoverUsedInMedal;
+				cr.AnnualTurnover = (int)this.medal.AnnualTurnover;
 				cr.LoanType = loanTypeIdToUse;
-				cr.LoanSource = isEuToUse
-					? this._loanSourceRepository.GetByName(LoanSourceName.EU.ToString())
-					: this._loanSourceRepository.GetDefault();
+				cr.LoanSource = this.loanSourceRepository.GetDefault();
 
 				if (this.autoDecisionResponse.DecidedToApprove)
 					cr.InterestRate = interestRateToUse;
@@ -542,11 +533,11 @@
 					cr.IsCustomerRepaymentPeriodSelectionAllowed =
 						autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
 					cr.DiscountPlan = autoDecisionResponse.DiscountPlanID.HasValue
-						? _discountPlanRepository.Get(autoDecisionResponse.DiscountPlanID.Value)
+						? discountPlanRepository.Get(autoDecisionResponse.DiscountPlanID.Value)
 						: null;
 					cr.UseBrokerSetupFee = autoDecisionResponse.BrokerSetupFeeEnabled;
-					cr.LoanSource = _loanSourceRepository.Get(autoDecisionResponse.LoanSourceID);
-					cr.LoanType = _loanTypeRepository.Get(autoDecisionResponse.LoanTypeID);
+					cr.LoanSource = loanSourceRepository.Get(autoDecisionResponse.LoanSourceID);
+					cr.LoanType = loanTypeRepository.Get(autoDecisionResponse.LoanTypeID);
 					cr.ManualSetupFeeAmount = autoDecisionResponse.ManualSetupFeeAmount;
 					cr.ManualSetupFeePercent = autoDecisionResponse.ManualSetupFeePercent;
 				} // if
@@ -554,13 +545,13 @@
 
 			customer.LastStartedMainStrategyEndTime = now;
 
-			this._customers.SaveOrUpdate(customer);
+			this.customers.SaveOrUpdate(customer);
 
 			if (this.autoDecisionResponse.Decision.HasValue) {
-				this._decisionHistory.LogAction(
+				this.decisionHistory.LogAction(
 					this.autoDecisionResponse.Decision.Value,
 					this.autoDecisionResponse.DecisionName,
-					this._session.Get<User>(1), customer
+					this.session.Get<User>(1), customer
 				);
 			} // if
 
@@ -650,12 +641,12 @@
 		private int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		private int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
-		private readonly CustomerRepository _customers;
-		private readonly DecisionHistoryRepository _decisionHistory;
-		private readonly DiscountPlanRepository _discountPlanRepository;
-		private readonly LoanSourceRepository _loanSourceRepository;
-		private readonly LoanTypeRepository _loanTypeRepository;
-		private readonly ISession _session;
+		private readonly CustomerRepository customers;
+		private readonly DecisionHistoryRepository decisionHistory;
+		private readonly DiscountPlanRepository discountPlanRepository;
+		private readonly LoanSourceRepository loanSourceRepository;
+		private readonly LoanTypeRepository loanTypeRepository;
+		private readonly ISession session;
 		private readonly int avoidAutomaticDecision;
 		private readonly CustomerAddressRepository customerAddressRepository;
 		private readonly LandRegistryRepository landRegistryRepository;
@@ -677,12 +668,9 @@
 
 		// Calculated based on raw data
 		private bool isHomeOwner;
-		private Medal medalClassification;
-		private TurnoverType? turnoverType;
-		private decimal turnoverUsedInMedal;
-		private decimal medalScore;
-		private Ezbob.Backend.Strategies.MedalCalculations.MedalType medalType;
-		private int modelLoanOffer;
+
+		private MedalResult medal;
+
 		private int offeredCreditLine;
 
 		/// <summary>

@@ -1,0 +1,1 @@
+-- Placeholder file, see SaveDecisionTrail stored procedure for type definition.

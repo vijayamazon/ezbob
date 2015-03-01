@@ -3,12 +3,14 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
+	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using PaymentServices.Calculators;
 
@@ -56,19 +58,7 @@
 				CommandSpecies.StoredProcedure
 			);
 
-			string top = (topCount > 0) ? "TOP " + topCount : string.Empty;
-
-			string condition = (lastCheckedID > 0)
-				? "AND r.Id < " + lastCheckedID
-				: string.Empty;
-
-			this.data.Clear();
-
-			DB.ForEachRowSafe(
-				ProcessRow,
-				string.Format(QueryTemplate, top, condition),
-				CommandSpecies.Text
-			);
+			LoadCashRequests();
 
 			var pc = new ProgressCounter("{0} cash requests processed.", Log, 50);
 
@@ -93,7 +83,7 @@
 			foreach (Datum d in this.data) {
 				Log.Debug("{0}", d);
 
-				lst.Add(d.ToCsv(crLoans, loanSources));
+				lst.Add(d.ToCsv(this.crLoans, this.loanSources));
 			} // for each
 
 			Log.Debug("Output data - end.");
@@ -104,6 +94,51 @@
 				string.Join("\n", lst)
 			);
 		} // Execute
+
+		private void LoadCashRequests() {
+			this.data.Clear();
+
+			DB.ForEachRowSafe(ProcessRow, Query, CommandSpecies.Text);
+
+			Log.Debug("{0} loaded before filtering.", Grammar.Number(this.data.Count, "cash request"));
+
+			var byCustomer = new SortedDictionary<int, List<Datum>>();
+
+			foreach (Datum curDatum in this.data) {
+				if (!byCustomer.ContainsKey(curDatum.CustomerID)) {
+					byCustomer[curDatum.CustomerID] = new List<Datum> { curDatum };
+					continue;
+				} // if
+
+				List<Datum> customerData = byCustomer[curDatum.CustomerID];
+
+				var lastKnown = customerData.Last();
+
+				// EZ-3048: from two cash requests that happen in less than 24 hours only the latest should be taken.
+				if ((curDatum.DecisionTime - lastKnown.DecisionTime).TotalHours < 24)
+					customerData.RemoveAt(customerData.Count - 1);
+
+				customerData.Add(curDatum);
+			} // for each
+
+			var result = new List<Datum>();
+
+			foreach (List<Datum> lst in byCustomer.Values)
+				result.AddRange(lst);
+
+			result.Sort((a, b) => b.CashRequestID.CompareTo(a.CashRequestID));
+
+			if (this.lastCheckedID > 0)
+				result = result.Where(ymir => ymir.CashRequestID < this.lastCheckedID).ToList();
+
+			if (this.topCount > 0)
+				result = result.Take(this.topCount).ToList();
+
+			this.data.Clear();
+			this.data.AddRange(result);
+
+			Log.Debug("{0} remained after filtering.", Grammar.Number(this.data.Count, "cash request"));
+		} // LoadCashRequests
 
 		private bool IsHomeOwner(int customerID) {
 			if (homeOwners.ContainsKey(customerID))
@@ -147,6 +182,8 @@
 			} // Status
 			public decimal RepaidPrincipal { get; set; }
 
+			public int MaxLateDays { get; set; }
+
 			public LoanStatus LoanStatus { get; protected set; }
 		} // class LoanMetaData
 
@@ -160,9 +197,11 @@
 					LoanAmount = lmd.LoanAmount;
 					RepaidPrincipal = lmd.RepaidPrincipal;
 					LoanStatus = lmd.LoanStatus;
+					MaxLateDays = lmd.MaxLateDays;
 				} else {
 					LoanAmount += lmd.LoanAmount;
 					RepaidPrincipal += lmd.RepaidPrincipal;
+					MaxLateDays = Math.Max(MaxLateDays, lmd.MaxLateDays);
 
 					if (lmd.LoanStatus == LoanStatus.Late)
 						LoanStatus = LoanStatus.Late;
@@ -191,7 +230,8 @@
 					Counter,
 					LoanStatus.ToString(),
 					LoanAmount,
-					RepaidPrincipal
+					RepaidPrincipal,
+					MaxLateDays
 				);
 			} // ToString
 		} // LoanSummaryData
@@ -210,6 +250,16 @@
 			public int CashRequestID { get; set; }
 			public int CustomerID { get; set; }
 			public int BrokerID { get; set; }
+
+			public string MedalType {
+				get { return Manual.MedalName; }
+				set { Manual.MedalName = value; }
+			} // MedalType
+
+			public decimal? ScorePoints {
+				get { return Manual.EzbobScore; }
+				set { Manual.EzbobScore = value; }
+			} // ScorePoints
 
 			[FieldName("UnderwriterDecisionDate")]
 			public DateTime DecisionTime {
@@ -258,7 +308,7 @@
 
 				foreach (var s in sources) {
 					os.Add(string.Format(
-						"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount",
+						"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount;{0} max late days",
 						s
 					));
 				} // for each
@@ -378,6 +428,12 @@
 			[NonTraversable]
 			public string Decision { get; set; }
 
+			[NonTraversable]
+			public string MedalName { get; set; }
+
+			[NonTraversable]
+			public decimal? EzbobScore { get; set; }
+
 			public string DecisionStr {
 				get {
 					switch (Decision) {
@@ -404,6 +460,10 @@
 			public void Calculate(int customerID, bool isHomeOwner, AConnection db, ASafeLog log) {
 				var instance = new CalculateMedal(customerID, DecisionTime, true, false);
 				instance.Execute();
+
+				MedalName = instance.Result.MedalClassification.ToString();
+
+				EzbobScore = instance.Result.TotalScoreNormalized;
 
 				log.Debug("Before capping the offer: {0}", instance.Result);
 
@@ -461,7 +521,7 @@
 
 			public static string CsvTitles(string prefix) {
 				return string.Format(
-					"{0} Decision time;{0} Decision;{0} Amount;{0} Interest Rate;" +
+					"{0} Decision time;{0} Medal;{0} Ezbob Score;{0} Decision;{0} Amount;{0} Interest Rate;" +
 					"{0} Repayment Period;{0} Setup Fee %;{0} Setup Fee Amount",
 					prefix
 				);
@@ -470,6 +530,8 @@
 			public string ToCsv() {
 				return string.Join(";",
 					DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					MedalName,
+					EzbobScore,
 					DecisionStr,
 					Amount.ToString(CultureInfo.InvariantCulture),
 					InterestRate.ToString(CultureInfo.InvariantCulture),
@@ -492,8 +554,8 @@
 		private readonly TCrLoans crLoans;
 		private readonly SortedSet<string> loanSources; 
 
-		private const string QueryTemplate = @"
-SELECT {0}
+		private const string Query = @"
+SELECT
 	r.Id AS CashRequestID,
 	r.IdCustomer AS CustomerID,
 	c.BrokerID,
@@ -505,7 +567,9 @@ SELECT {0}
 	r.UseSetupFee,
 	r.UseBrokerSetupFee,
 	r.ManualSetupFeePercent,
-	r.ManualSetupFeeAmount
+	r.ManualSetupFeeAmount,
+	r.MedalType,
+	r.ScorePoints
 FROM
 	CashRequests r
 	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
@@ -521,9 +585,10 @@ WHERE
 	r.IdUnderwriter IS NOT NULL
 	AND
 	r.IdUnderwriter != 1
-	{1}
 ORDER BY
-	r.Id DESC";
+	r.IdCustomer ASC,
+	r.UnderwriterDecisionDate ASC,
+	r.Id ASC";
 	} // class MaamMedalAndPricing
 } // namespace
 

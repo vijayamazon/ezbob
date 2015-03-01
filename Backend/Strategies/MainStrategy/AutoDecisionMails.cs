@@ -8,7 +8,7 @@
 		private void SendEmails() {
 			if (autoDecisionResponse.DecidedToReject) {
 				bool sendToCustomer = true;
-				var customer = _customers.ReallyTryGet(customerId);
+				var customer = this.customers.ReallyTryGet(customerId);
 				if (customer != null) {
 					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
 					if (customer.FilledByBroker && numOfPreviousApprovals == 0) {
@@ -36,7 +36,7 @@
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{ "Surname", this.customerDetails.AppSurname },
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
-				{ "MedalType", medalClassification.ToString() },
+				{ "MedalType", this.medal.MedalClassification.ToString() },
 				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
 				{ "ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
 				{ "RepaymentPeriod", this.lastOffer.LoanOfferRepaymentPeriod.ToString(Library.Instance.Culture) },
@@ -70,7 +70,7 @@
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{ "Surname", this.customerDetails.AppSurname },
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
-				{ "MedalType", medalClassification.ToString() },
+				{ "MedalType", this.medal.MedalClassification.ToString() },
 				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
 				{
 					"ApprovalAmount",
@@ -109,7 +109,7 @@
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{ "Surname", this.customerDetails.AppSurname },
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
-				{ "MedalType", medalClassification.ToString() },
+				{ "MedalType", this.medal.MedalClassification.ToString() },
 				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
 				{ "ApprovalAmount", offeredCreditLine.ToString(Library.Instance.Culture) },
 				{ "RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
@@ -144,7 +144,7 @@
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{ "Surname", this.customerDetails.AppSurname },
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
-				{ "MedalType", medalClassification.ToString() },
+				{ "MedalType", this.medal.MedalClassification.ToString() },
 				{ "SystemDecision", "WaitingForDecision" }
 			});
 		} // SendWaitingForDecisionMail
