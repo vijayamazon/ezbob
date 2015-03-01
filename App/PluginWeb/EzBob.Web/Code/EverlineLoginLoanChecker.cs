@@ -1,21 +1,28 @@
 ﻿namespace EzBob.Web.Code {
 	using System;
 	using ConfigManager;
+	using log4net;
 	using Newtonsoft.Json;
 	using RestSharp;
 
 	public class EverlineLoginLoanChecker {
+		private readonly ILog Log = LogManager.GetLogger(typeof (EverlineLoginLoanChecker));
 		public EverlineLoginLoanCheckerResult GetLoginStatus(string email) {
 			try {
-				if (!string.IsNullOrEmpty(CurrentValues.Instance.EverlineLoanStatusTestMode.Value)) {
+				string testMode = CurrentValues.Instance.EverlineLoanStatusTestMode.Value;
+				if (!string.IsNullOrEmpty(testMode)) {
+					Log.InfoFormat("EverlineLoginLoanChecker TestMode: {0}", testMode);	
 					EverlineLoanStatus status;
 					if (Enum.TryParse(CurrentValues.Instance.EverlineLoanStatusTestMode.Value, out status)) {
+						Log.InfoFormat("EverlineLoginLoanChecker returning status: {0}", status);
 						return new EverlineLoginLoanCheckerResult {
 							status = status
 						};
+					} else {
+						Log.WarnFormat("EverlineLoginLoanChecker failed to parse test mode status: {0}", testMode);
 					}
 				}
-
+				Log.InfoFormat("EverlineLoginLoanChecker executing api call to wonga for email: {0}", email);
 				RestClient client = new RestClient("https://restapi.everline.com/1.0/ezbob/customerloanstatus");
 				var request = new RestRequest(Method.GET) {
 					Parameters = {
@@ -29,14 +36,17 @@
 				request.AddHeader("X-Authentication", "c83c4951-d205-4452-bce0-f0bc24d3e8b2,00000000-0000-0000-0000-000000000000,5a4690c72b1723a54530700250d90e5b35aa283ffb884525a031c3dc0a164c5c");
 				var response = client.Execute(request);
 				if (string.IsNullOrEmpty(response.Content)) {
+					Log.WarnFormat("EverlineLoginLoanChecker empty response returning error {0}", response.ErrorMessage);
 					return new EverlineLoginLoanCheckerResult {
 						Message = response.ErrorMessage,
 						status = EverlineLoanStatus.Error
 					};
 				}
 				var result = JsonConvert.DeserializeObject<EverlineLoginLoanCheckerResult>(response.Content);
+				Log.InfoFormat("EverlineLoginLoanChecker successful response {0} returning {1}", response.Content, result.status);
 				return result;
 			} catch (Exception ex) {
+				Log.WarnFormat("EverlineLoginLoanChecker exception during retrieve of status {0}", ex);
 				return new EverlineLoginLoanCheckerResult {
 					Message = ex.Message,
 					status = EverlineLoanStatus.Error
