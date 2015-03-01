@@ -103,6 +103,8 @@
 					var limited = new LoadExperianLtd(this.customer.Company.ExperianRefNum, 0);
 					limited.Execute();
 
+					this.companyDissolutionDate = limited.Result.DissolutionDate;
+
 					this.directors = new List<Name>();
 
 					foreach (ExperianLtdDL72 dataRow in limited.Result.GetChildren<ExperianLtdDL72>())

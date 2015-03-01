@@ -203,6 +203,7 @@
 			DirectorName,
 			HmrcBusinessName,
 			ExperianConsumerDataCais,
+			CompanyDissolutionDate,
 		} // enum RowType
 
 		private void ProcessRow(SafeReader sr) {
@@ -248,6 +249,10 @@
 
 			case RowType.ExperianConsumerDataCais:
 				this.caisAccounts.Add(sr.Fill<ExperianConsumerDataCaisAccounts>());
+				break;
+
+			case RowType.CompanyDissolutionDate:
+				MetaData.CompanyDissolutionDate = sr["CompanyDissolutionDate"];
 				break;
 
 			default:

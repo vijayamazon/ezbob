@@ -533,5 +533,9 @@ BEGIN
 	EXECUTE LoadExperianConsumerDataCais @ExperianConsumerId
 
 	------------------------------------------------------------------------------
+
+	EXECUTE LoadCompanyDissolutionDate @CustomerID, @Now
+
+	------------------------------------------------------------------------------
 END
 GO

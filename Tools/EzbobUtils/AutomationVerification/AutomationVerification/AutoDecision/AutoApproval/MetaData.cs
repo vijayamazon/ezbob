@@ -61,6 +61,8 @@
 
 		public int PreviousManualApproveCount { get; set; }
 
+		public DateTime? CompanyDissolutionDate { get; set; }
+
 		[JsonIgnore]
 		public FraudStatus FraudStatus { get; private set; }
 
