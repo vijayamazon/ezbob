@@ -35,13 +35,14 @@ namespace EzBob.Models.Marketplaces.Builders {
 		}
 
 		public YodleeModel BuildYodlee(MP_CustomerMarketPlace mp, DateTime? history) {
+			DateTime now = history ?? DateTime.UtcNow;
 			YodleeOrderDictionary yodleeData = null;
 			var directors = new List<string>();
 			_timeElapsed = new List<System.Tuple<string, double>>();
 			Stopwatch sw = Stopwatch.StartNew();
 			if (mp.Marketplace.InternalId == new YodleeServiceInfo().InternalId) {
 				var ddh = new DatabaseDataHelper(_session);
-				yodleeData = ddh.GetAllYodleeOrdersData(history.HasValue ? history.Value : DateTime.UtcNow, mp, false, out directors);
+				yodleeData = ddh.GetAllYodleeOrdersData(now, mp, false, out directors);
 			} // if
 			sw.Stop();
 			_timeElapsed.Add(new System.Tuple<string, double>("GetAllYodleeOrdersData", sw.Elapsed.TotalMilliseconds));
@@ -60,7 +61,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			model.BankStatementDataModel = new BankStatementDataModel();
 
 			var banks = new List<YodleeBankModel>();
-
+			var yearAgo = new DateTime(now.Year, now.Month, 1).AddYears(-1);
 			Log.Debug("Yodlee model is being built for marketplace {0}...", mp.Stringify());
 			sw.Restart();
 			foreach (var bank in yodleeData.Data.Keys) {
@@ -89,6 +90,10 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 				foreach (var transaction in yodleeData.Data[bank]) {
 					DateTime? oDate = transaction.postDate.date ?? transaction.transactionDate.date;
+					if (!oDate.HasValue || oDate.Value < yearAgo) {
+						continue;//take only 12 month of data
+					}
+
 					double? transactionAmount = CurrencyXchg(transaction.transactionAmount, oDate);
 					double? runningBalance = CurrencyXchg(transaction.runningBalance, oDate);
 
@@ -105,7 +110,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 						bankTransactionId = transaction.bankTransactionId,
 						ezbobGroup = transaction.siteCategory,
 						ezbobSubGroup = transaction.siteCategoryType,
-						ezbobGroupPriority = transaction.customCategoryId.HasValue ? transaction.customCategoryId.Value : 0
+						ezbobGroupPriority = transaction.customCategoryId ?? 0
 					};
 
 					transactions.Add(yodleeTransactionModel);

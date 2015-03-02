@@ -172,10 +172,23 @@
 				using (tc.AddStep("CompanyScore Time taken")) {
 					var builder = new CompanyScoreModelBuilder();
 					model.CompanyScore = builder.Create(customer);
+
+					DateTime? companySeniority = model.CompanyScore.DashboardModel.OriginationDate;
+					int companySeniorityYears = 0, companySeniorityMonths = 0;
+					if (companySeniority.HasValue) {
+						MiscUtils.GetFullYearsAndMonths(companySeniority.Value, out companySeniorityYears, out companySeniorityMonths);
+					}
+
+					model.PersonalInfoModel.CompanySeniority = string.Format("{0}y {1}m", companySeniorityYears, companySeniorityMonths);
+					model.PersonalInfoModel.IsYoungCompany = companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow && (companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month || companySeniority.Value.Day != DateTime.UtcNow.Day);
 				} // using
 
-				using (tc.AddStep("ExperianDirectors Time taken"))
-					model.ExperianDirectors = model.PersonalInfoModel.ExperianDirectors;
+				using (tc.AddStep("ExperianDirectors Time taken")) {
+					var expDirModel = CrossCheckModel.GetExperianDirectors(customer);
+					model.ExperianDirectors = expDirModel.DirectorNames;
+					model.PersonalInfoModel.NumOfDirectors = expDirModel.NumOfDirectors;
+					model.PersonalInfoModel.NumOfShareholders = expDirModel.NumOfShareHolders;
+				}
 
 				using (tc.AddStep("MarketplacesHistory Time taken")) {
 					model.State = "Ok";
