@@ -155,7 +155,7 @@
 			model.CcjValue = data.TotalJudgmentValueLast24Months ?? 0 + data.TotalAssociatedJudgmentValueLast24Months ?? 0;
 			model.Ccjs = data.TotalJudgmentCountLast24Months ?? 0 + data.TotalAssociatedJudgmentCountLast24Months ?? 0;
 			model.CompanyHistories = new List<CompanyHistory>();
-
+			model.OriginationDate = data.IncorporationDate;
 			if (data.ScoreHistory != null)
 			{
 				foreach (ScoreAtDate scoreAtDate in data.ScoreHistory)
@@ -187,6 +187,7 @@
 
 			oModel.Ccjs = oExperianLtd.GetNumberOfCcjsInLast24Months();
 			oModel.CcjValue = oExperianLtd.GetSumOfCcjsInLast24Months();
+			oModel.OriginationDate = oExperianLtd.GetOriginationDate();
 			if (data.History != null)
 			{
 				foreach (ScoreAtDate scoreAtDate in data.History) {

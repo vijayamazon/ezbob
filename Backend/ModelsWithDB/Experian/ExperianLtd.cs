@@ -423,5 +423,8 @@
 			} // for each row type (DL 65, DL 72, etc)
 		} // LoadChildrenFromXml
 
+		public DateTime? GetOriginationDate() {
+			return IncorporationDate;
+		}
 	} // class ExperianLtd
 } // namespace

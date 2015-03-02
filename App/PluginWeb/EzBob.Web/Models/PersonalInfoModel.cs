@@ -80,7 +80,6 @@
 		public string PostCode { get; set; }
 		public DirectorModel[] Directors { get; set; }
 		public bool IsWizardComplete { get; set; }
-		public List<string> ExperianDirectors { get; set; }
 		public bool IsAlibaba { get; set; }
 		public int BoardResolutionTemplateID { get; set; }
 		public int PersonalGuaranteeTemplateID { get; set; }
@@ -147,32 +146,6 @@
 			if (Directors == null)
 				Directors = new DirectorModel[0];
 			
-			var expDirModel = CrossCheckModel.GetExperianDirectors(customer);
-			ExperianDirectors = expDirModel.DirectorNames;
-			NumOfDirectors = expDirModel.NumOfDirectors;
-			NumOfShareholders = expDirModel.NumOfShareHolders;
-			
-			var context = ObjectFactory.GetInstance<IWorkplaceContext>();
-			DateTime? companySeniority = null;
-			try
-			{
-				if (customer.PersonalInfo != null) {
-					companySeniority = serviceClient.Instance.GetCompanySeniority(customer.Id, customer.PersonalInfo.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited, context.UserId).Value;
-				}
-			}
-			catch (Exception ex)
-			{
-				Log.WarnFormat("Failed to fetch company seniority \n {0}", ex);
-			}
-			int companySeniorityYears = 0, companySeniorityMonths = 0;
-			if (companySeniority.HasValue)
-			{
-				MiscUtils.GetFullYearsAndMonths(companySeniority.Value, out companySeniorityYears, out companySeniorityMonths);
-			}
-
-			CompanySeniority = string.Format("{0}y {1}m", companySeniorityYears, companySeniorityMonths);
-			IsYoungCompany = companySeniority.HasValue && companySeniority.Value.AddYears(1) > DateTime.UtcNow && (companySeniority.Value.Year != DateTime.UtcNow.Year || companySeniority.Value.Month != DateTime.UtcNow.Month || companySeniority.Value.Day != DateTime.UtcNow.Day);
-
 			if (customer.FraudStatus != FraudStatus.Ok)
 			{
 				IsFraudInAlertMode = true;

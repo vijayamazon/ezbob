@@ -81,6 +81,7 @@
 		public List<FinDataModel> FinDataHistories { get; set; }
 		public List<CompanyHistory> CompanyHistories { get; set; }
 		public string Error { get; set; }
+		public DateTime? OriginationDate { get; set; }
 	} // class ComapanyDashboardModel
 
 } // namespace
