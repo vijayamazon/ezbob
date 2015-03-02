@@ -14,7 +14,6 @@
 	using Ezbob.Utils;
 	using Infrastructure;
 	using Models;
-	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using Web.Models;
@@ -56,8 +55,6 @@
 			_docRepo = docRepo;
 			_bugs = bugs;
 			_loanRepository = loanRepository;
-			this.customerAddressRepository = customerAddressRepository;
-			this.landRegistryRepository = landRegistryRepository;
 			_propertiesModelBuilder = propertiesModelBuilder;
 			_context = context;
 			serviceClient = new ServiceClient();
@@ -99,14 +96,12 @@
 					bool bHasHistoryDate = DateTime.TryParseExact(history, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out historyDate);
 					try {
 						var ar = serviceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, bHasHistoryDate ? historyDate : (DateTime?)null);
-
-						model.MarketPlaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models)
-							.ToList();
-						model.Affordability = ar.Affordability.ToList();
+						model.MarketPlaces = ar.MpModel.MarketPlaces;
+						model.Affordability = ar.MpModel.Affordability;
 					} catch (Exception ex) {
 						Log.ErrorFormat("Failed to retrieve mp and affordability data for customer {0}\n{1}", customer.Id, ex);
 						model.Affordability = new List<AffordabilityData>();
-						model.MarketPlaces = new List<MarketPlaceModel>();
+						model.MarketPlaces = new List<MarketPlaceDataModel>();
 					}
 				} // using
 
@@ -203,7 +198,7 @@
 		private class FullCustomerModel {
 			public PersonalInfoModel PersonalInfoModel { get; set; }
 			public ApplicationInfoModel ApplicationInfoModel { get; set; }
-			public List<MarketPlaceModel> MarketPlaces { get; set; }
+			public List<MarketPlaceDataModel> MarketPlaces { get; set; }
 			public List<AffordabilityData> Affordability { get; set; }
 			public List<MarketPlaceHistoryModel> MarketplacesHistory { get; set; }
 			public LoansAndOffers LoansAndOffers { get; set; }
@@ -238,8 +233,6 @@
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly PropertiesModelBuilder _propertiesModelBuilder;
 		private readonly LoanRepository _loanRepository;
-		private readonly CustomerAddressRepository customerAddressRepository;
-		private readonly LandRegistryRepository landRegistryRepository;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private readonly ServiceClient serviceClient;

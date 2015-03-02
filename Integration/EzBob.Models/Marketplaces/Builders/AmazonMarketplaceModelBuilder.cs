@@ -43,8 +43,9 @@
             model.Categories = _ebayAmazonCategoryRepository.GetAmazonCategories(mp);
         }
 
-		protected override void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
+		protected override MarketPlaceFeedbackModel GetFeedbackData(List<IAnalysisDataParameterInfo> aggregations) {
 			var sellerRating = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.UserRating.ToString());
+			var model = new MarketPlaceFeedbackModel();
 			model.AmazonSelerRating = sellerRating == null ? 0 : (double)sellerRating.Value;
 
 			var raitingPercent = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackPercentRate.ToString() && x.TimePeriod.TimePeriodType == TimePeriodEnum.Year);
@@ -53,7 +54,7 @@
 
 			var yearAggregations = aggregations.Where(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year).ToList();
 			if (!yearAggregations.Any()) {
-				return;
+				return model;
 			}
 
 			var positive = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackRate.ToString());
@@ -63,6 +64,7 @@
 			model.PositiveFeedbacks = positive == null ? null : (int?)positive.Value;
 			model.NegativeFeedbacks = negative == null ? null : (int?)negative.Value;
 			model.NeutralFeedbacks = neutral == null ? null : (int?)neutral.Value;
+			return model;
 		}
 
         public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)

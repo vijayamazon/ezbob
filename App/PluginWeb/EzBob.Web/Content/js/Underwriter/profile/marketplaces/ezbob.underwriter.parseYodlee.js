@@ -14,12 +14,10 @@ EzBob.Underwriter.ParseYodleeView = Backbone.Marionette.ItemView.extend({
 		"click .parseYodlee": "parseYodlee",
 	},
 	serializeData: function () {
-		var companyFiles = _.find(this.model.models, function (model) {
-			return model.get('CompanyFiles') != null;
-		});
+		var companyFiles = this.model.get('CompanyFiles');
 		return {
 			customerId: this.customerId,
-			files: companyFiles ? companyFiles.get('CompanyFiles').Files : []
+			files: companyFiles ? companyFiles.Files : []
 		};
 	},
 	onRender: function () {

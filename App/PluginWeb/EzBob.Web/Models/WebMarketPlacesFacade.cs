@@ -30,7 +30,6 @@
 						Type = mp.DisplayName,
 						Name = mp.Marketplace.Name,
 						IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
-						PaymentAccountBasic = new PaymentAccountsModel(mp,history)
 					};
 				} // try
 			}).ToList();

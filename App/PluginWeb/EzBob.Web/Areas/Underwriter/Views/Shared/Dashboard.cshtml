@@ -105,10 +105,6 @@
             </div>
         </div>
 
-        <%
-        if(affordability && affordability.length > 0){
-        }%>
-
         <div class="col-lg-9 col-md-12 col-sm-12">
             <div class="table-ezbig">
                 <div class="box">
@@ -129,6 +125,7 @@
                                 <td><strong>EBIDA</strong></td>
                                 <td>Loan repayment</td>
                                 <td><strong>FCF</strong></td>
+                                <td>Turnover Trend</td>
                             </tr>
                             <%_.each(affordability, function(af,i) { if(af.TypeStr) {%>
                             <tr>
@@ -149,6 +146,7 @@
                                 <td><strong><%-EzBob.formatPoundsNoDecimals(af.Ebitda)%></strong></td>
                                 <td><%-EzBob.formatPoundsNoDecimals(af.LoanRepayment)%></td>
                                 <td><strong><span class="alert <%- af.FreeCashFlow < 0 ? 'alert-danger' : 'alert-success' %>"><%-EzBob.formatPoundsNoDecimals(af.FreeCashFlow)%></span></strong></td>
+                                <td><span class="affordability-trend-<%-i%>"></span></td>
                             </tr>
                             <%}});%>
                         </table>
@@ -566,7 +564,6 @@
         </div>
         <%}%>
     </div>
-
     <div class="table-ezbig">
         <div class="row">
             <div class="col-lg-12 col-md-12">
@@ -631,7 +628,6 @@
             </div>
         </div>
     </div>
-
 </script>
 
 @helper BoxTools(string bugType, string gotoTab = null) {

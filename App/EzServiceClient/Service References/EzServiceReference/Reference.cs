@@ -1394,33 +1394,17 @@ namespace ServiceClientProxy.EzServiceReference {
     public partial class MarketplacesActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.AffordabilityData[] AffordabilityField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string ModelsField;
+        private Ezbob.Backend.Models.MpModel MpModelField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.AffordabilityData[] Affordability {
+        public Ezbob.Backend.Models.MpModel MpModel {
             get {
-                return this.AffordabilityField;
+                return this.MpModelField;
             }
             set {
-                if ((object.ReferenceEquals(this.AffordabilityField, value) != true)) {
-                    this.AffordabilityField = value;
-                    this.RaisePropertyChanged("Affordability");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Models {
-            get {
-                return this.ModelsField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.ModelsField, value) != true)) {
-                    this.ModelsField = value;
-                    this.RaisePropertyChanged("Models");
+                if ((object.ReferenceEquals(this.MpModelField, value) != true)) {
+                    this.MpModelField = value;
+                    this.RaisePropertyChanged("MpModel");
                 }
             }
         }

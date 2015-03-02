@@ -232,7 +232,10 @@
 
 		[Test]
 		public void TestCalculateModelsAndAffordability() {
-			new CalculateModelsAndAffordability(15821, null).Execute();
+			var stra = new CalculateModelsAndAffordability(14166, null);
+			stra.Execute();
+			Assert.IsNotNull(stra.MpModel.Affordability);
+			Assert.IsNotNull(stra.MpModel.MarketPlaces);
 		}
 
 		[Test]

@@ -46,7 +46,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				Disabled = mp.Disabled,
 				IsNew = mp.IsNew,
 				IsHistory = history.HasValue,
-				History = history.HasValue ? history.Value : (DateTime?)null,
+				History = history,
 				LastTransactionDate = lastTransactionDate
 			};
 
@@ -60,16 +60,84 @@ namespace EzBob.Models.Marketplaces.Builders {
 			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
 
 			InitializeSpecificData(mp, model, history);
-			InitializeFeedbackData(model, aggregations);
+			var feedbacks = GetFeedbackData(aggregations);
+			model.RaitingPercent = feedbacks.RaitingPercent;
+			model.PositiveFeedbacks = feedbacks.PositiveFeedbacks;
+			model.NegativeFeedbacks = feedbacks.NegativeFeedbacks;
+			model.NeutralFeedbacks = feedbacks.NeutralFeedbacks;
+			model.AmazonSelerRating = feedbacks.AmazonSelerRating;
 
 			if (model.IsPaymentAccount) {
-				model.PaymentAccountBasic = GetPaymentAccountModel(mp, model, history, aggregations);
+				var paymentModel = GetPaymentAccountModel(mp, history, aggregations);
+				model.TotalNetInPayments = paymentModel.TotalNetInPayments;
+				model.TotalNetOutPayments = paymentModel.TotalNetOutPayments;
+				model.TransactionsNumber = paymentModel.TransactionsNumber;
+				model.MonthInPayments = paymentModel.MonthInPayments;
 			}
 			return model;
 		}
 
-		protected virtual void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
-		
+		public MarketPlaceDataModel CreateLightModel(MP_CustomerMarketPlace mp, DateTime? history) {
+			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
+			var updatingStatus = mp.GetUpdatingStatus(history);
+			var updatingError = mp.GetUpdatingError(history);
+			var age = GetAccountAge(mp);
+			var url = GetUrl(mp, mp.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(mp.Id));
+			var lastTransactionDate = GetLastTransactionDate(mp);
+
+			var model = new MarketPlaceDataModel {
+				Id = mp.Id,
+				Type = mp.DisplayName,
+				Name = mp.Marketplace.Name,
+				LastChecked = lastChecked,
+				UpdatingStatus = updatingStatus,
+				UpdateError = updatingError,
+				AccountAge = age,
+				RaitingPercent = 0,
+				SellerInfoStoreURL = url,
+				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
+				UWPriority = mp.Marketplace.UWPriority,
+				Disabled = mp.Disabled,
+				IsNew = mp.IsNew,
+				IsHistory = history.HasValue,
+				History = history,
+				LastTransactionDate = lastTransactionDate,
+				OriginationDate = mp.OriginationDate
+			};
+
+			var aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
+
+			model.TurnoverTrend = mp.MarketplaceTurnovers
+				.Where(x => x.IsActive)
+				.OrderByDescending(x => x.TheMonth)
+				.Take(12)
+				.Select(x => new TurnoverTrend {
+					TheMonth = x.TheMonth,
+					Turnover = x.Turnover
+				}).ToList();
+			
+			var monthSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Month && x.ParameterName == AggregationFunction.Turnover.ToString());
+			model.MonthSales = monthSales == null ? 0 : (decimal)monthSales.Value;
+
+			var yearSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.Turnover.ToString());
+			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
+
+			
+			var feedbacks = GetFeedbackData(aggregations);
+			model.RaitingPercent = feedbacks.RaitingPercent;
+
+			if (model.IsPaymentAccount) {
+				var paymentModel = GetPaymentAccountModel(mp, history, aggregations);
+				model.TotalNetInPayments = paymentModel.TotalNetInPayments;
+				model.TotalNetOutPayments = paymentModel.TotalNetOutPayments;
+				model.MonthInPayments = paymentModel.MonthInPayments;
+				model.TransactionsNumber = paymentModel.TransactionsNumber;
+			}
+			return model;
+		}
+
+		protected virtual MarketPlaceFeedbackModel GetFeedbackData(List<IAnalysisDataParameterInfo> aggregations) {
+			return new MarketPlaceFeedbackModel();
 		}
 
 		public string GetAccountAge(MP_CustomerMarketPlace mp) {
@@ -88,7 +156,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return mp.LastTransactionDate;
 		}
 
-		protected virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+		protected virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, DateTime? history, List<IAnalysisDataParameterInfo> av) {
 			return null;
 		}
 

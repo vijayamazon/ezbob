@@ -5,9 +5,6 @@
 	[DataContract]
 	public class MarketplacesActionResult : ActionResult {
 		[DataMember]
-		public string Models { get; set; }
-
-		[DataMember]
-		public AffordabilityData[] Affordability { get; set; }
+		public MpModel MpModel { get; set; }
 	} // class MarketplacesActionResult
 } // namespace EzService

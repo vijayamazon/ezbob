@@ -48,8 +48,11 @@ EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 			}
 		};
 
-		EzBob.App.vent.on('ct:marketplaces.history', function() {
+		EzBob.App.vent.on('ct:marketplaces.history', function(history) {
+			BlockUi('on', self.$el);
 			self.$el.find('#hmrc-upload-container').hide().empty();
+			self.model.history = EzBob.parseDate(history);
+			self.model.fetch().done(function() { BlockUi('off', self.$el); });
 		});
 
 		EzBob.App.vent.on('ct:marketplaces.uploadHmrc', function() {
@@ -118,6 +121,7 @@ EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 			customerId: this.model.customerId
 		});
 
+		
 		return this;
 	},
 
@@ -270,24 +274,37 @@ EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 			return;
 
 		var id = e.currentTarget.getAttribute("data-id");
-		if (!id)
+
+		console.log('load details', id, this.model, this.model.history, this.model.history);
+		if (!id) {
+			UnBlockUi();
 			return;
-
-		this.detailView = new EzBob.Underwriter.MarketPlaceDetailsView({
-			model: this.model,
-			currentId: id,
-			customerId: this.model.customerId,
-			personalInfoModel: this.options.personalInfoModel
+		}
+		this.detailsModel = new EzBob.Underwriter.MarketPlaceDetailModel({
+			historyDate: EzBob.parseDate(this.model.history),
+			marketplaceId: id
 		});
+		BlockUi();
+		var that = this;
+		this.detailsModel.fetch().done(
+			function() {
+				that.detailView = new EzBob.Underwriter.MarketPlaceDetailsView({
+					model: that.detailsModel,
+					currentId: id,
+					customerId: that.model.customerId,
+					personalInfoModel: that.options.personalInfoModel
+				});
 
-		EzBob.App.jqmodal.show(this.detailView);
-
-		this.detailView.on("reCheck", this.reCheckmarketplaces, this);
-		this.detailView.on("disable-shop", this.disableShop, this);
-		this.detailView.on("enable-shop", this.enableShop, this);
-		this.detailView.on("recheck-token", this.renewToken);
-		this.detailView.customerId = this.model.customerId;
-		this.detailView.render();
+				EzBob.App.jqmodal.show(that.detailView);
+				that.detailView.on("reCheck", that.reCheckmarketplaces, that);
+				that.detailView.on("disable-shop", that.disableShop, that);
+				that.detailView.on("enable-shop", that.enableShop, that);
+				that.detailView.on("recheck-token", that.renewToken);
+				that.detailView.customerId = that.model.customerId;
+				that.detailView.render();
+				UnBlockUi();
+			}
+		);
 	},
 
 	showMPError: function() {
@@ -431,17 +448,31 @@ EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 	},
 
 	parseYodlee: function() {
+		
+		var companyFiles = _.find(this.model.models, function(m) { return m.get('Name') === "CompanyFiles"; });
+		if (companyFiles) {
+			var mpId = companyFiles.get('Id');
+
+			this.detailsModel = new EzBob.Underwriter.MarketPlaceDetailModel({
+				historyDate: null,
+				marketplaceId: mpId
+			});
+
+			this.detailsModel.fetch();
+		} else {
+			this.detailsModel = new Backbone.Model();
+		}
+
 		var parseYodleeView = new EzBob.Underwriter.ParseYodleeView({
 			el: this.$el.find('#parse-yodlee-container'),
 			customerId: this.model.customerId,
-			model: this.model
+			model: this.detailsModel
 		});
 
 		parseYodleeView.render();
 
 		this.$el.find('#parse-yodlee-container').show();
-
-		$(".mps-tables").hide();
+		this.$el.find(".mps-tables").hide();
 
 		return this;
 	}

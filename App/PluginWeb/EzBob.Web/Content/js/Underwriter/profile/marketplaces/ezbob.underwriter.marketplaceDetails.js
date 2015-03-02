@@ -2,21 +2,21 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.MarketPlaceDetailModel = Backbone.Model.extend({
-});
+	initialize: function() {
+		this.on('change reset', this.recalculate, this);
+		this.recalculate();
+	},
 
-EzBob.Underwriter.MarketPlaceDetails = Backbone.Collection.extend({
-    model: EzBob.Underwriter.MarketPlaceDetailModel,
-    url: function () {
-        return window.gRootPath + "Underwriter/MarketPlaces/Details/" + this.makertplaceId;
-    }
-});
+	url: function() {
+		console.log('mod', this.get('marketplaceId'), this.get('historyDate'), this);
+		return window.gRootPath + "Underwriter/MarketPlaces/Details/?umi=" + this.get('marketplaceId') + "&history=" + this.get('historyDate');
+	},
 
-EzBob.Underwriter.MarketPlaceYodleeDetailModel = Backbone.Model.extend({
-    url: function () {
-        return window.gRootPath + "Underwriter/MarketPlaces/YodleeDetails/" + this.get("makertplaceId");
-    }
+	recalculate: function() {
+		var age = EzBob.SeniorityFormat(this.get('AccountAge'), 0);
+		this.set({age: age}, {silent: true});
+	}
 });
-
 
 EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
     initialize: function () {
@@ -26,7 +26,7 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
     render: function () {
         var that = this;
 
-        this.shop = this.model.get(this.options.currentId);
+        this.shop = this.model;
 
         if (!this.shop)
             return false;

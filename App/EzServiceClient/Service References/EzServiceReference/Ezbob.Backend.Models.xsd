@@ -564,6 +564,15 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="FileDescription" nillable="true" type="tns:FileDescription" />
+  <xs:complexType name="MpModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Affordability" nillable="true" type="tns:ArrayOfAffordabilityData" />
+      <xs:element minOccurs="0" name="MarketPlaces" nillable="true" type="tns:ArrayOfMarketPlaceDataModel" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="MpModel" nillable="true" type="tns:MpModel" />
   <xs:complexType name="ArrayOfAffordabilityData">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="AffordabilityData" nillable="true" type="tns:AffordabilityData" />
@@ -583,6 +592,7 @@
       <xs:element minOccurs="0" name="Revenues" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="Salaries" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="Tax" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TurnoverTrend" nillable="true" type="tns:ArrayOfTurnoverTrend" />
       <xs:element minOccurs="0" name="Type" type="tns:AffordabilityType" />
       <xs:element minOccurs="0" name="ValueAdded" nillable="true" type="xs:decimal" />
     </xs:sequence>
@@ -590,6 +600,21 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="AffordabilityData" nillable="true" type="tns:AffordabilityData" />
+  <xs:complexType name="ArrayOfTurnoverTrend">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="TurnoverTrend" nillable="true" type="tns:TurnoverTrend" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfTurnoverTrend" nillable="true" type="tns:ArrayOfTurnoverTrend" />
+  <xs:complexType name="TurnoverTrend">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="TheMonth" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Turnover" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="TurnoverTrend" nillable="true" type="tns:TurnoverTrend" />
   <xs:simpleType name="AffordabilityType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="Hmrc" />
@@ -600,6 +625,43 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="AffordabilityType" nillable="true" type="tns:AffordabilityType" />
+  <xs:complexType name="ArrayOfMarketPlaceDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="MarketPlaceDataModel" nillable="true" type="tns:MarketPlaceDataModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfMarketPlaceDataModel" nillable="true" type="tns:ArrayOfMarketPlaceDataModel" />
+  <xs:complexType name="MarketPlaceDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountAge" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AnnualSales" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Disabled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="History" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="IsHistory" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsNew" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsPaymentAccount" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LastChecked" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastTransactionDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="MonthInPayments" type="xs:decimal" />
+      <xs:element minOccurs="0" name="MonthSales" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Name" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OriginationDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="RaitingPercent" type="xs:decimal" />
+      <xs:element minOccurs="0" name="SellerInfoStoreURL" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="TotalNetInPayments" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TotalNetOutPayments" type="xs:decimal" />
+      <xs:element minOccurs="0" name="TransactionsNumber" type="xs:int" />
+      <xs:element minOccurs="0" name="TurnoverTrend" nillable="true" type="tns:ArrayOfTurnoverTrend" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UWPriority" type="xs:int" />
+      <xs:element minOccurs="0" name="UpdateError" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="UpdatingStatus" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="MarketPlaceDataModel" nillable="true" type="tns:MarketPlaceDataModel" />
   <xs:complexType name="AccountsToUpdate">
     <xs:sequence>
       <xs:element xmlns:q3="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="Ekms" nillable="true" type="q3:ArrayOfKeyValueOfstringstring" />

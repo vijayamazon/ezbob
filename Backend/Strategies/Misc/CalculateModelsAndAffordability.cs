@@ -8,11 +8,8 @@
 	using Ezbob.Utils;
 	using CompanyFiles;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Models.Marketplaces;
 	using Ezbob.Backend.Models;
-	using Newtonsoft.Json;
 	using StructureMap;
-	using VatReturn;
 	using YodleeLib.connector;
 
 	public class CalculateModelsAndAffordability : AStrategy {
@@ -24,7 +21,7 @@
 				m_nCustomerID = nCustomerID;
 				m_oHistory = oHistory;
 				m_oMundMs = new List<LocalMp>();
-				Affordability = new SortedSet<AffordabilityData>();
+				MpModel = new MpModel { Affordability = new List<AffordabilityData>(), MarketPlaces = new List<MarketPlaceDataModel>()};
 				m_oRepo = ObjectFactory.GetInstance<CustomerMarketPlaceRepository>();
 			} // using
 		} // constructor
@@ -34,6 +31,11 @@
 		} // Name
 
 		public override void Execute() {
+			MpModel = new MpModel {
+				Affordability = new List<AffordabilityData>(),
+				MarketPlaces = new List<MarketPlaceDataModel>()
+			};
+
 			using (m_oTimeCounter.AddStep("Total mp and affordability strategy execute time")) {
 				using (m_oTimeCounter.AddStep("All marketplaces build time"))
 					GetAllModels();
@@ -42,7 +44,7 @@
 				var oEcomm = new List<LocalMp>();
 				var oAccounting = new List<LocalMp>();
 
-				MarketPlaceModel oHmrc = null;
+				MarketPlaceDataModel oHmrc = null;
 
 				var oYodlee = new List<LocalMp>();
 
@@ -111,7 +113,7 @@
 					Log.Debug("*");
 					Log.Debug("**************************************************************************");
 
-					foreach (var a in Affordability) {
+					foreach (var a in MpModel.Affordability) {
 						Log.Debug(a);
 					}
 					Log.Debug("**************************************************************************");
@@ -125,18 +127,10 @@
 			m_oTimeCounter.Log(Log);
 		} // Execute
 
-		public string Models {
-			get {
-				return JsonConvert.SerializeObject(
-					m_oMundMs.Select(mm => mm.Model).ToArray()
-				);
-			} // get
-		} // Models
-
-		public SortedSet<AffordabilityData> Affordability { get; private set; }
-
-		private void HmrcBank(MarketPlaceModel oModel) {
-			if (oModel.HmrcData == null) {
+		public MpModel MpModel { get; set; }
+		
+		private void HmrcBank(MarketPlaceDataModel oModel) {
+			/*if (oModel.HmrcData == null) {
 				Log.Debug("There is no VAT return data for customer {0}.", m_nCustomerID);
 				return;
 			} // if
@@ -166,20 +160,27 @@
 					oFrom = oHmrc.Quarters[nIdx].DateFrom;
 				} // if
 
-				Affordability.Add(new AffordabilityData {
-					Type = AffordabilityType.Hmrc,
-					DateFrom = oFrom,
-					DateTo = oTo,
-					Ebitda = oHmrc.Ebida,
-					FreeCashFlow = oHmrc.FreeCashFlow,
-					LoanRepayment = oHmrc.ActualLoanRepayment,
-					Opex = oHmrc.Opex,
-					Revenues = oHmrc.Revenues,
-					Salaries = oHmrc.Salaries,
-					Tax = oHmrc.Tax,
-					ValueAdded = oHmrc.TotalValueAdded,
-				});
-			} // if
+				
+			} // if*/ //todo
+
+
+			MpModel.Affordability.Add(new AffordabilityData {
+				Type = AffordabilityType.Hmrc,
+				DateFrom = oModel.OriginationDate,
+				DateTo = oModel.LastTransactionDate,
+				
+				Opex = oModel.TotalNetOutPayments,
+				Revenues = oModel.TotalNetInPayments,
+				ValueAdded = oModel.TotalNetInPayments - oModel.TotalNetOutPayments,
+				
+				Ebitda = oModel.TotalNetInPayments - oModel.TotalNetOutPayments, //todo
+				FreeCashFlow = oModel.TotalNetInPayments - oModel.TotalNetOutPayments, //todo
+				LoanRepayment = 0, //todo
+				Salaries = 0, //todo
+				Tax = 0,//todo
+				TurnoverTrend = oModel.TurnoverTrend
+			});
+
 		} // HmrcBank
 
 		private void Psp(List<LocalMp> oPayPals) {
@@ -199,50 +200,32 @@
 				if (!string.IsNullOrWhiteSpace(mp.UpdateError))
 					oErrorMsgs.Add(mp.UpdateError.Trim());
 
-				Tuple<decimal, bool> res = ExtractValue(oModel.AnalysisDataInfo, PaypalRevenues);
-				if (res.Item1 != 0) {
-					nRevenue += res.Item1;
+				nRevenue += oModel.TotalNetInPayments;
+				nOpex += Math.Abs(oModel.TotalNetOutPayments);
 
-					if (res.Item2)
-						bWasAnnualized = true;
-				} // if
-
-				Log.Debug(
-					"PayPal account {0} ({1}): revenue = {2}, annualized = {3}.",
-					mp.DisplayName,
-					mp.Id,
-					res.Item1,
-					res.Item2 ? "yes" : "no"
-				);
-
-				res = ExtractValue(oModel.AnalysisDataInfo, PaypalOpex);
-				if (res.Item1 != 0) {
-					nOpex += Math.Abs(res.Item1);
-
-					if (res.Item2)
-						bWasAnnualized = true;
-				} // if
-
-				Log.Debug(
-					"PayPal account {0} ({1}): OPEX = {2}, annualized = {3}.",
-					mp.DisplayName,
-					mp.Id,
-					res.Item1,
-					res.Item2 ? "yes" : "no"
-				);
 			} // for each account
 
+			var trend = oPayPals
+				.SelectMany(x => x.Model.TurnoverTrend)
+				.GroupBy(x => x.TheMonth)
+				.Select(t => new TurnoverTrend {
+					TheMonth = t.Key,
+					Turnover = t.Sum(s => s.Turnover)
+				}).ToList();
+				
 			var oRes = new AffordabilityData {
 				Type = AffordabilityType.Psp,
 				Revenues = nRevenue,
 				Opex = nOpex,
 				IsAnnualized = bWasAnnualized,
 				ErrorMsgs = string.Join(" ", oErrorMsgs).Trim(),
+				TurnoverTrend = trend
 			};
 
 			oRes.Fill();
-
-			Affordability.Add(oRes);
+			oRes.DateFrom = oPayPals.Any(x => x.Model.OriginationDate.HasValue) ? oPayPals.Min(x => x.Model.OriginationDate) : null;
+			oRes.DateTo = oPayPals.Any(x => x.Model.LastTransactionDate.HasValue) ? oPayPals.Max(x => x.Model.LastTransactionDate) : null;
+			MpModel.Affordability.Add(oRes);
 		} // Psp
 
 		private Tuple<decimal /*value*/, bool /*isAnnualized*/> ExtractValue(Dictionary<string, string> oValues, string sKeyBase, bool isAnnualized = false) {
@@ -296,27 +279,19 @@
 				if (!string.IsNullOrWhiteSpace(mp.UpdateError))
 					oErrorMsgs.Add(mp.UpdateError.Trim());
 
-				Tuple<decimal, bool> res = ExtractValue(oModel.AnalysisDataInfo, CommonRevenuesAnnualized, isAnnualized: true);
+				
+				nRevenue += oModel.AnnualSales;
 
-				if (res.Item1 == 0)
-					res = ExtractValue(oModel.AnalysisDataInfo, CommonRevenues);
-
-				if (res.Item1 != 0) {
-					nRevenue += res.Item1;
-
-					if (res.Item2)
-						bWasAnnualized = true;
-				} // if
-
-				Log.Debug(
-					"{4} account {0} ({1}): revenue = {2}, annualized = {3}.",
-					mp.DisplayName,
-					mp.Id,
-					res.Item1,
-					res.Item2 ? "yes" : "no",
-					mp.Marketplace.Name
-				);
 			} // for each account
+
+			var trend = oModels
+				.SelectMany(x => x.Model.TurnoverTrend)
+				.GroupBy(x => x.TheMonth)
+				.Select(t => new TurnoverTrend {
+					TheMonth = t.Key,
+					Turnover = t.Sum(s => s.Turnover)
+				})
+				.ToList();
 
 			if (nCount > 0) {
 				var oRes = new AffordabilityData {
@@ -324,11 +299,13 @@
 					Revenues = nRevenue,
 					IsAnnualized = bWasAnnualized,
 					ErrorMsgs = string.Join(" ", oErrorMsgs).Trim(),
+					TurnoverTrend = trend
 				};
 
 				oRes.Fill();
-
-				Affordability.Add(oRes);
+				oRes.DateFrom = oModels.Any(x => x.Model.OriginationDate.HasValue) ? oModels.Min(x => x.Model.OriginationDate) : null;
+				oRes.DateTo = oModels.Any(x => x.Model.LastTransactionDate.HasValue) ? oModels.Max(x => x.Model.LastTransactionDate) : null;
+				MpModel.Affordability.Add(oRes);
 			} // if
 		} // EcommAccounting
 
@@ -346,26 +323,35 @@
 			};
 
 			foreach (var yodlee in yodlees) {
-				if (yodlee.Model != null && yodlee.Model.Yodlee != null && yodlee.Model.Yodlee.BankStatementAnnualizedModel != null) {
-					affordability.DateFrom = affordability.DateFrom ?? yodlee.Model.Yodlee.BankStatementAnnualizedModel.DateFrom;
-					affordability.DateTo = affordability.DateTo ?? yodlee.Model.Yodlee.BankStatementAnnualizedModel.DateTo;
-					affordability.Ebitda += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Ebida;
-					affordability.FreeCashFlow += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.FreeCashFlow;
-					affordability.IsAnnualized = true;
-					affordability.LoanRepayment += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.ActualLoansRepayment;
-					affordability.Opex = (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Opex;
-					affordability.Revenues += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Revenues;
-					affordability.Salaries += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Salaries;
-					affordability.Tax += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.Tax;
-					affordability.ValueAdded += (decimal) yodlee.Model.Yodlee.BankStatementAnnualizedModel.TotalValueAdded;
+				if (yodlee.Model != null) {
+					affordability.DateFrom = affordability.DateFrom ?? yodlee.Model.OriginationDate;
+					affordability.DateTo = affordability.DateTo ?? yodlee.Model.LastTransactionDate;
+					affordability.Opex += yodlee.Model.TotalNetOutPayments;
+					affordability.Revenues += yodlee.Model.TotalNetInPayments;
+					affordability.ValueAdded += (yodlee.Model.TotalNetInPayments - yodlee.Model.TotalNetOutPayments); //todo fix
+					affordability.FreeCashFlow += (yodlee.Model.TotalNetInPayments - yodlee.Model.TotalNetOutPayments); //todo fix
+					affordability.Ebitda += (yodlee.Model.TotalNetInPayments - yodlee.Model.TotalNetOutPayments); //todo fix
+					affordability.IsAnnualized = false;
+					affordability.LoanRepayment += 0; // todo fix
+					affordability.Salaries += 0;//todo fix
+					affordability.Tax += 0;//todo fix
 				}
 			}
 
+			affordability.TurnoverTrend = yodlees
+				.SelectMany(x => x.Model.TurnoverTrend)
+				.GroupBy(x => x.TheMonth)
+				.Select(t => new TurnoverTrend {
+					TheMonth = t.Key,
+					Turnover = t.Sum(s => s.Turnover)
+				})
+				.ToList();
+			
 			if (yodlees.Count() > 1) {
 				affordability.ErrorMsgs = "More than one bank data";
 			}
 
-			Affordability.Add(affordability);
+			MpModel.Affordability.Add(affordability);
 		} // SaveBankStatement
 
 		private void GetAllModels() {
@@ -384,7 +370,7 @@
 			);
 
 			foreach (var mp in marketplaces) {
-				MarketPlaceModel model;
+				MarketPlaceDataModel model;
 
 				try {
 					if (mp.Disabled) {
@@ -404,7 +390,7 @@
 						using (m_oTimeCounter.AddStep(
 							"Model build time for mp {0}: {1} of type {2}", mp.Id, mp.DisplayName, mp.Marketplace.Name
 						)) {
-							model = builder.Create(mp, m_oHistory);
+							model = builder.CreateLightModel(mp, m_oHistory);
 
 							Log.Debug(
 								"Model has been built for marketplace {0} of type {1}.",
@@ -422,6 +408,8 @@
 				m_oMundMs.Add(new LocalMp(model, mp));
 			} // for each mp
 
+			MpModel.MarketPlaces.AddRange(m_oMundMs.Select(x => x.Model));
+			/*
 			try {
 				if (m_oMundMs.Any(x => x.Model.Name == "HMRC") && m_oMundMs.Any(x => x.Model.Name == "Yodlee")) {
 					foreach (var mp in m_oMundMs.Where(x => x.Model.Name == "HMRC")) {
@@ -437,28 +425,28 @@
 			}
 			catch (Exception ex) {
 				Log.Warn(ex, "Failed to build bank statement for hmrc");
-			}
+			}*/ // todo bank statement model for hmrc
 		} // GetAllModels
 
-		private MarketPlaceModel GetDefaultModel(MP_CustomerMarketPlace mp) {
-			return new MarketPlaceModel
+		private MarketPlaceDataModel GetDefaultModel(MP_CustomerMarketPlace mp) {
+			return new MarketPlaceDataModel
 			{
 				Id = mp.Id,
 				Type = mp.DisplayName,
 				Name = mp.Marketplace.Name,
 				IsPaymentAccount = mp.Marketplace.IsPaymentAccount,
-				PaymentAccountBasic = new PaymentAccountsModel(mp, null),
-				Disabled = mp.Disabled
+				Disabled = mp.Disabled,
+				History = null,
 			};
 		}
 
 		private class LocalMp {
-			public LocalMp(MarketPlaceModel oModel, MP_CustomerMarketPlace mp) {
+			public LocalMp(MarketPlaceDataModel oModel, MP_CustomerMarketPlace mp) {
 				Model = oModel;
 				Marketplace = mp;
 			} // constructor
 
-			public MarketPlaceModel Model { get; private set; }
+			public MarketPlaceDataModel Model { get; private set; }
 			public MP_CustomerMarketPlace Marketplace { get; private set; }
 		} // LocalMp
 

@@ -62,7 +62,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return latest;
 		}
 
-		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, DateTime? history, List<IAnalysisDataParameterInfo> av) {
 			var paymentAccountModel = new FreeAgentPaymentAccountsModel(mp, history);
 			paymentAccountModel.Load(av);
 			return paymentAccountModel;

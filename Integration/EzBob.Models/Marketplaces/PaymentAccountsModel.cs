@@ -17,10 +17,6 @@
 				IsNew = mp.IsNew;
 				Status = mp.GetUpdatingStatus(history);
 			}
-			MonthInPayments = 0;
-			TotalNetInPayments = 0;
-			TotalNetOutPayments = 0;
-			TransactionsNumber = 0;
 		} // constructor
 		public int id { get; set; }
 		public bool IsNew { get; set; }

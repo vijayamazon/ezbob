@@ -3,6 +3,8 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
+	using NHibernate;
+	using StructureMap;
 
 	public class MarketplaceInstantUpdate : AStrategy {
 		public MarketplaceInstantUpdate(int nMarketplaceID) {
@@ -31,6 +33,10 @@
 			m_oEnd.ErrorMessage = sError;
 			m_oEnd.TokenExpired = nTokenExpired;
 			m_oEnd.ExecuteNonQuery();
+
+			// clear the session cache after updating mp
+			var session = ObjectFactory.GetInstance<ISession>();
+			session.Clear();
 		} // End
 
 		private readonly StartMarketplaceUpdate m_oStart;

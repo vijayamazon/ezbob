@@ -38,7 +38,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			HasMany(x => x.UpdatingHistory).
 				KeyColumn("CustomerMarketPlaceId")
-				.LazyLoad()
 				.Cascade.All();
 
 			HasMany(x => x.EbayUserData).
@@ -104,6 +103,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 			HasMany(x => x.YodleeOrders).
 				KeyColumn("CustomerMarketPlaceId")
 				.LazyLoad()
+				.Cascade.All();
+
+			HasMany(x => x.MarketplaceTurnovers).
+				KeyColumn("CustomerMarketPlaceId")
 				.Cascade.All();
 
 			Map(x => x.Disabled);

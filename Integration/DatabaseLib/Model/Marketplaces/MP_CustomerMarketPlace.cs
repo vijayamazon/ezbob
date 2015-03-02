@@ -7,6 +7,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using Marketplaces.Sage;
 	using Marketplaces.Yodlee;
 	using System;
+	using EZBob.DatabaseLib.Repository.Turnover;
 	using Iesi.Collections.Generic;
 	using StructureMap;
 
@@ -111,6 +112,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual ISet<MP_YodleeOrder> YodleeOrders { get; set; }
 
+		public virtual ISet<MarketplaceTurnover> MarketplaceTurnovers { get; set; }
+
 		public MP_CustomerMarketPlace() {
 			PayPalTransactions = new HashedSet<MP_PayPalTransaction>();
 			EbayOrders = new HashedSet<MP_EbayOrder>();
@@ -129,6 +132,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			RtiTaxMonthRecords = new HashedSet<MP_RtiTaxMonthRecord>();
 			PayPointOrders = new HashedSet<MP_PayPointOrder>();
 			YodleeOrders = new HashedSet<MP_YodleeOrder>();
+			MarketplaceTurnovers = new HashedSet<MarketplaceTurnover>();
 		}
 
 		public virtual string GetUpdatingError(DateTime? history) {

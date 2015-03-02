@@ -213,7 +213,7 @@
         </table>
     </div>
     <div style="overflow: auto">
-        <table class="table box marketplace-table paypalAccounts centered <%if (hideAccounts) print('hide');%>">
+        <table class="table box marketplace-table paypalAccounts <%if (hideAccounts) print('hide');%>">
             <thead class="box">
                 <tr class="box-title">
                     <th></th>
@@ -242,20 +242,6 @@
 					nBehaviour = oCG.Behaviour;
 				} // if
 
-				function ll(sPropertyName) {
-					switch(sPropertyName) {
-					case 'TransactionsNumber':
-						return (nBehaviour == 1) ? '-' : m.PaymentAccountBasic[sPropertyName];
-
-					case 'MonthInPayments':
-					case 'TotalNetInPayments':
-						return (nBehaviour == 1) ? '-' : EzBob.formatPounds(m.PaymentAccountBasic[sPropertyName]);
-
-					case 'TotalNetOutPayments':
-						return (nBehaviour == 1) ? '-' : GBPValues(m.PaymentAccountBasic[sPropertyName], true);
-					} // switch
-				}; // function ll
-
 				var sSourceLabels = 'source_labels_on';
 	            var showAsNew = !m.IsNew ? 'hidden-field' : '';
 	            var disabled = m.Disabled ? 'disabled': '';
@@ -267,11 +253,11 @@
                     </td>
                     <td class="<%- disabled%>"><a href="<%- m.SellerInfoStoreURL %>" target="_blank"><%- m.Type %></a></td>
                     <td class="centered <%- disabled%>"><%- m.age %></td>
-                    <td class="centered <%- disabled%>"><%- ll('TransactionsNumber') %></td>
-                    <td class="centered <%- disabled%>"><%- ll('MonthInPayments') %><br />
-                        <label class="small-text"><%- m.monthAnnualizedSales != 0 ? EzBob.formatPoundsNoDecimals(m.monthAnnualizedSales) : '' %></label></td>
-                    <td class="centered <%- disabled%>"><%- ll('TotalNetInPayments') %></td>
-                    <td class="centered <%- disabled%>"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : ll('TotalNetOutPayments') %></td>
+                    <td class="centered <%- disabled%>"><%- m.TransactionsNumber %></td>
+                    <td class="centered <%- disabled%>"><%- m.MonthInPayments %><br />
+                        <label class="small-text"><%- m.MonthInPaymentsAnnualized != 0 ? EzBob.formatPoundsNoDecimals(m.MonthInPaymentsAnnualized) : '' %></label></td>
+                    <td class="centered <%- disabled%>"><%- EzBob.formatPounds(m.TotalNetInPayments) %></td>
+                    <td class="centered <%- disabled%>"><%- (m.Name.toLowerCase() === 'paypoint') ? '-' : GBPValues(m.TotalNetOutPayments, true) %></td>
                     <td class="<%- disabled%>"><%- m.UpdatingStatus %> <%- m.LastChecked%>
 						<% if(m.UpdateError){%>
                         <button class="btn btn-mini btn-primary mp-error-description" data-original-title="<%- m.UpdateError %>"><i class="fa fa-comment"></i></button>

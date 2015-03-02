@@ -89,63 +89,50 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			HasMany(x => x.HmrcAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.YodleeAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.PayPalAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.EbayAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.CGAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.EkmAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.FreeAgentAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.SageAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.AmazonAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
 			HasMany(x => x.PayPointAggregations)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
-
 
 			// view
 			HasMany(x => x.MarketplaceTurnovers)
 				.KeyColumn("CustomerMarketPlaceUpdatingHistoryID")
-				.LazyLoad()
 				.Inverse()
 				.Cascade.All();
-
 		}
 	}
 }

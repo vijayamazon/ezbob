@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Runtime.Serialization;
 	using System.Text;
@@ -48,6 +49,9 @@
 		[DataMember]
 		public bool IsAnnualized { get; set; }
 
+		[DataMember]
+		public List<TurnoverTrend> TurnoverTrend { get; set; }
+
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -95,4 +99,12 @@
 		} // CompareTo
 
 	} // class AffordabilityData
+
+	[DataContract(IsReference = true)]
+	public class TurnoverTrend {
+		[DataMember]
+		public DateTime TheMonth { get; set; }
+		[DataMember]
+		public decimal Turnover { get; set; }
+	}
 } // namespace

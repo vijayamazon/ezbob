@@ -33,14 +33,15 @@ namespace EzBob.Models.Marketplaces.Builders
             model.EBay = BuildEBay(mp.EbayUserData.LastOrDefault(), mp.EbayUserAccountData.LastOrDefault(), ebayFeedBack);
         }
 
-		protected override void InitializeFeedbackData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> aggregations) {
+		protected override MarketPlaceFeedbackModel GetFeedbackData(List<IAnalysisDataParameterInfo> aggregations) {
 			var raitingPercent = aggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackPercentRate.ToString());
 			decimal? raitingPercentValue = raitingPercent == null ? 0 : (decimal?)raitingPercent.Value;
+			var model = new MarketPlaceFeedbackModel();
 			model.RaitingPercent = raitingPercentValue ?? 0;
 			
 			var yearAggregations = aggregations.Where(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year).ToList();
 			if (!yearAggregations.Any()){
-				return;
+				return model;
 			}
 
 			var positive = yearAggregations.FirstOrDefault(x => x.ParameterName == AggregationFunction.PositiveFeedbackRate.ToString());
@@ -50,6 +51,8 @@ namespace EzBob.Models.Marketplaces.Builders
 			model.PositiveFeedbacks = positive == null ? null : (int?)positive.Value;
 			model.NegativeFeedbacks = negative == null ? null : (int?)negative.Value;
 			model.NeutralFeedbacks = neutral == null ? null : (int?)neutral.Value;
+
+			return model;
 		}
 
         private static EBayModel BuildEBay(MP_EbayUserData ebayUserData, MP_EbayUserAccountData ebayAccount, MP_EbayFeedback ebayFeedBack)

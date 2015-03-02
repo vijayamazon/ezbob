@@ -14,12 +14,6 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return "#";
 		}
 
-		public PaymentAccountsModel CreatePayPointAccountModelModel(MP_CustomerMarketPlace m, DateTime? history, List<IAnalysisDataParameterInfo> av) {
-			var payPointModel = new PayPointAccountsModel(m, history);
-			payPointModel.Load(av);
-			return payPointModel;
-		}
-
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp) {
 			var s = _session.Query<MP_PayPointOrderItem>()
 				.Where(oi => oi.Order.CustomerMarketPlace.Id == mp.Id)
@@ -31,8 +25,10 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return null;
 		}
 
-		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
-			return CreatePayPointAccountModelModel(mp, history, av);
+		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+			var payPointModel = new PayPointAccountsModel(mp, history);
+			payPointModel.Load(av);
+			return payPointModel;
 		}
 		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
 			var s = _session.Query<MP_PayPointOrderItem>()

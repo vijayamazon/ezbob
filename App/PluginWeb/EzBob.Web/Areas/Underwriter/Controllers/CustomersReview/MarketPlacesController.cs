@@ -17,14 +17,13 @@
 	using Ezbob.Utils.Serialization;
 	using Infrastructure;
 	using Infrastructure.Attributes;
-	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
-	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using Web.Models;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -121,18 +120,12 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult Details(int id) {
-			// var cm = _customerMarketplaces.Get(id);
-			// var values = _functions.GetAllValuesFor(cm);
-			// return Json(values.Select(v => new FunctionValueModel(v)), JsonRequestBehavior.AllowGet);
-
-			// TODO: insert actual totals here, the following is just a placeholder
-
-			var lst = new List<FunctionValueModel> {
-				new FunctionValueModel { Id = 1, Name = "Total 1", Value = "25", },
-				new FunctionValueModel { Id = 2, Name = "Total 2", Value = "50", },
-			};
-			return Json(lst, JsonRequestBehavior.AllowGet);
+		public JsonResult Details(int umi, DateTime? history) {
+			var mp = _customerMarketplaces.Get(umi);
+			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
+			builder =  builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
+			var model = builder.Create(mp, history);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -184,7 +177,7 @@
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {
 			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, null);
-			return Json(ar.Affordability, JsonRequestBehavior.AllowGet);
+			return Json(ar.MpModel.Affordability, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -246,8 +239,8 @@
 		public JsonResult Index(int id, DateTime? history = null) {
 			try {
 				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, history);
-				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
-				return Json(mps.ToList(), JsonRequestBehavior.AllowGet);
+				var mps = ar.MpModel.MarketPlaces;
+				return Json(mps, JsonRequestBehavior.AllowGet);
 			} catch (Exception ex) {
 				Log.Error(ex, "failed to retrieve mp data from service");
 				return Json(new List<MarketPlaceModel>(), JsonRequestBehavior.AllowGet);
@@ -480,14 +473,7 @@
 		}
 
 		// GetAffordabilityData
-		[Ajax]
-		[HttpGet]
-		public JsonResult YodleeDetails(int id) {
-			var mp = _customerMarketplaces.Get(id);
-			var b = new YodleeMarketplaceModelBuilder(_session);
-			return Json(b.BuildYodlee(mp, null), JsonRequestBehavior.AllowGet);
-		}
-
+		
 		private static readonly ASafeLog Log = new SafeILog(typeof(MarketPlacesController));
 		private readonly CompanyFilesMetaDataRepository _companyFiles;
 		private readonly IWorkplaceContext _context;

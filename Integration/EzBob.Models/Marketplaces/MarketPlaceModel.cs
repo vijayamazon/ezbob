@@ -1,16 +1,10 @@
 ﻿namespace EzBob.Models.Marketplaces
 {
 	using System.Collections.Generic;
-	using Ezbob.Backend.Models;
 	using Yodlee;
 	using Web.Areas.Underwriter.Models;
 	using System;
 
-	public class MpModel
-	{
-		public List<MarketPlaceModel> MarketPlaces { get; set; }
-		public List<AffordabilityData> Affordability { get; set; }
-	}
 
 	public class MarketPlaceModel
 	{
@@ -45,6 +39,14 @@
 		public decimal MonthSalesAnnualized { get { return MonthSales * 12; } }
 		public decimal AnnualSales { get; set; }
 
+		//Payment Aggregates
+		public decimal MonthInPayments { get; set; }
+		public decimal MonthInPaymentsAnnualized {get {return MonthInPayments * 12;}}
+		public string Status { get; set; }
+		public decimal TotalNetInPayments { get; set; }
+		public decimal TotalNetOutPayments { get; set; }
+		public int TransactionsNumber { get; set; }
+
 		//Feedbacks
 		public int? PositiveFeedbacks { get; set; }
 		public int? NegativeFeedbacks { get; set; }
@@ -56,8 +58,6 @@
 		public HmrcData HmrcData { get; set; }
 
 		public bool IsPaymentAccount { get; set; }
-
-		public PaymentAccountsModel PaymentAccountBasic { get; set; }
 
 		public FreeAgentModel FreeAgent { get; set; }
 

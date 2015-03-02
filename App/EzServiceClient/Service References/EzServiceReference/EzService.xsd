@@ -438,8 +438,7 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Affordability" nillable="true" type="q31:ArrayOfAffordabilityData" />
-          <xs:element minOccurs="0" name="Models" nillable="true" type="xs:string" />
+          <xs:element xmlns:q31="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="MpModel" nillable="true" type="q31:MpModel" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>

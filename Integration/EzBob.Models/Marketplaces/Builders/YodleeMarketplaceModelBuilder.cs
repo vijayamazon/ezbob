@@ -150,7 +150,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return !s.Any() ? null : s.Max();
 		}
 
-		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, MarketPlaceModel model, DateTime? history, List<IAnalysisDataParameterInfo> av) {
+		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, DateTime? history, List<IAnalysisDataParameterInfo> av) {
 			var status = mp.GetUpdatingStatus(history);
 
 			var yodleeModel = new YodleePaymentAccountsModel(mp, history);

@@ -56,10 +56,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		});
 		this.marketPlaceView.on('rechecked', this.mpRechecked, this.marketPlaces);
 
-		EzBob.App.vent.on('ct:marketplaces.history', function(history) {
-			self.show(self.marketPlaces.customerId, true, history);
-		});
-
 		this.loanHistory = new EzBob.Underwriter.LoanHistoryModel();
 		this.loanHistoryView = new EzBob.Underwriter.LoanHistoryView({
 			el: loanhistorys,

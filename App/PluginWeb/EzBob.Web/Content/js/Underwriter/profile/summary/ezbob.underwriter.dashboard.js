@@ -73,6 +73,35 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         });
 
         $($('#affordabilityTable tr')[2]).addClass('green-row');
+	    var that = this;
+        
+	    if (this.affordability.customerId) {
+		    _.each(this.affordability.attributes, function(aford, i) {
+				if (_.isFunction(aford)) {
+				    return;
+			    }
+		    	var trendSorted = _.sortBy(aford.TurnoverTrend, function(turnover) {
+				    return moment.utc(turnover.TheMonth);
+		    	});
+		    	
+		    	var trendTurnover = _.pluck(trendSorted, 'Turnover').join(',');
+		    	
+		    	that.$el.find(".affordability-trend-" + i).attr('values', trendTurnover);
+			    that.$el.find(".affordability-trend-" + i).sparkline("html", {
+				    width: '100px',
+				    lineWidth: 1,
+				    spotRadius: 2,
+				    lineColor: "#cfcfcf",
+				    fillColor: "transparent",
+				    spotColor: "#cfcfcf",
+				    maxSpotColor: "#cfcfcf",
+				    minSpotColor: "#cfcfcf",
+				    valueSpots: {
+					    ':': '#cfcfcf'
+				    }
+			    });
+		    });
+	    }
     },
 
     buildJournal: function () {
@@ -190,9 +219,12 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.experianSpark();
         this.drawGraphs();
         this.buildJournal();
-        this.rotateTable();
 
-        this.$el.find('a[data-bug-type]').tooltip({
+	    if (this.affordability.customerId) {
+		    this.rotateTable();
+	    }
+
+	    this.$el.find('a[data-bug-type]').tooltip({
             title: 'Report bug'
         });
         this.$el.find('[data-toggle="tooltip"]').tooltip({

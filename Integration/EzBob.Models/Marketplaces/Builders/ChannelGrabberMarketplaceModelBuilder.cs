@@ -21,7 +21,6 @@
 
 		protected override PaymentAccountsModel GetPaymentAccountModel(
 			MP_CustomerMarketPlace mp,
-			MarketPlaceModel model,
 			DateTime? history,
 			List<IAnalysisDataParameterInfo> av
 		) {

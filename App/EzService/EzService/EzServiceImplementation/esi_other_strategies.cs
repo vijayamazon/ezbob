@@ -144,8 +144,7 @@
 			ActionMetaData oMetaData = ExecuteSync(out oInstance, nCustomerID, userId, nCustomerID, oHistory);
 
 			return new MarketplacesActionResult {
-				Models = oInstance.Models,
-				Affordability = oInstance.Affordability.ToArray(),
+				MpModel = oInstance.MpModel,
 				MetaData = oMetaData,
 			};
 		} // CalculateModelsAndAffordability
