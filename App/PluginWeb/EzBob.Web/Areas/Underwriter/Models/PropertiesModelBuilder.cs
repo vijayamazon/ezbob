@@ -4,24 +4,20 @@
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository;
 	using Infrastructure;
 	using LandRegistryLib;
 	using StructureMap;
 
 	public class PropertiesModelBuilder {
-		private readonly CustomerAddressRepository _customerAddressRepository;
 		private readonly LandRegistryRepository _landRegistryRepository;
 		private readonly IWorkplaceContext _context;
 		private readonly LandRegistryModelBuilder _landRegistryModelBuilder;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _fileRepo;
 
 		public PropertiesModelBuilder(
-			CustomerAddressRepository customerAddressRepository,
 			LandRegistryRepository landRegistryRepository,
 			IWorkplaceContext context) {
-			_customerAddressRepository = customerAddressRepository;
 			_landRegistryRepository = landRegistryRepository;
 			_context = context;
 			_landRegistryModelBuilder = new LandRegistryModelBuilder();
