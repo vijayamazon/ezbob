@@ -65,8 +65,9 @@
 		public JsonResult ListOfFiles() {
 			var cais = _caisReportsHistoryRepository
 				.GetAll()
+				.OrderByDescending(x => x.Date)
 				.Select(CaisModel.FromModel)
-				.OrderByDescending(x => x.Date);
+				.ToList();
 
 			return Json(new { cais }, JsonRequestBehavior.AllowGet);
 		}

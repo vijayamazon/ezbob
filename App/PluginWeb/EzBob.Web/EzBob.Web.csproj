@@ -275,7 +275,6 @@
     <Compile Include="Areas\Underwriter\Models\Fraud\FraudStatusModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\GenerateAgreementsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\LoanEditorController.cs" />
-    <Compile Include="Areas\Underwriter\Controllers\Reports\CaisReportsHistoryController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\Reports\ReportsController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\ScheduleController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\StrategySettingsController.cs" />
@@ -1447,7 +1446,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\LoanOptions.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\LoanDetails\PaymentRollover.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\RenewEbayToken.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\_CaisReportsHistory.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_CustomersPopupTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\EKMAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Consent\Agreed.cshtml" />
