@@ -571,7 +571,7 @@
 					ApprovedAmount = autoDecisionResponse.AutoApproveAmount,
 					Email = customerEmail,
 					ExpectedEndDate = autoDecisionResponse.AppValidFor,
-					Stage = (int)OpportunityStage.s90 // TODO
+					Stage = OpportunityStage.s90.DescriptionAttr(),
 				}).Execute();
 				break;
 

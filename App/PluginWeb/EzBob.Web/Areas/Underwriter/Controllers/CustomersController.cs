@@ -20,6 +20,8 @@
 	using StructureMap;
 	using Models;
 	using Code;
+	using Ezbob.Utils.Extensions;
+	using EzBob.CommonLib;
 	using Infrastructure.csrf;
 	using log4net;
 	using SalesForceLib.Models;
@@ -301,7 +303,7 @@
 
 			if (model.status != CreditResultStatus.ApprovedPending)
 				customer.IsWaitingForSignature = false;
-			int stage = (int)OpportunityStage.s5;
+			string stage;
 			switch (model.status) {
 			case CreditResultStatus.Approved:
 				if (!customer.WizardStep.TheLastOne) {
@@ -373,7 +375,7 @@
 						m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
 					} // try
 				} // if
-				stage = (int)OpportunityStage.s90;//todo
+				stage = OpportunityStage.s90.DescriptionAttr();
 				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {
 					Email = customer.Name,
 					ApprovedAmount = (int)sum,
@@ -422,7 +424,7 @@
 				customer.DateEscalated = DateTime.UtcNow;
 				customer.EscalationReason = model.reason;
 				_historyRepository.LogAction(DecisionActions.Escalate, model.reason, user, customer);
-				stage = (int)OpportunityStage.s20;//todo
+				stage = OpportunityStage.s20.DescriptionAttr();
 				try {
 					m_oServiceClient.Instance.Escalated(customer.Id, _context.UserId);
 				}
@@ -440,14 +442,14 @@
 				customer.ManagerApprovedSum = request.ApprovedSum();
 				_historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
 
-				stage = model.signature == 1 ? (int)OpportunityStage.s75 : (int)OpportunityStage.s50; //TODO define stages for pending and signature
+				stage = model.signature == 1 ? OpportunityStage.s75.DescriptionAttr() : OpportunityStage.s50.DescriptionAttr();
 				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {Email = customer.Name,Stage = stage}); 
 				break;
 
 			case CreditResultStatus.WaitingForDecision:
 				customer.CreditResult = CreditResultStatus.WaitingForDecision;
 				_historyRepository.LogAction(DecisionActions.Waiting, "", user, customer);
-				stage = (int)OpportunityStage.s40;//todo
+				stage = OpportunityStage.s40.DescriptionAttr();
 				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage }); 
 
 				break;

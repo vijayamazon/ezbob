@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
+	using Ezbob.Utils.Extensions;
 	using SalesForceLib.Models;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -60,7 +61,7 @@
 				};
 
 			customer.CashRequests.Add(cashRequest);
-
+			
 			if (originator != CashRequestOriginator.FinishedWizard) {
 				CustomerRequestedLoan requestedLoan = customer.CustomerRequestedLoan.LastOrDefault();
 				m_oServiceClient.Instance.SalesForceAddOpportunity(customer.Id, customer.Id,
@@ -69,8 +70,9 @@
 						CreateDate = now,
 						ExpectedEndDate = now.AddDays(7),
 						RequestedAmount = requestedLoan != null ? (int?)requestedLoan.Amount : null,
-						Type = originator.ToString(),
-						Stage = (int)OpportunityStage.s5 //todo
+						Type = OpportunityType.Resell.DescriptionAttr(),
+						Stage = OpportunityStage.s5.DescriptionAttr(),
+						OpportunityName = customer.PersonalInfo.Fullname + customer.CashRequests.Count()
 					});
 			}
 

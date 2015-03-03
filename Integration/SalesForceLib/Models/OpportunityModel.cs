@@ -1,12 +1,14 @@
 ﻿namespace SalesForceLib.Models {
 	using System;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
-	//todo use auto generated object from sales force
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class OpportunityModel {
 		[DataMember]
 		public string Email { get; set; }
+		[DataMember]
+		public string OpportunityName { get; set; }
 		[DataMember]
 		public DateTime? CreateDate { get; set; }
 		[DataMember]
@@ -22,7 +24,7 @@
 		[DataMember]
 		public string Type { get; set; } //??? is it needed
 		[DataMember]
-		public int? Stage { get; set; }
+		public string Stage { get; set; }
 		[DataMember]
 		public string DealCloseType { get; set; }
 		[DataMember]
@@ -34,20 +36,29 @@
 		Lost
 	}
 	public enum OpportunityType {
+		[Description("New Deal")]
 		New, 
+		[Description("Partial")]
 		Partial,
+		[Description("Resell")]
 		Resell,
+		[Description("Finish Loan")]
 		FinishLoan
 	}
 
 	//todo define stages
 	public enum OpportunityStage {
+		[Description("New")]
 		s5 = 5,
-		s10 = 10,
+		[Description("Escalated")]
 		s20 = 20,
+		[Description("Waiting for decision")]
 		s40 = 40,
+		[Description("Pending information")]
 		s50 = 50,
+		[Description("Pending Signatures")]
 		s75 = 75,
+		[Description("Approved")]
 		s90 = 90
 	}
 }

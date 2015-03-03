@@ -2,8 +2,7 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	//todo use auto generated object from sales force
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class ContactModel {
 		[DataMember]
 		public string Email { get; set; }
