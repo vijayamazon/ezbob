@@ -93,7 +93,6 @@
   <ItemGroup>
     <Content Include="..\..\..\connection-strings.xml">
       <Link>connection-strings.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
