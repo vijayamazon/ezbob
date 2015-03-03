@@ -12,7 +12,7 @@ BEGIN
 	SELECT
 	c.Id AS CustomerID,
 	ISNULL(c.MedalType, '') AS Medal,
-	ISNULL(t.Name, '') AS MpTypeName,
+	dbo.udfGetMpsTypes(c.Id) AS MpTypeName,
 	c.ApplyForLoan AS ApplyDate,
 	c.GreetingMailSentDate AS RegDate,
 	c.Status AS CustomerStatus,
@@ -61,8 +61,6 @@ BEGIN
 FROM
 	Customer c
 	INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
-	LEFT JOIN MP_CustomerMarketPlace m ON c.Id = m.CustomerId
-	LEFT JOIN MP_MarketplaceType t ON m.MarketPlaceId = t.Id
 WHERE
 	(
 		@WithTest = 1 OR c.IsTest = 0
@@ -70,7 +68,6 @@ WHERE
 	AND
 	c.CreditResult = 'Late'
 ORDER BY
-	c.Id DESC,
-	t.Id
+	c.Id DESC
 END
 GO

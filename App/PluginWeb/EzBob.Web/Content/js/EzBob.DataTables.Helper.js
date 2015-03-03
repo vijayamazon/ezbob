@@ -160,7 +160,8 @@ EzBob.DataTables.Helper = {
 	showNewMPsIcon: function (mps, segment) {
 	    var mpsList = mps || '';
 	    mpsList = mpsList.split(',');
-	    var mpsLen = mpsList.length >= 5 ? 5 : mpsList.length;
+		var numMps = mpsList.length - 1;
+		var mpsLen = numMps >= 5 ? 5 : numMps;
 	    return '<i data-toggle=tooltip title="' + mps.replace(/,/g, '<br>') + '" class="' + segment + mpsLen + '"></i>';
     },
 	
