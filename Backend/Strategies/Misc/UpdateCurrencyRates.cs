@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
+	using System;
 	using CustomSchedulers.Currency;
 
 	public class UpdateCurrencyRates : AStrategy {
@@ -16,8 +17,11 @@
 				isExecuting = true;
 			} // lock
 
-			CurrencyUpdateController.Run();
-
+			try {
+				CurrencyUpdateController.Run();
+			} catch (Exception ex) {
+				Log.Error(ex, "UpdateCurrencyRates failed");
+			}
 			lock (updateCurrencyRatesLock) {
 				isExecuting = false;
 			} // lock
