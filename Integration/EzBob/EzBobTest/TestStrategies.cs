@@ -235,6 +235,12 @@
 			new CalculateModelsAndAffordability(15821, null).Execute();
 		}
 
+
+		[Test]
+		public void TestUpdateCurrencyRate() {
+			var ucr = new UpdateCurrencyRates();
+			ucr.Execute();
+		}
 		[Test]
 		public void TestDecrypt() {
 			string sIn = @"<?xml version=""1.0""?>
