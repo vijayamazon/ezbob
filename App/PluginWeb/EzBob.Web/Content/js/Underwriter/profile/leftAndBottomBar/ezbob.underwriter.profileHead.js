@@ -8,7 +8,6 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		this.personalModel = options.personalModel;
 		this.medalModel = options.medalModel;
 		this.parentView = options.parentView;
-		this.summaryInfoModel = options.summaryInfoModel;
 		this.bindTo(this.model, "change sync", this.render, this);
 		this.bindTo(this.loanModel, "change sync", this.render, this);
 		this.bindTo(this.medalModel, "change fetch sync", this.render, this);
@@ -37,7 +36,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		$.post(window.gRootPath + 'Underwriter/Medal/RecalculateMedal', {
 			customerId: this.model.id
 		}).always(function() {
-			that.summaryInfoModel.fetch();
+			that.model.fetch();
 			that.medalModel.fetch().always(function() {
 				UnBlockUi();
 			});

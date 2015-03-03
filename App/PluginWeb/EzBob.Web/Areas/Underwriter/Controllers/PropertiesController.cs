@@ -59,7 +59,7 @@
 		[HttpGet]
 		public JsonResult Index(int id) {
 			var customer = this._customerRepository.TryGet(id);
-			var builder = new PropertiesModelBuilder(this._customerAddressRepository, this._landRegistryRepository, this._context);
+			var builder = new PropertiesModelBuilder(this._landRegistryRepository, this._context);
 			PropertiesModel data = builder.Create(customer);
 
 			return Json(data, JsonRequestBehavior.AllowGet);
