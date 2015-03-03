@@ -15,7 +15,7 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='EbayRuNameEverline')
 	BEGIN
 		INSERT INTO dbo.ConfigurationVariables(Name, Value, Description, IsEncrypted)
-		VALUES('EbayRuNameEverline', 'Ezbob-Ezbob342e-6544--arxujwkun', 'Ebay ru name for everline', NULL)
+		VALUES('EbayRuNameEverline', 'Ezbob-Ezbob342e-6544--sqixafsb', 'Ebay ru name for everline', NULL)
 	END
 END
 

@@ -238,6 +238,12 @@
 			Assert.IsNotNull(stra.MpModel.MarketPlaces);
 		}
 
+
+		[Test]
+		public void TestUpdateCurrencyRate() {
+			var ucr = new UpdateCurrencyRates();
+			ucr.Execute();
+		}
 		[Test]
 		public void TestDecrypt() {
 			string sIn = @"<?xml version=""1.0""?>
