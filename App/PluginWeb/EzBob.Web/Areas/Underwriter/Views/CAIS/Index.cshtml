@@ -47,16 +47,8 @@
                 @EzForm.RawCellBold("Generation Date", "Name", "Type", "Total account", "Good accounts", "Late accounts", "Defaults", "Upload status")
             </thead>
             <tbody>
-                <% var currentCollor = "first";%>
                 <% _.each(model, function(val, i){ %>
-                <% 
-                var timeDiffWithPreviousInHour = i > 0 ? ((new Date(model[i-1].Date)) - (new Date(val.Date)) )/1000/60 : 0;
-                if( !( timeDiffWithPreviousInHour <= 1 && timeDiffWithPreviousInHour >= 0) ){
-                currentCollor = currentCollor == "first" ? "seccond" : "first";
-                }
-                var checkedClass = _.filter(checkedModel, function(value){  return value.id == val.Id }).length === 0 ? '':'checked';
-                %>
-                <tr class="<%- currentCollor %> <%- checkedClass %>" data-id ="<%-val.Id%>">
+                <tr class="" data-id ="<%-val.Id%>">
                     <td><%-val.Date%></td>
                     <td><%-val.FileName%></td>
                     <td><%-val.Type%></td>
