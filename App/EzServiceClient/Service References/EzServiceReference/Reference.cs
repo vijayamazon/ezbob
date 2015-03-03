@@ -2408,7 +2408,7 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="TaskModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="TaskModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models", IsReference=true)]
     [System.SerializableAttribute()]
     public partial class TaskModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -2549,7 +2549,7 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ActivityModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ActivityModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models", IsReference=true)]
     [System.SerializableAttribute()]
     public partial class ActivityModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -2674,7 +2674,7 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="OpportunityModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="OpportunityModel", Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models", IsReference=true)]
     [System.SerializableAttribute()]
     public partial class OpportunityModel : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
         
@@ -2703,10 +2703,13 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Nullable<System.DateTime> ExpectedEndDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string OpportunityNameField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> RequestedAmountField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.Nullable<int> StageField;
+        private string StageField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> TookAmountField;
@@ -2816,6 +2819,19 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
+        public string OpportunityName {
+            get {
+                return this.OpportunityNameField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.OpportunityNameField, value) != true)) {
+                    this.OpportunityNameField = value;
+                    this.RaisePropertyChanged("OpportunityName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
         public System.Nullable<int> RequestedAmount {
             get {
                 return this.RequestedAmountField;
@@ -2829,12 +2845,12 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Nullable<int> Stage {
+        public string Stage {
             get {
                 return this.StageField;
             }
             set {
-                if ((this.StageField.Equals(value) != true)) {
+                if ((object.ReferenceEquals(this.StageField, value) != true)) {
                     this.StageField = value;
                     this.RaisePropertyChanged("Stage");
                 }
