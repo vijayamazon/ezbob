@@ -1,15 +1,11 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using Ezbob.Database;
 
 	internal abstract class AGridRow {
 		public abstract string RowIDFieldName();
 
 		public abstract void Init(long nRowID, SafeReader oRow);
-
-		public abstract void Add(SafeReader oRow);
 
 		public virtual bool IsValid() {
 			return true;
@@ -22,39 +18,21 @@
 		public override void Init(long nCustomerID, SafeReader oRow) {
 			Id = nCustomerID;
 			Email = oRow["Email"];
-
-			Add(oRow);
+			m_sMP_List = oRow["MpTypeName"];
 		} // Init
 
 		public virtual long Id { get; private set; }
 		public virtual string Email { get; private set; }
-
-		public override void Add(SafeReader oRow) {
-			string sMp = oRow["MpTypeName"];
-
-			if (string.IsNullOrWhiteSpace(sMp))
-				return;
-
-			if (m_oMp.ContainsKey(sMp))
-				m_oMp[sMp]++;
-			else
-				m_oMp[sMp] = 1;
-
-			m_sMP_List = string.Join(", ", m_oMp.Select(kv => kv.Value + " " + kv.Key));
-		} // Add
-
+		
 		public override string RowIDFieldName() {
 			return "CustomerID";
 		} // RowIDFieldName
 
 		protected AGridRowBase() {
-			m_oMp = new SortedDictionary<string, int>();
 			m_sMP_List = "";
 		} // constructor
 
 		protected string m_sMP_List;
-
-		private readonly SortedDictionary<string, int> m_oMp;
 	} // class AGridBase
 
 	internal abstract class AGridRowCommon : AGridRowBase {
@@ -152,11 +130,6 @@
 
 	internal class GridRegisteredRow : AGridRowBase {
 
-		public GridRegisteredRow() {
-			m_sMP_Statuses = string.Empty;
-			m_oMpStatuses = new SortedDictionary<string, List<string>>();
-		} // constructor
-
 		public override void Init(long nCustomerID, SafeReader oRow) {
 			base.Init(nCustomerID, oRow);
 
@@ -165,31 +138,8 @@
 			WizardStep = oRow["WizardStep"];
 			SegmentType = oRow["SegmentType"];
 			IsWasLate = oRow["IsWasLate"];
+			MP_Statuses = oRow["MpStatus"];
 		} // Init
-
-		public override void Add(SafeReader oRow) {
-			base.Add(oRow);
-
-			string sMpTypeName = oRow["MpTypeName"];
-
-			if (string.IsNullOrWhiteSpace(sMpTypeName))
-				return;
-
-			string sMpStatus = oRow["MpStatus"];
-
-			if (string.IsNullOrWhiteSpace(sMpStatus))
-				return;
-
-			if (m_oMpStatuses.ContainsKey(sMpTypeName))
-				m_oMpStatuses[sMpTypeName].Add(sMpStatus);
-			else
-				m_oMpStatuses[sMpTypeName] = new List<string> { sMpStatus };
-
-			m_sMP_Statuses = string.Join(
-				" ",
-				m_oMpStatuses.Select(kv => kv.Key + ": " + string.Join(", ", kv.Value))
-			);
-		} // Add
 
 		public virtual long UserId { get { return Id; } }
 
@@ -197,15 +147,12 @@
 
 		public virtual DateTime RegDate { get; private set; }
 
-		public virtual string MP_Statuses { get { return m_sMP_Statuses; } }
+		public virtual string MP_Statuses { get; private set; } 
 
 		public virtual string WizardStep { get; private set; }
 
 		public virtual string SegmentType { get; private set; }
 		public virtual string IsWasLate { get; private set; }
-
-		private string m_sMP_Statuses;
-		private SortedDictionary<string, List<string>> m_oMpStatuses;
 
 	} // class GridRegisteredRow
 
@@ -223,6 +170,8 @@
 			CRMcomment = oRow["CRMcomment"];
 			Broker = oRow["Broker"];
 			FirstSale = oRow["FirstSale"];
+
+
 		} // Init
 
 		public virtual DateTime DateRejected { get; private set; }
@@ -420,11 +369,6 @@
 			EntryTime = oRow["EntryTime"];	
 			EntryContent = oRow["EntryContent"];
 		} // Init
-
-		public override void Add(SafeReader oRow) {
-			// nothing to do here
-		} // Add
-
 	} // GridLogbookRow
 
 	internal class GridBroker : AGridRow {
@@ -446,11 +390,6 @@
 			oRow.Fill(this);
 			BrokerID = nRowID;
 		} // Init
-
-		public override void Add(SafeReader oRow) {
-			// nothing to do here
-		} // Add
-
 	} // GridBroker
 
 } // namespace

@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text;
 	using System.Web.Mvc;
 	using System.Web.Script.Serialization;
 	using ConfigManager;
@@ -20,6 +21,7 @@
 	using StructureMap;
 	using Models;
 	using Code;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using EzBob.CommonLib;
 	using Infrastructure.csrf;
@@ -231,6 +233,8 @@
 			DateTime? now = null,
 			IEnumerable<QueryParameter> oMoreSpArgs = null
 		) {
+
+			TimeCounter tc = new TimeCounter("LoadGrid building time for grid " + nSpName);
 			var oRes = new SortedDictionary<long, AGridRow>();
 
 			var args = new List<QueryParameter> {
@@ -246,29 +250,33 @@
 			if (oMoreSpArgs != null)
 				args.AddRange(oMoreSpArgs);
 
-			m_oDB.ForEachRowSafe(
-				(sr, bRowSetStarts) => {
-					AGridRow r = oFactory();
+			using (tc.AddStep("retrieving from db and processing")) {
+				m_oDB.ForEachRowSafe(
+					(sr, bRowSetStarts) => {
+						AGridRow r = oFactory();
 
-					long nRowID = sr[r.RowIDFieldName()];
+						long nRowID = sr[r.RowIDFieldName()];
 
-					if (oRes.ContainsKey(nRowID))
-						oRes[nRowID].Add(sr);
-					else {
 						r.Init(nRowID, sr);
 
 						if (r.IsValid())
 							oRes[nRowID] = r;
-					} // if
-
-					return ActionResult.Continue;
-				},
-				nSpName.ToString(),
-				CommandSpecies.StoredProcedure,
-				args.ToArray()
-			); // foreach
-
+						
+						return ActionResult.Continue;
+					},
+					nSpName.ToString(),
+					CommandSpecies.StoredProcedure,
+					args.ToArray()
+					); // foreach
+			}
 			m_oLog.Debug("{0}: traversing done.", nSpName);
+
+			var sb = new StringBuilder();
+			sb.AppendLine(tc.Title);
+			foreach (var time in tc.Checkpoints)
+				sb.AppendFormat("\t{0}: {1}ms\n", time.Item1, time.Item2);
+
+			m_oLog.Info("{0}", sb);
 
 			var serializer = new JavaScriptSerializer {
 				MaxJsonLength = Int32.MaxValue
