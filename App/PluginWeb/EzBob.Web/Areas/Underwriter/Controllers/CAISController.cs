@@ -13,7 +13,6 @@
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Models.CAIS;
-	using Code;
 	using ServiceClientProxy;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
