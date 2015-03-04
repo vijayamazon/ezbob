@@ -1,8 +1,8 @@
 ﻿namespace EzBobTest {
-	using System.IO;
+	using System;
 	using System.Text.RegularExpressions;
 	using EchoSignLib;
-	using Ezbob.Utils;
+	using Newtonsoft.Json;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -74,6 +74,25 @@
 			Assert.IsTrue(ms_reEmail.IsMatch("asd@sfsdf.fsf"));
 			Assert.IsTrue(ms_reEmail.IsMatch("asd@sfsdf-sdfsdf.fsf"));
 			Assert.IsFalse(ms_reEmail.IsMatch("as!@d@sfsdf-sdfsdf.f"));
+		}
+
+		[Test]
+		public void HackForSendingESignatures() {
+			var e = new EchoSignEnvelope[1];
+			e[0] = new EchoSignEnvelope {
+				CustomerID = 22436,
+				//Directors = new[] {
+				//	1138
+				//},
+				ExperianDirectors = new []{20817},
+				SendToCustomer = false,
+				TemplateID = 2
+			};
+
+			Console.WriteLine();
+			Console.WriteLine("var oRequest = $.post(window.gRootPath + 'Underwriter/Esignatures/Send', {{ sPackage: '{0}', }});",
+				JsonConvert.SerializeObject(e));
+
 		}
 	} // class TestEchoSign
 } // namespace
