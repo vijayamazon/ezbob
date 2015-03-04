@@ -27,7 +27,8 @@ EzBob.Underwriter.MedalCalculationView = Backbone.View.extend({
         location.href = window.gRootPath + 'Underwriter/Medal/ExportToExel?id=' + this.model.get('Id');
     },
     
-    render: function () {
+    render: function() {
+		
         var medals = this.model.toJSON();
         var that = this;
         var currentMedal = _.find(medals.DetailedHistory.MedalDetailsHistories, function(medalDetails) {
@@ -39,6 +40,8 @@ EzBob.Underwriter.MedalCalculationView = Backbone.View.extend({
             currentMedal: currentMedal,
             currentMedalId: this.currentMedalId
         }));
+
+        EzBob.handleUserLayoutSetting();
         return this;
     }
 });

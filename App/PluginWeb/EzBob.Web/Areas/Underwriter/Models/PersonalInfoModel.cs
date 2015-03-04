@@ -3,25 +3,22 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils;
-	using Infrastructure;
 	using Infrastructure.Email;
-	using NHibernate;
 	using CommonLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using ServiceClientProxy;
 	using StructureMap;
 	using log4net;
 
 	public class PersonalInfoModel {
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PersonalInfoModel));
-		private readonly ServiceClient serviceClient;
 		private readonly CustomerPhoneRepository customerPhoneRepository = ObjectFactory.GetInstance <CustomerPhoneRepository>();
+		private readonly TrustPilotStatusRepository trustPilotStatusRepository = ObjectFactory.GetInstance<TrustPilotStatusRepository>();
+
 
 		public int Id { get; set; }
 		public string Name { get; set; }
@@ -37,18 +34,14 @@
 		public string MobileTooltip { get; set; }
 		public string DaytimeTooltip { get; set; }
 		public string RegistrationDate { get; set; }
-		public List<string> IndustryFields { get; set; }
 		public string UserStatus { get; set; }
 		public string CreditResult { get; set; }
 		public int CustomerStatusId { get; set; }
 		public string CustomerStatusName { get; set; }
-		public List<string> TopCategories { get; set; }
 		public decimal? WebSiteTurnOver { get; set; }
 		public decimal? OverallTurnOver { get; set; }
 		public string ReferenceSource { get; set; }
 		public string ABTesting { get; set; }
-		public bool IsMainStratFinished { get; set; }
-		public string StrategyError { get; set; }
 		public string FraudCheckStatus { get; set; }
 		public int FraudCheckStatusId { get; set; }
 		public bool IsCustomerInEnabledStatus { get; set; }
@@ -69,8 +62,6 @@
 		public string CompanySeniority { get; set; }
 		public bool IsYoungCompany { get; set; }
 		public string CompanyExperianRefNum { get; set; }
-		public int NumOfDirectors { get; set; }
-		public int NumOfShareholders { get; set; }
 		public string Website { get; set; }
 		public bool IsWarning { get; set; }
 		public string PromoCode { get; set; }
@@ -85,13 +76,10 @@
 		public int PersonalGuaranteeTemplateID { get; set; }
 
 		public PersonalInfoModel() {
-			IndustryFields = new List<string>();
-			StrategyError = "";
 			CompanyEmployeeCountInfo = null;
-			serviceClient = new ServiceClient();
 		} // constructor
 
-		public void InitFromCustomer(Customer customer, ISession session) {
+		public void InitFromCustomer(Customer customer) {
 			if (customer == null)
 				return;
 
@@ -166,9 +154,15 @@
 				Surname = customer.PersonalInfo.Surname;
 				MobilePhone = customer.PersonalInfo.MobilePhone;
 				DaytimePhone = customer.PersonalInfo.DaytimePhone;
+				OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
+				WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
 			} // if
 
-			List<CustomerPhone> customerPhones =  customerPhoneRepository.GetAll().Where(x => x.CustomerId == customer.Id && x.IsCurrent).ToList();
+			List<CustomerPhone> customerPhones =  customerPhoneRepository
+				.GetAll()
+				.Where(x => x.CustomerId == customer.Id && x.IsCurrent)
+				.ToList();
+
 			MobileTooltip = "Click to verify";
 			DaytimeTooltip = "Click to verify";
 			foreach (CustomerPhone customerPhone in customerPhones)
@@ -207,6 +201,7 @@
 
 			Medal = customer.Medal.HasValue ? customer.Medal.ToString() : "";
 			Email = customer.Name;
+			
 			EmailState = EmailConfirmationState.Get(customer);
 
 			if (customer.GreetingMailSentDate != null)
@@ -219,7 +214,6 @@
 				                   string.Format(" [{0}y {1}m]", registrationTimeYears, registrationTimeMonths);
 			}
 
-			IndustryFields.Add(string.Empty);
 			UserStatus = customer.Status.ToString();
 			CreditResult = customer.CreditResult.ToString();
 
@@ -229,11 +223,6 @@
 			CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
 
 			IsWarning = customer.CollectionStatus.CurrentStatus.IsWarning;
-
-			if (customer.PersonalInfo != null) {
-				OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
-				WebSiteTurnOver = customer.PersonalInfo.WebSiteTurnOver;
-			} // if
 
 			ReferenceSource = customer.ReferenceSource;
 			ABTesting = customer.ABTesting;
@@ -256,15 +245,6 @@
 
 			TrustPilotStatusDescription = customer.TrustPilotStatus.Description;
 			TrustPilotStatusName = customer.TrustPilotStatus.Name;
-
-			string lastMainStrategyStatus = (string)session.CreateSQLQuery("EXEC GetLastMainStrategyStatus " + customer.Id).UniqueResult();
-
-			IsMainStratFinished = lastMainStrategyStatus != "BG launch" && lastMainStrategyStatus != "In progress";
-			if (lastMainStrategyStatus == "Finished" || lastMainStrategyStatus == "Failed" ||
-			    lastMainStrategyStatus == "Terminated")
-			{
-				StrategyError = string.Format("Error occurred in main strategy, its status is:{0}", lastMainStrategyStatus);
-			}
 
 			BrokerID = customer.Broker == null ? 0 : customer.Broker.ID;
 			BrokerName = customer.Broker == null ? "" : customer.Broker.ContactName;
@@ -307,22 +287,33 @@
 		public string BrokerContactEmail { get; set; }
 		public string BrokerContactMobile { get; set; }
 
-		public List<object> TrustPilotStatusList {
+		public List<TrustPilotStatusModel> TrustPilotStatusList {
 			get {
 				if (m_oTrustPilotStatusList != null)
 					return m_oTrustPilotStatusList;
 
-				m_oTrustPilotStatusList = new List<object>();
-
-				var oHelper = ObjectFactory.GetInstance<DatabaseDataHelper>();
-
-				foreach (TrustPilotStatus tsp in oHelper.TrustPilotStatusRepository.GetAll())
-					m_oTrustPilotStatusList.Add(new { value = tsp.Name, text = tsp.Description });
-
+				m_oTrustPilotStatusList = trustPilotStatusRepository
+					.GetAll()
+					.Select(tsp => new TrustPilotStatusModel {
+						value = tsp.Name,
+						text = tsp.Description
+					})
+					.ToList();
+				
 				return m_oTrustPilotStatusList;
 			} // get
-		} // TrustPilotSatusList
+		}
 
-		private List<object> m_oTrustPilotStatusList;
+		public int NumOfDirectors { get; set; }
+		public int NumOfShareholders { get; set; }
+
+// TrustPilotSatusList
+
+		private List<TrustPilotStatusModel> m_oTrustPilotStatusList;
 	} // class PersonalInfoModel
+
+	public class TrustPilotStatusModel {
+		public string value { get; set; }
+		public string text { get; set; }
+	}
 } // namespace

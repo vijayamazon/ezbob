@@ -104,7 +104,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
 		this.pricingModelCalculationsModel = new EzBob.Underwriter.PricingModelCalculationsModel();
-		this.pricingModelScenarios.fetch();
 		this.pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView({
 			el: this.$el.find('#pricing-calc'),
 			model: this.pricingModelCalculationsModel,
@@ -115,10 +114,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
 			el: self.$el.find('#company-score-list'),
 			model: this.companyScoreModel,
-		});
-
-		this.$el.find('a.company-score-tab').on('shown.bs.tab', function() {
-			self.companyScoreView.redisplayAccordion();
 		});
 
 		this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
@@ -188,19 +183,51 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			personalModel: this.personalInfoModel,
 			loanModel: this.loanInfoModel,
 			medalModel: this.medalCalculationModel,
-			parentView: this,
-		    summaryInfoModel: this.summaryInfoModel
+			parentView: this
 		});
 
 		this.showed = true;
-		
-		this.restoreState();
 		this.$el.find('.nav-list a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
 			self.setLastShownProfileSection($(e.target).attr('href').substr(1));
-			if ($(e.currentTarget).attr('href') === '#customer-info')
-				self.crossCheckView.render({ customerId: self.customerId });
-			if ($(e.currentTarget).attr('href') === '#dashboard')
-				self.dashboardInfoView.render();
+
+			var currentTab = $(e.currentTarget).attr('href');
+			switch (currentTab) {
+				case '#customer-info':
+					self.crossCheckView.render({ customerId: self.customerId });
+					break;
+				case '#dashboard':
+					self.dashboardInfoView.render();
+					break;
+				case '#company-score':
+					self.companyScoreView.redisplayAccordion();
+					break;
+				case '#fraudDetection':
+					self.FraudDetectionLogs.customerId = self.customerId;
+					self.FraudDetectionLogs.fetch();
+					break;
+				case '#apiChecks':
+					self.ApicCheckLogs.customerId = self.customerId;
+					self.ApicCheckLogs.fetch();
+					break;
+				case '#messages-tab':
+					self.messagesModel.set({ Id: self.customerId }, { silent: true });
+					self.messagesModel.fetch();
+					self.signatureMonitorView.reload(self.customerId);
+					break;
+				case '#payment-accounts':
+					self.paymentAccountsModel.customerId = self.customerId;
+					self.paymentAccountsModel.fetch();
+					break;
+				case '#loanhistorys':
+					self.loanHistory.customerId = self.customerId;
+					self.loanHistory.fetch();
+					break;
+				case '#calculator':
+					self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
+					self.pricingModelScenarios.fetch();
+					self.pricingModelCalculationsModel.fetch();
+					break;
+			}
 		}));
 
 		this.gotoCustomer();
@@ -252,10 +279,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			self.affordability.clear().set(fullModel.get('Affordability'), { silent: true });
 			self.affordability.trigger('sync');
 
-			self.loanHistory.customerId = id;
 			self.loanHistoryView.idCustomer = id;
-			self.loanHistory.set(fullModel.get('LoansAndOffers'), { silent: true });
-			self.loanHistory.trigger('sync');
 
 			self.summaryInfoModel.set({ Id: id, success: true }, { silent: true });
 			self.summaryInfoModel.set(fullModel.get('SummaryModel'), { silent: true });
@@ -265,36 +289,18 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			self.experianInfoModel.set(fullModel.get('CreditBureauModel'), { silent: true });
 			self.experianInfoModel.trigger('sync');
 
-			self.paymentAccountsModel.customerId = id;
-			self.paymentAccountsModel.set(fullModel.get('PaymentAccountModel'), { silent: true });
-			self.paymentAccountsModel.trigger('sync');
-
 			self.medalCalculationModel.set({ Id: id }, { silent: true });
 			self.medalCalculationModel.set(fullModel.get('MedalCalculations'), { silent: true });
 			self.medalCalculationModel.trigger('sync');
-
-			self.pricingModelCalculationsModel.set({ Id: id }, { silent: true });
-			self.pricingModelCalculationsModel.set(fullModel.get('PricingModelCalculations'), { silent: true });
-			self.pricingModelCalculationsModel.trigger('sync');
 
 			self.PropertiesModel.set({ Id: id }, { silent: true });
 			self.PropertiesModel.set(fullModel.get('Properties'), { silent: true });
 			self.PropertiesModel.trigger('sync');
 
-			self.FraudDetectionLogs.customerId = id;
 			self.FraudDetectionLogView.customerId = id;
-			self.FraudDetectionLogs.set(fullModel.get('FraudDetectionLog'), { silent: true });
-			self.FraudDetectionLogs.trigger('sync');
-
-			self.ApicCheckLogs.customerId = id;
+			
 			self.ApiChecksLogView.idCustomer = id;
-			self.ApicCheckLogs.reset(fullModel.get('ApiCheckLogs'), { silent: true });
-			self.ApicCheckLogs.trigger('sync');
-
-			self.messagesModel.set({ Id: id }, { silent: true });
-			self.messagesModel.set({ attaches: fullModel.get('Messages'), silent: true });
-			self.messagesModel.trigger('sync');
-
+			
 			self.crmModel.customerId = id;
 			self.crmModel.set(fullModel.get('CustomerRelations'), { silent: true });
 			self.crmModel.trigger('sync');
@@ -318,8 +324,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 				$('a[href=#marketplaces]').click();
 
 			$('a.common-bug').attr('data-bug-customer', id);
-
-			self.signatureMonitorView.reload(id);
 
 			self.fillFunds();
 			self.fundingModel.fetch();
@@ -348,8 +352,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 	}, // gotoCustomer
 
 	setState: function(nCustomerID, sSection) {
-		this.lastShownCustomerID = nCustomerID;
-
+		this.customerId = nCustomerID;
 		if (!sSection)
 			this.getLastShownProfileSection(this.$el.find('a.customer-tab:first').attr('href').substr(1));
 	}, // setState

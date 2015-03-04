@@ -2,7 +2,8 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.PricingModelCalculationsModel = Backbone.Model.extend({
-    url: window.gRootPath + "Underwriter/PricingModelCalculations/Index/"
+	idAttribute: "Id",
+	urlRoot: window.gRootPath + "Underwriter/PricingModelCalculations/Index/"
 });
 
 EzBob.Underwriter.PricingModelScenarios = Backbone.Model.extend({
@@ -15,8 +16,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     initialize: function () {
         this.scenarios = this.options.scenarios;
         this.modelBinder = new Backbone.ModelBinder();
-        this.model.on('reset fetch sync', this.render, this);
-        this.model.on('reset fetch sync', this.makeInitialCalculation, this);
+        this.model.on('change sync', this.makeInitialCalculation, this);
         this.inputsExpanded = false;
         this.outputsExpanded = false;
     },
@@ -125,7 +125,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         request.success(function (res) {
             that.model.set(res);
             that.renderAndRememberExpanded();
-            UnBlockUi();
+            BlockUi('off', that.$el);
             that.calculateClicked();
         });
     },
@@ -160,7 +160,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         request.success(function (res) {
             that.model.set('DefaultRate', res);
             that.renderAndRememberExpanded();
-            UnBlockUi();
+            BlockUi('off', that.$el);
         });
     },
 
@@ -184,7 +184,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     setupFeePoundsChanged: function () {
         var setupFeePercents = 0;
         var loanAmount = this.model.get('LoanAmount');
-        if (loanAmount != 0) {
+        if (loanAmount !== 0) {
             setupFeePercents = this.model.get('SetupFeePounds') / loanAmount;
         }
         this.model.set('SetupFeePercents', setupFeePercents);
@@ -206,7 +206,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     brokerSetupFeePoundsChanged: function () {
         var brokerSetupFeePercents = 0;
         var loanAmount = this.model.get('LoanAmount');
-        if (loanAmount != 0) {
+        if (loanAmount !== 0) {
             brokerSetupFeePercents = this.model.get('BrokerSetupFeePounds') / loanAmount;
         }
         this.model.set('BrokerSetupFeePercents', brokerSetupFeePercents);
@@ -233,7 +233,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     tenureMonthsChanged: function () {
         var tenurePercents = 0;
         var loanTerm = this.model.get('LoanTerm');
-        if (loanTerm != 0) {
+        if (loanTerm !== 0) {
             tenurePercents = this.model.get('TenureMonths') / loanTerm;
         }
         this.model.set('TenurePercents', tenurePercents);
@@ -260,19 +260,21 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         });
     },
     
-    makeInitialCalculation: function () {
+    makeInitialCalculation: function() {
+	    console.log('makeInitialCalculation');
         if (this.model.get('LoanAmount') > 0 && this.model.get('TenureMonths') > 0) {
             this.calculateClicked();
         }
     },
     
-    calculateClicked: function () {
+    calculateClicked: function() {
+    	console.log('calculateClicked');
         if (this.model.get('LoanAmount') <= 0) {
             EzBob.ShowMessage("Loan amount must be positive", "Wrong loan amount");
             return;
         }
         
-        BlockUi();
+        BlockUi('on',this.$el);
         var that = this;
         var request = $.post(
 			window.gRootPath + 'Underwriter/PricingModelCalculations/Calculate',
@@ -285,7 +287,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         request.success(function (res) {
             that.model.set(res);
             that.renderAndRememberExpanded();
-            UnBlockUi();
+            BlockUi('off', that.$el);
         });
     },
 
@@ -339,6 +341,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         if (this.selectedScenario)
             this.$el.find('#PricingModelScenario').val(this.selectedScenario);
         
+        EzBob.handleUserLayoutSetting();
         return this;
     }
 });
