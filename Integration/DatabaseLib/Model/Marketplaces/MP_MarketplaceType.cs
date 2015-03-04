@@ -2,6 +2,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 	using System;
 	using FluentNHibernate.Mapping;
 	using System.Collections.Generic;
+	using EzBob.CommonLib.TimePeriodLogic;
 	using Marketplaces;
 
 	public class MP_MarketplaceType {
@@ -24,6 +25,16 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 		public virtual IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
 			return new List<IAnalysisDataParameterInfo>();
+		}
+
+		protected virtual DateTime GetRelevantDate(DateTime? history) {
+			DateTime now = history ?? DateTime.UtcNow;
+
+			int daysInMonth = DateTime.DaysInMonth(now.Year, now.Month);
+			bool isPreviousMonth = now.Day < daysInMonth - 3;
+
+			DateTime relevantMonth = isPreviousMonth ? now.AddMonths(-1) : now;
+			return relevantMonth;
 		}
 
 		protected const int MonthsInYear = 12;

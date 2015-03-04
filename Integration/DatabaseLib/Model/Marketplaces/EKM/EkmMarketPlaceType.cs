@@ -11,7 +11,13 @@
 		public override int UWPriority { get { return 3; } }
 
 		public override IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
-			var aggregations = mp.UpdatingHistory.SelectMany(x => x.EkmAggregations).Where(ag => ag.IsActive).OrderByDescending(ag => ag.TheMonth).ToList();
+			DateTime relevantDate = GetRelevantDate(history);
+			var aggregations = mp.UpdatingHistory
+				.SelectMany(x => x.EkmAggregations)
+				.Where(ag => ag.IsActive && ag.TheMonth < relevantDate)
+				.OrderByDescending(ag => ag.TheMonth)
+				.ToList();
+
 			var calculatedAggregations = new List<IAnalysisDataParameterInfo>();
 
 			if (!aggregations.Any()) {
@@ -22,6 +28,8 @@
 				aggregations = aggregations.Where(x => x.TheMonth < history).ToList();
 			}
 
+			DateTime firstOfMonth = new DateTime(relevantDate.Year, relevantDate.Month, 1);
+
 			var month = TimePeriodFactory.Create(TimePeriodEnum.Month);
 			var month3 = TimePeriodFactory.Create(TimePeriodEnum.Month3);
 			var month6 = TimePeriodFactory.Create(TimePeriodEnum.Month6);
@@ -30,9 +38,6 @@
 			var month18 = TimePeriodFactory.Create(TimePeriodEnum.Month18);
 			var year2 = TimePeriodFactory.Create(TimePeriodEnum.Year2);
 			var all = TimePeriodFactory.Create(TimePeriodEnum.Lifetime);
-
-			DateTime today = history ?? DateTime.UtcNow;
-			DateTime firstOfMonth = new DateTime(today.Year, today.Month, 1);
 
 			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, month, firstOfMonth));
 			calculatedAggregations.AddRange(GetAnalysisDataParameters(aggregations, month3, firstOfMonth));

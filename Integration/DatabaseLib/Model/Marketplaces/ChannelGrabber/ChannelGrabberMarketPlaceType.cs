@@ -12,6 +12,8 @@
 		public override int UWPriority { get { return 4; } } // UWPriority
 
 		public override IEnumerable<IAnalysisDataParameterInfo> GetAggregations(MP_CustomerMarketPlace mp, DateTime? history) {
+			DateTime relevantDate = GetRelevantDate(history);
+			DateTime firstOfMonth = new DateTime(relevantDate.Year, relevantDate.Month, 1);
 
 			var month = TimePeriodFactory.Create(TimePeriodEnum.Month);
 			var month3 = TimePeriodFactory.Create(TimePeriodEnum.Month3);
@@ -24,18 +26,16 @@
 
 			var calculatedAggregations = new List<IAnalysisDataParameterInfo>();
 			if (InternalId == new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA")) {
-				var aggregations = mp.UpdatingHistory.SelectMany(x => x.HmrcAggregations).Where(ag => ag.IsActive).OrderByDescending(ag => ag.TheMonth).ToList();
+				var aggregations = mp.UpdatingHistory
+					.SelectMany(x => x.HmrcAggregations)
+					.Where(ag => ag.IsActive && ag.TheMonth < relevantDate)
+					.OrderByDescending(ag => ag.TheMonth)
+					.ToList();
+
 				if (!aggregations.Any()) {
 					return calculatedAggregations;
 				}
-
-				if (history.HasValue) {
-					aggregations = aggregations.Where(x => x.TheMonth < history).ToList();
-				}
-
-				DateTime today = history ?? DateTime.UtcNow;
-				DateTime firstOfMonth = new DateTime(today.Year, today.Month, 1);
-
+				
 				calculatedAggregations.AddRange(GetAnalysisDataParametersHmrc(aggregations, month, firstOfMonth));
 				calculatedAggregations.AddRange(GetAnalysisDataParametersHmrc(aggregations, month3, firstOfMonth));
 				calculatedAggregations.AddRange(GetAnalysisDataParametersHmrc(aggregations, month6, firstOfMonth));
@@ -49,13 +49,6 @@
 				if (!aggregations.Any()) {
 					return calculatedAggregations;
 				}
-
-				if (history.HasValue) {
-					aggregations = aggregations.Where(x => x.TheMonth < history).ToList();
-				}
-
-				DateTime today = history ?? DateTime.UtcNow;
-				DateTime firstOfMonth = new DateTime(today.Year, today.Month, 1);
 
 				calculatedAggregations.AddRange(GetAnalysisDataParametersCG(aggregations, month, firstOfMonth));
 				calculatedAggregations.AddRange(GetAnalysisDataParametersCG(aggregations, month3, firstOfMonth));
