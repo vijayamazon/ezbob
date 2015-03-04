@@ -187,6 +187,7 @@
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\SalesForceController.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
@@ -227,7 +228,7 @@
     <Compile Include="Code\ServerLog\ServerLogEntryModel.cs" />
     <Compile Include="Controllers\ServerLogController.cs" />
     <Compile Include="Models\LoanScheduleExtention.cs" />
-    <Compile Include="Models\PersonalInfoModel.cs" />
+    <Compile Include="Areas\Underwriter\Models\PersonalInfoModel.cs" />
     <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />

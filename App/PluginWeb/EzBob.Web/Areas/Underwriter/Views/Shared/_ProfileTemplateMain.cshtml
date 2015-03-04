@@ -67,6 +67,7 @@
     Html.RenderPartial("_CreditLineDialog");
     Html.RenderPartial("ApproveLoanWithoutAML");
     Html.RenderPartial("ApproveLoanForWarningStatusCustomer"); 
+    Html.RenderPartial("_Messages");
 }
 
 <script id="functionsDialogTemplate" type="text/template">
@@ -118,14 +119,6 @@
     </div>
 
 </script>
-
-<script id="message-template" type="text/template">
-    @{Html.RenderPartial("_Messages");}
-    <div class="pull-right">
-        <button class="btn btn-primary aml-button-margin" id="btnAMLInformation">AML</button>
-    </div>
-</script>
-
 
 <script id="address-popup-template" type="text/template">
     @{Html.RenderPartial("~/Areas/Customer/Views/Shared/_AddressPopupTemplate.cshtml");}

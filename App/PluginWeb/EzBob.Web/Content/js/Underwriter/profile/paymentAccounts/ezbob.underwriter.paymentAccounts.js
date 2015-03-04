@@ -62,7 +62,7 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		"click .addNewDebitCard": "addNewDebitCard",
 		"click .set-paypoint-default": "setPaypointDefault"
 	},
-	onRender: function () {
+	onRender: function() {
 		this.$el.find('.bankAccounts i[data-title]').tooltip({
 			placement: "right"
 		});

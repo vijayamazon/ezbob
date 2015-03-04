@@ -34,7 +34,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		var self = this;
 
 		var doDeleteDirector = function() {
-			BlockUi();
+			BlockUi('on', this.$el);
 
 			var oData = oRow.data('for-edit');
 
@@ -61,7 +61,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			});
 
 			oRequest.always(function() {
-				UnBlockUi();
+				BlockUi('off', self.$el);
 			});
 		}; // doDeleteDirector
 
@@ -193,15 +193,13 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		if (!oPackage)
 			return;
 
-		BlockUi();
+		BlockUi('on', this.$el);
 
 		var oRequest = $.post(window.gRootPath + 'Underwriter/Esignatures/Send', { sPackage: JSON.stringify(oPackage), });
 
 		var self = this;
 
 		oRequest.done(function(oResponse) {
-			UnBlockUi();
-
 			if (oResponse.success) {
 				self.cancelSend();
 				self.reloadCurrent();
@@ -216,8 +214,11 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		});
 
 		oRequest.fail(function() {
-			UnBlockUi();
 			EzBob.ShowMessage('Failed to send documents for signature.', 'Error while sending');
+		});
+
+		oRequest.always(function() {
+			BlockUi('off', self.$el);
 		});
 	}, // doSend
 
@@ -356,7 +357,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		var self = this;
 
 		if (bPollStatus)
-			BlockUi();
+			BlockUi('on', this.$el);
 
 		var oRequest = $.getJSON(
 			window.gRootPath + 'Underwriter/Esignatures/Load',
@@ -436,7 +437,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 		oRequest.always(function() {
 			if (bPollStatus)
-				UnBlockUi();
+				BlockUi('off', self.$el);
 
 			self.boardResolutionTemplateID = self.personalInfoModel.get('BoardResolutionTemplateID');
 			self.personalGuaranteeTemplateID = self.personalInfoModel.get('PersonalGuaranteeTemplateID');

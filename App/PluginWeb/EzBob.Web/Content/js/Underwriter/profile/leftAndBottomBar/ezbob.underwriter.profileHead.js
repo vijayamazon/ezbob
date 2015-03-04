@@ -10,7 +10,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		this.parentView = options.parentView;
 		this.bindTo(this.model, "change sync", this.render, this);
 		this.bindTo(this.loanModel, "change sync", this.render, this);
-		this.bindTo(this.medalModel, "change fetch sync", this.render, this);
+		this.bindTo(this.medalModel, "change sync", this.render, this);
 		this.bindTo(this.personalModel, "change sync", this.personalModelChanged, this);
 	},
 	serializeData: function() {

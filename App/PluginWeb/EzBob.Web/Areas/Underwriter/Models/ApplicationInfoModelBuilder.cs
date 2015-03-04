@@ -17,7 +17,6 @@
 
 	public class ApplicationInfoModelBuilder
 	{
-		private readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
@@ -73,7 +72,7 @@
 				cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
 				cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
 
-				model.RepaymentPerion = _repaymentCalculator.ReCalculateRepaymentPeriod(cr);
+				model.RepaymentPerion = cr.RepaymentPeriod;//_repaymentCalculator.ReCalculateRepaymentPeriod(cr);
 
 				if (cr.SystemCalculatedSum.HasValue && Math.Abs(cr.SystemCalculatedSum.Value) > 0.01)
 				{

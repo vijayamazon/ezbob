@@ -8,15 +8,12 @@
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models.Marketplaces;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils;
 	using Infrastructure;
 	using Models;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
 	using Web.Models;
 	using NHibernate;
 	using System;
@@ -32,15 +29,10 @@
 			WebMarketPlacesFacade marketPlaces,
 			CreditBureauModelBuilder creditBureauModelBuilder,
 			ProfileSummaryModelBuilder summaryModelBuilder,
-			FraudDetectionRepository fraudDetectionLog,
-			ApiCheckLogBuilder apiCheckLogBuilder,
-			MessagesModelBuilder messagesModelBuilder,
 			CustomerRelationsRepository customerRelationsRepository,
 			NHibernateRepositoryBase<MP_AlertDocument> docRepo,
 			IBugRepository bugs,
 			LoanRepository loanRepository,
-			CustomerAddressRepository customerAddressRepository,
-			LandRegistryRepository landRegistryRepository, 
 			PropertiesModelBuilder propertiesModelBuilder,
 			IWorkplaceContext context) {
 			_customers = customers;
@@ -49,9 +41,6 @@
 			_marketPlaces = marketPlaces;
 			_creditBureauModelBuilder = creditBureauModelBuilder;
 			_summaryModelBuilder = summaryModelBuilder;
-			_fraudDetectionLog = fraudDetectionLog;
-			_apiCheckLogBuilder = apiCheckLogBuilder;
-			_messagesModelBuilder = messagesModelBuilder;
 			_customerRelationsRepository = customerRelationsRepository;
 			_docRepo = docRepo;
 			_bugs = bugs;
@@ -84,7 +73,7 @@
 
 				using (tc.AddStep("PersonalInfoModel Time taken")) {
 					var pi = new PersonalInfoModel();
-					pi.InitFromCustomer(customer, _session);
+					pi.InitFromCustomer(customer);
 					model.PersonalInfoModel = pi;
 				} // using
 
@@ -110,54 +99,19 @@
 					}
 				} // using
 
-				using (tc.AddStep("LoansAndOffers Time taken"))
-					model.LoansAndOffers = new LoansAndOffers(customer);
-
 				using (tc.AddStep("CreditBureauModel Time taken"))
 					model.CreditBureauModel = _creditBureauModelBuilder.Create(customer);
 
 				using (tc.AddStep("SummaryModel Time taken"))
 					model.SummaryModel = _summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
 
-				using (tc.AddStep("PaymentAccountModel Time taken"))
-					model.PaymentAccountModel = new PaymentsAccountModel(customer);
-
 				using (tc.AddStep("MedalCalculations Time taken"))
 					model.MedalCalculations = new MedalCalculators(customer);
-
-				using (tc.AddStep("PricingModelCalculations Time taken")) {
-					try {
-						PricingModelModelActionResult getPricingModelModelResponse =
-							serviceClient.Instance.GetPricingModelModel(customer.Id, _context.UserId, "Basic New");
-
-						model.PricingModelCalculations = getPricingModelModelResponse.Value;
-					}
-					catch (Exception ex) {
-						Log.ErrorFormat("Failed to load pricing model. \n{0}", ex);
-					}
-				} // using
 
 				using (tc.AddStep("PropertiesModel Time taken")) {
 					model.Properties = _propertiesModelBuilder.Create(customer);
 				}
-				using (tc.AddStep("FraudDetectionLog Time taken")) {
-					DateTime? lastDateCheck;
-
-					model.FraudDetectionLog = new FraudDetectionLogModel {
-						FraudDetectionLogRows = _fraudDetectionLog.GetLastDetections(id, out lastDateCheck)
-							.Select(x => new FraudDetectionLogRowModel(x))
-							.OrderByDescending(x => x.Id)
-							.ToList(),
-						LastCheckDate = lastDateCheck,
-					};
-				} // using
-
-				using (tc.AddStep("ApiCheckLogs Time taken"))
-					model.ApiCheckLogs = _apiCheckLogBuilder.Create(customer);
-
-				using (tc.AddStep("Messages Time taken"))
-					model.Messages = _messagesModelBuilder.Create(customer);
-
+				
 				using (tc.AddStep("CustomerRelations Time taken")) {
 					var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
 					model.CustomerRelations = crm.Create(customer.Id);
@@ -211,43 +165,13 @@
 
 			Log.InfoFormat("{0}", sb);
 		}
-		// ReSharper disable UnusedAutoPropertyAccessor.Local
-
-		private class FullCustomerModel {
-			public PersonalInfoModel PersonalInfoModel { get; set; }
-			public ApplicationInfoModel ApplicationInfoModel { get; set; }
-			public List<MarketPlaceModel> MarketPlaces { get; set; }
-			public List<AffordabilityData> Affordability { get; set; }
-			public List<MarketPlaceHistoryModel> MarketplacesHistory { get; set; }
-			public LoansAndOffers LoansAndOffers { get; set; }
-			public CreditBureauModel CreditBureauModel { get; set; }
-			public ProfileSummaryModel SummaryModel { get; set; }
-			public PaymentsAccountModel PaymentAccountModel { get; set; }
-			public MedalCalculators MedalCalculations { get; set; }
-			public PricingModelModel PricingModelCalculations { get; set; }
-			public PropertiesModel Properties { get; set; }
-			public FraudDetectionLogModel FraudDetectionLog { get; set; }
-			public List<ApiChecksLogModel> ApiCheckLogs { get; set; }
-			public List<MessagesModel> Messages { get; set; }
-			public CrmModel CustomerRelations { get; set; }
-			public AlertDoc[] AlertDocs { get; set; }
-			public List<BugModel> Bugs { get; set; }
-			public string State { get; set; }
-			public CompanyScoreModel CompanyScore { get; set; }
-			public List<string> ExperianDirectors { get; set; }
-		} // class FullCustomerModel
-
-		// ReSharper restore UnusedAutoPropertyAccessor.Local
-
+		
 		private readonly ICustomerRepository _customers;
 		private readonly ISession _session;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly WebMarketPlacesFacade _marketPlaces;
 		private readonly CreditBureauModelBuilder _creditBureauModelBuilder;
 		private readonly ProfileSummaryModelBuilder _summaryModelBuilder;
-		private readonly FraudDetectionRepository _fraudDetectionLog;
-		private readonly ApiCheckLogBuilder _apiCheckLogBuilder;
-		private readonly MessagesModelBuilder _messagesModelBuilder;
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly PropertiesModelBuilder _propertiesModelBuilder;
 		private readonly LoanRepository _loanRepository;

@@ -4,22 +4,22 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Infrastructure.Attributes;
 	using Models;
-	using NHibernate;
-	using StructureMap;
 
 	public class CustomerInfoController : Controller
 	{
+		private readonly CustomerRepository customerRepository;
+
+		public CustomerInfoController(CustomerRepository customerRepository) {
+			this.customerRepository = customerRepository;
+		}
+
 		[Ajax]
 		[HttpGet]
 		public JsonResult Index(int id)
 		{
-			var newSession = ObjectFactory.GetInstance<ISession>();
-			newSession.CacheMode = CacheMode.Ignore;
-
-			var newCustomers = new CustomerRepository(newSession);
-			var customer = newCustomers.Get(id);
+			var customer = customerRepository.Get(id);
 			var model = new PersonalInfoModel();
-			model.InitFromCustomer(customer, newSession);
+			model.InitFromCustomer(customer);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 	}

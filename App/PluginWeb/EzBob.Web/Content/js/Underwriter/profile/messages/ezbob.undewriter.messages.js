@@ -12,8 +12,8 @@ EzBob.Underwriter.Message = Backbone.View.extend({
         this.template = _.template($('#message-template').html());
     },
     
-    render: function () {
-        this.$el.html(this.template({ model: this.model.get('attaches') }));
+    render: function() {
+        this.$el.html(this.template({ model: this.model.toJSON() }));
         this.customerId = this.model.get("Id");
     },
     
