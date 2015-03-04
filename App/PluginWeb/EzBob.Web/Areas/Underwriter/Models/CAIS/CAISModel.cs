@@ -1,7 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Globalization;
+﻿using System.Globalization;
 using EZBob.DatabaseLib.Model.Database;
-using System.Linq;
 
 namespace EzBob.Web.Areas.Underwriter.Models.CAIS
 {
