@@ -43,65 +43,9 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             experian: this.experianModel.toJSON(),
             company: this.expCompany,
             properties: this.propertiesModel.toJSON(),
-            //mps: this.mpsModel.toJSON(),
             loan: this.loanModel.toJSON(),
-            affordability: this.affordability.toJSON(),
             personal: this.personalModel.toJSON()
         };
-    },
-
-    rotateTable: function () {
-        this.$el.find('#affordabilityTable').each(function () {
-            var $this = $(this);
-            var newrows = [];
-            $this.find('tr').each(function () {
-                var i = 0;
-                $(this).find('td').each(function () {
-                    i++;
-                    if (newrows[i] === undefined) { newrows[i] = $('<tr></tr>'); }
-                    newrows[i].append($(this));
-                });
-            });
-            $this.find("tr").remove();
-            $.each(newrows, function () {
-                $this.append(this);
-            });
-        });
-
-        this.$el.find('#affordabilityTable tr:first-child td').each(function () {
-            $(this).replaceWith('<th>' + $(this).html() + '</th>');
-        });
-
-        $($('#affordabilityTable tr')[2]).addClass('green-row');
-	    var that = this;
-        
-	    if (this.affordability.customerId) {
-		    _.each(this.affordability.attributes, function(aford, i) {
-				if (_.isFunction(aford)) {
-				    return;
-			    }
-		    	var trendSorted = _.sortBy(aford.TurnoverTrend, function(turnover) {
-				    return moment.utc(turnover.TheMonth);
-		    	});
-		    	
-		    	var trendTurnover = _.pluck(trendSorted, 'Turnover').join(',');
-		    	
-		    	that.$el.find(".affordability-trend-" + i).attr('values', trendTurnover);
-			    that.$el.find(".affordability-trend-" + i).sparkline("html", {
-				    width: '100px',
-				    lineWidth: 1,
-				    spotRadius: 2,
-				    lineColor: "#cfcfcf",
-				    fillColor: "transparent",
-				    spotColor: "#cfcfcf",
-				    maxSpotColor: "#cfcfcf",
-				    minSpotColor: "#cfcfcf",
-				    valueSpots: {
-					    ':': '#cfcfcf'
-				    }
-			    });
-		    });
-	    }
     },
 
     buildJournal: function () {
@@ -220,10 +164,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.drawGraphs();
         this.buildJournal();
 
-	    if (this.affordability.customerId) {
-		    this.rotateTable();
-	    }
-
 	    this.$el.find('a[data-bug-type]').tooltip({
             title: 'Report bug'
         });
@@ -236,7 +176,14 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             that.drawSparklineGraphs();
         });
 
-        EzBob.handleUserLayoutSetting();
+	    if (this.affordability.customerId) {
+		    this.affordabilityView = new EzBob.Underwriter.AffordabilityView({
+			    el: this.$el.find('#affordability'),
+			    model: this.affordability
+		    });
+		    this.affordabilityView.render();
+	    }
+	    EzBob.handleUserLayoutSetting();
     },
 
     experianSpark: function () {

@@ -121,6 +121,9 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult Details(int umi, DateTime? history) {
+			if (history.HasValue) {
+				history = DateTime.SpecifyKind(history.Value, DateTimeKind.Utc);
+			}
 			var mp = _customerMarketplaces.Get(umi);
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
 			builder =  builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
@@ -238,6 +241,11 @@
 		[HttpGet]
 		public JsonResult Index(int id, DateTime? history = null) {
 			try {
+				Log.Info("history before {0}", history);
+				if (history.HasValue) {
+					history = DateTime.SpecifyKind(history.Value, DateTimeKind.Utc);
+				}
+				Log.Info("history after {0}", history);
 				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, history);
 				var mps = ar.MpModel.MarketPlaces;
 				return Json(mps, JsonRequestBehavior.AllowGet);

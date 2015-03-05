@@ -703,7 +703,7 @@
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.2014-03-25.doc" />
     <Content Include="Areas\Broker\Files\credit.file.release.and.consent.doc" />
     <Content Include="Areas\Underwriter\Views\Shared\PricingModelCalculationTemplate.cshtml" />
-    <Content Include="Areas\Underwriter\Views\Shared\Dashboard.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Dashboard.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\PricingModelSettings.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\ConfigTableSettings.cshtml" />
     <Content Include="Content\css\lib\fonts\fontawesome-webfont.eot" />
@@ -831,6 +831,7 @@
     <Content Include="Content\js\Underwriter\profile\loanHistory\ezbob.underwriter.rollover.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplaces.js" />
     <Content Include="Content\js\Underwriter\profile\marketplaces\ezbob.underwriter.marketplacesHistory.js" />
+    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
@@ -853,6 +854,7 @@
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinanceGuarantyAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinancePre-Contract-Agreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinancePrivateCompanyLoanAgreement.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1885,7 +1887,7 @@
     <Content Include="Content\js\Underwriter\StrategySettings\ezbob.underwriter.Settings.PricingModel.js" />
     <Content Include="Content\js\Underwriter\StrategySettings\EzBob.Underwriter.Settings.ConfigTables.js" />
     <Content Include="Content\js\Underwriter\report\ezbob.underwriter.report.js" />
-    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.dashboard.js" />
+    <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.affordability.js" />
     <Content Include="packages.config" />
     <Content Include="Content\img\ny2015scratch\titilliumweb-bold-webfont.eot" />
     <Content Include="Content\img\ny2015scratch\titilliumweb-bold-webfont.ttf" />

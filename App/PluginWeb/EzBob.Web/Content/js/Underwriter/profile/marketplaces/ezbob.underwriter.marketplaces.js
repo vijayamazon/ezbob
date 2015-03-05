@@ -275,7 +275,6 @@ EzBob.Underwriter.MarketPlacesView = EzBob.ItemView.extend({
 
 		var id = e.currentTarget.getAttribute("data-id");
 
-		console.log('load details', id, this.model, this.model.history, this.model.history);
 		if (!id) {
 			UnBlockUi();
 			return;
