@@ -2,7 +2,6 @@
 	using System;
 	using System.Globalization;
 	using System.Linq;
-	using System.Web;
 	using System.Web.Mvc;
 	using Code;
 	using Code.UiEvents;
@@ -21,7 +20,6 @@
 	using NHibernate.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
 	using Web.Models;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
@@ -168,18 +166,6 @@
 
 			var c = new ServiceClient();
 			c.Instance.VipRequest(customer != null ? customer.Id : 0, model.VipFullName, model.VipEmail, model.VipPhone);
-			c.Instance.SalesForceAddUpdateLeadAccount(
-				customer != null ? customer.Id : (int?)null,
-				model.VipEmail,
-				customer != null ? customer.Id : (int?)null,
-				false, customer == null);
-			c.Instance.SalesForceAddTask(customer != null ? customer.Id : (int?)null, customer != null ? customer.Id : 0, new TaskModel() {
-				Email = model.VipEmail,
-				Originator = "System",
-				CreateDate = DateTime.UtcNow,
-				DueDate = DateTime.UtcNow.AddDays(1),
-				Subject = "VIP request"
-			});
 			return Json(new {});
 		} // Vip
 

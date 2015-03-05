@@ -8,7 +8,7 @@
 		[DataMember]
 		public string Email { get; set; }
 		[DataMember]
-		public string OpportunityName { get; set; }
+		public string Name { get; set; }
 		[DataMember]
 		public DateTime? CreateDate { get; set; }
 		[DataMember]
