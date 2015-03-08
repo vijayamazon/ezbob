@@ -5,7 +5,6 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
-
 ALTER PROCEDURE [dbo].[AlibabaCustomerDataSharing]
 	@CustomerID int, @FinalDecision bit
 AS
