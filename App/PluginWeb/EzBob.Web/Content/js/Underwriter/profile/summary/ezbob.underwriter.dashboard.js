@@ -11,18 +11,18 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.loanModel = options.loanModel;
         this.companyModel = options.companyModel;
         this.affordability = options.affordability;
+
         this.bindTo(this.model, 'change sync', this.render, this);
-        this.bindTo(this.crmModel, 'change sync', this.render, this);
         this.bindTo(this.personalModel, 'change sync', this.personalModelChanged, this);
         this.bindTo(this.experianModel, 'change sync', this.render, this);
         this.bindTo(this.companyModel, 'change sync', this.render, this);
         this.bindTo(this.propertiesModel, 'change sync', this.render, this);
         this.bindTo(this.loanModel, 'change sync', this.render, this);
+
         this.bindTo(this.affordability, 'change sync', this.render, this);
+        this.bindTo(this.crmModel, 'change sync', this.render, this);
 
         this.expCompany = [];
-        this.journal = [];
-        this.journalTable = null;
         return this;
     },
     serializeData: function () {
@@ -48,101 +48,11 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         };
     },
 
-    buildJournal: function () {
-        this.journal = [];
-        if (this.crmModel && this.crmModel.get('CustomerRelations')) {
-            _.each(this.crmModel.get('CustomerRelations'), (function (_this) {
-                return function (crm) {
-                    return _this.journal.push({
-                        Action: crm.Action,
-                        Adate: new Date(moment.utc(crm.DateTime)),
-                        Type: crm.Type,
-                        Status: crm.Status,
-                        ApprovedSum: null,
-                        Interest: null,
-                        RepaymentPeriod: null,
-                        LoanType: null,
-                        SetupFee: null,
-                        DiscountPlan: null,
-                        LoanSource: null,
-                        CustomerSelection: null,
-                        UW: crm.User,
-                        Comment: crm.Comment,
-                        IsCrm: true
-                    });
-                };
-            })(this));
-
-        }
-        if (this.model && this.model.get('DecisionHistory')) {
-            _.each(this.model.get('DecisionHistory'), (function (_this) {
-                return function (dh) {
-                    return _this.journal.push({
-                        Action: dh.Action,
-                        Adate: new Date(moment.utc(dh.Date)),
-                        Type: null,
-                        Status: null,
-                        ApprovedSum: dh.ApprovedSum,
-                        Interest: dh.InterestRate,
-                        RepaymentPeriod: dh.RepaymentPeriod,
-                        LoanType: dh.LoanType.split(" ")[0],
-                        SetupFee: (dh.UseSetupFee || dh.UseBrokerSetupFee ? 'yes (todo %)' : '-'),
-                        DiscountPlan: dh.DiscountPlan,
-                        LoanSource: (dh.LoanSourceName === 'Standard' ? '' : dh.LoanSourceName),
-                        CustomerSelection: (dh.IsLoanTypeSelectionAllowed === 1 ? 'Yes' : 'No'),
-                        UW: dh.UnderwriterName,
-                        Comment: dh.Comment,
-                        IsCrm: false
-                    });
-                };
-            })(this));
-        }
-
-        if (this.journal.length > 0 && this.model && this.crmModel) {
-            try {
-                if (this.journalTable) {
-                    this.journalTable.fnClearTable();
-                    this.journalTable = null;
-                }
-
-                this.journalTable = this.$el.find("#journalTable").dataTable({
-                    aLengthMenu: [[-1, 10, 20, 50, 100], ['all', 10, 20, 50, 100]],
-                    iDisplayLength: 20,
-                    sPaginationType: 'bootstrap',
-                    bJQueryUI: false,
-                    aaSorting: [[1, 'desc']],
-                    bAutoWidth: true,
-                    aaData: this.journal,
-                    aoColumns: EzBob.DataTables.Helper.extractColumns('Action,^Adate,Type,Status,$ApprovedSum,%Interest,RepaymentPeriod,LoanType,SetupFee,DiscountPlan,LoanSource,CustomerSelection,UW,Comment,~IsCrm'),
-                    aoColumnDefs: [
-                        {
-                            "aTargets": [1],
-                            "sType": 'date'
-                        }
-                    ],
-                    //bDestroy: true,
-                    bDeferRender: true
-                });
-                EzBob.DataTables.Helper.initCustomFiltering();
-            }catch(ex) {
-                console.log('journal table exception', ex);
-            }
-        }
-    },
     events: {
         'click a[href^="#companyExperian"]': 'companyChanged',
         'click a[href="#customerExperian"]': 'consumerChanged',
         'click a[href^="#director"]': 'consumerChanged',
         'change label.journal-filter input': 'journalFilter'
-    },
-    journalFilter: function (e) {
-        var allJournal = this.$el.find('#allJournal');
-        if ($(e.currentTarget).attr('id') !== 'allJournal' && allJournal.is(':checked')) {
-            allJournal.parent().click();
-            return false;
-        }
-        this.journalTable.fnDraw();
-	    return false;
     },
     companyChanged: function (e) {
 	    var obj = e.currentTarget;
@@ -159,10 +69,12 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             this.model.fetch();
         }
     },
+    journalFilter: function(e) {
+	    this.journalView.journalFilter(e);
+    },
     onRender: function () {
         this.experianSpark();
         this.drawGraphs();
-        this.buildJournal();
         this.$el.find('a[data-bug-type]').tooltip({
             title: 'Report bug'
         });
@@ -175,16 +87,27 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             that.drawSparklineGraphs();
         });
 
-	    if (this.affordability.customerId) {
-		    this.affordabilityView = new EzBob.Underwriter.AffordabilityView({
-			    el: this.$el.find('#affordability'),
-			    model: this.affordability
-		    });
-		    this.affordabilityView.render();
-	    }
+        if (this.affordability.customerId) {
+        	this.affordabilityView = new EzBob.Underwriter.AffordabilityView({
+        		el: this.$el.find('#affordability'),
+        		model: this.affordability
+        	});
+        	this.affordabilityView.render();
+        }
+
+        if (this.crmModel.customerId) {
+        	this.journalView = new EzBob.Underwriter.JournalView({
+        		el: this.$el.find('#journal'),
+        		model: this.model,
+        		crmModel: this.crmModel
+        	});
+        
+        	this.journalView.render();
+        }
+
 	    EzBob.handleUserLayoutSetting();
     },
-
+    
     experianSpark: function () {
         var that = this;
         if (this.experianModel && this.experianModel.get('Consumer')) {
