@@ -2441,6 +2441,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private string EmailField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsOpportunityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OriginatorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -2497,6 +2500,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.EmailField, value) != true)) {
                     this.EmailField = value;
                     this.RaisePropertyChanged("Email");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsOpportunity {
+            get {
+                return this.IsOpportunityField;
+            }
+            set {
+                if ((this.IsOpportunityField.Equals(value) != true)) {
+                    this.IsOpportunityField = value;
+                    this.RaisePropertyChanged("IsOpportunity");
                 }
             }
         }
@@ -2582,6 +2598,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.DateTime EndDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private bool IsOpportunityField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string OriginatorField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -2635,6 +2654,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.EndDateField.Equals(value) != true)) {
                     this.EndDateField = value;
                     this.RaisePropertyChanged("EndDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsOpportunity {
+            get {
+                return this.IsOpportunityField;
+            }
+            set {
+                if ((this.IsOpportunityField.Equals(value) != true)) {
+                    this.IsOpportunityField = value;
+                    this.RaisePropertyChanged("IsOpportunity");
                 }
             }
         }
