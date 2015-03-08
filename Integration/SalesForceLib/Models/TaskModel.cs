@@ -25,6 +25,8 @@
 		public string Status { get; set; } // ? no updates only create with default value
 		[DataMember]
 		public string Priority { get; set; }
+		[DataMember]
+		public bool IsOpportunity { get; set; }
 	}
 
 	public enum PriorityEnum {

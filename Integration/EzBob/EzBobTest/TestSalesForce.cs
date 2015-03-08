@@ -102,7 +102,8 @@
 				Type = "Mail",
 				Originator = "Originator",
 				StartDate = new DateTime(2015, 01, 27),
-				EndDate = new DateTime(2015, 01, 28)
+				EndDate = new DateTime(2015, 01, 28),
+				IsOpportunity = false,
 			};
 			Log.Debug(JsonConvert.SerializeObject(aModel, Formatting.Indented));
 			Log.Debug("call ChangeEmail");
@@ -193,7 +194,8 @@
 				Type = "Mail",
 				Originator = "Originator",
 				StartDate = new DateTime(2015, 01, 27),
-				EndDate = new DateTime(2015, 01, 28)
+				EndDate = new DateTime(2015, 01, 28),
+				IsOpportunity = false,
 			};
 
 			client.CreateActivity(aModel);

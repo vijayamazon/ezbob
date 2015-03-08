@@ -17,6 +17,8 @@
 		public string Description { get; set; }
 		[DataMember]
 		public string Originator { get; set; }
+		[DataMember]
+		public bool IsOpportunity { get; set; }
 	}
 
 	public enum ActivityType {

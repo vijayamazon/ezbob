@@ -31,12 +31,11 @@ namespace SalesForceLib {
 			return sb.ToString();
 		}
 
-		public static string ToJsonExtension(this object obj) {
+		public static string ToJsonExtension(this object obj, bool useTime = false) {
 
-			JsonSerializerSettings dateFormatSettings = new JsonSerializerSettings
-		    {
-				DateFormatString = "yyyy-MM-dd"
-			};
+			JsonSerializerSettings dateFormatSettings =  useTime ?
+				new JsonSerializerSettings { DateFormatString = "yyyy-MM-ddTHH:mm:ss" } :
+				new JsonSerializerSettings { DateFormatString = "yyyy-MM-dd" };
 
 			string jsonInput = JsonConvert.SerializeObject(obj, Formatting.Indented, dateFormatSettings);
 			return "[" + jsonInput + "]";

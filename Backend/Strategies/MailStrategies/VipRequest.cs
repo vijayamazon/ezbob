@@ -37,7 +37,8 @@
 				Originator = "System",
 				CreateDate = DateTime.UtcNow,
 				DueDate = DateTime.UtcNow.AddDays(1),
-				Subject = "VIP request"
+				Subject = "VIP request",
+				IsOpportunity = false,
 			});
 			addTask.Execute();
 		}
