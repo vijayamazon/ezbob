@@ -13,6 +13,7 @@
 	using NHibernate;
 	using System;
 	using System.Text;
+	using EZBob.DatabaseLib.Repository;
 	using log4net;
 
 	public class FullCustomerController : Controller {

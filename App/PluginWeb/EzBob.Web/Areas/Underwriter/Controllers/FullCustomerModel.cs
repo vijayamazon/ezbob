@@ -8,7 +8,6 @@
 	public class FullCustomerModel {
 		public PersonalInfoModel PersonalInfoModel { get; set; }
 		public ApplicationInfoModel ApplicationInfoModel { get; set; }
-		public List<MarketPlaceDataModel> MarketPlaces { get; set; }
 		public List<AffordabilityData> Affordability { get; set; }
 		public List<MarketPlaceHistoryModel> MarketplacesHistory { get; set; }
 		public CreditBureauModel CreditBureauModel { get; set; }

@@ -17,7 +17,6 @@
 	using Ezbob.Utils.Serialization;
 	using Infrastructure;
 	using Infrastructure.Attributes;
-	using Models;
 	using EzBob.Models.Marketplaces;
 	using NHibernate;
 	using Ezbob.Utils.Security;
@@ -25,6 +24,7 @@
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
+	using StructureMap;
 	using Web.Models;
 	using YodleeLib;
 	using YodleeLib.connector;
@@ -121,13 +121,13 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult Details(int id) {
+		public JsonResult Details(int umi, DateTime? history) {
 			if (history.HasValue) {
 				history = DateTime.SpecifyKind(history.Value, DateTimeKind.Utc);
 			}
 			var mp = _customerMarketplaces.Get(umi);
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
-			builder =  builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
+			builder = builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
 			var model = builder.Create(mp, history);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
