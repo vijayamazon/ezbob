@@ -2,6 +2,7 @@
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
 @using ServiceClientProxy
@@ -14,23 +15,22 @@
     var refNum = context.Customer == null ? "" : context.Customer.RefNumber;
     var term = context.Customer == null || context.Customer.CampaignSource == null ? "" : context.Customer.CampaignSource.RTerm;
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-    if (string.IsNullOrEmpty(ViewBag.Phone)) {
-        ViewBag.Phone = "0800-011-4787";
-    }
+	CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
+	CustomerOrigin customerOrigin = null;
 
+	foreach (var co in customerOriginRepository.GetAllOrdered()) {
+		if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle)) {
+			customerOrigin = co;
+			break;
+		}
+	}
 
-    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
-        ViewBag.Phone = "0203-371-0322";
-        ViewBag.Origin = "everline";
-    }
+	if (customerOrigin == null) {
+		customerOrigin = customerOriginRepository.GetDefault();
+	}
 
-    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
-        ViewBag.Origin = "ezbob";
-    }
-
-    if (string.IsNullOrEmpty(ViewBag.Origin)) {
-        ViewBag.Origin = "ezbob";
-    }
+	ViewBag.CustomerOrigin = customerOrigin;
+	ViewBag.PhoneNumber = ViewBag.CustomerOrigin.PhoneNumber;
 
     string sCustomerLeadFieldName = "{}";
     try {
@@ -49,12 +49,7 @@
     @RenderSection("head", false)
 
     @if (controller == "Wizard") {
-        if (ViewBag.Origin == "ezbob") {
-            <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
-        }
-        if (ViewBag.Origin == "everline") {
-            <meta name="description" content="Everline provides a fast, flexible and convenient source of credit to entrepreneurs and looking to expand their business or manage working capital.">
-        }
+		<meta name="description" content="@customerOrigin.MetaDescription" />
     }
 
     <title>@ViewBag.Title</title>
@@ -69,8 +64,10 @@
     @BundleHelper.RenderPrintCss()
     @BundleHelper.RenderCustomerCss()
 
-    @if (ViewBag.Origin == "everline") {
+    @if (customerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
         @BundleHelper.RenderEverlineCss()
+    } else if (customerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
+        @BundleHelper.RenderAlibabaCss()
     }
 
     @RenderSection("css", false)
@@ -81,7 +78,7 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body auth="@authCookie" data-user-name="" data-ref="@refNum" data-term="@term">
+<body auth="@authCookie" data-user-name="" data-ref="@refNum" data-term="@term" data-origin="@customerOrigin.Name">
     @{Html.RenderPartial("_GoogleTagManager");}
     @RenderSection("afterHead", false)
 

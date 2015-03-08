@@ -1,21 +1,32 @@
 ﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
+@using StructureMap
 @model EzBob.Web.Models.LogOnModel
 
 @{
-    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
-        ViewBag.Origin = "everline";
-    }
-    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
-        ViewBag.Origin = "ezbob";
-    }
-    
-    ViewBag.Title = " Login to your " + ViewBag.Origin + " Account";
-    
+	CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
+	CustomerOrigin customerOrigin = null;
+
+	foreach (var co in customerOriginRepository.GetAllOrdered()) {
+		if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle)) {
+			customerOrigin = co;
+			break;
+		}
+	}
+
+	if (customerOrigin == null) {
+		customerOrigin = customerOriginRepository.GetDefault();
+	}
+
+	ViewBag.CustomerOrigin = customerOrigin;
+	ViewBag.PhoneNumber = ViewBag.CustomerOrigin.PhoneNumber;
+
+	ViewBag.Title = " Login to your " + ViewBag.CustomerOrigin.Name + " Account";
 }
 
 @section head
 {
-    <meta name="description" content="@string.Format("Login to your " + ViewBag.Origin + " online business loan account.")" />
+    <meta name="description" content="@string.Format("Login to your " + ViewBag.CustomerOrigin.Name + " online business loan account.")" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 }
 

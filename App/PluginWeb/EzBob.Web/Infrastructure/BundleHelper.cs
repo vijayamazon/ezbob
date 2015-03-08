@@ -29,11 +29,18 @@
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
 
+		public static MvcHtmlString RenderAlibabaCss() {
+			return Bundle.Css()
+			.Add("~/Content/css/alibaba.css")				
+			.MvcRender("~/Content/css/min/alibaba_#.css");
+		} // RenderAlibabaCss
+
 		public static MvcHtmlString RenderEverlineCss() {
 			return Bundle.Css()
 			.Add("~/Content/css/everline.css")				
 			.MvcRender("~/Content/css/min/everline_#.css");
-		}
+		} // RenderEverlineCss
+
 		public static MvcHtmlString RenderProfileCss() {
 			return Bundle.Css()
 				//libs

@@ -1,12 +1,23 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@using StructureMap
+@model dynamic
 @{
-    if (ViewBag.Origin == "everline") {
-        ViewBag.Phone = "0203-371-0322";
-        ViewBag.Email = "customercare@everline.com";
-    } else {
-        ViewBag.Phone = "0800-011-4787";
-        ViewBag.Email = "customercare@ezbob.com";
-    }
+	CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
+	CustomerOrigin customerOrigin = null;
+
+	foreach (var co in customerOriginRepository.GetAllOrdered()) {
+		if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle)) {
+			customerOrigin = co;
+			break;
+		}
+	}
+
+	if (customerOrigin == null) {
+		customerOrigin = customerOriginRepository.GetDefault();
+	}
+
+	ViewBag.CustomerOrigin = customerOrigin;
+	ViewBag.PhoneNumber = ViewBag.CustomerOrigin.PhoneNumber;
 }
 
 <div class="customer-sidebar-content">
@@ -52,7 +63,7 @@
         </div>
         <div class="text">
             <h3>Fastest platform</h3>
-            @ViewBag.Origin is the fastest loan system available
+            @ViewBag.CustomerOrigin.Name is the fastest loan system available
         </div>
     </div>
 
@@ -89,28 +100,28 @@
 	</div>*@
 
     <div class="item-call-us">
-        <a href="tel:@ViewBag.Phone">
+        <a href="tel:@ViewBag.PhoneNumber">
             <div class="item">
                 <div class="icon">
                     <img src="@Url.Content("~/Content/img/customer-sidebar/call.png")" alt="Call now" width="50" height="45" class="sb-icon" />
                 </div>
                 <div class="text">
                     <h3>Call now</h3>
-                    @ViewBag.Phone
+                    @ViewBag.PhoneNumber
                 </div>
             </div>
         </a>
     </div>
 	@if (string.IsNullOrEmpty(ViewBag.WhiteLabel)) {
 		<div class="item-email-us">
-            <a href="mailto:@ViewBag.Email">
+            <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">
                 <div class="item">
                     <div class="icon">
                         <img src="@Url.Content("~/Content/img/customer-sidebar/email.png")" alt="Email us" width="50" height="45" class="sb-icon" />
                     </div>
                     <div class="text">
                         <h3>Email us</h3>
-                        @ViewBag.Email
+                        @ViewBag.CustomerOrigin.CustomerCareEmail
                     </div>
                 </div>
             </a>

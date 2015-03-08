@@ -289,6 +289,14 @@
 			} // if user is disabled
 
 			string customerOrigin = customer.CustomerOrigin.Name;
+			
+			// TODO: Alex to ask Stas what the hell this condition mean. In other words:
+			// why the hell hardcoded "localhost" (the hell)? 
+			// why the hell test customer can login from whatever host he wants (the hell)?
+			// why in all the checks hostname is checked against "everline.com" or "ezbob.com" but here hostname
+			// is checked against origin name?
+			// why not passing current UI origin to server and not checking on fetching customer from DB?
+
 			if (!hostname.Contains(customerOrigin) && !hostname.Contains("localhost") && !customer.IsTest) {
 				ms_oLog.Warn("customer {0} origin is {1} tried to login from host {2}.", user.Id, customerOrigin, hostname);
 				return Json(new {
