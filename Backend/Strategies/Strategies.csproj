@@ -60,6 +60,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nustache\Nustache.Core.dll</HintPath>
     </Reference>
+    <Reference Include="RestSharp">
+      <HintPath>..\..\Lib\3rdparty\RestSharp\RestSharp.dll</HintPath>
+    </Reference>
     <Reference Include="StructureMap">
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
@@ -79,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\Nop.cs" />
+    <Compile Include="Alibaba\DataSharing.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
     <Compile Include="AutomationVerification\MaamMedalAndPricing.cs" />
@@ -124,8 +128,8 @@
     <Compile Include="Experian\UpdateCustomerAnalyticsOnCompanyChange.cs" />
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
+    <Compile Include="ExternalAPI\Alibaba\CustomerAvaliableCredit.cs" />
     <Compile Include="ExternalAPI\Alibaba\ParseSale.cs" />
-    <Compile Include="ExternalAPI\AvaliableCredit.cs" />
     <Compile Include="ExternalAPI\RequalifyCustomer.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="CalculateLoan\ALoanCalculator.cs" />
@@ -400,10 +404,6 @@
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
       <Name>Reports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
-      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
-      <Name>EzServiceClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
       <Name>EzServiceConfigurationLoader</Name>
@@ -411,6 +411,10 @@
     <ProjectReference Include="..\..\App\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
       <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
       <Name>EzServiceConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\AlibabaLib\AlibabaLib.csproj">
+      <Project>{1da200b6-41d1-489d-a060-6bb7e07990f7}</Project>
+      <Name>AlibabaLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>

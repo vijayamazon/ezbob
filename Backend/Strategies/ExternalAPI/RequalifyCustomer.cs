@@ -76,18 +76,15 @@
 			Console.WriteLine("cachRequestAdded? {0}", cachRequestAdded);
 
 			// 2. run main strategy
-			try {
+			/*try {
 				if (cachRequestAdded) {
-
 					MainStrategy strategy = new MainStrategy(customer.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null);
 					strategy.Execute();
-
 				}
 			} catch (Exception ex1) {
 				Log.Debug("Failed to run main strategy for 'RequalifyCustomer' customer: {0}, {1}", customer.Id, ex1.Message);
 				Result = false;
-			}
-
+			}*/
 
 			Console.WriteLine("Result: {0}", Result);
 		}

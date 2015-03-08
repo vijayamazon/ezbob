@@ -74,6 +74,7 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.Alibaba" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
@@ -236,17 +237,23 @@
   <wsdl:message name="IEzService_EnlistLottery_OutputMessage">
     <wsdl:part name="parameters" element="tns:EnlistLotteryResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_AvailableCredit_InputMessage">
-    <wsdl:part name="parameters" element="tns:AvailableCredit" />
+  <wsdl:message name="IEzService_CustomerAvaliableCredit_InputMessage">
+    <wsdl:part name="parameters" element="tns:CustomerAvaliableCredit" />
   </wsdl:message>
-  <wsdl:message name="IEzService_AvailableCredit_OutputMessage">
-    <wsdl:part name="parameters" element="tns:AvailableCreditResponse" />
+  <wsdl:message name="IEzService_CustomerAvaliableCredit_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CustomerAvaliableCreditResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_RequalifyCustomer_InputMessage">
     <wsdl:part name="parameters" element="tns:RequalifyCustomer" />
   </wsdl:message>
   <wsdl:message name="IEzService_RequalifyCustomer_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequalifyCustomerResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_DataSharing_InputMessage">
+    <wsdl:part name="parameters" element="tns:DataSharing" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_DataSharing_OutputMessage">
+    <wsdl:part name="parameters" element="tns:DataSharingResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyFile" />
@@ -1371,13 +1378,17 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/EnlistLottery" message="tns:IEzService_EnlistLottery_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/EnlistLotteryResponse" message="tns:IEzService_EnlistLottery_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="AvailableCredit">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AvailableCredit" message="tns:IEzService_AvailableCredit_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AvailableCreditResponse" message="tns:IEzService_AvailableCredit_OutputMessage" />
+    <wsdl:operation name="CustomerAvaliableCredit">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/CustomerAvaliableCredit" message="tns:IEzService_CustomerAvaliableCredit_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/CustomerAvaliableCreditResponse" message="tns:IEzService_CustomerAvaliableCredit_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="RequalifyCustomer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomer" message="tns:IEzService_RequalifyCustomer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomerResponse" message="tns:IEzService_RequalifyCustomer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="DataSharing">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/DataSharing" message="tns:IEzService_DataSharing_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/DataSharingResponse" message="tns:IEzService_DataSharing_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCompanyFile">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
@@ -2294,8 +2305,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="AvailableCredit">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/AvailableCredit" style="document" />
+    <wsdl:operation name="CustomerAvaliableCredit">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/CustomerAvaliableCredit" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2305,6 +2316,15 @@
     </wsdl:operation>
     <wsdl:operation name="RequalifyCustomer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/RequalifyCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DataSharing">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/DataSharing" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

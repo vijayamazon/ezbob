@@ -13,7 +13,6 @@
 
 	[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	public class AuthenticationService : IAuthenticationService {
-
 		public string GetSampleMethod_With_OAuth(string userName) {
 			Console.WriteLine(WebOperationContext.Current);
 			if (Authenticate(WebOperationContext.Current.IncomingRequest)) {
@@ -21,8 +20,7 @@
 				// return username prefixed as shown below
 				strReturnValue.Append(string.Format("You have entered userName as {0}", userName));
 				return strReturnValue.ToString();
-			} 
-
+			}
 			WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.Unauthorized;
 			return "Unauthorized Request";
 		}
@@ -31,22 +29,20 @@
 			Console.WriteLine(WebOperationContext.Current.IncomingRequest.Headers);
 			string authToken = WebOperationContext.Current.IncomingRequest.Headers["Authorization"];
 			WebOperationContext.Current.OutgoingResponse.ContentType = "text/plain";
-			if (string.IsNullOrEmpty(authToken)) {
-				return this.ReturnForbidden();
-			}
+			if (string.IsNullOrEmpty(authToken))
+				return ReturnForbidden();
 			// Check cache to see if the auth token exists.
 			foreach (DictionaryEntry cacheEntry in HttpContext.Current.Cache) {
 				AuthTokenData authTokenData = cacheEntry.Value as AuthTokenData;
-				if (authTokenData == null || authTokenData.Expires < DateTime.Now) {
-					return this.ReturnForbidden();
-				}
+				if (authTokenData == null || authTokenData.Expires < DateTime.Now)
+					return ReturnForbidden();
 				if (authTokenData.AuthToken == authToken) {
 					// Return the associated username.
 					string username = (string)cacheEntry.Key;
 					return new MemoryStream(Encoding.UTF8.GetBytes("You have access to the serivce. Your username is: " + username));
 				}
 			}
-			return this.ReturnForbidden();
+			return ReturnForbidden();
 		}
 
 		private Stream ReturnForbidden() {
@@ -91,7 +87,10 @@
 				SHA256 sha = SHA256.Create();
 				string authToken = Convert.ToBase64String(sha.ComputeHash(Encoding.UTF8.GetBytes(key)));
 				// Store the auth token in cache, and associate it with the username. This simple sample uses ASP.NET cache. You may want to use AppFabric cache for better scaling.
-				HttpContext.Current.Cache[username] = new AuthTokenData() { AuthToken = authToken, Expires = DateTime.Now.AddMinutes(20) };
+				HttpContext.Current.Cache[username] = new AuthTokenData() {
+					AuthToken = authToken,
+					Expires = DateTime.Now.AddMinutes(20)
+				};
 				WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
 				// return the auth token.
 				return new MemoryStream(Encoding.UTF8.GetBytes(authToken));
@@ -101,7 +100,7 @@
 		}
 
 		public Stream Login(string username, string password) {
-		//	Console.WriteLine("============> {0}, {1}", username, password);
+			//	Console.WriteLine("============> {0}, {1}", username, password);
 			if (WebOperationContext.Current != null) {
 				WebOperationContext.Current.OutgoingResponse.ContentType = "text/plain";
 				if (Membership.ValidateUser(username, password)) {
@@ -110,7 +109,10 @@
 					SHA256 sha = SHA256.Create();
 					string authToken = Convert.ToBase64String(sha.ComputeHash(Encoding.UTF8.GetBytes(key)));
 					// Store the auth token in cache, and associate it with the username. This simple sample uses ASP.NET cache. You may want to use AppFabric cache for better scaling.
-					HttpContext.Current.Cache[username] = new AuthTokenData() { AuthToken = authToken, Expires = DateTime.Now.AddMinutes(20) };
+					HttpContext.Current.Cache[username] = new AuthTokenData() {
+						AuthToken = authToken,
+						Expires = DateTime.Now.AddMinutes(20)
+					};
 					WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.OK;
 					// return the auth token.
 					return new MemoryStream(Encoding.UTF8.GetBytes(authToken));

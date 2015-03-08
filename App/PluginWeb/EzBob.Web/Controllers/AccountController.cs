@@ -37,6 +37,7 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model.Alibaba;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class AccountController : Controller {
@@ -922,6 +923,15 @@
 			catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to save sourceref history.");
 			} // try
+
+			// save AlibabaBuyer
+			if (customer.AlibabaId != null && customer.IsAlibaba ) {
+				AlibabaBuyer alibabaMember = new AlibabaBuyer();
+				alibabaMember.AliId = Convert.ToInt32(customer.AlibabaId);
+				alibabaMember.Customer = customer;
+				EZBob.DatabaseLib.Model.Alibaba.AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
+				aliMemberRep.SaveOrUpdate(alibabaMember);
+			}
 
 			return customer;
 		} // CreateCustomer

@@ -188,7 +188,8 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LotteryActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableCreditActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaCustomerDataSharingActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ConfigTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
@@ -393,15 +394,38 @@ namespace ServiceClientProxy.EzServiceReference {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AvailableCreditActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AlibabaAvailableCreditActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
-    public partial class AvailableCreditActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+    public partial class AlibabaAvailableCreditActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private Ezbob.Backend.Models.ExternalAPI.AvailableCreditResult ResultField;
+        private Ezbob.Backend.Models.ExternalAPI.AlibabaAvailableCreditResult ResultField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public Ezbob.Backend.Models.ExternalAPI.AvailableCreditResult Result {
+        public Ezbob.Backend.Models.ExternalAPI.AlibabaAvailableCreditResult Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AlibabaCustomerDataSharingActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class AlibabaCustomerDataSharingActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.Alibaba.CustomerDataSharing ResultField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.Alibaba.CustomerDataSharing Result {
             get {
                 return this.ResultField;
             }
@@ -3164,17 +3188,23 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EnlistLottery", ReplyAction="http://tempuri.org/IEzService/EnlistLotteryResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EnlistLotteryAsync(int customerID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AvailableCredit", ReplyAction="http://tempuri.org/IEzService/AvailableCreditResponse")]
-        ServiceClientProxy.EzServiceReference.AvailableCreditActionResult AvailableCredit(string customerEmail);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerAvaliableCredit", ReplyAction="http://tempuri.org/IEzService/CustomerAvaliableCreditResponse")]
+        ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AvailableCredit", ReplyAction="http://tempuri.org/IEzService/AvailableCreditResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AvailableCreditActionResult> AvailableCreditAsync(string customerEmail);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerAvaliableCredit", ReplyAction="http://tempuri.org/IEzService/CustomerAvaliableCreditResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, int aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequalifyCustomer", ReplyAction="http://tempuri.org/IEzService/RequalifyCustomerResponse")]
         string RequalifyCustomer(string customerEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequalifyCustomer", ReplyAction="http://tempuri.org/IEzService/RequalifyCustomerResponse")]
         System.Threading.Tasks.Task<string> RequalifyCustomerAsync(string customerEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DataSharing", ReplyAction="http://tempuri.org/IEzService/DataSharingResponse")]
+        ServiceClientProxy.EzServiceReference.AlibabaCustomerDataSharingActionResult DataSharing(int customerID, int finalDecision);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DataSharing", ReplyAction="http://tempuri.org/IEzService/DataSharingResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaCustomerDataSharingActionResult> DataSharingAsync(int customerID, int finalDecision);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         byte[] GetCompanyFile(int userId, int companyFileId);
@@ -4392,12 +4422,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EnlistLotteryAsync(customerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.AvailableCreditActionResult AvailableCredit(string customerEmail) {
-            return base.Channel.AvailableCredit(customerEmail);
+        public ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID) {
+            return base.Channel.CustomerAvaliableCredit(customerID, aliMemberID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AvailableCreditActionResult> AvailableCreditAsync(string customerEmail) {
-            return base.Channel.AvailableCreditAsync(customerEmail);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, int aliMemberID) {
+            return base.Channel.CustomerAvaliableCreditAsync(customerID, aliMemberID);
         }
         
         public string RequalifyCustomer(string customerEmail) {
@@ -4406,6 +4436,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<string> RequalifyCustomerAsync(string customerEmail) {
             return base.Channel.RequalifyCustomerAsync(customerEmail);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.AlibabaCustomerDataSharingActionResult DataSharing(int customerID, int finalDecision) {
+            return base.Channel.DataSharing(customerID, finalDecision);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaCustomerDataSharingActionResult> DataSharingAsync(int customerID, int finalDecision) {
+            return base.Channel.DataSharingAsync(customerID, finalDecision);
         }
         
         public byte[] GetCompanyFile(int userId, int companyFileId) {

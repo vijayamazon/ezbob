@@ -4,6 +4,7 @@
 	using System.ServiceModel;
 	using EchoSignLib;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Strategies.UserManagement;
@@ -743,10 +744,13 @@
 		ActionMetaData EnlistLottery(int customerID);
 
 		[OperationContract]
-		AvailableCreditActionResult AvailableCredit(string customerEmail);
+		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID);
 
 		[OperationContract]
 		string RequalifyCustomer(string customerEmail);
+
+		[OperationContract]
+		AlibabaCustomerDataSharingActionResult DataSharing(int customerID, int finalDecision);
 
 	} // interface IEzService
 } // namespace EzService

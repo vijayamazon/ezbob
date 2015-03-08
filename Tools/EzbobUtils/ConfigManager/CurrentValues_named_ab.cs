@@ -383,5 +383,34 @@
 		public virtual VariableValue BWABusinessCheck {
 			get { return this[Variables.BWABusinessCheck]; }
 		}
+
+		public virtual VariableValue AlibabaBaseUrl {
+			get { return this[Variables.AlibabaBaseUrl]; }
+		}
+
+		public virtual VariableValue AlibabaUrlPath {
+			get { return this[Variables.AlibabaUrlPath]; }
+		}
+
+		public virtual VariableValue AlibabaAppSecret {
+			get { return this[Variables.AlibabaAppSecret]; }
+		}
+
+
+		public virtual VariableValue AlibabaBaseUrl_Sandbox {
+			get { return this[Variables.AlibabaBaseUrl_Sandbox]; }
+		}
+
+		public virtual VariableValue AlibabaUrlPath_Sandbox {
+			get { return this[Variables.AlibabaUrlPath_Sandbox]; }
+		}
+
+		public virtual VariableValue AlibabaAppSecret_Sandbox {
+			get { return this[Variables.AlibabaAppSecret_Sandbox]; }
+		}
+		public virtual VariableValue AlibabaClientEnvironment {
+			get { return this[Variables.AlibabaClientEnvironment]; }
+		}
+
 	} // class CurrentValues
 } // namespace
