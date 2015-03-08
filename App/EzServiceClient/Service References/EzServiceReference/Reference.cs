@@ -2719,7 +2719,7 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.Nullable<System.DateTime> ExpectedEndDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string OpportunityNameField;
+        private string NameField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.Nullable<int> RequestedAmountField;
@@ -2835,14 +2835,14 @@ namespace ServiceClientProxy.EzServiceReference {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string OpportunityName {
+        public string Name {
             get {
-                return this.OpportunityNameField;
+                return this.NameField;
             }
             set {
-                if ((object.ReferenceEquals(this.OpportunityNameField, value) != true)) {
-                    this.OpportunityNameField = value;
-                    this.RaisePropertyChanged("OpportunityName");
+                if ((object.ReferenceEquals(this.NameField, value) != true)) {
+                    this.NameField = value;
+                    this.RaisePropertyChanged("Name");
                 }
             }
         }

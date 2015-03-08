@@ -72,7 +72,7 @@
 						RequestedAmount = requestedLoan != null ? (int?)requestedLoan.Amount : null,
 						Type = OpportunityType.Resell.DescriptionAttr(),
 						Stage = OpportunityStage.s5.DescriptionAttr(),
-						OpportunityName = customer.PersonalInfo.Fullname + customer.CashRequests.Count()
+						Name = customer.PersonalInfo.Fullname + customer.CashRequests.Count()
 					});
 			}
 
