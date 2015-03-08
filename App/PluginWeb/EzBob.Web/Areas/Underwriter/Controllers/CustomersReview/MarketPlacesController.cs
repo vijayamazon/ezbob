@@ -122,17 +122,14 @@
 		[Ajax]
 		[HttpGet]
 		public JsonResult Details(int id) {
-			// var cm = _customerMarketplaces.Get(id);
-			// var values = _functions.GetAllValuesFor(cm);
-			// return Json(values.Select(v => new FunctionValueModel(v)), JsonRequestBehavior.AllowGet);
-
-			// TODO: insert actual totals here, the following is just a placeholder
-
-			var lst = new List<FunctionValueModel> {
-				new FunctionValueModel { Id = 1, Name = "Total 1", Value = "25", },
-				new FunctionValueModel { Id = 2, Name = "Total 2", Value = "50", },
-			};
-			return Json(lst, JsonRequestBehavior.AllowGet);
+			if (history.HasValue) {
+				history = DateTime.SpecifyKind(history.Value, DateTimeKind.Utc);
+			}
+			var mp = _customerMarketplaces.Get(umi);
+			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
+			builder =  builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
+			var model = builder.Create(mp, history);
+			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -245,6 +242,11 @@
 		[HttpGet]
 		public JsonResult Index(int id, DateTime? history = null) {
 			try {
+				Log.Info("history before {0}", history);
+				if (history.HasValue) {
+					history = DateTime.SpecifyKind(history.Value, DateTimeKind.Utc);
+				}
+				Log.Info("history after {0}", history);
 				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, history);
 				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
 				return Json(mps.ToList(), JsonRequestBehavior.AllowGet);

@@ -20,6 +20,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		this.fundingModel = options.fundingModel;
 		this.fundingModel.on('change reset sync', this.fillFunds, this);
+
 	}, // initialize
 
 	render: function() {
@@ -45,14 +46,14 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
 		this.profileInfoView = new EzBob.Underwriter.PersonInfoView({
 			el: profileInfo,
-			model: this.personalInfoModel,
+			model: this.personalInfoModel
 		});
 
 		this.marketPlaces = new EzBob.Underwriter.MarketPlaces();
 		this.marketPlaceView = new EzBob.Underwriter.MarketPlacesView({
 			el: marketplaces,
 			model: this.marketPlaces,
-			personalInfoModel: this.personalInfoModel,
+			personalInfoModel: this.personalInfoModel
 		});
 		this.marketPlaceView.on('rechecked', this.mpRechecked, this.marketPlaces);
 
@@ -63,13 +64,13 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.loanHistory = new EzBob.Underwriter.LoanHistoryModel();
 		this.loanHistoryView = new EzBob.Underwriter.LoanHistoryView({
 			el: loanhistorys,
-			model: this.loanHistory,
+			model: this.loanHistory
 		});
 
 		this.experianInfoModel = new EzBob.Underwriter.ExperianInfoModel();
 		this.experianInfoView = new EzBob.Underwriter.ExperianInfoView({
 			el: experianInfo,
-			model: this.experianInfoModel,
+			model: this.experianInfoModel
 		});
 
 		this.loanInfoModel = new EzBob.Underwriter.LoanInfoModel();
@@ -77,7 +78,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.summaryInfoModel = new EzBob.Underwriter.SummaryInfoModel();
 		this.summaryInfoView = new EzBob.Underwriter.SummaryInfoView({
 			el: summaryInfo,
-			model: this.summaryInfoModel,
+			model: this.summaryInfoModel
 		});
 
 		EzBob.App.vent.on('newCreditLine:updated', function() {
@@ -95,7 +96,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.paymentAccountsModel = new EzBob.Underwriter.PaymentAccountsModel();
 		this.paymentAccountsView = new EzBob.Underwriter.PaymentAccountView({
 			el: paymentAccounts,
-			model: this.paymentAccountsModel,
+			model: this.paymentAccountsModel
 		});
 
 		this.paymentAccountsView.on('rechecked', this.mpRechecked, this.paymentAccountsModel);
@@ -103,7 +104,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.medalCalculationModel = new EzBob.Underwriter.MedalCalculationModel();
 		this.medalCalculationView = new EzBob.Underwriter.MedalCalculationView({
 			el: medalCalculations,
-			model: this.medalCalculationModel,
+			model: this.medalCalculationModel
 		});
 
 		this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
@@ -111,61 +112,61 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.pricingModelCalculationsView = new EzBob.Underwriter.PricingModelCalculationsView({
 			el: this.$el.find('#pricing-calc'),
 			model: this.pricingModelCalculationsModel,
-			scenarios: this.pricingModelScenarios,
+			scenarios: this.pricingModelScenarios
 		});
 
 		this.companyScoreModel = new EzBob.Underwriter.CompanyScoreModel();
 		this.companyScoreView = new EzBob.Underwriter.CompanyScoreView({
 			el: self.$el.find('#company-score-list'),
-			model: this.companyScoreModel,
+			model: this.companyScoreModel
 		});
 
 		this.crossCheckView = new EzBob.Underwriter.CrossCheckView({
-			el: this.$el.find('#customer-info'),
+			el: this.$el.find('#customer-info')
 		});
 
 		this.messagesModel = new EzBob.Underwriter.MessageModel();
 		this.Message = new EzBob.Underwriter.Message({
 			el: messages,
-			model: this.messagesModel,
+			model: this.messagesModel
 		});
 
 		this.Message.on('creditResultChanged', this.changedSystemDecision, this);
 
 		this.signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView({
 			el: this.$el.find('#signature-monitor'),
-			personalInfoModel: this.personalInfoModel,
+			personalInfoModel: this.personalInfoModel
 		});
 
 		this.alertDocs = new EzBob.Underwriter.Docs();
 		this.alertDocsView = new EzBob.Underwriter.AlertDocsView({
 			el: this.$el.find('#alert-docs'),
-			model: this.alertDocs,
+			model: this.alertDocs
 		});
 
 		this.ApicCheckLogs = new EzBob.Underwriter.ApiChecksLogs();
 		this.ApiChecksLogView = new EzBob.Underwriter.ApiChecksLogView({
 			el: apiChecks,
-			model: this.ApicCheckLogs,
+			model: this.ApicCheckLogs
 		});
 
 		this.crmModel = new EzBob.Underwriter.CustomerRelationsModel();
 		this.CustomerRelationsView = new EzBob.Underwriter.CustomerRelationsView({
 			el: customerRelations,
 			model: this.crmModel,
-			isBroker: false,
+			isBroker: false
 		});
 
 		this.FraudDetectionLogs = new EzBob.Underwriter.fraudDetectionLogModel();
 		this.FraudDetectionLogView = new EzBob.Underwriter.FraudDetectionLogView({
 			el: fraudDetection,
-			model: this.FraudDetectionLogs,
+			model: this.FraudDetectionLogs
 		});
 
 		this.PropertiesModel = new EzBob.Underwriter.Properties();
 		this.PropertiesView = new EzBob.Underwriter.PropertiesView({
 			el: properties,
-			model: this.PropertiesModel,
+			model: this.PropertiesModel
 		});
 
 		this.affordability = new EzBob.Underwriter.Affordability();
@@ -178,7 +179,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			companyModel: this.companyScoreModel,
 			propertiesModel: this.PropertiesModel,
 			affordability: this.affordability,
-			loanModel: this.loanInfoModel,
+			loanModel: this.loanInfoModel
 		});
 
 		this.profileHeadView = new EzBob.Underwriter.ProfileHeadView({
@@ -191,15 +192,16 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		});
 
 		this.showed = true;
-		this.$el.find('.nav-list a[data-toggle="tab"]').on('shown.bs.tab', (function(e) {
+		this.$el.find('.nav-list a[data-toggle="tab"]').on('show.bs.tab', (function(e) {
 			self.setLastShownProfileSection($(e.target).attr('href').substr(1));
-
 			var currentTab = $(e.currentTarget).attr('href');
 			switch (currentTab) {
 				case '#customer-info':
 					self.crossCheckView.render({ customerId: self.customerId });
 					break;
 				case '#dashboard':
+					self.affordability.customerId = self.customerId;
+					self.affordability.fetch();
 					self.dashboardInfoView.render();
 					break;
 				case '#company-score':
@@ -231,6 +233,10 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 					self.pricingModelScenarios.fetch();
 					self.pricingModelCalculationsModel.fetch();
 					break;
+				case '#marketplaces':
+					self.marketPlaces.customerId = self.customerId;
+					self.marketPlaces.fetch();
+					break;
 			}
 		}));
 
@@ -239,7 +245,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		return this;
 	}, // render
 
-	show: function(id, isHistory, history) {
+	show: function(id) {
 		this.hide();
 
 		BlockUi('on');
@@ -249,8 +255,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.customerId = id;
 
 		var fullModel = new EzBob.Underwriter.CustomerFullModel({
-			customerId: id,
-			history: EzBob.parseDate(history),
+			customerId: id
 		});
 
 		var self = this;
@@ -258,7 +263,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		fullModel.fetch().done(function(res) {
 			if (fullModel.get('State') === 'NotFound') {
 				EzBob.ShowMessage(res.error, 'Customer id. #' + id + ' was not found');
-				self.router.navigate('', { trigger: true, replace: true, });
+				self.router.navigate('', { trigger: true, replace: true });
 				return;
 			} // if
 
@@ -273,15 +278,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			self.loanInfoModel.set({ Id: id }, { silent: true });
 			self.loanInfoModel.set(fullModel.get('ApplicationInfoModel'), { silent: true });
 			self.loanInfoModel.trigger('sync');
-
-			self.marketPlaces.customerId = id;
-			self.marketPlaces.history = history;
-			self.marketPlaces.reset(fullModel.get('MarketPlaces'), { silent: true });
-			self.marketPlaces.trigger('sync');
-
-			self.affordability.customerId = id;
-			self.affordability.clear().set(fullModel.get('Affordability'), { silent: true });
-			self.affordability.trigger('sync');
 
 			self.loanHistoryView.idCustomer = id;
 
@@ -324,9 +320,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 			self.PropertiesView.customerId = id;
 
-			if (isHistory)
-				$('a[href=#marketplaces]').click();
-
 			$('a.common-bug').attr('data-bug-customer', id);
 
 			self.fillFunds();
@@ -344,7 +337,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 	gotoCustomer: function() {
 		var goToCustomerId = new EzBob.Underwriter.goToCustomerId();
-
 		goToCustomerId.on('ok', function(id) {
 			Redirect(window.gRootPath + 'Underwriter/Customers#profile/' + id);
 		});
@@ -365,8 +357,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.$el.find('a.customer-tab').filter(
 			'[href="#' + this.getLastShownProfileSection(this.$el.find('a.customer-tab:first'
 			).attr('href').substr(1)) + '"]'
-		).tab('show');
-
+		).tab('show').trigger('show.bs.tab');
 		EzBob.handleUserLayoutSetting();
 	}, // restoreState
 
@@ -418,7 +409,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			el: directorEl,
 			backButtonCaption: 'Cancel',
 			failOnDuplicate: false,
-			customerInfo: customerInfo,
+			customerInfo: customerInfo
 		});
 
 		var self = this;
@@ -518,7 +509,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			return false;
 		} // if
 
-	    if (this.personalInfoModel.get('CompanyExperianRefNum') == 'NotFound' && _.contains([1, 3, 5],this.loanInfoModel.get('TypeOfBusiness'))) {
+	    if (this.personalInfoModel.get('CompanyExperianRefNum') === 'NotFound' && _.contains([1, 3, 5],this.loanInfoModel.get('TypeOfBusiness'))) {
 		    EzBob.ShowMessage('Customer with limited/pship business type have selected company not found, this must be fixed in order to approve a loan', 'Error');
 		    return false;
 		}
@@ -526,7 +517,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 	    $('.editOfferDiv').hide();
 
 	    $.cookie('editOfferVisible', false);
-	    $(".profile-content").css({ 'margin-top': ($('#profileHead').height() + 10) + 'px', });
+	    $(".profile-content").css({ 'margin-top': ($('#profileHead').height() + 10) + 'px' });
 
 		this.skipPopupForApprovalWithoutAML = this.loanInfoModel.get('SkipPopupForApprovalWithoutAML');
 
@@ -534,7 +525,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			var approveLoanWithoutAMLDialog = new EzBob.Underwriter.ApproveLoanWithoutAML({
 				model: this.loanInfoModel,
 				parent: this,
-				skipPopupForApprovalWithoutAML: this.skipPopupForApprovalWithoutAML,
+				skipPopupForApprovalWithoutAML: this.skipPopupForApprovalWithoutAML
 			});
 
 			EzBob.App.jqmodal.show(approveLoanWithoutAMLDialog);
@@ -549,7 +540,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		if (this.personalInfoModel.get('IsWarning')) {
 			var approveLoanForWarningStatusCustomer = new EzBob.Underwriter.ApproveLoanForWarningStatusCustomer({
 				model: this.personalInfoModel,
-				parent: this,
+				parent: this
 			});
 			EzBob.App.jqmodal.show(approveLoanForWarningStatusCustomer);
 			return false;
@@ -644,5 +635,5 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 	appendDecisionNote: function(oNote) {
 		this.$el.find('#DecisionNotes').append(oNote);
-	}, // appendDecisionNote
+	} // appendDecisionNote
 }); // EzBob.Underwriter.ProfileView

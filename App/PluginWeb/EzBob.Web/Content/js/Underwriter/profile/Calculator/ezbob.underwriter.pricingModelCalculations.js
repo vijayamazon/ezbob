@@ -261,14 +261,12 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     },
     
     makeInitialCalculation: function() {
-	    console.log('makeInitialCalculation');
         if (this.model.get('LoanAmount') > 0 && this.model.get('TenureMonths') > 0) {
             this.calculateClicked();
         }
     },
     
     calculateClicked: function() {
-    	console.log('calculateClicked');
         if (this.model.get('LoanAmount') <= 0) {
             EzBob.ShowMessage("Loan amount must be positive", "Wrong loan amount");
             return;

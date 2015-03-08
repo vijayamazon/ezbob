@@ -316,6 +316,7 @@
 
 				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.summaryInfo.js")
 				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.dashboard.js")
+				.Add("~/Content/js/underwriter/profile/summary/ezbob.underwriter.affordability.js")
 
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaceDetails.js")
 				.Add("~/Content/js/underwriter/profile/marketplaces/ezbob.underwriter.marketplaces.js")

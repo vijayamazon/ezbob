@@ -1,19 +1,14 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
-	using System.Globalization;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web.Mvc;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.CustomerRelations;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Ezbob.Backend.Models;
 	using Ezbob.Utils;
-	using Infrastructure;
 	using Models;
 	using Newtonsoft.Json;
-	using ServiceClientProxy;
 	using Web.Models;
 	using NHibernate;
 	using System;
@@ -33,8 +28,7 @@
 			NHibernateRepositoryBase<MP_AlertDocument> docRepo,
 			IBugRepository bugs,
 			LoanRepository loanRepository,
-			PropertiesModelBuilder propertiesModelBuilder,
-			IWorkplaceContext context) {
+			PropertiesModelBuilder propertiesModelBuilder) {
 			_customers = customers;
 			_session = session;
 			_infoModelBuilder = infoModelBuilder;
@@ -48,14 +42,12 @@
 			this.customerAddressRepository = customerAddressRepository;
 			this.landRegistryRepository = landRegistryRepository;
 			_propertiesModelBuilder = propertiesModelBuilder;
-			_context = context;
-			serviceClient = new ServiceClient();
 
 		} // constructor
 
 		[HttpGet]
-		public JsonResult Index(int id, string history = null) {
-			Log.DebugFormat("Build full customer model begin for customer {0} and history = {1}.", id, history);
+		public JsonResult Index(int id) {
+			Log.DebugFormat("Build full customer model begin for customer {0}", id);
 
 			var model = new FullCustomerModel();
 
@@ -81,22 +73,6 @@
 					var m = new ApplicationInfoModel();
 					_infoModelBuilder.InitApplicationInfo(m, customer, cr);
 					model.ApplicationInfoModel = m;
-				} // using
-
-				using (tc.AddStep("MarketPlaces and Affordability Time taken")) {
-					DateTime historyDate;
-					bool bHasHistoryDate = DateTime.TryParseExact(history, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal | DateTimeStyles.AssumeUniversal, out historyDate);
-					try {
-						var ar = serviceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, bHasHistoryDate ? historyDate : (DateTime?)null);
-
-						model.MarketPlaces = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models)
-							.ToList();
-						model.Affordability = ar.Affordability.ToList();
-					} catch (Exception ex) {
-						Log.ErrorFormat("Failed to retrieve mp and affordability data for customer {0}\n{1}", customer.Id, ex);
-						model.Affordability = new List<AffordabilityData>();
-						model.MarketPlaces = new List<MarketPlaceModel>();
-					}
 				} // using
 
 				using (tc.AddStep("CreditBureauModel Time taken"))
@@ -152,7 +128,7 @@
 
 			WriteToLog(tc);
 			
-			Log.DebugFormat("Build full customer model end for customer {0} and history = {1}.", id, history);
+			Log.DebugFormat("Build full customer model end for customer {0}", id);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		} // Index
@@ -179,8 +155,6 @@
 		private readonly LandRegistryRepository landRegistryRepository;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
-		private readonly ServiceClient serviceClient;
-		private readonly IWorkplaceContext _context;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(FullCustomerController));
 
 	} // class FullCustomerController
