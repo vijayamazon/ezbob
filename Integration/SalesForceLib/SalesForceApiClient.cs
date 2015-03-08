@@ -8,7 +8,7 @@
 	public class SalesForceApiClient : ISalesForceAppClient {
 		public SalesForceApiClient(string userName, string password, string token, string environment) {
 			api = new EzbobWebServicesPortTypeClient("EzbobWebServices" + environment);
-			partnersClient = new SoapClient("PartnersServices" + environment); 
+			partnersClient = new SoapClient("PartnersServices" + environment);
 			Login(userName, password, token);
 		}
 
@@ -33,7 +33,8 @@
 		}
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
-			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", model.ToStringExtension());
+			string modelStr = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", modelStr);
 			string result;
 			var response = api.LeadAccountService(
 				new SalesForceServiceNS.SessionHeader {
@@ -42,7 +43,7 @@
 				new SalesForceServiceNS.CallOptions(),
 				new SalesForceServiceNS.DebuggingHeader(),
 				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				model.ToJsonExtension(),
+				modelStr,
 				out result);
 
 			var res = result.JsonStringToObject<ApiResponse>();
@@ -54,7 +55,8 @@
 		}
 
 		public void CreateOpportunity(OpportunityModel model) {
-			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", model.ToStringExtension());
+			string modelStr = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", modelStr);
 			string result;
 			var response = api.CreateOpportunityService(
 				new SalesForceServiceNS.SessionHeader {
@@ -63,9 +65,9 @@
 				new SalesForceServiceNS.CallOptions(),
 				new SalesForceServiceNS.DebuggingHeader(),
 				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				model.ToJsonExtension(),
+				modelStr,
 				out result);
-		
+
 			var res = result.JsonStringToObject<ApiResponse>();
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateOpportunity failed for customer {0}, error: {1}", model.Email, res.Error);
@@ -75,7 +77,8 @@
 		}
 
 		public void UpdateOpportunity(OpportunityModel model) {
-			Log.InfoFormat("SalesForce UpdateOpportunity\n {0}", model.ToStringExtension());
+			string modelStr = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce UpdateOpportunity\n {0}", modelStr);
 			string result;
 			var response = api.UpdateCloseOpportunityService(
 				new SalesForceServiceNS.SessionHeader {
@@ -84,7 +87,7 @@
 				new SalesForceServiceNS.CallOptions(),
 				new SalesForceServiceNS.DebuggingHeader(),
 				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				model.ToJsonExtension(),
+				modelStr,
 				out result);
 
 			var res = result.JsonStringToObject<ApiResponse>();
@@ -96,7 +99,8 @@
 		}
 
 		public void CreateUpdateContact(ContactModel model) {
-			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", model.ToStringExtension());
+			string modelStr = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", modelStr);
 			string result;
 			var response = api.ContactService(
 				new SalesForceServiceNS.SessionHeader {
@@ -105,9 +109,9 @@
 				new SalesForceServiceNS.CallOptions(),
 				new SalesForceServiceNS.DebuggingHeader(),
 				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				model.ToJsonExtension(),
+				modelStr,
 				out result);
-			
+
 			var res = result.JsonStringToObject<ApiResponse>();
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateUpdateContact failed for customer {0}, error: {1}", model.Email, res.Error);
@@ -117,7 +121,8 @@
 		}
 
 		public void CreateTask(TaskModel model) {
-			Log.InfoFormat("SalesForce CreateTask\n {0}", model.ToStringExtension());
+			string modelStr = model.ToJsonExtension(true);
+			Log.InfoFormat("SalesForce CreateTask\n {0}", modelStr);
 			string result = "";
 			var response = api.CreateTask(
 				new SalesForceServiceNS.SessionHeader {
@@ -126,9 +131,9 @@
 				new SalesForceServiceNS.CallOptions(),
 				new SalesForceServiceNS.DebuggingHeader(),
 				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				model.ToJsonExtension(),
+				modelStr,
 				out result);
-			
+
 			var res = result.JsonStringToObject<ApiResponse>();
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateTask failed for customer {0}, error: {1}", model.Email, res.Error);
@@ -138,7 +143,8 @@
 		}
 
 		public void CreateActivity(ActivityModel model) {
-			Log.InfoFormat("SalesForce CreateActivity\n {0}", model.ToStringExtension());
+			string modelStr = model.ToJsonExtension(true);
+			Log.InfoFormat("SalesForce CreateActivity\n {0}", modelStr);
 			string result = "";
 			var response = api.CreateActivity(
 				new SalesForceServiceNS.SessionHeader {
@@ -147,9 +153,9 @@
 				new SalesForceServiceNS.CallOptions(),
 				new SalesForceServiceNS.DebuggingHeader(),
 				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				model.ToJsonExtension(),
+				modelStr,
 				out result);
-			
+
 			var res = result.JsonStringToObject<ApiResponse>();
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateActivity failed for customer {0}, error: {1}", model.Email, res.Error);
@@ -170,7 +176,7 @@
 				new SalesForceServiceNS.AllowFieldTruncationHeader(),
 				new { currentEmail, newEmail }.ToJsonExtension(),
 				out result);
-			
+
 			var res = result.JsonStringToObject<ApiResponse>();
 			if (!res.IsSuccess) {
 				Log.ErrorFormat("SalesForce ChangeEmail failed for customer {0}, error: {1}", newEmail, res.Error);

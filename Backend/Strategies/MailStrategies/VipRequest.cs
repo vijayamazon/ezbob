@@ -25,6 +25,8 @@
 		{
 			SetTemplateAndVariables();
 			m_oMailer.SendMailViaMandrill(_mailMetaData);
+				Subject = "VIP request"
+				IsOpportunity = false,
 		}
 
 		protected void SetTemplateAndVariables()

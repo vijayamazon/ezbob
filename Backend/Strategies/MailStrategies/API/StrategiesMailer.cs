@@ -75,7 +75,8 @@
 						Description = oMeta.TemplateName,
 						Email = addr.Recipient,
 						Originator = "System",
-						Type = ActivityType.Email.ToString()
+						Type = ActivityType.Email.ToString(),
+						IsOpportunity = false,
 					});
 					salesForceAddEvent.Execute();
 				} // if should register
