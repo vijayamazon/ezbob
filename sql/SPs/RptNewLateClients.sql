@@ -19,6 +19,7 @@ WHERE
 	S.Date >= @DateStart AND 
 	S.Date < @DateEnd AND 
 	S.Status IN ('StillToPay','Late') AND 
-	C.CollectionStatus in (0,6)
+	C.CollectionStatus in (0,6,10,11,12,13,14,15)
 END
+
 GO
