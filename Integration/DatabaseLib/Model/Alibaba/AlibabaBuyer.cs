@@ -17,8 +17,8 @@
 	public class AlibabaBuyerRepository : NHibernateRepositoryBase<AlibabaBuyer> {
 		public AlibabaBuyerRepository(ISession session) : base(session) { }
 
-		public IEnumerable<AlibabaBuyer> ByCustomer(int customerId) {
-			return GetAll().Where(l => l.Customer.Id == customerId);
+		public AlibabaBuyer ByCustomer(int customerId) {
+			return GetAll().FirstOrDefault(l => l.Customer.Id == customerId);
 		}
 	}
 

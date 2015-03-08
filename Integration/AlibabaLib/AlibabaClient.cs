@@ -43,7 +43,7 @@
 
 		public IRestResponse SendDecision(JObject obj, int finalDecision) {
 
-			Console.WriteLine("SendDecision-------------------------------------------------{0}, {1}", obj, finalDecision);
+		//	Console.WriteLine("SendDecision-------------------------------------------------{0}, {1}", obj, finalDecision);
 
 			IRestResponse response;
 
@@ -87,14 +87,11 @@
 				datas.Append(de.Key.ToString()).Append(de.Value);
 			}
 
-			//Console.WriteLine(datas.ToString());
-
 			Encoding enc = Encoding.UTF8;
 			string signature;
 			using (HMACSHA1 hmacsha1 = new HMACSHA1(enc.GetBytes(this.appSecret))) {
 				byte[] digest = hmacsha1.ComputeHash(datas.ToString().ToStream());
 				signature = MiscUtils.ByteArr2Hex(digest).ToUpper();
-				//	Console.WriteLine("_aop_signature: " + signature);
 				request.AddParameter("_aop_signature", signature);
 			}
 
@@ -105,11 +102,10 @@
 			try {
 				response = client.Post(request);
 				HttpStatusCode status = response.StatusCode;
-				Console.WriteLine(status);
-				Console.WriteLine(response.Content);
+			/*	Console.WriteLine(status);
+				Console.WriteLine(response.Content);*/
 			} catch (Exception e) {
 				// log error TODO
-				Console.WriteLine(e);
 				throw new HttpException(String.Format("Failed to process request to Alibaba for customer {0}, alibabaID {1}, error: {2}", arg0: obj.GetValue("aId"), arg1: obj.GetValue("aliMemberId"), arg2: e));
 			}
 

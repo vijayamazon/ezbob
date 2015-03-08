@@ -694,14 +694,17 @@
 
 
 		[Test]
-		public void TestAlibabaDataSharing() {
+		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
 			int customerID = 18234; // 217 ; //; // 18234;
 
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
-			var v = aliMemberRep.ByCustomer(customerID).FirstOrDefault();
-			new RequalifyCustomer(v.Customer.Name).Execute();
+			var v = aliMemberRep.ByCustomer(customerID);
+			new RequalifyCustomer(v.Customer.Name).Execute(); // only for CashRequest creation!!!
+			new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
+
+			/*new DataSharing(customerID, 0).Execute();*/
 
 			/* many customers
 			 * var aliCustomers = aliMemberRep.ByCustomer(customerID);
@@ -713,24 +716,13 @@
 			}*/
 
 			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
-			new DataSharing(customerID, 0).Execute();
+			//new DataSharing(customerID, 0).Execute();
 			new DataSharing(customerID, 1).Execute();
 		}
 
 
 
 
-		[Test]
-		public void TestAlibabaDataSharing_old() {
-			Console.WriteLine(CurrentValues.Instance.AlibabaAppSecret_Sandbox.Value);
-			Console.WriteLine(CurrentValues.Instance.AlibabaBaseUrl_Sandbox.Value);
-			Console.WriteLine(CurrentValues.Instance.AlibabaUrlPath_Sandbox.Value);
-			/*int customerID = 18234; //217; // 18234;
-			var s = new DataSharing(customerID);
-			//s.DataSharingCompleted += c_DataSharingCompleted;
-			s.Execute();
-			Console.WriteLine();
-			Console.WriteLine(  JsonConvert.SerializeObject(s.Result) );*/
-		}
+
 	}
 }

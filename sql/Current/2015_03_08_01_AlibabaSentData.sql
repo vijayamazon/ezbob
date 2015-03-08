@@ -6,7 +6,7 @@ CREATE TABLE [dbo].[AlibabaSentData](
 	[Request] [ntext] NOT NULL,
 	[Response] [ntext] NOT NULL,
 	[StatusCode] [nvarchar](80) NULL,
-	[Signature] [nvarchar](255) NOT NULL,
+	[Signature] [nvarchar](255) DEFAULT NULL,
 	[CustomerId] [int] NOT NULL,
 	[AlibabaMemberId] [int] NOT NULL,
 	[SentDate] [datetime] NOT NULL,

@@ -4,6 +4,7 @@
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
+	using FluentNHibernate.Automapping;
 	using FluentNHibernate.Mapping;
 	using NHibernate;
 	using NHibernate.Type;

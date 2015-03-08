@@ -75,10 +75,10 @@ BEGIN
 		r.SystemDecisionDate as locOfferDate , 
 		r.OfferValidUntil as locOfferExpireDate	,
 
-		r.UnderwriterDecision as locAppriveStatus,	-- manual or final auto -  for 002
-		r.ManagerApprovedSum as locAppriveAmount,				
-		r.UnderwriterDecisionDate as locAppriveDate , 
-		r.OfferValidUntil as locAppriveExpireDate,		
+		r.UnderwriterDecision as locApproveStatus,	-- manual or final auto -  for 002
+		r.ManagerApprovedSum as locApproveAmount,				
+		r.UnderwriterDecisionDate as locApproveDate , 
+		r.OfferValidUntil as locApproveExpireDate,		
 		
 		CASE WHEN @FinalDecision = 1 THEN r.UnderwriterComment END as remarks,	
 		CASE WHEN @FinalDecision = 1 THEN r.UnderwriterComment END as rejectReason

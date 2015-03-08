@@ -600,9 +600,11 @@
 				);
 			} // if
 
-			UpdateSalesForceOpportunity(customer.Name);
+			// TEMPORARY DISABLED TODO - sync for proper launch
+			//UpdateSalesForceOpportunity(customer.Name);
 
-			UpdatePartnerAlibaba(customer.Id, Convert.ToInt32(customer.AlibabaId));
+			if(customer.IsAlibaba)
+				UpdatePartnerAlibaba(customer.Id);
 
 		} // UpdateCustomerAndCashRequest
 
@@ -747,15 +749,11 @@
 		/// In the case of "Waiting"/manual, 002 will be transmitted in UI underwrites, CustomerController, ChangeStatus method
 		/// </summary>
 		/// <param name="customerID"></param>
-		/// <param name="alibabaID"></param>
-		private void UpdatePartnerAlibaba(int customerID, int alibabaID) {
-
-			if (alibabaID == 0)
-				return;
-
+		private void UpdatePartnerAlibaba(int customerID) {
+	
 			DecisionActions autoDecision = this.autoDecisionResponse.Decision ?? DecisionActions.Waiting;
 
-			Log.Info("UpdatePartnerAlibaba ******************************************************{0}, {1}, {2}", customerID, alibabaID, autoDecision);
+			Log.Info("UpdatePartnerAlibaba ******************************************************{0}, {1}", customerID,  autoDecision);
 
 			//	Reject, Re-Reject, Re-Approve, Approve: 0001 + 0002 (auto decision is a final also)
 			// other: 0001 

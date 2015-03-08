@@ -178,35 +178,32 @@
 		public string locOfferStatus {
 			get { return this._locOfferStatus; }
 			set {
-
-				Console.WriteLine("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + value);
-
 				switch (value) {
-					case "Escalated":
-						this._locOfferStatus = AlibabaLocOfferStatus.MoreInformationNeeded.DescriptionAttr();
-						break;
+				case "Escalated":
+					this._locOfferStatus = AlibabaLocOfferStatus.MoreInformationNeeded.DescriptionAttr();
+					break;
 
-					case "ApprovedPending":
-					case "WaitingForDecision":
-					case "Manual":
-						this._locOfferStatus = AlibabaLocOfferStatus.Incomplete.DescriptionAttr();
-						break;
+				case "ApprovedPending":
+				case "WaitingForDecision":
+				case "Manual":
+					this._locOfferStatus = AlibabaLocOfferStatus.Incomplete.DescriptionAttr();
+					break;
 
-					case "Approval":
-					case "Re-Approval":
-					case "Approved":
-						this._locOfferStatus = AlibabaLocOfferStatus.Approved.DescriptionAttr();
-						break;
+				case "Approval":
+				case "Re-Approval":
+				case "Approved":
+					this._locOfferStatus = AlibabaLocOfferStatus.Approved.DescriptionAttr();
+					break;
 
-					case "Rejected":
-					case "Re-Rejection":
-					case "Rejection":
-						this._locOfferStatus = AlibabaLocOfferStatus.NoLoan.DescriptionAttr();
-						break;
-					default:
-						this._locOfferStatus = AlibabaLocOfferStatus.Incomplete.DescriptionAttr();
-						break;
-					}
+				case "Rejected":
+				case "Re-Rejection":
+				case "Rejection":
+					this._locOfferStatus = AlibabaLocOfferStatus.NoLoan.DescriptionAttr();
+					break;
+				default:
+					this._locOfferStatus = AlibabaLocOfferStatus.Incomplete.DescriptionAttr();
+					break;
+				}
 			}
 		}
 
@@ -239,25 +236,22 @@
 		public string locApproveStatus {
 			get { return this._locApproveStatus; }
 			set {
-
-				Console.WriteLine("_locApproveStatus!!!!!!!!!!!!!!!!!!!!!!!!!!!!!" + value);
-
 				switch (value) {
-					case "Approval":
-					case "Re-Approval":
-					case "Approved":
-						this._locOfferStatus = AlibabaLocOfferStatus.Approved.DescriptionAttr();
-						break;
+				case "Approval":
+				case "Re-Approval":
+				case "Approved":
+					this._locApproveStatus = AlibabaLocOfferStatus.Approved.DescriptionAttr();
+					break;
 
-					case "Rejected":
-					case "Re-Rejection":
-					case "Rejection":
-						this._locOfferStatus = AlibabaLocOfferStatus.NoLoan.DescriptionAttr();
-						break;
+				case "Rejected":
+				case "Re-Rejection":
+				case "Rejection":
+					this._locApproveStatus = AlibabaLocOfferStatus.NoLoan.DescriptionAttr();
+					break;
 
-					default:
-						this._locOfferStatus = AlibabaLocOfferStatus.AppSubmitted.DescriptionAttr();
-						break;
+				default:
+					this._locApproveStatus = AlibabaLocOfferStatus.AppSubmitted.DescriptionAttr();
+					break;
 				}
 			}
 		}
