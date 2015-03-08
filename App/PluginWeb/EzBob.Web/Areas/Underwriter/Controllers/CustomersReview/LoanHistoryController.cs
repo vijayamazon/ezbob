@@ -20,7 +20,6 @@
 	using PaymentServices.PayPoint;
 	using ServiceClientProxy;
 	using log4net;
-	using StructureMap;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class LoanHistoryController : Controller
