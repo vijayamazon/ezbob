@@ -601,7 +601,7 @@
 			} // if
 
 			// TEMPORARY DISABLED TODO - sync for proper launch
-			//UpdateSalesForceOpportunity(customer.Name);
+			UpdateSalesForceOpportunity(customer.Name);
 
 			if(customer.IsAlibaba)
 				UpdatePartnerAlibaba(customer.Id);
@@ -762,13 +762,13 @@
 				case DecisionActions.Reject:
 				case DecisionActions.ReApprove:
 				case DecisionActions.Approve:
-					new DataSharing(customerID, 0).Execute();
-					new DataSharing(customerID, 1).Execute();
+					new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
+					new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
 					break;
 
 				// auto not final
 				case DecisionActions.Waiting:
-					new DataSharing(customerID, 0).Execute();
+					new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
 					break;
 	
 				default:  // unknown auto decision status

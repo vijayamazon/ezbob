@@ -2,14 +2,11 @@
 	using System;
 	using System.Diagnostics;
 	using System.IO;
-	using System.Net;
 	using System.ServiceModel.Activation;
 	using System.ServiceModel.Web;
 	using System.Text;
-	using Ext.Net.Utilities;
 	using EzbobAPI.DataObject;
 	using Newtonsoft.Json;
-	using ServiceClientProxy;
 
 	[AspNetCompatibilityRequirements(RequirementsMode = AspNetCompatibilityRequirementsMode.Allowed)]
 	public class Customer : ICustomer {

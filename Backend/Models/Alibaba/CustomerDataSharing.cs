@@ -29,28 +29,23 @@
 45	WaitingForDecision
 */
 
-	public enum AlibabaCompanyEntityType {
-		[Description("NONE")]
-		NONE,
-		[Description("SOLE_PROPRIETOR")]
-		SOLE_PROPRIETOR,
-		[Description("LLC")]
-		LLC,
-		[Description("PARTNERSHIP")]
-		PARTNERSHIP,
-		[Description("LLP")]
-		LLP,
-		[Description("S_CORP")]
-		S_CORP,
-		[Description("C_CORP")]
-		C_CORP
-	}
+	/*
+	 * (No column name)	TypeOfBusiness
+364		PShip3P
+44		PShip
+3888	NULL
+5664	Limited
+8753	Entrepreneur
+1075	SoleTrader
+78		LLP
+	 * */
 
 
 	[DataContract]
 	public class CustomerDataSharing {
 		private string _locOfferStatus;
 		private string _locApproveStatus;
+		private string _compEntityType;
 
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] // customerID
 		public int aId { get; set; }
@@ -97,11 +92,23 @@
 		[DataMember(EmitDefaultValue = true)]
 		public int? compEmployees { get; set; }
 
-		//Possible values: NONE, SOLE_PROPRIETOR, LLC, PARTNERSHIP, LLP, S_CORP, C_CORP
+		//Possible values:	PShip,  LLP, Limited, PShip3P
 		[DataMember(EmitDefaultValue = true, IsRequired = true)]
-		public string compEntityType { get; set; } //AlibabaCompanyEntityType
+		public string compEntityType {
+			get { return this._compEntityType; }
+			set {
+				switch (value) {
+				case "LLP":
+				case "Limited":
+				case "PShip":
+				case "PShip3P":
+					this._compEntityType = value;
+					break;
+				}
+			}
+		}
 
-		[DataMember(EmitDefaultValue = true)]
+		[DataMember(EmitDefaultValue = true)] // Industry
 		public string compType { get; set; }
 
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] // c.FirstName

@@ -175,7 +175,7 @@
       <Name>Strategies</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
-      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EchoSign\EchoSignLib\EchoSignLib.csproj">

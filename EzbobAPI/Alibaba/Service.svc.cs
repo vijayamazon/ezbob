@@ -3,7 +3,6 @@
 	using System.Diagnostics;
 	using System.Net;
 	using System.ServiceModel.Web;
-	using Ext.Net.Utilities;
 	using EzbobAPI.DataObject;
 	using ServiceClientProxy;
 
@@ -18,13 +17,13 @@
 				requestId = input.requestId
 			};
 
-			if (input.requestId.IsNull()) {
+			if (input.requestId == null) {
 				response.errCode = AlibabaErrorCode.INCOMING_REQUEST_ID_NOT_VALID;
 				response.errMsg = "INCOMING_REQUEST_ID_NOT_VALID";
 				throw new WebFaultException<AlibabaCompositeType>(response, HttpStatusCode.BadRequest);
 			}
 
-			if (input.responseId.IsNull()) {
+			if (input.responseId == null) {
 				response.errCode = AlibabaErrorCode.INCOMING_RESPONSE_ID_NOT_VALID;
 				response.errMsg = "INCOMING_RESPONSE_ID_NOT_VALID";
 				throw new WebFaultException<AlibabaCompositeType>(response, HttpStatusCode.BadRequest);
@@ -62,7 +61,7 @@
 			Debug.Write(result.ToString());
 
 			// customerID and aliMemberID doesn't match each other in in system DB
-			if (result.aId.IsNull() && result.aliMemberId.IsNull()) {
+			if (result.aId == null && result.aliMemberId == null) {
 
 				Debug.Write("SYSTEM_CUSTOMER_ALI_MEMBER_ID_MISMATCH: {0}", result.aliMemberId.ToString());
 
@@ -72,7 +71,7 @@
 			}
 
 			// customerID not found in system DB
-			if (result.aId.IsNull()) {
+			if (result.aId == null) {
 
 				Debug.Write("SYSTEM_CUSTOMER_ID_NOT_FOUND: {0}", result.aId.ToString());
 
@@ -82,7 +81,7 @@
 			}
 
 			// ali memberID not found in system DB
-			if (result.aliMemberId.IsNull()) {
+			if (result.aliMemberId == null) {
 
 				Debug.Write("SYSTEM_ALI_MEMBER_ID_NOT_FOUND: {0}", result.ToString());
 
@@ -91,7 +90,7 @@
 				throw new WebFaultException<AlibabaCompositeType>(response, HttpStatusCode.BadRequest);
 			}
 
-			if (result.creditLine.IsNull()) {
+			if (result.creditLine == null) {
 				response.errCode = AlibabaErrorCode.SYSTEM_NO_VALID_CREDITLINE_FOR_CUSTOMER;
 				response.errMsg = "SYSTEM_NO_VALID_CREDITLINE_FOR_CUSTOMER";
 			}

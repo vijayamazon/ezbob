@@ -6,7 +6,7 @@
 	using System.Security.Authentication;
 	using System.ServiceModel;
 	using System.ServiceModel.Web;
-	using Ext.Net.Utilities;
+	
 
 	public class ServiceValidator : UserNamePasswordValidator
     {
@@ -23,7 +23,7 @@
 
 			System.Diagnostics.Debug.WriteLine("==userName {0}, password {1}", userName, password);
 
-			if (userName.IsEmpty() || password.IsEmpty()) {
+			if (userName == null || password == null) {
 				// auth headers not found  - how to add message?
 				throw new WebFaultException(HttpStatusCode.BadRequest);
 			}

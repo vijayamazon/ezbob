@@ -55,6 +55,10 @@
       <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
       <Name>Barrymore</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

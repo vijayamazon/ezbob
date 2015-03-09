@@ -24,6 +24,7 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
@@ -35,6 +36,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using NHibernate.Util;
 	using NUnit.Framework;
+	using SalesForceLib;
 	using StructureMap;
 	using Twilio;
 
@@ -95,6 +97,8 @@
 					.Use<LoanScheduleRepository>();
 				x.For<ILoanHistoryRepository>()
 					.Use<LoanHistoryRepository>();
+				x.For<ISalesForceAppClient>()
+					.Use<FakeApiClient>();
 			});
 
 			Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
@@ -704,7 +708,7 @@
 			new RequalifyCustomer(v.Customer.Name).Execute(); // only for CashRequest creation!!!
 			new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 
-			/*new DataSharing(customerID, 0).Execute();*/
+			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
 
 			/* many customers
 			 * var aliCustomers = aliMemberRep.ByCustomer(customerID);
@@ -717,11 +721,15 @@
 
 			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
 			//new DataSharing(customerID, 0).Execute();
-			new DataSharing(customerID, 1).Execute();
+		//	new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
 		}
 
 
-
+		[Test]
+		public void TestSF() {
+			var sf = new AddUpdateLeadAccount("a@b.c", 1, false, false);
+			sf.Execute();
+		}
 
 
 	}

@@ -456,7 +456,7 @@
 
 			// send final decision data (0002) to Alibaba parther (if exists)
 			if (customer.IsAlibaba && (model.status == CreditResultStatus.Rejected || model.status == CreditResultStatus.Approved)) {
-				m_oServiceClient.Instance.DataSharing(customer.Id, 1);
+				m_oServiceClient.Instance.DataSharing(customer.Id, ServiceClientProxy.EzServiceReference.AlibabaBusinessType.APPLICATION_REVIEW);
 			}
 
 			return Json(new { warning = sWarning });

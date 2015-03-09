@@ -1362,11 +1362,10 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.log.Debug("blablabla: {0}",  JsonConvert.SerializeObject(result)); //json
 		}
 
-		// will be called from MainStrategy 
-		/*[Activation]
-		private void DataSharing() { // DataSharing 18234  
+		
+		[Activation]
+		private void DataSharing() { // DataSharing 18241
 			int customerID;
-			int aliMemberID;
 
 			if ((cmdLineArgs.Length != 2) || !int.TryParse(cmdLineArgs[1], out customerID)) {
 				log.Msg("Usage: DataSharing <Customer ID>");
@@ -1375,9 +1374,9 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			log.Debug("activator: customerID: {0}", customerID);
 
-			AlibabaCustomerDataSharingActionResult result = serviceClient.DataSharing(customerID);
+			AlibabaCustomerDataSharingActionResult result = serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW );
 			this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
-		}*/
+		}
 
 		
 

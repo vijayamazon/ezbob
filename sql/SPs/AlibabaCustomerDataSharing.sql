@@ -18,6 +18,23 @@ BEGIN
 	-- not an Alibaba's customer
 	IF @AlibabaMemberID IS NULL
 		RETURN;	
+
+	DECLARE @TypeOfBusiness nvarchar(15);
+
+	SET @TypeOfBusiness = (select TypeOfBusiness from Customer where Id = @CustomerID);	
+
+--364	PShip3P
+--44	PShip
+--3888	NULL
+--5664	Limited
+--8753	Entrepreneur
+--1075	SoleTrader
+--78	LLP
+
+	-- NOT SUPPORTED FOR ALIBABA
+	-- NULL -how should be treated?
+	IF @TypeOfBusiness = 'Entrepreneur' OR @TypeOfBusiness = 'SoleTrader' OR @TypeOfBusiness IS NULL
+		RETURN;	
 		
 	SELECT 
 		@AlibabaMemberID as  aliMemberId,		
@@ -43,7 +60,8 @@ BEGIN
 		c.Name as email, 
 			
 		CASE WHEN @FinalDecision = 1 THEN c.Gender END as gender,	 
-		CASE WHEN @FinalDecision = 0 THEN c.GreetingMailSentDate END as applicationDate,		
+		--CASE WHEN @FinalDecision = 0 THEN c.GreetingMailSentDate END as applicationDate,
+		c.GreetingMailSentDate as applicationDate,				
 
 		co.ExperianCompanyName as  compName,  
 
@@ -63,12 +81,7 @@ BEGIN
 
 		c.IndustryType as compType,		
 		r.AnualTurnover as compRevenue, -- Business revenue last year 
-		c.OverallTurnOver as compNetProfit, -- Business net profit before taxes last year ???				
-	
-		--r.UnderwriterDecision as locOfferStatus,	-- auto decision
-		--r.ManagerApprovedSum as locOfferAmount,			
-		--r.OfferStart as locOfferDate , 
-		--r.OfferValidUntil as locOfferExpireDate	,
+		--c.OverallTurnOver as compNetProfit, -- Business net profit before taxes last year ???		
 
 		r.SystemDecision as locOfferStatus,	-- auto decision 001 RR, R, RA, A
 		r.ManagerApprovedSum as locOfferAmount,			

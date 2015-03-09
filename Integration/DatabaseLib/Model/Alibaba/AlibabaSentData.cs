@@ -16,6 +16,9 @@
 		public virtual string Request { get; set; }
 		public virtual string Response { get; set; }
 		public virtual string StatusCode { get; set; }
+		public virtual string ErrorCode { get; set; }
+		public virtual string ErrorMessage { get; set; }
+
 		public virtual string Signature { get; set; }
 		public virtual DateTime SentDate { get; set; }
 		public virtual string Comments { get; set; }
@@ -45,6 +48,8 @@
 			Map(x => x.Request);
 			Map(x => x.Response);
 			Map(x => x.StatusCode);
+			Map(x => x.ErrorCode);
+			Map(x => x.ErrorMessage);
 			Map(x => x.Signature);
 			Map(x => x.SentDate).CustomType<UtcDateTimeType>();
 			Map(x => x.Comments);
