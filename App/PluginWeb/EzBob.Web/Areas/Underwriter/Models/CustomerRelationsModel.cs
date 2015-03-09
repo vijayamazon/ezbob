@@ -87,10 +87,10 @@
 					Action = "Took a Loan",
 					Comment = string.Format("Amount: {0}, Repayments: {1}, Type: {2}, Discount Plan: {3}, Source: {4}", 
                         loan.LoanAmount, 
-                        loan.Repayments, 
-                        loan.LoanType.Description, 
-                        loan.CashRequest.DiscountPlan.ValuesStr,
-                        loan.LoanSource.Name),
+                        loan.Repayments,
+						loan.LoanType == null ? "" : loan.LoanType.Description,
+						loan.CashRequest == null || loan.CashRequest.DiscountPlan == null ? "" : loan.CashRequest.DiscountPlan.ValuesStr,
+						loan.LoanSource == null ? "" : loan.LoanSource.Name),
 					DateTime = loan.Date,
 					Status = loan.Status.ToString()
 				};
