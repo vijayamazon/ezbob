@@ -272,28 +272,35 @@
 			return "Loans summary:<br>" + CreateHtmlTable(summarySection.ToString(), summaryHeaders.ToArray());
 		}
 
-		private void SendStatusMail(string toAddress, string firstName, 
-			string headerSection, string loanSummarySection, string closedLoansSection, string outstandingLoansSection, string origin) {
-
+		private void SendStatusMail(
+			Customer customer,
+			string toAddress,
+			string headerSection,
+			string loanSummarySection,
+			string closedLoansSection,
+			string outstandingLoansSection
+		) {
 			string firstOfMonthStatusMailMandrillTemplateName;
 			var mail = new Mail();
 
-			var vars = new Dictionary<string, string>
-				{
-					{"FirstName", firstName},
-					{"HeaderSection", headerSection},
-					{"LoanSummarySection", loanSummarySection},
-					{"ClosedLoansSection", closedLoansSection},
-					{"OutstandingLoansSection", outstandingLoansSection} 
-				};
+			var vars = new Dictionary<string, string> {
+				{"FirstName", customer.PersonalInfo.FirstName},
+				{"HeaderSection", headerSection},
+				{"LoanSummarySection", loanSummarySection},
+				{"ClosedLoansSection", closedLoansSection},
+				{"OutstandingLoansSection", outstandingLoansSection},
+			};
 			
-			if (origin == "everline") {
-				firstOfMonthStatusMailMandrillTemplateName = "EVL " + CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
+			if (customer.CustomerOrigin.IsEverline()) {
+				firstOfMonthStatusMailMandrillTemplateName =
+					"EVL " + CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
 			} else {
-				firstOfMonthStatusMailMandrillTemplateName = CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
-			}
+				firstOfMonthStatusMailMandrillTemplateName =
+					CurrentValues.Instance.FirstOfMonthStatusMailMandrillTemplateName;
+			} // if
 
 			var result = mail.Send(vars, toAddress, firstOfMonthStatusMailMandrillTemplateName);
+
 			if (result == "OK") {
 				log.InfoFormat("Sent mail - {0}", firstOfMonthStatusMailMandrillTemplateName);
 			} else {
@@ -301,23 +308,41 @@
 			}
 		}
 
-		private void SendStatusMailToCustomer(Customer customer, List<Loan> outstandingLoans, List<Loan> closedLoans,
-											  string copyToAddress, bool shouldSendToCustomer) {
+		private void SendStatusMailToCustomer(
+			Customer customer,
+			List<Loan> outstandingLoans,
+			List<Loan> closedLoans,
+			string copyToAddress,
+			bool shouldSendToCustomer
+		) {
 			log.InfoFormat("Preparing first of month mail for customer:{0}", customer.Id);
+
+			var targetAddresses = new List<string>();
+
+			if (shouldSendToCustomer)
+				targetAddresses.Add(customer.Name);
+
+			if (!string.IsNullOrEmpty(copyToAddress))
+				targetAddresses.Add(copyToAddress);
+
+			if (targetAddresses.Count < 1)
+				return;
 
 			string headerSection = GenerateHeaderSection(customer, outstandingLoans);
 			string summarySection = GenerateSummarySection(outstandingLoans);
 			string closedLoansSection = GenerateClosedLoansSection(closedLoans);
 			string outstandingLoansSection = GenerateOutstandingLoansSection(outstandingLoans);
 
-			if (shouldSendToCustomer) {
-				SendStatusMail(customer.Name, customer.PersonalInfo.FirstName, headerSection, summarySection, closedLoansSection,
-							   outstandingLoansSection, customer.CustomerOrigin.Name);
-			}
-			if (!string.IsNullOrEmpty(copyToAddress)) {
-				SendStatusMail(copyToAddress, customer.PersonalInfo.FirstName, headerSection, summarySection, closedLoansSection,
-							   outstandingLoansSection, customer.CustomerOrigin.Name);
-			}
+			foreach (string toAddress in targetAddresses) {
+				SendStatusMail(
+					customer,
+					toAddress,
+					headerSection,
+					summarySection,
+					closedLoansSection,
+					outstandingLoansSection
+				);
+			} // for each
 		}
 
 		private static readonly ILog log = LogManager.GetLogger(typeof(FirstOfMonthStatusStrategyHelper));

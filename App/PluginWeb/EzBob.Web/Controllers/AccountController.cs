@@ -56,7 +56,6 @@
 			m_oVipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 			_whiteLabelProviderRepository = ObjectFactory.GetInstance <WhiteLabelProviderRepository>();
-			customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
 		} // constructor
 
 		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
@@ -210,27 +209,37 @@
 				user = null;
 			} // try
 
+			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+			
 			if (user == null) {
-				if (hostname.Contains("everline")) {
+				if (uiOrigin.IsEverline()) {
 					var loginLoanChecker = new EverlineLoginLoanChecker();
 					var status = loginLoanChecker.GetLoginStatus(model.UserName);
+
 					switch (status.status) {
-						case EverlineLoanStatus.Error:
-							ms_oLog.Error("Failed to retrieve everline customer loan status \n{0}", status.Message);
-							return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
-						case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
-							return Json(new {success = true,everlineAccount = true}, JsonRequestBehavior.AllowGet);
-						case EverlineLoanStatus.ExistsWithNoLiveLoan:
-							TempData["IsEverline"] = true;
-							TempData["CustomerEmail"] = model.UserName;
-							return Json(new {success = true,everlineWizard = true}, JsonRequestBehavior.AllowGet);
-						case EverlineLoanStatus.DoesNotExist:
-							return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
-					}
-				} else {
-					ms_oLog.Warn("Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",customerIp,model.UserName);
-					return Json(new {success = false,errorMessage = @"User not found or incorrect password."}, JsonRequestBehavior.AllowGet);
-				}
+					case EverlineLoanStatus.Error:
+						ms_oLog.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
+						return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
+
+					case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
+						return Json(new {success = true,everlineAccount = true}, JsonRequestBehavior.AllowGet);
+
+					case EverlineLoanStatus.ExistsWithNoLiveLoan:
+						TempData["IsEverline"] = true;
+						TempData["CustomerEmail"] = model.UserName;
+						return Json(new {success = true,everlineWizard = true}, JsonRequestBehavior.AllowGet);
+
+					case EverlineLoanStatus.DoesNotExist:
+						return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
+
+					default:
+						ms_oLog.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
+						return Json(new { success = false, errorMessage = @"User not found or incorrect password." }, JsonRequestBehavior.AllowGet);
+					} // switch
+				} // if
+
+				ms_oLog.Warn("Customer log on attempt from remote IP {0} with user name '{1}': could not find a user entry.",customerIp,model.UserName);
+				return Json(new {success = false, errorMessage = @"User not found or incorrect password."}, JsonRequestBehavior.AllowGet);
 			} // if user not found
 
 			var isUnderwriter = user.BranchId == 1;
@@ -288,22 +297,20 @@
 				return Json(new { success = false, errorMessage = sDisabledError, }, JsonRequestBehavior.AllowGet);
 			} // if user is disabled
 
-			string customerOrigin = customer.CustomerOrigin.Name;
-			
-			// TODO: Alex to ask Stas what the hell this condition mean. In other words:
-			// why the hell hardcoded "localhost" (the hell)? 
-			// why the hell test customer can login from whatever host he wants (the hell)?
-			// why in all the checks hostname is checked against "everline.com" or "ezbob.com" but here hostname
-			// is checked against origin name?
-			// why not passing current UI origin to server and not checking on fetching customer from DB?
+			if (uiOrigin.GetOrigin() != customer.CustomerOrigin.GetOrigin()) {
+				ms_oLog.Warn(
+					"Customer {0} with origin {1} tried to login with UI origin {2} (from host {3}).",
+					user.Id,
+					customer.CustomerOrigin.Name,
+					uiOrigin.Name,
+					this.hostname
+				);
 
-			if (!hostname.Contains(customerOrigin) && !hostname.Contains("localhost") && !customer.IsTest) {
-				ms_oLog.Warn("customer {0} origin is {1} tried to login from host {2}.", user.Id, customerOrigin, hostname);
 				return Json(new {
 					success = false,
-					errorMessage = "User not found or invalid password."
+					errorMessage = "User not found or invalid password.",
 				}, JsonRequestBehavior.AllowGet);
-			}
+			} // if
 
 			string loginError;
 			var nStatus = ValidateUser(
@@ -327,8 +334,10 @@
 			} // if logged in successfully
 
 			string errorMessage = MembershipCreateStatus.InvalidProviderUserKey == nStatus
-				? @"Three unsuccessful login attempts have been made. <span class='bold'>" + customerOrigin + "</span> has issued you with a temporary password. Please check your e-mail."
-				: @"User not found or incorrect password.";
+				? "Three unsuccessful login attempts have been made. <span class='bold'>" +
+					customer.CustomerOrigin.Name +
+					"</span> has issued you with a temporary password. Please check your e-mail."
+				: "User not found or incorrect password.";
 
 			ms_oLog.Warn(
 				"Customer log on attempt from remote IP {0} with user name '{1}': failed {2}.",
@@ -347,14 +356,13 @@
 			switch (m_oLogOffMode) {
 			case LogOffMode.SignUpOfEnv:
 				return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
+
 			case LogOffMode.LogOnOfEnv:
 				return RedirectToAction("LogOn", "Account", new { Area = "" });
+
 			default:
-				string defaultRedirect = @"http://www.ezbob.com";
-				if(hostname.Contains("everline")) {
-					defaultRedirect = @"https://www.everline.com";
-				}
-				return Redirect(defaultRedirect);
+				CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+				return Redirect(uiOrigin.FrontendSite);
 			} // switch
 		} // LogOff
 
@@ -496,26 +504,36 @@
 				}
 			}
 
-			if (hostname.Contains("everline")) {
+			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
+
+			if (uiOrigin.IsEverline()) {
 				var loginLoanChecker = new EverlineLoginLoanChecker();
 				var status = loginLoanChecker.GetLoginStatus(email);
+
 				switch (status.status) {
 				case EverlineLoanStatus.Error:
-					ms_oLog.Error("Failed to retrieve everline customer loan status \n{0}", status.Message);
+					ms_oLog.Error("Failed to retrieve Everline customer loan status \n{0}", status.Message);
 					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+
 				case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
 					ms_oLog.Warn("Customer {0} ExistsWithCurrentLiveLoan in Everiline tried to restore password", email);
 					return Json(new { everlineAccount = true }, JsonRequestBehavior.AllowGet);
+
 				case EverlineLoanStatus.ExistsWithNoLiveLoan:
 					ms_oLog.Warn("Customer {0} ExistsWithNoLiveLoan in Everiline tried to restore password", email);
 					TempData["IsEverline"] = true;
 					TempData["CustomerEmail"] = email;
 					return Json(new { everlineWizard = true }, JsonRequestBehavior.AllowGet);
+
 				case EverlineLoanStatus.DoesNotExist:
 					ms_oLog.Warn("Customer {0} DoesNotExist in Everiline tried to restore password", email);
 					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
-				}
-			}
+
+				default:
+					ms_oLog.Alert("Unsupported EverlineLoanStatus: {0}.", status.status);
+					return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
+				} // switch
+			} // if
 
 			return Json(new { error = "User : '" + email + "' was not found" }, JsonRequestBehavior.AllowGet);
 
@@ -862,8 +880,7 @@
 				Broker = broker,
 			};
 
-			CustomerOrigin origin = customerOriginRepository.GetByHostname(hostname);
-			customer.CustomerOrigin = origin;
+			customer.CustomerOrigin = UiCustomerOrigin.Get();
 
 			ms_oLog.Debug("Customer ({0}): wizard step has been updated to: {1}", customer.Id, (int)WizardStepType.SignUp);
 			CampaignSourceRef campaignSourceRef = null;
@@ -1162,7 +1179,6 @@
 		private readonly IVipRequestRepository m_oVipRequestRepository;
 		private readonly AConnection m_oDB;
 		private readonly WhiteLabelProviderRepository _whiteLabelProviderRepository;
-		private readonly CustomerOriginRepository customerOriginRepository;
 		private string hostname;
 	} // class AccountController
 } // namespace

@@ -6,6 +6,7 @@
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Utils.Exceptions;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public abstract class AMailStrategyBase : AStrategy {
 		public override void Execute() {
@@ -18,8 +19,8 @@
 				SetTemplateAndVariables();
 				Log.Debug("Setting template and variables complete.");
 
-				if (SendToCustomer && CustomerData.Origin == "everline") {
-					Log.Debug("Customer's origin is everline adding EVL to template name");
+				if (SendToCustomer && CustomerData.Origin == CustomerOriginEnum.everline.ToString()) {
+					Log.Debug("Customer's origin is Everline adding EVL to template name");
 					TemplateName = string.Format("EVL {0}", TemplateName);
 				} // if
 

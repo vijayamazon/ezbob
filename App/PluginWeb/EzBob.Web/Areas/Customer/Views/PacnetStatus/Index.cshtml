@@ -1,25 +1,8 @@
 ﻿@using EzBob.Web.Infrastructure
 @using ConfigManager
 @using Ezbob.Backend.Models
-@using EZBob.DatabaseLib.Model.Database
-@using StructureMap
 @{
-	CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
-	CustomerOrigin customerOrigin = null;
-
-	foreach (var co in customerOriginRepository.GetAllOrdered()) {
-		if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle)) {
-			customerOrigin = co;
-			break;
-		}
-	}
-
-	if (customerOrigin == null) {
-		customerOrigin = customerOriginRepository.GetDefault();
-	}
-
-	ViewBag.CustomerOrigin = customerOrigin;
-	ViewBag.PhoneNumber = ViewBag.CustomerOrigin.PhoneNumber;
+	UiCustomerOrigin.Set(ViewBag);
 
 	ViewBag.Title = "Loan Confirmation: Loan Confirmation |  " + ViewBag.CustomerOrigin.Name;
 	bool ttPixelEnabled = CurrentValues.Instance.TradeTrackerPixelEnabled;

@@ -77,7 +77,13 @@
 
 			ms_oLog.Info("WizardController Index {0}", hostname);
 
-			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(_context.Customer, Session, provider, hostname);
+			WizardModel wizardModel = _customerModelBuilder.BuildWizardModel(
+				_context.Customer,
+				Session,
+				provider,
+				hostname,
+				false
+			);
 
 			if (TempData.ContainsKey("IsEverline")) {
 				bool isEverline = (bool)TempData["IsEverline"];

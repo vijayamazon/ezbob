@@ -27,11 +27,22 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public virtual string PhoneNumber { get; set; }
 		public virtual string MetaDescription { get; set; }
 		public virtual string CustomerCareEmail { get; set; }
+		public virtual string FrontendSite { get; set; }
 
 		public virtual CustomerOriginEnum GetOrigin() { return this.origin; }
 
 		private CustomerOriginEnum origin;
 	} // class CustomerOrigin
+
+	public static class CustomerOriginExt {
+		public static bool IsEverline(this CustomerOrigin cu) {
+			return cu != null && cu.GetOrigin() == CustomerOriginEnum.everline;
+		} // IsEverline
+
+		public static bool IsEzbob(this CustomerOrigin cu) {
+			return cu != null && cu.GetOrigin() == CustomerOriginEnum.ezbob;
+		} // IsEzbob
+	} // class CustomerOriginExt
 
 	public class CustomerOriginMap : ClassMap<CustomerOrigin> {
 		public CustomerOriginMap() {
@@ -43,6 +54,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.UrlNeedle).Length(255);
 			Map(x => x.PhoneNumber).Length(32);
 			Map(x => x.CustomerCareEmail).Length(255);
+			Map(x => x.FrontendSite).Length(255);
 			Map(x => x.MetaDescription);
 		} // constructor
 	} // class CustomerOriginMap
@@ -53,16 +65,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public List<CustomerOrigin> GetAllOrdered() {
 			return GetAll().OrderByDescending(x => x.SearchPriority).ToList();
 		} // GetAllOrdered
-
-		public CustomerOrigin GetByHostname(string hostname) {
-			List<CustomerOrigin> all = GetAllOrdered();
-
-			foreach (var co in all)
-				if (hostname.Contains(co.UrlNeedle))
-					return co;
-
-			return GetDefault();
-		} // GetbyHostname
 
 		public CustomerOrigin GetDefault() {
 			return GetAll().ToList().First(x => x.GetOrigin() == CustomerOriginEnum.ezbob);

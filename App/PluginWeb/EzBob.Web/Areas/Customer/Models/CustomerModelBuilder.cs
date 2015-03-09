@@ -25,7 +25,6 @@
 	using Web.Models;
 
 	public class CustomerModelBuilder {
-
 		public CustomerModelBuilder(
 			ISecurityQuestionRepository questions,
 			ICustomerRepository customerRepository,
@@ -47,21 +46,28 @@
 			_whiteLabelProviderRepository = whiteLabelProviderRepository;
 		} // constructor
 
-		public WizardModel BuildWizardModel(Customer cus, HttpSessionStateBase session, string profile,string requestUrl, bool isProfile = false) {
-			var wizardModel = new WizardModel();
-			var origin = "ezbob";
-			
-			if(requestUrl.Contains("everline.com"))
-			{
-				origin = "everline";
-			}
+		public WizardModel BuildWizardModel(
+			Customer cus,
+			HttpSessionStateBase session,
+			string profile,
+			string requestUrl,
+			bool isProfile
+		) {
+			CustomerOrigin uiOrigin = cus == null ? UiCustomerOrigin.Get() : cus.CustomerOrigin;
 
-			Log.InfoFormat("BuildWizardModel URL: {0} origin {1} customer {2}", requestUrl, origin, cus == null ? "null" : cus.Id.ToString());
+			var wizardModel = new WizardModel();
+
+			Log.InfoFormat(
+				"BuildWizardModel URL: {0} origin {1} customer {2}",
+				requestUrl,
+				uiOrigin.Name,
+				cus == null ? "null" : cus.Id.ToString()
+			);
 
 			var customerModel = new CustomerModel {
 				loggedIn = cus != null,
 				bankAccountAdded = false,
-				Origin = origin,
+				Origin = uiOrigin.Name,
 			};
 
 			if (!string.IsNullOrEmpty(profile)) {

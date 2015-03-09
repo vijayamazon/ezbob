@@ -38,7 +38,7 @@
 			var model = !isRebuld ? _builder.Build(loan.Customer, loan.LoanAmount, loan) : _builder.ReBuild(loan.Customer, loan);
 
 			var isAlibaba = loan.Customer.IsAlibaba;
-			var isEverline = loan.Customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString();
+			var isEverline = loan.Customer.CustomerOrigin.IsEverline();
 			
 			var origin = isAlibaba ? "Alibaba" : string.Empty;
 			origin = isEverline ? "EVL" : origin;

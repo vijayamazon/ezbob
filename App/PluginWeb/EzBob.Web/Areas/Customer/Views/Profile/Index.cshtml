@@ -1,27 +1,10 @@
 ﻿@using System.Globalization
 @using EzBob.Web.Infrastructure
 @using ConfigManager
-@using EZBob.DatabaseLib.Model.Database
-@using StructureMap
 @model EzBob.Web.Models.WizardModel
 
 @{
-	CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
-	CustomerOrigin customerOrigin = null;
-
-	foreach (var co in customerOriginRepository.GetAllOrdered()) {
-		if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle)) {
-			customerOrigin = co;
-			break;
-		}
-	}
-
-	if (customerOrigin == null) {
-		customerOrigin = customerOriginRepository.GetDefault();
-	}
-
-	ViewBag.CustomerOrigin = customerOrigin;
-	ViewBag.PhoneNumber = Model.WhiteLabel == null ? ViewBag.CustomerOrigin.PhoneNumber : Model.WhiteLabel.Phone;
+	UiCustomerOrigin.Set(ViewBag, Model.WhiteLabel == null ? null : Model.WhiteLabel.Phone);
 
     ViewBag.WhiteLabel = Model.WhiteLabel == null ? null : Model.WhiteLabel.Name;
     var customer = Model.Customer;

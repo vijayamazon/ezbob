@@ -1,23 +1,7 @@
-﻿@using EZBob.DatabaseLib.Model.Database
-@using StructureMap
+﻿@using EzBob.Web.Infrastructure
 @model dynamic
 @{
-	CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
-	CustomerOrigin customerOrigin = null;
-
-	foreach (var co in customerOriginRepository.GetAllOrdered()) {
-		if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle)) {
-			customerOrigin = co;
-			break;
-		}
-	}
-
-	if (customerOrigin == null) {
-		customerOrigin = customerOriginRepository.GetDefault();
-	}
-
-	ViewBag.CustomerOrigin = customerOrigin;
-	ViewBag.PhoneNumber = ViewBag.CustomerOrigin.PhoneNumber;
+	UiCustomerOrigin.Set(ViewBag);
 }
 
 <div class="customer-sidebar-content">

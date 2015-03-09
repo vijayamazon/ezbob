@@ -15,22 +15,8 @@
     var refNum = context.Customer == null ? "" : context.Customer.RefNumber;
     var term = context.Customer == null || context.Customer.CampaignSource == null ? "" : context.Customer.CampaignSource.RTerm;
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-	CustomerOriginRepository customerOriginRepository = ObjectFactory.GetInstance<CustomerOriginRepository>();
-	CustomerOrigin customerOrigin = null;
 
-	foreach (var co in customerOriginRepository.GetAllOrdered()) {
-		if (HttpContext.Current.Request.Url.Host.Contains(co.UrlNeedle)) {
-			customerOrigin = co;
-			break;
-		}
-	}
-
-	if (customerOrigin == null) {
-		customerOrigin = customerOriginRepository.GetDefault();
-	}
-
-	ViewBag.CustomerOrigin = customerOrigin;
-	ViewBag.PhoneNumber = ViewBag.CustomerOrigin.PhoneNumber;
+	UiCustomerOrigin.Set(ViewBag);
 
     string sCustomerLeadFieldName = "{}";
     try {
@@ -49,7 +35,7 @@
     @RenderSection("head", false)
 
     @if (controller == "Wizard") {
-		<meta name="description" content="@customerOrigin.MetaDescription" />
+		<meta name="description" content="@ViewBag.CustomerOrigin.MetaDescription" />
     }
 
     <title>@ViewBag.Title</title>
@@ -64,9 +50,9 @@
     @BundleHelper.RenderPrintCss()
     @BundleHelper.RenderCustomerCss()
 
-    @if (customerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
+    @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
         @BundleHelper.RenderEverlineCss()
-    } else if (customerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
+    } else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
         @BundleHelper.RenderAlibabaCss()
     }
 
@@ -78,7 +64,7 @@
     @{Html.RenderPartial("security_template");}
 </head>
 
-<body auth="@authCookie" data-user-name="" data-ref="@refNum" data-term="@term" data-origin="@customerOrigin.Name">
+<body auth="@authCookie" data-user-name="" data-ref="@refNum" data-term="@term">
     @{Html.RenderPartial("_GoogleTagManager");}
     @RenderSection("afterHead", false)
 
