@@ -504,23 +504,23 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 					req.done(function(reqData) {
 						if (reqData) {
 							switch (reqData.length) {
-								case 0:
-									break;
+							case 0:
+								break;
 
-								case 1:
-									that.saveTargeting(reqData[0]);
-									break;
+							case 1:
+								that.saveTargeting(reqData[0]);
+								break;
 
-								default:
-									var companyTargets = new EzBob.companyTargets({ model: reqData });
+							default:
+								var companyTargets = new EzBob.companyTargets({ model: reqData });
 
-									companyTargets.render();
+								companyTargets.render();
 
-									companyTargets.on('BusRefNumGetted', function(targetingData) {
-										that.saveTargeting(targetingData);
-									});
+								companyTargets.on('BusRefNumGetted', function(targetingData) {
+									that.saveTargeting(targetingData);
+								});
 
-									break;
+								break;
 							} // switch reqData.length
 						} // if
 					}); // on done
@@ -534,8 +534,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 	}, // makeTargeting
 
 	saveTargeting: function(targetingData) {
-		if (!targetingData || targetingData.BusRefNum == 'skip')
-			targetingData = { BusRefNum: "NotFound" };
+		if (!targetingData || targetingData.BusRefNum === 'skip')
+			targetingData = { BusRefNum: 'NotFound' };
 
 		$.post(window.gRootPath + 'Customer/Profile/SaveTargeting', targetingData);
 	}, // saveTargeting
