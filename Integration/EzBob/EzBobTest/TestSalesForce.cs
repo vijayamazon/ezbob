@@ -140,7 +140,7 @@
 			ISalesForceAppClient client = GetClient();
 
 			LeadAccountModel model = new LeadAccountModel {
-				Email = "a@b.c",
+				Email = "aa@b.c",
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",

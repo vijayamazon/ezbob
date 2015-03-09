@@ -185,8 +185,11 @@
           <xsd:enumeration value="CANT_UNSET_CORP_CURRENCY" />
           <xsd:enumeration value="CHILD_SHARE_FAILS_PARENT" />
           <xsd:enumeration value="CIRCULAR_DEPENDENCY" />
+          <xsd:enumeration value="CLEAN_SERVICE_ERROR" />
           <xsd:enumeration value="COLLISION_DETECTED" />
           <xsd:enumeration value="COMMUNITY_NOT_ACCESSIBLE" />
+          <xsd:enumeration value="CONFLICTING_ENVIRONMENT_HUB_MEMBER" />
+          <xsd:enumeration value="CONFLICTING_SSO_USER_MAPPING" />
           <xsd:enumeration value="CUSTOM_APEX_ERROR" />
           <xsd:enumeration value="CUSTOM_CLOB_FIELD_LIMIT_EXCEEDED" />
           <xsd:enumeration value="CUSTOM_ENTITY_OR_FIELD_LIMIT" />
@@ -194,6 +197,7 @@
           <xsd:enumeration value="CUSTOM_INDEX_EXISTS" />
           <xsd:enumeration value="CUSTOM_LINK_LIMIT_EXCEEDED" />
           <xsd:enumeration value="CUSTOM_METADATA_LIMIT_EXCEEDED" />
+          <xsd:enumeration value="CUSTOM_SETTINGS_LIMIT_EXCEEDED" />
           <xsd:enumeration value="CUSTOM_TAB_LIMIT_EXCEEDED" />
           <xsd:enumeration value="DELETE_FAILED" />
           <xsd:enumeration value="DELETE_OPERATION_TOO_LARGE" />
@@ -216,6 +220,8 @@
           <xsd:enumeration value="ENTITY_IS_ARCHIVED" />
           <xsd:enumeration value="ENTITY_IS_DELETED" />
           <xsd:enumeration value="ENTITY_IS_LOCKED" />
+          <xsd:enumeration value="ENTITY_SAVE_ERROR" />
+          <xsd:enumeration value="ENTITY_SAVE_VALIDATION_ERROR" />
           <xsd:enumeration value="ENVIRONMENT_HUB_MEMBERSHIP_CONFLICT" />
           <xsd:enumeration value="ENVIRONMENT_HUB_MEMBERSHIP_ERROR_JOINING_HUB" />
           <xsd:enumeration value="ENVIRONMENT_HUB_MEMBERSHIP_USER_ALREADY_IN_HUB" />
@@ -252,7 +258,8 @@
           <xsd:enumeration value="INVALID_EMPTY_KEY_OWNER" />
           <xsd:enumeration value="INVALID_ENTITY_FOR_MATCH_ENGINE_ERROR" />
           <xsd:enumeration value="INVALID_ENTITY_FOR_MATCH_OPERATION_ERROR" />
-          <xsd:enumeration value="INVALID_EVENT_SUBSCRIPTION" />
+          <xsd:enumeration value="INVALID_ENVIRONMENT_HUB_MEMBER" />
+          <xsd:enumeration value="INVALID_EVENT_PUBLICATION" />
           <xsd:enumeration value="INVALID_FIELD" />
           <xsd:enumeration value="INVALID_FIELD_FOR_INSERT_UPDATE" />
           <xsd:enumeration value="INVALID_FIELD_WHEN_USING_TEMPLATE" />
@@ -309,6 +316,7 @@
           <xsd:enumeration value="MATCH_OPERATION_UNKNOWN_RULE_ERROR" />
           <xsd:enumeration value="MATCH_OPERATION_UNSUPPORTED_VERSION_ERROR" />
           <xsd:enumeration value="MATCH_RUNTIME_ERROR" />
+          <xsd:enumeration value="MATCH_SERVICE_ERROR" />
           <xsd:enumeration value="MATCH_SERVICE_UNAVAILABLE_ERROR" />
           <xsd:enumeration value="MAXIMUM_CCEMAILS_EXCEEDED" />
           <xsd:enumeration value="MAXIMUM_DASHBOARD_COMPONENTS_EXCEEDED" />
@@ -326,6 +334,7 @@
           <xsd:enumeration value="MAX_TM_RULE_ITEMS_EXCEEDED" />
           <xsd:enumeration value="MERGE_FAILED" />
           <xsd:enumeration value="MISSING_ARGUMENT" />
+          <xsd:enumeration value="MISSING_RECORD" />
           <xsd:enumeration value="MIXED_DML_OPERATION" />
           <xsd:enumeration value="NONUNIQUE_SHIPPING_ADDRESS" />
           <xsd:enumeration value="NO_APPLICABLE_PROCESS" />
@@ -340,6 +349,13 @@
           <xsd:enumeration value="PACKAGE_LICENSE_REQUIRED" />
           <xsd:enumeration value="PACKAGING_API_INSTALL_FAILED" />
           <xsd:enumeration value="PACKAGING_API_UNINSTALL_FAILED" />
+          <xsd:enumeration value="PA_API_EXCEPTION" />
+          <xsd:enumeration value="PA_AXIS_FAULT" />
+          <xsd:enumeration value="PA_INVALID_ID_EXCEPTION" />
+          <xsd:enumeration value="PA_NO_ACCESS_EXCEPTION" />
+          <xsd:enumeration value="PA_NO_DATA_FOUND_EXCEPTION" />
+          <xsd:enumeration value="PA_URI_SYNTAX_EXCEPTION" />
+          <xsd:enumeration value="PA_VISIBLE_ACTIONS_FILTER_ORDERING_EXCEPTION" />
           <xsd:enumeration value="PORTAL_NO_ACCESS" />
           <xsd:enumeration value="PORTAL_USER_ALREADY_EXISTS_FOR_CONTACT" />
           <xsd:enumeration value="PRIVATE_CONTACT_ON_ASSET" />
@@ -641,6 +657,8 @@
           <xsd:element name="childSObject" type="xsd:string" />
           <xsd:element name="deprecatedAndHidden" type="xsd:boolean" />
           <xsd:element name="field" type="xsd:string" />
+          <xsd:element minOccurs="0" name="junctionIdListName" type="xsd:string" />
+          <xsd:element minOccurs="0" maxOccurs="unbounded" name="junctionReferenceTo" nillable="true" type="xsd:string" />
           <xsd:element minOccurs="0" name="relationshipName" type="xsd:string" />
           <xsd:element minOccurs="0" name="restrictedDelete" type="xsd:boolean" />
         </xsd:sequence>
@@ -731,6 +749,7 @@
           <xsd:element name="filterable" type="xsd:boolean" />
           <xsd:element minOccurs="0" name="filteredLookupInfo" nillable="true" type="tns:FilteredLookupInfo" />
           <xsd:element name="groupable" type="xsd:boolean" />
+          <xsd:element minOccurs="0" name="highScaleNumber" type="xsd:boolean" />
           <xsd:element minOccurs="0" name="htmlFormatted" type="xsd:boolean" />
           <xsd:element name="idLookup" type="xsd:boolean" />
           <xsd:element minOccurs="0" name="inlineHelpText" type="xsd:string" />
@@ -821,6 +840,8 @@
           <xsd:element name="name" type="xsd:string" />
           <xsd:element minOccurs="0" name="quickActionList" type="tns:DescribeQuickActionListResult" />
           <xsd:element minOccurs="0" maxOccurs="unbounded" name="regions" type="tns:DescribeFlexiPageRegion" />
+          <xsd:element name="sobjectType" nillable="true" type="xsd:string" />
+          <xsd:element name="template" nillable="true" type="xsd:string" />
           <xsd:element name="type" type="xsd:string" />
         </xsd:sequence>
       </xsd:complexType>
@@ -1459,6 +1480,7 @@
           <xsd:element name="logoUrl" type="xsd:string" />
           <xsd:element minOccurs="0" name="namespace" type="xsd:string" />
           <xsd:element name="selected" type="xsd:boolean" />
+          <xsd:element name="tabSetId" type="xsd:string" />
           <xsd:element minOccurs="0" maxOccurs="unbounded" name="tabs" type="tns:DescribeTab" />
         </xsd:sequence>
       </xsd:complexType>
@@ -1753,6 +1775,31 @@
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element minOccurs="0" maxOccurs="1" name="result" type="tns:ExecuteListViewResult" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:simpleType name="listViewIsSoqlCompatible">
+        <xsd:restriction base="xsd:string">
+          <xsd:enumeration value="TRUE" />
+          <xsd:enumeration value="FALSE" />
+          <xsd:enumeration value="ALL" />
+        </xsd:restriction>
+      </xsd:simpleType>
+      <xsd:element name="describeSObjectListViews">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="sObjectType" type="xsd:string" />
+            <xsd:element name="recentsOnly" type="xsd:boolean" />
+            <xsd:element name="isSoqlCompatible" type="tns:listViewIsSoqlCompatible" />
+            <xsd:element name="limit" type="xsd:int" />
+            <xsd:element name="offset" type="xsd:int" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="describeSObjectListViewsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="result" type="tns:DescribeSoqlListViewResult" />
           </xsd:sequence>
         </xsd:complexType>
       </xsd:element>
@@ -2359,6 +2406,7 @@
           <xsd:enumeration value="ARGUMENT_OBJECT_PARSE_ERROR" />
           <xsd:enumeration value="ASYNC_OPERATION_LOCATOR" />
           <xsd:enumeration value="BATCH_PROCESSING_HALTED" />
+          <xsd:enumeration value="CANNOT_DELETE_ENTITY" />
           <xsd:enumeration value="CANNOT_DELETE_OWNER" />
           <xsd:enumeration value="CANT_ADD_STANDADRD_PORTAL_USER_TO_TERRITORY" />
           <xsd:enumeration value="CANT_ADD_STANDARD_PORTAL_USER_TO_TERRITORY" />
@@ -2375,6 +2423,7 @@
           <xsd:enumeration value="CONTENT_HUB_TIMEOUT_EXCEPTION" />
           <xsd:enumeration value="CONTENT_HUB_UNEXPECTED_EXCEPTION" />
           <xsd:enumeration value="CUSTOM_METADATA_LIMIT_EXCEEDED" />
+          <xsd:enumeration value="CUSTOM_SETTINGS_LIMIT_EXCEEDED" />
           <xsd:enumeration value="DATACLOUD_API_CLIENT_EXCEPTION" />
           <xsd:enumeration value="DATACLOUD_API_DISABLED_EXCEPTION" />
           <xsd:enumeration value="DATACLOUD_API_SERVER_BUSY_EXCEPTION" />
@@ -2455,6 +2504,7 @@
           <xsd:enumeration value="MISSING_ARGUMENT" />
           <xsd:enumeration value="MISSING_RECORD" />
           <xsd:enumeration value="MUTUAL_AUTHENTICATION_FAILED" />
+          <xsd:enumeration value="NOT_ACCEPTABLE" />
           <xsd:enumeration value="NOT_MODIFIED" />
           <xsd:enumeration value="NO_SOFTPHONE_LAYOUT" />
           <xsd:enumeration value="NUMBER_OUTSIDE_VALID_RANGE" />
@@ -2477,6 +2527,7 @@
           <xsd:enumeration value="SOCIALCRM_FEEDSERVICE_API_SERVER_EXCEPTION" />
           <xsd:enumeration value="SOCIALCRM_FEEDSERVICE_API_UNAVAILABLE" />
           <xsd:enumeration value="SSO_SERVICE_DOWN" />
+          <xsd:enumeration value="SST_ADMIN_FILE_DOWNLOAD_EXCEPTION" />
           <xsd:enumeration value="TOO_MANY_APEX_REQUESTS" />
           <xsd:enumeration value="TOO_MANY_RECIPIENTS" />
           <xsd:enumeration value="TOO_MANY_RECORDS" />
@@ -2499,6 +2550,7 @@
           <xsd:enumeration value="fns:ARGUMENT_OBJECT_PARSE_ERROR" />
           <xsd:enumeration value="fns:ASYNC_OPERATION_LOCATOR" />
           <xsd:enumeration value="fns:BATCH_PROCESSING_HALTED" />
+          <xsd:enumeration value="fns:CANNOT_DELETE_ENTITY" />
           <xsd:enumeration value="fns:CANNOT_DELETE_OWNER" />
           <xsd:enumeration value="fns:CANT_ADD_STANDADRD_PORTAL_USER_TO_TERRITORY" />
           <xsd:enumeration value="fns:CANT_ADD_STANDARD_PORTAL_USER_TO_TERRITORY" />
@@ -2515,6 +2567,7 @@
           <xsd:enumeration value="fns:CONTENT_HUB_TIMEOUT_EXCEPTION" />
           <xsd:enumeration value="fns:CONTENT_HUB_UNEXPECTED_EXCEPTION" />
           <xsd:enumeration value="fns:CUSTOM_METADATA_LIMIT_EXCEEDED" />
+          <xsd:enumeration value="fns:CUSTOM_SETTINGS_LIMIT_EXCEEDED" />
           <xsd:enumeration value="fns:DATACLOUD_API_CLIENT_EXCEPTION" />
           <xsd:enumeration value="fns:DATACLOUD_API_DISABLED_EXCEPTION" />
           <xsd:enumeration value="fns:DATACLOUD_API_SERVER_BUSY_EXCEPTION" />
@@ -2595,6 +2648,7 @@
           <xsd:enumeration value="fns:MISSING_ARGUMENT" />
           <xsd:enumeration value="fns:MISSING_RECORD" />
           <xsd:enumeration value="fns:MUTUAL_AUTHENTICATION_FAILED" />
+          <xsd:enumeration value="fns:NOT_ACCEPTABLE" />
           <xsd:enumeration value="fns:NOT_MODIFIED" />
           <xsd:enumeration value="fns:NO_SOFTPHONE_LAYOUT" />
           <xsd:enumeration value="fns:NUMBER_OUTSIDE_VALID_RANGE" />
@@ -2617,6 +2671,7 @@
           <xsd:enumeration value="fns:SOCIALCRM_FEEDSERVICE_API_SERVER_EXCEPTION" />
           <xsd:enumeration value="fns:SOCIALCRM_FEEDSERVICE_API_UNAVAILABLE" />
           <xsd:enumeration value="fns:SSO_SERVICE_DOWN" />
+          <xsd:enumeration value="fns:SST_ADMIN_FILE_DOWNLOAD_EXCEPTION" />
           <xsd:enumeration value="fns:TOO_MANY_APEX_REQUESTS" />
           <xsd:enumeration value="fns:TOO_MANY_RECIPIENTS" />
           <xsd:enumeration value="fns:TOO_MANY_RECORDS" />
@@ -2867,6 +2922,12 @@
   </message>
   <message name="executeListViewResponse">
     <part name="parameters" element="tns:executeListViewResponse" />
+  </message>
+  <message name="describeSObjectListViewsRequest">
+    <part name="parameters" element="tns:describeSObjectListViews" />
+  </message>
+  <message name="describeSObjectListViewsResponse">
+    <part name="parameters" element="tns:describeSObjectListViewsResponse" />
   </message>
   <message name="describeTabsRequest">
     <part name="parameters" element="tns:describeTabs" />
@@ -3175,6 +3236,13 @@
       <documentation>Execute the specified list view and return the presentation-ready results.</documentation>
       <input message="tns:executeListViewRequest" />
       <output message="tns:executeListViewResponse" />
+    </operation>
+    <operation name="describeSObjectListViews">
+      <documentation>Describe the ListViews of a SObject as SOQL metadata for the generation of SOQL.</documentation>
+      <input message="tns:describeSObjectListViewsRequest" />
+      <output message="tns:describeSObjectListViewsResponse" />
+      <fault name="InvalidSObjectFault" message="tns:InvalidSObjectFault" />
+      <fault name="UnexpectedErrorFault" message="tns:UnexpectedErrorFault" />
     </operation>
     <operation name="describeTabs">
       <documentation>Describe the tabs that appear on a users page</documentation>
@@ -3725,6 +3793,25 @@
         <soap:header message="tns:Header" part="LimitInfoHeader" use="literal" />
         <soap:body use="literal" />
       </output>
+    </operation>
+    <operation name="describeSObjectListViews">
+      <soap:operation soapAction="" />
+      <input>
+        <soap:header message="tns:Header" part="SessionHeader" use="literal" />
+        <soap:header message="tns:Header" part="CallOptions" use="literal" />
+        <soap:header message="tns:Header" part="PackageVersionHeader" use="literal" />
+        <soap:body use="literal" parts="parameters" />
+      </input>
+      <output>
+        <soap:header message="tns:Header" part="LimitInfoHeader" use="literal" />
+        <soap:body use="literal" />
+      </output>
+      <fault name="InvalidSObjectFault">
+        <soap:fault use="literal" name="InvalidSObjectFault" namespace="" />
+      </fault>
+      <fault name="UnexpectedErrorFault">
+        <soap:fault use="literal" name="UnexpectedErrorFault" namespace="" />
+      </fault>
     </operation>
     <operation name="describeTabs">
       <soap:operation soapAction="" />
@@ -4401,7 +4488,7 @@
   <service name="SforceService">
     <documentation>Sforce SOAP API</documentation>
     <port name="Soap" binding="tns:SoapBinding">
-      <soap:address location="https://test.salesforce.com/services/Soap/u/32.0" />
+      <soap:address location="https://login.salesforce.com/services/Soap/u/33.0" />
     </port>
   </service>
 </definitions>
