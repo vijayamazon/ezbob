@@ -101,6 +101,9 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         BATCH_PROCESSING_HALTED,
         
         /// <remarks/>
+        CANNOT_DELETE_ENTITY,
+        
+        /// <remarks/>
         CANNOT_DELETE_OWNER,
         
         /// <remarks/>
@@ -147,6 +150,9 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         /// <remarks/>
         CUSTOM_METADATA_LIMIT_EXCEEDED,
+        
+        /// <remarks/>
+        CUSTOM_SETTINGS_LIMIT_EXCEEDED,
         
         /// <remarks/>
         DATACLOUD_API_CLIENT_EXCEPTION,
@@ -389,6 +395,9 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         MUTUAL_AUTHENTICATION_FAILED,
         
         /// <remarks/>
+        NOT_ACCEPTABLE,
+        
+        /// <remarks/>
         NOT_MODIFIED,
         
         /// <remarks/>
@@ -453,6 +462,9 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         /// <remarks/>
         SSO_SERVICE_DOWN,
+        
+        /// <remarks/>
+        SST_ADMIN_FILE_DOWNLOAD_EXCEPTION,
         
         /// <remarks/>
         TOO_MANY_APEX_REQUESTS,
@@ -1246,6 +1258,17 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
         System.Threading.Tasks.Task<SalesForceLib.SalesForcePartnersServiceNS.executeListViewResponse> executeListViewAsync(SalesForceLib.SalesForcePartnersServiceNS.executeListViewRequest1 request);
+        
+        // CODEGEN: Generating message contract since message describeSObjectListViewsRequest has headers
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        [System.ServiceModel.FaultContractAttribute(typeof(SalesForceLib.SalesForcePartnersServiceNS.InvalidSObjectFault), Action="", Name="InvalidSObjectFault", Namespace="urn:fault.partner.soap.sforce.com")]
+        [System.ServiceModel.FaultContractAttribute(typeof(SalesForceLib.SalesForcePartnersServiceNS.UnexpectedErrorFault), Action="", Name="UnexpectedErrorFault", Namespace="urn:fault.partner.soap.sforce.com")]
+        [System.ServiceModel.XmlSerializerFormatAttribute(SupportFaults=true)]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ApiFault))]
+        SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsResponse describeSObjectListViews(SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest request);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsResponse> describeSObjectListViewsAsync(SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest request);
         
         // CODEGEN: Generating message contract since message describeTabsRequest has headers
         [System.ServiceModel.OperationContractAttribute(Action="", ReplyAction="*")]
@@ -2497,6 +2520,10 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         private string fieldField;
         
+        private string junctionIdListNameField;
+        
+        private string[] junctionReferenceToField;
+        
         private string relationshipNameField;
         
         private bool restrictedDeleteField;
@@ -2553,6 +2580,30 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        public string junctionIdListName {
+            get {
+                return this.junctionIdListNameField;
+            }
+            set {
+                this.junctionIdListNameField = value;
+                this.RaisePropertyChanged("junctionIdListName");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("junctionReferenceTo", IsNullable=true, Order=5)]
+        public string[] junctionReferenceTo {
+            get {
+                return this.junctionReferenceToField;
+            }
+            set {
+                this.junctionReferenceToField = value;
+                this.RaisePropertyChanged("junctionReferenceTo");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=6)]
         public string relationshipName {
             get {
                 return this.relationshipNameField;
@@ -2564,7 +2615,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public bool restrictedDelete {
             get {
                 return this.restrictedDeleteField;
@@ -2652,6 +2703,10 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         private FilteredLookupInfo filteredLookupInfoField;
         
         private bool groupableField;
+        
+        private bool highScaleNumberField;
+        
+        private bool highScaleNumberFieldSpecified;
         
         private bool htmlFormattedField;
         
@@ -3011,6 +3066,30 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         /// <remarks/>
         [System.Xml.Serialization.XmlElementAttribute(Order=20)]
+        public bool highScaleNumber {
+            get {
+                return this.highScaleNumberField;
+            }
+            set {
+                this.highScaleNumberField = value;
+                this.RaisePropertyChanged("highScaleNumber");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlIgnoreAttribute()]
+        public bool highScaleNumberSpecified {
+            get {
+                return this.highScaleNumberFieldSpecified;
+            }
+            set {
+                this.highScaleNumberFieldSpecified = value;
+                this.RaisePropertyChanged("highScaleNumberSpecified");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=21)]
         public bool htmlFormatted {
             get {
                 return this.htmlFormattedField;
@@ -3034,7 +3113,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=21)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=22)]
         public bool idLookup {
             get {
                 return this.idLookupField;
@@ -3046,7 +3125,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=22)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=23)]
         public string inlineHelpText {
             get {
                 return this.inlineHelpTextField;
@@ -3058,7 +3137,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=23)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=24)]
         public string label {
             get {
                 return this.labelField;
@@ -3070,7 +3149,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=24)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=25)]
         public int length {
             get {
                 return this.lengthField;
@@ -3082,7 +3161,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=25)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=26)]
         public string mask {
             get {
                 return this.maskField;
@@ -3094,7 +3173,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=26)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=27)]
         public string maskType {
             get {
                 return this.maskTypeField;
@@ -3106,7 +3185,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=27)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=28)]
         public string name {
             get {
                 return this.nameField1;
@@ -3118,7 +3197,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=28)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=29)]
         public bool nameField {
             get {
                 return this.nameFieldField;
@@ -3130,7 +3209,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=29)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=30)]
         public bool namePointing {
             get {
                 return this.namePointingField;
@@ -3154,7 +3233,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=30)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=31)]
         public bool nillable {
             get {
                 return this.nillableField;
@@ -3166,7 +3245,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=31)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=32)]
         public bool permissionable {
             get {
                 return this.permissionableField;
@@ -3178,7 +3257,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("picklistValues", IsNullable=true, Order=32)]
+        [System.Xml.Serialization.XmlElementAttribute("picklistValues", IsNullable=true, Order=33)]
         public PicklistEntry[] picklistValues {
             get {
                 return this.picklistValuesField;
@@ -3190,7 +3269,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=33)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=34)]
         public int precision {
             get {
                 return this.precisionField;
@@ -3202,7 +3281,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=34)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=35)]
         public bool queryByDistance {
             get {
                 return this.queryByDistanceField;
@@ -3214,7 +3293,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=35)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=36)]
         public string referenceTargetField {
             get {
                 return this.referenceTargetFieldField;
@@ -3226,7 +3305,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("referenceTo", IsNullable=true, Order=36)]
+        [System.Xml.Serialization.XmlElementAttribute("referenceTo", IsNullable=true, Order=37)]
         public string[] referenceTo {
             get {
                 return this.referenceToField;
@@ -3238,7 +3317,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=37)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=38)]
         public string relationshipName {
             get {
                 return this.relationshipNameField;
@@ -3250,7 +3329,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=38)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=39)]
         public int relationshipOrder {
             get {
                 return this.relationshipOrderField;
@@ -3274,7 +3353,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=39)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=40)]
         public bool restrictedDelete {
             get {
                 return this.restrictedDeleteField;
@@ -3298,7 +3377,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=40)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=41)]
         public bool restrictedPicklist {
             get {
                 return this.restrictedPicklistField;
@@ -3310,7 +3389,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=41)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=42)]
         public int scale {
             get {
                 return this.scaleField;
@@ -3322,7 +3401,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=42)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=43)]
         public soapType soapType {
             get {
                 return this.soapTypeField;
@@ -3334,7 +3413,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=43)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=44)]
         public bool sortable {
             get {
                 return this.sortableField;
@@ -3358,7 +3437,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=44)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=45)]
         public fieldType type {
             get {
                 return this.typeField;
@@ -3370,7 +3449,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=45)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=46)]
         public bool unique {
             get {
                 return this.uniqueField;
@@ -3382,7 +3461,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=46)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=47)]
         public bool updateable {
             get {
                 return this.updateableField;
@@ -3394,7 +3473,7 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=47)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=48)]
         public bool writeRequiresMasterRead {
             get {
                 return this.writeRequiresMasterReadField;
@@ -4914,6 +4993,10 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         private DescribeFlexiPageRegion[] regionsField;
         
+        private string sobjectTypeField;
+        
+        private string templateField;
+        
         private string typeField;
         
         /// <remarks/>
@@ -4978,7 +5061,31 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute(Order=5)]
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=5)]
+        public string sobjectType {
+            get {
+                return this.sobjectTypeField;
+            }
+            set {
+                this.sobjectTypeField = value;
+                this.RaisePropertyChanged("sobjectType");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(IsNullable=true, Order=6)]
+        public string template {
+            get {
+                return this.templateField;
+            }
+            set {
+                this.templateField = value;
+                this.RaisePropertyChanged("template");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute(Order=7)]
         public string type {
             get {
                 return this.typeField;
@@ -9808,6 +9915,91 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
     /// <remarks/>
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
     [System.SerializableAttribute()]
+    [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:partner.soap.sforce.com")]
+    public enum listViewIsSoqlCompatible {
+        
+        /// <remarks/>
+        TRUE,
+        
+        /// <remarks/>
+        FALSE,
+        
+        /// <remarks/>
+        ALL,
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="describeSObjectListViews", WrapperNamespace="urn:partner.soap.sforce.com", IsWrapped=true)]
+    public partial class describeSObjectListViewsRequest {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="urn:partner.soap.sforce.com")]
+        public SalesForceLib.SalesForcePartnersServiceNS.SessionHeader SessionHeader;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="urn:partner.soap.sforce.com")]
+        public SalesForceLib.SalesForcePartnersServiceNS.CallOptions CallOptions;
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="urn:partner.soap.sforce.com")]
+        [System.Xml.Serialization.XmlArrayItemAttribute("packageVersions", IsNullable=false)]
+        public SalesForceLib.SalesForcePartnersServiceNS.PackageVersion[] PackageVersionHeader;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:partner.soap.sforce.com", Order=0)]
+        public string sObjectType;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:partner.soap.sforce.com", Order=1)]
+        public bool recentsOnly;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:partner.soap.sforce.com", Order=2)]
+        public SalesForceLib.SalesForcePartnersServiceNS.listViewIsSoqlCompatible isSoqlCompatible;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:partner.soap.sforce.com", Order=3)]
+        public int limit;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:partner.soap.sforce.com", Order=4)]
+        public int offset;
+        
+        public describeSObjectListViewsRequest() {
+        }
+        
+        public describeSObjectListViewsRequest(SalesForceLib.SalesForcePartnersServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForcePartnersServiceNS.CallOptions CallOptions, SalesForceLib.SalesForcePartnersServiceNS.PackageVersion[] PackageVersionHeader, string sObjectType, bool recentsOnly, SalesForceLib.SalesForcePartnersServiceNS.listViewIsSoqlCompatible isSoqlCompatible, int limit, int offset) {
+            this.SessionHeader = SessionHeader;
+            this.CallOptions = CallOptions;
+            this.PackageVersionHeader = PackageVersionHeader;
+            this.sObjectType = sObjectType;
+            this.recentsOnly = recentsOnly;
+            this.isSoqlCompatible = isSoqlCompatible;
+            this.limit = limit;
+            this.offset = offset;
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
+    [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+    [System.ServiceModel.MessageContractAttribute(WrapperName="describeSObjectListViewsResponse", WrapperNamespace="urn:partner.soap.sforce.com", IsWrapped=true)]
+    public partial class describeSObjectListViewsResponse {
+        
+        [System.ServiceModel.MessageHeaderAttribute(Namespace="urn:partner.soap.sforce.com")]
+        [System.Xml.Serialization.XmlArrayItemAttribute("limitInfo", IsNullable=false)]
+        public SalesForceLib.SalesForcePartnersServiceNS.LimitInfo[] LimitInfoHeader;
+        
+        [System.ServiceModel.MessageBodyMemberAttribute(Namespace="urn:partner.soap.sforce.com", Order=0)]
+        [System.Xml.Serialization.XmlArrayItemAttribute("describeSoqlListViews", IsNullable=false)]
+        public SalesForceLib.SalesForcePartnersServiceNS.DescribeSoqlListView[] result;
+        
+        public describeSObjectListViewsResponse() {
+        }
+        
+        public describeSObjectListViewsResponse(SalesForceLib.SalesForcePartnersServiceNS.LimitInfo[] LimitInfoHeader, SalesForceLib.SalesForcePartnersServiceNS.DescribeSoqlListView[] result) {
+            this.LimitInfoHeader = LimitInfoHeader;
+            this.result = result;
+        }
+    }
+    
+    /// <remarks/>
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Xml", "4.0.30319.34234")]
+    [System.SerializableAttribute()]
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.ComponentModel.DesignerCategoryAttribute("code")]
     [System.Xml.Serialization.XmlTypeAttribute(Namespace="urn:partner.soap.sforce.com")]
@@ -9820,6 +10012,8 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         private string namespaceField;
         
         private bool selectedField;
+        
+        private string tabSetIdField;
         
         private DescribeTab[] tabsField;
         
@@ -9872,7 +10066,19 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         }
         
         /// <remarks/>
-        [System.Xml.Serialization.XmlElementAttribute("tabs", Order=4)]
+        [System.Xml.Serialization.XmlElementAttribute(Order=4)]
+        public string tabSetId {
+            get {
+                return this.tabSetIdField;
+            }
+            set {
+                this.tabSetIdField = value;
+                this.RaisePropertyChanged("tabSetId");
+            }
+        }
+        
+        /// <remarks/>
+        [System.Xml.Serialization.XmlElementAttribute("tabs", Order=5)]
         public DescribeTab[] tabs {
             get {
                 return this.tabsField;
@@ -10797,10 +11003,19 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         CIRCULAR_DEPENDENCY,
         
         /// <remarks/>
+        CLEAN_SERVICE_ERROR,
+        
+        /// <remarks/>
         COLLISION_DETECTED,
         
         /// <remarks/>
         COMMUNITY_NOT_ACCESSIBLE,
+        
+        /// <remarks/>
+        CONFLICTING_ENVIRONMENT_HUB_MEMBER,
+        
+        /// <remarks/>
+        CONFLICTING_SSO_USER_MAPPING,
         
         /// <remarks/>
         CUSTOM_APEX_ERROR,
@@ -10822,6 +11037,9 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         /// <remarks/>
         CUSTOM_METADATA_LIMIT_EXCEEDED,
+        
+        /// <remarks/>
+        CUSTOM_SETTINGS_LIMIT_EXCEEDED,
         
         /// <remarks/>
         CUSTOM_TAB_LIMIT_EXCEEDED,
@@ -10888,6 +11106,12 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         /// <remarks/>
         ENTITY_IS_LOCKED,
+        
+        /// <remarks/>
+        ENTITY_SAVE_ERROR,
+        
+        /// <remarks/>
+        ENTITY_SAVE_VALIDATION_ERROR,
         
         /// <remarks/>
         ENVIRONMENT_HUB_MEMBERSHIP_CONFLICT,
@@ -10998,7 +11222,10 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         INVALID_ENTITY_FOR_MATCH_OPERATION_ERROR,
         
         /// <remarks/>
-        INVALID_EVENT_SUBSCRIPTION,
+        INVALID_ENVIRONMENT_HUB_MEMBER,
+        
+        /// <remarks/>
+        INVALID_EVENT_PUBLICATION,
         
         /// <remarks/>
         INVALID_FIELD,
@@ -11169,6 +11396,9 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         MATCH_RUNTIME_ERROR,
         
         /// <remarks/>
+        MATCH_SERVICE_ERROR,
+        
+        /// <remarks/>
         MATCH_SERVICE_UNAVAILABLE_ERROR,
         
         /// <remarks/>
@@ -11220,6 +11450,9 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         MISSING_ARGUMENT,
         
         /// <remarks/>
+        MISSING_RECORD,
+        
+        /// <remarks/>
         MIXED_DML_OPERATION,
         
         /// <remarks/>
@@ -11260,6 +11493,27 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
         
         /// <remarks/>
         PACKAGING_API_UNINSTALL_FAILED,
+        
+        /// <remarks/>
+        PA_API_EXCEPTION,
+        
+        /// <remarks/>
+        PA_AXIS_FAULT,
+        
+        /// <remarks/>
+        PA_INVALID_ID_EXCEPTION,
+        
+        /// <remarks/>
+        PA_NO_ACCESS_EXCEPTION,
+        
+        /// <remarks/>
+        PA_NO_DATA_FOUND_EXCEPTION,
+        
+        /// <remarks/>
+        PA_URI_SYNTAX_EXCEPTION,
+        
+        /// <remarks/>
+        PA_VISIBLE_ACTIONS_FILTER_ORDERING_EXCEPTION,
         
         /// <remarks/>
         PORTAL_NO_ACCESS,
@@ -16633,6 +16887,44 @@ namespace SalesForceLib.SalesForcePartnersServiceNS {
             inValue.MruHeader = MruHeader;
             inValue.request = request;
             return ((SalesForceLib.SalesForcePartnersServiceNS.Soap)(this)).executeListViewAsync(inValue);
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsResponse SalesForceLib.SalesForcePartnersServiceNS.Soap.describeSObjectListViews(SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest request) {
+            return base.Channel.describeSObjectListViews(request);
+        }
+        
+        public SalesForceLib.SalesForcePartnersServiceNS.LimitInfo[] describeSObjectListViews(SalesForceLib.SalesForcePartnersServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForcePartnersServiceNS.CallOptions CallOptions, SalesForceLib.SalesForcePartnersServiceNS.PackageVersion[] PackageVersionHeader, string sObjectType, bool recentsOnly, SalesForceLib.SalesForcePartnersServiceNS.listViewIsSoqlCompatible isSoqlCompatible, int limit, int offset, out SalesForceLib.SalesForcePartnersServiceNS.DescribeSoqlListView[] result) {
+            SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest inValue = new SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.PackageVersionHeader = PackageVersionHeader;
+            inValue.sObjectType = sObjectType;
+            inValue.recentsOnly = recentsOnly;
+            inValue.isSoqlCompatible = isSoqlCompatible;
+            inValue.limit = limit;
+            inValue.offset = offset;
+            SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsResponse retVal = ((SalesForceLib.SalesForcePartnersServiceNS.Soap)(this)).describeSObjectListViews(inValue);
+            result = retVal.result;
+            return retVal.LimitInfoHeader;
+        }
+        
+        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
+        System.Threading.Tasks.Task<SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsResponse> SalesForceLib.SalesForcePartnersServiceNS.Soap.describeSObjectListViewsAsync(SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest request) {
+            return base.Channel.describeSObjectListViewsAsync(request);
+        }
+        
+        public System.Threading.Tasks.Task<SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsResponse> describeSObjectListViewsAsync(SalesForceLib.SalesForcePartnersServiceNS.SessionHeader SessionHeader, SalesForceLib.SalesForcePartnersServiceNS.CallOptions CallOptions, SalesForceLib.SalesForcePartnersServiceNS.PackageVersion[] PackageVersionHeader, string sObjectType, bool recentsOnly, SalesForceLib.SalesForcePartnersServiceNS.listViewIsSoqlCompatible isSoqlCompatible, int limit, int offset) {
+            SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest inValue = new SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsRequest();
+            inValue.SessionHeader = SessionHeader;
+            inValue.CallOptions = CallOptions;
+            inValue.PackageVersionHeader = PackageVersionHeader;
+            inValue.sObjectType = sObjectType;
+            inValue.recentsOnly = recentsOnly;
+            inValue.isSoqlCompatible = isSoqlCompatible;
+            inValue.limit = limit;
+            inValue.offset = offset;
+            return ((SalesForceLib.SalesForcePartnersServiceNS.Soap)(this)).describeSObjectListViewsAsync(inValue);
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="759f623b-238c-4d91-80a6-c24f1564b155" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="67f83546-943e-465f-b81a-2bff91193537" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
@@ -19,10 +19,10 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="c:\ezbob\Integration\SalesForceLib\wsdls\EzBobPartnerwsdl.wsdl" Protocol="file" SourceId="1" />
+    <MetadataSource Address="c:\ezbob\Integration\SalesForceLib\wsdls\EzbobPartnerProd.wsdl" Protocol="file" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="EzBobPartnerwsdl.wsdl" MetadataType="Wsdl" ID="6d58a33e-6ca1-45f4-8533-d758a93bcb60" SourceId="1" SourceUrl="file:///c:/ezbob/Integration/SalesForceLib/wsdls/EzBobPartnerwsdl.wsdl" />
+    <MetadataFile FileName="EzbobPartnerProd.wsdl" MetadataType="Wsdl" ID="7278e8c3-eb28-46fc-aaeb-9e8bb6e91afc" SourceId="1" SourceUrl="file:///c:/ezbob/Integration/SalesForceLib/wsdls/EzbobPartnerProd.wsdl" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

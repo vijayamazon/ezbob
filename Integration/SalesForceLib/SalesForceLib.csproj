@@ -80,7 +80,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Service References\SalesForcePartnersServiceNS\EzBobPartnerwsdl.wsdl" />
+    <None Include="Service References\SalesForcePartnersServiceNS\EzbobPartnerProd.wsdl" />
     <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.convertLeadResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -184,6 +184,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.DescribeSearchScopeOrderResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSObjectListViewsResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.describeSObjectResponse.datasource">
@@ -369,7 +372,7 @@
     <None Include="Service References\SalesForcePartnersServiceNS\SalesForceLib.SalesForcePartnersServiceNS.UpsertResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\SalesForceServiceNS\EzbobWebServices1.wsdl" />
+    <None Include="Service References\SalesForceServiceNS\EzbobWebServicesProd.wsdl" />
     <None Include="Service References\SalesForceServiceNS\SalesForceLib.SalesForceServiceNS.ChangeEmailResponse.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

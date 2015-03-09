@@ -85,6 +85,27 @@
           <xsd:pattern value="[a-zA-Z0-9]{18}" />
         </xsd:restriction>
       </xsd:simpleType>
+      <xsd:complexType name="address">
+        <xsd:complexContent mixed="false">
+          <xsd:extension base="tns:location">
+            <xsd:sequence>
+              <xsd:element name="city" type="xsd:string" />
+              <xsd:element name="country" type="xsd:string" />
+              <xsd:element name="countryCode" type="xsd:string" />
+              <xsd:element name="postalCode" type="xsd:string" />
+              <xsd:element name="state" type="xsd:string" />
+              <xsd:element name="stateCode" type="xsd:string" />
+              <xsd:element name="street" type="xsd:string" />
+            </xsd:sequence>
+          </xsd:extension>
+        </xsd:complexContent>
+      </xsd:complexType>
+      <xsd:complexType name="location">
+        <xsd:sequence>
+          <xsd:element name="latitude" type="xsd:double" />
+          <xsd:element name="longitude" type="xsd:double" />
+        </xsd:sequence>
+      </xsd:complexType>
       <xsd:element name="ChangeEmail">
         <xsd:complexType>
           <xsd:sequence>
@@ -369,7 +390,7 @@
     <documentation>
     </documentation>
     <port name="EzbobWebServices" binding="tns:EzbobWebServicesBinding">
-      <soap:address location="https://cs81.salesforce.com/services/Soap/class/EzbobWebServices" />
+      <soap:address location="https://eu5.salesforce.com/services/Soap/class/EzbobWebServices" />
     </port>
   </service>
 </definitions>
