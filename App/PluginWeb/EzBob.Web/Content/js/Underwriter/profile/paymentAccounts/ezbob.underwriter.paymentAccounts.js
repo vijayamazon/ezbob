@@ -2,10 +2,10 @@ var EzBob = EzBob || {};
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.PaymentAccountsModel = Backbone.Model.extend({
-	urlRoot: function () {
+	urlRoot: function() {
 		return "" + window.gRootPath + "Underwriter/PaymentAccounts/Index/" + this.customerId;
 	},
-	getCardById: function (id) {
+	getCardById: function(id) {
 		var acc, current, _i, _len, _ref;
 		current = this.get('CurrentBankAccount');
 		if (parseInt(current.Id) === parseInt(id)) {
@@ -24,10 +24,10 @@ EzBob.Underwriter.PaymentAccountsModel = Backbone.Model.extend({
 
 EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 	template: "#payment-accounts-template",
-	initialize: function () {
+	initialize: function() {
 		this.bindTo(this.model, "change reset sync", this.render, this);
 		var self = this;
-		window.paypointAdded = (function (amount) {
+		window.paypointAdded = (function(amount) {
 			if (amount == null) {
 				amount = 5;
 			}
@@ -36,7 +36,7 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		});
 		return this;
 	},
-	serializeData: function () {
+	serializeData: function() {
 		var bankAccounts, current;
 		bankAccounts = this.model.get("BankAccounts") || [];
 		current = this.model.get("CurrentBankAccount");
@@ -52,7 +52,10 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		};
 	},
 	ui: {
-		'allowSelection': '.debitCardCustomerSelection'
+		'allowSelection': '.debitCardCustomerSelection',
+		'account': '.paypoint_account',
+		'accounts': '.paypoint_account_tr',
+		'copyAccount': '.copy_account'
 	},
 	events: {
 		"click .bankAccounts tbody tr": "showBankAccount",
@@ -69,14 +72,44 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		this.ui.allowSelection.bootstrapSwitch();
 		this.ui.allowSelection.bootstrapSwitch('setState', this.model.get('CustomerDefaultCardSelectionAllowed'));
 		var self = this;
-		
-		this.ui.allowSelection.on('switch-change', (function (event, state) {
+
+		this.ui.allowSelection.on('switch-change', (function(event, state) {
 			self.changeAllowSelection(event, state);
 		}));
-		
+
+		this.ui.account.tooltip({
+			html: true,
+			'placement': 'bottom'
+		});
+
+		this.ui.accounts.one('mouseover', function() {
+			self.ui.copyAccount.each(function() {
+				self.copyAccount($(this));
+			});
+		});
+
 		return this;
 	},
-	changeAllowSelection: function (event, state) {
+
+	copyAccount: function(targetElement) {
+		var textToCopy = targetElement.data('title').replace('<br>', '').replace('<br>', ' ');
+
+		targetElement.zclip({
+			path: window.gRootPath + "Content/flash/ZeroClipboard.swf",
+			copy: textToCopy,
+			afterCopy: function() {
+				EzBob.ShowMessageEx({
+					message: 'Account details copied to clipboard: ' + textToCopy,
+					timeout: 3,
+					setCSSEffects: false,
+				});
+			},
+		});
+
+		return false;
+	},
+
+	changeAllowSelection: function(event, state) {
 		var xhr;
 		BlockUi("on");
 		xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/ChangeCustomerDefaultCardSelection", {
@@ -84,39 +117,39 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 			state: state.value
 		});
 		var self = this;
-		xhr.done(function () {
+		xhr.done(function() {
 			self.model.fetch();
 		});
-		
-		xhr.always(function () {
+
+		xhr.always(function() {
 			BlockUi("off");
 		});
 	},
-	setPaypointDefault: function (e) {
+	setPaypointDefault: function(e) {
 		var $el, card, transactionId, xhr;
 		$el = $(e.currentTarget);
 		transactionId = $el.data("transactionid");
-		
-		card = _.find(this.model.get("PayPointCards"), function (c) {
+
+		card = _.find(this.model.get("PayPointCards"), function(c) {
 			return c.TransactionId === transactionId;
 		});
-		
+
 		BlockUi("on");
 		xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/SetPaypointDefaultCard", {
 			customerId: this.model.customerId,
 			transactionId: transactionId,
 			cardNo: card.CardNo
 		});
-		xhr.complete(function () {
+		xhr.complete(function() {
 			return BlockUi("off");
 		});
-		return xhr.done((function (_this) {
-			return function () {
+		return xhr.done((function(_this) {
+			return function() {
 				return _this.model.fetch();
 			};
 		})(this));
 	},
-	showBankAccount: function (e) {
+	showBankAccount: function(e) {
 		var id;
 		if (e.target.tagName === 'BUTTON') {
 			return false;
@@ -124,7 +157,7 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		id = $(e.currentTarget).data('card-id');
 		return this._showBankAccount(id);
 	},
-	_showBankAccount: function (cardId) {
+	_showBankAccount: function(cardId) {
 		var card, message, view;
 		card = this.model.getCardById(cardId);
 		if ((card != null ? card.Bank : void 0) == null) {
@@ -138,20 +171,20 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		EzBob.App.jqmodal.show(view);
 		return false;
 	},
-	addNewDebitCard: function () {
+	addNewDebitCard: function() {
 		var view;
 		var self = this;
 		view = new EzBob.Underwriter.AddBankAccount({
 			customerId: this.model.customerId
 		});
-		view.on('saved', function () {
+		view.on('saved', function() {
 			return self.model.fetch();
 		});
-		
+
 		EzBob.App.jqmodal.show(view);
 		return false;
 	},
-	setDefault: function (e) {
+	setDefault: function(e) {
 		var id, xhr;
 		id = $(e.currentTarget).parents('tr').data('card-id');
 		xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/SetDefaultCard", {
@@ -159,12 +192,12 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 			cardId: id
 		});
 		var self = this;
-		
-		xhr.done(function () {
+
+		xhr.done(function() {
 			return self.model.fetch();
 		});
 	},
-	checkBanckAccount: function (e) {
+	checkBanckAccount: function(e) {
 		var id, xhr;
 		id = $(e.currentTarget).parents('tr').data('card-id');
 		BlockUi('On');
@@ -179,7 +212,7 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		});
 
 		var self = this;
-		xhr.done(function (r) {
+		xhr.done(function(r) {
 			var xhr2;
 			if (r.error) {
 				self.model.fetch();
@@ -187,16 +220,16 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 				EzBob.ShowMessage(r.error, "Error");
 				return false;
 			}
-			
+
 			xhr2 = self.model.fetch();
-			xhr2.done(function () {
+			xhr2.done(function() {
 				self._showBankAccount(id);
 				BlockUi('Off');
 			});
 			return false;
 		});
 	},
-	addExistingCard: function () {
+	addExistingCard: function() {
 		var model, view;
 		model = new EzBob.Underwriter.PayPointCardModel();
 		view = new EzBob.Underwriter.AddPayPointCardView({
@@ -204,18 +237,18 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 		});
 
 		var self = this;
-		view.on('save', (function () {
+		view.on('save', (function() {
 			var data, xhr;
 			BlockUi("on");
 			data = model.toJSON();
 			data.customerId = self.model.customerId;
 			xhr = $.post("" + window.gRootPath + "Underwriter/PaymentAccounts/AddPayPointCard", data);
-			xhr.done(function () {
+			xhr.done(function() {
 				BlockUi("off");
 				self.model.fetch();
 			});
 		}));
-		
+
 		EzBob.App.jqmodal.show(view);
 		return false;
 	}

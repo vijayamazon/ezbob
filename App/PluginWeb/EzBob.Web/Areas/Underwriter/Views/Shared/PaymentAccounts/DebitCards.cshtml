@@ -14,7 +14,7 @@
 	</thead>
 	<tbody class="box-content"><%
 		_.each(paymentAccounts.PayPointCards, function(pp) {
-			%><tr>
+			%><tr class="paypoint_account_tr">
 				<td><%
 					if (pp.IsDefault) {
 						%><i class="icon-ok"></i><%
@@ -25,7 +25,12 @@
 				<td><%- pp.CardNo %></td>
 				<td><%- EzBob.formatDateHumanFull(pp.ExpireDate) || 'Unknown'%></td>
                 <td><%- pp.CardHolder %></td>
-                <td><%- pp.AccountName %></td>
+			  	<td>
+				<span class="paypoint_account" data-toggle="tooltip" data-title="<%- pp.BankAccountName %><br><%- pp.AccNumber %><br><%- pp.SortCode %>">
+					<%- pp.PayPointAccountName %>
+					<button class="btn btn-mini btn-primary copy_account" data-title="<%- pp.BankAccountName %><br><%- pp.AccNumber %><br><%- pp.SortCode %>"><i class="fa fa-copy"></i></button>
+				</span>
+				</td>
 				<td class="buttons_container"><%
 					if (!pp.IsDefault) {
 						%><button class="btn btn-mini btn-primary set-paypoint-default" data-transactionid="<%- pp.TransactionId %>">

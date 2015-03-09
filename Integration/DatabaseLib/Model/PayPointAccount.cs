@@ -20,6 +20,9 @@ namespace EZBob.DatabaseLib.Model {
 		public virtual bool DebugModeEnabled { get; set; }
 		public virtual bool DebugModeErrorCodeNEnabled { get; set; }
 		public virtual bool DebugModeIsValidCard { get; set; }
+		public virtual string AccName { get; set; }
+		public virtual string AccNumber { get; set; }
+		public virtual string SortCode { get; set; }
 	}
 
 	public class PayPointAccountMap : ClassMap<PayPointAccount> {
@@ -38,6 +41,9 @@ namespace EZBob.DatabaseLib.Model {
 			Map(x => x.DebugModeEnabled);
 			Map(x => x.DebugModeErrorCodeNEnabled);
 			Map(x => x.DebugModeIsValidCard);
+			Map(x => x.AccName).Length(100);
+			Map(x => x.AccNumber).Length(10);
+			Map(x => x.SortCode).Length(10);
 		}
 	}
 
