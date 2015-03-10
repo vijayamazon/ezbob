@@ -70,7 +70,8 @@
 						ExpectedEndDate = now.AddDays(7),
 						RequestedAmount = requestedLoan != null ? (int?)requestedLoan.Amount : null,
 						Type = originator.ToString(),
-						Stage = (int)OpportunityStage.s5 //todo
+						Stage = (int)OpportunityStage.s5, //todo
+						Name = customer.PersonalInfo.Fullname + customer.CashRequests.Count()
 					});
 			}
 

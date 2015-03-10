@@ -2,7 +2,7 @@
 	using System;
 	using System.Runtime.Serialization;
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class ActivityModel {
 		[DataMember]
 		public string Email { get; set; }

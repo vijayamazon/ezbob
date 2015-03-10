@@ -1,6 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies
 {
+	using System;
+	using System.Threading;
 	using API;
+	using SalesForceLib.Models;
 
 	public class VipRequest : AStrategy
 	{
@@ -25,8 +28,18 @@
 		{
 			SetTemplateAndVariables();
 			m_oMailer.SendMailViaMandrill(_mailMetaData);
+
+			SalesForce.AddUpdateLeadAccount addLead = new SalesForce.AddUpdateLeadAccount(_email, _customerId, false, _customerId == 0);
+			addLead.Execute();
+			Thread.Sleep(40000); //ugly fix for SF race condition
+			SalesForce.AddTask addTask = new SalesForce.AddTask(_customerId, new TaskModel {
+				Email = _email,
+				Originator = "System",
+				CreateDate = DateTime.UtcNow,
+				DueDate = DateTime.UtcNow.AddDays(1),
 				Subject = "VIP request"
-				IsOpportunity = false,
+			});
+			addTask.Execute();
 		}
 
 		protected void SetTemplateAndVariables()

@@ -3,10 +3,12 @@
 	using System.Runtime.Serialization;
 
 	//todo use auto generated object from sales force
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class OpportunityModel {
 		[DataMember]
 		public string Email { get; set; }
+		[DataMember]
+		public string Name { get; set; }
 		[DataMember]
 		public DateTime? CreateDate { get; set; }
 		[DataMember]
