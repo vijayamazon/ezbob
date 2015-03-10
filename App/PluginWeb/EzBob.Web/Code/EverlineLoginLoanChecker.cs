@@ -4,7 +4,6 @@
 	using ConfigManager;
 	using log4net;
 	using Newtonsoft.Json;
-	using NUnit.Framework;
 	using RestSharp;
 
 	public class EverlineLoginLoanChecker {
