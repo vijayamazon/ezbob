@@ -138,10 +138,10 @@
 				this.sentDataRep.Save(sent);
 
 			} catch (HttpException e) {
-				Console.WriteLine(e);
+				//Console.WriteLine(e);
 				throw new StrategyAlert(this, string.Format("HttpException: Failed to transmit {1} for customer {0}, ", CustomerID, bizType.DescriptionAttr()), e);
 			} catch (Exception ex) {
-				Console.WriteLine(ex);
+			//	Console.WriteLine(ex);
 				throw new StrategyAlert(this, string.Format("Failed to transmit {1} for customer {0}", CustomerID, bizType.DescriptionAttr()), ex);
 			}
 		}

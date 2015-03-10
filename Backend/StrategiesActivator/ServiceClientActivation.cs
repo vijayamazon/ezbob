@@ -1374,8 +1374,8 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			log.Debug("activator: customerID: {0}", customerID);
 
-			AlibabaCustomerDataSharingActionResult result = serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW );
-			this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
+			ActionMetaData result = serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null );
+			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
 		}
 
 		

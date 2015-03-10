@@ -30,7 +30,6 @@
     <MetadataFile FileName="Ezbob.Backend.Models.xsd" MetadataType="Schema" ID="f26e950b-3254-40f5-8926-dda0410f5417" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="e85fbdbe-8e98-4b0a-b2f9-84221f582d19" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="DbConstants.xsd" MetadataType="Schema" ID="3b9b3070-8f9b-45ac-8c65-614a25bbab68" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="Ezbob.Backend.Models.Alibaba.xsd" MetadataType="Schema" ID="a620a83e-19c4-4320-a428-f3c287189d8b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="942011b1-41e7-46a5-95ed-64bfab3d58f2" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="25cc5a78-b4ed-4847-99f9-9c8e1ac07186" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="c6dd8ce7-310c-4088-af4d-286734ac1f6f" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />

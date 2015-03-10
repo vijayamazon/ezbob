@@ -751,7 +751,7 @@
 		string RequalifyCustomer(string customerEmail);
 
 		[OperationContract]
-		AlibabaCustomerDataSharingActionResult DataSharing(int customerID, AlibabaBusinessType businessType);
+		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
 
 	} // interface IEzService
 } // namespace EzService

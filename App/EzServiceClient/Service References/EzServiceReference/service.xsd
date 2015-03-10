@@ -419,13 +419,14 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
         <xs:element xmlns:q33="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="businessType" type="q33:AlibabaBusinessType" />
+        <xs:element minOccurs="0" name="uwID" nillable="true" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="DataSharingResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="DataSharingResult" nillable="true" type="q34:AlibabaCustomerDataSharingActionResult" />
+        <xs:element xmlns:q34="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="DataSharingResult" nillable="true" type="q34:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

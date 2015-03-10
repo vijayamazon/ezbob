@@ -1,25 +1,16 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using System;
-	using System.Diagnostics;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.Alibaba;
-	using Newtonsoft.Json;
 
 	partial class EzServiceImplementation {
 
-		public AlibabaCustomerDataSharingActionResult DataSharing(int customerID, AlibabaBusinessType businessType) {
-
-			DataSharing instance;
+		public ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwId) {
 
 			Log.Info("ESI: customerID: {0}, finalDecision: {1}", customerID, businessType);
 
-			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID, businessType);
+			ActionMetaData amd = Execute<DataSharing>(customerID, uwId, customerID, businessType);
 
-			Debug.WriteLine(JsonConvert.SerializeObject(instance.Result), "Alibaba Customer DataSharing esi");
-
-			return new AlibabaCustomerDataSharingActionResult {
-				Result = instance.Result
-			};
+			return amd;
 
 		}// DataSharing
 
