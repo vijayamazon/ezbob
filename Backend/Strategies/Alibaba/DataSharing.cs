@@ -56,7 +56,7 @@
 						"AlibabaCustomerDataSharing",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("CustomerID", this.CustomerID),
-						new QueryParameter("FinalDecision", AlibabaBusinessType.APPLICATION.DescriptionAttr())
+						new QueryParameter("FinalDecision", 0)
 					);
 					SendRequest(aliMember, this.Result, AlibabaBusinessType.APPLICATION);
 				}
@@ -67,7 +67,7 @@
 					"AlibabaCustomerDataSharing",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", this.CustomerID),
-					new QueryParameter("FinalDecision", this.businessType.DescriptionAttr())
+					new QueryParameter("FinalDecision", (this.businessType == AlibabaBusinessType.APPLICATION)?0:1)
 				);
 
 			Log.Debug("DataSharing strategy, execute customerID: {0}, finalDecision: {1}, Result: {2}", CustomerID, this.businessType.DescriptionAttr(), JsonConvert.SerializeObject(Result));
