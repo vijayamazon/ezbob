@@ -932,6 +932,9 @@ table.dashboard_sources {
     left: 0;
     z-index: 9999;
     overflow: hidden;
+	webkit-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.35);
+	-moz-box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.35);
+	box-shadow: 0px 0px 8px 0px rgba(0,0,0,0.35);
 }
 
 .modal-backdrop,
@@ -1006,10 +1009,8 @@ table.dashboard_sources {
 }
 
 #cboxContent {
-    margin-top: 32px;
+    margin-top: 0;
     overflow: visible;
-    /*background: #000;*/
-    border: #000 1px solid;
 }
 
 .cboxIframe {
@@ -1087,12 +1088,17 @@ table.dashboard_sources {
     }
 
 #cboxClose {
-    background-position: -50px 0px;
-    right: 0;
+	background-position: -51px -2px;
+    right: 3px;
+	top: 3px;
+	border: 1px grey solid;
+	-ms-border-radius: 50%;
+	border-radius: 50%;
 }
 
-    #cboxClose:hover {
-        background-position: -50px -25px;
+#cboxClose:hover {
+        background-position: -51px -27px;
+		border: 1px black solid;
     }
 
 .cboxSlideshow_on #cboxPrevious, .cboxSlideshow_off #cboxPrevious {
@@ -1312,6 +1318,13 @@ input[type="color"],
     background-size: contain;
     width: 759px;
     height: 77px;
+}
+
+.help_everline_header {
+    background: url(../everline/help/help_everline_header.png) no-repeat center 0;
+    background-size: contain;
+	height: 149px;
+	margin: -11px;
 }
 
 .accounts-list > div {

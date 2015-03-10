@@ -151,6 +151,12 @@
         height: 25px;
     }
 
+	.help_everline_header {
+		width: 320px;
+		height: 65px;
+		margin: 0;
+	}
+
     .SubBank {
         width: 92%;
     }
