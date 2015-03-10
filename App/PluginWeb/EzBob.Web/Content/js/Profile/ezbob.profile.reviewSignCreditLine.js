@@ -164,19 +164,19 @@ EzBob.Profile.ReviewSignCreditLineView = EzBob.View.extend({
 			creditFacilityAccepted: this.isAccepted(),
 		});
 
-		var self = this;
-
 		request.done(function(response) {
 			UnBlockUi();
 
 			if (response.success) {
 				EzBob.ShowMessageEx({
 					message: 'Your signature has been saved.',
-					title: 'Success',
-					timeout: 3,
+					title: 'Thank you!',
+					closeOnEscape: false,
+					onOk: function() {
+						BlockUi();
+						window.location.reload(true);
+					},
 				});
-
-				window.location.reload(true);
 
 				return;
 			} // if
