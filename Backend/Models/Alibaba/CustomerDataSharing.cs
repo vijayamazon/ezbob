@@ -92,17 +92,27 @@
 		[DataMember(EmitDefaultValue = true)]
 		public int? compEmployees { get; set; }
 
-		//Possible values:	PShip,  LLP, Limited, PShip3P
+		
+/*
+LLP = "LLP"
+P Ship3P = "PARTNERSHIP_3P"
+P Ship = "PARTNERSHIP"
+Limited = "LIMITED"
+*/
 		[DataMember(EmitDefaultValue = true, IsRequired = true)]
 		public string compEntityType {
 			get { return this._compEntityType; }
 			set {
 				switch (value) {
+				case "PShip":
+					this._compEntityType = "PARTNERSHIP";
+					break;
+				case "PShip3P":
+					this._compEntityType = "PARTNERSHIP_3P";
+					break;
 				case "LLP":
 				case "Limited":
-				case "PShip":
-				case "PShip3P":
-					this._compEntityType = value;
+					this._compEntityType = "LIMITED";
 					break;
 				}
 			}
