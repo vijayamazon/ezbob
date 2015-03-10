@@ -441,6 +441,7 @@
 				//Wizard
 				.Add("~/Content/js/Profile/ezbob.profile.payEarly.js")
 				.Add("~/Content/js/Profile/ezbob.profile.getCash.js")
+				.Add("~/Content/js/Profile/ezbob.profile.reviewSignCreditLine.js")
 				.Add("~/Content/js/Profile/ezbob.profile.signWidget.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shopbutton.js")
 				.Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")

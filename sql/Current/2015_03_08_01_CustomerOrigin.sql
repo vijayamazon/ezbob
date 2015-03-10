@@ -26,6 +26,7 @@ END
 GO
 
 IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('CustomerOrigin') AND name = 'PhoneNumber')
+BEGIN
 	ALTER TABLE CustomerOrigin ADD PhoneNumber NVARCHAR(32) NULL
 
 	EXECUTE('UPDATE CustomerOrigin SET PhoneNumber = ''0''')
@@ -33,9 +34,11 @@ IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('CustomerOrigin') A
 	ALTER TABLE CustomerOrigin ALTER COLUMN PhoneNumber NVARCHAR(32) NOT NULL
 
 	INSERT INTO #new_cols (a) VALUES (1)
+END
 GO
 
 IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('CustomerOrigin') AND name = 'CustomerCareEmail')
+BEGIN
 	ALTER TABLE CustomerOrigin ADD CustomerCareEmail NVARCHAR(255) NULL
 
 	EXECUTE('UPDATE CustomerOrigin SET CustomerCareEmail = ''customercare''')
@@ -43,6 +46,7 @@ IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('CustomerOrigin') A
 	ALTER TABLE CustomerOrigin ALTER COLUMN CustomerCareEmail NVARCHAR(255) NOT NULL
 
 	INSERT INTO #new_cols (a) VALUES (1)
+END
 GO
 
 IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('CustomerOrigin') AND name = 'MetaDescription')

@@ -812,6 +812,7 @@
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.reviewSignCreditLine.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.selectcard.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.valentine2015.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.ny2015.js" />
@@ -855,6 +856,8 @@
     <Content Include="Areas\Customer\Views\Agreement\EVLPre-Contract-Agreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLGuarantyAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLCreditActAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditFacility.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\ReviewSignCreditLine.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

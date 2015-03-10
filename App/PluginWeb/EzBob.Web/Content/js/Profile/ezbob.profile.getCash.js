@@ -107,18 +107,49 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 	events: {
 		'click button.get-cash': 'getCash',
+		'click button.choose-amount-wait': 'maybeShowCreditLine',
 		'click button.apply-for-loan': 'applyForALoan',
 	}, // events
 
 	getCash: function() {
-		if (this.customer.hasLateLoans())
-			return;
-
 		if (this.customer.get('state') !== 'get')
 			return;
 
-		window.location.href = "#GetCash";
+		if (this.customer.get('IsAlibaba'))
+			this.showCreditLine();
+		else {
+			if (this.customer.hasLateLoans())
+				return;
+
+			window.location.href = '#GetCash';
+		} // if
 	}, // getCash
+
+	maybeShowCreditLine: function() {
+		if (this.customer.get('IsAlibaba'))
+			this.showCreditLine();
+	}, // maybeShowCreditLine
+
+	showCreditLine: function() {
+		var clView = new EzBob.Profile.ReviewSignCreditLineView({
+			customerID: this.customer.get('Id'),
+			cashRequestID: this.customer.get('LastCashRequestID'),
+			signedLegalID: this.customer.get('SignedLegalID'),
+
+			firstName: this.customer.get('FirstName'),
+			middleName: this.customer.get('MiddleName'),
+			lastName: this.customer.get('LastName'),
+
+			approvedAmount: this.customer.get('LastApprovedAmount'),
+			repaymentPeriod: this.customer.get('LastApprovedRepaymentPeriod'),
+			loanTypeID: this.customer.get('LastApprovedLoanTypeID'),
+
+			isPersonal: this.customer.get('BusinessTypeReduced') === 'Personal',
+
+			alibabaCreditFacilityTemplate: this.customer.get('AlibabaCreditFacilityTemplate'),
+		});
+		clView.render();
+	}, // showCreditLine
 
 	applyForALoan: function() {
 		UnBlockUi();
@@ -134,7 +165,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		if (sState !== 'apply' && sState !== 'bad' && sState !== 'disabled')
 			return;
 
-		if (this.customer.get('TrustPilotReviewEnabled') && this.customer.get("hasLoans") && this.customer.get('Origin') === 'ezbob') {
+		var isTrustPilotEnabled = this.customer.get('TrustPilotReviewEnabled') &&
+			this.customer.get('hasLoans') &&
+			(this.customer.get('Origin') === 'ezbob');
+
+		if (isTrustPilotEnabled) {
 			var nTrustPilotStatusID = this.customer.get('TrustPilotStatusID');
 
 			if (nTrustPilotStatusID === 0) {
@@ -155,11 +190,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			width: 500,
 			resizable: false,
 			closeOnEscape: false,
-			close: function(evt, ui) {
+			close: function() {
 				$(this).dialog('destroy');
 				self.$el.append(this);
 			}, // on close
-			open: function(evt, ui) {
+			open: function() {
 				var me = $(this);
 
 				$('.ui-dialog-titlebar', me.parent()).hide();
@@ -215,11 +250,11 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				});
 
 				var oList = oDlg.find('.account-list').empty();
-			    var updatesNeeded = false;
+				var updatesNeeded = false;
 
 				var sDisplayName;
 				if (oResponse.has_hmrc) {
-				    updatesNeeded = true;
+					updatesNeeded = true;
 					for (var i = 0; i < oResponse.linked_hmrc.length; i++) {
 						sDisplayName = oResponse.linked_hmrc[i];
 
@@ -235,14 +270,16 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				} // if
 
 				if (oResponse.HasUploadedHmrc && !oResponse.vat_return_is_up_to_date) {
-				    updatesNeeded = true;
+					updatesNeeded = true;
 					oList.append(that.createUpdateEntry(
 						'your VAT return data', 'vat-return-list-item', { type: 'vat-return', }
 					));
 				} // if
 
 				if (oResponse.has_ekm) {
-				    updatesNeeded = true;
+					updatesNeeded = true;
+
+					// ReSharper disable once MissingHasOwnPropertyInForeach
 					for (sDisplayName in oResponse.ekms) {
 						var sErrorMsg = oResponse.ekms[sDisplayName];
 
@@ -259,26 +296,26 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 				} // if has EKM
 
 				if (oResponse.has_yodlee) {
-				    updatesNeeded = true;
+					updatesNeeded = true;
 					oList.append(that.createUpdateEntry(
 						'your bank account', 'yodlee-list-item', { type: 'bank', }
 					));
 				} // if has yodlee
 
-			    if (updatesNeeded) {
-			        that.$el.find('.refresh-account-help').colorbox({
-			            href: '#refresh-accounts-dlg',
-			            inline: true,
-			            open: true,
-			            onClosed: function() {
-			                that.refreshAccount();
-			            },
-			        });
-			    } else {
-			        that.directApplyForLoan();
-			    }
-			    
-			    return;
+				if (updatesNeeded) {
+					that.$el.find('.refresh-account-help').colorbox({
+						href: '#refresh-accounts-dlg',
+						inline: true,
+						open: true,
+						onClosed: function() {
+							that.refreshAccount();
+						},
+					});
+				} else {
+					that.directApplyForLoan();
+				}
+
+				return;
 			} // if
 
 			that.customer.set('state', 'wait');
@@ -312,6 +349,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 	refreshAccount: function() {
 		$.colorbox.remove();
+
 		if (!this.refreshAccountData)
 			return;
 
@@ -387,7 +425,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 		this.uploadUi.render();
 
-		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh-vat-return', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+		this.$el.find('.refresh-account-help').colorbox({
+			href: '#refresh-vat-return',
+			inline: true,
+			open: true,
+			onClosed: function() { $.colorbox.remove(); },
+		});
 	}, // refreshVatReturn
 
 	backFromUploadFiles: function(bRecheck) {
@@ -399,7 +442,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 	refreshYodlee: function() {
 		this.$el.find('#refreshYodleeBtn').attr('href', '' + window.gRootPath + 'Customer/YodleeMarketPlaces/RefreshYodlee');
-		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh_yodlee_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+		this.$el.find('.refresh-account-help').colorbox({
+			href: '#refresh_yodlee_help',
+			inline: true,
+			open: true,
+			onClosed: function() { $.colorbox.remove(); },
+		});
 	}, // refreshYodlee
 
 	refreshEkm: function() {
@@ -412,7 +460,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			this.ekmRefreshButtonEventSet = true;
 		} // if
 
-		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh_ekm_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+		this.$el.find('.refresh-account-help').colorbox({
+			href: '#refresh_ekm_help',
+			inline: true,
+			open: true,
+			onClosed: function() { $.colorbox.remove(); },
+		});
 	}, // refreshEkm
 
 	refreshLinkedHmrc: function() {
@@ -425,7 +478,12 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 			this.hmrcRefreshButtonEventSet = true;
 		} // if
 
-		this.$el.find('.refresh-account-help').colorbox({ href: '#refresh_hmrc_help', inline: true, open: true, onClosed: function() { $.colorbox.remove(); }, });
+		this.$el.find('.refresh-account-help').colorbox({
+			href: '#refresh_hmrc_help',
+			inline: true,
+			open: true,
+			onClosed: function() { $.colorbox.remove(); },
+		});
 	}, // refreshLinkedHmrc
 
 	validateAndUpdateAccount: function(sAccountType) {
@@ -556,11 +614,13 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		this.$el.html(this.templates[state](data));
 
 		this.$el.find('button').popover({ placement: 'top' });
-	    
-        if(this.customer.get("IsAlibaba")) {
-            this.$el.find('button.get-cash').text('Get a loan');
-            this.$el.find('button.choose-amount-wait').text('Get a loan');
-        }
+
+		if (this.customer.get('IsAlibaba')) {
+			var buttonText = (this.customer.get('SignedLegalID') > 0) ? 'Review credit line' : 'Sign agreement';
+
+			this.$el.find('button.get-cash').text(buttonText);
+			this.$el.find('button.choose-amount-wait').text(buttonText);
+		} // if
 
 		EzBob.UiAction.registerView(this);
 

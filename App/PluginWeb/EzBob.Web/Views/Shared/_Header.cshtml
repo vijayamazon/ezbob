@@ -24,25 +24,23 @@ case CustomerOriginEnum.everline:
 	</header>
 	break;
 
-case CustomerOriginEnum.ezbob:
-case CustomerOriginEnum.alibaba: {
-	bool isAlibaba = ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba;
-
-	if (isAlibaba) {
-		<div id="header-alibaba">
-			<div class="header-content">
-				<a href="mailto:info@ezbob.com">info@ezbob.com</a>
-				<img class="right-line" src="~/Content/alibaba/line.png">
-				<img class="ezbob-in-alibaba-logo" src="~/Content/alibaba/ezbob-logo.png">
-				<span>in partnership with</span>
-				
-				<img class="alibaba-logo" src="~/Content/alibaba/alibaba_logo.png">
-				<img class="left-line" src="~/Content/alibaba/line.png">
-				<img class="e-credit-line-logo" src="~/Content/alibaba/e-credit-line-logo.png">
-			</div>
+case CustomerOriginEnum.alibaba:
+	<div id="header-alibaba">
+		<div class="header-content">
+			<a href="mailto:info@ezbob.com">info@ezbob.com</a>
+			<img class="right-line" src="~/Content/alibaba/line.png">
+			<img class="ezbob-in-alibaba-logo" src="~/Content/alibaba/ezbob-logo.png">
+			<span>in partnership with</span>
+			
+			<img class="alibaba-logo" src="~/Content/alibaba/alibaba_logo.png">
+			<img class="left-line" src="~/Content/alibaba/line.png">
+			<img class="e-credit-line-logo" src="~/Content/alibaba/e-credit-line-logo.png">
 		</div>
-	}
+	</div>
 
+	goto case CustomerOriginEnum.ezbob;
+
+case CustomerOriginEnum.ezbob:
 	<div id="header">
 		<div class="header-bg-strip"></div>
 		<div class="header-inner">
@@ -68,5 +66,5 @@ case CustomerOriginEnum.alibaba: {
 			</ul>
 		</div>
 	</div>
-	} break;
+	break;
 }

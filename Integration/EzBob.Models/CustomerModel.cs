@@ -118,6 +118,9 @@ namespace EzBob.Models {
 		public bool IsLastApprovedLoanSourceEu { get; set; }
 		public bool IsLastApprovedLoanSourceCOSME { get; set; }
 
+		public int SignedLegalID { get; set; }
+		public long LastCashRequestID { get; set; }
+
 		public bool IsLoanDetailsFixed { get; set; }
 
 		public int IsLoanTypeSelectionAllowed { get; set; }
@@ -200,6 +203,14 @@ namespace EzBob.Models {
 		public string LotteryCode { get; set; }
 		public string Origin { get; set; }
 		public bool IsEverline { get; set; }
+
+		public string FirstName { get; set; }
+		public string MiddleName { get; set; }
+		public string LastName { get; set; }
+
+		public int LastApprovedAmount { get; set; }
+
+		public string AlibabaCreditFacilityTemplate { get; set; }
 	} // class CustomerModel
 
 	public class InvitedFriend {

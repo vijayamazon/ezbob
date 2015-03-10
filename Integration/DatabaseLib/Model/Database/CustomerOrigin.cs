@@ -42,6 +42,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public static bool IsEzbob(this CustomerOrigin cu) {
 			return cu != null && cu.GetOrigin() == CustomerOriginEnum.ezbob;
 		} // IsEzbob
+
+		public static bool IsAlibaba(this CustomerOrigin cu) {
+			return cu != null && cu.GetOrigin() == CustomerOriginEnum.alibaba;
+		} // IsAlibaba
 	} // class CustomerOriginExt
 
 	public class CustomerOriginMap : ClassMap<CustomerOrigin> {

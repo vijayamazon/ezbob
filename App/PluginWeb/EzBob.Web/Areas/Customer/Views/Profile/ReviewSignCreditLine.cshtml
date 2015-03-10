@@ -1,0 +1,34 @@
+﻿@model dynamic
+
+<h2>Review loan schedule</h2>
+
+If you took full amount today, your loan schedule would be:
+
+<div class="loan-schedule"></div>
+
+<h2><span class="agreement-title"></span> credit facility</h2>
+
+<div class="credit-facility"></div>
+
+<div class="credit-facility-template hide">
+	@{ Html.RenderPartial("~/Areas/Customer/Views/Agreement/AlibabaCreditFacility.cshtml"); }
+</div>
+
+<form class="signature-block">
+	<div class="form_field_container">
+		<input type="checkbox" id="creditFacilityAccepted" ui-event-control-id="review-credit-line:credit-facility-accepted" />
+		<label class="creditFacilityAccepted" for="creditFacilityAccepted" ui-event-control-id="review-credit-line:credit-facility-accepted-label">I have read and agree to the credit facility terms</label>
+	</div>
+
+	<div class="form_field_container sign-full-name hide">
+		<label class="attardi-input">
+			<span>Type your full name</span>
+			<input type="text" name="signedName" id="signedName" class="form_field" ui-event-control-id="review-credit-line:signed-name" />
+		</label>
+	</div>
+</form>
+
+<div class="buttons-container">
+	<button type="button" class="btn-grey btn-back button" ui-event-control-id="review-credit-line:back">Back</button>
+	<button type="button" class="btn-green btn-sign button" ui-event-control-id="review-credit-line:sign">Sign</button>
+</div>
