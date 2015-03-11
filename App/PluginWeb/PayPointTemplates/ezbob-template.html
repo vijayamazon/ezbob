@@ -1,19 +1,17 @@
-
 <!DOCTYPE html>
 <html>
 <head>
     <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-<script>
-    function CTIsPlayback() {
-        try { return parent && parent.WebPlayer; }
-        catch (e) { return false; }
-    }
-    if (!CTIsPlayback())
-        if (top != self)
-            top.location = location;
-</script>
 
-    
+    <script>
+        function CTIsPlayback() {
+            try { return parent && parent.WebPlayer; }
+            catch (e) { return false; }
+        }
+        if (!CTIsPlayback())
+            if (top != self)
+                top.location = location;
+    </script>
 
     <base href="https://app.ezbob.com"/>
 
@@ -74,14 +72,12 @@
         .PayPointHeader {
             margin-top: 80px;
         }
-        
+
         .wizard-steps {
             margin-bottom: -60px;
         }
 
     </style>
-
-
 
     <title>PayPoint: Fill Debit Card Details</title>
 
@@ -106,6 +102,20 @@
 
 <body auth="auth" data-user-name="" data-ref="" data-term="">
     <div id="wrapper">
+
+	<div id="header-alibaba" style="display: none;">
+		<div class="header-content">
+			<a href="mailto:info@ezbob.com">info@ezbob.com</a>
+			<img class="right-line" src="~/Content/alibaba/line.png">
+			<img class="ezbob-in-alibaba-logo" src="~/Content/alibaba/ezbob-logo.png">
+			<span>in partnership with</span>
+			
+			<img class="alibaba-logo" src="~/Content/alibaba/alibaba_logo.png">
+			<img class="left-line" src="~/Content/alibaba/line.png">
+			<img class="e-credit-line-logo" src="~/Content/alibaba/e-credit-line-logo.png">
+		</div>
+	</div>
+
     <div id="header" class="ezbob_header" style="display: none;">
         <div class="header-bg-strip"></div>
         <div class="header-inner">
@@ -540,18 +550,24 @@
                 var param = decodeURIComponent(getCallbackValue('cardMinExpiryDate') || "");
                 cardMinExpiryDate = moment(param || moment().add("months", 3), "DD/MM/YYYY");
             }
-            
+
             var hideSteps = decodeURIComponent(getCallbackValue('hideSteps') || "");
             if (hideSteps != 'True') {
                 $(".dashboard-steps").show();
             } else {
                 $('#amount-group').show();
             }
-            
+
             var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
-			$('.' + origin + '_header').show();
-			$('.' + origin + '_footer').show();
-			
+
+            if (origin === 'alibaba') {
+                $('#header-alibaba').show();
+                origin = 'ezbob';
+            }
+
+            $('.' + origin + '_header').show();
+            $('.' + origin + '_footer').show();
+
             var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
             //set user email in top bar
