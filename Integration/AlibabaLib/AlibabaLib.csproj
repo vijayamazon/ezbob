@@ -52,11 +52,11 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
-      <Project>{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}</Project>
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>
     </ProjectReference>
     <ProjectReference Include="..\DbConstants\DbConstants.csproj">
-      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
   </ItemGroup>
