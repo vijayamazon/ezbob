@@ -38,7 +38,7 @@ BEGIN
 		WHERE c.IsTest=0 AND c.CollectionStatus<>0 AND a.addressType IN (3,5)
 	)
 
-	SELECT C.Id CustomerId,C.Fullname,CS.Name Status,sum(L.Principal) AS Principal,  sum(L.Balance) AS Balance,
+	SELECT C.Id CustomerId,C.Fullname, co.ExperianCompanyName AS CompanyName, CS.Name Status,sum(L.Principal) AS Principal,  sum(L.Balance) AS Balance,
 		CASE WHEN LS.LoanSourceName = 'EU' THEN 'EU' ELSE '' END AS EU,
 		C.TypeOfBusiness,CP.Description ResidentialStatus, FirstNotRepaidLoan.FirstMissedRepaymentDate, pa.Address AS PersonalAddress, ca.Address AS CompanyAddress
 	FROM Customer C INNER JOIN CustomerStatuses CS ON C.CollectionStatus=CS.Id 
@@ -48,11 +48,13 @@ BEGIN
 	LEFT JOIN  FirstNotRepaidLoan ON C.Id = FirstNotRepaidLoan.Id
 	LEFT JOIN PersonalAddress pa ON C.Id = pa.CustomerID
 	LEFT JOIN CompanyAddress ca ON C.Id = ca.CustomerID
+	LEFT JOIN Company co ON C.CompanyId = co.Id
 	WHERE C.IsTest = 0 
 	AND C.CollectionStatus != 0  
 	AND L.Principal > 0 
-	GROUP BY C.Id,C.Fullname,CS.Name,LS.LoanSourceName,C.TypeOfBusiness,CP.Description,FirstNotRepaidLoan.FirstMissedRepaymentDate,pa.Address,ca.Address
+	GROUP BY C.Id,C.Fullname,CS.Name,LS.LoanSourceName,C.TypeOfBusiness,CP.Description,FirstNotRepaidLoan.FirstMissedRepaymentDate,pa.Address,ca.Address,co.ExperianCompanyName
 	ORDER BY CS.Name,sum(L.Principal) DESC
 END 
 
 GO
+
