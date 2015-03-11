@@ -1327,6 +1327,11 @@ input[type="color"],
 	margin: -11px;
 }
 
+.help_everline_content{
+	margin-left: 40px;
+	margin-right: 40px;
+}
+
 .accounts-list > div {
     margin-left: 0!important;
     margin-top: 20px;

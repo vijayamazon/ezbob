@@ -157,6 +157,11 @@
 		margin: 0;
 	}
 
+	.help_everline_content {
+		margin-left: 15px;
+		margin-right: 15px;
+	}
+
     .SubBank {
         width: 92%;
     }
