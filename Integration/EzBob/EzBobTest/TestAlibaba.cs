@@ -168,6 +168,7 @@ namespace EzBobTest {
 			Request Body: 	{ "Email"  :  "asdfas@com",  "BoolValue": true, "StringValue" :  "adfasfdasf" }			 
 			***/
 
+			/*
 			CompositeType data = new CompositeType();
 			data.Email = "asdfas@com";
 			data.BoolValue = false;
@@ -188,6 +189,7 @@ namespace EzBobTest {
 			} catch (Exception e) {
 				Console.WriteLine(e.Message);
 			}
+			*/
 		}
 
 		[Test]
