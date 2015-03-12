@@ -464,6 +464,9 @@
   <xs:complexType name="BrokerCustomerEntry">
     <xs:sequence>
       <xs:element minOccurs="0" name="ApplyDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="ApprovedAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CommissionAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CommissionPaymentDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />

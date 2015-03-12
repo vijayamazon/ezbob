@@ -87,6 +87,12 @@ footer {
         padding: 0;
     }
 
+.table-big{
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: scroll;
+}
+
 table.customer-list {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
