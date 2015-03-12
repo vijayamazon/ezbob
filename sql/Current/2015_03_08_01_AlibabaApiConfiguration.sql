@@ -30,17 +30,25 @@ IF @Environment = 'Prod'
 BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='AlibabaAppSecret')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AlibabaAppSecret', 'cc', 'Production Alibaba API appSecret')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AlibabaAppSecret', 'wpO07gmLj4xU', 'Production Alibaba API appSecret');
+	END
+	ELSE
+	BEGIN
+		UPDATE ConfigurationVariables SET  Value = 'wpO07gmLj4xU' WHERE Name = 'AlibabaAppSecret' AND [Description] = 'Production Alibaba API appSecret';
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='AlibabaBaseUrl')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AlibabaBaseUrl', 'aa', 'Production Alibaba API base url')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AlibabaBaseUrl', 'https://gw.api.alibaba.com/openapi/', 'Production Alibaba API base url')
+	END
+	ELSE
+	BEGIN
+		UPDATE ConfigurationVariables SET  Value = 'https://gw.api.alibaba.com/openapi/' WHERE Name = 'AlibabaBaseUrl' AND [Description] = 'Production Alibaba API base url';
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='AlibabaUrlPath')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AlibabaUrlPath', 'bb', 'Production Alibaba API url path')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AlibabaUrlPath', 'param2/1/alibaba.open/partner.feedback/643480', 'Production Alibaba API url path')
 	END	
 	
 END
