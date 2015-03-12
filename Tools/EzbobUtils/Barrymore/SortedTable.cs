@@ -8,19 +8,18 @@
 
 	[DataContract]
 	public class SortedTable<TRowKey, TColumnKey, TData> {
-
 		public SortedTable() {
-			m_oData = new SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>>();
+			this.data = new SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>>();
 			ColumnKeys = new SortedSet<TColumnKey>();
 		} // constructor
 
 		public bool Contains(TRowKey oRowKey) {
-			return m_oData.ContainsKey(oRowKey);
+			return this.data.ContainsKey(oRowKey);
 		} // Contains
 
 		public bool Contains(TRowKey oRowKey, TColumnKey oColumnKey) {
-			if (m_oData.ContainsKey(oRowKey)) {
-				SortedDictionary<TColumnKey, TData> oRow = m_oData[oRowKey];
+			if (this.data.ContainsKey(oRowKey)) {
+				SortedDictionary<TColumnKey, TData> oRow = this.data[oRowKey];
 
 				return oRow.ContainsKey(oColumnKey);
 			} // if
@@ -30,8 +29,8 @@
 
 		public SortedDictionary<TColumnKey, TData> this[TRowKey oRowKey] {
 			get { 
-				if (m_oData.ContainsKey(oRowKey))
-					return m_oData[oRowKey];
+				if (this.data.ContainsKey(oRowKey))
+					return this.data[oRowKey];
 
 				throw new KeyNotFoundException("Cannot find row by requested key");
 			} // get
@@ -39,8 +38,8 @@
 
 		public TData this[TRowKey oRowKey, TColumnKey oColumnKey] {
 			get {
-				if (m_oData.ContainsKey(oRowKey)) {
-					SortedDictionary<TColumnKey, TData> oRow = m_oData[oRowKey];
+				if (this.data.ContainsKey(oRowKey)) {
+					SortedDictionary<TColumnKey, TData> oRow = this.data[oRowKey];
 
 					if (oRow.ContainsKey(oColumnKey))
 						return oRow[oColumnKey];
@@ -51,11 +50,11 @@
 			set {
 				SortedDictionary<TColumnKey, TData> oRow;
 
-				if (m_oData.ContainsKey(oRowKey))
-					oRow = m_oData[oRowKey];
+				if (this.data.ContainsKey(oRowKey))
+					oRow = this.data[oRowKey];
 				else {
 					oRow = new SortedDictionary<TColumnKey, TData>();
-					m_oData[oRowKey] = oRow;
+					this.data[oRowKey] = oRow;
 				} // if
 
 				oRow[oColumnKey] = value;
@@ -67,7 +66,7 @@
 			if (ReferenceEquals(oAction, null))
 				throw new ArgumentNullException("oAction", "Action not specified.");
 
-			foreach (var pair in m_oData)
+			foreach (var pair in this.data)
 				foreach (var raip in pair.Value)
 					oAction(pair.Key, raip.Key, raip.Value);
 		} // ForEach
@@ -76,24 +75,40 @@
 			if (ReferenceEquals(oAction, null))
 				throw new ArgumentNullException("oAction", "Action not specified.");
 
-			foreach (var pair in m_oData)
+			foreach (var pair in this.data)
 				oAction(pair.Key, pair.Value);
 		} // ForEach
 
 		public SortedSet<TRowKey> RowKeys {
-			get { return new SortedSet<TRowKey>(m_oData.Keys); }
+			get { return new SortedSet<TRowKey>(this.data.Keys); }
 		} // RowKeys
 
 		[DataMember]
 		public SortedSet<TColumnKey> ColumnKeys { get; private set; }
 
 		public void Clear() {
-			m_oData.Clear();
+			this.data.Clear();
+			ColumnKeys.Clear();
 		} // Clear
 
 		public bool IsEmpty {
-			get { return m_oData.Count < 1; }
+			get { return this.data.Count < 1; }
 		} // IsEmpty
+
+		public bool HasAlignedColumns() {
+			foreach (KeyValuePair<TRowKey, SortedDictionary<TColumnKey, TData>> pair in this.data) {
+				SortedDictionary<TColumnKey, TData> column = pair.Value;
+
+				if (column.Count != ColumnKeys.Count)
+					return false;
+
+				foreach (KeyValuePair<TColumnKey, TData> pp in column)
+					if (!ColumnKeys.Contains(pp.Key))
+						return false;
+			} // for each row
+
+			return true;
+		} // HasAlignedColumns
 
 		public string ToFormattedString(
 			string sTitle = null,
@@ -132,7 +147,7 @@
 				oFirstRow.Add(sKey);
 			} // foreach key
 
-			foreach (KeyValuePair<TRowKey, SortedDictionary<TColumnKey, TData>> oRowKeyValues in m_oData) {
+			foreach (KeyValuePair<TRowKey, SortedDictionary<TColumnKey, TData>> oRowKeyValues in this.data) {
 				TRowKey oRowKey = oRowKeyValues.Key;
 				SortedDictionary<TColumnKey, TData> pcts = oRowKeyValues.Value;
 
@@ -164,7 +179,7 @@
 			} // for
 			oLine.Append(cLineChar);
 
-			string sLine = Environment.NewLine + oLine.ToString() + Environment.NewLine;
+			string sLine = Environment.NewLine + oLine + Environment.NewLine;
 
 			var os = new StringBuilder();
 
@@ -188,7 +203,6 @@
 		} // ToFormattedString
 
 		[DataMember]
-		private readonly SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>> m_oData;
-
+		private readonly SortedDictionary<TRowKey, SortedDictionary<TColumnKey, TData>> data;
 	} // class SortedTable
 } // namespace Ezbob.Utils

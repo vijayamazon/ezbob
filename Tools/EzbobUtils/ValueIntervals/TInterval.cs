@@ -30,7 +30,7 @@
 
 		public override string ToString() { return string.Format("[ {0} - {1} ]", Left, Right); } // ToString
 
-		public int CompareTo(TInterval<TFinite> other) {
+		public virtual int CompareTo(TInterval<TFinite> other) {
 			if (ReferenceEquals(other, null))
 				throw new ArgumentNullException();
 
@@ -51,8 +51,10 @@
 
 		protected TInterval(TInterval<TFinite> other) : this(other.Left, other.Right) {} // constructor
 
-		protected TInterval(Tuple<AIntervalEdge<TFinite>, AIntervalEdge<TFinite>> oEdges) : this(oEdges.Item1, oEdges.Item2) {
-		} // constructor
+		protected TInterval(
+			Tuple<AIntervalEdge<TFinite>,
+			AIntervalEdge<TFinite>> oEdges
+		) : this(oEdges.Item1, oEdges.Item2) {} // constructor
 
 		protected virtual TInterval<TFinite> Intersection(TInterval<TFinite> other) {
 			if (!Intersects(other))
