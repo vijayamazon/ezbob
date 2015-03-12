@@ -3,16 +3,10 @@
 	using System.Globalization;
 
 	public class DateIntervalEdge : AIntervalEdge<DateTime> {
-
-		public DateIntervalEdge(DateTime? oDate, EdgeType nDefaultInfinityType) {
-			if (oDate.HasValue) {
-				Type = EdgeType.Finite;
-				Value = oDate.Value.Date;
-			}
-			else {
-				Type = nDefaultInfinityType;
-				Value = default(DateTime);
-			} // if
+		public DateIntervalEdge(DateTime? oDate, EdgeType nDefaultInfinityType) : base(
+			oDate.HasValue ? EdgeType.Finite : nDefaultInfinityType,
+			oDate.HasValue ? oDate.Value.Date : default (DateTime)
+		) {
 		} // constructor
 
 		public override AIntervalEdge<DateTime> Previous() {
@@ -48,6 +42,5 @@
 		protected override string InfinityToString(bool bPositive, CultureInfo oCultureInfo) {
 			return bPositive ? "  forever  " : "   never   ";
 		} // InfinityToString
-
 	} // class DateIntervalEdge
 } // namespace

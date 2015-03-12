@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Ezbob.ValueIntervals {
+﻿namespace Ezbob.ValueIntervals {
+	using System;
 	using System.Globalization;
 
 	public abstract class AIntervalEdge<TFinite> : IComparable<AIntervalEdge<TFinite>>, IOrdinal<AIntervalEdge<TFinite>> where TFinite: IComparable<TFinite> {
-
 		public static bool operator ==(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			if (ReferenceEquals(a, b))
 				return true;
@@ -73,11 +71,11 @@ namespace Ezbob.ValueIntervals {
 			PositiveInfinity,
 		} // EdgeType
 
-		public virtual EdgeType Type { get; protected set; }
+		public virtual EdgeType Type { get; private set; }
 
 		public virtual bool IsFinite { get { return Type == EdgeType.Finite; } } // IsFinite
 
-		public virtual TFinite Value { get; protected set; }
+		public virtual TFinite Value { get; private set; }
 
 		public override bool Equals(object obj) {
 			return this == (AIntervalEdge<TFinite>)obj;
@@ -162,7 +160,5 @@ namespace Ezbob.ValueIntervals {
 		protected virtual string ValueToString(string sFormat, CultureInfo ci) {
 			return Value.ToString();
 		} // ValueToString
-
 	} // class AIntervalEdge
-
 } // namespace Ezbob.ValueIntervals

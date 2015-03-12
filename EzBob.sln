@@ -237,6 +237,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "API", "API", "{7CC3C94B-0C3
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzbobAPI", "EzbobAPI\EzbobAPI.csproj", "{AA027EB4-4FE1-4236-ACC2-B4F9A0A8CA18}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrices", "Tools\EzbobUtils\Matrices\Matrices.csproj", "{43BB65D6-C562-49C9-BB02-CC8275E39518}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1188,6 +1190,16 @@ Global
 		{AA027EB4-4FE1-4236-ACC2-B4F9A0A8CA18}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AA027EB4-4FE1-4236-ACC2-B4F9A0A8CA18}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{AA027EB4-4FE1-4236-ACC2-B4F9A0A8CA18}.Release|x86.ActiveCfg = Release|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{43BB65D6-C562-49C9-BB02-CC8275E39518}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1299,6 +1311,7 @@ Global
 		{198579CB-CD05-46F6-AFAC-75A982B3216A} = {DCBC1A64-44B4-47D5-9B12-C963FBA9C24C}
 		{E9580EFC-6014-4D3B-82A8-5F6D57213CE4} = {DCBC1A64-44B4-47D5-9B12-C963FBA9C24C}
 		{AA027EB4-4FE1-4236-ACC2-B4F9A0A8CA18} = {7CC3C94B-0C32-4652-B7CC-8C63F66FA731}
+		{43BB65D6-C562-49C9-BB02-CC8275E39518} = {6CD922BC-E41C-4B2E-B133-943764D6BC93}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .
