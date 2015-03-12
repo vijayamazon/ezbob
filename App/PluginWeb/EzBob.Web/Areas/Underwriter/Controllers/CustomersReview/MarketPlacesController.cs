@@ -21,7 +21,6 @@
 	using NHibernate;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
-	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -44,7 +43,8 @@
 			CompanyFilesMetaDataRepository companyFiles,
 			IWorkplaceContext context,
 			DatabaseDataHelper helper,
-			MarketPlaceRepository mpTypes) {
+			MarketPlaceRepository mpTypes
+		) {
 			_customerMarketplaces = customerMarketplaces;
 			_marketPlaces = marketPlaces;
 			m_oServiceClient = new ServiceClient();
@@ -60,18 +60,18 @@
 			_context = context;
 			_helper = helper;
 			_mpTypes = mpTypes;
-		}
+		} // constructor
 
 		public static long ToUnixTimestamp(DateTime d) {
 			var duration = d - new DateTime(1970, 1, 1, 0, 0, 0);
 			return (long)duration.TotalSeconds * 1000;
-		}
+		} // ToUnixTimestamp
 
 		[Transactional]
 		[Ajax]
 		public void AddSearchWord(string word) {
 			_yodleeSearchWordsRepository.AddWord(word);
-		}
+		} // AddSearchWord
 
 		[Transactional]
 		[Ajax]
@@ -105,19 +105,19 @@
 					t.RemoveEzbobCategorization();
 				}
 			}
-		}
+		} // AddYodleeRule
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult CheckForUpdatedStatus(int mpId) {
 			return Json(new { status = _customerMarketplaces.Get(mpId).GetUpdatingStatus() }, JsonRequestBehavior.AllowGet);
-		}
+		} // CheckForUpdatedStatus
 
 		[Transactional]
 		[Ajax]
 		public void DeleteSearchWord(string word) {
 			_yodleeSearchWordsRepository.DeleteWord(word);
-		}
+		} // DeleteSearchWord
 
 		[Ajax]
 		[HttpGet]
@@ -130,7 +130,7 @@
 			builder = builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
 			var model = builder.Create(mp, history);
 			return Json(model, JsonRequestBehavior.AllowGet);
-		}
+		} // Details
 
 		[Ajax]
 		[HttpPost]
@@ -139,7 +139,7 @@
 			var mp = _customerMarketplaces.Get(umi);
 			mp.Disabled = true;
 			return Json(new { });
-		}
+		} // Disable
 
 		public ActionResult DownloadCompanyFile(int fileId) {
 			var file = m_oServiceClient.Instance.GetCompanyFile(_context.UserId, fileId);
@@ -166,7 +166,7 @@
 			}
 
 			return null;
-		}
+		} // DownloadCompanyFile
 
 		[Ajax]
 		[HttpPost]
@@ -175,14 +175,14 @@
 			var mp = _customerMarketplaces.Get(umi);
 			mp.Disabled = false;
 			return Json(new { });
-		}
+		} // Enable
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {
 			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, null);
-			return Json(ar.Affordability, JsonRequestBehavior.AllowGet);
-		}
+			return Json(ar.MpModel.Affordability, JsonRequestBehavior.AllowGet);
+		} // GetAffordabilityData
 
 		[Ajax]
 		[HttpGet]
@@ -219,14 +219,14 @@
 				is_alibaba = customer.IsAlibaba,
 				value = cmarar.Value,
 			}, JsonRequestBehavior.AllowGet);
-		}
+		} // GetCustomerManualAnnualRevenue
 
 		[HttpGet]
 		public JsonResult GetCustomerMarketplacesHistory(int customerId) {
 			var customer = _customers.Get(customerId);
 			var models = _marketPlaces.GetMarketPlaceHistoryModel(customer);
 			return Json(models, JsonRequestBehavior.AllowGet);
-		}
+		} // GetCustomerMarketplacesHistory
 
 		[Ajax]
 		[HttpGet]
@@ -236,7 +236,7 @@
 				(ToUnixTimestamp(item.StartDate) + ToUnixTimestamp(item.EndDate)) / 2,
 				item.Revenue
 			}).Cast<object>().ToArray(), JsonRequestBehavior.AllowGet);
-		}
+		} // GetTeraPeakOrderItems
 
 		[Ajax]
 		[HttpGet]
@@ -248,13 +248,13 @@
 				}
 				Log.Info("history after {0}", history);
 				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, history);
-				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
-				return Json(mps.ToList(), JsonRequestBehavior.AllowGet);
+				var mps = ar.MpModel.MarketPlaces;
+				return Json(mps, JsonRequestBehavior.AllowGet);
 			} catch (Exception ex) {
 				Log.Error(ex, "failed to retrieve mp data from service");
 				return Json(new List<MarketPlaceModel>(), JsonRequestBehavior.AllowGet);
-			}
-		}
+			} // try
+		} // Index
 
 		[Ajax]
 		public JsonResult ParseYodlee(int customerId, int fileId) {
@@ -296,9 +296,9 @@
 				var mp = _helper.SaveOrUpdateCustomerMarketplace("ParsedBank", yodleeDatabaseMarketPlace, securityData, customer);
 
 				m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false, _context.UserId);
-			}
+			} // if
 			return Json(new { });
-		}
+		} // ParseYodlee
 
 		[Ajax]
 		[Transactional]
@@ -327,7 +327,7 @@
 					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, umi, true, _context.UserId);
 				break;
 			} // switch
-		}
+		} // ReCheckMarketplaces
 
 		[Ajax]
 		[HttpPost]
@@ -340,7 +340,7 @@
 				mp.DisplayName,
 				"Customer/Profile/RenewEbayToken/"
 			);
-		}
+		} // RenewEbayToken
 
 		[Ajax]
 		[HttpPost]
@@ -380,7 +380,7 @@
 				is_alibaba = customer.IsAlibaba,
 				value = cmarar.Value,
 			});
-		}
+		} // SetCustomerManualAnnualRevenue
 
 		[Transactional]
 		public ActionResult TryRecheckYodlee(int umi) {
@@ -420,7 +420,7 @@
 			var callback = Url.Action("YodleeCallback", "YodleeRecheck", new { Area = "Underwriter" }, "https") + "/" + umi;
 			string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 			return Redirect(finalUrl);
-		}
+		} // TryRecheckYodlee
 
 		// TryRecheckYodlee
 		[HttpPost]
@@ -479,16 +479,7 @@
 			}
 
 			return error.Length > 0 ? Json(new { error = error.ToString() }) : Json(new { success = true });
-		}
-
-		// GetAffordabilityData
-		[Ajax]
-		[HttpGet]
-		public JsonResult YodleeDetails(int id) {
-			var mp = _customerMarketplaces.Get(id);
-			var b = new YodleeMarketplaceModelBuilder(_session);
-			return Json(b.BuildYodlee(mp, null), JsonRequestBehavior.AllowGet);
-		}
+		} // UploadFile
 
 		private static readonly ASafeLog Log = new SafeILog(typeof(MarketPlacesController));
 		private readonly CompanyFilesMetaDataRepository _companyFiles;
@@ -506,13 +497,5 @@
 		private readonly YodleeRuleRepository _yodleeRuleRepository;
 		private readonly YodleeSearchWordsRepository _yodleeSearchWordsRepository;
 		private readonly ServiceClient m_oServiceClient;
-		// ReCheckMarketplaces
-
-		// UploadedFiles
-
-		// GetCustomerManualAnnualRevenue
-
-		// SetCustomerManualAnnualRevenue
-
 	} // class MarketPlacesController
 } // namespace
