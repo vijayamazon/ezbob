@@ -101,7 +101,7 @@ BEGIN
 			)
 		) AS MPsNumber,
 		-- EZBOB seniority
-		ISNULL(DateDiff(DAY, c.GreetingMailSentDate, @Today), 0) AS EZBOBSeniority,
+		ISNULL(DATEDIFF(month, c.GreetingMailSentDate, @Today), 0) AS EzbobSeniorityMonths,
 		-- EZBOB #of previous ON time loans
 		(
 			SELECT COUNT(l.id)

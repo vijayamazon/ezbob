@@ -8,10 +8,12 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Utils;
 	using Models;
+	using Newtonsoft.Json;
 	using Web.Models;
 	using NHibernate;
 	using System;
 	using System.Text;
+	using EZBob.DatabaseLib.Repository;
 	using log4net;
 
 	public class FullCustomerController : Controller {
@@ -38,6 +40,8 @@
 			_docRepo = docRepo;
 			_bugs = bugs;
 			_loanRepository = loanRepository;
+			this.customerAddressRepository = customerAddressRepository;
+			this.landRegistryRepository = landRegistryRepository;
 			_propertiesModelBuilder = propertiesModelBuilder;
 
 		} // constructor
@@ -133,8 +137,8 @@
 		private void WriteToLog(TimeCounter tc) {
 			var sb = new StringBuilder();
 			sb.AppendLine(tc.Title);
-			foreach (var time in tc.Checkpoints)
-				sb.AppendFormat("\t{0}: {1}ms\n", time.Item1, time.Item2);
+			foreach (var time in tc.Steps)
+				sb.AppendFormat("\t{0}: {1}ms\n", time.Name, time.Length);
 
 			Log.InfoFormat("{0}", sb);
 		}
@@ -148,6 +152,8 @@
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly PropertiesModelBuilder _propertiesModelBuilder;
 		private readonly LoanRepository _loanRepository;
+		private readonly CustomerAddressRepository customerAddressRepository;
+		private readonly LandRegistryRepository landRegistryRepository;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(FullCustomerController));

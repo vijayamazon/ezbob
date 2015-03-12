@@ -24,6 +24,7 @@
 			Medal();
 			IsFraud();
 			IsBrokerCustomer();
+			CompanyIsDissolved();
 			TodayApprovedCount();
 			TodayOpenLoans();
 			OutstandingOffers();
@@ -68,6 +69,17 @@
 		private DateTime Now {
 			get { return this.m_oAgent.Now; }
 		} // Now
+
+		private void CompanyIsDissolved() {
+			bool isDissolved =
+				Trail.MyInputData.MetaData.CompanyDissolutionDate.HasValue &&
+				Trail.MyInputData.MetaData.CompanyDissolutionDate.Value <= Now;
+
+			if (isDissolved)
+				StepFailed<CompanyIsDissolved>().Init(Trail.MyInputData.MetaData.CompanyDissolutionDate);
+			else
+				StepDone<CompanyIsDissolved>().Init(Trail.MyInputData.MetaData.CompanyDissolutionDate);
+		} // CompanyIsDissolved
 
 		private void IsDirector() {
 			if (!Trail.MyInputData.MetaData.IsLimitedCompanyType) {

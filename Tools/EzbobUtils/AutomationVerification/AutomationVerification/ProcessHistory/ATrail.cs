@@ -8,6 +8,7 @@
 	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Utils;
 	using JetBrains.Annotations;
 	using MailApi;
 
@@ -323,6 +324,12 @@
 			} // try
 		} // Save
 
+		public virtual List<TimeCounter.Step> StepTimes { get { return this.timer.Steps; } }
+
+		public virtual TimeCounter.Timer AddCheckpoint(ProcessCheckpoints checkpoint) {
+			return this.timer.AddStep(((int)checkpoint).ToString());
+		} // AddCheckpoint
+
 		protected ATrail(
 			int nCustomerID,
 			DecisionStatus nDecisionStatus,
@@ -341,6 +348,8 @@
 			m_sFromEmailAddress = fromEmailAddress;
 			m_sFromEmailName = fromEmailName;
 			m_oLog = oLog ?? new SafeLog();
+
+			this.timer = new TimeCounter();
 		} // constructor
 
 		protected virtual bool IsDecisionLocked {
@@ -351,6 +360,12 @@
 		private bool m_bIsDecisionLocked;
 
 		protected abstract void UpdateDecision(DecisionStatus nDecisionStatus);
+
+		private class TimerStepDBModel {
+			public int Position { [UsedImplicitly] get; set; }
+			public long StepNameID { [UsedImplicitly] get; set; }
+			public double Length { [UsedImplicitly] get; set; }
+		} // class TimerStepDBModel
 
 		private class SaveDecisionTrail : AStoredProcedure {
 			public SaveDecisionTrail(
@@ -376,6 +391,18 @@
 
 				for (int i = 0; i < oTrail.Length; i++)
 					Traces.Add(oTrail.m_oSteps[i].ToDBModel(i, false));
+
+				TimerSteps = new List<TimerStepDBModel>();
+
+				for (int i = 0; i < oTrail.StepTimes.Count; i++) {
+					TimeCounter.Step st = oTrail.StepTimes[i];
+
+					TimerSteps.Add(new TimerStepDBModel {
+						Position = i,
+						StepNameID = long.Parse(st.Name),
+						Length = st.Length,
+					});
+				} // for each
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -458,6 +485,9 @@
 			public List<ATrace.DBModel> Traces { get; set; }
 
 			[UsedImplicitly]
+			public List<TimerStepDBModel> TimerSteps { get; set; }
+
+			[UsedImplicitly]
 			public List<string> Notes {
 				get { return m_oTrail.m_oDiffNotes; }
 				// ReSharper disable ValueParameterNotUsed
@@ -535,5 +565,6 @@
 		private readonly string m_sToExplanationEmailAddress;
 		private readonly string m_sFromEmailAddress;
 		private readonly string m_sFromEmailName;
+		private readonly TimeCounter timer;
 	} // class Trail
 } // namespace

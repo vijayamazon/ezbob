@@ -2,7 +2,6 @@
 	using System;
 
 	public class TInterval<TFinite> : IComparable<TInterval<TFinite>> where TFinite : IComparable<TFinite> {
-
 		public static TInterval<TFinite> operator *(TInterval<TFinite> a, TInterval<TFinite> b) {
 			return ReferenceEquals(a, null) ? null : a.Intersection(b);
 		} // operator *
@@ -89,6 +88,5 @@
 				new TInterval<TFinite>(other.Right.Next(), Right)
 			);
 		} // Difference
-
 	} // class TInterval
 } // namespace

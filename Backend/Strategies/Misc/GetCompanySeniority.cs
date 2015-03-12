@@ -4,7 +4,6 @@
 	using Ezbob.Logger;
 
 	public class GetCompanySeniority : AStrategy {
-
 		public GetCompanySeniority(int nCustomerID, bool isLimited) {
 			m_oSp = new SpGetCompanySeniority(nCustomerID, isLimited, DB, Log);
 		} // constructor
@@ -34,6 +33,5 @@
 			public int CustomerID { get; set; }
 			public bool IsLimited { get; set; }
 		} // class SpGetCompanySeniority
-
 	} // class GetCompanySeniority
 } // namespace

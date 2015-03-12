@@ -99,6 +99,11 @@
 			Reject_NumOfLateAccounts = configs.Reject_NumOfLateAccounts;
 			RejectionLastValidLate = configs.RejectionLastValidLate;
 			AutoRejectConsumerCheckAge = configs.AutoRejectConsumerCheckAge;
+
+			EnabledTraces.Clear();
+
+			foreach (var s in configs.EnabledTraces)
+				EnabledTraces.Add(s);
 		} // InitCfg
 
 		public void InitData(RejectionInputData data) {

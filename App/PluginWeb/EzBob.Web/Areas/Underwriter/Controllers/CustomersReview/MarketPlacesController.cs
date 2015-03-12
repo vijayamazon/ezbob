@@ -21,6 +21,7 @@
 	using NHibernate;
 	using Ezbob.Utils.Security;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
+	using Newtonsoft.Json;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -126,7 +127,7 @@
 			}
 			var mp = _customerMarketplaces.Get(umi);
 			var builder = ObjectFactory.TryGetInstance<IMarketplaceModelBuilder>(mp.Marketplace.GetType().ToString());
-			builder =  builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
+			builder = builder ?? ObjectFactory.GetNamedInstance<IMarketplaceModelBuilder>("DEFAULT");
 			var model = builder.Create(mp, history);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -180,7 +181,7 @@
 		[HttpGet]
 		public JsonResult GetAffordabilityData(int id) {
 			var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, null);
-			return Json(ar.MpModel.Affordability, JsonRequestBehavior.AllowGet);
+			return Json(ar.Affordability, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
@@ -247,8 +248,8 @@
 				}
 				Log.Info("history after {0}", history);
 				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, history);
-				var mps = ar.MpModel.MarketPlaces;
-				return Json(mps, JsonRequestBehavior.AllowGet);
+				var mps = JsonConvert.DeserializeObject<MarketPlaceModel[]>(ar.Models);
+				return Json(mps.ToList(), JsonRequestBehavior.AllowGet);
 			} catch (Exception ex) {
 				Log.Error(ex, "failed to retrieve mp data from service");
 				return Json(new List<MarketPlaceModel>(), JsonRequestBehavior.AllowGet);
@@ -481,7 +482,14 @@
 		}
 
 		// GetAffordabilityData
-		
+		[Ajax]
+		[HttpGet]
+		public JsonResult YodleeDetails(int id) {
+			var mp = _customerMarketplaces.Get(id);
+			var b = new YodleeMarketplaceModelBuilder(_session);
+			return Json(b.BuildYodlee(mp, null), JsonRequestBehavior.AllowGet);
+		}
+
 		private static readonly ASafeLog Log = new SafeILog(typeof(MarketPlacesController));
 		private readonly CompanyFilesMetaDataRepository _companyFiles;
 		private readonly IWorkplaceContext _context;

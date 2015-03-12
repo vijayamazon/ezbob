@@ -7,20 +7,32 @@
 	using Logger;
 
 	public class TimeCounter {
-
-		public TimeCounter(string sTitle) {
-			m_sTitle = (sTitle ?? string.Empty).Trim();
-			m_oCheckpoints = new List<Tuple<string, double>>();
+		public TimeCounter(string sTitle = null) {
+			Title = (sTitle ?? string.Empty).Trim();
+			Steps = new List<Step>();
 		} // constructor
 
 		[StringFormatMethod("sFormat")]
 		public Timer AddStep(string sFormat, params object[] args) {
-			return new Timer(m_oCheckpoints, sFormat, args);
+			return new Timer(Steps, sFormat, args);
 		} // AddStep
 
-		public class Timer : IDisposable {
+		public class Step {
+			public Step(string name, double length) {
+				Name = name;
+				Length = length;
+			} // constructor
 
-			internal Timer(List<Tuple<string, double>> oCheckpoints, string sFormat, params object[] args) {
+			public string Name { get; private set; }
+			public double Length { get; private set; }
+		} // class Step
+
+		public List<Step> Steps { get; private set; }
+
+		public string Title { get; private set; }
+
+		public class Timer : IDisposable {
+			internal Timer(List<Step> oCheckpoints, string sFormat, params object[] args) {
 				m_oStopwatch = Stopwatch.StartNew();
 				m_oCheckpoints = oCheckpoints;
 				m_sCheckpoint = string.Format(sFormat, args);
@@ -28,30 +40,24 @@
 
 			public void Dispose() {
 				m_oStopwatch.Stop();
-				m_oCheckpoints.Add(new Tuple<string, double>(m_sCheckpoint, m_oStopwatch.Elapsed.TotalMilliseconds));
+				m_oCheckpoints.Add(new Step(m_sCheckpoint, m_oStopwatch.Elapsed.TotalMilliseconds));
 			} // Dispose
 
 			private readonly Stopwatch m_oStopwatch;
 			private readonly string m_sCheckpoint;
-			private readonly List<Tuple<string, double>> m_oCheckpoints;
-
+			private readonly List<Step> m_oCheckpoints;
 		} // class Timer
 
 		public void Log(ASafeLog oLog, Severity nSeverity = Severity.Debug) {
 			var sb = new StringBuilder();
 
-			sb.AppendLine(m_sTitle);
+			sb.AppendLine(Title);
 
-			foreach (var time in m_oCheckpoints)
-				sb.AppendFormat("\t{0}: {1}ms\n", time.Item1, time.Item2);
+			foreach (var time in Steps)
+				sb.AppendFormat("\t{0}: {1}ms\n", time.Name, time.Length);
 
 			oLog.Say(nSeverity, "{0}", sb);
 		} // Log
-
-		private readonly List<Tuple<string, double>> m_oCheckpoints;
-		public List<Tuple<string, double>> Checkpoints { get { return m_oCheckpoints; } }
-		public string Title { get { return m_sTitle; } }
-		private readonly string m_sTitle;
 
 	} // class TimeCounter
 } // namespace

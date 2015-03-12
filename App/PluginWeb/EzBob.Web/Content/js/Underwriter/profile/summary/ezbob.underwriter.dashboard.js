@@ -75,8 +75,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
     onRender: function () {
         this.experianSpark();
         this.drawGraphs();
-     
-	    this.$el.find('a[data-bug-type]').tooltip({
+        this.$el.find('a[data-bug-type]').tooltip({
             title: 'Report bug'
         });
         this.$el.find('[data-toggle="tooltip"]').tooltip({

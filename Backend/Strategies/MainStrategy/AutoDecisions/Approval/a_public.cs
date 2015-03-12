@@ -4,6 +4,7 @@
 	using System.Data;
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
+	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
@@ -29,26 +30,6 @@
 			AConnection db,
 			ASafeLog log
 		) {
-			Now = DateTime.UtcNow;
-
-			this.db = db;
-			this.log = log ?? new SafeLog();
-
-			this.loanRepository = ObjectFactory.GetInstance<LoanRepository>();
-			var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
-			this.cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
-			this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
-			this.customerAnalytics = ObjectFactory.GetInstance<CustomerAnalyticsRepository>();
-
-			this.customerId = customerId;
-			this.medalClassification = medalClassification;
-			this.medalType = medalType;
-			this.turnoverType = turnoverType;
-
-			this.consumerCaisDetailWorstStatuses = new List<string>();
-
-			this.customer = customerRepo.ReallyTryGet(customerId);
-
 			this.m_oTrail = new ApprovalTrail(
 				customerId,
 				this.log,
@@ -59,6 +40,33 @@
 				Amount = offeredCreditLine,
 			};
 
+			using (m_oTrail.AddCheckpoint(ProcessCheckpoints.Creation)) {
+				Now = DateTime.UtcNow;
+
+				this.db = db;
+				this.log = log ?? new SafeLog();
+
+				this.loanRepository = ObjectFactory.GetInstance<LoanRepository>();
+				var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
+				this.cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
+				this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
+				this.customerAnalytics = ObjectFactory.GetInstance<CustomerAnalyticsRepository>();
+
+				this.customerId = customerId;
+				this.medalClassification = medalClassification;
+				this.medalType = medalType;
+				this.turnoverType = turnoverType;
+
+				this.consumerCaisDetailWorstStatuses = new List<string>();
+
+				this.customer = customerRepo.ReallyTryGet(customerId);
+
+				this.m_oTurnover = new AutoApprovalTurnover {
+					TurnoverType = this.turnoverType,
+				};
+				this.m_oTurnover.Init();
+			} // using timer step
+
 			this.m_oSecondaryImplementation = new Agent(
 				customerId,
 				offeredCreditLine,
@@ -68,114 +76,121 @@
 				db,
 				log
 			);
-
-			this.m_oTurnover = new AutoApprovalTurnover {
-				TurnoverType = this.turnoverType,
-			};
-			this.m_oTurnover.Init();
 		} // constructor
 
 		public Approval Init() {
-			var stra = new LoadExperianConsumerData(this.customerId, null, null);
-			stra.Execute();
+			using (m_oTrail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
+				var stra = new LoadExperianConsumerData(this.customerId, null, null);
+				stra.Execute();
 
-			this.m_oConsumerData = stra.Result;
+				this.m_oConsumerData = stra.Result;
 
-			if (this.customer == null) {
-				this.isBrokerCustomer = false;
-				this.hasLoans = false;
-			} else {
-				this.isBrokerCustomer = this.customer.Broker != null;
-				this.hasLoans = this.customer.Loans.Any();
-			} // if
+				if (this.customer == null) {
+					this.isBrokerCustomer = false;
+					this.hasLoans = false;
+				} else {
+					this.isBrokerCustomer = this.customer.Broker != null;
+					this.hasLoans = this.customer.Loans.Any();
+				} // if
 
-			bool hasLtd =
-				(this.customer != null) &&
-				(this.customer.Company != null) &&
-				(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) &&
-				(this.customer.Company.ExperianRefNum != "NotFound");
+				bool hasLtd =
+					(this.customer != null) &&
+					(this.customer.Company != null) &&
+					(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited) &&
+					(this.customer.Company.ExperianRefNum != "NotFound");
 
-			if (hasLtd) {
-				var limited = new LoadExperianLtd(this.customer.Company.ExperianRefNum, 0);
-				limited.Execute();
+				if (hasLtd) {
+					var limited = new LoadExperianLtd(this.customer.Company.ExperianRefNum, 0);
+					limited.Execute();
 
-				this.directors = new List<Name>();
+					this.companyDissolutionDate = limited.Result.DissolutionDate;
 
-				foreach (ExperianLtdDL72 dataRow in limited.Result.GetChildren<ExperianLtdDL72>())
-					this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+					this.directors = new List<Name>();
 
-				foreach (ExperianLtdDLB5 dataRow in limited.Result.GetChildren<ExperianLtdDLB5>())
-					this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
-			} // if
+					foreach (ExperianLtdDL72 dataRow in limited.Result.GetChildren<ExperianLtdDL72>())
+						this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
 
-			this.hmrcNames = new List<string>();
+					foreach (ExperianLtdDLB5 dataRow in limited.Result.GetChildren<ExperianLtdDLB5>())
+						this.directors.Add(new Name(dataRow.FirstName, dataRow.LastName));
+				} // if
 
-			this.db.ForEachRowSafe(
-				names => {
-					string name = AutomationCalculator.Utils.AdjustCompanyName(names["BusinessName"]);
-					if (name != string.Empty)
-						this.hmrcNames.Add(name);
-				},
-				"GetHmrcBusinessNames",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId)
-			);
+				this.hmrcNames = new List<string>();
 
-			SafeReader sr = this.db.GetFirst(
-				"GetExperianMinMaxConsumerDirectorsScore",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId),
-				new QueryParameter("Now", Now)
-			);
+				this.db.ForEachRowSafe(
+					names => {
+						string name = AutomationCalculator.Utils.AdjustCompanyName(names["BusinessName"]);
+						if (name != string.Empty)
+							this.hmrcNames.Add(name);
+					},
+					"GetHmrcBusinessNames",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", this.customerId)
+				);
 
-			if (!sr.IsEmpty)
-				this.minExperianScore = sr["MinExperianScore"];
+				SafeReader sr = this.db.GetFirst(
+					"GetExperianMinMaxConsumerDirectorsScore",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", this.customerId),
+					new QueryParameter("Now", Now)
+				);
 
-			var oScore = new QueryParameter("CompanyScore") {
-				Type = DbType.Int32,
-				Direction = ParameterDirection.Output,
-			};
+				if (!sr.IsEmpty)
+					this.minExperianScore = sr["MinExperianScore"];
 
-			var oDate = new QueryParameter("IncorporationDate") {
-				Type = DbType.DateTime2,
-				Direction = ParameterDirection.Output,
-			};
+				var oScore = new QueryParameter("CompanyScore") {
+					Type = DbType.Int32,
+					Direction = ParameterDirection.Output,
+				};
 
-			this.db.ExecuteNonQuery(
-				"GetCompanyScoreAndIncorporationDate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId),
-				new QueryParameter("TakeMinScore", true),
-				oScore,
-				oDate
-			);
+				var oDate = new QueryParameter("IncorporationDate") {
+					Type = DbType.DateTime2,
+					Direction = ParameterDirection.Output,
+				};
 
-			int nScore;
-			if (int.TryParse(oScore.SafeReturnedValue, out nScore))
-				this.minCompanyScore = nScore;
+				this.db.ExecuteNonQuery(
+					"GetCompanyScoreAndIncorporationDate",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("CustomerId", this.customerId),
+					new QueryParameter("TakeMinScore", true),
+					oScore,
+					oDate
+				);
 
-			this.consumerCaisDetailWorstStatuses.Clear();
-			var oWorstStatuses = new SortedSet<string>();
+				int nScore;
+				if (int.TryParse(oScore.SafeReturnedValue, out nScore))
+					this.minCompanyScore = nScore;
 
-			if (this.m_oConsumerData.Cais != null) {
-				foreach (var c in this.m_oConsumerData.Cais)
-					oWorstStatuses.Add(c.WorstStatus.Trim());
-			} // if
+				this.consumerCaisDetailWorstStatuses.Clear();
+				var oWorstStatuses = new SortedSet<string>();
 
-			this.consumerCaisDetailWorstStatuses.AddRange(oWorstStatuses);
+				if (this.m_oConsumerData.Cais != null) {
+					foreach (var c in this.m_oConsumerData.Cais)
+						oWorstStatuses.Add(c.WorstStatus.Trim());
+				} // if
 
-			this.m_oSecondaryImplementation.Init();
+				this.consumerCaisDetailWorstStatuses.AddRange(oWorstStatuses);
+
+				this.m_oSecondaryImplementation.Init();
+			} // using timer step
 
 			return this;
 		} // Init
 
 		public bool MakeAndVerifyDecision() {
-			var availFunds = new GetAvailableFunds();
-			availFunds.Execute();
+			using (m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+				GetAvailableFunds availFunds;
 
-			SaveTrailInputData(availFunds);
+				using (m_oTrail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
+					availFunds = new GetAvailableFunds();
+					availFunds.Execute();
 
-			CheckAutoApprovalConformance(availFunds.ReservedAmount);
+					SaveTrailInputData(availFunds);
+				} // using timer step
+
+				using (m_oTrail.AddCheckpoint(ProcessCheckpoints.RunCheck))
+					CheckAutoApprovalConformance(availFunds.ReservedAmount);
+			} // using timer step
+
 			this.m_oSecondaryImplementation.MakeDecision();
 
 			bool bSuccess = this.m_oTrail.EqualsTo(this.m_oSecondaryImplementation.Trail);
@@ -306,34 +321,5 @@
 				response.LoanOfferUnderwriterComment = "Exception - " + this.m_oTrail.UniqueID;
 			} // try
 		} // MakeDecision
-
-		public DateTime GetCustomerIncorporationDate() {
-			if (this.customer == null)
-				return DateTime.UtcNow;
-
-			bool bIsLimited =
-				(this.customer.Company != null) &&
-				(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited);
-
-			if (bIsLimited) {
-				CustomerAnalytics oAnalytics = this.customerAnalytics.GetAll()
-					.FirstOrDefault(ca => ca.Id == this.customer.Id);
-
-				DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
-
-				if (oIncorporationDate.Year < 1000)
-					oIncorporationDate = DateTime.UtcNow;
-
-				return oIncorporationDate;
-			} // if ltd
-
-			DateTime? oDate = this.db.ExecuteScalar<DateTime?>(
-				"GetNoLtdIncorporationDate",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customer.Id)
-			);
-
-			return oDate ?? DateTime.UtcNow;
-		} // GetCustomerIncorporationDate
 	} // class Approval
 } // namespace

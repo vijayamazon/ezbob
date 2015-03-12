@@ -105,7 +105,6 @@
     <Compile Include="Misc.cs" />
     <Compile Include="TestClassToDb.cs" />
     <Compile Include="TestDbConnection.cs" />
-    <Compile Include="MedalScoreCalculatorTestFixture.cs" />
     <Compile Include="TestEchoSign.cs" />
     <Compile Include="TestExperianLateCount.cs" />
     <Compile Include="TestSageParser.cs" />

@@ -159,6 +159,7 @@
 						cr.UnderwriterDecisionDate.Value < Now
 					)
 					: 0,
+				CompanyDissolutionDate = this.companyDissolutionDate,
 			});
 
 			FindOutstandingLoans();
@@ -232,6 +233,7 @@
 		private readonly AutomationCalculator.Common.MedalType medalType;
 		private readonly CustomerAnalyticsRepository customerAnalytics;
 
+		private DateTime? companyDissolutionDate;
 		private List<Name> directors;
 		private bool hasLoans;
 		private List<String> hmrcNames;

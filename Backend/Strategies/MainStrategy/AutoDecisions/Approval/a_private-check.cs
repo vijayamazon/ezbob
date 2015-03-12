@@ -19,6 +19,7 @@
 				CheckMedal();
 				CheckIsFraud();
 				CheckIsBroker();
+				CheckCompanyIsDissolved();
 				CheckTodaysApprovals();
 				CheckTodaysLoans();
 				CheckOutstandingOffers(outstandingOffers);
@@ -78,6 +79,17 @@
 
 			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.m_oTrail.RoundedAmount, this.m_oTrail);
 		} // CheckAutoApprovalConformance
+
+		private void CheckCompanyIsDissolved() {
+			bool isDissolved =
+				m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.HasValue &&
+				m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.Value <= Now;
+
+			if (isDissolved)
+				StepFailed<CompanyIsDissolved>().Init(m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
+			else
+				StepDone<CompanyIsDissolved>().Init(m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
+		} // CheckCompanyIsDissolved
 
 		private void CheckAge() {
 			int autoApproveCustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge;

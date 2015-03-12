@@ -1,32 +1,3 @@
-IF OBJECT_ID('GetCompanyScore') IS NULL
-	EXECUTE('CREATE PROCEDURE GetCompanyScore AS SELECT 1')
-GO
-
-SET ANSI_NULLS ON
-GO
-
-SET QUOTED_IDENTIFIER ON
-GO
-
-ALTER PROCEDURE GetCompanyScore
-@CustomerID INT
-AS
-BEGIN
-	SET NOCOUNT ON;
-
-	DECLARE @MaxScore INT = 0
-	DECLARE @MinScore INT = 0
-
-	SELECT
-		@MaxScore = (CASE WHEN MaxScore IS NULL OR MaxScore < Score THEN Score ELSE MaxScore END),
-		@MinScore = (CASE WHEN MaxScore IS NULL OR MaxScore < Score THEN MaxScore ELSE Score END)
-	FROM
-		CustomerAnalyticsCompany
-	WHERE
-		CustomerID = @CustomerID
-		AND
-		IsActive = 1
-
-	SELECT @MaxScore AS MaxScore, @MinScore AS MinScore
-END
+IF OBJECT_ID('GetCompanyScore') IS NOT NULL
+	DROP PROCEDURE GetCompanyScore
 GO

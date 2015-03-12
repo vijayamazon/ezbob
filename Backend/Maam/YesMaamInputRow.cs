@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Maam {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using AutomationCalculator.Common;
 	using Ezbob.Database;
 
@@ -45,22 +46,60 @@
 			int topCount,
 			int lastCheckedID
 		) {
-			string top = (topCount > 0) ? "TOP " + topCount : string.Empty;
-
-			string condition = (lastCheckedID > 0)
-				? "AND r.Id < " + lastCheckedID
-				: string.Empty;
-
-			return Load(oDB, top, condition);
+			return Load(oDB, topCount, lastCheckedID, 0);
 		} // Load
 
 		public static List<YesMaamInputRow> Load(AConnection oDB, int cashRequestID) {
-			return Load(oDB, string.Empty, "AND r.Id = " + cashRequestID);
+			return Load(oDB, 0, 0, cashRequestID);
 		} // Load
 
-		private static List<YesMaamInputRow> Load(AConnection db, string top, string condition) {
-			const string sQueryFormat = @"
-SELECT {0}
+		private static List<YesMaamInputRow> Load(
+			AConnection db,
+			int topCount,
+			int lastCheckedID,
+			int cashRequestID
+		) {
+			string filter = cashRequestID > 0 ? "r.Id = " + cashRequestID + " AND" : string.Empty;
+
+			var rawList = db.Fill<YesMaamInputRow>(string.Format(QueryFormat, filter), CommandSpecies.Text);
+
+			var byCustomer = new SortedDictionary<int, List<YesMaamInputRow>>();
+
+			foreach (YesMaamInputRow ymir in rawList) {
+				if (!byCustomer.ContainsKey(ymir.CustomerID)) {
+					byCustomer[ymir.CustomerID] = new List<YesMaamInputRow> { ymir };
+					continue;
+				} // if
+
+				List<YesMaamInputRow> customerData = byCustomer[ymir.CustomerID];
+
+				var lastKnown = customerData.Last();
+
+				// EZ-3048: from two cash requests that happen in less than 24 hours only the latest should be taken.
+				if ((ymir.DecisionTime - lastKnown.DecisionTime).TotalHours < 24)
+					customerData.RemoveAt(customerData.Count - 1);
+
+				customerData.Add(ymir);
+			} // for each
+
+			var result = new List<YesMaamInputRow>();
+
+			foreach (List<YesMaamInputRow> lst in byCustomer.Values)
+				result.AddRange(lst);
+
+			result.Sort((a, b) => b.CashRequestID.CompareTo(a.CashRequestID));
+
+			if (lastCheckedID > 0)
+				result = result.Where(ymir => ymir.CashRequestID < lastCheckedID).ToList();
+
+			if (topCount > 0)
+				result = result.Take(topCount).ToList();
+
+			return result;
+		} // Load
+
+		private const string QueryFormat = @"
+SELECT
 	r.Id AS CashRequestID,
 	r.IdCustomer AS CustomerID,
 	r.UnderwriterDecisionDate,
@@ -76,7 +115,7 @@ FROM
 	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
 	INNER JOIN Security_User u ON r.IdUnderwriter = u.UserId
 	INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
-WHERE
+WHERE {0}
 	r.IdUnderwriter IS NOT NULL
 	AND
 	r.UnderwriterDecision IN ('Approved', 'Rejected')
@@ -84,15 +123,9 @@ WHERE
 	r.IdUnderwriter IS NOT NULL
 	AND
 	r.IdUnderwriter != 1
-	{1}
 ORDER BY
 	r.Id DESC
 ";
 
-			return db.Fill<YesMaamInputRow>(
-				string.Format(sQueryFormat, top, condition),
-				CommandSpecies.Text
-			);
-		} // Load
 	} // class AutoApproveInputRow
 } // namespace

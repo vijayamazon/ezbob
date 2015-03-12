@@ -5,8 +5,10 @@
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzBob.Models;
+	using EZBob.DatabaseLib.Model.Database;
 
 	public partial class Approval {
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
@@ -112,5 +114,34 @@
 				oMeta.SetupFees += loan.SetupFee;
 			} // for
 		} // FindOutstandingLoans
+
+		private DateTime GetCustomerIncorporationDate() {
+			if (this.customer == null)
+				return DateTime.UtcNow;
+
+			bool bIsLimited =
+				(this.customer.Company != null) &&
+				(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited);
+
+			if (bIsLimited) {
+				CustomerAnalytics oAnalytics = this.customerAnalytics.GetAll()
+					.FirstOrDefault(ca => ca.Id == this.customer.Id);
+
+				DateTime oIncorporationDate = (oAnalytics != null) ? oAnalytics.IncorporationDate : DateTime.UtcNow;
+
+				if (oIncorporationDate.Year < 1000)
+					oIncorporationDate = DateTime.UtcNow;
+
+				return oIncorporationDate;
+			} // if ltd
+
+			DateTime? oDate = this.db.ExecuteScalar<DateTime?>(
+				"GetNoLtdIncorporationDate",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customer.Id)
+			);
+
+			return oDate ?? DateTime.UtcNow;
+		} // GetCustomerIncorporationDate
 	} // class Approval
 } // namespace

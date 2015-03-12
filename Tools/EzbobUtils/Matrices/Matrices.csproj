@@ -1,17 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</ProjectGuid>
+    <ProjectGuid>{43BB65D6-C562-49C9-BB02-CC8275E39518}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ezbob.ValueIntervals</RootNamespace>
-    <AssemblyName>ValueIntervals</AssemblyName>
+    <RootNamespace>Ezbob.Matrices</RootNamespace>
+    <AssemblyName>Matrices</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,20 +39,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AIntervalEdge.cs" />
-    <Compile Include="DateInterval.cs" />
-    <Compile Include="ANumericIntervalEdge.cs" />
-    <Compile Include="DecimalIntervalEdge.cs" />
-    <Compile Include="FreezeInterval.cs" />
-    <Compile Include="DateIntervalEdge.cs" />
-    <Compile Include="IOrdinal.cs" />
+    <Compile Include="MatrixIntervalEdge.cs" />
+    <Compile Include="DecimalMatrix.cs" />
+    <Compile Include="Matrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
-      <Link>Properties\CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="TDisjointIntervals.cs" />
-    <Compile Include="TInterval.cs" />
-    <Compile Include="ValueIntervalException.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90cc3a5f-5bea-4c13-82b7-992adc41f854}</Project>
+      <Name>ValueIntervals</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

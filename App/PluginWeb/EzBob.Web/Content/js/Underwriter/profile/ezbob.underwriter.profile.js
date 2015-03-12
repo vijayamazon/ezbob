@@ -57,6 +57,10 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		});
 		this.marketPlaceView.on('rechecked', this.mpRechecked, this.marketPlaces);
 
+		EzBob.App.vent.on('ct:marketplaces.history', function(history) {
+			self.show(self.marketPlaces.customerId, true, history);
+		});
+
 		this.loanHistory = new EzBob.Underwriter.LoanHistoryModel();
 		this.loanHistoryView = new EzBob.Underwriter.LoanHistoryView({
 			el: loanhistorys,
@@ -189,73 +193,49 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 
 		this.showed = true;
 		this.$el.find('.nav-list a[data-toggle="tab"]').on('show.bs.tab', (function(e) {
-			var $content = self.$el.find('.profile-content');
-			BlockUi('on', $content);
 			self.setLastShownProfileSection($(e.target).attr('href').substr(1));
 			var currentTab = $(e.currentTarget).attr('href');
 			switch (currentTab) {
 				case '#customer-info':
 					self.crossCheckView.render({ customerId: self.customerId });
-					BlockUi('off', $content);
 					break;
 				case '#dashboard':
 					self.affordability.customerId = self.customerId;
-					self.affordability.fetch().done(function ()
-					{
-						BlockUi('off', $content);
-					});
+					self.affordability.fetch();
 					self.dashboardInfoView.render();
 					break;
 				case '#company-score':
 					self.companyScoreView.redisplayAccordion();
-					BlockUi('off', $content);
 					break;
 				case '#fraudDetection':
 					self.FraudDetectionLogs.customerId = self.customerId;
-					self.FraudDetectionLogs.fetch().done(function() {
-						BlockUi('off', $content);
-					});
+					self.FraudDetectionLogs.fetch();
 					break;
 				case '#apiChecks':
 					self.ApicCheckLogs.customerId = self.customerId;
-					self.ApicCheckLogs.fetch().done(function() {
-						BlockUi('off', $content);
-					});
+					self.ApicCheckLogs.fetch();
 					break;
 				case '#messages-tab':
 					self.messagesModel.set({ Id: self.customerId }, { silent: true });
-					self.messagesModel.fetch().done(function() {
-						BlockUi('off', $content);
-					});
+					self.messagesModel.fetch();
 					self.signatureMonitorView.reload(self.customerId);
 					break;
 				case '#payment-accounts':
 					self.paymentAccountsModel.customerId = self.customerId;
-					self.paymentAccountsModel.fetch().done(function() {
-						BlockUi('off', $content);
-					});
+					self.paymentAccountsModel.fetch();
 					break;
 				case '#loanhistorys':
 					self.loanHistory.customerId = self.customerId;
-					self.loanHistory.fetch().done(function() {
-						BlockUi('off', $content);
-					});
+					self.loanHistory.fetch();
 					break;
 				case '#calculator':
 					self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
 					self.pricingModelScenarios.fetch();
-					self.pricingModelCalculationsModel.fetch().done(function() {
-						BlockUi('off', $content);
-					});
+					self.pricingModelCalculationsModel.fetch();
 					break;
 				case '#marketplaces':
 					self.marketPlaces.customerId = self.customerId;
-					self.marketPlaces.fetch().done(function() {
-						BlockUi('off', $content);
-					});
-					break;
-				default:
-					BlockUi('off', $content);
+					self.marketPlaces.fetch();
 					break;
 			}
 		}));
@@ -299,7 +279,6 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			self.loanInfoModel.set(fullModel.get('ApplicationInfoModel'), { silent: true });
 			self.loanInfoModel.trigger('sync');
 
-			self.loanHistory.customerId = id;
 			self.loanHistoryView.idCustomer = id;
 
 			self.summaryInfoModel.set({ Id: id, success: true }, { silent: true });

@@ -1,9 +1,7 @@
-﻿using System;
-
-namespace Ezbob.ValueIntervals {
+﻿namespace Ezbob.ValueIntervals {
+	using System;
 
 	public class FreezeInterval : DateInterval {
-
 		public static FreezeInterval operator *(FreezeInterval a, FreezeInterval b) {
 			return ReferenceEquals(a, null) ? null : a.Intersection(b);
 		} // operator *
@@ -43,7 +41,5 @@ namespace Ezbob.ValueIntervals {
 
 			return oResult;
 		} // Difference
-
 	} // class FreezeInterval
-
 } // namespace Ezbob.ValueIntervals

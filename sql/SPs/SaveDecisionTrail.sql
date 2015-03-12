@@ -5,6 +5,10 @@ IF OBJECT_ID('SaveDecisionTrail') IS NOT NULL
 	DROP PROCEDURE SaveDecisionTrail
 GO
 
+IF TYPE_ID('DecisionTrailStepTimeList') IS NOT NULL
+	DROP TYPE DecisionTrailStepTimeList
+GO
+
 IF TYPE_ID('DecisionTraceList') IS NOT NULL
 	DROP TYPE DecisionTraceList
 GO
@@ -27,6 +31,13 @@ CREATE TYPE DecisionTraceList AS TABLE (
 )
 GO
 
+CREATE TYPE DecisionTrailStepTimeList AS TABLE (
+	Position INT,
+	StepTimeNameID BIGINT,
+	StepLength FLOAT
+)
+GO
+
 CREATE PROCEDURE SaveDecisionTrail
 @CustomerID INT,
 @Amount NUMERIC(18, 2),
@@ -39,6 +50,7 @@ CREATE PROCEDURE SaveDecisionTrail
 @CashRequestID BIGINT,
 @Tag NVARCHAR(256),
 @Traces DecisionTraceList READONLY,
+@TimerSteps DecisionTrailStepTimeList READONLY,
 @Notes LongStringList READONLY
 AS
 BEGIN
@@ -141,5 +153,16 @@ BEGIN
 		Value
 	FROM
 		@Notes
+
+	------------------------------------------------------------------------------
+
+	INSERT INTO DecisionTrailStepTimes (TrailID, Position, StepTimeNameID, StepLength)
+	SELECT
+		@TrailID,
+		Position,
+		StepTimeNameID,
+		StepLength
+	FROM
+		@TimerSteps
 END
 GO
