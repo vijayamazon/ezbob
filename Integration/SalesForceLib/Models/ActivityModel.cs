@@ -1,7 +1,7 @@
 ﻿namespace SalesForceLib.Models {
 	using System;
 	using System.Runtime.Serialization;
-
+	
 	[DataContract(IsReference = true)]
 	public class ActivityModel {
 		[DataMember]

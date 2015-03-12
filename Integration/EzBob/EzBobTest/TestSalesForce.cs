@@ -1,5 +1,7 @@
 ﻿namespace EzBobTest {
 	using System;
+	using Ezbob.Utils.Extensions;
+	using EzBob.CommonLib;
 	using log4net;
 	using Newtonsoft.Json;
 	using NUnit.Framework;
@@ -50,7 +52,7 @@
 				ApprovedAmount = 10000,
 				Email = "a@b.c",
 				ExpectedEndDate = new DateTime(2015, 01, 29),
-				Stage = (int)OpportunityStage.s90,
+				Stage = OpportunityStage.s90.DescriptionAttr()
 				
 			};
 			Log.Debug(JsonConvert.SerializeObject(opModel, Formatting.Indented));
