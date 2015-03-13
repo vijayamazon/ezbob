@@ -322,6 +322,9 @@
 						<!-- section-forgotten -->
 
 						<div class="page-section hide section-dashboard">
+						
+                            <div id="commision-view">@{ Html.RenderPartial("Commission"); }</div>
+
 							<div class="profile-menu">
 								<div class="navbar-inner">
 									<ul class="nav">
@@ -608,6 +611,12 @@
 							</form>
 						</div>
 						<!-- section-add-customer -->
+                        
+                        
+                        @{
+                            Html.RenderPartial("AddBank");
+                        }
+                        <!--section-add-bank-->
 
 						<div class="page-section hide section-customer-details">
 							<input type="hidden" id="customer-id" class="value" data-field-name="id" />

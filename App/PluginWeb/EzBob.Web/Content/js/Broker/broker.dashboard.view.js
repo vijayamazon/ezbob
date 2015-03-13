@@ -14,6 +14,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
         this.instantOfferView = new EzBob.Broker.InstantOfferView({ router: this.router });
         this.changePasswordView = new EzBob.Broker.ChangePasswordView({ router: this.router });
+
     }, // initialize
 
     events: function () {
@@ -349,6 +350,11 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
         EzBob.App.trigger('clear');
         location.assign('#add');
     }, // addNewCustomer
+
+    addBankDetails: function (){
+        EzBob.App.trigger('clear');
+        location.assign('#bank');
+    },
 
     initDataTablesOptions: function (sColumns, sGridKey) {
         return {

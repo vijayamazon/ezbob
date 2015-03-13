@@ -112,12 +112,13 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			//currently not showing the explanation popup but saving the email 
 			EzBob.UiAction.saveOne(EzBob.UiAction.evtLinked(), oEverlineDialog, true);
 		
-			this.showEverlineHelp = true; 
-			if (this.showEverlineHelp) {
-				this.showEverlineHelp = false;
-			
-				if (oEverlineDialog.length > 0)
-					$.colorbox({ inline: true, open: true, href: oEverlineDialog, maxWidth: '840px' });
+			this.showEverlineHelp = true;
+		    if (this.showEverlineHelp) {
+		        this.showEverlineHelp = false;
+
+		        if (oEverlineDialog.length > 0)
+		            $.colorbox({ inline: true, open: true, href: oEverlineDialog, maxWidth: '840px' });
+		    }
 		} // if
 
 		var oFieldStatusIcons = this.$el.find('IMG.field_status');
