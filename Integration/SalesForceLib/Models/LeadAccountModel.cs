@@ -1,5 +1,6 @@
 ﻿namespace SalesForceLib.Models {
 	using System;
+	using System.ComponentModel;
 	using System.Runtime.Serialization;
 
 	[DataContract(IsReference = true)]
@@ -57,4 +58,32 @@
 		[DataMember]
 		public int RequestedLoanAmount { get; set; }
 	}
+
+    public enum EzbobSource
+    {
+        [Description("Wizard")]
+        Wizard,
+        [Description("Wizard")]
+        VIP,
+        [Description("Landing page")]
+        LandingPage,
+        [Description("Broker lead")]
+        BrokerLead
+    }
+
+    public enum EzbobStatus
+    {
+        Contacted,
+        Open,
+        Qualified,
+        Unqualified
+    }
+
+    public enum Gender
+    {
+        Male,
+        Female
+    }
+
+
 }

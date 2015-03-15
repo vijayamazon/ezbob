@@ -64,7 +64,7 @@ BEGIN
 		v.Email AS Email,
 		v.FullName AS Name,
 		v.Phone AS PhoneNumber,
-		'Vip' AS EzbobSource,
+		'VIP' AS EzbobSource,
 		v.RequestDate AS RegistrationDate
 	FROM VipRequest v
 	WHERE v.Email = @Email
@@ -79,7 +79,7 @@ BEGIN
 		l.Email AS Email,
 		isnull(l.FirstName, '') + ' ' + isnull(l.LastName, '') AS Name,
 		l.DateCreated AS RegistrationDate,
-		'BrokerLead' AS EzbobSource,
+		'Broker lead' AS EzbobSource,
 		CAST(1 AS BIT) IsBroker
 	FROM BrokerLeads l
 	WHERE Email = @Email
@@ -91,7 +91,6 @@ SELECT @Email AS Email,
 	   'Unknown' AS EzbobSource
 
 END
-
 
 GO
 
