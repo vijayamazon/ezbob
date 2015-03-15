@@ -19,6 +19,7 @@ namespace Reports {
 		RPT_TRAFFIC_REPORT,
 		RPT_UI_EXT_REPORT,
 		RPT_UI_REPORT,
+		RPT_WEEKLY_KPMG,
 	} // enum ReportType
 } // namespace Reports
 // ReSharper restore InconsistentNaming

@@ -5,6 +5,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using ConfigManager;
+	using EKM.API;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
@@ -35,6 +36,8 @@
 		} // Name
 
 		public override void Execute() {
+			CsvOutput = new List<string>();
+
 			this.loanSources.Clear();
 			this.crLoans.Clear();
 			this.defaultCustomers.Clear();
@@ -76,24 +79,33 @@
 
 			pc.Log();
 
-			var lst = new List<string>();
+			CsvOutput.Add(Datum.CsvTitles(this.loanSources));
 
 			Log.Debug("Output data - begin:");
 
 			foreach (Datum d in this.data) {
 				Log.Debug("{0}", d);
 
-				lst.Add(d.ToCsv(this.crLoans, this.loanSources));
+				CsvOutput.Add(d.ToCsv(this.crLoans, this.loanSources));
 			} // for each
 
 			Log.Debug("Output data - end.");
 
 			Log.Debug(
-				"\n\nCSV output - begin:\n{0}\n{1}\nCSV output - end.\n",
-				Datum.CsvTitles(loanSources),
-				string.Join("\n", lst)
+				"\n\nCSV output - begin:\n{0}\nCSV output - end.\n",
+				string.Join("\n", CsvOutput)
 			);
 		} // Execute
+
+		public virtual List<string> CsvOutput { get; private set; }
+
+		protected virtual string Condition {
+			get { return string.Empty; }
+		} // Condition
+
+		private string Query {
+			get { return string.Format(QueryFormat, Condition); }
+		} // Query
 
 		private void LoadCashRequests() {
 			this.data.Clear();
@@ -554,7 +566,7 @@
 		private readonly TCrLoans crLoans;
 		private readonly SortedSet<string> loanSources; 
 
-		private const string Query = @"
+		private const string QueryFormat = @"
 SELECT
 	r.Id AS CashRequestID,
 	r.IdCustomer AS CustomerID,
@@ -585,6 +597,7 @@ WHERE
 	r.IdUnderwriter IS NOT NULL
 	AND
 	r.IdUnderwriter != 1
+	{0}
 ORDER BY
 	r.IdCustomer ASC,
 	r.UnderwriterDecisionDate ASC,

@@ -103,6 +103,7 @@
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
     <Compile Include="Broker\BrokerInstantOffer.cs" />
+    <Compile Include="Tasks\WeeklyMaamMedalAndPricing.cs" />
     <Compile Include="Esign\EsignSend.cs" />
     <Compile Include="Esign\LoadCustomerEsignatures.cs" />
     <Compile Include="Esign\LoadEsignatureFile.cs" />
