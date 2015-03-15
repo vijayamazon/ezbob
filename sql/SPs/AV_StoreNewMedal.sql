@@ -75,7 +75,10 @@ ALTER PROCEDURE AV_StoreNewMedal
 	,@NumOfHmrcMps INT
 	,@AmazonPositiveFeedbacks INT
 	,@EbayPositiveFeedbacks INT
-	,@NumberOfPaypalPositiveTransactions INT)
+	,@NumberOfPaypalPositiveTransactions INT
+	,@CapOfferByCustomerScoresValue DECIMAL(18, 6)
+	,@CapOfferByCustomerScoresTable NVARCHAR(MAX)
+)
 AS
 BEGIN
 	UPDATE MedalCalculationsAV SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
@@ -151,8 +154,10 @@ BEGIN
 	,NumOfHmrcMps
 	,AmazonPositiveFeedbacks
 	,EbayPositiveFeedbacks
-	,NumberOfPaypalPositiveTransactions)
-	VALUES (
+	,NumberOfPaypalPositiveTransactions
+	,CapOfferByCustomerScoresValue
+	,CapOfferByCustomerScoresTable
+	) VALUES (
 	 @CustomerId
 	,@CalculationTime
 	,@MedalType
@@ -223,7 +228,10 @@ BEGIN
 	,@NumOfHmrcMps
 	,@AmazonPositiveFeedbacks
 	,@EbayPositiveFeedbacks
-	,@NumberOfPaypalPositiveTransactions)
+	,@NumberOfPaypalPositiveTransactions
+	,@CapOfferByCustomerScoresValue
+	,@CapOfferByCustomerScoresTable
+	)
 END
 GO
 

@@ -222,6 +222,10 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Matrices\Matrices.csproj">
+      <Project>{43BB65D6-C562-49C9-BB02-CC8275E39518}</Project>
+      <Name>Matrices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\MiniResharper\MiniResharper.csproj">
       <Project>{805f29c1-d575-49c5-a95d-4d393e65481f}</Project>
       <Name>MiniResharper</Name>

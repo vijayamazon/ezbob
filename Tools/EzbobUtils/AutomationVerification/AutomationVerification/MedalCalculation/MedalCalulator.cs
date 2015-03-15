@@ -1,6 +1,5 @@
 ﻿namespace AutomationCalculator.MedalCalculation {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
@@ -8,6 +7,7 @@
 	using AutomationCalculator.Turnover;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Matrices;
 
 	/// <summary>
 	///     Medal calculator interface.
@@ -289,6 +289,13 @@
 			model.FreeCashFlow = model.AnnualTurnover == 0 || !dbData.HasHmrc ? 0 : model.FreeCashFlowValue / model.AnnualTurnover;
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
 			model.CustomerId = customerId;
+
+			model.CapOfferByCustomerScoresTable = new DBMatrix(
+				MatrixName.Automation.Medal.CapOfferByCustomerScores,
+				this.DB
+			);
+			model.CapOfferByCustomerScoresTable.Load();
+
 			return model;
 		} // GetInputParameters
 
@@ -349,6 +356,8 @@
 				CustomerId = inputModel.CustomerId,
 				CalculationDate = inputModel.CalculationDate,
 				UseHmrc = inputModel.UseHmrc,
+				CapOfferByCustomerScoresTable = inputModel.CapOfferByCustomerScoresTable.ToFormattedString(),
+				CapOfferByCustomerScoresValue = inputModel.CapOfferByCustomerScoresValue,
 			};
 
 			return medalOutput;

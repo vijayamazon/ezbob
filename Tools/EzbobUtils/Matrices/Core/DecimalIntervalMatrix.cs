@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Matrices {
+﻿namespace Ezbob.Matrices.Core {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -15,7 +15,7 @@
 
 		public virtual decimal? this[decimal rowValeRaw, decimal columnValeRaw] {
 			get {
-				if (!this.isInitialized)
+				if (!IsInitialized)
 					throw new Exception("Matrix was not initialized");
 
 				var rowValue = new DecimalIntervalMatrixIntervalEdge(rowValeRaw);
@@ -66,6 +66,11 @@
 			return tbl.ToFormattedString();
 		} // ToFormattedString
 
+		public virtual bool IsInitialized {
+			get { return this.isInitialized; }
+			protected set { this.isInitialized = value; }
+		} // IsInitialized
+
 		protected virtual void AddValue(decimal? rowTitleValueRaw, decimal? columnTitleValueRaw, decimal? cellValue) {
 			DecimalIntervalMatrixIntervalEdge rowTitleValue = rowTitleValueRaw == null
 				? new DecimalIntervalMatrixIntervalEdge(true)
@@ -84,12 +89,12 @@
 			this.rawData[rowTitleValue, columnTitleValue] = cellValue;
 		} // AddValue
 
-		protected virtual void Init() {
-			this.isInitialized = false;
+		protected virtual bool Init() {
+			IsInitialized = false;
 			this.data.Clear();
 
 			if (!this.rawData.HasAlignedColumns())
-				return;
+				return IsInitialized;
 
 			DecimalIntervalMatrixIntervalEdge prevRowTitle = MinRowTitleValue;
 
@@ -112,7 +117,9 @@
 			});
 
 			this.rawData.Clear();
-			this.isInitialized = true;
+			IsInitialized = true;
+
+			return IsInitialized;
 		} // Init
 
 		protected virtual void SetMinRowTitleValue(decimal? v) {

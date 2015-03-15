@@ -459,7 +459,10 @@
 					new QueryParameter("AmazonPositiveFeedbacks", model.AmazonPositiveFeedbacks),
 					new QueryParameter("EbayPositiveFeedbacks", model.EbayPositiveFeedbacks),
 					new QueryParameter("NumberOfPaypalPositiveTransactions",
-						model.NumberOfPaypalPositiveTransactions));
+						model.NumberOfPaypalPositiveTransactions),
+					new QueryParameter("CapOfferByCustomerScoresValue", model.CapOfferByCustomerScoresValue),
+					new QueryParameter("CapOfferByCustomerScoresTable", model.CapOfferByCustomerScoresTable)
+				);
 			} else {
 				_db.ExecuteNonQuery("AV_StoreNewMedalError", CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", model.CustomerId),

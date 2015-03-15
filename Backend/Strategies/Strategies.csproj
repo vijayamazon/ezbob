@@ -559,6 +559,10 @@
       <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Matrices\Matrices.csproj">
+      <Project>{43BB65D6-C562-49C9-BB02-CC8275E39518}</Project>
+      <Name>Matrices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\MiniResharper\MiniResharper.csproj">
       <Project>{805f29c1-d575-49c5-a95d-4d393e65481f}</Project>
       <Name>MiniResharper</Name>

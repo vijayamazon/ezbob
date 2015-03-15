@@ -40,9 +40,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DBMatrix.cs" />
-    <Compile Include="DecimalIntervalMatrixInterval.cs" />
-    <Compile Include="DecimalIntervalMatrixIntervalEdge.cs" />
-    <Compile Include="DecimalIntervalMatrix.cs" />
+    <Compile Include="Core\DecimalIntervalMatrixInterval.cs" />
+    <Compile Include="Core\DecimalIntervalMatrixIntervalEdge.cs" />
+    <Compile Include="Core\DecimalIntervalMatrix.cs" />
+    <Compile Include="MatrixName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

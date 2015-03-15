@@ -6,6 +6,7 @@
 	using AutomationCalculator.Turnover;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Matrices;
 	using Ezbob.Utils.Extensions;
 
 	public static class AnalysisFunctionIncome {
@@ -45,6 +46,9 @@
 		public decimal FreeCashflow { get; set; }
 		public decimal AnnualTurnover { get; set; }
 		public bool UseHmrc { get; set; }
+
+		public string CapOfferByCustomerScoresTable { get; set; }
+		public decimal CapOfferByCustomerScoresValue { get; set; }
 
 		public void SaveToDb(AConnection db, ASafeLog log) {
 			log.Debug("\n\nSecondary medal:\n{0}", ToString());
@@ -312,6 +316,19 @@
 		public bool HasHmrc { get; set; }
 		public bool UseHmrc { get; set; }
 		public bool FirstRepaymentDatePassed { get; set; }
+
+		public DBMatrix CapOfferByCustomerScoresTable { get; set; }
+
+		public decimal CapOfferByCustomerScoresValue {
+			get {
+				if (CapOfferByCustomerScoresTable == null)
+					return 0;
+
+				return CapOfferByCustomerScoresTable.IsInitialized
+					? (CapOfferByCustomerScoresTable[BusinessScore, ConsumerScore] ?? 0)
+					: 0;
+			} // get
+		} // CapOfferByCustomerScoresValue
 
 		/*online only*/
 		public int NumOfStores { get; set; }

@@ -530,7 +530,7 @@
 		}
 
 		private static void TestMatrix(AConnection db, ASafeLog log) {
-			var mat = new DBMatrix("TestMatrix", db);
+			var mat = new DBMatrix(MatrixName.Automation.Medal.CapOfferByCustomerScores, db);
 			mat.Load();
 
 			log.Debug("\n\n\n{0}\n\n", mat.ToFormattedString());

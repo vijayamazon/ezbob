@@ -133,7 +133,7 @@
 			medal.OfferedLoanAmount = GetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
 
 			return medal;
-		} // GetMeal
+		} // GetMedal
 
 		protected AConnection DB;
 		protected ASafeLog Log;
@@ -166,8 +166,16 @@
 			Log.Debug("Secondary medal - valid offer amounts: {0}", string.Join(", ", positiveOffers));
 
 			if (positiveOffers.Any()) {
-				int theOffer = positiveOffers.Min(x => (int)x);
-				Log.Debug("Secondary medal - offered loan amount calculated to be {0}.", theOffer);
+				int thePreOffer = positiveOffers.Min(x => (int)x);
+
+				int theOffer = (int)(thePreOffer * medal.CapOfferByCustomerScoresValue);
+
+				Log.Debug(
+					"Secondary medal - offered loan amount calculated to be {0} (before score cap: {1}, cap value: {2}).",
+					theOffer,
+					thePreOffer,
+					medal.CapOfferByCustomerScoresValue.ToString("P6")
+				);
 				return theOffer;
 			} // if
 

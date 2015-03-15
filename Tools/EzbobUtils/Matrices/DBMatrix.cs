@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Matrices {
 	using System;
 	using Ezbob.Database;
+	using Ezbob.Matrices.Core;
 
 	public class DBMatrix : DecimalIntervalMatrix {
 		public DBMatrix(string matrixName, AConnection db) {
@@ -8,11 +9,10 @@
 			MatrixName = matrixName;
 		} // constructor
 
-		public virtual void Load() {
+		public virtual bool Load() {
 			this.db.ForEachRowSafe(ProcessRow, "LoadMatrix", new QueryParameter("MatrixName", MatrixName));
 
-			if (MatrixID > 0)
-				Init();
+			return (MatrixID > 0) && Init();
 		} // Load
 
 		public long MatrixID { get; private set; }

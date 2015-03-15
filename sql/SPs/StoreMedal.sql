@@ -43,15 +43,15 @@ ALTER PROCEDURE StoreMedal
 	,@MaritalStatus NVARCHAR(50)
 	,@MaritalStatusWeight DECIMAL(18,6)
 	,@MaritalStatusGrade DECIMAL(18,6)
-	,@MaritalStatusScore DECIMAL(18,6)	
+	,@MaritalStatusScore DECIMAL(18,6)
 	,@NumberOfStores INT
 	,@NumberOfStoresWeight DECIMAL(18,6)
 	,@NumberOfStoresGrade DECIMAL(18,6)
-	,@NumberOfStoresScore DECIMAL(18,6)	
+	,@NumberOfStoresScore DECIMAL(18,6)
 	,@PositiveFeedbacks INT
 	,@PositiveFeedbacksWeight DECIMAL(18,6)
 	,@PositiveFeedbacksGrade DECIMAL(18,6)
-	,@PositiveFeedbacksScore DECIMAL(18,6)	
+	,@PositiveFeedbacksScore DECIMAL(18,6)
 	,@EzbobSeniority DATETIME
 	,@EzbobSeniorityWeight DECIMAL(18,6)
 	,@EzbobSeniorityGrade DECIMAL(18,6)
@@ -76,13 +76,15 @@ ALTER PROCEDURE StoreMedal
 	,@Error NVARCHAR(500)
 	,@OfferedLoanAmount INT
 	,@NumOfHmrcMps INT
-	,@ZooplaValue INT	
+	,@ZooplaValue INT
 	,@EarliestHmrcLastUpdateDate DATETIME
-	,@EarliestYodleeLastUpdateDate DATETIME	
+	,@EarliestYodleeLastUpdateDate DATETIME
 	,@AmazonPositiveFeedbacks INT
 	,@EbayPositiveFeedbacks INT
-	,@NumberOfPaypalPositiveTransactions INT	
-	,@MortgageBalance DECIMAL(18,6))
+	,@NumberOfPaypalPositiveTransactions INT
+	,@MortgageBalance DECIMAL(18,6)
+	,@CapOfferByCustomerScoresValue DECIMAL(18,6)
+	,@CapOfferByCustomerScoresTable NVARCHAR(MAX))
 AS
 BEGIN
 	UPDATE MedalCalculations SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
@@ -137,7 +139,7 @@ BEGIN
 	,PositiveFeedbacks
 	,PositiveFeedbacksWeight
 	,PositiveFeedbacksGrade
-	,PositiveFeedbacksScore	
+	,PositiveFeedbacksScore
 	,EzbobSeniority
 	,EzbobSeniorityWeight
 	,EzbobSeniorityGrade
@@ -164,12 +166,14 @@ BEGIN
 	,NumOfHmrcMps
 	,ZooplaValue	
 	,EarliestHmrcLastUpdateDate
-	,EarliestYodleeLastUpdateDate	
+	,EarliestYodleeLastUpdateDate
 	,AmazonPositiveFeedbacks
 	,EbayPositiveFeedbacks
-	,NumberOfPaypalPositiveTransactions	
-	,MortgageBalance)
-	VALUES (
+	,NumberOfPaypalPositiveTransactions
+	,MortgageBalance
+	,CapOfferByCustomerScoresValue
+	,CapOfferByCustomerScoresTable
+	) VALUES (
 	 @CustomerId
 	,@CalculationTime
 	,@MedalType
@@ -219,7 +223,7 @@ BEGIN
 	,@PositiveFeedbacks
 	,@PositiveFeedbacksWeight
 	,@PositiveFeedbacksGrade
-	,@PositiveFeedbacksScore	
+	,@PositiveFeedbacksScore
 	,@EzbobSeniority
 	,@EzbobSeniorityWeight
 	,@EzbobSeniorityGrade
@@ -244,12 +248,14 @@ BEGIN
 	,@Error
 	,@OfferedLoanAmount
 	,@NumOfHmrcMps
-	,@ZooplaValue	
+	,@ZooplaValue
 	,@EarliestHmrcLastUpdateDate
-	,@EarliestYodleeLastUpdateDate	
+	,@EarliestYodleeLastUpdateDate
 	,@AmazonPositiveFeedbacks
 	,@EbayPositiveFeedbacks
-	,@NumberOfPaypalPositiveTransactions	
-	,@MortgageBalance)
+	,@NumberOfPaypalPositiveTransactions
+	,@MortgageBalance
+	,@CapOfferByCustomerScoresValue
+	,@CapOfferByCustomerScoresTable)
 END
 GO

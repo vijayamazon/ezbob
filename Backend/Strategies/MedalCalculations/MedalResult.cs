@@ -6,6 +6,7 @@
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Matrices;
 	using Ezbob.Utils;
 	using MaritalStatus = EZBob.DatabaseLib.Model.Database.MaritalStatus;
 	using Medal = EZBob.DatabaseLib.Model.Database.Medal;
@@ -105,11 +106,24 @@
 		public int NumberOfPaypalPositiveTransactions { get; set; }
 		public decimal MortgageBalance { get; set; }
 
+		public DBMatrix CapOfferByCustomerScoresTable { get; set; }
+
 		// Calculated data
 		public decimal AnnualTurnover { get; set; }
 		public decimal TangibleEquity { get; set; }
 		public decimal FreeCashFlow { get; set; }
 		public TurnoverType? TurnoverType { get; set; }
+
+		public decimal CapOfferByCustomerScoresValue {
+			get {
+				if (CapOfferByCustomerScoresTable == null)
+					return 0;
+
+				return CapOfferByCustomerScoresTable.IsInitialized
+					? (CapOfferByCustomerScoresTable[BusinessScore, ConsumerScore] ?? 0)
+					: 0;
+			} // get
+		} // CapOfferByCustomerScoresValue
 
 		// Weights, grades, scores
 		public decimal BusinessScoreWeight { get; set; }
@@ -291,7 +305,10 @@
 				new QueryParameter("AmazonPositiveFeedbacks", AmazonPositiveFeedbacks),
 				new QueryParameter("EbayPositiveFeedbacks", EbayPositiveFeedbacks),
 				new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
-				new QueryParameter("MortgageBalance", MortgageBalance));
+				new QueryParameter("MortgageBalance", MortgageBalance),
+				new QueryParameter("CapOfferByCustomerScoresValue", CapOfferByCustomerScoresValue),
+				new QueryParameter("CapOfferByCustomerScoresTable", CapOfferByCustomerScoresTable.ToFormattedString())
+			);
 		} // SaveToDb
 
 		public override string ToString() {

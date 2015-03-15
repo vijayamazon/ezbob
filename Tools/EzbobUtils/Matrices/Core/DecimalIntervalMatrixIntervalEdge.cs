@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Matrices {
+﻿namespace Ezbob.Matrices.Core {
 	using System;
 	using Ezbob.ValueIntervals;
 

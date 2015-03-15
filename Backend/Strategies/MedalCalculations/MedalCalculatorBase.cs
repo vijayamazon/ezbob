@@ -8,6 +8,7 @@
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Ezbob.Matrices;
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -218,6 +219,12 @@
 			Results.FreeCashFlowValue -= newActualLoansRepayment;
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
+
+			Results.CapOfferByCustomerScoresTable = new DBMatrix(
+				MatrixName.Automation.Medal.CapOfferByCustomerScores,
+				this.db
+			);
+			Results.CapOfferByCustomerScoresTable.Load();
 		} // GatherInputData
 
 		private enum RowType {
@@ -629,8 +636,15 @@
 
 			if (validOfferAmounts.Count > 0) {
 				decimal unroundedValue = validOfferAmounts.Min();
-				Results.OfferedLoanAmount = (int)unroundedValue;
-				this.log.Debug("Primary medal - offered loan amount calculated to be {0}.", Results.OfferedLoanAmount);
+
+				Results.OfferedLoanAmount = (int)(unroundedValue * Results.CapOfferByCustomerScoresValue);
+
+				this.log.Debug(
+					"Primary medal - offered amount calculated to be {0} (before cap and rounding: {1}, cap value: {2}.",
+					Results.OfferedLoanAmount,
+					unroundedValue,
+					Results.CapOfferByCustomerScoresValue
+				);
 			} else
 				this.log.Debug("Primary medal - all the offer amounts are not valid.");
 		} // CalculateOffer

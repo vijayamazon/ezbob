@@ -46,6 +46,8 @@ BEGIN
 	FROM
 		MatrixRowTitles r
 		INNER JOIN MatrixColumns c ON r.MatrixRowID = c.MatrixRowID
+	WHERE
+		r.MatrixID = @MatrixID
 	ORDER BY
 		CASE WHEN r.TitleValue IS NOT NULL THEN 0 ELSE 1 END,
 		r.TitleValue,
