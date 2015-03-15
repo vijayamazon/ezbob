@@ -10,7 +10,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'forgotten': 'forgotten',
 		'ForgotPassword': 'forgotten',
 		'add': 'addCustomer',
-        'bank', 'addBank',
+        'bank': 'addBank',
 		'customer/:customerId': 'showCustomer',
 		'*z': 'dashboard', // this entry must be the last
 	}, // routes

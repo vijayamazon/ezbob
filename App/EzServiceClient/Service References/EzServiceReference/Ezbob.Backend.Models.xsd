@@ -36,6 +36,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LotteryResult" nillable="true" type="tns:LotteryResult" />
+  <xs:complexType name="CompanyDataForCreditBureau">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Errors" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastUpdate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Score" type="xs:int" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompanyDataForCreditBureau" nillable="true" type="tns:CompanyDataForCreditBureau" />
   <xs:complexType name="CustomerManualAnnualizedRevenue">
     <xs:sequence>
       <xs:element minOccurs="0" name="Comment" nillable="true" type="xs:string" />
@@ -396,6 +404,17 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="ConfigTableType" nillable="true" type="tns:ConfigTableType" />
+  <xs:complexType name="BrokerAddBankModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankAccountType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BrokerEmail" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SortCode" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="BrokerAddBankModel" nillable="true" type="tns:BrokerAddBankModel" />
   <xs:complexType name="BrokerCustomerDetails">
     <xs:sequence>
       <xs:element minOccurs="0" name="CrmData" nillable="true" type="tns:ArrayOfBrokerCustomerCrmEntry" />
@@ -883,12 +902,4 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PreviousSearch" nillable="true" type="tns:PreviousSearch" />
-  <xs:complexType name="CompanyDataForCreditBureau">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Errors" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LastUpdate" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Score" type="xs:int" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="CompanyDataForCreditBureau" nillable="true" type="tns:CompanyDataForCreditBureau" />
 </xs:schema>

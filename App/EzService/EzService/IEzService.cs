@@ -67,6 +67,9 @@
 			string sContactEmail
 			);
 
+        [OperationContract]
+        ActionMetaData BrokerAddBank(BrokerAddBankModel model);
+
 		[OperationContract]
 		ActionMetaData BrokerApproveAndResetCustomerPassword(
 			int nUnderwriterID,

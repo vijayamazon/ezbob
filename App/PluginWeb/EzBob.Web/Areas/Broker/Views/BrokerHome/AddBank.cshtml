@@ -1,11 +1,8 @@
 ﻿@model dynamic
 
-<div id="section-add-bank">
+<div class="page-section hide section-add-bank">
     <div class="row-fluid">
-        <div class="notifications"></div>
-        <div class="wizard-top-notification">
-            <h2>Your Bank Details</h2>
-        </div>
+        <h2>Your Bank Details</h2>
         <form id="bankAccount">
             <div class="bank-account-instructions clearfix">
                 <div class="bank-account">
@@ -13,7 +10,7 @@
                         <div class="controls">
                             <label class="attardi-input">
                                 <span>Account number</span>
-                                <input id="AccountNumber" name="AccountNumber" type="text" value="" autofocus="autofocus" class="AccountNumber form_field" maxlength="8" ui-event-control-id="bank-details:account-number" />
+                                <input id="AccountNumber" name="AccountNumber" type="text" value="" autofocus="autofocus" class="AccountNumber form_field" maxlength="8" ui-event-control-id="broker:bank-details:account-number" />
                                 <img class="field_status required" id="AccountNumberImage" />
                             </label>
                         </div>
@@ -23,11 +20,11 @@
                         <div class="controls ezSortCode">
                             <label class="attardi-input">
                                 <span>Sort Code</span>
-                                <input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="bank-details:sort-code-1" />
+                                <input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-1" />
                                 <span></span>
-                                <input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="bank-details:sort-code-2" />
+                                <input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-2" />
                                 <span></span>
-                                <input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="bank-details:sort-code-3" />
+                                <input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="broker:bank-details:sort-code-3" />
                                 <img class="field_status required" id="SortCodeImage" />
                             </label>
                             <input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;" />
@@ -36,15 +33,15 @@
 
                     <div class="control-group">
                         <div class="controls">
-                            <input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked ui-event-control-id="bank-details:account-type"><label class="for-radio" for="baPersonal">Personal</label>
-                            <input type="radio" name="bankAccountType" id="baBusiness" value="Business" ui-event-control-id="bank-details:account-type"><label class="for-radio" for="baPusiness">Business </label>
+                            <input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPersonal">Personal</label>
+                            <input type="radio" name="bankAccountType" id="baBusiness" value="Business" ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPusiness">Business </label>
                         </div>
                     </div>
 
                     <div class="form_buttons_container">
                         <div class="attardi-button">
-                            <a href="#" class="button btn-green connect-bank disabled pull-right" ui-event-control-id="bank-details:continue">Continue</a>
-                            <a href="#" class="back button btn-grey pull-right" ui-event-control-id="bank-details:back">Back</a>
+                            <button type="submit" class="button btn-green connect-bank disabled pull-right" ui-event-control-id="broker:bank-details:continue">Continue</button>
+                            <button class="back button btn-grey pull-right" ui-event-control-id="broker:bank-details:back">Back</button>
                         </div>
                     </div>
                 </div>

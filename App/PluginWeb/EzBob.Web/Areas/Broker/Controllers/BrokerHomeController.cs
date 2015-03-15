@@ -22,6 +22,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
+	using PostcodeAnywhere;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -634,7 +635,7 @@
 				return new BrokerForJsonResult("Failed to add customer lead.");
 			} // try
 
-			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(
+			this.m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(
 				(int?)null,
 				LeadEmail,
 				(int?)null,
@@ -644,6 +645,33 @@
 
 			return new BrokerForJsonResult();
 		} // AddLead
+
+        [HttpPost]
+        [Ajax]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult AddBank(string AccountNumber, string SortCode, string ContactEmail, string bankAccountType)
+        {
+            ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3}.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+
+            var oIsAuthResult = IsAuth("Add bank", ContactEmail);
+            if (oIsAuthResult != null)
+                return oIsAuthResult;
+
+            try {
+                this.m_oServiceClient.Instance.BrokerAddBank(new BrokerAddBankModel {
+                    AccountNumber = AccountNumber,
+                    SortCode = SortCode,
+                    BankAccountType = bankAccountType,
+                    BrokerEmail = ContactEmail
+                });
+            } catch (Exception ex) {
+                ms_oLog.Warn(ex, "Failed to add bank for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+                return new BrokerForJsonResult(ex.Message);
+            }
+           
+            ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+            return new BrokerForJsonResult();
+        } // AddBank
 
 		[HttpPost]
 		[Ajax]

@@ -87,6 +87,7 @@
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
+    <Compile Include="Broker\BrokerAddBank.cs" />
     <Compile Include="CalculateLoan\Helpers\BadPeriods.cs" />
     <Compile Include="CalculateLoan\Helpers\DailyLoanStatus.cs" />
     <Compile Include="CalculateLoan\BankLikeLoanCalculator.cs" />
@@ -412,6 +413,10 @@
     <ProjectReference Include="..\..\App\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
       <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
       <Name>EzServiceConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\App\PluginWeb\PostcodeAnywhere\PostcodeAnywhere.csproj">
+      <Project>{083973A7-25ED-4B16-9BB4-65BDD4AA1AA8}</Project>
+      <Name>PostcodeAnywhere</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\Amazon\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>

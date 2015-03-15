@@ -12,10 +12,35 @@ EzBob.Broker.AddBankView = EzBob.Broker.SubmitView.extend({
 		this.initValidatorCfg();
 	}, // initialize
 
+	render: function(){
+	    EzBob.Broker.AddBankView.__super__.render.apply(this, arguments);
+
+	    this.$el.find('#AccountNumber, #SortCode1, #SortCode2, #SortCode3').numericOnly();
+
+	    var that = this;
+
+	    this.$el.find("#SortCode #SortCode1").on("keyup change focusout", function () {
+	        that.$el.find("#SortCode .SortCodeSplit").val(that.$el.find("#SortCode #SortCode1").val() +
+                                                          that.$el.find("#SortCode #SortCode2").val() +
+                                                          that.$el.find("#SortCode #SortCode3").val()
+                                                         );
+	    });
+
+	    this.$el.find("#SortCode #SortCode2").on("keyup change focusout", function () {
+	        that.$el.find("#SortCode #SortCode1").trigger("change");
+	    });
+
+	    this.$el.find("#SortCode #SortCode3").on("keyup change focusout", function () {
+	        that.$el.find("#SortCode #SortCode1").trigger("change");
+	    });
+
+	    this.inputChanged();
+	},
+
 	events: function() {
 		var evt = EzBob.Broker.AddBankView.__super__.events.apply(this, arguments);
 
-		evt['click .back-to-list'] = 'backToList';
+		evt['click .back'] = 'backToList';
 
 		return evt;
 	}, // events
@@ -54,8 +79,8 @@ EzBob.Broker.AddBankView = EzBob.Broker.SubmitView.extend({
 		oRequest.success(function(res) {
 			if (res.success) {
 				self.clear();
-                EzBob.App.trigger('info', 'A bank account has been added.');
 				self.backToList();
+				EzBob.App.trigger('info', 'A bank account has been added.');
 				return;
 			} // if
 
@@ -77,7 +102,7 @@ EzBob.Broker.AddBankView = EzBob.Broker.SubmitView.extend({
 	}, // onSubmit
 
 	initValidatorCfg: function() {
-		this.validator = this.$el.find('form').validate({
+	    this.validator = this.$el.find('form#bankAccount').validate({
 			rules: {
 			    SortCode: { required: true, minlength: 6, maxlength: 6, digits: true },
 			    AccountNumber: { required: true, minlength: 8, maxlength: 8, digits: true }
