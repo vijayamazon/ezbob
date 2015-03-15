@@ -26,6 +26,19 @@ BEGIN
 	--
 	--------------------------------------------------------------------------
 
+	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, NULL)
+	SET @RowID = SCOPE_IDENTITY()
+
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 1)
+
+	/*
+
+	--------------------------------------------------------------------------
+	--
+	-- Row
+	--
+	--------------------------------------------------------------------------
+
 	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, 0)
 	SET @RowID = SCOPE_IDENTITY()
 
@@ -79,6 +92,8 @@ BEGIN
 	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  600, 0.85)
 	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  700, 0.95)
 	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 1.00)
+
+	*/
 
 	--------------------------------------------------------------------------
 END
