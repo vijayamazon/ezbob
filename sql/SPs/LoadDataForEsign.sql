@@ -84,6 +84,7 @@ BEGIN
 		'Company' AS RowType,
 		co.Id AS ID,
 		co.CompanyName AS Name,
+		LTRIM(RTRIM(ISNULL(co.CompanyNumber, ''))) AS Number,
 		a.Line1,
 		a.Line2,
 		a.Line3,
