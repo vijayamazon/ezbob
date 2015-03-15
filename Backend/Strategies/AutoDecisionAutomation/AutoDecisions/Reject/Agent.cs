@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -12,6 +12,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;

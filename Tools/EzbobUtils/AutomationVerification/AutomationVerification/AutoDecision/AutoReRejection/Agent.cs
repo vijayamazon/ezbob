@@ -9,7 +9,6 @@
 	using Ezbob.Logger;
 
 	public class Agent {
-
 		public Agent(int nCustomerID, DateTime? dataAsOf, AConnection oDB, ASafeLog oLog) {
 			Log = oLog ?? new SafeLog();
 			DB = oDB;
@@ -39,14 +38,15 @@
 				CheckNewMarketplaces();
 				CheckRejectionAge();
 				CheckReturnRatio();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Log.Error(e, "Exception during auto re-rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);
 			} // try
 
 			Log.Debug(
-				"Secondary: checking if auto re-reject should take place for customer {0} complete; {1}", Args.CustomerID, Trail
+				"Secondary: checking if auto re-reject should take place for customer {0} complete; {1}",
+				Args.CustomerID,
+				Trail
 			);
 		} // MakeDecision
 
@@ -81,10 +81,13 @@
 		} // GatherData
 
 		private void CheckNumOfLoans() {
-			if (Trail.MyInputData.NumOfOpenLoans >= Trail.MyInputData.AutoReRejectMaxAllowedLoans)
-				StepReject<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
-			else
-				StepNoDecision<OpenLoans>().Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
+			if (Trail.MyInputData.NumOfOpenLoans >= Trail.MyInputData.AutoReRejectMaxAllowedLoans) {
+				StepReject<OpenLoans>()
+					.Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
+			} else {
+				StepNoDecision<OpenLoans>()
+					.Init(Trail.MyInputData.NumOfOpenLoans, Trail.MyInputData.AutoReRejectMaxAllowedLoans);
+			} // if
 		} // CheckNumOfLoans
 
 		private void CheckLastDecisionWasReject() {
@@ -127,23 +130,21 @@
 					Trail.MyInputData.PrincipalRepaymentAmount,
 					Trail.MyInputData.AutoReRejectMinRepaidPortion
 					);
-			}
-			else { //have open loan
+			} else { //have open loan
 				if (nRatio < Trail.MyInputData.AutoReRejectMinRepaidPortion) {
 					StepReject<OpenLoansRepayments>().Init(
 						Trail.MyInputData.OpenLoansAmount,
 						Trail.MyInputData.PrincipalRepaymentAmount,
 						Trail.MyInputData.AutoReRejectMinRepaidPortion
-						);
-				}
-				else {
+					);
+				} else {
 					StepNoReject<OpenLoansRepayments>().Init(
 						Trail.MyInputData.OpenLoansAmount,
 						Trail.MyInputData.PrincipalRepaymentAmount,
 						Trail.MyInputData.AutoReRejectMinRepaidPortion
-						);
-				}
-			}
+					);
+				} // if
+			} // if
 		} // CheckReturnRatio
 
 		private void ProcessRow(SafeReader sr) {
@@ -186,6 +187,5 @@
 		private T StepNoDecision<T>() where T : ATrace {
 			return Trail.Dunno<T>();
 		} // StepNoDecision
-
 	} // class Agent
 } // namespace

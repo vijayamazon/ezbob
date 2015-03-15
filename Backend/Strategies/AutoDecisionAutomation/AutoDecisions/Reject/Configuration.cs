@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject {
 	using System;
 	using System.Reflection;
 	using AutomationCalculator.AutoDecision.AutoRejection;
@@ -8,14 +8,14 @@
 	public class Configuration {
 
 		public Configuration(AConnection oDB, ASafeLog oLog) {
-			m_oDB = oDB;
-			m_oLog = oLog;
+			this.m_oDB = oDB;
+			this.m_oLog = oLog;
 			Values = new RejectionConfigs();
 		} // constructor
 
 		public virtual void Load() {
 			Values.EnabledTraces.Clear();
-			m_oDB.ForEachRowSafe(SetValue, "LoadAutoRejectionConfigs", CommandSpecies.StoredProcedure);
+			this.m_oDB.ForEachRowSafe(SetValue, "LoadAutoRejectionConfigs", CommandSpecies.StoredProcedure);
 		} // Load
 
 		public RejectionConfigs Values { get; private set; }
@@ -26,7 +26,7 @@
 			RowType rt;
 
 			if (!Enum.TryParse(rowType, true, out rt)) {
-				m_oLog.Alert("Unknown row type: {0}", rowType);
+				this.m_oLog.Alert("Unknown row type: {0}", rowType);
 				return;
 			} // if
 
@@ -37,18 +37,18 @@
 				PropertyInfo pi = this.Values.GetType().GetProperty(sName);
 
 				if (pi == null) {
-					m_oLog.Alert("Auto reject configuration: unsupported parameter found '{0}'.", sName);
+					this.m_oLog.Alert("Auto reject configuration: unsupported parameter found '{0}'.", sName);
 					return;
 				} // if
 
 				pi.SetValue(this.Values, sr["Value"].ToType(pi.PropertyType));
 
-				m_oLog.Debug("Auto reject configuration: '{0}' was set to {1}.", sName, pi.GetValue(this.Values));
+				this.m_oLog.Debug("Auto reject configuration: '{0}' was set to {1}.", sName, pi.GetValue(this.Values));
 				break;
 
 			case RowType.TraceEnabled:
 				Values.EnabledTraces.Add(sName);
-				m_oLog.Debug("Auto reject configuration: '{0}' trace is enabled.", sName);
+				this.m_oLog.Debug("Auto reject configuration: '{0}' trace is enabled.", sName);
 				break;
 
 			default:

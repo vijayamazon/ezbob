@@ -23,14 +23,11 @@
 	using Code;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
-	using EzBob.CommonLib;
 	using Infrastructure.csrf;
-	using log4net;
 	using SalesForceLib.Models;
 	using ActionResult = Ezbob.Database.ActionResult;
 
 	public class CustomersController : Controller {
-
 		public CustomersController(
 			ISession session,
 			CustomerStatusesRepository customerStatusesRepository,
@@ -40,8 +37,8 @@
 			LoanLimit limit,
 			MarketPlaceRepository mpType,
 			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository, 
-			RejectReasonRepository rejectReasonRepository) {
-			m_oLog = new SafeILog(LogManager.GetLogger(typeof(CustomersController)));
+			RejectReasonRepository rejectReasonRepository
+		) {
 			m_oDB = DbConnectionGenerator.Get();
 
 			_context = context;
@@ -122,11 +119,11 @@
 				CommandSpecies.StoredProcedure
 			); // foreach
 
-			m_oLog.Debug("{0}: traversing done.", sSpName);
+			log.Debug("{0}: traversing done.", sSpName);
 
 			var j = Json(oRes, JsonRequestBehavior.AllowGet);
 
-			m_oLog.Debug("{0}: converted to json.", sSpName);
+			log.Debug("{0}: converted to json.", sSpName);
 
 			return j;
 		} // LoadLogbookEntryTypeList
@@ -152,7 +149,7 @@
 		[Ajax]
 		[HttpGet]
 		public ContentResult GetGrid(string grid, bool includeTestCustomers, bool includeAllCustomers) {
-			m_oLog.Debug("Started: GetGrid('{0}', {1}, {2}...)", grid, includeTestCustomers, includeAllCustomers);
+			log.Debug("Started: GetGrid('{0}', {1}, {2}...)", grid, includeTestCustomers, includeAllCustomers);
 
 			GridActions nAction;
 
@@ -221,8 +218,19 @@
 			} // switch
 		} // GetGrid
 
-		private ContentResult LoadGrid(GridActions nSpName, bool bIncludeTestCustomers, Func<AGridRow> oFactory, IEnumerable<QueryParameter> oMoreSpArgs = null) {
-			return LoadGrid(nSpName, bIncludeTestCustomers, oFactory, bIncludeAllCustomers: null, oMoreSpArgs: oMoreSpArgs);
+		private ContentResult LoadGrid(
+			GridActions nSpName,
+			bool bIncludeTestCustomers,
+			Func<AGridRow> oFactory,
+			IEnumerable<QueryParameter> oMoreSpArgs = null
+		) {
+			return LoadGrid(
+				nSpName,
+				bIncludeTestCustomers,
+				oFactory,
+				bIncludeAllCustomers: null,
+				oMoreSpArgs: oMoreSpArgs
+			);
 		} // LoadGrid
 
 		private ContentResult LoadGrid(
@@ -269,14 +277,14 @@
 					args.ToArray()
 					); // foreach
 			}
-			m_oLog.Debug("{0}: traversing done.", nSpName);
+			log.Debug("{0}: traversing done.", nSpName);
 
 			var sb = new StringBuilder();
 			sb.AppendLine(tc.Title);
 			foreach (var time in tc.Steps)
 				sb.AppendFormat("\t{0}: {1}ms\n", time.Name, time.Length);
 
-			m_oLog.Info("{0}", sb);
+			log.Info("{0}", sb);
 
 			var serializer = new JavaScriptSerializer {
 				MaxJsonLength = Int32.MaxValue
@@ -311,20 +319,26 @@
 
 			if (model.status != CreditResultStatus.ApprovedPending)
 				customer.IsWaitingForSignature = false;
+
 			string stage;
+			bool runSilentAutomation = false;
+
 			switch (model.status) {
 			case CreditResultStatus.Approved:
-				if (!customer.WizardStep.TheLastOne) {
+				if (customer.WizardStep.TheLastOne)
+					runSilentAutomation = true;
+				else {
 					try {
 						customer.AddAlibabaDefaultBankAccount();
 
-						var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(CurrentValues.Instance.FinishWizardForApproved);
+						var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(
+							CurrentValues.Instance.FinishWizardForApproved
+							);
 						oArgs.CustomerID = customer.Id;
 
 						m_oServiceClient.Instance.FinishWizard(oArgs, user.Id);
-					}
-					catch (Exception e) {
-						m_oLog.Alert(e, "Something went horribly not so cool while finishing customer's wizard.");
+					} catch (Exception e) {
+						log.Alert(e, "Something went horribly not so cool while finishing customer's wizard.");
 					} // try
 				} // if
 
@@ -357,22 +371,35 @@
 				_session.Flush();
 
 				int validForHours = (int)(request.OfferValidUntil - request.OfferStart).Value.TotalHours;
+
 				if (bSendBrokerForceResetCustomerPassword && bSendApprovedUser) {
 					try {
-						m_oServiceClient.Instance.BrokerApproveAndResetCustomerPassword(user.Id, customer.Id, sum, validForHours, numOfPreviousApprovals == 0);
+						m_oServiceClient.Instance.BrokerApproveAndResetCustomerPassword(
+							user.Id,
+							customer.Id,
+							sum,
+							validForHours,
+							numOfPreviousApprovals == 0
+						);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to force reset customer password and send 'approved user' email: " + e.Message;
-						m_oLog.Alert(e, "Failed to force reset customer password and send 'approved user' email.");
+						log.Alert(e, "Failed to force reset customer password and send 'approved user' email.");
 					} // try
 				}
 				else if (bSendApprovedUser) {
 					try {
-						m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, sum, validForHours, numOfPreviousApprovals == 0);
+						m_oServiceClient.Instance.ApprovedUser(
+							user.Id,
+							customer.Id,
+							sum,
+							validForHours,
+							numOfPreviousApprovals == 0
+						);
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'approved user' email: " + e.Message;
-						m_oLog.Warn(e, "Failed to send 'approved user' email.");
+						log.Warn(e, "Failed to send 'approved user' email.");
 					} // try
 				}
 				else if (bSendBrokerForceResetCustomerPassword) {
@@ -380,19 +407,28 @@
 						m_oServiceClient.Instance.BrokerForceResetCustomerPassword(user.Id, customer.Id);
 					}
 					catch (Exception e) {
-						m_oLog.Alert(e, "Something went horribly not so cool while resetting customer password.");
+						log.Alert(e, "Something went horribly not so cool while resetting customer password.");
 					} // try
 				} // if
+
 				stage = OpportunityStage.s90.DescriptionAttr();
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {
-					Email = customer.Name,
-					ApprovedAmount = (int)sum,
-					Stage = stage,
-					ExpectedEndDate = request.OfferValidUntil
-				}); 
+
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(
+					_context.UserId,
+					customer.Id,
+					new ServiceClientProxy.EzServiceReference.OpportunityModel {
+						Email = customer.Name,
+						ApprovedAmount = (int)sum,
+						Stage = stage,
+						ExpectedEndDate = request.OfferValidUntil
+					}
+				); 
+
 				break;
 
 			case CreditResultStatus.Rejected:
+				runSilentAutomation = true;
+
 				customer.DateRejected = now;
 				customer.RejectedReason = model.reason;
 				customer.Status = Status.Rejected;
@@ -414,17 +450,21 @@
 					}
 					catch (Exception e) {
 						sWarning = "Failed to send 'reject user' email: " + e.Message;
-						m_oLog.Warn(e, "Failed to send 'reject user' email.");
+						log.Warn(e, "Failed to send 'reject user' email.");
 					} // try
 				} // if
 
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel 
-				{
-					Email = customer.Name,
-					CloseDate = now,
-					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
-					DealLostReason = customer.RejectedReason
-				}); 
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(
+					_context.UserId,
+					customer.Id,
+					new ServiceClientProxy.EzServiceReference.OpportunityModel {
+						Email = customer.Name,
+						CloseDate = now,
+						DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
+						DealLostReason = customer.RejectedReason
+					}
+				); 
+
 				break;
 
 			case CreditResultStatus.Escalated:
@@ -433,35 +473,68 @@
 				customer.EscalationReason = model.reason;
 				_historyRepository.LogAction(DecisionActions.Escalate, model.reason, user, customer);
 				stage = OpportunityStage.s20.DescriptionAttr();
+
 				try {
 					m_oServiceClient.Instance.Escalated(customer.Id, _context.UserId);
 				}
 				catch (Exception e) {
 					sWarning = "Failed to send 'escalated' email: " + e.Message;
-					m_oLog.Warn(e, "Failed to send 'escalated' email.");
+					log.Warn(e, "Failed to send 'escalated' email.");
 				} // try
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage }); 
+
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(
+					_context.UserId,
+					customer.Id,
+					new ServiceClientProxy.EzServiceReference.OpportunityModel {
+						Email = customer.Name,
+						Stage = stage,
+					}
+				); 
+
 				break;
 
 			case CreditResultStatus.ApprovedPending:
+				runSilentAutomation = true;
+
 				customer.IsWaitingForSignature = model.signature == 1;
 				customer.CreditResult = CreditResultStatus.ApprovedPending;
 				customer.PendingStatus = PendingStatus.Manual;
 				customer.ManagerApprovedSum = request.ApprovedSum();
 				_historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
 
-				stage = model.signature == 1 ? OpportunityStage.s75.DescriptionAttr() : OpportunityStage.s50.DescriptionAttr();
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel {Email = customer.Name,Stage = stage}); 
+				stage = model.signature == 1
+					? OpportunityStage.s75.DescriptionAttr()
+					: OpportunityStage.s50.DescriptionAttr();
+
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(
+					_context.UserId,
+					customer.Id,
+					new ServiceClientProxy.EzServiceReference.OpportunityModel {
+						Email = customer.Name,
+						Stage = stage,
+					}
+				); 
+
 				break;
 
 			case CreditResultStatus.WaitingForDecision:
 				customer.CreditResult = CreditResultStatus.WaitingForDecision;
 				_historyRepository.LogAction(DecisionActions.Waiting, "", user, customer);
 				stage = OpportunityStage.s40.DescriptionAttr();
-				m_oServiceClient.Instance.SalesForceUpdateOpportunity(_context.UserId, customer.Id, new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage }); 
+
+				m_oServiceClient.Instance.SalesForceUpdateOpportunity(
+					_context.UserId,
+					customer.Id,
+					new ServiceClientProxy.EzServiceReference.OpportunityModel {
+						Email = customer.Name,
+						Stage = stage,
+					}); 
 
 				break;
 			} // switch
+
+			if (runSilentAutomation)
+				m_oServiceClient.Instance.SilentAutomation(customer.Id, user.Id);
 
 			return Json(new { warning = sWarning });
 		} // ChangeStatus
@@ -501,8 +574,19 @@
 			foreach (var recentCustomer in recentCustomers) {
 				var customer = _customers.ReallyTryGet(recentCustomer.CustomerId);
 
-				if (customer != null)
-					recentCustomersMap.Add(new System.Tuple<int, string>(recentCustomer.CustomerId, string.Format("{0}, {1}, {2}", recentCustomer.CustomerId, customer.PersonalInfo == null ? null : customer.PersonalInfo.Fullname, customer.Name)));
+				if (customer != null) {
+					recentCustomersMap.Add(
+						new System.Tuple<int, string>(
+							recentCustomer.CustomerId,
+							string.Format(
+								"{0}, {1}, {2}",
+								recentCustomer.CustomerId,
+								customer.PersonalInfo == null ? null : customer.PersonalInfo.Fullname,
+								customer.Name
+							)
+						)
+					);
+				} // if
 			} // for each
 
 			return Json(new { RecentCustomers = recentCustomersMap }, JsonRequestBehavior.AllowGet);
@@ -553,9 +637,8 @@
 		public JsonResult FindCustomer(string term) {
 			term = term.Trim();
 			int id;
-			if (!int.TryParse(term, out id)) {
+			if (!int.TryParse(term, out id))
 				term = term.Replace(" ", "%");
-			}
 
 			var findResult = _session.Query<Customer>()
 				.Where(c =>
@@ -572,15 +655,14 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult RejectReasons()
-		{
+		public JsonResult RejectReasons() {
 			return Json(new {reasons = _rejectReasonRepository.GetAll().ToList()}, JsonRequestBehavior.AllowGet);
-		}
+		} // RejectReasons
 
 		private enum CustomerState {
 			NotSuccesfullyRegistred,
 			NotFound,
-			Ok
+			Ok,
 		} // enum CustomerState
 
 		private readonly ISession _session;
@@ -594,8 +676,8 @@
 		private readonly CustomerStatusesRepository _customerStatusesRepository;
 		private readonly IUnderwriterRecentCustomersRepository underwriterRecentCustomersRepository;
 		private readonly RejectReasonRepository _rejectReasonRepository;
-		private readonly ASafeLog m_oLog;
 		private readonly AConnection m_oDB;
 
+		private static readonly ASafeLog log = new SafeILog(typeof(CustomersController));
 	} // class CustomersController
 } // namespace

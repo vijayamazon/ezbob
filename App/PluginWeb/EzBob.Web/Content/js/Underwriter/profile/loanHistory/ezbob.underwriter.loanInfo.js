@@ -268,13 +268,19 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			if ($(e.currentTarget).hasClass("disabled"))
 				return false;
 
-			var el = ($("<select/>")).css("height", "30px").css("width", "270px").append("<option value='1'>Skip everything, go to manual decision</option>").append("<option value='2'>Skip everything and apply auto rules</option>").append("<option value='3'>Update everything and apply auto rules</option>").append("<option value='4'>Update everything and go to manual decision</option>");
+			var el = $('<select></select>')
+				.css({ height: '30px', width: '270px', })
+				.append('<option value=1>Skip everything, go to manual decision</option>')
+				.append('<option value=2>Skip everything and apply auto rules</option>')
+				.append('<option value=3>Update everything and apply auto rules</option>')
+				.append('<option value=4>Update everything and go to manual decision</option>');
 
 			var self = this;
 
-			EzBob.ShowMessage(el, "New Credit Line Option", (function() {
+			EzBob.ShowMessage(el, 'New Credit Line Option', (function() {
 				self.createNewCreditLine(el.val());
-			}), "OK", null, "Cancel");
+			}), 'OK', null, 'Cancel');
+
 			return false;
 		}, // runNewCreditLine
 

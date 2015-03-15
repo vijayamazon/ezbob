@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -6,9 +6,9 @@
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public partial class Approval {
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");

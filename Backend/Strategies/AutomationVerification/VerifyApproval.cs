@@ -1,5 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 
 	public class VerifyApproval : AVerificationBase {
 		public VerifyApproval(int nTopCount, int nLastCheckedCustomerID) : base(nTopCount, nLastCheckedCustomerID) {}

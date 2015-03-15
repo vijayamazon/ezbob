@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -82,13 +82,13 @@
 
 		private void CheckCompanyIsDissolved() {
 			bool isDissolved =
-				m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.HasValue &&
-				m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.Value <= Now;
+				this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.HasValue &&
+				this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.Value <= Now;
 
 			if (isDissolved)
-				StepFailed<CompanyIsDissolved>().Init(m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
+				StepFailed<CompanyIsDissolved>().Init(this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
 			else
-				StepDone<CompanyIsDissolved>().Init(m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
+				StepDone<CompanyIsDissolved>().Init(this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
 		} // CheckCompanyIsDissolved
 
 		private void CheckAge() {
@@ -295,16 +295,16 @@
 
 			if (!isDirector) {
 				var nc = new NameComparer(
-					m_oTrail.MyInputData.CustomerName,
-					m_oTrail.MyInputData.DirectorNames,
+					this.m_oTrail.MyInputData.CustomerName,
+					this.m_oTrail.MyInputData.DirectorNames,
 					this.db
 				);
 
-				foreach (Name name in m_oTrail.MyInputData.DirectorNames) {
-					StringDifference firstNameDiff = nc[m_oTrail.MyInputData.CustomerName.FirstName, name.FirstName];
+				foreach (Name name in this.m_oTrail.MyInputData.DirectorNames) {
+					StringDifference firstNameDiff = nc[this.m_oTrail.MyInputData.CustomerName.FirstName, name.FirstName];
 
 					if ((int)firstNameDiff >= (int)StringDifference.SoundVerySimilar) {
-						StringDifference lastNameDiff = nc[m_oTrail.MyInputData.CustomerName.LastName, name.LastName];
+						StringDifference lastNameDiff = nc[this.m_oTrail.MyInputData.CustomerName.LastName, name.LastName];
 						
 						if ((int)lastNameDiff >= (int)StringDifference.SoundVerySimilar) {
 							isDirector = true;

@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval {
 	using System;
 	using AutomationCalculator.ProcessHistory.ReApproval;
 	using Ezbob.Database;

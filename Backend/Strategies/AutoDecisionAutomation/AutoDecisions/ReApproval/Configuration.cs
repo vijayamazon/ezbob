@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval {
 	using System.Reflection;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -7,12 +7,12 @@
 	public class Configuration {
 
 		public Configuration(AConnection oDB, ASafeLog oLog) {
-			m_oDB = oDB;
-			m_oLog = oLog;
+			this.m_oDB = oDB;
+			this.m_oLog = oLog;
 		} // constructor
 
 		public void Load() {
-			m_oDB.ForEachRowSafe(SetValue, "LoadReApprovalConfigs", CommandSpecies.StoredProcedure);
+			this.m_oDB.ForEachRowSafe(SetValue, "LoadReApprovalConfigs", CommandSpecies.StoredProcedure);
 		} // Load
 
 		public int MaxLacrAge { get; [UsedImplicitly] private set; }
@@ -28,13 +28,13 @@
 			PropertyInfo pi = this.GetType().GetProperty(sName);
 
 			if (pi == null) {
-				m_oLog.Alert("Auto re-approval configuration: unsupported parameter found '{0}'.", sName);
+				this.m_oLog.Alert("Auto re-approval configuration: unsupported parameter found '{0}'.", sName);
 				return;
 			} // if
 
 			pi.SetValue(this, sr["Value"].ToType(pi.PropertyType));
 
-			m_oLog.Debug("Auto re-approval configuration: '{0}' was set to {1}.", sName, pi.GetValue(this));
+			this.m_oLog.Debug("Auto re-approval configuration: '{0}' was set to {1}.", sName, pi.GetValue(this));
 		} // SetValue
 
 		private readonly ASafeLog m_oLog;

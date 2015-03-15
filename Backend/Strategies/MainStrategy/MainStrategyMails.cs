@@ -1,22 +1,35 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System.Collections.Generic;
-	using System.Linq;
-	using DbConstants;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MailStrategies.API;
+	using Ezbob.Backend.Strategies.MedalCalculations;
 
-	partial class MainStrategy {
-		private void SendEmails() {
-			if (autoDecisionResponse.DecidedToReject) {
-				bool sendToCustomer = true;
-				var customer = this.customers.ReallyTryGet(customerId);
-				if (customer != null) {
-					int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
-					if (customer.FilledByBroker && numOfPreviousApprovals == 0) {
-						sendToCustomer = false;
-					}
-				}
+	internal class MainStrategyMails {
+		public MainStrategyMails(
+			StrategiesMailer mailer,
+			int customerId,
+			int offeredCreditLine,
+			LastOfferData lastOffer,
+			MedalResult medal,
+			CustomerDetails customerDetails,
+			AutoDecisionResponse autoDecisionResponse,
+			bool sendToCustomer
+		) {
+			this.mailer = mailer;
+			this.customerId = customerId;
+			this.offeredCreditLine = offeredCreditLine;
+			this.lastOffer = lastOffer;
+			this.medal = medal;
+			this.customerDetails = customerDetails;
+			this.autoDecisionResponse = autoDecisionResponse;
+			this.sendToCustomer = sendToCustomer;
+		} // constructor
+
+		public void SendEmails() {
+			if (autoDecisionResponse.DecidedToReject)
 				new RejectUser(customerId, sendToCustomer).Execute();
-			} else if (autoDecisionResponse.IsAutoApproval)
+			else if (autoDecisionResponse.IsAutoApproval)
 				SendApprovalMails();
 			else if (autoDecisionResponse.IsAutoBankBasedApproval)
 				SendBankBasedApprovalMails();
@@ -27,7 +40,6 @@
 		} // SendEmails
 
 		private void SendApprovalMails() {
-			
 			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Approved" },
 				{ "RegistrationDate", this.customerDetails.AppRegistrationDate.DateStr() },
@@ -57,7 +69,14 @@
 						: string.Empty
 				}
 			};
-			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(customerId, "Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables);
+
+			var isFirstLoan = this.customerDetails.NumOfLoans == 0;
+
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(
+				customerId,
+				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
+				customerMailVariables
+			);
 			automationDecsionMails.Execute();
 		} // SendApprovalMails
 
@@ -96,7 +115,14 @@
 					: string.Empty
 				}
 			};
-			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(customerId, "Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)", customerMailVariables);
+
+			var isFirstLoan = this.customerDetails.NumOfLoans == 0;
+
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(
+				customerId,
+				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
+				customerMailVariables
+			);
 			automationDecsionMails.Execute();
 		} // SendBankBasedApprovalMails
 
@@ -132,7 +158,9 @@
 			};
 
 			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(customerId,
-				this.customerDetails.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)", customerMailVariables);
+				this.customerDetails.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)",
+				customerMailVariables
+			);
 			automationDecsionMails.Execute();
 		} // SendReApprovalMails
 
@@ -148,5 +176,14 @@
 				{ "SystemDecision", "WaitingForDecision" }
 			});
 		} // SendWaitingForDecisionMail
-	}
-}
+
+		private readonly int customerId;
+		private readonly int offeredCreditLine;
+		private readonly LastOfferData lastOffer;
+		private readonly MedalResult medal;
+		private readonly CustomerDetails customerDetails;
+		private readonly AutoDecisionResponse autoDecisionResponse;
+		private readonly bool sendToCustomer;
+		private readonly StrategiesMailer mailer;
+	} // class MainStrategyMails
+} // namespace

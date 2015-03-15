@@ -5,8 +5,9 @@
 	using System.IO;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
 	using Ezbob.Backend.Strategies.Broker;
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Matrices;
@@ -524,7 +525,7 @@
 		private static void TestReapproval(AConnection oDB, ASafeLog oLog) {
 			var adr = new AutoDecisionResponse();
 
-			var ra = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(339, oDB, oLog).Init();
+			var ra = new Agent(339, oDB, oLog).Init();
 
 			ra.MakeDecision(adr);
 		}

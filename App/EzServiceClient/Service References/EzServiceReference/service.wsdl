@@ -254,6 +254,12 @@
   <wsdl:message name="IEzService_RequalifyCustomer_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequalifyCustomerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SilentAutomation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SilentAutomation" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SilentAutomation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SilentAutomationResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyFile" />
   </wsdl:message>
@@ -1389,6 +1395,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomer" message="tns:IEzService_RequalifyCustomer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomerResponse" message="tns:IEzService_RequalifyCustomer_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SilentAutomation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SilentAutomation" message="tns:IEzService_SilentAutomation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SilentAutomationResponse" message="tns:IEzService_SilentAutomation_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyFile">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
@@ -2324,6 +2334,15 @@
     </wsdl:operation>
     <wsdl:operation name="RequalifyCustomer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/RequalifyCustomer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SilentAutomation">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SilentAutomation" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

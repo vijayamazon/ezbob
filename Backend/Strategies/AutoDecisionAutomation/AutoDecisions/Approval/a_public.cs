@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval {
 	using System;
 	using System.Collections.Generic;
 	using System.Data;
@@ -10,6 +10,7 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
@@ -40,7 +41,7 @@
 				Amount = offeredCreditLine,
 			};
 
-			using (m_oTrail.AddCheckpoint(ProcessCheckpoints.Creation)) {
+			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.Creation)) {
 				Now = DateTime.UtcNow;
 
 				this.db = db;
@@ -79,7 +80,7 @@
 		} // constructor
 
 		public Approval Init() {
-			using (m_oTrail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
+			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
 				var stra = new LoadExperianConsumerData(this.customerId, null, null);
 				stra.Execute();
 
@@ -177,17 +178,17 @@
 		} // Init
 
 		public bool MakeAndVerifyDecision() {
-			using (m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				GetAvailableFunds availFunds;
 
-				using (m_oTrail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
+				using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
 					availFunds = new GetAvailableFunds();
 					availFunds.Execute();
 
 					SaveTrailInputData(availFunds);
 				} // using timer step
 
-				using (m_oTrail.AddCheckpoint(ProcessCheckpoints.RunCheck))
+				using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.RunCheck))
 					CheckAutoApprovalConformance(availFunds.ReservedAmount);
 			} // using timer step
 

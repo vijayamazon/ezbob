@@ -4,7 +4,6 @@ namespace EzBobTest {
 	using AutomationCalculator.MedalCalculation;
 	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.AutomationVerification;
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
@@ -14,7 +13,7 @@ namespace EzBobTest {
 	using System.IO;
 	using System.Security.Cryptography;
 	using System.Text;
-	
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
 	using Ezbob.Utils;
 
 	/// <summary>

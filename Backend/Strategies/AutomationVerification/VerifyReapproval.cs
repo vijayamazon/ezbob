@@ -1,4 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval;
+
 	public class VerifyReapproval : AVerificationBase {
 		public VerifyReapproval(
 			int nTopCount,
@@ -11,7 +13,7 @@
 		} // DecisionName
 
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
-			return new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(
+			return new Agent(
 				oRow.CustomerId,
 				DB,
 				Log

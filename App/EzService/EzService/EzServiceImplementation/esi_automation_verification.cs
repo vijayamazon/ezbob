@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 
 	partial class EzServiceImplementation {
@@ -26,5 +27,9 @@
 		public ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, DateTime? calculationTime) {
 			return Execute<VerifyMedal>(null, null, topCount, lastCheckedID, includeTest, calculationTime);
 		} // VerifyMedal
+
+		public ActionMetaData SilentAutomation(int customerID, int underwriterID) {
+			return Execute<SilentAutomation>(customerID, underwriterID, customerID);
+		} // SilentAutomation
 	} // class EzServiceImplementation
 } // namespace

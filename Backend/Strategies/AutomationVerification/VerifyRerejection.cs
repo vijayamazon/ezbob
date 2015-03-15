@@ -1,8 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 
 	public class VerifyRerejection : AVerificationBase {
-
 		public VerifyRerejection(
 			int nTopCount,
 			int nLastCheckedCustomerID
@@ -20,6 +19,5 @@
 				Log
 			).MakeAndVerifyDecision();
 		} // MakeAndVerifyDecision
-
 	} // class VerifyRerejection
 } // namespace

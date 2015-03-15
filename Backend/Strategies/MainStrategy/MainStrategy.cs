@@ -1,13 +1,15 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.SalesForce;
@@ -23,19 +25,13 @@
 	using SalesForceLib.Models;
 	using StructureMap;
 
-	public partial class MainStrategy : AStrategy {
-		public override string Name {
-			get { return "Main strategy"; }
-		} // Name
-
+	public class MainStrategy : AStrategy {
 		public MainStrategy(
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
 			FinishWizardArgs fwa
 		) {
-			this.finishWizardArgs = fwa;
-
 			this.session = ObjectFactory.GetInstance<ISession>();
 			this.customers = ObjectFactory.GetInstance<CustomerRepository>();
 			this.decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
@@ -45,30 +41,41 @@
 			this.customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
 			this.landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
 
-			this.mailer = new StrategiesMailer();
 			this.customerId = customerId;
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = avoidAutoDecision;
 			this.overrideApprovedRejected = true;
-			this.staller = new Staller(customerId, this.mailer);
+			this.finishWizardArgs = fwa;
+
+			this.autoDecisionResponse = new AutoDecisionResponse {
+				DecisionName = "Manual",
+			};
 		} // constructor
+
+		public override string Name {
+			get { return "Main strategy"; }
+		} // Name
 
 		public override void Execute() {
 			if (this.finishWizardArgs != null)
 				FinishWizard();
 
-			this.autoDecisionResponse = new AutoDecisionResponse {
-				DecisionName = "Manual",
-			};
-
 			if (this.newCreditLineOption == NewCreditLineOption.SkipEverything) {
-				Log.Alert("MainStrategy was activated in SkipEverything mode. Nothing is done. Avoid such calls!");
+				Log.Debug(
+					"MainStrategy was activated in 'skip everything go to manual decision mode'." +
+					"Nothing more to do for customer id '{0}'. Bye.", this.customerId
+				);
+
 				return;
 			} // if
 
-			// Wait for data to be filled by other strategies
+			StrategiesMailer mailer = null;
+
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
-				this.staller.Stall();
+				mailer = new StrategiesMailer();
+
+				var staller = new Staller(customerId, mailer);
+				staller.Stall();
 				ExecuteAdditionalStrategies();
 			} // if
 
@@ -79,14 +86,10 @@
 				fraudChecker.Execute();
 			} // if
 
-			// Processing logic
-			this.isHomeOwner = this.customerDetails.IsOwnerOfMainAddress || this.customerDetails.IsOwnerOfOtherProperties;
-			this.isFirstLoan = this.customerDetails.NumOfLoans == 0;
-
 			ProcessRejections();
 
 			// Gather LR data - must be done after rejection decisions
-			bool bSkip = 
+			bool bSkip =
 				this.newCreditLineOption == NewCreditLineOption.SkipEverything ||
 				this.newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
 
@@ -110,7 +113,7 @@
 
 			UpdateCustomerAnalyticsLocalData();
 
-			SendEmails();
+			SendEmails(mailer ?? new StrategiesMailer());
 		} // Execute
 
 		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
@@ -121,6 +124,30 @@
 		public AutoDecisionResponse AutoDecisionResponse {
 			get { return this.autoDecisionResponse; }
 		} // AutoDecisionResponse
+
+		private void SendEmails(StrategiesMailer mailer) {
+			bool sendToCustomer = true;
+			Customer customer = this.customers.ReallyTryGet(customerId);
+
+			if (customer != null) {
+				int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
+
+				sendToCustomer = !customer.FilledByBroker || (numOfPreviousApprovals != 0);
+			} // if
+
+			var postMaster = new MainStrategyMails(
+				mailer,
+				this.customerId,
+				this.offeredCreditLine,
+				this.lastOffer,
+				this.medal,
+				this.customerDetails,
+				this.autoDecisionResponse,
+				sendToCustomer
+			);
+
+			postMaster.SendEmails();
+		} // SendEmails
 
 		private void UpdateCustomerAnalyticsLocalData() {
 			SafeReader scoreCardResults = DB.GetFirst(
@@ -166,9 +193,11 @@
 		private void AdjustOfferredCreditLine() {
 			if (this.autoDecisionResponse.IsAutoReApproval || this.autoDecisionResponse.IsAutoApproval)
 				this.offeredCreditLine = MedalResult.RoundOfferedAmount(this.autoDecisionResponse.AutoApproveAmount);
-			else if (this.autoDecisionResponse.IsAutoBankBasedApproval)
-				this.offeredCreditLine = MedalResult.RoundOfferedAmount(this.autoDecisionResponse.BankBasedAutoApproveAmount);
-			else if (this.autoDecisionResponse.DecidedToReject)
+			else if (this.autoDecisionResponse.IsAutoBankBasedApproval) {
+				this.offeredCreditLine = MedalResult.RoundOfferedAmount(
+					this.autoDecisionResponse.BankBasedAutoApproveAmount
+				);
+			} else if (this.autoDecisionResponse.DecidedToReject)
 				this.offeredCreditLine = 0;
 		} // AdjustOfferredCreditLine
 
@@ -293,7 +322,9 @@
 		} // GetLandRegistryData
 
 		private void GetLandRegistryDataIfNotRejected() {
-			if (!this.autoDecisionResponse.DecidedToReject && this.isHomeOwner) {
+			var isHomeOwner = this.customerDetails.IsOwnerOfMainAddress || this.customerDetails.IsOwnerOfOtherProperties;
+
+			if (!this.autoDecisionResponse.DecidedToReject && isHomeOwner) {
 				Log.Debug(
 					"Retrieving LandRegistry system decision: {0} residential status: {1}",
 					this.autoDecisionResponse.DecisionName,
@@ -359,7 +390,7 @@
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				new AutoDecisions.ReApproval.Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
+				new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
 
 				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
 
@@ -432,7 +463,7 @@
 			if (this.customerDetails.IsAlibaba)
 				return;
 
-			new AutoDecisions.Reject.Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
+			new Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
 		} // ProcessRejections
 
 		private void UpdateCustomerAndCashRequest() {
@@ -656,18 +687,11 @@
 		private readonly FinishWizardArgs finishWizardArgs;
 
 		// Helpers
-		private readonly StrategiesMailer mailer;
 		private readonly NewCreditLineOption newCreditLineOption;
-		private readonly Staller staller;
-		private AutoDecisionResponse autoDecisionResponse;
+		private readonly AutoDecisionResponse autoDecisionResponse;
 
 		private CustomerDetails customerDetails;
 		private LastOfferData lastOffer;
-
-		private bool isFirstLoan;
-
-		// Calculated based on raw data
-		private bool isHomeOwner;
 
 		private MedalResult medal;
 

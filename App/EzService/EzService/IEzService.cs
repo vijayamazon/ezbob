@@ -751,5 +751,7 @@
 		[OperationContract]
 		string RequalifyCustomer(string customerEmail);
 
+		[OperationContract]
+		ActionMetaData SilentAutomation(int customerID, int underwriterID);
 	} // interface IEzService
 } // namespace EzService

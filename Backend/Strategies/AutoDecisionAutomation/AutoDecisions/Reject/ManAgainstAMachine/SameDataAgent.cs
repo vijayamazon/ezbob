@@ -1,22 +1,23 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.ManAgainstAMachine {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.ManAgainstAMachine {
 	using System;
-	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
+	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	/// <summary>
 	/// Verifies whether the customer should be rejected using customer data that was available on specific date.
 	/// </summary>
-	public class SameDataAgent : Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent {
+	public class SameDataAgent : Agent {
 		public SameDataAgent(int nCustomerID, DateTime oNow, AConnection oDB, ASafeLog oLog) : base(nCustomerID, oDB, oLog) {
-			m_oNow = oNow;
+			this.m_oNow = oNow;
 		} // constructor
 
-		public override Reject.Agent Init() {
+		public override Agent Init() {
 			base.Init();
 
-			Now = m_oNow;
+			Now = this.m_oNow;
 
 			return this;
 		} // Init

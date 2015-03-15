@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval {
+﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -8,6 +8,7 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using Ezbob.Logger;

@@ -3214,6 +3214,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequalifyCustomer", ReplyAction="http://tempuri.org/IEzService/RequalifyCustomerResponse")]
         System.Threading.Tasks.Task<string> RequalifyCustomerAsync(string customerEmail);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SilentAutomation", ReplyAction="http://tempuri.org/IEzService/SilentAutomationResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SilentAutomation", ReplyAction="http://tempuri.org/IEzService/SilentAutomationResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         byte[] GetCompanyFile(int userId, int companyFileId);
         
@@ -4452,6 +4458,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<string> RequalifyCustomerAsync(string customerEmail) {
             return base.Channel.RequalifyCustomerAsync(customerEmail);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID) {
+            return base.Channel.SilentAutomation(customerID, underwriterID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID) {
+            return base.Channel.SilentAutomationAsync(customerID, underwriterID);
         }
         
         public byte[] GetCompanyFile(int userId, int companyFileId) {

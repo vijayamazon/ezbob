@@ -7,6 +7,8 @@
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CalculateLoan;
@@ -16,8 +18,6 @@
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions;
-	using Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
@@ -182,9 +182,9 @@
 		[Test]
 		public void TestAutoReRejection() {
 			var rerejection = new ReRejection(21334, this.m_oDB, this.m_oLog);
-			var rejection = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.Reject.Agent(21334, this.m_oDB, this.m_oLog);
+			var rejection = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(21334, this.m_oDB, this.m_oLog);
 			var approve = new Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, AutomationCalculator.Common.TurnoverType.HMRC, this.m_oDB, this.m_oLog);
-			var reapprove = new Ezbob.Backend.Strategies.MainStrategy.AutoDecisions.ReApproval.Agent(21334, this.m_oDB, this.m_oLog);
+			var reapprove = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(21334, this.m_oDB, this.m_oLog);
 
 			//rerejection.MakeDecision(rejectionDecision);
 			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
