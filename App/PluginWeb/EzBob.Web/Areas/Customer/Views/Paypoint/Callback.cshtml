@@ -2,6 +2,7 @@
 @model EzBob.Web.Models.PaymentConfirmationModel
 
 @{
+	UiCustomerOrigin.Set(ViewBag);
     Html.RenderPartial("PayPointResult");
     ViewBag.Title = "Payment Confirm: Payment Confirmation " + ViewBag.CustomerOrigin.Name;
 }
