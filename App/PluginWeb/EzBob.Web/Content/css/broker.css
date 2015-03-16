@@ -325,3 +325,27 @@ input[type="checkbox"].form_field {
 b, strong {
     font-family: 'Titillium Web Semi Bold';
 }
+
+.d-widget{
+    height: 56px;
+}
+
+.d-widgets:before, .d-widgets:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.d-widgets:after {
+    clear: both;
+}
+
+.d-widget dd.dashes {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.header-message{
+    color: #67c10b;
+}

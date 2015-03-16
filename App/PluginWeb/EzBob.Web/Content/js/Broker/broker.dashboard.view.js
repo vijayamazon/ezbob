@@ -21,7 +21,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
         var evt = EzBob.Broker.DashboardView.__super__.events.apply(this, arguments);
 
         evt['click #AddNewCustomer'] = 'addNewCustomer';
-        evt['click #AddBank'] = 'addBankDetails';
+        evt['click .add-bank'] = 'addBankDetails';
         evt['click .reload-customer-list'] = 'reloadCustomerList';
         evt['click .lead-send-invitation'] = 'sendInvitation';
         evt['click .lead-fill-wizard'] = 'fillWizard';
@@ -87,6 +87,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 				' alt="business loans">' + sNewLine +
 				'</a>';
         };
+        this.commissionView = new EzBob.Broker.CommissionView({ properties: oProps });
+        this.commissionView.render();
 
         this.$el.find('#section-dashboard-account-info .value, #section-dashboard-marketing .value').load_display_value({
             data_source: oProps,

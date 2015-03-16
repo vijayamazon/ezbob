@@ -55,6 +55,23 @@ BEGIN
 		DateAdded DESC
 
 	------------------------------------------------------------------------------
+	DECLARE @LinkedBank BIT = 0
+	DECLARE @ApprovedAmount DECIMAL(18,2) = 0	
+	DECLARE @CommissionAmount DECIMAL(18,2) = 0
+	
+	IF(@BrokerID > 0)
+	BEGIN
+		SELECT @LinkedBank = CAST (
+			CASE 
+				WHEN EXISTS (SELECT * FROM Broker b INNER JOIN CardInfo ci ON b.BrokerID = ci.BrokerID) THEN 1
+				ELSE 0
+			END AS BIT)
+			
+		--TODO @ApprovedAmount
+		--TODO @CommissionAmount
+		
+	END
+	------------------------------------------------------------------------------
 
 	SELECT TOP 1
 		b.BrokerID,
@@ -75,7 +92,10 @@ BEGIN
 			WHEN ts.BrokerTermsID IS NULL OR ts.TermsTextID != tc.TermsTextID THEN tc.BrokerTerms
 			ELSE ''
 		END) AS CurrentTerms,
-		b.LicenseNumber
+		b.LicenseNumber,
+		@LinkedBank AS LinkedBank,
+		@ApprovedAmount AS ApprovedAmount,
+		@CommissionAmount AS CommissionAmount
 	FROM
 		Broker b
 		INNER JOIN BrokerTerms tc ON tc.BrokerTermsID = @BrokerTermsID -- current terms

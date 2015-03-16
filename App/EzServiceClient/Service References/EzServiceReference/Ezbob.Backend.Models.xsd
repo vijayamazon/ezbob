@@ -507,10 +507,12 @@
   <xs:element name="BrokerCustomerEntry" nillable="true" type="tns:BrokerCustomerEntry" />
   <xs:complexType name="BrokerProperties">
     <xs:sequence>
+      <xs:element minOccurs="0" name="ApprovedAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="BrokerID" type="xs:int" />
       <xs:element minOccurs="0" name="BrokerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BrokerRegNum" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BrokerWebSiteUrl" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CommissionAmount" type="xs:decimal" />
       <xs:element minOccurs="0" name="ContactEmail" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ContactMobile" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ContactName" nillable="true" type="xs:string" />
@@ -520,6 +522,7 @@
       <xs:element minOccurs="0" name="CurrentTextID" type="xs:int" />
       <xs:element minOccurs="0" name="ErrorMsg" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LicenseNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LinkedBank" type="xs:boolean" />
       <xs:element minOccurs="0" name="LotteryCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LotteryPlayerID" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SignedTermsID" type="xs:int" />
