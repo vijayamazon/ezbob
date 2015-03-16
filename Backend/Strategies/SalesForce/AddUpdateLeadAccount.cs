@@ -6,7 +6,7 @@
 
 	public class AddUpdateLeadAccount : AStrategy {
 		public AddUpdateLeadAccount(string email, int? customerID, bool isBrokerLead, bool isVipLead) {
-			salesForce = ObjectFactory
+		    this.salesForce = ObjectFactory
 				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
 				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
 				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
@@ -23,10 +23,10 @@
 			LeadAccountModel model = DB.FillFirst<LeadAccountModel>(
 				"SF_LoadAccountLead",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("Email", email),
-				new QueryParameter("CustomerID", customerID),
-				new QueryParameter("IsBrokerLead", isBrokerLead),
-				new QueryParameter("IsVipLead", isVipLead));
+				new QueryParameter("Email", this.email),
+				new QueryParameter("CustomerID", this.customerID),
+				new QueryParameter("IsBrokerLead", this.isBrokerLead),
+				new QueryParameter("IsVipLead", this.isVipLead));
 
 
 			if (string.IsNullOrEmpty(model.CompanyName)) {
@@ -36,7 +36,7 @@
 			if (string.IsNullOrEmpty(model.CompanyName)) {
 				model.CompanyName = "No name";
 			}
-			salesForce.CreateUpdateLeadAccount(model);
+			this.salesForce.CreateUpdateLeadAccount(model);
 		}
 
 		private readonly ISalesForceAppClient salesForce;

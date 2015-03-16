@@ -38,6 +38,8 @@
 		public DateTime? RegistrationDate { get; set; }
 		[DataMember]
 		public string Origin { get; set; }
+        [DataMember]
+        public bool IsTest { get; set; }
 		//Company data
 		[DataMember]
 		public string CompanyName { get; set; }

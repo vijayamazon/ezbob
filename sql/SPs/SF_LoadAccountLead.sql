@@ -44,7 +44,8 @@ BEGIN
 		w.WizardStepTypeDescription AS EzbobStatus,
 		s.RSource AS LeadSource,
 		r.Amount AS RequestedLoanAmount,
-		o.Name AS Origin
+		o.Name AS Origin,
+		c.IsTest AS IsTest
 	FROM Customer c 
 	LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType=1
 	LEFT JOIN Company co ON co.Id = c.CompanyId
@@ -91,6 +92,8 @@ SELECT @Email AS Email,
 	   'Unknown' AS EzbobSource
 
 END
+
+
 
 GO
 
