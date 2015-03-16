@@ -140,7 +140,7 @@
 			ISalesForceAppClient client = GetClient();
 
 			LeadAccountModel model = new LeadAccountModel {
-				Email = "aa@b.c",
+                Email = "is@test.com",
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -148,8 +148,8 @@
 				AddressLine3 = "Line3",
 				AddressPostcode = "Postcode",
 				AddressTown = "Town",
-				CompanyName = "CompanyName",
-				Name = "CustomerName",
+                CompanyName = "TestIsTestCompanyName",
+				Name = "TestIsTest",
 				TypeOfBusiness = "Limited",
 				CompanyNumber = "056456446",
 				DateOfBirth = new DateTime(1966, 12, 11),
@@ -162,6 +162,7 @@
 				PhoneNumber = "0564564654",
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
+                IsTest = true
 			};
 
 			client.CreateUpdateLeadAccount(model);

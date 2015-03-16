@@ -361,6 +361,7 @@
 			} // if
 
 			oCustomer.IsTest = !oCustomer.IsTest;
+		    this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(this._context.UserId, null, oCustomer.Id, false, false);
 			log.Debug("Customer({0}).IsTest set to {1}", id, oCustomer.IsTest);
 
 			return Json(new { error = (string)null, id = id, isTest = oCustomer.IsTest });
