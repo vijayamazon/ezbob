@@ -66,6 +66,15 @@
         [DataMember]
         public decimal CommissionAmount { get; set; }
 
+        [DataMember]
+        public string BankAccount { get; set; }
+
+        [DataMember]
+        public string BankSortCode { get; set; }
+
+        [DataMember]
+        public string BankName { get; set; }
+
 		public override string ToString() {
 			return string.Format(
 @"

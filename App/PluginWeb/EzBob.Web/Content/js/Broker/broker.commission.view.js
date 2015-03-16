@@ -8,12 +8,15 @@ EzBob.Broker.CommissionView = EzBob.Broker.BaseView.extend({
 	}, // initialize
 
 	render: function () {
+	    console.log('this.properties.LinkedBank', this.properties.LinkedBank);
 	    if (this.properties.LinkedBank) {
+	        console.log('linked');
 	        this.$el.find('.linked_bank').show();
-	        this.$el.find('.unlinked_bank').hide();
+	        this.$el.find('.not_linked_bank').hide();
 	    } else {
+	        console.log('not linked');
 	        this.$el.find('.linked_bank').hide();
-	        this.$el.find('.unlinked_bank').show();
+	        this.$el.find('.not_linked_bank').show();
 	    }
 	    var firstName = this.properties.ContactName;
 	    if (this.properties.ContactName.indexOf(' ') > -1)

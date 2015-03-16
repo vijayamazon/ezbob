@@ -5,7 +5,9 @@
     using Ezbob.Backend.Models;
     using Ezbob.Backend.Strategies.Exceptions;
     using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Broker;
     using PostcodeAnywhere;
+    using StructureMap;
 
     public class BrokerAddBank : AStrategy {
         public BrokerAddBank(BrokerAddBankModel model) {
@@ -39,17 +41,31 @@
                     sortCodeChecker = new FakeSortCodeChecker();
                 }
 
+                var brokerRepository = ObjectFactory.GetInstance<BrokerRepository>();
+                var broker = brokerRepository.Find(this.model.BrokerEmail);
+
+                if (broker == null) {
+                    Log.Alert("BrokerAddBank broker not found by email {0}", this.model.BrokerEmail);
+                    throw new StrategyWarning(this, "Failed adding bank account");
+                }
+
                 var cardInfo = new CardInfo
                 {
                     BankAccount = this.model.AccountNumber,
                     SortCode = this.model.SortCode,
-                    Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), this.model.BankAccountType)
+                    Type = (BankAccountType)Enum.Parse(typeof(BankAccountType), this.model.BankAccountType),
+                    Broker = broker,
+                    IsDefault = true
                 };
 
                 sortCodeChecker.Check(cardInfo);
 
-                //TODO save cardInfo to DB
+                foreach (var bankAccount in broker.BankAccounts) {
+                    bankAccount.IsDefault = false;
+                }
 
+                broker.BankAccounts.Add(cardInfo);
+                brokerRepository.SaveOrUpdate(broker);
             }
             catch (SortCodeNotFoundException)
             {

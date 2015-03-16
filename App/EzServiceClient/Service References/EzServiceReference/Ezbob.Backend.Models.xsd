@@ -508,6 +508,9 @@
   <xs:complexType name="BrokerProperties">
     <xs:sequence>
       <xs:element minOccurs="0" name="ApprovedAmount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BankAccount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BankSortCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BrokerID" type="xs:int" />
       <xs:element minOccurs="0" name="BrokerName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="BrokerRegNum" nillable="true" type="xs:string" />

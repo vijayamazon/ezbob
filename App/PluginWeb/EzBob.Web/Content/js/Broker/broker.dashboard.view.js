@@ -89,7 +89,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
         };
         this.commissionView = new EzBob.Broker.CommissionView({ properties: oProps });
         this.commissionView.render();
-
+        var self = this;
+        console.log('oProps', oProps);
         this.$el.find('#section-dashboard-account-info .value, #section-dashboard-marketing .value').load_display_value({
             data_source: oProps,
 
@@ -110,6 +111,10 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
                     case 'SourceRef':
                         return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '" rel="nofollow">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
+
+                    case 'BankAccount':
+                        self.$el.find('.bank-details').toggle(oFieldValue);
+                        return oFieldValue;
                 } // switch
 
                 if (sFieldName.indexOf('SourceRef') !== 0)

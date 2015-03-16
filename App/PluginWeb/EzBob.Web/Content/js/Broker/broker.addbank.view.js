@@ -77,7 +77,8 @@ EzBob.Broker.AddBankView = EzBob.Broker.SubmitView.extend({
 		var self = this;
 
 		oRequest.success(function(res) {
-			if (res.success) {
+		    if (res.success) {
+		        self.router.loadBrokerProperties();
 				self.clear();
 				self.backToList();
 				EzBob.App.trigger('info', 'A bank account has been added.');

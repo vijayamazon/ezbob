@@ -95,11 +95,15 @@ BEGIN
 		b.LicenseNumber,
 		@LinkedBank AS LinkedBank,
 		@ApprovedAmount AS ApprovedAmount,
-		@CommissionAmount AS CommissionAmount
+		@CommissionAmount AS CommissionAmount,
+		ci.BankAccount AS BankAccount,
+		ci.SortCode AS BankSortCode,
+		ci.Bank AS BankName
 	FROM
 		Broker b
 		INNER JOIN BrokerTerms tc ON tc.BrokerTermsID = @BrokerTermsID -- current terms
 		LEFT JOIN BrokerTerms ts ON b.BrokerTermsID = ts.BrokerTermsID -- signed terms
+		LEFT JOIN CardInfo ci ON b.BrokerID=ci.BrokerID AND ci.IsDefault = 1
 	WHERE
 		b.ContactEmail = @ContactEmail
 		OR
