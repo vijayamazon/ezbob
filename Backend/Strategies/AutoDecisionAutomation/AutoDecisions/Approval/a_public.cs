@@ -177,7 +177,7 @@
 			return this;
 		} // Init
 
-		public bool MakeAndVerifyDecision() {
+		public bool MakeAndVerifyDecision(string tag = null) {
 			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				GetAvailableFunds availFunds;
 
@@ -209,7 +209,7 @@
 				} // if
 			} // if
 
-			this.m_oTrail.Save(this.db, this.m_oSecondaryImplementation.Trail);
+			this.m_oTrail.Save(this.db, this.m_oSecondaryImplementation.Trail, tag: tag);
 
 			return bSuccess;
 		} // MakeAndVerifyDecision

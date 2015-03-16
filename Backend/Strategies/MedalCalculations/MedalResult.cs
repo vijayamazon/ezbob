@@ -224,7 +224,7 @@
 			return !notIdentical;
 		} // IsIdentical
 
-		public void SaveToDb(AConnection db) {
+		public void SaveToDb(string tag, AConnection db) {
 			db.ExecuteNonQuery("StoreMedal", CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerId", CustomerId),
 				new QueryParameter("CalculationTime", CalculationTime),
@@ -307,7 +307,8 @@
 				new QueryParameter("NumberOfPaypalPositiveTransactions", NumberOfPaypalPositiveTransactions),
 				new QueryParameter("MortgageBalance", MortgageBalance),
 				new QueryParameter("CapOfferByCustomerScoresValue", CapOfferByCustomerScoresValue),
-				new QueryParameter("CapOfferByCustomerScoresTable", CapOfferByCustomerScoresTable.ToFormattedString())
+				new QueryParameter("CapOfferByCustomerScoresTable", CapOfferByCustomerScoresTable.ToFormattedString()),
+				new QueryParameter("Tag", tag)
 			);
 		} // SaveToDb
 

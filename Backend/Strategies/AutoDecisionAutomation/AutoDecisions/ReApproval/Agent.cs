@@ -37,7 +37,7 @@
 			return this;
 		} // Init
 
-		public virtual bool MakeAndVerifyDecision() {
+		public virtual bool MakeAndVerifyDecision(string tag = null) {
 			RunPrimary();
 
 			AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
@@ -67,7 +67,7 @@
 				} // if
 			} // if
 
-			Trail.Save(DB, oSecondary.Trail);
+			Trail.Save(DB, oSecondary.Trail, tag: tag);
 
 			return bSuccess;
 		} // MakeAndVerifyDecision

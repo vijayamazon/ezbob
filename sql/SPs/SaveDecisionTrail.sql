@@ -60,34 +60,11 @@ BEGIN
 
 	DECLARE @TrailID BIGINT
 
+	------------------------------------------------------------------------------
+
 	DECLARE @TagID BIGINT = NULL
 
-	SET @Tag = ISNULL(LTRIM(RTRIM(ISNULL(@Tag, ''))), '')
-
-	IF @Tag = ''
-		SET @Tag = NULL
-
-	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
-
-	IF @Tag IS NOT NULL
-	BEGIN
-		SELECT
-			@TagID = TrailTagID
-		FROM
-			DecisionTrailTags
-		WHERE
-			TrailTag = @Tag
-
-		-------------------------------------------------------------------------
-
-		IF @TagID IS NULL
-		BEGIN
-			INSERT INTO DecisionTrailTags (TrailTag) VALUES (@Tag)
-
-			SET @TagID = SCOPE_IDENTITY()
-		END
-	END
+	EXECUTE SaveOrGetDecisionTrailTag @Tag, @TagID OUTPUT
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------

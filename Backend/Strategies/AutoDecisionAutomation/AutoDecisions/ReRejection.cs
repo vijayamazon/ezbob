@@ -26,14 +26,14 @@
 			);
 		} // constructor
 
-		public bool MakeAndVerifyDecision() {
+		public bool MakeAndVerifyDecision(string tag = null) {
 			RunPrimary();
 
 			Agent oSecondary = RunSecondary();
 
 			bool bSuccess = this.trail.EqualsTo(oSecondary.Trail);
 
-			this.trail.Save(this.db, oSecondary.Trail);
+			this.trail.Save(this.db, oSecondary.Trail, tag: tag);
 
 			return bSuccess;
 		} // MakeAndVerifyDecision

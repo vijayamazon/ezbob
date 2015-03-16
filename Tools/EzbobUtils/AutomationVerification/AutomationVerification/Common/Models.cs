@@ -50,10 +50,10 @@
 		public string CapOfferByCustomerScoresTable { get; set; }
 		public decimal CapOfferByCustomerScoresValue { get; set; }
 
-		public void SaveToDb(AConnection db, ASafeLog log) {
+		public void SaveToDb(string tag, AConnection db, ASafeLog log) {
 			log.Debug("\n\nSecondary medal:\n{0}", ToString());
 			var dbHelper = new DbHelper(db, log);
-			dbHelper.StoreMedalVerification(this);
+			dbHelper.StoreMedalVerification(this, tag);
 		} // SaveToDb
 
 		public override string ToString() {

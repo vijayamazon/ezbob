@@ -26,12 +26,13 @@ BEGIN
 	--
 	--------------------------------------------------------------------------
 
-	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, NULL)
+	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, 0)
 	SET @RowID = SCOPE_IDENTITY()
 
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 1)
-
-	/*
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,    0,    0)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500,    0)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  650,    0)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL,    0)
 
 	--------------------------------------------------------------------------
 	--
@@ -39,14 +40,27 @@ BEGIN
 	--
 	--------------------------------------------------------------------------
 
-	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, 0)
+	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, 10)
 	SET @RowID = SCOPE_IDENTITY()
 
 	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,    0,    0)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500,    0)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  600,    0)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  700,    0)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL,    0)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500, 0.65)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  650, 0.65)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 1.00)
+
+	--------------------------------------------------------------------------
+	--
+	-- Row
+	--
+	--------------------------------------------------------------------------
+
+	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, 20)
+	SET @RowID = SCOPE_IDENTITY()
+
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,    0,    0)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500, 0.65)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  650, 0.65)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 1.00)
 
 	--------------------------------------------------------------------------
 	--
@@ -58,25 +72,9 @@ BEGIN
 	SET @RowID = SCOPE_IDENTITY()
 
 	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,    0,    0)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500, 0.45)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  600, 0.50)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  700, 0.60)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 0.75)
-
-	--------------------------------------------------------------------------
-	--
-	-- Row
-	--
-	--------------------------------------------------------------------------
-
-	INSERT INTO MatrixRowTitles (MatrixID, TitleValue) VALUES (@MatrixID, 60)
-	SET @RowID = SCOPE_IDENTITY()
-
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,    0,    0)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500, 0.55)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  600, 0.65)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  700, 0.80)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 0.90)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500, 0.65)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  650, 0.65)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 1.00)
 
 	--------------------------------------------------------------------------
 	--
@@ -88,12 +86,9 @@ BEGIN
 	SET @RowID = SCOPE_IDENTITY()
 
 	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,    0,    0)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500, 0.70)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  600, 0.85)
-	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  700, 0.95)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  500, 1.00)
+	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID,  650, 1.00)
 	INSERT INTO MatrixColumns (MatrixRowID, TitleValue, CellValue) VALUES (@RowID, NULL, 1.00)
-
-	*/
 
 	--------------------------------------------------------------------------
 END

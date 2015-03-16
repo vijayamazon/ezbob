@@ -55,7 +55,7 @@
 			return this;
 		} // Init
 
-		public virtual bool MakeAndVerifyDecision() {
+		public virtual bool MakeAndVerifyDecision(string tag = null) {
 			RunPrimary();
 
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
@@ -63,7 +63,7 @@
 
 			bool bSuccess = Trail.EqualsTo(oSecondary.Trail);
 
-			Trail.Save(DB, oSecondary.Trail);
+			Trail.Save(DB, oSecondary.Trail, tag: tag);
 
 			return bSuccess;
 		} // MakeAndVerifyDecision

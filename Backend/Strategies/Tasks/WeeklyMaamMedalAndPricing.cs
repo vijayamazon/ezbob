@@ -30,7 +30,7 @@
 
 		public override void Execute() {
 			if (!this.doRun) {
-				Log.Debug("Not running: today is not Saturday.");
+				Log.Debug("Not running: neither Saturday nor forced.");
 				return;
 			} // if
 

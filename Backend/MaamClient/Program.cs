@@ -43,7 +43,7 @@
 			} // if
 
 			return null;
-		} // CompareMaam
+		} // MaamForCashRequest
 
 		private static void LoadFromJson() {
 			var log = new ConsoleLog(Log);

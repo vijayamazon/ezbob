@@ -22,6 +22,8 @@
 			this.calculationTime = calculationTime;
 		} // constructor
 
+		public virtual string Tag { get; set; }
+
 		public override void Execute() {
 			try {
 				Log.Debug(
@@ -99,12 +101,12 @@
 					result2 = verification.GetMedal(this.customerId, this.calculationTime);
 
 					if (this.doStoreMedal)
-						result2.SaveToDb(DB, Log);
+						result2.SaveToDb(Tag, DB, Log);
 				} // if
 
 				if ((result1 != null) && result1.IsLike(result2)) {
 					if (this.doStoreMedal)
-						result1.SaveToDb(DB);
+						result1.SaveToDb(Tag, DB);
 
 					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}.", this.customerId);
 
@@ -121,7 +123,7 @@
 				result1.Error = "Mismatch found in the 2 medal calculations";
 
 				if (this.doStoreMedal)
-					result1.SaveToDb(DB);
+					result1.SaveToDb(Tag, DB);
 
 				SendExplanationMail(result1, result2);
 				Log.Error("Mismatch found in the 2 medal calculations of customer: {0}.", this.customerId);

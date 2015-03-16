@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation {
 	using System;
+	using System.Globalization;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
@@ -18,15 +19,23 @@
 		public override string Name { get { return "Silent automation"; } }
 
 		public override void Execute() {
+			string tag = string.Format(
+				"#SilentAutomation_{0}_{1}",
+				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
+				Guid.NewGuid().ToString("N")
+			);
+
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReRejection(
 				this.customerID, DB, Log
-			).MakeAndVerifyDecision();
+			).MakeAndVerifyDecision(tag);
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID, DB, Log
-			).Init().MakeAndVerifyDecision();
+			).Init().MakeAndVerifyDecision(tag);
 
-			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true);
+			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
+				Tag = tag
+			};
 			instance.Execute();
 
 			MedalResult medal = instance.Result;
@@ -35,7 +44,7 @@
 
 			new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
 				this.customerID, DB, Log
-			).Init().MakeAndVerifyDecision();
+			).Init().MakeAndVerifyDecision(tag);
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
 				this.customerID,
@@ -45,7 +54,7 @@
 				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision();
+			).Init().MakeAndVerifyDecision(tag);
 		} // Execute
 
 		private int CapOffer(MedalResult medal) {

@@ -590,13 +590,11 @@ FROM
 WHERE
 	r.IdUnderwriter IS NOT NULL
 	AND
+	r.IdUnderwriter != 1
+	AND
 	r.UnderwriterDecision IN ('Approved', 'Rejected', 'ApprovedPending')
 	AND
 	r.UnderwriterComment NOT LIKE '%campaign%'
-	AND
-	r.IdUnderwriter IS NOT NULL
-	AND
-	r.IdUnderwriter != 1
 	{0}
 ORDER BY
 	r.IdCustomer ASC,
