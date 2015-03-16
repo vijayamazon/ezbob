@@ -14,6 +14,7 @@ namespace EzBobTest {
 	using System.Security.Cryptography;
 	using System.Text;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
+	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Utils;
 
 	/// <summary>

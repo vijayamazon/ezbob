@@ -77,6 +77,10 @@
       <Project>{7A4121BC-BBDE-4DDC-9B6E-29D2B0055F2F}</Project>
       <Name>ConfigManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
+      <Project>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</Project>
+      <Name>Logger</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
       <Name>NHibernateWrapper</Name>

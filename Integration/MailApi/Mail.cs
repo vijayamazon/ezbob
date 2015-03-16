@@ -5,35 +5,40 @@
 	using System.Net;
 	using System.Text.RegularExpressions;
 	using ConfigManager;
+	using Ezbob.Logger;
 	using Model;
 	using Newtonsoft.Json;
 	using RestSharp;
 	using RestSharp.Deserializers;
-	using log4net;
 
 	public class Mail {
-		private readonly RestClient _client;
-		private static readonly ILog Log = LogManager.GetLogger(typeof(Mail));
-		private string key;
+		public static string EncodeAttachment(string plainText) {
+			return Mail.EncodeAttachment(System.Text.Encoding.UTF8.GetBytes(plainText ?? string.Empty));
+		} // EncodeAttachment
 
-		//Api pathes
-		private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
-		private const string SendTemplatePath = "/messages/send-template.json";
-		private const string SendTemplatelessPath = "/messages/send.json";
-		private const string RenderTemplatePath = "/templates/render.json";
+		public static string EncodeAttachment(byte[] plainTextBytes) {
+			return System.Convert.ToBase64String(plainTextBytes ?? new byte[0]);
+		} // EncodeAttachment
 
 		public Mail(string key = null) {
 			this.key = key ?? CurrentValues.Instance.MandrillKey;
+		} // constructor
 
-			_client = new RestClient(BaseSecureUrl);
-			_client.AddHandler("application/json", new JsonDeserializer());
-		}
-
-		private EmailModel PrepareEmail(string templateName, string to, Dictionary<string, string> variables, string subject, string cc = "", List<attachment> attachments = null) {
+		/// <summary>
+		/// With template
+		/// </summary>
+		public string Send(
+			Dictionary<string, string> parameters,
+			string to,
+			string templateName,
+			string subject = "",
+			string cc = "",
+			List<attachment> attachments = null
+		) {
 			var toList = PrepareRecipients(to);
 
 			var message = new EmailModel {
-				key = key,
+				key = this.key,
 				template_name = templateName,
 				message = new EmailMessageModel {
 					to = toList,
@@ -43,25 +48,37 @@
 					track_clicks = true,
 					track_opens = true
 				}
-
 			};
 
-			foreach (var var in variables) {
+			foreach (var var in parameters)
 				message.AddGlobalVariable(var.Key, var.Value);
-			}
 
-			return message;
-		}
+			return Send(message, SendTemplatePath);
+		} // Send
 
-		private EmailModel PrepareTemplateLessEmail(string to, string subject, string messageText, string messageHtml, string fromEmail, string fromName, string cc = "", List<attachment> attachments = null)
-		{
+		/// <summary>
+		/// Without template
+		/// </summary>
+		public string Send(
+			string to,
+			string messageText,
+			string messageHtml,
+			string fromEmail,
+			string fromName,
+			string subject = "",
+			string cc = "",
+			List<attachment> attachments = null
+		) {
+			if (string.IsNullOrEmpty(to)) {
+				log.Warn("Receiver email not provided for {0}", subject);
+				return "No receiver email provided";
+			} // if
+
 			var toList = PrepareRecipients(to);
 
-			var message = new EmailModel
-			{
-				key = key,
-				message = new EmailMessageModel
-				{
+			var message = new EmailModel {
+				key = this.key,
+				message = new EmailMessageModel {
 					to = toList,
 					subject = subject,
 					bcc_address = cc,
@@ -75,108 +92,111 @@
 				}
 			};
 
-			return message;
-		}
+			return Send(message, SendTemplatelessPath);
+		} // Send
 
-		private static IEnumerable<EmailAddressModel> PrepareRecipients(string to) {
-			var spaces = new Regex(@"\s+", RegexOptions.Compiled);
-			return spaces.Replace(to, string.Empty).Split(';').Select(x => new EmailAddressModel { email = x });
-		}
-
-		private string SendRequest(string path, object model)
-		{
-			try
-			{
-				Log.DebugFormat("ServicePointManager.SecurityProtocol = {0}", ServicePointManager.SecurityProtocol);
-
-				Log.InfoFormat("Starting SendRequest. Path: {0} Model: {1}", path, model);
-
-				var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
-				Log.InfoFormat("Created RestRequest object");
-				request.AddBody(model);
-				Log.InfoFormat("Added model to RestRequest's body");
-				var response = _client.Post(request);
-				Log.InfoFormat("Posted RestRequest");
-				Log.InfoFormat("Mandrill service call.\n Response length: \n {0}", response.Content.Length);
-
-				if (response.StatusCode == HttpStatusCode.InternalServerError)
-				{
-					Log.InfoFormat("InternalServerError status code in RestRequest's response");
-					var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
-					throw new MandrillException(error, string.Format("InternalServerError. Post failed {0}; response: {1}", path, response.Content));
-				}
-
-				if (response.StatusCode != HttpStatusCode.OK)
-				{
-					Log.InfoFormat("Other than ok status code in RestRequest's response :{0}", response.StatusCode);
-					throw response.ErrorException;
-				}
-
-				return response.Content;
-			}
-			catch (Exception e)
-			{
-				Log.ErrorFormat("Error occur during SendRequest: {0}", e);
-				Log.ErrorFormat("Exception should have been thrown from SendRequest but was blocked to avoid interfering with business logic: {0}", e);
-				//throw; // Hides mail exceptions from strategies
-				return null;
-			}
-		}
-
-		private string Send(EmailModel email, string path) {
-			var response = SendRequest(path, email);
-			if (response == null) {
-				return null;
-			}
-
-			var responseDeserialized = JsonConvert.DeserializeObject<List<EmailResultModel>>(response);
-			var status = responseDeserialized[0].status.ToLower();
-			if (status != "sent" && status != "queued") {
-				Log.WarnFormat("status: {0}, {1}", status, responseDeserialized[0]);
-				return "status not 'sent' or 'queued'";
-			}
-			return "OK";
-		}
-
-		private string RenderTemplate(Dictionary<string, string> parameters, string templateName) {
+		public string GetRenderedTemplate(Dictionary<string, string> parameters, string templateName) {
 			var templateModel = new RenderTemplateModel {
 				key = key,
 				template_name = templateName,
 				template_content = new template_content[] { },
 				merge_vars = Utils.AddMergeVars(parameters)
 			};
+
 			var response = SendRequest(RenderTemplatePath, templateModel);
-			if (response == null) {
+
+			if (response == null)
 				return null;
-			}
-			var retVal = JsonConvert.DeserializeObject<Dictionary<string, string>>(response); //response is { "html": "response text" }
+
+			// Response is { "html": "response text" }
+			var retVal = JsonConvert.DeserializeObject<Dictionary<string, string>>(response);
+
 			return retVal["html"];
-		}
+		} // GetRenderedTemplate
 
-		/// <summary>
-		/// With template
-		/// </summary>
-		public string Send(Dictionary<string, string> parameters, string to, string templateName, string subject = "", string cc = "", List<attachment> attachments = null) {
-			var message = PrepareEmail(templateName, to, parameters, subject, cc, attachments);
-			return Send(message, SendTemplatePath);
-		}
+		private static IEnumerable<EmailAddressModel> PrepareRecipients(string to) {
+			var spaces = new Regex(@"\s+", RegexOptions.Compiled);
 
-		/// <summary>
-		/// Without template
-		/// </summary>
-		public string Send(string to, string messageText, string messageHtml, string fromEmail, string fromName, string subject = "", string cc = "", List<attachment> attachments = null)
-		{
-			if (string.IsNullOrEmpty(to)) {
-				Log.WarnFormat("receiver email not provided for {0}", subject);
-				return "No receiver email provided";
-			}
+			return spaces.Replace(to, string.Empty).Split(';').Select(x => new EmailAddressModel { email = x });
+		} // PrepareRecipients
 
-			var message = PrepareTemplateLessEmail(to, subject, messageText, messageHtml, fromEmail, fromName, cc, attachments);
-			return Send(message, SendTemplatelessPath);
-		}
+		private string SendRequest(string path, object model) {
+			try {
+				log.Debug("ServicePointManager.SecurityProtocol = {0}", ServicePointManager.SecurityProtocol);
 
-		public string GetRenderedTemplate(Dictionary<string, string> parameters, string templateName) {
-			return RenderTemplate(parameters, templateName);
-		}
-	}
-}
+				log.Debug("Starting SendRequest. Path: {0} Model: {1}", path, model);
+
+				var client = new RestClient(BaseSecureUrl);
+				client.AddHandler("application/json", new JsonDeserializer());
+
+				var request = new RestRequest(path, Method.POST) { RequestFormat = DataFormat.Json };
+
+				log.Debug("Created RestRequest object");
+
+				request.AddBody(model);
+
+				log.Debug("Added model to RestRequest's body");
+
+				IRestResponse response = client.Post(request);
+
+				log.Debug("Posted RestRequest: Mandrill service call; response length: {0}.", response.Content.Length);
+
+				if (response.StatusCode == HttpStatusCode.InternalServerError) {
+					log.Debug("InternalServerError status code in RestRequest's response");
+
+					var error = JsonConvert.DeserializeObject<ErrorResponseModel>(response.Content);
+
+					throw new MandrillException(
+						error,
+						string.Format("InternalServerError. Post failed {0}; response: {1}", path, response.Content)
+					);
+				} // if
+
+				if (response.StatusCode != HttpStatusCode.OK) {
+					log.Warn(
+						response.ErrorException,
+						"Other than ok status code in RestRequest's response: {0}.",
+						response.StatusCode
+					);
+					throw response.ErrorException;
+				} // if
+
+				return response.Content;
+			} catch (Exception e) {
+				log.Error(
+					e,
+					"Error occurred during SendRequest; " +
+					"exception should have been thrown from SendRequest" +
+					"but was blocked to avoid interfering with business logic."
+				);
+				return null;
+			} // try
+		} // SendRequest
+
+		private string Send(EmailModel email, string path) {
+			var response = SendRequest(path, email);
+
+			if (response == null)
+				return null;
+
+			var responseDeserialized = JsonConvert.DeserializeObject<List<EmailResultModel>>(response);
+			var status = responseDeserialized[0].status.ToLower();
+
+			if (status != "sent" && status != "queued") {
+				log.Warn("status: {0}, {1}", status, responseDeserialized[0]);
+				return "status not 'sent' or 'queued'";
+			} // if
+
+			return "OK";
+		} // Send
+
+		private static readonly ASafeLog log = new SafeILog(typeof(Mail));
+		private readonly string key;
+
+		// API paths
+		private const string BaseSecureUrl = "https://mandrillapp.com/api/1.0/";
+		private const string SendTemplatePath = "/messages/send-template.json";
+		private const string SendTemplatelessPath = "/messages/send.json";
+		private const string RenderTemplatePath = "/templates/render.json";
+	} // class Mail
+} // namespace

@@ -2,6 +2,7 @@
 	using System;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.AutomationVerification;
+	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID) {

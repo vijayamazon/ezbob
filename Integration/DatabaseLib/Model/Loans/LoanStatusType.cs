@@ -1,5 +1,4 @@
-﻿namespace EZBob.DatabaseLib.Model.Database.Loans 
-{
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
 	using System.ComponentModel;
 	using NHibernate.Type;
 
@@ -13,5 +12,4 @@
 	} // enum LoanStatus
 
 	public class LoanStatusType : EnumStringType<LoanStatus> {} // class LoanStatusType
-
 } // namespace EZBob.DatabaseLib.Model.Database.Loans

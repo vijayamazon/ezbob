@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using Ezbob.Backend.Strategies.AutomationVerification;
+	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using global::Reports;
 	using MailApi;
 	using MailApi.Model;
@@ -52,17 +52,19 @@
 
 			string emailText = string.Join(System.Environment.NewLine, CsvOutput);
 
+			var attachmentName = "weekly.kpmg." + this.today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ".txt";
+
 			var attachments = new List<attachment> {
 				new attachment {
-					name = "weekly.kpmg." + this.today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ".txt",
-					content = emailText,
+					name = attachmentName,
+					content = Mail.EncodeAttachment(emailText),
 					type = "text/plain",
 				}
 			};
 
 			new Mail().Send(
 				rpt.ToEmail,
-				emailText,
+				"See attached file " + attachmentName,
 				null,
 				ConfigManager.CurrentValues.Instance.MailSenderEmail,
 				ConfigManager.CurrentValues.Instance.MailSenderName,
