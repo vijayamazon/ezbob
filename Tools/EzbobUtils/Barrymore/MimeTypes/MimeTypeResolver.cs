@@ -4,9 +4,7 @@
 	using System.Runtime.InteropServices;
 
 	public class MimeTypeResolver {
-
 		static MimeTypeResolver() {
-
 			ms_oFileExtMap = new SortedDictionary<string, MimeType> {
 				{ ".323", new MimeType { FileExtension = ".323", IsText = true, PrimaryMimeType = "text/h323", SecondaryMimeTypes = "" } },
 				{ ".3g2", new MimeType { FileExtension = ".3g2", IsText = false, PrimaryMimeType = "video/3gpp2", SecondaryMimeTypes = "" } },

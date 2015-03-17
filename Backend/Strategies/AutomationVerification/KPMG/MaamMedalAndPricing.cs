@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using Ezbob.Database;
 	using Ezbob.Utils;
@@ -14,16 +16,24 @@
 		public MaamMedalAndPricing(int topCount, int lastCheckedCashRequestID) {
 			this.topCount = topCount;
 			this.lastCheckedID = lastCheckedCashRequestID;
-			this.data = new List<Datum>();
+			Data = new List<Datum>();
 			this.homeOwners = new SortedDictionary<int, bool>();
 			this.defaultCustomers = new SortedSet<int>();
 			this.crLoans = new TCrLoans();
 			this.loanSources = new SortedSet<string>();
+
+			this.tag = string.Format(
+				"#MaamMedalAndPricing_{0}_{1}",
+				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
+				Guid.NewGuid().ToString("N")
+			);
 		} // constructor
 
 		public override string Name {
 			get { return "MaamMedalAndPricing"; }
 		} // Name
+
+		public List<Datum> Data { get; private set; }
 
 		public override void Execute() {
 			CsvOutput = new List<string>();
@@ -55,13 +65,15 @@
 
 			var pc = new ProgressCounter("{0} cash requests processed.", Log, 50);
 
-			foreach (Datum d in this.data) {
+			foreach (Datum d in Data) {
 				d.IsDefault = defaultCustomers.Contains(d.CustomerID);
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
-				d.CheckAutoReject(DB, Log);
-
-				d.AutoThen.Calculate(d.CustomerID, isHomeOwner, DB, Log);
+				try {
+					d.RunAutomation(isHomeOwner, DB, Log);
+				} catch (Exception e) {
+					Log.Alert(e, "Automation failed for customer {0} with cash request {1}.", d.CustomerID, d.CashRequestID);
+				} // try
 
 				pc++;
 			} // for
@@ -70,15 +82,10 @@
 
 			CsvOutput.Add(Datum.CsvTitles(this.loanSources));
 
-			Log.Debug("Output data - begin:");
+			CsvTitles = Datum.CsvTitles(this.loanSources).Split(';');
 
-			foreach (Datum d in this.data) {
-				Log.Debug("{0}", d);
-
+			foreach (Datum d in Data)
 				CsvOutput.Add(d.ToCsv(this.crLoans, this.loanSources));
-			} // for each
-
-			Log.Debug("Output data - end.");
 
 			Log.Debug(
 				"\n\nCSV output - begin:\n{0}\nCSV output - end.\n",
@@ -87,6 +94,8 @@
 		} // Execute
 
 		public virtual List<string> CsvOutput { get; private set; }
+
+		public virtual string[] CsvTitles { get; private set; }
 
 		protected virtual string Condition {
 			get { return string.Empty; }
@@ -97,15 +106,15 @@
 		} // Query
 
 		private void LoadCashRequests() {
-			this.data.Clear();
+			Data.Clear();
 
 			DB.ForEachRowSafe(ProcessRow, Query, CommandSpecies.Text);
 
-			Log.Debug("{0} loaded before filtering.", Grammar.Number(this.data.Count, "cash request"));
+			Log.Debug("{0} loaded before filtering.", Grammar.Number(Data.Count, "cash request"));
 
 			var byCustomer = new SortedDictionary<int, List<Datum>>();
 
-			foreach (Datum curDatum in this.data) {
+			foreach (Datum curDatum in Data) {
 				if (!byCustomer.ContainsKey(curDatum.CustomerID)) {
 					byCustomer[curDatum.CustomerID] = new List<Datum> { curDatum };
 					continue;
@@ -113,11 +122,11 @@
 
 				List<Datum> customerData = byCustomer[curDatum.CustomerID];
 
-				var lastKnown = customerData.Last();
+				var lastKnown = customerData.Last(d => !d.IsCampaign && !d.IsSuperseded);
 
 				// EZ-3048: from two cash requests that happen in less than 24 hours only the latest should be taken.
 				if ((curDatum.DecisionTime - lastKnown.DecisionTime).TotalHours < 24)
-					customerData.RemoveAt(customerData.Count - 1);
+					lastKnown.IsSuperseded = true;
 
 				customerData.Add(curDatum);
 			} // for each
@@ -135,10 +144,10 @@
 			if (this.topCount > 0)
 				result = result.Take(this.topCount).ToList();
 
-			this.data.Clear();
-			this.data.AddRange(result);
+			Data.Clear();
+			Data.AddRange(result);
 
-			Log.Debug("{0} remained after filtering.", Grammar.Number(this.data.Count, "cash request"));
+			Log.Debug("{0} remained after filtering.", Grammar.Number(Data.Count, "cash request"));
 		} // LoadCashRequests
 
 		private bool IsHomeOwner(int customerID) {
@@ -157,25 +166,22 @@
 		} // IsHomeOwner
 
 		private void ProcessRow(SafeReader sr) {
-			bool isCampaign = sr["IsCampaign"];
-
-			if (isCampaign)
-				return;
-
 			Datum d = sr.Fill<Datum>();
+			d.Tag = this.tag;
+
 			sr.Fill(d.Manual);
 			sr.Fill(d.ManualCfg);
 
 			d.ManualCfg.Calculate(d.Manual);
 			d.LoadLoans(DB);
 
-			this.data.Add(d);
+			Data.Add(d);
 		} // ProcessRow
 
+		private readonly string tag;
 		private readonly int topCount;
 		private readonly int lastCheckedID;
 
-		private readonly List<Datum> data;
 		private readonly SortedDictionary<int, bool> homeOwners;
 		private readonly SortedSet<int> defaultCustomers;
 		private readonly TCrLoans crLoans;

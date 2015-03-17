@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
 	using OfficeOpenXml;

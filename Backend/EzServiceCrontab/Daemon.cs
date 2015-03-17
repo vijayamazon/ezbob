@@ -6,6 +6,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
+	using log4net;
 
 	public class Daemon {
 
@@ -62,6 +63,10 @@
 
 		private void Reinit() {
 			try {
+				ThreadContext.Properties["UserId"] = string.Empty;
+				ThreadContext.Properties["CustomerId"] = string.Empty;
+				ThreadContext.Properties["StrategyType"] = "Crontab";
+
 				m_oLog.Debug("Updating crontab job list...");
 
 				var oAllJobs = new JobSet();

@@ -130,7 +130,7 @@
 
 			MedalOutputModel medal = medalCalulator.CalculateMedal(data);
 
-			medal.OfferedLoanAmount = GetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
+			SetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
 
 			return medal;
 		} // GetMedal
@@ -138,7 +138,10 @@
 		protected AConnection DB;
 		protected ASafeLog Log;
 
-		private int GetOfferedAmount(MedalOutputModel medal, int minApprovalAmount) {
+		private void SetOfferedAmount(MedalOutputModel medal, int minApprovalAmount) {
+			medal.OfferedLoanAmount = 0;
+			medal.MaxOfferedLoanAmount = 0;
+
 			var medalCoefficients = new List<MedalCoefficientsModelDb>();
 
 			DB.ForEachRowSafe(sr => {
@@ -154,7 +157,8 @@
 
 			MedalCoefficientsModelDb coefficients = medalCoefficients.First(x => x.Medal == medal.Medal);
 
-			decimal annualTurnoverOffer = decimal.Parse(medal.WeightsDict[Parameter.AnnualTurnover].Value) * coefficients.AnnualTurnover / 100.0M;
+			decimal annualTurnoverOffer =
+				decimal.Parse(medal.WeightsDict[Parameter.AnnualTurnover].Value) * coefficients.AnnualTurnover / 100.0M;
 			decimal freeCashflowOffer = medal.UseHmrc ? medal.FreeCashflow * coefficients.FreeCashFlow / 100.0M : 0;
 			decimal valueAddedOffer = medal.UseHmrc ? medal.ValueAdded * coefficients.ValueAdded / 100.0M : 0;
 
@@ -167,20 +171,27 @@
 
 			if (positiveOffers.Any()) {
 				int thePreOffer = positiveOffers.Min(x => (int)x);
+				int theMaxPreOffer = positiveOffers.Max(x => (int)x);
 
-				int theOffer = (int)(thePreOffer * medal.CapOfferByCustomerScoresValue);
+				medal.OfferedLoanAmount = (int)(thePreOffer * medal.CapOfferByCustomerScoresValue);
+				medal.MaxOfferedLoanAmount = (int)(theMaxPreOffer * medal.CapOfferByCustomerScoresValue);
 
 				Log.Debug(
-					"Secondary medal - offered loan amount calculated to be {0} (before score cap: {1}, cap value: {2}).",
-					theOffer,
+					"Secondary medal - offered loan amount is {0} (before score cap: {1}, cap value: {2}).",
+					medal.OfferedLoanAmount,
 					thePreOffer,
 					medal.CapOfferByCustomerScoresValue.ToString("P6")
 				);
-				return theOffer;
+
+				Log.Debug(
+					"Secondary medal - MAX offered loan amount is {0} (before score cap: {1}, cap value: {2}).",
+					medal.MaxOfferedLoanAmount,
+					theMaxPreOffer,
+					medal.CapOfferByCustomerScoresValue.ToString("P6")
+				);
 			} // if
 
 			Log.Debug("Secondary medal - all the offer amounts are not valid.");
-			return 0;
 		} // GetOfferedAmount
 
 		private static bool AccountIsTooOld(DateTime today, bool hasAccounts, DateTime? lastUpdated, int threshold) {

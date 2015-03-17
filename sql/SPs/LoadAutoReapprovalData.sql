@@ -6,7 +6,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadAutoReapprovalData
-@CustomerID INT
+@CustomerID INT,
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -25,6 +26,8 @@ BEGIN
 			c.UnderwriterDecision = 'Approved'
 			AND
 			h.UnderwriterId != 1
+			AND
+			h.[Date] < @Now
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -40,6 +43,8 @@ BEGIN
 			c.UnderwriterDecision = 'Rejected'
 			AND
 			c.Id > @LacrID
+			AND
+			c.UnderwriterDecisionDate < @Now
 	), 0) END
 
 	------------------------------------------------------------------------------
@@ -68,24 +73,37 @@ BEGIN
 		WHERE
 			l.CustomerId = @CustomerId 
 			AND
-			ls.[Date] > @LacrTime
+			@LacrTime < ls.[Date] AND ls.[Date] < @Now
 			AND
 			ls.Status IN ('Late', 'Paid')
 	), 0)
 
 	------------------------------------------------------------------------------
+	------------------------------------------------------------------------------
 
-	DECLARE @OpenLoanCount INT = ISNULL((
-		SELECT
-			COUNT(*)
-		FROM
-			Loan l
-		WHERE
-			CustomerId = @CustomerID
-			AND
-			Status != 'PaidOff'
-	), 0)
+	DECLARE @TakenLoanAmount DECIMAL(18, 0)
+	DECLARE @OpenLoanCount INT
+	
+	------------------------------------------------------------------------------
 
+	SELECT
+		@OpenLoanCount = COUNT(*),
+		@TakenLoanAmount = SUM(l.LoanAmount)
+	FROM
+		Loan l
+	WHERE
+		CustomerId = @CustomerID
+		AND
+		l.[Date] < @Now
+		AND
+		(l.DateClosed IS NULL OR l.DateClosed > @Now)
+
+	------------------------------------------------------------------------------
+
+	SET @OpenLoanCount = ISNULL(@OpenLoanCount, 0)
+	SET @TakenLoanAmount = ISNULL(@TakenLoanAmount, 0)
+
+	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	DECLARE @SumOfCharges DECIMAL(18, 4) = ISNULL((
@@ -97,21 +115,7 @@ BEGIN
 		WHERE
 			l.Customerid = @CustomerId
 			AND
-			lc.[Date] > @LacrTime
-	), 0)
-
-	------------------------------------------------------------------------------
-
-	DECLARE @TakenLoanAmount DECIMAL(18, 0) = ISNULL((
-		SELECT
-			SUM(l.LoanAmount)
-		FROM
-			Loan l
-			INNER JOIN CashRequests cr ON l.RequestCashId = cr.Id
-		WHERE
-			cr.IdCustomer = @CustomerID
-			AND
-			cr.Id >= @LacrID
+			@LacrTime < lc.[Date] AND lc.[Date] < @Now
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -127,6 +131,8 @@ BEGIN
 			cr.IdCustomer = @CustomerID
 			AND
 			cr.Id >= @LacrID
+			AND
+			t.PostDate < @Now
 			AND
 			t.Status = 'Done'
 			AND
@@ -146,6 +152,8 @@ BEGIN
 			cr.IdCustomer = @CustomerID
 			AND
 			cr.Id >= @LacrID
+			AND
+			t.PostDate < @Now
 			AND
 			t.Status = 'Done'
 			AND
@@ -195,7 +203,7 @@ BEGIN
 	WHERE
 		l.CustomerId = @CustomerID
 		AND
-		t.PostDate > @LacrTime
+		@LacrTime < t.PostDate AND t.PostDate < @Now
 		AND
 		t.PostDate > s.[Date]
 	ORDER BY
@@ -215,7 +223,7 @@ BEGIN
 	WHERE
 		m.CustomerId = @CustomerID
 		AND
-		m.Created > @LacrTime
+		@LacrTime < m.Created AND m.Created < @Now
 	ORDER BY
 		m.Created
 

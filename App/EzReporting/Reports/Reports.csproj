@@ -73,8 +73,6 @@
   <ItemGroup>
     <Compile Include="Alibaba\DataSharing\CustomerData.cs" />
     <Compile Include="Alibaba\DataSharing\DataSharing.cs" />
-    <Compile Include="Alibaba\ExcelPackageExt.cs" />
-    <Compile Include="Alibaba\ExcelWorksheetExt.cs" />
     <Compile Include="Alibaba\Funnel\FunnelCreator.cs" />
     <Compile Include="Alibaba\Funnel\FunnelRow.cs" />
     <Compile Include="Alibaba\Funnel\Funnel.cs" />
@@ -173,6 +171,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
       <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
       <Name>DbConnection</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ExcelExt\ExcelExt.csproj">
+      <Project>{a6cc0a11-823d-4193-b135-7b8e9f8796c1}</Project>
+      <Name>ExcelExt</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\EzEnvironment\EzEnvironment.csproj">
       <Project>{b91eb116-94eb-416b-9422-d3ba97993163}</Project>

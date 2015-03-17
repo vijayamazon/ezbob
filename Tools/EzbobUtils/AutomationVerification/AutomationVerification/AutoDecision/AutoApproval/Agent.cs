@@ -147,8 +147,8 @@
 		} // GatherAvailableFunds
 
 		/// <summary>
-		///     Collects customer data from DB. Can be overridden to provide
-		///     specific customer data instead of the current one.
+		/// Collects customer data from DB. Can be overridden to provide
+		/// specific customer data instead of the current one.
 		/// </summary>
 		protected virtual void GatherData() {
 			this.caisAccounts.Clear();

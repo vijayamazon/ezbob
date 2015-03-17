@@ -3,6 +3,8 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
+	using DbConstants;
+	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -15,12 +17,21 @@
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedMember.Local")]
-	internal class Datum {
+	public class Datum {
 		public Datum() {
 			Manual = new ManualMedalAndPricing();
 			ManualCfg = new SetupFeeConfiguration();
-			AutoThen = new AutoMedalAndPricing();
+			AutoMin = new AutoMedalAndPricing();
+			AutoMax = new AutoMedalAndPricing();
+			IsSuperseded = false;
+			AutomationDecision = DecisionActions.Waiting;
+			IsAutoReRejected = false;
+			IsAutoRejected = false;
+			IsAutoReApproved = false;
+			IsAutoApproved = false;
 		} // constructor
+
+		public string Tag { get; set; }
 
 		public int CashRequestID { get; set; }
 		public int CustomerID { get; set; }
@@ -41,7 +52,8 @@
 			get { return Manual.DecisionTime; }
 			set {
 				Manual.DecisionTime = value;
-				AutoThen.DecisionTime = value;
+				AutoMin.DecisionTime = value;
+				AutoMax.DecisionTime = value;
 			} // set
 		} // DecisionTime
 
@@ -56,24 +68,39 @@
 		public AMedalAndPricing Manual { get; private set; }
 
 		public bool IsDefault { get; set; }
+		public bool IsCampaign { get; set; }
+		public bool IsSuperseded { get; set; }
 
+		public DecisionActions AutomationDecision { get; private set; }
+
+		public bool IsAutoReRejected { get; private set; }
 		public bool IsAutoRejected { get; private set; }
+		public bool IsAutoReApproved { get; private set; }
+		public bool IsAutoApproved { get; private set; }
 
-		public AMedalAndPricing AutoThen { get; private set; }
+		public decimal ReapprovedAmount { get; private set; }
+
+		public AMedalAndPricing AutoMin { get; private set; }
+		public AMedalAndPricing AutoMax { get; private set; }
 
 		public SetupFeeConfiguration ManualCfg { get; private set; }
 
-		public void CheckAutoReject(AConnection db, ASafeLog log) {
-			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
-				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, log, CustomerID);
+		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
+			RunAutoRerejection(db, log);
 
-			oSecondary.MakeDecision(oSecondary.GetRejectionInputData(DecisionTime));
+			RunAutoReject(db, log);
 
-			IsAutoRejected = oSecondary.Trail.HasDecided;
-		} // CheckAutoReject
+			RunAutoReapproval(db, log);
+
+			var instance = new CalculateMedal(CustomerID, DecisionTime, true, false);
+			instance.Execute();
+
+			RunAutoApprove(isHomeOwner, instance.Result, db, log);
+		} // RunAutomation
 
 		public void LoadLoans(AConnection db) {
-			AutoThen.LoadLoans(CustomerID, db);
+			AutoMin.LoadLoans(CustomerID, db);
+			AutoMax.LoadLoans(CustomerID, db);
 		} // LoadLoans
 
 		public static string CsvTitles(SortedSet<string> sources) {
@@ -92,9 +119,18 @@
 				"Broker ID",
 				"Customer is default now",
 				"Has default loan",
+				"Is campaign",
+				"Is superseded",
 				AMedalAndPricing.CsvTitles("Manual"),
-				"Auto reject",
-				AMedalAndPricing.CsvTitles("Auto"),
+				"Automation decision",
+				"Auto re-reject decision",
+				"Auto reject decision",
+				"Auto re-approve decision",
+				"Auto approve decision",
+				"Re-approved amount",
+				AMedalAndPricing.CsvTitles("Auto min"),
+				"The same max offer",
+				AMedalAndPricing.CsvTitles("Auto max"),
 				string.Join(";", os)
 			);
 		} // CsvTitles
@@ -131,11 +167,90 @@
 				BrokerID.ToString(CultureInfo.InvariantCulture),
 				IsDefault ? "Default" : "No",
 				hasDefaultLoan ? "Default" : "No",
+				IsCampaign ? "Campaign" : "No",
+				IsSuperseded ? "Superseded" : "No",
 				Manual.ToCsv(),
-				IsAutoRejected ? "Rejected" : "Manual",
-				AutoThen.ToCsv(),
+				AutomationDecision.ToString(),
+				IsAutoReRejected ? "Reject" : "Manual",
+				IsAutoRejected ? "Reject" : "Manual",
+				IsAutoReApproved ? "Approve" : "Manual",
+				IsAutoApproved ? "Approve" : "Manual",
+				ReapprovedAmount,
+				AutoMin.ToCsv(),
+				(AutoMax == null) ? "Same" : "No",
+				(AutoMax ?? AutoMin).ToCsv(),
 				string.Join(";", os)
 			);
 		} // ToCsv
+
+		private void RunAutoRerejection(AConnection db, ASafeLog log) {
+			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
+				CustomerID,
+				DecisionTime,
+				db,
+				log
+			).Init();
+
+			agent.MakeDecision();
+
+			agent.Trail.Save(db, null, CashRequestID, Tag);
+
+			if (agent.Trail.HasDecided && (AutomationDecision == DecisionActions.Waiting))
+				AutomationDecision = DecisionActions.ReReject;
+
+			IsAutoReRejected = agent.Trail.HasDecided;
+		} // RunAutoRerejection
+
+		private void RunAutoReject(AConnection db, ASafeLog log) {
+			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =
+				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, log, CustomerID);
+
+			agent.MakeDecision(agent.GetRejectionInputData(DecisionTime));
+
+			agent.Trail.Save(db, null, CashRequestID, Tag);
+
+			if (agent.Trail.HasDecided && (AutomationDecision == DecisionActions.Waiting))
+				AutomationDecision = DecisionActions.Reject;
+
+			IsAutoRejected = agent.Trail.HasDecided;
+		} // RunAutoReject
+
+		private void RunAutoReapproval(AConnection db, ASafeLog log) {
+			ReapprovedAmount = 0;
+
+			var agent = new
+				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
+				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, DecisionTime, db, log);
+
+			agent.Init();
+
+			agent.Decide(CashRequestID, Tag);
+
+			if (agent.Trail.HasDecided && (AutomationDecision == DecisionActions.Waiting)) {
+				AutomationDecision = DecisionActions.ReApprove;
+				ReapprovedAmount = agent.ApprovedAmount;
+			} // if
+
+			IsAutoReApproved = agent.Trail.HasDecided;
+		} // RunAutoReapproval
+
+		private void RunAutoApprove(
+			bool isHomeOwner,
+			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
+			AConnection db,
+			ASafeLog log
+		) {
+			AutoMin.Calculate(CustomerID, isHomeOwner, medal, true, CashRequestID, Tag, db, log);
+
+			if ((AutoMin.Amount > 0) && (AutomationDecision == DecisionActions.Waiting))
+				AutomationDecision = DecisionActions.Approve;
+
+			IsAutoReApproved = AutoMin.Amount > 0;
+
+			if (medal.OfferedAmountsDiffer())
+				AutoMax.Calculate(CustomerID, isHomeOwner, medal, false, CashRequestID, Tag, db, log);
+			else
+				AutoMax = null;
+		} // RunAutoApprove
 	} // class Datum
 } // namespace

@@ -37,6 +37,7 @@
 
 		public bool FirstRepaymentDatePassed { get; set; }
 		public int OfferedLoanAmount { get; set; }
+		public int MaxOfferedLoanAmount { get; set; }
 		public DateTime? EarliestHmrcLastUpdateDate { get; set; }
 		public DateTime? EarliestYodleeLastUpdateDate { get; set; }
 		public int AmazonPositiveFeedbacks { get; set; }

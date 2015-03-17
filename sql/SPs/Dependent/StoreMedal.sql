@@ -86,6 +86,7 @@ ALTER PROCEDURE StoreMedal
 	,@CapOfferByCustomerScoresValue DECIMAL(18,6)
 	,@CapOfferByCustomerScoresTable NVARCHAR(MAX)
 	,@Tag NVARCHAR(256)
+	,@MaxOfferedLoanAmount INT
 AS
 BEGIN
 	------------------------------------------------------------------------------
@@ -183,6 +184,7 @@ BEGIN
 	,CapOfferByCustomerScoresValue
 	,CapOfferByCustomerScoresTable
 	,TrailTagID
+	,MaxOfferedLoanAmount
 	) VALUES (
 	 @CustomerId
 	,@CalculationTime
@@ -268,6 +270,7 @@ BEGIN
 	,@CapOfferByCustomerScoresValue
 	,@CapOfferByCustomerScoresTable
 	,@TagID
+	,@MaxOfferedLoanAmount
 	)
 END
 GO

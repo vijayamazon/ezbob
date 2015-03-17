@@ -4,6 +4,7 @@
 	using System.Drawing;
 	using System.Linq;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Utils;
 	using Ezbob.Utils.ParsedValue;
 	using JetBrains.Annotations;

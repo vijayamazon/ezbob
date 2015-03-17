@@ -3,7 +3,7 @@
 	using Ezbob.Logger;
 
 	public class SameDataConfiguration : Configuration {
-		public SameDataConfiguration() : base() {} // constructor
+		public SameDataConfiguration() {} // constructor
 
 		public SameDataConfiguration(AConnection db, ASafeLog log) : base(db, log) {
 		} // constructor

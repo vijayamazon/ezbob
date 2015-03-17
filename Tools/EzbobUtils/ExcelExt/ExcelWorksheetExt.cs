@@ -1,4 +1,4 @@
-﻿namespace Reports.Alibaba {
+﻿namespace Ezbob.ExcelExt {
 	using System;
 	using System.Drawing;
 	using System.Globalization;
@@ -6,8 +6,7 @@
 	using OfficeOpenXml;
 	using OfficeOpenXml.Style;
 
-	internal static class ExcelWorksheetExt {
-
+	public static class ExcelWorksheetExt {
 		public static int SetCellTitle(this ExcelWorksheet oSheet, int nRow, int nColumn, object oRaw) {
 			return SetCellValue(
 				oSheet,
@@ -93,6 +92,5 @@
 
 			return nColumn;
 		} // SetRowValues
-
 	} // class ExcelWorksheetExt
 } // namespace

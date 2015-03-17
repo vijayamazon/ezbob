@@ -175,6 +175,7 @@
 		public EZBob.DatabaseLib.Model.Database.Medal MedalClassification { get; set; }
 		public string Error { get; set; }
 		public int OfferedLoanAmount { get; set; }
+		public int MaxOfferedLoanAmount { get; set; }
 
 		public MedalResult(int customerID, ASafeLog log) {
 			MedalClassification = Medal.NoClassification;
@@ -196,6 +197,14 @@
 		public int RoundOfferedAmount() {
 			return RoundOfferedAmount(OfferedLoanAmount);
 		} // RoundOfferedAmount
+
+		public int RoundMaxOfferedAmount() {
+			return RoundOfferedAmount(MaxOfferedLoanAmount);
+		} // RoundMaxOfferedAmount
+
+		public bool OfferedAmountsDiffer() {
+			return RoundOfferedAmount() != RoundMaxOfferedAmount();
+		} // OfferedAmountsDiffer
 
 		public bool UseHmrc() {
 			return (NumOfHmrcMps > 0) && (TurnoverType == Ezbob.Backend.Strategies.MedalCalculations.TurnoverType.HMRC);
@@ -308,7 +317,8 @@
 				new QueryParameter("MortgageBalance", MortgageBalance),
 				new QueryParameter("CapOfferByCustomerScoresValue", CapOfferByCustomerScoresValue),
 				new QueryParameter("CapOfferByCustomerScoresTable", CapOfferByCustomerScoresTable.ToFormattedString()),
-				new QueryParameter("Tag", tag)
+				new QueryParameter("Tag", tag),
+				new QueryParameter("MaxOfferedLoanAmount", MaxOfferedLoanAmount)
 			);
 		} // SaveToDb
 

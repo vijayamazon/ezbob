@@ -462,7 +462,8 @@
 						model.NumberOfPaypalPositiveTransactions),
 					new QueryParameter("CapOfferByCustomerScoresValue", model.CapOfferByCustomerScoresValue),
 					new QueryParameter("CapOfferByCustomerScoresTable", model.CapOfferByCustomerScoresTable),
-					new QueryParameter("Tag", tag)
+					new QueryParameter("Tag", tag),
+					new QueryParameter("MaxOfferedLoanAmount", model.MaxOfferedLoanAmount)
 				);
 			} else {
 				_db.ExecuteNonQuery("AV_StoreNewMedalError", CommandSpecies.StoredProcedure,

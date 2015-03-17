@@ -1,5 +1,6 @@
 ﻿namespace Reports.Alibaba.Funnel {
 	using System.Collections.Generic;
+	using Ezbob.ExcelExt;
 	using OfficeOpenXml;
 
 	internal class StrInt {

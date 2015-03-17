@@ -13,8 +13,7 @@
 			DateTime now,
 			AConnection oDB,
 			ASafeLog oLog
-			)
-			: base(nCustomerID, nSystemCalculatedAmount, nMedal, nMedalType, turnoverType, oDB, oLog) {
+		) : base(nCustomerID, nSystemCalculatedAmount, nMedal, nMedalType, turnoverType, oDB, oLog) {
 			this.now = now;
 		} // constructor
 
@@ -30,13 +29,11 @@
 			// Just dummy values (for now) so that approval ain't no breaks on this.
 			Funds.Available = 1000000m;
 			Funds.Reserved = 1000m;
-		}
+		} // GatherAvailableFunds
 
 		protected override Configuration InitCfg() {
 			return new SameDataConfiguration(DB, Log);
 		} // InitCfg
-
-		// GatherAvailableFunds
 
 		private readonly DateTime now;
 	} // class Agent

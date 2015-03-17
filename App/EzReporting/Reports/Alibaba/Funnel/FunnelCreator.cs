@@ -1,6 +1,7 @@
 ﻿namespace Reports.Alibaba.Funnel {
 	using System;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
 

@@ -2,10 +2,15 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.IO;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.ExcelExt;
+	using Ezbob.Utils.MimeTypes;
+	using EzBob.CommonLib;
 	using global::Reports;
 	using MailApi;
 	using MailApi.Model;
+	using OfficeOpenXml;
 
 	public class WeeklyMaamMedalAndPricing : MaamMedalAndPricing {
 		public WeeklyMaamMedalAndPricing(bool forceRunNow) : base(-1, -1) {
@@ -52,19 +57,26 @@
 
 			string emailText = string.Join(System.Environment.NewLine, CsvOutput);
 
-			var attachmentName = "weekly.kpmg." + this.today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture) + ".txt";
+			string baseAttachmentName = "weekly.kpmg." + this.today.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+			var mime = new MimeTypeResolver();
 
 			var attachments = new List<attachment> {
 				new attachment {
-					name = attachmentName,
+					name = baseAttachmentName + ".txt",
 					content = Mail.EncodeAttachment(emailText),
 					type = "text/plain",
+				},
+				new attachment {
+					name = baseAttachmentName + ".xlsx",
+					content = CreateXlsx(),
+					type = mime[".xlsx"],
 				}
 			};
 
 			new Mail().Send(
 				rpt.ToEmail,
-				"See attached file " + attachmentName,
+				"See attached file.",
 				null,
 				ConfigManager.CurrentValues.Instance.MailSenderEmail,
 				ConfigManager.CurrentValues.Instance.MailSenderName,
@@ -76,6 +88,34 @@
 		protected override string Condition {
 			get { return this.condition; }
 		} // Condition
+
+		private string CreateXlsx() {
+			var ep = new ExcelPackage();
+
+			var sheet = ep.CreateSheet("Cash requests", false, CsvTitles);
+
+			int curRow = 2;
+
+			bool first = true;
+
+			foreach (var d in CsvOutput) {
+				if (first) {
+					first = false;
+					continue;
+				} // if
+
+				sheet.SetRowValues(curRow, true, d.Split(';'));
+				curRow++;
+			} // for each
+
+			ep.AutoFitColumns();
+
+			var ms = new MemoryStream();
+
+			ep.SaveAs(ms);
+
+			return Mail.EncodeAttachment(ms.GetBuffer());
+		} // CreateXlsx
 
 		private readonly string condition;
 

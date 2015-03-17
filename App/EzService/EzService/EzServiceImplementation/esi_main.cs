@@ -378,7 +378,7 @@
 			ThreadContext.Properties["UserId"] = args.UserID;
 			ThreadContext.Properties["CustomerId"] = args.CustomerID;
 			ThreadContext.Properties["StrategyType"] = args.StrategyType.Name;
-		}
+		} // SetLogThreadProperties
 
 		private static readonly SortedDictionary<Guid, ActionMetaData> ms_oActiveActions;
 		private static readonly object ms_oLockActiveActions;

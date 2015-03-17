@@ -6,7 +6,7 @@
 
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
-	internal class SetupFeeConfiguration {
+	public class SetupFeeConfiguration {
 		public int UseSetupFee { get; set; }
 		public bool UseBrokerSetupFee { get; set; }
 

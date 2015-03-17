@@ -3,7 +3,7 @@
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
-	internal class LoanMetaData : AResultRow {
+	public class LoanMetaData : AResultRow {
 		public int CashRequestID { get; set; }
 		public int LoanID { get; set; }
 		public string LoanSourceName { get; set; }

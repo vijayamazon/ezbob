@@ -3,7 +3,6 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using ConfigManager;
-	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.Logger;
@@ -11,7 +10,7 @@
 
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
-	internal abstract class AMedalAndPricing {
+	public abstract class AMedalAndPricing {
 		public int LoanCount { get; private set; }
 		[NonTraversable]
 		public DateTime DecisionTime { get; set; }
@@ -47,18 +46,26 @@
 		public decimal SetupFee { get; set; }
 		public int RepaymentPeriod { get; set; }
 
-		public void Calculate(int customerID, bool isHomeOwner, AConnection db, ASafeLog log) {
-			var instance = new CalculateMedal(customerID, DecisionTime, true, false);
-			instance.Execute();
+		public void Calculate(
+			int customerID,
+			bool isHomeOwner,
+			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
+			bool takeMinOffer,
+			long cashRequestID,
+			string tag,
+			AConnection db,
+			ASafeLog log
+		) {
+			MedalName = medal.MedalClassification.ToString();
 
-			MedalName = instance.Result.MedalClassification.ToString();
+			EzbobScore = medal.TotalScoreNormalized;
 
-			EzbobScore = instance.Result.TotalScoreNormalized;
-
-			log.Debug("Before capping the offer: {0}", instance.Result);
+			log.Debug("Before capping the offer: {0}", medal);
 
 			int amount = Math.Min(
-				instance.Result.RoundOfferedAmount(),
+				takeMinOffer
+					?  medal.RoundOfferedAmount()
+					:  medal.RoundMaxOfferedAmount(),
 				isHomeOwner
 					? CurrentValues.Instance.MaxCapHomeOwner
 					: CurrentValues.Instance.MaxCapNotHomeOwner
@@ -67,14 +74,16 @@
 			var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
 				customerID,
 				amount,
-				(AutomationCalculator.Common.Medal)instance.Result.MedalClassification,
-				(AutomationCalculator.Common.MedalType)instance.Result.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)instance.Result.TurnoverType,
+				(AutomationCalculator.Common.Medal)medal.MedalClassification,
+				(AutomationCalculator.Common.MedalType)medal.MedalType,
+				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
 				DecisionTime,
 				db,
 				log
 			).Init();
 			approveAgent.MakeDecision();
+
+			approveAgent.Trail.Save(db, null, cashRequestID, tag);
 
 			Amount = amount;
 			Decision = approveAgent.Trail.GetDecisionName();
@@ -89,7 +98,7 @@
 					DecisionTime,
 					amount,
 					LoanCount > 0,
-					instance.Result.MedalClassification
+					medal.MedalClassification
 				);
 
 				odc.CalculateOffer();
@@ -111,7 +120,7 @@
 
 		public static string CsvTitles(string prefix) {
 			return string.Format(
-				"{0} Decision time;{0} Medal;{0} Ezbob Score;{0} Decision;{0} Amount;{0} Interest Rate;" +
+				"{0} Medal;{0} Ezbob Score;{0} Decision;{0} Amount;{0} Interest Rate;" +
 				"{0} Repayment Period;{0} Setup Fee %;{0} Setup Fee Amount",
 				prefix
 			);
@@ -119,7 +128,6 @@
 
 		public string ToCsv() {
 			return string.Join(";",
-				DecisionTime.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
 				MedalName,
 				EzbobScore,
 				DecisionStr,

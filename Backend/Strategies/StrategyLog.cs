@@ -5,7 +5,7 @@
 	public class StrategyLog : ASafeLog {
 		public StrategyLog(AStrategy oStrategy, ASafeLog oLog) : base(null) {
 			if (ReferenceEquals(oStrategy, null))
-				throw new Exception("Cannot initialise logger", new ArgumentNullException("oStrategy"));
+				throw new Exception("Cannot initialize logger", new ArgumentNullException("oStrategy"));
 
 			m_oStrategy = oStrategy;
 			m_oLog = new SafeLog(oLog);

@@ -1,10 +1,15 @@
-﻿namespace Reports.Alibaba {
+﻿namespace Ezbob.ExcelExt {
 	using System;
 	using System.Collections.Generic;
 	using OfficeOpenXml;
 
-	internal static class ExcelPackageExt {
-		public static ExcelWorksheet CreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, params string[] oColumnNames) {
+	public static class ExcelPackageExt {
+		public static ExcelWorksheet CreateSheet(
+			this ExcelPackage oReport,
+			string sSheetName,
+			bool bAddCustomerIDColumn,
+			params string[] oColumnNames
+		) {
 			var oSheet = oReport.Workbook.Worksheets.Add(sSheetName);
 
 			var lst = new List<object>();
@@ -27,11 +32,22 @@
 			return oReport.Workbook.Worksheets[sSheetName];
 		} // FindSheet
 
-		public static ExcelWorksheet FindOrCreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, params string[] oColumnNames) {
+		public static ExcelWorksheet FindOrCreateSheet(
+			this ExcelPackage oReport,
+			string sSheetName,
+			bool bAddCustomerIDColumn,
+			params string[] oColumnNames
+		) {
 			return FindOrCreateSheet(oReport, sSheetName, bAddCustomerIDColumn, null, oColumnNames);
 		} // FindOrCreateSheet
 
-		public static ExcelWorksheet FindOrCreateSheet(this ExcelPackage oReport, string sSheetName, bool bAddCustomerIDColumn, Action<ExcelWorksheet> OnCreate, params string[] oColumnNames) {
+		public static ExcelWorksheet FindOrCreateSheet(
+			this ExcelPackage oReport,
+			string sSheetName,
+			bool bAddCustomerIDColumn,
+			Action<ExcelWorksheet> OnCreate,
+			params string[] oColumnNames
+		) {
 			ExcelWorksheet ws = oReport.Workbook.Worksheets[sSheetName];
 
 			if (ws != null)

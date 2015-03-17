@@ -636,13 +636,22 @@
 
 			if (validOfferAmounts.Count > 0) {
 				decimal unroundedValue = validOfferAmounts.Min();
+				decimal maxUnroundedValue = validOfferAmounts.Max();
 
 				Results.OfferedLoanAmount = (int)(unroundedValue * Results.CapOfferByCustomerScoresValue);
+				Results.MaxOfferedLoanAmount = (int)(maxUnroundedValue * Results.CapOfferByCustomerScoresValue);
 
 				this.log.Debug(
 					"Primary medal - offered amount calculated to be {0} (before cap and rounding: {1}, cap value: {2}.",
 					Results.OfferedLoanAmount,
 					unroundedValue,
+					Results.CapOfferByCustomerScoresValue
+				);
+
+				this.log.Debug(
+					"Primary medal - MAX offered amount calculated to be {0} (before cap and rounding: {1}, cap value: {2}.",
+					Results.MaxOfferedLoanAmount,
+					maxUnroundedValue,
 					Results.CapOfferByCustomerScoresValue
 				);
 			} else
