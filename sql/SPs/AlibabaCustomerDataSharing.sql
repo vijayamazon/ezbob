@@ -5,6 +5,7 @@ GO
 SET QUOTED_IDENTIFIER ON
 GO
 
+
 ALTER PROCEDURE [dbo].[AlibabaCustomerDataSharing]
 	@CustomerID int, @FinalDecision bit
 AS
@@ -61,7 +62,9 @@ BEGIN
 			
 		CASE WHEN @FinalDecision = 1 THEN c.Gender END as gender,	 
 		--CASE WHEN @FinalDecision = 0 THEN c.GreetingMailSentDate END as applicationDate,
-		c.GreetingMailSentDate as applicationDate,				
+	   -- c.GreetingMailSentDate as applicationDate,		
+	   -- CashRequests date
+	   r.CreationDate	as applicationDate,		
 
 		co.ExperianCompanyName as  compName,  
 
@@ -82,7 +85,7 @@ BEGIN
 		c.IndustryType as compType,		
 		r.AnualTurnover as compRevenue, -- Business revenue last year 
 		--c.OverallTurnOver as compNetProfit, -- Business net profit before taxes last year ???		
-
+		
 		r.SystemDecision as locOfferStatus,	-- auto decision 001 RR, R, RA, A
 		r.ManagerApprovedSum as locOfferAmount,			
 		r.SystemDecisionDate as locOfferDate , 
@@ -113,7 +116,8 @@ BEGIN
 			AnualTurnover, 					  		
 			OfferStart,	
 			OfferValidUntil,
-			UnderwriterComment					
+			UnderwriterComment,
+			CreationDate				
 		FROM dbo.CashRequests where UnderwriterDecision is not null and IdCustomer= @CustomerID and OfferValidUntil >= GETDATE() order by Id desc) as r on r.IdCustomer = c.Id 
 	WHERE 
 		c.Id = @CustomerID and st.IsEnabled = 1

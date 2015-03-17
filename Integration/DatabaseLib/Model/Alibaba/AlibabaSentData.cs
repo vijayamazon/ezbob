@@ -4,13 +4,11 @@
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
-	using FluentNHibernate.Automapping;
 	using FluentNHibernate.Mapping;
 	using NHibernate;
 	using NHibernate.Type;
 
 	public class AlibabaSentData {
-
 		public virtual int Id { get; set; }
 		public virtual int CustomerId { get; set; }
 		public virtual string Request { get; set; }
