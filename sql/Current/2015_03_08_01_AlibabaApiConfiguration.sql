@@ -48,7 +48,7 @@ BEGIN
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='AlibabaUrlPath')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('AlibabaUrlPath', 'param2/1/alibaba.open/partner.feedback/643480', 'Production Alibaba API url path')
+		UPDATE ConfigurationVariables SET  Value = 'param2/1/alibaba.open/partner.feedback/643480' WHERE Name = 'AlibabaUrlPath' AND [Description] = 'Production Alibaba API url path';
 	END	
 	
 END
