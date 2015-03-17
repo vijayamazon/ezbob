@@ -11,7 +11,7 @@
 		No
 	} // TriState
 
-	[DataContract]
+	[DataContract(IsReference = true)]
 	public class ActionMetaData {
 
 		public static ActionMetaData Create(int nServiceInstanceID, string sActionName, AConnection oDB, ASafeLog oLog, bool bIsSynchronous, ActionStatus nStatus, string sComment, int? nCustomerID, int? nUserID) {

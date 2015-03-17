@@ -16,13 +16,13 @@ namespace PaymentServices.PacNet
 		private const string RoutingNumber = "857151";
 		private const string PaymentType = "fp_credit";
 
-		public PacnetReturnData SendMoney(int customerId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = "ezbob", string currencyCode = "GBP", string description = "EZBOB")
+		public PacnetReturnData SendMoney(int userId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = "ezbob", string currencyCode = "GBP", string description = "EZBOB")
 		{
-			Log.DebugFormat("PacnetService SendMoney customerId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", customerId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
+			Log.DebugFormat("PacnetService SendMoney userId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", userId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
 
 			try
 			{
-				var request = new RavenRequest("submit");
+                var request = new RavenRequest(RavenOperationType.SUBMIT.ToString());
 
 				request.Set("PaymentRoutingNumber", RoutingNumber);
 				request.Set("PaymentType", PaymentType);
@@ -68,12 +68,12 @@ namespace PaymentServices.PacNet
 		}
 
 		//-----------------------------------------------------------------------------------
-		public PacnetReturnData CheckStatus(int customerId, string trackingNumber)
+		public PacnetReturnData CheckStatus(int userId, string trackingNumber)
 		{
 			Log.DebugFormat("CheckStatus: trackingNumber={0}", trackingNumber);
 			try
 			{
-				var request = new RavenRequest("status");
+                var request = new RavenRequest(RavenOperationType.STATUS.ToString());
 				request.Set("PaymentRoutingNumber", RoutingNumber);
 				request.Set("TrackingNumber", trackingNumber);
 				request.Set("PymtType", PaymentType);
@@ -86,7 +86,7 @@ namespace PaymentServices.PacNet
 				}
 				Log.DebugFormat("CheckStatus completed successfully");
 				var pacnetResponse = new PacnetReturnData(response);
-				Log.DebugFormat("CheckStatus customerId {0} trackingNumber {1} Status {2}", customerId, trackingNumber, pacnetResponse.Status);
+				Log.DebugFormat("CheckStatus trackingNumber {0} Status {1}", trackingNumber, pacnetResponse.Status);
 				return pacnetResponse;
 			}
 			catch (Exception ex)
@@ -97,19 +97,19 @@ namespace PaymentServices.PacNet
 		}
 
 		//-----------------------------------------------------------------------------------
-		public PacnetReturnData CloseFile(int customerId = 0, string fileName = "ezbob")
+		public PacnetReturnData CloseFile(int userId, string fileName = "ezbob")
 		{
-			Log.DebugFormat("CloseFile: trackingNumber={0}", fileName);
+			Log.DebugFormat("CloseFile: fileName={0}", fileName);
 			try
 			{
-				var request = new RavenRequest("closefile");
+				var request = new RavenRequest(RavenOperationType.CLOSEFILE.ToString());
 				request.Set("Filename", fileName);
 
 				RavenResponse response = request.Send();
 				using (var wr = new StringWriter())
 				{
 					Serializer.Serialize(wr, response);
-					Log.DebugFormat("Result: " + wr);
+					Log.InfoFormat("Result: " + wr);
 				}
 				Log.DebugFormat("CloseFile completed successfully");
 				return new PacnetReturnData(response);
@@ -144,7 +144,7 @@ namespace PaymentServices.PacNet
 
 				var timestampProvider = new TimestampProvider();
 
-				var request = new RavenRequest("payments");
+                var request = new RavenRequest(RavenOperationType.PAYMENTS.ToString());
 				request.Set("ReportFormat", "RavenPaymentFile_v1.0");
 				request.Set("StartTime", timestampProvider.FormatTimestamp(startTime));
 				request.Set("EndTime", timestampProvider.FormatTimestamp(endTime));

@@ -1,65 +1,114 @@
-﻿namespace Ezbob.Backend.Strategies.Misc {
-	using Ezbob.Database;
-	using PaymentServices.PacNet;
-	using StructureMap;
+﻿namespace Ezbob.Backend.Strategies.Misc
+{
+    using Ezbob.Database;
+    using PaymentServices.PacNet;
+    using StructureMap;
 
-	public class UpdateTransactionStatus : AStrategy {
-		public override string Name {
-			get { return "Update Transaction Status"; }
-		} // Name
+    public class UpdateTransactionStatus : AStrategy
+    {
+        public UpdateTransactionStatus()
+        {
+            this.service = ObjectFactory.GetInstance<IPacnetService>();
+        } //construction
 
-		public override void Execute() {
-			var lst = DB.ExecuteEnumerable("GetPacnetTransactions", CommandSpecies.StoredProcedure);
+        public override string Name
+        {
+            get { return "Update Transaction Status"; }
+        } // Name
 
-			var service = ObjectFactory.GetInstance<IPacnetService>();
+        public override void Execute() {
+            UpdateLoanTransactionStatus();
+            UpdateBrokerCommissionTransactionStatus();
+        }// Execute
 
-			foreach (var sr in lst) {
-				int customerId = sr["CustomerId"];
-				string trackingNumber = sr["TrackingNumber"];
 
-				PacnetReturnData result = service.CheckStatus(customerId, trackingNumber);
+        private void UpdateLoanTransactionStatus(){
+            var lst = DB.ExecuteEnumerable("GetPacnetTransactions", CommandSpecies.StoredProcedure);
 
-				string newStatus;
-				string description = sr["allDescriptions"];
+            foreach (var sr in lst)
+            {
 
-				if (string.IsNullOrEmpty(result.Status)) {
-					newStatus = "Error";
-					description = result.Error;
-				}
-				else if (result.Status.ToLower().Contains("inprogress"))
-				{
-					newStatus = "InProgress";
-				}
-				else if (result.Status.ToLower().Contains("submitted"))
-				{
-					newStatus = "Done";
-					description = "Done";
-				}
-				else if (result.Status.ToLower().Contains("cleared"))
-				{
-					newStatus = "Done";
-					description = "Cleared";
-				}
-				else
-				{
-					newStatus = "Error";
-					description = "Status: '" + result.Status + "' Error: " + result.Error;
-				} // if
+                int customerId = sr["CustomerId"];
+                string trackingNumber = sr["TrackingNumber"];
 
-				Log.Debug(
-					"UpdateTransactionStatus: CustomerId {4}, Tracking number {5}, " +
-					"Pacnet Result: status: {0}, error: {1}, Update data: status {2}, description {3}",
-					result.Status, result.Error, newStatus, description, customerId, trackingNumber
-				);
+                Log.Debug("Checking PacNet transaction status for customer {0} tracking number {1}", customerId, trackingNumber);
 
-				DB.ExecuteNonQuery("UpdateTransactionStatus",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("TrackingId", trackingNumber),
-					new QueryParameter("TransactionStatus", newStatus),
-					new QueryParameter("Description", description)
-				);
-			} // foreach
-		} // Execute
+                string newStatus;
+                string description = sr["allDescriptions"];
+                GetStatus(customerId, trackingNumber, out newStatus, ref description);
 
-	} // UpdateTransactionStatus
+                DB.ExecuteNonQuery("UpdateTransactionStatus",
+                    CommandSpecies.StoredProcedure,
+                    new QueryParameter("TrackingId", trackingNumber),
+                    new QueryParameter("TransactionStatus", newStatus),
+                    new QueryParameter("Description", description)
+                );
+            } // foreach
+        }//UpdateLoanTransactionStatus
+
+
+        private void UpdateBrokerCommissionTransactionStatus()
+        {
+            var brokerCommissions = DB.ExecuteEnumerable("GetBrokerCommissionsForStatusUpdate", CommandSpecies.StoredProcedure);
+
+            foreach (var sr in brokerCommissions)
+            {
+                int loanBrokerCommissionID = sr["LoanBrokerCommissionID"];
+                string trackingNumber = sr["TrackingNumber"];
+                int brokerID = sr["BrokerID"];
+
+                Log.Debug("Checking PacNet transaction status for broker {0} tracking number {1}", brokerID, trackingNumber);
+                string newStatus;
+                string description = sr["Description"];
+                GetStatus(brokerID, trackingNumber, out newStatus, ref description);
+
+                DB.ExecuteNonQuery("UpdateBrokerCommissionTransferStatus",
+                    CommandSpecies.StoredProcedure,
+                    new QueryParameter("LoanBrokerCommissionID", loanBrokerCommissionID),
+                    new QueryParameter("TrackingNumber", trackingNumber),
+                    new QueryParameter("Status", newStatus),
+                    new QueryParameter("Description", description),
+                    new QueryParameter("Now")
+                );
+            } // foreach
+        }//UpdateBrokerCommissionTransactionStatus
+
+        private void GetStatus(int userId, string trackingNumber, out string newStatus, ref string description)
+        {
+            PacnetReturnData result = this.service.CheckStatus(userId, trackingNumber);
+
+            if (string.IsNullOrEmpty(result.Status))
+            {
+                newStatus = "Error";
+                description = result.Error;
+            }
+            else if (result.Status.ToLower().Contains("inprogress"))
+            {
+                newStatus = "InProgress";
+            }
+            else if (result.Status.ToLower().Contains("submitted"))
+            {
+                newStatus = "Done";
+                description = "Done";
+            }
+            else if (result.Status.ToLower().Contains("cleared"))
+            {
+                newStatus = "Done";
+                description = "Cleared";
+            }
+            else
+            {
+                newStatus = "Error";
+                description = "Status: '" + result.Status + "' Error: " + result.Error;
+            } // if
+
+            Log.Debug(
+                "UpdateTransactionStatus: Tracking number {4}, " +
+                "PacNet Result: status: {0}, error: {1}, Update data: status {2}, description {3}",
+                result.Status, result.Error, newStatus, description, trackingNumber
+                );
+        } //GetStatus
+        
+        private readonly IPacnetService service;
+    } // UpdateTransactionStatus
 } // namespace

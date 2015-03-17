@@ -415,5 +415,10 @@
 			};
 		}
 
+        public ActionMetaData BrokerTransferCommission()
+        {
+            return Execute<BrokerTransferCommission>(null, null);
+        }
+
 	} // class EzServiceImplementation
 } // namespace EzService

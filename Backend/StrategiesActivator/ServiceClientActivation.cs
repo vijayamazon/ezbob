@@ -1355,6 +1355,13 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			log.Debug("blablabla: {0}",  result.Result.ToString());
 		}
 
+        [Activation]
+        private void BrokerTransferCommission()
+        {
+            ActionMetaData result = this.serviceClient.BrokerTransferCommission();
+            this.log.Debug("{0}", result.ToString());
+        }
+
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;
 		private readonly ASafeLog log;

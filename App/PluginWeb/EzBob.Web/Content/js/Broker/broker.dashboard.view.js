@@ -75,11 +75,14 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
     }, // displaySignedTerms
 
     displayBrokerProperties: function () {
+        console.log('displayBrokerProperties');
+
         var oProps = this.router.getBrokerProperties();
 
-        if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
+        if (!this.router.isMyBroker(oProps)) { // e.g. not yet loaded
+            console.log('displayBrokerProperties not loaded');
             return;
-
+        }
         var oSampleLink = function (sSourceRef, sImagePath, sNewLine, nWidth, nHeight) {
             return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
 				'\t<img src="' + sImagePath + '" ' +
@@ -111,10 +114,6 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
                     case 'SourceRef':
                         return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '" rel="nofollow">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
-
-                    case 'BankAccount':
-                        self.$el.find('.bank-details').toggle(oFieldValue);
-                        return oFieldValue;
                 } // switch
 
                 if (sFieldName.indexOf('SourceRef') !== 0)

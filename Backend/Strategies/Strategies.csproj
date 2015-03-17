@@ -88,6 +88,7 @@
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="Broker\BrokerAddBank.cs" />
+    <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="CalculateLoan\Helpers\BadPeriods.cs" />
     <Compile Include="CalculateLoan\Helpers\DailyLoanStatus.cs" />
     <Compile Include="CalculateLoan\BankLikeLoanCalculator.cs" />

@@ -204,6 +204,9 @@
 			string sLicenseNumber
 			);
 
+        [OperationContract]
+	    ActionMetaData BrokerTransferCommission();
+
 		[OperationContract]
 		ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword);
 
