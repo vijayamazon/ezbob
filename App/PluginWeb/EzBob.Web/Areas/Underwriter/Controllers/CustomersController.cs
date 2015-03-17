@@ -542,7 +542,7 @@
 		[HttpGet]
 		[Ajax]
 		public JsonResult CheckCustomer(int customerId) {
-			var customer = _customers.TryGet(customerId);
+            var customer = _customers.ReallyTryGet(customerId);
 
 			var nState = (customer == null)
 				? CustomerState.NotFound

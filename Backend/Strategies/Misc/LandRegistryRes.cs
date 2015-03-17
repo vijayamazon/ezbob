@@ -100,6 +100,10 @@
 			var b = new LandRegistryModelBuilder();
 			var lrData = b.BuildResModel(response, titleNumber);
 
+            if (lrData.Proprietorship == null || lrData.Proprietorship.ProprietorshipParties == null) {
+                return false;
+            }
+
 			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties) {
 				// We are taking the first part of the LR first name as it may contain both first and middle name, while we might be missing the middle name
 				if (string.IsNullOrEmpty(proprietorshipParty.PrivateIndividualForename) || string.IsNullOrEmpty(proprietorshipParty.PrivateIndividualSurname))
