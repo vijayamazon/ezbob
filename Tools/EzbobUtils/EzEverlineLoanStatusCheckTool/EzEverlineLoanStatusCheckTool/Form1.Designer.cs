@@ -23,103 +23,116 @@
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.btnCheck = new System.Windows.Forms.Button();
-			this.label1 = new System.Windows.Forms.Label();
-			this.txtEmail = new System.Windows.Forms.TextBox();
-			this.label2 = new System.Windows.Forms.Label();
-			this.lblResult = new System.Windows.Forms.Label();
-			this.label3 = new System.Windows.Forms.Label();
-			this.lblError = new System.Windows.Forms.Label();
-			this.lblLoading = new System.Windows.Forms.Label();
-			this.SuspendLayout();
-			// 
-			// btnCheck
-			// 
-			this.btnCheck.Location = new System.Drawing.Point(402, 48);
-			this.btnCheck.Name = "btnCheck";
-			this.btnCheck.Size = new System.Drawing.Size(75, 23);
-			this.btnCheck.TabIndex = 0;
-			this.btnCheck.Text = "Check";
-			this.btnCheck.UseVisualStyleBackColor = true;
-			this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
-			// 
-			// label1
-			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(14, 48);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(32, 13);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Email";
-			// 
-			// txtEmail
-			// 
-			this.txtEmail.Location = new System.Drawing.Point(129, 48);
-			this.txtEmail.Name = "txtEmail";
-			this.txtEmail.Size = new System.Drawing.Size(267, 20);
-			this.txtEmail.TabIndex = 2;
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(12, 126);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(40, 13);
-			this.label2.TabIndex = 3;
-			this.label2.Text = "Result:";
-			// 
-			// lblResult
-			// 
-			this.lblResult.AutoSize = true;
-			this.lblResult.Location = new System.Drawing.Point(126, 126);
-			this.lblResult.Name = "lblResult";
-			this.lblResult.Size = new System.Drawing.Size(0, 13);
-			this.lblResult.TabIndex = 4;
-			// 
-			// label3
-			// 
-			this.label3.AutoSize = true;
-			this.label3.Location = new System.Drawing.Point(14, 153);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(32, 13);
-			this.label3.TabIndex = 5;
-			this.label3.Text = "Error:";
-			// 
-			// lblError
-			// 
-			this.lblError.AutoSize = true;
-			this.lblError.Location = new System.Drawing.Point(74, 153);
-			this.lblError.Name = "lblError";
-			this.lblError.Size = new System.Drawing.Size(0, 13);
-			this.lblError.TabIndex = 6;
-			// 
-			// lblLoading
-			// 
-			this.lblLoading.AutoSize = true;
-			this.lblLoading.Location = new System.Drawing.Point(14, 87);
-			this.lblLoading.Name = "lblLoading";
-			this.lblLoading.Size = new System.Drawing.Size(107, 13);
-			this.lblLoading.TabIndex = 7;
-			this.lblLoading.Text = "Please wait loading...";
-			this.lblLoading.Visible = false;
-			// 
-			// Form1
-			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(521, 216);
-			this.Controls.Add(this.lblLoading);
-			this.Controls.Add(this.lblError);
-			this.Controls.Add(this.label3);
-			this.Controls.Add(this.lblResult);
-			this.Controls.Add(this.label2);
-			this.Controls.Add(this.txtEmail);
-			this.Controls.Add(this.label1);
-			this.Controls.Add(this.btnCheck);
-			this.Name = "Form1";
-			this.Text = "EzEverlineLoanStatusCheckTool";
-			this.ResumeLayout(false);
-			this.PerformLayout();
+            this.btnCheck = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.txtEmail = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.lblResult = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.lblError = new System.Windows.Forms.Label();
+            this.lblLoading = new System.Windows.Forms.Label();
+            this.btnDetails = new System.Windows.Forms.Button();
+            this.SuspendLayout();
+            // 
+            // btnCheck
+            // 
+            this.btnCheck.Location = new System.Drawing.Point(402, 48);
+            this.btnCheck.Name = "btnCheck";
+            this.btnCheck.Size = new System.Drawing.Size(75, 23);
+            this.btnCheck.TabIndex = 0;
+            this.btnCheck.Text = "Check";
+            this.btnCheck.UseVisualStyleBackColor = true;
+            this.btnCheck.Click += new System.EventHandler(this.btnCheck_Click);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(14, 48);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(32, 13);
+            this.label1.TabIndex = 1;
+            this.label1.Text = "Email";
+            // 
+            // txtEmail
+            // 
+            this.txtEmail.Location = new System.Drawing.Point(129, 48);
+            this.txtEmail.Name = "txtEmail";
+            this.txtEmail.Size = new System.Drawing.Size(267, 20);
+            this.txtEmail.TabIndex = 2;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(12, 126);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(40, 13);
+            this.label2.TabIndex = 3;
+            this.label2.Text = "Result:";
+            // 
+            // lblResult
+            // 
+            this.lblResult.AutoSize = true;
+            this.lblResult.Location = new System.Drawing.Point(126, 126);
+            this.lblResult.Name = "lblResult";
+            this.lblResult.Size = new System.Drawing.Size(0, 13);
+            this.lblResult.TabIndex = 4;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(14, 153);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(32, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "Error:";
+            // 
+            // lblError
+            // 
+            this.lblError.AutoSize = true;
+            this.lblError.Location = new System.Drawing.Point(74, 153);
+            this.lblError.Name = "lblError";
+            this.lblError.Size = new System.Drawing.Size(0, 13);
+            this.lblError.TabIndex = 6;
+            // 
+            // lblLoading
+            // 
+            this.lblLoading.AutoSize = true;
+            this.lblLoading.Location = new System.Drawing.Point(14, 87);
+            this.lblLoading.Name = "lblLoading";
+            this.lblLoading.Size = new System.Drawing.Size(107, 13);
+            this.lblLoading.TabIndex = 7;
+            this.lblLoading.Text = "Please wait loading...";
+            this.lblLoading.Visible = false;
+            // 
+            // btnDetails
+            // 
+            this.btnDetails.Location = new System.Drawing.Point(483, 48);
+            this.btnDetails.Name = "btnDetails";
+            this.btnDetails.Size = new System.Drawing.Size(71, 23);
+            this.btnDetails.TabIndex = 8;
+            this.btnDetails.Text = "Details";
+            this.btnDetails.UseVisualStyleBackColor = true;
+            this.btnDetails.Click += new System.EventHandler(this.btnDetails_Click);
+            // 
+            // Form1
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScroll = true;
+            this.ClientSize = new System.Drawing.Size(760, 504);
+            this.Controls.Add(this.btnDetails);
+            this.Controls.Add(this.lblLoading);
+            this.Controls.Add(this.lblError);
+            this.Controls.Add(this.label3);
+            this.Controls.Add(this.lblResult);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.txtEmail);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.btnCheck);
+            this.Name = "Form1";
+            this.Text = "EzEverlineLoanStatusCheckTool";
+            this.ResumeLayout(false);
+            this.PerformLayout();
 
 		}
 
@@ -133,6 +146,7 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label lblError;
 		private System.Windows.Forms.Label lblLoading;
+        private System.Windows.Forms.Button btnDetails;
 	}
 }
 
