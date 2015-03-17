@@ -3,6 +3,7 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Backend.Strategies.Tasks;
 
 	partial class EzServiceImplementation {
 		public ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID) {
@@ -32,5 +33,9 @@
 		public ActionMetaData SilentAutomation(int customerID, int underwriterID) {
 			return Execute<SilentAutomation>(customerID, underwriterID, customerID);
 		} // SilentAutomation
+
+		public ActionMetaData TotalMaamMedalAndPricing() {
+			return Execute<TotalMaamMedalAndPricing>(null, null);
+		} // TotalMaamMedalAndPricing
 	} // class EzServiceImplementation
 } // namespace

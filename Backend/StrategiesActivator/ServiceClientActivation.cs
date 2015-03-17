@@ -13,12 +13,10 @@
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
-	using EzServiceAccessor;
 	using EzServiceConfigurationLoader;
 	using log4net;
 	using Newtonsoft.Json;
 	using ServiceClientProxy.EzServiceReference;
-	using StructureMap;
 
 	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	public class ServiceClientActivation {
@@ -1327,6 +1325,16 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			}
 
 			serviceClient.XDaysDue();
+		}
+
+		[Activation]
+		private void TotalMaamMedalAndPricing() {
+			if (cmdLineArgs.Length != 1) {
+				log.Msg("Usage: TotalMaamMedalAndPricing");
+				return;
+			}
+
+			serviceClient.TotalMaamMedalAndPricing();
 		}
 
 

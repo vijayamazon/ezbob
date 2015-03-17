@@ -753,5 +753,8 @@
 
 		[OperationContract]
 		ActionMetaData SilentAutomation(int customerID, int underwriterID);
+
+		[OperationContract]
+		ActionMetaData TotalMaamMedalAndPricing();
 	} // interface IEzService
 } // namespace EzService

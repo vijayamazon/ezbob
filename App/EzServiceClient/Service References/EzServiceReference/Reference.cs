@@ -3220,6 +3220,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SilentAutomation", ReplyAction="http://tempuri.org/IEzService/SilentAutomationResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyFile", ReplyAction="http://tempuri.org/IEzService/GetCompanyFileResponse")]
         byte[] GetCompanyFile(int userId, int companyFileId);
         
@@ -4466,6 +4472,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID) {
             return base.Channel.SilentAutomationAsync(customerID, underwriterID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing() {
+            return base.Channel.TotalMaamMedalAndPricing();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync() {
+            return base.Channel.TotalMaamMedalAndPricingAsync();
         }
         
         public byte[] GetCompanyFile(int userId, int companyFileId) {
