@@ -97,6 +97,14 @@
 
 		public virtual string[] CsvTitles { get; private set; }
 
+		protected virtual TCrLoans CashRequestLoans {
+			get { return this.crLoans; }
+		} // CashRequestLoans
+
+		protected virtual SortedSet<string> LoanSources {
+			get { return this.loanSources; }
+		} // LoanSources
+
 		protected virtual string Condition {
 			get { return string.Empty; }
 		} // Condition

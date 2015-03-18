@@ -5,8 +5,10 @@
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using Ezbob.Utils;
+	using OfficeOpenXml;
 
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
@@ -137,6 +139,18 @@
 				SetupFeePct.ToString(CultureInfo.InvariantCulture),
 				SetupFeeAmount.ToString(CultureInfo.InvariantCulture)
 			);
+		} // ToCsv
+
+		public int ToXlsx(ExcelWorksheet sheet, int rowNum, int colNum) {
+			colNum = sheet.SetCellValue(rowNum, colNum, MedalName);
+			colNum = sheet.SetCellValue(rowNum, colNum, EzbobScore);
+			colNum = sheet.SetCellValue(rowNum, colNum, DecisionStr);
+			colNum = sheet.SetCellValue(rowNum, colNum, Amount);
+			colNum = sheet.SetCellValue(rowNum, colNum, InterestRate);
+			colNum = sheet.SetCellValue(rowNum, colNum, RepaymentPeriod);
+			colNum = sheet.SetCellValue(rowNum, colNum, SetupFeePct);
+			colNum = sheet.SetCellValue(rowNum, colNum, SetupFeeAmount);
+			return colNum;
 		} // ToCsv
 
 		protected abstract decimal SetupFeePct { get; }

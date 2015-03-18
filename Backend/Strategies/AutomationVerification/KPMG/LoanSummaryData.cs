@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
+	using Ezbob.ExcelExt;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using OfficeOpenXml;
 
 	internal class LoanSummaryData : LoanMetaData {
 		public LoanSummaryData() {
@@ -48,6 +50,15 @@
 				RepaidPrincipal,
 				MaxLateDays
 			);
+		} // ToString
+
+		public int ToXlsx(ExcelWorksheet sheet, int rowNum, int curColumn) {
+			curColumn = sheet.SetCellValue(rowNum, curColumn, Counter);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanStatus.ToString());
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanAmount);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, RepaidPrincipal);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, MaxLateDays);
+			return curColumn;
 		} // ToString
 	} // LoanSummaryData
 } // namespace

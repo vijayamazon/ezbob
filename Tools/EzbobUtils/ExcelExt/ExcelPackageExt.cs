@@ -66,8 +66,7 @@
 				int nColumn = 1;
 
 				while (oSheet.Cells[1, nColumn].Value != null) {
-					oSheet.Column(nColumn)
-						.AutoFit();
+					oSheet.Column(nColumn).AutoFit();
 					nColumn++;
 				} // while
 			} // for each sheet

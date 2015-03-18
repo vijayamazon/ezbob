@@ -6,9 +6,10 @@
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-
+	using OfficeOpenXml;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
 		int,
 		System.Collections.Generic.List<LoanMetaData>
@@ -148,21 +149,21 @@
 
 			var bySource = new SortedDictionary<string, LoanSummaryData>();
 
-			foreach (var s in sources)
+			foreach (string s in sources)
 				bySource[s] = new LoanSummaryData();
 
-			foreach (var lmd in lst)
+			foreach (LoanMetaData lmd in lst)
 				bySource[lmd.LoanSourceName].Add(lmd);
 
 			var os = new List<string>();
 
-			bool hasDefaultLoan = false;
+			HasDefaultLoan = false;
 
 			foreach (string s in sources) {
 				LoanSummaryData loanStat = bySource[s];
 
 				if (loanStat.LoanStatus == LoanStatus.Late)
-					hasDefaultLoan = true;
+					HasDefaultLoan = true;
 
 				os.Add(loanStat.ToString());
 			} // for each
@@ -172,7 +173,7 @@
 				CustomerID.ToString(CultureInfo.InvariantCulture),
 				BrokerID.ToString(CultureInfo.InvariantCulture),
 				IsDefault ? "Default" : "No",
-				hasDefaultLoan ? "Default" : "No",
+				HasDefaultLoan ? "Default" : "No",
 				IsCampaign ? "Campaign" : "No",
 				IsSuperseded ? "Superseded" : "No",
 				Manual.ToCsv(),
@@ -188,6 +189,61 @@
 				string.Join(";", os)
 			);
 		} // ToCsv
+
+		public bool HasDefaultLoan { get; private set; }
+
+		public int ToXlsx(ExcelWorksheet sheet, int rowNum, TCrLoans crLoans, SortedSet<string> sources) {
+			List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
+				? crLoans[CashRequestID]
+				: new List<LoanMetaData>();
+
+			var bySource = new SortedDictionary<string, LoanSummaryData>();
+
+			foreach (string s in sources)
+				bySource[s] = new LoanSummaryData();
+
+			HasDefaultLoan = false;
+
+			foreach (LoanMetaData lmd in lst) {
+				bySource[lmd.LoanSourceName].Add(lmd);
+
+				if (lmd.LoanStatus == LoanStatus.Late)
+					HasDefaultLoan = true;
+			} // if
+
+			int curColumn = 1;
+
+			curColumn = sheet.SetCellValue(rowNum, curColumn, CashRequestID);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, IsCampaign ? "Campaign" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, IsSuperseded ? "Superseded" : "No");
+
+			curColumn = Manual.ToXlsx(sheet, rowNum, curColumn);
+
+			curColumn = sheet.SetCellValue(rowNum, curColumn, AutomationDecision.ToString());
+
+			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoReRejected ? "Reject" : "Manual");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoRejected ? "Reject" : "Manual");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoReApproved ? "Approve" : "Manual");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoApproved ? "Approve" : "Manual");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, ReapprovedAmount);
+
+			curColumn = AutoMin.ToXlsx(sheet, rowNum, curColumn);
+
+			curColumn = sheet.SetCellValue(rowNum, curColumn, (AutoMax == null) ? "Same" : "No");
+
+			curColumn = (AutoMax ?? AutoMin).ToXlsx(sheet, rowNum, curColumn);
+
+			foreach (string s in sources) {
+				LoanSummaryData loanStat = bySource[s];
+				curColumn = loanStat.ToXlsx(sheet, rowNum, curColumn);
+			} // for each
+
+			return curColumn;
+		} // ToXlsx
 
 		private void RunAutoRerejection(AConnection db, ASafeLog log) {
 			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
