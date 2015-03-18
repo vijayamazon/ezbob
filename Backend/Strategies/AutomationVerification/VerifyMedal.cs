@@ -7,6 +7,10 @@
 
 	public class VerifyMedal : AStrategy {
 		public VerifyMedal(int topCount, int lastCheckedID, bool includeTest, DateTime? calculationTime) {
+			this.tag = "#VerifyMedal_" +
+				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture) + "_" +
+				Guid.NewGuid().ToString("N");
+
 			this.topCount = topCount;
 			this.lastCheckedID = lastCheckedID;
 			this.includeTest = includeTest;
@@ -48,7 +52,7 @@
 
 		private void DoCustomer(int customerID) {
 			try {
-				new CalculateMedal(customerID, this.calculationTime, false, true).Execute();
+				new CalculateMedal(customerID, this.calculationTime, false, true) { Tag = this.tag, }.Execute();
 			} catch (Exception e) {
 				Log.Alert(
 					e,
@@ -112,6 +116,7 @@
 
 		private int? customerCount;
 		private ProgressCounter progressCounter;
+		private readonly string tag;
 	} // class VerifyMedal
 } // namespace
 

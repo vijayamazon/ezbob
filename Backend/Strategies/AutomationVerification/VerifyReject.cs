@@ -17,7 +17,7 @@
 				oRow.CustomerId,
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision();
+			).Init().MakeAndVerifyDecision(Tag);
 		} // MakeAndVerifyDecision
 	} // class VerifyReject
 } // namespace

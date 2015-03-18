@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 
 	public abstract class AVerificationBase : AStrategy {
 		public override string Name {
@@ -33,6 +34,19 @@
 		} // Execute
 
 		protected abstract string DecisionName { get; }
+
+		protected virtual string Tag {
+			get {
+				if (this.tag != null)
+					return this.tag;
+
+				this.tag = "#Verify" + DecisionName + "_" +
+					DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture) + "_" +
+					Guid.NewGuid().ToString("N");
+
+				return this.tag;
+			} // get
+		} // Tag
 
 		protected AVerificationBase(int nTopCount, int nLastCheckedCustomerID) {
 			m_nTopCount = nTopCount;
@@ -68,5 +82,6 @@
 		private int m_nMismatchCount;
 		private int m_nExceptionCount;
 
+		private string tag;
 	} // class AVerificationBase
 } // namespace

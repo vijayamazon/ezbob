@@ -19,15 +19,16 @@ BEGIN
 			MAX(c.Id)
 		FROM
 			CashRequests c
-			INNER JOIN DecisionHistory h ON c.Id = h.CashRequestId
 		WHERE
 			c.IdCustomer = @CustomerID
 			AND
 			c.UnderwriterDecision = 'Approved'
 			AND
-			h.UnderwriterId != 1
+			c.IdUnderwriter IS NOT NULL
 			AND
-			h.[Date] < @Now
+			c.IdUnderwriter != 1
+			AND
+			c.UnderwriterDecisionDate < @Now
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -79,31 +80,38 @@ BEGIN
 	), 0)
 
 	------------------------------------------------------------------------------
-	------------------------------------------------------------------------------
 
-	DECLARE @TakenLoanAmount DECIMAL(18, 0)
-	DECLARE @OpenLoanCount INT
-	
-	------------------------------------------------------------------------------
-
-	SELECT
-		@OpenLoanCount = COUNT(*),
-		@TakenLoanAmount = SUM(l.LoanAmount)
-	FROM
-		Loan l
-	WHERE
-		CustomerId = @CustomerID
-		AND
-		l.[Date] < @Now
-		AND
-		(l.DateClosed IS NULL OR l.DateClosed > @Now)
+	DECLARE @OpenLoanCount INT = ISNULL((
+		SELECT
+			COUNT(*)
+		FROM
+			Loan l
+		WHERE
+			l.CustomerId = @CustomerID
+			AND
+			l.[Date] < @Now
+			AND
+			(l.DateClosed IS NULL OR l.DateClosed > @Now)
+	), 0)
 
 	------------------------------------------------------------------------------
 
-	SET @OpenLoanCount = ISNULL(@OpenLoanCount, 0)
-	SET @TakenLoanAmount = ISNULL(@TakenLoanAmount, 0)
+	DECLARE @TakenLoanAmount DECIMAL(18, 0) = ISNULL((
+		SELECT
+			SUM(l.LoanAmount)
+		FROM
+			Loan l
+			INNER JOIN CashRequests r ON l.RequestCashId = r.Id
+		WHERE
+			l.CustomerId = @CustomerID
+			AND
+			r.Id >= @LacrID
+			AND
+			l.[Date] < @Now
+			AND
+			(l.DateClosed IS NULL OR l.DateClosed > @Now)
+	), 0)
 
-	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
 
 	DECLARE @SumOfCharges DECIMAL(18, 4) = ISNULL((

@@ -130,7 +130,8 @@ SELECT
 		@AutoReApproveMaxLacrAge AS AutoReApproveMaxLacrAge,
 		@AutoReApproveMaxLatePayment AS AutoReApproveMaxLatePayment,
 		@AutoReApproveMaxNumOfOutstandingLoans AS AutoReApproveMaxNumOfOutstandingLoans,
-		@MinLoan AS MinLoan
+		@MinLoan AS MinLoan,
+		@ManualApproveRequestId AS LacrID
 		
 END
 GO

@@ -17,7 +17,7 @@
 				oRow.GetTurnoverType(),
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision();
+			).Init().MakeAndVerifyDecision(Tag);
 		} // MakeAndVerifyDecision
 	} // class VerifyApproval
 } // namespace

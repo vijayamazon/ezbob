@@ -100,7 +100,8 @@ BEGIN
 		PrimLocked   = prim.HasLockedDecision,
 		PrimComment  = prim.Comment,
 		--
-		SameName     = CASE WHEN prim.TraceNameID = sec.TraceNameID THEN 1 ELSE 0 END,
+		SameName     = CASE WHEN prim.TraceNameID = sec.TraceNameID THEN '' ELSE 'no' END,
+		SameDecision = CASE WHEN prim.DecisionStatusID = sec.DecisionStatusID THEN '' ELSE 'no' END,
 		--
 		SecID        = sec.TraceID,
 		SecNameID    = sec.TraceNameID,
