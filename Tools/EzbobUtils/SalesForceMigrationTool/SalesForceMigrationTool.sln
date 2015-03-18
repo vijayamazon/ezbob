@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.31101.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesForceMigrationTool", "SalesForceMigrationTool\SalesForceMigrationTool.csproj", "{44B99932-67DF-4378-B2D8-267082D548AB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SalesForceLib", "..\..\..\Integration\SalesForceLib\SalesForceLib.csproj", "{198579CB-CD05-46F6-AFAC-75A982B3216A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Barrymore", "..\Barrymore\Barrymore.csproj", "{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DbConnection", "..\DbConnection\DbConnection.csproj", "{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EzEnvironment", "..\EzEnvironment\EzEnvironment.csproj", "{B91EB116-94EB-416B-9422-D3BA97993163}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Logger", "..\Logger\Logger.csproj", "{F92CA169-9532-4C4D-8D84-6F48ACE5719C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiniResharper", "..\MiniResharper\MiniResharper.csproj", "{805F29C1-D575-49C5-A95D-4D393E65481F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{44B99932-67DF-4378-B2D8-267082D548AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{44B99932-67DF-4378-B2D8-267082D548AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{44B99932-67DF-4378-B2D8-267082D548AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{44B99932-67DF-4378-B2D8-267082D548AB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{198579CB-CD05-46F6-AFAC-75A982B3216A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{198579CB-CD05-46F6-AFAC-75A982B3216A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{198579CB-CD05-46F6-AFAC-75A982B3216A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{198579CB-CD05-46F6-AFAC-75A982B3216A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6E34C540-073A-44B1-9BBC-31DAC15A6F5E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{270BAF49-7F7D-4220-91A2-D8F5BF16B3E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B91EB116-94EB-416B-9422-D3BA97993163}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F92CA169-9532-4C4D-8D84-6F48ACE5719C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{805F29C1-D575-49C5-A95D-4D393E65481F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

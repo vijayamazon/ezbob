@@ -34,7 +34,14 @@
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
 			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", modelStr);
+			this.Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
+            {
+                this.Log.ErrorFormat("SalesForce CreateUpdateLeadAccount null session id");
+                return;
+            }
+
 			string result;
 			var response = api.LeadAccountService(
 				new SalesForceServiceNS.SessionHeader {
@@ -57,6 +64,13 @@
 		public void CreateOpportunity(OpportunityModel model) {
 			string modelStr = model.ToJsonExtension();
 			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
+            {
+                this.Log.ErrorFormat("SalesForce CreateOpportunity null session id");
+                return;
+            }
+
 			string result;
 			var response = api.CreateOpportunityService(
 				new SalesForceServiceNS.SessionHeader {
@@ -79,6 +93,13 @@
 		public void UpdateOpportunity(OpportunityModel model) {
 			string modelStr = model.ToJsonExtension();
 			Log.InfoFormat("SalesForce UpdateOpportunity\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
+            {
+                this.Log.ErrorFormat("SalesForce UpdateOpportunity null session id");
+                return;
+            }
+
 			string result;
 			var response = api.UpdateCloseOpportunityService(
 				new SalesForceServiceNS.SessionHeader {
@@ -101,6 +122,13 @@
 		public void CreateUpdateContact(ContactModel model) {
 			string modelStr = model.ToJsonExtension();
 			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
+            {
+                this.Log.ErrorFormat("SalesForce CreateUpdateContact null session id");
+                return;
+            }
+
 			string result;
 			var response = api.ContactService(
 				new SalesForceServiceNS.SessionHeader {
@@ -123,6 +151,13 @@
 		public void CreateTask(TaskModel model) {
 			string modelStr = model.ToJsonExtension(true);
 			Log.InfoFormat("SalesForce CreateTask\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
+            {
+                this.Log.ErrorFormat("SalesForce CreateTask null session id");
+                return;
+            }
+
 			string result = "";
 			var response = api.CreateTask(
 				new SalesForceServiceNS.SessionHeader {
@@ -145,6 +180,13 @@
 		public void CreateActivity(ActivityModel model) {
 			string modelStr = model.ToJsonExtension(true);
 			Log.InfoFormat("SalesForce CreateActivity\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
+            {
+                this.Log.ErrorFormat("SalesForce CreateActivity null session id");
+                return;
+            }
+
 			string result = "";
 			var response = api.CreateActivity(
 				new SalesForceServiceNS.SessionHeader {
@@ -166,6 +208,13 @@
 
 		public void ChangeEmail(string currentEmail, string newEmail) {
 			Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", currentEmail, newEmail);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
+            {
+                this.Log.ErrorFormat("SalesForce ChangeEmail null session id");
+                return;
+            }
+
 			string result = "";
 			var response = api.ChangeEmail(
 				new SalesForceServiceNS.SessionHeader {
