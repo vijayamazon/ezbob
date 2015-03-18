@@ -130,11 +130,12 @@
 
 				List<Datum> customerData = byCustomer[curDatum.CustomerID];
 
-				var lastKnown = customerData.Last(d => !d.IsCampaign && !d.IsSuperseded);
+				var lastKnown = customerData.LastOrDefault(d => !d.IsCampaign && !d.IsSuperseded);
 
 				// EZ-3048: from two cash requests that happen in less than 24 hours only the latest should be taken.
-				if ((curDatum.DecisionTime - lastKnown.DecisionTime).TotalHours < 24)
-					lastKnown.IsSuperseded = true;
+				if (lastKnown != null)
+					if ((curDatum.DecisionTime - lastKnown.DecisionTime).TotalHours < 24)
+						lastKnown.IsSuperseded = true;
 
 				customerData.Add(curDatum);
 			} // for each
