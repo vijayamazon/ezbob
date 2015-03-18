@@ -203,7 +203,7 @@ SELECT
 	r.ManualSetupFeeAmount,
 	r.MedalType,
 	r.ScorePoints,
-	CASE WHEN r.UnderwriterComment LIKE '%campaign%' THEN 1 ELSE 0 END AS IsCampaign
+	CONVERT(BIT, CASE WHEN r.UnderwriterComment LIKE '%campaign%' THEN 1 ELSE 0 END) AS IsCampaign
 FROM
 	CashRequests r
 	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
