@@ -24,7 +24,7 @@
 			AutoMin = new AutoMedalAndPricing();
 			AutoMax = new AutoMedalAndPricing();
 			IsSuperseded = false;
-			AutomationDecision = DecisionActions.Waiting;
+			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
 			IsAutoRejected = false;
 			IsAutoReApproved = false;
@@ -71,7 +71,13 @@
 		public bool IsCampaign { get; set; }
 		public bool IsSuperseded { get; set; }
 
-		public DecisionActions AutomationDecision { get; private set; }
+		public DecisionActions AutomationDecision {
+			get { return this.automationDecision; }
+			private set {
+				if (this.automationDecision == DecisionActions.Waiting)
+					this.automationDecision = value;
+			} // set
+		} // AutomationDecision
 
 		public bool IsAutoReRejected { get; private set; }
 		public bool IsAutoRejected { get; private set; }
@@ -195,7 +201,7 @@
 
 			agent.Trail.Save(db, null, CashRequestID, Tag);
 
-			if (agent.Trail.HasDecided && (AutomationDecision == DecisionActions.Waiting))
+			if (agent.Trail.HasDecided)
 				AutomationDecision = DecisionActions.ReReject;
 
 			IsAutoReRejected = agent.Trail.HasDecided;
@@ -209,7 +215,7 @@
 
 			agent.Trail.Save(db, null, CashRequestID, Tag);
 
-			if (agent.Trail.HasDecided && (AutomationDecision == DecisionActions.Waiting))
+			if (agent.Trail.HasDecided)
 				AutomationDecision = DecisionActions.Reject;
 
 			IsAutoRejected = agent.Trail.HasDecided;
@@ -226,7 +232,7 @@
 
 			agent.Decide(CashRequestID, Tag);
 
-			if (agent.Trail.HasDecided && (AutomationDecision == DecisionActions.Waiting)) {
+			if (agent.Trail.HasDecided) {
 				AutomationDecision = DecisionActions.ReApprove;
 				ReapprovedAmount = agent.ApprovedAmount;
 			} // if
@@ -242,7 +248,7 @@
 		) {
 			AutoMin.Calculate(CustomerID, isHomeOwner, medal, true, CashRequestID, Tag, db, log);
 
-			if ((AutoMin.Amount > 0) && (AutomationDecision == DecisionActions.Waiting))
+			if (AutoMin.Amount > 0)
 				AutomationDecision = DecisionActions.Approve;
 
 			IsAutoReApproved = AutoMin.Amount > 0;
@@ -252,5 +258,7 @@
 			else
 				AutoMax = null;
 		} // RunAutoApprove
+
+		private DecisionActions automationDecision;
 	} // class Datum
 } // namespace
