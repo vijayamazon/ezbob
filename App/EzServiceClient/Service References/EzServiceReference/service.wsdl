@@ -135,6 +135,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UserChangePassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserChangePassword" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserChangePassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserChangePasswordResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UserLogin_InputMessage">
     <wsdl:part name="parameters" element="tns:UserLogin" />
   </wsdl:message>
@@ -260,6 +266,18 @@
   </wsdl:message>
   <wsdl:message name="IEzService_SaveApiCall_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveApiCallResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SilentAutomation_InputMessage">
+    <wsdl:part name="parameters" element="tns:SilentAutomation" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SilentAutomation_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SilentAutomationResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_TotalMaamMedalAndPricing_InputMessage">
+    <wsdl:part name="parameters" element="tns:TotalMaamMedalAndPricing" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_TotalMaamMedalAndPricing_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TotalMaamMedalAndPricingResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyFile" />
@@ -669,6 +687,12 @@
   <wsdl:message name="IEzService_SendPendingMails_OutputMessage">
     <wsdl:part name="parameters" element="tns:SendPendingMailsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SendEverlineRefinanceMails_InputMessage">
+    <wsdl:part name="parameters" element="tns:SendEverlineRefinanceMails" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SendEverlineRefinanceMails_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SendEverlineRefinanceMailsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SendSms_InputMessage">
     <wsdl:part name="parameters" element="tns:SendSms" />
   </wsdl:message>
@@ -764,12 +788,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_UserChangeEmail_OutputMessage">
     <wsdl:part name="parameters" element="tns:UserChangeEmailResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserChangePassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:UserChangePassword" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserChangePassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UserChangePasswordResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -1316,6 +1334,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="UserChangePassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangePassword" message="tns:IEzService_UserChangePassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangePasswordResponse" message="tns:IEzService_UserChangePassword_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UserLogin">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
@@ -1399,6 +1421,14 @@
     <wsdl:operation name="SaveApiCall">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveApiCall" message="tns:IEzService_SaveApiCall_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveApiCallResponse" message="tns:IEzService_SaveApiCall_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SilentAutomation">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SilentAutomation" message="tns:IEzService_SilentAutomation_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SilentAutomationResponse" message="tns:IEzService_SilentAutomation_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TotalMaamMedalAndPricing">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing" message="tns:IEzService_TotalMaamMedalAndPricing_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse" message="tns:IEzService_TotalMaamMedalAndPricing_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCompanyFile">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
@@ -1672,6 +1702,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendPendingMails" message="tns:IEzService_SendPendingMails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendPendingMailsResponse" message="tns:IEzService_SendPendingMails_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SendEverlineRefinanceMails">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendEverlineRefinanceMails" message="tns:IEzService_SendEverlineRefinanceMails_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendEverlineRefinanceMailsResponse" message="tns:IEzService_SendEverlineRefinanceMails_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SendSms">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SendSms" message="tns:IEzService_SendSms_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SendSmsResponse" message="tns:IEzService_SendSms_OutputMessage" />
@@ -1735,10 +1769,6 @@
     <wsdl:operation name="UserChangeEmail">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangeEmail" message="tns:IEzService_UserChangeEmail_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangeEmailResponse" message="tns:IEzService_UserChangeEmail_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UserChangePassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangePassword" message="tns:IEzService_UserChangePassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangePasswordResponse" message="tns:IEzService_UserChangePassword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -2162,6 +2192,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="UserChangePassword">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserChangePassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="UserLogin">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UserLogin" style="document" />
       <wsdl:input>
@@ -2344,6 +2383,24 @@
     </wsdl:operation>
     <wsdl:operation name="SaveApiCall">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveApiCall" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SilentAutomation">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SilentAutomation" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="TotalMaamMedalAndPricing">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricing" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2963,6 +3020,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SendEverlineRefinanceMails">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SendEverlineRefinanceMails" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SendSms">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SendSms" style="document" />
       <wsdl:input>
@@ -3100,15 +3166,6 @@
     </wsdl:operation>
     <wsdl:operation name="UserChangeEmail">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UserChangeEmail" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UserChangePassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UserChangePassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -51,10 +51,10 @@
       <xs:element minOccurs="0" name="CustomerID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="ErrorCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ErrorMessage" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="OriginID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="Request" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RequestId" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Response" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Source" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="StatusCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Url" nillable="true" type="xs:string" />
     </xs:sequence>

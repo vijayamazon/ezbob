@@ -29,6 +29,9 @@
       <xs:element minOccurs="0" name="CurentDate" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CurrentDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="CustomerEmail" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EverlineRefinanceLoanDate" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EverlineRefinanceLoanOutstandingAmount" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EverlineRefinanceLoanRef" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FormattedSchedules" nillable="true" type="tns:ArrayOfFormattedSchedule" />
       <xs:element minOccurs="0" name="FullName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
@@ -36,6 +39,7 @@
       <xs:element minOccurs="0" name="InterestRatePerDayFormatted" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="InterestRatePerYearFormatted" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsBrokerFee" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsEverlineRefinanceLoan" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsManualSetupFee" type="xs:boolean" />
       <xs:element minOccurs="0" name="LoanType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ManualSetupFee" nillable="true" type="xs:string" />
