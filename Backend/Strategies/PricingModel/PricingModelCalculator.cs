@@ -8,9 +8,7 @@
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using Experian;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using PaymentServices.Calculators;
 	
 	public class PricingModelCalculator: AStrategy
@@ -94,18 +92,16 @@
 				APR = GetApr(loan)
 			});
 
-			var scoreStrat = new GetExperianConsumerScore(customerId);
-			scoreStrat.Execute();
+		    GetPricingModelDefaultRate defaultRate = new GetPricingModelDefaultRate(this.customerId, Model.DefaultRateCompanyShare);
+		    defaultRate.Execute();
 
-			int consumerScore = scoreStrat.Score;
 
-			decimal preferableEUInterest = GetEuLoanMonthlyInterest(consumerScore);
+            decimal preferableEUInterest = GetEuLoanMonthlyInterest(defaultRate.ConsumerScore);
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("EU Loan (2%)", 0.02M, Model.EuCollectionRate, preferableEUInterest));
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("EU Loan (1.75%)", 0.0175M, Model.EuCollectionRate, preferableEUInterest));
 
-			int companyScore = GetCompanyScore();
-			decimal preferableCOSMEInterest = GetCOSMELoanMonthlyInterest(consumerScore, companyScore);
-			Log.Info("Pricing calculator: Customer {0} Consumer score: {1} Company Score: {2} preferable COSME interest {3} preferable EU interest {4}", customerId, consumerScore, companyScore, preferableCOSMEInterest, preferableEUInterest);
+            decimal preferableCOSMEInterest = GetCOSMELoanMonthlyInterest(defaultRate.ConsumerScore, defaultRate.BusinessScore);
+            Log.Info("Pricing calculator: Customer {0} Consumer score: {1} Company Score: {2} preferable COSME interest {3} preferable EU interest {4}", this.customerId, defaultRate.ConsumerScore, defaultRate.BusinessScore, preferableCOSMEInterest, preferableEUInterest);
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (2.25%)", 0.0225M, Model.CosmeCollectionRate, preferableCOSMEInterest));
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (2%)", 0.02M, Model.CosmeCollectionRate, preferableCOSMEInterest));
 			Model.PricingSourceModels.Add(GetPricingSourceForEU("COSME Loan (1.75%)", 0.0175M, Model.CosmeCollectionRate, preferableCOSMEInterest));

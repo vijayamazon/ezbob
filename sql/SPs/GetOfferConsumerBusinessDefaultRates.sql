@@ -42,5 +42,10 @@ BEGIN
 	SELECT @BusinessDefaultRate = Value FROM DefaultRateCompany d WHERE @BusinessScore >= d.Start AND @BusinessScore <= d.[End]
 	SELECT @ConsumerDefaultRate = Value FROM DefaultRateCustomer d WHERE @ConsumerScore >= d.Start AND @ConsumerScore <= d.[End]
 	
-	SELECT @ConsumerDefaultRate AS ConsumerDefaultRate, @BusinessDefaultRate AS BusinessDefaultRate
+	SELECT @ConsumerScore AS ConsumerScore,
+		   @BusinessScore AS BusinessScore,
+		   @ConsumerDefaultRate AS ConsumerDefaultRate, 
+		   @BusinessDefaultRate AS BusinessDefaultRate
 END
+
+GO
