@@ -15,9 +15,6 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 		}
 
 		public override void Execute() {
-
-			//Console.WriteLine(this.CustomerID + "===" + this.AliMemberID);
-
 			DB.FillFirst(
 					Result,
 					"AlibabaCustomerAvalableCredit",
@@ -25,14 +22,10 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 					new QueryParameter("CustomerID", this.CustomerID),
 					new QueryParameter("AliMemberId", this.AliMemberID)
 				);
-
-			//Console.WriteLine( JsonConvert.SerializeObject(Result));
 		}
 
 		public int CustomerID { get; private set; }
 		public int AliMemberID { get; private set; }
-
 		public AlibabaAvailableCreditResult Result { get; private set; }
-
 	}
 }

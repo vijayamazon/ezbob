@@ -1,11 +1,11 @@
 ﻿namespace EzBobTest {
 	using System;
-	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Alibaba;
@@ -34,7 +34,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using NHibernate.Util;
 	using NUnit.Framework;
 	using SalesForceLib;
 	using StructureMap;
@@ -602,9 +601,10 @@
 
 		[Test]
 		public void RequalifyCustomer() {
-			var s = new RequalifyCustomer("caroles@ezbob.com.test.test");
+			int customerID = 18234; //217; // 18234;
+			int aliMemberID = 12345000; //00;
+			var s = new RequalifyCustomer(customerID, aliMemberID); //"caroles@ezbob.com.test.test"
 			s.Execute();
-			Console.WriteLine(s.Result);
 		}
 
 
@@ -612,9 +612,9 @@
 		public void AvailableCredit() {
 			int customerID = 18234; //217; // 18234;
 			int aliMemberID = 12345000; //00;
-			var s = new CustomerAvaliableCredit(customerID, aliMemberID); // "caroles@ezbob.com.test.test");
+			/*var s = new CustomerAvaliableCredit(customerID, aliMemberID); // "caroles@ezbob.com.test.test");
 			s.Execute();
-			Console.WriteLine(s.Result.ToString());
+			Console.WriteLine(s.Result.ToString());*/
 		}
 
 		[Test]
@@ -701,15 +701,13 @@
 		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
 			int customerID = 18234; // 217 ; //; // 18234;
-
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
-			new RequalifyCustomer(v.Customer.Name).Execute(); // only for CashRequest creation!!!
-			new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
-
+			Console.WriteLine(v.AliId);
+			new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
+			//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
-
 			/* many customers
 			 * var aliCustomers = aliMemberRep.ByCustomer(customerID);
 			foreach (var v in aliCustomers) {
@@ -718,16 +716,30 @@
 				//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 				new DataSharing(v.Customer.Id, 0).Execute();
 			}*/
-
 			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
 			//new DataSharing(customerID, 0).Execute();
-		//	new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
+			new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
 		}
 
 
 		[Test]
 		public void TestSF() {
 			var sf = new AddUpdateLeadAccount("a@b.c", 1, false, false);
+			sf.Execute();
+		}
+
+		[Test]
+		public void TestSaveApiCall() {
+			var sf = new SaveApiCall(new ApiCallData() {
+				Request = "requestonbj",
+				RequestId = "11111",
+				Response = "responseobj",
+				Comments = "test strategy",
+				StatusCode = "5500",
+				ErrorCode = "0",
+				ErrorMessage = "no errors",
+				Url = "stam"
+			});
 			sf.Execute();
 		}
 

@@ -255,6 +255,12 @@
   <wsdl:message name="IEzService_DataSharing_OutputMessage">
     <wsdl:part name="parameters" element="tns:DataSharingResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SaveApiCall_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaveApiCall" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaveApiCall_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaveApiCallResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyFile_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyFile" />
   </wsdl:message>
@@ -1390,6 +1396,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/DataSharing" message="tns:IEzService_DataSharing_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/DataSharingResponse" message="tns:IEzService_DataSharing_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SaveApiCall">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveApiCall" message="tns:IEzService_SaveApiCall_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveApiCallResponse" message="tns:IEzService_SaveApiCall_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyFile">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyFile" message="tns:IEzService_GetCompanyFile_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyFileResponse" message="tns:IEzService_GetCompanyFile_OutputMessage" />
@@ -2325,6 +2335,15 @@
     </wsdl:operation>
     <wsdl:operation name="DataSharing">
       <soap12:operation soapAction="http://tempuri.org/IEzService/DataSharing" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SaveApiCall">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaveApiCall" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3865,20 +3884,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://elinar-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://elinar-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ELINAR-PC\elinar</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

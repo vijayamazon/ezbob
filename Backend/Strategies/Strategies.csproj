@@ -48,6 +48,10 @@
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\Owin_WebAPI_Identity\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
@@ -129,8 +133,8 @@
     <Compile Include="Experian\UpdateExperianDirectorDetails.cs" />
     <Compile Include="Experian\UpdateLimitedExperianDirectors.cs" />
     <Compile Include="ExternalAPI\Alibaba\CustomerAvaliableCredit.cs" />
-    <Compile Include="ExternalAPI\Alibaba\ParseSale.cs" />
-    <Compile Include="ExternalAPI\RequalifyCustomer.cs" />
+    <Compile Include="ExternalAPI\Alibaba\RequalifyCustomer.cs" />
+    <Compile Include="ExternalAPI\SaveApiCall.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="CalculateLoan\ALoanCalculator.cs" />
     <Compile Include="Lottery\ChangeLotteryPlayerStatus.cs" />
@@ -404,6 +408,10 @@
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
       <Name>Reports</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
+      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
+      <Name>EzServiceClient</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
       <Name>EzServiceConfigurationLoader</Name>
@@ -585,7 +593,9 @@
       <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

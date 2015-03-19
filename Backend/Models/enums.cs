@@ -157,4 +157,13 @@
 		[EnumMember]
 		Reserved = 5,
 	} // enum LotteryPlayerStatus
+
+	[DataContract]
+	public enum ExternalAPISource {
+		[EnumMember]
+		Alibaba,
+		[EnumMember]
+		Other,
+	} // enum OriginatorExternalAPI
+
 } // namespace

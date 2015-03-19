@@ -101,9 +101,6 @@
 
 				IRestResponse response = client.SendDecision(JObject.FromObject(result), bizType);
 
-			//	Log.Info("response.Request {0}", JsonConvert.SerializeObject(response.Request.Parameters));
-			//	Log.Info("response.Content {0}", JsonConvert.SerializeObject(response.Content));
-
 				AlibabaSentData sent = new AlibabaSentData();
 				sent.AlibabaBuyer = aliMember;
 				sent.Customer = sent.AlibabaBuyer.Customer;
@@ -138,10 +135,8 @@
 				this.sentDataRep.Save(sent);
 
 			} catch (HttpException e) {
-				//Console.WriteLine(e);
 				throw new StrategyAlert(this, string.Format("HttpException: Failed to transmit {1} for customer {0}, ", CustomerID, bizType.DescriptionAttr()), e);
 			} catch (Exception ex) {
-			//	Console.WriteLine(ex);
 				throw new StrategyAlert(this, string.Format("Failed to transmit {1} for customer {0}", CustomerID, bizType.DescriptionAttr()), ex);
 			}
 		}

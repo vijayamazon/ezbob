@@ -1341,7 +1341,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 				return;
 			}
 			email = cmdLineArgs[1];
-			var result = serviceClient.RequalifyCustomer(email);
+			//var result = serviceClient.RequalifyCustomer(email);
 			//log.Debug("blablabla: {0}", result.ToString());
 		}
 
@@ -1358,8 +1358,8 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			log.Debug("activator: customerID: {0}, aliMemberID: {1}", customerID, aliMemberID);
 
-			AlibabaAvailableCreditActionResult result = serviceClient.CustomerAvaliableCredit(customerID, aliMemberID);
-			this.log.Debug("blablabla: {0}",  JsonConvert.SerializeObject(result)); //json
+			//AlibabaAvailableCreditActionResult result = serviceClient.CustomerAvaliableCredit(customerID, aliMemberID);
+			//this.log.Debug("blablabla: {0}",  JsonConvert.SerializeObject(result)); //json
 		}
 
 		

@@ -748,10 +748,13 @@
 		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID);
 
 		[OperationContract]
-		string RequalifyCustomer(string customerEmail);
+		ActionMetaData RequalifyCustomer(int customerID, int aliMemberID);
 
 		[OperationContract]
 		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+
+		[OperationContract]
+		ActionMetaData SaveApiCall(ApiCallData data);
 
 	} // interface IEzService
 } // namespace EzService

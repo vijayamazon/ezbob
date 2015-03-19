@@ -1,39 +1,44 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using System;
-	using System.Diagnostics;
+	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
-	using Newtonsoft.Json;
 
 	partial class EzServiceImplementation {
-
 
 		public AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID) {
 
 			CustomerAvaliableCredit instance;
 
-			Console.WriteLine("ESI: customerID: {0}, customerID: {1}", customerID, aliMemberID);
+			Log.Info("ESI CustomerAvaliableCredit: customerID: {0}, customerID: {1}", customerID, aliMemberID);
 
-			ActionMetaData amd = ExecuteSync(out instance, customerID, customerID, customerID, aliMemberID);
+			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID, aliMemberID);
 
-			Debug.WriteLine(JsonConvert.SerializeObject(instance.Result), "CustomerAvaliableCredit esi");
+			return new AlibabaAvailableCreditActionResult { Result = instance.Result };
 
-			return new AlibabaAvailableCreditActionResult {
-				Result = instance.Result
-			};
-			
 		} // CustomerAvaliableCredit
-		
 
-		public string RequalifyCustomer(string customerEmail) {
+		public ActionMetaData RequalifyCustomer(int customerID, int aliMemberID) {
 
-			Execute<RequalifyCustomer>(null, null, customerEmail);
+			RequalifyCustomer instance;
 
-			//	Console.WriteLine("ESI: strategy meta data is: {0}", JsonConvert.SerializeObject(result));
+			Log.Info("ESI RequalifyCustomer: customerID: {0}, customerID: {1}", customerID, aliMemberID);
 
-			return "Re-qualification process started, please check results later";
+			ActionMetaData amd = Execute<RequalifyCustomer>(customerID, null, customerID, aliMemberID);
 
-		} // RequalifyCustomer
+			return amd;
+
+		} //RequalifyCustomer
+
+		public ActionMetaData SaveApiCall(ApiCallData data) {
+
+			SaveApiCall instance;
+
+			ActionMetaData amd = Execute<SaveApiCall>(data.CustomerID, null, data);
+
+			return amd;
+
+		} // SaveApiCall
+
 
 	} // class EzServiceImplementation
 } // namespace
