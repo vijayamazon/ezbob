@@ -36,7 +36,7 @@ BEGIN
 		a.Postcode AS AddressPostcode,
 		CAST(CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END AS BIT) AS IsBroker,
 		c.GreetingMailSentDate AS RegistrationDate,
-		co.ExperianCompanyName AS CompanyName,
+		isnull(co.ExperianCompanyName, co.CompanyName) AS CompanyName,
 		co.ExperianRefNum AS CompanyNumber,
 		co.TypeOfBusiness AS TypeOfBusiness,
 		c.IndustryType AS Industry,

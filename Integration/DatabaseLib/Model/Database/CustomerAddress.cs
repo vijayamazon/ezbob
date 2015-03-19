@@ -77,7 +77,11 @@ namespace EZBob.DatabaseLib.Model.Database
 			get
 			{
 				return string.IsNullOrEmpty(Postcode) ? null : string.Format("{0}{1}{2} {3} {4}",
-					Line1.Trim(), string.IsNullOrEmpty(Line2) ? "" : " " + Line2.Trim(), string.IsNullOrEmpty(Line3) ? "" : " " + Line3.Trim(), Town, Postcode);
+					string.IsNullOrEmpty(Line1) ? "" : Line1.Trim(),
+                    string.IsNullOrEmpty(Line2) ? "" : " " + Line2.Trim(),
+                    string.IsNullOrEmpty(Line3) ? "" : " " + Line3.Trim(), 
+                    Town, 
+                    Postcode);
 			}
 		}
 
