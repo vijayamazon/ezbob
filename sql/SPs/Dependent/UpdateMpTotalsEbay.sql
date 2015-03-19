@@ -239,7 +239,7 @@ BEGIN
 		INNER JOIN (
 			SELECT
 				im.TheMonth,
-				Value = SUM(ISNULL(i.Listings - i.Successful, 0))
+				Value = SUM(ISNULL(i.Transactions - i.Successful, 0))
 			FROM
 				#months im
 				INNER JOIN #order_items i
@@ -396,4 +396,6 @@ BEGIN
 	DROP TABLE #months
 	DROP TABLE #order_items
 END
+
 GO
+
