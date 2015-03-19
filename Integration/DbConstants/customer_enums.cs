@@ -91,6 +91,8 @@
 		NewCreditLineBtn = 3,
 		[Description("Other")]
 		Other = 4,
+		[Description("RequalifyCustomerStrategy")]
+		RequalifyCustomerStrategy = 5
 	} // enum CashRequestOriginator
 
 	public enum FraudStatus {

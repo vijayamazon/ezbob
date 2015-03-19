@@ -2,6 +2,7 @@
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @using Integration.ChannelGrabberConfig
 @using Newtonsoft.Json
 @using ServiceClientProxy
@@ -14,23 +15,8 @@
     var refNum = context.Customer == null ? "" : context.Customer.RefNumber;
     var term = context.Customer == null || context.Customer.CampaignSource == null ? "" : context.Customer.CampaignSource.RTerm;
     var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
-    if (string.IsNullOrEmpty(ViewBag.Phone)) {
-        ViewBag.Phone = "0800-011-4787";
-    }
 
-
-    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
-        ViewBag.Phone = "0203-371-0322";
-        ViewBag.Origin = "everline";
-    }
-
-    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
-        ViewBag.Origin = "ezbob";
-    }
-
-    if (string.IsNullOrEmpty(ViewBag.Origin)) {
-        ViewBag.Origin = "ezbob";
-    }
+	UiCustomerOrigin.Set(ViewBag);
 
     string sCustomerLeadFieldName = "{}";
     try {
@@ -49,12 +35,7 @@
     @RenderSection("head", false)
 
     @if (controller == "Wizard") {
-        if (ViewBag.Origin == "ezbob") {
-            <meta name="description" content="Online sellers sign up for a free account to apply for an ecommerce business loan. Funds can be in your account within 30 minutes." />
-        }
-        if (ViewBag.Origin == "everline") {
-            <meta name="description" content="Everline provides a fast, flexible and convenient source of credit to entrepreneurs and looking to expand their business or manage working capital.">
-        }
+		<meta name="description" content="@ViewBag.CustomerOrigin.MetaDescription" />
     }
 
     <title>@ViewBag.Title</title>
@@ -69,8 +50,10 @@
     @BundleHelper.RenderPrintCss()
     @BundleHelper.RenderCustomerCss()
 
-    @if (ViewBag.Origin == "everline") {
+    @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
         @BundleHelper.RenderEverlineCss()
+    } else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
+        @BundleHelper.RenderAlibabaCss()
     }
 
     @RenderSection("css", false)

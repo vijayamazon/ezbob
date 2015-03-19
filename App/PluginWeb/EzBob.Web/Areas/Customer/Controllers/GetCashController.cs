@@ -12,6 +12,7 @@
 	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Code;
+	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Customer.Models;
 	using Infrastructure;
 	using PaymentServices.Calculators;
@@ -20,6 +21,7 @@
 	using StructureMap;
 	using log4net;
 	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Loans;
 
 	public class GetCashController : Controller {
 		private readonly ServiceClient m_oServiceClient;
@@ -312,9 +314,90 @@
 				GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
+				AlibabaCreditFacilityTemplate = null,
 			});
 
 			return Json(new { });
 		} // LoanLegalSigned
+
+		[Transactional]
+		[HttpPost]
+		public JsonResult CreditLineSigned(
+			int customerID = 0,
+			int cashRequestID = 0,
+			string signedName = "",
+			bool creditFacilityAccepted = false
+		) {
+			_log.DebugFormat(
+				"CreditLineSignatureModel " +
+				"customer ID: {0}" +
+				"cash request ID: {1}" +
+				"signed name: {2}" +
+				"credit facility accepted: {3}", 
+				customerID,
+				cashRequestID,
+				signedName,
+				creditFacilityAccepted
+			);
+
+			var customer = _context.Customer;
+
+			if ((customer == null) || (customer.Id != customerID)) {
+				_log.ErrorFormat(
+					"CreditLineSigned: invalid or unmatched customer ({0}) for requested id {1}.",
+					customer.Stringify(),
+					customerID
+				);
+
+				return Json(new { success = false, error = "Invalid customer name.", });
+			} // if
+
+			CashRequest cashRequest = customer.CashRequests.FirstOrDefault(r => r.Id == cashRequestID);
+
+			if (cashRequest == null) {
+				_log.WarnFormat(
+					"CreditLineSigned: cash request not found by id {0} at customer {1}.",
+					cashRequestID,
+					customer.Stringify()
+				);
+
+				return Json(new { success = false, error = "Invalid credit line.", });
+			} // if
+
+			bool hasError = !creditFacilityAccepted;
+
+			if (hasError) {
+				_log.WarnFormat(
+					"CreditLineSigned: credit facility not accepted for cash request {0} at customer {1}.",
+					cashRequestID,
+					customer.Stringify()
+				);
+
+				return Json(new { success = false, error = "You must agree to all agreements.", });
+			} // if
+
+			IAgreementsTemplatesProvider templateProvider = ObjectFactory.GetInstance<IAgreementsTemplatesProvider>();
+
+			string templateText = templateProvider.GetTemplate(LoanAgreementTemplateType.AlibabaCreditFacility);
+
+			var template = ObjectFactory.GetInstance<DatabaseDataHelper>()
+				.LoadOrCreateLoanAgreementTemplate(templateText, LoanAgreementTemplateType.AlibabaCreditFacility);
+
+			customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
+				CashRequest = cashRequest,
+				Created = DateTime.UtcNow,
+				EUAgreementAgreed = false,
+				COSMEAgreementAgreed = false,
+				CreditActAgreementAgreed = false,
+				PreContractAgreementAgreed = false,
+				PrivateCompanyLoanAgreementAgreed = false,
+				GuarantyAgreementAgreed = false,
+				SignedName = signedName,
+				NotInBankruptcy = false,
+				AlibabaCreditFacilityTemplate = template,
+			});
+
+			return Json(new { success = true, error = string.Empty, });
+		} // CreditLineSigned
 	}
 }

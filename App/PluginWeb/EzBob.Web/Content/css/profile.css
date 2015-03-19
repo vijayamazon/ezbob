@@ -789,3 +789,34 @@ table.directors-list td.l {
     font-size: 18px;
     height: 38px;
 }
+
+#review-sign-credit-line {
+	display: none;
+}
+
+#review-sign-credit-line label.creditFacilityAccepted {
+	display: inline !important;
+	text-decoration: underline;
+	color: blue;
+	cursor: pointer;
+}
+
+#review-sign-credit-line input#creditFacilityAccepted {
+	margin-top: -4px;
+}
+
+#review-sign-credit-line .buttons-container {
+	text-align: right;
+}
+
+#review-sign-credit-line .buttons-container .btn-sign {
+	margin-left: 10px;
+}
+
+#review-sign-credit-line .loan-schedule,
+#review-sign-credit-line .credit-facility {
+	height: 400px;
+	overflow-y: auto;
+	margin-bottom: 20px;
+}
+

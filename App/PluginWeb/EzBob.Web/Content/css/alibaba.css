@@ -1,0 +1,62 @@
+﻿div#header-alibaba {
+	height: 53px;
+	min-height: 53px;
+	width: 100%;
+	position: relative;
+	min-width: 100%;
+}
+
+div#header-alibaba > div.header-content {
+	position: absolute;
+	top: -64px;
+	height: 24px;
+	min-height: 24px;
+	width: 100%;
+	min-width: 100%;
+}
+
+div#header-alibaba > div.header-content > a {
+	float: right;
+	margin-right: 30px;
+	font-size: 10px;
+	display: inline-block;
+	padding-top: 5px;
+}
+
+div#header-alibaba > div.header-content > img.right-line {
+	float: right;
+	margin: 0 30px;
+	width: 1px;
+	height: 24px;
+}
+
+div#header-alibaba > div.header-content > img.ezbob-in-alibaba-logo {
+	float: right;
+	height: 24px;
+}
+
+div#header-alibaba > div.header-content > span {
+	float: right;
+	margin-right: 10px;
+	font-size: 10px;
+	display: inline-block;
+	padding-top: 5px;
+}
+
+div#header-alibaba > div.header-content > img.alibaba-logo {
+	float: left;
+	height: 24px;
+	margin-left: 30px;
+}
+
+div#header-alibaba > div.header-content > img.left-line {
+	float: left;
+	margin: 0 30px;
+	width: 1px;
+	height: 24px;
+}
+
+div#header-alibaba > div.header-content > img.e-credit-line-logo {
+	float: left;
+	height: 24px;
+}

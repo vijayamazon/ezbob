@@ -132,16 +132,16 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="LotteryActionResult" nillable="true" type="tns:LotteryActionResult" />
-  <xs:complexType name="AvailableCreditActionResult">
+  <xs:complexType name="AlibabaAvailableCreditActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
         <xs:sequence>
-          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" minOccurs="0" name="Result" nillable="true" type="q3:AvailableCreditResult" />
+          <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" minOccurs="0" name="Result" nillable="true" type="q3:AlibabaAvailableCreditResult" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="AvailableCreditActionResult" nillable="true" type="tns:AvailableCreditActionResult" />
+  <xs:element name="AlibabaAvailableCreditActionResult" nillable="true" type="tns:AlibabaAvailableCreditActionResult" />
   <xs:complexType name="NullableDateTimeActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

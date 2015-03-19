@@ -1,21 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
-	using Ezbob.Backend.Models.ExternalAPI;
-	using ServiceClientProxy.EzServiceReference;
-
+﻿namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 	public class ParseSale : AStrategy {
-		public override string Name {
+	public override string Name {
 			get { return "Alibaba ParseSale"; }
 		}
 
 		public ParseSale(byte[] doc) {
 			this.Document = doc;
-			Result = new BoolActionResult();
+	//		Result = new BoolActionResult();
 		}
 
 		public override void Execute() {
@@ -23,7 +14,7 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 			// check the document exists is not empty
 			if (this.Document == null || this.Document.Length < 2) {
 				Message = "Bad document attached";
-				Result.Value = false;
+	//			Result.Value = false;
 				return;
 			}
 
@@ -42,7 +33,7 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 
 		public byte[] Document;
 
-		public BoolActionResult Result { get; private set; }
+	//	public BoolActionResult Result { get; private set; }
 
 		public string Message { get; private set; }
 	}

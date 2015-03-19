@@ -66,6 +66,9 @@
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\DbConstants.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\EchoSignLib.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -118,7 +121,7 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ActionMetaData.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AvailableCreditActionResult.datasource">
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AvailableFundsActionResult.datasource">

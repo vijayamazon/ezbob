@@ -2,20 +2,14 @@
 @model EzBob.Web.Models.LogOnModel
 
 @{
-    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
-        ViewBag.Origin = "everline";
-    }
-    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
-        ViewBag.Origin = "ezbob";
-    }
-    
-    ViewBag.Title = " Login to your " + ViewBag.Origin + " Account";
-    
+	UiCustomerOrigin.Set(ViewBag);
+
+	ViewBag.Title = " Login to your " + ViewBag.CustomerOrigin.Name + " Account";
 }
 
 @section head
 {
-    <meta name="description" content="@string.Format("Login to your " + ViewBag.Origin + " online business loan account.")" />
+    <meta name="description" content="@string.Format("Login to your " + ViewBag.CustomerOrigin.Name + " online business loan account.")" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 }
 

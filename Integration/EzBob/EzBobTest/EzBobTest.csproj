@@ -144,10 +144,6 @@
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\EzbobAPI\EzbobAPI.csproj">
-      <Project>{aa027eb4-4fe1-4236-acc2-b4f9a0a8ca18}</Project>
-      <Name>EzbobAPI</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\..\Lib\Ezbob\RegistryScanner\RegistryScanner.csproj">
       <Project>{4ee658d4-f8bc-4c45-b729-470d6b601441}</Project>
       <Name>RegistryScanner</Name>

@@ -6,9 +6,11 @@ EzBob.Profile = EzBob.Profile || {};
 
 EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 	template: '#your-info-template',
+
 	initialize: function () {
 		return EzBob.App.on('dash-director-address-change', this.directorModelChange, this);
 	},
+
 	events: {
 		'click .edit-personal': 'editPersonalViewShow',
 		'click .submit-personal': 'saveData',
@@ -16,9 +18,11 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 		'change .personEditInput': 'inputChanged',
 		'keyup .personEditInput': 'inputChanged'
 	},
+
 	ui: {
 		form: 'form.editYourInfoForm'
 	},
+
 	setInputReadOnly: function (isReadOnly) {
 		var isOwnerOfOtherProperties, otherPropertiesModels;
 		this.$el.find('.personEditInput').attr('readonly', isReadOnly);
@@ -168,14 +172,16 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 		return this.$el.find('.submit-personal').toggleClass('disabled', isInvalid).prop('disabled', isInvalid);
 	},
 	onRender: function () {
-		var typeOfBusinessName;
 		this.renderPersonal();
-		typeOfBusinessName = this.model.get('BusinessTypeReduced');
+
+		var typeOfBusinessName = this.model.get('BusinessTypeReduced');
+
 		if (typeOfBusinessName === 'Limited') {
 			this.renderLimited();
 		} else if (typeOfBusinessName === 'NonLimited') {
 			this.renderNonLimited();
 		}
+
 		this.setInputReadOnly(true);
 		this.validator = EzBob.validateYourInfoEditForm(this.ui.form);
 		this.$el.find('.phonenumber').numericOnly(11);
@@ -184,16 +190,12 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 		return EzBob.UiAction.registerView(this);
 	},
 	renderPersonal: function () {
-		var personalInfoView;
-		personalInfoView = new EzBob.Profile.PersonalInfoView({
-			model: this.model
-		});
+		var personalInfoView = new EzBob.Profile.PersonalInfoView({ model: this.model });
 		this.model.get('PersonalAddress').on('all', this.addressModelChange, this);
-		return this.personal.show(personalInfoView);
+		this.personal.show(personalInfoView);
 	},
 	renderNonLimited: function () {
-		var view;
-		view = new EzBob.Profile.NonLimitedInfoView({
+		var view = new EzBob.Profile.NonLimitedInfoView({
 			model: this.model,
 			parentView: this
 		});
@@ -201,8 +203,7 @@ EzBob.Profile.YourInfoMainView = Backbone.Marionette.Layout.extend({
 		return this.company.show(view);
 	},
 	renderLimited: function () {
-		var view;
-		view = new EzBob.Profile.LimitedInfoView({
+		var view = new EzBob.Profile.LimitedInfoView({
 			model: this.model,
 			parentView: this
 		});

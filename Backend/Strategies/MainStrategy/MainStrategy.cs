@@ -2,12 +2,18 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Diagnostics;
+	using System.Runtime.InteropServices;
 	using ConfigManager;
 	using DbConstants;
+	using EchoSignLib.EchoSignService;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
+	using Ezbob.Backend.Models.Alibaba;
+	using Ezbob.Backend.Strategies.Alibaba;
+	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Backend.Strategies.MedalCalculations;
@@ -21,6 +27,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using LandRegistryLib;
+	using Newtonsoft.Json;
 	using NHibernate;
 	using SalesForceLib.Models;
 	using StructureMap;
@@ -349,7 +356,7 @@
 		} // GetLandRegistryDataIfNotRejected
 
 		private void ProcessApprovals() {
-			bool bContinue = true; 
+			bool bContinue = true;
 
 			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
 			if (this.autoDecisionResponse.DecidedToReject && bContinue) {
@@ -466,6 +473,11 @@
 			new Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
 		} // ProcessRejections
 
+
+		/// <summary>
+		/// Last stage of auto-decision process
+		/// </summary>
+		/// <param name="customerEmail"></param>
 		private void UpdateCustomerAndCashRequest() {
 			var now = DateTime.UtcNow;
 
@@ -586,8 +598,15 @@
 				);
 			} // if
 
+			// TEMPORARY DISABLED TODO - sync for proper launch
 			UpdateSalesForceOpportunity(customer.Name);
+
+			if(customer.IsAlibaba)
+				UpdatePartnerAlibaba(customer.Id);
+
 		} // UpdateCustomerAndCashRequest
+
+
 
 		private void UpdateSalesForceOpportunity(string customerEmail) {
 			new AddUpdateLeadAccount(customerEmail, customerId, false, false).Execute();
@@ -703,5 +722,41 @@
 		///     then customer's status should not change.
 		/// </summary>
 		private bool overrideApprovedRejected;
-	} // class MainStrategy
+	
+		// 
+		/// <summary>
+		/// Auto decision only treated 
+		/// In case of auto decision occured (RR, R, RA, A), 002 sent immediately
+		/// 
+		/// In the case of "Waiting"/manual, 002 will be transmitted in UI underwrites, CustomerController, ChangeStatus method
+		/// </summary>
+		/// <param name="customerID"></param>
+		private void UpdatePartnerAlibaba(int customerID) {
+	
+			DecisionActions autoDecision = this.autoDecisionResponse.Decision ?? DecisionActions.Waiting;
+
+			Log.Info("UpdatePartnerAlibaba ******************************************************{0}, {1}", customerID,  autoDecision);
+
+			//	Reject, Re-Reject, Re-Approve, Approve: 0001 + 0002 (auto decision is a final also)
+			// other: 0001 
+			switch (autoDecision) {
+				case DecisionActions.ReReject:
+				case DecisionActions.Reject:
+				case DecisionActions.ReApprove:
+				case DecisionActions.Approve:
+					new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
+					new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
+					break;
+
+				// auto not final
+				case DecisionActions.Waiting:
+					new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
+					break;
+	
+				default:  // unknown auto decision status
+					throw new StrategyAlert(this, string.Format("Auto decision invalid value {0} for customer {1}", autoDecision, customerID));
+			}
+		} // UpdatePartnerAlibaba
+
+	}// class MainStrategy
 } // namespace

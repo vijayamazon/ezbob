@@ -2,13 +2,9 @@
 @using ConfigManager
 @using Ezbob.Backend.Models
 @{
-    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
-        ViewBag.Origin = "everline";
-    }
-    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
-        ViewBag.Origin = "ezbob";
-    }
-	ViewBag.Title = "Loan Confirmation: Loan Confirmation |  " + ViewBag.Origin;
+	UiCustomerOrigin.Set(ViewBag);
+
+	ViewBag.Title = "Loan Confirmation: Loan Confirmation |  " + ViewBag.CustomerOrigin.Name;
 	bool ttPixelEnabled = CurrentValues.Instance.TradeTrackerPixelEnabled;
 }
 

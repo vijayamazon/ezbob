@@ -37,7 +37,7 @@
 			var env = new Ezbob.Context.Environment(log);
 			var db = new SqlConnection(env, log);
 
-			ConfigManager.CurrentValues.Init(db, log);
+			CurrentValues.Init(db, log);
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
 
@@ -806,6 +806,11 @@ GeneratePassword broker-contact-email@example.com password-itself
 				return;
 			}
 
+			// MainStrategy null 18234 3 1
+
+			//	NewCreditLineOption.UpdateEverythingAndApplyAutoRules 3
+			// avoidAutoDescison 0
+
 			log.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
 		}
 
@@ -1346,22 +1351,44 @@ The digits shown in a group are the maximum number of meaningful digits that can
 				return;
 			}
 			email = cmdLineArgs[1];
-			var result = serviceClient.RequalifyCustomer(email);
+			//var result = serviceClient.RequalifyCustomer(email);
 			//log.Debug("blablabla: {0}", result.ToString());
 		}
 
 
 		[Activation]
-		private void AvailableCredit() {
-			string email;
-			if (cmdLineArgs.Length < 2) {
-				log.Msg("Usage: AvailableCredit <CustomerEmail>");  // AvailableCredit "toby@jendens.com.test.test" //"2405kennedy@googlemail.com.test.test"
+		private void CustomerAvaliableCredit() { // CustomerAvaliableCredit 18234 12345 
+			int customerID;
+			int aliMemberID;
+
+			if ((cmdLineArgs.Length != 3) || !int.TryParse(cmdLineArgs[1], out customerID) || !int.TryParse(cmdLineArgs[2], out aliMemberID)) {
+				log.Msg("Usage: CustomerAvaliableCredit <Customer ID> <Alibaba MemberID>");
 				return;
 			}
-			email = cmdLineArgs[1];
-			AvailableCreditActionResult result = serviceClient.AvailableCredit(email);
-			log.Debug("blablabla: {0}",  result.Result.ToString());
+
+			log.Debug("activator: customerID: {0}, aliMemberID: {1}", customerID, aliMemberID);
+
+			//AlibabaAvailableCreditActionResult result = serviceClient.CustomerAvaliableCredit(customerID, aliMemberID);
+			//this.log.Debug("blablabla: {0}",  JsonConvert.SerializeObject(result)); //json
 		}
+
+		
+		[Activation]
+		private void DataSharing() { // DataSharing 18241
+			int customerID;
+
+			if ((cmdLineArgs.Length != 2) || !int.TryParse(cmdLineArgs[1], out customerID)) {
+				log.Msg("Usage: DataSharing <Customer ID>");
+				return;
+			}
+
+			log.Debug("activator: customerID: {0}", customerID);
+
+			ActionMetaData result = serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null );
+			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
+		}
+
+		
 
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;

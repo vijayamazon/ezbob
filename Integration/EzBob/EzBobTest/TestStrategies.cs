@@ -1,37 +1,43 @@
 ﻿namespace EzBobTest {
 	using System;
-	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
+	using Ezbob.Backend.Strategies;
+	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CalculateLoan;
 	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.ExternalAPI;
+	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
+	using EZBob.DatabaseLib.Model.Alibaba;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using NUnit.Framework;
+	using SalesForceLib;
 	using StructureMap;
 	using Twilio;
-	using EZBob.DatabaseLib.Model.Database;
 
 	[TestFixture]
 	public class TestStrategies : BaseTestFixtue {
@@ -90,9 +96,11 @@
 					.Use<LoanScheduleRepository>();
 				x.For<ILoanHistoryRepository>()
 					.Use<LoanHistoryRepository>();
+				x.For<ISalesForceAppClient>()
+					.Use<FakeApiClient>();
 			});
 
-			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
+			Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
 		[Test]
@@ -417,11 +425,11 @@
 				new CalculateMedal(customerID, calculationTime, false, true).Execute();
 
 			this.m_oDB.ForEachRowSafe((sr) => {
-					int customerId = sr["Id"];
-					new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
-				}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc",  CommandSpecies.Text);
-		
-			
+				int customerId = sr["Id"];
+				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
+			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
+
+
 		}
 
 		[Test]
@@ -451,8 +459,8 @@
 				sr => {
 					int customerId = sr["CustomerId"];
 
-					EZBob.DatabaseLib.Model.Database.Medal medal = (EZBob.DatabaseLib.Model.Database.Medal)Enum.Parse(
-						typeof(EZBob.DatabaseLib.Model.Database.Medal),
+					Medal medal = (Medal)Enum.Parse(
+						typeof(Medal),
 						sr["Medal"]
 					);
 
@@ -551,10 +559,10 @@
 			s.Execute();
 		}
 
-	
+
 		[Test]
 		public void Test_AutoReject() {
-			
+
 			int nCustomerCount = 100;
 			int nLastCheckedCustomerID = -1;
 
@@ -602,18 +610,22 @@
 
 		[Test]
 		public void RequalifyCustomer() {
-			var s = new RequalifyCustomer("caroles@ezbob.com.test.test");
+			int customerID = 18234; //217; // 18234;
+			int aliMemberID = 12345000; //00;
+			var s = new RequalifyCustomer(customerID, aliMemberID); //"caroles@ezbob.com.test.test"
 			s.Execute();
-			Console.WriteLine(s.Result);
 		}
 
 
 		[Test]
 		public void AvailableCredit() {
-			var s = new AvaliableCredit("caroles@ezbob.com.test.test");
+			int customerID = 18234; //217; // 18234;
+			int aliMemberID = 12345000; //00;
+			/*var s = new CustomerAvaliableCredit(customerID, aliMemberID); // "caroles@ezbob.com.test.test");
 			s.Execute();
-			Console.WriteLine(s.Result.ToString());
+			Console.WriteLine(s.Result.ToString());*/
 		}
+
 		[Test]
 		public void TestLoanCalculator() {
 			/*
@@ -677,8 +689,8 @@
 
 			lcm.Repayments.Add(new Repayment(new DateTime(2014, 11, 21, 11, 40, 15, DateTimeKind.Utc), 0, 5, 0));
 			lcm.Repayments.Add(new Repayment(new DateTime(2014, 12, 19, 11, 40, 15, DateTimeKind.Utc), 4540.75m, 1632.25m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2015,  1, 22, 11, 40, 15, DateTimeKind.Utc), 4261.84m, 1757.17m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2015,  2, 18, 11, 40, 15, DateTimeKind.Utc), 4603.11m, 1270.17m, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 1, 22, 11, 40, 15, DateTimeKind.Utc), 4261.84m, 1757.17m, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 2, 18, 11, 40, 15, DateTimeKind.Utc), 4603.11m, 1270.17m, 0));
 
 			lc.CalculateBalance(new DateTime(2015, 1, 22, 12, 0, 0, DateTimeKind.Utc));
 		} // TestLoanCalculator
@@ -686,13 +698,60 @@
 		[Test]
 		public void TestGetSmsDetails() {
 			//In case we need to retrieve the status of sms need to invoke this method and update sms message table
-			string m_sAccountSid = ConfigManager.CurrentValues.Instance.TwilioAccountSid;
-			string m_sAuthToken = ConfigManager.CurrentValues.Instance.TwilioAuthToken;
-			
+			string m_sAccountSid = CurrentValues.Instance.TwilioAccountSid;
+			string m_sAuthToken = CurrentValues.Instance.TwilioAuthToken;
+
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
 			var smsDetails = twilio.GetSmsMessage("SM1511753ccca64868b73c9cf7469a1bc8");
 		}
+
+
+		[Test]
+		public void TestAlibabaDataSharing_01() {
+			// run "requalify before all
+			int customerID = 18234; // 217 ; //; // 18234;
+			// ad cashe request before
+			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
+			var v = aliMemberRep.ByCustomer(customerID);
+			Console.WriteLine(v.AliId);
+			new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
+			//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
+			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
+			/* many customers
+			 * var aliCustomers = aliMemberRep.ByCustomer(customerID);
+			foreach (var v in aliCustomers) {
+				Console.WriteLine("AliId: {0}, customerID: {1}, email: {2}", v.AliId, v.Customer.Id, v.Customer.Name);
+				//new RequalifyCustomer(v.Customer.Name).Execute();
+				//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
+				new DataSharing(v.Customer.Id, 0).Execute();
+			}*/
+			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
+			//new DataSharing(customerID, 0).Execute();
+			new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
+		}
+
+
+		[Test]
+		public void TestSF() {
+			var sf = new AddUpdateLeadAccount("a@b.c", 1, false, false);
+			sf.Execute();
+		}
+
+		[Test]
+		public void TestSaveApiCall() {
+			var sf = new SaveApiCall(new ApiCallData() {
+				Request = "requestonbj",
+				RequestId = "11111",
+				Response = "responseobj",
+				Comments = "test strategy",
+				StatusCode = "5500",
+				ErrorCode = "0",
+				ErrorMessage = "no errors",
+				Url = "stam"
+			});
+			sf.Execute();
+		}
+
+
 	}
-
-
 }

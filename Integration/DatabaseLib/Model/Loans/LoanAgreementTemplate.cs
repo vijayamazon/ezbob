@@ -15,7 +15,7 @@
 		AlibabaPreContractAgreement = 6,
 		AlibabaCreditActAgreement = 7,
 		AlibabaPrivateCompanyLoanAgreement = 8,
-
+		AlibabaCreditFacility = 9,
 	}
 
 	public class LoanAgreementTemplate

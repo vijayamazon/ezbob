@@ -73,7 +73,8 @@
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
-    <Compile Include="ActionResults\AvailableCreditActionResult.cs" />
+    <Compile Include="ActionResults\AlibabaAvailableCreditActionResult.cs" />
+    <Compile Include="ActionResults\AlibabaCustomerDataSharingActionResult.cs" />
     <Compile Include="ActionResults\LotteryActionResult.cs" />
     <Compile Include="ActionResults\BoolActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFileContentsActionResult.cs" />
@@ -120,6 +121,7 @@
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
     <Compile Include="EzServiceImplementation\esi_automation_verification.cs" />
     <Compile Include="EzServiceImplementation\esi_customer_manual_annualized_revenue.cs" />
+    <Compile Include="EzServiceImplementation\esi_partner_alibaba.cs" />
     <Compile Include="EzServiceImplementation\esi_external_api.cs" />
     <Compile Include="EzServiceImplementation\esi_lottery.cs" />
     <Compile Include="EzServiceImplementation\esi_esign.cs" />
@@ -173,7 +175,7 @@
       <Name>Strategies</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
-      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\EchoSign\EchoSignLib\EchoSignLib.csproj">

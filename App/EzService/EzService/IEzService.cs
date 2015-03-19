@@ -2,8 +2,10 @@
 	using System;
 	using System.Collections.Generic;
 	using System.ServiceModel;
+	using DbConstants;
 	using EchoSignLib;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Strategies.UserManagement;
@@ -15,7 +17,7 @@
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
-	
+
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
 
@@ -564,7 +566,7 @@
 		[OperationContract]
 		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
 
-		
+
 		[OperationContract]
 		ActionMetaData SalesForceAddUpdateLeadAccount(int? userID, string email, int? customerID, bool isBrokerLead, bool isVipLead);
 
@@ -746,10 +748,16 @@
 		ActionMetaData EnlistLottery(int customerID);
 
 		[OperationContract]
-		AvailableCreditActionResult AvailableCredit(string customerEmail);
+		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID);
 
 		[OperationContract]
-		string RequalifyCustomer(string customerEmail);
+		ActionMetaData RequalifyCustomer(int customerID, int aliMemberID);
+
+		[OperationContract]
+		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+
+		[OperationContract]
+		ActionMetaData SaveApiCall(ApiCallData data);
 
 		[OperationContract]
 		ActionMetaData SilentAutomation(int customerID, int underwriterID);

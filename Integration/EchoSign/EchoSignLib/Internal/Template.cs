@@ -91,6 +91,7 @@
 			string sTemplate = System.Text.Encoding.UTF8.GetString(FileContent);
 
 			sTemplate = sTemplate.Replace("__COMPANY_NAME__", oCompany.Name);
+			sTemplate = sTemplate.Replace("__COMPANY_NUMBER__", oCompany.Number);
 			sTemplate = sTemplate.Replace("__CUSTOMER_NAME__", oCustomer.FullName);
 			sTemplate = sTemplate.Replace("__CURRENT_DATE__", DateTime.Now.ToString("MMMM d yyyy", CultureInfo.InvariantCulture));
 

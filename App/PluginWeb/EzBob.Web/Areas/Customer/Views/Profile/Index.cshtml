@@ -1,17 +1,12 @@
 ﻿@using System.Globalization
 @using EzBob.Web.Infrastructure
 @using ConfigManager
+@using EZBob.DatabaseLib.Model.Database
 @model EzBob.Web.Models.WizardModel
 
 @{
-    if (HttpContext.Current.Request.Url.Host.Contains("everline.com")) {
-        ViewBag.Origin = "everline";
-        ViewBag.Phone = "0203-371-0322";
-    }
-    if (HttpContext.Current.Request.Url.Host.Contains("ezbob.com")) {
-        ViewBag.Origin = "ezbob";
-        ViewBag.Phone = "0800-011-4787";
-    }
+	UiCustomerOrigin.Set(ViewBag, Model.WhiteLabel == null ? null : Model.WhiteLabel.Phone);
+
     ViewBag.WhiteLabel = Model.WhiteLabel == null ? null : Model.WhiteLabel.Name;
     var customer = Model.Customer;
     customer.IsProfile = true;
@@ -90,6 +85,9 @@
     <div class="inner">
         <div id="profile-content">
             <div id="profile-main-to-be-replaced"></div>
+			@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
+				<div id="review-sign-credit-line">@{ Html.RenderPartial("ReviewSignCreditLine");}</div>
+			}
             <div id="get-cash"></div>
             <div id="pay-early"></div>
             <div id="loan-detail"></div>
@@ -422,33 +420,25 @@
                     <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
                     <p>
                         In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
-                        If you still have not received an email, please contact our customer care department by phone: @ViewBag.Phone or by emailing:
-                        @if (@ViewBag.Origin == "ezbob") {
-                            <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>
-                        } else if (@ViewBag.Origin == "everline") {
-                            <a href="mailto:customercare@everline.com">customercare@everline.com</a>
-                        }.
+                        If you still have not received an email, please contact our customer care department by phone: @ViewBag.PhoneNumber or by emailing:
+                        <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a>.
                     </p>
-                    <p>If you have additional accounts we recommend that you link them to @ViewBag.Origin, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+                    <p>If you have additional accounts we recommend that you link them to @ViewBag.CustomerOrigin.Name, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
                 </div>
             } else {
                 <div class="notoffline">
             <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
             <p>
                 In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
-                If you still have not received an email, please contact our customer care department by phone: @ViewBag.Phone or by emailing: 
-                @if (@ViewBag.Origin == "ezbob") {
-                    <a href="mailto:customercare@ezbob.com">customercare@ezbob.com</a>
-                } else if (@ViewBag.Origin == "everline") {
-                    <a href="mailto:customercare@everline.com">customercare@everline.com</a>
-                }.
+                If you still have not received an email, please contact our customer care department by phone: @ViewBag.PhoneNumber or by emailing: 
+                <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a>.
             </p>
-            <p>If you have additional accounts we recommend that you link them to @ViewBag.Origin, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
+            <p>If you have additional accounts we recommend that you link them to @ViewBag.CustomerOrigin.Name, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
         </div>
             }
                         <p>
                             Thank You,<br>
-                            The <span class="bold">@ViewBag.Origin</span> Team
+                            The <span class="bold">@ViewBag.CustomerOrigin.Name</span> Team
                         </p>
                         }
                         <div class="alignright" style="padding: 0 10px 0 0;">

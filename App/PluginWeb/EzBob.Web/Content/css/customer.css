@@ -672,3 +672,8 @@ blockquote {
 .AmazonForm{
     padding-top: 1.6em;
 }
+
+/* wizard-header */
+#header {
+	margin-top: -77px;
+}

@@ -500,6 +500,20 @@
 			return loanAgreementTemplate;
 		}
 
+		public LoanAgreementTemplate LoadOrCreateLoanAgreementTemplate(string template, LoanAgreementTemplateType type) {
+			var loanAgreementTemplate = _loanAgreementTemplateRepository.GetAll()
+				.FirstOrDefault(x => x.Template == template && x.TemplateType == (int)type);
+
+			if (loanAgreementTemplate != null)
+				return loanAgreementTemplate;
+			
+			loanAgreementTemplate = new LoanAgreementTemplate { Template = template, TemplateType = (int)type };
+
+			_loanAgreementTemplateRepository.SaveOrUpdate(loanAgreementTemplate);
+
+			return loanAgreementTemplate;
+		} // LoadOrCreateLoanAgreementTemplate
+
 		public string GetPayPointDeltaPeriod(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 

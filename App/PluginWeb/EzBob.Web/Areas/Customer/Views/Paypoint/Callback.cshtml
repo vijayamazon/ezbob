@@ -1,10 +1,10 @@
-﻿@using System.Globalization
-@using EzBob.Web.Infrastructure
+﻿@using EzBob.Web.Infrastructure
 @model EzBob.Web.Models.PaymentConfirmationModel
 
 @{
+	UiCustomerOrigin.Set(ViewBag);
     Html.RenderPartial("PayPointResult");
-    ViewBag.Title = "Payment Confirm: Payment Confirmation " + ViewBag.Origin;
+    ViewBag.Title = "Payment Confirm: Payment Confirmation " + ViewBag.CustomerOrigin.Name;
 }
 
 @section css {

@@ -1,25 +1,29 @@
-﻿@model EzBob.Web.Models.LogOnModel
+﻿@using EzBob.Web.Infrastructure
+@model EzBob.Web.Models.LogOnModel
 @{
-    ViewBag.Title = " Login to your  " + ViewBag.Origin + " Account";
-    Layout = "../../Areas/Underwriter/Views/Shared/_LayoutLogin.cshtml";
+	UiCustomerOrigin.SetDefault(ViewBag);
+
+	ViewBag.Title = " Login to your  " + ViewBag.CustomerOrigin.Name + " Account";
+	Layout = "../../Areas/Underwriter/Views/Shared/_LayoutLogin.cshtml";
 }
+
 <div class="login-page">
-    <div class="login-wrapper">
-        @Html.Partial("_LoginSimple")
-    </div>
+	<div class="login-wrapper">
+		@Html.Partial("_LoginSimple")
+	</div>
 </div>
 
-
 @section Js{
+<script type="text/javascript">
+	(function() {
+		var isValid = @ViewData.ModelState.IsValid.ToString().ToLowerInvariant();
 
-    <script type="text/javascript">
-        $(function() {
-            var isValid = @ViewData.ModelState.IsValid.ToString().ToLowerInvariant();
-            EzBob.validateAdminLoginForm();
-            var notifications = new EzBob.NotificationsView({ el: $('.notifications') });
-            if (!isValid) {
-                EzBob.App.trigger('error', '@Html.ValidationMessage("LoginError")');
-            }
-        });
-    </script>
+		EzBob.validateAdminLoginForm();
+
+		new EzBob.NotificationsView({ el: $('.notifications') });
+
+		if (!isValid)
+			EzBob.App.trigger('error', '@Html.ValidationMessage("LoginError")');
+	})();
+</script>
 }

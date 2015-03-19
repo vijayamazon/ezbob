@@ -29,11 +29,18 @@
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
 
+		public static MvcHtmlString RenderAlibabaCss() {
+			return Bundle.Css()
+			.Add("~/Content/css/alibaba.css")				
+			.MvcRender("~/Content/css/min/alibaba_#.css");
+		} // RenderAlibabaCss
+
 		public static MvcHtmlString RenderEverlineCss() {
 			return Bundle.Css()
 			.Add("~/Content/css/everline.css")				
 			.MvcRender("~/Content/css/min/everline_#.css");
-		}
+		} // RenderEverlineCss
+
 		public static MvcHtmlString RenderProfileCss() {
 			return Bundle.Css()
 				//libs
@@ -436,6 +443,7 @@
 				//Wizard
 				.Add("~/Content/js/Profile/ezbob.profile.payEarly.js")
 				.Add("~/Content/js/Profile/ezbob.profile.getCash.js")
+				.Add("~/Content/js/Profile/ezbob.profile.reviewSignCreditLine.js")
 				.Add("~/Content/js/Profile/ezbob.profile.signWidget.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shopbutton.js")
 				.Add("~/Content/js/Wizard/ezbob.ct.bindShopToCT.js")

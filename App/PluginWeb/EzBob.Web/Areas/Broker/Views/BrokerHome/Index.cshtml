@@ -1,7 +1,9 @@
 ﻿@using ConfigManager
 @using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @using SquishIt.Framework
 @using SquishIt.Mvc
+@using StructureMap
 @model EzBob.Web.Areas.Broker.Models.BrokerHomeModel
 @{
 	Layout = null;
@@ -12,10 +14,8 @@
 
 	Model.LogoUrl = Url.Content("~/Content/css/images/header/ezbob_logo-white.png");
 	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
-    
-    if (string.IsNullOrEmpty(ViewBag.Origin)) {
-        ViewBag.Origin = "ezbob";
-    }
+
+	ViewBag.CustomerOrigin = ObjectFactory.GetInstance<CustomerOriginRepository>().GetDefault();
 }
 <!DOCTYPE html>
 <html>

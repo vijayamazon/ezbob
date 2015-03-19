@@ -80,16 +80,9 @@
 			                           "https");
 			var disAcceptUrl = Url.Action("ActivateStore", "Home",
 			                              new {Area = "", id = guid, approve = false.ToString().ToLower()}, "https");
-			var origin = marketplace.Customer.CustomerOrigin.Name;
-			string phone = "";
-			switch (origin) {
-			case "ezbob":
-				phone = "0800-011-4787";
-				break;
-			case "everline":
-				phone = "0203-371-0322";
-				break;
-			}
+
+			string origin = marketplace.Customer.CustomerOrigin.Name;
+			string phone = marketplace.Customer.CustomerOrigin.PhoneNumber;
 
 			var message = @"
             Confirm your store on Amazon.

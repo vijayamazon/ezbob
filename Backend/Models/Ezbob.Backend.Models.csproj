@@ -48,6 +48,7 @@
     <Compile Include="AccountsToUpdateModel.cs" />
     <Compile Include="AffordabilityDataModel.cs" />
     <Compile Include="AgreementModel.cs" />
+    <Compile Include="Alibaba\CustomerDataSharing.cs" />
     <Compile Include="BankStatementDataModel.cs" />
     <Compile Include="BrokerCustomerEntryModel.cs" />
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />
@@ -61,7 +62,9 @@
     <Compile Include="CompanyData.cs" />
     <Compile Include="CompanyCaisAccount.cs" />
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
-    <Compile Include="ExternalAPI\AvailableCreditResult.cs" />
+    <Compile Include="CustomerRiskData.cs" />
+    <Compile Include="ExternalAPI\AlibabaAvailableCreditResult.cs" />
+    <Compile Include="ExternalAPI\ApiCallData.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MpModel.cs" />
@@ -95,6 +98,10 @@
     <Compile Include="VatReturnUtils.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>

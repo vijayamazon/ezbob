@@ -221,6 +221,7 @@
     <Compile Include="Areas\Underwriter\Models\BugModel.cs" />
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
+    <Compile Include="Infrastructure\UiCustomerOrigin.cs" />
     <Compile Include="Models\CompanyScoreModelBuilder.cs" />
     <Compile Include="Models\CreatePasswordModel.cs" />
     <Compile Include="Models\LoanOffer.cs" />
@@ -454,6 +455,10 @@
       <Link>connection-strings.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <Content Include="Content\alibaba\alibaba_logo.png" />
+    <Content Include="Content\alibaba\e-credit-line-logo.png" />
+    <Content Include="Content\alibaba\ezbob-logo.png" />
+    <Content Include="Content\alibaba\line.png" />
     <Content Include="Content\css\adminlogin.css" />
     <Content Include="Content\css\broker.css" />
     <Content Include="Content\css\common.css" />
@@ -667,6 +672,7 @@
     <Content Include="Content\css\mobile.css" />
     <Content Include="Content\css\Permission.css" />
     <Content Include="Content\css\salesforce.css" />
+    <Content Include="Content\css\alibaba.css" />
     <Content Include="Content\css\valentine2015scratch.css" />
     <Content Include="Content\everline\EverlineLogo.png" />
     <Content Include="Content\everline\EverlineLogo.svg" />
@@ -806,6 +812,7 @@
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
+    <Content Include="Content\js\Profile\ezbob.profile.reviewSignCreditLine.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.selectcard.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.valentine2015.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.ny2015.js" />
@@ -853,6 +860,8 @@
     <Content Include="Areas\Customer\Views\Agreement\EVLCreditActAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinanceCreditActAgreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinanceGuarantyAgreement.cshtml" />
+    <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditFacility.cshtml" />
+    <Content Include="Areas\Customer\Views\Profile\ReviewSignCreditLine.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinancePre-Contract-Agreement.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinancePrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />

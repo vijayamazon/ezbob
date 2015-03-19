@@ -1,51 +1,70 @@
-﻿@model dynamic
+﻿@using EZBob.DatabaseLib.Model.Database
+@model dynamic
 
-@if (ViewBag.Origin == "ezbob") { 
-    <div id="header">
-        <div class="header-bg-strip"></div>
-        <div class="header-inner">
-            <div class="header-logo">
-                <a href="http://www.ezbob.com">
-                    <div class="newlogo"></div>
-                </a>
-            </div>
+@switch ((CustomerOriginEnum)ViewBag.CustomerOrigin.GetOrigin()) {
+case CustomerOriginEnum.everline:
+	<header class="everline_header">
+		<nav>
+			<div class="pin"><span></span></div>
+			<span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
+			<ul class="flt-r sub-links">
+				<li><a href="tel:0203-371-0322"><i class="fa fa-phone"></i>&nbsp;0203 371 0322</a></li>
+				<li id="logoff-li" class="login" style="display: none;">
+					<a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="">Log Off</a>
+				</li>
+				<li class="login login_btn" style="display: none;">
+					<a href="@Url.Action("LogOn", "Account", new { Area = "" })" class=""><i class="fa fa-lock"></i>&nbsp;Login</a>
+				</li>
+				<li class="sign-up signup_btn" style="display: none">
+					<a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="org-btn">Apply now</a>
+				</li>
+			</ul>
+		</nav>
+		<br class="clearfix">
+	</header>
+	break;
 
-            <div class="header-info" style="display: none;">
-                <div class="header-info-left"></div>
-                <div class="header-info-text"></div>
-                <div class="header-info-right"></div>
-            </div>
+case CustomerOriginEnum.alibaba:
+	<div id="header-alibaba">
+		<div class="header-content">
+			<a href="mailto:info@ezbob.com">info@ezbob.com</a>
+			<img class="right-line" src="~/Content/alibaba/line.png">
+			<img class="ezbob-in-alibaba-logo" src="~/Content/alibaba/ezbob-logo.png">
+			<span>in partnership with</span>
+			
+			<img class="alibaba-logo" src="~/Content/alibaba/alibaba_logo.png">
+			<img class="left-line" src="~/Content/alibaba/line.png">
+			<img class="e-credit-line-logo" src="~/Content/alibaba/e-credit-line-logo.png">
+		</div>
+	</div>
 
-            <ul id="user-menu">
-                <li id="logoff-li" class="login" style="display: none;">
-                    <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="button btn-grey">Log Off</a>
-                </li>
-                <li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">Login</a></li>
-                <li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">Sign Up</a></li>
-                <li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;@ViewBag.Phone</div></li>
-            </ul>
-        </div>
-    </div>
-}
+	goto case CustomerOriginEnum.ezbob;
 
-@if (ViewBag.Origin == "everline") {
-    <header class="everline_header">
-        <nav>
-            <div class="pin"><span></span></div>
-            <span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
-            <ul class="flt-r sub-links">
-                <li><a href="tel:0203-371-0322"><i class="fa fa-phone"></i>&nbsp;0203 371 0322</a></li>
-                <li id="logoff-li" class="login" style="display: none;">
-                    <a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="">Log Off</a>
-                </li>
-                <li class="login login_btn" style="display: none;">
-                    <a href="@Url.Action("LogOn", "Account", new { Area = "" })" class=""><i class="fa fa-lock"></i>&nbsp;Login</a>
-                </li>
-                <li class="sign-up signup_btn" style="display: none">
-                    <a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="org-btn">Apply now</a>
-                </li>
-            </ul>
-        </nav>
-        <br class="clearfix">
-    </header>
+case CustomerOriginEnum.ezbob:
+	<div id="header">
+		<div class="header-bg-strip"></div>
+		<div class="header-inner">
+			<div class="header-logo">
+				<a href="http://www.ezbob.com">
+					<div class="newlogo"></div>
+				</a>
+			</div>
+
+			<div class="header-info" style="display: none;">
+				<div class="header-info-left"></div>
+				<div class="header-info-text"></div>
+				<div class="header-info-right"></div>
+			</div>
+
+			<ul id="user-menu">
+				<li id="logoff-li" class="login" style="display: none;">
+					<a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="button btn-grey">Log Off</a>
+				</li>
+				<li class="login login_btn" style="display: none;"><a href="@Url.Action("LogOn", "Account", new { Area = "" })" class="button btn-grey">Login</a></li>
+				<li class="sign-up signup_btn" style="display: none"><a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="button btn-green">Sign Up</a></li>
+				<li><div class="header-phone"><i class="fa fa-phone"></i>&nbsp;@ViewBag.PhoneNumber</div></li>
+			</ul>
+		</div>
+	</div>
+	break;
 }

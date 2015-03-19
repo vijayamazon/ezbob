@@ -1,7 +1,9 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure
+@model dynamic
 
 @{
-    ViewBag.Title = "Payment failure: Payment Failure |  " + ViewBag.Origin;
+	UiCustomerOrigin.Set(ViewBag);
+    ViewBag.Title = "Payment failure: Payment Failure |  " + ViewBag.CustomerOrigin.Name;
 }
 
 <div class="row-fluid " style="padding-top:  20px;">
