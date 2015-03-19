@@ -91,6 +91,15 @@
 		[DataMember]
 		public string TotalPrincipalWithSetupFee { get; set; }
 
+        [DataMember]
+        public bool IsEverlineRefinanceLoan { get; set; }
+        [DataMember]
+        public string EverlineRefinanceLoanRef { get; set; }
+        [DataMember]
+        public string EverlineRefinanceLoanDate { get; set; }
+        [DataMember]
+        public string EverlineRefinanceLoanOutstandingAmount { get; set; }
+
 		public override string ToString() {
 			return "AgreementModel";
 		}
