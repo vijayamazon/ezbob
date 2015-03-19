@@ -1,243 +1,216 @@
 ﻿namespace SalesForceLib {
-	using System;
-	using log4net;
-	using SalesForceLib.Models;
-	using SalesForceLib.SalesForcePartnersServiceNS;
-	using SalesForceLib.SalesForceServiceNS;
+    using System;
+    using log4net;
+    using SalesForceLib.Models;
+    using SalesForceLib.SalesForcePartnersServiceNS;
+    using SalesForceLib.SalesForceServiceNS;
 
-	public class SalesForceApiClient : ISalesForceAppClient {
-		public SalesForceApiClient(string userName, string password, string token, string environment) {
-			api = new EzbobWebServicesPortTypeClient("EzbobWebServices" + environment);
-			partnersClient = new SoapClient("PartnersServices" + environment);
-			Login(userName, password, token);
-		}
+    public class SalesForceApiClient : ISalesForceAppClient {
+        public SalesForceApiClient(string userName, string password, string token, string environment) {
+            this.api = new EzbobWebServicesPortTypeClient("EzbobWebServices" + environment);
+            this.partnersClient = new SoapClient("PartnersServices" + environment);
+            Login(userName, password, token);
+        }
 
-		private void Login(string userName, string password, string token) {
-			lr = null;
-			try {
-				var response = partnersClient.login(new loginRequest {
-					username = userName,
-					password = password + token,
-					CallOptions = new SalesForceLib.SalesForcePartnersServiceNS.CallOptions(),
-					LoginScopeHeader = new LoginScopeHeader(),
-				});
-				lr = response.result;
-			} catch (Exception ex) {
-				Log.ErrorFormat("Failed to login to sales force partners server \n{0}", ex);
-				return;
-			}
+        private void Login(string userName, string password, string token) {
+            this.lr = null;
+            try {
+                var response = this.partnersClient.login(new loginRequest {
+                    username = userName,
+                    password = password + token,
+                    CallOptions = new SalesForceLib.SalesForcePartnersServiceNS.CallOptions(),
+                    LoginScopeHeader = new LoginScopeHeader(),
+                });
+                this.lr = response.result;
+            } catch (Exception ex) {
+                this.Log.ErrorFormat("Failed to login to sales force partners server \n{0}", ex);
+                return;
+            }
 
-			if (lr != null && lr.passwordExpired) {
-				Log.Error("Sales Force: Your password is expired.");
-			}
-		}
+            if (this.lr != null && this.lr.passwordExpired) {
+                this.Log.Error("Sales Force: Your password is expired.");
+            }
+        }
 
-		public void CreateUpdateLeadAccount(LeadAccountModel model) {
-			string modelStr = model.ToJsonExtension();
-			this.Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", modelStr);
+        public void CreateUpdateLeadAccount(LeadAccountModel model) {
+            string modelStr = model.ToJsonExtension();
+            this.Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", modelStr);
 
-            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
-            {
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
                 this.Log.ErrorFormat("SalesForce CreateUpdateLeadAccount null session id");
                 return;
             }
 
-			string result;
-			var response = api.LeadAccountService(
-				new SalesForceServiceNS.SessionHeader {
-					sessionId = lr.sessionId
-				},
-				new SalesForceServiceNS.CallOptions(),
-				new SalesForceServiceNS.DebuggingHeader(),
-				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				modelStr,
-				out result);
+            string result;
+            var response = this.api.LeadAccountService(
+                new SalesForceServiceNS.SessionHeader {
+                    sessionId = this.lr.sessionId
+                },
+                new SalesForceServiceNS.CallOptions(),
+                new SalesForceServiceNS.DebuggingHeader(),
+                new SalesForceServiceNS.AllowFieldTruncationHeader(),
+                modelStr,
+                out result);
 
-			var res = result.JsonStringToObject<ApiResponse>();
-			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce CreateUpdateLeadAccount failed for customer {0}, error: {1}", model.Email, res.Error);
-			} else {
-				Log.InfoFormat("SalesForce CreateUpdateLeadAccount success for customer {0}, {1}", model.Email, result);
-			}
-		}
 
-		public void CreateOpportunity(OpportunityModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", modelStr);
+            LogResult("LeadAccountService", result, modelStr, model.Email);
 
-            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
-            {
+
+        }
+
+        public void CreateOpportunity(OpportunityModel model) {
+            string modelStr = model.ToJsonExtension();
+            this.Log.InfoFormat("SalesForce CreateOpportunity\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
                 this.Log.ErrorFormat("SalesForce CreateOpportunity null session id");
                 return;
             }
 
-			string result;
-			var response = api.CreateOpportunityService(
-				new SalesForceServiceNS.SessionHeader {
-					sessionId = lr.sessionId
-				},
-				new SalesForceServiceNS.CallOptions(),
-				new SalesForceServiceNS.DebuggingHeader(),
-				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				modelStr,
-				out result);
+            string result;
+            var response = this.api.CreateOpportunityService(
+                new SalesForceServiceNS.SessionHeader {
+                    sessionId = this.lr.sessionId
+                },
+                new SalesForceServiceNS.CallOptions(),
+                new SalesForceServiceNS.DebuggingHeader(),
+                new SalesForceServiceNS.AllowFieldTruncationHeader(),
+                modelStr,
+                out result);
 
-			var res = result.JsonStringToObject<ApiResponse>();
-			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce CreateOpportunity failed for customer {0}, error: {1}", model.Email, res.Error);
-			} else {
-				Log.InfoFormat("SalesForce CreateOpportunity success for customer {0}, {1}", model.Email, result);
-			}
-		}
+            LogResult("CreateOpportunityService", result, modelStr, model.Email);
 
-		public void UpdateOpportunity(OpportunityModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce UpdateOpportunity\n {0}", modelStr);
+        }
 
-            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
-            {
-                this.Log.ErrorFormat("SalesForce UpdateOpportunity null session id");
+        public void UpdateOpportunity(OpportunityModel model) {
+            string modelStr = model.ToJsonExtension();
+            this.Log.InfoFormat("SalesForce UpdateCloseOpportunityService\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
+                this.Log.ErrorFormat("SalesForce UpdateCloseOpportunityService null session id");
                 return;
             }
 
-			string result;
-			var response = api.UpdateCloseOpportunityService(
-				new SalesForceServiceNS.SessionHeader {
-					sessionId = lr.sessionId
-				},
-				new SalesForceServiceNS.CallOptions(),
-				new SalesForceServiceNS.DebuggingHeader(),
-				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				modelStr,
-				out result);
+            string result;
+            var response = this.api.UpdateCloseOpportunityService(
+                new SalesForceServiceNS.SessionHeader {
+                    sessionId = this.lr.sessionId
+                },
+                new SalesForceServiceNS.CallOptions(),
+                new SalesForceServiceNS.DebuggingHeader(),
+                new SalesForceServiceNS.AllowFieldTruncationHeader(),
+                modelStr,
+                out result);
 
-			var res = result.JsonStringToObject<ApiResponse>();
-			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce UpdateOpportunity failed for customer {0}, error: {1}", model.Email, res.Error);
-			} else {
-				Log.InfoFormat("SalesForce UpdateOpportunity success for customer {0}, {1}", model.Email, result);
-			}
-		}
+            LogResult("UpdateCloseOpportunityService", result, modelStr, model.Email);
 
-		public void CreateUpdateContact(ContactModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", modelStr);
+        }
 
-            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
-            {
+        public void CreateUpdateContact(ContactModel model) {
+            string modelStr = model.ToJsonExtension();
+            this.Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
                 this.Log.ErrorFormat("SalesForce CreateUpdateContact null session id");
                 return;
             }
 
-			string result;
-			var response = api.ContactService(
-				new SalesForceServiceNS.SessionHeader {
-					sessionId = lr.sessionId
-				},
-				new SalesForceServiceNS.CallOptions(),
-				new SalesForceServiceNS.DebuggingHeader(),
-				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				modelStr,
-				out result);
+            string result;
+            var response = this.api.ContactService(
+                new SalesForceServiceNS.SessionHeader {
+                    sessionId = this.lr.sessionId
+                },
+                new SalesForceServiceNS.CallOptions(),
+                new SalesForceServiceNS.DebuggingHeader(),
+                new SalesForceServiceNS.AllowFieldTruncationHeader(),
+                modelStr,
+                out result);
 
-			var res = result.JsonStringToObject<ApiResponse>();
-			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce CreateUpdateContact failed for customer {0}, error: {1}", model.Email, res.Error);
-			} else {
-				Log.InfoFormat("SalesForce CreateUpdateContact success for customer {0}, {1}", model.Email, result);
-			}
-		}
+            LogResult("ContactService", result, modelStr, model.Email);
 
-		public void CreateTask(TaskModel model) {
-			string modelStr = model.ToJsonExtension(true);
-			Log.InfoFormat("SalesForce CreateTask\n {0}", modelStr);
+        }
 
-            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
-            {
+        public void CreateTask(TaskModel model) {
+            string modelStr = model.ToJsonExtension(true);
+            this.Log.InfoFormat("SalesForce CreateTask\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
                 this.Log.ErrorFormat("SalesForce CreateTask null session id");
                 return;
             }
 
-			string result = "";
-			var response = api.CreateTask(
-				new SalesForceServiceNS.SessionHeader {
-					sessionId = lr.sessionId
-				},
-				new SalesForceServiceNS.CallOptions(),
-				new SalesForceServiceNS.DebuggingHeader(),
-				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				modelStr,
-				out result);
+            string result = "";
+            var response = this.api.CreateTask(
+                new SalesForceServiceNS.SessionHeader {
+                    sessionId = this.lr.sessionId
+                },
+                new SalesForceServiceNS.CallOptions(),
+                new SalesForceServiceNS.DebuggingHeader(),
+                new SalesForceServiceNS.AllowFieldTruncationHeader(),
+                modelStr,
+                out result);
 
-			var res = result.JsonStringToObject<ApiResponse>();
-			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce CreateTask failed for customer {0}, error: {1}", model.Email, res.Error);
-			} else {
-				Log.InfoFormat("SalesForce CreateTask success for customer {0}, {1}", model.Email, result);
-			}
-		}
+            LogResult("CreateTask", result, modelStr, model.Email);
 
-		public void CreateActivity(ActivityModel model) {
-			string modelStr = model.ToJsonExtension(true);
-			Log.InfoFormat("SalesForce CreateActivity\n {0}", modelStr);
+        }
 
-            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
-            {
+        public void CreateActivity(ActivityModel model) {
+            string modelStr = model.ToJsonExtension(true);
+            this.Log.InfoFormat("SalesForce CreateActivity\n {0}", modelStr);
+
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
                 this.Log.ErrorFormat("SalesForce CreateActivity null session id");
                 return;
             }
 
-			string result = "";
-			var response = api.CreateActivity(
-				new SalesForceServiceNS.SessionHeader {
-					sessionId = lr.sessionId
-				},
-				new SalesForceServiceNS.CallOptions(),
-				new SalesForceServiceNS.DebuggingHeader(),
-				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				modelStr,
-				out result);
+            string result = "";
+            this.api.CreateActivity(
+                new SalesForceServiceNS.SessionHeader {
+                    sessionId = this.lr.sessionId
+                },
+                new SalesForceServiceNS.CallOptions(),
+                new SalesForceServiceNS.DebuggingHeader(),
+                new SalesForceServiceNS.AllowFieldTruncationHeader(),
+                modelStr,
+                out result);
 
-			var res = result.JsonStringToObject<ApiResponse>();
-			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce CreateActivity failed for customer {0}, error: {1}", model.Email, res.Error);
-			} else {
-				Log.InfoFormat("SalesForce CreateActivity success for customer {0}, {1}", model.Email, result);
-			}
-		}
+            LogResult("CreateActivity", result, modelStr, model.Email);
+        }
 
-		public void ChangeEmail(string currentEmail, string newEmail) {
-			Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", currentEmail, newEmail);
+        public void ChangeEmail(string currentEmail, string newEmail) {
+            this.Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", currentEmail, newEmail);
 
-            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId))
-            {
+            if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
                 this.Log.ErrorFormat("SalesForce ChangeEmail null session id");
                 return;
             }
 
-			string result = "";
-			var response = api.ChangeEmail(
-				new SalesForceServiceNS.SessionHeader {
-					sessionId = lr.sessionId
-				},
-				new SalesForceServiceNS.CallOptions(),
-				new SalesForceServiceNS.DebuggingHeader(),
-				new SalesForceServiceNS.AllowFieldTruncationHeader(),
-				new { currentEmail, newEmail }.ToJsonExtension(),
-				out result);
+            string result = "";
+            var response = this.api.ChangeEmail(
+                new SalesForceServiceNS.SessionHeader {
+                    sessionId = this.lr.sessionId
+                },
+                new SalesForceServiceNS.CallOptions(),
+                new SalesForceServiceNS.DebuggingHeader(),
+                new SalesForceServiceNS.AllowFieldTruncationHeader(),
+                new { currentEmail, newEmail }.ToJsonExtension(),
+                out result);
 
-			var res = result.JsonStringToObject<ApiResponse>();
-			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce ChangeEmail failed for customer {0}, error: {1}", newEmail, res.Error);
-			} else {
-				Log.InfoFormat("SalesForce ChangeEmail success for customer {0}, {1}", newEmail, result);
-			}
-		}
+            LogResult("ChangeEmail", result, new { currentEmail, newEmail }.ToJsonExtension(), newEmail);
+        }
 
+        private void LogResult(string serviceName, string result, string request, string email) {
+            var res = result.JsonStringToObject<ApiResponse>();
+            if (!res.IsSuccess) {
+                this.Log.ErrorFormat("SalesForce {3} failed for customer {0}, request \n{2}\n error: {1}", email, res.Error, request, serviceName);
+            } else {
+                this.Log.InfoFormat("SalesForce {3} success for customer {0}, request \n{2}\n response: {1}", email, result, request, serviceName);
+            }
+        }
 
-		private readonly EzbobWebServicesPortTypeClient api;
-		private readonly Soap partnersClient;
-		private readonly ILog Log = LogManager.GetLogger(typeof(SalesForceApiClient));
-		private LoginResult lr;
-	}
+        private readonly EzbobWebServicesPortTypeClient api;
+        private readonly Soap partnersClient;
+        private readonly ILog Log = LogManager.GetLogger(typeof(SalesForceApiClient));
+        private LoginResult lr;
+    }
 }
