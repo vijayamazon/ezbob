@@ -121,8 +121,10 @@
 				"Broker ID",
 				"Customer is default now",
 				"Has default loan",
+				"Loan was default",
 				"Is campaign",
 				"Is superseded",
+				"Decision time",
 				AMedalAndPricing.CsvTitles("Manual"),
 				"Automation decision",
 				"Auto re-reject decision",
@@ -153,12 +155,16 @@
 			var os = new List<string>();
 
 			HasDefaultLoan = false;
+			LoanWasDefault = false;
 
 			foreach (string s in sources) {
 				LoanSummaryData loanStat = bySource[s];
 
 				if (loanStat.LoanStatus == LoanStatus.Late)
 					HasDefaultLoan = true;
+
+				if (loanStat.MaxLateDays > 13)
+					LoanWasDefault = true;
 
 				os.Add(loanStat.ToString());
 			} // for each
@@ -169,8 +175,10 @@
 				BrokerID.ToString(CultureInfo.InvariantCulture),
 				IsDefault ? "Default" : "No",
 				HasDefaultLoan ? "Default" : "No",
+				LoanWasDefault ? "Default" : "No",
 				IsCampaign ? "Campaign" : "No",
 				IsSuperseded ? "Superseded" : "No",
+				Manual.DecisionTime,
 				Manual.ToCsv(),
 				AutomationDecision.ToString(),
 				IsAutoReRejected ? "Reject" : "Manual",
@@ -186,6 +194,7 @@
 		} // ToCsv
 
 		public bool HasDefaultLoan { get; private set; }
+		public bool LoanWasDefault { get; private set; }
 
 		public int ToXlsx(ExcelWorksheet sheet, int rowNum, TCrLoans crLoans, SortedSet<string> sources) {
 			List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
@@ -198,12 +207,16 @@
 				bySource[s] = new LoanSummaryData();
 
 			HasDefaultLoan = false;
+			LoanWasDefault = false;
 
 			foreach (LoanMetaData lmd in lst) {
 				bySource[lmd.LoanSourceName].Add(lmd);
 
 				if (lmd.LoanStatus == LoanStatus.Late)
 					HasDefaultLoan = true;
+
+				if (lmd.MaxLateDays > 13)
+					LoanWasDefault = true;
 			} // if
 
 			int curColumn = 1;
@@ -213,6 +226,7 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanWasDefault ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsCampaign ? "Campaign" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsSuperseded ? "Superseded" : "No");
 

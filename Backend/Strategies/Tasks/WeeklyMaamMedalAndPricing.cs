@@ -180,6 +180,15 @@
 				this.manualDefaultCount = 0;
 				this.autoDefaultCount = 0;
 
+				this.manualBadLoanCount = 0;
+				this.autoBadLoanCount = 0;
+
+				this.manualDefaultAmount = 0;
+				this.autoDefaultAmount = 0;
+
+				this.manualBadLoanAmount = 0;
+				this.autoBadLoanAmount = 0;
+
 				this.manualRejectedAndAutoApprovedCount = 0;
 				this.manualApprovedAndAutoRejectedCount = 0;
 			} // constructor
@@ -249,8 +258,15 @@
 
 					this.manualAmount += d.Manual.Amount;
 
-					if (d.HasDefaultLoan)
+					if (d.HasDefaultLoan) {
 						this.manualDefaultCount++;
+						this.manualDefaultAmount++;
+					} // if
+
+					if (d.HasDefaultLoan || d.LoanWasDefault) {
+						this.manualBadLoanCount++;
+						this.manualBadLoanAmount += d.Manual.Amount;
+					} // if
 
 					if (this.takeMin) {
 						if ((d.AutomationDecision == DecisionActions.ReApprove) || (d.AutomationDecision == DecisionActions.Approve))
@@ -270,25 +286,53 @@
 					if (d.AutomationDecision == DecisionActions.ReApprove) {
 						this.autoAmount += d.ReapprovedAmount;
 
-						if (d.HasDefaultLoan)
+						if (d.HasDefaultLoan) {
 							this.autoDefaultCount++;
+							this.autoDefaultAmount += d.ReapprovedAmount;
+						} // if
+
+						if (d.HasDefaultLoan || d.LoanWasDefault) {
+							this.autoBadLoanCount++;
+							this.autoBadLoanAmount += d.ReapprovedAmount;
+						} // if
 					} else if (d.AutomationDecision == DecisionActions.Approve) {
 						this.autoAmount += d.AutoMin.Amount;
 
-						if (d.HasDefaultLoan)
+						if (d.HasDefaultLoan) {
 							this.autoDefaultCount++;
+							this.autoDefaultAmount += d.AutoMin.Amount;
+						} // if
+
+						if (d.HasDefaultLoan || d.LoanWasDefault) {
+							this.autoBadLoanCount++;
+							this.autoBadLoanAmount += d.AutoMin.Amount;
+						} // if
 					} // if
 				} else {
 					if (d.AutomationDecision == DecisionActions.ReApprove) {
 						this.autoAmount += d.ReapprovedAmount;
 
-						if (d.HasDefaultLoan)
+						if (d.HasDefaultLoan) {
 							this.autoDefaultCount++;
+							this.autoDefaultAmount += d.ReapprovedAmount;
+						} // if
+
+						if (d.HasDefaultLoan || d.LoanWasDefault) {
+							this.autoBadLoanCount++;
+							this.autoBadLoanAmount += d.ReapprovedAmount;
+						} // if
 					} else if (d.AutomationDecision == DecisionActions.Waiting && autoMax.Amount > 0) {
 						this.autoAmount = autoMax.Amount;
 
-						if (d.HasDefaultLoan)
+						if (d.HasDefaultLoan) {
 							this.autoDefaultCount++;
+							this.autoDefaultAmount += autoMax.Amount;
+						} // if
+
+						if (d.HasDefaultLoan || d.LoanWasDefault) {
+							this.autoBadLoanCount++;
+							this.autoBadLoanAmount += autoMax.Amount;
+						} // if
 					} // if
 				} // if
 			} // Add
@@ -317,7 +361,13 @@
 
 				row = ToXlsxManualAndAutoAmount(sheet, row);
 
-				row = ToXlsxDefaults(sheet, row);
+				row = ToXlsxDefaultCount(sheet, row);
+
+				row = ToXlsxDefaultAmount(sheet, row);
+
+				row = ToXlsxBadLoanCount(sheet, row);
+
+				row = ToXlsxBadLoanAmount(sheet, row);
 
 				row = ToXlsxManualRejectAndAutoApprove(sheet, row);
 
@@ -443,18 +493,57 @@
 				);
 			} // ToXlsxManualAndAutoAmount
 
-			private int ToXlsxDefaults(ExcelWorksheet sheet, int row) {
-				SetRowTitle(sheet, row, "What is default (loan wise) automatic vs. manual?");
+			private int ToXlsxDefaultCount(ExcelWorksheet sheet, int row) {
+				SetRowTitle(sheet, row, "Default (and remained default) loans count automatic vs. manual?");
 
 				return SetValue(
 					sheet,
 					row,
 					new TitledValue("manual default count", this.manualDefaultCount),
 					new TitledValue("auto default count", this.autoDefaultCount),
-					new TitledValue("manual default / total %", this.manualDefaultCount, this.totalCount),
-					new TitledValue("auto default / total %", this.autoDefaultCount, this.totalCount)
+					new TitledValue("manual default / total %", this.manualDefaultCount, this.manualApprovedCount),
+					new TitledValue("auto default / total %", this.autoDefaultCount, this.autoApprovedCount)
 				);
-			} // ToXlsxDefaults
+			} // ToXlsxDefaultCount
+
+			private int ToXlsxDefaultAmount(ExcelWorksheet sheet, int row) {
+				SetRowTitle(sheet, row, "Default (and remained default) loans amount automatic vs. manual?");
+
+				return SetValue(
+					sheet,
+					row,
+					new TitledValue("manual default amount", this.manualDefaultAmount),
+					new TitledValue("auto default amount", this.autoDefaultAmount),
+					new TitledValue("manual default / total %", this.manualDefaultAmount, this.manualAmount),
+					new TitledValue("auto default / total %", this.autoDefaultAmount, this.autoAmount)
+				);
+			} // ToXlsxDefaultAmount
+
+			private int ToXlsxBadLoanCount(ExcelWorksheet sheet, int row) {
+				SetRowTitle(sheet, row, "Default (and cured or not) loans count automatic vs. manual?");
+
+				return SetValue(
+					sheet,
+					row,
+					new TitledValue("manual default count", this.manualBadLoanCount),
+					new TitledValue("auto default count", this.autoBadLoanCount),
+					new TitledValue("manual default / total %", this.manualBadLoanCount, this.manualApprovedCount),
+					new TitledValue("auto default / total %", this.autoBadLoanCount, this.autoApprovedCount)
+				);
+			} // ToXlsxBadLoanCount
+
+			private int ToXlsxBadLoanAmount(ExcelWorksheet sheet, int row) {
+				SetRowTitle(sheet, row, "Default (and cured or not) loans amount automatic vs. manual?");
+
+				return SetValue(
+					sheet,
+					row,
+					new TitledValue("manual default amount", this.manualBadLoanAmount),
+					new TitledValue("auto default amount", this.autoBadLoanAmount),
+					new TitledValue("manual default / total %", this.manualBadLoanAmount, this.manualAmount),
+					new TitledValue("auto default / total %", this.autoBadLoanAmount, this.autoAmount)
+				);
+			} // ToXlsxBadLoanCount
 
 			private int ToXlsxManualRejectAndAutoApprove(ExcelWorksheet sheet, int row) {
 				SetRowTitle(sheet, row, "How many of manually rejected were automatically approved?");
@@ -562,6 +651,15 @@
 
 			private int manualDefaultCount;
 			private int autoDefaultCount;
+
+			private int manualBadLoanCount;
+			private int autoBadLoanCount;
+
+			private decimal manualDefaultAmount;
+			private decimal autoDefaultAmount;
+
+			private decimal manualBadLoanAmount;
+			private decimal autoBadLoanAmount;
 
 			private int manualRejectedAndAutoApprovedCount;
 			private int manualApprovedAndAutoRejectedCount;
