@@ -6,7 +6,7 @@
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
-
+	using PaymentServices.Calculators;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
 		int,
 		System.Collections.Generic.List<LoanMetaData>
@@ -116,7 +116,13 @@
 		private void LoadCashRequests() {
 			Data.Clear();
 
-			DB.ForEachRowSafe(ProcessRow, Query, CommandSpecies.Text);
+			this.crPc = new ProgressCounter("{0} cash requests loaded so far...", Log, 50);
+
+			SetupFeeCalculator.ReloadBrokerRepoCache();
+
+			DB.ForEachRowSafe(ProcessCashRequest, Query, CommandSpecies.Text);
+
+			this.crPc.Log();
 
 			Log.Debug("{0} loaded before filtering.", Grammar.Number(Data.Count, "cash request"));
 
@@ -174,7 +180,7 @@
 			return isHomeOwnerAccordingToLandRegistry;
 		} // IsHomeOwner
 
-		private void ProcessRow(SafeReader sr) {
+		private void ProcessCashRequest(SafeReader sr) {
 			Datum d = sr.Fill<Datum>();
 			d.Tag = this.tag;
 
@@ -182,10 +188,13 @@
 			sr.Fill(d.ManualCfg);
 
 			d.ManualCfg.Calculate(d.Manual);
-			d.LoadLoans(DB);
 
 			Data.Add(d);
-		} // ProcessRow
+
+			this.crPc++;
+		} // ProcessCashRequest
+
+		private ProgressCounter crPc;
 
 		private readonly string tag;
 		private readonly int topCount;
@@ -212,7 +221,13 @@ SELECT
 	r.ManualSetupFeeAmount,
 	r.MedalType,
 	r.ScorePoints,
-	CONVERT(BIT, CASE WHEN r.UnderwriterComment LIKE '%campaign%' THEN 1 ELSE 0 END) AS IsCampaign
+	CONVERT(BIT, CASE WHEN r.UnderwriterComment LIKE '%campaign%' THEN 1 ELSE 0 END) AS IsCampaign,
+	ISNULL((
+		SELECT COUNT(*)
+		FROM Loan
+		WHERE CustomerID = r.IdCustomer
+		AND [Date] < r.UnderwriterDecisionDate
+	), 0) AS LoanCount
 FROM
 	CashRequests r
 	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0

@@ -105,11 +105,6 @@
 			RunAutoApprove(isHomeOwner, instance.Result, db, log);
 		} // RunAutomation
 
-		public void LoadLoans(AConnection db) {
-			AutoMin.LoadLoans(CustomerID, db);
-			AutoMax.LoadLoans(CustomerID, db);
-		} // LoadLoans
-
 		public static string CsvTitles(SortedSet<string> sources) {
 			var os = new List<string>();
 
@@ -307,7 +302,7 @@
 			if (AutoMin.Amount > 0)
 				AutomationDecision = DecisionActions.Approve;
 
-			IsAutoReApproved = AutoMin.Amount > 0;
+			IsAutoApproved = AutoMin.Amount > 0;
 
 			if (medal.OfferedAmountsDiffer())
 				AutoMax.Calculate(CustomerID, isHomeOwner, medal, false, CashRequestID, Tag, db, log);

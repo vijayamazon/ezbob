@@ -13,9 +13,11 @@
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 	public abstract class AMedalAndPricing {
-		public int LoanCount { get; private set; }
+		public int LoanCount { get; set; }
+
 		[NonTraversable]
 		public DateTime DecisionTime { get; set; }
+
 		[NonTraversable]
 		public string Decision { get; set; }
 
@@ -110,15 +112,6 @@
 				SetupFee = odc.VerifyBoundaries.SetupFee / 100.0m;
 			} // if
 		} // Calculate
-
-		public void LoadLoans(int customerID, AConnection db) {
-			LoanCount = db.ExecuteScalar<int>(
-				"GetCustomerLoanCount",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerID),
-				new QueryParameter("Now", DecisionTime)
-			);
-		} // LoadLoans
 
 		public static string CsvTitles(string prefix) {
 			return string.Format(

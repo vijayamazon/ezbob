@@ -25,7 +25,7 @@
 				UseBrokerSetupFee,
 				(int)(Amount ?? 0),
 				Percent
-			).Calculate(map.Amount);
+			).Calculate(map.Amount, true);
 		} // Calculate
 
 		/// <summary>
