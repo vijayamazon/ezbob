@@ -8,8 +8,9 @@ using PaymentServices.Calculators;
 namespace EzBob.Web.Code
 {
 	using ConfigManager;
+	using EZBob.DatabaseLib.Model.Loans;
 
-	public class LoanBuilder
+    public class LoanBuilder
 	{
 		private readonly ChangeLoanDetailsModelBuilder _builder;
 
@@ -30,8 +31,9 @@ namespace EzBob.Web.Code
 
 		public Loan CreateNewLoan(CashRequest cr, decimal amount, DateTime now, int term, int interestOnlyTerm = 0)
 		{
-			var sfc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+			var sfc = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent);
 			var setupFee = sfc.Calculate(amount);
+		    var brokerFee = sfc.CalculateBrokerFee(amount);
 
 			var calculator = new LoanScheduleCalculator { Interest = cr.InterestRate, Term = term };
 			var loanLegal = cr.LoanLegals.LastOrDefault();
@@ -46,7 +48,18 @@ namespace EzBob.Web.Code
 				};
 			calculator.Calculate(amount, loan, loan.Date, interestOnlyTerm);
 			loan.LoanSource = cr.LoanSource;
-			return loan;
+
+		    if (brokerFee > 0 && cr.Customer.Broker != null) {
+		        loan.BrokerCommissions.Add(new LoanBrokerCommission {
+		            Broker = cr.Customer.Broker,
+		            CardInfo = cr.Customer.Broker.BankAccounts.FirstOrDefault(x => x.IsDefault.HasValue && x.IsDefault.Value),
+		            CommissionAmount = brokerFee,
+		            CreateDate = now,
+		            Loan = loan,
+		        });
+		    }
+
+		    return loan;
 		}
 
 		private Loan CreateLoanFromTemplate(CashRequest cr, decimal amount, DateTime now)

@@ -42,8 +42,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
-		private readonly LoanScheduleRepository loanScheduleRepository;
-
+		
 		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
 
 		public ApplicationInfoController(
@@ -59,8 +58,7 @@
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
-			CustomerPhoneRepository customerPhoneRepository,
-			LoanScheduleRepository loanScheduleRepository)
+			CustomerPhoneRepository customerPhoneRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -76,7 +74,7 @@
 			_suggestedAmountRepository = suggestedAmountRepository;
 			serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
-			this.loanScheduleRepository = loanScheduleRepository;
+			
 		}
 
 		// Here we get VA\FCF\Turnover
@@ -270,32 +268,6 @@
 			cust.Details = details;
 		}
 
-		[HttpPost]
-		[Transactional]
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeSetupFee(long id, bool enabled)
-		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.UseSetupFee = enabled;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).UseSetupFee = {1}", id, enabled);
-
-			return Json(new { error = (string)null });
-		}
-
-		[Transactional]
-		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeBrokerSetupFee(long id, bool enabled)
-		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.UseBrokerSetupFee = enabled;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
-			return Json(new { error = (string)null});
-		}
-
 		[Transactional]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
 		public JsonResult ChangeManualSetupFeePercent(long id, decimal? manualPercent)
@@ -316,13 +288,17 @@
 
 		[Transactional]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeManualSetupFeeAmount(long id, int? manualAmount)
+		public JsonResult ChangeBrokerSetupFeePercent(long id, decimal? brokerPercent)
 		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
-			return Json(new { });
+            var cr = _cashRequestsRepository.Get(id);
+            if (brokerPercent.HasValue && brokerPercent > 0) {
+                cr.BrokerSetupFeePercent = brokerPercent.Value * 0.01M;
+            } else {
+                cr.BrokerSetupFeePercent = null;
+            }
+            cr.LoanTemplate = null;
+            log.Debug("CashRequest({0}).BrokerSetupFeePercent percent: {1}", id, cr.BrokerSetupFeePercent);
+            return Json(new { });
 		}
 
 		[HttpPost]

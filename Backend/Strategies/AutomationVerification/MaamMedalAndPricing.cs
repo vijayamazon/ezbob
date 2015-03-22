@@ -311,24 +311,19 @@
 		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 		[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 		private class SetupFeeConfiguration {
-			public int UseSetupFee { get; set; }
-			public bool UseBrokerSetupFee { get; set; }
-
 			[FieldName("ManualSetupFeePercent")]
 			public decimal? Percent { get; set; }
 
-			[FieldName("ManualSetupFeeAmount")]
-			public decimal? Amount { get; set; }
+            [FieldName("BrokerSetupFeePercent")]
+			public decimal? BrokerPercent { get; set; }
 
 			public void Calculate(AMedalAndPricing map) {
 				if (map == null)
 					return;
 
 				map.SetupFee = new SetupFeeCalculator(
-					UseSetupFee == 1,
-					UseBrokerSetupFee,
-					(int)(Amount ?? 0),
-					Percent
+					Percent,
+                    BrokerPercent
 				).Calculate(map.Amount);
 			} // Calculate
 
@@ -339,12 +334,9 @@
 			/// A string that represents the current object.
 			/// </returns>
 			public override string ToString() {
-				return string.Format(
-					"( use fee: {0}, broker fee: {1}; manual pct: {2}, amount {3} )",
-					UseSetupFee,
-					UseBrokerSetupFee,
+				return string.Format("( manual pct: {0}, broker pct {1} )",
 					Percent.HasValue ? Percent.Value.ToString("P2", CultureInfo.InvariantCulture) : "--",
-					Amount.HasValue ? Amount.Value.ToString("N2", CultureInfo.InvariantCulture) : "--"
+					BrokerPercent.HasValue ? BrokerPercent.Value.ToString("P2", CultureInfo.InvariantCulture) : "--"
 				);
 			} // ToString
 		} // class SetupFeeConfiguration

@@ -271,6 +271,14 @@
 			set { _agreements = value; }
 		}
 
+
+        private Iesi.Collections.Generic.ISet<LoanBrokerCommission> _brokerCommissions = new HashedSet<LoanBrokerCommission>();
+        public virtual Iesi.Collections.Generic.ISet<LoanBrokerCommission> BrokerCommissions {
+            get { return _brokerCommissions; }
+            set { _brokerCommissions = value; }
+        }
+
+
 		public virtual string LastReportedCaisStatus { get; set; }
 
 		public virtual DateTime? LastReportedCaisStatusDate { get; set; }

@@ -64,6 +64,7 @@
 
 		public virtual int? ManualSetupFeeAmount { get; set; }
 		public virtual decimal? ManualSetupFeePercent { get; set; }
+        public virtual decimal? BrokerSetupFeePercent { get; set; }
 
 		public virtual bool IsSure { get; set; }
 

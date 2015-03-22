@@ -319,7 +319,7 @@
                                 <th>Interest </th>
                                 <th>Repayment Period </th>
                                 <th>Loan Type </th>
-                                <th>Use SetupFee </th>
+                                <th>Setup Fee</th>
                                 <th>Discount Plan </th>
                                 <th>Customer Selection </th>
                                 <th>Loan Source </th>
@@ -341,7 +341,7 @@
                                 <td><%- EzBob.formatPercents(d.InterestRate) %></td>
                                 <td><%- d.RepaymentPeriod %></td>
                                 <td><%- EzBob.formatLoanType(d.IsLoanTypeSelectionAllowed, d.LoanType) %></td>
-                                <td><%- (d.ManualSetupFeeAmount || d.ManualSetupFeePercent) ? 'Manual' : (d.UseBrokerSetupFee ? 'Broker' : (d.UseSetupFee ? 'Setup Fee' : 'No')) %></td>
+                                <td><%- d.TotalSetupFee ? EzBob.formatPounds(d.TotalSetupFee) : 'No' %> <%- d.BrokerSetupFee ? '( Broker: ' + EzBob.formatPounds(d.BrokerSetupFee) + ')' : '' %></td>
                                 <td><%- d.DiscountPlan %></td>
                                 <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>
                                 <td><%- d.LoanSourceName %></td>

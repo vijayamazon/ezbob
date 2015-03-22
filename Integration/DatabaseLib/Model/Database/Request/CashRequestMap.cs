@@ -32,6 +32,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map(x => x.UseBrokerSetupFee);
 			Map(x => x.ManualSetupFeeAmount);
 			Map(x => x.ManualSetupFeePercent);
+            Map(x => x.BrokerSetupFeePercent);
 			Map(x => x.EmailSendingBanned);
 			Map(x => x.UnderwriterComment).Length(200);
 			References(x => x.LoanType, "LoanTypeId");

@@ -1,67 +1,56 @@
 ﻿namespace PaymentServices.Calculators {
 	using System;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
-	using EZBob.DatabaseLib.Model.Loans;
-	using StructureMap;
 
 	public class SetupFeeCalculator {
 
-		public SetupFeeCalculator(bool setupFee, bool brokerFee, int? manualAmount, decimal? manualPercent) {
-			_setupFeeFixed = CurrentValues.Instance.SetupFeeFixed;
-			_setupFeePercent = CurrentValues.Instance.SetupFeePercent;
-			_useMax = CurrentValues.Instance.SetupFeeMaxFixedPercent;
+		public SetupFeeCalculator(decimal? manualPercent, decimal? brokerPercent) {
+			this.setupFeeFixed = CurrentValues.Instance.SetupFeeFixed;
+			this.useMax = CurrentValues.Instance.SetupFeeMaxFixedPercent;
+            this.brokerSetupFeeRate = CurrentValues.Instance.BrokerSetupFeeRate;
 
-			_setupFee = setupFee;
-			_brokerFee = brokerFee;
-			_manualAmount = manualAmount;
-			_manualPercent = manualPercent;
+			this.manualPercent = manualPercent;
+		    this.brokerPercent = brokerPercent;
 		} // constructor
 
 		public decimal Calculate(decimal amount) {
-			//use manual fee
-			if (_setupFee || _brokerFee) {
-				if ((_manualAmount.HasValue && _manualAmount.Value > 0) || (_manualPercent.HasValue && _manualPercent.Value > 0)) {
-					return Math.Max(Math.Floor(amount * (_manualPercent.HasValue ? _manualPercent.Value : 0M)),
-						_manualAmount.HasValue ? _manualAmount.Value : 0);
-				}
-			} // if
+			decimal? totalFeePercent = this.manualPercent + this.brokerPercent;
 
-			//use broker fee
-			if (_brokerFee)
-				return CalculateBroker(amount);
+		    if (totalFeePercent.HasValue) {
+                var totalSetupFee = Math.Floor(amount * totalFeePercent.Value);
 
-			//use default fee
-			if (_setupFee) {
-				if (_useMax)
-					return Math.Max(Math.Floor(amount * _setupFeePercent * 0.01m), _setupFeeFixed);
+                if (this.useMax && totalSetupFee < this.setupFeeFixed) {
+                    return this.setupFeeFixed;
+                }
 
-				return Math.Min(Math.Floor(amount * _setupFeePercent * 0.01m), _setupFeeFixed);
-			} // if
+                return totalSetupFee;
+            }
 
-			//don't use fee
-			return 0M;
+		    return 0M;
 		} // Calculate
 
-		private decimal CalculateBroker(decimal amount) {
-			var oVar = CurrentValues.Instance.BrokerSetupFeeRate;
+		public decimal CalculateBrokerFee(decimal amount) {
+            //No broker fee
+            if (!this.brokerPercent.HasValue) {
+                return 0M;
+            }
 
-			if (oVar.Value.ToUpper() == "TABLE") {
-				var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
-				return brokerFeeRepository.GetFee((int)amount);
-			} // if
+		    decimal totalFee = Calculate(amount);
 
-			return amount * (decimal)oVar;
-		} // CalculateBroker
+            //1. Minimum fee - let's have it configurable, but for now make it 100 GBP per loan, of which broker fee will be calculated as 5% of loan amount, the rest is ezbob fee. 
+            //e.g. on 1000 GBP loan, 5%*1000=50 GBP broker fee, ezbob fee = 100 GBP less 50GBP broker fee = 50 GBP.
+            if (totalFee == this.setupFeeFixed) {
+                return Math.Floor(amount * this.brokerSetupFeeRate);
+            }
 
-		private readonly int _setupFeeFixed;
-		private readonly decimal _setupFeePercent;
-		private readonly bool _useMax;
+		    return Math.Floor(amount * this.brokerPercent.Value);
+		} // CalculateBrokerFee
 
-		private readonly bool _setupFee;
-		private readonly bool _brokerFee;
-		private readonly int? _manualAmount;
-		private readonly decimal? _manualPercent;
+		private readonly int setupFeeFixed;
+		private readonly bool useMax;
+	    private readonly decimal brokerSetupFeeRate;
+        private readonly decimal? manualPercent;
+        private readonly decimal? brokerPercent;
 
 	} // class SetupFeeCalculator
 } // namespace

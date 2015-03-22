@@ -23,8 +23,8 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			"click [name='interestRateChangeButton']": "editInterestRate",
 			"click [name='openCreditLineChangeButton']": "editOfferedCreditLine",
 			"click [name='editDetails']": "editDetails",
-			"click [name='manualSetupFeeEditAmountButton']": "editManualSetupFeeAmount",
 			"click [name='manualSetupFeeEditPercentButton']": "editManualSetupFeePercent",
+			"click [name='brokerSetupFeeEditPercentButton']": "editBrokerSetupFeePercent",
 			"click [name='newCreditLineBtn']": "runNewCreditLine",
 			'click [name="loanType"]': 'loanType',
 			'click [name="isLoanTypeSelectionAllowed"]': 'isLoanTypeSelectionAllowed',
@@ -218,29 +218,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			d.render();
 		},
 
-		editManualSetupFeeAmount: function() {
-			var d = new EzBob.Dialogs.PoundsNoDecimalsEdit({
-				model: this.model,
-				propertyName: "ManualSetupFeeAmount",
-				title: "Manual setup fee amount edit",
-				width: 400,
-				postValueName: "manualAmount",
-				url: "Underwriter/ApplicationInfo/ChangeManualSetupFeeAmount",
-				data: {
-					id: this.model.get("CashRequestId")
-				},
-				required: false
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
 		editManualSetupFeePercent: function() {
 			var d = new EzBob.Dialogs.PercentsEdit({
 				model: this.model,
@@ -262,6 +239,29 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			d.on("done", function() {
 				self.model.fetch();
 			});
+		},
+
+		editBrokerSetupFeePercent: function () {
+		    var d = new EzBob.Dialogs.PercentsEdit({
+		        model: this.model,
+		        propertyName: "BrokerSetupFeePercent",
+		        title: "Broker setup fee percent edit",
+		        width: 400,
+		        postValueName: "brokerPercent",
+		        url: "Underwriter/ApplicationInfo/ChangeBrokerSetupFeePercent",
+		        data: {
+		            id: this.model.get("CashRequestId")
+		        },
+		        required: false
+		    });
+
+		    d.render();
+
+		    var self = this;
+
+		    d.on("done", function () {
+		        self.model.fetch();
+		    });
 		},
 
 		runNewCreditLine: function(e) {
@@ -513,8 +513,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			this.UpdateNewCreditLineState();
 			this.LoanTypeSelectionAllowedChanged();
 
-			this.initSwitch(".brokerCommisionSwitch", 'UseBrokerSetupFee', this.toggleValue, 'ChangeBrokerSetupFee');
-			this.initSwitch(".setupFeeSwitch", 'UseSetupFee', this.toggleValue, 'ChangeSetupFee');
 			this.initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', this.toggleValue, 'AllowSendingEmails');
 
 			var isLoanTypeSelectionAllowed = this.model.get('IsLoanTypeSelectionAllowed');

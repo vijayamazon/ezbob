@@ -5,8 +5,9 @@
 	using EzBob.Models;
 	using Ezbob.Utils.Extensions;
 	using System.Linq;
+	using PaymentServices.Calculators;
 
-	public class DecisionHistoryModel
+    public class DecisionHistoryModel
 	{
 		public int Id { get; set; }
 		public string Action { get; set; }
@@ -14,10 +15,6 @@
 		public string Comment { get; set; }
 		public string UnderwriterName { get; set; }
 
-		public bool UseSetupFee { get; set; }
-		public bool UseBrokerSetupFee { get; set; }
-		public int? ManualSetupFeeAmount { get; set; }
-		public decimal? ManualSetupFeePercent { get; set; }
 		public decimal InterestRate { get; set; }
 		public int RepaymentPeriod { get; set; }
 		public decimal ApprovedSum { get; set; }
@@ -48,13 +45,13 @@
 			{
 				dm.RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(item.CashRequest);
 				dm.InterestRate = item.CashRequest.InterestRate;
-				dm.UseSetupFee = item.CashRequest.UseSetupFee;
-				dm.ManualSetupFeeAmount = item.CashRequest.ManualSetupFeeAmount;
-				dm.ManualSetupFeePercent = item.CashRequest.ManualSetupFeePercent;
-				dm.UseBrokerSetupFee = item.CashRequest.UseBrokerSetupFee;
 				dm.ApprovedSum = item.CashRequest.ApprovedSum();
 				dm.IsLoanTypeSelectionAllowed = item.CashRequest.IsLoanTypeSelectionAllowed;
 				dm.Originator = item.CashRequest.Originator.HasValue ? item.CashRequest.Originator.DescriptionAttr() : "";
+
+                var setupFeeCalculator = new SetupFeeCalculator(item.CashRequest.ManualSetupFeePercent, item.CashRequest.BrokerSetupFeePercent);
+			    dm.TotalSetupFee = setupFeeCalculator.Calculate(dm.ApprovedSum);
+                dm.BrokerSetupFee = setupFeeCalculator.CalculateBrokerFee(dm.ApprovedSum);
 			}
 
 			if (item.RejectReasons.Any())
@@ -66,7 +63,11 @@
 			return dm;
 		}
 
-		public string DiscountPlan { get; set; }
+        public decimal BrokerSetupFee { get; set; }
+
+        public decimal TotalSetupFee { get; set; }
+
+        public string DiscountPlan { get; set; }
 
 		private static string GetDiscountPlanName(DecisionHistory item)
 		{

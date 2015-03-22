@@ -58,10 +58,10 @@
 			{
 				model.InterestRate = cr.InterestRate;
 				model.CashRequestId = cr.Id;
-				model.UseSetupFee = cr.UseSetupFee;
-				model.UseBrokerSetupFee = cr.UseBrokerSetupFee;
-				model.ManualSetupFeeAmount = cr.ManualSetupFeeAmount;
+				
 				model.ManualSetupFeePercent = cr.ManualSetupFeePercent;
+                model.BrokerSetupFeePercent = cr.BrokerSetupFeePercent;
+
 				model.AllowSendingEmail = !cr.EmailSendingBanned;
 
 				var loanType = cr.LoanType ?? _loanTypes.GetDefault();
@@ -81,9 +81,15 @@
 
 				model.OfferedCreditLine = Convert.ToDecimal(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum);
 
-				var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
-				model.SetupFee = calc.Calculate(model.OfferedCreditLine);
-				model.SetupFeePercent = model.OfferedCreditLine == 0 ? 0 : model.SetupFee / model.OfferedCreditLine;
+				var calc = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent);
+				model.TotalSetupFee = calc.Calculate(model.OfferedCreditLine);
+				model.TotalSetupFeePercent = model.OfferedCreditLine == 0 ? 0 : model.TotalSetupFee / model.OfferedCreditLine;
+			    model.BrokerSetupFee = calc.CalculateBrokerFee(model.OfferedCreditLine);
+                model.BrokerSetupFeeActualPercent = model.OfferedCreditLine == 0 ? 0 : model.BrokerSetupFee / model.OfferedCreditLine;
+			    model.SetupFee = model.TotalSetupFee - model.BrokerSetupFee;
+                model.SetupFeeActualPercent = model.OfferedCreditLine == 0 ? 0 : model.SetupFee / model.OfferedCreditLine;
+
+
 				model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id).Sum(x => x.LoanAmount);
 
 				model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
@@ -101,7 +107,7 @@
 
 				var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 				model.Apr = apr;
-				model.Air = (model.InterestRate*100*12 + (model.RepaymentPerion == 0 ? 0 : (12/(decimal) model.RepaymentPerion*model.SetupFeePercent*100))) / 100;
+				model.Air = (model.InterestRate*100*12 + (model.RepaymentPerion == 0 ? 0 : (12/(decimal) model.RepaymentPerion*model.TotalSetupFeePercent*100))) / 100;
 				model.RealCost = loanOffer.RealInterestCost;
 			}
 
