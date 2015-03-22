@@ -36,7 +36,7 @@ EzBob.VipView = Backbone.Marionette.ItemView.extend({
 
 	requestVipBtnClicked: function () {
 		document.getElementById("requestVipBtn").classList.add('disabled');
-		var data = this.$el.find('#vip-form').serializeArray();
+		var data = $('#vip-form').serializeArray();
 		$.colorbox.close();
 		var that = this;
 		_.each(data, function (obj) { that.model.set(obj.name, obj.value); });

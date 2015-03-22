@@ -70,18 +70,18 @@ BEGIN
 	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceUserName')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceUserName', '', 'SF login')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceUserName', 'techapi@ezbob.com', 'SF login')
 	END
 
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForcePassword')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForcePassword', '', 'SF password')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForcePassword', 'Ezca$h123', 'SF password')
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceToken')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', '', 'Used for calls from non white list IPs')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'qCgy7jIz8PwQtIn3bwxuBv9h', 'Used for calls from non white list IPs')
 	END
 	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')

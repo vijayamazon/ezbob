@@ -125,13 +125,21 @@
 				x.For<ISalesForceAppClient>().Use<SalesForceApiClient>();
 			});
 
-			ISalesForceAppClient client = ObjectFactory
-				.With("userName").EqualTo("yarons@ezbob.com.sandbox")
-                .With("password").EqualTo("yaron456")
-                .With("token").EqualTo("FqKCAj7vcgECfAgTf7dCfVMIp")
-				.With("environment").EqualTo("Sandbox")
-				.GetInstance<ISalesForceAppClient>();
+            //Sandbox
+            //ISalesForceAppClient client = ObjectFactory
+            //    .With("userName").EqualTo("yarons@ezbob.com.sandbox")
+            //    .With("password").EqualTo("yaron123")
+            //    .With("token").EqualTo("iaUmAG5GDkpXfpeqNEPi2rmt")
+            //    .With("environment").EqualTo("Sandbox")
+            //    .GetInstance<ISalesForceAppClient>();
 
+            //Production
+            ISalesForceAppClient client = ObjectFactory
+                .With("userName").EqualTo("techapi@ezbob.com")
+                .With("password").EqualTo("Ezca$h123")
+                .With("token").EqualTo("qCgy7jIz8PwQtIn3bwxuBv9h")
+                .With("environment").EqualTo("Production")
+                .GetInstance<ISalesForceAppClient>();
 			return client;
 		}
 
@@ -140,7 +148,7 @@
 			ISalesForceAppClient client = GetClient();
 
 			LeadAccountModel model = new LeadAccountModel {
-                Email = "is@test.com",
+				Email = "a@b.c",
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -162,7 +170,7 @@
 				PhoneNumber = "0564564654",
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
-                IsTest = true
+                Origin = "ezbob"
 			};
 
 			client.CreateUpdateLeadAccount(model);
