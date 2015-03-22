@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
+	using System.Globalization;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
@@ -197,6 +198,7 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsCampaign ? "Campaign" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsSuperseded ? "Superseded" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, DecisionTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
 			curColumn = Manual.ToXlsx(sheet, rowNum, curColumn);
 
