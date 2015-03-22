@@ -36,8 +36,6 @@
 		public List<Datum> Data { get; private set; }
 
 		public override void Execute() {
-			CsvOutput = new List<string>();
-
 			this.loanSources.Clear();
 			this.crLoans.Clear();
 			this.defaultCustomers.Clear();
@@ -80,20 +78,8 @@
 
 			pc.Log();
 
-			CsvOutput.Add(Datum.CsvTitles(this.loanSources));
-
 			CsvTitles = Datum.CsvTitles(this.loanSources).Split(';');
-
-			foreach (Datum d in Data)
-				CsvOutput.Add(d.ToCsv(this.crLoans, this.loanSources));
-
-			Log.Debug(
-				"\n\nCSV output - begin:\n{0}\nCSV output - end.\n",
-				string.Join("\n", CsvOutput)
-			);
 		} // Execute
-
-		public virtual List<string> CsvOutput { get; private set; }
 
 		public virtual string[] CsvTitles { get; private set; }
 

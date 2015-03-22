@@ -38,23 +38,33 @@
 			bool? bSetZebra = true,
 			Color? oFontColour = null,
 			Color? oBgColour = null,
-			string sNumberFormat = null
+			string sNumberFormat = null,
+			bool wrapText = false
 		) {
 			ExcelRange oCell = oSheet.Cells[nRow, nColumn];
 
+			object cellValue = null;
+
 			if (oRaw == null)
-				oCell.Value = null;
+				cellValue = null;
 			else {
 				if (oRaw.GetType() == typeof (ParsedValue))
 					oRaw = ((ParsedValue)oRaw).Raw;
 
 				if (oRaw == null)
-					oCell.Value = null;
+					cellValue = null;
 				else if (oRaw is DateTime)
-					oCell.Value = ((DateTime)oRaw).ToString("dd/MMMM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+					cellValue = ((DateTime)oRaw).ToString("dd/MMMM/yyyy HH:mm:ss", CultureInfo.InvariantCulture);
 				else
-					oCell.Value = oRaw;
+					cellValue = oRaw;
 			} // if
+
+			if (wrapText) {
+				oCell.Value = null;
+				oCell.RichText.Add(cellValue == null ? string.Empty : cellValue.ToString());
+				oCell.Style.WrapText = true;
+			} else
+				oCell.Value = cellValue;
 
 			if (oFontColour.HasValue)
 				oCell.Style.Font.Color.SetColor(oFontColour.Value);

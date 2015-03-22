@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Globalization;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
@@ -90,6 +89,8 @@
 		public AMedalAndPricing AutoMin { get; private set; }
 		public AMedalAndPricing AutoMax { get; private set; }
 
+		public AMedalAndPricing AutoMaxOrMin { get { return AutoMax ?? AutoMin; } } // AutoMaxOrMin
+
 		public SetupFeeConfiguration ManualCfg { get; private set; }
 
 		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
@@ -139,62 +140,16 @@
 			);
 		} // CsvTitles
 
-		public string ToCsv(TCrLoans crLoans, SortedSet<string> sources) {
-			List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
-				? crLoans[CashRequestID]
-				: new List<LoanMetaData>();
+		public int LoanCount { get; private set; }
+		public decimal LoanAmount { get; private set; }
 
-			var bySource = new SortedDictionary<string, LoanSummaryData>();
+		public bool HasDefaultLoan { get { return DefaultLoanCount > 0; } }
+		public int DefaultLoanCount { get; private set; }
+		public decimal DefaultLoanAmount { get; private set; }
 
-			foreach (string s in sources)
-				bySource[s] = new LoanSummaryData();
-
-			foreach (LoanMetaData lmd in lst)
-				bySource[lmd.LoanSourceName].Add(lmd);
-
-			var os = new List<string>();
-
-			HasDefaultLoan = false;
-			LoanWasDefault = false;
-
-			foreach (string s in sources) {
-				LoanSummaryData loanStat = bySource[s];
-
-				if (loanStat.LoanStatus == LoanStatus.Late)
-					HasDefaultLoan = true;
-
-				if (loanStat.MaxLateDays > 13)
-					LoanWasDefault = true;
-
-				os.Add(loanStat.ToString());
-			} // for each
-
-			return string.Join(";",
-				CashRequestID.ToString(CultureInfo.InvariantCulture),
-				CustomerID.ToString(CultureInfo.InvariantCulture),
-				BrokerID.ToString(CultureInfo.InvariantCulture),
-				IsDefault ? "Default" : "No",
-				HasDefaultLoan ? "Default" : "No",
-				LoanWasDefault ? "Default" : "No",
-				IsCampaign ? "Campaign" : "No",
-				IsSuperseded ? "Superseded" : "No",
-				Manual.DecisionTime,
-				Manual.ToCsv(),
-				AutomationDecision.ToString(),
-				IsAutoReRejected ? "Reject" : "Manual",
-				IsAutoRejected ? "Reject" : "Manual",
-				IsAutoReApproved ? "Approve" : "Manual",
-				IsAutoApproved ? "Approve" : "Manual",
-				ReapprovedAmount,
-				AutoMin.ToCsv(),
-				(AutoMax == null) ? "Same" : "No",
-				(AutoMax ?? AutoMin).ToCsv(),
-				string.Join(";", os)
-			);
-		} // ToCsv
-
-		public bool HasDefaultLoan { get; private set; }
-		public bool LoanWasDefault { get; private set; }
+		public bool HasBadLoan { get { return BadLoanCount > 0; } }
+		public int BadLoanCount { get; private set; }
+		public decimal BadLoanAmount { get; private set; }
 
 		public int ToXlsx(ExcelWorksheet sheet, int rowNum, TCrLoans crLoans, SortedSet<string> sources) {
 			List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
@@ -206,17 +161,30 @@
 			foreach (string s in sources)
 				bySource[s] = new LoanSummaryData();
 
-			HasDefaultLoan = false;
-			LoanWasDefault = false;
+			LoanCount = 0;
+			LoanAmount = 0;
+
+			DefaultLoanCount = 0;
+			DefaultLoanAmount = 0;
+
+			BadLoanCount = 0;
+			BadLoanAmount = 0;
 
 			foreach (LoanMetaData lmd in lst) {
 				bySource[lmd.LoanSourceName].Add(lmd);
 
-				if (lmd.LoanStatus == LoanStatus.Late)
-					HasDefaultLoan = true;
+				LoanCount++;
+				LoanAmount += lmd.LoanAmount;
 
-				if (lmd.MaxLateDays > 13)
-					LoanWasDefault = true;
+				if (lmd.LoanStatus == LoanStatus.Late) {
+					DefaultLoanCount++;
+					DefaultLoanAmount += lmd.LoanAmount;
+				} // if
+
+				if (lmd.MaxLateDays > 13) {
+					BadLoanCount++;
+					BadLoanAmount += lmd.LoanAmount;
+				} // if
 			} // if
 
 			int curColumn = 1;
@@ -226,7 +194,7 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanWasDefault ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsCampaign ? "Campaign" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsSuperseded ? "Superseded" : "No");
 
