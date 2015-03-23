@@ -49,6 +49,7 @@
     <Compile Include="ARetryer.cs" />
     <Compile Include="BaseConverter.cs" />
     <Compile Include="Cache.cs" />
+    <Compile Include="dbutils\LengthAttribute.cs" />
     <Compile Include="Extensions\StrExt.cs" />
     <Compile Include="Formula\Boolean\ABinaryBoolOperator.cs" />
     <Compile Include="Formula\Boolean\Or.cs" />

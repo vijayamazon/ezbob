@@ -48,6 +48,7 @@
 			CustomerOpenLoans();
 			RepaidRatio();
 			ReduceOutstandingPrincipal();
+			RoundAmount();
 			AllowedRange();
 			Complete();
 		} // Run
@@ -56,6 +57,29 @@
 			ApprovedAmount = 0;
 			return Trail.Negative<T>(false);
 		} // StepForceFailed
+
+		private void RoundAmount() {
+			decimal roundTo = Trail.MyInputData.Configuration.GetCashSliderStep;
+
+			if (roundTo < 0.00000001m)
+				roundTo = 1m;
+
+			m_oAgent.Log.Debug(
+				"Secondary before rounding: amount = {0}, minLoanAmount = {1}",
+				Trail.SafeAmount,
+				roundTo
+			);
+
+			Trail.Amount = roundTo * Math.Round(
+				Trail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
+			);
+
+			m_oAgent.Log.Debug(
+				"Secondary after rounding: amount = {0}, minLoanAmount = {1}",
+				Trail.SafeAmount,
+				roundTo
+			);
+		} // RoundAmount
 
 		private ApprovalTrail Trail {
 			get { return this.m_oAgent.Trail; }

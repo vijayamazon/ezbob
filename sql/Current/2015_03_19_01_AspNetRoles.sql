@@ -12,4 +12,3 @@ CREATE TABLE [dbo].[AspNetRoles](
 
 END
 
-

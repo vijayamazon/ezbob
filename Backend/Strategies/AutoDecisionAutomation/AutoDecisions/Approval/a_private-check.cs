@@ -43,30 +43,8 @@
 				CheckCustomerOpenLoans();
 				CheckRepaidRatio();
 				ReduceOutstandingPrincipal();
-
+				RoundAmount();
 				CheckAllowedRange();
-
-				decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
-
-				if (roundTo < 0.00000001m)
-					roundTo = 1m;
-
-				this.log.Debug(
-					"Primary before rounding: amount = {0}, minLoanAmount = {1}",
-					this.m_oTrail.SafeAmount,
-					roundTo
-				);
-
-				this.m_oTrail.Amount = roundTo * Math.Round(
-					this.m_oTrail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
-				);
-
-				this.log.Debug(
-					"Primary after rounding: amount = {0}, minLoanAmount = {1}",
-					this.m_oTrail.SafeAmount,
-					roundTo
-				);
-
 				CheckComplete();
 			} catch (Exception ex) {
 				StepForceFailed<ExceptionThrown>().Init(ex);
@@ -79,6 +57,29 @@
 
 			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.m_oTrail.RoundedAmount, this.m_oTrail);
 		} // CheckAutoApprovalConformance
+
+		private void RoundAmount() {
+			decimal roundTo = CurrentValues.Instance.GetCashSliderStep;
+
+			if (roundTo < 0.00000001m)
+				roundTo = 1m;
+
+			this.log.Debug(
+				"Primary before rounding: amount = {0}, minLoanAmount = {1}",
+				this.m_oTrail.SafeAmount,
+				roundTo
+			);
+
+			this.m_oTrail.Amount = roundTo * Math.Round(
+				this.m_oTrail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
+			);
+
+			this.log.Debug(
+				"Primary after rounding: amount = {0}, minLoanAmount = {1}",
+				this.m_oTrail.SafeAmount,
+				roundTo
+			);
+		} // RoundAmount
 
 		private void CheckCompanyIsDissolved() {
 			bool isDissolved =

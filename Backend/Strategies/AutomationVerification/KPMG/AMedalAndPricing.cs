@@ -3,6 +3,7 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
@@ -20,6 +21,14 @@
 
 		[NonTraversable]
 		public string Decision { get; set; }
+
+		public bool IsRejected {
+			get { return Decision == "Rejected"; }
+		} // IsRejected
+
+		public bool IsApproved {
+			get { return Decision.StartsWith("Approve"); }
+		} // IsApproved
 
 		[NonTraversable]
 		public string MedalName { get; set; }

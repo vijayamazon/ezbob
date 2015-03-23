@@ -84,27 +84,6 @@
 				string logMsg = string.Empty;
 
 				if (Trail.HasDecided) {
-					decimal roundTo = Trail.MyInputData.Configuration.GetCashSliderStep;
-
-					if (roundTo < 0.00000001m)
-						roundTo = 1m;
-
-					Log.Debug(
-						"Secondary before rounding: amount = {0}, minLoanAmount = {1}",
-						Trail.SafeAmount,
-						roundTo
-					);
-
-					Trail.Amount = roundTo * Math.Round(
-						Trail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
-					);
-
-					Log.Debug(
-						"Secondary after rounding: amount = {0}, minLoanAmount = {1}",
-						Trail.SafeAmount,
-						roundTo
-					);
-
 					logMsg = string.Format(
 						"Approved amount {0} for {1}, email banned: {2}",
 						Trail.RoundedAmount,
@@ -132,7 +111,7 @@
 
 		protected virtual List<string> HmrcBusinessNames { get; private set; }
 
-		protected virtual ASafeLog Log { get; private set; }
+		protected internal virtual ASafeLog Log { get; private set; }
 		protected virtual MetaData MetaData { get; private set; }
 		protected virtual OriginationTime OriginationTime { get; private set; }
 

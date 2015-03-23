@@ -8,4 +8,14 @@
 		ReApprove = 6,
 		ReReject = 7,
 	} // enum DecisionActions
+
+	public static class DecisionActionsExt {
+		public static bool In(this DecisionActions da, params DecisionActions[] set) {
+			foreach (var item in set)
+				if (da == item)
+					return true;
+
+			return false;
+		} // In
+	} // class DecisionActionsExt
 } // namespace
