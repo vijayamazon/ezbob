@@ -26,6 +26,7 @@
 				.Add("~/Content/css/customer.css")
 				.Add("~/Content/css/profile-ny2015scratch.css")
 				.Add("~/Content/css/valentine2015scratch.css")
+				.Add("~/Content/css/easter2015scratch.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
 
@@ -492,6 +493,7 @@
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.selectcard.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.ny2015.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.valentine2015.js")
+				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.easter2015.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMain.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMaster.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")

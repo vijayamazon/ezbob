@@ -116,6 +116,7 @@
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
     <Compile Include="Broker\BrokerInstantOffer.cs" />
+    <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\BadLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultLoans.cs" />

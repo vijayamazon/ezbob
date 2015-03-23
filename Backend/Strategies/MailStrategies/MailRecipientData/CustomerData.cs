@@ -3,7 +3,6 @@
 	using Ezbob.Database;
 
 	public class CustomerData {
-
 		public CustomerData(AStrategy oStrategy, int nCustomerID, AConnection oDB) {
 			Strategy = oStrategy;
 			RequestedID = nCustomerID;
@@ -20,7 +19,8 @@
 
 		public override string ToString() {
 			return string.Format(
-				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, test: {9} {10}{11}, broker: {12}, filled by broker: {13} origin {14} origin site {15}",
+				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, " +
+				"test: {9} {10}{11}, broker: {12}, filled by broker: {13} origin {14} origin site {15}",
 				Id,
 				FirstName,
 				Surname,
@@ -64,7 +64,6 @@
 		public virtual int ReportedAnnualTurnover { get; protected set; }
 		public virtual string Origin { get; protected set; }
 		public virtual string OriginSite { get; protected set; }
-		
 
 		protected AStrategy Strategy { get; private set; }
 		protected AConnection DB { get; private set; }
@@ -106,6 +105,5 @@
 			Origin = sr["Origin"];
 			OriginSite = sr["CustomerSite"];
 		} // Load
-
 	} // class CustomerData
 } // namespace

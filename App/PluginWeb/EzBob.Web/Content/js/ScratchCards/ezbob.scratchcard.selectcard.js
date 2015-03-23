@@ -12,6 +12,9 @@ EzBob.ScratchCards.Select = function(lotteryCode, scratchArgs) {
 	case 'val2015':
 		return new EzBob.ScratchCards.Valentine2015(scratchArgs);
 
+	case 'easter2015':
+		return new EzBob.ScratchCards.Easter2015(scratchArgs);
+
 	default:
 		return null;
 	} // switch
