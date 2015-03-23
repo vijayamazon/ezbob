@@ -2439,6 +2439,9 @@ namespace ServiceClientProxy.EzServiceReference {
         private System.DateTime CreateDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DescriptionField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private System.DateTime DueDateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -2478,6 +2481,19 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.CreateDateField.Equals(value) != true)) {
                     this.CreateDateField = value;
                     this.RaisePropertyChanged("CreateDate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Description {
+            get {
+                return this.DescriptionField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DescriptionField, value) != true)) {
+                    this.DescriptionField = value;
+                    this.RaisePropertyChanged("Description");
                 }
             }
         }

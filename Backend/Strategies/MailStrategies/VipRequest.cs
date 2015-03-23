@@ -42,6 +42,7 @@
 				DueDate = DateTime.UtcNow.AddDays(1),
 				Subject = "VIP request",
 				IsOpportunity = false,
+                Description = "VIP request"
 			});
 			addTask.Execute();
 		}

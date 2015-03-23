@@ -89,7 +89,8 @@
 				DueDate = new DateTime(2015, 01, 29),
 				Originator = "Originator",
 				Status = "Status",
-				Subject = "Subject"
+				Subject = "Subject",
+                Description = "Subject"
 			};
 
 			Log.Debug(JsonConvert.SerializeObject(tModel, Formatting.Indented));
@@ -183,12 +184,13 @@
 			ISalesForceAppClient client = GetClient();
 			var tModel = new TaskModel {
 
-				Email = "a@b.c",
+                Email = "stasd+vip221@ezbob.com",
 				CreateDate = new DateTime(2015, 01, 27),
 				DueDate = new DateTime(2015, 01, 29),
 				Originator = "Originator",
 				Status = "Status",
-				Subject = "Subject"
+				Subject = "Subject",
+                Description = "Description"
 			};
 
 			client.CreateTask(tModel);

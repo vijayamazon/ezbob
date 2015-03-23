@@ -21,6 +21,8 @@
 		public string Originator { get; set; }
 		[DataMember]
 		public string Subject { get; set; }
+        [DataMember]
+        public string Description { get; set; }
 		[DataMember]
 		public string Status { get; set; } // ? no updates only create with default value
 		[DataMember]

@@ -4,6 +4,7 @@
   <xs:complexType name="TaskModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="CreateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="DueDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IsOpportunity" type="xs:boolean" />
