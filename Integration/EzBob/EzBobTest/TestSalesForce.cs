@@ -126,21 +126,22 @@
 			});
 
             //Sandbox
-            //ISalesForceAppClient client = ObjectFactory
-            //    .With("userName").EqualTo("yarons@ezbob.com.sandbox")
-            //    .With("password").EqualTo("yaron123")
-            //    .With("token").EqualTo("iaUmAG5GDkpXfpeqNEPi2rmt")
-            //    .With("environment").EqualTo("Sandbox")
-            //    .GetInstance<ISalesForceAppClient>();
+            ISalesForceAppClient client = ObjectFactory
+                .With("userName").EqualTo("yarons@ezbob.com.sandbox")
+                .With("password").EqualTo("yaron456")
+                .With("token").EqualTo("FqKCAj7vcgECfAgTf7dCfVMIp")
+                .With("environment").EqualTo("Sandbox")
+                .GetInstance<ISalesForceAppClient>();
 
             //Production
-            ISalesForceAppClient client = ObjectFactory
-                .With("userName").EqualTo("techapi@ezbob.com")
-                .With("password").EqualTo("Ezca$h123")
-                .With("token").EqualTo("qCgy7jIz8PwQtIn3bwxuBv9h")
-                .With("environment").EqualTo("Production")
-                .GetInstance<ISalesForceAppClient>();
-			return client;
+            //ISalesForceAppClient client = ObjectFactory
+            //    .With("userName").EqualTo("techapi@ezbob.com")
+            //    .With("password").EqualTo("Ezca$h123")
+            //    .With("token").EqualTo("qCgy7jIz8PwQtIn3bwxuBv9h")
+            //    .With("environment").EqualTo("Production")
+            //    .GetInstance<ISalesForceAppClient>();
+            
+            return client;
 		}
 
 		[Test]

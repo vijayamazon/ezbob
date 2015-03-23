@@ -7,19 +7,19 @@
 
 	public class VipRequest : AStrategy
 	{
-		private readonly int _customerId;
-		private readonly string _fullName;
-		private readonly string _email;
-		private readonly string _phone;
-		private MailMetaData _mailMetaData;
-		private readonly StrategiesMailer m_oMailer;
+		private readonly int customerId;
+		private readonly string fullName;
+		private readonly string email;
+		private readonly string phone;
+		private MailMetaData mailMetaData;
+		private readonly StrategiesMailer mailer;
 
 		public VipRequest(int customerId, string fullName, string email, string phone) {
-			_customerId = customerId;
-			_fullName = fullName;
-			_email = email;
-			_phone = phone;
-			m_oMailer = new StrategiesMailer();
+			this.customerId = customerId;
+			this.fullName = fullName;
+			this.email = email;
+			this.phone = phone;
+			this.mailer = new StrategiesMailer();
 		}
 
 		public override string Name { get { return "VipRequest"; } }
@@ -27,13 +27,16 @@
 		public override void Execute()
 		{
 			SetTemplateAndVariables();
-			m_oMailer.SendMailViaMandrill(_mailMetaData);
+			this.mailer.SendMailViaMandrill(this.mailMetaData);
 
-			SalesForce.AddUpdateLeadAccount addLead = new SalesForce.AddUpdateLeadAccount(_email, _customerId, false, _customerId == 0);
+		    Log.Info("VIP create update lead {0}, {1}, {2}, {3}", this.email, this.customerId, false, this.customerId == 0);
+			SalesForce.AddUpdateLeadAccount addLead = new SalesForce.AddUpdateLeadAccount(this.email, this.customerId, false, this.customerId == 0);
 			addLead.Execute();
 			Thread.Sleep(40000); //ugly fix for SF race condition
-			SalesForce.AddTask addTask = new SalesForce.AddTask(_customerId, new TaskModel {
-				Email = _email,
+
+            Log.Info("VIP add task {0}, {1}", this.email, this.customerId);
+			SalesForce.AddTask addTask = new SalesForce.AddTask(this.customerId, new TaskModel {
+				Email = this.email,
 				Originator = "System",
 				CreateDate = DateTime.UtcNow,
 				DueDate = DateTime.UtcNow.AddDays(1),
@@ -45,25 +48,25 @@
 
 		protected void SetTemplateAndVariables()
 		{
-			_mailMetaData = new MailMetaData("VipRequest");
+			this.mailMetaData = new MailMetaData("VipRequest");
 
-			if (_customerId > 0)
+			if (this.customerId > 0)
 			{
-				_mailMetaData.Add("CustomerId",
+				this.mailMetaData.Add("CustomerId",
 								  string.Format(
 									  "<a alt='Open this customer in underwriter.' href='https://{1}/UnderWriter/Customers?customerid={0}' title='Open this customer in underwriter.' style='font-weight:bold;color:black;background-color:#bfffcf!important' target='_blank'>{0}</a>",
-									  _customerId, ConfigManager.CurrentValues.Instance.UnderwriterSite.Value));
+									  this.customerId, ConfigManager.CurrentValues.Instance.UnderwriterSite.Value));
 			}
 			else
 			{
-				_mailMetaData.Add("CustomerId", string.Empty);
+				this.mailMetaData.Add("CustomerId", string.Empty);
 			}
 
-			_mailMetaData.Add("FullName", _fullName);
-			_mailMetaData.Add("Email", _email);
-			_mailMetaData.Add("Phone", _phone);
+			this.mailMetaData.Add("this.fullName", this.fullName);
+			this.mailMetaData.Add("Email", this.email);
+			this.mailMetaData.Add("Phone", this.phone);
 
-			_mailMetaData.Add(new Addressee(ConfigManager.CurrentValues.Instance.VipMailReceiver, bShouldRegister: false));
+			this.mailMetaData.Add(new Addressee(ConfigManager.CurrentValues.Instance.VipMailReceiver, bShouldRegister: false));
 		} // SetTemplateAndVariables
 
 	} // class 
