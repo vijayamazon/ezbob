@@ -20,10 +20,11 @@ BEGIN
 	FROM 
 		LoanBrokerCommission lb 
 		INNER JOIN Broker b ON b.BrokerID = lb.BrokerID
-		INNER JOIN CardInfo ci ON ci.BrokerID = lb.CardInfoID
+		INNER JOIN CardInfo ci ON ci.Id = lb.CardInfoID
 	WHERE 
 		lb.PaidDate IS NULL
 		AND 
 		lb.CardInfoID IS NOT NULL
 END
 GO
+

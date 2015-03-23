@@ -1359,7 +1359,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
         private void BrokerTransferCommission()
         {
             ActionMetaData result = this.serviceClient.BrokerTransferCommission();
-            this.log.Debug("{0}", result.ToString());
+            this.log.Debug("{0}", result.Status.ToString());
         }
 
 		private readonly EzServiceAdminClient adminClient;

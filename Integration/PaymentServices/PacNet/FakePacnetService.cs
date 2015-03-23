@@ -11,7 +11,7 @@ namespace PaymentServices.PacNet
         private Random _random = new Random();
         public virtual PacnetReturnData SendMoney(int userId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = null, string currencyCode = "GBP", string description = null)
         {
-			Log.DebugFormat("Fake SendMoney userId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", userId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
+			Log.InfoFormat("Fake SendMoney userId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", userId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
             var trackingNumber = _random.Next(111111111, 999999999);
             var pacnetReturnData = new PacnetReturnData()
                                        {
@@ -32,7 +32,7 @@ namespace PaymentServices.PacNet
 										   Error = "Fake " + statuses[r]
                                        };
 
-			Log.DebugFormat("Fake CheckStatus trackingNumber {0} Status {1}", trackingNumber, pacnetReturnData.Status);
+			Log.InfoFormat("Fake CheckStatus trackingNumber {0} Status {1}", trackingNumber, pacnetReturnData.Status);
 
             return pacnetReturnData;
         }

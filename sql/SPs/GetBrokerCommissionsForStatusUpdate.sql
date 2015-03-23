@@ -18,6 +18,8 @@ BEGIN
 	FROM 
 		LoanBrokerCommission lb 
 	WHERE 
-		lb.Status = 'InProgress' OR lb.Status IS NULL 
+		(lb.Status = 'InProgress' OR lb.Status IS NULL)
+		AND lb.TrackingNumber IS NOT NULL
+		
 END
 GO

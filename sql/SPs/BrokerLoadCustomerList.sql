@@ -2,6 +2,9 @@ IF OBJECT_ID('BrokerLoadCustomerList') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerLoadCustomerList AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE BrokerLoadCustomerList
 @ContactEmail NVARCHAR(255),
 @BrokerID INT
@@ -41,13 +44,14 @@ BEGIN
 		l.Date AS LoanDate,
 		l.SetupFee,
 		ISNULL(cr.ManagerApprovedSum, 0) AS ApprovedAmount,
-		0 AS CommissionAmount, -- todo
-		NULL AS CommissionPaymentDate -- todo
+		isnull(lb.CommissionAmount, 0) AS CommissionAmount, 
+		lb.PaidDate AS CommissionPaymentDate
 	FROM
 		Customer c
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
 		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
 		LEFT JOIN CashRequests cr ON cr.Id = l.RequestCashId
+		LEFT JOIN LoanBrokerCommission lb ON lb.LoanID = l.Id
 	WHERE
 		c.BrokerID = @BrokerID
 	ORDER BY

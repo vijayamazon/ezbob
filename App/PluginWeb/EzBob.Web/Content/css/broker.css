@@ -156,8 +156,10 @@ padding-top: 0;
 .section-dashboard tbody .grid-item-LoanAmount,
 .section-dashboard tbody .grid-item-SetupFee,
 .section-dashboard tfoot .grid-item-LoanAmount,
+.section-dashboard tbody .grid-item-CommissionAmount, 
 .section-dashboard tfoot .grid-item-SetupFee,
-.section-dashboard tfoot .grid-item-LoanDate {
+.section-dashboard tfoot .grid-item-LoanDate
+.section-dashboard tfoot .grid-item-CommissionAmount {
     text-align: right;
 }
 

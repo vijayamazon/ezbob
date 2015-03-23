@@ -18,7 +18,7 @@ namespace PaymentServices.PacNet
 
 		public PacnetReturnData SendMoney(int userId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = "ezbob", string currencyCode = "GBP", string description = "EZBOB")
 		{
-			Log.DebugFormat("PacnetService SendMoney userId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", userId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
+			Log.InfoFormat("PacnetService SendMoney userId {0} amount {1} bankNumber {2} accountNumber {3} accountName {4} fileName {5} currencyCode {6} description {7}", userId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
 
 			try
 			{
@@ -38,7 +38,7 @@ namespace PaymentServices.PacNet
 				using (var wr = new StringWriter())
 				{
 					Serializer.Serialize(wr, response);
-					Log.DebugFormat("SendMoney result: " + wr);
+					Log.InfoFormat("SendMoney result: " + wr);
 				}
 
 				var pacnetReturnData = new PacnetReturnData(response);
@@ -70,7 +70,7 @@ namespace PaymentServices.PacNet
 		//-----------------------------------------------------------------------------------
 		public PacnetReturnData CheckStatus(int userId, string trackingNumber)
 		{
-			Log.DebugFormat("CheckStatus: trackingNumber={0}", trackingNumber);
+			Log.InfoFormat("CheckStatus: trackingNumber={0}", trackingNumber);
 			try
 			{
                 var request = new RavenRequest(RavenOperationType.STATUS.ToString());
@@ -84,9 +84,9 @@ namespace PaymentServices.PacNet
 					Serializer.Serialize(wr, response);
 					Log.DebugFormat("Result: " + wr);
 				}
-				Log.DebugFormat("CheckStatus completed successfully");
+                Log.InfoFormat("CheckStatus completed successfully");
 				var pacnetResponse = new PacnetReturnData(response);
-				Log.DebugFormat("CheckStatus trackingNumber {0} Status {1}", trackingNumber, pacnetResponse.Status);
+                Log.InfoFormat("CheckStatus trackingNumber {0} Status {1}", trackingNumber, pacnetResponse.Status);
 				return pacnetResponse;
 			}
 			catch (Exception ex)
@@ -99,7 +99,7 @@ namespace PaymentServices.PacNet
 		//-----------------------------------------------------------------------------------
 		public PacnetReturnData CloseFile(int userId, string fileName = "ezbob")
 		{
-			Log.DebugFormat("CloseFile: fileName={0}", fileName);
+            Log.InfoFormat("CloseFile: fileName={0}", fileName);
 			try
 			{
 				var request = new RavenRequest(RavenOperationType.CLOSEFILE.ToString());
@@ -111,7 +111,7 @@ namespace PaymentServices.PacNet
 					Serializer.Serialize(wr, response);
 					Log.InfoFormat("Result: " + wr);
 				}
-				Log.DebugFormat("CloseFile completed successfully");
+                Log.InfoFormat("CloseFile completed successfully");
 				return new PacnetReturnData(response);
 			}
 			catch (Exception ex)
@@ -157,9 +157,9 @@ namespace PaymentServices.PacNet
 				using (var wr = new StringWriter())
 				{
 					Serializer.Serialize(wr, response);
-					Log.DebugFormat("Result: " + wr);
+                    Log.InfoFormat("Result: " + wr);
 				}
-				Log.DebugFormat("GetReport completed successfully");
+				Log.InfoFormat("GetReport completed successfully");
 				return new PacnetReturnData(response);
 			}
 			catch (Exception ex)
