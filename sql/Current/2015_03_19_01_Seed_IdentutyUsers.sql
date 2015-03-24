@@ -10,3 +10,5 @@ BEGIN
 		INSERT INTO [dbo].[AspNetUsers] ([Id],[Email],[EmailConfirmed],[PasswordHash],[SecurityStamp],[PhoneNumber],[PhoneNumberConfirmed],[TwoFactorEnabled],[LockoutEndDateUtc],[LockoutEnabled],[AccessFailedCount],[UserName]) VALUES ('b02fe9a2-636c-4aa9-80e4-ed3735dd3cdb', NULL, 0, 'ANo9AB92FIpBzf5Jv34e0oZVgnkNJ64RezgTEuiEi9/W1L9oiusXFIbmw1UkmMD40w==','03fa134c-2668-467b-9654-85098498edbb', NULL,0,	0,	NULL,	0,	0,	'partherAppAlibaba')
 	END		
 END
+
+GO

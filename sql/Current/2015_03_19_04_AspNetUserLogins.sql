@@ -24,3 +24,4 @@ ALTER TABLE [dbo].[AspNetUserLogins] CHECK CONSTRAINT [FK_dbo.AspNetUserLogins_d
 
 
 END
+GO

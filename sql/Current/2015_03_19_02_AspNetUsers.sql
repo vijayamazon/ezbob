@@ -23,5 +23,4 @@ CREATE TABLE [dbo].[AspNetUsers](
 
 
 end
-
-
+GO

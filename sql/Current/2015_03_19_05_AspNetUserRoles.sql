@@ -28,6 +28,7 @@ ON DELETE CASCADE;
 ALTER TABLE [dbo].[AspNetUserRoles] CHECK CONSTRAINT [FK_dbo.AspNetUserRoles_dbo.AspNetUsers_UserId];
 
 END
+GO
 
 
 

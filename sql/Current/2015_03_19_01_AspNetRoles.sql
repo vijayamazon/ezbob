@@ -11,4 +11,5 @@ CREATE TABLE [dbo].[AspNetRoles](
 ) ON [PRIMARY]
 
 END
+GO
 

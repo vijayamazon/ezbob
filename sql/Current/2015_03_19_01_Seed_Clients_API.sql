@@ -19,3 +19,5 @@ BEGIN
 	BEGIN		
 		INSERT INTO [dbo].[Clients] ([Id],[Secret],[Name],[ApplicationType],[Active],[RefreshTokenLifeTime],[AllowedOrigin]) VALUES  ('pAliServer7c60C021e70B',	'rM7jVn+pwmiEuKLCAjHaQzt+mmrKFBZqPH4nxHcwjOg=','Alibaba partner server application',1,1,14400,'*')
 	END	
+
+	GO

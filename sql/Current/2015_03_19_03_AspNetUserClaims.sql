@@ -22,5 +22,5 @@ ON DELETE CASCADE
 ALTER TABLE [dbo].[AspNetUserClaims] CHECK CONSTRAINT [FK_dbo.AspNetUserClaims_dbo.AspNetUsers_UserId]
 
 
-
 END
+GO

@@ -16,3 +16,4 @@ CREATE TABLE [dbo].[RefreshTokens](
 
 END
 
+GO

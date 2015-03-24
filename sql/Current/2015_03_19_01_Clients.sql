@@ -16,4 +16,4 @@ CREATE TABLE [dbo].[Clients](
 ) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
 
 END
-
+GO
