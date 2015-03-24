@@ -108,7 +108,7 @@
 
 				if ((result1 != null) && result1.IsLike(result2)) {
 					if (this.doStoreMedal)
-						result1.SaveToDb(Tag, DB);
+						result1.SaveToDb(Tag, DB, Log);
 
 					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}.", this.customerId);
 
@@ -125,7 +125,7 @@
 				result1.Error = "Mismatch found in the 2 medal calculations";
 
 				if (this.doStoreMedal)
-					result1.SaveToDb(Tag, DB);
+					result1.SaveToDb(Tag, DB, Log);
 
 				SendExplanationMail(result1, result2);
 				Log.Error("Mismatch found in the 2 medal calculations of customer: {0}.", this.customerId);

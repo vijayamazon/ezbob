@@ -29,8 +29,10 @@ namespace EzBobTest {
 			Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
-
-
+		[Test]
+		public void TestOneMedal() {
+			new CalculateMedal(24195, DateTime.UtcNow, false, true).Execute();
+		} // TestOneMedal
 
 		[Test]
 		public void TestMaamMedalAndPricing() {

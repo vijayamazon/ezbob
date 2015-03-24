@@ -50,7 +50,7 @@
 			return this[rowValue, columnValue];
 		} // GetItem
 
-		public string ToFormattedString() {
+		public virtual string ToFormattedString() {
 			var tbl = new SortedTable<string, string, string>();
 
 			foreach (var pair in this.data) {
@@ -161,4 +161,10 @@
 
 		private bool isInitialized;
 	} // class DecimalIntervalMatrix
+
+	public static class DecimalIntervalMatrixExt {
+		public static string SafeToFormattedString(this DecimalIntervalMatrix matrix) {
+			return (matrix == null) ? "-- NULL --" : matrix.ToFormattedString();
+		} // SafeToFormattedString
+	} // class DecimalIntervalMatrixExt
 } // namespace
