@@ -23,13 +23,10 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestOfferDualCalc() {
-			const int customerID = 8596;
+			const int customerID = 23350;
 
 			var dates = new List<string> {
-				"2014-01-27 16:25:52.0",
-				"2014-03-30 10:19:10.0",
-				"2014-03-30 11:01:51.0",
-				"2014-08-13 09:44:35.0",
+				"2015-03-09 11:51:41.0",
 			};
 
 			var res = new SortedDictionary<DateTime, MedalOffer>();
