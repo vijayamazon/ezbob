@@ -776,6 +776,9 @@
     <Content Include="Content\img\easter2015scratch\arrow.jpg" />
     <Content Include="Content\img\easter2015scratch\golden-egg.png" />
     <Content Include="Content\img\easter2015scratch\magenta-egg.png" />
+    <Content Include="Content\img\easter2015scratch\not-now-active.png" />
+    <Content Include="Content\img\easter2015scratch\not-now-hover.png" />
+    <Content Include="Content\img\easter2015scratch\not-now-normal.png" />
     <Content Include="Content\img\easter2015scratch\not-yet.png" />
     <Content Include="Content\img\easter2015scratch\opening-bg.jpg" />
     <Content Include="Content\img\easter2015scratch\pink-egg.png" />

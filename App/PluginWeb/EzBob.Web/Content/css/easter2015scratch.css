@@ -29,11 +29,24 @@
 	position: relative;
 }
 
-#easter2015scratch > .opening > .leave {
+/*#easter2015scratch > .opening > .leave {*/
+#easter2015scratch .leave {
 	position: absolute;
-	bottom: 0;
-	left: 0;
+	right: 0;
 	margin: 0 0 10px 10px;
+	width: 198px;
+	height: 60px;
+	background-position: left top;
+	background-repeat: no-repeat;
+	background-image: url(../img/easter2015scratch/not-now-normal.png);
+}
+
+#easter2015scratch .leave:active {
+	background-image: url(../img/easter2015scratch/not-now-active.png);
+}
+
+#easter2015scratch .leave:hover {
+	background-image: url(../img/easter2015scratch/not-now-hover.png);
 }
 
 #easter2015scratch > .playground {
@@ -46,12 +59,14 @@
 	position: relative;
 }
 
+/*
 #easter2015scratch > .playground > .exit-game {
 	position: absolute;
 	bottom: 0;
 	left: 0;
 	margin: 0 0 10px 10px;
 }
+*/
 
 #easter2015scratch > .playground > .egg {
 	position: absolute;
@@ -79,7 +94,14 @@
 
 #easter2015scratch > .playground > .not-yet > img {
 	display: block;
-	margin: 20px auto 0 auto;
+	margin: 0 auto;
+	position: relative;
+	top: 50%;
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
 	width: 802px;
 	height: 563px;
 }
