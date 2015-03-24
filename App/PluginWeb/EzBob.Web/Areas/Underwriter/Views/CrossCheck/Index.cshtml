@@ -2,6 +2,7 @@
 @using EzBob.Web.Areas.Underwriter.Models
 @using Ezbob.Backend.Models
 @using Ezbob.Utils.Extensions
+@using Iesi.Collections.Generic
 @using PersonalInfo = EZBob.DatabaseLib.Model.Database.PersonalInfo
 @model CrossCheckModel
 
@@ -283,7 +284,7 @@
 
                 @{
                     string companyRefNum = null, companyNum = null, companyName = null, industryType = null, vatReporting = null;
-                    Iesi.Collections.Generic.ISet<CustomerAddress> postcode = null;
+                    Iesi.Collections.Generic.ISet<CustomerAddress> postcode = new HashedSet<CustomerAddress>();
                     bool propertyOwnedByCompany = false;
                     var company = Model.Customer.Company;
 
