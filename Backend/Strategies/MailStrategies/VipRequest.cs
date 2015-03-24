@@ -63,7 +63,7 @@
 				this.mailMetaData.Add("CustomerId", string.Empty);
 			}
 
-			this.mailMetaData.Add("this.fullName", this.fullName);
+			this.mailMetaData.Add("FullName", this.fullName);
 			this.mailMetaData.Add("Email", this.email);
 			this.mailMetaData.Add("Phone", this.phone);
 
