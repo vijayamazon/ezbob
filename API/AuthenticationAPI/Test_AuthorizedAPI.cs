@@ -70,6 +70,13 @@
 		
 		private void AuthRequest(string clientID, string clientSecret, string username, string userPwd) {
 
+			/*Console.WriteLine(clientID);
+			Console.WriteLine(clientSecret);
+			Console.WriteLine(username);
+			Console.WriteLine(userPwd);*/
+			//return;
+
+
 			if (this.token != null && this.token.GetValue(".expires") != null) {
 				DateTime dt2 = DateTime.Parse(this.token.GetValue(".expires").ToString(), this.culture, System.Globalization.DateTimeStyles.AssumeLocal);
 				Console.WriteLine(dt2);
