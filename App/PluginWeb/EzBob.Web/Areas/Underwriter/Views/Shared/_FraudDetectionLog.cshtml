@@ -4,6 +4,7 @@
             <div class="box">
                 <div class="box-content">
                     <button class="btn-primary btn" id="recheckFraud"><i class="fa fa-refresh"></i>Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
+                    <a class="btn-primary btn" href="https://ci-admin.iovation.com/admin/accountLookup/load/<%-refNum%>" target="_blank"><i class="fa fa-globe"></i>Iovation</a>
                     <table class="table centered">
                         <thead class="box">
                             <tr class="box-title">

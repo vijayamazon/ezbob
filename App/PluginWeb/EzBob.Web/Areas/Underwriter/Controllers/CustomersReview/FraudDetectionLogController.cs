@@ -26,11 +26,13 @@
 		public JsonResult Index(int id)
 		{
 			DateTime? lastCheckDate;
-			var rows = _fraudDetectionLog.GetLastDetections(id, out lastCheckDate).Select(x => new FraudDetectionLogRowModel(x)).OrderByDescending(x => x.Id).ToList();
+		    string customerRefNum;
+            var rows = _fraudDetectionLog.GetLastDetections(id, out lastCheckDate, out customerRefNum).Select(x => new FraudDetectionLogRowModel(x)).OrderByDescending(x => x.Id).ToList();
 			var model = new FraudDetectionLogModel
 				{
 					FraudDetectionLogRows = rows,
-					LastCheckDate = lastCheckDate
+					LastCheckDate = lastCheckDate,
+                    CustomerRefNumber = customerRefNum
 				};
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}

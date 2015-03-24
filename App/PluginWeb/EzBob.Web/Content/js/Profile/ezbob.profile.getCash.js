@@ -125,6 +125,17 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		} // if
 	}, // getCash
 
+	callIovation: function (refNumber, sEmail) {
+	    var properties = new Object();
+	    properties.rules = "application"; // use the default ruleset
+	    properties.Email = sEmail;
+	    ioSubmitLogin(io_subscriber_code, refNumber, properties, 2000);
+
+	    if (io_last_error) {
+	        EzBob.ServerLog.error('iovation', io_last_error);
+	    }
+	},
+
 	maybeShowCreditLine: function() {
 		if (this.customer.get('IsAlibaba'))
 			this.showCreditLine();
@@ -317,7 +328,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 				return;
 			} // if
-
+			this.callIovation(this.customer.get('RefNumber'), this.customer.get('Email'));
 			that.customer.set('state', 'wait');
 		});
 

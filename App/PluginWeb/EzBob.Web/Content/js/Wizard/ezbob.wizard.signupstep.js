@@ -300,6 +300,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 				that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
 
+				that.callIovation(result.refNumber, sEmail, isInCaptchaMode, mobilePhone);
 				EzBob.App.trigger('customerLoggedIn');
 				EzBob.App.trigger('clear');
 
@@ -308,6 +309,8 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 				window.ShowHideSignLogOnOff();
 
 				that.model.set('loggedIn', true); // triggers 'ready' and 'next'
+
+			    
 			}
 			else {
 				EzBob.ServerLog.warn('Customer', sEmail, 'failed to sign up with error message:', result.errorMessage);
@@ -338,6 +341,22 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		return false;
 	}, // submit
+
+	callIovation: function (refNumber, sEmail, isInCaptchaMode, mobilePhone){
+	    var properties = new Object();
+	    properties.rules = "application"; // use the default ruleset
+	    properties.Email = sEmail;
+	    properties.MobilePhoneNumber = mobilePhone;
+	    if (!isInCaptchaMode) {
+	        properties.mobilePhoneVerified = true;
+	    }
+
+	    ioSubmitLogin(io_subscriber_code, refNumber, properties, 2000);
+
+	    if (io_last_error) {
+	        EzBob.ServerLog.error('iovation', io_last_error);
+	    }
+	},
 
 	ready: function() {
 		this.setReadOnly();

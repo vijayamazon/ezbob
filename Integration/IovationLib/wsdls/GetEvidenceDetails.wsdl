@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/"
+	xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xmlns:namesp1="http://www.iesnare.com/dra/api/GetEvidenceDetails"
+	targetNamespace="http://www.iesnare.com/dra/api/GetEvidenceDetails">
+  <types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.iesnare.com/dra/api/GetEvidenceDetails">
+      <xsd:element name="GetEvidenceDetails">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="subscriberid"  		  type="xsd:string" />
+            <xsd:element name="subscriberaccount" 	type="xsd:string" />
+            <xsd:element name="subscriberpasscode" 	type="xsd:string" />
+            <xsd:element name="accountcode"   		  type="xsd:string" />
+            <xsd:element name="devicealias"  		    type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="GetEvidenceDetailsResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="evidence_details" minOccurs="1">
+              <xsd:complexType>
+                <xsd:sequence>
+                  <xsd:element name="evidence" minOccurs="0" maxOccurs="unbounded">
+                    <xsd:complexType>
+                      <xsd:sequence>
+                        <xsd:element name="type" type="xsd:string" minOccurs="1" />
+                        <xsd:element name="source" type="xsd:string" minOccurs="1" />
+                      </xsd:sequence>
+                    </xsd:complexType>
+                  </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+  <message name="GetEvidenceDetailsRequest">
+    <part name="parameters" element="namesp1:GetEvidenceDetails" />
+  </message>
+  <message name="GetEvidenceDetailsResponse">
+    <part name="parameters" element="namesp1:GetEvidenceDetailsResponse" />
+  </message>
+  <portType name="PortType">
+    <operation name="GetEvidenceDetails">
+      <input  message="namesp1:GetEvidenceDetailsRequest"                    />
+      <output message="namesp1:GetEvidenceDetailsResponse"                   />
+    </operation>
+  </portType>
+  <binding name="Binding" type="namesp1:PortType">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="GetEvidenceDetails">
+      <soap:operation soapAction="http://www.ieservice.com/dra/api/GetEvidenceDetails#GetEvidenceDetails" style="document" />
+      <input>
+        <soap:body use="literal"  namespace="http://www.ieservice.com/dra/api/GetEvidenceDetails"                      />
+      </input>
+      <output>
+        <soap:body use="literal"  namespace="http://www.ieservice.com/dra/api/GetEvidenceDetails"                      />
+      </output>
+    </operation>
+  </binding>
+  <service name="Service">
+    <port name="GetEvidenceDetails" binding="namesp1:Binding">
+      <soap:address location="https://www.iesnare.com/api/GetEvidenceDetails"/>
+    </port>
+  </service>
+</definitions>

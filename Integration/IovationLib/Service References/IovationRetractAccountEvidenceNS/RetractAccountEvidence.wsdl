@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:namesp1="http://www.iesnare.com/dra/api/RetractAccountEvidence" targetNamespace="http://www.iesnare.com/dra/api/RetractAccountEvidence" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.iesnare.com/dra/api/RetractAccountEvidence">
+      <xsd:element name="RetractAccountEvidence">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="subscriberid" type="xsd:string" />
+            <xsd:element name="adminaccountname" type="xsd:string" />
+            <xsd:element name="adminpassword" type="xsd:string" />
+            <xsd:element name="accountcode" type="xsd:string" />
+            <xsd:element name="evidencetype" type="xsd:string" />
+            <xsd:element name="comment" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="RetractAccountEvidenceResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" name="success" type="xsd:string" />
+            <xsd:element maxOccurs="1" name="retractedcount" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+  <message name="RetractAccountEvidenceRequest">
+    <part name="request" element="namesp1:RetractAccountEvidence" />
+  </message>
+  <message name="RetractAccountEvidenceResponse">
+    <part name="response" element="namesp1:RetractAccountEvidenceResponse" />
+  </message>
+  <portType name="PortType">
+    <operation name="RetractAccountEvidence">
+      <input message="namesp1:RetractAccountEvidenceRequest" />
+      <output message="namesp1:RetractAccountEvidenceResponse" />
+    </operation>
+  </portType>
+  <binding name="Binding" type="namesp1:PortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="RetractAccountEvidence">
+      <soap:operation soapAction="http://www.iesnare.com/dra/api/RetractAccountEvidence#RetractAccountEvidence" style="document" />
+      <input>
+        <soap:body use="literal" namespace="http://www.iesnare.com/dra/api/RetractAccountEvidence" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://www.iesnare.com/dra/api/RetractAccountEvidence" />
+      </output>
+    </operation>
+  </binding>
+  <service name="Service">
+    <port name="RetractAccountEvidence" binding="namesp1:Binding">
+      <soap:address location="https://soap.iovation.com/api/RetractAccountEvidence" />
+    </port>
+  </service>
+</definitions>

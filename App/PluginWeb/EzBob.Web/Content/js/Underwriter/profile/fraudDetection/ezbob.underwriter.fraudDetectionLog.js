@@ -27,6 +27,10 @@ EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
                });
     },
     serializeData: function () {
-        return { vals: this.model.get("FraudDetectionLogRows"), checkDate: this.model.get("LastCheckDate") };
+        return {
+            vals: this.model.get("FraudDetectionLogRows"),
+            checkDate: this.model.get("LastCheckDate"),
+            refNum: this.model.get('CustomerRefNumber')
+        };
     }
 });

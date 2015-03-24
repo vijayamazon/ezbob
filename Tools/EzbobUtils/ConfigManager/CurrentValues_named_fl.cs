@@ -183,14 +183,27 @@
 			get { return this[Variables.InvalidPasswordBlockSeconds]; }
 		}
 
-		public virtual VariableValue IovationAccountCode {
-			get { return this[Variables.IovationAccountCode]; }
+		public virtual VariableValue IovationAdminAccountName {
+			get { return this[Variables.IovationAdminAccountName]; }
 		}
-
-		public virtual VariableValue IovationSubscriberCode {
-			get { return this[Variables.IovationSubscriberCode]; }
+        public virtual VariableValue IovationAdminPassword {
+			get { return this[Variables.IovationAdminPassword]; }
 		}
-
+        public virtual VariableValue IovationEnabled {
+			get { return this[Variables.IovationEnabled]; }
+		}
+        public virtual VariableValue IovationEnvironment {
+			get { return this[Variables.IovationEnvironment]; }
+		}
+        public virtual VariableValue IovationSubscriberAccount {
+			get { return this[Variables.IovationSubscriberAccount]; }
+		}
+        public virtual VariableValue IovationSubscriberId {
+			get { return this[Variables.IovationSubscriberId]; }
+		}
+		public virtual VariableValue IovationSubscriberPasscode {
+			get { return this[Variables.IovationSubscriberPasscode]; }
+		}
 		public virtual VariableValue IovationUrl {
 			get { return this[Variables.IovationUrl]; }
 		}

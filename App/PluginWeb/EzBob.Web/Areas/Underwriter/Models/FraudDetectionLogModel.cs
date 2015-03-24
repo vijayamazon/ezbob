@@ -1,14 +1,13 @@
-﻿using EZBob.DatabaseLib.Model.Fraud;
-using EzBob.Web.Code;
-
-namespace EzBob.Web.Areas.Underwriter.Models
+﻿namespace EzBob.Web.Areas.Underwriter.Models
 {
 	using System;
 	using System.Collections.Generic;
+    using EZBob.DatabaseLib.Model.Fraud;
 
 	public class FraudDetectionLogModel
 	{
 		public DateTime? LastCheckDate { get; set; }
+        public string CustomerRefNumber { get; set; }
 		public List<FraudDetectionLogRowModel> FraudDetectionLogRows { get; set; }
 	}
 
