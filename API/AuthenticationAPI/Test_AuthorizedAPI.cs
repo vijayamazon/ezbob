@@ -1,9 +1,10 @@
 ﻿namespace Ezbob.API.AuthenticationAPI {
 	using System;
 	using System.ComponentModel.DataAnnotations;
+	using System.Globalization;
 	using System.Net;
 	using System.Net.Http;
-	using System.ServiceModel.Description;
+	using System.Threading;
 	using Ezbob.API.AuthenticationAPI.Models;
 	using Newtonsoft.Json.Linq;
 	using NUnit.Framework;
@@ -55,7 +56,7 @@
 			userPwd = "123456"
 		};
 
-		readonly IFormatProvider culture = System.Threading.Thread.CurrentThread.CurrentCulture;
+		readonly IFormatProvider culture = Thread.CurrentThread.CurrentCulture;
 
 		[TestFixtureSetUp]
 		public void FixtureInit() {
@@ -78,7 +79,7 @@
 
 
 			if (this.token != null && this.token.GetValue(".expires") != null) {
-				DateTime dt2 = DateTime.Parse(this.token.GetValue(".expires").ToString(), this.culture, System.Globalization.DateTimeStyles.AssumeLocal);
+				DateTime dt2 = DateTime.Parse(this.token.GetValue(".expires").ToString(), this.culture, DateTimeStyles.AssumeLocal);
 				Console.WriteLine(dt2);
 				TimeSpan timespan = (DateTime.Now - dt2);
 				Console.WriteLine(timespan.TotalMinutes);
@@ -265,15 +266,12 @@
 			Console.WriteLine(response.Content);
 		}
 
-		[Test]
+		/*[Test]
 		public void hashed() {
 			Console.WriteLine(Helper.GetHash("152863423315581"));
 			//Console.WriteLine(Helper.GetHash("rM7jVn+pwmiEuKLCAjHaQzt+mmrKFBZqPH4nxHcwjOg="));
-		}
-
-
-
-
+		}*/
+		
 		[Test]
 		public void Test_Credit_ClentTypeJavascript() {
 			try {
