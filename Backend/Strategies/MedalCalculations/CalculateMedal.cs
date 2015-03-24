@@ -100,6 +100,8 @@
 					var verification = new MedalChooser(DB, Log);
 					result2 = verification.GetMedal(this.customerId, this.calculationTime);
 
+					Log.Debug("\n\nSecondary medal:\n{0}", result2.ToString());
+
 					if (this.doStoreMedal)
 						result2.SaveToDb(Tag, DB, Log);
 				} // if

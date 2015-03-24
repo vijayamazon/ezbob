@@ -358,6 +358,8 @@
 				UseHmrc = inputModel.UseHmrc,
 				CapOfferByCustomerScoresTable = inputModel.CapOfferByCustomerScoresTable.ToFormattedString(),
 				CapOfferByCustomerScoresValue = inputModel.CapOfferByCustomerScoresValue,
+				ConsumerScore = inputModel.ConsumerScore,
+				BusinessScore = inputModel.BusinessScore,
 			};
 
 			return medalOutput;

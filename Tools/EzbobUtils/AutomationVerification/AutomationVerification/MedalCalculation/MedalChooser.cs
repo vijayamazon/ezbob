@@ -129,7 +129,10 @@
 
 			MedalOutputModel medal = medalCalulator.CalculateMedal(data);
 
-			SetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
+			SetOfferedAmount(
+				medal,
+				medalChooserData.MinApprovalAmount
+			);
 
 			return medal;
 		} // GetMedal
@@ -176,10 +179,13 @@
 				medal.MaxOfferedLoanAmount = (int)(theMaxPreOffer * medal.CapOfferByCustomerScoresValue);
 
 				Log.Debug(
-					"Secondary medal - offered loan amount is {0} (before score cap: {1}, cap value: {2}).",
+					"Secondary medal - offered amount is {0}" +
+					"(before score cap: {1}, cap value: {2}, consumer score: {3}, business score: {4}).",
 					medal.OfferedLoanAmount,
 					thePreOffer,
-					medal.CapOfferByCustomerScoresValue.ToString("P6")
+					medal.CapOfferByCustomerScoresValue.ToString("P6"),
+					medal.ConsumerScore,
+					medal.BusinessScore
 				);
 
 				Log.Debug(
