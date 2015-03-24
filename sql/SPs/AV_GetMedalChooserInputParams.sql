@@ -22,7 +22,6 @@ BEGIN
 	DECLARE @HasOnline BIT = 0
 	DECLARE @HasHmrc BIT = 0
 	DECLARE @HasBank BIT = 0
-	DECLARE @NumOfHmrc INT = 0
 	DECLARE @HasCompanyScore BIT = 0
 	DECLARE @HasPersonalScore BIT = 0
 	DECLARE @LastHmrcUpdateDate DATETIME
@@ -108,8 +107,22 @@ BEGIN
 		SET @HasBank = 1
 	END
 
+	IF EXISTS (
+		SELECT *
+		FROM MP_CustomerMarketPlace m
+		INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId
+		INNER JOIN MP_VatReturnRecords r ON m.Id = r.CustomerMarketPlaceId
+		INNER JOIN Business b ON r.BusinessId = b.Id AND b.BelongsToCustomer = 1
+		WHERE m.CustomerId = @CustomerId
+		AND m.Disabled = 0
+		AND t.InternalId = @HMRC
+		AND m.Created < @Now
+	)
+	BEGIN
+		SET @HasHmrc = 1
+	END
+
 	SELECT
-		@NumOfHmrc = COUNT(*),
 		@LastHmrcUpdateDate = MIN(m.UpdatingEnd)
 	FROM
 		MP_CustomerMarketPlace m
@@ -125,12 +138,9 @@ BEGIN
 		AND
 		t.InternalId = @HMRC
 		AND
-		m.UpdatingEnd IS NOT NULL
-		AND
 		m.Created < @Now
-
-	IF ISNULL(@NumOfHmrc, 0) > 0
-		SET @HasHmrc = 1
+		AND
+		m.UpdatingEnd IS NOT NULL
 
 	SELECT
 		@LastBankUpdateDate = MIN(m.UpdatingEnd)

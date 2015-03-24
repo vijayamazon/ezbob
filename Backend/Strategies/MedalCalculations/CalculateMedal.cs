@@ -122,7 +122,7 @@
 					result1 = new MedalResult(this.customerId, Log);
 
 				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
-				result1.Error = "Mismatch found in the 2 medal calculations";
+				result1.Error = (result1.Error ?? string.Empty) + " Mismatch found in the 2 medal calculations";
 
 				if (this.doStoreMedal)
 					result1.SaveToDb(Tag, DB, Log);
