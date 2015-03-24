@@ -31,16 +31,15 @@
 		///     or specify date to calculate medal based on data available on that date.
 		/// </param>
 		/// <returns>Calculated medal model.</returns>
-		public MedalOutputModel GetMedal(int customerId, DateTime? calculationDate = null) {
+		public MedalOutputModel GetMedal(int customerId, DateTime calculationDate) {
 			var medalChooserData = DB.FillFirst<MedalChooserInputModelDb>(
 				"AV_GetMedalChooserInputParams",
-				new QueryParameter("@CustomerId", customerId)
+				new QueryParameter("@CustomerId", customerId),
+				new QueryParameter("@Now", calculationDate)
 			);
 
-			DateTime today = calculationDate ?? DateTime.Today;
-
 			bool hmrcTooOld = AccountIsTooOld(
-				today,
+				calculationDate,
 				medalChooserData.HasHmrc,
 				medalChooserData.LastHmrcUpdateDate,
 				medalChooserData.MedalDaysOfMpRelevancy
@@ -57,7 +56,7 @@
 			} // if
 
 			bool bankTooOld = AccountIsTooOld(
-				today,
+				calculationDate,
 				medalChooserData.HasBank,
 				medalChooserData.LastBankUpdateDate,
 				medalChooserData.MedalDaysOfMpRelevancy

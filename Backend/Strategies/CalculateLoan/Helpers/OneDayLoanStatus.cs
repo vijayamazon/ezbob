@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan.Helpers {
 	using System;
 	using System.Globalization;
+	using Ezbob.Backend.Strategies.Extensions;
 
 	internal class OneDayLoanStatus {
 		public static string FormatField(string field, int length) {

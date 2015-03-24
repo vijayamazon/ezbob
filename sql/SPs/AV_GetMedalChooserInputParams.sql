@@ -6,7 +6,8 @@ IF OBJECT_ID('AV_GetMedalChooserInputParams') IS NULL
 GO
 
 ALTER PROCEDURE AV_GetMedalChooserInputParams
-@CustomerId INT
+@CustomerId INT,
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -50,27 +51,32 @@ BEGIN
 
 	IF @IsLimited = 1
 	BEGIN
-		SELECT
-			@CompanyScore = Score
+		SELECT TOP 1
+			@CompanyScore = cac.Score
 		FROM
-			CustomerAnalyticsCompany
+			CustomerAnalyticsCompany cac
 		WHERE
-			CustomerID = @CustomerId
+			cac.CustomerID = @CustomerId
 			AND
-			IsActive=1
+			cac.AnalyticsDate < @Now
+		ORDER BY
+			cac.AnalyticsDate DESC
 
 		IF @CompanyScore > 0 
 			SET @HasCompanyScore = 1
 	END
 	ELSE BEGIN 
-		SELECT
+		SELECT TOP 1
 			@CompanyScore = nl.CommercialDelphiScore
 		FROM
 			ExperianNonLimitedResults nl
+			INNER JOIN MP_ServiceLog l ON nl.ServiceLogId = l.Id
 		WHERE
 			nl.RefNumber = @CompanyRefNum
 			AND
-			nl.IsActive = 1
+			l.InsertDate < @Now
+		ORDER BY
+			l.InsertDate DESC
 
 		IF @CompanyScore > 0
 			SET @HasCompanyScore = 1
@@ -81,8 +87,9 @@ BEGIN
 		FROM MP_CustomerMarketPlace m
 		INNER JOIN MP_MarketplaceType t ON t.Id = m.MarketPlaceId
 		WHERE m.CustomerId = @CustomerId
-		AND m.Disabled = 0 AND
-		t.InternalId IN (@eBay, @Amazon, @PayPal)
+		AND m.Disabled = 0
+		AND t.InternalId IN (@eBay, @Amazon, @PayPal)
+		AND m.Created < @Now
 	)
 	BEGIN
 		SET @HasOnline = 1
@@ -95,6 +102,7 @@ BEGIN
 		WHERE m.CustomerId = @CustomerId
 		AND m.Disabled = 0
 		AND t.InternalId = @Yodlee
+		AND m.Created < @Now
 	)
 	BEGIN
 		SET @HasBank = 1
@@ -118,6 +126,8 @@ BEGIN
 		t.InternalId = @HMRC
 		AND
 		m.UpdatingEnd IS NOT NULL
+		AND
+		m.Created < @Now
 
 	IF ISNULL(@NumOfHmrc, 0) > 0
 		SET @HasHmrc = 1
@@ -135,6 +145,8 @@ BEGIN
 		t.InternalId = @Yodlee
 		AND
 		m.UpdatingEnd IS NOT NULL
+		AND
+		m.Created < @Now
 
 	DECLARE @MinApprovalAmount INT = (
 		SELECT CAST(Value AS INT)

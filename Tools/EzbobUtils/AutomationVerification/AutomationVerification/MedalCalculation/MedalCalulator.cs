@@ -19,7 +19,7 @@
 		/// <param name="customerId">Customer Id</param>
 		/// <param name="calculationDate">optional for historical data</param>
 		/// <returns>the medal input model</returns>
-		MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null);
+		MedalInputModel GetInputParameters(int customerId, DateTime calculationDate);
 
 		/// <summary>
 		///     Calculates the medal score, medal classification
@@ -175,33 +175,33 @@
 			get { return 0; }
 		}
 
-		public virtual MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null) {
+		public virtual MedalInputModel GetInputParameters(int customerId, DateTime calculationDate) {
 			MedalInputModelDb dbData = this.DB.FillFirst<MedalInputModelDb>(
 				"AV_GetMedalInputParams",
-				new QueryParameter("@CustomerId", customerId)
+				new QueryParameter("@CustomerId", customerId),
+				new QueryParameter("@Now", calculationDate)
 			);
 
 			var model = new MedalInputModel {
 				MedalInputModelDb = dbData
 			};
 
-			var today = calculationDate ?? DateTime.Today;
-			model.CalculationDate = today;
+			model.CalculationDate = calculationDate;
 
 			model.HasHmrc = dbData.HasHmrc;
 			model.UseHmrc = dbData.HasHmrc;
 			model.BusinessScore = dbData.BusinessScore;
 
 			model.BusinessSeniority = dbData.IncorporationDate.HasValue
-				? today.Year - dbData.IncorporationDate.Value.Year
+				? calculationDate.Year - dbData.IncorporationDate.Value.Year
 				: 1;
 
-			if (dbData.IncorporationDate.HasValue && dbData.IncorporationDate.Value > today.AddYears(-model.BusinessSeniority))
+			if (dbData.IncorporationDate.HasValue && dbData.IncorporationDate.Value > calculationDate.AddYears(-model.BusinessSeniority))
 				model.BusinessSeniority--;
 
 			model.ConsumerScore = dbData.ConsumerScore;
-			model.EzbobSeniority = (decimal)(today - dbData.RegistrationDate).TotalDays / (365.0M / 12.0M);
-			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < today;
+			model.EzbobSeniority = (decimal)(calculationDate - dbData.RegistrationDate).TotalDays / (365.0M / 12.0M);
+			model.FirstRepaymentDatePassed = dbData.FirstRepaymentDate.HasValue && dbData.FirstRepaymentDate.Value < calculationDate;
 			model.NumOfEarlyPayments = dbData.NumOfEarlyPayments;
 			model.NumOfLatePayments = dbData.NumOfLatePayments;
 			model.NumOfOnTimeLoans = dbData.NumOfOnTimeLoans;
@@ -281,7 +281,7 @@
 				"GetCustomerAnnualFcfValueAdded",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerId),
-				new QueryParameter("Now", today)
+				new QueryParameter("Now", calculationDate)
 			);
 
 			model.FreeCashFlowValue -= newActualLoansRepayment;

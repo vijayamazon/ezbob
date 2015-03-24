@@ -78,7 +78,7 @@
 		[Test]
 		public void TestMedal() {
 			var medalChooser = new MedalChooser(_db, Log);
-			medalChooser.GetMedal(18626);
+			medalChooser.GetMedal(18626, DateTime.UtcNow);
 		}
 
 		[Test]

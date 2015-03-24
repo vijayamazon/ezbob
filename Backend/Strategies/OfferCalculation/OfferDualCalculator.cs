@@ -14,10 +14,12 @@
 			DateTime calculationTime,
 			int amount,
 			bool hasLoans,
-			EZBob.DatabaseLib.Model.Database.Medal medalClassification
+			EZBob.DatabaseLib.Model.Database.Medal medalClassification,
+			bool saveToDB = true
 		) {
 			this.log = Library.Instance.Log;
 			this.db = Library.Instance.DB;
+			this.saveToDB = saveToDB;
 
 			CustomerID = customerID;
 			CalculationTime = calculationTime;
@@ -66,8 +68,10 @@
 				VerifySeek = offerCalculator2.GetOfferBySeek(input);
 				VerifyBoundaries = offerCalculator2.GetOfferByBoundaries(input);
 
-				VerifySeek.SaveToDb(log, db, OfferCalculationType.Seek);
-				VerifyBoundaries.SaveToDb(log, db, OfferCalculationType.Boundaries);
+				if (this.saveToDB) {
+					VerifySeek.SaveToDb(log, db, OfferCalculationType.Seek);
+					VerifyBoundaries.SaveToDb(log, db, OfferCalculationType.Boundaries);
+				} // if
 
 				if (!VerifySeek.Equals(VerifyBoundaries)) {
 					log.Info(
@@ -79,13 +83,19 @@
 
 				if (Primary.Equals(VerifySeek)) {
 					log.Debug("Main implementation of offer calculation result: \n{0}", Primary);
-					Primary.SaveToDb(db);
+
+					if (this.saveToDB)
+						Primary.SaveToDb(db);
+
 					return Primary;
 				} // if
 
 				// Difference in offer calculations
 				SendExplanationMail();
-				Primary.SaveToDb(db);
+
+				if (this.saveToDB)
+					Primary.SaveToDb(db);
+
 				log.Error("Mismatch found in the 2 offer calculations of customer: {0} ", CustomerID);
 				return null;
 			} catch (Exception e) {
@@ -153,5 +163,6 @@
 		private readonly AConnection db;
 		private readonly OfferCalculator1 offerCalculator1;
 		private readonly OfferCalculator offerCalculator2;
+		private readonly bool saveToDB;
 	} // class OfferDualCalculator
 } // namespace

@@ -116,6 +116,8 @@
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
     <Compile Include="Broker\BrokerInstantOffer.cs" />
+    <Compile Include="Extensions\Q1AddressTypeExt.cs" />
+    <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\BadLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultLoans.cs" />
@@ -263,7 +265,7 @@
     <Compile Include="SalesForce\AddUpdateLeadAccount.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="Misc\UpdateGoogleAnalytics.cs" />
-    <Compile Include="extensions.cs" />
+    <Compile Include="Extensions\DateTimeExt.cs" />
     <Compile Include="Tasks\DailyFetchGoogleAnalyticsAndRunDependent.cs" />
     <Compile Include="UserManagement\AddCciHistory.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />

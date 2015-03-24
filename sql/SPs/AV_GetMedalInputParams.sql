@@ -6,7 +6,8 @@ IF OBJECT_ID('AV_GetMedalInputParams') IS NULL
 GO
 
 ALTER PROCEDURE AV_GetMedalInputParams
-@CustomerId INT
+@CustomerId INT,
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -32,30 +33,35 @@ BEGIN
 	
 	IF @TypeOfBusiness IN ('Limited', 'LLP')
 	BEGIN
-		SELECT
-			@BusinessScore = Score,
-			@IncorporationDate = IncorporationDate,
-			@TangibleEquity = TangibleEquity,
-			@CurrentBalanceSum = CurrentBalanceSum  
+		SELECT TOP 1
+			@BusinessScore = cac.Score,
+			@IncorporationDate = cac.IncorporationDate,
+			@TangibleEquity = cac.TangibleEquity,
+			@CurrentBalanceSum = cac.CurrentBalanceSum  
 		FROM
-			CustomerAnalyticsCompany 
+			CustomerAnalyticsCompany cac
 		WHERE
-			CustomerID = @CustomerId
+			cac.CustomerID = @CustomerId
 			AND
-			IsActive = 1
+			cac.AnalyticsDate < @Now
+		ORDER BY
+			cac.AnalyticsDate DESC
 	END
 	ELSE BEGIN
-		SELECT
+		SELECT TOP 1
 			@IncorporationDate = nl.IncorporationDate,
 			@BusinessScore = nl.CommercialDelphiScore
 		FROM
 			Customer c
 			INNER JOIN Company co ON c.CompanyId = co.Id
 			INNER JOIN ExperianNonLimitedResults nl ON co.ExperianRefNum = nl.RefNumber
+			INNER JOIN MP_ServiceLog l ON nl.ServiceLogId = l.Id
 		WHERE
 			c.Id = @CustomerId
 			AND
-			nl.IsActive=1
+			l.InsertDate < @Now
+		ORDER BY
+			l.InsertDate DESC
 	END
 
 	-- IncorporationDate if not exist in experian
@@ -77,6 +83,8 @@ BEGIN
 				m.Disabled = 0
 				AND
 				v.DateFrom IS NOT NULL
+				AND
+				m.Created < @Now
 			UNION
 			SELECT
 				MIN(tr.transactionDate) MinDate
@@ -91,6 +99,8 @@ BEGIN
 				m.Disabled = 0
 				AND
 				tr.transactionDate IS NOT NULL
+				AND
+				m.Created < @Now
 			UNION
 			SELECT
 				MIN(tr.postDate) MinDate
@@ -105,6 +115,8 @@ BEGIN
 				m.Disabled = 0
 				AND
 				tr.postDate IS NOT NULL
+				AND
+				m.Created < @Now
 		) x
 		WHERE x.MinDate IS NOT NULL
 	END 
@@ -130,6 +142,8 @@ BEGIN
 		Loan l
 		LEFT JOIN late_loans ll ON l.Id = ll.LoanID
 	WHERE
+		l.[Date] < @Now
+		AND
 		ll.LoanID IS NULL
 		AND
 		l.CustomerId = @CustomerID
@@ -151,6 +165,8 @@ BEGIN
 		Loan l
 		INNER JOIN LoanCharges lc ON l.Id = lc.LoanId 
 	WHERE
+		l.[Date] < @Now
+		AND
 		l.CustomerId = @CustomerId
 		AND
 		lc.ConfigurationVariableId = @LateFeeConfigId
@@ -164,6 +180,8 @@ BEGIN
 		Loan l
 		INNER JOIN LoanSchedule ls ON l.Id = ls.LoanId
 	WHERE
+		l.[Date] < @Now
+		AND
 		l.CustomerId = @CustomerId
 		AND
 		ls.Status = 'PaidEarly'
@@ -185,6 +203,8 @@ BEGIN
 		mp.CustomerId = @CustomerId
 		AND
 		mp.Disabled = 0
+		AND
+		mp.Created < @Now
 
 	DECLARE @FCFFactor DECIMAL(18,4)
 	
@@ -217,7 +237,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DECLARE @ServiceLogId BIGINT
-	EXEC GetExperianConsumerServiceLog @CustomerId, @ServiceLogId OUTPUT
+	EXEC GetExperianConsumerServiceLog @CustomerId, @ServiceLogId OUTPUT, @Now
 
 	------------------------------------------------------------------------------
 
@@ -281,8 +301,10 @@ BEGIN
 
 	DECLARE @FirstRepaymentDate DATETIME = (
 		SELECT TOP 1 ls.[Date] 
-		FROM Loan l INNER JOIN LoanSchedule ls ON ls.LoanId = l.Id 
+		FROM Loan l
+		INNER JOIN LoanSchedule ls ON ls.LoanId = l.Id 
 		WHERE l.CustomerId = @CustomerId
+		AND l.[Date] < @Now
 		ORDER BY ls.[Date]
 	)
 
@@ -301,6 +323,8 @@ BEGIN
 		mp.Disabled = 0
 		AND
 		t.InternalId = '107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF'
+		AND
+		mp.Created < @Now
 
 	--Num of ebay amazon and paypal stores
 
@@ -321,6 +345,8 @@ BEGIN
 			'A4920125-411F-4BB9-A52D-27E8A00D0A3B',
 			'3FA5E327-FCFD-483B-BA5A-DC1815747A28'
 		)
+		AND
+		mp.Created < @Now
 
 	--Config for online cap
 
