@@ -52,7 +52,7 @@
 			oFields.Add("\t\t[TimestampCounter] ROWVERSION");
 
 			return
-				"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
+				//"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
 				"IF OBJECT_ID('" + sTableName + "') IS NULL\nBEGIN\n" +
 				"\tCREATE TABLE [" + sTableName + "] (\n" +
 				string.Join(",\n", oFields) +
@@ -92,11 +92,11 @@
 
 				if (!string.IsNullOrWhiteSpace(sType)) {
 					if (oPropInfo.DeclaringType == typeof(T)) {
-						oFields.Add(oPropInfo.Name + " " + sType);
-						oFieldNames.Add(oPropInfo.Name);
+						oFields.Add("["+ oPropInfo.Name + "] " + sType);
+						oFieldNames.Add("[" + oPropInfo.Name  + "]");
 					} else {
-						oSql.Add("\t" + oPropInfo.Name + " " + sType + ",");
-						oFieldNames.Insert(0, oPropInfo.Name);
+						oSql.Add("\t[" + oPropInfo.Name + "] " + sType + ",");
+						oFieldNames.Insert(0, "[" + oPropInfo.Name + "] ");
 					} // if
 				} // if
 			});
@@ -117,7 +117,7 @@
 			oProcSql.Add("GO");
 
 			return
-			 "SET QUOTED_IDENTIFIER ON\nGO\n\n" +
+			 //"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
 			 string.Join("\n", oSql) + "\n\t" +
 			 string.Join(",\n\t", oFields) + "\n)\nGO\n\n" +
 			 string.Join("\n", oProcSql) + "\n\n";
@@ -131,7 +131,7 @@
 				return "INT NULL";
 
 			if (oPropInfo.PropertyType == typeof(int))
-				return "INT" + ExtractIdentity(oPropInfo) + " NOT NULL";
+				return "INT" + ExtractIdentity(oPropInfo) + " NULL";//" NOT NULL"
 
 			if (oPropInfo.PropertyType == typeof(long?))
 				return "BIGINT NULL";
@@ -140,7 +140,7 @@
 				return "BIGINT" + ExtractIdentity(oPropInfo) + " NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(decimal))
-				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NOT NULL";
+				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NULL";//") NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(decimal?))
 				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NULL";
@@ -149,10 +149,10 @@
 				return "DATETIME NULL";
 
 			if (oPropInfo.PropertyType == typeof(DateTime))
-				return "DATETIME NOT NULL";
+				return "DATETIME NULL";//"DATETIME NOT NULL"
 
 			if (oPropInfo.PropertyType == typeof(bool))
-				return "BIT NOT NULL";
+				return "BIT NULL";//"BIT NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(bool?))
 				return "BIT NULL";
