@@ -144,7 +144,8 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 			var theTableOpts = self.initDataTablesOptions(
 				'FirstName,LastName,Status,^ApplyDate,$LoanAmount',
-				'brk-grid-state-' + self.router.getAuth() + '-customer-list'
+				'brk-grid-state-' + self.router.getAuth() + '-customer-list',
+				2 // increase this version number every time table structure is changed.
 			);
 
 			theTableOpts.aaData = oResponse.customers;
@@ -344,7 +345,16 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		location.assign('#add');
 	}, // addNewCustomer
 
-	initDataTablesOptions: function(sColumns, sGridKey) {
+	initDataTablesOptions: function(sColumns, sGridKey, tableStuctVersionNo) {
+		var versionNoKey = sGridKey + '-struct-version';
+
+		var storedVersionNo = parseInt(localStorage.getItem(versionNoKey) || 0, 10);
+
+		if (storedVersionNo < tableStuctVersionNo)
+			localStorage.removeItem(sGridKey);
+
+		localStorage.setItem(versionNoKey, tableStuctVersionNo);
+
 		return {
 			bDestroy: true,
 			bProcessing: true,
