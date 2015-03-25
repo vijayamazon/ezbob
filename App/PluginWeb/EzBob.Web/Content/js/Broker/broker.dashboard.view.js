@@ -348,13 +348,6 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 	initDataTablesOptions: function(sColumns, sGridKey, tableStuctVersionNo) {
 		var versionNoKey = sGridKey + '-struct-version';
 
-		var storedVersionNo = parseInt(localStorage.getItem(versionNoKey) || 0, 10);
-
-		if (storedVersionNo < tableStuctVersionNo)
-			localStorage.removeItem(sGridKey);
-
-		localStorage.setItem(versionNoKey, tableStuctVersionNo);
-
 		return {
 			bDestroy: true,
 			bProcessing: true,
@@ -372,10 +365,16 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 			bStateSave: true,
 
 			fnStateSave: function(oSettings, oData) {
+				localStorage.setItem(versionNoKey, tableStuctVersionNo);
 				localStorage.setItem(sGridKey, JSON.stringify(oData));
 			}, // fnStateSave
 
 			fnStateLoad: function(oSettings) {
+				var storedVersionNo = parseInt(localStorage.getItem(versionNoKey) || 0, 10);
+
+				if (storedVersionNo < tableStuctVersionNo)
+					localStorage.removeItem(sGridKey);
+
 				var sData = localStorage.getItem(sGridKey);
 				var oData = sData ? JSON.parse(sData) : null;
 				return oData;
