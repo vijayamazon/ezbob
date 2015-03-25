@@ -2,7 +2,6 @@
 	using System;
 	using AutomationCalculator.Common;
 	using Ezbob.Database;
-	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 
 	public class OfferResult : IEquatable<OfferOutputModel> {
 		// Inputs

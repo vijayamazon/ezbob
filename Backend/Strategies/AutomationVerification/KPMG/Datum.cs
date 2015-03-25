@@ -3,7 +3,9 @@
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Globalization;
+	using System.Linq;
 	using DbConstants;
+	using Ezbob.Backend.Strategies.Extensions;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
@@ -95,16 +97,29 @@
 		public SetupFeeConfiguration ManualCfg { get; private set; }
 
 		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
+			log.Info(
+				"RunAutomation({0}) started for customer {1} with decision time '{2}'...",
+				isHomeOwner,
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
+
 			RunAutoRerejection(db, log);
 
 			RunAutoReject(db, log);
 
 			RunAutoReapproval(db, log);
 
-			var instance = new CalculateMedal(CustomerID, DecisionTime, true, false);
-			instance.Execute();
+			MedalResult medal = RunCalculateMedal(log);
 
-			RunAutoApprove(isHomeOwner, instance.Result, db, log);
+			RunAutoApprove(isHomeOwner, medal, db, log);
+
+			log.Info(
+				"RunAutomation({0}) complete for customer {1} with decision time '{2}'.",
+				isHomeOwner,
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
 		} // RunAutomation
 
 		public static string CsvTitles(SortedSet<string> sources) {
@@ -141,6 +156,17 @@
 			);
 		} // CsvTitles
 
+		public int CustomerLoanCount {
+			get { return Manual.LoanCount; }
+			private set {
+				Manual.LoanCount = value;
+				AutoMin.LoanCount = value;
+
+				if (AutoMax != null)
+					AutoMax.LoanCount = value;
+			} // set
+		} // CustomerLoanCount
+
 		public int LoanCount { get; private set; }
 		public decimal LoanAmount { get; private set; }
 
@@ -152,6 +178,17 @@
 		public int BadLoanCount { get; private set; }
 		public decimal BadLoanAmount { get; private set; }
 
+		public void SetCustomerLoanCount(TCrLoans customerLoans) {
+			List<LoanMetaData> lst = customerLoans.ContainsKey(CustomerID)
+				? customerLoans[CustomerID]
+				: new List<LoanMetaData>();
+
+			CustomerLoanCount = lst.Count(lmd =>
+				(lmd.LoanDate < DecisionTime) &&
+				((lmd.DateClosed == null) || (lmd.DateClosed > DecisionTime))
+			);
+		} // SetCustomerLoanCount
+
 		public int ToXlsx(ExcelWorksheet sheet, int rowNum, TCrLoans crLoans, SortedSet<string> sources) {
 			List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
 				? crLoans[CashRequestID]
@@ -161,6 +198,8 @@
 
 			foreach (string s in sources)
 				bySource[s] = new LoanSummaryData();
+
+			foreach (LoanMetaData lmd in lst)
 
 			LoanCount = 0;
 			LoanAmount = 0;
@@ -186,7 +225,7 @@
 					BadLoanCount++;
 					BadLoanAmount += lmd.LoanAmount;
 				} // if
-			} // if
+			} // for
 
 			int curColumn = 1;
 
@@ -225,6 +264,12 @@
 		} // ToXlsx
 
 		private void RunAutoRerejection(AConnection db, ASafeLog log) {
+			log.Info(
+				"RunAutomation-RunAutoRerejection() started for customer {0} with decision time '{1}'...",
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
+
 			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
 				CustomerID,
 				DecisionTime,
@@ -240,9 +285,24 @@
 				AutomationDecision = DecisionActions.ReReject;
 
 			IsAutoReRejected = agent.Trail.HasDecided;
+
+			log.Info(
+				"RunAutomation-RunAutoRerejection() complete for customer {0} with decision time '{1}': " +
+				"automation decision is '{2}', auto re-rejected is '{3}'.",
+				CustomerID,
+				DecisionTime.MomentStr(),
+				AutomationDecision,
+				IsAutoReRejected
+			);
 		} // RunAutoRerejection
 
 		private void RunAutoReject(AConnection db, ASafeLog log) {
+			log.Info(
+				"RunAutomation-RunAutoReject() started for customer {0} with decision time '{1}'...",
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
+
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =
 				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, log, CustomerID);
 
@@ -254,9 +314,24 @@
 				AutomationDecision = DecisionActions.Reject;
 
 			IsAutoRejected = agent.Trail.HasDecided;
+
+			log.Info(
+				"RunAutomation-RunAutoReject() complete for customer {0} with decision time '{1}': " +
+				"automation decision is '{2}', auto rejected is '{3}'.",
+				CustomerID,
+				DecisionTime.MomentStr(),
+				AutomationDecision,
+				IsAutoRejected
+			);
 		} // RunAutoReject
 
 		private void RunAutoReapproval(AConnection db, ASafeLog log) {
+			log.Info(
+				"RunAutomation-RunAutoReapproval() started for customer {0} with decision time '{1}'...",
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
+
 			ReapprovedAmount = 0;
 
 			var agent = new
@@ -273,7 +348,40 @@
 			} // if
 
 			IsAutoReApproved = agent.Trail.HasDecided;
+
+			log.Info(
+				"RunAutomation-RunAutoReapproval() complete for customer {0} with decision time '{1}': " +
+				"automation decision is '{2}', auto re-approved is '{3}', re-approved amount is {4}.",
+				CustomerID,
+				DecisionTime.MomentStr(),
+				AutomationDecision,
+				IsAutoReApproved,
+				ReapprovedAmount
+			);
 		} // RunAutoReapproval
+
+		private MedalResult RunCalculateMedal(ASafeLog log) {
+			log.Info(
+				"RunAutomation-CalculateMedal() started for customer {0} with decision time '{1}'...",
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
+
+			CalculateMedal instance = new CalculateMedal(CustomerID, DecisionTime, true, false);
+			instance.Execute();
+
+			log.Info(
+				"RunAutomation-CalculateMedal() complete for customer {0} with decision time '{1}': " +
+				"medal is '{2}', offered amount is {3}, max offered amount is {4}.",
+				CustomerID,
+				DecisionTime.MomentStr(),
+				instance.Result.MedalClassification,
+				instance.Result.RoundOfferedAmount(),
+				instance.Result.RoundMaxOfferedAmount()
+			);
+
+			return instance.Result;
+		} // RunCalculateMedal
 
 		private void RunAutoApprove(
 			bool isHomeOwner,
@@ -281,6 +389,12 @@
 			AConnection db,
 			ASafeLog log
 		) {
+			log.Info(
+				"RunAutomation-RunAutoApprove() started for customer {0} with decision time '{1}'...",
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
+
 			AutoMin.Calculate(CustomerID, isHomeOwner, medal, true, CashRequestID, Tag, db, log);
 
 			if (AutoMin.Amount > 0)
@@ -288,10 +402,42 @@
 
 			IsAutoApproved = AutoMin.Amount > 0;
 
-			if (medal.OfferedAmountsDiffer())
+			log.Info(
+				"RunAutomation-RunAutoApprove()-AutoMin done for customer {0} with decision time '{1}': " +
+				"automation decision is '{2}', auto approved is '{3}', approved amount is {4}.",
+				CustomerID,
+				DecisionTime.MomentStr(),
+				AutomationDecision,
+				IsAutoApproved,
+				AutoMin.Amount
+			);
+
+			if (medal.OfferedAmountsDiffer()) {
 				AutoMax.Calculate(CustomerID, isHomeOwner, medal, false, CashRequestID, Tag, db, log);
-			else
+
+				log.Info(
+					"RunAutomation-RunAutoApprove()-AutoMax done for customer {0} with decision time '{1}': " +
+					"approved amount is {2}.",
+					CustomerID,
+					DecisionTime.MomentStr(),
+					AutoMax.Amount
+				);
+			} else {
 				AutoMax = null;
+
+				log.Info(
+					"RunAutomation-RunAutoApprove()-AutoMax not done for customer {0} with decision time '{1}': " +
+					"same min and max amounts.",
+					CustomerID,
+					DecisionTime.MomentStr()
+				);
+			} // if
+
+			log.Info(
+				"RunAutomation-RunAutoApprove() complete for customer {0} with decision time '{1}'.",
+				CustomerID,
+				DecisionTime.MomentStr()
+			);
 		} // RunAutoApprove
 
 		private DecisionActions automationDecision;

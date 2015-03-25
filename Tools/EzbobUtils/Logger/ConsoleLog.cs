@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Ezbob.Logger{
+﻿namespace Ezbob.Logger{
+	using System;
 	using JetBrains.Annotations;
 
 	public class ConsoleLog : ASafeLog {
-
 		public ConsoleLog(ASafeLog oLog = null) : base(oLog) {} // constructor
 
 		[StringFormatMethod("format")]
@@ -23,7 +21,5 @@ namespace Ezbob.Logger{
 			Console.Write("{0} {1} ", CurrentTime, nSeverity.ToString());
 			Console.WriteLine(ExceptionToString(ex));
 		} // OwnSay
-
 	} // class ConsoleLog
-
 } // namespace Ezbob.Logger

@@ -1,16 +1,13 @@
-﻿using System;
-
-using log4net;
-using log4net.Appender;
-using log4net.Core;
-using log4net.Layout;
-using log4net.Repository.Hierarchy;
-
-namespace Ezbob.Logger {
+﻿namespace Ezbob.Logger {
+	using System;
+	using log4net;
+	using log4net.Appender;
+	using log4net.Core;
+	using log4net.Layout;
+	using log4net.Repository.Hierarchy;
 	using JetBrains.Annotations;
 
 	public class LegacyLog : ASafeLog {
-
 		static LegacyLog() {
 			var hierarchy = (Hierarchy)LogManager.GetRepository();
 			hierarchy.Root.RemoveAllAppenders();
@@ -20,7 +17,7 @@ namespace Ezbob.Logger {
 			fileAppender.LockingModel = new FileAppender.MinimalLock();
 
 			if (System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName.Contains("iis"))
-				fileAppender.File = System.Web.Hosting.HostingEnvironment.SiteName; // System.AppDomain.CurrentDomain.FriendlyName.Split('.')[0];
+				fileAppender.File = System.Web.Hosting.HostingEnvironment.SiteName;
 			else
 				fileAppender.File = System.AppDomain.CurrentDomain.FriendlyName.Split('.')[0];
 
@@ -105,7 +102,5 @@ namespace Ezbob.Logger {
 		} // OwnSay
 
 		private static readonly ILog ms_oLog = LogManager.GetLogger(typeof(ASafeLog));
-
 	} // class LegacyLog
-
 } // namespace Ezbob.Logger

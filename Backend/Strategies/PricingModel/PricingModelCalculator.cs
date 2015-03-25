@@ -19,6 +19,7 @@
 		{
 			Model = model;
 			this.customerId = customerId;
+			LogInputs();
 		}
 
 		public PricingModelModel Model { get; private set; }

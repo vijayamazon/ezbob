@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Ezbob.Logger {
+﻿namespace Ezbob.Logger {
+	using System;
 	using JetBrains.Annotations;
 
 	public class SafeLog : ASafeLog {
-
 		public SafeLog(ASafeLog oLog = null) : base(oLog) {} // constructor
 
 		[StringFormatMethod("format")]
@@ -16,7 +14,5 @@ namespace Ezbob.Logger {
 		protected override void OwnSay(Severity nSeverity, Exception ex, string format, params object[] parameters) {
 			// nothing here
 		} // OwnSay
-
 	} // class SafeLog
-
 } // namespace Ezbob.Logger

@@ -29,9 +29,11 @@ BEGIN
 	), loan_list AS (
 		SELECT
 			r.Id AS CashRequestID,
+			l.CustomerID,
 			l.Id AS LoanID,
 			ls.LoanSourceName,
 			l.[Date] AS LoanDate,
+			l.DateClosed,
 			l.LoanAmount,
 			l.Status,
 			SUM(t.LoanRepayment) AS RepaidPrincipal
@@ -45,17 +47,21 @@ BEGIN
 				AND t.Status = 'Done'
 		GROUP BY
 			r.Id,
+			l.CustomerID,
 			l.Id,
 			ls.LoanSourceName,
 			l.[Date],
+			l.DateClosed,
 			l.LoanAmount,
 			l.Status
 	)
 	SELECT
 		ll.CashRequestID,
+		ll.CustomerID,
 		ll.LoanID,
 		ll.LoanSourceName,
 		ll.LoanDate,
+		ll.DateClosed,
 		ll.LoanAmount,
 		ll.Status,
 		ll.RepaidPrincipal,

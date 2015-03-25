@@ -1,15 +1,13 @@
-﻿using System;
-using System.Diagnostics;
-using System.Globalization;
-using System.IO;
-using System.Reflection;
-using System.Text;
-
-namespace Ezbob.Logger {
+﻿namespace Ezbob.Logger {
+	using System;
+	using System.Diagnostics;
+	using System.Globalization;
+	using System.IO;
+	using System.Reflection;
+	using System.Text;
 	using JetBrains.Annotations;
 
 	public class FileLog : ASafeLog {
-
 		public FileLog(
 			string sAppName = null,
 			bool bAppend = false,
@@ -17,16 +15,15 @@ namespace Ezbob.Logger {
 			bool bUtcTimeInName = false,
 			string sPath = null,
 			ASafeLog oLog = null
-		) : base(oLog)
-		{
+		) : base(oLog) {
 			AppName = (sAppName ?? string.Empty).Trim();
 
-			if (AppName == string.Empty)
-				AppName = Assembly.GetCallingAssembly().GetName().Name;
+			if (this.appName == string.Empty)
+				this.appName = Assembly.GetCallingAssembly().GetName().Name;
 
 			sPath = (sPath ?? string.Empty).Trim();
 
-			var oFileName = new StringBuilder(AppName);
+			var oFileName = new StringBuilder(this.appName);
 
 			if (bUtcTimeInName)
 				oFileName.Append(DateTime.UtcNow.ToString(".yyyy-MM-dd.HH-mm-ss", CultureInfo.InvariantCulture));
@@ -46,17 +43,18 @@ namespace Ezbob.Logger {
 
 			m_oLock = new object();
 
-			NotifyStartStop("started");
-			SayCurrentTimezone();
+			Init();
 		} // constructor
 
 		public override void Dispose() {
-			if (m_oLogFile != null) {
-				NotifyStartStop("stopped");
-				m_oLogFile.Close();
-			} // if
+			lock (m_oLock) {
+				if (m_oLogFile != null) {
+					NotifyStartStop("stopped");
+					m_oLogFile.Close();
+				} // if
 
-			m_oLogFile = null;
+				m_oLogFile = null;
+			} // lock
 
 			base.Dispose();
 		} // Dispose
@@ -88,7 +86,10 @@ namespace Ezbob.Logger {
 			} // lock
 		} // OwnSay
 
-		protected virtual string AppName { get; private set; }
+		protected virtual string AppName {
+			get { return this.appName; }
+			private set { this.appName = value; }
+		} // AppName
 
 		protected virtual void NotifyStartStop(string sEvent) {
 			Msg(
@@ -102,9 +103,13 @@ namespace Ezbob.Logger {
 			);
 		} // NotifyStartStop
 
+		private void Init() {
+			NotifyStartStop("started");
+			SayCurrentTimezone();
+		} // Init
+
 		private StreamWriter m_oLogFile;
 		private readonly object m_oLock;
-
+		private string appName;
 	} // class FileLog
-
 } // namespace Ezbob.Logger

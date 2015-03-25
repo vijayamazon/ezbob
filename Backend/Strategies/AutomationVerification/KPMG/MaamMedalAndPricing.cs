@@ -20,6 +20,7 @@
 			this.homeOwners = new SortedDictionary<int, bool>();
 			this.defaultCustomers = new SortedSet<int>();
 			this.crLoans = new TCrLoans();
+			this.customerLoans = new TCrLoans();
 			this.loanSources = new SortedSet<string>();
 
 			this.tag = string.Format(
@@ -53,6 +54,11 @@
 					else
 						this.crLoans[lmd.CashRequestID] = new List<LoanMetaData> { lmd };
 
+					if (this.customerLoans.ContainsKey(lmd.CustomerID))
+						this.customerLoans[lmd.CustomerID].Add(lmd);
+					else
+						this.customerLoans[lmd.CustomerID] = new List<LoanMetaData> { lmd };
+
 					this.loanSources.Add(lmd.LoanSourceName);
 				},
 				"LoadAllLoansMetaData",
@@ -68,6 +74,7 @@
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
 				try {
+					d.SetCustomerLoanCount(this.customerLoans);
 					d.RunAutomation(isHomeOwner, DB, Log);
 				} catch (Exception e) {
 					Log.Alert(e, "Automation failed for customer {0} with cash request {1}.", d.CustomerID, d.CashRequestID);
@@ -191,6 +198,7 @@
 		private readonly SortedDictionary<int, bool> homeOwners;
 		private readonly SortedSet<int> defaultCustomers;
 		private readonly TCrLoans crLoans;
+		private readonly TCrLoans customerLoans;
 		private readonly SortedSet<string> loanSources; 
 
 		private const string QueryFormat = @"

@@ -13,7 +13,6 @@
 	} // enum LoggingEvent
 
 	public abstract class ASafeLog : IDisposable {
-
 		public virtual void SetInternal(ASafeLog oLog, bool bOverwriteExisting = false) {
 			lock (ms_oLock) {
 				if (m_oLog == null)
@@ -31,7 +30,11 @@
 			NotifyStartStop(LoggingEvent.Stopped, Assembly.GetCallingAssembly().GetName(), nSeverity);
 		} // NotifyStart
 
-		protected virtual void NotifyStartStop(LoggingEvent nEvent, AssemblyName oCallingAssemblyName, Severity nSeverity = Severity.Info) {
+		protected virtual void NotifyStartStop(
+			LoggingEvent nEvent,
+			AssemblyName oCallingAssemblyName,
+			Severity nSeverity = Severity.Info
+		) {
 			AssemblyName oName = oCallingAssemblyName ?? Assembly.GetCallingAssembly().GetName();
 
 			Say(
@@ -159,7 +162,5 @@
 
 		private ASafeLog m_oLog { get; set; }
 		private static readonly object ms_oLock = new object();
-
 	} // class ASafeLog
-
 } // namespace Ezbob.Logger

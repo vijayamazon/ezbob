@@ -60,11 +60,28 @@ namespace EzBobTest {
 		} // TestMedalScoreMatrix
 
 		[Test]
+		public void TestOneOffer() {
+			var odc = new OfferDualCalculator(
+				18164,
+				new DateTime(2015, 3, 20, 15, 18, 37, DateTimeKind.Utc),
+				14100,
+				true,
+				EZBob.DatabaseLib.Model.Database.Medal.Silver,
+				false
+			);
+
+			odc.CalculateOffer();
+		} // TestOneOffer
+
+		[Test]
 		public void TestOfferDualCalc() {
-			const int customerID = 15202;
+			const int customerID = 18164;
 
 			var dates = new List<string> {
-				"2015-03-15 15:30:06.0",
+				"2014-10-27 10:09:24.0",
+				"2014-10-27 13:51:40.0",
+				"2014-10-27 14:42:09.0",
+				"2015-03-20 15:03:27.0",
 			};
 
 			var res = new SortedDictionary<DateTime, MedalOffer>();
