@@ -18,3 +18,15 @@ CREATE TABLE [dbo].[ExternalApiLog](
 	)
 END
 GO
+
+
+
+IF OBJECT_ID('ExternalApiLog') <> NULL
+BEGIN 
+	ALTER TABLE [dbo].[ExternalApiLog] ALTER COLUMN [ErrorCode] [nvarchar](256) ;
+	ALTER TABLE [dbo].[ExternalApiLog] ALTER COLUMN [ErrorMessage] ntext ;
+END 
+GO
+
+
+
