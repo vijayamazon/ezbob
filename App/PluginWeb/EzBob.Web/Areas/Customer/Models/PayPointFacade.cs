@@ -7,7 +7,6 @@
 	using System.Text;
 	using System.Text.RegularExpressions;
 	using System.Web;
-	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using StructureMap;
@@ -27,23 +26,20 @@
 		private readonly string paypointOptions;
 
 		public PayPointAccount PayPointAccount { get; private set; }
-		public PayPointFacade(bool isDefault = true) {
+		public PayPointFacade(DateTime? firstOpenLoanDate = null) {
 			var payPointAccountRepository = ObjectFactory.GetInstance<PayPointAccountRepository>();
-			if (isDefault) {
-				PayPointAccount = payPointAccountRepository.GetDefaultAccount();
-			} else {
-				PayPointAccount = payPointAccountRepository.GetOldAccount();
-			}
-			remotePassword = PayPointAccount.RemotePassword;
-			mid = PayPointAccount.Mid;
-			templateUrl = PayPointAccount.TemplateUrl;
-			paypointOptions = PayPointAccount.Options;
+            PayPointAccount = payPointAccountRepository.GetAccount(firstOpenLoanDate);
+
+		    this.remotePassword = PayPointAccount.RemotePassword;
+		    this.mid = PayPointAccount.Mid;
+		    this.templateUrl = PayPointAccount.TemplateUrl;
+		    this.paypointOptions = PayPointAccount.Options;
 		}
 
 		public virtual bool CheckHash(string hash, Uri url)
 		{
 			var request = url.PathAndQuery;
-			request = request.Replace("hash=" + hash, remotePassword);
+			request = request.Replace("hash=" + hash, this.remotePassword);
 			var digest = CalculateMD5Hash(request);
 			return digest == hash;
 		}
@@ -78,9 +74,9 @@
 		public string GeneratePaymentUrl(bool bIsOffline, decimal amount, string callback, DateTime? dateOfBirth, string surname, string postcode, string accountNumber, bool deferred = false)
 		{
 			var transactionId = Guid.NewGuid().ToString();
-			var merchantId = mid;
+			var merchantId = this.mid;
 			string amountStr = amount.ToString(CultureInfo.InvariantCulture);
-			var digest = CalculateMD5Hash(transactionId + amountStr + remotePassword);
+			var digest = CalculateMD5Hash(transactionId + amountStr + this.remotePassword);
 
 			var dateOfBirthFormatted = dateOfBirth.HasValue ? dateOfBirth.Value.ToString("yyyyMMdd") : "";
 			surname = Regex.Replace(surname, "[^a-zA-Z]", String.Empty);
@@ -90,8 +86,7 @@
 			postCodeFormatted = !postcode.Contains(" ") ? postcode.Substring(0, postcode.Length - 3) : postcode.Split(' ')[0];
 			postCodeFormatted = postCodeFormatted.Length > 6 ? postCodeFormatted.Substring(0, 6) : postCodeFormatted;
 
-			var options = string.Format("{0};fin_serv_birth_date={1};fin_serv_surname={2};fin_serv_postcode={3};fin_serv_account={4}", 
-				paypointOptions, 
+			var options = string.Format("{0};fin_serv_birth_date={1};fin_serv_surname={2};fin_serv_postcode={3};fin_serv_account={4}", this.paypointOptions, 
 				dateOfBirthFormatted, 
 				surnameFormatted, 
 				postCodeFormatted, 
@@ -110,7 +105,7 @@
 				transactionId,
 				HttpUtility.UrlEncode(callback),
 				digest,
-				HttpUtility.UrlEncode(templateUrl),
+				HttpUtility.UrlEncode(this.templateUrl),
 				HttpUtility.UrlEncode(options),
 				bIsOffline ? "offline" : "online"
 			);

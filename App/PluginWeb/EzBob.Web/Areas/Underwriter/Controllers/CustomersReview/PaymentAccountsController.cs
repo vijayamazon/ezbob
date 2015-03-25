@@ -144,11 +144,11 @@
 		public RedirectResult AddPayPoint(int id)
 		{
 			var oCustomer = _customers.Get(id);
-			int payPointCardExpiryMonths = payPointAccountRepository.GetDefaultAccount().CardExpiryMonths;
+            PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate());
+			int payPointCardExpiryMonths =payPointFacade.PayPointAccount.CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "PaymentAccounts", new { Area = "Underwriter", customerId = id, cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate), hideSteps = true }, "https");
-			bool isDefaultCard = !oCustomer.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
-			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			
 			var url = payPointFacade.GeneratePaymentUrl(oCustomer, 5m, callback);
 
 			return Redirect(url);
@@ -176,14 +176,14 @@
 				TempData["message"] = message;
 				return View("Error");
 			}
-			bool isDefaultCard = !cus.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
-			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			
+            PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate());
 			if (!payPointFacade.CheckHash(hash, Request.Url))
 			{
 				throw new Exception("check hash failed");
 			}
 
-			AddPayPointCardToCustomer(trans_id, card_no, cus, expiry);
+			AddPayPointCardToCustomer(trans_id, card_no, cus, expiry, payPointFacade.PayPointAccount);
 
 			return View("PayPointAdded", amount ?? 0);
 		}
@@ -194,15 +194,15 @@
 		{
 			var customer = _customers.GetChecked(customerId);
 			var expiry = expiredate.ToString("MMyy");
-
-			AddPayPointCardToCustomer(transactionid, cardno, customer, expiry);
+            PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate());
+			AddPayPointCardToCustomer(transactionid, cardno, customer, expiry, payPointFacade.PayPointAccount);
 
 			return Json(new { });
 		}
 
-		private void AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry) {
-			var defaultPaypointAccount = payPointAccountRepository.GetDefaultAccount();
-			customer.TryAddPayPointCard(transactionid, cardno, expiry, customer.PersonalInfo.Fullname, defaultPaypointAccount);
+		private void AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry, PayPointAccount account) {
+			
+			customer.TryAddPayPointCard(transactionid, cardno, expiry, customer.PersonalInfo.Fullname, account);
 			m_oServiceClient.Instance.PayPointAddedByUnderwriter(customer.Id, cardno, _context.User.FullName, _context.User.Id);
 		}
 

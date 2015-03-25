@@ -48,8 +48,7 @@
 			}
 
 			var customerContext = _context.Customer;
-			bool isDefaultCard = !customerContext.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
-			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+			PayPointFacade payPointFacade = new PayPointFacade(customerContext.MinOpenLoanDate());
 			if (!payPointFacade.CheckHash(hash, Request.Url)) {
 				Log.ErrorFormat("Paypoint callback is not authenticated for user {0}", customerContext.Id);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to ", "Failed", String.Format("Paypoint callback is not authenticated for user {0}", customerContext.Id));
@@ -178,11 +177,13 @@
 				Log.InfoFormat("Payment request for customer id {0}, amount {1}", _context.Customer.Id, amount);
 
 				amount = CalculateRealAmount(type, loanId, amount);
-				var paypointAccount = payPointAccountRepository.GetDefaultAccount();
-				if (amount < 0)
-					return View("Error");
-				var oCustomer = _context.Customer;
-				int payPointCardExpiryMonths = paypointAccount.CardExpiryMonths;
+                if (amount < 0)
+                    return View("Error");
+
+                var oCustomer = _context.Customer;
+                PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate());
+				
+                int payPointCardExpiryMonths = payPointFacade.PayPointAccount.CardExpiryMonths;
 				DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 
 				var callback = Url.Action("Callback", "Paypoint", new {
@@ -196,8 +197,8 @@
 					origin = oCustomer.CustomerOrigin.Name
 				}, "https");
 
-				bool isDefaultCard = !oCustomer.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
-				PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+				
+                
 				var url = payPointFacade.GeneratePaymentUrl(oCustomer, amount, callback);
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Redirect to " + url, "Successful", "");
 
