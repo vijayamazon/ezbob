@@ -43,6 +43,10 @@ BEGIN
 			h.Updated DESC
 	END
 
-	RETURN ISNULL(@Res, 1)
+	SET @Res = ISNULL(@Res, 1)
+
+	SET @Res = CASE WHEN @Res = 0 THEN 1 ELSE 1 / @Res END
+
+	RETURN @Res
 END
 GO
