@@ -69,7 +69,7 @@ namespace EZBob.DatabaseLib.Model {
 
             return GetAll()
                 .First(x => x.LoanFromDate >= firstOpenLoanDate.Value &&
-                            x.LoanToDate <= firstOpenLoanDate.Value);
+                            x.LoanToDate < firstOpenLoanDate.Value);
         }
     }
 
