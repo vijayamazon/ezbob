@@ -58,13 +58,15 @@
 
 		readonly IFormatProvider culture = Thread.CurrentThread.CurrentCulture;
 
+		// 
+
 		[TestFixtureSetUp]
 		public void FixtureInit() {
 			this.model = new AlibabaDto {
 				requestId = "000001",
 				responseId = "1000001",
-				aId = 18234,
-				aliMemberId = 12345,
+				aId = 23915,
+				aliMemberId = 5645444,
 				loanId = 0
 			};
 		}
@@ -176,8 +178,8 @@
 			this.model = new AlibabaDto {
 				requestId = "000001",
 				responseId = "1000001",
-				aId = 16816,
-				aliMemberId = 123,
+				aId = 23504,
+				aliMemberId = 789,
 				loanId = 0
 			};
 			Console.WriteLine(string.Format("==={0},=========={1}======", this.model.aId, this.model.aliMemberId));

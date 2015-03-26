@@ -16,9 +16,9 @@
 			get { return "RequalifyCustomer"; }
 		}
 
-		public RequalifyCustomer(int customerID, int aliMemberID) {
-			this.CustomerID = customerID;
-			this.AliMemberID = aliMemberID;
+		public RequalifyCustomer(int customerID, decimal aliMemberID) {
+			CustomerID = customerID;
+			AliMemberID = aliMemberID;
 		}
 
 		/// <exception cref="StrategyAlert">Condition. </exception>
@@ -101,7 +101,7 @@
 			}
 		}
 
-		public int AliMemberID { get; private set; }
+		public decimal AliMemberID { get; private set; }
 		public int CustomerID { get; private set; }
 
 	}

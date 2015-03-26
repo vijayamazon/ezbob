@@ -3239,16 +3239,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EnlistLotteryAsync(int customerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerAvaliableCredit", ReplyAction="http://tempuri.org/IEzService/CustomerAvaliableCreditResponse")]
-        ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID);
+        ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, decimal aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerAvaliableCredit", ReplyAction="http://tempuri.org/IEzService/CustomerAvaliableCreditResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, int aliMemberID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, decimal aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequalifyCustomer", ReplyAction="http://tempuri.org/IEzService/RequalifyCustomerResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(int customerID, int aliMemberID);
+        ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(int customerID, decimal aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequalifyCustomer", ReplyAction="http://tempuri.org/IEzService/RequalifyCustomerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(int customerID, int aliMemberID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(int customerID, decimal aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DataSharing", ReplyAction="http://tempuri.org/IEzService/DataSharingResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData DataSharing(int customerID, ServiceClientProxy.EzServiceReference.AlibabaBusinessType businessType, System.Nullable<int> uwID);
@@ -4498,19 +4498,19 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EnlistLotteryAsync(customerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID) {
+        public ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, decimal aliMemberID) {
             return base.Channel.CustomerAvaliableCredit(customerID, aliMemberID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, int aliMemberID) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, decimal aliMemberID) {
             return base.Channel.CustomerAvaliableCreditAsync(customerID, aliMemberID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(int customerID, int aliMemberID) {
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(int customerID, decimal aliMemberID) {
             return base.Channel.RequalifyCustomer(customerID, aliMemberID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(int customerID, int aliMemberID) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(int customerID, decimal aliMemberID) {
             return base.Channel.RequalifyCustomerAsync(customerID, aliMemberID);
         }
         

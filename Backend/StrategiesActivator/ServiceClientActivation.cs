@@ -1359,9 +1359,9 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		[Activation]
 		private void CustomerAvaliableCredit() { // CustomerAvaliableCredit 18234 12345 
 			int customerID;
-			int aliMemberID;
+			decimal aliMemberID;
 
-			if ((cmdLineArgs.Length != 3) || !int.TryParse(cmdLineArgs[1], out customerID) || !int.TryParse(cmdLineArgs[2], out aliMemberID)) {
+			if ((cmdLineArgs.Length != 3) || !int.TryParse(cmdLineArgs[1], out customerID) || !decimal.TryParse(cmdLineArgs[2], out aliMemberID)) {
 				log.Msg("Usage: CustomerAvaliableCredit <Customer ID> <Alibaba MemberID>");
 				return;
 			}

@@ -51,7 +51,7 @@
 		public int aId { get; set; }
 
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] //  AlibabaBuyer table
-		public int aliMemberId { get; set; }
+		public decimal aliMemberId { get; set; }
 
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] // Partner loan ID | Y
 		public int? loanId = 0; //{ get; set; }

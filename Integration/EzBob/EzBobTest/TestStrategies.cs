@@ -611,7 +611,7 @@
 		[Test]
 		public void RequalifyCustomer() {
 			int customerID = 18234; //217; // 18234;
-			int aliMemberID = 12345000; //00;
+			decimal aliMemberID = 12345000; //00;
 			var s = new RequalifyCustomer(customerID, aliMemberID); //"caroles@ezbob.com.test.test"
 			s.Execute();
 		}
@@ -620,7 +620,7 @@
 		[Test]
 		public void AvailableCredit() {
 			int customerID = 18234; //217; // 18234;
-			int aliMemberID = 12345000; //00;
+			decimal aliMemberID = 12345000; //00;
 			/*var s = new CustomerAvaliableCredit(customerID, aliMemberID); // "caroles@ezbob.com.test.test");
 			s.Execute();
 			Console.WriteLine(s.Result.ToString());*/
@@ -714,7 +714,8 @@
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
 			Console.WriteLine(v.AliId);
-			new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
+			decimal aliaid = v.AliId;
+			new RequalifyCustomer(customerID, aliaid).Execute(); // only for CashRequest creation!!!
 			//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
 			/* many customers

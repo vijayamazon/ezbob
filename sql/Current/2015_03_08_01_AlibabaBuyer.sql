@@ -15,6 +15,10 @@ BEGIN
 END
 GO
 
+BEGIN	
+alter table AlibabaBuyer alter column AliId numeric(20) not null;
+END
+GO
 
 IF NOT EXISTS (SELECT * FROM sys.foreign_keys WHERE name = 'FK_AlibabaBuyerCustomer')
 BEGIN	
