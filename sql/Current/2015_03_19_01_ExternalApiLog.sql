@@ -21,6 +21,10 @@ GO
 
 
 
+<<<<<<< origin/master
+=======
+
+>>>>>>> local
 BEGIN 
 	ALTER TABLE [dbo].[ExternalApiLog] ALTER COLUMN [ErrorCode] [nvarchar](256) ;
 	ALTER TABLE [dbo].[ExternalApiLog] ALTER COLUMN [ErrorMessage] ntext ;
