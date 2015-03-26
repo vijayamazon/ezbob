@@ -55,6 +55,7 @@
 			.Add("~/Content/css/lib/notifications.css")
 			//custom css
 			.Add("~/Content/css/common.css")
+			.Add("~/Content/css/ezbob.css")
 			.Add("~/Content/css/broker.css")
 			.Add("~/Content/css/edit-experian-director-data.css")
 			.Add("~/Content/css/mobile.css")
@@ -74,29 +75,32 @@
 	@AntiForgery.GetHtml()
 
 	<div id="wrapper">
-		<div id="header">
-			<div class="header-bg-strip"></div>
-			<div class="header-inner">
-				<div class="header-logo">
-					<a href="http://ezbob.com">
-						<img src="@Model.LogoUrl" class="newlogo" width="128" height="34">
-					</a>
+		<header class="common-header">
+			<div id="header">
+				<div class="header-bg-strip"></div>
+				<div class="header-inner">
+					<div class="header-logo">
+						<a href="http://ezbob.com">
+							<img src="@Model.LogoUrl" class="newlogo" width="128" height="34">
+						</a>
+					</div>
+					<div class="header-info">
+						<div class="header-info-left"></div>
+						<div class="header-info-text">FOR BROKERS</div>
+						<div class="header-info-right"></div>
+					</div>
+					<ul id="user-menu" class="hide">
+						<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
+						<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
+						<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
+						<li>
+							<div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
+						</li>
+					</ul>
 				</div>
-				<div class="header-info">
-					<div class="header-info-left"></div>
-					<div class="header-info-text">FOR BROKERS</div>
-					<div class="header-info-right"></div>
-				</div>
-				<ul id="user-menu" class="hide">
-					<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
-					<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
-					<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
-					<li>
-						<div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
-					</li>
-				</ul>
 			</div>
-		</div>
+		</header>
+		<div class="ezbob-header-placeholder"></div>
 
 		<div class="row-fluid broker-page-content">
 			<div class="inner">
@@ -193,21 +197,21 @@
 										<img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
 									</label>
 								</div>
-                                
-                                <div class="form_field_container">
-                                    <div class="form_read_and_accept">
-                                        <input type="checkbox" name="FCARegistered" id="FCARegistered" value="false" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:fca-registered" />
-                                        <label for="FCARegistered">FCA Registered</label>
-                                    </div>
-                                </div>
 
-                                <div class="form_field_container license_number_field_container" style="display: none">
-                                    <label class="attardi-input">
-                                        <span>Licence number</span>
-                                        <input type="text" name="LicenseNumber" id="LicenseNumber" maxlength="50" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-license-number" />
-                                        <img id="LicenseNumberImage" class="field_status required" />
-                                    </label>
-                                </div>
+								<div class="form_field_container">
+									<div class="form_read_and_accept">
+										<input type="checkbox" name="FCARegistered" id="FCARegistered" value="false" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:fca-registered" />
+										<label for="FCARegistered">FCA Registered</label>
+									</div>
+								</div>
+
+								<div class="form_field_container license_number_field_container" style="display: none">
+									<label class="attardi-input">
+										<span>Licence number</span>
+										<input type="text" name="LicenseNumber" id="LicenseNumber" maxlength="50" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-license-number" />
+										<img id="LicenseNumberImage" class="field_status required" />
+									</label>
+								</div>
 
 								<div id="strength-password-view" class="form_field_container">
 									<label class="attardi-input">
@@ -822,6 +826,8 @@
 		</div>
 
 		<div id="modalRegion" class="modal hide fade"></div>
+
+		@{ Html.RenderPartial("_Footer"); }
 	</div>
 
 	<div id="easter2015scratch">
@@ -847,8 +853,6 @@
 		</div>
 		<div class="won"></div>
 	</div>
-
-	@{ Html.RenderPartial("_Footer"); }
 
 	<div id="hidden-container" class="hide" style="display: none !important;">
 		<div class="common-customer-sidebar">
