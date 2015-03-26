@@ -21,7 +21,7 @@
 	public class DataSharing : AStrategy {
 
 		public DataSharing(int customerID, AlibabaBusinessType businessType) {
-			this.CustomerID = customerID;
+			CustomerID = customerID;
 			this.businessType = businessType;
 			Result = new CustomerDataSharing();
 			this.sentDataRep = ObjectFactory.GetInstance<AlibabaSentDataRepository>();
@@ -58,6 +58,7 @@
 						new QueryParameter("CustomerID", this.CustomerID),
 						new QueryParameter("FinalDecision", 0)
 					);
+					
 					SendRequest(aliMember, this.Result, AlibabaBusinessType.APPLICATION);
 				}
 			}
@@ -88,7 +89,14 @@
 		/// <param name="result"></param>
 		/// <param name="bizType"></param>
 		private void SendRequest(AlibabaBuyer aliMember, CustomerDataSharing result, AlibabaBusinessType bizType) {
-
+			if (result==null)
+				return;
+			if(aliMember==null)
+				return;
+			if (result.aliMemberId == 0)
+				return;
+			if (result.aId == 0)
+				return;
 			try {
 
 				AlibabaClient client;

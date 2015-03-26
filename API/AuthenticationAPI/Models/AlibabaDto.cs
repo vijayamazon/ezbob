@@ -61,7 +61,7 @@
 		public string responseId { get; set; }
 
 		[Required]
-		[Range(1, Int64.MaxValue, ErrorMessage = "AliMemberId is invalid")]
+		[Range(1, long.MaxValue, ErrorMessage = "AliMemberId is invalid")]
 		public long aliMemberId { get; set; }
 
 		[Required(AllowEmptyStrings = false)]
