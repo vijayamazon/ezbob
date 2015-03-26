@@ -727,7 +727,7 @@
 			}*/
 			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
 			new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
-			new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
+			//new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
 		}
 
 
