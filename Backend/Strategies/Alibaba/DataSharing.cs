@@ -8,13 +8,10 @@
 	using Ezbob.Backend.Models.Alibaba;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Database;
-	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Alibaba;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-	using NHibernate.Linq;
-	using NHibernate.Util;
 	using RestSharp;
 	using StructureMap;
 

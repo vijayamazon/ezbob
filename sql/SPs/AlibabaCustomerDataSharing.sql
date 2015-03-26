@@ -12,7 +12,7 @@ AS
 BEGIN
 	
 	SET NOCOUNT ON;	
-	DECLARE @AlibabaMemberID numeric(20,0);	
+	DECLARE @AlibabaMemberID bigint;
 
 	SET @AlibabaMemberID = (select AliId from AlibabaBuyer where CustomerID = @CustomerID);	
 

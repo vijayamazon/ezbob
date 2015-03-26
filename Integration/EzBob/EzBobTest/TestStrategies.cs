@@ -709,11 +709,11 @@
 		[Test]
 		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
-			int customerID = 24319;  //24321 ; 
+			int customerID = 24322; //  23504; // 24319;  //24321 ; 
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
-			Console.WriteLine(v.AliId);
+		//	Console.WriteLine(v.AliId);
 			//new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
 			//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
@@ -726,7 +726,7 @@
 				new DataSharing(v.Customer.Id, 0).Execute();
 			}*/
 			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
-			//new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
+			new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
 			new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
 		}
 
