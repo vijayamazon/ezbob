@@ -709,7 +709,7 @@
 		[Test]
 		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
-			int customerID = 18234; // 217 ; //; // 18234;
+			int customerID = 24319; //18234; // 217 ; //; // 18234;
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
@@ -727,7 +727,7 @@
 				new DataSharing(v.Customer.Id, 0).Execute();
 			}*/
 			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
-			//new DataSharing(customerID, 0).Execute();
+			new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
 			new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
 		}
 
