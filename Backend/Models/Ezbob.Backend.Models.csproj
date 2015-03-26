@@ -62,7 +62,6 @@
     <Compile Include="CompanyData.cs" />
     <Compile Include="CompanyCaisAccount.cs" />
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
-    <Compile Include="CustomerRiskData.cs" />
     <Compile Include="ExternalAPI\AlibabaAvailableCreditResult.cs" />
     <Compile Include="ExternalAPI\ApiCallData.cs" />
     <Compile Include="LotteryResult.cs" />

@@ -16,7 +16,7 @@
 			get { return "RequalifyCustomer"; }
 		}
 
-		public RequalifyCustomer(int customerID, decimal aliMemberID) {
+		public RequalifyCustomer(int customerID, long aliMemberID) {
 			CustomerID = customerID;
 			AliMemberID = aliMemberID;
 		}
@@ -101,7 +101,7 @@
 			}
 		}
 
-		public decimal AliMemberID { get; private set; }
+		public long AliMemberID { get; private set; }
 		public int CustomerID { get; private set; }
 
 	}

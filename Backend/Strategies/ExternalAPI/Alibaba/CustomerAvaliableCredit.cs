@@ -8,9 +8,9 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 			get { return "Alibaba CustomerAvaliableCredit"; }
 		}
 
-		public CustomerAvaliableCredit(int customerID, decimal aliMemberID) {
-			this.CustomerID = customerID;
-			this.AliMemberID = aliMemberID;
+		public CustomerAvaliableCredit(int customerID, long aliMemberID) {
+			CustomerID = customerID;
+			AliMemberID = aliMemberID;
 			Result = new AlibabaAvailableCreditResult();
 		}
 
@@ -25,7 +25,7 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 		}
 
 		public int CustomerID { get; private set; }
-		public decimal AliMemberID { get; private set; }
+		public long AliMemberID { get; private set; }
 		public AlibabaAvailableCreditResult Result { get; private set; }
 	}
 }

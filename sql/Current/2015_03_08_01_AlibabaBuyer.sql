@@ -16,7 +16,7 @@ END
 GO
 
 BEGIN	
-alter table AlibabaBuyer alter column AliId numeric(20) not null;
+alter table AlibabaBuyer alter column AliId numeric(20, 0) not null;
 END
 GO
 

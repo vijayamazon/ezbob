@@ -19,7 +19,7 @@
         </xs:annotation>
       </xs:element>
       <xs:element minOccurs="0" name="aId" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="aliMemberId" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="aliMemberId" nillable="true" type="xs:long" />
       <xs:element minOccurs="0" name="creditLine" nillable="true" type="xs:decimal">
         <xs:annotation>
           <xs:appinfo>

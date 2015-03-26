@@ -62,7 +62,7 @@
 
 		[Required]
 		[Range(1, Int64.MaxValue, ErrorMessage = "AliMemberId is invalid")]
-		public decimal aliMemberId { get; set; }
+		public long aliMemberId { get; set; }
 
 		[Required(AllowEmptyStrings = false)]
 		[Range(1, Int32.MaxValue, ErrorMessage = "ezbob customer ID is invalid")]

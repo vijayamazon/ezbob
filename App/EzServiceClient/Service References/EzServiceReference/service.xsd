@@ -407,7 +407,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element minOccurs="0" name="aliMemberID" type="xs:decimal" />
+        <xs:element minOccurs="0" name="aliMemberID" type="xs:long" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -422,7 +422,7 @@
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element minOccurs="0" name="aliMemberID" type="xs:decimal" />
+        <xs:element minOccurs="0" name="aliMemberID" type="xs:long" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

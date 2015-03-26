@@ -5,7 +5,7 @@
 
 	partial class EzServiceImplementation {
 
-		public AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, decimal aliMemberID) {
+		public AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID) {
 
 			CustomerAvaliableCredit instance;
 
@@ -17,7 +17,7 @@
 
 		} // CustomerAvaliableCredit
 
-		public ActionMetaData RequalifyCustomer(int customerID, decimal aliMemberID) {
+		public ActionMetaData RequalifyCustomer(int customerID, long aliMemberID) {
 
 			Log.Info("ESI RequalifyCustomer: customerID: {0}, customerID: {1}", customerID, aliMemberID);
 

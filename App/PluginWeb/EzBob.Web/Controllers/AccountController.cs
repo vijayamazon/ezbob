@@ -1090,7 +1090,7 @@
 			if (customer.AlibabaId != null && customer.IsAlibaba) {
 				try {
 					AlibabaBuyer alibabaMember = new AlibabaBuyer();
-					alibabaMember.AliId = Convert.ToDecimal(customer.AlibabaId);
+					alibabaMember.AliId = Convert.ToInt64(customer.AlibabaId);
 					alibabaMember.Customer = customer;
 					EZBob.DatabaseLib.Model.Alibaba.AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 					aliMemberRep.SaveOrUpdate(alibabaMember);

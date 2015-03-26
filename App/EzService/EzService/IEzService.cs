@@ -748,10 +748,10 @@
 		ActionMetaData EnlistLottery(int customerID);
 
 		[OperationContract]
-		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, decimal aliMemberID);
+		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID);
 
 		[OperationContract]
-		ActionMetaData RequalifyCustomer(int customerID, decimal aliMemberID);
+		ActionMetaData RequalifyCustomer(int customerID, long aliMemberID);
 
 		[OperationContract]
 		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);

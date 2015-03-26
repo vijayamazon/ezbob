@@ -9,7 +9,7 @@
 	public class AlibabaBuyer {
 
 		public virtual int Id { get; set; }
-		public virtual decimal AliId { get; set; }
+		public virtual long AliId { get; set; }
 		public virtual decimal? Freeze { get; set; }
 		public virtual Customer Customer { get; set; }
 	}
@@ -30,7 +30,7 @@
 
 			Id(x => x.Id).GeneratedBy.Identity();
 
-			Map(x => x.AliId).Precision(20).Scale(0);
+			Map(x => x.AliId);
 			Map(x => x.Freeze);
 
 			References(x => x.Customer, "CustomerId").LazyLoad().Cascade.None();
