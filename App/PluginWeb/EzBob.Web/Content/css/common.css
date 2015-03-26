@@ -1,7 +1,8 @@
-﻿/*--------------------------------------------
-    Fonts
-----------------------------------------------*/
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
+﻿html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,
+big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,
+dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,
+aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,
+section,summary,time,mark,audio,video {
     margin:0;
     padding:0;
     border:0;
@@ -110,19 +111,25 @@ body, .ui-dialog {
 select, .tooltip {
     font-family: 'Open Sans';
 }
-html, body {
-    height: 100%;
-}
 
-i{
-	font-style: italic;
+html, body {
+	height: 100%;
 }
 
 #wrapper {
     min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -90px; /* the bottom margin is the negative value of the footer's height */
+	position: relative;
+}
+
+footer {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+i{
+	font-style: italic;
 }
 
 /*-- Padding for inner sections --*/
@@ -130,10 +137,6 @@ i{
     width:1000px; 
     margin:0 auto;
 	font-size: 16px;
-}
-
-footer, .push {
-    height: 90px; /* .push must be the same height as .footer */
 }
 
 /*-- copyrights, right at the bottom of the site --*/

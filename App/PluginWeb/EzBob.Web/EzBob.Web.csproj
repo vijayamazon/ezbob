@@ -465,6 +465,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\ezbob.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.svg" />
@@ -670,6 +671,7 @@
     <Content Include="Content\css\lib\jquery.ui.1.8.16.ie.css" />
     <Content Include="Content\css\lib\notifications.css" />
     <Content Include="Content\css\mobile.css" />
+    <Content Include="Content\css\paypoint-template.css" />
     <Content Include="Content\css\Permission.css" />
     <Content Include="Content\css\salesforce.css" />
     <Content Include="Content\css\alibaba.css" />

@@ -9,63 +9,68 @@
 @using ServiceClientProxy.EzServiceReference
 @using StructureMap
 @{
-    var controller = (string)ViewContext.RouteData.Values["controller"];
-    var authCookie = Request.IsAuthenticated ? "auth" : "";
-    var context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
-    var refNum = context.Customer == null ? "" : context.Customer.RefNumber;
-    var term = context.Customer == null || context.Customer.CampaignSource == null ? "" : context.Customer.CampaignSource.RTerm;
-    var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+	var controller = (string)ViewContext.RouteData.Values["controller"];
+	var authCookie = Request.IsAuthenticated ? "auth" : "";
+	var context = ObjectFactory.GetInstance<IEzbobWorkplaceContext>();
+	var refNum = context.Customer == null ? "" : context.Customer.RefNumber;
+	var term = context.Customer == null || context.Customer.CampaignSource == null ? "" : context.Customer.CampaignSource.RTerm;
+	var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
 	UiCustomerOrigin.Set(ViewBag);
 
-    string sCustomerLeadFieldName = "{}";
-    try {
-        StringStringMapActionResult clfnar = new ServiceClient().Instance.LoadCustomerLeadFieldNames();
-        sCustomerLeadFieldName = JsonConvert.SerializeObject(clfnar.Map);
-    } catch {
-        sCustomerLeadFieldName = "{}";
-    }
+	string sCustomerLeadFieldName = "{}";
+	try {
+		StringStringMapActionResult clfnar = new ServiceClient().Instance.LoadCustomerLeadFieldNames();
+		sCustomerLeadFieldName = JsonConvert.SerializeObject(clfnar.Map);
+	} catch {
+		sCustomerLeadFieldName = "{}";
+	}
 }
 <!DOCTYPE html>
 <html>
 <head>
-    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-    @{ Html.RenderPartial("_FrameKiller"); }
+	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+	@{ Html.RenderPartial("_FrameKiller"); }
 
-    @RenderSection("head", false)
+	@RenderSection("head", false)
 
-    @if (controller == "Wizard") {
+	@if (controller == "Wizard") {
 		<meta name="description" content="@ViewBag.CustomerOrigin.MetaDescription" />
-    }
+	}
 
-    <title>@ViewBag.Title</title>
+	<title>@ViewBag.Title</title>
 
-    <meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
+	<meta name="webutation-site-verification" content="webutation66c78d618b360eb461a120920e8ab3a3" />
 
-    <meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css">
+	<meta name="msvalidate.01" content="AFD649895CD47944F50BFA0BE7BAB5D8" />
+	<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" type="text/css">
 
-    @{ Html.RenderPartial("_FavIcon"); }
+	@{ Html.RenderPartial("_FavIcon"); }
 
-    @BundleHelper.RenderPrintCss()
-    @BundleHelper.RenderCustomerCss()
+	@BundleHelper.RenderPrintCss()
+	@BundleHelper.RenderCustomerCss()
 
-    @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
-        @BundleHelper.RenderEverlineCss()
-    } else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
-        @BundleHelper.RenderAlibabaCss()
-    }
+	@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
+		@BundleHelper.RenderEverlineCss()
+	} else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
+		@BundleHelper.RenderAlibabaCss()
+		@BundleHelper.RenderEzbobCss()
+	} else {
+		@BundleHelper.RenderEzbobCss()
+	}
 
-    @RenderSection("css", false)
+	@RenderSection("css", false)
 
-    <!--[if lt IE 9]>
-            <script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
-        <![endif]-->
-    @{Html.RenderPartial("security_template");}
+<!--[if lt IE 9]>
+	<script src="https://html5shiv.googlecode.com/svn/trunk/html5.js"> </script>
+<![endif]-->
+
+	@{Html.RenderPartial("security_template");}
 </head>
 
 <body auth="@authCookie" data-user-name="" data-ref="@refNum" data-term="@term">
 	@{Html.RenderPartial("_GoogleTagManager");}
+
 	@RenderSection("afterHead", false)
 
 	@AntiForgery.GetHtml()
@@ -73,9 +78,16 @@
 	<div id="wrapper">
 		@{ Html.RenderPartial("_Header", new ViewDataDictionary(ViewData)); }
 
-		<div class="main-page">
+		@{
+			CustomerOriginEnum uiOrigin = ViewBag.CustomerOrigin.GetOrigin();
+			string mainPageClassName = "main-page-" + uiOrigin.ToString().ToLowerInvariant();
+		}
+
+		<div class="main-page @mainPageClassName">
 			@RenderBody()
 		</div>
+
+		@{ Html.RenderPartial("_Footer", new ViewDataDictionary(ViewData)); }
 
 		<div id="valentine2015scratch">
 			<div class="content">
@@ -147,41 +159,42 @@
 		</div>
 
 		<div id="modalRegion" class="modal hide fade"></div>
-		@if (!IsSectionDefined("customJs")) {
-			<div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
-			<div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
-			<div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
-			<div style="display: none;" class="hide" id="customer-name"></div>
+
+		@*if (!IsSectionDefined("customJs")) {
 			<div class="push"></div>
-		}
-		<div style="display: none;" class="hide" id="customer-lead-field-names">@sCustomerLeadFieldName</div>
+		}*@
 	</div>
 
-	<div id="easter2015scratch" class="in-customer">
-		<div class="opening">
-			<!--a class="leave" href="#">Play later</a-->
-			<div class="leave"></div>
-		</div>
-		<div class="playground">
-			<img class="egg egg-golden" data-has-prize="no" src="~/Content/img/easter2015scratch/golden-egg.png" />
-			<img class="egg egg-magenta" data-has-prize="no" src="~/Content/img/easter2015scratch/magenta-egg.png" />
-			<img class="egg egg-pink" data-has-prize="yes" src="~/Content/img/easter2015scratch/pink-egg.png" />
-
-			<div class="exit-game">
-				<!--<a class="decline-game" href="#">I don't want to play</a>
-				&nbsp;&nbsp;&nbsp;&nbsp;-->
-				<!--a class="leave" href="#">Play later</a-->
+	<div id="promotion-pages">
+		<div id="easter2015scratch" class="in-customer">
+			<div class="opening">
 				<div class="leave"></div>
 			</div>
+			<div class="playground">
+				<img class="egg egg-golden" data-has-prize="no" src="~/Content/img/easter2015scratch/golden-egg.png" />
+				<img class="egg egg-magenta" data-has-prize="no" src="~/Content/img/easter2015scratch/magenta-egg.png" />
+				<img class="egg egg-pink" data-has-prize="yes" src="~/Content/img/easter2015scratch/pink-egg.png" />
 
-			<div class="not-yet">
-				<img src="~/Content/img/easter2015scratch/not-yet.png" />
+				<div class="exit-game">
+					<div class="leave"></div>
+				</div>
+
+				<div class="not-yet">
+					<img src="~/Content/img/easter2015scratch/not-yet.png" />
+				</div>
 			</div>
+			<div class="won"></div>
 		</div>
-		<div class="won"></div>
 	</div>
 
-	@{ Html.RenderPartial("_Footer", new ViewDataDictionary(ViewData)); }
+	@if (!IsSectionDefined("customJs")) {
+		<div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
+		<div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
+		<div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
+		<div style="display: none;" class="hide" id="customer-name"></div>
+	}
+
+	<div style="display: none;" class="hide" id="customer-lead-field-names">@sCustomerLeadFieldName</div>
 
 	<script type="text/javascript">
 		window.gRootPath = '@Url.Content("~/")';
@@ -195,6 +208,7 @@
 		@BundleHelper.RenderCommonJs()
 		@BundleHelper.RenderProfileJs()
 	}
+
 	@RenderSection("Js", false)
 
 	<script type="text/javascript">
@@ -235,7 +249,7 @@
 				EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
 		} // EzBob_CgVendors_init
 	</script>
+
 	@{ Html.RenderPartial("_Iovation"); }
 </body>
-
 </html>

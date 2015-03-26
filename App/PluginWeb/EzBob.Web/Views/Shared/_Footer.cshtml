@@ -2,41 +2,41 @@
 @model dynamic
 
 @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
-    <footer class="row everline_footer">
-        <div id="copyrights">
-            <div class="copyrights-inner">
-                <div class="legal-links col">
-                    <p class="col">
-                        Everline is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.
-                        <br />
-                        Everline is authorised and regulated by the Financial Conduct Authority for its consumer lending business. Our Interim Permissions Reference Number is 647816.
-                        <br />
-                        Registered Address: 39-41 North Road, London N7 9DP
-                        <br />
-                        All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.
-                        <br />
-                        All loans are subject to status and approval. 18+ only.
-                    </p>
-                </div>
-            </div>
-        </div>
-    </footer>
+	<footer class="everline_footer">
+		<div id="copyrights">
+			<div class="copyrights-inner">
+				<div class="legal-links col">
+					<p class="col">
+						Everline is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.
+						<br />
+						Everline is authorised and regulated by the Financial Conduct Authority for its consumer lending business. Our Interim Permissions Reference Number is 647816.
+						<br />
+						Registered Address: 39-41 North Road, London N7 9DP
+						<br />
+						All rights reserved. Terms, conditions, features, availability, pricing, fees, service & support options subject to change without notice.
+						<br />
+						All loans are subject to status and approval. 18+ only.
+					</p>
+				</div>
+			</div>
+		</div>
+	</footer>
 } else {
-    <footer>
-        <div id="copyrights">
-            <div class="copyrights-inner">
-                @if (!string.IsNullOrEmpty(ViewBag.FooterText)) {
-                    @Html.Raw(ViewBag.FooterText)
-                    @Html.Raw(@"<br>powered by <span class='bold'>ezbob</span>")
-                } else {
-                    @Html.Raw(@"
+	<footer>
+		<div id="copyrights">
+			<div class="copyrights-inner">
+				@if (!string.IsNullOrEmpty(ViewBag.FooterText)) {
+					@Html.Raw(ViewBag.FooterText)
+					@Html.Raw(@"<br>powered by <span class='bold'>ezbob</span>")
+				} else {
+					@Html.Raw(@"
 				<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br/>
 				<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
 				Registered Address: 39-41 North Road, London N7 9DP<br/>
 				&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.")
-                }
-            </div>
-        </div>
-    </footer>
+				}
+			</div>
+		</div>
+	</footer>
 }
 
