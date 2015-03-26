@@ -31,8 +31,6 @@
 
 		public IRestResponse SendDecision(JObject obj, AlibabaBusinessType businessType) {
 
-			Trace.WriteLine(string.Format("**********SendDecision-------------------------------------------------{0}, {1}", JsonConvert.SerializeObject(obj, Formatting.None, jf), businessType.DescriptionAttr()));
-
 			IRestResponse response;
 
 			StringDictionary parameters = new StringDictionary();
@@ -84,10 +82,6 @@
 			try {
 				response = client.Post(request);
 				HttpStatusCode status = response.StatusCode;
-
-				Trace.WriteLine(string.Format("**********SendDecision---response--------------------{0}, {1}", JsonConvert.SerializeObject(response, Formatting.None, jf), businessType.DescriptionAttr()));
-
-
 			} catch (Exception e) {
 				// log error TODO
 				throw new HttpException(String.Format("Failed to process request to Alibaba for customer {0}, alibabaID {1}, error: {2}", arg0: obj.GetValue("aId"), arg1: obj.GetValue("aliMemberId"), arg2: e));
@@ -95,6 +89,5 @@
 
 			return response;
 		}
-
 	}
 }

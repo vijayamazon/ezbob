@@ -19,9 +19,7 @@
 	public class DataSharing : AStrategy {
 
 		public JsonSerializerSettings jf = new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
-		
-
-
+	
 		public DataSharing(int customerID, AlibabaBusinessType businessType) {
 			CustomerID = customerID;
 			this.businessType = businessType;
@@ -43,10 +41,6 @@
 				Log.Info("Alibaba member for customer {0} not exists OR customer business Type not supported in Alibaba (Entrepreneur|SoleTrader|None)", CustomerID);
 				return;
 			}
-
-			Log.Debug(string.Format("DATASHARING2*****************************{0}, {1}", CustomerID, businessType.DescriptionAttr()));
-
-			Log.Debug(string.Format("**********DATASHARING3 ***********alimember: {0}, aliid: {1}", aliMember.AliId, aliMember.AliId));
 
 			// check if 001 exists before 002
 			if (this.businessType == AlibabaBusinessType.APPLICATION_REVIEW) {
@@ -82,9 +76,6 @@
 				return;
 			}
 
-			//Log.Debug("*************DATASHARING66  {0} ", this.Result.Stringify());
-
-
 			SendRequest(aliMember, this.Result, this.businessType);
 		}
 
@@ -96,9 +87,6 @@
 		/// <param name="result"></param>
 		/// <param name="bizType"></param>
 		private void SendRequest(AlibabaBuyer aliMember, CustomerDataSharing result, AlibabaBusinessType bizType) {
-
-			//Log.Debug("*************DATASHARING5 SendRequest ENTER: CustomerDataSharing {0}, aliMember: {1} ", JsonConvert.SerializeObject(result, jf), JsonConvert.SerializeObject(aliMember, jf));
-			Log.Debug("*************DATASHARING5 SendRequest ENTER: CustomerDataSharing {0} ", result.Stringify());
 
 			if (result==null)
 				return;
@@ -118,13 +106,9 @@
 				} else {
 					client = new AlibabaClient(CurrentValues.Instance.AlibabaBaseUrl, CurrentValues.Instance.AlibabaUrlPath, CurrentValues.Instance.AlibabaAppSecret);
 				}
-
-				Log.Debug("*************DATASHARING6 SendRequest TRY: CustomerDataSharing {0}, aliMember: {1} ", result.Stringify(), aliMember.AliId );
-
+	
 				IRestResponse response = client.SendDecision(JObject.FromObject(result), bizType);
-
-				Log.Debug("************* DATASHARING7 SendRequest : response {0} ", response.Content);
-
+	
 				AlibabaSentData sent = new AlibabaSentData();
 				sent.AlibabaBuyer = aliMember;
 				sent.Customer = sent.AlibabaBuyer.Customer;
@@ -133,10 +117,6 @@
 
 				var jsonContent = JsonConvert.DeserializeObject(response.Content);
 				var objContent = JObject.Parse(jsonContent.ToString());
-
-				Log.Debug("************* DATASHARING8 SendRequest : jsonContent {0} ", jsonContent.ToString());
-
-				Log.Debug("************* DATASHARING9 SendRequest : objContent {0} ", objContent.ToString());
 
 				var errCode = objContent.Properties().FirstOrDefault(c => c.Name == "errCode");
 				if (errCode != null) {
@@ -157,23 +137,14 @@
 				if (btype != null) {
 					sent.BizTypeCode = btype.Value.ToString();
 				}
-
-				try {
-					sent.StatusCode = response.StatusCode.DescriptionAttr();
-					sent.SentDate = DateTime.UtcNow;
-					this.sentDataRep.Save(sent);
-				} catch (Exception ee) {
-					Log.Error(ee, "************* DATASHARING10 SendRequest : failed to save {0} ", sent);
-				}
+				
+				sent.StatusCode = response.StatusCode.DescriptionAttr();
+				sent.SentDate = DateTime.UtcNow;
+				this.sentDataRep.Save(sent);
 
 			} catch (HttpException e) {
-
 				throw new StrategyAlert(this, string.Format("HttpException: Failed to transmit for customer {0}, CustomerDataSharing: {1}, alimember:{2}", CustomerID, result.Stringify(), aliMember.AliId), e);
-
-				throw new StrategyAlert(this, string.Format("HttpException: Failed to transmit for customer {0}, CustomerDataSharing: {1}, alimember {2}", CustomerID, JsonConvert.SerializeObject(result, jf), JsonConvert.SerializeObject(aliMember, jf)), e);
 			} catch (Exception ex) {
-		//		throw new StrategyAlert(this, string.Format("Failed to transmit for customer {0}, CustomerDataSharing: {1}, alimember {2}", CustomerID, JsonConvert.SerializeObject(result, jf), JsonConvert.SerializeObject(aliMember, jf)), ex);
-
 				throw new StrategyAlert(this, string.Format("Failed to transmit for customer {0}, CustomerDataSharing: {1}, alimember:{2}", CustomerID, result.Stringify(), aliMember.AliId), ex);
 			}
 		}
