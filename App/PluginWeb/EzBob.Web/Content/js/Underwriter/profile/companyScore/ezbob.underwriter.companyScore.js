@@ -72,6 +72,7 @@ EzBob.Underwriter.CompanyScoreView = Backbone.View.extend({
 
 		this.list.addClass('box');
 		this.list.find('.ui-state-default').addClass('box-title');
+		this.list.find('.box-content').css('height', ''); // Ugly temporary patch.
 	}, // redisplayAccordion
 
 	changeCompany: function () {
