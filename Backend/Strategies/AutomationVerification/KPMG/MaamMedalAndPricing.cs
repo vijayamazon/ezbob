@@ -206,9 +206,24 @@ SELECT
 	r.Id AS CashRequestID,
 	r.IdCustomer AS CustomerID,
 	c.BrokerID,
-	r.UnderwriterDecisionDate,
-	r.UnderwriterDecision,
-	ISNULL(r.ManagerApprovedSum, 0) AS Amount,
+	CASE
+		WHEN r.IdUnderwriter IS NULL THEN r.SystemDecisionDate
+		ELSE r.UnderwriterDecisionDate
+	END AS UnderwriterDecisionDate,
+	CASE
+		WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Rejected') THEN 'Rejected'
+		WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision IN ('Approved', 'ApprovedPending')) THEN 'Approved'
+		WHEN (r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve') THEN 'Approved'
+	END AS UnderwriterDecision,
+	ISNULL(CASE
+		WHEN r.IdUnderwriter IS NULL
+			THEN CASE
+				WHEN r.UnderwriterComment = 'Auto Re-Approval' THEN r.ManagerApprovedSum
+				ELSE r.SystemCalculatedSum
+			END
+		ELSE
+			ISNULL(r.ManagerApprovedSum, r.SystemCalculatedSum)
+	END, 0) AS Amount,
 	r.InterestRate,
 	ISNULL(r.ApprovedRepaymentPeriod, r.RepaymentPeriod) AS RepaymentPeriod,
 	r.UseSetupFee,
@@ -229,11 +244,17 @@ FROM
 	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
 	INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 WHERE
-	r.IdUnderwriter IS NOT NULL
+	r.CreationDate >= 'Sep 4 2012'
 	AND
-	r.IdUnderwriter != 1
-	AND
-	r.UnderwriterDecision IN ('Approved', 'Rejected', 'ApprovedPending')
+	(r.IdUnderwriter IS NULL OR r.IdUnderwriter != 1)
+	AND (
+		(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Rejected')
+		OR (
+			(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision IN ('Approved', 'ApprovedPending'))
+			OR
+			(r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve')
+		)
+	)
 	{0}
 ORDER BY
 	r.IdCustomer ASC,

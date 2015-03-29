@@ -73,7 +73,8 @@
 				return;
 			} // if
 
-			DB.ExecuteNonQuery(
+			// Result is ignored here.
+			DB.GetFirst(
 				"UpdatePlayerStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("PlayerID", this.playerID),

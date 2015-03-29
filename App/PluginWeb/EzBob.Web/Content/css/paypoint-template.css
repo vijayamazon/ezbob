@@ -1,0 +1,45 @@
+﻿.error h3 {
+	font-size: 14px;
+	margin-bottom: 0px;
+	color: red;
+}
+
+.paypont-form .control-label {
+	font-weight: normal;
+}
+
+body header + .inner {
+	margin: 0 auto !important;
+}
+
+#paypal_table {
+	width: 50%;
+}
+
+#paypal_button {
+	text-align: right;
+}
+
+#paypal_link {
+	text-align: center;
+}
+
+#secure {
+	height: 200px;
+}
+
+.login_btn {
+	display: none !important;
+}
+
+#logoff-li {
+	display: inline-block !important;
+}
+
+.PayPointHeader {
+	margin-top: 80px;
+}
+
+.wizard-steps {
+	margin-bottom: -60px;
+}

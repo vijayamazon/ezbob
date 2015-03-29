@@ -1,0 +1,13 @@
+﻿.main-page-ezbob {
+	padding-bottom: 90px;
+}
+
+.ezbob-header-placeholder {
+	height: 77px;
+}
+
+.common-header {
+	position: fixed;
+	z-index: 10;
+	width: 100%;
+}

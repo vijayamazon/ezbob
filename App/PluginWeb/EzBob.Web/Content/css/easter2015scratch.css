@@ -1,0 +1,92 @@
+﻿#easter2015scratch {
+	display: none;
+	width: 100%;
+	background-color: black;
+	min-height: 100%;
+	height: 100%;
+}
+
+#easter2015scratch > .opening {
+	background-image: url(../img/easter2015scratch/opening-bg.jpg);
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 100%;
+	position: relative;
+}
+
+#easter2015scratch .leave {
+	position: absolute;
+	right: 0;
+	margin: 0 0 10px 10px;
+	width: 198px;
+	height: 60px;
+	background-position: left top;
+	background-repeat: no-repeat;
+	background-image: url(../img/easter2015scratch/not-now-normal.png);
+}
+
+#easter2015scratch .leave:active {
+	background-image: url(../img/easter2015scratch/not-now-active.png);
+}
+
+#easter2015scratch .leave:hover {
+	background-image: url(../img/easter2015scratch/not-now-hover.png);
+}
+
+#easter2015scratch > .playground {
+	display: none;
+	background-image: url(../img/easter2015scratch/playground-bg.jpg);
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 100%;
+	position: relative;
+}
+
+#easter2015scratch > .playground > .egg {
+	position: absolute;
+	-ms-opacity: 0.01;
+	opacity: 0.01;
+	display: none;
+}
+
+#easter2015scratch > .playground > .egg:hover {
+	position: absolute;
+	-ms-opacity: 1;
+	opacity: 1;
+}
+
+#easter2015scratch > .playground > .not-yet {
+	display: none;
+	background-color: #000000;
+	background-color: rgba(0, 0, 0, 0.5);
+	height: 100%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+
+#easter2015scratch > .playground > .not-yet > img {
+	display: block;
+	margin: 0 auto;
+	position: relative;
+	top: 50%;
+	-moz-transform: translateY(-50%);
+	-ms-transform: translateY(-50%);
+	-o-transform: translateY(-50%);
+	-webkit-transform: translateY(-50%);
+	transform: translateY(-50%);
+	width: 802px;
+	height: 563px;
+}
+
+#easter2015scratch > .won {
+	display: none;
+	background-position: center top;
+	background-repeat: no-repeat;
+	background-size: contain;
+	height: 100%;
+	position: relative;
+}

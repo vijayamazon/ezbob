@@ -1,15 +1,11 @@
 ﻿body {
 	font-family: 'Open Sans',sans-serif;
-	position: static;
-	padding-top: 129px;
-	max-width: 100%;
-	overflow-x: hidden;
 	font-size: 62.5%;
-	margin: 0;
 }
 
-.main-page{
+.main-page-everline {
 	font-size: 16px;
+	padding-bottom: 100px;
 }
 
 .row {
@@ -162,6 +158,10 @@ header.everline_header {
 		zoom: 1;
 	}
 
+.everline-header-placeholder {
+	height: 129px;
+}
+
 a {
 	-webkit-tap-highlight-color: transparent;
 }
@@ -170,22 +170,21 @@ footer.everline_footer {
 	background: #28211f;
 	border-top: 6px solid #8dc641;
 	height: 100px;
-	/*height: 100%;*/
 }
 
 	footer.everline_footer .legal-links {
 		margin: 0 auto;
 		float: none;
 		clear: both;
-		padding: 0 20px 0 20px;
+		padding: 0 20px;
 		font-size: 1.2em;
 	}
 
 	footer.everline_footer p {
 		color: #ddd;
 		font-size: 1em;
+		margin-bottom: 0;
 	}
-
 
 .help_everline.help_eBay {
 	background: url(../everline/help/help_ebay_everline.jpg) no-repeat center 0;
@@ -208,60 +207,60 @@ footer.everline_footer {
 }
 
 .org-btn {
-padding: .6em 2em;
--webkit-transition: all .1s ease-out;
--moz-transition: all .1s ease-out;
--ms-transition: all .1s ease-out;
--o-transition: all .1s ease-out;
-transition: all .1s ease-out;
-background: #e28023;
-border-left: 0;
-border-right: 0;
-border-bottom: 2px solid #c86d14;
-border-top: 2px solid #f39e4b;
-color: #fff;
-font-size: 1.8em;
-font-weight: 600;
-text-decoration: none;
--webkit-border-radius: 0;
--moz-border-radius: 0;
--ms-border-radius: 0;
--o-border-radius: 0;
-border-radius: 0;
+	padding: .6em 2em;
+	-webkit-transition: all .1s ease-out;
+	-moz-transition: all .1s ease-out;
+	-ms-transition: all .1s ease-out;
+	-o-transition: all .1s ease-out;
+	transition: all .1s ease-out;
+	background: #e28023;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 2px solid #c86d14;
+	border-top: 2px solid #f39e4b;
+	color: #fff;
+	font-size: 1.8em;
+	font-weight: 600;
+	text-decoration: none;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-ms-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
 }
 
 .org-btn, .grn-btn, .blue-btn {
-color: #fff;
-font-size: 1.8em;
-font-weight: 600;
-text-decoration: none;
+	color: #fff;
+	font-size: 1.8em;
+	font-weight: 600;
+	text-decoration: none;
 }
 
-.btn-sm{
+.btn-sm {
 	font-size: 16px;
 	font-weight: 600;
 	padding: 6px 25px;
 }
 
 header nav ul.sub-links a.org-btn {
-padding: 7px 26px;
-margin-right: 20px;
+	padding: 7px 26px;
+	margin-right: 20px;
 }
 
 header nav ul.sub-links a {
-display: block;
-padding: 36px 15px;
-position: relative;
-z-index: 10;
-font-weight: 600;
-font-size: 1.4em;
+	display: block;
+	padding: 36px 15px;
+	position: relative;
+	z-index: 10;
+	font-weight: 600;
+	font-size: 1.4em;
 }
 
 header nav .org-btn {
-font-size: 1.4em;
+	font-size: 1.4em;
 }
 
 .copyrights-inner {
-padding-bottom: 5px;
-padding-top: 5px;
+	padding-bottom: 5px;
+	padding-top: 5px;
 }

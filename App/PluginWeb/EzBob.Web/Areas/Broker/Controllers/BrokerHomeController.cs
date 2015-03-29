@@ -36,8 +36,10 @@
 		public System.Web.Mvc.ActionResult Index(string sourceref = "") {
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
+			ms_oLog.Debug("UI origin is {0}", uiOrigin.Stringify());
+
 			if (!uiOrigin.IsEzbob()) {
-				return RedirectToActionPermanent(
+				return RedirectToAction(
 					"Index",
 					User.Identity.IsAuthenticated ? "Profile" : "Wizard",
 					new { Area = "Customer" }
@@ -55,8 +57,7 @@
 				Response.Cookies.Add(cookie);
 			} // if
 
-			oModel.MessageOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString()
-				.Trim();
+			oModel.MessageOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString().Trim();
 
 			if (!string.IsNullOrWhiteSpace(oModel.MessageOnStart)) {
 				oModel.MessageOnStartSeverity = (Session[Constant.Broker.MessageOnStartSeverity] ?? string.Empty).ToString();
@@ -71,8 +72,7 @@
 				ms_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", oModel.Auth, User.Identity.Name);
 			} // if
 
-			oModel.Terms = (Session[Constant.Broker.Terms] ?? string.Empty).ToString()
-				.Trim();
+			oModel.Terms = (Session[Constant.Broker.Terms] ?? string.Empty).ToString().Trim();
 			Session[Constant.Broker.Terms] = null;
 
 			if (!string.IsNullOrWhiteSpace(oModel.Terms)) {

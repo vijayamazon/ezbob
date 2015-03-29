@@ -99,7 +99,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 			customerID: props.BrokerID,
 			playerID: props.LotteryPlayerID,
 			customerMode: false,
-			mainPageClass: '.broker-page-content',
+			mainPageClass: '#wrapper',
 		});
 
 		if (this.scratchView)
