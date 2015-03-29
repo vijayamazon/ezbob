@@ -34,7 +34,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 			customerID: this.customer.get('Id'),
 			playerID: this.customer.get('LotteryPlayerID'),
 			customerMode: true,
-			mainPageClass: '#wrapper,footer',
+			mainPageClass: '#wrapper',
 		});
 
 		this.router = new EzBob.Profile.ProfileRouter(this.customer);

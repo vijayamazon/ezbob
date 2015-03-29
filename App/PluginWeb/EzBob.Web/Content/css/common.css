@@ -112,7 +112,7 @@ select, .tooltip {
     font-family: 'Open Sans';
 }
 
-html, body {
+html, body, #promotion-pages {
 	height: 100%;
 }
 
