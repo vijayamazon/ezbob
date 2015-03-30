@@ -55,11 +55,13 @@
 			.Add("~/Content/css/lib/notifications.css")
 			//custom css
 			.Add("~/Content/css/common.css")
+			.Add("~/Content/css/ezbob.css")
 			.Add("~/Content/css/broker.css")
 			.Add("~/Content/css/edit-experian-director-data.css")
 			.Add("~/Content/css/mobile.css")
 			.Add("~/Content/css/profile-ny2015scratch.css")
 			.Add("~/Content/css/valentine2015scratch.css")
+			.Add("~/Content/css/easter2015scratch.css")
 			.MvcRender("~/Content/css/min/broker_#.css")
 		);
 	}
@@ -73,32 +75,36 @@
 	@AntiForgery.GetHtml()
 
 	<div id="wrapper">
-		<div id="header">
-			<div class="header-bg-strip"></div>
-			<div class="header-inner">
-				<div class="header-logo">
-					<a href="http://ezbob.com">
-						<img src="@Model.LogoUrl" class="newlogo" width="128" height="34">
-					</a>
+		<header class="common-header">
+			<div id="header">
+				<div class="header-bg-strip"></div>
+				<div class="header-inner">
+					<div class="header-logo">
+						<a href="http://ezbob.com">
+							<img src="@Model.LogoUrl" class="newlogo" width="128" height="34">
+						</a>
+					</div>
+					<div class="header-info">
+						<div class="header-info-left"></div>
+						<div class="header-info-text">FOR BROKERS</div>
+						<div class="header-info-right"></div>
+					</div>
+					<ul id="user-menu" class="hide">
+						<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
+						<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
+						<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
+						<li>
+							<div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
+						</li>
+					</ul>
 				</div>
-				<div class="header-info">
-					<div class="header-info-left"></div>
-					<div class="header-info-text">FOR BROKERS</div>
-					<div class="header-info-right"></div>
-				</div>
-				<ul id="user-menu" class="hide">
-					<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
-					<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
-					<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
-					<li>
-						<div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
-					</li>
-				</ul>
 			</div>
-		</div>
-		<div class="row-fluid broker-page-content">
+		</header>
+		<div class="ezbob-header-placeholder"></div>
+
+		<div class="row-fluid broker-page-content main-page main-page-ezbob">
 			<div class="inner">
-				<div class="inner main-page">
+				<div class="inner">
 					<section class="broker">
 						<div class="notifications"></div>
 
@@ -191,21 +197,21 @@
 										<img id="EstimatedMonthlyClientAmountImage" class="field_status required" />
 									</label>
 								</div>
-                                
-                                <div class="form_field_container">
-                                    <div class="form_read_and_accept">
-                                        <input type="checkbox" name="FCARegistered" id="FCARegistered" value="false" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:fca-registered" />
-                                        <label for="FCARegistered">FCA Registered</label>
-                                    </div>
-                                </div>
 
-                                <div class="form_field_container license_number_field_container" style="display: none">
-                                    <label class="attardi-input">
-                                        <span>Licence number</span>
-                                        <input type="text" name="LicenseNumber" id="LicenseNumber" maxlength="50" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-license-number" />
-                                        <img id="LicenseNumberImage" class="field_status required" />
-                                    </label>
-                                </div>
+								<div class="form_field_container">
+									<div class="form_read_and_accept">
+										<input type="checkbox" name="FCARegistered" id="FCARegistered" value="false" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" ui-event-control-id="broker:fca-registered" />
+										<label for="FCARegistered">FCA Registered</label>
+									</div>
+								</div>
+
+								<div class="form_field_container license_number_field_container" style="display: none">
+									<label class="attardi-input">
+										<span>Licence number</span>
+										<input type="text" name="LicenseNumber" id="LicenseNumber" maxlength="50" tabindex="@{ WriteLiteral(nSignupTabIdx++); }" class="form_field" ui-event-control-id="broker:signup-license-number" />
+										<img id="LicenseNumberImage" class="field_status required" />
+									</label>
+								</div>
 
 								<div id="strength-password-view" class="form_field_container">
 									<label class="attardi-input">
@@ -818,13 +824,35 @@
 				</div>
 			</div>
 		</div>
+
 		<div id="modalRegion" class="modal hide fade"></div>
-		<div class="push"></div>
+
+		@{ Html.RenderPartial("_Footer"); }
 	</div>
 
-	
-	@{ Html.RenderPartial("_Footer"); }
-	
+	<div id="easter2015scratch">
+		<div class="opening">
+			<!--a class="leave" href="#">Play later</a-->
+			<div class="leave"></div>
+		</div>
+		<div class="playground">
+			<img class="egg egg-golden" data-has-prize="no" src="~/Content/img/easter2015scratch/golden-egg.png" />
+			<img class="egg egg-magenta" data-has-prize="no" src="~/Content/img/easter2015scratch/magenta-egg.png" />
+			<img class="egg egg-pink" data-has-prize="yes" src="~/Content/img/easter2015scratch/pink-egg.png" />
+
+			<div class="exit-game">
+				<!--<a class="decline-game" href="#">I don't want to play</a>
+				&nbsp;&nbsp;&nbsp;&nbsp;-->
+				<!--a class="leave" href="#">Play later</a-->
+				<div class="leave"></div>
+			</div>
+
+			<div class="not-yet">
+				<img src="~/Content/img/easter2015scratch/not-yet.png" />
+			</div>
+		</div>
+		<div class="won"></div>
+	</div>
 
 	<div id="hidden-container" class="hide" style="display: none !important;">
 		<div class="common-customer-sidebar">
@@ -916,6 +944,7 @@
 			.Add("~/Content/js/ScratchCards/ezbob.scratchcard.selectcard.js")
 			.Add("~/Content/js/ScratchCards/ezbob.scratchcard.ny2015.js")
 			.Add("~/Content/js/ScratchCards/ezbob.scratchcard.valentine2015.js")
+			.Add("~/Content/js/ScratchCards/ezbob.scratchcard.easter2015.js")
 			.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 			.Add("~/Content/js/Broker/broker.base.view.js")
 			.Add("~/Content/js/Broker/broker.submit.view.js")
