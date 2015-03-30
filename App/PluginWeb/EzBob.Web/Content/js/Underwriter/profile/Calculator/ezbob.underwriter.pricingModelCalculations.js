@@ -260,9 +260,11 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
         });
     },
     
-    makeInitialCalculation: function() {
+    makeInitialCalculation: function () {
         if (this.model.get('LoanAmount') > 0 && this.model.get('TenureMonths') > 0) {
             this.calculateClicked();
+        } else {
+            this.renderAndRememberExpanded();
         }
     },
     
