@@ -139,6 +139,11 @@
 					new QueryParameter("CustomerID", sp.Customer.ID)
 				);
 
+				if (nApprovedSum <= 0) {
+					m_oLog.Warn("EchoSign cannot send: approved sum is not positive.");
+					return EchoSignSendResult.Fail;
+				} // if
+
 				int nTotalCount = 0;
 				int nSuccessCount = 0;
 
