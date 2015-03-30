@@ -68,11 +68,22 @@
 		} // Execute
 
 		private string CreateXlsx() {
-			var ms = new MemoryStream();
+			string fileName = string.Format(
+				"{0}.{1}.{2}",
+				DateTime.UtcNow.ToString("yyyyMMdd-HHmmss.ffffff", CultureInfo.InvariantCulture),
+				Guid.NewGuid().ToString("N"),
+				Guid.NewGuid().ToString("N")
+			);
 
-			Xlsx.SaveAs(ms);
+			string filePath = Path.Combine(Path.GetTempPath(), fileName);
 
-			return Mail.EncodeAttachment(ms.GetBuffer());
+			Xlsx.SaveAs(new FileInfo(filePath));
+
+			string result = Mail.EncodeAttachment(File.ReadAllBytes(filePath));
+
+			File.Delete(filePath);
+
+			return result;
 		} // CreateXlsx
 
 		private readonly bool doRun;

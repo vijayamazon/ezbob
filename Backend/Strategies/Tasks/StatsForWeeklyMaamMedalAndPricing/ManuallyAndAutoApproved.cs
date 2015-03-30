@@ -30,7 +30,6 @@
 
 		public override void Add(Datum d) {
 			if (Added.If(ManuallyApproved.LastWasAdded && AutoApproved.LastWasAdded)) {
-				/* TODO
 				this.manualAmount += ManuallyApproved.LastAmount;
 				this.autoAmount += AutoApproved.LastAmount;
 
@@ -41,7 +40,6 @@
 				this.loanAmount += d.LoanAmount;
 				this.badLoanAmount += d.BadLoanAmount;
 				this.defaultLoanAmount += d.DefaultLoanAmount;
-				*/
 			} // if
 		} // Add
 

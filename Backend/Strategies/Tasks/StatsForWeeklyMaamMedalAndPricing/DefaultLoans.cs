@@ -10,7 +10,7 @@
 			AutoApproved autoApproved
 		) : base(
 			sheet,
-			"Default (and remained) loans",
+			"Default (not cured) loans",
 			total,
 			manuallyApproved,
 			autoApproved
@@ -18,12 +18,10 @@
 		} // constructor
 
 		public override void Add(Datum d) {
-			/* TODO
 			if (Added.If(ManuallyApproved.LastWasAdded && AutoApproved.LastWasAdded && d.HasDefaultLoan)) {
 				this.approvedAmount += AutoApproved.LastAmount;
 				this.loanAmount += d.DefaultLoanAmount;
 			} // if
-			*/
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

@@ -1,19 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
-	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Globalization;
-	using System.Linq;
-	using DbConstants;
-	using Ezbob.Backend.Strategies.Extensions;
-	using Ezbob.Backend.Strategies.MedalCalculations;
-	using Ezbob.Database;
 	using Ezbob.ExcelExt;
-	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using OfficeOpenXml;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
-		int,
+		long,
 		System.Collections.Generic.List<LoanMetaData>
 	>;
 
@@ -44,44 +36,6 @@
 		public int? BrokerID { get; set; }
 		public bool IsDefault { get; set; }
 
-		public List<ManualDatumItem> ManualItems { get; private set; }
-
-		public ManualDatumItem FirstManual { get { return ManualItems[0]; } }
-		public ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
-
-		public AutoDatumItem Auto { get; private set; }
-
-		public static string CsvTitles(SortedSet<string> sources) {
-			/*
-			var os = new List<string>();
-
-			foreach (var s in sources) {
-				os.Add(string.Format(
-					"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount;{0} max late days",
-					s
-				));
-			} // for each
-			*/
-
-			return string.Join(";",
-				"Customer ID",
-				"Broker ID",
-				"Customer is default now",
-				// "Has default loan",
-				// "Loan was default",
-				ManualDatumItem.CsvTitles("First"),
-				"Decision count",
-				ManualDatumItem.CsvTitles("Last"),
-				AutoDatumItem.CsvTitles("Auto")/*,
-				AMedalAndPricing.CsvTitles("Auto min"),
-				"The same max offer",
-				AMedalAndPricing.CsvTitles("Auto max"),
-				string.Join(";", os)
-				*/
-			);
-		} // CsvTitles
-
-		/*
 		public int LoanCount { get; private set; }
 		public decimal LoanAmount { get; private set; }
 
@@ -92,18 +46,48 @@
 		public bool HasBadLoan { get { return BadLoanCount > 0; } }
 		public int BadLoanCount { get; private set; }
 		public decimal BadLoanAmount { get; private set; }
-		*/
 
-		public int ToXlsx(ExcelWorksheet sheet, int rowNum, TCrLoans crLoans, SortedSet<string> sources) {
-			/*
-			List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
-				? crLoans[CashRequestID]
-				: new List<LoanMetaData>();
+		public List<ManualDatumItem> ManualItems { get; private set; }
 
-			var bySource = new SortedDictionary<string, LoanSummaryData>();
+		public ManualDatumItem FirstManual { get { return ManualItems[0]; } }
+		public ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
 
-			foreach (string s in sources)
-				bySource[s] = new LoanSummaryData();
+		public AutoDatumItem Auto { get; private set; }
+
+		public static string CsvTitles(SortedSet<string> allLoanSources) {
+			var os = new List<string>();
+
+			foreach (var s in allLoanSources) {
+				os.Add(string.Format(
+					"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount;{0} max late days",
+					s
+				));
+			} // for each
+
+			return string.Join(";",
+				"Customer ID",
+				"Broker ID",
+				"Customer is default now",
+				"Has not cured loan",
+				"Has 14 days late loan",
+				ManualDatumItem.CsvTitles("First"),
+				"Decision count",
+				ManualDatumItem.CsvTitles("Last"),
+				AutoDatumItem.CsvTitles("Auto"),
+				/*
+				AMedalAndPricing.CsvTitles("Auto min"),
+				"The same max offer",
+				AMedalAndPricing.CsvTitles("Auto max"),
+				*/
+				string.Join(";", os)
+			);
+		} // CsvTitles
+
+		public void FindLoans(TCrLoans crLoans, SortedSet<string> allLoanSources) {
+			this.loansBySource = new SortedDictionary<string, LoanSummaryData>();
+
+			foreach (string s in allLoanSources)
+				this.loansBySource[s] = new LoanSummaryData();
 
 			LoanCount = 0;
 			LoanAmount = 0;
@@ -114,31 +98,39 @@
 			BadLoanCount = 0;
 			BadLoanAmount = 0;
 
-			foreach (LoanMetaData lmd in lst) {
-				bySource[lmd.LoanSourceName].Add(lmd);
+			foreach (ManualDatumItem mi in ManualItems) {
+				long cashRequestID = mi.CashRequestID;
 
-				LoanCount++;
-				LoanAmount += lmd.LoanAmount;
+				if (!crLoans.ContainsKey(cashRequestID))
+					continue;
 
-				if (lmd.LoanStatus == LoanStatus.Late) {
-					DefaultLoanCount++;
-					DefaultLoanAmount += lmd.LoanAmount;
-				} // if
+				foreach (LoanMetaData lmd in crLoans[cashRequestID]) {
+					this.loansBySource[lmd.LoanSourceName].Add(lmd);
 
-				if (lmd.MaxLateDays > 13) {
-					BadLoanCount++;
-					BadLoanAmount += lmd.LoanAmount;
-				} // if
-			} // for
-			*/
+					LoanCount++;
+					LoanAmount += lmd.LoanAmount;
 
+					if (lmd.LoanStatus == LoanStatus.Late) {
+						DefaultLoanCount++;
+						DefaultLoanAmount += lmd.LoanAmount;
+					} // if
+
+					if (lmd.MaxLateDays > 13) {
+						BadLoanCount++;
+						BadLoanAmount += lmd.LoanAmount;
+					} // if
+				} // for
+			} // for each item
+		} // FindLoans
+
+		public int ToXlsx(ExcelWorksheet sheet, int rowNum) {
 			int curColumn = 1;
 
 			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
-			// curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
-			// curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
 
 			curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
@@ -152,14 +144,16 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, (AutoMax == null) ? "Same" : "No");
 
 			curColumn = (AutoMax ?? AutoMin).ToXlsx(sheet, rowNum, curColumn);
+			*/
 
-			foreach (string s in sources) {
-				LoanSummaryData loanStat = bySource[s];
+			foreach (var pair in this.loansBySource) {
+				LoanSummaryData loanStat = pair.Value;
 				curColumn = loanStat.ToXlsx(sheet, rowNum, curColumn);
 			} // for each
-			*/
 
 			return curColumn;
 		} // ToXlsx
+
+		private SortedDictionary<string, LoanSummaryData> loansBySource;
 	} // class Datum
 } // namespace

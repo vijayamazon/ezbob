@@ -6,13 +6,13 @@
 	internal class AutoRejected : AStatItem {
 		public AutoRejected(ExcelWorksheet sheet, Total total, AutoProcessed autoProcessed) : base(
 			sheet,
-			"Auto rejected & re-rejected",
+			"Auto rejected",
 			total,
 			autoProcessed
 		) {} // constructor
 
 		public override void Add(Datum d) {
-			// TODO Added.If(d.AutomationDecision.In(DecisionActions.Reject, DecisionActions.ReReject));
+			Added.If(d.Auto.HasDecided && d.Auto.AutomationDecision.In(DecisionActions.Reject, DecisionActions.ReReject));
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

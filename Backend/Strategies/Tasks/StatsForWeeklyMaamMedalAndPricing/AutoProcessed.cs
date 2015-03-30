@@ -11,7 +11,7 @@
 		) {} // constructor
 
 		public override void Add(Datum d) {
-			// TODO Added.If(d.AutomationDecision != DecisionActions.Waiting);
+			Added.If(d.Auto.HasDecided);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

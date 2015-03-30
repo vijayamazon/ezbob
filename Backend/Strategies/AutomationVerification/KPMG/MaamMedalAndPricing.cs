@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
+	// using System.Globalization;
 	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
@@ -10,7 +10,7 @@
 	using OfficeOpenXml;
 	using PaymentServices.Calculators;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
-		int,
+		long,
 		System.Collections.Generic.List<LoanMetaData>
 	>;
 
@@ -24,11 +24,13 @@
 			this.crLoans = new TCrLoans();
 			this.loanSources = new SortedSet<string>();
 
+			/*
 			this.tag = string.Format(
 				"#MaamMedalAndPricing_{0}_{1}",
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
 				Guid.NewGuid().ToString("N")
 			);
+			*/
 		} // constructor
 
 		public override string Name {
@@ -62,6 +64,7 @@
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
 				try {
+					d.FindLoans(CashRequestLoans, LoanSources);
 					d.Auto.RunAutomation(isHomeOwner, DB, Log);
 				} catch (Exception e) {
 					Log.Alert(e, "Automation failed for customer {0} at {1}.", d.CustomerID, d.FirstManual.DecisionTime);
@@ -94,7 +97,7 @@
 			};
 
 			foreach (Datum d in Data) {
-				d.ToXlsx(sheet, curRow, CashRequestLoans, LoanSources);
+				d.ToXlsx(sheet, curRow);
 				curRow++;
 
 				foreach (var st in stats)
@@ -175,7 +178,7 @@
 			return isHomeOwnerAccordingToLandRegistry;
 		} // IsHomeOwner
 
-		private readonly string tag;
+		// private readonly string tag;
 
 		private readonly SortedDictionary<int, bool> homeOwners;
 		private readonly TCrLoans crLoans;

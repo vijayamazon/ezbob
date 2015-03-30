@@ -10,7 +10,7 @@
 			AutoApproved autoApproved
 		) : base(
 			sheet,
-			"Default (and cured or remained) loans",
+			"Default (14 days late) loans",
 			total,
 			manuallyApproved,
 			autoApproved
@@ -18,12 +18,10 @@
 		} // constructor
 
 		public override void Add(Datum d) {
-			/* TODO
 			if (Added.If(ManuallyApproved.LastWasAdded && AutoApproved.LastWasAdded && d.HasBadLoan)) {
 				this.approvedAmount += AutoApproved.LastAmount;
 				this.loanAmount += d.BadLoanAmount;
 			} // if
-			*/
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

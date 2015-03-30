@@ -1,6 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
-	using AutomationCalculator.Common;
+	// using AutomationCalculator.Common;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.Extensions;
@@ -10,6 +10,10 @@
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
+	using TCrLoans = System.Collections.Generic.SortedDictionary<
+		long,
+		System.Collections.Generic.List<LoanMetaData>
+	>;
 
 	public class AutoDatumItem : ADatumItem {
 		public AutoDatumItem(int customerID, DateTime decisionTime, int previousLoanCount) {
@@ -31,6 +35,10 @@
 		} // DecisionStr
 
 		public override bool IsAuto { get { return true; } }
+
+		public bool HasDecided {
+			get { return AutomationDecision != DecisionActions.Waiting; }
+		} // HasDecided
 
 		public DecisionActions AutomationDecision {
 			get { return this.automationDecision; }

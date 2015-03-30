@@ -45,6 +45,8 @@ BEGIN
 				ON l.Id = t.LoanID
 				AND t.Type = 'PaypointTransaction'
 				AND t.Status = 'Done'
+		WHERE
+			l.[Date] >= 'September 4 2012'
 		GROUP BY
 			r.Id,
 			l.CustomerID,

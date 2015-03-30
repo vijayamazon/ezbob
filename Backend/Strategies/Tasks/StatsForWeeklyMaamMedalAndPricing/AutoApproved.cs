@@ -6,7 +6,7 @@
 	internal class AutoApproved : AStatItem {
 		public AutoApproved(bool takeMin, ExcelWorksheet sheet, Total total, AutoProcessed autoProcessed) : base(
 			sheet,
-			"Auto approved & re-approved",
+			"Auto approved",
 			total,
 			autoProcessed
 		) {
@@ -14,13 +14,10 @@
 		} // constructor
 
 		public override void Add(Datum d) {
-			/* TODO
 			Added.If(
-				(d.AutomationDecision == DecisionActions.ReApprove) ||
-				(this.takeMin ? (d.AutomationDecision == DecisionActions.Approve) : (d.AutoMaxOrMin.Amount > 0)),
-				this.takeMin ? d.AutoMin.Amount : d.AutoMaxOrMin.Amount
+				d.Auto.HasDecided && d.Auto.AutomationDecision.In(DecisionActions.Approve, DecisionActions.ReApprove),
+				d.Auto.AutomationDecision == DecisionActions.ReApprove ? d.Auto.ReapprovedAmount : d.Auto.ApprovedAmount
 			);
-			*/
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

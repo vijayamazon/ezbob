@@ -10,7 +10,7 @@
 		) {} // constructor
 
 		public override void Add(Datum d) {
-			// TODO Added.If(d.Manual.IsRejected);
+			Added.If(!d.FirstManual.IsApproved);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
