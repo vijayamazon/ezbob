@@ -805,6 +805,7 @@
     <Content Include="Content\img\valentine2015scratch\win.png" />
     <Content Include="Content\js\App\ezbob.bindings.js" />
     <Content Include="Content\js\App\ezbob.GA.js" />
+    <Content Include="Content\js\App\ezbob.iovation.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\footer.min.js" />

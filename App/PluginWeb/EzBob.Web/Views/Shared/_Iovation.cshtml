@@ -2,13 +2,10 @@
 
 <script type="text/javascript" >
     // set common configuration variables
-    var io_install_flash = false;
-    var io_install_stm = false;
-    var io_enable_rip = true;
-    var io_exclude_stm = 12;
-    var io_flash_needs_update_handler = "";
-
-
+    var io_install_stm = false; // do not install Active X 
+    var io_exclude_stm = 12; // do not run Active X 
+    var io_install_flash = false; // do not install Flash 
+    var io_enable_rip = true; // collect Real IP information 
     var io_last_error = "";// string This variable contains the last known error
 
     var io_subscriber_code = @ConfigManager.CurrentValues.Instance.IovationSubscriberId.Value;
@@ -36,6 +33,14 @@
 	false – if the request was not immediately sent
 	true – if the request was immediately sent
 	*@
+
+    // use callback to process blackbox as soon as it is done 
+    var io_bb_callback = function (bb, isComplete) {
+        console.log('io_bb_callback', bb, isComplete);
+        // when done call the send function 
+        if (isComplete) EzBob.App.Iovation.io_send_bb(bb);
+    };
+    
 </script>
 
 <script type="text/javascript" src="@ConfigManager.CurrentValues.Instance.IovationUrl.Value"></script>

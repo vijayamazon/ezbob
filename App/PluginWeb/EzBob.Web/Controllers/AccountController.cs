@@ -936,6 +936,21 @@
 			return Json(new { success = true, broker = false, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
 		} // CustomerCreatePassword
 
+        [ValidateJsonAntiForgeryToken]
+		[Ajax]
+        [HttpPost]
+        public JsonResult Iovation(string blackbox) {
+            var ip = RemoteIp();
+            var customer = this.m_oContext.Customer;
+            if (customer == null) {
+                ms_oLog.Info("Iovation black box {0} ip {1} customer is null", blackbox, ip);
+                return Json(new { });
+            }
+            
+            ms_oLog.Info("Iovation black box {0} ip {1} customer {2}", blackbox, ip, customer.Id);
+            return Json(new {});
+        }
+
 		private MembershipCreateStatus CreateUser(
 			string email,
 			string password,
