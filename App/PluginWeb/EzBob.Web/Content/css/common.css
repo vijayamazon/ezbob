@@ -116,6 +116,10 @@ html, body, #promotion-pages {
 	height: 100%;
 }
 
+#promotion-pages {
+	display: none;
+}
+
 #wrapper {
     min-height: 100%;
 	position: relative;

@@ -1,7 +1,7 @@
 ﻿var EzBob = EzBob || {};
 EzBob.ScratchCards = EzBob.ScratchCards || {};
 
-EzBob.ScratchCards.Easter2015 = EzBob.View.extend({
+EzBob.ScratchCards.Easter2015 = EzBob.ScratchCards.Base.extend({
 	initialize: function(options) {
 		this.customerID = options.customerID;
 		this.playerID = options.playerID;
@@ -49,7 +49,7 @@ EzBob.ScratchCards.Easter2015 = EzBob.View.extend({
 		$(window).off(this.resizeEventName);
 
 		// don't forget to call the original remove() function
-		EzBob.View.prototype.remove.call(this);
+		EzBob.ScratchCards.Base.prototype.remove.call(this);
 	}, // remove
 
 	events: {
@@ -223,6 +223,8 @@ EzBob.ScratchCards.Easter2015 = EzBob.View.extend({
 			return;
 		} // if
 
+		EzBob.ScratchCards.Easter2015.prototype.show.call(this);
+
 		this.$mainPage.hide();
 
 		this.$el.show();
@@ -236,6 +238,8 @@ EzBob.ScratchCards.Easter2015 = EzBob.View.extend({
 	}, // show
 
 	hide: function() {
+		EzBob.ScratchCards.Easter2015.prototype.hide.call(this);
+
 		this.$mainPage.show();
 
 		this.$el.hide();
