@@ -14,11 +14,13 @@
 		} // constructor
 
 		public override void Add(Datum d) {
+			/* TODO
 			Added.If(
 				(d.AutomationDecision == DecisionActions.ReApprove) ||
 				(this.takeMin ? (d.AutomationDecision == DecisionActions.Approve) : (d.AutoMaxOrMin.Amount > 0)),
 				this.takeMin ? d.AutoMin.Amount : d.AutoMaxOrMin.Amount
 			);
+			*/
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

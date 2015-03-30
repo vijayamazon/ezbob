@@ -6,10 +6,8 @@
 	using OfficeOpenXml;
 
 	internal class Stats {
-		public Stats(ExcelWorksheet sheet, bool takeMin, bool takeAll) {
+		public Stats(ExcelWorksheet sheet, bool takeMin) {
 			this.sheet = sheet;
-
-			this.takeAll = takeAll;
 
 			var total = new Total(sheet);
 			var autoProcessed = new AutoProcessed(sheet, total);
@@ -36,15 +34,10 @@
 				new RejectedCrossApproved(sheet, "Auto rejected and manually approved", total, autoRejected, manuallyApproved),
 			};
 
-			this.name =
-				(takeMin ? "Minimum" : "Maximum") + " offer " +
-				(this.takeAll ? "with" : "without") + " campaigns and duplicates";
+			this.name = (takeMin ? "Minimum" : "Maximum") + " offer";
 		} // constructor
 
 		public void Add(Datum d) {
-			if (!this.takeAll && d.IsCampaign)
-				return;
-
 			foreach (var si in this.stats)
 				si.Add(d);
 		} // Add
@@ -65,7 +58,6 @@
 			return row;
 		} // ToXlsx
 
-		private readonly bool takeAll;
 		private readonly string name;
 
 		private readonly List<AStatItem> stats; 

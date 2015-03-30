@@ -23,7 +23,6 @@
 			this.homeOwners = new SortedDictionary<int, bool>();
 			this.defaultCustomers = new SortedSet<int>();
 			this.crLoans = new TCrLoans();
-			this.customerLoans = new TCrLoans();
 			this.loanSources = new SortedSet<string>();
 
 			this.tag = string.Format(
@@ -57,11 +56,6 @@
 					else
 						this.crLoans[lmd.CashRequestID] = new List<LoanMetaData> { lmd };
 
-					if (this.customerLoans.ContainsKey(lmd.CustomerID))
-						this.customerLoans[lmd.CustomerID].Add(lmd);
-					else
-						this.customerLoans[lmd.CustomerID] = new List<LoanMetaData> { lmd };
-
 					this.loanSources.Add(lmd.LoanSourceName);
 				},
 				"LoadAllLoansMetaData",
@@ -73,14 +67,12 @@
 			var pc = new ProgressCounter("{0} cash requests processed.", Log, 50);
 
 			foreach (Datum d in Data) {
-				d.IsDefault = defaultCustomers.Contains(d.CustomerID);
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
 				try {
-					d.SetCustomerLoanCount(this.customerLoans);
-					d.RunAutomation(isHomeOwner, DB, Log);
+					// d.RunAutomation(isHomeOwner, DB, Log);
 				} catch (Exception e) {
-					Log.Alert(e, "Automation failed for customer {0} with cash request {1}.", d.CustomerID, d.CashRequestID);
+					// Log.Alert(e, "Automation failed for customer {0} with cash request {1}.", d.CustomerID, d.CashRequestID);
 				} // try
 
 				pc++;
@@ -105,10 +97,8 @@
 			int curRow = 2;
 
 			var stats = new List<Stats> {
-				new Stats(statSheet, true, true),
-				new Stats(statSheet, true, false),
-				new Stats(statSheet, false, true),
-				new Stats(statSheet, false, false),
+				new Stats(statSheet, true),
+				new Stats(statSheet, false),
 			};
 
 			foreach (Datum d in Data) {
@@ -157,11 +147,12 @@
 			SetupFeeCalculator.ReloadBrokerRepoCache();
 
 			this.spLoad.ForEachResult<SpLoadCashRequestsForAutomationReport.ResultRow>(sr => {
+				bool isDefault = defaultCustomers.Contains(sr.CustomerID);
 
 				if (byCustomer.ContainsKey(sr.CustomerID))
-					byCustomer[sr.CustomerID].Add(sr);
+					byCustomer[sr.CustomerID].Add(sr, isDefault);
 				else
-					byCustomer[sr.CustomerID] = new CustomerData(sr);
+					byCustomer[sr.CustomerID] = new CustomerData(sr, isDefault);
 
 				pc++;
 				return ActionResult.Continue;
@@ -194,24 +185,11 @@
 			return isHomeOwnerAccordingToLandRegistry;
 		} // IsHomeOwner
 
-		private void ProcessCashRequest(SafeReader sr) {
-			Datum d = sr.Fill<Datum>();
-			d.Tag = this.tag;
-
-			sr.Fill(d.Manual);
-			sr.Fill(d.ManualCfg);
-
-			d.ManualCfg.Calculate(d.Manual);
-
-			Data.Add(d);
-		} // ProcessCashRequest
-
 		private readonly string tag;
 
 		private readonly SortedDictionary<int, bool> homeOwners;
 		private readonly SortedSet<int> defaultCustomers;
 		private readonly TCrLoans crLoans;
-		private readonly TCrLoans customerLoans;
 		private readonly SortedSet<string> loanSources; 
 		private readonly SpLoadCashRequestsForAutomationReport spLoad;
 	} // class MaamMedalAndPricing

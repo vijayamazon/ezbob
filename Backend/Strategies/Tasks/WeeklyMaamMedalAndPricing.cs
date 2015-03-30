@@ -4,13 +4,10 @@
 	using System.Globalization;
 	using System.IO;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
-	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
-	using Ezbob.ExcelExt;
 	using Ezbob.Utils.MimeTypes;
 	using global::Reports;
 	using MailApi;
 	using MailApi.Model;
-	using OfficeOpenXml;
 
 	public class WeeklyMaamMedalAndPricing : MaamMedalAndPricing {
 		public WeeklyMaamMedalAndPricing(bool forceRunNow) {

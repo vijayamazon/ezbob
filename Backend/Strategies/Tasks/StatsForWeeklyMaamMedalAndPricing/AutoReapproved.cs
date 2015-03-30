@@ -18,7 +18,7 @@
 		) {} // constructor
 
 		public override void Add(Datum d) {
-			Added.If(d.AutomationDecision == DecisionActions.ReApprove);
+			// TODO Added.If(d.AutomationDecision == DecisionActions.ReApprove);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

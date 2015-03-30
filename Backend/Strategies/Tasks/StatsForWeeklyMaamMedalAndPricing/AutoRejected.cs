@@ -12,7 +12,7 @@
 		) {} // constructor
 
 		public override void Add(Datum d) {
-			Added.If(d.AutomationDecision.In(DecisionActions.Reject, DecisionActions.ReReject));
+			// TODO Added.If(d.AutomationDecision.In(DecisionActions.Reject, DecisionActions.ReReject));
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

@@ -16,9 +16,11 @@
 			return this;
 		} // Init
 
-		public virtual void Decide(long? cashRequestID = null, string tag = null) {
+		public virtual void Decide(bool saveTrail, long? cashRequestID = null, string tag = null) {
 			RunPrimary();
-			Trail.Save(DB, null, cashRequestID, tag);
+
+			if (saveTrail)
+				Trail.Save(DB, null, cashRequestID, tag);
 		} // Decide
 
 		protected override void GatherAvailableFunds() {

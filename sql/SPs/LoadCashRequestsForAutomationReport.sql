@@ -19,7 +19,7 @@ BEGIN
 		CASE
 			WHEN r.IdUnderwriter IS NULL THEN r.SystemDecisionDate
 			ELSE r.UnderwriterDecisionDate
-		END AS DecisionDate,
+		END AS DecisionTime,
 		CASE
 			WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Rejected') THEN CONVERT(BIT, 0)
 			WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision IN ('Approved', 'ApprovedPending')) THEN CONVERT(BIT, 1)
@@ -33,7 +33,7 @@ BEGIN
 				END
 			ELSE
 				ISNULL(r.ManagerApprovedSum, r.SystemCalculatedSum)
-		END, 0) AS Amount,
+		END, 0) AS ApprovedAmount,
 		r.InterestRate,
 		ISNULL(r.ApprovedRepaymentPeriod, r.RepaymentPeriod) AS RepaymentPeriod,
 		r.UseSetupFee,
@@ -42,7 +42,6 @@ BEGIN
 		r.ManualSetupFeeAmount,
 		r.MedalType AS MedalName,
 		r.ScorePoints AS EzbobScore,
-		CONVERT(BIT, CASE WHEN r.UnderwriterComment LIKE '%campaign%' THEN 1 ELSE 0 END) AS IsCampaign,
 		ISNULL((
 			SELECT COUNT(*)
 			FROM Loan
