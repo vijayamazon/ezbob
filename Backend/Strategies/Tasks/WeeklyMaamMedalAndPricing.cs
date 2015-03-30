@@ -13,20 +13,9 @@
 	using OfficeOpenXml;
 
 	public class WeeklyMaamMedalAndPricing : MaamMedalAndPricing {
-		public WeeklyMaamMedalAndPricing(bool forceRunNow) : base(-1, -1) {
-			DateTime dateTo = DateTime.UtcNow.Date;
-
-			this.doRun = forceRunNow || dateTo.DayOfWeek == DayOfWeek.Saturday;
-
-			this.today = dateTo.Date;
-
-			DateTime dateFrom = dateTo.AddDays(-7);
-
-			this.condition = string.Format(
-				"AND '{0}' <= r.UnderwriterDecisionDate AND r.UnderwriterDecisionDate < '{1}'",
-				dateFrom.Date.ToString("MMMM d yyyy", CultureInfo.InvariantCulture),
-				this.today.ToString("MMMM d yyyy", CultureInfo.InvariantCulture)
-			);
+		public WeeklyMaamMedalAndPricing(bool forceRunNow) {
+			this.today = DateTime.UtcNow.Date;
+			this.doRun = forceRunNow || this.today.DayOfWeek == DayOfWeek.Saturday;
 		} // constructor
 
 		public override string Name {
@@ -38,6 +27,8 @@
 				Log.Debug("Not running: neither Saturday nor forced.");
 				return;
 			} // if
+
+			DateFrom = this.today.AddDays(-7);
 
 			Report rpt;
 
@@ -63,7 +54,7 @@
 			var attachments = new List<attachment> {
 				new attachment {
 					name = baseAttachmentName + ".xlsx",
-					content = CreateXlsx(baseAttachmentName + ".xlsx"),
+					content = CreateXlsx(),
 					type = mime[".xlsx"],
 				}
 			};
@@ -79,65 +70,16 @@
 			);
 		} // Execute
 
-		protected override string Condition {
-			get { return this.condition; }
-		} // Condition
-
-		private string CreateXlsx(string fileName) {
-			var ep = new ExcelPackage();
-
-			ExcelWorksheet sheet = ep.CreateSheet("Cash requests", false, CsvTitles);
-			ExcelWorksheet statSheet = ep.CreateSheet("Statistics", false);
-
-			int curRow = 2;
-
-			var stats = new List<Stats> {
-				new Stats(statSheet, true, true),
-				new Stats(statSheet, true, false),
-				new Stats(statSheet, false, true),
-				new Stats(statSheet, false, false),
-			};
-
-			foreach (Datum d in Data) {
-				d.ToXlsx(sheet, curRow, CashRequestLoans, LoanSources);
-				curRow++;
-
-				foreach (var st in stats)
-					st.Add(d);
-			} // for each
-
-			ep.AutoFitColumns();
-
-			int row = 1;
-
-			foreach (var st in stats) {
-				row = st.ToXlsx(row);
-				row++;
-			} // for each
-
+		private string CreateXlsx() {
 			var ms = new MemoryStream();
 
-			ep.SaveAs(ms);
+			Xlsx.SaveAs(ms);
 
-			byte[] fileContent = ms.GetBuffer();
-
-			string filePath = Path.Combine(Path.GetTempPath(), fileName);
-
-			try {
-				File.WriteAllBytes(filePath, fileContent);
-				Log.Debug("Saved .xlsx file as {0}.", filePath);
-			} catch (Exception e) {
-				Log.Warn(e, "Failed to save .xlsx file as {0}.", filePath);
-			} // try
-
-			return Mail.EncodeAttachment(fileContent);
+			return Mail.EncodeAttachment(ms.GetBuffer());
 		} // CreateXlsx
 
-		private readonly string condition;
-
-		private readonly DateTime today;
-
 		private readonly bool doRun;
+		private readonly DateTime today;
 	} // class WeeklyMaamMedalAndPricing
 } // namespace
 

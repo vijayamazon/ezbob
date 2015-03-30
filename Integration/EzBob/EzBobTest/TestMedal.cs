@@ -36,7 +36,7 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestMaamMedalAndPricing() {
-			var stra = new MaamMedalAndPricing(1, 16431);
+			var stra = new MaamMedalAndPricing();
 			stra.Execute();
 		} // TestMaamMedalAndPricing
 

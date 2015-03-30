@@ -89,12 +89,14 @@
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
     <Compile Include="AutomationVerification\KPMG\AMedalAndPricing.cs" />
     <Compile Include="AutomationVerification\KPMG\AutoMedalAndPricing.cs" />
+    <Compile Include="AutomationVerification\KPMG\CustomerData.cs" />
     <Compile Include="AutomationVerification\KPMG\Datum.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanMetaData.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanSummaryData.cs" />
     <Compile Include="AutomationVerification\KPMG\MaamMedalAndPricing.cs" />
     <Compile Include="AutomationVerification\KPMG\ManualMedalAndPricing.cs" />
     <Compile Include="AutomationVerification\KPMG\SetupFeeConfiguration.cs" />
+    <Compile Include="AutomationVerification\KPMG\SpLoadCashRequestsForAutomationReport.cs" />
     <Compile Include="AutomationVerification\VerifyMedal.cs" />
     <Compile Include="AutomationVerification\VerifyReject.cs" />
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />

@@ -26,7 +26,6 @@
 			ManualCfg = new SetupFeeConfiguration();
 			AutoMin = new AutoMedalAndPricing();
 			AutoMax = new AutoMedalAndPricing();
-			IsSuperseded = false;
 			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
 			IsAutoRejected = false;
@@ -72,7 +71,6 @@
 
 		public bool IsDefault { get; set; }
 		public bool IsCampaign { get; set; }
-		public bool IsSuperseded { get; set; }
 
 		public DecisionActions AutomationDecision {
 			get { return this.automationDecision; }
@@ -140,7 +138,6 @@
 				"Has default loan",
 				"Loan was default",
 				"Is campaign",
-				"Is superseded",
 				"Decision time",
 				AMedalAndPricing.CsvTitles("Manual"),
 				"Automation decision",
@@ -199,8 +196,6 @@
 			foreach (string s in sources)
 				bySource[s] = new LoanSummaryData();
 
-			foreach (LoanMetaData lmd in lst)
-
 			LoanCount = 0;
 			LoanAmount = 0;
 
@@ -236,7 +231,6 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsCampaign ? "Campaign" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsSuperseded ? "Superseded" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, DecisionTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
 			curColumn = Manual.ToXlsx(sheet, rowNum, curColumn);

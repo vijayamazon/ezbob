@@ -2,10 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
+	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
+	using OfficeOpenXml;
 	using PaymentServices.Calculators;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
 		int,
@@ -13,10 +15,11 @@
 	>;
 
 	public class MaamMedalAndPricing : AStrategy {
-		public MaamMedalAndPricing(int topCount, int lastCheckedCashRequestID) {
-			this.topCount = topCount;
-			this.lastCheckedID = lastCheckedCashRequestID;
+		public MaamMedalAndPricing() {
+			this.spLoad = new SpLoadCashRequestsForAutomationReport(DB, Log);
+
 			Data = new List<Datum>();
+
 			this.homeOwners = new SortedDictionary<int, bool>();
 			this.defaultCustomers = new SortedSet<int>();
 			this.crLoans = new TCrLoans();
@@ -86,9 +89,45 @@
 			pc.Log();
 
 			CsvTitles = Datum.CsvTitles(this.loanSources).Split(';');
+			CreateXlsx();
 		} // Execute
 
 		public virtual string[] CsvTitles { get; private set; }
+
+		public virtual ExcelPackage Xlsx { get; private set; }
+
+		private void CreateXlsx() {
+			Xlsx = new ExcelPackage();
+
+			ExcelWorksheet sheet = Xlsx.CreateSheet("Cash requests", false, CsvTitles);
+			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
+
+			int curRow = 2;
+
+			var stats = new List<Stats> {
+				new Stats(statSheet, true, true),
+				new Stats(statSheet, true, false),
+				new Stats(statSheet, false, true),
+				new Stats(statSheet, false, false),
+			};
+
+			foreach (Datum d in Data) {
+				d.ToXlsx(sheet, curRow, CashRequestLoans, LoanSources);
+				curRow++;
+
+				foreach (var st in stats)
+					st.Add(d);
+			} // for each
+
+			Xlsx.AutoFitColumns();
+
+			int row = 1;
+
+			foreach (var st in stats) {
+				row = st.ToXlsx(row);
+				row++;
+			} // for each
+		} // CreateXlsx
 
 		protected virtual TCrLoans CashRequestLoans {
 			get { return this.crLoans; }
@@ -98,66 +137,46 @@
 			get { return this.loanSources; }
 		} // LoanSources
 
-		protected virtual string Condition {
-			get { return string.Empty; }
-		} // Condition
+		protected virtual int? CustomerID {
+			get { return this.spLoad.CustomerID; }
+			set { this.spLoad.CustomerID = value; }
+		} // CustomerID
 
-		private string Query {
-			get { return string.Format(QueryFormat, Condition); }
-		} // Query
+		protected virtual DateTime? DateFrom {
+			get { return this.spLoad.DateFrom; }
+			set { this.spLoad.DateFrom = value; }
+		} // DateFrom
 
 		private void LoadCashRequests() {
 			Data.Clear();
 
-			this.crPc = new ProgressCounter("{0} cash requests loaded so far...", Log, 50);
+			var byCustomer = new SortedDictionary<int, CustomerData>();
+
+			ProgressCounter pc = new ProgressCounter("{0} cash requests loaded so far...", Log, 50);
 
 			SetupFeeCalculator.ReloadBrokerRepoCache();
 
-			DB.ForEachRowSafe(ProcessCashRequest, Query, CommandSpecies.Text);
+			this.spLoad.ForEachResult<SpLoadCashRequestsForAutomationReport.ResultRow>(sr => {
 
-			this.crPc.Log();
+				if (byCustomer.ContainsKey(sr.CustomerID))
+					byCustomer[sr.CustomerID].Add(sr);
+				else
+					byCustomer[sr.CustomerID] = new CustomerData(sr);
+
+				pc++;
+				return ActionResult.Continue;
+			});
+
+			pc.Log();
 
 			Log.Debug("{0} loaded before filtering.", Grammar.Number(Data.Count, "cash request"));
 
-			var byCustomer = new SortedDictionary<int, List<Datum>>();
-
-			foreach (Datum curDatum in Data) {
-				if (!byCustomer.ContainsKey(curDatum.CustomerID)) {
-					byCustomer[curDatum.CustomerID] = new List<Datum> { curDatum };
-					continue;
-				} // if
-
-				List<Datum> customerData = byCustomer[curDatum.CustomerID];
-
-				if (!curDatum.IsCampaign) {
-					var lastKnown = customerData.LastOrDefault(d => !d.IsCampaign && !d.IsSuperseded);
-
-					// EZ-3048: from two cash requests that happen in less than 24 hours only the latest should be taken.
-					if (lastKnown != null)
-						if ((curDatum.DecisionTime - lastKnown.DecisionTime).TotalHours < 24)
-							lastKnown.IsSuperseded = true;
-				} // if
-
-				customerData.Add(curDatum);
-			} // for each
-
-			var result = new List<Datum>();
-
-			foreach (List<Datum> lst in byCustomer.Values)
-				result.AddRange(lst);
-
-			result.Sort((a, b) => b.CashRequestID.CompareTo(a.CashRequestID));
-
-			if (this.lastCheckedID > 0)
-				result = result.Where(ymir => ymir.CashRequestID < this.lastCheckedID).ToList();
-
-			if (this.topCount > 0)
-				result = result.Take(this.topCount).ToList();
-
 			Data.Clear();
-			Data.AddRange(result);
 
-			Log.Debug("{0} remained after filtering.", Grammar.Number(Data.Count, "cash request"));
+			foreach (var customerData in byCustomer.Values)
+				Data.AddRange(customerData.Data);
+
+			Log.Debug("{0} remained after filtering cash requests.", Grammar.Number(Data.Count, "data item"));
 		} // LoadCashRequests
 
 		private bool IsHomeOwner(int customerID) {
@@ -185,81 +204,16 @@
 			d.ManualCfg.Calculate(d.Manual);
 
 			Data.Add(d);
-
-			this.crPc++;
 		} // ProcessCashRequest
 
-		private ProgressCounter crPc;
-
 		private readonly string tag;
-		private readonly int topCount;
-		private readonly int lastCheckedID;
 
 		private readonly SortedDictionary<int, bool> homeOwners;
 		private readonly SortedSet<int> defaultCustomers;
 		private readonly TCrLoans crLoans;
 		private readonly TCrLoans customerLoans;
 		private readonly SortedSet<string> loanSources; 
-
-		private const string QueryFormat = @"
-SELECT
-	r.Id AS CashRequestID,
-	r.IdCustomer AS CustomerID,
-	c.BrokerID,
-	CASE
-		WHEN r.IdUnderwriter IS NULL THEN r.SystemDecisionDate
-		ELSE r.UnderwriterDecisionDate
-	END AS UnderwriterDecisionDate,
-	CASE
-		WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Rejected') THEN 'Rejected'
-		WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision IN ('Approved', 'ApprovedPending')) THEN 'Approved'
-		WHEN (r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve') THEN 'Approved'
-	END AS UnderwriterDecision,
-	ISNULL(CASE
-		WHEN r.IdUnderwriter IS NULL
-			THEN CASE
-				WHEN r.UnderwriterComment = 'Auto Re-Approval' THEN r.ManagerApprovedSum
-				ELSE r.SystemCalculatedSum
-			END
-		ELSE
-			ISNULL(r.ManagerApprovedSum, r.SystemCalculatedSum)
-	END, 0) AS Amount,
-	r.InterestRate,
-	ISNULL(r.ApprovedRepaymentPeriod, r.RepaymentPeriod) AS RepaymentPeriod,
-	r.UseSetupFee,
-	r.UseBrokerSetupFee,
-	r.ManualSetupFeePercent,
-	r.ManualSetupFeeAmount,
-	r.MedalType,
-	r.ScorePoints,
-	CONVERT(BIT, CASE WHEN r.UnderwriterComment LIKE '%campaign%' THEN 1 ELSE 0 END) AS IsCampaign,
-	ISNULL((
-		SELECT COUNT(*)
-		FROM Loan
-		WHERE CustomerID = r.IdCustomer
-		AND [Date] < r.UnderwriterDecisionDate
-	), 0) AS LoanCount
-FROM
-	CashRequests r
-	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
-	INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
-WHERE
-	r.CreationDate >= 'Sep 4 2012'
-	AND
-	(r.IdUnderwriter IS NULL OR r.IdUnderwriter != 1)
-	AND (
-		(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Rejected')
-		OR (
-			(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision IN ('Approved', 'ApprovedPending'))
-			OR
-			(r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve')
-		)
-	)
-	{0}
-ORDER BY
-	r.IdCustomer ASC,
-	r.UnderwriterDecisionDate ASC,
-	r.Id ASC";
+		private readonly SpLoadCashRequestsForAutomationReport spLoad;
 	} // class MaamMedalAndPricing
 } // namespace
 

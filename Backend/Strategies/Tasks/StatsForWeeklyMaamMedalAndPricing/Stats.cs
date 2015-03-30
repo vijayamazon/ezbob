@@ -42,7 +42,7 @@
 		} // constructor
 
 		public void Add(Datum d) {
-			if (!this.takeAll && (d.IsSuperseded || d.IsCampaign))
+			if (!this.takeAll && d.IsCampaign)
 				return;
 
 			foreach (var si in this.stats)
