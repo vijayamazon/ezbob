@@ -61,7 +61,7 @@
 
 			oPackage.Out.ServiceLog = new MP_ServiceLog
 			{
-				InsertDate = DateTime.Now,
+				InsertDate = DateTime.UtcNow,
 				RequestData = oPackage.In.Request,
 				ResponseData = oPackage.In.Response,
 				ServiceType = oPackage.In.ServiceType.DescriptionAttr(),
