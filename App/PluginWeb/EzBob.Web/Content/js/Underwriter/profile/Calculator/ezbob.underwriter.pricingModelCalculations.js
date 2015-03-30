@@ -16,7 +16,7 @@ EzBob.Underwriter.PricingModelCalculationsView = Backbone.Marionette.ItemView.ex
     initialize: function () {
         this.scenarios = this.options.scenarios;
         this.modelBinder = new Backbone.ModelBinder();
-        this.model.on('change sync', this.makeInitialCalculation, this);
+        this.model.on('reset fetch sync', this.makeInitialCalculation, this);
         this.inputsExpanded = false;
         this.outputsExpanded = false;
     },

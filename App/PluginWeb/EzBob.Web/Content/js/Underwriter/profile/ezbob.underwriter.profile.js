@@ -248,7 +248,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 				case '#calculator':
 					self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
 					self.pricingModelScenarios.fetch();
-					self.pricingModelCalculationsModel.fetch().done(function() {
+					self.pricingModelCalculationsModel.fetch().done(function () {
+					    self.pricingModelCalculationsModel.trigger('fetch');
 						BlockUi('off', $content);
 					});
 					break;
