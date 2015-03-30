@@ -30,7 +30,9 @@
 			public virtual int? ManualSetupFeeAmount { get; set; }
 			public virtual string MedalName { get; set; }
 			public virtual decimal? EzbobScore { get; set; }
-			public virtual int LoanCount { get; set; }
+			public virtual int PreviousLoanCount { get; set; }
+			public virtual int CrLoanCount { get; set; }
+			public virtual bool IsDefault { get; set; }
 
 			protected internal virtual void CopyTo(ResultRow other) {
 				if (other == null)
@@ -50,7 +52,9 @@
 				other.ManualSetupFeeAmount = ManualSetupFeeAmount;
 				other.MedalName = MedalName;
 				other.EzbobScore = EzbobScore;
-				other.LoanCount = LoanCount;
+				other.PreviousLoanCount = PreviousLoanCount;
+				other.CrLoanCount = CrLoanCount;
+				other.IsDefault = IsDefault;
 			} // CopyTo
 		} // class ResultRow
 	} // class SpLoadCashRequestsForAutomationReport

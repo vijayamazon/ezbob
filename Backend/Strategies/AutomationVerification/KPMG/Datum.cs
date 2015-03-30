@@ -21,32 +21,35 @@
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	public class Datum {
-		public Datum(
-			SpLoadCashRequestsForAutomationReport.ResultRow sr,
-			bool isDefault
-		) {
-			Items = new List<ADatumItem>();
+		public Datum(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
+			ManualItems = new List<ManualDatumItem>();
+
+			CustomerID = sr.CustomerID;
+			BrokerID = sr.BrokerID;
+			IsDefault = sr.IsDefault;
 
 			Add(sr);
 
-			IsDefault = isDefault;
+			Auto = new AutoDatumItem();
 		} // constructor
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
 			var mdi = new ManualDatumItem(sr);
 			mdi.Calculate();
-			Items.Add(mdi);
+			ManualItems.Add(mdi);
 		} // Add
 
-		public bool IsDefault { get; private set; }
 		public string Tag { get; set; }
 		public int CustomerID { get; set; }
-		public int BrokerID { get; set; }
+		public int? BrokerID { get; set; }
+		public bool IsDefault { get; set; }
 
-		public List<ADatumItem> Items { get; private set; }
+		public List<ManualDatumItem> ManualItems { get; private set; }
 
-		public ADatumItem First { get { return Items[0]; } } // First
-		public ADatumItem Last  { get { return Items[Items.Count - 1]; } } // Last
+		public ManualDatumItem FirstManual { get { return ManualItems[0]; } }
+		public ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
+
+		public AutoDatumItem Auto { get; private set; }
 
 		public static string CsvTitles(SortedSet<string> sources) {
 			/*
@@ -66,8 +69,8 @@
 				"Customer is default now",
 				// "Has default loan",
 				// "Loan was default",
-				ADatumItem.CsvTitles("First manual"),
-				ADatumItem.CsvTitles("Last manual"),
+				ManualDatumItem.CsvTitles("First"),
+				ManualDatumItem.CsvTitles("Last"),
 				ADatumItem.CsvTitles("Auto")/*,
 				"Automation decision",
 				"Auto re-reject decision",
@@ -142,8 +145,10 @@
 			// curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
 			// curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
 
-			curColumn = First.ToXlsx(sheet, rowNum, curColumn);
-			curColumn = Last.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);
+
+			curColumn = Auto.ToXlsx(sheet, rowNum, curColumn);
 
 			/*
 			curColumn = sheet.SetCellValue(rowNum, curColumn, AutomationDecision.ToString());

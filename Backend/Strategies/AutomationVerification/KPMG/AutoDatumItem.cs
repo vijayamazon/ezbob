@@ -9,7 +9,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	internal class AutoDatumItem : ADatumItem {
+	public class AutoDatumItem : ADatumItem {
 		public AutoDatumItem() {
 			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
@@ -168,6 +168,8 @@
 		} // Calculate
 
 		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
+			return; // TODO
+
 			log.Info(
 				"RunAutomation({0}) started for customer {1} with decision time '{2}'...",
 				isHomeOwner,

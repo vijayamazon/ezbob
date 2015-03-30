@@ -12,12 +12,12 @@
 
 		public static string CsvTitles(string prefix) {
 			return string.Format(
-				"{0} Cash Request ID;" +
-				"{0} Time;{0} Medal;{0} Ezbob Score;{0} Decision;{0} Amount;{0} Interest Rate;" +
-				"{0} Repayment Period;{0} Setup Fee %;{0} Setup Fee Amount",
+				"{0} cash request ID;" +
+				"{0} time;{0} medal;{0} Ezbob score;{0} decision;{0} amount;{0} interest rate;" +
+				"{0} repayment period;{0} setup fee %;{0} setup fee amount",
 				prefix
 			);
-		} // ToCsv
+		} // CsvTitles
 
 		public virtual int ToXlsx(ExcelWorksheet sheet, int rowNum, int colNum) {
 			colNum = sheet.SetCellValue(rowNum, colNum, CashRequestID);
@@ -31,7 +31,7 @@
 			colNum = sheet.SetCellValue(rowNum, colNum, SetupFeePct);
 			colNum = sheet.SetCellValue(rowNum, colNum, SetupFeeAmount);
 			return colNum;
-		} // ToCsv
+		} // ToXlsx
 
 		public virtual decimal SetupFeePct { get; protected set; }
 		public virtual decimal SetupFeeAmount { get; protected set; }

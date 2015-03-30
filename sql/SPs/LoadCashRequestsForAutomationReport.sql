@@ -47,7 +47,13 @@ BEGIN
 			FROM Loan
 			WHERE CustomerID = r.IdCustomer
 			AND [Date] < r.UnderwriterDecisionDate
-		), 0) AS LoanCount
+		), 0) AS PreviousLoanCount,
+		ISNULL((
+			SELECT COUNT(*)
+			FROM Loan
+			WHERE RequestCashId = r.Id
+		), 0) AS CrLoanCount,
+		cs.IsDefault
 	FROM
 		CashRequests r
 		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0

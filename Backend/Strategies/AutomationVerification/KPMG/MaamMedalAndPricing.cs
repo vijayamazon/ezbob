@@ -21,7 +21,6 @@
 			Data = new List<Datum>();
 
 			this.homeOwners = new SortedDictionary<int, bool>();
-			this.defaultCustomers = new SortedSet<int>();
 			this.crLoans = new TCrLoans();
 			this.loanSources = new SortedSet<string>();
 
@@ -41,13 +40,6 @@
 		public override void Execute() {
 			this.loanSources.Clear();
 			this.crLoans.Clear();
-			this.defaultCustomers.Clear();
-
-			DB.ForEachRowSafe(
-				srdc => defaultCustomers.Add(srdc["CustomerID"]),
-				"LoadDefaultCustomers",
-				CommandSpecies.StoredProcedure
-			);
 
 			DB.ForEachResult<LoanMetaData>(
 				lmd => {
@@ -70,9 +62,9 @@
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
 				try {
-					// d.RunAutomation(isHomeOwner, DB, Log);
+					d.Auto.RunAutomation(isHomeOwner, DB, Log);
 				} catch (Exception e) {
-					// Log.Alert(e, "Automation failed for customer {0} with cash request {1}.", d.CustomerID, d.CashRequestID);
+					Log.Alert(e, "Automation failed for customer {0} at {1}.", d.CustomerID, d.FirstManual.DecisionTime);
 				} // try
 
 				pc++;
@@ -147,12 +139,10 @@
 			SetupFeeCalculator.ReloadBrokerRepoCache();
 
 			this.spLoad.ForEachResult<SpLoadCashRequestsForAutomationReport.ResultRow>(sr => {
-				bool isDefault = defaultCustomers.Contains(sr.CustomerID);
-
 				if (byCustomer.ContainsKey(sr.CustomerID))
-					byCustomer[sr.CustomerID].Add(sr, isDefault);
+					byCustomer[sr.CustomerID].Add(sr);
 				else
-					byCustomer[sr.CustomerID] = new CustomerData(sr, isDefault);
+					byCustomer[sr.CustomerID] = new CustomerData(sr);
 
 				pc++;
 				return ActionResult.Continue;
@@ -188,7 +178,6 @@
 		private readonly string tag;
 
 		private readonly SortedDictionary<int, bool> homeOwners;
-		private readonly SortedSet<int> defaultCustomers;
 		private readonly TCrLoans crLoans;
 		private readonly SortedSet<string> loanSources; 
 		private readonly SpLoadCashRequestsForAutomationReport spLoad;

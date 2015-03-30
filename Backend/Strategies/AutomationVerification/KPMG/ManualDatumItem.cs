@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+	using Ezbob.ExcelExt;
+	using OfficeOpenXml;
 	using PaymentServices.Calculators;
 
-	internal class ManualDatumItem : ADatumItem {
+	public class ManualDatumItem : ADatumItem {
 		public ManualDatumItem(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
 			sr.CopyTo(this);
 		} // constructor
@@ -22,5 +24,15 @@
 
 			SetupFeePct = ApprovedAmount <= 0 ? 0 : SetupFeeAmount / ApprovedAmount;
 		} // Calculate
+
+		public static new string CsvTitles(string prefix) {
+			return string.Format("{0};{1} manual loan count", ADatumItem.CsvTitles(prefix + " manual"), prefix);
+		} // CsvTitles
+
+		public override int ToXlsx(ExcelWorksheet sheet, int rowNum, int colNum) {
+			colNum = base.ToXlsx(sheet, rowNum, colNum);
+			colNum = sheet.SetCellValue(rowNum, colNum, CrLoanCount);
+			return colNum;
+		} // ToXlsx
 	} // ManualDatumItem
 } // namespace
