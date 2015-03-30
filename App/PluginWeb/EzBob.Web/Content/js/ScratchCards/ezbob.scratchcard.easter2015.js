@@ -49,7 +49,7 @@ EzBob.ScratchCards.Easter2015 = EzBob.ScratchCards.Base.extend({
 		$(window).off(this.resizeEventName);
 
 		// don't forget to call the original remove() function
-		EzBob.ScratchCards.Base.prototype.remove.call(this);
+		EzBob.ScratchCards.Base.__super__.remove.call(this);
 	}, // remove
 
 	events: {
@@ -223,7 +223,7 @@ EzBob.ScratchCards.Easter2015 = EzBob.ScratchCards.Base.extend({
 			return;
 		} // if
 
-		EzBob.ScratchCards.Easter2015.prototype.show.call(this);
+		EzBob.ScratchCards.Easter2015.__super__.show.call(this);
 
 		this.$mainPage.hide();
 
@@ -238,7 +238,7 @@ EzBob.ScratchCards.Easter2015 = EzBob.ScratchCards.Base.extend({
 	}, // show
 
 	hide: function() {
-		EzBob.ScratchCards.Easter2015.prototype.hide.call(this);
+		EzBob.ScratchCards.Easter2015.__super__.hide.call(this);
 
 		this.$mainPage.show();
 
