@@ -7,15 +7,21 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
+	using OfficeOpenXml;
 
 	public class AutoDatumItem : ADatumItem {
-		public AutoDatumItem() {
+		public AutoDatumItem(int customerID, DateTime decisionTime, int previousLoanCount) {
 			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
 			IsAutoRejected = false;
 			IsAutoReApproved = false;
 			IsAutoApproved = false;
+
+			CustomerID = customerID;
+			DecisionTime = decisionTime;
+			PreviousLoanCount = previousLoanCount;
 		} // constructor
 
 		public override string DecisionStr {
@@ -41,135 +47,26 @@
 
 		public decimal ReapprovedAmount { get; private set; }
 
-		public void Calculate(
-			int customerID,
-			bool isHomeOwner,
-			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
-			bool takeMinOffer,
-			long cashRequestID,
-			string tag,
-			AConnection db,
-			ASafeLog log
-		) {
-			/*
-			log.Info(
-				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
-				"has home '{2}', medal '{3}', take min '{4}') started...",
-				customerID,
-				cashRequestID,
-				isHomeOwner,
-				medal.MedalClassification,
-				takeMinOffer ? "Min" : "Max"
-			);
+		public static new string CsvTitles(string prefix) {
+			return string.Format(
+				"{1} decision;{1} re-reject decision;{1} reject decision;{1} re-approve decision;{1} approve decision;" +
+				"{0};{1} re-approved amount", ADatumItem.CsvTitles(prefix), prefix);
+		} // CsvTitles
 
-			MedalName = medal.MedalClassification.ToString();
+		public override int ToXlsx(ExcelWorksheet sheet, int rowNum, int colNum) {
+			colNum = sheet.SetCellValue(rowNum, colNum, AutomationDecision.ToString());
+			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoReRejected ? "Reject" : "Manual");
+			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoRejected ? "Reject" : "Manual");
+			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoReApproved ? "Approve" : "Manual");
+			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoApproved ? "Approve" : "Manual");
 
-			EzbobScore = medal.TotalScoreNormalized;
+			colNum = base.ToXlsx(sheet, rowNum, colNum);
 
-			int amount = takeMinOffer ? medal.RoundOfferedAmount() : medal.RoundMaxOfferedAmount();
-
-			log.Info(
-				"RunAutomation-Auto{0}.Calculate() before capping: medal '{1}', amount {2}\n{3}",
-				takeMinOffer ? "Min" : "Max",
-				MedalName,
-				amount,
-				medal
-			);
-
-			amount = Math.Min(
-				amount,
-				isHomeOwner ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
-			);
-
-			log.Info(
-				"RunAutomation-Auto{0}.Calculate(), after capping: medal name '{1}', amount {2}, " +
-				"medal '{3}', medal type '{4}', turnover type '{5}', decision time '{6}'.",
-				takeMinOffer ? "Min" : "Max",
-				MedalName,
-				amount,
-				(AutomationCalculator.Common.Medal)medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
-				DecisionTime.MomentStr()
-			);
-
-			var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
-				customerID,
-				amount,
-				(AutomationCalculator.Common.Medal)medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
-				DecisionTime,
-				db,
-				log
-			).Init();
-
-			approveAgent.MakeDecision();
-
-			Amount = amount;
-			Decision = approveAgent.Trail.GetDecisionName();
-
-			if (amount == 0) {
-				log.Info(
-					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1} - not calculating offer.",
-					takeMinOffer ? "Min" : "Max",
-					amount
-				);
-
-				RepaymentPeriod = 0;
-				InterestRate = 0;
-				SetupFee = 0;
-			} else {
-				log.Info(
-					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1}, " +
-					"loan count {2}, medal '{3}', decision time '{4}' - going for offer calculation.",
-					takeMinOffer ? "Min" : "Max",
-					amount,
-					LoanCount,
-					medal.MedalClassification,
-					DecisionTime.MomentStr()
-				);
-
-				var odc = new OfferDualCalculator(
-					customerID,
-					DecisionTime,
-					amount,
-					LoanCount > 0,
-					medal.MedalClassification
-				);
-
-				odc.CalculateOffer();
-
-				RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
-				InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
-				SetupFee = odc.VerifyBoundaries.SetupFee / 100.0m;
-
-				log.Info(
-					"RunAutomation-Auto{0}.Calculate(), offer: amount {1}, " +
-					"repayment period {2}, interest rate {3}, setup fee {4}.",
-					takeMinOffer ? "Min" : "Max",
-					amount,
-					RepaymentPeriod,
-					InterestRate,
-					SetupFee
-				);
-			} // if
-
-			log.Info(
-				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
-				"has home '{2}', medal '{3}', take min '{4}') complete.",
-				customerID,
-				cashRequestID,
-				isHomeOwner,
-				medal.MedalClassification,
-				takeMinOffer ? "Min" : "Max"
-			);
-			*/
-		} // Calculate
+			colNum = sheet.SetCellValue(rowNum, colNum, ReapprovedAmount);
+			return colNum;
+		} // ToXlsx
 
 		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
-			return; // TODO
-
 			log.Info(
 				"RunAutomation({0}) started for customer {1} with decision time '{2}'...",
 				isHomeOwner,
@@ -317,19 +214,18 @@
 			AConnection db,
 			ASafeLog log
 		) {
-			/*
 			log.Info(
 				"RunAutomation-RunAutoApprove() started for customer {0} with decision time '{1}'...",
 				CustomerID,
 				DecisionTime.MomentStr()
 			);
 
-			AutoMin.Calculate(CustomerID, isHomeOwner, medal, true, CashRequestID, Tag, db, log);
+			Calculate(isHomeOwner, medal, true, CashRequestID, db, log);
 
-			if (AutoMin.Amount > 0)
+			if (ApprovedAmount > 0)
 				AutomationDecision = DecisionActions.Approve;
 
-			IsAutoApproved = AutoMin.Amount > 0;
+			IsAutoApproved = ApprovedAmount > 0;
 
 			log.Info(
 				"RunAutomation-RunAutoApprove()-AutoMin done for customer {0} with decision time '{1}': " +
@@ -338,9 +234,10 @@
 				DecisionTime.MomentStr(),
 				AutomationDecision,
 				IsAutoApproved,
-				AutoMin.Amount
+				ApprovedAmount
 			);
 
+			/*
 			if (medal.OfferedAmountsDiffer()) {
 				AutoMax.Calculate(CustomerID, isHomeOwner, medal, false, CashRequestID, Tag, db, log);
 
@@ -369,6 +266,131 @@
 			);
 			*/
 		} // RunAutoApprove
+
+		private void Calculate(
+			bool isHomeOwner,
+			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
+			bool takeMinOffer,
+			long cashRequestID,
+			AConnection db,
+			ASafeLog log
+		) {
+			log.Info(
+				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
+				"has home '{2}', medal '{3}', take min '{4}') started...",
+				CustomerID,
+				cashRequestID,
+				isHomeOwner,
+				medal.MedalClassification,
+				takeMinOffer ? "Min" : "Max"
+			);
+
+			MedalName = medal.MedalClassification.ToString();
+
+			EzbobScore = medal.TotalScoreNormalized;
+
+			int amountBeforeApproval = takeMinOffer ? medal.RoundOfferedAmount() : medal.RoundMaxOfferedAmount();
+
+			log.Info(
+				"RunAutomation-Auto{0}.Calculate() before capping: medal '{1}', amount {2}\n{3}",
+				takeMinOffer ? "Min" : "Max",
+				MedalName,
+				amountBeforeApproval,
+				medal
+			);
+
+			amountBeforeApproval = Math.Min(
+				amountBeforeApproval,
+				isHomeOwner ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
+			);
+
+			log.Info(
+				"RunAutomation-Auto{0}.Calculate(), after capping: medal name '{1}', amount {2}, " +
+				"medal '{3}', medal type '{4}', turnover type '{5}', decision time '{6}'.",
+				takeMinOffer ? "Min" : "Max",
+				MedalName,
+				amountBeforeApproval,
+				(AutomationCalculator.Common.Medal)medal.MedalClassification,
+				(AutomationCalculator.Common.MedalType)medal.MedalType,
+				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+				DecisionTime.MomentStr()
+			);
+
+			var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
+				CustomerID,
+				amountBeforeApproval,
+				(AutomationCalculator.Common.Medal)medal.MedalClassification,
+				(AutomationCalculator.Common.MedalType)medal.MedalType,
+				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+				DecisionTime,
+				db,
+				log
+			).Init();
+
+			approveAgent.MakeDecision();
+
+			ApprovedAmount = approveAgent.Trail.RoundedAmount;
+			IsApproved = approveAgent.Trail.HasDecided;
+
+			if (!IsApproved) {
+				log.Info(
+					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1} - not calculating offer.",
+					takeMinOffer ? "Min" : "Max",
+					ApprovedAmount
+				);
+
+				RepaymentPeriod = 0;
+				InterestRate = 0;
+				SetupFeeAmount = 0;
+				SetupFeePct = 0;
+			} else {
+				log.Info(
+					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1}, " +
+					"loan count {2}, medal '{3}', decision time '{4}' - going for offer calculation.",
+					takeMinOffer ? "Min" : "Max",
+					ApprovedAmount,
+					PreviousLoanCount,
+					medal.MedalClassification,
+					DecisionTime.MomentStr()
+				);
+
+				var odc = new OfferDualCalculator(
+					CustomerID,
+					DecisionTime,
+					ApprovedAmount,
+					PreviousLoanCount > 0,
+					medal.MedalClassification
+				);
+
+				odc.CalculateOffer();
+
+				RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
+				InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
+				SetupFeePct = odc.VerifyBoundaries.SetupFee / 100.0m;
+				SetupFeeAmount = ApprovedAmount * SetupFeePct;
+
+				log.Info(
+					"RunAutomation-Auto{0}.Calculate(), offer: amount {1}, " +
+					"repayment period {2}, interest rate {3}, setup fee {4} ({5}).",
+					takeMinOffer ? "Min" : "Max",
+					ApprovedAmount,
+					RepaymentPeriod,
+					InterestRate,
+					SetupFeePct.ToString("P6", Library.Instance.Culture),
+					SetupFeeAmount.ToString("C2", Library.Instance.Culture)
+				);
+			} // if
+
+			log.Info(
+				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
+				"has home '{2}', medal '{3}', take min '{4}') complete.",
+				CustomerID,
+				cashRequestID,
+				isHomeOwner,
+				medal.MedalClassification,
+				takeMinOffer ? "Min" : "Max"
+			);
+		} // Calculate
 
 		private DecisionActions automationDecision;
 	} // AutoDatumItem

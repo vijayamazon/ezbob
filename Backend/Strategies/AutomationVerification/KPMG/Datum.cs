@@ -30,7 +30,7 @@
 
 			Add(sr);
 
-			Auto = new AutoDatumItem();
+			Auto = new AutoDatumItem(sr.CustomerID, sr.DecisionTime, sr.PreviousLoanCount);
 		} // constructor
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
@@ -70,14 +70,9 @@
 				// "Has default loan",
 				// "Loan was default",
 				ManualDatumItem.CsvTitles("First"),
+				"Decision count",
 				ManualDatumItem.CsvTitles("Last"),
-				ADatumItem.CsvTitles("Auto")/*,
-				"Automation decision",
-				"Auto re-reject decision",
-				"Auto reject decision",
-				"Auto re-approve decision",
-				"Auto approve decision",
-				"Re-approved amount",
+				AutoDatumItem.CsvTitles("Auto")/*,
 				AMedalAndPricing.CsvTitles("Auto min"),
 				"The same max offer",
 				AMedalAndPricing.CsvTitles("Auto max"),
@@ -146,19 +141,12 @@
 			// curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
 
 			curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
 			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);
 
 			curColumn = Auto.ToXlsx(sheet, rowNum, curColumn);
 
 			/*
-			curColumn = sheet.SetCellValue(rowNum, curColumn, AutomationDecision.ToString());
-
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoReRejected ? "Reject" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoRejected ? "Reject" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoReApproved ? "Approve" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoApproved ? "Approve" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, ReapprovedAmount);
-
 			curColumn = AutoMin.ToXlsx(sheet, rowNum, curColumn);
 
 			curColumn = sheet.SetCellValue(rowNum, curColumn, (AutoMax == null) ? "Same" : "No");
