@@ -1,6 +1,16 @@
 ﻿var EzBob = EzBob || {};
 EzBob.ScratchCards = EzBob.ScratchCards || {};
 
+EzBob.ScratchCards.Base = EzBob.View.extend({
+	show: function() {
+		$('#promotion-pages').show();
+	}, // show
+
+	hide: function() {
+		$('#promotion-pages').hide();
+	}, // hide
+}); // EzBob.ScratchCards.Base
+
 EzBob.ScratchCards.Select = function(lotteryCode, scratchArgs) {
 	if (!lotteryCode)
 		return null;

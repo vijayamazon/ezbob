@@ -118,6 +118,10 @@ i{
 	font-style: italic;
 }
 
+#promotion-pages {
+	display: none;
+}
+
 #wrapper {
     min-height: 100%;
     height: auto !important;
