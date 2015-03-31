@@ -11,23 +11,20 @@ GO
 --
 -- 1. If customer has already played or lottery is closed - do nothing.
 --
--- 2. Find number of all the customers that can win (@PlayerCount)
---    in this lottery.
+-- 2. Find number of available prizes (@PrizeCount) in this lottery.
 --
--- 3. Find number of available prizes (@PrizeCount) in this lottery.
+-- 3. If @PrizeCount = 0 customer has lost, game ends.
 --
--- 4. If @PrizeCount = 0 customer has lost, game ends.
+-- 4. Create a list of all the available prizes.
 --
--- 5. Create a list of all the available prizes.
+-- 5. Append to the list of prizes
+--    (@MinParticipantCount - 1) * @PrizeCount entries of "anti-prize" (i.e. no win).
 --
--- 6. If @PlayerCount > @PrizeCount append to the list of prizes
---    @PlayerCount - @PrizeCount entries of "anti-prize" (i.e. no win).
+-- 6. Attach to every item in the list a random number.
 --
--- 7. Attach to every item in the list a random number.
+-- 7. Sort the list by the attached random number.
 --
--- 8. Sort the list by the attached random number.
---
--- 9. Take the first item of the sorted list - this is customer's prize
+-- 8. Take the first item of the sorted list - this is customer's prize
 --    which can be a real prize (won) or an "anti-prize" (lost).
 --
 -------------------------------------------------------------------------------
@@ -60,9 +57,8 @@ BEGIN
 	DECLARE @Amount DECIMAL(18, 2) = 0
 	DECLARE @PrizeID BIGINT = NULL
 
-	DECLARE @PlayerCount INT = 0
 	DECLARE @PrizeCount INT = 0
-	DECLARE @MinParticipantCount INT = 0
+	DECLARE @MinParticipantCount INT = 1
 
 	------------------------------------------------------------------------------
 
@@ -118,22 +114,6 @@ BEGIN
 	BEGIN
 		-------------------------------------------------------------------------
 
-		SELECT
-			@PlayerCount = COUNT(*)
-		FROM
-			LotteryPlayers lp
-			INNER JOIN LotteryPlayerStatuses s
-				ON lp.StatusID = s.StatusID
-				AND s.CanWin = 1
-		WHERE
-			lp.LotteryID = @LotteryID
-
-		-------------------------------------------------------------------------
-
-		SET @PlayerCount = dbo.udfMaxInt(@PlayerCount, @MinParticipantCount)
-
-		-------------------------------------------------------------------------
-
 		CREATE TABLE #prizes (
 			PrizeID BIGINT NULL,
 			Amount BIGINT NOT NULL,
@@ -172,7 +152,7 @@ BEGIN
 
 		IF @PrizeCount > 0
 		BEGIN
-			DECLARE @PlayerCountForProbability INT = @PrizeCount * @PlayerCount
+			DECLARE @PlayerCountForProbability INT = @PrizeCount * @MinParticipantCount
 
 			IF @PrizeCount < @PlayerCountForProbability
 			BEGIN
