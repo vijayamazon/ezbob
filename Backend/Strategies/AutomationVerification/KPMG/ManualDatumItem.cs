@@ -4,7 +4,7 @@
 	using PaymentServices.Calculators;
 
 	public class ManualDatumItem : ADatumItem {
-		public ManualDatumItem(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
+		public ManualDatumItem(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) : base(tag) {
 			sr.CopyTo(this);
 		} // constructor
 

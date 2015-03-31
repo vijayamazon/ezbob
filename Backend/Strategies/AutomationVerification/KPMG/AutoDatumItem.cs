@@ -16,16 +16,17 @@
 	>;
 
 	public class AutoDatumItem : ADatumItem {
-		public AutoDatumItem(int customerID, DateTime decisionTime, int previousLoanCount) {
+		public AutoDatumItem(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) : base(tag) {
 			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
 			IsAutoRejected = false;
 			IsAutoReApproved = false;
 			IsAutoApproved = false;
 
-			CustomerID = customerID;
-			DecisionTime = decisionTime;
-			PreviousLoanCount = previousLoanCount;
+			CustomerID = sr.CustomerID;
+			DecisionTime = sr.DecisionTime;
+			PreviousLoanCount = sr.PreviousLoanCount;
+			CashRequestID = sr.CashRequestID;
 		} // constructor
 
 		public override string DecisionStr {
@@ -116,6 +117,8 @@
 
 			agent.MakeDecision();
 
+			agent.Trail.Save(db, null, CashRequestID, Tag);
+
 			if (agent.Trail.HasDecided)
 				AutomationDecision = DecisionActions.ReReject;
 
@@ -142,6 +145,8 @@
 				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, log, CustomerID);
 
 			agent.MakeDecision(agent.GetRejectionInputData(DecisionTime));
+
+			agent.Trail.Save(db, null, CashRequestID, Tag);
 
 			if (agent.Trail.HasDecided)
 				AutomationDecision = DecisionActions.Reject;
@@ -173,7 +178,7 @@
 
 			agent.Init();
 
-			agent.Decide(false, CashRequestID);
+			agent.Decide(true, CashRequestID, Tag);
 
 			if (agent.Trail.HasDecided) {
 				AutomationDecision = DecisionActions.ReApprove;
@@ -200,7 +205,7 @@
 				DecisionTime.MomentStr()
 			);
 
-			CalculateMedal instance = new CalculateMedal(CustomerID, DecisionTime, true, false);
+			CalculateMedal instance = new CalculateMedal(CustomerID, DecisionTime, true, true) { Tag = Tag, };
 			instance.Execute();
 
 			log.Info(
@@ -336,6 +341,8 @@
 			).Init();
 
 			approveAgent.MakeDecision();
+
+			approveAgent.Trail.Save(db, null, CashRequestID, Tag);
 
 			ApprovedAmount = approveAgent.Trail.RoundedAmount;
 			IsApproved = approveAgent.Trail.HasDecided;

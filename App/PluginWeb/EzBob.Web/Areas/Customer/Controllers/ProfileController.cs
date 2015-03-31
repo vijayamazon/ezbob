@@ -249,7 +249,51 @@
 
 		[Transactional]
 		[HttpGet]
-		public ActionResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string card_no, string customer, string expiry, int customerId) {
+		public ActionResult PayPointCallback(
+			bool valid,
+			string trans_id,
+			string code,
+			string auth_code,
+			decimal? amount,
+			string ip,
+			string test_status,
+			string hash,
+			string message,
+			string card_no,
+			string customer,
+			string expiry,
+			int customerId
+		) {
+			ms_oLog.Debug(
+				"PayPointCallback with args:" +
+				"\n\tvalid: '{0}'" +
+				"\n\ttrans_id: '{1}'" +
+				"\n\tcode: '{2}'" +
+				"\n\tauth_code: '{3}'" +
+				"\n\tamount: '{4}'" +
+				"\n\tip: '{5}'" +
+				"\n\ttest_status: '{6}'" +
+				"\n\thash: '{7}'" +
+				"\n\tmessage: '{8}'" +
+				"\n\tcard_no: '{9}'" +
+				"\n\tcustomer: '{10}'" +
+				"\n\texpiry: '{11}'" +
+				"\n\tcustomer id: '{12}'",
+				valid,
+				trans_id,
+				code,
+				auth_code,
+				amount,
+				ip,
+				test_status,
+				hash,
+				message,
+				card_no,
+				customer,
+				expiry,
+				customerId
+			);
+
 			if (test_status == "true") {
 				// Use last 4 random digits as card number (to enable useful tests)
 				string random4Digits = string.Format("{0}{1}", DateTime.UtcNow.Second, DateTime.UtcNow.Millisecond);
@@ -262,17 +306,30 @@
 			} // if
 
 			if (!valid || code != "A") {
+				ms_oLog.Debug("Failed to add debit card: invalid or code ain't no 'A'.");
+
 				TempData["code"] = code;
 				TempData["message"] = message;
 				return View(new { error = "Failed to add debit card" });
 			} // if
+
 			var cust = m_oContext.Customer;
 
-            PayPointFacade payPointFacade = new PayPointFacade(cust.MinOpenLoanDate());
-			if (!payPointFacade.CheckHash(hash, Request.Url))
+			PayPointFacade payPointFacade = new PayPointFacade(cust.MinOpenLoanDate());
+
+			if (!payPointFacade.CheckHash(hash, Request.Url)) {
+				ms_oLog.Debug("Failed to add debit card: failed to CheckHash(\n\t hash: '{0}',\n\t Url: '{1}'\n).", hash, Request.Url);
+
 				return View(new { error = "Failed to add debit card" });
-			
-			var card = cust.TryAddPayPointCard(trans_id, card_no, expiry, cust.PersonalInfo.Fullname, payPointFacade.PayPointAccount);
+			} // if
+
+			cust.TryAddPayPointCard(
+				trans_id,
+				card_no,
+				expiry,
+				cust.PersonalInfo.Fullname,
+				payPointFacade.PayPointAccount
+			);
 			
 			return View(new { success = true });
 		} // PayPointCallback

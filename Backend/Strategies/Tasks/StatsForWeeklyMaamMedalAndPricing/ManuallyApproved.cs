@@ -7,25 +7,36 @@
 			sheet,
 			"Manually approved",
 			total
-		) {} // constructor
+		) {
+			this.loanAmount = 0;
+			this.loanCount = 0;
+		} // constructor
 
 		public override void Add(Datum d) {
-			Added.If(d.FirstManual.IsApproved, d.FirstManual.ApprovedAmount);
+			if (Added.If(d.FirstManual.IsApproved, d.FirstManual.ApprovedAmount)) {
+				this.loanAmount += d.LoanAmount;
+				this.loanCount += d.LoanCount;
+			} // if
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
 			return new[] {
 				new TitledValue("count", Count),
 				new TitledValue("approved / total %", Count, Total.Count),
+				new TitledValue("loan count", this.loanCount),
 			};
 		} // PrepareCountRowValues
 
 		protected override TitledValue[] PrepareAmountRowValues() {
 			return new[] {
-				new TitledValue("amount", Amount),
+				new TitledValue("approved amount", Amount),
+				new TitledValue("issued amount", this.loanAmount),
 			};
 		} // PrepareAmountRowValues
 
 		private AStatItem Total { get { return Superior[0]; } }
+
+		private int loanCount;
+		private decimal loanAmount;
 	} // class ManuallyApproved
 } // namespace

@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using System.Collections.Generic;
-	// using System.Globalization;
+	using System.Globalization;
 	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
@@ -24,13 +24,13 @@
 			this.crLoans = new TCrLoans();
 			this.loanSources = new SortedSet<string>();
 
-			/*
 			this.tag = string.Format(
 				"#MaamMedalAndPricing_{0}_{1}",
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
 				Guid.NewGuid().ToString("N")
 			);
-			*/
+
+			Log.Debug("The tag is '{0}'.", this.tag);
 		} // constructor
 
 		public override string Name {
@@ -145,7 +145,7 @@
 				if (byCustomer.ContainsKey(sr.CustomerID))
 					byCustomer[sr.CustomerID].Add(sr);
 				else
-					byCustomer[sr.CustomerID] = new CustomerData(sr);
+					byCustomer[sr.CustomerID] = new CustomerData(sr, this.tag);
 
 				pc++;
 				return ActionResult.Continue;
@@ -178,7 +178,7 @@
 			return isHomeOwnerAccordingToLandRegistry;
 		} // IsHomeOwner
 
-		// private readonly string tag;
+		private readonly string tag;
 
 		private readonly SortedDictionary<int, bool> homeOwners;
 		private readonly TCrLoans crLoans;

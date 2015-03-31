@@ -35,5 +35,11 @@
 
 		public virtual decimal SetupFeePct { get; protected set; }
 		public virtual decimal SetupFeeAmount { get; protected set; }
+
+		protected ADatumItem(string tag) {
+			Tag = tag;
+		} // constructor
+
+		protected virtual string Tag { get; private set; }
 	} // class MedalAndPricing
 } // namespace

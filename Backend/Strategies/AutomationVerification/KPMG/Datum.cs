@@ -13,7 +13,8 @@
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	public class Datum {
-		public Datum(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
+		public Datum(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) {
+			this.tag = tag;
 			ManualItems = new List<ManualDatumItem>();
 
 			CustomerID = sr.CustomerID;
@@ -22,11 +23,11 @@
 
 			Add(sr);
 
-			Auto = new AutoDatumItem(sr.CustomerID, sr.DecisionTime, sr.PreviousLoanCount);
+			Auto = new AutoDatumItem(sr, tag);
 		} // constructor
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
-			var mdi = new ManualDatumItem(sr);
+			var mdi = new ManualDatumItem(sr, tag);
 			mdi.Calculate();
 			ManualItems.Add(mdi);
 		} // Add
@@ -155,5 +156,6 @@
 		} // ToXlsx
 
 		private SortedDictionary<string, LoanSummaryData> loansBySource;
+		private readonly string tag;
 	} // class Datum
 } // namespace
