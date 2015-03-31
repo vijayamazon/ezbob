@@ -116,6 +116,7 @@
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
     <Compile Include="Broker\BrokerInstantOffer.cs" />
+    <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\BadLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultLoans.cs" />
@@ -527,6 +528,10 @@
     <ProjectReference Include="..\..\Integration\IMailLib\IMailLib.csproj">
       <Project>{18bd5614-c801-4869-b5e5-d993f6754671}</Project>
       <Name>IMailLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\IovationLib\IovationLib.csproj">
+      <Project>{19ec11bc-48ae-4bfb-bf8e-7aa6a90ac484}</Project>
+      <Name>IovationLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\LandRegistryLib\LandRegistryLib.csproj">
       <Project>{637833c1-b500-4310-be16-f157f15b17c1}</Project>

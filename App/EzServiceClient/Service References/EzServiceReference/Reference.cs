@@ -3130,6 +3130,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangeEmail", ReplyAction="http://tempuri.org/IEzService/UserChangeEmailResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangeEmail", ReplyAction="http://tempuri.org/IEzService/UserChangeEmailResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangePassword", ReplyAction="http://tempuri.org/IEzService/UserChangePasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword);
         
@@ -3363,6 +3369,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetZooplaData", ReplyAction="http://tempuri.org/IEzService/GetZooplaDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetZooplaDataAsync(int customerId, bool reCheck);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IovationCheck", ReplyAction="http://tempuri.org/IEzService/IovationCheckResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData IovationCheck(Ezbob.Backend.Models.IovationCheckModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IovationCheck", ReplyAction="http://tempuri.org/IEzService/IovationCheckResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> IovationCheckAsync(Ezbob.Backend.Models.IovationCheckModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
@@ -3777,12 +3789,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateTransactionStatus", ReplyAction="http://tempuri.org/IEzService/UpdateTransactionStatusResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync();
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangeEmail", ReplyAction="http://tempuri.org/IEzService/UserChangeEmailResponse")]
-        ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserChangeEmail", ReplyAction="http://tempuri.org/IEzService/UserChangeEmailResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
@@ -4354,6 +4360,14 @@ namespace ServiceClientProxy.EzServiceReference {
                 base(binding, remoteAddress) {
         }
         
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail) {
+            return base.Channel.UserChangeEmail(underwriterId, nUserID, sNewEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail) {
+            return base.Channel.UserChangeEmailAsync(underwriterId, nUserID, sNewEmail);
+        }
+        
         public ServiceClientProxy.EzServiceReference.StringActionResult UserChangePassword(string sEmail, Ezbob.Backend.Models.Password oOldPassword, Ezbob.Backend.Models.Password oNewPassword, bool bForceChangePassword) {
             return base.Channel.UserChangePassword(sEmail, oOldPassword, oNewPassword, bForceChangePassword);
         }
@@ -4664,6 +4678,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetZooplaDataAsync(int customerId, bool reCheck) {
             return base.Channel.GetZooplaDataAsync(customerId, reCheck);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData IovationCheck(Ezbob.Backend.Models.IovationCheckModel model) {
+            return base.Channel.IovationCheck(model);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> IovationCheckAsync(Ezbob.Backend.Models.IovationCheckModel model) {
+            return base.Channel.IovationCheckAsync(model);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
@@ -5216,14 +5238,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateTransactionStatusAsync() {
             return base.Channel.UpdateTransactionStatusAsync();
-        }
-        
-        public ServiceClientProxy.EzServiceReference.StringActionResult UserChangeEmail(int underwriterId, int nUserID, string sNewEmail) {
-            return base.Channel.UserChangeEmail(underwriterId, nUserID, sNewEmail);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserChangeEmailAsync(int underwriterId, int nUserID, string sNewEmail) {
-            return base.Channel.UserChangeEmailAsync(underwriterId, nUserID, sNewEmail);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {

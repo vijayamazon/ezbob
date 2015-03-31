@@ -300,7 +300,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 				that.$el.find('input[type="password"], input[type="text"]').tooltip('hide');
 
-				EzBob.Iovation.callIovation();
+				EzBob.App.Iovation.callIovation('signup');
 				EzBob.App.trigger('customerLoggedIn');
 				EzBob.App.trigger('clear');
 

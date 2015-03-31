@@ -6,6 +6,7 @@
 	using System.Web.Script.Serialization;
 	using Broker;
 	using CustomerRelations;
+	using EZBob.DatabaseLib.Model.Fraud;
 	using Loans;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
@@ -531,6 +532,7 @@
 
 		public virtual IList<CustomerRequestedLoan> CustomerRequestedLoan { get; set; }
 		public virtual IList<CustomerInviteFriend> CustomerInviteFriend { get; set; }
+        public virtual IList<FraudIovation> IovationChecks { get; set; }
 		public virtual Company Company { get; set; }
 
 		public virtual bool Equals(Customer x, Customer y) {

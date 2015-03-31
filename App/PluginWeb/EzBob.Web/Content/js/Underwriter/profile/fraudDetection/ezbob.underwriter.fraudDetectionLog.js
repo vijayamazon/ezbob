@@ -15,6 +15,7 @@ EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
     },
     events: {
         "click #recheckFraud": "reCheck",
+        "click .fraud-detection-row": "fraudDetectionRowClicked"
     },
     reCheck: function () {
         BlockUi('on');
@@ -25,6 +26,19 @@ EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
                .always(function () {
                    BlockUi('off');
                });
+    },
+    fraudDetectionRowClicked: function (ev) {
+        var type = $(ev.currentTarget).data('type');
+        var value = $(ev.currentTarget).data('value');
+        if (type === 'Iovation') {
+            BlockUi('on');
+            $.get(window.gRootPath + "Underwriter/FraudDetectionLog/IovationDetails", { id: value })
+             .done(function (response) {
+                 console.log('response');
+             })
+             .always(function () { BlockUi('off'); });
+        }
+
     },
     serializeData: function () {
         return {

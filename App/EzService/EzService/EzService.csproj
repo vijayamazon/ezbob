@@ -121,6 +121,7 @@
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
     <Compile Include="EzServiceImplementation\esi_automation_verification.cs" />
     <Compile Include="EzServiceImplementation\esi_customer_manual_annualized_revenue.cs" />
+    <Compile Include="EzServiceImplementation\esi_iovation.cs" />
     <Compile Include="EzServiceImplementation\esi_partner_alibaba.cs" />
     <Compile Include="EzServiceImplementation\esi_external_api.cs" />
     <Compile Include="EzServiceImplementation\esi_lottery.cs" />

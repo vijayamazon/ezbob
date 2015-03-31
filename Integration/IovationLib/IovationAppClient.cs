@@ -1,5 +1,6 @@
 ﻿namespace IovationLib
 {
+    using Ezbob.Backend.Models;
     using IovationLib.IovationAddAccountEvidenceNS;
     using IovationLib.IovationCheckTransactionDetailsNS;
     using IovationLib.IovationRetractAccountEvidenceNS;
@@ -19,25 +20,42 @@
             this.retractAccountEvidenceClient = new IovationLib.IovationRetractAccountEvidenceNS.PortTypeClient("RetractAccountEvidence" + environment);
         }
 
-        public void CheckTransactionDetails(string accountCode, string beginBlackBox, string endUserIp, string type) {
+        public CheckTransactionDetailsResponse CheckTransactionDetails(IovationCheckModel model) {
             CheckTransactionDetailsResponse response = this.checkTransactionDetailsClient.CheckTransactionDetails(new CheckTransactionDetails {
                 subscriberaccount = this.subscriberAccount,
                 subscriberid = this.subscriberId,
                 subscriberpasscode = this.subscriberPasscode,
 
-                accountcode = accountCode,
-                beginblackbox = beginBlackBox,
-                enduserip = endUserIp,
-                //txn_properties = new[] {
-                //    new CheckTransactionDetailsProperty {
-                //        name = "",
-                //        value = ""
-                //    }
-                //},
-                type = type
+                accountcode = model.AccountCode,
+                beginblackbox = model.BeginBlackBox,
+                enduserip = model.EndUserIp,
+                txn_properties = new[] {
+                    new CheckTransactionDetailsProperty {
+                        name = "Email",
+                        value = model.Email
+                    },
+                    new CheckTransactionDetailsProperty{
+                            name = "Email",
+                            value = model.Email
+                    },
+                    new CheckTransactionDetailsProperty{
+                            name = "MobilePhoneNumber",
+                            value = model.MobilePhoneNumber
+                    },
+                    new CheckTransactionDetailsProperty{
+                            name = "mobilePhoneSmsEnabled",
+                            value = model.mobilePhoneSmsEnabled ? "1" : "0"
+                    },
+                    new CheckTransactionDetailsProperty{
+                            name = "mobilePhoneVerified",
+                            value = model.mobilePhoneVerified ? "1" : "0"
+                    }
+                },
+                type = model.Type
             });
 
             this.Log.InfoFormat("CheckTransactionDetails result: {0}", response.result);
+            return response;
         }
 
         public void AddAccountEvidence(string accountCode, string comment, string evidenceType) {

@@ -72,6 +72,23 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PropertyStatusModel" nillable="true" type="tns:PropertyStatusModel" />
+  <xs:complexType name="IovationCheckModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AccountCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BeginBlackBox" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EndUserIp" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MobilePhoneNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Origin" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="mobilePhoneSmsEnabled" type="xs:boolean" />
+      <xs:element minOccurs="0" name="mobilePhoneVerified" type="xs:boolean" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="IovationCheckModel" nillable="true" type="tns:IovationCheckModel" />
   <xs:complexType name="CustomerDetails">
     <xs:sequence>
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />

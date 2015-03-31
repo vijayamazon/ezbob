@@ -79,6 +79,7 @@
     <Compile Include="Password.cs" />
     <Compile Include="RejectionModel.cs" />
     <Compile Include="RtiTaxMonthRawData.cs" />
+    <Compile Include="IovationCheckModel.cs" />
     <Compile Include="VatReturnRawDataModel.cs" />
     <Compile Include="VatReturnPeriodModel.cs" />
     <Compile Include="VatReturnSummaryQuarterModel.cs" />

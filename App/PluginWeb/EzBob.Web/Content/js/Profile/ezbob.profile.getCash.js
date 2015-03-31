@@ -317,7 +317,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 				return;
 			} // if
-			EzBob.Iovation.callIovation();
+			EzBob.App.Iovation.callIovation('getcash');
 			that.customer.set('state', 'wait');
 		});
 

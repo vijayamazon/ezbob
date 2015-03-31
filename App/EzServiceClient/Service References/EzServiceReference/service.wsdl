@@ -135,6 +135,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UserChangeEmail_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserChangeEmail" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserChangeEmail_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserChangeEmailResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UserChangePassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UserChangePassword" />
   </wsdl:message>
@@ -368,6 +374,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_GetZooplaData_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetZooplaDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IovationCheck_InputMessage">
+    <wsdl:part name="parameters" element="tns:IovationCheck" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IovationCheck_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IovationCheckResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_IsBroker_InputMessage">
     <wsdl:part name="parameters" element="tns:IsBroker" />
@@ -782,12 +794,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateTransactionStatus_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateTransactionStatusResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserChangeEmail_InputMessage">
-    <wsdl:part name="parameters" element="tns:UserChangeEmail" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UserChangeEmail_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UserChangeEmailResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -1334,6 +1340,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="UserChangeEmail">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangeEmail" message="tns:IEzService_UserChangeEmail_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangeEmailResponse" message="tns:IEzService_UserChangeEmail_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UserChangePassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangePassword" message="tns:IEzService_UserChangePassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangePasswordResponse" message="tns:IEzService_UserChangePassword_OutputMessage" />
@@ -1489,6 +1499,10 @@
     <wsdl:operation name="GetZooplaData">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetZooplaData" message="tns:IEzService_GetZooplaData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetZooplaDataResponse" message="tns:IEzService_GetZooplaData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IovationCheck">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IovationCheck" message="tns:IEzService_IovationCheck_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/IovationCheckResponse" message="tns:IEzService_IovationCheck_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="IsBroker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
@@ -1765,10 +1779,6 @@
     <wsdl:operation name="UpdateTransactionStatus">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatus" message="tns:IEzService_UpdateTransactionStatus_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateTransactionStatusResponse" message="tns:IEzService_UpdateTransactionStatus_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UserChangeEmail">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserChangeEmail" message="tns:IEzService_UserChangeEmail_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserChangeEmailResponse" message="tns:IEzService_UserChangeEmail_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -2192,6 +2202,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="UserChangeEmail">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserChangeEmail" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="UserChangePassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UserChangePassword" style="document" />
       <wsdl:input>
@@ -2536,6 +2555,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetZooplaData">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetZooplaData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IovationCheck">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/IovationCheck" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3157,15 +3185,6 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateTransactionStatus">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateTransactionStatus" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UserChangeEmail">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UserChangeEmail" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
