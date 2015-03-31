@@ -69,19 +69,30 @@
 						new QueryParameter("TemplateName", oMeta.TemplateName)
 					);
 
-					var salesForceAddEvent = new AddActivity(null, new ActivityModel {
-						StartDate = now,
-						EndDate = now,
-						Description = oMeta.TemplateName,
-						Email = addr.Recipient,
-						Originator = "System",
-						Type = ActivityType.Email.ToString(),
-						IsOpportunity = false,
-					});
-					salesForceAddEvent.Execute();
+				    AddSalesForceActivity(now, oMeta, addr);
+					
 				} // if should register
 			} // foreach
-		} // SendMailViaMandrill
+		}
+
+	    private void AddSalesForceActivity(DateTime now, MailMetaData oMeta, Addressee addr) {
+	        try {
+	            var salesForceAddEvent = new AddActivity(null, new ActivityModel {
+	                StartDate = now,
+	                EndDate = now,
+	                Description = oMeta.TemplateName,
+	                Email = addr.Recipient,
+	                Originator = "System",
+	                Type = ActivityType.Email.ToString(),
+	                IsOpportunity = false,
+	            });
+	            salesForceAddEvent.Execute();
+            } catch (Exception ex) {
+                Log.Error(ex, "Failed to SF add activity to {0}", addr.Recipient);
+            }
+	    }
+
+// SendMailViaMandrill
 
 		private byte[] HtmlToDocxBinary(string html) {
 			if (html == null)
