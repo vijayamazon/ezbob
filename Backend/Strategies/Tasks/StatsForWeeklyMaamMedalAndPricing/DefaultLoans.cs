@@ -10,7 +10,7 @@
 			AutoApproved autoApproved
 		) : base(
 			sheet,
-			"Default (not cured) loans",
+			"Default loans (including 14 days late)",
 			total,
 			manuallyApproved,
 			autoApproved
@@ -18,10 +18,8 @@
 		} // constructor
 
 		public override void Add(Datum d) {
-			if (Added.If(ManuallyApproved.LastWasAdded && AutoApproved.LastWasAdded && d.HasDefaultLoan)) {
-				this.approvedAmount += AutoApproved.LastAmount;
-				this.loanAmount += d.DefaultLoanAmount;
-			} // if
+			if (Added.If(d.HasDefaultLoan, d.DefaultLoanAmount, d.DefaultLoanCount))
+				this.approvedAmount += d.FirstManual.ApprovedAmount;
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
@@ -38,9 +36,9 @@
 				new TitledValue("approved amount", this.approvedAmount),
 				new TitledValue("approved amount / manually approved amount %", this.approvedAmount, ManuallyApproved.Amount),
 				new TitledValue("approved amount / auto approved amount %", this.approvedAmount, AutoApproved.Amount),
-				new TitledValue("loan amount", this.loanAmount),
-				new TitledValue("loan amount / manually approved amount %", this.loanAmount, ManuallyApproved.Amount),
-				new TitledValue("loan amount / auto approved amount %", this.loanAmount, AutoApproved.Amount),
+				new TitledValue("loan amount", Amount),
+				new TitledValue("loan amount / manually approved amount %", Amount, ManuallyApproved.Amount),
+				new TitledValue("loan amount / auto approved amount %", Amount, AutoApproved.Amount),
 			};
 		} // PrepareAmountRowValues
 
@@ -49,6 +47,5 @@
 		private AStatItem AutoApproved { get { return Superior[2]; } }
 
 		private decimal approvedAmount;
-		private decimal loanAmount;
 	} // class DefaultLoans
 } // namespace

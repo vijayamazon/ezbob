@@ -4,19 +4,28 @@
 	using OfficeOpenXml;
 
 	internal class AutoApproved : AStatItem {
-		public AutoApproved(bool takeMin, ExcelWorksheet sheet, Total total, AutoProcessed autoProcessed) : base(
+		public AutoApproved(
+			bool takeMin,
+			bool takeLast,
+			ExcelWorksheet sheet,
+			Total total,
+			AutoProcessed autoProcessed
+		) : base(
 			sheet,
 			"Auto approved",
 			total,
 			autoProcessed
 		) {
 			this.takeMin = takeMin;
+			this.takeLast = takeLast;
 		} // constructor
 
 		public override void Add(Datum d) {
+			AutoDatumItem auto = d.Auto(this.takeLast);
+
 			Added.If(
-				d.Auto.HasDecided && d.Auto.AutomationDecision.In(DecisionActions.Approve, DecisionActions.ReApprove),
-				d.Auto.AutomationDecision == DecisionActions.ReApprove ? d.Auto.ReapprovedAmount : d.Auto.ApprovedAmount
+				auto.HasDecided && auto.AutomationDecision.In(DecisionActions.Approve, DecisionActions.ReApprove),
+				auto.AutomationDecision == DecisionActions.ReApprove ? auto.ReapprovedAmount : auto.ApprovedAmount
 			);
 		} // Add
 
@@ -38,5 +47,6 @@
 		private AStatItem AutoProcessed { get { return Superior[1]; } }
 
 		private readonly bool takeMin;
+		private readonly bool takeLast;
 	} // class AutoApproved
 } // namespace

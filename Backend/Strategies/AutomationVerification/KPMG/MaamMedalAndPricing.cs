@@ -65,7 +65,8 @@
 
 				try {
 					d.FindLoans(CashRequestLoans, LoanSources);
-					d.Auto.RunAutomation(isHomeOwner, DB, Log);
+					d.AutoFirst.RunAutomation(isHomeOwner, DB, Log);
+					d.AutoLast.RunAutomation(isHomeOwner, DB, Log);
 				} catch (Exception e) {
 					Log.Alert(e, "Automation failed for customer {0} at {1}.", d.CustomerID, d.FirstManual.DecisionTime);
 				} // try
@@ -92,8 +93,8 @@
 			int curRow = 2;
 
 			var stats = new List<Stats> {
-				new Stats(statSheet, true),
-				new Stats(statSheet, false),
+				new Stats(statSheet, true, false),
+				new Stats(statSheet, true, true),
 			};
 
 			foreach (Datum d in Data) {

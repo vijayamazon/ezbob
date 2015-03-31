@@ -10,7 +10,7 @@
 			AutoApproved autoApproved
 		) : base(
 			sheet,
-			"Default (14 days late) loans",
+			"14 days late loans",
 			total,
 			manuallyApproved,
 			autoApproved
@@ -18,8 +18,8 @@
 		} // constructor
 
 		public override void Add(Datum d) {
-			if (Added.If(ManuallyApproved.LastWasAdded && AutoApproved.LastWasAdded && d.HasBadLoan)) {
-				this.approvedAmount += AutoApproved.LastAmount;
+			if (Added.If(d.HasBadLoan)) {
+				this.approvedAmount += d.FirstManual.ApprovedAmount;
 				this.loanAmount += d.BadLoanAmount;
 			} // if
 		} // Add

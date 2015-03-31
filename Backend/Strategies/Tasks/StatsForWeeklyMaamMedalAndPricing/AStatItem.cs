@@ -89,15 +89,15 @@
 				this.item = item;
 			} // AddTrigger
 
-			public bool If(bool added, decimal amount = 0) {
-				return added ? Yes(amount) : No();
+			public bool If(bool added, decimal amount = 0, int count = 1) {
+				return added ? Yes(amount, count) : No();
 			} // If
 
-			public bool Yes(decimal amount = 0) {
+			public bool Yes(decimal amount = 0, int count = 1) {
 				this.item.Amount += amount;
 				this.item.LastAmount = amount;
 
-				this.item.Count++;
+				this.item.Count += count;
 				this.item.LastWasAdded = true;
 				return true;
 			} // Yes
@@ -127,10 +127,19 @@
 			return new List<TitledValue[]>();
 		} // PrepareMultipleAmountRowValues
 
-		private int SetRowValues(int row, bool showTitle, params TitledValue[] values) {
+		protected virtual int SetRowValues(int row, bool showTitle, params TitledValue[] values) {
 			SetBorder(this.sheet.Cells[row, 1]);
 			this.sheet.SetCellValue(row, 1, showTitle ? this.title : string.Empty, true);
+			return SetRowValues(row, values);
+		} // SetRowValues
 
+		protected virtual int SetRowValues(int row, string rowTitle, params TitledValue[] values) {
+			SetBorder(this.sheet.Cells[row, 1]);
+			this.sheet.SetCellValue(row, 1, rowTitle, true);
+			return SetRowValues(row, values);
+		} // SetRowValues
+
+		protected virtual int SetRowValues(int row, params TitledValue[] values) {
 			int column = 2;
 
 			for (int i = 0; i < values.Length; i++) {

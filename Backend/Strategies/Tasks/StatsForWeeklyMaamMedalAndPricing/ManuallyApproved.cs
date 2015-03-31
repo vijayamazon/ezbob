@@ -10,12 +10,22 @@
 		) {
 			this.loanAmount = 0;
 			this.loanCount = 0;
+			this.defaultLoanAmount= 0;
+			this.defaultLoanCount = 0;
+			this.badLoanAmount = 0;
+			this.badLoanCount = 0;
 		} // constructor
 
 		public override void Add(Datum d) {
 			if (Added.If(d.FirstManual.IsApproved, d.FirstManual.ApprovedAmount)) {
 				this.loanAmount += d.LoanAmount;
 				this.loanCount += d.LoanCount;
+
+				this.defaultLoanAmount += d.DefaultLoanAmount;
+				this.defaultLoanCount += d.DefaultLoanCount;
+
+				this.badLoanAmount += d.BadLoanAmount;
+				this.badLoanCount += d.BadLoanCount;
 			} // if
 		} // Add
 
@@ -24,6 +34,8 @@
 				new TitledValue("count", Count),
 				new TitledValue("approved / total %", Count, Total.Count),
 				new TitledValue("loan count", this.loanCount),
+				new TitledValue("default loan count", this.defaultLoanCount),
+				new TitledValue("bad loan count", this.badLoanCount),
 			};
 		} // PrepareCountRowValues
 
@@ -31,6 +43,8 @@
 			return new[] {
 				new TitledValue("approved amount", Amount),
 				new TitledValue("issued amount", this.loanAmount),
+				new TitledValue("default amount", this.defaultLoanAmount),
+				new TitledValue("bad amount", this.badLoanAmount),
 			};
 		} // PrepareAmountRowValues
 
@@ -38,5 +52,11 @@
 
 		private int loanCount;
 		private decimal loanAmount;
+
+		private int defaultLoanCount;
+		private decimal defaultLoanAmount;
+
+		private int badLoanCount;
+		private decimal badLoanAmount;
 	} // class ManuallyApproved
 } // namespace

@@ -23,13 +23,15 @@
 
 			Add(sr);
 
-			Auto = new AutoDatumItem(sr, tag);
+			AutoFirst = new AutoDatumItem(sr, tag);
 		} // constructor
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
-			var mdi = new ManualDatumItem(sr, tag);
+			var mdi = new ManualDatumItem(sr, this.tag);
 			mdi.Calculate();
 			ManualItems.Add(mdi);
+
+			AutoLast = new AutoDatumItem(sr, this.tag);
 		} // Add
 
 		public string Tag { get; set; }
@@ -53,7 +55,12 @@
 		public ManualDatumItem FirstManual { get { return ManualItems[0]; } }
 		public ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
 
-		public AutoDatumItem Auto { get; private set; }
+		public AutoDatumItem AutoFirst { get; private set; }
+		public AutoDatumItem AutoLast { get; private set; }
+
+		public AutoDatumItem Auto(bool takeLast) {
+			return takeLast ? AutoLast : AutoFirst;
+		} // Auto
 
 		public static string CsvTitles(SortedSet<string> allLoanSources) {
 			var os = new List<string>();
@@ -74,7 +81,8 @@
 				ManualDatumItem.CsvTitles("First"),
 				"Decision count",
 				ManualDatumItem.CsvTitles("Last"),
-				AutoDatumItem.CsvTitles("Auto"),
+				AutoDatumItem.CsvTitles("First"),
+				AutoDatumItem.CsvTitles("Last"),
 				/*
 				AMedalAndPricing.CsvTitles("Auto min"),
 				"The same max offer",
@@ -137,7 +145,8 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
 			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);
 
-			curColumn = Auto.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = AutoFirst.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = AutoLast.ToXlsx(sheet, rowNum, curColumn);
 
 			/*
 			curColumn = AutoMin.ToXlsx(sheet, rowNum, curColumn);

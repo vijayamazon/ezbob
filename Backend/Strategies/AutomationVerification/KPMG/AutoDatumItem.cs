@@ -57,6 +57,8 @@
 		public decimal ReapprovedAmount { get; private set; }
 
 		public static new string CsvTitles(string prefix) {
+			prefix += " auto";
+
 			return string.Format(
 				"{1} decision;{1} re-reject decision;{1} reject decision;{1} re-approve decision;{1} approve decision;" +
 				"{0};{1} re-approved amount", ADatumItem.CsvTitles(prefix), prefix);

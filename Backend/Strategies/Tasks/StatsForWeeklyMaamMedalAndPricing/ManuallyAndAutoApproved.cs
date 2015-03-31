@@ -8,13 +8,15 @@
 			ExcelWorksheet sheet,
 			Total total,
 			ManuallyApproved manuallyApproved,
-			AutoApproved autoApproved
+			AutoApproved autoApproved,
+			DefaultLoans defaultLoans
 		) : base(
 			sheet,
 			"Manually and auto approved",
 			total,
 			manuallyApproved,
-			autoApproved
+			autoApproved,
+			defaultLoans
 		) {
 			this.manualAmount = 0;
 			this.autoAmount = 0;
@@ -43,6 +45,42 @@
 			} // if
 		} // Add
 
+		public int DrawSummary(int row) {
+			row = SetRowValues(row, true,
+				new TitledValue("Manual amount", "Manual count"),
+				new TitledValue("Auto amount", "Auto count")
+			);
+
+			row = SetRowValues(row, "Approved",
+				new TitledValue(this.manualAmount, Count),
+				new TitledValue(this.autoAmount, Count)
+			);
+
+			var autoIssued = this.manualAmount == 0 ? 0 : this.loanAmount / this.manualAmount * this.autoAmount;
+
+			row = SetRowValues(row, "Issued",
+				new TitledValue(this.loanAmount, this.loanCount),
+				new TitledValue(autoIssued, this.loanCount)
+			);
+
+			row = SetRowValues(row, "Default",
+				new TitledValue(this.defaultLoanAmount, this.defaultLoanCount),
+				new TitledValue(DefaultLoans.Amount, DefaultLoans.Count)
+			);
+
+			row = SetRowValues(row, "Default rate (% of loans)",
+				new TitledValue(this.defaultLoanAmount, this.loanAmount, this.defaultLoanCount, this.loanCount),
+				new TitledValue(DefaultLoans.Amount, autoIssued, DefaultLoans.Count, this.loanCount)
+			);
+
+			row = SetRowValues(row, "Default rate (% of approvals)",
+				new TitledValue(this.defaultLoanAmount, this.manualAmount, this.defaultLoanCount, Count),
+				new TitledValue(DefaultLoans.Amount, this.autoAmount, DefaultLoans.Count, Count)
+			);
+
+			return row;
+		} // DrawSummary
+
 		protected override TitledValue[] PrepareCountRowValues() {
 			return null;
 		} // PrepareCountRowValues
@@ -57,8 +95,8 @@
 				},
 				new[] {
 					new TitledValue("loan count", this.loanCount),
-					new TitledValue("bad loan count", this.badLoanCount),
 					new TitledValue("default loan count", this.defaultLoanCount),
+					new TitledValue("bad loan count", this.badLoanCount),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -78,8 +116,8 @@
 				},
 				new[] {
 					new TitledValue("loan amount", this.loanAmount),
-					new TitledValue("bad loan amount", this.badLoanAmount),
 					new TitledValue("default loan amount", this.defaultLoanAmount),
+					new TitledValue("bad loan amount", this.badLoanAmount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues
@@ -87,6 +125,7 @@
 		private AStatItem Total { get { return Superior[0]; } }
 		private AStatItem ManuallyApproved { get { return Superior[1]; } }
 		private AStatItem AutoApproved { get { return Superior[2]; } }
+		private AStatItem DefaultLoans { get { return Superior[3]; } }
 
 		private decimal manualAmount;
 		private decimal autoAmount;

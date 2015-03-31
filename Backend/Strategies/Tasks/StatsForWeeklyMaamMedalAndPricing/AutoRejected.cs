@@ -4,15 +4,20 @@
 	using OfficeOpenXml;
 
 	internal class AutoRejected : AStatItem {
-		public AutoRejected(ExcelWorksheet sheet, Total total, AutoProcessed autoProcessed) : base(
+		public AutoRejected(ExcelWorksheet sheet, bool takeLast, Total total, AutoProcessed autoProcessed) : base(
 			sheet,
 			"Auto rejected",
 			total,
 			autoProcessed
-		) {} // constructor
+		) {
+			this.takeLast = takeLast;
+		} // constructor
 
 		public override void Add(Datum d) {
-			Added.If(d.Auto.HasDecided && d.Auto.AutomationDecision.In(DecisionActions.Reject, DecisionActions.ReReject));
+			Added.If(
+				d.Auto(this.takeLast).HasDecided &&
+				d.Auto(this.takeLast).AutomationDecision.In(DecisionActions.Reject, DecisionActions.ReReject)
+			);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
@@ -25,5 +30,7 @@
 
 		private AStatItem Total { get { return Superior[0]; } }
 		private AStatItem AutoProcessed { get { return Superior[1]; } }
+
+		private readonly bool takeLast;
 	} // class AutoRejected
 } // namespace
