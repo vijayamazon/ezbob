@@ -16,7 +16,7 @@
 			autoApproved
 		) {} // constructor
 
-		public override void Add(Datum d) {
+		public override void Add(Datum d, int cashRequestIndex) {
 			Added.If(
 				!AutoRejected.LastWasAdded && AutoApproved.LastWasAdded,
 				AutoApproved.LastAmount

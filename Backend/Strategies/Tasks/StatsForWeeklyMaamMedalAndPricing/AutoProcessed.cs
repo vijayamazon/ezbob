@@ -3,16 +3,14 @@
 	using OfficeOpenXml;
 
 	internal class AutoProcessed : AStatItem {
-		public AutoProcessed(ExcelWorksheet sheet, bool takeLast, Total total) : base(
+		public AutoProcessed(ExcelWorksheet sheet, Total total) : base(
 			sheet,
 			"Auto processed",
 			total
-		) {
-			this.takeLast = takeLast;
-		} // constructor
+		) {} // constructor
 
-		public override void Add(Datum d) {
-			Added.If(d.Auto(this.takeLast).HasDecided);
+		public override void Add(Datum d, int cashRequestIndex) {
+			Added.If(d.Auto(cashRequestIndex).HasDecided);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
@@ -21,7 +19,5 @@
 				new TitledValue("processed / total %", Count, Superior[0].Count),
 			};
 		} // PrepareCountRowValues
-
-		private readonly bool takeLast;
 	} // class AutoProcessed
 } // namespace

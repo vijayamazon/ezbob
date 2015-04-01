@@ -17,7 +17,7 @@
 			} // if
 
 			Datum lastDatum = Data[Data.Count - 1];
-			ManualDatumItem lastCr = lastDatum.LastManual;
+			ManualDatumItem lastCr = lastDatum.Manual(-1);
 
 			if (sr.IsApproved) {
 				if (!lastCr.IsApproved || (lastCr.CrLoanCount > 0))

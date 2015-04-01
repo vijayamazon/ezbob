@@ -4,16 +4,9 @@
 	using OfficeOpenXml;
 
 	internal abstract class ARejectedCrossApproved : AStatItem {
-		public override void Add(Datum d) {
-			if (Added.If(Rejected.LastWasAdded && Approved.LastWasAdded, Approved.LastAmount)) {
-				this.loanCount += d.LoanCount;
-				this.badLoanCount += d.BadLoanCount;
-				this.defaultLoanCount += d.DefaultLoanCount;
-
-				this.loanAmount += d.LoanAmount;
-				this.badLoanAmount += d.BadLoanAmount;
-				this.defaultLoanAmount += d.DefaultLoanAmount;
-			} // if
+		public override void Add(Datum d, int cashRequestIndex) {
+			if (Added.If(Rejected.LastWasAdded && Approved.LastWasAdded, Approved.LastAmount))
+				this.loanCount += d.Manual(cashRequestIndex).LoanCount;
 		} // Add
 
 		public int DrawSummary(int row) {
@@ -29,22 +22,25 @@
 
 			row = SetRowValues(row, "Issued", OrderApprovedAndRejected(
 				new TitledValue(0, 0),
-				new TitledValue(this.loanAmount, this.loanCount)
+				new TitledValue(this.loanCount.Total.Amount, this.loanCount.Total.Count)
 			));
 
 			row = SetRowValues(row, "Default", OrderApprovedAndRejected(
 				new TitledValue(0, 0),
-				new TitledValue(this.defaultLoanAmount, this.defaultLoanCount)
+				new TitledValue(this.loanCount.Default.Amount, this.loanCount.Default.Count)
 			));
 
 			row = SetRowValues(row, "Default rate (% of loans)", OrderApprovedAndRejected(
 				new TitledValue(0, 0),
-				new TitledValue(this.defaultLoanAmount, this.loanAmount, this.defaultLoanCount, this.loanCount)
+				new TitledValue(
+					this.loanCount.Default.Amount, this.loanCount.Total.Amount,
+					this.loanCount.Default.Count, this.loanCount.Total.Count
+				)
 			));
 
 			row = SetRowValues(row, "Default rate (% of approvals)", OrderApprovedAndRejected(
 				new TitledValue(0, 0),
-				new TitledValue(this.defaultLoanAmount, Amount, this.defaultLoanCount, Count)
+				new TitledValue(this.loanCount.Default.Amount, Amount, this.loanCount.Default.Count, Count)
 			));
 
 			return row;
@@ -63,13 +59,7 @@
 			rejected,
 			approved
 		) {
-			this.loanCount = 0;
-			this.badLoanCount = 0;
-			this.defaultLoanCount = 0;
-
-			this.loanAmount = 0;
-			this.badLoanAmount = 0;
-			this.defaultLoanAmount = 0;
+			this.loanCount = new LoanCount();
 		} // constructor
 
 		protected override TitledValue[] PrepareCountRowValues() {
@@ -87,9 +77,9 @@
 					new TitledValue("count / approved %", Count, Approved.Count),
 				},
 				new [] {
-					new TitledValue("loan count", this.loanCount),
-					new TitledValue("default loan count", this.defaultLoanCount),
-					new TitledValue("bad loan count", this.badLoanCount),
+					new TitledValue("loan count", this.loanCount.Total.Count),
+					new TitledValue("default loan count", this.loanCount.Default.Count),
+					new TitledValue("bad loan count", this.loanCount.Bad.Count),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -105,9 +95,9 @@
 					new TitledValue("amount / approved %", Amount, Approved.Amount),
 				},
 				new [] {
-					new TitledValue("loan amount", this.loanAmount),
-					new TitledValue("default loan amount", this.defaultLoanAmount),
-					new TitledValue("bad loan amount", this.badLoanAmount),
+					new TitledValue("loan amount", this.loanCount.Total.Amount),
+					new TitledValue("default loan amount", this.loanCount.Default.Amount),
+					new TitledValue("bad loan amount", this.loanCount.Bad.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues
@@ -116,12 +106,6 @@
 		private AStatItem Rejected { get { return Superior[1]; } }
 		private AStatItem Approved { get { return Superior[2]; } }
 
-		private int loanCount;
-		private int badLoanCount;
-		private int defaultLoanCount;
-
-		private decimal loanAmount;
-		private decimal badLoanAmount;
-		private decimal defaultLoanAmount;
+		private LoanCount loanCount;
 	} // class RejectedCrossApproved
 } // namespace

@@ -7,7 +7,7 @@
 	using OfficeOpenXml.Style;
 
 	internal abstract class AStatItem {
-		public abstract void Add(Datum d);
+		public abstract void Add(Datum d, int cashRequestIndex);
 
 		public virtual int ToXlsx(int row) {
 			bool showTitle = true;

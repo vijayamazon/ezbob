@@ -14,12 +14,13 @@
 			total,
 			manuallyApproved,
 			autoApproved
-		) {
-		} // constructor
+		) {} // constructor
 
-		public override void Add(Datum d) {
-			if (Added.If(d.HasDefaultLoan, d.DefaultLoanAmount, d.DefaultLoanCount))
-				this.approvedAmount += d.FirstManual.ApprovedAmount;
+		public override void Add(Datum d, int cashRequestIndex) {
+			ManualDatumItem item = d.Manual(cashRequestIndex);
+
+			if (Added.If(item.LoanCount.Default.Exist, item.LoanCount.Default.Amount, item.LoanCount.Default.Count))
+				this.approvedAmount += item.ApprovedAmount;
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

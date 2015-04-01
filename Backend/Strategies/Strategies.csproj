@@ -91,6 +91,7 @@
     <Compile Include="AutomationVerification\KPMG\AutoDatumItem.cs" />
     <Compile Include="AutomationVerification\KPMG\CustomerData.cs" />
     <Compile Include="AutomationVerification\KPMG\Datum.cs" />
+    <Compile Include="AutomationVerification\KPMG\LoanCount.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanMetaData.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanSummaryData.cs" />
     <Compile Include="AutomationVerification\KPMG\MaamMedalAndPricing.cs" />

@@ -6,7 +6,6 @@
 	internal class AutoApproved : AStatItem {
 		public AutoApproved(
 			bool takeMin,
-			bool takeLast,
 			ExcelWorksheet sheet,
 			Total total,
 			AutoProcessed autoProcessed
@@ -17,11 +16,10 @@
 			autoProcessed
 		) {
 			this.takeMin = takeMin;
-			this.takeLast = takeLast;
 		} // constructor
 
-		public override void Add(Datum d) {
-			AutoDatumItem auto = d.Auto(this.takeLast);
+		public override void Add(Datum d, int cashRequestIndex) {
+			AutoDatumItem auto = d.Auto(cashRequestIndex);
 
 			Added.If(
 				auto.HasDecided && auto.AutomationDecision.In(DecisionActions.Approve, DecisionActions.ReApprove),
@@ -47,6 +45,5 @@
 		private AStatItem AutoProcessed { get { return Superior[1]; } }
 
 		private readonly bool takeMin;
-		private readonly bool takeLast;
 	} // class AutoApproved
 } // namespace

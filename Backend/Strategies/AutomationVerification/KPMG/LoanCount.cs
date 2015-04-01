@@ -1,0 +1,113 @@
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+	using EZBob.DatabaseLib.Model.Database.Loans;
+
+	public class LoanCount {
+		public static LoanCount operator +(LoanCount lc, LoanMetaData lmd) {
+			if (lc != null)
+				lc.Append(lmd);
+
+			return lc;
+		} // operator +
+
+		public static LoanCount operator +(LoanCount lc, LoanCount other) {
+			if (lc != null)
+				lc.Append(other);
+
+			return lc;
+		} // operator +
+
+		public LoanCount() {
+			Total = new CountAmount();
+			Default = new CountAmount();
+			Bad = new CountAmount();
+		} // constructor
+
+		public LoanCount Clone() {
+			return new LoanCount {
+				Total = Total.Clone(),
+				Default = Default.Clone(),
+				Bad = Bad.Clone(),
+			};
+		} // Clone
+
+		public void Clear() {
+			Total.Clear();
+			Bad.Clear();
+			Default.Clear();
+		} // Clear
+
+		public void Append(LoanMetaData lmd) {
+			if (lmd == null)
+				return;
+
+			Total.Count++;
+			Total.Amount += lmd.LoanAmount;
+
+			if ((lmd.LoanStatus == LoanStatus.Late) || (lmd.MaxLateDays > 13)) {
+				Default.Count++;
+				Default.Amount += lmd.LoanAmount;
+
+				if (lmd.MaxLateDays > 13) {
+					Bad.Count++;
+					Bad.Amount += lmd.LoanAmount;
+				} // if
+			} // if
+		} // Append
+
+		public void Append(LoanCount other) {
+			if (other == null)
+				return;
+
+			Total += other.Total;
+			Default += other.Default;
+			Bad += other.Bad;
+		} // Append
+
+		public CountAmount Total { get; private set; }
+		public CountAmount Default { get; private set; }
+		public CountAmount Bad { get; private set; }
+
+		public class CountAmount {
+			public static CountAmount operator +(CountAmount a, CountAmount b) {
+				if (a == null)
+					return b;
+
+				return a.Append(b);
+			} // operator +
+
+			public CountAmount() {
+				Count = 0;
+				Amount = 0;
+			} // constructor
+
+			public CountAmount Clone() {
+				return new CountAmount {
+					Count = Count,
+					Amount = Amount,
+				};
+			} // Clone
+
+			public bool Exist {
+				get { return Count > 0; }
+			} // Exist
+
+			public void Clear() {
+				Count = 0;
+				Amount = 0;
+			} // Clear
+
+			public CountAmount Append(CountAmount other) {
+				if (other == null)
+					return this;
+
+				Count += other.Count;
+				Amount += other.Amount;
+
+				return this;
+			} // Append
+
+			public int Count { get; set; }
+			public decimal Amount { get; set; }
+		} // class CountAmount
+	} // class LoanCount
+} // namespace

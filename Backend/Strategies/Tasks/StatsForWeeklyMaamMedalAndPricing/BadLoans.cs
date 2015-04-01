@@ -14,14 +14,13 @@
 			total,
 			manuallyApproved,
 			autoApproved
-		) {
-		} // constructor
+		) {} // constructor
 
-		public override void Add(Datum d) {
-			if (Added.If(d.HasBadLoan)) {
-				this.approvedAmount += d.FirstManual.ApprovedAmount;
-				this.loanAmount += d.BadLoanAmount;
-			} // if
+		public override void Add(Datum d, int cashRequestIndex) {
+			ManualDatumItem item = d.Manual(cashRequestIndex);
+
+			if (Added.If(item.LoanCount.Bad.Exist, item.LoanCount.Bad.Amount))
+				this.approvedAmount += item.ApprovedAmount;
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
@@ -38,9 +37,9 @@
 				new TitledValue("approved amount", this.approvedAmount),
 				new TitledValue("approved amount / manually approved amount %", this.approvedAmount, ManuallyApproved.Amount),
 				new TitledValue("approved amount / auto approved amount %", this.approvedAmount, AutoApproved.Amount),
-				new TitledValue("loan amount", this.loanAmount),
-				new TitledValue("loan amount / manually approved amount %", this.loanAmount, ManuallyApproved.Amount),
-				new TitledValue("loan amount / auto approved amount %", this.loanAmount, AutoApproved.Amount),
+				new TitledValue("loan amount", Amount),
+				new TitledValue("loan amount / manually approved amount %", Amount, ManuallyApproved.Amount),
+				new TitledValue("loan amount / auto approved amount %", Amount, AutoApproved.Amount),
 			};
 		} // PrepareAmountRowValues
 
@@ -49,6 +48,5 @@
 		private AStatItem AutoApproved { get { return Superior[2]; } }
 
 		private decimal approvedAmount;
-		private decimal loanAmount;
 	} // class BadLoans
 } // namespace

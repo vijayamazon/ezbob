@@ -6,13 +6,13 @@
 	using OfficeOpenXml;
 
 	internal class Stats {
-		public Stats(ExcelWorksheet sheet, bool takeMin, bool takeLast) {
+		public Stats(ExcelWorksheet sheet, bool takeMin, string cashRequestSourceName) {
 			this.sheet = sheet;
 
 			var total = new Total(sheet);
-			var autoProcessed = new AutoProcessed(sheet, takeLast, total);
-			var autoRejected = new AutoRejected(sheet, takeLast, total, autoProcessed);
-			var autoApproved = new AutoApproved(takeMin, takeLast, sheet, total, autoProcessed);
+			var autoProcessed = new AutoProcessed(sheet, total);
+			var autoRejected = new AutoRejected(sheet, total, autoProcessed);
+			var autoApproved = new AutoApproved(takeMin, sheet, total, autoProcessed);
 			var manuallyRejected = new ManuallyRejected(sheet, total);
 			var manuallyApproved = new ManuallyApproved(sheet, total);
 			var defaultLoans = new DefaultLoans(sheet, total, manuallyApproved, autoApproved);
@@ -37,12 +37,12 @@
 				this.manuallyApprovedAutoRejected,
 			};
 
-			this.name = (takeMin ? "Minimum" : "Maximum") + " offer at " + (takeLast ? "last" : "first") + " date";
+			this.name = (takeMin ? "Minimum" : "Maximum") + " offer " + cashRequestSourceName;
 		} // constructor
 
-		public void Add(Datum d) {
-			foreach (var si in this.stats)
-				si.Add(d);
+		public void Add(Datum d, int cashRequstIndex) {
+			foreach (AStatItem si in this.stats)
+				si.Add(d, cashRequstIndex);
 		} // Add
 
 		// ReSharper disable once UnusedMethodReturnValue.Local

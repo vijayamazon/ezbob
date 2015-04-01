@@ -17,7 +17,7 @@
 			autoApproved
 		) {} // constructor
 
-		public override void Add(Datum d) {
+		public override void Add(Datum d, int cashRequestIndex) {
 			// TODO Added.If(d.AutomationDecision == DecisionActions.ReApprove);
 		} // Add
 

@@ -10,8 +10,6 @@
 		} // Name
 
 		public override void Execute() {
-			CustomerID = 1001; // TODO: remove!
-
 			base.Execute();
 
 			SaveXlsx(string.Format(

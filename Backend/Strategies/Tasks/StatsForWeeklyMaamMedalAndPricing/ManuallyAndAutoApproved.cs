@@ -21,27 +21,15 @@
 			this.manualAmount = 0;
 			this.autoAmount = 0;
 
-			this.loanCount = 0;
-			this.badLoanCount = 0;
-			this.defaultLoanCount = 0;
-
-			this.loanAmount = 0;
-			this.badLoanAmount = 0;
-			this.defaultLoanAmount = 0;
+			this.loanCount = new LoanCount();
 		} // constructor
 
-		public override void Add(Datum d) {
+		public override void Add(Datum d, int cashRequestIndex) {
 			if (Added.If(ManuallyApproved.LastWasAdded && AutoApproved.LastWasAdded)) {
 				this.manualAmount += ManuallyApproved.LastAmount;
 				this.autoAmount += AutoApproved.LastAmount;
 
-				this.loanCount += d.LoanCount;
-				this.badLoanCount += d.BadLoanCount;
-				this.defaultLoanCount += d.DefaultLoanCount;
-
-				this.loanAmount += d.LoanAmount;
-				this.badLoanAmount += d.BadLoanAmount;
-				this.defaultLoanAmount += d.DefaultLoanAmount;
+				this.loanCount += d.Manual(cashRequestIndex).LoanCount;
 			} // if
 		} // Add
 
@@ -56,25 +44,34 @@
 				new TitledValue(this.autoAmount, Count)
 			);
 
-			var autoIssued = this.manualAmount == 0 ? 0 : this.loanAmount / this.manualAmount * this.autoAmount;
+			var autoIssued = this.manualAmount == 0 ? 0 : this.loanCount.Total.Amount / this.manualAmount * this.autoAmount;
 
 			row = SetRowValues(row, "Issued",
-				new TitledValue(this.loanAmount, this.loanCount),
-				new TitledValue(autoIssued, this.loanCount)
+				new TitledValue(this.loanCount.Total.Amount, this.loanCount.Total.Count),
+				new TitledValue(autoIssued, this.loanCount.Total.Amount)
 			);
 
 			row = SetRowValues(row, "Default",
-				new TitledValue(this.defaultLoanAmount, this.defaultLoanCount),
+				new TitledValue(this.loanCount.Default.Amount, this.loanCount.Default.Count),
 				new TitledValue(DefaultLoans.Amount, DefaultLoans.Count)
 			);
 
 			row = SetRowValues(row, "Default rate (% of loans)",
-				new TitledValue(this.defaultLoanAmount, this.loanAmount, this.defaultLoanCount, this.loanCount),
-				new TitledValue(DefaultLoans.Amount, autoIssued, DefaultLoans.Count, this.loanCount)
+				new TitledValue(
+					this.loanCount.Default.Amount, this.loanCount.Total.Amount,
+					this.loanCount.Default.Count, this.loanCount.Total.Count
+				),
+				new TitledValue(
+					DefaultLoans.Amount, autoIssued,
+					DefaultLoans.Count, this.loanCount.Total.Count
+				)
 			);
 
 			row = SetRowValues(row, "Default rate (% of approvals)",
-				new TitledValue(this.defaultLoanAmount, this.manualAmount, this.defaultLoanCount, Count),
+				new TitledValue(
+					this.loanCount.Default.Amount, this.manualAmount,
+					this.loanCount.Default.Count, Count
+				),
 				new TitledValue(DefaultLoans.Amount, this.autoAmount, DefaultLoans.Count, Count)
 			);
 
@@ -94,9 +91,9 @@
 					new TitledValue("both approved / autoApproved %", Count, AutoApproved.Count),
 				},
 				new[] {
-					new TitledValue("loan count", this.loanCount),
-					new TitledValue("default loan count", this.defaultLoanCount),
-					new TitledValue("bad loan count", this.badLoanCount),
+					new TitledValue("loan count", this.loanCount.Total.Count),
+					new TitledValue("default loan count", this.loanCount.Default.Count),
+					new TitledValue("bad loan count", this.loanCount.Bad.Count),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -115,9 +112,9 @@
 					new TitledValue("auto amount / manual amount %", this.autoAmount, this.manualAmount),
 				},
 				new[] {
-					new TitledValue("loan amount", this.loanAmount),
-					new TitledValue("default loan amount", this.defaultLoanAmount),
-					new TitledValue("bad loan amount", this.badLoanAmount),
+					new TitledValue("loan amount", this.loanCount.Total.Amount),
+					new TitledValue("default loan amount", this.loanCount.Default.Amount),
+					new TitledValue("bad loan amount", this.loanCount.Bad.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues
@@ -130,12 +127,6 @@
 		private decimal manualAmount;
 		private decimal autoAmount;
 
-		private int loanCount;
-		private int badLoanCount;
-		private int defaultLoanCount;
-
-		private decimal loanAmount;
-		private decimal badLoanAmount;
-		private decimal defaultLoanAmount;
+		private LoanCount loanCount;
 	} // class ManuallyAndAutoApproved
 } // namespace

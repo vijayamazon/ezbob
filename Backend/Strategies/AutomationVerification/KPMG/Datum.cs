@@ -1,8 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
+	using Ezbob.Database;
 	using Ezbob.ExcelExt;
-	using EZBob.DatabaseLib.Model.Database.Loans;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
 		long,
@@ -16,22 +17,20 @@
 		public Datum(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) {
 			this.tag = tag;
 			ManualItems = new List<ManualDatumItem>();
+			AutoItems = new List<AutoDatumItem>();
+			LoanCount = new LoanCount();
 
 			CustomerID = sr.CustomerID;
 			BrokerID = sr.BrokerID;
 			IsDefault = sr.IsDefault;
 
 			Add(sr);
-
-			AutoFirst = new AutoDatumItem(sr, tag);
 		} // constructor
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
 			var mdi = new ManualDatumItem(sr, this.tag);
 			mdi.Calculate();
 			ManualItems.Add(mdi);
-
-			AutoLast = new AutoDatumItem(sr, this.tag);
 		} // Add
 
 		public string Tag { get; set; }
@@ -39,28 +38,35 @@
 		public int? BrokerID { get; set; }
 		public bool IsDefault { get; set; }
 
-		public int LoanCount { get; private set; }
-		public decimal LoanAmount { get; private set; }
-
-		public bool HasDefaultLoan { get { return DefaultLoanCount > 0; } }
-		public int DefaultLoanCount { get; private set; }
-		public decimal DefaultLoanAmount { get; private set; }
-
-		public bool HasBadLoan { get { return BadLoanCount > 0; } }
-		public int BadLoanCount { get; private set; }
-		public decimal BadLoanAmount { get; private set; }
+		public LoanCount LoanCount { get; private set; }
 
 		public List<ManualDatumItem> ManualItems { get; private set; }
+		public List<AutoDatumItem> AutoItems { get; private set; }
 
-		public ManualDatumItem FirstManual { get { return ManualItems[0]; } }
-		public ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
+		public ManualDatumItem Manual(int itemIndex) {
+			if (itemIndex < 0)
+				return ManualItems[ManualItems.Count + itemIndex];
 
-		public AutoDatumItem AutoFirst { get; private set; }
-		public AutoDatumItem AutoLast { get; private set; }
-
-		public AutoDatumItem Auto(bool takeLast) {
-			return takeLast ? AutoLast : AutoFirst;
+			return ManualItems[itemIndex];
 		} // Auto
+
+		public AutoDatumItem Auto(int itemIndex) {
+			if (itemIndex < 0)
+				return AutoItems[AutoItems.Count + itemIndex];
+
+			return AutoItems[itemIndex];
+		} // Auto
+
+		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
+			AutoItems.Clear();
+
+			foreach (ManualDatumItem mi in ManualItems) {
+				var ai = new AutoDatumItem(mi, this.tag);
+				ai.LoanCount = mi.LoanCount.Clone();
+				AutoItems.Add(ai);
+				ai.RunAutomation(isHomeOwner, db, log);
+			} // for each manual item
+		} // RunAutomation
 
 		public static string CsvTitles(SortedSet<string> allLoanSources) {
 			var os = new List<string>();
@@ -98,14 +104,7 @@
 			foreach (string s in allLoanSources)
 				this.loansBySource[s] = new LoanSummaryData();
 
-			LoanCount = 0;
-			LoanAmount = 0;
-
-			DefaultLoanCount = 0;
-			DefaultLoanAmount = 0;
-
-			BadLoanCount = 0;
-			BadLoanAmount = 0;
+			LoanCount.Clear();
 
 			foreach (ManualDatumItem mi in ManualItems) {
 				long cashRequestID = mi.CashRequestID;
@@ -115,19 +114,8 @@
 
 				foreach (LoanMetaData lmd in crLoans[cashRequestID]) {
 					this.loansBySource[lmd.LoanSourceName].Add(lmd);
-
-					LoanCount++;
-					LoanAmount += lmd.LoanAmount;
-
-					if (lmd.LoanStatus == LoanStatus.Late) {
-						DefaultLoanCount++;
-						DefaultLoanAmount += lmd.LoanAmount;
-					} // if
-
-					if (lmd.MaxLateDays > 13) {
-						BadLoanCount++;
-						BadLoanAmount += lmd.LoanAmount;
-					} // if
+					LoanCount += lmd;
+					mi.LoanCount += lmd;
 				} // for
 			} // for each item
 		} // FindLoans
@@ -138,15 +126,15 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.Default.Exist ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.Bad.Exist ? "Default" : "No");
 
 			curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
 			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);
 
-			curColumn = AutoFirst.ToXlsx(sheet, rowNum, curColumn);
-			curColumn = AutoLast.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = FirstAuto.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = LastAuto.ToXlsx(sheet, rowNum, curColumn);
 
 			/*
 			curColumn = AutoMin.ToXlsx(sheet, rowNum, curColumn);
@@ -163,6 +151,12 @@
 
 			return curColumn;
 		} // ToXlsx
+
+		private ManualDatumItem FirstManual { get { return ManualItems[0]; } }
+		private ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
+
+		private AutoDatumItem FirstAuto { get { return AutoItems[0]; } }
+		private AutoDatumItem LastAuto  { get { return AutoItems[AutoItems.Count - 1]; } }
 
 		private SortedDictionary<string, LoanSummaryData> loansBySource;
 		private readonly string tag;

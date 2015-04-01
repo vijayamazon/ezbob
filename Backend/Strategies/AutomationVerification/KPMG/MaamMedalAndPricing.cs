@@ -65,10 +65,9 @@
 
 				try {
 					d.FindLoans(CashRequestLoans, LoanSources);
-					d.AutoFirst.RunAutomation(isHomeOwner, DB, Log);
-					d.AutoLast.RunAutomation(isHomeOwner, DB, Log);
+					d.RunAutomation(isHomeOwner, DB, Log);
 				} catch (Exception e) {
-					Log.Alert(e, "Automation failed for customer {0} at {1}.", d.CustomerID, d.FirstManual.DecisionTime);
+					Log.Alert(e, "Automation failed for customer {0}.", d.CustomerID);
 				} // try
 
 				pc++;
@@ -92,27 +91,35 @@
 
 			int curRow = 2;
 
-			var stats = new List<Stats> {
-				new Stats(statSheet, true, false),
-				new Stats(statSheet, true, true),
+			var stats = new List<Tuple<Stats, int>> {
+				new Tuple<Stats, int>(new Stats(statSheet, true, "at first decision time"), 0),
+				new Tuple<Stats, int>(new Stats(statSheet, true, "at last decision time"), -1),
 			};
+
+			var allCrStats = new Stats(statSheet, true, "with all the decisions");
 
 			foreach (Datum d in Data) {
 				d.ToXlsx(sheet, curRow);
 				curRow++;
 
-				foreach (var st in stats)
-					st.Add(d);
+				foreach (Tuple<Stats, int> pair in stats)
+					pair.Item1.Add(d, pair.Item2);
+
+				for (int i = 0; i < d.ManualItems.Count; i++)
+					allCrStats.Add(d, i);
 			} // for each
 
 			Xlsx.AutoFitColumns();
 
 			int row = 1;
 
-			foreach (var st in stats) {
-				row = st.ToXlsx(row);
+			foreach (Tuple<Stats, int> pair in stats) {
+				row = pair.Item1.ToXlsx(row);
 				row++;
 			} // for each
+
+			row = allCrStats.ToXlsx(row);
+			row++;
 		} // CreateXlsx
 
 		protected virtual TCrLoans CashRequestLoans {

@@ -9,8 +9,8 @@
 			total
 		) {} // constructor
 
-		public override void Add(Datum d) {
-			Added.If(!d.FirstManual.IsApproved);
+		public override void Add(Datum d, int cashRequestIndex) {
+			Added.If(!d.Manual(cashRequestIndex).IsApproved);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
