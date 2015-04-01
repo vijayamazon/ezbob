@@ -3,19 +3,13 @@ namespace EzBobTest {
 	using System;
 	using AutomationCalculator.MedalCalculation;
 	using Ezbob.Backend.Strategies;
-	using Ezbob.Backend.Strategies.AutomationVerification;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
+	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using NUnit.Framework;
 	using StructureMap;
-	using System.Collections;
-	using System.IO;
-	using System.Security.Cryptography;
-	using System.Text;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
-	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
-	using Ezbob.Utils;
 
 	/// <summary>
 	/// The test medal.
@@ -53,18 +47,22 @@ namespace EzBobTest {
 
 		[Test]
 		public void Test_TurnoverForMedalTest_NH_AV() {
-			DateTime calculationTime = DateTime.UtcNow; //new DateTime(2015, 01, 26);
-			int customerId = 20366; //19271; // 739; //19856; // 211; // 1871; // //19271 ; //1953;  1826;  //  //  171; //348; // 363; //290; // 178; //;363 // 171: amazon, pp, ebay
-			// CustomerId = 211, CalculationTime = 01/01/2014 00:00:00 - have all MP types
+
+			DateTime calculationTime = DateTime.UtcNow;
+			int customerId = 20658; //24609; // 24613; 
+			
+			//14858; // 20658; not in tail
+			
 			this.m_oLog.Info("START TURNOVER FOR MEDAL customerID: {0}; calculationTime: {1}", customerId, calculationTime.Date);
-			;
-			MedalResult resultsInput = new MedalResult(customerId, this.m_oLog);
-			/*var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1NoGathering(resultsInput);
-			MedalResult result = calculatorTester.CalculateMedalScore(customerId, calculationTime);*/
-			// both
-			//	new CalculateMedal(customerId, calculationTime, false, true).Execute();
+			
+			//MedalResult resultsInput = new MedalResult(customerId, this.m_oLog);
+			//var calculatorTester = new OnlineNonLimitedWithBusinessScoreMedalCalculator1();
+			//calculatorTester.Init(customerId, calculationTime, 0, 0, 0, 0, 0, null, null);
+			//MedalResult result = calculatorTester.CalculateMedalScore();
+
+			// AV
 			var msc = new OnlineNonLimitedWithBusinessScoreMedalCalculator(this.m_oDB, this.m_oLog);
-			//var model = msc.GetInputParameters(customerId, calculationTime);
+			var model = msc.GetInputParameters(customerId, calculationTime);
 		}
 
 	

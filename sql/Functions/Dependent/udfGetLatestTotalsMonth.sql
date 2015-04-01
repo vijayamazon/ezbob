@@ -62,6 +62,11 @@ BEGIN
 			h.CustomerMarketPlaceId = @MpID
 			AND
 			h.UpdatingEnd <= @Now
+			AND (
+				h.Error IS NULL
+				OR
+				LTRIM(RTRIM(h.Error)) = ''
+			)
 		ORDER BY
 			h.UpdatingEnd DESC,
 			h.Id DESC

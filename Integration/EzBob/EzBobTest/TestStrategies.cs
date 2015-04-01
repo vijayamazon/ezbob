@@ -418,17 +418,17 @@
 			DateTime calculationTime = DateTime.UtcNow;
 
 			var customers = new[] {
-				270,  19271, 19856, 19970, 234, 103, 211, 739
+				20658, //	24600 //,24596,24593,24609,24592,24517,24613
+				//270,  19271, 19856, 19970, 234, 103, 211, 739
 			};
 
 			foreach (var customerID in customers)
 				new CalculateMedal(customerID, calculationTime, false, true).Execute();
 
-			this.m_oDB.ForEachRowSafe((sr) => {
-				int customerId = sr["Id"];
-				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
-			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
-
+			//this.m_oDB.ForEachRowSafe((sr) => {
+			//	int customerId = sr["Id"];
+			//	new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
+			//}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 
 		}
 
@@ -752,6 +752,12 @@
 			sf.Execute();
 		}
 
+		[Test]
+		public void TestAutoRejectBoth() {
+			int customerID = 20658;
+			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID,this.m_oDB, this.m_oLog);
+			result.Init().MakeAndVerifyDecision();
+		}
 
 	}
 }
