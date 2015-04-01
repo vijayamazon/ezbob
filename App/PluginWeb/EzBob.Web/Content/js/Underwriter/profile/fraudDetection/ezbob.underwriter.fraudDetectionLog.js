@@ -8,6 +8,35 @@ EzBob.Underwriter.fraudDetectionLogModel = Backbone.Model.extend({
     }
 });
 
+EzBob.Underwriter.IovationDetailsModel = Backbone.Model.extend({
+    url: function () {
+        return window.gRootPath + "Underwriter/FraudDetectionLog/IovationDetails/" + this.get('Id');
+    }
+});
+
+EzBob.Underwriter.IovationFraudDetailsView = Backbone.Marionette.ItemView.extend({
+    template: '#iovation-details-template',
+    initialize: function () {
+        this.model.on("change sync", this.render, this);
+        this.model.fetch();
+    },
+    serializeData: function () {
+        return {
+            iovation : this.model.toJSON()
+        };
+    },
+    jqoptions: function () {
+        return {
+            modal: true,
+            title: 'Iovation details',
+            position: 'top',
+            width: 530,
+            dialogClass: 'iovation-details-popup'
+        };
+    }, // jqoptions
+});
+
+
 EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
     template: '#fraudDetectionLog',
     initialize: function () {
@@ -31,12 +60,9 @@ EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
         var type = $(ev.currentTarget).data('type');
         var value = $(ev.currentTarget).data('value');
         if (type === 'Iovation') {
-            BlockUi('on');
-            $.get(window.gRootPath + "Underwriter/FraudDetectionLog/IovationDetails", { id: value })
-             .done(function (response) {
-                 console.log('response');
-             })
-             .always(function () { BlockUi('off'); });
+            this.iovationDetailsModel = new EzBob.Underwriter.IovationDetailsModel({ Id: value });
+            this.iovationDetailsView = new EzBob.Underwriter.IovationFraudDetailsView({ model: this.iovationDetailsModel });
+            EzBob.App.jqmodal.show(this.iovationDetailsView)
         }
 
     },
@@ -48,3 +74,6 @@ EzBob.Underwriter.FraudDetectionLogView = Backbone.Marionette.ItemView.extend({
         };
     }
 });
+
+
+

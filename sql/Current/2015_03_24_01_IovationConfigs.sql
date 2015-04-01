@@ -33,6 +33,11 @@ BEGIN
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationEnabled', 'True', 'True / False')
 	END
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationAdminUrl')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAdminUrl', 'https://admin.iovation.com/', 'iovation admin url')
+	END
+	
 END
 ELSE	
 BEGIN
@@ -43,6 +48,10 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationEnabled')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationEnabled', 'False', 'True / False')
+	END
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationAdminUrl')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAdminUrl', 'https://ci-admin.iovation.com/', 'iovation admin url')
 	END
 END
 GO

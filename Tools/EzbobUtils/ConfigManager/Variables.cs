@@ -247,6 +247,7 @@ namespace ConfigManager {
 		InvalidPasswordBlockSeconds,
 		IovationAdminAccountName,
         IovationAdminPassword,
+        IovationAdminUrl,
         IovationEnabled,
         IovationEnvironment,
         IovationSubscriberAccount,

@@ -207,7 +207,9 @@
 		public virtual VariableValue IovationUrl {
 			get { return this[Variables.IovationUrl]; }
 		}
-
+        public virtual VariableValue IovationAdminUrl {
+            get { return this[Variables.IovationAdminUrl]; }
+        }
 		public virtual VariableValue IsSmsValidationActive {
 			get { return this[Variables.IsSmsValidationActive]; }
 		}
