@@ -50,6 +50,11 @@
 
 			request = request.Replace("hash=" + hash, this.remotePassword);
 
+            //Patch for issue with decoding of ' sign
+            if (request.Contains("%27")) {
+                request = request.Replace("%27", "'");
+            }
+
 			log.Debug("CheckHash: request (after replace) = '{0}'", request);
 
 			var digest = CalculateMD5Hash(request);
