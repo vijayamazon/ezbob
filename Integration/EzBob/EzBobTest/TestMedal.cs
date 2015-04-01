@@ -49,7 +49,7 @@ namespace EzBobTest {
 		public void Test_TurnoverForMedalTest_NH_AV() {
 
 			DateTime calculationTime = DateTime.UtcNow;
-			int customerId = 20658; //24609; // 24613; 
+			int customerId = 24517; // 20658; //24609; // 24613; 
 			
 			//14858; // 20658; not in tail
 			

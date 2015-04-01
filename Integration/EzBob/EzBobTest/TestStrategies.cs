@@ -418,7 +418,7 @@
 			DateTime calculationTime = DateTime.UtcNow;
 
 			var customers = new[] {
-				20658, //	24600 //,24596,24593,24609,24592,24517,24613
+				24517, //20658, //	24600 //,24596,24593,24609,24592,24517,24613
 				//270,  19271, 19856, 19970, 234, 103, 211, 739
 			};
 
@@ -759,5 +759,13 @@
 			result.Init().MakeAndVerifyDecision();
 		}
 
+
+		[Test]
+		public void TestBulkAutoRejectBoth() {
+			this.m_oDB.ForEachRowSafe((sr) => {
+				int customerId = sr["Id"];
+				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init().MakeAndVerifyDecision();
+			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
+		}
 	}
 }
