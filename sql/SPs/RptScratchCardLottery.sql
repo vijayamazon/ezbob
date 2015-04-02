@@ -29,8 +29,9 @@ LEFT JOIN LotteryCodes lc ON lc.CodeID = ll.CodeID
 LEFT JOIN Loan lo ON s.UserId = lo.CustomerId
 LEFT JOIN Customer c ON s.UserId=c.BrokerID
 LEFT JOIN Loan lo2 ON c.Id = lo2.CustomerId
-WHERE s.UserName NOT LIKE '%ezbob%' AND lps.StatusID=4 AND p.Amount> 0
+WHERE s.UserName NOT LIKE '%ezbob%' AND lps.StatusID=4 AND p.Amount> 0 AND ll.IsActive=1
 GROUP BY s.UserId, lc.Code,ll.LotteryID,ll.LotteryName, s.UserName, p.Amount, lps.Status, lps.CanWin, lps.HasPlayed, lps.StatusID
 ORDER BY max(lo.[Date]),max(lo2.[Date])
 END
+
 GO
