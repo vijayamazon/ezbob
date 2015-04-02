@@ -12,29 +12,46 @@
 	/// or transfers customer to "pending" state.
 	/// </summary>
 	public class SilentAutomation : AStrategy {
+		public enum Callers {
+			UpdateMarketplace,
+			LandRegistry,
+			Aml,
+			Consumer,
+			Company,
+		} // enum Callers
+
 		public SilentAutomation(int customerID) {
 			this.customerID = customerID;
 		} // constructor
 
-		public override string Name { get { return "Silent automation"; } }
+		public override string Name { get { return "SilentAutomation"; } }
+
+		public virtual string Tag {
+			get {
+				if (string.IsNullOrWhiteSpace(this.tag))
+					this.tag = CreateTag();
+
+				return this.tag;
+			} // get
+			set { this.tag = CreateTag(value); }
+		} // Tag
+
+		public virtual SilentAutomation SetTag(Callers caller) {
+			Tag = caller.ToString();
+			return this;
+		} // SetTag
 
 		public override void Execute() {
-			string tag = string.Format(
-				"#SilentAutomation_{0}_{1}",
-				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
-				Guid.NewGuid().ToString("N")
-			);
-
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReRejection(
 				this.customerID, DB, Log
-			).MakeAndVerifyDecision(tag);
+			).MakeAndVerifyDecision(Tag);
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID, DB, Log
-			).Init().MakeAndVerifyDecision(tag);
+			).Init().MakeAndVerifyDecision(Tag);
 
 			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
-				Tag = tag
+				Tag = Tag
 			};
 			instance.Execute();
 
@@ -44,7 +61,7 @@
 
 			new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
 				this.customerID, DB, Log
-			).Init().MakeAndVerifyDecision(tag);
+			).Init().MakeAndVerifyDecision(Tag);
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
 				this.customerID,
@@ -54,7 +71,7 @@
 				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision(tag);
+			).Init().MakeAndVerifyDecision(Tag);
 		} // Execute
 
 		private int CapOffer(MedalResult medal) {
@@ -79,9 +96,19 @@
 			return offeredCreditLine;
 		} // CapOffer
 
+		private string CreateTag(string label = null) {
+			return string.Format(
+				"#{0}_{1}_{2}",
+				string.IsNullOrWhiteSpace(label) ? Name : label.Trim(),
+				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
+				Guid.NewGuid().ToString("N")
+			);
+		} // CreateTag
+
 		private int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		private int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
 		private readonly int customerID;
+		private string tag;
 	} // class SilentAutomation
 } // namespace

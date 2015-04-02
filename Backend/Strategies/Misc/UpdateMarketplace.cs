@@ -9,6 +9,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using EKM;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Database;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
@@ -151,6 +152,8 @@
 				Log.Info("End update data for umi: id: {0}, name: {1}. {2}", marketplaceId, marketplaceDisplayName, string.IsNullOrEmpty(errorMessage) ? "Successfully" : "With error!");
 
 				oMpUpdateTimesSetter.End(errorMessage, tokenExpired);
+
+				new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.UpdateMarketplace).Execute();
 			} // try
 		} // Execute
 
@@ -158,6 +161,5 @@
 		private readonly int customerId;
 		private readonly int marketplaceId;
 		private readonly bool m_bDoUpdateWizardStep;
-
 	} // class UpdateMarketplace
 } // namespace
