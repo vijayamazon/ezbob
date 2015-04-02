@@ -10,7 +10,12 @@
 		} // constructor
 
 		public virtual bool Load() {
-			this.db.ForEachRowSafe(ProcessRow, "LoadMatrix", new QueryParameter("MatrixName", MatrixName));
+			this.db.ForEachRowSafe(
+				ProcessRow,
+				"LoadMatrix",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("MatrixName", MatrixName)
+			);
 
 			return (MatrixID > 0) && Init();
 		} // Load
@@ -19,7 +24,9 @@
 
 		public string MatrixName { get; private set; }
 
-		private void ProcessRow(SafeReader sr) {
+		protected virtual AConnection DB { get { return this.db; } }
+
+		protected virtual void ProcessRow(SafeReader sr) {
 			RowTypes rt;
 
 			if (!Enum.TryParse(sr["RowType"], true, out rt))

@@ -39,11 +39,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CapOfferByCustomerScoreMatrix.cs" />
     <Compile Include="DBMatrix.cs" />
     <Compile Include="Core\DecimalIntervalMatrixInterval.cs" />
     <Compile Include="Core\DecimalIntervalMatrixIntervalEdge.cs" />
     <Compile Include="Core\DecimalIntervalMatrix.cs" />
-    <Compile Include="MatrixName.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

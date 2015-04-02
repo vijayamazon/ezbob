@@ -220,10 +220,7 @@
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
 
-			Results.CapOfferByCustomerScoresTable = new DBMatrix(
-				MatrixName.Automation.Medal.CapOfferByCustomerScores,
-				this.db
-			);
+			Results.CapOfferByCustomerScoresTable = new CapOfferByCustomerScoreMatrix(Results.CustomerId, this.db);
 			Results.CapOfferByCustomerScoresTable.Load();
 		} // GatherInputData
 

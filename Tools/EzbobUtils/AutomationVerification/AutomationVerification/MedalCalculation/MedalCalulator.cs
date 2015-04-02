@@ -290,10 +290,7 @@
 			model.TangibleEquity = model.AnnualTurnover == 0 ? 0 : model.MedalInputModelDb.TangibleEquity / model.AnnualTurnover;
 			model.CustomerId = customerId;
 
-			model.CapOfferByCustomerScoresTable = new DBMatrix(
-				MatrixName.Automation.Medal.CapOfferByCustomerScores,
-				this.DB
-			);
+			model.CapOfferByCustomerScoresTable = new CapOfferByCustomerScoreMatrix(customerId, this.DB);
 			model.CapOfferByCustomerScoresTable.Load();
 
 			return model;

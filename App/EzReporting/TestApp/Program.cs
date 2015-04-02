@@ -100,8 +100,6 @@
 
 			CurrentValues.Init(oDB, log);
 
-			TestMatrix(oDB, log);
-
 			// TestBadPeriods(oDB, ms_oLog);
 
 			// PropertyTraverser.Traverse<B>((oInstance, oInfo) => { ms_oLog.Msg("Instance is {0}", oInstance); ms_oLog.Msg("Property name is {0}", oInfo.Name); });
@@ -529,26 +527,6 @@
 
 			ra.MakeDecision(adr);
 		}
-
-		private static void TestMatrix(AConnection db, ASafeLog log) {
-			var mat = new DBMatrix(MatrixName.Automation.Medal.CapOfferByCustomerScores, db);
-			mat.Load();
-
-			log.Debug("\n\n\n{0}\n\n", mat.ToFormattedString());
-
-			var lst = new List<Tuple<decimal, decimal>> {
-				new Tuple<decimal, decimal>(-1, 1),
-				new Tuple<decimal, decimal>(1, 1),
-				new Tuple<decimal, decimal>(1, 1.01m),
-				new Tuple<decimal, decimal>(1, 3.01m),
-				new Tuple<decimal, decimal>(20.20m, 2),
-				new Tuple<decimal, decimal>(100, 1),
-				new Tuple<decimal, decimal>(1, 1000),
-			}; 
-
-			foreach (var p in lst)
-				log.Debug("mat[{0}, {1}] = {2}", p.Item1, p.Item2, mat[p.Item1, p.Item2]);
-		} // TestMatrix
 
 		private static ASafeLog ms_oLog;
 
