@@ -151,6 +151,7 @@ namespace ConfigManager {
 		EbayPixelEnabled,
 		EbayRuName,
 		EbayRuNameEverline,
+        EbayRuNameAlibaba,
 		EbayServiceType,
 		EchoSignApiKey,
 		EchoSignDeadline,
