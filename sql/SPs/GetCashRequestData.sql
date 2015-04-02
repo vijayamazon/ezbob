@@ -6,6 +6,19 @@ ALTER PROCEDURE GetCashRequestData
 @CustomerId INT
 AS
 BEGIN
-	SELECT TOP 1 InterestRate, ManualSetupFeeAmount, SystemCalculatedSum, ManagerApprovedSum FROM CashRequests WHERE IdCustomer = @CustomerId ORDER BY Id DESC
+	SET NOCOUNT ON;
+
+	SELECT TOP 1
+		InterestRate,
+		ManualSetupFeeAmount,
+		SystemCalculatedSum,
+		ManagerApprovedSum,
+		Id
+	FROM
+		CashRequests
+	WHERE
+		IdCustomer = @CustomerId
+	ORDER BY
+		Id DESC
 END
 GO

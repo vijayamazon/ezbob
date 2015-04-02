@@ -838,7 +838,15 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
-			m_oServiceClient.Instance.MainStrategy1(m_oContext.User.Id, m_oContext.User.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, Convert.ToInt32(customer.IsAvoid));
+			m_oServiceClient.Instance.MainStrategy1(
+				m_oContext.User.Id,
+				m_oContext.User.Id,
+				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
+				Convert.ToInt32(customer.IsAvoid),
+				null,
+				MainStrategyDoAction.Yes,
+				MainStrategyDoAction.Yes
+			);
 
 			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 

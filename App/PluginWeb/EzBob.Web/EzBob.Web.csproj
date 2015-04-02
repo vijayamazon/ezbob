@@ -230,7 +230,6 @@
     <Compile Include="Controllers\ServerLogController.cs" />
     <Compile Include="Models\LoanScheduleExtention.cs" />
     <Compile Include="Areas\Underwriter\Models\PersonalInfoModel.cs" />
-    <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />
     <Compile Include="Infrastructure\Attributes\AjaxAttribute.cs" />

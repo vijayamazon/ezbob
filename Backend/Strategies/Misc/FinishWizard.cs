@@ -22,7 +22,6 @@
 			if (m_oArgs.DoSendEmail)
 				new EmailUnderReview(m_oArgs.CustomerID).Execute();
 
-
 			var salesForceUpdateLeadAccount = new AddUpdateLeadAccount(null, m_oArgs.CustomerID, false, false);
 			salesForceUpdateLeadAccount.Execute();
 

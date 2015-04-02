@@ -333,7 +333,7 @@
 
 						var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(
 							CurrentValues.Instance.FinishWizardForApproved
-							);
+						);
 						oArgs.CustomerID = customer.Id;
 
 						m_oServiceClient.Instance.FinishWizard(oArgs, user.Id);

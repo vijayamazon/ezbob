@@ -42,7 +42,6 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
-		private readonly LoanScheduleRepository loanScheduleRepository;
 
 		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
 
@@ -59,8 +58,7 @@
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
-			CustomerPhoneRepository customerPhoneRepository,
-			LoanScheduleRepository loanScheduleRepository)
+			CustomerPhoneRepository customerPhoneRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -76,7 +74,6 @@
 			_suggestedAmountRepository = suggestedAmountRepository;
 			serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
-			this.loanScheduleRepository = loanScheduleRepository;
 		}
 
 		// Here we get VA\FCF\Turnover
@@ -599,11 +596,18 @@
 		} // ChangeCreditLine
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
-		public JsonResult ActivateMainStrategy(int customerId)
-		{
+		public JsonResult ActivateMainStrategy(int customerId) {
 			int underwriterId = _context.User.Id;
 
-			new ServiceClient().Instance.MainStrategy1(underwriterId, customerId, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0);
+			new ServiceClient().Instance.MainStrategy1(
+				underwriterId,
+				customerId,
+				NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+				0,
+				null,
+				MainStrategyDoAction.Yes,
+				MainStrategyDoAction.Yes
+			);
 
 			return Json(true);
 		}

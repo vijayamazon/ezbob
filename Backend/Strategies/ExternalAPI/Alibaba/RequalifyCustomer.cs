@@ -73,7 +73,6 @@
 			};
 
 			try {
-
 				var cachRequestAdded = customer.CashRequests.Add(cashRequest);
 
 				custRep.Save(customer);
@@ -83,16 +82,21 @@
 				if (cr != null) {
 					Log.Info("cachRequestAdded? {0}, {1}, {2}", cachRequestAdded, cr.Id, cr.CreationDate);
 				}
-
-				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				throw new StrategyAlert(this, string.Format("Failed to add cash request for 'RequalifyCustomer' customer: {0}, {1}", customer.Id, ex.Message), ex);
 			}
 
 			// 2. run main strategy
 			try {
-
-				MainStrategy strategy = new MainStrategy(customer.Id, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null);
+				MainStrategy strategy = new MainStrategy(
+					customer.Id,
+					NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
+					0,
+					null,
+					null,
+					MainStrategy.DoAction.Yes,
+					MainStrategy.DoAction.Yes
+				);
 				strategy.Execute();
 
 				// ReSharper disable once CatchAllClause

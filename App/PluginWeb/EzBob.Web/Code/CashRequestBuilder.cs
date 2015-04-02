@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Code
-{
+﻿namespace EzBob.Web.Code {
 	using ConfigManager;
 	using System;
 	using System.Linq;
@@ -14,17 +13,14 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
-	public class CashRequestBuilder
-	{
-
+	public class CashRequestBuilder {
 		public CashRequestBuilder(
 			ILoanTypeRepository loanTypes,
 			IDiscountPlanRepository discounts,
 			IUsersRepository users,
 			ILoanSourceRepository loanSources,
 			IDecisionHistoryRepository historyRepository
-		)
-		{
+		) {
 			m_oServiceClient = new ServiceClient();
 			_loanTypes = loanTypes;
 			_discounts = discounts;
@@ -33,37 +29,36 @@
 			_historyRepository = historyRepository;
 		} // constructor
 
-		public CashRequest CreateCashRequest(Customer customer, CashRequestOriginator originator)
-		{
+		public CashRequest CreateCashRequest(Customer customer, CashRequestOriginator originator) {
 			LoanType loanType = customer.IsAlibaba ? _loanTypes.ByName("Alibaba Loan") : _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
 
 			int? experianScore = customer.ExperianConsumerScore;
 			DateTime now = DateTime.UtcNow;
-			var cashRequest = new CashRequest
-				{
-					CreationDate = DateTime.UtcNow,
-					Customer = customer,
-					InterestRate = 0.06M,
-					LoanType = loanType,
-					RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
-					ApprovedRepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
-					UseSetupFee = CurrentValues.Instance.SetupFeeEnabled,
-					UseBrokerSetupFee = (customer.Broker != null) || CurrentValues.Instance.BrokerCommissionEnabled,
-					DiscountPlan = _discounts.GetDefault(),
-					IsLoanTypeSelectionAllowed = 1,
-					OfferValidUntil = now.AddDays(1),
-					OfferStart = now,
-					LoanSource = loanSource,
-					IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
-					ExpirianRating = experianScore,
-					Originator = originator
-				};
+			var cashRequest = new CashRequest {
+				CreationDate = DateTime.UtcNow,
+				Customer = customer,
+				InterestRate = 0.06M,
+				LoanType = loanType,
+				RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
+				ApprovedRepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
+				UseSetupFee = CurrentValues.Instance.SetupFeeEnabled,
+				UseBrokerSetupFee = (customer.Broker != null) || CurrentValues.Instance.BrokerCommissionEnabled,
+				DiscountPlan = _discounts.GetDefault(),
+				IsLoanTypeSelectionAllowed = 1,
+				OfferValidUntil = now.AddDays(1),
+				OfferStart = now,
+				LoanSource = loanSource,
+				IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
+				ExpirianRating = experianScore,
+				Originator = originator
+			};
 
 			customer.CashRequests.Add(cashRequest);
 			
 			if (originator != CashRequestOriginator.FinishedWizard) {
 				CustomerRequestedLoan requestedLoan = customer.CustomerRequestedLoan.LastOrDefault();
+
 				m_oServiceClient.Instance.SalesForceAddOpportunity(customer.Id, customer.Id,
 					new ServiceClientProxy.EzServiceReference.OpportunityModel {
 						Email = customer.Name,
@@ -73,52 +68,51 @@
 						Type = OpportunityType.Resell.DescriptionAttr(),
 						Stage = OpportunityStage.s5.DescriptionAttr(),
 						Name = customer.PersonalInfo.Fullname + customer.CashRequests.Count()
-					});
-			}
+					}
+				);
+			} // if
 
 			return cashRequest;
 		} // CreateCashRequest
 
-		public CashRequest CreateQuickOfferCashRequest(Customer customer)
-		{
+		public CashRequest CreateQuickOfferCashRequest(Customer customer) {
 			var loanType = _loanTypes.GetDefault();
 			var loanSource = _loanSources.GetDefault();
 
 			const string sReason = "Quick offer taken.";
 
-			var user = _users.GetAll().FirstOrDefault(x => x.Id == 21); // TODO: do something really really really better than this.
+			// TODO: do something really really really better than this.
+			var user = _users.GetAll().FirstOrDefault(x => x.Id == 1);
 
-			var cashRequest = new CashRequest
-				{
+			var cashRequest = new CashRequest {
+				CreationDate = DateTime.UtcNow,
+				Customer = customer,
+				InterestRate = customer.QuickOffer.ImmediateInterestRate,
+				LoanType = loanType,
+				RepaymentPeriod = customer.QuickOffer.ImmediateTerm,
+				ApprovedRepaymentPeriod = customer.QuickOffer.ImmediateTerm,
+				UseSetupFee = customer.QuickOffer.ImmediateSetupFee > 0,
+				UseBrokerSetupFee = false,
+				DiscountPlan = _discounts.GetDefault(),
+				IsLoanTypeSelectionAllowed = 0,
+				OfferValidUntil = DateTime.UtcNow.AddDays(1),
+				OfferStart = DateTime.UtcNow,
+				LoanSource = loanSource, // TODO: can it be EU loan?
+				IsCustomerRepaymentPeriodSelectionAllowed = false,
 
-					CreationDate = DateTime.UtcNow,
-					Customer = customer,
-					InterestRate = customer.QuickOffer.ImmediateInterestRate,
-					LoanType = loanType,
-					RepaymentPeriod = customer.QuickOffer.ImmediateTerm,
-					ApprovedRepaymentPeriod = customer.QuickOffer.ImmediateTerm,
-					UseSetupFee = customer.QuickOffer.ImmediateSetupFee > 0,
-					UseBrokerSetupFee = false,
-					DiscountPlan = _discounts.GetDefault(),
-					IsLoanTypeSelectionAllowed = 0,
-					OfferValidUntil = DateTime.UtcNow.AddDays(1),
-					OfferStart = DateTime.UtcNow,
-					LoanSource = loanSource, // TODO: can it be EU loan?
-					IsCustomerRepaymentPeriodSelectionAllowed = false,
-
-					ManualSetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
-					SystemCalculatedSum = (double) customer.QuickOffer.Amount,
-					ManagerApprovedSum = (double) customer.QuickOffer.Amount,
-					QuickOffer = customer.QuickOffer,
-					SystemDecision = SystemDecision.Approve,
-					SystemDecisionDate = DateTime.UtcNow,
-					UnderwriterDecision = CreditResultStatus.Approved,
-					UnderwriterDecisionDate = DateTime.UtcNow,
-					UnderwriterComment = sReason,
-					IdUnderwriter = user.Id,
-					Originator = CashRequestOriginator.QuickOffer,
-					ExpirianRating = customer.ExperianConsumerScore
-				};
+				ManualSetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
+				SystemCalculatedSum = (double) customer.QuickOffer.Amount,
+				ManagerApprovedSum = (double) customer.QuickOffer.Amount,
+				QuickOffer = customer.QuickOffer,
+				SystemDecision = SystemDecision.Approve,
+				SystemDecisionDate = DateTime.UtcNow,
+				UnderwriterDecision = CreditResultStatus.Approved,
+				UnderwriterDecisionDate = DateTime.UtcNow,
+				UnderwriterComment = sReason,
+				IdUnderwriter = user.Id,
+				Originator = CashRequestOriginator.QuickOffer,
+				ExpirianRating = customer.ExperianConsumerScore
+			};
 
 			customer.CashRequests.Add(cashRequest);
 
@@ -133,35 +127,61 @@
 			customer.OfferValidUntil = cashRequest.OfferValidUntil;
 			customer.IsLoanTypeSelectionAllowed = 0;
 			int validForHours = (int)(cashRequest.OfferValidUntil - cashRequest.OfferStart).Value.TotalHours;
-			m_oServiceClient.Instance.ApprovedUser(user.Id, customer.Id, customer.QuickOffer.Amount, validForHours, customer.NumApproves == 1);
+
+			m_oServiceClient.Instance.ApprovedUser(
+				user.Id,
+				customer.Id,
+				customer.QuickOffer.Amount,
+				validForHours,
+				customer.NumApproves == 1
+			);
 
 			_historyRepository.LogAction(DecisionActions.Approve, sReason, user, customer);
 
 			return cashRequest;
 		} // CreateQuickOfferCashRequest
 
-		public ActionMetaData ForceEvaluate(int underwriterId, Customer customer, NewCreditLineOption newCreditLineOption, bool isSync) {
+		public ActionMetaData ForceEvaluate(
+			int underwriterId,
+			Customer customer,
+			NewCreditLineOption newCreditLineOption,
+			bool isSync
+		) {
 			bool bUpdateMarketplaces =
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
 				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
 
 			bUpdateMarketplaces = bUpdateMarketplaces && customer.CustomerMarketPlaces.Any(x =>
-				x.UpdatingEnd != null && (DateTime.UtcNow - x.UpdatingEnd.Value).Days > CurrentValues.Instance.UpdateOnReapplyLastDays
+				x.UpdatingEnd != null &&
+				(DateTime.UtcNow - x.UpdatingEnd.Value).Days > CurrentValues.Instance.UpdateOnReapplyLastDays
 			);
 
-			if (bUpdateMarketplaces)
-			{
-				// Update all marketplaces
+			if (bUpdateMarketplaces) {
 				foreach (var mp in customer.CustomerMarketPlaces)
-				{
 					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false, underwriterId);
-				}
 			} // if
 
-			if (isSync)
-				return m_oServiceClient.Instance.MainStrategySync1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
-			else
-				return m_oServiceClient.Instance.MainStrategy1(underwriterId, _users.Get(customer.Id).Id, newCreditLineOption, Convert.ToInt32(customer.IsAvoid));
+			if (isSync) {
+				return m_oServiceClient.Instance.MainStrategySync1(
+					underwriterId,
+					_users.Get(customer.Id).Id,
+					newCreditLineOption,
+					Convert.ToInt32(customer.IsAvoid),
+					null,
+					MainStrategyDoAction.Yes,
+					MainStrategyDoAction.Yes
+				);
+			} else {
+				return m_oServiceClient.Instance.MainStrategy1(
+					underwriterId,
+					_users.Get(customer.Id).Id,
+					newCreditLineOption,
+					Convert.ToInt32(customer.IsAvoid),
+					null,
+					MainStrategyDoAction.Yes,
+					MainStrategyDoAction.Yes
+				);
+			} // if
 		} // ForceEvaluate
 
 		private readonly ILoanTypeRepository _loanTypes;
@@ -170,6 +190,5 @@
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;
 		private readonly ServiceClient m_oServiceClient;
-
 	} // class CashRequestBuilder
 } // namespace

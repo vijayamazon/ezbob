@@ -183,7 +183,15 @@
 
 		[Test]
 		public void test_mainstrat() {
-			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null);
+			var ms = new MainStrategy(
+				21370,
+				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
+				0,
+				null,
+				null,
+				MainStrategy.DoAction.Yes,
+				MainStrategy.DoAction.Yes
+			);
 			ms.Execute();
 		}
 
