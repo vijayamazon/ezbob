@@ -277,7 +277,8 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
     }, // name
 
     events: {
-        "click #recheck-targeting": "recheckTargeting"
+        "click #recheck-targeting": "recheckTargeting",
+        'click .btn-change-address': "changeAddressClicked"
     }, // events
     recheckTargeting: function (e) {
         var el = $(e.currentTarget),
@@ -325,7 +326,18 @@ EzBob.Underwriter.CrossCheckView = Backbone.View.extend({
 
         return false;
     }, // recheckTargeting
+    changeAddressClicked: function() {
+        this.changeAddressModel = new EzBob.Underwriter.ChangeAddressModel({ customerId: this.model.customerId });
+        this.changeAddressView = new EzBob.Underwriter.ChangeAddressView({ model: this.changeAddressModel });
 
+        var that = this;
+        this.changeAddressView.on('addressChanged',
+            function (id) {
+                that.render({ customerId: id });
+            }, that);
+
+        EzBob.App.jqmodal.show(this.changeAddressView);
+    },//changeAddressClicked
     saveTargetingData: function (targetingData) {
         var that = this;
         if (!targetingData || targetingData.BusRefNum == 'skip') {

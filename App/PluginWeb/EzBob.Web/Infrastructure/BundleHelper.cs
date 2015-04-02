@@ -362,6 +362,7 @@
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.zoopla.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.landregistry.js")
+                .Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.changeAddress.js")
 				.Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
 				.Add("~/Content/js/Underwriter/profile/companyScore/ezbob.underwriter.companyScore.js")
 				.Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")

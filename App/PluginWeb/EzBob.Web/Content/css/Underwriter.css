@@ -2225,3 +2225,7 @@ ul.alert-list {
 	position: relative; 
 	display: inline-block;
 }
+
+button.btn-update-address, .button.btn-update-address{
+    margin-right: 24px;
+}

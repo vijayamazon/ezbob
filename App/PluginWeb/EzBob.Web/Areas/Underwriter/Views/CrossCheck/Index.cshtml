@@ -41,8 +41,6 @@
 }
 <div class="row">
     <div class="col-md-12">
-    
-
         <div class="box row">
             <div class="box-content">
 
@@ -594,11 +592,14 @@
 
 @helper copyAddress(string name, CustomerAddress currentAddress)
 {
-    if (currentAddress != null && currentAddress.FormattedAddress != null)
-    {
-    <div class="copy-buttons">
-        <button class="btn btn-primary btn-copy" data-address="@currentAddress.FormattedAddress" >@name Copy</button>
-        <a class="btn btn-primary" href="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=@Uri.EscapeDataString(currentAddress.FormattedAddress)" target="_blank">@name Image</a>
-    </div>
+    if (currentAddress != null && currentAddress.FormattedAddress != null) {
+        <div class="copy-buttons btn-group-xs">
+            <button class="btn btn-primary btn-xs btn-copy" data-address="@currentAddress.FormattedAddress">@name Copy</button>
+            <a class="btn btn-primary btn-xs" href="http://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=@Uri.EscapeDataString(currentAddress.FormattedAddress)" target="_blank">@name Image</a>
+
+            @if (name == "Current") {
+                <button class="btn btn-primary btn-xs btn-change-address">Change</button>
+            }
+        </div>
     }
 }
