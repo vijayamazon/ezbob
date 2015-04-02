@@ -1,10 +1,10 @@
 ﻿namespace Ezbob.HmrcHarvester {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using Ezbob.Logger;
 
 	public class VatReturnSeeds : ISeeds {
-
 		public enum Field {
 			Period,
 			DateFrom,
@@ -74,6 +74,8 @@
 				AddFatalError("VAT return 'Period' not specified.");
 			} // if
 
+			InterpolateDatesFromPeriod();
+
 			if (DateFrom.Equals(ms_oLongTimeAgo)) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Date From' not specified.");
@@ -91,6 +93,72 @@
 
 			return bIsValid;
 		} // IsPeriodValid
+
+		/// <summary>
+		/// Interpolate dates from period if needed & possible.
+		/// </summary>
+		private void InterpolateDatesFromPeriod() {
+			if (!DateFrom.Equals(ms_oLongTimeAgo) && !DateTo.Equals(ms_oLongTimeAgo)) {
+				m_oLog.Debug("Not interpolating dates from period: dates have already been set.");
+				return;
+			} // if
+
+			string[] monthYear = Period.Split(' ');
+
+			if (monthYear.Length != 2) {
+				m_oLog.Debug("Not interpolating dates from period: period '{0}' is not in expected format.", Period);
+				return;
+			} // if
+
+			while (monthYear[0].StartsWith("0"))
+				monthYear[0] = monthYear[0].Substring(1);
+
+			while (monthYear[1].StartsWith("0"))
+				monthYear[1] = monthYear[1].Substring(1);
+
+			int month;
+			int year;
+
+			if (!int.TryParse(monthYear[0], out month)) {
+				m_oLog.Debug(
+					"Not interpolating dates from period: period's month '{0}' is not in expected format.",
+					monthYear[0]
+				);
+				return;
+			} // if
+
+			if ((month < 1) || (month > 12)) {
+				m_oLog.Debug(
+					"Not interpolating dates from period: period's month '{0}' is not in range 1..12.",
+					month
+				);
+
+				return;
+			} // if
+
+			if (!int.TryParse(monthYear[1], out year)) {
+				m_oLog.Debug(
+					"Not interpolating dates from period: period's year '{0}' is not in expected format.",
+					monthYear[1]
+				);
+				return;
+			} // if
+
+			// 29 is a standard (at least in windows) cutoff year.
+			year += (year <= 29) ? 2000 : 1900;
+
+			DateFrom = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(-2).Date;
+			DateTo = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(1).AddSeconds(-1).Date;
+			DateDue = new DateTime(year, month, 1, 0, 0, 0, DateTimeKind.Utc).AddMonths(2).AddDays(7).Date;
+
+			m_oLog.Debug(
+				"Dates have been interpolated from period:\n\tperiod: {0}\n\tfrom: {1}\n\tto: {2}\n\tdue: {3}",
+				Period,
+				DateFrom.ToString("M d yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				DateTo.ToString("M d yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				DateDue.ToString("M d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+			);
+		} // InterpolateDatesFromPeriod
 
 		public long RegistrationNo {
 			get { return Get(Field.RegistrationNo); }
@@ -113,21 +181,20 @@
 			if (RegistrationNo <= 0) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Company Registration #' not specified.");
-			}
+			} // if
 
 			if (string.IsNullOrWhiteSpace(BusinessName)) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Company Name' not specified.");
-			}
+			} // if
 
 			if (BusinessAddress == null) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Company Address' not specified.");
-			}
-			else if (BusinessAddress.Length < 1) {
+			} else if (BusinessAddress.Length < 1) {
 				bIsValid = false;
 				AddFatalError("VAT return 'Company Address' not specified.");
-			}
+			} // if
 
 			return bIsValid;
 		} // AreBusinessDetailsValid
@@ -158,6 +225,5 @@
 		private readonly ASafeLog m_oLog;
 
 		private static readonly DateTime ms_oLongTimeAgo = new DateTime(1976, 7, 1, 9, 30, 0, DateTimeKind.Utc);
-
 	} // class VatReturnSeeds
 } // namespace Ezbob.HmrcHarvester
