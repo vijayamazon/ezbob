@@ -53,7 +53,8 @@
 					this.loanSources.Add(lmd.LoanSourceName);
 				},
 				"LoadAllLoansMetaData",
-				CommandSpecies.StoredProcedure
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Today", new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc))
 			);
 
 			LoadCashRequests();
@@ -93,11 +94,13 @@
 			int curRow = 2;
 
 			var stats = new List<Tuple<Stats, int>> {
-				new Tuple<Stats, int>(new Stats(Log, statSheet, true, "at first decision time"), 0),
+				// new Tuple<Stats, int>(new Stats(Log, statSheet, true, "at first decision time"), 0),
 				new Tuple<Stats, int>(new Stats(Log, statSheet, true, "at last decision time"), -1),
 			};
 
 			var allCrStats = new Stats(Log, statSheet, true, "with all the decisions");
+
+			var pc = new ProgressCounter("{0} items sent to .xlsx", Log, 50);
 
 			foreach (Datum d in Data) {
 				d.ToXlsx(sheet, curRow);
@@ -108,7 +111,11 @@
 
 				for (int i = 0; i < d.ManualItems.Count; i++)
 					allCrStats.Add(d, i);
+
+				pc++;
 			} // for each
+
+			pc.Log();
 
 			int row = 1;
 			int loanIDColumn = 1;

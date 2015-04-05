@@ -81,6 +81,24 @@
 			return colNum;
 		} // ToXlsx
 
+		public void SetAdjustedLoanCount(LoanCount manualLoanCount) {
+			LoanCount = manualLoanCount.Clone();
+
+			decimal approvedAmount = 0;
+
+			switch (AutomationDecision) {
+			case DecisionActions.Approve:
+				approvedAmount = ApprovedAmount;
+				break;
+
+			case DecisionActions.ReApprove:
+				approvedAmount = ReapprovedAmount;
+				break;
+			} // switch
+
+			LoanCount.Cap(approvedAmount);
+		} // SetAdjustedLoanCount
+
 		public void RunAutomation(bool isHomeOwner, AConnection db) {
 			Log.Info(
 				"RunAutomation({0}) started for customer {1} with decision time '{2}'...",

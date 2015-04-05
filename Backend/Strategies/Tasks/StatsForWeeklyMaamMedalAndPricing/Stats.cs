@@ -20,7 +20,7 @@
 			this.manuallyApproved = new ManuallyApproved(log, sheet, total);
 			var defaultLoans = new DefaultLoans(log, sheet, total, this.manuallyApproved, autoApproved);
 
-			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(log, sheet, total, this.manuallyApproved, autoApproved, defaultLoans);
+			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(log, sheet, total, this.manuallyApproved, autoApproved);
 
 			this.manuallyRejectedAutoApproved = new ManuallyRejectedAutoApproved(log, sheet, "Manually rejected and auto approved", total, manuallyRejected, autoApproved);
 			this.manuallyApprovedAutoRejected = new ManuallyApprovedAutoRejected(log, sheet, "Manually approved and auto rejected", total, autoRejected, this.manuallyApproved);

@@ -64,9 +64,9 @@
 
 			foreach (ManualDatumItem mi in ManualItems) {
 				var ai = new AutoDatumItem(mi, this.tag, this.log);
-				ai.LoanCount = mi.LoanCount.Clone();
 				AutoItems.Add(ai);
-				// TODO: ai.RunAutomation(isHomeOwner, db);
+				ai.RunAutomation(isHomeOwner, db);
+				ai.SetAdjustedLoanCount(mi.LoanCount);
 			} // for each manual item
 		} // RunAutomation
 

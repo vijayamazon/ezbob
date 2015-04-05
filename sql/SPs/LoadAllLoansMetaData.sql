@@ -6,18 +6,34 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 ALTER PROCEDURE LoadAllLoansMetaData
+@Today DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	;WITH late_list AS (
 		SELECT
-			lst.LoanID,
-			DATEDIFF(day, s.Date, t.PostDate) AS LateDays
+			s.LoanID,
+			DATEDIFF(day, s.Date, @Today) AS LateDays
 		FROM
-			LoanScheduleTransaction lst
-			INNER JOIN LoanSchedule s ON lst.ScheduleID = s.Id
-			INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
+			LoanSchedule s
+		WHERE
+			s.[Date] < @Today
+			AND
+			s.Status NOT IN ('PaidOnTime', 'PaidEarly')
+			AND (
+				s.Status != 'Paid' OR EXISTS (
+					SELECT
+						lst.Id
+					FROM
+						LoanScheduleTransaction lst
+						INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
+					WHERE
+						lst.ScheduleID = s.Id
+						AND
+						t.PostDate > @Today
+				)
+			)
 	), max_late AS (
 		SELECT
 			LoanID,
@@ -48,7 +64,7 @@ BEGIN
 		WHERE
 			l.[Date] >= 'September 4 2012'
 			AND
-			l.[Date] < 'April 1 2015'
+			l.[Date] < @Today
 		GROUP BY
 			r.Id,
 			l.CustomerID,

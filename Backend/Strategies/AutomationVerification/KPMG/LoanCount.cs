@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -45,6 +46,12 @@
 			Bad.Clear();
 			Default.Clear();
 		} // Clear
+
+		public void Cap(decimal amount) {
+			Total.Cap(amount);
+			Bad.Cap(amount);
+			Default.Cap(amount);
+		} // Cap
 
 		public void Append(LoanMetaData lmd) {
 			if (lmd == null)
@@ -94,6 +101,14 @@
 				Count = 0;
 				Amount = 0;
 			} // constructor
+
+			public void Cap(decimal amount) {
+				if (amount <= 0) {
+					Count = 0;
+					Amount = 0;
+				} else
+					Amount = Math.Min(amount, Amount);
+			} // Cap
 
 			public CountAmount Clone() {
 				return new CountAmount {

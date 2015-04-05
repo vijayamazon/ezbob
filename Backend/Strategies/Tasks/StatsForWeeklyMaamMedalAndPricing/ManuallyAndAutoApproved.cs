@@ -10,21 +10,20 @@
 			ExcelWorksheet sheet,
 			Total total,
 			ManuallyApproved manuallyApproved,
-			AutoApproved autoApproved,
-			DefaultLoans defaultLoans
+			AutoApproved autoApproved
 		) : base(
 			log.Safe(),
 			sheet,
 			"Manually and auto approved",
 			total,
 			manuallyApproved,
-			autoApproved,
-			defaultLoans
+			autoApproved
 		) {
 			this.manualAmount = 0;
 			this.autoAmount = 0;
 
-			this.loanCount = new LoanCount(Log);
+			this.manualLoanCount = new LoanCount(Log);
+			this.autoLoanCount = new LoanCount(Log);
 		} // constructor
 
 		public override void Add(Datum d, int cashRequestIndex) {
@@ -32,7 +31,8 @@
 				this.manualAmount += ManuallyApproved.LastAmount;
 				this.autoAmount += AutoApproved.LastAmount;
 
-				this.loanCount += d.Manual(cashRequestIndex).LoanCount;
+				this.manualLoanCount += d.Manual(cashRequestIndex).LoanCount;
+				this.autoLoanCount += d.Auto(cashRequestIndex).LoanCount;
 			} // if
 		} // Add
 
@@ -47,35 +47,36 @@
 				new TitledValue(this.autoAmount, Count)
 			);
 
-			var autoIssued = this.manualAmount == 0 ? 0 : this.loanCount.Total.Amount / this.manualAmount * this.autoAmount;
-
 			row = SetRowValues(row, "Issued",
-				new TitledValue(this.loanCount.Total.Amount, this.loanCount.Total.Count),
-				new TitledValue(autoIssued, this.loanCount.Total.Amount)
+				new TitledValue(this.manualLoanCount.Total.Amount, this.manualLoanCount.Total.Count),
+				new TitledValue(this.autoLoanCount.Total.Amount, this.autoLoanCount.Total.Count)
 			);
 
 			row = SetRowValues(row, "Default",
-				new TitledValue(this.loanCount.Default.Amount, this.loanCount.Default.Count),
-				new TitledValue(DefaultLoans.Amount, DefaultLoans.Count)
+				new TitledValue(this.manualLoanCount.Default.Amount, this.manualLoanCount.Default.Count),
+				new TitledValue(this.autoLoanCount.Default.Amount, this.autoLoanCount.Default.Count)
 			);
 
 			row = SetRowValues(row, "Default rate (% of loans)",
 				new TitledValue(
-					this.loanCount.Default.Amount, this.loanCount.Total.Amount,
-					this.loanCount.Default.Count, this.loanCount.Total.Count
+					this.manualLoanCount.Default.Amount, this.manualLoanCount.Total.Amount,
+					this.autoLoanCount.Default.Count, this.autoLoanCount.Total.Count
 				),
 				new TitledValue(
-					DefaultLoans.Amount, autoIssued,
-					DefaultLoans.Count, this.loanCount.Total.Count
+					this.autoLoanCount.Default.Amount, this.autoLoanCount.Total.Amount,
+					this.autoLoanCount.Default.Count, this.autoLoanCount.Total.Count
 				)
 			);
 
 			row = SetRowValues(row, "Default rate (% of approvals)",
 				new TitledValue(
-					this.loanCount.Default.Amount, this.manualAmount,
-					this.loanCount.Default.Count, Count
+					this.manualLoanCount.Default.Amount, this.manualAmount,
+					this.manualLoanCount.Default.Count, Count
 				),
-				new TitledValue(DefaultLoans.Amount, this.autoAmount, DefaultLoans.Count, Count)
+				new TitledValue(
+					this.manualLoanCount.Default.Amount, this.autoAmount,
+					this.autoLoanCount.Default.Count, Count
+				)
 			);
 
 			return row;
@@ -94,9 +95,9 @@
 					new TitledValue("both approved / autoApproved %", Count, AutoApproved.Count),
 				},
 				new[] {
-					new TitledValue("loan count", this.loanCount.Total.Count),
-					new TitledValue("default loan count", this.loanCount.Default.Count),
-					new TitledValue("bad loan count", this.loanCount.Bad.Count),
+					new TitledValue("loan count", this.manualLoanCount.Total.Count),
+					new TitledValue("default loan count", this.manualLoanCount.Default.Count),
+					new TitledValue("bad loan count", this.manualLoanCount.Bad.Count),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -115,9 +116,14 @@
 					new TitledValue("auto amount / manual amount %", this.autoAmount, this.manualAmount),
 				},
 				new[] {
-					new TitledValue("loan amount", this.loanCount.Total.Amount),
-					new TitledValue("default loan amount", this.loanCount.Default.Amount),
-					new TitledValue("bad loan amount", this.loanCount.Bad.Amount),
+					new TitledValue("manual loan amount", this.manualLoanCount.Total.Amount),
+					new TitledValue("manual default loan amount", this.manualLoanCount.Default.Amount),
+					new TitledValue("manual bad loan amount", this.manualLoanCount.Bad.Amount),
+				},
+				new[] {
+					new TitledValue("auto loan amount", this.autoLoanCount.Total.Amount),
+					new TitledValue("auto default loan amount", this.autoLoanCount.Default.Amount),
+					new TitledValue("auto bad loan amount", this.autoLoanCount.Bad.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues
@@ -125,11 +131,11 @@
 		private AStatItem Total { get { return Superior[0]; } }
 		private AStatItem ManuallyApproved { get { return Superior[1]; } }
 		private AStatItem AutoApproved { get { return Superior[2]; } }
-		private AStatItem DefaultLoans { get { return Superior[3]; } }
 
 		private decimal manualAmount;
 		private decimal autoAmount;
 
-		private LoanCount loanCount;
+		private LoanCount manualLoanCount;
+		private LoanCount autoLoanCount;
 	} // class ManuallyAndAutoApproved
 } // namespace
