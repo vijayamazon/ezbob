@@ -14,33 +14,38 @@
 			MainStrategy.DoAction createCashRequest,
 			MainStrategy.DoAction updateCashRequest
 		) {
-			var onfail = new Action<ActionMetaData>(
-				amd => this.DB.ExecuteNonQuery(
-					"UpdateMainStratFinishDate",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", customerId),
-					new QueryParameter("Now", DateTime.UtcNow)
-				)
-			);
-
-			return Execute(new ExecuteArguments(
+			return Execute(PrepageMainStrategyArguments(
+				underwriterId,
 				customerId,
 				newCreditLine,
 				avoidAutoDescison,
-				null,
 				cashRequestID,
 				createCashRequest,
 				updateCashRequest
-			) {
-				CustomerID = customerId,
-				UserID = underwriterId,
-				StrategyType = typeof(MainStrategy),
-				OnException = onfail,
-				OnFail = onfail,
-			});
+			));
 		} // MainStrategy1
 
 		public ActionMetaData MainStrategySync1(
+			int underwriterId,
+			int customerId,
+			NewCreditLineOption newCreditLine,
+			int avoidAutoDescison,
+			long? cashRequestID,
+			MainStrategy.DoAction createCashRequest,
+			MainStrategy.DoAction updateCashRequest
+		) {
+			return ExecuteSync<MainStrategy>(PrepageMainStrategyArguments(
+				underwriterId,
+				customerId,
+				newCreditLine,
+				avoidAutoDescison,
+				cashRequestID,
+				createCashRequest,
+				updateCashRequest
+			));
+		} // MainStrategySync1
+
+		private ExecuteArguments PrepageMainStrategyArguments(
 			int underwriterId,
 			int customerId,
 			NewCreditLineOption newCreditLine,
@@ -58,7 +63,7 @@
 				)
 			);
 
-			return ExecuteSync<MainStrategy>(new ExecuteArguments(
+			return new ExecuteArguments(
 				customerId,
 				newCreditLine,
 				avoidAutoDescison,
@@ -69,9 +74,10 @@
 			) {
 				CustomerID = customerId,
 				UserID = underwriterId,
+				StrategyType = typeof(MainStrategy),
 				OnException = onfail,
 				OnFail = onfail,
-			});
-		} // MainStrategySync1
+			};
+		} // PrepageMainStrategyArguments
 	} // class EzServiceImplementation
 } // namespace EzService
