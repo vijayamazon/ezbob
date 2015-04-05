@@ -10,7 +10,7 @@
 
 	public class Agent {
 		public Agent(int nCustomerID, DateTime? dataAsOf, AConnection oDB, ASafeLog oLog) {
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 			DB = oDB;
 
 			Args = new Arguments(nCustomerID, dataAsOf);

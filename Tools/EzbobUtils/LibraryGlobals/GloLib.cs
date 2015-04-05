@@ -10,7 +10,7 @@
 		public virtual CultureInfo Culture { get; protected set; }
 
 		public virtual void Init(Ezbob.Context.Name name, string variant, ASafeLog log = null) {
-			Log = log ?? new SafeLog();
+			Log = log.Safe();
 			Env = new Ezbob.Context.Environment(name, variant, Log);
 			DB = new SqlConnection(Env, Log);
 			Culture = CreateCultureInfo();
@@ -24,7 +24,7 @@
 		} // Init
 
 		public virtual void Init(ASafeLog log = null) {
-			Log = log ?? new SafeLog();
+			Log = log.Safe();
 			Env = new Ezbob.Context.Environment(Log);
 			DB = new SqlConnection(Env, Log);
 			Culture = CreateCultureInfo();

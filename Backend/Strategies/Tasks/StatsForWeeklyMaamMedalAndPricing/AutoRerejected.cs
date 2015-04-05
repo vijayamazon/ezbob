@@ -1,15 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
-	using DbConstants;
+	// using DbConstants;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class AutoRerejected : AStatItem {
 		public AutoRerejected(
+			ASafeLog log,
 			ExcelWorksheet sheet,
 			Total total,
 			AutoProcessed autoProcessed,
 			AutoRejected autoRejected
 		) : base(
+			log,
 			sheet,
 			"Auto re-rejected",
 			total,

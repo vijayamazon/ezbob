@@ -3,6 +3,7 @@
 	using System.Drawing;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.ExcelExt;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 	using OfficeOpenXml.Style;
 
@@ -63,7 +64,10 @@
 			return range;
 		} // SetBorder
 
-		protected AStatItem(ExcelWorksheet sheet, string title, params AStatItem[] superior) {
+		public ASafeLog Log { get; private set; }
+
+		protected AStatItem(ASafeLog log, ExcelWorksheet sheet, string title, params AStatItem[] superior) {
+			Log = log.Safe();
 			this.sheet = sheet;
 			this.title = title;
 			Count = 0;
@@ -154,8 +158,8 @@
 		} // SetRowValues
 
 		private void SetOneValue(int row, int column, TitledValue val) {
-			this.sheet.SetCellValue(row, column, val.Title);
-			this.sheet.SetCellValue(row, column + 1, val.Value, true);
+			this.sheet.SetCellValue(row, column, val.Title, sNumberFormat: CellFormat);
+			this.sheet.SetCellValue(row, column + 1, val.Value, true, sNumberFormat: CellFormat);
 
 			SetBorder(this.sheet.Cells[row, column]).Style.Border.Right.Style = ExcelBorderStyle.None;
 			SetBorder(this.sheet.Cells[row, column + 1]).Style.Border.Left.Style = ExcelBorderStyle.None;
@@ -163,6 +167,8 @@
 
 		private readonly ExcelWorksheet sheet;
 		private readonly string title;
+
+		private const string CellFormat = "#,##0.00";
 
 		private static readonly Color BorderColor = Color.Black;
 	} // class AStatItem

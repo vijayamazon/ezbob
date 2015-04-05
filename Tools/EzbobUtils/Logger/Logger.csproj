@@ -49,6 +49,7 @@
     <Compile Include="ConsoleLog.cs" />
     <Compile Include="FileLog.cs" />
     <Compile Include="LogException.cs" />
+    <Compile Include="LogExt.cs" />
     <Compile Include="SafeILog.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ASafeLog.cs" />

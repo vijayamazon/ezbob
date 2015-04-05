@@ -1,8 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System.Collections.Generic;
+	using Ezbob.Logger;
 
 	internal class CustomerData {
-		public CustomerData(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) {
+		public CustomerData(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag, ASafeLog log) {
+			this.log = log.Safe();
+
 			Data = new List<Datum>();
 
 			Add(sr);
@@ -12,7 +15,7 @@
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
 			if (Data.Count < 1) {
-				Data.Add(new Datum(sr, this.tag));
+				Data.Add(new Datum(sr, this.tag, this.log));
 				return;
 			} // if
 
@@ -21,12 +24,12 @@
 
 			if (sr.IsApproved) {
 				if (!lastCr.IsApproved || (lastCr.CrLoanCount > 0))
-					Data.Add(new Datum(sr, this.tag));
+					Data.Add(new Datum(sr, this.tag, this.log));
 				else
 					lastDatum.Add(sr);
 			} else {
 				if (lastCr.IsApproved)
-					Data.Add(new Datum(sr, this.tag));
+					Data.Add(new Datum(sr, this.tag, this.log));
 				else
 					lastDatum.Add(sr);
 			} // if
@@ -35,5 +38,6 @@
 		public List<Datum> Data { get; private set; }
 
 		private readonly string tag;
+		private readonly ASafeLog log;
 	} // class CustomerData
 } // namespace

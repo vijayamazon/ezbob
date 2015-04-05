@@ -45,7 +45,7 @@
 				Now = DateTime.UtcNow;
 
 				this.db = db;
-				this.log = log ?? new SafeLog();
+				this.log = log.Safe();
 
 				this.loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 				var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();

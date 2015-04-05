@@ -1,14 +1,17 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class ManuallyApprovedAutoRejected : ARejectedCrossApproved {
 		public ManuallyApprovedAutoRejected(
+			ASafeLog log,
 			ExcelWorksheet sheet,
 			string title,
 			Total total,
 			AStatItem rejected,
 			AStatItem approved
 		) : base(
+			log.Safe(),
 			sheet,
 			title,
 			total,

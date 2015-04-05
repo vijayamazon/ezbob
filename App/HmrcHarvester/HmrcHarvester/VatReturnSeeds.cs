@@ -17,7 +17,7 @@
 		} // enum Field
 
 		public VatReturnSeeds(ASafeLog oLog) {
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			m_oProperties = new SortedDictionary<Field, dynamic>();
 

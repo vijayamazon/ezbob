@@ -25,7 +25,7 @@
 		public EchoSignFacade(AConnection oDB, ASafeLog oLog) {
 			m_bIsReady = false;
 
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			if (oDB == null)
 				throw new Alert(m_oLog, "Cannot create EchoSign façade: database connection not specified.");

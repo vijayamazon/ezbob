@@ -1,4 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+	using System.Collections.Generic;
+	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class LoanCount {
@@ -16,21 +18,29 @@
 			return lc;
 		} // operator +
 
-		public LoanCount() {
+		public LoanCount(ASafeLog log) {
+			Log = log.Safe();
+
+			IDs = new SortedSet<int>();
 			Total = new CountAmount();
 			Default = new CountAmount();
 			Bad = new CountAmount();
 		} // constructor
 
 		public LoanCount Clone() {
-			return new LoanCount {
+			var lc = new LoanCount(Log) {
 				Total = Total.Clone(),
 				Default = Default.Clone(),
 				Bad = Bad.Clone(),
 			};
+
+			lc.AddLoanID(IDs);
+
+			return lc;
 		} // Clone
 
 		public void Clear() {
+			IDs.Clear();
 			Total.Clear();
 			Bad.Clear();
 			Default.Clear();
@@ -39,6 +49,8 @@
 		public void Append(LoanMetaData lmd) {
 			if (lmd == null)
 				return;
+
+			AddLoanID(lmd.LoanID);
 
 			Total.Count++;
 			Total.Amount += lmd.LoanAmount;
@@ -58,11 +70,14 @@
 			if (other == null)
 				return;
 
+			AddLoanID(other.IDs);
+
 			Total += other.Total;
 			Default += other.Default;
 			Bad += other.Bad;
 		} // Append
 
+		public SortedSet<int> IDs { get; private set; }
 		public CountAmount Total { get; private set; }
 		public CountAmount Default { get; private set; }
 		public CountAmount Bad { get; private set; }
@@ -109,5 +124,20 @@
 			public int Count { get; set; }
 			public decimal Amount { get; set; }
 		} // class CountAmount
+
+		public ASafeLog Log { get; private set; }
+
+		private void AddLoanID(IEnumerable<int> lst) {
+			if (lst == null)
+				return;
+
+			foreach (int id in lst)
+				AddLoanID(id);
+		} // AddLoanID
+
+		private void AddLoanID(int id) {
+			if (!IDs.Add(id))
+				Log.Warn("Duplicate loan id detected: {0}", id);
+		} // AddLoanID
 	} // class LoanCount
 } // namespace

@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class ManuallyRejected : AStatItem {
-		public ManuallyRejected(ExcelWorksheet sheet, Total total) : base(
+		public ManuallyRejected(ASafeLog log, ExcelWorksheet sheet, Total total) : base(
+			log.Safe(),
 			sheet,
 			"Manually rejected",
 			total

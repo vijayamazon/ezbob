@@ -14,11 +14,13 @@
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	public class Datum {
-		public Datum(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) {
+		public Datum(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag, ASafeLog log) {
 			this.tag = tag;
+			this.log = log.Safe();
+
 			ManualItems = new List<ManualDatumItem>();
 			AutoItems = new List<AutoDatumItem>();
-			LoanCount = new LoanCount();
+			LoanCount = new LoanCount(this.log);
 
 			CustomerID = sr.CustomerID;
 			BrokerID = sr.BrokerID;
@@ -28,7 +30,7 @@
 		} // constructor
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
-			var mdi = new ManualDatumItem(sr, this.tag);
+			var mdi = new ManualDatumItem(sr, this.tag, this.log);
 			mdi.Calculate();
 			ManualItems.Add(mdi);
 		} // Add
@@ -57,14 +59,14 @@
 			return AutoItems[itemIndex];
 		} // Auto
 
-		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
+		public void RunAutomation(bool isHomeOwner, AConnection db) {
 			AutoItems.Clear();
 
 			foreach (ManualDatumItem mi in ManualItems) {
-				var ai = new AutoDatumItem(mi, this.tag);
+				var ai = new AutoDatumItem(mi, this.tag, this.log);
 				ai.LoanCount = mi.LoanCount.Clone();
 				AutoItems.Add(ai);
-				ai.RunAutomation(isHomeOwner, db, log);
+				// TODO: ai.RunAutomation(isHomeOwner, db);
 			} // for each manual item
 		} // RunAutomation
 
@@ -160,5 +162,6 @@
 
 		private SortedDictionary<string, LoanSummaryData> loansBySource;
 		private readonly string tag;
+		private readonly ASafeLog log;
 	} // class Datum
 } // namespace

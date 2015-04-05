@@ -1,14 +1,17 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class DefaultLoans : AStatItem {
 		public DefaultLoans(
+			ASafeLog log,
 			ExcelWorksheet sheet,
 			Total total,
 			ManuallyApproved manuallyApproved,
 			AutoApproved autoApproved
 		) : base(
+			log,
 			sheet,
 			"Default loans (including 14 days late)",
 			total,

@@ -23,7 +23,7 @@
 
 				var oPaths = new List<string>();
 
-				oLog = oLog ?? new SafeLog();
+				oLog = oLog.Safe();
 
 				foreach (System.Environment.SpecialFolder nFld in new [] {
 					System.Environment.SpecialFolder.ApplicationData,
@@ -119,7 +119,7 @@
 		} // GetMarketplaceDiscriminator
 
 		private Configuration(string sConfigurationJson, ASafeLog oLog = null) {
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 
 			Log.Debug("Parsing Channel Grabber connectors configuration...");
 

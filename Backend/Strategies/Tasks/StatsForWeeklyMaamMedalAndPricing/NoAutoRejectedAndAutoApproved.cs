@@ -1,14 +1,17 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class NotAutoRejectedAndAutoApproved : AStatItem {
 		public NotAutoRejectedAndAutoApproved(
+			ASafeLog log,
 			ExcelWorksheet sheet,
 			Total total,
 			AutoRejected autoRejected,
 			AutoApproved autoApproved
 		) : base(
+			log.Safe(),
 			sheet,
 			"Not auto rejected & auto approved",
 			total,

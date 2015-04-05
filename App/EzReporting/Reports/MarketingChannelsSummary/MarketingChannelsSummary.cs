@@ -12,7 +12,7 @@
 
 		public MarketingChannelsSummary(AConnection oDB, ASafeLog oLog) {
 			m_oDB = oDB;
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 		} // constructor
 
 		public KeyValuePair<ReportQuery, DataTable> Run(Report report, DateTime from, DateTime to) {

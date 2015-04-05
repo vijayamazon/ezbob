@@ -1,10 +1,15 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using Ezbob.ExcelExt;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 	using PaymentServices.Calculators;
 
 	public class ManualDatumItem : ADatumItem {
-		public ManualDatumItem(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) : base(tag) {
+		public ManualDatumItem(
+			SpLoadCashRequestsForAutomationReport.ResultRow sr,
+			string tag,
+			ASafeLog log
+		) : base(tag, log.Safe()) {
 			sr.CopyTo(this);
 		} // constructor
 

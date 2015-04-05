@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.ExcelExt;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
@@ -41,12 +42,15 @@
 		public virtual decimal SetupFeePct { get; protected set; }
 		public virtual decimal SetupFeeAmount { get; protected set; }
 
-		protected ADatumItem(string tag) {
+		protected ADatumItem(string tag, ASafeLog log) {
 			Tag = tag;
-			this.loanCount = new LoanCount();
+			this.loanCount = new LoanCount(log.Safe());
+			Log = this.loanCount.Log;
 		} // constructor
 
 		protected virtual string Tag { get; private set; }
+
+		protected virtual ASafeLog Log { get; private set; }
 
 		private LoanCount loanCount;
 	} // class MedalAndPricing

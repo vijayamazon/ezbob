@@ -1,15 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class AutoApproved : AStatItem {
 		public AutoApproved(
+			ASafeLog log,
 			bool takeMin,
 			ExcelWorksheet sheet,
 			Total total,
 			AutoProcessed autoProcessed
 		) : base(
+			log,
 			sheet,
 			"Auto approved",
 			total,

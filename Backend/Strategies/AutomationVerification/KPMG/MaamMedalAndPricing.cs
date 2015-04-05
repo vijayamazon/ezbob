@@ -65,7 +65,7 @@
 
 				try {
 					d.FindLoans(CashRequestLoans, LoanSources);
-					d.RunAutomation(isHomeOwner, DB, Log);
+					d.RunAutomation(isHomeOwner, DB);
 				} catch (Exception e) {
 					Log.Alert(e, "Automation failed for customer {0}.", d.CustomerID);
 				} // try
@@ -88,15 +88,16 @@
 
 			ExcelWorksheet sheet = Xlsx.CreateSheet("Cash requests", false, CsvTitles);
 			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
+			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
 			int curRow = 2;
 
 			var stats = new List<Tuple<Stats, int>> {
-				new Tuple<Stats, int>(new Stats(statSheet, true, "at first decision time"), 0),
-				new Tuple<Stats, int>(new Stats(statSheet, true, "at last decision time"), -1),
+				new Tuple<Stats, int>(new Stats(Log, statSheet, true, "at first decision time"), 0),
+				new Tuple<Stats, int>(new Stats(Log, statSheet, true, "at last decision time"), -1),
 			};
 
-			var allCrStats = new Stats(statSheet, true, "with all the decisions");
+			var allCrStats = new Stats(Log, statSheet, true, "with all the decisions");
 
 			foreach (Datum d in Data) {
 				d.ToXlsx(sheet, curRow);
@@ -109,17 +110,21 @@
 					allCrStats.Add(d, i);
 			} // for each
 
-			Xlsx.AutoFitColumns();
-
 			int row = 1;
+			int loanIDColumn = 1;
 
 			foreach (Tuple<Stats, int> pair in stats) {
 				row = pair.Item1.ToXlsx(row);
 				row++;
+
+				loanIDColumn = pair.Item1.FlushLoanIDs(loanIDSheet, loanIDColumn);
 			} // for each
 
 			row = allCrStats.ToXlsx(row);
 			row++;
+			loanIDColumn = allCrStats.FlushLoanIDs(loanIDSheet, loanIDColumn);
+
+			Xlsx.AutoFitColumns();
 		} // CreateXlsx
 
 		protected virtual TCrLoans CashRequestLoans {
@@ -153,7 +158,7 @@
 				if (byCustomer.ContainsKey(sr.CustomerID))
 					byCustomer[sr.CustomerID].Add(sr);
 				else
-					byCustomer[sr.CustomerID] = new CustomerData(sr, this.tag);
+					byCustomer[sr.CustomerID] = new CustomerData(sr, this.tag, Log);
 
 				pc++;
 				return ActionResult.Continue;

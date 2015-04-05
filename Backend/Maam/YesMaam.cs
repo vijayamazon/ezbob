@@ -42,7 +42,7 @@
 			this.cashRequestID = cashRequestID;
 
 			DB = oDB;
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 
 			this.medalChooser = new MedalChooser(DB, Log);
 
@@ -312,7 +312,7 @@
 
 		private void Init(AConnection db, ASafeLog log) {
 			DB = db;
-			Log = log ?? new SafeLog();
+			Log = log.Safe();
 
 			this.medalChooser = new MedalChooser(DB, Log);
 

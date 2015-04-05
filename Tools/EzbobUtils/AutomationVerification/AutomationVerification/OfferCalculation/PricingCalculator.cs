@@ -13,7 +13,7 @@
 			AConnection db,
 			ASafeLog log
 		) {
-			this.log = log ?? new SafeLog();
+			this.log = log.Safe();
 			this.pricingScenario = pricingScenario;
 			this.loanAmount = loanAmount;
 			this.repaymentPeriod = repaymentPeriod;

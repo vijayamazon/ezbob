@@ -16,7 +16,11 @@
 	>;
 
 	public class AutoDatumItem : ADatumItem {
-		public AutoDatumItem(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag) : base(tag) {
+		public AutoDatumItem(
+			SpLoadCashRequestsForAutomationReport.ResultRow sr,
+			string tag,
+			ASafeLog log
+		) : base(tag, log.Safe()) {
 			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
 			IsAutoRejected = false;
@@ -77,25 +81,25 @@
 			return colNum;
 		} // ToXlsx
 
-		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
-			log.Info(
+		public void RunAutomation(bool isHomeOwner, AConnection db) {
+			Log.Info(
 				"RunAutomation({0}) started for customer {1} with decision time '{2}'...",
 				isHomeOwner,
 				CustomerID,
 				DecisionTime.MomentStr()
 			);
 
-			RunAutoRerejection(db, log);
+			RunAutoRerejection(db);
 
-			RunAutoReject(db, log);
+			RunAutoReject(db);
 
-			RunAutoReapproval(db, log);
+			RunAutoReapproval(db);
 
-			MedalResult medal = RunCalculateMedal(log);
+			MedalResult medal = RunCalculateMedal();
 
-			RunAutoApprove(isHomeOwner, medal, db, log);
+			RunAutoApprove(isHomeOwner, medal, db);
 
-			log.Info(
+			Log.Info(
 				"RunAutomation({0}) complete for customer {1} with decision time '{2}'.",
 				isHomeOwner,
 				CustomerID,
@@ -103,8 +107,8 @@
 			);
 		} // RunAutomation
 
-		private void RunAutoRerejection(AConnection db, ASafeLog log) {
-			log.Info(
+		private void RunAutoRerejection(AConnection db) {
+			Log.Info(
 				"RunAutomation-RunAutoRerejection() started for customer {0} with decision time '{1}'...",
 				CustomerID,
 				DecisionTime.MomentStr()
@@ -114,7 +118,7 @@
 				CustomerID,
 				DecisionTime,
 				db,
-				log
+				Log
 			).Init();
 
 			agent.MakeDecision();
@@ -126,7 +130,7 @@
 
 			IsAutoReRejected = agent.Trail.HasDecided;
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-RunAutoRerejection() complete for customer {0} with decision time '{1}': " +
 				"automation decision is '{2}', auto re-rejected is '{3}'.",
 				CustomerID,
@@ -136,15 +140,15 @@
 			);
 		} // RunAutoRerejection
 
-		private void RunAutoReject(AConnection db, ASafeLog log) {
-			log.Info(
+		private void RunAutoReject(AConnection db) {
+			Log.Info(
 				"RunAutomation-RunAutoReject() started for customer {0} with decision time '{1}'...",
 				CustomerID,
 				DecisionTime.MomentStr()
 			);
 
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =
-				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, log, CustomerID);
+				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, Log, CustomerID);
 
 			agent.MakeDecision(agent.GetRejectionInputData(DecisionTime));
 
@@ -155,7 +159,7 @@
 
 			IsAutoRejected = agent.Trail.HasDecided;
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-RunAutoReject() complete for customer {0} with decision time '{1}': " +
 				"automation decision is '{2}', auto rejected is '{3}'.",
 				CustomerID,
@@ -165,8 +169,8 @@
 			);
 		} // RunAutoReject
 
-		private void RunAutoReapproval(AConnection db, ASafeLog log) {
-			log.Info(
+		private void RunAutoReapproval(AConnection db) {
+			Log.Info(
 				"RunAutomation-RunAutoReapproval() started for customer {0} with decision time '{1}'...",
 				CustomerID,
 				DecisionTime.MomentStr()
@@ -176,7 +180,7 @@
 
 			var agent = new
 				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
-				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, DecisionTime, db, log);
+				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, DecisionTime, db, Log);
 
 			agent.Init();
 
@@ -189,7 +193,7 @@
 
 			IsAutoReApproved = agent.Trail.HasDecided;
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-RunAutoReapproval() complete for customer {0} with decision time '{1}': " +
 				"automation decision is '{2}', auto re-approved is '{3}', re-approved amount is {4}.",
 				CustomerID,
@@ -200,8 +204,8 @@
 			);
 		} // RunAutoReapproval
 
-		private MedalResult RunCalculateMedal(ASafeLog log) {
-			log.Info(
+		private MedalResult RunCalculateMedal() {
+			Log.Info(
 				"RunAutomation-CalculateMedal() started for customer {0} with decision time '{1}'...",
 				CustomerID,
 				DecisionTime.MomentStr()
@@ -210,7 +214,7 @@
 			CalculateMedal instance = new CalculateMedal(CustomerID, DecisionTime, true, true) { Tag = Tag, };
 			instance.Execute();
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-CalculateMedal() complete for customer {0} with decision time '{1}': " +
 				"medal is '{2}', offered amount is {3}, max offered amount is {4}.",
 				CustomerID,
@@ -226,23 +230,22 @@
 		private void RunAutoApprove(
 			bool isHomeOwner,
 			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
-			AConnection db,
-			ASafeLog log
+			AConnection db
 		) {
-			log.Info(
+			Log.Info(
 				"RunAutomation-RunAutoApprove() started for customer {0} with decision time '{1}'...",
 				CustomerID,
 				DecisionTime.MomentStr()
 			);
 
-			Calculate(isHomeOwner, medal, true, CashRequestID, db, log);
+			Calculate(isHomeOwner, medal, true, CashRequestID, db);
 
 			if (ApprovedAmount > 0)
 				AutomationDecision = DecisionActions.Approve;
 
 			IsAutoApproved = ApprovedAmount > 0;
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-RunAutoApprove()-AutoMin done for customer {0} with decision time '{1}': " +
 				"automation decision is '{2}', auto approved is '{3}', approved amount is {4}.",
 				CustomerID,
@@ -287,10 +290,9 @@
 			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
 			bool takeMinOffer,
 			long cashRequestID,
-			AConnection db,
-			ASafeLog log
+			AConnection db
 		) {
-			log.Info(
+			Log.Info(
 				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
 				"has home '{2}', medal '{3}', take min '{4}') started...",
 				CustomerID,
@@ -306,7 +308,7 @@
 
 			int amountBeforeApproval = takeMinOffer ? medal.RoundOfferedAmount() : medal.RoundMaxOfferedAmount();
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-Auto{0}.Calculate() before capping: medal '{1}', amount {2}\n{3}",
 				takeMinOffer ? "Min" : "Max",
 				MedalName,
@@ -319,7 +321,7 @@
 				isHomeOwner ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
 			);
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-Auto{0}.Calculate(), after capping: medal name '{1}', amount {2}, " +
 				"medal '{3}', medal type '{4}', turnover type '{5}', decision time '{6}'.",
 				takeMinOffer ? "Min" : "Max",
@@ -339,7 +341,7 @@
 				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
 				DecisionTime,
 				db,
-				log
+				Log
 			).Init();
 
 			approveAgent.MakeDecision();
@@ -350,7 +352,7 @@
 			IsApproved = approveAgent.Trail.HasDecided;
 
 			if (!IsApproved) {
-				log.Info(
+				Log.Info(
 					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1} - not calculating offer.",
 					takeMinOffer ? "Min" : "Max",
 					ApprovedAmount
@@ -361,7 +363,7 @@
 				SetupFeeAmount = 0;
 				SetupFeePct = 0;
 			} else {
-				log.Info(
+				Log.Info(
 					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1}, " +
 					"loan count {2}, medal '{3}', decision time '{4}' - going for offer calculation.",
 					takeMinOffer ? "Min" : "Max",
@@ -386,7 +388,7 @@
 				SetupFeePct = odc.VerifyBoundaries.SetupFee / 100.0m;
 				SetupFeeAmount = ApprovedAmount * SetupFeePct;
 
-				log.Info(
+				Log.Info(
 					"RunAutomation-Auto{0}.Calculate(), offer: amount {1}, " +
 					"repayment period {2}, interest rate {3}, setup fee {4} ({5}).",
 					takeMinOffer ? "Min" : "Max",
@@ -398,7 +400,7 @@
 				);
 			} // if
 
-			log.Info(
+			Log.Info(
 				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
 				"has home '{2}', medal '{3}', take min '{4}') complete.",
 				CustomerID,

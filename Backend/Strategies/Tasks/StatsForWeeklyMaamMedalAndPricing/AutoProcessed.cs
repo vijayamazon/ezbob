@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class AutoProcessed : AStatItem {
-		public AutoProcessed(ExcelWorksheet sheet, Total total) : base(
+		public AutoProcessed(ASafeLog log, ExcelWorksheet sheet, Total total) : base(
+			log,
 			sheet,
 			"Auto processed",
 			total

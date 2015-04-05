@@ -14,7 +14,7 @@
 
 		public StrategiesMailer() {
 			DB = Library.Instance.DB;
-			Log = Library.Instance.Log ?? new SafeLog();
+			Log = Library.Instance.Log.Safe();
 
 			m_oMail = new Mail();
 

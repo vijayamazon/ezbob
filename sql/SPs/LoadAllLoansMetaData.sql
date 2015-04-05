@@ -47,6 +47,8 @@ BEGIN
 				AND t.Status = 'Done'
 		WHERE
 			l.[Date] >= 'September 4 2012'
+			AND
+			l.[Date] < 'April 1 2015'
 		GROUP BY
 			r.Id,
 			l.CustomerID,

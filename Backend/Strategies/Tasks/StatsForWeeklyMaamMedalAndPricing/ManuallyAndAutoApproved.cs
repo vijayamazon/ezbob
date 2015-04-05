@@ -1,16 +1,19 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class ManuallyAndAutoApproved : AStatItem {
 		public ManuallyAndAutoApproved(
+			ASafeLog log,
 			ExcelWorksheet sheet,
 			Total total,
 			ManuallyApproved manuallyApproved,
 			AutoApproved autoApproved,
 			DefaultLoans defaultLoans
 		) : base(
+			log.Safe(),
 			sheet,
 			"Manually and auto approved",
 			total,
@@ -21,7 +24,7 @@
 			this.manualAmount = 0;
 			this.autoAmount = 0;
 
-			this.loanCount = new LoanCount();
+			this.loanCount = new LoanCount(Log);
 		} // constructor
 
 		public override void Add(Datum d, int cashRequestIndex) {

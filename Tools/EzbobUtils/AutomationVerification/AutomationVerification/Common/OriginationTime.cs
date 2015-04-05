@@ -11,7 +11,7 @@
 	public class OriginationTime {
 		public OriginationTime(ASafeLog oLog) {
 			m_oRow = null;
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 		} // constructor
 
 		/// <summary>

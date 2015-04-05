@@ -19,7 +19,7 @@
 
 			Name = sName;
 			Args = new Queue<string>(args);
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 		} // constructor
 
 		public virtual void Init() {

@@ -60,6 +60,12 @@ BEGIN
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 	WHERE
 		r.CreationDate >= ISNULL(@DateFrom, 'Sep 4 2012')
+		AND (
+			(CASE
+				WHEN r.IdUnderwriter IS NULL THEN r.SystemDecisionDate
+				ELSE r.UnderwriterDecisionDate
+			END) < 'April 1 2015'
+		)
 		AND
 		(r.IdUnderwriter IS NULL OR r.IdUnderwriter != 1)
 		AND (

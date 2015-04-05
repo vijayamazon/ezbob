@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal abstract class ARejectedCrossApproved : AStatItem {
@@ -47,19 +48,21 @@
 		} // DrawSummary
 
 		protected ARejectedCrossApproved(
+			ASafeLog log,
 			ExcelWorksheet sheet,
 			string title,
 			Total total,
 			AStatItem rejected,
 			AStatItem approved
 		) : base(
+			log,
 			sheet,
 			title,
 			total,
 			rejected,
 			approved
 		) {
-			this.loanCount = new LoanCount();
+			this.loanCount = new LoanCount(Log);
 		} // constructor
 
 		protected override TitledValue[] PrepareCountRowValues() {
