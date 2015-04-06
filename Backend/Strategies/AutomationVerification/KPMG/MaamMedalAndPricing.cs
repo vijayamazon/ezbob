@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using System.Collections.Generic;
+	using System.Drawing;
 	using System.Globalization;
 	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
 	using Ezbob.Database;
@@ -86,31 +87,19 @@
 		private void CreateXlsx() {
 			Xlsx = new ExcelPackage();
 
-			ExcelWorksheet verifySheet = Xlsx.CreateSheet("Data verification", false);
 			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
 			ExcelWorksheet decisionSheet = Xlsx.CreateSheet("Decisions", false, CsvTitles);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
-			verifySheet.SetCellValue(1, 1, "Reference loan count");
-			verifySheet.SetCellValue(1, 2, 3938, sNumberFormat: "#,##0.00");
-			verifySheet.SetCellValue(2, 1, "Reference loan amount");
-			verifySheet.SetCellValue(2, 2, 37577566m, sNumberFormat: "#,##0.00");
-
-			verifySheet.SetCellValue(3, 1, "Reference approve count");
-			verifySheet.SetCellValue(3, 2, 4621, sNumberFormat: "#,##0.00");
-			verifySheet.SetCellValue(4, 1, "Reference approve amount");
-			verifySheet.SetCellValue(4, 2, 45888566m, sNumberFormat: "#,##0.00");
-
-			int curRow = 2;
+			var decisionStats = new Stats(Log, statSheet, true, "at last decision time");
 
 			var stats = new List<Tuple<Stats, int>> {
-				// new Tuple<Stats, int>(new Stats(Log, statSheet, true, "at first decision time"), 0),
-				new Tuple<Stats, int>(new Stats(Log, statSheet, true, "at last decision time"), -1),
+				new Tuple<Stats, int>(decisionStats, -1),
 			};
 
-			var allCrStats = new Stats(Log, statSheet, true, "with all the decisions");
-
 			var pc = new ProgressCounter("{0} items sent to .xlsx", Log, 50);
+
+			int curRow = 2;
 
 			foreach (Datum d in Data) {
 				d.ToXlsx(decisionSheet, curRow);
@@ -119,15 +108,12 @@
 				foreach (Tuple<Stats, int> pair in stats)
 					pair.Item1.Add(d, pair.Item2);
 
-				for (int i = 0; i < d.ManualItems.Count; i++)
-					allCrStats.Add(d, i);
-
 				pc++;
 			} // for each
 
 			pc.Log();
 
-			int row = 1;
+			int row = 1 + DrawVerificationData(statSheet, 1, decisionStats);
 			int loanIDColumn = 1;
 
 			foreach (Tuple<Stats, int> pair in stats) {
@@ -136,10 +122,6 @@
 
 				loanIDColumn = pair.Item1.FlushLoanIDs(loanIDSheet, loanIDColumn);
 			} // for each
-
-			row = allCrStats.ToXlsx(row);
-			row++;
-			loanIDColumn = allCrStats.FlushLoanIDs(loanIDSheet, loanIDColumn);
 
 			Xlsx.AutoFitColumns();
 		} // CreateXlsx
@@ -166,6 +148,72 @@
 			get { return this.spLoad.DateTo; }
 			set { this.spLoad.DateTo = value; }
 		} // DateTo
+
+		private static int DrawVerificationData(ExcelWorksheet statSheet, int row, Stats decisionStats) {
+			AStatItem.SetBorder(statSheet.Cells[row, 1, row, 3]).Merge = true;
+			statSheet.SetCellValue(row, 1, "Verification data", bSetZebra: false, oBgColour: Color.Yellow, bIsBold: true);
+			statSheet.Cells[row, 1].Style.Font.Size = 16;
+			row++;
+
+			statSheet.SetCellValue(row, 2, "Reference", true);
+			statSheet.SetCellValue(row, 3, "Actual", true);
+			row++;
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Approve count",
+				Reference.Approve.Count,
+				decisionStats.ManuallyApproved.Count,
+				TitledValue.Format.Int
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Approve amount",
+				Reference.Approve.Amount,
+				decisionStats.ManuallyApproved.Amount,
+				TitledValue.Format.Money
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Loan count",
+				Reference.Loan.Count,
+				decisionStats.ManuallyApproved.LoanCount.Total.Count,
+				TitledValue.Format.Int
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Loan amount",
+				Reference.Loan.Amount,
+				decisionStats.ManuallyApproved.LoanCount.Total.Amount,
+				TitledValue.Format.Money
+			);
+
+			return row;
+		} // DrawVerificationData
+
+		private static int DrawVerificationRow(
+			ExcelWorksheet statSheet,
+			int row,
+			string title,
+			decimal reference,
+			decimal actual,
+			string format
+		) {
+			Color fontColour = Math.Abs(reference - actual) < 0.000001m ? Color.DarkGreen : Color.Red;
+
+			statSheet.SetCellValue(row, 1, title, true);
+			statSheet.SetCellValue(row, 2, reference, sNumberFormat: format);
+			statSheet.SetCellValue(row, 3, actual, oFontColour: fontColour, sNumberFormat: format);
+
+			return row + 1;
+		} // DrawVerificationRow
 
 		private void LoadCashRequests() {
 			Data.Clear();
@@ -221,6 +269,18 @@
 		private readonly TCrLoans crLoans;
 		private readonly SortedSet<string> loanSources; 
 		private readonly SpLoadCashRequestsForAutomationReport spLoad;
+
+		private static class Reference {
+			public static class Approve {
+				public const int Count = 4621;
+				public const decimal Amount = 45888566m;
+			} // class Approve
+
+			public static class Loan {
+				public const int Count = 3938;
+				public const decimal Amount = 37577566m;
+			} // class Loan
+		} // class Reference
 	} // class MaamMedalAndPricing
 } // namespace
 

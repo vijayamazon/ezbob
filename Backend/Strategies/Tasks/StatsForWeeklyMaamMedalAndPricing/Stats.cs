@@ -17,13 +17,13 @@
 			var autoRejected = new AutoRejected(log, sheet, total, autoProcessed);
 			var autoApproved = new AutoApproved(log, takeMin, sheet, total, autoProcessed);
 			var manuallyRejected = new ManuallyRejected(log, sheet, total);
-			this.manuallyApproved = new ManuallyApproved(log, sheet, total);
-			var defaultLoans = new DefaultLoans(log, sheet, total, this.manuallyApproved, autoApproved);
+			ManuallyApproved = new ManuallyApproved(log, sheet, total);
+			var defaultLoans = new DefaultLoans(log, sheet, total, ManuallyApproved, autoApproved);
 
-			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(log, sheet, total, this.manuallyApproved, autoApproved);
+			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(log, sheet, total, ManuallyApproved, autoApproved);
 
 			this.manuallyRejectedAutoApproved = new ManuallyRejectedAutoApproved(log, sheet, "Manually rejected and auto approved", total, manuallyRejected, autoApproved);
-			this.manuallyApprovedAutoRejected = new ManuallyApprovedAutoRejected(log, sheet, "Manually approved and auto rejected", total, autoRejected, this.manuallyApproved);
+			this.manuallyApprovedAutoRejected = new ManuallyApprovedAutoRejected(log, sheet, "Manually approved and auto rejected", total, autoRejected, ManuallyApproved);
 
 			this.stats = new List<AStatItem> {
 				total,
@@ -32,9 +32,9 @@
 				autoApproved,
 				manuallyRejected,
 				new ManuallyAndAutoRejected(log, sheet, total, manuallyRejected, autoRejected),
-				this.manuallyApproved,
+				ManuallyApproved,
 				defaultLoans,
-				new BadLoans(log, sheet, total, this.manuallyApproved, autoApproved),
+				new BadLoans(log, sheet, total, ManuallyApproved, autoApproved),
 				this.manuallyAndAutoApproved,
 				this.manuallyRejectedAutoApproved,
 				this.manuallyApprovedAutoRejected,
@@ -82,13 +82,15 @@
 			targetSheet.SetCellValue(row, column, this.name);
 			row++;
 
-			foreach (int id in this.manuallyApproved.LoanCount.IDs) {
+			foreach (int id in ManuallyApproved.LoanCount.IDs) {
 				targetSheet.SetCellValue(row, column, id);
 				row++;
 			} // for each
 
 			return column + 1;
 		} // FlushLoanIDs
+
+		public ManuallyApproved ManuallyApproved { get; private set; }
 
 		private readonly string name;
 
@@ -99,6 +101,5 @@
 		private readonly ManuallyAndAutoApproved manuallyAndAutoApproved;
 		private readonly ARejectedCrossApproved manuallyRejectedAutoApproved;
 		private readonly ARejectedCrossApproved manuallyApprovedAutoRejected;
-		private readonly ManuallyApproved manuallyApproved;
 	} // class Stats
 } // namespace

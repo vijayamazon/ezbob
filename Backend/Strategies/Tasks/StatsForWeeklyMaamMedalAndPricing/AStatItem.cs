@@ -158,8 +158,8 @@
 		} // SetRowValues
 
 		private void SetOneValue(int row, int column, TitledValue val) {
-			this.sheet.SetCellValue(row, column, val.Title, sNumberFormat: CellFormat);
-			this.sheet.SetCellValue(row, column + 1, val.Value, true, sNumberFormat: CellFormat);
+			this.sheet.SetCellValue(row, column, val.Title, sNumberFormat: val.TitleFormat);
+			this.sheet.SetCellValue(row, column + 1, val.Value, true, sNumberFormat: val.ValueFormat);
 
 			SetBorder(this.sheet.Cells[row, column]).Style.Border.Right.Style = ExcelBorderStyle.None;
 			SetBorder(this.sheet.Cells[row, column + 1]).Style.Border.Left.Style = ExcelBorderStyle.None;
@@ -167,8 +167,6 @@
 
 		private readonly ExcelWorksheet sheet;
 		private readonly string title;
-
-		private const string CellFormat = "#,##0.00";
 
 		private static readonly Color BorderColor = Color.Black;
 	} // class AStatItem
