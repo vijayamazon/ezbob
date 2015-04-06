@@ -25,6 +25,8 @@
                 this.taskModel.Description = this.taskModel.Subject;
             }
 
+		    this.taskModel.Email = this.taskModel.Email.ToLower();
+
 		    this.salesForce.CreateTask(this.taskModel);
 		}
 		private readonly ISalesForceAppClient salesForce;

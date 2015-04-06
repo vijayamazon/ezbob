@@ -36,6 +36,9 @@
 			if (string.IsNullOrEmpty(model.CompanyName)) {
 				model.CompanyName = "No name";
 			}
+
+            model.Email = model.Email.ToLower();
+
 			this.salesForce.CreateUpdateLeadAccount(model);
 		}
 

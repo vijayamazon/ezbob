@@ -6,7 +6,7 @@
 	public class AddOpportunity : AStrategy {
 
 		public AddOpportunity(int customerID, OpportunityModel model) {
-			salesForce = ObjectFactory
+            this.salesForce = ObjectFactory
 				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
 				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
 				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
@@ -18,8 +18,11 @@
 		public override string Name { get { return "AddOpportunity"; } }
 
 		public override void Execute() {
-			Log.Info("Adding SalesForce opportunity to customer {0} ", customerID);
-			salesForce.CreateOpportunity(opportunityModel);
+            Log.Info("Adding SalesForce opportunity to customer {0} ", this.customerID);
+		    
+            this.opportunityModel.Email = this.opportunityModel.Email.ToLower();
+
+            this.salesForce.CreateOpportunity(this.opportunityModel);
 		}
 		private readonly ISalesForceAppClient salesForce;
 		private readonly int customerID;
