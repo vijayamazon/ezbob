@@ -83,6 +83,14 @@
 			PropertyTraverser.Traverse(typeof(T), (ignored, oPropInfo) => {
 				string sType = T2T(oPropInfo);
 
+				List<bool> oKeyAttr = oPropInfo.CustomAttributes
+					.Where(a => a.AttributeType == typeof(PKAttribute) && a.ConstructorArguments.Count > 0)
+					.Select(a => (bool)a.ConstructorArguments[0].Value)
+					.ToList();
+
+				if (oKeyAttr.Count > 0 && oKeyAttr[0]) // is identity
+					return;
+
 				if (!string.IsNullOrWhiteSpace(sType)) {
 					if (oPropInfo.DeclaringType == typeof(T)) {
 						oFields.Add(oPropInfo.Name + " " + sType);
