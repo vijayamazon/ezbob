@@ -1,12 +1,11 @@
-﻿namespace Reports {
-	using EZBob.DatabaseLib.Model.Database;
-	using Newtonsoft.Json.Linq;
+﻿namespace Reports.LoanStats {
 	using System;
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
+	using Newtonsoft.Json.Linq;
 
 	internal class LoanStatsDataEntry {
-
 		public int CustomerID { get; private set; }
 		public string ApprovedType { get; private set; }
 		public bool IsLoanTypeSelectionAllowed { get; private set; }

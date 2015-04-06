@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿namespace Reports.LoanStats {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 
-namespace Reports {
 	internal class LoanStatsPaypalTotal {
-
 		public LoanStatsPaypalTotal(int nMarketplaceID, DateTime oUpdated, decimal nTotal) {
 			m_oData = new SortedDictionary<int, SortedDictionary<DateTime, decimal>>();
 
@@ -34,6 +33,5 @@ namespace Reports {
 		} // Calculate
 
 		private SortedDictionary<int, SortedDictionary<DateTime, decimal>> m_oData;
-
 	} // class LoanStatsPaypalTotal
 } // namespace

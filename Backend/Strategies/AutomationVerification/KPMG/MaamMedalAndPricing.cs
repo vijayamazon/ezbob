@@ -89,7 +89,13 @@
 
 			ExcelWorksheet sheet = Xlsx.CreateSheet("Cash requests", false, CsvTitles);
 			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
+			ExcelWorksheet verifySheet = Xlsx.CreateSheet("Data verification", false);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
+
+			verifySheet.SetCellValue(1, 1, "Reference loan count");
+			verifySheet.SetCellValue(1, 2, 3938, sNumberFormat: "#,##0.00");
+			verifySheet.SetCellValue(2, 1, "Reference loan amount");
+			verifySheet.SetCellValue(2, 2, 37577566m, sNumberFormat: "#,##0.00");
 
 			int curRow = 2;
 

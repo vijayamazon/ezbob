@@ -10,13 +10,13 @@
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Ezbob.Matrices;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Html;
 	using Ezbob.Utils.Security;
 	using Ezbob.ValueIntervals;
 	using EzBob.Backend.Models;
 	using Reports;
+	using Reports.LoanStats;
 	using Reports.Alibaba.DataSharing;
 	using Reports.Alibaba.Funnel;
 	using Reports.EarnedInterest;
