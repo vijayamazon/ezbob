@@ -76,5 +76,15 @@
 		public SuggestedAmountModel[] SuggestedAmounts { get; set; }
 		public int TypeOfBusiness { get; set; }
 
+        public AutomationOfferModel AutomationOfferModel { get; set; }
+
+    }
+
+    public class AutomationOfferModel {
+        public int Amount { get; set; }
+        public decimal InterestRate { get; set; }
+        public int RepaymentPeriod { get; set; }
+        public decimal SetupFeePercent { get; set; }
+        public decimal SetupFeeAmount { get; set; }
     }
 }

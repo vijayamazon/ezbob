@@ -1814,6 +1814,9 @@ td a.edit-loan {
     font-size: 24px;
     text-align: center;
 }
+.ez-automation-offer {
+    font-size: 10px;
+}
 
 .mortgage-div {
     position: absolute;

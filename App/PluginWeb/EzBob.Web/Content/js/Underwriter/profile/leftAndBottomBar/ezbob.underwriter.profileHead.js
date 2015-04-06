@@ -26,7 +26,8 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		'click #RecalculateMedalBtn': 'recalculateMedalClick'
 	},
 	ui: {
-		editOfferDiv: '.editOfferDiv'
+	    editOfferDiv: '.editOfferDiv',
+        automationOffer: '.ez-automation-offer'
 	},
 
 	recalculateMedalClick: function() {
@@ -100,6 +101,11 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		this.controlButtonsView.render();
 
 		this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
+
+		if (this.loanModel && this.loanModel.get('AutomationOfferModel') && this.loanModel.get('AutomationOfferModel').Amount === 0) {
+		    this.ui.automationOffer.hide();
+		}
+
 		if (this.personalModel) {
 			this.changeDecisionButtonsState(this.personalModel.get("Editable"));
 		}

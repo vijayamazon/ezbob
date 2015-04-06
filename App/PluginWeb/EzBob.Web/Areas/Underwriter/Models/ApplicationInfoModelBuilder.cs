@@ -12,6 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
+	using EZBob.DatabaseLib.Model.Database.Request;
 	using PaymentServices.Calculators;
 	using Web.Models;
 
@@ -21,6 +22,7 @@
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly ILoanSourceRepository _loanSources;
+	    private readonly IOfferCalculationsRepository offerCalculationsRepository;
 		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
 		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
 		private readonly LoanBuilder _loanBuilder;
@@ -34,16 +36,18 @@
 			VatReturnSummaryRepository vatReturnSummaryRepository,
 			CustomerAnalyticsRepository customerAnalyticsRepository,
 			LoanBuilder loanBuilder,
-			APRCalculator aprCalc)
+			APRCalculator aprCalc, 
+            IOfferCalculationsRepository offerCalculationsRepository)
 		{
-			_discounts = discounts;
-			_loanTypes = loanTypes;
+		    this._discounts = discounts;
+		    this._loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
-			_loanSources = loanSources;
-			_vatReturnSummaryRepository = vatReturnSummaryRepository;
-			_customerAnalyticsRepository = customerAnalyticsRepository;
-			_loanBuilder = loanBuilder;
-			_aprCalc = aprCalc;
+		    this._loanSources = loanSources;
+		    this._vatReturnSummaryRepository = vatReturnSummaryRepository;
+		    this._customerAnalyticsRepository = customerAnalyticsRepository;
+		    this._loanBuilder = loanBuilder;
+		    this._aprCalc = aprCalc;
+		    this.offerCalculationsRepository = offerCalculationsRepository;
 		}
 
 		public void InitApplicationInfo(ApplicationInfoModel model, Customer customer, CashRequest cr)
@@ -54,58 +58,13 @@
 			model.CustomerName = customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "";
 			model.TypeOfBusiness = customer.PersonalInfo != null ? (int)customer.PersonalInfo.TypeOfBusiness : 0;
 			model.CustomerRefNum = customer.RefNumber;
+
 			if (cr != null)
 			{
-				model.InterestRate = cr.InterestRate;
-				model.CashRequestId = cr.Id;
-				model.UseSetupFee = cr.UseSetupFee;
-				model.UseBrokerSetupFee = cr.UseBrokerSetupFee;
-				model.ManualSetupFeeAmount = cr.ManualSetupFeeAmount;
-				model.ManualSetupFeePercent = cr.ManualSetupFeePercent;
-				model.AllowSendingEmail = !cr.EmailSendingBanned;
-
-				var loanType = cr.LoanType ?? _loanTypes.GetDefault();
-
-				model.LoanType = loanType.Name;
-				model.LoanTypeId = loanType.Id;
-
-				cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
-				cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
-
-				model.RepaymentPerion = cr.RepaymentPeriod;//_repaymentCalculator.ReCalculateRepaymentPeriod(cr);
-
-				if (cr.SystemCalculatedSum.HasValue && Math.Abs(cr.SystemCalculatedSum.Value) > 0.01)
-				{
-					model.SystemCalculatedAmount = Convert.ToDecimal(cr.SystemCalculatedSum.Value);
-				}
-
-				model.OfferedCreditLine = Convert.ToDecimal(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum);
-
-				var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
-				model.SetupFee = calc.Calculate(model.OfferedCreditLine);
-				model.SetupFeePercent = model.OfferedCreditLine == 0 ? 0 : model.SetupFee / model.OfferedCreditLine;
-				model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id).Sum(x => x.LoanAmount);
-
-				model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
-				model.OfferValidateUntil = FormattingUtils.FormatDateToString(cr.OfferValidUntil);
-
-				model.Reason = cr.UnderwriterComment;
-
-				model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
-
-				model.AnnualTurnover = cr.AnnualTurnover;
-
-				var loan = _loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart.HasValue ? cr.OfferStart.Value : DateTime.UtcNow);
-				
-				var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
-
-				var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
-				model.Apr = apr;
-				model.Air = (model.InterestRate*100*12 + (model.RepaymentPerion == 0 ? 0 : (12/(decimal) model.RepaymentPerion*model.SetupFeePercent*100))) / 100;
-				model.RealCost = loanOffer.RealInterestCost;
+				BuildCashRequestModel(model, customer, cr);
 			}
 
-			model.LoanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : _loanSources.GetDefault());
+			model.LoanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : this._loanSources.GetDefault());
 
 			model.CustomerId = customer.Id;
 			model.IsTest = customer.IsTest;
@@ -127,9 +86,9 @@
 
 			model.IsModified = cr != null && !string.IsNullOrEmpty(cr.LoanTemplate);
 
-			model.LoanTypes = _loanTypes.GetAll().Select(t => LoanTypesModel.Create(t)).ToArray();
+			model.LoanTypes = this._loanTypes.GetAll().Select(t => LoanTypesModel.Create(t)).ToArray();
 
-			model.DiscountPlans = _discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
+			model.DiscountPlans = this._discounts.GetAll().Select(d => DiscountPlanModel.Create(d)).ToArray();
 			DiscountPlan discountPlan;
 
 			if (cr != null && cr.DiscountPlan != null)
@@ -138,19 +97,19 @@
 			}
 			else
 			{
-				discountPlan = _discounts.GetDefault();
+				discountPlan = this._discounts.GetDefault();
 			}
 
 			model.DiscountPlan = discountPlan.Name;
 			model.DiscountPlanPercents = discountPlan.Discounts.Any(d => d != 0) ? string.Format("({0})", discountPlan.ValuesStr) : "";
 			model.DiscountPlanId = discountPlan.Id;
 
-			model.AllLoanSources = _loanSources.GetAll().Select(ls => new LoanSourceModel(ls)).ToArray();
+			model.AllLoanSources = this._loanSources.GetAll().Select(ls => new LoanSourceModel(ls)).ToArray();
 
 			model.OfferValidForHours = (int)Math.Truncate((decimal)CurrentValues.Instance.OfferValidForHours);
 
 			model.AMLResult = customer.AMLResult;
-			model.SkipPopupForApprovalWithoutAML = approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
+			model.SkipPopupForApprovalWithoutAML = this.approvalsWithoutAMLRepository.ShouldSkipById(customer.Id);
 
 			var company = customer.Company;
 			model.EmployeeCount = new CompanyEmployeeCount().EmployeeCount;
@@ -159,82 +118,144 @@
 				model.EmployeeCount = (company.CompanyEmployeeCount.OrderBy(x => x.Created).LastOrDefault() ?? new CompanyEmployeeCount()).EmployeeCount;
 			}
 
-			CustomerRequestedLoan oRequest = customer.CustomerRequestedLoan.OrderBy(x => x.Created).LastOrDefault();
+			BuildRequestedLoan(model, customer);
 
-			if ((oRequest == null) || (oRequest.CustomerReason == null))
-			{
-				model.CustomerReasonType = -1;
-				model.CustomerReason = "";
-			}
-			else
-			{
-				model.CustomerReasonType = oRequest.CustomerReason.ReasonType ?? -1;
+		    BuildSuggestedAmountModel(model, customer);
 
-				var os = new StringBuilder();
+		    BuildAutomationOfferModel(model, customer);
+		}//InitApplicationInfo
 
-				if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
-					os.Append(oRequest.CustomerReason.Reason.Trim());
+	    private static void BuildRequestedLoan(ApplicationInfoModel model, Customer customer) {
+	        CustomerRequestedLoan oRequest = customer.CustomerRequestedLoan.OrderBy(x => x.Created)
+	            .LastOrDefault();
 
-				if (!string.IsNullOrWhiteSpace(oRequest.OtherReason))
-				{
-					if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
-						os.Append(": ");
+	        if ((oRequest == null) || (oRequest.CustomerReason == null)) {
+	            model.CustomerReasonType = -1;
+	            model.CustomerReason = "";
+	        } else {
+	            model.CustomerReasonType = oRequest.CustomerReason.ReasonType ?? -1;
 
-					os.Append(oRequest.OtherReason.Trim());
-				} // if
+	            var os = new StringBuilder();
 
-				model.CustomerReason = os.ToString().Trim();
-			} // if
+	            if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
+	                os.Append(oRequest.CustomerReason.Reason.Trim());
 
-			if (customer.CustomerMarketPlaces.Any(x => x.Marketplace.Name == "HMRC"))
-			{
-				var hmrc = customer.CustomerMarketPlaces.First(x => x.Marketplace.Name == "HMRC").Id;
-				var summary = _vatReturnSummaryRepository.GetLastSummary(hmrc);
-				if (summary != null)
-				{
-					model.ValueAdded = summary.TotalValueAdded;
-					model.FreeCashFlow = summary.FreeCashFlow;
-				}
-			}
+	            if (!string.IsNullOrWhiteSpace(oRequest.OtherReason)) {
+	                if (!string.IsNullOrWhiteSpace(oRequest.CustomerReason.Reason))
+	                    os.Append(": ");
 
-			var analytics = _customerAnalyticsRepository.Get(customer.Id);
-			if (analytics != null)
-			{
-				model.Turnover = analytics.AnnualTurnover;
-			}
+	                os.Append(oRequest.OtherReason.Trim());
+	            } // if
 
-			model.SuggestedAmounts = new[]
-				{
-					new SuggestedAmountModel
-						{
-							Method = CalculationMethod.Turnover.DescriptionAttr(),
-							Silver = 0.06M,
-							Gold = 0.08M,
-							Platinum = 0.1M,
-							Diamond = 0.12M,
-							Value = model.Turnover
-						},
+	            model.CustomerReason = os.ToString()
+	                .Trim();
+	        } // if
+	    }//BuildRequestedLoan
 
-					new SuggestedAmountModel
-						{
-							Method = CalculationMethod.ValueAdded.DescriptionAttr(),
-							Silver = 0.15M,
-							Gold = 0.20M,
-							Platinum = 0.25M,
-							Diamond = 0.30M,
-							Value = model.ValueAdded
-						},
-					new SuggestedAmountModel
-						{
-							Method = CalculationMethod.FCF.DescriptionAttr(),
-							Silver = 0.29M,
-							Gold = 0.38M,
-							Platinum = 0.48M,
-							Diamond = 0.58M,
-							Value = model.FreeCashFlow
-						},
-				};
+	    private void BuildCashRequestModel(ApplicationInfoModel model, Customer customer, CashRequest cr) {
+	        model.InterestRate = cr.InterestRate;
+	        model.CashRequestId = cr.Id;
+	        model.UseSetupFee = cr.UseSetupFee;
+	        model.UseBrokerSetupFee = cr.UseBrokerSetupFee;
+	        model.ManualSetupFeeAmount = cr.ManualSetupFeeAmount;
+	        model.ManualSetupFeePercent = cr.ManualSetupFeePercent;
+	        model.AllowSendingEmail = !cr.EmailSendingBanned;
 
-		} // InitApplicationInfo
+	        var loanType = cr.LoanType ?? this._loanTypes.GetDefault();
+
+	        model.LoanType = loanType.Name;
+	        model.LoanTypeId = loanType.Id;
+
+	        cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
+	        cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
+
+	        model.RepaymentPerion = cr.RepaymentPeriod; //_repaymentCalculator.ReCalculateRepaymentPeriod(cr);
+
+	        if (cr.SystemCalculatedSum.HasValue && Math.Abs(cr.SystemCalculatedSum.Value) > 0.01)
+	            model.SystemCalculatedAmount = Convert.ToDecimal(cr.SystemCalculatedSum.Value);
+
+	        model.OfferedCreditLine = Convert.ToDecimal(cr.ManagerApprovedSum ?? cr.SystemCalculatedSum);
+
+	        var calc = new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent);
+	        model.SetupFee = calc.Calculate(model.OfferedCreditLine);
+	        model.SetupFeePercent = model.OfferedCreditLine == 0 ? 0 : model.SetupFee / model.OfferedCreditLine;
+	        model.BorrowedAmount = customer.Loans.Where(x => x.CashRequest != null && x.CashRequest.Id == cr.Id)
+	            .Sum(x => x.LoanAmount);
+
+	        model.StartingFromDate = FormattingUtils.FormatDateToString(cr.OfferStart);
+	        model.OfferValidateUntil = FormattingUtils.FormatDateToString(cr.OfferValidUntil);
+
+	        model.Reason = cr.UnderwriterComment;
+
+	        model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
+
+	        model.AnnualTurnover = cr.AnnualTurnover;
+
+	        var loan = this._loanBuilder.CreateLoan(cr, cr.ApprovedSum(), cr.OfferStart ?? DateTime.UtcNow);
+
+	        var apr = loan.LoanAmount == 0 ? 0 : this._aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
+
+	        var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
+	        model.Apr = apr;
+	        model.Air = (model.InterestRate * 100 * 12 + (model.RepaymentPerion == 0 ? 0 : (12 / (decimal)model.RepaymentPerion * model.SetupFeePercent * 100))) / 100;
+	        model.RealCost = loanOffer.RealInterestCost;
+	    }// BuildCashRequestModel
+
+	    private void BuildAutomationOfferModel(ApplicationInfoModel model, Customer customer) {
+	        OfferCalculations offerCalculations = this.offerCalculationsRepository.GetActiveForCustomer(customer.Id);
+	        if (offerCalculations != null) {
+	            model.AutomationOfferModel = new AutomationOfferModel {
+	                Amount = offerCalculations.Amount,
+	                InterestRate = offerCalculations.InterestRate / 100,
+	                RepaymentPeriod = offerCalculations.Period,
+	                SetupFeePercent = offerCalculations.SetupFee / 100,
+	                SetupFeeAmount = offerCalculations.Amount * offerCalculations.SetupFee / 100
+	            };
+	        } else
+	            model.AutomationOfferModel = new AutomationOfferModel();
+	    }//BuildAutomationOfferModel
+
+	    private void BuildSuggestedAmountModel(ApplicationInfoModel model, Customer customer) {
+	        if (customer.CustomerMarketPlaces.Any(x => x.Marketplace.Name == "HMRC")) {
+	            var hmrc = customer.CustomerMarketPlaces.First(x => x.Marketplace.Name == "HMRC")
+	                .Id;
+	            var summary = this._vatReturnSummaryRepository.GetLastSummary(hmrc);
+	            if (summary != null) {
+	                model.ValueAdded = summary.TotalValueAdded;
+	                model.FreeCashFlow = summary.FreeCashFlow;
+	            }
+	        }
+
+	        var analytics = this._customerAnalyticsRepository.Get(customer.Id);
+	        if (analytics != null)
+	            model.Turnover = analytics.AnnualTurnover;
+
+	        model.SuggestedAmounts = new[] {
+	            new SuggestedAmountModel {
+	                Method = CalculationMethod.Turnover.DescriptionAttr(),
+	                Silver = 0.06M,
+	                Gold = 0.08M,
+	                Platinum = 0.1M,
+	                Diamond = 0.12M,
+	                Value = model.Turnover
+	            },
+	            new SuggestedAmountModel {
+	                Method = CalculationMethod.ValueAdded.DescriptionAttr(),
+	                Silver = 0.15M,
+	                Gold = 0.20M,
+	                Platinum = 0.25M,
+	                Diamond = 0.30M,
+	                Value = model.ValueAdded
+	            },
+	            new SuggestedAmountModel {
+	                Method = CalculationMethod.FCF.DescriptionAttr(),
+	                Silver = 0.29M,
+	                Gold = 0.38M,
+	                Platinum = 0.48M,
+	                Diamond = 0.58M,
+	                Value = model.FreeCashFlow
+	            },
+	        };
+        }//BuildSuggestedAmountModel
 	}
 }
