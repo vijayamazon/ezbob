@@ -604,6 +604,9 @@
 
 			this.customers.SaveOrUpdate(customer);
 
+            //TODO update new offer / decision tables
+            Log.Info("update new offer / decision for customer {0}", customer.Id);
+
 			if (this.autoDecisionResponse.Decision.HasValue) {
 				this.decisionHistory.LogAction(
 					this.autoDecisionResponse.Decision.Value,

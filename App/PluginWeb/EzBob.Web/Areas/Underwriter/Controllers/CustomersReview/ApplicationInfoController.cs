@@ -130,6 +130,9 @@
 			cr.LoanTemplate = null;
 			_cashRequestsRepository.SaveOrUpdate(cr);
 
+            //TODO update new offer table
+		    log.Debug("update offer for customer {0} amount {1}", cr.Customer.Id, amount);
+
 			log.Debug("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
 
 			if (value.HasValue && value.Value > 0)
@@ -182,6 +185,9 @@
 			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).LoanType = {1}", id, cr.LoanType.Name);
+
+            //TODO update new offer table
+		    log.Debug("update offer for customer {0} loan type {1}", cr.Customer.Id, loanType);
 		}
 
 		[HttpPost]
@@ -194,6 +200,10 @@
 			cr.DiscountPlan = discount;
 			//cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).Discount = {1}", id, cr.DiscountPlan.Name);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} discountPlanId {1}", cr.Customer.Id, discountPlanId); 
+
 			return Json(new { });
 		}
 
@@ -218,6 +228,9 @@
 				}
 			} // if
 
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} loan source {1}", cr.Customer.Id, LoanSourceID); 
+
 			return Json(new { });
 		} // LoanSource
 
@@ -233,6 +246,9 @@
 			cr.LoanTemplate = null;
 
 			log.Debug("CashRequest({0}).InterestRate = {1}", id, cr.InterestRate);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} interest rate {1}", cr.Customer.Id, interestRate); 
 
 			return Json(true);
 		}
@@ -250,6 +266,10 @@
 			cr.LoanTemplate = null;
 
 			log.Debug("CashRequest({0}).RepaymentPeriod = {1}", id, period);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} period {1}", cr.Customer.Id, period); 
+
 
 			return Json(true);
 		}
@@ -279,6 +299,10 @@
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).UseSetupFee = {1}", id, enabled);
 
+
+            //TODO update new offer table //Not in use any more
+            log.Debug("update offer for customer {0} setupfee {1}", cr.Customer.Id, enabled); 
+
 			return Json(new { error = (string)null });
 		}
 
@@ -290,6 +314,10 @@
 			cr.UseBrokerSetupFee = enabled;
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
+
+            //TODO update new offer table //Not in use any more
+            log.Debug("update offer for customer {0} broker setup fee {1}", cr.Customer.Id, enabled); 
+
 			return Json(new { error = (string)null});
 		}
 
@@ -307,6 +335,10 @@
 				cr.ManualSetupFeePercent = null;
 			}
 			cr.LoanTemplate = null;
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} setup fee percent {1}", cr.Customer.Id, manualPercent);
+
 			log.Debug("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
 			return Json(new { });
 		}
@@ -319,6 +351,10 @@
 			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} setup fee amount {1}", cr.Customer.Id, manualAmount);
+
 			return Json(new { });
 		}
 
@@ -412,6 +448,10 @@
 			var cust = _customerRepository.Get(id);
 			cust.IsAvoid = enabled;
 			log.Debug("Customer({0}).IsAvoided = {1}", id, enabled);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} avoid auto decision {1}", cust.Id, enabled);
+
 			return Json(new { error = (string)null, id = id, status = cust.IsAvoid });
 		}
 
@@ -426,6 +466,9 @@
 			cr.EmailSendingBanned = !enabled;
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).EmailSendingBanned = {1}", id, cr.EmailSendingBanned);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} EmailSendingBanned {1}", cr.Customer.Id, cr.EmailSendingBanned);
 			return Json(new { error = (string)null, id = id, status = enabled });
 		}
 
@@ -439,6 +482,9 @@
 			var cr = _cashRequestsRepository.Get(id);
 			cr.IsLoanTypeSelectionAllowed = loanTypeSelection;
 			log.Debug("CashRequest({0}).IsLoanTypeSelectionAllowed = {1}", id, cr.IsLoanTypeSelectionAllowed);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} IsLoanTypeSelectionAllowed {1}", cr.Customer.Id, cr.IsLoanTypeSelectionAllowed);
 		}
 
 		[HttpPost]
@@ -459,6 +505,9 @@
 			var cr = cust.LastCashRequest;
 			cr.LoanTemplate = null;
 			cr.OfferValidUntil = dt;
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} OfferValidUntil {1}", cr.Customer.Id, cr.OfferValidUntil);
 		}
 
 		[HttpPost]
@@ -486,6 +535,9 @@
 			cr.LoanTemplate = null;
 			cr.OfferStart = dt;
 			cr.OfferValidUntil = offerValidUntil;
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} OfferStart {1} OfferValidUntil {2}", cr.Customer.Id, cr.OfferStart, cr.OfferValidUntil);
 		}
 
 		[HttpPost]
@@ -591,6 +643,9 @@
 			c.ManagerApprovedSum = sum;
 			_cashRequestsRepository.SaveOrUpdate(cr);
 			_customerRepository.SaveOrUpdate(c);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
 
 			return Json(true);
 		} // ChangeCreditLine

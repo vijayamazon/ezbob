@@ -24,6 +24,7 @@
 		private readonly LoanBuilder _loanBuilder;
 		private readonly ILoanChangesHistoryRepository _history;
 		private readonly IWorkplaceContext _context;
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(LoanEditorController));
 
 		public LoanEditorController(ILoanRepository loans, ChangeLoanDetailsModelBuilder builder, ICashRequestRepository cashRequests, ChangeLoanDetailsModelBuilder loanModelBuilder, LoanBuilder loanBuilder, ILoanChangesHistoryRepository history, IWorkplaceContext context)
 		{
@@ -46,6 +47,10 @@
 			calc.GetState();
 
 			var model = _builder.BuildModel(loan);
+
+            //TODO build loan model
+            Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
+
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
@@ -86,6 +91,10 @@
 
 			_loans.SaveOrUpdate(oLoan);
 
+            //TODO update loan (apply add freeze)
+            Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
+
+
 			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
@@ -107,6 +116,9 @@
 				lif.DeactivationDate = DateTime.UtcNow;
 
 			_loans.SaveOrUpdate(oLoan);
+
+            //TODO update loan (apply remove freeze)
+            Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
 
 			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
@@ -160,6 +172,9 @@
 
 			_loanModelBuilder.UpdateLoan(model, loan);
 
+            //TODO update loan (apply all modifications)
+            Log.DebugFormat("apply loan modifications for customer {0}", loan.Customer.Id);
+
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
@@ -186,6 +201,9 @@
 				model.Errors.Add(e.Message);
 				return model;
 			}
+
+            //TODO build loan model
+            Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 
 			return _loanModelBuilder.BuildModel(loan);
 		}

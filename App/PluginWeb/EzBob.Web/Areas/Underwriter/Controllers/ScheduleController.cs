@@ -8,6 +8,7 @@
 	using Code.ReportGenerator;
 	using ConfigManager;
 	using Infrastructure.Attributes;
+	using log4net;
 	using PaymentServices.Calculators;
 	using Web.Models;
 
@@ -17,6 +18,7 @@
 		private readonly ICashRequestRepository _cashRequests;
 		private readonly APRCalculator _aprCalc;
 		private readonly ICustomerRepository _customerRepository;
+	    private static readonly ILog Log = LogManager.GetLogger(typeof (ScheduleController));
 
 		public ScheduleController(LoanBuilder loanBuilder, ICashRequestRepository cashRequests, ICustomerRepository customerRepository)
 		{
@@ -57,6 +59,10 @@
 			var apr = loan.LoanAmount == 0 ? 0 : _aprCalc.Calculate(loan.LoanAmount, loan.Schedule, loan.SetupFee, loan.Date);
 
 			var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
+            
+            
+            //TODO calculate offer
+            Log.DebugFormat("calculate offer for customer {0}", cr.Customer.Id);
 
 			return loanOffer;
 		}

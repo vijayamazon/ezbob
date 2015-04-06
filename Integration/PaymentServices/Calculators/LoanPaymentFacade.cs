@@ -52,6 +52,9 @@
 			};
 
 			loan.AddTransaction(transactionItem);
+            
+            //TODO add payment to new payment table
+		    Log.InfoFormat("Add payment of {0} to loan {1}", amount, loan.Id);
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 

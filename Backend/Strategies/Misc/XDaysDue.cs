@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
-	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -14,30 +13,7 @@
 
 		public override void Execute() {
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				int loanScheduleId = sr["id"];
-				decimal amountDue = sr["AmountDue"];
-				string firstName = sr["FirstName"];
-				string mail = sr["Email"];
-				DateTime sceduledDate = sr["SceduledDate"];
-				string creditCard = sr["CreditCardNo"];
-				int customerId = sr["customerId"];
-
-				var variables = new Dictionary<string, string> {
-					{"FirstName", firstName},
-					{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
-					{"Date", FormattingUtils.FormatDateToString(sceduledDate)},
-					{"DebitCard", creditCard}
-				};
-
-				XDaysDueMails xDaysDueMails = new XDaysDueMails(customerId, "Mandrill - 5 days notice", variables);
-				xDaysDueMails.Execute();
-
-				DB.ExecuteNonQuery("UpdateFiveDaysDueMailSent",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("Id", loanScheduleId),
-					new QueryParameter("UpdateFiveDaysDueMailSent", true)
-				);
-
+                SendMailAndMarkDB("Mandrill - 5 days notice", sr, "UpdateFiveDaysDueMailSent", "UpdateFiveDaysDueMailSent");
 				return ActionResult.Continue;
 			}, // for each
 				"GetCustomersFiveDaysDue", 
@@ -46,32 +22,38 @@
 			);
 
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
-				int loanScheduleId = sr["id"];
-				decimal amountDue = sr["AmountDue"];
-				string firstName = sr["FirstName"];
-				string mail = sr["Email"];
-				DateTime sceduledDate = sr["SceduledDate"];
-				string creditCard = sr["CreditCardNo"];
-				int customerId = sr["customerId"];
+                SendMailAndMarkDB("Mandrill - 2 days notice", sr, "UpdateTwoDaysDueMailSent", "UpdateTwoDaysDueMailSent");
+				return ActionResult.Continue;
+			}, "GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
+		} // Execute
 
-				var variables = new Dictionary<string, string> {
+        private void SendMailAndMarkDB(string templateName, SafeReader sr, string spName, string fieldName) {
+            decimal amountDue = sr["AmountDue"];
+            string firstName = sr["FirstName"];
+            //string mail = sr["Email"];
+            DateTime sceduledDate = sr["SceduledDate"];
+            string creditCard = sr["CreditCardNo"];
+            int customerId = sr["customerId"];
+            int loanScheduleId = sr["id"];
+
+            var variables = new Dictionary<string, string> {
 					{"FirstName", firstName},
 					{"AmountDueScalar", amountDue.ToString(CultureInfo.InvariantCulture)},
 					{"Date", FormattingUtils.FormatDateToString(sceduledDate)},
 					{"DebitCard", creditCard}
 				};
 
-				XDaysDueMails xDaysDueMails = new XDaysDueMails(customerId, "Mandrill - 2 days notice", variables);
-				xDaysDueMails.Execute();
+            XDaysDueMails xDaysDueMails = new XDaysDueMails(customerId, templateName, variables);
+            xDaysDueMails.Execute();
 
-				DB.ExecuteNonQuery("UpdateTwoDaysDueMailSent",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("Id", loanScheduleId),
-					new QueryParameter("UpdateTwoDaysDueMailSent", true)
-				);
+            DB.ExecuteNonQuery(spName,
+                    CommandSpecies.StoredProcedure,
+                    new QueryParameter("Id", loanScheduleId),
+                    new QueryParameter(fieldName, true)
+                );
 
-				return ActionResult.Continue;
-			}, "GetCustomersTwoDaysDue", CommandSpecies.StoredProcedure);
-		} // Execute
+            //TODO update loan schedule x days due 
+            Log.Info("update loan schedule x days due for customer {0}", customerId);
+        }
 	} // class XDaysDue
 } // namespace

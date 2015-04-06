@@ -9,6 +9,7 @@
 	using Infrastructure.Attributes;
 	using Models;
 	using Infrastructure.csrf;
+	using log4net;
 	using StructureMap;
 
 	public class LoanOptionsController : Controller {
@@ -17,7 +18,7 @@
 		private readonly ILoanOptionsRepository _loanOptionsRepository;
 		private readonly ILoanRepository _loanRepository;
 		private readonly ICaisFlagRepository _caisFlagRepository;
-
+	    private readonly ILog Log = LogManager.GetLogger(typeof (LoanOptionsController));
 		public LoanOptionsController(ILoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository, ICustomerStatusHistoryRepository customerStatusHistoryRepository, CustomerStatusesRepository customerStatusesRepository) {
 			_loanOptionsRepository = loanOptionsRepository;
 			_loanRepository = loanRepository;
@@ -111,6 +112,9 @@
 				customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}
 
+            //TODO update new loan options table
+            Log.DebugFormat("update loan options for loan {0}", options.LoanId);
+            
 			return Json(new { });
 		}
 	}

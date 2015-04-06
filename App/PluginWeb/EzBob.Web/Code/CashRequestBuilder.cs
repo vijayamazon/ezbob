@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using Ezbob.Backend.Models;
 	using Ezbob.Utils.Extensions;
+	using log4net;
 	using SalesForceLib.Models;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -55,6 +56,9 @@
 			};
 
 			customer.CashRequests.Add(cashRequest);
+
+            //TODO add new cash request
+            Log.DebugFormat("add new cash request for customer {0}", customer.Id);
 			
 			if (originator != CashRequestOriginator.FinishedWizard) {
 				CustomerRequestedLoan requestedLoan = customer.CustomerRequestedLoan.LastOrDefault();
@@ -138,6 +142,9 @@
 
 			_historyRepository.LogAction(DecisionActions.Approve, sReason, user, customer);
 
+            //TODO add new cash request / offer / decision
+            Log.DebugFormat("add new cash request for customer {0}", customer.Id);
+
 			return cashRequest;
 		} // CreateQuickOfferCashRequest
 
@@ -190,5 +197,6 @@
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IDecisionHistoryRepository _historyRepository;
 		private readonly ServiceClient m_oServiceClient;
+	    private static readonly ILog Log = LogManager.GetLogger(typeof (CashRequestBuilder));
 	} // class CashRequestBuilder
 } // namespace
