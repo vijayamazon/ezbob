@@ -1,0 +1,3 @@
+ALTER TABLE LoanBrokerCommission ALTER COLUMN CardInfoID INT NULL
+
+GO
