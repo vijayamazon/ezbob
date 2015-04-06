@@ -6,7 +6,6 @@
 
 	public class CodeToSql {
 		public static string GetCreateTable<T>() where T : class {
-			var oPkFields = new List<string>();
 			var oFields = new List<string>();
 			var oConstraints = new List<string>();
 
@@ -82,6 +81,14 @@
 
 			PropertyTraverser.Traverse(typeof(T), (ignored, oPropInfo) => {
 				string sType = T2T(oPropInfo);
+
+				List<bool> oKeyAttr = oPropInfo.CustomAttributes
+					.Where(a => a.AttributeType == typeof(PKAttribute) && a.ConstructorArguments.Count > 0)
+					.Select(a => (bool)a.ConstructorArguments[0].Value)
+					.ToList();
+
+				if (oKeyAttr.Count > 0 && oKeyAttr[0]) // is identity
+					return;
 
 				if (!string.IsNullOrWhiteSpace(sType)) {
 					if (oPropInfo.DeclaringType == typeof(T)) {
