@@ -7,7 +7,8 @@ GO
 
 ALTER PROCEDURE LoadCashRequestsForAutomationReport
 @CustomerID INT,
-@DateFrom DATETIME
+@DateFrom DATETIME,
+@DateTo DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -22,17 +23,19 @@ BEGIN
 		END AS DecisionTime,
 		CASE
 			WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Rejected') THEN CONVERT(BIT, 0)
-			WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision IN ('Approved', 'ApprovedPending')) THEN CONVERT(BIT, 1)
+			WHEN (r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Approved') THEN CONVERT(BIT, 1)
 			WHEN (r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve') THEN CONVERT(BIT, 1)
 		END AS IsApproved,
 		ISNULL(CASE
-			WHEN r.IdUnderwriter IS NULL
-				THEN CASE
+			WHEN r.ManagerApprovedSum IS NOT NULL THEN r.ManagerApprovedSum
+			ELSE CASE
+				WHEN r.IdUnderwriter IS NULL THEN CASE
 					WHEN r.UnderwriterComment = 'Auto Re-Approval' THEN r.ManagerApprovedSum
 					ELSE r.SystemCalculatedSum
 				END
-			ELSE
-				ISNULL(r.ManagerApprovedSum, r.SystemCalculatedSum)
+				ELSE
+					r.SystemCalculatedSum
+				END
 		END, 0) AS ApprovedAmount,
 		r.InterestRate,
 		ISNULL(r.ApprovedRepaymentPeriod, r.RepaymentPeriod) AS RepaymentPeriod,
@@ -64,14 +67,14 @@ BEGIN
 			(CASE
 				WHEN r.IdUnderwriter IS NULL THEN r.SystemDecisionDate
 				ELSE r.UnderwriterDecisionDate
-			END) < 'April 1 2015'
+			END) < ISNULL(@DateTo, 'April 1 2015')
 		)
 		AND
 		(r.IdUnderwriter IS NULL OR r.IdUnderwriter != 1)
 		AND (
 			(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Rejected')
 			OR (
-				(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision IN ('Approved', 'ApprovedPending'))
+				(r.IdUnderwriter IS NOT NULL AND r.UnderwriterDecision = 'Approved')
 				OR
 				(r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve')
 			)

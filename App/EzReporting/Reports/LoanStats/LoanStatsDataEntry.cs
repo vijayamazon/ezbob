@@ -30,7 +30,7 @@
 		public Decimal LoanAmount { get; private set; }
 		public DateTime IssueDate { get; private set; }
 		public int LoanTerm { get; private set; }
-		public List<int> RequestIDHistory { get; private set; }
+		public List<long> RequestIDHistory { get; private set; }
 
 		public bool IsLoanIssued { get { return LoanID != 0; } }
 		public bool IsNewClient { get { return LoanSeqNo == 1; } }
@@ -48,7 +48,7 @@
 		} // IsFirstLoan
 
 		public LoanStatsDataEntry(SafeReader sr) {
-			RequestIDHistory = new List<int>();
+			RequestIDHistory = new List<long>();
 			LoanTerm = 0;
 			Update(sr);
 			FirstDecisionDate = LastDecisionDate;

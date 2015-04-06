@@ -15,6 +15,8 @@
 
 		public DateTime? DateFrom { get; set; }
 
+		public DateTime? DateTo { get; set; }
+
 		public class ResultRow : AResultRow {
 			public long CashRequestID { get; set; }
 			public int CustomerID { get; set; }

@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Database;
@@ -30,10 +31,31 @@
 		} // constructor
 
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
+			if (ManualItems.Count > 0) {
+				if ((FirstManual.CustomerID != sr.CustomerID) || (FirstManual.IsApproved != sr.IsApproved)) {
+					this.log.Alert(
+						"Inconsistent customer id or manual decision while adding an item to datum. " +
+						"Existing customer '{0}', is approved: '{1}'. " +
+						"Appending customer '{2}', is approved: '{3}'.",
+						FirstManual.CustomerID, FirstManual.IsApproved,
+						sr.CustomerID, sr.IsApproved
+					);
+					throw new Exception("Inconsistent manual decision.");
+				} // if
+			} // if
+
 			var mdi = new ManualDatumItem(sr, this.tag, this.log);
 			mdi.Calculate();
 			ManualItems.Add(mdi);
 		} // Add
+
+		/// <summary>
+		/// Gets this datum manual decision. FirstManaul always exists because it must be specified in constructor,
+		/// all the items share the same decision, so checking the first is enough.
+		/// </summary>
+		public bool IsApproved {
+			get { return FirstManual.IsApproved; }
+		} // IsApproved
 
 		public string Tag { get; set; }
 		public int CustomerID { get; set; }
@@ -65,7 +87,7 @@
 			foreach (ManualDatumItem mi in ManualItems) {
 				var ai = new AutoDatumItem(mi, this.tag, this.log);
 				AutoItems.Add(ai);
-				ai.RunAutomation(isHomeOwner, db);
+				// ai.RunAutomation(isHomeOwner, db);
 				ai.SetAdjustedLoanCount(mi.LoanCount);
 			} // for each manual item
 		} // RunAutomation
@@ -86,10 +108,10 @@
 				"Customer is default now",
 				"Has not cured loan",
 				"Has 14 days late loan",
-				ManualDatumItem.CsvTitles("First"),
+				// ManualDatumItem.CsvTitles("First"),
 				"Decision count",
 				ManualDatumItem.CsvTitles("Last"),
-				AutoDatumItem.CsvTitles("First"),
+				// AutoDatumItem.CsvTitles("First"),
 				AutoDatumItem.CsvTitles("Last"),
 				/*
 				AMedalAndPricing.CsvTitles("Auto min"),
@@ -131,11 +153,11 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.Default.Exist ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.Bad.Exist ? "Default" : "No");
 
-			curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
+			// curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
 			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);
 
-			curColumn = FirstAuto.ToXlsx(sheet, rowNum, curColumn);
+			// curColumn = FirstAuto.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = LastAuto.ToXlsx(sheet, rowNum, curColumn);
 
 			/*

@@ -10,6 +10,9 @@
 		} // Name
 
 		public override void Execute() {
+			DateFrom = new DateTime(2012, 9, 4, 0, 0, 0, DateTimeKind.Utc);
+			DateTo   = new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+
 			base.Execute();
 
 			SaveXlsx(string.Format(

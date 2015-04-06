@@ -54,7 +54,7 @@
 				},
 				"LoadAllLoansMetaData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("Today", new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc))
+				new QueryParameter("Today", spLoad.DateTo ?? new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc))
 			);
 
 			LoadCashRequests();
@@ -65,7 +65,6 @@
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
 				try {
-					d.FindLoans(CashRequestLoans, LoanSources);
 					d.RunAutomation(isHomeOwner, DB);
 				} catch (Exception e) {
 					Log.Alert(e, "Automation failed for customer {0}.", d.CustomerID);
@@ -87,15 +86,20 @@
 		private void CreateXlsx() {
 			Xlsx = new ExcelPackage();
 
-			ExcelWorksheet sheet = Xlsx.CreateSheet("Cash requests", false, CsvTitles);
-			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
 			ExcelWorksheet verifySheet = Xlsx.CreateSheet("Data verification", false);
+			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
+			ExcelWorksheet decisionSheet = Xlsx.CreateSheet("Decisions", false, CsvTitles);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
 			verifySheet.SetCellValue(1, 1, "Reference loan count");
 			verifySheet.SetCellValue(1, 2, 3938, sNumberFormat: "#,##0.00");
 			verifySheet.SetCellValue(2, 1, "Reference loan amount");
 			verifySheet.SetCellValue(2, 2, 37577566m, sNumberFormat: "#,##0.00");
+
+			verifySheet.SetCellValue(3, 1, "Reference approve count");
+			verifySheet.SetCellValue(3, 2, 4621, sNumberFormat: "#,##0.00");
+			verifySheet.SetCellValue(4, 1, "Reference approve amount");
+			verifySheet.SetCellValue(4, 2, 45888566m, sNumberFormat: "#,##0.00");
 
 			int curRow = 2;
 
@@ -109,7 +113,7 @@
 			var pc = new ProgressCounter("{0} items sent to .xlsx", Log, 50);
 
 			foreach (Datum d in Data) {
-				d.ToXlsx(sheet, curRow);
+				d.ToXlsx(decisionSheet, curRow);
 				curRow++;
 
 				foreach (Tuple<Stats, int> pair in stats)
@@ -158,6 +162,11 @@
 			set { this.spLoad.DateFrom = value; }
 		} // DateFrom
 
+		protected virtual DateTime? DateTo {
+			get { return this.spLoad.DateTo; }
+			set { this.spLoad.DateTo = value; }
+		} // DateTo
+
 		private void LoadCashRequests() {
 			Data.Clear();
 
@@ -183,8 +192,10 @@
 
 			Data.Clear();
 
-			foreach (var customerData in byCustomer.Values)
+			foreach (var customerData in byCustomer.Values) {
+				customerData.FindLoansAndFilterAraOut(CashRequestLoans, LoanSources);
 				Data.AddRange(customerData.Data);
+			} // for each
 
 			Log.Debug("{0} remained after filtering cash requests.", Grammar.Number(Data.Count, "data item"));
 		} // LoadCashRequests

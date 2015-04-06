@@ -153,6 +153,8 @@
 					lre.Category3 = ""; // TODO
 
 					lre.Region = CustomerRegions.ContainsKey(nCustomerID) ? CustomerRegions[nCustomerID] : "";
+
+					lre.LastCashRequestID = lse.RequestIDHistory[lse.RequestIDHistory.Count - 1];
 				} // for each entry
 			} // for each customer
 
@@ -190,6 +192,7 @@
 			sheet.Cells["E" + nRowNumber].Value = lre.DiscountPlan;
 			sheet.Cells["F" + nRowNumber].Value = lre.Offline;
 			sheet.Cells["G" + nRowNumber].Value = lre.LoanID;
+			// sheet.Cells["H" + nRowNumber].Value = lre.LastCashRequestID;
 			sheet.Cells["I" + nRowNumber].Value = lre.ClientID;
 			sheet.Cells["J" + nRowNumber].Value = lre.ClientName;
 			sheet.Cells["K" + nRowNumber].Value = lre.DateFirstApproved;
@@ -259,6 +262,7 @@
 			sheet.Cells["D" + nRowNumber].Value = "Customer selection (0-no, 1-yes)";
 			sheet.Cells["E" + nRowNumber].Value = "Discount plan (0, new13, old13)";
 			sheet.Cells["G" + nRowNumber].Value = "Loan ID";
+			// sheet.Cells["H" + nRowNumber].Value = "Last cash request ID";
 			sheet.Cells["I" + nRowNumber].Value = "Client ID";
 			sheet.Cells["J" + nRowNumber].Value = "Name";
 			sheet.Cells["K" + nRowNumber].Value = "Date first approved";

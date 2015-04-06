@@ -40,5 +40,6 @@
 		public string Category2 { get; set; }
 		public string Category3 { get; set; }
 		public string Region { get; set; }
+		public long LastCashRequestID { get; set; }
 	} // class LoanStatsReportEntry
 } // namespace

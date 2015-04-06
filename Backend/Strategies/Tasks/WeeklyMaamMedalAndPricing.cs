@@ -26,6 +26,7 @@
 			} // if
 
 			DateFrom = this.today.AddDays(-7);
+			DateTo = this.today;
 
 			Report rpt;
 
