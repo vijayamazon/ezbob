@@ -26,7 +26,7 @@
 			string sBrokerEmail = sp.ExecuteScalar<string>();
 
 			if (!string.IsNullOrWhiteSpace(sBrokerEmail))
-				aryAddresses.Add(new Addressee(sBrokerEmail, userID: CustomerData.BrokerID));
+				aryAddresses.Add(new Addressee(sBrokerEmail, userID: CustomerData.BrokerID, isBroker: true));
 
 			return aryAddresses.ToArray();
 		} // GetRecipients

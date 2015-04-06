@@ -69,8 +69,9 @@
 						new QueryParameter("TemplateName", oMeta.TemplateName)
 					);
 
-				    AddSalesForceActivity(now, oMeta, addr);
-					
+				    if (!addr.IsBroker) {
+				        AddSalesForceActivity(now, oMeta, addr);
+				    }
 				} // if should register
 			} // foreach
 		}
