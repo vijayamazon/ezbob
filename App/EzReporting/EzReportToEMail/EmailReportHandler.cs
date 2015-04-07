@@ -177,6 +177,11 @@
 			Func<Report, DateTime, DateTime, ExcelPackage> oBuildXls,
 			DateTime? dTodayForMonthStart = null
 		) {
+            if (string.IsNullOrEmpty(report.ToEmail)) {
+                Debug("No emails defined for report {0} {1} to be sent to, not sending", report.Type, report.Title);
+                return;
+            }
+
 			if (report.IsDaily)
 				BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
 
