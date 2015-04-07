@@ -90,7 +90,7 @@ footer {
 .table-big{
     width: 100%;
     overflow-y: hidden;
-    overflow-x: scroll;
+    overflow-x: auto;
 }
 
 table.customer-list {

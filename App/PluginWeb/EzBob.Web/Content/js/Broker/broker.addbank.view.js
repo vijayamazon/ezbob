@@ -34,6 +34,8 @@ EzBob.Broker.AddBankView = EzBob.Broker.SubmitView.extend({
 	        that.$el.find("#SortCode #SortCode1").trigger("change");
 	    });
 
+	    this.$el.find('input[nextSerial]').serialFill();
+
 	    this.inputChanged();
 	},
 

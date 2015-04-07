@@ -77,7 +77,7 @@ BEGIN
 	BEGIN
 		SELECT @LinkedBank = CAST (
 			CASE 
-				WHEN EXISTS (SELECT * FROM Broker b INNER JOIN CardInfo ci ON b.BrokerID = ci.BrokerID) THEN 1
+				WHEN EXISTS (SELECT 1 FROM CardInfo ci WHERE ci.BrokerID = @BrokerID AND ci.IsDefault = 1) THEN 1
 				ELSE 0
 			END AS BIT)
 		

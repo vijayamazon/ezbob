@@ -54,14 +54,15 @@
 		/// </summary>
 		public virtual int? ApprovedRepaymentPeriod { get; set; }
 
+        [Obsolete]
 		public virtual bool UseSetupFee
 		{
 			get { return _useSetupFee; }
 			set { _useSetupFee = value; }
 		}
-
+        [Obsolete]
 		public virtual bool UseBrokerSetupFee { get; set; }
-
+        [Obsolete]
 		public virtual int? ManualSetupFeeAmount { get; set; }
 		public virtual decimal? ManualSetupFeePercent { get; set; }
         public virtual decimal? BrokerSetupFeePercent { get; set; }
