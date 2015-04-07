@@ -21,10 +21,15 @@ for %%d in (
 	%MY_PATH%SPs
 ) do (
 	echo Executing %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d...
-	call %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d
-	echo Executing %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d complete
 
-	if %ERRORLEVEL% NEQ 0 goto :LoopExitPoint
+	call %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d
+
+	if %ERRORLEVEL% NEQ 0 (
+		echo Executing %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d failed.
+		goto :LoopExitPoint
+	)
+
+	echo Executing %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d complete.
 )
 
 :LoopExitPoint
