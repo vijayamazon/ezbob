@@ -90,14 +90,17 @@
 			return new List<TitledValue[]> {
 				new[] {
 					new TitledValue("count", Count),
+				},
+				new[] {
 					new TitledValue("both approved / total %", Count, Total.Count),
 					new TitledValue("both approved / manually approved %", Count, ManuallyApproved.Count),
 					new TitledValue("both approved / autoApproved %", Count, AutoApproved.Count),
 				},
 				new[] {
 					new TitledValue("loan count", this.manualLoanCount.Total.Count),
+				},
+				new[] {
 					new TitledValue("default loan count", this.manualLoanCount.Default.Count),
-					new TitledValue("bad loan count", this.manualLoanCount.Bad.Count),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -111,19 +114,19 @@
 				new[] {
 					new TitledValue("manual amount", this.manualAmount),
 					new TitledValue("manual amount / total manual amount %", this.manualAmount, ManuallyApproved.Amount),
+				},
+				new[] {
 					new TitledValue("auto amount", this.autoAmount),
-					new TitledValue("auto amount / totalAuto amount %", this.autoAmount, AutoApproved.Amount),
+					new TitledValue("auto amount / total auto amount %", this.autoAmount, AutoApproved.Amount),
 					new TitledValue("auto amount / manual amount %", this.autoAmount, this.manualAmount),
 				},
 				new[] {
 					new TitledValue("manual loan amount", this.manualLoanCount.Total.Amount),
 					new TitledValue("manual default loan amount", this.manualLoanCount.Default.Amount),
-					new TitledValue("manual bad loan amount", this.manualLoanCount.Bad.Amount),
 				},
 				new[] {
 					new TitledValue("auto loan amount", this.autoLoanCount.Total.Amount),
 					new TitledValue("auto default loan amount", this.autoLoanCount.Default.Amount),
-					new TitledValue("auto bad loan amount", this.autoLoanCount.Bad.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues

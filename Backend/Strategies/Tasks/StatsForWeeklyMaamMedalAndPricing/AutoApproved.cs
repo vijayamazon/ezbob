@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
+	using System.Collections.Generic;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Logger;
@@ -31,12 +32,20 @@
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
-			return new[] {
-				new TitledValue("count", Count),
-				new TitledValue("approved / total %", Count, Total.Count),
-				new TitledValue("approved / processed %", Count, AutoProcessed.Count),
-			};
+			return null;
 		} // PrepareCountRowValues
+
+		protected override List<TitledValue[]> PrepareMultipleCountRowValues() {
+			return new List<TitledValue[]> {
+				new[] {
+					new TitledValue("count", Count),
+				},
+				new[] {
+					new TitledValue("approved / total %", Count, Total.Count),
+					new TitledValue("approved / processed %", Count, AutoProcessed.Count),
+				},
+			};
+		} // PrepareMultipleCountRowValues
 
 		protected override TitledValue[] PrepareAmountRowValues() {
 			return new[] {

@@ -57,7 +57,7 @@
 			get { return MaxDataItemsCount * 2 + 1; }
 		} // LastColumnNumber
 
-		public const int MaxDataItemsCount = 6;
+		public const int MaxDataItemsCount = 3;
 
 		public static ExcelRange SetBorder(ExcelRange range) {
 			range.Style.Border.BorderAround(ExcelBorderStyle.Thin, BorderColor);

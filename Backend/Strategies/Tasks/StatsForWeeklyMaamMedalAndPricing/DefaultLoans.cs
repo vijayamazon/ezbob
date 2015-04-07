@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
+	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
@@ -13,7 +14,7 @@
 		) : base(
 			log,
 			sheet,
-			"Default loans (including 14 days late)",
+			"Default loans",
 			total,
 			manuallyApproved,
 			autoApproved
@@ -27,24 +28,45 @@
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
-			return new[] {
-				new TitledValue("count", Count),
-				new TitledValue("count / total %", Count, Total.Count),
-				new TitledValue("count / manually approved count %", Count, ManuallyApproved.Count),
-				new TitledValue("count / auto approved count %", Count, AutoApproved.Count),
-			};
+			return null;
 		} // PrepareCountRowValues
 
-		protected override TitledValue[] PrepareAmountRowValues() {
-			return new[] {
-				new TitledValue("approved amount", this.approvedAmount),
-				new TitledValue("approved amount / manually approved amount %", this.approvedAmount, ManuallyApproved.Amount),
-				new TitledValue("approved amount / auto approved amount %", this.approvedAmount, AutoApproved.Amount),
-				new TitledValue("loan amount", Amount),
-				new TitledValue("loan amount / manually approved amount %", Amount, ManuallyApproved.Amount),
-				new TitledValue("loan amount / auto approved amount %", Amount, AutoApproved.Amount),
+		protected override List<TitledValue[]> PrepareMultipleCountRowValues() {
+			return new List<TitledValue[]> {
+				new[] {
+					new TitledValue("count", Count),
+				},
+				new[] {
+					new TitledValue("count / total %", Count, Total.Count),
+					new TitledValue("count / manually approved count %", Count, ManuallyApproved.Count),
+					new TitledValue("count / auto approved count %", Count, AutoApproved.Count),
+				},
 			};
+		} // PrepareMultipleCountRowValues
+
+		protected override TitledValue[] PrepareAmountRowValues() {
+			return null;
 		} // PrepareAmountRowValues
+
+		protected override List<TitledValue[]> PrepareMultipleAmountRowValues() {
+			return new List<TitledValue[]> {
+				new[] {
+					new TitledValue("approved amount", this.approvedAmount),
+				},
+				new[] {
+					new TitledValue("approved amount / manually approved amount %", this.approvedAmount, ManuallyApproved.Amount),
+					new TitledValue("approved amount / auto approved amount %", this.approvedAmount, AutoApproved.Amount),
+				},
+				new[] {
+					new TitledValue("loan amount", Amount),
+				},
+				new[] {
+					new TitledValue("loan amount / manually approved amount %", Amount, ManuallyApproved.Amount),
+					new TitledValue("loan amount / auto approved amount %", Amount, AutoApproved.Amount),
+					new TitledValue("loan amount / issued amount %", Amount, (ManuallyApproved as ManuallyApproved).LoanCount.Total.Amount),
+				},
+			};
+		} // PrepareMultipleAmountRowValues
 
 		private AStatItem Total { get { return Superior[0]; } }
 		private AStatItem ManuallyApproved { get { return Superior[1]; } }

@@ -75,14 +75,17 @@
 			return new List<TitledValue[]> {
 				new [] {
 					new TitledValue("count", Count),
+				},
+				new [] {
 					new TitledValue("count / total %", Count, Total.Count),
 					new TitledValue("count / rejected %", Count, Rejected.Count),
 					new TitledValue("count / approved %", Count, Approved.Count),
 				},
 				new [] {
 					new TitledValue("loan count", this.loanCount.Total.Count),
+				},
+				new [] {
 					new TitledValue("default loan count", this.loanCount.Default.Count),
-					new TitledValue("bad loan count", this.loanCount.Bad.Count),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -100,7 +103,6 @@
 				new [] {
 					new TitledValue("loan amount", this.loanCount.Total.Amount),
 					new TitledValue("default loan amount", this.loanCount.Default.Amount),
-					new TitledValue("bad loan amount", this.loanCount.Bad.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues

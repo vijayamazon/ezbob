@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Logger;
-	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class LoanCount {
 		public static LoanCount operator +(LoanCount lc, LoanMetaData lmd) {
@@ -25,14 +24,12 @@
 			IDs = new SortedSet<int>();
 			Total = new CountAmount();
 			Default = new CountAmount();
-			Bad = new CountAmount();
 		} // constructor
 
 		public LoanCount Clone() {
 			var lc = new LoanCount(Log) {
 				Total = Total.Clone(),
 				Default = Default.Clone(),
-				Bad = Bad.Clone(),
 			};
 
 			lc.AddLoanID(IDs);
@@ -43,13 +40,11 @@
 		public void Clear() {
 			IDs.Clear();
 			Total.Clear();
-			Bad.Clear();
 			Default.Clear();
 		} // Clear
 
 		public void Cap(decimal amount) {
 			Total.Cap(amount);
-			Bad.Cap(amount);
 			Default.Cap(amount);
 		} // Cap
 
@@ -62,14 +57,10 @@
 			Total.Count++;
 			Total.Amount += lmd.LoanAmount;
 
-			if ((lmd.LoanStatus == LoanStatus.Late) || (lmd.MaxLateDays > 13)) {
+			// Condition is "> 14" due to implementation of SQL Server's DATEDIFF function.
+			if (lmd.MaxLateDays > 14) {
 				Default.Count++;
 				Default.Amount += lmd.LoanAmount;
-
-				if (lmd.MaxLateDays > 13) {
-					Bad.Count++;
-					Bad.Amount += lmd.LoanAmount;
-				} // if
 			} // if
 		} // Append
 
@@ -81,13 +72,11 @@
 
 			Total += other.Total;
 			Default += other.Default;
-			Bad += other.Bad;
 		} // Append
 
 		public SortedSet<int> IDs { get; private set; }
 		public CountAmount Total { get; private set; }
 		public CountAmount Default { get; private set; }
-		public CountAmount Bad { get; private set; }
 
 		public class CountAmount {
 			public static CountAmount operator +(CountAmount a, CountAmount b) {

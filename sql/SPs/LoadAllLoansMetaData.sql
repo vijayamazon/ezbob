@@ -12,7 +12,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	;WITH late_list AS (
-		SELECT
+		-- Paid Early and Paid on Time are not interesting anyway.
+		SELECT DISTINCT -- Looking only on not Paid schedules and calculating delay between scheduled time and today.
 			s.LoanID,
 			DATEDIFF(day, s.Date, @Today) AS LateDays
 		FROM
@@ -20,19 +21,65 @@ BEGIN
 		WHERE
 			s.[Date] < @Today
 			AND
-			s.Status NOT IN ('PaidOnTime', 'PaidEarly')
-			AND (
-				s.Status != 'Paid' OR EXISTS (
-					SELECT
-						lst.Id
-					FROM
-						LoanScheduleTransaction lst
-						INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-					WHERE
-						lst.ScheduleID = s.Id
-						AND
-						t.PostDate > @Today
-				)
+			s.Status NOT IN ('PaidOnTime', 'PaidEarly', 'Paid')
+		UNION
+		SELECT DISTINCT -- Looking only on not Paid schedules and calculating delay between scheduled time and transaction time.
+			s.LoanID,
+			DATEDIFF(day, s.Date, t.PostDate) AS LateDays
+		FROM
+			LoanSchedule s
+			INNER JOIN LoanScheduleTransaction lst ON s.Id = lst.ScheduleID
+			INNER JOIN LoanTransaction t
+				ON lst.TransactionID = t.Id
+				AND t.Type = 'PaypointTransaction'
+				AND t.Status = 'Done'
+				AND t.PostDate < @Today
+		WHERE
+			s.[Date] < @Today
+			AND
+			s.Status NOT IN ('PaidOnTime', 'PaidEarly', 'Paid')
+		UNION
+		SELECT DISTINCT -- Looking only on Paid schedules and calculating delay between scheduled time and transaction time.
+			s.LoanID,
+			DATEDIFF(day, s.Date, t.PostDate) AS LateDays
+		FROM
+			LoanSchedule s
+			INNER JOIN LoanScheduleTransaction lst ON s.Id = lst.ScheduleID
+			INNER JOIN LoanTransaction t
+				ON lst.TransactionID = t.Id
+				AND t.Type = 'PaypointTransaction'
+				AND t.Status = 'Done'
+				AND t.PostDate < @Today
+		WHERE
+			s.[Date] < @Today
+			AND
+			s.Status = 'Paid'
+		UNION
+		SELECT DISTINCT -- Looking only on Paid schedules that where paid after today and calculating delay between scheduled time and today.
+			s.LoanID,
+			DATEDIFF(day, s.Date, @Today) AS LateDays
+		FROM
+			LoanSchedule s
+			INNER JOIN LoanScheduleTransaction lst ON s.Id = lst.ScheduleID
+			INNER JOIN LoanTransaction t
+				ON lst.TransactionID = t.Id
+				AND t.Type = 'PaypointTransaction'
+				AND t.Status = 'Done'
+				AND t.PostDate < @Today
+		WHERE
+			s.[Date] < @Today
+			AND
+			s.Status = 'Paid'
+			AND EXISTS (
+				SELECT 1
+				FROM LoanScheduleTransaction lst
+				INNER JOIN LoanTransaction t
+					ON lst.TransactionID = t.Id
+					AND t.Type = 'PaypointTransaction'
+					AND t.Status = 'Done'
+					AND t.PostDate >= @Today
+				WHERE
+					lst.ScheduleID = s.Id
 			)
 	), max_late AS (
 		SELECT
