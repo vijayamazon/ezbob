@@ -53,7 +53,7 @@
 			} catch (Exception ex) {
 				Log.WarnFormat("Failed to parse the file {0} \n {1}", fileName, ex);
 				return new ParsedBankAccount {
-					Error = "Failed to parse the file " + fileName
+					Error = string.Format("Failed to parse the file {0} \n{1}", fileName, ex.Message)
 				};
 			}
 		}
@@ -73,7 +73,9 @@
 				return ParseCsv(file);
 			} catch (Exception ex) {
 				Log.WarnFormat("Failed to parse the file {0} \n {1}", filePath, ex);
-				return null;
+                return new ParsedBankAccount {
+                    Error = string.Format("Failed to parse the file {0} \n{1}", filePath, ex.Message)
+                };
 			}
 		}
 
@@ -394,7 +396,8 @@
 						cellLower.Contains("description") ||
 						cellLower.Contains("text") ||
 						cellLower.Contains("money") ||
-						cellLower.Contains("narrative")) {
+						cellLower.Contains("narrative") ||
+                        cellLower.Contains("memo")) {
 						isHeader = true;
 						break;
 					}
@@ -451,7 +454,7 @@
 						continue;
 					}
 
-					if (cellLower.Contains("description") || cellLower.Contains("text") || cellLower.Contains("narrative")) {
+					if (cellLower.Contains("description") || cellLower.Contains("text") || cellLower.Contains("narrative") || cellLower.Contains("memo")) {
 						if (headerColumns.Description == null)
 							headerColumns.Description = col;
 						else

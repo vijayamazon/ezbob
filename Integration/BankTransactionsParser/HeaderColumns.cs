@@ -25,13 +25,13 @@
 		}
 
 		public override string ToString() {
-			return string.Format("Date: {0} Amount: {1} Credit:{2} Debit:{3} Description:{4} Balance:{5}", 
-				Date.ColumnName ?? "not found",
-				Amount.ColumnName ?? "not found",
-				Credit.ColumnName ?? "not found",
-				Debit.ColumnName ?? "not found",
-				Description.ColumnName ?? "not found",
-				Balance.ColumnName ?? "not found");
+			return string.Format("Date: {0}, Amount: {1}, Credit:{2}, Debit:{3}, Description:{4}, Balance:{5}", 
+				Date != null ? Date.ColumnName : "not found",
+                Amount != null ? Amount.ColumnName : "not found",
+                Credit != null ? Credit.ColumnName : "not found",
+                Debit != null ? Debit.ColumnName : "not found",
+                Description != null ? Description.ColumnName : "not found",
+                Balance != null ? Balance.ColumnName : "not found");
 		}
 	}
 }
