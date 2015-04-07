@@ -20,6 +20,7 @@
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using NHibernate;
+	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -129,6 +130,16 @@
 			cr.ManagerApprovedSum = sum;
 			cr.Customer.ManagerApprovedSum = sum;
 			cr.LoanTemplate = null;
+
+            if (cr.Customer.Broker != null) {
+                BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
+                bool hasLoans = cr.Customer.Loans.Any();
+                DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
+                Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(sum, hasLoans, firstLoanDate);
+                cr.BrokerSetupFeePercent = commission.Item1;
+                cr.ManualSetupFeePercent = commission.Item2;
+            }
+
 			_cashRequestsRepository.SaveOrUpdate(cr);
 
 			log.Debug("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
