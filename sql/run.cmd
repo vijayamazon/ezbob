@@ -17,7 +17,6 @@ for %%d in (
 	%MY_PATH%Views
 	%MY_PATH%SPs
 
-	%MY_PATH%Views_2
 ) do @( call %RUN_ONE_DIR% %RUN_ONE_DIR% %BASH% %SCRIPT% %%d )
 
 echo.
@@ -29,6 +28,8 @@ echo Output files:
 echo.
 
 dir /A-H-S-D /S /B output*.*
+if %ERRORLEVEL% NEQ 0 exit 1
+
 
 echo.
 echo Output files - end of list.
