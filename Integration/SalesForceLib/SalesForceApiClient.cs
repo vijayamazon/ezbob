@@ -90,9 +90,10 @@
                 this.Log.ErrorFormat("SalesForce UpdateCloseOpportunityService null session id");
                 return;
             }
-            // max length of deal lost reason is 100
-            if (model.DealLostReason != null && model.DealLostReason.Length > 100) {
-                model.DealLostReason = model.DealLostReason.Substring(0, 100);
+            // max length of deal lost reason is 255
+            const int maxDealLostReasonLength = 255;
+            if (model.DealLostReason != null && model.DealLostReason.Length > maxDealLostReasonLength) {
+                model.DealLostReason = model.DealLostReason.Substring(0, maxDealLostReasonLength);
             }
 
             string result;
