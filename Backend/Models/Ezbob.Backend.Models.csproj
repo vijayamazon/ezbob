@@ -50,6 +50,7 @@
     <Compile Include="AgreementModel.cs" />
     <Compile Include="Alibaba\CustomerDataSharing.cs" />
     <Compile Include="BankStatementDataModel.cs" />
+    <Compile Include="BrokerAddBankModel.cs" />
     <Compile Include="BrokerCustomerEntryModel.cs" />
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />
     <Compile Include="BrokerCustomerPersonalDataModel.cs" />

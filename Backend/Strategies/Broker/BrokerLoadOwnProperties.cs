@@ -30,6 +30,8 @@
 
 			Properties.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 			Properties.LotteryCode = sr["LotteryCode"];
+
+		    Log.Debug("BrokerLoadOwnProperties loaded \n{0}", Properties.ToString());
 		} // Execute
 
 		public BrokerProperties Properties { get; private set; }

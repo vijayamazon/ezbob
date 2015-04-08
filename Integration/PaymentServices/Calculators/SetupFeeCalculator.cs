@@ -1,106 +1,59 @@
 ﻿namespace PaymentServices.Calculators {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
-	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Loans;
 	using StructureMap;
 
-	public class SetupFeeCalculator {
-		public static void ReloadBrokerRepoCache() {
-			brokerRepoCache = new List<BrokerRepoCached>();
+    public class SetupFeeCalculator {
 
-			var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
-
-			foreach (BrokerSetupFeeMap x in brokerFeeRepository.GetAll())
-				brokerRepoCache.Add(new BrokerRepoCached(x));
-		} // ReloadBrokerCache
-
-		[SuppressMessage("ReSharper", "RedundantDelegateCreation")]
-		public SetupFeeCalculator(bool setupFee, bool brokerFee, int? manualAmount, decimal? manualPercent) {
+		public SetupFeeCalculator(decimal? manualPercent, decimal? brokerPercent) {
 			this.setupFeeFixed = CurrentValues.Instance.SetupFeeFixed;
-			this.setupFeePercent = CurrentValues.Instance.SetupFeePercent;
+			this.useMax = CurrentValues.Instance.SetupFeeMaxFixedPercent;
+            this.brokerSetupFeeRate = CurrentValues.Instance.BrokerSetupFeeRate;
 
-			this.defaultFeeSelector = CurrentValues.Instance.SetupFeeMaxFixedPercent
-				? new Func<decimal, decimal, decimal>(Math.Max)
-				: new Func<decimal, decimal, decimal>(Math.Min);
-
-			this.setupFee = setupFee;
-			this.brokerFee = brokerFee;
-			this.manualAmount = manualAmount;
 			this.manualPercent = manualPercent;
+		    this.brokerPercent = brokerPercent;
 		} // constructor
 
-		public decimal Calculate(decimal amount, bool useBrokerCache = false) {
-			// Use manual fee.
-			if (this.setupFee || this.brokerFee) {
-				bool hasManual =
-					(this.manualAmount.HasValue && this.manualAmount.Value > 0) ||
-					(this.manualPercent.HasValue && this.manualPercent.Value > 0);
+        public decimal Calculate(decimal amount) {
+			decimal? totalFeePercent = this.manualPercent + this.brokerPercent;
 
-				if (hasManual) {
-					return Math.Max(
-						Math.Floor(amount * (this.manualPercent ?? 0M)),
-						this.manualAmount ?? 0
-					);
-				} // if
-			} // if
+		    if (totalFeePercent.HasValue) {
+                var totalSetupFee = Math.Floor(amount * totalFeePercent.Value);
 
-			if (this.brokerFee) // Use broker fee.
-				return CalculateBroker(amount, useBrokerCache);
-			else if (this.setupFee) // Use default fee.
-				return this.defaultFeeSelector(Math.Floor(amount * this.setupFeePercent * 0.01m), this.setupFeeFixed);
-			else // Don't use fee.
-				return 0M;
+                if (this.useMax && totalSetupFee < this.setupFeeFixed) {
+                    return this.setupFeeFixed;
+                }
+
+                return totalSetupFee;
+            }
+
+		    return 0M;
 		} // Calculate
 
-		private decimal CalculateBroker(decimal amount, bool useBrokerCache) {
-			VariableValue oVar = CurrentValues.Instance.BrokerSetupFeeRate;
+		public decimal CalculateBrokerFee(decimal amount) {
+            //No broker fee
+            if (!this.brokerPercent.HasValue) {
+                return 0M;
+            }
 
-			if (oVar.Value.ToUpper() == "TABLE") {
-				if (useBrokerCache) {
-					if (brokerRepoCache == null)
-						return 0;
+		    decimal totalFee = Calculate(amount);
 
-					var cached = brokerRepoCache.FirstOrDefault(x => x.Matches((int)amount));
+            //1. Minimum fee - let's have it configurable, but for now make it 100 GBP per loan, of which broker fee will be calculated as 5% of loan amount, the rest is ezbob fee. 
+            //e.g. on 1000 GBP loan, 5%*1000=50 GBP broker fee, ezbob fee = 100 GBP less 50GBP broker fee = 50 GBP.
+            if (totalFee == this.setupFeeFixed) {
+                return Math.Floor(amount * this.brokerSetupFeeRate);
+            }
 
-					return cached == null ? 0 : cached.Fee;
-				} else {
-					var brokerFeeRepository = ObjectFactory.GetInstance<BrokerSetupFeeMapRepository>();
-					return brokerFeeRepository.GetFee((int)amount);
-				} // if
-			} // if
-
-			// ReSharper disable once RedundantCast
-			return amount * (decimal)oVar;
-		} // CalculateBroker
-
-		private class BrokerRepoCached {
-			public BrokerRepoCached(BrokerSetupFeeMap map) {
-				this.minAmount = map.MinAmount;
-				this.maxAmount = map.MaxAmount;
-				Fee = map.Fee;
-			} // constructor
-
-			public bool Matches(int amount) {
-				return this.minAmount <= amount && amount <= this.maxAmount;
-			} // Matches
-
-			public int Fee { get; set; }
-
-			private readonly int minAmount;
-			private readonly int maxAmount;
-		} // class BrokerRepoCached
-
-		private static List<BrokerRepoCached> brokerRepoCache;
+		    return Math.Floor(amount * this.brokerPercent.Value);
+		} // CalculateBrokerFee
 
 		private readonly int setupFeeFixed;
-		private readonly decimal setupFeePercent;
-		private readonly Func<decimal, decimal, decimal> defaultFeeSelector;
-		private readonly bool setupFee;
-		private readonly bool brokerFee;
-		private readonly int? manualAmount;
-		private readonly decimal? manualPercent;
+		private readonly bool useMax;
+	    private readonly decimal brokerSetupFeeRate;
+        private readonly decimal? manualPercent;
+        private readonly decimal? brokerPercent;
+
 	} // class SetupFeeCalculator
 } // namespace

@@ -11,7 +11,7 @@
 
 		public static string Msg(AStrategy oSource, string sMsg) {
 			return
-				(oSource == null ? string.Empty : oSource.Name + ": ") +
+				(string.IsNullOrEmpty(oSource.Name) ? string.Empty : oSource.Name + ": ") +
 				(string.IsNullOrWhiteSpace(sMsg) ? "Something exceptional happened" : sMsg);
 		} // Msg
 	} // class StrategyException

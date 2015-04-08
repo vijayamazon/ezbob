@@ -17,58 +17,58 @@ namespace PaymentServices.PacNet
             _logRepository = ObjectFactory.GetInstance<PacnetPaypointServiceLogRepository>();
         }
 
-        public PacnetReturnData SendMoney(int customerId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = null, string currencyCode = "GBP", string description = null)
+        public PacnetReturnData SendMoney(int userId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = null, string currencyCode = "GBP", string description = null)
         {
             var pacnetSendMoney = string.Format("Pacnet Send Money. Amount = {0}, bankNumber = {1}", amount, bankNumber);
             log.InfoFormat("SendMoney: amount={0}, bankNumber={1}, accountNumber = {2}, accountName = {3}, currencyCode={4}, description={5}", amount, bankNumber, accountNumber, accountName, currencyCode, description);
             try
             {
-                var result = _t.SendMoney(customerId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
-                Log(customerId, pacnetSendMoney);
+                var result = _t.SendMoney(userId, amount, bankNumber, accountNumber, accountName, fileName, currencyCode, description);
+                Log(userId, pacnetSendMoney);
                 return result;
             }
             catch (Exception e)
             {
                 log.Error(e);
-                Log(customerId, pacnetSendMoney, false, e.ToString());
+                Log(userId, pacnetSendMoney, false, e.ToString());
                 throw;
             }
         }
 
-        public PacnetReturnData CheckStatus(int customerId, string trackingNumber)
+        public PacnetReturnData CheckStatus(int userId, string trackingNumber)
         {
             try
             {
-                var result = _t.CheckStatus(customerId, trackingNumber);
-                Log(customerId, "Pacnet Check Status");
+                var result = _t.CheckStatus(userId, trackingNumber);
+                Log(userId, "Pacnet Check Status");
                 return result;
             }
             catch (Exception e)
             {
-                Log(customerId, "Pacnet Check Status", false, e.ToString());
+                Log(userId, "Pacnet Check Status", false, e.ToString());
                 throw;
             }
         }
 
-        public PacnetReturnData CloseFile(int customerId, string fileName)
+        public PacnetReturnData CloseFile(int userId, string fileName)
         {
             try
             {
                 log.InfoFormat("Closing file {0}", fileName);
-                var result = _t.CloseFile(customerId, fileName);
-                Log(customerId, "Pacnet Close File");
+                var result = _t.CloseFile(userId, fileName);
+                Log(userId, "Pacnet Close File");
                 return result;
             }
             catch (Exception e)
             {
-                Log(customerId, "Pacnet Close File", false, e.ToString());
+                Log(userId, "Pacnet Close File", false, e.ToString());
                 throw;
             }
         }
 
-        private void Log(int customerId, string typeRequest, bool requestStatus = true, string errorMessage = "")
+        private void Log(int userId, string typeRequest, bool requestStatus = true, string errorMessage = "")
         {
-            _logRepository.Log(customerId, DateTime.Now, typeRequest, requestStatus ? "Successful" : "Failed", errorMessage);
+            _logRepository.Log(userId, DateTime.Now, typeRequest, requestStatus ? "Successful" : "Failed", errorMessage);
         }
     }
 }

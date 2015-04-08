@@ -1410,6 +1410,13 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
 		}
 
+        [Activation]
+        private void BrokerTransferCommission()
+        {
+            ActionMetaData result = this.serviceClient.BrokerTransferCommission();
+            this.log.Debug("{0}", result.Status.ToString());
+        }
+
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;
 		private readonly ASafeLog log;

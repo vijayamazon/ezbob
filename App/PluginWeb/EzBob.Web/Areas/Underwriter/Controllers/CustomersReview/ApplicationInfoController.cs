@@ -20,6 +20,7 @@
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using NHibernate;
+	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -42,7 +43,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
-
+		
 		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
 
 		public ApplicationInfoController(
@@ -74,6 +75,7 @@
 			_suggestedAmountRepository = suggestedAmountRepository;
 			serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
+			
 		}
 
 		// Here we get VA\FCF\Turnover
@@ -128,6 +130,16 @@
 			cr.ManagerApprovedSum = sum;
 			cr.Customer.ManagerApprovedSum = sum;
 			cr.LoanTemplate = null;
+
+            if (cr.Customer.Broker != null) {
+                BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
+                bool hasLoans = cr.Customer.Loans.Any();
+                DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
+                Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(sum, hasLoans, firstLoanDate);
+                cr.BrokerSetupFeePercent = commission.Item1;
+                cr.ManualSetupFeePercent = commission.Item2;
+            }
+
 			_cashRequestsRepository.SaveOrUpdate(cr);
 
             //TODO update new offer table
@@ -274,54 +286,19 @@
 			return Json(true);
 		}
 
-		[HttpPost]
-		[Transactional]
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		public void SaveDetails(int id, string details)
-		{
-			var cust = _customerRepository.Get(id);
-			if (cust == null)
-				return;
+	    [HttpPost]
+	    [Transactional]
+	    [ValidateJsonAntiForgeryToken]
+	    [Ajax]
+	    public void SaveDetails(int id, string details) {
+	        var cust = _customerRepository.Get(id);
+	        if (cust == null)
+	            return;
 
-			cust.Details = details;
-		}
+	        cust.Details = details;
+	    }
 
-		[HttpPost]
-		[Transactional]
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeSetupFee(long id, bool enabled)
-		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.UseSetupFee = enabled;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).UseSetupFee = {1}", id, enabled);
-
-
-            //TODO update new offer table //Not in use any more
-            log.Debug("update offer for customer {0} setupfee {1}", cr.Customer.Id, enabled); 
-
-			return Json(new { error = (string)null });
-		}
-
-		[Transactional]
-		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeBrokerSetupFee(long id, bool enabled)
-		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.UseBrokerSetupFee = enabled;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
-
-            //TODO update new offer table //Not in use any more
-            log.Debug("update offer for customer {0} broker setup fee {1}", cr.Customer.Id, enabled); 
-
-			return Json(new { error = (string)null});
-		}
-
-		[Transactional]
+	    [Transactional]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
 		public JsonResult ChangeManualSetupFeePercent(long id, decimal? manualPercent)
 		{
@@ -345,17 +322,21 @@
 
 		[Transactional]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeManualSetupFeeAmount(long id, int? manualAmount)
+		public JsonResult ChangeBrokerSetupFeePercent(long id, decimal? brokerPercent)
 		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
+            var cr = _cashRequestsRepository.Get(id);
+            if (brokerPercent.HasValue && brokerPercent > 0) {
+                cr.BrokerSetupFeePercent = brokerPercent.Value * 0.01M;
+            } else {
+                cr.BrokerSetupFeePercent = null;
+            }
+            cr.LoanTemplate = null;
+            log.Debug("CashRequest({0}).BrokerSetupFeePercent percent: {1}", id, cr.BrokerSetupFeePercent);
 
             //TODO update new offer table
-            log.Debug("update offer for customer {0} setup fee amount {1}", cr.Customer.Id, manualAmount);
+            log.Debug("update offer for customer {0} broker setup fee percent {1}", cr.Customer.Id, brokerPercent);
 
-			return Json(new { });
+            return Json(new { });
 		}
 
 		[HttpPost]
@@ -654,15 +635,15 @@
 		public JsonResult ActivateMainStrategy(int customerId) {
 			int underwriterId = _context.User.Id;
 
-			new ServiceClient().Instance.MainStrategy1(
-				underwriterId,
-				customerId,
-				NewCreditLineOption.SkipEverythingAndApplyAutoRules,
-				0,
-				null,
-				MainStrategyDoAction.Yes,
-				MainStrategyDoAction.Yes
-			);
+            //new ServiceClient().Instance.MainStrategy1(
+            //    underwriterId,
+            //    customerId,
+            //    NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+            //    0,
+            //    null,
+            //    MainStrategyDoAction.Yes,
+            //    MainStrategyDoAction.Yes
+            //);
 
 			return Json(true);
 		}

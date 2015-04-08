@@ -826,6 +826,8 @@
     <Content Include="Content\img\valentine2015scratch\win.png" />
     <Content Include="Content\js\App\ezbob.bindings.js" />
     <Content Include="Content\js\App\ezbob.GA.js" />
+    <Content Include="Content\js\Broker\broker.addbank.view.js" />
+    <Content Include="Content\js\Broker\broker.commission.view.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\footer.min.js" />
@@ -892,6 +894,8 @@
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Journal.cshtml" />
     <Content Include="App_Code\ChangeAddress.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_AutomationCalculationTemplate.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Commission.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\AddBank.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

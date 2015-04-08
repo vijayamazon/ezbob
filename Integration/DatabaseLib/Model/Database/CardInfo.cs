@@ -55,6 +55,11 @@ namespace EZBob.DatabaseLib.Model.Database
         public virtual BankAccountType Type { get; set; }
 
         public virtual Customer Customer { get; set; }
+
+        public virtual Broker.Broker Broker { get; set; }
+
+        public virtual bool? IsDefault { get; set; }
+
     }
 
     public class CardInfoMap : ClassMap<CardInfo>
@@ -81,7 +86,9 @@ namespace EZBob.DatabaseLib.Model.Database
             Map(x => x.BankAccount).Length(8);
             Map(x => x.BWAResult).Length(100);
             Map(x => x.Type, "BankAccountType").CustomType<BankAccountTypeType>();
+            Map(x => x.IsDefault);
             References(x => x.Customer, "CustomerId");
+            References(x => x.Broker, "BrokerID");
         }
     }
 

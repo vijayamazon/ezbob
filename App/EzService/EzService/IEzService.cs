@@ -69,6 +69,9 @@
 			string sContactEmail
 			);
 
+        [OperationContract]
+        ActionMetaData BrokerAddBank(BrokerAddBankModel model);
+
 		[OperationContract]
 		ActionMetaData BrokerApproveAndResetCustomerPassword(
 			int nUnderwriterID,
@@ -202,6 +205,9 @@
 			bool bFCARegistered,
 			string sLicenseNumber
 			);
+
+        [OperationContract]
+	    ActionMetaData BrokerTransferCommission();
 
 		[OperationContract]
 		ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword);

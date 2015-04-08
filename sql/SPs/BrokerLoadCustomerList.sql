@@ -2,6 +2,9 @@ IF OBJECT_ID('BrokerLoadCustomerList') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerLoadCustomerList AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE BrokerLoadCustomerList
 @ContactEmail NVARCHAR(255),
 @BrokerID INT
@@ -36,19 +39,23 @@ BEGIN
 			ELSE 'Unknown: ' + W.WizardStepTypeName
 		END AS Status,
 		c.GreetingMailSentDate AS ApplyDate,
-		ISNULL(t.Name, '') AS MpTypeName,
+        dbo.udfGetMpsTypes(c.Id) AS Marketplaces,
 		ISNULL(l.LoanAmount, 0) AS LoanAmount,
 		l.Date AS LoanDate,
-		l.SetupFee
+		l.SetupFee,
+		ISNULL(cr.ManagerApprovedSum, 0) AS ApprovedAmount,
+		isnull(lb.CommissionAmount, 0) AS CommissionAmount, 
+		lb.PaidDate AS CommissionPaymentDate
 	FROM
 		Customer c
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
-		LEFT JOIN MP_CustomerMarketPlace m ON c.Id = m.CustomerId
-		LEFT JOIN MP_MarketplaceType t ON m.MarketPlaceId = t.Id
 		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
+		LEFT JOIN CashRequests cr ON cr.Id = l.RequestCashId
+		LEFT JOIN LoanBrokerCommission lb ON lb.LoanID = l.Id
 	WHERE
 		c.BrokerID = @BrokerID
 	ORDER BY
 		c.Id
 END
+
 GO

@@ -83,6 +83,12 @@ footer {
         padding: 0;
     }
 
+.table-big{
+    width: 100%;
+    overflow-y: hidden;
+    overflow-x: auto;
+}
+
 table.customer-list {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
@@ -146,8 +152,10 @@ padding-top: 0;
 .section-dashboard tbody .grid-item-LoanAmount,
 .section-dashboard tbody .grid-item-SetupFee,
 .section-dashboard tfoot .grid-item-LoanAmount,
+.section-dashboard tbody .grid-item-CommissionAmount, 
 .section-dashboard tfoot .grid-item-SetupFee,
-.section-dashboard tfoot .grid-item-LoanDate {
+.section-dashboard tfoot .grid-item-LoanDate
+.section-dashboard tfoot .grid-item-CommissionAmount {
     text-align: right;
 }
 
@@ -314,4 +322,28 @@ input[type="checkbox"].form_field {
 
 b, strong {
     font-family: 'Titillium Web Semi Bold';
+}
+
+.d-widget{
+    height: 56px;
+}
+
+.d-widgets:before, .d-widgets:after {
+  display: table;
+  line-height: 0;
+  content: "";
+}
+
+.d-widgets:after {
+    clear: both;
+}
+
+.d-widget dd.dashes {
+  text-align: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.header-message{
+    color: #67c10b;
 }

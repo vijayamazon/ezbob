@@ -232,6 +232,10 @@
 			return ExecuteSync<BrokerAddCustomerLead>(null, null, sLeadFirstName, sLeadLastName, sLeadEmail, sLeadAddMode, sContactEmail);
 		} // BrokerAddCustomerLead
 
+        public ActionMetaData BrokerAddBank(BrokerAddBankModel model) {
+            return ExecuteSync<BrokerAddBank>(null, null, model);
+        } // BrokerAddBank
+
 		public BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
 			BrokerLeadCanFillWizard oInstance;
 
@@ -410,6 +414,11 @@
 				Response = oInstance.Response,
 			};
 		}
+
+        public ActionMetaData BrokerTransferCommission()
+        {
+            return Execute<BrokerTransferCommission>(null, null);
+        }
 
 	} // class EzServiceImplementation
 } // namespace EzService

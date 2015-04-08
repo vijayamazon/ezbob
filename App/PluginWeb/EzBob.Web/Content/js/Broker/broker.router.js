@@ -10,6 +10,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'forgotten': 'forgotten',
 		'ForgotPassword': 'forgotten',
 		'add': 'addCustomer',
+        'bank': 'addBank',
 		'customer/:customerId': 'showCustomer',
 		'*z': 'dashboard', // this entry must be the last
 	}, // routes
@@ -278,6 +279,23 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		}
 		else
 			this.login();
+	}, // addCustomer
+
+	addBank: function() {
+	    if (this.isForbidden()) {
+	        this.forbidden();
+	        return;
+	    } // if
+
+	    var self = this;
+	    this.setReturnUrl(function() { self.addBank(); });
+
+	    if (this.getAuth()) {
+	        this.createView('addBank', EzBob.Broker.AddBankView);
+	        this.show('add-bank', 'log-off', 'addBank');
+	    }
+	    else
+	        this.login();
 	}, // addCustomer
 
 	showCustomer: function(customerId) {
