@@ -9,7 +9,6 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
 	using OfficeOpenXml;
-	using PaymentServices.Calculators;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
 		long,
 		System.Collections.Generic.List<LoanMetaData>
@@ -195,6 +194,36 @@
 				TitledValue.Format.Money
 			);
 
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Default count",
+				Reference.Default.Count,
+				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Count,
+				TitledValue.Format.Int,
+				true
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Default issued amount",
+				Reference.Default.Issued.Amount,
+				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Amount,
+				TitledValue.Format.Money,
+				true
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Default outstanding amount",
+				Reference.Default.Outstanding.Amount,
+				decisionStats.ManuallyApproved.LoanCount.DefaultOutstanding.Amount,
+				TitledValue.Format.Money,
+				true
+			);
+
 			return row;
 		} // DrawVerificationData
 
@@ -204,13 +233,16 @@
 			string title,
 			decimal reference,
 			decimal actual,
-			string format
+			string format,
+			bool setItalic = false
 		) {
 			Color fontColour = Math.Abs(reference - actual) < 0.000001m ? Color.DarkGreen : Color.Red;
 
 			statSheet.SetCellValue(row, 1, title, true);
 			statSheet.SetCellValue(row, 2, reference, sNumberFormat: format);
 			statSheet.SetCellValue(row, 3, actual, oFontColour: fontColour, sNumberFormat: format);
+
+			statSheet.Cells[row, 1, row, 3].Style.Font.Italic = setItalic;
 
 			return row + 1;
 		} // DrawVerificationRow
@@ -223,7 +255,6 @@
 			ProgressCounter pc = new ProgressCounter("{0} cash requests loaded so far...", Log, 50);
 
 			SetupFeeCalculatorLegacy.ReloadBrokerRepoCache();
-
 			this.spLoad.ForEachResult<SpLoadCashRequestsForAutomationReport.ResultRow>(sr => {
 				if (byCustomer.ContainsKey(sr.CustomerID))
 					byCustomer[sr.CustomerID].Add(sr);
@@ -240,7 +271,7 @@
 
 			Data.Clear();
 
-			foreach (var customerData in byCustomer.Values) {
+			foreach (CustomerData customerData in byCustomer.Values) {
 				customerData.FindLoansAndFilterAraOut(CashRequestLoans, LoanSources);
 				Data.AddRange(customerData.Data);
 			} // for each
@@ -280,6 +311,18 @@
 				public const int Count = 3938;
 				public const decimal Amount = 37577566m;
 			} // class Loan
+
+			public static class Default {
+				public const int Count = 319;
+
+				public static class Issued {
+					public const decimal Amount = 2567666m;
+				} // class Issued
+
+				public static class Outstanding {
+					public const decimal Amount = 1651147m;
+				} // class Outstanding
+			} // class Default
 		} // class Reference
 	} // class MaamMedalAndPricing
 } // namespace

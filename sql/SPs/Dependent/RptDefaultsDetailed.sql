@@ -12,23 +12,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	------------------ TEMP TABLES CREATIONS ------------------
-
-	IF OBJECT_ID('tempdb..#SpecialLate') IS NOT NULL
-		DROP TABLE #SpecialLate
-
-	IF OBJECT_ID('tempdb..#HandledLoans') IS NOT NULL
-		DROP TABLE #HandledLoans
-
-	IF OBJECT_ID('tempdb..#temp1') IS NOT NULL
-		DROP TABLE #temp1
-
-	IF OBJECT_ID('tempdb..#temp1') IS NOT NULL
-		DROP TABLE #temp2
-
-	IF OBJECT_ID('tempdb..#CollectionPayments') IS NOT NULL
-		DROP TABLE #CollectionPayments
-
 	------------------ Local variables ------------------
 
 	DECLARE
@@ -80,65 +63,31 @@ BEGIN
 	SET @NumOfLoans = (
 		SELECT COUNT(L.Id)
 		FROM Loan L
-		WHERE L.CustomerId NOT IN (
-			SELECT C.Id
-			FROM Customer C
-			WHERE
-				Name LIKE '%ezbob%'
-				OR Name LIKE '%liatvanir%'
-				OR Name LIKE '%q@q%'
-				OR Name LIKE '%1@1%'
-				OR C.IsTest = 1
-		)
-		AND L.[Date] < @CutOffDate
+		INNER JOIN Customer c ON L.CustomerId = c.Id AND c.IsTest = 0
+		WHERE L.[Date] < @CutOffDate
 	);
 
 	SET @SumOfLoans = (
 		SELECT SUM(L.LoanAmount)
 		FROM Loan L
-		WHERE L.CustomerId NOT IN (
-			SELECT C.Id
-			FROM Customer C
-			WHERE
-				Name LIKE '%ezbob%'
-				OR Name LIKE '%liatvanir%'
-				OR Name LIKE '%q@q%'
-				OR Name LIKE '%1@1%'
-				OR C.IsTest = 1
-		)
-		AND L.[Date] < @CutOffDate
+		INNER JOIN Customer c ON L.CustomerId = c.Id AND c.IsTest = 0
+		WHERE L.[Date] < @CutOffDate
 	);
 
 	SET @OutstandingPrincipal = (
 		(
 			SELECT SUM(L.LoanAmount)
 			FROM Loan L
-			WHERE L.CustomerId NOT IN (
-				SELECT C.Id
-				FROM Customer C
-				WHERE Name LIKE '%ezbob%'
-				OR Name LIKE '%liatvanir%'
-				OR Name LIKE '%q@q%'
-				OR Name LIKE '%1@1%'
-				OR C.IsTest = 1
-			)
-			AND L.[Date] < @CutOffDate
+			INNER JOIN Customer c ON L.CustomerId = c.Id AND c.IsTest = 0
+			WHERE L.[Date] < @CutOffDate
 		) - (
 			SELECT SUM(T.LoanRepayment)
 			FROM LoanTransaction T
-			JOIN Loan l ON L.Id = T.LoanId
+			INNER JOIN Loan l ON L.Id = T.LoanId
+			INNER JOIN Customer c ON L.CustomerId = c.Id AND c.IsTest = 0
 			WHERE T.PostDate < @CutOffDate
 			AND T.Type = 'PaypointTransaction'
 			AND T.Status = 'Done'
-			AND L.CustomerId NOT IN (
-				SELECT C.Id
-	               FROM Customer C
-	               WHERE Name LIKE '%ezbob%'
-	               OR Name LIKE '%liatvanir%'
-	               OR Name LIKE '%q@q%'
-	               OR Name LIKE '%1@1%'
-	               OR C.IsTest=1
-			)
 		)
 	)
 
@@ -478,20 +427,7 @@ BEGIN
 			WHEN S.LateDays >= 91 THEN '90+ days missed'
 			ELSE 'No Group'
 		END AS MissedPaymentDays,
-		CASE
-			WHEN S.LoanDate BETWEEN '2012-07-01' AND '2013-01-01' THEN 'Q4-2012'
-			WHEN S.LoanDate BETWEEN '2013-01-01' AND '2013-04-01' THEN 'Q1-2013'
-			WHEN S.LoanDate BETWEEN '2013-04-01' AND '2013-07-01' THEN 'Q2-2013'
-			WHEN S.LoanDate BETWEEN '2013-07-01' AND '2013-10-01' THEN 'Q3-2013'
-			WHEN S.LoanDate BETWEEN '2013-10-01' AND '2014-01-01' THEN 'Q4-2013'
-			WHEN S.LoanDate BETWEEN '2014-01-01' AND '2014-04-01' THEN 'Q1-2014'
-			WHEN S.LoanDate BETWEEN '2014-04-01' AND '2014-07-01' THEN 'Q2-2014'
-			WHEN S.LoanDate BETWEEN '2014-07-01' AND '2014-10-01' THEN 'Q3-2014'
-			WHEN S.LoanDate BETWEEN '2014-10-01' AND '2015-01-01' THEN 'Q4-2014'
-			WHEN S.LoanDate BETWEEN '2015-01-01' AND '2015-04-01' THEN 'Q1-2015'
-			WHEN S.LoanDate BETWEEN '2015-04-01' AND '2015-07-01' THEN 'Q2-2015'
-			ELSE 'No Q'
-		END AS Quarter,
+		'Q' + CONVERT(VARCHAR(1), DATEPART(q, S.LoanDate)) + '-' + CONVERT(VARCHAR(4), DATEPART(year, S.LoanDate)) AS Quarter,
 		DATEADD(month,S.PayMentNum,S.LoanDate) AS DefaultDate,
 		T1.NewOldLoan,
 		T1.IssueMonth
@@ -499,7 +435,7 @@ BEGIN
 		#temp2
 	FROM
 		#SpecialLate S
-		JOIN @tmp_sp1 T1 ON T1.LoanId = S.LoanId
+		INNER JOIN @tmp_sp1 T1 ON T1.LoanId = S.LoanId
 
 	----------- COLLECTION PAYMENTS AFTER THE DEFAULT DATE -------------
 

@@ -2,7 +2,6 @@
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
-	using PaymentServices.Calculators;
 
 	public class ManualDatumItem : ADatumItem {
 		public ManualDatumItem(

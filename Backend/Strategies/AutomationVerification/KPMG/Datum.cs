@@ -87,7 +87,7 @@
 			foreach (ManualDatumItem mi in ManualItems) {
 				var ai = new AutoDatumItem(mi, this.tag, this.log);
 				AutoItems.Add(ai);
-				ai.RunAutomation(isHomeOwner, db);
+				// ai.RunAutomation(isHomeOwner, db);
 				ai.SetAdjustedLoanCount(mi.LoanCount);
 			} // for each manual item
 		} // RunAutomation
@@ -149,7 +149,7 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.Default.Exist ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.DefaultIssued.Exist ? "Default" : "No");
 
 			// curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
