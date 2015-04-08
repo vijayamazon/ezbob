@@ -9,7 +9,6 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
 	using OfficeOpenXml;
-	using PaymentServices.Calculators;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
 		long,
 		System.Collections.Generic.List<LoanMetaData>
@@ -254,8 +253,6 @@
 			var byCustomer = new SortedDictionary<int, CustomerData>();
 
 			ProgressCounter pc = new ProgressCounter("{0} cash requests loaded so far...", Log, 50);
-
-			SetupFeeCalculator.ReloadBrokerRepoCache();
 
 			this.spLoad.ForEachResult<SpLoadCashRequestsForAutomationReport.ResultRow>(sr => {
 				if (byCustomer.ContainsKey(sr.CustomerID))

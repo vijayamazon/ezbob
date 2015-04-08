@@ -2,7 +2,6 @@
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
-	using PaymentServices.Calculators;
 
 	public class ManualDatumItem : ADatumItem {
 		public ManualDatumItem(
@@ -20,12 +19,7 @@
 		public override bool IsAuto { get { return false; } }
 
 		public virtual void Calculate() {
-			SetupFeeAmount = new SetupFeeCalculator(
-				UseSetupFee == 1,
-				UseBrokerSetupFee,
-				ManualSetupFeeAmount,
-				ManualSetupFeePercent
-			).Calculate(ApprovedAmount, true);
+			SetupFeeAmount = 0; // TODO calculate using legacy calculator
 
 			SetupFeePct = ApprovedAmount <= 0 ? 0 : SetupFeeAmount / ApprovedAmount;
 		} // Calculate
