@@ -4,8 +4,18 @@
 	using Ezbob.Logger;
 	using OfficeOpenXml;
 
-	internal class DefaultLoans : AStatItem {
-		public DefaultLoans(
+	internal abstract class ADefaultLoans : AStatItem {
+		public override void Add(Datum d, int cashRequestIndex) {
+			ManualDatumItem item = d.Manual(cashRequestIndex);
+
+			LoanCount.CountAmount ca = GetCountAmount(item);
+
+			if (Added.If(ca.Exist, ca.Amount, ca.Count))
+				this.approvedAmount += item.ApprovedAmount;
+		} // Add
+
+		protected ADefaultLoans(
+			string title,
 			ASafeLog log,
 			ExcelWorksheet sheet,
 			Total total,
@@ -14,18 +24,13 @@
 		) : base(
 			log,
 			sheet,
-			"Default loans",
+			title,
 			total,
 			manuallyApproved,
 			autoApproved
 		) {} // constructor
 
-		public override void Add(Datum d, int cashRequestIndex) {
-			ManualDatumItem item = d.Manual(cashRequestIndex);
-
-			if (Added.If(item.LoanCount.Default.Exist, item.LoanCount.Default.Amount, item.LoanCount.Default.Count))
-				this.approvedAmount += item.ApprovedAmount;
-		} // Add
+		protected abstract LoanCount.CountAmount GetCountAmount(ManualDatumItem item);
 
 		protected override TitledValue[] PrepareCountRowValues() {
 			return null;
@@ -73,5 +78,5 @@
 		private AStatItem AutoApproved { get { return Superior[2]; } }
 
 		private decimal approvedAmount;
-	} // class DefaultLoans
+	} // class ADefaultLoans
 } // namespace

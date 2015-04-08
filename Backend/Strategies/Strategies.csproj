@@ -121,8 +121,10 @@
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Extensions\StringExt.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultLoans.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ADefaultLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoRejected.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApproved.cs" />
