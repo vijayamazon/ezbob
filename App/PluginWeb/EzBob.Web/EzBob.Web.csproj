@@ -186,6 +186,7 @@
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AutomationController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
@@ -847,6 +848,7 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
+    <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.automationCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.changeAddress.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.MarkAsPending.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js" />
@@ -889,6 +891,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Journal.cshtml" />
     <Content Include="App_Code\ChangeAddress.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_AutomationCalculationTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

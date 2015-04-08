@@ -359,6 +359,7 @@
 				.Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.AlertDocsView.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.medalCalculations.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.pricingModelCalculations.js")
+                .Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.automationCalculations.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.zoopla.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.landregistry.js")

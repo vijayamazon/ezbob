@@ -36,6 +36,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		var paymentAccounts = this.$el.find('#payment-accounts');
 		var loanhistorys = this.$el.find('#loanhistorys');
 		var medalCalculations = this.$el.find('#medal-calc');
+		var automationCalculations = this.$el.find('#automation-calc');
 		var messages = this.$el.find('#messages');
 		var apiChecks = this.$el.find('#apiChecks');
 		var customerRelations = this.$el.find('#customerRelations');
@@ -105,6 +106,12 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		this.medalCalculationView = new EzBob.Underwriter.MedalCalculationView({
 			el: medalCalculations,
 			model: this.medalCalculationModel
+		});
+
+		this.automationCalculationModel = new EzBob.Underwriter.AutomationCalculationModel();
+		this.automationCalculationView = new EzBob.Underwriter.AutomationCalculationView({
+		    el: automationCalculations,
+		    model: this.automationCalculationModel
 		});
 
 		this.pricingModelScenarios = new EzBob.Underwriter.PricingModelScenarios();
@@ -246,12 +253,16 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 					});
 					break;
 				case '#calculator':
-					self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
+				    self.automationCalculationModel.set({ Id: self.customerId }, { silent: true });
+				    self.automationCalculationModel.fetch();
+
+				    self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
 					self.pricingModelScenarios.fetch();
 					self.pricingModelCalculationsModel.fetch().done(function () {
 					    self.pricingModelCalculationsModel.trigger('fetch');
 						BlockUi('off', $content);
 					});
+
 					break;
 				case '#marketplaces':
 					self.marketPlaces.customerId = self.customerId;
