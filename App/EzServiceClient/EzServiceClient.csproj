@@ -151,6 +151,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerLeadDetailsDataActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

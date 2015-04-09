@@ -163,6 +163,17 @@
 			};
 		} // BrokerLoadCustomerDetails
 
+        public BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(int leadID, string sContactEmail) {
+            BrokerLoadLeadDetails oIntstance;
+
+            ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, leadID, sContactEmail);
+
+            return new BrokerLeadDetailsDataActionResult {
+                MetaData = oResult,
+                BrokerLeadDataModel = oIntstance.Result
+            };
+        } // BrokerLoadLeadDetails
+
 		public StringActionResult BrokerSaveCrmEntry(string sType, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
 			BrokerSaveCrmEntry oInstance;
 

@@ -374,6 +374,30 @@
 			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data, oPotentialSigners: oDetails.PotentialSigners);
 		} // LoadCustomerDetails
 
+        [HttpGet]
+        [Ajax]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult LoadLeadDetails(int sLeadID, string sContactEmail) {
+            ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
+
+            var oIsAuthResult = IsAuth<CustomerDetailsBrokerForJsonResult>("Load lead details for customer " + sLeadID, sContactEmail);
+            if (oIsAuthResult != null)
+                return oIsAuthResult;
+
+            BrokerLeadDetailsDataActionResult oDetails;
+
+            try {
+                oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail);
+            } catch (Exception e) {
+                ms_oLog.Alert(e, "Failed to load customer details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
+                return new LeadDetailsBrokerForJsonResult("Failed to load lead details.");
+            } // try
+
+            ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0} complete.", sContactEmail, sLeadID);
+
+            return new LeadDetailsBrokerForJsonResult(oDetails:oDetails.BrokerLeadDataModel);
+        } // LoadCustomerDetails
+
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]

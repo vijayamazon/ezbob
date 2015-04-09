@@ -136,6 +136,9 @@
 		[OperationContract]
 		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
 
+	    [OperationContract]
+	    BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(int leadID, string sContactEmail);
+
 		[OperationContract]
 		BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail);
 

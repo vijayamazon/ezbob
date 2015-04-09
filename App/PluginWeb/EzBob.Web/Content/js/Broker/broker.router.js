@@ -11,7 +11,8 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		'ForgotPassword': 'forgotten',
 		'add': 'addCustomer',
         'bank': 'addBank',
-		'customer/:customerId': 'showCustomer',
+        'customer/:customerId': 'showCustomer',
+        'lead/:leadId': 'showLead',
 		'*z': 'dashboard', // this entry must be the last
 	}, // routes
 
@@ -323,6 +324,33 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		}
 		else
 			this.login();
+	}, // showCustomer
+
+	showLead: function (leadId) {
+	    if (this.isForbidden()) {
+	        this.forbidden();
+	        return;
+	    } // if
+
+	    var self = this;
+	    this.setReturnUrl((function (nLeadID) {
+	        return function () { self.showLead(nLeadID); };
+	    })(leadId));
+
+	    if (this.getAuth()) {
+	        if (this.views) {
+	            if (this.views.lead)
+	                this.views.lead.clear();
+
+	            this.views.lead = null;
+	        } // if
+
+	        this.createView('lead', EzBob.Broker.LeadDetailsView, { leadid: leadId });
+	        this.show('lead-details', 'log-off', 'lead');
+	        this.navigate('lead/' + leadId);
+	    }
+	    else
+	        this.login();
 	}, // showCustomer
 
 	forbidden: function() {

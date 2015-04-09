@@ -36,6 +36,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LotteryResult" nillable="true" type="tns:LotteryResult" />
+  <xs:complexType name="ArrayOfCompanyCaisAccount">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyCaisAccount" nillable="true" type="tns:CompanyCaisAccount" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyCaisAccount" nillable="true" type="tns:ArrayOfCompanyCaisAccount" />
+  <xs:complexType name="CompanyCaisAccount">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="LastUpdateDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Statuses" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompanyCaisAccount" nillable="true" type="tns:CompanyCaisAccount" />
   <xs:complexType name="CompanyData">
     <xs:sequence>
       <xs:element minOccurs="0" name="Address1" nillable="true" type="xs:string" />
@@ -629,6 +642,19 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="BrokerCustomerPersonalData" nillable="true" type="tns:BrokerCustomerPersonalData" />
+  <xs:complexType name="BrokerLeadDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DateCreated" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DateLastInvitationSent" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="BrokerLeadDataModel" nillable="true" type="tns:BrokerLeadDataModel" />
   <xs:complexType name="ArrayOfBrokerCustomerFile">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="BrokerCustomerFile" nillable="true" type="tns:BrokerCustomerFile" />
@@ -895,17 +921,4 @@
     </xs:restriction>
   </xs:simpleType>
   <xs:element name="FraudMode" nillable="true" type="tns:FraudMode" />
-  <xs:complexType name="ArrayOfCompanyCaisAccount">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyCaisAccount" nillable="true" type="tns:CompanyCaisAccount" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfCompanyCaisAccount" nillable="true" type="tns:ArrayOfCompanyCaisAccount" />
-  <xs:complexType name="CompanyCaisAccount">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="LastUpdateDate" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="Statuses" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="CompanyCaisAccount" nillable="true" type="tns:CompanyCaisAccount" />
 </xs:schema>

@@ -365,8 +365,6 @@
                                                 <th>Loan amount</th>
                                                 <th>Commission amount</th>
                                                 <th>Commission payment date</th>
-                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -378,14 +376,10 @@
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td></td>
-                                                <td></td>
                                             </tr>
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td></td>
-                                                <td></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -647,11 +641,12 @@
 						</div>
 						<!-- section-add-customer -->
                         
-                        
                         @{
                             Html.RenderPartial("AddBank");
+                            Html.RenderPartial("LeadDetails");
                         }
                         <!--section-add-bank-->
+                        <!--section-lead-details-->
 
 						<div class="page-section hide section-customer-details">
 							<input type="hidden" id="customer-id" class="value" data-field-name="id" />
@@ -1002,6 +997,7 @@
 			.Add("~/Content/js/Broker/broker.signup.view.js")
 			.Add("~/Content/js/Broker/broker.addcustomer.view.js")
 			.Add("~/Content/js/Broker/broker.customerdetails.view.js")
+            .Add("~/Content/js/Broker/broker.leaddetails.view.js")
 			.Add("~/Content/js/Broker/broker.router.js")
 			.Add("~/Content/js/Broker/broker.main.js")
 			.Add("~/Content/js/Broker/broker.instantoffer.view.js")

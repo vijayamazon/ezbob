@@ -164,13 +164,7 @@ padding-top: 0;
     background-color: #E2E3E5;
 }
 
-.section-dashboard .lead-send-invitation,
-.section-dashboard .lead-fill-wizard {
-    white-space: nowrap;
-}
-
-
-.section-customer-details .back-to-list-container {
+.back-to-list-container {
     margin: 2em 0 1em 0;
     text-align: right;
 }
