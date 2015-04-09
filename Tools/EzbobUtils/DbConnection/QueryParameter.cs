@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Database {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Data;
 	using System.Data.Common;
@@ -104,5 +103,4 @@
 			get { return (ReturnedValue ?? string.Empty).ToString(); } // get
 		} // SafeReturnedValue
 	} // class QueryParameter
-
 } // namespace Ezbob.Database

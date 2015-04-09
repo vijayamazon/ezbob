@@ -6,10 +6,11 @@
 	using Ezbob.Utils;
 
 	public class SqlRetryer : ARetryer {
-
-		public SqlRetryer(int nRetryCount = 3, int nSleepBeforeRetryMilliseconds = 0, ASafeLog oLog = null)
-			: base(nRetryCount, nSleepBeforeRetryMilliseconds, oLog)
-		{
+		public SqlRetryer(
+			int nRetryCount = 3,
+			int nSleepBeforeRetryMilliseconds = 0,
+			ASafeLog oLog = null
+		) : base(nRetryCount, nSleepBeforeRetryMilliseconds, oLog) {
 		} // constructor
 
 		public override void Retry(Action oAction, string sFuncDescription = null) {
@@ -17,11 +18,12 @@
 				throw new ArgumentNullException("oAction", "Function to retry not specified.");
 
 			Exception ex = null;
-			string sErrName = null;
 
 			sFuncDescription = string.IsNullOrWhiteSpace(sFuncDescription) ? "DB action" : sFuncDescription;
 
 			for (int nCount = 1; nCount <= RetryCount; nCount++) {
+				string sErrName = null;
+
 				try {
 					ex = null;
 
@@ -34,12 +36,10 @@
 						Log.Debug("Success on attempt {0} of {1}: {2}", nCount, RetryCount, sFuncDescription);
 
 					return;
-				}
-				catch (ForceRetryException e) {
+				} catch (ForceRetryException e) {
 					ex = e;
 					sErrName = ForceRetryException.Name;
-				}
-				catch (SqlException e) {
+				} catch (SqlException e) {
 					ex = e;
 					sErrName = null;
 
@@ -65,8 +65,7 @@
 				if (nCount < RetryCount) {
 					Log.Warn(ex, "{2} encountered on attempt {0} of {1}, retrying after {3} milliseconds.", nCount, RetryCount, sErrName, SleepBeforeRetry);
 					Thread.Sleep(SleepBeforeRetry);
-				}
-				else
+				} else
 					Log.Alert(ex, "{2} encountered on attempt {0} of {1}, out of retry attempts.", nCount, RetryCount, sErrName);
 			} // for
 
@@ -75,7 +74,5 @@
 
 			throw new DbException("Out of retry attempts.", ex);
 		} // Retry
-
 	} // class SqlRetryer
-
 } // namespace Ezbob.Database

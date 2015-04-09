@@ -1,6 +1,4 @@
 ﻿namespace Ezbob.Database {
-	using Ezbob.Utils;
-
 	public interface IResultRow {
 		/// <summary>
 		/// Gets indicator whether current row is the first in a row set

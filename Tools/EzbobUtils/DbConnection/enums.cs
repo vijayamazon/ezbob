@@ -24,5 +24,4 @@
 		[Description("table direct")]
 		TableDirect
 	} // enum CommandSpecies
-
 } // namespace Ezbob.Database

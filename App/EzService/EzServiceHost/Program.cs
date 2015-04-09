@@ -62,9 +62,11 @@
 				app.Done();
 			}
 			catch (Exception e) {
-				app.m_oLog.Fatal(e, "EzServiceHost root level: unhandled exception caught!");
+				app.m_oLog.Fatal(e, "EzServiceHost root level: not handled exception caught!");
 				throw;
 			} // try
+
+			app.m_oLog.Dispose();
 		} // Main
 
 		private void Usage(OptionSet oArgs, Exception e) {

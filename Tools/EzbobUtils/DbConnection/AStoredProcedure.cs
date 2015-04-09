@@ -9,22 +9,16 @@
 	using Ezbob.Utils;
 	using Ezbob.Logger;
 
-	[System.AttributeUsage(
-		System.AttributeTargets.Property,
-		AllowMultiple = false
-	)]
+	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class DirectionAttribute : Attribute {
-
 		public DirectionAttribute(ParameterDirection nDirection = ParameterDirection.Input) {
 			Direction = nDirection;
 		} // constructor
 
 		public ParameterDirection Direction { get; private set; } // Direction
-
 	} // class DirectionAttribute
 
 	public abstract class AStoredProcedure {
-
 		public abstract bool HasValidParameters();
 
 		public virtual T ExecuteScalar<T>(ConnectionWrapper oConnectionToUse = null) {
@@ -70,7 +64,10 @@
 			});
 		} // ForEachRowSafe
 
-		public virtual void ForEachRowSafe(ConnectionWrapper oConnectionToUse, Func<SafeReader, bool, ActionResult> oAction) {
+		public virtual void ForEachRowSafe(
+			ConnectionWrapper oConnectionToUse,
+			Func<SafeReader, bool, ActionResult> oAction
+		) {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
@@ -93,8 +90,8 @@
 			if (oResultRowType == null)
 				throw new NotImplementedException("This class does not have a nested public ResultRow class.");
 
-			if (null == oResultRowType.GetInterface(typeof (IResultRow).ToString()))
-				throw new NotImplementedException("Nested ResultRow class does not implement " + typeof (IResultRow));
+			if (null == oResultRowType.GetInterface(typeof(IResultRow).ToString()))
+				throw new NotImplementedException("Nested ResultRow class does not implement " + typeof(IResultRow));
 
 			var oConstructorInfo = oResultRowType.GetConstructors().FirstOrDefault(ci => ci.GetParameters().Length == 0);
 
@@ -121,7 +118,10 @@
 			ForEachResult<T>(null, oAction);
 		} // ForEachResult
 
-		public virtual void ForEachResult<T>(ConnectionWrapper oConnectionToUse, Func<T, ActionResult> oAction) where T: IResultRow, new() {
+		public virtual void ForEachResult<T>(
+			ConnectionWrapper oConnectionToUse,
+			Func<T, ActionResult> oAction
+		) where T : IResultRow, new() {
 			if (!IsReadyToGo())
 				throw new ArgumentOutOfRangeException("Parameters are invalid for " + GetName(), (Exception)null);
 
@@ -147,14 +147,14 @@
 		} // FillFirst
 
 		public virtual void FillFirst<T>(ConnectionWrapper oConnectionToUse, T oInstance) {
-			if (!typeof (T).IsValueType) {
+			if (!typeof(T).IsValueType) {
 				// Plain comparison "oInstance == null" fires warning "possible compare of value type with null".
 				// Assignment to temp variable is a workaround to suppress the warning.
 				// And if we are already here then T is not a value type so it can be null.
 				object obj = oInstance;
 
 				if (obj == null)
-					throw new NullReferenceException("Cannot FillFirst of type " + typeof (T) + ": no instance specified.");
+					throw new NullReferenceException("Cannot FillFirst of type " + typeof(T) + ": no instance specified.");
 			} // if
 
 			if (!IsReadyToGo())
@@ -181,7 +181,11 @@
 			return string.Format("{0} {1}", Species, GetName());
 		} // ToString
 
-		protected AStoredProcedure(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) {
+		protected AStoredProcedure(
+			AConnection oDB,
+			ASafeLog oLog = null,
+			CommandSpecies nSpecies = CommandSpecies.StoredProcedure
+		) {
 			m_aryArgs = null;
 			Log = new SafeLog(oLog);
 			Species = nSpecies;
@@ -198,27 +202,7 @@
 			return HasValidParameters();
 		} // IsReadyToGo
 
-		protected virtual void CheckDirection() {
-			bool bReturnFound = false;
-
-			this.Traverse((oInstance, oPropertyInfo) => {
-				object[] oAttrList = oPropertyInfo.GetCustomAttributes(typeof(DirectionAttribute), false);
-
-				if (oAttrList.Length < 1)
-					return;
-
-				var oAttr = (DirectionAttribute)oAttrList[0];
-
-				if (oAttr.Direction == ParameterDirection.ReturnValue) {
-					if (bReturnFound)
-						throw new DbException("Multiple 'return value' parameters configured for stored procedure " + GetName());
-
-					bReturnFound = true;
-				} // if
-			});
-		} // CheckDirection
-
-		protected virtual AConnection DB { get; set; } // DB
+		protected virtual AConnection DB { get; private set; } // DB
 
 		protected virtual ASafeLog Log { get; private set; } // Log
 
@@ -234,21 +218,25 @@
 				var args = new List<QueryParameter>();
 
 				this.Traverse((oInstance, oPropertyInfo) => {
-					object[] oNameAttrList = oPropertyInfo.GetCustomAttributes(typeof (FieldNameAttribute), false);
+					object[] oNameAttrList = oPropertyInfo.GetCustomAttributes(typeof(FieldNameAttribute), false);
 
-					string sFieldName = (oNameAttrList.Length > 0) ? ((FieldNameAttribute)oNameAttrList[0]).Name : oPropertyInfo.Name;
+					string sFieldName = (oNameAttrList.Length > 0)
+						? ((FieldNameAttribute)oNameAttrList[0]).Name
+						: oPropertyInfo.Name;
 
-					object[] oDirAttrList = oPropertyInfo.GetCustomAttributes(typeof (DirectionAttribute), false);
+					object[] oDirAttrList = oPropertyInfo.GetCustomAttributes(typeof(DirectionAttribute), false);
 
-					ParameterDirection nDirection = (oDirAttrList.Length > 0) ? ((DirectionAttribute)oDirAttrList[0]).Direction : ParameterDirection.Input;
+					ParameterDirection nDirection = (oDirAttrList.Length > 0)
+						? ((DirectionAttribute)oDirAttrList[0]).Direction
+						: ParameterDirection.Input;
 
 					QueryParameter qp;
 
-					bool bIsByteArray = oPropertyInfo.PropertyType == typeof (byte[]);
+					bool bIsByteArray = oPropertyInfo.PropertyType == typeof(byte[]);
 
 					bool bIsSimpleType = !bIsByteArray && (
-						(oPropertyInfo.PropertyType == typeof (string)) ||
-						(null == oPropertyInfo.PropertyType.GetInterface(typeof (IEnumerable).ToString()))
+						(oPropertyInfo.PropertyType == typeof(string)) ||
+						(null == oPropertyInfo.PropertyType.GetInterface(typeof(IEnumerable).ToString()))
 					);
 
 					if (bIsByteArray) {
@@ -256,13 +244,11 @@
 							Direction = nDirection,
 							Type = DbType.Binary,
 						};
-					}
-					else if (bIsSimpleType) {
+					} else if (bIsSimpleType) {
 						qp = new QueryParameter(sFieldName, oPropertyInfo.GetValue(oInstance, null)) {
 							Direction = nDirection,
 						};
-					}
-					else {
+					} else {
 						if (TypeUtils.IsEnumerable(oPropertyInfo.PropertyType)) {
 							Type oUnderlyingType = oPropertyInfo.PropertyType.GetGenericArguments()[0];
 
@@ -271,10 +257,12 @@
 								sFieldName,
 								(IEnumerable)oPropertyInfo.GetValue(oInstance, null),
 								TypeUtils.GetConvertorToObjectArray(oUnderlyingType)
+								);
+						} else {
+							throw new NotImplementedException(
+								"Type " + oPropertyInfo.PropertyType + " does not implement IEnumerable<T>"
 							);
-						}
-						else
-							throw new NotImplementedException("Type " + oPropertyInfo.PropertyType + " does not implement IEnumerable<T>");
+						} // if
 					} // if
 
 					args.Add(qp);
@@ -297,13 +285,38 @@
 			return this.GetType().Name;
 		} // GetName
 
-		private QueryParameter[] m_aryArgs;
+		private void CheckDirection() {
+			bool bReturnFound = false;
 
+			this.Traverse((oInstance, oPropertyInfo) => {
+				object[] oAttrList = oPropertyInfo.GetCustomAttributes(typeof(DirectionAttribute), false);
+
+				if (oAttrList.Length < 1)
+					return;
+
+				var oAttr = (DirectionAttribute)oAttrList[0];
+
+				if (oAttr.Direction == ParameterDirection.ReturnValue) {
+					if (bReturnFound) {
+						throw new DbException(
+							"Multiple 'return value' parameters configured for stored procedure " + GetName()
+						);
+					} // if
+
+					bReturnFound = true;
+				} // if
+			});
+		} // CheckDirection
+
+		private QueryParameter[] m_aryArgs;
 	} // class AStoredProcedure
 
 	public abstract class AStoredProc : AStoredProcedure {
-
-		protected AStoredProc(AConnection oDB, ASafeLog oLog = null, CommandSpecies nSpecies = CommandSpecies.StoredProcedure) : base(oDB, oLog, nSpecies) {
+		protected AStoredProc(
+			AConnection oDB,
+			ASafeLog oLog = null,
+			CommandSpecies nSpecies = CommandSpecies.StoredProcedure
+		) : base(oDB, oLog, nSpecies) {
 		} // constructor
 
 		/// <summary>
@@ -325,7 +338,5 @@
 
 			return sName;
 		} // GetName
-
 	} // class AStoredProc
-
 } // namespace Ezbob.Database
