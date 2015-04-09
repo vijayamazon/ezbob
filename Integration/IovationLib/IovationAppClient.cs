@@ -1,5 +1,7 @@
 ﻿namespace IovationLib
 {
+    using System;
+    using System.Collections.Generic;
     using Ezbob.Backend.Models;
     using IovationLib.IovationAddAccountEvidenceNS;
     using IovationLib.IovationCheckTransactionDetailsNS;
@@ -21,7 +23,85 @@
         }
 
         public CheckTransactionDetailsResponse CheckTransactionDetails(IovationCheckModel model) {
-            CheckTransactionDetailsResponse response = this.checkTransactionDetailsClient.CheckTransactionDetails(new CheckTransactionDetails {
+
+            model.MobilePhoneNumber = string.IsNullOrEmpty(model.MobilePhoneNumber) ? "" : "+44" + model.MobilePhoneNumber.Substring(1);
+
+            var properties = new List<CheckTransactionDetailsProperty> {
+                new CheckTransactionDetailsProperty {
+                    name = "Email",
+                    value = model.Email
+                },
+                new CheckTransactionDetailsProperty {
+                    name = "MobilePhoneNumber",
+                    value = model.MobilePhoneNumber
+                },
+                new CheckTransactionDetailsProperty {
+                    name = "mobilePhoneSmsEnabled",
+                    value = model.mobilePhoneSmsEnabled ? "1" : "0"
+                },
+                new CheckTransactionDetailsProperty {
+                    name = "mobilePhoneVerified",
+                    value = model.mobilePhoneVerified ? "1" : "0"
+                },
+                new CheckTransactionDetailsProperty {
+                    name = "eventId",
+                    value = model.Origin
+                }
+            };
+
+            if (model.MoreData != null) {
+                model.MoreData.HomePhoneNumber = string.IsNullOrEmpty(model.MoreData.HomePhoneNumber) ? "" : "+44" + model.MoreData.HomePhoneNumber.Substring(1);
+
+                string countryCode = "";
+                switch (model.MoreData.BillingCountry) {
+                    case "England":
+                    case "UK":
+                    case "Scotland":
+                    case "Northern Ireland":
+                    case "United Kingdom":
+                        countryCode = "GB";
+                        break;
+                }
+
+                var moreProperties = new List<CheckTransactionDetailsProperty> {
+                    new CheckTransactionDetailsProperty {
+                        name = "firstName",
+                        value = model.MoreData.FirstName
+                    },
+                    new CheckTransactionDetailsProperty {
+                        name = "lastName",
+                        value = model.MoreData.LastName
+                    },
+                    new CheckTransactionDetailsProperty {
+                        name = "BillingCity",
+                        value = model.MoreData.BillingCity
+                    },
+                    new CheckTransactionDetailsProperty {
+                        name = "BillingCountry",
+                        value = countryCode
+                    },
+                    new CheckTransactionDetailsProperty {
+                        name = "BillingPostalCode",
+                        value = model.MoreData.BillingPostalCode
+                    },
+                    new CheckTransactionDetailsProperty {
+                        name = "BillingStreet",
+                        value = model.MoreData.BillingStreet
+                    },
+                    new CheckTransactionDetailsProperty {
+                        name = "emailVerified",
+                        value = model.MoreData.EmailVerified ? "1" : "0"
+                    },
+                    new CheckTransactionDetailsProperty {
+                        name = "HomePhoneNumber",
+                        value = model.MoreData.HomePhoneNumber
+                    }
+                };
+
+                properties.AddRange(moreProperties);
+            }
+            
+            IovationCheckTransactionDetailsNS.CheckTransactionDetails request = new CheckTransactionDetails {
                 subscriberaccount = this.subscriberAccount,
                 subscriberid = this.subscriberId,
                 subscriberpasscode = this.subscriberPasscode,
@@ -29,33 +109,23 @@
                 accountcode = model.AccountCode,
                 beginblackbox = model.BeginBlackBox,
                 enduserip = model.EndUserIp,
-                txn_properties = new[] {
-                    new CheckTransactionDetailsProperty {
-                        name = "Email",
-                        value = model.Email
-                    },
-                    new CheckTransactionDetailsProperty{
-                            name = "Email",
-                            value = model.Email
-                    },
-                    new CheckTransactionDetailsProperty{
-                            name = "MobilePhoneNumber",
-                            value = model.MobilePhoneNumber
-                    },
-                    new CheckTransactionDetailsProperty{
-                            name = "mobilePhoneSmsEnabled",
-                            value = model.mobilePhoneSmsEnabled ? "1" : "0"
-                    },
-                    new CheckTransactionDetailsProperty{
-                            name = "mobilePhoneVerified",
-                            value = model.mobilePhoneVerified ? "1" : "0"
-                    }
-                },
+                txn_properties = properties.ToArray(),
                 type = model.Type
-            });
+            };
 
-            this.Log.InfoFormat("CheckTransactionDetails result: {0}", response.result);
-            return response;
+           
+
+            try {
+                CheckTransactionDetailsResponse response = this.checkTransactionDetailsClient.CheckTransactionDetails(request);
+                this.Log.InfoFormat("CheckTransactionDetails result: {0}", response.result);
+                return response;
+            } catch (Exception ex) {
+                this.Log.ErrorFormat("CheckTransactionDetails failed:\n {0}", ex);
+                return new CheckTransactionDetailsResponse() {
+                    reason = "Exception: " + ex.Message,
+                    result = "U"
+                };
+            }
         }
 
         public void AddAccountEvidence(string accountCode, string comment, string evidenceType) {

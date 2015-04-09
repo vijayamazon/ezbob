@@ -80,6 +80,7 @@
       <xs:element minOccurs="0" name="Email" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="EndUserIp" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="MobilePhoneNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MoreData" nillable="true" type="tns:IovationCheckMoreDataModel" />
       <xs:element minOccurs="0" name="Origin" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="mobilePhoneSmsEnabled" type="xs:boolean" />
@@ -89,6 +90,21 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="IovationCheckModel" nillable="true" type="tns:IovationCheckModel" />
+  <xs:complexType name="IovationCheckMoreDataModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BillingCity" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingCountry" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingPostalCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BillingStreet" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EmailVerified" type="xs:boolean" />
+      <xs:element minOccurs="0" name="FirstName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="HomePhoneNumber" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LastName" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="IovationCheckMoreDataModel" nillable="true" type="tns:IovationCheckMoreDataModel" />
   <xs:complexType name="CustomerDetails">
     <xs:sequence>
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />

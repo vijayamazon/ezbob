@@ -207,6 +207,9 @@
 		public virtual VariableValue IovationUrl {
 			get { return this[Variables.IovationUrl]; }
 		}
+        public virtual VariableValue IovationCheckPeriod {
+            get { return this[Variables.IovationCheckPeriod]; }
+		}
         public virtual VariableValue IovationAdminUrl {
             get { return this[Variables.IovationAdminUrl]; }
         }

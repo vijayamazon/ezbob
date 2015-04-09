@@ -227,6 +227,8 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 		if (bClaims)
 			$.post(window.gRootPath + 'Customer/Profile/ClaimsTrustPilotReview');
 
+		EzBob.App.Iovation.callIovation('getcash');
+	    
 		var oRequest = $.post(window.gRootPath + 'Customer/Profile/ApplyForALoan');
 
 		oRequest.done(function(oResponse) {
@@ -317,7 +319,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 				return;
 			} // if
-			EzBob.App.Iovation.callIovation('getcash');
+			
 			that.customer.set('state', 'wait');
 		});
 

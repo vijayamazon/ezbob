@@ -254,6 +254,7 @@ namespace ConfigManager {
         IovationSubscriberId,
         IovationSubscriberPasscode,
         IovationUrl,
+        IovationCheckPeriod,
 		IsSmsValidationActive,
 
 		LandRegistryFilePath,
