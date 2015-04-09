@@ -23,9 +23,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
         evt['click #AddNewCustomer'] = 'addNewCustomer';
         evt['click .add-bank'] = 'addBankDetails';
         evt['click .reload-customer-list'] = 'reloadCustomerList';
-        evt['click .lead-send-invitation'] = 'sendInvitation';
-        evt['click .lead-fill-wizard'] = 'fillWizard';
-
+        
         return evt;
     }, // events
 
