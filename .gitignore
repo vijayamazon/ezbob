@@ -50,3 +50,4 @@ drop-create*.bat
 ezTest/img/*
 obj/
 packages/
+sql/last.run.times.json

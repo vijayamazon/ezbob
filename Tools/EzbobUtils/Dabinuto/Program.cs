@@ -60,10 +60,11 @@
 				if (this.exitCode != ExitCode.Success)
 					return;
 
-				this.fileTimes = new FileTimes(this.environment.Context, Path.Combine(this.basePath, LastRunTimesFileName));
-
-				if (!this.force)
-					this.fileTimes.Load();
+				this.fileTimes = new FileTimes(
+					this.environment.Context,
+					Path.Combine(this.basePath, LastRunTimesFileName),
+					this.force
+				);
 
 				LogConfiguration();
 
@@ -233,8 +234,18 @@ Exit code '{0}', see details above.
 
 		private void FillMissingParameters() {
 			if (string.IsNullOrWhiteSpace(this.basePath) || !Directory.Exists(this.basePath)) {
-				this.log.Debug("Path '{0}' is empty or not found, defaulting to executable location.", this.basePath);
-				this.basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+				string oldBase = this.basePath;
+
+				this.basePath = Directory.GetParent(
+					// ReSharper disable once AssignNullToNotNullAttribute
+					Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)
+				).FullName;
+
+				this.log.Debug(
+					"Path '{0}' is empty or not found, defaulting to executable location '{1}'.",
+					oldBase,
+					this.basePath
+				);
 			} // if
 		} // FillMissingParameters
 
@@ -302,6 +313,18 @@ Exit code '{0}', see details above.
 --base <base path>: Use specified path as parent of directories listed in app.config (usually it is c:\ezbob\sql).
                     Default value: this executable location.
 
+SQL scripts are executed according the following section in app.config file:
+
+	<SourceFolders>
+		<Folders>
+			<add name=""types"" />
+			<add name=""current"" />
+			<add name=""Triggers"" />
+			<add name=""Functions"" />
+			<add name=""Views"" />
+			<add name=""SPs"" />
+		</Folders>
+	</SourceFolders>
 ", AppName);
 		} // Usage
 

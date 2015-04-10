@@ -6,25 +6,23 @@
 	using Newtonsoft.Json;
 
 	class FileTimes {
-		public FileTimes(string envName, string saveToFilePath) {
+		public FileTimes(string envName, string saveToFilePath, bool forceAllScripts) {
 			this.envName = envName;
 			this.saveToFilePath = saveToFilePath;
+			this.forceAllScripts = forceAllScripts;
 
-			this.lastRunTimes = new SortedDictionary<string, SortedDictionary<string, DateTime>>();
-			this.lastRunTimes[this.envName] = new SortedDictionary<string, DateTime>();
-		} // constructor
-
-		public void Load() {
-			if (!File.Exists(this.saveToFilePath))
-				return;
-
-			this.lastRunTimes = JsonConvert.DeserializeObject<SortedDictionary<string, SortedDictionary<string, DateTime>>>(
-				File.ReadAllText(this.saveToFilePath, Encoding.UTF8)
-			);
+			if (File.Exists(this.saveToFilePath)) {
+				this.lastRunTimes = JsonConvert.DeserializeObject<
+					SortedDictionary<string, SortedDictionary<string, DateTime>>
+				>(
+					File.ReadAllText(this.saveToFilePath, Encoding.UTF8)
+				);
+			} else 
+				this.lastRunTimes = new SortedDictionary<string, SortedDictionary<string, DateTime>>();
 
 			if (!this.lastRunTimes.ContainsKey(this.envName))
 				this.lastRunTimes[this.envName] = new SortedDictionary<string, DateTime>();
-		} // Load
+		} // constructor
 
 		public void Save() {
 			File.WriteAllText(
@@ -36,6 +34,9 @@
 
 		public DateTime? this[string filePath] {
 			get {
+				if (this.forceAllScripts)
+					return null;
+
 				var fileTimes = this.lastRunTimes[this.envName];
 
 				return fileTimes.ContainsKey(filePath) ? fileTimes[filePath] : (DateTime?)null;
@@ -46,10 +47,10 @@
 			} // set
 		} // indexer
 
-		private SortedDictionary<string, SortedDictionary<string, DateTime>> lastRunTimes { get; set; }
+		private readonly SortedDictionary<string, SortedDictionary<string, DateTime>> lastRunTimes;
 
 		private readonly string envName;
-
 		private readonly string saveToFilePath;
+		private readonly bool forceAllScripts;
 	} // class FileTimes
 } // namespace
