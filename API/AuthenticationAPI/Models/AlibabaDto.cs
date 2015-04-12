@@ -42,13 +42,13 @@
 		[Description("System: loanId not found")]
 		SYSTEM_CUSTOMER_ID_LOAN_NOT_FOUND,
 
-		[Description("Customer's re-qualifycation process started")]
+		[Description("Customer's re-qualification process started")]
 		REQUALIFY_STARTED,
 
 		[Description("Unauthorized")]
 		Unauthorized,
 
-		[Description("Internal error ocuured")]
+		[Description("Internal error occurred")]
 		INTERNAL_ERROR
 	}
 

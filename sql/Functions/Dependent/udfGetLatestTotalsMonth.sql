@@ -70,7 +70,7 @@ BEGIN
 		ORDER BY
 			h.UpdatingEnd DESC,
 			h.Id DESC
-	)
+	);
 
 	IF @HistoryID IS NULL
 		RETURN dbo.udfMonthStart(DATEADD(month, -1, @Now))
