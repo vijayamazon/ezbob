@@ -77,7 +77,6 @@
     <Compile Include="CreditSafe\CreditSafeShareHolders.cs" />
     <Compile Include="CreditSafe\CreditSafeStatusHistory.cs" />
     <Compile Include="CreditSafe\CreditSafeTradingAddresses.cs" />
-    <Compile Include="CreditSafe\ServiceLog.cs" />
     <Compile Include="Experian\AExperianLtdDataRow.cs" />
     <Compile Include="Experian\Attributes\ASrcAttribute.cs" />
     <Compile Include="Experian\Attributes\CaisMonthlyAttribute.cs" />

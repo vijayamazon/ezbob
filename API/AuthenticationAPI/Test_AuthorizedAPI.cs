@@ -64,7 +64,7 @@
 			this.model = new AlibabaDto {
 				requestId = "000771",
 				responseId = "000771",
-				aId = "aa23504",
+				aId = 0,//"aa23504",
 				aliMemberId = 789,
 				loanId = 0
 			};
