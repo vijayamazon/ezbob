@@ -28,7 +28,7 @@
 
 			m_oLog = new SafeILog(Log);
 
-			var oLog4NetCfg = new Log4Net().Init();
+			this.oLog4NetCfg = new Log4Net().Init();
 
 			m_oDB = new SqlConnection(oLog4NetCfg.Environment, m_oLog);
 
@@ -41,5 +41,6 @@
 		protected ASafeLog m_oLog;
 
 		protected static readonly ILog Log = LogManager.GetLogger(typeof(BaseTest));
+	    protected Log4Net oLog4NetCfg;
 	} // class BaseTest
 } // namespace

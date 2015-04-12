@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xmlrequest>
+  <header>
+    <username>{0}</username>
+    <password>{1}</password>
+    <operation>{2}</operation>
+    <language>EN</language>
+    <chargereference>{3}</chargereference>
+  </header>
+  <body>
+    <package>{4}</package>
+    <country>{5}</country>
+    <companynumber>{6}</companynumber>
+  </body>
+</xmlrequest>

@@ -115,6 +115,7 @@
     <Compile Include="CalculateLoan\LoanCalculatorModel.cs" />
     <Compile Include="CalculateLoan\Helpers\ScheduledPayment.cs" />
     <Compile Include="CalculateLoan\Helpers\Repayment.cs" />
+    <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
@@ -489,6 +490,10 @@
     <ProjectReference Include="..\..\integration\CompanyFiles\CompanyFiles.csproj">
       <Project>{80458A21-990F-46BA-BCBB-FB211B5BAAAC}</Project>
       <Name>CompanyFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\integration\CreditSafeLib\CreditSafeLib.csproj">
+      <Project>{e2749a0f-640b-44e7-9766-4f841f38267f}</Project>
+      <Name>CreditSafeLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\CustomSchedulers\CustomSchedulers.csproj">
       <Project>{47D73896-1B70-4347-BEB5-A0AD94A45421}</Project>
