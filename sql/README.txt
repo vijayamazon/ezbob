@@ -29,3 +29,15 @@ SQL scripts are executed according the following section in app.config file:
                 </Folders>
         </SourceFolders>
 
+Exit codes:
+	Success = 0,
+	HelpOnly = 1,
+	NoFoldersSpecified = 2,
+	BadFolderSpecified = 3,
+	LastRunTimeSaveFailed = 4,
+	InitFailed = 5,
+	RunFailed = 6,
+	ErrorInFile = 7,
+	FailedToLoadConnectionString = 8,
+	EnvironmentCheckFailed = 9.
+
