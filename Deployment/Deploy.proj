@@ -120,7 +120,7 @@
 	<Target Name="IncrementalUpdateDB">
 		<Message Text="Incremental update database..." Importance="high"/>
 		<!-- <Exec Command="UpgradeDatabase.exe" WorkingDirectory="$(ServerBaseFolder)\$(ToolsFolder)\IncrementalUpdate\" /> -->
-		<Exec Command="run.cmd" WorkingDirectory="$(ServerBaseFolder)\$(Database)\sql\" ContinueOnError="false"/>
+		<Exec Command="deploy.cmd" WorkingDirectory="$(ServerBaseFolder)\$(Database)\sql\" ContinueOnError="false"/>
 	</Target>	
 	
 	<Target Name="WEBStart">
