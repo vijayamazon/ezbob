@@ -7,6 +7,7 @@
 	using System.IO;
 	using System.Reflection;
 	using System.Text;
+	using Ezbob.Context;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
 	using Microsoft.SqlServer.Management.Common;
@@ -25,6 +26,7 @@
 		} // Main
 
 		private Program(string[] args) {
+			this.skipEnvironmentCheck = false;
 			this.now = DateTime.UtcNow;
 			this.exitCode = ExitCode.Success;
 
@@ -54,6 +56,18 @@
 				} // if
 
 				this.environment = new Ezbob.Context.Environment(this.log);
+
+				if (!this.skipEnvironmentCheck) {
+					if (this.environment.Name != Name.Dev) {
+						this.exitCode = ExitCode.EnvironmentCheckFailed;
+						this.log.Fatal(
+							"Environment check failed: current environment is '{0}'; " +
+							"either switch to Dev or specify --skip-env command line argument.",
+							this.environment.Context
+						);
+						return;
+					} // if
+				} // if
 
 				LoadConnectionString();
 
@@ -184,6 +198,10 @@
 					this.exitCode = ExitCode.HelpOnly;
 					return;
 
+				case "--skip-env":
+					this.skipEnvironmentCheck = true;
+					break;
+
 				case "--force":
 					this.force = true;
 					break;
@@ -301,15 +319,17 @@ Exit code '{0}', see details above.
 			RunFailed = 6,
 			ErrorInFile = 7,
 			FailedToLoadConnectionString = 8,
+			EnvironmentCheckFailed = 9,
 		} // enum ExitCode
 
 		private void Usage() {
 			this.log.Info(@"
 
-{0} [--help] [--force] [--base <base path>]
+{0} [--help] [--force] [--skip-env] [--base <base path>]
 
 --help:             Show this note and exit.
 --force:            Ignore last run time and re-run all the scripts.
+--skip-env:         Without this argument this programme works only on DEV environment.
 --base <base path>: Use specified path as parent of directories listed in app.config (usually it is c:\ezbob\sql).
                     Default value: this executable location.
 
@@ -340,6 +360,7 @@ SQL scripts are executed according the following section in app.config file:
 		private const string DateFormat = "MMM dd yyyy HH:mm:ss";
 		private readonly CultureInfo Culture = new CultureInfo("en-GB", false);
 
+		private bool skipEnvironmentCheck;
 		private string connectionString;
 		private SqlConnection sqlConnection;
 		private string basePath;
