@@ -3,7 +3,6 @@
 	using Utils.ObjectPool;
 
 	public class DbConnectionPool : ObjectPool<PooledConnection> {
-
 		static DbConnectionPool() {
 			ms_oLock = new object();
 			ReuseCount = 10;

@@ -70,7 +70,6 @@
     <Compile Include="QueryParameter.cs" />
     <Compile Include="VendorSpecific\SqlConnection.cs" />
     <Compile Include="SqlRetryer.cs" />
-    <Compile Include="VendorSpecific\StdSqlConnection.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Barrymore\Barrymore.csproj">

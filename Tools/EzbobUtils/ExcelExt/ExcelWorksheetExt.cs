@@ -41,7 +41,32 @@
 			string sNumberFormat = null,
 			bool wrapText = false
 		) {
-			ExcelRange oCell = oSheet.Cells[nRow, nColumn];
+			return SetCellValue(
+				oSheet,
+				oSheet.Cells[nRow, nColumn],
+				oRaw,
+				bIsBold,
+				bSetZebra,
+				oFontColour,
+				oBgColour,
+				sNumberFormat,
+				wrapText
+			);
+		} // SetCellValue
+
+		public static int SetCellValue(
+			this ExcelWorksheet oSheet,
+			ExcelRange oCell,
+			object oRaw,
+			bool? bIsBold = false,
+			bool? bSetZebra = true,
+			Color? oFontColour = null,
+			Color? oBgColour = null,
+			string sNumberFormat = null,
+			bool wrapText = false
+		) {
+			int nRow = oCell.Start.Row;
+			int nColumn = oCell.Start.Column;
 
 			object cellValue = null;
 

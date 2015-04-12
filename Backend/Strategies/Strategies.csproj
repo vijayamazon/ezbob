@@ -102,6 +102,9 @@
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
+    <Compile Include="Broker\BrokerAddBank.cs" />
+    <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
+    <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="CalculateLoan\Helpers\BadPeriods.cs" />
     <Compile Include="CalculateLoan\Helpers\DailyLoanStatus.cs" />
     <Compile Include="CalculateLoan\BankLikeLoanCalculator.cs" />
@@ -121,9 +124,10 @@
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Extensions\StringExt.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\BadLoans.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultLoans.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ADefaultLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoRejected.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApproved.cs" />
@@ -449,6 +453,10 @@
     <ProjectReference Include="..\..\App\EzService\EzServiceConfiguration\EzServiceConfiguration.csproj">
       <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
       <Name>EzServiceConfiguration</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\App\PluginWeb\PostcodeAnywhere\PostcodeAnywhere.csproj">
+      <Project>{083973A7-25ED-4B16-9BB4-65BDD4AA1AA8}</Project>
+      <Name>PostcodeAnywhere</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\AlibabaLib\AlibabaLib.csproj">
       <Project>{1da200b6-41d1-489d-a060-6bb7e07990f7}</Project>

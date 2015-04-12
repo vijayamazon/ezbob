@@ -4,7 +4,6 @@
 	using System.Data.Common;
 
 	public static class DbCommandExt {
-
 		public static void ForEachRow(this DbCommand cmd, Action<DbDataReader> oAction, Action oLogExecution = null) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
@@ -17,7 +16,11 @@
 			cmd.ForEachRow(oFunc, oLogExecution);
 		} // ForEachRow
 
-		public static void ForEachRow(this DbCommand cmd, Func<DbDataReader, bool, ActionResult> oAction, Action oLogExecution = null) {
+		public static void ForEachRow(
+			this DbCommand cmd,
+			Func<DbDataReader, bool, ActionResult> oAction,
+			Action oLogExecution = null
+		) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
 
@@ -36,7 +39,11 @@
 			cmd.ForEachRowSafe(oFunc, oLogExecution);
 		} // ForEachRowSafe
 
-		public static void ForEachRowSafe(this DbCommand cmd, Func<SafeReader, bool, ActionResult> oAction, Action oLogExecution = null) {
+		public static void ForEachRowSafe(
+			this DbCommand cmd,
+			Func<SafeReader, bool, ActionResult> oAction,
+			Action oLogExecution = null
+		) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRowSafe' call.");
 
@@ -47,7 +54,11 @@
 			);
 		} // ForEachRowSafe
 
-		public static void ForEachResult<T>(this DbCommand cmd, Action<T> oAction, Action oLogExecution = null) where T : IResultRow, new() {
+		public static void ForEachResult<T>(
+			this DbCommand cmd,
+			Action<T> oAction,
+			Action oLogExecution = null
+		) where T : IResultRow, new() {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachResult' call.");
 
@@ -59,7 +70,11 @@
 			cmd.ForEachResult(oFunc, oLogExecution);
 		} // ForEachResult
 
-		public static void ForEachResult<T>(this DbCommand cmd, Func<T, ActionResult> oAction, Action oLogExecution = null) where T: IResultRow, new() {
+		public static void ForEachResult<T>(
+			this DbCommand cmd,
+			Func<T, ActionResult> oAction,
+			Action oLogExecution = null
+		) where T : IResultRow, new() {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachResult' call.");
 
@@ -102,8 +117,7 @@
 				oReader.Close();
 
 				bAllesInOrdnung = true;
-			}
-			finally {
+			} finally {
 				if (oConnection != null)
 					oConnection.DisposeAfterOneUsage(bAllesInOrdnung, cw);
 			} // try
@@ -140,6 +154,5 @@
 
 			oReader.Close();
 		} // Run
-
 	} // class DbCommandExt
 } // namespace Ezbob.Database

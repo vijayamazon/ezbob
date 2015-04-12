@@ -35,7 +35,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
                                                     displayName = c.CustomerMarketPlace.DisplayName
                                                 });
             var eseriasLog = _serviceLogRepository.GetByCustomer(customer);
-            var pacnetLog = _pacnetPaypointServiceLogRepository.GetByCustomer(customer);
+            var pacnetLog = _pacnetPaypointServiceLogRepository.GetByCustomerId(customer.Id);
 
             models.AddRange(postCode.Select(val => new ApiChecksLogModel
             {

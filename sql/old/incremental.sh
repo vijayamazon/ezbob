@@ -15,7 +15,7 @@ Say Incremental script started with ...
 if [ ! -d "${SCRIPTS_PATH}" ]
 then
 	Say "Scripts path not found."
-	exit
+	exit 1
 fi
 
 HOSTNAME=`hostname | tr [:upper:] [:lower:]`
@@ -31,31 +31,31 @@ done < ${CONF_FILE_NAME}
 if [ "x${ODBC}" = "x" ]
 then
 	Say "Database ODBC source not specified."
-	exit
+	exit 2
 fi
 
 if [ "x${DB}" = "x" ]
 then
 	Say "Database name not specified."
-	exit
+	exit 3
 fi
 
 if [ "x${USER}" = "x" ]
 then
 	Say "Database user not specified."
-	exit
+	exit 4
 fi
 
 if [ "x${PASS}" = "x" ]
 then
 	Say "Database password not specified."
-	exit
+	exit 5
 fi
 
 if [ "x${ISQL}" = "x" ]
 then
 	Say "Query tool path not specified."
-	exit
+	exit 6
 fi
 
 Say "Database:   ${DB} via ${ODBC} as ${USER}"
@@ -81,6 +81,7 @@ function ProcessOneFile {
 	else
 		Say "Failed with code ${EXIT_CODE} while executing ${QUERY_FILE}."
 		Say "Check file ${OUTPUT_FILE} for details."
+		PROCESS_ONE_FILE_RESULT=1
 		return
 	fi
 
@@ -92,10 +93,12 @@ function ProcessOneFile {
 	then
 		Say "Errors encountered while executing ${QUERY_FILE}."
 		Say "Check file ${OUTPUT_FILE} for details."
+		PROCESS_ONE_FILE_RESULT=1
 		return
 	fi
 
 	rm -f ${OUTPUT_FILE}
+	PROCESS_ONE_FILE_RESULT=0
 } # ProcessOneFile
 
 function ProcessDirectory {
@@ -105,11 +108,30 @@ function ProcessDirectory {
 
 	for QUERY_FILE in `${DIR}/Bash/ls ${THE_DIR}/*.sql`
 	do
+		PROCESS_ONE_FILE_RESULT=0
+
 		ProcessOneFile "${QUERY_FILE}"
+
+		if [ "${PROCESS_ONE_FILE_RESULT}" -ne "0" ]
+		then
+			PROCESS_DIRECTORY_RESULT=1
+			return
+		fi
 	done
+
+	PROCESS_DIRECTORY_RESULT=0
 } # ProcessDirectory
+
+PROCESS_DIRECTORY_RESULT=0
 
 ProcessDirectory ${SCRIPTS_PATH}
 
-Say Incremental script complete.
+if [ "${PROCESS_DIRECTORY_RESULT}" -eq "0" ]
+then
+	Say Incremental script completed successfully, code ${PROCESS_DIRECTORY_RESULT}.
+else
+	Say Incremental script failed, code ${PROCESS_DIRECTORY_RESULT}.
+fi
+
+exit ${PROCESS_DIRECTORY_RESULT}
 

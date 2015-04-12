@@ -1,9 +1,7 @@
 ﻿namespace Ezbob.Database {
 	using System;
-	using Ezbob.Logger;
 
-	public abstract partial class AConnection : SafeLog {
-
+	public abstract partial class AConnection {
 		public virtual void ForEachResult<T>(ConnectionWrapper oConnectionToUse, Action<T> oAction, string sQuery, params QueryParameter[] aryParams) where T : IResultRow, new() {
 			ForEachResult<T>(oConnectionToUse, oAction, sQuery, CommandSpecies.Auto, aryParams);
 		} // ForEachResult
@@ -65,6 +63,5 @@
 				aryParams
 			);
 		} // ForEachResult
-
-	} // AConnection
+	} // class AConnection
 } // namespace Ezbob.Database

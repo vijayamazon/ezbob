@@ -186,6 +186,7 @@
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AutomationController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
@@ -825,6 +826,9 @@
     <Content Include="Content\img\valentine2015scratch\win.png" />
     <Content Include="Content\js\App\ezbob.bindings.js" />
     <Content Include="Content\js\App\ezbob.GA.js" />
+    <Content Include="Content\js\Broker\broker.addbank.view.js" />
+    <Content Include="Content\js\Broker\broker.commission.view.js" />
+    <Content Include="Content\js\Broker\broker.leaddetails.view.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\footer.min.js" />
@@ -847,6 +851,7 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
+    <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.automationCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.changeAddress.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.MarkAsPending.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js" />
@@ -889,6 +894,10 @@
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Journal.cshtml" />
     <Content Include="App_Code\ChangeAddress.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_AutomationCalculationTemplate.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Commission.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\AddBank.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\LeadDetails.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

@@ -85,13 +85,20 @@
 
 			model.InterestRate = loan.InterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
-			model.IsBrokerFee = loan.CashRequest.UseBrokerSetupFee;
+			
 			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
 			model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
-			bool isManualSetupFee;
-			model.ManualSetupFee = SetupFeeText(loan.CashRequest.ManualSetupFeeAmount, loan.CashRequest.ManualSetupFeePercent, out isManualSetupFee);
-			model.IsManualSetupFee = isManualSetupFee;
-			model.APR = apr;
+
+            //According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
+            if((loan.CashRequest.ManualSetupFeePercent.HasValue && loan.CashRequest.ManualSetupFeePercent.Value > 0) || 
+               (loan.CashRequest.BrokerSetupFeePercent.HasValue && loan.CashRequest.BrokerSetupFeePercent.Value > 0)) {
+                decimal setupFeePercent = (loan.CashRequest.ManualSetupFeePercent ?? 0M) +  (loan.CashRequest.BrokerSetupFeePercent ?? 0M);
+                model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
+            }
+            model.IsBrokerFee = false;
+            model.IsManualSetupFee = false;
+			
+            model.APR = apr;
 
 			var start = loan.Schedule.First().Date.AddMonths(-1);
 			var end = loan.Schedule.Last().Date;
@@ -143,27 +150,6 @@
                 //failed to build everline refinance 
             }
         }
-
-	    private string SetupFeeText(int? amount, decimal? percent, out bool isManualSetupFee)
-		{
-			isManualSetupFee = true;
-			if (amount.HasValue && amount > 0 && percent.HasValue && percent > 0)
-			{
-				return string.Format("{1}% of the loan amount (but in no case less than {0})", FormattingUtils.NumericFormats(amount.Value), percent.Value*100);
-			}
-
-			if (amount.HasValue && amount > 0)
-			{
-				return string.Format("{0}", FormattingUtils.NumericFormats(amount.Value));
-			}
-
-			if (percent.HasValue && percent > 0)
-			{
-				return string.Format("{0}% of the loan amount", percent.Value*100);
-			}
-			isManualSetupFee = false;
-			return null;
-		}
 
 		private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule)
 		{

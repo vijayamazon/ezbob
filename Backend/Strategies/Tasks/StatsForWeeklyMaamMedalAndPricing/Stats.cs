@@ -18,7 +18,6 @@
 			var autoApproved = new AutoApproved(log, takeMin, sheet, total, autoProcessed);
 			var manuallyRejected = new ManuallyRejected(log, sheet, total);
 			ManuallyApproved = new ManuallyApproved(log, sheet, total);
-			var defaultLoans = new DefaultLoans(log, sheet, total, ManuallyApproved, autoApproved);
 
 			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(log, sheet, total, ManuallyApproved, autoApproved);
 
@@ -33,8 +32,8 @@
 				manuallyRejected,
 				new ManuallyAndAutoRejected(log, sheet, total, manuallyRejected, autoRejected),
 				ManuallyApproved,
-				defaultLoans,
-				new BadLoans(log, sheet, total, ManuallyApproved, autoApproved),
+				new DefaultIssuedLoans(log, sheet, total, ManuallyApproved, autoApproved),
+				new DefaultOutstandingLoans(log, sheet, total, ManuallyApproved, autoApproved),
 				this.manuallyAndAutoApproved,
 				this.manuallyRejectedAutoApproved,
 				this.manuallyApprovedAutoRejected,
@@ -55,10 +54,6 @@
 			this.sheet.Cells[row, 1].Style.Font.Size = 16;
 			row++;
 
-			foreach (var si in this.stats)
-				row = si.ToXlsx(row);
-
-			row++;
 			AStatItem.SetBorder(this.sheet.Cells[row, 1, row, AStatItem.LastColumnNumber]).Merge = true;
 			this.sheet.SetCellValue(row, 1, "Summary", bSetZebra: false, oBgColour: Color.Bisque, bIsBold: true);
 			this.sheet.Cells[row, 1].Style.Font.Size = 14;
@@ -70,6 +65,16 @@
 
 			row = this.manuallyApprovedAutoRejected.DrawSummary(row + 1);
 
+			row++;
+
+			AStatItem.SetBorder(this.sheet.Cells[row, 1, row, AStatItem.LastColumnNumber]).Merge = true;
+			this.sheet.SetCellValue(row, 1, "Details", bSetZebra: false, oBgColour: Color.Bisque, bIsBold: true);
+			this.sheet.Cells[row, 1].Style.Font.Size = 14;
+			row++;
+
+			foreach (var si in this.stats)
+				row = si.ToXlsx(row + 1);
+
 			for (int i = 1; i <= AStatItem.LastColumnNumber; i++)
 				this.sheet.Column(i).AutoFit();
 
@@ -77,20 +82,24 @@
 		} // ToXlsx
 
 		public int FlushLoanIDs(ExcelWorksheet targetSheet, int column) {
-			int row = 1;
+			column = FlushLoanIDList(targetSheet, column, "all loans", ManuallyApproved.LoanCount.IDs);
 
-			targetSheet.SetCellValue(row, column, this.name);
-			row++;
-
-			foreach (int id in ManuallyApproved.LoanCount.IDs) {
-				targetSheet.SetCellValue(row, column, id);
-				row++;
-			} // for each
-
-			return column + 1;
+			return FlushLoanIDList(targetSheet, column, "default loans", ManuallyApproved.LoanCount.DefaultIDs);
 		} // FlushLoanIDs
 
 		public ManuallyApproved ManuallyApproved { get; private set; }
+
+		private int FlushLoanIDList(ExcelWorksheet targetSheet, int column, string title, SortedSet<int> ids) {
+			targetSheet.SetCellValue(1, column, this.name + " - " + title);
+
+			int row = 2;
+			foreach (int id in ids) {
+				targetSheet.SetCellValue(row, column, id);
+				row++;
+			} // for each
+			
+			return column + 1;
+		} // FlushLoanIDList
 
 		private readonly string name;
 

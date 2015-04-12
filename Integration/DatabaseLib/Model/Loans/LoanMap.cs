@@ -84,6 +84,12 @@
 				.KeyColumn("LoanId")
 				.Cascade.AllDeleteOrphan()
 				.Inverse();
+            HasMany(x => x.BrokerCommissions)
+                .AsSet()
+                .KeyColumn("LoanID")
+                .Cascade.AllDeleteOrphan()
+                .Inverse();
+
 			Map(x => x.AgreementModel).CustomType("StringClob");
 			References(x => x.LoanType, "LoanTypeId");
 			Map(x => x.LastReportedCaisStatus, "LastReportedCAISStatus");

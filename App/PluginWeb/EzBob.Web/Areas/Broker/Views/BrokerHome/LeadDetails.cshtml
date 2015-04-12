@@ -1,0 +1,50 @@
+﻿@model dynamic
+
+<div class="page-section hide section-lead-details">
+    <input type="hidden" id="lead-id" class="value" data-field-name="Id" />
+
+    <div class="back-to-list-container">
+        
+        <button class="lead-fill-wizard button btn-green" 
+                title="Complete the application on behalf of the client."><i class="fa fa-desktop"></i> Fill</button>
+        <button class="lead-send-invitation button btn-green" 
+                title=""><i class="fa fa-envelope"></i> Send</button>
+        <button type="button" class="back-to-list button btn-green btn-wide">Back to client list</button>
+    </div>
+
+    <div class="value-group aka-table table-big box">
+        <div class="box-title aka-caption">Lead details</div>
+
+        <div class="aka-row">
+            <div class="aka-column">
+                <div class="aka-table">
+                    <div class="aka-row">
+                        <span class="value-title">First name:</span>
+                        <span class="value" data-field-name="FirstName"></span>
+                    </div>
+                    <div class="aka-row">
+                        <span class="value-title">Last name:</span>
+                        <span class="value" data-field-name="LastName"></span>
+                    </div>
+                    <div class="aka-row">
+                        <span class="value-title">Email:</span>
+                        <span class="value" data-field-name="Email"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="aka-column">
+                <div class="aka-table">
+                    <div class="aka-row">
+                        <span class="value-title">Date created:</span>
+                        <span class="value" data-field-name="DateCreated"></span>
+                    </div>
+                    <div class="aka-row">
+                        <span class="value-title">Date last invintation sent:</span>
+                        <span class="value" data-field-name="DateLastInvitationSent"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

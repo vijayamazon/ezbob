@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Logger;
-	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class LoanCount {
 		public static LoanCount operator +(LoanCount lc, LoanMetaData lmd) {
@@ -23,53 +22,57 @@
 			Log = log.Safe();
 
 			IDs = new SortedSet<int>();
+			DefaultIDs = new SortedSet<int>();
 			Total = new CountAmount();
-			Default = new CountAmount();
-			Bad = new CountAmount();
+			DefaultIssued = new CountAmount();
+			DefaultOutstanding = new CountAmount();
 		} // constructor
 
 		public LoanCount Clone() {
 			var lc = new LoanCount(Log) {
 				Total = Total.Clone(),
-				Default = Default.Clone(),
-				Bad = Bad.Clone(),
+				DefaultIssued = DefaultIssued.Clone(),
+				DefaultOutstanding = DefaultOutstanding.Clone(),
 			};
 
-			lc.AddLoanID(IDs);
+			lc.AddLoanID(IDs, lc.IDs);
+			lc.AddLoanID(DefaultIDs, lc.DefaultIDs);
 
 			return lc;
 		} // Clone
 
 		public void Clear() {
 			IDs.Clear();
+			DefaultIDs.Clear();
 			Total.Clear();
-			Bad.Clear();
-			Default.Clear();
+			DefaultIssued.Clear();
+			DefaultOutstanding.Clear();
 		} // Clear
 
 		public void Cap(decimal amount) {
 			Total.Cap(amount);
-			Bad.Cap(amount);
-			Default.Cap(amount);
+			DefaultIssued.Cap(amount);
+			DefaultOutstanding.Cap(amount);
 		} // Cap
 
 		public void Append(LoanMetaData lmd) {
 			if (lmd == null)
 				return;
 
-			AddLoanID(lmd.LoanID);
+			AddLoanID(lmd.LoanID, IDs);
 
 			Total.Count++;
 			Total.Amount += lmd.LoanAmount;
 
-			if ((lmd.LoanStatus == LoanStatus.Late) || (lmd.MaxLateDays > 13)) {
-				Default.Count++;
-				Default.Amount += lmd.LoanAmount;
+			// Condition is "> 14" due to implementation of SQL Server's DATEDIFF function.
+			if (lmd.MaxLateDays > 14) {
+				DefaultIssued.Count++;
+				DefaultIssued.Amount += lmd.LoanAmount;
 
-				if (lmd.MaxLateDays > 13) {
-					Bad.Count++;
-					Bad.Amount += lmd.LoanAmount;
-				} // if
+				DefaultOutstanding.Count++;
+				DefaultOutstanding.Amount += lmd.LoanAmount - lmd.RepaidPrincipal;
+
+				AddLoanID(lmd.LoanID, DefaultIDs);
 			} // if
 		} // Append
 
@@ -77,17 +80,19 @@
 			if (other == null)
 				return;
 
-			AddLoanID(other.IDs);
+			AddLoanID(other.IDs, IDs);
+			AddLoanID(other.DefaultIDs, DefaultIDs);
 
 			Total += other.Total;
-			Default += other.Default;
-			Bad += other.Bad;
+			DefaultIssued += other.DefaultIssued;
+			DefaultOutstanding += other.DefaultOutstanding;
 		} // Append
 
 		public SortedSet<int> IDs { get; private set; }
+		public SortedSet<int> DefaultIDs { get; private set; }
 		public CountAmount Total { get; private set; }
-		public CountAmount Default { get; private set; }
-		public CountAmount Bad { get; private set; }
+		public CountAmount DefaultIssued { get; private set; }
+		public CountAmount DefaultOutstanding { get; private set; }
 
 		public class CountAmount {
 			public static CountAmount operator +(CountAmount a, CountAmount b) {
@@ -142,16 +147,16 @@
 
 		public ASafeLog Log { get; private set; }
 
-		private void AddLoanID(IEnumerable<int> lst) {
+		private void AddLoanID(IEnumerable<int> lst, SortedSet<int> targetIDList) {
 			if (lst == null)
 				return;
 
 			foreach (int id in lst)
-				AddLoanID(id);
+				AddLoanID(id, targetIDList);
 		} // AddLoanID
 
-		private void AddLoanID(int id) {
-			if (!IDs.Add(id))
+		private void AddLoanID(int id, SortedSet<int> targetIDList) {
+			if (!(targetIDList ?? IDs).Add(id))
 				Log.Warn("Duplicate loan id detected: {0}", id);
 		} // AddLoanID
 	} // class LoanCount

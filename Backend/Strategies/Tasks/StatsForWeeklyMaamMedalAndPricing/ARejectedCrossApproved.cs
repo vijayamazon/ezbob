@@ -26,22 +26,43 @@
 				new TitledValue(this.loanCount.Total.Amount, this.loanCount.Total.Count)
 			));
 
-			row = SetRowValues(row, "Default", OrderApprovedAndRejected(
+			row = SetRowValues(row, "Default issued", OrderApprovedAndRejected(
 				new TitledValue(0, 0),
-				new TitledValue(this.loanCount.Default.Amount, this.loanCount.Default.Count)
+				new TitledValue(this.loanCount.DefaultIssued.Amount, this.loanCount.DefaultIssued.Count)
 			));
 
-			row = SetRowValues(row, "Default rate (% of loans)", OrderApprovedAndRejected(
+			row = SetRowValues(row, "Default issued rate (% of loans)", OrderApprovedAndRejected(
 				new TitledValue(0, 0),
 				new TitledValue(
-					this.loanCount.Default.Amount, this.loanCount.Total.Amount,
-					this.loanCount.Default.Count, this.loanCount.Total.Count
+					this.loanCount.DefaultIssued.Amount, this.loanCount.Total.Amount,
+					this.loanCount.DefaultIssued.Count, this.loanCount.Total.Count
 				)
 			));
 
-			row = SetRowValues(row, "Default rate (% of approvals)", OrderApprovedAndRejected(
+			row = SetRowValues(row, "Default issued rate (% of approvals)", OrderApprovedAndRejected(
 				new TitledValue(0, 0),
-				new TitledValue(this.loanCount.Default.Amount, Amount, this.loanCount.Default.Count, Count)
+				new TitledValue(this.loanCount.DefaultIssued.Amount, Amount, this.loanCount.DefaultIssued.Count, Count)
+			));
+
+			row = SetRowValues(row, "Default outstanding", OrderApprovedAndRejected(
+				new TitledValue(0, 0),
+				new TitledValue(this.loanCount.DefaultOutstanding.Amount, this.loanCount.DefaultOutstanding.Count)
+			));
+
+			row = SetRowValues(row, "Default outstanding rate (% of loans)", OrderApprovedAndRejected(
+				new TitledValue(0, 0),
+				new TitledValue(
+					this.loanCount.DefaultOutstanding.Amount, this.loanCount.Total.Amount,
+					this.loanCount.DefaultOutstanding.Count, this.loanCount.Total.Count
+				)
+			));
+
+			row = SetRowValues(row, "Default outstanding rate (% of approvals)", OrderApprovedAndRejected(
+				new TitledValue(0, 0),
+				new TitledValue(
+					this.loanCount.DefaultOutstanding.Amount, Amount,
+					this.loanCount.DefaultOutstanding.Count, Count
+				)
 			));
 
 			return row;
@@ -75,14 +96,17 @@
 			return new List<TitledValue[]> {
 				new [] {
 					new TitledValue("count", Count),
+				},
+				new [] {
 					new TitledValue("count / total %", Count, Total.Count),
 					new TitledValue("count / rejected %", Count, Rejected.Count),
 					new TitledValue("count / approved %", Count, Approved.Count),
 				},
 				new [] {
 					new TitledValue("loan count", this.loanCount.Total.Count),
-					new TitledValue("default loan count", this.loanCount.Default.Count),
-					new TitledValue("bad loan count", this.loanCount.Bad.Count),
+				},
+				new [] {
+					new TitledValue("default loan count", this.loanCount.DefaultIssued.Count),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -99,8 +123,8 @@
 				},
 				new [] {
 					new TitledValue("loan amount", this.loanCount.Total.Amount),
-					new TitledValue("default loan amount", this.loanCount.Default.Amount),
-					new TitledValue("bad loan amount", this.loanCount.Bad.Amount),
+					new TitledValue("default issued loan amount", this.loanCount.DefaultIssued.Amount),
+					new TitledValue("default outstanding loan amount", this.loanCount.DefaultOutstanding.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues

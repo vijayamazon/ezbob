@@ -51,12 +51,7 @@
 			bool isEverlineRefinance = ValidateEverlineRefinance(cus);
 			var cr = cus.LastCashRequest;
 
-			var calculator = new SetupFeeCalculator(
-				cr.UseSetupFee,
-				cr.UseBrokerSetupFee,
-				cr.ManualSetupFeeAmount,
-				cr.ManualSetupFeePercent
-			);
+			var calculator = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent);
 
 			var fee = calculator.Calculate(loanAmount);
 

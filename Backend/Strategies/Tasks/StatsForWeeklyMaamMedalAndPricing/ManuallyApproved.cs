@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
+	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
@@ -19,23 +20,35 @@
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
-			return new[] {
-				new TitledValue("count", Count),
-				new TitledValue("approved / total %", Count, Total.Count),
-				new TitledValue("loan count", LoanCount.Total.Count),
-				new TitledValue("default loan count", LoanCount.Default.Count),
-				new TitledValue("bad loan count", LoanCount.Bad.Count),
-			};
+			return null;
 		} // PrepareCountRowValues
 
-		protected override TitledValue[] PrepareAmountRowValues() {
-			return new[] {
-				new TitledValue("approved amount", Amount),
-				new TitledValue("issued amount", LoanCount.Total.Amount),
-				new TitledValue("default amount", LoanCount.Default.Amount),
-				new TitledValue("bad amount", LoanCount.Bad.Amount),
+		protected override List<TitledValue[]> PrepareMultipleCountRowValues() {
+			return new List<TitledValue[]> {
+				new[] {
+					new TitledValue("count", Count),
+				},
+				new[] {
+					new TitledValue("approved / total %", Count, Total.Count),
+				},
+				new[] {
+					new TitledValue("loan count", LoanCount.Total.Count),
+				},
 			};
+		} // PrepareMultipleCountRowValues
+
+		protected override TitledValue[] PrepareAmountRowValues() {
+			return null;
 		} // PrepareAmountRowValues
+
+		protected override List<TitledValue[]> PrepareMultipleAmountRowValues() {
+			return new List<TitledValue[]> {
+				new[] {
+					new TitledValue("approved amount", Amount),
+					new TitledValue("issued amount", LoanCount.Total.Amount),
+				},
+			};
+		} // PrepareMultipleAmountRowValues
 
 		private AStatItem Total { get { return Superior[0]; } }
 

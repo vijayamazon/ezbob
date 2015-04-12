@@ -1,10 +1,8 @@
 ﻿namespace Ezbob.Database {
 	using System;
 	using System.Data.Common;
-	using Ezbob.Logger;
 
-	public abstract partial class AConnection : SafeLog {
-
+	public abstract partial class AConnection {
 		public virtual void ForEachRow(ConnectionWrapper oConnectionToUse, Action<DbDataReader> oAction, string sQuery, params QueryParameter[] aryParams) {
 			if (ReferenceEquals(oAction, null))
 				throw new DbException("Callback action not specified in 'ForEachRow' call.");
@@ -65,6 +63,5 @@
 
 			Run(oConnectionToUse, oAction, ExecMode.ForEachRow, nSpecies, sQuery, aryParams);
 		} // ForEachRow
-
-	} // AConnection
+	} // class AConnection
 } // namespace Ezbob.Database

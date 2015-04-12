@@ -85,12 +85,12 @@
 				{
 					User = "System",
 					Action = "Took a Loan",
-					Comment = string.Format("Amount: {0}, Repayments: {1}, Type: {2}, Discount Plan: {3}, Source: {4}", 
+					Comment = string.Format("Amount: {0}, SF: {5}, Repayments: {1}, Type: {2}, Discount Plan: {3}, Source: {4}", 
                         loan.LoanAmount, 
                         loan.Repayments,
 						loan.LoanType == null ? "" : loan.LoanType.Description,
 						loan.CashRequest == null || loan.CashRequest.DiscountPlan == null ? "" : loan.CashRequest.DiscountPlan.ValuesStr,
-						loan.LoanSource == null ? "" : loan.LoanSource.Name),
+						loan.LoanSource == null ? "" : loan.LoanSource.Name, loan.SetupFee),
 					DateTime = loan.Date,
 					Status = loan.Status.ToString()
 				};

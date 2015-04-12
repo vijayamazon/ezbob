@@ -56,7 +56,7 @@ EzBob.Underwriter.JournalView = Backbone.Marionette.ItemView.extend({
 				    Interest: dh.InterestRate,
 				    RepaymentPeriod: dh.RepaymentPeriod,
 				    LoanType: dh.LoanType.split(" ")[0],
-				    SetupFee: (dh.UseSetupFee || dh.UseBrokerSetupFee ? 'yes (todo %)' : '-'),
+				    SetupFee: dh.TotalSetupFee ? EzBob.formatPounds(dh.TotalSetupFee) : '-',
 				    DiscountPlan: dh.DiscountPlan,
 				    LoanSource: (dh.LoanSourceName === 'Standard' ? '' : dh.LoanSourceName),
 				    CustomerSelection: (dh.IsLoanTypeSelectionAllowed === 1 ? 'Yes' : 'No'),

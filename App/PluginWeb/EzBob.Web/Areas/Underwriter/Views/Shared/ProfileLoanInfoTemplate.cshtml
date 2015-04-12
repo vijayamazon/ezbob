@@ -424,21 +424,21 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            <%if(m.Editable){%>
-            @RawCellWithSlider("Setup fee", "setupFeeSwitch", "No", "Yes", "", "info")
-            @RawCellWithSlider("Broker commission", "brokerCommisionSwitch", "No", "Yes", "", "info")
-            <%} else{%>
-            @RawCell("Setup fee", "<%= m.UseSetupFee ? 'Enabled' : 'Disabled' %>")
-            @RawCell("Broker commission", "<%= m.UseBrokerSetupFee ? 'Enabled' : 'Disabled' %>")
-            <%}%>
-    
             <tr>
-                <td>Manual setup fee</td>
+                <td>setup fee</td>
                 <td>
-                    <span>£ <%= m.ManualSetupFeeAmount ? m.ManualSetupFeeAmount : '' %> | <%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) : '%' %></span>
+                    <span><%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) + ' (' + EzBob.formatPounds(m.ManualSetupFeePercent * m.OfferedCreditLine) + ')' : 'No setup fee' %></span>
                      <%if(m.Editable){%>
-                    <button class="btn btn-mini couple_buttons left-pane-button" name="manualSetupFeeEditAmountButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> ><i class="fa fa-gbp"></i></button>
-                    <button class="btn btn-mini couple_buttons left-pane-button" name="manualSetupFeeEditPercentButton" <%= m.UseSetupFee || m.UseBrokerSetupFee ? '' : 'disabled="disabled"' %> >%</button>
+                    <button class="btn btn-mini couple_buttons left-pane-button" name="manualSetupFeeEditPercentButton">%</button>
+                    <%}%>
+                </td>
+            </tr>
+            <tr>
+                <td>broker fee</td>
+                <td>
+                    <span><%= m.BrokerSetupFeePercent ? EzBob.formatPercents(m.BrokerSetupFeePercent) + ' (' + EzBob.formatPounds(m.BrokerSetupFeePercent * m.OfferedCreditLine) + ')' : 'No broker fee' %></span>
+                    <%if(m.Editable){%>
+                    <button class="btn btn-mini couple_buttons left-pane-button" name="brokerSetupFeeEditPercentButton">%</button>
                     <%}%>
                 </td>
             </tr>

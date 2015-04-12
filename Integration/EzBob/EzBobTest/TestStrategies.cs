@@ -713,6 +713,17 @@
 			var smsDetails = twilio.GetSmsMessage("SM1511753ccca64868b73c9cf7469a1bc8");
 		}
 
+        [Test]
+        public void TestBrokerTransferCommission() {
+            var stra = new BrokerTransferCommission();
+            stra.Execute();
+        }
+
+        [Test]
+        public void TestUpdateTransactionStatus() {
+            var stra = new UpdateTransactionStatus();
+            stra.Execute();
+        }
 
 		[Test]
 		public void TestAlibabaDataSharing_01() {

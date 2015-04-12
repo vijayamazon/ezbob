@@ -58,15 +58,14 @@
 
 		readonly IFormatProvider culture = Thread.CurrentThread.CurrentCulture;
 
-		// 
-
+		// { "requestId": "000771", "responseId": "000771", "aliMemberId" : 789, "loanId": "0", "aId" : 23504 }
 		[TestFixtureSetUp]
 		public void FixtureInit() {
 			this.model = new AlibabaDto {
-				requestId = "000001",
-				responseId = "1000001",
-				aId = 24319,
-				aliMemberId = 9223372036854775804,
+				requestId = "000771",
+				responseId = "000771",
+				aId = "aa23504",
+				aliMemberId = 789,
 				loanId = 0
 			};
 		}

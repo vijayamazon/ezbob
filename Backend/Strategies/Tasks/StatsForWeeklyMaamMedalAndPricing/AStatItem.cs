@@ -50,14 +50,14 @@
 				} // if
 			} // if
 
-			return row;
+			return InsertDivider(row);
 		} // ToXlsx
 
 		public static int LastColumnNumber {
 			get { return MaxDataItemsCount * 2 + 1; }
 		} // LastColumnNumber
 
-		public const int MaxDataItemsCount = 6;
+		public const int MaxDataItemsCount = 3;
 
 		public static ExcelRange SetBorder(ExcelRange range) {
 			range.Style.Border.BorderAround(ExcelBorderStyle.Thin, BorderColor);
@@ -65,6 +65,15 @@
 		} // SetBorder
 
 		public ASafeLog Log { get; private set; }
+
+		protected virtual int InsertDivider(int row) {
+			var fill = this.sheet.Cells[row, 1, row, LastColumnNumber].Style.Fill;
+
+			fill.PatternType = ExcelFillStyle.Solid;
+			fill.BackgroundColor.SetColor(Color.PeachPuff);
+
+			return row + 1;
+		} // InsertDivider
 
 		protected AStatItem(ASafeLog log, ExcelWorksheet sheet, string title, params AStatItem[] superior) {
 			Log = log.Safe();

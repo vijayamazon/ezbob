@@ -106,8 +106,7 @@
 				"Customer ID",
 				"Broker ID",
 				"Customer is default now",
-				"Has not cured loan",
-				"Has 14 days late loan",
+				"Has default loan",
 				// ManualDatumItem.CsvTitles("First"),
 				"Decision count",
 				ManualDatumItem.CsvTitles("Last"),
@@ -150,8 +149,7 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.Default.Exist ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.Bad.Exist ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.DefaultIssued.Exist ? "Default" : "No");
 
 			// curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);

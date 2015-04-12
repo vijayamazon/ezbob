@@ -163,6 +163,17 @@
 			};
 		} // BrokerLoadCustomerDetails
 
+        public BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(int leadID, string sContactEmail) {
+            BrokerLoadLeadDetails oIntstance;
+
+            ActionMetaData oResult = ExecuteSync(out oIntstance, null, null, leadID, sContactEmail);
+
+            return new BrokerLeadDetailsDataActionResult {
+                MetaData = oResult,
+                BrokerLeadDataModel = oIntstance.Result
+            };
+        } // BrokerLoadLeadDetails
+
 		public StringActionResult BrokerSaveCrmEntry(string sType, int nActionID, int nStatusID, string sComment, string sCustomerRefNum, string sContactEmail) {
 			BrokerSaveCrmEntry oInstance;
 
@@ -231,6 +242,10 @@
 		public ActionMetaData BrokerAddCustomerLead(string sLeadFirstName, string sLeadLastName, string sLeadEmail, string sLeadAddMode, string sContactEmail) {
 			return ExecuteSync<BrokerAddCustomerLead>(null, null, sLeadFirstName, sLeadLastName, sLeadEmail, sLeadAddMode, sContactEmail);
 		} // BrokerAddCustomerLead
+
+        public ActionMetaData BrokerAddBank(BrokerAddBankModel model) {
+            return ExecuteSync<BrokerAddBank>(null, null, model);
+        } // BrokerAddBank
 
 		public BrokerLeadDetailsActionResult BrokerLeadCanFillWizard(int nLeadID, string sLeadEmail, string sContactEmail) {
 			BrokerLeadCanFillWizard oInstance;
@@ -410,6 +425,11 @@
 				Response = oInstance.Response,
 			};
 		}
+
+        public ActionMetaData BrokerTransferCommission()
+        {
+            return Execute<BrokerTransferCommission>(null, null);
+        }
 
 	} // class EzServiceImplementation
 } // namespace EzService

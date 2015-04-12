@@ -12,26 +12,32 @@ BEGIN
 	SET NOCOUNT ON;
 
 	;WITH late_list AS (
-		SELECT
+		SELECT DISTINCT
 			s.LoanID,
 			DATEDIFF(day, s.Date, @Today) AS LateDays
 		FROM
 			LoanSchedule s
+			INNER JOIN Loan l ON s.LoanId = l.Id
 		WHERE
+			(l.DateClosed IS NULL OR l.DateClosed >= @Today)
+			AND
 			s.[Date] < @Today
 			AND
 			s.Status NOT IN ('PaidOnTime', 'PaidEarly')
 			AND (
-				s.Status != 'Paid' OR EXISTS (
-					SELECT
-						lst.Id
-					FROM
-						LoanScheduleTransaction lst
-						INNER JOIN LoanTransaction t ON lst.TransactionID = t.Id
-					WHERE
-						lst.ScheduleID = s.Id
-						AND
-						t.PostDate > @Today
+				s.Status != 'Paid'
+				OR (
+					s.Status = 'Paid' AND EXISTS (
+						SELECT 1
+						FROM LoanScheduleTransaction lst
+						INNER JOIN LoanTransaction t
+							ON lst.TransactionID = t.Id
+							AND t.Type = 'PaypointTransaction'
+							AND t.Status = 'Done'
+							AND t.PostDate >= @Today
+						WHERE
+							lst.ScheduleID = s.Id
+					)
 				)
 			)
 	), max_late AS (
@@ -52,11 +58,12 @@ BEGIN
 			l.DateClosed,
 			l.LoanAmount,
 			l.Status,
-			SUM(t.LoanRepayment) AS RepaidPrincipal
+			ISNULL(SUM(t.LoanRepayment), 0) AS RepaidPrincipal
 		FROM
 			Loan l
 			INNER JOIN CashRequests r ON l.RequestCashId = r.Id
 			INNER JOIN LoanSource ls ON r.LoanSourceID = ls.LoanSourceID
+			INNER JOIN Customer c ON l.CustomerId = c.Id AND c.IsTest = 0
 			LEFT JOIN LoanTransaction t
 				ON l.Id = t.LoanID
 				AND t.Type = 'PaypointTransaction'

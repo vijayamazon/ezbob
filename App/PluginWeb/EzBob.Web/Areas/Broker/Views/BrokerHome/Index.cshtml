@@ -328,6 +328,9 @@
 						<!-- section-forgotten -->
 
 						<div class="page-section hide section-dashboard">
+						
+                            <div id="commission-view">@{ Html.RenderPartial("Commission"); }</div>
+
 							<div class="profile-menu">
 								<div class="navbar-inner">
 									<ul class="nav">
@@ -349,44 +352,46 @@
 							<div id="section-dashboard-customers">
 								<button type="button" id="AddNewCustomer" class="button btn-green pull-right btn-wide">Add a new client</button>
 								<h2 class="form-start">Client list</h2>
-
-								<div class="">
-									<table class="customer-list table">
-										<thead>
-											<tr>
-												<th>First name</th>
-												<th>Last name</th>
-												<th>Status</th>
-												<th>Applied date</th>
-												<th>Loan amount</th>
-												<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-												<th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-											</tr>
-										</thead>
-										<tbody>
-											<tr>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-											</tr>
-										</tbody>
-										<tfoot>
-											<tr>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-												<td></td>
-											</tr>
-										</tfoot>
-									</table>
-								</div>
+                                
+                                <div class="table-big">
+                                    <table class="customer-list table">
+                                        <thead>
+                                            <tr>
+                                                <th>First name</th>
+                                                <th>Last name</th>
+                                                <th>Status</th>
+                                                <th>Applied date</th>
+                                                <th>Approved amount</th>
+                                                <th>Loan amount</th>
+                                                <th>Commission amount</th>
+                                                <th>Commission payment date</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
+                                    </table>
+                                </div>
 							</div>
 
 							<div id="section-dashboard-marketing">
@@ -495,7 +500,36 @@
 											</div>
 										</div>
 									</div>
-								</div>
+                                    
+                                    <div class="aka-row">
+                                        <div class="aka-column">
+                                            <div class="aka-table">
+                                                <div class="aka-row">
+                                                    <span class="value-title">Bank name:</span>
+                                                    <span class="value" data-field-name="BankName"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="aka-column">
+                                            <div class="aka-table">
+                                                <div class="aka-row">
+                                                    <span class="value-title">Account number:</span>
+                                                    <span class="value" data-field-name="BankAccount"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="aka-column">
+                                            <div class="aka-table">
+                                                <div class="aka-row">
+                                                    <span class="value-title">Sort code:</span>
+                                                    <span class="value" data-field-name="BankSortCode"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
 
 								<div class="value-group aka-table table-big box">
 									<div class="box-title aka-caption">Update password</div>
@@ -606,6 +640,13 @@
 							</form>
 						</div>
 						<!-- section-add-customer -->
+                        
+                        @{
+                            Html.RenderPartial("AddBank");
+                            Html.RenderPartial("LeadDetails");
+                        }
+                        <!--section-add-bank-->
+                        <!--section-lead-details-->
 
 						<div class="page-section hide section-customer-details">
 							<input type="hidden" id="customer-id" class="value" data-field-name="id" />
@@ -956,10 +997,13 @@
 			.Add("~/Content/js/Broker/broker.signup.view.js")
 			.Add("~/Content/js/Broker/broker.addcustomer.view.js")
 			.Add("~/Content/js/Broker/broker.customerdetails.view.js")
+            .Add("~/Content/js/Broker/broker.leaddetails.view.js")
 			.Add("~/Content/js/Broker/broker.router.js")
 			.Add("~/Content/js/Broker/broker.main.js")
 			.Add("~/Content/js/Broker/broker.instantoffer.view.js")
 			.Add("~/Content/js/Broker/broker.changepassword.view.js")
+            .Add("~/Content/js/Broker/broker.addbank.view.js")
+            .Add("~/Content/js/Broker/broker.commission.view.js")
 			.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 			.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")
 			.MvcRender("~/Content/js/min/jslib_#.js")
