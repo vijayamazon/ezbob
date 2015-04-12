@@ -56,7 +56,7 @@
 		<MultiCopy CopyFrom="$(Src)\sql\Views_2\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Views_2\" />
 		<MultiCopy CopyFrom="$(Src)\sql\Triggers\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Triggers\" />
 		<MultiCopy CopyFrom="$(Src)\sql\Functions\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Functions\" />
-		<MultiCopy CopyFrom="$(Src)\sql\Bash\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\Bash\" />
+		<MultiCopy CopyFrom="$(Src)\sql\_inctool\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(Database)\sql\_inctool\" />
 		
 		<MultiCopy CopyFrom="$(Src)\Backend\StrategiesActivator\bin\debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(ServicesFolder)\StrategiesActivator\" />
 		<MultiCopy CopyFrom="$(Src)\App\EzService\EzServiceHost\bin\Debug\" CopyTo="$(BuildBin)\%(Edition.Identity)\EzServiceHost\" />
