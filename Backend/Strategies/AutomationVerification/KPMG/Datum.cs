@@ -107,16 +107,14 @@
 				"Broker ID",
 				"Customer is default now",
 				"Has default loan",
-				// ManualDatumItem.CsvTitles("First"),
 				"Decision count",
 				ManualDatumItem.CsvTitles("Last"),
-				// AutoDatumItem.CsvTitles("First"),
 				AutoDatumItem.CsvTitles("Last"),
-				/*
-				AMedalAndPricing.CsvTitles("Auto min"),
-				"The same max offer",
-				AMedalAndPricing.CsvTitles("Auto max"),
-				*/
+				"Max approved amount",
+				"Max interest rate",
+				"Max repayment period",
+				"Max setup fee %",
+				"Max setup fee amount",
 				string.Join(";", os)
 			);
 		} // CsvTitles
@@ -151,20 +149,16 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
 			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.DefaultIssued.Exist ? "Default" : "No");
 
-			// curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
 			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);
 
-			// curColumn = FirstAuto.ToXlsx(sheet, rowNum, curColumn);
 			curColumn = LastAuto.ToXlsx(sheet, rowNum, curColumn);
 
-			/*
-			curColumn = AutoMin.ToXlsx(sheet, rowNum, curColumn);
-
-			curColumn = sheet.SetCellValue(rowNum, curColumn, (AutoMax == null) ? "Same" : "No");
-
-			curColumn = (AutoMax ?? AutoMin).ToXlsx(sheet, rowNum, curColumn);
-			*/
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.ApprovedAmount);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.InterestRate);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.RepaymentPeriod);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.SetupFeePct);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.SetupFeeAmount);
 
 			foreach (var pair in this.loansBySource) {
 				LoanSummaryData loanStat = pair.Value;
@@ -177,7 +171,6 @@
 		private ManualDatumItem FirstManual { get { return ManualItems[0]; } }
 		private ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
 
-		private AutoDatumItem FirstAuto { get { return AutoItems[0]; } }
 		private AutoDatumItem LastAuto  { get { return AutoItems[AutoItems.Count - 1]; } }
 
 		private SortedDictionary<string, LoanSummaryData> loansBySource;

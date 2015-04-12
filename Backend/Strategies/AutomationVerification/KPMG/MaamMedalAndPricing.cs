@@ -95,6 +95,7 @@
 
 			var stats = new List<Tuple<Stats, int>> {
 				new Tuple<Stats, int>(decisionStats, -1),
+				new Tuple<Stats, int>(new Stats(Log, statSheet, false, "at last decision time"), -1),
 			};
 
 			var pc = new ProgressCounter("{0} items sent to .xlsx", Log, 50);
@@ -201,8 +202,7 @@
 				"Default count",
 				Reference.Default.Count,
 				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Count,
-				TitledValue.Format.Int,
-				true
+				TitledValue.Format.Int
 			);
 
 			row = DrawVerificationRow(
@@ -211,8 +211,7 @@
 				"Default issued amount",
 				Reference.Default.Issued.Amount,
 				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Amount,
-				TitledValue.Format.Money,
-				true
+				TitledValue.Format.Money
 			);
 
 			row = DrawVerificationRow(
@@ -221,8 +220,7 @@
 				"Default outstanding amount",
 				Reference.Default.Outstanding.Amount,
 				decisionStats.ManuallyApproved.LoanCount.DefaultOutstanding.Amount,
-				TitledValue.Format.Money,
-				true
+				TitledValue.Format.Money
 			);
 
 			return row;
@@ -234,16 +232,13 @@
 			string title,
 			decimal reference,
 			decimal actual,
-			string format,
-			bool setItalic = false
+			string format
 		) {
 			Color fontColour = Math.Abs(reference - actual) < 0.000001m ? Color.DarkGreen : Color.Red;
 
 			statSheet.SetCellValue(row, 1, title, true);
 			statSheet.SetCellValue(row, 2, reference, sNumberFormat: format);
 			statSheet.SetCellValue(row, 3, actual, oFontColour: fontColour, sNumberFormat: format);
-
-			statSheet.Cells[row, 1, row, 3].Style.Font.Italic = setItalic;
 
 			return row + 1;
 		} // DrawVerificationRow
@@ -322,7 +317,7 @@
 				} // class Issued
 
 				public static class Outstanding {
-					public const decimal Amount = 1651147m;
+					public const decimal Amount = 1651147.56m;
 				} // class Outstanding
 			} // class Default
 		} // class Reference

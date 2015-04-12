@@ -44,6 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExcelPackageExt.cs" />
+    <Compile Include="ExcelRangeExt.cs" />
     <Compile Include="ExcelWorksheetExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

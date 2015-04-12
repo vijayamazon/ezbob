@@ -23,7 +23,7 @@
 			this.autoAmount = 0;
 
 			this.manualLoanCount = new LoanCount(Log);
-			this.autoLoanCount = new LoanCount(Log);
+			AutoLoanCount = new LoanCount(Log);
 		} // constructor
 
 		public override void Add(Datum d, int cashRequestIndex) {
@@ -32,9 +32,11 @@
 				this.autoAmount += AutoApproved.LastAmount;
 
 				this.manualLoanCount += d.Manual(cashRequestIndex).LoanCount;
-				this.autoLoanCount += d.Auto(cashRequestIndex).LoanCount;
+				AutoLoanCount += d.Auto(cashRequestIndex).LoanCount;
 			} // if
 		} // Add
+
+		public LoanCount AutoLoanCount { get; private set; }
 
 		public int DrawSummary(int row) {
 			row = SetRowValues(row, true,
@@ -49,22 +51,22 @@
 
 			row = SetRowValues(row, "Issued",
 				new TitledValue(this.manualLoanCount.Total.Amount, this.manualLoanCount.Total.Count),
-				new TitledValue(this.autoLoanCount.Total.Amount, this.autoLoanCount.Total.Count)
+				new TitledValue(AutoLoanCount.Total.Amount, AutoLoanCount.Total.Count)
 			);
 
 			row = SetRowValues(row, "Default issued",
 				new TitledValue(this.manualLoanCount.DefaultIssued.Amount, this.manualLoanCount.DefaultIssued.Count),
-				new TitledValue(this.autoLoanCount.DefaultIssued.Amount, this.autoLoanCount.DefaultIssued.Count)
+				new TitledValue(AutoLoanCount.DefaultIssued.Amount, AutoLoanCount.DefaultIssued.Count)
 			);
 
 			row = SetRowValues(row, "Default issued rate (% of loans)",
 				new TitledValue(
 					this.manualLoanCount.DefaultIssued.Amount, this.manualLoanCount.Total.Amount,
-					this.autoLoanCount.DefaultIssued.Count, this.autoLoanCount.Total.Count
+					AutoLoanCount.DefaultIssued.Count, AutoLoanCount.Total.Count
 				),
 				new TitledValue(
-					this.autoLoanCount.DefaultIssued.Amount, this.autoLoanCount.Total.Amount,
-					this.autoLoanCount.DefaultIssued.Count, this.autoLoanCount.Total.Count
+					AutoLoanCount.DefaultIssued.Amount, AutoLoanCount.Total.Amount,
+					AutoLoanCount.DefaultIssued.Count, AutoLoanCount.Total.Count
 				)
 			);
 
@@ -75,23 +77,23 @@
 				),
 				new TitledValue(
 					this.manualLoanCount.DefaultIssued.Amount, this.autoAmount,
-					this.autoLoanCount.DefaultIssued.Count, Count
+					AutoLoanCount.DefaultIssued.Count, Count
 				)
 			);
 
 			row = SetRowValues(row, "Default outstanding",
 				new TitledValue(this.manualLoanCount.DefaultOutstanding.Amount, this.manualLoanCount.DefaultOutstanding.Count),
-				new TitledValue(this.autoLoanCount.DefaultOutstanding.Amount, this.autoLoanCount.DefaultOutstanding.Count)
+				new TitledValue(AutoLoanCount.DefaultOutstanding.Amount, AutoLoanCount.DefaultOutstanding.Count)
 			);
 
 			row = SetRowValues(row, "Default outstanding rate (% of loans)",
 				new TitledValue(
 					this.manualLoanCount.DefaultOutstanding.Amount, this.manualLoanCount.Total.Amount,
-					this.autoLoanCount.DefaultOutstanding.Count, this.autoLoanCount.Total.Count
+					AutoLoanCount.DefaultOutstanding.Count, AutoLoanCount.Total.Count
 				),
 				new TitledValue(
-					this.autoLoanCount.DefaultOutstanding.Amount, this.autoLoanCount.Total.Amount,
-					this.autoLoanCount.DefaultOutstanding.Count, this.autoLoanCount.Total.Count
+					AutoLoanCount.DefaultOutstanding.Amount, AutoLoanCount.Total.Amount,
+					AutoLoanCount.DefaultOutstanding.Count, AutoLoanCount.Total.Count
 				)
 			);
 
@@ -102,7 +104,7 @@
 				),
 				new TitledValue(
 					this.manualLoanCount.DefaultOutstanding.Amount, this.autoAmount,
-					this.autoLoanCount.DefaultOutstanding.Count, Count
+					AutoLoanCount.DefaultOutstanding.Count, Count
 				)
 			);
 
@@ -153,9 +155,9 @@
 					new TitledValue("manual default outstanding loan amount", this.manualLoanCount.DefaultOutstanding.Amount),
 				},
 				new[] {
-					new TitledValue("auto loan amount", this.autoLoanCount.Total.Amount),
-					new TitledValue("auto default issued loan amount", this.autoLoanCount.DefaultIssued.Amount),
-					new TitledValue("auto default outstanding loan amount", this.autoLoanCount.DefaultOutstanding.Amount),
+					new TitledValue("auto loan amount", AutoLoanCount.Total.Amount),
+					new TitledValue("auto default issued loan amount", AutoLoanCount.DefaultIssued.Amount),
+					new TitledValue("auto default outstanding loan amount", AutoLoanCount.DefaultOutstanding.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues
@@ -168,6 +170,5 @@
 		private decimal autoAmount;
 
 		private LoanCount manualLoanCount;
-		private LoanCount autoLoanCount;
 	} // class ManuallyAndAutoApproved
 } // namespace

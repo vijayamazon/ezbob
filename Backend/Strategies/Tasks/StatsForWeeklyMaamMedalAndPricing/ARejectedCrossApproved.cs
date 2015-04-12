@@ -7,66 +7,10 @@
 	internal abstract class ARejectedCrossApproved : AStatItem {
 		public override void Add(Datum d, int cashRequestIndex) {
 			if (Added.If(Rejected.LastWasAdded && Approved.LastWasAdded, Approved.LastAmount))
-				this.loanCount += d.Manual(cashRequestIndex).LoanCount;
+				LoanCount += d.Manual(cashRequestIndex).LoanCount;
 		} // Add
 
-		public int DrawSummary(int row) {
-			row = SetRowValues(row, true,
-				new TitledValue("Manual amount", "Manual count"),
-				new TitledValue("Auto amount", "Auto count")
-				);
-
-			row = SetRowValues(row, "Approved", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(Amount, Count)
-			));
-
-			row = SetRowValues(row, "Issued", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(this.loanCount.Total.Amount, this.loanCount.Total.Count)
-			));
-
-			row = SetRowValues(row, "Default issued", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(this.loanCount.DefaultIssued.Amount, this.loanCount.DefaultIssued.Count)
-			));
-
-			row = SetRowValues(row, "Default issued rate (% of loans)", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(
-					this.loanCount.DefaultIssued.Amount, this.loanCount.Total.Amount,
-					this.loanCount.DefaultIssued.Count, this.loanCount.Total.Count
-				)
-			));
-
-			row = SetRowValues(row, "Default issued rate (% of approvals)", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(this.loanCount.DefaultIssued.Amount, Amount, this.loanCount.DefaultIssued.Count, Count)
-			));
-
-			row = SetRowValues(row, "Default outstanding", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(this.loanCount.DefaultOutstanding.Amount, this.loanCount.DefaultOutstanding.Count)
-			));
-
-			row = SetRowValues(row, "Default outstanding rate (% of loans)", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(
-					this.loanCount.DefaultOutstanding.Amount, this.loanCount.Total.Amount,
-					this.loanCount.DefaultOutstanding.Count, this.loanCount.Total.Count
-				)
-			));
-
-			row = SetRowValues(row, "Default outstanding rate (% of approvals)", OrderApprovedAndRejected(
-				new TitledValue(0, 0),
-				new TitledValue(
-					this.loanCount.DefaultOutstanding.Amount, Amount,
-					this.loanCount.DefaultOutstanding.Count, Count
-				)
-			));
-
-			return row;
-		} // DrawSummary
+		public abstract int DrawSummary(int row);
 
 		protected ARejectedCrossApproved(
 			ASafeLog log,
@@ -83,14 +27,12 @@
 			rejected,
 			approved
 		) {
-			this.loanCount = new LoanCount(Log);
+			LoanCount = new LoanCount(Log);
 		} // constructor
 
 		protected override TitledValue[] PrepareCountRowValues() {
 			return null;
 		} // PrepareCountRowValues
-
-		protected abstract TitledValue[] OrderApprovedAndRejected(TitledValue rejected, TitledValue approved);
 
 		protected override List<TitledValue[]> PrepareMultipleCountRowValues() {
 			return new List<TitledValue[]> {
@@ -103,10 +45,10 @@
 					new TitledValue("count / approved %", Count, Approved.Count),
 				},
 				new [] {
-					new TitledValue("loan count", this.loanCount.Total.Count),
+					new TitledValue("loan count", LoanCount.Total.Count),
 				},
 				new [] {
-					new TitledValue("default loan count", this.loanCount.DefaultIssued.Count),
+					new TitledValue("default loan count", LoanCount.DefaultIssued.Count),
 				},
 			};
 		} // PrepareMultipleCountRowValues
@@ -122,17 +64,17 @@
 					new TitledValue("amount / approved %", Amount, Approved.Amount),
 				},
 				new [] {
-					new TitledValue("loan amount", this.loanCount.Total.Amount),
-					new TitledValue("default issued loan amount", this.loanCount.DefaultIssued.Amount),
-					new TitledValue("default outstanding loan amount", this.loanCount.DefaultOutstanding.Amount),
+					new TitledValue("loan amount", LoanCount.Total.Amount),
+					new TitledValue("default issued loan amount", LoanCount.DefaultIssued.Amount),
+					new TitledValue("default outstanding loan amount", LoanCount.DefaultOutstanding.Amount),
 				},
 			};
 		} // PrepareMultipleAmountRowValues
 
+		protected virtual LoanCount LoanCount { get; private set; }
+
 		private AStatItem Total { get { return Superior[0]; } }
 		private AStatItem Rejected { get { return Superior[1]; } }
 		private AStatItem Approved { get { return Superior[2]; } }
-
-		private LoanCount loanCount;
 	} // class RejectedCrossApproved
 } // namespace

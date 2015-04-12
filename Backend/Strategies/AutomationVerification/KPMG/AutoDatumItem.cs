@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
+	using AutomationCalculator.ProcessHistory.Trails;
 	// using AutomationCalculator.Common;
 	using ConfigManager;
 	using DbConstants;
@@ -53,6 +54,16 @@
 			} // set
 		} // AutomationDecision
 
+		public class MaxOfferResult {
+			public int ApprovedAmount { get; set; }
+			public int RepaymentPeriod { get; set; }
+			public decimal InterestRate { get; set; }
+			public decimal SetupFeePct { get; set; }
+			public decimal SetupFeeAmount { get; set; }
+		} // class MaxOfferResult
+
+		public MaxOfferResult MaxOffer { get; private set; }
+
 		public bool IsAutoReRejected { get; private set; }
 		public bool IsAutoRejected { get; private set; }
 		public bool IsAutoReApproved { get; private set; }
@@ -97,7 +108,27 @@
 			} // switch
 
 			LoanCount.Cap(approvedAmount);
+
+			// And now for max loan count.
+
+			approvedAmount = 0;
+
+			MaxLoanCount = manualLoanCount.Clone();
+
+			switch (AutomationDecision) {
+			case DecisionActions.Approve:
+				approvedAmount = MaxOffer.ApprovedAmount;
+				break;
+
+			case DecisionActions.ReApprove:
+				approvedAmount = ReapprovedAmount;
+				break;
+			} // switch
+
+			MaxLoanCount.Cap(approvedAmount);
 		} // SetAdjustedLoanCount
+
+		public virtual LoanCount MaxLoanCount { get; private set; } // LoanCount
 
 		public void RunAutomation(bool isHomeOwner, AConnection db) {
 			Log.Info(
@@ -256,7 +287,7 @@
 				DecisionTime.MomentStr()
 			);
 
-			Calculate(isHomeOwner, medal, true, CashRequestID, db);
+			Calculate(isHomeOwner, medal, CashRequestID, db);
 
 			if (ApprovedAmount > 0)
 				AutomationDecision = DecisionActions.Approve;
@@ -272,63 +303,31 @@
 				IsAutoApproved,
 				ApprovedAmount
 			);
-
-			/*
-			if (medal.OfferedAmountsDiffer()) {
-				AutoMax.Calculate(CustomerID, isHomeOwner, medal, false, CashRequestID, Tag, db, log);
-
-				log.Info(
-					"RunAutomation-RunAutoApprove()-AutoMax done for customer {0} with decision time '{1}': " +
-					"approved amount is {2}.",
-					CustomerID,
-					DecisionTime.MomentStr(),
-					AutoMax.Amount
-				);
-			} else {
-				AutoMax = null;
-
-				log.Info(
-					"RunAutomation-RunAutoApprove()-AutoMax not done for customer {0} with decision time '{1}': " +
-					"same min and max amounts.",
-					CustomerID,
-					DecisionTime.MomentStr()
-				);
-			} // if
-
-			log.Info(
-				"RunAutomation-RunAutoApprove() complete for customer {0} with decision time '{1}'.",
-				CustomerID,
-				DecisionTime.MomentStr()
-			);
-			*/
 		} // RunAutoApprove
 
 		private void Calculate(
 			bool isHomeOwner,
 			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
-			bool takeMinOffer,
 			long cashRequestID,
 			AConnection db
 		) {
 			Log.Info(
-				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
-				"has home '{2}', medal '{3}', take min '{4}') started...",
+				"RunAutomation-Auto.Calculate(customer {0}, cash request {1}, has home '{2}', medal '{3}') started...",
 				CustomerID,
 				cashRequestID,
 				isHomeOwner,
-				medal.MedalClassification,
-				takeMinOffer ? "Min" : "Max"
+				medal.MedalClassification
 			);
 
 			MedalName = medal.MedalClassification.ToString();
 
 			EzbobScore = medal.TotalScoreNormalized;
 
-			int amountBeforeApproval = takeMinOffer ? medal.RoundOfferedAmount() : medal.RoundMaxOfferedAmount();
+			// int amountBeforeApproval = takeMinOffer ? medal.RoundOfferedAmount() : medal.RoundMaxOfferedAmount();
+			int amountBeforeApproval = medal.RoundOfferedAmount();
 
 			Log.Info(
-				"RunAutomation-Auto{0}.Calculate() before capping: medal '{1}', amount {2}\n{3}",
-				takeMinOffer ? "Min" : "Max",
+				"RunAutomation-Auto.Calculate() before capping: medal '{0}', amount {1}\n{2}",
 				MedalName,
 				amountBeforeApproval,
 				medal
@@ -340,9 +339,8 @@
 			);
 
 			Log.Info(
-				"RunAutomation-Auto{0}.Calculate(), after capping: medal name '{1}', amount {2}, " +
-				"medal '{3}', medal type '{4}', turnover type '{5}', decision time '{6}'.",
-				takeMinOffer ? "Min" : "Max",
+				"RunAutomation-Auto.Calculate(), after capping: medal name '{0}', amount {1}, " +
+				"medal '{2}', medal type '{3}', turnover type '{4}', decision time '{5}'.",
 				MedalName,
 				amountBeforeApproval,
 				(AutomationCalculator.Common.Medal)medal.MedalClassification,
@@ -371,8 +369,7 @@
 
 			if (!IsApproved) {
 				Log.Info(
-					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1} - not calculating offer.",
-					takeMinOffer ? "Min" : "Max",
+					"RunAutomation-Auto.Calculate(), after decision: amount {0} - not calculating offer.",
 					ApprovedAmount
 				);
 
@@ -380,11 +377,18 @@
 				InterestRate = 0;
 				SetupFeeAmount = 0;
 				SetupFeePct = 0;
+
+				MaxOffer = new MaxOfferResult {
+					ApprovedAmount = 0,
+					RepaymentPeriod = 0,
+					InterestRate = 0,
+					SetupFeeAmount = 0,
+					SetupFeePct = 0,
+				};
 			} else {
 				Log.Info(
-					"RunAutomation-Auto{0}.Calculate(), after decision: amount {1}, " +
-					"loan count {2}, medal '{3}', decision time '{4}' - going for offer calculation.",
-					takeMinOffer ? "Min" : "Max",
+					"RunAutomation-Auto.Calculate(), after decision: amount {0}, " +
+					"loan count {1}, medal '{2}', decision time '{3}' - going for offer calculation.",
 					ApprovedAmount,
 					PreviousLoanCount,
 					medal.MedalClassification,
@@ -407,27 +411,90 @@
 				SetupFeeAmount = ApprovedAmount * SetupFeePct;
 
 				Log.Info(
-					"RunAutomation-Auto{0}.Calculate(), offer: amount {1}, " +
-					"repayment period {2}, interest rate {3}, setup fee {4} ({5}).",
-					takeMinOffer ? "Min" : "Max",
+					"RunAutomation-Auto.Calculate(), offer: amount {0}, " +
+					"repayment period {1}, interest rate {2}, setup fee {3} ({4}).",
 					ApprovedAmount,
 					RepaymentPeriod,
 					InterestRate,
 					SetupFeePct.ToString("P6", Library.Instance.Culture),
 					SetupFeeAmount.ToString("C2", Library.Instance.Culture)
 				);
+
+				if (medal.OfferedAmountsDiffer())
+					CalculateMaxOffer(isHomeOwner, medal, approveAgent.Trail);
+				else {
+					MaxOffer = new MaxOfferResult {
+						ApprovedAmount = ApprovedAmount,
+						RepaymentPeriod = RepaymentPeriod,
+						InterestRate = InterestRate,
+						SetupFeeAmount = SetupFeeAmount,
+						SetupFeePct = SetupFeePct,
+					};
+				} // if
 			} // if
 
 			Log.Info(
-				"RunAutomation-Auto{4}.Calculate(customer {0}, cash request {1}, " +
-				"has home '{2}', medal '{3}', take min '{4}') complete.",
+				"RunAutomation-Auto.Calculate(customer {0}, cash request {1}, has home '{2}', medal '{3}') complete.",
 				CustomerID,
 				cashRequestID,
 				isHomeOwner,
-				medal.MedalClassification,
-				takeMinOffer ? "Min" : "Max"
+				medal.MedalClassification
 			);
 		} // Calculate
+
+		private void CalculateMaxOffer(
+			bool isHomeOwner,
+			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
+			ApprovalTrail trail
+		) {
+			decimal approvedAmount = Math.Min(
+				medal.RoundMaxOfferedAmount(),
+				isHomeOwner ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
+			);
+
+			approvedAmount -= trail.MyInputData.MetaData.OutstandingPrincipal;
+
+			if (approvedAmount < 0)
+				approvedAmount = 0;
+
+			if (approvedAmount == 0) {
+				MaxOffer = new MaxOfferResult {
+					ApprovedAmount = 0,
+					RepaymentPeriod = 0,
+					InterestRate = 0,
+					SetupFeeAmount = 0,
+					SetupFeePct = 0,
+				};
+			} else {
+				decimal roundTo = trail.MyInputData.Configuration.GetCashSliderStep;
+
+				if (roundTo < 0.00000001m)
+					roundTo = 1m;
+
+				approvedAmount = roundTo * Math.Round(
+					approvedAmount / roundTo, 0, MidpointRounding.AwayFromZero
+				);
+
+				MaxOffer = new MaxOfferResult {
+					ApprovedAmount = (int)approvedAmount,
+				};
+
+				var odc = new OfferDualCalculator(
+					CustomerID,
+					DecisionTime,
+					MaxOffer.ApprovedAmount,
+					PreviousLoanCount > 0,
+					medal.MedalClassification
+				);
+
+				odc.CalculateOffer();
+
+				MaxOffer.RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
+				MaxOffer.InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
+				MaxOffer.SetupFeePct = odc.VerifyBoundaries.SetupFee / 100.0m;
+				MaxOffer.SetupFeeAmount = MaxOffer.ApprovedAmount * MaxOffer.SetupFeePct;
+			} // if
+		} // CalculateMaxOffer
 
 		private DecisionActions automationDecision;
 	} // AutoDatumItem

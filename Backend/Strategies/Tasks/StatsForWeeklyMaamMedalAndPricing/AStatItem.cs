@@ -174,7 +174,7 @@
 			SetBorder(this.sheet.Cells[row, column + 1]).Style.Border.Left.Style = ExcelBorderStyle.None;
 		} // SetOneValue
 
-		private readonly ExcelWorksheet sheet;
+		protected readonly ExcelWorksheet sheet;
 		private readonly string title;
 
 		private static readonly Color BorderColor = Color.Black;

@@ -25,9 +25,11 @@
 		public override void Add(Datum d, int cashRequestIndex) {
 			AutoDatumItem auto = d.Auto(cashRequestIndex);
 
+			var approvedAmount = this.takeMin ? auto.ApprovedAmount : auto.MaxOffer.ApprovedAmount;
+
 			Added.If(
 				auto.HasDecided && auto.AutomationDecision.In(DecisionActions.Approve, DecisionActions.ReApprove),
-				auto.AutomationDecision == DecisionActions.ReApprove ? auto.ReapprovedAmount : auto.ApprovedAmount
+				auto.AutomationDecision == DecisionActions.ReApprove ? auto.ReapprovedAmount : approvedAmount
 			);
 		} // Add
 

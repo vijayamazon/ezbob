@@ -4,6 +4,7 @@
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
+	using JetBrains.Annotations;
 	using OfficeOpenXml;
 
 	internal class Stats {
@@ -59,16 +60,32 @@
 			this.sheet.Cells[row, 1].Style.Font.Size = 14;
 			row++;
 
-			row = this.manuallyAndAutoApproved.DrawSummary(row + 1);
+			int rowMAAA = row + 1;
 
-			row = this.manuallyRejectedAutoApproved.DrawSummary(row + 1);
+			row = this.manuallyAndAutoApproved.DrawSummary(rowMAAA);
 
-			row = this.manuallyApprovedAutoRejected.DrawSummary(row + 1);
+			this.manuallyRejectedAutoApproved.IssuedCountRate = this.manuallyAndAutoApproved.Count == 0
+				? 0
+				: (decimal)this.manuallyAndAutoApproved.AutoLoanCount.Total.Count / this.manuallyAndAutoApproved.Count;
 
-			row++;
+			this.manuallyRejectedAutoApproved.OutstandingAmountRate =
+				this.manuallyAndAutoApproved.AutoLoanCount.DefaultIssued.Amount == 0
+					? 0
+					: this.manuallyAndAutoApproved.AutoLoanCount.DefaultOutstanding.Amount /
+						this.manuallyAndAutoApproved.AutoLoanCount.DefaultIssued.Amount;
+
+			int rowMRAA = row + 1;
+
+			row = this.manuallyRejectedAutoApproved.DrawSummary(rowMRAA);
+
+			int rowMAAR = row + 1;
+
+			row = this.manuallyApprovedAutoRejected.DrawSummary(rowMAAR);
+
+			row = DrawTotalSummary(row + 1, rowMAAA, rowMRAA, rowMAAR);
 
 			AStatItem.SetBorder(this.sheet.Cells[row, 1, row, AStatItem.LastColumnNumber]).Merge = true;
-			this.sheet.SetCellValue(row, 1, "Details", bSetZebra: false, oBgColour: Color.Bisque, bIsBold: true);
+			this.sheet.SetCellValue(row, 1, "Details", bSetZebra: false, oBgColour: Color.Coral, bIsBold: true);
 			this.sheet.Cells[row, 1].Style.Font.Size = 14;
 			row++;
 
@@ -89,6 +106,119 @@
 
 		public ManuallyApproved ManuallyApproved { get; private set; }
 
+		private int DrawTotalSummary(int row, int rowMAAA, int rowMRAA, int rowMAAR) {
+			const int countOffset = 1;
+			const int issuedOffset = countOffset + 1;
+			const int defaultIssuedOffset = issuedOffset + 1;
+			const int defaultOutstandingOffset = defaultIssuedOffset + 3;
+
+			int offset;
+
+			int column = 1;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("TOTAL", true);
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Manual amount", true);
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Manual count", true);
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Auto amount", true);
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Auto count", true);
+
+			row++;
+			column = 1;
+
+			int approvedRow = row;
+			offset = countOffset;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Approved", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "B", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "C", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "D", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "E", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+
+			row++;
+			column = 1;
+
+			int issuedRow = row;
+			offset = issuedOffset;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Issued", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "B", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "C", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "D", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "E", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+
+			row++;
+			column = 1;
+
+			int defaultIssuedRow = row;
+			offset = defaultIssuedOffset;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Default issued", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "B", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "C", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "D", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "E", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+
+			row++;
+			column = 1;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Default issued rate (% of loans)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "B", defaultIssuedRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "C", defaultIssuedRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "D", defaultIssuedRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "E", defaultIssuedRow, issuedRow);
+
+			row++;
+			column = 1;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Default issued rate (% of approvals)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "B", defaultIssuedRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "C", defaultIssuedRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "D", defaultIssuedRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "E", defaultIssuedRow, approvedRow);
+
+			row++;
+			column = 1;
+
+			int defaultOutstandingRow = row;
+			offset = defaultOutstandingOffset;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Default outstanding", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "B", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "C", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Money, "={0}{1}+{0}{2}+{0}{3}", "D", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+			column = SetFormula(row, column, TitledValue.Format.Int,   "={0}{1}+{0}{2}+{0}{3}", "E", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+
+			row++;
+			column = 1;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Default outstanding rate (% of loans)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "B", defaultOutstandingRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "C", defaultOutstandingRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "D", defaultOutstandingRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "E", defaultOutstandingRow, issuedRow);
+
+			row++;
+			column = 1;
+
+			column = AStatItem.SetBorder(this.sheet.Cells[row, column]).SetCellValue("Default outstanding rate (% of approvals)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "B", defaultOutstandingRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "C", defaultOutstandingRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "D", defaultOutstandingRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, "={0}{1}/{0}{2}", "E", defaultOutstandingRow, approvedRow);
+
+			return row + 2;
+		} // DrawTotalSummary
+
+		[StringFormatMethod("formulaFormat")]
+		private int SetFormula(int row, int column, string valueFormat, string formulaFormat, params object[] args) {
+			var cell = AStatItem.SetBorder(this.sheet.Cells[row, column]);
+
+			cell.Formula = string.Format(formulaFormat, args);
+			cell.Style.Numberformat.Format = valueFormat;
+
+			return column + 1;
+		} // SetFormula
+
 		private int FlushLoanIDList(ExcelWorksheet targetSheet, int column, string title, SortedSet<int> ids) {
 			targetSheet.SetCellValue(1, column, this.name + " - " + title);
 
@@ -108,7 +238,7 @@
 		private readonly ExcelWorksheet sheet;
 
 		private readonly ManuallyAndAutoApproved manuallyAndAutoApproved;
-		private readonly ARejectedCrossApproved manuallyRejectedAutoApproved;
+		private readonly ManuallyRejectedAutoApproved manuallyRejectedAutoApproved;
 		private readonly ARejectedCrossApproved manuallyApprovedAutoRejected;
 	} // class Stats
 } // namespace
