@@ -1,6 +1,3 @@
-USE [CallCredit]
-GO
-
 SET QUOTED_IDENTIFIER ON
 GO
 

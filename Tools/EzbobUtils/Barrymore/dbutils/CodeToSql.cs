@@ -52,7 +52,7 @@
 			oFields.Add("\t\t[TimestampCounter] ROWVERSION");
 
 			return
-				//"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
+				"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
 				"IF OBJECT_ID('" + sTableName + "') IS NULL\nBEGIN\n" +
 				"\tCREATE TABLE [" + sTableName + "] (\n" +
 				string.Join(",\n", oFields) +
