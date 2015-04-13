@@ -243,6 +243,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Matrices", "Tools\EzbobUtil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelExt", "Tools\EzbobUtils\ExcelExt\ExcelExt.csproj", "{A6CC0A11-823D-4193-B135-7B8E9F8796C1}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CallCredit", "CallCredit", "{3ABCD981-6226-4253-A08C-7426FF7FACA0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallCreditLib", "Integration\CallCreditLib\CallCreditLib.csproj", "{C91A56A7-87AE-44CA-9640-59510455BC09}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CallCreditTestClient", "Tools\EzbobUtils\CallCreditTestClient\CallCreditTestClient.csproj", "{210A9D90-646B-43F3-A415-378C156D7B35}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1224,6 +1230,26 @@ Global
 		{A6CC0A11-823D-4193-B135-7B8E9F8796C1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{A6CC0A11-823D-4193-B135-7B8E9F8796C1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A6CC0A11-823D-4193-B135-7B8E9F8796C1}.Release|x86.ActiveCfg = Release|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C91A56A7-87AE-44CA-9640-59510455BC09}.Release|x86.ActiveCfg = Release|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Release|Any CPU.Build.0 = Release|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{210A9D90-646B-43F3-A415-378C156D7B35}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1338,6 +1364,9 @@ Global
 		{1F66A8FA-B726-4931-8F68-847C5FFF953C} = {7CC3C94B-0C32-4652-B7CC-8C63F66FA731}
 		{43BB65D6-C562-49C9-BB02-CC8275E39518} = {6CD922BC-E41C-4B2E-B133-943764D6BC93}
 		{A6CC0A11-823D-4193-B135-7B8E9F8796C1} = {6CD922BC-E41C-4B2E-B133-943764D6BC93}
+		{3ABCD981-6226-4253-A08C-7426FF7FACA0} = {DCBC1A64-44B4-47D5-9B12-C963FBA9C24C}
+		{C91A56A7-87AE-44CA-9640-59510455BC09} = {3ABCD981-6226-4253-A08C-7426FF7FACA0}
+		{210A9D90-646B-43F3-A415-378C156D7B35} = {3ABCD981-6226-4253-A08C-7426FF7FACA0}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

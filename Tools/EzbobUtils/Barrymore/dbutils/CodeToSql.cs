@@ -32,7 +32,7 @@
 				bool isPk = false;
 
 				if (oKeyAttr.Any(x => x.AttributeType == typeof(PKAttribute))) {
-					oConstraints.Add("\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY ([" + oPropInfo.Name + "])");
+					oConstraints.Add("\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY ([" + oPropInfo.Name + "]),");
 					oFields.Insert(0, fullPropName);
 					isPk = true;
 				} // if
@@ -42,7 +42,7 @@
 				if ((fk != null) && !string.IsNullOrWhiteSpace(fk.TableName)) {
 					oConstraints.Add(
 						"\t\tCONSTRAINT FK_" + sTableName + "_" + oPropInfo.Name +
-						" FOREIGN KEY ([" + oPropInfo.Name + "]) REFERENCES [" + fk.TableName + "] ([" + fk.FieldName + "])"
+						" FOREIGN KEY ([" + oPropInfo.Name + "]) REFERENCES [" + fk.TableName + "] ([" + fk.FieldName + "]),"
 					);
 				} // if
 
@@ -83,6 +83,14 @@
 			PropertyTraverser.Traverse(typeof(T), (ignored, oPropInfo) => {
 				string sType = T2T(oPropInfo);
 
+				List<bool> oKeyAttr = oPropInfo.CustomAttributes
+					.Where(a => a.AttributeType == typeof(PKAttribute) && a.ConstructorArguments.Count > 0)
+					.Select(a => (bool)a.ConstructorArguments[0].Value)
+					.ToList();
+
+				if (oKeyAttr.Count > 0 && oKeyAttr[0]) // is identity
+					return;
+
 				if (!string.IsNullOrWhiteSpace(sType)) {
 					if (oPropInfo.DeclaringType == typeof(T)) {
 						oFields.Add("["+ oPropInfo.Name + "] " + sType);
@@ -110,7 +118,7 @@
 			oProcSql.Add("GO");
 
 			return
-			 //"SET QUOTED_IDENTIFIER ON\nGO\n\n" +
+			 "SET QUOTED_IDENTIFIER ON\nGO\n\n" +
 			 string.Join("\n", oSql) + "\n\t" +
 			 string.Join(",\n\t", oFields) + "\n)\nGO\n\n" +
 			 string.Join("\n", oProcSql) + "\n\n";
@@ -124,7 +132,7 @@
 				return "INT NULL";
 
 			if (oPropInfo.PropertyType == typeof(int))
-				return "INT" + ExtractIdentity(oPropInfo) + " NULL";//" NOT NULL"
+				return "INT" + ExtractIdentity(oPropInfo) + " NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(long?))
 				return "BIGINT NULL";
@@ -133,7 +141,7 @@
 				return "BIGINT" + ExtractIdentity(oPropInfo) + " NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(decimal))
-				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NULL";//") NOT NULL";
+				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(decimal?))
 				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NULL";
@@ -142,13 +150,19 @@
 				return "DATETIME NULL";
 
 			if (oPropInfo.PropertyType == typeof(DateTime))
-				return "DATETIME NULL";//"DATETIME NOT NULL"
+				return "DATETIME NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(bool))
-				return "BIT NULL";//"BIT NOT NULL";
+				return "BIT NOT NULL";
 
 			if (oPropInfo.PropertyType == typeof(bool?))
 				return "BIT NULL";
+
+			if (oPropInfo.PropertyType == typeof(float))
+				return "FLOAT NOT NULL";
+
+			if (oPropInfo.PropertyType == typeof(float?))
+				return "FLOAT NULL";
 
 			return null;
 		} // T2T

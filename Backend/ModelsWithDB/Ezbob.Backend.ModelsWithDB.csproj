@@ -50,6 +50,52 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="BrokerInstantOfferModels.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditApplicantAddresses.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditApplicantNames.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditData.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAccs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAccsHistory.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAccsNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddressConfs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddressConfsResidents.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddressConfsResidentsErHistory.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddressConfsResidentsErHistoryNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddressConfsResidentsNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddresses.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddressLinks.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAddressLinksNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAliasLinks.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAliasLinksNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAssociateLinks.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataAssociateLinksNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataBais.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataBaisNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCifasFiling.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCifasFilingNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCifasPlusCases.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCifasPlusCasesDmrs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCifasPlusCasesFilingReasons.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCifasPlusCasesNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCifasPlusCasesSubjects.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataCreditScores.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataJudgments.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataJudgmentsNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataLinkAddresses.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataRtr.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataRtrNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataSearches.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataTpd.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataTpdDecisionAlertIndividuals.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataTpdDecisionAlertIndividualsNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataTpdDecisionCreditScores.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataTpdHhoCreditScores.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataTpdReviewAlertIndividuals.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditDataTpdReviewAlertIndividualsNocs.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditEmail.cs" />
+    <Compile Include="CallCredit\CallCreditData\CallCreditTelephone.cs" />
     <Compile Include="CampaignSourceRef.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
@@ -116,6 +162,7 @@
       <Name>Logger</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

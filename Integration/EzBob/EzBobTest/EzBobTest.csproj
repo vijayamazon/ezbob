@@ -100,6 +100,7 @@
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="PayPalTest.cs" />
     <Compile Include="TestAlibaba.cs" />
+    <Compile Include="TestCallCredit.cs" />
     <Compile Include="TestMedal.cs" />
     <Compile Include="TestOffer.cs" />
     <Compile Include="Misc.cs" />
