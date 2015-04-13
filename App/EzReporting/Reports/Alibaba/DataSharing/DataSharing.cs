@@ -13,7 +13,7 @@
 			if (oDB == null)
 				throw new Exception("Database connection not specified for DataSharing report.");
 
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			m_oSp = new RptAlibabaDataSharing(bIncludeTestCustomers, oDB, m_oLog);
 

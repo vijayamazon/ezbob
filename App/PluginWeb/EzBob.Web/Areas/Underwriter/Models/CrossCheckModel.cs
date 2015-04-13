@@ -80,7 +80,11 @@
 			ExperianDirectors = GetExperianDirectors(customer)
 				.DirectorNames;
 
-			var current = customer.AddressInfo.PersonalAddress.FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
+		    var current = customer
+		        .AddressInfo
+                .PersonalAddress
+                .FirstOrDefault(x => x.AddressType == CustomerAddressType.PersonalAddress);
+
 			Zoopla zoopla = null;
 			if (current != null)
 				zoopla = current.Zoopla.LastOrDefault();
@@ -101,7 +105,12 @@
 
 				AssetWorth = current.ZooplaValue - ExperianMortgage;
 			}
-			var prev = customer.AddressInfo.PrevPersonAddresses.FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
+            var prev = customer
+                .AddressInfo
+                .PrevPersonAddresses
+                .OrderByDescending(x => x.AddressId)
+                .FirstOrDefault(x => x.AddressType == CustomerAddressType.PrevPersonAddresses);
+
 			CurrentAddress = current;
 			if (prev != null)
 				PrevAddress = prev;

@@ -92,6 +92,9 @@
 				new QueryParameter("Now", now));
 
 			AddCollectionLog(customerID, loanID, type, CollectionMethod.ChangeStatus);
+
+            //TODO update loan collection status if want to be on loan level and not on customer level
+            Log.Info("add new late fee and mark loan as late for customer {0}, loan {1}", customerID, loanID);
 		}
 
 		private void CollectionDay0(CollectionDataModel model, CollectionType type) {
@@ -381,6 +384,9 @@
 				appliedLateCharge = papi.ApplyLateCharge(feeAmount, loanId, feeType);
 			} // if
 
+            //TODO add late fees to new table
+            Log.Info("add new late fee and mark loan as late for customer {0}", customerId);
+
 			Log.Info("Applied late charge for customer {0} loan {1} : {2}", customerId, loanId, appliedLateCharge);
 
 		} // MarkLoansAsLate
@@ -496,6 +502,9 @@
 				new QueryParameter("Late90Plus", model.Late90Plus),
 				new QueryParameter("Late90PlusNum", model.Late90PlusNum)
 				);
+
+            //TODO save loan statistics to new table
+            Log.Info("add new late fee and mark loan as late for loanId {0}", loanId);
 		}// UpdateLoanStats
 
 

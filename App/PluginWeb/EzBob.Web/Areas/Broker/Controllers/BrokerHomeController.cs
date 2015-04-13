@@ -22,6 +22,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
+	using PostcodeAnywhere;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -36,8 +37,10 @@
 		public System.Web.Mvc.ActionResult Index(string sourceref = "") {
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
+			ms_oLog.Debug("UI origin is {0}", uiOrigin.Stringify());
+
 			if (!uiOrigin.IsEzbob()) {
-				return RedirectToActionPermanent(
+				return RedirectToAction(
 					"Index",
 					User.Identity.IsAuthenticated ? "Profile" : "Wizard",
 					new { Area = "Customer" }
@@ -55,8 +58,7 @@
 				Response.Cookies.Add(cookie);
 			} // if
 
-			oModel.MessageOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString()
-				.Trim();
+			oModel.MessageOnStart = (Session[Constant.Broker.MessageOnStart] ?? string.Empty).ToString().Trim();
 
 			if (!string.IsNullOrWhiteSpace(oModel.MessageOnStart)) {
 				oModel.MessageOnStartSeverity = (Session[Constant.Broker.MessageOnStartSeverity] ?? string.Empty).ToString();
@@ -71,8 +73,7 @@
 				ms_oLog.Info("Broker page sent to browser with authentication result '{0}' for identified name '{1}'.", oModel.Auth, User.Identity.Name);
 			} // if
 
-			oModel.Terms = (Session[Constant.Broker.Terms] ?? string.Empty).ToString()
-				.Trim();
+			oModel.Terms = (Session[Constant.Broker.Terms] ?? string.Empty).ToString().Trim();
 			Session[Constant.Broker.Terms] = null;
 
 			if (!string.IsNullOrWhiteSpace(oModel.Terms)) {
@@ -373,6 +374,30 @@
 			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data, oPotentialSigners: oDetails.PotentialSigners);
 		} // LoadCustomerDetails
 
+        [HttpGet]
+        [Ajax]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult LoadLeadDetails(int sLeadID, string sContactEmail) {
+            ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
+
+            var oIsAuthResult = IsAuth<CustomerDetailsBrokerForJsonResult>("Load lead details for customer " + sLeadID, sContactEmail);
+            if (oIsAuthResult != null)
+                return oIsAuthResult;
+
+            BrokerLeadDetailsDataActionResult oDetails;
+
+            try {
+                oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail);
+            } catch (Exception e) {
+                ms_oLog.Alert(e, "Failed to load customer details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
+                return new LeadDetailsBrokerForJsonResult("Failed to load lead details.");
+            } // try
+
+            ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0} complete.", sContactEmail, sLeadID);
+
+            return new LeadDetailsBrokerForJsonResult(oDetails:oDetails.BrokerLeadDataModel);
+        } // LoadCustomerDetails
+
 		[HttpGet]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -634,7 +659,7 @@
 				return new BrokerForJsonResult("Failed to add customer lead.");
 			} // try
 
-			m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(
+			this.m_oServiceClient.Instance.SalesForceAddUpdateLeadAccount(
 				(int?)null,
 				LeadEmail,
 				(int?)null,
@@ -644,6 +669,33 @@
 
 			return new BrokerForJsonResult();
 		} // AddLead
+
+        [HttpPost]
+        [Ajax]
+        [ValidateJsonAntiForgeryToken]
+        public JsonResult AddBank(string AccountNumber, string SortCode, string ContactEmail, string bankAccountType)
+        {
+            ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3}.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+
+            var oIsAuthResult = IsAuth("Add bank", ContactEmail);
+            if (oIsAuthResult != null)
+                return oIsAuthResult;
+
+            try {
+                this.m_oServiceClient.Instance.BrokerAddBank(new BrokerAddBankModel {
+                    AccountNumber = AccountNumber,
+                    SortCode = SortCode,
+                    BankAccountType = bankAccountType,
+                    BrokerEmail = ContactEmail
+                });
+            } catch (Exception ex) {
+                ms_oLog.Warn(ex, "Failed to add bank for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+                return new BrokerForJsonResult(ex.Message);
+            }
+           
+            ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+            return new BrokerForJsonResult();
+        } // AddBank
 
 		[HttpPost]
 		[Ajax]

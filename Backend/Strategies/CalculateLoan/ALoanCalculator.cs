@@ -4,6 +4,7 @@
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
+	using Ezbob.Backend.Strategies.Extensions;
 
 	// TODO: missing functionality: calculate next scheduled payment.
 	// TODO: missing functionality: calculate next scheduled payment state on specific date (e.g. in three days).

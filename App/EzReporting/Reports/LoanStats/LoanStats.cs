@@ -1,4 +1,4 @@
-﻿namespace Reports {
+﻿namespace Reports.LoanStats {
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Logger;
@@ -8,7 +8,6 @@
 	using System.Collections.Generic;
 
 	public class LoanStats : SafeLog {
-
 		public LoanStats(AConnection oDB, ASafeLog oLog = null) : base(oLog) {
 			if (oDB == null)
 				throw new ArgumentNullException("oDB", "Connection to database not specified.");
@@ -98,32 +97,32 @@
 						break;
 
 					default:
-						throw new ArgumentOutOfRangeException("MaritalStatus", (object)lse.MaritalStatus, "Unsupported marital status.");
+						throw new ArgumentOutOfRangeException(
+							"MaritalStatus",
+							(object)lse.MaritalStatus,
+							"Unsupported marital status."
+						);
 					} // switch
 
 					if (lse.IsHomeOwner)
-					{
 						lre.HomeOwnership = 1;
-					}
-					else
-					{
-						switch (lse.PropertyStatusDescription.ToLower())
-						{
-							case "social house":
-								lre.HomeOwnership = 3;
-								break;
+					else {
+						switch (lse.PropertyStatusDescription.ToLower()) {
+						case "social house":
+							lre.HomeOwnership = 3;
+							break;
 
-							case "renting":
-								lre.HomeOwnership = 0;
-								break;
+						case "renting":
+							lre.HomeOwnership = 0;
+							break;
 
-							case "living with parents":
-								lre.HomeOwnership = 2;
-								break;
+						case "living with parents":
+							lre.HomeOwnership = 2;
+							break;
 
-							default:
-								lre.HomeOwnership = null;
-								break;
+						default:
+							lre.HomeOwnership = null;
+							break;
 						} // switch
 					}
 
@@ -154,6 +153,8 @@
 					lre.Category3 = ""; // TODO
 
 					lre.Region = CustomerRegions.ContainsKey(nCustomerID) ? CustomerRegions[nCustomerID] : "";
+
+					lre.LastCashRequestID = lse.RequestIDHistory[lse.RequestIDHistory.Count - 1];
 				} // for each entry
 			} // for each customer
 
@@ -184,25 +185,26 @@
 		} // Xls
 
 		private void FillRow(ExcelWorksheet sheet, int nRowNumber, LoanStatsReportEntry lre) {
-			sheet.Cells["A"  + nRowNumber].Value = lre.IsFirstLoan;
-			sheet.Cells["B"  + nRowNumber].Value = lre.ClientLoanOrderNo;
-			sheet.Cells["C"  + nRowNumber].Value = lre.TypeOfLoan;
-			sheet.Cells["D"  + nRowNumber].Value = lre.CustomerSelection;
-			sheet.Cells["E"  + nRowNumber].Value = lre.DiscountPlan;
-			sheet.Cells["F"  + nRowNumber].Value = lre.Offline;
-			sheet.Cells["G"  + nRowNumber].Value = lre.LoanID;
-			sheet.Cells["I"  + nRowNumber].Value = lre.ClientID;
-			sheet.Cells["J"  + nRowNumber].Value = lre.ClientName;
-			sheet.Cells["K"  + nRowNumber].Value = lre.DateFirstApproved;
-			sheet.Cells["L"  + nRowNumber].Value = lre.DateLastApproved;
-			sheet.Cells["M"  + nRowNumber].Value = lre.NewOrOldClient;
-			sheet.Cells["N"  + nRowNumber].Value = lre.LoanOffered;
-			sheet.Cells["P"  + nRowNumber].Value = lre.InterestRate;
-			sheet.Cells["Q"  + nRowNumber].Value = lre.LoanIssued;
-			sheet.Cells["R"  + nRowNumber].Value = lre.IsLoanIssued;
-			sheet.Cells["T"  + nRowNumber].Value = lre.LoanIssueDate;
-			sheet.Cells["X"  + nRowNumber].Value = lre.LoanDuration;
-			sheet.Cells["Y"  + nRowNumber].Value = lre.CreditScore;
+			sheet.Cells["A" + nRowNumber].Value = lre.IsFirstLoan;
+			sheet.Cells["B" + nRowNumber].Value = lre.ClientLoanOrderNo;
+			sheet.Cells["C" + nRowNumber].Value = lre.TypeOfLoan;
+			sheet.Cells["D" + nRowNumber].Value = lre.CustomerSelection;
+			sheet.Cells["E" + nRowNumber].Value = lre.DiscountPlan;
+			sheet.Cells["F" + nRowNumber].Value = lre.Offline;
+			sheet.Cells["G" + nRowNumber].Value = lre.LoanID;
+			// sheet.Cells["H" + nRowNumber].Value = lre.LastCashRequestID;
+			sheet.Cells["I" + nRowNumber].Value = lre.ClientID;
+			sheet.Cells["J" + nRowNumber].Value = lre.ClientName;
+			sheet.Cells["K" + nRowNumber].Value = lre.DateFirstApproved;
+			sheet.Cells["L" + nRowNumber].Value = lre.DateLastApproved;
+			sheet.Cells["M" + nRowNumber].Value = lre.NewOrOldClient;
+			sheet.Cells["N" + nRowNumber].Value = lre.LoanOffered;
+			sheet.Cells["P" + nRowNumber].Value = lre.InterestRate;
+			sheet.Cells["Q" + nRowNumber].Value = lre.LoanIssued;
+			sheet.Cells["R" + nRowNumber].Value = lre.IsLoanIssued;
+			sheet.Cells["T" + nRowNumber].Value = lre.LoanIssueDate;
+			sheet.Cells["X" + nRowNumber].Value = lre.LoanDuration;
+			sheet.Cells["Y" + nRowNumber].Value = lre.CreditScore;
 			sheet.Cells["AB" + nRowNumber].Value = lre.TotalAnnualTurnover;
 			sheet.Cells["AC" + nRowNumber].Value = lre.Medal;
 			sheet.Cells["AK" + nRowNumber].Value = lre.PaypalTotal;
@@ -245,33 +247,34 @@
 
 			sheet.Cells["K" + nRowNumber + ":L" + nRowNumber].Style.Numberformat.Format = "dd-mmm-yy";
 
-			sheet.Cells["T"  + nRowNumber].Style.Numberformat.Format = "dd-mmm-yy";
-			sheet.Cells["P"  + nRowNumber].Style.Numberformat.Format = "0.00%";
-			sheet.Cells["N"  + nRowNumber].Style.Numberformat.Format = "#,##0";
-			sheet.Cells["Q"  + nRowNumber].Style.Numberformat.Format = "#,##0";
+			sheet.Cells["T" + nRowNumber].Style.Numberformat.Format = "dd-mmm-yy";
+			sheet.Cells["P" + nRowNumber].Style.Numberformat.Format = "0.00%";
+			sheet.Cells["N" + nRowNumber].Style.Numberformat.Format = "#,##0";
+			sheet.Cells["Q" + nRowNumber].Style.Numberformat.Format = "#,##0";
 			sheet.Cells["AB" + nRowNumber].Style.Numberformat.Format = "#,##0";
 			sheet.Cells["AK" + nRowNumber].Style.Numberformat.Format = "#,##0";
 		} // FillRow
 
 		private void FillTitle(ExcelWorksheet sheet, int nRowNumber) {
-			sheet.Cells["A"  + nRowNumber].Value = "Is this 'a first' loan?";
-			sheet.Cells["B"  + nRowNumber].Value = "Client loan order #";
-			sheet.Cells["C"  + nRowNumber].Value = "Type of loan (s-standard, n-new offer)";
-			sheet.Cells["D"  + nRowNumber].Value = "Customer selection (0-no, 1-yes)";
-			sheet.Cells["E"  + nRowNumber].Value = "Discount plan (0, new13, old13)";
-			sheet.Cells["G"  + nRowNumber].Value = "Loan ID";
-			sheet.Cells["I"  + nRowNumber].Value = "Client ID";
-			sheet.Cells["J"  + nRowNumber].Value = "Name";
-			sheet.Cells["K"  + nRowNumber].Value = "Date first approved";
-			sheet.Cells["L"  + nRowNumber].Value = "Date last approved";
-			sheet.Cells["M"  + nRowNumber].Value = "New or old client?";
-			sheet.Cells["N"  + nRowNumber].Value = "Loan offered";
-			sheet.Cells["P"  + nRowNumber].Value = "interest rate, % per month";
-			sheet.Cells["Q"  + nRowNumber].Value = "Loan issued";
-			sheet.Cells["R"  + nRowNumber].Value = "Loan issued?";
-			sheet.Cells["T"  + nRowNumber].Value = "Loan issue date";
-			sheet.Cells["X"  + nRowNumber].Value = "Loan duration, months";
-			sheet.Cells["Y"  + nRowNumber].Value = "Credit score";
+			sheet.Cells["A" + nRowNumber].Value = "Is this 'a first' loan?";
+			sheet.Cells["B" + nRowNumber].Value = "Client loan order #";
+			sheet.Cells["C" + nRowNumber].Value = "Type of loan (s-standard, n-new offer)";
+			sheet.Cells["D" + nRowNumber].Value = "Customer selection (0-no, 1-yes)";
+			sheet.Cells["E" + nRowNumber].Value = "Discount plan (0, new13, old13)";
+			sheet.Cells["G" + nRowNumber].Value = "Loan ID";
+			// sheet.Cells["H" + nRowNumber].Value = "Last cash request ID";
+			sheet.Cells["I" + nRowNumber].Value = "Client ID";
+			sheet.Cells["J" + nRowNumber].Value = "Name";
+			sheet.Cells["K" + nRowNumber].Value = "Date first approved";
+			sheet.Cells["L" + nRowNumber].Value = "Date last approved";
+			sheet.Cells["M" + nRowNumber].Value = "New or old client?";
+			sheet.Cells["N" + nRowNumber].Value = "Loan offered";
+			sheet.Cells["P" + nRowNumber].Value = "interest rate, % per month";
+			sheet.Cells["Q" + nRowNumber].Value = "Loan issued";
+			sheet.Cells["R" + nRowNumber].Value = "Loan issued?";
+			sheet.Cells["T" + nRowNumber].Value = "Loan issue date";
+			sheet.Cells["X" + nRowNumber].Value = "Loan duration, months";
+			sheet.Cells["Y" + nRowNumber].Value = "Credit score";
 			sheet.Cells["AB" + nRowNumber].Value = "Total annual turnover, GBP";
 			sheet.Cells["AC" + nRowNumber].Value = "Medal";
 			sheet.Cells["AK" + nRowNumber].Value = "paypal total in";
@@ -388,21 +391,21 @@
 					if (string.IsNullOrWhiteSpace(sRawpostcode))
 						return ActionResult.Continue;
 
-						string sPostcode = "";
+					string sPostcode = "";
 
-						for (int i = 0; i < sRawpostcode.Length; ++i) {
-							char c = sRawpostcode[i];
+					for (int i = 0; i < sRawpostcode.Length; ++i) {
+						char c = sRawpostcode[i];
 
-							if (('A' <= c) && (c <= 'Z'))
-								sPostcode += c;
-							else
-								break;
-						} // for
+						if (('A' <= c) && (c <= 'Z'))
+							sPostcode += c;
+						else
+							break;
+					} // for
 
-						string sRegion = ptr[sPostcode];
+					string sRegion = ptr[sPostcode];
 
-						if (sRegion != string.Empty)
-							CustomerRegions[nCustomerID] = sRegion;
+					if (sRegion != string.Empty)
+						CustomerRegions[nCustomerID] = sRegion;
 
 					return ActionResult.Continue;
 				},
@@ -467,6 +470,5 @@
 		private SortedDictionary<int, string> CustomerRegions { get; set; }
 		private SortedDictionary<int, LoanStatsMarketplaces> CustomerMarketplaces { get; set; }
 		private SortedDictionary<int, LoanStatsPaypalTotal> CustomerPaypalTotals { get; set; }
-
 	} // class LoanStats
 } // namespace

@@ -9,7 +9,7 @@
 	using Ezbob.Logger;
 
 	public abstract class OnlineCalculator : MedalCalculator {
-		public override MedalInputModel GetInputParameters(int customerId, DateTime? calculationDate = null) {
+		public override MedalInputModel GetInputParameters(int customerId, DateTime calculationDate) {
 			var model = base.GetInputParameters(customerId, calculationDate);
 			model = GetOnlineInputParameters(customerId, model);
 			return model;

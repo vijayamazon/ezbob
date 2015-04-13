@@ -3,7 +3,6 @@
 	using Ezbob.Utils.ObjectPool;
 
 	public class PooledConnection : IPoolable {
-
 		public PooledConnection() {
 			IsPooled = true;
 			OutOfPoolCount = 0;

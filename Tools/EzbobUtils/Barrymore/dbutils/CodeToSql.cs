@@ -6,7 +6,6 @@
 
 	public class CodeToSql {
 		public static string GetCreateTable<T>() where T : class {
-			var oPkFields = new List<string>();
 			var oFields = new List<string>();
 			var oConstraints = new List<string>();
 

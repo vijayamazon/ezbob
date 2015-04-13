@@ -156,7 +156,7 @@
 			m_oDefaults = new SortedDictionary<Variables, VariableValue>();
 
 			DB = oDB;
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 
 			m_oUploadLimitations = new UploadLimitations(oDB, Log);
 

@@ -7,13 +7,13 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EzService.ActionResults;
 	using SalesForceLib.Models;
-
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzService {
@@ -68,6 +68,9 @@
 			string sLeadAddMode,
 			string sContactEmail
 			);
+
+        [OperationContract]
+        ActionMetaData BrokerAddBank(BrokerAddBankModel model);
 
 		[OperationContract]
 		ActionMetaData BrokerApproveAndResetCustomerPassword(
@@ -132,6 +135,9 @@
 
 		[OperationContract]
 		BrokerCustomerDetailsActionResult BrokerLoadCustomerDetails(string sCustomerRefNum, string sContactEmail);
+
+	    [OperationContract]
+	    BrokerLeadDetailsDataActionResult BrokerLoadLeadDetails(int leadID, string sContactEmail);
 
 		[OperationContract]
 		BrokerCustomerFilesActionResult BrokerLoadCustomerFiles(string sCustomerRefNum, string sContactEmail);
@@ -202,6 +208,9 @@
 			bool bFCARegistered,
 			string sLicenseNumber
 			);
+
+        [OperationContract]
+	    ActionMetaData BrokerTransferCommission();
 
 		[OperationContract]
 		ActionMetaData BrokerUpdatePassword(string sContactEmail, Password oOldPassword, Password oNewPassword);
@@ -479,16 +488,22 @@
 			int uderwriterId,
 			int customerId,
 			NewCreditLineOption newCreditLine,
-			int avoidAutoDescison
-			);
+			int avoidAutoDescison,
+			long? cashRequestID,
+			MainStrategy.DoAction createCashRequest,
+			MainStrategy.DoAction updateCashRequest
+		);
 
 		[OperationContract]
 		ActionMetaData MainStrategySync1(
 			int underwriterId,
 			int customerId,
 			NewCreditLineOption newCreditLine,
-			int avoidAutoDescison
-			);
+			int avoidAutoDescison,
+			long? cashRequestID,
+			MainStrategy.DoAction createCashRequest,
+			MainStrategy.DoAction updateCashRequest
+		);
 
 		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
@@ -748,10 +763,10 @@
 		ActionMetaData EnlistLottery(int customerID);
 
 		[OperationContract]
-		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID);
+		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID);
 
 		[OperationContract]
-		ActionMetaData RequalifyCustomer(int customerID, int aliMemberID);
+		ActionMetaData RequalifyCustomer(int customerID, long aliMemberID);
 
 		[OperationContract]
 		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);

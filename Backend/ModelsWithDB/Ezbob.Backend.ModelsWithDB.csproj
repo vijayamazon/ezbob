@@ -99,6 +99,30 @@
     <Compile Include="CampaignSourceRef.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />
+    <Compile Include="CreditSafe\CreditSafeBaseData.cs" />
+    <Compile Include="CreditSafe\CreditSafeBaseData_SecondarySicCodes.cs" />
+    <Compile Include="CreditSafe\CreditSafeCCJDetails.cs" />
+    <Compile Include="CreditSafe\CreditSafeCreditLimits.cs" />
+    <Compile Include="CreditSafe\CreditSafeCreditRatings.cs" />
+    <Compile Include="CreditSafe\CreditSafeDirectors.cs" />
+    <Compile Include="CreditSafe\CreditSafeDirectors_Directorships.cs" />
+    <Compile Include="CreditSafe\CreditSafeEventHistory.cs" />
+    <Compile Include="CreditSafe\CreditSafeFinancial.cs" />
+    <Compile Include="CreditSafe\CreditSafeIndustries.cs" />
+    <Compile Include="CreditSafe\CreditSafeMortgages.cs" />
+    <Compile Include="CreditSafe\CreditSafeMortgages_PersonEntitled.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdBaseData.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdBaseDataFax.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdBaseDataTel.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdEvents.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdLimits.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdMatchedCCJ.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdPossibleCCJ.cs" />
+    <Compile Include="CreditSafe\CreditSafeNonLtdRatings.cs" />
+    <Compile Include="CreditSafe\CreditSafePreviousNames.cs" />
+    <Compile Include="CreditSafe\CreditSafeShareHolders.cs" />
+    <Compile Include="CreditSafe\CreditSafeStatusHistory.cs" />
+    <Compile Include="CreditSafe\CreditSafeTradingAddresses.cs" />
     <Compile Include="Experian\AExperianLtdDataRow.cs" />
     <Compile Include="Experian\Attributes\ASrcAttribute.cs" />
     <Compile Include="Experian\Attributes\CaisMonthlyAttribute.cs" />
@@ -161,6 +185,9 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

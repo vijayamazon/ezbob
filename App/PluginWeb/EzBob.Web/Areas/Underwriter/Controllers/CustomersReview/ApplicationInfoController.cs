@@ -20,6 +20,7 @@
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using NHibernate;
+	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -42,8 +43,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
-		private readonly LoanScheduleRepository loanScheduleRepository;
-
+		
 		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
 
 		public ApplicationInfoController(
@@ -59,8 +59,7 @@
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
-			CustomerPhoneRepository customerPhoneRepository,
-			LoanScheduleRepository loanScheduleRepository)
+			CustomerPhoneRepository customerPhoneRepository)
 		{
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
@@ -76,7 +75,7 @@
 			_suggestedAmountRepository = suggestedAmountRepository;
 			serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
-			this.loanScheduleRepository = loanScheduleRepository;
+			
 		}
 
 		// Here we get VA\FCF\Turnover
@@ -131,7 +130,20 @@
 			cr.ManagerApprovedSum = sum;
 			cr.Customer.ManagerApprovedSum = sum;
 			cr.LoanTemplate = null;
+
+            if (cr.Customer.Broker != null) {
+                BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
+                bool hasLoans = cr.Customer.Loans.Any();
+                DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
+                Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(sum, hasLoans, firstLoanDate);
+                cr.BrokerSetupFeePercent = commission.Item1;
+                cr.ManualSetupFeePercent = commission.Item2;
+            }
+
 			_cashRequestsRepository.SaveOrUpdate(cr);
+
+            //TODO update new offer table
+		    log.Debug("update offer for customer {0} amount {1}", cr.Customer.Id, amount);
 
 			log.Debug("CashRequest({0}).ManagerApprovedSum = {1}", id, cr.ManagerApprovedSum);
 
@@ -185,6 +197,9 @@
 			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).LoanType = {1}", id, cr.LoanType.Name);
+
+            //TODO update new offer table
+		    log.Debug("update offer for customer {0} loan type {1}", cr.Customer.Id, loanType);
 		}
 
 		[HttpPost]
@@ -197,6 +212,10 @@
 			cr.DiscountPlan = discount;
 			//cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).Discount = {1}", id, cr.DiscountPlan.Name);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} discountPlanId {1}", cr.Customer.Id, discountPlanId); 
+
 			return Json(new { });
 		}
 
@@ -221,6 +240,9 @@
 				}
 			} // if
 
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} loan source {1}", cr.Customer.Id, LoanSourceID); 
+
 			return Json(new { });
 		} // LoanSource
 
@@ -236,6 +258,9 @@
 			cr.LoanTemplate = null;
 
 			log.Debug("CashRequest({0}).InterestRate = {1}", id, cr.InterestRate);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} interest rate {1}", cr.Customer.Id, interestRate); 
 
 			return Json(true);
 		}
@@ -254,49 +279,26 @@
 
 			log.Debug("CashRequest({0}).RepaymentPeriod = {1}", id, period);
 
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} period {1}", cr.Customer.Id, period); 
+
+
 			return Json(true);
 		}
 
-		[HttpPost]
-		[Transactional]
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		public void SaveDetails(int id, string details)
-		{
-			var cust = _customerRepository.Get(id);
-			if (cust == null)
-				return;
+	    [HttpPost]
+	    [Transactional]
+	    [ValidateJsonAntiForgeryToken]
+	    [Ajax]
+	    public void SaveDetails(int id, string details) {
+	        var cust = _customerRepository.Get(id);
+	        if (cust == null)
+	            return;
 
-			cust.Details = details;
-		}
+	        cust.Details = details;
+	    }
 
-		[HttpPost]
-		[Transactional]
-		[ValidateJsonAntiForgeryToken]
-		[Ajax]
-		[Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeSetupFee(long id, bool enabled)
-		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.UseSetupFee = enabled;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).UseSetupFee = {1}", id, enabled);
-
-			return Json(new { error = (string)null });
-		}
-
-		[Transactional]
-		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeBrokerSetupFee(long id, bool enabled)
-		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.UseBrokerSetupFee = enabled;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).UseBrokerSetupFee = {1}", id, enabled);
-			return Json(new { error = (string)null});
-		}
-
-		[Transactional]
+	    [Transactional]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
 		public JsonResult ChangeManualSetupFeePercent(long id, decimal? manualPercent)
 		{
@@ -310,19 +312,31 @@
 				cr.ManualSetupFeePercent = null;
 			}
 			cr.LoanTemplate = null;
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} setup fee percent {1}", cr.Customer.Id, manualPercent);
+
 			log.Debug("CashRequest({0}).ManualSetupFee percent: {1}", id, cr.ManualSetupFeePercent);
 			return Json(new { });
 		}
 
 		[Transactional]
 		[HttpPost, ValidateJsonAntiForgeryToken, Ajax, Permission(Name = "CreditLineFields")]
-		public JsonResult ChangeManualSetupFeeAmount(long id, int? manualAmount)
+		public JsonResult ChangeBrokerSetupFeePercent(long id, decimal? brokerPercent)
 		{
-			var cr = _cashRequestsRepository.Get(id);
-			cr.ManualSetupFeeAmount = manualAmount.HasValue && manualAmount.Value > 0 ? manualAmount.Value : (int?)null;
-			cr.LoanTemplate = null;
-			log.Debug("CashRequest({0}).ManualSetupFee amount: {1}", id, manualAmount);
-			return Json(new { });
+            var cr = _cashRequestsRepository.Get(id);
+            if (brokerPercent.HasValue && brokerPercent > 0) {
+                cr.BrokerSetupFeePercent = brokerPercent.Value * 0.01M;
+            } else {
+                cr.BrokerSetupFeePercent = null;
+            }
+            cr.LoanTemplate = null;
+            log.Debug("CashRequest({0}).BrokerSetupFeePercent percent: {1}", id, cr.BrokerSetupFeePercent);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} broker setup fee percent {1}", cr.Customer.Id, brokerPercent);
+
+            return Json(new { });
 		}
 
 		[HttpPost]
@@ -415,6 +429,10 @@
 			var cust = _customerRepository.Get(id);
 			cust.IsAvoid = enabled;
 			log.Debug("Customer({0}).IsAvoided = {1}", id, enabled);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} avoid auto decision {1}", cust.Id, enabled);
+
 			return Json(new { error = (string)null, id = id, status = cust.IsAvoid });
 		}
 
@@ -429,6 +447,9 @@
 			cr.EmailSendingBanned = !enabled;
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).EmailSendingBanned = {1}", id, cr.EmailSendingBanned);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} EmailSendingBanned {1}", cr.Customer.Id, cr.EmailSendingBanned);
 			return Json(new { error = (string)null, id = id, status = enabled });
 		}
 
@@ -442,6 +463,9 @@
 			var cr = _cashRequestsRepository.Get(id);
 			cr.IsLoanTypeSelectionAllowed = loanTypeSelection;
 			log.Debug("CashRequest({0}).IsLoanTypeSelectionAllowed = {1}", id, cr.IsLoanTypeSelectionAllowed);
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} IsLoanTypeSelectionAllowed {1}", cr.Customer.Id, cr.IsLoanTypeSelectionAllowed);
 		}
 
 		[HttpPost]
@@ -462,6 +486,9 @@
 			var cr = cust.LastCashRequest;
 			cr.LoanTemplate = null;
 			cr.OfferValidUntil = dt;
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} OfferValidUntil {1}", cr.Customer.Id, cr.OfferValidUntil);
 		}
 
 		[HttpPost]
@@ -489,6 +516,9 @@
 			cr.LoanTemplate = null;
 			cr.OfferStart = dt;
 			cr.OfferValidUntil = offerValidUntil;
+
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} OfferStart {1} OfferValidUntil {2}", cr.Customer.Id, cr.OfferStart, cr.OfferValidUntil);
 		}
 
 		[HttpPost]
@@ -595,15 +625,25 @@
 			_cashRequestsRepository.SaveOrUpdate(cr);
 			_customerRepository.SaveOrUpdate(c);
 
+            //TODO update new offer table
+            log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
+
 			return Json(true);
 		} // ChangeCreditLine
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
-		public JsonResult ActivateMainStrategy(int customerId)
-		{
+		public JsonResult ActivateMainStrategy(int customerId) {
 			int underwriterId = _context.User.Id;
 
-			new ServiceClient().Instance.MainStrategy1(underwriterId, customerId, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0);
+            //new ServiceClient().Instance.MainStrategy1(
+            //    underwriterId,
+            //    customerId,
+            //    NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+            //    0,
+            //    null,
+            //    MainStrategyDoAction.Yes,
+            //    MainStrategyDoAction.Yes
+            //);
 
 			return Json(true);
 		}

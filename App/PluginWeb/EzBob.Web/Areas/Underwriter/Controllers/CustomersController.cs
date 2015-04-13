@@ -333,7 +333,7 @@
 
 						var oArgs = JsonConvert.DeserializeObject<FinishWizardArgs>(
 							CurrentValues.Instance.FinishWizardForApproved
-							);
+						);
 						oArgs.CustomerID = customer.Id;
 
 						m_oServiceClient.Instance.FinishWizard(oArgs, user.Id);
@@ -533,6 +533,9 @@
 				break;
 			} // switch
 
+
+            //TODO update new decision table 
+            log.Debug("update decision for customer {0} with decision {1} signature {2}", customer.Id, model.status, model.signature);
 
 			// send final decision data (0002) to Alibaba parther (if exists)
 			if (customer.IsAlibaba && (model.status == CreditResultStatus.Rejected || model.status == CreditResultStatus.Approved)) {

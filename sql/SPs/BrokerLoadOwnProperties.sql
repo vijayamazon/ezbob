@@ -6,6 +6,9 @@ IF OBJECT_ID('BrokerLoadOwnProperties') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerLoadOwnProperties AS SELECT 1')
 GO
 
+SET QUOTED_IDENTIFIER ON
+GO
+
 ALTER PROCEDURE BrokerLoadOwnProperties
 @ContactEmail NVARCHAR(255) = '',
 @BrokerID INT = 0,
@@ -46,7 +49,18 @@ BEGIN
 	END
 
 	------------------------------------------------------------------------------
-
+	IF (@BrokerID = 0 OR @BrokerID IS NULL)
+	BEGIN 
+		SET @BrokerID = (SELECT TOP 1 b.BrokerID
+						 FROM Broker b
+						 WHERE 
+							b.ContactEmail = @ContactEmail
+							OR
+							b.ContactMobile = @ContactMobile
+						)	
+	END
+	------------------------------------------------------------------------------
+	
 	SELECT TOP 1
 		@BrokerTermsID = BrokerTermsID
 	FROM
@@ -54,6 +68,31 @@ BEGIN
 	ORDER BY
 		DateAdded DESC
 
+	------------------------------------------------------------------------------
+	DECLARE @LinkedBank BIT = 0
+	DECLARE @ApprovedAmount DECIMAL(18,2) = 0	
+	DECLARE @CommissionAmount DECIMAL(18,2) = 0
+	
+	IF(@BrokerID > 0)
+	BEGIN
+		SELECT @LinkedBank = CAST (
+			CASE 
+				WHEN EXISTS (SELECT 1 FROM CardInfo ci WHERE ci.BrokerID = @BrokerID AND ci.IsDefault = 1) THEN 1
+				ELSE 0
+			END AS BIT)
+		
+		SELECT @CommissionAmount = isnull(sum(lb.CommissionAmount), 0) 
+		FROM LoanBrokerCommission lb
+		WHERE lb.BrokerID=@BrokerID	
+		
+		SELECT @ApprovedAmount = isnull(sum(cr.ManagerApprovedSum),0) 
+		FROM Customer c
+		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
+		LEFT JOIN CashRequests cr ON cr.Id = l.RequestCashId
+		WHERE c.BrokerID=@BrokerID
+		--AND cr.UnderwriterDecision='Approved'
+		
+	END
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
@@ -75,17 +114,20 @@ BEGIN
 			WHEN ts.BrokerTermsID IS NULL OR ts.TermsTextID != tc.TermsTextID THEN tc.BrokerTerms
 			ELSE ''
 		END) AS CurrentTerms,
-		b.LicenseNumber
+		b.LicenseNumber,
+		@LinkedBank AS LinkedBank,
+		@ApprovedAmount AS ApprovedAmount,
+		@CommissionAmount AS CommissionAmount,
+		ci.BankAccount AS BankAccount,
+		ci.SortCode AS BankSortCode,
+		ci.Bank AS BankName
 	FROM
 		Broker b
 		INNER JOIN BrokerTerms tc ON tc.BrokerTermsID = @BrokerTermsID -- current terms
 		LEFT JOIN BrokerTerms ts ON b.BrokerTermsID = ts.BrokerTermsID -- signed terms
+		LEFT JOIN CardInfo ci ON b.BrokerID=ci.BrokerID AND ci.IsDefault = 1
 	WHERE
-		b.ContactEmail = @ContactEmail
-		OR
 		b.BrokerID = @BrokerID
-		OR
-		b.ContactMobile = @ContactMobile
 	ORDER BY
 		b.BrokerID DESC
 END

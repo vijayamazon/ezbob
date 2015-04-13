@@ -1,4 +1,6 @@
-﻿namespace EzBobTest {
+﻿using Ezbob.Backend.Strategies.CreditSafe;
+
+namespace EzBobTest {
 	using System;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
@@ -183,7 +185,15 @@
 
 		[Test]
 		public void test_mainstrat() {
-			var ms = new MainStrategy(21370, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null);
+			var ms = new MainStrategy(
+				21370,
+				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
+				0,
+				null,
+				null,
+				MainStrategy.DoAction.Yes,
+				MainStrategy.DoAction.Yes
+			);
 			ms.Execute();
 		}
 
@@ -418,17 +428,17 @@
 			DateTime calculationTime = DateTime.UtcNow;
 
 			var customers = new[] {
-				270,  19271, 19856, 19970, 234, 103, 211, 739
+				24517, //20658, //	24600 //,24596,24593,24609,24592,24517,24613
+				//270,  19271, 19856, 19970, 234, 103, 211, 739
 			};
 
 			foreach (var customerID in customers)
 				new CalculateMedal(customerID, calculationTime, false, true).Execute();
 
-			this.m_oDB.ForEachRowSafe((sr) => {
-				int customerId = sr["Id"];
-				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
-			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
-
+			//this.m_oDB.ForEachRowSafe((sr) => {
+			//	int customerId = sr["Id"];
+			//	new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
+			//}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 
 		}
 
@@ -611,7 +621,7 @@
 		[Test]
 		public void RequalifyCustomer() {
 			int customerID = 18234; //217; // 18234;
-			int aliMemberID = 12345000; //00;
+			long aliMemberID = 12345000; //00;
 			var s = new RequalifyCustomer(customerID, aliMemberID); //"caroles@ezbob.com.test.test"
 			s.Execute();
 		}
@@ -620,7 +630,7 @@
 		[Test]
 		public void AvailableCredit() {
 			int customerID = 18234; //217; // 18234;
-			int aliMemberID = 12345000; //00;
+			decimal aliMemberID = 12345000; //00;
 			/*var s = new CustomerAvaliableCredit(customerID, aliMemberID); // "caroles@ezbob.com.test.test");
 			s.Execute();
 			Console.WriteLine(s.Result.ToString());*/
@@ -705,16 +715,27 @@
 			var smsDetails = twilio.GetSmsMessage("SM1511753ccca64868b73c9cf7469a1bc8");
 		}
 
+        [Test]
+        public void TestBrokerTransferCommission() {
+            var stra = new BrokerTransferCommission();
+            stra.Execute();
+        }
+
+        [Test]
+        public void TestUpdateTransactionStatus() {
+            var stra = new UpdateTransactionStatus();
+            stra.Execute();
+        }
 
 		[Test]
 		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
-			int customerID = 18234; // 217 ; //; // 18234;
+			int customerID = 24322; //  23504; // 24319;  //24321 ; 
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
-			Console.WriteLine(v.AliId);
-			new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
+		//	Console.WriteLine(v.AliId);
+			//new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
 			//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
 			/* many customers
@@ -726,8 +747,8 @@
 				new DataSharing(v.Customer.Id, 0).Execute();
 			}*/
 			//var s = new MainStrategy(customerID, NewCreditLineOption.UpdateEverythingAndApplyAutoRules, 0, null).Execute();
-			//new DataSharing(customerID, 0).Execute();
-			new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
+			new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
+			//new DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
 		}
 
 
@@ -752,6 +773,26 @@
 			sf.Execute();
 		}
 
+		[Test]
+		public void TestAutoRejectBoth() {
+			int customerID = 20658;
+			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID,this.m_oDB, this.m_oLog);
+			result.Init().MakeAndVerifyDecision();
+		}
 
+	    [Test]
+	    [Ignore]
+	    public void TestSaveToDB()
+	    {
+	        ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
+	        saveTest.Execute();
+	    }
+		[Test]
+		public void TestBulkAutoRejectBoth() {
+			this.m_oDB.ForEachRowSafe((sr) => {
+				int customerId = sr["Id"];
+				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init().MakeAndVerifyDecision();
+			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
+		}
 	}
 }

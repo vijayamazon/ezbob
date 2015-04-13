@@ -185,6 +185,56 @@
 			return Json(zoopla, JsonRequestBehavior.AllowGet);
 		} // Zoopla
 
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult ChangeAddress(string addressInput, List<CustomerAddress> customerAddress, int customerId) {
+            ms_oLog.Info("ChangeAddress was called {0} {1} {2}", customerId, customerAddress.Count, customerAddress[0].Line1);
+
+            var customer = this._customerRepository.Get(customerId);
+            
+            MakeAddress(
+                customerAddress,
+                customer.AddressInfo.PrevPersonAddresses,
+                CustomerAddressType.PrevPersonAddresses,
+                customer.AddressInfo.PersonalAddress,
+                CustomerAddressType.PersonalAddress
+            );
+
+            this._customerRepository.SaveOrUpdate(customer);
+            return Json(new {});
+        }
+
+        private void MakeAddress(
+            IEnumerable<CustomerAddress> newAddress,
+            Iesi.Collections.Generic.ISet<CustomerAddress> prevAddress,
+            CustomerAddressType prevAddressType,
+            Iesi.Collections.Generic.ISet<CustomerAddress> currentAddress,
+            CustomerAddressType currentAddressType
+        ) {
+            var newAddresses = newAddress as IList<CustomerAddress> ?? newAddress.ToList();
+            var addAddress = newAddresses.Where(i => i.AddressId == 0).ToList();
+            var curAddress = addAddress.LastOrDefault() ?? currentAddress.LastOrDefault();
+
+            if (curAddress == null)
+                return;
+
+            foreach (var address in newAddresses) {
+                address.Director = currentAddress.First().Director;
+                address.Customer = currentAddress.First().Customer;
+                address.Company = currentAddress.First().Company;
+            } // for each new address
+
+            foreach (var item in currentAddress) {
+                item.AddressType = prevAddressType;
+                prevAddress.Add(item);
+            } // for each old address
+
+            curAddress.AddressType = currentAddressType;
+            currentAddress.Add(curAddress);
+        } // MakeAddress
+
 		private static readonly ASafeLog ms_oLog = new SafeILog(typeof(CrossCheckController));
 		private readonly IWorkplaceContext _context;
 		private readonly CustomerAddressRepository _customerAddressRepository;

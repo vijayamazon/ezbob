@@ -51,12 +51,7 @@
 			bool isEverlineRefinance = ValidateEverlineRefinance(cus);
 			var cr = cus.LastCashRequest;
 
-			var calculator = new SetupFeeCalculator(
-				cr.UseSetupFee,
-				cr.UseBrokerSetupFee,
-				cr.ManualSetupFeeAmount,
-				cr.ManualSetupFeePercent
-			);
+			var calculator = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent);
 
 			var fee = calculator.Calculate(loanAmount);
 
@@ -121,6 +116,9 @@
 				Log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
 			} // if
 
+            //TODO This is the place where the funds transferred to customer saved to DB
+            Log.Info("Save transferred funds to customer {0} amount {1}, isFake {2} , isAlibaba {3}, isEverlineRefinance {4}", cus.Id, transfered, isFakeLoanCreate, cus.IsAlibaba, isEverlineRefinance);
+
 			loan.AddTransaction(loanTransaction);
 
 			var aprCalc = new APRCalculator();
@@ -146,6 +144,10 @@
 				TookAmount = (int)loan.LoanAmount,
 				DealCloseType = OpportunityDealCloseReason.Won.ToString()
 			});
+
+
+            //TODO This is the place where the loan is created and saved to DB
+		    Log.Info("Create loan for customer {0} cash request {1} amount {2}", cus.Id, loan.CashRequest.Id, loan.LoanAmount);
 
 			_session.Flush();
 

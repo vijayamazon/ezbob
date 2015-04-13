@@ -24,7 +24,10 @@
 					oArgs.CustomerID,
 					oArgs.NewCreditLineOption,
 					oArgs.AvoidAutoDecision,
-					oArgs
+					oArgs,
+					null, // Cash request id is filled inside Main strategy when FinishWizardArgs are set.
+					MainStrategy.DoAction.No, // These two arguments are set inside Main strategy when FinishWizardArgs
+					MainStrategy.DoAction.Yes // are set so these values are here just as mandatory placeholders.
 				);
 			} // if
 

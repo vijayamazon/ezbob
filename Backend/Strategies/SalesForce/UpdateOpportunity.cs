@@ -6,7 +6,7 @@
 	public class UpdateOpportunity : AStrategy {
 
 		public UpdateOpportunity(int customerID, OpportunityModel model) {
-			salesForce = ObjectFactory
+			this.salesForce = ObjectFactory
 				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
 				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
 				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
@@ -18,8 +18,10 @@
 		public override string Name { get { return "UpdateOpportunity"; } }
 
 		public override void Execute() {
-			Log.Info("Updating SalesForce opportunity to customer {0} ", customerID);
-			salesForce.UpdateOpportunity(opportunityModel);
+            Log.Info("Updating SalesForce opportunity to customer {0} ", this.customerID);
+
+            this.opportunityModel.Email = this.opportunityModel.Email.ToLower();
+            this.salesForce.UpdateOpportunity(this.opportunityModel);
 		}
 		private readonly ISalesForceAppClient salesForce;
 		private readonly int customerID;

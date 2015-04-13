@@ -18,7 +18,7 @@
 
 		public Agent(AConnection oDB, ASafeLog oLog, int customerId, DateTime? dataAsOf = null) {
 			this.m_oDB = oDB;
-			this.m_oLog = oLog ?? new SafeLog();
+			this.m_oLog = oLog.Safe();
 			this.CustomerId = customerId;
 			this.Now = dataAsOf ?? DateTime.UtcNow;
 			Trail = new ReapprovalTrail(customerId, this.m_oLog);

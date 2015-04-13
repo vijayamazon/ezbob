@@ -25,7 +25,7 @@
 		public EchoSignFacade(AConnection oDB, ASafeLog oLog) {
 			m_bIsReady = false;
 
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			if (oDB == null)
 				throw new Alert(m_oLog, "Cannot create EchoSign façade: database connection not specified.");
@@ -138,6 +138,11 @@
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", sp.Customer.ID)
 				);
+
+				if (nApprovedSum <= 0) {
+					m_oLog.Warn("EchoSign cannot send: approved sum is not positive.");
+					return EchoSignSendResult.Fail;
+				} // if
 
 				int nTotalCount = 0;
 				int nSuccessCount = 0;

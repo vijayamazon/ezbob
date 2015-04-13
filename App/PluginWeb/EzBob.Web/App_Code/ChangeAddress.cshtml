@@ -1,0 +1,15 @@
+﻿@model dynamic
+@helper Render(WebPageBase page, string url) {
+    <script id="change-address-template" type="text/template">
+        <form class="change-address-form" action="@url" method="POST">
+            <h2></h2>
+            @EzForm.AddressInput(page, "customerAddress", "Address", "address")
+            
+            <input type="hidden" name="customerId" id="customerId" />
+            <div class="buttons_container">
+                <button class="btn btn-green button form_field_right_side btn-update-address disabled">Change</button>
+            </div>
+        </form>
+    </script>
+}
+

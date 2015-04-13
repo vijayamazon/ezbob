@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.CalculateLoan.Helpers {
 	using System;
 	using System.Globalization;
+	using Ezbob.Backend.Strategies.Extensions;
 
 	public class Fee {
 		public Fee(DateTime assignTime, decimal amount) {

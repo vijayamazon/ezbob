@@ -5,21 +5,19 @@
 
 	partial class EzServiceImplementation {
 
-		public AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, int aliMemberID) {
+		public AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID) {
 
 			CustomerAvaliableCredit instance;
 
 			Log.Info("ESI CustomerAvaliableCredit: customerID: {0}, customerID: {1}", customerID, aliMemberID);
 
-			ActionMetaData amd = ExecuteSync(out instance, customerID, null, customerID, aliMemberID);
+			ExecuteSync(out instance, customerID, null, customerID, aliMemberID);
 
 			return new AlibabaAvailableCreditActionResult { Result = instance.Result };
 
 		} // CustomerAvaliableCredit
 
-		public ActionMetaData RequalifyCustomer(int customerID, int aliMemberID) {
-
-			RequalifyCustomer instance;
+		public ActionMetaData RequalifyCustomer(int customerID, long aliMemberID) {
 
 			Log.Info("ESI RequalifyCustomer: customerID: {0}, customerID: {1}", customerID, aliMemberID);
 
@@ -30,8 +28,6 @@
 		} //RequalifyCustomer
 
 		public ActionMetaData SaveApiCall(ApiCallData data) {
-
-			SaveApiCall instance;
 
 			ActionMetaData amd = Execute<SaveApiCall>(data.CustomerID, null, data);
 

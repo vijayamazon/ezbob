@@ -63,18 +63,19 @@
 			}
 			var cr = customer.LastCashRequest;
 
-			bool isDefaultCard = !customer.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
-			PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+
+
+            PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate());
 			if (customer.IsLoanTypeSelectionAllowed == 1)
 			{
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 				cr.RepaymentPeriod = repaymentPeriod;
 				cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
 			} // if
-			int payPointCardExpiryMonths = payPointAccountRepository.GetDefaultAccount().CardExpiryMonths;
-			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
+			
+			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointFacade.PayPointAccount.CardExpiryMonths);
 
-			var fee = (new SetupFeeCalculator(cr.UseSetupFee, cr.UseBrokerSetupFee, cr.ManualSetupFeeAmount, cr.ManualSetupFeePercent)).Calculate(loan_amount);
+			var fee = new SetupFeeCalculator(cr.ManualSetupFeePercent,cr.BrokerSetupFeePercent).Calculate(loan_amount);
 
 			string callback = Url.Action("PayPointCallback", "GetCash",
 										 new
@@ -172,8 +173,8 @@
 
 					return RedirectToAction("Error", "Paypoint", new { Area = "Customer" });
 				}
-				bool isDefaultCard = !cus.Loans.Any(x => x.Date < new DateTime(2015, 01, 12) && x.Status != LoanStatus.PaidOff);
-				PayPointFacade payPointFacade = new PayPointFacade(isDefaultCard);
+				
+                PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate());
 				if (!payPointFacade.CheckHash(hash, Request.Url))
 				{
 					_log.ErrorFormat("Paypoint callback is not authenticated for user {0}", _context.Customer.Id);

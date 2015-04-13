@@ -14,20 +14,20 @@
                 <div class="box-content">
                     <div class="col-md-12 col-lg-12">
                         <div class="col-md-3 col-lg-3 right-seperator offer-box">
-                            <div class="ez-bigtext"><%-EzBob.formatPoundsNoDecimals(loan.OfferedCreditLine)%></div>
+                            <div class="ez-bigtext"><%-EzBob.formatPoundsNoDecimals(loan.OfferedCreditLine)%> <span class="ez-automation-offer">(A <%-EzBob.formatPoundsNoDecimals(loan.AutomationOfferModel.Amount)%>)</span></div>
                             <div class="offer-donut-div">
                                 <canvas id="offer-donut" width="100" height="100"></canvas>
                             </div>
                         </div>
                         <div class="col-md-3 col-lg-3 right-seperator offer-box">
-                            <div class="ez-bigtext"><%-EzBob.formatPercents(loan.InterestRate)%></div>
+                            <div class="ez-bigtext"><%-EzBob.formatPercents(loan.InterestRate)%> <span class="ez-automation-offer">(A <%-EzBob.formatPercents(loan.AutomationOfferModel.InterestRate)%>)</span></div>
 
                             <div class="">APR: <%-loan.Apr%>%</div>
                             <div class="">AIR: <%-EzBob.formatPercents(loan.Air)%></div>
                             <div class="">Real cost: <%-EzBob.formatPercents(loan.RealCost)%></div>
                         </div>
                         <div class="col-md-2 col-lg-2 right-seperator offer-box">
-                            <div class="ez-bigtext"><%-loan.RepaymentPerion%></div>
+                            <div class="ez-bigtext"><%-loan.RepaymentPerion%> <span class="ez-automation-offer">(A <%-loan.AutomationOfferModel.RepaymentPeriod%>)</span></div>
                             <div style="text-align: center; margin-top: -10px;">Months</div>
                             <div class="period-canvas-div">
                                 <canvas id="period-di" width="50" height="70"></canvas>
@@ -35,9 +35,10 @@
                         </div>
                         <div class="col-md-4 col-lg-4 offer-box">
                             <div class="ez-bigtext">&nbsp;</div>
-                            <div class="">Setup fee: <%-loan.UseSetupFee ? 'Yes' : 'No' %></div>
-                            <div class="">Broker fee: <%-loan.UseBrokerSetupFee ? 'Yes' : 'No' %></div>
-                            <div class="">Total fee: <%-EzBob.formatPounds(loan.SetupFee)%> (<%-EzBob.formatPercents(loan.SetupFeePercent)%>)</div>
+                            <div>Setup fee: <%-EzBob.formatPounds(loan.SetupFee)%> (<%-EzBob.formatPercents(loan.SetupFeeActualPercent)%>)</div>
+                            <div>Broker fee: <%-EzBob.formatPounds(loan.BrokerSetupFee)%> (<%-EzBob.formatPercents(loan.BrokerSetupFeeActualPercent)%>)</div>
+                            <div>Total fee: <%-EzBob.formatPounds(loan.TotalSetupFee)%> (<%-EzBob.formatPercents(loan.TotalSetupFeePercent)%>)</div>
+                            <div><span class="ez-automation-offer">(A <%-EzBob.formatPounds(loan.AutomationOfferModel.SetupFeeAmount)%> (<%-EzBob.formatPercents(loan.AutomationOfferModel.SetupFeePercent)%>))</span></div>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-12">

@@ -1,104 +1,83 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
-	using System;
-	using System.Collections.Generic;
-	using System.Web.Mvc;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model.Database;
-	using CommonLib;
-	using Code;
-	using Infrastructure;
-	using Infrastructure.Attributes;
-	using Infrastructure.csrf;
-	using PaymentServices.Calculators;
-	using StructureMap;
-	using Web.Models;
+    using System;
+    using System.Web.Mvc;
+    using EZBob.DatabaseLib;
+    using EZBob.DatabaseLib.Model.Database;
+    using CommonLib;
+    using Code;
+    using Infrastructure;
+    using Infrastructure.Attributes;
+    using Infrastructure.csrf;
+    using PaymentServices.Calculators;
+    using StructureMap;
+    using Web.Models;
 
-	public class ScheduleController : Controller {
-		public static readonly int[] LoanPeriods = { 6, 10 };
+    public class ScheduleController : Controller {
+        public static readonly int[] LoanPeriods = { 6, 10 };
 
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly APRCalculator _aprCalc;
-		private readonly Customer _customer;
-		private readonly LoanBuilder _loanBuilder;
-		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ScheduleController));
+        private readonly IEzbobWorkplaceContext _context;
+        private readonly APRCalculator _aprCalc;
+        private readonly Customer _customer;
+        private readonly LoanBuilder _loanBuilder;
+        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(ScheduleController));
 
-		public ScheduleController(IEzbobWorkplaceContext context, LoanBuilder loanBuilder) {
-			_context = context;
-			_loanBuilder = loanBuilder;
-			_customer = _context.Customer;
-			_aprCalc = new APRCalculator();
-		} // constructor
+        public ScheduleController(IEzbobWorkplaceContext context, LoanBuilder loanBuilder) {
+            _context = context;
+            _loanBuilder = loanBuilder;
+            _customer = _context.Customer;
+            _aprCalc = new APRCalculator();
+        } // constructor
 
-		[Ajax]
-		[HttpGet]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult CalculateAll(int amount) {
-			var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+        [Ajax]
+        [HttpGet]
+        [ValidateJsonAntiForgeryToken]
+        [Transactional]
+        public JsonResult Calculate(int amount, int loanType, int repaymentPeriod) {
+            LoanOffer loanOffer = CalculateLoan(amount, loanType, repaymentPeriod);
 
-			var dic = new Dictionary<string, LoanOffer>();
+            if (loanOffer == null)
+                return Json(new { error = "Invalid customer state" }, JsonRequestBehavior.AllowGet);
 
-			if (oDBHelper != null) {
-				foreach (var nPeriod in LoanPeriods) {
-					foreach (var lt in oDBHelper.LoanTypeRepository.GetAll()) {
-						LoanOffer lo = CalculateLoan(amount, lt.Id, nPeriod);
+            return Json(loanOffer, JsonRequestBehavior.AllowGet);
+        } // Calculate
 
-						if (lo != null) {
-							var sKey = string.Format("{0}-{1}", lt.Id, nPeriod);
-							dic[sKey] = lo;
-						} // if loan offer is good
-					} // for each loan type
-				} // for each period
-			} // if helper is not null
+        private LoanOffer CalculateLoan(int amount, int loanType, int repaymentPeriod) {
+            if (!_customer.CreditSum.HasValue || !_customer.Status.HasValue || _customer.Status.Value != Status.Approved)
+                return null;
 
-			return Json(dic, JsonRequestBehavior.AllowGet);
-		} // CalculateAll
+            _customer.ValidateOfferDate();
 
-		[Ajax]
-		[HttpGet]
-		[ValidateJsonAntiForgeryToken]
-		[Transactional]
-		public JsonResult Calculate(int amount, int loanType, int repaymentPeriod) {
-			LoanOffer loanOffer = CalculateLoan(amount, loanType, repaymentPeriod);
+            if (amount < 0)
+                amount = (int)Math.Floor(_customer.CreditSum.Value);
 
-			if (loanOffer == null)
-				return Json(new { error = "Invalid customer state" }, JsonRequestBehavior.AllowGet);
+            if (amount > _customer.CreditSum.Value) {
+                Log.WarnFormat("Attempt to calculate schedule for ammount({0}) bigger than credit sum value({1})", amount, _customer.CreditSum);
+                amount = (int)Math.Floor(_customer.CreditSum.Value);
+            } // if
 
-			return Json(loanOffer, JsonRequestBehavior.AllowGet);
-		} // Calculate
+            var cr = _customer.LastCashRequest;
 
-		private LoanOffer CalculateLoan(int amount, int loanType, int repaymentPeriod) {
-			if (!_customer.CreditSum.HasValue || !_customer.Status.HasValue || _customer.Status.Value != Status.Approved)
-				return null;
+            if (_customer.IsLoanTypeSelectionAllowed == 1) {
+                var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 
-			_customer.ValidateOfferDate();
+                if (oDBHelper != null) {
+                    cr.RepaymentPeriod = repaymentPeriod;
+                    cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
+                } // if
+            } // if
 
-			if (amount < 0)
-				amount = (int)Math.Floor(_customer.CreditSum.Value);
+            var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
 
-			if (amount > _customer.CreditSum.Value) {
-				Log.WarnFormat("Attempt to calculate schedule for ammount({0}) bigger than credit sum value({1})", amount, _customer.CreditSum);
-				amount = (int)Math.Floor(_customer.CreditSum.Value);
-			} // if
+            var schedule = loan.Schedule;
+            var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
 
-			var cr = _customer.LastCashRequest;
+            var b = new AgreementsModelBuilder();
+            var agreement = b.Build(_customer, amount, loan);
 
-			if (_customer.IsLoanTypeSelectionAllowed == 1) {
-				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
+            //TODO calculate offer
+            Log.DebugFormat("calculate offer for customer {0}", _customer.Id);
 
-				if (oDBHelper != null) {
-					cr.RepaymentPeriod = repaymentPeriod;
-					cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
-				} // if
-			} // if
-
-			var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
-
-			var schedule = loan.Schedule;
-			var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
-
-			var b = new AgreementsModelBuilder();
-			var agreement = b.Build(_customer, amount, loan);
-			return LoanOffer.InitFromLoan(loan, apr, agreement, cr);
-		} // CalculateLoan
-	} // class ScheduleController
+            return LoanOffer.InitFromLoan(loan, apr, agreement, cr);
+        } // CalculateLoan
+    } // class ScheduleController
 } // namespace

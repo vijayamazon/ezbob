@@ -9,7 +9,7 @@
 	internal class LoanData {
 		public LoanData(int nLoanID, ASafeLog oLog) {
 			this.m_nLoanID = nLoanID;
-			this.m_oLog = oLog ?? new SafeLog();
+			this.m_oLog = oLog.Safe();
 
 			this.Schedule = new SortedDictionary<DateTime, InterestData>();
 			this.Repayments = new SortedDictionary<DateTime, TransactionData>();

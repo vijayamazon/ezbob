@@ -2,6 +2,7 @@
 	using System;
 	using System.Linq;
 	using ConfigManager;
+	using Ezbob.Backend.Strategies.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using EZBob.DatabaseLib.Model.Database;

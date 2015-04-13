@@ -2,6 +2,7 @@
 	using System;
 	using Common;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	internal class PricingCalculator {
 		public PricingCalculator(
@@ -9,8 +10,10 @@
 			PricingScenarioModel pricingScenario,
 			int loanAmount,
 			int repaymentPeriod,
-			AConnection db
+			AConnection db,
+			ASafeLog log
 		) {
+			this.log = log.Safe();
 			this.pricingScenario = pricingScenario;
 			this.loanAmount = loanAmount;
 			this.repaymentPeriod = repaymentPeriod;
@@ -38,7 +41,7 @@
 		/// </summary>
 		/// <returns>interest rate</returns>
 		public decimal GetInterestRate() {
-			var setupFee = // f
+			decimal setupFee = // f
 				(this.pricingScenario.SetupFee / 100) * this.loanAmount;
 
 			int realRepaymentPeriod = // ñ
@@ -50,26 +53,40 @@
 			int realRestPeriod = // ḿ
 				realRepaymentPeriod - realInterestOnlyPeriod;
 
-			var cost = // C
+			decimal cost = // C
 				GetTotalCost();
 
-			var profit = // p
+			decimal profit = // p
 				this.pricingScenario.ProfitMarkupPercentsOfRevenue;
 
-			var defaultRate = // d
+			decimal defaultRate = // d
 				this.calculatedDefaultRate;
 
 			// this.loanAmount; // A
 
-			// formula is
-			//           C
-			//      2(------- - f)
-			//         1 - p
-			// r = ----------------------
-			//      A(1 - d)(2õ + ḿ + 1)
-
-			return (2 * (cost / (1 - profit) - setupFee)) /
+			decimal r = (2 * (cost / (1 - profit) - setupFee)) /
 				(this.loanAmount * (1 - defaultRate) * (2 * realInterestOnlyPeriod + realRestPeriod + 1));
+
+			this.log.Debug(@"PricingCalculator.GetInterestRate() - formula is:
+           C
+      2(------- - f)
+         1 - p
+r = ----------------------
+     A(1 - d)(2õ + ḿ + 1)
+");
+			this.log.Debug("Terms in the above formula are:\n\t{0}\n", string.Join("\n\t",
+				DisplayFormulaTerm(setupFee, "f", "setup fee"),
+				DisplayFormulaTerm(realRepaymentPeriod, "ñ", "repayment months after tenure"),
+				DisplayFormulaTerm(realInterestOnlyPeriod, "õ", "interest only months after tenure"),
+				DisplayFormulaTerm(realRestPeriod, "ḿ", "ñ - õ"),
+				DisplayFormulaTerm(cost, "C", "total loan cost"),
+				DisplayFormulaTerm(profit, "p", "profit rate"),
+				DisplayFormulaTerm(defaultRate, "d", "default rate"),
+				DisplayFormulaTerm(this.loanAmount, "A", "loan amount"),
+				DisplayFormulaTerm(r, "r", "interest rate")
+			));
+
+			return r;
 		} // GetInterestRate
 
 		/// <summary>
@@ -88,21 +105,16 @@
 			int realRestPeriod = // ḿ
 				realRepaymentPeriod - realInterestOnlyPeriod;
 
-			var cost = // C
+			decimal cost = // C
 				GetTotalCost();
 
-			var profit = // p
+			decimal profit = // p
 				this.pricingScenario.ProfitMarkupPercentsOfRevenue;
 
-			var defaultRate = // d
+			decimal defaultRate = // d
 				this.calculatedDefaultRate;
 
 			// interestRate; // r
-
-			// formula is
-			//        C       rA(1 - d)(2õ + ḿ + 1)
-			// f = ------- - -----------------------
-			//      1 - p              2
 
 			decimal setupFee = // f
 				(cost / (1 - profit)) - (
@@ -114,45 +126,101 @@
 					) / 2
 				);
 
+			this.log.Debug(@"PricingCalculator.GetSetupFee() - formula is:
+       C       rA(1 - d)(2õ + ḿ + 1)
+f = ------- - -----------------------
+     1 - p              2
+");
+
+			this.log.Debug("Terms in the above formula are:\n\t{0}\n", string.Join("\n\t", 
+				DisplayFormulaTerm(this.loanAmount, "A", "loan amount"),
+				DisplayFormulaTerm(realRepaymentPeriod, "ñ", "repayment months after tenure"),
+				DisplayFormulaTerm(realInterestOnlyPeriod, "õ", "interest only months after tenure"),
+				DisplayFormulaTerm(realRestPeriod, "ḿ", "ñ - õ"),
+				DisplayFormulaTerm(cost, "C", "total loan cost"),
+				DisplayFormulaTerm(profit, "p", "profit rate"),
+				DisplayFormulaTerm(defaultRate, "d", "default rate"),
+				DisplayFormulaTerm(interestRate, "r", "interest rate"),
+				DisplayFormulaTerm(setupFee, "f", "setup fee")
+			));
+
 			return setupFee / this.loanAmount;
 		} // GetSetupFee
 
 		private decimal GetTotalCost() {
 			// this.loanAmount;                                                          // A
 			// this.repaymentPeriod;                                                     // n
-			var interestOnlyMonths = this.pricingScenario.InterestOnlyPeriod;            // o
-			var tenure = this.pricingScenario.TenurePercents;                            // t
+			decimal interestOnlyMonths = this.pricingScenario.InterestOnlyPeriod;        // o
+			decimal tenure = this.pricingScenario.TenurePercents;                        // t
 			int realRepaymentPeriod = (int)Math.Floor(this.repaymentPeriod * tenure);    // ñ
 			int realInterestOnlyPeriod = (int)Math.Ceiling(interestOnlyMonths * tenure); // õ
 			int realRestPeriod = realRepaymentPeriod - realInterestOnlyPeriod;           // ḿ
-			var debtOfTotalCapital = this.pricingScenario.DebtPercentOfCapital;          // δ
-			var costOfDebt = this.pricingScenario.CostOfDebtPA;                          // γ
-			var defaultRate = this.calculatedDefaultRate;                                // d
-			var collectionRate = this.pricingScenario.CollectionRate;                    // ρ
-			var opexCapex = this.pricingScenario.OpexAndCapex;                           // Ω
-			var cogs = this.pricingScenario.Cogs;                                        // ξ
+			decimal debtOfTotalCapital = this.pricingScenario.DebtPercentOfCapital;      // δ
+			decimal costOfDebt = this.pricingScenario.CostOfDebtPA;                      // γ
+			decimal defaultRate = this.calculatedDefaultRate;                            // d
+			decimal collectionRate = this.pricingScenario.CollectionRate;                // ρ
+			decimal opexCapex = this.pricingScenario.OpexAndCapex;                       // Ω
+			decimal cogs = this.pricingScenario.Cogs;                                    // ξ
 
 			// formula:
 			//      Aδγ(2õ + ḿ + 1)
 			// Δ = -----------------
 			//            24
-			var debtCost = // Δ
+			decimal debtCost = // Δ
 				this.loanAmount * debtOfTotalCapital * costOfDebt * (2 * realInterestOnlyPeriod + realRestPeriod + 1) / 24;
 
 			// formula: N = Ad(1 - ρ)
-			var netLossFromDefault = // N
+			decimal netLossFromDefault = // N
 				this.loanAmount * defaultRate * (1 - collectionRate);
 
 			// formula: C = Δ + N + Ω + ξ
-			var totalCost = // C
+			decimal totalCost = // C
 				debtCost + netLossFromDefault + opexCapex + cogs;
+
+			this.log.Debug(@"PricingCalculator.GetSetupFee() - formulae is:
+     Aδγ(2õ + ḿ + 1)
+Δ = -----------------
+           24
+
+N = Ad(1 - ρ)
+
+C = Δ + N + Ω + ξ   <-- returned value
+");
+
+			this.log.Debug("Terms in the above formulae are:\n\t{0}\n", string.Join("\n\t", 
+				DisplayFormulaTerm(this.loanAmount, "A", "loan amount"),
+				DisplayFormulaTerm(this.repaymentPeriod, "n", "repayment months"),
+				DisplayFormulaTerm(interestOnlyMonths, "o", "interest only months"),
+				DisplayFormulaTerm(tenure, "t", "tenure rate"),
+				DisplayFormulaTerm(realRepaymentPeriod, "ñ", "repayment months after tenure"),
+				DisplayFormulaTerm(realInterestOnlyPeriod, "õ", "interest only months after tenure"),
+				DisplayFormulaTerm(realRestPeriod, "ḿ", "ñ - õ"),
+				DisplayFormulaTerm(debtOfTotalCapital, "δ", "debt/total capital"),
+				DisplayFormulaTerm(costOfDebt, "γ", "cost of debt"),
+				DisplayFormulaTerm(defaultRate, "d", "default rate"),
+				DisplayFormulaTerm(collectionRate, "ρ", "collection rate"),
+				DisplayFormulaTerm(opexCapex, "Ω", "OPEX/CAPEX"),
+				DisplayFormulaTerm(cogs, "ξ", "COGS"),
+				DisplayFormulaTerm(debtCost, "Δ", "debt cost"),
+				DisplayFormulaTerm(netLossFromDefault, "N", "net loss"),
+				DisplayFormulaTerm(totalCost, "C", "total loan cost")
+			));
 
 			return totalCost;
 		} // GetTotalCost
+
+		private string DisplayFormulaTerm(int v, string name, string fullName) {
+			return string.Format("{0} = {1} ({2})", name, v, fullName);
+		} // DisplayFormulaTerm
+
+		private string DisplayFormulaTerm(decimal v, string name, string fullName) {
+			return string.Format("{0} = {1} ({2})", name, v, fullName);
+		} // DisplayFormulaTerm
 
 		private readonly PricingScenarioModel pricingScenario;
 		private readonly decimal calculatedDefaultRate;
 		private readonly int loanAmount;
 		private readonly int repaymentPeriod;
+		private readonly ASafeLog log;
 	} // class PricingCalculator
 } // namespace

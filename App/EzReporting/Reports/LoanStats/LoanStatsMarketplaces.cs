@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Reports.LoanStats {
+	using System;
+	using System.Collections.Generic;
 
-namespace Reports {
 	internal class LoanStatsMarketplaces {
-
 		public static SortedDictionary<int, string> MarketplaceTypes { get; private set; }
 
 		public LoanStatsMarketplaces(int nMarketplaceTypeID, string sMarketplaceTypeName, DateTime oCreated) {
@@ -52,6 +51,5 @@ namespace Reports {
 		} // Count
 
 		private readonly SortedDictionary<int, SortedSet<DateTime>> m_oMarketplaces;
-
 	} // class LoanStatsMarketplaces
 } // namespace

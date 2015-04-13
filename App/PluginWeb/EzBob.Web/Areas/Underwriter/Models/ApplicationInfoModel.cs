@@ -19,13 +19,17 @@
         public string Details { get; set; }
         public bool Editable { get; set; }
         public long CashRequestId { get; set; }
-        public bool UseSetupFee { get; set; }
-		public bool UseBrokerSetupFee { get; set; }
-		public int? ManualSetupFeeAmount { get; set; }
+        
 		public decimal? ManualSetupFeePercent { get; set; }
+        public decimal? BrokerSetupFeePercent { get; set; }
 
+        public decimal TotalSetupFee { get; set; }
+		public decimal TotalSetupFeePercent { get; set; }
+        public decimal BrokerSetupFee { get; set; }
+        public decimal BrokerSetupFeeActualPercent { get; set; }
         public decimal SetupFee { get; set; }
-		public decimal SetupFeePercent { get; set; }
+        public decimal SetupFeeActualPercent { get; set; }
+
         public bool IsTest { get; set; }
 
 		public bool? IsOffline { get; set; }
@@ -76,5 +80,15 @@
 		public SuggestedAmountModel[] SuggestedAmounts { get; set; }
 		public int TypeOfBusiness { get; set; }
 
+        public AutomationOfferModel AutomationOfferModel { get; set; }
+
+    }
+
+    public class AutomationOfferModel {
+        public int Amount { get; set; }
+        public decimal InterestRate { get; set; }
+        public int RepaymentPeriod { get; set; }
+        public decimal SetupFeePercent { get; set; }
+        public decimal SetupFeeAmount { get; set; }
     }
 }

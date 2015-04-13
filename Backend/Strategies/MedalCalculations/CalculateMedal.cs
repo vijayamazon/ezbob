@@ -100,13 +100,15 @@
 					var verification = new MedalChooser(DB, Log);
 					result2 = verification.GetMedal(this.customerId, this.calculationTime);
 
+					Log.Debug("\n\nSecondary medal:\n{0}", result2.ToString());
+
 					if (this.doStoreMedal)
 						result2.SaveToDb(Tag, DB, Log);
 				} // if
 
 				if ((result1 != null) && result1.IsLike(result2)) {
 					if (this.doStoreMedal)
-						result1.SaveToDb(Tag, DB);
+						result1.SaveToDb(Tag, DB, Log);
 
 					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}.", this.customerId);
 
@@ -120,10 +122,10 @@
 					result1 = new MedalResult(this.customerId, Log);
 
 				result1.MedalClassification = EZBob.DatabaseLib.Model.Database.Medal.NoClassification;
-				result1.Error = "Mismatch found in the 2 medal calculations";
+				result1.Error = (result1.Error ?? string.Empty) + " Mismatch found in the 2 medal calculations";
 
 				if (this.doStoreMedal)
-					result1.SaveToDb(Tag, DB);
+					result1.SaveToDb(Tag, DB, Log);
 
 				SendExplanationMail(result1, result2);
 				Log.Error("Mismatch found in the 2 medal calculations of customer: {0}.", this.customerId);

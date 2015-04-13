@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Reports.LoanStats {
+	using System;
+	using System.Collections.Generic;
 
-namespace Reports {
 	public class LoanStatsReportEntry {
-
 		public LoanStatsReportEntry() {
 			MarketplaceCount = new SortedDictionary<int, int>();
 		} // constructor
@@ -41,6 +40,6 @@ namespace Reports {
 		public string Category2 { get; set; }
 		public string Category3 { get; set; }
 		public string Region { get; set; }
-
+		public long LastCashRequestID { get; set; }
 	} // class LoanStatsReportEntry
 } // namespace

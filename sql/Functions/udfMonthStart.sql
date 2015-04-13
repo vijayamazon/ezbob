@@ -19,5 +19,7 @@ BEGIN
 	--     |                 |               |                                |
 	RETURN CONVERT(DATETIME, DATEADD(day, 1, DATEADD(day, -DATEPART(day, @d), CONVERT(DATE, @d))))
 
+	-- More simple way: DATEADD(month, DATEDIFF(month, 0, @d), 0)
+	-- This method is less obvious: it uses definition of what DATEDIFF returns and what is the value of CONVERT(DATETIME, 0).
 END
 GO

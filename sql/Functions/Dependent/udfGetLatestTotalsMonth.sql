@@ -62,10 +62,15 @@ BEGIN
 			h.CustomerMarketPlaceId = @MpID
 			AND
 			h.UpdatingEnd <= @Now
+			AND (
+				h.Error IS NULL
+				OR
+				LTRIM(RTRIM(h.Error)) = ''
+			)
 		ORDER BY
 			h.UpdatingEnd DESC,
 			h.Id DESC
-	)
+	);
 
 	IF @HistoryID IS NULL
 		RETURN dbo.udfMonthStart(DATEADD(month, -1, @Now))

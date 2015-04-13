@@ -127,7 +127,7 @@
 			Value = sValue;
 			Description = sDescription;
 
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 		} // constructor
 
 		public VariableValue Update(string sValue) {

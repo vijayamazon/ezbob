@@ -87,6 +87,9 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.MainStrategy.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.PricingModel.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -146,6 +149,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerLeadDetailsActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerLeadDetailsDataActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult.datasource">

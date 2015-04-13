@@ -346,7 +346,7 @@
 			m_nExperianLtdID = 0;
 			Children = new List<AExperianLtdDataRow>();
 
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 		} // constructor
 
 		protected virtual ASafeLog Log { get; private set; } // Log

@@ -4,7 +4,6 @@
 	using Pool;
 
 	public class ConnectionWrapper {
-
 		public ConnectionWrapper(PooledConnection oPooled) {
 			Connection = oPooled.Connection;
 			Pooled = oPooled;

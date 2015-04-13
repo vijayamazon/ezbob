@@ -1,14 +1,4 @@
-﻿@font-face {
-	font-family: TitilliumWebBold;
-	src: url(../img/ny2015scratch/titilliumweb-bold-webfont.ttf), url(../img/ny2015scratch/titilliumweb-bold-webfont.eot);
-}
-
-@font-face {
-	font-family: TitilliumWebExtraLight;
-	src: url(../img/ny2015scratch/titilliumweb-extralight-webfont.ttf), url(../img/ny2015scratch/titilliumweb-extralight-webfont.eot);
-}
-
-#ny2015scratch {
+﻿#ny2015scratch {
 	display: none;
 	background-image: url(../img/ny2015scratch/bg.jpg);
 	background-position: center 77px;
@@ -31,14 +21,14 @@
 
 #ny2015scratch > .content > .title {
 	text-align: center;
-	font-family: TitilliumWebExtraLight;
+	font-family: 'Titillium Web Extra Light';
 	font-size: 87px;
 	color: #ffcc83;
 }
 
 #ny2015scratch > .content > .slogan {
 	font-size: 37px;
-	font-family: TitilliumWebBold;
+	font-family: 'Titillium Web Bold';
 }
 
 #ny2015scratch > .content > .slogan-amount {
@@ -220,7 +210,7 @@
 
 #ny2015scratch > .won > .fire > .frame > .title {
 	font-size: 87px;
-	font-family: TitilliumWebExtraLight;
+	font-family: 'Titillium Web Extra Light';
 	color: #ffcc83;
 }
 

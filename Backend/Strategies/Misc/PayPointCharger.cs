@@ -27,8 +27,12 @@
 		public override void Execute() {
 			DB.ForEachRowSafe(
 				(sr, bRowsetStart) => {
-					HandleOnePayment(sr);
-					return ActionResult.Continue;
+				    try {
+				        HandleOnePayment(sr);
+                    } catch (Exception ex) {
+                        Log.Error(ex, "failed to auto charge customer {0} schedule {1}", sr["CustomerId"], sr["LoanScheduleId"]);
+                    }
+				    return ActionResult.Continue;
 				},
 				"GetCustomersForPayPoint",
 				CommandSpecies.StoredProcedure

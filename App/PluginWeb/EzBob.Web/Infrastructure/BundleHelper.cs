@@ -9,6 +9,12 @@
 	using StructureMap;
 
 	public class BundleHelper {
+		public static MvcHtmlString RenderPaypointTemplateCss() {
+			return Bundle.Css()
+			.Add("~/Content/css/paypoint-template.css")				
+			.MvcRender("~/Content/css/min/paypoint_#.css");
+		} // RenderPaypointTemplateCss
+
 		public static MvcHtmlString RenderCustomerCss() {
 			return Bundle.Css()
 				//libs
@@ -26,8 +32,15 @@
 				.Add("~/Content/css/customer.css")
 				.Add("~/Content/css/profile-ny2015scratch.css")
 				.Add("~/Content/css/valentine2015scratch.css")
+				.Add("~/Content/css/easter2015scratch.css")
 				.MvcRender("~/Content/css/min/customer_#.css");
 		} // RenderCustomerCss
+
+		public static MvcHtmlString RenderEzbobCss() {
+			return Bundle.Css()
+			.Add("~/Content/css/ezbob.css")				
+			.MvcRender("~/Content/css/min/ezbob_#.css");
+		} // RenderEzbobCss
 
 		public static MvcHtmlString RenderAlibabaCss() {
 			return Bundle.Css()
@@ -346,9 +359,11 @@
 				.Add("~/Content/js/Underwriter/profile/alerts/ezbob.underwriter.AlertDocsView.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.medalCalculations.js")
 				.Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.pricingModelCalculations.js")
+                .Add("~/Content/js/Underwriter/profile/Calculator/ezbob.underwriter.automationCalculations.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.crosscheck.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.zoopla.js")
 				.Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.landregistry.js")
+                .Add("~/Content/js/Underwriter/profile/customerInfo/ezbob.underwriter.changeAddress.js")
 				.Add("~/Content/js/Underwriter/profile/messages/ezbob.undewriter.messages.js")
 				.Add("~/Content/js/Underwriter/profile/companyScore/ezbob.underwriter.companyScore.js")
 				.Add("~/Content/js/Underwriter/profile/APIChecksLog/ezbob.underwriter.apiChecksLog.js")
@@ -492,6 +507,7 @@
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.selectcard.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.ny2015.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.valentine2015.js")
+				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.easter2015.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMain.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsMaster.js")
 				.Add("~/Content/js/Profile/Settings/ezbob.profile.settingsPassword.js")

@@ -243,7 +243,7 @@ select {
 }
 
 select.selectheight {
-    height: 30px;
+    height: auto;
 }
 
 select.higherselectheight {
@@ -1814,6 +1814,9 @@ td a.edit-loan {
     font-size: 24px;
     text-align: center;
 }
+.ez-automation-offer {
+    font-size: 10px;
+}
 
 .mortgage-div {
     position: absolute;
@@ -2224,4 +2227,8 @@ ul.alert-list {
 .paypoint_account {
 	position: relative; 
 	display: inline-block;
+}
+
+button.btn-update-address, .button.btn-update-address{
+    margin-right: 24px;
 }

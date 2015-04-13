@@ -31,16 +31,15 @@
 		///     or specify date to calculate medal based on data available on that date.
 		/// </param>
 		/// <returns>Calculated medal model.</returns>
-		public MedalOutputModel GetMedal(int customerId, DateTime? calculationDate = null) {
+		public MedalOutputModel GetMedal(int customerId, DateTime calculationDate) {
 			var medalChooserData = DB.FillFirst<MedalChooserInputModelDb>(
 				"AV_GetMedalChooserInputParams",
-				new QueryParameter("@CustomerId", customerId)
+				new QueryParameter("@CustomerId", customerId),
+				new QueryParameter("@Now", calculationDate)
 			);
 
-			DateTime today = calculationDate ?? DateTime.Today;
-
 			bool hmrcTooOld = AccountIsTooOld(
-				today,
+				calculationDate,
 				medalChooserData.HasHmrc,
 				medalChooserData.LastHmrcUpdateDate,
 				medalChooserData.MedalDaysOfMpRelevancy
@@ -57,7 +56,7 @@
 			} // if
 
 			bool bankTooOld = AccountIsTooOld(
-				today,
+				calculationDate,
 				medalChooserData.HasBank,
 				medalChooserData.LastBankUpdateDate,
 				medalChooserData.MedalDaysOfMpRelevancy
@@ -130,7 +129,10 @@
 
 			MedalOutputModel medal = medalCalulator.CalculateMedal(data);
 
-			SetOfferedAmount(medal, medalChooserData.MinApprovalAmount);
+			SetOfferedAmount(
+				medal,
+				medalChooserData.MinApprovalAmount
+			);
 
 			return medal;
 		} // GetMedal
@@ -177,10 +179,13 @@
 				medal.MaxOfferedLoanAmount = (int)(theMaxPreOffer * medal.CapOfferByCustomerScoresValue);
 
 				Log.Debug(
-					"Secondary medal - offered loan amount is {0} (before score cap: {1}, cap value: {2}).",
+					"Secondary medal - offered amount is {0}" +
+					"(before score cap: {1}, cap value: {2}, consumer score: {3}, business score: {4}).",
 					medal.OfferedLoanAmount,
 					thePreOffer,
-					medal.CapOfferByCustomerScoresValue.ToString("P6")
+					medal.CapOfferByCustomerScoresValue.ToString("P6"),
+					medal.ConsumerScore,
+					medal.BusinessScore
 				);
 
 				Log.Debug(

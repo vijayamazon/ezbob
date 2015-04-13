@@ -24,7 +24,7 @@
 
 	public class LoanHistoryController : Controller
 	{
-		private static readonly ILog _log = LogManager.GetLogger("LoanHistoryController");
+		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanHistoryController));
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly CustomerRepository _customerRepository;
@@ -113,6 +113,9 @@
 			var rollover = _rolloverRepository.GetById(rolloverId);
 			rollover.Status = RolloverStatus.Removed;
 			_rolloverRepository.Update(rollover);
+
+            //TODO remove rollover from new rollover table
+		    Log.InfoFormat("remove rollover from new rollover table rollover id {0}", rolloverId);
 		}
 
 		[Ajax]
@@ -156,6 +159,10 @@
 			rolloverModel.Status = RolloverStatus.New;
 			_rolloverRepository.SaveOrUpdate(rolloverModel);
 
+
+            //TODO add rollover to new rollover table
+            Log.InfoFormat("add rollover to new rollover table schedule id {0}", scheduleId);
+
 			m_oServiceClient.Instance.EmailRolloverAdded(_context.UserId, customer.Id, payment);
 		}
 
@@ -177,7 +184,7 @@
 			try
 			{
 
-				_log.InfoFormat("Manual payment request for customer id {0}, amount {1}", customer.Id, realAmount);
+				Log.InfoFormat("Manual payment request for customer id {0}, amount {1}", customer.Id, realAmount);
 
 				if (realAmount < 0)
 				{
@@ -220,6 +227,9 @@
 												 "other", model.LoanId, customer,
 												 date, description, null, model.PaymentMethod);
 
+                //TODO add payment to new table
+                Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);
+
 				facade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
 
 				if (model.SendEmail)
@@ -251,11 +261,10 @@
 			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, paymentDate, CurrentValues.Instance.AmountToChargeFrom);
 			var state = payEarlyCalc.GetState();
 
-			var model = new LoanPaymentDetails
-							{
-								Balance = payEarlyCalc.TotalEarlyPayment(),
-								MinValue = !hasRollover ? 0.01m : state.Fees + state.Interest
-							};
+		    var model = new LoanPaymentDetails {
+		        Balance = payEarlyCalc.TotalEarlyPayment(),
+		        MinValue = !hasRollover ? 0.01m : state.Fees + state.Interest
+		    };
 
 			money = (money > model.Balance) ? model.Balance : money;
 			money = (money < model.MinValue) ? model.MinValue : money;

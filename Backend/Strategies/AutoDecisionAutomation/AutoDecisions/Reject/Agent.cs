@@ -29,7 +29,7 @@
 
 		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID);
 		} // constructor
 

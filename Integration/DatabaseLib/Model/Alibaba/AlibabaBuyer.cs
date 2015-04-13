@@ -1,5 +1,5 @@
 ﻿namespace EZBob.DatabaseLib.Model.Alibaba {
-	using System.Collections.Generic;
+	using System;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using EZBob.DatabaseLib.Model.Database;
@@ -9,7 +9,7 @@
 	public class AlibabaBuyer {
 
 		public virtual int Id { get; set; }
-		public virtual int AliId { get; set; }
+		public virtual long AliId { get; set; }
 		public virtual decimal? Freeze { get; set; }
 		public virtual Customer Customer { get; set; }
 	}

@@ -15,6 +15,7 @@ BEGIN
 
 	SELECT
 		c.Id,
+		o.Name AS CustomerOrigin,
 		c.GreetingMailSentDate,
 		c.CreditResult,
 		c.Name,
@@ -35,6 +36,7 @@ BEGIN
 	FROM
 		Customer c
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
+		LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 	WHERE
 		@DateStart <= c.GreetingMailSentDate AND c.GreetingMailSentDate < @DateEnd
 		AND
@@ -50,4 +52,5 @@ BEGIN
 		c.GreetingMailSentDate,
 		c.Fullname
 END
+
 GO

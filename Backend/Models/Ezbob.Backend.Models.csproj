@@ -50,8 +50,10 @@
     <Compile Include="AgreementModel.cs" />
     <Compile Include="Alibaba\CustomerDataSharing.cs" />
     <Compile Include="BankStatementDataModel.cs" />
+    <Compile Include="BrokerAddBankModel.cs" />
     <Compile Include="BrokerCustomerEntryModel.cs" />
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />
+    <Compile Include="BrokerLeadDataModel.cs" />
     <Compile Include="BrokerCustomerPersonalDataModel.cs" />
     <Compile Include="BrokerCustomerDetailsModel.cs" />
     <Compile Include="BrokerCustomerFileModel.cs" />
@@ -62,7 +64,6 @@
     <Compile Include="CompanyData.cs" />
     <Compile Include="CompanyCaisAccount.cs" />
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
-    <Compile Include="CustomerRiskData.cs" />
     <Compile Include="ExternalAPI\AlibabaAvailableCreditResult.cs" />
     <Compile Include="ExternalAPI\ApiCallData.cs" />
     <Compile Include="LotteryResult.cs" />

@@ -7,7 +7,7 @@
 
 	public class AddUpdateContact : AStrategy {
 		public AddUpdateContact(int customerID, int? directorID, string directorEmail) {
-			salesForce = ObjectFactory
+            this.salesForce = ObjectFactory
 				.With("userName").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceUserName.Value)
 				.With("password").EqualTo(ConfigManager.CurrentValues.Instance.SalesForcePassword.Value)
 				.With("token").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceToken.Value)
@@ -28,11 +28,15 @@
 			Thread.Sleep(60000); // Solves race condition in converting lead to account on finish wizard, in order to improve sleep only when invoked from finish wizard flow
 			ContactModel model = DB.FillFirst<ContactModel>("SF_LoadContact",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", customerID),
-				new QueryParameter("DirectorID", directorID),
-				new QueryParameter("DirectorEmail", directorEmail));
+                new QueryParameter("CustomerID", this.customerID),
+                new QueryParameter("DirectorID", this.directorID),
+                new QueryParameter("DirectorEmail", this.directorEmail));
 
-			salesForce.CreateUpdateContact(model);
+
+		    model.Email = model.Email.ToLower();
+		    model.ContactEmail = model.ContactEmail.ToLower();
+
+			this.salesForce.CreateUpdateContact(model);
 		}
 		private readonly ISalesForceAppClient salesForce;
 		private readonly int customerID;

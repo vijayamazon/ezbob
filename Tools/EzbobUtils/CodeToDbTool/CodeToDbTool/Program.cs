@@ -15,12 +15,13 @@ namespace CodeToDbTool {
 
 			//Console.WriteLine(CodeToSql.GetCreateTable<CallCreditDataApplicant>());
 			//Console.WriteLine(CodeToSql.GetCreateSp<CallCreditSearchData>());
-			using (StreamWriter file1 = new System.IO.StreamWriter(@"c:\temp\BuildDB.txt", true)) {
-				file1.WriteLine(CodeToSql.GetCreateTable<CallCreditDataLinkAddresses>());
+			using (StreamWriter file1 = new System.IO.StreamWriter(@"c:\temp1\BuildDB.txt", true)) {
+                file1.WriteLine(CodeToSql.GetCreateTable<CreditSafeNonLtdRatings>());
 			};
 
-			using (StreamWriter file2 = new System.IO.StreamWriter(@"c:\temp\BuildCP.txt", true)) {
-				file2.WriteLine(CodeToSql.GetCreateSp<CallCreditDataLinkAddresses>());
+            using (StreamWriter file2 = new System.IO.StreamWriter(@"c:\temp1\SaveCreditSafeNonLtdRatings.sql", true))
+            {
+                file2.WriteLine(CodeToSql.GetCreateSp<CreditSafeNonLtdRatings>());
 			}
 
 

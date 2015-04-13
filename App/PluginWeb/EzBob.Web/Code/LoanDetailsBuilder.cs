@@ -9,9 +9,11 @@ using EzBob.Web.Areas.Underwriter.Models;
 namespace EzBob.Web.Code
 {
 	using EzBob.Web.Models;
+	using log4net;
 
-	public class LoansDetailsBuilder 
-    {
+    public class LoansDetailsBuilder {
+        private static readonly ILog Log = LogManager.GetLogger(typeof (LoansDetailsBuilder));
+
         public LoanDetails Build(Loan loan, IEnumerable<PaymentRollover> rollovers )
         {
             var details = new LoanDetails();
@@ -55,6 +57,9 @@ namespace EzBob.Web.Code
                                           LoanScheduleId = x.LoanSchedule.Id,
                                           Id = x.Id
                                       });
+
+            //TODO build loan details using new structure
+            Log.InfoFormat("create loan details from new tables for loan {0}", loan.Id);
 
             return details;
         }

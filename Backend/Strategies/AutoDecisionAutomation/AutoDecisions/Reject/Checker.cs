@@ -13,7 +13,7 @@
 
 		public Checker(RejectionTrail oTrail, ASafeLog oLog) {
 			Trail = oTrail;
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 		} // constructor
 
 		public void Run() {

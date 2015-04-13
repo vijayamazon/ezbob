@@ -1,15 +1,36 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks {
-	public class TotalMaamMedalAndPricing : WeeklyMaamMedalAndPricing {
-		public TotalMaamMedalAndPricing() : base(true) {
-		} // constructor
+	using System;
+	using System.Globalization;
+	using System.IO;
+	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 
+	public class TotalMaamMedalAndPricing : MaamMedalAndPricing {
 		public override string Name {
 			get { return "TotalMaamMedalAndPricing"; }
 		} // Name
 
-		protected override string Condition {
-			get { return string.Empty; }
-		} // Condition
+		public override void Execute() {
+			DateFrom = new DateTime(2012, 9, 4, 0, 0, 0, DateTimeKind.Utc);
+			DateTo   = new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			base.Execute();
+
+			SaveXlsx(string.Format(
+				"automation.report.{0}.xlsx",
+				DateTime.UtcNow.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
+			));
+		} // Execute
+
+		private void SaveXlsx(string fileName) {
+			string filePath = Path.Combine(Path.GetTempPath(), fileName);
+
+			try {
+				Xlsx.SaveAs(new FileInfo(filePath));
+				Log.Debug("Saved .xlsx file as {0}.", filePath);
+			} catch (Exception e) {
+				Log.Warn(e, "Failed to save .xlsx file as {0}.", filePath);
+			} // try
+		} // CreateXlsx
 	} // class WeeklyMaamMedalAndPricing
 } // namespace
 

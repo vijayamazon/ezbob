@@ -10,7 +10,7 @@
 	public class LoanDateScoreItem {
 
 		public LoanDateScoreItem(SafeReader oRow, ASafeLog oLog) {
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			CustomerID = oRow["CustomerID"];
 			m_oLastLoanDate = oRow["LoanIssueDate"];

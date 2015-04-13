@@ -7,7 +7,7 @@
     <ProjectGuid>{F92CA169-9532-4C4D-8D84-6F48ACE5719C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Logger</RootNamespace>
+    <RootNamespace>Ezbob.Logger</RootNamespace>
     <AssemblyName>Logger</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -49,6 +49,7 @@
     <Compile Include="ConsoleLog.cs" />
     <Compile Include="FileLog.cs" />
     <Compile Include="LogException.cs" />
+    <Compile Include="LogExt.cs" />
     <Compile Include="SafeILog.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="ASafeLog.cs" />

@@ -8,7 +8,7 @@
 	internal class TypeRepository {
 
 		public TypeRepository(ASafeLog oLog) {
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			m_oTypes = new List<IType>();
 

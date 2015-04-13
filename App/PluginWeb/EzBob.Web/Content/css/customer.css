@@ -14,13 +14,8 @@ body
 {
     text-rendering: optimizeLegibility !important;
     -webkit-font-smoothing: antialiased !important;
-    margin: 0;
     background: #fff;
     font-size: 18px;
-	position: static;
-	padding-top: 77px;
-	overflow-x: hidden;
-	font-size: 62.5%;
 }
 
 /*-- login bar --*/
@@ -671,9 +666,4 @@ blockquote {
 
 .AmazonForm{
     padding-top: 1.6em;
-}
-
-/* wizard-header */
-#header {
-	margin-top: -77px;
 }

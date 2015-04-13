@@ -32,8 +32,8 @@
 		public static List<Order> CreateOrders() {
 			List<Order> OrderList = new List<Order> 
             {
-                new Order {OrderID = 10248, CustomerName = "Thankyouverymuch", ShipperCity = "Goodboy", IsShipped = true },
-                new Order {OrderID = 10249, CustomerName = "Foxy-proxy", ShipperCity = "London", IsShipped = false}
+                new Order {OrderID = 1122, CustomerName = "Andres", ShipperCity = "Good", IsShipped = true },
+                new Order {OrderID = 1123, CustomerName = "John", ShipperCity = "London", IsShipped = false}
             };
 
 			return OrderList;

@@ -1,7 +1,8 @@
-﻿/*--------------------------------------------
-    Fonts
-----------------------------------------------*/
-html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,section,summary,time,mark,audio,video {
+﻿html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,
+big,cite,code,del,dfn,em,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,
+dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,
+aside,canvas,details,embed,figure,figcaption,footer,header,hgroup,menu,nav,output,ruby,
+section,summary,time,mark,audio,video {
     margin:0;
     padding:0;
     border:0;
@@ -110,19 +111,29 @@ body, .ui-dialog {
 select, .tooltip {
     font-family: 'Open Sans';
 }
-html, body {
-    height: 100%;
+
+html, body, #promotion-pages {
+	height: 100%;
 }
 
-i{
-	font-style: italic;
+#promotion-pages {
+	display: none;
 }
 
 #wrapper {
     min-height: 100%;
-    height: auto !important;
-    height: 100%;
-    margin: 0 auto -90px; /* the bottom margin is the negative value of the footer's height */
+	position: relative;
+}
+
+footer {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	left: 0;
+}
+
+i{
+	font-style: italic;
 }
 
 /*-- Padding for inner sections --*/
@@ -130,10 +141,6 @@ i{
     width:1000px; 
     margin:0 auto;
 	font-size: 16px;
-}
-
-footer, .push {
-    height: 90px; /* .push must be the same height as .footer */
 }
 
 /*-- copyrights, right at the bottom of the site --*/
@@ -3245,4 +3252,92 @@ iframe[src^='https://finimpact'] {
 .aka-cell,
 .aka-column {
     display: table-cell;
+}
+
+
+.d-widgets 
+{
+    margin-bottom: 14px;
+}
+
+.d-widgets .d-widget {
+    display: block;
+}
+
+.d-widget
+{
+    border: solid 1px #c5c5c5;
+    border-radius: 6px;
+    -moz-border-radius: 6px;
+    -o-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    display: block;
+    font-size:14px;
+    color: #565656;
+    height: 30px;
+    padding: 12px 18px 12px 18px;
+    background-color: white;
+    margin-bottom: 10px;
+
+    behavior: url(CSS3PIE);
+    position:relative\0/;
+}
+
+.d-widget h3 {
+    font-weight: bold;
+    float: left;
+    border-right: solid 1px #ccc;
+    font-size: 16px;
+    width: 70px;
+    margin-right: 5px;
+    line-height: 23px;
+    padding-left: 20px;
+    margin-top: 0;
+}
+
+.d-widget dl{
+    margin: 0 0 4px 0;
+    padding: 0;
+}
+
+.d-widget dt, .d-widget dd {
+    height: 25px;
+    line-height: 25px;
+    vertical-align: middle;
+    display: block;
+    float: left;
+}
+
+.d-widget dt 
+{
+    font-weight: normal;
+    margin-left: 8px;
+	margin-right: 8px;
+}
+
+.d-widget dd {
+    border: solid 1px #c5c5c5;
+    width: 130px;
+    display: block;
+    margin-bottom: 3px;
+    border-radius: 4px;
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -o-border-radius: 4px;
+    text-align: right;
+    padding-right: 3px;
+    font-weight: bold;
+    margin-right: 8px;
+    padding-left: 2px;
+    font-size: 16px;
+    position: relative;
+    font-family: 'Titillium Web Semi Bold';
+    color: #67c10b;
+}
+
+.d-widget button {
+    display: block;
+    margin: -7px -10px 0;
+    float: right;
+    width: 167px;
 }

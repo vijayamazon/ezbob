@@ -8,20 +8,20 @@
 	using Ezbob.Backend.Models.Alibaba;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Database;
-	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Alibaba;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-	using NHibernate.Linq;
-	using NHibernate.Util;
+	using NHibernate.SqlCommand;
 	using RestSharp;
 	using StructureMap;
 
 	public class DataSharing : AStrategy {
 
+		public JsonSerializerSettings jf = new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+	
 		public DataSharing(int customerID, AlibabaBusinessType businessType) {
-			this.CustomerID = customerID;
+			CustomerID = customerID;
 			this.businessType = businessType;
 			Result = new CustomerDataSharing();
 			this.sentDataRep = ObjectFactory.GetInstance<AlibabaSentDataRepository>();
@@ -35,14 +35,12 @@
 			var aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			AlibabaBuyer aliMember = aliMemberRep.ByCustomer(CustomerID);
 
-			Log.Info("ali member: {0}", aliMember.AliId);
+			Log.Info(string.Format("DATASHARING1*************{0}*******************", aliMember.AliId));
 
 			if (aliMember.Customer.Id != CustomerID || aliMember.AliId == 0) {
 				Log.Info("Alibaba member for customer {0} not exists OR customer business Type not supported in Alibaba (Entrepreneur|SoleTrader|None)", CustomerID);
 				return;
 			}
-
-			Log.Debug("******************************************************{0}, {1}", CustomerID, businessType.DescriptionAttr());
 
 			// check if 001 exists before 002
 			if (this.businessType == AlibabaBusinessType.APPLICATION_REVIEW) {
@@ -58,6 +56,7 @@
 						new QueryParameter("CustomerID", this.CustomerID),
 						new QueryParameter("FinalDecision", 0)
 					);
+					
 					SendRequest(aliMember, this.Result, AlibabaBusinessType.APPLICATION);
 				}
 			}
@@ -70,7 +69,7 @@
 					new QueryParameter("FinalDecision", (this.businessType == AlibabaBusinessType.APPLICATION)?0:1)
 				);
 
-			Log.Debug("DataSharing strategy, execute customerID: {0}, finalDecision: {1}, Result: {2}", CustomerID, this.businessType.DescriptionAttr(), JsonConvert.SerializeObject(Result));
+			Log.Debug("**********DATASHARING4 strategy, execute customerID: {0}, finalDecision: {1}, Result: {2}", CustomerID, this.businessType.DescriptionAttr(), JsonConvert.SerializeObject(Result, jf));
 
 			if (Result == null || Result.aliMemberId == 0 || Result.aId == 0) {
 				Log.Info("Relevant data for sharing with Alibaba (001/002) for customer {0}, aliId {1} not found", CustomerID, aliMember.AliId);
@@ -89,6 +88,15 @@
 		/// <param name="bizType"></param>
 		private void SendRequest(AlibabaBuyer aliMember, CustomerDataSharing result, AlibabaBusinessType bizType) {
 
+			if (result==null)
+				return;
+			if(aliMember==null)
+				return;
+			if (result.aliMemberId == 0)
+				return;
+			if (result.aId == 0)
+				return;
+
 			try {
 
 				AlibabaClient client;
@@ -98,9 +106,9 @@
 				} else {
 					client = new AlibabaClient(CurrentValues.Instance.AlibabaBaseUrl, CurrentValues.Instance.AlibabaUrlPath, CurrentValues.Instance.AlibabaAppSecret);
 				}
-
+	
 				IRestResponse response = client.SendDecision(JObject.FromObject(result), bizType);
-
+	
 				AlibabaSentData sent = new AlibabaSentData();
 				sent.AlibabaBuyer = aliMember;
 				sent.Customer = sent.AlibabaBuyer.Customer;
@@ -129,15 +137,15 @@
 				if (btype != null) {
 					sent.BizTypeCode = btype.Value.ToString();
 				}
-
+				
 				sent.StatusCode = response.StatusCode.DescriptionAttr();
 				sent.SentDate = DateTime.UtcNow;
 				this.sentDataRep.Save(sent);
 
 			} catch (HttpException e) {
-				throw new StrategyAlert(this, string.Format("HttpException: Failed to transmit {1} for customer {0}, ", CustomerID, bizType.DescriptionAttr()), e);
+				throw new StrategyAlert(this, string.Format("HttpException: Failed to transmit for customer {0}, CustomerDataSharing: {1}, alimember:{2}", CustomerID, result.Stringify(), aliMember.AliId), e);
 			} catch (Exception ex) {
-				throw new StrategyAlert(this, string.Format("Failed to transmit {1} for customer {0}", CustomerID, bizType.DescriptionAttr()), ex);
+				throw new StrategyAlert(this, string.Format("Failed to transmit for customer {0}, CustomerDataSharing: {1}, alimember:{2}", CustomerID, result.Stringify(), aliMember.AliId), ex);
 			}
 		}
 

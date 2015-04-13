@@ -32,7 +32,7 @@
 			ASafeLog oLog
 		) {
 			DB = oDB;
-			Log = oLog ?? new SafeLog();
+			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal, medalType, turnoverType);
 			this.m_oCheck = new Checker(this);
 			this.caisAccounts = new List<ExperianConsumerDataCaisAccounts>();

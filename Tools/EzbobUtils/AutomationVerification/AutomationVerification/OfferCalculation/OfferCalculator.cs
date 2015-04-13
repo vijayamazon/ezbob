@@ -40,7 +40,8 @@
 				pricingScenario,
 				input.Amount,
 				outModel.RepaymentPeriod,
-				DB
+				DB,
+				Log
 			);
 
 			if (input.AspireToMinSetupFee) {
@@ -144,7 +145,8 @@
 				pricingScenario,
 				input.Amount,
 				outModel.RepaymentPeriod,
-				DB
+				DB,
+				Log
 			);
 
 			decimal setupfeeRight = pricingCalculator.GetSetupfee(interestRateRange.MinInterestRate);
@@ -196,8 +198,8 @@
 
 		protected decimal SetupFeeStep { get { return 0.05M; } }
 		protected decimal InterestRateStep { get { return 0.005M; } }
-		protected ASafeLog Log;
-		protected AConnection DB;
+		protected ASafeLog Log { get; set; }
+		protected AConnection DB { get; set; }
 
 		private decimal RoundInterest(decimal interest) {
 			return Math.Ceiling(Math.Round(interest, 4, MidpointRounding.AwayFromZero) * 2000) / 20;

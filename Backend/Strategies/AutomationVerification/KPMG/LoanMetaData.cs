@@ -5,9 +5,11 @@
 
 	public class LoanMetaData : AResultRow {
 		public int CashRequestID { get; set; }
+		public int CustomerID { get; set; }
 		public int LoanID { get; set; }
 		public string LoanSourceName { get; set; }
 		public DateTime LoanDate { get; set; }
+		public DateTime? DateClosed { get; set; }
 		public decimal LoanAmount { get; set; }
 		public string Status {
 			get { return LoanStatus.ToString(); }

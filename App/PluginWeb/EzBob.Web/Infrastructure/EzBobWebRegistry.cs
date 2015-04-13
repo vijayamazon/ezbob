@@ -22,8 +22,9 @@ namespace EzBob.Web.Infrastructure
 	using ServiceClientProxy;
 	using StructureMap.Configuration.DSL;
 	using ConfigManager;
+	using EZBob.DatabaseLib.Model.Database.Request;
 
-	public class PluginWebRegistry : Registry
+    public class PluginWebRegistry : Registry
 	{
 		public PluginWebRegistry()
 		{
@@ -93,6 +94,7 @@ namespace EzBob.Web.Infrastructure
 			For<IApprovalsWithoutAMLRepository>().Use<ApprovalsWithoutAMLRepository>();
 			For<ICustomerStatusHistoryRepository>().Use<CustomerStatusHistoryRepository>();
 			For<ILoanSourceRepository>().Use<LoanSourceRepository>();
+            For<IOfferCalculationsRepository>().Use<OfferCalculationsRepository>();
 
 			For<ICustomerReasonRepository>().Use<CustomerReasonRepository>();
 			For<ICustomerSourceOfRepaymentRepository>().Use<CustomerSourceOfRepaymentRepository>();

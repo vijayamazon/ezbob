@@ -23,7 +23,7 @@
 			m_bStopFlag = false;
 
 			m_oDB = oDB;
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			m_oData = oData;
 

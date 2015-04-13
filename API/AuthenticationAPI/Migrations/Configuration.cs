@@ -16,7 +16,7 @@ namespace Ezbob.API.AuthenticationAPI.Migrations
     {
         public Configuration()
         {
-			Trace.WriteLine("---------------Migration Configuration ---------------------");
+			//Trace.WriteLine("---------------Migration Configuration ---------------------");
             AutomaticMigrationsEnabled = false;
 	        //this.Seed(new AuthContext());
         }

@@ -186,6 +186,7 @@
     <Compile Include="Areas\Customer\Controllers\ScratchController.cs" />
     <Compile Include="Areas\Customer\Models\ApplyForLoanResultModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\BrokersController.cs" />
+    <Compile Include="Areas\Underwriter\Controllers\CustomersReview\AutomationController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\EsignaturesController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
@@ -230,7 +231,6 @@
     <Compile Include="Controllers\ServerLogController.cs" />
     <Compile Include="Models\LoanScheduleExtention.cs" />
     <Compile Include="Areas\Underwriter\Models\PersonalInfoModel.cs" />
-    <Compile Include="Code\StrategyChecker.cs" />
     <Compile Include="Code\UiEvents\UiActionEventModel.cs" />
     <Compile Include="Code\UiEvents\UiCachePkgModel.cs" />
     <Compile Include="Infrastructure\Attributes\AjaxAttribute.cs" />
@@ -454,6 +454,7 @@
     <None Include="..\..\..\connection-strings.xml">
       <Link>connection-strings.xml</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
     <Content Include="Content\alibaba\alibaba_logo.png" />
     <Content Include="Content\alibaba\e-credit-line-logo.png" />
@@ -465,6 +466,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\ezbob.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bolditalic-webfont.svg" />
@@ -670,9 +672,11 @@
     <Content Include="Content\css\lib\jquery.ui.1.8.16.ie.css" />
     <Content Include="Content\css\lib\notifications.css" />
     <Content Include="Content\css\mobile.css" />
+    <Content Include="Content\css\paypoint-template.css" />
     <Content Include="Content\css\Permission.css" />
     <Content Include="Content\css\salesforce.css" />
     <Content Include="Content\css\alibaba.css" />
+    <Content Include="Content\css\easter2015scratch.css" />
     <Content Include="Content\css\valentine2015scratch.css" />
     <Content Include="Content\everline\EverlineLogo.png" />
     <Content Include="Content\everline\EverlineLogo.svg" />
@@ -765,6 +769,23 @@
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SendSms.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\InstantOffer.cshtml" />
     <Content Include="Areas\Underwriter\Views\Broker\BrokerWhiteLabel.cshtml" />
+    <Content Include="Content\img\easter2015scratch\100.jpg" />
+    <Content Include="Content\img\easter2015scratch\1000.jpg" />
+    <Content Include="Content\img\easter2015scratch\25.jpg" />
+    <Content Include="Content\img\easter2015scratch\250.jpg" />
+    <Content Include="Content\img\easter2015scratch\50.jpg" />
+    <Content Include="Content\img\easter2015scratch\500.jpg" />
+    <Content Include="Content\img\easter2015scratch\750.jpg" />
+    <Content Include="Content\img\easter2015scratch\arrow.jpg" />
+    <Content Include="Content\img\easter2015scratch\golden-egg.png" />
+    <Content Include="Content\img\easter2015scratch\magenta-egg.png" />
+    <Content Include="Content\img\easter2015scratch\not-now-active.png" />
+    <Content Include="Content\img\easter2015scratch\not-now-hover.png" />
+    <Content Include="Content\img\easter2015scratch\not-now-normal.png" />
+    <Content Include="Content\img\easter2015scratch\not-yet.png" />
+    <Content Include="Content\img\easter2015scratch\opening-bg.jpg" />
+    <Content Include="Content\img\easter2015scratch\pink-egg.png" />
+    <Content Include="Content\img\easter2015scratch\playground-bg.jpg" />
     <Content Include="Content\img\ny2015scratch\0.png" />
     <Content Include="Content\img\ny2015scratch\1.png" />
     <Content Include="Content\img\ny2015scratch\2.png" />
@@ -805,6 +826,9 @@
     <Content Include="Content\img\valentine2015scratch\win.png" />
     <Content Include="Content\js\App\ezbob.bindings.js" />
     <Content Include="Content\js\App\ezbob.GA.js" />
+    <Content Include="Content\js\Broker\broker.addbank.view.js" />
+    <Content Include="Content\js\Broker\broker.commission.view.js" />
+    <Content Include="Content\js\Broker\broker.leaddetails.view.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\footer.min.js" />
@@ -814,6 +838,7 @@
     <Content Include="Content\js\login\ezbob.restorePassword.js" />
     <Content Include="Content\js\Profile\ezbob.profile.reviewSignCreditLine.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.selectcard.js" />
+    <Content Include="Content\js\ScratchCards\ezbob.scratchcard.easter2015.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.valentine2015.js" />
     <Content Include="Content\js\ScratchCards\ezbob.scratchcard.ny2015.js" />
     <Content Include="Content\js\Underwriter\bugs\ezbob.underwriter.bugs.reporter.js" />
@@ -826,6 +851,8 @@
     <Content Include="Content\js\Underwriter\ezbob.underwriter.goToCustomer.js" />
     <Content Include="Content\js\Underwriter\Fraud\ezbob.underwriter.fraud.js" />
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
+    <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.automationCalculations.js" />
+    <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.changeAddress.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.MarkAsPending.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js" />
@@ -866,6 +893,11 @@
     <Content Include="Areas\Customer\Views\Agreement\EVLRefinancePrivateCompanyLoanAgreement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Affordability.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\Dashboard\Journal.cshtml" />
+    <Content Include="App_Code\ChangeAddress.cshtml" />
+    <Content Include="Areas\Underwriter\Views\Shared\_AutomationCalculationTemplate.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Commission.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\AddBank.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\LeadDetails.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

@@ -41,6 +41,8 @@
 			ppb.Done();
 
 			SendReport(ms_oDate, ms_oLog);
+
+			ms_oLog.Dispose();
 		} // Main
 
 		private static bool IsNormalMode(string[] args) {

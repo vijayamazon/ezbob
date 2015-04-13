@@ -161,6 +161,20 @@
 			public virtual Esigner[] potential_signers { get; private set; }
 		} // CustomerDetailsBrokerForJsonResult
 
+        public class LeadDetailsBrokerForJsonResult : BrokerForJsonResult {
+            public LeadDetailsBrokerForJsonResult(
+                string sErrorMsg = "",
+                bool? bExplicitSuccess = null,
+                BrokerLeadDataModel oDetails = null
+            )
+                : base(sErrorMsg, bExplicitSuccess) {
+                personal_data = oDetails;
+            } // constructor
+
+            public virtual BrokerLeadDataModel personal_data { get; private set; }
+
+        } // LeadDetailsBrokerForJsonResult
+
 		public class FileListBrokerForJsonResult : BrokerForJsonResult {
 			public FileListBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerFile[] oFileList = null)
 				: base(sErrorMsg, bExplicitSuccess) {

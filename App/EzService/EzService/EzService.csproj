@@ -75,6 +75,7 @@
     <Compile Include="ActionResults\ActionResult.cs" />
     <Compile Include="ActionResults\AlibabaAvailableCreditActionResult.cs" />
     <Compile Include="ActionResults\AlibabaCustomerDataSharingActionResult.cs" />
+    <Compile Include="ActionResults\BrokerLeadDetailsDataActionResult.cs" />
     <Compile Include="ActionResults\LotteryActionResult.cs" />
     <Compile Include="ActionResults\BoolActionResult.cs" />
     <Compile Include="ActionResults\BrokerCustomerFileContentsActionResult.cs" />

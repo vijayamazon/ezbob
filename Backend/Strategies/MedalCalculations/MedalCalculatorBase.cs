@@ -220,10 +220,7 @@
 
 			Results.MortgageBalance = GetMortgages(Results.CustomerId);
 
-			Results.CapOfferByCustomerScoresTable = new DBMatrix(
-				MatrixName.Automation.Medal.CapOfferByCustomerScores,
-				this.db
-			);
+			Results.CapOfferByCustomerScoresTable = new CapOfferByCustomerScoreMatrix(Results.CustomerId, this.db);
 			Results.CapOfferByCustomerScoresTable.Load();
 		} // GatherInputData
 
@@ -642,14 +639,18 @@
 				Results.MaxOfferedLoanAmount = (int)(maxUnroundedValue * Results.CapOfferByCustomerScoresValue);
 
 				this.log.Debug(
-					"Primary medal - offered amount calculated to be {0} (before cap and rounding: {1}, cap value: {2}.",
+					"Primary medal - offered amount is {0}" +
+					"(before cap and rounding: {1}, cap value: {2}, consumer score: {3}, business score: {4}).",
 					Results.OfferedLoanAmount,
 					unroundedValue,
-					Results.CapOfferByCustomerScoresValue
+					Results.CapOfferByCustomerScoresValue,
+					Results.ConsumerScore,
+					Results.BusinessScore
 				);
 
 				this.log.Debug(
-					"Primary medal - MAX offered amount calculated to be {0} (before cap and rounding: {1}, cap value: {2}.",
+					"Primary medal - MAX offered amount is {0}" +
+					"(before cap and rounding: {1}, cap value: {2}).",
 					Results.MaxOfferedLoanAmount,
 					maxUnroundedValue,
 					Results.CapOfferByCustomerScoresValue
@@ -802,16 +803,23 @@
 		/// </summary>
 		protected virtual void CalculateTurnoverForMedal() {
 			this.updatingHistoryRep = ObjectFactory.GetInstance<CustomerMarketPlaceUpdatingHistoryRepository>();
+
 			try {
 				Results.AnnualTurnover = 0;
 				Results.HmrcAnnualTurnover = 0;
 				Results.BankAnnualTurnover = 0;
 				Results.OnlineAnnualTurnover = 0;
 
-				var h = this.updatingHistoryRep.GetByCustomerId(Results.CustomerId).Where(x => x.UpdatingEnd < Results.CalculationTime && (x.Error == null || x.Error.Trim().Length == 0));
+				var h = this.updatingHistoryRep
+					.GetByCustomerId(Results.CustomerId)
+					.Where(x => x.UpdatingEnd < Results.CalculationTime && (x.Error == null || x.Error.Trim().Length == 0));
 
 				if (h.Equals(null)) {
-					this.log.Info("Updating history for customer {0}, calculationDate {1} not found", Results.CustomerId, Results.CalculationTime);
+					this.log.Info(
+						"Updating history for customer {0}, calculationDate {1} not found",
+						Results.CustomerId,
+						Results.CalculationTime
+					);
 					return;
 				} // if
 
@@ -823,25 +831,35 @@
 							};
 
 				if (!hmrcs.Equals(null)) {
-
 					var hmrcList = this.LastHistoryTurnovers(hmrcs.ToList(), Results.CalculationTime);
 
 					if (hmrcList != null) {
 						// get hmrc turnover for all months received
 						Results.HmrcAnnualTurnover = hmrcList.Sum(t => t.Turnover);
 						Results.HmrcAnnualTurnover = (Results.HmrcAnnualTurnover < 0) ? 0 : Results.HmrcAnnualTurnover;
-					}
+					} // if
 
 					// this is non-online medal type and has a hmrc
 					if (!Results.MedalType.IsOnline() && Results.NumOfHmrcMps > 0) {
 						Results.TurnoverType = TurnoverType.HMRC;
 						Results.AnnualTurnover = Results.HmrcAnnualTurnover;
 
-						this.log.Info("Base: (HMRC) AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+						this.log.Info(
+							"Base: (HMRC) AnnualTurnover: {0}," +
+							"HmrcAnnualTurnover: {1}," +
+							"BankAnnualTurnover: {2}," +
+							"OnlineAnnualTurnover: {3}," +
+							"Type: {4}",
+							Results.AnnualTurnover,
+							Results.HmrcAnnualTurnover,
+							Results.BankAnnualTurnover,
+							Results.OnlineAnnualTurnover,
+							Results.TurnoverType
+						);
 
 						return;
 					} // if
-				}
+				} // if
 
 				var yodlees = from row in h.SelectMany(y => y.YodleeAggregations)
 							  select new MarketplaceTurnover {
@@ -868,7 +886,18 @@
 						Results.TurnoverType = TurnoverType.Bank;
 						Results.AnnualTurnover = Results.BankAnnualTurnover;
 
-						this.log.Info("Base: (bank) AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+						this.log.Info(
+							"Base: (bank) AnnualTurnover: {0}," +
+							"HmrcAnnualTurnover: {1}," +
+							"BankAnnualTurnover: {2}," +
+							"OnlineAnnualTurnover: {3}," +
+							"Type: {4}",
+							Results.AnnualTurnover,
+							Results.HmrcAnnualTurnover,
+							Results.BankAnnualTurnover,
+							Results.OnlineAnnualTurnover,
+							Results.TurnoverType
+						);
 
 						return;
 					} // if
@@ -910,7 +939,7 @@
 				var amazonList = this.LastHistoryTurnovers(amazons.ToList(), Results.CalculationTime);
 
 				if (amazonList != null) {
-					// Amazon: calculate "last month", "last three months", "last six months", and "last twelve months"/annualize 
+					// Amazon: calculate "last month", "last 3 months", "last 6 months", and "last 12 months"/annualize 
 					list_t1.Insert(0, amazonList.Where(t => t.TheMonth >= T1)
 						.Sum(t => t.Turnover) * Ec1);
 					list_t3.Insert(0, amazonList.Where(t => t.TheMonth >= T3)
@@ -919,9 +948,14 @@
 						.Sum(t => t.Turnover) * Ec6);
 					list_t12.Insert(0, amazonList.Sum(t => t.Turnover));
 
-					//			log.Info(" amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(0), list_t3.ElementAtOrDefault(0), list_t6.ElementAtOrDefault(0), list_t12.ElementAtOrDefault(0));
-
-				}
+					// log.Info(
+					// "amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}",
+					// list_t1.ElementAtOrDefault(0),
+					// list_t3.ElementAtOrDefault(0),
+					// list_t6.ElementAtOrDefault(0),
+					// list_t12.ElementAtOrDefault(0)
+					// );
+				} // if
 
 				var ebays = from row in h.SelectMany(y => y.EbayAggregations)
 							select new MarketplaceTurnover {

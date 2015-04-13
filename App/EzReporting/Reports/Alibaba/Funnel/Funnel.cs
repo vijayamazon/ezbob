@@ -16,7 +16,7 @@
 
 			m_oDB = oDB;
 
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			Report = oExcel;
 

@@ -1,15 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
-	using DbConstants;
+	// using DbConstants;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class AutoReapproved : AStatItem {
 		public AutoReapproved(
+			ASafeLog log,
 			ExcelWorksheet sheet,
 			Total total,
 			AutoProcessed autoProcessed,
 			AutoApproved autoApproved
 		) : base(
+			log,
 			sheet,
 			"Auto re-approved",
 			total,
@@ -17,8 +20,8 @@
 			autoApproved
 		) {} // constructor
 
-		public override void Add(Datum d) {
-			Added.If(d.AutomationDecision == DecisionActions.ReApprove);
+		public override void Add(Datum d, int cashRequestIndex) {
+			// TODO Added.If(d.AutomationDecision == DecisionActions.ReApprove);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

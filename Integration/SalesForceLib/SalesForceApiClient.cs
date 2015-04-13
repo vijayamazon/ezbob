@@ -90,6 +90,11 @@
                 this.Log.ErrorFormat("SalesForce UpdateCloseOpportunityService null session id");
                 return;
             }
+            // max length of deal lost reason is 255
+            const int maxDealLostReasonLength = 255;
+            if (model.DealLostReason != null && model.DealLostReason.Length > maxDealLostReasonLength) {
+                model.DealLostReason = model.DealLostReason.Substring(0, maxDealLostReasonLength);
+            }
 
             string result;
             var response = this.api.UpdateCloseOpportunityService(
@@ -131,7 +136,7 @@
         }
 
         public void CreateTask(TaskModel model) {
-            string modelStr = model.ToJsonExtension(true);
+            string modelStr = model.ToJsonExtension();
             this.Log.InfoFormat("SalesForce CreateTask\n {0}", modelStr);
 
             if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {

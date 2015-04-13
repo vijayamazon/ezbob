@@ -190,7 +190,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 
 			if (av != null) {
 				foreach (var info in av) {
-					if (!string.IsNullOrEmpty(info.ParameterName)) {
+					if (info != null && !string.IsNullOrEmpty(info.ParameterName)) {
 						var val = info.ParameterName.Replace(" ", "")
 							.Replace("%", "") + info.TimePeriod;
 						string temp;

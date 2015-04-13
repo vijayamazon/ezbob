@@ -46,6 +46,10 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public static bool IsAlibaba(this CustomerOrigin cu) {
 			return cu != null && cu.GetOrigin() == CustomerOriginEnum.alibaba;
 		} // IsAlibaba
+
+		public static string Stringify(this CustomerOrigin cu) {
+			return cu == null ? "-- NULL --" : string.Format("{0} (by '{1}')", cu.Name, cu.UrlNeedle);
+		} // Stringify
 	} // class CustomerOriginExt
 
 	public class CustomerOriginMap : ClassMap<CustomerOrigin> {

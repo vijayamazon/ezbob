@@ -1,33 +1,51 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
+	using System.Collections.Generic;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class AutoApproved : AStatItem {
-		public AutoApproved(bool takeMin, ExcelWorksheet sheet, Total total, AutoProcessed autoProcessed) : base(
+		public AutoApproved(
+			ASafeLog log,
+			bool takeMin,
+			ExcelWorksheet sheet,
+			Total total,
+			AutoProcessed autoProcessed
+		) : base(
+			log,
 			sheet,
-			"Auto approved & re-approved",
+			"Auto approved",
 			total,
 			autoProcessed
 		) {
 			this.takeMin = takeMin;
 		} // constructor
 
-		public override void Add(Datum d) {
+		public override void Add(Datum d, int cashRequestIndex) {
+			AutoDatumItem auto = d.Auto(cashRequestIndex);
+
 			Added.If(
-				(d.AutomationDecision == DecisionActions.ReApprove) ||
-				(this.takeMin ? (d.AutomationDecision == DecisionActions.Approve) : (d.AutoMaxOrMin.Amount > 0)),
-				this.takeMin ? d.AutoMin.Amount : d.AutoMaxOrMin.Amount
+				auto.HasDecided && auto.AutomationDecision.In(DecisionActions.Approve, DecisionActions.ReApprove),
+				auto.AutomationDecision == DecisionActions.ReApprove ? auto.ReapprovedAmount : auto.ApprovedAmount
 			);
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {
-			return new[] {
-				new TitledValue("count", Count),
-				new TitledValue("approved / total %", Count, Total.Count),
-				new TitledValue("approved / processed %", Count, AutoProcessed.Count),
-			};
+			return null;
 		} // PrepareCountRowValues
+
+		protected override List<TitledValue[]> PrepareMultipleCountRowValues() {
+			return new List<TitledValue[]> {
+				new[] {
+					new TitledValue("count", Count),
+				},
+				new[] {
+					new TitledValue("approved / total %", Count, Total.Count),
+					new TitledValue("approved / processed %", Count, AutoProcessed.Count),
+				},
+			};
+		} // PrepareMultipleCountRowValues
 
 		protected override TitledValue[] PrepareAmountRowValues() {
 			return new[] {

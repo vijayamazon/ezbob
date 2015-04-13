@@ -52,7 +52,7 @@
 			getPricingModelModelInstance.Execute();
 
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
-			templateModel.LoanAmount = amount;
+			templateModel.SetLoanAmount(amount);
 			templateModel.LoanTerm = result.Period;
 			templateModel.TenureMonths = result.Period * templateModel.TenurePercents;
 
@@ -178,7 +178,7 @@
 
 			if (!upperBoundaryPricingModelCalculator.CalculateInterestRate()) {
 				result.IsError = true;
-				result.Message = lowerBoundaryPricingModelCalculator.Error;
+				result.Message = upperBoundaryPricingModelCalculator.Error;
 				return false;
 			} // if
 

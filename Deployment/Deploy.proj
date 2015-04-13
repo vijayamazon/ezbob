@@ -43,6 +43,7 @@
 		<!-- Exec Command="unlocker.exe $(BuildBin) /D /S" WorkingDirectory="C:\Program Files\Unlocker\" Condition="Exists('C:\Program Files\Unlocker\Unlocker.exe')" IgnoreExitCode="true"/-->
 				
 		<WebCopy CopyFrom="$(Src)\App\pluginweb\EzBob.Web\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\"/>
+		<WebCopy CopyFrom="$(Src)\Api\AuthenticationAPI\" CopyTo="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Api\"/>
 		<ItemGroup><WebPdbFiles Include="$(Src)\App\pluginweb\EzBob.Web\bin\*.pdb"/></ItemGroup>
 		<Copy SourceFiles="$(WebPdbFiles)" DestinationFolder="$(BuildBin)\%(Edition.Identity)\$(WebFolder)\EzBob.Web\bin\" />
 		

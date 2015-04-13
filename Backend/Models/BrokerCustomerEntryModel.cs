@@ -1,15 +1,13 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using System.Runtime.Serialization;
 
 	[DataContract(IsReference = true)]
 	public class BrokerCustomerEntry {
 
 		public BrokerCustomerEntry() {
-			m_oMps = new SortedDictionary<string, int>();
 			LoanDate = ms_oLongTimeAgo;
+		    CommissionPaymentDate = ms_oLongTimeAgo;
 		} // constructor
 
 		[DataMember]
@@ -57,30 +55,15 @@
 		[DataMember]
 		public DateTime LastInvitationSent { get; set; }
 
-		public void AddMpLoan(string sMpTypeName, decimal nLoanAmount, DateTime? oLoanDate, decimal nSetupFee) {
-			if (nLoanAmount > 0) {
-				if (LoanDate == ms_oLongTimeAgo) {
-					LoanDate = oLoanDate.Value;
-					LoanAmount = nLoanAmount;
-					SetupFee = nSetupFee;
-				}
-				else if (LoanDate > oLoanDate.Value) {
-					LoanDate = oLoanDate.Value;
-					LoanAmount = nLoanAmount;
-					SetupFee = nSetupFee;
-				} // if
-			} // if
+        [DataMember]
+        public decimal ApprovedAmount { get; set; }
 
-			if (!string.IsNullOrWhiteSpace(sMpTypeName)) {
-				if (m_oMps.ContainsKey(sMpTypeName))
-					m_oMps[sMpTypeName]++;
-				else
-					m_oMps[sMpTypeName] = 1;
-			} // if
+        [DataMember]
+        public decimal CommissionAmount { get; set; }
 
-			Marketplaces = string.Join(", ", m_oMps.Select(kv => string.Format("{0} {1}", kv.Value, kv.Key)));
-		} // AddMpLoan
-
+        [DataMember]
+        public DateTime CommissionPaymentDate { get; set; }
+        
 		public BrokerCustomerEntry SetLead(int nLeadID, bool bIsLeadDeleted, DateTime oLastInvitationSent, string sFirstName, string sLastName) {
 			LeadID = nLeadID;
 			IsLeadDeleted = bIsLeadDeleted;
@@ -96,8 +79,5 @@
 		} // SetLead
 
 		private static readonly DateTime ms_oLongTimeAgo = new DateTime(1976, 7, 1).Date;
-
-		private readonly SortedDictionary<string, int> m_oMps;
-
-	} // class BrokerCustomerEntry
+    } // class BrokerCustomerEntry
 } // namespace Ezbob.Backend.Strategies.Broker

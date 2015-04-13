@@ -798,11 +798,22 @@ GeneratePassword broker-contact-email@example.com password-itself
 		[Activation]
 		private void MainStrategy() {
 			int underwriterId;
-			int customerId, avoidAutoDescison;
+			int customerId;
 			NewCreditLineOption newCreditLineOption;
+			int avoidAutoDescison;
+			bool createCashRequest;
+			bool updateCashRequest;
 
-			if (int.TryParse(cmdLineArgs[1], out underwriterId) && int.TryParse(cmdLineArgs[2], out customerId) && Enum.TryParse(cmdLineArgs[3], out newCreditLineOption) && int.TryParse(cmdLineArgs[4], out avoidAutoDescison)) {
-				serviceClient.MainStrategy1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
+			if (int.TryParse(cmdLineArgs[1], out underwriterId) && int.TryParse(cmdLineArgs[2], out customerId) && Enum.TryParse(cmdLineArgs[3], out newCreditLineOption) && int.TryParse(cmdLineArgs[4], out avoidAutoDescison) && bool.TryParse(cmdLineArgs[5], out createCashRequest) && bool.TryParse(cmdLineArgs[6], out updateCashRequest)) {
+				serviceClient.MainStrategy1(
+					underwriterId,
+					customerId,
+					newCreditLineOption,
+					avoidAutoDescison,
+					null,
+					createCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No,
+					updateCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No
+				);
 				return;
 			}
 
@@ -811,7 +822,7 @@ GeneratePassword broker-contact-email@example.com password-itself
 			//	NewCreditLineOption.UpdateEverythingAndApplyAutoRules 3
 			// avoidAutoDescison 0
 
-			log.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
+			log.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <create cash request (true/false)> <update cash request (true/false)>");
 		}
 
 		[Activation]
@@ -819,8 +830,19 @@ GeneratePassword broker-contact-email@example.com password-itself
 			int underwriterId;
 			int customerId, avoidAutoDescison;
 			NewCreditLineOption newCreditLineOption;
-			if (cmdLineArgs.Length == 5 && int.TryParse(cmdLineArgs[1], out underwriterId) && int.TryParse(cmdLineArgs[2], out customerId) && Enum.TryParse(cmdLineArgs[3], out newCreditLineOption) && int.TryParse(cmdLineArgs[4], out avoidAutoDescison)) {
-				serviceClient.MainStrategySync1(underwriterId, customerId, newCreditLineOption, avoidAutoDescison);
+			bool createCashRequest;
+			bool updateCashRequest;
+
+			if (cmdLineArgs.Length == 5 && int.TryParse(cmdLineArgs[1], out underwriterId) && int.TryParse(cmdLineArgs[2], out customerId) && Enum.TryParse(cmdLineArgs[3], out newCreditLineOption) && int.TryParse(cmdLineArgs[4], out avoidAutoDescison) && bool.TryParse(cmdLineArgs[5], out createCashRequest) && bool.TryParse(cmdLineArgs[6], out updateCashRequest)) {
+				serviceClient.MainStrategySync1(
+					underwriterId,
+					customerId,
+					newCreditLineOption,
+					avoidAutoDescison,
+					null,
+					createCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No,
+					updateCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No
+				);
 				return;
 			}
 
@@ -1342,7 +1364,7 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			serviceClient.TotalMaamMedalAndPricing();
 		}
 
-
+		/*
 		[Activation]
 		private void RequalifyCustomer() {
 			string email;
@@ -1351,17 +1373,17 @@ The digits shown in a group are the maximum number of meaningful digits that can
 				return;
 			}
 			email = cmdLineArgs[1];
-			//var result = serviceClient.RequalifyCustomer(email);
-			//log.Debug("blablabla: {0}", result.ToString());
+			var result = serviceClient.RequalifyCustomer(email);
+			log.Debug("blablabla: {0}", result.ToString());
 		}
-
+		*/
 
 		[Activation]
 		private void CustomerAvaliableCredit() { // CustomerAvaliableCredit 18234 12345 
 			int customerID;
-			int aliMemberID;
+			long aliMemberID;
 
-			if ((cmdLineArgs.Length != 3) || !int.TryParse(cmdLineArgs[1], out customerID) || !int.TryParse(cmdLineArgs[2], out aliMemberID)) {
+			if ((cmdLineArgs.Length != 3) || !int.TryParse(cmdLineArgs[1], out customerID) || !long.TryParse(cmdLineArgs[2], out aliMemberID)) {
 				log.Msg("Usage: CustomerAvaliableCredit <Customer ID> <Alibaba MemberID>");
 				return;
 			}
@@ -1372,7 +1394,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			//this.log.Debug("blablabla: {0}",  JsonConvert.SerializeObject(result)); //json
 		}
 
-		
 		[Activation]
 		private void DataSharing() { // DataSharing 18241
 			int customerID;
@@ -1384,11 +1405,17 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 			log.Debug("activator: customerID: {0}", customerID);
 
-			ActionMetaData result = serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null );
+			// ActionMetaData result =
+				serviceClient.DataSharing(customerID, AlibabaBusinessType.APPLICATION_REVIEW, null );
 			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
 		}
 
-		
+        [Activation]
+        private void BrokerTransferCommission()
+        {
+            ActionMetaData result = this.serviceClient.BrokerTransferCommission();
+            this.log.Debug("{0}", result.Status.ToString());
+        }
 
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;

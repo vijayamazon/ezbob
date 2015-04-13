@@ -1,24 +1,27 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using System.Collections.Generic;
+	using System.Drawing;
 	using System.Globalization;
-	using System.Linq;
+	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
 	using Ezbob.Database;
+	using Ezbob.ExcelExt;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
+	using OfficeOpenXml;
 	using PaymentServices.Calculators;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
-		int,
+		long,
 		System.Collections.Generic.List<LoanMetaData>
 	>;
 
 	public class MaamMedalAndPricing : AStrategy {
-		public MaamMedalAndPricing(int topCount, int lastCheckedCashRequestID) {
-			this.topCount = topCount;
-			this.lastCheckedID = lastCheckedCashRequestID;
+		public MaamMedalAndPricing() {
+			this.spLoad = new SpLoadCashRequestsForAutomationReport(DB, Log);
+
 			Data = new List<Datum>();
+
 			this.homeOwners = new SortedDictionary<int, bool>();
-			this.defaultCustomers = new SortedSet<int>();
 			this.crLoans = new TCrLoans();
 			this.loanSources = new SortedSet<string>();
 
@@ -27,6 +30,8 @@
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
 				Guid.NewGuid().ToString("N")
 			);
+
+			Log.Debug("The tag is '{0}'.", this.tag);
 		} // constructor
 
 		public override string Name {
@@ -38,13 +43,6 @@
 		public override void Execute() {
 			this.loanSources.Clear();
 			this.crLoans.Clear();
-			this.defaultCustomers.Clear();
-
-			DB.ForEachRowSafe(
-				srdc => defaultCustomers.Add(srdc["CustomerID"]),
-				"LoadDefaultCustomers",
-				CommandSpecies.StoredProcedure
-			);
 
 			DB.ForEachResult<LoanMetaData>(
 				lmd => {
@@ -56,7 +54,8 @@
 					this.loanSources.Add(lmd.LoanSourceName);
 				},
 				"LoadAllLoansMetaData",
-				CommandSpecies.StoredProcedure
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("Today", spLoad.DateTo ?? new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc))
 			);
 
 			LoadCashRequests();
@@ -64,13 +63,12 @@
 			var pc = new ProgressCounter("{0} cash requests processed.", Log, 50);
 
 			foreach (Datum d in Data) {
-				d.IsDefault = defaultCustomers.Contains(d.CustomerID);
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
 				try {
-					d.RunAutomation(isHomeOwner, DB, Log);
+					d.RunAutomation(isHomeOwner, DB);
 				} catch (Exception e) {
-					Log.Alert(e, "Automation failed for customer {0} with cash request {1}.", d.CustomerID, d.CashRequestID);
+					Log.Alert(e, "Automation failed for customer {0}.", d.CustomerID);
 				} // try
 
 				pc++;
@@ -79,9 +77,54 @@
 			pc.Log();
 
 			CsvTitles = Datum.CsvTitles(this.loanSources).Split(';');
+			CreateXlsx();
 		} // Execute
 
 		public virtual string[] CsvTitles { get; private set; }
+
+		public virtual ExcelPackage Xlsx { get; private set; }
+
+		private void CreateXlsx() {
+			Xlsx = new ExcelPackage();
+
+			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
+			ExcelWorksheet decisionSheet = Xlsx.CreateSheet("Decisions", false, CsvTitles);
+			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
+
+			var decisionStats = new Stats(Log, statSheet, true, "at last decision time");
+
+			var stats = new List<Tuple<Stats, int>> {
+				new Tuple<Stats, int>(decisionStats, -1),
+			};
+
+			var pc = new ProgressCounter("{0} items sent to .xlsx", Log, 50);
+
+			int curRow = 2;
+
+			foreach (Datum d in Data) {
+				d.ToXlsx(decisionSheet, curRow);
+				curRow++;
+
+				foreach (Tuple<Stats, int> pair in stats)
+					pair.Item1.Add(d, pair.Item2);
+
+				pc++;
+			} // for each
+
+			pc.Log();
+
+			int row = 1 + DrawVerificationData(statSheet, 1, decisionStats);
+			int loanIDColumn = 1;
+
+			foreach (Tuple<Stats, int> pair in stats) {
+				row = pair.Item1.ToXlsx(row);
+				row++;
+
+				loanIDColumn = pair.Item1.FlushLoanIDs(loanIDSheet, loanIDColumn);
+			} // for each
+
+			Xlsx.AutoFitColumns();
+		} // CreateXlsx
 
 		protected virtual TCrLoans CashRequestLoans {
 			get { return this.crLoans; }
@@ -91,66 +134,151 @@
 			get { return this.loanSources; }
 		} // LoanSources
 
-		protected virtual string Condition {
-			get { return string.Empty; }
-		} // Condition
+		protected virtual int? CustomerID {
+			get { return this.spLoad.CustomerID; }
+			set { this.spLoad.CustomerID = value; }
+		} // CustomerID
 
-		private string Query {
-			get { return string.Format(QueryFormat, Condition); }
-		} // Query
+		protected virtual DateTime? DateFrom {
+			get { return this.spLoad.DateFrom; }
+			set { this.spLoad.DateFrom = value; }
+		} // DateFrom
+
+		protected virtual DateTime? DateTo {
+			get { return this.spLoad.DateTo; }
+			set { this.spLoad.DateTo = value; }
+		} // DateTo
+
+		private static int DrawVerificationData(ExcelWorksheet statSheet, int row, Stats decisionStats) {
+			AStatItem.SetBorder(statSheet.Cells[row, 1, row, 3]).Merge = true;
+			statSheet.SetCellValue(row, 1, "Verification data", bSetZebra: false, oBgColour: Color.Yellow, bIsBold: true);
+			statSheet.Cells[row, 1].Style.Font.Size = 16;
+			row++;
+
+			statSheet.SetCellValue(row, 2, "Reference", true);
+			statSheet.SetCellValue(row, 3, "Actual", true);
+			row++;
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Approve count",
+				Reference.Approve.Count,
+				decisionStats.ManuallyApproved.Count,
+				TitledValue.Format.Int
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Approve amount",
+				Reference.Approve.Amount,
+				decisionStats.ManuallyApproved.Amount,
+				TitledValue.Format.Money
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Loan count",
+				Reference.Loan.Count,
+				decisionStats.ManuallyApproved.LoanCount.Total.Count,
+				TitledValue.Format.Int
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Loan amount",
+				Reference.Loan.Amount,
+				decisionStats.ManuallyApproved.LoanCount.Total.Amount,
+				TitledValue.Format.Money
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Default count",
+				Reference.Default.Count,
+				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Count,
+				TitledValue.Format.Int,
+				true
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Default issued amount",
+				Reference.Default.Issued.Amount,
+				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Amount,
+				TitledValue.Format.Money,
+				true
+			);
+
+			row = DrawVerificationRow(
+				statSheet,
+				row,
+				"Default outstanding amount",
+				Reference.Default.Outstanding.Amount,
+				decisionStats.ManuallyApproved.LoanCount.DefaultOutstanding.Amount,
+				TitledValue.Format.Money,
+				true
+			);
+
+			return row;
+		} // DrawVerificationData
+
+		private static int DrawVerificationRow(
+			ExcelWorksheet statSheet,
+			int row,
+			string title,
+			decimal reference,
+			decimal actual,
+			string format,
+			bool setItalic = false
+		) {
+			Color fontColour = Math.Abs(reference - actual) < 0.000001m ? Color.DarkGreen : Color.Red;
+
+			statSheet.SetCellValue(row, 1, title, true);
+			statSheet.SetCellValue(row, 2, reference, sNumberFormat: format);
+			statSheet.SetCellValue(row, 3, actual, oFontColour: fontColour, sNumberFormat: format);
+
+			statSheet.Cells[row, 1, row, 3].Style.Font.Italic = setItalic;
+
+			return row + 1;
+		} // DrawVerificationRow
 
 		private void LoadCashRequests() {
 			Data.Clear();
 
-			this.crPc = new ProgressCounter("{0} cash requests loaded so far...", Log, 50);
+			var byCustomer = new SortedDictionary<int, CustomerData>();
 
-			SetupFeeCalculator.ReloadBrokerRepoCache();
+			ProgressCounter pc = new ProgressCounter("{0} cash requests loaded so far...", Log, 50);
 
-			DB.ForEachRowSafe(ProcessCashRequest, Query, CommandSpecies.Text);
+			SetupFeeCalculatorLegacy.ReloadBrokerRepoCache();
 
-			this.crPc.Log();
+			this.spLoad.ForEachResult<SpLoadCashRequestsForAutomationReport.ResultRow>(sr => {
+				if (byCustomer.ContainsKey(sr.CustomerID))
+					byCustomer[sr.CustomerID].Add(sr);
+				else
+					byCustomer[sr.CustomerID] = new CustomerData(sr, this.tag, Log);
+
+				pc++;
+				return ActionResult.Continue;
+			});
+
+			pc.Log();
 
 			Log.Debug("{0} loaded before filtering.", Grammar.Number(Data.Count, "cash request"));
 
-			var byCustomer = new SortedDictionary<int, List<Datum>>();
+			Data.Clear();
 
-			foreach (Datum curDatum in Data) {
-				if (!byCustomer.ContainsKey(curDatum.CustomerID)) {
-					byCustomer[curDatum.CustomerID] = new List<Datum> { curDatum };
-					continue;
-				} // if
-
-				List<Datum> customerData = byCustomer[curDatum.CustomerID];
-
-				if (!curDatum.IsCampaign) {
-					var lastKnown = customerData.LastOrDefault(d => !d.IsCampaign && !d.IsSuperseded);
-
-					// EZ-3048: from two cash requests that happen in less than 24 hours only the latest should be taken.
-					if (lastKnown != null)
-						if ((curDatum.DecisionTime - lastKnown.DecisionTime).TotalHours < 24)
-							lastKnown.IsSuperseded = true;
-				} // if
-
-				customerData.Add(curDatum);
+			foreach (CustomerData customerData in byCustomer.Values) {
+				customerData.FindLoansAndFilterAraOut(CashRequestLoans, LoanSources);
+				Data.AddRange(customerData.Data);
 			} // for each
 
-			var result = new List<Datum>();
-
-			foreach (List<Datum> lst in byCustomer.Values)
-				result.AddRange(lst);
-
-			result.Sort((a, b) => b.CashRequestID.CompareTo(a.CashRequestID));
-
-			if (this.lastCheckedID > 0)
-				result = result.Where(ymir => ymir.CashRequestID < this.lastCheckedID).ToList();
-
-			if (this.topCount > 0)
-				result = result.Take(this.topCount).ToList();
-
-			Data.Clear();
-			Data.AddRange(result);
-
-			Log.Debug("{0} remained after filtering.", Grammar.Number(Data.Count, "cash request"));
+			Log.Debug("{0} remained after filtering cash requests.", Grammar.Number(Data.Count, "data item"));
 		} // LoadCashRequests
 
 		private bool IsHomeOwner(int customerID) {
@@ -168,69 +296,36 @@
 			return isHomeOwnerAccordingToLandRegistry;
 		} // IsHomeOwner
 
-		private void ProcessCashRequest(SafeReader sr) {
-			Datum d = sr.Fill<Datum>();
-			d.Tag = this.tag;
-
-			sr.Fill(d.Manual);
-			sr.Fill(d.ManualCfg);
-
-			d.ManualCfg.Calculate(d.Manual);
-
-			Data.Add(d);
-
-			this.crPc++;
-		} // ProcessCashRequest
-
-		private ProgressCounter crPc;
-
 		private readonly string tag;
-		private readonly int topCount;
-		private readonly int lastCheckedID;
 
 		private readonly SortedDictionary<int, bool> homeOwners;
-		private readonly SortedSet<int> defaultCustomers;
 		private readonly TCrLoans crLoans;
 		private readonly SortedSet<string> loanSources; 
+		private readonly SpLoadCashRequestsForAutomationReport spLoad;
 
-		private const string QueryFormat = @"
-SELECT
-	r.Id AS CashRequestID,
-	r.IdCustomer AS CustomerID,
-	c.BrokerID,
-	r.UnderwriterDecisionDate,
-	r.UnderwriterDecision,
-	ISNULL(r.ManagerApprovedSum, 0) AS Amount,
-	r.InterestRate,
-	ISNULL(r.ApprovedRepaymentPeriod, r.RepaymentPeriod) AS RepaymentPeriod,
-	r.UseSetupFee,
-	r.UseBrokerSetupFee,
-	r.ManualSetupFeePercent,
-	r.ManualSetupFeeAmount,
-	r.MedalType,
-	r.ScorePoints,
-	CONVERT(BIT, CASE WHEN r.UnderwriterComment LIKE '%campaign%' THEN 1 ELSE 0 END) AS IsCampaign,
-	ISNULL((
-		SELECT COUNT(*)
-		FROM Loan
-		WHERE CustomerID = r.IdCustomer
-		AND [Date] < r.UnderwriterDecisionDate
-	), 0) AS LoanCount
-FROM
-	CashRequests r
-	INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
-	INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
-WHERE
-	r.IdUnderwriter IS NOT NULL
-	AND
-	r.IdUnderwriter != 1
-	AND
-	r.UnderwriterDecision IN ('Approved', 'Rejected', 'ApprovedPending')
-	{0}
-ORDER BY
-	r.IdCustomer ASC,
-	r.UnderwriterDecisionDate ASC,
-	r.Id ASC";
+		private static class Reference {
+			public static class Approve {
+				public const int Count = 4621;
+				public const decimal Amount = 45888566m;
+			} // class Approve
+
+			public static class Loan {
+				public const int Count = 3938;
+				public const decimal Amount = 37577566m;
+			} // class Loan
+
+			public static class Default {
+				public const int Count = 319;
+
+				public static class Issued {
+					public const decimal Amount = 2567666m;
+				} // class Issued
+
+				public static class Outstanding {
+					public const decimal Amount = 1651147m;
+				} // class Outstanding
+			} // class Default
+		} // class Reference
 	} // class MaamMedalAndPricing
 } // namespace
 

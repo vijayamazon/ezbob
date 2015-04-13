@@ -4,6 +4,7 @@
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using ConfigManager;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using EZBob.DatabaseLib.Model.Database;
@@ -42,6 +43,8 @@
 				LinkLandRegistryAndAddress(this.customerID, landRegistry.Response, this.titleNumber, landRegistry.Id);
 
 			Result = new Serialized(RawResult);
+
+			new SilentAutomation(this.customerID).SetTag(SilentAutomation.Callers.LandRegistry).Execute();
 		} // Execute
 
 		public static void LinkLandRegistryAndAddress(int customerId, string response, string titleNumber, int landRegistryId) {

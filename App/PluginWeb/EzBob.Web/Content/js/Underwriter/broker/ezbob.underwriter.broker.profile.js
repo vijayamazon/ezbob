@@ -99,7 +99,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 
 		oXhr.done(function(oResponse) {
 			var theTableOpts = self.initDataTablesOptions(
-				'CustomerID,Email,FirstName,LastName,Status,^ApplyDate,$LoanAmount',
+				'CustomerID,Email,FirstName,LastName,Status,^ApplyDate,$LoanAmount,$CommissionAmount,^CommissionPaymentDate',
 				'brk-grid-state-uw-broker-customer-list'
 			);
 
@@ -111,7 +111,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 				oCol.asSorting = [];
 			});
 
-			self.adjustAoColumn(theTableOpts, ['LoanAmount', 'SetupFee'], function(oCol) {
+			self.adjustAoColumn(theTableOpts, ['LoanAmount', 'SetupFee', 'CommissionAmount'], function(oCol) {
 				var oStdMoneyRender = oCol.mRender;
 
 				oCol.mRender = function(oData, sAction, oFullSource) {
@@ -139,7 +139,7 @@ EzBob.Underwriter.BrokerProfileView = EzBob.View.extend({
 
 			var oSomeTimeAgo = moment([2012, 7]).utc();
 
-			self.adjustAoColumn(theTableOpts, ['ApplyDate', 'LoanDate'], function(oCol) {
+			self.adjustAoColumn(theTableOpts, ['ApplyDate', 'LoanDate', 'CommissionPaymentDate'], function(oCol) {
 				oCol.mRender = function(oData, sAction, oFullSource) {
 					switch (sAction) {
 					case 'display':

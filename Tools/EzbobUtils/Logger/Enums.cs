@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Logger {
-
 	public enum Severity {
 		Debug,
 		Info,
@@ -14,5 +13,4 @@
 		Compact,
 		Verbose
 	} // enum LogVerbosityLevel
-
 } // namespace Ezbob.Logger

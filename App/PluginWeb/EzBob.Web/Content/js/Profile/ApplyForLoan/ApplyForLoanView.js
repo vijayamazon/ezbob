@@ -126,14 +126,6 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		var self = this;
 		var val = args.value;
 
-		/*
-		unless args.reloadSelectedOnly is true
-		$.getJSON('#{window.gRootPath}Customer/Schedule/CalculateAll?amount=#{parseInt(val)}').done (data) =>
-		for loanKey, offer of data
-		$('#loan-type-' + loanKey + ' .Interest').text EzBob.formatPounds offer.TotalInterest
-		$('#loan-type-' + loanKey + ' .Total').text EzBob.formatPounds offer.Total
-		*/
-
 		BlockUi('on', this.$el.find('#block-loan-schedule'));
 		BlockUi('on', this.$el.find('#block-agreement'));
 

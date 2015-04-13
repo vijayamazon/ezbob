@@ -1,14 +1,4 @@
-﻿@font-face {
-	font-family: TitilliumWebBold;
-	src: url(../img/ny2015scratch/titilliumweb-bold-webfont.ttf), url(../img/ny2015scratch/titilliumweb-bold-webfont.eot);
-}
-
-@font-face {
-	font-family: TitilliumWebExtraLight;
-	src: url(../img/ny2015scratch/titilliumweb-extralight-webfont.ttf), url(../img/ny2015scratch/titilliumweb-extralight-webfont.eot);
-}
-
-#valentine2015scratch {
+﻿#valentine2015scratch {
 	display: none;
 	background-image: url(../img/valentine2015scratch/valentine_promotion_bg.jpg);
 	background-position: center 77px;
@@ -152,7 +142,7 @@
 	background-image: url(../img/valentine2015scratch/win.png);
 	background-position: center top;
 	background-repeat: no-repeat;
-	font-family: TitilliumWebBold;
+	font-family: 'Titillium Web Bold';
 }
 
 #valentine2015scratch > .won > .popup > .title {

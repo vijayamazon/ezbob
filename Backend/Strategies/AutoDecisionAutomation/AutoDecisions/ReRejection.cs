@@ -14,7 +14,7 @@
 	public class ReRejection {
 		public ReRejection(int customerId, AConnection db, ASafeLog log) {
 			this.db = db;
-			this.log = log ?? new SafeLog();
+			this.log = log.Safe();
 			this.customerId = customerId;
 
 			this.trail = new ReRejectionTrail(

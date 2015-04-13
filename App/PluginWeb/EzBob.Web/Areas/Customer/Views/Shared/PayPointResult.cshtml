@@ -16,12 +16,12 @@
 				<h3>Your loan has been rolled over</h3>
 			<% } %>
 
-			<p>
-				<div><strong>Payment amount:</strong> <%- EzBob.formatPounds(amount) %></div>
-				<div><strong>Payment date:</strong> <%- EzBob.currentDateFormatted() %></div>
-				<div><strong>Payment ref:</strong> <%- transRefnums %></div>
-				<div><strong>Loan ref. number:</strong> <%- refnum %></div>
-				<div><strong>Payment made by:</strong> xxxx-<%- card_no %> debit card</div>
+			<p>	
+				<div><strong style="font-size:18px">Payment amount:</strong> <%- EzBob.formatPounds(amount) %></div>
+				<div><strong style="font-size:18px">Payment date:</strong> <%- EzBob.currentDateFormatted() %></div>
+				<div><strong style="font-size:18px">Payment ref:</strong> <%- transRefnums %></div>
+				<div><strong style="font-size:18px">Loan ref. number:</strong> <%- refnum %></div>
+				<div><strong style="font-size:18px">Payment made by:</strong> xxxx-<%- card_no %> debit card</div>
 			</p>
 
 			<p style="margin-top: 25px">A confirmation email is being sent to <%- email %></p>

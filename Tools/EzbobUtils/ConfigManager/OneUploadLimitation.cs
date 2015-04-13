@@ -75,7 +75,7 @@
 		} // ToString
 
 		public string DetectFileMimeType(byte[] oFilePrefix, string sFileName, int? nFilePrefixLength = 256, ASafeLog oLog = null) {
-			oLog = oLog ?? new SafeLog();
+			oLog = oLog.Safe();
 
 			var mtr = new MimeTypeResolver();
 

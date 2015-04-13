@@ -22,5 +22,17 @@ BEGIN
 		InvitationSentTime = CASE WHEN @StatusID = @NotPlayed THEN @Now ELSE InvitationSentTime END
 	WHERE
 		UniqueID = @PlayerID
+
+	SELECT
+		p.UserID,
+		l.WinMailTemplateName,
+		pr.Amount,
+		pr.Description
+	FROM
+		LotteryPlayers p
+		INNER JOIN LotteryPrizes pr ON p.PrizeID = pr.PrizeID
+		INNER JOIN Lotteries l ON p.LotteryID = l.LotteryID
+	WHERE
+		p.UniqueID = @PlayerID
 END
 GO

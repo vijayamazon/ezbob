@@ -347,7 +347,7 @@
 			m_sToExplanationEmailAddress = toExplanationEmailAddress;
 			m_sFromEmailAddress = fromEmailAddress;
 			m_sFromEmailName = fromEmailName;
-			m_oLog = oLog ?? new SafeLog();
+			m_oLog = oLog.Safe();
 
 			this.timer = new TimeCounter();
 		} // constructor

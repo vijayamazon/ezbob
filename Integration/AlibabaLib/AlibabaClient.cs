@@ -20,6 +20,9 @@
 		private readonly string urlPath;
 		private readonly string appSecret;
 
+		public JsonSerializerSettings jf = new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
+	
+
 		public AlibabaClient(string baseUrl, string path, string secret) {
 			this.appSecret = secret; // "IOVVt8lbOfDE";
 			this.baseUrl = baseUrl; // "http://119.38.217.38:1680/openapi/";
@@ -27,8 +30,6 @@
 		}
 
 		public IRestResponse SendDecision(JObject obj, AlibabaBusinessType businessType) {
-
-			//	Console.WriteLine("SendDecision-------------------------------------------------{0}, {1}", obj, finalDecision);
 
 			IRestResponse response;
 
@@ -81,10 +82,6 @@
 			try {
 				response = client.Post(request);
 				HttpStatusCode status = response.StatusCode;
-				
-			//	Console.WriteLine(status);
-			//	Console.WriteLine(response.Content);
-
 			} catch (Exception e) {
 				// log error TODO
 				throw new HttpException(String.Format("Failed to process request to Alibaba for customer {0}, alibabaID {1}, error: {2}", arg0: obj.GetValue("aId"), arg1: obj.GetValue("aliMemberId"), arg2: e));
@@ -92,6 +89,5 @@
 
 			return response;
 		}
-
 	}
 }

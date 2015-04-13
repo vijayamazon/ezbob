@@ -4,11 +4,12 @@
 	width: 100%;
 	position: relative;
 	min-width: 100%;
+	background-color: white;
 }
 
 div#header-alibaba > div.header-content {
 	position: absolute;
-	top: -64px;
+	margin-top: 14px;
 	height: 24px;
 	min-height: 24px;
 	width: 100%;
@@ -59,4 +60,18 @@ div#header-alibaba > div.header-content > img.left-line {
 div#header-alibaba > div.header-content > img.e-credit-line-logo {
 	float: left;
 	height: 24px;
+}
+
+.main-page-alibaba {
+	padding-bottom: 90px;
+}
+
+.alibaba-header-placeholder {
+	height: 130px;
+}
+
+.common-header {
+	position: fixed;
+	z-index: 10;
+	width: 100%;
 }

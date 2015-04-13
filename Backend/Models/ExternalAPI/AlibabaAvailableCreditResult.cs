@@ -7,7 +7,7 @@
 	public class AlibabaAvailableCreditResult {
 
 		[DataMember(EmitDefaultValue = true)]
-		public int? aliMemberId { get; set; }
+		public long? aliMemberId { get; set; }
 
 		[DataMember(EmitDefaultValue = true)]
 		public int? aId { get; set; }

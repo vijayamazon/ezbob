@@ -3,11 +3,12 @@
 	using System.Drawing;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.ExcelExt;
+	using Ezbob.Logger;
 	using OfficeOpenXml;
 	using OfficeOpenXml.Style;
 
 	internal abstract class AStatItem {
-		public abstract void Add(Datum d);
+		public abstract void Add(Datum d, int cashRequestIndex);
 
 		public virtual int ToXlsx(int row) {
 			bool showTitle = true;
@@ -49,21 +50,33 @@
 				} // if
 			} // if
 
-			return row;
+			return InsertDivider(row);
 		} // ToXlsx
 
 		public static int LastColumnNumber {
 			get { return MaxDataItemsCount * 2 + 1; }
 		} // LastColumnNumber
 
-		public const int MaxDataItemsCount = 6;
+		public const int MaxDataItemsCount = 3;
 
 		public static ExcelRange SetBorder(ExcelRange range) {
 			range.Style.Border.BorderAround(ExcelBorderStyle.Thin, BorderColor);
 			return range;
 		} // SetBorder
 
-		protected AStatItem(ExcelWorksheet sheet, string title, params AStatItem[] superior) {
+		public ASafeLog Log { get; private set; }
+
+		protected virtual int InsertDivider(int row) {
+			var fill = this.sheet.Cells[row, 1, row, LastColumnNumber].Style.Fill;
+
+			fill.PatternType = ExcelFillStyle.Solid;
+			fill.BackgroundColor.SetColor(Color.PeachPuff);
+
+			return row + 1;
+		} // InsertDivider
+
+		protected AStatItem(ASafeLog log, ExcelWorksheet sheet, string title, params AStatItem[] superior) {
+			Log = log.Safe();
 			this.sheet = sheet;
 			this.title = title;
 			Count = 0;
@@ -89,15 +102,15 @@
 				this.item = item;
 			} // AddTrigger
 
-			public bool If(bool added, decimal amount = 0) {
-				return added ? Yes(amount) : No();
+			public bool If(bool added, decimal amount = 0, int count = 1) {
+				return added ? Yes(amount, count) : No();
 			} // If
 
-			public bool Yes(decimal amount = 0) {
+			public bool Yes(decimal amount = 0, int count = 1) {
 				this.item.Amount += amount;
 				this.item.LastAmount = amount;
 
-				this.item.Count++;
+				this.item.Count += count;
 				this.item.LastWasAdded = true;
 				return true;
 			} // Yes
@@ -127,10 +140,19 @@
 			return new List<TitledValue[]>();
 		} // PrepareMultipleAmountRowValues
 
-		private int SetRowValues(int row, bool showTitle, params TitledValue[] values) {
+		protected virtual int SetRowValues(int row, bool showTitle, params TitledValue[] values) {
 			SetBorder(this.sheet.Cells[row, 1]);
 			this.sheet.SetCellValue(row, 1, showTitle ? this.title : string.Empty, true);
+			return SetRowValues(row, values);
+		} // SetRowValues
 
+		protected virtual int SetRowValues(int row, string rowTitle, params TitledValue[] values) {
+			SetBorder(this.sheet.Cells[row, 1]);
+			this.sheet.SetCellValue(row, 1, rowTitle, true);
+			return SetRowValues(row, values);
+		} // SetRowValues
+
+		protected virtual int SetRowValues(int row, params TitledValue[] values) {
 			int column = 2;
 
 			for (int i = 0; i < values.Length; i++) {
@@ -145,8 +167,8 @@
 		} // SetRowValues
 
 		private void SetOneValue(int row, int column, TitledValue val) {
-			this.sheet.SetCellValue(row, column, val.Title);
-			this.sheet.SetCellValue(row, column + 1, val.Value, true);
+			this.sheet.SetCellValue(row, column, val.Title, sNumberFormat: val.TitleFormat);
+			this.sheet.SetCellValue(row, column + 1, val.Value, true, sNumberFormat: val.ValueFormat);
 
 			SetBorder(this.sheet.Cells[row, column]).Style.Border.Right.Style = ExcelBorderStyle.None;
 			SetBorder(this.sheet.Cells[row, column + 1]).Style.Border.Left.Style = ExcelBorderStyle.None;

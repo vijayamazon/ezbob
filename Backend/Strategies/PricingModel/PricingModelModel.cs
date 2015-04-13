@@ -1,12 +1,9 @@
-﻿namespace Ezbob.Backend.Strategies.PricingModel
-{
+﻿namespace Ezbob.Backend.Strategies.PricingModel {
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-	using System.Text;
 
 	[DataContract]
-	public class PricingModelModel
-	{
+	public class PricingModelModel {
 		// Main input fields
 		[DataMember]
 		public decimal LoanAmount { get; set; }
@@ -54,7 +51,7 @@
 		// Main output fields
 		[DataMember]
 		public decimal MonthlyInterestRate { get; set; }
-		
+
 		// Other output fields
 		[DataMember]
 		public decimal Revenue { get; set; }
@@ -80,6 +77,12 @@
 		public decimal ProfitMarkupOutput { get; set; }
 		[DataMember]
 		public List<PricingSourceModel> PricingSourceModels { get; set; }
+
+		public void SetLoanAmount(decimal newLoanAmount) {
+			LoanAmount = newLoanAmount;
+			SetupFeePounds = SetupFeePercents * newLoanAmount;
+			BrokerSetupFeePounds = BrokerSetupFeePercents * newLoanAmount;
+		} // SetLoanAmount
 
 		public PricingModelModel Clone() {
 			List<PricingSourceModel> pricingSourceModels = new List<PricingSourceModel>();
@@ -131,8 +134,9 @@
 				TotalCost = TotalCost,
 				ProfitMarkupOutput = ProfitMarkupOutput,
 			};
-		}
-	}
+		} // Clone
+	} // class PricingModelModel
+
 	[DataContract]
 	public class PricingSourceModel {
 		[DataMember]
@@ -147,5 +151,5 @@
 		public decimal APR { get; set; }
 		[DataMember]
 		public bool IsPreferable { get; set; }
-	}
-}
+	} // class PricingSourceModel
+} // namespace

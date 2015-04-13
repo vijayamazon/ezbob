@@ -1,46 +1,7 @@
 ﻿@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 
-@switch ((CustomerOriginEnum)ViewBag.CustomerOrigin.GetOrigin()) {
-case CustomerOriginEnum.everline:
-	<header class="everline_header">
-		<nav>
-			<div class="pin"><span></span></div>
-			<span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
-			<ul class="flt-r sub-links">
-				<li><a href="tel:0203-371-0322"><i class="fa fa-phone"></i>&nbsp;0203 371 0322</a></li>
-				<li id="logoff-li" class="login" style="display: none;">
-					<a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="">Log Off</a>
-				</li>
-				<li class="login login_btn" style="display: none;">
-					<a href="@Url.Action("LogOn", "Account", new { Area = "" })" class=""><i class="fa fa-lock"></i>&nbsp;Login</a>
-				</li>
-				<li class="sign-up signup_btn" style="display: none">
-					<a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="org-btn">Apply now</a>
-				</li>
-			</ul>
-		</nav>
-		<br class="clearfix">
-	</header>
-	break;
-
-case CustomerOriginEnum.alibaba:
-	<div id="header-alibaba">
-		<div class="header-content">
-			<a href="mailto:info@ezbob.com">info@ezbob.com</a>
-			<img class="right-line" src="~/Content/alibaba/line.png">
-			<img class="ezbob-in-alibaba-logo" src="~/Content/alibaba/ezbob-logo.png">
-			<span>in partnership with</span>
-			
-			<img class="alibaba-logo" src="~/Content/alibaba/alibaba_logo.png">
-			<img class="left-line" src="~/Content/alibaba/line.png">
-			<img class="e-credit-line-logo" src="~/Content/alibaba/e-credit-line-logo.png">
-		</div>
-	</div>
-
-	goto case CustomerOriginEnum.ezbob;
-
-case CustomerOriginEnum.ezbob:
+@helper EzbobHeader() {
 	<div id="header">
 		<div class="header-bg-strip"></div>
 		<div class="header-inner">
@@ -66,5 +27,54 @@ case CustomerOriginEnum.ezbob:
 			</ul>
 		</div>
 	</div>
+}
+
+@switch ((CustomerOriginEnum)ViewBag.CustomerOrigin.GetOrigin()) {
+case CustomerOriginEnum.everline:
+	<header class="everline_header">
+		<nav>
+			<div class="pin"><span></span></div>
+			<span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
+			<ul class="flt-r sub-links">
+				<li><a href="tel:0203-371-0322"><i class="fa fa-phone"></i>&nbsp;0203 371 0322</a></li>
+				<li id="logoff-li" class="login" style="display: none;">
+					<a href="@Url.Action("LogOff", "Account", new { Area = "" })" class="">Log Off</a>
+				</li>
+				<li class="login login_btn" style="display: none;">
+					<a href="@Url.Action("LogOn", "Account", new { Area = "" })" class=""><i class="fa fa-lock"></i>&nbsp;Login</a>
+				</li>
+				<li class="sign-up signup_btn" style="display: none">
+					<a href="@Url.Action("Index", "Wizard", new { Area = "Customer" }, "https")#SignUp" class="org-btn">Apply now</a>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	<div class="everline-header-placeholder"></div>
+	break;
+
+case CustomerOriginEnum.alibaba:
+	<header class="common-header">
+		<div id="header-alibaba">
+			<div class="header-content">
+				<a href="mailto:info@ezbob.com">info@ezbob.com</a>
+				<img class="right-line" src="~/Content/alibaba/line.png">
+				<img class="ezbob-in-alibaba-logo" src="~/Content/alibaba/ezbob-logo.png">
+				<span>in partnership with</span>
+				
+				<img class="alibaba-logo" src="~/Content/alibaba/alibaba_logo.png">
+				<img class="left-line" src="~/Content/alibaba/line.png">
+				<img class="e-credit-line-logo" src="~/Content/alibaba/e-credit-line-logo.png">
+			</div>
+		</div>
+		@EzbobHeader()
+	</header>
+	<div class="alibaba-header-placeholder"></div>
+	break;
+
+case CustomerOriginEnum.ezbob:
+	<header class="common-header">
+		@EzbobHeader()
+	</header>
+	<div class="ezbob-header-placeholder"></div>
 	break;
 }

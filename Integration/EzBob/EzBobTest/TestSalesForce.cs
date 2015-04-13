@@ -89,7 +89,8 @@
 				DueDate = new DateTime(2015, 01, 29),
 				Originator = "Originator",
 				Status = "Status",
-				Subject = "Subject"
+				Subject = "Subject",
+                Description = "Subject"
 			};
 
 			Log.Debug(JsonConvert.SerializeObject(tModel, Formatting.Indented));
@@ -126,21 +127,22 @@
 			});
 
             //Sandbox
-            //ISalesForceAppClient client = ObjectFactory
-            //    .With("userName").EqualTo("yarons@ezbob.com.sandbox")
-            //    .With("password").EqualTo("yaron123")
-            //    .With("token").EqualTo("iaUmAG5GDkpXfpeqNEPi2rmt")
-            //    .With("environment").EqualTo("Sandbox")
-            //    .GetInstance<ISalesForceAppClient>();
+            ISalesForceAppClient client = ObjectFactory
+                .With("userName").EqualTo("yarons@ezbob.com.sandbox")
+                .With("password").EqualTo("yaron456")
+                .With("token").EqualTo("FqKCAj7vcgECfAgTf7dCfVMIp")
+                .With("environment").EqualTo("Sandbox")
+                .GetInstance<ISalesForceAppClient>();
 
             //Production
-            ISalesForceAppClient client = ObjectFactory
-                .With("userName").EqualTo("techapi@ezbob.com")
-                .With("password").EqualTo("Ezca$h123")
-                .With("token").EqualTo("qCgy7jIz8PwQtIn3bwxuBv9h")
-                .With("environment").EqualTo("Production")
-                .GetInstance<ISalesForceAppClient>();
-			return client;
+            //ISalesForceAppClient client = ObjectFactory
+            //    .With("userName").EqualTo("techapi@ezbob.com")
+            //    .With("password").EqualTo("Ezca$h123")
+            //    .With("token").EqualTo("qCgy7jIz8PwQtIn3bwxuBv9h")
+            //    .With("environment").EqualTo("Production")
+            //    .GetInstance<ISalesForceAppClient>();
+            
+            return client;
 		}
 
 		[Test]
@@ -182,12 +184,13 @@
 			ISalesForceAppClient client = GetClient();
 			var tModel = new TaskModel {
 
-				Email = "a@b.c",
+                Email = "stasd+vip221@ezbob.com",
 				CreateDate = new DateTime(2015, 01, 27),
 				DueDate = new DateTime(2015, 01, 29),
 				Originator = "Originator",
 				Status = "Status",
-				Subject = "Subject"
+				Subject = "Subject",
+                Description = "Description"
 			};
 
 			client.CreateTask(tModel);

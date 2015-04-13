@@ -2,16 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
-	using System.Globalization;
-	using DbConstants;
-	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
-	using EZBob.DatabaseLib.Model.Database.Loans;
 	using OfficeOpenXml;
 	using TCrLoans = System.Collections.Generic.SortedDictionary<
-		int,
+		long,
 		System.Collections.Generic.List<LoanMetaData>
 	>;
 
@@ -19,98 +15,87 @@
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedMember.Local")]
 	public class Datum {
-		public Datum() {
-			Manual = new ManualMedalAndPricing();
-			ManualCfg = new SetupFeeConfiguration();
-			AutoMin = new AutoMedalAndPricing();
-			AutoMax = new AutoMedalAndPricing();
-			IsSuperseded = false;
-			this.automationDecision = DecisionActions.Waiting;
-			IsAutoReRejected = false;
-			IsAutoRejected = false;
-			IsAutoReApproved = false;
-			IsAutoApproved = false;
+		public Datum(SpLoadCashRequestsForAutomationReport.ResultRow sr, string tag, ASafeLog log) {
+			this.tag = tag;
+			this.log = log.Safe();
+
+			ManualItems = new List<ManualDatumItem>();
+			AutoItems = new List<AutoDatumItem>();
+			LoanCount = new LoanCount(this.log);
+
+			CustomerID = sr.CustomerID;
+			BrokerID = sr.BrokerID;
+			IsDefault = sr.IsDefault;
+
+			Add(sr);
 		} // constructor
 
+		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
+			if (ManualItems.Count > 0) {
+				if ((FirstManual.CustomerID != sr.CustomerID) || (FirstManual.IsApproved != sr.IsApproved)) {
+					this.log.Alert(
+						"Inconsistent customer id or manual decision while adding an item to datum. " +
+						"Existing customer '{0}', is approved: '{1}'. " +
+						"Appending customer '{2}', is approved: '{3}'.",
+						FirstManual.CustomerID, FirstManual.IsApproved,
+						sr.CustomerID, sr.IsApproved
+					);
+					throw new Exception("Inconsistent manual decision.");
+				} // if
+			} // if
+
+			var mdi = new ManualDatumItem(sr, this.tag, this.log);
+			mdi.Calculate();
+			ManualItems.Add(mdi);
+		} // Add
+
+		/// <summary>
+		/// Gets this datum manual decision. FirstManaul always exists because it must be specified in constructor,
+		/// all the items share the same decision, so checking the first is enough.
+		/// </summary>
+		public bool IsApproved {
+			get { return FirstManual.IsApproved; }
+		} // IsApproved
+
 		public string Tag { get; set; }
-
-		public int CashRequestID { get; set; }
 		public int CustomerID { get; set; }
-		public int BrokerID { get; set; }
-
-		public string MedalType {
-			get { return Manual.MedalName; }
-			set { Manual.MedalName = value; }
-		} // MedalType
-
-		public decimal? ScorePoints {
-			get { return Manual.EzbobScore; }
-			set { Manual.EzbobScore = value; }
-		} // ScorePoints
-
-		[FieldName("UnderwriterDecisionDate")]
-		public DateTime DecisionTime {
-			get { return Manual.DecisionTime; }
-			set {
-				Manual.DecisionTime = value;
-				AutoMin.DecisionTime = value;
-				AutoMax.DecisionTime = value;
-			} // set
-		} // DecisionTime
-
-		public DateTime Now { get; set; }
-
-		[FieldName("UnderwriterDecision")]
-		public string Decision {
-			get { return Manual.Decision; }
-			set { Manual.Decision = value; }
-		} // Decision
-
-		public AMedalAndPricing Manual { get; private set; }
-
+		public int? BrokerID { get; set; }
 		public bool IsDefault { get; set; }
-		public bool IsCampaign { get; set; }
-		public bool IsSuperseded { get; set; }
 
-		public DecisionActions AutomationDecision {
-			get { return this.automationDecision; }
-			private set {
-				if (this.automationDecision == DecisionActions.Waiting)
-					this.automationDecision = value;
-			} // set
-		} // AutomationDecision
+		public LoanCount LoanCount { get; private set; }
 
-		public bool IsAutoReRejected { get; private set; }
-		public bool IsAutoRejected { get; private set; }
-		public bool IsAutoReApproved { get; private set; }
-		public bool IsAutoApproved { get; private set; }
+		public List<ManualDatumItem> ManualItems { get; private set; }
+		public List<AutoDatumItem> AutoItems { get; private set; }
 
-		public decimal ReapprovedAmount { get; private set; }
+		public ManualDatumItem Manual(int itemIndex) {
+			if (itemIndex < 0)
+				return ManualItems[ManualItems.Count + itemIndex];
 
-		public AMedalAndPricing AutoMin { get; private set; }
-		public AMedalAndPricing AutoMax { get; private set; }
+			return ManualItems[itemIndex];
+		} // Auto
 
-		public AMedalAndPricing AutoMaxOrMin { get { return AutoMax ?? AutoMin; } } // AutoMaxOrMin
+		public AutoDatumItem Auto(int itemIndex) {
+			if (itemIndex < 0)
+				return AutoItems[AutoItems.Count + itemIndex];
 
-		public SetupFeeConfiguration ManualCfg { get; private set; }
+			return AutoItems[itemIndex];
+		} // Auto
 
-		public void RunAutomation(bool isHomeOwner, AConnection db, ASafeLog log) {
-			RunAutoRerejection(db, log);
+		public void RunAutomation(bool isHomeOwner, AConnection db) {
+			AutoItems.Clear();
 
-			RunAutoReject(db, log);
-
-			RunAutoReapproval(db, log);
-
-			var instance = new CalculateMedal(CustomerID, DecisionTime, true, false);
-			instance.Execute();
-
-			RunAutoApprove(isHomeOwner, instance.Result, db, log);
+			foreach (ManualDatumItem mi in ManualItems) {
+				var ai = new AutoDatumItem(mi, this.tag, this.log);
+				AutoItems.Add(ai);
+				ai.RunAutomation(isHomeOwner, db);
+				ai.SetAdjustedLoanCount(mi.LoanCount);
+			} // for each manual item
 		} // RunAutomation
 
-		public static string CsvTitles(SortedSet<string> sources) {
+		public static string CsvTitles(SortedSet<string> allLoanSources) {
 			var os = new List<string>();
 
-			foreach (var s in sources) {
+			foreach (var s in allLoanSources) {
 				os.Add(string.Format(
 					"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount;{0} max late days",
 					s
@@ -118,182 +103,85 @@
 			} // for each
 
 			return string.Join(";",
-				"Cash Request ID",
 				"Customer ID",
 				"Broker ID",
 				"Customer is default now",
 				"Has default loan",
-				"Loan was default",
-				"Is campaign",
-				"Is superseded",
-				"Decision time",
-				AMedalAndPricing.CsvTitles("Manual"),
-				"Automation decision",
-				"Auto re-reject decision",
-				"Auto reject decision",
-				"Auto re-approve decision",
-				"Auto approve decision",
-				"Re-approved amount",
+				// ManualDatumItem.CsvTitles("First"),
+				"Decision count",
+				ManualDatumItem.CsvTitles("Last"),
+				// AutoDatumItem.CsvTitles("First"),
+				AutoDatumItem.CsvTitles("Last"),
+				/*
 				AMedalAndPricing.CsvTitles("Auto min"),
 				"The same max offer",
 				AMedalAndPricing.CsvTitles("Auto max"),
+				*/
 				string.Join(";", os)
 			);
 		} // CsvTitles
 
-		public int LoanCount { get; private set; }
-		public decimal LoanAmount { get; private set; }
+		public void FindLoans(TCrLoans crLoans, SortedSet<string> allLoanSources) {
+			this.loansBySource = new SortedDictionary<string, LoanSummaryData>();
 
-		public bool HasDefaultLoan { get { return DefaultLoanCount > 0; } }
-		public int DefaultLoanCount { get; private set; }
-		public decimal DefaultLoanAmount { get; private set; }
+			foreach (string s in allLoanSources)
+				this.loansBySource[s] = new LoanSummaryData();
 
-		public bool HasBadLoan { get { return BadLoanCount > 0; } }
-		public int BadLoanCount { get; private set; }
-		public decimal BadLoanAmount { get; private set; }
+			LoanCount.Clear();
 
-		public int ToXlsx(ExcelWorksheet sheet, int rowNum, TCrLoans crLoans, SortedSet<string> sources) {
-			List<LoanMetaData> lst = crLoans.ContainsKey(CashRequestID)
-				? crLoans[CashRequestID]
-				: new List<LoanMetaData>();
+			foreach (ManualDatumItem mi in ManualItems) {
+				long cashRequestID = mi.CashRequestID;
 
-			var bySource = new SortedDictionary<string, LoanSummaryData>();
+				if (!crLoans.ContainsKey(cashRequestID))
+					continue;
 
-			foreach (string s in sources)
-				bySource[s] = new LoanSummaryData();
+				foreach (LoanMetaData lmd in crLoans[cashRequestID]) {
+					this.loansBySource[lmd.LoanSourceName].Add(lmd);
+					LoanCount += lmd;
+					mi.LoanCount += lmd;
+				} // for
+			} // for each item
+		} // FindLoans
 
-			LoanCount = 0;
-			LoanAmount = 0;
-
-			DefaultLoanCount = 0;
-			DefaultLoanAmount = 0;
-
-			BadLoanCount = 0;
-			BadLoanAmount = 0;
-
-			foreach (LoanMetaData lmd in lst) {
-				bySource[lmd.LoanSourceName].Add(lmd);
-
-				LoanCount++;
-				LoanAmount += lmd.LoanAmount;
-
-				if (lmd.LoanStatus == LoanStatus.Late) {
-					DefaultLoanCount++;
-					DefaultLoanAmount += lmd.LoanAmount;
-				} // if
-
-				if (lmd.MaxLateDays > 13) {
-					BadLoanCount++;
-					BadLoanAmount += lmd.LoanAmount;
-				} // if
-			} // if
-
+		public int ToXlsx(ExcelWorksheet sheet, int rowNum) {
 			int curColumn = 1;
 
-			curColumn = sheet.SetCellValue(rowNum, curColumn, CashRequestID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, HasDefaultLoan ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, HasBadLoan ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsCampaign ? "Campaign" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsSuperseded ? "Superseded" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, DecisionTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
+			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.DefaultIssued.Exist ? "Default" : "No");
 
-			curColumn = Manual.ToXlsx(sheet, rowNum, curColumn);
+			// curColumn = FirstManual.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
+			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);
 
-			curColumn = sheet.SetCellValue(rowNum, curColumn, AutomationDecision.ToString());
+			// curColumn = FirstAuto.ToXlsx(sheet, rowNum, curColumn);
+			curColumn = LastAuto.ToXlsx(sheet, rowNum, curColumn);
 
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoReRejected ? "Reject" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoRejected ? "Reject" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoReApproved ? "Approve" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, IsAutoApproved ? "Approve" : "Manual");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, ReapprovedAmount);
-
+			/*
 			curColumn = AutoMin.ToXlsx(sheet, rowNum, curColumn);
 
 			curColumn = sheet.SetCellValue(rowNum, curColumn, (AutoMax == null) ? "Same" : "No");
 
 			curColumn = (AutoMax ?? AutoMin).ToXlsx(sheet, rowNum, curColumn);
+			*/
 
-			foreach (string s in sources) {
-				LoanSummaryData loanStat = bySource[s];
+			foreach (var pair in this.loansBySource) {
+				LoanSummaryData loanStat = pair.Value;
 				curColumn = loanStat.ToXlsx(sheet, rowNum, curColumn);
 			} // for each
 
 			return curColumn;
 		} // ToXlsx
 
-		private void RunAutoRerejection(AConnection db, ASafeLog log) {
-			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
-				CustomerID,
-				DecisionTime,
-				db,
-				log
-			).Init();
+		private ManualDatumItem FirstManual { get { return ManualItems[0]; } }
+		private ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
 
-			agent.MakeDecision();
+		private AutoDatumItem FirstAuto { get { return AutoItems[0]; } }
+		private AutoDatumItem LastAuto  { get { return AutoItems[AutoItems.Count - 1]; } }
 
-			agent.Trail.Save(db, null, CashRequestID, Tag);
-
-			if (agent.Trail.HasDecided)
-				AutomationDecision = DecisionActions.ReReject;
-
-			IsAutoReRejected = agent.Trail.HasDecided;
-		} // RunAutoRerejection
-
-		private void RunAutoReject(AConnection db, ASafeLog log) {
-			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =
-				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(db, log, CustomerID);
-
-			agent.MakeDecision(agent.GetRejectionInputData(DecisionTime));
-
-			agent.Trail.Save(db, null, CashRequestID, Tag);
-
-			if (agent.Trail.HasDecided)
-				AutomationDecision = DecisionActions.Reject;
-
-			IsAutoRejected = agent.Trail.HasDecided;
-		} // RunAutoReject
-
-		private void RunAutoReapproval(AConnection db, ASafeLog log) {
-			ReapprovedAmount = 0;
-
-			var agent = new
-				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
-				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, DecisionTime, db, log);
-
-			agent.Init();
-
-			agent.Decide(CashRequestID, Tag);
-
-			if (agent.Trail.HasDecided) {
-				AutomationDecision = DecisionActions.ReApprove;
-				ReapprovedAmount = agent.ApprovedAmount;
-			} // if
-
-			IsAutoReApproved = agent.Trail.HasDecided;
-		} // RunAutoReapproval
-
-		private void RunAutoApprove(
-			bool isHomeOwner,
-			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
-			AConnection db,
-			ASafeLog log
-		) {
-			AutoMin.Calculate(CustomerID, isHomeOwner, medal, true, CashRequestID, Tag, db, log);
-
-			if (AutoMin.Amount > 0)
-				AutomationDecision = DecisionActions.Approve;
-
-			IsAutoApproved = AutoMin.Amount > 0;
-
-			if (medal.OfferedAmountsDiffer())
-				AutoMax.Calculate(CustomerID, isHomeOwner, medal, false, CashRequestID, Tag, db, log);
-			else
-				AutoMax = null;
-		} // RunAutoApprove
-
-		private DecisionActions automationDecision;
+		private SortedDictionary<string, LoanSummaryData> loansBySource;
+		private readonly string tag;
+		private readonly ASafeLog log;
 	} // class Datum
 } // namespace

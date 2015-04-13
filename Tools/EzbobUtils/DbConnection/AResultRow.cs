@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Database {
 	public abstract class AResultRow : IResultRow {
-
 		public virtual bool IsFirst() {
 			return m_bIsFirst;
 		} // IsFirst
@@ -14,6 +13,5 @@
 		} // constructor
 
 		private bool m_bIsFirst;
-
 	} // class AResultRow
 } // namespace Ezbob.Database

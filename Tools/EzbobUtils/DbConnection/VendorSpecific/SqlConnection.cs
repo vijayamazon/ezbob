@@ -7,7 +7,6 @@
 	using Ezbob.Logger;
 
 	public class SqlConnection : AConnection {
-
 		public SqlConnection(ASafeLog log = null, string sConnectionString = null) : base(log, sConnectionString) {
 		} // constructor
 
@@ -28,26 +27,37 @@
 		protected override DbConnection CreateConnection() {
 			var oConnection = new System.Data.SqlClient.SqlConnection(ConnectionString);
 
-			oConnection.InfoMessage += (sender, args) => Debug("Database information from '{0}'; message: '{1}'.\nErrors:\n\t{2}", args.Source, args.Message, string.Join("\n\t", args.Errors));
+			oConnection.InfoMessage += (sender, args) => Log.Debug(
+				"Database information from '{0}'; message: '{1}'.\nErrors:\n\t{2}",
+				args.Source,
+				args.Message,
+				string.Join("\n\t", args.Errors)
+			);
 
-			oConnection.StateChange += (sender, args) => Debug("Database connection state change: {0} -> {1}.", args.OriginalState, args.CurrentState);
+			oConnection.StateChange += (sender, args) => Log.Debug(
+				"Database connection state change: {0} -> {1}.",
+				args.OriginalState,
+				args.CurrentState
+			);
 
-			oConnection.Disposed += (obj, args) => Debug("Database connection is disposed.");
+			oConnection.Disposed += (obj, args) => Log.Debug("Database connection is disposed.");
 
 			return oConnection;
 		} // CreateConnection
 
 		protected override DbCommand CreateCommand(string sCommand) {
-			return new SqlCommand {
-				CommandText = sCommand,
-			};
+			return new SqlCommand { CommandText = sCommand, };
 		} // CreateCommand
 
 		protected override void AppendParameter(DbCommand cmd, QueryParameter prm) {
 			var oCmd = cmd as SqlCommand;
 
-			if (oCmd == null)
-				throw new DbException("Something went terribly wrong: SQL Server command argument contains non-SQL Server underlying parameter.");
+			if (oCmd == null) {
+				throw new DbException(
+					"Something went terribly wrong: " +
+					"SQL Server command argument contains non-SQL Server underlying parameter."
+				);
+			} // if
 
 			if (!ReferenceEquals(prm.UnderlyingParameter, null) && (prm.UnderlyingParameter is SqlParameter)) {
 				oCmd.Parameters.Add(prm.UnderlyingParameter);
@@ -102,9 +112,7 @@
 		} // AppendParameter
 
 		protected override Utils.ARetryer CreateRetryer() {
-			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetryMilliseconds: 500, oLog: this);
+			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetryMilliseconds: 500, oLog: Log);
 		} // CreateRetryer
-
 	} // class SqlConnection
-
 } // namespace Ezbob.Database

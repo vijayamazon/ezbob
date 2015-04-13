@@ -5,9 +5,7 @@ using Ezbob.Logger;
 using iTextSharp.text.pdf;
 
 namespace Ezbob.HmrcHarvester {
-
 	public class VatReturnPdfThrasher : AThrasher {
-
 		public VatReturnPdfThrasher(bool bVerboseLogging = false, ASafeLog oLog = null) : base(bVerboseLogging, oLog) {
 		} // constructor
 
@@ -101,7 +99,5 @@ namespace Ezbob.HmrcHarvester {
 		} // Read
 
 		private PdfReader m_oReader;
-
 	} // class VatReturnPdfThrasher
-
 } // namespace Ezbob.HmrcHarvester

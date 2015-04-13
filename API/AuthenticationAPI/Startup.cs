@@ -3,8 +3,7 @@ using Ezbob.API.AuthenticationAPI;
 using Microsoft.Owin;
 
 [assembly: OwinStartup(typeof(Startup))]
-namespace Ezbob.API.AuthenticationAPI
-{
+namespace Ezbob.API.AuthenticationAPI {
 	using System;
 	using System.Web.Http;
 	using Ezbob.API.AuthenticationAPI.Providers;
@@ -15,7 +14,7 @@ namespace Ezbob.API.AuthenticationAPI
 	using Owin;
 
 	public class Startup {
-				 
+
 		public static OAuthBearerAuthenticationOptions OAuthBearerOptions { get; private set; }
 		public static GoogleOAuth2AuthenticationOptions googleAuthOptions { get; private set; }
 		public static FacebookAuthenticationOptions facebookAuthOptions { get; private set; }
@@ -31,7 +30,7 @@ namespace Ezbob.API.AuthenticationAPI
 			app.UseCors(CorsOptions.AllowAll);
 
 			app.UseWebApi(config);
-			
+
 			//Database.SetInitializer(new MigrateDatabaseToLatestVersion<AuthContext, Configuration>());
 		}
 
@@ -46,8 +45,8 @@ namespace Ezbob.API.AuthenticationAPI
 				AllowInsecureHttp = false,
 				TokenEndpointPath = new PathString("/token"),
 				AccessTokenExpireTimeSpan = TimeSpan.FromMinutes(30),
-				Provider = new CustomAuthorizationServerProvider(), 
-				// RefreshTokenProvider = new CustomRefreshTokenProvider()
+				Provider = new CustomAuthorizationServerProvider(),
+				RefreshTokenProvider = new CustomRefreshTokenProvider()
 			};
 
 			// Token Generation

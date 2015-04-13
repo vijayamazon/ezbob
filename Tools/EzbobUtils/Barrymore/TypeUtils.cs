@@ -80,7 +80,7 @@
 		private static Type PureFindType(string sName, Assembly asm, bool bHasDot, ASafeLog oLog) {
 			Type[] aryTypes;
 
-			oLog = oLog ?? new SafeLog();
+			oLog = oLog.Safe();
 
 			try {
 				aryTypes = asm.GetTypes();

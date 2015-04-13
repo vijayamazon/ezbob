@@ -1,12 +1,11 @@
-﻿namespace Reports {
-	using EZBob.DatabaseLib.Model.Database;
-	using Newtonsoft.Json.Linq;
+﻿namespace Reports.LoanStats {
 	using System;
 	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
+	using Newtonsoft.Json.Linq;
 
 	internal class LoanStatsDataEntry {
-
 		public int CustomerID { get; private set; }
 		public string ApprovedType { get; private set; }
 		public bool IsLoanTypeSelectionAllowed { get; private set; }
@@ -31,7 +30,7 @@
 		public Decimal LoanAmount { get; private set; }
 		public DateTime IssueDate { get; private set; }
 		public int LoanTerm { get; private set; }
-		public List<int> RequestIDHistory { get; private set; }
+		public List<long> RequestIDHistory { get; private set; }
 
 		public bool IsLoanIssued { get { return LoanID != 0; } }
 		public bool IsNewClient { get { return LoanSeqNo == 1; } }
@@ -49,7 +48,7 @@
 		} // IsFirstLoan
 
 		public LoanStatsDataEntry(SafeReader sr) {
-			RequestIDHistory = new List<int>();
+			RequestIDHistory = new List<long>();
 			LoanTerm = 0;
 			Update(sr);
 			FirstDecisionDate = LastDecisionDate;

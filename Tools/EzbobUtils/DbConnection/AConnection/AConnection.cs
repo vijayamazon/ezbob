@@ -13,7 +13,11 @@
 	using Pool;
 	using Utils;
 
-	public abstract partial class AConnection : SafeLog {
+	public abstract partial class AConnection : IDisposable {
+		public virtual void Dispose() {
+			// nothing here so far.
+		} // Dispose
+
 		public virtual int CommandTimeout {
 			get { return m_nCommandTimeout; }
 			set { m_nCommandTimeout = value; }
@@ -287,7 +291,7 @@
 			lock (ms_oFreeConnectionLock)
 				pc.PoolItemID = ++ms_nFreeConnectionGenerator;
 
-			Debug("A non-pooled connection {0} has been created.", pc.Name);
+			Log.Debug("A non-pooled connection {0} has been created.", pc.Name);
 
 			return new ConnectionWrapper(pc).Open();
 		} // GetPersistent
@@ -317,7 +321,7 @@
 				break;
 			} // switch
 
-			Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
+			Log.Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
 				pc.OutOfPoolCount,
 				sSuffix,
 				pc.PoolItemID,
@@ -348,12 +352,12 @@
 						Env.Context.ToLower()
 					);
 
-					Error(sMsg + ": " + e.Message);
+					Log.Error(sMsg + ": " + e.Message);
 
 					throw new Ezbob.Database.DbException(sMsg, e);
 				} // try
 
-				Info("ConnectionString: {0}", m_sConnectionString);
+				Log.Info("ConnectionString: {0}", m_sConnectionString);
 
 				return m_sConnectionString;
 			} // get
@@ -362,8 +366,8 @@
 			} // set
 		} // ConnectionString
 
-		protected AConnection(ASafeLog log = null, string sConnectionString = null)
-			: base(log) {
+		protected AConnection(ASafeLog log = null, string sConnectionString = null) {
+			Log = log.Safe();
 			Env = new Ezbob.Context.Environment(log);
 			m_sConnectionString = sConnectionString;
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
@@ -372,8 +376,8 @@
 			ms_oPool.Log.SetInternal(log);
 		} // constructor
 
-		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null)
-			: base(log) {
+		protected AConnection(Ezbob.Context.Environment oEnv, ASafeLog log = null) {
+			Log = log.Safe();
 			Env = oEnv;
 			m_sConnectionString = null;
 			m_nLogVerbosityLevel = LogVerbosityLevel.Compact;
@@ -415,6 +419,8 @@
 			return command;
 		} // BuildCommand
 
+		protected virtual ASafeLog Log { get; private set; }
+
 		protected abstract DbCommand CreateCommand(string sCommand);
 
 		protected abstract DbConnection CreateConnection();
@@ -447,11 +453,11 @@
 				else
 					sTime = nPrevStopwatchValue + "ms / " + (nCurStopwatchValue - nPrevStopwatchValue) + "ms";
 
-				Debug("Query {0} in {1}{2} on connection {5}. Request: {3}{4}", sMsg, sTime, sAuxMsg, sSpName, sArgsForLog, sPooledConnectionID);
+				Log.Debug("Query {0} in {1}{2} on connection {5}. Request: {3}{4}", sMsg, sTime, sAuxMsg, sSpName, sArgsForLog, sPooledConnectionID);
 				break;
 
 			case LogVerbosityLevel.Verbose:
-				Debug("Query {1} {2} in {0}ms{3} since query start on connection {4}.", nCurStopwatchValue, guid, sMsg, sAuxMsg, sPooledConnectionID);
+				Log.Debug("Query {1} {2} in {0}ms{3} since query start on connection {4}.", nCurStopwatchValue, guid, sMsg, sAuxMsg, sPooledConnectionID);
 				break;
 
 			default:
@@ -492,7 +498,7 @@
 			Guid guid = Guid.NewGuid();
 
 			if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
-				Debug("Starting to run query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
+				Log.Debug("Starting to run query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
 
 			ARetryer oRetryer = CreateRetryer();
 			oRetryer.LogVerbosityLevel = this.LogVerbosityLevel;
@@ -512,9 +518,9 @@
 				return oResult;
 			} catch (Exception e) {
 				if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
-					Error(e, "Error while executing query {0}", guid);
+					Log.Error(e, "Error while executing query {0}", guid);
 				else
-					Error(e, "Error while executing query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
+					Log.Error(e, "Error while executing query:\n\tid = {0}\n\t{1}{2}", guid, spName, sArgsForLog);
 
 				throw;
 			} finally {
@@ -522,7 +528,7 @@
 					oCmdToDispose.Dispose();
 
 					if (nLogVerbosityLevel == LogVerbosityLevel.Verbose)
-						Debug("Command has been disposed.");
+						Log.Debug("Command has been disposed.");
 				} // if
 			} // try
 		} // Run

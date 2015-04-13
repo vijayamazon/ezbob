@@ -19,7 +19,7 @@ AS
 BEGIN
 
 -- registered customer
-IF @CustomerID IS NOT NULL
+IF @CustomerID IS NOT NULL AND @CustomerId <> 0
 BEGIN 
     SELECT 
         c.Name AS Email,

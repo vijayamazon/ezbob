@@ -99,9 +99,6 @@
 		} // FillCommonDetails
 
 		public byte[] PersonalGuarantee(Person oSigner, int nApprovedSum) {
-			if ((nApprovedSum <= 0) || (nApprovedSum > 50000))
-				nApprovedSum = 50000;
-
 			string sTemplate = System.Text.Encoding.UTF8.GetString(FileContent);
 
 			sTemplate = sTemplate.Replace("__GUARANTOR_DETAILS__", oSigner.FullDetails);

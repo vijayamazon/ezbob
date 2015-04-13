@@ -91,11 +91,13 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			if (activeMedal != null) {
 				Score = BuildNewScore(activeMedal);
 			}
-			else
-			{
-				var maxdate = oldMedals.Max(s => s.ScoreDate);
-				var scoringResult = oldMedals.FirstOrDefault(s => s.ScoreDate == maxdate);
-				Score = BuildScore(scoringResult);
+			else if (oldMedals.Any()) {
+			        var maxdate = oldMedals.Max(s => s.ScoreDate);
+			        var scoringResult = oldMedals.FirstOrDefault(s => s.ScoreDate == maxdate);
+			        Score = BuildScore(scoringResult);
+			    
+			}else {
+			    Score = new Score();
 			}
 
 			var details = new MedalDetailedHistory();

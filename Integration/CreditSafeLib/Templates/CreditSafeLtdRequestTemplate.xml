@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<xmlrequest>
+  <header>
+    <username>ORAN01</username>
+    <password>Jd4xDKpy</password>
+    <operation>GetCompanyInformation</operation>
+    <language>EN</language>
+    <chargereference></chargereference>
+  </header>
+  <body>
+    <package>standard</package>
+    <country>UK</country>
+    <companynumber>{0}</companynumber>
+  </body>
+</xmlrequest>

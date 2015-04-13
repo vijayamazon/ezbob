@@ -6,12 +6,8 @@
 	using Ezbob.Utils;
 	using Ezbob.Utils.ParsedValue;
 
-	[System.AttributeUsage(
-		System.AttributeTargets.Property,
-		AllowMultiple = false
-	)]
+	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class FieldNameAttribute : Attribute {
-
 		public FieldNameAttribute(string sFieldName) {
 			Name = sFieldName;
 		} // constructor
@@ -22,13 +18,10 @@
 		} // Name
 
 		private string m_sName;
-
 	} // FieldNameAttribute
 
 	public class SafeReader {
-
 		public class SafeReaderFluentInterface {
-
 			public SafeReaderFluentInterface(SafeReader oReader) {
 				m_oReader = oReader;
 				Reset();
@@ -47,7 +40,6 @@
 
 			private readonly SafeReader m_oReader;
 			private int m_nIdx;
-
 		} // SafeReaderFluentInterface
 
 		public static SafeReader CreateEmpty() {
@@ -83,8 +75,7 @@
 			if (!ReferenceEquals(m_oReader, null)) {
 				try {
 					return m_oReader[sIdx];
-				}
-				catch (Exception) {
+				} catch (Exception) {
 					return oDefault;
 				} // try
 			} // try
@@ -105,8 +96,7 @@
 			if (!ReferenceEquals(m_oReader, null)) {
 				try {
 					return ((0 <= nIdx) && (nIdx < m_oReader.FieldCount)) ? m_oReader[nIdx] : oDefault;
-				}
-				catch (Exception) {
+				} catch (Exception) {
 					return oDefault;
 				} // try
 			} // if
@@ -187,7 +177,7 @@
 			return null;
 		} // GetName
 
-		public T Fill<T>() where T: new() {
+		public T Fill<T>() where T : new() {
 			var oInstance = new T();
 			Fill(oInstance);
 			return oInstance;
@@ -228,11 +218,12 @@
 		} // ToCache
 
 		public bool IsEmpty {
-			get { return
-				ReferenceEquals(m_oReader, null) &&
-				ReferenceEquals(m_oRow, null) &&
-				ReferenceEquals(m_oCache, null) &&
-				m_bAllowNoSource;
+			get {
+				return
+					ReferenceEquals(m_oReader, null) &&
+					ReferenceEquals(m_oRow, null) &&
+					ReferenceEquals(m_oCache, null) &&
+					m_bAllowNoSource;
 			}
 		} // IsEmpty
 
@@ -247,7 +238,7 @@
 		private void FillProperty(object oInstance, PropertyInfo oPropertyInfo) {
 			string sFieldName = oPropertyInfo.Name;
 
-			object[] aryAttrList = oPropertyInfo.GetCustomAttributes(typeof (FieldNameAttribute), false);
+			object[] aryAttrList = oPropertyInfo.GetCustomAttributes(typeof(FieldNameAttribute), false);
 
 			if (aryAttrList.Length > 0) {
 				var fna = (FieldNameAttribute)aryAttrList[0];
@@ -264,7 +255,5 @@
 		private readonly SafeReaderFluentInterface m_oFluent;
 		private readonly bool m_bAllowNoSource;
 		private readonly ParsedValueCache m_oCache;
-
 	} // class SafeReader
-
 } // namespace

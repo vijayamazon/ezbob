@@ -54,7 +54,7 @@
 			m_oLogOffMode = (LogOffMode)(int)CurrentValues.Instance.LogOffMode;
 			m_oVipRequestRepository = ObjectFactory.GetInstance<IVipRequestRepository>();
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
-			_whiteLabelProviderRepository = ObjectFactory.GetInstance <WhiteLabelProviderRepository>();
+			_whiteLabelProviderRepository = ObjectFactory.GetInstance<WhiteLabelProviderRepository>();
 		} // constructor
 
 		protected override void Initialize(System.Web.Routing.RequestContext requestContext) {
@@ -92,8 +92,7 @@
 						ModelState.AddModelError("LoginError", "Wrong user name/password.");
 						return View(model);
 					} // if is broker
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					ms_oLog.Warn(
 						e,
 						"Failed to check whether '{0}' is a broker login, continuing as an underwriter.",
@@ -125,11 +124,10 @@
 
 						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 					} // if
-					
+
 					loginError = string.IsNullOrEmpty(loginError) ? "Wrong user name/password." : loginError;
 					ModelState.AddModelError("LoginError", loginError);
-				}
-				catch (UserNotFoundException ex) {
+				} catch (UserNotFoundException ex) {
 					ms_oLog.Warn(ex, "Failed to log in as underwriter '{0}'.", model.UserName);
 					ModelState.AddModelError("LoginError", "Wrong user name/password.");
 				} // try
@@ -203,8 +201,7 @@
 						broker = true,
 					});
 				} // if is broker
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Warn(
 					e,
 					"Failed to check whether '{0}' is a broker login, continuing as a customer.",
@@ -216,14 +213,13 @@
 
 			try {
 				user = m_oUsers.GetUserByLogin(model.UserName);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
 				user = null;
 			} // try
 
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
-			
+
 			if (user == null) {
 				if (uiOrigin.IsEverline()) {
 					var loginLoanChecker = new EverlineLoginLoanChecker();
@@ -238,12 +234,12 @@
 						}, JsonRequestBehavior.AllowGet);
 
 					case EverlineLoanStatus.ExistsWithCurrentLiveLoan:
-						return Json(new {success = true,everlineAccount = true}, JsonRequestBehavior.AllowGet);
+						return Json(new { success = true, everlineAccount = true }, JsonRequestBehavior.AllowGet);
 
 					case EverlineLoanStatus.ExistsWithNoLiveLoan:
 						TempData["IsEverline"] = true;
 						TempData["CustomerEmail"] = model.UserName;
-						return Json(new {success = true,everlineWizard = true}, JsonRequestBehavior.AllowGet);
+						return Json(new { success = true, everlineWizard = true }, JsonRequestBehavior.AllowGet);
 
 					case EverlineLoanStatus.DoesNotExist:
 						return Json(new {
@@ -306,8 +302,7 @@
 
 			try {
 				customer = m_oCustomers.Get(user.Id);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to retrieve a customer by id {0}.", user.Id);
 				return Json(new {
 					success = false,
@@ -538,8 +533,7 @@
 					antiforgery_token = AntiForgery.GetHtml().ToString(),
 					refNumber = customer.RefNumber
 				}, JsonRequestBehavior.AllowGet);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString()) {
 					return Json(new {
 						success = false,
@@ -565,8 +559,7 @@
 			try {
 				if (m_oBrokerHelper.IsBroker(email))
 					return Json(new { broker = true }, JsonRequestBehavior.AllowGet);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Warn(
 					e,
 					"Failed to check whether the email '{0}' is a broker email, continuing as a customer.",
@@ -711,13 +704,11 @@
 				}
 				TargetResults result = service.TargetBusiness(companyName, postcode, customerId.Value, nFilter, refNum);
 				return Json(result.Targets, JsonRequestBehavior.AllowGet);
-			}
-			catch (WebException we) {
+			} catch (WebException we) {
 				ms_oLog.Debug(we, "WebException caught while executing company targeting.");
-				var res = new List<CompanyInfo> {new CompanyInfo {BusName = "", BusRefNum = "exception"}};
+				var res = new List<CompanyInfo> { new CompanyInfo { BusName = "", BusRefNum = "exception" } };
 				return Json(res, JsonRequestBehavior.AllowGet);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				if (companyName.ToLower() == "asd" && postcode.ToLower() == "ab10 1ba")
 					return Json(GenerateFakeTargetingData(companyName, postcode), JsonRequestBehavior.AllowGet);
 
@@ -793,12 +784,10 @@
 					} // if
 
 					ms_oLog.Debug("AccountController.CreatePassword: token received {0} -> no user found.", token);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					ms_oLog.Alert(e, "Failed to check create password token '{0}'.", token);
 				} // try
-			}
-			else
+			} else
 				ms_oLog.Warn("AccountController.CreatePassword: invalid token received {0}.", token);
 
 			return RedirectToAction("LogOn", "Account", new { Area = "" });
@@ -857,8 +846,7 @@
 					model.Token,
 					model.IsBrokerLead
 				).Value;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to retrieve a user by name '{0}'.", model.UserName);
 				return Json(new {
 					success = false,
@@ -884,8 +872,7 @@
 						broker = true,
 					});
 				} // if is broker
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Warn(
 					e,
 					"Failed to check whether '{0}' is a broker login, continuing as a customer.",
@@ -897,8 +884,7 @@
 
 			try {
 				customer = m_oCustomers.Get(nUserID);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Warn(e, "Failed to retrieve a customer by id {0}.", nUserID);
 				return Json(new {
 					success = false,
@@ -959,8 +945,7 @@
 					ular.SessionID.ToString(CultureInfo.InvariantCulture);
 
 				status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Error(e, "Failed to create user '{0}'.", email);
 				throw;
 			} // try
@@ -1102,14 +1087,17 @@
 			} // try
 
 			// save AlibabaBuyer
-			if (customer.AlibabaId != null && customer.IsAlibaba ) {
-				AlibabaBuyer alibabaMember = new AlibabaBuyer();
-				alibabaMember.AliId = Convert.ToInt32(customer.AlibabaId);
-				alibabaMember.Customer = customer;
-				EZBob.DatabaseLib.Model.Alibaba.AlibabaBuyerRepository aliMemberRep =
-					ObjectFactory.GetInstance<AlibabaBuyerRepository>();
-				aliMemberRep.SaveOrUpdate(alibabaMember);
-			} // if
+			if (customer.AlibabaId != null && customer.IsAlibaba) {
+				try {
+					AlibabaBuyer alibabaMember = new AlibabaBuyer();
+					alibabaMember.AliId = Convert.ToInt64(customer.AlibabaId);
+					alibabaMember.Customer = customer;
+					EZBob.DatabaseLib.Model.Alibaba.AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
+					aliMemberRep.SaveOrUpdate(alibabaMember);
+				} catch (Exception alieException) {
+					ms_oLog.Error(alieException, "Failed to save alibabaMember ID");
+				}
+			}
 
 			return customer;
 		} // CreateCustomer
@@ -1177,8 +1165,7 @@
 				nSessionID = ular.SessionID;
 				nStatus = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
 				error = ular.ErrorMessage;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				ms_oLog.Error(e, "Failed to validate user '{0}' credentials.", username);
 				return MembershipCreateStatus.ProviderError;
 			} // try

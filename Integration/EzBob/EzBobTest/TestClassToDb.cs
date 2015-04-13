@@ -13,6 +13,9 @@
 
 			Console.WriteLine(CodeToSql.GetCreateTable<DbTable>());
 			Console.WriteLine(CodeToSql.GetCreateTable<OtherTable>());
+
+			Console.WriteLine(CodeToSql.GetCreateSp<DbTable>());
+			Console.WriteLine(CodeToSql.GetCreateSp<OtherTable>());
 		}
 	}
 

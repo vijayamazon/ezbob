@@ -87,19 +87,24 @@
     <Compile Include="Alibaba\DataSharing.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />
     <Compile Include="AutomationVerification\AVerificationBase.cs" />
-    <Compile Include="AutomationVerification\KPMG\AMedalAndPricing.cs" />
-    <Compile Include="AutomationVerification\KPMG\AutoMedalAndPricing.cs" />
+    <Compile Include="AutomationVerification\KPMG\ADatumItem.cs" />
+    <Compile Include="AutomationVerification\KPMG\AutoDatumItem.cs" />
+    <Compile Include="AutomationVerification\KPMG\CustomerData.cs" />
     <Compile Include="AutomationVerification\KPMG\Datum.cs" />
+    <Compile Include="AutomationVerification\KPMG\LoanCount.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanMetaData.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanSummaryData.cs" />
     <Compile Include="AutomationVerification\KPMG\MaamMedalAndPricing.cs" />
-    <Compile Include="AutomationVerification\KPMG\ManualMedalAndPricing.cs" />
-    <Compile Include="AutomationVerification\KPMG\SetupFeeConfiguration.cs" />
+    <Compile Include="AutomationVerification\KPMG\ManualDatumItem.cs" />
+    <Compile Include="AutomationVerification\KPMG\SpLoadCashRequestsForAutomationReport.cs" />
     <Compile Include="AutomationVerification\VerifyMedal.cs" />
     <Compile Include="AutomationVerification\VerifyReject.cs" />
     <Compile Include="AutomationVerification\VerifyRerejection.cs" />
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
+    <Compile Include="Broker\BrokerAddBank.cs" />
+    <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
+    <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="CalculateLoan\Helpers\BadPeriods.cs" />
     <Compile Include="CalculateLoan\Helpers\DailyLoanStatus.cs" />
     <Compile Include="CalculateLoan\BankLikeLoanCalculator.cs" />
@@ -110,20 +115,27 @@
     <Compile Include="CalculateLoan\LoanCalculatorModel.cs" />
     <Compile Include="CalculateLoan\Helpers\ScheduledPayment.cs" />
     <Compile Include="CalculateLoan\Helpers\Repayment.cs" />
+    <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
     <Compile Include="Broker\BrokerInstantOffer.cs" />
+    <Compile Include="Extensions\Q1AddressTypeExt.cs" />
+    <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
+    <Compile Include="Extensions\StringExt.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\BadLoans.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultLoans.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ADefaultLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoRejected.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyAndAutoApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyRejected.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\RejectedCrossApproved.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ARejectedCrossApproved.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApprovedAutoRejected.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyRejectedAutoApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\NoAutoRejectedAndAutoApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoReapproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoApproved.cs" />
@@ -217,7 +229,6 @@
     <Compile Include="MailStrategies\EmailChanged.cs" />
     <Compile Include="MailStrategies\EmailHmrcParsingErrors.cs" />
     <Compile Include="MailStrategies\NotifyDocumentSigned.cs" />
-    <Compile Include="MainStrategy\Utils.cs" />
     <Compile Include="MainStrategy\LastOfferData.cs" />
     <Compile Include="MainStrategy\Staller.cs" />
     <Compile Include="Misc\BackfillHmrcBusinessRelevance.cs" />
@@ -263,7 +274,7 @@
     <Compile Include="SalesForce\AddUpdateLeadAccount.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="Misc\UpdateGoogleAnalytics.cs" />
-    <Compile Include="extensions.cs" />
+    <Compile Include="Extensions\DateTimeExt.cs" />
     <Compile Include="Tasks\DailyFetchGoogleAnalyticsAndRunDependent.cs" />
     <Compile Include="UserManagement\AddCciHistory.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
@@ -444,6 +455,10 @@
       <Project>{1f4ab740-e9bb-4448-9c4d-22a191c297b9}</Project>
       <Name>EzServiceConfiguration</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\App\PluginWeb\PostcodeAnywhere\PostcodeAnywhere.csproj">
+      <Project>{083973A7-25ED-4B16-9BB4-65BDD4AA1AA8}</Project>
+      <Name>PostcodeAnywhere</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\AlibabaLib\AlibabaLib.csproj">
       <Project>{1da200b6-41d1-489d-a060-6bb7e07990f7}</Project>
       <Name>AlibabaLib</Name>
@@ -475,6 +490,10 @@
     <ProjectReference Include="..\..\integration\CompanyFiles\CompanyFiles.csproj">
       <Project>{80458A21-990F-46BA-BCBB-FB211B5BAAAC}</Project>
       <Name>CompanyFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\integration\CreditSafeLib\CreditSafeLib.csproj">
+      <Project>{e2749a0f-640b-44e7-9766-4f841f38267f}</Project>
+      <Name>CreditSafeLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\CustomSchedulers\CustomSchedulers.csproj">
       <Project>{47D73896-1B70-4347-BEB5-A0AD94A45421}</Project>

@@ -1,7 +1,9 @@
 ﻿namespace Ezbob.Backend.Models.Alibaba {
 	using System;
+	using System.Collections.Generic;
 	using System.ComponentModel;
 	using System.Runtime.Serialization;
+	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
 
@@ -51,7 +53,7 @@
 		public int aId { get; set; }
 
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] //  AlibabaBuyer table
-		public int aliMemberId { get; set; }
+		public long aliMemberId { get; set; }
 
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] // Partner loan ID | Y
 		public int? loanId = 0; //{ get; set; }
@@ -292,5 +294,20 @@ Limited = "LIMITED"
 		[DataMember(EmitDefaultValue = false)] // Reason application declined |N
 		public string rejectReason { get; set; }
 
+	}
+
+	public static class CustomerDataSharingExt {
+		public static string Stringify(this CustomerDataSharing cds) {
+			if (cds == null)
+				return "-- null --";
+
+			var os = new List<string>();
+
+			cds.Traverse((instance, propInfo) => {
+				os.Add(string.Format("{0} = '{1}'", propInfo.Name, propInfo.GetValue(instance)));
+			});
+
+			return string.Format("{{ {0} }}", string.Join(", ", os));
+		} // Stringify
 	}
 }

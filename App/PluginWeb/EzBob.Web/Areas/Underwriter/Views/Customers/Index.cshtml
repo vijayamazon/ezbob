@@ -399,6 +399,8 @@
     Html.RenderPartial("../CrossCheck/LandRegistryEnquiryResults");
 }
 
+@ChangeAddress.Render(this, Url.Action("ChangeAddress", "CrossCheck", new { Area = "Underwriter"}));
+
 @section Js{
     <script type="text/javascript">
         EzBob.Config.MinLoan = @CurrentValues.Instance.MinLoan.Value;

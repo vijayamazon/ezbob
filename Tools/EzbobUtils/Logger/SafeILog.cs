@@ -4,7 +4,6 @@
 	using JetBrains.Annotations;
 
 	public class SafeILog : ASafeLog {
-
 		public SafeILog(object oCaller, ASafeLog oLog = null) : base(oLog) {
 			if (ReferenceEquals(oCaller, null))
 				return;
@@ -143,7 +142,5 @@
 		} // OwnSay
 
 		private readonly ILog m_oiLog;
-
 	} // class SafeILog
-
 } // namespace Ezbob.Logger

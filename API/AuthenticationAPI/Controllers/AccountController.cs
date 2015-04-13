@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.API.AuthenticationAPI.Controllers {
 	using System;
-	using System.Diagnostics;
 	using System.Linq;
 	using System.Net.Http;
 	using System.Security.Claims;
@@ -15,7 +14,7 @@
 	using Microsoft.Owin.Security.OAuth;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Linq;
-	
+
 	[RoutePrefix("api/Account")]
 	public class AccountController : ApiController {
 		private AuthRepository _repo = null;
