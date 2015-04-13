@@ -2232,3 +2232,8 @@ ul.alert-list {
 button.btn-update-address, .button.btn-update-address{
     margin-right: 24px;
 }
+
+.editOfferDiv {
+    width: 100%;
+    display: inline-block;
+}

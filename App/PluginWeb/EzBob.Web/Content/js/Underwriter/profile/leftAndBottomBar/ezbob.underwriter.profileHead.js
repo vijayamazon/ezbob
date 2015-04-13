@@ -45,9 +45,14 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	},
 
 	editOfferClick: function() {
-		this.ui.editOfferDiv.toggle();
-		var isVisible = this.ui.editOfferDiv.is(":visible");
-		$.cookie('editOfferVisible', isVisible);
+	    var isHidden = this.ui.editOfferDiv.hasClass('hide');
+	    if (isHidden) {
+	        this.ui.editOfferDiv.removeClass('hide');
+	    } else {
+	        this.ui.editOfferDiv.addClass('hide');
+	    }
+	    
+	    $.cookie('editOfferVisible', isHidden);
 		$(".profile-content").css({ "margin-top": (this.$el.height() + 10) + "px" });
 	},
 
@@ -262,7 +267,7 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 		this.drawDi('period-di', "#00ab5d", period / 12);
 
 		if ($.cookie('editOfferVisible') == "true") {
-			this.ui.editOfferDiv.show();
+			this.ui.editOfferDiv.removeClass('hide');
 			$(".profile-content").css({ "margin-top": this.$el.height() + "px" });
 		}
 		if ($.cookie('collapseAll') == "true") {

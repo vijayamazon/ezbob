@@ -11,14 +11,26 @@
 					<div class="control-group">
 						<label for="loan-type" class="control-label">Loan Type:</label>
 						<div class="controls">
-							<select id="loan-type" name="loan-type" class="valid form-control selectheight"><%
-								_.each(LoanTypes, function(loanType) {
-									var selected = (loanType.Id == LoanTypeId) ? "selected='selected'" : "";
-									%><option <%= selected  %> value="<%=loanType.Id%>"><%=loanType.Name%></option><%
-								});
-							%></select>
+							<select id="loan-type" name="loan-type" class="valid form-control selectheight">
+                                <% _.each(LoanTypes, function(loanType) {
+									var selected = (loanType.Id == LoanTypeId) ? "selected='selected'" : "";%>
+                                    <option <%= selected  %> value="<%=loanType.Id%>"><%=loanType.Name%></option>
+                                <%});%>
+                            </select>
 						</div>
 					</div>
+                    
+                    <div class="control-group">
+                        <label for="loan-type" class="control-label">Loan Source:</label>
+                        <div class="controls">
+                            <select id="loan-source" name="loan-source" class="valid form-control selectheight">
+                                <% _.each(AllLoanSources, function(loanSource) {
+                                var selected = (loanSource.Id == LoanSource) ? "selected='selected'" : ""; %>
+                                <option <%= selected  %> value="<%=loanSource.Id%>"><%=loanSource.Name%></option>
+                                <%});%>
+                            </select>
+                        </div>
+                    </div>
 
 					<div class="control-group">
 						<label for="offeredCreditLine" class="control-label">Offered credit line:</label>
@@ -60,46 +72,23 @@
 							</div>
 						</div>
 					</div>
-
-					<div class="control-group">
-						<label for="enableSetupFee" class="control-label">Enable setup fee:</label>
-						<div class="controls">
-							<input name="enableSetupFee" id="enableSetupFee" type="checkbox" class="form-control" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label for="enableBrokerSetupFee" class="control-label">Enable broker commission:</label>
-						<div class="controls">
-							<input name="enableBrokerSetupFee" id="enableBrokerSetupFee" type="checkbox" class="form-control" />
-						</div>
-					</div>
-					<div class="control-group">
-						<label for="manualSetupFeeAmount" class="control-label">Manual setup fee amount:</label>
-						<div class="controls">
-							<input name="manualSetupFeeAmount" id="manualSetupFeeAmount" type="text" class="form-control" />
-						</div>
-					</div>
+                    
 					<div class="control-group">
 						<label for="manualSetupFeePercent" class="control-label">Manual setup fee percent:</label>
 						<div class="controls">
 							<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control" />
 						</div>
 					</div>
+                    <div class="control-group">
+                        <label for="brokerSetupFeePercent" class="control-label">Broker setup fee percent:</label>
+                        <div class="controls">
+                            <input name="brokerSetupFeePercent" id="brokerSetupFeePercent" type="text" class="form-control" />
+                        </div>
+                    </div>
 					<div class="control-group">
 						<label for="allowSendingEmail" class="control-label">Send Emails:</label>
 						<div class="controls">
 							<input name="allowSendingEmail" id="allowSendingEmail" type="checkbox" class="form-control" />
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label for="isLoanTypeSelectionAllowed" class="control-label">Customer selection:</label>
-						<div class="controls">
-							<select name="isLoanTypeSelectionAllowed" id="isLoanTypeSelectionAllowed" class="form-control selectheight">
-								<option value="0">Disabled</option>
-								<option value="1">Enabled</option>
-							</select>
 						</div>
 					</div>
 

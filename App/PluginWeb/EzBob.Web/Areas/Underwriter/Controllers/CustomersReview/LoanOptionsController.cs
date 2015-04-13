@@ -43,9 +43,9 @@
 				AutoPayment = true,
 				LatePaymentNotification = true,
 				ReductionFee = true,
-				EmailSendingAllowed = false,
-				MailSendingAllowed = false,
-				SmsSendingAllowed = false,
+				EmailSendingAllowed = true,
+				MailSendingAllowed = true,
+				SmsSendingAllowed = true,
 				CaisAccountStatus = "Calculated value",
 				LoanId = loanid
 			};

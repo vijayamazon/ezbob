@@ -39,20 +39,18 @@
 			var cashRequest = new CashRequest {
 				CreationDate = DateTime.UtcNow,
 				Customer = customer,
-				InterestRate = 0.06M,
+				InterestRate = loanSource.MaxInterest ?? 0.06M,
 				LoanType = loanType,
 				RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
 				ApprovedRepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
-				UseSetupFee = CurrentValues.Instance.SetupFeeEnabled,
-				UseBrokerSetupFee = (customer.Broker != null) || CurrentValues.Instance.BrokerCommissionEnabled,
 				DiscountPlan = _discounts.GetDefault(),
-				IsLoanTypeSelectionAllowed = 1,
 				OfferValidUntil = now.AddDays(1),
 				OfferStart = now,
 				LoanSource = loanSource,
 				IsCustomerRepaymentPeriodSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed,
+                IsLoanTypeSelectionAllowed = loanSource.IsCustomerRepaymentPeriodSelectionAllowed ? 1 : 0,
 				ExpirianRating = experianScore,
-				Originator = originator
+				Originator = originator,
 			};
 
 			customer.CashRequests.Add(cashRequest);

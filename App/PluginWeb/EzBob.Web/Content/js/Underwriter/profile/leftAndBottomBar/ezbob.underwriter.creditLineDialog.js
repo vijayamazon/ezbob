@@ -14,10 +14,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 	events: {
 		'click .btnOk': 'save',
-		'change #loan-type ': 'onChangeLoanType',
-		'click #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed',
-		'change #isLoanTypeSelectionAllowed': 'onChangeLoanTypeSelectionAllowed',
-		'click #enableSetupFee': 'onChangeEnableSetupFee',
+		'change #loan-type': 'onChangeLoanType',
+		'change #loan-source': 'onChangeLoanSource',
 	}, // events
 
 	ui: {
@@ -40,26 +38,6 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		return this.model.fetch();
 	}, // closeDialog
 
-	onChangeEnableSetupFee: function() {
-		var bChecked = this.$el.find('#enableSetupFee').attr('checked') ? true : false;
-		this.setSomethingEnabled('#manualSetupFeeAmount, #manualSetupFeePercent', bChecked);
-	}, // onChangeEnableSetupFee
-
-	onChangeLoanTypeSelectionAllowed: function() {
-		var controlledElements = '#loan-type, #repaymentPeriod';
-
-		var nIsLoanTypeSelectionAllowed = this.cloneModel.get('IsLoanTypeSelectionAllowed');
-
-		if (nIsLoanTypeSelectionAllowed === 1 || nIsLoanTypeSelectionAllowed === '1') {
-			this.$el.find(controlledElements).attr('disabled', 'disabled');
-
-			if (this.cloneModel.get('LoanTypeId') !== 1)
-				this.cloneModel.set('LoanTypeId', 1);
-		}
-		else
-			this.$el.find(controlledElements).removeAttr('disabled');
-	}, // onChangeLoanTypeSelectionAllowed
-
 	onChangeStartingDate: function() {
 		var startingDate = moment.utc(this.cloneModel.get("StartingFromDate"), "DD/MM/YYYY");
 
@@ -70,15 +48,31 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	}, // onChangeStartingDate
 
 	onChangeLoanType: function() {
-		var loanTypeId = +this.$el.find("#loan-type option:selected").val();
+		var loanTypeId = this.$el.find("#loan-type option:selected").val();
 
 		if (isNaN(loanTypeId) || (loanTypeId <= 0))
 			return;
 
-		var currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) { return l.Id === loanTypeId; });
+		var currentLoanType = _.find(this.cloneModel.get("LoanTypes"), function(l) { return l.Id == loanTypeId; });
 
 		this.cloneModel.set("RepaymentPerion", currentLoanType.RepaymentPeriod);
 	}, // onChangeLoanType
+
+	onChangeLoanSource: function () {
+	    var loanSourceId = this.$el.find("#loan-source option:selected").val();
+	    if (isNaN(loanSourceId) || (loanSourceId <= 0))
+	        return;
+
+	    var currentLoanSource = _.find(this.cloneModel.get("AllLoanSources"), function (l) { return l.Id == loanSourceId; });
+	    if (currentLoanSource && currentLoanSource.DefaultRepaymentPeriod) {
+	        this.cloneModel.set("RepaymentPerion", currentLoanSource.DefaultRepaymentPeriod);
+	    }
+
+	    if (currentLoanSource && currentLoanSource.MaxInterest && this.cloneModel.get("InterestRate") > currentLoanSource.MaxInterest) {
+	        this.cloneModel.set("InterestRate", currentLoanSource.MaxInterest);
+	    }
+
+	},
 
 	save: function() {
 		if (!this.ui.form.valid())
@@ -100,18 +94,16 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		return {
 			id: m.CashRequestId,
 			loanType: m.LoanTypeId,
+			loanSource: m.LoanSourceId,
 			discountPlan: m.DiscountPlanId,
 			amount: m.amount,
 			interestRate: m.InterestRate,
 			repaymentPeriod: m.RepaymentPerion,
 			offerStart: m.StartingFromDate,
 			offerValidUntil: m.OfferValidateUntil,
-			useSetupFee: m.UseSetupFee,
-			useBrokerSetupFee: m.UseBrokerSetupFee,
-			manualSetupFeeAmount: m.ManualSetupFeeAmount,
+			brokerSetupFeePercent: m.BrokerSetupFeePercent,
 			manualSetupFeePercent: m.ManualSetupFeePercent,
 			allowSendingEmail: m.AllowSendingEmail,
-			isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed,
 		};
 	}, // getPostData
 
@@ -130,20 +122,12 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		OfferValidateUntil: {
 			selector: "input[name='offerValidUntil']"
 		},
-		UseSetupFee: {
-			selector: "input[name='enableSetupFee']"
-		},
-		UseBrokerSetupFee: {
-			selector: "input[name='enableBrokerSetupFee']"
-		},
 		AllowSendingEmail: {
 			selector: "input[name='allowSendingEmail']"
 		},
-		IsLoanTypeSelectionAllowed: {
-			selector: "select[name='isLoanTypeSelectionAllowed']"
-		},
 		DiscountPlanId: "select[name='discount-plan']",
 		LoanTypeId: "select[name='loan-type']",
+		LoanSourceId: "select[name='loan-source']",
 		amount: {
 			selector: "#offeredCreditLine",
 			converter: EzBob.BindingConverters.moneyFormat
@@ -152,9 +136,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			selector: "input[name='manualSetupFeePercent']",
 			converter: EzBob.BindingConverters.percentsFormat
 		},
-		ManualSetupFeeAmount: {
-			selector: "input[name='manualSetupFeeAmount']",
-			converter: EzBob.BindingConverters.moneyFormat
+		BrokerSetupFeePercent: {
+		    selector: "input[name='brokerSetupFeePercent']",
+			converter: EzBob.BindingConverters.percentsFormat
 		},
 	}, // bindings
 
@@ -173,10 +157,9 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 
 		this.$el.find("#interestRate").autoNumeric(EzBob.percentFormat);
 		this.$el.find("#manualSetupFeePercent").autoNumeric(EzBob.percentFormat);
-		this.$el.find("#manualSetupFeeAmount").autoNumeric(EzBob.moneyFormat);
+		this.$el.find("#brokerSetupFeePercent").autoNumeric(EzBob.percentFormat);
+		
 		this.$el.find("#repaymentPeriod").numericOnly();
-
-		this.onChangeEnableSetupFee();
 
 		this.ui.form.validate({
 			rules: {
@@ -185,16 +168,16 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 				interestRate: { required: true, autonumericMin: 1, autonumericMax: 100 },
 				startingFromDate: { required: true, dateCheck: true },
 				offerValidUntil: { required: true, dateCheck: true },
-				manualSetupFeeAmount: { autonumericMin: 0, required: false },
 				manualSetupFeePercent: { autonumericMin: 0, required: false },
+				brokerSetupFeePercent: { autonumericMin: 0, required: false },
 			},
 			messages: {
 				interestRate: { autonumericMin: "Interest Rate is below limit.", autonumericMax: "Interest Rate is above limit." },
 				repaymentPeriod: { autonumericMin: "Repayment Period is below limit." },
 				startingFromDate: { dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012" },
 				offerValidUntil: { dateCheck: "Incorrect Date, please insert date in format DD/MM/YYYY, for example 21/06/2012" },
-				manualSetupFeeAmount: { autonumericMin: "Can't be negative." },
-				manualSetupFeePercent: { autonumericMin: "Can't be negative." }
+				manualSetupFeePercent: { autonumericMin: "Can't be negative." },
+			    brokerSetupFeePercent: { autonumericMin: "Can't be negative." }
 			},
 			errorPlacement: EzBob.Validation.errorPlacement,
 			unhighlight: EzBob.Validation.unhighlight

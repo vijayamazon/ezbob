@@ -579,43 +579,43 @@
 		public JsonResult ChangeCreditLine(
 			long id,
 			int loanType,
+            int loanSource,
 			double amount,
 			decimal interestRate,
 			int repaymentPeriod,
 			string offerStart,
 			string offerValidUntil,
-			bool useSetupFee,
-			bool useBrokerSetupFee,
 			bool allowSendingEmail,
-			int isLoanTypeSelectionAllowed,
 			int discountPlan,
-			decimal? manualSetupFeeAmount,
+            decimal? brokerSetupFeePercent,
 			decimal? manualSetupFeePercent
 		) {
 			CashRequest cr = _cashRequestsRepository.Get(id);
 
 			LoanType loanT = _loanTypes.Get(loanType);
+		    LoanSource source = _loanSources.Get(loanSource);
 
 			cr.LoanType = loanT;
 
 			int step = CurrentValues.Instance.GetCashSliderStep;
 			int sum = (int)Math.Round(amount / step, MidpointRounding.AwayFromZero) * step;
 			cr.ManagerApprovedSum = sum;
-
+            cr.LoanSource = source;
 			cr.InterestRate = interestRate;
 			cr.RepaymentPeriod = repaymentPeriod;
 			cr.ApprovedRepaymentPeriod = cr.RepaymentPeriod;
 			cr.OfferStart = FormattingUtils.ParseDateWithCurrentTime(offerStart);
 			cr.OfferValidUntil = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil);
 
-			cr.UseSetupFee = useSetupFee;
-			cr.UseBrokerSetupFee = useBrokerSetupFee;
-			cr.ManualSetupFeeAmount = (int?)manualSetupFeeAmount;
+			cr.BrokerSetupFeePercent = brokerSetupFeePercent;
 			cr.ManualSetupFeePercent = manualSetupFeePercent;
 
 			cr.EmailSendingBanned = !allowSendingEmail;
 			cr.LoanTemplate = null;
-			cr.IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed;
+            
+            cr.IsLoanTypeSelectionAllowed = source.IsCustomerRepaymentPeriodSelectionAllowed ? 1 : 0;
+		    cr.IsCustomerRepaymentPeriodSelectionAllowed = source.IsCustomerRepaymentPeriodSelectionAllowed;
+
 			cr.DiscountPlan = _discounts.Get(discountPlan);
 
 			Customer c = cr.Customer;
