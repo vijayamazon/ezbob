@@ -15,25 +15,33 @@ namespace ExperianLib
 
 		public ExperianConsumerData Build(OutputRoot outputRoot, int? customerId = null, int? directorId = null, DateTime? insertDate = null, long serviceLogId = 0)
 		{
+			var data = BuildMain(outputRoot, customerId, directorId, insertDate, serviceLogId);
+			data.Cais = GetCais(outputRoot);
+			data.Locations = GetLocations(outputRoot);
+			data.Residencies = GetResidencies(outputRoot);
+			data.Nocs = GetNocs(outputRoot);
+			data.Error = Errors;
+			data.HasParsingError = HasParsingError;
+			return data;
+
+		}
+
+		private ExperianConsumerData BuildMain(OutputRoot outputRoot, int? customerId, int? directorId, DateTime? insertDate, long serviceLogId) {
 			var data = new ExperianConsumerData {
 				Applicants = new List<ExperianConsumerDataApplicant>(),
 				Cais = new List<ExperianConsumerDataCais>(),
 				ServiceLogId = serviceLogId,
 				CustomerId = customerId,
 				DirectorId = directorId,
-				InsertDate = insertDate.HasValue ? insertDate.Value : new DateTime()
+				InsertDate = insertDate.HasValue ? insertDate.Value : DateTime.UtcNow
 			};
 
-			if (outputRoot == null || outputRoot.Output == null || outputRoot.Output.Error != null)
-			{
-				if (outputRoot != null && outputRoot.Output != null)
-				{
+			if (outputRoot == null || outputRoot.Output == null || outputRoot.Output.Error != null) {
+				if (outputRoot != null && outputRoot.Output != null) {
 					Errors = string.Format("Error from service with code: {0}, severity: {1}, message: {2} \n",
-					                       outputRoot.Output.Error.ErrorCode, outputRoot.Output.Error.Severity,
-					                       outputRoot.Output.Error.Message);
-				}
-				else
-				{
+										   outputRoot.Output.Error.ErrorCode, outputRoot.Output.Error.Severity,
+										   outputRoot.Output.Error.Message);
+				} else {
 					Errors = "OutputRoot is null";
 				}
 				data.HasExperianError = true;
@@ -41,30 +49,27 @@ namespace ExperianLib
 				return data;
 			}
 
-			TryRead(() =>
-				{
-					foreach (var applicant in outputRoot.Output.Applicant)
-					{
-						TryRead(() =>
-							{
-								var app = new ExperianConsumerDataApplicant();
-								TryRead(() => app.ApplicantIdentifier = Convert.ToInt32(applicant.ApplicantIdentifier), "ApplicantIdentifier");
-								TryRead(() => app.Title = applicant.Name.Title, "Title");
-								TryRead(() => app.Forename = applicant.Name.Forename, "Forename");
-								TryRead(() => app.MiddleName = applicant.Name.MiddleName, "MiddleName");
-								TryRead(() => app.Surname = applicant.Name.Surname, "Surname");
-								TryRead(() => app.Suffix = applicant.Name.Suffix, "Suffix");
-								TryRead(() => app.DateOfBirth = new DateTime(
-									                                int.Parse(applicant.DateOfBirth.CCYY.ToString(CultureInfo.InvariantCulture)),
-									                                int.Parse(applicant.DateOfBirth.MM.ToString(CultureInfo.InvariantCulture)),
-									                                int.Parse(applicant.DateOfBirth.DD.ToString(CultureInfo.InvariantCulture)), 0,
-									                                0, 0, DateTimeKind.Utc),
-								        "DateOfBirth", false);
-								TryRead(() => app.Gender = applicant.Gender, "Gender");
-								data.Applicants.Add(app);
-							}, "Applicant");
-					}
-				}, "Applicants", false);
+			TryRead(() => {
+						foreach (var applicant in outputRoot.Output.Applicant) {
+							TryRead(() => {
+									var app = new ExperianConsumerDataApplicant();
+									TryRead(() => app.ApplicantIdentifier = Convert.ToInt32(applicant.ApplicantIdentifier), "ApplicantIdentifier");
+									TryRead(() => app.Title = applicant.Name.Title, "Title");
+									TryRead(() => app.Forename = applicant.Name.Forename, "Forename");
+									TryRead(() => app.MiddleName = applicant.Name.MiddleName, "MiddleName");
+									TryRead(() => app.Surname = applicant.Name.Surname, "Surname");
+									TryRead(() => app.Suffix = applicant.Name.Suffix, "Suffix");
+									TryRead(() => app.DateOfBirth = new DateTime(
+																		int.Parse(applicant.DateOfBirth.CCYY.ToString(CultureInfo.InvariantCulture)),
+																		int.Parse(applicant.DateOfBirth.MM.ToString(CultureInfo.InvariantCulture)),
+																		int.Parse(applicant.DateOfBirth.DD.ToString(CultureInfo.InvariantCulture)), 0,
+																		0, 0, DateTimeKind.Utc),
+											"DateOfBirth", false);
+									TryRead(() => app.Gender = applicant.Gender, "Gender");
+									data.Applicants.Add(app);
+								}, "Applicant");
+						}
+					}, "Applicants", false);
 
 			TryRead(() => data.BureauScore = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.Scoring.E5S051), "BureauScore");
 			TryRead(() => data.CreditCardBalances = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.AdditDelphiBlocks.Utilisationblock.SPA04), "CreditCardBalances");
@@ -87,16 +92,12 @@ namespace ExperianLib
 			TryRead(() => data.EnquiriesLast6Months = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAPS.E1E02), "EnquiriesLast6Months");
 			TryRead(() => data.EnquiriesLast3Months = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAPS.E1E01), "EnquiriesLast3Months");
 			TryRead(() => data.MortgageBalance = Convert.ToInt32(outputRoot.Output.ConsumerSummary.Summary.CAIS.E1B11), "MortgageBalance");
-			TryRead(() =>
-				{
-					if (null != outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04)
-					{
+			TryRead(() => {
+					if (null != outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04) {
 						data.CaisDOB = new DateTime(1900 + outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.YY,
 													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.MM,
 													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.EA4S04.DD, 0, 0, 0, DateTimeKind.Utc);
-					}
-					else if (null != outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB)
-					{
+					} else if (null != outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB) {
 						data.CaisDOB = new DateTime(1900 + outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.YY,
 													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.MM,
 													outputRoot.Output.ConsumerSummary.PremiumValueData.AgeDoB.NDDOB.DD, 0, 0, 0, DateTimeKind.Utc);
@@ -116,14 +117,7 @@ namespace ExperianLib
 			TryRead(() => data.CII = Convert.ToInt32(outputRoot.Output.ConsumerSummary.PremiumValueData.CII.NDSPCII), "CII");
 			TryRead(() => data.CAISSpecialInstructionFlag = outputRoot.Output.ConsumerSummary.Summary.CAIS.EA1F04, "CAISSpecialInstructionFlag");
 
-			data.Cais = GetCais(outputRoot);
-			data.Locations = GetLocations(outputRoot);
-			data.Residencies = GetResidencies(outputRoot);
-			data.Nocs = GetNocs(outputRoot);
-			data.Error = Errors;
-			data.HasParsingError = HasParsingError;
 			return data;
-
 		}
 
 		private List<ExperianConsumerDataNoc> GetNocs(OutputRoot outputRoot)
@@ -167,6 +161,7 @@ namespace ExperianLib
 						TryRead(() => location.SharedLetterbox = outputRoot.Output.LocationDetails[i].UKLocation.SharedLetterbox, "SharedLetterbox");
 						TryRead(() => location.FormattedLocation = outputRoot.Output.LocationDetails[i].FormattedLocation, "FormattedLocation");
 						locations.Add(location);
+
 					}
 				},
 				"Location");
