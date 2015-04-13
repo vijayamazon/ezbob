@@ -10,8 +10,11 @@
 			string tag,
 			ASafeLog log
 		) : base(tag, log.Safe()) {
+			ActualLoanCount = new LoanCount(true, log.Safe());
 			sr.CopyTo(this);
 		} // constructor
+
+		public LoanCount ActualLoanCount { get; set; }
 
 		public override string DecisionStr {
 			get { return IsApproved ? "Approved" : "Rejected"; }
@@ -31,7 +34,11 @@
 		} // Calculate
 
 		public static new string CsvTitles(string prefix) {
-			return string.Format("{0};{1} manual loan count", ADatumItem.CsvTitles(prefix + " manual"), prefix);
+			return string.Format(
+				"{0};{1} manual loan count",
+				ADatumItem.CsvTitles(prefix + " manual"),
+				prefix
+			);
 		} // CsvTitles
 
 		public override int ToXlsx(ExcelWorksheet sheet, int rowNum, int colNum) {

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Logger;
 
 	public class LoanCount {
@@ -18,61 +19,67 @@
 			return lc;
 		} // operator +
 
-		public LoanCount(ASafeLog log) {
+		public LoanCount(bool takeMin, ASafeLog log) {
+			TakeMin = takeMin;
 			Log = log.Safe();
 
-			IDs = new SortedSet<int>();
-			DefaultIDs = new SortedSet<int>();
-			Total = new CountAmount();
-			DefaultIssued = new CountAmount();
-			DefaultOutstanding = new CountAmount();
+			Loans = new SortedDictionary<int, LoanMetaData>();
+			DefaultLoans = new SortedDictionary<int, LoanMetaData>();
+
+			Total = new CountAmount(
+				Loans,
+				lmd => takeMin ? lmd.MinOffer.LoanAmount : lmd.MaxOffer.LoanAmount
+			);
+
+			DefaultIssued = new CountAmount(
+				DefaultLoans,
+				lmd => takeMin ? lmd.MinOffer.LoanAmount : lmd.MaxOffer.LoanAmount
+			);
+
+			DefaultOutstanding = new CountAmount(
+				DefaultLoans,
+				lmd => takeMin
+					? lmd.MinOffer.LoanAmount - lmd.MinOffer.RepaidPrincipal
+					: lmd.MaxOffer.LoanAmount - lmd.MaxOffer.RepaidPrincipal
+			);
 		} // constructor
 
 		public LoanCount Clone() {
-			var lc = new LoanCount(Log) {
-				Total = Total.Clone(),
-				DefaultIssued = DefaultIssued.Clone(),
-				DefaultOutstanding = DefaultOutstanding.Clone(),
-			};
+			var lc = new LoanCount(TakeMin, Log);
 
-			lc.AddLoanID(IDs, lc.IDs);
-			lc.AddLoanID(DefaultIDs, lc.DefaultIDs);
+			lc.Append(this);
 
 			return lc;
 		} // Clone
 
 		public void Clear() {
-			IDs.Clear();
-			DefaultIDs.Clear();
-			Total.Clear();
-			DefaultIssued.Clear();
-			DefaultOutstanding.Clear();
+			Loans.Clear();
+			DefaultLoans.Clear();
 		} // Clear
 
+		public decimal AssumedLoanAmount {
+			set {
+				foreach (KeyValuePair<int, LoanMetaData> pair in Loans)
+					pair.Value.AssumedLoanAmount = value;
+			} // set
+		} // AssumedLoanAmount
+
 		public void Cap(decimal amount) {
-			Total.Cap(amount);
-			DefaultIssued.Cap(amount);
-			DefaultOutstanding.Cap(amount);
+			foreach (KeyValuePair<int, LoanMetaData> pair in Loans)
+				pair.Value.Cap = amount;
 		} // Cap
 
 		public void Append(LoanMetaData lmd) {
 			if (lmd == null)
 				return;
 
-			AddLoanID(lmd.LoanID, IDs);
+			if (Loans.ContainsKey(lmd.LoanID))
+				Log.Warn("Duplicate loan id detected: {0}", lmd.LoanID);
+			else {
+				Loans[lmd.LoanID] = lmd;
 
-			Total.Count++;
-			Total.Amount += lmd.LoanAmount;
-
-			// Condition is "> 14" due to implementation of SQL Server's DATEDIFF function.
-			if (lmd.MaxLateDays > 14) {
-				DefaultIssued.Count++;
-				DefaultIssued.Amount += lmd.LoanAmount;
-
-				DefaultOutstanding.Count++;
-				DefaultOutstanding.Amount += lmd.LoanAmount - lmd.RepaidPrincipal;
-
-				AddLoanID(lmd.LoanID, DefaultIDs);
+				if (lmd.MaxLateDays > 14)
+					DefaultLoans[lmd.LoanID] = lmd;
 			} // if
 		} // Append
 
@@ -80,84 +87,55 @@
 			if (other == null)
 				return;
 
-			AddLoanID(other.IDs, IDs);
-			AddLoanID(other.DefaultIDs, DefaultIDs);
+			foreach (KeyValuePair<int, LoanMetaData> pair in other.Loans)
+				Loans[pair.Key] = pair.Value;
 
-			Total += other.Total;
-			DefaultIssued += other.DefaultIssued;
-			DefaultOutstanding += other.DefaultOutstanding;
+			foreach (KeyValuePair<int, LoanMetaData> pair in other.DefaultLoans)
+				DefaultLoans[pair.Key] = pair.Value;
 		} // Append
 
-		public SortedSet<int> IDs { get; private set; }
-		public SortedSet<int> DefaultIDs { get; private set; }
+		public IEnumerable<int> IDs {
+			get { return Loans.Keys; }
+		}
+
+		public IEnumerable<int> DefaultIDs {
+			get { return DefaultLoans.Keys; }
+		}
+
+		public SortedDictionary<int, LoanMetaData> Loans { get; private set; }
+		public SortedDictionary<int, LoanMetaData> DefaultLoans { get; private set; }
+
 		public CountAmount Total { get; private set; }
 		public CountAmount DefaultIssued { get; private set; }
 		public CountAmount DefaultOutstanding { get; private set; }
 
 		public class CountAmount {
-			public static CountAmount operator +(CountAmount a, CountAmount b) {
-				if (a == null)
-					return b;
-
-				return a.Append(b);
-			} // operator +
-
-			public CountAmount() {
-				Count = 0;
-				Amount = 0;
+			public CountAmount(SortedDictionary<int, LoanMetaData> loans, Func<LoanMetaData, decimal> extractAmount) {
+				this.loans = loans;
+				this.extractAmount = extractAmount;
 			} // constructor
-
-			public void Cap(decimal amount) {
-				if (amount <= 0) {
-					Count = 0;
-					Amount = 0;
-				} else
-					Amount = Math.Min(amount, Amount);
-			} // Cap
-
-			public CountAmount Clone() {
-				return new CountAmount {
-					Count = Count,
-					Amount = Amount,
-				};
-			} // Clone
 
 			public bool Exist {
 				get { return Count > 0; }
 			} // Exist
 
-			public void Clear() {
-				Count = 0;
-				Amount = 0;
-			} // Clear
+			public int Count { get { return this.loans.Count; } }
 
-			public CountAmount Append(CountAmount other) {
-				if (other == null)
-					return this;
+			public decimal Amount {
+				get {
+					if (this.loans.Count < 1)
+						return 0;
 
-				Count += other.Count;
-				Amount += other.Amount;
+					return this.loans.Sum(pair => this.extractAmount(pair.Value));
+				} // get
+			} // Amount
 
-				return this;
-			} // Append
-
-			public int Count { get; set; }
-			public decimal Amount { get; set; }
+			private readonly SortedDictionary<int, LoanMetaData> loans;
+			private readonly Func<LoanMetaData, decimal> extractAmount;
 		} // class CountAmount
 
 		public ASafeLog Log { get; private set; }
 
-		private void AddLoanID(IEnumerable<int> lst, SortedSet<int> targetIDList) {
-			if (lst == null)
-				return;
-
-			foreach (int id in lst)
-				AddLoanID(id, targetIDList);
-		} // AddLoanID
-
-		private void AddLoanID(int id, SortedSet<int> targetIDList) {
-			if (!(targetIDList ?? IDs).Add(id))
-				Log.Warn("Duplicate loan id detected: {0}", id);
-		} // AddLoanID
+		public bool TakeMin { get ; private set; }
 	} // class LoanCount
 } // namespace

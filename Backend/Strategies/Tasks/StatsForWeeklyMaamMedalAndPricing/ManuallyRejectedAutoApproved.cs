@@ -1,12 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using System;
-	using System.Drawing.Design;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
 
 	internal class ManuallyRejectedAutoApproved : ARejectedCrossApproved {
 		public ManuallyRejectedAutoApproved(
+			bool takeMin,
 			ASafeLog log,
 			ExcelWorksheet sheet,
 			string title,
@@ -14,6 +14,7 @@
 			AStatItem rejected,
 			AStatItem approved
 		) : base(
+			takeMin,
 			log.Safe(),
 			sheet,
 			title,

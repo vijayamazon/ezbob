@@ -7,11 +7,6 @@
 	[SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
 	[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
 	public abstract class ADatumItem : SpLoadCashRequestsForAutomationReport.ResultRow {
-		public virtual LoanCount LoanCount {
-			get { return this.loanCount; }
-			set { this.loanCount = value; }
-		} // LoanCount
-
 		public abstract string DecisionStr { get; }
 
 		public abstract bool IsAuto { get; }
@@ -44,14 +39,11 @@
 
 		protected ADatumItem(string tag, ASafeLog log) {
 			Tag = tag;
-			this.loanCount = new LoanCount(log.Safe());
-			Log = this.loanCount.Log;
+			Log = log.Safe();
 		} // constructor
 
 		protected virtual string Tag { get; private set; }
 
 		protected virtual ASafeLog Log { get; private set; }
-
-		private LoanCount loanCount;
 	} // class MedalAndPricing
 } // namespace

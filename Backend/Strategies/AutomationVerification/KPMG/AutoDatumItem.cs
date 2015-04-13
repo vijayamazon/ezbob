@@ -22,6 +22,8 @@
 			string tag,
 			ASafeLog log
 		) : base(tag, log.Safe()) {
+			MinLoanCount = new LoanCount(true, log.Safe());
+
 			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
 			IsAutoRejected = false;
@@ -42,6 +44,8 @@
 
 		public override bool IsAuto { get { return true; } }
 
+		public LoanCount MinLoanCount { get; private set; }
+
 		public bool HasDecided {
 			get { return AutomationDecision != DecisionActions.Waiting; }
 		} // HasDecided
@@ -55,6 +59,11 @@
 		} // AutomationDecision
 
 		public class MaxOfferResult {
+			public MaxOfferResult(ASafeLog log) {
+				LoanCount = new LoanCount(false, log.Safe());
+			} // constructor
+
+			public LoanCount LoanCount { get; set; }
 			public int ApprovedAmount { get; set; }
 			public int RepaymentPeriod { get; set; }
 			public decimal InterestRate { get; set; }
@@ -76,7 +85,10 @@
 
 			return string.Format(
 				"{1} decision;{1} re-reject decision;{1} reject decision;{1} re-approve decision;{1} approve decision;" +
-				"{0};{1} re-approved amount", ADatumItem.CsvTitles(prefix), prefix);
+				"{0};{1} re-approved amount;{1} turnover type; {1} min medal amount; {1} max medal amount",
+				ADatumItem.CsvTitles(prefix),
+				prefix
+			);
 		} // CsvTitles
 
 		public override int ToXlsx(ExcelWorksheet sheet, int rowNum, int colNum) {
@@ -89,46 +101,41 @@
 			colNum = base.ToXlsx(sheet, rowNum, colNum);
 
 			colNum = sheet.SetCellValue(rowNum, colNum, ReapprovedAmount);
+
+			var medalRes = this.medal ?? new MedalResult(CustomerID, Log);
+
+			colNum = sheet.SetCellValue(
+				rowNum,
+				colNum,
+				medalRes.TurnoverType.HasValue ? medalRes.TurnoverType.ToString() : "N/A"
+			);
+			colNum = sheet.SetCellValue(rowNum, colNum, medalRes.RoundOfferedAmount());
+			colNum = sheet.SetCellValue(rowNum, colNum, medalRes.RoundMaxOfferedAmount());
+
 			return colNum;
 		} // ToXlsx
 
-		public void SetAdjustedLoanCount(LoanCount manualLoanCount) {
-			LoanCount = manualLoanCount.Clone();
-
-			decimal approvedAmount = 0;
-
-			switch (AutomationDecision) {
-			case DecisionActions.Approve:
-				approvedAmount = ApprovedAmount;
-				break;
-
-			case DecisionActions.ReApprove:
-				approvedAmount = ReapprovedAmount;
-				break;
-			} // switch
-
-			LoanCount.Cap(approvedAmount);
-
-			// And now for max loan count.
-
-			approvedAmount = 0;
-
-			MaxLoanCount = manualLoanCount.Clone();
-
-			switch (AutomationDecision) {
-			case DecisionActions.Approve:
-				approvedAmount = MaxOffer.ApprovedAmount;
-				break;
-
-			case DecisionActions.ReApprove:
-				approvedAmount = ReapprovedAmount;
-				break;
-			} // switch
-
-			MaxLoanCount.Cap(approvedAmount);
+		public void SetAdjustedLoanCount(LoanCount manualLoanCount, int manuallyApprovedAmount) {
+			MinLoanCount = AdjustLoanCount(manualLoanCount, manuallyApprovedAmount, ApprovedAmount);
+			MaxOffer.LoanCount = AdjustLoanCount(manualLoanCount, manuallyApprovedAmount, MaxOffer.ApprovedAmount);
 		} // SetAdjustedLoanCount
 
-		public virtual LoanCount MaxLoanCount { get; private set; } // LoanCount
+		private LoanCount AdjustLoanCount(
+			LoanCount manualLoanCount,
+			int manuallyApprovedAmount,
+			decimal autoApprovedAmount
+		) {
+			LoanCount loanCount = manualLoanCount.Clone();
+
+			loanCount.Cap(autoApprovedAmount);
+
+			decimal takenAmount = manualLoanCount.Total.Amount;
+
+			if ((takenAmount > 0) && (takenAmount == manuallyApprovedAmount))
+				loanCount.AssumedLoanAmount = autoApprovedAmount;
+
+			return loanCount;
+		} // AdjustLoanCount
 
 		public void RunAutomation(bool isHomeOwner, AConnection db) {
 			Log.Info(
@@ -144,9 +151,9 @@
 
 			RunAutoReapproval(db);
 
-			MedalResult medal = RunCalculateMedal();
+			this.medal = RunCalculateMedal();
 
-			RunAutoApprove(isHomeOwner, medal, db);
+			RunAutoApprove(isHomeOwner, db);
 
 			Log.Info(
 				"RunAutomation({0}) complete for customer {1} with decision time '{2}'.",
@@ -276,18 +283,14 @@
 			return instance.Result;
 		} // RunCalculateMedal
 
-		private void RunAutoApprove(
-			bool isHomeOwner,
-			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
-			AConnection db
-		) {
+		private void RunAutoApprove(bool isHomeOwner, AConnection db) {
 			Log.Info(
 				"RunAutomation-RunAutoApprove() started for customer {0} with decision time '{1}'...",
 				CustomerID,
 				DecisionTime.MomentStr()
 			);
 
-			Calculate(isHomeOwner, medal, CashRequestID, db);
+			Calculate(isHomeOwner, CashRequestID, db);
 
 			if (ApprovedAmount > 0)
 				AutomationDecision = DecisionActions.Approve;
@@ -307,7 +310,6 @@
 
 		private void Calculate(
 			bool isHomeOwner,
-			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
 			long cashRequestID,
 			AConnection db
 		) {
@@ -316,21 +318,20 @@
 				CustomerID,
 				cashRequestID,
 				isHomeOwner,
-				medal.MedalClassification
+				this.medal.MedalClassification
 			);
 
-			MedalName = medal.MedalClassification.ToString();
+			MedalName = this.medal.MedalClassification.ToString();
 
-			EzbobScore = medal.TotalScoreNormalized;
+			EzbobScore = this.medal.TotalScoreNormalized;
 
-			// int amountBeforeApproval = takeMinOffer ? medal.RoundOfferedAmount() : medal.RoundMaxOfferedAmount();
-			int amountBeforeApproval = medal.RoundOfferedAmount();
+			int amountBeforeApproval = this.medal.RoundOfferedAmount();
 
 			Log.Info(
 				"RunAutomation-Auto.Calculate() before capping: medal '{0}', amount {1}\n{2}",
 				MedalName,
 				amountBeforeApproval,
-				medal
+				this.medal
 			);
 
 			amountBeforeApproval = Math.Min(
@@ -343,18 +344,18 @@
 				"medal '{2}', medal type '{3}', turnover type '{4}', decision time '{5}'.",
 				MedalName,
 				amountBeforeApproval,
-				(AutomationCalculator.Common.Medal)medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+				(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
+				(AutomationCalculator.Common.MedalType)this.medal.MedalType,
+				(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
 				DecisionTime.MomentStr()
 			);
 
 			var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
 				CustomerID,
 				amountBeforeApproval,
-				(AutomationCalculator.Common.Medal)medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+				(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
+				(AutomationCalculator.Common.MedalType)this.medal.MedalType,
+				(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
 				DecisionTime,
 				db,
 				Log
@@ -378,7 +379,7 @@
 				SetupFeeAmount = 0;
 				SetupFeePct = 0;
 
-				MaxOffer = new MaxOfferResult {
+				MaxOffer = new MaxOfferResult(Log) {
 					ApprovedAmount = 0,
 					RepaymentPeriod = 0,
 					InterestRate = 0,
@@ -391,7 +392,7 @@
 					"loan count {1}, medal '{2}', decision time '{3}' - going for offer calculation.",
 					ApprovedAmount,
 					PreviousLoanCount,
-					medal.MedalClassification,
+					this.medal.MedalClassification,
 					DecisionTime.MomentStr()
 				);
 
@@ -400,7 +401,7 @@
 					DecisionTime,
 					ApprovedAmount,
 					PreviousLoanCount > 0,
-					medal.MedalClassification
+					this.medal.MedalClassification
 				);
 
 				odc.CalculateOffer();
@@ -420,10 +421,10 @@
 					SetupFeeAmount.ToString("C2", Library.Instance.Culture)
 				);
 
-				if (medal.OfferedAmountsDiffer())
-					CalculateMaxOffer(isHomeOwner, medal, approveAgent.Trail);
+				if (this.medal.OfferedAmountsDiffer())
+					CalculateMaxOffer(isHomeOwner, approveAgent.Trail);
 				else {
-					MaxOffer = new MaxOfferResult {
+					MaxOffer = new MaxOfferResult(Log) {
 						ApprovedAmount = ApprovedAmount,
 						RepaymentPeriod = RepaymentPeriod,
 						InterestRate = InterestRate,
@@ -438,17 +439,16 @@
 				CustomerID,
 				cashRequestID,
 				isHomeOwner,
-				medal.MedalClassification
+				this.medal.MedalClassification
 			);
 		} // Calculate
 
 		private void CalculateMaxOffer(
 			bool isHomeOwner,
-			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
 			ApprovalTrail trail
 		) {
 			decimal approvedAmount = Math.Min(
-				medal.RoundMaxOfferedAmount(),
+				this.medal.RoundMaxOfferedAmount(),
 				isHomeOwner ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
 			);
 
@@ -458,7 +458,7 @@
 				approvedAmount = 0;
 
 			if (approvedAmount == 0) {
-				MaxOffer = new MaxOfferResult {
+				MaxOffer = new MaxOfferResult(Log) {
 					ApprovedAmount = 0,
 					RepaymentPeriod = 0,
 					InterestRate = 0,
@@ -475,7 +475,7 @@
 					approvedAmount / roundTo, 0, MidpointRounding.AwayFromZero
 				);
 
-				MaxOffer = new MaxOfferResult {
+				MaxOffer = new MaxOfferResult(Log) {
 					ApprovedAmount = (int)approvedAmount,
 				};
 
@@ -484,7 +484,7 @@
 					DecisionTime,
 					MaxOffer.ApprovedAmount,
 					PreviousLoanCount > 0,
-					medal.MedalClassification
+					this.medal.MedalClassification
 				);
 
 				odc.CalculateOffer();
@@ -497,5 +497,6 @@
 		} // CalculateMaxOffer
 
 		private DecisionActions automationDecision;
+		private Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal;
 	} // AutoDatumItem
 } // namespace

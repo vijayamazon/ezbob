@@ -78,7 +78,7 @@
 
 				Datum previous = filtered[filtered.Count - 1];
 
-				if (previous.LoanCount.Total.Count == 0)
+				if (previous.ActualLoanCount.Total.Count == 0)
 					filtered.RemoveAt(filtered.Count - 1);
 				else
 					filtered.Add(current);

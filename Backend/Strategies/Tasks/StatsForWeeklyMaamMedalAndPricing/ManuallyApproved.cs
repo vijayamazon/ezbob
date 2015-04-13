@@ -11,12 +11,12 @@
 			"Manually approved",
 			total
 		) {
-			LoanCount = new LoanCount(Log);
+			LoanCount = new LoanCount(true, Log);
 		} // constructor
 
 		public override void Add(Datum d, int cashRequestIndex) {
 			if (Added.If(d.Manual(cashRequestIndex).IsApproved, d.Manual(cashRequestIndex).ApprovedAmount))
-				LoanCount += d.Manual(cashRequestIndex).LoanCount;
+				LoanCount += d.Manual(cashRequestIndex).ActualLoanCount;
 		} // Add
 
 		protected override TitledValue[] PrepareCountRowValues() {

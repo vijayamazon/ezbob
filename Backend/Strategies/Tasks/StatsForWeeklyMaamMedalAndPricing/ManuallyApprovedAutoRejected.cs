@@ -4,6 +4,7 @@
 
 	internal class ManuallyApprovedAutoRejected : ARejectedCrossApproved {
 		public ManuallyApprovedAutoRejected(
+			bool takeMin,
 			ASafeLog log,
 			ExcelWorksheet sheet,
 			string title,
@@ -11,6 +12,7 @@
 			AStatItem rejected,
 			AStatItem approved
 		) : base(
+			takeMin,
 			log.Safe(),
 			sheet,
 			title,

@@ -20,7 +20,7 @@
 		) {} // constructor
 
 		protected override LoanCount.CountAmount GetCountAmount(ManualDatumItem item) {
-			return item.LoanCount.DefaultOutstanding;
+			return item.ActualLoanCount.DefaultOutstanding;
 		} // GetCountAmount
 	} // class DefaultOutstandingLoans
 } // namespace

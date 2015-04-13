@@ -6,6 +6,7 @@
 
 	internal class ManuallyAndAutoApproved : AStatItem {
 		public ManuallyAndAutoApproved(
+			bool takeMin,
 			ASafeLog log,
 			ExcelWorksheet sheet,
 			Total total,
@@ -19,11 +20,12 @@
 			manuallyApproved,
 			autoApproved
 		) {
+			this.takeMin = takeMin;
 			this.manualAmount = 0;
 			this.autoAmount = 0;
 
-			this.manualLoanCount = new LoanCount(Log);
-			AutoLoanCount = new LoanCount(Log);
+			this.manualLoanCount = new LoanCount(true, Log);
+			AutoLoanCount = new LoanCount(takeMin, Log);
 		} // constructor
 
 		public override void Add(Datum d, int cashRequestIndex) {
@@ -31,8 +33,10 @@
 				this.manualAmount += ManuallyApproved.LastAmount;
 				this.autoAmount += AutoApproved.LastAmount;
 
-				this.manualLoanCount += d.Manual(cashRequestIndex).LoanCount;
-				AutoLoanCount += d.Auto(cashRequestIndex).LoanCount;
+				this.manualLoanCount += d.Manual(cashRequestIndex).ActualLoanCount;
+				AutoLoanCount += this.takeMin
+					? d.Auto(cashRequestIndex).MinLoanCount
+					: d.Auto(cashRequestIndex).MaxOffer.LoanCount;
 			} // if
 		} // Add
 
@@ -170,5 +174,6 @@
 		private decimal autoAmount;
 
 		private LoanCount manualLoanCount;
+		private readonly bool takeMin;
 	} // class ManuallyAndAutoApproved
 } // namespace

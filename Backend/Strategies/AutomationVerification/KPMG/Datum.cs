@@ -21,7 +21,8 @@
 
 			ManualItems = new List<ManualDatumItem>();
 			AutoItems = new List<AutoDatumItem>();
-			LoanCount = new LoanCount(this.log);
+
+			ActualLoanCount = new LoanCount(true, this.log);
 
 			CustomerID = sr.CustomerID;
 			BrokerID = sr.BrokerID;
@@ -62,7 +63,7 @@
 		public int? BrokerID { get; set; }
 		public bool IsDefault { get; set; }
 
-		public LoanCount LoanCount { get; private set; }
+		public LoanCount ActualLoanCount { get; private set; }
 
 		public List<ManualDatumItem> ManualItems { get; private set; }
 		public List<AutoDatumItem> AutoItems { get; private set; }
@@ -88,7 +89,7 @@
 				var ai = new AutoDatumItem(mi, this.tag, this.log);
 				AutoItems.Add(ai);
 				ai.RunAutomation(isHomeOwner, db);
-				ai.SetAdjustedLoanCount(mi.LoanCount);
+				ai.SetAdjustedLoanCount(mi.ActualLoanCount, mi.ApprovedAmount);
 			} // for each manual item
 		} // RunAutomation
 
@@ -125,7 +126,7 @@
 			foreach (string s in allLoanSources)
 				this.loansBySource[s] = new LoanSummaryData();
 
-			LoanCount.Clear();
+			ActualLoanCount.Clear();
 
 			foreach (ManualDatumItem mi in ManualItems) {
 				long cashRequestID = mi.CashRequestID;
@@ -135,8 +136,9 @@
 
 				foreach (LoanMetaData lmd in crLoans[cashRequestID]) {
 					this.loansBySource[lmd.LoanSourceName].Add(lmd);
-					LoanCount += lmd;
-					mi.LoanCount += lmd;
+					ActualLoanCount += lmd;
+
+					mi.ActualLoanCount += lmd;
 				} // for
 			} // for each item
 		} // FindLoans
@@ -147,7 +149,7 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, BrokerID);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, IsDefault ? "Default" : "No");
-			curColumn = sheet.SetCellValue(rowNum, curColumn, LoanCount.DefaultIssued.Exist ? "Default" : "No");
+			curColumn = sheet.SetCellValue(rowNum, curColumn, ActualLoanCount.DefaultIssued.Exist ? "Default" : "No");
 
 			curColumn = sheet.SetCellValue(rowNum, curColumn, ManualItems.Count);
 			curColumn = LastManual.ToXlsx(sheet, rowNum, curColumn);

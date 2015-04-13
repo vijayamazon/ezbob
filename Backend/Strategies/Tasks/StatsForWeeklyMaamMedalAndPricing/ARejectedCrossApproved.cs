@@ -7,12 +7,13 @@
 	internal abstract class ARejectedCrossApproved : AStatItem {
 		public override void Add(Datum d, int cashRequestIndex) {
 			if (Added.If(Rejected.LastWasAdded && Approved.LastWasAdded, Approved.LastAmount))
-				LoanCount += d.Manual(cashRequestIndex).LoanCount;
+				LoanCount += d.Manual(cashRequestIndex).ActualLoanCount;
 		} // Add
 
 		public abstract int DrawSummary(int row);
 
 		protected ARejectedCrossApproved(
+			bool takeMin,
 			ASafeLog log,
 			ExcelWorksheet sheet,
 			string title,
@@ -27,7 +28,7 @@
 			rejected,
 			approved
 		) {
-			LoanCount = new LoanCount(Log);
+			LoanCount = new LoanCount(takeMin, Log);
 		} // constructor
 
 		protected override TitledValue[] PrepareCountRowValues() {

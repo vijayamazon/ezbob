@@ -20,10 +20,10 @@
 			var manuallyRejected = new ManuallyRejected(log, sheet, total);
 			ManuallyApproved = new ManuallyApproved(log, sheet, total);
 
-			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(log, sheet, total, ManuallyApproved, autoApproved);
+			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(takeMin, log, sheet, total, ManuallyApproved, autoApproved);
 
-			this.manuallyRejectedAutoApproved = new ManuallyRejectedAutoApproved(log, sheet, "Manually rejected and auto approved", total, manuallyRejected, autoApproved);
-			this.manuallyApprovedAutoRejected = new ManuallyApprovedAutoRejected(log, sheet, "Manually approved and auto rejected", total, autoRejected, ManuallyApproved);
+			this.manuallyRejectedAutoApproved = new ManuallyRejectedAutoApproved(takeMin, log, sheet, "Manually rejected and auto approved", total, manuallyRejected, autoApproved);
+			this.manuallyApprovedAutoRejected = new ManuallyApprovedAutoRejected(takeMin, log, sheet, "Manually approved and auto rejected", total, autoRejected, ManuallyApproved);
 
 			this.stats = new List<AStatItem> {
 				total,
@@ -219,7 +219,7 @@
 			return column + 1;
 		} // SetFormula
 
-		private int FlushLoanIDList(ExcelWorksheet targetSheet, int column, string title, SortedSet<int> ids) {
+		private int FlushLoanIDList(ExcelWorksheet targetSheet, int column, string title, IEnumerable<int> ids) {
 			targetSheet.SetCellValue(1, column, this.name + " - " + title);
 
 			int row = 2;
@@ -239,6 +239,6 @@
 
 		private readonly ManuallyAndAutoApproved manuallyAndAutoApproved;
 		private readonly ManuallyRejectedAutoApproved manuallyRejectedAutoApproved;
-		private readonly ARejectedCrossApproved manuallyApprovedAutoRejected;
+		private readonly ManuallyApprovedAutoRejected manuallyApprovedAutoRejected;
 	} // class Stats
 } // namespace

@@ -20,7 +20,7 @@
 		) {} // constructor
 
 		protected override LoanCount.CountAmount GetCountAmount(ManualDatumItem item) {
-			return item.LoanCount.DefaultIssued;
+			return item.ActualLoanCount.DefaultIssued;
 		} // GetCountAmount
 	} // class DefaultIssuedLoans
 } // namespace
