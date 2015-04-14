@@ -392,6 +392,7 @@
 		public decimal CollectionRate { get; set; }
 		public decimal Cogs { get; set; }
 		public decimal BrokerSetupFee { get; set; }
+        public decimal CosmeCollectionRate { get; set; }
 	}
 
 	public class OfferInputModel {
@@ -400,6 +401,8 @@
 		public Medal Medal { get; set; }
 		public bool AspireToMinSetupFee { get; set; }
 		public int CustomerId { get; set; }
+        public int LoanSourceId { get; set; }
+        public int RepaymentPeriod { get; set; }
 	}
 
 	public class OfferOutputModel : IEquatable<OfferOutputModel> {
@@ -407,13 +410,7 @@
 		public Medal Medal { get; set; }
 		public DateTime CalculationTime { get; set; }
 
-		public int RepaymentPeriod {
-			get { return 12; }
-		} //Currently Hard coded
-
-		public LoanSource LoanSource {
-			get { return LoanSource.Standard; }
-		} //Currently Hard coded
+		public int RepaymentPeriod { get; set; } 
 
 		public LoanType LoanType {
 			get { return LoanType.StandardLoanType; }
@@ -423,11 +420,8 @@
 		public int Amount { get; set; }
 		public string ScenarioName { get; set; }
 
-		public bool IsEu {
-			get { return false; }
-		}
-
-		public bool IsError { get; set; }
+        public int LoanSourceID { get; set; }
+        public bool IsError { get; set; }
 		public bool IsMismatch { get; set; }
 		public bool HasDecision { get; set; }
 		public string Message { get; set; }
@@ -442,8 +436,8 @@
 		}
 
 		public override string ToString() {
-			return string.Format("InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, LoanSource: {4}, IsEu: {5}. {6}",
-				InterestRate, SetupFee, RepaymentPeriod, LoanType.DescriptionAttr(), LoanSource, IsEu, Description);
+			return string.Format("InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, LoanSource: {4}. {5}",
+				InterestRate, SetupFee, RepaymentPeriod, LoanType.DescriptionAttr(), LoanSourceID, Description);
 		}
 
 		public void SaveToDb(ASafeLog log, AConnection db, OfferCalculationType type) {

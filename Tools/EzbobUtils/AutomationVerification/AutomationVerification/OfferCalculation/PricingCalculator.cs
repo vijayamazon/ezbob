@@ -5,6 +5,9 @@
 	using Ezbob.Logger;
 
 	internal class PricingCalculator {
+        public int ConsumerScore { get; private set; }
+        public int CompanyScore { get; private set; }
+
 		public PricingCalculator(
 			int customerID,
 			PricingScenarioModel pricingScenario,
@@ -30,6 +33,9 @@
 
 			decimal consumerDefautRate = sr["ConsumerDefaultRate"];
 			decimal businessDefautRate = sr["BusinessDefaultRate"];
+
+		    ConsumerScore = sr["ConsumerScore"];
+		    CompanyScore = sr["BusinessScore"];
 
 			this.calculatedDefaultRate =
 				consumerDefautRate * (1 - this.pricingScenario.DefaultRateCompanyShare) +
@@ -93,7 +99,7 @@ r = ----------------------
 		/// Calculate setup fee for specific offer amount, interest rate, repayment period and pricing scenario
 		/// </summary>
 		/// <returns>setup fee</returns>
-		public decimal GetSetupfee(decimal interestRate) {
+		public decimal GetSetupfee(decimal interestRate, bool useCosmeCollectionRate = false) {
 			// this.loanAmount; // A
 
 			int realRepaymentPeriod = // ñ
@@ -106,7 +112,7 @@ r = ----------------------
 				realRepaymentPeriod - realInterestOnlyPeriod;
 
 			decimal cost = // C
-				GetTotalCost();
+                GetTotalCost(useCosmeCollectionRate);
 
 			decimal profit = // p
 				this.pricingScenario.ProfitMarkupPercentsOfRevenue;
@@ -147,7 +153,7 @@ f = ------- - -----------------------
 			return setupFee / this.loanAmount;
 		} // GetSetupFee
 
-		private decimal GetTotalCost() {
+		private decimal GetTotalCost(bool useCosmeCollectionRate = false) {
 			// this.loanAmount;                                                          // A
 			// this.repaymentPeriod;                                                     // n
 			decimal interestOnlyMonths = this.pricingScenario.InterestOnlyPeriod;        // o
@@ -158,7 +164,9 @@ f = ------- - -----------------------
 			decimal debtOfTotalCapital = this.pricingScenario.DebtPercentOfCapital;      // δ
 			decimal costOfDebt = this.pricingScenario.CostOfDebtPA;                      // γ
 			decimal defaultRate = this.calculatedDefaultRate;                            // d
-			decimal collectionRate = this.pricingScenario.CollectionRate;                // ρ
+			decimal collectionRate = useCosmeCollectionRate ? 
+                this.pricingScenario.CosmeCollectionRate :
+                this.pricingScenario.CollectionRate;                                     // ρ
 			decimal opexCapex = this.pricingScenario.OpexAndCapex;                       // Ω
 			decimal cogs = this.pricingScenario.Cogs;                                    // ξ
 

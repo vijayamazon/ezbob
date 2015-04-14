@@ -60,8 +60,6 @@
 				LoanType = loanType,
 				RepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
 				ApprovedRepaymentPeriod = loanSource.DefaultRepaymentPeriod ?? loanType.RepaymentPeriod,
-				UseSetupFee = CurrentValues.Instance.SetupFeeEnabled,
-				UseBrokerSetupFee = (customer.Broker != null) || CurrentValues.Instance.BrokerCommissionEnabled,
 				DiscountPlan = discounts.GetDefault(),
 				IsLoanTypeSelectionAllowed = 1,
 				OfferValidUntil = now.AddDays(1),

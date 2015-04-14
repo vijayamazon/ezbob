@@ -42,6 +42,8 @@ DECLARE @CostOfDebtPA DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScena
 DECLARE @CollectionRate DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='CollectionRate')
 DECLARE @Cogs DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='Cogs')
 DECLARE @BrokerSetupFee DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='BrokerSetupFee')
+DECLARE @CosmeCollectionRate DECIMAL(18,6) = (SELECT ConfigValue FROM PricingModelScenarios WHERE ScenarioName=@ScenarioName AND ConfigName='CosmeCollectionRate')
+
 
 SELECT
 	@ScenarioName AS ScenarioName,
@@ -55,6 +57,8 @@ SELECT
 	@CostOfDebtPA AS CostOfDebtPA,
 	@CollectionRate AS CollectionRate,
 	@Cogs AS Cogs,
-	@BrokerSetupFee AS BrokerSetupFee
+	@BrokerSetupFee AS BrokerSetupFee,
+	@CosmeCollectionRate AS CosmeCollectionRate
 END
+
 GO

@@ -12,7 +12,6 @@ ALTER PROCEDURE StoreOffer
 	,@MedalClassification NVARCHAR(50)	
 	,@ScenarioName NVARCHAR(50)
 	,@Period INT
-	,@IsEu BIT
 	,@LoanTypeId INT
 	,@InterestRate DECIMAL(18,6)
 	,@SetupFee DECIMAL(18,6)
@@ -29,7 +28,6 @@ BEGIN
 	,MedalClassification
 	,ScenarioName
 	,Period
-	,IsEu
 	,LoanTypeId
 	,InterestRate
 	,SetupFee
@@ -42,7 +40,6 @@ BEGIN
 	,@MedalClassification
 	,@ScenarioName
 	,@Period
-	,@IsEu
 	,@LoanTypeId
 	,@InterestRate
 	,@SetupFee
@@ -50,4 +47,3 @@ BEGIN
 END
 
 GO
-

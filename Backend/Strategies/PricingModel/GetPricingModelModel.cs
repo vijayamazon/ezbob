@@ -15,13 +15,13 @@
 
 		public override void Execute() {
 			decimal defaultRateCustomerShare;
-			decimal defaultRate = GetDefaultRate(out defaultRateCustomerShare);
+			var defaultRateModel = GetDefaultRate(out defaultRateCustomerShare);
 			int loanAmount, loanTerm;
 			GetDataFromCashRequest(out loanAmount, out loanTerm);
 			decimal tenureMonths = tenurePercents * loanTerm;
 
 			Model = new PricingModelModel {
-				DefaultRate = defaultRate,
+                DefaultRate = defaultRateModel.DefaultRate,
 				DefaultRateCompanyShare = defaultRateCompanyShare,
 				DefaultRateCustomerShare = defaultRateCustomerShare,
 				SetupFeePercents = setupFee,
@@ -37,7 +37,9 @@
 				DebtPercentOfCapital = debtPercentOfCapital,
 				CostOfDebt = costOfDebtPA,
 				OpexAndCapex = opexAndCapex,
-				ProfitMarkup = profitMarkupPercentsOfRevenue
+				ProfitMarkup = profitMarkupPercentsOfRevenue,
+                ConsumerScore = defaultRateModel.ConsumerScore,
+                CompanyScore = defaultRateModel.BusinessScore
 			};
 
 			Model.SetLoanAmount(loanAmount);
@@ -83,12 +85,12 @@
 			} // if
 		} // GetDataFromCashRequest
 
-		private decimal GetDefaultRate(out decimal defaultRateCustomerShare) {
+        private GetPricingModelDefaultRate GetDefaultRate(out decimal defaultRateCustomerShare) {
 			defaultRateCustomerShare = 1 - defaultRateCompanyShare;
 
 			var instance = new GetPricingModelDefaultRate(customerId, defaultRateCompanyShare);
 			instance.Execute();
-			return instance.DefaultRate;
+			return instance;
 		} // GetDefaultRate
 
 		private readonly int customerId;

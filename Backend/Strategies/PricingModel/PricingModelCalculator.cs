@@ -154,7 +154,9 @@
 			decimal costOfDebtEu = GetCostOfDebt(loan.Schedule);
 			decimal interestRevenue = GetInterestRevenue(loan.Schedule);
 			decimal netLossFromDefaults = (1 - collectionRate) * Model.LoanAmount * Model.DefaultRate;
-			decimal setupFeePounds = Model.ProfitMarkupOutput - interestRevenue + Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
+            decimal totalCost = Model.Cogs + Model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
+            decimal profit = totalCost / (1 - Model.ProfitMarkup);
+			decimal setupFeePounds = profit - interestRevenue;
 			decimal setupFee = setupFeePounds / Model.LoanAmount;
 			loan = CreateLoan(monthlyInterestRate, setupFeePounds + Model.BrokerSetupFeePounds);
 			apr = GetApr(loan);

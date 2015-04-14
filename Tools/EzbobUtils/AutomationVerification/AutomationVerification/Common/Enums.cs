@@ -20,11 +20,6 @@
 		F
 	} // enum Gender
 
-	public enum LoanSource {
-		Standard,
-		EU
-	}
-
 	public enum LoanType {
 		[Description("Standard")]
 		StandardLoanType,

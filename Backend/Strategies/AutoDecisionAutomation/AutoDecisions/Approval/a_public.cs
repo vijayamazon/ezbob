@@ -22,7 +22,9 @@
 	using StructureMap;
 
 	public partial class Approval {
-		public Approval(
+	    
+
+	    public Approval(
 			int customerId,
 			int offeredCreditLine,
 			Medal medalClassification,
@@ -48,6 +50,7 @@
 				this.log = log.Safe();
 
 				this.loanRepository = ObjectFactory.GetInstance<LoanRepository>();
+                this.loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
 				var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 				this.cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 				this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
@@ -247,12 +250,15 @@
 
 				if (response.AutoApproveAmount != 0) {
 					if (this.m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
+					    var source = this.loanSourceRepository.GetDefault();
 						var offerDualCalculator = new OfferDualCalculator(
 							this.customerId,
 							Now,
 							response.AutoApproveAmount,
 							this.hasLoans,
-							this.medalClassification
+							this.medalClassification,
+                            source.ID,
+                            source.DefaultRepaymentPeriod ?? 15
 						);
 
 						OfferResult offerResult = offerDualCalculator.CalculateOffer();
@@ -307,9 +313,7 @@
 
 								// Use offer calculated data
 								response.RepaymentPeriod = offerResult.Period;
-								response.LoanSourceID = offerResult.IsEu
-									? (int)LoanSourceName.EU
-									: (int)LoanSourceName.Standard; // TODO replace with Loan source and not IsEU
+								response.LoanSourceID = (int)LoanSourceName.COSME; // TODO replace with Loan source and not IsEU
 								response.LoanTypeID = offerResult.LoanTypeId;
 								response.InterestRate = offerResult.InterestRate / 100;
 								response.SetupFee = offerResult.SetupFee / 100;

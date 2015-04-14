@@ -223,6 +223,7 @@
 		private readonly int customerId;
 		private readonly AConnection db;
 		private readonly LoanRepository loanRepository;
+        private readonly LoanSourceRepository loanSourceRepository;
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly ASafeLog log;
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;

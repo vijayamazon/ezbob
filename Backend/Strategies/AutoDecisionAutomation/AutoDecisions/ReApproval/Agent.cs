@@ -104,11 +104,8 @@
 					);
 
 					response.InterestRate = sr["InterestRate"];
-					response.SetupFeeEnabled = sr["UseSetupFee"];
 					response.RepaymentPeriod = sr["RepaymentPeriod"];
-					response.BrokerSetupFeeEnabled = sr["UseBrokerSetupFee"];
-					response.ManualSetupFeeAmount = sr["ManualSetupFeeAmount"];
-					response.ManualSetupFeePercent = sr["ManualSetupFeePercent"];
+					response.SetupFee = sr["ManualSetupFeePercent"];
 					response.LoanTypeID = sr["LoanTypeID"];
 					response.LoanSourceID = sr["LoanSourceID"];
 					response.IsCustomerRepaymentPeriodSelectionAllowed = sr["IsCustomerRepaymentPeriodSelectionAllowed"];

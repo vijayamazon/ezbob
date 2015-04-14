@@ -1,12 +1,16 @@
 ﻿namespace Ezbob.Backend.Strategies.OfferCalculation {
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
-	using Ezbob.Logger;
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using PaymentServices.Calculators;
 	using PricingModel;
-
-	public class OfferCalculator1 {
+	
+    public class OfferCalculator1 {
 		public OfferCalculator1() {
 			this.log = Library.Instance.Log;
 			this.db = Library.Instance.DB;
@@ -17,20 +21,19 @@
 			DateTime calculationTime,
 			int amount,
 			bool hasLoans,
-			Medal medalClassification
+			EZBob.DatabaseLib.Model.Database.Medal medalClassification,
+            int period
 		) {
 			var result = new OfferResult {
 				CustomerId = customerId,
 				CalculationTime = calculationTime,
 				Amount = amount,
 				MedalClassification = medalClassification,
-				Period = 12, // Period is always 12
-				IsEu = false,
+                Period = period,
 			};
 
 			// We always use standard loan type
-			// We use standard loan type
-			SafeReader sr = db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
+			SafeReader sr = this.db.GetFirst("GetStandardLoanTypeId", CommandSpecies.StoredProcedure);
 
 			if (sr.IsEmpty) {
 				result.IsError = true;
@@ -50,21 +53,131 @@
 
 			var getPricingModelModelInstance = new GetPricingModelModel(customerId, result.ScenarioName);
 			getPricingModelModelInstance.Execute();
-
+            
 			PricingModelModel templateModel = getPricingModelModelInstance.Model;
 			templateModel.SetLoanAmount(amount);
 			templateModel.LoanTerm = result.Period;
 			templateModel.TenureMonths = result.Period * templateModel.TenurePercents;
 
-			CalculateInterestRateAndSetupFee(customerId, amount, medalClassification, result, templateModel);
+			//CalculateInterestRateAndSetupFee(customerId, amount, medalClassification, result, templateModel);
+            templateModel.MonthlyInterestRate = GetCOSMELoanMonthlyInterest(templateModel.ConsumerScore, templateModel.CompanyScore);
 
+            decimal setupFee = GetSetupFeeForCOSME(templateModel);
+		    AdjustToMinMaxSetupFee(templateModel.LoanAmount, medalClassification.ToString(), ref setupFee);
+		    SetRounded(result, templateModel.MonthlyInterestRate, setupFee);
 			return result;
-		} // CalculateOffer
+		}// CalculateOffer
 
+        private void AdjustToMinMaxSetupFee(decimal amount, string medal, ref decimal setupFee) {
+            SafeReader sr = this.db.GetFirst(
+                    "LoadOfferRanges",
+                    CommandSpecies.StoredProcedure,
+                    new QueryParameter("@Amount", amount),
+                    new QueryParameter("@MedalClassification", medal)
+                );
+
+            decimal minSetupFee = sr["MinSetupFee"] / 100M;
+            decimal maxSetupFee = sr["MaxSetupFee"] / 100M;
+            //decimal minInterestRate = sr["MinInterestRate"];
+            //decimal maxInterestRate = sr["MaxInterestRate"];
+
+            if (setupFee < minSetupFee) {
+                this.log.Info("Primary Setup fee is {0} less then min {1}, adjusting", setupFee, minSetupFee);
+                setupFee = minSetupFee;
+            }
+
+            if (setupFee > maxSetupFee) {
+                this.log.Info("Primary Setup fee is {0} bigger then max {1}, adjusting", setupFee, maxSetupFee);
+                setupFee = maxSetupFee;
+            }
+
+        }//AdjustToMinMaxSetupFee
+
+
+
+        /// <summary>
+        /// Retrieve the preferable COSME interest rate based on customers personal and business score
+        /// TODO make configurable in DB
+        /// </summary>
+        /// <returns>preferable interest rate</returns>
+        private decimal GetCOSMELoanMonthlyInterest(int consumerScore, int companyScore) {
+            if (consumerScore < 1040 && companyScore == 0) {
+                return 0.0225M;
+            }
+            if (consumerScore >= 1040 && companyScore == 0) {
+                return 0.0175M;
+            }
+            if (consumerScore < 1040 && companyScore >= 50) {
+                return 0.02M;
+            }
+            if (consumerScore >= 1040 && companyScore >= 50) {
+                return 0.0175M;
+            }
+            //if companyScore < 50
+            return 0.0225M;
+        }
+
+
+        private decimal GetSetupFeeForCOSME(PricingModelModel model) {
+            Loan loan = CreateLoan(model.LoanAmount, model.MonthlyInterestRate, model.FeesRevenue, (int)model.TenureMonths);
+            
+            decimal costOfDebtEu = GetCostOfDebt(model.LoanAmount, model.DebtPercentOfCapital, model.CostOfDebt, loan.Schedule);
+            decimal interestRevenue = loan.Schedule.Sum(scheuldeItem => scheuldeItem.Interest);
+            interestRevenue *= 1 - model.DefaultRate;
+            decimal netLossFromDefaults = (1 - model.CosmeCollectionRate) * model.LoanAmount * model.DefaultRate;
+            decimal totalCost = model.Cogs + model.OpexAndCapex + netLossFromDefaults + costOfDebtEu;
+            decimal profit = totalCost / (1 - model.ProfitMarkup);
+            decimal setupFeePounds = profit - interestRevenue;
+            decimal setupFee = setupFeePounds / model.LoanAmount;
+
+            return setupFee;
+        }
+
+        private Loan CreateLoan(decimal loanAmount, decimal interestRate, decimal setupFee, int tenureMonths) {
+            var calculator = new LoanScheduleCalculator { Interest = interestRate, Term = tenureMonths };
+            LoanType lt = new StandardLoanType();
+            var loan = new Loan {
+                LoanAmount = loanAmount,
+                Date = DateTime.UtcNow,
+                LoanType = lt,
+                CashRequest = null,
+                SetupFee = setupFee,
+                LoanLegalId = 1
+            };
+            calculator.Calculate(loanAmount, loan, loan.Date);
+
+            var calc = new LoanRepaymentScheduleCalculator(loan, loan.Date, CurrentValues.Instance.AmountToChargeFrom);
+            calc.GetState();
+
+            return loan;
+        }
+
+        private decimal GetCostOfDebt(decimal loanAmount, decimal debtPercentOfCapital, decimal costOfDebt, IEnumerable<LoanScheduleItem> schedule) {
+            decimal costOfDebtOutput = 0;
+            decimal balanceAtBeginningOfMonth = loanAmount;
+            foreach (LoanScheduleItem scheuldeItem in schedule) {
+                costOfDebtOutput += balanceAtBeginningOfMonth * debtPercentOfCapital * costOfDebt / 12;
+                balanceAtBeginningOfMonth = scheuldeItem.Balance;
+            }
+
+            return costOfDebtOutput;
+        }
+
+        private void SetRounded(OfferResult result, decimal interestRate, decimal setupFee) {
+            result.InterestRate = Math.Ceiling(interestRate * 2000) / 20;
+            result.SetupFee = Math.Ceiling(setupFee * 200) / 2;
+
+            this.log.Info("Rounding setup fee {0} -> {1}, interest rate {2} - > {3}", setupFee, result.SetupFee, interestRate, result.InterestRate);
+        } // SetRounded
+        
+        private readonly AConnection db;
+        private readonly ASafeLog log;
+
+        /*
 		private void CalculateInterestRateAndSetupFee(
 			int customerId,
 			int amount,
-			Medal medalClassification,
+			EZBob.DatabaseLib.Model.Database.Medal medalClassification,
 			OfferResult result,
 			PricingModelModel templateModel
 		) {
@@ -307,15 +420,7 @@
 
 			SetRounded(result, pricingModelCalculator.Model.MonthlyInterestRate, setupFee);
 		} // RoundSetupFeeAndRecalculateInterestRate
-
-		private void SetRounded(OfferResult result, decimal interestRate, decimal setupFee) {
-			result.InterestRate = Math.Ceiling(interestRate * 2000) / 20;
-			result.SetupFee = Math.Ceiling(setupFee * 200) / 2;
-		} // SetRounded
-
-		private readonly ASafeLog log;
-		private readonly AConnection db;
-
-		private const decimal SetupFeeStep = 0.0005M;
-	} // class OfferCalculator1
+         private const decimal SetupFeeStep = 0.0005M;
+        */
+    } // class OfferCalculator1
 } // namespace

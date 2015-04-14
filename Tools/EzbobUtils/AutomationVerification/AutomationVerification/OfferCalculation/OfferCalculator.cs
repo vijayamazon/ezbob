@@ -6,33 +6,28 @@
 	using Ezbob.ValueIntervals;
 
 	public class OfferCalculator {
-		public OfferCalculator(AConnection db, ASafeLog log) {
+
+	    public OfferCalculator(AConnection db, ASafeLog log) {
 			DB = db;
 			Log = log;
-		} // calculator
+            this.dbHelper = new DbHelper(DB, Log);
+		} // constructor
 
 		/// <summary>
-		/// Get Offer Using seek (change setup fee to find interest rate in range
+		/// Get Offer For COSME loan source using hard coded interest selection and calculated setup fee
 		/// </summary>
-		/// <param name="input"></param>
-		/// <returns></returns>
 		public OfferOutputModel GetOfferBySeek(OfferInputModel input) {
-			var dbHelper = new DbHelper(DB, Log);
-
-			OfferSetupFeeRangeModelDb setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
-			OfferInterestRateRangeModelDb interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
-
-			interestRateRange.MaxInterestRate = interestRateRange.MaxInterestRate / 100;
-			interestRateRange.MinInterestRate = interestRateRange.MinInterestRate / 100;
-
-			var pricingScenario = dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
+			
+			var pricingScenario = this.dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
 
 			var outModel = new OfferOutputModel {
 				ScenarioName = pricingScenario.ScenarioName,
 				Amount = input.Amount,
 				CustomerId = input.CustomerId,
 				Medal = input.Medal,
-				CalculationTime = DateTime.UtcNow
+				CalculationTime = DateTime.UtcNow,
+                LoanSourceID = input.LoanSourceId,
+                RepaymentPeriod = input.RepaymentPeriod
 			};
 
 			var pricingCalculator = new PricingCalculator(
@@ -44,100 +39,158 @@
 				Log
 			);
 
-			if (input.AspireToMinSetupFee) {
-				bool wasTooSmallInterest = false;
+			//return CalculateLegacyOfferBySeek(input, setupFeeRange, pricingScenario, pricingCalculator, interestRateRange, outModel);
 
-				decimal setupFee = setupFeeRange.MinSetupFee;
+		    decimal interestRate = GetCOSMEInterestRate(pricingCalculator.ConsumerScore, pricingCalculator.CompanyScore);
+            decimal setupFee = pricingCalculator.GetSetupfee(interestRate, input.LoanSourceId == CosmeLoanSourceId);
 
-				do {
-					pricingScenario.SetupFee = setupFee;
+		    outModel.InterestRate = interestRate*100;
 
-					decimal interest = pricingCalculator.GetInterestRate();
+            setupFee = AdjustMinMaxSetupFee(input.Amount, setupFee);
 
-					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
-						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = RoundSetupFee(setupFee / 100);
-						outModel.HasDecision = true;
-						return outModel;
-					} // if
+		    outModel.SetupFee = RoundSetupFee(setupFee);
+            Log.Info("Verification Rounding setup fee {0} -> {1}", setupFee, outModel.SetupFee);
+            
+		    return outModel;
+		}// GetOfferBySeek
 
-					if (interest > interestRateRange.MaxInterestRate && wasTooSmallInterest) {
-						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = RoundSetupFee(setupFee / 100);
-						outModel.HasDecision = true;
-						return outModel;
-					} // if
+	    private decimal AdjustMinMaxSetupFee(int amount, decimal setupFee) {
+	        OfferSetupFeeRangeModelDb setupFeeRange = this.dbHelper.GetOfferSetupFeeRange(amount);
+	        setupFeeRange.MaxSetupFee /= 100;
+	        setupFeeRange.MinSetupFee /= 100;
 
-					wasTooSmallInterest = interest < interestRateRange.MinInterestRate;
+	        if (setupFee < setupFeeRange.MinSetupFee) {
+	            Log.Info("Verification Setup fee is {0} less then min {1}, adjusting", setupFee, setupFeeRange.MinSetupFee);
+	            setupFee = setupFeeRange.MinSetupFee;
+	        }
 
-					setupFee += SetupFeeStep;
-				} while (setupFee <= setupFeeRange.MaxSetupFee);
-			} else {
-				bool wasTooBigIneterest = false;
+	        if (setupFee > setupFeeRange.MaxSetupFee) {
+	            Log.Info("Verification Setup fee is {0} bigger then max {1}, adjusting", setupFee, setupFeeRange.MaxSetupFee);
+	            setupFee = setupFeeRange.MaxSetupFee;
+	        }
+	        return setupFee;
+	    }//AdjustMinMaxSetupFee
 
-				decimal setupFee = setupFeeRange.MaxSetupFee;
 
-				do {
-					pricingScenario.SetupFee = setupFee;
 
-					decimal interest = pricingCalculator.GetInterestRate();
+	    private decimal GetCOSMEInterestRate(int consumerScore, int companyScore) {
+            if (consumerScore < 1040 && companyScore == 0)   { return 0.0225M; }
+            if (consumerScore >= 1040 && companyScore == 0)  { return 0.0175M; }
+            if (consumerScore < 1040 && companyScore >= 50)  { return 0.0200M; }
+            if (consumerScore >= 1040 && companyScore >= 50) { return 0.0175M; }
+            //if companyScore < 50
+            return 0.0225M;
+	    }//GetCOSMEInterestRate
 
-					if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
-						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = RoundSetupFee(setupFee / 100);
-						outModel.HasDecision = true;
-						return outModel;
-					} // if
+        /// <summary>
+        /// This is the old function kept for reference, not in use
+        /// </summary>
+        internal OfferOutputModel CalculateLegacyOfferBySeek(
+            OfferInputModel input,
+            PricingScenarioModel pricingScenario, 
+            PricingCalculator pricingCalculator, 
+            OfferOutputModel outModel) {
+            OfferSetupFeeRangeModelDb setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
+            OfferInterestRateRangeModelDb interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
 
-					if (interest < interestRateRange.MinInterestRate && wasTooBigIneterest) {
-						outModel.InterestRate = RoundInterest(interest);
-						outModel.SetupFee = RoundSetupFee(setupFee / 100);
-						outModel.HasDecision = true;
-						return outModel;
-					} // if
+            interestRateRange.MaxInterestRate = interestRateRange.MaxInterestRate / 100;
+            interestRateRange.MinInterestRate = interestRateRange.MinInterestRate / 100;
 
-					wasTooBigIneterest = interest > interestRateRange.MaxInterestRate;
+	        if (input.AspireToMinSetupFee) {
+	            bool wasTooSmallInterest = false;
 
-					setupFee -= SetupFeeStep;
-				} while (setupFee <= setupFeeRange.MaxSetupFee);
-			} // if
+	            decimal setupFee = setupFeeRange.MinSetupFee;
 
-			outModel.Message = "No interest rate found in range.";
+	            do {
+	                pricingScenario.SetupFee = setupFee;
 
-			if (input.AspireToMinSetupFee) {
-				outModel.InterestRate = RoundInterest(interestRateRange.MaxInterestRate);
-				outModel.SetupFee = RoundSetupFee(setupFeeRange.MinSetupFee / 100);
-			} else {
-				outModel.InterestRate = RoundInterest(interestRateRange.MinInterestRate);
-				outModel.SetupFee = RoundSetupFee(setupFeeRange.MaxSetupFee / 100);
-			} // if
+	                decimal interest = pricingCalculator.GetInterestRate();
 
-			return outModel;
-		} // GetOfferBySeek
+	                if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
+	                    outModel.InterestRate = RoundInterest(interest);
+	                    outModel.SetupFee = RoundSetupFee(setupFee / 100);
+	                    outModel.HasDecision = true;
+	                    return outModel;
+	                } // if
+
+	                if (interest > interestRateRange.MaxInterestRate && wasTooSmallInterest) {
+	                    outModel.InterestRate = RoundInterest(interest);
+	                    outModel.SetupFee = RoundSetupFee(setupFee / 100);
+	                    outModel.HasDecision = true;
+	                    return outModel;
+	                } // if
+
+	                wasTooSmallInterest = interest < interestRateRange.MinInterestRate;
+
+	                setupFee += SetupFeeStep;
+	            } while (setupFee <= setupFeeRange.MaxSetupFee);
+	        } else {
+	            bool wasTooBigIneterest = false;
+
+	            decimal setupFee = setupFeeRange.MaxSetupFee;
+
+	            do {
+	                pricingScenario.SetupFee = setupFee;
+
+	                decimal interest = pricingCalculator.GetInterestRate();
+
+	                if (interest >= interestRateRange.MinInterestRate && interest <= interestRateRange.MaxInterestRate) {
+	                    outModel.InterestRate = RoundInterest(interest);
+	                    outModel.SetupFee = RoundSetupFee(setupFee / 100);
+	                    outModel.HasDecision = true;
+	                    return outModel;
+	                } // if
+
+	                if (interest < interestRateRange.MinInterestRate && wasTooBigIneterest) {
+	                    outModel.InterestRate = RoundInterest(interest);
+	                    outModel.SetupFee = RoundSetupFee(setupFee / 100);
+	                    outModel.HasDecision = true;
+	                    return outModel;
+	                } // if
+
+	                wasTooBigIneterest = interest > interestRateRange.MaxInterestRate;
+
+	                setupFee -= SetupFeeStep;
+	            } while (setupFee <= setupFeeRange.MaxSetupFee);
+	        } // if
+
+	        outModel.Message = "No interest rate found in range.";
+
+	        if (input.AspireToMinSetupFee) {
+	            outModel.InterestRate = RoundInterest(interestRateRange.MaxInterestRate);
+	            outModel.SetupFee = RoundSetupFee(setupFeeRange.MinSetupFee / 100);
+	        } else {
+	            outModel.InterestRate = RoundInterest(interestRateRange.MinInterestRate);
+	            outModel.SetupFee = RoundSetupFee(setupFeeRange.MaxSetupFee / 100);
+	        } // if
+
+	        return outModel;
+	    }//CalculateLegacyOfferBySeek
 
 		/// <summary>
+		/// this is old function kept for reference, not in use
 		/// calc setup fee for max interest rate (f1) and for min interest rate (f2)
 		/// find if any (f1,f2) ∩ (x1, x2) min max interest rate configuration based on medal.
 		/// </summary>
 		/// <param name="input"></param>
 		/// <returns>Offer model : interest rate, setup fee, repayment period, loan type and source</returns>
-		public OfferOutputModel GetOfferByBoundaries(OfferInputModel input) {
-			var dbHelper = new DbHelper(DB, Log);
+		public OfferOutputModel GetOfferByBoundariesLegacy(OfferInputModel input) {
+			OfferSetupFeeRangeModelDb setupFeeRange = this.dbHelper.GetOfferSetupFeeRange(input.Amount);
+            OfferInterestRateRangeModelDb interestRateRange = this.dbHelper.GetOfferIneterestRateRange(input.Medal);
 
-			OfferSetupFeeRangeModelDb setupFeeRange = dbHelper.GetOfferSetupFeeRange(input.Amount);
-			OfferInterestRateRangeModelDb interestRateRange = dbHelper.GetOfferIneterestRateRange(input.Medal);
-
-			interestRateRange.MaxInterestRate = interestRateRange.MaxInterestRate / 100;
-			interestRateRange.MinInterestRate = interestRateRange.MinInterestRate / 100;
-
-			PricingScenarioModel pricingScenario = dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
+            interestRateRange.MaxInterestRate = interestRateRange.MaxInterestRate / 100;
+            interestRateRange.MinInterestRate = interestRateRange.MinInterestRate / 100;
+            
+			PricingScenarioModel pricingScenario = this.dbHelper.GetPricingScenario(input.Amount, input.HasLoans);
 
 			var outModel = new OfferOutputModel {
 				ScenarioName = pricingScenario.ScenarioName,
 				Amount = input.Amount,
 				Medal = input.Medal,
 				CustomerId = input.CustomerId,
-				CalculationTime = DateTime.UtcNow
+				CalculationTime = DateTime.UtcNow,
+                LoanSourceID = input.LoanSourceId,
+                RepaymentPeriod = input.RepaymentPeriod
 			};
 
 			var pricingCalculator = new PricingCalculator(
@@ -150,8 +203,7 @@
 			);
 
 			decimal setupfeeRight = pricingCalculator.GetSetupfee(interestRateRange.MinInterestRate);
-
-			decimal setupfeeLeft = pricingCalculator.GetSetupfee(interestRateRange.MaxInterestRate);
+            decimal setupfeeLeft = pricingCalculator.GetSetupfee(interestRateRange.MaxInterestRate);
 
 			TInterval<decimal> calcSetupfees = new TInterval<decimal>(
 				new DecimalIntervalEdge(setupfeeLeft),
@@ -194,12 +246,7 @@
 			} // if
 
 			return outModel;
-		} // GetOfferByBoundaries
-
-		protected decimal SetupFeeStep { get { return 0.05M; } }
-		protected decimal InterestRateStep { get { return 0.005M; } }
-		protected ASafeLog Log { get; set; }
-		protected AConnection DB { get; set; }
+		} // GetOfferByBoundariesLegacy
 
 		private decimal RoundInterest(decimal interest) {
 			return Math.Ceiling(Math.Round(interest, 4, MidpointRounding.AwayFromZero) * 2000) / 20;
@@ -208,5 +255,13 @@
 		private decimal RoundSetupFee(decimal setupFee) {
 			return Math.Ceiling(setupFee * 200) / 2;
 		} // RoundSetupFee
+
+        protected const decimal SetupFeeStep = 0.05M; 
+        protected const decimal InterestRateStep = 0.005M;
+	    protected const int CosmeLoanSourceId = 3;
+        protected ASafeLog Log { get; set; }
+        protected AConnection DB { get; set; }
+        private readonly DbHelper dbHelper;
+
 	} // class OfferCalculator
 } // namespace

@@ -496,14 +496,13 @@
 			var now = DateTime.UtcNow;
 
 			decimal interestRateToUse;
-			decimal setupFeePercentToUse, setupFeeAmountToUse;
+			decimal setupFeePercentToUse;
 			int repaymentPeriodToUse;
 			LoanType loanTypeIdToUse;
 
 			if (this.autoDecisionResponse.IsAutoApproval) {
 				interestRateToUse = this.autoDecisionResponse.InterestRate;
 				setupFeePercentToUse = this.autoDecisionResponse.SetupFee;
-				setupFeeAmountToUse = setupFeePercentToUse * this.offeredCreditLine;
 				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
 				loanTypeIdToUse =
 					this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID) ??
@@ -512,7 +511,6 @@
 				//TODO check this code!!!
 				interestRateToUse = this.lastOffer.LoanOfferInterestRate;
 				setupFeePercentToUse = this.lastOffer.ManualSetupFeePercent;
-				setupFeeAmountToUse = this.lastOffer.ManualSetupFeeAmount;
 				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
 				loanTypeIdToUse = this.loanTypeRepository.GetDefault();
 			} // if
@@ -579,24 +577,21 @@
 					cr.RepaymentPeriod = repaymentPeriodToUse;
 				} // if
 
-				cr.ManualSetupFeeAmount = (int)setupFeeAmountToUse;
+			
 				cr.ManualSetupFeePercent = setupFeePercentToUse;
-				cr.UseSetupFee = setupFeeAmountToUse > 0 || setupFeePercentToUse > 0;
 				cr.APR = this.lastOffer.LoanOfferApr;
 
 				if (this.autoDecisionResponse.IsAutoReApproval) {
-					cr.UseSetupFee = this.autoDecisionResponse.SetupFeeEnabled;
 					cr.EmailSendingBanned = this.autoDecisionResponse.LoanOfferEmailSendingBannedNew;
 					cr.IsCustomerRepaymentPeriodSelectionAllowed =
 						this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
 					cr.DiscountPlan = this.autoDecisionResponse.DiscountPlanID.HasValue
 						? this.discountPlanRepository.Get(this.autoDecisionResponse.DiscountPlanID.Value)
-						: null;
-					cr.UseBrokerSetupFee = this.autoDecisionResponse.BrokerSetupFeeEnabled;
+                        : this.discountPlanRepository.GetDefault();
+			
 					cr.LoanSource = this.loanSourceRepository.Get(this.autoDecisionResponse.LoanSourceID);
 					cr.LoanType = this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID);
-					cr.ManualSetupFeeAmount = this.autoDecisionResponse.ManualSetupFeeAmount;
-					cr.ManualSetupFeePercent = this.autoDecisionResponse.ManualSetupFeePercent;
+					cr.ManualSetupFeePercent = this.autoDecisionResponse.SetupFee;
 				} // if
 			} // if
 

@@ -406,9 +406,9 @@
 
 				odc.CalculateOffer();
 
-				RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
-				InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
-				SetupFeePct = odc.VerifyBoundaries.SetupFee / 100.0m;
+				RepaymentPeriod = odc.VerifySeek.RepaymentPeriod;
+                InterestRate = odc.VerifySeek.InterestRate / 100.0m;
+                SetupFeePct = odc.VerifySeek.SetupFee / 100.0m;
 				SetupFeeAmount = ApprovedAmount * SetupFeePct;
 
 				Log.Info(
@@ -489,9 +489,9 @@
 
 				odc.CalculateOffer();
 
-				MaxOffer.RepaymentPeriod = odc.VerifyBoundaries.RepaymentPeriod;
-				MaxOffer.InterestRate = odc.VerifyBoundaries.InterestRate / 100.0m;
-				MaxOffer.SetupFeePct = odc.VerifyBoundaries.SetupFee / 100.0m;
+				MaxOffer.RepaymentPeriod = odc.VerifySeek.RepaymentPeriod;
+                MaxOffer.InterestRate = odc.VerifySeek.InterestRate / 100.0m;
+                MaxOffer.SetupFeePct = odc.VerifySeek.SetupFee / 100.0m;
 				MaxOffer.SetupFeeAmount = MaxOffer.ApprovedAmount * MaxOffer.SetupFeePct;
 			} // if
 		} // CalculateMaxOffer

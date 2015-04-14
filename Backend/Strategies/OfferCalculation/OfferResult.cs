@@ -13,8 +13,8 @@
 		// Outputs
 		public string ScenarioName { get; set; }
 		public int Period { get; set; }
-		public bool IsEu { get; set; }
 		public int LoanTypeId { get; set; }
+        public int LoanSourceId { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
 		public string Message { get; set; }
@@ -56,7 +56,6 @@
 				new QueryParameter("MedalClassification", MedalClassification.ToString()),
 				new QueryParameter("ScenarioName", ScenarioName),
 				new QueryParameter("Period", Period),
-				new QueryParameter("IsEu", IsEu),
 				new QueryParameter("LoanTypeId", LoanTypeId),
 				new QueryParameter("InterestRate", InterestRate),
 				new QueryParameter("SetupFee", SetupFee),
@@ -66,8 +65,8 @@
 
 		public override string ToString() {
 			return string.Format(
-				"InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, IsEu: {4} {5}",
-				InterestRate, SetupFee, Period, LoanTypeId, IsEu, Description
+				"InterestRate {0}, SetupFee: {1}, RepaymentPeriod: {2}, LoanType: {3}, {4}",
+				InterestRate, SetupFee, Period, LoanTypeId, Description
 			);
 		} // ToString
 

@@ -12,7 +12,6 @@ ALTER PROCEDURE AV_StoreOffer
 	,@Medal NVARCHAR(50)	
 	,@ScenarioName NVARCHAR(50)
 	,@Period INT
-	,@IsEu BIT
 	,@LoanType NVARCHAR(30)
 	,@LoanSource NVARCHAR(30)
 	,@InterestRate DECIMAL(18,6)
@@ -26,8 +25,8 @@ BEGIN
 	BEGIN 
 
 	UPDATE OfferCalculationsSeekAV SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
-	INSERT INTO OfferCalculationsSeekAV (CustomerId,CalculationTime,IsActive,Amount,Medal,ScenarioName,Period,IsEu,LoanType,LoanSource,InterestRate,SetupFee,Error)
-	VALUES ( @CustomerId,@CalculationTime,1,@Amount,@Medal,@ScenarioName,@Period,@IsEu,@LoanType,@LoanSource,@InterestRate,@SetupFee,@Error)
+	INSERT INTO OfferCalculationsSeekAV (CustomerId,CalculationTime,IsActive,Amount,Medal,ScenarioName,Period,LoanType,LoanSource,InterestRate,SetupFee,Error)
+	VALUES ( @CustomerId,@CalculationTime,1,@Amount,@Medal,@ScenarioName,@Period,@LoanType,@LoanSource,@InterestRate,@SetupFee,@Error)
 	
 	END 
 	
@@ -35,12 +34,13 @@ BEGIN
 	BEGIN 
 
 	UPDATE OfferCalculationsBoundariesAV SET IsActive = 0 WHERE IsActive = 1 AND CustomerId = @CustomerId
-	INSERT INTO OfferCalculationsBoundariesAV (CustomerId,CalculationTime,IsActive,Amount,Medal,ScenarioName,Period,IsEu,LoanType,LoanSource,InterestRate,SetupFee,Error)
-	VALUES ( @CustomerId,@CalculationTime,1,@Amount,@Medal,@ScenarioName,@Period,@IsEu,@LoanType,@LoanSource,@InterestRate,@SetupFee,@Error)
+	INSERT INTO OfferCalculationsBoundariesAV (CustomerId,CalculationTime,IsActive,Amount,Medal,ScenarioName,Period,LoanType,LoanSource,InterestRate,SetupFee,Error)
+	VALUES ( @CustomerId,@CalculationTime,1,@Amount,@Medal,@ScenarioName,@Period,@LoanType,@LoanSource,@InterestRate,@SetupFee,@Error)
 	
 	END 
 	
 	
 END
+
 
 GO

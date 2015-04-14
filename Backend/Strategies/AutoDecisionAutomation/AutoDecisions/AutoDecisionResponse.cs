@@ -36,12 +36,7 @@
 		public int LoanTypeID { get; set; }
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
-		public bool SetupFeeEnabled { get; set; }
-		public bool BrokerSetupFeeEnabled { get; set; }
-		public decimal ManualSetupFeePercent { get; set; }
-		public int ManualSetupFeeAmount { get; set; }
 		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 		public int? DiscountPlanID { get; set; }
-
 	} // class AutoDecisionResponse
 } // namespace
