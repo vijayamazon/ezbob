@@ -31,7 +31,7 @@
 		} // VerifyMedal
 
 		public ActionMetaData SilentAutomation(int customerID, int underwriterID) {
-			return ExecuteSync<SilentAutomation>(customerID, underwriterID, customerID);
+			return Execute<SilentAutomation>(customerID, underwriterID, customerID);
 		} // SilentAutomation
 
 		public ActionMetaData TotalMaamMedalAndPricing() {
