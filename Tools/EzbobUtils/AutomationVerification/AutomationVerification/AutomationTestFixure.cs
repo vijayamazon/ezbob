@@ -41,17 +41,7 @@
 
 			Assert.AreEqual(Medal.Gold, medal.Medal);
 		}
-
-		[Test]
-		public void TestIsOffline() {
-			var db = new DbHelper(_db, Log);
-			var isOffline = db.IsOffline(25);
-			Assert.AreEqual(false, isOffline);
-
-			isOffline = db.IsOffline(14183);
-			Assert.AreEqual(true, isOffline);
-		}
-
+        
 		[Test]
 		public void TestMedalChooser() {
 			var medalChooser = new MedalChooser(_db, Log);
@@ -104,13 +94,6 @@
 		//	Assert.AreEqual(offer1.SetupFee, offer2.SetupFee);
 			offer1.SaveToDb(Log, db, OfferCalculationType.Seek);
 		//	offer2.SaveToDb(Log, db, OfferCalculationType.Boundaries);
-		}
-
-		[Test]
-		public void TestOriginationTime() {
-			var db = new DbHelper(_db, Log);
-			var origTime = db.GetCustomerMarketPlacesOriginationTimes(14223);
-			Assert.NotNull(origTime.Since);
 		}
 
 		[Test]

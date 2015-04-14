@@ -28,128 +28,6 @@
 			return consts;
 		} // GetRejectionConfigs
 
-		public DateTime? GetCustomerBirthDate(int customerId) {
-			return _db.ExecuteScalar<DateTime?>("AV_GetCustomerBirthDate", new QueryParameter("@CustomerId", customerId));
-		}
-
-		/// <summary>
-		///     Retrieve all online shops and paypal
-		/// </summary>
-		/// <param name="customerId">Customer Id</param>
-		/// <returns></returns>
-		public List<MarketPlace> GetCustomerMarketPlaces(int customerId) {
-			var mps = _db.Fill<MarketPlace>("AV_GetCustomerMarketPlaces", new QueryParameter("@CustomerId", customerId));
-			return mps;
-		}
-
-		/// <summary>
-		///     Retrieve all payment accounts without paypal
-		/// </summary>
-		/// <param name="customerId">Customer Id</param>
-		/// <returns></returns>
-		public List<MarketPlace> GetCustomerPaymentMarketPlaces(int customerId) {
-			var mps = _db.Fill<MarketPlace>("AV_GetCustomerPaymentMarketPlaces", new QueryParameter("@CustomerId", customerId));
-			return mps;
-		}
-
-		/// <summary>
-		///     Retrieve last analysis functions values (only doubles)
-		/// </summary>
-		/// <param name="mpId">Marketplace id</param>
-		/// <returns></returns>
-		public List<AnalysisFunction> GetAnalysisFunctions(int mpId) {
-			var srList = _db.ExecuteEnumerable("AV_GetAnalysisFunctions", new QueryParameter("@CustomerMarketPlaceId", mpId));
-
-			var afvs = new List<AnalysisFunction>();
-			foreach (SafeReader row in srList) {
-				afvs.Add(new AnalysisFunction {
-					Updated = row["Updated"],
-					MarketPlaceName = row["MarketPlaceName"],
-					Value = row["Value"],
-					Function = row["FunctionName"],
-					TimePeriod = (TimePeriodEnum)(int.Parse(row["TimePeriod"].ToString())),
-				});
-			}
-			return afvs;
-		}
-
-		/// <summary>
-		///     Retrieve last analysis functions values form min annualized income for ebay/amazon/paypal mp by for 1m 3m 6m 1y and
-		///     1y not annualized
-		/// </summary>
-		/// <returns></returns>
-		public OnlineRevenues GetOnlineAnnaulizedRevenueForPeriod(int mpId) {
-			var onlineRevenue = _db.FillFirst<OnlineRevenues>("AV_GetAnnualizedRevenueForPeriod", new QueryParameter("@CustomerMarketPlaceId", mpId));
-			return onlineRevenue;
-		}
-
-		public int GetExperianScore(int customerId) {
-			var sr = _db.GetFirst("AV_GetExperianScore", new QueryParameter("@CustomerId", customerId));
-			if (sr.Count == 0)
-				return 0;
-			//todo retrieve defaults 
-			return sr["ExperianScore"];
-		}
-
-		public bool WasApprovedForLoan(int customerId) {
-			return bool.Parse(_db.ExecuteScalar<string>("AV_WasLoanApproved", new QueryParameter("@CustomerId", customerId)));
-		}
-
-		//todo retrieve defaults accounts num, amount, lates
-		public bool HasDefaultAccounts(int customerId, int minDefBalance) {
-			return bool.Parse(_db.ExecuteScalar<string>("AV_HasDefaultAccounts", new QueryParameter("@CustomerId", customerId), new QueryParameter("@MinDefBalance", minDefBalance)));
-		}
-
-		public IEnumerable<SafeReader> GetAutoDecisions(DateTime from, DateTime to) {
-			return _db.ExecuteEnumerable("AV_GetAutomaticDecisions", new QueryParameter("@DateStart", from), new QueryParameter("@DateEnd", to));
-		}
-
-		public ReRejectionData GetReRejectionData(int customerId, int cashRequestId) {
-			var sqlData = _db.GetFirst("AV_ReRejectionData",
-				new QueryParameter("@CustomerId", customerId),
-				new QueryParameter("@CashRequestId", cashRequestId));
-
-			var data = new ReRejectionData {
-				ManualRejectDate = string.IsNullOrEmpty(sqlData["ManualRejectDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData["ManualRejectDate"].ToString()),
-				IsNewClient = bool.Parse(sqlData["IsNewClient"].ToString()),
-				NewDataSourceAdded = bool.Parse(sqlData["NewDataSourceAdded"].ToString()),
-				LoanAmount = int.Parse(sqlData["LoanAmount"].ToString()),
-				RepaidAmount = decimal.Parse(sqlData["RepaidAmount"].ToString()),
-				AutomaticDecisionDate = string.IsNullOrEmpty(sqlData["AutomaticDecisionDate"].ToString()) ? DateTime.UtcNow : DateTime.Parse(sqlData["AutomaticDecisionDate"].ToString())
-			};
-			return data;
-		}
-
-		public ReApprovalData GetReApprovalData(int customerId, int cashRequestId) {
-			var sqlData = _db.GetFirst("AV_ReApprovalData",
-				new QueryParameter("@CustomerId", customerId),
-				new QueryParameter("@CashRequestId", cashRequestId));
-
-			var data = new ReApprovalData {
-				ManualApproveDate = string.IsNullOrEmpty(sqlData["ManualApproveDate"].ToString()) ? (DateTime?)null : DateTime.Parse(sqlData["ManualApproveDate"].ToString()),
-				IsNewClient = bool.Parse(sqlData["IsNewClient"].ToString()),
-				NewDataSourceAdded = bool.Parse(sqlData["NewDataSourceAdded"].ToString()),
-				OfferedAmount = string.IsNullOrEmpty(sqlData["OfferedAmount"].ToString()) ? 0 : int.Parse(sqlData["OfferedAmount"].ToString()),
-				PrincipalRepaymentsSinceOffer = string.IsNullOrEmpty(sqlData["PrincipalRepaymentsSinceOffer"].ToString()) ? 0 : decimal.Parse(sqlData["PrincipalRepaymentsSinceOffer"].ToString()),
-				TookAmountLastRequest = string.IsNullOrEmpty(sqlData["TookAmountLastRequest"].ToString()) ? 0 : int.Parse(sqlData["TookAmountLastRequest"].ToString()),
-				TookLoanLastRequest = bool.Parse(sqlData["TookLoanLastRequest"].ToString()),
-				WasLate = bool.Parse(sqlData["WasLate"].ToString()),
-			};
-			return data;
-		}
-
-		public decimal GetMedalRate(int customerId) {
-			return _db.ExecuteScalar<decimal>("AV_GetMedalRate", new QueryParameter("@CustomerId", customerId));
-		}
-
-		public bool IsOffline(int customerId) {
-			return _db.ExecuteScalar<bool>("AV_IsCustomerOffline", new QueryParameter("@CustomerId", customerId));
-		}
-
-		public int GetExperianCompanyScore(int customerId) {
-			throw new NotImplementedException();
-		}
-
 		public List<MedalComparisonModel> GetMedalTestData() {
 			var model = new List<MedalComparisonModel>();
 			_db.ForEachRowSafe((sr, bRowsetStart) => {
@@ -293,16 +171,6 @@
 			return customers;
 		}
 
-		public YodleeRevenuesModelDb GetYodleeRevenues(int customerMarketplaceId) {
-			var model = _db.FillFirst<YodleeRevenuesModelDb>("AV_GetYodleeRevenues", CommandSpecies.StoredProcedure, new QueryParameter("CustomerMarketplaceId", customerMarketplaceId));
-			return model;
-		}
-
-		public decimal GetYodleeRevenuesQuerter(int customerMarketplaceId) {
-			var model = _db.ExecuteScalar<decimal>("AV_GetYodleeRevenuesQuarter", CommandSpecies.StoredProcedure, new QueryParameter("CustomerMarketplaceId", customerMarketplaceId));
-			return model;
-		}
-
 		public OfferSetupFeeRangeModelDb GetOfferSetupFeeRange(int amount) {
 			return _db.FillFirst<OfferSetupFeeRangeModelDb>("AV_GetOfferSetupFeeRange", CommandSpecies.StoredProcedure,
 				new QueryParameter("Amount", amount));
@@ -316,15 +184,6 @@
 		public PricingScenarioModel GetPricingScenario(int amount, bool hasLoans) {
 			var model = _db.FillFirst<PricingScenarioModel>("AV_PricingScenario", new QueryParameter("Amount", amount), new QueryParameter("HasLoans", hasLoans));
 			return model;
-		}
-
-		public OriginationTime GetCustomerMarketPlacesOriginationTimes(int customerId) {
-			var srList = _db.ExecuteEnumerable("LoadCustomerMarketplaceOriginationTimes", CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerId));
-			var originationTime = new OriginationTime(_log);
-			foreach (var safeReader in srList)
-				originationTime.Process(safeReader);
-			return originationTime;
 		}
 
 		public AvailableFunds GetAvailableFunds() {
