@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
     using System;
+    using System.Linq;
     using System.Text.RegularExpressions;
     using ConfigManager;
     using Ezbob.Backend.Models;
@@ -65,23 +66,31 @@
                 }
 
                 broker.BankAccounts.Add(cardInfo);
+                
+                var loanCommissionsWithoutCard = broker.LoanBrokerCommissions.Where(x => x.CardInfo == null && x.PaidDate == null && x.Status != "Done");
+                foreach (var commission in loanCommissionsWithoutCard) {
+                    commission.CardInfo = cardInfo;
+                }
+
                 brokerRepository.SaveOrUpdate(broker);
+
+                
             }
-            catch (SortCodeNotFoundException)
-            {
+            catch (SortCodeNotFoundException){
                 throw new StrategyWarning(this, "Sort code was not found");
             }
-            catch (UnknownSortCodeException)
-            {
+            catch (UnknownSortCodeException){
                 throw new StrategyWarning(this, "Sort code was not found");
             }
-            catch (InvalidAccountNumberException)
-            {
+            catch (InvalidAccountNumberException){
                 throw new StrategyWarning(this, "Account number is not valid");
             }
-            catch (NotValidSortCodeException)
-            {
+            catch (NotValidSortCodeException){
                 throw new StrategyWarning(this, "Sort code is not valid");
+            } 
+            catch (Exception ex) {
+                Log.Error(ex, "BrokerAddBank failed");
+                throw new StrategyWarning(this, "Failed adding bank account");
             }
 		} // Execute
 

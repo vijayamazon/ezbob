@@ -1,10 +1,12 @@
 namespace EZBob.DatabaseLib.Model.Database.Broker {
+    using EZBob.DatabaseLib.Model.Loans;
     using Iesi.Collections.Generic;
 
     public class Broker {
         public Broker()
         {
-            this._bankAccounts = new HashedSet<CardInfo>();
+            this.bankAccounts = new HashedSet<CardInfo>();
+            this.loanBrokerCommissions = new HashedSet<LoanBrokerCommission>();
         }
 		public virtual int ID { get; set; }
 		public virtual string FirmName { get; set; }
@@ -17,12 +19,17 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
 		public virtual decimal EstimatedMonthlyClientAmount { get; set; }
 		public virtual WhiteLabelProvider WhiteLabel { get; set; }
         
-        private Iesi.Collections.Generic.ISet<CardInfo> _bankAccounts;
-        public virtual Iesi.Collections.Generic.ISet<CardInfo> BankAccounts
-        {
-            get { return this._bankAccounts; }
-            set { this._bankAccounts = value; }
+        private Iesi.Collections.Generic.ISet<CardInfo> bankAccounts;
+        public virtual Iesi.Collections.Generic.ISet<CardInfo> BankAccounts {
+            get { return this.bankAccounts; }
+            set { this.bankAccounts = value; }
         } // BankAccounts
+
+        private Iesi.Collections.Generic.ISet<LoanBrokerCommission> loanBrokerCommissions;
+        public virtual Iesi.Collections.Generic.ISet<LoanBrokerCommission> LoanBrokerCommissions {
+            get { return this.loanBrokerCommissions; }
+            set { this.loanBrokerCommissions = value; }
+        } // LoanBrokerCommissions
 
 	} // class Broker
 } // namespace EZBob.DatabaseLib.Model.Database.Broker

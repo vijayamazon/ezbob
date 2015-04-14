@@ -24,6 +24,12 @@ namespace EZBob.DatabaseLib.Model.Database.Broker {
                 .KeyColumn("BrokerID")
                 .Inverse()
                 .Cascade.All();
+
+            HasMany(m => m.LoanBrokerCommissions)
+                .AsSet()
+                .KeyColumn("BrokerID")
+                .Inverse()
+                .Cascade.All();
 		} // constructor
 	} // class BrokerMap
 } // namespace EZBob.DatabaseLib.Model.Database.Broker
