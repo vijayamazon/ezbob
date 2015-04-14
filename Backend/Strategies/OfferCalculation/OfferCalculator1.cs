@@ -63,12 +63,21 @@
             templateModel.MonthlyInterestRate = GetCOSMELoanMonthlyInterest(templateModel.ConsumerScore, templateModel.CompanyScore);
 
             decimal setupFee = GetSetupFeeForCOSME(templateModel);
-		    AdjustToMinMaxSetupFee(templateModel.LoanAmount, medalClassification.ToString(), ref setupFee);
-		    SetRounded(result, templateModel.MonthlyInterestRate, setupFee);
+		    decimal adjustedSetupfee = setupFee;
+            bool wasAdjusted = AdjustToMinMaxSetupFee(templateModel.LoanAmount, medalClassification.ToString(), ref adjustedSetupfee);
+		    SetRounded(result, templateModel.MonthlyInterestRate, adjustedSetupfee);
+
+            if (wasAdjusted) {
+                result.Message = string.Format("calculated setup fee of {0:N2} was adjusted", setupFee*100);
+            }
 			return result;
 		}// CalculateOffer
 
-        private void AdjustToMinMaxSetupFee(decimal amount, string medal, ref decimal setupFee) {
+        /// <summary>
+        /// Checks if the calculated setup fee is in range if not adjusts
+        /// </summary>
+        /// <returns>true if setup fee was adjusted</returns>
+        private bool AdjustToMinMaxSetupFee(decimal amount, string medal, ref decimal setupFee) {
             SafeReader sr = this.db.GetFirst(
                     "LoadOfferRanges",
                     CommandSpecies.StoredProcedure,
@@ -84,13 +93,16 @@
             if (setupFee < minSetupFee) {
                 this.log.Info("Primary Setup fee is {0} less then min {1}, adjusting", setupFee, minSetupFee);
                 setupFee = minSetupFee;
+                return true;
             }
 
             if (setupFee > maxSetupFee) {
                 this.log.Info("Primary Setup fee is {0} bigger then max {1}, adjusting", setupFee, maxSetupFee);
                 setupFee = maxSetupFee;
+                return true;
             }
 
+            return false;
         }//AdjustToMinMaxSetupFee
 
 
