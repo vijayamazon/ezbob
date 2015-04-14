@@ -23,7 +23,7 @@
 			this.manuallyAndAutoApproved = new ManuallyAndAutoApproved(takeMin, log, sheet, total, ManuallyApproved, autoApproved);
 
 			this.manuallyRejectedAutoApproved = new ManuallyRejectedAutoApproved(takeMin, log, sheet, "Manually rejected and auto approved", total, manuallyRejected, autoApproved);
-			this.manuallyApprovedAutoRejected = new ManuallyApprovedAutoRejected(takeMin, log, sheet, "Manually approved and auto rejected", total, autoRejected, ManuallyApproved);
+			this.manuallyApprovedAutoNotApproved = new ManuallyApprovedAutoNotApproved(takeMin, log, sheet, "Manually approved and auto NOT approved", total, ManuallyApproved, autoApproved);
 
 			this.stats = new List<AStatItem> {
 				total,
@@ -37,7 +37,7 @@
 				new DefaultOutstandingLoans(log, sheet, total, ManuallyApproved, autoApproved),
 				this.manuallyAndAutoApproved,
 				this.manuallyRejectedAutoApproved,
-				this.manuallyApprovedAutoRejected,
+				this.manuallyApprovedAutoNotApproved,
 			};
 
 			this.name = (takeMin ? "Minimum" : "Maximum") + " offer " + cashRequestSourceName;
@@ -80,7 +80,7 @@
 
 			int rowMAAR = row + 1;
 
-			row = this.manuallyApprovedAutoRejected.DrawSummary(rowMAAR);
+			row = this.manuallyApprovedAutoNotApproved.DrawSummary(rowMAAR);
 
 			row = DrawTotalSummary(row + 1, rowMAAA, rowMRAA, rowMAAR);
 
@@ -239,6 +239,6 @@
 
 		private readonly ManuallyAndAutoApproved manuallyAndAutoApproved;
 		private readonly ManuallyRejectedAutoApproved manuallyRejectedAutoApproved;
-		private readonly ManuallyApprovedAutoRejected manuallyApprovedAutoRejected;
+		private readonly ManuallyApprovedAutoNotApproved manuallyApprovedAutoNotApproved;
 	} // class Stats
 } // namespace

@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using System;
+	using System.Collections.Generic;
+	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
@@ -11,8 +13,8 @@
 			ExcelWorksheet sheet,
 			string title,
 			Total total,
-			AStatItem rejected,
-			AStatItem approved
+			ManuallyRejected rejected,
+			AutoApproved approved
 		) : base(
 			takeMin,
 			log.Safe(),
@@ -22,6 +24,11 @@
 			rejected,
 			approved
 		) {} // constructor
+
+		public override void Add(Datum d, int cashRequestIndex) {
+			if (Added.If(Rejected.LastWasAdded && Approved.LastWasAdded, Approved.LastAmount))
+				LoanCount += d.Manual(cashRequestIndex).ActualLoanCount;
+		} // Add
 
 		/// <summary>
 		/// Issued loan count / approved count.
@@ -126,5 +133,41 @@
 
 			return InsertDivider(row);
 		} // DrawSummary
+
+		protected override List<TitledValue[]> PrepareMultipleCountRowValues() {
+			return new List<TitledValue[]> {
+				new [] {
+					new TitledValue("count", Count),
+				},
+				new [] {
+					new TitledValue("count / total %", Count, Total.Count),
+					new TitledValue("count / rejected %", Count, Rejected.Count),
+					new TitledValue("count / approved %", Count, Approved.Count),
+				},
+				new [] {
+					new TitledValue("loan count", LoanCount.Total.Count),
+				},
+				new [] {
+					new TitledValue("default loan count", LoanCount.DefaultIssued.Count),
+				},
+			};
+		} // PrepareMultipleCountRowValues
+
+		protected override List<TitledValue[]> PrepareMultipleAmountRowValues() {
+			return new List<TitledValue[]> {
+				new[] {
+					new TitledValue("amount", Amount),
+					new TitledValue("amount / approved %", Amount, Approved.Amount),
+				},
+				new [] {
+					new TitledValue("loan amount", LoanCount.Total.Amount),
+					new TitledValue("default issued loan amount", LoanCount.DefaultIssued.Amount),
+					new TitledValue("default outstanding loan amount", LoanCount.DefaultOutstanding.Amount),
+				},
+			};
+		} // PrepareMultipleAmountRowValues
+
+		private ManuallyRejected Rejected { get { return (ManuallyRejected)Superior[1]; } }
+		private AutoApproved Approved { get { return (AutoApproved)Superior[2]; } }
 	} // class ManuallyRejectedAutoApproved
 } // namespace

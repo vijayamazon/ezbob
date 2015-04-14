@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
 	using Ezbob.Logger;
 
 	public class LoanCount {
@@ -14,7 +13,7 @@
 
 		public static LoanCount operator +(LoanCount lc, LoanCount other) {
 			if (lc != null)
-				lc.Append(other);
+				lc.Append(other, false);
 
 			return lc;
 		} // operator +
@@ -47,7 +46,7 @@
 		public LoanCount Clone() {
 			var lc = new LoanCount(TakeMin, Log);
 
-			lc.Append(this);
+			lc.Append(this, true);
 
 			return lc;
 		} // Clone
@@ -64,7 +63,7 @@
 			} // set
 		} // AssumedLoanAmount
 
-		public void Cap(decimal amount) {
+		public void Cap(decimal? amount) {
 			foreach (KeyValuePair<int, LoanMetaData> pair in Loans)
 				pair.Value.Cap = amount;
 		} // Cap
@@ -83,15 +82,15 @@
 			} // if
 		} // Append
 
-		public void Append(LoanCount other) {
+		public void Append(LoanCount other, bool withClone) {
 			if (other == null)
 				return;
 
 			foreach (KeyValuePair<int, LoanMetaData> pair in other.Loans)
-				Loans[pair.Key] = pair.Value;
+				Loans[pair.Key] = withClone ? pair.Value.Clone() : pair.Value;
 
 			foreach (KeyValuePair<int, LoanMetaData> pair in other.DefaultLoans)
-				DefaultLoans[pair.Key] = pair.Value;
+				DefaultLoans[pair.Key] = withClone ? Loans[pair.Key] : pair.Value;
 		} // Append
 
 		public IEnumerable<int> IDs {
@@ -126,7 +125,12 @@
 					if (this.loans.Count < 1)
 						return 0;
 
-					return this.loans.Sum(pair => this.extractAmount(pair.Value));
+					decimal amount = 0;
+
+					foreach (var pair in this.loans)
+						amount += this.extractAmount(pair.Value);
+
+					return amount;
 				} // get
 			} // Amount
 

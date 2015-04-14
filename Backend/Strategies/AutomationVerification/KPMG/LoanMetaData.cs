@@ -103,6 +103,24 @@
 
 		public MaxOfferValues MaxOffer { get; private set; }
 
+		public LoanMetaData Clone() {
+			return new LoanMetaData {
+				CashRequestID = CashRequestID,
+				CustomerID = CustomerID,
+				LoanID = LoanID,
+				LoanSourceName = LoanSourceName,
+				LoanDate = LoanDate,
+				DateClosed = DateClosed,
+				LoanAmount = LoanAmount,
+				Status = Status,
+				RepaidPrincipal = RepaidPrincipal,
+				MaxLateDays = MaxLateDays,
+
+				Cap = Cap,
+				AssumedLoanAmount = AssumedLoanAmount,
+			};
+		} // Clone
+
 		private decimal? cap;
 	} // class LoanMetaData
 } // namespace

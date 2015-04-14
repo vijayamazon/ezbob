@@ -24,6 +24,14 @@
 		) : base(tag, log.Safe()) {
 			MinLoanCount = new LoanCount(true, log.Safe());
 
+			MaxOffer = new MaxOfferResult(log.Safe()) {
+				ApprovedAmount = 0,
+				RepaymentPeriod = 0,
+				InterestRate = 0,
+				SetupFeeAmount = 0,
+				SetupFeePct = 0,
+			};
+
 			this.automationDecision = DecisionActions.Waiting;
 			IsAutoReRejected = false;
 			IsAutoRejected = false;
@@ -127,7 +135,14 @@
 		) {
 			LoanCount loanCount = manualLoanCount.Clone();
 
-			loanCount.Cap(autoApprovedAmount);
+			decimal? capAmount = null;
+
+			if (AutomationDecision == DecisionActions.ReApprove)
+				capAmount = ReapprovedAmount;
+			else if (AutomationDecision == DecisionActions.Approve)
+				capAmount = autoApprovedAmount;
+
+			loanCount.Cap(capAmount);
 
 			decimal takenAmount = manualLoanCount.Total.Amount;
 

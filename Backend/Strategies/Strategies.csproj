@@ -133,7 +133,7 @@
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyRejected.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ARejectedCrossApproved.cs" />
-    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApprovedAutoRejected.cs" />
+    <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyApprovedAutoNotApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\ManuallyRejectedAutoApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\NoAutoRejectedAndAutoApproved.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AutoReapproved.cs" />
