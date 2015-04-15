@@ -18,8 +18,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.bindTo(this.companyModel, 'change sync', this.render, this);
         this.bindTo(this.propertiesModel, 'change sync', this.render, this);
         this.bindTo(this.loanModel, 'change sync', this.render, this);
-
-        this.bindTo(this.affordability, 'change sync', this.render, this);
+        this.bindTo(this.affordability, 'change sync', this.renderAffordability, this);
         this.bindTo(this.crmModel, 'change sync', this.render, this);
 
         this.expCompany = [];
@@ -72,6 +71,13 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
     journalFilter: function(e) {
 	    this.journalView.journalFilter(e);
     },
+    renderAffordability: function () {
+        this.affordabilityView = new EzBob.Underwriter.AffordabilityView({
+            el: this.$el.find('#affordability'),
+            model: this.affordability
+        });
+        this.affordabilityView.render();
+    },
     onRender: function () {
         this.experianSpark();
         this.drawGraphs();
@@ -87,13 +93,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             that.drawSparklineGraphs();
         });
 
-        if (this.affordability.customerId) {
-        	this.affordabilityView = new EzBob.Underwriter.AffordabilityView({
-        		el: this.$el.find('#affordability'),
-        		model: this.affordability
-        	});
-        	this.affordabilityView.render();
-        }
+       
 
         if (this.crmModel.customerId) {
         	this.journalView = new EzBob.Underwriter.JournalView({
@@ -104,7 +104,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         
         	this.journalView.render();
         }
-
+        this.renderAffordability();
 	    EzBob.handleUserLayoutSetting();
     },
     

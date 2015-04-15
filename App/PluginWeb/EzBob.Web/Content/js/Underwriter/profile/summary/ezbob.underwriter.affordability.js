@@ -10,10 +10,11 @@ EzBob.Underwriter.AffordabilityView = Backbone.Marionette.ItemView.extend({
     },
     serializeData: function () {
         return {
-	    	affordability: this.model.toJSON()
+	    	affordability: this.model.get('Affordabilities')
         };
     },
-    onRender: function() {
+    onRender: function () {
+        BlockUi('on', this.$el);
     	if (this.model.customerId) {
     		this.rotateTable();
     	}

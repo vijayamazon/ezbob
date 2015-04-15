@@ -43,6 +43,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		var profileHead = this.$el.find('#profileHead');
 		var fraudDetection = this.$el.find('#fraudDetection');
 		var properties = this.$el.find('#properties');
+		var affordability = this.$el.find('#affordability');
 
 		this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel();
 		this.profileInfoView = new EzBob.Underwriter.PersonInfoView({
@@ -209,13 +210,15 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 					self.crossCheckView.render({ customerId: self.customerId });
 					BlockUi('off', $content);
 					break;
-				case '#dashboard':
-					self.affordability.customerId = self.customerId;
-					self.affordability.fetch().done(function ()
-					{
-						BlockUi('off', $content);
-					});
-					self.dashboardInfoView.render();
+			    case '#dashboard':
+			        if (self.affordability.customerId !== self.customerId) {
+			            BlockUi('on', affordability);
+			            self.affordability.customerId = self.customerId;
+			            self.affordability.fetch().done(function() {
+			                BlockUi('off', $content);
+			                BlockUi('off', affordability);
+			            });
+			        } else { BlockUi('off', $content); }
 					break;
 				case '#company-score':
 					self.companyScoreView.redisplayAccordion();
