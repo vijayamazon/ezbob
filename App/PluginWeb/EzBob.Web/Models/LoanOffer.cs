@@ -101,7 +101,7 @@
 			offer.Details = new LoanOfferDetails
 				{
 					InterestRate = cr.InterestRate,
-					RepaymentPeriod = _repaymentCalculator.ReCalculateRepaymentPeriod(cr),
+					RepaymentPeriod = _repaymentCalculator.CalculateCountRepayment(loan),
 					OfferedCreditLine = totalPrincipal,
 					LoanType = cr.LoanType.Name,
 					IsModified = !string.IsNullOrEmpty(cr.LoanTemplate),

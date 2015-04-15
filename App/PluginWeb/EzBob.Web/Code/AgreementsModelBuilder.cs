@@ -104,7 +104,7 @@
 			var end = loan.Schedule.Last().Date;
 			var days = (end - start).TotalDays;
 
-			model.Term = _repaymentCalculator.ReCalculateRepaymentPeriod(loan.CashRequest);
+			
 
 			//model.InterestRatePerDay = (model.Schedule.Count * model.InterestRate) / (decimal)days;
 			model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
@@ -120,6 +120,7 @@
 			model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
 			model.isHalwayLoan = loanType.IsHalwayLoan;
 			model.CountRepayment = _repaymentCalculator.CalculateCountRepayment(loan);
+            model.Term = _repaymentCalculator.CalculateCountRepayment(loan);
 
 			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(loan.Schedule.Sum(a => a.LoanRepayment) - loan.SetupFee);
 
