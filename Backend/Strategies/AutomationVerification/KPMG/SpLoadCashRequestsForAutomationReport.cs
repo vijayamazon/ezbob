@@ -1,21 +1,28 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class SpLoadCashRequestsForAutomationReport : AStoredProc {
 		public SpLoadCashRequestsForAutomationReport(AConnection db, ASafeLog log) : base(db, log) {
+			this.requestedCustomers = new List<int>();
 		} // constructor
 
 		public override bool HasValidParameters() {
-			return (CustomerID == null) || (CustomerID.Value > 0);
+			return true;
 		} // HasValidParameters
-
-		public int? CustomerID { get; set; }
 
 		public DateTime? DateFrom { get; set; }
 
 		public DateTime? DateTo { get; set; }
+
+		public List<int> RequestedCustomers {
+			get { return this.requestedCustomers; }
+			// Making the property read-only but with public set.
+			// ReSharper disable once ValueParameterNotUsed
+			set { }
+		} // RequestedCustomers
 
 		public class ResultRow : AResultRow {
 			public long CashRequestID { get; set; }
@@ -59,5 +66,7 @@
 				other.IsDefault = IsDefault;
 			} // CopyTo
 		} // class ResultRow
+
+		private List<int> requestedCustomers;
 	} // class SpLoadCashRequestsForAutomationReport
 } // namespace

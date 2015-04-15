@@ -135,9 +135,8 @@
 			get { return this.loanSources; }
 		} // LoanSources
 
-		protected virtual int? CustomerID {
-			get { return this.spLoad.CustomerID; }
-			set { this.spLoad.CustomerID = value; }
+		protected virtual List<int> RequestedCustomers {
+			get { return this.spLoad.RequestedCustomers; }
 		} // CustomerID
 
 		protected virtual DateTime? DateFrom {
@@ -151,7 +150,7 @@
 		} // DateTo
 
 		private static int DrawVerificationData(ExcelWorksheet statSheet, int row, Stats decisionStats) {
-			AStatItem.SetBorder(statSheet.Cells[row, 1, row, 3]).Merge = true;
+			AStatItem.SetBorders(statSheet.Cells[row, 1, row, 3]).Merge = true;
 			statSheet.SetCellValue(row, 1, "Verification data", bSetZebra: false, oBgColour: Color.Yellow, bIsBold: true);
 			statSheet.Cells[row, 1].Style.Font.Size = 16;
 			row++;

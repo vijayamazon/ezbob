@@ -543,7 +543,9 @@
   </xs:element>
   <xs:element name="TotalMaamMedalAndPricing">
     <xs:complexType>
-      <xs:sequence />
+      <xs:sequence>
+        <xs:element minOccurs="0" name="testMode" type="xs:boolean" />
+      </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="TotalMaamMedalAndPricingResponse">

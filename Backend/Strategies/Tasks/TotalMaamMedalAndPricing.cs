@@ -5,11 +5,25 @@
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 
 	public class TotalMaamMedalAndPricing : MaamMedalAndPricing {
+		public TotalMaamMedalAndPricing(bool testMode) {
+			this.testMode = testMode;
+		} // constructor
+
 		public override string Name {
 			get { return "TotalMaamMedalAndPricing"; }
 		} // Name
 
 		public override void Execute() {
+			RequestedCustomers.Clear();
+
+			if (this.testMode) {
+				RequestedCustomers.AddRange(new[] {
+					211, 1001, 1105, 1934, 17304, 21285, 23583,
+				});
+
+				Log.Debug("Test mode, customer list: {0}.", string.Join(", ", RequestedCustomers));
+			} // if
+
 			DateFrom = new DateTime(2012, 9, 4, 0, 0, 0, DateTimeKind.Utc);
 			DateTo   = new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc);
 
@@ -31,6 +45,8 @@
 				Log.Warn(e, "Failed to save .xlsx file as {0}.", filePath);
 			} // try
 		} // CreateXlsx
+
+		private readonly bool testMode;
 	} // class WeeklyMaamMedalAndPricing
 } // namespace
 

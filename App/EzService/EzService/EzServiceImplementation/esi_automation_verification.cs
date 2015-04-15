@@ -34,8 +34,8 @@
 			return Execute<SilentAutomation>(customerID, underwriterID, customerID);
 		} // SilentAutomation
 
-		public ActionMetaData TotalMaamMedalAndPricing() {
-			return Execute<TotalMaamMedalAndPricing>(null, null);
+		public ActionMetaData TotalMaamMedalAndPricing(bool testMode) {
+			return Execute<TotalMaamMedalAndPricing>(null, null, testMode);
 		} // TotalMaamMedalAndPricing
 	} // class EzServiceImplementation
 } // namespace

@@ -3360,10 +3360,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing();
+        ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync();
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts", ReplyAction="http://tempuri.org/IEzService/GetCompanyCaisDataForAlertsResponse")]
         ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId);
@@ -4661,12 +4661,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SilentAutomationAsync(customerID, underwriterID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing() {
-            return base.Channel.TotalMaamMedalAndPricing();
+        public ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode) {
+            return base.Channel.TotalMaamMedalAndPricing(testMode);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync() {
-            return base.Channel.TotalMaamMedalAndPricingAsync();
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode) {
+            return base.Channel.TotalMaamMedalAndPricingAsync(testMode);
         }
         
         public ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId) {

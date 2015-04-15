@@ -93,33 +93,6 @@
 			} // for each manual item
 		} // RunAutomation
 
-		public static string CsvTitles(SortedSet<string> allLoanSources) {
-			var os = new List<string>();
-
-			foreach (var s in allLoanSources) {
-				os.Add(string.Format(
-					"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount;{0} max late days",
-					s
-				));
-			} // for each
-
-			return string.Join(";",
-				"Customer ID",
-				"Broker ID",
-				"Customer is default now",
-				"Has default loan",
-				"Decision count",
-				ManualDatumItem.CsvTitles("Last"),
-				AutoDatumItem.CsvTitles("Last"),
-				"Max approved amount",
-				"Max interest rate",
-				"Max repayment period",
-				"Max setup fee %",
-				"Max setup fee amount",
-				string.Join(";", os)
-			);
-		} // CsvTitles
-
 		public void FindLoans(TCrLoans crLoans, SortedSet<string> allLoanSources) {
 			this.loansBySource = new SortedDictionary<string, LoanSummaryData>();
 
@@ -143,6 +116,35 @@
 			} // for each item
 		} // FindLoans
 
+		public static string CsvTitles(SortedSet<string> allLoanSources) {
+			var os = new List<string>();
+
+			foreach (var s in allLoanSources) {
+				os.Add(string.Format(
+					"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount;{0} max late days",
+					s
+				));
+			} // for each
+
+			return string.Join(";",
+				"Customer ID",
+				"Broker ID",
+				"Customer is default now",
+				"Has default loan",
+				"Decision count",
+				ManualDatumItem.CsvTitles("Last"),
+				AutoDatumItem.CsvTitles("Last"),
+				"Max approved amount",
+				"Max interest rate",
+				"Max repayment period",
+				"Max setup fee %",
+				"Max setup fee amount",
+				string.Join(";", os),
+				"Total loan count",
+				"Total loan amount"
+			);
+		} // CsvTitles
+
 		public int ToXlsx(ExcelWorksheet sheet, int rowNum) {
 			int curColumn = 1;
 
@@ -162,10 +164,19 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.SetupFeePct);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.SetupFeeAmount);
 
+			int totalLoanCount = 0;
+			decimal totalLoanAmount = 0;
+
 			foreach (var pair in this.loansBySource) {
 				LoanSummaryData loanStat = pair.Value;
 				curColumn = loanStat.ToXlsx(sheet, rowNum, curColumn);
+
+				totalLoanCount += loanStat.Counter;
+				totalLoanAmount += loanStat.LoanAmount;
 			} // for each
+
+			curColumn = sheet.SetCellValue(rowNum, curColumn, totalLoanCount);
+			curColumn = sheet.SetCellValue(rowNum, curColumn, totalLoanAmount);
 
 			return curColumn;
 		} // ToXlsx

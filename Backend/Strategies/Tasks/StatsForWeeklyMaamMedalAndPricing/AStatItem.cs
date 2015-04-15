@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using System.Drawing;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
+	using JetBrains.Annotations;
 	using OfficeOpenXml;
 	using OfficeOpenXml.Style;
 
@@ -59,12 +61,26 @@
 
 		public const int MaxDataItemsCount = 3;
 
-		public static ExcelRange SetBorder(ExcelRange range) {
+		public static ExcelRange SetBorders(ExcelRange range) {
 			range.Style.Border.BorderAround(ExcelBorderStyle.Thin, BorderColor);
 			return range;
-		} // SetBorder
+		} // SetBorders
 
 		public ASafeLog Log { get; private set; }
+
+		[StringFormatMethod("formulaFormat")]
+		public static int SetFormula(ExcelWorksheet sheet, int row, int column, string valueFormat, string formulaFormat, params object[] args) {
+			var cell = SetBorders(sheet.Cells[row, column]);
+
+			cell.Formula = string.Format(formulaFormat, args);
+			cell.Style.Numberformat.Format = valueFormat;
+
+			return column + 1;
+		} // SetFormula
+
+		protected virtual ExcelRange SetBorders(int row, int column) {
+			return SetBorders(this.sheet.Cells[row, column]);
+		} // SetBorders
 
 		protected virtual int InsertDivider(int row) {
 			var fill = this.sheet.Cells[row, 1, row, LastColumnNumber].Style.Fill;
@@ -126,6 +142,19 @@
 
 		protected internal virtual List<AStatItem> Superior { get; private set; }
 
+		[SuppressMessage("ReSharper", "RedundantAssignment")]
+		protected virtual int DrawSummaryTitle(int row) {
+			int column = 1;
+
+			column = SetBorders(this.sheet.Cells[row, column]).SetCellValue(Title, true);
+			column = SetBorders(this.sheet.Cells[row, column]).SetCellValue("Manual amount", true);
+			column = SetBorders(this.sheet.Cells[row, column]).SetCellValue("Manual count", true);
+			column = SetBorders(this.sheet.Cells[row, column]).SetCellValue("Auto amount", true);
+			column = SetBorders(this.sheet.Cells[row, column]).SetCellValue("Auto count", true);
+
+			return row + 1;
+		} // DrawSummaryTitle
+
 		protected abstract TitledValue[] PrepareCountRowValues();
 
 		protected virtual List<TitledValue[]> PrepareMultipleCountRowValues() {
@@ -141,13 +170,13 @@
 		} // PrepareMultipleAmountRowValues
 
 		protected virtual int SetRowValues(int row, bool showTitle, params TitledValue[] values) {
-			SetBorder(this.sheet.Cells[row, 1]);
+			SetBorders(this.sheet.Cells[row, 1]);
 			this.sheet.SetCellValue(row, 1, showTitle ? this.title : string.Empty, true);
 			return SetRowValues(row, values);
 		} // SetRowValues
 
 		protected virtual int SetRowValues(int row, string rowTitle, params TitledValue[] values) {
-			SetBorder(this.sheet.Cells[row, 1]);
+			SetBorders(this.sheet.Cells[row, 1]);
 			this.sheet.SetCellValue(row, 1, rowTitle, true);
 			return SetRowValues(row, values);
 		} // SetRowValues
@@ -166,15 +195,44 @@
 			return row + 1;
 		} // SetRowValues
 
+		protected virtual int SetCellGbp(int row, int column, decimal amount) {
+			return SetBorders(this.sheet.Cells[row, column]).SetCellValue(amount, sNumberFormat: TitledValue.Format.Money);
+		} // SetCellGbp
+
+		protected virtual int SetCellInt(int row, int column, int amount) {
+			return SetBorders(this.sheet.Cells[row, column]).SetCellValue(amount, sNumberFormat: TitledValue.Format.Int);
+		} // SetCellInt
+
+		protected virtual int SetCellPct(int row, int column, decimal amount) {
+			return SetBorders(this.sheet.Cells[row, column]).SetCellValue(amount, sNumberFormat: TitledValue.Format.Percent);
+		} // SetCellPct
+
+		[StringFormatMethod("formulaFormat")]
+		protected virtual int SetFormula(int row, int column, string valueFormat, string formulaFormat, params object[] args) {
+			return SetFormula(this.sheet, row, column, valueFormat, formulaFormat, args);
+		} // SetFormula
+
+		[StringFormatMethod("formulaFormat")]
+		protected virtual int SetFormula(int row, int column, string valueFormat, Color fontColour, string formulaFormat, params object[] args) {
+			this.sheet.Cells[row, column].Style.Font.Color.SetColor(fontColour);
+			return SetFormula(this.sheet, row, column, valueFormat, formulaFormat, args);
+		} // SetFormula
+
 		private void SetOneValue(int row, int column, TitledValue val) {
 			this.sheet.SetCellValue(row, column, val.Title, sNumberFormat: val.TitleFormat);
 			this.sheet.SetCellValue(row, column + 1, val.Value, true, sNumberFormat: val.ValueFormat);
 
-			SetBorder(this.sheet.Cells[row, column]).Style.Border.Right.Style = ExcelBorderStyle.None;
-			SetBorder(this.sheet.Cells[row, column + 1]).Style.Border.Left.Style = ExcelBorderStyle.None;
+			SetBorders(this.sheet.Cells[row, column]).Style.Border.Right.Style = ExcelBorderStyle.None;
+			SetBorders(this.sheet.Cells[row, column + 1]).Style.Border.Left.Style = ExcelBorderStyle.None;
 		} // SetOneValue
 
-		protected readonly ExcelWorksheet sheet;
+		protected virtual string Title { get { return this.title; } }
+
+		protected static readonly Color FormulaColour = Color.RoyalBlue;
+		protected static readonly Color InputFieldColour = Color.Crimson;
+
+		private readonly ExcelWorksheet sheet;
+
 		private readonly string title;
 
 		private static readonly Color BorderColor = Color.Black;

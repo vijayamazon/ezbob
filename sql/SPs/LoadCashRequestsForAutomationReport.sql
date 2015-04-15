@@ -6,12 +6,51 @@ IF OBJECT_ID('LoadCashRequestsForAutomationReport') IS NULL
 GO
 
 ALTER PROCEDURE LoadCashRequestsForAutomationReport
-@CustomerID INT,
+@RequestedCustomers IntList READONLY,
 @DateFrom DATETIME,
 @DateTo DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	------------------------------------------------------------------------------
+	--
+	-- Find relevant customers.
+	--
+	------------------------------------------------------------------------------
+
+	SELECT
+		c.Id,
+		c.BrokerID,
+		c.CollectionStatus
+	INTO
+		#customers
+	FROM
+		Customer c
+		INNER JOIN @RequestedCustomers rc ON c.Id = rc.Value
+	WHERE
+		c.IsTest = 0
+
+	------------------------------------------------------------------------------
+
+	IF NOT EXISTS (SELECT Id FROM #customers)
+	BEGIN
+		INSERT INTO #customers(Id, BrokerId, CollectionStatus)
+		SELECT
+			c.Id,
+			c.BrokerID,
+			c.CollectionStatus
+		FROM
+			Customer c
+		WHERE
+			c.IsTest = 0
+	END
+
+	------------------------------------------------------------------------------
+	--
+	-- Do the job.
+	--
+	------------------------------------------------------------------------------
 
 	SELECT
 		r.Id AS CashRequestID,
@@ -59,7 +98,7 @@ BEGIN
 		cs.IsDefault
 	FROM
 		CashRequests r
-		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
+		INNER JOIN #customers c ON r.IdCustomer = c.Id
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
 	WHERE
 		r.CreationDate >= ISNULL(@DateFrom, 'Sep 4 2012')
@@ -79,11 +118,17 @@ BEGIN
 				(r.IdUnderwriter IS NULL AND r.SystemDecision = 'Approve')
 			)
 		)
-		AND
-		(@CustomerID IS NULL OR r.IdCustomer = @CustomerID)
 	ORDER BY
 		r.IdCustomer ASC,
 		r.UnderwriterDecisionDate ASC,
 		r.Id ASC
+
+	------------------------------------------------------------------------------
+	--
+	-- Clean up.
+	--
+	------------------------------------------------------------------------------
+
+	DROP TABLE #customers
 END
 GO

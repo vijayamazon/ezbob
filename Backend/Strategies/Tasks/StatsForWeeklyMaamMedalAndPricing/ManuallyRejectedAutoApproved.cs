@@ -1,6 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
-	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
@@ -30,104 +30,64 @@
 				LoanCount += d.Manual(cashRequestIndex).ActualLoanCount;
 		} // Add
 
-		/// <summary>
-		/// Issued loan count / approved count.
-		/// </summary>
-		public decimal IssuedCountRate { get; set; }
+		public string LoanCountRatio { get; set; }
+		public string LoanAmountRatio { get; set; }
+		public string DefaultOutstandingRatio { get; set; }
 
-		/// <summary>
-		/// Default outstanding amount / default issued amount.
-		/// </summary>
-		public decimal OutstandingAmountRate { get; set; }
-
+		[SuppressMessage("ReSharper", "RedundantAssignment")]
 		public override int DrawSummary(int row) {
-			const decimal defaultIssuedRate = 0.2m;
-
-			int firstRow = row;
+			row = DrawSummaryTitle(row);
 
 			int column = 1;
 
-			column = this.sheet.SetCellValue(row, column, "Manually rejected and auto approved", true);
-			column = this.sheet.SetCellValue(row, column, "Manual amount", true);
-			column = this.sheet.SetCellValue(row, column, "Manual count", true);
-			column = this.sheet.SetCellValue(row, column, "Auto amount", true);
-			column = this.sheet.SetCellValue(row, column, "Auto count", true);
+			int approvedRow = row;
+
+			column = SetBorders(row, column).SetCellValue("Approved", true);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetCellGbp(row, column, Amount);
+			column = SetCellInt(row, column, Count);
 
 			row++;
 			column = 1;
 
-			column = this.sheet.SetCellValue(row, column, "Approved", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, Amount, sNumberFormat: TitledValue.Format.Money);
-			column = this.sheet.SetCellValue(row, column, Count, sNumberFormat: TitledValue.Format.Int);
+			int issuedRow = row;
+
+			column = SetBorders(row, column).SetCellValue("Issued", true);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=D{0} * {1}", approvedRow, LoanAmountRatio);
+			column = SetFormula(row, column, TitledValue.Format.Int,   FormulaColour, "=E{0} * {1}", approvedRow, LoanCountRatio);
 
 			row++;
 			column = 1;
 
-			column = this.sheet.SetCellValue(row, column, "Issued", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, Amount * IssuedCountRate, sNumberFormat: TitledValue.Format.Money);
-			column = this.sheet.SetCellValue(row, column, Math.Round(Count * IssuedCountRate), sNumberFormat: TitledValue.Format.Int);
+			int defaultIssuedRow = row;
+			int defaultIssuedRateRow = row + 1;
+
+			column = SetBorders(row, column).SetCellValue("Default issued", true);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=D{0} * D{1}", issuedRow, defaultIssuedRateRow);
+			column = SetFormula(row, column, TitledValue.Format.Int,   FormulaColour, "=E{0} * E{1}", issuedRow, defaultIssuedRateRow);
 
 			row++;
 			column = 1;
 
-			column = this.sheet.SetCellValue(row, column, "Default issued", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, Amount * IssuedCountRate * defaultIssuedRate, sNumberFormat: TitledValue.Format.Money);
-			column = this.sheet.SetCellValue(row, column, Math.Round(Count * IssuedCountRate * defaultIssuedRate), sNumberFormat: TitledValue.Format.Int);
+			column = SetBorders(row, column).SetCellValue("Default issued rate (% of loans)", true);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue(0.2m, oFontColour: InputFieldColour, sNumberFormat: TitledValue.Format.Percent);
+			column = SetBorders(row, column).SetCellValue(0.2m, oFontColour: InputFieldColour, sNumberFormat: TitledValue.Format.Percent);
 
 			row++;
 			column = 1;
 
-			column = this.sheet.SetCellValue(row, column, "Default issued rate (% of loans)", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, defaultIssuedRate, sNumberFormat: TitledValue.Format.Percent);
-			column = this.sheet.SetCellValue(row, column, defaultIssuedRate, sNumberFormat: TitledValue.Format.Percent);
-
-			row++;
-			column = 1;
-
-			column = this.sheet.SetCellValue(row, column, "Default issued rate (% of approvals)", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-
-			row++;
-			column = 1;
-
-			column = this.sheet.SetCellValue(row, column, "Default outstanding", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, Amount * IssuedCountRate * defaultIssuedRate * OutstandingAmountRate, sNumberFormat: TitledValue.Format.Money);
-			column = this.sheet.SetCellValue(row, column, Math.Round(Count * IssuedCountRate * defaultIssuedRate), sNumberFormat: TitledValue.Format.Int);
-
-			row++;
-			column = 1;
-
-			column = this.sheet.SetCellValue(row, column, "Default outstanding rate (% of loans)", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-
-			row++;
-			column = 1;
-
-			column = this.sheet.SetCellValue(row, column, "Default outstanding rate (% of approvals)", true);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-			column = this.sheet.SetCellValue(row, column, 0);
-
-			for (int i = firstRow; i <= row; i++)
-				for (int j = 1; j <= column; j++)
-					SetBorder(this.sheet.Cells[i, j]);
+			column = SetBorders(row, column).SetCellValue("Default outstanding", true);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=D{0} * {1}", defaultIssuedRow, DefaultOutstandingRatio);
+			column = SetFormula(row, column, TitledValue.Format.Int,   FormulaColour, "=E{0}", defaultIssuedRow);
 
 			row++;
 

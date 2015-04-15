@@ -1356,13 +1356,13 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 		[Activation]
 		private void TotalMaamMedalAndPricing() {
-			if (cmdLineArgs.Length != 1) {
-				log.Msg("Usage: TotalMaamMedalAndPricing");
-				return;
-			}
+			bool testMode = false;
 
-			serviceClient.TotalMaamMedalAndPricing();
-		}
+			if (cmdLineArgs.Length > 1)
+				testMode = cmdLineArgs[1].Equals("test", StringComparison.CurrentCultureIgnoreCase);
+
+			serviceClient.TotalMaamMedalAndPricing(testMode);
+		} // TotalMaamMedalAndPricing
 
 		/*
 		[Activation]

@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing {
 	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
+	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
 	using OfficeOpenXml;
 
@@ -28,60 +30,88 @@
 				LoanCount += d.Manual(cashRequestIndex).ActualLoanCount;
 		} // Add
 
+		[SuppressMessage("ReSharper", "RedundantAssignment")]
 		public override int DrawSummary(int row) {
-			row = SetRowValues(row, true,
-				new TitledValue("Manual amount", "Manual count"),
-				new TitledValue("Auto amount", "Auto count")
-			);
+			row = DrawSummaryTitle(row);
 
-			row = SetRowValues(row, "Approved",
-				new TitledValue(Amount, Count),
-				new TitledValue(0, 0)
-			);
+			int column = 1;
 
-			row = SetRowValues(row, "Issued",
-				new TitledValue(LoanCount.Total.Amount, LoanCount.Total.Count),
-				new TitledValue(0, 0)
-			);
+			int approvedRow = row;
 
-			row = SetRowValues(row, "Default issued",
-				new TitledValue(LoanCount.DefaultIssued.Amount, LoanCount.DefaultIssued.Count),
-				new TitledValue(0, 0)
-			);
+			column = SetBorders(row, column).SetCellValue("Approved", true);
+			column = SetCellGbp(row, column, Amount);
+			column = SetCellInt(row, column, Count);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
 
-			row = SetRowValues(row, "Default issued rate (% of loans)",
-				new TitledValue(
-					LoanCount.DefaultIssued.Amount, LoanCount.Total.Amount,
-					LoanCount.DefaultIssued.Count, LoanCount.Total.Count
-				),
-				new TitledValue(0, 0)
-			);
+			row++;
+			column = 1;
 
-			row = SetRowValues(row, "Default issued rate (% of approvals)",
-				new TitledValue(LoanCount.DefaultIssued.Amount, Amount, LoanCount.DefaultIssued.Count, Count),
-				new TitledValue(0, 0)
-			);
+			int issuedRow = row;
 
-			row = SetRowValues(row, "Default outstanding",
-				new TitledValue(0, 0),
-				new TitledValue(LoanCount.DefaultOutstanding.Amount, LoanCount.DefaultOutstanding.Count)
-			);
+			column = SetBorders(row, column).SetCellValue("Issued", true);
+			column = SetCellGbp(row, column, LoanCount.Total.Amount);
+			column = SetCellInt(row, column, LoanCount.Total.Count);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
 
-			row = SetRowValues(row, "Default outstanding rate (% of loans)",
-				new TitledValue(
-					LoanCount.DefaultOutstanding.Amount, LoanCount.Total.Amount,
-					LoanCount.DefaultOutstanding.Count, LoanCount.Total.Count
-				),
-				new TitledValue(0, 0)
-			);
+			row++;
+			column = 1;
 
-			row = SetRowValues(row, "Default outstanding rate (% of approvals)",
-				new TitledValue(
-					LoanCount.DefaultOutstanding.Amount, Amount,
-					LoanCount.DefaultOutstanding.Count, Count
-				),
-				new TitledValue(0, 0)
-			);
+			int defaultIssuedRow = row;
+
+			column = SetBorders(row, column).SetCellValue("Default issued", true);
+			column = SetCellGbp(row, column, LoanCount.DefaultIssued.Amount);
+			column = SetCellInt(row, column, LoanCount.DefaultIssued.Count);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Default issued rate (% of loans)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=B{0}/B{1}", defaultIssuedRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=C{0}/C{1}", defaultIssuedRow, issuedRow);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Default issued rate (% of approvals)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=B{0}/B{1}", defaultIssuedRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=C{0}/C{1}", defaultIssuedRow, approvedRow);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+
+			row++;
+			column = 1;
+
+			int defaultOutstandingRow = row;
+
+			column = SetBorders(row, column).SetCellValue("Default outstanding", true);
+			column = SetCellGbp(row, column, LoanCount.DefaultOutstanding.Amount);
+			column = SetCellInt(row, column, LoanCount.DefaultOutstanding.Count);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Default outstanding rate (% of loans)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=B{0}/B{1}", defaultOutstandingRow, issuedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=C{0}/C{1}", defaultOutstandingRow, issuedRow);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Default outstanding rate (% of approvals)", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=B{0}/B{1}", defaultOutstandingRow, approvedRow);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=C{0}/C{1}", defaultOutstandingRow, approvedRow);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
 
 			return InsertDivider(row);
 		} // DrawSummary
