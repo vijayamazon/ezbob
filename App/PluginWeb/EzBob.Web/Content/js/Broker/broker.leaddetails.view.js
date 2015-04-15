@@ -52,7 +52,7 @@ EzBob.Broker.LeadDetailsView = EzBob.Broker.BaseView.extend({
 
 	        if (res.success) {
 	            EzBob.App.trigger('info', 'An invitation has been sent.');
-	            self.reloadCustomerList();
+	            self.reloadData();
 	            return;
 	        } // if
 

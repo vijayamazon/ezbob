@@ -30,6 +30,12 @@
 
 		[DataMember]
 		public string address { get; set; }
+
+        [DataMember]
+        public int leadID { get; set; }
+
+        [DataMember]
+        public bool finishedWizard { get; set; }
 	} // class BrokerCustomerPersonalData
 
 } // namespace Ezbob.Backend.Strategies.Broker

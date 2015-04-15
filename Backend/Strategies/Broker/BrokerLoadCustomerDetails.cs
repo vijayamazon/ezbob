@@ -18,8 +18,7 @@
 		} // Name
 
 		public class BrokerLoadCustomerDetailsRawData {
-
-			public int CustomerID { get; set; }
+            public int CustomerID { get; set; }
 			public string FirstName { get; set; }
 			public string Surname { get; set; }
 			public DateTime DateOfBirth { get; set; }
@@ -37,6 +36,8 @@
 			public string County { get; set; }
 			public string Postcode { get; set; }
 			public string Country { get; set; }
+            public int LeadID { get; set; }
+            public bool FinishedWizard { get; set; }
 
 			public void ToModel(BrokerCustomerPersonalData oModel) {
 				oModel.id = CustomerID;
@@ -51,6 +52,8 @@
 					Organisation, Line1, Line2, Line3,
 					Pobox, Town, Postcode, County, Country
 				);
+			    oModel.leadID = LeadID;
+			    oModel.finishedWizard = FinishedWizard;
 			} // ToModel
 
 		} // BrokerLoadCustomerDetailsRawData

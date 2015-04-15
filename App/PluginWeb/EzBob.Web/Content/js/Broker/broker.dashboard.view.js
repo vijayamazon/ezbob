@@ -73,12 +73,9 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
     }, // displaySignedTerms
 
     displayBrokerProperties: function () {
-        console.log('displayBrokerProperties');
-
         var oProps = this.router.getBrokerProperties();
 
         if (!this.router.isMyBroker(oProps)) { // e.g. not yet loaded
-            console.log('displayBrokerProperties not loaded');
             return;
         }
         var oSampleLink = function (sSourceRef, sImagePath, sNewLine, nWidth, nHeight) {

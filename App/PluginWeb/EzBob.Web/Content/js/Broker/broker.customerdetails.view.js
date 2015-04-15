@@ -26,6 +26,8 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		evt['click .remove-file-mark'] = 'fileMarkChanged';
 		evt['click .delete-selected-files'] = 'deleteSelectedFiles';
 		evt['click .btn-edit-director'] = 'startEditDirector';
+		evt['click .lead-send-invitation'] = 'sendInvitation';
+		evt['click .lead-fill-wizard'] = 'fillWizard';
 
 		return evt;
 	}, // events
@@ -56,6 +58,55 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 		oView.render();
 	}, // startEditDirector
+
+	sendInvitation: function () {
+	    var nLeadID = this.LeadID;
+
+	    if (nLeadID < 1)
+	        return;
+
+	    BlockUi();
+
+	    var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/SendInvitation', {
+	        nLeadID: nLeadID,
+	        sContactEmail: this.router.getAuth(),
+	    });
+
+	    var self = this;
+
+	    oRequest.success(function (res) {
+	        UnBlockUi();
+
+	        if (res.success) {
+	            EzBob.App.trigger('info', 'An invitation has been sent.');
+	            self.reloadData();
+	            return;
+	        } // if
+
+	        if (res.error)
+	            EzBob.App.trigger('error', res.error);
+	        else
+	            EzBob.App.trigger('error', 'Failed to send an invitation.');
+	    }); // on success
+
+	    oRequest.fail(function () {
+	        UnBlockUi();
+	        EzBob.App.trigger('error', 'Failed to send an invitation.');
+	    });
+	}, // sendInvitation
+
+	fillWizard: function () {
+	    var nLeadID = this.LeadID;
+
+	    if (nLeadID < 1)
+	        return;
+
+	    location.assign(
+			'' + window.gRootPath + 'Broker/BrokerHome/FillWizard' +
+			'?nLeadID=' + nLeadID +
+			'&sContactEmail=' + encodeURIComponent(this.router.getAuth())
+		);
+	}, // fillWizard
 
 	clear: function() {
 		EzBob.Broker.CustomerDetailsView.__super__.clear.apply(this, arguments);
@@ -115,7 +166,7 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 		$.getJSON(
 			window.gRootPath + 'Broker/BrokerHome/LoadCustomerDetails',
 			{ sCustomerID: this.CustomerID, sContactEmail: this.router.getAuth(), },
-			function(oResponse) {
+			function (oResponse) {
 				if (!oResponse.success) {
 					if (oResponse.error)
 						EzBob.App.trigger('error', oResponse.error);
@@ -124,6 +175,11 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 
 					return;
 				} // if
+
+				self.LeadID = oResponse.personal_data.leadID;
+				if (oResponse.personal_data.finishedWizard) {
+				    self.$el.find('.lead-fill-wizard, .lead-send-invitation').hide();
+				}
 
 				self.$el.find('.value').load_display_value({
 					data_source: oResponse.personal_data,

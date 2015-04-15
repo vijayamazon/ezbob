@@ -36,13 +36,20 @@ BEGIN
 		a.Town,
 		a.County,
 		a.Postcode,
-		a.Country
+		a.Country,
+		w.TheLastOne FinishedWizard,
+		b.BrokerLeadID LeadID
 	FROM
 		Customer c
 		LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType = 1
+		LEFT JOIN WizardStepTypes w ON w.WizardStepTypeID = c.WizardStep
+		LEFT JOIN BrokerLeads b ON b.CustomerID = c.Id
 	WHERE
 		c.RefNumber = @RefNum
 		AND
 		c.BrokerID = @BrokerID
 END
+
 GO
+
+
