@@ -427,6 +427,9 @@
 		[OperationContract]
 		ActionMetaData GetZooplaData(int customerId, bool reCheck);
 
+        [OperationContract]
+        ActionMetaData IovationCheck(IovationCheckModel model);
+
 		[OperationContract]
 		BoolActionResult IsBroker(string sContactEmail);
 
@@ -779,5 +782,7 @@
 
 		[OperationContract]
 		ActionMetaData TotalMaamMedalAndPricing();
+
+
 	} // interface IEzService
 } // namespace EzService

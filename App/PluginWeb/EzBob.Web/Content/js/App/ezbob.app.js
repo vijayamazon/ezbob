@@ -7,6 +7,10 @@ EzBob.App = new EzBob.Application();
 if (EzBob.GA)
 	EzBob.App.GA = new EzBob.GA();
 
+if (EzBob.Iovation)
+    EzBob.App.Iovation = new EzBob.Iovation();
+
+
 EzBob.App.addRegions({
 	modal: EzBob.ModalRegion,
 	jqmodal: EzBob.JqModalRegion

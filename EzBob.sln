@@ -245,6 +245,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExcelExt", "Tools\EzbobUtil
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dabinuto", "Tools\EzbobUtils\Dabinuto\Dabinuto.csproj", "{E150E60C-1983-4BDE-BCC7-35D3A8624100}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "IovationLib", "Integration\IovationLib\IovationLib.csproj", "{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1236,6 +1238,16 @@ Global
 		{E150E60C-1983-4BDE-BCC7-35D3A8624100}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E150E60C-1983-4BDE-BCC7-35D3A8624100}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E150E60C-1983-4BDE-BCC7-35D3A8624100}.Release|x86.ActiveCfg = Release|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1351,6 +1363,7 @@ Global
 		{43BB65D6-C562-49C9-BB02-CC8275E39518} = {6CD922BC-E41C-4B2E-B133-943764D6BC93}
 		{A6CC0A11-823D-4193-B135-7B8E9F8796C1} = {6CD922BC-E41C-4B2E-B133-943764D6BC93}
 		{E150E60C-1983-4BDE-BCC7-35D3A8624100} = {6CD922BC-E41C-4B2E-B133-943764D6BC93}
+		{19EC11BC-48AE-4BFB-BF8E-7AA6A90AC484} = {DCBC1A64-44B4-47D5-9B12-C963FBA9C24C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

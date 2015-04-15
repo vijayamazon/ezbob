@@ -7,6 +7,8 @@
       <xs:element minOccurs="0" name="Cogs" type="xs:decimal" />
       <xs:element minOccurs="0" name="CogsOutput" type="xs:decimal" />
       <xs:element minOccurs="0" name="CollectionRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CompanyScore" type="xs:int" />
+      <xs:element minOccurs="0" name="ConsumerScore" type="xs:int" />
       <xs:element minOccurs="0" name="CosmeCollectionRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="CostOfDebt" type="xs:decimal" />
       <xs:element minOccurs="0" name="CostOfDebtOutput" type="xs:decimal" />

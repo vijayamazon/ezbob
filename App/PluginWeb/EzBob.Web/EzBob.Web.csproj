@@ -191,6 +191,7 @@
     <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\SalesForceController.cs" />
+    <Compile Include="Areas\Underwriter\Models\Fraud\IovationDetailsModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
     <Compile Include="Areas\Underwriter\Models\SalesForceModel.cs" />
@@ -827,6 +828,7 @@
     <Content Include="Content\js\App\ezbob.bindings.js" />
     <Content Include="Content\js\App\ezbob.GA.js" />
     <Content Include="Content\js\Broker\broker.addbank.view.js" />
+    <Content Include="Content\js\App\ezbob.iovation.js" />
     <Content Include="Content\js\Broker\broker.commission.view.js" />
     <Content Include="Content\js\Broker\broker.leaddetails.view.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />

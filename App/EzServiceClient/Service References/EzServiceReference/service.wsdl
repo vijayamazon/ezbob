@@ -136,6 +136,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPasswordResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UpdateMarketplace_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateMarketplace" />
   </wsdl:message>
@@ -405,6 +411,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_GetZooplaData_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetZooplaDataResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IovationCheck_InputMessage">
+    <wsdl:part name="parameters" element="tns:IovationCheck" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_IovationCheck_OutputMessage">
+    <wsdl:part name="parameters" element="tns:IovationCheckResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_IsBroker_InputMessage">
     <wsdl:part name="parameters" element="tns:IsBroker" />
@@ -801,12 +813,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateGoogleAnalytics_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateGoogleAnalyticsResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPasswordResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -1353,6 +1359,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="UpdateLinkedHmrcPassword">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse" message="tns:IEzService_UpdateLinkedHmrcPassword_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateMarketplace">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplace" message="tns:IEzService_UpdateMarketplace_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateMarketplaceResponse" message="tns:IEzService_UpdateMarketplace_OutputMessage" />
@@ -1532,6 +1542,10 @@
     <wsdl:operation name="GetZooplaData">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetZooplaData" message="tns:IEzService_GetZooplaData_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetZooplaDataResponse" message="tns:IEzService_GetZooplaData_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="IovationCheck">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IovationCheck" message="tns:IEzService_IovationCheck_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/IovationCheckResponse" message="tns:IEzService_IovationCheck_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="IsBroker">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
@@ -1796,10 +1810,6 @@
     <wsdl:operation name="UpdateGoogleAnalytics">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateGoogleAnalytics" message="tns:IEzService_UpdateGoogleAnalytics_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateGoogleAnalyticsResponse" message="tns:IEzService_UpdateGoogleAnalytics_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="UpdateLinkedHmrcPassword">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse" message="tns:IEzService_UpdateLinkedHmrcPassword_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -2223,6 +2233,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="UpdateLinkedHmrcPassword">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="UpdateMarketplace">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateMarketplace" style="document" />
       <wsdl:input>
@@ -2621,6 +2640,15 @@
     </wsdl:operation>
     <wsdl:operation name="GetZooplaData">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetZooplaData" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="IovationCheck">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/IovationCheck" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3215,15 +3243,6 @@
     </wsdl:operation>
     <wsdl:operation name="UpdateGoogleAnalytics">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateGoogleAnalytics" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="UpdateLinkedHmrcPassword">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

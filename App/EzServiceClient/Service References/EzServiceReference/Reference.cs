@@ -1762,6 +1762,12 @@ namespace ServiceClientProxy.EzServiceReference {
         private decimal CollectionRateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int CompanyScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ConsumerScoreField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
         private decimal CosmeCollectionRateField;
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
@@ -1916,6 +1922,32 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((this.CollectionRateField.Equals(value) != true)) {
                     this.CollectionRateField = value;
                     this.RaisePropertyChanged("CollectionRate");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int CompanyScore {
+            get {
+                return this.CompanyScoreField;
+            }
+            set {
+                if ((this.CompanyScoreField.Equals(value) != true)) {
+                    this.CompanyScoreField = value;
+                    this.RaisePropertyChanged("CompanyScore");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int ConsumerScore {
+            get {
+                return this.ConsumerScoreField;
+            }
+            set {
+                if ((this.ConsumerScoreField.Equals(value) != true)) {
+                    this.ConsumerScoreField = value;
+                    this.RaisePropertyChanged("ConsumerScore");
                 }
             }
         }
@@ -3165,6 +3197,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateMarketplace", ReplyAction="http://tempuri.org/IEzService/UpdateMarketplaceResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, int userId);
         
@@ -3434,6 +3472,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetZooplaData", ReplyAction="http://tempuri.org/IEzService/GetZooplaDataResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetZooplaDataAsync(int customerId, bool reCheck);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IovationCheck", ReplyAction="http://tempuri.org/IEzService/IovationCheckResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData IovationCheck(Ezbob.Backend.Models.IovationCheckModel model);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IovationCheck", ReplyAction="http://tempuri.org/IEzService/IovationCheckResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> IovationCheckAsync(Ezbob.Backend.Models.IovationCheckModel model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/IsBroker", ReplyAction="http://tempuri.org/IEzService/IsBrokerResponse")]
         ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail);
@@ -3830,12 +3874,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateGoogleAnalytics", ReplyAction="http://tempuri.org/IEzService/UpdateGoogleAnalyticsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateGoogleAnalyticsAsync(System.Nullable<System.DateTime> oBackfillStartDate, System.Nullable<System.DateTime> oBackfillEndDate);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
@@ -4407,6 +4445,14 @@ namespace ServiceClientProxy.EzServiceReference {
                 base(binding, remoteAddress) {
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
+            return base.Channel.UpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword, sHash);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
+            return base.Channel.UpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword, sHash);
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, int userId) {
             return base.Channel.UpdateMarketplace(customerId, marketplaceId, doUpdateWizardStep, userId);
         }
@@ -4765,6 +4811,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> GetZooplaDataAsync(int customerId, bool reCheck) {
             return base.Channel.GetZooplaDataAsync(customerId, reCheck);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData IovationCheck(Ezbob.Backend.Models.IovationCheckModel model) {
+            return base.Channel.IovationCheck(model);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> IovationCheckAsync(Ezbob.Backend.Models.IovationCheckModel model) {
+            return base.Channel.IovationCheckAsync(model);
         }
         
         public ServiceClientProxy.EzServiceReference.BoolActionResult IsBroker(string sContactEmail) {
@@ -5293,14 +5347,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateGoogleAnalyticsAsync(System.Nullable<System.DateTime> oBackfillStartDate, System.Nullable<System.DateTime> oBackfillEndDate) {
             return base.Channel.UpdateGoogleAnalyticsAsync(oBackfillStartDate, oBackfillEndDate);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.UpdateLinkedHmrcPassword(sCustomerID, sDisplayName, sPassword, sHash);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateLinkedHmrcPasswordAsync(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-            return base.Channel.UpdateLinkedHmrcPasswordAsync(sCustomerID, sDisplayName, sPassword, sHash);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {

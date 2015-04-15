@@ -4,7 +4,9 @@
             <div class="box">
                 <div class="box-content">
                     <button class="btn-primary btn" id="recheckFraud"><i class="fa fa-refresh"></i>Recheck</button><span>  Last check date: <%-checkDate == undefined ? 'Never checked' : EzBob.formatDate(checkDate)%></span>
-                    <table class="table centered">
+                    @{ var iovationAdminUrl = String.Format("{0}admin/accountLookup/load/", ConfigManager.CurrentValues.Instance.IovationAdminUrl.Value); }
+                    <a class="btn-primary btn" href="@iovationAdminUrl<%-refNum%>" target="_blank"><i class="fa fa-globe"></i>Iovation</a>
+                    <table class="table table-hover centered">
                         <thead class="box">
                             <tr class="box-title">
                                 <th>Check Type</th>
@@ -16,18 +18,56 @@
                         </thead>
                         <tbody>
                             <%_.each(vals, function(val){%>
-                                <tr>
-                                    <td class="break-word"><%-val.Type%></td>
-                                    <td class="break-word"><%-val.CurrentField%></td>
-                                    <td class="break-word"><%-val.CompareField || ''%></td>
-                                    <td class="break-word"><%-val.Value || ''%></td>
-                                    <td class="break-word"><%=val.Concurrence || ''%></td>
-                                </tr>
+                            <tr class="fraud-detection-row" data-type="<%-val.Type%>" data-value="<%-val.Value || ''%>">
+                                <td class="break-word"><%-val.Type%></td>
+                                <td class="break-word"><%-val.CurrentField%></td>
+                                <td class="break-word"><%-val.CompareField || ''%></td>
+                                <td class="break-word"><%-val.Value || ''%></td>
+                                <td class="break-word"><%=val.Concurrence || ''%></td>
+                            </tr>
                             <%})%>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
+    </div>
+</script>
+
+<script id="iovation-details-template" type="text/template">
+    <div class="loan-details">
+        <dl>
+            <dt>Date:</dt>
+            <dd><%-EzBob.formatDate(iovation.Created)%></dd>
+            <dt>Origin:</dt>
+            <dd><%-iovation.Origin%></dd>
+            <dt>Result:</dt>
+            <dd><%-iovation.Result%></dd>
+            <dt>Reason:</dt>
+            <dd><%-iovation.Reason%></dd>
+            <dt>Tracking number:</dt>
+            <dd><%-iovation.TrackingNumber%></dd>
+        </dl>
+        <%if(iovation.Details && iovation.Details.length > 0) { %>
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th colspan="2">Details</th>
+                </tr>
+                <tr>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tbody>
+                <%_.each(iovation.Details, function(detail) {%>
+                <tr>
+                    <td><%-detail.name%></td>
+                    <td><%-detail.value%></td>
+                </tr>
+                <%});%>
+            </tbody>
+        </table>
+        <%}%>
     </div>
 </script>

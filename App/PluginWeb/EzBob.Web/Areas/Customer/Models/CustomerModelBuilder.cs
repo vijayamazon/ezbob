@@ -105,6 +105,7 @@
 			} // if
 
 			customerModel.Id = customer.Id;
+		    customerModel.RefNumber = customer.RefNumber;
 			customerModel.userName = user.Name;
 			customerModel.Email = customer.Name;
 			customerModel.EmailState = EmailConfirmationState.Get(customer);

@@ -99,7 +99,10 @@ namespace EzBob.Models {
 		public bool HasRollovers { get; set; }
 
 		public int Id { get; set; }
-		public IEnumerable<InvitedFriend> InvitedFriends { get; set; }
+        
+        public string RefNumber { get; set; }
+		
+        public IEnumerable<InvitedFriend> InvitedFriends { get; set; }
 
 		public string InviteFriendSource { get; set; }
 

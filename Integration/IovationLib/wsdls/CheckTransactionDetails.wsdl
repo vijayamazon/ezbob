@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:namesp1="http://www.iesnare.com/dra/api/CheckTransactionDetails"
+	targetNamespace="http://www.iesnare.com/dra/api/CheckTransactionDetails">
+	<types>
+		<xsd:schema elementFormDefault="qualified" targetNamespace="http://www.iesnare.com/dra/api/CheckTransactionDetails">
+		    <!-- the CheckTransactionDetails Request -->
+			<xsd:element name="CheckTransactionDetails">
+				<xsd:complexType>
+					<xsd:sequence>
+					    <!-- 
+					        subscriberid - the subscriber id
+					    -->
+						<xsd:element name="subscriberid" type="xsd:string" />
+						<!--  
+						    subscriberaccount - the subscriber's OTLP account
+						-->
+						<xsd:element name="subscriberaccount" type="xsd:string" />
+                        <!--  
+	                        subscriberpasscode - the subscriber's OTLP account passcode
+	                    -->
+						<xsd:element name="subscriberpasscode" type="xsd:string" />
+						<!-- 
+						    enduserip - the end user's ipaddress
+						-->
+						<xsd:element name="enduserip" minOccurs="0" type="xsd:string" />
+						<!--  
+						    accountcode - The end user account
+						-->
+						<xsd:element name="accountcode" minOccurs="0" type="xsd:string" />
+						<!-- 
+                            beginblackbox - the begin black box collected from the device 
+                        -->
+						<xsd:element name="beginblackbox" minOccurs="0" type="xsd:string" />
+						<!--  
+						    type - the type of check transaction to perform
+						-->
+						<xsd:element name="type" minOccurs="0" type="xsd:string" />
+						<!--
+						   txn_properties - a list of additional transaction properties to be recorded
+						 -->
+						<xsd:element name="txn_properties" minOccurs="0" nillable="true">
+              <xsd:complexType>
+                <xsd:sequence>
+                   <xsd:element name="property" minOccurs="0" maxOccurs="2" nillable="false">
+                      <xsd:complexType>
+                         <xsd:sequence>
+                            <xsd:element name="name" minOccurs="1" type="xsd:string" nillable="false"/>
+                            <xsd:element name="value" minOccurs="1" type="xsd:string" nillable="false"/>
+                         </xsd:sequence>
+                      </xsd:complexType>
+                   </xsd:element>
+                </xsd:sequence>
+              </xsd:complexType>
+            </xsd:element>
+
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+            <!-- the CheckTransactionDetails Response -->
+			<xsd:element name="CheckTransactionDetailsResponse">
+				<xsd:complexType>
+					<xsd:sequence>
+                        <!-- 
+                            result - the result of the transaction (A, D, R)  
+                        -->
+                        <xsd:element name="result" type="xsd:string" />
+                        <!--  
+                            reason - A user defined reason for the result 
+                        -->
+                        <xsd:element name="reason" minOccurs="0" type="xsd:string" />
+                        <!-- 
+                            trackingnumber - a unique id assigned to the transaction  
+                        -->
+                        <xsd:element name="trackingnumber" type="xsd:string" />
+                        <!--  
+                            endblackbox- the end black box to store on the remote client
+                        -->
+                        <xsd:element name="endblackbox" minOccurs="0" type="xsd:string" />
+                        <!--  
+                            details - a set of  name/value elements containing transaction detail
+							   * device.alias - an alias assigned to the device by iovation
+							   * device.firstseen -  date/time the device was first seen by iovation
+							   * device.new -  true if the device has never been seen by iovation
+							   * device.screen - the screen resolution
+							   * device.type - the hardware (mac, pc, mobile)
+							   * device.os - the os (windows, linux, osx)
+							   * device.tz - the time zone
+							   * device.js.enabled - true/false
+							   * device.flash.enabled - true/false
+							   * device.flash.installed - true/false
+							   * device.flash.version - the flash version
+							   * device.flash.storage.enabled - true/false
+							   * device.cookie.enabled - true/false
+							   * device.browser.type - the browser type (ie, firefox)
+							   * device.browser.version - the browser version
+							   * device.browser.charset - the character set
+							   * device.browser.lang - the browser language
+							   * ipaddress - the ip address
+							   * ipaddress.org - the address owner
+							   * ipaddress.isp - internet service provider
+							   * ipaddress.proxy - satellite or proxy?
+							   * ipaddress.loc.lat - the latitude
+							   * ipaddress.loc.lng - the longitude
+							   * ipaddress.loc.city - the city
+							   * ipaddress.loc.countrycode - the country code
+							   * ipaddress.loc.country - the country name
+							   * ipaddress.loc.region - state/region name 
+					    -->
+						<xsd:element name="details" minOccurs="0">
+							<xsd:complexType>
+								<xsd:sequence>
+									<xsd:element name="detail" minOccurs="1" maxOccurs="unbounded">
+										<xsd:complexType>
+											<xsd:sequence>
+												<xsd:element name="name" type="xsd:string" minOccurs="1" />
+												<xsd:element name="value" type="xsd:string" minOccurs="1" />
+											</xsd:sequence>
+										</xsd:complexType>
+									</xsd:element>
+								</xsd:sequence>
+							</xsd:complexType>
+						</xsd:element>
+					</xsd:sequence>
+				</xsd:complexType>
+			</xsd:element>
+		</xsd:schema>
+	</types>
+	<message name="CheckTransactionDetailsInput">
+		<part name="request" element="namesp1:CheckTransactionDetails" />
+	</message>
+	<message name="CheckTransactionDetailsOutput">
+		<part name="response" element="namesp1:CheckTransactionDetailsResponse" />
+	</message>
+	<portType name="PortType">
+		<operation name="CheckTransactionDetails">
+			<input message="namesp1:CheckTransactionDetailsInput" />
+			<output message="namesp1:CheckTransactionDetailsOutput" />
+		</operation>
+	</portType>
+	<binding name="Binding" type="namesp1:PortType">
+		<soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" />
+		<operation name="CheckTransactionDetails">
+			<soap:operation soapAction="http://www.iesnare.com/dra/api/CheckTransactionDetails#CheckTransactionDetails" style="document" />
+			<input>
+				<soap:body use="literal" />
+			</input>
+			<output>
+				<soap:body use="literal" />
+			</output>
+		</operation>
+	</binding>
+	<service name="Service">
+		<port name="CheckTransactionDetails" binding="namesp1:Binding">
+			<soap:address location="https://soap.iovation.com/api/CheckTransactionDetails" />
+		</port>
+	</service>
+</definitions>

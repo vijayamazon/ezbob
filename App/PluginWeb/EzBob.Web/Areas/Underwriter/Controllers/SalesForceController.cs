@@ -39,8 +39,10 @@
 			model.FromCustomer(customer);
 
 			DateTime? lastCheckDate;
+		    string customerRef;
+
 			var fraudDetections = fraudDetectionLog
-				.GetLastDetections(customer.Id, out lastCheckDate)
+				.GetLastDetections(customer.Id, out lastCheckDate, out customerRef)
 				.Select(x => new FraudDetectionLogRowModel(x))
 				.OrderByDescending(x => x.Id)
 				.ToList();

@@ -12,6 +12,7 @@
 	using NHibernate.Linq;
 	using StructureMap;
 	using System.Text.RegularExpressions;
+	using Ezbob.Utils.Extensions;
 	using NHibernate.Criterion;
 	using NHibernate.Transform;
 
@@ -63,6 +64,7 @@
 						CompanyCheck(customer, customers, fraudDetections);
 						MpCheck(customer, customers, fraudDetections);
 						InternalBankAccountCheck(fraudDetections, customers, customer);
+				        
 						break;
 				}
 			}
@@ -75,7 +77,8 @@
 			return fraudDetections;
 		}
 
-		private void PersonalCheck(Customer customer, IList<Customer> customers, List<FraudDetection> fraudDetections)
+
+	    private void PersonalCheck(Customer customer, IList<Customer> customers, List<FraudDetection> fraudDetections)
 		{
 			InternalFirstMiddleLastNameCheck(customer, customers, fraudDetections);
 			InternalFirstMiddleLastNameCheck(customer, customers, fraudDetections, true);
@@ -86,6 +89,7 @@
 			InternalLastNameRawPostcodeCheck(fraudDetections, customer, customers);
 			InternalIpCheck(fraudDetections, customers, customer);
 			InternalDobLess21(customer, fraudDetections);
+            IovationCheck(fraudDetections, customer);
 		}
 
 		private void CompanyCheck(Customer customer, IList<Customer> customers, List<FraudDetection> fraudDetections)
@@ -525,5 +529,13 @@
 					.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, null)));
 			}
 		}
+
+        private static void IovationCheck(List<FraudDetection> fraudDetections, Customer customer) {
+            fraudDetections.AddRange(customer.IovationChecks.Where(x => x.Result == IovationResult.D || x.Result == IovationResult.R)
+                .Select(c => Helper.CreateDetection("Iovation Transaction Check on " + c.Origin, customer, null, 
+                    string.Format("Result: {0}, Reason: {1}, Score: {2}", c.Result.DescriptionAttr(), c.Reason, c.Score) , null, c.FraudIovationID.ToString())));
+        }
 	}
+
+    
 }

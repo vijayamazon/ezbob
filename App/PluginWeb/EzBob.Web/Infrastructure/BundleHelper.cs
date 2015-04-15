@@ -197,6 +197,7 @@
 
 				//App
 				.Add("~/Content/js/App/ezbob.GA.js")
+                .Add("~/Content/js/App/ezbob.iovation.js")
 				.Add("~/Content/js/App/ezbob.app.js")
 				.Add("~/Content/js/App/ezbob.clicktale.js")
 				.Add("~/Content/js/App/ezbob.bindings.js")

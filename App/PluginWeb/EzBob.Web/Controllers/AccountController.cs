@@ -25,6 +25,7 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using EzBob.Web.Infrastructure.Email;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using Infrastructure.Filters;
@@ -921,6 +922,61 @@
 			model.SetCookie(LogOnModel.Roles.Customer);
 			return Json(new { success = true, broker = false, errorMessage = string.Empty }, JsonRequestBehavior.AllowGet);
 		} // CustomerCreatePassword
+
+        [ValidateJsonAntiForgeryToken]
+		[Ajax]
+        [HttpPost]
+        public JsonResult Iovation(string blackbox, string origin) {
+            var ip = RemoteIp();
+            var customer = this.m_oContext.Customer;
+            if (customer == null) {
+                ms_oLog.Info("Iovation black box {0} ip {1} customer is null", blackbox, ip);
+                return Json(new { });
+            }
+
+            var lastCheck = customer.IovationChecks.OrderByDescending(x => x.Created).FirstOrDefault();
+            if (lastCheck != null && lastCheck.Created > DateTime.UtcNow.AddDays(-ConfigManager.CurrentValues.Instance.IovationCheckPeriod)) {
+                ms_oLog.Info("Not performing iovation check, last one was done on {0}", lastCheck.Created);
+                return Json(new { });
+            }
+
+            if (!customer.WizardStep.TheLastOne && customer.FilledByBroker) {
+                ms_oLog.Info("Not performing iovation check, filled by broker");
+                return Json(new { });
+            }
+
+            var request = new IovationCheckModel {
+                CustomerID = customer.Id,
+                AccountCode = customer.RefNumber,
+                BeginBlackBox = blackbox,
+                Email = customer.Name,
+                EndUserIp = ip,
+                MobilePhoneNumber = customer.PersonalInfo != null ? customer.PersonalInfo.MobilePhone : string.Empty,
+                Origin = origin,
+                Type = "application",
+                mobilePhoneVerified = customer.PersonalInfo != null && customer.PersonalInfo.MobilePhoneVerified,
+                mobilePhoneSmsEnabled = customer.PersonalInfo != null && customer.PersonalInfo.MobilePhoneVerified
+            };
+
+            if (customer.WizardStep.TheLastOne) {
+                var address = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+                request.MoreData = new IovationCheckMoreDataModel {
+                    BillingCity = address == null ? "" : address.Town,
+                    BillingPostalCode = address == null ? "" : address.Postcode,
+                    BillingCountry = address == null ? "" : address.Country,
+                    BillingStreet = address == null ? "" : address.Line1,
+                    FirstName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.FirstName,
+                    LastName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.Surname,
+                    HomePhoneNumber = customer.PersonalInfo == null ? "" : customer.PersonalInfo.DaytimePhone,
+                    EmailVerified = EmailConfirmationState.IsVerified(customer),
+                };
+            }
+
+            this.m_oServiceClient.Instance.IovationCheck(request);
+
+            ms_oLog.Info("Iovation black box {0} ip {1} customer {2}, origin {3}", blackbox, ip, customer.Id, origin);
+            return Json(new {});
+        }
 
 		private MembershipCreateStatus CreateUser(
 			string email,

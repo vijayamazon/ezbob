@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:namesp1="http://www.iesnare.com/dra/api/AddAccountEvidence" targetNamespace="http://www.iesnare.com/dra/api/AddAccountEvidence" xmlns="http://schemas.xmlsoap.org/wsdl/">
+  <types>
+    <xsd:schema elementFormDefault="qualified" targetNamespace="http://www.iesnare.com/dra/api/AddAccountEvidence">
+      <xsd:element name="AddAccountEvidence">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="subscriberid" type="xsd:string" />
+            <xsd:element name="adminaccountname" type="xsd:string" />
+            <xsd:element name="adminpassword" type="xsd:string" />
+            <xsd:element name="accountcode" type="xsd:string" />
+            <xsd:element name="evidencetype" type="xsd:string" />
+            <xsd:element name="comment" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="AddAccountEvidenceResponse">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element maxOccurs="1" name="success" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+      <xsd:element name="AddAccountEvidenceFault">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="module" type="xsd:string" />
+            <xsd:element name="requestid" type="xsd:string" />
+            <xsd:element name="subscriberref" type="xsd:string" />
+          </xsd:sequence>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:schema>
+  </types>
+  <message name="AddAccountEvidenceRequest">
+    <part name="request" element="namesp1:AddAccountEvidence" />
+  </message>
+  <message name="AddAccountEvidenceResponse">
+    <part name="response" element="namesp1:AddAccountEvidenceResponse" />
+  </message>
+  <message name="AddAccountEvidenceFaultResponse">
+    <part name="fault" element="namesp1:AddAccountEvidenceFault" />
+  </message>
+  <portType name="PortType">
+    <operation name="AddAccountEvidence">
+      <input message="namesp1:AddAccountEvidenceRequest" />
+      <output message="namesp1:AddAccountEvidenceResponse" />
+      <fault name="FaultResponse" message="namesp1:AddAccountEvidenceFaultResponse" />
+    </operation>
+  </portType>
+  <binding name="Binding" type="namesp1:PortType">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <operation name="AddAccountEvidence">
+      <soap:operation soapAction="http://www.ieservice.com/dra/api/AddAccountEvidence#AddAccountEvidence" style="document" />
+      <input>
+        <soap:body use="literal" namespace="http://www.ieservice.com/dra/api/AddAccountEvidence" />
+      </input>
+      <output>
+        <soap:body use="literal" namespace="http://www.ieservice.com/dra/api/AddAccountEvidence" />
+      </output>
+      <fault name="FaultResponse">
+        <soap:fault use="literal" name="FaultResponse" namespace="http://www.ieservice.com/dra/api/AddAccountEvidence" />
+      </fault>
+    </operation>
+  </binding>
+  <service name="Service">
+    <port name="AddAccountEvidence" binding="namesp1:Binding">
+      <soap:address location="https://ci-snare.iovation.com/api/AddAccountEvidence" />
+    </port>
+  </service>
+</definitions>

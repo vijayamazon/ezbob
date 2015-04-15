@@ -1,37 +1,26 @@
 ﻿@model dynamic
 
 <script type="text/javascript" >
-	// set common configuration variables
-	var io_install_flash = false;
-	var io_install_stm = false;
-	var io_enable_rip = true;
-	var io_exclude_stm = 12;
-	var io_flash_needs_update_handler = "";
-	
-	@*
-	var io_last_error = "";// string This variable contains the last known error
-	var io_submit_element_id = ""; //string, optional Contains the ID attribute of the HTML form submit element. This parameter is used to determine which form to submit once the request has been submitted to iovation’s server. If io_submit_form_id is set and valid, this parameter will not be used.
-	var io_submit_form_id = ""; //string, optional Contains the ID attribute of the HTML form to submit. This value identifies which form to submit when the request has been sent to iovation’s server. If this value is not set, the form containing io_submit_element_id will be used.
-	
-	// create a Javascript Object to hold the additional elements to send
-	var properties = new Object();
-	properties.rules = "payment"; // use the payment ruleset
-	properties.key = "013J3hiu-oiu_pomq-2nbqpEHhqR"; // restrict calls to those sites in the key
-	
+    // set common configuration variables
+    var io_install_stm = false; // do not install Active X 
+    var io_exclude_stm = 12; // do not run Active X 
+    var io_install_flash = false; // do not install Flash 
+    var io_enable_rip = true; // collect Real IP information 
+    var io_last_error = "";// string This variable contains the last known error
 
-	Prototype
-	boolean ioSubmitLogin( subscriber_code, account_code, properties, max_wait )
-	Description
-	This function transmits the ReputationShieldTM and account information to the Active Fraud AssessmentTM server.
-	Parameters
-	subscriber_code – an iovation supplied value identifying your company/site
-	account_code – a unique id, you choose, that represents the account in your system. Account codes can be UTF-8 up to 80 bytes.
-	properties – an optional argument that contains a Javascript object with properties defining additional attributes to send.
-	max_wait – an optional argument representing the maximum amount of time, in milliseconds, to wait for device printing to complete before sending the data. If this parameter is not set, the default wait time is 1 second.
-	Return Values
-	false – if the request was not immediately sent
-	true – if the request was immediately sent
-	*@
+    var io_subscriber_code = @ConfigManager.CurrentValues.Instance.IovationSubscriberId.Value;
+    
+    //Subscriber supplied variables for snare// Snare operation to perform
+    var io_operation = 'ioBegin';
+
+    // io_bbout_element_id should refer to the hidden field in your form that contains the blackbox
+    //var io_bbout_element_id          = 'ioBlackbox';
+
+   //  use callback to process blackbox as soon as it is done 
+    //var io_bb_callback = function (bb, isComplete) {
+    //    // when done call the send function 
+    //    if (isComplete) EzBob.App.Iovation.io_send_bb(bb);
+    //};
 </script>
 
-<script type="text/javascript" src='@ConfigManager.CurrentValues.Instance.IovationUrl.Value'></script>
+<script type="text/javascript" src="@ConfigManager.CurrentValues.Instance.IovationUrl.Value"></script>
