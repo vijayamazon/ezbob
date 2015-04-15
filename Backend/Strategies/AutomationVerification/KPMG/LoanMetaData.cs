@@ -1,15 +1,12 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using Ezbob.Database;
-	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class LoanMetaData : AResultRow {
 		public LoanMetaData() {
-			AssumedLoanAmount = null;
-			Cap = null;
-			MaxOffer = new MaxOfferValues(this);
-			MinOffer = new MinOfferValues(this);
+			MaxOffer = new OfferValues(this);
+			MinOffer = new OfferValues(this);
 		} // LoanMetaData
 
 		public int CashRequestID { get; set; }
@@ -35,76 +32,29 @@
 
 		public LoanStatus LoanStatus { get; protected set; }
 
-		[NonTraversable]
-		public decimal? Cap {
-			get { return this.cap; }
-			set { this.cap = value <= 0 ? 0 : value; }
-		} // Cap
-
-		[NonTraversable]
-		public decimal? AssumedLoanAmount { get; set; }
-
-		public class MaxOfferValues {
-			public MaxOfferValues(LoanMetaData lmd) {
+		public class OfferValues {
+			public OfferValues(LoanMetaData lmd) {
+				Ratio = 1m;
 				this.lmd = lmd;
 			} // constructor
 
-			public decimal LoanAmount {
-				get {
-					decimal loanAmount = this.lmd.AssumedLoanAmount ?? this.lmd.LoanAmount;
+			public decimal Ratio { get; set; }
 
-					return this.lmd.Cap.HasValue ? Math.Min(loanAmount, this.lmd.Cap.Value) : loanAmount;
-				} // get
-			} // LoanAmount
+			public decimal LoanAmount { get { return this.lmd.LoanAmount * Ratio; } } // LoanAmount
 
-			public decimal RepaidPrincipal {
-				get {
-					decimal repaidPrincipal;
+			public decimal RepaidPrincipal { get { return Math.Min(this.lmd.RepaidPrincipal, LoanAmount); } }
 
-					if (this.lmd.AssumedLoanAmount.HasValue) {
-						repaidPrincipal = this.lmd.LoanAmount == 0
-							? this.lmd.RepaidPrincipal
-							: this.lmd.RepaidPrincipal * this.lmd.AssumedLoanAmount.Value / this.lmd.LoanAmount;
-					} else
-						repaidPrincipal = this.lmd.RepaidPrincipal;
-
-					return this.lmd.Cap.HasValue ? Math.Min(repaidPrincipal, this.lmd.Cap.Value) : repaidPrincipal;
-				} // get
-			} // RepaidPrincipal
+			public decimal OutstandingAmount { get { return LoanAmount - RepaidPrincipal; } }
 
 			private readonly LoanMetaData lmd;
-		} // class MaxOfferValues
+		} // class OfferValues
 
-		public class MinOfferValues {
-			public MinOfferValues(LoanMetaData lmd) {
-				this.lmd = lmd;
-			} // constructor
+		public OfferValues MinOffer { get; private set; }
 
-			public decimal LoanAmount {
-				get {
-					return this.lmd.Cap.HasValue
-						? Math.Min(this.lmd.LoanAmount, this.lmd.Cap.Value)
-						: this.lmd.LoanAmount;
-				} // get
-			} // LoanAmount
-
-			public decimal RepaidPrincipal {
-				get {
-					return this.lmd.Cap.HasValue
-						? Math.Min(this.lmd.RepaidPrincipal, this.lmd.Cap.Value)
-						: this.lmd.RepaidPrincipal;
-				} // get
-			} // RepaidPrincipal
-
-			private readonly LoanMetaData lmd;
-		} // class MinOfferValues
-
-		public MinOfferValues MinOffer { get; private set; }
-
-		public MaxOfferValues MaxOffer { get; private set; }
+		public OfferValues MaxOffer { get; private set; }
 
 		public LoanMetaData Clone() {
-			return new LoanMetaData {
+			var lmd = new LoanMetaData {
 				CashRequestID = CashRequestID,
 				CustomerID = CustomerID,
 				LoanID = LoanID,
@@ -115,12 +65,12 @@
 				Status = Status,
 				RepaidPrincipal = RepaidPrincipal,
 				MaxLateDays = MaxLateDays,
-
-				Cap = Cap,
-				AssumedLoanAmount = AssumedLoanAmount,
 			};
-		} // Clone
 
-		private decimal? cap;
+			lmd.MinOffer.Ratio = MinOffer.Ratio;
+			lmd.MaxOffer.Ratio = MaxOffer.Ratio;
+
+			return lmd;
+		} // Clone
 	} // class LoanMetaData
 } // namespace

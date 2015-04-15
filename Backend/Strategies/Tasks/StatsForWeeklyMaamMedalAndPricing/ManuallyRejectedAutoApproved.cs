@@ -51,6 +51,15 @@
 			row++;
 			column = 1;
 
+			column = SetBorders(row, column).SetCellValue("Average approved amount", true);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(E{0}=0,0,D{0}/E{0})", approvedRow);
+			column = SetBorders(row, column).SetCellValue("");
+
+			row++;
+			column = 1;
+
 			int issuedRow = row;
 
 			column = SetBorders(row, column).SetCellValue("Issued", true);
@@ -58,6 +67,15 @@
 			column = SetBorders(row, column).SetCellValue("N/A");
 			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=D{0} * {1}", approvedRow, LoanAmountRatio);
 			column = SetFormula(row, column, TitledValue.Format.Int,   FormulaColour, "=E{0} * {1}", approvedRow, LoanCountRatio);
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Average issued amount", true);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(E{0}=0,0,D{0}/E{0})", issuedRow);
+			column = SetBorders(row, column).SetCellValue("");
 
 			row++;
 			column = 1;

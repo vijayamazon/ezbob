@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
 	using AutomationCalculator.ProcessHistory.Trails;
-	// using AutomationCalculator.Common;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.Extensions;
@@ -124,33 +123,20 @@
 		} // ToXlsx
 
 		public void SetAdjustedLoanCount(LoanCount manualLoanCount, int manuallyApprovedAmount) {
-			MinLoanCount = AdjustLoanCount(manualLoanCount, manuallyApprovedAmount, ApprovedAmount);
-			MaxOffer.LoanCount = AdjustLoanCount(manualLoanCount, manuallyApprovedAmount, MaxOffer.ApprovedAmount);
+			MinLoanCount = AdjustLoanCount(
+				manualLoanCount,
+				manuallyApprovedAmount,
+				ApprovedAmount,
+				(lc, ratio) => lc.SetMinRatio(ratio)
+			);
+
+			MaxOffer.LoanCount = AdjustLoanCount(
+				manualLoanCount,
+				manuallyApprovedAmount,
+				MaxOffer.ApprovedAmount,
+				(lc, ratio) => lc.SetMaxRatio(ratio)
+			);
 		} // SetAdjustedLoanCount
-
-		private LoanCount AdjustLoanCount(
-			LoanCount manualLoanCount,
-			int manuallyApprovedAmount,
-			decimal autoApprovedAmount
-		) {
-			LoanCount loanCount = manualLoanCount.Clone();
-
-			decimal? capAmount = null;
-
-			if (AutomationDecision == DecisionActions.ReApprove)
-				capAmount = ReapprovedAmount;
-			else if (AutomationDecision == DecisionActions.Approve)
-				capAmount = autoApprovedAmount;
-
-			loanCount.Cap(capAmount);
-
-			decimal takenAmount = manualLoanCount.Total.Amount;
-
-			if ((takenAmount > 0) && (takenAmount == manuallyApprovedAmount))
-				loanCount.AssumedLoanAmount = autoApprovedAmount;
-
-			return loanCount;
-		} // AdjustLoanCount
 
 		public void RunAutomation(bool isHomeOwner, AConnection db) {
 			Log.Info(
@@ -422,8 +408,8 @@
 				odc.CalculateOffer();
 
 				RepaymentPeriod = odc.VerifySeek.RepaymentPeriod;
-                InterestRate = odc.VerifySeek.InterestRate / 100.0m;
-                SetupFeePct = odc.VerifySeek.SetupFee / 100.0m;
+				InterestRate = odc.VerifySeek.InterestRate / 100.0m;
+				SetupFeePct = odc.VerifySeek.SetupFee / 100.0m;
 				SetupFeeAmount = ApprovedAmount * SetupFeePct;
 
 				Log.Info(
@@ -505,11 +491,33 @@
 				odc.CalculateOffer();
 
 				MaxOffer.RepaymentPeriod = odc.VerifySeek.RepaymentPeriod;
-                MaxOffer.InterestRate = odc.VerifySeek.InterestRate / 100.0m;
-                MaxOffer.SetupFeePct = odc.VerifySeek.SetupFee / 100.0m;
+				MaxOffer.InterestRate = odc.VerifySeek.InterestRate / 100.0m;
+				MaxOffer.SetupFeePct = odc.VerifySeek.SetupFee / 100.0m;
 				MaxOffer.SetupFeeAmount = MaxOffer.ApprovedAmount * MaxOffer.SetupFeePct;
 			} // if
 		} // CalculateMaxOffer
+
+		private LoanCount AdjustLoanCount(
+			LoanCount manualLoanCount,
+			int manuallyApprovedAmount,
+			decimal autoApprovedAmount,
+			Action<LoanCount, decimal> setRatio
+		) {
+			LoanCount loanCount = manualLoanCount.Clone();
+
+			decimal ratio = 0;
+
+			if (manuallyApprovedAmount > 0) {
+				if (AutomationDecision == DecisionActions.ReApprove)
+					ratio = ReapprovedAmount / manuallyApprovedAmount;
+				else if (AutomationDecision == DecisionActions.Approve)
+					ratio = autoApprovedAmount / manuallyApprovedAmount;
+			} // if
+
+			setRatio(loanCount, ratio);
+
+			return loanCount;
+		} // AdjustLoanCount
 
 		private DecisionActions automationDecision;
 		private Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal;

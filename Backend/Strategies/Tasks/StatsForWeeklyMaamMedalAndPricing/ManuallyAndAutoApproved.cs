@@ -61,6 +61,15 @@
 			row++;
 			column = 1;
 
+			column = SetBorders(row, column).SetCellValue("Average approved amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(C{0}=0,0,B{0}/C{0})", approvedRow);
+			column = SetBorders(row, column).SetCellValue("");
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(E{0}=0,0,D{0}/E{0})", approvedRow);
+			column = SetBorders(row, column).SetCellValue("");
+
+			row++;
+			column = 1;
+
 			int issuedRow = row;
 
 			column = SetBorders(row, column).SetCellValue("Issued", true);
@@ -71,6 +80,24 @@
 
 			loanCountRatio = string.Format("IF(E{1}=0,0,E{0}/E{1})", issuedRow, approvedRow);
 			loanAmountRatio = string.Format("IF(D{1}=0,0,D{0}/D{1})", issuedRow, approvedRow);
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Average issued amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(C{0}=0,0,B{0}/C{0})", issuedRow);
+			column = SetBorders(row, column).SetCellValue("");
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(E{0}=0,0,D{0}/E{0})", issuedRow);
+			column = SetBorders(row, column).SetCellValue("");
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Issued amount / approved amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=IF(B{0}=0,0,B{1}/B{0})", approvedRow, issuedRow);
+			column = SetBorders(row, column).SetCellValue("");
+			column = SetFormula(row, column, TitledValue.Format.Percent, FormulaColour, "=IF(D{0}=0,0,D{1}/D{0})", approvedRow, issuedRow);
+			column = SetBorders(row, column).SetCellValue("");
 
 			row++;
 			column = 1;

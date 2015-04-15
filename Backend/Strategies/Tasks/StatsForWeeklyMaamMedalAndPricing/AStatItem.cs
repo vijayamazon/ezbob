@@ -10,6 +10,8 @@
 	using OfficeOpenXml.Style;
 
 	internal abstract class AStatItem {
+		public static readonly Color FormulaColour = Color.RoyalBlue;
+
 		public abstract void Add(Datum d, int cashRequestIndex);
 
 		public virtual int ToXlsx(int row) {
@@ -67,6 +69,12 @@
 		} // SetBorders
 
 		public ASafeLog Log { get; private set; }
+
+		[StringFormatMethod("formulaFormat")]
+		public static int SetFormula(ExcelWorksheet sheet, int row, int column, string valueFormat, Color fontColor, string formulaFormat, params object[] args) {
+			sheet.Cells[row, column].Style.Font.Color.SetColor(fontColor);
+			return SetFormula(sheet, row, column, valueFormat, formulaFormat, args);
+		} // SetFormula
 
 		[StringFormatMethod("formulaFormat")]
 		public static int SetFormula(ExcelWorksheet sheet, int row, int column, string valueFormat, string formulaFormat, params object[] args) {
@@ -228,7 +236,6 @@
 
 		protected virtual string Title { get { return this.title; } }
 
-		protected static readonly Color FormulaColour = Color.RoyalBlue;
 		protected static readonly Color InputFieldColour = Color.Crimson;
 
 		private readonly ExcelWorksheet sheet;

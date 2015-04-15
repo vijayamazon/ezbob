@@ -113,8 +113,8 @@
 		[SuppressMessage("ReSharper", "RedundantAssignment")]
 		private int DrawTotalSummary(int row, int rowMAAA, int rowMRAA, int rowMAAR) {
 			const int countOffset = 1;
-			const int issuedOffset = countOffset + 1;
-			const int defaultIssuedOffset = issuedOffset + 1;
+			const int issuedOffset = countOffset + 2;
+			const int defaultIssuedOffset = issuedOffset + 3;
 			const int defaultOutstandingOffset = defaultIssuedOffset + 3;
 
 			int offset;
@@ -142,6 +142,15 @@
 			row++;
 			column = 1;
 
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Average approved amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, AStatItem.FormulaColour, "=IF(C{0}=0,0,B{0}/C{0})", approvedRow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("");
+			column = SetFormula(row, column, TitledValue.Format.Money, AStatItem.FormulaColour, "=IF(E{0}=0,0,D{0}/E{0})", approvedRow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("");
+
+			row++;
+			column = 1;
+
 			int issuedRow = row;
 			offset = issuedOffset;
 
@@ -150,6 +159,24 @@
 			column = SetFormula(row, column, TitledValue.Format.Int,   ThreeSum, "C", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
 			column = SetFormula(row, column, TitledValue.Format.Money, ThreeSum, "D", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
 			column = SetFormula(row, column, TitledValue.Format.Int,   ThreeSum, "E", rowMAAA + offset, rowMRAA + offset, rowMAAR + offset);
+
+			row++;
+			column = 1;
+
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Average issued amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, AStatItem.FormulaColour, "=IF(C{0}=0,0,B{0}/C{0})", issuedRow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("");
+			column = SetFormula(row, column, TitledValue.Format.Money, AStatItem.FormulaColour, "=IF(E{0}=0,0,D{0}/E{0})", issuedRow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("");
+
+			row++;
+			column = 1;
+
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Issued amount / approved amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Percent, AStatItem.FormulaColour, "=IF(B{0}=0,0,B{1}/B{0})", approvedRow, issuedRow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("");
+			column = SetFormula(row, column, TitledValue.Format.Percent, AStatItem.FormulaColour, "=IF(D{0}=0,0,D{1}/D{0})", approvedRow, issuedRow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("");
 
 			row++;
 			column = 1;
@@ -217,6 +244,11 @@
 		[StringFormatMethod("formulaFormat")]
 		private int SetFormula(int row, int column, string valueFormat, string formulaFormat, params object[] args) {
 			return AStatItem.SetFormula(this.sheet, row, column, valueFormat, formulaFormat, args);
+		} // SetFormula
+
+		[StringFormatMethod("formulaFormat")]
+		private int SetFormula(int row, int column, string valueFormat, Color fontColor, string formulaFormat, params object[] args) {
+			return AStatItem.SetFormula(this.sheet, row, column, valueFormat, fontColor, formulaFormat, args);
 		} // SetFormula
 
 		private int FlushLoanIDList(ExcelWorksheet targetSheet, int column, string title, IEnumerable<int> ids) {

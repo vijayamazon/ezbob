@@ -37,9 +37,7 @@
 
 			DefaultOutstanding = new CountAmount(
 				DefaultLoans,
-				lmd => takeMin
-					? lmd.MinOffer.LoanAmount - lmd.MinOffer.RepaidPrincipal
-					: lmd.MaxOffer.LoanAmount - lmd.MaxOffer.RepaidPrincipal
+				lmd => takeMin ? lmd.MinOffer.OutstandingAmount : lmd.MaxOffer.OutstandingAmount
 			);
 		} // constructor
 
@@ -56,17 +54,15 @@
 			DefaultLoans.Clear();
 		} // Clear
 
-		public decimal AssumedLoanAmount {
-			set {
-				foreach (KeyValuePair<int, LoanMetaData> pair in Loans)
-					pair.Value.AssumedLoanAmount = value;
-			} // set
-		} // AssumedLoanAmount
-
-		public void Cap(decimal? amount) {
+		public void SetMinRatio(decimal ratio) {
 			foreach (KeyValuePair<int, LoanMetaData> pair in Loans)
-				pair.Value.Cap = amount;
-		} // Cap
+				pair.Value.MinOffer.Ratio = ratio;
+		} // SetMinRatio
+
+		public void SetMaxRatio(decimal ratio) {
+			foreach (KeyValuePair<int, LoanMetaData> pair in Loans)
+				pair.Value.MaxOffer.Ratio = ratio;
+		} // SetMaxRatio
 
 		public void Append(LoanMetaData lmd) {
 			if (lmd == null)
@@ -93,13 +89,9 @@
 				DefaultLoans[pair.Key] = withClone ? Loans[pair.Key] : pair.Value;
 		} // Append
 
-		public IEnumerable<int> IDs {
-			get { return Loans.Keys; }
-		}
+		public IEnumerable<int> IDs { get { return Loans.Keys; } }
 
-		public IEnumerable<int> DefaultIDs {
-			get { return DefaultLoans.Keys; }
-		}
+		public IEnumerable<int> DefaultIDs { get { return DefaultLoans.Keys; } }
 
 		public SortedDictionary<int, LoanMetaData> Loans { get; private set; }
 		public SortedDictionary<int, LoanMetaData> DefaultLoans { get; private set; }
@@ -114,9 +106,7 @@
 				this.extractAmount = extractAmount;
 			} // constructor
 
-			public bool Exist {
-				get { return Count > 0; }
-			} // Exist
+			public bool Exist { get { return Count > 0; } }
 
 			public int Count { get { return this.loans.Count; } }
 

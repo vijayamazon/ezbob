@@ -47,11 +47,29 @@
 			row++;
 			column = 1;
 
+			column = SetBorders(row, column).SetCellValue("Average approved amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(C{0}=0,0,B{0}/C{0})", approvedRow);
+			column = SetBorders(row, column).SetCellValue("");
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+
+			row++;
+			column = 1;
+
 			int issuedRow = row;
 
 			column = SetBorders(row, column).SetCellValue("Issued", true);
 			column = SetCellGbp(row, column, LoanCount.Total.Amount);
 			column = SetCellInt(row, column, LoanCount.Total.Count);
+			column = SetBorders(row, column).SetCellValue("N/A");
+			column = SetBorders(row, column).SetCellValue("N/A");
+
+			row++;
+			column = 1;
+
+			column = SetBorders(row, column).SetCellValue("Average issued amount", true);
+			column = SetFormula(row, column, TitledValue.Format.Money, FormulaColour, "=IF(C{0}=0,0,B{0}/C{0})", issuedRow);
+			column = SetBorders(row, column).SetCellValue("");
 			column = SetBorders(row, column).SetCellValue("N/A");
 			column = SetBorders(row, column).SetCellValue("N/A");
 
