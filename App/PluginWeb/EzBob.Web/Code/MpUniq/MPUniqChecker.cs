@@ -24,7 +24,8 @@ namespace EzBob.Web.Code.MpUniq
             }
             if (_customerMarketPlaceRepository.Exists(marketplaceType, customer, token))
             {
-                throw new MarketPlaceAddedByThisCustomerException();
+                return;
+                //throw new MarketPlaceAddedByThisCustomerException();
             }
             if (_customerMarketPlaceRepository.Exists(marketplaceType, token))
             {

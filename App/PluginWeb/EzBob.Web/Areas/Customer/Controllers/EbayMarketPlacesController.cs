@@ -112,8 +112,6 @@
 
                 var ebay = new eBayDatabaseMarketPlace();
 
-                this.mpChecker.Check(ebay.InternalId, customer, username);
-
                 var sid = TempData["SID"] as string;
                 var isUpdate = TempData["isUpdate"] is bool && (bool)TempData["isUpdate"];
 
@@ -131,12 +129,14 @@
                 Log.InfoFormat("Token {0} was generated.", token);
 
                 var eBaySecurityInfo = new eBaySecurityInfo { Token = token };
-
+                
                 bool isValid = this.eBayServiceHelper.ValidateAccount(eBaySecurityInfo);
                 if (!isValid) {
                     Log.WarnFormat("eBay account has not been activated yet");
                     return Json(new { error = "Your account has not been activated yet. Accounts are not accessible until an actual debit or credit has first been posted to the account, even though you may have already filled out our account creation form." }, JsonRequestBehavior.AllowGet);
                 }
+                
+                this.mpChecker.Check(ebay.InternalId, customer, username);
 
                 var mp = this.helper.SaveOrUpdateCustomerMarketplace(username, ebay, eBaySecurityInfo, customer);
 
