@@ -1,7 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
+	using Ezbob.Backend.Strategies.SalesForce;
+    using Ezbob.Utils.Extensions;
+    using SalesForceLib.Models;
 
-	public class LoanFullyPaid : AMailStrategyBase {
+    public class LoanFullyPaid : AMailStrategyBase {
 
 		public LoanFullyPaid(int customerId, string loanRefNum) : base(customerId, true) {
 			this.loanRefNum = loanRefNum;
@@ -18,6 +22,16 @@
 			};
 		} // SetTemplateAndVariables
 
-		private readonly string loanRefNum;
+	    protected override void ActionAtEnd() {
+            SalesForce.AddOpportunity addOpportunity = new AddOpportunity(CustomerData.Id, new OpportunityModel {
+                CreateDate = DateTime.UtcNow,
+                Email = CustomerData.Mail,
+                Stage = OpportunityStage.s5.DescriptionAttr(),
+                Type = OpportunityType.FinishLoan.DescriptionAttr()
+            });
+            addOpportunity.Execute();
+	    }
+
+	    private readonly string loanRefNum;
 	} // class LoanFullyPaid
 } // namespace

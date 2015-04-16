@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
-	using MailStrategies.API;
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -8,7 +7,7 @@
 	using Ezbob.Database;
 	using PaymentServices.PayPoint;
 
-	public class AutoPaymentResult {
+    public class AutoPaymentResult {
 		public decimal ActualAmountCharged { get; set; }
 		public bool PaymentFailed { get; set; }
 		public bool PaymentCollectedSuccessfully { get; set; }
@@ -164,15 +163,8 @@
 			string loanStatus = sr["Status"];
 
 			if (loanStatus == "PaidOff") {
-				var variables = new Dictionary<string, string>
-					{
-						{"FirstName", firstName},
-						{"RefNum", refNum}
-					};
-
-				PayPointChargerMails payPointChargerMails = new PayPointChargerMails(customerId, "Mandrill - Loan paid in full", variables);
-				payPointChargerMails.Execute();
-				
+			    LoanFullyPaid loanFullyPaid = new LoanFullyPaid(customerId, refNum);
+			    loanFullyPaid.Execute();
 			}
 		}
 
