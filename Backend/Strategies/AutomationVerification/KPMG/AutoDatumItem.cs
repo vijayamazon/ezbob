@@ -146,11 +146,11 @@
 				DecisionTime.MomentStr()
 			);
 
-			RunAutoRerejection(db);
+			// RunAutoRerejection(db);
 
 			RunAutoReject(db);
 
-			RunAutoReapproval(db);
+			// RunAutoReapproval(db);
 
 			this.medal = RunCalculateMedal();
 
