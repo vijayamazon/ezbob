@@ -98,11 +98,12 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
 
     ownValidationRules: function () {
         return {
-            NonLimitedCompanyName: { required: true, minlength: 2 },
+            NonLimitedCompanyName: { required: true, minlength: 2, maxlength: 255 },
             NonLimitedTimeInBusiness: { required: true },
             CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-            TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
-            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+            TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
+            OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 1, autonumericMax: 1000000000 },
+            EmployeeCount: { required: true, numeric: true, min: 0, max: 1000 }
         };
     }, // ownValidationRules
 

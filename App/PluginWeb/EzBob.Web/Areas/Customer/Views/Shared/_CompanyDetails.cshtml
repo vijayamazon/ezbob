@@ -128,7 +128,7 @@
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Mobile number</span>
-                            <input type="text" class="phonenumber form_field" name="MobilePhone" id="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" ui-event-control-id="personal-info:mobile_phone" />
+                            <input type="tel" class="phonenumber form_field" name="MobilePhone" id="MobilePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>" ui-event-control-id="personal-info:mobile_phone" />
                             <img id="MobilePhoneImage" class="field_status required" />
                         </label>
                     </div>
@@ -138,7 +138,7 @@
                     <div class="controls">
                         <label class="control-label attardi-input">
                             <span>Other contact number</span>
-                            <input type="text" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" ui-event-control-id="personal-info:daytime_phone" />
+                            <input type="tel" class="phonenumber form_field" id="DayTimePhone" name="DayTimePhone" value="<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>" ui-event-control-id="personal-info:daytime_phone" />
                             <img id="DayTimePhoneImage" class="field_status required" />
                         </label>
                     </div>
@@ -220,7 +220,7 @@
                         <div class="controls cashControlls">
                             <label class="attardi-input">
                                 <span>Total annual revenue</span>
-                                <input id="OverallTurnOver" name="OverallTurnOver" type="text" class="cashInput form_field" ui-event-control-id="personal-info:overall_turnover" />
+                                <input id="OverallTurnOver" name="OverallTurnOver" type="tel" class="cashInput form_field" ui-event-control-id="personal-info:overall_turnover" />
                                 <img id="OverallTurnOverImage" class="field_status required" />
                             </label>
                         </div>
@@ -256,7 +256,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Current # of employees</span>
-                <input id="EmployeeCount" name="EmployeeCount" type="text" class="form_field numeric" min="0" ui-event-control-id="personal-info:employee_count" />
+                <input id="EmployeeCount" name="EmployeeCount" type="tel" class="form_field numeric" min="0" max="1000" ui-event-control-id="personal-info:employee_count" />
                 <img id="EmployeeCountImage" class="field_status required" />
             </label>
         </div>
@@ -266,7 +266,7 @@
         <div class="controls">
             <label class="control-label attardi-input">
                 <span>Total monthly salary expenditure (inc tax & national insurance)</span>
-                <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="text" class="form_field cashInput" ui-event-control-id="personal-info:total_monthly_salary" />
+                <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="tel" class="form_field cashInput" ui-event-control-id="personal-info:total_monthly_salary" />
                 <img id="TotalMonthlySalaryImage" class="field_status required" />
             </label>
         </div>
@@ -438,7 +438,7 @@
                 <div class="controls">
                     <label class="control-label attardi-input">
                         <span>Best contact number</span>
-                        <input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="text" value="<%- director.Phone %>" ui-event-control-id="personal-info:director_phone" />
+                        <input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="tel" value="<%- director.Phone %>" ui-event-control-id="personal-info:director_phone" />
                         <img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
                     </label>
                 </div>

@@ -5,7 +5,7 @@ EzBob.Validation = EzBob.Validation || {};
 
 EzBob.Validation.NameValidationObjectOld = { regex: "^(([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))( ([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))*$", required: true, minlength: 2 };
 
-EzBob.Validation.NameValidationObject = { nameValidator: true, required: true, minlength: 2 };
+EzBob.Validation.NameValidationObject = { nameValidator: true, required: true, minlength: 2, maxlength: 100 };
 
 //-----------------------------------------------------------------
 EzBob.Validation.addressErrorPlacement = function(el, model, nDirectorID, sTypeOfBusiness) {
@@ -300,6 +300,10 @@ $.validator.methods.yearLimit = function (value, element, yearCount) {
 //-----------  Director Validation -----------  
 
 EzBob.Validation.checkDirectorName = function (value, elm) {
+    if (value.length > 100) {
+        return false;
+    }
+
     if (/\.Name$/.test(elm.name)) {
         var trimmed = $.trim(value);
         var re = /^(([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))( ([a-zA-Z]*[AEIOUYaeiouy]+[a-zA-Z]*)|(Ng)|(ng))*$/;
@@ -310,11 +314,12 @@ EzBob.Validation.checkDirectorName = function (value, elm) {
 }; // EzBob.Validation.checkDirectorName
 
 EzBob.Validation.checkDirectorSurName = function (value, elm) {
-    return value.length >= 1;
+    return value.length >= 1 && value.length <= 100;
 }; // EzBob.Validation.checkDirectorSurName
 
 jQuery.validator.addMethod('director_name_part', EzBob.Validation.checkDirectorName, 'Please check your input.');
 jQuery.validator.addMethod('director_surname_part', EzBob.Validation.checkDirectorSurName, 'Please check your input.');
+
 
 EzBob.Validation.checkDirectorGender = function(ignored, elm) {
     return $(elm).closest('.FormRadioCtrl').find('.director_gender:checked').length == 1;

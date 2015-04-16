@@ -180,7 +180,7 @@ $(function() {
 			this.attr("maxlength", maxLength);
 		}
 		return this.each(function() {
-			$(this).bind('keyup blur', function() {
+		    $(this).bind('keyup blur', function () {
 				var regexp = /[^0-9]/;
 				while (regexp.test(this.value)) {
 					this.value = this.value.replace(regexp, '');
@@ -1151,7 +1151,7 @@ EzBob.validateSignUpForm = function(el) {
 			securityQuestion: { required: true },
 			SecurityAnswer: { required: true, maxlength: 199 },
 			CaptchaInputText: { required: true, minlength: 6, maxlength: 6 },
-			amount: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+			amount: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
 			customerReason: { required: true },
 			customerSourceOfRepayment: { required: true },
 			otherCustomerReason: { required: true },
@@ -1226,10 +1226,11 @@ EzBob.validateRestorePasswordForm = function(el) {
 EzBob.validatePersonalDetailsForm = function(el) {
 	var e = el || $(".PersonalDetailsForm");
 
-	return e.validate({
-		rules: {
-			FirstName: EzBob.Validation.NameValidationObject,
-			Surname: { required: true },
+    return e.validate({
+        rules: {
+            FirstName: EzBob.Validation.NameValidationObject,
+            MiddleInitial: { required: false, maxlength: 100 },
+			Surname: { required: true, maxlength: 100 },
 			DateOfBirth: { requiredDate: true, yearLimit: 18 },
 			DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
 			MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
@@ -1260,9 +1261,9 @@ EzBob.validateLimitedCompanyDetailForm = function(el) {
 		rules: {
 			//limited company info
 			LimitedCompanyNumber: { required: true, maxlength: 255, regex: "^[a-zA-Z0-9]+$" },
-			LimitedCompanyName: { required: true, minlength: 2 },
+			LimitedCompanyName: { required: true, minlength: 2, maxlength: 255 },
 			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
 		},
 		messages: {
 			LimitedCompanyNumber: { regex: "Please enter a valid company number" },
@@ -1281,10 +1282,10 @@ EzBob.validateNonLimitedCompanyDetailForm = function(el) {
 	return e.validate({
 		rules: {
 			//Non limited company info
-			NonLimitedCompanyName: { required: true, minlength: 2 },
+			NonLimitedCompanyName: { required: true, minlength: 2, maxlength: 255 },
 			NonLimitedTimeInBusiness: { required: true },
 			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
-			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)" },
+			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
 		},
 		messages: {
 			CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
@@ -1342,8 +1343,8 @@ EzBob.validateYourInfoEditForm = function(el) {
 			DayTimePhone: { required: true, regex: "^0[0-9]{10}$" },
 			MobilePhone: { required: true, regex: "^0[0-9]{10}$" },
 			BusinessPhone: { required: true, regex: "^0[0-9]{10}$" },
-			OverallTurnOver: { required: true, digits: true, min: 1 },
-			WebSiteTurnOver: { required: true, digits: true, min: isOffline ? 0 : 1 }
+			OverallTurnOver: { required: true, digits: true, min: 1, max: 1000000000 },
+			WebSiteTurnOver: { required: true, digits: true, min: isOffline ? 0 : 1, max: 1000000000 }
 		},
 		messages: {
 			DayTimePhone: { regex: "Please enter a valid UK number" },

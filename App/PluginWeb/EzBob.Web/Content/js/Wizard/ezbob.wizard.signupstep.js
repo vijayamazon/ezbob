@@ -85,6 +85,7 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		this.$el.find('#amount').moneyFormat();
 
+		this.$el.find('.phonenumber').mask('0?9999999999', { placeholder: ' ' });
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.phonenumbercode').numericOnly(6);
 

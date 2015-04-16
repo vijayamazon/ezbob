@@ -285,7 +285,7 @@ EzBob.AddDirectorInfoView = EzBob.ItemView.extend({
 		return this.form().validate({
 			rules: {
 				Name: EzBob.Validation.NameValidationObject,
-				Surname: { required: true },
+				Surname: { required: true, maxlength: 100 },
 				Gender: { required: true },
 				DateOfBirth: { requiredDate: true, yearLimit: 18 },
 				Email: { required: true, email: true },

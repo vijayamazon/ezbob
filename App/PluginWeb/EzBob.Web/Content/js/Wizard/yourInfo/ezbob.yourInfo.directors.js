@@ -67,6 +67,7 @@ EzBob.DirectorMainView = Backbone.View.extend({
 		EzBob.UiAction.registerView(this);
 
 		this.$el.find('.alphaOnly').alphaOnly();
+		this.$el.find('.phonenumber').mask('0?9999999999', { placeholder: ' ' });
 		this.$el.find('.phonenumber').numericOnly(11);
 		this.$el.find('.addressCaption').hide();
 
