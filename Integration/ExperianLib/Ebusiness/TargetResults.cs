@@ -4,8 +4,9 @@ using System.Xml.Linq;
 namespace ExperianLib.Ebusiness
 {
 	using System.Linq;
+	using Ezbob.Backend.Models;
 
-	public class TargetResults
+    public class TargetResults
 	{
 		public List<CompanyInfo> Targets { get; private set; }
 		public string OutStr { get; private set; }

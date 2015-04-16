@@ -1,15 +1,14 @@
-﻿
-using ExperianLib.Ebusiness;
-using ExperianLib.Tests.Integration;
-using Ezbob.Backend.Strategies.CreditSafe;
-using Ezbob.Backend.Strategies;
-using Ezbob.CreditSafeLib;
-using Ezbob.CreditSafeLib.Ebussiness;
-using Ezbob.Database;
-using NUnit.Framework;
-
-namespace EzBobTest
+﻿namespace EzBobTest
 {
+    using ExperianLib.Tests.Integration;
+    using Ezbob.Backend.Strategies.CreditSafe;
+    using Ezbob.Backend.Strategies;
+    using Ezbob.CreditSafeLib;
+    using NUnit.Framework;
+    using EzServiceAccessor;
+    using EzServiceShortcut;
+    using StructureMap;
+
     [TestFixture]
     public class TestCreditSafe : BaseTest
     {
@@ -50,9 +49,10 @@ namespace EzBobTest
         }
 
         [SetUp]
-        public void init()
+        public void Init()
         {
             Library.Initialize(this.oLog4NetCfg.Environment, this.m_oDB, this.m_oLog);
+            ObjectFactory.Configure(x => x.For<IEzServiceAccessor>().Use<EzServiceAccessorShort>());
         }
 
         [Test]
@@ -103,8 +103,8 @@ namespace EzBobTest
         [Ignore]
         public void TestSaveToServiceLog()
         {
-            ServiceLogCreditSafeLtd serviceLogTest = new ServiceLogCreditSafeLtd();
-            serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 27);
+            var serviceLogTest = new CreditSafeLtdService();
+            serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
             //AConnection oDB=new SqlConnection();
             //EBusinessService ser = new EBusinessService(new SqlConnection());
            // ser.DownloadOneLimitedFromExperian("X9999999", 27);

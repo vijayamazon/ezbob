@@ -779,5 +779,12 @@
 
 		[OperationContract]
 		ActionMetaData TotalMaamMedalAndPricing();
+
+        [OperationContract]
+        ActionMetaData ParseCreditSafeLtd(int customerID, int userID, long serviceLogID);
+
+        [OperationContract]
+        ExperianTargetingActionResult ExperianTarget(int customerID, int userID, ExperianTargetingRequest request);
+
 	} // interface IEzService
 } // namespace EzService

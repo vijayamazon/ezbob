@@ -175,5 +175,17 @@
 		public ActionMetaData UpdateCustomerAnalyticsOnCompanyChange(int customerID) {
 			return Execute<UpdateCustomerAnalyticsOnCompanyChange>(customerID, null, customerID);
 		} // UpdateCustomerAnalyticsOnCompanyChange
+
+	    public ExperianTargetingActionResult ExperianTarget(int customerID, int userID, ExperianTargetingRequest request) {
+            ExperianTargeting strategyInstance;
+
+            var result = ExecuteSync(out strategyInstance, customerID, userID, request);
+
+            return new ExperianTargetingActionResult
+            {
+                MetaData = result,
+                CompanyInfos = strategyInstance.Response
+            };
+        }//ExperianTarget
 	} // class EzServiceImplementation
 } // namespace EzService

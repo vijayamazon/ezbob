@@ -10,6 +10,7 @@
 	using NUnit.Framework;
 	using NHibernateWrapper.NHibernate;
 	using Ezbob.RegistryScanner;
+	using EzServiceAccessor;
 	using StructureMap;
 	using StructureMap.Pipeline;
 

@@ -52,7 +52,7 @@ namespace Ezbob.Backend.Strategies.CreditSafe
 
             try
             {
-                var outputRootSerializer = new XmlSerializer(typeof(CreditSafeLtdResponse));
+                var outputRootSerializer = new XmlSerializer(typeof(CreditSafeLtdResponse), new XmlRootAttribute("xmlresponse"));
                 var outputRoot = (CreditSafeLtdResponse)outputRootSerializer.Deserialize(new StringReader(sr["ResponseData"]));
                 if (outputRoot == null)
                 {

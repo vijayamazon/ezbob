@@ -8,7 +8,9 @@
 	using System.Web;
 	using ConfigManager;
 	using ExperianLib.EBusiness;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.CreditSafeLib;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Lingvo;
@@ -16,6 +18,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
+    using Ezbob.Backend.Models;
 
 	public class EBusinessService {
 		public EBusinessService(AConnection oDB) {
@@ -196,7 +199,13 @@
 
 			ms_oLog.Debug("Downloading data from Experian for company {0} and customer {1} complete.", regNumber, customerId);
 
-			return pkg.Out.ExperianLtd;
+		    try {
+		        CreditSafeLtdService creditSafeLtdService = new CreditSafeLtdService();
+		        creditSafeLtdService.ServiceLogCreditSafeLtdData(regNumber, customerId);
+		    } catch (Exception ex) {
+		        ms_oLog.Error(ex, "CreditSafeLtdService failed");
+		    }
+		    return pkg.Out.ExperianLtd;
 		} // DownloadOneLimitedFromExperian
 
 		private bool CacheExpired(DateTime? updateDate) {

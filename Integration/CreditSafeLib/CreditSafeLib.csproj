@@ -30,6 +30,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="StructureMap, Version=2.6.3.0, Culture=neutral, PublicKeyToken=e60ad81abae3c223, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.EnterpriseServices" />
@@ -58,7 +62,7 @@
     <Compile Include="CreditsafeRequestModel.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ServiceLogCreditSafeLtd.cs" />
+    <Compile Include="CreditSafeLtdService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\CreditSafeServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>
@@ -67,6 +71,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
+      <Project>{D283AD52-FE57-4CD8-A928-A7A3AF9F04EC}</Project>
+      <Name>EzServiceAccessor</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
       <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
@@ -78,10 +86,6 @@
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ExperianLib\ExperianLib.csproj">
-      <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
-      <Name>ExperianLib</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
