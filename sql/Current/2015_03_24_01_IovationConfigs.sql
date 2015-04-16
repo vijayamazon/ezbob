@@ -4,6 +4,10 @@ SELECT @Environment = Value FROM ConfigurationVariables WHERE Name = 'Environmen
 
 IF @Environment = 'Prod'
 BEGIN
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationUrl')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationUrl', 'https://mpsnare.iesnare.com/snare.js', 'iovation prod URL')
+	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationSubscriberId')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationSubscriberId', '883900', 'an iovation supplied value identifying your company/site')
@@ -46,7 +50,10 @@ BEGIN
 END
 ELSE	
 BEGIN
-
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationUrl')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationUrl', 'https://ci-mpsnare.iovation.com/snare.js', 'iovation test URL')
+	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationSubscriberId')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationSubscriberId', '962002', 'an iovation supplied value identifying your company/site')
