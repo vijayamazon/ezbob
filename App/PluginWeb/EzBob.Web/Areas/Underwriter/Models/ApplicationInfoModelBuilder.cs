@@ -178,8 +178,8 @@
 
             var calc = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent);
             model.TotalSetupFee = calc.Calculate(model.OfferedCreditLine);
-            model.TotalSetupFeePercent = model.OfferedCreditLine == 0 ? 0 : model.TotalSetupFee / model.OfferedCreditLine;
             model.BrokerSetupFee = calc.CalculateBrokerFee(model.OfferedCreditLine);
+            model.TotalSetupFeePercent = model.OfferedCreditLine == 0 ? 0 : model.TotalSetupFee / model.OfferedCreditLine;
             model.BrokerSetupFeeActualPercent = model.OfferedCreditLine == 0 ? 0 : model.BrokerSetupFee / model.OfferedCreditLine;
             model.SetupFee = model.TotalSetupFee - model.BrokerSetupFee;
             model.SetupFeeActualPercent = model.OfferedCreditLine == 0 ? 0 : model.SetupFee / model.OfferedCreditLine;

@@ -427,7 +427,7 @@
             <tr>
                 <td>setup fee</td>
                 <td>
-                    <span><%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) + ' (' + EzBob.formatPounds(m.ManualSetupFeePercent * m.OfferedCreditLine) + ')' : 'No setup fee' %></span>
+                    <span><%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) + ' (' + EzBob.formatPounds(m.SetupFee) + ')' : 'No setup fee' %></span>
                      <%if(m.Editable){%>
                     <button class="btn btn-mini couple_buttons left-pane-button" name="manualSetupFeeEditPercentButton">%</button>
                     <%}%>
@@ -436,7 +436,7 @@
             <tr>
                 <td>broker fee</td>
                 <td>
-                    <span><%= m.BrokerSetupFeePercent ? EzBob.formatPercents(m.BrokerSetupFeePercent) + ' (' + EzBob.formatPounds(m.BrokerSetupFeePercent * m.OfferedCreditLine) + ')' : 'No broker fee' %></span>
+                    <span><%= m.BrokerSetupFeePercent ? EzBob.formatPercents(m.BrokerSetupFeePercent) + ' (' + EzBob.formatPounds(m.BrokerSetupFee) + ')' : 'No broker fee' %></span>
                     <%if(m.Editable){%>
                     <button class="btn btn-mini couple_buttons left-pane-button" name="brokerSetupFeeEditPercentButton">%</button>
                     <%}%>
