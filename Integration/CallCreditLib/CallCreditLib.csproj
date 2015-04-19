@@ -7,7 +7,7 @@
     <ProjectGuid>{C91A56A7-87AE-44CA-9640-59510455BC09}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Ezbob.Integration.CallCreditLib</RootNamespace>
+    <RootNamespace>CallCreditLib</RootNamespace>
     <AssemblyName>CallCreditLib</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -53,6 +53,7 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="CallCreditGetData.cs" />
     <Compile Include="CallCreditModelBuilder.cs" />
     <Compile Include="CallCreditModelBuilderContinue1.cs" />
     <Compile Include="CallCreditModelBuilderContinue2.cs" />

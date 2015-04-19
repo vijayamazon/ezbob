@@ -13,10 +13,10 @@ using Ezbob.Logger;
 
 	public class ParseCallCredit : AStrategy {
 
-		public ParseCallCredit(CallCredit aa, long nServiceLogID)
+		public ParseCallCredit(CallCredit basedata, long nServiceLogID)
         {
 			Result = null;
-			Intro = aa;
+			DataSaved = basedata;
 			m_nServiceLogID = nServiceLogID;
 		}// constructor
 
@@ -29,7 +29,7 @@ using Ezbob.Logger;
 			try {
 				//var loaded = Load();
 				//var parsed = Parse(loaded);
-				var oTbl = Save(Intro);
+				var oTbl = Save(DataSaved);
 
 				if (oTbl != null)
 					Result = oTbl;
@@ -42,7 +42,7 @@ using Ezbob.Logger;
 		}// Execute
 
 		public CallCredit Result { get; private set; }
-		public CallCredit Intro { get; set; }
+		public CallCredit DataSaved { get; set; }
 
 		private readonly long m_nServiceLogID;
 
@@ -92,10 +92,11 @@ using Ezbob.Logger;
 		public CallCredit Save(CallCredit data) {
 			if (data == null)
 				return null;
+			
 
 			Log.Info("Saving CallCredit data into DB...");
 
-			var con = DB.GetPersistent();
+			ConnectionWrapper con = DB.GetPersistent();
 
 			con.BeginTransaction();
 
@@ -105,11 +106,11 @@ using Ezbob.Logger;
 				var arg = DB.CreateTableParameter<CallCredit>("Tbl", new List<CallCredit> { data });
 
 
-				Log.Debug("\n\n\n\n\n\n\n\n\n\nSaveCallCredit - begin: {0}\n\n\n\n\n\n\n\n\n\n", data.Error.Length);
+				//Log.Debug("\n\n\n\n\n\n\n\n\n\nSaveCallCredit - begin: {0}\n\n\n\n\n\n\n\n\n\n", data.Error.Length);
 
 				long CallCreditID = DB.ExecuteScalar<long>(con, "SaveCallCredit", CommandSpecies.StoredProcedure, arg);
 
-				Log.Debug("\n\n\n\n\n\n\n\n\n\nSaveCallCredit - end, new id = {0}\n\n\n\n\n\n\n\n\n\n", CallCreditID);
+				//Log.Debug("\n\n\n\n\n\n\n\n\n\nSaveCallCredit - end, new id = {0}\n\n\n\n\n\n\n\n\n\n", CallCreditID);
 
 				if (data.ApplicantData.Any()) 
 					SaveCallCreditData(data.ApplicantData, CallCreditID, con);
