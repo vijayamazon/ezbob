@@ -1,8 +1,8 @@
-﻿using System;
-using Ezbob.Backend.ModelsWithDB.CreditSafe;
-
-namespace Ezbob.CreditSafeLib
+﻿namespace Ezbob.CreditSafeLib
 {
+	using System;
+	using Ezbob.Backend.ModelsWithDB.CreditSafe;
+
     public class CreditSafeLtdModelBuilder
     {
         private string Errors { get; set; }

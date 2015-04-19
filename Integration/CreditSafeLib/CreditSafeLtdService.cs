@@ -1,10 +1,9 @@
-﻿using System.Xml.Linq;
-using Ezbob.CreditSafeLib.CreditSafeServiceReference;
-using Ezbob.Logger;
-using EZBob.DatabaseLib.Model.Database;
-
-namespace Ezbob.CreditSafeLib
+﻿namespace Ezbob.CreditSafeLib
 {
+	using System.Xml.Linq;
+	using Ezbob.CreditSafeLib.CreditSafeServiceReference;
+	using Ezbob.Logger;
+	using EZBob.DatabaseLib.Model.Database;
     using System.IO;
     using System.Reflection;
     using System.Text;
