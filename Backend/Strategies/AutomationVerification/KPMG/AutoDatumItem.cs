@@ -32,9 +32,9 @@
 			};
 
 			this.automationDecision = DecisionActions.Waiting;
-			IsAutoReRejected = false;
+			// IsAutoReRejected = false;
 			IsAutoRejected = false;
-			IsAutoReApproved = false;
+			// IsAutoReApproved = false;
 			IsAutoApproved = false;
 
 			CustomerID = sr.CustomerID;
@@ -80,19 +80,17 @@
 
 		public MaxOfferResult MaxOffer { get; private set; }
 
-		public bool IsAutoReRejected { get; private set; }
 		public bool IsAutoRejected { get; private set; }
-		public bool IsAutoReApproved { get; private set; }
 		public bool IsAutoApproved { get; private set; }
 
-		public decimal ReapprovedAmount { get; private set; }
+		// public decimal ReapprovedAmount { get; private set; }
 
 		public static new string CsvTitles(string prefix) {
 			prefix += " auto";
 
 			return string.Format(
-				"{1} decision;{1} re-reject decision;{1} reject decision;{1} re-approve decision;{1} approve decision;" +
-				"{0};{1} re-approved amount;{1} turnover type; {1} min medal amount; {1} max medal amount",
+				"{1} decision;{1} reject decision;{1} approve decision;" +
+				"{0};{1} turnover type; {1} min medal amount; {1} max medal amount",
 				ADatumItem.CsvTitles(prefix),
 				prefix
 			);
@@ -100,14 +98,10 @@
 
 		public override int ToXlsx(ExcelWorksheet sheet, int rowNum, int colNum) {
 			colNum = sheet.SetCellValue(rowNum, colNum, AutomationDecision.ToString());
-			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoReRejected ? "Reject" : "Manual");
 			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoRejected ? "Reject" : "Manual");
-			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoReApproved ? "Approve" : "Manual");
 			colNum = sheet.SetCellValue(rowNum, colNum, IsAutoApproved ? "Approve" : "Manual");
 
 			colNum = base.ToXlsx(sheet, rowNum, colNum);
-
-			colNum = sheet.SetCellValue(rowNum, colNum, ReapprovedAmount);
 
 			var medalRes = this.medal ?? new MedalResult(CustomerID, Log);
 
@@ -164,39 +158,6 @@
 			);
 		} // RunAutomation
 
-		private void RunAutoRerejection(AConnection db) {
-			Log.Info(
-				"RunAutomation-RunAutoRerejection() started for customer {0} with decision time '{1}'...",
-				CustomerID,
-				DecisionTime.MomentStr()
-			);
-
-			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
-				CustomerID,
-				DecisionTime,
-				db,
-				Log
-			).Init();
-
-			agent.MakeDecision();
-
-			agent.Trail.Save(db, null, CashRequestID, Tag);
-
-			if (agent.Trail.HasDecided)
-				AutomationDecision = DecisionActions.ReReject;
-
-			IsAutoReRejected = agent.Trail.HasDecided;
-
-			Log.Info(
-				"RunAutomation-RunAutoRerejection() complete for customer {0} with decision time '{1}': " +
-				"automation decision is '{2}', auto re-rejected is '{3}'.",
-				CustomerID,
-				DecisionTime.MomentStr(),
-				AutomationDecision,
-				IsAutoReRejected
-			);
-		} // RunAutoRerejection
-
 		private void RunAutoReject(AConnection db) {
 			Log.Info(
 				"RunAutomation-RunAutoReject() started for customer {0} with decision time '{1}'...",
@@ -225,41 +186,6 @@
 				IsAutoRejected
 			);
 		} // RunAutoReject
-
-		private void RunAutoReapproval(AConnection db) {
-			Log.Info(
-				"RunAutomation-RunAutoReapproval() started for customer {0} with decision time '{1}'...",
-				CustomerID,
-				DecisionTime.MomentStr()
-			);
-
-			ReapprovedAmount = 0;
-
-			var agent = new
-				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
-				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, DecisionTime, db, Log);
-
-			agent.Init();
-
-			agent.Decide(true, CashRequestID, Tag);
-
-			if (agent.Trail.HasDecided) {
-				AutomationDecision = DecisionActions.ReApprove;
-				ReapprovedAmount = agent.ApprovedAmount;
-			} // if
-
-			IsAutoReApproved = agent.Trail.HasDecided;
-
-			Log.Info(
-				"RunAutomation-RunAutoReapproval() complete for customer {0} with decision time '{1}': " +
-				"automation decision is '{2}', auto re-approved is '{3}', re-approved amount is {4}.",
-				CustomerID,
-				DecisionTime.MomentStr(),
-				AutomationDecision,
-				IsAutoReApproved,
-				ReapprovedAmount
-			);
-		} // RunAutoReapproval
 
 		private MedalResult RunCalculateMedal() {
 			Log.Info(
@@ -508,9 +434,7 @@
 			decimal ratio = 0;
 
 			if (manuallyApprovedAmount > 0) {
-				if (AutomationDecision == DecisionActions.ReApprove)
-					ratio = ReapprovedAmount / manuallyApprovedAmount;
-				else if (AutomationDecision == DecisionActions.Approve)
+				if (AutomationDecision == DecisionActions.Approve)
 					ratio = autoApprovedAmount / manuallyApprovedAmount;
 			} // if
 

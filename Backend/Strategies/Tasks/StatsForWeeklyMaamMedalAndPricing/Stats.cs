@@ -61,6 +61,8 @@
 			this.sheet.Cells[row, 1].Style.Font.Size = 14;
 			row++;
 
+			/*
+
 			int rowMAAA = row + 1;
 
 			string loanCountRatio;
@@ -87,6 +89,7 @@
 			row = this.manuallyApprovedAutoNotApproved.DrawSummary(rowMAAR);
 
 			row = DrawTotalSummary(row + 1, rowMAAA, rowMRAA, rowMAAR);
+			*/
 
 			AStatItem.SetBorders(this.sheet.Cells[row, 1, row, AStatItem.LastColumnNumber]).Merge = true;
 			this.sheet.SetCellValue(row, 1, "Details", bSetZebra: false, oBgColour: Color.Coral, bIsBold: true);

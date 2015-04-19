@@ -29,7 +29,8 @@
 
 			Added.If(
 				auto.HasDecided && auto.AutomationDecision.In(DecisionActions.Approve, DecisionActions.ReApprove),
-				auto.AutomationDecision == DecisionActions.ReApprove ? auto.ReapprovedAmount : approvedAmount
+				// auto.AutomationDecision == DecisionActions.ReApprove ? auto.ReapprovedAmount : approvedAmount
+				approvedAmount
 			);
 		} // Add
 

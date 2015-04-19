@@ -87,15 +87,17 @@
 		private void CreateXlsx() {
 			Xlsx = new ExcelPackage();
 
-			ExcelWorksheet statSheet = Xlsx.CreateSheet("Statistics", false);
-			ExcelWorksheet decisionSheet = Xlsx.CreateSheet("Decisions", false, CsvTitles);
+			ExcelWorksheet verificationSheet = Xlsx.CreateSheet("Verification", false);
+			ExcelWorksheet minOfferStatSheet = Xlsx.CreateSheet("Min offer", false);
+			ExcelWorksheet maxOfferStatSheet = Xlsx.CreateSheet("Max offer", false);
+			ExcelWorksheet decisionSheet = Xlsx.CreateSheet(DecisionsSheetName, false, CsvTitles);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
-			var decisionStats = new Stats(Log, statSheet, true, "at last decision time");
+			var decisionStats = new Stats(Log, minOfferStatSheet, true, "at last decision time");
 
 			var stats = new List<Tuple<Stats, int>> {
 				new Tuple<Stats, int>(decisionStats, -1),
-				new Tuple<Stats, int>(new Stats(Log, statSheet, false, "at last decision time"), -1),
+				new Tuple<Stats, int>(new Stats(Log, maxOfferStatSheet, false, "at last decision time"), -1),
 			};
 
 			var pc = new ProgressCounter("{0} items sent to .xlsx", Log, 50);
@@ -114,12 +116,12 @@
 
 			pc.Log();
 
-			int row = 1 + DrawVerificationData(statSheet, 1, decisionStats);
+			DrawVerificationData(verificationSheet, 1, decisionStats);
+
 			int loanIDColumn = 1;
 
 			foreach (Tuple<Stats, int> pair in stats) {
-				row = pair.Item1.ToXlsx(row);
-				row++;
+				pair.Item1.ToXlsx(1);
 
 				loanIDColumn = pair.Item1.FlushLoanIDs(loanIDSheet, loanIDColumn);
 			} // for each
@@ -320,6 +322,8 @@
 				} // class Outstanding
 			} // class Default
 		} // class Reference
+
+		private const string DecisionsSheetName = "Decisions";
 	} // class MaamMedalAndPricing
 } // namespace
 
