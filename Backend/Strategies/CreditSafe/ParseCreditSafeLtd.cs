@@ -23,7 +23,7 @@ namespace Ezbob.Backend.Strategies.CreditSafe
 
         public override void Execute()
         {
-            Log.Info("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
+            Log.Info("Parsing CreditSafe Ltd for service log entry {0}...", m_nServiceLogID);
 	        var loaded = Load();
 	        var parsed = Parse(loaded);
             var oTbl = Save(parsed);
@@ -31,7 +31,7 @@ namespace Ezbob.Backend.Strategies.CreditSafe
             if (oTbl != null)
                 Result = oTbl;
 
-            Log.Info("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
+            Log.Info("Parsing CreditSafe Ltd for service log entry {0} complete.", m_nServiceLogID);
         }
         public CreditSafeBaseData Result { get; private set; }
 
@@ -53,7 +53,7 @@ namespace Ezbob.Backend.Strategies.CreditSafe
 
             try
             {
-                var outputRootSerializer = new XmlSerializer(typeof(CreditSafeLtdResponse));
+                var outputRootSerializer = new XmlSerializer(typeof(CreditSafeLtdResponse), new XmlRootAttribute("xmlresponse"));
                 var outputRoot = (CreditSafeLtdResponse)outputRootSerializer.Deserialize(new StringReader(sr["ResponseData"]));
                 if (outputRoot == null)
                 {

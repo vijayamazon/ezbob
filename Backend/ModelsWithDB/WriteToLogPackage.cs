@@ -1,4 +1,4 @@
-﻿namespace ExperianLib {
+﻿namespace Ezbob.Backend.ModelsWithDB    {
 	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -60,6 +60,7 @@
 			public string PostCode { get; private set; }
 			public string CompanyRefNum { get; private set; }
 		} // class In
+
 
 		public class OutputData {
 			public MP_ServiceLog ServiceLog { get; set; }

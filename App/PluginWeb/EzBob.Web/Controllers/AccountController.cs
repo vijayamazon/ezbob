@@ -682,39 +682,28 @@
 				refNum
 			);
 
-			var nFilter = TargetResults.LegalStatus.DontCare;
 
-			switch (filter.ToUpper()) {
-			case "L":
-				nFilter = TargetResults.LegalStatus.Limited;
-				break;
+            if (customerId == null && m_oContext.Customer == null)
+            {
+                throw new Exception("Customer id is not provided");
+            }
+            if (customerId == null)
+            {
+                customerId = m_oContext.Customer.Id;
+            }
 
-			case "N":
-				nFilter = TargetResults.LegalStatus.NonLimited;
-				break;
-			} // switch
+		    ExperianTargetingActionResult response = this.m_oServiceClient.Instance.ExperianTarget(
+                customerId.Value, 
+                this.m_oContext.UserId,
+		        new ExperianTargetingRequest {
+		            CompanyName = companyName,
+		            CustomerID = customerId.Value,
+		            Filter = filter,
+		            Postcode = postcode,
+		            RefNum = refNum
+		        });
 
-			try {
-				var service = new EBusinessService(m_oDB);
-				if (customerId == null && m_oContext.Customer == null) {
-					throw new Exception("Customer id is not provided");
-				}
-				if (customerId == null) {
-					customerId = m_oContext.Customer.Id;
-				}
-				TargetResults result = service.TargetBusiness(companyName, postcode, customerId.Value, nFilter, refNum);
-				return Json(result.Targets, JsonRequestBehavior.AllowGet);
-			} catch (WebException we) {
-				ms_oLog.Debug(we, "WebException caught while executing company targeting.");
-				var res = new List<CompanyInfo> { new CompanyInfo { BusName = "", BusRefNum = "exception" } };
-				return Json(res, JsonRequestBehavior.AllowGet);
-			} catch (Exception e) {
-				if (companyName.ToLower() == "asd" && postcode.ToLower() == "ab10 1ba")
-					return Json(GenerateFakeTargetingData(companyName, postcode), JsonRequestBehavior.AllowGet);
-
-				ms_oLog.Alert(e, "Target Business failed.");
-				throw;
-			} // try
+		    return Json(response.CompanyInfos, JsonRequestBehavior.AllowGet);
 		} // CheckingCompany
 
 		[Ajax]
@@ -1193,32 +1182,6 @@
 
 			return isAutomaticTest;
 		} // IsAutomaticTest
-
-		private static List<CompanyInfo> GenerateFakeTargetingData(string companyName, string postcode) {
-			var data = new List<CompanyInfo>();
-
-			for (var i = 0; i < 10; i++) {
-				data.Add(new CompanyInfo {
-					AddrLine1 = "AddrLine1" + " for company " + i,
-					AddrLine2 = "AddrLine2" + " for company " + i,
-					AddrLine3 = "AddrLine3" + " for company " + i,
-					AddrLine4 = "AddrLine4" + " for company " + i,
-					BusName = "BusName" + " for company " + i,
-					BusRefNum = "BusRefNum" + " for company " + i,
-					BusinessStatus = "BusinessStatus" + " for company " + i,
-					LegalStatus = "LegalStatus" + " for company " + i,
-					MatchScore = "MatchScore" + " for company " + i,
-					MatchedBusName = companyName + " for company " + i,
-					MatchedBusNameType = "MatchedBusNameType" + " for company " + i,
-					PostCode = postcode + " for company " + i,
-					SicCode = "SicCode" + " for company " + i,
-					SicCodeDesc = "SicCodeDesc" + " for company " + i,
-					SicCodeType = "SicCodeType" + " for company " + i
-				});
-			}
-
-			return data;
-		} // GenerateFakeTargetingData
 
 		private JsonResult GetModelStateErrors(ModelStateDictionary modelStateDictionary) {
 			return Json(

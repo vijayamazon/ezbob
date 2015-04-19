@@ -186,7 +186,7 @@ namespace EzBobTest {
 		[Test]
 		public void test_mainstrat() {
 			var ms = new MainStrategy(
-				21370,
+                14036,
 				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
 				0,
 				null,

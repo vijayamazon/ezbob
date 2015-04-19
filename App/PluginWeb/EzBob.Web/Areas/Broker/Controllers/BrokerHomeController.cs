@@ -1024,34 +1024,7 @@
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult TargetBusiness(string companyNameNumber) {
-			if (string.IsNullOrEmpty(companyNameNumber))
-				return new BrokerForJsonResult("Company name/number not provided");
-
-			string companyName = "";
-			string companyNumber = "";
-			var legalStatus = TargetResults.LegalStatus.DontCare;
-			//company ref num is alpha numeric 8 chars length string, digits only or 2 letters and 6 digits.
-			if (companyNameNumber.Length <= 8 &&
-				(Regex.IsMatch(companyNameNumber, @"^\d+$") || Regex.IsMatch(companyNameNumber, @"^[a-zA-Z]{2}\d+$")))
-				companyNumber = companyNameNumber;
-			else
-				companyName = companyNameNumber;
-
-			if (companyNameNumber.ToLowerInvariant()
-				.Contains("ltd") || companyNameNumber.ToLowerInvariant()
-					.Contains("limited"))
-				legalStatus = TargetResults.LegalStatus.Limited;
-
-			try {
-				var service = new EBusinessService(m_oDB);
-
-				var result = service.TargetBusiness(companyName, null, 0, legalStatus, companyNumber);
-
-				return Json(result.Targets, JsonRequestBehavior.AllowGet);
-			} catch (Exception e) {
-				ms_oLog.Alert(e, "Target Business failed.");
-				throw;
-			} // try
+				return Json(null, JsonRequestBehavior.AllowGet); //TODO remove
 		}
 
 		[Ajax]

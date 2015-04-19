@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="WWNrOkCHAVLrt65EGO5r+JsZzpc=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="LgKOf9IOc4zJeHxsVrTSF/KGCdU=">
   <bindingConfigurations>
-    <bindingConfiguration bindingType="basicHttpBinding" name="CreditsafeServicesSoap1">
+    <bindingConfiguration bindingType="basicHttpBinding" name="CreditsafeServicesSoap">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>CreditsafeServicesSoap1</serializedValue>
+          <serializedValue>CreditsafeServicesSoap</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -110,10 +110,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="basicHttpBinding" name="CreditsafeServicesSoap2">
+    <bindingConfiguration bindingType="basicHttpBinding" name="CreditsafeServicesSoap1">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>CreditsafeServicesSoap2</serializedValue>
+          <serializedValue>CreditsafeServicesSoap1</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -221,7 +221,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="CreditsafeServicesSoap1" contract="CreditSafeServiceReference.CreditsafeServicesSoap" bindingType="basicHttpBinding" address="https://www.creditsafeuk.com/getdatauk/service/CreditsafeServices.asmx" bindingConfiguration="CreditsafeServicesSoap1">
+    <endpoint name="CreditsafeServicesSoap" contract="CreditSafeServiceReference.CreditsafeServicesSoap" bindingType="basicHttpBinding" address="https://www.creditsafeuk.com/getdatauk/service/CreditsafeServices.asmx" bindingConfiguration="CreditsafeServicesSoap">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>https://www.creditsafeuk.com/getdatauk/service/CreditsafeServices.asmx</serializedValue>
@@ -233,7 +233,7 @@
           <serializedValue>basicHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>CreditsafeServicesSoap1</serializedValue>
+          <serializedValue>CreditsafeServicesSoap</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>CreditSafeServiceReference.CreditsafeServicesSoap</serializedValue>
@@ -296,7 +296,7 @@
           <serializedValue>False</serializedValue>
         </property>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>CreditsafeServicesSoap1</serializedValue>
+          <serializedValue>CreditsafeServicesSoap</serializedValue>
         </property>
         <property path="/kind" isComplexType="false" isExplicitlyDefined="false" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
