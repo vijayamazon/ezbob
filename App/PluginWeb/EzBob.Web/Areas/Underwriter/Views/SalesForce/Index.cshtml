@@ -49,7 +49,19 @@
         @Description("Email", Model.PersonalModel.Email)
         @Description("Name", Model.PersonalModel.Name)
         @Description("FraudStatus", Model.PersonalModel.FraudStatus)
-        @Description("CreditStatus", Model.PersonalModel.CreditStatus)
+        
+        <dl class="dl-horizontal">
+            <dt>CreditStatus</dt>
+            <dd>@Model.PersonalModel.CreditStatus 
+                @if (Model.PersonalModel.IsPendingDecision) {
+                    <button class="btn btn-primary btn-return-waiting-for-decision" 
+                            data-toggle="tooltip" data-placement="top" title="return to waiting for decision">
+                        <i class="fa fa-rotate-left"></i>
+                    </button>
+                }
+            </dd>
+        </dl>
+        
         @Description("Experian score", Model.PersonalModel.ExperianScore.ToString())
         @Description("Aml Score", Model.PersonalModel.AmlScore.ToString())
         @Description("Aml Description", Model.PersonalModel.AmlDescription)
@@ -66,7 +78,10 @@
                                 verified = "list-group-item-success";
                                 verifiedTooltip = "Verified phone";
                             }
-                            <li class="list-group-item no-border @verified" data-toggle="tooltip" data-placement="top" title="@verifiedTooltip"><span class="badge">@phone.Type</span>@phone.Number</li>
+                            <li class="list-group-item no-border @verified" 
+                                data-toggle="tooltip" data-placement="top" title="@verifiedTooltip">
+                                <span class="badge">@phone.Type</span>@phone.Number
+                            </li>
                         }
                     </ul>
                 </dd>
@@ -207,7 +222,7 @@
     <div>
         @Description("Check Date", Model.Fraud.LastCheckDate.HasValue ? Model.Fraud.LastCheckDate.Value.ToString("dd/MM/yyyy") : "Never performed a check")
         @if (Model.Fraud.LastCheckDate.HasValue && !Model.Fraud.FraudDetectionLogRows.Any()) {
-            <strong>Not a fraud</strong>
+            @Description("Not a fraud", "")
         }
         @if (Model.Fraud.FraudDetectionLogRows.Any()) {
             <table class="table table-hover table-condensed">
@@ -270,4 +285,11 @@
         <dt>@key</dt>
         <dd>@value</dd>
     </dl>
+}
+
+@section Js
+{
+    @{
+        Html.RenderPartial("_FunctionsDialog");
+    }
 }

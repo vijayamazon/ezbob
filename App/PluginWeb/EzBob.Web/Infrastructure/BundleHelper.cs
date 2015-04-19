@@ -121,6 +121,7 @@
 				//libs
 				.Add("~/Content/css/lib/font-awesome.min.css")
 				.Add("~/Content/css/lib/bootstrap3.css")
+                .Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
 				//custom
 				.Add("~/Content/css/salesforce.css")
 				.MvcRender("~/Content/css/min/salesforce_#.css");
@@ -574,9 +575,24 @@
 
 		public static MvcHtmlString RenderSalesForceJs() {
 			return Bundle.JavaScript()
-				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				//libs
+                .Add("~/Content/js/lib/jquery-1.8.3.js")
+                .Add("~/Content/js/lib/jquery.validate.js")
+                .Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
+                .Add("~/Content/js/lib/jquery.placeholder.js")
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
+                .Add("~/Content/js/lib/jquery.blockUI.js")
+                .Add("~/Content/js/lib/underscore.js")
+                .Add("~/Content/js/lib/backbone.js")
+                .Add("~/Content/js/lib/backbone.marionette.js")
+                //custom
+                .Add("~/Content/js/ezbob.design.js")
+                .Add("~/Content/js/controls/ezbob.modal.js")
+                .Add("~/Content/js/controls/ezbob.jqmodal.js")
+                .Add("~/Content/js/App/ezbob.app.js")
 				.Add("~/Content/js/ezbob.csrf.js")
+                .Add("~/Content/js/Underwriter/ezbob.underwriter.salesforce.js")
+                .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
 				.MvcRender("~/Content/js/min/jsSalesForce_#.js");
 	}
 	} // class BundleHelper

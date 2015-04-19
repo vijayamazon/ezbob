@@ -4,8 +4,9 @@
 	using System.Linq;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
+	using EZBob.DatabaseLib.Model.Database;
 
-	public class SalesForceModel {
+    public class SalesForceModel {
 		public PersonalModel PersonalModel { get; set; }
 		
 		public List<SalesForceMarketPlaceModel> MarketPlaces { get; set; }
@@ -28,7 +29,14 @@
 				AmlScore = customer.AmlScore,
 				AmlDescription = customer.AmlDescription,
 				ExperianScore = customer.ExperianConsumerScore,
+                IsPendingDecision = customer.CreditResult.HasValue && 
+                                    customer.CreditResult.Value == CreditResultStatus.ApprovedPending &&
+                                   (!customer.IsWaitingForSignature.HasValue || (!customer.IsWaitingForSignature.Value)),
 			};
+
+            if (customer.IsWaitingForSignature.HasValue && customer.IsWaitingForSignature.Value) {
+                PersonalModel.CreditStatus += " (Signatures)";
+            }
 
 			MarketPlaces = customer
 				.CustomerMarketPlaces
@@ -66,6 +74,7 @@
 		public int? ExperianScore { get; set; }
 		public int? AmlScore { get; set; }
 		public string AmlDescription { get; set; }
+        public bool IsPendingDecision { get; set; }
 	}
 	public class SalesForceMarketPlaceModel : SimpleMarketPlaceModel {
 		public DateTime? Created { get; set; }

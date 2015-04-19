@@ -4,7 +4,8 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 	initialize: function () {
 		this.template = _.template(this.getTemplate());
-		return this.type = this.getType();
+		this.type = this.getType();
+	    return this;
 	},
 	getTemplate: function () {
 		return $("#functionsDialogTemplate").html();
@@ -75,13 +76,12 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 		return this.ReasonFieldEmptyError($(field.currentTarget), false);
 	},
 	BtnOkClicked: function (e) {
-		var data, rejectionReasons, req, that;
-		that = this;
+		var that = this;
 		if ($(e.currentTarget).hasClass("disabled")) {
 			return false;
 		}
-		rejectionReasons = this.RejectionReason.val();
-		req = false;
+		var rejectionReasons = this.RejectionReason.val();
+		var req = false;
 		if (this.type !== 'Rejected') {
 			if (this.ReasonField.val() === "" && this.showReasonField()) {
 				this.ReasonFieldEmptyError(this.ReasonField, true);
@@ -100,7 +100,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 			return false;
 		}
 		$(e.currentTarget).addClass("disabled");
-		data = {
+		var data = {
 			id: this.model.get("CustomerId"),
 			status: this.type,
 			signature: this.getIsSignature(),
@@ -116,18 +116,18 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 			data.reason += " | " + this.YodleeReasonField.val();
 		}
 		BlockUi("on");
-		req = $.ajax({
+		var xhr = $.ajax({
 			type: "POST",
 			url: window.gRootPath + "Underwriter/Customers/ChangeStatus",
 			data: data,
 			dataType: "json",
 			traditional: true
 		});
-		req.done(function (res) {
+		xhr.done(function (res) {
 			if (res.error) {
 				EzBob.ShowMessage(res.error, "Error occured");
 				that.$el.css("border", "1px solid red");
-				return;
+				return false;
 			}
 			if (res.warning) {
 				EzBob.ShowMessage(res.warning, "Warning signaled");
@@ -136,7 +136,7 @@ EzBob.Underwriter.FunctionsDialogView = Backbone.View.extend({
 			that.trigger("changedSystemDecision");
 			return $(".ui-icon-refresh").click();
 		});
-		return req.always(function (res) {
+		xhr.always(function (res) {
 			BlockUi("off");
 			return $(e.currentTarget).removeClass("disabled");
 		});
@@ -247,28 +247,26 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 		return this.$el.find("#noYodleeReasonDiv").toggleClass('hide', !this.NoYodlee).toggleClass('uwReason', this.NoYodlee);
 	},
 	renderDetails: function () {
-		var details;
-		details = _.template($("#approve-details").html(), this.model.toJSON());
+		var details = _.template($("#approve-details").html(), this.model.toJSON());
 		this.$el.find("#details").html(details);
 		if (this.model.get("IsModified")) {
 			return this.$el.find(".offer-status").append("<strong>Offer was manually modified</strong>").css({
 				"margin-top": "-20px"
 			});
 		}
+	    return false;
 	},
 	renderSchedule: function () {
-		var that;
-		that = this;
+		var that = this;
 		return $.getJSON(window.gRootPath + "Underwriter/Schedule/Calculate", {
 			id: this.model.get("CashRequestId")
 		}).done(function (data) {
-			var scheduleView;
 			if (data.hasOwnProperty('success') && !data.success) {
 				EzBob.ShowMessage(data.error, 'Error occured');
 				that.$el.dialog('close');
-				return;
+				return false;
 			}
-			scheduleView = new EzBob.LoanScheduleView({
+			var scheduleView = new EzBob.LoanScheduleView({
 				el: that.$el.find(".loan-schedule"),
 				schedule: data,
 				isShowGift: false,
@@ -289,8 +287,7 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 	dlgWidth: 880,
 	dlgHeight: 900,
 	onSaved: function () {
-		var that;
-		that = this;
+		var that = this;
 		this.renderSchedule();
 		return $.post(window.gRootPath + "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed", {
 			id: this.model.get("CashRequestId"),
@@ -300,16 +297,14 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 		});
 	},
 	changeLoanDetails: function () {
-		var loan, that, xhr;
-		that = this;
-		loan = new EzBob.LoanModelTemplate({
+		var that = this;
+		var loan = new EzBob.LoanModelTemplate({
 			CashRequestId: this.model.get("CashRequestId"),
 			CustomerId: this.model.get("CustomerId")
 		});
-		xhr = loan.fetch();
+		var xhr = loan.fetch();
 		xhr.done(function () {
-			var view;
-			view = new EzBob.EditLoanView({
+			var view = new EzBob.EditLoanView({
 				model: loan
 			});
 			EzBob.App.jqmodal.show(view);
@@ -318,20 +313,17 @@ EzBob.Underwriter.ApproveDialog = EzBob.Underwriter.FunctionsDialogView.extend({
 		return false;
 	},
 	exportToPdf: function (e) {
-		var $el;
-		$el = $(e.currentTarget);
+		var $el = $(e.currentTarget);
 		return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId") + "&isExcel=false&isShowDetails=true&customerId=" + this.model.get("CustomerId"));
 	},
 	exportToExcel: function (e) {
-		var $el;
-		$el = $(e.currentTarget);
+		var $el = $(e.currentTarget);
 		return $el.attr("href", window.gRootPath + "Underwriter/Schedule/Export?id=" + this.model.get("CashRequestId") + "&isExcel=true&isShowDetails=true&customerId=" + this.model.get("CustomerId"));
 	},
 	exportToPrint: function () {
-		var $printSection, domClone, elem;
-		elem = $(".loan-schedule:visible")[0];
-		domClone = elem.cloneNode(true);
-		$printSection = document.getElementById("printSection");
+		var elem = $(".loan-schedule:visible")[0];
+		var domClone = elem.cloneNode(true);
+		var $printSection = document.getElementById("printSection");
 		if (!$printSection) {
 			$printSection = document.createElement("div");
 			$printSection.id = "printSection";
