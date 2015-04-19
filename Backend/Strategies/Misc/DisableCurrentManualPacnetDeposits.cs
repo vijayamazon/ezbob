@@ -8,6 +8,7 @@
 
 		public override void Execute() {
 			DB.ExecuteNonQuery("DisableCurrentManualPacnetDeposits", CommandSpecies.StoredProcedure);
+            var availFunds = new GetAvailableFunds(); //fix for static log and db init
 			GetAvailableFunds.LoadFromDB();
 		} // Execute
 	} // class DisableCurrentManualPacnetDeposits

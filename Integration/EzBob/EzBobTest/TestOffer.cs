@@ -1,5 +1,7 @@
 namespace EzBobTest {
 	using System;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using EzServiceAccessor;
@@ -116,6 +118,20 @@ namespace EzBobTest {
 
 		    Assert.AreEqual(true, passed);
 		} // TestOfferDualCalc
+
+        [Test]
+        public void TestAutoApprove() {
+            AutoDecisionResponse response = new AutoDecisionResponse();
+            new Approval(
+                    29,
+                    10000,
+                    Medal.Silver,
+                    AutomationCalculator.Common.MedalType.Limited,
+                    AutomationCalculator.Common.TurnoverType.Online,
+                    m_oDB,
+                    m_oLog
+                ).Init().MakeDecision(response);
+        }
 
 		private class MedalOffer {
 			public MedalOffer(MedalResult m, OfferDualCalculator o) {

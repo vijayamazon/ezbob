@@ -23,6 +23,7 @@
 				new QueryParameter("Date", DateTime.UtcNow)
 			);
 
+            var availFunds = new GetAvailableFunds(); //fix for static log and db init
 			GetAvailableFunds.LoadFromDB();
 		} // Execute
 

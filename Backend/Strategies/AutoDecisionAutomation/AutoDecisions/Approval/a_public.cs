@@ -186,6 +186,7 @@
 
 				using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
 					availFunds = new GetAvailableFunds();
+                    GetAvailableFunds.LoadFromDB();
 					availFunds.Execute();
 
 					SaveTrailInputData(availFunds);
