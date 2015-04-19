@@ -23,14 +23,14 @@ namespace Ezbob.Backend.Strategies.CreditSafe
 
         public override void Execute()
         {
-            Log.Info("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
+            Log.Info("Parsing CreditSafe Ltd for service log entry {0}...", m_nServiceLogID);
 
             var oTbl = Save(Parse(Load()));
 
             if (oTbl != null)
                 Result = oTbl;
 
-            Log.Info("Parsing Experian Ltd for service log entry {0} complete.", m_nServiceLogID);
+            Log.Info("Parsing CreditSafe Ltd for service log entry {0} complete.", m_nServiceLogID);
         }
         public CreditSafeBaseData Result { get; private set; }
 

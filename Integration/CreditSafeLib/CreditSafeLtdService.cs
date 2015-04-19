@@ -5,6 +5,10 @@ using EZBob.DatabaseLib.Model.Database;
 
 namespace Ezbob.CreditSafeLib
 {
+    using System.IO;
+    using System.Reflection;
+    using System.Text;
+    using System.Xml;
     using Ezbob.Backend.ModelsWithDB;
     using EzServiceAccessor;
     using StructureMap;
@@ -17,7 +21,7 @@ namespace Ezbob.CreditSafeLib
         {
             ms_oLog.Debug("Downloading data from CreditSafe for company {0} and customer {1}...", regNumber, customerId);
 
-            string requestXml = GenerateRequestXML(regNumber);
+            string requestXml = GetResource("Ezbob.CreditSafeLib.Templates.CreditSafeLtdRequestTemplate.xml", regNumber);
             
             CreditsafeServicesSoapClient client = new CreditsafeServicesSoapClient("CreditsafeServicesSoap");
             string newResponse = client.GetData(requestXml);
@@ -39,5 +43,26 @@ namespace Ezbob.CreditSafeLib
             string template = xmldoc.ToString();
             return string.Format(template, refNum);
         }
+        private string GetResource(string resName, params object[] p) {
+            //string template = @"<xmlrequest><header><username>ORAN01</username><password>Jd4xDKpy</password><operation>GetCompanyInformation</operation><language>EN</language><chargereference></chargereference></header><body><package>standard</package><country>UK</country><companynumber>{0}</companynumber></body></xmlrequest>";
+            using (Stream s = Assembly.GetExecutingAssembly()
+                .GetManifestResourceStream(resName))
+            {
+                if (s == null)
+                    return null;
+
+                var data = new byte[s.Length];
+
+                s.Read(data, 0, (int)s.Length);
+
+                string template =  Encoding.UTF8.GetString(data);
+                XmlDocument xml = new XmlDocument();
+                xml.LoadXml(template);
+                string xmlStr = template.ToString();
+                return string.Format(xmlStr, p);
+            } // using
+
+
+        } // GetResource
     }
 }

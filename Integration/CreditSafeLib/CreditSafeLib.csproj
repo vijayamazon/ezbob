@@ -98,12 +98,8 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Templates\CreditSafeLtdRequestTemplate.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Templates\CreditSafeRequestTemplate.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Templates\CreditSafeLtdRequestTemplate.xml" />
+    <EmbeddedResource Include="Templates\CreditSafeRequestTemplate.xml" />
     <None Include="Service References\CreditSafeServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>

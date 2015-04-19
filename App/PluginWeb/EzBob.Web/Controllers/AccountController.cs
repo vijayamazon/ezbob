@@ -703,7 +703,7 @@
 		            RefNum = refNum
 		        });
 
-		    return Json(new { response.CompanyInfos }, JsonRequestBehavior.AllowGet);
+		    return Json(response.CompanyInfos, JsonRequestBehavior.AllowGet);
 		} // CheckingCompany
 
 		[Ajax]
