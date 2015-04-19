@@ -3,6 +3,8 @@
     using System.Linq;
     using ConfigManager;
     using Ezbob.Backend.Models;
+    using Ezbob.Backend.ModelsWithDB;
+    using Ezbob.Database;
     using EZBob.DatabaseLib.Model.Fraud;
     using IovationLib;
     using IovationLib.IovationCheckTransactionDetailsNS;
@@ -19,6 +21,18 @@
         public override void Execute() {
             if (!CurrentValues.Instance.IovationEnabled) {
                 Log.Info("Iovation is disabled, not invoking the service");
+                return;
+            }
+
+            IovationLastCheckModel iovationLastCheck = DB.FillFirst<IovationLastCheckModel>("IovationGetCheckStatus", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.model.CustomerID));
+
+            if (iovationLastCheck.LastCheckDate.HasValue && iovationLastCheck.LastCheckDate.Value > DateTime.UtcNow.AddDays(-ConfigManager.CurrentValues.Instance.IovationCheckPeriod)) {
+                Log.Info("Not performing iovation check, last one was done on {0}", iovationLastCheck.LastCheckDate.Value);
+                return;
+            }
+
+            if (!iovationLastCheck.FinishedWizard && iovationLastCheck.FilledByBroker) {
+                Log.Info("Not performing iovation check, filled by broker");
                 return;
             }
 

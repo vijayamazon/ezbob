@@ -99,6 +99,7 @@
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
     <Compile Include="Experian\ServiceLog.cs" />
+    <Compile Include="IovationLastCheckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EzbobSmsMessage.cs" />
   </ItemGroup>

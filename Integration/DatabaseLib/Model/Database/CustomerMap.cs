@@ -197,12 +197,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 				.Cascade.All()
 				.Inverse();
 
-            HasMany(x => x.IovationChecks)
-                .AsBag()
-                .KeyColumn("CustomerID")
-                .Cascade.All()
-                .Inverse();
-
 			HasMany(x => x.Session)
 				.AsBag()
 				.KeyColumn("CustomerId")

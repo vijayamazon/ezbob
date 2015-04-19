@@ -934,17 +934,6 @@
                 return Json(new { });
             }
 
-            var lastCheck = customer.IovationChecks.OrderByDescending(x => x.Created).FirstOrDefault();
-            if (lastCheck != null && lastCheck.Created > DateTime.UtcNow.AddDays(-ConfigManager.CurrentValues.Instance.IovationCheckPeriod)) {
-                ms_oLog.Info("Not performing iovation check, last one was done on {0}", lastCheck.Created);
-                return Json(new { });
-            }
-
-            if (!customer.WizardStep.TheLastOne && customer.FilledByBroker) {
-                ms_oLog.Info("Not performing iovation check, filled by broker");
-                return Json(new { });
-            }
-
             var request = new IovationCheckModel {
                 CustomerID = customer.Id,
                 AccountCode = customer.RefNumber,

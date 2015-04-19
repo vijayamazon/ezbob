@@ -347,6 +347,11 @@
 
 		private static void InternalDobLess21(Customer customer, List<FraudDetection> fraudDetections)
 		{
+            if (!customer.PersonalInfo.DateOfBirth.HasValue) {
+                fraudDetections.Add(Helper.CreateDetection("Customer.DateOfBirth is null", customer, null, "", null, null));
+                return;
+            }
+
 			//Date of birth too young ( < 21 years)
 			if ((DateTime.UtcNow - customer.PersonalInfo.DateOfBirth).Value.Days / 365.25 < 21)
 			{
@@ -530,10 +535,14 @@
 			}
 		}
 
-        private static void IovationCheck(List<FraudDetection> fraudDetections, Customer customer) {
-            fraudDetections.AddRange(customer.IovationChecks.Where(x => x.Result == IovationResult.D || x.Result == IovationResult.R)
-                .Select(c => Helper.CreateDetection("Iovation Transaction Check on " + c.Origin, customer, null, 
-                    string.Format("Result: {0}, Reason: {1}, Score: {2}", c.Result.DescriptionAttr(), c.Reason, c.Score) , null, c.FraudIovationID.ToString())));
+        private void IovationCheck(List<FraudDetection> fraudDetections, Customer customer) {
+
+            var iovationChecks = this._session.QueryOver<FraudIovation>()
+                .Where(x => x.CustomerID == customer.Id && (x.Result == IovationResult.D || x.Result == IovationResult.R))
+                .List();
+            fraudDetections.AddRange(iovationChecks
+                .Select(io => Helper.CreateDetection("Iovation Transaction Check on " + io.Origin, customer, null, 
+                    string.Format("Result: {0}, Reason: {1}, Score: {2}", io.Result.DescriptionAttr(), io.Reason, io.Score) , null, io.FraudIovationID.ToString())));
         }
 	}
 
