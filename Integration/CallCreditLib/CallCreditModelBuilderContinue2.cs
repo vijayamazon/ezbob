@@ -54,7 +54,7 @@
 
 					var judgs = Judg;
 					TryRead(() => judgment.NameDetails = judgs.name, "Name details as provided on the Judgment");
-					TryRead(() => judgment.Dob = judgs.dob, "Date of birth as provided on the Judgment");
+					judgment.Dob = TryReadDate(() => judgs.dob, "Date of birth as provided on the Judgment");
 					TryRead(() => judgment.CourtName = judgs.courtname, "Court name");
 					TryRead(() => judgment.CourtType = (int)judgs.courttype, "Court type");
 					TryRead(() => judgment.CaseNumber = judgs.casenumber, "Case number");
