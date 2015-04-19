@@ -24,6 +24,10 @@ BEGIN
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAdminAccountName', 'orange', 'iovation creds')
 	END
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationAdminSubscriber')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAdminSubscriber', 'Orange Money', 'iovation creds')
+	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationAdminPassword')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAdminPassword', '345yP0und5', 'iovation creds')
@@ -69,6 +73,10 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationAdminAccountName')
 	BEGIN
 		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAdminAccountName', 'orange', 'iovation creds')
+	END
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationAdminSubscriber')
+	BEGIN
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('IovationAdminSubscriber', 'Orange Money', 'iovation creds')
 	END
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='IovationAdminPassword')
 	BEGIN

@@ -186,6 +186,9 @@
 		public virtual VariableValue IovationAdminAccountName {
 			get { return this[Variables.IovationAdminAccountName]; }
 		}
+        public virtual VariableValue IovationAdminSubscriber {
+            get { return this[Variables.IovationAdminSubscriber]; }
+		}
         public virtual VariableValue IovationAdminPassword {
 			get { return this[Variables.IovationAdminPassword]; }
 		}
