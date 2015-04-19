@@ -21,8 +21,8 @@
 					TryRead(() => account.AccHolderName = acc.accholderdetails.name, "Account holder’s name details");
 					TryRead(() => account.Dob = acc.accholderdetails.dob, "Account holder’s date of birth");
 					TryRead(() => account.StatusCode = acc.accholderdetails.statuscode, "Account holder status code");
-					TryRead(() => account.StartDate = acc.accholderdetails.startdate, "account holder start day");
-					TryRead(() => account.EndDate = acc.accholderdetails.enddate, "account holder end day");
+					account.StartDate = TryReadDate(() => acc.accholderdetails.startdate, "account holder start day");
+					account.EndDate = TryReadDate(() => acc.accholderdetails.enddate, "account holder end day");
 					//account holder address
 					TryRead(() => account.CurrentAddress = Convert.ToBoolean(acc.accholderdetails.address.current), "account holder current address check");
 					TryRead(() => account.UnDeclaredAddressType = (int)acc.accholderdetails.address.undeclaredaddresstype, "type of undeclared address for account holder");
@@ -31,10 +31,10 @@
 					TryRead(() => account.DefDate = acc.@default.defdate, "Default date");
 					TryRead(() => account.OrigDefBal = acc.@default.origdefbal, "Original default balance");
 					TryRead(() => account.TermBal = acc.@default.termbal, "Termination balance");
-					TryRead(() => account.DefSatDate = acc.@default.defsatdate, "Default satisfaction date");
-					TryRead(() => account.RepoDate = acc.@default.repodate, "Repossession date");
+					account.DefSatDate = TryReadDate(() => acc.@default.defsatdate, "Default satisfaction date");
+					account.RepoDate = TryReadDate(() => acc.@default.repodate, "Repossession date");
 					//account delinquency related details
-					TryRead(() => account.DelinqDate = acc.delinquent.delinqdate, "Delinquency date");
+					account.DelinqDate = TryReadDate(() => acc.delinquent.delinqdate, "Delinquency date");
 					TryRead(() => account.DelinqBal = acc.delinquent.delinqbal, "Delinquency balance");
 					//general account details
 					TryRead(() => account.AccNo = acc.accdetails.accno, "Account number (own data only)");

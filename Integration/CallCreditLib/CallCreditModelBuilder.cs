@@ -538,13 +538,29 @@
 		}
 
 		
-		private void TryRead(Action a, string key, bool isRequered = true) {
+		private DateTime? TryReadDate(Func<DateTime> a, string key, bool isRequired = true) {
+			try {
+				DateTime d = a();
+				return (d < DbSmallestDate) ? (DateTime?)null : d;
+			} catch {
+				if (isRequired) {
+					HasParsingError = true;
+					Errors += "Can not read value for: " + key + Environment.NewLine;
+				} // if
+
+				return null;
+			} // try
+		} // TryReadDate
+
+		private static readonly DateTime DbSmallestDate = new DateTime(1900, 1, 1, 0, 0, 0, DateTimeKind.Utc);
+
+		private void TryRead(Action a, string key, bool isRequired = true) {
 			try {
 				a();
 			} catch {
-				if (isRequered) {
+				if (isRequired) {
 					HasParsingError = true;
-					Errors += "Can`t read value for: " + key + Environment.NewLine;
+					Errors += "Can not read value for: " + key + Environment.NewLine;
 				}
 			}
 		}
