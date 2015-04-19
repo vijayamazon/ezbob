@@ -306,14 +306,17 @@ using Ezbob.Logger;
 					acchist.CallCreditDataAccsID = CallCrediDataAccsID;
 				}
 
-				var arg = DB.CreateTableParameter<CallCreditDataAccsHistory>("Tbl", acc.AccHistory);
+				if (acc.AccHistory.Any()) {
+					var arg = DB.CreateTableParameter<CallCreditDataAccsHistory>("Tbl", acc.AccHistory);
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataAccsHistory", CommandSpecies.StoredProcedure, arg);
+				} // if
 
-				 DB.ExecuteNonQuery(con, "SaveCallCreditDataAccsHistory", CommandSpecies.StoredProcedure, arg);
-				
 				foreach (var accnotice in acc.AccNocs) {
 					accnotice.CallCreditDataAccsID = CallCrediDataAccsID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataAccsNocs", CommandSpecies.StoredProcedure, DB.CreateTableParameter<CallCreditDataAccsNocs>("Tbl", acc.AccNocs));
+
+				if (acc.AccNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataAccsNocs", CommandSpecies.StoredProcedure, DB.CreateTableParameter<CallCreditDataAccsNocs>("Tbl", acc.AccNocs));
 			}
 		}
 
