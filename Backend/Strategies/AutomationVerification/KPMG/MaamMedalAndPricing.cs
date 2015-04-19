@@ -3,6 +3,8 @@
 	using System.Collections.Generic;
 	using System.Drawing;
 	using System.Globalization;
+	using System.IO;
+	using System.Reflection;
 	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
@@ -28,8 +30,9 @@
 			this.tag = string.Format(
 				"#MaamMedalAndPricing_{0}_{1}",
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
-				Guid.NewGuid().ToString("N")
-			);
+				Guid.NewGuid()
+					.ToString("N")
+				);
 
 			Log.Debug("The tag is '{0}'.", this.tag);
 		} // constructor
@@ -49,14 +52,16 @@
 					if (this.crLoans.ContainsKey(lmd.CashRequestID))
 						this.crLoans[lmd.CashRequestID].Add(lmd);
 					else
-						this.crLoans[lmd.CashRequestID] = new List<LoanMetaData> { lmd };
+						this.crLoans[lmd.CashRequestID] = new List<LoanMetaData> {
+							lmd
+						};
 
 					this.loanSources.Add(lmd.LoanSourceName);
 				},
 				"LoadAllLoansMetaData",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("Today", spLoad.DateTo ?? new DateTime(2015, 4, 1, 0, 0, 0, DateTimeKind.Utc))
-			);
+				);
 
 			LoadCashRequests();
 
@@ -76,7 +81,8 @@
 
 			pc.Log();
 
-			CsvTitles = Datum.CsvTitles(this.loanSources).Split(';');
+			CsvTitles = Datum.CsvTitles(this.loanSources)
+				.Split(';');
 			CreateXlsx();
 		} // Execute
 
@@ -90,14 +96,16 @@
 			ExcelWorksheet verificationSheet = Xlsx.CreateSheet("Verification", false);
 			ExcelWorksheet minOfferStatSheet = Xlsx.CreateSheet("Min offer", false);
 			ExcelWorksheet maxOfferStatSheet = Xlsx.CreateSheet("Max offer", false);
-			ExcelWorksheet decisionSheet = Xlsx.CreateSheet(DecisionsSheetName, false, CsvTitles);
+			ExcelWorksheet decisionSheet = Xlsx.CreateSheet(DecisionsSheetName, false);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
-			var decisionStats = new Stats(Log, minOfferStatSheet, true, "at last decision time");
+			AppendDecisionTitles(decisionSheet);
+
+			var decisionStats = new Stats(Log, minOfferStatSheet, true, minOfferFormulaeSheet);
 
 			var stats = new List<Tuple<Stats, int>> {
 				new Tuple<Stats, int>(decisionStats, -1),
-				new Tuple<Stats, int>(new Stats(Log, maxOfferStatSheet, false, "at last decision time"), -1),
+				new Tuple<Stats, int>(new Stats(Log, maxOfferStatSheet, false, maxOfferFormulaeSheet), -1),
 			};
 
 			var pc = new ProgressCounter("{0} items sent to .xlsx", Log, 50);
@@ -116,7 +124,9 @@
 
 			pc.Log();
 
-			DrawVerificationData(verificationSheet, 1, decisionStats);
+			curRow = DrawVerificationData(verificationSheet, 1, decisionStats);
+
+			DrawConfiguration(verificationSheet, curRow + 1);
 
 			int loanIDColumn = 1;
 
@@ -152,7 +162,8 @@
 		} // DateTo
 
 		private static int DrawVerificationData(ExcelWorksheet statSheet, int row, Stats decisionStats) {
-			AStatItem.SetBorders(statSheet.Cells[row, 1, row, 3]).Merge = true;
+			AStatItem.SetBorders(statSheet.Cells[row, 1, row, 3])
+				.Merge = true;
 			statSheet.SetCellValue(row, 1, "Verification data", bSetZebra: false, oBgColour: Color.Yellow, bIsBold: true);
 			statSheet.Cells[row, 1].Style.Font.Size = 16;
 			row++;
@@ -168,7 +179,7 @@
 				Reference.Approve.Count,
 				decisionStats.ManuallyApproved.Count,
 				TitledValue.Format.Int
-			);
+				);
 
 			row = DrawVerificationRow(
 				statSheet,
@@ -177,7 +188,7 @@
 				Reference.Approve.Amount,
 				decisionStats.ManuallyApproved.Amount,
 				TitledValue.Format.Money
-			);
+				);
 
 			row = DrawVerificationRow(
 				statSheet,
@@ -186,7 +197,7 @@
 				Reference.Loan.Count,
 				decisionStats.ManuallyApproved.LoanCount.Total.Count,
 				TitledValue.Format.Int
-			);
+				);
 
 			row = DrawVerificationRow(
 				statSheet,
@@ -195,7 +206,7 @@
 				Reference.Loan.Amount,
 				decisionStats.ManuallyApproved.LoanCount.Total.Amount,
 				TitledValue.Format.Money
-			);
+				);
 
 			row = DrawVerificationRow(
 				statSheet,
@@ -204,7 +215,7 @@
 				Reference.Default.Count,
 				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Count,
 				TitledValue.Format.Int
-			);
+				);
 
 			row = DrawVerificationRow(
 				statSheet,
@@ -213,7 +224,7 @@
 				Reference.Default.Issued.Amount,
 				decisionStats.ManuallyApproved.LoanCount.DefaultIssued.Amount,
 				TitledValue.Format.Money
-			);
+				);
 
 			row = DrawVerificationRow(
 				statSheet,
@@ -222,7 +233,45 @@
 				Reference.Default.Outstanding.Amount,
 				decisionStats.ManuallyApproved.LoanCount.DefaultOutstanding.Amount,
 				TitledValue.Format.Money
-			);
+				);
+
+			return row;
+		} // DrawVerificationData
+
+		// ReSharper disable once UnusedMethodReturnValue.Local
+		private static int DrawConfiguration(ExcelWorksheet cfgSheet, int row) {
+			AStatItem.SetBorders(cfgSheet.Cells[row, 1, row, 2]).Merge = true;
+			cfgSheet.SetCellValue(row, 1, "Report configuration", bSetZebra: false, oBgColour: Color.Yellow, bIsBold: true);
+			cfgSheet.Cells[row, 1].Style.Font.Size = 16;
+			row++;
+
+			cfgSheet.SetCellValue(row, 1, "First auto approve top limitation");
+			cfgSheet.SetCellValue(row, 2, 15000, sNumberFormat: "£ #,##");
+			row++;
+
+			cfgSheet.SetCellValue(row, 1, "Second auto approve top limitation");
+			cfgSheet.SetCellValue(row, 2, 20000, sNumberFormat: "£ #,##");
+			row++;
+
+			cfgSheet.SetCellValue(row, 1, "Default issued rate (% of loans) - amount");
+			cfgSheet.SetCellValue(row, 2, 0.2, sNumberFormat: "0.00%");
+			row++;
+
+			cfgSheet.SetCellValue(row, 1, "Default issued rate (% of loans) - count");
+			cfgSheet.SetCellValue(row, 2, 0.2, sNumberFormat: "0.00%");
+			row++;
+
+			cfgSheet.SetCellValue(row, 1, "Home owner cap");
+			cfgSheet.SetCellValue(row, 2, 120000, sNumberFormat: "£ #,##");
+			row++;
+
+			cfgSheet.SetCellValue(row, 1, "Homeless cap");
+			cfgSheet.SetCellValue(row, 2, 20000, sNumberFormat: "£ #,##");
+			row++;
+
+			cfgSheet.SetCellValue(row, 1, "Round to");
+			cfgSheet.SetCellValue(row, 2, 100, sNumberFormat: "0");
+			row++;
 
 			return row;
 		} // DrawVerificationData
@@ -234,7 +283,7 @@
 			decimal reference,
 			decimal actual,
 			string format
-		) {
+			) {
 			Color fontColour = Math.Abs(reference - actual) < 0.000001m ? Color.DarkGreen : Color.Red;
 
 			statSheet.SetCellValue(row, 1, title, true);
@@ -296,7 +345,7 @@
 
 		private readonly SortedDictionary<int, bool> homeOwners;
 		private readonly TCrLoans crLoans;
-		private readonly SortedSet<string> loanSources; 
+		private readonly SortedSet<string> loanSources;
 		private readonly SpLoadCashRequestsForAutomationReport spLoad;
 
 		private static class Reference {
@@ -323,7 +372,59 @@
 			} // class Default
 		} // class Reference
 
+		private void AppendDecisionTitles(ExcelWorksheet decisionSheet) {
+			int column = decisionSheet.SetRowTitles(1, CsvTitles);
+
+			foreach (string formula in decisionTitleFormulae) {
+				if (formula.StartsWith("=")) {
+					decisionSheet.SetCellTitle(1, column, null);
+					decisionSheet.Cells[1, column].Formula = formula;
+					column++;
+				} else
+					column = decisionSheet.SetCellTitle(1, column, formula);
+			} // for each
+		} // AppendDecisionTitles
+
 		private const string DecisionsSheetName = "Decisions";
+
+		private static readonly string[] decisionTitleFormulae = {
+			"Total repaid amount",
+			"Outstanding amount",
+			"Approved amount",
+			"Min offer: issued amount",
+			"Min offer: outstanding amount",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" outstanding amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" outstanding amount\")",
+			"Max offer:" + System.Environment.NewLine + "approved amount",
+			"Max offer:" + System.Environment.NewLine + "issued amount",
+			"Max offer:" + System.Environment.NewLine + "outstanding amount",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" outstanding amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" outstanding amount\")",
+			"Min offer: auto decision",
+			"Is home owner",
+			"Home owner cap",
+			"Outstanding amount",
+		};
+
+		private static readonly string minOfferFormulaeSheet = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(
+			"Ezbob.Backend.Strategies.AutomationVerification.KPMG.MaamMedalAndPricing_MinOffer.txt"
+		)).ReadToEnd();
+
+		private static readonly string maxOfferFormulaeSheet = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(
+			"Ezbob.Backend.Strategies.AutomationVerification.KPMG.MaamMedalAndPricing_MaxOffer.txt"
+		)).ReadToEnd();
 	} // class MaamMedalAndPricing
 } // namespace
 

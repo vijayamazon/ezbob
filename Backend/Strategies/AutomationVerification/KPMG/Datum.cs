@@ -86,9 +86,11 @@
 			AutoItems.Clear();
 
 			foreach (ManualDatumItem mi in ManualItems) {
-				var ai = new AutoDatumItem(mi, this.tag, this.log);
+				var ai = new AutoDatumItem(mi, this.tag, db, this.log) { IsHomeOwner = isHomeOwner, };
+
 				AutoItems.Add(ai);
-				ai.RunAutomation(isHomeOwner, db);
+
+				ai.RunAutomation();
 				ai.SetAdjustedLoanCount(mi.ActualLoanCount, mi.ApprovedAmount);
 			} // for each manual item
 		} // RunAutomation
@@ -178,6 +180,23 @@
 			curColumn = sheet.SetCellValue(rowNum, curColumn, totalLoanCount);
 			curColumn = sheet.SetCellValue(rowNum, curColumn, totalLoanAmount);
 
+			foreach (string formula in decisionValueFormulae) {
+				if (formula.StartsWith("=")) {
+					sheet.Cells[rowNum, curColumn].Formula = formula.Replace(CurrentRow, rowNum.ToString());
+					curColumn++;
+				} else {
+					switch (formula) {
+					case IsHomeOwnerCell:
+						curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.IsHomeOwner);
+						break;
+
+					case OutstandingPrincipalCell:
+						curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.OutstandingPrincipalOnDecisionDate);
+						break;
+					} // switch
+				} // if
+			} // for each
+
 			return curColumn;
 		} // ToXlsx
 
@@ -189,5 +208,40 @@
 		private SortedDictionary<string, LoanSummaryData> loansBySource;
 		private readonly string tag;
 		private readonly ASafeLog log;
+
+		private const string IsHomeOwnerCell = "__IS_HOME_OWNER__";
+		private const string OutstandingPrincipalCell = "__OUTSTANDING_PRINCIPAL__";
+		private const string CurrentRow = "__CURRENT_ROW__";
+
+		private static readonly string[] decisionValueFormulae = {
+			"=AO" + CurrentRow + "+AT" + CurrentRow + "+AY" + CurrentRow + "",
+			"=BB" + CurrentRow + "-BC" + CurrentRow + "",
+			"=IF(CA" + CurrentRow + "=\"Approve\", ROUND((MIN(AE" + CurrentRow + ",CC" + CurrentRow + ") - CD" + CurrentRow + "), -2), 0)",
+			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BE" + CurrentRow + "/K" + CurrentRow + ")",
+			"=IF(BD" + CurrentRow + ">BF" + CurrentRow + ",0,BF" + CurrentRow + "-BD" + CurrentRow + ")",
+			"=IF(AND(CA" + CurrentRow + "=\"Approve\",BE" + CurrentRow + "<=Verification!$B$1" + CurrentRow + "),\"Approve\", \"Not approved\")",
+			"=IF(BH" + CurrentRow + "=\"Approve\",BE" + CurrentRow + ",0)",
+			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BI" + CurrentRow + "/K" + CurrentRow + ")",
+			"=IF(BC" + CurrentRow + ">BJ" + CurrentRow + ",0,BJ" + CurrentRow + "-BC" + CurrentRow + ")",
+			"=IF(AND(CA" + CurrentRow + "=\"Approve\",BE" + CurrentRow + "<=Verification!$B$13),\"Approve\", \"Not approved\")",
+			"=IF(BL" + CurrentRow + "=\"Approve\",BE" + CurrentRow + ",0)",
+			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BM" + CurrentRow + "/K" + CurrentRow + ")",
+			"=IF(BC" + CurrentRow + ">BN" + CurrentRow + ",0,BN" + CurrentRow + "-BC" + CurrentRow + ")",
+			"=IF(CA" + CurrentRow + "=\"Approve\",ROUND(MIN(AF" + CurrentRow + ",CC" + CurrentRow + ") - CD" + CurrentRow + ", -2),0)",
+			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BP" + CurrentRow + "/K" + CurrentRow + ")",
+			"=IF(BC" + CurrentRow + ">BQ" + CurrentRow + ", 0, BQ" + CurrentRow + "-BC" + CurrentRow + ")",
+			"=IF(AND(CA" + CurrentRow + "=\"Approve\",BP" + CurrentRow + "<=Verification!$B$12),\"Approve\", \"Not approved\")",
+			"=IF(BS" + CurrentRow + "=\"Approve\",BP" + CurrentRow + ",0)",
+			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BT" + CurrentRow + "/K" + CurrentRow + ")",
+			"=IF(BC" + CurrentRow + ">BU" + CurrentRow + ",0,BU" + CurrentRow + "-BC" + CurrentRow + ")",
+			"=IF(AND(CA" + CurrentRow + "=\"Approve\",BP" + CurrentRow + "<=Verification!$B$13),\"Approve\", \"Not approved\")",
+			"=IF(BW" + CurrentRow + "=\"Approve\",BP" + CurrentRow + ",0)",
+			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BX" + CurrentRow + "/K" + CurrentRow + ")",
+			"=IF(BC" + CurrentRow + ">BY" + CurrentRow + ",0,BY" + CurrentRow + "-BC" + CurrentRow + ")",
+			"=IF(Q" + CurrentRow + "=\"Approve\",\"Approve\",\"Not approved\")",
+			IsHomeOwnerCell,
+			"=IF(CB" + CurrentRow + ",Verification!$B$16,Verification!$B$17)",
+			OutstandingPrincipalCell,
+		};
 	} // class Datum
 } // namespace

@@ -41,8 +41,8 @@
 			);
 		} // constructor
 
-		public LoanCount Clone() {
-			var lc = new LoanCount(TakeMin, Log);
+		public LoanCount Clone(bool? forcedTakeMinValue) {
+			var lc = new LoanCount(forcedTakeMinValue ?? TakeMin, Log);
 
 			lc.Append(this, true);
 

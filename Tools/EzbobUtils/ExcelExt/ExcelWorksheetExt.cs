@@ -1,12 +1,11 @@
 ﻿namespace Ezbob.ExcelExt {
-	using System;
 	using System.Drawing;
-	using System.Globalization;
-	using Ezbob.Utils.ParsedValue;
 	using OfficeOpenXml;
-	using OfficeOpenXml.Style;
 
 	public static class ExcelWorksheetExt {
+		public static readonly Color ColumnTitleBgColour = Color.FromArgb(0x67, 0xc1, 0x0b);
+		public static readonly Color ColumnTitleFgColour = Color.White;
+
 		public static int SetCellTitle(this ExcelWorksheet oSheet, int nRow, int nColumn, object oRaw) {
 			return SetCellValue(
 				oSheet,
@@ -15,8 +14,8 @@
 				oRaw,
 				bIsBold: true,
 				bSetZebra: false,
-				oFontColour: Color.White,
-				oBgColour: Color.FromArgb(0x67, 0xc1, 0x0b)
+				oFontColour: ColumnTitleFgColour,
+				oBgColour: ColumnTitleBgColour
 			);
 		} // SetCellTitle
 

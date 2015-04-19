@@ -94,6 +94,8 @@
     <Compile Include="AutomationVerification\KPMG\LoanCount.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanMetaData.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanSummaryData.cs" />
+    <EmbeddedResource Include="AutomationVerification\KPMG\MaamMedalAndPricing_MaxOffer.txt" />
+    <EmbeddedResource Include="AutomationVerification\KPMG\MaamMedalAndPricing_MinOffer.txt" />
     <Compile Include="AutomationVerification\KPMG\MaamMedalAndPricing.cs" />
     <Compile Include="AutomationVerification\KPMG\ManualDatumItem.cs" />
     <Compile Include="AutomationVerification\KPMG\SpLoadCashRequestsForAutomationReport.cs" />

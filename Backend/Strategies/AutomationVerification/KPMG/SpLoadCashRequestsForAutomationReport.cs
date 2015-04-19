@@ -30,9 +30,11 @@
 			public int? BrokerID { get; set; }
 			public DateTime DecisionTime { get; set; }
 			public bool IsApproved { get; set; }
-			public int ApprovedAmount { get; set; }
-			public decimal InterestRate { get; set; }
-			public int RepaymentPeriod { get; set; }
+
+			public virtual int ApprovedAmount { get; set; }
+			public virtual decimal InterestRate { get; set; }
+			public virtual int RepaymentPeriod { get; set; }
+
 			public int UseSetupFee { get; set; }
 			public bool UseBrokerSetupFee { get; set; }
 			public decimal? ManualSetupFeePercent { get; set; }
