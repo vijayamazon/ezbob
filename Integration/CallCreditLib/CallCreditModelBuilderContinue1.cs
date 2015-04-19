@@ -19,7 +19,7 @@
 					var acc = Ac;
 					//account holder details
 					TryRead(() => account.AccHolderName = acc.accholderdetails.name, "Account holder’s name details");
-					TryRead(() => account.Dob = acc.accholderdetails.dob, "Account holder’s date of birth");
+					account.Dob = TryReadDate(() => acc.accholderdetails.dob, "Account holder’s date of birth");
 					TryRead(() => account.StatusCode = acc.accholderdetails.statuscode, "Account holder status code");
 					account.StartDate = TryReadDate(() => acc.accholderdetails.startdate, "account holder start day");
 					account.EndDate = TryReadDate(() => acc.accholderdetails.enddate, "account holder end day");
@@ -28,7 +28,7 @@
 					TryRead(() => account.UnDeclaredAddressType = (int)acc.accholderdetails.address.undeclaredaddresstype, "type of undeclared address for account holder");
 					TryRead(() => account.AddressValue = acc.accholderdetails.address.Value, "account holder address value");
 					//account default related details
-					TryRead(() => account.DefDate = acc.@default.defdate, "Default date");
+					account.DefDate = TryReadDate(() => acc.@default.defdate, "Default date");
 					TryRead(() => account.OrigDefBal = acc.@default.origdefbal, "Original default balance");
 					TryRead(() => account.TermBal = acc.@default.termbal, "Termination balance");
 					account.DefSatDate = TryReadDate(() => acc.@default.defsatdate, "Default satisfaction date");
@@ -41,18 +41,18 @@
 					TryRead(() => account.AccSuffix = (int)acc.accdetails.accsuffix, "Account suffix code (own data only)");
 					TryRead(() => account.Joint = acc.accdetails.joint, "Joint account indicator");
 					TryRead(() => account.Status = acc.accdetails.status, "Status of account");
-					TryRead(() => account.DateUpdated = acc.accdetails.dateupdated, "Date that account was last updated");
+					account.DateUpdated = TryReadDate(() => acc.accdetails.dateupdated, "Date that account was last updated");
 					TryRead(() => account.AccTypeCode = acc.accdetails.acctypecode, "Account type code");
 					TryRead(() => account.AccGroupId = (int)acc.accdetails.accgroupid, "Account Type Group Identifier");
 					TryRead(() => account.CurrencyCode = acc.accdetails.currencycode, "Currency code");
 					TryRead(() => account.Balance = acc.accdetails.balance, "Current balance on account");
 					TryRead(() => account.CurCreditLimit = acc.accdetails.limit, "Current credit limit on account");
 					TryRead(() => account.OpenBalance = acc.accdetails.openbalance, "Account opening balance");
-					TryRead(() => account.ArrStartDate = acc.accdetails.arrstartdate, "Arrangement start date");
-					TryRead(() => account.ArrEndDate = acc.accdetails.arrenddate, "Arrangement end date");
-					TryRead(() => account.PayStartDate = acc.accdetails.paystartdate, "Payment start date");
-					TryRead(() => account.accStartDate = acc.accdetails.accstartdate, "Account start date");
-					TryRead(() => account.AccEndDate = acc.accdetails.accenddate, "Account end date");
+					account.ArrStartDate = TryReadDate(() => acc.accdetails.arrstartdate, "Arrangement start date");
+					account.ArrEndDate = TryReadDate(() => acc.accdetails.arrenddate, "Arrangement end date");
+					account.PayStartDate = TryReadDate(() => acc.accdetails.paystartdate, "Payment start date");
+					account.accStartDate = TryReadDate(() => acc.accdetails.accstartdate, "Account start date");
+					account.AccEndDate = TryReadDate(() => acc.accdetails.accenddate, "Account end date");
 					TryRead(() => account.RegPayment = acc.accdetails.regpayment, "Regular payment value");
 					TryRead(() => account.ExpectedPayment = acc.accdetails.expectedpayment, "Expected payment value");
 					TryRead(() => account.ActualPayment = acc.accdetails.actualpayment, "Actual payment value");
@@ -73,7 +73,7 @@
 							var AccHist = new CallCreditDataAccsHistory();
 
 							var acchistory = AcHis;
-							TryRead(() => AccHist.M = new DateTime(Convert.ToInt32(acchistory.m.Substring(0, 4)), Convert.ToInt32(acchistory.m.Substring(5)), 1, 0, 0, 0, DateTimeKind.Utc), "Year and month that history record applies to");
+							AccHist.M = TryReadDate(() => new DateTime(Convert.ToInt32(acchistory.m.Substring(0, 4)), Convert.ToInt32(acchistory.m.Substring(5)), 1, 0, 0, 0, DateTimeKind.Utc), "Year and month that history record applies to");
 							TryRead(() => AccHist.Bal = acchistory.bal, "Balance amount for account history record");
 							TryRead(() => AccHist.CreditLimit = acchistory.limit, "Credit limit for account history record");
 							TryRead(() => AccHist.Acc = acchistory.acc, "Account status code for account history record");
@@ -92,7 +92,7 @@
 							var accnotice = AcN;
 							TryRead(() => AccNoc.NoticeType = accnotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => AccNoc.RefNum = accnotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => AccNoc.DateRaised = accnotice.dateraised, "Date that the Notice was raised)");
+							AccNoc.DateRaised = TryReadDate(() => accnotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => AccNoc.Text = accnotice.text, "Text for Notice of Correction");
 							TryRead(() => AccNoc.NameDetails = accnotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => AccNoc.CurrentAddress = Convert.ToBoolean(accnotice.address.current), "current address check");
@@ -157,8 +157,8 @@
 							TryRead(() => resident.DeclaredAlias = Convert.ToBoolean(resids.declaredalias), "resident's declared alias check");
 							TryRead(() => resident.NameDetails = resids.name, "Confirmation of individual's details");
 							TryRead(() => resident.Duration = resids.duration, "Effective duration of residency");
-							TryRead(() => resident.StartDate = resids.startdate, "Effective start date of residency");
-							TryRead(() => resident.EndDate = resids.enddate, "Effective end date of residency");
+							resident.StartDate = TryReadDate(() => resids.startdate, "Effective start date of residency");
+							resident.EndDate = TryReadDate(() => resids.enddate, "Effective end date of residency");
 							TryRead(() => resident.ErValid = (int)resids.ervalid, "Electoral Roll validation identifier");
 							TryRead(() => {
 								foreach (var ErHis in resids.erhistory) {
@@ -167,8 +167,8 @@
 									};
 
 									var erhist = ErHis;
-									TryRead(() => erhistory.StartDate = erhist.startdate, "");
-									TryRead(() => erhistory.EndDate = erhist.enddate, "");
+									erhistory.StartDate = TryReadDate(() => erhist.startdate, "");
+									erhistory.EndDate = TryReadDate(() => erhist.enddate, "");
 									TryRead(() => erhistory.Optout = Convert.ToBoolean(erhist.optout), "");
 									TryRead(() => erhistory.RollingRoll = Convert.ToBoolean(erhist.rollingroll), "");
 									TryRead(() => {
@@ -178,7 +178,7 @@
 											var erhisnotice = ErHisNoc;
 											TryRead(() => erhnoc.NoticeType = erhisnotice.type, "Notice Type (Correction or Dispute)");
 											TryRead(() => erhnoc.RefNum = erhisnotice.refnum, "Notice Type (Notice Reference Number)");
-											TryRead(() => erhnoc.DateRaised = erhisnotice.dateraised, "Date that the Notice was raised)");
+											erhnoc.DateRaised = TryReadDate(() => erhisnotice.dateraised, "Date that the Notice was raised)");
 											TryRead(() => erhnoc.Text = erhisnotice.text, "Text for Notice of Correction");
 											TryRead(() => erhnoc.NameDetails = erhisnotice.name, "Name details as provided on the Notice of Correction)");
 											TryRead(() => erhnoc.CurrentAddress = Convert.ToBoolean(erhisnotice.address.current), "current address check");
@@ -199,7 +199,7 @@
 									var resnotice = ResNoc;
 									TryRead(() => resnoc.NoticeType = resnotice.type, "Notice Type (Correction or Dispute)");
 									TryRead(() => resnoc.RefNum = resnotice.refnum, "Notice Type (Notice Reference Number)");
-									TryRead(() => resnoc.DateRaised = resnotice.dateraised, "Date that the Notice was raised)");
+									resnoc.DateRaised = TryReadDate(() => resnotice.dateraised, "Date that the Notice was raised)");
 									TryRead(() => resnoc.Text = resnotice.text, "Text for Notice of Correction");
 									TryRead(() => resnoc.NameDetails = resnotice.name, "Name details as provided on the Notice of Correction)");
 									TryRead(() => resnoc.CurrentAddress = Convert.ToBoolean(resnotice.address.current), "current address check");
@@ -229,8 +229,8 @@
 					};
 
 					var addlinks = AdL;
-					TryRead(() => addlink.CreationDate = addlinks.creationdate, "Address Link creation date");
-					TryRead(() => addlink.LastConfDate = addlinks.lastconfdate, "Address Link most recent confirmation date");
+					addlink.CreationDate = TryReadDate(() => addlinks.creationdate, "Address Link creation date");
+					addlink.LastConfDate = TryReadDate(() => addlinks.lastconfdate, "Address Link most recent confirmation date");
 					TryRead(() => addlink.From = (int)addlinks.from, "Address ID for the from address");
 					TryRead(() => addlink.To = (int)addlinks.to, "Address ID for the to address");
 					TryRead(() => addlink.SupplierName = addlinks.supplierdetails.suppliername, "Address Link Supplier name");
@@ -242,7 +242,7 @@
 							var addlinknotice = AddLinkNoc;
 							TryRead(() => addlinknoc.NoticeType = addlinknotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => addlinknoc.RefNum = addlinknotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => addlinknoc.DateRaised = addlinknotice.dateraised, "Date that the Notice was raised)");
+							addlinknoc.DateRaised = TryReadDate(() => addlinknotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => addlinknoc.Text = addlinknotice.text, "Text for Notice of Correction");
 							TryRead(() => addlinknoc.NameDetails = addlinknotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => addlinknoc.CurrentAddress = Convert.ToBoolean(addlinknotice.address.current), "current address check");
@@ -292,8 +292,8 @@
 					TryRead(() => aliaslink.Declared = Convert.ToBoolean(alslinks.declared), "alias was declared on input check");
 					TryRead(() => aliaslink.NameBefore = alslinks.name, "Name before Alias Link");
 					TryRead(() => aliaslink.Alias = alslinks.alias, "Name after Alias Link");
-					TryRead(() => aliaslink.CreationDate = alslinks.creationdate, "Date the Alias Link was created");
-					TryRead(() => aliaslink.LastConfDate = alslinks.lastconfdate, "Most recent date that the Alias Link was confirmed");
+					aliaslink.CreationDate = TryReadDate(() => alslinks.creationdate, "Date the Alias Link was created");
+					aliaslink.LastConfDate = TryReadDate(() => alslinks.lastconfdate, "Most recent date that the Alias Link was confirmed");
 					TryRead(() => aliaslink.SupplierName = alslinks.supplierdetails.suppliername, "Alias Link Supplier name");
 					TryRead(() => aliaslink.SupplierTypeCode = alslinks.supplierdetails.suppliertypecode, "Alias Link Supplier type code");
 					TryRead(() => {
@@ -303,7 +303,7 @@
 							var alslinknotice = AlsLinkNoc;
 							TryRead(() => aliaslinknoc.NoticeType = alslinknotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => aliaslinknoc.RefNum = alslinknotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => aliaslinknoc.DateRaised = alslinknotice.dateraised, "Date that the Notice was raised)");
+							aliaslinknoc.DateRaised = TryReadDate(() => alslinknotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => aliaslinknoc.Text = alslinknotice.text, "Text for Notice of Correction");
 							TryRead(() => aliaslinknoc.NameDetails = alslinknotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => aliaslinknoc.CurrentAddress = Convert.ToBoolean(alslinknotice.address.current), "Current address check");
@@ -334,8 +334,8 @@
 					TryRead(() => associatelink.OiaID = (int)asslinks.oiaid, "pointer between an applicant's Associate Link and the corresponding opt-in associate report");
 					TryRead(() => associatelink.NavLinkID = asslinks.navlinkid, "Identifier for Associate Link Navigation");
 					TryRead(() => associatelink.AssociateName = asslinks.name, "Name of the associate");
-					TryRead(() => associatelink.CreationDate = asslinks.creationdate, "Date the Associate Link was created");
-					TryRead(() => associatelink.LastConfDate = asslinks.lastconfdate, "Most recent date the Associate Link was confirmed");
+					associatelink.CreationDate = TryReadDate(() => asslinks.creationdate, "Date the Associate Link was created");
+					associatelink.LastConfDate = TryReadDate(() => asslinks.lastconfdate, "Most recent date the Associate Link was confirmed");
 					TryRead(() => associatelink.SupplierName = asslinks.supplierdetails.suppliername, "Associate Link Supplier name");
 					TryRead(() => associatelink.SupplierTypeCode = asslinks.supplierdetails.suppliertypecode, "Associate Link Supplier type code");
 					TryRead(() => {
@@ -345,7 +345,7 @@
 							var asslinknotice = AssLinkNoc;
 							TryRead(() => associatelinknoc.NoticeType = asslinknotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => associatelinknoc.RefNum = asslinknotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => associatelinknoc.DateRaised = asslinknotice.dateraised, "Date that the Notice was raised)");
+							associatelinknoc.DateRaised = TryReadDate(() => asslinknotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => associatelinknoc.Text = asslinknotice.text, "Text for Notice of Correction");
 							TryRead(() => associatelinknoc.NameDetails = asslinknotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => associatelinknoc.CurrentAddress = Convert.ToBoolean(asslinknotice.address.current), "Current address check");
@@ -373,7 +373,7 @@
 
 					var cifasfil = CfsFl;
 					TryRead(() => cifasfiling.PersonName = cifasfil.person.name, "Person`s name details");
-					TryRead(() => cifasfiling.Dob = cifasfil.person.dob, "Person`s date of birth");
+					cifasfiling.Dob = TryReadDate(() => cifasfil.person.dob, "Person`s date of birth");
 					TryRead(() => cifasfiling.CurrentAddressP = Convert.ToBoolean(cifasfil.person.address.current), "Current address check");
 					TryRead(() => cifasfiling.UnDeclaredAddressTypeP = (int)cifasfil.person.address.undeclaredaddresstype, "Type of undeclared address");
 					TryRead(() => cifasfiling.AddressValueP = cifasfil.person.address.Value, "Address value related to person against CIFAS filing");
@@ -389,8 +389,8 @@
 					TryRead(() => cifasfiling.FraudCategory = cifasfil.details.fraudcategory, "Fraud category");
 					TryRead(() => cifasfiling.ProductDesc = cifasfil.details.productdesc, "Description of product code");
 					TryRead(() => cifasfiling.FraudDesc = cifasfil.details.frauddesc, "Description of fraud category");
-					TryRead(() => cifasfiling.InputDate = cifasfil.details.inputdate, "The exact date upon which a confirmed fraud originally became live on the CIFAS database");
-					TryRead(() => cifasfiling.ExpiryDate = cifasfil.details.expirydate, "The date upon which a confirmed fraud becomes expired on the CIFAS database");
+					cifasfiling.InputDate = TryReadDate(() => cifasfil.details.inputdate, "The exact date upon which a confirmed fraud originally became live on the CIFAS database");
+					cifasfiling.ExpiryDate = TryReadDate(() => cifasfil.details.expirydate, "The date upon which a confirmed fraud becomes expired on the CIFAS database");
 					TryRead(() => cifasfiling.TransactionType = cifasfil.details.transactiontype, "Transaction type");
 					TryRead(() => {
 						foreach (var CifasFilkNoc in cifasfil.notice) {
@@ -399,7 +399,7 @@
 							var cifasfilnotice = CifasFilkNoc;
 							TryRead(() => cifasfilingnoc.NoticeType = cifasfilnotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => cifasfilingnoc.Refnum = cifasfilnotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => cifasfilingnoc.DateRaised = cifasfilnotice.dateraised, "Date that the Notice was raised)");
+							cifasfilingnoc.DateRaised = TryReadDate(() => cifasfilnotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => cifasfilingnoc.Text = cifasfilnotice.text, "Text for Notice of Correction");
 							TryRead(() => cifasfilingnoc.NameDetails = cifasfilnotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => cifasfilingnoc.CurrentAddress = Convert.ToBoolean(cifasfilnotice.address.current), "Current address check");
@@ -436,9 +436,9 @@
 					TryRead(() => cifascases.CaseType = cifascase.details.casetype, "CIFAS Case Type");
 					TryRead(() => cifascases.ProductCode = cifascase.details.productcode, "CIFAS Product code");
 					TryRead(() => cifascases.Facility = cifascase.details.facility, "Financial facility was granted indicator");
-					TryRead(() => cifascases.SupplyDate = cifascase.details.supplydate, "The exact date upon which a confirmed fraud originally became live on the CIFAS database");
-					TryRead(() => cifascases.ExpiryDate = cifascase.details.expirydate, "The date upon which a confirmed fraud becomes expired on the CIFAS database");
-					TryRead(() => cifascases.ApplicationDate = cifascase.details.applicationdate, "The date upon which an application for credit was made");
+					cifascases.SupplyDate = TryReadDate(() => cifascase.details.supplydate, "The exact date upon which a confirmed fraud originally became live on the CIFAS database");
+					cifascases.ExpiryDate = TryReadDate(() => cifascase.details.expirydate, "The date upon which a confirmed fraud becomes expired on the CIFAS database");
+					cifascases.ApplicationDate = TryReadDate(() => cifascase.details.applicationdate, "The date upon which an application for credit was made");
 
 					for (int i = 0; i < cifascase.details.filingreasons.Length; ++i) {
 						var cifascasefr = new CallCreditDataCifasPlusCasesFilingReasons();
@@ -460,7 +460,7 @@
 
 							var cifascasesubj = CifasCaseSubj;
 							TryRead(() => cifascasesubject.PersonName = cifascasesubj.person.name, "Notice Type (Person name for a CIFAS Case)");
-							TryRead(() => cifascasesubject.PersonDob = cifascasesubj.person.dob, "Person date of birth for a CIFAS Case");
+							cifascasesubject.PersonDob = TryReadDate(() => cifascasesubj.person.dob, "Person date of birth for a CIFAS Case");
 							TryRead(() => cifascasesubject.CompanyName = cifascasesubj.company.name, "Company name for a CIFAS Case");
 							TryRead(() => cifascasesubject.CompanyNumber = cifascasesubj.company.number, "Company number for a CIFAS Case");
 							TryRead(() => cifascasesubject.HomeTelephone = cifascasesubj.hometelephone, "Home telephone number of a Subject");
@@ -483,7 +483,7 @@
 							var cifascasenotice = CifasCaseNoc;
 							TryRead(() => cifascasenoc.NoticeType = cifascasenotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => cifascasenoc.Refnum = cifascasenotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => cifascasenoc.DateRaised = cifascasenotice.dateraised, "Date that the Notice was raised)");
+							cifascasenoc.DateRaised = TryReadDate(() => cifascasenotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => cifascasenoc.Text = cifascasenotice.text, "Text for Notice of Correction");
 							TryRead(() => cifascasenoc.NameDetails = cifascasenotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => cifascasenoc.CurrentAddress = Convert.ToBoolean(cifascasenotice.address.current), "Current address check");

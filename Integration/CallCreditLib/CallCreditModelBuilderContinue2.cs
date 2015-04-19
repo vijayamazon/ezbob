@@ -60,8 +60,8 @@
 					TryRead(() => judgment.CaseNumber = judgs.casenumber, "Case number");
 					TryRead(() => judgment.Status = judgs.status, "Status of Judgment");
 					TryRead(() => judgment.Amount = (int)judgs.amount, "Total amount of the Judgment");
-					TryRead(() => judgment.JudgmentDate = judgs.judgmentdate, "Date of the Judgment");
-					TryRead(() => judgment.DateSatisfied = judgs.datesatisfied, "Date that the Judgment was satisfied");
+					judgment.JudgmentDate = TryReadDate(() => judgs.judgmentdate, "Date of the Judgment");
+					judgment.DateSatisfied = TryReadDate(() => judgs.datesatisfied, "Date that the Judgment was satisfied");
 					TryRead(() => judgment.CurrentAddress = Convert.ToBoolean(judgs.address.current), "Current address check");
 					TryRead(() => judgment.UnDeclaredAddressType = (int)judgs.address.undeclaredaddresstype, "Type of undeclared address");
 					TryRead(() => judgment.AddressValue = judgs.address.Value, "Address value related to judgment");
@@ -72,7 +72,7 @@
 							var judgnotice = JudgNoc;
 							TryRead(() => judgmentnoc.NoticeType = judgnotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => judgmentnoc.RefNum = judgnotice.refnum, "Notice Type (Notice Reference Number )");
-							TryRead(() => judgmentnoc.DateRaised = judgnotice.dateraised, "Date that the Notice was raised)");
+							judgmentnoc.DateRaised = TryReadDate(() => judgnotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => judgmentnoc.Text = judgnotice.text, "Text for Notice of Correction");
 							TryRead(() => judgmentnoc.NameDetails = judgnotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => judgmentnoc.CurrentAddress = Convert.ToBoolean(judgnotice.address.current), "Current address check");
@@ -133,11 +133,11 @@
 					TryRead(() => searches.Balance = (int)search.balance, "Balance or credit limit applied for");
 					TryRead(() => searches.Term = (int)search.term, "Term of loan applied for");
 					TryRead(() => searches.JointApplication = Convert.ToBoolean(search.jointapplication), "This search was a joint application check");
-					TryRead(() => searches.SearchDate = search.searchdate, "Date of Search");
+					searches.SearchDate = TryReadDate(() => search.searchdate, "Date of Search");
 					TryRead(() => searches.NameDetailes = search.name, "Name details input for this Search");
 					TryRead(() => searches.Dob = search.dob, "Applicant's date of birth");
-					TryRead(() => searches.StartDate = search.startdate, "Move in date specified for this Search");
-					TryRead(() => searches.EndDate = search.enddate, "Move out date specified for this Search");
+					searches.StartDate = TryReadDate(() => search.startdate, "Move in date specified for this Search");
+					searches.EndDate = TryReadDate(() => search.enddate, "Move out date specified for this Search");
 					TryRead(() => searches.TpOptOut = Convert.ToBoolean(search.tpoptout), "Third party data is opted out check");
 					TryRead(() => searches.Transient = Convert.ToBoolean(search.transient), "Transient association check");
 					TryRead(() => searches.LinkType = search.linktype, "Link Report Type (Non, Address, Associate)");
@@ -162,7 +162,7 @@
 
 					TryRead(() => notices.NoticeType = nocs.type, "Notice Type (Correction or Dispute)");
 					TryRead(() => notices.Refnum = nocs.refnum, "Notice Type (Notice Reference Number)");
-					TryRead(() => notices.DateRaised = nocs.dateraised, "Date that the Notice was raised)");
+					notices.DateRaised = TryReadDate(() => nocs.dateraised, "Date that the Notice was raised)");
 					TryRead(() => notices.Text = nocs.text, "Text for Notice of Correction");
 					TryRead(() => notices.NameDetails = nocs.name, "Name details as provided on the Notice of Correction)");
 					TryRead(() => notices.CurrentAddress = Convert.ToBoolean(nocs.address.current), "Current address check");
@@ -186,7 +186,7 @@
 
 					var rtreport = RtR;
 					TryRead(() => rtr.HolderName = rtreport.holder.name, "Account holder's name");
-					TryRead(() => rtr.Dob = rtreport.holder.dob, "Account holder's date of birth");
+					rtr.Dob = TryReadDate(() => rtreport.holder.dob, "Account holder's date of birth");
 					TryRead(() => rtr.CurrentAddress = Convert.ToBoolean(rtreport.holder.address.current), "Current address check");
 					TryRead(() => rtr.UnDeclaredAddressType = (int)rtreport.holder.address.undeclaredaddresstype, "Type of undeclared address");
 					TryRead(() => rtr.AddressValue = rtreport.holder.address.Value, "Address value related to account holder");
@@ -198,8 +198,8 @@
 					TryRead(() => rtr.AccTypeCode = rtreport.acctypecode, "Account type code");
 					TryRead(() => rtr.Balance = rtreport.balance, "Current balance on account ");
 					TryRead(() => rtr.Limit = rtreport.limit, "Current credit limit on account ");
-					TryRead(() => rtr.StartDate = rtreport.startdate, "Account start date");
-					TryRead(() => rtr.EndDate = rtreport.enddate, "Account closed date");
+					rtr.StartDate = TryReadDate(() => rtreport.startdate, "Account start date");
+					rtr.EndDate = TryReadDate(() => rtreport.enddate, "Account closed date");
 					TryRead(() => rtr.AccStatusCode = rtreport.accstatuscode, "Account status code");
 					TryRead(() => rtr.RepayFreqCode = rtreport.repayfreqcode, "Repayment frequency code");
 					TryRead(() => rtr.NumOverdue = (int)rtreport.numoverdue, "Number of overdue payments");
@@ -214,7 +214,7 @@
 							var rtrnotice = JudgNoc;
 							TryRead(() => rtrnoc.NoticeType = rtrnotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => rtrnoc.Refnum = rtrnotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => rtrnoc.DateRaised = rtrnotice.dateraised, "Date that the Notice was raised)");
+							rtrnoc.DateRaised = TryReadDate(() => rtrnotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => rtrnoc.Text = rtrnotice.text, "Text for Notice of Correction");
 							TryRead(() => rtrnoc.NameDetails = rtrnotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => rtrnoc.CurrentAddress = Convert.ToBoolean(rtrnotice.address.current), "Current address check");
@@ -320,7 +320,7 @@
 							var aldecindnotice = TpdADINoc;
 							TryRead(() => alertdecisionindnoc.NoticeType = aldecindnotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => alertdecisionindnoc.Refnum = aldecindnotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => alertdecisionindnoc.DateRaised = aldecindnotice.dateraised, "Date that the Notice was raised)");
+							alertdecisionindnoc.DateRaised = TryReadDate(() => aldecindnotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => alertdecisionindnoc.Text = aldecindnotice.text, "Text for Notice of Correction");
 							TryRead(() => alertdecisionindnoc.NameDetails = aldecindnotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => alertdecisionindnoc.CurrentAddress = Convert.ToBoolean(aldecindnotice.address.current), "Current address check");
@@ -350,7 +350,7 @@
 							var alrevindnotice = TpdARINoc;
 							TryRead(() => alertreviewindnoc.NoticeType = alrevindnotice.type, "Notice Type (Correction or Dispute)");
 							TryRead(() => alertreviewindnoc.Refnum = alrevindnotice.refnum, "Notice Type (Notice Reference Number)");
-							TryRead(() => alertreviewindnoc.DateRaised = alrevindnotice.dateraised, "Date that the Notice was raised)");
+							alertreviewindnoc.DateRaised = TryReadDate(() => alrevindnotice.dateraised, "Date that the Notice was raised)");
 							TryRead(() => alertreviewindnoc.Text = alrevindnotice.text, "Text for Notice of Correction");
 							TryRead(() => alertreviewindnoc.NameDetails = alrevindnotice.name, "Name details as provided on the Notice of Correction)");
 							TryRead(() => alertreviewindnoc.CurrentAddress = Convert.ToBoolean(alrevindnotice.address.current), "Current address check");

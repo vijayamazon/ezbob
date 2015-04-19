@@ -112,7 +112,7 @@
 			TryRead(() => result.CastInfo = response.jobdetails.cast, "CastInfo - Callcredit System Specific Information");
 			TryRead(() => result.PSTV = response.jobdetails.pstv, "PSTV - Callcredit System Specific Information");
 			TryRead(() => result.LS = response.jobdetails.ls, "LS - Callcredit System Specific Information");
-			TryRead(() => result.SearchDate = response.jobdetails.searchdate, "Date and time that Search was carried out ");
+			result.SearchDate = TryReadDate(() => response.jobdetails.searchdate, "Date and time that Search was carried out ");
 			//linkrequest
 			TryRead(() => result.SchemaVersionLR = response.linkrequest.schemaversion, "The version of the schema for link request");
 			TryRead(() => result.DataSetsLR = (int)response.linkrequest.datasets, "Search datasets required for link request, values 0 to 511");
@@ -124,7 +124,7 @@
 			TryRead(() => result.OrigSrchSRID = response.secondaryrequest.origsrchid, "Original report searchid");
 
 			//request applicant details as part of response
-			TryRead(() => result.Dob = response.creditrequest.applicant[0].dob, "Applicant's date Of birth");
+			result.Dob = TryReadDate(() => response.creditrequest.applicant[0].dob, "Applicant's date Of birth");
 			TryRead(() => result.Hho = Convert.ToBoolean(response.creditrequest.applicant[0].hho), "Household override check");
 			TryRead(() => result.TpOptOut = Convert.ToBoolean(response.creditrequest.applicant[0].tpoptout), "Third party data opt out check");
 			
@@ -148,7 +148,7 @@
 			//employment
 			TryRead(() => result.Occupation = response.creditrequest.applicant[0].applicantdemographics.employment.occupation, "Occupation Code");
 			TryRead(() => result.EmploymentStatus = response.creditrequest.applicant[0].applicantdemographics.employment.employmentstatus, "Employment Status Code");
-			TryRead(() => result.ExpiryDate = response.creditrequest.applicant[0].applicantdemographics.employment.expirydate, "Employment Expiry Data - dependent on the Employment Status Code");
+			result.ExpiryDate = TryReadDate(() => response.creditrequest.applicant[0].applicantdemographics.employment.expirydate, "Employment Expiry Data - dependent on the Employment Status Code");
 			TryRead(() => result.EmploymentRecency = response.creditrequest.applicant[0].applicantdemographics.employment.employmentrecency, "Employment Recency Code");
 			TryRead(() => result.EmployerCategory = response.creditrequest.applicant[0].applicantdemographics.employment.employercategory, "Employer Category Code");
 			TryRead(() => result.TimeAtCurrentEmployer = response.creditrequest.applicant[0].applicantdemographics.employment.timeatcurrentemployer, "Total number of months with the current employer");
@@ -191,7 +191,7 @@
 			}
 
 			result.Amendments = GetAmendments(response.secondaryrequest);
-			//result.ApplicantAddresses = GetApplicantAddresses(response.creditrequest);
+			result.ApplicantAddresses = GetApplicantAddresses(response.creditrequest);
 			result.ApplicantNames = GetApplicantNames(response.creditrequest);
 			result.Email = GetEmail(response.creditrequest.applicant[0].applicantdemographics);
 			result.Telephone = GetTelephone(response.creditrequest.applicant[0].applicantdemographics);
@@ -475,8 +475,8 @@
 					TryRead(() => amendments.Locality = amend.address.locality, "District or Locality");
 					TryRead(() => amendments.PostTown = amend.address.posttown, "Town");
 					TryRead(() => amendments.PostCode = amend.address.postcode, "Postcode");
-					TryRead(() => amendments.StartDate = amend.address.startdate, "The date the applicant moved into the Residence ");
-					TryRead(() => amendments.EndDate = amend.address.enddate, "The date the applicant moved out of the Residence ");
+					amendments.StartDate = TryReadDate(() => amend.address.startdate, "The date the applicant moved into the Residence ");
+					amendments.EndDate = TryReadDate(() => amend.address.enddate, "The date the applicant moved out of the Residence ");
 					TryRead(() => amendments.Duration = amend.address.duration, "Duration of residency");
 					TryRead(() => amendments.Title = amend.name.title, "Title");
 					TryRead(() => amendments.Forename = amend.name.forename, "Forename");
@@ -506,8 +506,8 @@
 					TryRead(() => appaddresses.Locality = appadd.locality, "District or Locality");
 					TryRead(() => appaddresses.PostTown = appadd.posttown, "Town");
 					TryRead(() => appaddresses.PostCode = appadd.postcode, "Postcode");
-					TryRead(() => appaddresses.StartDate = appadd.startdate, "The date the applicant moved into the Residence ");
-					TryRead(() => appaddresses.EndDate = appadd.enddate, "The date the applicant moved out of the Residence ");
+					appaddresses.StartDate = TryReadDate(() => appadd.startdate, "The date the applicant moved into the Residence ");
+					appaddresses.EndDate = TryReadDate(() => appadd.enddate, "The date the applicant moved out of the Residence ");
 					TryRead(() => appaddresses.Duration = appadd.duration, "Duration of residency");
 					Applicantddresses.Add(appaddresses);
 				}
