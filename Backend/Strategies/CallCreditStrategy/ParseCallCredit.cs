@@ -334,7 +334,8 @@ using Ezbob.Logger;
 				foreach (var addrlinknotice in addrlink.AddressLinkNocs) {
 					addrlinknotice.CallCreditDataAddressLinksID = CallCreditDataAddressLinksID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataAddressLinksNocs", CommandSpecies.StoredProcedure,
+				if (addrlink.AddressLinkNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataAddressLinksNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataAddressLinksNocs>("Tbl", addrlink.AddressLinkNocs));
 			}
 		}
@@ -353,7 +354,8 @@ using Ezbob.Logger;
 				foreach (var aliaslinknotice in aliaslink.AliasLinkNocs) {
 					aliaslinknotice.CallCreditDataAliasLinksID = CallCreditDataAliasLinksID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataAliasLinksNocs", CommandSpecies.StoredProcedure,
+				if (aliaslink.AliasLinkNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataAliasLinksNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataAliasLinksNocs>("Tbl", aliaslink.AliasLinkNocs));
 			}
 		}
@@ -372,7 +374,8 @@ using Ezbob.Logger;
 				foreach (var asslinknotice in asslink.AssociateLinkNocs) {
 					asslinknotice.CallCreditDataAssociateLinksID = CallCreditDataAssociateLinksID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataAssociateLinksNocs", CommandSpecies.StoredProcedure,
+				if (asslink.AssociateLinkNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataAssociateLinksNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataAssociateLinksNocs>("Tbl", asslink.AssociateLinkNocs));
 			}
 		}
@@ -391,7 +394,8 @@ using Ezbob.Logger;
 				foreach (var cifasfilingnotice in cifasfiling.CifasFilingNocs) {
 					cifasfilingnotice.CallCreditDataCifasFilingID = CallCreditDataCifasFilingID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataCifasFilingNocs", CommandSpecies.StoredProcedure,
+				if (cifasfiling.CifasFilingNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataCifasFilingNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataCifasFilingNocs>("Tbl", cifasfiling.CifasFilingNocs));
 			}
 		}
@@ -410,7 +414,8 @@ using Ezbob.Logger;
 				foreach (var judgmentnotice in judgment.JudgmentNocs) {
 					judgmentnotice.CallCreditDataJudgmentsID = CallCreditDataJudgmentsID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataJudgmentsNocs", CommandSpecies.StoredProcedure,
+				if (judgment.JudgmentNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataJudgmentsNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataJudgmentsNocs>("Tbl", judgment.JudgmentNocs));
 			}
 		}
@@ -429,7 +434,8 @@ using Ezbob.Logger;
 				foreach (var rtrnotice in rtr.RtrNocs) {
 					rtrnotice.CallCreditDataRtrID = CallCreditDataRtrID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataRtrNocs", CommandSpecies.StoredProcedure,
+				if (rtr.RtrNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataRtrNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataRtrNocs>("Tbl", rtr.RtrNocs));
 			}
 		}
@@ -486,7 +492,8 @@ using Ezbob.Logger;
 				foreach (var erhistnotice in erhist.ErHistoryNocs) {
 					erhistnotice.CallCreditDataAddressConfsResidentsErHistoryID = CallCreditDataAddressConfsResidentsErHistoryID;
 				}
-				DB.ExecuteNonQuery(con, "SaveCallCreditDataAddressConfsResidentsErHistoryNocs", CommandSpecies.StoredProcedure,
+				if (erhist.ErHistoryNocs.Any())
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataAddressConfsResidentsErHistoryNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataAddressConfsResidentsErHistoryNocs>("Tbl", erhist.ErHistoryNocs));
 			}
 		}
@@ -609,6 +616,7 @@ using Ezbob.Logger;
 				foreach (var rtrnotice in decalind.DecisionAlertIndividualNocs) {
 					rtrnotice.CallCreditDataTpdDecisionAlertIndividualsID = CallCreditDataTpdDecisionAlertIndividualsID;
 				}
+				if (decalind.DecisionAlertIndividualNocs.Any())
 				DB.ExecuteNonQuery(con, "SaveCCallCreditDataTpdReviewAlertIndividualsNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataTpdDecisionAlertIndividualsNocs>("Tbl", decalind.DecisionAlertIndividualNocs));
 			}
@@ -628,6 +636,7 @@ using Ezbob.Logger;
 				foreach (var rtrnotice in revalind.ReviewAlertIndividualNocs) {
 					rtrnotice.CallCreditDataTpdReviewAlertIndividualsID = CallCreditDataTpdReviewAlertIndividualsID;
 				}
+				if (revalind.ReviewAlertIndividualNocs.Any())
 				DB.ExecuteNonQuery(con, "SaveCallCreditDataTpdReviewAlertIndividualsNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataTpdReviewAlertIndividualsNocs>("Tbl", revalind.ReviewAlertIndividualNocs));
 			}
