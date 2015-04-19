@@ -23,6 +23,7 @@
 		public bool? Optout { get; set; }
 		public bool? RollingRoll { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataAddressConfsResidentsErHistoryNocs> ErHistoryNocs { get; set; }
 
 	}

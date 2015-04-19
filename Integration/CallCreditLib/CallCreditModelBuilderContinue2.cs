@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Integration.CallCreditLib {
+﻿namespace CallCreditLib {
 	using System;
 	using System.Collections.Generic;
 	using Callcredit.CRBSB;
@@ -7,42 +7,43 @@
 	public partial class CallCreditModelBuilder {
 
 
-		public List<CallCreditEmail> GetEmail(CT_applicantdemographicsContact contact) {
+		public List<CallCreditEmail> GetEmail(CT_applicantdemographics appdem) {
 			var EmailAddresses = new List<CallCreditEmail>();
+			TryRead(() => {
+				foreach (var EmL in appdem.contact.email) {
+					var email = new CallCreditEmail();
 
-			foreach (var EmL in contact.email) {
-				var email = new CallCreditEmail();
+					var emailaddress = EmL;
 
-				var emailaddress = EmL;
-
-				TryRead(() => email.EmailType = emailaddress.type, "Email type code");
-				TryRead(() => email.EmailAddress = emailaddress.address, "Email address");
-				EmailAddresses.Add(email);
-			}
+					TryRead(() => email.EmailType = emailaddress.type, "Email type code");
+					TryRead(() => email.EmailAddress = emailaddress.address, "Email address");
+					EmailAddresses.Add(email);
+				}
+			}, "Emails");
 
 			return EmailAddresses;
 		}
 
 
-		public List<CallCreditTelephone> GetTelephone(CT_applicantdemographicsContact contact) {
+		public List<CallCreditTelephone> GetTelephone(CT_applicantdemographics appdem) {
 			var TelephoneNumbers = new List<CallCreditTelephone>();
+			TryRead(() => {
+				foreach (var TlPh in appdem.contact.telephone) {
+					var telephones = new CallCreditTelephone();
 
-			foreach (var TlPh in contact.telephone) {
-				var telephones = new CallCreditTelephone();
+					var phonenumber = TlPh;
 
-				var phonenumber = TlPh;
-
-				TryRead(() => telephones.TelephoneType = phonenumber.type, "Telephone Type Code");
-				TryRead(() => telephones.STD = phonenumber.std, "Telephone STD Code");
-				TryRead(() => telephones.PhoneNumber = phonenumber.number, "Telephone number");
-				TryRead(() => telephones.Extension = phonenumber.extension, "Telephone extension number");
-				TelephoneNumbers.Add(telephones);
-			}
-
+					TryRead(() => telephones.TelephoneType = phonenumber.type, "Telephone Type Code");
+					TryRead(() => telephones.STD = phonenumber.std, "Telephone STD Code");
+					TryRead(() => telephones.PhoneNumber = phonenumber.number, "Telephone number");
+					TryRead(() => telephones.Extension = phonenumber.extension, "Telephone extension number");
+					TelephoneNumbers.Add(telephones);
+				}
+			}, "Telephones");
 			return TelephoneNumbers;
 		}
-		
-		
+
+
 		public List<CallCreditDataJudgments> GetJudgments(CT_outputapplicant applicant) {
 			var Judgments = new List<CallCreditDataJudgments>();
 			TryRead(() => {
@@ -304,62 +305,64 @@
 			TryRead(() => tpdata.TotalDelinqsAmountH = (int)thirdparty.hho.summary.share.totaldelinqsamount, "Total value of delinquent SHARE Accounts (HHO)");
 
 
+			TryRead(() => {
+				foreach (var TpdADI in thirdparty.decision.alertindividual) {
+					var alertdecisionind = new CallCreditDataTpdDecisionAlertIndividuals() {
+						DecisionAlertIndividualNocs = new List<CallCreditDataTpdDecisionAlertIndividualsNocs>()
+					};
 
-			foreach (var TpdADI in thirdparty.decision.alertindividual) {
-				var alertdecisionind = new CallCreditDataTpdDecisionAlertIndividuals() {
-					DecisionAlertIndividualNocs = new List<CallCreditDataTpdDecisionAlertIndividualsNocs>()
-				};
+					var aldecind = TpdADI;
+					TryRead(() => alertdecisionind.IndividualName = aldecind.name, "Name of Alert decision Individual");
+					TryRead(() => {
+						foreach (var TpdADINoc in aldecind.notice) {
+							var alertdecisionindnoc = new CallCreditDataTpdDecisionAlertIndividualsNocs();
 
-				var aldecind = TpdADI;
-				TryRead(() => alertdecisionind.IndividualName = aldecind.name, "Name of Alert decision Individual");
-				TryRead(() => {
-					foreach (var TpdADINoc in aldecind.notice) {
-						var alertdecisionindnoc = new CallCreditDataTpdDecisionAlertIndividualsNocs();
+							var aldecindnotice = TpdADINoc;
+							TryRead(() => alertdecisionindnoc.NoticeType = aldecindnotice.type, "Notice Type (Correction or Dispute)");
+							TryRead(() => alertdecisionindnoc.Refnum = aldecindnotice.refnum, "Notice Type (Notice Reference Number)");
+							TryRead(() => alertdecisionindnoc.DateRaised = aldecindnotice.dateraised, "Date that the Notice was raised)");
+							TryRead(() => alertdecisionindnoc.Text = aldecindnotice.text, "Text for Notice of Correction");
+							TryRead(() => alertdecisionindnoc.NameDetails = aldecindnotice.name, "Name details as provided on the Notice of Correction)");
+							TryRead(() => alertdecisionindnoc.CurrentAddress = Convert.ToBoolean(aldecindnotice.address.current), "Current address check");
+							TryRead(() => alertdecisionindnoc.UnDeclaredAddressType = (int)aldecindnotice.address.undeclaredaddresstype, "Type of undeclared address");
+							TryRead(() => alertdecisionindnoc.AddressValue = aldecindnotice.address.Value, "Address value related to notice against an alert decision individual");
+							alertdecisionind.DecisionAlertIndividualNocs.Add(alertdecisionindnoc);
+						}
+					}, "Alert decision individual Notices");
 
-						var aldecindnotice = TpdADINoc;
-						TryRead(() => alertdecisionindnoc.NoticeType = aldecindnotice.type, "Notice Type (Correction or Dispute)");
-						TryRead(() => alertdecisionindnoc.Refnum = aldecindnotice.refnum, "Notice Type (Notice Reference Number)");
-						TryRead(() => alertdecisionindnoc.DateRaised = aldecindnotice.dateraised, "Date that the Notice was raised)");
-						TryRead(() => alertdecisionindnoc.Text = aldecindnotice.text, "Text for Notice of Correction");
-						TryRead(() => alertdecisionindnoc.NameDetails = aldecindnotice.name, "Name details as provided on the Notice of Correction)");
-						TryRead(() => alertdecisionindnoc.CurrentAddress = Convert.ToBoolean(aldecindnotice.address.current), "Current address check");
-						TryRead(() => alertdecisionindnoc.UnDeclaredAddressType = (int)aldecindnotice.address.undeclaredaddresstype, "Type of undeclared address");
-						TryRead(() => alertdecisionindnoc.AddressValue = aldecindnotice.address.Value, "Address value related to notice against an alert decision individual");
-						alertdecisionind.DecisionAlertIndividualNocs.Add(alertdecisionindnoc);
-					}
-				}, "Alert decision individual Notices");
-
-				tpdata.DecisionAlertIndividuals.Add(alertdecisionind);
-			}
+					tpdata.DecisionAlertIndividuals.Add(alertdecisionind);
+				}
+			}, "Alert decision individuals");
 
 
+			TryRead(() => {
+				foreach (var TpdARI in thirdparty.review.alertindividual) {
+					var alertreviewind = new CallCreditDataTpdReviewAlertIndividuals() {
+						ReviewAlertIndividualNocs = new List<CallCreditDataTpdReviewAlertIndividualsNocs>()
+					};
 
-			foreach (var TpdARI in thirdparty.review.alertindividual) {
-				var alertreviewind = new CallCreditDataTpdReviewAlertIndividuals() {
-					ReviewAlertIndividualNocs = new List<CallCreditDataTpdReviewAlertIndividualsNocs>()
-				};
+					var alrevind = TpdARI;
+					TryRead(() => alertreviewind.IndividualName = alrevind.name, "Name of Alert review Individual");
+					TryRead(() => {
+						foreach (var TpdARINoc in alrevind.notice) {
+							var alertreviewindnoc = new CallCreditDataTpdReviewAlertIndividualsNocs();
 
-				var alrevind = TpdARI;
-				TryRead(() => alertreviewind.IndividualName = alrevind.name, "Name of Alert review Individual");
-				TryRead(() => {
-					foreach (var TpdARINoc in alrevind.notice) {
-						var alertreviewindnoc = new CallCreditDataTpdReviewAlertIndividualsNocs();
+							var alrevindnotice = TpdARINoc;
+							TryRead(() => alertreviewindnoc.NoticeType = alrevindnotice.type, "Notice Type (Correction or Dispute)");
+							TryRead(() => alertreviewindnoc.Refnum = alrevindnotice.refnum, "Notice Type (Notice Reference Number)");
+							TryRead(() => alertreviewindnoc.DateRaised = alrevindnotice.dateraised, "Date that the Notice was raised)");
+							TryRead(() => alertreviewindnoc.Text = alrevindnotice.text, "Text for Notice of Correction");
+							TryRead(() => alertreviewindnoc.NameDetails = alrevindnotice.name, "Name details as provided on the Notice of Correction)");
+							TryRead(() => alertreviewindnoc.CurrentAddress = Convert.ToBoolean(alrevindnotice.address.current), "Current address check");
+							TryRead(() => alertreviewindnoc.UnDeclaredAddressType = (int)alrevindnotice.address.undeclaredaddresstype, "Type of undeclared address");
+							TryRead(() => alertreviewindnoc.AddressValue = alrevindnotice.address.Value, "Address value related to notice against an alert review individual");
+							alertreviewind.ReviewAlertIndividualNocs.Add(alertreviewindnoc);
+						}
+					}, "Alert review individual Notices");
 
-						var alrevindnotice = TpdARINoc;
-						TryRead(() => alertreviewindnoc.NoticeType = alrevindnotice.type, "Notice Type (Correction or Dispute)");
-						TryRead(() => alertreviewindnoc.Refnum = alrevindnotice.refnum, "Notice Type (Notice Reference Number)");
-						TryRead(() => alertreviewindnoc.DateRaised = alrevindnotice.dateraised, "Date that the Notice was raised)");
-						TryRead(() => alertreviewindnoc.Text = alrevindnotice.text, "Text for Notice of Correction");
-						TryRead(() => alertreviewindnoc.NameDetails = alrevindnotice.name, "Name details as provided on the Notice of Correction)");
-						TryRead(() => alertreviewindnoc.CurrentAddress = Convert.ToBoolean(alrevindnotice.address.current), "Current address check");
-						TryRead(() => alertreviewindnoc.UnDeclaredAddressType = (int)alrevindnotice.address.undeclaredaddresstype, "Type of undeclared address");
-						TryRead(() => alertreviewindnoc.AddressValue = alrevindnotice.address.Value, "Address value related to notice against an alert review individual");
-						alertreviewind.ReviewAlertIndividualNocs.Add(alertreviewindnoc);
-					}
-				}, "Alert review individual Notices");
-
-				tpdata.ReviewAlertIndividuals.Add(alertreviewind);
-			}
+					tpdata.ReviewAlertIndividuals.Add(alertreviewind);
+				}
+			}, "Alert review individuas");
 
 
 			TryRead(() => {
@@ -395,6 +398,7 @@
 			}, "Summarised Credit Scores for Household Override Individuals");
 
 			Tpd.Add(tpdata);
+			
 
 			return Tpd;
 		}

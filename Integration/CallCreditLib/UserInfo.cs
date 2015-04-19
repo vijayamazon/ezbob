@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Integration.CallCreditLib {
+﻿namespace CallCreditLib {
 	using System;
 
 	public class UserInfo {

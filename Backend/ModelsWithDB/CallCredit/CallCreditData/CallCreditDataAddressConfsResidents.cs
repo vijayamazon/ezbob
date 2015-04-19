@@ -30,7 +30,9 @@
 		public DateTime? EndDate { get; set; }
 		public int? ErValid { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataAddressConfsResidentsErHistory> ErHistory { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataAddressConfsResidentsNocs> ResidentNocs { get; set; }
 
 	}

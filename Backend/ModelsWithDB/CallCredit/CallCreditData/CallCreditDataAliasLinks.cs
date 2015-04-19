@@ -29,6 +29,7 @@
 		[Length(10)]
 		public string SupplierTypeCode { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataAliasLinksNocs> AliasLinkNocs { get; set; }
 
 	}

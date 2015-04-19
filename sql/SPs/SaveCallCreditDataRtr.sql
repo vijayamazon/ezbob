@@ -42,6 +42,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataRtrId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataRtr table.', 11, 1)
+
 	INSERT INTO CallCreditDataRtr (
 		[CallCreditDataID],
 		[HolderName],
@@ -91,6 +99,10 @@ BEGIN
 		[ChangePay],
 		[NextPayAmount]
 	FROM @Tbl
+
+	SET @CallCreditDataRtrId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataRtrId AS CallCreditDataRtrId
 END
 GO
 

@@ -25,6 +25,13 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditApplicantNames table.', 11, 1)
+
 	INSERT INTO CallCreditApplicantNames (
 		[CallCreditID],
 		[Title],

@@ -33,9 +33,13 @@
 		public DateTime? ExpiryDate { get; set; }
 		public DateTime? ApplicationDate { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataCifasPlusCasesDmrs> Dmrs { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataCifasPlusCasesFilingReasons> FilingReasons { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataCifasPlusCasesNocs> CifasPlusCaseNocs { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataCifasPlusCasesSubjects> Subjects { get; set; }
 
 	}

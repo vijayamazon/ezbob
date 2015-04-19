@@ -24,6 +24,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataAddressConfsResidentsErHistoryId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataAddressConfsResidentsErHistory table.', 11, 1)
+
 	INSERT INTO CallCreditDataAddressConfsResidentsErHistory (
 		[CallCreditDataAddressConfsResidentsID],
 		[StartDate],
@@ -37,6 +45,10 @@ BEGIN
 		[Optout],
 		[RollingRoll]
 	FROM @Tbl
+
+	SET @CallCreditDataAddressConfsResidentsErHistoryId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataAddressConfsResidentsErHistoryId AS CallCreditDataAddressConfsResidentsErHistoryId
 END
 GO
 

@@ -46,6 +46,7 @@
 		public DateTime? Startdate { get; set; }
 		public DateTime? Enddate { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataBaisNocs> BaiNocs { get; set; }
 	}
 }

@@ -37,6 +37,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
     </Reference>
+    <Reference Include="Callcredit.CRBSB, Version=7.2.0.0, Culture=neutral, PublicKeyToken=aed89f8db6c5d243, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\CallCredit\Callcredit.CRBSB.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=3.1.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
@@ -115,6 +119,7 @@
     <Compile Include="CalculateLoan\LoanCalculatorModel.cs" />
     <Compile Include="CalculateLoan\Helpers\ScheduledPayment.cs" />
     <Compile Include="CalculateLoan\Helpers\Repayment.cs" />
+    <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
@@ -471,6 +476,10 @@
       <Project>{9e536824-37ad-4cc7-b597-11b882091dbd}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\CallCreditLib\CallCreditLib.csproj">
+      <Project>{c91a56a7-87ae-44ca-9640-59510455bc09}</Project>
+      <Name>CallCreditLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
       <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
       <Name>ChannelGrabberAPI</Name>
@@ -647,6 +656,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -25,6 +25,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataAddressConfsId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataAddressConfs table.', 11, 1)
+
 	INSERT INTO CallCreditDataAddressConfs (
 		[CallCreditDataID],
 		[PafValid],
@@ -40,6 +48,10 @@ BEGIN
 		[UnDeclaredAddressType],
 		[AddressValue]
 	FROM @Tbl
+
+	SET @CallCreditDataAddressConfsId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataAddressConfsId AS CallCreditDataAddressConfsId
 END
 GO
 

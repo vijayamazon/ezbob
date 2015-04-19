@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Integration.CallCreditLib {
+﻿namespace CallCreditLib {
 	using System;
 	using System.Collections.Generic;
 	using Callcredit.CRBSB;
@@ -100,7 +100,8 @@
 							TryRead(() => AccNoc.AddressValue = accnotice.address.Value, "Address value related to notice against account");
 							account.AccNocs.Add(AccNoc);
 						}
-					},"Account notices");			
+					},"Account notices");
+					Accounts.Add(account);
 				}
 			}, "Accs");
 

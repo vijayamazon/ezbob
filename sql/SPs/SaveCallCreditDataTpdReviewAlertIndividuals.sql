@@ -21,6 +21,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataTpdReviewAlertIndividualsId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataTpdReviewAlertIndividuals table.', 11, 1)
+
 	INSERT INTO CallCreditDataTpdReviewAlertIndividuals (
 		[CallCreditDataTpdID],
 		[IndividualName]
@@ -28,6 +36,10 @@ BEGIN
 		[CallCreditDataTpdID],
 		[IndividualName]
 	FROM @Tbl
+
+	SET @CallCreditDataTpdReviewAlertIndividualsId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataTpdReviewAlertIndividualsId AS CallCreditDataTpdReviewAlertIndividualsId
 END
 GO
 

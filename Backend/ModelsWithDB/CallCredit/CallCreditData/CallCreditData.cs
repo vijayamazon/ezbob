@@ -257,23 +257,37 @@
 		[Length(2)]
 		public string CameoIntl { get; set; }
 
-		
-		
-		public  List<CallCreditDataAccs> Accs { get; set; }	
+
+		[NonTraversable]
+		public  List<CallCreditDataAccs> Accs { get; set; }
+		[NonTraversable]
 		public	List<CallCreditDataAddressConfs> AddressConfs { get; set; }
-		public	List<CallCreditDataAddresses> SummaryAddresses { get; set; } 
-		public	List<CallCreditDataAddressLinks> AddressLinks { get; set; }
-		public	List<CallCreditDataAliasLinks> AliasLinks { get; set; }
-		public	List<CallCreditDataAssociateLinks> AssociateLinks { get; set; }
-		public	List<CallCreditDataCifasFiling> CifasFiling { get; set; }
-		public	List<CallCreditDataCifasPlusCases> CifasPlusCases { get; set; }
-		public	List<CallCreditDataCreditScores> CreditScores { get; set; } 
-		public	List<CallCreditDataJudgments> Judgments { get; set; }
-		public	List<CallCreditDataLinkAddresses> LinkAddresses { get; set; }
-		public  List<CallCreditDataNocs> Nocs { get; set; }	
-		public	List<CallCreditDataRtr> Rtr { get; set; }
-		public	List<CallCreditDataSearches> Searches { get; set; }
-		public	List<CallCreditDataTpd> Tpd { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataAddresses> SummaryAddresses { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataAddressLinks> AddressLinks { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataAliasLinks> AliasLinks { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataAssociateLinks> AssociateLinks { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataCifasFiling> CifasFiling { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataCifasPlusCases> CifasPlusCases { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataCreditScores> CreditScores { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataJudgments> Judgments { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataLinkAddresses> LinkAddresses { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataNocs> Nocs { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataRtr> Rtr { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataSearches> Searches { get; set; }
+		[NonTraversable]
+		public List<CallCreditDataTpd> Tpd { get; set; }
 
 	}
 }

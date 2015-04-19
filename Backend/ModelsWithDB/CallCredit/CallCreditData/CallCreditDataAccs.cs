@@ -74,7 +74,9 @@
 		public string SupplierTypeCode { get; set; }
 		public bool? Apacs { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataAccsHistory> AccHistory { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataAccsNocs> AccNocs { get; set; }
 
 	}

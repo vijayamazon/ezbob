@@ -32,6 +32,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataJudgmentsId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataJudgments table.', 11, 1)
+
 	INSERT INTO CallCreditDataJudgments (
 		[CallCreditDataID],
 		[NameDetails],
@@ -61,6 +69,10 @@ BEGIN
 		[UnDeclaredAddressType],
 		[AddressValue]
 	FROM @Tbl
+
+	SET @CallCreditDataJudgmentsId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataJudgmentsId AS CallCreditDataJudgmentsId
 END
 GO
 

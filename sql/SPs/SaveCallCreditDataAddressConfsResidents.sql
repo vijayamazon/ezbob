@@ -28,6 +28,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataAddressConfsResidentsId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataAddressConfsResidents table.', 11, 1)
+
 	INSERT INTO CallCreditDataAddressConfsResidents (
 		[CallCreditDataAddressConfsID],
 		[MatchType],
@@ -49,6 +57,10 @@ BEGIN
 		[EndDate],
 		[ErValid]
 	FROM @Tbl
+
+	SET @CallCreditDataAddressConfsResidentsId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataAddressConfsResidentsId AS CallCreditDataAddressConfsResidentsId
 END
 GO
 

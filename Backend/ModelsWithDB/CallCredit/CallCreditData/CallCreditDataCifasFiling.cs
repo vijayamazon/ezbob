@@ -50,6 +50,7 @@
 		[Length(10)]
 		public string TransactionType { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataCifasFilingNocs> CifasFilingNocs { get; set; }
 	}
 }

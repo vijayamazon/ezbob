@@ -20,6 +20,7 @@
 		[Length(164)]
 		public string IndividualName { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataTpdReviewAlertIndividualsNocs> ReviewAlertIndividualNocs { get; set; }
 	}
 }

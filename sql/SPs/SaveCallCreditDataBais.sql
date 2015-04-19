@@ -38,6 +38,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataBaisId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataBais table.', 11, 1)
+
 	INSERT INTO CallCreditDataBais (
 		[CallCreditDataID],
 		[DischargeDate],
@@ -79,6 +87,10 @@ BEGIN
 		[Startdate],
 		[Enddate]
 	FROM @Tbl
+
+	SET @CallCreditDataBaisId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataBaisId AS CallCreditDataBaisId
 END
 GO
 

@@ -206,6 +206,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditData table.', 11, 1)
+
 	INSERT INTO CallCreditData (
 		[CallCreditID],
 		[OiaID],
@@ -583,6 +591,10 @@ BEGIN
 		[RegionCode],
 		[CameoIntl]
 	FROM @Tbl
+
+	SET @CallCreditDataId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataId AS CallCreditDataId
 END
 GO
 

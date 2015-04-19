@@ -139,11 +139,17 @@
 		[Length(10)]
 		public string FrequencyAd { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditData> ApplicantData { get; set; }
+		[NonTraversable]
 		public List<CallCreditAmendments> Amendments { get; set; }
+		[NonTraversable]
 		public List<CallCreditApplicantAddresses> ApplicantAddresses { get; set; }
+		[NonTraversable]
 		public List<CallCreditApplicantNames> ApplicantNames { get; set; }
+		[NonTraversable]
 		public List<CallCreditEmail> Email { get; set; }
+		[NonTraversable]
 		public List<CallCreditTelephone> Telephone { get; set; }
 	}
 }

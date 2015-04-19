@@ -91,6 +91,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c != 1
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCredit table.', 11, 1)
+
 	INSERT INTO CallCredit (
 		[MP_ServiceLogId],
 		[InsertDate],
@@ -238,6 +246,10 @@ BEGIN
 		[PaymentMethodAd],
 		[FrequencyAd]
 	FROM @Tbl
+
+	SET @CallCreditId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditId AS CallCreditId
 END
 GO
 

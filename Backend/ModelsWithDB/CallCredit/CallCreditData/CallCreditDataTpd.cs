@@ -82,9 +82,13 @@
 		public int? TotalDelinqsH { get; set; }
 		public int? TotalDelinqsAmountH { get; set; }
 
-		public List<CallCreditDataTpdDecisionAlertIndividuals> DecisionAlertIndividuals { get; set; }		
+		[NonTraversable]
+		public List<CallCreditDataTpdDecisionAlertIndividuals> DecisionAlertIndividuals { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataTpdDecisionCreditScores> DecisionCreditScores { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataTpdHhoCreditScores> HhoCreditScores { get; set; }
+		[NonTraversable]
 		public List<CallCreditDataTpdReviewAlertIndividuals> ReviewAlertIndividuals { get; set; }		
 	}
 }

@@ -194,6 +194,10 @@
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\CallCreditLib\CallCreditLib.csproj">
+      <Project>{c91a56a7-87ae-44ca-9640-59510455bc09}</Project>
+      <Name>CallCreditLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
       <Project>{189D7477-DEE3-4F7B-B703-D24C92352C0C}</Project>
       <Name>ChannelGrabberAPI</Name>

@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Xml.Linq;
-using System.Xml.Serialization;
-
-namespace Ezbob.Integration.CallCreditLib {
+﻿namespace CallCreditLib {
+	using System;
+	using System.Collections.Generic;
+	using System.IO;
+	using System.Linq;
+	using System.Xml.Linq;
+	using System.Xml.Serialization;
+	
 	class XSerializer {
 		private static object _locker = new object();
 		private static Dictionary<Type, XmlSerializer> _serializeCache = new Dictionary<Type, XmlSerializer>();

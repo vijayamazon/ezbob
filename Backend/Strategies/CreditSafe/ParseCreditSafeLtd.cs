@@ -24,8 +24,9 @@ namespace Ezbob.Backend.Strategies.CreditSafe
         public override void Execute()
         {
             Log.Info("Parsing Experian Ltd for service log entry {0}...", m_nServiceLogID);
-
-            var oTbl = Save(Parse(Load()));
+	        var loaded = Load();
+	        var parsed = Parse(loaded);
+            var oTbl = Save(parsed);
 
             if (oTbl != null)
                 Result = oTbl;

@@ -50,6 +50,7 @@
 		public bool? ChangePay { get; set; }
 		public int? NextPayAmount { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataRtrNocs> RtrNocs { get; set; }
 	}
 }

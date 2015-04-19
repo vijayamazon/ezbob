@@ -1,15 +1,16 @@
-﻿namespace Ezbob.Integration.CallCreditLib {
+﻿namespace CallCreditTestClient {
 	using System;
 	using Callcredit.CRBSB;
+	using CallCreditLib;
 
-	public class Program {
+	public class CallCreditTestClientProgram {
 
 		// to ConfigurationVariables db table
 		private static string password = "7UM9AXH2";
 		private static string userName = "Ezbob SR API CTEST";
 		private static string companyName = "Ezbob SR CTEST";
 
-		private static void Main(string[] args) {
+		public static void Main() {
 
 			try {
 				CallcreditBsbAndCreditReport apiProxy = InitializeApiProxy();
@@ -19,7 +20,6 @@
 				CT_SearchResult apiresult = new CT_SearchResult();
 
 				apiresult = apiProxy.Search07a(apiSD);
-
 
 				var builder = new CallCreditModelBuilder();
 

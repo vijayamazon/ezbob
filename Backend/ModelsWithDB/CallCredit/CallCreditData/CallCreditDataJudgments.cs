@@ -36,6 +36,7 @@
 		[Length(440)]
 		public string AddressValue { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataJudgmentsNocs> JudgmentNocs { get; set; }
 
 	}

@@ -168,7 +168,7 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
-    <Compile Include="Experian\ServiceLog.cs" />
+    <Compile Include="ServiceLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EzbobSmsMessage.cs" />
   </ItemGroup>
@@ -185,9 +185,6 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

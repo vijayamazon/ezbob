@@ -26,6 +26,14 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	DECLARE @CallCreditDataAddressLinksId BIGINT
+	DECLARE @c INT
+
+	SELECT @c = COUNT(*) FROM @Tbl
+
+	IF @c = 0
+		RAISERROR('Invalid argument: no/too much data to insert into SaveCallCreditDataAddressLinks table.', 11, 1)
+
 	INSERT INTO CallCreditDataAddressLinks (
 		[CallCreditDataID],
 		[CreationDate],
@@ -43,6 +51,10 @@ BEGIN
 		[SupplierName],
 		[SupplierTypeCode]
 	FROM @Tbl
+
+	SET @CallCreditDataAddressLinksId = SCOPE_IDENTITY()
+
+	SELECT @CallCreditDataAddressLinksId AS CallCreditDataAddressLinksId
 END
 GO
 

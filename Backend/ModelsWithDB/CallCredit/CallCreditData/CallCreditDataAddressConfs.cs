@@ -25,6 +25,7 @@
 		[Length(440)]
 		public string AddressValue { get; set; }
 
+		[NonTraversable]
 		public List<CallCreditDataAddressConfsResidents> Residents { get; set; }
 
 	}
