@@ -201,15 +201,19 @@
 
 			approveAgent.Trail.Save(this.db, null, CashRequestID, Tag);
 
-			OutstandingPrincipalOnDecisionDate = approveAgent.Trail.MyInputData.MetaData.OutstandingPrincipal;
+			// Currently we don't check this logic hence 0.
+			OutstandingPrincipalOnDecisionDate = 0; // approveAgent.Trail.MyInputData.MetaData.OutstandingPrincipal;
 
 			if (!approveAgent.Trail.HasDecided)
 				return;
 
 			OfferResult minOffer = CalculateOffer(this.medal.RoundOfferedAmount(), approveAgent.Trail.MyInputData);
 
-			if (minOffer.ApprovedAmount <= 0)
-				return;
+			// Currently we check "what if" scenario and not "how automation exactly works" scenario.
+			// if (minOffer.ApprovedAmount <= 0)
+				// return;
+
+			// Due to previous comment there can be approve with amount of 0.
 
 			IsApproved = true;
 			AutomationDecision = DecisionActions.Approve;
@@ -232,11 +236,13 @@
 		} // RunAutoApprove
 
 		private OfferResult CalculateOffer(decimal medalAmount, ApprovalInputData aid) {
-			decimal outstandingPrincipal = aid.MetaData.OutstandingPrincipal;
+			// decimal outstandingPrincipal = aid.MetaData.OutstandingPrincipal;
 
 			decimal roundTo = aid.Configuration.GetCashSliderStep;
 
-			decimal approvedAmount = medalAmount - outstandingPrincipal;
+			// Currently we don't check this functionality.
+			// decimal approvedAmount = medalAmount - outstandingPrincipal;
+			decimal approvedAmount = medalAmount;
 
 			if (approvedAmount <= 0)
 				return new OfferResult();

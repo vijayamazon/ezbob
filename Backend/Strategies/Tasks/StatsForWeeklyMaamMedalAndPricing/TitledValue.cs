@@ -45,8 +45,8 @@
 		public static class Format {
 			public const string Default = null;
 			public const string Int = "#,##0";
-			public const string Money = "£ #,##0.00";
-			public const string Percent = "0.00%";
+			public const string Money = "£ #,##0";
+			public const string Percent = "0.0%";
 
 			public static string Detect(object val) {
 				if (val == null)

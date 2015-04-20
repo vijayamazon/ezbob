@@ -71,5 +71,12 @@
 				} // while
 			} // for each sheet
 		} // AutoFitColumns
+
+		public static void AutoFitColumns(this ExcelPackage oReport, int lastColumnToFit) {
+			foreach (ExcelWorksheet oSheet in oReport.Workbook.Worksheets) {
+				for (int nColumn = 1; nColumn <= lastColumnToFit; nColumn++)
+					oSheet.Column(nColumn).AutoFit();
+			} // for each sheet
+		} // AutoFitColumns
 	} // class ExcelPackageExt
 } // namespace

@@ -8,8 +8,15 @@
 	using OfficeOpenXml.Style;
 
 	internal class Stats {
-		public Stats(ASafeLog log, ExcelWorksheet sheet, bool takeMin, string summaryTableFormulaPattern) {
+		public Stats(
+			ASafeLog log,
+			ExcelWorksheet sheet,
+			bool takeMin,
+			string summaryTableFormulaPattern,
+			Color titleBgColour
+		) {
 			this.sheet = sheet;
+			this.titleBgColour = titleBgColour;
 
 			log = log.Safe();
 
@@ -46,9 +53,10 @@
 		} // Add
 
 		// ReSharper disable once UnusedMethodReturnValue.Local
-		public int ToXlsx(int row) {
-			row = DrawSummary(row);
+		public int ToXlsx(int row, int lastRawRow) {
+			row = DrawSummary(row, lastRawRow);
 
+			/*
 			AStatItem.SetBorders(this.sheet.Cells[row, 1, row, AStatItem.LastColumnNumber]).Merge = true;
 			this.sheet.SetCellValue(row, 1, "Details", bSetZebra: false, oBgColour: Color.Coral, bIsBold: true);
 			this.sheet.Cells[row, 1].Style.Font.Size = 14;
@@ -59,6 +67,7 @@
 
 			for (int i = 1; i <= AStatItem.LastColumnNumber; i++)
 				this.sheet.Column(i).AutoFit();
+			*/
 
 			return row;
 		} // ToXlsx
@@ -83,7 +92,7 @@
 			return column + 1;
 		} // FlushLoanIDList
 
-		private int DrawSummary(int row) {
+		private int DrawSummary(int row, int lastRawRow) {
 			string[] lines = this.summaryTableFormulaPattern.Split('\n');
 
 			string[] titles = lines[0].Split('\t');
@@ -95,7 +104,7 @@
 			for (int i = 0; i < titles.Length; i++) {
 				ExcelRange range = this.sheet.Cells[row, i + 1];
 
-				range.SetCellValue(null, bSetZebra: false, oBgColour: Color.Yellow, bIsBold: true);
+				range.SetCellValue(null, bSetZebra: false, oBgColour: this.titleBgColour, bIsBold: true);
 				range.Style.Font.Size = 16;
 
 				string title = titles[i];
@@ -116,7 +125,7 @@
 				if (string.IsNullOrWhiteSpace(line))
 					continue;
 
-				string[] values = line.Split('\t');
+				string[] values = line.Replace("__LAST_RAW_ROW__", lastRawRow.ToString()).Split('\t');
 
 				string rowTitle = values[0];
 
@@ -202,5 +211,6 @@
 		private readonly List<AStatItem> stats; 
 		private readonly ExcelWorksheet sheet;
 		private readonly string summaryTableFormulaPattern;
+		private readonly Color titleBgColour;
 	} // class Stats
 } // namespace
