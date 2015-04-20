@@ -152,6 +152,26 @@
 		private bool GetConsumerInfoAndSave(AddressCurrency oAddressCurrency) {
 			InputLocationDetailsMultiLineLocation location = this.addressLines.GetLocation(oAddressCurrency);
 
+			var addressHelper = new Ezbob.Backend.Strategies.Misc.CustomerAddressHelper(customerId);
+			var ukAddress = new Models.CustomerAddressModel {
+				Line1 = location.LocationLine1,
+				Line2 = location.LocationLine2,
+				Line3 = location.LocationLine3,
+				PostCode = location.LocationLine6,
+				City = location.LocationLine4
+			};
+			addressHelper.FillAddress(ukAddress);
+
+			InputLocationDetailsUKLocation ukLokation = new InputLocationDetailsUKLocation {
+				Postcode = ukAddress.PostCode,
+				HouseName = ukAddress.HouseName,
+				HouseNumber = ukAddress.HouseNumber,
+				Flat = ukAddress.FlatOrApartmentNumber,
+				PostTown = ukAddress.City,
+				Street = ukAddress.Address1,
+				Street2 = ukAddress.Address2,
+				POBox = ukAddress.POBox
+			};
 			var consumerService = new ConsumerService();
 
 			Result = consumerService.GetConsumerInfo(
@@ -159,7 +179,7 @@
 				this.personalData.Surname,
 				this.personalData.Gender,
 				this.personalData.DateOfBirth,
-				null,
+				ukLokation,
 				location,
 				"PL", this.customerId, this.directorId,
 				false, this.directorId != null, this.forceCheck

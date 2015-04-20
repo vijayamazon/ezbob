@@ -60,10 +60,12 @@
     <Compile Include="BrokerPropertiesModel.cs" />
     <Compile Include="Coin.cs" />
     <Compile Include="CompanyDataForCreditBureau.cs" />
+    <Compile Include="CompanyInfo.cs" />
     <Compile Include="ConfigTable.cs" />
     <Compile Include="CompanyData.cs" />
     <Compile Include="CompanyCaisAccount.cs" />
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
+    <Compile Include="ExperianTargetingRequest.cs" />
     <Compile Include="ExternalAPI\AlibabaAvailableCreditResult.cs" />
     <Compile Include="ExternalAPI\ApiCallData.cs" />
     <Compile Include="LotteryResult.cs" />

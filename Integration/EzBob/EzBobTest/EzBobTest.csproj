@@ -37,6 +37,10 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Callcredit.CRBSB, Version=7.2.0.0, Culture=neutral, PublicKeyToken=aed89f8db6c5d243, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\Lib\3rdparty\CallCredit\Callcredit.CRBSB.dll</HintPath>
+    </Reference>
     <Reference Include="ExcelLibrary, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\Lib\3rdparty\ExcelLibrary\ExcelLibrary.dll</HintPath>
@@ -101,6 +105,8 @@
     <Compile Include="PayPalTest.cs" />
     <Compile Include="TestAlibaba.cs" />
     <Compile Include="TestIovation.cs" />
+    <Compile Include="TestCallCredit.cs" />
+    <Compile Include="TestCreditSafe.cs" />
     <Compile Include="TestMedal.cs" />
     <Compile Include="TestOffer.cs" />
     <Compile Include="Misc.cs" />
@@ -193,6 +199,10 @@
       <Project>{9E536824-37AD-4CC7-B597-11B882091DBD}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\CallCreditLib\CallCreditLib.csproj">
+      <Project>{c91a56a7-87ae-44ca-9640-59510455bc09}</Project>
+      <Name>CallCreditLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
       <Project>{189D7477-DEE3-4F7B-B703-D24C92352C0C}</Project>
       <Name>ChannelGrabberAPI</Name>
@@ -212,6 +222,10 @@
     <ProjectReference Include="..\..\CompanyFiles\CompanyFiles.csproj">
       <Project>{80458a21-990f-46ba-bcbb-fb211b5baaac}</Project>
       <Name>CompanyFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\CreditSafeLib\CreditSafeLib.csproj">
+      <Project>{e2749a0f-640b-44e7-9766-4f841f38267f}</Project>
+      <Name>CreditSafeLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\CustomSchedulers\CustomSchedulers.csproj">
       <Project>{47d73896-1b70-4347-beb5-a0ad94a45421}</Project>
@@ -240,6 +254,10 @@
     <ProjectReference Include="..\..\EKM\EKM.csproj">
       <Project>{590C01C7-CF2C-4D5B-A307-3EB7EC61FB0D}</Project>
       <Name>EKM</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ExperianLib\ExperianLib.csproj">
+      <Project>{d91f3fd0-9e1b-41ff-ae2e-67f051198f51}</Project>
+      <Name>ExperianLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\EzBob.Models\EzBob.Models.csproj">
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>

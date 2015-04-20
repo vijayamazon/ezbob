@@ -114,6 +114,10 @@ namespace ConfigManager {
 
 		CAISPath,
 		CAISPath2,
+		CallCreditUrl,
+		CallCreditUserCompany,
+		CallCreditUserName,
+		CallCreditPassword,
 		CaptchaMode,
 		ChannelGrabberCycleCount,
 		ChannelGrabberRejectPolicy,

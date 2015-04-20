@@ -1,8 +1,10 @@
 ﻿namespace ServiceClientProxy {
-	using System.Collections.Generic;
+    using System;
+    using System.Collections.Generic;
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
 
@@ -73,6 +75,15 @@
 			return m_oServiceClient.Instance.GetCompanyDataForCreditBureau(underwriterId, refNumber).Result;
 		}
 
-		private readonly ServiceClient m_oServiceClient;
+	    public void ParseCreditSafeLtd(int customerID, int userID, long serviceLogID) {
+	        m_oServiceClient.Instance.ParseCreditSafeLtd(customerID, userID, serviceLogID);
+	    }
+
+        public WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package)
+        {
+	        //should not execute this strategy from web (only from service)
+	        throw new NotImplementedException();
+        }
+	    private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

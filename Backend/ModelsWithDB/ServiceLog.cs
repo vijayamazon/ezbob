@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ezbob.Backend.ModelsWithDB.Experian
+namespace Ezbob.Backend.ModelsWithDB
 {
 	public class ServiceLog
 	{

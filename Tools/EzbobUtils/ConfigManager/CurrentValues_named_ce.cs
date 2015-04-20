@@ -10,6 +10,22 @@
 			get { return this[Variables.CAISPath2]; }
 		}
 
+		public virtual VariableValue CallCreditUrl {
+			get { return this[Variables.CallCreditUrl]; }
+		}
+
+		public virtual VariableValue CallCreditUserCompany {
+			get { return this[Variables.CallCreditUserCompany]; }
+		}
+
+		public virtual VariableValue CallCreditUserName {
+			get { return this[Variables.CallCreditUserName]; }
+		}
+
+		public virtual VariableValue CallCreditPassword {
+			get { return this[Variables.CallCreditPassword]; }
+		}
+
 		public virtual VariableValue CaptchaMode {
 			get { return this[Variables.CaptchaMode]; }
 		}

@@ -31,7 +31,7 @@
 				bool isPk = false;
 
 				if (oKeyAttr.Any(x => x.AttributeType == typeof(PKAttribute))) {
-					oConstraints.Add("\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY ([" + oPropInfo.Name + "])");
+					oConstraints.Add("\t\tCONSTRAINT PK_" + sTableName + " PRIMARY KEY ([" + oPropInfo.Name + "]),");
 					oFields.Insert(0, fullPropName);
 					isPk = true;
 				} // if
@@ -41,7 +41,7 @@
 				if ((fk != null) && !string.IsNullOrWhiteSpace(fk.TableName)) {
 					oConstraints.Add(
 						"\t\tCONSTRAINT FK_" + sTableName + "_" + oPropInfo.Name +
-						" FOREIGN KEY ([" + oPropInfo.Name + "]) REFERENCES [" + fk.TableName + "] ([" + fk.FieldName + "])"
+						" FOREIGN KEY ([" + oPropInfo.Name + "]) REFERENCES [" + fk.TableName + "] ([" + fk.FieldName + "]),"
 					);
 				} // if
 
@@ -92,11 +92,11 @@
 
 				if (!string.IsNullOrWhiteSpace(sType)) {
 					if (oPropInfo.DeclaringType == typeof(T)) {
-						oFields.Add(oPropInfo.Name + " " + sType);
-						oFieldNames.Add(oPropInfo.Name);
+						oFields.Add("["+ oPropInfo.Name + "] " + sType);
+						oFieldNames.Add("[" + oPropInfo.Name  + "]");
 					} else {
-						oSql.Add("\t" + oPropInfo.Name + " " + sType + ",");
-						oFieldNames.Insert(0, oPropInfo.Name);
+						oSql.Add("\t[" + oPropInfo.Name + "] " + sType + ",");
+						oFieldNames.Insert(0, "[" + oPropInfo.Name + "] ");
 					} // if
 				} // if
 			});
@@ -156,6 +156,12 @@
 
 			if (oPropInfo.PropertyType == typeof(bool?))
 				return "BIT NULL";
+
+			if (oPropInfo.PropertyType == typeof(float))
+				return "FLOAT NOT NULL";
+
+			if (oPropInfo.PropertyType == typeof(float?))
+				return "FLOAT NULL";
 
 			return null;
 		} // T2T

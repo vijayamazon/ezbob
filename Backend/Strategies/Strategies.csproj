@@ -37,6 +37,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Aspose\Aspose.Words.dll</HintPath>
     </Reference>
+    <Reference Include="Callcredit.CRBSB, Version=7.2.0.0, Culture=neutral, PublicKeyToken=aed89f8db6c5d243, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\CallCredit\Callcredit.CRBSB.dll</HintPath>
+    </Reference>
     <Reference Include="EPPlus, Version=3.1.3.0, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
@@ -117,16 +121,20 @@
     <Compile Include="CalculateLoan\LoanCalculatorModel.cs" />
     <Compile Include="CalculateLoan\Helpers\ScheduledPayment.cs" />
     <Compile Include="CalculateLoan\Helpers\Repayment.cs" />
+    <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
+    <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
     <Compile Include="Broker\BrokerInstantOffer.cs" />
+    <Compile Include="Experian\ExperianTargeting.cs" />
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Extensions\StringExt.cs" />
+    <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
@@ -473,6 +481,10 @@
       <Project>{9e536824-37ad-4cc7-b597-11b882091dbd}</Project>
       <Name>AmazonServiceLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Integration\CallCreditLib\CallCreditLib.csproj">
+      <Project>{c91a56a7-87ae-44ca-9640-59510455bc09}</Project>
+      <Name>CallCreditLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Integration\ChannelGrabberAPI\ChannelGrabberAPI.csproj">
       <Project>{189d7477-dee3-4f7b-b703-d24c92352c0c}</Project>
       <Name>ChannelGrabberAPI</Name>
@@ -492,6 +504,10 @@
     <ProjectReference Include="..\..\integration\CompanyFiles\CompanyFiles.csproj">
       <Project>{80458A21-990F-46BA-BCBB-FB211B5BAAAC}</Project>
       <Name>CompanyFiles</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\integration\CreditSafeLib\CreditSafeLib.csproj">
+      <Project>{e2749a0f-640b-44e7-9766-4f841f38267f}</Project>
+      <Name>CreditSafeLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Integration\CustomSchedulers\CustomSchedulers.csproj">
       <Project>{47D73896-1B70-4347-BEB5-A0AD94A45421}</Project>
@@ -649,6 +665,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

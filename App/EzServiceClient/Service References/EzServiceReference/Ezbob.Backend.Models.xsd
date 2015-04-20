@@ -36,6 +36,42 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="LotteryResult" nillable="true" type="tns:LotteryResult" />
+  <xs:complexType name="ExperianTargetingRequest">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CompanyName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="Filter" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RefNum" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ExperianTargetingRequest" nillable="true" type="tns:ExperianTargetingRequest" />
+  <xs:complexType name="ArrayOfCompanyInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyInfo" nillable="true" type="tns:CompanyInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfCompanyInfo" nillable="true" type="tns:ArrayOfCompanyInfo" />
+  <xs:complexType name="CompanyInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="AddrLine1" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddrLine2" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddrLine3" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="AddrLine4" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BusName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BusRefNum" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="BusinessStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LegalStatus" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MatchScore" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MatchedBusName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="MatchedBusNameType" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PostCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SicCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SicCodeDesc" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SicCodeType" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="CompanyInfo" nillable="true" type="tns:CompanyInfo" />
   <xs:complexType name="ArrayOfCompanyCaisAccount">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="CompanyCaisAccount" nillable="true" type="tns:CompanyCaisAccount" />

@@ -8,8 +8,12 @@
 	using System.Text.RegularExpressions;
 	using System.Xml.Serialization;
 	using ApplicationMng.Repository;
+	using Callcredit.CRBSB;
+	using CallCreditLib;
 	using ConfigManager;
 	using Dictionaries;
+	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.ModelsWithDB.CallCredit.CallCreditData;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Experian;
@@ -252,7 +256,7 @@
 			var address = new InputLocationDetails
 			{
 				LocationIdentifier = 1,
-				UKLocation = ukLocation,
+				UKLocation = null,
 				MultiLineLocation = mlLocation
 			};
 
@@ -299,15 +303,61 @@
 				Application = application
 			};
 
-			Log.InfoFormat("GetConsumerInfo: request Experian service.");
+			
 
-			var output = service.GetOutput(input);
+			WriteToLogPackage.OutputData serviceLog;
 
-			var serviceLog = Utils.WriteLog(input, output, ExperianServiceType.Consumer, customerId, directorId, firstName, surname, birthDate, postcode);
+			try {
+				Log.InfoFormat("GetConsumerInfo: request Experian service.");
+				var output = service.GetOutput(input);
+				serviceLog = Utils.WriteLog(input, output, ExperianServiceType.Consumer, customerId, directorId, firstName, surname, birthDate, postcode);
+				 SaveDefaultAccountIntoDb(output, customerId, serviceLog.ServiceLog);
+			} catch (Exception ex) {
+				serviceLog = new WriteToLogPackage.OutputData();
+			}
 
-			SaveDefaultAccountIntoDb(output, customerId, serviceLog.ServiceLog);
+			//retrieving data from call credit api
+			GetCallCreditData(ukLocation, firstName, surname, birthDate, postcode, customerId, directorId);
+
 			return serviceLog.ExperianConsumer;
-		} // GetServiceOutput
+		}//GetServiceOutput
+
+		private void GetCallCreditData(InputLocationDetailsUKLocation ukLocation, string firstName, string surname, DateTime? birthDate, string postcode, int customerId, int? directorId) {
+			try {
+				Log.InfoFormat("Retrieving CallCredit data fro customer {0} director {1}", customerId, directorId);
+				var searchRequest = new CT_searchapplicant {
+					dob = birthDate ?? DateTime.UtcNow,
+					dobSpecified = birthDate.HasValue,
+					name = new[] {
+						new CT_inputname {
+							forename = firstName,
+							surname = surname,
+						}
+					},
+					address = new[] {
+						new CT_inputaddress {
+							postcode = ukLocation.Postcode,
+							street1 = ukLocation.Street,
+							street2 = ukLocation.Street2,
+							startdateSpecified = false,
+							enddateSpecified = false,
+							buildingname = ukLocation.HouseName,
+							buildingno = ukLocation.HouseNumber,
+							posttown = ukLocation.PostTown,
+						}
+					},
+					tpoptout = 0,
+					tpoptoutSpecified = true
+				};
+
+				CallCreditLib.CallCreditGetData callCreditGetData = new CallCreditGetData(searchRequest);
+				CT_SearchResult searchResponse = callCreditGetData.GetSearch07a();
+				Log.InfoFormat("Saving to ServiceLog CallCredit data fro customer {0} director {1}", customerId, directorId);
+				Utils.WriteLog(searchRequest, searchResponse, ExperianServiceType.CallCredit, customerId, directorId, firstName, surname, birthDate, postcode);
+			} catch (Exception ex) {
+				Log.Error("Failed retrieve from data CallCredit", ex);
+			}//try
+		}//GetCallCreditData
 
 		private bool CacheNotExpired(DateTime cacheDate)
 		{

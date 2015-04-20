@@ -116,11 +116,13 @@
     <Compile Include="ActionResults\CrmLookupsActionResult.cs" />
     <Compile Include="ActionResults\QuickOfferActionResult.cs" />
     <Compile Include="ActionResults\DecimalActionResult.cs" />
+    <Compile Include="ActionResults\ExperianTargetingActionResult.cs" />
     <Compile Include="ActionStatus.cs" />
     <Compile Include="ExecuteArguments.cs" />
     <Compile Include="EzServiceImplementation\esi_agreement.cs" />
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
     <Compile Include="EzServiceImplementation\esi_automation_verification.cs" />
+    <Compile Include="EzServiceImplementation\esi_creditsafe.cs" />
     <Compile Include="EzServiceImplementation\esi_customer_manual_annualized_revenue.cs" />
     <Compile Include="EzServiceImplementation\esi_iovation.cs" />
     <Compile Include="EzServiceImplementation\esi_partner_alibaba.cs" />

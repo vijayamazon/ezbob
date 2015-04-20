@@ -1,4 +1,6 @@
-﻿namespace EzBobTest {
+﻿using Ezbob.Backend.Strategies.CreditSafe;
+
+namespace EzBobTest {
 	using System;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
@@ -184,7 +186,7 @@
 		[Test]
 		public void test_mainstrat() {
 			var ms = new MainStrategy(
-				21370,
+                14036,
 				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
 				0,
 				null,
@@ -778,7 +780,13 @@
 			result.Init().MakeAndVerifyDecision();
 		}
 
-
+	    [Test]
+	    [Ignore]
+	    public void TestSaveToDB()
+	    {
+	        ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
+	        saveTest.Execute();
+	    }
 		[Test]
 		public void TestBulkAutoRejectBoth() {
 			this.m_oDB.ForEachRowSafe((sr) => {

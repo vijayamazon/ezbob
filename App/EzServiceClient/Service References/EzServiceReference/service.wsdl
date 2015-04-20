@@ -304,6 +304,18 @@
   <wsdl:message name="IEzService_TotalMaamMedalAndPricing_OutputMessage">
     <wsdl:part name="parameters" element="tns:TotalMaamMedalAndPricingResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_ParseCreditSafeLtd_InputMessage">
+    <wsdl:part name="parameters" element="tns:ParseCreditSafeLtd" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ParseCreditSafeLtd_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ParseCreditSafeLtdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ExperianTarget_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExperianTarget" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ExperianTarget_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExperianTargetResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyCaisDataForAlerts_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyCaisDataForAlerts" />
   </wsdl:message>
@@ -1471,6 +1483,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing" message="tns:IEzService_TotalMaamMedalAndPricing_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse" message="tns:IEzService_TotalMaamMedalAndPricing_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ParseCreditSafeLtd">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ParseCreditSafeLtd" message="tns:IEzService_ParseCreditSafeLtd_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ParseCreditSafeLtdResponse" message="tns:IEzService_ParseCreditSafeLtd_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="ExperianTarget">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ExperianTarget" message="tns:IEzService_ExperianTarget_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ExperianTargetResponse" message="tns:IEzService_ExperianTarget_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyCaisDataForAlerts">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts" message="tns:IEzService_GetCompanyCaisDataForAlerts_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlertsResponse" message="tns:IEzService_GetCompanyCaisDataForAlerts_OutputMessage" />
@@ -2478,6 +2498,24 @@
     </wsdl:operation>
     <wsdl:operation name="TotalMaamMedalAndPricing">
       <soap12:operation soapAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricing" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ParseCreditSafeLtd">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ParseCreditSafeLtd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExperianTarget">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/ExperianTarget" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4018,20 +4056,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

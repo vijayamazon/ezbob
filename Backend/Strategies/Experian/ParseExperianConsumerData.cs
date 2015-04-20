@@ -5,6 +5,7 @@
 	using System.Linq;
 	using System.Xml.Serialization;
 	using ExperianLib;
+	using Ezbob.Backend.ModelsWithDB;
 	using EzBobIntegration.Web_References.Consumer;
 	using Ezbob.Database;
 	using Ezbob.Backend.ModelsWithDB.Experian;
