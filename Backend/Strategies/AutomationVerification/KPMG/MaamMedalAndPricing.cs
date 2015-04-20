@@ -181,7 +181,7 @@
 				row,
 				"Approve count",
 				Reference.Approve.Count,
-				string.Format("=SUMIF(Decisions!$D$2:$D${0}, \"Default\",Decisions!$BD$2:$BD${0})", lastRawRow),
+				string.Format("=COUNTIF(Decisions!$J$2:$J${0},\"Approved\") ", lastRawRow),
 				TitledValue.Format.Int
 			);
 
