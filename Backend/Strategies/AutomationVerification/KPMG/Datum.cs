@@ -219,7 +219,7 @@
 			"=IF(CA" + CurrentRow + "=\"Approve\", ROUND((MIN(AE" + CurrentRow + ",CC" + CurrentRow + ") - CD" + CurrentRow + "), -2), 0)",
 			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BE" + CurrentRow + "/K" + CurrentRow + ")",
 			"=IF(BD" + CurrentRow + ">BF" + CurrentRow + ",0,BF" + CurrentRow + "-BD" + CurrentRow + ")",
-			"=IF(AND(CA" + CurrentRow + "=\"Approve\",BE" + CurrentRow + "<=Verification!$B$1" + CurrentRow + "),\"Approve\", \"Not approved\")",
+			"=IF(AND(CA" + CurrentRow + "=\"Approve\",BE" + CurrentRow + "<=Verification!$B$12),\"Approve\", \"Not approved\")",
 			"=IF(BH" + CurrentRow + "=\"Approve\",BE" + CurrentRow + ",0)",
 			"=IF(K" + CurrentRow + "=0,0,BB" + CurrentRow + "*BI" + CurrentRow + "/K" + CurrentRow + ")",
 			"=IF(BC" + CurrentRow + ">BJ" + CurrentRow + ",0,BJ" + CurrentRow + "-BC" + CurrentRow + ")",
