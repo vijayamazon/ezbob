@@ -11,7 +11,7 @@
 		private bool HasParsingError { get; set; }
 
 		
-		public CallCredit Build(CT_SearchResult response, int? customerId = null, int? directorId = null, DateTime? insertDate = null, long serviceLogId = 1) {
+		public CallCredit Build(CT_SearchResult response, int? customerId, int? directorId, DateTime? insertDate, long serviceLogId) {
 
 			/*Console.WriteLine(response.token);
 			return null;*/

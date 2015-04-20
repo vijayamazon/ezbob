@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Callcredit.CRBSB">
+      <HintPath>..\..\Lib\3rdparty\CallCredit\Callcredit.CRBSB.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.SharpZipLibRusSupport">
       <HintPath>..\..\Lib\3rdparty\ICSharpCode.SharpZipLibRusSupport\ICSharpCode.SharpZipLibRusSupport.dll</HintPath>
     </Reference>
@@ -236,6 +239,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{DC706B41-2B3E-4082-B390-51AABAC065D3}</Project>
       <Name>NHibernateWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CallCreditLib\CallCreditLib.csproj">
+      <Project>{c91a56a7-87ae-44ca-9640-59510455bc09}</Project>
+      <Name>CallCreditLib</Name>
     </ProjectReference>
     <ProjectReference Include="..\CreditSafeLib\CreditSafeLib.csproj">
       <Project>{e2749a0f-640b-44e7-9766-4f841f38267f}</Project>

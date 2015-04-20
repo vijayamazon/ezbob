@@ -1,4 +1,5 @@
 ﻿namespace EzBobTest {
+	using System;
 	using ExperianLib.Tests.Integration;
 	using Ezbob.Backend.ModelsWithDB.CallCredit.CallCreditData;
 	using Ezbob.Backend.Strategies;
@@ -15,10 +16,38 @@
 		[Test]
 		
 		public CallCredit TestGetData() {
-			var retrievedata = new CallCreditLib.CallCreditGetData();
-			return retrievedata.GetSearch07a();
-			
+			//var user = InitializeUser();
+			//var retrievedata = new CallCreditGetData(user);
+			//return retrievedata.GetSearch07a();
+			return null;
 		}
+
+		/*private static UserInfo InitializeUser() {
+			UserInfo user = new UserInfo();
+			
+			/*user.dob = new DateTime(1910, 01, 01);
+			user.title = "MISS";
+			user.forename = "JULIA";
+			user.othernames = "";
+			user.surname = "AUDI";
+			user.buildingno = "1";
+			user.street = "TOP GEAR LANE";
+			user.postcode = "X9 9LF";#1#
+			
+			user.dob = new DateTime(1960, 11, 05);
+			user.title = "MR";
+			user.forename = "OSCAR";
+			user.othernames = "TEST-PERSON";
+			user.surname = "MANX";
+			user.buildingno = "606";
+			user.street = "ALLEY CAT LANE";
+			user.postcode = "X9 9AA";
+
+			return user;
+		}*/
+		
+		
+		
 
 		[SetUp]
 		public void init() {
@@ -29,7 +58,7 @@
 		//[Ignore]
 		public void TestSaveToDB() {
 
-			ParseCallCredit testsave = new ParseCallCredit(TestGetData(), 1);
+			ParseCallCredit testsave = new ParseCallCredit(1);
 			testsave.Execute();
 		}
 

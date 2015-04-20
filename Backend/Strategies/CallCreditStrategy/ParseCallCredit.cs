@@ -9,14 +9,12 @@ using Callcredit.CRBSB;
 using Ezbob.Database;
 using System.Xml.Serialization;
 using Ezbob.Backend.ModelsWithDB;
-using Ezbob.Logger;
 
 	public class ParseCallCredit : AStrategy {
 
-		public ParseCallCredit(CallCredit basedata, long nServiceLogID)
+		public ParseCallCredit(long nServiceLogID)
         {
 			Result = null;
-			DataSaved = basedata;
 			m_nServiceLogID = nServiceLogID;
 		}// constructor
 
@@ -27,9 +25,9 @@ using Ezbob.Logger;
 		public override void Execute() {
 			Log.Info("Parsing CallCredit for service log entry {0}...", m_nServiceLogID);
 			try {
-				//var loaded = Load();
-				//var parsed = Parse(loaded);
-				var oTbl = Save(DataSaved);
+				var loaded = Load();
+				var parsed = Parse(loaded);
+				var oTbl = Save(parsed);
 
 				if (oTbl != null)
 					Result = oTbl;
@@ -42,8 +40,6 @@ using Ezbob.Logger;
 		}// Execute
 
 		public CallCredit Result { get; private set; }
-		public CallCredit DataSaved { get; set; }
-
 		private readonly long m_nServiceLogID;
 
 		private Tuple<CT_SearchResult, ServiceLog> Load() {
@@ -59,26 +55,19 @@ using Ezbob.Logger;
 			} // if
 
 			try{
-				var outputRootSerializer = new XmlSerializer(typeof(CT_SearchResult));
-				var outputRoot = (CT_SearchResult)outputRootSerializer.Deserialize(new StringReader(serviceLog.ResponseData));
-				if (outputRoot == null) {
+				var searchResultSerializer = new XmlSerializer(typeof(CT_SearchResult));
+				var searchResult = (CT_SearchResult)searchResultSerializer.Deserialize(new StringReader(serviceLog.ResponseData));
+				if (searchResult == null) {
 					Log.Alert("Parsing CallCredit Consumer for service log entry {0} failed root element is null.", m_nServiceLogID);
 					return null;
 				}
-				return new Tuple<CT_SearchResult, ServiceLog>(outputRoot, serviceLog);
+				return new Tuple<CT_SearchResult, ServiceLog>(searchResult, serviceLog);
 			} 
 			catch (Exception e) {
 				Log.Alert(e, "Parsing CallCredit for service log entry {0} failed.", m_nServiceLogID);
 				return null;
 			}
 		}// Load
-
-	   //	 private Tuple<CT_SearchResult, Servicelog> TestLoad()
-	   //{
-	   //	var outputRootSerializer = new XmlSerializer(typeof(CT_SearchResult), new XmlRootAttribute("xmlresponse"));
-	   //	var outputRoot = (CT_SearchResult)outputRootSerializer.Deserialize(new StringReader(response));
-	   //	return new Tuple<CT_SearchResult, Servicelog>(outputRoot, servicelog");
-	   //}
 
 		public CallCredit Parse(Tuple<CT_SearchResult, ServiceLog> oDoc) {
 			if (oDoc == null || oDoc.Item1 == null)

@@ -20,7 +20,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 		[Description("ESeriesTargeting")]
 		Targeting,
         [Description("CreditSafeLtd")]
-        CreditSafeLtd
+        CreditSafeLtd,
+		[Description("CallCredit")]
+		CallCredit
 	} // enum ExperianServiceType
 
 	public class MP_ServiceLog {

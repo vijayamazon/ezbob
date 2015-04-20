@@ -15,6 +15,7 @@
     using System.Linq;
     using Ezbob.Backend.ModelsWithDB;
     using Ezbob.Backend.ModelsWithDB.Experian;
+    using Ezbob.Backend.Strategies.CallCreditStrategy;
     using Ezbob.Backend.Strategies.CreditSafe;
 
     public class ServiceLogWriter:AStrategy
@@ -105,6 +106,11 @@
                         var parseCreditSafeData = new ParseCreditSafeLtd(oPackage.Out.ServiceLog.Id);
                         parseCreditSafeData.Execute();
                         break;
+
+					case ExperianServiceType.CallCredit:
+						var parseCallCredit = new ParseCallCredit(oPackage.Out.ServiceLog.Id);
+						parseCallCredit.Execute();
+						break;
                 } // switch
 
                 try

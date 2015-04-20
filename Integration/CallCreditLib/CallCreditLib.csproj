@@ -58,7 +58,6 @@
     <Compile Include="CallCreditModelBuilderContinue1.cs" />
     <Compile Include="CallCreditModelBuilderContinue2.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="UserInfo.cs" />
     <Compile Include="XSerializer.cs" />
   </ItemGroup>
   <ItemGroup>
