@@ -17,10 +17,10 @@ BEGIN
 		VALUES('CallCreditUserCompany', 'Ezbob SR CTEST', 'User`s company at CallCredit', NULL)
 	END
 
-	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCrediUserName')
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditUserName')
 	BEGIN
 		INSERT INTO dbo.ConfigurationVariables(Name, Value, Description, IsEncrypted)
-		VALUES('CallCrediUserName', 'Ezbob SR API CTEST', 'Username at CallCredit', NULL)
+		VALUES('CallCreditUserName', 'Ezbob SR API CTEST', 'Username at CallCredit', NULL)
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditPassword')
@@ -46,10 +46,10 @@ BEGIN
 		VALUES('CallCreditUserCompany', '', 'User`s company at CallCredit', NULL)
 	END
 
-	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCrediUserName')
+	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditUserName')
 	BEGIN
 		INSERT INTO dbo.ConfigurationVariables(Name, Value, Description, IsEncrypted)
-		VALUES('CallCrediUserName', '', 'Username at CallCredit', NULL)
+		VALUES('CallCreditUserName', '', 'Username at CallCredit', NULL)
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditPassword')

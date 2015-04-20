@@ -12,6 +12,7 @@
 	using CallCreditLib;
 	using ConfigManager;
 	using Dictionaries;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.CallCredit.CallCreditData;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
@@ -255,7 +256,7 @@
 			var address = new InputLocationDetails
 			{
 				LocationIdentifier = 1,
-				UKLocation = ukLocation,
+				UKLocation = null,
 				MultiLineLocation = mlLocation
 			};
 
@@ -302,16 +303,22 @@
 				Application = application
 			};
 
-			Log.InfoFormat("GetConsumerInfo: request Experian service.");
+			
 
-			var output = service.GetOutput(input);
+			WriteToLogPackage.OutputData serviceLog;
 
-			var serviceLog = Utils.WriteLog(input, output, ExperianServiceType.Consumer, customerId, directorId, firstName, surname, birthDate, postcode);
+			try {
+				Log.InfoFormat("GetConsumerInfo: request Experian service.");
+				var output = service.GetOutput(input);
+				serviceLog = Utils.WriteLog(input, output, ExperianServiceType.Consumer, customerId, directorId, firstName, surname, birthDate, postcode);
+				 SaveDefaultAccountIntoDb(output, customerId, serviceLog.ServiceLog);
+			} catch (Exception ex) {
+				serviceLog = new WriteToLogPackage.OutputData();
+			}
 
 			//retrieving data from call credit api
 			GetCallCreditData(ukLocation, firstName, surname, birthDate, postcode, customerId, directorId);
 
-			SaveDefaultAccountIntoDb(output, customerId, serviceLog.ServiceLog);
 			return serviceLog.ExperianConsumer;
 		}//GetServiceOutput
 
@@ -336,10 +343,10 @@
 							enddateSpecified = false,
 							buildingname = ukLocation.HouseName,
 							buildingno = ukLocation.HouseNumber,
-							posttown = ukLocation.PostTown
+							posttown = ukLocation.PostTown,
 						}
 					},
-					tpoptout = 1,
+					tpoptout = 0,
 					tpoptoutSpecified = true
 				};
 

@@ -39,16 +39,16 @@
 			}
 
 			//report attributes
-			TryRead(() => result.LinkType = response.creditreport.linktype, "report link type");
-			TryRead(() => result.ReportSearchID = response.creditreport.searchid, "report search ID");
+			TryRead(() => result.LinkType = response.creditreport.linktype, "report link type", false);
+			TryRead(() => result.ReportSearchID = response.creditreport.searchid, "report search ID", false);
 
 			//response set
-			TryRead(() => result.PayLoadData = XSerializer.Serialize(response.payload), "Client's own data");
-			TryRead(() => result.YourReference = response.yourreference, "User reference as part of search definition");
-			TryRead(() => result.Token = response.token, "Client's own data");
+			TryRead(() => result.PayLoadData = XSerializer.Serialize(response.payload), "Client's own data", false);
+			TryRead(() => result.YourReference = response.yourreference, "User reference as part of search definition", false);
+			TryRead(() => result.Token = response.token, "Client's own data", false);
 			//request details as part of response
-			TryRead(() => result.SchemaVersionCR = response.creditrequest.schemaversion, "The version of the schema for credit request");
-			TryRead(() => result.DataSetsCR = (int)response.creditrequest.datasets, "Search datasets required for credit request, values 0 to 511");
+			TryRead(() => result.SchemaVersionCR = response.creditrequest.schemaversion, "The version of the schema for credit request", false);
+			TryRead(() => result.DataSetsCR = (int)response.creditrequest.datasets, "Search datasets required for credit request, values 0 to 511", false);
 			TryRead(() => result.Score = Convert.ToBoolean(response.creditrequest.score), "Score request check");
 			TryRead(() => result.Purpose = response.creditrequest.purpose, "Credit request search purpose");
 			TryRead(() => result.CreditType = response.creditrequest.credittype, "Credit type");
@@ -146,7 +146,10 @@
 			result.Email = GetEmail(response.creditrequest.applicant[0].applicantdemographics);
 			result.Telephone = GetTelephone(response.creditrequest.applicant[0].applicantdemographics);
 			result.ApplicantData[0].Tpd = GetTpd(app.tpd);
-			result.Error = "";//Errors;
+
+			const int maxErrorLength = 4000;
+			result.Error = (!string.IsNullOrEmpty(Errors) && Errors.Length > maxErrorLength) ? Errors.Substring(0, maxErrorLength) : Errors;
+			
 			result.HasParsingError = HasParsingError;
 			
 			return result; //Object with searchdata
