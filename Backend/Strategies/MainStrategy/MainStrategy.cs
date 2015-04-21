@@ -577,7 +577,6 @@
 					cr.RepaymentPeriod = repaymentPeriodToUse;
 				} // if
 
-			
 				cr.ManualSetupFeePercent = setupFeePercentToUse;
 				cr.APR = this.lastOffer.LoanOfferApr;
 
@@ -590,6 +589,23 @@
                         : this.discountPlanRepository.GetDefault();
 			
 					cr.LoanSource = this.loanSourceRepository.Get(this.autoDecisionResponse.LoanSourceID);
+
+                    if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
+                        Log.Warn("too big interest was assigned for this loan source - adjusting for customer {0}", this.customerId);
+                        cr.InterestRate = cr.LoanSource.MaxInterest.Value;
+                    }
+
+                    if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.ApprovedRepaymentPeriod < cr.LoanSource.DefaultRepaymentPeriod) {
+                        Log.Warn("too small repayment period was assigned for this loan source - adjusting for customer {0}", this.customerId);
+                        cr.ApprovedRepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod;
+                        cr.RepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod.Value;
+                    }
+
+                    if (cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed == false && cr.IsCustomerRepaymentPeriodSelectionAllowed == true) {
+                        Log.Warn("wrong customer repayment period was assigned for this loan source - adjusting for customer {0}", this.customerId);
+                        cr.IsCustomerRepaymentPeriodSelectionAllowed = false;
+                    }
+
 					cr.LoanType = this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID);
 					cr.ManualSetupFeePercent = this.autoDecisionResponse.SetupFee;
 				} // if

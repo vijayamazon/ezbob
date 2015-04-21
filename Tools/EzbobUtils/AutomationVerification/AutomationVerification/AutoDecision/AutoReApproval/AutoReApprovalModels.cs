@@ -20,6 +20,7 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 		public decimal TookLoanAmount { get; set; }
 		public decimal RepaidPrincipal { get; set; }
 		public decimal SetupFee { get; set; }
+        public int LacrID { get; set; }
 
 		//configs
 		public int AutoReApproveMaxLacrAge { get; set; }
@@ -51,6 +52,7 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 			AutoReApproveMaxLatePayment = data.AutoReApproveMaxLatePayment;
 			AutoReApproveMaxNumOfOutstandingLoans = data.AutoReApproveMaxNumOfOutstandingLoans;
 			MinLoan = data.MinLoan;
+		    LacrID = data.LacrID;
 		}
 
 		public DateTime DataAsOf { get; private set; }
@@ -64,12 +66,16 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 		public bool HasLoanCharges { get; set; }
 		public decimal ReApproveAmount { get; set; }
 		public decimal AvaliableFunds { get; set; }
+        public int LacrID { get; set; }
+
 		//configs
 		public int AutoReApproveMaxLacrAge { get; set; }
 		public int AutoReApproveMaxLatePayment { get; set; }
 		public int AutoReApproveMaxNumOfOutstandingLoans { get; set; }
 		public int MinLoan { get; set; }
-		public string Serialize()
+	    
+
+	    public string Serialize()
 		{
 			return JsonConvert.SerializeObject(this, Formatting.Indented);
 		}

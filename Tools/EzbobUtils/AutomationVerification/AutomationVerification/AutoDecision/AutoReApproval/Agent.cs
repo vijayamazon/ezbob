@@ -44,7 +44,8 @@
 				ReApproveAmount = dbData.ApprovedAmount - dbData.TookLoanAmount,
 				WasLate = dbData.WasLate,
 				WasRejected = dbData.WasRejected,
-				MinLoan = dbData.MinLoan
+				MinLoan = dbData.MinLoan,
+                LacrID = dbData.LacrID
 			};
 
 			this.m_oLog.Debug("AutoReApprovalInputDataModelDb: {0}, {1}, {2}, {3}", dbData.ApprovedAmount, dbData.TookLoanAmount, dbData.RepaidPrincipal, dbData.SetupFee);

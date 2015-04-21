@@ -154,16 +154,17 @@
 			MetaData.Validate();
 
 			Trail.MyInputData.Init(Now, null);
-
-			Trail.MyInputData.FraudStatus = MetaData.FraudStatus;
+            Trail.MyInputData.ReApproveAmount = MetaData.ApprovedAmount;
+            Trail.MyInputData.FraudStatus = MetaData.FraudStatus;
 			Trail.MyInputData.ManualApproveDate = MetaData.LacrTime;
 			Trail.MyInputData.WasLate = MetaData.LateLoanCount > 0;
 			Trail.MyInputData.WasRejected = MetaData.RejectAfterLacrID > 0;
+            Trail.MyInputData.NumOutstandingLoans = MetaData.OpenLoanCount;
+            Trail.MyInputData.HasLoanCharges = MetaData.SumOfCharges > 0.00000001m;
+		    Trail.MyInputData.LacrID = MetaData.LacrID;
+
 			Trail.MyInputData.MaxLateDays = LatePayments.Count < 1 ? 0 : LatePayments.Select(lp => lp.Delay).Max();
 			Trail.MyInputData.NewDataSourceAdded = NewMarketplaces.Count > 0;
-			Trail.MyInputData.NumOutstandingLoans = MetaData.OpenLoanCount;
-			Trail.MyInputData.HasLoanCharges = MetaData.SumOfCharges > 0.00000001m;
-			Trail.MyInputData.ReApproveAmount = MetaData.ApprovedAmount;
 			Trail.MyInputData.AvaliableFunds = Funds.Available - Funds.Reserved;
 			Trail.MyInputData.AutoReApproveMaxLacrAge = Cfg.MaxLacrAge;
 			Trail.MyInputData.AutoReApproveMaxLatePayment = Cfg.MaxLatePayment;
