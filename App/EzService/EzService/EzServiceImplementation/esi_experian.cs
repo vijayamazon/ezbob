@@ -1,7 +1,9 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 
 	partial class EzServiceImplementation {
@@ -187,5 +189,9 @@
                 CompanyInfos = strategyInstance.Response
             };
         }//ExperianTarget
+
+        public ActionMetaData WriteToServiceLog(int customerID, int userID, WriteToLogPackage.InputData packageInputData) {
+            return Execute<ServiceLogWriter>(customerID, userID, new WriteToLogPackage(packageInputData));
+        }
 	} // class EzServiceImplementation
 } // namespace EzService

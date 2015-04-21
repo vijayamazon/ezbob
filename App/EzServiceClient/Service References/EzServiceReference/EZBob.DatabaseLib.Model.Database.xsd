@@ -1,5 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:simpleType name="ExperianServiceType">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Aml" />
+      <xs:enumeration value="Askville" />
+      <xs:enumeration value="Bwa" />
+      <xs:enumeration value="Consumer" />
+      <xs:enumeration value="LimitedData" />
+      <xs:enumeration value="NonLimitedData" />
+      <xs:enumeration value="Targeting" />
+      <xs:enumeration value="CreditSafeLtd" />
+      <xs:enumeration value="CallCredit" />
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="ExperianServiceType" nillable="true" type="tns:ExperianServiceType" />
   <xs:simpleType name="Medal">
     <xs:restriction base="xs:string">
       <xs:enumeration value="NoClassification" />

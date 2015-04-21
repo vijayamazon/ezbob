@@ -82,7 +82,8 @@
         public WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package)
         {
 	        //should not execute this strategy from web (only from service)
-	        throw new NotImplementedException();
+            this.m_oServiceClient.Instance.WriteToServiceLog(package.In.CustomerID, package.In.CustomerID, package.In);
+            return null;
         }
 	    private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong

@@ -789,5 +789,8 @@
         [OperationContract]
         ExperianTargetingActionResult ExperianTarget(int customerID, int userID, ExperianTargetingRequest request);
 
+        [OperationContract]
+        ActionMetaData WriteToServiceLog(int customerID, int userID, WriteToLogPackage.InputData packageInputData);
+
 	} // interface IEzService
 } // namespace EzService
