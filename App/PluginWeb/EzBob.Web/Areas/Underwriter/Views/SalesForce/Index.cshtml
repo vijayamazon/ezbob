@@ -292,4 +292,10 @@
     @{
         Html.RenderPartial("_FunctionsDialog");
     }
+    
+    <script>
+        var EzBob = EzBob || {};
+        var customerID = @Html.Raw(Model.PersonalModel.ID.ToString());
+        EzBob.SalesForce.init(customerID);
+    </script>
 }
