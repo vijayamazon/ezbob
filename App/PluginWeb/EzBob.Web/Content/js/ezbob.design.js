@@ -180,7 +180,7 @@ $(function() {
 			this.attr("maxlength", maxLength);
 		}
 		return this.each(function() {
-		    $(this).bind('keyup blur', function () {
+		    $(this).bind('keyup blur mousedown', function () {
 				var regexp = /[^0-9]/;
 				while (regexp.test(this.value)) {
 					this.value = this.value.replace(regexp, '');

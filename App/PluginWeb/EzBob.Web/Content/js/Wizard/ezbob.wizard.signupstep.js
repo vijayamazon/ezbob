@@ -343,8 +343,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 		return false;
 	}, // submit
 
-	
-
 	ready: function() {
 		this.setReadOnly();
 	}, // ready
@@ -365,5 +363,5 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 	},
 	blockBtn: function(isBlock) {
 		BlockUi(isBlock ? 'on' : 'off');
-	}
+	},//blockBtn
 });
