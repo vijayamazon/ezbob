@@ -319,6 +319,7 @@
 				//leftAndBottomBar
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.profileHead.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.emaileditview.js")
+                .Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.phoneEditView.js")
 				.Add("~/Content/js/underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineDialog.js")

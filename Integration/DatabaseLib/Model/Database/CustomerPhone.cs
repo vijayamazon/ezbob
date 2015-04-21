@@ -1,5 +1,7 @@
 namespace EZBob.DatabaseLib.Model.Database {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using ApplicationMng.Repository;
 	using FluentNHibernate.Mapping;
 	using NHibernate;
@@ -33,11 +35,16 @@ namespace EZBob.DatabaseLib.Model.Database {
 	}
 
 	public interface ICustomerPhoneRepository : IRepository<CustomerPhone> {
+	    IEnumerable<CustomerPhone> GetByCustomer(int customerID);
 	}
 
 	public class CustomerPhoneRepository : NHibernateRepositoryBase<CustomerPhone>, ICustomerPhoneRepository {
 		public CustomerPhoneRepository(ISession session)
 			: base(session) {
 		}
+
+        public IEnumerable<CustomerPhone> GetByCustomer(int customerID) {
+            return GetAll().Where(x => x.CustomerId == customerID);
+        }
 	}
 }
