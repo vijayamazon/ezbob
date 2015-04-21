@@ -44,6 +44,7 @@
 			public int PreviousLoanCount { get; set; }
 			public int CrLoanCount { get; set; }
 			public bool IsDefault { get; set; }
+			public string LoanSourceName { get; set; }
 
 			protected internal virtual void CopyTo(ResultRow other) {
 				if (other == null)
@@ -66,9 +67,10 @@
 				other.PreviousLoanCount = PreviousLoanCount;
 				other.CrLoanCount = CrLoanCount;
 				other.IsDefault = IsDefault;
+				other.LoanSourceName = LoanSourceName;
 			} // CopyTo
 		} // class ResultRow
 
-		private List<int> requestedCustomers;
+		private readonly List<int> requestedCustomers;
 	} // class SpLoadCashRequestsForAutomationReport
 } // namespace

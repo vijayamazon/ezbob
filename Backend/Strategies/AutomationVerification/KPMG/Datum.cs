@@ -118,17 +118,17 @@
 			} // for each item
 		} // FindLoans
 
-		public static string CsvTitles(SortedSet<string> allLoanSources) {
+		public static void SetDecisionTitles(ExcelWorksheet decisionSheet, SortedSet<string> loanSources) {
 			var os = new List<string>();
 
-			foreach (var s in allLoanSources) {
+			foreach (string s in loanSources) {
 				os.Add(string.Format(
 					"{0} loan count;{0} worst loan status;{0} issued amount;{0} repaid amount;{0} max late days",
 					s
 				));
 			} // for each
 
-			return string.Join(";",
+			string[] csvTitles = string.Join(";",
 				"Customer ID",
 				"Broker ID",
 				"Customer is default now",
@@ -144,10 +144,24 @@
 				string.Join(";", os),
 				"Total loan count",
 				"Total loan amount"
-			);
-		} // CsvTitles
+			).Split(';');
 
-		public int ToXlsx(ExcelWorksheet sheet, int rowNum) {
+			int column = 1;
+
+			foreach (string columnTitle in csvTitles)
+				column = decisionSheet.SetCellTitle(1, column, columnTitle);
+
+			foreach (string formula in decisionTitleFormulae) {
+				if (formula.StartsWith("=")) {
+					decisionSheet.SetCellTitle(1, column, null);
+					decisionSheet.Cells[1, column].Formula = formula;
+					column++;
+				} else
+					column = decisionSheet.SetCellTitle(1, column, formula);
+			} // for each
+		} // SetDecisionTitles
+
+		public int ToXlsx(ExcelWorksheet sheet, int rowNum, SortedSet<string> scenarioNames) {
 			int curColumn = 1;
 
 			curColumn = sheet.SetCellValue(rowNum, curColumn, CustomerID);
@@ -169,7 +183,7 @@
 			int totalLoanCount = 0;
 			decimal totalLoanAmount = 0;
 
-			foreach (var pair in this.loansBySource) {
+			foreach (KeyValuePair<string, LoanSummaryData> pair in this.loansBySource) {
 				LoanSummaryData loanStat = pair.Value;
 				curColumn = loanStat.ToXlsx(sheet, rowNum, curColumn);
 
@@ -193,6 +207,26 @@
 					case OutstandingPrincipalCell:
 						curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.OutstandingPrincipalOnDecisionDate);
 						break;
+
+					case MinOfferScenarioName:
+						curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.PricingCalculatorScenarioName);
+
+						if (!string.IsNullOrWhiteSpace(LastAuto.PricingCalculatorScenarioName))
+							scenarioNames.Add(LastAuto.PricingCalculatorScenarioName);
+
+						break;
+
+					case MaxOfferScenarioName:
+						curColumn = sheet.SetCellValue(rowNum, curColumn, LastAuto.MaxOffer.ScenarioName);
+
+						if (!string.IsNullOrWhiteSpace(LastAuto.MaxOffer.ScenarioName))
+							scenarioNames.Add(LastAuto.MaxOffer.ScenarioName);
+
+						break;
+
+					case ManualLoanSource:
+						curColumn = sheet.SetCellValue(rowNum, curColumn, LastManual.LoanSourceName);
+						break;
 					} // switch
 				} // if
 			} // for each
@@ -209,9 +243,47 @@
 		private readonly string tag;
 		private readonly ASafeLog log;
 
+		private static readonly string[] decisionTitleFormulae = {
+			"Total repaid amount",
+			"Outstanding amount",
+			"Approved amount",
+			"Min offer: issued amount",
+			"Min offer: outstanding amount",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" outstanding amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" outstanding amount\")",
+			"Max offer:" + System.Environment.NewLine + "approved amount",
+			"Max offer:" + System.Environment.NewLine + "issued amount",
+			"Max offer:" + System.Environment.NewLine + "outstanding amount",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" outstanding amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" auto decision\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" approved amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" issued amount\")",
+			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" outstanding amount\")",
+			"Min offer: auto decision",
+			"Is home owner",
+			"Home owner cap",
+			"Outstanding amount",
+			"Min offer:" + System.Environment.NewLine + "Pricing calculator scenario name",
+			"Max offer:" + System.Environment.NewLine + "Pricing calculator scenario name",
+			"Manual loan source",
+			"Manual loan is EU",
+		};
+
 		private const string IsHomeOwnerCell = "__IS_HOME_OWNER__";
 		private const string OutstandingPrincipalCell = "__OUTSTANDING_PRINCIPAL__";
 		private const string CurrentRow = "__CURRENT_ROW__";
+		private const string MinOfferScenarioName = "__MIN_OFFER_SCENARIO_NAME__";
+		private const string MaxOfferScenarioName = "__MAX_OFFER_SCENARIO_NAME__";
+		private const string ManualLoanSource = "__MANUAL_LOAN_SOURCE__";
 
 		private static readonly string[] decisionValueFormulae = {
 			"=AO" + CurrentRow + "+AT" + CurrentRow + "+AY" + CurrentRow + "",
@@ -242,6 +314,10 @@
 			IsHomeOwnerCell,
 			"=IF(CB" + CurrentRow + ",Verification!$B$16,Verification!$B$17)",
 			OutstandingPrincipalCell,
+			MinOfferScenarioName,
+			MaxOfferScenarioName,
+			ManualLoanSource,
+			"=IF(OR(CG" + CurrentRow + "=\"EU\", CG" + CurrentRow + "=\"COSME\"), \"EU\", \"No\")",
 		};
 	} // class Datum
 } // namespace

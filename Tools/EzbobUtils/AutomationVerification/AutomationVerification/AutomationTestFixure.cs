@@ -85,7 +85,7 @@
                 LoanSourceId = 3,
 			};
 
-			var offer1 = offerCalculator.GetOfferBySeek(input);
+			var offer1 = offerCalculator.GetCosmeOffer(input);
 			//var offer2 = offerCalculator.GetOfferByBoundaries(input);
 
 			Log.Debug("Offer1 is: {0}", offer1);

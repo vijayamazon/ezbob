@@ -95,11 +95,13 @@ BEGIN
 			FROM Loan
 			WHERE RequestCashId = r.Id
 		), 0) AS CrLoanCount,
-		cs.IsDefault
+		cs.IsDefault,
+		ls.LoanSourceName
 	FROM
 		CashRequests r
 		INNER JOIN #customers c ON r.IdCustomer = c.Id
 		INNER JOIN CustomerStatuses cs ON c.CollectionStatus = cs.Id
+		INNER JOIN LoanSource ls ON r.LoanSourceId = ls.LoanSourceID
 	WHERE
 		r.CreationDate >= ISNULL(@DateFrom, 'Sep 4 2012')
 		AND (

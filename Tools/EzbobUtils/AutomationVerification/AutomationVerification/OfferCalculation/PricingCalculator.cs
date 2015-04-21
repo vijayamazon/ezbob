@@ -5,8 +5,8 @@
 	using Ezbob.Logger;
 
 	internal class PricingCalculator {
-        public int ConsumerScore { get; private set; }
-        public int CompanyScore { get; private set; }
+		public int ConsumerScore { get; private set; }
+		public int CompanyScore { get; private set; }
 
 		public PricingCalculator(
 			int customerID,
@@ -34,8 +34,8 @@
 			decimal consumerDefautRate = sr["ConsumerDefaultRate"];
 			decimal businessDefautRate = sr["BusinessDefaultRate"];
 
-		    ConsumerScore = sr["ConsumerScore"];
-		    CompanyScore = sr["BusinessScore"];
+			ConsumerScore = sr["ConsumerScore"];
+			CompanyScore = sr["BusinessScore"];
 
 			this.calculatedDefaultRate =
 				consumerDefautRate * (1 - this.pricingScenario.DefaultRateCompanyShare) +
@@ -138,7 +138,7 @@ f = ------- - -----------------------
      1 - p              2
 ");
 
-			this.log.Debug("Terms in the above formula are:\n\t{0}\n", string.Join("\n\t", 
+			this.log.Debug("Terms in the above formula are:\n\t{0}\n", string.Join("\n\t",
 				DisplayFormulaTerm(this.loanAmount, "A", "loan amount"),
 				DisplayFormulaTerm(realRepaymentPeriod, "ñ", "repayment months after tenure"),
 				DisplayFormulaTerm(realInterestOnlyPeriod, "õ", "interest only months after tenure"),
@@ -164,9 +164,9 @@ f = ------- - -----------------------
 			decimal debtOfTotalCapital = this.pricingScenario.DebtPercentOfCapital;      // δ
 			decimal costOfDebt = this.pricingScenario.CostOfDebtPA;                      // γ
 			decimal defaultRate = this.calculatedDefaultRate;                            // d
-			decimal collectionRate = useCosmeCollectionRate ? 
-                this.pricingScenario.CosmeCollectionRate :
-                this.pricingScenario.CollectionRate;                                     // ρ
+			decimal collectionRate = useCosmeCollectionRate ?
+				this.pricingScenario.CosmeCollectionRate :
+				this.pricingScenario.CollectionRate;                                     // ρ
 			decimal opexCapex = this.pricingScenario.OpexAndCapex;                       // Ω
 			decimal cogs = this.pricingScenario.Cogs;                                    // ξ
 
@@ -195,7 +195,7 @@ N = Ad(1 - ρ)
 C = Δ + N + Ω + ξ   <-- returned value
 ");
 
-			this.log.Debug("Terms in the above formulae are:\n\t{0}\n", string.Join("\n\t", 
+			this.log.Debug("Terms in the above formulae are:\n\t{0}\n", string.Join("\n\t",
 				DisplayFormulaTerm(this.loanAmount, "A", "loan amount"),
 				DisplayFormulaTerm(this.repaymentPeriod, "n", "repayment months"),
 				DisplayFormulaTerm(interestOnlyMonths, "o", "interest only months"),

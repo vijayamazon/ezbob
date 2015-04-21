@@ -69,6 +69,7 @@
 
 		public class OfferResult {
 			public OfferResult() {
+				ScenarioName = string.Empty;
 				ApprovedAmount = 0;
 				RepaymentPeriod = 0;
 				InterestRate = 0;
@@ -76,6 +77,7 @@
 				SetupFeeAmount = 0;
 			} // constructor
 
+			public string ScenarioName { get; set; }
 			public int ApprovedAmount { get; set; }
 			public int RepaymentPeriod { get; set; }
 			public decimal InterestRate { get; set; }
@@ -145,6 +147,7 @@
 		} // SetAdjustedLoanCount
 
 		public bool IsHomeOwner { get; set; }
+		public string PricingCalculatorScenarioName { get; private set; }
 
 		public void RunAutomation() {
 			ApprovedAmount = 0;
@@ -218,6 +221,7 @@
 			IsApproved = true;
 			AutomationDecision = DecisionActions.Approve;
 
+			PricingCalculatorScenarioName = minOffer.ScenarioName;
 			ApprovedAmount = minOffer.ApprovedAmount;
 			RepaymentPeriod = minOffer.RepaymentPeriod;
 			InterestRate = minOffer.InterestRate;
@@ -228,6 +232,7 @@
 				? CalculateOffer(this.medal.RoundMaxOfferedAmount(), approveAgent.Trail.MyInputData)
 				: minOffer;
 
+			MaxOffer.ScenarioName = maxOffer.ScenarioName;
 			MaxOffer.ApprovedAmount = maxOffer.ApprovedAmount;
 			MaxOffer.RepaymentPeriod = maxOffer.RepaymentPeriod;
 			MaxOffer.InterestRate = maxOffer.InterestRate;
@@ -265,6 +270,7 @@
 			odc.CalculateOffer();
 
 			var res = new OfferResult {
+				ScenarioName = odc.VerifySeek.ScenarioName,
 				ApprovedAmount = (int)approvedAmount,
 				RepaymentPeriod = odc.VerifySeek.RepaymentPeriod,
 				InterestRate = odc.VerifySeek.InterestRate / 100.0m,

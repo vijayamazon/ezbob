@@ -16,15 +16,15 @@
 			int amount,
 			bool hasLoans,
 			EZBob.DatabaseLib.Model.Database.Medal medalClassification,
-            int loanSourceId = (int)LoanSourceName.COSME,
-            int repaymentPeriod = 15,
+			int loanSourceId = (int)LoanSourceName.COSME,
+			int repaymentPeriod = 15,
 			bool saveToDB = true
 		) {
 			this.log = Library.Instance.Log;
 			this.db = Library.Instance.DB;
 			this.saveToDB = saveToDB;
-		    this.loanScourceID = loanSourceId;
-		    this.repaymentPeriod = repaymentPeriod;
+			this.loanScourceID = loanSourceId;
+			this.repaymentPeriod = repaymentPeriod;
 			CustomerID = customerID;
 			CalculationTime = calculationTime;
 			Amount = amount;
@@ -48,7 +48,7 @@
 		public OfferResult Primary { get; private set; }
 		public OfferOutputModel VerifySeek { get; private set; }
 		//public OfferOutputModel VerifyBoundaries { get; private set; }
-	    
+
 		public OfferResult CalculateOffer() {
 			try {
 				Primary = this.offerCalculator1.CalculateOffer(
@@ -57,7 +57,7 @@
 					Amount,
 					HasLoans,
 					MedalClassification,
-                    this.repaymentPeriod
+					this.repaymentPeriod
 				);
 
 				var medal = (Medal)Enum.Parse(typeof(Medal), MedalClassification.ToString());
@@ -68,31 +68,31 @@
 					HasLoans = HasLoans,
 					Medal = medal,
 					CustomerId = CustomerID,
-                    LoanSourceId = this.loanScourceID,
-                    RepaymentPeriod = this.repaymentPeriod
+					LoanSourceId = this.loanScourceID,
+					RepaymentPeriod = this.repaymentPeriod
 				};
 
-				VerifySeek = this.offerCalculator2.GetOfferBySeek(input);
-                //VerifyBoundaries = this.offerCalculator2.GetOfferByBoundaries(input);
+				VerifySeek = this.offerCalculator2.GetCosmeOffer(input);
+				//VerifyBoundaries = this.offerCalculator2.GetOfferByBoundaries(input);
 
 				if (this.saveToDB) {
-                    VerifySeek.SaveToDb(this.log, this.db, OfferCalculationType.Seek);
-                  //  VerifyBoundaries.SaveToDb(this.log, this.db, OfferCalculationType.Boundaries);
+					VerifySeek.SaveToDb(this.log, this.db, OfferCalculationType.Seek);
+					//  VerifyBoundaries.SaveToDb(this.log, this.db, OfferCalculationType.Boundaries);
 				} // if
 
-                //if (!VerifySeek.Equals(VerifyBoundaries)) {
-                //    this.log.Info(
-                //        "the two verification implementations mismatch \nby seek:\n {0}\nby boundaries\n {1}",
-                //        VerifySeek,
-                //        VerifyBoundaries
-                //    );
-                //} // if
+				//if (!VerifySeek.Equals(VerifyBoundaries)) {
+				//    this.log.Info(
+				//        "the two verification implementations mismatch \nby seek:\n {0}\nby boundaries\n {1}",
+				//        VerifySeek,
+				//        VerifyBoundaries
+				//    );
+				//} // if
 
 				if (Primary.Equals(VerifySeek)) {
-                    this.log.Debug("Main implementation of offer calculation result: \n{0}", Primary);
+					this.log.Debug("Main implementation of offer calculation result: \n{0}", Primary);
 
 					if (this.saveToDB)
-                        Primary.SaveToDb(this.db);
+						Primary.SaveToDb(this.db);
 
 					return Primary;
 				} // if
@@ -101,12 +101,12 @@
 				SendExplanationMail();
 
 				if (this.saveToDB)
-                    Primary.SaveToDb(this.db);
+					Primary.SaveToDb(this.db);
 
-                this.log.Error("Mismatch found in the 2 offer calculations of customer: {0} \n Primary: {1} \n Verification: {2} ", CustomerID, Primary, VerifySeek);
+				this.log.Error("Mismatch found in the 2 offer calculations of customer: {0} \n Primary: {1} \n Verification: {2} ", CustomerID, Primary, VerifySeek);
 				return null;
 			} catch (Exception e) {
-                this.log.Warn(e, "Offer calculation for customer {0} failed with exception.", CustomerID);
+				this.log.Warn(e, "Offer calculation for customer {0} failed with exception.", CustomerID);
 			} // try
 
 			return null;
@@ -162,7 +162,7 @@
 		private readonly OfferCalculator1 offerCalculator1;
 		private readonly OfferCalculator offerCalculator2;
 		private readonly bool saveToDB;
-	    private readonly int loanScourceID;
-	    private readonly int repaymentPeriod;
+		private readonly int loanScourceID;
+		private readonly int repaymentPeriod;
 	} // class OfferDualCalculator
 } // namespace

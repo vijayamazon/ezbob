@@ -20,6 +20,7 @@
 
 	public class MaamMedalAndPricing : AStrategy {
 		public MaamMedalAndPricing() {
+			this.scenarioNames = new SortedSet<string>();
 			this.spLoad = new SpLoadCashRequestsForAutomationReport(DB, Log);
 
 			Data = new List<Datum>();
@@ -82,11 +83,8 @@
 
 			pc.Log();
 
-			CsvTitles = Datum.CsvTitles(this.loanSources).Split(';');
 			CreateXlsx();
 		} // Execute
-
-		public virtual string[] CsvTitles { get; private set; }
 
 		public virtual ExcelPackage Xlsx { get; private set; }
 
@@ -97,9 +95,10 @@
 			ExcelWorksheet minOfferStatSheet = Xlsx.CreateSheet("Min offer", false);
 			ExcelWorksheet maxOfferStatSheet = Xlsx.CreateSheet("Max offer", false);
 			ExcelWorksheet decisionSheet = Xlsx.CreateSheet(DecisionsSheetName, false);
+			ExcelWorksheet interestRateSheet = Xlsx.CreateSheet("Interest rate", false);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
-			AppendDecisionTitles(decisionSheet);
+			Datum.SetDecisionTitles(decisionSheet, this.loanSources);
 
 			var decisionStats = new Stats(Log, minOfferStatSheet, true, minOfferFormulaeSheet, Color.Yellow);
 
@@ -113,7 +112,7 @@
 			int curRow = 2;
 
 			foreach (Datum d in Data) {
-				d.ToXlsx(decisionSheet, curRow);
+				d.ToXlsx(decisionSheet, curRow, this.scenarioNames);
 				curRow++;
 
 				foreach (Tuple<Stats, int> pair in stats)
@@ -140,8 +139,10 @@
 				loanIDColumn = pair.Item1.FlushLoanIDs(loanIDSheet, loanIDColumn);
 			} // for each
 
-			// Currently (Apr 20 2015) the last column is CD in Decisions, so 90 should be good enough.
-			Xlsx.AutoFitColumns(90);
+			CreateInterestRateSheet(interestRateSheet, lastDecisionRow);
+
+			// Currently (Apr 21 2015) the last column is CG in Decisions, so 128 should be good enough.
+			Xlsx.AutoFitColumns(128);
 		} // CreateXlsx
 
 		protected virtual TCrLoans CashRequestLoans {
@@ -375,7 +376,10 @@
 			int manuallyAndAutoRejectedRow = row;
 
 			row = DrawTotalAndRejectRow(cfgSheet, row,
-				"Count", "=COUNTIFS(Decisions!$J$2:$J${0},\"Rejected\", Decisions!$Q$2:$Q${0},\"Reject\")", lastRawRow, TitledValue.Format.Int
+				"Count",
+				"=COUNTIFS(Decisions!$J$2:$J${0},\"Rejected\", Decisions!$Q$2:$Q${0},\"Reject\")",
+				lastRawRow,
+				TitledValue.Format.Int
 			);
 
 			row = DrawTotalAndRejectRow(cfgSheet, row,
@@ -488,6 +492,357 @@
 			return isHomeOwnerAccordingToLandRegistry;
 		} // IsHomeOwner
 
+		private void CreateInterestRateSheet(ExcelWorksheet interestRateSheet, int lastRawRow) {
+			int row = 1;
+
+			foreach (var cfg in interestRateSheetSections)
+				row = CreateInterestRateSheetSection(interestRateSheet, row, lastRawRow, cfg);
+		} // CreateInterestRateSheet
+
+		private class InterestRateSheetSectionConfiguration {
+			public InterestRateSheetSectionConfiguration(
+				string title,
+				string loanSourceColumn,
+				string loanSourceCondition,
+				string loanSourceEscapedCondition
+			) {
+				Title = title;
+				LoanSourceColumn = loanSourceColumn;
+				LoanSourceCondition = loanSourceCondition;
+				LoanSourceEscapedCondition = loanSourceEscapedCondition;
+
+				WeightColumnNames = new SortedDictionary<string, string> {
+					{ ManualDecisionType,   "K" },
+					{ MinOfferDecisionType, "BE" },
+					{ MaxOfferDecisionType, "BP" },
+				};
+
+				ScenarioColumnNames = new SortedDictionary<string, string> {
+					{ ManualDecisionType,   "CE" },
+					{ MinOfferDecisionType, "CE" },
+					{ MaxOfferDecisionType, "CF" },
+				};
+
+				DataColumnNames = new SortedDictionary<string, SortedDictionary<string, string>>();
+
+				DataColumnNames[ManualDecisionType] = new SortedDictionary<string, string> {
+					{ SetupFeeAmount, "O" },
+					{ SetupFeeRate, "N" },
+					{ InterestRate, "L" },
+				};
+
+				DataColumnNames[MinOfferDecisionType] = new SortedDictionary<string, string> {
+					{ SetupFeeAmount, "AC" },
+					{ SetupFeeRate, "AB" },
+					{ InterestRate, "Z" },
+				};
+
+				DataColumnNames[MaxOfferDecisionType] = new SortedDictionary<string, string> {
+					{ SetupFeeAmount, "AK" },
+					{ SetupFeeRate, "AJ" },
+					{ InterestRate, "AH" },
+				};
+
+				Formats = new SortedDictionary<string, string> {
+					{ SetupFeeAmount, TitledValue.Format.Money },
+					{ SetupFeeRate, TitledValue.Format.Percent },
+					{ InterestRate, TitledValue.Format.Percent },
+				};
+			} // constructor
+
+			public string Title { get; private set; }
+			public string LoanSourceColumn { get; private set; }
+			public string LoanSourceCondition { get; private set; }
+			public string LoanSourceEscapedCondition { get; private set; }
+
+			public SortedDictionary<string, SortedDictionary<string, string>> DataColumnNames { get; private set; }
+
+			public SortedDictionary<string, string> WeightColumnNames { get; private set; }
+
+			public SortedDictionary<string, string> Formats { get; private set; }
+
+			public SortedDictionary<string, string> ScenarioColumnNames { get; private set; }
+		} // class InterestRateSheetSectionConfiguration
+
+		private static readonly List<InterestRateSheetSectionConfiguration> interestRateSheetSections =
+			new List<InterestRateSheetSectionConfiguration> {
+				new InterestRateSheetSectionConfiguration("All decisions", "CG", "<>\"\"", "<>\"\"\"\""),
+				new InterestRateSheetSectionConfiguration("EU & COSME loans", "CH", "=\"EU\"", "EU"),
+				new InterestRateSheetSectionConfiguration("COSME only", "CG", "=\"COSME\"", "COSME"),
+			};
+
+		private int CreateInterestRateSheetSection(
+			ExcelWorksheet interestRateSheet,
+			int row,
+			int lastRawRow,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			ExcelRange range = AStatItem.SetBorders(interestRateSheet.Cells[row, 1]);
+			range.SetCellValue(cfg.Title, bSetZebra: false);
+			range.Style.Font.Size = 16;
+			range.Style.Font.Bold = true;
+			range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+			range.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+
+			int decisionTypeWidth = interestRateSheetColumns.Count;
+
+			int column = 2;
+
+			foreach (string decisionType in interestRateSheetDecisionTypes) {
+				range = AStatItem.SetBorders(interestRateSheet.Cells[row, column, row, column + decisionTypeWidth - 1]);
+				range.Merge = true;
+				range.SetCellValue(decisionType, bSetZebra: false);
+				range.Style.Font.Size = 16;
+				range.Style.Font.Bold = true;
+				range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+				range.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
+				range.Style.Border.Left.Style = ExcelBorderStyle.Thick;
+
+				column += decisionTypeWidth;
+			} // for each
+
+			row++;
+
+			row = CreateInterestRateSheetSectionGroup(interestRateSheet, row, lastRawRow, SetupFeeRate, cfg);
+			row = CreateInterestRateSheetSectionGroup(interestRateSheet, row, lastRawRow, SetupFeeAmount, cfg);
+			row = CreateInterestRateSheetSectionGroup(interestRateSheet, row, lastRawRow, InterestRate, cfg);
+
+			return row;
+		} // CreateInterestRateSheetSection
+
+		private const string SetupFeeRate = "Setup fee rate";
+		private const string SetupFeeAmount = "Setup fee amount";
+		private const string InterestRate = "Interest rate";
+
+		private int CreateInterestRateSheetSectionGroup(
+			ExcelWorksheet interestRateSheet,
+			int row,
+			int lastRawRow,
+			string title,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			int column = 1;
+
+			ExcelRange range = AStatItem.SetBorders(interestRateSheet.Cells[row, column]);
+
+			column = range.SetCellValue(title, bIsBold: true, bSetZebra: false, oBgColour: Color.Bisque);
+			range.Style.Font.Size = 13;
+
+			// ReSharper disable once UnusedVariable
+			foreach (string justForLoop in interestRateSheetDecisionTypes) {
+				bool first = true;
+
+				foreach (string colName in interestRateSheetColumns) {
+					range = AStatItem.SetBorders(interestRateSheet.Cells[row, column]);
+
+					column = range.SetCellValue(colName, bIsBold: true, bSetZebra: false, oBgColour: Color.Bisque);
+					range.Style.Font.Size = 13;
+
+					if (first)
+						range.Style.Border.Left.Style = ExcelBorderStyle.Thick;
+
+					first = false;
+				} // for each column
+			} // for each decision type
+
+			row++;
+
+			foreach (string scenarioName in scenarioNames)
+				row = CreateInterestRateSheetSectionRow(interestRateSheet, row, lastRawRow, title, scenarioName, cfg);
+
+			return row;
+		} // CreateInterestRateSheetSectionGroup
+
+		private int CreateInterestRateSheetSectionRow(
+			ExcelWorksheet interestRateSheet,
+			int row,
+			int lastRawRow,
+			string dataFieldName,
+			string scenarioName,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			int column = 1;
+
+			ExcelRange range = AStatItem.SetBorders(interestRateSheet.Cells[row, column]);
+
+			column = range.SetCellValue(scenarioName, bIsBold: true, bSetZebra: false);
+
+			foreach (string decisionType in interestRateSheetDecisionTypes) {
+				bool first = true;
+
+				foreach (string colName in interestRateSheetColumns) {
+					range = AStatItem.SetBorders(interestRateSheet.Cells[row, column]);
+
+					if (first)
+						range.Style.Border.Left.Style = ExcelBorderStyle.Thick;
+
+					first = false;
+
+					switch (colName) {
+					case CountInterestColumn:
+						CreateCellCount(range, row, lastRawRow, decisionType, cfg);
+						break;
+
+					case AvgInterestColumn:
+						CreateCellAvg(range, row, lastRawRow, dataFieldName, decisionType, cfg);
+						break;
+
+					case WeightAvgInterestColumn:
+						CreateCellWeightAvg(range, row, lastRawRow, dataFieldName, decisionType, cfg);
+						break;
+
+					case MinInterestColumn:
+						CreateCellMin(range, row, lastRawRow, dataFieldName, decisionType, cfg);
+						break;
+
+					case MaxInterestColumn:
+						CreateCellMax(range, row, lastRawRow, dataFieldName, decisionType, cfg);
+						break;
+					} // switch
+
+					column++;
+				} // for each column
+			} // for each decision type
+
+			return row + 1;
+		} // CreateInterestRateSheetSectionRow
+
+		private void CreateCellCount(
+			ExcelRange cell,
+			int row,
+			int lastRawRow,
+			string decisionType,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			cell.Formula = string.Format(
+				"=COUNTIFS({0}!${1}$2:${1}${2}, $A${3}, {0}!${4}$2:${4}${2}, \"{5}\")",
+				DecisionsSheetName,
+				cfg.ScenarioColumnNames[decisionType],
+				lastRawRow,
+				row,
+				cfg.LoanSourceColumn,
+				cfg.LoanSourceEscapedCondition
+			);
+
+			cell.Style.Numberformat.Format = TitledValue.Format.Int;
+		} // CreateCellCount
+
+		private void CreateCellAvg(
+			ExcelRange cell,
+			int row,
+			int lastRawRow,
+			string dataFieldName,
+			string decisionType,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			cell.Formula = string.Format(
+				"=AVERAGEIFS({0}!${6}$2:${6}${2}, {0}!${1}$2:${1}${2}, $A${3}, {0}!${4}$2:${4}${2}, \"{5}\")",
+				DecisionsSheetName,
+				cfg.ScenarioColumnNames[decisionType],
+				lastRawRow,
+				row,
+				cfg.LoanSourceColumn,
+				cfg.LoanSourceEscapedCondition,
+				cfg.DataColumnNames[decisionType][dataFieldName]
+			);
+
+			cell.Style.Numberformat.Format = cfg.Formats[dataFieldName];
+		} // CreateCellAvg
+
+		private void CreateCellWeightAvg(
+			ExcelRange cell,
+			int row,
+			int lastRawRow,
+			string dataFieldName,
+			string decisionType,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			cell.Formula = string.Format(
+				"=SUMPRODUCT(" +
+					"({0}!${7}$2:${7}${2} * {0}!${8}$2:${8}${2}) * " +
+					"({0}!${1}$2:${1}${2} = $A${3}) * " +
+					"({0}!${4}$2:${4}${2}{5})" +
+				") / SUMIFS(" +
+					"{0}!${8}$2:${8}${2}," +
+					"{0}!${1}$2:${1}${2}, $A${3}," +
+					"{0}!${4}$2:${4}${2}, \"{6}\"" +
+				")",
+				DecisionsSheetName,
+				cfg.ScenarioColumnNames[decisionType],
+				lastRawRow,
+				row,
+				cfg.LoanSourceColumn,
+				cfg.LoanSourceCondition,
+				cfg.LoanSourceEscapedCondition,
+				cfg.DataColumnNames[decisionType][dataFieldName],
+				cfg.WeightColumnNames[decisionType]
+			);
+
+			cell.Style.Numberformat.Format = cfg.Formats[dataFieldName];
+		} // CreateCellWeightAvg
+
+		private void CreateCellMin(
+			ExcelRange cell,
+			int row,
+			int lastRawRow,
+			string dataFieldName,
+			string decisionType,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			cell.CreateArrayFormula(string.Format(
+				"=MIN(IF({0}!${1}$2:${1}${2}=$A${3},IF({0}!${4}$2:${4}${2}{5},{0}!${6}$2:${6}${2})))",
+				DecisionsSheetName,
+				cfg.ScenarioColumnNames[decisionType],
+				lastRawRow,
+				row,
+				cfg.LoanSourceColumn,
+				cfg.LoanSourceCondition,
+				cfg.DataColumnNames[decisionType][dataFieldName]
+			));
+
+			cell.Style.Numberformat.Format = cfg.Formats[dataFieldName];
+		} // CreateCellWeightMin
+
+		private void CreateCellMax(
+			ExcelRange cell,
+			int row,
+			int lastRawRow,
+			string dataFieldName,
+			string decisionType,
+			InterestRateSheetSectionConfiguration cfg
+		) {
+			cell.CreateArrayFormula(string.Format(
+				"=MAX(IF({0}!${1}$2:${1}${2}=$A${3},IF({0}!${4}$2:${4}${2}{5},{0}!${6}$2:${6}${2})))",
+				DecisionsSheetName,
+				cfg.ScenarioColumnNames[decisionType],
+				lastRawRow,
+				row,
+				cfg.LoanSourceColumn,
+				cfg.LoanSourceCondition,
+				cfg.DataColumnNames[decisionType][dataFieldName]
+			));
+
+			cell.Style.Numberformat.Format = cfg.Formats[dataFieldName];
+		} // CreateCellWeightMax
+
+		private const string CountInterestColumn = "Count";
+		private const string AvgInterestColumn = "Simple average";
+		private const string WeightAvgInterestColumn = "Weighted average"; 
+		private const string MinInterestColumn = "Minimum"; 
+		private const string MaxInterestColumn = "Maximum";
+
+		private static readonly List<string> interestRateSheetColumns = new List<string> {
+			CountInterestColumn, AvgInterestColumn, WeightAvgInterestColumn, MinInterestColumn, MaxInterestColumn,
+		};
+
+		private const string ManualDecisionType = "Manual";
+		private const string MinOfferDecisionType ="Min offer";
+		private const string MaxOfferDecisionType ="Max offer";
+
+		private static readonly List<string> interestRateSheetDecisionTypes = new List<string> {
+			ManualDecisionType, MinOfferDecisionType, MaxOfferDecisionType,
+		};
+
 		private readonly string tag;
 
 		private readonly SortedDictionary<int, bool> homeOwners;
@@ -510,7 +865,7 @@
 				public const int Count = 317;
 
 				public static class Issued {
-					public const decimal Amount = 2567666m;
+					public const decimal Amount = 2572666m;
 				} // class Issued
 
 				public static class Outstanding {
@@ -519,61 +874,25 @@
 			} // class Default
 		} // class Reference
 
-		private void AppendDecisionTitles(ExcelWorksheet decisionSheet) {
-			int column = decisionSheet.SetRowTitles(1, CsvTitles);
-
-			foreach (string formula in decisionTitleFormulae) {
-				if (formula.StartsWith("=")) {
-					decisionSheet.SetCellTitle(1, column, null);
-					decisionSheet.Cells[1, column].Formula = formula;
-					column++;
-				} else
-					column = decisionSheet.SetCellTitle(1, column, formula);
-			} // for each
-		} // AppendDecisionTitles
+		private readonly SortedSet<string> scenarioNames; 
 
 		private const string DecisionsSheetName = "Decisions";
 
-		private static readonly string[] decisionTitleFormulae = {
-			"Total repaid amount",
-			"Outstanding amount",
-			"Approved amount",
-			"Min offer: issued amount",
-			"Min offer: outstanding amount",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" auto decision\")",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" approved amount\")",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" issued amount\")",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" outstanding amount\")",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" auto decision\")",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" approved amount\")",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" issued amount\")",
-			"=CONCATENATE(\"Min offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" outstanding amount\")",
-			"Max offer:" + System.Environment.NewLine + "approved amount",
-			"Max offer:" + System.Environment.NewLine + "issued amount",
-			"Max offer:" + System.Environment.NewLine + "outstanding amount",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" auto decision\")",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" approved amount\")",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" issued amount\")",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$12, \"£ #,##\"), \" outstanding amount\")",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" auto decision\")",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" approved amount\")",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" issued amount\")",
-			"=CONCATENATE(\"Max offer:" + System.Environment.NewLine + "\",TEXT(Verification!$B$13, \"£ #,##\"), \" outstanding amount\")",
-			"Min offer: auto decision",
-			"Is home owner",
-			"Home owner cap",
-			"Outstanding amount",
-		};
+		// ReSharper disable AssignNullToNotNullAttribute
 
-		private static readonly string minOfferFormulaeSheet = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(
-			"Ezbob.Backend.Strategies.AutomationVerification.KPMG.MaamMedalAndPricing_MinOffer.txt"
-		)).ReadToEnd();
+		private static readonly string minOfferFormulaeSheet = new StreamReader(
+			Assembly.GetExecutingAssembly().GetManifestResourceStream(
+				"Ezbob.Backend.Strategies.AutomationVerification.KPMG.MaamMedalAndPricing_MinOffer.txt"
+			)
+		).ReadToEnd();
 
-		private static readonly string maxOfferFormulaeSheet = new StreamReader(Assembly.GetExecutingAssembly().GetManifestResourceStream(
-			"Ezbob.Backend.Strategies.AutomationVerification.KPMG.MaamMedalAndPricing_MaxOffer.txt"
-		)).ReadToEnd();
+		private static readonly string maxOfferFormulaeSheet = new StreamReader(
+			Assembly.GetExecutingAssembly().GetManifestResourceStream(
+				"Ezbob.Backend.Strategies.AutomationVerification.KPMG.MaamMedalAndPricing_MaxOffer.txt"
+			)
+		).ReadToEnd();
 
-		private const string LastRawRow = "__LAST_RAW_ROW__";
+		// ReSharper restore AssignNullToNotNullAttribute
 	} // class MaamMedalAndPricing
 } // namespace
 
