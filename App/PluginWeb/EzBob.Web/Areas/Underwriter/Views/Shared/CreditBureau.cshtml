@@ -75,10 +75,9 @@
 
 @helper ScoreMark(string score, string scorePos, string valPos, string color, string align) {
 	var backDivStyle = "height: 50px; width: 8px; display: inline-block; position:relative; left: " + scorePos + "background-color: " + color;
-	var scoreDivStyle = "height: 50px; width: 120px; display: inline-block; position: relative; font-size: 48px; "
+	var scoreDivStyle = "height: 50px; display: inline-block; position: relative; font-size: 48px; line-height: 50px;"
 		+ " color: " + color
 		+ " left: " + valPos
-		+ " text-align: " + "center;"
 		+ " float: " + align;
 	<div style="height: 50px;">
 		@Html.Raw("<div style=\"" + backDivStyle + "\"></div>" + "<div style=\"" + scoreDivStyle + "\">" + score + "</div>")
@@ -190,7 +189,7 @@
 									@ScoreMark("<%- consumerData.Score %>",
 										   "<%- consumerData.ScorePosition %>",
 										   "<%- consumerData.ScoreValuePosition %>",
-										   "<%- consumerData.ScoreColor %>",
+										   "<%- consumerData.ScoreColor %>;",
 										   "<%- consumerData.ScoreAlign %>")
 								</div>
 							</div>

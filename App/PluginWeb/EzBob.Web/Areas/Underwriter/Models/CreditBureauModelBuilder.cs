@@ -575,7 +575,7 @@
 					Align = (s < barCount / 2) ? "none" : "left",
 					Position = string.Format("{0}px;", scorePos),
 					ValPosition = string.Format("{0}px;", valPos),
-					Color = string.Format("#{0:X2}{1:X2}{2:X2};", c.R, c.G, c.B),
+					Color = string.Format("#{0:X2}{1:X2}{2:X2}", c.R, c.G, c.B),
 				};
 		}
 
