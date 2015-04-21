@@ -60,7 +60,7 @@
 				other.RepaymentPeriod = RepaymentPeriod;
 				other.UseSetupFee = UseSetupFee;
 				other.UseBrokerSetupFee = UseBrokerSetupFee;
-				other.ManualSetupFeePercent = ManualSetupFeeAmount;
+				other.ManualSetupFeePercent = ManualSetupFeePercent;
 				other.ManualSetupFeeAmount = ManualSetupFeeAmount;
 				other.MedalName = MedalName;
 				other.EzbobScore = EzbobScore;

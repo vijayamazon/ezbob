@@ -116,6 +116,7 @@
     <Compile Include="TestExperianLateCount.cs" />
     <Compile Include="TestSageParser.cs" />
     <Compile Include="TestSalesForce.cs" />
+    <Compile Include="TestSetupFeeCalcLegacy.cs" />
     <Compile Include="TestStrategies.cs" />
     <Compile Include="TestCurrencyUpdateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -274,6 +275,10 @@
     <ProjectReference Include="..\..\MailApi\MailApi.csproj">
       <Project>{de254378-4cf8-400c-bcc4-a9af01550350}</Project>
       <Name>MailApi</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\PaymentServices\PaymentServices.csproj">
+      <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
+      <Name>PaymentServices</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\PayPal\PayPalLib\PayPalLib.csproj">
       <Project>{231243D6-9B1A-43BC-AC7E-FC6AE5DDC006}</Project>
