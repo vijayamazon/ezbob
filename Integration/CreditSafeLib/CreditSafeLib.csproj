@@ -47,22 +47,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CreditSafeLtdGetData.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="CreditSafeNonLtdModelBuilder.cs" />
     <Compile Include="CreditSafeLtdModelBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CreditSafeLtdResponse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CreditsafeRequestBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CreditsafeRequestModel.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CreditSafeLtdService.cs" />
+    <Compile Include="CreditSafeNonLtdResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\CreditSafeServiceReference\Reference.cs">
       <AutoGen>True</AutoGen>

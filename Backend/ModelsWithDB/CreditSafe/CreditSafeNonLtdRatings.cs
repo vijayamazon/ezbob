@@ -4,7 +4,7 @@ using Ezbob.Utils.dbutils;
 
 namespace Ezbob.Backend.ModelsWithDB.CreditSafe
 {
-    class CreditSafeNonLtdRatings
+    public class CreditSafeNonLtdRatings
     {
 
         [PK(true)]
@@ -12,10 +12,10 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
         public long CreditSafeNonLtdRatingsID { get; set; }
         [FK("CreditSafeNonLtdBaseData", "CreditSafeNonLtdBaseDataID")]
         public long? CreditSafeNonLtdBaseDataID { get; set; }
-        public DateTime? date { get; set; }
-        public int? score { get; set; }
+        public DateTime? Date { get; set; }
+        public int? Score { get; set; }
         [Length(100)]
-        public string description { get; set; }
+        public string Description { get; set; }
 
 
     }

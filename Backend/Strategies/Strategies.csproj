@@ -122,6 +122,7 @@
     <Compile Include="CalculateLoan\Helpers\ScheduledPayment.cs" />
     <Compile Include="CalculateLoan\Helpers\Repayment.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
+    <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />

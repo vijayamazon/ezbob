@@ -3,7 +3,7 @@ using Ezbob.Utils.dbutils;
 
 namespace Ezbob.Backend.ModelsWithDB.CreditSafe
 {
-    class CreditSafeNonLtdBaseDataTel
+    public class CreditSafeNonLtdBaseDataTel
     {
 
         [PK(true)]

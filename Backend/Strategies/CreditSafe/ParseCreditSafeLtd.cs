@@ -92,7 +92,7 @@ namespace Ezbob.Backend.Strategies.CreditSafe
             if (data == null)
                 return null;
 
-            Log.Info("Saving CreditSafe consumer data into DB...");
+            Log.Info("Saving CreditSafeLtd consumer data into DB...");
 
             var con = DB.GetPersistent();
             con.BeginTransaction();
@@ -303,13 +303,13 @@ namespace Ezbob.Backend.Strategies.CreditSafe
             }
             catch (Exception ex)
             {
-                Log.Warn(ex, "Failed to save CreditSafe consumer");
+                Log.Warn(ex, "Failed to save CreditSafeLtd consumer");
                 con.Rollback();
                 return null;
             }
 
             con.Commit();
-            Log.Info("Saving CreditSafe consumer data into DB complete.");
+            Log.Info("Saving CreditSafeLtd consumer data into DB complete.");
             return data;
         }
 

@@ -4,7 +4,7 @@ using Ezbob.Utils.dbutils;
 
 namespace Ezbob.Backend.ModelsWithDB.CreditSafe
 {
-    class CreditSafeNonLtdLimits
+    public class CreditSafeNonLtdLimits
     {
 
         [PK(true)]

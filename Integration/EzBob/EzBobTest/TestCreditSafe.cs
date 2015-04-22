@@ -42,8 +42,8 @@
 
             Console.WriteLine(baseData.ID);*/
 
-            CreditSafeLtdGetData test = new CreditSafeLtdGetData();
-            test.LtdGetData("asd");
+            //CreditSafeLtdGetData test = new CreditSafeLtdGetData();
+            //test.LtdGetData("asd");
 
 
         }
@@ -71,9 +71,10 @@
             data.LatestAccountsDate = data.LatestAccountsDate ?? DateTime.UtcNow;
             data.CCJDateFrom = data.CCJDateFrom ?? DateTime.UtcNow;
             data.CCJDateTo = data.CCJDateTo ?? DateTime.UtcNow;*/
-
-            ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
-            saveTest.Execute();
+            ParseCreditSafeNonLtd test = new ParseCreditSafeNonLtd(1);
+            test.Execute();
+            //ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
+            //saveTest.Execute();
 
             /*var con = m_oDB.GetPersistent();
             con.BeginTransaction();
