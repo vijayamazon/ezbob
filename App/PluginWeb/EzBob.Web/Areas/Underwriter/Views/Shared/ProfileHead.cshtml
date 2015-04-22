@@ -35,10 +35,10 @@
                         </div>
                         <div class="col-md-4 col-lg-4 offer-box">
                             <div class="ez-bigtext">&nbsp;</div>
-                            <div>Setup fee: <%-EzBob.formatPounds(loan.SetupFee)%> (<%-EzBob.formatPercents(loan.SetupFeeActualPercent)%>)</div>
-                            <div>Broker fee: <%-EzBob.formatPounds(loan.BrokerSetupFee)%> (<%-EzBob.formatPercents(loan.BrokerSetupFeeActualPercent)%>)</div>
-                            <div>Total fee: <%-EzBob.formatPounds(loan.TotalSetupFee)%> (<%-EzBob.formatPercents(loan.TotalSetupFeePercent)%>)</div>
-                            <div><span class="ez-automation-offer">(A <%-EzBob.formatPounds(loan.AutomationOfferModel.SetupFeeAmount)%> (<%-EzBob.formatPercents(loan.AutomationOfferModel.SetupFeePercent)%>))</span></div>
+                            <div>Setup fee: <%-EzBob.formatPoundsAsInt(loan.SetupFee)%> (<%-EzBob.formatPercents(loan.SetupFeeActualPercent)%>)</div>
+                            <div>Broker fee: <%-EzBob.formatPoundsAsInt(loan.BrokerSetupFee)%> (<%-EzBob.formatPercents(loan.BrokerSetupFeeActualPercent)%>)</div>
+                            <div>Total fee: <%-EzBob.formatPoundsAsInt(loan.TotalSetupFee)%> (<%-EzBob.formatPercents(loan.TotalSetupFeePercent)%>)</div>
+                            <div><span class="ez-automation-offer">(A <%-EzBob.formatPoundsAsInt(loan.AutomationOfferModel.SetupFeeAmount)%> (<%-EzBob.formatPercents(loan.AutomationOfferModel.SetupFeePercent)%>))</span></div>
                         </div>
                     </div>
                     <div class="col-md-12 col-lg-12">
