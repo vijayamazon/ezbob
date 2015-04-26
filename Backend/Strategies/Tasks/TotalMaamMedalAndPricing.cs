@@ -18,7 +18,8 @@
 
 			if (this.testMode) {
 				RequestedCustomers.AddRange(new[] {
-					1105, 211, 1001, 1884, 1934, 2058, 17304, 21285, 23583,
+					// 1105, 211, 1001, 1884, 1934, 2058, 17304, 21285, 23583,
+					3474, 3759, 4214, 4564, 7768, 8765, 9934, 10218, 11598, 11926, 20217,
 				});
 
 				Log.Debug("Test mode, customer list: {0}.", string.Join(", ", RequestedCustomers));
