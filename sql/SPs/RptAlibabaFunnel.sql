@@ -111,7 +111,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	INSERT INTO #Funnel(DatumID, DoDropoff, Caption, Counter)
-	VALUES (20, 1, 'Start EZBOB appliation', ISNULL((SELECT COUNT(*) FROM #ws), 0))
+	VALUES (20, 1, 'Start EZBOB application', ISNULL((SELECT COUNT(*) FROM #ws), 0))
 
 	------------------------------------------------------------------------------
 
