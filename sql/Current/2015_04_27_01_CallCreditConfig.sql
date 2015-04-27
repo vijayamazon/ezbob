@@ -26,7 +26,7 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditPassword')
 	BEGIN
 		INSERT INTO dbo.ConfigurationVariables(Name, Value, Description, IsEncrypted)
-		VALUES('CallCreditPassword', '7UM9AXH2', 'CallCredit Password', NULL)
+		VALUES('CallCreditPassword', 'HP37SB9W', 'CallCredit Password', NULL)
 	END
 END
 
@@ -43,19 +43,19 @@ BEGIN
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditUserCompany')
 	BEGIN
 		INSERT INTO dbo.ConfigurationVariables(Name, Value, Description, IsEncrypted)
-		VALUES('CallCreditUserCompany', '', 'User`s company at CallCredit', NULL)
+		VALUES('CallCreditUserCompany', 'Ezbob SR', 'User`s company at CallCredit', NULL)
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditUserName')
 	BEGIN
 		INSERT INTO dbo.ConfigurationVariables(Name, Value, Description, IsEncrypted)
-		VALUES('CallCreditUserName', '', 'Username at CallCredit', NULL)
+		VALUES('CallCreditUserName', 'Ezbob SR API Live', 'Username at CallCredit', NULL)
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='CallCreditPassword')
 	BEGIN
 		INSERT INTO dbo.ConfigurationVariables(Name, Value, Description, IsEncrypted)
-		VALUES('CallCreditPassword', '7UM9AXH2', 'CallCredit Password', NULL)
+		VALUES('CallCreditPassword', 'HP37SB9W', 'CallCredit Password', NULL)
 	END
 END
 GO
