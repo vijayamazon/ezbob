@@ -132,7 +132,7 @@
 			try
 			{
 				var oEsi = new YodleeServiceInfo();
-				_mpChecker.Check(oEsi.InternalId, _customer, csId, _session);
+				_mpChecker.Check(oEsi.InternalId, _customer, csId);
 			}
 			catch (MarketPlaceAddedByThisCustomerException e)
 			{
