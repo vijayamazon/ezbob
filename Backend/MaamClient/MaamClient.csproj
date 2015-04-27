@@ -102,10 +102,6 @@
       <Project>{805F29C1-D575-49C5-A95D-4D393E65481F}</Project>
       <Name>MiniResharper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Maam\Maam.csproj">
-      <Project>{2195d5e3-1077-474b-9bb6-2e5c51e71789}</Project>
-      <Name>Maam</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Strategies\Strategies.csproj">
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>

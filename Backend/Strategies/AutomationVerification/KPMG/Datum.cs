@@ -65,9 +65,6 @@
 
 		public LoanCount ActualLoanCount { get; private set; }
 
-		public List<ManualDatumItem> ManualItems { get; private set; }
-		public List<AutoDatumItem> AutoItems { get; private set; }
-
 		public ManualDatumItem Manual(int itemIndex) {
 			if (itemIndex < 0)
 				return ManualItems[ManualItems.Count + itemIndex];
@@ -82,7 +79,11 @@
 			return AutoItems[itemIndex];
 		} // Auto
 
-		public void RunAutomation(bool isHomeOwner, AConnection db) {
+		public void RunAutomation(
+			bool isHomeOwner,
+			AConnection db,
+			SortedDictionary<long, AutomationTrails> automationTrails
+		) {
 			AutoItems.Clear();
 
 			foreach (ManualDatumItem mi in ManualItems) {
@@ -90,7 +91,7 @@
 
 				AutoItems.Add(ai);
 
-				ai.RunAutomation();
+				ai.RunAutomation(automationTrails);
 				ai.SetAdjustedLoanCount(mi.ActualLoanCount, mi.ApprovedAmount);
 			} // for each manual item
 		} // RunAutomation
@@ -227,6 +228,10 @@
 					case ManualLoanSource:
 						curColumn = sheet.SetCellValue(rowNum, curColumn, LastManual.LoanSourceName);
 						break;
+
+					case PreviousLoansCount:
+						curColumn = sheet.SetCellValue(rowNum, curColumn, LastManual.PreviousLoanCount);
+						break;
 					} // switch
 				} // if
 			} // for each
@@ -238,6 +243,9 @@
 		private ManualDatumItem LastManual  { get { return ManualItems[ManualItems.Count - 1]; } }
 
 		private AutoDatumItem LastAuto  { get { return AutoItems[AutoItems.Count - 1]; } }
+
+		private List<ManualDatumItem> ManualItems { get; set; }
+		private List<AutoDatumItem> AutoItems { get; set; }
 
 		private SortedDictionary<string, LoanSummaryData> loansBySource;
 		private readonly string tag;
@@ -276,6 +284,8 @@
 			"Max offer:" + System.Environment.NewLine + "Pricing calculator scenario name",
 			"Manual loan source",
 			"Manual loan is EU",
+			"Number of previous loans",
+			"New customer request",
 		};
 
 		private const string IsHomeOwnerCell = "__IS_HOME_OWNER__";
@@ -284,6 +294,7 @@
 		private const string MinOfferScenarioName = "__MIN_OFFER_SCENARIO_NAME__";
 		private const string MaxOfferScenarioName = "__MAX_OFFER_SCENARIO_NAME__";
 		private const string ManualLoanSource = "__MANUAL_LOAN_SOURCE__";
+		private const string PreviousLoansCount = "__PREVIOUS_LOANS_COUNT__";
 
 		private static readonly string[] decisionValueFormulae = {
 			"=AO" + CurrentRow + "+AT" + CurrentRow + "+AY" + CurrentRow + "",
@@ -318,6 +329,8 @@
 			MaxOfferScenarioName,
 			ManualLoanSource,
 			"=IF(OR(CG" + CurrentRow + "=\"EU\", CG" + CurrentRow + "=\"COSME\"), \"EU\", \"No\")",
+			PreviousLoansCount,
+			"=CI" + CurrentRow + "=0",
 		};
 	} // class Datum
 } // namespace

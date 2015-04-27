@@ -95,7 +95,9 @@
     <Compile Include="AutomationVerification\KPMG\AutoDatumItem.cs" />
     <Compile Include="AutomationVerification\KPMG\CustomerData.cs" />
     <Compile Include="AutomationVerification\KPMG\Datum.cs" />
-    <Compile Include="AutomationVerification\KPMG\ExcelGenerator.cs" />
+    <Compile Include="AutomationVerification\KPMG\AutomationTrails.cs" />
+    <Compile Include="AutomationVerification\KPMG\Excel\ExcelGenerator.cs" />
+    <Compile Include="AutomationVerification\KPMG\Excel\SheetDDD.cs" />
     <Compile Include="AutomationVerification\KPMG\InterestRateSheetSectionConfiguration.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanCount.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanMetaData.cs" />
@@ -105,8 +107,9 @@
     <Compile Include="AutomationVerification\KPMG\MaamMedalAndPricing.cs" />
     <Compile Include="AutomationVerification\KPMG\ManualDatumItem.cs" />
     <Compile Include="AutomationVerification\KPMG\Reference.cs" />
-    <Compile Include="AutomationVerification\KPMG\SheetInterestRate.cs" />
-    <Compile Include="AutomationVerification\KPMG\SheetVerification.cs" />
+    <Compile Include="AutomationVerification\KPMG\Excel\SheetAutomationTrails.cs" />
+    <Compile Include="AutomationVerification\KPMG\Excel\SheetInterestRate.cs" />
+    <Compile Include="AutomationVerification\KPMG\Excel\SheetVerification.cs" />
     <Compile Include="AutomationVerification\KPMG\SpLoadCashRequestsForAutomationReport.cs" />
     <Compile Include="AutomationVerification\VerifyMedal.cs" />
     <Compile Include="AutomationVerification\VerifyReject.cs" />

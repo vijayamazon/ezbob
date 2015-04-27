@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG.Excel {
 	using System;
 	using System.Collections.Generic;
 	using System.Drawing;
@@ -11,11 +11,19 @@
 	using OfficeOpenXml;
 
 	internal class ExcelGenerator {
-		public ExcelGenerator(List<Datum> data, SortedSet<string> loanSources) {
+		public ExcelGenerator(
+			List<Datum> data,
+			SortedSet<string> loanSources,
+			SortedDictionary<long, AutomationTrails> automationTrails
+		) {
 			this.scenarioNames = new SortedSet<string>();
 
 			this.data = data;
 			this.loanSources = loanSources;
+			this.automationTrails = automationTrails;
+
+			this.autoDecisionNames = new SortedSet<string>();
+			this.manualDecisionNames = new SortedSet<string>();
 
 			Xlsx = new ExcelPackage();
 		} // constructor
@@ -30,6 +38,8 @@
 			ExcelWorksheet maxOfferStatSheet = Xlsx.CreateSheet("Max offer", false);
 			ExcelWorksheet decisionSheet = Xlsx.CreateSheet(DecisionsSheetName, false);
 			var interestRateSheet = new SheetInterestRate(Xlsx, this.scenarioNames);
+			var automationTrailsSheet = new SheetAutomationTrails(Xlsx, this.automationTrails);
+			var dddSheet = new SheetDDD(Xlsx, DecisionsSheetName, this.autoDecisionNames, this.manualDecisionNames);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
 			// At this point all the sheets have been created.
@@ -49,6 +59,12 @@
 
 			foreach (Datum d in this.data) {
 				d.ToXlsx(decisionSheet, curRow, this.scenarioNames);
+
+				automationTrailsSheet.Generate(d.Manual(-1).CashRequestID);
+
+				this.autoDecisionNames.Add(d.Auto(-1).AutomationDecision.ToString());
+				this.manualDecisionNames.Add(d.Manual(-1).DecisionStr);
+
 				curRow++;
 
 				foreach (Tuple<Stats, int> pair in stats)
@@ -72,6 +88,8 @@
 			} // for each
 
 			interestRateSheet.Create(lastDecisionRow);
+
+			dddSheet.Generate(lastDecisionRow);
 
 			// Currently (Apr 21 2015) the last column is CG in Decisions, so 128 should be good enough.
 			Xlsx.AutoFitColumns(128);
@@ -101,5 +119,8 @@
 
 		private readonly List<Datum> data;
 		private readonly SortedSet<string> loanSources;
+		private readonly SortedDictionary<long, AutomationTrails> automationTrails;
+		private readonly SortedSet<string> autoDecisionNames;
+		private readonly SortedSet<string> manualDecisionNames;
 	} // class ExcelGenerator
 } // namespace

@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using Ezbob.Backend.Strategies.AutomationVerification.KPMG.Excel;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
@@ -25,13 +26,14 @@
 			this.tag = string.Format(
 				"#MaamMedalAndPricing_{0}_{1}",
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
-				Guid.NewGuid()
-					.ToString("N")
-				);
+				Guid.NewGuid().ToString("N")
+			);
 
 			Log.Debug("The tag is '{0}'.", this.tag);
 
-			this.excelGenerator = new ExcelGenerator(Data, this.loanSources);
+			this.automationTrails = new SortedDictionary<long, AutomationTrails>();
+
+			this.excelGenerator = new ExcelGenerator(Data, this.loanSources, this.automationTrails);
 		} // constructor
 
 		public override string Name {
@@ -66,7 +68,7 @@
 				bool isHomeOwner = IsHomeOwner(d.CustomerID);
 
 				try {
-					d.RunAutomation(isHomeOwner, DB);
+					d.RunAutomation(isHomeOwner, DB, this.automationTrails);
 				} catch (Exception e) {
 					Log.Alert(e, "Automation failed for customer {0}.", d.CustomerID);
 				} // try
@@ -148,6 +150,7 @@
 		private readonly SortedSet<string> loanSources;
 		private readonly SpLoadCashRequestsForAutomationReport spLoad;
 		private readonly ExcelGenerator excelGenerator;
+		private readonly SortedDictionary<long, AutomationTrails> automationTrails;
 	} // class MaamMedalAndPricing
 } // namespace
 

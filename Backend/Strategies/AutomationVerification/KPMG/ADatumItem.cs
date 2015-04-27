@@ -9,8 +9,6 @@
 	public abstract class ADatumItem : SpLoadCashRequestsForAutomationReport.ResultRow {
 		public abstract string DecisionStr { get; }
 
-		public abstract bool IsAuto { get; }
-
 		public static string CsvTitles(string prefix) {
 			return string.Format(
 				"{0} cash request ID;" +

@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
 	using System;
+	using System.Collections.Generic;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using DbConstants;
 	using Ezbob.Backend.Strategies.MedalCalculations;
@@ -52,8 +53,6 @@
 				return AutomationDecision == DecisionActions.Waiting ? "Manual" : AutomationDecision.ToString();
 			} // get
 		} // DecisionStr
-
-		public override bool IsAuto { get { return true; } }
 
 		public bool HasDecided {
 			get { return AutomationDecision != DecisionActions.Waiting; }
@@ -149,27 +148,35 @@
 		public bool IsHomeOwner { get; set; }
 		public string PricingCalculatorScenarioName { get; private set; }
 
-		public void RunAutomation() {
+		public void RunAutomation(SortedDictionary<long, AutomationTrails> automationTrails) {
 			ApprovedAmount = 0;
 			RepaymentPeriod = 0;
 			InterestRate = 0;
 			SetupFeeAmount = 0;
 			SetupFeePct = 0;
 
-			RunAutoReject();
+			var atra = new AutomationTrails();
+
+			automationTrails[CashRequestID] = atra;
+
+			RunAutoReject(atra);
 
 			this.medal = RunCalculateMedal();
 
-			RunAutoApprove();
+			RunAutoApprove(atra);
+
+			atra.AutomationDecision = AutomationDecision;
 		} // RunAutomation
 
-		private void RunAutoReject() {
+		private void RunAutoReject(AutomationTrails atra) {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =
 				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(this.db, Log, CustomerID);
 
 			agent.MakeDecision(agent.GetRejectionInputData(DecisionTime));
 
 			agent.Trail.Save(this.db, null, CashRequestID, Tag);
+
+			atra.Rejection = agent.Trail;
 
 			if (agent.Trail.HasDecided)
 				AutomationDecision = DecisionActions.Reject;
@@ -183,7 +190,7 @@
 			return instance.Result;
 		} // RunCalculateMedal
 
-		private void RunAutoApprove() {
+		private void RunAutoApprove(AutomationTrails atra) {
 			IsApproved = false;
 
 			MedalName = this.medal.MedalClassification.ToString();
@@ -203,6 +210,8 @@
 			approveAgent.MakeDecision();
 
 			approveAgent.Trail.Save(this.db, null, CashRequestID, Tag);
+
+			atra.Approval = approveAgent.Trail;
 
 			// Currently we don't check this logic hence 0.
 			OutstandingPrincipalOnDecisionDate = 0; // approveAgent.Trail.MyInputData.MetaData.OutstandingPrincipal;

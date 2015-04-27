@@ -20,8 +20,6 @@
 			get { return IsApproved ? "Approved" : "Rejected"; }
 		} // DecisionStr
 
-		public override bool IsAuto { get { return false; } }
-
 		public virtual void Calculate() {
 			SetupFeeAmount = new SetupFeeCalculatorLegacy(
 				UseSetupFee == 1,

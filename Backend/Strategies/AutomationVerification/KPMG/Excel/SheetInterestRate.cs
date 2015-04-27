@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG.Excel {
 	using System.Collections.Generic;
 	using System.Drawing;
 	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
