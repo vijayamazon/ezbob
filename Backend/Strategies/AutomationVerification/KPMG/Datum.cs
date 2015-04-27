@@ -286,6 +286,9 @@
 			"Manual loan is EU",
 			"Number of previous loans",
 			"New customer request",
+			"Clean manually approved amount",
+			"Min offer: manual - auto",
+			"Max offer: manual - auto",
 		};
 
 		private const string IsHomeOwnerCell = "__IS_HOME_OWNER__";
@@ -331,6 +334,9 @@
 			"=IF(OR(CG" + CurrentRow + "=\"EU\", CG" + CurrentRow + "=\"COSME\"), \"EU\", \"No\")",
 			PreviousLoansCount,
 			"=CI" + CurrentRow + "=0",
+			"=IF(J" + CurrentRow + "=\"Approved\",K" + CurrentRow + ",0)",
+			"=CK" + CurrentRow + "-BE" + CurrentRow,
+			"=CK" + CurrentRow + "-BP" + CurrentRow,
 		};
 	} // class Datum
 } // namespace

@@ -13,7 +13,9 @@
 		public void Generate(int lastDecisionRow) {
 			int curRow = DrawVerificationData(1, lastDecisionRow);
 			curRow = DrawConfiguration(curRow + 1);
-			DrawTotalAndReject(curRow + 1, lastDecisionRow);
+			curRow = DrawTotalAndReject(curRow + 1, lastDecisionRow);
+
+			DrawDefaultsData(curRow + 1, lastDecisionRow);
 		} // Generate
 
 		private int DrawVerificationData(int row, int lastRawRow) {
@@ -257,6 +259,170 @@
 
 			return row + 1;
 		} // DrawTotalAndRejectRow
+
+		// ReSharper disable once UnusedMethodReturnValue.Local
+		private int DrawDefaultsData(int row, int lastRawRow) {
+			AStatItem.SetBorders(this.sheet.Cells[row, 1, row, 5]).Merge = true;
+			this.sheet.SetCellValue(row, 1, "Defaults: auto vs manual", bSetZebra: false, oBgColour: Color.Yellow, bIsBold: true);
+			this.sheet.Cells[row, 1].Style.Font.Size = 16;
+			row++;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]);
+
+			var range = AStatItem.SetBorders(this.sheet.Cells[row, 2, row, 3]);
+			range.Merge = true;
+			range.SetCellValue("Min offer", true, false);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, 4, row, 5]);
+			range.Merge = true;
+			range.SetCellValue("Max offer", true, false);
+
+			row++;
+
+			int column = 2;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Count", true, false, oBgColour: Color.Bisque);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Amount", true, false, oBgColour: Color.Bisque);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Count", true, false, oBgColour: Color.Bisque);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Amount", true, false, oBgColour: Color.Bisque);
+
+			row++;
+
+			column = 2;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]).SetCellValue("Defaults: auto < manual", bSetZebra: false);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\">0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$CL$2:$CL${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\">0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\">0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$CM$2:$CM${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\">0\")", lastRawRow);
+
+			row++;
+
+			column = 2;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]).SetCellValue("Defaults: auto = manual", bSetZebra: false);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\"0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$BE$2:$BE${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\"0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\"0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$BP$2:$BP${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\"0\")", lastRawRow);
+
+			row++;
+
+			column = 2;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]).SetCellValue("Defaults: auto > manual", bSetZebra: false);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\"<0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$CL$2:$CL${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\"<0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\"<0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$CM$2:$CM${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\"<0\")", lastRawRow);
+
+			row++;
+
+			column = 2;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]).SetCellValue("Non-defaults: auto > manual", bSetZebra: false);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"No\",Decisions!$CL$2:$CL${0},\"<0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=-SUMIFS(Decisions!$CL$2:$CL${0},Decisions!$D$2:$D${0},\"No\",Decisions!$CL$2:$CL${0},\"<0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"No\",Decisions!$CM$2:$CM${0},\"<0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=-SUMIFS(Decisions!$CM$2:$CM${0},Decisions!$D$2:$D${0},\"No\",Decisions!$CM$2:$CM${0},\"<0\")", lastRawRow);
+
+			row++;
+
+			column = 2;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]).SetCellValue("Non-defaults: auto = manual", bSetZebra: false);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"No\",Decisions!$CL$2:$CL${0},\"0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$BE$2:$BE${0},Decisions!$D$2:$D${0},\"No\",Decisions!$CL$2:$CL${0},\"0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"No\",Decisions!$CM$2:$CM${0},\"0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$BP$2:$BP${0},Decisions!$D$2:$D${0},\"No\",Decisions!$CM$2:$CM${0},\"0\")", lastRawRow);
+
+			row++;
+
+			column = 2;
+
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]).SetCellValue("Non-defaults: auto < manual", bSetZebra: false);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"No\",Decisions!$CL$2:$CL${0},\">0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$CL$2:$CL${0},Decisions!$D$2:$D${0},\"No\",Decisions!$CL$2:$CL${0},\">0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
+			range.Formula = string.Format("=COUNTIFS(Decisions!$D$2:$D${0},\"No\",Decisions!$CM$2:$CM${0},\">0\")", lastRawRow);
+
+			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
+			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
+			range.Formula = string.Format("=SUMIFS(Decisions!$CM$2:$CM${0},Decisions!$D$2:$D${0},\"No\",Decisions!$CM$2:$CM${0},\">0\")", lastRawRow);
+
+			row++;
+
+			return row;
+		} // DrawDefaultsData
 
 		private int DrawTotalAndRejectTitle(int row, string title) {
 			ExcelRange range = this.sheet.Cells[row, 1, row, 2];
