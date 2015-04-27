@@ -6,8 +6,6 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 
-
-
 ALTER PROCEDURE RptCampaignReportFirst
 @DateStart DATE,
 @DateEnd DATE
@@ -59,6 +57,8 @@ BEGIN
 		s.FSource IS NOT NULL
 		AND
 		c.BrokerID IS NULL
+		AND
+		c.OriginID=1
 	GROUP BY
 		s.FSource,
 		s.FMedium,
@@ -92,6 +92,8 @@ BEGIN
 	  	s.FSource IS NOT NULL
 	  	AND
 		c.BrokerID IS NULL
+		AND
+		c.OriginID=1
 	GROUP BY
 		s.FSource,
 		s.FMedium,
@@ -131,5 +133,6 @@ BEGIN
 	DROP TABLE #temp2
 	DROP TABLE #temp1
 END
+
 GO
 

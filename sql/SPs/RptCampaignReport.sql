@@ -56,6 +56,8 @@ BEGIN
 		s.RSource IS NOT NULL
 		AND
 		c.BrokerID IS NULL
+		AND
+		c.OriginID=1
 	GROUP BY
 		s.RSource,
 		s.RMedium,
@@ -89,6 +91,8 @@ BEGIN
 	  	s.RSource IS NOT NULL
 	  	AND
 		c.BrokerID IS NULL
+		AND
+		c.OriginID=1
 	GROUP BY
 		s.RSource,
 		s.RMedium,
@@ -130,3 +134,4 @@ BEGIN
 END
 
 GO
+
