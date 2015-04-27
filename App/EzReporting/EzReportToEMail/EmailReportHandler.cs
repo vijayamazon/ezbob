@@ -257,7 +257,7 @@
 		} // IsMonthly
 
 		private bool IsWeekly(bool isWeeklyFlag, DateTime dToday) {
-			return isWeeklyFlag && dToday.DayOfWeek == DayOfWeek.Sunday;
+			return isWeeklyFlag && dToday.DayOfWeek == DayOfWeek.Saturday;
 		} // IsWeekly
 
 		private const string DailyPerdiod = "Daily";
