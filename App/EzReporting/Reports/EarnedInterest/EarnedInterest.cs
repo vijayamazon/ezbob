@@ -130,7 +130,7 @@
 						bool bIsNewGood = !BadPeriods.IsBad(csc.NewStatus);
 
 						if (bLastKnown != bIsOldGood) {
-							Alert(
+							Warn(
 								"Last known status is '{0}' while previous status is '{1}' for customer {2} on {3}.",
 								(bLastKnown ? "good" : "bad"),
 								(bIsOldGood ? "good" : "bad"),
