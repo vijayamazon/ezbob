@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
-	using SalesForceLib;
+    using System;
+    using Ezbob.Database;
+    using SalesForceLib;
 	using SalesForceLib.Models;
 	using StructureMap;
 
@@ -24,6 +26,15 @@
 
             this.eventModel.Email = this.eventModel.Email.ToLower();
             this.salesForce.CreateActivity(this.eventModel);
+
+            if (this.salesForce.HasError) {
+                DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,
+                    new QueryParameter("Now", DateTime.UtcNow),
+                    new QueryParameter("CustomerID", this.customerID),
+                    new QueryParameter("Type", this.Name),
+                    new QueryParameter("Model", this.salesForce.Model),
+                    new QueryParameter("Error", this.salesForce.Error));
+            }
 		}
 		private readonly ISalesForceAppClient salesForce;
 		private readonly int? customerID;

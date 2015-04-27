@@ -5,6 +5,16 @@
 
 	public class FakeApiClient : ISalesForceAppClient
     {
+        public string Error { get; set; }
+
+	    public bool HasError {
+	        get {
+	            return false;
+	        }
+	    }
+
+	    public string Model { get; set; }
+
 		public FakeApiClient(string userName, string password, string token, string environment) {
 			api = new Api();
 		}

@@ -6,9 +6,20 @@
     using SalesForceLib.SalesForceServiceNS;
 
     public class SalesForceApiClient : ISalesForceAppClient {
+        public string Error { get; set; }
+
+        public bool HasError {
+            get {
+                return !string.IsNullOrEmpty(Error);
+            }
+        }
+
+        public string Model { get; set; }
+
         public SalesForceApiClient(string userName, string password, string token, string environment) {
             this.api = new EzbobWebServicesPortTypeClient("EzbobWebServices" + environment);
             this.partnersClient = new SoapClient("PartnersServices" + environment);
+            Error = string.Empty;
             Login(userName, password, token);
         }
 
@@ -23,12 +34,14 @@
                 });
                 this.lr = response.result;
             } catch (Exception ex) {
-                this.Log.ErrorFormat("Failed to login to sales force partners server \n{0}", ex);
+                Error = string.Format("Failed to login to sales force partners server \n{0}", ex);
+                this.Log.Error(Error);
                 return;
             }
 
             if (this.lr != null && this.lr.passwordExpired) {
-                this.Log.Error("Sales Force: Your password is expired.");
+                Error = "Sales Force: Your password is expired.";
+                this.Log.Error(Error);
             }
         }
 
@@ -208,6 +221,8 @@
             var res = result.JsonStringToObject<ApiResponse>();
             if (!res.IsSuccess) {
                 this.Log.ErrorFormat("SalesForce {3} failed for customer {0}, request \n{2}\n error: {1}", email, res.Error, request, serviceName);
+                Model = request;
+                Error = res.Error;
             } else {
                 this.Log.InfoFormat("SalesForce {3} success for customer {0}, request \n{2}\n response: {1}", email, result, request, serviceName);
             }

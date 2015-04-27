@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
-	using System.Threading;
+    using System;
+    using System.Threading;
 	using Ezbob.Database;
 	using SalesForceLib;
 	using SalesForceLib.Models;
@@ -37,6 +38,15 @@
 		    model.ContactEmail = model.ContactEmail.ToLower();
 
 			this.salesForce.CreateUpdateContact(model);
+
+            if (this.salesForce.HasError) {
+                DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,
+                    new QueryParameter("Now", DateTime.UtcNow),
+                    new QueryParameter("CustomerID", this.customerID),
+                    new QueryParameter("Type", this.Name),
+                    new QueryParameter("Model", this.salesForce.Model),
+                    new QueryParameter("Error", this.salesForce.Error));
+            }
 		}
 		private readonly ISalesForceAppClient salesForce;
 		private readonly int customerID;

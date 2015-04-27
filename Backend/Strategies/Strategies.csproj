@@ -283,7 +283,7 @@
     <Compile Include="Reports\Alibaba.cs" />
     <Compile Include="SalesForce\AddOpportunity.cs" />
     <Compile Include="SalesForce\UpdateOpportunity.cs" />
-    <Compile Include="SalesForce\AddEvent.cs" />
+    <Compile Include="SalesForce\AddActivity.cs" />
     <Compile Include="SalesForce\AddTask.cs" />
     <Compile Include="SalesForce\AddUpdateContact.cs" />
     <Compile Include="SalesForce\AddUpdateLeadAccount.cs" />
