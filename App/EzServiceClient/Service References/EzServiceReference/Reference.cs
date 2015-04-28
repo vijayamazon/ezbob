@@ -3439,6 +3439,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/WriteToServiceLog", ReplyAction="http://tempuri.org/IEzService/WriteToServiceLogResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> WriteToServiceLogAsync(int customerID, int userID, Ezbob.Backend.ModelsWithDB.WriteToLogPackage.InputData packageInputData);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan", ReplyAction="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoanResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData PayPointAddedWithoutOpenLoan(int customerID, int userID, decimal amount, string paypointTransactionID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan", ReplyAction="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoanResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PayPointAddedWithoutOpenLoanAsync(int customerID, int userID, decimal amount, string paypointTransactionID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts", ReplyAction="http://tempuri.org/IEzService/GetCompanyCaisDataForAlertsResponse")]
         ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId);
         
@@ -4765,6 +4771,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> WriteToServiceLogAsync(int customerID, int userID, Ezbob.Backend.ModelsWithDB.WriteToLogPackage.InputData packageInputData) {
             return base.Channel.WriteToServiceLogAsync(customerID, userID, packageInputData);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData PayPointAddedWithoutOpenLoan(int customerID, int userID, decimal amount, string paypointTransactionID) {
+            return base.Channel.PayPointAddedWithoutOpenLoan(customerID, userID, amount, paypointTransactionID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> PayPointAddedWithoutOpenLoanAsync(int customerID, int userID, decimal amount, string paypointTransactionID) {
+            return base.Channel.PayPointAddedWithoutOpenLoanAsync(customerID, userID, amount, paypointTransactionID);
         }
         
         public ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult GetCompanyCaisDataForAlerts(int underwriterId, int customerId) {

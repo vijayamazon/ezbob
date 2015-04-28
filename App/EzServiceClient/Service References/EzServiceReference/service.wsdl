@@ -322,6 +322,12 @@
   <wsdl:message name="IEzService_WriteToServiceLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToServiceLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoan" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoanResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyCaisDataForAlerts_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyCaisDataForAlerts" />
   </wsdl:message>
@@ -1501,6 +1507,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLog" message="tns:IEzService_WriteToServiceLog_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLogResponse" message="tns:IEzService_WriteToServiceLog_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" message="tns:IEzService_PayPointAddedWithoutOpenLoan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoanResponse" message="tns:IEzService_PayPointAddedWithoutOpenLoan_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="GetCompanyCaisDataForAlerts">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts" message="tns:IEzService_GetCompanyCaisDataForAlerts_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlertsResponse" message="tns:IEzService_GetCompanyCaisDataForAlerts_OutputMessage" />
@@ -2535,6 +2545,15 @@
     </wsdl:operation>
     <wsdl:operation name="WriteToServiceLog">
       <soap12:operation soapAction="http://tempuri.org/IEzService/WriteToServiceLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

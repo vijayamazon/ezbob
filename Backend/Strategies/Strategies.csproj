@@ -135,6 +135,7 @@
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
+    <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />

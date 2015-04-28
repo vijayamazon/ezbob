@@ -794,5 +794,11 @@ namespace EzBobTest {
 				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init().MakeAndVerifyDecision();
 			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 		}
+
+        [Test]
+        public void TestPPNoLoan() {
+            PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
+            p.Execute();
+        }
 	}
 }
