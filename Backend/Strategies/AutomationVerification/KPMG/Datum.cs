@@ -31,6 +31,8 @@
 			Add(sr);
 		} // constructor
 
+		public int ItemCount { get { return ManualItems.Count; } } // ItemCount
+
 		public void Add(SpLoadCashRequestsForAutomationReport.ResultRow sr) {
 			if (ManualItems.Count > 0) {
 				if ((FirstManual.CustomerID != sr.CustomerID) || (FirstManual.IsApproved != sr.IsApproved)) {

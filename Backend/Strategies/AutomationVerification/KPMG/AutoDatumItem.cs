@@ -96,6 +96,9 @@
 
 		public bool IsAutoRejected { get; private set; }
 
+		public bool IsAutoReRejected { get; private set; }
+		public bool IsAutoReApproved { get; private set; }
+
 		public decimal OutstandingPrincipalOnDecisionDate { get; private set; }
 
 		public static new string CsvTitles(string prefix) {
@@ -166,7 +169,37 @@
 			RunAutoApprove(atra);
 
 			atra.AutomationDecision = AutomationDecision;
+
+			RunAutoRerejection();
+			RunAutoReapproval();
 		} // RunAutomation
+
+		private void RunAutoRerejection() {
+			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
+				CustomerID,
+				DecisionTime,
+				this.db,
+				Log
+			).Init();
+
+			agent.MakeDecision();
+
+			agent.Trail.Save(this.db, null, CashRequestID, Tag);
+
+			IsAutoReRejected = agent.Trail.HasDecided;
+		} // RunAutoRerejection
+
+		private void RunAutoReapproval() {
+			var agent = new
+				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
+				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, DecisionTime, this.db, Log);
+
+			agent.Init();
+
+			agent.Decide(true, CashRequestID, Tag);
+
+			IsAutoReApproved = agent.Trail.HasDecided;
+		} // RunAutoReapproval
 
 		private void RunAutoReject(AutomationTrails atra) {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =

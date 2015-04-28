@@ -81,7 +81,7 @@
 			this.excelGenerator.Run();
 		} // Execute
 
-		public virtual ExcelPackage Xlsx { get { return excelGenerator.Xlsx; } }
+		public virtual ExcelPackage Xlsx { get { return this.excelGenerator.Xlsx; } }
 
 		protected virtual List<int> RequestedCustomers { get { return this.spLoad.RequestedCustomers; } } // CustomerID
 

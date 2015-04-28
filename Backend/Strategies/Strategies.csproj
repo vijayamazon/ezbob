@@ -98,6 +98,7 @@
     <Compile Include="AutomationVerification\KPMG\AutomationTrails.cs" />
     <Compile Include="AutomationVerification\KPMG\Excel\ExcelGenerator.cs" />
     <Compile Include="AutomationVerification\KPMG\Excel\SheetDDD.cs" />
+    <Compile Include="AutomationVerification\KPMG\Excel\SheetRawAutomation.cs" />
     <Compile Include="AutomationVerification\KPMG\InterestRateSheetSectionConfiguration.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanCount.cs" />
     <Compile Include="AutomationVerification\KPMG\LoanMetaData.cs" />
