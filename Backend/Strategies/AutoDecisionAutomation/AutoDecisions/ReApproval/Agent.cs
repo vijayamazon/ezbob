@@ -222,7 +222,7 @@
 		} // RunSecondary
 
 		private void CheckComplete() {
-			if (ApprovedAmount > Trail.MyInputData.MinLoan)
+			if (ApprovedAmount >= Trail.MyInputData.MinLoan)
 				StepDone<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);
 			else
 				StepFailed<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);

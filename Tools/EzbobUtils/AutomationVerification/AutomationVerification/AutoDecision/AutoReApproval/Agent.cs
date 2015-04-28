@@ -72,7 +72,7 @@
 				SetApprovedAmount((int)data.ReApproveAmount);
 				CheckAvailableFunds();
 
-				if (this.m_nApprovedAmount > Trail.MyInputData.MinLoan) {
+				if (this.m_nApprovedAmount >= Trail.MyInputData.MinLoan) {
 					StepDone<Complete>()
 						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan);
 				} else {
