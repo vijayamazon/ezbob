@@ -23,12 +23,12 @@
                     <div class="control-group">
                         <label for="loan-type" class="control-label">Loan Source:</label>
                         <div class="controls">
-                            <select id="loan-source" name="loan-source" class="valid form-control selectheight">
-                                <% _.each(AllLoanSources, function(loanSource) {
-                                var selected = (loanSource.Id == LoanSource) ? "selected='selected'" : ""; %>
-                                <option <%= selected  %> value="<%=loanSource.Id%>"><%=loanSource.Name%></option>
-                                <%});%>
-                            </select>
+							<select id="loan-source" name="loan-source" class="valid form-control selectheight">
+								<% _.each(AllLoanSources, function(loanSource) {
+								var selected = (loanSource.Id == LoanSource.Id) ? "selected='selected'" : ""; %>
+								<option <%= selected  %> value="<%=loanSource.Id%>"><%=loanSource.Name%></option>
+								<%});%>
+							</select>
                         </div>
                     </div>
 

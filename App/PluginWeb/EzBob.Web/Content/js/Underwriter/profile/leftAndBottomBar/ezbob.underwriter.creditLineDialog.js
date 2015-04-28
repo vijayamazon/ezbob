@@ -94,7 +94,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		return {
 			id: m.CashRequestId,
 			loanType: m.LoanTypeId,
-			loanSource: m.LoanSourceId,
+			loanSource: m.LoanSource.Id,
 			discountPlan: m.DiscountPlanId,
 			amount: m.amount,
 			interestRate: m.InterestRate,
