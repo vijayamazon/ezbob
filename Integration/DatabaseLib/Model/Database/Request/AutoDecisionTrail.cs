@@ -20,6 +20,7 @@
         public virtual string DecisionName { get; set; }
         public virtual string InputData { get; set; }
         public virtual string DecisionStatus { get; set; }
+        public virtual string TrailTag { get; set; }
         public virtual Iesi.Collections.Generic.ISet<AutoDecisionTrace> Traces { get; set; }
     }
 
@@ -35,6 +36,7 @@
             Map(x => x.DecisionTime).CustomType<UtcDateTimeType>(); ;
             Map(x => x.InputData);
             Map(x => x.DecisionStatus);
+            Map(x => x.TrailTag);
 
             HasMany(x => x.Traces)
                 .KeyColumn("TrailID")

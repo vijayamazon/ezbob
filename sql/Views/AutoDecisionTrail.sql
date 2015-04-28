@@ -16,9 +16,11 @@ CREATE VIEW AutoDecisionTrail AS
 		   dtl.DecisionTime, 
 		   d.DecisionName,
 		   dtl.InputData,
-		   ds.DecisionStatus
+		   ds.DecisionStatus,
+		   dtt.TrailTag
 	FROM DecisionTrail dtl
 	LEFT JOIN Decisions d ON d.DecisionID = dtl.DecisionID
 	LEFT JOIN DecisionStatuses ds ON ds.DecisionStatusID = dtl.DecisionStatusID
+	LEFT JOIN DecisionTrailTags dtt ON dtt.TrailTagID = dtl.TrailTagID 
 	WHERE dtl.IsPrimary=1
 GO
