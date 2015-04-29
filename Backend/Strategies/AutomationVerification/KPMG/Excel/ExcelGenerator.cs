@@ -40,7 +40,7 @@
 			var interestRateSheet = new SheetInterestRate(Xlsx, this.scenarioNames);
 			var automationTrailsSheet = new SheetAutomationTrails(Xlsx, this.automationTrails);
 			var dddSheet = new SheetDDD(Xlsx, DecisionsSheetName, this.autoDecisionNames, this.manualDecisionNames);
-			var rawAutomationSheet = new SheetRawAutomation(Xlsx, this.data);
+			var rawAutomationSheet = new SheetRawAutomation(Xlsx, this.data, this.automationTrails);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
 			// At this point all the sheets have been created.

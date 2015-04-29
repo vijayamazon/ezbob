@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG.Excel {
 	using System.Collections.Generic;
+	using AutomationCalculator.ProcessHistory.Trails;
 	using DbConstants;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
@@ -7,7 +8,11 @@
 	using OfficeOpenXml;
 
 	internal class SheetRawAutomation {
-		public SheetRawAutomation(ExcelPackage workbook, List<Datum> data) {
+		public SheetRawAutomation(
+			ExcelPackage workbook,
+			List<Datum> data,
+			SortedDictionary<long, AutomationTrails> automationTrails
+		) {
 			this.sheet = workbook.CreateSheet(
 				"Raw automation",
 				false,
@@ -17,9 +22,11 @@
 				"Auto re-reject",
 				"Auto reject",
 				"Auto re-approve",
-				"Auto approve"
+				"Auto approve",
+				"Approval trail ID"
 			);
 
+			this.automationTrails = automationTrails;
 			this.data = data;
 			this.log = Library.Instance.Log;
 		} // constructor
@@ -47,6 +54,8 @@
 					else if (auto.IsApproved)
 						autoDecision = DecisionActions.Approve;
 
+					ApprovalTrail approvalTrail = this.automationTrails[manual.CashRequestID].Approval;
+
 					column = this.sheet.SetCellValue(row, column, manual.CashRequestID);
 					column = this.sheet.SetCellValue(row, column, manual.DecisionStr);
 					column = this.sheet.SetCellValue(row, column, autoDecision.ToString());
@@ -54,6 +63,7 @@
 					column = this.sheet.SetCellValue(row, column, auto.IsAutoRejected ? DecisionActions.Reject.ToString() : "No");
 					column = this.sheet.SetCellValue(row, column, auto.IsAutoReApproved ? DecisionActions.ReApprove.ToString() : "No");
 					column = this.sheet.SetCellValue(row, column, auto.IsApproved ? DecisionActions.Approve.ToString() : "No");
+					column = this.sheet.SetCellValue(row, column, approvalTrail.UniqueID.ToString());
 
 					row++;
 
@@ -69,5 +79,6 @@
 		private readonly ExcelWorksheet sheet;
 		private readonly List<Datum> data;
 		private readonly ASafeLog log;
+		private readonly SortedDictionary<long, AutomationTrails> automationTrails;
 	} // class SheetRawAutomation
 } // namespace
