@@ -90,9 +90,9 @@
 
 			interestRateSheet.Create(lastDecisionRow);
 
-			dddSheet.Generate(lastDecisionRow);
+			int lastRawAutomationRow = rawAutomationSheet.Generate();
 
-			rawAutomationSheet.Generate();
+			dddSheet.Generate(lastDecisionRow, lastRawAutomationRow);
 
 			// Currently (Apr 21 2015) the last column is CG in Decisions, so 128 should be good enough.
 			Xlsx.AutoFitColumns(128);

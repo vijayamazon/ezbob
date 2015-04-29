@@ -24,7 +24,7 @@
 			this.log = Library.Instance.Log;
 		} // constructor
 
-		public void Generate() {
+		public int Generate() {
 			int row = 2;
 
 			var pc = new ProgressCounter("{0} rows sent to Raw automation sheet.", this.log, 50);
@@ -62,6 +62,8 @@
 			} // for each datum (i.e. aggregated decision)
 
 			pc.Log();
+
+			return row;
 		} // Generate
 
 		private readonly ExcelWorksheet sheet;

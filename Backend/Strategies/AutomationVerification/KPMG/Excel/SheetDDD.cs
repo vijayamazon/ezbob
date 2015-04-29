@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification.KPMG.Excel {
 	using System.Collections.Generic;
 	using System.Drawing;
+	using DbConstants;
 	using Ezbob.Backend.Strategies.Tasks.StatsForWeeklyMaamMedalAndPricing;
 	using Ezbob.ExcelExt;
 	using OfficeOpenXml;
@@ -19,15 +20,80 @@
 			this.manualDecisionNames = manualDecisionNames;
 		} // constructor
 
-		public void Generate(int lastRawRow) {
-			AStatItem.SetBorders(this.sheet.Cells[1, 1]).SetCellValue(
+		public void Generate(int lastDecisionRow, int lastRawAutomationRow) {
+			int row = GenerateNewOldCustomersStats(1, lastDecisionRow);
+			GenerateRawAutomationStats(row + 1, lastRawAutomationRow);
+		} // Generate
+
+		private void GenerateRawAutomationStats(int row, int lastRawAutomationRow) {
+			int column = 1;
+
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("All cash requests", true, false, oBgColour: Color.Yellow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Live", true, false, oBgColour: Color.Yellow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Count", true, false, oBgColour: Color.Yellow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Total count", true, false, oBgColour: Color.Yellow);
+			column = AStatItem.SetBorders(this.sheet.Cells[row, column]).SetCellValue("Ratio", true, false, oBgColour: Color.Yellow);
+
+			row++;
+
+			var lst = new List<List<CellCfg>>(); 
+
+			int firstRow = row;
+
+			List<CellCfg> thisRow;
+
+			foreach (KeyValuePair<DecisionActions, int> pair in liveValues) {
+				column = 0;
+
+				thisRow = new List<CellCfg> {
+					new CellCfg(this.sheet, row, ++column, pair.Key.ToString(), null),
+					new CellCfg(this.sheet, row, ++column, "=" + pair.Value, TitledValue.Format.Int, true, fgColour: Color.Gray),
+					new CellCfg(this.sheet, row, ++column, "=COUNTIF('Raw automation'!$C$2:$C$" + lastRawAutomationRow + ", A" + row + ")", TitledValue.Format.Int, fgColour: Color.DodgerBlue),
+					new CellCfg(this.sheet, row, ++column, "=B" + row + "+C" + row, TitledValue.Format.Int, true, fgColour: Color.Red),
+					new CellCfg(this.sheet, row, ++column, "=IF(D" + CellCfg.AutoTotalRow + "=0,0,D" + row + "/D" + CellCfg.AutoTotalRow + ")", TitledValue.Format.Percent),
+				};
+
+				lst.Add(thisRow);
+
+				row++;
+			} // for each
+
+			int totalRow = row;
+
+			column = 0;
+
+			thisRow = new List<CellCfg> {
+				new CellCfg(this.sheet, row, ++column, "Total", null, true, Color.Bisque),
+				new CellCfg(this.sheet, row, ++column, "=SUM(B" + firstRow + ":B" + (totalRow - 1) + ")", TitledValue.Format.Int, true, Color.Bisque),
+				new CellCfg(this.sheet, row, ++column, "=SUM(C" + firstRow + ":C" + (totalRow - 1) + ")", TitledValue.Format.Int, true, Color.Bisque),
+				new CellCfg(this.sheet, row, ++column, "=SUM(D" + firstRow + ":D" + (totalRow - 1) + ")", TitledValue.Format.Int, true, Color.Bisque),
+				new CellCfg(this.sheet, row, ++column, "=IF(D" + totalRow + "=0,0,D" + row + "/D" + totalRow + ")", TitledValue.Format.Percent, true, Color.Bisque),
+			};
+
+			lst.Add(thisRow);
+
+			foreach (List<CellCfg> rowData in lst)
+				foreach (CellCfg cell in rowData)
+					cell.Fill(0, totalRow, 0, 0);
+		} // GenerateRawAutomationStats
+
+		private static readonly Dictionary<DecisionActions, int> liveValues = new Dictionary<DecisionActions, int> {
+			{ DecisionActions.ReReject, 783 },
+			{ DecisionActions.Reject, 2968 },
+			{ DecisionActions.ReApprove, 724 },
+			{ DecisionActions.Approve, -711 },
+			{ DecisionActions.Waiting, 0 },
+		};
+
+		private int GenerateNewOldCustomersStats(int row, int lastRawRow) {
+			AStatItem.SetBorders(this.sheet.Cells[row, 1]).SetCellValue(
 				"Customers",
 				bSetZebra: false,
 				bIsBold: true,
 				oBgColour: Color.Yellow
 			);
 
-			ExcelRange range = AStatItem.SetBorders(this.sheet.Cells[1, 2, 1, 3]);
+			ExcelRange range = AStatItem.SetBorders(this.sheet.Cells[row, 2, row, 5]);
 			range.SetCellValue("New");
 			range.Merge = true;
 			range.Style.Font.Bold = true;
@@ -35,7 +101,7 @@
 			range.Style.Fill.PatternType = ExcelFillStyle.Solid;
 			range.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
 
-			range = AStatItem.SetBorders(this.sheet.Cells[1, 4, 1, 5]);
+			range = AStatItem.SetBorders(this.sheet.Cells[row, 6, row, 9]);
 			range.SetCellValue("Returning");
 			range.Merge = true;
 			range.Style.Font.Bold = true;
@@ -43,7 +109,7 @@
 			range.Style.Fill.PatternType = ExcelFillStyle.Solid;
 			range.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
 
-			range = AStatItem.SetBorders(this.sheet.Cells[1, 6, 1, 7]);
+			range = AStatItem.SetBorders(this.sheet.Cells[row, 10, row, 13]);
 			range.SetCellValue("Total");
 			range.Merge = true;
 			range.Style.Font.Bold = true;
@@ -51,7 +117,8 @@
 			range.Style.Fill.PatternType = ExcelFillStyle.Solid;
 			range.Style.Fill.BackgroundColor.SetColor(Color.Yellow);
 
-			int row = 2;
+			row++;
+
 			var cells = new List<List<CellCfg>>();
 
 			row = CreateAutoPatterns(row, lastRawRow, cells);
@@ -67,9 +134,13 @@
 					);
 				} // for each cell
 			} // for each row
-		} // Generate
+
+			return row;
+		} // GenerateNewOldCustomersStats
 
 		private int CreateAutoPatterns(int row, int lastRawRow, List<List<CellCfg>> cells) {
+			int col;
+
 			cells.Add(CreateSectionTitle(row, "Auto decisions"));
 			row++;
 
@@ -81,21 +152,44 @@
 				string count = CountFormulaPattern
 					.Replace(SheetName, this.decisionSheetName)
 					.Replace(LastRawRow, lastRawRow.ToString())
-					.Replace(DecisionColumn, "Q")
+					.Replace(DecisionColumn, AutoDecisionColumn)
 					.Replace(CurrentRow, row.ToString());
+
+				string sum = decision == "Approve"
+					? SumFormulaPattern
+						.Replace(SheetName, this.decisionSheetName)
+						.Replace(LastRawRow, lastRawRow.ToString())
+						.Replace(DecisionColumn, AutoDecisionColumn)
+						.Replace(CurrentRow, row.ToString())
+					: string.Empty;
+
+				string totalSum = decision == "Approve"
+					? TotalSumFormulaPattern.Replace(CurrentRow, row.ToString())
+					: string.Empty;
 
 				string ratio = RatioFormulaPattern
 					.Replace(TotalRow, CellCfg.AutoTotalRow)
 					.Replace(CurrentRow, row.ToString());
 
+				col = 0;
+
 				thisRow = new List<CellCfg> {
-					new CellCfg(this.sheet, row, 1, decision, null),
-					new CellCfg(this.sheet, row, 2, count.Replace(IsNew, "TRUE"), TitledValue.Format.Int),
-					new CellCfg(this.sheet, row, 3, ratio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent),
-					new CellCfg(this.sheet, row, 4, count.Replace(IsNew, "FALSE"), TitledValue.Format.Int),
-					new CellCfg(this.sheet, row, 5, ratio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent),
-					new CellCfg(this.sheet, row, 6, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int),
-					new CellCfg(this.sheet, row, 7, ratio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, decision, null),
+
+					new CellCfg(this.sheet, row, ++col, count.Replace(IsNew, NewCustomer), TitledValue.Format.Int),
+					new CellCfg(this.sheet, row, ++col, ratio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, sum.Replace(IsNew, NewCustomer).Replace(AmountColumn, MinOfferAmountColumn), TitledValue.Format.Money),
+					new CellCfg(this.sheet, row, ++col, sum.Replace(IsNew, NewCustomer).Replace(AmountColumn, MaxOfferAmountColumn), TitledValue.Format.Money),
+
+					new CellCfg(this.sheet, row, ++col, count.Replace(IsNew, OldCustomer), TitledValue.Format.Int),
+					new CellCfg(this.sheet, row, ++col, ratio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, sum.Replace(IsNew, OldCustomer).Replace(AmountColumn, MinOfferAmountColumn), TitledValue.Format.Money),
+					new CellCfg(this.sheet, row, ++col, sum.Replace(IsNew, OldCustomer).Replace(AmountColumn, MaxOfferAmountColumn), TitledValue.Format.Money),
+
+					new CellCfg(this.sheet, row, ++col, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int),
+					new CellCfg(this.sheet, row, ++col, ratio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, totalSum.Replace(MinOfferColumn, NewCustomerMinOfferColumn).Replace(MaxOfferColumn, NewCustomerMaxOfferColumn), TitledValue.Format.Money),
+					new CellCfg(this.sheet, row, ++col, totalSum.Replace(MinOfferColumn, OldCustomerMinOfferColumn).Replace(MaxOfferColumn, OldCustomerMaxOfferColumn), TitledValue.Format.Money),
 				};
 
 				cells.Add(thisRow);
@@ -113,14 +207,25 @@
 				.Replace(TotalRow, CellCfg.AutoTotalRow)
 				.Replace(CurrentRow, row.ToString());
 
+			col = 0;
+
 			thisRow = new List<CellCfg> {
-				new CellCfg(this.sheet, row, 1, "Total", null, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 2, totalCount.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 3, totalRatio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 4, totalCount.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 5, totalRatio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 6, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 7, totalRatio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, "Total", null, true, Color.AntiqueWhite),
+
+				new CellCfg(this.sheet, row, ++col, totalCount.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, totalRatio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+
+				new CellCfg(this.sheet, row, ++col, totalCount.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, totalRatio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+
+				new CellCfg(this.sheet, row, ++col, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, totalRatio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
 			};
 
 			cells.Add(thisRow);
@@ -129,6 +234,8 @@
 		} // CreateAutoPatterns
 
 		private int CreateManualPatterns(int row, int lastRawRow, List<List<CellCfg>> cells) {
+			int col;
+
 			cells.Add(CreateSectionTitle(row, "Manual decisions"));
 			row++;
 
@@ -147,14 +254,25 @@
 					.Replace(TotalRow, CellCfg.ManualTotalRow)
 					.Replace(CurrentRow, row.ToString());
 
+				col = 0;
+
 				thisRow = new List<CellCfg> {
-					new CellCfg(this.sheet, row, 1, decision, null),
-					new CellCfg(this.sheet, row, 2, count.Replace(IsNew, "TRUE"), TitledValue.Format.Int),
-					new CellCfg(this.sheet, row, 3, ratio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent),
-					new CellCfg(this.sheet, row, 4, count.Replace(IsNew, "FALSE"), TitledValue.Format.Int),
-					new CellCfg(this.sheet, row, 5, ratio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent),
-					new CellCfg(this.sheet, row, 6, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int),
-					new CellCfg(this.sheet, row, 7, ratio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, decision, null),
+
+					new CellCfg(this.sheet, row, ++col, count.Replace(IsNew, NewCustomer), TitledValue.Format.Int),
+					new CellCfg(this.sheet, row, ++col, ratio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, null, null),
+					new CellCfg(this.sheet, row, ++col, null, null),
+
+					new CellCfg(this.sheet, row, ++col, count.Replace(IsNew, OldCustomer), TitledValue.Format.Int),
+					new CellCfg(this.sheet, row, ++col, ratio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, null, null),
+					new CellCfg(this.sheet, row, ++col, null, null),
+
+					new CellCfg(this.sheet, row, ++col, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int),
+					new CellCfg(this.sheet, row, ++col, ratio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent),
+					new CellCfg(this.sheet, row, ++col, null, null),
+					new CellCfg(this.sheet, row, ++col, null, null),
 				};
 
 				cells.Add(thisRow);
@@ -172,14 +290,25 @@
 				.Replace(TotalRow, CellCfg.ManualTotalRow)
 				.Replace(CurrentRow, row.ToString());
 
+			col = 0;
+
 			thisRow = new List<CellCfg> {
-				new CellCfg(this.sheet, row, 1, "Total", null, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 2, totalCount.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 3, totalRatio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 4, totalCount.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 5, totalRatio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 6, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int, true, Color.AntiqueWhite),
-				new CellCfg(this.sheet, row, 7, totalRatio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, "Total", null, true, Color.AntiqueWhite),
+
+				new CellCfg(this.sheet, row, ++col, totalCount.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, totalRatio.Replace(DataColumn, NewCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+
+				new CellCfg(this.sheet, row, ++col, totalCount.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Int, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, totalRatio.Replace(DataColumn, OldCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+
+				new CellCfg(this.sheet, row, ++col, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, totalRatio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
+				new CellCfg(this.sheet, row, ++col, null, null, true, Color.AntiqueWhite),
 			};
 
 			cells.Add(thisRow);
@@ -195,8 +324,10 @@
 			const int column = 2;
 
 			for (int i = 0; i < 3; i++) {
-				thisRow.Add(new CellCfg(this.sheet, row, column + i * 2,     "Count", null, true, Color.Bisque));
-				thisRow.Add(new CellCfg(this.sheet, row, column + i * 2 + 1, "Ratio", null, true, Color.Bisque));
+				thisRow.Add(new CellCfg(this.sheet, row, column + i * 4,     "Count",     null, true, Color.Bisque));
+				thisRow.Add(new CellCfg(this.sheet, row, column + i * 4 + 1, "Ratio",     null, true, Color.Bisque));
+				thisRow.Add(new CellCfg(this.sheet, row, column + i * 4 + 2, "Min offer", null, true, Color.Bisque));
+				thisRow.Add(new CellCfg(this.sheet, row, column + i * 4 + 3, "Max offer", null, true, Color.Bisque));
 			} // for
 
 			return thisRow;
@@ -212,8 +343,19 @@
 		private const string DecisionColumn = "__DECISION_COLUMN__";
 		private const string SheetName = "__SHEET_NAME__";
 		private const string IsNew = "__IS_NEW__";
+		private const string AmountColumn = "__AMOUNT_COLUMN__";
+		private const string MinOfferColumn = "__MIN_OFFER_COLUMN__";
+		private const string MaxOfferColumn = "__MAX_OFFER_COLUMN__";
 
 		private const string CountFormulaPattern = "=COUNTIFS(" +
+			SheetName + "!$CJ$2:$CJ$" + LastRawRow + "," +
+			IsNew + "," +
+			SheetName + "!$" + DecisionColumn + "$2:$" + DecisionColumn + "$" + LastRawRow +
+			",$A$" + CurrentRow +
+		")";
+
+		private const string SumFormulaPattern = "=SUMIFS(" +
+			SheetName + "!$" + AmountColumn + "$2:$" + AmountColumn + "$" + LastRawRow + "," +
 			SheetName + "!$CJ$2:$CJ$" + LastRawRow + "," +
 			IsNew + "," +
 			SheetName + "!$" + DecisionColumn + "$2:$" + DecisionColumn + "$" + LastRawRow +
@@ -229,11 +371,24 @@
 			"=SUM(" + DataColumn + FirstRow + ":" + DataColumn + LastRow + ")";
 
 		private const string NewCustomerColumn = "B";
-		private const string OldCustomerColumn = "D";
-		private const string TotalCustomerColumn = "F";
+		private const string NewCustomerMinOfferColumn = "D";
+		private const string NewCustomerMaxOfferColumn = "E";
+		private const string OldCustomerColumn = "F";
+		private const string OldCustomerMinOfferColumn = "H";
+		private const string OldCustomerMaxOfferColumn = "I";
+		private const string TotalCustomerColumn = "J";
+
+		private const string AutoDecisionColumn = "Q";
+		private const string MinOfferAmountColumn = "BE";
+		private const string MaxOfferAmountColumn = "BP";
+
+		private const string NewCustomer = "TRUE";
+		private const string OldCustomer = "FALSE";
 
 		private const string TotalColumnCountFormulaPattern =
 			"=" + NewCustomerColumn + CurrentRow + "+" + OldCustomerColumn + CurrentRow;
+
+		private const string TotalSumFormulaPattern = "=" + MinOfferColumn + CurrentRow + "+" + MaxOfferColumn + CurrentRow;
 
 		private const string RatioFormulaPattern = "=IF(" +
 			"$" + DataColumn + "$" + TotalRow + "=0,0," +
@@ -261,7 +416,8 @@
 				string formula,
 				string format,
 				bool isBold = false,
-				Color? bgColour = null
+				Color? bgColour = null,
+				Color? fgColour = null
 			) {
 				this.sheet = sheet;
 				this.row = row;
@@ -270,6 +426,7 @@
 				this.format = format;
 				this.isBold = isBold;
 				this.bgColour = bgColour;
+				this.fgColour = fgColour;
 			} // constructor
 
 			public void Fill(
@@ -278,7 +435,7 @@
 				int manualFirstRow,
 				int manualTotalRow
 			) {
-				string finalFormula = this.formula
+				string finalFormula = string.IsNullOrWhiteSpace(this.formula) ? string.Empty : this.formula
 					.Replace(AutoFirstRow, autoFirstRow.ToString())
 					.Replace(AutoLastRow, (autoTotalRow - 1).ToString())
 					.Replace(AutoTotalRow, autoTotalRow.ToString())
@@ -288,10 +445,10 @@
 
 				var range = AStatItem.SetBorders(this.sheet.Cells[this.row, this.column]);
 
-				if (this.column % 2 == 0)
+				if ((this.column - 2) % 4 == 0)
 					range.Style.Border.Left.Style = ExcelBorderStyle.Thick;
 
-				range.SetCellValue(null, this.isBold, false, oBgColour: this.bgColour, sNumberFormat: this.format);
+				range.SetCellValue(null, this.isBold, false, this.fgColour, this.bgColour, this.format);
 
 				if (finalFormula.StartsWith("="))
 					range.Formula = finalFormula;
@@ -306,6 +463,7 @@
 			private readonly string format;
 			private readonly bool isBold;
 			private readonly Color? bgColour;
+			private readonly Color? fgColour;
 		} // class CellCfg
 	} // class SheetDDD
 } // namespace

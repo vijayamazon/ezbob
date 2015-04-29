@@ -343,7 +343,7 @@
 
 			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
 			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
-			range.Formula = string.Format("=SUMIFS(Decisions!$CL$2:$CL${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\"<0\")", lastRawRow);
+			range.Formula = string.Format("=-SUMIFS(Decisions!$CL$2:$CL${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CL$2:$CL${0},\"<0\")", lastRawRow);
 
 			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
 			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Int);
@@ -351,7 +351,7 @@
 
 			range = AStatItem.SetBorders(this.sheet.Cells[row, column]);
 			column = range.SetCellValue(null, bSetZebra: false, sNumberFormat: TitledValue.Format.Money);
-			range.Formula = string.Format("=SUMIFS(Decisions!$CM$2:$CM${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\"<0\")", lastRawRow);
+			range.Formula = string.Format("=-SUMIFS(Decisions!$CM$2:$CM${0},Decisions!$D$2:$D${0},\"Default\",Decisions!$CM$2:$CM${0},\"<0\")", lastRawRow);
 
 			row++;
 
