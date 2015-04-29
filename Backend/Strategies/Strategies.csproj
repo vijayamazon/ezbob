@@ -97,6 +97,7 @@
     <Compile Include="AutomationVerification\KPMG\Datum.cs" />
     <Compile Include="AutomationVerification\KPMG\AutomationTrails.cs" />
     <Compile Include="AutomationVerification\KPMG\Excel\ExcelGenerator.cs" />
+    <Compile Include="AutomationVerification\KPMG\Excel\SheetApproveFailGroups.cs" />
     <Compile Include="AutomationVerification\KPMG\Excel\SheetDDD.cs" />
     <Compile Include="AutomationVerification\KPMG\Excel\SheetRawAutomation.cs" />
     <Compile Include="AutomationVerification\KPMG\InterestRateSheetSectionConfiguration.cs" />

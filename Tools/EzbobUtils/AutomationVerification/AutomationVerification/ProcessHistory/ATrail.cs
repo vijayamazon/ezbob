@@ -86,6 +86,12 @@
 			return Add<T>(DecisionStatus.Dunno, false);
 		} // Dunno
 
+		public virtual IEnumerable<string> NonAffirmativeTraces() {
+			foreach (ATrace trace in m_oSteps)
+				if (trace.DecisionStatus != DecisionStatus.Affirmative)
+					yield return trace.Name;
+		} // NonAffirmativeTraces
+
 		public override string ToString() {
 			var lst = new List<Tuple<string, string, string, string>>();
 

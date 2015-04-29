@@ -18,7 +18,6 @@
 			bool wrapText = false
 		) {
 			int nRow = oCell.Start.Row;
-			int nColumn = oCell.Start.Column;
 
 			object cellValue = null;
 
@@ -66,9 +65,7 @@
 			if (!string.IsNullOrWhiteSpace(sNumberFormat))
 				oCell.Style.Numberformat.Format = sNumberFormat;
 
-			nColumn++;
-
-			return nColumn;
+			return oCell.Start.Column + 1;
 		} // SetCellValue
 	} // class ExcelRangeExt
 } // namespace

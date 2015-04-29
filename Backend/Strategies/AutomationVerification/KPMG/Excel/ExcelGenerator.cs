@@ -41,6 +41,7 @@
 			var automationTrailsSheet = new SheetAutomationTrails(Xlsx, this.automationTrails);
 			var dddSheet = new SheetDDD(Xlsx, DecisionsSheetName, this.autoDecisionNames, this.manualDecisionNames);
 			var rawAutomationSheet = new SheetRawAutomation(Xlsx, this.data, this.automationTrails);
+			var approveFailGroupsSheet = new SheetApproveFailGroups(Xlsx, rawAutomationSheet);
 			ExcelWorksheet loanIDSheet = Xlsx.CreateSheet("Loan IDs", false);
 
 			// At this point all the sheets have been created.
@@ -93,6 +94,8 @@
 			int lastRawAutomationRow = rawAutomationSheet.Generate();
 
 			dddSheet.Generate(lastDecisionRow, lastRawAutomationRow);
+
+			approveFailGroupsSheet.Generate(lastRawAutomationRow);
 
 			// Currently (Apr 21 2015) the last column is CG in Decisions, so 128 should be good enough.
 			Xlsx.AutoFitColumns(128);
