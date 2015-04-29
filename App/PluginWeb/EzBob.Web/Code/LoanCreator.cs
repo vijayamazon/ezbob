@@ -96,7 +96,7 @@
 					Amount = loan.LoanAmount,
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
 					PostDate = now,
-					Status = isFakeLoanCreate ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
+                    Status = (isFakeLoanCreate || isEverlineRefinance) ? LoanTransactionStatus.Done : LoanTransactionStatus.InProgress,
 					TrackingNumber = ret.TrackingNumber,
 					PacnetStatus = ret.Status,
 					Fees = fee,
