@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xmlrequest>
+  <header>
+    <username>{0}</username>
+    <password>{1}</password>
+    <operation>nonltdcompanysearch</operation>
+    <language>EN</language>
+    <chargereference />
+    <country>UK</country>
+  </header>
+  <body>
+    <companynumber />
+    <name>{2}</name>
+    <namesearchmode>begin</namesearchmode>
+    <address>{3}</address>
+    <addresssearchmode>begin</addresssearchmode>
+    <postcode>{4}</postcode>
+    <telephone />
+    <startposition>1</startposition>
+    <pagesize>25</pagesize>
+  </body>
+</xmlrequest>

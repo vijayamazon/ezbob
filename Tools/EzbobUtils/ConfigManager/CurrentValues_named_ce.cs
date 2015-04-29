@@ -98,6 +98,16 @@
 			get { return this[Variables.ConnectionPoolReuseCount]; }
 		}
 
+        public virtual VariableValue CreditSafeUserName
+        {
+            get { return this[Variables.CreditSafeUserName]; }
+        }
+
+        public virtual VariableValue CreditSafePassword
+        {
+            get { return this[Variables.CreditSafePassword]; }
+        }
+
 		public virtual VariableValue CustomerAnalyticsDefaultHistoryYears {
 			get { return this[Variables.CustomerAnalyticsDefaultHistoryYears]; }
 		}

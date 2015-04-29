@@ -54,7 +54,8 @@
     <Compile Include="CreditSafeLtdResponse.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CreditSafeLtdService.cs" />
+    <Compile Include="CreditSafeNonLtdSearchResponse.cs" />
+    <Compile Include="CreditSafeService.cs" />
     <Compile Include="CreditSafeNonLtdResponse.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service References\CreditSafeServiceReference\Reference.cs">
@@ -71,6 +72,18 @@
     <ProjectReference Include="..\..\Backend\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
       <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>
       <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
+      <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
+      <Name>Barrymore</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\ConfigManager\ConfigManager.csproj">
+      <Project>{7a4121bc-bbde-4ddc-9b6e-29d2b0055f2f}</Project>
+      <Name>ConfigManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Tools\EzbobUtils\DbConnection\DbConnection.csproj">
+      <Project>{270baf49-7f7d-4220-91a2-d8f5bf16b3e4}</Project>
+      <Name>DbConnection</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
@@ -92,7 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Templates\CreditSafeLtdRequestTemplate.xml" />
-    <EmbeddedResource Include="Templates\CreditSafeRequestTemplate.xml" />
     <None Include="Service References\CreditSafeServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -102,6 +114,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CreditSafeServiceReference\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\CreditSafeNonLtdRequestTemplate.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Templates\CreditSafeNonLtdSearchTemplate.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

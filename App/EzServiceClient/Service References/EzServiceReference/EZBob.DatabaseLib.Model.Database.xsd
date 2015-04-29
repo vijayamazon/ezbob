@@ -10,6 +10,8 @@
       <xs:enumeration value="NonLimitedData" />
       <xs:enumeration value="Targeting" />
       <xs:enumeration value="CreditSafeLtd" />
+      <xs:enumeration value="CreditSafeNonLtd" />
+      <xs:enumeration value="CreditSafeNonLtdTargeting" />
       <xs:enumeration value="CallCredit" />
     </xs:restriction>
   </xs:simpleType>

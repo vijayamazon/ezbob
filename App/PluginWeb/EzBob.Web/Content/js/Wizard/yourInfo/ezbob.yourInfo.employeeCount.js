@@ -69,9 +69,16 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 
 		nEmployeeCount = parseInt(nEmployeeCount, 10);
 
-		if (nEmployeeCount < 0) {
+		var maxCount = parseInt(oEmployeeCount.attr('max'), 10);
+		var minCount = parseInt(oEmployeeCount.attr('min'), 10);
+
+		if ((nEmployeeCount < minCount) || (nEmployeeCount > maxCount)) {
+			var msg = (nEmployeeCount < 0)
+				? 'This field cannot contain value less than ' + minCount + '.'
+				: 'This field cannot contain value greater than ' + maxCount + '.';
+
 			oIcons.Count.field_status('set', 'fail');
-			oEmployeeCount.tooltip({ title: 'This field cannot contain negative value.' }).tooltip('enable').tooltip('fixTitle');
+			oEmployeeCount.tooltip({ title: msg }).tooltip('enable').tooltip('fixTitle');
 
 			this.changeValue(oTopCount);
 			this.changeValue(oBottomCount);
@@ -202,7 +209,19 @@ EzBob.EmployeeCountView = Backbone.View.extend({
 		oFieldStatusIcons.filter('.required').field_status({ required: true });
 		oFieldStatusIcons.not('.required').field_status({ required: false });
 
-		this.$el.find('.numeric').numericOnly();
+		this.$el.find('.numeric').each(function() {
+			var ctrl = $(this);
+
+			var maxValue = parseInt(ctrl.attr('max'), 10);
+
+			if (maxValue === 0)
+				ctrl.numericOnly();
+			else {
+				var maxLen = parseInt(Math.log(maxValue) / Math.LN10 + 0.5, 10) + 1;
+				ctrl.attr('maxlength', maxLen).numericOnly(maxLen);
+			} // if
+		});
+
 		this.$el.find('.cashInput').moneyFormat();
 
 		EzBob.UiAction.registerView(this);

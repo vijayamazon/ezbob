@@ -69,12 +69,12 @@ namespace Ezbob.Backend.Strategies.CreditSafe
             } 
         }
 
-     /*   private Tuple<CreditSafeNonLtdResponse, DateTime, string> TestLoad()
-        {
-            var outputRootSerializer = new XmlSerializer(typeof(CreditSafeNonLtdResponse), new XmlRootAttribute("xmlresponse"));
-            var outputRoot = (CreditSafeNonLtdResponse)outputRootSerializer.Deserialize(new StringReader(response));
-            return new Tuple<CreditSafeNonLtdResponse, DateTime, string>(outputRoot, DateTime.UtcNow, "X9999999");
-        }*/
+        //private Tuple<CreditSafeNonLtdResponse, DateTime, string> TestLoad()
+        //{
+        //    var outputRootSerializer = new XmlSerializer(typeof(CreditSafeNonLtdResponse), new XmlRootAttribute("xmlresponse"));
+        //    var outputRoot = (CreditSafeNonLtdResponse)outputRootSerializer.Deserialize(new StringReader(response));
+        //    return new Tuple<CreditSafeNonLtdResponse, DateTime, string>(outputRoot, DateTime.UtcNow, "X9999999");
+        //}
 
         private CreditSafeNonLtdBaseData Parse(Tuple<CreditSafeNonLtdResponse, DateTime, string> oDoc)
         {

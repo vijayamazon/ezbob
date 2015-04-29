@@ -2524,7 +2524,13 @@ namespace ServiceClientProxy.EzServiceReference {
         CreditSafeLtd = 7,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        CallCredit = 8,
+        CreditSafeNonLtd = 8,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CreditSafeNonLtdTargeting = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        CallCredit = 10,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
@@ -3426,6 +3432,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseCreditSafeLtd", ReplyAction="http://tempuri.org/IEzService/ParseCreditSafeLtdResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ParseCreditSafeLtdAsync(int customerID, int userID, long serviceLogID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseCreditSafeNonLtd", ReplyAction="http://tempuri.org/IEzService/ParseCreditSafeNonLtdResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData ParseCreditSafeNonLtd(int customerID, int userID, long serviceLogID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseCreditSafeNonLtd", ReplyAction="http://tempuri.org/IEzService/ParseCreditSafeNonLtdResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ParseCreditSafeNonLtdAsync(int customerID, int userID, long serviceLogID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ExperianTarget", ReplyAction="http://tempuri.org/IEzService/ExperianTargetResponse")]
         ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult ExperianTarget(int customerID, int userID, Ezbob.Backend.Models.ExperianTargetingRequest request);
@@ -4749,6 +4761,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ParseCreditSafeLtdAsync(int customerID, int userID, long serviceLogID) {
             return base.Channel.ParseCreditSafeLtdAsync(customerID, userID, serviceLogID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ParseCreditSafeNonLtd(int customerID, int userID, long serviceLogID) {
+            return base.Channel.ParseCreditSafeNonLtd(customerID, userID, serviceLogID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ParseCreditSafeNonLtdAsync(int customerID, int userID, long serviceLogID) {
+            return base.Channel.ParseCreditSafeNonLtdAsync(customerID, userID, serviceLogID);
         }
         
         public ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult ExperianTarget(int customerID, int userID, Ezbob.Backend.Models.ExperianTargetingRequest request) {

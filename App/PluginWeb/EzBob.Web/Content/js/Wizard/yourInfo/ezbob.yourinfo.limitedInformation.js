@@ -99,7 +99,6 @@ EzBob.LimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             CapitalExpenditure: { required: true, defaultInvalidPounds: true },
             TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
             OverallTurnOver: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 1, autonumericMax: 1000000000 },
-            EmployeeCount: {required: true, numeric: true, min: 0, max: 1000 }
         };
     }, // ownValidationRules
 

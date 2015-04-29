@@ -104,7 +104,7 @@
         [Ignore]
         public void TestSaveToServiceLog()
         {
-            var serviceLogTest = new CreditSafeLtdService();
+            var serviceLogTest = new CreditSafeService();
             serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
             //AConnection oDB=new SqlConnection();
             //EBusinessService ser = new EBusinessService(new SqlConnection());

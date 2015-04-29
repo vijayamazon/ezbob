@@ -3,12 +3,12 @@
   <header>
     <username>{0}</username>
     <password>{1}</password>
-    <operation>GetCompanyInformation</operation>
+    <operation>GetNonLtdCompanyInformation</operation>
     <language>EN</language>
     <chargereference></chargereference>
   </header>
   <body>
-    <package>standard</package>
+    <package>nonltdstandard</package>
     <country>UK</country>
     <companynumber>{2}</companynumber>
   </body>
