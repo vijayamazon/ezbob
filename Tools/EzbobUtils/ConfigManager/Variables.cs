@@ -279,6 +279,7 @@ namespace ConfigManager {
 		LowCreditScore,
 
 		MaamEmailReceiver,
+        MailChimpApiKey,
 		MailSenderEmail,
 		MailSenderName,
 		ManagerMaxLoan,

@@ -3,14 +3,16 @@
 	using System.Xml.Serialization;
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using MailChimp;
 	using MailChimp.Types;
 	using McCampaign = MailChimp.Types.Campaign;
 
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using Microsoft.FSharp.Core;
 
-	public class MailChimpApiControler {
+    public class MailChimpApiControler {
 		public MailChimpApiControler(AConnection oDB, ASafeLog oLog) {
 			string sApikey = System.Configuration.ConfigurationManager.AppSettings["apikey"];
 			m_oMcApi = new MCApi(sApikey, true);
@@ -274,6 +276,20 @@
 				page++;
 			} while (campaigns.Data.Count > 0);
 		} // GetCampaignAnalytics
+
+        public void UnsubscribeFromAllLists(string email) {
+            MCList<string> lists = m_oMcApi.ListsForEmail(email);
+            if(lists != null && lists.Any()){
+                foreach (var list in lists) {
+                    m_oMcApi.ListUnsubscribe(list, email, new FSharpOption<List.UnsubscribeOptions>(new List.UnsubscribeOptions {
+                        DeleteMember = true,
+                        SendGoodby = false,
+                        SendNotify = false
+                    }));
+                }
+            }
+            
+        }
 
 		public List<Subscriber> GetTestSubscriberList() {
 			return GetTestSubscriberListFor(
