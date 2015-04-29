@@ -18,7 +18,7 @@
         } // constructor
 
 		public override string Name {
-			get { return "User login"; }
+			get { return "User disable"; }
 		} // Name
 
 		public override void Execute() {

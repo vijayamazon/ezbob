@@ -801,9 +801,11 @@ namespace EzBobTest {
             PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
             p.Execute();
         }
-        [Test]
-        public void TestUserDisable() {
-            UserDisable ud = new UserDisable(1, "a@b.com", true, false);
-            ud.Execute();
+
+	    [Test]
+	    public void TestUserDisable() {
+	        UserDisable ud = new UserDisable(1, "a@b.com", true, false);
+	        ud.Execute();
+	    }
 	}
 }
