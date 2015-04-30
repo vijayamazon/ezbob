@@ -379,7 +379,7 @@
 		private void CaisStatuses(List<string> oAllowedStatuses) {
 			List<string> diff = Trail.MyInputData.WorstStatusList.Except(oAllowedStatuses).ToList();
 
-			if (diff.Count > 1)
+			if (diff.Count > 0)
 				StepFailed<WorstCaisStatus>().Init(diff, Trail.MyInputData.WorstStatusList, oAllowedStatuses);
 			else
 				StepDone<WorstCaisStatus>().Init(null, Trail.MyInputData.WorstStatusList, oAllowedStatuses);

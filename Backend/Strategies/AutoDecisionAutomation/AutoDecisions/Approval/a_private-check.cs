@@ -444,10 +444,9 @@
 		private void CheckWorstCaisStatus(string allowedStatuses) {
 			List<string> oAllowedStatuses = allowedStatuses.Split(',').ToList();
 
-			List<string> diff = this.consumerCaisDetailWorstStatuses.Except(oAllowedStatuses)
-				.ToList();
+			List<string> diff = this.consumerCaisDetailWorstStatuses.Except(oAllowedStatuses).ToList();
 
-			if (diff.Count > 1)
+			if (diff.Count > 0)
 				StepFailed<WorstCaisStatus>().Init(diff, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
 			else
 				StepDone<WorstCaisStatus>().Init(null, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
