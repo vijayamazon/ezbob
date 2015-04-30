@@ -4,6 +4,8 @@
 	<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
 
 	<base href="https://localhost:44300" />
+    <!-- <base href="https://192.168.120.11"/>
+	<base href="https://app.ezbob.com" /> -->
 
 	<script>
 		function CTIsPlayback() {
@@ -374,26 +376,13 @@
 			</div>
 		</div>
 
-		<footer class="ezbob_footer" style="display: none">
+		<footer>
 			<div id="copyrights">
 				<div class="copyrights-inner">
-					<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br />
-					<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br />
-					Registered Address: 145 – 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br />
-					&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
-				</div>
-			</div>
-		</footer>
-
-		<footer class="everline_footer" style="display: none">
-			<div id="copyrights">
-				<div class="copyrights-inner">
-					<div class="legal-links col">
-						&nbsp;
-						<p class="col">
-							Everline Financial Services Limited<br> Registered Address: Greater London House, Hampstead Road, London, NW1 7EJ
-						</p>
-					</div>
+					<span class=bold></span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br />
+					<span class=bold></span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br />
+					Registered Address: 36 Soho Square, London W1D 3QY<br />
+					&copy;2013 <span class=bold></span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
 				</div>
 			</div>
 		</footer>
@@ -553,23 +542,30 @@
 
 			var controls;
 
+			var displayName;
+
 			switch (origin) {
 			case 'alibaba':
-				controls = '.ezbob_footer, .common-header, #header-alibaba, .ezbob_header, .alibaba-header-placeholder';
+				controls = '.common-header, #header-alibaba, .ezbob_header, .alibaba-header-placeholder';
+				displayName = 'Ezbob';
 				break;
 
 			case 'everline':
-				controls = '.everline_footer, .everline_header, .everline-header-placeholder';
+				controls = '.everline_header, .everline-header-placeholder';
+				displayName = 'Everline';
 				break;
 
 			default:
-				controls = '.ezbob_footer, .common-header, .ezbob_header, .ezbob-header-placeholder';
+				controls = '.common-header, .ezbob_header, .ezbob-header-placeholder';
+				displayName = 'Ezbob';
 				break;
 			}
 
 			$(controls).show();
 
 			$('.main-page').addClass('main-page-' + origin);
+
+			$('span.bold', 'footer').text(displayName);
 
 			onLoad();
 		});
