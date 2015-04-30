@@ -188,8 +188,8 @@
 
 					new CellCfg(this.sheet, row, ++col, TotalColumnCountFormulaPattern.Replace(CurrentRow, row.ToString()), TitledValue.Format.Int),
 					new CellCfg(this.sheet, row, ++col, ratio.Replace(DataColumn, TotalCustomerColumn), TitledValue.Format.Percent),
-					new CellCfg(this.sheet, row, ++col, totalSum.Replace(MinOfferColumn, NewCustomerMinOfferColumn).Replace(MaxOfferColumn, NewCustomerMaxOfferColumn), TitledValue.Format.Money),
-					new CellCfg(this.sheet, row, ++col, totalSum.Replace(MinOfferColumn, OldCustomerMinOfferColumn).Replace(MaxOfferColumn, OldCustomerMaxOfferColumn), TitledValue.Format.Money),
+					new CellCfg(this.sheet, row, ++col, totalSum.Replace(NewCustomerAmountColumn, NewCustomerMinOfferColumn).Replace(OldCustomerAmountColumn, OldCustomerMinOfferColumn), TitledValue.Format.Money),
+					new CellCfg(this.sheet, row, ++col, totalSum.Replace(NewCustomerAmountColumn, NewCustomerMaxOfferColumn).Replace(OldCustomerAmountColumn, OldCustomerMaxOfferColumn), TitledValue.Format.Money),
 				};
 
 				cells.Add(thisRow);
@@ -344,8 +344,8 @@
 		private const string SheetName = "__SHEET_NAME__";
 		private const string IsNew = "__IS_NEW__";
 		private const string AmountColumn = "__AMOUNT_COLUMN__";
-		private const string MinOfferColumn = "__MIN_OFFER_COLUMN__";
-		private const string MaxOfferColumn = "__MAX_OFFER_COLUMN__";
+		private const string NewCustomerAmountColumn = "__NEW_CUSTOMER_AMOUNT__";
+		private const string OldCustomerAmountColumn = "__OLD_CUSTOMER_AMOUNT__";
 
 		private const string CountFormulaPattern = "=COUNTIFS(" +
 			SheetName + "!$CJ$2:$CJ$" + LastRawRow + "," +
@@ -388,7 +388,7 @@
 		private const string TotalColumnCountFormulaPattern =
 			"=" + NewCustomerColumn + CurrentRow + "+" + OldCustomerColumn + CurrentRow;
 
-		private const string TotalSumFormulaPattern = "=" + MinOfferColumn + CurrentRow + "+" + MaxOfferColumn + CurrentRow;
+		private const string TotalSumFormulaPattern = "=" + NewCustomerAmountColumn + CurrentRow + "+" + OldCustomerAmountColumn + CurrentRow;
 
 		private const string RatioFormulaPattern = "=IF(" +
 			"$" + DataColumn + "$" + TotalRow + "=0,0," +
