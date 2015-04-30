@@ -1,46 +1,4 @@
-﻿.dashboard-header {
-    position: relative;
-}
-.dashboard-header:before,.dashboard-header:after {
-  content: "";
-  position: absolute;
-  background-color: #E2E3E5;
-  top: 0;
-  bottom: 0;
-  width: 100%;
-  -webkit-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.35);
-  -moz-box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.35);
-  box-shadow: 0px 1px 0px 0px rgba(0,0,0,0.35);
-}
-
-.dashboard-header:before {
-    right: 100%;
-}
-.dashboard-header:after {
-    left: 100%;
-}
-
-@media screen and (max-width: 1000px){
-  .dashboard-header:before,.dashboard-header:after {
-  content: "";
-  position: absolute;
-  background-color: #E2E3E5;
-  top: 0;
-  bottom: 0;
-  width: inherit;
-}
-.dashboard-header:before {
-    right: 0;
-}
-.dashboard-header:after {
-    left: 0;
-}
-
-}
-
-
-
-.slider-ticks {
+﻿.slider-ticks {
     border-bottom: dotted 1px black;
     margin: 5px 10px 0 10px;
 }
