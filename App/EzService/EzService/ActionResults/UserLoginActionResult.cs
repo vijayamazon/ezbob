@@ -11,5 +11,8 @@
 
 		[DataMember]
 		public string ErrorMessage { get; set; }
+
+		[DataMember]
+		public int OriginID { get; set; }
 	} // class UserLoginActionResult
 } // namespace EzService

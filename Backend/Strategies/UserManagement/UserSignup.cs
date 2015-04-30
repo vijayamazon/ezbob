@@ -77,6 +77,7 @@
 
 					nUserID = sr["UserID"];
 					SessionID = sr["SessionID"];
+					OriginID = sr["OriginID"];
 					return ActionResult.SkipAll;
 				});
 
@@ -109,6 +110,7 @@
 			get { return m_oResult.HasValue ? m_oResult.Value.ToString() : string.Empty; } // get
 		} // Result
 
+		public int OriginID { get; private set; } // OriginID
 		public int SessionID { get; private set; } // SessionID
 
 		private MembershipCreateStatus? m_oResult;
