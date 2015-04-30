@@ -318,7 +318,10 @@
 				AlibabaCreditFacilityTemplate = null,
 			});
 
+			//el: TODO add LoanLegal for offer
+			
 			return Json(new { });
+
 		} // LoanLegalSigned
 
 		[Transactional]
@@ -397,6 +400,8 @@
 				NotInBankruptcy = false,
 				AlibabaCreditFacilityTemplate = template,
 			});
+
+			//el: TODO add LoanLegal for offer
 
 			return Json(new { success = true, error = string.Empty, });
 		} // CreditLineSigned

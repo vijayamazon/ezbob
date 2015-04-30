@@ -33,6 +33,7 @@
         [ValidateJsonAntiForgeryToken]
         [Transactional]
         public JsonResult Calculate(int amount, int loanType, int repaymentPeriod) {
+			// el: slider of offer display (customer app)
             LoanOffer loanOffer = CalculateLoan(amount, loanType, repaymentPeriod);
 
             if (loanOffer == null)

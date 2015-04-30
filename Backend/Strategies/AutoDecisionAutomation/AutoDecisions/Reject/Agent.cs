@@ -20,6 +20,7 @@
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository.Turnover;
+	using NHibernate.Linq;
 	using StructureMap;
 
 	// using Ezbob.Utils.Lingvo;
@@ -56,7 +57,10 @@
 		} // Init
 
 		public virtual bool MakeAndVerifyDecision(string tag = null) {
+			Log.Info("=====================STARTPRIMARY{0}=====================", Args.CustomerID);
 			RunPrimary();
+
+			Log.Info("=====================START SECONDARY{0}=====================", Args.CustomerID);
 
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
 				RunSecondary();
@@ -441,27 +445,18 @@
 				List<FilteredAggregationResult> paypal = new List<FilteredAggregationResult>();
 
 				foreach (var mpType in mpTypes) {
-
 					if (mpType.Key.InternalId.Equals(MpType.Hmrc)) {
 						hmrc.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.Hmrc, calculationTime));
-
-						//	hmrc.ForEach(x => Log.Info(" HMRC: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
-
+		//hmrc.ForEach(x => Log.Info(" HMRC: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
 					} else if (mpType.Key.InternalId.Equals(MpType.Yodlee)) {
 						bank.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.Yodlee, calculationTime));
-
-						//	bank.ForEach(x => Log.Info(" bank: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
-
+		//bank.ForEach(x => Log.Info(" bank: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
 					} else if (mpType.Key.InternalId.Equals(MpType.Ebay)) {
 						ebay.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.Ebay, calculationTime));
-
-						//	ebay.ForEach(x => Log.Info(" ebay: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
-
+		//ebay.ForEach(x => Log.Info(" ebay: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
 					} else if (mpType.Key.InternalId.Equals(MpType.PayPal)) {
 						paypal.AddRange(this.LastUpdedEndHistoryTurnoversByMpType(h, MpType.PayPal, calculationTime));
-
-						//	paypal.ForEach(x => Log.Info(" paypal: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
-
+		//paypal.ForEach(x => Log.Info(" paypal: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
 					} else {
 						// isPayment
 						if (mpType.Key.IsPaymentAccount) {
@@ -472,16 +467,12 @@
 					}
 				}
 
-				//accounting.ForEach(x => Log.Info(" accounting: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
-				//ecommerce.ForEach(x => Log.Info(" ecommerce: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+				//accounting.ForEach(x => Log.Info(" accounting: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
+				//ecommerce.ForEach(x => Log.Info(" ecommerce: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
 
-				DateTime monthStart = new DateTime(calculationTime.Year, calculationTime.Month, 1, 0, 0, 0);
-				DateTime T1 = monthStart.AddMonths(-1);
-				DateTime T3 = monthStart.AddMonths(-3);
-				DateTime T6 = monthStart.AddMonths(-6);
-
-				//	Log.Info("t1: {0}, t3: {1}, t6: {2},", T1, T3, T6);
-
+				const int T1 = 1;
+				const int T3 = 3;
+				const int T6 = 6;
 				decimal[] fillannual = { 0, 0, 0, 0 };
 
 				// annualize and get max
@@ -490,7 +481,6 @@
 				fillannual[2] = this.MaxAnnualizedTurnover(accounting, T1, T3, T6);
 
 				// get all T for pp, evay, other ecommerce
-
 				decimal[] tPaypal = this.CalculateTTurnover(paypal, T1, T3, T6);
 				decimal[] tEbay = this.CalculateTTurnover(ebay, T1, T3, T6);
 				decimal[] tEcommerce = this.CalculateTTurnover(ecommerce, T1, T3, T6);
@@ -503,11 +493,15 @@
 
 				fillannual[3] = annualEcommerce.Max();
 
+				//fillannual.ForEach(c => Log.Info("==>MaxAnnualizedTurnover: {0}", c));
+
 				decimal[] fillquarter = { 0, 0, 0, 0 };
 				fillquarter[0] = this.MaxQuarterTurnover(hmrc, T1, T3);
 				fillquarter[1] = this.MaxQuarterTurnover(bank, T1, T3);
 				fillquarter[2] = this.MaxQuarterTurnover(accounting, T1, T3);
 				fillquarter[3] = this.MaxQuarterTurnover(ecommerce, T1, T3) + Math.Max(this.MaxQuarterTurnover(paypal, T1, T3), this.MaxQuarterTurnover(ebay, T1, T3));
+
+				//fillquarter.ForEach(c => Log.Info("==>MaxQuarterTurnover: {0}", c));
 
 				this.AnnualTurnover = fillannual.Max();
 				this.QuarterTurnover = fillquarter.Max();
@@ -518,22 +512,22 @@
 				this.Log.Alert(ex, "Failed to calculate turnover for Reject, customerID {0}, calculationDate {1}", customerId, calculationTime);
 			}
 		}
-
-		public decimal MaxAnnualizedTurnover(List<FilteredAggregationResult> list, DateTime T1, DateTime T3, DateTime T6, int Ec1 = 12, int Ec3 = 4, int Ec6 = 2) {
+		
+		public decimal MaxAnnualizedTurnover(List<FilteredAggregationResult> list, int T1, int T3, int T6, int Ec1 = 12, int Ec3 = 4, int Ec6 = 2) {
 			decimal[] filltt = { 0, 0, 0, 0 };
-			filltt[0] = list.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover) * Ec1;
-			filltt[1] = list.Where(t => t.TheMonth >= T3).Sum(t => t.Turnover) * Ec3;
-			filltt[2] = list.Where(t => t.TheMonth >= T6).Sum(t => t.Turnover) * Ec6;
+			filltt[0] = list.Where(t => t.Distance < T1).Sum(t => t.Turnover) * Ec1;
+			filltt[1] = list.Where(t => t.Distance < T3).Sum(t => t.Turnover) * Ec3;
+			filltt[2] = list.Where(t => t.Distance < T6).Sum(t => t.Turnover) * Ec6;
 			filltt[3] = list.Sum(t => t.Turnover);
 			decimal totalTurnover = filltt.Max();
 			return totalTurnover = totalTurnover < 0 ? 0 : totalTurnover;
 		}
 
-		public decimal MaxQuarterTurnover(List<FilteredAggregationResult> list, DateTime T1, DateTime T3) {
+		public decimal MaxQuarterTurnover(List<FilteredAggregationResult> list, int T1, int T3) {
 			decimal[] filltt = { 0, 0 };
 			// annualize
-			filltt[0] = list.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover);
-			filltt[1] = list.Where(t => t.TheMonth >= T3).Sum(t => t.Turnover);
+			filltt[0] = list.Where(t => t.Distance < T1).Sum(t => t.Turnover);
+			filltt[1] = list.Where(t => t.Distance < T3).Sum(t => t.Turnover);
 			decimal totalTurnover = filltt.Max();
 			return totalTurnover = totalTurnover < 0 ? 0 : totalTurnover;
 		}
@@ -559,7 +553,7 @@
 
 			var histories = ofcurrentType.Where(z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd).ToList();
 
-			//	histories.ForEach(x => Log.Info(" filtered: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.CustomerMarketPlaceUpdatingHistory.Id, x.CustomerMarketPlace.Id));
+//histories.ForEach(x => Log.Info(" filtered: {0}, {1}, {2}, {3}", x.TheMonth, x.Turnover, x.CustomerMarketPlaceUpdatingHistory.Id, x.CustomerMarketPlace.Id));
 
 			if (histories.Equals(null))
 				return null;
@@ -567,6 +561,7 @@
 			var result = from ag in histories
 						 group ag by new { ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id, ag.TheMonth } into grouping
 						 select new FilteredAggregationResult {
+							 Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, grouping.First().TheMonth)), 
 							 TheMonth = grouping.First().TheMonth,
 							 MpId = grouping.First().CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
 							 Turnover = histories.Where(xx => xx.TheMonth == grouping.First().TheMonth && xx.CustomerMarketPlaceUpdatingHistory.Id == grouping.Max(p => p.CustomerMarketPlaceUpdatingHistory.Id)).First().Turnover
@@ -575,12 +570,11 @@
 			return result;
 		}
 
-
-		public decimal[] CalculateTTurnover(List<FilteredAggregationResult> list, DateTime T1, DateTime T3, DateTime T6) {
+		public decimal[] CalculateTTurnover(List<FilteredAggregationResult> list, int T1, int T3, int T6) {
 			decimal[] filltt = { 0, 0, 0, 0 };
-			filltt[0] = list.Where(t => t.TheMonth >= T1).Sum(t => t.Turnover);
-			filltt[1] = list.Where(t => t.TheMonth >= T3).Sum(t => t.Turnover);
-			filltt[2] = list.Where(t => t.TheMonth >= T6).Sum(t => t.Turnover);
+			filltt[0] = list.Where(t => t.Distance < T1).Sum(t => t.Turnover);
+			filltt[1] = list.Where(t => t.Distance < T3).Sum(t => t.Turnover);
+			filltt[2] = list.Where(t => t.Distance < T6).Sum(t => t.Turnover);
 			filltt[3] = list.Sum(t => t.Turnover);
 			return filltt;
 		}

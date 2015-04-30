@@ -428,18 +428,16 @@ namespace EzBobTest {
 			DateTime calculationTime = DateTime.UtcNow;
 
 			var customers = new[] {
-				24517, //20658, //	24600 //,24596,24593,24609,24592,24517,24613
-				//270,  19271, 19856, 19970, 234, 103, 211, 739
+				26338
 			};
 
-			foreach (var customerID in customers)
-				new CalculateMedal(customerID, calculationTime, false, true).Execute();
+			//foreach (var customerID in customers)
+			//	new CalculateMedal(customerID, calculationTime, false, true).Execute();
 
 			//this.m_oDB.ForEachRowSafe((sr) => {
 			//	int customerId = sr["Id"];
 			//	new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
 			//}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
-
 		}
 
 		[Test]
@@ -572,14 +570,10 @@ namespace EzBobTest {
 
 		[Test]
 		public void Test_AutoReject() {
-
-			int nCustomerCount = 100;
+			int nCustomerCount = 1000;
 			int nLastCheckedCustomerID = -1;
-
 			var test = new VerifyReject(nCustomerCount, nLastCheckedCustomerID);
-
 			test.Execute();
-
 		}
 
 		[Test]

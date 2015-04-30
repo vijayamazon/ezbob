@@ -172,5 +172,16 @@
 			return hex;
 		}
 
+		/// <summary>
+		/// Calculates difference between to DatTime dates in months
+		/// </summary>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// <returns></returns>
+		public static int DateDiffInMonths(DateTime start, DateTime end) {
+			return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
+		}
+
+
 	} // class MiscUtils
 } // namespace
