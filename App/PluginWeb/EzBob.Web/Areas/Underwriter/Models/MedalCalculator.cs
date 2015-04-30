@@ -19,6 +19,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 		public double Points { get; set; }
 		public double Result { get; set; }
 		public string Error { get; set; }
+        
+        public int? OfferedAmount { get; set; }
+	    public int? MaxOfferedLoanAmount { get; set; }
 	}
 
 	public class MedalHistory
@@ -85,19 +88,19 @@ namespace EzBob.Web.Areas.Underwriter.Models
 			var oldMedalHistories = oldMedals.Where(x => firstNewMedalDate == null || x.ScoreDate < firstNewMedalDate).Select(BuildScore);
 
 			newMedalHistories.AddRange(oldMedalHistories);
-			History.MedalHistories = newMedalHistories.OrderBy(x => x.Date);
+			this.History.MedalHistories = newMedalHistories.OrderBy(x => x.Date);
 			
 			var activeMedal = newMedals.FirstOrDefault(x => x.IsActive);
 			if (activeMedal != null) {
-				Score = BuildNewScore(activeMedal);
+				this.Score = BuildNewScore(activeMedal);
 			}
 			else if (oldMedals.Any()) {
 			        var maxdate = oldMedals.Max(s => s.ScoreDate);
 			        var scoringResult = oldMedals.FirstOrDefault(s => s.ScoreDate == maxdate);
-			        Score = BuildScore(scoringResult);
+			        this.Score = BuildScore(scoringResult);
 			    
 			}else {
-			    Score = new Score();
+			    this.Score = new Score();
 			}
 
 			var details = new MedalDetailedHistory();
@@ -112,7 +115,7 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				i++;
 			}
 
-			DetailedHistory = details;
+			this.DetailedHistory = details;
 		}
 
 		private Score BuildScore(ScoringResult scoringResult)
@@ -136,7 +139,9 @@ namespace EzBob.Web.Areas.Underwriter.Models
 				Points = (double)medalCalculation.TotalScore,
 				Result = (double)medalCalculation.TotalScoreNormalized,
 				Date = medalCalculation.CalculationTime,
-				Error = medalCalculation.Error
+				Error = medalCalculation.Error,
+                OfferedAmount = medalCalculation.OfferedLoanAmount,
+                MaxOfferedLoanAmount = medalCalculation.MaxOfferedLoanAmount
 			};
 		}
 

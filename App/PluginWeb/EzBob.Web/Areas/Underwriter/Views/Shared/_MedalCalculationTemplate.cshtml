@@ -75,9 +75,8 @@
                     <!-- new medal details-->
                     <%if(currentMedal && currentMedal.Score.MedalType != 'Old Medal') {%>
                     <% currentMedal.Score = currentMedal.Score || {}; %>
-                    <table class="table box">
+                    <table class="table box table-hover">
                         <thead class="box">
-                    
                             <tr class="box-title">
                                 <th>Date</th>
                                 <th>Medal</th>
@@ -98,8 +97,23 @@
                             </tr>
                         </tbody>
                     </table>
+                    
+                    <table class="table box table-hover">
+                        <thead class="box">
+                            <tr class="box-title">
+                                <th>Min Offered Amount</th>
+                                <th>Max Offered Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody class="box-content">
+                            <tr>
+                                <td><%-EzBob.formatPoundsAsInt(currentMedal.Score.OfferedAmount) %></td>
+                                <td><%-EzBob.formatPoundsAsInt(currentMedal.Score.MaxOfferedLoanAmount) %></td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <table class="table box">
+                    <table class="table box table-hover">
                         <thead class="box">
                             <tr class="box-title">
                                 <th>Customer Characteristic</th>
