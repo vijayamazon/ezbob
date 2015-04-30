@@ -39,14 +39,11 @@ SELECT l.Id AS loanID
 , lo.ManualCaisFlag
 FROM         
 (
-  SELECT 
-	  SUM(l.LoanAmount) AS am	  
-     , l.Id
-     , COUNT(ls.Id) as ScheduledRepayments
- FROM dbo.LoanSchedule AS ls 
-  LEFT OUTER JOIN dbo.Loan AS l ON l.Id = ls.LoanId
-    GROUP BY l.Id
- ) AS LoanAmount
+	SELECT l.LoanAmount AS am, l.Id, COUNT(ls.Id) as ScheduledRepayments
+	FROM dbo.LoanSchedule AS ls 
+	LEFT OUTER JOIN dbo.Loan AS l ON l.Id = ls.LoanId
+	GROUP BY l.Id, l.LoanAmount
+) AS LoanAmount
 
  LEFT OUTER JOIN dbo.Loan AS l ON l.Id = LoanAmount.Id 
  LEFT OUTER JOIN MinLoanSchedule as ld ON ld.Id = LoanAmount.Id 
