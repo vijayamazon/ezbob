@@ -804,7 +804,7 @@ namespace EzBobTest {
 
 	    [Test]
 	    public void TestUserDisable() {
-	        UserDisable ud = new UserDisable(1, "a@b.com", true, false);
+	        UserDisable ud = new UserDisable(1, "a@b.com", true);
 	        ud.Execute();
 	    }
 	}

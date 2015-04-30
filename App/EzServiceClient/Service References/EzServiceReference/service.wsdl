@@ -172,6 +172,12 @@
   <wsdl:message name="IEzService_UserLogin_OutputMessage">
     <wsdl:part name="parameters" element="tns:UserLoginResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UserDisable_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserDisable" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserDisable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserDisableResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UserResetPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UserResetPassword" />
   </wsdl:message>
@@ -1407,6 +1413,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="UserDisable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserDisable" message="tns:IEzService_UserDisable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserDisableResponse" message="tns:IEzService_UserDisable_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UserResetPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
@@ -2320,6 +2330,15 @@
     </wsdl:operation>
     <wsdl:operation name="UserLogin">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UserLogin" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="UserDisable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserDisable" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

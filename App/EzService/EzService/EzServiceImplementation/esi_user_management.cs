@@ -58,6 +58,33 @@
 			};
 		} // UserLogin
 
+        public StringActionResult UserDisable(
+            int userID,
+            int customerID,
+            string email,
+            bool unsubscribeFromMailChimp,
+            bool changeEmail
+        ) {
+            UserDisable udInstance;
+
+            ActionMetaData udMetaData = ExecuteSync(out udInstance, customerID, userID, customerID, email, unsubscribeFromMailChimp);
+
+            if (changeEmail) {
+                UserChangeEmail uceInstance;
+
+                ActionMetaData oMetaData = ExecuteSync(out uceInstance, customerID, userID, customerID, string.Format("{0}_Frozen", email));
+
+                return new StringActionResult {
+                    MetaData = oMetaData,
+                    Value = uceInstance.ErrorMessage,
+                };
+            }
+
+            return new StringActionResult {
+                MetaData = udMetaData
+            };
+        }
+
 		public StringActionResult UserResetPassword(string sEmail) {
 			UserResetPassword oInstance;
 

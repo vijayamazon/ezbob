@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.UserManagement {
     using System;
     using System.Linq;
-	using Ezbob.Database;
 	using MailChimp;
 	using MailChimp.Types;
 
@@ -9,12 +8,10 @@
         public UserDisable(
             int customerID,
 			string email,
-			bool unsubscribeFromMailChimp,
-            bool changeEmail) {
+			bool unsubscribeFromMailChimp) {
             this.customerID = customerID;
             this.email = email;
             this.unsubscribeFromMailChimp = unsubscribeFromMailChimp;
-            this.changeEmail = changeEmail;
         } // constructor
 
 		public override string Name {
@@ -23,11 +20,6 @@
 
 		public override void Execute() {
 			Log.Debug("Disable User {0} {1} ", this.customerID, this.email);
-            if (this.changeEmail) {
-                DB.ExecuteNonQuery("CustomerEmailRenameFrozen", CommandSpecies.StoredProcedure, 
-                    new QueryParameter("CustomerID", this.customerID));
-            }
-
             if(this.unsubscribeFromMailChimp) {
                 UnsubscribeFromAllLists();
             }
@@ -61,7 +53,5 @@
         private readonly int customerID;
         private readonly string email;
         private readonly bool unsubscribeFromMailChimp;
-        private readonly bool changeEmail;
-
 	} // class UserDisable
 } // namespace Ezbob.Backend.Strategies.UserManagement

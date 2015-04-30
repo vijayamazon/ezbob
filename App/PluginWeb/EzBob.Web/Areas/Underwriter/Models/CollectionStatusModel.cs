@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Models {
-	using System;
 	using System.Collections.Generic;
 
 	public class CollectionStatusItem {
@@ -14,6 +13,8 @@
 		public string ApplyForJudgmentDate { get; set; }
 		public string Type { get; set; }
 		public string Feedback { get; set; }
+        public bool ChangeEmail { get; set; }
+        public bool Unsubscribe { get; set; }
 		public List<CollectionStatusItem> Items { get; set; }
 	}
 }

@@ -3289,6 +3289,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserLogin", ReplyAction="http://tempuri.org/IEzService/UserLoginResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserDisable", ReplyAction="http://tempuri.org/IEzService/UserDisableResponse")]
+        ServiceClientProxy.EzServiceReference.StringActionResult UserDisable(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserDisable", ReplyAction="http://tempuri.org/IEzService/UserDisableResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserDisableAsync(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UserResetPassword", ReplyAction="http://tempuri.org/IEzService/UserResetPasswordResponse")]
         ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail);
         
@@ -4571,6 +4577,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.UserLoginActionResult> UserLoginAsync(string sEmail, Ezbob.Backend.Models.Password sPassword, string sRemoteIp, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime) {
             return base.Channel.UserLoginAsync(sEmail, sPassword, sRemoteIp, promotionName, promotionPageVisitTime);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.StringActionResult UserDisable(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail) {
+            return base.Channel.UserDisable(userID, customerID, email, unsubscribeFromMailChimp, changeEmail);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringActionResult> UserDisableAsync(int userID, int customerID, string email, bool unsubscribeFromMailChimp, bool changeEmail) {
+            return base.Channel.UserDisableAsync(userID, customerID, email, unsubscribeFromMailChimp, changeEmail);
         }
         
         public ServiceClientProxy.EzServiceReference.StringActionResult UserResetPassword(string sEmail) {

@@ -712,6 +712,15 @@
 			DateTime? promotionPageVisitTime
 		);
 
+        [OperationContract]
+        StringActionResult UserDisable(
+            int userID,
+            int customerID,
+            string email,
+            bool unsubscribeFromMailChimp,
+            bool changeEmail
+        );
+
 		[OperationContract]
 		StringActionResult UserResetPassword(string sEmail);
 
