@@ -554,7 +554,7 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 		    return false;
 		}
 	    
-	    $('.editOfferDiv').hide();
+	    $('.editOfferDiv').addClass('hide');
 
 	    $.cookie('editOfferVisible', false);
 	    $(".profile-content").css({ 'margin-top': ($('#profileHead').height() + 10) + 'px' });
