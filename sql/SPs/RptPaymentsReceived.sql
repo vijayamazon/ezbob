@@ -8,6 +8,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 ALTER PROCEDURE [dbo].[RptPaymentsReceived] 
 	(@DateStart DATETIME,
 @DateEnd   DATETIME,
@@ -28,8 +29,8 @@ BEGIN
 		Rollover NUMERIC(18, 4) NOT NULL,
 		TransactionType NVARCHAR(64) NOT NULL,
 		Description NTEXT,
-		SumMatch NVARCHAR(9) NOT NULL,
-		CustomerStatus NVARCHAR(20),
+		SumMatch NVARCHAR(20) NOT NULL,
+		CustomerStatus NVARCHAR(50),
 		RowLevel NVARCHAR(5) NOT NULL
 	)
 
@@ -123,4 +124,5 @@ BEGIN
 		
 	DROP TABLE #t	
 END
+
 GO
