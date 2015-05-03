@@ -1,4 +1,4 @@
-Updating database structure
+Updating database structure 
 
 1. Make sure you have right environment.json in %APPDATA% directory.
 
