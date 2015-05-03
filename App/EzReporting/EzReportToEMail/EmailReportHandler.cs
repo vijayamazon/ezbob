@@ -182,20 +182,20 @@
                 return;
             }
 
-			if (report.IsDaily)
-				BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
+            if (report.IsDaily)
+                BuildReport(report, dToday, dToday.AddDays(1), DailyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
 
 			if (IsWeekly(report.IsWeekly, dToday))
-				BuildReport(report, dToday.AddDays(-7), dToday, WeeklyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
+				BuildReport(report, dToday.AddDays(-6), dToday.AddDays(1), WeeklyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
 
-			if (IsMonthly(report.IsMonthly, dToday))
-				BuildReport(report, dToday.AddMonths(-1), dToday, MonthlyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
+            if (IsMonthly(report.IsMonthly, dToday))
+                BuildReport(report, dToday.AddMonths(-1), dToday, MonthlyPerdiod, sender, dToday, oBuildHtml, oBuildXls);
 
-			if (report.IsMonthToDate) {
-				DateTime d = dTodayForMonthStart.HasValue ? dTodayForMonthStart.Value : dToday;
-				var monthStart = new DateTime(d.Year, d.Month, 1);
-				BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod, sender, dToday, oBuildHtml, oBuildXls);
-			} // if month to date
+            if (report.IsMonthToDate) {
+                DateTime d = dTodayForMonthStart.HasValue ? dTodayForMonthStart.Value : dToday;
+                var monthStart = new DateTime(d.Year, d.Month, 1);
+                BuildReport(report, monthStart, dToday.AddDays(1), MonthToDatePerdiod, sender, dToday, oBuildHtml, oBuildXls);
+            } // if month to date
 		} // HandleGenericReport
 
 		private void BuildReport(
