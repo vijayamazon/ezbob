@@ -97,15 +97,21 @@
 
 				var staller = new Staller(this.customerId, mailer);
 				staller.Stall();
+
 				ExecuteAdditionalStrategies();
 			} // if
-
-			this.customerDetails = new CustomerDetails(this.customerId);
 
 			if (!this.customerDetails.IsTest) {
 				var fraudChecker = new FraudChecker(this.customerId, FraudMode.FullCheck);
 				fraudChecker.Execute();
 			} // if
+
+			// Force nhibernate to sync.
+			var customer = this.customers.ReallyTryGet(this.customerId);
+			if (customer != null)
+				this.session.Evict(customer);
+
+			this.customerDetails = new CustomerDetails(this.customerId);
 
 			ProcessRejections();
 
