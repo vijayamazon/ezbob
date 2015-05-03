@@ -135,7 +135,7 @@
 					TryRead(() => searches.JointApplication = Convert.ToBoolean(search.jointapplication), "This search was a joint application check", false);
 					searches.SearchDate = TryReadDate(() => search.searchdate, "Date of Search", false);
 					TryRead(() => searches.NameDetailes = search.name, "Name details input for this Search", false);
-					TryRead(() => searches.Dob = search.dob, "Applicant's date of birth", false);
+					searches.Dob = TryReadDate(() => search.dob, "Applicant's date of birth", false);
 					searches.StartDate = TryReadDate(() => search.startdate, "Move in date specified for this Search", false);
 					searches.EndDate = TryReadDate(() => search.enddate, "Move out date specified for this Search", false);
 					TryRead(() => searches.TpOptOut = Convert.ToBoolean(search.tpoptout), "Third party data is opted out check", false);
