@@ -5,6 +5,7 @@ GO
 /****** Object:  StoredProcedure [dbo].[AddUpdateDescription]    Script Date: 4/7/2015 2:33:44 PM ******/
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
 
@@ -18,6 +19,8 @@ ALTER PROCEDURE [dbo].[AddUpdateDescription]
 	@level2type	varchar(128)	= NULL,
 	@level2name	sysname			= NULL
 as
+begin
+	SET NOCOUNT ON;
 
 	declare  @DescriptionExists int;	
 
@@ -78,3 +81,5 @@ inner join sys.extended_properties ep on ep.minor_id = c.column_id and ep.major_
 	
 	COMMIT TRANSACTION
 	return (0)
+END
+GO
