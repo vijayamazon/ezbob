@@ -23,6 +23,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using EZBob.DatabaseLib.Repository.Turnover;
 	using LandRegistryLib;
 	using NHibernate;
 	using SalesForceLib.Models;
@@ -108,10 +109,7 @@
 				fraudChecker.Execute();
 			} // if
 
-			// Force nhibernate to sync.
-			var customer = this.customers.ReallyTryGet(this.customerId);
-			if (customer != null)
-				this.session.Evict(customer);
+			ForceNhibernateResync();
 
 			ProcessRejections();
 
@@ -155,6 +153,17 @@
 		private long? cashRequestID;
 		private DoAction createCashRequest;
 		private DoAction updateCashRequest;
+
+		private void ForceNhibernateResync() {
+			var customer = this.customers.ReallyTryGet(this.customerId);
+			if (customer != null)
+				this.session.Evict(customer);
+
+			MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
+			foreach (MarketplaceTurnover mpt in mpTurnoverRep.GetByCustomerId(this.customerId))
+				if (mpt != null)
+					this.session.Evict(mpt);
+		} // ForceNhibernateResync
 
 		private void SendEmails(StrategiesMailer mailer) {
 			bool sendToCustomer = true;
