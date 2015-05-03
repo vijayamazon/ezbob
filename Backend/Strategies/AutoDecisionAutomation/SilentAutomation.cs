@@ -4,6 +4,9 @@
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
+	using NHibernate;
+	using StructureMap;
 
 	/// <summary>
 	/// Executes all the automation decisions (re-reject, reject, re-approve, approve) in silent mode,
@@ -42,9 +45,10 @@
 		} // SetTag
 
 		public override void Execute() {
-			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReRejection(
-				this.customerID, DB, Log
-			).MakeAndVerifyDecision(Tag);
+			// Force nhibernate to sync.
+			var customer = ObjectFactory.GetInstance<CustomerRepository>().ReallyTryGet(this.customerID);
+			if (customer != null)
+				ObjectFactory.GetInstance<ISession>().Evict(customer);
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID, DB, Log
@@ -58,10 +62,6 @@
 			MedalResult medal = instance.Result;
 
 			int offeredCreditLine = CapOffer(medal);
-
-			new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
-				this.customerID, DB, Log
-			).Init().MakeAndVerifyDecision(Tag);
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
 				this.customerID,

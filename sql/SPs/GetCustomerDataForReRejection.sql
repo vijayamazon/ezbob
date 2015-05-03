@@ -14,7 +14,6 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	DECLARE @CurrentCashRequest INT
 	DECLARE @LastRejectDate DATETIME
 	DECLARE @LastDecisionDate DATETIME
 	DECLARE @LastDecisionWasReject BIT = 0
@@ -25,16 +24,12 @@ BEGIN
 	DECLARE @SetupFees DECIMAL(18,4) = 0
 
 	------------------------------------------------------------------------------
-	SELECT @CurrentCashRequest = ISNULL(MAX(Id), 0) FROM CashRequests WHERE IdCustomer = @CustomerId
-	------------------------------------------------------------------------------
 	-- last reject date (automatic or manual)
 	SELECT
 		@LastRejectDate = MAX(cr.UnderwriterDecisionDate)
 	FROM
 		CashRequests cr LEFT JOIN Decisions d ON d.DecisionID = cr.AutoDecisionID
 	WHERE
-		cr.Id < @CurrentCashRequest
-		AND
 		cr.IdCustomer = @CustomerId 
 		AND 
 		((cr.IdUnderwriter IS NOT NULL AND cr.UnderwriterDecision='Rejected') OR (d.DecisionName = 'Reject'))
@@ -45,8 +40,6 @@ BEGIN
 	FROM
 		CashRequests cr
 	WHERE
-		cr.Id < @CurrentCashRequest
-		AND
 		cr.IdCustomer = @CustomerId 
 		AND
 		cr.UnderwriterDecisionDate IS NOT NULL 
