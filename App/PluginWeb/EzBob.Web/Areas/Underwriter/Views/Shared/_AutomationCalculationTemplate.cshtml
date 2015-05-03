@@ -14,9 +14,9 @@
                     <div class="row">
                         <label for="AutomationDetailsHistory" class="col-lg-3 col-md-4">Choose </label>
                         <select id="AutomationDetailsHistory" class="selectheight col-lg-4 col-md-8">
-                            <%_.each(automations.trails, function(trail, i){
+                            <%_.each(automations.trails, function(trail){
                             var tag = trail.TrailTag || '_';%>
-                            <option value="<%-i%>" <%- (currentId == i ? selected="selected" : "")%> >
+                            <option value="<%-trail.TrailID%>" <%- (currentId == trail.TrailID ? selected="selected" : "")%> >
                                     <%-EzBob.formatDateTime(trail.DecisionTime)%> <%-trail.DecisionName%> <%-trail.DecisionStatus%> <%- tag.split('_')[0] %>
                             </option>
                             <%});%>

@@ -4,37 +4,41 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.AutomationCalculationModel = Backbone.Model.extend({
     idAttribute: "Id",
     urlRoot: window.gRootPath + "Underwriter/Automation/Index/"
-});
+});//model
 
 EzBob.Underwriter.AutomationCalculationView = Backbone.View.extend({
     initialize: function () {
         this.template = _.template($('#automation-calculation-template').html());
         this.model.on('change', this.render, this);
         this.currentId = 0;
-    },
+    },//initialize
 
     render: function() {
         var automations = this.model.toJSON();
-        var current = (automations.trails && automations.trails.length > 0) ? automations.trails[this.currentId] : {};
-
         this.$el.html(this.template({
             automations: automations,
-            current: current,
-            currentId: this.currentId
+            current: automations.current,
+            currentId: automations.current.TrailID
         }));
 
         return this;
-    },
+    },//render
 
     events: {
         'change #AutomationDetailsHistory': 'changeHistory',
         'click #automation-explanation-btn': 'clickedExplanation'
-    },
+    },//events
 
-    changeHistory: function(el) {
+    changeHistory: function (el) {
+        var that = this;
         this.currentId = $(el.currentTarget).val();
-        this.render();
-    },
+
+        var xhr = $.get(window.gRootPath + "Underwriter/Automation/GetTrail/" + this.currentId);
+        xhr.done(function(trail) {
+            that.model.set('current', trail.current);
+            that.render();
+        });
+    },//changeHistory
     
     clickedExplanation: function() {
         EzBob.ShowMessageEx({
@@ -59,7 +63,7 @@ EzBob.Underwriter.AutomationCalculationView = Backbone.View.extend({
             closeOnEscape: true,
             dialogWidth: '80%'
         });
-    },
-});
+    },//clickedExplanation
+});//view
 
 

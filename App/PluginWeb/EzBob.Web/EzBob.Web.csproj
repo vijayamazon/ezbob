@@ -191,6 +191,7 @@
     <Compile Include="Areas\Underwriter\Controllers\FullCustomerModel.cs" />
     <Compile Include="Areas\Underwriter\Controllers\FundingController.cs" />
     <Compile Include="Areas\Underwriter\Controllers\SalesForceController.cs" />
+    <Compile Include="Areas\Underwriter\Models\AutoDecisionModel.cs" />
     <Compile Include="Areas\Underwriter\Models\Fraud\IovationDetailsModel.cs" />
     <Compile Include="Areas\Underwriter\Models\PropertiesModelBuilder.cs" />
     <Compile Include="Areas\Underwriter\Models\DecisionModel.cs" />
