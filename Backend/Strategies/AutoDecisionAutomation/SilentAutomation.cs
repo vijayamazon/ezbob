@@ -47,11 +47,8 @@
 		public override void Execute() {
 			// Force nhibernate to sync.
 			var customer = ObjectFactory.GetInstance<CustomerRepository>().ReallyTryGet(this.customerID);
-			if (customer != null) {
-				var session = ObjectFactory.GetInstance<ISession>();
-				session.Evict(customer);
-				session.Refresh(customer);
-			} // if
+			if (customer != null)
+				ObjectFactory.GetInstance<ISession>().Evict(customer);
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID, DB, Log

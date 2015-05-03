@@ -101,6 +101,8 @@
 				ExecuteAdditionalStrategies();
 			} // if
 
+			this.customerDetails = new CustomerDetails(this.customerId);
+
 			if (!this.customerDetails.IsTest) {
 				var fraudChecker = new FraudChecker(this.customerId, FraudMode.FullCheck);
 				fraudChecker.Execute();
@@ -108,12 +110,8 @@
 
 			// Force nhibernate to sync.
 			var customer = this.customers.ReallyTryGet(this.customerId);
-			if (customer != null) {
+			if (customer != null)
 				this.session.Evict(customer);
-				this.session.Refresh(customer);
-			} // if
-
-			this.customerDetails = new CustomerDetails(this.customerId);
 
 			ProcessRejections();
 

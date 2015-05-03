@@ -246,9 +246,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 
 			HasOne(x => x.CampaignSource)
 				.PropertyRef(p => p.Customer)
-				.LazyLoad()
 				.Cascade.All();
-
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database
