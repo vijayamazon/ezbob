@@ -47,22 +47,26 @@
                 TryRead(() =>
                 {
                     var date = baseInfo.annualreturndate.Split('/');
-                    data.AnnualReturnDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        data.AnnualReturnDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "BaseInfoAnnualReturnDate");
                 TryRead(() =>
                 {
                     var date = baseInfo.incorporationdate.Split('/');
-                    data.IncorporationDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        data.IncorporationDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "BaseInfoIncorporationDate");
                 TryRead(() =>
                 {
                     var date = baseInfo.accountsfilingdate.Split('/');
-                    data.AccountsFilingDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        data.AccountsFilingDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "BaseInfoAccountsFilingDate");
                 TryRead(() =>
                 {
                     var date = baseInfo.latestaccountsdate.Split('/');
-                    data.LatestAccountsDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        data.LatestAccountsDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "BaseInfoLatestAccountsDate");
                 TryRead(() => data.Quoted = baseInfo.quoted, "BaseInfoQuoted");
                 //TryRead(() => data.CompanyStatus = baseInfo.companystatus, "BaseInfoCompanyStatus");
@@ -72,12 +76,14 @@
                 TryRead(() =>
                 {
                     var date = ccjsummary.datefrom.Split('/');
-                    data.CCJDateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        data.CCJDateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "BaseInfoCCJDateFrom");
                 TryRead(() =>
                 {
                     var date = ccjsummary.dateto.Split('/');
-                    data.CCJDateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        data.CCJDateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "BaseInfoCCJDateTo");
                 //TryRead(() => data.CCJNumberOfWrits = Convert.ToInt32(ccjsummary.numberofwrits), "BaseInfoCCJNumberOfWrits");
                 TryRead(() => data.Outstanding = Convert.ToInt32(mortgagesummary.outstanding), "BaseInfoOutstanding");
@@ -123,7 +129,8 @@
                 TryRead(() =>
                 {
                     var date = rating.date.Split('/');
-                    newRating.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newRating.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "RatingDate");
                 TryRead(() => newRating.Score = Convert.ToInt32(rating.score), "RatingScore");
                 TryRead(() => newRating.Description = rating.description, "RatingDescription");
@@ -136,7 +143,8 @@
                 TryRead(() =>
                 {
                     var date = limit.date.Split('/');
-                    newLimit.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newLimit.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "LimitDate");
                 data.CreditLimits.Add(newLimit);
             }
@@ -147,7 +155,8 @@
                 TryRead(() =>
                 {
                     var date = name.date.Split('/');
-                    newName.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newName.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "PreviousNameDate");
                 data.PreviousNames.Add(newName);
             }
@@ -158,13 +167,15 @@
                 TryRead(() =>
                 {
                     var date = record.ccjdate.Split('/');
-                    newRecord.CcjDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newRecord.CcjDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "CcjDate");
                 TryRead(() => newRecord.Court = record.court, "CcjCourt");
                 TryRead(() =>
                 {
                     var date = record.ccjdatepaid.Split('/');
-                    newRecord.CcjDatePaid = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newRecord.CcjDatePaid = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "CcjDatePaid");
                 TryRead(() => newRecord.CcjStatus = record.ccjstatus, "CcjStatus");
                 TryRead(() => newRecord.CcjAmount = Convert.ToInt32(record.ccjamount), "CcjAmount");
@@ -177,7 +188,8 @@
                 TryRead(() =>
                 {
                     var date = history.date.Split('/');
-                    newHistory.date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newHistory.date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "StatusHistoryDate");
                 TryRead(() => newHistory.text = history.text, "StatusHistoryText");
                 data.StatusHistory.Add(newHistory);
@@ -189,17 +201,20 @@
                 TryRead(() =>
                 {
                     var date = mortgage.createddate.Split('/');
-                    newMortgage.CreateDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newMortgage.CreateDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "MortgageCreateDate");
                 TryRead(() =>
                 {
                     var date = mortgage.registereddate.Split('/');
-                    newMortgage.RegisterDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newMortgage.RegisterDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "MortgageRegisterDate");
                 TryRead(() =>
                 {
                     var date = mortgage.satisfieddate.Split('/');
-                    newMortgage.SatisfiedDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newMortgage.SatisfiedDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "MortgageSatisfiedDate");
                 TryRead(() => newMortgage.Status = mortgage.status, "MortgageStatus");
                 TryRead(() => newMortgage.AmountSecured = Convert.ToInt32(mortgage.amountsecured), "MortgageAmountSecured");
@@ -234,12 +249,14 @@
                 TryRead(() =>
                 {
                     var date = period.datefrom.Split('/');
-                    newFinancial.DateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newFinancial.DateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "FinancialDateFrom");
                 TryRead(() =>
                 {
                     var date = period.dateto.Split('/');
-                    newFinancial.DateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newFinancial.DateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "FinancialDateTo");
                 TryRead(() => newFinancial.PeriodMonths = Convert.ToInt32(period.periodmonths), "FinancialPeriodMonths");
                 TryRead(() => newFinancial.Currency = period.currency, "FinancialCurrency");
@@ -337,7 +354,8 @@
                 TryRead(() =>
                 {
                     var date = eventhistory.date.Split('/');
-                    newEvent.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newEvent.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "EventHistoryDate");
                 TryRead(() => newEvent.Text = eventhistory.text, "EventHistoryText");
 
@@ -358,7 +376,8 @@
                 TryRead(() =>
                 {
                     var date = director.birthdate.Split('/');
-                    newDirector.BirthDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                    if (Convert.ToInt32(date[2]) > 1900)
+                        newDirector.BirthDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                 }, "DirectorsBirthDate");
                 TryRead(() => newDirector.Nationality = director.nationality, "DirectorsNationality");
                 TryRead(() => newDirector.Honours = director.honours, "DirectorsHonours");
@@ -372,7 +391,8 @@
                     TryRead(() =>
                     {
                         var date = ship.appointeddate.Split('/');
-                        newShip.AppointedDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
+                        if (Convert.ToInt32(date[2]) > 1900)
+                            newShip.AppointedDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
                     }, "DirectorsAppointedDate");
                     newDirector.Directorships.Add(newShip);
                 }

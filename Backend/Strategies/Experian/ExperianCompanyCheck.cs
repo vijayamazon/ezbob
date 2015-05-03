@@ -4,6 +4,7 @@
 	using ExperianLib.Ebusiness;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
+	using Ezbob.Backend.Strategies.CreditSafe;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -189,6 +190,16 @@
 						Log.Info("Filled Score & MaxScore of the strategy");
 					} else
 						experianError = oExperianData.Error;
+
+				    if (!oExperianData.CacheHit) {
+				        if (this.isLimited) {
+                            ServiceLogCreditSafeLtd LtdStra = new ServiceLogCreditSafeLtd(this.experianRefNum,this.customerId);
+                            LtdStra.Execute();
+				        } else {
+				            ServiceLogCreditSafeNonLtd NonLtdStra = new ServiceLogCreditSafeNonLtd(this.customerId);
+                            NonLtdStra.Execute();
+				        }
+				    }
 				} // if
 			} // if
 

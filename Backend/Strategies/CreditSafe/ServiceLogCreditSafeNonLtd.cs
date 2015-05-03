@@ -1,48 +1,33 @@
-﻿namespace Ezbob.CreditSafeLib
+﻿namespace Ezbob.Backend.Strategies.CreditSafe
 {
     using System;
-    using Ezbob.CreditSafeLib.CreditSafeServiceReference;
-    using Ezbob.Logger;
-    using EZBob.DatabaseLib.Model.Database;
     using System.IO;
-    using System.Reflection;
     using System.Text;
+    using System.Reflection;
     using System.Xml;
     using System.Xml.Serialization;
     using ConfigManager;
     using Ezbob.Backend.ModelsWithDB;
+    using Ezbob.CreditSafeLib;
+    using Ezbob.CreditSafeLib.CreditSafeServiceReference;
     using Ezbob.Database;
+    using Ezbob.Logger;
     using EzServiceAccessor;
     using StructureMap;
+    using EZBob.DatabaseLib.Model.Database;
 
-    /// <summary>
-    /// class is responssible for writing CreditSafe data into MP_servicelog and then running ParseCreditSafe starategy
-    /// </summary>
-    public class CreditSafeService
+    class ServiceLogCreditSafeNonLtd :AStrategy
     {
-        private static readonly SafeILog Log = new SafeILog(typeof(CreditSafeService));
-        private readonly AConnection m_oDB = new SqlConnection();
+        public ServiceLogCreditSafeNonLtd(int customerId) {
+            this.o_customerId = customerId;
+        }
+        public override string Name {
+            get { return "ServiceLogCreditSafeNonLtd"; }
+        }
 
-        public MP_ServiceLog ServiceLogCreditSafeLtdData(string regNumber, int customerId)
-        {
-            Log.Debug("Downloading data from CreditSafe for company {0} and customer {1}...", regNumber, customerId);
-
-            string uname = CurrentValues.Instance.CreditSafeUserName;
-            string pass = CurrentValues.Instance.CreditSafePassword;
-            string requestXml = GetResource("Ezbob.CreditSafeLib.Templates.CreditSafeLtdRequestTemplate.xml", uname, pass, regNumber);
-
-            CreditsafeServicesSoapClient client = new CreditsafeServicesSoapClient("CreditsafeServicesSoap");
-            string newResponse = client.GetData(requestXml);
-
-            var pkg = new WriteToLogPackage(requestXml, newResponse, ExperianServiceType.CreditSafeLtd, customerId, companyRefNum: regNumber);
-
-            ObjectFactory.GetInstance<IEzServiceAccessor>().ServiceLogWriter(pkg);
-
-            Log.Debug("Downloading data from CreditSafe for company {0} and customer {1} complete.", regNumber, customerId);
-
-            return pkg.Out.ServiceLog;
-        }//ServiceLogCreditSafeLtdData
-
+        public override void Execute() {
+            ServiceLogCreditSafeNonLtdData(o_customerId);
+        }
         public void ServiceLogCreditSafeNonLtdData(int customerId)
         {
             SafeReader addressSR = this.m_oDB.GetFirst(
@@ -57,7 +42,8 @@
             );
 
             string companyName = companySR["CompanyName"];
-            if (string.IsNullOrEmpty(companyName)) {
+            if (string.IsNullOrEmpty(companyName))
+            {
                 Log.Info("CreditSafeNonLtd not retrieving data - customer has no company name.");
                 return;
             }
@@ -69,7 +55,7 @@
 
             Log.Debug("Targeting data from CreditSafe for Company: {0} With CompanyId:{1} and CustomerId: {2}", companyName, companyId, customerId);
 
-            string targetingRequest = GetResource("Ezbob.CreditSafeLib.Templates.CreditSafeNonLtdSearchTemplate.xml", uname, pass, companyName, address, postcode);
+            string targetingRequest = GetResource("Ezbob.Backend.Strategies.CreditSafe.Tamplets.CreditSafeNonLtdSearchTemplate.xml", uname, pass, companyName, address, postcode);
 
             CreditsafeServicesSoapClient client = new CreditsafeServicesSoapClient("CreditsafeServicesSoap");
             string targetingResponse = client.GetData(targetingRequest);
@@ -87,7 +73,7 @@
                 {
                     string companyNum = body.results[0].number;
                     Log.Debug("Downloading data from CreditSafeNonLtd for company {0} and customer {1}...", companyNum, customerId);
-                    string requestXml = GetResource("Ezbob.CreditSafeLib.Templates.CreditSafeNonLtdRequestTemplate.xml", uname, pass, companyNum);
+                    string requestXml = GetResource("Ezbob.Backend.Strategies.CreditSafe.Tamplets.CreditSafeNonLtdRequestTemplate.xml", uname, pass, companyNum);
                     string newResponse = client.GetData(requestXml);
                     var pkg = new WriteToLogPackage(requestXml, newResponse, ExperianServiceType.CreditSafeNonLtd, customerId, companyRefNum: companyNum);
                     ObjectFactory.GetInstance<IEzServiceAccessor>().ServiceLogWriter(pkg);
@@ -129,5 +115,9 @@
                 return string.Format(xmlStr, p);
             } // using
         } // GetResource
-    }//class
-}//ns
+
+        private static readonly SafeILog Log = new SafeILog(typeof(ServiceLogCreditSafeNonLtd));
+        private readonly AConnection m_oDB = new SqlConnection();
+        private int o_customerId;
+    }
+}

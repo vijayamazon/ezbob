@@ -227,15 +227,15 @@
 
             ms_oLog.Debug("Downloading data from Experian for company {0} and customer {1} complete.", regNumber, customerId);
 
-            try
-            {
-                CreditSafeService creditSafeLtdService = new CreditSafeService();
-                creditSafeLtdService.ServiceLogCreditSafeLtdData(regNumber, customerId);
-            }
-            catch (Exception ex)
-            {
-                ms_oLog.Error(ex, "CreditSafeLtdService failed");
-            }
+            //try
+            //{
+            //    CreditSafeService creditSafeLtdService = new CreditSafeService();
+            //    creditSafeLtdService.ServiceLogCreditSafeLtdData(regNumber, customerId);
+            //}
+            //catch (Exception ex)
+            //{
+            //    ms_oLog.Error(ex, "CreditSafeLtdService failed");
+            //}
             return pkg.Out.ExperianLtd;
         } // DownloadOneLimitedFromExperian
 
@@ -265,7 +265,7 @@
 
                     this.nonLimitedParser.ParseAndStore(newResponse, refNumber, writelog.ServiceLog.Id);
 
-                    GetCreditSafeNonLtdData(customerId);
+                    //GetCreditSafeNonLtdData(customerId);
 
                     return BuildResponseFromDb(refNumber);
                 } // if
@@ -291,15 +291,15 @@
 
         private void GetCreditSafeNonLtdData(int customerId)
         {
-            try
-            {
-                CreditSafeService creditSafeNonLtdService = new CreditSafeService();
-                creditSafeNonLtdService.ServiceLogCreditSafeNonLtdData(customerId);
-            }
-            catch (Exception ex)
-            {
-                ms_oLog.Error(ex, "CreditSafeNonLtdService failed");
-            }
+            //try
+            //{
+            //    CreditSafeService creditSafeNonLtdService = new CreditSafeService();
+            //    creditSafeNonLtdService.ServiceLogCreditSafeNonLtdData(customerId);
+            //}
+            //catch (Exception ex)
+            //{
+            //    ms_oLog.Error(ex, "CreditSafeNonLtdService failed");
+            //}
         }//GetCreditSafeNonLtdData
 
         private DateTime? GetNonLimitedCreationTime(string refNumber)
