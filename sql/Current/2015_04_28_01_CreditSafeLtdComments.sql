@@ -165,3 +165,5 @@ EXEC dbo.AddUpdateDescription @value=N'Total current liabilities / Shareholders 
 EXEC dbo.AddUpdateDescription @value=N'Total short and Long term liabilities / Shareholders Funds. A way of measuring the gearing of a company in relation to the net worthy ' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'CreditSafeFinancial', @level2type=N'COLUMN',@level2name=N'TotalDebtRatio'
 EXEC dbo.AddUpdateDescription @value=N'Stock / Turnover x100. Shows the level of socks in relation to turnover as a percentage ' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'CreditSafeFinancial', @level2type=N'COLUMN',@level2name=N'StockTurnoverRatio'
 EXEC dbo.AddUpdateDescription @value=N'Net Profit / Net Assets x 100. Relates profitability of the business to the value of the net assets ' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'CreditSafeFinancial', @level2type=N'COLUMN',@level2name=N'ReturnOnNetAssetsEmployed'
+GO
+

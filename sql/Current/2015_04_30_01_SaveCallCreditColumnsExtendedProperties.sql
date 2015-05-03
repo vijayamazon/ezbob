@@ -822,3 +822,4 @@ EXEC dbo.AddUpdateDescription  @value=N'Name details as provided on the Notice o
 EXEC dbo.AddUpdateDescription  @value=N'A value of ‘1’ indicates this is the applicant’s current address ' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'CallCreditDataAddressConfsResidentsErHistoryNocs', @level2type=N'COLUMN',@level2name=N'CurrentAddress'
 EXEC dbo.AddUpdateDescription  @value=N'The type of undeclared address ' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'CallCreditDataAddressConfsResidentsErHistoryNocs', @level2type=N'COLUMN',@level2name=N'UnDeclaredAddressType'
 EXEC dbo.AddUpdateDescription  @value=N'Address value related to notice against a period of Electoral Roll history' , @level0type=N'SCHEMA',@level0name=N'dbo', @level1type=N'TABLE',@level1name=N'CallCreditDataAddressConfsResidentsErHistoryNocs', @level2type=N'COLUMN',@level2name=N'AddressValue'
+GO
