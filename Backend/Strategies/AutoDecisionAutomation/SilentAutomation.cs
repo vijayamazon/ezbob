@@ -4,7 +4,9 @@
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
+	using EZBob.DatabaseLib.Repository.Turnover;
 	using NHibernate;
 	using StructureMap;
 
@@ -45,10 +47,7 @@
 		} // SetTag
 
 		public override void Execute() {
-			// Force nhibernate to sync.
-			var customer = ObjectFactory.GetInstance<CustomerRepository>().ReallyTryGet(this.customerID);
-			if (customer != null)
-				ObjectFactory.GetInstance<ISession>().Evict(customer);
+			ForceNhibernateResync();
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID, DB, Log
@@ -73,6 +72,21 @@
 				Log
 			).Init().MakeAndVerifyDecision(Tag);
 		} // Execute
+
+		private void ForceNhibernateResync() {
+			ISession session = ObjectFactory.GetInstance<ISession>();
+
+			Customer customer = ObjectFactory.GetInstance<CustomerRepository>().ReallyTryGet(this.customerID);
+
+			if (customer != null)
+				session.Evict(customer);
+
+			MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
+
+			foreach (MarketplaceTurnover mpt in mpTurnoverRep.GetByCustomerId(this.customerID))
+				if (mpt != null)
+					session.Evict(mpt);
+		} // ForceNhibernateResync
 
 		private int CapOffer(MedalResult medal) {
 			Log.Info("Finalizing and capping offer");
