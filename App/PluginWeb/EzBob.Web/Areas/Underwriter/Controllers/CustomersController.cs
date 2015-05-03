@@ -60,7 +60,8 @@
 				IsEscalated = _context.User.Roles.Any(r => r.Name == "manager"),
 				MpTypes = _mpType.GetAll().ToList(),
 				CollectionStatuses = _customerStatusesRepository.GetAll().ToList(),
-				MaxLoan = _limit.GetMaxLimit()
+				MaxLoan = _limit.GetMaxLimit(),
+                ManagerMaxLoan = CurrentValues.Instance.ManagerMaxLoan
 			};
 
 			return View(grids);

@@ -405,6 +405,7 @@
     <script type="text/javascript">
         EzBob.Config.MinLoan = @CurrentValues.Instance.MinLoan.Value;
         EzBob.Config.MaxLoan = @Model.MaxLoan;
+        EzBob.Config.ManagerMaxLoan = @Model.ManagerMaxLoan;
         EzBob.Config.XMinLoan = @CurrentValues.Instance.XMinLoan.Value;
         EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;
         EzBob.Config.PacnetBalanceMaxManualChange = @CurrentValues.Instance.PacnetBalanceMaxManualChange.Value;
@@ -413,20 +414,20 @@
 
         EzBob.Config.EchoSignEnabledUnderwriter = @(CurrentValues.Instance.EchoSignEnabledUnderwriter ? "true" : "false");
 
-		@{
-			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("UploadHmrcController", "SaveFile");
-			OneUploadLimitation oAlertDocOul = CurrentValues.Instance.GetUploadLimitations("AlertDocsController", "UploadDoc");
-			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
-		}
+        @{
+            OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("UploadHmrcController", "SaveFile");
+            OneUploadLimitation oAlertDocOul = CurrentValues.Instance.GetUploadLimitations("AlertDocsController", "UploadDoc");
+            OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
+        }
 
-		EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
-		EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
+        EzBob.Config.HmrcMaxFileSize = +(@oHmrcOul.FileSize / 1048576.0).toFixed(2);
+        EzBob.Config.HmrcAcceptedFiles = '@oHmrcOul.AcceptedFiles';
 
-    	EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
-    	EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
-    	
-		EzBob.Config.AlertDocMaxFileSize = +(@oAlertDocOul.FileSize / 1048576.0).toFixed(2);
-		EzBob.Config.AlertDocAcceptedFiles = '@oAlertDocOul.AcceptedFiles';
+        EzBob.Config.CompanyFilesMaxFileSize = +(@oComanyFilesOul.FileSize / 1048576.0).toFixed(2);
+        EzBob.Config.CompanyFilesAcceptedFiles = '@oComanyFilesOul.AcceptedFiles';
+
+        EzBob.Config.AlertDocMaxFileSize = +(@oAlertDocOul.FileSize / 1048576.0).toFixed(2);
+        EzBob.Config.AlertDocAcceptedFiles = '@oAlertDocOul.AcceptedFiles';
 
         var escalatedFlag = @(Model.IsEscalated ? 1 : 0);
         EzBob.handleUserLayoutSetting();

@@ -15,6 +15,7 @@
     {
 	    public bool IsEscalated { get; set; }
         public decimal MaxLoan { get; set; }
+        public decimal ManagerMaxLoan { get; set; }
         public IEnumerable<MP_MarketplaceType> MpTypes { get; set; }
         public List<CustomerStatuses> CollectionStatuses { get; set; }
     }
