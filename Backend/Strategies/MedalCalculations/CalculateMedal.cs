@@ -20,9 +20,15 @@
 			this.primaryOnly = primaryOnly;
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
+			this.quietMode = false;
 		} // constructor
 
 		public virtual string Tag { get; set; }
+
+		public virtual bool QuietMode {
+			get { return this.quietMode; }
+			set { this.quietMode = value; }
+		} // QuietMode
 
 		public override void Execute() {
 			try {
@@ -141,6 +147,11 @@
 		} // Execute
 
 		private void SendExplanationMail(MedalResult result1, MedalOutputModel result2) {
+			if (QuietMode) {
+				Log.Debug("Not sending explanation email: quiet mode.");
+				return;
+			} // if
+
 			string medal2 = result2 == null ? string.Empty : result2.Medal.Stringify();
 			string medalType2 = result2 == null ? string.Empty : result2.MedalType.ToString();
 			string score2 = result2 == null ? string.Empty : (result2.Score * 100).ToString("N2");
@@ -209,5 +220,6 @@
 		private int numOfEbayAmazonPayPalMps;
 		private DateTime? earliestHmrcLastUpdateDate;
 		private DateTime? earliestYodleeLastUpdateDate;
+		private bool quietMode;
 	} // class CalculateMedal
 } // namespace

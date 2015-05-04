@@ -47,14 +47,22 @@
 		} // SetTag
 
 		public override void Execute() {
+			LoadMainStrategyExecutedBefore();
+
+			if (!this.mainStrategyExecutedBefore) {
+				Log.Debug("Not executing: main strategy has never run before for customer '{0}'.", this.customerID);
+				return;
+			} // if
+
 			ForceNhibernateResync();
 
 			new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID, DB, Log
-			).Init().MakeAndVerifyDecision(Tag);
+			).Init().MakeAndVerifyDecision(Tag, true);
 
 			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
-				Tag = Tag
+				Tag = Tag,
+				QuietMode = true,
 			};
 			instance.Execute();
 
@@ -70,8 +78,18 @@
 				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
 				DB,
 				Log
-			).Init().MakeAndVerifyDecision(Tag);
+			).Init().MakeAndVerifyDecision(Tag, true);
 		} // Execute
+
+		private void LoadMainStrategyExecutedBefore() {
+			SafeReader sr = DB.GetFirst(
+				"GetMainStrategyStallerData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerId", this.customerID)
+			);
+
+			this.mainStrategyExecutedBefore = sr.IsEmpty ? false : sr["MainStrategyExecutedBefore"];
+		} // LoadMainStrategyExecutedBefore 
 
 		private void ForceNhibernateResync() {
 			ISession session = ObjectFactory.GetInstance<ISession>();
@@ -124,5 +142,6 @@
 
 		private readonly int customerID;
 		private string tag;
+		private bool mainStrategyExecutedBefore;
 	} // class SilentAutomation
 } // namespace

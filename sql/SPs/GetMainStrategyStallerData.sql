@@ -1,24 +1,28 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetMainStrategyStallerData]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetMainStrategyStallerData]
+IF OBJECT_ID('GetMainStrategyStallerData') IS NULL
+	EXECUTE('CREATE PROCEDURE GetMainStrategyStallerData AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
+
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetMainStrategyStallerData] 
-	(@CustomerId INT)
+
+ALTER PROCEDURE GetMainStrategyStallerData
+@CustomerId INT
 AS
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT		
 		ExperianRefNum,
 		CAST(CASE WHEN LastStartedMainStrategyEndTime IS NULL THEN 0 ELSE 1 END AS BIT) AS MainStrategyExecutedBefore,
 		Company.TypeOfBusiness,
 		Name AS CustomerEmail
 	FROM
-		Customer,
-		Company
+		Customer
+		INNER JOIN Company ON Customer.CompanyId = Company.Id
 	WHERE
-		Customer.Id = @CustomerId AND
-		Customer.CompanyId = Company.Id
+		Customer.Id = @CustomerId
 END
 GO

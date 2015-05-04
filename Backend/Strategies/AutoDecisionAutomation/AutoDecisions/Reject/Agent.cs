@@ -20,7 +20,6 @@
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Repository.Turnover;
-	using NHibernate.Linq;
 	using StructureMap;
 
 	// using Ezbob.Utils.Lingvo;
@@ -56,7 +55,7 @@
 			return this;
 		} // Init
 
-		public virtual bool MakeAndVerifyDecision(string tag = null) {
+		public virtual bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
 		    Trail.SetTag(tag);
 			Log.Info("=====================STARTPRIMARY{0}=====================", Args.CustomerID);
 			RunPrimary();
@@ -66,7 +65,7 @@
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
 				RunSecondary();
 
-			bool bSuccess = Trail.EqualsTo(oSecondary.Trail);
+			bool bSuccess = Trail.EqualsTo(oSecondary.Trail, quiet);
 
 			Trail.Save(DB, oSecondary.Trail, tag: tag);
 
