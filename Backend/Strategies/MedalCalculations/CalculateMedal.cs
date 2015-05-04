@@ -184,7 +184,7 @@
 			var message = string.Format(
 				"<h1><u>Difference in verification for " +
 					"<b style=\"color:red\">Medal calculation</b> for customer " +
-					"<b style=\"color:red\">{0}</b>" +
+					"<b style=\"color:red\">{0}</b> {4}" +
 				"</u></h1><br>" +
 				"<h2><b style=\"color:red\"><pre>{1}</pre></b><br></h2>" +
 				"<h2><b>main flow:</b></h2>" +
@@ -194,7 +194,8 @@
 				this.customerId,
 				HttpUtility.HtmlEncode(msg),
 				HttpUtility.HtmlEncode(result1.ToString()),
-				HttpUtility.HtmlEncode(result2 == null ? string.Empty : result2.ToString())
+				HttpUtility.HtmlEncode(result2 == null ? string.Empty : result2.ToString()),
+                Tag
 			);
 
 			new Mail().Send(
