@@ -182,6 +182,7 @@
 
 		public bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
 			this.m_oTrail.SetTag(tag);
+
 			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				GetAvailableFunds availFunds;
 

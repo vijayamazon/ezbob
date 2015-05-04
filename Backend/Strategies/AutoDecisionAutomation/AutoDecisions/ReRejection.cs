@@ -27,6 +27,8 @@
 		} // constructor
 
 		public bool MakeAndVerifyDecision(string tag = null) {
+		    this.trail.SetTag(tag);
+
 			RunPrimary();
 
 			Agent oSecondary = RunSecondary();
