@@ -120,7 +120,7 @@
 				nFirstFieldLength,
 				nSecondFieldLength + 1
 			);
-
+            
 			for (int i = 0; i < lst.Count; i++) {
 				Tuple<string, string, string, string> tpl = lst[i];
 				os.AppendFormat(sFormat, i + 1, tpl.Item1, tpl.Item2 + ':', tpl.Item3, tpl.Item4);
@@ -229,7 +229,7 @@
 
 					string sMsg = string.Format(
 						"Different checks for '{3}' encountered on step {0}: {1} in this vs {2} in the second.",
-						i,
+						i+1,
 						oMyTrace.GetType().Name,
 						oOtherTrace.GetType().Name,
 						this.Decision
@@ -246,7 +246,7 @@
 
 					string sMsg = string.Format(
 						"Different conclusions for '{4}' have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
-						i,
+						i+1,
 						oMyTrace.GetType().Name,
 						oMyTrace.DecisionStatus,
 						oOtherTrace.DecisionStatus,
@@ -266,7 +266,7 @@
 
 					string sMsg = string.Format(
 						"Different conclusions for '{4}' decision lock have been reached on step {0} - {1}: {2} in the first vs {3} in the second.",
-						i,
+						i+1,
 						oMyTrace.GetType().Name,
 						oMyTrace.HasLockedDecision ? "locked" : "not locked",
 						oOtherTrace.HasLockedDecision ? "locked" : "not locked",
@@ -525,7 +525,7 @@
 
 			// ReSharper disable PossibleNullReferenceException
 			if (oTrace.GetType() == typeof (ExceptionThrown))
-				(oTrace as ExceptionThrown).OnAfterInitEvent += step => m_oDiffNotes.Add(step.Comment);
+                (oTrace as ExceptionThrown).OnAfterInitEvent += step => this.m_oDiffNotes.Add(step.Comment);
 			// ReSharper restore PossibleNullReferenceException
 
 			return oTrace;
@@ -540,21 +540,22 @@
 				HttpUtility.HtmlEncode(this.ToString()),
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.ToString()),
 				HttpUtility.HtmlEncode(this.InputData.Serialize()),
-				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize())
+				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize()),
+                this.m_sTag
 			);
 
 			new Mail().Send(
-				m_sToExplanationEmailAddress,
+                this.m_sToExplanationEmailAddress,
 				null,
 				message,
-				m_sFromEmailAddress,
-				m_sFromEmailName,
+                this.m_sFromEmailAddress,
+                this.m_sFromEmailName,
 				"#Mismatch in " + Name + " for customer " + CustomerID
 			);
 		} // SendExplanationMail
 
 		private const string EmailFormat =
-			"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b></u></h1><br>" +
+			"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b> {7}</u></h1><br>" +
 			"<h2><b style='color:red'>{2}</b><br></h2>" +
 			"<h2><b>main flow:</b></h2>" +
 			"<pre><h3>{3}</h3></pre><br>" +
@@ -565,6 +566,9 @@
 			"</b></h2>verification data:</b></h2>" +
 			"<pre><h3>{6}</h3></pre>";
 
+        public void SetTag(string tag) {
+            this.m_sTag = tag;
+        }
 		private readonly List<string> m_oDiffNotes;
 		private readonly List<ATrace> m_oSteps;
 		private readonly ASafeLog m_oLog;
@@ -572,5 +576,6 @@
 		private readonly string m_sFromEmailAddress;
 		private readonly string m_sFromEmailName;
 		private readonly TimeCounter timer;
+	    protected string m_sTag;
 	} // class Trail
 } // namespace

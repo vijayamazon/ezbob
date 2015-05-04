@@ -49,6 +49,7 @@
 		} // Init
 
 		public virtual bool MakeAndVerifyDecision(string tag = null) {
+		    Trail.SetTag(tag);
 			RunPrimary();
 
 			AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();

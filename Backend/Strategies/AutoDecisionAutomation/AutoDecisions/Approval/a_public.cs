@@ -181,6 +181,8 @@
 		} // Init
 
 		public bool MakeAndVerifyDecision(string tag = null) {
+		    this.m_oTrail.SetTag(tag);
+
 			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				GetAvailableFunds availFunds;
 

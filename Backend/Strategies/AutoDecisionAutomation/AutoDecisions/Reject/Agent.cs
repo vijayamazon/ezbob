@@ -57,6 +57,7 @@
 		} // Init
 
 		public virtual bool MakeAndVerifyDecision(string tag = null) {
+		    Trail.SetTag(tag);
 			Log.Info("=====================STARTPRIMARY{0}=====================", Args.CustomerID);
 			RunPrimary();
 
