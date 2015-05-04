@@ -180,13 +180,14 @@
 			return this;
 		} // Init
 
-		public bool MakeAndVerifyDecision(string tag = null) {
+		public bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
+			this.m_oTrail.SetTag(tag);
 			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				GetAvailableFunds availFunds;
 
 				using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
 					availFunds = new GetAvailableFunds();
-                    GetAvailableFunds.LoadFromDB();
+					GetAvailableFunds.LoadFromDB();
 					availFunds.Execute();
 
 					SaveTrailInputData(availFunds);
@@ -198,7 +199,7 @@
 
 			this.m_oSecondaryImplementation.MakeDecision();
 
-			bool bSuccess = this.m_oTrail.EqualsTo(this.m_oSecondaryImplementation.Trail);
+			bool bSuccess = this.m_oTrail.EqualsTo(this.m_oSecondaryImplementation.Trail, quiet);
 
 			if (bSuccess && this.m_oTrail.HasDecided) {
 				if (this.m_oTrail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
