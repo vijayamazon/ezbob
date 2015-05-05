@@ -27,7 +27,8 @@
                 CreateDate = DateTime.UtcNow,
                 Email = CustomerData.Mail,
                 Stage = OpportunityStage.s5.DescriptionAttr(),
-                Type = OpportunityType.FinishLoan.DescriptionAttr()
+                Type = OpportunityType.FinishLoan.DescriptionAttr(),
+                Name = CustomerData.FirstName + OpportunityType.FinishLoan.DescriptionAttr()
             });
             addOpportunity.Execute();
 	    }

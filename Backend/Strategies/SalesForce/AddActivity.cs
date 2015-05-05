@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.SalesForce {
     using System;
+    using System.Threading;
     using Ezbob.Database;
     using SalesForceLib;
 	using SalesForceLib.Models;
@@ -15,17 +16,21 @@
 				.With("environment").EqualTo(ConfigManager.CurrentValues.Instance.SalesForceEnvironment.Value)
 				.GetInstance<ISalesForceAppClient>();
 			this.customerID = customerID;
-			this.eventModel = model;
+			this.activityModel = model;
 		}
-		public override string Name { get { return "AddEvent"; } }
+		public override string Name { get { return "AddActivity"; } }
 
 		public override void Execute() {
             if (this.customerID.HasValue) {
-                Log.Info("Adding SalesForce event {1} to customer {0} ", this.eventModel.Type, this.customerID.Value);
+                Log.Info("Adding SalesForce event {1} to customer {0} ", this.activityModel.Type, this.customerID.Value);
 			}
 
-            this.eventModel.Email = this.eventModel.Email.ToLower();
-            this.salesForce.CreateActivity(this.eventModel);
+            this.activityModel.Email = this.activityModel.Email.ToLower();
+
+            //fix race condition in sales force between create lead and adding activity to it.
+            if (this.activityModel.Description.Contains("Greeting")) { Thread.Sleep(10000); }
+
+            this.salesForce.CreateActivity(this.activityModel);
 
             if (this.salesForce.HasError) {
                 DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,
@@ -38,6 +43,6 @@
 		}
 		private readonly ISalesForceAppClient salesForce;
 		private readonly int? customerID;
-		private readonly ActivityModel eventModel;
+        private readonly ActivityModel activityModel;
 	}
 }
