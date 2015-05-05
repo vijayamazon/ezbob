@@ -71,7 +71,7 @@
             data.LatestAccountsDate = data.LatestAccountsDate ?? DateTime.UtcNow;
             data.CCJDateFrom = data.CCJDateFrom ?? DateTime.UtcNow;
             data.CCJDateTo = data.CCJDateTo ?? DateTime.UtcNow;*/
-            ParseCreditSafeNonLtd test = new ParseCreditSafeNonLtd(1);
+            ParseCreditSafeLtd test = new ParseCreditSafeLtd(1);
             test.Execute();
             //ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
             //saveTest.Execute();

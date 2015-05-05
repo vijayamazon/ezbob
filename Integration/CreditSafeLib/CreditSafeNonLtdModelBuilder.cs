@@ -38,12 +38,7 @@
                     else
                         data.MpsRegistered = true;
                 }, "BaseInfoMpsRegistered");
-                TryRead(() =>
-                {
-                    var date = baseInfo.addressdate.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        data.AddressDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoAddressDate");
+                data.AddressDate = TryReadDate(baseInfo.addressdate, "BaseInfoAddressDate");
                 TryRead(() => data.AddressReason = baseInfo.addressreason, "BaseInfoAddressReason");
                 TryRead(() => data.PremiseType = baseInfo.premisestype, "BaseInfoPremiseType");
                 TryRead(() => data.Activities = baseInfo.activities, "BaseInfoActivities");
@@ -53,33 +48,13 @@
 
                 TryRead(() => data.MatchedCcjValue = Convert.ToInt32(matchedccjsummary.value), "BaseInfoMatchedCcjValue");
                 TryRead(() => data.MatchedCcjNumber = Convert.ToInt32(matchedccjsummary.number), "BaseInfoMatchedCcjNumber");
-                TryRead(() =>
-                {
-                    var date = matchedccjsummary.datefrom.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        data.MatchedCcjDateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoMatchedCcjDateFrom");
-                TryRead(() =>
-                {
-                    var date = matchedccjsummary.dateto.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        data.MatchedCcjDateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoMatchedCcjDateTo");
+                data.MatchedCcjDateFrom = TryReadDate(matchedccjsummary.datefrom, "BaseInfoMatchedCcjDateFrom");
+                data.MatchedCcjDateTo = TryReadDate(matchedccjsummary.dateto, "BaseInfoMatchedCcjDateTo");
 
                 TryRead(() => data.PossibleCcjValue = Convert.ToInt32(possibleccjsummary.value), "BaseInfoPossibleCcjValue");
                 TryRead(() => data.PossibleCcjNumber = Convert.ToInt32(possibleccjsummary.number), "BaseInfoPossibleCcjNumber");
-                TryRead(() =>
-                {
-                    var date = possibleccjsummary.datefrom.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        data.PossibleCcjDateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoPossibleCcjDateFrom");
-                TryRead(() =>
-                {
-                    var date = possibleccjsummary.dateto.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        data.PossibleCcjDateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoPossibleCcjDateTo");
+                data.PossibleCcjDateFrom = TryReadDate(possibleccjsummary.datefrom, "BaseInfoPossibleCcjDateFrom");
+                data.PossibleCcjDateTo = TryReadDate(possibleccjsummary.dateto, "BaseInfoPossibleCcjDateTo");
 
                 TryRead(() => data.ExecutiveName = seniorexecutive.name, "BaseInfoExecutiveName");
                 TryRead(() => data.ExecutivePosition = seniorexecutive.position, "BaseInfoExecutivePosition");
@@ -129,12 +104,7 @@
             foreach (var rating in company.ratings)
             {
                 CreditSafeNonLtdRatings newRating = new CreditSafeNonLtdRatings();
-                TryRead(() =>
-                {
-                    var date = rating.date.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        newRating.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "RatingsDate");
+                newRating.Date = TryReadDate(rating.date, "RatingsDate");
                 TryRead(() => newRating.Score = Convert.ToInt32(rating.score), "RatingsScore");
                 TryRead(() => newRating.Description = rating.description, "RatingsDescription");
                 data.Ratings.Add(newRating);
@@ -144,30 +114,15 @@
             {
                 CreditSafeNonLtdLimits newLimit = new CreditSafeNonLtdLimits();
                 TryRead(() => newLimit.Limit = Convert.ToInt32(limit.limit), "LimitLimit");
-                TryRead(() =>
-                {
-                    var date = limit.date.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        newLimit.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "LimitDate");
+                newLimit.Date = TryReadDate(limit.date, "LimitDate");
                 data.Limits.Add(newLimit);
             }
             foreach (var matched in company.matchedrecordofpayments)
             {
                 CreditSafeNonLtdMatchedCCJ newMatched = new CreditSafeNonLtdMatchedCCJ();
                 TryRead(() => newMatched.CaseNr = matched.casenr, "MatchedCaseNr");
-                TryRead(() =>
-                {
-                    var date = matched.ccjdate.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        newMatched.CcjDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "MatchedCcjDate");
-                TryRead(() =>
-                {
-                    var date = matched.ccjdatepaid.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        newMatched.CcjDatePaid = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "MatchedCcjDatePaid");
+                newMatched.CcjDate = TryReadDate(matched.ccjdate, "MatchedCcjDate");
+                newMatched.CcjDatePaid = TryReadDate(matched.ccjdatepaid, "MatchedCcjDatePaid");
                 TryRead(() => newMatched.Court = matched.court, "MatchedCourt");
                 TryRead(() => newMatched.CcjStatus = matched.ccjstatus, "MatchedCcjStatus");
                 TryRead(() => newMatched.CcjAmount = Convert.ToInt32(matched.ccjamount), "MatchedCcjAmount");
@@ -179,18 +134,8 @@
             {
                 CreditSafeNonLtdPossibleCCJ newPossible = new CreditSafeNonLtdPossibleCCJ();
                 TryRead(() => newPossible.CaseNr = possible.casenr, "PossibleCaseNr");
-                TryRead(() =>
-                {
-                    var date = possible.ccjdate.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        newPossible.CcjDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "PossibleCcjDate");
-                TryRead(() =>
-                {
-                    var date = possible.ccjdatepaid.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        newPossible.CcjDatePaid = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "PossibleCcjDatePaid");
+                newPossible.CcjDate = TryReadDate(possible.ccjdate, "PossibleCcjDate");
+                newPossible.CcjDatePaid = TryReadDate(possible.ccjdatepaid, "PossibleCcjDatePaid");
                 TryRead(() => newPossible.Court = possible.court, "PossibleCourt");
                 TryRead(() => newPossible.CcjStatus = possible.ccjstatus, "PossibleCcjStatus");
                 TryRead(() => newPossible.CcjAmount = Convert.ToInt32(possible.ccjamount), "PossibleCcjAmount");
@@ -201,12 +146,7 @@
             foreach (var events in company.events)
             {
                 CreditSafeNonLtdEvents newEvent = new CreditSafeNonLtdEvents();
-                TryRead(() =>
-                {
-                    var date = events.date.Split('/');
-                    if (Convert.ToInt32(date[2]) > 1900)
-                        newEvent.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "EventsDate");
+                newEvent.Date = TryReadDate(events.date, "EventsDate");
                 TryRead(() => newEvent.Text = events.text, "EventsText");
                 data.Events.Add(newEvent);
             }
@@ -236,8 +176,26 @@
                     HasParsingError = true;
                     Errors += "Can`t read value for: " + key + Environment.NewLine;
                 }
-            }
+            }//try
+        }//TryRead
 
-        }
+        private DateTime? TryReadDate(string a, string key, bool isRequired = true)
+        {
+            try
+            {
+                DateTime d = Convert.ToDateTime(a);
+                return (d.Year < 1900) ? (DateTime?)null : d;
+            }
+            catch
+            {
+                if (isRequired)
+                {
+                    HasParsingError = true;
+                    Errors += "Can't read value for: " + key + Environment.NewLine;
+                } // if
+
+                return null;
+            } // try
+        } // TryReadDate
     }
 }

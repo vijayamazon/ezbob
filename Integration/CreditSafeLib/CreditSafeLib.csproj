@@ -91,7 +91,6 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Templates\CreditSafeLtdRequestTemplate.xml" />
     <None Include="Service References\CreditSafeServiceReference\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -101,12 +100,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\CreditSafeServiceReference\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Templates\CreditSafeNonLtdRequestTemplate.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Templates\CreditSafeNonLtdSearchTemplate.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
