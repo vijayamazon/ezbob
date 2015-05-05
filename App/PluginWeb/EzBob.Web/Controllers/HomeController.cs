@@ -51,6 +51,9 @@
 			ms_oLog.Debug("fulr = {0},fsource = {1},fmedium = {2},fterm = {3},fcontent = {4},fname = {5},fdate = {6},", furl, fsource, fmedium, fterm, fcontent, fname, fdate);
 			ms_oLog.Debug("rulr = {0},rsource = {1},rmedium = {2},rterm = {3},rcontent = {4},rname = {5},rdate = {6},", rurl, rsource, rmedium, rterm, rcontent, rname, rdate);
 
+			if ((Request != null) && (Request.Url != null))
+				ms_oLog.Debug("Full request URL - begin:\n{0}\nFull request URL - end.", Request.Url);
+
 			Session["Shop"] = shop;
 			CreatePasswordModel oCreatePassword = null;
 
@@ -62,8 +65,7 @@
 			AddCookie(ezbobab, "ezbobab", 3);
 			AddCookie(sourceref_time, "sourceref_time", 3);
 
-			AddCookie(alibaba_id, "alibaba_id", 6);
-			AddCookie(baba_id, "alibaba_id", 6);
+			AddCookie(!string.IsNullOrWhiteSpace(baba_id) ? baba_id : alibaba_id, "alibaba_id", 6);
 
 			AddCookie(furl, "furl", 6);
 			AddCookie(fsource, "fsource", 6);
