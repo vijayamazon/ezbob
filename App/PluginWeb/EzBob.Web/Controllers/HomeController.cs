@@ -66,7 +66,6 @@
 			AddCookie(sourceref_time, "sourceref_time", 3);
 
 			AddCookie(!string.IsNullOrWhiteSpace(baba_id) ? baba_id : alibaba_id, "alibaba_id", 6);
-			AddCookie(baba_id, "alibaba_id", 6);
 
 			AddCookie(furl, "furl", 6);
 			AddCookie(fsource, "fsource", 6);
