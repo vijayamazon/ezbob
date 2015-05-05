@@ -28,6 +28,7 @@
 			string sourceref_time = "",
 			string lead_data = "",
 			string alibaba_id = "",
+			string baba_id = "",
 
 			string furl = "",
 			string fsource = "",
@@ -62,6 +63,7 @@
 			AddCookie(sourceref_time, "sourceref_time", 3);
 
 			AddCookie(alibaba_id, "alibaba_id", 6);
+			AddCookie(baba_id, "alibaba_id", 6);
 
 			AddCookie(furl, "furl", 6);
 			AddCookie(fsource, "fsource", 6);
