@@ -268,6 +268,23 @@
 			this.finishWizardArgs.DoMain = false;
 
 			new FinishWizard(this.finishWizardArgs).Execute();
+
+			SafeReader sr = DB.GetFirst(
+				"GetCashRequestData",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerId", this.customerId)
+			);
+
+			if (sr.IsEmpty) {
+				throw new StrategyException(
+					this,
+					"Cannot execute Main strategy: no cash request found after executing FinishWizard."
+				);
+			} // if
+
+			this.cashRequestID = sr["Id"];
+			this.createCashRequest = DoAction.No;
+			this.updateCashRequest = DoAction.Yes;
 		} // FinishWizard
 
 		private void GetLandRegistryData(List<CustomerAddressModel> addresses) {
@@ -807,15 +824,11 @@
 
 		private void ValidateCashRequestArgs() {
 			if (this.finishWizardArgs != null) {
-				SafeReader sr = DB.GetFirst(
-					"GetCashRequestData",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@CustomerId", this.customerId)
-				);
-
-				this.cashRequestID = sr["Id"];
-				this.createCashRequest = DoAction.No;
-				this.updateCashRequest = DoAction.Yes;
+				// Setting these three parameters to some default values that enable passing verification.
+				// Real values will be loaded after FinishWizard has completed.
+				this.cashRequestID = null;
+				this.createCashRequest = DoAction.Yes;
+				this.updateCashRequest = DoAction.No;
 			} // if
 
 			bool crIsNotNull = (this.cashRequestID != null);
