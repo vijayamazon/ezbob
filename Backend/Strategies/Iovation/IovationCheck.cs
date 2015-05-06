@@ -51,10 +51,10 @@
                 return;
             }
 
-            var score = response.details.FirstOrDefault(x => x.name == "ruleset.score");
-            
             Log.Info("Iovation Response : \n{0}", JsonConvert.SerializeObject(response, Formatting.Indented));
 
+            CheckTransactionDetailsResponseDetail score = response.details == null ? null : response.details.FirstOrDefault(x => x.name == "ruleset.score");
+            
             IovationResult result;
             if(!Enum.TryParse(response.result, out result)){
                 result = IovationResult.U;
