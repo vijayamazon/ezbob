@@ -1,4 +1,4 @@
-﻿@model decimal
+﻿@model EzBob.Web.Areas.Underwriter.Models.PaypointAddedModel
 
 PayPoint added
 
@@ -6,7 +6,7 @@ PayPoint added
 {
     <script type="text/javascript">
         $(function () {
-            window.opener.paypointAdded(@Model);
+            window.opener.paypointAdded(@Model.Amount, @Model.PaymentAdded.ToString().ToLower());
             self.close();
         });
     </script>

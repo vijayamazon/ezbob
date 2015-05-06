@@ -1,5 +1,7 @@
 ﻿/* Permissions */
 [name="editEmail"],
+[name="changeMobile"],
+[name="changeDaytime"],
 [name="changeCustomerStatus"],
 [name="isTestEditButton"],
 [name="newCreditLineBtn"],
@@ -70,12 +72,21 @@ a[data-bug-type],
      visibility: visible;
 }
 
-/*Email confirmation button*/
+/*Email confirmation button / change phones */
 
-.permission-EmailConfirmationButton [name="editEmail"] {
+.permission-EmailConfirmationButton [name="editEmail"]
+ {
     display: inline-block;
     visibility: visible;
 }
+
+/*ChangePhone*/
+.permission-ChangePhone [name="changeMobile"],
+.permission-ChangePhone [name="changeDaytime"]{
+    display: inline-block;
+    visibility: visible;
+}
+
 
 /*Customer Status*/
 

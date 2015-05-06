@@ -66,6 +66,10 @@
 			get { return this[Variables.CollectionPeriod3]; }
 		}
 
+        public virtual VariableValue CollectionToAddress {
+            get { return this[Variables.CollectionToAddress]; }
+		}
+        
 		public virtual VariableValue CompanyCaisLateAlertLongMonths {
 			get { return this[Variables.CompanyCaisLateAlertLongMonths]; }
 		}

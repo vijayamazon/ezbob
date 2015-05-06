@@ -45,12 +45,19 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
     </Reference>
+    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\FSharp\FSharp.Core.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
+    </Reference>
+    <Reference Include="MailChimp">
+      <HintPath>..\..\Lib\3rdparty\MailChimp\MailChimp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
@@ -145,6 +152,7 @@
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
+    <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
@@ -312,6 +320,7 @@
     <Compile Include="StoredProcs\GetCustomerAddresses.cs" />
     <Compile Include="UserManagement\LoadCustomerByCreatePasswordToken.cs" />
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
+    <Compile Include="UserManagement\UserDisable.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="Misc\AmlChecker.cs" />

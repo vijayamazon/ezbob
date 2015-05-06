@@ -5,11 +5,9 @@
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using DbConstants;
-	using EZBob.DatabaseLib.Model.Database;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using IMailLib;
-	using MailStrategies.API;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
 	using StructureMap;
@@ -20,7 +18,7 @@
 	/// </summary>
 	public class SetLateLoanStatus : AStrategy {
 		public SetLateLoanStatus() {
-			collectionIMailer = new CollectionMail(
+            this.collectionIMailer = new CollectionMail(
 				ConfigManager.CurrentValues.Instance.ImailUserName,
 				ConfigManager.CurrentValues.Instance.IMailPassword,
 				ConfigManager.CurrentValues.Instance.IMailDebugModeEnabled,
@@ -28,22 +26,19 @@
 				ConfigManager.CurrentValues.Instance.IMailSavePath);
 		} // constructor
 
-		public override string Name {
-			get {
-				return "Set Late Loan Status";
-			}
-		}
+		public override string Name { get { return "Set Late Loan Status"; } }
 
 		public override void Execute() {
-			now = DateTime.UtcNow;
+            this.now = DateTime.UtcNow;
 
+            //-----------Mark Loans as Late----------------------------------------------------
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				MarkLoanAsLate(sr);
 				return ActionResult.Continue;
 			}, "GetLoansToCollect",
-			CommandSpecies.StoredProcedure, new QueryParameter("Now", now));
+            CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
 
-
+            //-----------Send collection mails sms imails and change status --------------------
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				try {
 					HandleCollectionLogic(sr);
@@ -52,9 +47,26 @@
 				}
 				
 				return ActionResult.Continue;
-			}, "GetLateForCollection", 
-			CommandSpecies.StoredProcedure, new QueryParameter("Now", now));
+			}, "GetLateForCollection",
+            CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+
+            //-----------Change status to enabled for cured loans--------------------------------
+            DB.ForEachRowSafe((sr, bRowsetStart) => {
+                int customerID = sr["CustomerID"];
+                int loanID = sr["LoanID"];
+                try {
+                    HandleCuredLoan(customerID, loanID);
+                } catch (Exception ex) {
+                    Log.Error(ex, "Failed to handle cured loan for customer {0}", customerID);
+                }
+                return ActionResult.Continue;
+            }, "GetCuredLoansForCollection",
+            CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
 		}//Execute
+
+	    private void HandleCuredLoan(int customerID, int loanID) {
+	        ChangeStatus(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured);
+	    }//HandleCuredLoan
 
 		private void AddCollectionLog(int customerID, int loanID, CollectionType type, CollectionMethod method) {
 			Log.Info("Adding collection log to customer {0} loan {1} type {2} method {3}", customerID, loanID, type, method);
@@ -64,8 +76,8 @@
 				new QueryParameter("LoanID", loanID),
 				new QueryParameter("Type", type.ToString()),
 				new QueryParameter("Method", method.ToString()),
-				new QueryParameter("Now", now));
-		}
+                new QueryParameter("Now", this.now));
+		}//AddCollectionLog
 
 		private void CalculateFee(int daysBetween, decimal interest, out int feeAmount, out int feeType) {
 			feeAmount = 0;
@@ -80,8 +92,8 @@
 			} else if (daysBetween >= CurrentValues.Instance.CollectionPeriod2 && daysBetween < CurrentValues.Instance.CollectionPeriod3 && interest <= 0) {
 				feeAmount = CurrentValues.Instance.PartialPaymentCharge;
 				feeType = CurrentValues.Instance.PartialPaymentCharge.ID;
-			}
-		}
+			}//if
+		}//CalculateFee
 
 		private void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type) {
 			Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", customerID, loanID, type, status);
@@ -89,13 +101,13 @@
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerID),
 				new QueryParameter("CollectionStatus", (int)status),
-				new QueryParameter("Now", now));
+				new QueryParameter("Now", this.now));
 
 			AddCollectionLog(customerID, loanID, type, CollectionMethod.ChangeStatus);
 
             //TODO update loan collection status if want to be on loan level and not on customer level
             Log.Info("add new late fee and mark loan as late for customer {0}, loan {1}", customerID, loanID);
-		}
+		}//ChangeStatus
 
 		private void CollectionDay0(CollectionDataModel model, CollectionType type) {
 			//send email Default Template0
@@ -105,7 +117,7 @@
 			string smsTemplate = string.Format("{0} This is a courtesy message to remind you that a payment of {1} is overdue with ezbob. Please call Emma at 02033711842 to arrange your payment ASAP.",
 				model.FirstName, model.AmountDue);
 			SendCollectionSms(smsTemplate, model, type);
-		}
+		}//CollectionDay0
 
 		private void CollectionDay15(CollectionDataModel model, CollectionType type) {
 			//change status to 15-30 days missed
@@ -121,7 +133,7 @@
 			string smsTemplate = string.Format("{0} final reminder that your account in the amount of {1} on your account was due on {2}. If we do not receive the payment in full ezbob will submit your action to our legal department.",
 				model.FirstName, model.AmountDue, model.DueDate.ToString("dd/MM/yyyy"));
 			SendCollectionSms(smsTemplate, model, type);
-		}
+		}//CollectionDay15
 
 		private void CollectionDay1to6(CollectionDataModel model, CollectionType type) {
 			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed1To14, type);
@@ -133,14 +145,14 @@
 			string smsTemplate = string.Format("{0} the outstanding balance of {1} with ezbob has not been settled. Failure to settle the account will result in additional late payment fees being added to your account balance. Emma 02033711842",
 				model.FirstName, model.AmountDue);
 			SendCollectionSms(smsTemplate, model, type);
-		}
+		}//CollectionDay1to6
 
 		private void CollectionDay21(CollectionDataModel model, CollectionType type) {
 			//send sms Default SMS21
 			string smsTemplate = string.Format("{0} you have failed to settle your payment. Ezbob has submitted your account for legal proceedings. Emma 02033711842",
 				model.FirstName);
 			SendCollectionSms(smsTemplate, model, type);
-		}
+		}//CollectionDay21
 
 		private void CollectionDay31(CollectionDataModel model, CollectionType type) {
 			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed31To45, type);
@@ -154,16 +166,15 @@
 			string smsTemplate = string.Format("{0} you have failed to settle your payment. Ezbob has submitted your account for legal proceedings. Emma 02033711842",
 				model.FirstName);
 			SendCollectionSms(smsTemplate, model, type);
-		}
+		}//CollectionDay31
 
 		private void CollectionDay46(CollectionDataModel model, CollectionType type) {
 			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed46To60, type);
-		}
+		}//CollectionDay46
 
-		//CollectionDay31
 		private void CollectionDay60(CollectionDataModel model, CollectionType type) {
 			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed61To90, type);
-		}
+		}//CollectionDay60
 
 		private void CollectionDay7(CollectionDataModel model, CollectionType type) {
 			//send email Default Template7
@@ -176,7 +187,7 @@
 			string smsTemplate = string.Format("{0}, the outstanding balance of {1}, including a late payment of £20 on your account with ezbob has not been settled. Failure to settle the account within 2 days will result in debt collection proceedings being taken to retrieve the debt. Emma 02033711842",
 				model.FirstName, model.AmountDue);
 			SendCollectionSms(smsTemplate, model, type);
-		}
+		}//CollectionDay7
 
 		private void CollectionDay8to14(CollectionDataModel model, CollectionType type) {
 			//send email Default Template8-13
@@ -185,12 +196,11 @@
 			//send sms Default SMS8-13
 			string smsTemplate = string.Format("Warning – {0} late fees and daily interest has been added to your ezbob account. If you don’t do something quickly, ezbob can take actions against you. Please call Emma 02033711842 to arrange your payment ASAP.", model.FirstName);
 			SendCollectionSms(smsTemplate, model, type);
-		}
+		}//CollectionDay8to14
 
-		//CollectionDay21
 		private void CollectionDay90(CollectionDataModel model, CollectionType type) {
 			ChangeStatus(model.CustomerID, model.LoanID, CollectionStatusNames.DaysMissed90Plus, type);
-		}
+		}//CollectionDay90
 
 		private CollectionMailModel GetCollectionMailModel(CollectionDataModel model) {
 			SafeReader sr = DB.GetFirst("GetDataForCollectionMail", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("LoanID", model.LoanID));
@@ -220,7 +230,7 @@
 				GuarantorName = sr["GuarantorName"], //TODO implement
 				IsLimited = sr["IsLimited"],
 				CompanyName = sr["CompanyName"],
-				Date = now,
+				Date = this.now,
 
 				LoanAmount = sr["LoanAmount"],
 				LoanRef = sr["LoanRef"],
@@ -246,12 +256,12 @@
 
 			var loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			Loan loan = loanRepository.Get(model.LoanID);
-			var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
+            var payEarlyCalc = new LoanRepaymentScheduleCalculator(loan, this.now, CurrentValues.Instance.AmountToChargeFrom);
 			var balance = payEarlyCalc.TotalEarlyPayment();
 			mailModel.OutstandingBalance = balance;
 
 			return mailModel;
-		}
+		}//GetCollectionMailModel
 
 		/// <summary>
 		/// For the first late schedule 
@@ -261,7 +271,7 @@
 			int loanId = sr["LoanID"];
 			string dayPhone = sr["DaytimePhone"];
 			string mobilePhone = sr["MobilePhone"];
-			int lateDays = (int)(now - scheduleDate).TotalDays;
+            int lateDays = (int)(this.now - scheduleDate).TotalDays;
 
 			var model = new CollectionDataModel {
 				CustomerID = sr["CustomerID"],
@@ -284,50 +294,28 @@
 
 			Log.Info(model.ToString());
 
+			if (lateDays == 0) { CollectionDay0(model, CollectionType.CollectionDay0); }
 
+			if (lateDays >= 1 && lateDays <= 6) { CollectionDay1to6(model, CollectionType.CollectionDay1to6); }
 
-			if (lateDays == 0) {
-				CollectionDay0(model, CollectionType.CollectionDay0);
-			}
+			if (lateDays == 7) { CollectionDay7(model, CollectionType.CollectionDay7); }
 
-			if (lateDays >= 1 && lateDays <= 6) {
-				CollectionDay1to6(model, CollectionType.CollectionDay1to6);
-			}
+			if (lateDays >= 8 && lateDays <= 14) { CollectionDay8to14(model, CollectionType.CollectionDay8to14); }
 
-			if (lateDays == 7) {
-				CollectionDay7(model, CollectionType.CollectionDay7);
-			}
+			if (lateDays == 15) { CollectionDay15(model, CollectionType.CollectionDay15); }
 
-			if (lateDays >= 8 && lateDays <= 14) {
-				CollectionDay8to14(model, CollectionType.CollectionDay8to14);
-			}
+			if (lateDays == 21) { CollectionDay21(model, CollectionType.CollectionDay21); }
 
-			if (lateDays == 15) {
-				CollectionDay15(model, CollectionType.CollectionDay15);
-			}
+			if (lateDays == 31) { CollectionDay31(model, CollectionType.CollectionDay31); }
 
-			if (lateDays == 21) {
-				CollectionDay21(model, CollectionType.CollectionDay21);
-			}
+			if (lateDays == 46) { CollectionDay46(model, CollectionType.CollectionDay46); }
 
-			if (lateDays == 31) {
-				CollectionDay31(model, CollectionType.CollectionDay31);
-			}
+			if (lateDays == 60) { CollectionDay60(model, CollectionType.CollectionDay60); }
 
-			if (lateDays == 46) {
-				CollectionDay46(model, CollectionType.CollectionDay46);
-			}
-
-			if (lateDays == 60) {
-				CollectionDay60(model, CollectionType.CollectionDay60);
-			}
-
-			if (lateDays == 90) {
-				CollectionDay90(model, CollectionType.CollectionDay90);
-			}
+			if (lateDays == 90) { CollectionDay90(model, CollectionType.CollectionDay90); }
 
 			UpdateLoanStats(loanId, lateDays, model.AmountDue);
-		}
+		}//HandleCollectionLogic
 
 		/// <summary>
 		/// For each loan schedule marks it as late, it's loan as late, applies fee if needed
@@ -369,12 +357,10 @@
 
 			if (scheduleStatus != "Late") {
 				DB.ExecuteNonQuery("UpdateLoanScheduleStatus", CommandSpecies.StoredProcedure,
-					new QueryParameter("Id", id),
-					new QueryParameter("Status", "Late")
-					);
+					new QueryParameter("Id", id), new QueryParameter("Status", "Late"));
 			}
 
-			int daysBetween = (int)(now - scheduleDate).TotalDays;
+            int daysBetween = (int)(this.now - scheduleDate).TotalDays;
 			int feeAmount, feeType;
 			CalculateFee(daysBetween, interest, out feeAmount, out feeType);
 
@@ -406,7 +392,7 @@
 			} else {
 				Log.Info("Collection sending email is not allowed, email is not sent to customer {0}\n email template {1}", model.CustomerID, emailTemplateName);
 			}
-		}
+		}//SendCollectionEmail
 
 		private void SendCollectionImail(CollectionDataModel model, CollectionType type) {
 			if (model.ImailSendingAllowed) {
@@ -416,26 +402,26 @@
 					case CollectionType.CollectionDay7:
 						if (mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-							collectionIMailer.SendDefaultTemplateComm7(mailModel);
+                            this.collectionIMailer.SendDefaultTemplateComm7(mailModel);
 							AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 						}
 						break;
 					case CollectionType.CollectionDay15:
 						if (mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-							collectionIMailer.SendDefaultNoticeComm7Borrower(mailModel);
+                            this.collectionIMailer.SendDefaultNoticeComm7Borrower(mailModel);
 							//TODO uncomment when guarantor is implemented: 
 							//collectionIMailer.SendDefaultWarningComm7Guarantor(mailModel);
 						} else {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-							collectionIMailer.SendDefaultTemplateConsumer14(mailModel);
+                            this.collectionIMailer.SendDefaultTemplateConsumer14(mailModel);
 						}
 						AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 						break;
 					case CollectionType.CollectionDay31:
 						if (!mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-							collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
+                            this.collectionIMailer.SendDefaultTemplateConsumer31(mailModel);
 							AddCollectionLog(model.CustomerID, model.LoanID, type, CollectionMethod.Mail);
 						}
 						break;
@@ -446,7 +432,7 @@
 			} else {
 				Log.Info("Collection sending mail is not allowed, mail is not sent to customer {0}\n template {1}", model.CustomerID, type);
 			}
-		}
+		}//SendCollectionImail
 
 		private void SendCollectionSms(string smsTemplate, CollectionDataModel model, CollectionType type) {
 			if (model.SmsSendingAllowed && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
@@ -462,7 +448,7 @@
 				Log.Info("Collection sending sms is not allowed, sms is not sent to customer {0} phone number {1}\n content {2}",
 					model.CustomerID, model.PhoneNumber, smsTemplate);
 			}
-		}
+		}//SendCollectionSms
 
 		/// <summary>
 		/// TODO This is wrong logic, there was a bug that corrupted all the values in loan table need to be backfilled and fixed
@@ -507,7 +493,6 @@
             Log.Info("add new late fee and mark loan as late for loanId {0}", loanId);
 		}// UpdateLoanStats
 
-
 		private const string CollectionDay8to14EmailTemplate = "Mandrill - ezbob - Last warning - Debt recovery";
 		private const string CollectionDay7EmailTemplate     = "Mandrill - ezbob - 20p late fee";
 		private const string CollectionDay31EmailTemplate    = "Mandrill - ezbob - legal process starting";
@@ -523,9 +508,10 @@
 			Mail,
 			Sms,
 			ChangeStatus
-		}
+		}//enum
 
 		public enum CollectionType {
+            Cured,
 			CollectionDay0,
 			CollectionDay1to6,
 			CollectionDay7,
@@ -536,7 +522,7 @@
 			CollectionDay46,
 			CollectionDay60,
 			CollectionDay90
-		}
+		}//enum
 
 		public class CollectionDataModel {
 			public decimal AmountDue { get; set; }
@@ -570,7 +556,7 @@ EmailSendingAllowed:{14}, SmsSendingAllowed: {15}, ImailSendingAllowed: {16}",
 					FirstName, "", FullName, Email, PhoneNumber, AmountDue, FeeAmount, Interest, LoanRefNum, DueDate, LateDays,
 					EmailSendingAllowed, SmsSendingAllowed, ImailSendingAllowed);
 			}
-		}
+		} //class CollectionDataModel
 
 		public class LoanStatsModel {
 			public decimal Late30 { get; set; }
@@ -583,6 +569,6 @@ EmailSendingAllowed:{14}, SmsSendingAllowed: {15}, ImailSendingAllowed: {16}",
 			public int Late90PlusNum { get; set; }
 			public decimal PastDues { get; set; }
 			public int PastDuesNum { get; set; }
-		}
-	}// class 
+        } //class LoanStatsModel
+	}// class SetLateLoanStatus
 } // namespace

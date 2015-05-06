@@ -193,6 +193,10 @@
 			return Execute<Temp_BackFillMedals>(null, null);
 		}
 
+        public ActionMetaData PayPointAddedWithoutOpenLoan(int customerID, int userID, decimal amount, string paypointTransactionID) {
+            return Execute<PayPointAddedWithoutOpenLoan>(customerID, userID, customerID, amount, paypointTransactionID);
+		}
+        
 		private bool IsValidConfigTableInput(List<ConfigTable> configTableEntries, out SortedDictionary<int, ConfigTable> sortedEntries) {
 			sortedEntries = new SortedDictionary<int, ConfigTable>();
 

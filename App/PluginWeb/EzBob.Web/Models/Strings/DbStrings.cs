@@ -9,9 +9,28 @@ namespace EzBob.Web.Models.Strings
 
 		/// <summary>
 		/// Fetches string like This email adress already exists in our system.  Please try to log-in or request new password.
-
 		/// </summary>
 		public static string EmailAddressAlreadyExists { get { return Strings.GetByKey("EmailAddressAlreadyExists"); } }
+		/// <summary>
+		/// Fetches string like This email is already registered. For more information contact support: 
+		/// </summary>
+		public static string EmailAddressAlreadyRegisteredInOtherOrigin { get { return Strings.GetByKey("EmailAddressAlreadyRegisteredInOtherOrigin"); } }
+		/// <summary>
+		/// Fetches string like Maximum answer length is 199 characters.
+		/// </summary>
+		public static string MaximumAnswerLengthExceeded { get { return Strings.GetByKey("MaximumAnswerLengthExceeded"); } }
+		/// <summary>
+		/// Fetches string like Invalid code.
+		/// </summary>
+		public static string InvalidMobileCode { get { return Strings.GetByKey("InvalidMobileCode"); } }
+		/// <summary>
+		/// Fetches string like Failed to create user.
+		/// </summary>
+		public static string UserCreationFailed { get { return Strings.GetByKey("UserCreationFailed"); } }
+		/// <summary>
+		/// Fetches string like Customer id is not provided
+		/// </summary>
+		public static string CustomeIdNotProvided { get { return Strings.GetByKey("CustomeIdNotProvided"); } }
 		/// <summary>
 		/// Fetches string like This is not a valid email adress
 		/// </summary>

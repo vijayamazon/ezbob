@@ -4,6 +4,10 @@ namespace ConfigManager {
 			get { return this[Variables.MaamEmailReceiver]; }
 		}
 
+        public virtual VariableValue MailChimpApiKey {
+            get { return this[Variables.MailChimpApiKey]; }
+		}
+
 		public virtual VariableValue MailSenderEmail {
 			get { return this[Variables.MailSenderEmail]; }
 		}

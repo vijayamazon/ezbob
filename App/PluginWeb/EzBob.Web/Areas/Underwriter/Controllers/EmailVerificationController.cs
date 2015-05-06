@@ -1,10 +1,8 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
 	using System.Web.Mvc;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Logger;
 	using Infrastructure;
-	using Infrastructure.Attributes;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 

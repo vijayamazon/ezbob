@@ -23,6 +23,7 @@
 	using System.Linq;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+    using PaymentServices.Calculators;
 
 	public class ProfileController : Controller {
 
@@ -330,8 +331,18 @@
 				cust.PersonalInfo.Fullname,
 				payPointFacade.PayPointAccount
 			);
-			
-			return View(new { success = true });
+
+            bool hasOpenLoans = cust.Loans.Any(x => x.Status != LoanStatus.PaidOff);
+		    if (amount > 0 && hasOpenLoans) {
+		        Loan loan = cust.Loans.First(x => x.Status != LoanStatus.PaidOff);
+		        var f = new LoanPaymentFacade();
+                f.PayLoan(loan, trans_id, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay");
+		    }
+
+            if (amount > 0 && !hasOpenLoans) {
+                this.m_oServiceClient.Instance.PayPointAddedWithoutOpenLoan(cust.Id, cust.Id, amount.Value, trans_id);
+            }
+		    return View(new { success = true });
 		} // PayPointCallback
 
 		private void DoApplyForLoan() {

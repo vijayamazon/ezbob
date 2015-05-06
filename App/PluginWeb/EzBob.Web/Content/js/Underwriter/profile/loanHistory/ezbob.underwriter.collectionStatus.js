@@ -142,6 +142,12 @@ EzBob.Underwriter.CollectionStatusView = Backbone.Marionette.Layout.extend({
 		},
 		Feedback: {
 			selector: "#collectionFeedback"
+		},
+		ChangeEmail:{
+		    selector: "#collectionChangeEmail"
+		},
+		Unsubscribe: {
+		    selector: "#collectionUnsubscribe"
 		}
 	},
 	upload: function() {
@@ -166,8 +172,6 @@ EzBob.Underwriter.CollectionStatusView = Backbone.Marionette.Layout.extend({
 			autoclose: true,
 			format: 'dd/mm/yyyy'
 		});
-
-		
 
 		var status = this.model.get('CurrentStatus');
 		var collectionStatus = EzBob.Underwriter.StaticData.CollectionStatuses.models[status];
@@ -197,6 +201,11 @@ EzBob.Underwriter.CollectionStatusView = Backbone.Marionette.Layout.extend({
 		//Collection: Tracing,Collection: Site Visit
 		if (_.contains([21, 22], collectionStatusId)) {
 			this.$el.find('.feedback_status').show();
+		}
+
+	    //Disable
+		if (_.contains([1], collectionStatusId)) {
+		    this.$el.find('.disable_status').show();
 		}
 
 		if (collectionStatusIsDefault) {

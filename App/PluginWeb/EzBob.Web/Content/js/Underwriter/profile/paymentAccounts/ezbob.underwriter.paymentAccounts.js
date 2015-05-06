@@ -27,12 +27,13 @@ EzBob.Underwriter.PaymentAccountView = Backbone.Marionette.ItemView.extend({
 	initialize: function() {
 		this.bindTo(this.model, "change reset sync", this.render, this);
 		var self = this;
-		window.paypointAdded = (function(amount) {
-			if (amount == null) {
-				amount = 5;
-			}
-			EzBob.ShowMessage("Please deduct the " + amount + " pounds from this card using manual payment", "Reminder");
-			self.model.fetch();
+		window.paypointAdded = (function (amount, paymentAdded) {
+		    if (paymentAdded) {
+		        EzBob.ShowMessage(amount + " pounds was added as a system payment to open loan", "Info");
+		    } else {
+		        EzBob.ShowMessage("Customer has no open loans, please deduct the " + amount + " pounds from this card using manual payment", "Reminder");
+		    }
+		    self.model.fetch();
 		});
 		return this;
 	},

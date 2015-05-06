@@ -20,6 +20,7 @@ BEGIN
 
 	DECLARE @UserID INT = 0
 	DECLARE @SessionID INT = 0
+	DECLARE @OriginID INT = 0
 	DECLARE @rc INT
 
 	BEGIN TRANSACTION
@@ -27,6 +28,10 @@ BEGIN
 	IF EXISTS (SELECT u.UserId FROM Security_User u WHERE LOWER(u.UserName) = LOWER(@Email))
 	BEGIN
 		SET @UserID = -1
+		IF EXISTS (SELECT 1 FROM Customer c WHERE LOWER(c.Name) = LOWER(@Email))
+		BEGIN
+			SET @OriginID = (SELECT c.OriginID FROM Customer c WHERE LOWER(c.Name) = LOWER(@Email))
+		END
 	END
 	ELSE BEGIN
 		BEGIN TRY
@@ -70,6 +75,7 @@ BEGIN
 
 	SELECT
 		@UserID AS UserID,
-		@SessionID AS SessionID
+		@SessionID AS SessionID,
+		@OriginID AS OriginID
 END
 GO

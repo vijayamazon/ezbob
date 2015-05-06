@@ -116,6 +116,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	events: {
 		"click button[name=\"changeCustomerStatus\"]": "changeCustomerStatus",
 		"click button[name=\"editEmail\"]": "editEmail",
+		"click button[name=\"changeMobile\"]": "editPhone",
+		"click button[name=\"changeDaytime\"]": "editPhone",
 		"click button[name=\"brokerDetails\"]": "brokerDetails",
 		"click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
 		'click [name="TrustPilotStatusUpdate"]': 'updateTrustPilotStatus',
@@ -396,6 +398,12 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 		return false;
 	}, // editEmail
+
+	editPhone: function (ev) {
+	    var view = new EzBob.PhoneEditView({ model: this.model, PhoneType: $(ev.currentTarget).attr('data-phoneType') });
+	    EzBob.App.jqmodal.show(view);
+        return false;
+	}, // editPhone
 
 	verifyPhone: function(elem) {
 	    var that = this;

@@ -413,3 +413,7 @@ div.wizard-director-text { font-size: 11pt; color: #585858; }
 .captcha-image-margin {
     margin-bottom: 1.0em !important;
 }
+
+.notification_red a {
+	color: white;	
+}

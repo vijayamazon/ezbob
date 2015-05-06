@@ -27,6 +27,7 @@ namespace EzBobTest {
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.SalesForce;
+	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
@@ -795,5 +796,16 @@ namespace EzBobTest {
             CaisGenerate cg = new CaisGenerate(1);
             cg.Execute();
         }
+        [Test]
+        public void TestPPNoLoan() {
+            PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
+            p.Execute();
+        }
+
+	    [Test]
+	    public void TestUserDisable() {
+	        UserDisable ud = new UserDisable(1, "a@b.com", true);
+	        ud.Execute();
+	    }
 	}
 }

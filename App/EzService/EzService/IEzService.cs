@@ -712,6 +712,15 @@
 			DateTime? promotionPageVisitTime
 		);
 
+        [OperationContract]
+        StringActionResult UserDisable(
+            int userID,
+            int customerID,
+            string email,
+            bool unsubscribeFromMailChimp,
+            bool changeEmail
+        );
+
 		[OperationContract]
 		StringActionResult UserResetPassword(string sEmail);
 
@@ -791,6 +800,9 @@
 
         [OperationContract]
         ActionMetaData WriteToServiceLog(int customerID, int userID, WriteToLogPackage.InputData packageInputData);
+
+        [OperationContract]
+        ActionMetaData PayPointAddedWithoutOpenLoan(int customerID, int userID, decimal amount, string paypointTransactionID);
 
 	} // interface IEzService
 } // namespace EzService

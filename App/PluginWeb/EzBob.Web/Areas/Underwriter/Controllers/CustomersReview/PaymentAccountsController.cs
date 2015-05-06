@@ -17,6 +17,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using ServiceClientProxy;
 	using ActionResult = System.Web.Mvc.ActionResult;
+    using PaymentServices.Calculators;
 
 	public class PaymentAccountsController : Controller
 	{
@@ -183,9 +184,9 @@
 				throw new Exception("check hash failed");
 			}
 
-			AddPayPointCardToCustomer(trans_id, card_no, cus, expiry, payPointFacade.PayPointAccount);
+            bool paymentAdded = AddPayPointCardToCustomer(trans_id, card_no, cus, expiry, amount, payPointFacade.PayPointAccount);
 
-			return View("PayPointAdded", amount ?? 0);
+            return View("PayPointAdded", new PaypointAddedModel { Amount = amount ?? 0, PaymentAdded = paymentAdded });
 		}
 
 		[Transactional]
@@ -195,15 +196,31 @@
 			var customer = _customers.GetChecked(customerId);
 			var expiry = expiredate.ToString("MMyy");
             PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate());
-			AddPayPointCardToCustomer(transactionid, cardno, customer, expiry, payPointFacade.PayPointAccount);
+			AddPayPointCardToCustomer(transactionid, cardno, customer, expiry, 0, payPointFacade.PayPointAccount);
 
 			return Json(new { });
 		}
 
-		private void AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry, PayPointAccount account) {
-			
+		private bool AddPayPointCardToCustomer(string transactionid, string cardno, EZBob.DatabaseLib.Model.Database.Customer customer, string expiry, decimal? amount, PayPointAccount account) {
+		    bool paymentAdded = false;
 			customer.TryAddPayPointCard(transactionid, cardno, expiry, customer.PersonalInfo.Fullname, account);
+
+            bool hasOpenLoans = customer.Loans.Any(x => x.Status != LoanStatus.PaidOff);
+            if (amount > 0 && hasOpenLoans) {
+                Loan loan = customer.Loans.First(x => x.Status != LoanStatus.PaidOff);
+                var f = new LoanPaymentFacade();
+                f.PayLoan(loan, transactionid, amount.Value, Request.UserHostAddress, DateTime.UtcNow, "system-repay");
+                paymentAdded = true;
+            }
+
+            if (amount > 0 && !hasOpenLoans) {
+                this.m_oServiceClient.Instance.PayPointAddedWithoutOpenLoan(customer.Id, _context.UserId, amount.Value, transactionid);
+            }
+
+
 			m_oServiceClient.Instance.PayPointAddedByUnderwriter(customer.Id, cardno, _context.User.FullName, _context.User.Id);
+
+		    return paymentAdded;
 		}
 
 		[Ajax]

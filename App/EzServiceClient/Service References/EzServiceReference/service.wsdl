@@ -172,6 +172,12 @@
   <wsdl:message name="IEzService_UserLogin_OutputMessage">
     <wsdl:part name="parameters" element="tns:UserLoginResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UserDisable_InputMessage">
+    <wsdl:part name="parameters" element="tns:UserDisable" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UserDisable_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UserDisableResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UserResetPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UserResetPassword" />
   </wsdl:message>
@@ -321,6 +327,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_WriteToServiceLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToServiceLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoan" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoanResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyCaisDataForAlerts_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyCaisDataForAlerts" />
@@ -1401,6 +1413,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserLogin" message="tns:IEzService_UserLogin_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserLoginResponse" message="tns:IEzService_UserLogin_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="UserDisable">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserDisable" message="tns:IEzService_UserDisable_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserDisableResponse" message="tns:IEzService_UserDisable_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UserResetPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UserResetPassword" message="tns:IEzService_UserResetPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UserResetPasswordResponse" message="tns:IEzService_UserResetPassword_OutputMessage" />
@@ -1500,6 +1516,10 @@
     <wsdl:operation name="WriteToServiceLog">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLog" message="tns:IEzService_WriteToServiceLog_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLogResponse" message="tns:IEzService_WriteToServiceLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" message="tns:IEzService_PayPointAddedWithoutOpenLoan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoanResponse" message="tns:IEzService_PayPointAddedWithoutOpenLoan_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCompanyCaisDataForAlerts">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts" message="tns:IEzService_GetCompanyCaisDataForAlerts_InputMessage" />
@@ -2317,6 +2337,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="UserDisable">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UserDisable" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="UserResetPassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UserResetPassword" style="document" />
       <wsdl:input>
@@ -2535,6 +2564,15 @@
     </wsdl:operation>
     <wsdl:operation name="WriteToServiceLog">
       <soap12:operation soapAction="http://tempuri.org/IEzService/WriteToServiceLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4075,20 +4113,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

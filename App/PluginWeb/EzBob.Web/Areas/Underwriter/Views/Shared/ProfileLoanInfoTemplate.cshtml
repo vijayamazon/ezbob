@@ -173,7 +173,10 @@
                     <span class="pull-right <%- data.MobilePhoneVerified ? 'verfied-phone' : '' %>">
                         <%- data.MobilePhone %>
                         <button class="btn btn-mini left-pane-button" name="verifyMobile">
-                            <i class="fa tltp-left <%- data.MobilePhoneVerified ? 'fa-check verfied-phone' : 'fa-warning' %>" data-title="<%- data.MobileTooltip %>"/>
+                            <i class="fa tltp-left <%- data.MobilePhoneVerified ? 'fa-check verfied-phone' : 'fa-warning' %>" data-title="<%- data.MobileTooltip %>"></i>
+                        </button>
+                        <button class="btn btn-mini left-pane-button" name="changeMobile" data-phoneType="Mobile">
+                            <i class="fa fa-pencil tltp-left" data-title="Change mobile phone number"></i>
                         </button>
                     </span>
                 </td>
@@ -184,7 +187,10 @@
                     <span class="pull-right <%- data.DaytimePhoneVerified ? 'verfied-phone' : '' %>">
                         <%- data.DaytimePhone %>
                         <button class="btn btn-mini left-pane-button" name="verifyDaytime">
-                            <i class="fa tltp-left <%- data.DaytimePhoneVerified ? 'fa-check verfied-phone' : 'fa-warning' %>" data-title="<%- data.DaytimeTooltip %>"/>
+                            <i class="fa tltp-left <%- data.DaytimePhoneVerified ? 'fa-check verfied-phone' : 'fa-warning' %>" data-title="<%- data.DaytimeTooltip %>"></i>
+                        </button>
+                        <button class="btn btn-mini left-pane-button" name="changeDaytime" data-phoneType="Daytime" >
+                            <i class="fa fa-pencil tltp-left" data-title="Change daytime phone number"></i>
                         </button>
                     </span>
                 </td>
@@ -504,9 +510,6 @@
 </script>
 
 <script id="email-edit-template" type="text/template">
-    <div class="modal-header">
-        <h3 id="myModalLabel">Customer Email Edit</h3>
-    </div>
     <div class="modal-body">
         <form id="email-edit-form">
             <label>Email</label>
@@ -519,6 +522,19 @@
         <button class="btn btn-primary email-confirm-manually">Confirm Manually</button>
     </div>
 </script>
+
+<script id="phone-edit-template" type="text/template">
+    <div class="modal-body">
+        <form id="phone-edit-form">
+            <label><%- PhoneType %> Phone</label>
+            <input class="form-control phonenumber" type="tel" id="edit-phone" name="edit-phone" value="<%- Phone %>">
+        </form>
+    </div>
+    <div class="pull-right">
+        <button class="btn btn-primary change-phone disabled">Change phone</button>
+    </div>
+</script>
+
 
 <script id="credit-line-edit-dialog-template" type="text/template">
     <div class="modal-body">

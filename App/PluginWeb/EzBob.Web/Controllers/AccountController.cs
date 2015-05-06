@@ -418,6 +418,7 @@
 			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
 		} // GetPropertyStatuses
 
+		
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
@@ -440,7 +441,7 @@
 				return GetModelStateErrors(ModelState);
 
 			if (model.SecurityAnswer.Length > 199)
-				throw new Exception("Maximum answer length is 199 characters");
+				throw new Exception(DbStrings.MaximumAnswerLengthExceeded);
 
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
@@ -461,7 +462,7 @@
 				var maxPassLength = CurrentValues.Instance.PasswordPolicyType.Value == "hard" ? 7 : 6;
 
 				if (signupPass1.Length < maxPassLength)
-					throw new Exception(DbStrings.NotValidEmailAddress);
+					throw new Exception(DbStrings.PasswordPolicyCheck);
 
 				bool mobilePhoneVerified = false;
 
@@ -469,16 +470,26 @@
 					mobilePhoneVerified = m_oServiceClient.Instance.ValidateMobileCode(mobilePhone, mobileCode).Value;
 
 					if (!mobilePhoneVerified)
-						throw new Exception("Invalid code.");
+						throw new Exception(DbStrings.InvalidMobileCode);
 				} // if
 
-				MembershipCreateStatus status = CreateUser(model.EMail, signupPass1, securityQuestion, model.SecurityAnswer);
+				UserLoginActionResult createuserresult = CreateUser(model.EMail, signupPass1, securityQuestion, model.SecurityAnswer);
 
-				if (status == MembershipCreateStatus.DuplicateEmail)
-					throw new Exception("This email is already registered.");
+				MembershipCreateStatus status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), createuserresult.Status);
+				
+				if (status == MembershipCreateStatus.DuplicateEmail) {
 
+					int EmailOriginID = createuserresult.OriginID;
+
+					if (uiOrigin.CustomerOriginID != EmailOriginID)
+						throw new Exception(DbStrings.EmailAddressAlreadyRegisteredInOtherOrigin + string.Format("<br/><strong><a href=\"tel:{0}\">{0}</a></strong>", UiCustomerOrigin.Get().PhoneNumber));
+					else {
+						throw new Exception(DbStrings.EmailAddressAlreadyExists);
+					}
+				}
+				
 				if (status != MembershipCreateStatus.Success)
-					throw new Exception("Failed to create user.");
+					throw new Exception(DbStrings.UserCreationFailed);
 
 				Customer customer = null;
 
@@ -535,12 +546,13 @@
 					refNumber = customer.RefNumber
 				}, JsonRequestBehavior.AllowGet);
 			} catch (Exception e) {
+/*
 				if (e.Message == MembershipCreateStatus.DuplicateEmail.ToString()) {
 					return Json(new {
 						success = false,
 						errorMessage = DbStrings.EmailAddressAlreadyExists
 					}, JsonRequestBehavior.AllowGet);
-				} // if
+				} // if*/
 
 				return Json(new { success = false, errorMessage = e.Message }, JsonRequestBehavior.AllowGet);
 			} // try
@@ -686,7 +698,7 @@
 
             if (customerId == null && m_oContext.Customer == null)
             {
-                throw new Exception("Customer id is not provided");
+                throw new Exception(DbStrings.CustomeIdNotProvided);
             }
             if (customerId == null)
             {
@@ -956,18 +968,18 @@
             return Json(new {});
         }
 
-		private MembershipCreateStatus CreateUser(
+		private UserLoginActionResult CreateUser(
 			string email,
 			string password,
 			string passwordQuestion,
 			string passwordAnswer
 		) {
 			ms_oLog.Debug("Creating a user '{0}'...", email);
-
-			MembershipCreateStatus status;
+			
+			UserLoginActionResult ular;
 
 			try {
-				UserLoginActionResult ular = m_oServiceClient.Instance.CustomerSignup(
+				ular = m_oServiceClient.Instance.CustomerSignup(
 					email,
 					new Password(password),
 					Convert.ToInt32(passwordQuestion),
@@ -977,15 +989,14 @@
 
 				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().SessionId =
 					ular.SessionID.ToString(CultureInfo.InvariantCulture);
-
-				status = (MembershipCreateStatus)Enum.Parse(typeof(MembershipCreateStatus), ular.Status);
+				
 			} catch (Exception e) {
 				ms_oLog.Error(e, "Failed to create user '{0}'.", email);
 				throw;
 			} // try
 
 			ms_oLog.Debug("User '{0}' has been created.", email);
-			return status;
+			return ular;
 		} // CreateUser
 
 		private Customer CreateCustomer(
