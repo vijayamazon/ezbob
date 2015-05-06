@@ -16,7 +16,7 @@
 			DateTime today,
 			DateTime tomorrow,
 			List<string> oColumnTypes = null
-			) {
+		) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateAccountingLoanBalanceReport(report, today, tomorrow);
 
 			return new Body().Add<Class>("Body")
@@ -28,7 +28,7 @@
 			Report report,
 			DateTime today,
 			DateTime tomorrow
-			) {
+		) {
 			KeyValuePair<ReportQuery, DataTable> oData = CreateAccountingLoanBalanceReport(report, today, tomorrow);
 
 			return AddSheetToExcel(oData.Value, report.GetTitle(today, oToDate: tomorrow), "RptEarnedInterest");
@@ -38,12 +38,15 @@
 		private class AccountingLoanBalanceRawUpdate {
 			public string LoanTranMethod { get; set; }
 			public decimal TotalRepaid { get; set; }
+			public decimal RepaidPrincipal { get; set; }
+			public decimal RepaidInterest { get; set; }
 			public decimal RolloverRepaid { get; set; }
 			public int TransactionID { get; set; }
 			public DateTime? TransactionDate { get; set; }
 			public DateTime? LoanChargeDate { get; set; }
 			public int FeesEarnedID { get; set; }
 			public decimal FeesEarned { get; set; }
+			public decimal FeesRepaid { get; set; }
 		} // class AccountingLoanBalanceRawUpdate
 
 		[SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
@@ -68,6 +71,9 @@
 				ClientID = 0;
 				LoanID = 0;
 				IssuedAmount = 0;
+				RepaidPrincipal = 0;
+				RepaidInterest = 0;
+				FeesRepaid = 0;
 				SetupFee = 0;
 				EarnedInterest = 0;
 				NonCashPaid = 0;
@@ -84,7 +90,7 @@
 				CustomerStatusChange oLastChange,
 				CustomerStatusChange oCurrent,
 				DateTime oWriteOffDate
-				) {
+			) {
 				IsTotal = false;
 
 				WriteOffTotalBalance = 0;
@@ -106,6 +112,9 @@
 				CurrentCustomerStatus = oCurrent.NewStatus;
 				EarnedInterest = nEarnedInterest;
 
+				RepaidPrincipal = 0;
+				RepaidInterest = 0;
+				FeesRepaid = 0;
 				EarnedFees = 0;
 				CashPaid = 0;
 				WriteOffEarnedFees = 0;
@@ -135,9 +144,12 @@
 				oOutput.Columns.Add("ClientEmail", typeof(string));
 				oOutput.Columns.Add("LoanStatus", typeof(string));
 				oOutput.Columns.Add("IssuedAmount", typeof(decimal));
+				oOutput.Columns.Add("OutstandingPrincipal", typeof(decimal));
 				oOutput.Columns.Add("SetupFee", typeof(decimal));
 				oOutput.Columns.Add("EarnedInterest", typeof(decimal));
+				oOutput.Columns.Add("OutstandingInterest", typeof(decimal));
 				oOutput.Columns.Add("EarnedFees", typeof(decimal));
+				oOutput.Columns.Add("OutstandingFees", typeof(decimal));
 				oOutput.Columns.Add("CashPaid", typeof(decimal));
 				oOutput.Columns.Add("NonCashPaid", typeof(decimal));
 				oOutput.Columns.Add("WriteOffBalance", typeof(decimal));
@@ -154,6 +166,9 @@
 				LoanID++;
 
 				IssuedAmount += row.IssuedAmount;
+				RepaidPrincipal += row.RepaidPrincipal;
+				RepaidInterest += row.RepaidInterest;
+				FeesRepaid += row.FeesRepaid;
 				SetupFee += row.SetupFee;
 				EarnedInterest += row.EarnedInterest;
 
@@ -184,8 +199,7 @@
 				if (upd.TransactionDate.HasValue && !Transactions.Contains(upd.TransactionID)) {
 					Transactions.Add(upd.TransactionID);
 
-					bool bNonCash = (upd.LoanTranMethod ?? string.Empty).ToLower()
-						.StartsWith("non-cash");
+					bool bNonCash = (upd.LoanTranMethod ?? string.Empty).ToLower().StartsWith("non-cash");
 
 					if (bNonCash)
 						NonCashPaid += upd.TotalRepaid;
@@ -193,6 +207,9 @@
 						CashPaid += upd.TotalRepaid;
 
 					EarnedFees += upd.RolloverRepaid;
+					RepaidPrincipal += upd.RepaidPrincipal;
+					RepaidInterest += upd.RepaidInterest;
+					FeesRepaid += upd.FeesRepaid;
 
 					if (upd.TransactionDate.Value < WriteOffDate) {
 						if (bNonCash)
@@ -223,9 +240,12 @@
 						DBNull.Value,
 						DBNull.Value,
 						IssuedAmount,
+						IssuedAmount - RepaidPrincipal,
 						SetupFee,
 						EarnedInterest,
+						EarnedInterest - RepaidInterest,
 						EarnedFees,
+						EarnedFees - FeesRepaid,
 						CashPaid,
 						NonCashPaid,
 						WriteOffTotalBalance,
@@ -244,9 +264,12 @@
 						ClientEmail,
 						LoanStatus,
 						IssuedAmount,
+						IssuedAmount - RepaidPrincipal,
 						SetupFee,
 						EarnedInterest,
+						EarnedInterest - RepaidInterest,
 						EarnedFees,
+						EarnedFees - FeesRepaid,
 						CashPaid,
 						NonCashPaid,
 						CurrentCustomerStatus == CustomerStatus.WriteOff ? (object)WriteOffBalance : (object)DBNull.Value,
@@ -255,7 +278,7 @@
 						LastStatusChangeDate,
 						CurrentCustomerStatus.ToString(),
 						string.Empty
-						);
+					);
 				} // if
 			} // ToRow
 
@@ -290,9 +313,12 @@
 			private string ClientName { get; set; }
 			private string ClientEmail { get; set; }
 			private decimal IssuedAmount { get; set; }
+			private decimal RepaidPrincipal { get; set; }
 			private decimal SetupFee { get; set; }
 			private string LoanStatus { get; set; }
 			private decimal EarnedInterest { get; set; }
+			private decimal RepaidInterest { get; set; }
+			private decimal FeesRepaid { get; set; }
 			private decimal EarnedFees { get; set; }
 			private decimal CashPaid { get; set; }
 			private decimal WriteOffEarnedFees { get; set; }
@@ -310,7 +336,7 @@
 			Report report,
 			DateTime today,
 			DateTime tomorrow
-			) {
+		) {
 			Debug("Creating accounting loan balance report...");
 
 			Debug("Creating accounting loan balance report: loading earned interest...");
@@ -322,7 +348,7 @@
 				today,
 				tomorrow,
 				this
-				);
+			);
 			SortedDictionary<int, decimal> earned = ea.Run();
 
 			Debug("Creating accounting loan balance report: loading earned interest complete.");
@@ -351,7 +377,7 @@
 						ea.CustomerStatusHistory.Data.GetLast(nClientID),
 						ea.CustomerStatusHistory.GetCurrent(nClientID),
 						ea.CustomerStatusHistory.Data.GetWriteOffDate(nClientID) ?? tomorrow
-						);
+					);
 				} // if
 
 				return ActionResult.Continue;
