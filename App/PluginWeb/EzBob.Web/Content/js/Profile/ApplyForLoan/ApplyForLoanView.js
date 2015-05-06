@@ -177,7 +177,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		if (this.fixed)
 			this.$('.cash-question').hide();
 
-		if (this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU || this.isAlibaba)
+		if (this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceCOSME || this.isLoanSourceEU || this.isAlibaba)
 			this.$('.duration-select-allowed').hide();
 
 		if (!this.isLoanSourceEU)

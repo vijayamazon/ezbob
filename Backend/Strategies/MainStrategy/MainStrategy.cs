@@ -560,7 +560,8 @@
 				customer.DateApproved = now;
 				customer.ApprovedReason = this.autoDecisionResponse.DecisionName;
 				customer.NumApproves++;
-				customer.IsLoanTypeSelectionAllowed = 1;
+				customer.IsLoanTypeSelectionAllowed =
+					this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed ? 1 : 0;
 			} // if
 
 			var cr = customer.LastCashRequest;
