@@ -16,26 +16,36 @@ namespace Ezbob.API.AuthenticationAPI.Migrations
     {
         public Configuration()
         {
-			//Trace.WriteLine("---------------Migration Configuration ---------------------");
-            AutomaticMigrationsEnabled = false;
-	        //this.Seed(new AuthContext());
+			Trace.WriteLine("---------------Migration Configuration ---------------------");
+			//AutomaticMigrationsEnabled = false;
+			//this.Seed(new AuthContext());
         }
 
-        /*protected override void Seed(AuthContext context)
-        {
-            if (context.Clients.Count() > 0)
-            {
-                return;
-            }
-            context.Clients.AddRange(BuildClientsList());
-            context.SaveChanges();
-        }*/
+		/// <summary>
+		/// DON'T DELETE - the short version of seed
+		/// add clients
+		/// </summary>
+		/// <param name="context"></param>
+		//protected override void Seed(AuthContext context)
+		//{
+		//	//if (context.Clients.Count() > 0)
+		//	//{
+		//	//	return;
+		//	//}
+		//	context.Clients.AddRange(BuildClientsList());
+		//	context.SaveChanges();
+		//}
 
+		/// <summary>
+		/// DON'T DELETE - extended version of seed
+		/// add clients and assign users to roles
+		/// </summary>
+		/// <param name="context"></param>
 		protected override void Seed(AuthContext context) {
 
 			Trace.WriteLine("==============Seed==============");
 
-			if (context.Clients.Count() < 2 ) {
+			if (context.Clients.Count() < 2) {
 				Trace.WriteLine("Adding clients");
 				context.Clients.AddRange(BuildClientsList());
 			}
@@ -59,11 +69,21 @@ namespace Ezbob.API.AuthenticationAPI.Migrations
 				roleManager.Create(alibabaPartnerRole);
 			}
 
-			if (context.Users.Any() ) {
+			//  assign roles to user partherAppAlibaba
+			if (context.Users.Any()) {
 				using (AuthRepository _repo = new AuthRepository()) {
 					var alibabaUser = _repo.FindByUserName("partherAppAlibaba");
 					Task<bool> userToRole = _repo.AddToRole(alibabaUser.Id.ToString(), "PartnerAlibaba");
 					Trace.WriteLine("Adding userToRole partherAppAlibaba=> PartnerAlibaba");
+				}
+			}
+
+			//  assign roles to user partherAppAlibabaStaging
+			if (context.Users.Any()) {
+				using (AuthRepository _repo = new AuthRepository()) {
+					var alibabaUser = _repo.FindByUserName("partherAppAlibabaStaging");
+					Task<bool> userToRole = _repo.AddToRole(alibabaUser.Id.ToString(), "PartnerAlibaba");
+					Trace.WriteLine("Adding userToRole partherAppAlibabaStaging => PartnerAlibaba");
 				}
 			}
 
@@ -84,37 +104,56 @@ namespace Ezbob.API.AuthenticationAPI.Migrations
         {
             List<Client> ClientsList = new List<Client> 
             {
-                new Client
-                { Id = "ngAuthApp", 
-                    Secret= Helper.GetHash("abc@123"), 
-                    Name="AngularJS front-end Application", 
-                    ApplicationType =  ApplicationTypes.JavaScript, 
-                    Active = true, 
-                    RefreshTokenLifeTime = 7200, 
-                    AllowedOrigin = "https://localhost:44302"   
-                },
-                new Client
-                { Id = "consoleApp", 
-                    Secret=Helper.GetHash("123@abc"), 
-                    Name="Console Application", 
-                    ApplicationType = ApplicationTypes.NativeConfidential, 
-                    Active = true, 
-                    RefreshTokenLifeTime = 14400, 
-                    AllowedOrigin = "*"
-                },
+				new Client
+				{ Id = "ngAuthApp", 
+					Secret= Helper.GetHash("abc@123"), 
+					Name="AngularJS front-end Application", 
+					ApplicationType =  ApplicationTypes.JavaScript, 
+					Active = true, 
+					RefreshTokenLifeTime = 7200, 
+					AllowedOrigin = "https://localhost:44302"   
+				},
+				new Client
+				{ Id = "consoleApp", 
+					Secret=Helper.GetHash("123@abc"), 
+					Name="Console Application", 
+					ApplicationType = ApplicationTypes.NativeConfidential, 
+					Active = true, 
+					RefreshTokenLifeTime = 14400, 
+					AllowedOrigin = "*"
+				},
 				 new Client
-                {	Id = "pAliServer7c60C021e70B", 
-                    Secret= Helper.GetHash("152863423315581"), 
-                    Name="Alibaba partner server application", 
+				{	Id = "pAliServer7c60C021e70B", 
+					Secret= Helper.GetHash("152863423315581"), 
+					Name="Alibaba partner server application", 
+					ApplicationType = ApplicationTypes.NativeConfidential, 
+					Active = true, 
+					RefreshTokenLifeTime = 14400, 
+					AllowedOrigin = "*"  
+				},
+				 new Client
+				{	Id = "pAliClient86f35Fd2896", 
+					Secret= Helper.GetHash("352878968536372"), 
+					Name="Alibaba partner client application", 
+					ApplicationType =  ApplicationTypes.JavaScript, 
+					Active = true, 
+					RefreshTokenLifeTime = 7200, 
+					AllowedOrigin = "https://localhost:44302"   
+				},
+
+				 new Client
+                {	Id = "pAliServerStaging8256", 
+                    Secret= Helper.GetHash("8674067HBI90"), 
+                    Name="Staging: Alibaba server application", 
                     ApplicationType = ApplicationTypes.NativeConfidential, 
                     Active = true, 
                     RefreshTokenLifeTime = 14400, 
                     AllowedOrigin = "*"  
                 },
 				 new Client
-                {	Id = "pAliClient86f35Fd2896", 
-                    Secret= Helper.GetHash("352878968536372"), 
-                    Name="Alibaba partner client application", 
+                {	Id = "pAliClientStaging8256", 
+                    Secret= Helper.GetHash("9603JT6789S"), 
+                    Name="Staging: Alibaba client application", 
 					ApplicationType =  ApplicationTypes.JavaScript, 
                     Active = true, 
                     RefreshTokenLifeTime = 7200, 
