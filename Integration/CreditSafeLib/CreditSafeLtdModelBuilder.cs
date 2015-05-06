@@ -44,41 +44,16 @@
                 TryRead(() => data.Website = baseInfo.website, "BaseInfoWebsite");
                 TryRead(() => data.CompanyType = baseInfo.companytype, "BaseInfoCompanyType");
                 TryRead(() => data.AccountsType = baseInfo.accountstype, "BaseInfoAccountsType");
-                TryRead(() =>
-                {
-                    var date = baseInfo.annualreturndate.Split('/');
-                    data.AnnualReturnDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoAnnualReturnDate");
-                TryRead(() =>
-                {
-                    var date = baseInfo.incorporationdate.Split('/');
-                    data.IncorporationDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoIncorporationDate");
-                TryRead(() =>
-                {
-                    var date = baseInfo.accountsfilingdate.Split('/');
-                    data.AccountsFilingDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoAccountsFilingDate");
-                TryRead(() =>
-                {
-                    var date = baseInfo.latestaccountsdate.Split('/');
-                    data.LatestAccountsDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoLatestAccountsDate");
+                data.AnnualReturnDate = TryReadDate(baseInfo.annualreturndate, "BaseInfoAnnualReturnDate");
+                data.IncorporationDate = TryReadDate(baseInfo.incorporationdate, "BaseInfoIncorporationDate");
+                data.AccountsFilingDate = TryReadDate(baseInfo.accountsfilingdate, "BaseInfoAccountsFilingDate");
+                data.LatestAccountsDate = TryReadDate(baseInfo.latestaccountsdate, "BaseInfoLatestAccountsDate");
                 TryRead(() => data.Quoted = baseInfo.quoted, "BaseInfoQuoted");
                 //TryRead(() => data.CompanyStatus = baseInfo.companystatus, "BaseInfoCompanyStatus");
-
                 TryRead(() => data.CCJValues = Convert.ToInt32(ccjsummary.values), "BaseInfoCCJValues");
                 TryRead(() => data.CCJNumbers = Convert.ToInt32(ccjsummary.numbers), "BaseInfoCCJNumbers");
-                TryRead(() =>
-                {
-                    var date = ccjsummary.datefrom.Split('/');
-                    data.CCJDateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoCCJDateFrom");
-                TryRead(() =>
-                {
-                    var date = ccjsummary.dateto.Split('/');
-                    data.CCJDateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "BaseInfoCCJDateTo");
+                data.CCJDateFrom = TryReadDate(ccjsummary.datefrom, "BaseInfoCCJDateFrom");
+                data.CCJDateTo = TryReadDate(ccjsummary.dateto, "BaseInfoCCJDateTo");
                 //TryRead(() => data.CCJNumberOfWrits = Convert.ToInt32(ccjsummary.numberofwrits), "BaseInfoCCJNumberOfWrits");
                 TryRead(() => data.Outstanding = Convert.ToInt32(mortgagesummary.outstanding), "BaseInfoOutstanding");
                 TryRead(() => data.Satisfied = Convert.ToInt32(mortgagesummary.satisfied), "BaseInfoSatisfied");
@@ -120,11 +95,7 @@
             foreach (var rating in company.ratings)
             {
                 CreditSafeCreditRatings newRating = new CreditSafeCreditRatings();
-                TryRead(() =>
-                {
-                    var date = rating.date.Split('/');
-                    newRating.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "RatingDate");
+                newRating.Date = TryReadDate(rating.date, "RatingDate");
                 TryRead(() => newRating.Score = Convert.ToInt32(rating.score), "RatingScore");
                 TryRead(() => newRating.Description = rating.description, "RatingDescription");
                 data.CreditRatings.Add(newRating);
@@ -133,39 +104,23 @@
             {
                 CreditSafeCreditLimits newLimit = new CreditSafeCreditLimits();
                 TryRead(() => newLimit.Limit = Convert.ToInt32(limit.limit), "Limit");
-                TryRead(() =>
-                {
-                    var date = limit.date.Split('/');
-                    newLimit.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "LimitDate");
+                newLimit.Date = TryReadDate(limit.date, "LimitDate");
                 data.CreditLimits.Add(newLimit);
             }
             foreach (var name in company.previousnames)
             {
                 CreditSafePreviousNames newName = new CreditSafePreviousNames();
                 TryRead(() => newName.Name = name.name, "PreviousName");
-                TryRead(() =>
-                {
-                    var date = name.date.Split('/');
-                    newName.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "PreviousNameDate");
+                newName.Date = TryReadDate(name.date, "PreviousNameDate");
                 data.PreviousNames.Add(newName);
             }
             foreach (var record in company.recordofpayments)
             {
                 CreditSafeCCJDetails newRecord = new CreditSafeCCJDetails();
                 TryRead(() => newRecord.CaseNr = record.casenr, "CcjCaseNr");
-                TryRead(() =>
-                {
-                    var date = record.ccjdate.Split('/');
-                    newRecord.CcjDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "CcjDate");
+                newRecord.CcjDate = TryReadDate(record.ccjdate, "CcjDate");
                 TryRead(() => newRecord.Court = record.court, "CcjCourt");
-                TryRead(() =>
-                {
-                    var date = record.ccjdatepaid.Split('/');
-                    newRecord.CcjDatePaid = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "CcjDatePaid");
+                newRecord.CcjDatePaid = TryReadDate(record.ccjdatepaid, "CcjDatePaid");
                 TryRead(() => newRecord.CcjStatus = record.ccjstatus, "CcjStatus");
                 TryRead(() => newRecord.CcjAmount = Convert.ToInt32(record.ccjamount), "CcjAmount");
                 data.CcjDetails.Add(newRecord);
@@ -174,11 +129,7 @@
             foreach (var history in company.statushistorys)
             {
                 CreditSafeStatusHistory newHistory = new CreditSafeStatusHistory();
-                TryRead(() =>
-                {
-                    var date = history.date.Split('/');
-                    newHistory.date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "StatusHistoryDate");
+                newHistory.date = TryReadDate(history.date, "StatusHistoryDate");
                 TryRead(() => newHistory.text = history.text, "StatusHistoryText");
                 data.StatusHistory.Add(newHistory);
             }
@@ -186,21 +137,9 @@
             {
                 CreditSafeMortgages newMortgage = new CreditSafeMortgages();
                 TryRead(() => newMortgage.MortgageType = mortgage.mortgagetype, "MortgageType");
-                TryRead(() =>
-                {
-                    var date = mortgage.createddate.Split('/');
-                    newMortgage.CreateDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "MortgageCreateDate");
-                TryRead(() =>
-                {
-                    var date = mortgage.registereddate.Split('/');
-                    newMortgage.RegisterDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "MortgageRegisterDate");
-                TryRead(() =>
-                {
-                    var date = mortgage.satisfieddate.Split('/');
-                    newMortgage.SatisfiedDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "MortgageSatisfiedDate");
+                newMortgage.CreateDate = TryReadDate(mortgage.createddate, "MortgageCreateDate");
+                newMortgage.RegisterDate = TryReadDate(mortgage.registereddate, "MortgageRegisterDate");
+                newMortgage.SatisfiedDate = TryReadDate(mortgage.satisfieddate, "MortgageSatisfiedDate");
                 TryRead(() => newMortgage.Status = mortgage.status, "MortgageStatus");
                 TryRead(() => newMortgage.AmountSecured = Convert.ToInt32(mortgage.amountsecured), "MortgageAmountSecured");
                 TryRead(() => newMortgage.Details = mortgage.details, "MortgageDetails");
@@ -231,16 +170,8 @@
                 var ratios = financial.ratios[0];
 
                 CreditSafeFinancial newFinancial = new CreditSafeFinancial();
-                TryRead(() =>
-                {
-                    var date = period.datefrom.Split('/');
-                    newFinancial.DateFrom = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "FinancialDateFrom");
-                TryRead(() =>
-                {
-                    var date = period.dateto.Split('/');
-                    newFinancial.DateTo = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "FinancialDateTo");
+                newFinancial.DateFrom = TryReadDate(period.datefrom, "FinancialDateFrom");
+                newFinancial.DateTo = TryReadDate(period.dateto, "FinancialDateTo");
                 TryRead(() => newFinancial.PeriodMonths = Convert.ToInt32(period.periodmonths), "FinancialPeriodMonths");
                 TryRead(() => newFinancial.Currency = period.currency, "FinancialCurrency");
                 TryRead(() =>
@@ -334,11 +265,7 @@
             foreach (var eventhistory in company.eventhistory)
             {
                 CreditSafeEventHistory newEvent = new CreditSafeEventHistory();
-                TryRead(() =>
-                {
-                    var date = eventhistory.date.Split('/');
-                    newEvent.Date = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "EventHistoryDate");
+                newEvent.Date = TryReadDate(eventhistory.date, "EventHistoryDate");
                 TryRead(() => newEvent.Text = eventhistory.text, "EventHistoryText");
 
                 data.EventHistory.Add(newEvent);
@@ -355,11 +282,7 @@
                 TryRead(() => newDirector.Address5 = director.address5, "DirectorsAddress5");
                 TryRead(() => newDirector.Address6 = director.address6, "DirectorsAddress6");
                 TryRead(() => newDirector.PostCode = director.postcode, "DirectorsPostCode");
-                TryRead(() =>
-                {
-                    var date = director.birthdate.Split('/');
-                    newDirector.BirthDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                }, "DirectorsBirthDate");
+                newDirector.BirthDate = TryReadDate(director.birthdate, "DirectorsBirthDate");
                 TryRead(() => newDirector.Nationality = director.nationality, "DirectorsNationality");
                 TryRead(() => newDirector.Honours = director.honours, "DirectorsHonours");
                 foreach (var ship in director.directorships[0].directorship)
@@ -369,11 +292,7 @@
                     TryRead(() => newShip.CompanyName = ship.companyname, "DirectorshipCompanyName");
                     TryRead(() => newShip.CompanyStatus = ship.companystatus, "DirectorshipCompanyStatus");
                     TryRead(() => newShip.Function = ship.function, "DirectorshipFunction");
-                    TryRead(() =>
-                    {
-                        var date = ship.appointeddate.Split('/');
-                        newShip.AppointedDate = new DateTime(Convert.ToInt32(date[2]), Convert.ToInt32(date[1]), Convert.ToInt32(date[0]));
-                    }, "DirectorsAppointedDate");
+                    newShip.AppointedDate = TryReadDate(ship.appointeddate, "DirectorsAppointedDate");
                     newDirector.Directorships.Add(newShip);
                 }
                 data.Directors.Add(newDirector);
@@ -403,8 +322,27 @@
                     HasParsingError = true;
                     Errors += "Can`t read value for: " + key + Environment.NewLine;
                 }
-            }
+            }//Try
+        }//TryRead
 
-        }
+        private DateTime? TryReadDate(string a, string key, bool isRequired = true)
+        {
+            try
+            {
+                DateTime d = Convert.ToDateTime(a);
+                return (d.Year < 1900) ? (DateTime?)null : d;
+            }
+            catch
+            {
+                if (isRequired)
+                {
+                    HasParsingError = true;
+                    Errors += "Can't read value for: " + key + Environment.NewLine;
+                } // if
+
+                return null;
+            } // try
+        } // TryReadDate
+
     }
 }

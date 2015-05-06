@@ -136,6 +136,8 @@ namespace ConfigManager {
 		CompanyScoreParserConfiguration,
 		ConnectionPoolMaxSize,
 		ConnectionPoolReuseCount,
+        CreditSafeUserName,
+        CreditSafePassword,
 		CustomerAnalyticsDefaultHistoryYears,
 		CustomerSite,
 		CustomerStateRefreshInterval,

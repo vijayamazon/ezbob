@@ -796,6 +796,14 @@ namespace EzBobTest {
             CaisGenerate cg = new CaisGenerate(1);
             cg.Execute();
         }
+        
+        [Test]
+        [Ignore]
+        public void TestCreditSfaeServiceLogWriter()
+        {
+            ServiceLogCreditSafeLtd saveTest = new ServiceLogCreditSafeLtd("X999999",1);
+            saveTest.Execute();
+        }
         [Test]
         public void TestPPNoLoan() {
             PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");

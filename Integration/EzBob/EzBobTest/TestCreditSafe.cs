@@ -42,8 +42,8 @@
 
             Console.WriteLine(baseData.ID);*/
 
-            CreditSafeLtdGetData test = new CreditSafeLtdGetData();
-            test.LtdGetData("asd");
+            //CreditSafeLtdGetData test = new CreditSafeLtdGetData();
+            //test.LtdGetData("asd");
 
 
         }
@@ -71,9 +71,10 @@
             data.LatestAccountsDate = data.LatestAccountsDate ?? DateTime.UtcNow;
             data.CCJDateFrom = data.CCJDateFrom ?? DateTime.UtcNow;
             data.CCJDateTo = data.CCJDateTo ?? DateTime.UtcNow;*/
-
-            ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
-            saveTest.Execute();
+            ParseCreditSafeLtd test = new ParseCreditSafeLtd(1);
+            test.Execute();
+            //ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
+            //saveTest.Execute();
 
             /*var con = m_oDB.GetPersistent();
             con.BeginTransaction();
@@ -103,8 +104,8 @@
         [Ignore]
         public void TestSaveToServiceLog()
         {
-            var serviceLogTest = new CreditSafeLtdService();
-            serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
+            //var serviceLogTest = new CreditSafeService();
+            //serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
             //AConnection oDB=new SqlConnection();
             //EBusinessService ser = new EBusinessService(new SqlConnection());
            // ser.DownloadOneLimitedFromExperian("X9999999", 27);

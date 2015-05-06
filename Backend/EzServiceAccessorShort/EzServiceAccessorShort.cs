@@ -99,7 +99,5 @@
             stra.Execute();
             return stra.Package.Out;
         }
-
-
 	} // class EzServiceAccessorShort
 } // namespace EzServiceShortcut

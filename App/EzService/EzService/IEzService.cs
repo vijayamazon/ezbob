@@ -796,6 +796,9 @@
         ActionMetaData ParseCreditSafeLtd(int customerID, int userID, long serviceLogID);
 
         [OperationContract]
+        ActionMetaData ParseCreditSafeNonLtd(int customerID, int userID, long serviceLogID);
+
+        [OperationContract]
         ExperianTargetingActionResult ExperianTarget(int customerID, int userID, ExperianTargetingRequest request);
 
         [OperationContract]

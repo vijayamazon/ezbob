@@ -2,6 +2,7 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using ExperianLib.Ebusiness;
+	using Ezbob.Backend.Strategies.CreditSafe;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
@@ -37,12 +38,20 @@
 					(LimitedResults)businessData,
 					this.customerID
 					);
+			    if (!businessData.CacheHit) {
+			        ServiceLogCreditSafeLtd LtdStra = new ServiceLogCreditSafeLtd(company.ExperianRefNum, this.customerID);
+			        LtdStra.Execute();
+			    }
 			} else {
 				ExperianCompanyCheck.UpdateAnalyticsForNonLimited(
 					businessData.MaxBureauScore,
 					company.ExperianRefNum,
 					this.customerID
 					);
+			    if (!businessData.CacheHit) {
+			        ServiceLogCreditSafeNonLtd NonLtdStra = new ServiceLogCreditSafeNonLtd(this.customerID);
+			        NonLtdStra.Execute();
+			    }
 			} // if
 		} // Execute
 

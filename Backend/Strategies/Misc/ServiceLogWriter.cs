@@ -106,6 +106,10 @@
                         var parseCreditSafeData = new ParseCreditSafeLtd(oPackage.Out.ServiceLog.Id);
                         parseCreditSafeData.Execute();
                         break;
+                    case ExperianServiceType.CreditSafeNonLtd:
+                        var parseCreditSafeNonLtdData = new ParseCreditSafeNonLtd(oPackage.Out.ServiceLog.Id);
+                        parseCreditSafeNonLtdData.Execute();
+                        break;
 
 					case ExperianServiceType.CallCredit:
 						var parseCallCredit = new ParseCallCredit(oPackage.Out.ServiceLog.Id);

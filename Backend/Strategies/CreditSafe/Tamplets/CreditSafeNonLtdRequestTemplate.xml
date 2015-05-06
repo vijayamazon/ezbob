@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<xmlrequest>
+  <header>
+    <username>{0}</username>
+    <password>{1}</password>
+    <operation>GetNonLtdCompanyInformation</operation>
+    <language>EN</language>
+    <chargereference></chargereference>
+  </header>
+  <body>
+    <package>nonltdstandard</package>
+    <country>UK</country>
+    <companynumber>{2}</companynumber>
+  </body>
+</xmlrequest>
