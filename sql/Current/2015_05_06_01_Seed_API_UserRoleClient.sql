@@ -1,10 +1,5 @@
-
-update ConfigurationVariables  set Value = 'Dev' where Name = 'Environment';
-
 DECLARE @Environment NVARCHAR(256)
 SELECT @Environment = Value FROM ConfigurationVariables WHERE Name = 'Environment'
-
-select @Environment
 
 -- USER
 BEGIN
@@ -32,7 +27,6 @@ BEGIN
 		END		
 	END		
 END
-
 
 -- CLIENTS
 BEGIN
