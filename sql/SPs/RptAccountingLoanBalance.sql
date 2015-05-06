@@ -23,6 +23,8 @@ BEGIN
 		la.Fees AS SetupFee,
 		lm.Name AS LoanTranMethod,
 		ISNULL(t.Amount, 0) AS TotalRepaid,
+		ISNULL(t.LoanRepayment, 0) AS RepaidPrincipal,
+		ISNULL(t.Interest, 0) AS RepaidInterest,
 		ISNULL(t.Fees, 0) AS FeesRepaid,
 		ISNULL(t.Rollover, 0) AS RolloverRepaid,
 		t.PostDate AS TransactionDate,
