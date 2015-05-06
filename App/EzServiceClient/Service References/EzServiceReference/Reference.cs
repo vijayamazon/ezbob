@@ -184,6 +184,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
@@ -197,7 +198,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ConfigTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingModelModelActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult))]
@@ -265,6 +265,29 @@ namespace ServiceClientProxy.EzServiceReference {
             System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
             if ((propertyChanged != null)) {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="IntActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class IntActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private int ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
             }
         }
     }
@@ -641,29 +664,6 @@ namespace ServiceClientProxy.EzServiceReference {
             }
             set {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="IntActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class IntActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private int ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public int Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
                 }
@@ -3253,6 +3253,24 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddCashRequest", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddCashRequestResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult AddCashRequest(int userID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_CashRequests cashRequest);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddCashRequest", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddCashRequestResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddCashRequestAsync(int userID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_CashRequests cashRequest);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddDecision", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddDecisionResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult AddDecision(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddDecision", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddDecisionResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddDecisionAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
         
@@ -4517,6 +4535,30 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddCashRequest(int userID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_CashRequests cashRequest) {
+            return base.Channel.AddCashRequest(userID, cashRequest);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddCashRequestAsync(int userID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_CashRequests cashRequest) {
+            return base.Channel.AddCashRequestAsync(userID, cashRequest);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddDecision(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision) {
+            return base.Channel.AddDecision(userID, customerID, decision);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddDecisionAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision) {
+            return base.Channel.AddDecisionAsync(userID, customerID, decision);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer) {
+            return base.Channel.AddOffer(userID, customerID, offer);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer) {
+            return base.Channel.AddOfferAsync(userID, customerID, offer);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {

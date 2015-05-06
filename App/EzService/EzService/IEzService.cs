@@ -16,7 +16,7 @@
 	using SalesForceLib.Models;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
-	public interface IEzService {
+	public interface IEzService : IEzServiceNewLoan {
 
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);

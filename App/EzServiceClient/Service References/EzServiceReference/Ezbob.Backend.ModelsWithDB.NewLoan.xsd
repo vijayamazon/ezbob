@@ -1,0 +1,59 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:complexType name="NL_CashRequests">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CashRequestID" type="xs:int" />
+      <xs:element minOccurs="0" name="CashRequestOriginID" type="xs:int" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="OldCashRequestID" type="xs:long" />
+      <xs:element minOccurs="0" name="RequestTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="UserID" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_CashRequests" nillable="true" type="tns:NL_CashRequests" />
+  <xs:complexType name="NL_Decisions">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CashRequestID" type="xs:int" />
+      <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
+      <xs:element minOccurs="0" name="DecisionNameID" type="xs:int" />
+      <xs:element minOccurs="0" name="DecisionTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsAmountSelectionAllowed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsRepaymentPeriodSelectionAllowed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Position" type="xs:int" />
+      <xs:element minOccurs="0" name="SendEmailNotification" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="UserID" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_Decisions" nillable="true" type="tns:NL_Decisions" />
+  <xs:complexType name="NL_Offers">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="BrokerSetupFeePercent" type="xs:decimal" />
+      <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
+      <xs:element minOccurs="0" name="DiscountPlanID" type="xs:int" />
+      <xs:element minOccurs="0" name="EmailSendingBanned" type="xs:boolean" />
+      <xs:element minOccurs="0" name="EndTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" type="xs:int" />
+      <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="MonthlyInterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
+      <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="SetupFeePercent" type="xs:decimal" />
+      <xs:element minOccurs="0" name="StartTime" type="xs:dateTime" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_Offers" nillable="true" type="tns:NL_Offers" />
+</xs:schema>

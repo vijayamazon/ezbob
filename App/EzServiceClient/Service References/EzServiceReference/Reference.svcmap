@@ -27,6 +27,7 @@
     <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="fea9a50a-c96a-4465-aefc-72cb7e855abc" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzService.xsd" MetadataType="Schema" ID="32c295d3-1882-441e-b1bc-206c4ed78e36" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="f5a2382e-7fa4-48c2-a090-ae5aacc86347" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.NewLoan.xsd" MetadataType="Schema" ID="d6dd6f02-c22b-4e63-b73b-e09077282cab" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.xsd" MetadataType="Schema" ID="3f6a4164-bd85-47ea-a83a-4faeefb743de" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="66f2fbf5-5c9b-42da-a827-73958894792e" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="DbConstants.xsd" MetadataType="Schema" ID="9ab3552e-1982-4ec3-9806-5cec06983a63" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />

@@ -72,6 +72,7 @@
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
@@ -135,6 +136,24 @@
   </wsdl:message>
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddCashRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddCashRequest" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddCashRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddCashRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddDecision_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddDecision" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddDecision_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddDecisionResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddOffer_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddOffer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddOffer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddOfferResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
@@ -1377,6 +1396,18 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="AddCashRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddCashRequest" message="tns:IEzService_AddCashRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddCashRequestResponse" message="tns:IEzService_AddCashRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddDecision">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddDecision" message="tns:IEzService_AddDecision_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddDecisionResponse" message="tns:IEzService_AddDecision_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="AddOffer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddOffer" message="tns:IEzService_AddOffer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse" message="tns:IEzService_AddOffer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse" message="tns:IEzService_UpdateLinkedHmrcPassword_OutputMessage" />
@@ -2263,6 +2294,33 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="AddCashRequest">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddCashRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddDecision">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddDecision" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddOffer">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddOffer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" style="document" />
       <wsdl:input>

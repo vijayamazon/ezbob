@@ -69,7 +69,7 @@
 
 			string sTableName = typeof(T).Name;
 
-			string sProcName = "Save" + sTableName;
+            string sProcName = sTableName + "Save";
 
 			string sTypeName = sTableName + "List";
 
@@ -112,7 +112,9 @@
 			oProcSql.Add("\t\t" + sFieldNames);
 			oProcSql.Add("\t) SELECT");
 			oProcSql.Add("\t\t" + sFieldNames);
-			oProcSql.Add("\tFROM @Tbl");
+            oProcSql.Add("\tFROM @Tbl\n");
+            oProcSql.Add("\tDECLARE @ScopeID INT = SCOPE_IDENTITY()");
+            oProcSql.Add("\tSELECT @ScopeID AS ScopeID");
 			oProcSql.Add("END");
 			oProcSql.Add("GO");
 

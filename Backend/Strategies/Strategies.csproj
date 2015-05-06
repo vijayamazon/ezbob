@@ -145,6 +145,9 @@
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
+    <Compile Include="NewLoan\AddDecision.cs" />
+    <Compile Include="NewLoan\AddOffer.cs" />
+    <Compile Include="NewLoan\AddCashRequest.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />

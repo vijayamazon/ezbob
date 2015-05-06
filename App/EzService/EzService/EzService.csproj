@@ -125,6 +125,7 @@
     <Compile Include="EzServiceImplementation\esi_creditsafe.cs" />
     <Compile Include="EzServiceImplementation\esi_customer_manual_annualized_revenue.cs" />
     <Compile Include="EzServiceImplementation\esi_iovation.cs" />
+    <Compile Include="EzServiceImplementation\esi_newloan.cs" />
     <Compile Include="EzServiceImplementation\esi_partner_alibaba.cs" />
     <Compile Include="EzServiceImplementation\esi_external_api.cs" />
     <Compile Include="EzServiceImplementation\esi_lottery.cs" />
@@ -148,6 +149,7 @@
     <Compile Include="EzServiceImplementation\esi_implement.IEzServiceAdmin.cs" />
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
+    <Compile Include="IEzServiceNewLoan.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="ActionResults\StringListActionResult.cs" />
     <Compile Include="EzServiceInstanceRuntimeData.cs" />
