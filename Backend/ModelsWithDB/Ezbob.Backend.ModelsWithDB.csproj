@@ -139,6 +139,7 @@
     <Compile Include="Experian\Attributes\DL68Attribute.cs" />
     <Compile Include="Experian\Attributes\DL72Attribute.cs" />
     <Compile Include="Experian\Attributes\DL76Attribute.cs" />
+    <Compile Include="Experian\Attributes\DL79Attribute.cs" />
     <Compile Include="Experian\Attributes\DL78Attribute.cs" />
     <Compile Include="Experian\Attributes\DL97Attribute.cs" />
     <Compile Include="Experian\Attributes\DL99Attribute.cs" />

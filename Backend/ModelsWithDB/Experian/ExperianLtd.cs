@@ -328,6 +328,25 @@
 		}")]
 		public string SupplierPaymentPattern { get; set; }
 
+        [DataMember]
+        [DL79("CREDITTEXT1", "Credit text line 1")]
+        public string CreditText1 { get; set; }
+        [DataMember]
+        [DL79("CREDITTEXT2", "Credit text line 2")]
+        public string CreditText2 { get; set; }
+        [DataMember]
+        [DL79("CREDITTEXT3", "Credit text line 3")]
+        public string CreditText3 { get; set; }
+        [DataMember]
+        [DL79("CREDITTEXT4", "Credit text line 4")]
+        public string CreditText4 { get; set; }
+        [DataMember]
+        [DL79("CREDITTEXT5", "Credit text line 5")]
+        public string CreditText5 { get; set; }
+        [DataMember]
+        [DL79("CONCLUTIONTEXT", "Conclusion text")]
+        public string ConclutionText { get; set; }
+
 		[DataMember]
 		[NonTraversable]
 		public override long ID {

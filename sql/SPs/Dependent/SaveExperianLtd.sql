@@ -67,7 +67,13 @@ CREATE TYPE ExperianLtdList AS TABLE (
 	IndustryNumberOfDbt100000Plus DECIMAL(18, 6) NULL,
 	CompanyPaymentPattern NVARCHAR(255) NULL,
 	IndustryPaymentPattern NVARCHAR(255) NULL,
-	SupplierPaymentPattern NVARCHAR(255) NULL
+	SupplierPaymentPattern NVARCHAR(255) NULL,
+	CreditText1 nvarchar(560) NULL,
+	CreditText2 nvarchar(110) NULL,
+	CreditText3 nvarchar(110) NULL,
+	CreditText4 nvarchar(110) NULL,
+	CreditText5 nvarchar(110) NULL,
+	ConclusionText nvarchar(300) NULL
 )
 GO
 
@@ -161,7 +167,13 @@ BEGIN
 		IndustryNumberOfDbt100000Plus,
 		CompanyPaymentPattern,
 		IndustryPaymentPattern,
-		SupplierPaymentPattern
+		SupplierPaymentPattern,
+		CreditText1,
+		CreditText2,
+		CreditText3,
+		CreditText4,
+		CreditText5,
+		ConclusionText
 	) SELECT
 		ServiceLogID,
 		RegisteredNumber,
@@ -220,7 +232,13 @@ BEGIN
 		IndustryNumberOfDbt100000Plus,
 		CompanyPaymentPattern,
 		IndustryPaymentPattern,
-		SupplierPaymentPattern
+		SupplierPaymentPattern,
+		CreditText1,
+		CreditText2,
+		CreditText3,
+		CreditText4,
+		CreditText5,
+		ConclusionText
 	FROM @Tbl
 
 	------------------------------------------------------------------------------
