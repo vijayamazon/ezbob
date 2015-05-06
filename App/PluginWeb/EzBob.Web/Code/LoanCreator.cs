@@ -46,6 +46,7 @@
 			ValidateAmount(loanAmount, cus);
 			ValidateOffer(cus);
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1));
+            ValidateRepaymentPeriod(cus);
 
 			bool isFakeLoanCreate = (card == null);
 			bool isEverlineRefinance = ValidateEverlineRefinance(cus);
@@ -248,7 +249,20 @@
 
 		public virtual void ValidateOffer(Customer cus) {
 			cus.ValidateOfferDate();
-		} // ValidateOffer
+		}
+
+	    private void ValidateRepaymentPeriod(Customer cus) {
+	        var cr = cus.LastCashRequest;
+	        if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod) {
+	            throw new ArgumentException("Wrong repayment period");
+	        }
+
+            if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod != cr.RepaymentPeriod) {
+                throw new ArgumentException("Wrong repayment period");
+            }
+	    }//ValidateRepaymentPeriod
+
+// ValidateOffer
 
 		public virtual void VerifyAvailableFunds(decimal transfered) {
 			m_oServiceClient.Instance.VerifyEnoughAvailableFunds(_context.UserId, transfered);
