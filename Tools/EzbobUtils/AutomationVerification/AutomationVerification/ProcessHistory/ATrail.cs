@@ -204,10 +204,10 @@
 				} // if
 			} // if
 
-			if (this.Length != oTrail.Length) {
+			if (Length != oTrail.Length) {
 				string sMsg = string.Format(
 					"Different number of steps in the trail: {0} in this vs {1} in the second.",
-					this.Length, oTrail.Length
+					Length, oTrail.Length
 				);
 
 				AddNote(sMsg);
@@ -220,7 +220,7 @@
 				return false;
 			} // if
 
-			for (int i = 0; i < this.Length; i++) {
+			for (int i = 0; i < Length; i++) {
 				ATrace oMyTrace = this.m_oSteps[i];
 				ATrace oOtherTrace = oTrail.m_oSteps[i];
 
@@ -232,7 +232,7 @@
 						i+1,
 						oMyTrace.GetType().Name,
 						oOtherTrace.GetType().Name,
-						this.Decision
+						Decision
 					);
 
 					AddNote(sMsg);
@@ -250,7 +250,7 @@
 						oMyTrace.GetType().Name,
 						oMyTrace.DecisionStatus,
 						oOtherTrace.DecisionStatus,
-						this.Decision
+						Decision
 					);
 
 					AddNote(sMsg);
@@ -270,7 +270,7 @@
 						oMyTrace.GetType().Name,
 						oMyTrace.HasLockedDecision ? "locked" : "not locked",
 						oOtherTrace.HasLockedDecision ? "locked" : "not locked",
-						this.Decision
+						Decision
 					);
 
 					AddNote(sMsg);
@@ -305,7 +305,7 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				var sp = new SaveDecisionTrail(this, this.UniqueID, true, cashRequestID, tag, oDB, this.m_oLog);
+				var sp = new SaveDecisionTrail(this, UniqueID, true, cashRequestID, tag, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
@@ -313,7 +313,7 @@
 				if (oTrail != null) {
 					m_oLog.Debug("Saving secondary trail...");
 
-					sp = new SaveDecisionTrail(oTrail, this.UniqueID, false, cashRequestID, tag, oDB, this.m_oLog);
+					sp = new SaveDecisionTrail(oTrail, UniqueID, false, cashRequestID, tag, oDB, this.m_oLog);
 					sp.ExecuteNonQuery(cw);
 
 					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
@@ -335,6 +335,10 @@
 		public virtual TimeCounter.Timer AddCheckpoint(ProcessCheckpoints checkpoint) {
 			return this.timer.AddStep(((int)checkpoint).ToString());
 		} // AddCheckpoint
+
+		public void SetTag(string tag) {
+			this.m_sTag = tag;
+		} // SetTag
 
 		protected ATrail(
 			int nCustomerID,
@@ -415,38 +419,38 @@
 				bool bResult = true;
 
 				if (CustomerID <= 0) {
-					Log.Debug("Invalid {0} parameter: customer id is {1}", this.GetName(), CustomerID);
+					Log.Debug("Invalid {0} parameter: customer id is {1}", GetName(), CustomerID);
 					bResult = false;
 				} // if
 
 				if (!Enum.IsDefined(typeof(DecisionActions), DecisionID)) {
-					Log.Debug("Invalid {0} parameter: decision id is {1}", this.GetName(), DecisionID);
+					Log.Debug("Invalid {0} parameter: decision id is {1}", GetName(), DecisionID);
 					bResult = false;
 				} // if
 
 				if (UniqueID == Guid.Empty) {
-					Log.Debug("Invalid {0} parameter: unique id is {1}", this.GetName(), UniqueID);
+					Log.Debug("Invalid {0} parameter: unique id is {1}", GetName(), UniqueID);
 					bResult = false;
 				} // if
 
 				if (!Enum.IsDefined(typeof (DecisionStatus), DecisionStatusID)) {
-					Log.Debug("Invalid {0} parameter: decision status id is {1}", this.GetName(), DecisionStatusID);
+					Log.Debug("Invalid {0} parameter: decision status id is {1}", GetName(), DecisionStatusID);
 					bResult = false;
 				} // if
 
 				if (Traces == null) {
-					Log.Debug("Invalid {0} parameter: Traces is null", this.GetName());
+					Log.Debug("Invalid {0} parameter: Traces is null", GetName());
 					bResult = false;
 				}
 				else {
 					if (Traces.Count == 0) {
-						Log.Debug("Invalid {0} parameter: Traces is empty", this.GetName());
+						Log.Debug("Invalid {0} parameter: Traces is empty", GetName());
 						bResult = false;
 					} // if
 				} // if
 
 				if (Notes == null) {
-					Log.Debug("Invalid {0} parameter: Notes is null", this.GetName());
+					Log.Debug("Invalid {0} parameter: Notes is null", GetName());
 					bResult = false;
 				} // if
 
@@ -525,7 +529,7 @@
 
 			// ReSharper disable PossibleNullReferenceException
 			if (oTrace.GetType() == typeof (ExceptionThrown))
-                (oTrace as ExceptionThrown).OnAfterInitEvent += step => this.m_oDiffNotes.Add(step.Comment);
+				(oTrace as ExceptionThrown).OnAfterInitEvent += step => this.m_oDiffNotes.Add(step.Comment);
 			// ReSharper restore PossibleNullReferenceException
 
 			return oTrace;
@@ -539,24 +543,26 @@
 				HttpUtility.HtmlEncode(sMsg),
 				HttpUtility.HtmlEncode(this.ToString()),
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.ToString()),
-				HttpUtility.HtmlEncode(this.InputData.Serialize()),
+				HttpUtility.HtmlEncode(InputData.Serialize()),
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize()),
-                this.m_sTag
+				this.m_sTag,
+				UniqueID
 			);
 
 			new Mail().Send(
-                this.m_sToExplanationEmailAddress,
+				this.m_sToExplanationEmailAddress,
 				null,
 				message,
-                this.m_sFromEmailAddress,
-                this.m_sFromEmailName,
+				this.m_sFromEmailAddress,
+				this.m_sFromEmailName,
 				"#Mismatch in " + Name + " for customer " + CustomerID
 			);
 		} // SendExplanationMail
 
 		private const string EmailFormat =
-			"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b> {7}</u></h1><br>" +
+			"<h1><u>Difference in verification for <b style='color:red'>{0}</b> for customer <b style='color:red'>{1}</b> (tag '{7}')</u></h1><br>" +
 			"<h2><b style='color:red'>{2}</b><br></h2>" +
+			"<p>Trail unique id: '{8}'</p>" +
 			"<h2><b>main flow:</b></h2>" +
 			"<pre><h3>{3}</h3></pre><br>" +
 			"<h2><b>verification flow:</b></h2>" +
@@ -566,9 +572,6 @@
 			"</b></h2>verification data:</b></h2>" +
 			"<pre><h3>{6}</h3></pre>";
 
-        public void SetTag(string tag) {
-            this.m_sTag = tag;
-        }
 		private readonly List<string> m_oDiffNotes;
 		private readonly List<ATrace> m_oSteps;
 		private readonly ASafeLog m_oLog;
@@ -576,6 +579,6 @@
 		private readonly string m_sFromEmailAddress;
 		private readonly string m_sFromEmailName;
 		private readonly TimeCounter timer;
-	    protected string m_sTag;
+	    private string m_sTag;
 	} // class Trail
 } // namespace
