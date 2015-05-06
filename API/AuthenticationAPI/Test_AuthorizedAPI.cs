@@ -38,6 +38,22 @@
 			userPwd = "XDroz4HhR1EI2zsvd"
 		};
 
+		// grant_type=password&client_id=pAliServerStaging8256&client_secret=8674067HBI90&username=partherAppAlibaba&password=086b469t
+		private readonly ClientCredentialModel staging_aliServerCredentials = new ClientCredentialModel {
+			clientID = "pAliServerStaging8256",
+			clientSecret = "8674067HBI90",
+			username = "partherAppAlibabaStaging",
+			userPwd = "086b469t"
+		};
+
+		// grant_type=password&client_id=pAliServerStaging8256&client_secret=8674067HBI90&username=partherAppAlibaba&password=086b469t
+		private readonly ClientCredentialModel staging_aliClentCredentials = new ClientCredentialModel {
+			clientID = "pAliClientStaging8256",
+			clientSecret = "9603JT6789S",
+			username = "partherAppAlibabaStaging",
+			userPwd = "086b469t"
+		};
+
 		//  grant_type=password&client_id=consoleApp&client_secret=123@abc=&username=elka&password=123456
 		private readonly ClientCredentialModel testServerCredentials = new ClientCredentialModel {
 			clientID = "consoleApp",
@@ -64,8 +80,8 @@
 			this.model = new AlibabaDto {
 				requestId = "000771",
 				responseId = "000771",
-				aId = 23504,
-				aliMemberId = 789,
+				aId = 358, // 23504,
+				aliMemberId = 710526132, // 789,
 				loanId = 0
 			};
 		}
@@ -282,6 +298,34 @@
 				Console.WriteLine("Failed to get access token", e.Message);
 				throw new HttpRequestException("Failed to get access token");
 			}
+			RestClient client = new RestClient(this.baseUrl);
+			RestRequest request = new RestRequest("api/customers/availableCredit");
+			request.AddHeader("Accept", "application/json");
+			request.AddHeader("Content-type", "application/json; charset=UTF-8");
+			request.AddHeader("Authorization", "Bearer " + this.token.GetValue("access_token"));
+			request.AddJsonBody(this.model);
+			try {
+				var response = client.Post(request);
+				Console.WriteLine(response.StatusCode);
+				Console.WriteLine(response.Content);
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+
+		[Test]
+		public void Ali_Staging_User_Available_Credit() {
+			try {
+			//	AuthRequest(this.staging_aliServerCredentials.clientID, this.staging_aliServerCredentials.clientSecret, this.staging_aliServerCredentials.username, this.staging_aliServerCredentials.userPwd);
+				AuthRequest(this.staging_aliClentCredentials.clientID, this.staging_aliClentCredentials.clientSecret, this.staging_aliClentCredentials.username, this.staging_aliClentCredentials.userPwd);
+				Console.WriteLine(this.token);
+				//return;
+			} catch (Exception e) {
+				Console.WriteLine("Failed to get access token", e.Message);
+				throw new HttpRequestException("Failed to get access token");
+			}
+
 			RestClient client = new RestClient(this.baseUrl);
 			RestRequest request = new RestRequest("api/customers/availableCredit");
 			request.AddHeader("Accept", "application/json");
