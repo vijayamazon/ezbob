@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW YodleeAggregationTurnover AS
 	SELECT
+		AggID = a.YodleeAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

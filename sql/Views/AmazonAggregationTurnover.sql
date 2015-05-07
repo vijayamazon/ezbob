@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW AmazonAggregationTurnover AS
 	SELECT
+		AggID = a.AmazonAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

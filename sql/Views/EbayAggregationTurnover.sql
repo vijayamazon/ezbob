@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW EbayAggregationTurnover AS
 	SELECT
+		AggID = a.EbayAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

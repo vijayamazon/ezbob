@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW SageAggregationTurnover AS
 	SELECT
+		AggID = a.SageAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,
