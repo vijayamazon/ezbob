@@ -635,15 +635,15 @@
 		public JsonResult ActivateMainStrategy(int customerId) {
 			int underwriterId = _context.User.Id;
 
-            //new ServiceClient().Instance.MainStrategy1(
-            //    underwriterId,
-            //    customerId,
-            //    NewCreditLineOption.SkipEverythingAndApplyAutoRules,
-            //    0,
-            //    null,
-            //    MainStrategyDoAction.Yes,
-            //    MainStrategyDoAction.Yes
-            //);
+            new ServiceClient().Instance.MainStrategy1(
+                underwriterId,
+                customerId,
+                NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+                0,
+                null,
+                MainStrategyDoAction.Yes,
+                MainStrategyDoAction.Yes
+            );
 
 			return Json(true);
 		}
