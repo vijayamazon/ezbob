@@ -31,9 +31,13 @@
 
 		public override void Execute() {
 
-			// check this cystomer is Alibaba's member also
+			// check this customer is Alibaba's member also
 			var aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			AlibabaBuyer aliMember = aliMemberRep.ByCustomer(CustomerID);
+			if( aliMember == null) {
+				Log.Alert("Alibaba customer {0} not found in AlibabaBuyer table", CustomerID);
+				return;
+			}
 
 			Log.Info(string.Format("DATASHARING1*************{0}*******************", aliMember.AliId));
 
