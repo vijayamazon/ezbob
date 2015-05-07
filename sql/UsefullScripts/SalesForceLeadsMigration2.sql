@@ -47,7 +47,8 @@ convert(date,c.GreetingMailSentDate) AS	'REGISTRATION_DATE__C',
 isnull(crl.Amount,0) AS 'REQUESTED_LOAN_AMOUNT__C',
 'Open' AS 'Lead Status',
 convert(date,isnull(c.DateOfBirth, '1900-01-01')) AS 'Date Of Birth',
-isnull(c.IndustryType, '') AS 'Industry'
+isnull(c.IndustryType, '') AS 'Industry',
+c.IsTest AS 'IS_TEST__C'
 FROM Customer c
 LEFT JOIN CustomerAddress ca ON c.Id = ca.CustomerId AND ca.addressType=1
 LEFT JOIN CustomerRequestedLoan crl ON crl.CustomerId = c.Id
@@ -57,10 +58,9 @@ LEFT JOIN CampaignSourceRef cs ON cs.CustomerId = c.Id
 LEFT JOIN CustomerAnalyticsLocalData cal ON cal.CustomerID = c.Id AND cal.IsActive=1
 LEFT JOIN CustomerOrigin o ON o.CustomerOriginID = c.OriginID
 LEFT JOIN WizardStepTypes w ON w.WizardStepTypeID = c.WizardStep
-WHERE c.IsTest=0
 UNION
---broker leads
 
+--broker leads
 SELECT
 isnull(bl.LastName, 'NoName') AS 'LASTNAME',
 bl.FirstName AS 'FIRSTNAME',
@@ -94,14 +94,14 @@ convert(date, bl.DateCreated) AS 'CREATEDDATE',
 0 AS 'REQUESTED_LOAN_AMOUNT__C',
 'Open' AS 'Lead Status',
 convert(date,'1900-01-01') AS 'Date Of Birth',
-'' AS 'Industry'
+'' AS 'Industry',
+CAST(0 AS BIT) AS 'IS_TEST__C'
 FROM BrokerLeads bl LEFT JOIN Customer c ON bl.Email = c.Name
 WHERE bl.Email IS NOT NULL AND c.Name IS NULL
 
 UNION
+
 --vip
-
-
 SELECT
 isnull(v.FullName, 'NoName') AS 'LASTNAME',
 v.FullName AS 'FIRSTNAME',
@@ -135,10 +135,8 @@ convert(date, v.RequestDate) AS 'CREATEDDATE',
 0 AS 'REQUESTED_LOAN_AMOUNT__C',
 'Open' AS 'Lead Status',
 convert(date,'1900-01-01') AS 'Date Of Birth',
-'' AS 'Industry'
+'' AS 'Industry',
+CAST(0 AS BIT) AS 'IS_TEST__C'
 FROM VipRequest v 
 LEFT JOIN Customer c ON c.Name = v.Email
-WHERE c.Name IS NULL AND v.Email IS NOT NULL
-
-
-
+WHERE c.Name IS NULL AND v.Email IS NOT NULL AND v.CustomerId IS NULL
