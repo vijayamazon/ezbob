@@ -203,7 +203,7 @@
 			}
 
             //TODO build loan model
-            Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
+			//Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 
 			return _loanModelBuilder.BuildModel(loan);
 		}
