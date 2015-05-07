@@ -110,8 +110,10 @@
       <xs:element minOccurs="0" name="BusinessName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CcjDetails" nillable="true" type="tns:ArrayOfCcjDetail" />
       <xs:element minOccurs="0" name="CommercialDelphiScore" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="ConcludingText" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CreditLimit" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CreditRating" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CreditText" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CurrentAverageDebt" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="DateOwnershipCeased" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DateOwnershipCommenced" nillable="true" type="xs:dateTime" />
@@ -122,17 +124,20 @@
       <xs:element minOccurs="0" name="IncorporationDate" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="IsLimited" type="xs:boolean" />
       <xs:element minOccurs="0" name="LastUpdateDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="NocText" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="NumberOfAccountsPlacedForCollection" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="NumberOfAccountsPlacedForCollectionLast2Years" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="NumberOfProprietorsFound" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="NumberOfProprietorsSearched" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="PaymentPerformanceDetails" nillable="true" type="tns:ArrayOfPaymentPerformanceDetail" />
+      <xs:element minOccurs="0" name="PossiblyRelatedDataText" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Postcode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PreviousSearches" nillable="true" type="tns:ArrayOfPreviousSearch" />
       <xs:element minOccurs="0" name="PrincipalActivities" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ProbabilityOfDefaultScore" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="RiskBand" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RiskScore" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="RiskText" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ScoreHistory" nillable="true" type="tns:ArrayOfScoreAtDate" />
       <xs:element minOccurs="0" name="SearchType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SearchTypeDesc" nillable="true" type="xs:string" />

@@ -70,7 +70,12 @@ BEGIN
 		RiskBand,
 		NumberOfProprietorsSearched,
 		NumberOfProprietorsFound,
-		Errors
+		Errors,
+		RiskText,
+		CreditText,
+		ConcludingText,
+		NocText,
+		PossiblyRelatedDataText
 	FROM 
 		ExperianNonLimitedResults 
 	WHERE 

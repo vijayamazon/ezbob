@@ -66,7 +66,12 @@ ALTER PROCEDURE InsertNonLimitedResult
 	 @RiskBand NVARCHAR(1),
 	 @NumberOfProprietorsSearched INT,
 	 @NumberOfProprietorsFound INT,		
-	 @Errors NVARCHAR(MAX))
+	 @Errors NVARCHAR(MAX),
+	 @RiskText NVARCHAR(70),
+	 @CreditText NVARCHAR(560),
+	 @ConcludingText NVARCHAR(200),
+	 @NocText NVARCHAR(200),
+	 @PossiblyRelatedDataText NVARCHAR(200))
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -138,7 +143,12 @@ BEGIN
 		 NumberOfProprietorsSearched,
 		 NumberOfProprietorsFound,		
 		 Errors,
-		 IsActive)
+		 IsActive,
+		 RiskText,
+		 CreditText,
+		 ConcludingText,
+		 NocText,
+		 PossiblyRelatedDataText)
 	VALUES
 		(@RefNumber,
 		 @ServiceLogId,
@@ -204,7 +214,12 @@ BEGIN
 		 @NumberOfProprietorsSearched,
 		 @NumberOfProprietorsFound,		
 		 @Errors,
-		 1)
+		 1,
+		 @RiskText,
+		 @CreditText,
+		 @ConcludingText,
+		 @NocText,
+		 @PossiblyRelatedDataText)
 		
 	SELECT CAST(@@IDENTITY AS INT) AS NewId
 END
