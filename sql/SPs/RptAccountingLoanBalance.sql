@@ -55,7 +55,7 @@ BEGIN
 	WHERE
 		l.DateClosed IS NULL
 		OR
-		l.DateClosed >= @DateStart
+		l.DateClosed >= 'September 1 2012' -- @DateStart
 	ORDER BY
 		l.Id,
 		lc.Id,
