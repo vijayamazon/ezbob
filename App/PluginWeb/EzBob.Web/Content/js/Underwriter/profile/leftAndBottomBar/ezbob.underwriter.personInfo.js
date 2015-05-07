@@ -283,10 +283,14 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		});
 	}, // startChangeBroker
 
-	activateMainStratgey: function() {
+	activateMainStratgey: function () {
+	    var customerID = this.model.get('Id');
 		$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateMainStrategy", {
-			customerId: this.model.get('Id')
+		    customerId: customerID
 		});
+
+		EzBob.ShowMessageTimeout('Executed main strategy for customer ' + customerID, '', 3, function () { }, 'Cool');
+
 	}, //activateMainStratgey
 
 	activateFinishWizard: function() {
