@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.Extensions;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using Ezbob.Backend.Strategies.MedalCalculations;

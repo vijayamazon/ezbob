@@ -1,9 +1,9 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan.Helpers {
+﻿namespace Ezbob.Backend.CalculateLoan.Models.Helpers {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 
-	internal class DailyLoanStatus {
+	public class DailyLoanStatus {
 		public DailyLoanStatus() {
 			Dates = new SortedDictionary<DateTime, OneDayLoanStatus>();
 			this.notes = new SortedDictionary<DateTime, string>();

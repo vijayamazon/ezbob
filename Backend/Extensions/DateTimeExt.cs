@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.Extensions {
+﻿namespace Ezbob.Backend.Extensions {
 	using System;
 
 	public static class DateTimeExt {
