@@ -1,0 +1,2 @@
+ALTER TABLE CreditSafeMortgages ALTER COLUMN MortgageType NVARCHAR(50)
+GO
