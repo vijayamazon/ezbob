@@ -46,7 +46,8 @@
 			ValidateAmount(loanAmount, cus);
 			ValidateOffer(cus);
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1));
-            ValidateRepaymentPeriod(cus);
+            ValidateRepaymentPeriodAndInterestRate(cus);
+            
 
 			bool isFakeLoanCreate = (card == null);
 			bool isEverlineRefinance = ValidateEverlineRefinance(cus);
@@ -251,8 +252,12 @@
 			cus.ValidateOfferDate();
 		}
 
-	    private void ValidateRepaymentPeriod(Customer cus) {
+        private void ValidateRepaymentPeriodAndInterestRate(Customer cus) {
 	        var cr = cus.LastCashRequest;
+            if (cr == null) {
+                throw new ArgumentException("No offer exists");
+            }
+
 	        if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod) {
 	            throw new ArgumentException("Wrong repayment period");
 	        }
@@ -260,7 +265,12 @@
             if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod != cr.RepaymentPeriod) {
                 throw new ArgumentException("Wrong repayment period");
             }
-	    }//ValidateRepaymentPeriod
+
+            if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
+                throw new ArgumentException("Wrong interest rate");
+            }
+
+	    }//ValidateRepaymentPeriodAndInterestRate
 
 // ValidateOffer
 
