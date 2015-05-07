@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW FreeAgentAggregationTurnover AS
 	SELECT
+		AggID = a.FreeAgentAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

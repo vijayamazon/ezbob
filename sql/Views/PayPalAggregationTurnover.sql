@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW PayPalAggregationTurnover AS
 	SELECT
+		AggID = a.PayPalAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

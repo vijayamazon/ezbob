@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW HmrcAggregationTurnover AS
 	SELECT
+		AggID = a.HmrcAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

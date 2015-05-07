@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW EkmAggregationTurnover AS
 	SELECT
+		AggID = a.EkmAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

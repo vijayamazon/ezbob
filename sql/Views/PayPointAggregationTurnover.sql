@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW PayPointAggregationTurnover AS
 	SELECT
+		AggID = a.PayPointAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,

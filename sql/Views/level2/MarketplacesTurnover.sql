@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW MarketplaceTurnover AS
 	SELECT
+		t.AggID,
 		t.TheMonth,
 		t.IsActive,
 		t.CustomerMarketPlaceUpdatingHistoryID,
@@ -19,25 +20,25 @@ CREATE VIEW MarketplaceTurnover AS
 		mp.CustomerId
 	FROM
 		(
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM AmazonAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM AmazonAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM ChannelGrabberAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM ChannelGrabberAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM EbayAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM EbayAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM EkmAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM EkmAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM FreeAgentAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM FreeAgentAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM HmrcAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM HmrcAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM PayPalAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM PayPalAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM PayPointAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM PayPointAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM SageAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM SageAggregationTurnover
 			UNION
-			SELECT TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM YodleeAggregationTurnover
+			SELECT AggID, TheMonth, IsActive, CustomerMarketPlaceUpdatingHistoryID, Turnover, CustomerMarketPlaceId, UpdatingEnd FROM YodleeAggregationTurnover
 		) t
 		INNER JOIN MP_CustomerMarketPlace mp ON t.CustomerMarketPlaceId = mp.Id
 GO

@@ -10,6 +10,7 @@ GO
 
 CREATE VIEW ChannelGrabberAggregationTurnover AS
 	SELECT
+		AggID = a.ChannelGrabberAggregationID,
 		a.TheMonth,
 		a.IsActive,
 		a.CustomerMarketPlaceUpdatingHistoryID,
