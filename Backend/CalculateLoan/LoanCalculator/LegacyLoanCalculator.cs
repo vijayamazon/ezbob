@@ -1,5 +1,6 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
+﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
+	using Ezbob.Backend.CalculateLoan.Models;
 
 	public class LegacyLoanCalculator : ALoanCalculator {
 		public LegacyLoanCalculator(LoanCalculatorModel model) : base(model) {

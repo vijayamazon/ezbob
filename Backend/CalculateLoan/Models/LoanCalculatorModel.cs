@@ -1,11 +1,11 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
+﻿namespace Ezbob.Backend.CalculateLoan.Models {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
 	using DbConstants;
-	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
-	using Ezbob.Backend.Strategies.Extensions;
+	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Utils.Lingvo;
 
 	public class LoanCalculatorModel {
@@ -20,7 +20,6 @@
 			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
 			BadPeriods = new BadPeriods();
-			FreezePeriods = new InterestFreezePeriods();
 		} // constructor
 
 		public void ValidateSchedule() {
@@ -58,7 +57,6 @@
 			lcm.Fees.AddRange(Fees.Select(v => v.DeepClone()));
 
 			lcm.BadPeriods.DeepCloneFrom(BadPeriods);
-			lcm.FreezePeriods.DeepCloneFrom(FreezePeriods);
 
 			return lcm;
 		} // DeepClone
@@ -109,11 +107,6 @@
 				os.Append("\tNo fees.\n");
 
 			os.AppendFormat("\tBad periods: {0}\n", BadPeriods);
-
-			if (FreezePeriods.Count > 0)
-				os.AppendFormat("\tInterest freeze periods: {0}.\n", FreezePeriods);
-			else
-				os.Append("\tNo interest freeze periods.\n");
 
 			os.Append("\tLoan calculation model - end.\n");
 
@@ -191,7 +184,6 @@
 		public List<Repayment> Repayments { get; private set; }
 		public List<Fee> Fees { get; private set; }
 		public BadPeriods BadPeriods { get; private set; }
-		public InterestFreezePeriods FreezePeriods { get; private set; }
 
 		private int repaymentCount;
 		private int interestOnlyMonths;

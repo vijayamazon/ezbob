@@ -1,10 +1,11 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan {
+﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
-	using Ezbob.Backend.Strategies.CalculateLoan.Helpers;
-	using Ezbob.Backend.Strategies.Extensions;
+	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.Extensions;
 
 	// TODO: missing functionality: calculate next scheduled payment.
 	// TODO: missing functionality: calculate next scheduled payment state on specific date (e.g. in three days).
@@ -279,7 +280,7 @@
 			if (WorkingModel.BadPeriods.Contains(currentDate))
 				return 0;
 
-			return WorkingModel.FreezePeriods.GetInterest(currentDate) ?? CalculateDailyInterestRate(
+			return CalculateDailyInterestRate(
 				currentDate,
 				monthlyInterestRate,
 				periodStartDate,

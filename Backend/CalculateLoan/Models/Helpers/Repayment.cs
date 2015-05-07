@@ -1,7 +1,7 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan.Helpers {
+﻿namespace Ezbob.Backend.CalculateLoan.Models.Helpers {
 	using System;
 	using System.Globalization;
-	using Ezbob.Backend.Strategies.Extensions;
+	using Ezbob.Backend.Extensions;
 
 	public class Repayment {
 		public Repayment(DateTime time, decimal principal, decimal interest, decimal fees) {

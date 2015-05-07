@@ -1,9 +1,9 @@
-﻿namespace Ezbob.Backend.Strategies.CalculateLoan.Helpers {
+﻿namespace Ezbob.Backend.CalculateLoan.Models.Helpers {
 	using System;
 	using System.Globalization;
-	using Ezbob.Backend.Strategies.Extensions;
+	using Ezbob.Backend.Extensions;
 
-	internal class OneDayLoanStatus {
+	public class OneDayLoanStatus {
 		public static string FormatField(string field, int length) {
 			string preResult = " " + (field ?? string.Empty) + " ";
 			return (length >= 0) ? preResult.PadLeft(length + 2) : preResult.PadRight(2 - length);
