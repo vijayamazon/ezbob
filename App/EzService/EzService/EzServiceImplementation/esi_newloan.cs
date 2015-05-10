@@ -13,21 +13,21 @@
             };
         }
 
-        public IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision) {
-            AddCashRequest stra;
-            var amd = ExecuteSync(out stra, customerID, userID, decision);
+        public IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest) {
+            AddDecision stra;
+            var amd = ExecuteSync(out stra, customerID, userID, decision, oldCashRequest);
             return new IntActionResult {
                 MetaData = amd,
-                Value = stra.CashRequestID
+                Value = stra.DecisionID
             };
         }
 
         public IntActionResult AddOffer(int userID, int customerID, NL_Offers offer) {
-            AddCashRequest stra;
+            AddOffer stra;
             var amd = ExecuteSync(out stra, customerID, userID, offer);
             return new IntActionResult {
                 MetaData = amd,
-                Value = stra.CashRequestID
+                Value = stra.OfferID
             };
         }
     }

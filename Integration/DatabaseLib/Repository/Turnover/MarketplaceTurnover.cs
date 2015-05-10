@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace EZBob.DatabaseLib.Repository.Turnover {
 	using ApplicationMng.Repository;
@@ -12,10 +9,8 @@ namespace EZBob.DatabaseLib.Repository.Turnover {
 	using NHibernate.Type;
 
 	public class MarketplaceTurnover {
-
-		public MarketplaceTurnover() { }
-
-		public virtual DateTime TheMonth { get; set; }
+        public virtual long AggID { get; set; }
+        public virtual DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }
 		public virtual DateTime UpdatingEnd { get; set; }
@@ -73,20 +68,19 @@ namespace EZBob.DatabaseLib.Repository.Turnover {
 			ReadOnly();
 
 			Map(x => x.Turnover).Precision(18).Scale(2);
-			Map(x => x.TheMonth); //.CustomType<>(;
+			Map(x => x.TheMonth).CustomType<UtcDateTimeType>();
 			Map(x => x.IsActive);
-
+		    Map(x => x.AggID);
 			Map(x => x.UpdatingEnd).CustomType<UtcDateTimeType>();
 
 			References(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
-
 			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId").Cascade.None();
 			References(x => x.Customer, "CustomerId").Cascade.None();
 
 			CompositeId()
 		   .KeyReference(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID")
+           .KeyProperty(x => x.AggID)
 		   .KeyProperty(x => x.TheMonth);
-
 
 		} // constructor
 	}

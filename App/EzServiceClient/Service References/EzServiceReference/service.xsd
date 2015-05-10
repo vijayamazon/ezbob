@@ -147,6 +147,7 @@
         <xs:element minOccurs="0" name="userID" type="xs:int" />
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
         <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="decision" nillable="true" type="q12:NL_Decisions" />
+        <xs:element minOccurs="0" name="oldCashRequest" nillable="true" type="xs:long" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

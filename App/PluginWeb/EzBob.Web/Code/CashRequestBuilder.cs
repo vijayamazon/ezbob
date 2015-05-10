@@ -181,7 +181,7 @@
                 SendEmailNotification = false,
                 DecisionNameID = (int)DecisionActions.Approve,
                 UserID = user.Id
-            });
+            }, null);
 
             var nlOfferID = m_oServiceClient.Instance.AddOffer(this.context.UserId, customer.Id, new NL_Offers {
                 DecisionID = nlDecisionID.Value,

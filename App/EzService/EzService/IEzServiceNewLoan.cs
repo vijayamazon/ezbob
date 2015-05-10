@@ -9,7 +9,7 @@
 		IntActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
 
         [OperationContract]
-        IntActionResult AddDecision(int userID, int customerID,NL_Decisions decision);
+        IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest);
 
         [OperationContract]
         IntActionResult AddOffer(int userID, int customerID, NL_Offers offer);

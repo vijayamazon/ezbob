@@ -10,6 +10,11 @@
         public override string Name { get { return "AddOffer"; } }
 
         public override void Execute() {
+            if (this.offer.DecisionID == 0) {
+                Log.Error("DecisionID is 0");
+                return;
+            }
+
             OfferID = DB.ExecuteScalar<int>("NL_OffersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Offers>("Tbl", this.offer)); 
         }//Execute
 
