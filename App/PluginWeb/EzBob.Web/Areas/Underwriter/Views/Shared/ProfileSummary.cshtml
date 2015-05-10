@@ -340,7 +340,7 @@
                                 <td><%- EzBob.formatPounds(d.ApprovedSum) %></td>
                                 <td><%- EzBob.formatPercents(d.InterestRate) %></td>
                                 <td><%- d.RepaymentPeriod %></td>
-                                <td><%- EzBob.formatLoanType(d.IsLoanTypeSelectionAllowed, d.LoanType) %></td>
+                                <td><%- d.LoanType %></td>
                                 <td><%- d.TotalSetupFee ? EzBob.formatPounds(d.TotalSetupFee) : 'No' %> <%- d.BrokerSetupFee ? '( Broker: ' + EzBob.formatPounds(d.BrokerSetupFee) + ')' : '' %></td>
                                 <td><%- d.DiscountPlan %></td>
                                 <td><%- EzBob.formatLoanTypeSelection(d.IsLoanTypeSelectionAllowed) %></td>

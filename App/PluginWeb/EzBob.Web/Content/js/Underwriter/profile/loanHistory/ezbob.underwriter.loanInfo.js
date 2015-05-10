@@ -17,21 +17,10 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 		},
 
 		events: {
-			"click [name='startingDateChangeButton']": "editStartingDate",
-			"click [name='offerValidUntilDateChangeButton']": "editOfferValidUntilDate",
-			"click [name='repaymentPeriodChangeButton']": "editRepaymentPeriod",
-			"click [name='interestRateChangeButton']": "editInterestRate",
-			"click [name='openCreditLineChangeButton']": "editOfferedCreditLine",
-			"click [name='editDetails']": "editDetails",
-			"click [name='manualSetupFeeEditPercentButton']": "editManualSetupFeePercent",
-			"click [name='brokerSetupFeeEditPercentButton']": "editBrokerSetupFeePercent",
-			"click [name='newCreditLineBtn']": "runNewCreditLine",
-			'click [name="loanType"]': 'loanType',
-			'click [name="isLoanTypeSelectionAllowed"]': 'isLoanTypeSelectionAllowed',
-			'click [name="discountPlan"]': 'discountPlan',
-			'click [name="loanSource"]': 'loanSource',
+			'click [name="newCreditLineBtn"]': 'runNewCreditLine',
 			'click .create-loan-hidden-toggle': 'toggleCreateLoanHidden',
-			'click #create-loan-hidden-btn': 'createLoanHidden'
+			'click #create-loan-hidden-btn': 'createLoanHidden',
+			'click #editOfferButton': 'showCreditLineDialog'
 		},
 
 		toggleCreateLoanHidden: function(event) {
@@ -82,188 +71,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 		},
 
-		editOfferValidUntilDate: function() {
-			var d = new EzBob.Dialogs.DateEdit({
-				model: this.model,
-				propertyName: "OfferValidateUntil",
-				title: "Offer valid until edit",
-				width: 370,
-				postValueName: "date",
-				url: "Underwriter/ApplicationInfo/ChangeOferValid",
-				data: {
-					id: this.model.get("CustomerId")
-				}
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
-		editStartingDate: function() {
-			var that = this;
-
-			var d = new EzBob.Dialogs.DateEdit({
-				model: this.model,
-				propertyName: "StartingFromDate",
-				title: "Starting date edit",
-				width: 400,
-				postValueName: "date",
-				url: "Underwriter/ApplicationInfo/ChangeStartingDate",
-				data: {
-					id: this.model.get("CustomerId")
-				}
-			});
-
-			d.render();
-
-			d.on("done", function() {
-				that.model.fetch();
-			});
-		},
-
-		editRepaymentPeriod: function() {
-			var self = this;
-			var loanSourceModel = this.model.get('LoanSource') || {};
-
-			if (loanSourceModel.DefaultRepaymentPeriod === -1) {
-				self.editRepaymentPeriodDialog();
-			} else {
-				EzBob.ShowMessage("The source type have default value of " + loanSourceModel.DefaultRepaymentPeriod, "Are you sure?", function() {
-					self.editRepaymentPeriodDialog();
-				}, "Ok" ,self.model.fetch(), "Cancel" );
-			}
-		},
-
-		editRepaymentPeriodDialog: function () {
-			var self = this;
-			var d = new EzBob.Dialogs.IntegerEdit({
-				model: this.model,
-				propertyName: "RepaymentPerion",
-				title: "Repayment period edit",
-				width: 400,
-				postValueName: "period",
-				url: "Underwriter/ApplicationInfo/ChangeCashRequestRepaymentPeriod",
-				data: {
-					id: this.model.get("CashRequestId")
-				},
-				required: true
-			});
-
-			d.render();
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
-		editOfferedCreditLine: function() {
-			var that = this;
-
-			this.model.set('amount', this.model.get('OfferedCreditLine'));
-
-			var view = new EzBob.Underwriter.CreditLineEditDialog({
-				model: this.model
-			});
-
-			EzBob.App.jqmodal.show(view);
-
-			view.on("showed", function() {
-				view.$el.find("input").focus();
-			});
-
-			view.on("done", function() {
-				that.model.fetch();
-			});
-		},
-
-		editInterestRate: function() {
-			var d = new EzBob.Dialogs.PercentsEdit({
-				model: this.model,
-				propertyName: "InterestRate",
-				title: "Interest rate edit",
-				width: 400,
-				postValueName: "interestRate",
-				url: "Underwriter/ApplicationInfo/ChangeCashRequestInterestRate",
-				data: {
-					id: this.model.get("CashRequestId")
-				},
-				required: true
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
-		editDetails: function() {
-			var d = new EzBob.Dialogs.TextEdit({
-				model: this.model,
-				propertyName: "Details",
-				title: "Details edit",
-				width: 400,
-				postValueName: "details",
-				url: "Underwriter/ApplicationInfo/SaveDetails",
-				data: {
-					id: this.model.get("CustomerId")
-				}
-			});
-			d.render();
-		},
-
-		editManualSetupFeePercent: function() {
-			var d = new EzBob.Dialogs.PercentsEdit({
-				model: this.model,
-				propertyName: "ManualSetupFeePercent",
-				title: "Manual setup fee percent edit",
-				width: 400,
-				postValueName: "manualPercent",
-				url: "Underwriter/ApplicationInfo/ChangeManualSetupFeePercent",
-				data: {
-					id: this.model.get("CashRequestId")
-				},
-				required: false
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
-		editBrokerSetupFeePercent: function () {
-		    var d = new EzBob.Dialogs.PercentsEdit({
-		        model: this.model,
-		        propertyName: "BrokerSetupFeePercent",
-		        title: "Broker setup fee percent edit",
-		        width: 400,
-		        postValueName: "brokerPercent",
-		        url: "Underwriter/ApplicationInfo/ChangeBrokerSetupFeePercent",
-		        data: {
-		            id: this.model.get("CashRequestId")
-		        },
-		        required: false
-		    });
-
-		    d.render();
-
-		    var self = this;
-
-		    d.on("done", function () {
-		        self.model.fetch();
-		    });
-		},
-
 		runNewCreditLine: function(e) {
 			if ($(e.currentTarget).hasClass("disabled"))
 				return false;
@@ -307,93 +114,10 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 		}, // createNewCreditLine
 
-		isLoanTypeSelectionAllowed: function() {
-			var d = new EzBob.Dialogs.ComboEdit({
-				model: this.model,
-				propertyName: "IsLoanTypeSelectionAllowed",
-				title: "Customer selection",
-				width: 400,
-				postValueName: "loanTypeSelection",
-				comboValues: [{
-					value: 0,
-					text: 'Disabled'
-				}, {
-					value: 1,
-					text: 'Enabled'
-				}],
-				url: "Underwriter/ApplicationInfo/IsLoanTypeSelectionAllowed",
-				data: {
-					id: this.model.get("CashRequestId")
-				}
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on('done', function() {
-				self.LoanTypeSelectionAllowedChanged();
-			});
-		},
-
-		LoanTypeSelectionAllowedChanged: function() {
-			// We used to set the loan type here and the availability of the edit repayment period button here
-			// Until a logic for that will be defined clearly we'll do nothing in this event
-		},
-
-		loanType: function() {
-			var d = new EzBob.Dialogs.ComboEdit({
-				model: this.model,
-				propertyName: "LoanTypeId",
-				title: "Loan type",
-				width: 400,
-				comboValues: this.model.get('LoanTypes'),
-				postValueName: "LoanType",
-				url: "Underwriter/ApplicationInfo/LoanType",
-				data: {
-					id: this.model.get("CashRequestId")
-				}
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
-		loanSource: function() {
-			var d = new EzBob.Dialogs.ComboEdit({
-				model: this.model,
-				propertyName: "LoanSource.LoanSourceID",
-				title: "Loan source",
-				width: 400,
-				comboValues: _.map(this.model.get('AllLoanSources'), function(ls) {
-					return {
-						value: ls.Id,
-						text: ls.Name
-					};
-				}),
-				postValueName: "LoanSourceID",
-				url: "Underwriter/ApplicationInfo/LoanSource",
-				data: {
-					id: this.model.get("CashRequestId")
-				}
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
-		validateLoanSourceRelated: function() {
-			var loanSourceModel = this.model.get('LoanSource') || {};
+		
+		validateLoanSourceRelated: function () {
+		    var loanSourceID = this.model.get('LoanSourceID');
+		    var loanSourceModel = _.find(this.model.get("AllLoanSources"), function (l) { return l.Id == loanSourceID; });
 
 			this.validateInterestVsSource(loanSourceModel.MaxInterest);
 
@@ -467,34 +191,6 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			return _results;
 		},
 
-		discountPlan: function() {
-			var d = new EzBob.Dialogs.ComboEdit({
-				model: this.model,
-				propertyName: "DiscountPlanId",
-				title: "Discount Plan",
-				width: 400,
-				comboValues: _.map(this.model.get('DiscountPlans'), function(v) {
-					return {
-						value: v.Id,
-						text: v.Name
-					};
-				}),
-				postValueName: "DiscountPlanId",
-				url: "Underwriter/ApplicationInfo/DiscountPlan",
-				data: {
-					id: this.model.get("CashRequestId")
-				}
-			});
-
-			d.render();
-
-			var self = this;
-
-			d.on("done", function() {
-				self.model.fetch();
-			});
-		},
-
 		UpdateNewCreditLineState: function() {
 			var waiting = this.personalInfo.get("CreditResult") === "WaitingForDecision";
 			var disabled = waiting || !this.personalInfo.get("IsCustomerInEnabledStatus");
@@ -517,17 +213,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			});
 
 			this.UpdateNewCreditLineState();
-			this.LoanTypeSelectionAllowedChanged();
-
-			this.initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', this.toggleValue, 'AllowSendingEmails');
-
-			var isLoanTypeSelectionAllowed = this.model.get('IsLoanTypeSelectionAllowed');
-
-			if (isLoanTypeSelectionAllowed === 2 || isLoanTypeSelectionAllowed === '2')
-				this.$el.find('button[name=isLoanTypeSelectionAllowed]').attr('disabled', 'disabled');
-			else
-				this.$el.find('button[name=isLoanTypeSelectionAllowed]').removeAttr('disabled');
-
+			
 			this.validateLoanSourceRelated();
 			EzBob.handleUserLayoutSetting();
 		},

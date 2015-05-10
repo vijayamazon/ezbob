@@ -6,4 +6,11 @@
 		Week    = 7,
 		TenDays = 10,
 	} // enum RepaymentIntervalTypes
+
+    public enum RepaymentIntervalTypesId {
+        Month = 1,
+        Day = 2,
+        Week = 3,
+        TenDays = 4,
+    } // enum RepaymentIntervalTypesId
 } // namespace

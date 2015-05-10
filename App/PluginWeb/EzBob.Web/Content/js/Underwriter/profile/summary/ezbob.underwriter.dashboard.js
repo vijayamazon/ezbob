@@ -79,6 +79,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         this.affordabilityView.render();
     },
     onRender: function () {
+        this.renderAffordability();
         this.experianSpark();
         this.drawGraphs();
         this.$el.find('a[data-bug-type]').tooltip({
@@ -93,8 +94,6 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
             that.drawSparklineGraphs();
         });
 
-       
-
         if (this.crmModel.customerId) {
         	this.journalView = new EzBob.Underwriter.JournalView({
         		el: this.$el.find('#journal'),
@@ -104,7 +103,7 @@ EzBob.Underwriter.DashboardView = Backbone.Marionette.ItemView.extend({
         
         	this.journalView.render();
         }
-        this.renderAffordability();
+        
 	    EzBob.handleUserLayoutSetting();
     },
     

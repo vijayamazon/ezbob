@@ -325,7 +325,6 @@
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.ApproveLoanWithoutAML.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.ApproveLoanForWarningStatusCustomer.js")
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.controlButtons.js")
-				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.creditLineEditDialog.js")
 
 				.Add("~/Content/js/Underwriter/profile/loanHistory/ezbob.underwriter.collectionStatus.js")
 				//loanHistory

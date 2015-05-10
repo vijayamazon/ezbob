@@ -938,17 +938,6 @@ EzBob.formatPercentsWithDecimals = function(num, precision) {
 	return $.fn.autoNumeric.Format(undefined, EzBob.roundNumber(num * 100, p)) + "%";
 };
 
-EzBob.formatLoanType = function(loanTypeSelection, loanType) {
-	return loanType;
-}; // formatLoanType
-
-EzBob.formatLoanSource = function(model) {
-	if (model && model.LoanSource && model.LoanSource.Name) {
-		return model.LoanSource.Name;
-	}
-	return '--';
-}; // formatLoanSource
-
 EzBob.formatLoanTypeSelection = function(num) {
 	switch (num) {
 		case 0:

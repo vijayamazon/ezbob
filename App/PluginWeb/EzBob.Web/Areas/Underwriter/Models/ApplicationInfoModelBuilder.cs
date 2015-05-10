@@ -23,7 +23,6 @@
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly ILoanSourceRepository _loanSources;
 	    private readonly IOfferCalculationsRepository offerCalculationsRepository;
-		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
 		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
 		private readonly LoanBuilder _loanBuilder;
 		private readonly APRCalculator _aprCalc;
@@ -33,7 +32,6 @@
 			IDiscountPlanRepository discounts,
 			ILoanTypeRepository loanTypes,
 			ILoanSourceRepository loanSources,
-			VatReturnSummaryRepository vatReturnSummaryRepository,
 			CustomerAnalyticsRepository customerAnalyticsRepository,
 			LoanBuilder loanBuilder,
 			APRCalculator aprCalc, 
@@ -43,7 +41,6 @@
 		    this._loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
 		    this._loanSources = loanSources;
-		    this._vatReturnSummaryRepository = vatReturnSummaryRepository;
 		    this._customerAnalyticsRepository = customerAnalyticsRepository;
 		    this._loanBuilder = loanBuilder;
 		    this._aprCalc = aprCalc;
@@ -64,20 +61,20 @@
 				BuildCashRequestModel(model, customer, cr);
 			}
 
-			model.LoanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : this._loanSources.GetDefault());
+			var loanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : this._loanSources.GetDefault());
+		    model.LoanSourceID = loanSource.Id;
+		    model.LoanSource = loanSource.Name;
 
 			model.CustomerId = customer.Id;
 			model.IsTest = customer.IsTest;
 			model.IsOffline = customer.IsOffline;
-			model.HasYodlee = customer.GetYodleeAccounts().ToList().Any();
+			model.HasYodlee = customer.GetYodleeAccounts().Any();
 			model.IsAvoid = customer.IsAvoid;
 			model.SystemDecision = customer.Status.ToString();
 
 			model.AvaliableAmount = customer.CreditSum ?? 0M;
 			model.OfferExpired = customer.OfferValidUntil <= DateTime.UtcNow;
 
-			//Status = "Active";
-			model.Details = customer.Details;
 			var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
 									   customer.CreditResult == CreditResultStatus.Escalated || 
 									   customer.CreditResult == CreditResultStatus.ApprovedPending;
@@ -119,8 +116,6 @@
 			}
 
 			BuildRequestedLoan(model, customer);
-
-		    BuildSuggestedAmountModel(model, customer);
 
 		    BuildAutomationOfferModel(model, customer);
 		}//InitApplicationInfo
@@ -169,7 +164,7 @@
 	        cr.OfferStart = cr.OfferStart ?? customer.OfferStart;
 	        cr.OfferValidUntil = cr.OfferValidUntil ?? customer.OfferValidUntil;
 
-	        model.RepaymentPerion = cr.RepaymentPeriod; //_repaymentCalculator.ReCalculateRepaymentPeriod(cr);
+	        model.RepaymentPerion = cr.RepaymentPeriod;
 
 	        if (cr.SystemCalculatedSum.HasValue && Math.Abs(cr.SystemCalculatedSum.Value) > 0.01)
 	            model.SystemCalculatedAmount = Convert.ToDecimal(cr.SystemCalculatedSum.Value);
@@ -193,6 +188,7 @@
 	        model.Reason = cr.UnderwriterComment;
 
 	        model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
+            model.IsCustomerRepaymentPeriodSelectionAllowed = cr.IsCustomerRepaymentPeriodSelectionAllowed;
 
 	        model.AnnualTurnover = cr.AnnualTurnover;
 
@@ -219,48 +215,5 @@
 	        } else
 	            model.AutomationOfferModel = new AutomationOfferModel();
 	    }//BuildAutomationOfferModel
-
-	    private void BuildSuggestedAmountModel(ApplicationInfoModel model, Customer customer) {
-	        if (customer.CustomerMarketPlaces.Any(x => x.Marketplace.Name == "HMRC")) {
-	            var hmrc = customer.CustomerMarketPlaces.First(x => x.Marketplace.Name == "HMRC")
-	                .Id;
-	            var summary = this._vatReturnSummaryRepository.GetLastSummary(hmrc);
-	            if (summary != null) {
-	                model.ValueAdded = summary.TotalValueAdded;
-	                model.FreeCashFlow = summary.FreeCashFlow;
-	            }
-	        }
-
-	        var analytics = this._customerAnalyticsRepository.Get(customer.Id);
-	        if (analytics != null)
-	            model.Turnover = analytics.AnnualTurnover;
-
-	        model.SuggestedAmounts = new[] {
-	            new SuggestedAmountModel {
-	                Method = CalculationMethod.Turnover.DescriptionAttr(),
-	                Silver = 0.06M,
-	                Gold = 0.08M,
-	                Platinum = 0.1M,
-	                Diamond = 0.12M,
-	                Value = model.Turnover
-	            },
-	            new SuggestedAmountModel {
-	                Method = CalculationMethod.ValueAdded.DescriptionAttr(),
-	                Silver = 0.15M,
-	                Gold = 0.20M,
-	                Platinum = 0.25M,
-	                Diamond = 0.30M,
-	                Value = model.ValueAdded
-	            },
-	            new SuggestedAmountModel {
-	                Method = CalculationMethod.FCF.DescriptionAttr(),
-	                Silver = 0.29M,
-	                Gold = 0.38M,
-	                Platinum = 0.48M,
-	                Diamond = 0.58M,
-	                Value = model.FreeCashFlow
-	            },
-	        };
-        }//BuildSuggestedAmountModel
 	}
 }

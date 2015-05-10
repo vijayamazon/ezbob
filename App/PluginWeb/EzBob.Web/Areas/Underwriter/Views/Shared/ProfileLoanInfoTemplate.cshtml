@@ -355,12 +355,7 @@
         <tbody class="box-content">
             @RawCell("System decision", "<%- m.SystemDecision %>")
             @RawCell("System amount", "<%- EzBob.formatPounds(m.SystemCalculatedAmount) %>")
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='fa fa-exclamation-circle'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>", "openCreditLineChangeButton")
-            <%} else{%>
-                @RawCell("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='fa fa-exclamation-circle'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
-            <%}%>
+            @RawCell("<span class=create-loan-hidden-toggle>Offered amount</span>", "<%if(m.OfferedCreditLine < EzBob.Config.MinLoan){%><i class='fa fa-exclamation-circle'></i><%}%> <%- EzBob.formatPounds(m.OfferedCreditLine) %>")
 
             <tr class="hide" id="create-loan-hidden">
                 <td colspan="2">
@@ -383,36 +378,16 @@
                 </td>
             </tr>
 
-            <%if (m.Editable) { %>
-                @RawCellWithButtonNear(
-                    "Interest Rate",
-                    "<%- EzBob.formatPercents(m.InterestRate) %>",
-                    "interestRateChangeButton",
-                    sRawHtmlUnder: "<div class=\"hide red interest-exceeds-max-by-loan-source\">Interest rate exceeds max rate for this loan source.</div>"
-                     )
-            <%} else {%>
-                <tr>
-                    <td>@Html.Raw("Interest Rate")</td>
-                    <td>@Html.Raw("<%- EzBob.formatPercents(m.InterestRate) %>")
-                        @Html.Raw("<div class=\"hide red interest-exceeds-max-by-loan-source\">Interest rate exceeds max rate for this loan source.</div>")
-                    </td>
-                </tr>
-            <%}%>
-
+            <tr>
+                <td>@Html.Raw("Interest Rate")</td>
+                <td>@Html.Raw("<%- EzBob.formatPercents(m.InterestRate) %>")
+                    @Html.Raw("<div class=\"hide red interest-exceeds-max-by-loan-source\">Interest rate exceeds max rate for this loan source.</div>")
+                </td>
+            </tr>
             @RawCell("Borrowed amount", "<%- EzBob.formatPounds(m.BorrowedAmount) %>")
             @RawCell("Avaliable amount", "<%- m.OfferExpired ? '-' : EzBob.formatPounds(m.AvaliableAmount) %>")
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Starting from date", "<%- m.StartingFromDate %>", "startingDateChangeButton")
-            <%} else{%>
-                @RawCell("Starting from date", "<%- m.StartingFromDate %>")
-            <%}%>
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Offer valid until", "<%- m.OfferValidateUntil %>", "offerValidUntilDateChangeButton")
-            <%} else{%>
-                @RawCell("Offer valid until", "<%- m.OfferValidateUntil %>")
-            <%}%>
+            @RawCell("Starting from date", "<%- m.StartingFromDate %>")
+            @RawCell("Offer valid until", "<%- m.OfferValidateUntil %>")
         </tbody>
     </table>
     </div>
@@ -428,18 +403,12 @@
                 <td>setup fee</td>
                 <td>
                     <span><%= m.ManualSetupFeePercent ? EzBob.formatPercents(m.ManualSetupFeePercent) + ' (' + EzBob.formatPounds(m.SetupFee) + ')' : 'No setup fee' %></span>
-                     <%if(m.Editable){%>
-                    <button class="btn btn-mini couple_buttons left-pane-button" name="manualSetupFeeEditPercentButton">%</button>
-                    <%}%>
                 </td>
             </tr>
             <tr>
                 <td>broker fee</td>
                 <td>
                     <span><%= m.BrokerSetupFeePercent ? EzBob.formatPercents(m.BrokerSetupFeePercent) + ' (' + EzBob.formatPounds(m.BrokerSetupFee) + ')' : 'No broker fee' %></span>
-                    <%if(m.Editable){%>
-                    <button class="btn btn-mini couple_buttons left-pane-button" name="brokerSetupFeeEditPercentButton">%</button>
-                    <%}%>
                 </td>
             </tr>
         </tbody>
@@ -452,52 +421,27 @@
             </tr>
         </thead>
         <tbody class="box-content">
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Repayment period", "<%- m.RepaymentPerion %>", "repaymentPeriodChangeButton")
-            <%} else{%>
-                @RawCell("Repayment period", "<%- m.RepaymentPerion %>")
-            <%}%>
-
-            <%if(m.Editable){%>
-                @RawCellWithSlider("Send Emails", "sendEmailsSwitch", "No", "Yes", "", "info")
-            <%} else{%>
-                @RawCell("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
-            <%}%>
-
+            @RawCell("Repayment period", "<%- m.RepaymentPerion %>")
+            @RawCell("Send Emails", "<%= m.AllowSendingEmail ? 'Yes' : 'No' %>")
+            
             <tr>
                 <td>Discount plan</td>
                 <td><%= m.DiscountPlan %>
                     <i data-title="" class="tltp-left fa fa-question-circle" data-original-title=""></i> 
-                    <% if (m.Editable) { %>
-                        <button class="btn btn-mini left-pane-button" name="discountPlan">
-                            <i class="fa fa-pencil"></i>
-                        </button>
-                    <% } %>
                     <div class="hide red discount-exceeds-max-by-loan-source">Interest rate for at least one month exceeds max rate for this loan source.</div>
                 </td>
             </tr>
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Loan Type", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>", "loanType")
-            <%} else{%>
-                @RawCell("Loan Type", "<%= EzBob.formatLoanType(m.IsLoanTypeSelectionAllowed, m.LoanType) %>")
-            <%}%>
-
-            <% if (m.Editable) { %>
-                @RawCellWithButtonNear("Loan Source", "<%- EzBob.formatLoanSource(m) %>", "loanSource")
-            <% } else { %>
-                @RawCell("Loan Source", "<%- EzBob.formatLoanSource(m) %>")
-            <% } %>
-
-            <%if(m.Editable){%>
-                @RawCellWithButtonNear("Customer selection", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>", "isLoanTypeSelectionAllowed")
-            <%} else{%>
-                @RawCell("Customer selection", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>")
-            <%}%>
+            @RawCell("Loan Type", "<%= m.LoanType %>")
+            @RawCell("Loan Source", "<%- m.LoanSource %>")
+            @RawCell("Loan type selection", "<%= EzBob.formatLoanTypeSelection(m.IsLoanTypeSelectionAllowed) %>")
+            @RawCell("Repayment period selection", "<%= m.IsCustomerRepaymentPeriodSelectionAllowed ? 'Yes' : 'No' %>")
         </tbody>
     </table>
     </div>
     <div class="control-group">
+        <%if(m.Editable){%>
+            <button id="editOfferButton" class="btn btn-dashboard" name="editOfferButton">Edit offer</button>
+        <%}%>
         <button id="newCreditLineButtonId" class="btn btn-dashboard" name="newCreditLineBtn">New Credit Line</button>
     </div>
     <% })(m); %>
@@ -517,78 +461,6 @@
         <button class="btn btn-primary email-change-address">Change Email</button>
         <button class="btn btn-primary email-send-new-request">Send New Request</button>
         <button class="btn btn-primary email-confirm-manually">Confirm Manually</button>
-    </div>
-</script>
-
-<script id="credit-line-edit-dialog-template" type="text/template">
-    <div class="modal-body">
-        <form id="credit-line-form">
-            <label>Amount</label>
-            <input class="form-control" type="text" id="edit-offer-amount" name="editOfferAmount" value="">
-        </form>
-
-        <div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="turnOverManual">Revenue: <%-EzBob.formatPoundsNoDecimals(m.Turnover)%></label>
-                </div>
-                <div class="col-md-4">
-                    <input id="turnOverManual" class="percent" type="text" value="0" data-value="<%-m.Turnover%>" data-method="Turnover" />
-                </div>
-                <div class="col-md-5">
-                    <a href="#" class="suggested-amount-link ManualTurnover" data-method="Turnover" data-medal="Manual" data-value="0" data-percent="0">Manual offer 0 (0%)</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="vaManual">VA: <%-EzBob.formatPoundsNoDecimals(m.ValueAdded)%></label>
-                </div>
-                <div class="col-md-4">
-                    <input class="percent" type="text" value="0" data-value="<%-(m.ValueAdded)%>" data-method="ValueAdded"/>
-                </div>
-                <div class="col-md-5">
-                    <a href="#" class="suggested-amount-link ManualValueAdded" data-method="ValueAdded" data-medal="Manual" data-value="0" data-percent="0">Manual offer 0 (0%)</a>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <label for="fcfManual">FCF: <%-EzBob.formatPoundsNoDecimals(m.FreeCashFlow)%></label>
-                </div>
-                <div class="col-md-4">
-                    <input class="percent" type="text" value="0" data-value="<%-(m.FreeCashFlow)%>" data-method="FreeCashFlow"/>
-                </div>
-                <div class="col-md-5">
-                    <a href="#" class="suggested-amount-link ManualFreeCashFlow" data-method="FreeCashFlow" data-medal="Manual" data-value="0" data-percent="0">Manual offer 0 (0%)</a>
-                </div>
-            </div>
-        </div>
-
-        <table class="table">
-            <thead class="box">
-                <tr class="box-title">
-                    <th>Method</th>
-                    <th>Silver</th>
-                    <th>Gold</th>
-                    <th>Platinum</th>
-                    <th>Diamond</th>
-                </tr>
-            </thead>
-            <tbody class="box-content">
-                <%_.each(m.SuggestedAmounts, function(s) { %>
-                        <tr>
-                            <td><%-s.Method%></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Silver" data-value="<%-(s.Silver*s.Value)%>" data-percent="<%-s.Silver%>"><%-EzBob.formatPoundsNoDecimals(s.Silver*s.Value)%> (<%-EzBob.formatPercents(s.Silver)%>)</a></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Gold" data-value="<%-(s.Gold*s.Value)%>" data-percent="<%-s.Gold%>"><%-EzBob.formatPoundsNoDecimals(s.Gold*s.Value)%> (<%-EzBob.formatPercents(s.Gold)%>)</a></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Platinum" data-value="<%-(s.Platinum*s.Value)%>" data-percent="<%-s.Platinum%>"><%-EzBob.formatPoundsNoDecimals(s.Platinum*s.Value)%> (<%-EzBob.formatPercents(s.Platinum)%>)</a></td>
-                            <td><a href="#" class="suggested-amount-link" data-method="<%-s.Method%>" data-medal="Diamond" data-value="<%-(s.Diamond*s.Value)%>" data-percent="<%-s.Diamond%>"><%-EzBob.formatPoundsNoDecimals(s.Diamond*s.Value)%> (<%-EzBob.formatPercents(s.Diamond)%>)</a></td>
-                        </tr>
-                <%});%>
-            </tbody>
-        </table>
-    </div>
-
-    <div class="pull-right">
-        <button class="btn btn-primary btnOk">Save</button>
     </div>
 </script>
 

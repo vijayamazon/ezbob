@@ -196,7 +196,7 @@
                 EndTime = now.AddDays(1),
                 MonthlyInterestRate = customer.QuickOffer.ImmediateInterestRate,
                 RepaymentCount = customer.QuickOffer.ImmediateTerm,
-                RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
+                RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
                 LoanSourceID = loanSource.ID,
                 LoanTypeID = loanType.Id,
                 StartTime = now,

@@ -684,7 +684,7 @@
                 LoanTypeID = this.autoDecisionResponse.LoanTypeID,
                 MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
                 RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
-                RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month, //todo
+                RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, //todo
                 SetupFeePercent = this.autoDecisionResponse.SetupFee,
                 StartTime = now,
                 EndTime = now.AddHours(CurrentValues.Instance.OfferValidForHours)

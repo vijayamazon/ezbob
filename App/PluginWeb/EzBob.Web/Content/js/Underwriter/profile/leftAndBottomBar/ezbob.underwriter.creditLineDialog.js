@@ -64,14 +64,21 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	        return;
 
 	    var currentLoanSource = _.find(this.cloneModel.get("AllLoanSources"), function (l) { return l.Id == loanSourceId; });
-	    if (currentLoanSource && currentLoanSource.DefaultRepaymentPeriod) {
+	    if (currentLoanSource && currentLoanSource.DefaultRepaymentPeriod > 0) {
 	        this.cloneModel.set("RepaymentPerion", currentLoanSource.DefaultRepaymentPeriod);
 	    }
 
-	    if (currentLoanSource && currentLoanSource.MaxInterest && this.cloneModel.get("InterestRate") > currentLoanSource.MaxInterest) {
+	    if (currentLoanSource && currentLoanSource.MaxInterest && currentLoanSource.MaxInterest > 0 && this.cloneModel.get("InterestRate") > currentLoanSource.MaxInterest) {
 	        this.cloneModel.set("InterestRate", currentLoanSource.MaxInterest);
 	    }
 
+	    if (!currentLoanSource.IsCustomerRepaymentPeriodSelectionAllowed) {
+	        this.cloneModel.set("IsCustomerRepaymentPeriodSelectionAllowed", false);
+	        this.cloneModel.set("IsLoanTypeSelectionAllowed", 0);
+	        this.$el.find("#repaymentPeriodSelection").addClass('disabled');
+	    } else {
+	        this.$el.find("#repaymentPeriodSelection").removeClass('disabled');
+	    }
 	},
 
 	save: function() {
@@ -90,13 +97,13 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	}, // save
 
 	getPostData: function() {
-		var m = this.cloneModel.toJSON();
+	    var m = this.cloneModel.toJSON();
 		return {
 			id: m.CashRequestId,
 			loanType: m.LoanTypeId,
-			loanSource: m.LoanSource.Id,
+			loanSource: m.LoanSourceID,
 			discountPlan: m.DiscountPlanId,
-			amount: m.amount,
+			amount: m.OfferedCreditLine,
 			interestRate: m.InterestRate,
 			repaymentPeriod: m.RepaymentPerion,
 			offerStart: m.StartingFromDate,
@@ -104,11 +111,17 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			brokerSetupFeePercent: m.BrokerSetupFeePercent,
 			manualSetupFeePercent: m.ManualSetupFeePercent,
 			allowSendingEmail: m.AllowSendingEmail,
+			isLoanTypeSelectionAllowed: m.IsLoanTypeSelectionAllowed,
+			isCustomerRepaymentPeriodSelectionAllowed: m.IsCustomerRepaymentPeriodSelectionAllowed
 		};
 	}, // getPostData
 
 	bindings: {
-		InterestRate: {
+	    OfferedCreditLine: {
+	        selector: "#offeredCreditLine",
+	        converter: EzBob.BindingConverters.moneyFormat
+	    },
+	    InterestRate: {
 			selector: "input[name='interestRate']",
 			converter: EzBob.BindingConverters.percentsFormat
 		},
@@ -127,11 +140,7 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		},
 		DiscountPlanId: "select[name='discount-plan']",
 		LoanTypeId: "select[name='loan-type']",
-		LoanSourceId: "select[name='loan-source']",
-		amount: {
-			selector: "#offeredCreditLine",
-			converter: EzBob.BindingConverters.moneyFormat
-		},
+		LoanSourceID: "select[name='loan-source']",
 		ManualSetupFeePercent: {
 			selector: "input[name='manualSetupFeePercent']",
 			converter: EzBob.BindingConverters.percentsFormat
@@ -140,11 +149,17 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		    selector: "input[name='brokerSetupFeePercent']",
 			converter: EzBob.BindingConverters.percentsFormat
 		},
+		IsLoanTypeSelectionAllowed: {
+		    selector: "input[name='loanTypeSelection']",
+		    converter: EzBob.BindingConverters.boolFormat
+		},
+		IsCustomerRepaymentPeriodSelectionAllowed: {
+		    selector: "input[name='repaymentPeriodSelection']"
+		},
 	}, // bindings
 
 	onRender: function() {
 		this.modelBinder.bind(this.cloneModel, this.el, this.bindings);
-
 		this.$el.find("#startingFromDate, #offerValidUntil").mask("99/99/9999").datepicker({
 			autoclose: true,
 			format: 'dd/mm/yyyy'
@@ -160,6 +175,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		this.$el.find("#brokerSetupFeePercent").autoNumeric(EzBob.percentFormat);
 		
 		this.$el.find("#repaymentPeriod").numericOnly();
+
+		this.onChangeLoanSource();
 
 		this.ui.form.validate({
 			rules: {
