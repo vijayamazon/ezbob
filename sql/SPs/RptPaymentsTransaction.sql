@@ -19,6 +19,7 @@ BEGIN
 	   T.Interest,
 	   T.Fees,
 	   T.LoanId,
+	   L.RefNum,
 	   L.[Date] AS LoanDate,
 	   T.PaypointId,
 	   M.Name AS TransactionType,
