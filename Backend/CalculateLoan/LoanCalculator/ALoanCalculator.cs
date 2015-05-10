@@ -12,18 +12,21 @@
 	// TODO: missing functionality: replace art of existing schedule with new schedule.
 
 	public abstract class ALoanCalculator {
+		public abstract string Name { get; }
+
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
+		/// Schedule is stored in WorkingModel.Schedule.
 		/// </summary>
 		public virtual void CreateSchedule() {
-			if (WorkingModel.InterestOnlyMonths >= WorkingModel.RepaymentCount) {
+			if (WorkingModel.InterestOnlyRepayments >= WorkingModel.RepaymentCount) {
 				throw new ArgumentOutOfRangeException(
 					"Interest only months count is not less than repayment count.",
 					(Exception)null
 				);
 			} // if
 
-			int principalRepaymentCount = WorkingModel.RepaymentCount - WorkingModel.InterestOnlyMonths;
+			int principalRepaymentCount = WorkingModel.RepaymentCount - WorkingModel.InterestOnlyRepayments;
 
 			decimal otherPayments = Math.Floor(WorkingModel.LoanAmount / principalRepaymentCount);
 
@@ -36,9 +39,9 @@
 
 				sp.Date = AddPeriods(i).Date;
 
-				if (i <= WorkingModel.InterestOnlyMonths)
+				if (i <= WorkingModel.InterestOnlyRepayments)
 					sp.Principal = 0;
-				else if (i == WorkingModel.InterestOnlyMonths + 1)
+				else if (i == WorkingModel.InterestOnlyRepayments + 1)
 					sp.Principal = firstPayment;
 				else
 					sp.Principal = otherPayments;
@@ -56,7 +59,7 @@
 		/// Calculates loan plan.
 		/// </summary>
 		/// <param name="writeToLog">Write result to log or not.</param>
-		/// <returns>Loan plan.</returns>
+		/// <returns>Loan plan (list of repayments).</returns>
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		public virtual List<Repayment> CalculatePlan(bool writeToLog = true) {
 			WorkingModel.ValidateSchedule();
@@ -75,12 +78,12 @@
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
 				ScheduledPayment sp = WorkingModel.Schedule[i];
 
-				foreach (var cls in days.Where(dd => dd.Date > sp.Date.Value))
+				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date > sp.Date.Value))
 					cls.OpenPrincipal -= sp.Principal;
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				foreach (var cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date.Value)) {
+				foreach (OneDayLoanStatus cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date.Value)) {
 					cls.DailyInterestRate = GetDailyInterestRate(
 						cls.Date,
 						sp.InterestRate,
@@ -113,7 +116,7 @@
 				AddScheduleNotes(days);
 
 				Library.Instance.Log.Debug(
-					"\n\nLoanCalculator.CreatePlan - begin:" +
+					"\n\n{3}.CreatePlan - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nLoan plan:\n\t\t{1}" +
 					"\n\nDaily data:\n{2}" +
@@ -121,7 +124,8 @@
 					"\n\n",
 					WorkingModel,
 					string.Join("\n\t\t", result),
-					days.ToFormattedString("\t\t")
+					days.ToFormattedString("\t\t"),
+					Name
 				);
 			} // if
 
@@ -131,9 +135,9 @@
 		/// <summary>
 		/// Calculates current loan balance.
 		/// </summary>
-		/// <param name="requestedDate">Date to calculate balance to (current date if null).</param>
+		/// <param name="requestedDate">Date to calculate balance on (current date if null).</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
-		/// <returns>Current loan balance.</returns>
+		/// <returns>Loan balance on specific date.</returns>
 		public virtual decimal CalculateBalance(DateTime? requestedDate = null, bool writeToLog = true) {
 			DateTime now = (requestedDate ?? DateTime.UtcNow).Date;
 
@@ -157,7 +161,7 @@
 				days.AddNote(now, "Requested balance date.");
 
 				Library.Instance.Log.Debug(
-					"\n\nLoanCalculator.CalculateBalance - begin:" +
+					"\n\n{4}.CalculateBalance - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nBalance on {3}:\n\t\t{1}" +
 					"\n\nDaily data:\n{2}" +
@@ -166,7 +170,8 @@
 					WorkingModel,
 					string.Join("\n\t\t", balance.ToString("C2", Library.Instance.Culture)),
 					days.ToFormattedString("\t\t"),
-					now.DateStr()
+					now.DateStr(),
+					Name
 				);
 			} // if
 
@@ -174,12 +179,12 @@
 		} // CalculateBalance
 
 		/// <summary>
-		/// Calculates current loan earned interest between two dates including both dates.
+		/// Calculates loan earned interest between two dates including both dates.
 		/// </summary>
-		/// <param name="startDate">First day of the calculation period; loan issue date is used if omitted </param>
+		/// <param name="startDate">First day of the calculation period; loan issue date is used if omitted.</param>
 		/// <param name="endDate">Last day of the calculation period; last scheduled payment date is used is omitted.</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
-		/// <returns>Current loan earned interest.</returns>
+		/// <returns>Loan earned interest during specific date range.</returns>
 		public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate, bool writeToLog = true) {
 			WorkingModel.ValidateSchedule();
 
@@ -200,7 +205,7 @@
 				days.AddNote(lastDay, "Last earned interest period date.");
 
 				Library.Instance.Log.Debug(
-					"\n\nLoanCalculator.CalculateEarnedInterest - begin:" +
+					"\n\n{5}.CalculateEarnedInterest - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nEarned interest between {3} and {4}:\n\t\t{1}" +
 					"\n\nDaily data:\n{2}" +
@@ -210,7 +215,8 @@
 					string.Join("\n\t\t", earnedInterest.ToString("C2", Library.Instance.Culture)),
 					days.ToFormattedString("\t\t"),
 					firstDay.DateStr(),
-					lastDay.DateStr()
+					lastDay.DateStr(),
+					Name
 				);
 			} // if
 

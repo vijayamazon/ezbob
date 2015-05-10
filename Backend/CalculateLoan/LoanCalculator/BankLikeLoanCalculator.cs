@@ -6,6 +6,8 @@
 		public BankLikeLoanCalculator(LoanCalculatorModel model) : base(model) {
 		} // constructor
 
+		public override string Name { get { return "Bank-like calculator"; } }
+
 		/// <summary>
 		/// Calculates date after requested number of periods have passed since loan issue date.
 		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
