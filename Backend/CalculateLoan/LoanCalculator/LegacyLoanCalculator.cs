@@ -6,6 +6,8 @@
 		public LegacyLoanCalculator(LoanCalculatorModel model) : base(model) {
 		} // constructor
 
+		public override string Name { get { return "Legacy calculator"; } }
+
 		/// <summary>
 		/// Calculates date after requested number of periods have passed since loan issue date.
 		/// Periods length is always 1 month.

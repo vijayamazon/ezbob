@@ -12,7 +12,7 @@
 		public LoanCalculatorModel() {
 			this.loanAmount = 0;
 			this.repaymentCount = 1;
-			this.interestOnlyMonths = 0;
+			this.interestOnlyRepayments = 0;
 			this.monthlyInterestRate = 0.06m;
 
 			DiscountPlan = new List<decimal>();
@@ -45,7 +45,7 @@
 				LoanAmount = LoanAmount,
 				LoanIssueTime = LoanIssueTime,
 				RepaymentCount = RepaymentCount,
-				InterestOnlyMonths = InterestOnlyMonths,
+				InterestOnlyRepayments = InterestOnlyRepayments,
 				RepaymentIntervalType = RepaymentIntervalType,
 				MonthlyInterestRate = MonthlyInterestRate,
 			};
@@ -135,8 +135,8 @@
 			} // set
 		} // RepaymentCount
 
-		public int InterestOnlyMonths {
-			get { return this.interestOnlyMonths; }
+		public int InterestOnlyRepayments {
+			get { return this.interestOnlyRepayments; }
 			set {
 				if (value < 0) {
 					throw new ArgumentOutOfRangeException(
@@ -144,9 +144,9 @@
 					);
 				} // if
 
-				this.interestOnlyMonths = value;
+				this.interestOnlyRepayments = value;
 			} // set
-		} // InterestOnlyMonths
+		} // InterestOnlyRepayments
 
 		public decimal LoanAmount {
 			get { return this.loanAmount; }
@@ -186,7 +186,7 @@
 		public BadPeriods BadPeriods { get; private set; }
 
 		private int repaymentCount;
-		private int interestOnlyMonths;
+		private int interestOnlyRepayments;
 		private decimal loanAmount;
 		private decimal monthlyInterestRate;
 	} // class LoanCalculatorModel
