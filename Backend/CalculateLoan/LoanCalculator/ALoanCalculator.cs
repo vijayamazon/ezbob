@@ -146,12 +146,8 @@
 
 			DailyLoanStatus days = CreateActualDailyLoanStatus(now);
 
-			decimal balance = WorkingModel.LoanAmount + days.Days.Where(odls => odls.Date <= now).Sum(odls =>
-				odls.DailyInterest
-				+ odls.AssignedFees
-				- odls.RepaidPrincipal
-				- odls.RepaidInterest
-				- odls.RepaidFees
+			decimal balance = WorkingModel.LoanAmount + days.Days.Where(odls => odls.Date <= now).Sum(
+				odls => odls.ExpectedNonprincipalPayment - odls.ActualPayment
 			);
 
 			if (writeToLog) {
@@ -177,6 +173,63 @@
 
 			return balance;
 		} // CalculateBalance
+
+		/// <summary>
+		/// Calculates current (for requested date) payment.
+		/// </summary>
+		/// <param name="requestedDate">Date to calculate payment on (current date if null).</param>
+		/// <param name="writeToLog">Write result to log or not.</param>
+		/// <returns>Loan balance on specific date.</returns>
+		public virtual CurrentPaymentModel CalculateCurrentPayment(DateTime? requestedDate = null, bool writeToLog = true) {
+			DateTime now = (requestedDate ?? DateTime.UtcNow).Date;
+
+			if (now <= WorkingModel.LoanIssueTime.Date)
+				return new CurrentPaymentModel(0);
+
+			DailyLoanStatus days = CreateActualDailyLoanStatus(now);
+
+			if (days.IsEmpty)
+				return new CurrentPaymentModel(0);
+
+			var cpm = new CurrentPaymentModel();
+			/*
+			decimal expectedPreviousPayment = 0;
+			DateTime? previousPaymentDate = null;
+
+			decimal expectedCurrentPayment = 0;
+			DateTime? currentPaymentDate = null;
+
+			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
+				var s = WorkingModel.Schedule[i];
+
+				if (s.Date <= now) {
+					expectedCurrentPayment += s.Principal;
+					currentPaymentDate = s.Date;
+
+					if (s.Date < now) {
+						expectedPreviousPayment += s.Principal;
+						previousPaymentDate = s.Date;
+					} // if
+				} // if
+			} // for
+
+			decimal actualPayment = 0;
+
+			foreach (OneDayLoanStatus odls in days.Days.Where(s => s.Date <= now)) {
+				expectedPreviousPayment += odls.ExpectedNonprincipalPayment;
+				expectedCurrentPayment += odls.ExpectedNonprincipalPayment;
+				actualPayment += odls.ActualPayment;
+			} // for each
+
+			cpm.IsLate = expectedPreviousPayment > actualPayment;
+
+			if (cpm.IsLate) {
+				cpm.Amount = expectedPayment - actualPayment;
+				return cpm;
+			} // if
+			*/
+			return cpm;
+		} // CalculateCurrentPayment
 
 		/// <summary>
 		/// Calculates loan earned interest between two dates including both dates.

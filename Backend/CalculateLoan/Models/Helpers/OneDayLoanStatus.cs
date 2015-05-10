@@ -31,9 +31,17 @@
 
 		public decimal DailyInterestRate { get; set; }
 
+		public decimal ExpectedNonprincipalPayment {
+			get { return DailyInterest + AssignedFees; }
+		} // ExpectedNonprincipalPayment
+
 		public decimal RepaidPrincipal { get; set; }
 		public decimal RepaidInterest { get; set; }
 		public decimal RepaidFees { get; set; }
+
+		public decimal ActualPayment {
+			get { return RepaidPrincipal + RepaidInterest + RepaidFees; }
+		} // ActualPayment
 
 		public void AddRepayment(Repayment rp) {
 			if (rp == null)
