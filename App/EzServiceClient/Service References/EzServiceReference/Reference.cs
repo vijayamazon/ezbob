@@ -190,6 +190,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LotteryActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCreditBureauActionResult))]
@@ -225,7 +226,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CrmLookupsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.EmailConfirmationTokenActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AccountsToUpdateActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AvailableFundsActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BrokerInstantOfferResponseActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringListActionResult))]
     public partial class ActionResult : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
@@ -434,6 +434,45 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.CompanyInfosField, value) != true)) {
                     this.CompanyInfosField = value;
                     this.RaisePropertyChanged("CompanyInfos");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AvailableFundsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class AvailableFundsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal AvailableFundsField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private decimal ReservedAmountField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal AvailableFunds {
+            get {
+                return this.AvailableFundsField;
+            }
+            set {
+                if ((this.AvailableFundsField.Equals(value) != true)) {
+                    this.AvailableFundsField = value;
+                    this.RaisePropertyChanged("AvailableFunds");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public decimal ReservedAmount {
+            get {
+                return this.ReservedAmountField;
+            }
+            set {
+                if ((this.ReservedAmountField.Equals(value) != true)) {
+                    this.ReservedAmountField = value;
+                    this.RaisePropertyChanged("ReservedAmount");
                 }
             }
         }
@@ -1671,45 +1710,6 @@ namespace ServiceClientProxy.EzServiceReference {
                 if ((object.ReferenceEquals(this.AccountInfoField, value) != true)) {
                     this.AccountInfoField = value;
                     this.RaisePropertyChanged("AccountInfo");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="AvailableFundsActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class AvailableFundsActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal AvailableFundsField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private decimal ReservedAmountField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal AvailableFunds {
-            get {
-                return this.AvailableFundsField;
-            }
-            set {
-                if ((this.AvailableFundsField.Equals(value) != true)) {
-                    this.AvailableFundsField = value;
-                    this.RaisePropertyChanged("AvailableFunds");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public decimal ReservedAmount {
-            get {
-                return this.ReservedAmountField;
-            }
-            set {
-                if ((this.ReservedAmountField.Equals(value) != true)) {
-                    this.ReservedAmountField = value;
-                    this.RaisePropertyChanged("ReservedAmount");
                 }
             }
         }
@@ -3253,6 +3253,12 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails", ReplyAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateExperianDirectorDetails(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails", ReplyAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateExperianDirectorDetailsAsync(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateGoogleAnalytics", ReplyAction="http://tempuri.org/IEzService/UpdateGoogleAnalyticsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateGoogleAnalytics(System.Nullable<System.DateTime> oBackfillStartDate, System.Nullable<System.DateTime> oBackfillEndDate);
         
@@ -3444,6 +3450,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/WriteToServiceLog", ReplyAction="http://tempuri.org/IEzService/WriteToServiceLogResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> WriteToServiceLogAsync(int customerID, int userID, Ezbob.Backend.ModelsWithDB.WriteToLogPackage.InputData packageInputData);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetAvailableFunds", ReplyAction="http://tempuri.org/IEzService/GetAvailableFundsResponse")]
+        ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetAvailableFunds", ReplyAction="http://tempuri.org/IEzService/GetAvailableFundsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AvailableFundsActionResult> GetAvailableFundsAsync(int underwriterId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetCashFailed", ReplyAction="http://tempuri.org/IEzService/GetCashFailedResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData GetCashFailed(int customerId);
@@ -3948,12 +3960,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChange", ReplyAction="http://tempuri.org/IEzService/UpdateCustomerAnalyticsOnCompanyChangeResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateCustomerAnalyticsOnCompanyChangeAsync(int customerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails", ReplyAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData UpdateExperianDirectorDetails(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails", ReplyAction="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateExperianDirectorDetailsAsync(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/AddCciHistory", ReplyAction="http://tempuri.org/IEzService/AddCciHistoryResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
@@ -4496,12 +4502,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GenerateMobileCode", ReplyAction="http://tempuri.org/IEzService/GenerateMobileCodeResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetAvailableFunds", ReplyAction="http://tempuri.org/IEzService/GetAvailableFundsResponse")]
-        ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/GetAvailableFunds", ReplyAction="http://tempuri.org/IEzService/GetAvailableFundsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AvailableFundsActionResult> GetAvailableFundsAsync(int underwriterId);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -4529,6 +4529,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateExperianDirectorDetails(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails) {
+            return base.Channel.UpdateExperianDirectorDetails(nCustomerID, nUnderwriterID, oDetails);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateExperianDirectorDetailsAsync(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails) {
+            return base.Channel.UpdateExperianDirectorDetailsAsync(nCustomerID, nUnderwriterID, oDetails);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateGoogleAnalytics(System.Nullable<System.DateTime> oBackfillStartDate, System.Nullable<System.DateTime> oBackfillEndDate) {
@@ -4785,6 +4793,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> WriteToServiceLogAsync(int customerID, int userID, Ezbob.Backend.ModelsWithDB.WriteToLogPackage.InputData packageInputData) {
             return base.Channel.WriteToServiceLogAsync(customerID, userID, packageInputData);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId) {
+            return base.Channel.GetAvailableFunds(underwriterId);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AvailableFundsActionResult> GetAvailableFundsAsync(int underwriterId) {
+            return base.Channel.GetAvailableFundsAsync(underwriterId);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData GetCashFailed(int customerId) {
@@ -5457,14 +5473,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateCustomerAnalyticsOnCompanyChangeAsync(int customerID) {
             return base.Channel.UpdateCustomerAnalyticsOnCompanyChangeAsync(customerID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateExperianDirectorDetails(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails) {
-            return base.Channel.UpdateExperianDirectorDetails(nCustomerID, nUnderwriterID, oDetails);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> UpdateExperianDirectorDetailsAsync(System.Nullable<int> nCustomerID, System.Nullable<int> nUnderwriterID, Ezbob.Backend.Models.Esigner oDetails) {
-            return base.Channel.UpdateExperianDirectorDetailsAsync(nCustomerID, nUnderwriterID, oDetails);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark) {
@@ -6177,14 +6185,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> GenerateMobileCodeAsync(string phone) {
             return base.Channel.GenerateMobileCodeAsync(phone);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.AvailableFundsActionResult GetAvailableFunds(int underwriterId) {
-            return base.Channel.GetAvailableFunds(underwriterId);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AvailableFundsActionResult> GetAvailableFundsAsync(int underwriterId) {
-            return base.Channel.GetAvailableFundsAsync(underwriterId);
         }
     }
 }

@@ -154,6 +154,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ExperianTargetingActionResult" nillable="true" type="tns:ExperianTargetingActionResult" />
+  <xs:complexType name="AvailableFundsActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AvailableFunds" type="xs:decimal" />
+          <xs:element minOccurs="0" name="ReservedAmount" type="xs:decimal" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="AvailableFundsActionResult" nillable="true" type="tns:AvailableFundsActionResult" />
   <xs:complexType name="CompanyCaisDataActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">
@@ -531,15 +542,4 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="AccountsToUpdateActionResult" nillable="true" type="tns:AccountsToUpdateActionResult" />
-  <xs:complexType name="AvailableFundsActionResult">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:ActionResult">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AvailableFunds" type="xs:decimal" />
-          <xs:element minOccurs="0" name="ReservedAmount" type="xs:decimal" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="AvailableFundsActionResult" nillable="true" type="tns:AvailableFundsActionResult" />
 </xs:schema>
