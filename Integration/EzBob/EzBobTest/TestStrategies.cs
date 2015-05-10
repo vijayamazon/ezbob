@@ -795,5 +795,15 @@ namespace EzBobTest {
             CaisGenerate cg = new CaisGenerate(1);
             cg.Execute();
         }
+
+		[Test]
+		[Ignore]
+		public void TestBackFillExperianNonLtdScoreText() {
+
+
+			BackFillExperianNonLtdScoreText test = new BackFillExperianNonLtdScoreText();
+
+			test.Execute();
+		}
 	}
 }

@@ -11,6 +11,10 @@
 			return Execute<BackfillCustomerAnalyticsCompany>(null, null);
 		} // BackfillCustomerAnalyticsCompany
 
+		public ActionMetaData BackFillExperianNonLtdScoreText() {
+			return Execute<BackFillExperianNonLtdScoreText>(null, null);
+		} // BackFillExperianNonLtdScoreText
+
 		public ActionMetaData BackfillExperianDirectors(int? nCustomerID) {
 			return Execute<BackfillExperianDirectors>(nCustomerID, null, nCustomerID);
 		} // BackfillExperianDirectors

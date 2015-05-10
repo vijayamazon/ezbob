@@ -868,6 +868,12 @@
   <wsdl:message name="IEzService_BackfillCustomerAnalyticsCompany_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillCustomerAnalyticsCompanyResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BackFillExperianNonLtdScoreText_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackFillExperianNonLtdScoreText" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackFillExperianNonLtdScoreText_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackFillExperianNonLtdScoreTextResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_BackfillExperianConsumer_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianConsumer" />
   </wsdl:message>
@@ -1870,6 +1876,10 @@
     <wsdl:operation name="BackfillCustomerAnalyticsCompany">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompany" message="tns:IEzService_BackfillCustomerAnalyticsCompany_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillCustomerAnalyticsCompanyResponse" message="tns:IEzService_BackfillCustomerAnalyticsCompany_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackFillExperianNonLtdScoreText">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackFillExperianNonLtdScoreText" message="tns:IEzService_BackFillExperianNonLtdScoreText_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackFillExperianNonLtdScoreTextResponse" message="tns:IEzService_BackFillExperianNonLtdScoreText_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillExperianConsumer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianConsumer" message="tns:IEzService_BackfillExperianConsumer_InputMessage" />
@@ -3371,6 +3381,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BackFillExperianNonLtdScoreText">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackFillExperianNonLtdScoreText" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="BackfillExperianConsumer">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianConsumer" style="document" />
       <wsdl:input>
@@ -4094,20 +4113,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://mishas-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://mishas-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>MISHAS-PC\mishas</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://mishas-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://mishas-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>MISHAS-PC\mishas</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

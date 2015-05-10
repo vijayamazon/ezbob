@@ -146,6 +146,11 @@
 		}
 
 		[Activation]
+		private void BackFillExperianNonLtdScoreText() {
+			serviceClient.BackFillExperianNonLtdScoreText();
+		}
+
+		[Activation]
 		private void BackfillExperianDirectors() {
 			if (cmdLineArgs.Length == 1) {
 				serviceClient.BackfillExperianDirectors(null);
