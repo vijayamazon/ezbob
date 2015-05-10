@@ -42,6 +42,9 @@
 		[OperationContract]
 		ActionMetaData BackfillExperianLtd();
 
+        [OperationContract]
+        ActionMetaData BackfillExperianLtdScoreText();
+
 		[OperationContract]
 		ActionMetaData BackfillHmrcBusinessRelevance();
 

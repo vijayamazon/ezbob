@@ -136,6 +136,12 @@
   <wsdl:message name="IEzServiceAdmin_WriteToLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToLogResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_UpdateGoogleAnalytics_InputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateGoogleAnalytics" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_UpdateGoogleAnalytics_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UpdateGoogleAnalyticsResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
   </wsdl:message>
@@ -321,6 +327,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_WriteToServiceLog_OutputMessage">
     <wsdl:part name="parameters" element="tns:WriteToServiceLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCashFailed_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetCashFailed" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetCashFailed_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetCashFailedResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_GetCompanyCaisDataForAlerts_InputMessage">
     <wsdl:part name="parameters" element="tns:GetCompanyCaisDataForAlerts" />
@@ -826,12 +838,6 @@
   <wsdl:message name="IEzService_UpdateExperianDirectorDetails_OutputMessage">
     <wsdl:part name="parameters" element="tns:UpdateExperianDirectorDetailsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_UpdateGoogleAnalytics_InputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateGoogleAnalytics" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_UpdateGoogleAnalytics_OutputMessage">
-    <wsdl:part name="parameters" element="tns:UpdateGoogleAnalyticsResponse" />
-  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -879,6 +885,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillExperianLtd_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillExperianLtdResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillExperianLtdScoreText_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillExperianLtdScoreText" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillExperianLtdScoreText_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillExperianLtdScoreTextResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_BackfillHmrcBusinessRelevance_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillHmrcBusinessRelevance" />
@@ -1336,12 +1348,6 @@
   <wsdl:message name="IEzService_GetAvailableFunds_OutputMessage">
     <wsdl:part name="parameters" element="tns:GetAvailableFundsResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_GetCashFailed_InputMessage">
-    <wsdl:part name="parameters" element="tns:GetCashFailed" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_GetCashFailed_OutputMessage">
-    <wsdl:part name="parameters" element="tns:GetCashFailedResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1377,6 +1383,10 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:portType name="IEzService">
+    <wsdl:operation name="UpdateGoogleAnalytics">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateGoogleAnalytics" message="tns:IEzService_UpdateGoogleAnalytics_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateGoogleAnalyticsResponse" message="tns:IEzService_UpdateGoogleAnalytics_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse" message="tns:IEzService_UpdateLinkedHmrcPassword_OutputMessage" />
@@ -1500,6 +1510,10 @@
     <wsdl:operation name="WriteToServiceLog">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLog" message="tns:IEzService_WriteToServiceLog_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLogResponse" message="tns:IEzService_WriteToServiceLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="GetCashFailed">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCashFailed" message="tns:IEzService_GetCashFailed_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCashFailedResponse" message="tns:IEzService_GetCashFailed_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="GetCompanyCaisDataForAlerts">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCompanyCaisDataForAlerts" message="tns:IEzService_GetCompanyCaisDataForAlerts_InputMessage" />
@@ -1837,10 +1851,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetails" message="tns:IEzService_UpdateExperianDirectorDetails_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateExperianDirectorDetailsResponse" message="tns:IEzService_UpdateExperianDirectorDetails_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="UpdateGoogleAnalytics">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateGoogleAnalytics" message="tns:IEzService_UpdateGoogleAnalytics_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateGoogleAnalyticsResponse" message="tns:IEzService_UpdateGoogleAnalytics_OutputMessage" />
-    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/AddCciHistoryResponse" message="tns:IEzService_AddCciHistory_OutputMessage" />
@@ -1872,6 +1882,10 @@
     <wsdl:operation name="BackfillExperianLtd">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtd" message="tns:IEzService_BackfillExperianLtd_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtdResponse" message="tns:IEzService_BackfillExperianLtd_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="BackfillExperianLtdScoreText">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtdScoreText" message="tns:IEzService_BackfillExperianLtdScoreText_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillExperianLtdScoreTextResponse" message="tns:IEzService_BackfillExperianLtdScoreText_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="BackfillHmrcBusinessRelevance">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillHmrcBusinessRelevance" message="tns:IEzService_BackfillHmrcBusinessRelevance_InputMessage" />
@@ -2177,10 +2191,6 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetAvailableFunds" message="tns:IEzService_GetAvailableFunds_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetAvailableFundsResponse" message="tns:IEzService_GetAvailableFunds_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="GetCashFailed">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/GetCashFailed" message="tns:IEzService_GetCashFailed_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/GetCashFailedResponse" message="tns:IEzService_GetCashFailed_OutputMessage" />
-    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
     <wsp:PolicyReference URI="#NetTcpBinding_IEzServiceAdmin_policy">
@@ -2263,6 +2273,15 @@
     <wsp:PolicyReference URI="#NetTcpBinding_IEzService_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="UpdateGoogleAnalytics">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateGoogleAnalytics" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" style="document" />
       <wsdl:input>
@@ -2535,6 +2554,15 @@
     </wsdl:operation>
     <wsdl:operation name="WriteToServiceLog">
       <soap12:operation soapAction="http://tempuri.org/IEzService/WriteToServiceLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetCashFailed">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCashFailed" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3298,15 +3326,6 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="UpdateGoogleAnalytics">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/UpdateGoogleAnalytics" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
       <wsdl:input>
@@ -3372,6 +3391,15 @@
     </wsdl:operation>
     <wsdl:operation name="BackfillExperianLtd">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianLtd" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="BackfillExperianLtdScoreText">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillExperianLtdScoreText" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4056,15 +4084,6 @@
     </wsdl:operation>
     <wsdl:operation name="GetAvailableFunds">
       <soap12:operation soapAction="http://tempuri.org/IEzService/GetAvailableFunds" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="GetCashFailed">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/GetCashFailed" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

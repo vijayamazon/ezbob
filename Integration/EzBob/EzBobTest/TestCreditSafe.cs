@@ -3,6 +3,7 @@
     using ExperianLib.Tests.Integration;
     using Ezbob.Backend.Strategies.CreditSafe;
     using Ezbob.Backend.Strategies;
+    using Ezbob.Backend.Strategies.Experian;
     using Ezbob.CreditSafeLib;
     using NUnit.Framework;
     using EzServiceAccessor;
@@ -103,11 +104,13 @@
         [Ignore]
         public void TestSaveToServiceLog()
         {
-            var serviceLogTest = new CreditSafeLtdService();
-            serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
+            //var serviceLogTest = new CreditSafeLtdService();
+            //serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
+            var test = new BackfillExperianLtdScoreText();
+            test.Execute();
             //AConnection oDB=new SqlConnection();
             //EBusinessService ser = new EBusinessService(new SqlConnection());
-           // ser.DownloadOneLimitedFromExperian("X9999999", 27);
+            // ser.DownloadOneLimitedFromExperian("X9999999", 27);
         }
 
         private const string response = @"<?xml version=""1.0""?>

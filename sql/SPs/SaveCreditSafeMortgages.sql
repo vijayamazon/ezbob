@@ -11,13 +11,13 @@ GO
 
 CREATE TYPE CreditSafeMortgagesList AS TABLE (
 	CreditSafeBaseDataID BIGINT NULL,
-	MortgageType NVARCHAR(10) NULL,
+	MortgageType NVARCHAR(50) NULL,
 	CreateDate DATETIME NULL,
 	RegisterDate DATETIME NULL,
 	SatisfiedDate DATETIME NULL,
 	Status NVARCHAR(20) NULL,
 	AmountSecured INT NULL,
-	Details NVARCHAR(500) NULL
+	Details NVARCHAR(MAX) NULL
 )
 GO
 

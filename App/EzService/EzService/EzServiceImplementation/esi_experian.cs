@@ -65,6 +65,11 @@
 			return Execute<BackfillExperianLtd>(null, null);
 		} // BackfillExperianLtd
 
+        public ActionMetaData BackfillExperianLtdScoreText()
+        {
+            return Execute<BackfillExperianLtdScoreText>(null, null);
+        } // BackfillExperianLtdScoreText
+
 		public ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
 			LoadExperianLtd oInstance;
 

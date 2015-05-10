@@ -167,6 +167,12 @@
 			serviceClient.BackfillExperianLtd();
 		}
 
+        [Activation]
+        private void BackfillExperianLtdScoreText()
+        {
+            serviceClient.BackfillExperianLtdScoreText();
+        }
+
 		[Activation]
 		private void BackfillHmrcBusinessRelevance() {
 			serviceClient.BackfillHmrcBusinessRelevance();

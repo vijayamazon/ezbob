@@ -139,6 +139,7 @@
     <Compile Include="Broker\BrokerAttachCustomer.cs" />
     <Compile Include="Broker\BrokerLoadSignedTerms.cs" />
     <Compile Include="Broker\BrokerInstantOffer.cs" />
+    <Compile Include="Experian\BackfillExperianLtdScoreText.cs" />
     <Compile Include="Experian\ExperianTargeting.cs" />
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
