@@ -79,7 +79,13 @@ BEGIN
 		IndustryNumberOfDbt100000Plus,
 		CompanyPaymentPattern,
 		IndustryPaymentPattern,
-		SupplierPaymentPattern
+		SupplierPaymentPattern,
+		CreditText1,
+		CreditText2,
+		CreditText3,
+		CreditText4,
+		CreditText5,
+		ConclusionText
 	FROM
 		ExperianLtd
 	WHERE
