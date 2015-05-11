@@ -2,42 +2,62 @@
 	<head>
 		<link rel="icon shortcut" type="image/png" href="/css/images/favicon_57x57.png" />
 		<link rel="stylesheet" type="text/css" href="/css/maintenance.css">
+		<script src="js/jquery-2.1.4.min.js"></script>
+		<script src="js/constructions.js"></script>
     </head>
 	
-	<body class="">
-		<div id="wrapper">
-			<div id="header">
-				<div class="header-bg-strip"></div>
-				<div class="header-inner">
-					<div class="header-logo">
-						<a href="http://www.ezbob.com">
-							<img src="/css/images/ezbob_logo-white.png" class="newlogo" />
-						</a>
-					</div>
-				</div>
-			</div>
-			
-			<div class="inner main-page">
-				<section id="full_width">
-					<div class="row-fluid">
-						<div class="content">
-							<img class="maintenance" src="/css/images/maintenance.jpg"/>
-							<h2><center>We are currently improving our site<br/> for you and we'll be back shortly.</center></h2>
+	<body>
+			<div id="wrapper">	
+				<div id="header_ezbob" style="display: none;">
+					<div class="header-bg-strip"></div>
+					<div class="header-inner">
+						<div class="header-logo">
+							<a href="http://www.ezbob.com">
+								<img src="/css/images/ezbob_logo-white.png" class="newlogo" />
+							</a>
 						</div>
 					</div>
-				</section>            
-			</div>        
-			<div class="push"></div>
-		</div>
-    
-		<footer>
-			<div id="copyrights">
-				<div class="inner-footer">
-					ezbob is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br>
-					ezbob is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br>
-					Registered Address: 145 - 157 John Street, London EC1V 4PW Business Address: 39-41 North Road, London N7 9DP<br>
-					&copy;2013 EZBOB Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.
 				</div>
+			
+				<header id="header_everline" style="display: none;">
+					<nav>
+						<div class="pin"><span></span></div>
+						<a class="logo svg" href="http://www.everline.com/">Everline</a>
+					</nav>
+				</header>
+				
+				<div class="inner main-page">
+					<section id="full_width">
+						<div class="row-fluid">
+							<div class="content">
+								<img class="maintenance" src="/css/images/maintenance.jpg"/>
+								<h2><center>We are currently improving our site<br/> for you and we'll be back shortly.</center></h2>
+							</div>
+						</div>
+					</section>            
+				</div>	 
+			</div>
+    
+		<footer id="footer_ezbob" style="display: none;">
+			<div id="copyrights">
+				<div class="copyrights-inner">
+					<span class='bold'>ezbob</span> is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br/>
+					<span class='bold'>ezbob</span> is Authorised and Regulated by the Financial Conduct Authority. Our Interim Permissions Reference Number is 647816.<br/>
+					Registered Address: 36 Soho Square, London W1D 3QY<br/>
+					&copy;2013 <span class='bold'>ezbob</span> Inc. All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice."
+				</div>
+			</div>
+		</footer>
+		
+		<footer class="row full-width" id="footer_everline" style="display: none;">
+			<div class="legal-links col span_16 below_960">
+				<p class="col span_16">
+					Everline is the trading name of Orange Money Ltd. Company No. 7852687 ICO Registration Number: Z2946778.<br />
+					Everline is authorised and regulated by the Financial Conduct Authority for its consumer lending business. Our Interim Permissions Reference Number is 647816.<br />
+					Registered Address: 36 Soho Square, London W1D 3QY<br />
+					All rights reserved. Terms, conditions, features, availability, pricing, fees, service &amp; support options subject to change without notice.<br />
+					All loans are subject to status and approval. 18+ only.
+				</p>
 			</div>
 		</footer>
     </body>
