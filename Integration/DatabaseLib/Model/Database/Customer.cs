@@ -6,7 +6,6 @@
 	using System.Web.Script.Serialization;
 	using Broker;
 	using CustomerRelations;
-	using EZBob.DatabaseLib.Model.Fraud;
 	using Loans;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;

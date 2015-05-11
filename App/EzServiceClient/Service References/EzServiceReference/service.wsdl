@@ -155,6 +155,12 @@
   <wsdl:message name="IEzService_AddOffer_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddOfferResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_GetLastOffer_InputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastOffer" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_GetLastOffer_OutputMessage">
+    <wsdl:part name="parameters" element="tns:GetLastOfferResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
   </wsdl:message>
@@ -1408,6 +1414,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddOffer" message="tns:IEzService_AddOffer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse" message="tns:IEzService_AddOffer_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="GetLastOffer">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLastOffer" message="tns:IEzService_GetLastOffer_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/GetLastOfferResponse" message="tns:IEzService_GetLastOffer_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse" message="tns:IEzService_UpdateLinkedHmrcPassword_OutputMessage" />
@@ -2314,6 +2324,15 @@
     </wsdl:operation>
     <wsdl:operation name="AddOffer">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddOffer" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetLastOffer">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/GetLastOffer" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

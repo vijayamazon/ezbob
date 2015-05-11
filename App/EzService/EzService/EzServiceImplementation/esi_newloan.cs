@@ -30,5 +30,11 @@
                 Value = stra.OfferID
             };
         }
+
+        public NL_Offers GetLastOffer(int userID, int customerID) {
+            GetLastOffer stra;
+            var amd = ExecuteSync(out stra, customerID, userID, customerID);
+            return stra.Offer;
+        }
     }
 }

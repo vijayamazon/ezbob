@@ -13,5 +13,8 @@
 
         [OperationContract]
         IntActionResult AddOffer(int userID, int customerID, NL_Offers offer);
-	} // interface IEzServiceNewLoan
+
+        [OperationContract]
+        NL_Offers GetLastOffer(int userID, int customerID);
+    } // interface IEzServiceNewLoan
 } // namespace EzService

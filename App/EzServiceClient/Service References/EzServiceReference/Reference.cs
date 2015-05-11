@@ -3271,6 +3271,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLastOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLastOfferResponse")]
+        Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers GetLastOffer(int userID, int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLastOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLastOfferResponse")]
+        System.Threading.Tasks.Task<Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers> GetLastOfferAsync(int userID, int customerID);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
         
@@ -4559,6 +4565,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer) {
             return base.Channel.AddOfferAsync(userID, customerID, offer);
+        }
+        
+        public Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers GetLastOffer(int userID, int customerID) {
+            return base.Channel.GetLastOffer(userID, customerID);
+        }
+        
+        public System.Threading.Tasks.Task<Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers> GetLastOfferAsync(int userID, int customerID) {
+            return base.Channel.GetLastOfferAsync(userID, customerID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
