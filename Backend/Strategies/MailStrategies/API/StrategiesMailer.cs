@@ -71,14 +71,14 @@
 
 				    if (!addr.IsBroker) {
 				        AddSalesForceActivity(now, oMeta, addr);
-				    }
+				    }//if
 				} // if should register
 			} // foreach
-		}
+		}// SendMailViaMandrill
 
 	    private void AddSalesForceActivity(DateTime now, MailMetaData oMeta, Addressee addr) {
 	        try {
-	            var salesForceAddEvent = new AddActivity(null, new ActivityModel {
+	            var salesForceAddEvent = new AddActivity(addr.UserID, new ActivityModel {
 	                StartDate = now,
 	                EndDate = now,
 	                Description = oMeta.TemplateName,
@@ -90,10 +90,10 @@
 	            salesForceAddEvent.Execute();
             } catch (Exception ex) {
                 Log.Error(ex, "Failed to SF add activity to {0}", addr.Recipient);
-            }
-	    }
+            }//try
+	    }//AddSalesForceActivity
 
-// SendMailViaMandrill
+
 
 		private byte[] HtmlToDocxBinary(string html) {
 			if (html == null)
