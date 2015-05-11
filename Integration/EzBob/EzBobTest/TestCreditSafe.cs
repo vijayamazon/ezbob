@@ -103,13 +103,14 @@
 
         [Test]
         [Ignore]
-        public void TestSaveToServiceLog()
-        {
+        public void TestSaveToServiceLog() {
+            var test = new ParseCreditSafeLtd(1);
+            test.Execute();
             //var serviceLogTest = new CreditSafeService();
             //serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
             //AConnection oDB=new SqlConnection();
             //EBusinessService ser = new EBusinessService(new SqlConnection());
-           // ser.DownloadOneLimitedFromExperian("X9999999", 27);
+            // ser.DownloadOneLimitedFromExperian("X9999999", 27);
         }
         [Test]
         [Ignore]

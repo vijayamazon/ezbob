@@ -16,7 +16,7 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
         public long CreditSafeMortgagesID { get; set; }
         [FK("CreditSafeBaseData", "CreditSafeBaseDataID")]
         public long? CreditSafeBaseDataID { get; set; }
-        [Length(10)]
+        [Length(50)]
         public string MortgageType { get; set; }
         public DateTime? CreateDate { get; set; }
         public DateTime? RegisterDate { get; set; }
@@ -24,7 +24,7 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
         [Length(20)]
         public string Status { get; set; }
         public int? AmountSecured { get; set; }
-        [Length(500)]
+        [Length("max")]
         public string Details { get; set; }
         [NonTraversable]
         public List<CreditSafeMortgages_PersonEntitled> PersonEntitled { get; set; }
