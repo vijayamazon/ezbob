@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.CalculateLoan.Models.Extensions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 
@@ -176,58 +178,49 @@
 
 		/// <summary>
 		/// Calculates current (for requested date) payment.
+		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&authuser=0
 		/// </summary>
 		/// <param name="requestedDate">Date to calculate payment on (current date if null).</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
 		public virtual CurrentPaymentModel CalculateCurrentPayment(DateTime? requestedDate = null, bool writeToLog = true) {
-			DateTime now = (requestedDate ?? DateTime.UtcNow).Date;
+			DateTime today = (requestedDate ?? DateTime.UtcNow).Date;
 
-			if (now <= WorkingModel.LoanIssueTime.Date)
-				return new CurrentPaymentModel(0);
+			var cpm = new CurrentPaymentModel(0);
 
-			DailyLoanStatus days = CreateActualDailyLoanStatus(now);
-
-			if (days.IsEmpty)
-				return new CurrentPaymentModel(0);
-
-			var cpm = new CurrentPaymentModel();
-			/*
-			decimal expectedPreviousPayment = 0;
-			DateTime? previousPaymentDate = null;
-
-			decimal expectedCurrentPayment = 0;
-			DateTime? currentPaymentDate = null;
-
-			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
-				var s = WorkingModel.Schedule[i];
-
-				if (s.Date <= now) {
-					expectedCurrentPayment += s.Principal;
-					currentPaymentDate = s.Date;
-
-					if (s.Date < now) {
-						expectedPreviousPayment += s.Principal;
-						previousPaymentDate = s.Date;
-					} // if
-				} // if
-			} // for
-
-			decimal actualPayment = 0;
-
-			foreach (OneDayLoanStatus odls in days.Days.Where(s => s.Date <= now)) {
-				expectedPreviousPayment += odls.ExpectedNonprincipalPayment;
-				expectedCurrentPayment += odls.ExpectedNonprincipalPayment;
-				actualPayment += odls.ActualPayment;
-			} // for each
-
-			cpm.IsLate = expectedPreviousPayment > actualPayment;
-
-			if (cpm.IsLate) {
-				cpm.Amount = expectedPayment - actualPayment;
+			if (today <= WorkingModel.LoanIssueTime.Date) {
+				cpm.IsError = true;
 				return cpm;
 			} // if
-			*/
+
+			DailyLoanStatus days = CreateActualDailyLoanStatus(today);
+
+			if (days.IsEmpty) {
+				cpm.IsError = true;
+				return cpm;
+			} // if
+
+			bool allPreviousPaymentsAreClosed = WorkingModel.Schedule
+				.Where(s => s.ClosedDate.HasValue)
+				.All(s => s.ClosedDate <= today);
+
+			ScheduledPayment currentPayment = WorkingModel.Schedule.FindByDate(today);
+
+			if (currentPayment == null) { // today is not a payment date.
+				if (allPreviousPaymentsAreClosed) { // Delta scenario.
+				} else { // Echo scenario.
+					cpm.IsLate = true;
+				} // if
+			} else { // today is a payment date.
+				if (allPreviousPaymentsAreClosed) {
+					if (currentPayment.ClosedDate.HasValue && (currentPayment.ClosedDate <= today)) { // Alpha scenario.
+					} else { // Bravo scenario.
+					} // if
+				} else { // Charlie scenario.
+					cpm.IsLate = true;
+				} // if
+			} // if
+
 			return cpm;
 		} // CalculateCurrentPayment
 

@@ -43,6 +43,8 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CurrentPaymentModel.cs" />
+    <Compile Include="Extensions\RepaymentListExt.cs" />
+    <Compile Include="Extensions\ScheduleListExt.cs" />
     <Compile Include="Helpers\BadPeriods.cs" />
     <Compile Include="Helpers\DailyLoanStatus.cs" />
     <Compile Include="Helpers\Fee.cs" />
