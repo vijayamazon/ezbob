@@ -23,10 +23,15 @@ BEGIN
 		Period = r.ApprovedRepaymentPeriod,
 		r.InterestRate,
 		SetupFeeRate = r.ManualSetupFeePercent,
-		MedalAmount = r.SystemCalculatedSum
+		MedalAmount = r.SystemCalculatedSum,
+		LoanID = l.Id,
+		LoanRefNum = l.RefNum,
+		l.LoanAmount,
+		LoanIssueTime = l.[Date]
 	FROM
 		CashRequests r
 		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
+		LEFT JOIN Loan l ON r.Id = l.RequestCashId
 	WHERE
 		r.AutoDecisionID = 1
 		AND
