@@ -176,6 +176,17 @@
 			get { return RepaymentIntervalType == RepaymentIntervalTypes.Month; }
 		} // IsMonthly
 
+		public void SetScheduleCloseDatesFromPayments() {
+			ValidateSchedule();
+
+			foreach (ScheduledPayment s in Schedule)
+				s.ClosedDate = null;
+
+			if (Repayments.Count < 1)
+				return;
+
+		} // SetScheduleCloseDatesFromPayments
+
 		public RepaymentIntervalTypes RepaymentIntervalType { get; set; }
 
 		public List<decimal> DiscountPlan { get; private set; }
