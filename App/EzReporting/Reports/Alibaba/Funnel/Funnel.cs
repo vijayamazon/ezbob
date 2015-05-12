@@ -47,7 +47,7 @@
 
 				FunnelRow oNext = m_oFunnel[i + 1];
 
-				oCur.DropOff = oCur.Counter - oNext.Counter;
+				oCur.DropOff = Math.Max(oCur.Counter - oNext.Counter, 0);
 				oCur.Pct = oCur.Counter < 1 ? 0 : (double)oNext.Counter / (double)oCur.Counter;
 			} // for
 
