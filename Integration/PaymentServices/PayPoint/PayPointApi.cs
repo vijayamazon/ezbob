@@ -169,7 +169,9 @@
 							.LoanTransactionMethodRepository
 							.FindOrDefault("Auto"),
 					});
+
 					installments.CommitTransaction();
+
 					return ex.PaypointData;
 				}
 
@@ -186,6 +188,8 @@
 					payPointReturnData = new PayPointReturnData { Error = e.Message };
 				installments.Dispose();
 			}
+
+
 			return payPointReturnData;
 		}
 
@@ -252,9 +256,15 @@
 				{
 					Log.ErrorFormat("RepeatTransaction error: {0} error {1} message {2} respCode {3}", str, ret.Error, ret.Message, (ResponseCode)ret.RespCode);
 				}
+
+				//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
+
 				throw new PayPointException(str, ret);
 			}
 			Log.DebugFormat("RepeatTransaction successful: " + str);
+
+			//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
+
 			return ret;
 		}
 

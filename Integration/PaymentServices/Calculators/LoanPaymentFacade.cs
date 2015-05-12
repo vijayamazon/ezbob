@@ -55,6 +55,7 @@
             
             //TODO add payment to new payment table
 		    Log.InfoFormat("Add payment of {0} to loan {1}", amount, loan.Id);
+			// elina: TODO : get distribution of amount to loan schedules from new loan calculator ALoanCalculator.AssignPaymentToLoan (princpal, interest) and fees and save to DB (design doc: "PayPointCharger" page 13-15; “Manual payment – by Customer” page 19; )
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
@@ -98,6 +99,7 @@
 
 		/// <summary>
 		/// Сколько будет сэкономлено денег, если пользователь погасит все свои кредиты.
+		/// How much money will be saved, if customer pay all his loans now
 		/// </summary>
 		/// <param name="customer"></param>
 		/// <param name="term"></param>
