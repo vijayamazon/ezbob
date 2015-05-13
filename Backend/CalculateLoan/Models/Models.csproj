@@ -50,7 +50,7 @@
     <Compile Include="Helpers\Fee.cs" />
     <Compile Include="Helpers\OneDayLoanStatus.cs" />
     <Compile Include="Helpers\Repayment.cs" />
-    <Compile Include="Helpers\ScheduledPayment.cs" />
+    <Compile Include="Helpers\Scheduled.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="LoanCalculatorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

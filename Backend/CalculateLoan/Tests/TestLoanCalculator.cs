@@ -19,6 +19,30 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			TestSpecificLoanCalculator(lcm => new LegacyLoanCalculator(lcm));
 		} // TestLegacyCalculator
 
+		[Test]
+		public void TestSetScheduleCloseDatesFromPayments() {
+			var lcm = new LoanCalculatorModel {
+				LoanAmount = 1200,
+				LoanIssueTime = new DateTime(2015, 1, 31, 14, 15, 16, DateTimeKind.Utc),
+				RepaymentIntervalType = RepaymentIntervalTypes.Month,
+				RepaymentCount = 6,
+				MonthlyInterestRate = 0.1m,
+			};
+
+			var lc = new LegacyLoanCalculator(lcm);
+
+			lc.CreateSchedule();
+
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 2, 17), 100, 25, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 2, 19),  80, 25, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 2, 23), 250, 25, 0));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 3, 23), 641, 25, 0));
+
+			lcm.SetScheduleCloseDatesFromPayments();
+
+			Log.Info("Loan model after close dates applied: {0}", lcm);
+		} // TestSetScheduleCloseDatesFromPayments
+
 		private void TestSpecificLoanCalculator(Func<LoanCalculatorModel, ALoanCalculator> loanCalculatorFactory) {
 			var lcm = new LoanCalculatorModel {
 				LoanAmount = 1200,

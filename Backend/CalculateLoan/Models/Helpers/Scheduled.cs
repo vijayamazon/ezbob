@@ -3,22 +3,30 @@
 	using System.Globalization;
 	using Ezbob.Backend.Extensions;
 
-	public class ScheduledPayment {
-		public ScheduledPayment() {
-			Date = null;
+	public class Scheduled {
+		public Scheduled(DateTime scheduledDate) {
+			Date = scheduledDate.Date;
 			ClosedDate = null;
 			Principal = 0;
 			InterestRate = 0;
 		} // constructor
 
-		public DateTime? Date { get; set; }
-		public DateTime? ClosedDate { get; set; }
+		public DateTime Date { get; set; }
+
+		public DateTime? ClosedDate {
+			get { return this.closedDate; }
+			set { this.closedDate = value == null ? (DateTime?)null : value.Value.Date; }
+		} // ClosedDate
+
 		public decimal Principal { get; set; }
 		public decimal InterestRate { get; set; }
 
-		public ScheduledPayment DeepClone() {
-			return new ScheduledPayment {
-				Date = Date,
+		public bool IsClosedOn(DateTime date) {
+			return ClosedDate.HasValue && (ClosedDate.Value.Date <= date.Date);
+		} // IsClosedOn
+
+		public Scheduled DeepClone() {
+			return new Scheduled(Date) {
 				ClosedDate = ClosedDate,
 				Principal = Principal,
 				InterestRate = InterestRate,
@@ -26,7 +34,7 @@
 		} // DeepClone
 
 		public override string ToString() {
-			string closedDate = ClosedDate.HasValue
+			string closedDateStr = ClosedDate.HasValue
 				? string.Format(" (closed on {0})", ClosedDate.DateStr())
 				: string.Empty;
 
@@ -35,12 +43,14 @@
 				Date.DateStr(),
 				Principal.ToString("C2", Culture),
 				InterestRate.ToString("P1", Culture),
-				closedDate
+				closedDateStr
 			);
 		} // ToString
 
 		private static CultureInfo Culture {
 			get { return Library.Instance.Culture; }
 		} // Culture
-	} // class TransactionData
-} // namespace Reports
+
+		private DateTime? closedDate;
+	} // class Scheduled
+} // namespace
