@@ -511,29 +511,35 @@ END ;
 
 
 
-
-
-
-
+IF OBJECT_ID ('dbo.NL_LoanOptions') IS NULL
+BEGIN 
+CREATE TABLE dbo.NL_LoanOptions
+	(
+	  LoanOptionsID           INT IDENTITY NOT NULL
+	, LoanID                  INT NOT NULL
+	, AutoPayment             BIT
+	, ReductionFee            BIT
+	, LatePaymentNotification BIT
+	, CaisAccountStatus       NVARCHAR (50)
+	, ManualCaisFlag          NVARCHAR (20)
+	, EmailSendingAllowed     BIT DEFAULT (1) NOT NULL
+	, MailSendingAllowed      BIT DEFAULT (1) NOT NULL
+	, SmsSendingAllowed       BIT DEFAULT (1) NOT NULL
+	, UserID                  INT
+	, InsertDate              DATETIME DEFAULT (getutcdate()) NOT NULL
+	, IsActive                BIT NOT NULL DEFAULT(0)
+	, Notes                   NTEXT
+	, CONSTRAINT PK_NL_LoanOptions PRIMARY KEY (LoanOptionsID)
+  	, CONSTRAINT FK_NL_LoanOptions_NL_Loans FOREIGN KEY (LoanID) REFERENCES dbo.NL_Loans (LoanID)
+	, CONSTRAINT FK_NL_LoanOptions_Security_User FOREIGN KEY (UserID) REFERENCES dbo.Security_User (UserId)
+	)
+END 
+GO
 
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanSource') AND name = 'IsDisabled')
 	ALTER TABLE [dbo].[LoanSource] ADD [IsDisabled] [bit] NULL;
 GO
-IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'UserID')
-	ALTER TABLE [dbo].[LoanOptions] ADD [UserID] [int] NULL ; 
-GO
-IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'InsertDate')
-	ALTER TABLE [dbo].[LoanOptions] ADD [InsertDate] [datetime] default getutcdate() not NULL ; 
-GO
-IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'IsActive')
-	ALTER TABLE [dbo].[LoanOptions] ADD [IsActive] [bit] NULL ; 
-GO
-IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'Comments')
-	ALTER TABLE [dbo].[LoanOptions] ADD [Comments] [ntext] NULL ; 
-GO
-IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'NLLoanID')
-	ALTER TABLE [dbo].[LoanOptions] ADD [NLLoanID] [int] NULL ; 
-GO
+
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanBrokerCommission') AND name = 'NLLoanID')
 	ALTER TABLE [dbo].[LoanBrokerCommission] ADD [NLLoanID] [int] NULL ; 
 GO

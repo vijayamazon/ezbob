@@ -35,6 +35,7 @@
             CodeToFile.SaveFile<NL_LoanStates>();
             CodeToFile.SaveFile<NL_Loans>();
             CodeToFile.SaveFile<NL_DecisionRejectReasons>();
+            CodeToFile.SaveFile<NL_LoanOptions>();
 	    }
 	}
 
