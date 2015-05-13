@@ -1015,7 +1015,7 @@ END;
 IF NOT EXISTS( select Id from dbo.LoanTransactionMethod where [Name] = 'Write Off') BEGIN
 declare @lastid int;
 set @lastid = (select Max(Id) as i from dbo.LoanTransactionMethod);
-insert into dbo.LoanTransactionMethod (Id, Name, DisplaySort) values( (@lastid), 'Write Off', 0);	
+insert into dbo.LoanTransactionMethod (Id, Name, DisplaySort) values( (@lastid +1), 'Write Off', 0);	
 END;
 
 -- populate LoanAgreementTemplateTypes
