@@ -168,6 +168,7 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
+    <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
     <Compile Include="NewLoan\NL_LoanLienLinks.cs" />
     <Compile Include="NewLoan\NL_LoanRollovers.cs" />
     <Compile Include="NewLoan\NL_LoanStates.cs" />

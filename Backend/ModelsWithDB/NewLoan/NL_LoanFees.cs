@@ -21,7 +21,7 @@
 
         [FK("Security_User", "UserId")]
         [DataMember]
-        public int? UserID { get; set; }
+        public int AssignedByUserID { get; set; }
 
         [DataMember]
         public decimal Amount { get; set; }
@@ -31,12 +31,16 @@
 
         [DataMember]
         public DateTime AssignTime { get; set; }
-       
+
+        [FK("Security_User", "UserId")]
+        [DataMember]
+        public int DeletedByUserID { get; set; }
+
         [DataMember]
         public DateTime DisabledTime { get; set; }
 
         [Length(LengthType.MAX)]
         [DataMember]
-        public string Description { get; set; }
+        public string Notes { get; set; }
     }//class NL_LoanFees
 }//ns

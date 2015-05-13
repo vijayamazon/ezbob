@@ -32,5 +32,10 @@
         [Length(100)]
         [DataMember]
         public string TrackingNumber { get; set; }
+
+        
+        [DataMember]
+        public DateTime StatusUpdatedTime { get; set; }
+        
     }//class NL_PacnetTransactions
 }//ns

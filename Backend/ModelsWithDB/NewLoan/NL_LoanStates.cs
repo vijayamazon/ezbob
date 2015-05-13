@@ -19,6 +19,9 @@
         public DateTime InsertDate { get; set; }
 
         [DataMember]
+        public int NumberOfPayments { get; set; }
+
+        [DataMember]
         public decimal OutstandingPrincipal { get; set; }
 
         [DataMember]
@@ -41,6 +44,21 @@
 
         [DataMember]
         public int LateDays { get; set; }
+
+        [DataMember]
+        public decimal LatePrincipal { get; set; }
+
+        [DataMember]
+        public decimal LateInterest { get; set; }
+
+        [DataMember]
+        public decimal WrittenOffPrincipal { get; set; }
+
+        [DataMember]
+        public decimal WrittenOffInterest { get; set; }
+
+        [DataMember]
+        public decimal WrittentOffFees { get; set; }
 
         [Length(LengthType.MAX)]
         [DataMember]

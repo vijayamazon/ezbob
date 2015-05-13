@@ -18,6 +18,12 @@
         [DataMember]
         public DateTime SignatureTime { get; set; }
 
+         [DataMember]
+        public int RepaymentPeriod { get; set; }
+
+        [DataMember]
+        public decimal Amount { get; set; }
+
         [DataMember]
         public bool? CreditActAgreementAgreed { get; set; }
         

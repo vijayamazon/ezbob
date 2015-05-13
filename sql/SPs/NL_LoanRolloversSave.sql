@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoanRolloversList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanRolloversList AS TABLE (
-	[LoanID] INT NOT NULL,
+	[LoanHistoryID] INT NOT NULL,
 	[CreatedByUserID] INT NOT NULL,
 	[DeletedByUserID] INT NULL,
 	[LoanFeeID] INT NULL,
@@ -30,7 +30,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO NL_LoanRollovers (
-		[LoanID],
+		[LoanHistoryID],
 		[CreatedByUserID],
 		[DeletedByUserID],
 		[LoanFeeID],
@@ -41,7 +41,7 @@ BEGIN
 		[IsAccepted],
 		[DeletionTime]
 	) SELECT
-		[LoanID],
+		[LoanHistoryID],
 		[CreatedByUserID],
 		[DeletedByUserID],
 		[LoanFeeID],

@@ -12,12 +12,13 @@ GO
 CREATE TYPE NL_LoanFeesList AS TABLE (
 	[LoanFeeTypeID] INT NULL,
 	[LoanID] INT NULL,
-	[UserID] INT NULL,
+	[AssignedByUserID] INT NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[CreatedTime] DATETIME NOT NULL,
 	[AssignTime] DATETIME NOT NULL,
+	[DeletedByUserID] INT NOT NULL,
 	[DisabledTime] DATETIME NOT NULL,
-	[Description] NVARCHAR(MAX) NULL
+	[Notes] NVARCHAR(MAX) NULL
 )
 GO
 
@@ -30,21 +31,23 @@ BEGIN
 	INSERT INTO NL_LoanFees (
 		[LoanFeeTypeID],
 		[LoanID],
-		[UserID],
+		[AssignedByUserID],
 		[Amount],
 		[CreatedTime],
 		[AssignTime],
+		[DeletedByUserID],
 		[DisabledTime],
-		[Description]
+		[Notes]
 	) SELECT
 		[LoanFeeTypeID],
 		[LoanID],
-		[UserID],
+		[AssignedByUserID],
 		[Amount],
 		[CreatedTime],
 		[AssignTime],
+		[DeletedByUserID],
 		[DisabledTime],
-		[Description]
+		[Notes]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

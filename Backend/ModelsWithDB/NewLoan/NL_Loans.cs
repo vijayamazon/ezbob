@@ -39,7 +39,7 @@
         public int Position { get; set; }
 
         [DataMember]
-        public decimal TakenAmount { get; set; }
+        public decimal InitialLoanAmount { get; set; }
 
         [DataMember]
         public DateTime CreationTime { get; set; }

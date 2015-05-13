@@ -12,6 +12,7 @@ GO
 CREATE TYPE NL_LoanStatesList AS TABLE (
 	[LoanID] INT NOT NULL,
 	[InsertDate] DATETIME NOT NULL,
+	[NumberOfPayments] INT NOT NULL,
 	[OutstandingPrincipal] DECIMAL(18, 6) NOT NULL,
 	[OutstandingInterest] DECIMAL(18, 6) NOT NULL,
 	[OutstandingFee] DECIMAL(18, 6) NOT NULL,
@@ -20,6 +21,11 @@ CREATE TYPE NL_LoanStatesList AS TABLE (
 	[PaidFee] DECIMAL(18, 6) NOT NULL,
 	[Balance] DECIMAL(18, 6) NOT NULL,
 	[LateDays] INT NOT NULL,
+	[LatePrincipal] DECIMAL(18, 6) NOT NULL,
+	[LateInterest] DECIMAL(18, 6) NOT NULL,
+	[WrittenOffPrincipal] DECIMAL(18, 6) NOT NULL,
+	[WrittenOffInterest] DECIMAL(18, 6) NOT NULL,
+	[WrittentOffFees] DECIMAL(18, 6) NOT NULL,
 	[Notes] NVARCHAR(MAX) NULL
 )
 GO
@@ -33,6 +39,7 @@ BEGIN
 	INSERT INTO NL_LoanStates (
 		[LoanID],
 		[InsertDate],
+		[NumberOfPayments],
 		[OutstandingPrincipal],
 		[OutstandingInterest],
 		[OutstandingFee],
@@ -41,10 +48,16 @@ BEGIN
 		[PaidFee],
 		[Balance],
 		[LateDays],
+		[LatePrincipal],
+		[LateInterest],
+		[WrittenOffPrincipal],
+		[WrittenOffInterest],
+		[WrittentOffFees],
 		[Notes]
 	) SELECT
 		[LoanID],
 		[InsertDate],
+		[NumberOfPayments],
 		[OutstandingPrincipal],
 		[OutstandingInterest],
 		[OutstandingFee],
@@ -53,6 +66,11 @@ BEGIN
 		[PaidFee],
 		[Balance],
 		[LateDays],
+		[LatePrincipal],
+		[LateInterest],
+		[WrittenOffPrincipal],
+		[WrittenOffInterest],
+		[WrittentOffFees],
 		[Notes]
 	FROM @Tbl
 

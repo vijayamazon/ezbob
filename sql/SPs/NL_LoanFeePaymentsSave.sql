@@ -11,7 +11,7 @@ GO
 
 CREATE TYPE NL_LoanFeePaymentsList AS TABLE (
 	[LoanFeeID] INT NOT NULL,
-	[PaymentID] DATETIME NOT NULL,
+	[PaymentID] INT NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL
 )
 GO

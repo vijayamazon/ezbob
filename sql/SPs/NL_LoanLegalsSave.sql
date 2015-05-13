@@ -12,6 +12,8 @@ GO
 CREATE TYPE NL_LoanLegalsList AS TABLE (
 	[OfferID] INT NULL,
 	[SignatureTime] DATETIME NOT NULL,
+	[RepaymentPeriod] INT NOT NULL,
+	[Amount] DECIMAL(18, 6) NOT NULL,
 	[CreditActAgreementAgreed] BIT NULL,
 	[PreContractAgreementAgreed] BIT NULL,
 	[PrivateCompanyLoanAgreementAgreed] BIT NULL,
@@ -32,6 +34,8 @@ BEGIN
 	INSERT INTO NL_LoanLegals (
 		[OfferID],
 		[SignatureTime],
+		[RepaymentPeriod],
+		[Amount],
 		[CreditActAgreementAgreed],
 		[PreContractAgreementAgreed],
 		[PrivateCompanyLoanAgreementAgreed],
@@ -43,6 +47,8 @@ BEGIN
 	) SELECT
 		[OfferID],
 		[SignatureTime],
+		[RepaymentPeriod],
+		[Amount],
 		[CreditActAgreementAgreed],
 		[PreContractAgreementAgreed],
 		[PrivateCompanyLoanAgreementAgreed],

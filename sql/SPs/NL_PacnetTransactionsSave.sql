@@ -15,7 +15,8 @@ CREATE TYPE NL_PacnetTransactionsList AS TABLE (
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[Notes] NVARCHAR(MAX) NULL,
 	[PacnetTransactionStatusID] INT NULL,
-	[TrackingNumber] NVARCHAR(100) NULL
+	[TrackingNumber] NVARCHAR(100) NULL,
+	[StatusUpdatedTime] DATETIME NOT NULL
 )
 GO
 
@@ -31,14 +32,16 @@ BEGIN
 		[Amount],
 		[Notes],
 		[PacnetTransactionStatusID],
-		[TrackingNumber]
+		[TrackingNumber],
+		[StatusUpdatedTime]
 	) SELECT
 		[FundTransferID],
 		[TransactionTime],
 		[Amount],
 		[Notes],
 		[PacnetTransactionStatusID],
-		[TrackingNumber]
+		[TrackingNumber],
+		[StatusUpdatedTime]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

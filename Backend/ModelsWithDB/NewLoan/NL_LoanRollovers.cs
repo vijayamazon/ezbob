@@ -11,9 +11,9 @@
         [DataMember]
         public int LoanRolloverID { get; set; }
 
-        [FK("NL_Loans", "LoanID")]
+        [FK("NL_LoanHistory", "LoanHistoryID")]
         [DataMember]
-        public int LoanID { get; set; }
+        public int LoanHistoryID { get; set; }
 
         [FK("Security_User", "UserId")]
         [DataMember]
