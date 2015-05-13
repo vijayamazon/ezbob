@@ -171,6 +171,7 @@
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
     <Compile Include="NewLoan\NL_LoanLienLinks.cs" />
     <Compile Include="NewLoan\NL_LoanRollovers.cs" />
+    <Compile Include="NewLoan\NL_LoanOptions.cs" />
     <Compile Include="NewLoan\NL_LoanStates.cs" />
     <Compile Include="NewLoan\NL_BlendedLoans.cs" />
     <Compile Include="NewLoan\NL_BlendedOffers.cs" />
