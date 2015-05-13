@@ -21,6 +21,10 @@
 				this.notes[dt.Date] = note;
 		} // AddNote
 
+		public OneDayLoanStatus LastDailyLoanStatus {
+			get { return Days.LastOrDefault(); }
+		} // LastDailyLoanStatus
+
 		public void Add(OneDayLoanStatus odls) {
 			if ((odls == null) || (this[odls.Date] != null))
 				return;

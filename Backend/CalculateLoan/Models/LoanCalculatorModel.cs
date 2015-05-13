@@ -16,7 +16,7 @@
 			this.monthlyInterestRate = 0.06m;
 
 			DiscountPlan = new List<decimal>();
-			Schedule = new List<ScheduledPayment>();
+			Schedule = new List<Scheduled>();
 			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
 			BadPeriods = new BadPeriods();
@@ -25,10 +25,6 @@
 		public void ValidateSchedule() {
 			if (Schedule.Count < 1)
 				throw new Exception("No loan schedule found.");
-
-			for (int i = 0; i < Schedule.Count; i++)
-				if (Schedule[i].Date == null)
-					throw new Exception("No date specified for scheduled payment #" + (i + 1));
 		} // ValidateSchedule
 
 		public void SetDiscountPlan(params decimal[] deltas) {
@@ -118,10 +114,7 @@
 		public DateTime LastScheduledDate {
 			get {
 				ValidateSchedule();
-
-				// ReSharper disable once PossibleInvalidOperationException
-				// ValidateSchedule() eliminates arriving to this point if there are NULLs.
-				return Schedule.Last().Date.Value.Date;
+				return Schedule.Last().Date;
 			} // get
 		} // LastScheduledDate
 
@@ -179,22 +172,74 @@
 		public void SetScheduleCloseDatesFromPayments() {
 			ValidateSchedule();
 
-			foreach (ScheduledPayment s in Schedule)
-				s.ClosedDate = null;
+			var qsp = new Queue<ScheduledPaymentWithRepayment>();
+
+			foreach (Scheduled s in Schedule)
+				qsp.Enqueue(new ScheduledPaymentWithRepayment(s));
 
 			if (Repayments.Count < 1)
 				return;
 
+			ScheduledPaymentWithRepayment curSchedule = qsp.Dequeue();
+
+			for (var i = 0; i < Repayments.Count; i++) {
+				Repayment curRepayment = Repayments[i];
+
+				decimal currentPaidPrincipal = curRepayment.Principal;
+
+				while (currentPaidPrincipal > 0) {
+					currentPaidPrincipal = curSchedule.AddPayment(currentPaidPrincipal, curRepayment.Date);
+
+					if (curSchedule.ScheduledPayment.ClosedDate.HasValue) {
+						if (qsp.Count > 0)
+							curSchedule = qsp.Dequeue();
+						else {
+							curSchedule = null;
+							break;
+						} // if
+					} // if
+				} // while
+
+				if (curSchedule == null)
+					break;
+			} // for each repayment
 		} // SetScheduleCloseDatesFromPayments
 
 		public RepaymentIntervalTypes RepaymentIntervalType { get; set; }
 
 		public List<decimal> DiscountPlan { get; private set; }
 
-		public List<ScheduledPayment> Schedule { get; private set; }
+		public List<Scheduled> Schedule { get; private set; }
 		public List<Repayment> Repayments { get; private set; }
 		public List<Fee> Fees { get; private set; }
 		public BadPeriods BadPeriods { get; private set; }
+
+		private class ScheduledPaymentWithRepayment {
+			public ScheduledPaymentWithRepayment(Scheduled sp) {
+				ScheduledPayment = sp;
+				this.openPrincipal = ScheduledPayment.Principal;
+				ScheduledPayment.ClosedDate = null;
+			} // constructor
+
+			public decimal AddPayment(decimal payment, DateTime closeDate) {
+				if (payment == 0)
+					return 0;
+
+				if (payment >= this.openPrincipal) {
+					payment -= this.openPrincipal;
+					ScheduledPayment.ClosedDate = closeDate;
+					this.openPrincipal = 0;
+					return payment;
+				} // if
+
+				this.openPrincipal -= payment;
+				return 0;
+			} // AddPayment
+
+			public Scheduled ScheduledPayment { get; private set; }
+
+			private decimal openPrincipal;
+		} // class ScheduledPaymentWithRepayment
 
 		private int repaymentCount;
 		private int interestOnlyRepayments;

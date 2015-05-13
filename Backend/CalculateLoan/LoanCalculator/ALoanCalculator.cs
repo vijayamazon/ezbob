@@ -36,9 +36,7 @@
 			WorkingModel.Schedule.Clear();
 
 			for (int i = 1; i <= WorkingModel.RepaymentCount; i++) {
-				var sp = new ScheduledPayment();
-
-				sp.Date = AddPeriods(i).Date;
+				var sp = new Scheduled(AddPeriods(i).Date);
 
 				if (i <= WorkingModel.InterestOnlyRepayments)
 					sp.Principal = 0;
@@ -67,38 +65,38 @@
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
-			DateTime lastInterestDay = WorkingModel.Schedule[WorkingModel.Schedule.Count - 1].Date.Value.Date;
+			DateTime lastInterestDay = WorkingModel.Schedule[WorkingModel.Schedule.Count - 1].Date;
 
 			var days = new DailyLoanStatus();
 
 			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
-				days.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount));
+				days.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount, days.LastDailyLoanStatus));
 
 			DateTime prevTime = WorkingModel.LoanIssueTime;
 
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
-				ScheduledPayment sp = WorkingModel.Schedule[i];
+				Scheduled sp = WorkingModel.Schedule[i];
 
-				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date > sp.Date.Value))
+				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date > sp.Date))
 					cls.OpenPrincipal -= sp.Principal;
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				foreach (OneDayLoanStatus cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date.Value)) {
+				foreach (OneDayLoanStatus cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date)) {
 					cls.DailyInterestRate = GetDailyInterestRate(
 						cls.Date,
 						sp.InterestRate,
 						false,
 						preScheduleEnd,
-						sp.Date.Value
+						sp.Date
 					);
 				} // for each
 
-				prevTime = sp.Date.Value;
+				prevTime = sp.Date;
 			} // for each scheduled payment
 
 			var result = new List<Repayment>(
-				WorkingModel.Schedule.Select(sp => new Repayment(sp.Date.Value, sp.Principal, 0, 0))
+				WorkingModel.Schedule.Select(sp => new Repayment(sp.Date, sp.Principal, 0, 0))
 			);
 
 			prevTime = WorkingModel.LoanIssueTime;
@@ -147,9 +145,7 @@
 
 			DailyLoanStatus days = CreateActualDailyLoanStatus(now);
 
-			decimal balance = WorkingModel.LoanAmount + days.Days.Where(odls => odls.Date <= now).Sum(
-				odls => odls.ExpectedNonprincipalPayment - odls.ActualPayment
-			);
+			decimal balance = days[now].CurrentBalance;
 
 			if (writeToLog) {
 				AddScheduleNotes(days);
@@ -180,9 +176,15 @@
 		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&authuser=0
 		/// </summary>
 		/// <param name="requestedDate">Date to calculate payment on (current date if null).</param>
+		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
+		/// or leave it as is.</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual CurrentPaymentModel CalculateCurrentPayment(DateTime? requestedDate = null, bool writeToLog = true) {
+		public virtual CurrentPaymentModel AmountToCharge(
+			DateTime? requestedDate = null,
+			bool setClosedDateFromPayments = false,
+			bool writeToLog = true
+		) {
 			DateTime today = (requestedDate ?? DateTime.UtcNow).Date;
 
 			var cpm = new CurrentPaymentModel(0);
@@ -199,20 +201,59 @@
 				return cpm;
 			} // if
 
-			bool allPreviousPaymentsAreClosed = WorkingModel.Schedule
-				.Where(s => s.ClosedDate.HasValue)
-				.All(s => s.ClosedDate <= today);
+			if (setClosedDateFromPayments)
+				WorkingModel.SetScheduleCloseDatesFromPayments();
 
-			ScheduledPayment currentPayment = WorkingModel.Schedule.FindByDate(today);
+			bool allPreviousPaymentsAreClosed = WorkingModel.Schedule
+				.Where(s => s.Date < today)
+				.All(s => s.IsClosedOn(today));
+
+			Scheduled currentPayment = WorkingModel.Schedule.FindByDate(today);
 
 			if (currentPayment == null) { // today is not a payment date.
 				if (allPreviousPaymentsAreClosed) { // Delta scenario.
+					Scheduled firstOpen = WorkingModel.Schedule
+						.FirstOrDefault(s => (s.Date > today) && !s.ClosedDate.HasValue);
+
+					// ReSharper disable once PossibleInvalidOperationException
+					// If firstOpen is not null then firstOpen.Date is not null:
+					// this is checked during CreateActualDailyLoanStatus().
+					OneDayLoanStatus thatDay = firstOpen == null ? null : days[firstOpen.Date];
+					OneDayLoanStatus thisDay = days[today];
+
+					cpm.LoanIsClosed = firstOpen == null;
+
+					if (firstOpen == null)
+						cpm.Amount = 0;
+					else {
+						// If firstOpen is not null then both thisDay is not null
+						// because of how CreateActualDailyLoanStatus works: thisDay corresponds to
+						// today which is inserted as it is a requested date.
+						cpm.Amount = firstOpen.Principal + thisDay.TotalExpectedNonprincipalPayment;
+					} // if
+
+					cpm.IsLate = false;
+
+					cpm.SavedAmount = thatDay == null
+						? 0
+						: thatDay.TotalExpectedNonprincipalPayment - thisDay.TotalExpectedNonprincipalPayment;
 				} else { // Echo scenario.
+					cpm.LoanIsClosed = false;
+
+					OneDayLoanStatus thisDay = days[today];
+
+					cpm.Amount =
+						WorkingModel.Schedule.Where(s => s.Date < today).Sum(s => s.Principal) -
+						thisDay.TotalRepaidPrincipal +
+						thisDay.TotalExpectedNonprincipalPayment;
+
 					cpm.IsLate = true;
+
+					cpm.SavedAmount = 0;
 				} // if
 			} else { // today is a payment date.
 				if (allPreviousPaymentsAreClosed) {
-					if (currentPayment.ClosedDate.HasValue && (currentPayment.ClosedDate <= today)) { // Alpha scenario.
+					if (currentPayment.IsClosedOn(today)) { // Alpha scenario.
 					} else { // Bravo scenario.
 					} // if
 				} else { // Charlie scenario.
@@ -221,7 +262,7 @@
 			} // if
 
 			return cpm;
-		} // CalculateCurrentPayment
+		} // AmountToCharge
 
 		/// <summary>
 		/// Calculates loan earned interest between two dates including both dates.
@@ -345,7 +386,7 @@
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
-			DateTime lastInterestDay = WorkingModel.Schedule[WorkingModel.Schedule.Count - 1].Date.Value.Date;
+			DateTime lastInterestDay = WorkingModel.Schedule[WorkingModel.Schedule.Count - 1].Date;
 
 			var days = new DailyLoanStatus();
 
@@ -353,10 +394,10 @@
 			// Open principal is equal to full loan amount.
 			// Daily interest is 0 at this point.
 
-			days.Add(new OneDayLoanStatus(WorkingModel.LoanIssueTime, 0));
+			days.Add(new OneDayLoanStatus(WorkingModel.LoanIssueTime, 0, null));
 
 			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
-				days.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount));
+				days.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount, days.LastDailyLoanStatus));
 
 			DateTime prevTime = WorkingModel.LoanIssueTime;
 
@@ -364,21 +405,21 @@
 			// Open principal is not changed.
 
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
-				ScheduledPayment sp = WorkingModel.Schedule[i];
+				Scheduled sp = WorkingModel.Schedule[i];
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				foreach (var cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date.Value)) {
+				foreach (var cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date)) {
 					cls.DailyInterestRate = GetDailyInterestRate(
 						cls.Date,
 						sp.InterestRate,
 						true,
 						preScheduleEnd,
-						sp.Date.Value
+						sp.Date
 					);
 				} // for each
 
-				prevTime = sp.Date.Value;
+				prevTime = sp.Date;
 			} // for each scheduled payment
 
 			// Step 3. Find maximum of requested date, last payment date, and last fee date.
@@ -407,7 +448,7 @@
 
 				if (lastKnownDayData.OpenPrincipal > 0) {
 					for (DateTime dt = lastKnownDayData.Date.AddDays(1); dt.Date <= maxDate; dt = dt.AddDays(1)) {
-						days.Add(new OneDayLoanStatus(dt, WorkingModel.LoanAmount) {
+						days.Add(new OneDayLoanStatus(dt, WorkingModel.LoanAmount, days.LastDailyLoanStatus) {
 							DailyInterestRate = lastKnownDayData.DailyInterestRate,
 						});
 					} // for
@@ -445,11 +486,8 @@
 			for(int i = 0; i < WorkingModel.Schedule.Count; i++) {
 				var sp = WorkingModel.Schedule[i];
 
-				if (sp.Date == null)
-					continue;
-
 				days.AddNote(
-					sp.Date.Value,
+					sp.Date,
 					i == WorkingModel.Schedule.Count - 1 ? "Last scheduled payment." : "Scheduled payment."
 				);
 			} // for each

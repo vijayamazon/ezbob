@@ -9,11 +9,12 @@
 			return (length >= 0) ? preResult.PadLeft(length + 2) : preResult.PadRight(2 - length);
 		} // FormatField
 
-		public OneDayLoanStatus(DateTime d, decimal openPrincipal) {
+		public OneDayLoanStatus(DateTime d, decimal openPrincipal, OneDayLoanStatus previousDay) {
 			Date = d;
 			OpenPrincipal = openPrincipal;
 			AssignedFees = 0;
 			DailyInterestRate = 0;
+			this.previousDay = previousDay;
 
 			Str = new FormattedData(this);
 		} // constructor
@@ -31,17 +32,37 @@
 
 		public decimal DailyInterestRate { get; set; }
 
-		public decimal ExpectedNonprincipalPayment {
-			get { return DailyInterest + AssignedFees; }
-		} // ExpectedNonprincipalPayment
-
 		public decimal RepaidPrincipal { get; set; }
 		public decimal RepaidInterest { get; set; }
 		public decimal RepaidFees { get; set; }
 
-		public decimal ActualPayment {
-			get { return RepaidPrincipal + RepaidInterest + RepaidFees; }
-		} // ActualPayment
+		public decimal TotalRepaidPrincipal {
+			get { return RepaidPrincipal + (this.previousDay == null ? 0 : this.previousDay.TotalRepaidPrincipal); }
+		} // TotalRepaidPrincipal
+
+		public decimal TotalEarnedInterest {
+			get { return DailyInterest + (this.previousDay == null ? 0 : this.previousDay.TotalEarnedInterest); }
+		} // TotalEarnedInterest
+
+		public decimal TotalAssignedFees {
+			get { return AssignedFees + (this.previousDay == null ? 0 : this.previousDay.TotalAssignedFees); }
+		} // TotalAssignedFees
+
+		public decimal TotalRepaidInterest {
+			get { return RepaidInterest + (this.previousDay == null ? 0 : this.previousDay.TotalRepaidInterest); }
+		} // TotalRepaidInterest
+
+		public decimal TotalRepaidFees {
+			get { return RepaidFees + (this.previousDay == null ? 0 : this.previousDay.TotalRepaidFees); }
+		} // TotalRepaidFees
+
+		public decimal TotalExpectedNonprincipalPayment {
+			get { return TotalEarnedInterest + TotalAssignedFees - TotalRepaidInterest - TotalRepaidFees; }
+		} // TotalExpectedNonprincipalPayment
+
+		public decimal CurrentBalance {
+			get { return OpenPrincipal + TotalExpectedNonprincipalPayment; }
+		} // CurrentBalance
 
 		public void AddRepayment(Repayment rp) {
 			if (rp == null)
@@ -126,5 +147,6 @@
 		} // Culture
 
 		private DateTime date;
+		private readonly OneDayLoanStatus previousDay;
 	} // class OneDayLoanStatus
 } // namespace
