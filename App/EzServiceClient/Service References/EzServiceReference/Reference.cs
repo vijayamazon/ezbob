@@ -3260,10 +3260,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddCashRequestAsync(int userID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_CashRequests cashRequest);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddDecision", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddDecisionResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult AddDecision(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest);
+        ServiceClientProxy.EzServiceReference.IntActionResult AddDecision(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest, Ezbob.Backend.ModelsWithDB.NewLoan.NL_DecisionRejectReasons[] decisionRejectReasons);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddDecision", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddDecisionResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddDecisionAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddDecisionAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest, Ezbob.Backend.ModelsWithDB.NewLoan.NL_DecisionRejectReasons[] decisionRejectReasons);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer);
@@ -4551,12 +4551,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddCashRequestAsync(userID, cashRequest);
         }
         
-        public ServiceClientProxy.EzServiceReference.IntActionResult AddDecision(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest) {
-            return base.Channel.AddDecision(userID, customerID, decision, oldCashRequest);
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddDecision(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest, Ezbob.Backend.ModelsWithDB.NewLoan.NL_DecisionRejectReasons[] decisionRejectReasons) {
+            return base.Channel.AddDecision(userID, customerID, decision, oldCashRequest, decisionRejectReasons);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddDecisionAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest) {
-            return base.Channel.AddDecisionAsync(userID, customerID, decision, oldCashRequest);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddDecisionAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest, Ezbob.Backend.ModelsWithDB.NewLoan.NL_DecisionRejectReasons[] decisionRejectReasons) {
+            return base.Channel.AddDecisionAsync(userID, customerID, decision, oldCashRequest, decisionRejectReasons);
         }
         
         public ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer) {

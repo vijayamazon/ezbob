@@ -666,7 +666,7 @@
                 // todo CashRequestID = 
                 SendEmailNotification = !cr.EmailSendingBanned,
                 UserID = 1,
-            }, cr.Id);
+            }, cr.Id, null);
 
             addDecisionStra.Execute();
             int decisionID = addDecisionStra.DecisionID;

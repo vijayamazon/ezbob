@@ -354,7 +354,7 @@
                 // todo InterestOnlyRepaymentCount = 
                 //todo Notes = 
                 //todo Position = 
-            }, cr.Id);
+            }, cr.Id, null);
 
 
 		    this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {

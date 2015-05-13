@@ -378,7 +378,7 @@
             var stage = OpportunityStage.s40.DescriptionAttr();
 
             newDecision.DecisionNameID = (int)DecisionActions.Waiting;
-            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id);
+            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
             this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
                 new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage });
         }//ReturnCustomerToWaitingForDecision
@@ -391,7 +391,7 @@
             this._historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
 
             newDecision.DecisionNameID = (int)DecisionActions.Pending;
-            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id);
+            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
 
             var stage = model.signature == 1
                 ? OpportunityStage.s75.DescriptionAttr()
@@ -416,7 +416,7 @@
             } // try
 
             newDecision.DecisionNameID = (int)DecisionActions.Escalate;
-            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id);
+            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
 
             this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
                 new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage });
@@ -448,7 +448,12 @@
             } // if
 
             newDecision.DecisionNameID = (int)DecisionActions.Reject;
-            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id);
+
+            var rejectReasons = model.rejectionReasons.Select(x => new NL_DecisionRejectReasons {
+                RejectReasonID = x
+            }).ToArray();
+
+            this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, rejectReasons);
 
 
             this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
@@ -541,7 +546,7 @@
 
             newDecision.DecisionNameID = (int)DecisionActions.Approve;
             NL_Offers lastOffer = this.m_oServiceClient.Instance.GetLastOffer(user.Id, customer.Id);
-            var decisionID = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id);
+            var decisionID = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
 
             lastOffer.DecisionID = decisionID.Value;
             lastOffer.CreatedTime = now;

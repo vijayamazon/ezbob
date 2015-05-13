@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
     using System;
+    using System.Collections.Generic;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Backend.Strategies.NewLoan;
 
@@ -13,9 +14,9 @@
             };
         }
 
-        public IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest) {
+        public IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
             AddDecision stra;
-            var amd = ExecuteSync(out stra, customerID, userID, decision, oldCashRequest);
+            var amd = ExecuteSync(out stra, customerID, userID, decision, oldCashRequest, decisionRejectReasons);
             return new IntActionResult {
                 MetaData = amd,
                 Value = stra.DecisionID

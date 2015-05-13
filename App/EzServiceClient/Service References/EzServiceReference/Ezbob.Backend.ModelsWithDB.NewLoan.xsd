@@ -32,6 +32,22 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_Decisions" nillable="true" type="tns:NL_Decisions" />
+  <xs:complexType name="ArrayOfNL_DecisionRejectReasons">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_DecisionRejectReasons" nillable="true" type="tns:NL_DecisionRejectReasons" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_DecisionRejectReasons" nillable="true" type="tns:ArrayOfNL_DecisionRejectReasons" />
+  <xs:complexType name="NL_DecisionRejectReasons">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
+      <xs:element minOccurs="0" name="DecisionRejectReasonID" type="xs:int" />
+      <xs:element minOccurs="0" name="RejectReasonID" type="xs:int" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_DecisionRejectReasons" nillable="true" type="tns:NL_DecisionRejectReasons" />
   <xs:complexType name="NL_Offers">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
