@@ -344,8 +344,8 @@
         [DL79("CREDITTEXT5", "Credit text line 5")]
         public string CreditText5 { get; set; }
         [DataMember]
-        [DL79("CONCLUTIONTEXT", "Conclusion text")]
-        public string ConclutionText { get; set; }
+        [DL79("CONCLUSIONTEXT", "Conclusion text")]
+        public string ConclusionText { get; set; }
 
 		[DataMember]
 		[NonTraversable]
