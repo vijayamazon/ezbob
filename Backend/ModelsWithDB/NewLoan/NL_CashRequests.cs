@@ -29,5 +29,5 @@
         [FK("CashRequests", "Id")]
         [DataMember]
         public long OldCashRequestID { get; set; }
-    }
-}
+    }//class NL_CashRequests
+}//ns

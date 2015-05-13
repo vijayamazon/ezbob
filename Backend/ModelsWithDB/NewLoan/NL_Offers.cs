@@ -49,8 +49,8 @@
 
         [DataMember]
         public decimal BrokerSetupFeePercent { get; set; }
-        
-        [Length("MAX")]
+
+        [Length(LengthType.MAX)]
         [DataMember]
         public string Notes { get; set; }
 
@@ -66,5 +66,5 @@
 
         [DataMember]
         public bool EmailSendingBanned { get; set; }
-    }
-}
+    }//class NL_Offers
+}//ns

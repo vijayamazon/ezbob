@@ -28,8 +28,8 @@
 
         [DataMember]
         public int Position { get; set; }
-        
-        [Length("MAX")]
+
+        [Length(LengthType.MAX)]
         [DataMember]
         public string Notes { get; set; }
 
@@ -44,6 +44,6 @@
 
         [DataMember]
         public bool? SendEmailNotification { get; set; }
-    }
-}
+    }//class NL_Decisions
+}//ns
 

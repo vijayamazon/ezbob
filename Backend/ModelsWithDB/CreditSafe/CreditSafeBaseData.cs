@@ -34,7 +34,7 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
         public string CompanyRefNum { get; set; }
         public bool? HasCreditSafeError { get; set; }
         public bool? HasParsingError { get; set; }
-        [Length("MAX")]
+        [Length(LengthType.MAX)]
         public string Error { get; set; }
         public DateTime? InsertDate { get; set; }
         [Length(10)]

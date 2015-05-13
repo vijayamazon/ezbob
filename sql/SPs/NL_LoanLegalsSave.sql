@@ -1,0 +1,61 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('NL_LoanLegalsSave') IS NOT NULL
+	DROP PROCEDURE NL_LoanLegalsSave
+GO
+
+IF TYPE_ID('NL_LoanLegalsList') IS NOT NULL
+	DROP TYPE NL_LoanLegalsList
+GO
+
+CREATE TYPE NL_LoanLegalsList AS TABLE (
+	[OfferID] INT NULL,
+	[SignatureTime] DATETIME NOT NULL,
+	[CreditActAgreementAgreed] BIT NULL,
+	[PreContractAgreementAgreed] BIT NULL,
+	[PrivateCompanyLoanAgreementAgreed] BIT NULL,
+	[GuarantyAgreementAgreed] BIT NULL,
+	[EUAgreementAgreed] BIT NULL,
+	[COSMEAgreementAgreed] BIT NULL,
+	[NotInBankruptcy] BIT NULL,
+	[SignedName] NVARCHAR(128) NULL
+)
+GO
+
+CREATE PROCEDURE NL_LoanLegalsSave
+@Tbl NL_LoanLegalsList READONLY
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	INSERT INTO NL_LoanLegals (
+		[OfferID],
+		[SignatureTime],
+		[CreditActAgreementAgreed],
+		[PreContractAgreementAgreed],
+		[PrivateCompanyLoanAgreementAgreed],
+		[GuarantyAgreementAgreed],
+		[EUAgreementAgreed],
+		[COSMEAgreementAgreed],
+		[NotInBankruptcy],
+		[SignedName]
+	) SELECT
+		[OfferID],
+		[SignatureTime],
+		[CreditActAgreementAgreed],
+		[PreContractAgreementAgreed],
+		[PrivateCompanyLoanAgreementAgreed],
+		[GuarantyAgreementAgreed],
+		[EUAgreementAgreed],
+		[COSMEAgreementAgreed],
+		[NotInBankruptcy],
+		[SignedName]
+	FROM @Tbl
+
+	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	SELECT @ScopeID AS ScopeID
+END
+GO
+
+
