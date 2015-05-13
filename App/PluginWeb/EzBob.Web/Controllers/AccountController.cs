@@ -526,8 +526,13 @@
 					false
 				);
 
+
+				// TODO: Alibaba 001 wizard step 1
+
 				FormsAuthentication.SetAuthCookie(model.EMail, false);
 				HttpContext.User = new GenericPrincipal(new GenericIdentity(model.EMail), new[] { "Customer" });
+
+			
 
 				return Json(new {
 					success = true,

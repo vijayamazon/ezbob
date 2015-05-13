@@ -243,6 +243,8 @@
 				m_oSession.Refresh(customer);
 			} // if
 
+			// TODO: Alibaba 001 - end of step 3
+
 			return Json(new { });
 		}
 
@@ -838,6 +840,7 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
+			// finish wizard => Main strategy runs Alibaba 001 ("data sharing") full info
 			m_oServiceClient.Instance.MainStrategy1(
 				m_oContext.User.Id,
 				m_oContext.User.Id,
@@ -932,6 +935,8 @@
 
 			customer.WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
 			m_oSession.Flush();
+
+			// TODO: Alibaba 001 - end of step 2
 
 			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 		}
