@@ -19,11 +19,9 @@
 	using Code;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using EZBob.DatabaseLib.Model.Database.Broker;
 	using Infrastructure;
 	using Infrastructure.csrf;
 	using NHibernate;
-	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
@@ -35,7 +33,6 @@
 		private readonly ICustomerRepository _customerRepository;
 		private readonly ICashRequestsRepository _cashRequestsRepository;
 		private readonly ILoanTypeRepository _loanTypes;
-		private readonly LoanLimit _limit;
 		private readonly IDiscountPlanRepository _discounts;
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
@@ -44,7 +41,6 @@
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
 		private readonly IEzbobWorkplaceContext _context;
-		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
 		
 		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
@@ -53,7 +49,6 @@
 			ICustomerRepository customerRepository,
 			ICashRequestsRepository cashRequestsRepository,
 			ILoanTypeRepository loanTypes,
-			LoanLimit limit,
 			IDiscountPlanRepository discounts,
 			CashRequestBuilder crBuilder,
 			ApplicationInfoModelBuilder infoModelBuilder,
@@ -61,22 +56,19 @@
 			ILoanSourceRepository loanSources,
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
-			ISuggestedAmountRepository suggestedAmountRepository,
 			CustomerPhoneRepository customerPhoneRepository)
 		{
-			_customerRepository = customerRepository;
-			_cashRequestsRepository = cashRequestsRepository;
-			_loanTypes = loanTypes;
-			_limit = limit;
-			_discounts = discounts;
-			_crBuilder = crBuilder;
-			_infoModelBuilder = infoModelBuilder;
-			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
-			_loanSources = loanSources;
-			_users = users;
-			_context = context;
-			_suggestedAmountRepository = suggestedAmountRepository;
-			serviceClient = new ServiceClient();
+			this._customerRepository = customerRepository;
+            this._cashRequestsRepository = cashRequestsRepository;
+            this._loanTypes = loanTypes;
+            this._discounts = discounts;
+            this._crBuilder = crBuilder;
+            this._infoModelBuilder = infoModelBuilder;
+            this._approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
+            this._loanSources = loanSources;
+            this._users = users;
+            this._context = context;
+            this.serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
 			
 		}
@@ -87,10 +79,10 @@
 		[HttpGet]
 		public JsonResult Index(int id)
 		{
-			var customer = _customerRepository.Get(id);
+            var customer = this._customerRepository.Get(id);
 			var m = new ApplicationInfoModel();
 			var cr = customer.LastCashRequest;
-			_infoModelBuilder.InitApplicationInfo(m, customer, cr);
+            this._infoModelBuilder.InitApplicationInfo(m, customer, cr);
 			return Json(m, JsonRequestBehavior.AllowGet);
 		}
 
@@ -98,13 +90,13 @@
 		[HttpPost]
 		public JsonResult VerifyPhone(int customerId,string phoneType, bool verifiedPreviousState)
 		{
-			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == phoneType && x.IsCurrent);
+            CustomerPhone customerPhone = this.customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == phoneType && x.IsCurrent);
 			if (customerPhone == null) {
 				return Json(new { });
 			}
 
 			customerPhone.IsCurrent = false;
-			customerPhoneRepository.SaveOrUpdate(customerPhone);
+            this.customerPhoneRepository.SaveOrUpdate(customerPhone);
 
 			var newCustomerPhoneEntry = new CustomerPhone {
 				CustomerId = customerPhone.CustomerId,
@@ -115,7 +107,7 @@
 				VerificationDate = DateTime.UtcNow,
 				VerifiedBy = User.Identity.Name
 			};
-			customerPhoneRepository.SaveOrUpdate(newCustomerPhoneEntry);
+            this.customerPhoneRepository.SaveOrUpdate(newCustomerPhoneEntry);
 			return Json(new {});
 		}
 	
@@ -134,7 +126,7 @@
 				Username = User.Identity.Name
 			};
 
-			_approvalsWithoutAmlRepository.SaveOrUpdate(entry);
+            this._approvalsWithoutAmlRepository.SaveOrUpdate(entry);
 		}
 
 		[HttpPost]
@@ -142,7 +134,7 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		public JsonResult ToggleCciMark(int id) {
-			Customer oCustomer = _customerRepository.Get(id);
+            Customer oCustomer = this._customerRepository.Get(id);
 
 			if (oCustomer == null) {
 				log.Debug("Customer({0}) not found", id);
@@ -151,7 +143,7 @@
 
 			oCustomer.CciMark = !oCustomer.CciMark;
 
-			serviceClient.Instance.AddCciHistory(id, _context.UserId, oCustomer.CciMark);
+            this.serviceClient.Instance.AddCciHistory(id, this._context.UserId, oCustomer.CciMark);
 
 			log.Debug("Customer({0}).CciMark set to {1}", id, oCustomer.CciMark);
 
@@ -164,7 +156,7 @@
 		[Ajax]
 		public JsonResult ToggleIsTest(int id)
 		{
-			Customer oCustomer = _customerRepository.Get(id);
+            Customer oCustomer = this._customerRepository.Get(id);
 
 			if (oCustomer == null)
 			{
@@ -185,7 +177,7 @@
 		[Ajax]
 		public JsonResult UpdateTrustPilotStatus(int id, string status)
 		{
-			Customer oCustomer = _customerRepository.Get(id);
+            Customer oCustomer = this._customerRepository.Get(id);
 
 			if (oCustomer == null)
 			{
@@ -224,12 +216,9 @@
 		[Permission(Name = "CreditLineFields")]
 		public JsonResult AvoidAutomaticDecision(int id, bool enabled)
 		{
-			var cust = _customerRepository.Get(id);
+            var cust = this._customerRepository.Get(id);
 			cust.IsAvoid = enabled;
 			log.Debug("Customer({0}).IsAvoided = {1}", id, enabled);
-
-            //TODO update new offer table
-            log.Debug("update offer for customer {0} avoid auto decision {1}", cust.Id, enabled);
 
 			return Json(new { error = (string)null, id = id, status = cust.IsAvoid });
 		}
@@ -241,17 +230,17 @@
 		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption) {
 			log.Debug("RunNewCreditLine({0}, {1}) start", Id, newCreditLineOption);
 
-			var customer = _customerRepository.Get(Id);
+            var customer = this._customerRepository.Get(Id);
 
 			new Transactional(() => {
-				var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
-				cashRequest.LoanType = _loanTypes.GetDefault();
+                var cashRequest = this._crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
+                cashRequest.LoanType = this._loanTypes.GetDefault();
 
 				customer.CreditResult = null;
 				customer.OfferStart = cashRequest.OfferStart;
 				customer.OfferValidUntil = cashRequest.OfferValidUntil;
 
-				_customerRepository.SaveOrUpdate(customer);
+                this._customerRepository.SaveOrUpdate(customer);
 			}).Execute();
 
 			CreditResultStatus? status;
@@ -261,17 +250,17 @@
 
 			if (typedNewCreditLineOption == NewCreditLineOption.SkipEverything) {
 				customer.CreditResult = CreditResultStatus.WaitingForDecision;
-				_customerRepository.SaveOrUpdate(customer);
+                this._customerRepository.SaveOrUpdate(customer);
 
 				strategyError = null;
 				status = customer.CreditResult;
 			} else {
-				var underwriter = _users.GetUserByLogin(User.Identity.Name);
+                var underwriter = this._users.GetUserByLogin(User.Identity.Name);
 
-				ActionMetaData amd = _crBuilder.ForceEvaluate(underwriter.Id, customer, typedNewCreditLineOption, true);
+                ActionMetaData amd = this._crBuilder.ForceEvaluate(underwriter.Id, customer, typedNewCreditLineOption, true);
 
 				// Reload from DB
-				var updatedCustomer = _customerRepository.Load(customer.Id);
+                var updatedCustomer = this._customerRepository.Load(customer.Id);
 
 				strategyError = amd.Status == ActionStatus.Done ? null : "Error: " + amd.Comment;
 				status = updatedCustomer.CreditResult;
@@ -350,8 +339,8 @@
                 DecisionTime = now,
                 IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
                 DecisionNameID = (int)DecisionActions.Waiting
-                // todo IsAmountSelectionAllowed = 
-                // todo InterestOnlyRepaymentCount = 
+                //todo IsAmountSelectionAllowed = 
+                //todo InterestOnlyRepaymentCount = 
                 //todo Notes = 
                 //todo Position = 
             }, cr.Id, null);
@@ -373,7 +362,7 @@
                 RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
 		        StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
                 DecisionID = decisionId.Value,
-                // todo Notes = 
+                //todo Notes = 
                 //todo InterestOnlyRepaymentCount = 
 		    });
             //TODO update new offer table
@@ -384,17 +373,17 @@
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ActivateMainStrategy(int customerId) {
-			int underwriterId = _context.User.Id;
+            int underwriterId = this._context.User.Id;
 
-            //new ServiceClient().Instance.MainStrategy1(
-            //    underwriterId,
-            //    customerId,
-            //    NewCreditLineOption.SkipEverythingAndApplyAutoRules,
-            //    0,
-            //    null,
-            //    MainStrategyDoAction.Yes,
-            //    MainStrategyDoAction.Yes
-            //);
+            new ServiceClient().Instance.MainStrategy1(
+                underwriterId,
+                customerId,
+                NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+                0,
+                null,
+                MainStrategyDoAction.Yes,
+                MainStrategyDoAction.Yes
+            );
 
 			return Json(true);
 		}
@@ -402,9 +391,9 @@
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ActivateFinishWizard(int customerId)
 		{
-			int underwriterId = _context.User.Id;
+            int underwriterId = this._context.User.Id;
 
-			_customerRepository.Get(customerId).AddAlibabaDefaultBankAccount();
+            this._customerRepository.Get(customerId).AddAlibabaDefaultBankAccount();
 
 			var oArgs = new FinishWizardArgs { CustomerID = customerId, };
 
@@ -426,7 +415,7 @@
 					ObjectFactory.GetInstance<ISession>()
 				);
 
-				Customer oCustomer = _customerRepository.Get(nCustomerID);
+                Customer oCustomer = this._customerRepository.Get(nCustomerID);
 
 				DateTime oDate = DateTime.ParseExact(sDate, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
@@ -443,7 +432,7 @@
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ResetPassword123456(int nCustomerID) {
-			new ServiceClient().Instance.ResetPassword123456(_context.User.Id, nCustomerID, PasswordResetTarget.Customer);
+            new ServiceClient().Instance.ResetPassword123456(this._context.User.Id, nCustomerID, PasswordResetTarget.Customer);
 			return Json(true);
 		} // ResetPassword123456
 	} // class ApplicationInfoController
