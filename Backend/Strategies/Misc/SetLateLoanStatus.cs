@@ -60,8 +60,7 @@
                     Log.Error(ex, "Failed to handle cured loan for customer {0}", customerID);
                 }
                 return ActionResult.Continue;
-            }, "GetCuredLoansForCollection",
-            CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
+            }, "GetCuredLoansForCollection",  CommandSpecies.StoredProcedure);
 		}//Execute
 
 	    private void HandleCuredLoan(int customerID, int loanID) {
