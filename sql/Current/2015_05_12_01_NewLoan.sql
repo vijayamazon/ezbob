@@ -489,8 +489,7 @@ CREATE TABLE [dbo].[NL_LoanStates](
 	[LoanStateID] [int] NOT NULL IDENTITY(1,1) ,
 	[InsertDate]  [datetime] NOT NULL default getutcdate(),
 	[LoanID] [int] NOT NULL , 
-	[NumberOfPayments] [int] NOT NULL ,
-	[Balance] [decimal](18, 6) NOT NULL, 
+	[NumberOfPayments] [int] NOT NULL ,	
 	[OutstandingPrincipal] [decimal](18, 6) NOT NULL,
 	[OutstandingInterest] [decimal](18, 6) NOT NULL,
 	[OutstandingFee] [decimal](18, 6) NOT NULL,	
@@ -509,6 +508,28 @@ CREATE TABLE [dbo].[NL_LoanStates](
 ) ;
 END ;
 
+IF object_id('NL_LoanOptions') IS NULL 
+BEGIN	
+CREATE TABLE [dbo].[NL_LoanOptions](
+	[LoanOptionID] [int] IDENTITY(1,1) NOT NULL,
+	[LoanID] [int] NULL,
+	[UserID] [int] NULL,
+	[AutoPayment] [bit] NULL,
+	[ReductionFee] [bit] NULL,
+	[LatePaymentNotification] [bit] NULL,
+	[CaisAccountStatus] [nvarchar](50) NULL,
+	[ManualCaisFlag] [nvarchar](20) NULL,
+	[EmailSendingAllowed] [bit] NOT NULL DEFAULT ((1)),
+	[MailSendingAllowed] [bit] NOT NULL  DEFAULT ((1)),
+	[SmsSendingAllowed] [bit] NOT NULL DEFAULT ((1)),	
+	[InsertDate] [datetime] default getutcdate() ,
+	[IsActive] [bit] NULL,
+	[Comments] [ntext] NULL,
+	[TimestampCounter] rowversion NOT NULL,
+ CONSTRAINT [PK_NL_LoanOptions] PRIMARY KEY CLUSTERED (	[LoanOptionID] ASC)
+) ;	
+END
+GO
 
 
 IF OBJECT_ID ('dbo.NL_LoanOptions') IS NULL
@@ -536,10 +557,6 @@ CREATE TABLE dbo.NL_LoanOptions
 END 
 GO
 
-IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanSource') AND name = 'IsDisabled')
-	ALTER TABLE [dbo].[LoanSource] ADD [IsDisabled] [bit] NULL;
-GO
-
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanBrokerCommission') AND name = 'NLLoanID')
 	ALTER TABLE [dbo].[LoanBrokerCommission] ADD [NLLoanID] [int] NULL ; 
 GO
@@ -555,8 +572,9 @@ GO
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('Esignatures') AND name = 'DecisionID')
 	ALTER TABLE [dbo].[Esignatures] ADD DecisionID [int] NULL ; 
 GO
-
-
+IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('DecisionTrail') AND name = 'NLCashRequestID')
+	ALTER TABLE [dbo].[DecisionTrail] ADD [NLCashRequestID] [int] NULL ; 
+GO
 
 IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_DecisionRejectReasons_NL_Decision') BEGIN
 ALTER TABLE [dbo].[NL_DecisionRejectReasons] ADD CONSTRAINT [FK_NL_DecisionRejectReasons_NL_Decision] FOREIGN KEY([DecisionID]) REFERENCES [dbo].[NL_Decisions] ([DecisionID])
@@ -663,12 +681,12 @@ ALTER TABLE [dbo].[NL_LoanLienLinks] ADD CONSTRAINT [FK_NL_LoanLienLink_NL_Loans
 END
 GO
 
-IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanOptions_NL_Loans') BEGIN
-ALTER TABLE [dbo].[LoanOptions] ADD CONSTRAINT [FK_LoanOptions_NL_Loans] FOREIGN KEY([NLLoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]) ;
+IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanOptions_NL_Loans') BEGIN
+ALTER TABLE [dbo].[NL_LoanOptions] ADD CONSTRAINT [FK_NL_LoanOptions_NL_Loans] FOREIGN KEY([LoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]) ;
 END
 GO
-IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanOptions_Security_User') BEGIN
-ALTER TABLE [dbo].[LoanOptions] ADD CONSTRAINT [FK_LoanOptions_Security_User] FOREIGN KEY([UserID]) REFERENCES [dbo].[Security_User] ([UserId]) ;
+IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanOptions_Security_User') BEGIN
+ALTER TABLE [dbo].[NL_LoanOptions] ADD CONSTRAINT [FK_NL_LoanOptions_Security_User] FOREIGN KEY([UserID]) REFERENCES [dbo].[Security_User] ([UserId]) ;
 END
 GO
  
@@ -802,10 +820,6 @@ IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_
  ALTER TABLE [dbo].[NL_CashRequests] ADD CONSTRAINT [FK_NL_CashRequests_Users] FOREIGN KEY([UserID]) REFERENCES [dbo].[Security_User] ([UserID]);
 END
 GO
---IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_CashRequests_CashRequest') BEGIN
--- ALTER TABLE [dbo].[NL_CashRequests] ADD CONSTRAINT [FK_NL_CashRequests_CashRequest] FOREIGN KEY([OldCashRequestID]) REFERENCES [dbo].[CashRequests] ([Id]);
---END
---GO
 
 
 IF(select cl.object_id from sys.all_objects ob inner join sys.all_columns cl on ob.object_id = cl.object_id  and ob.name = 'MedalCalculationsAV' and cl.name = 'CashRequestID') IS NULL BEGIN
@@ -830,8 +844,8 @@ IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_
 END
 GO
 
-IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_DecisionTrail_NL_Decisions') BEGIN
- ALTER TABLE [dbo].[DecisionTrail] ADD CONSTRAINT [FK_DecisionTrail_NL_Decisions] FOREIGN KEY([NLDecisionID]) REFERENCES [dbo].[NL_Decisions] ([DecisionID]);
+IF NOT EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_DecisionTrail_NL_CashRequests') BEGIN
+ ALTER TABLE [dbo].[DecisionTrail] ADD CONSTRAINT [FK_DecisionTrail_NL_CashRequests] FOREIGN KEY([NLCashRequestID]) REFERENCES [dbo].[NL_CashRequests] ([CashRequestID]);
 END
 GO
 
