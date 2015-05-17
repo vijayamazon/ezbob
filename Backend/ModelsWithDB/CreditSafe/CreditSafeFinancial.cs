@@ -76,33 +76,33 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
         public string Bankers { get; set; }
         [Length(100)]
         public string BankBranchCode { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string PreTaxMargin { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string CurrentRatio { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string NetworkingCapital { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string GearingRatio { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string Equity { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string CreditorDays { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string DebtorDays { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string Liquidity { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string ReturnOnCapitalEmployed { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string ReturnOnAssetsEmployed { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string CurrentDebtRatio { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string TotalDebtRatio { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string StockTurnoverRatio { get; set; }
-        [Length(10)]
+        [Length(20)]
         public string ReturnOnNetAssetsEmployed { get; set; }
 
 
