@@ -4,7 +4,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Database.Mapping;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices;
 	using Web.Areas.Customer.Models;
@@ -14,19 +13,21 @@
 	[Serializable]
     public class LoanModel
     {
-        public int Id { get; set; }
+        // used for loan list in account activity tab in customer profile
+        public int Id { get; set; } // loan id
+        public DateTime Date { get; set; } // loan date
+        public string Status { get; set; } //LoanStatus
+        public string StatusDescription { get; set; } //LoanStatus Description
+        public decimal TotalBalance { get; set; } //outstanding principal + interest + fees
+        public decimal LoanAmount { get; set; } // loan amount
+        public string RefNumber { get; set; } // loan ref number
+
         public int Position { get; set; }
-        public DateTime Date { get; set; }
         public DateTime? DateClosed { get; set; }
-        public decimal LoanAmount { get; set; }
-        public string Status { get; set; }
-        public string StatusDescription { get; set; }
         public decimal Balance { get; set; }
-        public decimal TotalBalance { get; set; }
         public decimal NextRepayment { get; set; }
         public decimal Fees { get; set; }
         public decimal Interest { get; set; }
-        public string RefNumber { get; set; }
         public decimal InterestRate { get; set; }
         public decimal NextEarlyPayment { get; set; }
         public decimal TotalEarlyPayment { get; set; }
