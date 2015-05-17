@@ -106,7 +106,6 @@
     <Compile Include="TestAlibaba.cs" />
     <Compile Include="TestIovation.cs" />
     <Compile Include="TestCallCredit.cs" />
-    <Compile Include="TestCreditSafe.cs" />
     <Compile Include="TestMedal.cs" />
     <Compile Include="TestOffer.cs" />
     <Compile Include="Misc.cs" />

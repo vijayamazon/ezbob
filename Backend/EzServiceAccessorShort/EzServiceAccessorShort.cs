@@ -7,7 +7,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-	using Ezbob.Backend.Strategies.CreditSafe;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Utils;
 
@@ -87,19 +86,11 @@
 			};
 		}
 
-	    public void ParseCreditSafeLtd(int customerID, int userID, long serviceLogID) {
-            var stra = new ParseCreditSafeLtd(serviceLogID);
-            stra.Execute();
-	    }
-
-
         public WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package)
         {
             var stra = new ServiceLogWriter(package);
             stra.Execute();
             return stra.Package.Out;
         }
-
-
 	} // class EzServiceAccessorShort
 } // namespace EzServiceShortcut

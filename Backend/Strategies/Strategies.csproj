@@ -45,19 +45,12 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\EPPlus\EPPlus.dll</HintPath>
     </Reference>
-    <Reference Include="FSharp.Core, Version=4.3.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\FSharp\FSharp.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\Nhibernate\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="MailChimp">
-      <HintPath>..\..\Lib\3rdparty\MailChimp\MailChimp.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json">
       <SpecificVersion>False</SpecificVersion>
@@ -130,10 +123,6 @@
     <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
     <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
-    <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
-    <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
-    <Compile Include="CreditSafe\ServiceLogCreditSafeLtd.cs" />
-    <Compile Include="CreditSafe\ServiceLogCreditSafeNonLtd.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\GetCustomerManualAnnualizedRevenue.cs" />
     <Compile Include="Broker\BrokerAcceptTerms.cs" />
@@ -144,7 +133,6 @@
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
-    <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />
     <Compile Include="NewLoan\AddPayPointPayment.cs" />
@@ -158,7 +146,6 @@
     <Compile Include="NewLoan\GetLastOffer.cs" />
     <Compile Include="NewLoan\AddOffer.cs" />
     <Compile Include="NewLoan\AddCashRequest.cs" />
-    <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />
@@ -307,7 +294,6 @@
     <Compile Include="SalesForce\AddUpdateLeadAccount.cs" />
     <Compile Include="StoredProcs\InitCreatePasswordToken.cs" />
     <Compile Include="Misc\UpdateGoogleAnalytics.cs" />
-    <Compile Include="Extensions\DateTimeExt.cs" />
     <Compile Include="Tasks\DailyFetchGoogleAnalyticsAndRunDependent.cs" />
     <Compile Include="UserManagement\AddCciHistory.cs" />
     <Compile Include="UserManagement\EmailConfirmation\EmailConfirmationConfirmUser.cs" />
@@ -325,7 +311,6 @@
     <Compile Include="StoredProcs\GetCustomerAddresses.cs" />
     <Compile Include="UserManagement\LoadCustomerByCreatePasswordToken.cs" />
     <Compile Include="UserManagement\SetCustomerPasswordByToken.cs" />
-    <Compile Include="UserManagement\UserDisable.cs" />
     <Compile Include="VatReturn\AndRecalculateVatReturnSummaryForAll.cs" />
     <Compile Include="AStrategy.cs" />
     <Compile Include="Misc\AmlChecker.cs" />
@@ -703,15 +688,6 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeLtdRequestTemplate.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeNonLtdRequestTemplate.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="CreditSafe\Tamplets\CreditSafeNonLtdSearchTemplate.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

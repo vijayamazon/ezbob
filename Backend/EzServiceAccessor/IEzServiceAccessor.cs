@@ -39,14 +39,11 @@
 
 		ExperianLtd LoadExperianLtd(long nServiceLogID);
 		ExperianLtd CheckLtdCompanyCache(int userId, string sCompanyRefNum);
-        
+
 		void EmailHmrcParsingErrors(int nCustomerID, int nCustomerMarketplaceID, SortedDictionary<string, string> oErrorsToEmail);
 
 		CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 
-        WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package);
-        
-        //credit safe
-        void ParseCreditSafeLtd(int customerID, int userID, long serviceLogID);
+		WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package);
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor
