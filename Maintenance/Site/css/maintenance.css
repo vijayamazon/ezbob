@@ -61,7 +61,7 @@ h2{
 }
 
 /*wizard-header*/
-#header {
+#header_ezbob {
     min-width: 1200px;
     width: 100%;
     height: 77px;
@@ -69,7 +69,7 @@ h2{
     background: #4d4d4d;
 }
 
-.header-inner {
+#header_ezbob .header-inner {
     width: 1200px;
     height: 100%;
     margin: auto;
@@ -77,7 +77,7 @@ h2{
     background: #4d4d4d;
 }
 
-.header-bg-strip {
+#header_ezbob .header-bg-strip {
     background: url('images/header_bg_strip.png');
     background-repeat: repeat-x;
     width: 50%;
@@ -85,7 +85,7 @@ h2{
     position: absolute;
 }
 
-.header-logo {
+#header_ezbob .header-logo {
     height: 77px;
     width: 190px;
     background: url('images/header_bg_left.png');
@@ -145,17 +145,11 @@ text-decoration: underline;
 }
 /*-- copyrights, right at the bottom of the site --*/
 #copyrights{
-    background: #333333;
-    background: -moz-linear-gradient(top,  #333333 0%, #1f2022 100%);
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#333333), color-stop(100%,#1f2022));
-    background: -webkit-linear-gradient(top,  #333333 0%,#1f2022 100%);
-    background: -o-linear-gradient(top,  #333333 0%,#1f2022 100%);
-    background: -ms-linear-gradient(top,  #333333 0%,#1f2022 100%);
-    background: linear-gradient(to bottom,  #333333 0%,#1f2022 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#333333', endColorstr='#1f2022',GradientType=0 );
-    color:#fff; text-shadow:0 1px 1px #000; font-size:11px;
+    background: #292929;
+    color:#b4b3b3;
+	font-size:14px;
     height: 90px;
-	font-family: Arial;
+	font-family: 'Titillium Web Regular';
 }
 
 .copyrights-inner {
@@ -164,5 +158,99 @@ text-decoration: underline;
     padding-bottom: 5px;
     padding-top: 5px;
 }
+/*everline CSS*/
+.hr-footer {
+	margin-top: 12px;
+	margin-bottom: 15px;
+	border-top: 1px solid #3f3f3f;
+}
 
+.full-width {
+  max-width: 100%;
+}
+.row {
+  clear: both;
+}
+#footer_everline {
+  background: #28211f;
+  border-top: 6px solid #8dc641;
+}
 
+.span_16 {
+  margin-left: 0;
+  min-height: 10px;
+  margin-top: 20px;
+  width: 100%;
+}
+
+.col {
+  padding-left: 10px;
+  padding: 0 0%;
+  box-sizing: border-box;
+}
+
+#footer_everline p {
+  color: #dddddd;
+  font-size: 12px;
+  font-family: 'Open Sans', sans-serif;
+  width: 960px;
+  margin: 0 auto;
+}
+
+header{
+background:black;
+border-top: 18px solid #f0f0f0;
+padding-top:11px;
+height: 100px;
+}
+header:before {
+  border-top: 11px solid #8dc641;
+  content: "";
+  display: block;
+  position: absolute;
+    top: 18px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+header nav {
+  max-width: 960px;
+  margin: 0 auto;
+  position: relative;
+}
+header nav div.pin {
+  position: relative;
+  margin-top: -22px;
+  float: right;
+  margin-right: 12px;
+}
+header nav div.pin span {
+  display: block;
+  width: 23px;
+  height: 23px;
+  background: #8dc641;
+  border: 6px solid #f0f0f0;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  border-radius: 30px;
+}
+header nav a, header nav span {
+  color: #ffffff;
+  font-size: 1.4em;
+  font-weight: 600;
+  text-decoration: none;
+}
+header nav a.svg, header nav span.svg {
+  background: url("images/EverlineLogo.png") no-repeat 0% center;
+  background-image: url("images/EverlineLogo.svg"), none;
+  background-size: contain;
+  height: 5em;
+  margin-top: 17px;
+  width: 11.7em;
+  display: inline-block;
+  float: left;
+  text-align: left;
+  text-indent: -9999px;
+  position: relative;
+  left: 6px;
+}
