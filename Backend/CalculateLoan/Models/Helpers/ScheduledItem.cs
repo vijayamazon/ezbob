@@ -3,8 +3,8 @@
 	using System.Globalization;
 	using Ezbob.Backend.Extensions;
 
-	public class Scheduled {
-		public Scheduled(DateTime scheduledDate) {
+	public class ScheduledItem {
+		public ScheduledItem(DateTime scheduledDate) {
 			Date = scheduledDate.Date;
 			ClosedDate = null;
 			Principal = 0;
@@ -25,8 +25,8 @@
 			return ClosedDate.HasValue && (ClosedDate.Value.Date <= date.Date);
 		} // IsClosedOn
 
-		public Scheduled DeepClone() {
-			return new Scheduled(Date) {
+		public ScheduledItem DeepClone() {
+			return new ScheduledItem(Date) {
 				ClosedDate = ClosedDate,
 				Principal = Principal,
 				InterestRate = InterestRate,
@@ -52,5 +52,5 @@
 		} // Culture
 
 		private DateTime? closedDate;
-	} // class Scheduled
+	} // class ScheduledItem
 } // namespace

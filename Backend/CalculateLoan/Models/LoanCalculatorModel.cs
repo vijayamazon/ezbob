@@ -16,7 +16,7 @@
 			this.monthlyInterestRate = 0.06m;
 
 			DiscountPlan = new List<decimal>();
-			Schedule = new List<Scheduled>();
+			Schedule = new List<ScheduledItem>();
 			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
 			BadPeriods = new BadPeriods();
@@ -174,7 +174,7 @@
 
 			var qsp = new Queue<ScheduledPaymentWithRepayment>();
 
-			foreach (Scheduled s in Schedule)
+			foreach (ScheduledItem s in Schedule)
 				qsp.Enqueue(new ScheduledPaymentWithRepayment(s));
 
 			if (Repayments.Count < 1)
@@ -209,13 +209,13 @@
 
 		public List<decimal> DiscountPlan { get; private set; }
 
-		public List<Scheduled> Schedule { get; private set; }
+		public List<ScheduledItem> Schedule { get; private set; }
 		public List<Repayment> Repayments { get; private set; }
 		public List<Fee> Fees { get; private set; }
 		public BadPeriods BadPeriods { get; private set; }
 
 		private class ScheduledPaymentWithRepayment {
-			public ScheduledPaymentWithRepayment(Scheduled sp) {
+			public ScheduledPaymentWithRepayment(ScheduledItem sp) {
 				ScheduledPayment = sp;
 				this.openPrincipal = ScheduledPayment.Principal;
 				ScheduledPayment.ClosedDate = null;
@@ -236,7 +236,7 @@
 				return 0;
 			} // AddPayment
 
-			public Scheduled ScheduledPayment { get; private set; }
+			public ScheduledItem ScheduledPayment { get; private set; }
 
 			private decimal openPrincipal;
 		} // class ScheduledPaymentWithRepayment

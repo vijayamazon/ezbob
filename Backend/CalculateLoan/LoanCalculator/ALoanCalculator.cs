@@ -19,7 +19,7 @@
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
 		/// Schedule is stored in WorkingModel.Schedule.
 		/// </summary>
-		public virtual void CreateSchedule() {
+		public virtual List<ScheduledItem> CreateSchedule() {
 			if (WorkingModel.InterestOnlyRepayments >= WorkingModel.RepaymentCount) {
 				throw new ArgumentOutOfRangeException(
 					"Interest only months count is not less than repayment count.",
@@ -36,7 +36,7 @@
 			WorkingModel.Schedule.Clear();
 
 			for (int i = 1; i <= WorkingModel.RepaymentCount; i++) {
-				var sp = new Scheduled(AddPeriods(i).Date);
+				var sp = new ScheduledItem(AddPeriods(i).Date);
 
 				if (i <= WorkingModel.InterestOnlyRepayments)
 					sp.Principal = 0;
@@ -52,6 +52,8 @@
 
 				WorkingModel.Schedule.Add(sp);
 			} // for
+
+			return WorkingModel.Schedule;
 		} // CreateSchedule
 
 		/// <summary>
@@ -75,7 +77,7 @@
 			DateTime prevTime = WorkingModel.LoanIssueTime;
 
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
-				Scheduled sp = WorkingModel.Schedule[i];
+				ScheduledItem sp = WorkingModel.Schedule[i];
 
 				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date > sp.Date))
 					cls.OpenPrincipal -= sp.Principal;
@@ -208,11 +210,11 @@
 				.Where(s => s.Date < today)
 				.All(s => s.IsClosedOn(today));
 
-			Scheduled currentPayment = WorkingModel.Schedule.FindByDate(today);
+			ScheduledItem currentPayment = WorkingModel.Schedule.FindByDate(today);
 
 			if (currentPayment == null) { // today is not a payment date.
 				if (allPreviousPaymentsAreClosed) { // Delta scenario.
-					Scheduled firstOpen = WorkingModel.Schedule
+					ScheduledItem firstOpen = WorkingModel.Schedule
 						.FirstOrDefault(s => (s.Date > today) && !s.ClosedDate.HasValue);
 
 					// ReSharper disable once PossibleInvalidOperationException
@@ -405,7 +407,7 @@
 			// Open principal is not changed.
 
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
-				Scheduled sp = WorkingModel.Schedule[i];
+				ScheduledItem sp = WorkingModel.Schedule[i];
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
