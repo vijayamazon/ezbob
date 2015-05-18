@@ -3279,11 +3279,13 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleMethodResponse")]
         ServiceClientProxy.EzServiceReference.DateTimeActionResult ExampleMethod(int userID, int customerID);
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult AddLoanLegals(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleMethodResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> ExampleMethodAsync(int userID, int customerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult AddLoanLegals(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanLegalsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
         
@@ -4581,12 +4583,16 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public ServiceClientProxy.EzServiceReference.DateTimeActionResult ExampleMethod(int userID, int customerID) {
             return base.Channel.ExampleMethod(userID, customerID);
-        public ServiceClientProxy.EzServiceReference.IntActionResult AddLoanLegals(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals) {
-            return base.Channel.AddLoanLegals(userID, customerID, loanLegals);
         }
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> ExampleMethodAsync(int userID, int customerID) {
             return base.Channel.ExampleMethodAsync(userID, customerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddLoanLegals(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals) {
+            return base.Channel.AddLoanLegals(userID, customerID, loanLegals);
+        }
+        
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanLegalsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals) {
             return base.Channel.AddLoanLegalsAsync(userID, customerID, loanLegals);
         }
