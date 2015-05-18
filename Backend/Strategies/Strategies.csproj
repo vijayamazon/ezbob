@@ -135,6 +135,7 @@
     <Compile Include="LoaderStrategy.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
+    <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />
     <Compile Include="NewLoan\AddPayPointPayment.cs" />
     <Compile Include="NewLoan\AddPacnetFundTransfer.cs" />

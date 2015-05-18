@@ -163,9 +163,13 @@
   </wsdl:message>
   <wsdl:message name="IEzService_ExampleMethod_InputMessage">
     <wsdl:part name="parameters" element="tns:ExampleMethod" />
+  <wsdl:message name="IEzService_AddLoanLegals_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddLoanLegals" />
   </wsdl:message>
   <wsdl:message name="IEzService_ExampleMethod_OutputMessage">
     <wsdl:part name="parameters" element="tns:ExampleMethodResponse" />
+  <wsdl:message name="IEzService_AddLoanLegals_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddLoanLegalsResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
@@ -1421,6 +1425,9 @@
     <wsdl:operation name="ExampleMethod">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/ExampleMethod" message="tns:IEzService_ExampleMethod_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/ExampleMethodResponse" message="tns:IEzService_ExampleMethod_OutputMessage" />
+    <wsdl:operation name="AddLoanLegals">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals" message="tns:IEzService_AddLoanLegals_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse" message="tns:IEzService_AddLoanLegals_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
@@ -2342,6 +2349,8 @@
     </wsdl:operation>
     <wsdl:operation name="ExampleMethod">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/ExampleMethod" style="document" />
+    <wsdl:operation name="AddLoanLegals">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

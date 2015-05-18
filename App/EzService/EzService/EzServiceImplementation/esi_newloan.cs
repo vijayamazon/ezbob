@@ -5,7 +5,7 @@
     using Ezbob.Backend.Strategies;
     using Ezbob.Backend.Strategies.NewLoan;
 
-    public partial class EzServiceImplementation : IEzServiceAdmin, IEzService, IEzServiceNewLoan, IDisposable {
+    public partial class EzServiceImplementation : IEzServiceNewLoan {
         public IntActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
             AddCashRequest stra;
             var amd = ExecuteSync(out stra, cashRequest.CustomerID, userID, cashRequest);
@@ -30,6 +30,15 @@
             return new IntActionResult {
                 MetaData = amd,
                 Value = stra.OfferID
+            };
+        }
+
+        public IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals) {
+            AddLoanLegals stra;
+            var amd = ExecuteSync(out stra, customerID, userID, customerID, loanLegals);
+            return new IntActionResult {
+                MetaData = amd,
+                Value = stra.LoanLegalsID
             };
         }
 

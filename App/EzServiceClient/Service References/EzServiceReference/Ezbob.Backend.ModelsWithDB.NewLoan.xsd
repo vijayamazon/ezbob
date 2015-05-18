@@ -72,4 +72,24 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_Offers" nillable="true" type="tns:NL_Offers" />
+  <xs:complexType name="NL_LoanLegals">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="COSMEAgreementAgreed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="CreditActAgreementAgreed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="EUAgreementAgreed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="GuarantyAgreementAgreed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="LoanLegalID" type="xs:int" />
+      <xs:element minOccurs="0" name="NotInBankruptcy" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="OfferID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PreContractAgreementAgreed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="PrivateCompanyLoanAgreementAgreed" nillable="true" type="xs:boolean" />
+      <xs:element minOccurs="0" name="RepaymentPeriod" type="xs:int" />
+      <xs:element minOccurs="0" name="SignatureTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="SignedName" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_LoanLegals" nillable="true" type="tns:NL_LoanLegals" />
 </xs:schema>

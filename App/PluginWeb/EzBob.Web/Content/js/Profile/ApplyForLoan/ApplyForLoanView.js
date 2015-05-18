@@ -85,7 +85,9 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 	ui: {
 		submit: '.submit',
 		agreement: '.agreement',
-		form: 'form'
+		form: 'form',
+		loanAmountInput: 'input#loanAmount',
+		repaymentPeriodInput: 'input#repaymentPeriod'
 	}, // ui
 
 	preAgreementTermsReadChange: function() {
@@ -107,6 +109,9 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.currentRepaymentPeriod = this.$('#loan-sliders .period-slider').slider('value');
 
 		var amount = this.$('#loan-sliders .amount-slider').slider('value');
+
+		this.ui.loanAmountInput.val(parseInt(amount, 10));
+		this.ui.repaymentPeriodInput.val(this.currentRepaymentPeriod);
 
 		this.model.set('neededCash', parseInt(amount, 10));
 		this.model.set('loanType', this.currentLoanTypeID);
@@ -166,7 +171,6 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		var value = this.model.get('neededCash');
 
 		this.ui.submit.attr('href', this.model.get('url'));
-
 		return this.recalculateThrottled({
 			value: value,
 			reloadSelectedOnly: reloadSelectedOnly

@@ -40,9 +40,6 @@
         public decimal PaidFee { get; set; }
 
         [DataMember]
-        public decimal Balance { get; set; }
-
-        [DataMember]
         public int LateDays { get; set; }
 
         [DataMember]
