@@ -13,22 +13,22 @@
     public class LoanOfferDetails
     {
 		[DataMember]
-		public decimal OfferedCreditLine { get; set; }
+		public decimal OfferedCreditLine { get; set; } // offered amount
 
 		[DataMember]
-		public int RepaymentPeriod { get; set; }
+		public int RepaymentPeriod { get; set; } // offered repayment period
 
 		[DataMember]
-		public decimal InterestRate { get; set; }
+		public decimal InterestRate { get; set; } // percent
 
 		[DataMember]
-		public string LoanType { get; set; }
+		public string LoanType { get; set; } // loan type
 
 		[DataMember]
-		public bool IsModified { get; set; }
+		public bool IsModified { get; set; } // not in use (only in some report)
 
 		[DataMember]
-		public DateTime Date { get; set; }
+        public DateTime Date { get; set; } // not in use (only in some report)
     }
 
 	[DataContract]
@@ -38,43 +38,43 @@
 		public LoanScheduleItemModel[] Schedule { get; set; }
 
 		[DataMember]
-		public double Apr { get; set; }
+		public double Apr { get; set; } //in use for personal
 
 		[DataMember]
-		public decimal Total { get; set; }
+		public decimal Total { get; set; } // total loan amount with interest and fees
 
 		[DataMember]
-		public decimal SetupFee { get; set; }
+		public decimal SetupFee { get; set; } // setup fee amount
 		
 		[DataMember]
-		public decimal TotalPrincipal { get; set; }
+		public decimal TotalPrincipal { get; set; } // total principal
 
 		[DataMember]
-		public decimal TotalInterest { get; set; }
+		public decimal TotalInterest { get; set; } // total interest + charges + setup fee
 
 		[DataMember]
-		public decimal RealInterestCost { get; set; }
+		public decimal RealInterestCost { get; set; } // total interest / Loan amount
 
 		[DataMember]
-		public long TimeStamp { get; set; }
+		public long TimeStamp { get; set; } //utcnow.ticks not in use
 
 		[DataMember]
-		public decimal LoanAmount { get; set; }
+		public decimal LoanAmount { get; set; } // loan amount 
 
 		[DataMember]
-		public AgreementModel Agreement { get; set; }
+		public AgreementModel Agreement { get; set; } // agreement model
 
 		[DataMember]
-		public LoanOfferDetails Details { get; set; }
+		public LoanOfferDetails Details { get; set; } // offer model
 
 		[DataMember]
-		public decimal? MaxInterestForSource { get; set; }
+		public decimal? MaxInterestForSource { get; set; } // max interest for warning in UW
 
 		[DataMember]
-		public string LoanSourceName { get; set; }
+		public string LoanSourceName { get; set; } // loan source for UW
 
 		[DataMember]
-		public string ManualAddressWarning { get; set; }
+		public string ManualAddressWarning { get; set; } // manual address for warning in UW
 
 	    private static readonly RepaymentCalculator _repaymentCalculator = new RepaymentCalculator();
 
