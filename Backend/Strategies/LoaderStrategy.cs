@@ -14,6 +14,10 @@
 			model.SomeTime = DateTime.UtcNow.AddSeconds(customerID);
 		} // ExampleMethod
 
+		public void ExampleOtherMethod() {
+			model.SomeTime = DateTime.UtcNow;
+		} // ExampleOtherMethod
+
 		private readonly LoanModel model;
 	} // class Loader
 

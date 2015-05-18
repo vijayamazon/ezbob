@@ -60,5 +60,15 @@
 				Value = loaderStrategy.Model.SomeTime,
 			};
 		} // ExampleMethod
+
+		public ActionMetaData ExampleOtherMethod() {
+			LoaderStrategy loaderStrategy;
+
+			Action<Loader> action = loader => loader.ExampleOtherMethod();
+
+			ActionMetaData amd = ExecuteSync(out loaderStrategy, null, null, action);
+
+			return amd;
+		} // ExampleOtherMethod
     }
 }

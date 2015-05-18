@@ -21,5 +21,8 @@
 		DateTimeActionResult ExampleMethod(int userID, int customerID);
         [OperationContract]
         IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
+
+		[OperationContract]
+		ActionMetaData ExampleOtherMethod();
     } // interface IEzServiceNewLoan
 } // namespace EzService
