@@ -148,7 +148,7 @@
 			}
 			catch (Exception e)
 			{
-				Log.Error("Adding paypal failed", e);
+				Log.Warn("Adding paypal failed", e);
 				return View("PPAttachError");
 			}
 		}

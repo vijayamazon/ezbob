@@ -45,7 +45,7 @@
 				{
 					if (ex != null)
 					{
-						WriteLoggerHelper.Write(ex.Message, WriteLogType.Error, null, ex);
+						WriteLoggerHelper.Write(ex.Message, WriteLogType.Warning, null, ex);
 						Debug.WriteLine(ex);
 					}
 

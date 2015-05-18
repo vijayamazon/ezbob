@@ -66,7 +66,7 @@
 			var result = response.ListOrdersResult;
 
 			if (result.IsSetOrders()) {
-				var ordersList = ParceOrdersInfo(result.Orders, request.SellerId, access, requestInfo.CustomerId);
+				var ordersList = ParseOrdersInfo(result.Orders, request.SellerId, access, requestInfo.CustomerId);
 				func(ordersList);
 			}
 
@@ -96,7 +96,7 @@
 			if (response != null && response.IsSetListOrdersByNextTokenResult()) {
 				var result = response.ListOrdersByNextTokenResult;
 				if (result.IsSetOrders()) {
-					var ordersList = ParceOrdersInfo(result.Orders, sellerId, access, requestInfo.CustomerId);
+					var ordersList = ParseOrdersInfo(result.Orders, sellerId, access, requestInfo.CustomerId);
 					func(ordersList);
 				}
 
@@ -106,23 +106,33 @@
 			}
 		}
 
-		private List<AmazonOrderItem> ParceOrdersInfo(List<Order> orders, string sellerId, ActionAccessType access, int customerId) {
-			if (orders.Any(x => x.IsSetPurchaseDate())) {
+		private List<AmazonOrderItem> ParseOrdersInfo(List<Order> orders, string sellerId, ActionAccessType access, int customerId) {
+            if (orders!=null && orders.Any(x => x.IsSetPurchaseDate())) {
 				var firstDate = orders.Min(x => x.PurchaseDate);
 				var lastDate = orders.Max(x => x.PurchaseDate);
 				WriteToLog(
 					string.Format(
-						"Amazon ParceOrdersInfo customerId {2}, sellerId {0} number of orders {1}, first order date {3} last order date {4}",
+						"Amazon ParseOrdersInfo customerId {2}, sellerId {0} number of orders {1}, first order date {3} last order date {4}",
 						sellerId, orders.Count, customerId, firstDate, lastDate));
 			} else {
-				WriteToLog(string.Format("Amazon ParceOrdersInfo customerId {1}, sellerId {0} number of orders 0", sellerId, customerId));
+				WriteToLog(string.Format("Amazon ParseOrdersInfo customerId {1}, sellerId {0} number of orders 0", sellerId, customerId));
 			}
-			var ordersList = new List<AmazonOrderItem>();
-			orders.AsParallel().ForAll(o => ordersList.Add(ParceOrder(o)));
+			
+            var ordersList = new List<AmazonOrderItem>();
+            if (orders != null && orders.Any()) {
+                foreach (var order in orders) {
+                    try {
+                        ordersList.Add(ParseOrder(order));
+                    } catch (Exception ex) {
+                        WriteToLog("failed to parse amazon order", WriteLogType.Warning, ex);
+                    }
+                }
+            }
+
 			return ordersList;
 		}
 
-		private AmazonOrderItem ParceOrder(Order order) {
+		private AmazonOrderItem ParseOrder(Order order) {
 			var orderInfo = new AmazonOrderItem();
 
 			if (order.IsSetAmazonOrderId()) {

@@ -106,7 +106,7 @@
             try {
                 var customer = this.context.Customer;
                 if (customer == null) {
-                    Log.ErrorFormat("Customer is not authorized in system");
+                    Log.Warn("Customer is not authorized in system");
                     return Json(new { error = "Customer is not authorized in system" }, JsonRequestBehavior.AllowGet);
                 }
 
@@ -116,21 +116,29 @@
                 var isUpdate = TempData["isUpdate"] is bool && (bool)TempData["isUpdate"];
 
                 if (string.IsNullOrEmpty(sid)) {
-                    Log.Error("Sid is empty");
+                    Log.Warn("Sid is empty");
                     return Json(new { error = "Username is empty" }, JsonRequestBehavior.AllowGet);
                 }
                 if (string.IsNullOrEmpty(username)) {
-                    Log.Error("Username is empty");
+                    Log.Warn("Username is empty");
                     return Json(new { error = "Username is empty" }, JsonRequestBehavior.AllowGet);
                 }
+                bool isValid = false;
+                eBaySecurityInfo eBaySecurityInfo = null;
+                try {
+                    Log.InfoFormat("Saving sid {0} for username {1}", sid, username);
+                    var token = this.eBayServiceHelper.FetchToken(sid);
+                    Log.InfoFormat("Token {0} was generated.", token);
 
-                Log.InfoFormat("Saving sid {0} for username {1}", sid, username);
-                var token = this.eBayServiceHelper.FetchToken(sid);
-                Log.InfoFormat("Token {0} was generated.", token);
+                    eBaySecurityInfo = new eBaySecurityInfo {
+                        Token = token
+                    };
 
-                var eBaySecurityInfo = new eBaySecurityInfo { Token = token };
-                
-                bool isValid = this.eBayServiceHelper.ValidateAccount(eBaySecurityInfo);
+                    isValid = this.eBayServiceHelper.ValidateAccount(eBaySecurityInfo);
+                } catch (Exception ex) {
+                    Log.Warn("Failed fetching token", ex);
+                }
+
                 if (!isValid) {
                     Log.WarnFormat("eBay account has not been activated yet");
                     return Json(new { error = "Your account has not been activated yet. Accounts are not accessible until an actual debit or credit has first been posted to the account, even though you may have already filled out our account creation form." }, JsonRequestBehavior.AllowGet);

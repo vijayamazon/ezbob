@@ -100,8 +100,8 @@ namespace EzBob.PayPalServiceLib
 
 			if ( per.isSuccess.ToUpper() == "FAILURE" )
 			{
-				_log.Error( "requestPermissions failed" );
-				_log.Error( per.LastError.ErrorDetails );
+				_log.Warn( "requestPermissions failed" );
+				_log.Warn( per.LastError.ErrorDetails );
 				throw new PayPalException( per.LastError.ErrorDetails );
 			}
 
