@@ -1,5 +1,4 @@
 ﻿namespace ServiceClientProxy {
-    using System;
     using System.Collections.Generic;
 	using EzServiceAccessor;
 	using EzServiceReference;
@@ -74,10 +73,6 @@
 		public CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber) {
 			return m_oServiceClient.Instance.GetCompanyDataForCreditBureau(underwriterId, refNumber).Result;
 		}
-
-	    public void ParseCreditSafeLtd(int customerID, int userID, long serviceLogID) {
-	        m_oServiceClient.Instance.ParseCreditSafeLtd(customerID, userID, serviceLogID);
-	    }
 
         public WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package)
         {
