@@ -16,5 +16,8 @@
 
         [OperationContract]
         NL_Offers GetLastOffer(int userID, int customerID);
+
+		[OperationContract]
+		DateTimeActionResult ExampleMethod(int userID, int customerID);
     } // interface IEzServiceNewLoan
 } // namespace EzService

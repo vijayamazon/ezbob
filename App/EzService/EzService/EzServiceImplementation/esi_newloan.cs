@@ -2,6 +2,7 @@
     using System;
     using System.Collections.Generic;
     using Ezbob.Backend.ModelsWithDB.NewLoan;
+    using Ezbob.Backend.Strategies;
     using Ezbob.Backend.Strategies.NewLoan;
 
     public partial class EzServiceImplementation : IEzServiceAdmin, IEzService, IEzServiceNewLoan, IDisposable {
@@ -37,5 +38,18 @@
             var amd = ExecuteSync(out stra, customerID, userID, customerID);
             return stra.Offer;
         }
+
+		public DateTimeActionResult ExampleMethod(int userID, int customerID) {
+			LoaderStrategy loaderStrategy;
+
+			Action<Loader> action = loader => loader.ExampleMethod(customerID);
+
+			ActionMetaData amd = ExecuteSync(out loaderStrategy, customerID, userID, action);
+
+			return new DateTimeActionResult {
+				MetaData = amd,
+				Value = loaderStrategy.Model.SomeTime,
+			};
+		} // ExampleMethod
     }
 }
