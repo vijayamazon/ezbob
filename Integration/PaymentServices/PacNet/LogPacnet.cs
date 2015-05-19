@@ -19,7 +19,7 @@ namespace PaymentServices.PacNet
 
         public PacnetReturnData SendMoney(int userId, decimal amount, string bankNumber, string accountNumber, string accountName, string fileName = null, string currencyCode = "GBP", string description = null)
         {
-            var pacnetSendMoney = string.Format("Pacnet Send Money. Amount = {0}, bankNumber = {1}", amount, bankNumber);
+            var pacnetSendMoney = string.Format("Pacnet Send Money. Amount = {0}, bankNumber = {1}, file name {2} description {3}", amount, bankNumber, fileName, description);
             log.InfoFormat("SendMoney: amount={0}, bankNumber={1}, accountNumber = {2}, accountName = {3}, currencyCode={4}, description={5}", amount, bankNumber, accountNumber, accountName, currencyCode, description);
             try
             {
@@ -40,7 +40,7 @@ namespace PaymentServices.PacNet
             try
             {
                 var result = _t.CheckStatus(userId, trackingNumber);
-                Log(userId, "Pacnet Check Status");
+                Log(userId, string.Format("Pacnet Check Status of track number {0} result {1} {2}", trackingNumber, result.Status, result.Error));
                 return result;
             }
             catch (Exception e)
@@ -56,12 +56,12 @@ namespace PaymentServices.PacNet
             {
                 log.InfoFormat("Closing file {0}", fileName);
                 var result = _t.CloseFile(userId, fileName);
-                Log(userId, "Pacnet Close File");
+                Log(userId, string.Format("Pacnet Close File tracking {0} status {1} {2}", fileName, result.TrackingNumber, result.Status, result.Error));
                 return result;
             }
             catch (Exception e)
             {
-                Log(userId, "Pacnet Close File", false, e.ToString());
+                Log(userId, string.Format("Pacnet Close File file name {0}", fileName), false, e.ToString());
                 throw;
             }
         }
