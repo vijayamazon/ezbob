@@ -44,9 +44,8 @@ EzBob.Underwriter.AffordabilityView = Backbone.Marionette.ItemView.extend({
 
         $($('#affordabilityTable tr')[2]).addClass('green-row');
 	    var that = this;
-        
-	    if (this.model.customerId) {
-		    _.each(this.model.attributes, function(aford, i) {
+        if (this.model.customerId) {
+            _.each(this.model.get('Affordabilities'), function(aford, i) {
 				if (_.isFunction(aford)) {
 				    return;
 			    }
