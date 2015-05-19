@@ -173,6 +173,12 @@
   <wsdl:message name="IEzService_AddLoanLegals_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddLoanLegalsResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_ExampleOtherMethod_InputMessage">
+    <wsdl:part name="parameters" element="tns:ExampleOtherMethod" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_ExampleOtherMethod_OutputMessage">
+    <wsdl:part name="parameters" element="tns:ExampleOtherMethodResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
   </wsdl:message>
@@ -1432,6 +1438,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals" message="tns:IEzService_AddLoanLegals_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse" message="tns:IEzService_AddLoanLegals_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="ExampleOtherMethod">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethod" message="tns:IEzService_ExampleOtherMethod_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethodResponse" message="tns:IEzService_ExampleOtherMethod_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse" message="tns:IEzService_UpdateLinkedHmrcPassword_OutputMessage" />
@@ -2361,6 +2371,15 @@
     </wsdl:operation>
     <wsdl:operation name="AddLoanLegals">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ExampleOtherMethod">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethod" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

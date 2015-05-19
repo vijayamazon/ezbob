@@ -626,8 +626,9 @@
                     cr.LoanType = this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID);
                     cr.ManualSetupFeePercent = this.autoDecisionResponse.SetupFee;
                     
-                    AddNewDecisionOffer(now, cr);
                 } // if
+
+                AddNewDecisionOffer(now, cr, loanTypeIdToUse);
             } // if
 
             customer.LastStartedMainStrategyEndTime = now;
@@ -654,7 +655,7 @@
 
         }// UpdateCustomerAndCashRequest
 
-        private void AddNewDecisionOffer(DateTime now, CashRequest cr) {
+        private void AddNewDecisionOffer(DateTime now, CashRequest cr, LoanType loanTypeIdToUse) {
             AddDecision addDecisionStra = new AddDecision(new NL_Decisions {
                 DecisionNameID = this.autoDecisionResponse.Decision.HasValue ? (int)this.autoDecisionResponse.Decision.Value : (int)DecisionActions.Waiting,
                 DecisionTime = now,
@@ -680,8 +681,8 @@
                 EmailSendingBanned = cr.EmailSendingBanned,
                 InterestOnlyRepaymentCount = 0, //todo
                 IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed == 1,
-                LoanSourceID = this.autoDecisionResponse.LoanSourceID,
-                LoanTypeID = this.autoDecisionResponse.LoanTypeID,
+                LoanSourceID = this.autoDecisionResponse.LoanSourceID > 0 ? this.autoDecisionResponse.LoanSourceID : this.loanSourceRepository.GetDefault().ID,
+                LoanTypeID = loanTypeIdToUse.Id,
                 MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
                 RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
                 RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, //todo

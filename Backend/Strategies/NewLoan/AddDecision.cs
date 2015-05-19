@@ -38,7 +38,7 @@
 
                 DB.ExecuteNonQuery("NL_DecisionRejectReasonsSave",
                     CommandSpecies.StoredProcedure,
-                    DB.CreateTableParameter<IEnumerable<NL_DecisionRejectReasons>>("Tbl", this.decisionRejectReasons));
+                    DB.CreateTableParameter<NL_DecisionRejectReasons>("Tbl", this.decisionRejectReasons));
             }
         }//Execute
 

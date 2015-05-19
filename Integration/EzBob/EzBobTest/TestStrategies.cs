@@ -1,5 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
+	using System.Collections.Generic;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
@@ -7,6 +8,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies;
@@ -21,6 +23,7 @@
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
@@ -715,5 +718,33 @@
             CaisGenerate cg = new CaisGenerate(1);
             cg.Execute();
         }
-	}
+
+        [Test]
+        public void TestAddDecision() {
+            AddDecision addDecision = new AddDecision(new NL_Decisions {
+                UserID = 347,
+                DecisionTime = DateTime.UtcNow,
+                Notes = "Reject",
+                DecisionNameID = 2
+            }, 22785, new List<NL_DecisionRejectReasons> {
+                new NL_DecisionRejectReasons {RejectReasonID = 1},
+                new NL_DecisionRejectReasons {RejectReasonID = 3}
+            });
+            addDecision.Execute();
+        }
+
+        [Test]
+        public void GetLastOffer() {
+            GetLastOffer get = new GetLastOffer(2362);
+            get.Execute();
+            Assert.Greater(get.Offer.OfferID, 0);
+        }
+
+        [Test]
+        public void AddLoanLegals() {
+            AddLoanLegals add = new AddLoanLegals(2362, new NL_LoanLegals(){SignatureTime = DateTime.UtcNow});
+            add.Execute();
+            Assert.Greater(add.LoanLegalsID, 0);
+        }
+    }
 }

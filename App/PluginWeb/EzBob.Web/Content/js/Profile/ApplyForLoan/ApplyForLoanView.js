@@ -110,9 +110,6 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		var amount = this.$('#loan-sliders .amount-slider').slider('value');
 
-		this.ui.loanAmountInput.val(parseInt(amount, 10));
-		this.ui.repaymentPeriodInput.val(this.currentRepaymentPeriod);
-
 		this.model.set('neededCash', parseInt(amount, 10));
 		this.model.set('loanType', this.currentLoanTypeID);
 		this.model.set('repaymentPeriod', this.currentRepaymentPeriod);
@@ -170,6 +167,9 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 
 		var value = this.model.get('neededCash');
 
+		this.ui.loanAmountInput.val(value);
+		this.ui.repaymentPeriodInput.val(this.currentRepaymentPeriod);
+
 		this.ui.submit.attr('href', this.model.get('url'));
 		return this.recalculateThrottled({
 			value: value,
@@ -209,8 +209,8 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 						step: 100
 					},
 					period: {
-						min: 3,
-						max: 12,
+					    min: this.isLoanSourceCOSME ? 15 : 3,
+						max: this.isLoanSourceCOSME ? 15 : 12,
 						start: this.model.get('repaymentPeriod'),
 						step: 1,
 						hide: this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU

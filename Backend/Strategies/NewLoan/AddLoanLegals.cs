@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
     using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Backend.Strategies.Exceptions;
     using Ezbob.Database;
 
     public class AddLoanLegals : AStrategy {
@@ -25,7 +24,7 @@
 
 
             this.loanLegals.OfferID = lastOffer.OfferID;
-            LoanLegalsID = DB.ExecuteScalar<int>("NL_LoanLegalSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanLegals>("Tbl", this.loanLegals)); 
+            LoanLegalsID = DB.ExecuteScalar<int>("NL_LoanLegalsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanLegals>("Tbl", this.loanLegals)); 
         }//Execute
 
         public int LoanLegalsID { get; set; }

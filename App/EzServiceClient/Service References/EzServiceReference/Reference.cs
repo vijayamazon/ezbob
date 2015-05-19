@@ -3289,6 +3289,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanLegalsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethodResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData ExampleOtherMethod();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethodResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExampleOtherMethodAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
         
@@ -4595,6 +4601,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanLegalsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals) {
             return base.Channel.AddLoanLegalsAsync(userID, customerID, loanLegals);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData ExampleOtherMethod() {
+            return base.Channel.ExampleOtherMethod();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExampleOtherMethodAsync() {
+            return base.Channel.ExampleOtherMethodAsync();
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {

@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System;
     using System.Runtime.Serialization;
     using Ezbob.Utils;
     using Ezbob.Utils.dbutils;

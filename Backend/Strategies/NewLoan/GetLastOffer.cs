@@ -10,7 +10,9 @@
         public override string Name { get { return "GetLastOffer"; } }
 
         public override void Execute() {
-            Offer = DB.FillFirst<NL_Offers>("NL_OffersGetLast", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.customerID));
+            var sr = DB.GetFirst("NL_OffersGetLast", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.customerID));
+            Offer = sr.Fill<NL_Offers>();
+            Offer.OfferID = sr["OfferID"];
         }//Execute
 
         public NL_Offers Offer { get; private set; }
