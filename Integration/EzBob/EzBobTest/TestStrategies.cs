@@ -24,6 +24,7 @@ namespace EzBobTest {
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.OfferCalculation;
+	using Ezbob.Backend.Strategies.Reports;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
@@ -433,10 +434,10 @@ namespace EzBobTest {
 			//foreach (var customerID in customers)
 			//	new CalculateMedal(customerID, calculationTime, false, true).Execute();
 
-			//this.m_oDB.ForEachRowSafe((sr) => {
-			//	int customerId = sr["Id"];
-			//	new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
-			//}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
+			this.m_oDB.ForEachRowSafe((sr) => {
+				int customerId = sr["Id"];
+				new CalculateMedal(customerId, DateTime.UtcNow, false, true).Execute();
+			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 		}
 
 		[Test]
@@ -743,6 +744,11 @@ namespace EzBobTest {
 	    public void TestUserDisable() {
 	        UserDisable ud = new UserDisable(1, "a@b.com", true);
 	        ud.Execute();
+	    }
+
+	    [Test]
+	    public void TestAlibabaReports() {
+			new Alibaba(null, false).Execute();
 	    }
 	}
 }
