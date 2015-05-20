@@ -141,6 +141,7 @@
                         _log.ErrorFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
                     }
 
+					// continue to log paypoint and pacnet transactions also for NL
                     _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
                                        String.Format("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id,
                                                      code, message));
@@ -148,6 +149,7 @@
                     _context.Customer.PayPointErrorsCount++;
 
                     try {
+						// sending mail "Mandrill - Debit card authorization problem"
                         m_oServiceClient.Instance.GetCashFailed(_context.User.Id);
                     } catch (Exception e) {
                         _log.Error("Failed to send 'get cash failed' email.", e);
@@ -162,6 +164,7 @@
                 PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate());
                 if (!payPointFacade.CheckHash(hash, Request.Url)) {
                     _log.ErrorFormat("Paypoint callback is not authenticated for user {0}", _context.Customer.Id);
+					// continue to log paypoint transaction also for NL
                     _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
                                        String.Format("Paypoint callback is not authenticated for user {0}",
                                                      _context.Customer.Id));
@@ -169,10 +172,9 @@
                     throw new Exception("check hash failed");
                 }
 
+				ValidateCustomerName(customer, cus);
 
-
-                ValidateCustomerName(customer, cus);
-
+				// continue to log paypoint transaction also for NL
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
 
                 var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
