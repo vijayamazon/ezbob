@@ -10,6 +10,7 @@
 	using System.Globalization;
 
 	using Ezbob.Logger;
+	using Ezbob.Utils.dbutils;
 	using Pool;
 	using Utils;
 
@@ -76,9 +77,25 @@
 			if (TypeUtils.IsSimpleType(oColumnInfo))
 				AddColumn(tbl, oColumnInfo);
 			else {
-				if (oCustomTypeOrder == null)
-					PropertyTraverser.Traverse(oColumnInfo, (i, oPropertyInfo) => AddColumn(tbl, oPropertyInfo.PropertyType));
-				else {
+				if (oCustomTypeOrder == null) {
+					PropertyTraverser.Traverse(oColumnInfo, (i, oPropertyInfo) => {
+						object[] pkAttrList = oPropertyInfo.GetCustomAttributes(typeof(PKAttribute), false);
+
+						if (pkAttrList.Length < 1) {
+							AddColumn(tbl, oPropertyInfo.PropertyType);
+							return;
+						} // if no PK configured
+
+						PKAttribute pk = (PKAttribute)pkAttrList[0];
+
+						// Primary key which is identity is not inserted into output column list
+						// because such field usage is intended for saving a new item but identity
+						// column is filled by DB.
+
+						if (!pk.WithIdentity)
+							AddColumn(tbl, oPropertyInfo.PropertyType);
+					});
+				} else {
 					foreach (Type t in oCustomTypeOrder)
 						AddColumn(tbl, t);
 				} // if

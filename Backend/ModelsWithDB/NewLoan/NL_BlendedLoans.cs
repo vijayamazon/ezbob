@@ -1,12 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
     using System.Runtime.Serialization;
-    using Ezbob.Utils;
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
     public class NL_BlendedLoans {
-        [PK]
-        [NonTraversable]
+        [PK(true)]
         [DataMember]
         public int BlendedLoanID { get; set; }
 

@@ -1,13 +1,11 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
     using System;
     using System.Runtime.Serialization;
-    using Ezbob.Utils;
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
     public class NL_Offers {
-        [PK]
-        [NonTraversable]
+		[PK(true)]
         public int OfferID { get; set; }
         
         [FK("NL_Decisions", "DecisionID")]
