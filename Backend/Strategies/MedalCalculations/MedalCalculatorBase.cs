@@ -356,13 +356,13 @@
 		private void CalculateBusinessSeniorityGrade() {
 			var dateOnlyCalculationTime = Results.CalculationTime.Date;
 			if (!Results.BusinessSeniority.HasValue
-				|| Results.BusinessSeniority.Value.AddYears(1) > dateOnlyCalculationTime)
+				|| Results.BusinessSeniority.Value.Date.AddYears(1) > dateOnlyCalculationTime)
 				Results.BusinessSeniorityGrade = 0;
-			else if (Results.BusinessSeniority.Value.AddYears(3) > dateOnlyCalculationTime)
+            else if (Results.BusinessSeniority.Value.Date.AddYears(3) > dateOnlyCalculationTime)
 				Results.BusinessSeniorityGrade = 1;
-			else if (Results.BusinessSeniority.Value.AddYears(5) > dateOnlyCalculationTime)
+            else if (Results.BusinessSeniority.Value.Date.AddYears(5) > dateOnlyCalculationTime)
 				Results.BusinessSeniorityGrade = 2;
-			else if (Results.BusinessSeniority.Value.AddYears(10) > dateOnlyCalculationTime)
+            else if (Results.BusinessSeniority.Value.Date.AddYears(10) > dateOnlyCalculationTime)
 				Results.BusinessSeniorityGrade = 3;
 			else
 				Results.BusinessSeniorityGrade = 4;
