@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models;
 
 	public class LegacyLoanCalculator : ALoanCalculator {
@@ -24,12 +25,8 @@
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		) {
-			if (periodEndDate == null) {
-				throw new ArgumentNullException(
-					"periodEndDate",
-					"Legacy daily interest rate calculator requires period end date."
-				);
-			} // if
+			if (periodEndDate == null)
+				throw new NoPeriodEndDateException();
 
 			DateTime d = periodEndDate.Value.AddMonths(-1);
 

@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Text;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Utils.Lingvo;
@@ -15,6 +16,7 @@
 			this.interestOnlyRepayments = 0;
 			this.monthlyInterestRate = 0.06m;
 
+			OpenPrincipalHistory = new List<OpenPrincipal>();
 			DiscountPlan = new List<decimal>();
 			Schedule = new List<ScheduledItem>();
 			Repayments = new List<Repayment>();
@@ -24,7 +26,40 @@
 
 		public void ValidateSchedule() {
 			if (Schedule.Count < 1)
-				throw new Exception("No loan schedule found.");
+				throw new NoScheduleException();
+
+			ScheduledItem lastSch = null;
+
+			foreach (ScheduledItem sch in Schedule) {
+				if (lastSch != null)
+					if (lastSch.Date >= sch.Date)
+						throw new WrongInstallmentOrderException(lastSch, sch);
+
+				lastSch = sch;
+			} // for each
+
+			var lic = new OpenPrincipal { Date = LoanIssueTime, Amount = LoanAmount, };
+
+			if (OpenPrincipalHistory.Count < 1)
+				OpenPrincipalHistory.Add(lic);
+
+			OpenPrincipal lastOp = OpenPrincipalHistory.First();
+
+			if ((lastOp.Date != lic.Date) || (lastOp.Amount != lic.Amount))
+				throw new WrongFirstOpenPrincipalException(lastOp, lic);
+
+			lastOp = null;
+
+			foreach (OpenPrincipal op in OpenPrincipalHistory) {
+				if (op.Date > LastScheduledDate)
+					throw new TooLateOpenPrincipalException(op, LastScheduledDate);
+
+				if (lastOp != null)
+					if (lastOp.Date >= op.Date)
+						throw new WrongOpenPrincipalOrderException(lastOp, op);
+
+				lastOp = op;
+			} // for each item
 		} // ValidateSchedule
 
 		public void SetDiscountPlan(params decimal[] deltas) {
@@ -48,6 +83,7 @@
 
 			lcm.DiscountPlan.AddRange(DiscountPlan);
 
+			lcm.OpenPrincipalHistory.AddRange(OpenPrincipalHistory.Select(v => v.DeepClone()));
 			lcm.Schedule.AddRange(Schedule.Select(v => v.DeepClone()));
 			lcm.Repayments.AddRange(Repayments.Select(v => v.DeepClone()));
 			lcm.Fees.AddRange(Fees.Select(v => v.DeepClone()));
@@ -87,6 +123,11 @@
 			} else
 				os.Append("\tNo discount plan.\n");
 
+			if (OpenPrincipalHistory.Count > 0)
+				os.AppendFormat("\tOpen principal:\n\t\t{0}.\n", string.Join("\n\t\t", OpenPrincipalHistory));
+			else
+				os.Append("\tNo open principal history.\n");
+
 			if (Schedule.Count > 0)
 				os.AppendFormat("\tSchedule:\n\t\t{0}.\n", string.Join("\n\t\t", Schedule));
 			else
@@ -111,18 +152,15 @@
 
 		public DateTime LoanIssueTime { get; set; }
 
-		public DateTime LastScheduledDate {
-			get {
-				ValidateSchedule();
-				return Schedule.Last().Date;
-			} // get
-		} // LastScheduledDate
+		public DateTime LoanIssueDate { get { return LoanIssueTime.Date; } }
+
+		public DateTime LastScheduledDate { get { return Schedule.Last().Date; } }
 
 		public int RepaymentCount {
 			get { return this.repaymentCount; }
 			set {
 				if (value < 1)
-					throw new ArgumentOutOfRangeException("Repayment count is negative: " + value + ".", (Exception)null);
+					throw new NegativeRepaymentCountException(value);
 
 				this.repaymentCount = value;
 			} // set
@@ -131,11 +169,8 @@
 		public int InterestOnlyRepayments {
 			get { return this.interestOnlyRepayments; }
 			set {
-				if (value < 0) {
-					throw new ArgumentOutOfRangeException(
-						"Interest only months is negative: " + value + ".", (Exception)null
-					);
-				} // if
+				if (value < 0)
+					throw new NegativeInterestOnlyRepaymentCountException(value);
 
 				this.interestOnlyRepayments = value;
 			} // set
@@ -144,8 +179,8 @@
 		public decimal LoanAmount {
 			get { return this.loanAmount; }
 			set {
-				if (value < 0)
-					throw new ArgumentOutOfRangeException("Loan amount is negative: " + value + ".", (Exception)null);
+				if (value <= 0)
+					throw new NegativeLoanAmountException(value);
 
 				this.loanAmount = value;
 			} // set
@@ -154,12 +189,8 @@
 		public decimal MonthlyInterestRate {
 			get { return this.monthlyInterestRate; }
 			set {
-				if (value < 0) {
-					throw new ArgumentOutOfRangeException(
-						"Monthly interest rate is out of range: " + value + ".",
-						(Exception)null
-					);
-				} // if
+				if (value < 0)
+					throw new NegativeMonthlyInterestRateException(value);
 
 				this.monthlyInterestRate = value;
 			} // set
@@ -209,6 +240,7 @@
 
 		public List<decimal> DiscountPlan { get; private set; }
 
+		public List<OpenPrincipal> OpenPrincipalHistory { get; private set; }
 		public List<ScheduledItem> Schedule { get; private set; }
 		public List<Repayment> Repayments { get; private set; }
 		public List<Fee> Fees { get; private set; }
