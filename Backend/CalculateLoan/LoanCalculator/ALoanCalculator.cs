@@ -12,7 +12,7 @@
 	// TODO: missing functionality: calculate next scheduled payment state on specific date (e.g. in three days).
 	// TODO: missing functionality: replace art of existing schedule with new schedule.
 
-	public abstract class ALoanCalculator {
+	public abstract partial class ALoanCalculator {
 		public abstract string Name { get; }
 
 		/// <summary>
