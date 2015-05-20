@@ -7,6 +7,21 @@
 	using EZBob.DatabaseLib.Model.Database;
 
     public class SalesForceModel {
+        public SalesForceModel() {
+            PersonalModel = new PersonalModel();
+            MarketPlaces = new List<SalesForceMarketPlaceModel>();
+            CompanyFiles = new List<CompanyFile>();
+            Phones = new List<CrmPhoneNumber>();
+            Fraud = new FraudDetectionLogModel() {
+                FraudDetectionLogRows = new List<FraudDetectionLogRowModel>()
+            };
+
+            Messages = new List<MessagesModel>();
+            OldCrm = new List<CustomerRelationsModel>();
+            Loans = new List<LoanHistoryModel>();
+            Decisions = new List<DecisionHistoryModel>();
+        }
+
 		public PersonalModel PersonalModel { get; set; }
 		
 		public List<SalesForceMarketPlaceModel> MarketPlaces { get; set; }

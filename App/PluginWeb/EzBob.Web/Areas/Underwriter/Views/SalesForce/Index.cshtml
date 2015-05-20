@@ -1,4 +1,5 @@
-﻿@model EzBob.Web.Areas.Underwriter.Models.SalesForceModel
+﻿@using System.Linq
+@model EzBob.Web.Areas.Underwriter.Models.SalesForceModel
 
 @{
     ViewBag.Title = "SalesForce";
@@ -8,52 +9,56 @@
 @if (Model == null) {
     <div>customer not found</div>
 } else {
-    <div role="tabpanel">
-        <!-- Nav tabs -->
-        <ul class="nav nav-tabs nav-pills" role="tablist" id="salesforce_tabs">
-            <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i> Profile</a></li>
-            <li role="presentation"><a href="#datasources" aria-controls="datasources" role="tab" data-toggle="tab"><i class="fa fa-shopping-cart"></i> Data Sources</a></li>
-            <li role="presentation"><a href="#loans" aria-controls="loans" role="tab" data-toggle="tab"><i class="fa fa-history" title="Loan history"></i> Loans</a></li>
-            <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-file-text-o"></i> Messages</a></li>
-            <li role="presentation"><a href="#fraud" aria-controls="fraud" role="tab" data-toggle="tab"><i class="fa fa-exclamation-triangle"></i> Fraud</a></li>
-            <li role="presentation"><a href="#crm" aria-controls="crm" role="tab" data-toggle="tab"><i class="fa fa-users"></i> Old CRM</a></li>
-        </ul>
+    try {
+        <div role="tabpanel">
+            <!-- Nav tabs -->
+            <ul class="nav nav-tabs nav-pills" role="tablist" id="salesforce_tabs">
+                <li role="presentation" class="active"><a href="#profile" aria-controls="profile" role="tab" data-toggle="tab"><i class="fa fa-user"></i> Profile</a></li>
+                <li role="presentation"><a href="#datasources" aria-controls="datasources" role="tab" data-toggle="tab"><i class="fa fa-shopping-cart"></i> Data Sources</a></li>
+                <li role="presentation"><a href="#loans" aria-controls="loans" role="tab" data-toggle="tab"><i class="fa fa-history" title="Loan history"></i> Loans</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab"><i class="fa fa-file-text-o"></i> Messages</a></li>
+                <li role="presentation"><a href="#fraud" aria-controls="fraud" role="tab" data-toggle="tab"><i class="fa fa-exclamation-triangle"></i> Fraud</a></li>
+                <li role="presentation"><a href="#crm" aria-controls="crm" role="tab" data-toggle="tab"><i class="fa fa-users"></i> Old CRM</a></li>
+            </ul>
 
-        <!-- Tab panes -->
-        <div class="tab-content">
-            <div role="tabpanel" class="tab-pane  fade in active" id="profile">
-                @ProfileDetails()
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="datasources">
-                @DataSources()
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="loans">
-                @Loans()
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="messages">
-                @Messages()
-            </div>
-            <div role="tabpanel" class="tab-pane fade" id="fraud">
-                @Fraud()
-            </div>
-            <div id="crm" class="tab-pane fade">
-                @Crm()
+            <!-- Tab panes -->
+            <div class="tab-content">
+                <div role="tabpanel" class="tab-pane  fade in active" id="profile">
+                    @ProfileDetails(Model)
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="datasources">
+                    @DataSources(Model)
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="loans">
+                    @Loans(Model)
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="messages">
+                    @Messages(Model)
+                </div>
+                <div role="tabpanel" class="tab-pane fade" id="fraud">
+                    @Fraud(Model)
+                </div>
+                <div id="crm" class="tab-pane fade">
+                    @Crm(Model)
+                </div>
             </div>
         </div>
-    </div>
+    } catch {
+        <div>Failed loading the customer details, please contact support</div>
+    }
 }
 
-@helper ProfileDetails() {
+@helper ProfileDetails(EzBob.Web.Areas.Underwriter.Models.SalesForceModel m) {
     <div>
-        @Description("ID", Model.PersonalModel.ID.ToString())
-        @Description("Email", Model.PersonalModel.Email)
-        @Description("Name", Model.PersonalModel.Name)
-        @Description("FraudStatus", Model.PersonalModel.FraudStatus)
+        @Description("ID", m.PersonalModel.ID.ToString())
+        @Description("Email", m.PersonalModel.Email)
+        @Description("Name", m.PersonalModel.Name)
+        @Description("FraudStatus", m.PersonalModel.FraudStatus)
         
         <dl class="dl-horizontal">
             <dt>CreditStatus</dt>
-            <dd>@Model.PersonalModel.CreditStatus 
-                @if (Model.PersonalModel.IsPendingDecision) {
+            <dd>@m.PersonalModel.CreditStatus 
+                @if (m.PersonalModel.IsPendingDecision) {
                     <button class="btn btn-primary btn-return-waiting-for-decision" 
                             data-toggle="tooltip" data-placement="top" title="return to waiting for decision">
                         <i class="fa fa-rotate-left"></i>
@@ -62,23 +67,23 @@
             </dd>
         </dl>
         
-        @Description("Experian score", Model.PersonalModel.ExperianScore.ToString())
-        @Description("Aml Score", Model.PersonalModel.AmlScore.ToString())
-        @Description("Aml Description", Model.PersonalModel.AmlDescription)
+        @Description("Experian score", m.PersonalModel.ExperianScore.ToString())
+        @Description("Aml Score", m.PersonalModel.AmlScore.ToString())
+        @Description("Aml Description", m.PersonalModel.AmlDescription)
 
-        @if (Model.Phones.Any()) {
+        @if (m.Phones.Any()) {
             <dl class="dl-horizontal">
                 <dt>Phones</dt>
                 <dd>
                     <ul class="list-group col-sm-4 col-md-3">
-                        @foreach (var phone in Model.Phones) {
+                        @foreach (var phone in m.Phones) {
                             string verified = "";
                             string verifiedTooltip = "";
                             if (phone.IsVerified) {
                                 verified = "list-group-item-success";
                                 verifiedTooltip = "Verified phone";
                             }
-                            <li class="list-group-item no-border @verified" 
+                            <li class="list-group-item no-border @verified"
                                 data-toggle="tooltip" data-placement="top" title="@verifiedTooltip">
                                 <span class="badge">@phone.Type</span>@phone.Number
                             </li>
@@ -90,8 +95,8 @@
     </div>
 }
 
-@helper DataSources() {
-    if (Model.MarketPlaces.Any()) {
+@helper DataSources(EzBob.Web.Areas.Underwriter.Models.SalesForceModel m) {
+    if (m.MarketPlaces.Any()) {
         <h4>Data sources</h4>
         <table class="table table-hover table-condensed">
             <thead>
@@ -103,7 +108,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var mp in Model.MarketPlaces) {
+                @foreach (var mp in m.MarketPlaces) {
                     string error = string.IsNullOrEmpty(mp.UpdateError) ? "" : "danger";
                     <tr data-toggle="tooltip" data-placement="top" title="@mp.UpdateError" class="@error">
                         <td>@mp.MpName</td>
@@ -115,7 +120,7 @@
             </tbody>
         </table>
 
-        if (Model.CompanyFiles.Any()) {
+        if (m.CompanyFiles.Any()) {
             <h4>Financial documents</h4>
             <table class="table table-hover table-condensed">
                 <thead>
@@ -125,7 +130,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var cf in Model.CompanyFiles) {
+                    @foreach (var cf in m.CompanyFiles) {
                         <tr>
                             <td>@cf.FileName</td>
                             <td>@cf.Uploaded.ToString("dd/MM/yyyy")</td>
@@ -139,8 +144,8 @@
     }
 }
 
-@helper Loans() {
-    if (Model.Loans.Any()) {
+@helper Loans(EzBob.Web.Areas.Underwriter.Models.SalesForceModel m) {
+    if (m.Loans.Any()) {
         <h4>Loans</h4>
         <table class="table table-hover table-condensed">
             <thead>
@@ -154,7 +159,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var loan in Model.Loans) {
+                @foreach (var loan in m.Loans) {
                     <tr data-loanid="@loan.Id">
                         <td>@loan.DateApplied</td>
                         <td>@loan.Status</td>
@@ -170,7 +175,7 @@
         <h3>Customer don't have any loan</h3>
     }
 
-    if (Model.Decisions.Any()) {
+    if (m.Decisions.Any()) {
         <h4>Decisions</h4>
         <table class="table table-hover table-condensed">
             <thead>
@@ -183,7 +188,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var decision in Model.Decisions) {
+                @foreach (var decision in m.Decisions) {
                     <tr data-decisionid="@decision.Id">
                         <td>@decision.Date</td>
                         <td>@decision.Action</td>
@@ -199,7 +204,7 @@
     }
 }
 
-@helper Messages() {
+@helper Messages(EzBob.Web.Areas.Underwriter.Models.SalesForceModel m) {
     <table class="table table-hover table-condensed">
         <thead>
             <tr>
@@ -208,7 +213,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var message in Model.Messages) {
+            @foreach (var message in m.Messages) {
                 <tr>
                     <td>@message.CreationDate</td>
                     <td>@message.FileName</td>
@@ -218,13 +223,13 @@
     </table>
 }
 
-@helper Fraud() {
+@helper Fraud(EzBob.Web.Areas.Underwriter.Models.SalesForceModel m) {
     <div>
-        @Description("Check Date", Model.Fraud.LastCheckDate.HasValue ? Model.Fraud.LastCheckDate.Value.ToString("dd/MM/yyyy") : "Never performed a check")
-        @if (Model.Fraud.LastCheckDate.HasValue && !Model.Fraud.FraudDetectionLogRows.Any()) {
+        @Description("Check Date", m.Fraud.LastCheckDate.HasValue ? m.Fraud.LastCheckDate.Value.ToString("dd/MM/yyyy") : "Never performed a check")
+        @if (m.Fraud.LastCheckDate.HasValue && !m.Fraud.FraudDetectionLogRows.Any()) {
             @Description("Not a fraud", "")
         }
-        @if (Model.Fraud.FraudDetectionLogRows.Any()) {
+        @if (m.Fraud.FraudDetectionLogRows.Any()) {
             <table class="table table-hover table-condensed">
                 <thead>
                     <tr>
@@ -235,7 +240,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var fraudRow in Model.Fraud.FraudDetectionLogRows) {
+                    @foreach (var fraudRow in m.Fraud.FraudDetectionLogRows) {
                         <tr>
                             <td>@fraudRow.Type</td>
                             <td>@fraudRow.CurrentField</td>
@@ -249,8 +254,8 @@
     </div>
 }
 
-@helper Crm() {
-    if (Model.OldCrm.Any()) {
+@helper Crm(EzBob.Web.Areas.Underwriter.Models.SalesForceModel m) {
+    if (m.OldCrm.Any()) {
         <table class="table table-hover table-condensed">
             <thead>
                 <tr>
@@ -263,7 +268,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach (var crm in Model.OldCrm) {
+                @foreach (var crm in m.OldCrm) {
                     <tr>
                         <td>@crm.DateTime.ToString("dd/MM/yyyy")</td>
                         <td>@crm.Type</td>

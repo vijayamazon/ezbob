@@ -17,6 +17,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		Customer GetChecked(int id);
 		Customer GetAndInitialize(int id);
 		Customer TryGetByEmail(string sEmail);
+	    Customer ReallyTryGet(int id);
 	}
 
 	public class CustomerRepository : NHibernateRepositoryBase<Customer>, ICustomerRepository

@@ -59,7 +59,7 @@
 				if (User == null)
 					return null;
 
-				return _customers.TryGet(User.Id);
+				return _customers.ReallyTryGet(User.Id);
 			}
 		}
 	}
