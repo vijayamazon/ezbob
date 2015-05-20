@@ -81,7 +81,20 @@ namespace NHibernateWrapper.NHibernate
 		}
 		private static void Configure()
 		{
-			_config.Configure(XmlReader.Create(new StringReader("<hibernate-configuration xmlns=\"urn:nhibernate-configuration-2.2\"><session-factory><property name=\"cache.provider_class\">NHibernate.Caches.SysCache2.SysCacheProvider, NHibernate.Caches.SysCache2</property><property name=\"cache.use_query_cache\">true</property><property name=\"connection.provider\">NHibernate.Connection.DriverConnectionProvider</property><property name=\"dialect\">NHibernate.Dialect.MsSql2005Dialect</property><property name=\"connection.driver_class\">NHibernate.Driver.SqlClientDriver</property><property name=\"show_sql\">false</property><property name=\"cache.use_second_level_cache\">true</property><property name=\"adonet.batch_size\">1000</property></session-factory></hibernate-configuration>")));
+            
+			_config.Configure(XmlReader.Create(new StringReader(
+                "<hibernate-configuration xmlns=\"urn:nhibernate-configuration-2.2\">" +
+			        "<session-factory>" +
+			            "<property name=\"cache.provider_class\">NHibernate.Caches.SysCache2.SysCacheProvider, NHibernate.Caches.SysCache2</property>" +
+			            "<property name=\"cache.use_query_cache\">true</property>" +
+			            "<property name=\"connection.provider\">NHibernate.Connection.DriverConnectionProvider</property>" +
+			            "<property name=\"dialect\">NHibernate.Dialect.MsSql2008Dialect</property>" +
+			            "<property name=\"connection.driver_class\">NHibernate.Driver.SqlClientDriver</property>" +
+			            "<property name=\"show_sql\">false</property>" +
+			            "<property name=\"cache.use_second_level_cache\">true</property>" +
+			            "<property name=\"adonet.batch_size\">50</property>" +
+			        "</session-factory>" +
+                "</hibernate-configuration>")));
 		
 			string connectionString = ConfigurationManager.ConnectionStrings[new Ezbob.Context.Environment().Context.ToLower()].ConnectionString;
 			_config.Properties.Add("connection.connection_string", connectionString);
