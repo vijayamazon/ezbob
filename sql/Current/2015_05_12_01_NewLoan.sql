@@ -121,7 +121,8 @@ IF OBJECT_ID('NL_EzbobBankAccounts') IS NULL
 BEGIN	
 CREATE TABLE [dbo].[NL_EzbobBankAccounts](
 	[EzbobBankAccountID] [int] NOT NULL IDENTITY(1,1) ,
-	[EzbobBankAccount] [nchar](10) NOT NULL,
+	[EzbobBankAccount] [nchar](10) NOT NULL,	
+	[IsDefault] [bit] null,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_EzbobBankAccounts] PRIMARY KEY CLUSTERED ([EzbobBankAccountID] ASC)
 ) ;
@@ -136,6 +137,7 @@ CREATE TABLE [dbo].[NL_FundTransfers](
 	[Amount] [decimal] (18,6) NOT NULL,
 	[TransferTime] [datetime] NOT NULL,
 	[IsActive] [bit] NOT NULL,
+	[LoanTransactionMethodID] [int] NOT NULL,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_FundTransfers] PRIMARY KEY CLUSTERED ([FundTransferID] ASC)
 ) ;
@@ -148,8 +150,7 @@ CREATE TABLE [dbo].[NL_LoanAgreements](
 	[LoanAgreementID] [int] NOT NULL IDENTITY(1,1) ,
 	[LoanHistoryID] [int] NOT NULL,
 	[LoanAgreementTemplateID] [int] NULL,	
-	[FilePath] [nvarchar] (255) NULL,	
-	[AgreementModel] [nvarchar](max) NULL,
+	[FilePath] [nvarchar] (255) NULL,		
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_LoanAgreements] PRIMARY KEY CLUSTERED ([LoanAgreementID] ASC )
 );
@@ -304,6 +305,7 @@ CREATE TABLE [dbo].[NL_LoanSchedules](
 	[ClosedTime] [datetime] NULL,
 	[Principal] [decimal] (18,6) NOT NULL,
 	[InterestRate] [decimal](18, 6) NOT NULL,
+	[AgreementModel] [nvarchar](max) NULL,
 	[TimestampCounter] rowversion NOT NULL,	
  CONSTRAINT [PK_NL_LoanSchedules] PRIMARY KEY CLUSTERED ([LoanScheduleID] ASC)
 ) ;
@@ -354,11 +356,15 @@ IF OBJECT_ID('NL_LoanHistory') IS NULL
 BEGIN
 CREATE TABLE [dbo].[NL_LoanHistory](
 	[LoanHistoryID] [int] NOT NULL IDENTITY(1,1) ,
-	[EventTime] [datetime] NOT NULL,
-	[Description] [nvarchar](max) NOT NULL,
 	[LoanID] [int] NULL,
 	[UserID] [int] NULL,
 	[LoanLegalID] [int] NULL,
+	[Amount] [decimal](18, 6) NOT NULL,
+	[RepaymentCount] [int] NOT NULL,
+	[InterestRate] [decimal](18, 6) NULL,	
+	[EventTime] [datetime] NOT NULL,
+	[Description] [nvarchar](max) NOT NULL,	
+	[AgreementModel] [nvarchar](max) NULL,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_LoanHistory] PRIMARY KEY CLUSTERED ([LoanHistoryID] ASC)
 ) ;
@@ -604,6 +610,9 @@ END ;
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_FundTransfers_Loans') BEGIN
 ALTER TABLE [dbo].[NL_FundTransfers] ADD CONSTRAINT [FK_FundTransfers_Loans] FOREIGN KEY([LoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]) ;
+END ;
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_FundTransfers_LoanTransactionMethod') BEGIN
+ALTER TABLE [dbo].[NL_FundTransfers] ADD CONSTRAINT [FK_FundTransfers_LoanTransactionMethod] FOREIGN KEY([LoanTransactionMethodID]) REFERENCES [dbo].[LoanTransactionMethod] ([Id]) ;
 END ;
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanAgreements_LoanHistory') BEGIN
