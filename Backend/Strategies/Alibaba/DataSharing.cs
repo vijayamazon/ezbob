@@ -46,6 +46,12 @@
 				return;
 			}
 
+            //if (this.businessType == AlibabaBusinessType.APPLICATION_WS_1) {
+		        
+            //    this.TypeOfBusinessParam=
+
+            //}
+
 			// check if 001 exists before 002
 			if (this.businessType == AlibabaBusinessType.APPLICATION_REVIEW) {
 
@@ -70,7 +76,7 @@
 					"AlibabaCustomerDataSharing",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerID", this.CustomerID),
-					new QueryParameter("FinalDecision", (this.businessType == AlibabaBusinessType.APPLICATION)?0:1)
+					new QueryParameter("FinalDecision", (this.businessType == AlibabaBusinessType.APPLICATION_REVIEW)?1:0)
 				);
 
 			Log.Debug("**********DATASHARING4 strategy, execute customerID: {0}, finalDecision: {1}, Result: {2}", CustomerID, this.businessType.DescriptionAttr(), JsonConvert.SerializeObject(Result, jf));
@@ -141,6 +147,16 @@
 				if (btype != null) {
 					sent.BizTypeCode = btype.Value.ToString();
 				}
+
+                //Add comments
+                switch (bizType) {
+				case AlibabaBusinessType.APPLICATION_WS_3:
+					sent.Comments = "DataSharing Step 3";
+					break;
+                case AlibabaBusinessType.APPLICATION:
+					sent.Comments = "DataSharing Wizard Complete";
+					break;
+                }
 				
 				sent.StatusCode = response.StatusCode.DescriptionAttr();
 				sent.SentDate = DateTime.UtcNow;
@@ -161,6 +177,8 @@
 		public CustomerDataSharing Result { get; private set; }
 
 		private readonly AlibabaSentDataRepository sentDataRep;
+
+        //private string TypeOfBusinessParam { get; private set; }
 
 	} //DataSharing
 }

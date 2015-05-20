@@ -2496,19 +2496,22 @@ namespace ServiceClientProxy.EzServiceReference {
     public enum AlibabaBusinessType : int {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        APPLICATION = 0,
+        APPLICATION_WS_3 = 0,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        APPLICATION_REVIEW = 1,
+        APPLICATION = 1,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        DRAW_REQUEST = 2,
+        APPLICATION_REVIEW = 2,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        PAYMENT_CONFIRMATION = 3,
+        DRAW_REQUEST = 3,
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
-        LOAN_SERVICING = 4,
+        PAYMENT_CONFIRMATION = 4,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        LOAN_SERVICING = 5,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
