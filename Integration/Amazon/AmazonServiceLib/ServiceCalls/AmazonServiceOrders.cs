@@ -240,7 +240,8 @@
 			try {
 				var req = new ListOrderItemsRequest {
 					AmazonOrderId = orderId,
-					SellerId = sellerId
+					SellerId = sellerId,
+                    MWSAuthToken = requestInfo.MWSAuthToken
 				};
 
 				var response = AmazonWaitBeforeRetryHelper.DoServiceAction(
