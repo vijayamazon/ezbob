@@ -4,7 +4,6 @@
 	using System.Diagnostics;
 	using System.Text;
 	using JetBrains.Annotations;
-	using Logger;
 
 	public class TimeCounter {
 		public TimeCounter(string sTitle = null) {
@@ -48,16 +47,19 @@
 			private readonly List<Step> m_oCheckpoints;
 		} // class Timer
 
-		public void Log(ASafeLog oLog, Severity nSeverity = Severity.Debug) {
-			var sb = new StringBuilder();
+	    /// <summary>
+	    /// Returns a string that represents the current object.
+	    /// </summary>
+	    /// <returns>
+	    /// A string that represents the current object.
+	    /// </returns>
+	    public override string ToString() {
+            var sb = new StringBuilder();
+            sb.AppendLine(Title);
+            foreach (var time in Steps)
+                sb.AppendFormat("\t{0}: {1}ms\n", time.Name, time.Length);
 
-			sb.AppendLine(Title);
-
-			foreach (var time in Steps)
-				sb.AppendFormat("\t{0}: {1}ms\n", time.Name, time.Length);
-
-			oLog.Say(nSeverity, "{0}", sb);
-		} // Log
-
+            return sb.ToString();
+        }//ToString
 	} // class TimeCounter
 } // namespace

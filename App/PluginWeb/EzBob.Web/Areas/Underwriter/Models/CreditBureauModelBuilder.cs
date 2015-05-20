@@ -16,9 +16,11 @@
 	using log4net;
 	using EZBob.DatabaseLib.Model.Experian;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Utils;
 	using EzBob.Web.Infrastructure;
+	using ServiceClientProxy.EzServiceReference;
 
-	public class CreditBureauModelBuilder
+    public class CreditBureauModelBuilder
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CreditBureauModelBuilder));
 		private readonly IExperianHistoryRepository _experianHistoryRepository;
@@ -27,68 +29,87 @@
 
 		private readonly ServiceClient _serviceClient;
 		private readonly IEzbobWorkplaceContext _context;
-
+	    private TimeCounter tc;
 		public CreditBureauModelBuilder(IExperianHistoryRepository experianHistoryRepository, IEzbobWorkplaceContext context)
 		{
-			_experianHistoryRepository = experianHistoryRepository;
-			_context = context;
+			this._experianHistoryRepository = experianHistoryRepository;
+            this._context = context;
 			Errors = new List<string>();
-			_serviceClient = new ServiceClient();
+            this._serviceClient = new ServiceClient();
 		}
 
 		public CreditBureauModel Create(Customer customer, bool getFromLog = false, long? logId = null)
 		{
 			Log.DebugFormat("CreditBureauModel Create customerid: {0} hist: {1} histId: {2}", customer.Id, getFromLog, logId);
-			var model = new CreditBureauModel { Id = customer.Id, Directors = new List<ExperianConsumerModel>()};
-			try
-			{
-				model.Consumer = GetConsumerInfo(customer, null, logId, customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "");
-				if (customer.Company != null && customer.Company.Directors.Any())
-				{
-					foreach (var director in customer.Company.Directors)
-					{
-						model.Directors.Add(GetConsumerInfo(customer, director, null, 
-							string.Format("{0} {1} {2}", director.Name, director.Middle, director.Surname)));
-					}
-				}
+            this.tc = new TimeCounter("CreditBureauModel building time for customer " + customer.Stringify());
 
-				model.AmlInfo = GetAmlInfo(customer);
-				model.BavInfo = GetBavInfo(customer);
-				model.Summary = GetSummaryModel(model);
-			}
-			catch (Exception e)
-			{
-				Log.DebugFormat("CreditBureauModel Create Exception {0} ", e);
-				if (model.Consumer != null)
-					model.Consumer.ErrorList.Add(e.Message);
-			}
+            var model = new CreditBureauModel {
+                Id = customer.Id,
+                Directors = new List<ExperianConsumerModel>()
+            };
 
-			if (model.Consumer != null)
-				model.Consumer.ErrorList.AddRange(Errors);
+            using (this.tc.AddStep("Customer {0} total CreditBureauModel time taken", customer.Stringify())) {
+		        
+		        try {
+                    using (this.tc.AddStep("GetConsumerInfo for customer time taken")) {
+		                model.Consumer = GetConsumerInfo(customer, null, logId, customer.PersonalInfo != null ? customer.PersonalInfo.Fullname : "");
+		            }
+		            if (customer.Company != null && customer.Company.Directors.Any()) {
+		                foreach (var director in customer.Company.Directors) {
+                            using (this.tc.AddStep("GetConsumerInfo for director {0} time taken", director.Id)) {
+		                        model.Directors.Add(GetConsumerInfo(customer, director, null,
+		                            string.Format("{0} {1} {2}", director.Name, director.Middle, director.Surname)));
+		                    }
+		                }
+		            }
 
-			return model;
+                    using (this.tc.AddStep("GetAmlInfo time taken")) {
+		                model.AmlInfo = GetAmlInfo(customer);
+		            }
+                    using (this.tc.AddStep("GetBWAInfo time taken")) {
+		                model.BavInfo = GetBavInfo(customer);
+		            }
+                    using (this.tc.AddStep("GetSummaryModel time taken")) {
+		                model.Summary = GetSummaryModel(model);
+		            }
+		        } catch (Exception e) {
+		            Log.DebugFormat("CreditBureauModel Create Exception {0} ", e);
+		            if (model.Consumer != null)
+		                model.Consumer.ErrorList.Add(e.Message);
+		        }
+
+		        if (model.Consumer != null)
+		            model.Consumer.ErrorList.AddRange(Errors);
+		    }
+
+            Log.Info(this.tc.ToString());
+
+		    return model;
 		}
 
-		public ExperianConsumerModel GetConsumerInfo(Customer customer, Director director, long? logId, string name)
-		{
-			var data = _serviceClient.Instance.LoadExperianConsumer(_context.UserId, customer.Id, director != null ? director.Id : (int?)null, logId);
+		public ExperianConsumerModel GetConsumerInfo(Customer customer, Director director, long? logId, string name) {
+		    ExperianConsumerActionResult data;
 
-			if (director != null && director.ExperianConsumerScore == null) {
-				director.ExperianConsumerScore = data.Value.BureauScore;
-			}
+		    using (this.tc.AddStep("LoadExperianConsumer from service time taken")) {
+                data = this._serviceClient.Instance.LoadExperianConsumer(this._context.UserId, customer.Id, director != null ? director.Id : (int?)null, logId);
+		    }
 
-			if (director == null && customer.ExperianConsumerScore == null) {
-				customer.ExperianConsumerScore = data.Value.BureauScore;
-			}
+		    if (director != null && director.ExperianConsumerScore == null) {
+		            director.ExperianConsumerScore = data.Value.BureauScore;
+		    }
 
-			return GenerateConsumerModel(data.Value, customer, director, logId, name);
+		    if (director == null && customer.ExperianConsumerScore == null) {
+		        customer.ExperianConsumerScore = data.Value.BureauScore;
+		    }
+		
+		    return GenerateConsumerModel(data.Value, customer, director, logId, name);
 		}
 
 		private IOrderedEnumerable<CheckHistoryModel> GetConsumerHistoryModel(Customer customer, Director director)
 		{
 			List<MP_ExperianHistory> consumerHistory = director != null ?
-				_experianHistoryRepository.GetDirectorConsumerHistory(director.Id).ToList() :
-				_experianHistoryRepository.GetCustomerConsumerHistory(customer.Id).ToList();
+                this._experianHistoryRepository.GetDirectorConsumerHistory(director.Id).ToList() :
+                this._experianHistoryRepository.GetCustomerConsumerHistory(customer.Id).ToList();
 
 			if (consumerHistory.Any())
 			{
@@ -97,8 +118,8 @@
 						Date = x.Date.ToUniversalTime(),
 						Id = x.Id,
 						Score = x.Score,
-						CII = x.CII.HasValue ? x.CII.Value : -1,
-						Balance = x.CaisBalance.HasValue ? x.CaisBalance.Value : -1,
+						CII = x.CII ?? -1,
+						Balance = x.CaisBalance ?? -1,
 						ServiceLogId = x.ServiceLogId
 					}).OrderByDescending(h => h.Date);
 			}
@@ -118,7 +139,7 @@
 				return model;
 			}
 
-			var scorePosColor = GetScorePositionAndColor(eInfo.BureauScore.HasValue ? eInfo.BureauScore.Value : 0, ConsumerScoreMax, ConsumerScoreMin);
+			var scorePosColor = GetScorePositionAndColor(eInfo.BureauScore ?? 0, ConsumerScoreMax, ConsumerScoreMin);
 
 			model.ServiceLogId = eInfo.ServiceLogId;
 			model.HasExperianError = eInfo.HasExperianError;
@@ -142,7 +163,7 @@
 
 			if (model.Applicant != null)
 			{
-				var days = model.Applicant.DateOfBirth.HasValue ? (DateTime.Now - model.Applicant.DateOfBirth.Value).TotalDays : 0;
+				var days = model.Applicant.DateOfBirth.HasValue ? (DateTime.UtcNow - model.Applicant.DateOfBirth.Value).TotalDays : 0;
 				var age = (int)Math.Round(days/365);
 				model.ApplicantFullNameAge = string.Format("{0} {1} {2} {3} {4} {5}",
 				                                           model.Applicant.Title,
@@ -254,7 +275,7 @@
 				if (accStatus == DefaultCaisStatusName && var == Variables.FinancialAccounts_MainApplicant) 
 				{
 					numberOfDefaults++;
-					defaultAmount += caisDetails.CurrentDefBalance.HasValue ? caisDetails.CurrentDefBalance.Value : 0;
+					defaultAmount += caisDetails.CurrentDefBalance ?? 0;
 				}
 
 				var accType = GetAccountType(caisDetails.AccountType);
@@ -267,8 +288,8 @@
 					var ws = caisDetails.WorstStatus;
 					var status = AccountStatusDictionary.GetAccountStatus(ws);
 					worstStatus[accType] = GetWorstStatus(worstStatus[accType], ws);
-					limits[accType] += caisDetails.CreditLimit.HasValue ? caisDetails.CreditLimit.Value : 0;
-					balances[accType] += caisDetails.Balance.HasValue ? caisDetails.Balance.Value : 0;
+					limits[accType] += caisDetails.CreditLimit ?? 0;
+					balances[accType] += caisDetails.Balance ?? 0;
 
 					numberOfAccounts++;
 					if ((accountInfo.OpenDate.HasValue) && (accountInfo.OpenDate.Value >= DateTime.Today.AddMonths(-3)))
@@ -371,8 +392,10 @@
 
 			Log.DebugFormat("Error List: {0}", PrintErrorList(model.ErrorList));
 
-			model.ConsumerHistory = GetConsumerHistoryModel(customer, director);
-			return model;
+            using (this.tc.AddStep("GetConsumerHistoryModel time taken")) {
+		        model.ConsumerHistory = GetConsumerHistoryModel(customer, director);
+		    }
+		    return model;
 		}
 
 		private string GetClass1String(int? totalCcjValue1) {
@@ -422,12 +445,14 @@
 			try
 			{
 				var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+                if (customerAddress == null) {
+                    return data;
+                }
+
 				var srv = new IdHubService();
 				var result = srv.Authenticate(customer.PersonalInfo.FirstName, string.Empty, customer.PersonalInfo.Surname,
 											  customer.PersonalInfo.Gender.ToString(),
-											  customer.PersonalInfo.DateOfBirth.HasValue
-												  ? customer.PersonalInfo.DateOfBirth.Value
-												  : DateTime.Now,
+											  customer.PersonalInfo.DateOfBirth ?? DateTime.UtcNow,
 											  customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
 											  customerAddress.Town, customerAddress.County, customerAddress.Postcode,
 											  customer.Id, true);
@@ -465,14 +490,16 @@
 			try
 			{
 				var customerAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault();
+			    if (customerAddress == null) {
+			        return data;
+                }//if
+
 				var srv = new IdHubService();
 				var bankAccount = customer.BankAccount;
 				var result = srv.AccountVerification(customer.PersonalInfo.FirstName, string.Empty,
 													 customer.PersonalInfo.Surname,
 													 customer.PersonalInfo.Gender.ToString(),
-													 customer.PersonalInfo.DateOfBirth.HasValue
-														 ? customer.PersonalInfo.DateOfBirth.Value
-														 : DateTime.Now,
+													 customer.PersonalInfo.DateOfBirth ?? DateTime.UtcNow,
 													 customerAddress.Line1, customerAddress.Line2, customerAddress.Line3,
 													 customerAddress.Town, customerAddress.County, customerAddress.Postcode,
 													 bankAccount != null ? bankAccount.SortCode : "",

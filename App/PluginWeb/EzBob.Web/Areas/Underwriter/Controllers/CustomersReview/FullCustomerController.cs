@@ -8,12 +8,10 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Utils;
 	using Models;
-	using Newtonsoft.Json;
 	using Web.Models;
 	using NHibernate;
 	using System;
 	using System.Text;
-	using EZBob.DatabaseLib.Repository;
 	using log4net;
 
 	public class FullCustomerController : Controller {
@@ -30,19 +28,17 @@
 			IBugRepository bugs,
 			LoanRepository loanRepository,
 			PropertiesModelBuilder propertiesModelBuilder) {
-			_customers = customers;
-			_session = session;
-			_infoModelBuilder = infoModelBuilder;
-			_marketPlaces = marketPlaces;
-			_creditBureauModelBuilder = creditBureauModelBuilder;
-			_summaryModelBuilder = summaryModelBuilder;
-			_customerRelationsRepository = customerRelationsRepository;
-			_docRepo = docRepo;
-			_bugs = bugs;
-			_loanRepository = loanRepository;
-			this.customerAddressRepository = customerAddressRepository;
-			this.landRegistryRepository = landRegistryRepository;
-			_propertiesModelBuilder = propertiesModelBuilder;
+			this._customers = customers;
+            this._session = session;
+            this._infoModelBuilder = infoModelBuilder;
+            this._marketPlaces = marketPlaces;
+            this._creditBureauModelBuilder = creditBureauModelBuilder;
+            this._summaryModelBuilder = summaryModelBuilder;
+            this._customerRelationsRepository = customerRelationsRepository;
+            this._docRepo = docRepo;
+            this._bugs = bugs;
+            this._loanRepository = loanRepository;
+            this._propertiesModelBuilder = propertiesModelBuilder;
 
 		} // constructor
 
@@ -52,7 +48,7 @@
 
 			var model = new FullCustomerModel();
 
-			var customer = _customers.TryGet(id);
+            var customer = this._customers.TryGet(id);
 
 			if (customer == null) {
 				model.State = "NotFound";
@@ -72,33 +68,33 @@
 
 				using (tc.AddStep("ApplicationInfoModel Time taken")) {
 					var m = new ApplicationInfoModel();
-					_infoModelBuilder.InitApplicationInfo(m, customer, cr);
+                    this._infoModelBuilder.InitApplicationInfo(m, customer, cr);
 					model.ApplicationInfoModel = m;
 				} // using
 
 				using (tc.AddStep("CreditBureauModel Time taken"))
-					model.CreditBureauModel = _creditBureauModelBuilder.Create(customer);
+                    model.CreditBureauModel = this._creditBureauModelBuilder.Create(customer);
 
 				using (tc.AddStep("SummaryModel Time taken"))
-					model.SummaryModel = _summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
+                    model.SummaryModel = this._summaryModelBuilder.CreateProfile(customer, model.CreditBureauModel);
 
 				using (tc.AddStep("MedalCalculations Time taken"))
 					model.MedalCalculations = new MedalCalculators(customer);
 
 				using (tc.AddStep("PropertiesModel Time taken")) {
-					model.Properties = _propertiesModelBuilder.Create(customer);
+                    model.Properties = this._propertiesModelBuilder.Create(customer);
 				}
 				
 				using (tc.AddStep("CustomerRelations Time taken")) {
-					var crm = new CustomerRelationsModelBuilder(_loanRepository, _customerRelationsRepository, _session);
+                    var crm = new CustomerRelationsModelBuilder(this._loanRepository, this._customerRelationsRepository, this._session);
 					model.CustomerRelations = crm.Create(customer.Id);
 				} // using
 
 				using (tc.AddStep("AlertDocs Time taken"))
-					model.AlertDocs = (from d in _docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
+                    model.AlertDocs = (from d in this._docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
 
 				using (tc.AddStep("Bugs Time taken"))
-					model.Bugs = _bugs.GetAll().Where(x => x.Customer.Id == customer.Id).Select(x => BugModel.ToModel(x)).ToList();
+                    model.Bugs = this._bugs.GetAll().Where(x => x.Customer.Id == customer.Id).Select(x => BugModel.ToModel(x)).ToList();
 
 				using (tc.AddStep("CompanyScore Time taken")) {
 					var builder = new CompanyScoreModelBuilder();
@@ -123,25 +119,17 @@
 
 				using (tc.AddStep("MarketplacesHistory Time taken")) {
 					model.State = "Ok";
-					model.MarketplacesHistory = _marketPlaces.GetMarketPlaceHistoryModel(customer).ToList();
+                    model.MarketplacesHistory = this._marketPlaces.GetMarketPlaceHistoryModel(customer).ToList();
 				} // using
 			} // using "Total" step
 
-			WriteToLog(tc);
+			Log.Info(tc.ToString());
 			
 			Log.DebugFormat("Build full customer model end for customer {0}", id);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		} // Index
 
-		private void WriteToLog(TimeCounter tc) {
-			var sb = new StringBuilder();
-			sb.AppendLine(tc.Title);
-			foreach (var time in tc.Steps)
-				sb.AppendFormat("\t{0}: {1}ms\n", time.Name, time.Length);
-
-			Log.InfoFormat("{0}", sb);
-		}
 		
 		private readonly ICustomerRepository _customers;
 		private readonly ISession _session;
@@ -152,8 +140,6 @@
 		private readonly CustomerRelationsRepository _customerRelationsRepository;
 		private readonly PropertiesModelBuilder _propertiesModelBuilder;
 		private readonly LoanRepository _loanRepository;
-		private readonly CustomerAddressRepository customerAddressRepository;
-		private readonly LandRegistryRepository landRegistryRepository;
 		private readonly NHibernateRepositoryBase<MP_AlertDocument> _docRepo;
 		private readonly IBugRepository _bugs;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(FullCustomerController));
