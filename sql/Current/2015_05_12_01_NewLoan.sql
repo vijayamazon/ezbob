@@ -238,9 +238,9 @@ BEGIN
 CREATE TABLE [dbo].[NL_Offers](
 	[OfferID] [int] NOT NULL IDENTITY(1,1) ,
 	[DecisionID] [int] NOT NULL,
-	[LoanTypeID] [int] NOT NULL default 1,
-	[RepaymentIntervalTypeID] [int] NOT NULL default 1,
-	[LoanSourceID] [int] NOT NULL default 1,	
+	[LoanTypeID] [int] NOT NULL, --default 1,
+	[RepaymentIntervalTypeID] [int] NOT NULL, --default 1,
+	[LoanSourceID] [int] NOT NULL, --default 1,	
 	[StartTime] [datetime] NOT NULL,
 	[EndTime] [datetime] NOT NULL,	
 	[RepaymentCount] [int] NOT NULL,	
@@ -562,6 +562,13 @@ CREATE TABLE dbo.NL_LoanOptions
 	)
 END 
 GO
+
+
+--ALTER TABLE [dbo].[NL_Offers] ALTER COLUMN LoanSourceID CONSTRAINT  DEFAULT 1;
+--ALTER TABLE [dbo].[NL_Offers] ALTER COLUMN LoanTypeID SET DEFAULT 1;
+--ALTER TABLE [dbo].[NL_Offers] ALTER COLUMN RepaymentIntervalTypeID SET DEFAULT 1;
+
+
 
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanBrokerCommission') AND name = 'NLLoanID')
 	ALTER TABLE [dbo].[LoanBrokerCommission] ADD [NLLoanID] [int] NULL ; 
@@ -911,8 +918,6 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
  ALTER TABLE [dbo].[NL_Payments] ADD CONSTRAINT [FK_NL_Payments_LoanTransactionMethod] FOREIGN KEY([PaymentMethodID]) REFERENCES [dbo].[LoanTransactionMethod] ([Id]);
 END
 GO
-
-
 
 -- NL_DiscountPlans/NL_DiscountPlanEntries migration
 
