@@ -558,7 +558,7 @@
 				// If firstOpen is not null then thisDay is not null
 				// because of how CreateActualDailyLoanStatus works: thisDay corresponds to
 				// today which is inserted as it is a requested date.
-				cpm.Amount = firstOpen.Principal + thisDay.TotalExpectedNonprincipalPayment;
+				cpm.Amount = firstOpen.OpenPrincipal + thisDay.TotalExpectedNonprincipalPayment;
 			} // if
 
 			cpm.IsLate = false;

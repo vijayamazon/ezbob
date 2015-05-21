@@ -46,11 +46,13 @@
     <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
     <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
     <Compile Include="Exceptions\ANegativeDecimalException.cs" />
+    <Compile Include="Exceptions\NegativeRepaymentAmountException.cs" />
     <Compile Include="Exceptions\NegativeMonthlyInterestRateException.cs" />
     <Compile Include="Exceptions\NegativeLoanAmountException.cs" />
     <Compile Include="Exceptions\NegativeRepaymentCountException.cs" />
     <Compile Include="Exceptions\NegativeOpenPrincipalException.cs" />
     <Compile Include="Exceptions\NoScheduleException.cs" />
+    <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
     <Compile Include="Exceptions\TooLateOpenPrincipalException.cs" />
     <Compile Include="Exceptions\WrongFirstOpenPrincipalException.cs" />
     <Compile Include="Exceptions\WrongOpenPrincipalOrderException.cs" />

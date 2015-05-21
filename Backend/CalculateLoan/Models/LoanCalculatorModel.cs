@@ -203,15 +203,17 @@
 		public void SetScheduleCloseDatesFromPayments() {
 			ValidateSchedule();
 
-			var qsp = new Queue<ScheduledPaymentWithRepayment>();
+			var qsp = new Queue<ScheduledItem>();
 
-			foreach (ScheduledItem s in Schedule)
-				qsp.Enqueue(new ScheduledPaymentWithRepayment(s));
+			foreach (ScheduledItem s in Schedule) {
+				s.ClearRepayments();
+				qsp.Enqueue(s);
+			} // for each
 
 			if (Repayments.Count < 1)
 				return;
 
-			ScheduledPaymentWithRepayment curSchedule = qsp.Dequeue();
+			ScheduledItem curSchedule = qsp.Dequeue();
 
 			for (var i = 0; i < Repayments.Count; i++) {
 				Repayment curRepayment = Repayments[i];
@@ -219,9 +221,9 @@
 				decimal currentPaidPrincipal = curRepayment.Principal;
 
 				while (currentPaidPrincipal > 0) {
-					currentPaidPrincipal = curSchedule.AddPayment(currentPaidPrincipal, curRepayment.Date);
+					currentPaidPrincipal = curSchedule.AddRepayment(currentPaidPrincipal, curRepayment.Date);
 
-					if (curSchedule.ScheduledPayment.ClosedDate.HasValue) {
+					if (curSchedule.ClosedDate.HasValue) {
 						if (qsp.Count > 0)
 							curSchedule = qsp.Dequeue();
 						else {
@@ -245,33 +247,6 @@
 		public List<Repayment> Repayments { get; private set; }
 		public List<Fee> Fees { get; private set; }
 		public BadPeriods BadPeriods { get; private set; }
-
-		private class ScheduledPaymentWithRepayment {
-			public ScheduledPaymentWithRepayment(ScheduledItem sp) {
-				ScheduledPayment = sp;
-				this.openPrincipal = ScheduledPayment.Principal;
-				ScheduledPayment.ClosedDate = null;
-			} // constructor
-
-			public decimal AddPayment(decimal payment, DateTime closeDate) {
-				if (payment == 0)
-					return 0;
-
-				if (payment >= this.openPrincipal) {
-					payment -= this.openPrincipal;
-					ScheduledPayment.ClosedDate = closeDate;
-					this.openPrincipal = 0;
-					return payment;
-				} // if
-
-				this.openPrincipal -= payment;
-				return 0;
-			} // AddPayment
-
-			public ScheduledItem ScheduledPayment { get; private set; }
-
-			private decimal openPrincipal;
-		} // class ScheduledPaymentWithRepayment
 
 		private int repaymentCount;
 		private int interestOnlyRepayments;
