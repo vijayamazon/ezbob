@@ -79,12 +79,10 @@
     <Compile Include="DatabaseWrapper\Order\AInternalOrderItem.cs" />
     <Compile Include="DatabaseWrapper\Order\RtiTaxMonthEntry.cs" />
     <Compile Include="DatabaseWrapper\Order\VatReturnEntry.cs" />
-    <Compile Include="Model\Alibaba\AlibabaContractItem.cs" />
-    <Compile Include="Model\Alibaba\AlibabaBuyer.cs" />
-    <Compile Include="Model\Alibaba\AlibabaContract.cs" />
-    <Compile Include="Model\Alibaba\AlibabaSeller.cs" />
+    <Compile Include="..\..\..\AlibabaBuyer.cs">
+      <Link>Model\Alibaba\AlibabaBuyer.cs</Link>
+    </Compile>
     <Compile Include="Model\Alibaba\AlibabaSentData.cs" />
-    <Compile Include="Model\Alibaba\AlibabSellerBank.cs" />
     <Compile Include="Model\CustomerRelations\FrequentActionItemsForCustomer.cs" />
     <Compile Include="Model\CustomerRelations\FrequentActionItems.cs" />
     <Compile Include="Model\CustomerRelations\CustomerRelationState.cs" />

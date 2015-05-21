@@ -6,7 +6,7 @@
 
 	public class AlibabaSellerBank {
 
-		[PK]
+		[PK(true)]
 		[NonTraversable]
 		public long SellerBankID { get; set; }
 		[FK("AlibabaSeller", "SellerID")]

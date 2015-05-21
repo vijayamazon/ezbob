@@ -7,10 +7,10 @@
 
 	public class AlibabaSeller {
 		public AlibabaSeller() {
-			Bank = new List<AlibabaSellerBank>();
+			Bank = new AlibabaSellerBank();
 		}
 
-		[PK]
+		[PK(true)]
 		[NonTraversable]
 		public long SellerID { get; set; }
 		[FK("AlibabaContract", "ContractID")]
@@ -56,6 +56,6 @@
 		public int? QuotationPerformance { get; set; }
 
 		[NonTraversable]
-		public List<AlibabaSellerBank> Bank { get; set; }
+		public AlibabaSellerBank Bank { get; set; }
 	}
 }
