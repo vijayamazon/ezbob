@@ -52,6 +52,8 @@
     <Compile Include="Alibaba\AlibabaBuyer.cs" />
     <Compile Include="Alibaba\AlibabaContract.cs" />
     <Compile Include="Alibaba\AlibabaContractItem.cs" />
+    <Compile Include="Alibaba\AlibabaSeller.cs" />
+    <Compile Include="Alibaba\AlibabaSellerBank.cs" />
     <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
