@@ -734,14 +734,14 @@
         }
 
         [Test]
-        public void GetLastOffer() {
+        public void TestGetLastOffer() {
             GetLastOffer get = new GetLastOffer(2362);
             get.Execute();
             Assert.Greater(get.Offer.OfferID, 0);
         }
 
         [Test]
-        public void AddLoanLegals() {
+        public void TestAddLoanLegals() {
             AddLoanLegals add = new AddLoanLegals(2362, new NL_LoanLegals(){SignatureTime = DateTime.UtcNow});
             add.Execute();
             Assert.Greater(add.LoanLegalsID, 0);
