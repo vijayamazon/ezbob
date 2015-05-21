@@ -6,8 +6,8 @@
     using Ezbob.Utils.dbutils;
 
     public class AlibabaContract {
-        public AlibabaContract()  {
-            Items=new 
+        public AlibabaContract() {
+            Items = new List<AlibabaContractItem>();
         }
         [PK(true)]
         [NonTraversable]
