@@ -10,7 +10,8 @@
         public override string Name { get { return "AddCashRequest"; } }
 
         public override void Execute() {
-            CashRequestID = DB.ExecuteScalar<int>("NL_CashRequestsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_CashRequests>("Tbl", this.cashRequest)); 
+            CashRequestID = DB.ExecuteScalar<int>("NL_CashRequestsSave", CommandSpecies.StoredProcedure,
+				DB.CreateTableParameter<NL_CashRequests>("Tbl", this.cashRequest)); 
         }//Execute
 
 

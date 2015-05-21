@@ -746,5 +746,18 @@
             add.Execute();
             Assert.Greater(add.LoanLegalsID, 0);
         }
-    }
+
+		[Test]
+		public void TestAddCashRequest() {
+			AddCashRequest add = new AddCashRequest(new NL_CashRequests {
+				UserID = 2362,
+				CashRequestOriginID = 1,
+				CustomerID = 2362,
+				OldCashRequestID = 22788,
+				RequestTime = DateTime.UtcNow
+			});
+			add.Execute();
+
+		}
+	}
 }

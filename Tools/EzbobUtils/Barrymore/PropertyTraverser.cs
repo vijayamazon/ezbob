@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+	using Ezbob.Utils.dbutils;
 
 	[System.AttributeUsage(System.AttributeTargets.Property, AllowMultiple = false)]
 	public class TraversableAttribute : Attribute { } // TraversableAttribute
@@ -100,7 +101,23 @@
 
 			var oResult = new List<object>();
 
-			oSrc.Traverse((oInstance, oPropertyInfo) => oResult.Add(oPropertyInfo.GetValue(oInstance)));
+			oSrc.Traverse((oInstance, oPropertyInfo) => {
+				object[] pkAttrList = oPropertyInfo.GetCustomAttributes(typeof(PKAttribute), false);
+
+				if (pkAttrList.Length < 1) {
+					oResult.Add(oPropertyInfo.GetValue(oInstance));
+					return;
+				} // if no PK configured
+
+				PKAttribute pk = (PKAttribute)pkAttrList[0];
+
+				// Primary key which is identity is not inserted into output column list
+				// because such field usage is intended for saving a new item but identity
+				// column is filled by DB.
+
+				if (!pk.WithIdentity)
+					oResult.Add(oPropertyInfo.GetValue(oInstance));
+			});
 
 			return oResult.ToArray();
 		} // ToObjectArray
