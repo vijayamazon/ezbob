@@ -49,6 +49,8 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Alibaba\AlibabaSeller.cs" />
+    <Compile Include="Alibaba\AlibabaSellerBank.cs" />
     <Compile Include="BrokerInstantOfferModels.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCredit.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditAmendments.cs" />
@@ -192,9 +194,7 @@
       <Name>Logger</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Alibaba\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
