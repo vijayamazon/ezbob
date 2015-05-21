@@ -244,7 +244,7 @@
 		} // TodayOpenLoans
 
 		private void OutstandingOffers() {
-			if (Trail.MyInputData.ReservedFunds > Trail.MyInputData.Configuration.MaxOutstandingOffers) {
+			if (Trail.MyInputData.ReservedFunds >= Trail.MyInputData.Configuration.MaxOutstandingOffers) {
 				StepFailed<OutstandingOffers>().Init(
 					Trail.MyInputData.ReservedFunds,
 					Trail.MyInputData.Configuration.MaxOutstandingOffers
