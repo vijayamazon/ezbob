@@ -9,10 +9,6 @@
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 
-	// TODO: missing functionality: calculate next scheduled payment.
-	// TODO: missing functionality: calculate next scheduled payment state on specific date (e.g. in three days).
-	// TODO: missing functionality: replace art of existing schedule with new schedule.
-
 	public abstract partial class ALoanCalculator {
 		public abstract string Name { get; }
 
@@ -118,7 +114,7 @@
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nLoan plan:\n\t\t{1}" +
 					"\n\nDaily data:\n{2}" +
-					"\n\nLoanCalculator.CreatePlan - end." +
+					"\n\n{3}.CreatePlan - end." +
 					"\n\n",
 					WorkingModel,
 					string.Join("\n\t\t", result),
@@ -133,36 +129,36 @@
 		/// <summary>
 		/// Calculates current loan balance.
 		/// </summary>
-		/// <param name="requestedDate">Date to calculate balance on (current date if null).</param>
+		/// <param name="today">Date to calculate balance on.</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual decimal CalculateBalance(DateTime? requestedDate = null, bool writeToLog = true) {
-			DateTime now = (requestedDate ?? DateTime.UtcNow).Date;
+		public virtual decimal CalculateBalance(DateTime today, bool writeToLog = true) {
+			today = today.Date;
 
-			if (now <= WorkingModel.LoanIssueTime.Date)
+			if (today <= WorkingModel.LoanIssueDate)
 				return 0;
 
-			DailyLoanStatus days = CreateActualDailyLoanStatus(now);
+			DailyLoanStatus days = CreateActualDailyLoanStatus(today);
 
-			decimal balance = days[now].CurrentBalance;
+			decimal balance = days[today].CurrentBalance;
 
 			if (writeToLog) {
 				AddScheduleNotes(days);
 				AddFeeNotes(days);
 				AddPaymentNotes(days);
-				days.AddNote(now, "Requested balance date.");
+				days.AddNote(today, "Requested balance date.");
 
 				Library.Instance.Log.Debug(
 					"\n\n{4}.CalculateBalance - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nBalance on {3}:\n\t\t{1}" +
 					"\n\nDaily data:\n{2}" +
-					"\n\nLoanCalculator.CalculateBalance - end." +
+					"\n\n{4}.CalculateBalance - end." +
 					"\n\n",
 					WorkingModel,
 					string.Join("\n\t\t", balance.ToString("C2", Library.Instance.Culture)),
 					days.ToFormattedString("\t\t"),
-					now.DateStr(),
+					today.DateStr(),
 					Name
 				);
 			} // if
@@ -171,7 +167,7 @@
 		} // CalculateBalance
 
 		/// <summary>
-		/// Calculates current (for requested date) payment.
+		/// Calculates payment options (late/current/next installment/full balance) for requested date.
 		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&amp;authuser=0
 		/// </summary>
 		/// <param name="today">Date to calculate payment on.</param>
@@ -179,14 +175,14 @@
 		/// or leave it as is.</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual CurrentPaymentModel AmountToCharge(
+		public virtual CurrentPaymentModel GetAmountToChargeOptions(
 			DateTime today,
 			bool setClosedDateFromPayments = false,
 			bool writeToLog = true
 		) {
 			today = today.Date;
 
-			var cpm = new CurrentPaymentModel(0);
+			var cpm = new CurrentPaymentModel();
 
 			if (today <= WorkingModel.LoanIssueTime.Date) {
 				cpm.IsError = true;
@@ -203,6 +199,8 @@
 			if (setClosedDateFromPayments)
 				WorkingModel.SetScheduleCloseDatesFromPayments();
 
+			cpm.Balance = days[today].CurrentBalance;
+
 			bool allPreviousPaymentsAreClosed = WorkingModel.Schedule
 				.Where(s => s.Date < today)
 				.All(s => s.IsClosedOn(today));
@@ -211,8 +209,10 @@
 
 			if (currentPayment == null) { // today is not a payment date.
 				if (allPreviousPaymentsAreClosed) // Delta scenario.
-					AlphaDelta(cpm, today, days);
+					AlphaDelta(cpm, today, days, "Delta");
 				else { // Echo scenario.
+					cpm.ScenarioName = "Echo";
+
 					cpm.LoanIsClosed = false;
 
 					OneDayLoanStatus thisDay = days[today];
@@ -229,14 +229,17 @@
 			} else { // today is a payment date.
 				if (allPreviousPaymentsAreClosed) {
 					if (currentPayment.IsClosedOn(today)) // Alpha scenario.
-						AlphaDelta(cpm, today, days);
+						AlphaDelta(cpm, today, days, "Alpha");
 					else { // Bravo scenario.
+						cpm.ScenarioName = "Bravo";
 						cpm.LoanIsClosed = false;
 						cpm.Amount = currentPayment.Principal + days[today].TotalExpectedNonprincipalPayment;
 						cpm.IsLate = false;
 						cpm.SavedAmount = 0;
 					} // if
 				} else { // Charlie scenario.
+					cpm.ScenarioName = "Charlie";
+
 					cpm.LoanIsClosed = false;
 
 					OneDayLoanStatus thisDay = days[today];
@@ -251,36 +254,29 @@
 				} // if
 			} // if
 
-			return cpm;
-		} // AmountToCharge
+			if (writeToLog) {
+				AddScheduleNotes(days);
+				AddFeeNotes(days);
+				AddPaymentNotes(days);
+				days.AddNote(today, "Requested balance date.");
 
-		private void AlphaDelta(CurrentPaymentModel cpm, DateTime today, DailyLoanStatus days) {
-			ScheduledItem firstOpen = WorkingModel.Schedule
-				.FirstOrDefault(s => (s.Date > today) && !s.ClosedDate.HasValue);
-
-			// ReSharper disable once PossibleInvalidOperationException
-			// If firstOpen is not null then firstOpen.Date is not null:
-			// this is checked during CreateActualDailyLoanStatus().
-			OneDayLoanStatus thatDay = firstOpen == null ? null : days[firstOpen.Date];
-			OneDayLoanStatus thisDay = days[today];
-
-			cpm.LoanIsClosed = firstOpen == null;
-
-			if (firstOpen == null)
-				cpm.Amount = 0;
-			else {
-				// If firstOpen is not null then thisDay is not null
-				// because of how CreateActualDailyLoanStatus works: thisDay corresponds to
-				// today which is inserted as it is a requested date.
-				cpm.Amount = firstOpen.Principal + thisDay.TotalExpectedNonprincipalPayment;
+				Library.Instance.Log.Debug(
+					"\n\n{4}.GetAmountToChargeOptions - begin:" +
+					"\n\nLoan calculator model:\n{0}" +
+					"\n\nPayment options on {3}:\n\t\t{1}" +
+					"\n\nDaily data:\n{2}" +
+					"\n\n{4}.GetAmountToChargeOptions - end." +
+					"\n\n",
+					WorkingModel,
+					cpm,
+					days.ToFormattedString("\t\t"),
+					today.DateStr(),
+					Name
+				);
 			} // if
 
-			cpm.IsLate = false;
-
-			cpm.SavedAmount = thatDay == null
-				? 0
-				: thatDay.TotalExpectedNonprincipalPayment - thisDay.TotalExpectedNonprincipalPayment;
-		} // AlphaDelta
+			return cpm;
+		} // GetAmountToChargeOptions
 
 		/// <summary>
 		/// Calculates loan earned interest between two dates including both dates.
@@ -541,5 +537,35 @@
 				);
 			} // for each
 		} // AddFeeNotes
+
+		private void AlphaDelta(CurrentPaymentModel cpm, DateTime today, DailyLoanStatus days, string scenarioName) {
+			cpm.ScenarioName = scenarioName;
+
+			ScheduledItem firstOpen = WorkingModel.Schedule
+				.FirstOrDefault(s => (s.Date > today) && !s.ClosedDate.HasValue);
+
+			// ReSharper disable once PossibleInvalidOperationException
+			// If firstOpen is not null then firstOpen.Date is not null:
+			// this is checked during CreateActualDailyLoanStatus().
+			OneDayLoanStatus thatDay = firstOpen == null ? null : days[firstOpen.Date];
+			OneDayLoanStatus thisDay = days[today];
+
+			cpm.LoanIsClosed = firstOpen == null;
+
+			if (firstOpen == null)
+				cpm.Amount = 0;
+			else {
+				// If firstOpen is not null then thisDay is not null
+				// because of how CreateActualDailyLoanStatus works: thisDay corresponds to
+				// today which is inserted as it is a requested date.
+				cpm.Amount = firstOpen.Principal + thisDay.TotalExpectedNonprincipalPayment;
+			} // if
+
+			cpm.IsLate = false;
+
+			cpm.SavedAmount = thatDay == null
+				? 0
+				: thatDay.TotalExpectedNonprincipalPayment - thisDay.TotalExpectedNonprincipalPayment;
+		} // AlphaDelta
 	} // class LoanCalculator
 } // namespace
