@@ -5,6 +5,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.Extensions;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -38,9 +39,15 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			lcm.Repayments.Add(new Repayment(new DateTime(2015, 2, 23), 250, 25, 0));
 			lcm.Repayments.Add(new Repayment(new DateTime(2015, 3, 23), 641, 25, 0));
 
+			lcm.Fees.Add(new Fee(new DateTime(2015, 4, 1), 25m));
+
 			lcm.SetScheduleCloseDatesFromPayments();
 
 			Log.Info("Loan model after close dates applied: {0}", lcm);
+
+			CurrentPaymentModel amount = lc.AmountToCharge(DateTime.UtcNow, true);
+
+			Log.Info("Amount to charge on {0}: {1}.", DateTime.UtcNow.DateStr(), amount);
 		} // TestSetScheduleCloseDatesFromPayments
 
 		private void TestSpecificLoanCalculator(Func<LoanCalculatorModel, ALoanCalculator> loanCalculatorFactory) {

@@ -172,19 +172,19 @@
 
 		/// <summary>
 		/// Calculates current (for requested date) payment.
-		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&authuser=0
+		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&amp;authuser=0
 		/// </summary>
-		/// <param name="requestedDate">Date to calculate payment on (current date if null).</param>
+		/// <param name="today">Date to calculate payment on.</param>
 		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
 		/// or leave it as is.</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
 		public virtual CurrentPaymentModel AmountToCharge(
-			DateTime? requestedDate = null,
+			DateTime today,
 			bool setClosedDateFromPayments = false,
 			bool writeToLog = true
 		) {
-			DateTime today = (requestedDate ?? DateTime.UtcNow).Date;
+			today = today.Date;
 
 			var cpm = new CurrentPaymentModel(0);
 
@@ -422,11 +422,7 @@
 			foreach (OpenPrincipal op in WorkingModel.OpenPrincipalHistory) {
 				DateTime curOpDate = op.Date;
 
-				Func<OneDayLoanStatus, bool> historyItemApplies = (op.Date == WorkingModel.LoanIssueDate)
-					? new Func<OneDayLoanStatus, bool>(dd => dd.Date > curOpDate)
-					: new Func<OneDayLoanStatus, bool>(dd => dd.Date >= curOpDate);
-
-				foreach (OneDayLoanStatus cls in days.Where(dd => historyItemApplies(dd)))
+				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date >= curOpDate))
 					cls.OpenPrincipal = op.Amount;
 			} // for each
 
