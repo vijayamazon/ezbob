@@ -41,9 +41,7 @@ EzBob.Popup = Backbone.View.extend({
 			modal: true,
 			resizable: true,
 			width: 550,
-			minWidth: 550,
 			height: 580,
-			minHeight: 580,
 			closeOnEscape: true,
 		});
 
