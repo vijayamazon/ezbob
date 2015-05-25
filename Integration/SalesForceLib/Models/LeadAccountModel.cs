@@ -6,14 +6,14 @@
 	[DataContract(IsReference = true)]
 	public class LeadAccountModel {
 		[DataMember]
-		public string Email { get; set; }
+		public string Email { get; set; } // lead/account unique identifier
 		//----------------------------------------//
 
 		//Contact Data
 		[DataMember]
 		public string Name { get; set; }
 		[DataMember]
-		public string Gender { get; set; }
+		public string Gender { get; set; } //Gender enum
 		[DataMember]
 		public string PhoneNumber { get; set; }
 		[DataMember]
@@ -52,9 +52,9 @@
 
 		//state source data
 		[DataMember]
-		public string EzbobStatus { get; set; }
+		public string EzbobStatus { get; set; } //EzbobStatus enum
 		[DataMember]
-		public string EzbobSource { get; set; }
+		public string EzbobSource { get; set; } //EzbobSource enum
 		[DataMember]
 		public string LeadSource { get; set; }
 		[DataMember]

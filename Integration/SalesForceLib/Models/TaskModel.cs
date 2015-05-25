@@ -12,7 +12,9 @@
 		}
 
 		[DataMember]
-		public string Email { get; set; }
+		public string Email { get; set; } // lead/account unique identifier
+		//----------------------------------------//
+
 		[DataMember]
 		public DateTime CreateDate { get; set; }
 		[DataMember]
@@ -26,7 +28,7 @@
 		[DataMember]
 		public string Status { get; set; } // ? no updates only create with default value
 		[DataMember]
-		public string Priority { get; set; }
+		public string Priority { get; set; } //PriorityEnum enum
 		[DataMember]
 		public bool IsOpportunity { get; set; }
 	}

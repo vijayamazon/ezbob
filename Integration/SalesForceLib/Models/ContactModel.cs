@@ -5,12 +5,12 @@
 	[DataContract(IsReference = true)]
 	public class ContactModel {
 		[DataMember]
-		public string Email { get; set; }
+		public string Email { get; set; } // account unique identifier
 		//----------------------------------------//
 		[DataMember]
-		public string ContactEmail { get; set; }
+		public string ContactEmail { get; set; } 
 		[DataMember]
-		public string Type { get; set; }
+		public string Type { get; set; } //ContactType enum
 		[DataMember]
 		public string Name { get; set; }
 		[DataMember]

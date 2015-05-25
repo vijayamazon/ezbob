@@ -44,18 +44,22 @@
 				PhoneNumber = "0564564654",
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
+				IsTest = false,
+				Origin = "ezbob"
 			};
-			Log.Debug(JsonConvert.SerializeObject(model, Formatting.Indented));
+			Log.Debug(model.ToJsonExtension());
 			Log.Debug("call CreateOpportunity/UpdateOpportunity");
 
 			var opModel = new OpportunityModel {
 				ApprovedAmount = 10000,
 				Email = "a@b.c",
 				ExpectedEndDate = new DateTime(2015, 01, 29),
-				Stage = OpportunityStage.s90.DescriptionAttr()
+				Stage = OpportunityStage.s90.DescriptionAttr(),
+				Name = "opName",
+				
 				
 			};
-			Log.Debug(JsonConvert.SerializeObject(opModel, Formatting.Indented));
+			Log.Debug(opModel.ToJsonExtension());
 
 
 			Log.Debug("call CreateUpdateContact");
@@ -77,7 +81,7 @@
 				Type = "Director",
 				PhoneNumber = "065645745"
 			};
-			Log.Debug(JsonConvert.SerializeObject(cModel, Formatting.Indented));
+			Log.Debug(cModel.ToJsonExtension());
 
 
 			Log.Debug("call CreateTask");
@@ -93,7 +97,7 @@
                 Description = "Subject"
 			};
 
-			Log.Debug(JsonConvert.SerializeObject(tModel, Formatting.Indented));
+			Log.Debug(tModel.ToJsonExtension());
 			Log.Debug("call CreateActivity");
 
 			var aModel = new ActivityModel {
@@ -106,7 +110,7 @@
 				EndDate = new DateTime(2015, 01, 28),
 				IsOpportunity = false,
 			};
-			Log.Debug(JsonConvert.SerializeObject(aModel, Formatting.Indented));
+			Log.Debug(aModel.ToJsonExtension(true));
 			Log.Debug("call ChangeEmail");
 
 			var changeModel = new {
@@ -114,11 +118,11 @@
 				newEmail = "b@a.c"
 			};
 
-			Log.Debug(JsonConvert.SerializeObject(changeModel, Formatting.Indented));
+			Log.Debug(changeModel.ToJsonExtension());
 			Log.Debug("All methods response");
 
-			var rModel = new ApiResponse("", "");
-			Log.Debug(JsonConvert.SerializeObject(rModel, Formatting.Indented));
+			var rModel = new ApiResponse("Success", "");
+			Log.Debug(rModel.ToJsonExtension());
 		}
 
 		private ISalesForceAppClient GetClient(){

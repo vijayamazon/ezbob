@@ -6,7 +6,8 @@
 	[DataContract(IsReference = true)]
 	public class OpportunityModel {
 		[DataMember]
-		public string Email { get; set; }
+		public string Email { get; set; } // account unique identifier
+		//----------------------------------------//
 		[DataMember]
 		public string Name { get; set; }
 		[DataMember]
@@ -22,13 +23,13 @@
 		[DataMember]
 		public int? TookAmount { get; set; }
 		[DataMember]
-		public string Type { get; set; } //??? is it needed
+		public string Type { get; set; } //OpportunityType enum
 		[DataMember]
-		public string Stage { get; set; }
+		public string Stage { get; set; } //OpportunityStage enum
 		[DataMember]
 		public string DealCloseType { get; set; }
 		[DataMember]
-		public string DealLostReason { get; set; }
+		public string DealLostReason { get; set; } // OpportunityDealCloseReason enum
 	}
 
 	public enum OpportunityDealCloseReason {
@@ -43,10 +44,11 @@
 		[Description("Resell")] // created when customer requests cash
 		Resell,
 		[Description("Finish Loan")] //created when customer finishes to repay his loan
-		FinishLoan
+		FinishLoan,
+		[Description("Paid 50% of the balance")]
+		FiftyPercentRepaid
 	}
 
-	//todo define stages
 	public enum OpportunityStage {
 		[Description("New")]
 		s5 = 5,
