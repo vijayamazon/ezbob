@@ -5,7 +5,8 @@
 			bool isLate = false,
 			bool loanIsClosed = false,
 			decimal savedAmount = 0,
-			decimal balance = 0
+			decimal balance = 0,
+			decimal accruedInterest = 0
 		) {
 			IsError = false;
 			Amount = amount;
@@ -13,6 +14,7 @@
 			LoanIsClosed = loanIsClosed;
 			SavedAmount = savedAmount;
 			Balance = balance;
+			AccruedInterest = accruedInterest;
 		} // constructor
 
 		/// <summary>
@@ -48,6 +50,11 @@
 		/// </summary>
 		public decimal Balance { get; set; }
 
+		/// <summary>
+		/// Interest that customer should pay today (e.g. for rollover).
+		/// </summary>
+		public decimal AccruedInterest { get; set; }
+
 		public string ScenarioName { get; set; }
 
 		/// <summary>
@@ -58,14 +65,16 @@
 		/// </returns>
 		public override string ToString() {
 			return string.Format(
-				"scenario '{6}', loan is closed: {1}, late: {2}, amount: {3}, saving {4}, balance: {5} ({0})",
+				"scenario '{6}', loan is closed: {1}, late: {2}, amount: {3}, " +
+				"saving {4}, balance: {5}, accrued interest: {7} ({0})",
 				IsError ? "error" : "no error",
 				LoanIsClosed ? "yes" : "no",
 				IsLate ? "yes" : "no",
 				Amount.ToString("C2", Library.Instance.Culture),
 				SavedAmount.ToString("C2", Library.Instance.Culture),
 				Balance.ToString("C2", Library.Instance.Culture),
-				ScenarioName
+				ScenarioName,
+				AccruedInterest.ToString("C2", Library.Instance.Culture)
 			);
 		} // ToString
 	} // class CurrentPaymentModel

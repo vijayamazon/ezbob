@@ -169,6 +169,7 @@
 		/// <summary>
 		/// Calculates payment options (late/current/next installment/full balance) for requested date.
 		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&amp;authuser=0
+		/// This method is used to calculate charge options that should be displayed to customer in the dashboard.
 		/// </summary>
 		/// <param name="today">Date to calculate payment on.</param>
 		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
@@ -180,103 +181,26 @@
 			bool setClosedDateFromPayments = false,
 			bool writeToLog = true
 		) {
-			today = today.Date;
-
-			var cpm = new CurrentPaymentModel();
-
-			if (today <= WorkingModel.LoanIssueTime.Date) {
-				cpm.IsError = true;
-				return cpm;
-			} // if
-
-			DailyLoanStatus days = CreateActualDailyLoanStatus(today);
-
-			if (days.IsEmpty) {
-				cpm.IsError = true;
-				return cpm;
-			} // if
-
-			if (setClosedDateFromPayments)
-				WorkingModel.SetScheduleCloseDatesFromPayments();
-
-			cpm.Balance = days[today].CurrentBalance;
-
-			bool allPreviousPaymentsAreClosed = WorkingModel.Schedule
-				.Where(s => s.Date < today)
-				.All(s => s.IsClosedOn(today));
-
-			ScheduledItem currentPayment = WorkingModel.Schedule.FindByDate(today);
-
-			if (currentPayment == null) { // today is not a payment date.
-				if (allPreviousPaymentsAreClosed) // Delta scenario.
-					AlphaDelta(cpm, today, days, "Delta");
-				else { // Echo scenario.
-					cpm.ScenarioName = "Echo";
-
-					cpm.LoanIsClosed = false;
-
-					OneDayLoanStatus thisDay = days[today];
-
-					cpm.Amount =
-						WorkingModel.Schedule.Where(s => s.Date < today).Sum(s => s.Principal) -
-						thisDay.TotalRepaidPrincipal +
-						thisDay.TotalExpectedNonprincipalPayment;
-
-					cpm.IsLate = true;
-
-					cpm.SavedAmount = 0;
-				} // if
-			} else { // today is a payment date.
-				if (allPreviousPaymentsAreClosed) {
-					if (currentPayment.IsClosedOn(today)) // Alpha scenario.
-						AlphaDelta(cpm, today, days, "Alpha");
-					else { // Bravo scenario.
-						cpm.ScenarioName = "Bravo";
-						cpm.LoanIsClosed = false;
-						cpm.Amount = currentPayment.Principal + days[today].TotalExpectedNonprincipalPayment;
-						cpm.IsLate = false;
-						cpm.SavedAmount = 0;
-					} // if
-				} else { // Charlie scenario.
-					cpm.ScenarioName = "Charlie";
-
-					cpm.LoanIsClosed = false;
-
-					OneDayLoanStatus thisDay = days[today];
-
-					cpm.Amount = WorkingModel.Schedule.Where(s => s.Date < today).Sum(s => s.Principal) -
-						thisDay.TotalRepaidPrincipal +
-						thisDay.TotalExpectedNonprincipalPayment +
-						currentPayment.Principal;
-
-					cpm.IsLate = true;
-					cpm.SavedAmount = 0;
-				} // if
-			} // if
-
-			if (writeToLog) {
-				AddScheduleNotes(days);
-				AddFeeNotes(days);
-				AddPaymentNotes(days);
-				days.AddNote(today, "Requested balance date.");
-
-				Library.Instance.Log.Debug(
-					"\n\n{4}.GetAmountToChargeOptions - begin:" +
-					"\n\nLoan calculator model:\n{0}" +
-					"\n\nPayment options on {3}:\n\t\t{1}" +
-					"\n\nDaily data:\n{2}" +
-					"\n\n{4}.GetAmountToChargeOptions - end." +
-					"\n\n",
-					WorkingModel,
-					cpm,
-					days.ToFormattedString("\t\t"),
-					today.DateStr(),
-					Name
-				);
-			} // if
-
-			return cpm;
+			return GetAmountToCharge(today, AmountToChargeScenario.Options, setClosedDateFromPayments, writeToLog);
 		} // GetAmountToChargeOptions
+
+		/// <summary>
+		/// Calculates payment options (late/current installment) for requested date.
+		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&amp;authuser=0
+		/// This method is used to determine what amount should be charged automatically by charger.
+		/// </summary>
+		/// <param name="today">Date to calculate payment on.</param>
+		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
+		/// or leave it as is.</param>
+		/// <param name="writeToLog">Write result to log or not.</param>
+		/// <returns>Loan balance on specific date.</returns>
+		public virtual CurrentPaymentModel GetAmountToChargeNow(
+			DateTime today,
+			bool setClosedDateFromPayments = false,
+			bool writeToLog = true
+		) {
+			return GetAmountToCharge(today, AmountToChargeScenario.Now, setClosedDateFromPayments, writeToLog);
+		} // GetAmountToChargeNow
 
 		/// <summary>
 		/// Calculates loan earned interest between two dates including both dates.
@@ -538,7 +462,122 @@
 			} // for each
 		} // AddFeeNotes
 
-		private void AlphaDelta(CurrentPaymentModel cpm, DateTime today, DailyLoanStatus days, string scenarioName) {
+		private enum AmountToChargeScenario {
+			Options,
+			Now,
+		} // enum AmountToChargeScenario
+
+		private CurrentPaymentModel GetAmountToCharge(
+			DateTime today,
+			AmountToChargeScenario scenario,
+			bool setClosedDateFromPayments,
+			bool writeToLog
+		) {
+			today = today.Date;
+
+			var cpm = new CurrentPaymentModel();
+
+			if (today <= WorkingModel.LoanIssueTime.Date) {
+				cpm.IsError = true;
+				return cpm;
+			} // if
+
+			DailyLoanStatus days = CreateActualDailyLoanStatus(today);
+
+			if (days.IsEmpty) {
+				cpm.IsError = true;
+				return cpm;
+			} // if
+
+			if (setClosedDateFromPayments)
+				WorkingModel.SetScheduleCloseDatesFromPayments();
+
+			cpm.Balance = days[today].CurrentBalance;
+			cpm.AccruedInterest = days[today].AccruedInterest;
+
+			bool allPreviousPaymentsAreClosed = WorkingModel.Schedule
+				.Where(s => s.Date < today)
+				.All(s => s.IsClosedOn(today));
+
+			ScheduledItem currentPayment = WorkingModel.Schedule.FindByDate(today);
+
+			if (currentPayment == null) { // today is not a payment date.
+				if (allPreviousPaymentsAreClosed) // Delta scenario.
+					AlphaDelta(cpm, today, days, "Delta", scenario);
+				else { // Echo scenario.
+					cpm.ScenarioName = "Echo";
+
+					cpm.LoanIsClosed = false;
+
+					OneDayLoanStatus thisDay = days[today];
+
+					cpm.Amount =
+						WorkingModel.Schedule.Where(s => s.Date < today).Sum(s => s.Principal) -
+						thisDay.TotalRepaidPrincipal +
+						thisDay.TotalExpectedNonprincipalPayment;
+
+					cpm.IsLate = true;
+
+					cpm.SavedAmount = 0;
+				} // if
+			} else { // today is a payment date.
+				if (allPreviousPaymentsAreClosed) {
+					if (currentPayment.IsClosedOn(today)) // Alpha scenario.
+						AlphaDelta(cpm, today, days, "Alpha", scenario);
+					else { // Bravo scenario.
+						cpm.ScenarioName = "Bravo";
+						cpm.LoanIsClosed = false;
+						cpm.Amount = currentPayment.Principal + days[today].TotalExpectedNonprincipalPayment;
+						cpm.IsLate = false;
+						cpm.SavedAmount = 0;
+					} // if
+				} else { // Charlie scenario.
+					cpm.ScenarioName = "Charlie";
+
+					cpm.LoanIsClosed = false;
+
+					OneDayLoanStatus thisDay = days[today];
+
+					cpm.Amount = WorkingModel.Schedule.Where(s => s.Date < today).Sum(s => s.Principal) -
+						thisDay.TotalRepaidPrincipal +
+						thisDay.TotalExpectedNonprincipalPayment +
+						currentPayment.Principal;
+
+					cpm.IsLate = true;
+					cpm.SavedAmount = 0;
+				} // if
+			} // if
+
+			if (writeToLog) {
+				AddScheduleNotes(days);
+				AddFeeNotes(days);
+				AddPaymentNotes(days);
+				days.AddNote(today, "Requested balance date.");
+
+				Library.Instance.Log.Debug(
+					"\n\n{4}.GetAmountToChargeOptions - begin:" +
+					"\n\nLoan calculator model:\n{0}" +
+					"\n\nPayment options on {3}:\n\t\t{1}" +
+					"\n\nDaily data:\n{2}" +
+					"\n\n{4}.GetAmountToChargeOptions - end." +
+					"\n\n",
+					WorkingModel,
+					cpm,
+					days.ToFormattedString("\t\t"),
+					today.DateStr(),
+					Name
+				);
+			} // if
+
+			return cpm;
+		} // GetAmountToCharge
+		private void AlphaDelta(
+			CurrentPaymentModel cpm,
+			DateTime today,
+			DailyLoanStatus days,
+			string scenarioName,
+			AmountToChargeScenario scenario
+		) {
 			cpm.ScenarioName = scenarioName;
 
 			ScheduledItem firstOpen = WorkingModel.Schedule
@@ -552,7 +591,7 @@
 
 			cpm.LoanIsClosed = firstOpen == null;
 
-			if (firstOpen == null)
+			if ((firstOpen == null) || (scenario == AmountToChargeScenario.Now))
 				cpm.Amount = 0;
 			else {
 				// If firstOpen is not null then thisDay is not null
@@ -563,7 +602,7 @@
 
 			cpm.IsLate = false;
 
-			cpm.SavedAmount = thatDay == null
+			cpm.SavedAmount = ((thatDay == null) || (scenario == AmountToChargeScenario.Now))
 				? 0
 				: thatDay.TotalExpectedNonprincipalPayment - thisDay.TotalExpectedNonprincipalPayment;
 		} // AlphaDelta

@@ -221,7 +221,7 @@
 				decimal currentPaidPrincipal = curRepayment.Principal;
 
 				while (currentPaidPrincipal > 0) {
-					currentPaidPrincipal = curSchedule.AddRepayment(currentPaidPrincipal, curRepayment.Date);
+					currentPaidPrincipal = curSchedule.AddPrincipalRepayment(currentPaidPrincipal, curRepayment.Date);
 
 					if (curSchedule.ClosedDate.HasValue) {
 						if (qsp.Count > 0)

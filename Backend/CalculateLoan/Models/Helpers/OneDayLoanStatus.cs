@@ -64,6 +64,10 @@
 			get { return OpenPrincipal + TotalExpectedNonprincipalPayment; }
 		} // CurrentBalance
 
+		public decimal AccruedInterest {
+			get { return TotalEarnedInterest - TotalRepaidInterest; }
+		} // AccruedInterest
+
 		public void AddRepayment(Repayment rp) {
 			if (rp == null)
 				return;

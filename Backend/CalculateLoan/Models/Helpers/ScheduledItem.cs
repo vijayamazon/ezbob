@@ -36,7 +36,7 @@
 			get { return this.principalRepayments.Count > 0; }
 		} // HasRepayments
 
-		public decimal AddRepayment(decimal principal, DateTime time) {
+		public decimal AddPrincipalRepayment(decimal principal, DateTime time) {
 			if (HasRepayments)
 				if (time < this.principalRepayments.Last().Time)
 					throw new TooEarlyPrincipalRepaymentException(time, this.principalRepayments.Last().Time);
@@ -54,7 +54,7 @@
 
 			this.principalRepayments.Add(new RepaidPrincipal(principal, time));
 			return 0;
-		} // AddRepayment
+		} // AddPrincipalRepayment
 
 		public void ClearRepayments() {
 			this.principalRepayments.Clear();
