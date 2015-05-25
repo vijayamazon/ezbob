@@ -4,6 +4,32 @@
 	using System.IO;
 	using System.Linq;
 
+/*
+select
+	t.TrailID,
+	n.TraceNameID,
+	n.TraceName
+from
+	DecisionTrail t
+	INNER JOIN DecisionTrail v ON t.UniqueID = v.UniqueID AND t.IsPrimary = 1 and v.IsPrimary = 0
+	inner join Customer c ON t.CustomerID = c.Id ANd c.IsTest = 0
+	inner join DecisionTrace tt ON t.TrailID = tt.TrailID
+	inner join DecisionTraceNames n ON tt.TraceNameID = n.TraceNameID
+where
+	t.TrailTagID IS NULL
+	AND
+	t.DecisionID = 1
+	AND
+	t.DecisionStatusID = 2
+	AND
+	t.DecisionTime > 'May 10 2015'
+	AND
+	tt.DecisionStatusID != 1
+order by
+	t.TrailID,
+	tt.Position
+*/
+
 	class Program {
 		static void Main(string[] args) {
 			string[] lines = File.ReadAllLines("not-auto-approved.csv");
