@@ -43,17 +43,17 @@
 					trails[id] = new Trail(id, name);
 			} // for each input line
 
-			var keys = new SortedDictionary<NonAffirmativeGroupKey, int>();
+			var keys = new SortedDictionary<NonAffirmativeGroupKey, List<long>>();
 
 			foreach (Trail trail in trails.Values) {
 				if (keys.ContainsKey(trail.Key))
-					keys[trail.Key]++;
+					keys[trail.Key].Add(trail.ID);
 				else
-					keys[trail.Key] = 1;
+					keys[trail.Key] = new List<long> { trail.ID, };
 			} // for each trail
 
 			foreach (var pair in keys)
-				Console.WriteLine("{0};{1}", pair.Value, pair.Key.List);
+				Console.WriteLine("{0};{1};{2}", pair.Value.Count, pair.Key.List, string.Join(", ", pair.Value));
 		} // Main
 	} // class Program
 } // namespace
