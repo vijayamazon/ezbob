@@ -1,16 +1,24 @@
 @media only screen and (min-width : 320px) and (max-width : 1000px) {
     #header {
-        width: 100%;
-        min-width: 100%;
+		width: 100%;
+		-moz-min-width: 100%;
+		-ms-min-width: 100%;
+		-o-min-width: 100%;
+		-webkit-min-width: 100%;
+		min-width: 100%;
         background-color: #fff;
-    }
-    
-    .header-inner {
-        width: 100%;
-        min-width: 320px;
-    }
-    
-    ul#user-menu {
+	}
+
+	.header-inner {
+		width: 100%;
+		-moz-min-width: 320px;
+		-ms-min-width: 320px;
+		-o-min-width: 320px;
+		-webkit-min-width: 320px;
+		min-width: 320px;
+	}
+
+	ul#user-menu {
         margin: 0;
         width: 180px;
         top: 0;
@@ -27,20 +35,28 @@
     }
 
     .inner {
-        min-width: 320px;
+		-moz-min-width: 320px;
+		-ms-min-width: 320px;
+		-o-min-width: 320px;
+		-webkit-min-width: 320px;
+		min-width: 320px;
         width: 100%;
         margin: 0 auto;
-    }
+	}
 
-    .broker-finish-wizard-later {
-        background: none;
-        min-width: 320px;
+	.broker-finish-wizard-later {
+		background: none;
+		-moz-min-width: 320px;
+		-ms-min-width: 320px;
+		-o-min-width: 320px;
+		-webkit-min-width: 320px;
+		min-width: 320px;
         width: 100%;
         margin: 0;
         border: none;
-    }
+	}
 
-    .broker-finish-inner {
+	.broker-finish-inner {
         border: 1px solid #E2E3E5;
         padding: 0;
     }
@@ -207,19 +223,27 @@
         }
 
     .wizard-steps {
-        min-width: 320px;
+		-moz-min-width: 320px;
+		-ms-min-width: 320px;
+		-o-min-width: 320px;
+		-webkit-min-width: 320px;
+		min-width: 320px;
         width: 100%;
-    }
+	}
 
-    ul.application_steps {
-        margin: 0 0 0 0;
+	ul.application_steps {
+		margin: 0 0 0 0;
         overflow: hidden;
         list-style: none;
-        min-width: 320px;
+		-moz-min-width: 320px;
+		-ms-min-width: 320px;
+		-o-min-width: 320px;
+		-webkit-min-width: 320px;
+		min-width: 320px;
         width: 100%;
-    }
+	}
 
-    .progress-line {
+	.progress-line {
         margin-left: 20px;
         top: 18px;
     }
