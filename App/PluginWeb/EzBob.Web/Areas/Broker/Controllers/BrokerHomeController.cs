@@ -2,12 +2,10 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Text.RegularExpressions;
 	using System.Web;
 	using System.Web.Helpers;
 	using System.Web.Mvc;
 	using ConfigManager;
-	using ExperianLib.Ebusiness;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Utils.MimeTypes;
@@ -22,7 +20,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
-	using PostcodeAnywhere;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
@@ -39,7 +36,7 @@
 
 			ms_oLog.Debug("UI origin is {0}", uiOrigin.Stringify());
 
-			if (!uiOrigin.IsEzbob()) {
+			if (!uiOrigin.IsEverline()) {
 				return RedirectToAction(
 					"Index",
 					User.Identity.IsAuthenticated ? "Profile" : "Wizard",
