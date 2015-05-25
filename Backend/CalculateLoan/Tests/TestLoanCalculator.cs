@@ -45,7 +45,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 
 			Log.Info("Loan model after close dates applied: {0}", lcm);
 
-			CurrentPaymentModel amount = lc.GetAmountToChargeOptions(DateTime.UtcNow, true);
+			CurrentPaymentModel amount = lc.GetAmountToChargeForDashboard(DateTime.UtcNow, true);
 
 			Log.Info("Amount to charge on {0}: {1}.", DateTime.UtcNow.DateStr(), amount);
 		} // TestSetScheduleCloseDatesFromPayments

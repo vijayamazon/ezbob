@@ -14,7 +14,7 @@
 		/// </summary>
 		/// <param name="periodCount">A number of periods to add.</param>
 		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		protected override DateTime AddPeriods(int periodCount) {
+		internal override DateTime AddPeriods(int periodCount) {
 			return WorkingModel.IsMonthly
 				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
 				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);

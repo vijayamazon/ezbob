@@ -165,6 +165,48 @@
 			return string.Join("\n", result);
 		} // ToFormattedString
 
+		public void AddScheduleNotes(LoanCalculatorModel workingModel) {
+			if (workingModel == null)
+				return;
+
+			for(int i = 0; i < workingModel.Schedule.Count; i++) {
+				var sp = workingModel.Schedule[i];
+
+				AddNote(
+					sp.Date,
+					i == workingModel.Schedule.Count - 1 ? "Last scheduled payment." : "Scheduled payment."
+				);
+			} // for each
+		} // AddScheduleNotes
+
+		public void AddPaymentNotes(LoanCalculatorModel workingModel) {
+			if (workingModel == null)
+				return;
+
+			for(int i = 0; i < workingModel.Repayments.Count; i++) {
+				var rp = workingModel.Repayments[i];
+
+				AddNote(
+					rp.Date,
+					"Repaid: " + rp.Amount.ToString("C2", Library.Instance.Culture)
+				);
+			} // for each
+		} // AddPaymentNotes
+
+		public void AddFeeNotes(LoanCalculatorModel workingModel) {
+			if (workingModel == null)
+				return;
+
+			for(int i = 0; i < workingModel.Fees.Count; i++) {
+				var fee = workingModel.Fees[i];
+
+				AddNote(
+					fee.AssignDate,
+					"Fee assigned: " + fee.Amount.ToString("C2", Library.Instance.Culture)
+				);
+			} // for each
+		} // AddFeeNotes
+
 		private readonly SortedDictionary<DateTime, string> notes;
 	} // class DailyLoanStatus
 } // namespace
