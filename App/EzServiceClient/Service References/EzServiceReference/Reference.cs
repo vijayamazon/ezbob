@@ -185,7 +185,6 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.DataContractAttribute(Name="ActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.IntActionResult))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.StringActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.UserLoginActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
@@ -199,6 +198,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ConfigTableActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DecimalActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CustomerManualAnnualizedRevenueActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.DateTimeActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PricingModelModelActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.PropertyStatusesActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.WizardConfigsActionResult))]
@@ -280,29 +280,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public int Value {
-            get {
-                return this.ValueField;
-            }
-            set {
-                if ((this.ValueField.Equals(value) != true)) {
-                    this.ValueField = value;
-                    this.RaisePropertyChanged("Value");
-                }
-            }
-        }
-    }
-    
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="DateTimeActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
-    [System.SerializableAttribute()]
-    public partial class DateTimeActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private System.DateTime ValueField;
-        
-        [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime Value {
             get {
                 return this.ValueField;
             }
@@ -687,6 +664,29 @@ namespace ServiceClientProxy.EzServiceReference {
             }
             set {
                 if ((object.ReferenceEquals(this.ValueField, value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="DateTimeActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class DateTimeActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private System.DateTime ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
                     this.ValueField = value;
                     this.RaisePropertyChanged("Value");
                 }
@@ -3277,23 +3277,17 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLastOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLastOfferResponse")]
         System.Threading.Tasks.Task<Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers> GetLastOfferAsync(int userID, int customerID);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleMethodResponse")]
-        ServiceClientProxy.EzServiceReference.DateTimeActionResult ExampleMethod(int userID, int customerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleMethodResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> ExampleMethodAsync(int userID, int customerID);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse")]
         ServiceClientProxy.EzServiceReference.IntActionResult AddLoanLegals(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoanLegals", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanLegalsResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanLegalsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethodResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData ExampleOtherMethod();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
+        ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethod", ReplyAction="http://tempuri.org/IEzServiceNewLoan/ExampleOtherMethodResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExampleOtherMethodAsync();
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
@@ -4587,14 +4581,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.GetLastOfferAsync(userID, customerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.DateTimeActionResult ExampleMethod(int userID, int customerID) {
-            return base.Channel.ExampleMethod(userID, customerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.DateTimeActionResult> ExampleMethodAsync(int userID, int customerID) {
-            return base.Channel.ExampleMethodAsync(userID, customerID);
-        }
-        
         public ServiceClientProxy.EzServiceReference.IntActionResult AddLoanLegals(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals) {
             return base.Channel.AddLoanLegals(userID, customerID, loanLegals);
         }
@@ -4603,12 +4589,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddLoanLegalsAsync(userID, customerID, loanLegals);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData ExampleOtherMethod() {
-            return base.Channel.ExampleOtherMethod();
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+            return base.Channel.AddLoan(userID, customerID, loanModel);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> ExampleOtherMethodAsync() {
-            return base.Channel.ExampleOtherMethodAsync();
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+            return base.Channel.AddLoanAsync(userID, customerID, loanModel);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {

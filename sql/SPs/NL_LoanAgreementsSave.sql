@@ -12,8 +12,7 @@ GO
 CREATE TYPE NL_LoanAgreementsList AS TABLE (
 	[LoanHistoryID] INT NOT NULL,
 	[FilePath] NVARCHAR(250) NULL,
-	[LoanAgreementTemplateID] INT NULL,
-	[AgreementModel] NVARCHAR(MAX) NULL
+	[LoanAgreementTemplateID] INT NULL
 )
 GO
 
@@ -26,13 +25,11 @@ BEGIN
 	INSERT INTO NL_LoanAgreements (
 		[LoanHistoryID],
 		[FilePath],
-		[LoanAgreementTemplateID],
-		[AgreementModel]
+		[LoanAgreementTemplateID]
 	) SELECT
 		[LoanHistoryID],
 		[FilePath],
-		[LoanAgreementTemplateID],
-		[AgreementModel]
+		[LoanAgreementTemplateID]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

@@ -24,6 +24,7 @@
 
 		public decimal Principal { get; set; }
 		public decimal InterestRate { get; set; }
+		public int Position { get; set; }
 
 		public decimal OpenPrincipal {
 			get {

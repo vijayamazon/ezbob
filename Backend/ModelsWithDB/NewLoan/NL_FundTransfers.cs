@@ -21,5 +21,13 @@
 
         [DataMember]
         public bool IsActive { get; set; }
+
+		[FK("LoanTransactionMethod", "Id")]
+		[DataMember]
+		public int LoanTransactionMethodID { get; set; }
+
+		//[DataMember]
+		//public NL_PacnetTransactions PacnetTransaction { get; set; }
+
     }//class NL_FundTransfers
 }//ns

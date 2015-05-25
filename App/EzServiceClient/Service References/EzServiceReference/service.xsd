@@ -3,6 +3,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
@@ -190,46 +191,35 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ExampleMethod">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
-        <xs:element minOccurs="0" name="customerID" type="xs:int" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ExampleMethodResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ExampleMethodResult" nillable="true" type="q18:DateTimeActionResult" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
   <xs:element name="AddLoanLegals">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="loanLegals" nillable="true" type="q19:NL_LoanLegals" />
+        <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="loanLegals" nillable="true" type="q18:NL_LoanLegals" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddLoanLegalsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanLegalsResult" nillable="true" type="q20:IntActionResult" />
+        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanLegalsResult" nillable="true" type="q19:IntActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="ExampleOtherMethod">
-    <xs:complexType>
-      <xs:sequence />
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="ExampleOtherMethodResponse">
+  <xs:element name="AddLoan">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="ExampleOtherMethodResult" nillable="true" type="q21:ActionMetaData" />
+        <xs:element minOccurs="0" name="userID" type="xs:int" />
+        <xs:element minOccurs="0" name="customerID" type="xs:int" />
+        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="loanModel" nillable="true" type="q20:NL_Model" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="AddLoanResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanResult" nillable="true" type="q21:IntActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

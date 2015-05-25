@@ -97,7 +97,7 @@ CREATE TABLE [dbo].[NL_DiscountPlans](
 	 [DiscountPlanID] [int] NOT NULL identity (1,1),
 	 [DiscountPlan] [nchar](80) NOT NULL,
 	 [IsDefault] [bit] NULL,
-	 [ForbiddenForReuse] [bit] NULL,
+	 [IsActive] [bit] NULL,
 	 [TimestampCounter] rowversion NOT NULL,
    CONSTRAINT [PK_NL_DiscountPlans] PRIMARY KEY CLUSTERED ( [DiscountPlanID] ASC )
  ) ;
@@ -316,20 +316,20 @@ IF OBJECT_ID('NL_Loans') IS NULL
 BEGIN	
 CREATE TABLE [dbo].[NL_Loans](
 	[LoanID] [int] NOT NULL IDENTITY(1,1) ,
-	[OfferID] [int] NULL,
+	[OfferID] [int] NOT NULL,
 	[LoanTypeID] [int] NOT NULL,
-	[RepaymentIntervalTypeID] [int] NULL,
-	[LoanStatusID] [int] NULL,
+	[RepaymentIntervalTypeID] [int] NOT NULL,
+	[LoanStatusID] [int] NOT NULL,
 	[EzbobBankAccountID] [int] NULL,
-	[LoanSourceID] [int] NULL,
+	[LoanSourceID] [int] NOT NULL,
 	[Position] [int] NOT NULL,
 	[InitialLoanAmount] [decimal] (18,6) NULL,
 	[CreationTime] [datetime] NOT NULL,
-	[IssuedTime] [datetime] NULL,
-	[RepaymentCount] [int] NULL,	
+	[IssuedTime] [datetime] NOT NULL,
+	[RepaymentCount] [int] NOT NULL,	
 	[Refnum] [nchar](10) NOT NULL,
 	[DateClosed] [datetime] NULL,	
-	[InterestRate] [decimal](18, 6) NULL,
+	[InterestRate] [decimal](18, 6) NOT NULL,
 	[InterestOnlyRepaymentCount] [int] NULL,
 	[OldLoanID] [int] NOT NULL,
 	[TimestampCounter] rowversion NOT NULL,	
@@ -944,7 +944,7 @@ if OBJECT_ID('tempdb..#discountplanTemp') is not null
         SELECT TOP 1 @Name = Name, @Id = Id, @VALUESStr = VALUESStr, @IsDefault = IsDefault, @ForbiddenForReuse = ForbiddenForReuse FROM #discountplanTemp;		
 		if (SELECT DiscountPlan FROM dbo.[NL_DiscountPlans] WHERE DiscountPlan = @Name ) is null	
 		BEGIN	
-			INSERT INTO [dbo].[NL_DiscountPlans] ([DiscountPlan], [IsDefault], [ForbiddenForReuse]) VALUES (ltrim(rtrim(@Name)), @IsDefault, @ForbiddenForReuse);
+			INSERT INTO [dbo].[NL_DiscountPlans] ([DiscountPlan], [IsDefault], [IsActive]) VALUES (ltrim(rtrim(@Name)), @IsDefault, @ForbiddenForReuse);
 		END
 		SELECT @NL_Id = DiscountPlanID FROM [dbo].[NL_DiscountPlans] WHERE [DiscountPlan] = @Name;	
 		if @NL_Id is not null 

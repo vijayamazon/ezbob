@@ -34,6 +34,9 @@
         
         [DataMember]
         public DateTime StatusUpdatedTime { get; set; }
+
+
+		public string TransactionStatus { get; set; }
         
     }//class NL_PacnetTransactions
 }//ns

@@ -76,13 +76,16 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.ExternalAPI.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.NewLoan.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Models.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\EzBob.Backend.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian.xsd">
+    <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.Experian1.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.NewLoan.xsd">

@@ -43,21 +43,21 @@
         public decimal MonthlyInterestRate { get; set; }
 
         [DataMember]
-        public decimal SetupFeePercent { get; set; }
+        public decimal? SetupFeePercent { get; set; }
 
         [DataMember]
-        public decimal BrokerSetupFeePercent { get; set; }
+        public decimal? BrokerSetupFeePercent { get; set; }
 
         [Length(LengthType.MAX)]
         [DataMember]
         public string Notes { get; set; }
 
         [DataMember]
-        public int InterestOnlyRepaymentCount { get; set; }
+        public int? InterestOnlyRepaymentCount { get; set; }
 
         [FK("NL_DiscountPlans", "DiscountPlanID")]
         [DataMember]
-        public int DiscountPlanID { get; set; }
+        public int? DiscountPlanID { get; set; }
 
         [DataMember]
         public bool IsLoanTypeSelectionAllowed { get; set; }

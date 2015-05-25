@@ -14,7 +14,8 @@ CREATE TYPE NL_LoanHistoryList AS TABLE (
 	[Description] NVARCHAR(MAX) NULL,
 	[LoanID] INT NULL,
 	[UserID] INT NULL,
-	[LoanLegalID] INT NULL
+	[LoanLegalID] INT NULL,
+	[AgreementModel] NVARCHAR(MAX) NULL
 )
 GO
 
@@ -29,13 +30,15 @@ BEGIN
 		[Description],
 		[LoanID],
 		[UserID],
-		[LoanLegalID]
+		[LoanLegalID],
+		[AgreementModel]
 	) SELECT
 		[EventTime],
 		[Description],
 		[LoanID],
 		[UserID],
-		[LoanLegalID]
+		[LoanLegalID],
+		[AgreementModel]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

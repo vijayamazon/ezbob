@@ -191,6 +191,9 @@
 
                 _customerRepository.Update(cus);
 
+
+
+
                 return RedirectToAction("Index", "PacnetStatus", new { Area = "Customer" });
             } catch (OfferExpiredException) {
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",

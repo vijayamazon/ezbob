@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
     using System;
+    using System.Collections.Generic;
     using System.Runtime.Serialization;
     using Ezbob.Utils.dbutils;
 
@@ -27,5 +28,12 @@
         [FK("NL_LoanLegals", "LoanLegalID")]
         [DataMember]
         public int? LoanLegalID { get; set; }
+
+		[Length(LengthType.MAX)]
+		[DataMember]
+		public string AgreementModel { get; set; }
+
+		public List<NL_LoanAgreements> LoanAgreements { get; set; }
+
     }//class NL_LoanHistory
 }//ns

@@ -1417,26 +1417,26 @@ The digits shown in a group are the maximum number of meaningful digits that can
             this.log.Debug("{0}", result.Status.ToString());
         }
 
-		[Activation]
-		private void ExampleMethod() {
-			int customerID;
+		//[Activation]
+		//private void ExampleMethod() {
+		//	int customerID;
 
-			if (cmdLineArgs.Length != 2 || !int.TryParse(cmdLineArgs[1], out customerID)) {
-				log.Msg("Usage: ExampleMethod <customer ID>");
-				return;
-			} // if
+		//	if (cmdLineArgs.Length != 2 || !int.TryParse(cmdLineArgs[1], out customerID)) {
+		//		log.Msg("Usage: ExampleMethod <customer ID>");
+		//		return;
+		//	} // if
 
-			DateTime now = DateTime.UtcNow;
+		//	DateTime now = DateTime.UtcNow;
 
-			DateTimeActionResult result = serviceClient.ExampleMethod(1, customerID);
+		//	DateTimeActionResult result = serviceClient.ExampleMethod(1, customerID);
 
-			log.Info(
-				"\nTime before the call: {0}\nCustomer          ID: {1}\nReturned       value: {2}\n",
-				now.ToString("MMM d yyyy H:mm:ss"),
-				customerID,
-				result.Value.ToString("MMM d yyyy H:mm:ss")
-			);
-		}
+		//	log.Info(
+		//		"\nTime before the call: {0}\nCustomer          ID: {1}\nReturned       value: {2}\n",
+		//		now.ToString("MMM d yyyy H:mm:ss"),
+		//		customerID,
+		//		result.Value.ToString("MMM d yyyy H:mm:ss")
+		//	);
+		//}
 
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;

@@ -1,9 +1,10 @@
 ﻿namespace EzService {
-    using System.Collections.Generic;
-    using System.ServiceModel;
+	using System.Collections.Generic;
+	using System.ServiceModel;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
-    [ServiceContract(SessionMode = SessionMode.Allowed)]
+	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceNewLoan {
 		[OperationContract]
 		IntActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
@@ -16,13 +17,18 @@
 
         [OperationContract]
         NL_Offers GetLastOffer(int userID, int customerID);
+		
+		[OperationContract]
+		IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
 
 		[OperationContract]
-		DateTimeActionResult ExampleMethod(int userID, int customerID);
-        [OperationContract]
-        IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
+		IntActionResult AddLoan(int userID, int customerID, NL_Model loanModel);
 
-		[OperationContract]
-		ActionMetaData ExampleOtherMethod();
-    } // interface IEzServiceNewLoan
+		//[OperationContract]
+		//DateTimeActionResult ExampleMethod(int userID, int customerID);
+		//[OperationContract]
+		//ActionMetaData ExampleOtherMethod();
+
+
+	} // interface IEzServiceNewLoan
 } // namespace EzService

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
     using System;
     using System.Runtime.Serialization;
+    using System.Text;
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
@@ -40,5 +41,22 @@
         [Length(LengthType.MAX)]
         [DataMember]
         public string Notes { get; set; }
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder("NL_Loans: ");
+			Type t = typeof(NL_LoanFeeTypes);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
+					sb.Append(prop.Name).Append(":").Append(prop.GetValue(this)).Append(@"; \n");
+			}
+			return sb.ToString();
+		}
+
     }//class NL_LoanFees
 }//ns
