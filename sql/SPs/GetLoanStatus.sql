@@ -1,19 +1,58 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetLoanStatus]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetLoanStatus]
+IF OBJECT_ID('GetLoanStatus') IS NULL
+	EXECUTE('CREATE PROCEDURE GetLoanStatus AS SELECT 1')
+
 GO
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetLoanStatus] 
-	(@LoanId INT)
+
+ALTER PROCEDURE GetLoanStatus
+	@LoanId INT
 AS
 BEGIN
+	DECLARE @CustomerID INT = (SELECT 
+								 CustomerId 
+							   FROM 
+							     Loan 
+							   WHERE Id = @LoanId)
+	
+	DECLARE @WasLate BIT = (SELECT 
+							  IsWasLate 
+							FROM 
+							  Customer 
+							WHERE 
+							  Id=@CustomerID)	   
+							  					   
+	DECLARE @BadStatuses INT = (SELECT count(*) 
+								FROM 
+									CustomerStatusHistory h 
+								INNER JOIN 
+									CustomerStatuses cs 
+								ON
+									h.PreviousStatus=cs.Id
+								INNER JOIN 
+									CustomerStatuses cs2 
+								ON 
+									h.NewStatus = cs.Id
+								WHERE 
+									CustomerId = @CustomerID 
+									AND 
+								 	(cs.IsWarning  = 1 
+								 	 OR 
+								 	 cs.IsDefault  = 1 
+								 	 OR 
+								 	 cs2.IsWarning = 1 
+								 	 OR 
+								 	 cs2.IsDefault = 1)
+							   )
+
 	SELECT 
-		l.Status 
+		l.Status, l.Balance, l.LoanAmount, CAST (CASE WHEN @BadStatuses>0 THEN 1 WHEN @WasLate = 1 THEN 1 ELSE 0 END AS BIT) WasLate
 	FROM 
 		loan l
 	WHERE
-		id = @LoanId
+		l.Id = @LoanId
 END
+
 GO

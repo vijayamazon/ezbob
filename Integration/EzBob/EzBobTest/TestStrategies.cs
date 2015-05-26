@@ -107,7 +107,7 @@ namespace EzBobTest {
 
 		[Test]
 		public void LoanFullyPaid() {
-			var s = new LoanFullyPaid(3060, "fdsfdf");
+			var s = new LoanFullyPaid(3060, "fdsfdf", false);
 			s.Execute();
 		}
 

@@ -7,8 +7,9 @@
 
     public class LoanFullyPaid : AMailStrategyBase {
 
-		public LoanFullyPaid(int customerId, string loanRefNum) : base(customerId, true) {
+		public LoanFullyPaid(int customerId, string loanRefNum, bool wasLate) : base(customerId, true) {
 			this.loanRefNum = loanRefNum;
+			this.wasLate = wasLate;
 		} // constructor
 
 		public override string Name { get { return "Loan Fully Paid"; } } // Name
@@ -18,21 +19,24 @@
 
 			Variables = new Dictionary<string, string> {
 				{"FirstName", CustomerData.FirstName},
-				{"RefNum", loanRefNum}
+				{"RefNum", this.loanRefNum}
 			};
 		} // SetTemplateAndVariables
 
 	    protected override void ActionAtEnd() {
-            SalesForce.AddOpportunity addOpportunity = new AddOpportunity(CustomerData.Id, new OpportunityModel {
-                CreateDate = DateTime.UtcNow,
-                Email = CustomerData.Mail,
-                Stage = OpportunityStage.s5.DescriptionAttr(),
-                Type = OpportunityType.FinishLoan.DescriptionAttr(),
-                Name = CustomerData.FirstName + OpportunityType.FinishLoan.DescriptionAttr()
-            });
-            addOpportunity.Execute();
+		    if (!this.wasLate) {
+			    SalesForce.AddOpportunity addOpportunity = new AddOpportunity(CustomerData.Id, new OpportunityModel {
+				    CreateDate = DateTime.UtcNow,
+				    Email = CustomerData.Mail,
+				    Stage = OpportunityStage.s5.DescriptionAttr(),
+				    Type = OpportunityType.FinishLoan.DescriptionAttr(),
+				    Name = CustomerData.FirstName + OpportunityType.FinishLoan.DescriptionAttr()
+			    });
+			    addOpportunity.Execute();
+		    }
 	    }
 
 	    private readonly string loanRefNum;
-	} // class LoanFullyPaid
+	    private readonly bool wasLate;
+    } // class LoanFullyPaid
 } // namespace
