@@ -1,12 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
-	using System.Collections;
-	using System.Linq;
-	using System.Reflection;
-	using System.Runtime.CompilerServices;
 	using System.Runtime.Serialization;
 	using System.Text;
-	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
