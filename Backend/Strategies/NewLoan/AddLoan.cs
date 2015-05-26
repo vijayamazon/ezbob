@@ -15,8 +15,6 @@
 
 	public class AddLoan : AStrategy {
 
-		//public IntActionResult AddLoan(int userID, int customerID, NL_Model loanModel)
-
 		public AddLoan(int userID, int customerID, NL_Model model) {
 			this.userID = userID;
 			this.customerID = customerID;
