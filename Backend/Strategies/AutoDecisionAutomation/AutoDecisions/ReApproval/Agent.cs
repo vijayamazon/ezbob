@@ -85,9 +85,9 @@
 			return bSuccess;
 		} // MakeAndVerifyDecision
 
-		public virtual void MakeDecision(AutoDecisionResponse response) {
+		public virtual void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
-				if (MakeAndVerifyDecision() && Trail.HasDecided) {
+				if (MakeAndVerifyDecision(tag) && Trail.HasDecided) {
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.Decision = DecisionActions.ReApprove;
 					response.CreditResult = CreditResultStatus.Approved;

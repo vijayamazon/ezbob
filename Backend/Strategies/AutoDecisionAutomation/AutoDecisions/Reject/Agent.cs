@@ -76,11 +76,11 @@
 			RunPrimary();
 		} // RunPrimaryOnly
 
-		public virtual void MakeDecision(AutoDecisionResponse response) {
+		public virtual void MakeDecision(AutoDecisionResponse response, string tag) {
 			bool bSuccess = false;
 
 			try {
-				bSuccess = MakeAndVerifyDecision();
+				bSuccess = MakeAndVerifyDecision(tag);
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);

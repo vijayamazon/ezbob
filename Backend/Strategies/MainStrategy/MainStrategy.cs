@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.MainStrategy {
 	using System;
 	using System.Collections.Generic;
+    using System.Globalization;
 	using System.Linq;
 	using System.Runtime.Serialization;
 	using ConfigManager;
@@ -70,6 +71,12 @@
 			this.autoDecisionResponse = new AutoDecisionResponse {
 				DecisionName = "Manual",
 			};
+
+			this.tag = string.Format(
+				"#MainStrategy_{0}_{1}",
+				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
+				Guid.NewGuid().ToString("N")
+			);
 		} // constructor
 
 		public override string Name {
@@ -445,7 +452,7 @@
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(this.customerId, DB, Log)
 					.Init()
-					.MakeDecision(this.autoDecisionResponse);
+					.MakeDecision(this.autoDecisionResponse, this.tag);
 
 				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
 
@@ -463,7 +470,7 @@
 					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
 					DB,
 					Log
-				).Init().MakeDecision(this.autoDecisionResponse);
+				).Init().MakeDecision(this.autoDecisionResponse, this.tag);
 
 				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
 
@@ -507,7 +514,7 @@
 				return;
 
 			if (EnableAutomaticReRejection)
-				new ReRejection(this.customerId, DB, Log).MakeDecision(this.autoDecisionResponse);
+				new ReRejection(this.customerId, DB, Log).MakeDecision(this.autoDecisionResponse, this.tag);
 
 			if (this.autoDecisionResponse.IsReRejected)
 				return;
@@ -518,7 +525,7 @@
 			if (this.customerDetails.IsAlibaba)
 				return;
 
-			new Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse);
+			new Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse, this.tag);
 		} // ProcessRejections
 
 		/// <summary>
@@ -843,5 +850,7 @@
 				);
 			} // if
 		} // ValidateCashRequestArgs
+
+	    private readonly string tag;
 	} // class MainStrategy
 } // namespace

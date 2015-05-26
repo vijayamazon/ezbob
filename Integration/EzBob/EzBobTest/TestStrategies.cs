@@ -213,8 +213,7 @@ namespace EzBobTest {
 			var decision = new AutoDecisionResponse();
 			//approve.Init().MakeDecision(decision);
 			//Assert.AreEqual(false, decision.IsAutoApproval);
-			reapprove.Init()
-				.MakeDecision(decision);
+			reapprove.Init().MakeDecision(decision, null);
 
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(this.m_oDB, this.m_oLog, 21334, reapprove.Trail.InputData.DataAsOf);
 			oSecondary.MakeDecision(oSecondary.GetInputData());
