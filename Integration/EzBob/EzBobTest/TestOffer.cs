@@ -130,7 +130,7 @@ namespace EzBobTest {
                     AutomationCalculator.Common.TurnoverType.Online,
                     m_oDB,
                     m_oLog
-                ).Init().MakeDecision(response);
+                ).Init().MakeDecision(response, null);
         }
 
 		private class MedalOffer {

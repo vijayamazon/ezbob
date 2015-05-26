@@ -220,11 +220,11 @@
 			return bSuccess;
 		} // MakeAndVerifyDecision
 
-		public void MakeDecision(AutoDecisionResponse response) {
+		public void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
 				response.LoanOfferUnderwriterComment = "Checking auto approve...";
 
-				bool bSuccess = MakeAndVerifyDecision();
+				bool bSuccess = MakeAndVerifyDecision(tag);
 
 				if (bSuccess) {
 					this.log.Info(

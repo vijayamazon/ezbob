@@ -40,9 +40,9 @@
 			return bSuccess;
 		} // MakeAndVerifyDecision
 
-		public void MakeDecision(AutoDecisionResponse response) {
+		public void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
-				if (MakeAndVerifyDecision() && this.trail.HasDecided) {
+				if (MakeAndVerifyDecision(tag) && this.trail.HasDecided) {
 					response.Decision = DecisionActions.ReReject;
 					response.AutoRejectReason = "Auto Re-Reject";
 					response.CreditResult = CreditResultStatus.Rejected;
