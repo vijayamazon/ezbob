@@ -27,6 +27,7 @@
 
 		public SilentAutomation(int customerID) {
 			this.customerID = customerID;
+			this.tag = CreateTag();
 		} // constructor
 
 		public override string Name { get { return "SilentAutomation"; } }
