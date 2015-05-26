@@ -38,6 +38,10 @@
 				model.CompanyName = "No name";
 			}
 
+			if (!string.IsNullOrEmpty(model.LeadSource) && model.LeadSource.Length > MaxLeadSourceLength) {
+				model.LeadSource = model.LeadSource.Substring(0, MaxLeadSourceLength);
+			}
+
             model.Email = model.Email.ToLower();
 
 			this.salesForce.CreateUpdateLeadAccount(model);
@@ -57,5 +61,7 @@
 		private readonly int? customerID;
 		private readonly bool isBrokerLead;
 		private readonly bool isVipLead;
+
+		private const int MaxLeadSourceLength = 30;
 	}
 }

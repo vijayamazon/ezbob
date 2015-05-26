@@ -27,8 +27,13 @@
 
             this.activityModel.Email = this.activityModel.Email.ToLower();
 
-            //fix race condition in sales force between create lead and adding activity to it.
-            if (this.activityModel.Description.Contains("Greeting")) { Thread.Sleep(10000); }
+            //fix race condition in sales force between create lead / convert lead into account and adding activity to it.
+			if (this.activityModel.Description.Contains("Greeting") || this.activityModel.Description.Contains("under review")) {
+				Thread.Sleep(10000);
+			} else {
+				Thread.Sleep(5000);
+			}
+
 
             this.salesForce.CreateActivity(this.activityModel);
 
