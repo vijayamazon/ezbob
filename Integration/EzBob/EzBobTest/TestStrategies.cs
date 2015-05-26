@@ -736,9 +736,20 @@ namespace EzBobTest {
         }
         [Test]
         public void TestPPNoLoan() {
-            PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
+	    PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
             p.Execute();
         }
+        
+		[Test]
+		[Ignore]
+		public void TestBackFillExperianNonLtdScoreText() {
+
+
+			BackFillExperianNonLtdScoreText test = new BackFillExperianNonLtdScoreText();
+
+			test.Execute();
+		}
+          
 
 	    [Test]
 	    public void TestUserDisable() {

@@ -380,7 +380,32 @@
 								<tr>
 									<td class=narrow-as-possible>Risk score</td><td><%-response.Data.RiskScore%></td>
 								</tr>
+							<% } %>							
+							<% if (response.Data.RiskText != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Risk text</td><td><%-response.Data.RiskText%></td>
+								</tr>
 							<% } %>
+							<% if (response.Data.CreditText != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Credit text</td>	<td><%-response.Data.CreditText%></td>
+								</tr>
+							<% } %>							
+							<% if (response.Data.ConcludingText != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Concluding Text</td><td><%-response.Data.ConcludingText%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.NocText != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Noc text</td>	<td><%-response.Data.NocText%></td>
+								</tr>
+							<% } %>
+							<% if (response.Data.PossiblyRelatedDataText != undefined) { %>
+								<tr>
+									<td class=narrow-as-possible>Possibly Related Data Text</td><td><%-response.Data.PossiblyRelatedDataText%></td>
+								</tr>
+							<% } %>	
 							<% if (response.Data.SearchType != undefined) { %>
 								<tr>
 									<td class=narrow-as-possible>Search type</td><td><%-response.Data.SearchType%></td>

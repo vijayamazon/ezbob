@@ -120,6 +120,12 @@
 			Data.NumberOfProprietorsSearched = nonLimitedSafeReader["NumberOfProprietorsSearched"];
 			Data.NumberOfProprietorsFound = nonLimitedSafeReader["NumberOfProprietorsFound"];
 			Data.Errors = nonLimitedSafeReader["Errors"].ToNullString();
+			Data.RiskText = nonLimitedSafeReader["RiskText"].ToNullString();
+			Data.CreditText = nonLimitedSafeReader["CreditText"].ToNullString();
+			Data.ConcludingText = nonLimitedSafeReader["ConcludingText"].ToNullString();
+			Data.NocText = nonLimitedSafeReader["NocText"].ToNullString();
+			Data.PossiblyRelatedDataText = nonLimitedSafeReader["PossiblyRelatedDataText"].ToNullString();
+
 		} // FillBasicData
 
 		private void FillSicCodes(int experianNonLimitedResultId) {

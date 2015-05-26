@@ -11,6 +11,10 @@
 			return Execute<BackfillCustomerAnalyticsCompany>(null, null);
 		} // BackfillCustomerAnalyticsCompany
 
+		public ActionMetaData BackFillExperianNonLtdScoreText() {
+			return Execute<BackFillExperianNonLtdScoreText>(null, null);
+		} // BackFillExperianNonLtdScoreText
+
 		public ActionMetaData BackfillExperianDirectors(int? nCustomerID) {
 			return Execute<BackfillExperianDirectors>(nCustomerID, null, nCustomerID);
 		} // BackfillExperianDirectors
@@ -64,6 +68,11 @@
 		public ActionMetaData BackfillExperianLtd() {
 			return Execute<BackfillExperianLtd>(null, null);
 		} // BackfillExperianLtd
+
+        public ActionMetaData BackfillExperianLtdScoreText()
+        {
+            return Execute<BackfillExperianLtdScoreText>(null, null);
+        } // BackfillExperianLtdScoreText
 
 		public ExperianLtdActionResult LoadExperianLtd(long nServiceLogID) {
 			LoadExperianLtd oInstance;

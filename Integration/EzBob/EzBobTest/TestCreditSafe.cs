@@ -116,7 +116,10 @@
         [Ignore]
         public void BackFillTest()
         {
-            // var test = new BackfillExperianLtdScoreText(); test.Execute();
+            //var serviceLogTest = new CreditSafeLtdService();
+            //serviceLogTest.ServiceLogCreditSafeLtdData("X9999999", 46);
+            var test = new BackfillExperianLtdScoreText();
+            test.Execute();
             //AConnection oDB=new SqlConnection();
             //EBusinessService ser = new EBusinessService(new SqlConnection());
             // ser.DownloadOneLimitedFromExperian("X9999999", 27);

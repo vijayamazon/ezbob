@@ -34,6 +34,9 @@
 		ActionMetaData BackfillCustomerAnalyticsCompany();
 
 		[OperationContract]
+		ActionMetaData BackFillExperianNonLtdScoreText();
+		
+		[OperationContract]
 		ActionMetaData BackfillExperianConsumer();
 
 		[OperationContract]
@@ -41,6 +44,9 @@
 
 		[OperationContract]
 		ActionMetaData BackfillExperianLtd();
+
+        [OperationContract]
+        ActionMetaData BackfillExperianLtdScoreText();
 
 		[OperationContract]
 		ActionMetaData BackfillHmrcBusinessRelevance();

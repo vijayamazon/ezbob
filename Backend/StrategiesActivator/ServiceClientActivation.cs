@@ -146,6 +146,11 @@
 		}
 
 		[Activation]
+		private void BackFillExperianNonLtdScoreText() {
+			serviceClient.BackFillExperianNonLtdScoreText();
+		}
+
+		[Activation]
 		private void BackfillExperianDirectors() {
 			if (cmdLineArgs.Length == 1) {
 				serviceClient.BackfillExperianDirectors(null);
@@ -166,6 +171,12 @@
 		private void BackfillExperianLtd() {
 			serviceClient.BackfillExperianLtd();
 		}
+
+        [Activation]
+        private void BackfillExperianLtdScoreText()
+        {
+            serviceClient.BackfillExperianLtdScoreText();
+        }
 
 		[Activation]
 		private void BackfillHmrcBusinessRelevance() {

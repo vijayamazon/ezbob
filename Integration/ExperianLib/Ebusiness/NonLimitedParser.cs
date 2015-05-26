@@ -7,6 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using log4net;
+	
 
 	public class NonLimitedParser 
 	{
@@ -103,6 +104,14 @@
 		private int? numberOfProprietorsSearched;
 		private int? numberOfProprietorsFound;
 
+		//DN74
+		private string riskText;
+		private string creditText;
+		private string concludingText;
+		private string nocText;
+		private string possiblyRelatedDataText;
+
+
 		//Errors
 		string errors = string.Empty;
 
@@ -140,6 +149,7 @@
 			ParseDN36();
 			ParseDN40();
 			ParseDN73();
+			ParseDN74();
 			ParseErrors();
 
 			SaveToDb(refNumber, serviceLogId, insertDate);
@@ -213,7 +223,12 @@
 				new QueryParameter("RiskBand", riskBand),
 				new QueryParameter("NumberOfProprietorsSearched", numberOfProprietorsSearched),
 				new QueryParameter("NumberOfProprietorsFound", numberOfProprietorsFound),
-				new QueryParameter("Errors", errors)
+				new QueryParameter("Errors", errors),
+				new QueryParameter("RiskText", riskText),
+				new QueryParameter("CreditText", creditText),
+				new QueryParameter("ConcludingText", concludingText),
+				new QueryParameter("NOCText", nocText),
+				new QueryParameter("PossiblyRelatedDataText", possiblyRelatedDataText)
 			);
 
 				foreach (Tuple<DateTime?, int?> historyData in scoreHistory)
@@ -771,6 +786,37 @@
 				numberOfProprietorsFound = GetInt(dn73Node, "NUMPROPSFOUND");
 			}
 		}
+
+		private void ParseDN74() {
+			XmlNodeList dn74Nodes = xmlDoc.SelectNodes("//DN74");
+			riskText = null;
+			creditText = null;
+			concludingText = null;
+			nocText = null;
+			possiblyRelatedDataText = null;
+
+			if (dn74Nodes != null) {
+
+				switch (dn74Nodes.Count) {
+				case 0:
+					break;
+
+				case 1:
+					XmlNode dn74Node = dn74Nodes[0];
+					riskText = GetString(dn74Node, "RISKTEXT");
+					creditText = GetString(dn74Node, "CREDITTEXT");
+					concludingText = GetString(dn74Node, "CONCLUDINGTEXT");
+					nocText = GetString(dn74Node, "NOCTEXT");
+					possiblyRelatedDataText = GetString(dn74Node, "POSSRELATEDTEXT");
+					break;
+
+				default:
+					this.log.Error("Multiple sets of score reasons (DN74)");
+					break;
+				}
+			}
+		}
+
 
 		private DateTime? GetDate(XmlNode node, string tag)
 		{

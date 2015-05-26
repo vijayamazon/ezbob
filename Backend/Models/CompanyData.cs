@@ -358,6 +358,21 @@
 		public string Errors { get; set; }
 
 		[DataMember]
+		public string RiskText { get; set; }
+
+		[DataMember]
+		public string CreditText { get; set; }
+
+		[DataMember]
+		public string ConcludingText { get; set; }
+
+		[DataMember]
+		public string NocText { get; set; }
+
+		[DataMember]
+		public string PossiblyRelatedDataText { get; set; }
+
+		[DataMember]
 		public List<string> SicCodes { get; set; }
 
 		[DataMember]
@@ -377,5 +392,7 @@
 
 		[DataMember]
 		public List<ScoreAtDate> ScoreHistory { get; set; }
+
+
 	}
 }
