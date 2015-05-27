@@ -6,7 +6,7 @@ IF OBJECT_ID('NL_OfferForLoan') IS NOT NULL
 GO
 
 
-CREATE PROCEDURE [dbo].[NL_OfferForLoan]	
+CREATE PROCEDURE PROCEDURE [dbo].[NL_OfferForLoan]	
 	@CustomerID INT 
 AS
 
@@ -14,7 +14,7 @@ declare @Now datetime;
 set @Now = GETUTCDATE();
 
 declare @OfferID int;
-declare @DiscountPlanID int;
+
 
 BEGIN
 	
@@ -22,14 +22,12 @@ BEGIN
 	set @OfferID = (select top 1 o.OfferID FROM NL_Offers o INNER JOIN NL_Decisions d ON d.DecisionID = o.DecisionID INNER JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
 		WHERE cr.CustomerID = @CustomerID and GETUTCDATE() between o.[StartTime] and o.[EndTime] order by OfferID desc);
 
---	print "OfferID: "+ cast( @OfferID as varchar(25));
-
---select @OfferID;
-
-	IF @OfferID IS NULL begin
-		
+	IF @OfferID IS NULL begin		
 		RETURN NULL;
-		end;
+	end;
+
+	declare @DiscountPlanID int;
+	declare @LoansCount int;
 
 	IF object_id('#offerforloan') IS NOT NULL drop table #offerforloan;
 
@@ -49,20 +47,28 @@ BEGIN
 			o.MonthlyInterestRate,
 			o.SetupFeePercent, 
 			o.BrokerSetupFeePercent, 
-			o.InterestOnlyRepaymentCount			
+			o.InterestOnlyRepaymentCount,
+			0 as LoansCount		
 		into #offerforloan
 			FROM NL_LoanLegals ll INNER JOIN NL_Offers o on ll.OfferID = o.OfferID	
 				LEFT JOIN NL_DiscountPlans dp on dp.DiscountPlanID = o.DiscountPlanID -- and dp.IsActive = 1 				
 			WHERE o.OfferID = @OfferID
 			order by ll.LoanLegalID desc; 
 
-		--select * from #offerforloan;
-
 		set @DiscountPlanID = (select DiscountPlanID from #offerforloan) ;
 
 		if @DiscountPlanID is not null begin			
 			update #offerforloan set
 			 DiscountPlan=(select ','+cast(dpe.InterestDiscount as varchar(11)) AS [text()] From NL_DiscountPlanEntries dpe Where dpe.DiscountPlanID = @DiscountPlanID ORDER BY dpe.PaymentOrder For XML PATH ('')) 
+		end;
+
+		set @LoansCount = (select COUNT(LoanID) 
+							from NL_Loans l inner join NL_Offers o on o.OfferID = l.OfferID inner join NL_Decisions d on d.DecisionID=o.DecisionID 
+							inner join NL_CashRequests cr on cr.CashRequestID = d.CashRequestID 
+							where cr.CustomerID=@CustomerID group by LoanID);
+
+		if @LoansCount is not null begin
+			update #offerforloan set LoansCount = @LoansCount;
 		end;
 
 		select * from #offerforloan;

@@ -1,5 +1,4 @@
 ﻿namespace EzService.EzServiceImplementation {
-	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -55,7 +54,7 @@
 		//	ActionMetaData amd = ExecuteSync(out loaderStrategy, customerID, userID, action);
 		//	return new DateTimeActionResult {
 		//		MetaData = amd,
-		//		Value = loaderStrategy.Model.SomeTime,
+		//		Value = loaderStrategy.NLModel.SomeTime,
 		//	};
 		//} // ExampleMethod
 
@@ -68,7 +67,7 @@
 
 		public IntActionResult AddLoan(int userID, int customerID, NL_Model loanModel) {
 			AddLoan strategy;
-			var amd = ExecuteSync(out strategy, customerID, userID, customerID, loanModel);
+			var amd = ExecuteSync(out strategy, customerID, userID, userID, customerID, loanModel);
 			return new IntActionResult {
 				MetaData = amd,
 				Value = strategy.LoanID

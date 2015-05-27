@@ -187,7 +187,7 @@ CREATE TABLE [dbo].[NL_LoanFees](
  CONSTRAINT [PK_NL_LoanFees] PRIMARY KEY CLUSTERED ([LoanFeeID] ASC)
 ) ;
 END
-GO;
+GO
 
 
 IF OBJECT_ID('NL_LoanFeeTypes') IS NULL 

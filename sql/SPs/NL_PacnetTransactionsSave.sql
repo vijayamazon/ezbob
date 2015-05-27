@@ -16,8 +16,8 @@ CREATE TYPE NL_PacnetTransactionsList AS TABLE (
 	[Notes] NVARCHAR(MAX) NULL,
 	[PacnetTransactionStatusID] INT NOT NULL,	
 	[StatusUpdatedTime] DATETIME NOT NULL,
-	[TrackingNumber] NVARCHAR(100) NOT NULL,
-)
+	[TrackingNumber] NVARCHAR(100) NOT NULL
+);
 GO
 
 CREATE PROCEDURE NL_PacnetTransactionsSave

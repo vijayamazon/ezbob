@@ -10,13 +10,13 @@
 		[DataMember]
 		public int LoanHistoryID { get; set; }
 
-		
+
 		[FK("NL_Loans", "LoanID")]
 		[DataMember]
 		public int? LoanID { get; set; }
 
 
-			[FK("Security_User", "UserId")]
+		[FK("Security_User", "UserId")]
 		[DataMember]
 		public int? UserID { get; set; }
 
@@ -31,7 +31,7 @@
 		[DataMember]
 		public int RepaymentCount { get; set; }
 
-		[DataMember] 
+		[DataMember]
 		public decimal? InterestRate { get; set; }
 
 		[DataMember]
@@ -53,16 +53,14 @@
 		/// A string that represents the current object.
 		/// </returns>
 		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().FullName + @": \n");
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
 			Type t = typeof(NL_LoanHistory);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null) {
 					if (prop.Name != "AgreementModel") {
-					//	Console.WriteLine(prop.GetValue(this));
-					//} else {
 						sb.Append(prop.Name)
-							.Append(@":" + prop.GetValue(this))
-							.Append(@"; \n");
+							.Append(": " + prop.GetValue(this))
+							.Append("; \n");
 					}
 				}
 			}

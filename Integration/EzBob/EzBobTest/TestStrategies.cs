@@ -446,7 +446,7 @@
 		[Test]
 		public void TestOfferCalculation() {
 			/*
-			var calc = new OfferDualCalculator(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
+			var calc = new OfferDualCalculator(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.NLModel.Database.Medal.Gold);
 			var offer1 = calc.CalculateOffer();
 			Assert.AreEqual(5.5M, offer1.SetupFee);
 			Assert.AreEqual(4.5M, offer1.InterestRate);
@@ -764,12 +764,10 @@
 
 		}
 
-
 		[Test]
 		public void TestNL_AddLoan() {
-
-			int customerID = 366;
-			int oldLoanID = 1042;
+			int customerID = 365; // 366;
+			int oldLoanID = 1045; //1042;
 
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
@@ -791,23 +789,23 @@
 
 			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
 			foreach (var aggr in oldLoan.Agreements) {
-				Console.WriteLine(aggr);
+				//Console.WriteLine(aggr);
 				NL_LoanAgreements agreement = new NL_LoanAgreements();
 				agreement.FilePath = aggr.FilePath;
 				agreement.LoanAgreementTemplateID = aggr.TemplateRef.Id;
 				nlModel.LoanAgreements.Add(agreement);
 			}
 
-			nlModel.PacnetTransaction = new NL_PacnetTransactions();
 			PacnetTransaction oldPacnetTransaction = oldLoan.PacnetTransactions.First() as PacnetTransaction;
 
 			if (oldPacnetTransaction != null) {
+				nlModel.PacnetTransaction = new NL_PacnetTransactions();
 				nlModel.PacnetTransaction.TransactionTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
 				nlModel.PacnetTransaction.StatusUpdatedTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
 				nlModel.PacnetTransaction.Amount = oldPacnetTransaction.Amount; //nlModel.Loan.InitialLoanAmount;
 				nlModel.PacnetTransaction.Notes = oldPacnetTransaction.Description;
 				nlModel.PacnetTransaction.TrackingNumber = oldPacnetTransaction.TrackingNumber;
-				nlModel.PacnetTransactionStatus = oldPacnetTransaction.Status.ToString();
+				nlModel.PacnetTransactionStatus = "sdfgsdfgsdg"; // oldPacnetTransaction.Status.ToString();
 			}
 
 			var s = new AddLoan(customerID, customerID, nlModel);

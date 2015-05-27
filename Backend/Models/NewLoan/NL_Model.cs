@@ -10,7 +10,7 @@
 		public NL_Model() { }
 
 		public NL_Model(int customerID) {
-			this.CustomerID = customerID;
+			CustomerID = customerID;
 		}
 
 		public int CustomerID { get; set; }
@@ -41,6 +41,8 @@
 
 		[DataMember]
 		public string PacnetTransactionStatus { get; set; }
+
+
 
 
 		/*// NL_OfferForLoan

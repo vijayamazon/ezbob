@@ -34,6 +34,8 @@
 		public int InterestOnlyRepaymentCount { get; set; }
 		[DataMember]
 		public string DiscountPlan { get; set; }
+		[DataMember]
+		public int LoansCount { get; set; }
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -42,11 +44,11 @@
 		/// A string that represents the current object.
 		/// </returns>
 		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + @": \n");
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
 			Type t = typeof(OfferForLoan);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(":").Append(prop.GetValue(this)).Append(@"; \n<br/>");
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
 			}
 			return sb.ToString();
 		}

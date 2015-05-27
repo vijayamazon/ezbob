@@ -1,10 +1,7 @@
 ﻿namespace EzBobTest {
 	using System;
-	using Ezbob.Backend.Models.NewLoan;
+	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Backend.Strategies.NewLoan;
-	using Ezbob.Database;
-	using NHibernate.Loader;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -40,6 +37,11 @@
 			Console.WriteLine(s);
 		}
 
+
+		[Test]
+		public void TestRepaymentIntervalTypes() {
+			Console.WriteLine(Enum.ToObject(typeof(RepaymentIntervalTypesId), 1));
+		}
 
 	
 
