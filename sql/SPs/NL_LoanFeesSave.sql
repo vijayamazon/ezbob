@@ -9,15 +9,15 @@ IF TYPE_ID('NL_LoanFeesList') IS NOT NULL
 	DROP TYPE NL_LoanFeesList
 GO
 
-CREATE TYPE NL_LoanFeesList AS TABLE (
-	[LoanFeeTypeID] INT NULL,
+CREATE TYPE NL_LoanFeesList AS TABLE (	
 	[LoanID] INT NULL,
-	[AssignedByUserID] INT NOT NULL,
+	[LoanFeeTypeID] INT NOT NULL,
+	[AssignedByUserID] INT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[CreatedTime] DATETIME NOT NULL,
 	[AssignTime] DATETIME NOT NULL,
-	[DeletedByUserID] INT NOT NULL,
-	[DisabledTime] DATETIME NOT NULL,
+	[DeletedByUserID] INT NULL,
+	[DisabledTime] DATETIME NULL,
 	[Notes] NVARCHAR(MAX) NULL
 )
 GO
@@ -28,9 +28,9 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO NL_LoanFees (
-		[LoanFeeTypeID],
+	INSERT INTO NL_LoanFees (		
 		[LoanID],
+		[LoanFeeTypeID],
 		[AssignedByUserID],
 		[Amount],
 		[CreatedTime],
@@ -38,9 +38,9 @@ BEGIN
 		[DeletedByUserID],
 		[DisabledTime],
 		[Notes]
-	) SELECT
-		[LoanFeeTypeID],
+	) SELECT		
 		[LoanID],
+		[LoanFeeTypeID],
 		[AssignedByUserID],
 		[Amount],
 		[CreatedTime],

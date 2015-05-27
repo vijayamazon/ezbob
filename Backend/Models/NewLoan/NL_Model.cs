@@ -9,6 +9,10 @@
 
 		public NL_Model() { }
 
+		public NL_Model(int customerID) {
+			this.CustomerID = customerID;
+		}
+
 		public int CustomerID { get; set; }
 
 		[DataMember]
@@ -20,14 +24,8 @@
 		[DataMember]
 		public NL_LoanHistory LoanHistory { get; set; }
 
-		// NL_OfferForLoan
 		[DataMember]
-		public decimal LoanLegalAmount { get; set; }
-		[DataMember]
-		public int LoanLegalRepaymentPeriod { get; set; }
-		[DataMember]
-		public string DiscountPlan { get; set; }
-
+		public List<NL_LoanAgreements> LoanAgreements { get; set; }
 
 		[DataMember]
 		public NL_Offers Offer { get; set; }
@@ -41,7 +39,41 @@
 		[DataMember]
 		public NL_PacnetTransactions PacnetTransaction { get; set; }
 
+		[DataMember]
+		public string PacnetTransactionStatus { get; set; }
 
+
+		/*// NL_OfferForLoan
+		[DataMember]
+		public int LoanLegalID { get; set; }
+		[DataMember]
+		public int OfferID { get; set; }
+		[DataMember]
+		public int LoanTypeID { get; set; }
+		[DataMember]
+		public int RepaymentIntervalTypeID { get; set; }
+		[DataMember]
+		public int LoanSourceID { get; set; }
+		[DataMember]
+		public int OfferRepaymentCount { get; set; }
+		[DataMember]
+		public decimal OfferAmount { get; set; }
+		[DataMember]
+		public decimal MonthlyInterestRate { get; set; }
+		[DataMember]
+		public decimal SetupFeePercent { get; set; }
+		[DataMember]
+		public decimal BrokerSetupFeePercent { get; set; }
+		[DataMember]
+		public int InterestOnlyRepaymentCount { get; set; }
+		[DataMember]
+		public decimal LoanLegalAmount { get; set; }
+		[DataMember]
+		public int LoanLegalRepaymentPeriod { get; set; }
+		[DataMember]
+		public string DiscountPlan { get; set; }
+*/
+		
 
 
 		// lookup objects
@@ -55,7 +87,7 @@
 		public List<NL_RepaymentIntervalTypes> RepaymentIntervalTypes { get; set; }
 		// ### lookup objects
 
-		
+
 
 		// schedules
 		[DataMember]
@@ -104,18 +136,18 @@
 		public int PaypointTransactionStatusID { get; set; }
 		[DataMember]
 		public DateTime PaypointTransactionTime { get; set; }
-
+	
 	}
 
 
 
-	public enum PacnetTransactionStatus {
-		Submited = 1,
-		//2	ConfigError:MultipleCandidateChannels
-		Error = 3,
-		InProgress = 4,
-		//PaymentByCustomer = 5,
-		Done = 6
-	}
+	//public enum PacnetTransactionStatus {
+	//	Submited = 1,
+	//	//2	ConfigError:MultipleCandidateChannels
+	//	Error = 3,
+	//	InProgress = 4,
+	//	//PaymentByCustomer = 5,
+	//	Done = 6
+	//}
 }
 

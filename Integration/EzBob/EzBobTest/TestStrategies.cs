@@ -7,6 +7,7 @@
 	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
@@ -35,6 +36,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate.Util;
 	using NUnit.Framework;
 	using SalesForceLib;
 	using StructureMap;
@@ -99,6 +101,9 @@
 					.Use<LoanHistoryRepository>();
 				x.For<ISalesForceAppClient>()
 					.Use<FakeApiClient>();
+				x.For<ILoanTransactionMethodRepository>()
+					.Use<LoanTransactionMethodRepository>();
+
 			});
 
 			Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
@@ -185,7 +190,7 @@
 		[Test]
 		public void test_mainstrat() {
 			var ms = new MainStrategy(
-                14036,
+				14036,
 				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
 				0,
 				null,
@@ -638,17 +643,17 @@
 			var smsDetails = twilio.GetSmsMessage("SM1511753ccca64868b73c9cf7469a1bc8");
 		}
 
-        [Test]
-        public void TestBrokerTransferCommission() {
-            var stra = new BrokerTransferCommission();
-            stra.Execute();
-        }
+		[Test]
+		public void TestBrokerTransferCommission() {
+			var stra = new BrokerTransferCommission();
+			stra.Execute();
+		}
 
-        [Test]
-        public void TestUpdateTransactionStatus() {
-            var stra = new UpdateTransactionStatus();
-            stra.Execute();
-        }
+		[Test]
+		public void TestUpdateTransactionStatus() {
+			var stra = new UpdateTransactionStatus();
+			stra.Execute();
+		}
 
 		[Test]
 		public void TestAlibabaDataSharing_01() {
@@ -657,7 +662,7 @@
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
-		//	Console.WriteLine(v.AliId);
+			//	Console.WriteLine(v.AliId);
 			//new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
 			//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
@@ -699,7 +704,7 @@
 		[Test]
 		public void TestAutoRejectBoth() {
 			int customerID = 20658;
-			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID,this.m_oDB, this.m_oLog);
+			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID, this.m_oDB, this.m_oLog);
 			result.Init().MakeAndVerifyDecision();
 		}
 
@@ -712,39 +717,39 @@
 		}
 
 
-        [Test]
-        public void TestCaisGenerate() {
-            CaisGenerate cg = new CaisGenerate(1);
-            cg.Execute();
-        }
+		[Test]
+		public void TestCaisGenerate() {
+			CaisGenerate cg = new CaisGenerate(1);
+			cg.Execute();
+		}
 
-        [Test]
-        public void TestAddDecision() {
-            AddDecision addDecision = new AddDecision(new NL_Decisions {
-                UserID = 347,
-                DecisionTime = DateTime.UtcNow,
-                Notes = "Reject",
-                DecisionNameID = 2
-            }, 22785, new List<NL_DecisionRejectReasons> {
+		[Test]
+		public void TestAddDecision() {
+			AddDecision addDecision = new AddDecision(new NL_Decisions {
+				UserID = 347,
+				DecisionTime = DateTime.UtcNow,
+				Notes = "Reject",
+				DecisionNameID = 2
+			}, 22785, new List<NL_DecisionRejectReasons> {
                 new NL_DecisionRejectReasons {RejectReasonID = 1},
                 new NL_DecisionRejectReasons {RejectReasonID = 3}
             });
-            addDecision.Execute();
-        }
+			addDecision.Execute();
+		}
 
-        [Test]
-        public void TestGetLastOffer() {
-            GetLastOffer get = new GetLastOffer(2362);
-            get.Execute();
-            Assert.Greater(get.Offer.OfferID, 0);
-        }
+		[Test]
+		public void TestGetLastOffer() {
+			GetLastOffer get = new GetLastOffer(2362);
+			get.Execute();
+			Assert.Greater(get.Offer.OfferID, 0);
+		}
 
-        [Test]
-        public void TestAddLoanLegals() {
-            AddLoanLegals add = new AddLoanLegals(2362, new NL_LoanLegals(){SignatureTime = DateTime.UtcNow});
-            add.Execute();
-            Assert.Greater(add.LoanLegalsID, 0);
-        }
+		[Test]
+		public void TestAddLoanLegals() {
+			AddLoanLegals add = new AddLoanLegals(2362, new NL_LoanLegals() { SignatureTime = DateTime.UtcNow });
+			add.Execute();
+			Assert.Greater(add.LoanLegalsID, 0);
+		}
 
 		[Test]
 		public void TestAddCashRequest() {
@@ -758,5 +763,63 @@
 			add.Execute();
 
 		}
+
+
+		[Test]
+		public void TestNL_AddLoan() {
+
+			int customerID = 366;
+			int oldLoanID = 1042;
+
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan oldLoan = loanRep.Get(oldLoanID);
+
+			NL_Model nlModel = new NL_Model(customerID);
+			nlModel.Loan = new NL_Loans();
+			nlModel.Loan.Refnum = oldLoan.RefNumber;
+			nlModel.Loan.OldLoanID = oldLoanID;
+			nlModel.Loan.InitialLoanAmount = oldLoan.LoanAmount;
+
+			nlModel.FundTransfer = new NL_FundTransfers();
+			nlModel.FundTransfer.Amount = nlModel.Loan.InitialLoanAmount; // logic transaction - full amount
+			nlModel.FundTransfer.TransferTime = DateTime.UtcNow;
+			nlModel.FundTransfer.IsActive = true;
+			nlModel.FundTransfer.LoanTransactionMethodID = 1; // 'Pacnet'
+
+			nlModel.LoanHistory = new NL_LoanHistory();
+			nlModel.LoanHistory.AgreementModel = oldLoan.AgreementModel;
+
+			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
+			foreach (var aggr in oldLoan.Agreements) {
+				Console.WriteLine(aggr);
+				NL_LoanAgreements agreement = new NL_LoanAgreements();
+				agreement.FilePath = aggr.FilePath;
+				agreement.LoanAgreementTemplateID = aggr.TemplateRef.Id;
+				nlModel.LoanAgreements.Add(agreement);
+			}
+
+			nlModel.PacnetTransaction = new NL_PacnetTransactions();
+			PacnetTransaction oldPacnetTransaction = oldLoan.PacnetTransactions.First() as PacnetTransaction;
+
+			if (oldPacnetTransaction != null) {
+				nlModel.PacnetTransaction.TransactionTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
+				nlModel.PacnetTransaction.StatusUpdatedTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
+				nlModel.PacnetTransaction.Amount = oldPacnetTransaction.Amount; //nlModel.Loan.InitialLoanAmount;
+				nlModel.PacnetTransaction.Notes = oldPacnetTransaction.Description;
+				nlModel.PacnetTransaction.TrackingNumber = oldPacnetTransaction.TrackingNumber;
+				nlModel.PacnetTransactionStatus = oldPacnetTransaction.Status.ToString();
+			}
+
+			var s = new AddLoan(customerID, customerID, nlModel);
+			try {
+				s.Execute();
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+
+
+
 	}
 }

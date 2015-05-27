@@ -196,6 +196,7 @@
     <Compile Include="NewLoan\NL_Decisions.cs" />
     <Compile Include="NewLoan\NL_CashRequests.cs" />
     <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
+    <Compile Include="NewLoan\OfferForLoan.cs" />
     <Compile Include="ServiceLog.cs" />
     <Compile Include="IovationLastCheckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

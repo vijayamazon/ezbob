@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -9,15 +10,22 @@
 	public class NL_Loader {
 
 		public static AConnection DB { get; private set; }
-		public ASafeLog Log { get; private set; }
+		public static ASafeLog Log { get; private set; }
 
 		public NL_Loader(NL_Model model) {
 			this.model = model;
 
 			DB = Library.Instance.DB;
 			Log = Library.Instance.Log;
+
+			Console.WriteLine("DB=============" + DB.GetType());
+
 		} // constructor
 
+
+		public static void CheckDB() {
+			Console.WriteLine("in static DB=============" + DB.GetType());
+		}
 
 		// lookup data
 		public static List<NL_PacnetTransactionStatuses> PacnetTransactionStatuses() {
@@ -38,17 +46,23 @@
 
 
 		// delete this strategy later, use the method instead 
-		public NL_Model OfferForLoan() { //int customerID
-			if (this.model.CustomerID == 0) {
-				Log.Debug(string.Format("OfferForLoan: customerID {0} param is wrong", this.model.CustomerID));
-			}
-			try {
-				return DB.FillFirst<NL_Model>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.model.CustomerID));
-			} catch (System.Exception e) {
-				Log.Debug(string.Format("OfferForLoan: offer for customerID {0} not found", this.model.CustomerID));
-				return null;
-			}
-		} // OfferForLoan
+		//public OfferForLoan OfferForLoan() { 
+			
+		//	//OfferForLoan data = new OfferForLoan();
+		//	if (this.model.CustomerID == 0) {
+		//		Log.Debug("OfferForLoan: customerID {0} param is wrong", this.model.CustomerID);
+		//	}
+		//	Console.WriteLine("==" + this.model.CustomerID);
+		//	try {
+		//		return DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.model.CustomerID));
+		//	} catch (System.NullReferenceException nref) {
+		//		Console.WriteLine(nref);
+		//	} catch (System.Exception e) {
+		//		Log.Debug("NL_OfferForLoan: valid offer for customerID {0} not found", this.model.CustomerID);
+		//	}
+
+		//	return null;
+		//} // OfferForLoan
 
 
 		// all those are referenced to the latest history ID

@@ -21,7 +21,7 @@ CREATE TYPE NL_LoansList AS TABLE (
 	[CreationTime] DATETIME NOT NULL,
 	[IssuedTime] DATETIME NULL,
 	[RepaymentCount] INT NULL,
-	[Refnum] NVARCHAR(10) NULL,
+	[Refnum] NVARCHAR(50) NULL,
 	[DateClosed] DATETIME NULL,
 	[InterestRate] DECIMAL(18, 6) NOT NULL,
 	[InterestOnlyRepaymentCount] INT NULL,
@@ -29,6 +29,7 @@ CREATE TYPE NL_LoansList AS TABLE (
 )
 GO
 
+	
 CREATE PROCEDURE NL_LoansSave
 @Tbl NL_LoansList READONLY
 AS

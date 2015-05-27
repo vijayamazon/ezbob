@@ -176,19 +176,20 @@ CREATE TABLE [dbo].[NL_LoanFees](
 	[LoanFeeID] [int] NOT NULL IDENTITY(1,1) ,	
 	[LoanID] [int] NOT NULL,
 	[LoanFeeTypeID] [int] NOT NULL,
-	[AssignedByUserID] [int] NOT NULL,
-	[Amount] [decimal](18, 6) NULL,
-	[CreatedTime] [datetime] NULL,
-	[AssignTime] [datetime] NULL,	
-	[DeletedByUserID] [int] NOT NULL,
+	[AssignedByUserID] [int]  NULL,
+	[Amount] [decimal](18, 6) NOT NULL,
+	[CreatedTime] [datetime] NOT NULL,
+	[AssignTime] [datetime] NOT NULL,	
+	[DeletedByUserID] [int] NULL,
 	[DisabledTime] [datetime] NULL,
 	[Notes] [nvarchar](max) NULL,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_LoanFees] PRIMARY KEY CLUSTERED ([LoanFeeID] ASC)
 ) ;
 END
-GO
-	
+GO;
+
+
 IF OBJECT_ID('NL_LoanFeeTypes') IS NULL 
 BEGIN
 CREATE TABLE [dbo].[NL_LoanFeeTypes](
@@ -327,7 +328,7 @@ CREATE TABLE [dbo].[NL_Loans](
 	[CreationTime] [datetime] NOT NULL,
 	[IssuedTime] [datetime] NOT NULL,
 	[RepaymentCount] [int] NOT NULL,	
-	[Refnum] [nchar](10) NOT NULL,
+	[Refnum] [nvarchar](50) NOT NULL,
 	[DateClosed] [datetime] NULL,	
 	[InterestRate] [decimal](18, 6) NOT NULL,
 	[InterestOnlyRepaymentCount] [int] NULL,
@@ -356,7 +357,7 @@ IF OBJECT_ID('NL_LoanHistory') IS NULL
 BEGIN
 CREATE TABLE [dbo].[NL_LoanHistory](
 	[LoanHistoryID] [int] NOT NULL IDENTITY(1,1) ,
-	[LoanID] [int] NULL,
+	[LoanID] [int] NOT NULL,
 	[UserID] [int] NULL,
 	[LoanLegalID] [int] NULL,
 	[Amount] [decimal](18, 6) NOT NULL,
@@ -397,18 +398,18 @@ BEGIN
 CREATE TABLE [dbo].[NL_PacnetTransactions](
 	[PacnetTransactionID] [int] NOT NULL IDENTITY(1,1) ,
 	[FundTransferID] [int] NOT NULL,	
-	[TransactionTime] [datetime] NULL,
-	[Amount] [decimal](18, 6) NULL,
+	[TransactionTime] [datetime] NOT NULL,
+	[Amount] [decimal](18, 6) NOT NULL,
 	[Notes] [nvarchar](max) NULL,
-	[PacnetTransactionStatusID] [int] NULL,
+	[PacnetTransactionStatusID] [int] NOT NULL,
 	[StatusUpdatedTime] [datetime] NOT NULL,
-	[TrackingNumber] [nvarchar](100) NULL,
+	[TrackingNumber] [nvarchar](100) NOT NULL,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_PacnetTransactions] PRIMARY KEY CLUSTERED (	[PacnetTransactionID] ASC)
 ) ;
 END
 GO
-	
+
 IF OBJECT_ID('NL_PacnetTransactionStatuses') IS NULL 
 BEGIN	
 CREATE TABLE [dbo].[NL_PacnetTransactionStatuses](
@@ -568,6 +569,19 @@ GO
 --ALTER TABLE [dbo].[NL_Offers] ALTER COLUMN LoanTypeID SET DEFAULT 1;
 --ALTER TABLE [dbo].[NL_Offers] ALTER COLUMN RepaymentIntervalTypeID SET DEFAULT 1;
 
+alter table NL_LoanFees alter column [AssignedByUserID] [int]  NULL;
+alter table NL_LoanFees alter column [Amount] [decimal](18, 6)  NOT NULL;
+alter table NL_LoanFees alter column [CreatedTime] [datetime]  NOT NULL;
+alter table NL_LoanFees alter column [AssignTime] [datetime]  NOT NULL;
+alter table NL_LoanFees alter column [DeletedByUserID] [int]   NULL;
+
+alter table NL_Loans alter column  [Refnum] [nvarchar](50);
+alter table NL_LoanHistory alter column  [LoanID] [int] NOT NULL;
+
+alter table [NL_PacnetTransactions] alter column  [Amount] [decimal](18, 6) NOT NULL;
+alter table [NL_PacnetTransactions] alter column  [TransactionTime] [datetime] NOT NULL;
+alter table [NL_PacnetTransactions] alter column  [TrackingNumber] [nvarchar](100) NOT NULL;
+alter table [NL_PacnetTransactions] alter column  [PacnetTransactionStatusID] [int] NOT NULL;
 
 
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanBrokerCommission') AND name = 'NLLoanID')
@@ -995,8 +1009,8 @@ IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Collection:
 
 
 -- NL_LoanFeeTypes
-IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'SETupFee') IS NULL BEGIN
-	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('SETupFee');
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'SetupFee') IS NULL BEGIN
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('SetupFee');
 END;
 IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'RolloverFee') IS NULL BEGIN
 	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('RolloverFee');
@@ -1133,6 +1147,9 @@ END;
 IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PacnetTransactionStatuses] WHERE TransactionStatus = 'Error') BEGIN
 	INSERT INTO [dbo].[NL_PacnetTransactionStatuses] (TransactionStatus) VALUES('Error');
 END;     
+IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PacnetTransactionStatuses] WHERE TransactionStatus = 'Unknown') BEGIN
+	INSERT INTO [dbo].[NL_PacnetTransactionStatuses] (TransactionStatus) VALUES('Unknown');
+END;  
 
 -- NL_RepaymentIntervalTypes
 IF NOT EXISTS( SELECT RepaymentIntervalType FROM [dbo].[NL_RepaymentIntervalTypes] WHERE RepaymentIntervalType = 30 ) BEGIN -- 'Month'
@@ -1149,41 +1166,41 @@ END;
 END; 		 
 
 -- NL_OfferStatuses
-IF NOT EXISTS( SELECT OfferStatus FROM [dbo].[NL_OfferStatuses] WHERE OfferStatus = 'Live') BEGIN 
-	INSERT INTO [dbo].[NL_OfferStatuses] (OfferStatus) VALUES('Live');
-END;
-IF NOT EXISTS( SELECT OfferStatus FROM [dbo].[NL_OfferStatuses] WHERE OfferStatus = 'Pending') BEGIN -- for offers FROM "Manual" decision
-	INSERT INTO [dbo].[NL_OfferStatuses] (OfferStatus) VALUES('Pending');
-END;
+--IF NOT EXISTS( SELECT OfferStatus FROM [dbo].[NL_OfferStatuses] WHERE OfferStatus = 'Live') BEGIN 
+--	INSERT INTO [dbo].[NL_OfferStatuses] (OfferStatus) VALUES('Live');
+--END;
+--IF NOT EXISTS( SELECT OfferStatus FROM [dbo].[NL_OfferStatuses] WHERE OfferStatus = 'Pending') BEGIN -- for offers FROM "Manual" decision
+--	INSERT INTO [dbo].[NL_OfferStatuses] (OfferStatus) VALUES('Pending');
+--END;
 
  	
 -- [ConfigurationVariables] Collection_Max_Cancel_Fee for roles: Collector, Underwriter, Manager
-IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Collector' )
-INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Max_Cancel_Fee_Role_Collector', 200, 'Maximal amount of late fee cancellation for user in role Collector');
-ELSE 
-UPDATE [dbo].[ConfigurationVariables] SET [Value] = 200, [Description]= 'Maximal amount of late fee cancellation for user in role Collector' WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Collector';
-IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Underwriter' )
-INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Max_Cancel_Fee_Role_Underwriter', 1000, 'Maximal amount of late fee cancellation for user in role Underwriter');
-ELSE 
-UPDATE [dbo].[ConfigurationVariables] SET [Value] = 1000, [Description]= 'Maximal amount of late fee cancellation for user in role Underwriter' WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Underwriter';
-IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Manager' )
-INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Max_Cancel_Fee_Role_Manager', 5000, 'Maximal amount of late fee cancellation for user in role Manager');
-ELSE 
-UPDATE [dbo].[ConfigurationVariables] SET [Value] = 5000, [Description]= 'Maximal amount of late fee cancellation for user in role Manager' WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Manager';
+--IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Collector' )
+--INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Max_Cancel_Fee_Role_Collector', 200, 'Maximal amount of late fee cancellation for user in role Collector');
+--ELSE 
+--UPDATE [dbo].[ConfigurationVariables] SET [Value] = 200, [Description]= 'Maximal amount of late fee cancellation for user in role Collector' WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Collector';
+--IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Underwriter' )
+--INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Max_Cancel_Fee_Role_Underwriter', 1000, 'Maximal amount of late fee cancellation for user in role Underwriter');
+--ELSE 
+--UPDATE [dbo].[ConfigurationVariables] SET [Value] = 1000, [Description]= 'Maximal amount of late fee cancellation for user in role Underwriter' WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Underwriter';
+--IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Manager' )
+--INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Max_Cancel_Fee_Role_Manager', 5000, 'Maximal amount of late fee cancellation for user in role Manager');
+--ELSE 
+--UPDATE [dbo].[ConfigurationVariables] SET [Value] = 5000, [Description]= 'Maximal amount of late fee cancellation for user in role Manager' WHERE [Name] = 'Collection_Max_Cancel_Fee_Role_Manager';
 
 -- [ConfigurationVariables] Collection_Move_To_Next_Payment_Max_Days (15 days)
-IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Days' ) BEGIN
-INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Move_To_Next_Payment_Max_Days', 15,
- 'Maximal days when extra principal is being forwarded to the next payment (in case of less than Collection_Move_To_Next_Payment_Max_Principal amount)');
-END
-ELSE BEGIN
-UPDATE [dbo].[ConfigurationVariables] SET [Value] = 15, [Description]= 'Maximal days when extra principal is being forwarded to the next payment (in case of less than Collection_Move_To_Next_Payment_Max_Principal amount)' WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Days';
-END
--- [ConfigurationVariables] Collection_Move_To_Next_Payment_Max_Principal (100 GBP)
-IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Principal' ) BEGIN
-INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Move_To_Next_Payment_Max_Principal', 100, 'Maximal principal amount is being forwarded to the next payment in case of less than Collection_Move_To_Next_Payment_Max_Days days late');
-END
-ELSE BEGIN
-UPDATE [dbo].[ConfigurationVariables] SET [Value] = 100, [Description]= 'Maximal principal amount is being forwarded to the next payment in case of less than Collection_Move_To_Next_Payment_Max_Days days late' WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Principal';
-END
+--IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Days' ) BEGIN
+--INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Move_To_Next_Payment_Max_Days', 15,
+-- 'Maximal days when extra principal is being forwarded to the next payment (in case of less than Collection_Move_To_Next_Payment_Max_Principal amount)');
+--END
+--ELSE BEGIN
+--UPDATE [dbo].[ConfigurationVariables] SET [Value] = 15, [Description]= 'Maximal days when extra principal is being forwarded to the next payment (in case of less than Collection_Move_To_Next_Payment_Max_Principal amount)' WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Days';
+--END
+---- [ConfigurationVariables] Collection_Move_To_Next_Payment_Max_Principal (100 GBP)
+--IF NOT EXISTS( SELECT [Name] FROM [dbo].[ConfigurationVariables] WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Principal' ) BEGIN
+--INSERT INTO [dbo].[ConfigurationVariables] ([Name] ,[Value] ,[Description]) VALUES ('Collection_Move_To_Next_Payment_Max_Principal', 100, 'Maximal principal amount is being forwarded to the next payment in case of less than Collection_Move_To_Next_Payment_Max_Days days late');
+--END
+--ELSE BEGIN
+--UPDATE [dbo].[ConfigurationVariables] SET [Value] = 100, [Description]= 'Maximal principal amount is being forwarded to the next payment in case of less than Collection_Move_To_Next_Payment_Max_Days days late' WHERE [Name] = 'Collection_Move_To_Next_Payment_Max_Principal';
+--END
 

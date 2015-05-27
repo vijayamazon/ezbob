@@ -9,18 +9,18 @@
 		[PK(true)]
         [DataMember]
         public int LoanFeeID { get; set; }
-
-        [FK("NL_LoanFeeTypes", "LoanFeeTypeID")]
-        [DataMember]
-        public int? LoanFeeTypeID { get; set; }
-
+       
         [FK("NL_Loans", "LoanID")]
         [DataMember]
         public int? LoanID { get; set; }
 
+		[FK("NL_LoanFeeTypes", "LoanFeeTypeID")]
+		[DataMember]
+		public int LoanFeeTypeID { get; set; }
+
         [FK("Security_User", "UserId")]
         [DataMember]
-        public int AssignedByUserID { get; set; }
+        public int? AssignedByUserID { get; set; }
 
         [DataMember]
         public decimal Amount { get; set; }
@@ -33,10 +33,10 @@
 
         [FK("Security_User", "UserId")]
         [DataMember]
-        public int DeletedByUserID { get; set; }
+        public int? DeletedByUserID { get; set; }
 
         [DataMember]
-        public DateTime DisabledTime { get; set; }
+        public DateTime? DisabledTime { get; set; }
 
         [Length(LengthType.MAX)]
         [DataMember]
@@ -49,8 +49,8 @@
 		/// A string that represents the current object.
 		/// </returns>
 		public override string ToString() {
-			StringBuilder sb = new StringBuilder("NL_Loans: ");
-			Type t = typeof(NL_LoanFeeTypes);
+			StringBuilder sb = new StringBuilder(this.GetType().Name +  ": ");
+			Type t = typeof(NL_LoanFees);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)
 					sb.Append(prop.Name).Append(":").Append(prop.GetValue(this)).Append(@"; \n");

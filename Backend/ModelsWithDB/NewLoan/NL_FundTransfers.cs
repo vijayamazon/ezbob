@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
     using System;
     using System.Runtime.Serialization;
+    using System.Text;
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
@@ -26,8 +27,22 @@
 		[DataMember]
 		public int LoanTransactionMethodID { get; set; }
 
-		//[DataMember]
-		//public NL_PacnetTransactions PacnetTransaction { get; set; }
+	
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType()+ ": ");
+			Type t = typeof(NL_FundTransfers);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
+					sb.Append(prop.Name).Append(":").Append(prop.GetValue(this)).Append(@"; \n");
+			}
+			return sb.ToString();
+		}
 
     }//class NL_FundTransfers
 }//ns

@@ -18,7 +18,7 @@
                     Amount = this.pacnetTransaction.Amount,
                     IsActive = true,
                     LoanID = this.loanID,
-                    TransferTime = this.pacnetTransaction.TransactionTime ?? DateTime.UtcNow
+              //      TransferTime = this.pacnetTransaction.TransactionTime ?? DateTime.UtcNow
                 }));
 
             this.pacnetTransaction.FundTransferID = fundTransferID;

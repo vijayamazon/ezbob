@@ -21,7 +21,7 @@ CREATE TYPE NL_OffersList AS TABLE (
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[MonthlyInterestRate] DECIMAL(18, 6) NOT NULL,
 	[SetupFeePercent] DECIMAL(18, 6) NOT NULL,
-	[BrokerSetupFeePercent] DECIMAL(18, 6) NOT NULL,
+	[BrokerSetupFeePercent] DECIMAL(18, 6) NULL,
 	[Notes] NVARCHAR(MAX) NULL,
 	[InterestOnlyRepaymentCount] INT NULL,
 	[DiscountPlanID] INT NOT NULL,
