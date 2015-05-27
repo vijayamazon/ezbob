@@ -2,7 +2,6 @@
 	using System;
 	using System.Globalization;
 	using System.Text;
-	using Ezbob.Utils;
 	using Ezbob.Utils.MimeTypes;
 
 	internal enum TemplateType {

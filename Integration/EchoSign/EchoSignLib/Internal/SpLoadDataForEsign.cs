@@ -9,6 +9,7 @@
 	internal class SpLoadDataForEsign : AStoredProc {
 
 		public SpLoadDataForEsign(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
+			this.errorList = new List<string>();
 		} // constructor
 
 		public override bool HasValidParameters() {
@@ -43,7 +44,10 @@
 
 		public Template Template { get; private set; }
 
+		public IReadOnlyCollection<string> ErrorList { get { return this.errorList.AsReadOnly(); } }
+
 		public void Load() {
+			this.errorList.Clear();
 			IsReady = false;
 
 			Template = null;
@@ -60,7 +64,9 @@
 				string sRowType = sr["RowType"];
 
 				if (!Enum.TryParse(sRowType, true, out nRowType)) {
-					Log.Warn("Unexpected row type received from DB: '{0}'.", sRowType);
+					string msg = string.Format("Unexpected row type received from DB: '{0}'.", sRowType);
+					Log.Warn(msg);
+					this.errorList.Add(msg);
 					return ActionResult.Continue;
 				} // if
 
@@ -89,8 +95,11 @@
 					Template = sr.Fill<Template>();
 					break;
 
-				default:
-					Log.Warn("Unexpected row type received from DB: '{0}'.", sRowType);
+				default: {
+					string msg = string.Format("Unexpected row type received from DB: '{0}'.", sRowType);
+					Log.Warn(msg);
+					this.errorList.Add(msg);
+					}
 					break;
 				} // switch
 
@@ -116,17 +125,23 @@
 			IsReady = false;
 
 			if (Company == null) {
-				Log.Warn("No company found for customer {0}.", CustomerID);
+				string msg = string.Format("No company found for customer {0}.", CustomerID);
+				Log.Warn(msg);
+				this.errorList.Add(msg);
 				return;
 			} // if
 
 			if (Template == null) {
-				Log.Warn("No template found for id {0}.", TemplateID);
+				string msg = string.Format("No template found for id {0}.", TemplateID);
+				Log.Warn(msg);
+				this.errorList.Add(msg);
 				return;
 			} // if
 
 			if (Customer == null) {
-				Log.Warn("No customer found for id {0}.", CustomerID);
+				string msg = string.Format("No customer found for id {0}.", CustomerID);
+				Log.Warn(msg);
+				this.errorList.Add(msg);
 				return;
 			} // if
 
@@ -136,5 +151,6 @@
 			IsReady = true;
 		} // FillTemplate
 
+		private readonly List<string> errorList;
 	} // class SpLoadDataForEsign
 } // namespace

@@ -45,36 +45,47 @@
 		} // constructor
 
 		public EchoSignSendResult Send(IEnumerable<EchoSignEnvelope> oCorrespondence) {
+			var result = new EchoSignSendResult();
+
 			int nTotalCount = 0;
 			int nSuccessCount = 0;
 
 			foreach (var oLetter in oCorrespondence) {
 				nTotalCount++;
 
-				if (EchoSignSendResult.Success == Send(oLetter))
+				if (EchoSignSendResultCode.Success == Send(oLetter, result))
 					nSuccessCount++;
 			} // for each
 
-			if (nSuccessCount == 0)
-				return EchoSignSendResult.Fail;
+			if (nSuccessCount == 0) {
+				result.Code = EchoSignSendResultCode.Fail;
+				return result;
+			} // if
 
-			return nTotalCount == nSuccessCount ? EchoSignSendResult.Success : EchoSignSendResult.Partial;
+			result.Code = nTotalCount == nSuccessCount ? EchoSignSendResultCode.Success : EchoSignSendResultCode.Partial;
+			return result;
 		} // Send
 
-		public EchoSignSendResult Send(EchoSignEnvelope oLetter) {
+		private EchoSignSendResultCode Send(EchoSignEnvelope oLetter, EchoSignSendResult result) {
 			if (!m_bIsReady) {
-				m_oLog.Msg("EchoSign cannot send - not ready.");
-				return EchoSignSendResult.Fail;
+				const string msg = "EchoSign cannot send - not ready.";
+				m_oLog.Warn("{0}", msg);
+				result.AddErrorMessage(msg);
+				return EchoSignSendResultCode.Fail;
 			} // if
 
 			if (oLetter == null) {
-				m_oLog.Warn("NULL EchoSign request discovered.");
-				return EchoSignSendResult.Fail;
+				const string msg = "NULL EchoSign request discovered.";
+				m_oLog.Warn("{0}", msg);
+				result.AddErrorMessage(msg);
+				return EchoSignSendResultCode.Fail;
 			} // if
 
 			if (!oLetter.IsValid) {
-				m_oLog.Warn("Some data are missing in EchoSign request: {0}.", oLetter);
-				return EchoSignSendResult.Fail;
+				string msg = string.Format("Some data are missing in EchoSign request: {0}.", oLetter);
+				m_oLog.Warn("{0}", msg);
+				result.AddErrorMessage(msg);
+				return EchoSignSendResultCode.Fail;
 			} // if
 
 			return Send(
@@ -82,16 +93,18 @@
 				oLetter.Directors ?? new int[0],
 				oLetter.ExperianDirectors ?? new int[0],
 				oLetter.TemplateID,
-				oLetter.SendToCustomer
+				oLetter.SendToCustomer,
+				result
 			);
 		} // Send
 
-		private EchoSignSendResult Send(
+		private EchoSignSendResultCode Send(
 			int nCustomerID,
 			IEnumerable<int> aryDirectors,
 			IEnumerable<int> aryExperianDirectors,
 			int nTemplateID,
-			bool bSendToCustomer
+			bool bSendToCustomer,
+			EchoSignSendResult result
 		) {
 			SpLoadDataForEsign sp;
 
@@ -106,13 +119,21 @@
 				sp.Load();
 			}
 			catch (Exception e) {
-				m_oLog.Warn(e, "EchoSign cannot send: failed to load all the data from database.");
-				return EchoSignSendResult.Fail;
+				const string msg = "EchoSign cannot send: failed to load all the data from database.";
+				m_oLog.Warn(e, msg);
+				result.AddErrorMessage("{0} {1}", msg, e.Message);
+				return EchoSignSendResultCode.Fail;
 			} // try
 
 			if (!sp.IsReady) {
-				m_oLog.Warn("EchoSign cannot send: failed to load all the data from database.");
-				return EchoSignSendResult.Fail;
+				string msg = string.Format(
+					"EchoSign cannot send: failed to load all the data from database.\n{0}",
+					string.Join("\n", sp.ErrorList)
+				);
+
+				m_oLog.Warn(msg);
+				result.AddErrorMessage(msg);
+				return EchoSignSendResultCode.Fail;
 			} // if
 
 			List<Person> oRecipients = new List<Person>();
@@ -124,13 +145,15 @@
 				oRecipients.Add(sp.Customer);
 
 			if (oRecipients.Count < 1) {
-				m_oLog.Warn("EchoSign cannot send: no recipients specified.");
-				return EchoSignSendResult.Fail;
+				const string msg = "EchoSign cannot send: no recipients specified.";
+				m_oLog.Warn(msg);
+				result.AddErrorMessage(msg);
+				return EchoSignSendResultCode.Fail;
 			} // if
 
 			switch (sp.Template.TemplateType) {
 			case TemplateType.BoardResolution:
-				return SendOne(sp.Template, null, oRecipients, sp.Customer.ID, sp.Template.ID, bSendToCustomer);
+				return SendOne(sp.Template, null, oRecipients, sp.Customer.ID, sp.Template.ID, bSendToCustomer, result);
 
 			case TemplateType.PersonalGuarantee:
 				int nApprovedSum = m_oDB.ExecuteScalar<int>(
@@ -140,8 +163,10 @@
 				);
 
 				if (nApprovedSum <= 0) {
-					m_oLog.Warn("EchoSign cannot send: approved sum is not positive.");
-					return EchoSignSendResult.Fail;
+					const string msg = "EchoSign cannot send: approved sum is not positive.";
+					m_oLog.Warn(msg);
+					result.AddErrorMessage(msg);
+					return EchoSignSendResultCode.Fail;
 				} // if
 
 				int nTotalCount = 0;
@@ -155,27 +180,41 @@
 
 					nTotalCount++;
 
-					EchoSignSendResult bSendOneResult = SendOne(
+					EchoSignSendResultCode bSendOneResult = SendOne(
 						sp.Template,
 						sp.Template.PersonalGuarantee(oRecipient, nApprovedSum),
 						new List<Person> { oRecipient },
 						sp.Customer.ID,
 						sp.Template.ID,
-						bIsCustomer
+						bIsCustomer,
+						result
 					);
 
-					if (EchoSignSendResult.Success == bSendOneResult)
+					if (EchoSignSendResultCode.Success == bSendOneResult)
 						nSuccessCount++;
 				} // for each
 
-				if (nSuccessCount == 0)
-					return EchoSignSendResult.Fail;
+				if (nSuccessCount == 0) {
+					result.AddErrorMessage("No documents were sent.");
+					return EchoSignSendResultCode.Fail;
+				} // if
 
-				return nTotalCount == nSuccessCount ? EchoSignSendResult.Success : EchoSignSendResult.Partial;
+				if (nTotalCount == nSuccessCount)
+					return EchoSignSendResultCode.Success;
+				else {
+					result.AddErrorMessage("Some documents were not sent.");
+					return EchoSignSendResultCode.Partial;
+				} // if
 
-			default:
-				m_oLog.Warn("EchoSign cannot send: don't know how to send template of type {0}.", sp.Template.TemplateType);
-				return EchoSignSendResult.Fail;
+			default: {
+				string msg = string.Format(
+					"EchoSign cannot send: don't know how to send template of type {0}.",
+					sp.Template.TemplateType
+				);
+				m_oLog.Warn("{0}", msg);
+				result.AddErrorMessage(msg);
+				return EchoSignSendResultCode.Fail;
+				}
 			} // switch
 		} // Send
 
@@ -321,13 +360,14 @@
 			return oResult.status;
 		} // GetDocumentInfo
 
-		private EchoSignSendResult SendOne(
+		private EchoSignSendResultCode SendOne(
 			Template oTemplate,
 			byte[] oFileContent,
 			List<Person> oAddressee,
 			int nCustomerID,
 			int nTemplateID,
-			bool bSentToCustomer
+			bool bSentToCustomer,
+			EchoSignSendResult result
 		) {
 			var oRecipients = oAddressee.Select(oPerson => new RecipientInfo {
 				email = oPerson.Email,
@@ -360,12 +400,20 @@
 				aryResult = m_oEchoSign.sendDocument(m_sApiKey, null, dci);
 			}
 			catch (Exception e) {
-				m_oLog.Warn(e, "Something went exceptionally terrible while sending a document '{0}' to {1}.", oTemplate.DocumentName, sAllRecipients);
-				return EchoSignSendResult.Fail;
+				string msg = string.Format(
+					"Something went exceptionally terrible while sending a document '{0}' to {1}.",
+					oTemplate.DocumentName,
+					sAllRecipients
+				);
+				m_oLog.Warn(e, msg);
+				result.AddErrorMessage(msg);
+				return EchoSignSendResultCode.Fail;
 			} // try
 
 			if (aryResult.Length != 1) {
-				m_oLog.Alert("Failed to send documents for signing.");
+				const string msg = "Failed to send documents for signing.";
+				m_oLog.Alert(msg);
+				result.AddErrorMessage(msg);
 			}
 			else {
 				m_oLog.Debug("Sending result: document key is '{0}'.", aryResult[0].documentKey);
@@ -382,7 +430,7 @@
 				sp.ExecuteNonQuery();
 			} // if
 
-			return EchoSignSendResult.Success;
+			return EchoSignSendResultCode.Success;
 		} // SendOne
 
 		private void LoadConfiguration() {
