@@ -21,6 +21,21 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 		} // TestLegacyCalculator
 
 		[Test]
+		public void TestCreateScheduleAndPlan() {
+			var lcm = new LoanCalculatorModel {
+				LoanAmount = 1200,
+				LoanIssueTime = new DateTime(2015, 1, 31, 14, 15, 16, DateTimeKind.Utc),
+				RepaymentIntervalType = RepaymentIntervalTypes.Month,
+				RepaymentCount = 15,
+				MonthlyInterestRate = 0.03m,
+			};
+
+			var lc = new LegacyLoanCalculator(lcm);
+
+			lc.CreateScheduleAndPlan();
+		} // TestCreateScheduleAndPlan
+
+		[Test]
 		public void TestSetScheduleCloseDatesFromPayments() {
 			var lcm = new LoanCalculatorModel {
 				LoanAmount = 1200,

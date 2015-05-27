@@ -7,7 +7,10 @@
 
 	internal class CalculatePlanMethod : AMethod {
 		public CalculatePlanMethod(ALoanCalculator calculator, bool writeToLog) : base(calculator, writeToLog) {
+			DailyLoanStatus = new DailyLoanStatus();
 		} // constructor
+
+		public DailyLoanStatus DailyLoanStatus { get; private set; }
 
 		public virtual List<Repayment> Execute() {
 			WorkingModel.ValidateSchedule();
@@ -16,22 +19,20 @@
 
 			DateTime lastInterestDay = WorkingModel.LastScheduledDate;
 
-			var days = new DailyLoanStatus();
-
 			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
-				days.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount, days.LastDailyLoanStatus));
+				DailyLoanStatus.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount, DailyLoanStatus.LastDailyLoanStatus));
 
 			DateTime prevTime = WorkingModel.LoanIssueTime;
 
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
 				ScheduledItem sp = WorkingModel.Schedule[i];
 
-				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date > sp.Date))
+				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(dd => dd.Date > sp.Date))
 					cls.OpenPrincipal -= sp.Principal;
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				foreach (OneDayLoanStatus cls in days.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date)) {
+				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date)) {
 					cls.DailyInterestRate = Calculator.GetDailyInterestRate(
 						cls.Date,
 						sp.InterestRate,
@@ -55,13 +56,13 @@
 
 				DateTime dt = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				r.Interest = days.Where(cls => dt < cls.Date && cls.Date <= r.Time).Sum(cls => cls.DailyInterest);
+				r.Interest = DailyLoanStatus.Where(cls => dt < cls.Date && cls.Date <= r.Time).Sum(cls => cls.DailyInterest);
 
 				prevTime = r.Time;
 			} // for
 
 			if (WriteToLog) {
-				days.AddScheduleNotes(WorkingModel);
+				DailyLoanStatus.AddScheduleNotes(WorkingModel);
 
 				Library.Instance.Log.Debug(
 					"\n\n{3}.CreatePlan - begin:" +
@@ -72,7 +73,7 @@
 					"\n\n",
 					WorkingModel,
 					string.Join("\n\t\t", result),
-					days.ToFormattedString("\t\t"),
+					DailyLoanStatus.ToFormattedString("\t\t"),
 					Calculator.Name
 				);
 			} // if

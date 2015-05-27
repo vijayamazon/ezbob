@@ -8,7 +8,10 @@
 
 		public List<ScheduledItemWithAmountDue> Execute() {
 			new CreateScheduleMethod(Calculator).Execute();
-			List<Repayment> payments = new CalculatePlanMethod(Calculator, WriteToLog).Execute();
+
+			var method = new CalculatePlanMethod(Calculator, false);
+
+			List<Repayment> payments = method.Execute();
 
 			var result = new List<ScheduledItemWithAmountDue>();
 
@@ -24,6 +27,21 @@
 					payment.Interest
 				));
 			} // for each
+
+			if (WriteToLog) {
+				Library.Instance.Log.Debug(
+					"\n\n{3}.CreateScheduleAndPlan - begin:" +
+					"\n\nLoan calculator model:\n{0}" +
+					"\n\nSchedule + plan:\n\t{1}" +
+					"\n\nDaily data:\n{2}" +
+					"\n\n{3}.CreateScheduleAndPlan - end." +
+					"\n\n",
+					WorkingModel,
+					string.Join("\n\t", result),
+					method.DailyLoanStatus.ToFormattedString("\t\t"),
+					Calculator.Name
+				);
+			} // if
 
 			return result;
 		} // Execute
