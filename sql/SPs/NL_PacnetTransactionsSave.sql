@@ -14,7 +14,7 @@ CREATE TYPE NL_PacnetTransactionsList AS TABLE (
 	[TransactionTime] DATETIME NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[Notes] NVARCHAR(MAX) NULL,
-	[PacnetTransactionStatusID] INT NOT NULL,	
+	[PacnetTransactionStatusID] INT NOT NULL,
 	[StatusUpdatedTime] DATETIME NOT NULL,
 	[TrackingNumber] NVARCHAR(100) NOT NULL
 );
@@ -31,7 +31,7 @@ BEGIN
 		[TransactionTime],
 		[Amount],
 		[Notes],
-		[PacnetTransactionStatusID],		
+		[PacnetTransactionStatusID],
 		[StatusUpdatedTime],
 		[TrackingNumber]
 	) SELECT
