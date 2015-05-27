@@ -66,6 +66,7 @@
     <Compile Include="Helpers\OpenPrincipal.cs" />
     <Compile Include="Helpers\Repayment.cs" />
     <Compile Include="Helpers\ScheduledItem.cs" />
+    <Compile Include="Helpers\ScheduledItemWithAmountDue.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="LoanCalculatorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

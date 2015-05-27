@@ -27,10 +27,18 @@
 		/// </summary>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan plan (list of repayments).</returns>
-		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		public virtual List<Repayment> CalculatePlan(bool writeToLog = true) {
 			return new CalculatePlanMethod(this, writeToLog).Execute();
 		} // CalculatePlan
+
+		/// <summary>
+		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
+		/// Also calculates loan plan.
+		/// Schedule is stored in WorkingModel.Schedule.
+		/// </summary>
+		public virtual List<ScheduledItemWithAmountDue> CreateScheduleAndPlan(bool writeToLog = true) {
+			return new CreateScheduleAndPlanMethod(this, writeToLog).Execute();
+		} // CreateScheduleAndPlan
 
 		/// <summary>
 		/// Calculates current loan balance.

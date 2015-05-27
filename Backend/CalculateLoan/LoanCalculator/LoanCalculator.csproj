@@ -57,6 +57,7 @@
     <Compile Include="Methods\CalculateBalanceMethod.cs" />
     <Compile Include="Methods\CalculateEarnedInterestMethod.cs" />
     <Compile Include="Methods\CalculatePlanMethod.cs" />
+    <Compile Include="Methods\CreateScheduleAndPlanMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
     <Compile Include="Methods\GetAmountToChargeForAutoChargerMethod.cs" />
     <Compile Include="Methods\GetAmountToChargeForDashboardMethod.cs" />

@@ -143,7 +143,7 @@
 
 				BankLikeLoanCalculator nlCalculator = new BankLikeLoanCalculator(calcModel);
 
-				List<ScheduledItem> shedules = nlCalculator.CreateSchedule();
+				List<ScheduledItemWithAmountDue> shedules = nlCalculator.CreateScheduleAndPlan();
 				List<NL_LoanSchedules> scheduleItems = new List<NL_LoanSchedules>();
 				foreach (var s in shedules) {
 					NL_LoanSchedules sch = new NL_LoanSchedules();

@@ -16,6 +16,7 @@
 		public void Clear() {
 			this.badPeriods.Clear();
 			this.extremumPoints.Clear();
+			Add(DateTime.MinValue, false);
 		} // Clear
 
 		public bool IsLastKnownGood {
