@@ -10,6 +10,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 		this.boardResolutionTemplateID = 1;
 		this.personalGuaranteeTemplateID = 2;
+
+		this.personalInfoModel.on('change sync', this.updateDocumentTemplateIDs, this);
 	}, // initialize
 
 	events: {
@@ -207,9 +209,12 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 				return;
 			} // if
 
-			if (oResponse.error)
-				EzBob.ShowMessage(oResponse.error, 'Error while sending');
-			else
+			if (oResponse.error) {
+				EzBob.ShowMessage(
+					'<ul><li>' + oResponse.error.replace(/(?:\r\n|\r|\n)/g, '<li>') + '</ul>',
+					'Error while sending'
+				);
+			} else
 				EzBob.ShowMessage('Could not send documents for signature.', 'Error while sending');
 		});
 
@@ -439,18 +444,31 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			if (bPollStatus)
 				BlockUi('off', self.$el);
 
-			self.boardResolutionTemplateID = self.personalInfoModel.get('BoardResolutionTemplateID');
-			self.personalGuaranteeTemplateID = self.personalInfoModel.get('PersonalGuaranteeTemplateID');
-
-			self.$el.find('#esign-board-resolution').data('template-id', self.boardResolutionTemplateID);
-			self.$el.find('#esign-personal-guarantee').data('template-id', self.personalGuaranteeTemplateID);
-
-			self.$el.find('#add-director-from-esign').toggleClass(
-				'hide',
-				self.personalInfoModel.get('CompanyType') === 'Entrepreneur'
-			);
+			self.updateDocumentTemplateIDs();
 		});
 	}, // reload
+
+	updateDocumentTemplateIDs: function() {
+		this.boardResolutionTemplateID = this.personalInfoModel.get('BoardResolutionTemplateID');
+		this.personalGuaranteeTemplateID = this.personalInfoModel.get('PersonalGuaranteeTemplateID');
+
+		this.$el.find('#esign-board-resolution').data('template-id', this.boardResolutionTemplateID);
+		this.$el.find('#esign-personal-guarantee').data('template-id', this.personalGuaranteeTemplateID);
+
+		this.$el.find('#add-director-from-esign').toggleClass(
+			'hide',
+			this.personalInfoModel.get('CompanyType') === 'Entrepreneur'
+		);
+
+		console.debug(
+			'document template ids updated for',
+			this.personalInfoModel.get('Origin'),
+			'customer',
+			this.personalInfoModel.get('Id'),
+			': BR =', this.boardResolutionTemplateID,
+			' PG =', this.personalGuaranteeTemplateID
+		);
+	}, // updateDocumentTemplateIDs
 
 	fromTemplate: function(sSelector) {
 		return this.$el.find('.templates').find(sSelector).clone(true);

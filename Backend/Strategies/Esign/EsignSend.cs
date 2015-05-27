@@ -32,24 +32,27 @@
 			Log.Debug("Send for signature request:\n{0}", string.Join("\n", (object[])oPackage));
 
 			EchoSignFacade esf = new EchoSignFacade(DB, Log);
-			EchoSignSendResult nResult = esf.Send(oPackage);
+			EchoSignSendResult result = esf.Send(oPackage);
 
-			switch (nResult) {
-			case EchoSignSendResult.Success:
+			switch (result.Code) {
+			case EchoSignSendResultCode.Success:
 				Result = string.Empty;
 				break;
 
-			case EchoSignSendResult.Partial:
+			case EchoSignSendResultCode.Partial:
 				Result = "Some envelopes were not sent.";
 				break;
 
-			case EchoSignSendResult.Fail:
-				Result = "Sending failed";
+			case EchoSignSendResultCode.Fail:
+				Result = "Sending failed.";
 				break;
 
 			default:
 				throw new ArgumentOutOfRangeException();
 			} // switch
+
+			if (result.ErrorList.Count > 0)
+				Result += "\n" + string.Join("\n", result.ErrorList);
 		} // Execute
 
 		public string Result { get; private set; }
