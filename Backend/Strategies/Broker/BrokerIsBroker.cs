@@ -24,7 +24,7 @@
 				"BrokerIsBroker",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("@ContactEmail", this.contactEmail),
-				new QueryParameter("@UiOrigin", this.uiOrigin)
+				new QueryParameter("@UiOriginID", this.uiOrigin)
 			);
 		} // Execute
 

@@ -907,6 +907,16 @@
     <Content Include="Areas\Broker\Views\BrokerHome\AddBank.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\LeadDetails.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_FunctionsDialog.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Signup.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Login.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Forgotten.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Dashboard.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\AddCustomer.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\CustomerDetails.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Forbidden.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\RequestAcceptTerms.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards_Old_Do_NOT_AppendHere.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

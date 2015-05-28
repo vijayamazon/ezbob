@@ -1,0 +1,32 @@
+﻿<div class="page-section hide section-login">
+	<form class="login-form broker-form" novalidate="novalidate">
+		@{ int nLoginTabIdx = 1; }
+		<h2 class="form-start">Broker login</h2>
+
+		<a href="#" class="ForgottenPassword">Forgotten password</a> | <a href="#" class="Signup">Sign up</a>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Contact person email</span>
+				<input type="email" name="LoginEmail" id="LoginEmail" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" autocorrect="off" autocapitalize="off" ui-event-control-id="broker:login-email" />
+				<img id="LoginEmailImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Password</span>
+				<input type="password" name="LoginPassword" id="LoginPassword" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-password" />
+				<img id="LoginPasswordImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div class="form_buttons_container">
+			<div class="attardi-button">
+				<button type="submit" id="LoginBrokerButton" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" ui-event-control-id="broker:login-submit">Login</button>
+			</div>
+		</div>
+	</form>
+
+	<aside class="customer-sidebar broker"></aside>
+</div>

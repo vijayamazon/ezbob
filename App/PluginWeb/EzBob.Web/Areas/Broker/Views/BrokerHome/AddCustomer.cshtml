@@ -1,0 +1,51 @@
+﻿<div class="page-section hide section-add-customer">
+	<button type="button" class="back-to-list button btn-green pull-right btn-wide">Back to client list</button>
+	<h2 class="form-start">Add a new client</h2>
+
+	<form class="new-lead-form broker-form" novalidate="novalidate">
+		@{ int nLeadTabIdx = 1; }
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Client first name</span>
+				<input type="text" name="LeadFirstName" id="LeadFirstName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-first-name" />
+				<img id="LeadFirstNameImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Client surname</span>
+				<input type="text" name="LeadLastName" id="LeadLastName" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-last-name" />
+				<img id="LeadLastNameImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Client email</span>
+				<input type="email" name="LeadEmail" id="LeadEmail" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" class="form_field" ui-event-control-id="broker:lead-email" />
+				<img id="LeadEmailImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div>
+			<div class="form_field_container">
+				<div class="form_buttons_container">
+					Complete the application on behalf of your client
+					<button type="submit" id="LeadFillWizard" data-add-mode="fill" class="button btn-green disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-fill-wizard">
+						<i class="fa fa-desktop"></i>&nbsp;Fill
+					</button>
+				</div>
+			</div>
+			<div class="form_field_container">
+				<div class="form_buttons_container">
+					Send an invitation to the client to fill himself
+					<button type="submit" id="LeadSendInvitation" data-add-mode="invitation" class="button btn-green disabled" tabindex="@{ WriteLiteral(nLeadTabIdx++); }" ui-event-control-id="broker:lead-send-invitation">
+						<i class="fa fa-envelope"></i>&nbsp;Send
+					</button>
+				</div>
+			</div>
+		</div>
+	</form>
+</div>
