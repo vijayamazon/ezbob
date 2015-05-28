@@ -42,9 +42,20 @@
 		[DataMember]
 		public string PacnetTransactionStatus { get; set; }
 
+		// AssignPaymentToLoan strategy
+		// 1. argument for the strategy - logic payment to assign (distribute) to loan
+		[DataMember]
+		public NL_Payments PaymentToAssign { get; set; }
 
+		// 2. result used in AssignPaymentToLoan strategy: loan fees that covered by the amount/or NL_Payments
+		[DataMember]
+		public List<NL_LoanFeePayments> PaymentAssignedToLoanFees { get; set; }
 
+		// 2. result used in AssignPaymentToLoan strategy: schedule items that covered by the amount/or NL_Payments
+		[DataMember]
+		public List<NL_LoanSchedulePayments> PaymentAssignedToScheduleItems { get; set; }
 
+		
 		/*// NL_OfferForLoan
 		[DataMember]
 		public int LoanLegalID { get; set; }

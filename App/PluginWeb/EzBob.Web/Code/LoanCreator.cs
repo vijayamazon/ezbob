@@ -234,7 +234,6 @@
 
 				Log.Debug(agreement.ToString());
 			}
-			
 
  			try {
 				Log.Debug(nlModel.FundTransfer.ToString());
@@ -243,7 +242,7 @@
 
 				this.m_oServiceClient.Instance.AddLoan(this._context.UserId, cus.Id, nlModel);
  			} catch (Exception ex) {
- 				Log.Debug("Failed to save new loan", ex);
+ 				Log.Debug("Failed to save new loan {0}", ex);
  			}
 
 			return loan;

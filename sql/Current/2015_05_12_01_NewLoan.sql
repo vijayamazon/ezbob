@@ -439,6 +439,7 @@ CREATE TABLE [dbo].[NL_Payments](
 	[PaymentMethodID] [int] NOT NULL,	
 	[PaymentStatusID] [int] NOT NULL,	
 	[PaymentTime] [datetime] NOT NULL, 
+	[Amount] [decimal](18, 6) NULL,
 	[IsActive] [bit] NOT NULL,
 	[CreationTime] [datetime] NOT NULL default getutcdate(), --real insert datetime
 	[CreatedByUserID] [int] NULL,
@@ -450,16 +451,17 @@ CREATE TABLE [dbo].[NL_Payments](
 ) ;
 END
 GO
+
 	
 IF OBJECT_ID('NL_PaypointTransactions') IS NULL 
 BEGIN	
 CREATE TABLE [dbo].[NL_PaypointTransactions](
 	[PaypointTransactionID] [int] NOT NULL  IDENTITY(1,1) ,
 	[PaymentID] [int] NULL,
-	[TransactionTime] [datetime] NULL, -- effective payment date
-	[Amount] [decimal](18, 6) NULL,
+	[TransactionTime] [datetime] NULL, -- ???  effective payment date
+	[Amount] [decimal](18, 6) NOT NULL,
 	[Notes] [nvarchar](max) NULL,
-	[PaypointTransactionStatusID] [int] NULL,
+	[PaypointTransactionStatusID] [int] NOT NULL,
 	[PaypointUniqID] [nvarchar](100) NULL,
 	[PaypointCardID] [int] NOT NULL,
 	[IP] [nvarchar](32) NULL,

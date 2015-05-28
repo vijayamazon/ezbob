@@ -36,11 +36,11 @@
 	    /// A string that represents the current object.
 	    /// </returns>
 	    public override string ToString() {
-			StringBuilder sb = new StringBuilder("NL_LoanSchedules: ");
+			StringBuilder sb = new StringBuilder(this.GetType().Name+": ");
 			Type t = typeof(NL_LoanSchedules);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(":").Append(prop.GetValue(this)).Append(@"; \n");
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
 			}
 			return sb.ToString();
 	    }

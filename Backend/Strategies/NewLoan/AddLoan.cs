@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Web;
-	using AutomationCalculator.ProcessHistory;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
@@ -27,6 +26,11 @@
 		}//constructor
 
 		public override string Name { get { return "AddLoan"; } }
+
+
+		//AddLoanOptions ??????????????
+		//var addLoanOptions = new AddLoanOptions(new NL_LoanOptions)
+
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		/// /// <exception cref="NL_ExceptionLoanExists">Condition. </exception>

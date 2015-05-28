@@ -141,7 +141,7 @@
                         _log.ErrorFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
                     }
 
-					// continue to log paypoint and pacnet transactions also for NL
+					// continue to log paypoint and pacnet transactions also for NL, i.e. do nothig new
                     _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
                                        String.Format("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id,
                                                      code, message));
@@ -174,12 +174,16 @@
 
 				ValidateCustomerName(customer, cus);
 
+				// 5 pounds charged successfully, continue to save PayPointCard, create new loan, and make "rebate" payment 
+
 				// continue to log paypoint transaction also for NL
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
 
+
+				// save new PayPointCard 
                 var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
-                var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
+				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
 
                 RebatePayment(amount, loan, trans_id, now);
 
@@ -191,10 +195,24 @@
 
                 _customerRepository.Update(cus);
 
+				// el: TODO save NL_Payments -> NL_PaypointTransactions for this PayPointCard; "AssignPaymentToLoan" strategy; 
+				 /* 
+				 * 1. save NL_Payments with PaymentStatusID (NL_PaymentStatuses ("rebate"? / "system-repay" ?)), PaymentMethodID ([LoanTransactionMethod] 'Auto' ID 2)
+				 * 
+				 * 2. save NL_PaypointTransactions with:
+				 * PaypointCardID- from just created PayPointCard.Id, 
+				 * PaypointTransactionStatusID =1 (Done) NL_PaypointTransactionStatuses  
+				 * IP - from LoanTransaction IP
+				 * Amount - from the method argument amount if not null, otherwise 5 pounds
+				 * PaymentID - from 1.				 * 
+				 * 
+				 * 3. new strategy AssignPaymentToLoan: argument: NL_Model with Loan.LoanID; decimal amount; output: NL_Model containing list of fees/schedules that covered by the amount/payment
+				 * closest unpaid loan fees and schedules (1.fee if exists; 2.interest; 3.principal)
+				 * 
+				 * 4. save into NL_LoanSchedulePayments : PaymentID just created + NL_LoanSchedules from AssignPaymentToLoan strategy
+				 */
 
-
-
-                return RedirectToAction("Index", "PacnetStatus", new { Area = "Customer" });
+				return RedirectToAction("Index", "PacnetStatus", new { Area = "Customer" });
             } catch (OfferExpiredException) {
                 _logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
                                    "Invalid apply for a loan period");
