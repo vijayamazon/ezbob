@@ -372,7 +372,6 @@
 	} // GridLogbookRow
 
 	internal class GridBroker : AGridRow {
-
 		public override string RowIDFieldName() {
 			return "BrokerID";
 		} // RowIDFieldName
@@ -385,11 +384,12 @@
 		public virtual string ContactOtherPhone { get; set; }
 		public virtual string FirmWebSiteUrl { get; set; }
 		public virtual string IsTest { get; set; }
+		public virtual int OriginID { get; set; }
+		public virtual string Origin { get; set; }
 
 		public override void Init(long nRowID, SafeReader oRow) {
 			oRow.Fill(this);
 			BrokerID = nRowID;
 		} // Init
 	} // GridBroker
-
 } // namespace

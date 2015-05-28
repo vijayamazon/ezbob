@@ -19,9 +19,12 @@ BEGIN
 		b.ContactMobile,
 		b.ContactOtherPhone,
 		b.FirmWebSiteUrl,
-		b.IsTest
+		b.IsTest,
+		b.OriginID,
+		o.Name AS Origin
 	FROM
 		Broker b
+		INNER JOIN CustomerOrigin o ON b.OriginID = o.CustomerOriginID
 	WHERE
 		@WithTest = 1
 		OR

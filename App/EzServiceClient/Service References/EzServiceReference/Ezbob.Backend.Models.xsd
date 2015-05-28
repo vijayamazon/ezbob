@@ -172,6 +172,8 @@
       <xs:element minOccurs="0" name="LinkedBank" type="xs:boolean" />
       <xs:element minOccurs="0" name="LotteryCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LotteryPlayerID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Origin" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="OriginID" type="xs:int" />
       <xs:element minOccurs="0" name="SignedTermsID" type="xs:int" />
       <xs:element minOccurs="0" name="SignedTextID" type="xs:int" />
       <xs:element minOccurs="0" name="SourceRef" nillable="true" type="xs:string" />

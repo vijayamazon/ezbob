@@ -23,6 +23,7 @@ BEGIN
 	DECLARE @LinkedBank BIT = 0
 	DECLARE @ApprovedAmount DECIMAL(18, 2) = 0	
 	DECLARE @CommissionAmount DECIMAL(18, 2) = 0
+	DECLARE @BrokerOriginID INT = NULL
 
 	------------------------------------------------------------------------------
 
@@ -67,6 +68,15 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	SELECT
+		@BrokerOriginID = OriginID
+	FROM
+		Broker
+	WHERE
+		BrokerID = @BrokerID
+
+	------------------------------------------------------------------------------
+
 	SELECT TOP 1
 		@BrokerTermsID = BrokerTermsID
 	FROM
@@ -92,6 +102,7 @@ BEGIN
 		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
 		LEFT JOIN CashRequests cr ON cr.Id = l.RequestCashId
 		WHERE c.BrokerID = @BrokerID
+		AND c.OriginID = @BrokerOriginID
 	END
 
 	------------------------------------------------------------------------------
@@ -122,9 +133,11 @@ BEGIN
 		ci.BankAccount AS BankAccount,
 		ci.SortCode AS BankSortCode,
 		ci.Bank AS BankName,
-		b.OriginID
+		b.OriginID,
+		bo.Name AS Origin
 	FROM
 		Broker b
+		INNER JOIN CustomerOrigin bo ON b.OriginID = bo.CustomerOriginID
 		INNER JOIN BrokerTerms tc ON tc.BrokerTermsID = @BrokerTermsID -- current terms
 		LEFT JOIN BrokerTerms ts ON b.BrokerTermsID = ts.BrokerTermsID -- signed terms
 		LEFT JOIN CardInfo ci ON b.BrokerID=ci.BrokerID AND ci.IsDefault = 1

@@ -21,7 +21,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
 
 		this.initSwitch(".manualDecisionSwitch", this.model.get('IsAvoid'), this.toggleManualDecision);
-	    
+
 		this.initSwitch(".lightDarkThemeSwitch", $.cookie('sidebar-color') == 'light', this.toggleTheme);
 
 		if (this.model.get('BrokerName') !== '')
@@ -204,7 +204,6 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 			EzBob.ShowMessge("Failed to change customer's broker", 'Error');
 			UnBlockUi();
 		});
-
 	}, // changeBroker
 
 	startChangeBroker: function() {
@@ -222,6 +221,10 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		});
 
 		oRequest.done(function(oResponse) {
+			var customerOrigin = self.model.get('Origin');
+
+			oResponse.aaData = _.filter(oResponse.aaData, function(brk) { return brk.Origin === customerOrigin; });
+
 			oResponse.aaData.sort(function(a, b) {
 				var sA = a.ContactName + a.FirmaName;
 				var sB = b.ContactName + b.FirmaName;

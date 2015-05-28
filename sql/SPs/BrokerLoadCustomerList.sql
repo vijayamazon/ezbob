@@ -12,8 +12,32 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
+	------------------------------------------------------------------------------
+
+	DECLARE @BrokerOriginID INT = NULL
+
+	------------------------------------------------------------------------------
+
 	IF @BrokerID IS NULL OR @BrokerID <= 0
-		SELECT @BrokerID = BrokerID FROM Broker WHERE ContactEmail = @ContactEmail
+	BEGIN
+		SELECT
+			@BrokerID = BrokerID,
+			@BrokerOriginID = OriginID
+		FROM
+			Broker
+		WHERE
+			ContactEmail = @ContactEmail
+	END
+	ELSE BEGIN
+		SELECT
+			@BrokerOriginID = OriginID
+		FROM
+			Broker
+		WHERE
+			BrokerID = @BrokerID
+	END
+
+	------------------------------------------------------------------------------
 
 	SELECT
 		c.Id AS CustomerID,
@@ -39,12 +63,12 @@ BEGIN
 			ELSE 'Unknown: ' + W.WizardStepTypeName
 		END AS Status,
 		c.GreetingMailSentDate AS ApplyDate,
-        dbo.udfGetMpsTypes(c.Id) AS Marketplaces,
+		dbo.udfGetMpsTypes(c.Id) AS Marketplaces,
 		ISNULL(l.LoanAmount, 0) AS LoanAmount,
 		l.Date AS LoanDate,
 		l.SetupFee,
 		ISNULL(cr.ManagerApprovedSum, 0) AS ApprovedAmount,
-		isnull(lb.CommissionAmount, 0) AS CommissionAmount, 
+		ISNULL(lb.CommissionAmount, 0) AS CommissionAmount, 
 		lb.PaidDate AS CommissionPaymentDate
 	FROM
 		Customer c
@@ -54,8 +78,11 @@ BEGIN
 		LEFT JOIN LoanBrokerCommission lb ON lb.LoanID = l.Id
 	WHERE
 		c.BrokerID = @BrokerID
+		AND
+		c.OriginID = @BrokerOriginID
 	ORDER BY
 		c.Id
-END
 
+	------------------------------------------------------------------------------
+END
 GO

@@ -57,23 +57,29 @@
 		[DataMember]
 		public string LicenseNumber { get; set; }
 
-        [DataMember]
-        public bool LinkedBank { get; set; }
+		[DataMember]
+		public bool LinkedBank { get; set; }
 
-        [DataMember]
-        public decimal ApprovedAmount { get; set; }
+		[DataMember]
+		public decimal ApprovedAmount { get; set; }
 
-        [DataMember]
-        public decimal CommissionAmount { get; set; }
+		[DataMember]
+		public decimal CommissionAmount { get; set; }
 
-        [DataMember]
-        public string BankAccount { get; set; }
+		[DataMember]
+		public string BankAccount { get; set; }
 
-        [DataMember]
-        public string BankSortCode { get; set; }
+		[DataMember]
+		public string BankSortCode { get; set; }
 
-        [DataMember]
-        public string BankName { get; set; }
+		[DataMember]
+		public string BankName { get; set; }
+
+		[DataMember]
+		public int OriginID { get; set; }
+
+		[DataMember]
+		public string Origin { get; set; }
 
 		public override string ToString() {
 			return string.Format(
@@ -91,9 +97,11 @@
 	CurrentTermsID: {10}
 	SignedTermsID: {11}
 	Current terms text length: {12}
-    LinkedBank: {13}
-    ApprovedAmount: {14}
-    CommissionAmount: {15}
+	LinkedBank: {13}
+	ApprovedAmount: {14}
+	CommissionAmount: {15}
+	Origin ID: {16}
+	Origin: {17}
 ",
 				BrokerID,
 				BrokerName,
@@ -108,9 +116,11 @@
 				CurrentTermsID,
 				SignedTermsID,
 				CurrentTerms.Length,
-                LinkedBank,
-                ApprovedAmount,
-                CommissionAmount
+				LinkedBank,
+				ApprovedAmount,
+				CommissionAmount,
+				OriginID,
+				Origin
 			);
 		} // ToString
 	} // class BrokerProperties

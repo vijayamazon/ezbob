@@ -211,7 +211,7 @@
 			ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0} complete.", sContactEmail, sLeadID);
 
 			return new LeadDetailsBrokerForJsonResult(oDetails:oDetails.BrokerLeadDataModel);
-		} // LoadCustomerDetails
+		} // LoadLeadDetails
 
 		[HttpGet]
 		[Ajax]
