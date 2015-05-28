@@ -175,8 +175,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Broker\BrokerAreaRegistration.cs" />
+    <Compile Include="Areas\Broker\Controllers\BrokerAccountController.cs" />
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController.cs" />
-    <Compile Include="Areas\Broker\Controllers\BrokerHomeController\private.cs" />
+    <Compile Include="Areas\Broker\Controllers\ABrokerBaseController.cs" />
+    <Compile Include="Areas\Broker\Controllers\BrokerLotteryController.cs" />
     <Compile Include="Areas\Broker\Models\BrokerSignupModel.cs" />
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Broker\Models\GetInstantOfferModel.cs" />

@@ -20,6 +20,9 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DECLARE @BrokerTermsID INT = NULL
+	DECLARE @LinkedBank BIT = 0
+	DECLARE @ApprovedAmount DECIMAL(18, 2) = 0	
+	DECLARE @CommissionAmount DECIMAL(18, 2) = 0
 
 	------------------------------------------------------------------------------
 
@@ -49,18 +52,21 @@ BEGIN
 	END
 
 	------------------------------------------------------------------------------
-	IF (@BrokerID = 0 OR @BrokerID IS NULL)
+
+	IF @BrokerID = 0 OR @BrokerID IS NULL
 	BEGIN 
-		SET @BrokerID = (SELECT TOP 1 b.BrokerID
-						 FROM Broker b
-						 WHERE 
-							b.ContactEmail = @ContactEmail
-							OR
-							b.ContactMobile = @ContactMobile
-						)	
+		SET @BrokerID = (
+			SELECT TOP 1 b.BrokerID
+			FROM Broker b
+			WHERE b.ContactEmail = @ContactEmail
+			OR b.ContactMobile = @ContactMobile
+		)
+
+		SET @BrokerID = ISNULL(@BrokerID, 0)
 	END
+
 	------------------------------------------------------------------------------
-	
+
 	SELECT TOP 1
 		@BrokerTermsID = BrokerTermsID
 	FROM
@@ -69,30 +75,25 @@ BEGIN
 		DateAdded DESC
 
 	------------------------------------------------------------------------------
-	DECLARE @LinkedBank BIT = 0
-	DECLARE @ApprovedAmount DECIMAL(18,2) = 0	
-	DECLARE @CommissionAmount DECIMAL(18,2) = 0
-	
-	IF(@BrokerID > 0)
+
+	IF @BrokerID > 0
 	BEGIN
-		SELECT @LinkedBank = CAST (
-			CASE 
-				WHEN EXISTS (SELECT 1 FROM CardInfo ci WHERE ci.BrokerID = @BrokerID AND ci.IsDefault = 1) THEN 1
-				ELSE 0
-			END AS BIT)
+		SELECT @LinkedBank = CAST(CASE
+			WHEN EXISTS (SELECT 1 FROM CardInfo ci WHERE ci.BrokerID = @BrokerID AND ci.IsDefault = 1) THEN 1
+			ELSE 0
+		END AS BIT)
 		
-		SELECT @CommissionAmount = isnull(sum(lb.CommissionAmount), 0) 
+		SELECT @CommissionAmount = ISNULL(SUM(lb.CommissionAmount), 0)
 		FROM LoanBrokerCommission lb
-		WHERE lb.BrokerID=@BrokerID	
+		WHERE lb.BrokerID = @BrokerID
 		
-		SELECT @ApprovedAmount = isnull(sum(cr.ManagerApprovedSum),0) 
+		SELECT @ApprovedAmount = ISNULL(SUM(cr.ManagerApprovedSum), 0)
 		FROM Customer c
 		LEFT JOIN Loan l ON l.CustomerId = c.Id AND l.Position = 0
 		LEFT JOIN CashRequests cr ON cr.Id = l.RequestCashId
-		WHERE c.BrokerID=@BrokerID
-		--AND cr.UnderwriterDecision='Approved'
-		
+		WHERE c.BrokerID = @BrokerID
 	END
+
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
@@ -120,7 +121,8 @@ BEGIN
 		@CommissionAmount AS CommissionAmount,
 		ci.BankAccount AS BankAccount,
 		ci.SortCode AS BankSortCode,
-		ci.Bank AS BankName
+		ci.Bank AS BankName,
+		b.OriginID
 	FROM
 		Broker b
 		INNER JOIN BrokerTerms tc ON tc.BrokerTermsID = @BrokerTermsID -- current terms

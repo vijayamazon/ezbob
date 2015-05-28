@@ -8,24 +8,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfstring" nillable="true" type="tns:ArrayOfstring" />
-  <xs:complexType name="ArrayOfKeyValueOfstringstring">
-    <xs:annotation>
-      <xs:appinfo>
-        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
-      </xs:appinfo>
-    </xs:annotation>
+  <xs:complexType name="ArrayOfint">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfstringstring">
-        <xs:complexType>
-          <xs:sequence>
-            <xs:element name="Key" nillable="true" type="xs:string" />
-            <xs:element name="Value" nillable="true" type="xs:string" />
-          </xs:sequence>
-        </xs:complexType>
-      </xs:element>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfKeyValueOfstringstring" nillable="true" type="tns:ArrayOfKeyValueOfstringstring" />
+  <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
   <xs:complexType name="ArrayOfKeyValueOfstringCoin96aT1m2k">
     <xs:annotation>
       <xs:appinfo>
@@ -62,10 +50,22 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfElapsedDataMemberTypelongpoA0JYJE" nillable="true" type="tns:ArrayOfKeyValueOfElapsedDataMemberTypelongpoA0JYJE" />
-  <xs:complexType name="ArrayOfint">
+  <xs:complexType name="ArrayOfKeyValueOfstringstring">
+    <xs:annotation>
+      <xs:appinfo>
+        <IsDictionary xmlns="http://schemas.microsoft.com/2003/10/Serialization/">true</IsDictionary>
+      </xs:appinfo>
+    </xs:annotation>
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="int" type="xs:int" />
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="KeyValueOfstringstring">
+        <xs:complexType>
+          <xs:sequence>
+            <xs:element name="Key" nillable="true" type="xs:string" />
+            <xs:element name="Value" nillable="true" type="xs:string" />
+          </xs:sequence>
+        </xs:complexType>
+      </xs:element>
     </xs:sequence>
   </xs:complexType>
-  <xs:element name="ArrayOfint" nillable="true" type="tns:ArrayOfint" />
+  <xs:element name="ArrayOfKeyValueOfstringstring" nillable="true" type="tns:ArrayOfKeyValueOfstringstring" />
 </xs:schema>

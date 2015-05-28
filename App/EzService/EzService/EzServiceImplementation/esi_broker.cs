@@ -10,7 +10,6 @@
 	using Ezbob.Backend.ModelsWithDB;
 
 	partial class EzServiceImplementation {
-
 		public ActionMetaData BrokerLeadAcquireCustomer(int nCustomerID, int nLeadID, string sFirstName, bool bBrokerFillsForCustomer, string sConfirmationToken) {
 			return Execute<BrokerLeadAcquireCustomer>(nCustomerID, null, nCustomerID, nLeadID, sFirstName, bBrokerFillsForCustomer, sConfirmationToken);
 		} // BrokerLeadAcquireCustomer
@@ -36,10 +35,10 @@
 			});
 		} // BrokerApproveAndResetCustomerPassword
 
-		public BoolActionResult IsBroker(string sContactEmail) {
+		public BoolActionResult IsBroker(string sContactEmail, int uiOrigin) {
 			BrokerIsBroker oInstance;
 
-			ActionMetaData oResult = ExecuteSync(out oInstance, null, null, sContactEmail);
+			ActionMetaData oResult = ExecuteSync(out oInstance, null, null, sContactEmail, uiOrigin);
 
 			return new BoolActionResult {
 				MetaData = oResult,
@@ -63,7 +62,8 @@
 			int nBrokerTermsID,
 			string sReferredBy,
 			bool bFCARegistered,
-			string sLicenseNumber
+			string sLicenseNumber,
+			int uiOriginID
 		) {
 			BrokerSignup oInstance;
 
@@ -83,7 +83,8 @@
 				nBrokerTermsID,
 				sReferredBy,
 				bFCARegistered,
-				sLicenseNumber
+				sLicenseNumber,
+				uiOriginID
 			);
 
 			if (oInstance != null) {
@@ -106,7 +107,8 @@
 			string sEmail,
 			Password oPassword,
 			string promotionName,
-			DateTime? promotionPageVisitTime
+			DateTime? promotionPageVisitTime,
+			int uiOriginID
 		) {
 			BrokerLogin oInstance;
 			ActionMetaData oMetaData = ExecuteSync(
@@ -116,7 +118,8 @@
 				sEmail,
 				oPassword,
 				promotionName,
-				promotionPageVisitTime
+				promotionPageVisitTime,
+				uiOriginID
 			);
 
 			return new BrokerPropertiesActionResult {
@@ -424,12 +427,10 @@
 				MetaData = oMetaData,
 				Response = oInstance.Response,
 			};
-		}
+		} // BrokerInstantOffer
 
-        public ActionMetaData BrokerTransferCommission()
-        {
-            return Execute<BrokerTransferCommission>(null, null);
-        }
-
+		public ActionMetaData BrokerTransferCommission() {
+			return Execute<BrokerTransferCommission>(null, null);
+		} // BrokerTransferCommission
 	} // class EzServiceImplementation
 } // namespace EzService

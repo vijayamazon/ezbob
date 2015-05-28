@@ -11,20 +11,25 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
-	public partial class BrokerHomeController : Controller {
-		static BrokerHomeController() {
+	public abstract class ABrokerBaseController : Controller {
+		static ABrokerBaseController() {
 			ms_oLog = new SafeILog(typeof(BrokerHomeController));
 			m_oDB = DbConnectionGenerator.Get(ms_oLog);
 		} // static constructor
 
-		private BrokerForJsonResult IsAuth(string sRequestDescription, string sContactEmail) {
+		protected ABrokerBaseController() {
+			this.m_oServiceClient = new ServiceClient();
+			this.m_oHelper = new BrokerHelper(this.m_oServiceClient, ms_oLog);
+		} // constructor
+
+		protected virtual BrokerForJsonResult IsAuth(string sRequestDescription, string sContactEmail) {
 			return IsAuth<BrokerForJsonResult>(sRequestDescription, sContactEmail);
 		} // IsAuth
 		
 		/// <summary>
 		/// Checks if broker is logged in session if OK returned null else return error message
 		/// </summary>
-		private T IsAuth<T>(string sRequestDescription, string sContactEmail) where T : BrokerForJsonResult {
+		protected virtual T IsAuth<T>(string sRequestDescription, string sContactEmail) where T : BrokerForJsonResult {
 			if (!User.Identity.IsAuthenticated || (User.Identity.Name != sContactEmail)) {
 				ms_oLog.Alert(
 					"{0} request with contact email {1}: {2}.",
@@ -58,16 +63,15 @@
 			return null;
 		} // IsAuth
 
-		private readonly ServiceClient m_oServiceClient;
-		private readonly BrokerHelper m_oHelper;
+		protected readonly ServiceClient m_oServiceClient;
+		protected readonly BrokerHelper m_oHelper;
 
-		private static readonly ASafeLog ms_oLog;
-		private static readonly AConnection m_oDB;
+		protected static readonly ASafeLog ms_oLog;
+		protected static readonly AConnection m_oDB;
 
 		// ReSharper disable InconsistentNaming
 
 		public class BrokerForJsonResult {
-
 			public static implicit operator JsonResult(BrokerForJsonResult oResult) {
 				ms_oLog.Debug(
 					"Controller output:\n\ttype: {0}\n\terror msg: {1}",
@@ -113,7 +117,6 @@
 			private bool m_bIsAuth;
 
 			public virtual string antiforgery_token { get; set; } // antiforgery_token
-
 		} // BrokerForJsonResult
 
 		public class PropertiesBrokerForJsonResult : BrokerForJsonResult {
@@ -161,19 +164,19 @@
 			public virtual Esigner[] potential_signers { get; private set; }
 		} // CustomerDetailsBrokerForJsonResult
 
-        public class LeadDetailsBrokerForJsonResult : BrokerForJsonResult {
-            public LeadDetailsBrokerForJsonResult(
-                string sErrorMsg = "",
-                bool? bExplicitSuccess = null,
-                BrokerLeadDataModel oDetails = null
-            )
-                : base(sErrorMsg, bExplicitSuccess) {
-                personal_data = oDetails;
-            } // constructor
+		public class LeadDetailsBrokerForJsonResult : BrokerForJsonResult {
+			public LeadDetailsBrokerForJsonResult(
+				string sErrorMsg = "",
+				bool? bExplicitSuccess = null,
+				BrokerLeadDataModel oDetails = null
+			)
+				: base(sErrorMsg, bExplicitSuccess) {
+				personal_data = oDetails;
+			} // constructor
 
-            public virtual BrokerLeadDataModel personal_data { get; private set; }
+			public virtual BrokerLeadDataModel personal_data { get; private set; }
 
-        } // LeadDetailsBrokerForJsonResult
+		} // LeadDetailsBrokerForJsonResult
 
 		public class FileListBrokerForJsonResult : BrokerForJsonResult {
 			public FileListBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerFile[] oFileList = null)
@@ -202,7 +205,7 @@
 
 		// ReSharper restore InconsistentNaming
 
-		private class MarketingFiles {
+		protected class MarketingFiles {
 			public MarketingFiles(ServiceClient oServiceClient) {
 				IEnumerable<FileDescription> oFiles = Load(oServiceClient);
 
@@ -240,5 +243,5 @@
 				return oResult;
 			} // Load
 		} // class MarketingFiles
-	} // class BrokerHomeController
+	} // class ABrokerBaseController
 } // namespace

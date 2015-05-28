@@ -77,9 +77,5 @@ namespace EZBob.DatabaseLib.Model.Database {
 		public CustomerOrigin GetDefault() {
 			return GetAll().ToList().First(x => x.GetOrigin() == CustomerOriginEnum.ezbob);
 		} // GetDefault
-
-		public CustomerOrigin GetBrokerDefault() {
-			return GetAll().ToList().First(x => x.GetOrigin() == CustomerOriginEnum.everline);
-		} // GetBrokerDefault
 	} // class CustomerOriginRepository
 } // namespace

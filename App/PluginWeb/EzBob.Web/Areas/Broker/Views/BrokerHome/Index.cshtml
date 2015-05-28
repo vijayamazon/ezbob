@@ -3,7 +3,6 @@
 @using EZBob.DatabaseLib.Model.Database
 @using SquishIt.Framework
 @using SquishIt.Mvc
-@using StructureMap
 @model EzBob.Web.Areas.Broker.Models.BrokerHomeModel
 @{
 	Layout = null;
@@ -15,7 +14,7 @@
 	Model.LogoUrl = Url.Content("~/Content/css/images/header/ezbob_logo-white.png");
 	Model.EuIconUrl = Url.Content("~/Content/img/eu-menu.png");
 
-	ViewBag.CustomerOrigin = ObjectFactory.GetInstance<CustomerOriginRepository>().GetBrokerDefault();
+	UiCustomerOrigin.Set(ViewBag);
 }
 <!DOCTYPE html>
 <html>
@@ -55,6 +54,7 @@
 			.Add("~/Content/css/lib/notifications.css")
 			//custom css
 			.Add("~/Content/css/common.css")
+			.Add("~/Content/css/ezbob.css")
 			.Add("~/Content/css/everline.css")
 			.Add("~/Content/css/broker.css")
 			.Add("~/Content/css/edit-experian-director-data.css")
@@ -67,30 +67,65 @@
 	}
 </head>
 
-<body data-auth="@Model.Auth"
-	  data-msg-on-start="@Model.MessageOnStart"
-	  data-msg-on-start-severity="@Model.MessageOnStartSeverity"
-	  data-request-accept-terms="@Model.HasTermsStr"
-	  data-user-name="@Model.Auth">
+<body
+	data-auth="@Model.Auth"
+	data-msg-on-start="@Model.MessageOnStart"
+	data-msg-on-start-severity="@Model.MessageOnStartSeverity"
+	data-request-accept-terms="@Model.HasTermsStr"
+	data-user-name="@Model.Auth"
+>
 	@AntiForgery.GetHtml()
 
 	<div id="wrapper">
-		<header class="everline_header">
-			<nav>
-				<div class="pin"><span></span></div>
-				<span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
-				<span class="for-brokers">FOR BROKERS</span>
-				<ul id="user-menu" class="hide">
-					<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
-					<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
-					<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
-					<li>
-						<div class="header-phone"><i class="fa fa-phone"></i>&nbsp;0800-011-4787</div>
-					</li>
-				</ul>
-			</nav>
-		</header>
-		<div class="everline-header-placeholder"></div>
+		@if (CustomerOriginExt.IsEzbob(ViewBag.CustomerOrigin)) {
+			<header class="common-header">
+				<div id="header">
+					<div class="header-bg-strip"></div>
+					<div class="header-inner">
+						<div class="header-logo">
+							<a href="http://ezbob.com">
+								<img src="@Model.LogoUrl" class="newlogo" width="128" height="34">
+							</a>
+						</div>
+						<div class="header-info">
+							<div class="header-info-left"></div>
+							<div class="header-info-text">FOR BROKERS</div>
+							<div class="header-info-right"></div>
+						</div>
+						<ul id="user-menu" class="hide">
+							<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
+							<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
+							<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
+							<li>
+								<div class="header-phone">
+									<i class="fa fa-phone"></i>&nbsp;0800-011-4787
+								</div>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</header>
+			<div class="ezbob-header-placeholder"></div>
+		} else if (CustomerOriginExt.IsEverline(ViewBag.CustomerOrigin)) {
+			<header class="everline_header">
+				<nav>
+					<div class="pin"><span></span></div>
+					<span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
+					<span class="for-brokers">FOR BROKERS</span>
+					<ul id="user-menu" class="hide">
+						<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
+						<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
+						<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
+						<li>
+							<div class="header-phone">
+								<i class="fa fa-phone"></i>&nbsp;0800-011-4787
+							</div>
+						</li>
+					</ul>
+				</nav>
+			</header>
+			<div class="everline-header-placeholder"></div>
+		}
 
 		<div class="row-fluid broker-page-content main-page main-page-ezbob">
 			<div class="inner">
@@ -318,8 +353,8 @@
 						<!-- section-forgotten -->
 
 						<div class="page-section hide section-dashboard">
-						
-                            <div id="commission-view">@{ Html.RenderPartial("Commission"); }</div>
+
+							<div id="commission-view">@{ Html.RenderPartial("Commission"); }</div>
 
 							<div class="profile-menu">
 								<div class="navbar-inner">
@@ -342,46 +377,46 @@
 							<div id="section-dashboard-customers">
 								<button type="button" id="AddNewCustomer" class="button btn-green pull-right btn-wide">Add a new client</button>
 								<h2 class="form-start">Client list</h2>
-                                
-                                <div class="table-big">
-                                    <table class="customer-list table">
-                                        <thead>
-                                            <tr>
-                                                <th>First name</th>
-                                                <th>Last name</th>
-                                                <th>Status</th>
-                                                <th>Applied date</th>
-                                                <th>Approved amount</th>
-                                                <th>Loan amount</th>
-                                                <th>Commission amount</th>
-                                                <th>Commission payment date</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tbody>
-                                        <tfoot>
-                                            <tr>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                            </tr>
-                                        </tfoot>
-                                    </table>
-                                </div>
+
+								<div class="table-big">
+									<table class="customer-list table">
+										<thead>
+											<tr>
+												<th>First name</th>
+												<th>Last name</th>
+												<th>Status</th>
+												<th>Applied date</th>
+												<th>Approved amount</th>
+												<th>Loan amount</th>
+												<th>Commission amount</th>
+												<th>Commission payment date</th>
+											</tr>
+										</thead>
+										<tbody>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tbody>
+										<tfoot>
+											<tr>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+												<td></td>
+											</tr>
+										</tfoot>
+									</table>
+								</div>
 							</div>
 
 							<div id="section-dashboard-marketing">
@@ -490,36 +525,36 @@
 											</div>
 										</div>
 									</div>
-                                    
-                                    <div class="aka-row">
-                                        <div class="aka-column">
-                                            <div class="aka-table">
-                                                <div class="aka-row">
-                                                    <span class="value-title">Bank name:</span>
-                                                    <span class="value" data-field-name="BankName"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="aka-column">
-                                            <div class="aka-table">
-                                                <div class="aka-row">
-                                                    <span class="value-title">Account number:</span>
-                                                    <span class="value" data-field-name="BankAccount"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                        <div class="aka-column">
-                                            <div class="aka-table">
-                                                <div class="aka-row">
-                                                    <span class="value-title">Sort code:</span>
-                                                    <span class="value" data-field-name="BankSortCode"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
+									<div class="aka-row">
+										<div class="aka-column">
+											<div class="aka-table">
+												<div class="aka-row">
+													<span class="value-title">Bank name:</span>
+													<span class="value" data-field-name="BankName"></span>
+												</div>
+											</div>
+										</div>
+
+										<div class="aka-column">
+											<div class="aka-table">
+												<div class="aka-row">
+													<span class="value-title">Account number:</span>
+													<span class="value" data-field-name="BankAccount"></span>
+												</div>
+											</div>
+										</div>
+
+										<div class="aka-column">
+											<div class="aka-table">
+												<div class="aka-row">
+													<span class="value-title">Sort code:</span>
+													<span class="value" data-field-name="BankSortCode"></span>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
 
 								<div class="value-group aka-table table-big box">
 									<div class="box-title aka-caption">Update password</div>
@@ -630,26 +665,25 @@
 							</form>
 						</div>
 						<!-- section-add-customer -->
-                        
-                        @{
-                            Html.RenderPartial("AddBank");
-                            Html.RenderPartial("LeadDetails");
-                        }
-                        <!--section-add-bank-->
-                        <!--section-lead-details-->
+						@{
+							Html.RenderPartial("AddBank");
+							Html.RenderPartial("LeadDetails");
+						}
+						<!--section-add-bank-->
+						<!--section-lead-details-->
 
 						<div class="page-section hide section-customer-details">
 							<input type="hidden" id="customer-id" class="value" data-field-name="id" />
 
 							<div class="back-to-list-container">
-                                <button class="lead-fill-wizard button btn-green"
-                                        title="Complete the application on behalf of the client.">
-                                    <i class="fa fa-desktop"></i> Fill
-                                </button>
-                                <button class="lead-send-invitation button btn-green"
-                                        title="">
-                                    <i class="fa fa-envelope"></i> Send
-                                </button>
+								<button class="lead-fill-wizard button btn-green"
+										title="Complete the application on behalf of the client.">
+									<i class="fa fa-desktop"></i> Fill
+								</button>
+								<button class="lead-send-invitation button btn-green"
+										title="">
+									<i class="fa fa-envelope"></i> Send
+								</button>
 								<button type="button" class="back-to-list button btn-green btn-wide">Back to client list</button>
 							</div>
 
@@ -866,7 +900,9 @@
 
 		<div id="modalRegion" class="modal hide fade"></div>
 
-		<div id="broker-footer-placeholder"></div>
+		@*if (CustomerOriginExt.IsEverline(ViewBag.CustomerOrigin)) {
+			<div id="broker-footer-placeholder"></div>
+		}*@
 
 		@{ Html.RenderPartial("_Footer"); }
 	</div>
@@ -997,13 +1033,13 @@
 			.Add("~/Content/js/Broker/broker.signup.view.js")
 			.Add("~/Content/js/Broker/broker.addcustomer.view.js")
 			.Add("~/Content/js/Broker/broker.customerdetails.view.js")
-            .Add("~/Content/js/Broker/broker.leaddetails.view.js")
+			.Add("~/Content/js/Broker/broker.leaddetails.view.js")
 			.Add("~/Content/js/Broker/broker.router.js")
 			.Add("~/Content/js/Broker/broker.main.js")
 			.Add("~/Content/js/Broker/broker.instantoffer.view.js")
 			.Add("~/Content/js/Broker/broker.changepassword.view.js")
-            .Add("~/Content/js/Broker/broker.addbank.view.js")
-            .Add("~/Content/js/Broker/broker.commission.view.js")
+			.Add("~/Content/js/Broker/broker.addbank.view.js")
+			.Add("~/Content/js/Broker/broker.commission.view.js")
 			.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
 			.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")
 			.MvcRender("~/Content/js/min/jslib_#.js")
@@ -1033,4 +1069,5 @@
 	</script>
 	<!-- scripts - end -->
 </body>
+
 </html>

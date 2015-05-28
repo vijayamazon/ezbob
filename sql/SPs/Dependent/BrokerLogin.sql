@@ -6,7 +6,8 @@ ALTER PROCEDURE BrokerLogin
 @Email NVARCHAR(255),
 @Password NVARCHAR(255),
 @LotteryCode NVARCHAR(64),
-@PageVisitTime DATETIME
+@PageVisitTime DATETIME,
+@UiOriginID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -24,6 +25,8 @@ BEGIN
 		b.ContactEmail = @Email
 		AND
 		u.EzPassword = @Password
+		AND
+		b.OriginID = @UiOriginID
 
 	------------------------------------------------------------------------------
 
