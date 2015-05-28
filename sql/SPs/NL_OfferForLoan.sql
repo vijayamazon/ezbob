@@ -6,7 +6,9 @@ IF OBJECT_ID('NL_OfferForLoan') IS NULL
 GO
 
 ALTER PROCEDURE [dbo].[NL_OfferForLoan]
+CREATE PROCEDURE [dbo].[NL_OfferForLoan]	
 @CustomerID INT
+	@CustomerID INT 
 AS
 BEGIN
 	declare @Now datetime;
@@ -14,9 +16,13 @@ BEGIN
 
 	declare @OfferID int;
 
-	-- get last valid offer for the customer
-	set @OfferID = (select top 1 o.OfferID FROM NL_Offers o INNER JOIN NL_Decisions d ON d.DecisionID = o.DecisionID INNER JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
-		WHERE cr.CustomerID = @CustomerID and GETUTCDATE() between o.[StartTime] and o.[EndTime] order by OfferID desc);
+	-- get last valid 'Approve' or 'ReApprove' offer for the customer
+	set @OfferID = (select top 1 o.OfferID FROM NL_Offers o 
+	INNER JOIN NL_Decisions d ON d.DecisionID = o.DecisionID 
+	INNER JOIN NL_CashRequests cr ON cr.CashRequestID = d.CashRequestID
+	inner join [dbo].[Decisions] dnames on d.DecisionNameID = dnames.[DecisionID]
+	WHERE cr.CustomerID = @CustomerID and GETUTCDATE() between o.[StartTime] and o.[EndTime] and dnames.[DecisionName] in ('Approve', 'ReApprove') 
+	order by OfferID desc);
 
 	IF @OfferID IS NULL begin
 		RETURN NULL;
@@ -50,6 +56,8 @@ BEGIN
 				LEFT JOIN NL_DiscountPlans dp on dp.DiscountPlanID = o.DiscountPlanID -- and dp.IsActive = 1
 			WHERE o.OfferID = @OfferID
 			order by ll.LoanLegalID desc;
+
+		--select * from #offerforloan;
 
 		set @DiscountPlanID = (select DiscountPlanID from #offerforloan) ;
 
