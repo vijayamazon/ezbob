@@ -138,13 +138,43 @@
 				.MvcRender("~/Content/css/min/adminlogin_#.css");
 		}
 
-		public static MvcHtmlString RenderPrintCss()
-		{
+		public static MvcHtmlString RenderPrintCss() {
 			return Bundle.Css()
 				.Add("~/Content/css/print.css")
 				.WithAttribute("media", "print")
 				.MvcRender("~/Content/css/min/print_combined_#.css");
 		} // RenderPrintCss
+
+		public static MvcHtmlString RenderBrokerCss() {
+			return Bundle.Css()
+			// libs
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/lib/bootstrap2.css")
+				.Add("~/Content/css/lib/bootstrap3.css")
+				.Add("~/Content/css/lib/bootstrap3-modal-patch.css")
+				.Add("~/Content/css/lib/dataTables.bootstrap.css")
+				.Add("~/Content/css/lib/DT_bootstrap.css")
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/dropzone.css")
+				.Add("~/Content/css/lib/flaty.css")
+				.Add("~/Content/css/lib/flaty-responsive.css")
+				.Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/notifications.css")
+
+			// custom css
+				.Add("~/Content/css/common.css")
+				.Add("~/Content/css/ezbob.css")
+				.Add("~/Content/css/everline.css")
+				.Add("~/Content/css/broker.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
+				.Add("~/Content/css/mobile.css")
+				.Add("~/Content/css/profile-ny2015scratch.css")
+				.Add("~/Content/css/valentine2015scratch.css")
+				.Add("~/Content/css/easter2015scratch.css")
+
+			.MvcRender("~/Content/css/min/broker_#.css");
+		} // RenderBrokerCss
 
 		public static MvcHtmlString RenderCommonJs() {
 			return Bundle.JavaScript()
@@ -576,25 +606,117 @@
 
 		public static MvcHtmlString RenderSalesForceJs() {
 			return Bundle.JavaScript()
-				//libs
-                .Add("~/Content/js/lib/jquery-1.8.3.js")
-                .Add("~/Content/js/lib/jquery.validate.js")
-                .Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
-                .Add("~/Content/js/lib/jquery.placeholder.js")
+			// libs
+				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/lib/jquery.validate.js")
+				.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
+				.Add("~/Content/js/lib/jquery.placeholder.js")
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
-                .Add("~/Content/js/lib/jquery.blockUI.js")
-                .Add("~/Content/js/lib/underscore.js")
-                .Add("~/Content/js/lib/backbone.js")
-                .Add("~/Content/js/lib/backbone.marionette.js")
-                //custom
-                .Add("~/Content/js/ezbob.design.js")
-                .Add("~/Content/js/controls/ezbob.modal.js")
-                .Add("~/Content/js/controls/ezbob.jqmodal.js")
-                .Add("~/Content/js/App/ezbob.app.js")
+				.Add("~/Content/js/lib/jquery.blockUI.js")
+				.Add("~/Content/js/lib/underscore.js")
+				.Add("~/Content/js/lib/backbone.js")
+				.Add("~/Content/js/lib/backbone.marionette.js")
+			// custom
+				.Add("~/Content/js/ezbob.design.js")
+				.Add("~/Content/js/controls/ezbob.modal.js")
+				.Add("~/Content/js/controls/ezbob.jqmodal.js")
+				.Add("~/Content/js/App/ezbob.app.js")
 				.Add("~/Content/js/ezbob.csrf.js")
-                .Add("~/Content/js/Underwriter/ezbob.underwriter.salesforce.js")
-                .Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
-				.MvcRender("~/Content/js/min/jsSalesForce_#.js");
-	}
+				.Add("~/Content/js/Underwriter/ezbob.underwriter.salesforce.js")
+				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
+			.MvcRender("~/Content/js/min/jsSalesForce_#.js");
+		} // RenderSalesForceJs
+
+		public static MvcHtmlString RenderBrokerJs() {
+			return Bundle.JavaScript()
+			// lib
+				.Add("~/Content/js/lib/jquery-1.8.3.js")
+				.Add("~/Content/js/ezbob.csrf.js")
+				.Add("~/Content/js/lib/jquery.browser.min.js")
+				.Add("~/Content/js/lib/dropzone.js")
+				.Add("~/Content/js/lib/jquery.hoverIntent.min.js")
+				.Add("~/Content/js/lib/jquery.scrollTo.js")
+				.Add("~/Content/js/lib/jquery.blockUI.js")
+				.Add("~/Content/js/lib/jquery.mousewheel.js")
+				.Add("~/Content/js/lib/jquery.jscrollpane.js")
+				.Add("~/Content/js/lib/jquery.validate.js")
+				.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
+				.Add("~/Content/js/lib/jsuri-1.1.1.js")
+				.Add("~/Content/js/lib/jquery.cookie.js")
+				.Add("~/Content/js/lib/jquery.slimscroll.min.js")
+				.Add("~/Content/js/lib/underscore.js")
+				.Add("~/Content/js/lib/backbone.js")
+				.Add("~/Content/js/lib/backbone.marionette.js")
+				.Add("~/Content/js/lib/Backbone.ModelBinder.js")
+				.Add("~/Content/js/lib/moment.js")
+				.Add("~/Content/js/lib/jquery.numeric.js")
+				.Add("~/Content/js/lib/recaptcha_ajax.js")
+				.Add("~/Content/js/lib/autoNumeric-1.7.4.js")
+				.Add("~/Content/js/lib/chosen.jquery.js")
+				.Add("~/Content/js/lib/jquery.maskedinput-1.2.2.js")
+				.Add("~/Content/js/lib/notifications.js")
+				.Add("~/Content/js/lib/coin-slider.js")
+				.Add("~/Content/js/lib/jquery.placeholder.js")
+				.Add("~/Content/js/lib/attardi.labels.js")
+				.Add("~/Content/js/lib/amount-period-sliders.js")
+				.Add("~/Content/js/lib/jquery.field_status.js")
+				.Add("~/Content/js/lib/jquery.set_display_value.js")
+				.Add("~/Content/js/lib/jquery.load_display_value.js")
+				.Add("~/Content/js/lib/mousetrap_1.4.0.js")
+				.Add("~/Content/js/lib/jquery.colorbox-min.js")
+				.Add("~/Content/js/lib/wScratchPad.min.js")
+				.Add("~/Content/js/controls/ezbob.modal.js")
+				.Add("~/Content/js/controls/ezbob.jqmodal.js")
+				.Add("~/Content/js/App/ezbob.app.js")
+				.Add("~/Content/js/App/ezbob.validation.js")
+				.Add("~/Content/js/controls/captcha.js")
+				.Add("~/Content/js/controls/ezbob.notifications.js")
+				.Add("~/Content/js/ezbob.design.js")
+				.Add("~/Content/js/ezbob.internal.debug.js")
+				.Add("~/Content/js/ezbob.uiaction.js")
+				.Add("~/Content/js/ezbob.cgvendors.js")
+				.Add("~/Content/js/ezbob.serverlog.js")
+				.Add("~/Content/js/ezbob.strengthPassword.js")
+				.Add("~/Content/js/lib/jquery.dataTables.js")
+				.Add("~/Content/js/lib/flaty/bootstrap3.js")
+				.Add("~/Content/js/lib/bootstrap-datepicker.js")
+				.Add("~/Content/js/lib/bootstrap-modal.js")
+				.Add("~/Content/js/lib/bootstrap-modalmanager.js")
+				.Add("~/Content/js/lib/flaty/dataTables.bootstrap.js")
+				.Add("~/Content/js/lib/flaty/DT_Bootstrap.js")
+				.Add("~/Content/js/lib/flaty/flaty.js")
+			// common
+				.Add("~/Content/js/EzBob.DataTables.Helper.js")
+				.Add("~/Content/js/controls/ezbob.BoundItemView.js")
+				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsEntry.js")
+				.AddString(GetDbStrings())
+				.Add("~/Content/js/ezbob.view.js")
+				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.selectcard.js")
+				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.ny2015.js")
+				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.valentine2015.js")
+				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.easter2015.js")
+				.Add("~/Content/js/ezbob.edit.experian.director.data.js")
+			// custom
+				.Add("~/Content/js/Broker/broker.base.view.js")
+				.Add("~/Content/js/Broker/broker.submit.view.js")
+				.Add("~/Content/js/Broker/broker.mobilephone.view.js")
+				.Add("~/Content/js/Broker/broker.forgotten.view.js")
+				.Add("~/Content/js/Broker/broker.dashboard.view.js")
+				.Add("~/Content/js/Broker/broker.requestAcceptTerms.view.js")
+				.Add("~/Content/js/Broker/broker.login.view.js")
+				.Add("~/Content/js/Broker/broker.signup.view.js")
+				.Add("~/Content/js/Broker/broker.addcustomer.view.js")
+				.Add("~/Content/js/Broker/broker.customerdetails.view.js")
+				.Add("~/Content/js/Broker/broker.leaddetails.view.js")
+				.Add("~/Content/js/Broker/broker.router.js")
+				.Add("~/Content/js/Broker/broker.main.js")
+				.Add("~/Content/js/Broker/broker.instantoffer.view.js")
+				.Add("~/Content/js/Broker/broker.changepassword.view.js")
+				.Add("~/Content/js/Broker/broker.addbank.view.js")
+				.Add("~/Content/js/Broker/broker.commission.view.js")
+				.Add("~/Content/js/Wizard/yourInfo/ezbob.yourinfo.companyTarget.js")
+				.Add("~/Content/js/controls/ezbob.LoanScheduleView.js")
+			.MvcRender("~/Content/js/min/jslib_#.js");
+		} // RenderBrokerJs
 	} // class BundleHelper
 } // namespace

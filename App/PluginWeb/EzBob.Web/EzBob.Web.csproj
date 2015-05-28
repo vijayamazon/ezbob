@@ -917,6 +917,7 @@
     <Content Include="Areas\Broker\Views\BrokerHome\RequestAcceptTerms.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards_Old_Do_NOT_AppendHere.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Header.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

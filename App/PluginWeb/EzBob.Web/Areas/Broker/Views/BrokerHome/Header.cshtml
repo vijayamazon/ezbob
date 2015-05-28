@@ -1,0 +1,50 @@
+﻿@using EZBob.DatabaseLib.Model.Database
+@if (CustomerOriginExt.IsEzbob(ViewBag.CustomerOrigin)) {
+	<header class="common-header">
+		<div id="header">
+			<div class="header-bg-strip"></div>
+			<div class="header-inner">
+				<div class="header-logo">
+					<a href="http://ezbob.com">
+						<img src="@Model.LogoUrl" class="newlogo" width="128" height="34">
+					</a>
+				</div>
+				<div class="header-info">
+					<div class="header-info-left"></div>
+					<div class="header-info-text">FOR BROKERS</div>
+					<div class="header-info-right"></div>
+				</div>
+				<ul id="user-menu" class="hide">
+					<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
+					<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
+					<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
+					<li>
+						<div class="header-phone">
+							<i class="fa fa-phone"></i>&nbsp;0800-011-4787
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</header>
+	<div class="ezbob-header-placeholder"></div>
+} else if (CustomerOriginExt.IsEverline(ViewBag.CustomerOrigin)) {
+	<header class="everline_header">
+		<nav>
+			<div class="pin"><span></span></div>
+			<span class="everlinelogo svg">Everline.com Official site - Flexible cashflow for your business</span>
+			<span class="for-brokers">FOR BROKERS</span>
+			<ul id="user-menu" class="hide">
+				<li class="menu-btn login log-off"><a href="#" class="button btn-grey">Log off</a></li>
+				<li class="menu-btn login log-in"><a href="#" class="button btn-grey">Login</a></li>
+				<li class="menu-btn sign-up"><a href="#" class="button btn-green">Sign Up</a></li>
+				<li>
+					<div class="header-phone">
+						<i class="fa fa-phone"></i>&nbsp;0800-011-4787
+					</div>
+				</li>
+			</ul>
+		</nav>
+	</header>
+	<div class="everline-header-placeholder"></div>
+}
