@@ -837,6 +837,7 @@
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\footer.min.js" />
     <Content Include="Content\js\lib\log.js" />
+    <Content Include="Content\js\lib\maps.google.api.js" />
     <Content Include="Content\js\lib\wScratchPad.min.js" />
     <Content Include="Content\js\login\ezbob.login.view.js" />
     <Content Include="Content\js\login\ezbob.restorePassword.js" />

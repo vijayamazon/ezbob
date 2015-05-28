@@ -255,6 +255,7 @@
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.pointLabels.js")
 				.Add("~/Content/js/lib/jqplot/plugins/jqplot.donutRenderer.js")
 				.Add("~/Content/js/lib/date.interval.js")
+				.Add("~/Content/js/lib/maps.google.api.js")
 
 				//Flaty
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")

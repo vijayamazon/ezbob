@@ -14,25 +14,25 @@ EzBob.Underwriter.Properties = Backbone.Model.extend({
 
 EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 	template: '#propertiesTemplate',
-	initialize: function () {
+	initialize: function() {
 		this.model.on("reset change sync", this.render, this);
 	},
-	onRender: function () {
-	    var that = this;
+	onRender: function() {
+		var that = this;
 
-		$(document).ready(function () {
+		$(document).ready(function() {
 			$('#ownedPropertiesTable').dataTable({
 				sDom: 't'
 			});
 
-			that.$el.find('.copy-buttons').one('mouseover', function () {
-				that.$el.find(".btn-copy").each(function () {
+			that.$el.find('.copy-buttons').one('mouseover', function() {
+				that.$el.find(".btn-copy").each(function() {
 					var element = $(this);
 
 					if ((/[^\s,]/g).test(element.data('address'))) {
 						element.zclip({
 							path: window.gRootPath + "Content/flash/ZeroClipboard.swf",
-							copy: function () {
+							copy: function() {
 								return element.data('address');
 							}
 						});
@@ -42,14 +42,16 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 			});
 		});
 	},
-	serializeData: function () {
+	serializeData: function() {
 		return { model: this.model.toJSON() };
 	},
 	events: {
 		"click .zooplaRecheck": "recheckZoopla",
 		"click .btnEnquiry": "showLandRegistry",
 		"click .btnNoLongerOwned": "markAsNoLongerOwned",
-		"click #addOwnedAddress": "addOwnedAddress"
+		"click #addOwnedAddress": "addOwnedAddress",
+		'click .accordion-toggle': "accordionClicked",
+		'click .btn-street-view-static': 'staticStreetViewClicked'
 	},
 	addOwnedAddress: function () {
 	    var popUp = new EzBob.Popup({
@@ -139,6 +141,42 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 			null,
 			"Cancel"
 		);
+	},
+	staticStreetViewClicked: function() {
+		this.$el.find('.street-view-static').toggleClass('hide');
+	},
+	accordionClicked: function (el) {
+		if (!$(el.currentTarget).hasClass('collapsed') && $(el.currentTarget).attr('href').indexOf('zoopla') > -1) {
+			this.googleStreetView();
+		}
+	},
+
+	googleStreetView: function () {
+		$('div.street-view').each(function (i, el) {
+			
+			var $el = $(this);
+			console.log($el, $el.data('address'), el, i);
+			var geocoder = new google.maps.Geocoder();
+			geocoder.geocode({ address: "106 Lion Road Bexleyheath England DA6 8PQ" },
+				function (results, status) {
+					if (status == 'OK') {
+						var latlng = results[0].geometry.location;
+						var addr = new google.maps.LatLng(latlng.lat(), latlng.lng());
+						var mapOptions = { center: addr, zoom: 14 };
+						var map = new google.maps.Map(el, mapOptions);
+						var panoramaOptions = {
+							position: addr,
+							pov: {
+								heading: 34,
+								pitch: 10
+							}
+						};
+						var panorama = new google.maps.StreetViewPanorama(el, panoramaOptions);
+						map.setStreetView(panorama);
+					}
+				}
+			);
+		});
 	},
 });
 
