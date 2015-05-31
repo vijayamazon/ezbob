@@ -99,12 +99,24 @@ header.everline_header {
 				left: 6px;
 			}
 
-		header.everline_header nav .for-brokers {
+		header.everline_header_broker nav .for-brokers {
 			height: 5em;
 			padding-left: 3em;
 			display: inline-block;
 			float: left;
-			margin-top: 2.7em;
+			margin-top: 2.5em;
+			font-size: 16px;
+			color: white;
+		}
+
+		header.everline_header_broker nav #user-menu {
+			margin-top: 2em;
+		}
+
+		header.everline_header_broker nav #user-menu a.button {
+			font-size: 14px;
+			font-weight: normal;
+			padding: 0;
 		}
 
 		header.everline_header nav ul.sub-links li:first-child a {

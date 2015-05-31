@@ -5,8 +5,11 @@
 	using Ezbob.Logger;
 
 	public abstract class ABrokerMailToo : AMailStrategyBase {
-
-		protected ABrokerMailToo(int nCustomerID, bool bSendToCustomer, bool bSendWhenOneLoan = false) : base(nCustomerID, bSendToCustomer) {
+		protected ABrokerMailToo(
+			int nCustomerID,
+			bool bSendToCustomer,
+			bool bSendWhenOneLoan = false
+		) : base(nCustomerID, bSendToCustomer) {
 			m_bSendWhenOneLoan = bSendWhenOneLoan;
 		} // constructor
 
@@ -42,7 +45,5 @@
 
 			public int CustomerID { get; set; }
 		} // BrokerLoadAddressForCustomerMailCC
-
 	} // class ABrokerMailToo
-
 } // namespace Ezbob.Backend.Strategies.MailStrategies

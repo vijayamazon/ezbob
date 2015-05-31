@@ -4,7 +4,6 @@
 	using UserManagement.EmailConfirmation;
 
 	public class PasswordChanged : AMailStrategyBase {
-
 		public PasswordChanged(int customerId, Password oPassword) : base(customerId, true) {
 			m_sPassword = oPassword.Primary;
 		} // constructor
@@ -41,6 +40,5 @@
 		} // FirstName
 
 		private readonly string m_sPassword;
-
 	} // class PasswordChanged
 } // namespace

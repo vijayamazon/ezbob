@@ -1,3 +1,6 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF OBJECT_ID('BrokerLeadLoadDataForEmail') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerLeadLoadDataForEmail AS SELECT 1')
 GO
@@ -11,21 +14,28 @@ BEGIN
 
 	DECLARE @BrokerID INT
 	DECLARE @FirmName NVARCHAR(255)
+	DECLARE @Origin NVARCHAR(20)
+	DECLARE @OriginSite NVARCHAR(255)
 
 	SELECT
-		@BrokerID = BrokerID,
-		@FirmName = FirmName
+		@BrokerID   = b.BrokerID,
+		@FirmName   = b.FirmName,
+		@Origin     = o.Name,
+		@OriginSite = o.CustomerSite
 	FROM
-		Broker
+		Broker b
+		INNER JOIN CustomerOrigin o ON b.OriginID = o.CustomerOriginID
 	WHERE
-		ContactEmail = @ContactEmail
+		b.ContactEmail = @ContactEmail
 
 	SELECT
 		bl.BrokerLeadID AS LeadID,
 		bl.FirstName,
 		bl.LastName,
 		bl.Email,
-		@FirmName AS FirmName
+		@FirmName AS FirmName,
+		@Origin AS Origin,
+		@OriginSite AS OriginSite
 	FROM
 		BrokerLeads bl
 	WHERE
@@ -33,8 +43,8 @@ BEGIN
 		AND
 		bl.BrokerID = @BrokerID
 		AND
-		DateDeleted IS NULL
+		bl.DateDeleted IS NULL
 		AND
-		BrokerLeadDeletedReasonID IS NULL
+		bl.BrokerLeadDeletedReasonID IS NULL
 END
 GO

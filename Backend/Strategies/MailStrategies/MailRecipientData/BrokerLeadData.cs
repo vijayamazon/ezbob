@@ -21,6 +21,8 @@
 					FullName = FirstName + " " + LastName;
 					Email = sr["Email"];
 					FirmName = sr["FirmName"];
+					Origin = sr["Origin"];
+					OriginSite = sr["OriginSite"];
 					return ActionResult.SkipAll;
 				},
 				"BrokerLeadLoadDataForEmail",

@@ -3,25 +3,25 @@
 	using Ezbob.Database;
 
 	public class BrokerData : CustomerData {
-
 		public override int BrokerID {
 			get { return Id; } // get
 			protected set { Id = value; } // set
-		}
+		} // BrokerID
 
 		public virtual string LastName {
 			get { return Surname; } // get
 			protected set { Surname = value; } // set
-		}
+		} // LastName
 
 		public virtual string Email {
 			get { return Mail; } // get
 			protected set { Mail = value; } // set
-		}
+		} // Email
 
-		public virtual string FirmName { get; set; }
+		public virtual string FirmName { get; set; } // FirmName
 
-		public BrokerData(AStrategy oStrategy, int nBrokerID, AConnection oDB) : base(oStrategy, nBrokerID, oDB) { } // constructor
+		public BrokerData(AStrategy oStrategy, int nBrokerID, AConnection oDB) : base(oStrategy, nBrokerID, oDB) {
+		} // constructor
 
 		public override void Load() {
 			BrokerID = 0;
@@ -37,6 +37,7 @@
 					Email = sr["ContactEmail"];
 					FirmName = sr["FirmName"];
 					UserID = sr["UserID"];
+					Origin = sr["Origin"];
 					return ActionResult.SkipAll;
 				},
 				"BrokerLoadContactData",
@@ -47,14 +48,5 @@
 			if (BrokerID != RequestedID)
 				throw new StrategyWarning(Strategy, "Failed to find a broker by id " + RequestedID);
 		} // Load
-
-		// BrokerID
-
-		// LeadID
-
-		// LeadID
-
-		// FirmName
-
 	} // class CustomerData
 } // namespace

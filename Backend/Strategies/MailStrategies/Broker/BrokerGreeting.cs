@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System.Collections.Generic;
-	using ConfigManager;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
 	using UserManagement.EmailConfirmation;
 
@@ -19,7 +18,7 @@
 			Variables = new Dictionary<string, string> {
 				{ "BrokerName", BrokerData.FirmName },
 				{ "ContactName", BrokerData.FullName },
-				{ "Link", string.Format("{0}/confirm/{1}", CurrentValues.Instance.CustomerSite, ecg.Token) } //Currently broker only in ezbob
+				{ "Link", string.Format("{0}/confirm/{1}", BrokerData.OriginSite, ecg.Token) }
 			};
 		} // SetTemplateAndVariables
 
@@ -42,13 +41,13 @@
 			Log.Debug("Loading broker data complete.");
 		} // LoadRecipientData
 
-	    protected override Addressee[] GetRecipients() {
-            var aryAddresses = new List<Addressee>();
+		protected override Addressee[] GetRecipients() {
+			var aryAddresses = new List<Addressee>();
 
-            if (!string.IsNullOrWhiteSpace(BrokerData.Email))
-                aryAddresses.Add(new Addressee(BrokerData.Email, userID: BrokerData.BrokerID, isBroker: true));
+			if (!string.IsNullOrWhiteSpace(BrokerData.Email))
+				aryAddresses.Add(new Addressee(BrokerData.Email, userID: BrokerData.BrokerID, isBroker: true));
 
-	        return aryAddresses.ToArray();
-	    }
+			return aryAddresses.ToArray();
+		} // GetRecipients
 	} // class BrokerGreeting
 } // namespace

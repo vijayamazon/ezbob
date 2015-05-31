@@ -1,3 +1,6 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF OBJECT_ID('BrokerLoadContactData') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerLoadContactData AS SELECT 1')
 GO
@@ -9,14 +12,17 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		BrokerID,
-		FirmName,
-		ContactName,
-		ContactEmail,
-		BrokerID AS UserID
+		b.BrokerID,
+		b.FirmName,
+		b.ContactName,
+		b.ContactEmail,
+		b.BrokerID AS UserID,
+		o.Name AS Origin,
+		o.CustomerSite
 	FROM
-		Broker
+		Broker b
+		INNER JOIN CustomerOrigin o ON b.OriginID = o.CustomerOriginID
 	WHERE
-		BrokerID = @BrokerID
+		b.BrokerID = @BrokerID
 END
 GO
