@@ -16,8 +16,6 @@
 	public class AddLoan : AStrategy {
 
 		public AddLoan(NL_Model nlModel) {
-			this.userID = nlModel.UserID;
-			this.customerID = nlModel.CustomerID;
 			NLModel = nlModel;
 			Loader = new NL_Loader(NLModel);
 
@@ -38,22 +36,22 @@
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		public override void Execute() {
 
-			Log.Debug("------------------ customer {0}------------------------", this.customerID);
+			Log.Debug("------------------ customer {0}------------------------", NLModel.CustomerID);
 
 			string message;
 
-			if (this.customerID == 0) {
-				message = string.Format("No valid Customer ID {0} ", this.customerID);
+			if (NLModel.CustomerID == 0) {
+				message = string.Format("No valid Customer ID {0} ", NLModel.CustomerID);
 				Log.Alert(message);
 				throw new NL_ExceptionCustomerNotFound(message);
 			}
 
-			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, 
-				new QueryParameter("CustomerID", this.customerID),
+			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", NLModel.CustomerID),
 				new QueryParameter("@Now", DateTime.UtcNow));
 
 			if (dataForLoan == null) {
-				message = string.Format("No valid offer found. Customer {0} ", this.customerID);
+				message = string.Format("No valid offer found. Customer {0} ", NLModel.CustomerID);
 				Log.Alert(message);
 				throw new NL_ExceptionOfferNotValid(message);
 			}
@@ -63,36 +61,36 @@
 			// loan for the offer exists
 			SafeReader sr = DB.GetFirst(string.Format("SELECT LoanID FROM NL_Loans WHERE OfferID={0}", dataForLoan.OfferID));
 			if (sr["LoanID"] > 0) {
-				message = string.Format("Loan for customer {0} and offer {1} exists", this.customerID, dataForLoan.OfferID);
+				message = string.Format("Loan for customer {0} and offer {1} exists", NLModel.CustomerID, dataForLoan.OfferID);
 				Log.Alert(message);
 				throw new NL_ExceptionLoanExists(message);
 			}
 
 			// input validation
 			if (NLModel.Loan == null) {
-				message = string.Format("Expected input data not found (NL_Model initialized by: Loan.OldLoanID, Loan.InitialLoanAmount, Loan.Refnum). Customer {0}", this.customerID);
+				message = string.Format("Expected input data not found (NL_Model initialized by: Loan.OldLoanID, Loan.InitialLoanAmount, Loan.Refnum). Customer {0}", NLModel.CustomerID);
 				Log.Alert(message);
 				throw new NL_ExceptionInputDataInvalid(message);
 			}
 
 			if (NLModel.FundTransfer == null) {
-				message = string.Format("Expected input data not found (NL_Model initialized by: FundTransfer). Customer {0}", this.customerID);
+				message = string.Format("Expected input data not found (NL_Model initialized by: FundTransfer). Customer {0}", NLModel.CustomerID);
 				Log.Alert(message);
 				throw new NL_ExceptionInputDataInvalid(message);
 			}
 
 			if (NLModel.LoanHistory == null) {
-				message = string.Format("Expected input data not found (NL_Model initialized by: LoanHistory.AgreementModel). Customer {0}", this.customerID);
+				message = string.Format("Expected input data not found (NL_Model initialized by: LoanHistory.AgreementModel). Customer {0}", NLModel.CustomerID);
 				Log.Alert(message);
 				throw new NL_ExceptionInputDataInvalid(message);
 			}
 
 			if (NLModel.LoanAgreements == null) {
-				message = string.Format("Expected input data not found (NL_Model initialized by: LoanAgreements list). Customer {0}", this.customerID);
+				message = string.Format("Expected input data not found (NL_Model initialized by: LoanAgreements list). Customer {0}", NLModel.CustomerID);
 				Log.Alert(message);
 				throw new NL_ExceptionInputDataInvalid(message);
 			}
-			
+
 			// complete other validations here
 
 			/*** 
@@ -100,7 +98,7 @@
 			VerifyEnoughAvailableFunds enoughAvailableFunds = new VerifyEnoughAvailableFunds(NLModel.Loan.InitialLoanAmount);
 			enoughAvailableFunds.Execute();
 			if (!enoughAvailableFunds.HasEnoughFunds) {
-				Log.Alert("No enough funds for loan: customer {0}; offer {1}", this.customerID, dataForLoan.Offer.OfferID);
+				Log.Alert("No enough funds for loan: customer {0}; offer {1}", NLModel.CustomerID, dataForLoan.Offer.OfferID);
 			}
 			****/
 
@@ -184,7 +182,7 @@
 
 				// 3. history
 				NLModel.LoanHistory.LoanID = this.LoanID;
-				NLModel.LoanHistory.UserID = this.userID;
+				NLModel.LoanHistory.UserID = NLModel.UserID;
 				NLModel.LoanHistory.LoanLegalID = dataForLoan.LoanLegalID;
 				NLModel.LoanHistory.Amount = NLModel.Loan.InitialLoanAmount;
 				NLModel.LoanHistory.RepaymentCount = NLModel.Loan.RepaymentCount;
@@ -260,7 +258,7 @@
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 
-				message = string.Format("Failed to write NL_Loan for customer {0}, oldLoanID {1}, err: {2}", this.customerID, NLModel.Loan.OldLoanID, ex);
+				message = string.Format("Failed to write NL_Loan for customer {0}, oldLoanID {1}, err: {2}", NLModel.CustomerID, NLModel.Loan.OldLoanID, ex);
 				this.LoanID = 0;
 				pconn.Rollback();
 
@@ -285,7 +283,7 @@
 					Log.Debug("NL_PacnetTransactionsSave: LoanID: {0}, pacnetTransactionID: {1}", this.LoanID, NLModel.PacnetTransaction.PacnetTransactionStatusID);
 				}
 			} catch (Exception e1) {
-				message = string.Format("Failed to write NL PacnetTransaction: Customer {0}, oldLoanID {1}, err: {2}", this.customerID, NLModel.Loan.OldLoanID, e1);
+				message = string.Format("Failed to write NL PacnetTransaction: Customer {0}, oldLoanID {1}, err: {2}", NLModel.CustomerID, NLModel.Loan.OldLoanID, e1);
 				SendErrorMail(message, setupFee, scheduleItems);
 				Log.Error(message);
 			}
@@ -294,17 +292,18 @@
 
 		private void SendErrorMail(string sMsg, NL_LoanFees setupFee = null, List<NL_LoanSchedules> scheduleItems = null) {
 			var message = string.Format(
-				"<h3>CustomerID: {0}</h3><p>"
-				 + "<h3>Input data</h3>: {1} <br/>"
-				 + "<h3>NL_Loan</h3>: {2} <br/>"
-				 + "<h3>NL_LoanHistory</h3>: {3} <br/>"
-				 + "<h3>NL_LoanFees</h3>: {4} <br/>"
-				 + "<h3>NL_LoanSchedules</h3>: {5} <br/>"
-				 + "<h3>NL_LoanAgreements</h3>: {6} <br/>"
-				 + "<h3>NL_FundTransfer</h3>: {7} <br/>"
-				 + "<h3>NL_PacnetTransactionr</h3>: {8} <br/></p>",
+				"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
+				 + "<h3>Input data</h3>: {2} <br/>"
+				 + "<h3>NL_Loan</h3>: {3} <br/>"
+				 + "<h3>NL_LoanHistory</h3>: {4} <br/>"
+				 + "<h3>NL_LoanFees</h3>: {5} <br/>"
+				 + "<h3>NL_LoanSchedules</h3>: {6} <br/>"
+				 + "<h3>NL_LoanAgreements</h3>: {7} <br/>"
+				 + "<h3>NL_FundTransfer</h3>: {8} <br/>"
+				 + "<h3>NL_PacnetTransactionr</h3>: {9} <br/></p>",
 
-				this.customerID
+				NLModel.CustomerID
+				, NLModel.UserID
 				, HttpUtility.HtmlEncode(NLModel.ToString())
 				, HttpUtility.HtmlEncode(NLModel.Loan == null ? "no Loan specified" : NLModel.Loan.ToString())
 				, HttpUtility.HtmlEncode(NLModel.LoanHistory == null ? "no LoanHistory specified" : NLModel.LoanHistory.ToString())
@@ -321,19 +320,15 @@
 				message, //html
 				this.emailFromAddress, // fromEmail
 				this.emailFromName, // fromName
-				sMsg //"#NL_Loan failed oldLoanID: " + (int)NLModel.Loan.OldLoanID + " for customer " + this.customerID // subject
+				sMsg //"#NL_Loan failed oldLoanID: " + (int)NLModel.Loan.OldLoanID + " for customer " + NLModel.CustomerID // subject
 			);
 
 		} // SendErrorMail
 
 		public int LoanID;
-
-		private readonly int? userID;
-		private readonly int customerID;
-
 		public NL_Loader Loader { get; private set; }
 		public NL_Model NLModel { get; private set; }
-		
+
 		private readonly string emailToAddress;
 		private readonly string	emailFromAddress;
 		private readonly string	emailFromName;

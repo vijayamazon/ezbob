@@ -79,8 +79,7 @@
 				nlModel.PaypointTransaction.Notes = description;
 				nlModel.PaypointTransaction.PaypointUniqID = transId;
 				nlModel.PaypointTransaction.IP = ip;
-				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); //1 (Done) NL_PaypointTransactionStatuses
-			//	int userID = 0;
+				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); 
 	
 				NL_Model nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
 

@@ -817,6 +817,47 @@
 		}
 
 
+		[Test]
+		public void TestNL_AddPayment() {
+			int customerID = 369;
+			int loanID = 5;
+			decimal amount = 5;
+
+			NL_Model nlModel = new NL_Model(customerID);
+
+			nlModel.Loan = new NL_Loans() {
+				LoanID = loanID
+			};
+
+			nlModel.PaypointTransactionStatus = "Done";
+
+			nlModel.Payment = new NL_Payments() {
+				PaymentMethodID = 2,
+				PaymentTime = DateTime.UtcNow,
+				IsActive = true,
+				Amount = amount,
+				Notes = "bbbbblala"
+			};
+
+			nlModel.PaypointTransaction = new NL_PaypointTransactions() {
+				TransactionTime = DateTime.UtcNow,
+				Amount = amount,
+				Notes = "system-repay",
+				PaypointUniqID = "4f0fce47-deb0-4667-bc65-f6edd3c978b5",
+				IP = "127.0.0.1",
+				PaypointTransactionStatusID = 1
+			};
+
+			var s = new AddPayment(nlModel);
+			try {
+				s.Execute();
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+
+
+
+		}
 
 
 	}

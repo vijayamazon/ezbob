@@ -6,7 +6,7 @@
 	public class NL_PaypointTransactionStatuses {
 		[PK]
 		[DataMember]
-		public int PacnetTransactionStatusID { get; set; }
+		public int PaypointTransactionStatusID { get; set; }
 
 		[DataMember]
 		public string TransactionStatus { get; set; }

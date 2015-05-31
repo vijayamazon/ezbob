@@ -31,7 +31,7 @@
         public int? CreatedByUserID { get; set; }
 
         [DataMember]
-        public DateTime DeletionTime { get; set; }
+        public DateTime? DeletionTime { get; set; }
 
         [FK("Security_User", "UserId")]
         [DataMember]

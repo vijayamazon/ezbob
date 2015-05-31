@@ -436,10 +436,9 @@ IF OBJECT_ID('NL_Payments') IS NULL
 BEGIN	
 CREATE TABLE [dbo].[NL_Payments](
 	[PaymentID] [int] NOT NULL IDENTITY(1,1) ,
-	[PaymentMethodID] [int] NOT NULL,	
-	--[PaymentStatusID] [int] NOT NULL,	
+	[PaymentMethodID] [int] NOT NULL,		
 	[PaymentTime] [datetime] NOT NULL, 
-	[Amount] [decimal](18, 6) NULL,
+	[Amount] [decimal](18, 6) NOT NULL,
 	[IsActive] [bit] NOT NULL,
 	[CreationTime] [datetime] NOT NULL default getutcdate(), --real insert datetime
 	[CreatedByUserID] [int] NULL,
@@ -452,13 +451,14 @@ CREATE TABLE [dbo].[NL_Payments](
 END
 GO
 
+alter table [dbo].[NL_Payments] alter column [Amount] [decimal](18, 6) NOT NULL;
 	
 IF OBJECT_ID('NL_PaypointTransactions') IS NULL 
 BEGIN	
 CREATE TABLE [dbo].[NL_PaypointTransactions](
 	[PaypointTransactionID] [int] NOT NULL  IDENTITY(1,1) ,
-	[PaymentID] [int] NULL,
-	[TransactionTime] [datetime] NULL, -- ???  effective payment date
+	[PaymentID] [int] NOT NULL,
+	[TransactionTime] [datetime] NOT NULL, 
 	[Amount] [decimal](18, 6) NOT NULL,
 	[Notes] [nvarchar](max) NULL,
 	[PaypointTransactionStatusID] [int] NOT NULL,
@@ -470,7 +470,7 @@ CREATE TABLE [dbo].[NL_PaypointTransactions](
 ) ;
 END
 GO
-	
+
 IF OBJECT_ID('NL_PaypointTransactionStatuses') IS NULL 
 BEGIN	
 CREATE TABLE [dbo].[NL_PaypointTransactionStatuses](
@@ -584,6 +584,12 @@ alter table [NL_PacnetTransactions] alter column  [Amount] [decimal](18, 6) NOT 
 alter table [NL_PacnetTransactions] alter column  [TransactionTime] [datetime] NOT NULL;
 alter table [NL_PacnetTransactions] alter column  [TrackingNumber] [nvarchar](100) NOT NULL;
 alter table [NL_PacnetTransactions] alter column  [PacnetTransactionStatusID] [int] NOT NULL;
+
+alter table [dbo].[NL_Payments] alter column [Amount] [decimal](18, 6) NOT NULL;
+
+alter table [dbo].[NL_PaypointTransactions] alter column [PaymentID] [int] NOT NULL;
+alter table [dbo].[NL_PaypointTransactions] alter column [TransactionTime]  [datetime] NOT NULL;
+
 
 
 IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanBrokerCommission') AND name = 'NLLoanID')

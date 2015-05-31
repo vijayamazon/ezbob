@@ -12,7 +12,7 @@
 
         [FK("NL_Payments", "PaymentID")]
         [DataMember]
-        public int? PaymentID { get; set; }
+        public int PaymentID { get; set; }
 
         [DataMember]
         public DateTime TransactionTime { get; set; }
@@ -26,7 +26,7 @@
 
         [FK("NL_PaypointTransactionStatuses", "PaypointTransactionStatusID")]
         [DataMember]
-        public int? PaypointTransactionStatusID { get; set; }
+        public int PaypointTransactionStatusID { get; set; }
 
         [Length(100)]
         [DataMember]

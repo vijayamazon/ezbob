@@ -16,7 +16,7 @@ CREATE TYPE NL_PaymentsList AS TABLE (
 	[IsActive] BIT NOT NULL,
 	[CreationTime] DATETIME NOT NULL,
 	[CreatedByUserID] INT NULL,
-	[DeletionTime] DATETIME NOT NULL,
+	[DeletionTime] DATETIME NULL,
 	[DeletedByUserID] INT NULL,
 	[Notes] NVARCHAR(MAX) NULL
 )

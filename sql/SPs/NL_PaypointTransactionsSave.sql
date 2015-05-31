@@ -10,7 +10,7 @@ IF TYPE_ID('NL_PaypointTransactionsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_PaypointTransactionsList AS TABLE (
-	[PaymentID] INT NULL,
+	[PaymentID] INT NOT NULL,
 	[TransactionTime] DATETIME NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[Notes] NVARCHAR(MAX) NULL,

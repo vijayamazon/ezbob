@@ -189,7 +189,7 @@
 
 				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);
 
-				Console.WriteLine(nlModel.Loan.ToString());
+				Console.WriteLine("GetCashController: new loan created: " + nlModel.Loan.ToString());
 			
 				nlModel.PaypointCardNo = card_no;
 
