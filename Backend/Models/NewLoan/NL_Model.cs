@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using System.Text;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]
@@ -13,9 +14,11 @@
 			CustomerID = customerID;
 		}
 
+		[DataMember]
 		public int CustomerID { get; set; }
 
-		public int UserID { get; set; }
+		[DataMember]
+		public int? UserID { get; set; }
 
 		[DataMember]
 		public NL_FundTransfers FundTransfer { get; set; }
@@ -168,6 +171,26 @@
 		[DataMember]
 		public DateTime PaypointTransactionTime { get; set; }
 
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
+			Type t = typeof(NL_Model);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null) {
+					if (prop.Name != "AgreementModel") {
+						sb.Append(prop.Name)
+							.Append(": " + prop.GetValue(this))
+							.Append("; \n");
+					}
+				}
+			}
+			return sb.ToString();
+		}
 	}
 
 

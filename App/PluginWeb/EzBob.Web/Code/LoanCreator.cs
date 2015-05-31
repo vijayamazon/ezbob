@@ -24,7 +24,8 @@
  	using StructureMap;
  
  	public interface ILoanCreator {
- 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
+ 		//Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
+ 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
  	} // interface ILoanCreator
  
  	public class LoanCreator : ILoanCreator {
@@ -44,7 +45,7 @@
  			m_oTranMethodRepo = ObjectFactory.GetInstance<DatabaseDataHelper>().LoanTransactionMethodRepository;
  		} // constructor
  
- 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now) {
+ 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
 
 			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
 			ValidateAmount(loanAmount, cus); // continue (loanAmount > customer.CreditSum)
@@ -97,8 +98,9 @@
  
  			loan.GenerateRefNumber(cus.RefNumber, cus.Loans.Count);
 
-			NL_Model nlModel = new NL_Model(cus.Id);
-			nlModel.FundTransfer = new NL_FundTransfers();
+			if(nlModel==null) 
+				 nlModel = new NL_Model(cus.Id);
+ 			nlModel.FundTransfer = new NL_FundTransfers();
 			nlModel.FundTransfer.Amount = loanAmount; // logic transaction - full amount
 			nlModel.FundTransfer.TransferTime = now;
 			nlModel.FundTransfer.IsActive = true;
@@ -220,6 +222,7 @@
  			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
 
 			nlModel.Loan = new NL_Loans();
+ 			nlModel.UserID = this._context.UserId; // ???
 			nlModel.Loan.Refnum = loan.RefNumber;
 			nlModel.Loan.OldLoanID = oldloanID;
  			nlModel.Loan.InitialLoanAmount = loanAmount;
@@ -240,9 +243,11 @@
 				Log.Debug(nlModel.PacnetTransaction.ToString());
 				Log.Debug(nlModel.Loan.ToString());
 
-				var nlLoanID = this.m_oServiceClient.Instance.AddLoan(this._context.UserId, cus.Id, nlModel);
-				
-				Log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoanID.Value, oldloanID); 
+				var nlLoan = this.m_oServiceClient.Instance.AddLoan(nlModel);
+	
+				nlModel.Loan.LoanID = nlLoan.Value;
+
+				Log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID); 
 
  			} catch (Exception ex) {
  				Log.Debug("Failed to save new loan {0}", ex);

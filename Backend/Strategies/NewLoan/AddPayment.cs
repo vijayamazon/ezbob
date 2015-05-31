@@ -113,7 +113,7 @@
 			* 4. save into NL_LoanSchedulePayments : PaymentID just created + NL_LoanSchedules from AssignPaymentToLoan strategy
 			*/
 
-			AssignPaymentToLoan payLoanStrategy = new AssignPaymentToLoan(this.userID, NLModel);
+			AssignPaymentToLoan payLoanStrategy = new AssignPaymentToLoan( NLModel);
 			payLoanStrategy.Execute();
 
 		} // Execute
@@ -146,7 +146,7 @@
 
 		} // SendErrorMail
 
-		private readonly int userID;
+		private readonly int? userID;
 		private readonly int customerID;
 
 		public NL_Loader Loader { get; private set; }

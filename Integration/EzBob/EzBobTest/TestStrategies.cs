@@ -766,8 +766,8 @@
 
 		[Test]
 		public void TestNL_AddLoan() {
-			int customerID = 365; // 366;
-			int oldLoanID = 1045; //1042;
+			int customerID = 369; // 366;
+			int oldLoanID = 1049; //1042;
 
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);

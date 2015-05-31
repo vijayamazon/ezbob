@@ -63,6 +63,7 @@
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Properties\DataSources\Ezbob.Backend.Models.NewLoan.NL_Model.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers.datasource" />
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>

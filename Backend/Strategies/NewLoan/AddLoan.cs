@@ -20,6 +20,7 @@
 			this.customerID = nlModel.CustomerID;
 			NLModel = nlModel;
 			Loader = new NL_Loader(NLModel);
+
 			this.emailToAddress = "elinar@ezbob.com";
 			this.emailFromAddress = "elinar@ezbob.com";
 			this.emailFromName = "ezbob-system";
@@ -31,16 +32,25 @@
 		//var addLoanOptions = new AddLoanOptions(new NL_LoanOptions)
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-		/// /// <exception cref="NL_ExceptionLoanExists">Condition. </exception>
+		/// <exception cref="NL_ExceptionLoanExists">Condition. </exception>
 		/// <exception cref="NL_ExceptionOfferNotValid">Condition. </exception>
 		/// <exception cref="Exception">Add loan failed: {0}</exception>
+		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		public override void Execute() {
 
 			Log.Debug("------------------ customer {0}------------------------", this.customerID);
 
 			string message;
 
-			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.customerID), new QueryParameter("@Now", DateTime.UtcNow));
+			if (this.customerID == 0) {
+				message = string.Format("No valid Customer ID {0} ", this.customerID);
+				Log.Alert(message);
+				throw new NL_ExceptionCustomerNotFound(message);
+			}
+
+			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, 
+				new QueryParameter("CustomerID", this.customerID),
+				new QueryParameter("@Now", DateTime.UtcNow));
 
 			if (dataForLoan == null) {
 				message = string.Format("No valid offer found. Customer {0} ", this.customerID);
@@ -82,7 +92,7 @@
 				Log.Alert(message);
 				throw new NL_ExceptionInputDataInvalid(message);
 			}
-
+			
 			// complete other validations here
 
 			/*** 
@@ -318,7 +328,7 @@
 
 		public int LoanID;
 
-		private readonly int userID;
+		private readonly int? userID;
 		private readonly int customerID;
 
 		public NL_Loader Loader { get; private set; }

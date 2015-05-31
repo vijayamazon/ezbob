@@ -174,6 +174,12 @@
   <wsdl:message name="IEzService_AddLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddLoanResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_AddPayment_InputMessage">
+    <wsdl:part name="parameters" element="tns:AddPayment" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_AddPayment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:AddPaymentResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
   </wsdl:message>
@@ -1433,6 +1439,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoan" message="tns:IEzService_AddLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse" message="tns:IEzService_AddLoan_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="AddPayment">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddPayment" message="tns:IEzService_AddPayment_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse" message="tns:IEzService_AddPayment_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse" message="tns:IEzService_UpdateLinkedHmrcPassword_OutputMessage" />
@@ -2362,6 +2372,15 @@
     </wsdl:operation>
     <wsdl:operation name="AddLoan">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddLoan" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AddPayment">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/AddPayment" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

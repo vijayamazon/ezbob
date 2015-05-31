@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using System.Web.UI.WebControls;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
 
     public class AddLoanLegals : AStrategy {
@@ -10,7 +11,8 @@
 
         public override string Name { get { return "AddLoanLegal"; } }
 
-        public override void Execute() {
+	    /// <exception cref="NL_ExceptionOfferNotValid">Condition. </exception>
+	    public override void Execute() {
 
             GetLastOffer g = new GetLastOffer(this.customerID);
             g.Execute();
@@ -19,7 +21,9 @@
             if (lastOffer.OfferID > 0) {
                 this.loanLegals.OfferID = lastOffer.OfferID;
             } else {
-                Log.Warn("Last offer not found");
+                Log.Alert("Last offer not found");
+
+	            throw new NL_ExceptionOfferNotValid();
             }
 
 

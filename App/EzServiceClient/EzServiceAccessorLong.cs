@@ -1,5 +1,6 @@
 ﻿namespace ServiceClientProxy {
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
@@ -85,15 +86,14 @@
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="userId"></param>
-		/// <param name="customerId"></param>
 		/// <param name="nlModel"></param>
 		/// <returns></returns>
 		public NL_Model AddPayment(NL_Model nlModel) {
-			// TODO
-			//this.m_oServiceClient.Instance.AddPayment(NL_Model nlModel);
+			Console.WriteLine("========================!!!!!!!!!!!!ACCESSOR LONG!!!!!!!!!!!=============================");
+			this.m_oServiceClient.Instance.AddPayment(nlModel);
 			return null;
 		}
+	
 
 		private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong

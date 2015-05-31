@@ -265,7 +265,7 @@ IF OBJECT_ID('NL_LoanLegals') IS NULL
 BEGIN	
 CREATE TABLE [dbo].[NL_LoanLegals](
 	[LoanLegalID] [int] NOT NULL IDENTITY(1,1),
-	[OfferID] [int] NULL,
+	[OfferID] [int] NOT NULL,
 	[RepaymentPeriod] [int] NULL,
 	[Amount]  [decimal](18, 6) NOT NULL,	 
 	[SignatureTime] [datetime] NOT NULL,

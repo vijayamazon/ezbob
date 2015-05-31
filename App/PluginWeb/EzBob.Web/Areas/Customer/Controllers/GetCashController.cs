@@ -185,27 +185,13 @@
 				// save new PayPointCard 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
-				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
-
 				NL_Model nlModel = new NL_Model(cus.Id);
-				nlModel.Loan.OldLoanID = loan.Id; // get LoanID instead
+
+				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);
+
+				Console.WriteLine(nlModel.Loan.ToString());
+			
 				nlModel.PaypointCardNo = card_no;
-				nlModel.Payment = new NL_Payments();
-				nlModel.PaypointTransaction = new NL_PaypointTransactions();
-				/*nlModel.Payment = new NL_Payments() {				
-				//	PaymentMethodID = 2, // [LoanTransactionMethod] 'Auto' ID 2
-				//	PaymentTime =  now,
-				//	IsActive = true,
-				//	Amount = amount ?? 5m,
-				//	CreationTime = now,
-					Notes = "system-repay-rebate"
-				};
-				nlModel.PaypointTransaction = new NL_PaypointTransactions() {
-				//	PaypointCardID = 
-				//	Amount = amount ?? 5m,
-					Notes = "system-repay", //- description filed in LoanTransaction 
-				//	PaypointTransactionStatusID = 1, //1 (Done) NL_PaypointTransactionStatuses
-				};*/
 
 				RebatePayment(amount, loan, trans_id, now, nlModel);
 
@@ -265,7 +251,9 @@
 			var cus = _context.Customer;
 			var card = cus.PayPointCards.First(c => c.Id == cardId);
 			DateTime now = DateTime.UtcNow;
-			var loan = _loanCreator.CreateLoan(cus, amount, card, now);
+
+			NL_Model nlModel = new NL_Model(cus.Id);
+			var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel: nlModel);
 
 			var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 

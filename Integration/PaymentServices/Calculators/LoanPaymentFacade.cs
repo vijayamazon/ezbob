@@ -64,7 +64,7 @@
 
 				if (nlModel.Payment == null)
 					nlModel.Payment = new NL_Payments();
-
+		
 				nlModel.Payment.PaymentMethodID = this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod).Id; // [LoanTransactionMethod] 'Auto' ID 2
 				nlModel.Payment.PaymentTime = paymentTime;
 				nlModel.Payment.IsActive = true;
@@ -80,9 +80,9 @@
 				nlModel.PaypointTransaction.PaypointUniqID = transId;
 				nlModel.PaypointTransaction.IP = ip;
 				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); //1 (Done) NL_PaypointTransactionStatuses
-				int userID = 0;
+			//	int userID = 0;
+	
 				NL_Model nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
-				//	(1, customerId, isDirector ? directorId : (int?)null, null);
 
 				Log.Debug(nlPayment.Payment.ToString());
 			}

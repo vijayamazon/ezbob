@@ -12,6 +12,8 @@ AS
 
 declare @OfferID int;
 
+
+
 BEGIN
 	
 	-- get last valid 'Approve' or 'ReApprove' offer for the customer

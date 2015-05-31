@@ -3,8 +3,8 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	public class AssignPaymentToLoan : AStrategy {
-		public AssignPaymentToLoan(int userID, NL_Model nlModel) {
-			this.userID = userID;
+		public AssignPaymentToLoan(NL_Model nlModel) {
+			this.userID = nlModel.UserID;
 			NLModel = nlModel;
 		}//constructor
 
@@ -37,7 +37,7 @@
 
 		} // Execute
 
-		private readonly int userID;
+		private readonly int? userID;
 		public NL_Model NLModel { get; private set; }
 
 	} // class AssignPaymentToLoan

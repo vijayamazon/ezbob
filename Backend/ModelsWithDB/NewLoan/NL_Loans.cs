@@ -12,7 +12,7 @@
 
 		[FK("NL_Offers", "OfferID")]
 		[DataMember]
-		public int? OfferID { get; set; }
+		public int OfferID { get; set; }
 
 		[FK("LoanType", "Id")]
 		[DataMember]

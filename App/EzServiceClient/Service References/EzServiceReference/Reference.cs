@@ -3284,10 +3284,16 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanLegalsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanLegals loanLegals);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse")]
+        Ezbob.Backend.Models.NewLoan.NL_Model AddPayment(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse")]
+        System.Threading.Tasks.Task<Ezbob.Backend.Models.NewLoan.NL_Model> AddPaymentAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
@@ -4589,12 +4595,20 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddLoanLegalsAsync(userID, customerID, loanLegals);
         }
         
-        public ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
-            return base.Channel.AddLoan(userID, customerID, loanModel);
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddLoan(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+            return base.Channel.AddLoan(loanModel);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
-            return base.Channel.AddLoanAsync(userID, customerID, loanModel);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddLoanAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+            return base.Channel.AddLoanAsync(loanModel);
+        }
+        
+        public Ezbob.Backend.Models.NewLoan.NL_Model AddPayment(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+            return base.Channel.AddPayment(loanModel);
+        }
+        
+        public System.Threading.Tasks.Task<Ezbob.Backend.Models.NewLoan.NL_Model> AddPaymentAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel) {
+            return base.Channel.AddPaymentAsync(loanModel);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {

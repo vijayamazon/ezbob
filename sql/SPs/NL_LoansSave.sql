@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoansList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoansList AS TABLE (
-	[OfferID] INT NULL,
+	[OfferID] INT NOT NULL,
 	[LoanTypeID] INT NOT NULL,
 	[RepaymentIntervalTypeID] INT NULL,
 	[LoanStatusID] INT NULL,

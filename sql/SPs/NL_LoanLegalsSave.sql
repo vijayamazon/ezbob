@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoanLegalsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanLegalsList AS TABLE (
-	[OfferID] INT NULL,
+	[OfferID] INT NOT NULL,
 	[SignatureTime] DATETIME NOT NULL,
 	[RepaymentPeriod] INT NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
