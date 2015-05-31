@@ -341,3 +341,16 @@ b, strong {
 .header-message{
     color: #67c10b;
 }
+
+.everline_header,
+.everline_header *,
+.everline_header *:before,
+.everline_header *:after {
+  -webkit-box-sizing: content-box;
+     -moz-box-sizing: content-box;
+          box-sizing: content-box;
+}
+
+div#broker-footer-placeholder {
+	height: 120px;
+}

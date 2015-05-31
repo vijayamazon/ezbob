@@ -1,13 +1,9 @@
 ﻿namespace EzBob.Web.Areas.Broker.Controllers {
 	using System;
 	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text.RegularExpressions;
 	using System.Web;
-	using System.Web.Helpers;
 	using System.Web.Mvc;
 	using ConfigManager;
-	using ExperianLib.Ebusiness;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Utils.MimeTypes;
@@ -16,30 +12,22 @@
 	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Infrastructure.Attributes;
 	using EzBob.Web.Infrastructure.csrf;
-	using EzBob.Web.Infrastructure.Filters;
 	using EzBob.Web.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
-	using PostcodeAnywhere;
-	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
-	public partial class BrokerHomeController : Controller {
-		public BrokerHomeController() {
-			this.m_oServiceClient = new ServiceClient();
-			this.m_oHelper = new BrokerHelper(this.m_oServiceClient, ms_oLog);
-		} // constructor
-
+	public class BrokerHomeController : ABrokerBaseController {
 		// GET: /Broker/BrokerHome/
 		public System.Web.Mvc.ActionResult Index(string sourceref = "") {
 			CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
 			ms_oLog.Debug("UI origin is {0}", uiOrigin.Stringify());
 
-			if (!uiOrigin.IsEzbob()) {
+			if (uiOrigin.IsAlibaba()) {
 				return RedirectToAction(
 					"Index",
 					User.Identity.IsAuthenticated ? "Profile" : "Wizard",
@@ -87,156 +75,6 @@
 		[HttpPost]
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
-		[CaptchaValidationFilter(Order = 999999)]
-		public JsonResult Signup(BrokerSignupModel model) {
-			string sReferredBy = "";
-
-			if (Request.Cookies.AllKeys.Contains(Constant.SourceRef)) {
-				var oCookie = Request.Cookies[Constant.SourceRef];
-
-				if (oCookie != null)
-					sReferredBy = oCookie.Value;
-			} // if
-
-			ms_oLog.Debug(
-				"Broker sign up request:" +
-					"\n\tFirm name: {0}" +
-					"\n\tFirm reg num: {1}" +
-					"\n\tContact person name: {2}" +
-					"\n\tContact person email: {3}" +
-					"\n\tContact person mobile: {4}" +
-					"\n\tMobile code: {5}" +
-					"\n\tContact person other phone: {6}" +
-					"\n\tEstimated monthly amount: {7}" +
-					"\n\tFirm web site URL: {8}" +
-					"\n\tEstimated monthly application count: {9}" +
-					"\n\tCaptcha enabled: {10}" +
-					"\n\tTerms ID: {11}" +
-					"\n\tReferred by (sourceref): {12}" +
-					"\n\tFCARegistered: {13}" + 
-					"\n\tLicense Number: {14}",
-				model.FirmName,
-				model.FirmRegNum,
-				model.ContactName,
-				model.ContactEmail,
-				model.ContactMobile,
-				model.MobileCode,
-				model.ContactOtherPhone,
-				model.EstimatedMonthlyClientAmount,
-				model.FirmWebSite,
-				model.EstimatedMonthlyAppCount,
-				model.IsCaptchaEnabled == 0 ? "no" : "yes",
-				model.TermsID,
-				sReferredBy,
-				model.FCARegistered,
-				model.LicenseNumber
-				);
-
-			if (!ModelState.IsValid) {
-				return new BrokerForJsonResult(string.Join("; ",
-					ModelState.Values.SelectMany(x => x.Errors)
-						.Select(x => x.ErrorMessage)
-					));
-			} // if
-
-			if (User.Identity.IsAuthenticated) {
-				ms_oLog.Warn("Sign up request with contact email {0}: already authorised as {1}.", model.ContactEmail, User.Identity.Name);
-				return new BrokerForJsonResult("You are already logged in.");
-			} // if
-
-			BrokerPropertiesActionResult bp;
-
-			try {
-				bp = this.m_oServiceClient.Instance.BrokerSignup(
-					model.FirmName,
-					model.FirmRegNum,
-					model.ContactName,
-					model.ContactEmail,
-					model.ContactMobile,
-					model.MobileCode,
-					model.ContactOtherPhone,
-					model.EstimatedMonthlyClientAmount,
-					new Password(model.Password, model.Password2),
-					model.FirmWebSite,
-					model.EstimatedMonthlyAppCount,
-					model.IsCaptchaEnabled != 0,
-					model.TermsID,
-					sReferredBy,
-					model.FCARegistered,
-					model.LicenseNumber
-					);
-
-				if (!string.IsNullOrEmpty(bp.Properties.ErrorMsg)) {
-					ms_oLog.Warn("Failed to sign up as a broker. {0}", bp.Properties.ErrorMsg);
-					return new BrokerForJsonResult(bp.Properties.ErrorMsg);
-				} // if
-			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to sign up as a broker.");
-				return new BrokerForJsonResult("Registration failed. Please contact customer care.");
-			} // try
-
-			BrokerHelper.SetAuth(model.ContactEmail);
-
-			ms_oLog.Debug("Broker sign up succeeded for: {0}", model.ContactEmail);
-
-			return new PropertiesBrokerForJsonResult(oProperties: bp.Properties) {
-				antiforgery_token = AntiForgery.GetHtml()
-					.ToString()
-			};
-		} // Signup
-
-		[HttpPost]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult Logoff(string sContactEmail) {
-			bool bGoodToLogOff =
-				string.IsNullOrWhiteSpace(sContactEmail) ||
-					(User.Identity.IsAuthenticated && (User.Identity.Name == sContactEmail));
-
-			if (bGoodToLogOff) {
-				this.m_oHelper.Logoff(User.Identity.Name, HttpContext);
-				return new BrokerForJsonResult {
-					antiforgery_token = AntiForgery.GetHtml()
-						.ToString()
-				};
-			} // if
-
-			ms_oLog.Warn(
-				"Logoff request with contact email {0} while {1} logged in.",
-				sContactEmail,
-				User.Identity.IsAuthenticated ? "broker " + User.Identity.Name + " is" : "not"
-				);
-
-			return new BrokerForJsonResult(bExplicitSuccess: false);
-		} // Logoff
-
-		[HttpPost]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult Login(string LoginEmail, string LoginPassword) {
-			ms_oLog.Debug("Broker login request: {0}", LoginEmail);
-
-			if (User.Identity.IsAuthenticated) {
-				ms_oLog.Warn("Login request with contact email {0}: already authorised as {1}.", LoginEmail, User.Identity.Name);
-				return new BrokerForJsonResult("You are already logged in.");
-			} // if
-
-			BrokerProperties bp = this.m_oHelper.TryLogin(LoginEmail, LoginPassword, null, null);
-
-			if (bp == null)
-				return new BrokerForJsonResult("Failed to log in.");
-
-			ms_oLog.Debug("Broker login succeeded for: {0}", LoginEmail);
-
-			return new PropertiesBrokerForJsonResult(oProperties: bp) {
-				antiforgery_token = AntiForgery.GetHtml()
-					.ToString()
-			};
-		} // Login
-
-		[HttpPost]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
 		public JsonResult AcceptTerms(int nTermsID, string sContactEmail) {
 			ms_oLog.Debug("Broker accept terms request for contact email {0} and terms id {1}...", sContactEmail, nTermsID);
 
@@ -278,29 +116,6 @@
 
 			return new SignedTermsBrokerForJsonResult(sTerms: slar.Records[0], sSignedTime: slar.Records[1]);
 		} // LoadSignedTerms
-
-		[HttpPost]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult RestorePassword(string ForgottenMobile, string ForgottenMobileCode) {
-			ms_oLog.Debug("Broker restore password request: phone # {0} with code {1}", ForgottenMobile, ForgottenMobileCode);
-
-			if (User.Identity.IsAuthenticated) {
-				ms_oLog.Warn("Request with mobile phone {0} and code {1}: already authorised as {2}.", ForgottenMobile, ForgottenMobileCode, User.Identity.Name);
-				return new BrokerForJsonResult("You are already logged in.");
-			} // if
-
-			try {
-				this.m_oServiceClient.Instance.BrokerRestorePassword(ForgottenMobile, ForgottenMobileCode);
-			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to restore password for a broker with phone # {0}.", ForgottenMobile);
-				return new BrokerForJsonResult("Failed to restore password.");
-			} // try
-
-			ms_oLog.Debug("Broker restore password succeded for phone # {0}", ForgottenMobile);
-
-			return new BrokerForJsonResult();
-		} // RestorePassword
 
 		[HttpGet]
 		[Ajax]
@@ -374,29 +189,29 @@
 			return new CustomerDetailsBrokerForJsonResult(oDetails: oDetails.Data, oPotentialSigners: oDetails.PotentialSigners);
 		} // LoadCustomerDetails
 
-        [HttpGet]
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        public JsonResult LoadLeadDetails(int sLeadID, string sContactEmail) {
-            ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
+		[HttpGet]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult LoadLeadDetails(int sLeadID, string sContactEmail) {
+			ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
 
-            var oIsAuthResult = IsAuth<CustomerDetailsBrokerForJsonResult>("Load lead details for customer " + sLeadID, sContactEmail);
-            if (oIsAuthResult != null)
-                return oIsAuthResult;
+			var oIsAuthResult = IsAuth<CustomerDetailsBrokerForJsonResult>("Load lead details for customer " + sLeadID, sContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
 
-            BrokerLeadDetailsDataActionResult oDetails;
+			BrokerLeadDetailsDataActionResult oDetails;
 
-            try {
-                oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail);
-            } catch (Exception e) {
-                ms_oLog.Alert(e, "Failed to load customer details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
-                return new LeadDetailsBrokerForJsonResult("Failed to load lead details.");
-            } // try
+			try {
+				oDetails = this.m_oServiceClient.Instance.BrokerLoadLeadDetails(sLeadID, sContactEmail);
+			} catch (Exception e) {
+				ms_oLog.Alert(e, "Failed to load customer details request for lead {1} and contact email {0}", sContactEmail, sLeadID);
+				return new LeadDetailsBrokerForJsonResult("Failed to load lead details.");
+			} // try
 
-            ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0} complete.", sContactEmail, sLeadID);
+			ms_oLog.Debug("Broker load lead details request for lead {1} and contact email {0} complete.", sContactEmail, sLeadID);
 
-            return new LeadDetailsBrokerForJsonResult(oDetails:oDetails.BrokerLeadDataModel);
-        } // LoadCustomerDetails
+			return new LeadDetailsBrokerForJsonResult(oDetails:oDetails.BrokerLeadDataModel);
+		} // LoadLeadDetails
 
 		[HttpGet]
 		[Ajax]
@@ -670,32 +485,31 @@
 			return new BrokerForJsonResult();
 		} // AddLead
 
-        [HttpPost]
-        [Ajax]
-        [ValidateJsonAntiForgeryToken]
-        public JsonResult AddBank(string AccountNumber, string SortCode, string ContactEmail, string bankAccountType)
-        {
-            ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3}.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult AddBank(string AccountNumber, string SortCode, string ContactEmail, string bankAccountType) {
+			ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3}.", ContactEmail, AccountNumber, SortCode, bankAccountType);
 
-            var oIsAuthResult = IsAuth("Add bank", ContactEmail);
-            if (oIsAuthResult != null)
-                return oIsAuthResult;
+			var oIsAuthResult = IsAuth("Add bank", ContactEmail);
+			if (oIsAuthResult != null)
+				return oIsAuthResult;
 
-            try {
-                this.m_oServiceClient.Instance.BrokerAddBank(new BrokerAddBankModel {
-                    AccountNumber = AccountNumber,
-                    SortCode = SortCode,
-                    BankAccountType = bankAccountType,
-                    BrokerEmail = ContactEmail
-                });
-            } catch (Exception ex) {
-                ms_oLog.Warn(ex, "Failed to add bank for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
-                return new BrokerForJsonResult(ex.Message);
-            }
-           
-            ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
-            return new BrokerForJsonResult();
-        } // AddBank
+			try {
+				this.m_oServiceClient.Instance.BrokerAddBank(new BrokerAddBankModel {
+					AccountNumber = AccountNumber,
+					SortCode = SortCode,
+					BankAccountType = bankAccountType,
+					BrokerEmail = ContactEmail
+				});
+			} catch (Exception ex) {
+				ms_oLog.Warn(ex, "Failed to add bank for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+				return new BrokerForJsonResult(ex.Message);
+			} // try
+
+			ms_oLog.Debug("Broker add bank request for contact email {0}: {1} {2} {3} complete.", ContactEmail, AccountNumber, SortCode, bankAccountType);
+			return new BrokerForJsonResult();
+		} // AddBank
 
 		[HttpPost]
 		[Ajax]
@@ -730,9 +544,7 @@
 				Session[Constant.Broker.MessageOnStart] = oIsAuthResult.error;
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new {
-					Area = "Broker",
-				});
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // if
 
 			if ((nLeadID > 0) && !string.IsNullOrWhiteSpace(sLeadEmail)) {
@@ -741,9 +553,7 @@
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new {
-					Area = "Broker",
-				});
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // if
 
 			BrokerLeadDetailsActionResult bld;
@@ -756,9 +566,7 @@
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new {
-					Area = "Broker",
-				});
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // try
 
 			if (bld.LeadID < 1) {
@@ -767,9 +575,7 @@
 				Session[Constant.Broker.MessageOnStart] = "Could not process fill all the details request.";
 				Session[Constant.Broker.MessageOnStartSeverity] = Constant.Severity.Error;
 
-				return RedirectToAction("Index", "BrokerHome", new {
-					Area = "Broker",
-				});
+				return RedirectToAction("Index", "BrokerHome", new { Area = "Broker", });
 			} // if
 
 			this.m_oHelper.Logoff(User.Identity.Name, HttpContext);
@@ -790,9 +596,7 @@
 
 			ms_oLog.Debug("Broker fill wizard request for contact email {0} and lead id {1} lead email {2} complete.", sContactEmail, nLeadID, sLeadEmail);
 
-			return RedirectToAction("Index", "Wizard", new {
-				Area = "Customer"
-			});
+			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 		} // FillWizard
 
 		[HttpGet]
@@ -819,18 +623,14 @@
 					BrokerHelper.SetAuth(sar.Value);
 
 					blm.Unset();
-					return RedirectToAction("Index", "BrokerHome", new {
-						Area = "Broker"
-					});
+					return RedirectToAction("Index", "BrokerHome", new { Area = "Broker" });
 				} // if
 			} // if
 
 			ms_oLog.Debug("Broker fill wizard later request failed, redirecting back to customer wizard.");
 
 			blm.Unset();
-			return RedirectToAction("Index", "Wizard", new {
-				Area = "Customer"
-			});
+			return RedirectToAction("Index", "Wizard", new { Area = "Customer" });
 		} // FinishWizardLater
 
 		public System.Web.Mvc.ActionResult DownloadFile(string fid) {
@@ -860,54 +660,6 @@
 			return HttpNotFound();
 		} // DownloadFile
 
-		[HttpPost]
-		[Ajax]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult UpdatePassword(string ContactEmail, string OldPassword, string NewPassword, string NewPassword2) {
-			ms_oLog.Debug("Broker update password request for contact email {0}", ContactEmail);
-
-			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Update password", ContactEmail);
-			if (oIsAuthResult != null)
-				return oIsAuthResult;
-
-			if (ReferenceEquals(OldPassword, null) || ReferenceEquals(NewPassword, null) || ReferenceEquals(NewPassword2, null)) {
-				ms_oLog.Warn("Cannot update password for contact email {0}: one of passwords not specified.", ContactEmail);
-				return new BrokerForJsonResult("Cannot update password: some required fields are missing.");
-			} // if
-
-			if (NewPassword != NewPassword2) {
-				ms_oLog.Warn("Cannot update password: passwords do not match.");
-				return new BrokerForJsonResult("Cannot update password: passwords do not match.");
-			} // if
-
-			if (NewPassword == OldPassword) {
-				ms_oLog.Warn("Cannot update password: new password is equal to the old one.");
-				return new BrokerForJsonResult("Cannot update password: new password is equal to the old one.");
-			} // if
-
-			ActionMetaData oResult;
-
-			try {
-				oResult = this.m_oServiceClient.Instance.BrokerUpdatePassword(
-					ContactEmail,
-					new Password(OldPassword),
-					new Password(NewPassword, NewPassword2)
-					);
-			} catch (Exception e) {
-				ms_oLog.Alert(e, "Failed to update password for contact email {0}", ContactEmail);
-				return new BrokerForJsonResult("Failed to update password.");
-			} // try
-
-			if (oResult == null) {
-				ms_oLog.Warn("Failed to update password for contact email {0}", ContactEmail);
-				return new BrokerForJsonResult("Failed to update password.");
-			} // if
-
-			ms_oLog.Debug("Broker update password request for contact email {0} complete.", ContactEmail);
-
-			return new BrokerForJsonResult();
-		} // UpdatePassword
-
 		[Ajax]
 		[HttpPost]
 		[ValidateJsonAntiForgeryToken]
@@ -923,12 +675,13 @@
 			string town,
 			string county,
 			string postcode
-			) {
+		) {
 			var oIsAuthResult = IsAuth<BrokerForJsonResult>("Save Experian director details for customer " + sCustomerID, sContactEmail);
 			if (oIsAuthResult != null)
 				return oIsAuthResult;
 
-			ms_oLog.Debug("Saving Experian director (BrokerHome controller, broker {9}): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
+			ms_oLog.Debug(
+				"Saving Experian director (BrokerHome controller, broker {9}): {0}: {1} {2}, {3} {4} {5} {6} {7} {8}",
 				directorID,
 				email,
 				mobilePhone,
@@ -939,7 +692,7 @@
 				county,
 				postcode,
 				sContactEmail
-				);
+			);
 
 			var m = new Esigner {
 				DirectorID = directorID,
@@ -1018,37 +771,13 @@
 			var loanOffer = LoanOffer.InitFromLoan(loan, apr, null, cr);
 
 			return Json(loanOffer, JsonRequestBehavior.AllowGet);
-		}
+		} // GetOffer
 
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
 		public JsonResult TargetBusiness(string companyNameNumber) {
-				return Json(null, JsonRequestBehavior.AllowGet); //TODO remove
-		}
-
-		[Ajax]
-		[HttpGet]
-		[ValidateJsonAntiForgeryToken]
-		public JsonResult PlayLottery(string playerID, int userID) {
-			var helper = new ScratchHelper(userID, playerID);
-			return Json(helper.PlayLottery(), JsonRequestBehavior.AllowGet);
-		} // PlayLottery
-
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		public void Claim(string playerID, int userID) {
-			var helper = new ScratchHelper(userID, playerID);
-			helper.Claim();
-		} // Claim
-
-		[Ajax]
-		[HttpPost]
-		[ValidateJsonAntiForgeryToken]
-		public void Decline(string playerID, int userID) {
-			var helper = new ScratchHelper(userID, playerID);
-			helper.Decline();
-		} // Decline
+			return Json(null, JsonRequestBehavior.AllowGet); //TODO remove
+		} // TargetBusiness
 	} // class BrokerHomeController
 } // namespace

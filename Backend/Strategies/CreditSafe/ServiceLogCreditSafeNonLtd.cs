@@ -8,12 +8,11 @@
     using System.Xml.Serialization;
     using ConfigManager;
     using Ezbob.Backend.ModelsWithDB;
+    using Ezbob.Backend.Strategies.Misc;
     using Ezbob.CreditSafeLib;
     using Ezbob.CreditSafeLib.CreditSafeServiceReference;
     using Ezbob.Database;
     using Ezbob.Logger;
-    using EzServiceAccessor;
-    using StructureMap;
     using EZBob.DatabaseLib.Model.Database;
 
     class ServiceLogCreditSafeNonLtd :AStrategy
@@ -61,7 +60,7 @@
             string targetingResponse = client.GetData(targetingRequest);
 
             var targetingPkg = new WriteToLogPackage(targetingRequest, targetingResponse, ExperianServiceType.CreditSafeNonLtdTargeting, customerId);
-            ObjectFactory.GetInstance<IEzServiceAccessor>().ServiceLogWriter(targetingPkg);
+            new ServiceLogWriter(targetingPkg).Execute();
 
             XmlSerializer searchSerializer = new XmlSerializer(typeof(CreditSafeNonLtdSearchResponse), new XmlRootAttribute("xmlresponse"));
             CreditSafeNonLtdSearchResponse targetingResult = (CreditSafeNonLtdSearchResponse)searchSerializer.Deserialize(new StringReader(targetingResponse));
@@ -76,7 +75,7 @@
                     string requestXml = GetResource("Ezbob.Backend.Strategies.CreditSafe.Tamplets.CreditSafeNonLtdRequestTemplate.xml", uname, pass, companyNum);
                     string newResponse = client.GetData(requestXml);
                     var pkg = new WriteToLogPackage(requestXml, newResponse, ExperianServiceType.CreditSafeNonLtd, customerId, companyRefNum: companyNum);
-                    ObjectFactory.GetInstance<IEzServiceAccessor>().ServiceLogWriter(pkg);
+					new ServiceLogWriter(pkg).Execute();
                     Log.Debug("Downloading data from CreditSafeNonLtd for company {0} and customer {1} complete.", companyNum, customerId);
                 }//if
                 else

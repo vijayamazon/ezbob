@@ -175,8 +175,10 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="Areas\Broker\BrokerAreaRegistration.cs" />
+    <Compile Include="Areas\Broker\Controllers\BrokerAccountController.cs" />
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController.cs" />
-    <Compile Include="Areas\Broker\Controllers\BrokerHomeController\private.cs" />
+    <Compile Include="Areas\Broker\Controllers\ABrokerBaseController.cs" />
+    <Compile Include="Areas\Broker\Controllers\BrokerLotteryController.cs" />
     <Compile Include="Areas\Broker\Models\BrokerSignupModel.cs" />
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Broker\Models\GetInstantOfferModel.cs" />
@@ -905,6 +907,17 @@
     <Content Include="Areas\Broker\Views\BrokerHome\AddBank.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\LeadDetails.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_FunctionsDialog.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Signup.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Login.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Forgotten.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Dashboard.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\AddCustomer.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\CustomerDetails.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Forbidden.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\RequestAcceptTerms.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards_Old_Do_NOT_AppendHere.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards.cshtml" />
+    <Content Include="Areas\Broker\Views\BrokerHome\Header.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

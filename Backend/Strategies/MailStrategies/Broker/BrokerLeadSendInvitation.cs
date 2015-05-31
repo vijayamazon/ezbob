@@ -1,12 +1,10 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	using System;
 	using System.Collections.Generic;
-	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
 	public class BrokerLeadSendInvitation : AMailStrategyBase {
-
 		public BrokerLeadSendInvitation(int nLeadID, string sBrokerContactEmail) : base(nLeadID, true) {
 			m_sBrokerContactEmail = sBrokerContactEmail;
 			m_oSp = new BrokerLeadSaveInvitationToken(DB, Log);
@@ -34,7 +32,7 @@
 			Variables = new Dictionary<string, string> {
 				{ "CustomerName", LeadData.FullName },
 				{ "FirmName", LeadData.FirmName },
-				{ "InvitationLink", CurrentValues.Instance.CustomerSite + "?bloken=" + m_oSp.Token.ToString("N") } //Currently broker only in ezbob
+				{ "InvitationLink", LeadData.OriginSite + "?bloken=" + m_oSp.Token.ToString("N") },
 			};
 		} // SetTemplateAndVariables
 
@@ -75,6 +73,5 @@
 				return (LeadID > 0) && (Token != null) && (Token != Guid.Empty);
 			} // HasValidParameters
 		} // BrokerLeadSaveInvitationToken
-
 	} // class BrokerLeadSendInvitation
 } // namespace

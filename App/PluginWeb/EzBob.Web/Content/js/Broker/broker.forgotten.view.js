@@ -27,7 +27,7 @@ EzBob.Broker.ForgottenView = EzBob.Broker.MobilePhoneView.extend({
 	}, // clear
 
 	onSubmit: function(event) {
-		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/RestorePassword', this.$el.find('form').serializeArray());
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerAccount/RestorePassword', this.$el.find('form').serializeArray());
 
 		var self = this;
 

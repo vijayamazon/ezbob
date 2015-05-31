@@ -9,7 +9,6 @@
 	using UserManagement.EmailConfirmation;
 
 	public class PasswordRestored : AMailStrategyBase {
-
 		public PasswordRestored(int customerId) : base(customerId, true) {
 		} // constructor
 
@@ -24,8 +23,12 @@
 
 			Guid oToken = InitCreatePasswordToken.Execute(DB, CustomerData.Mail);
 
-			if (oToken == Guid.Empty)
-				throw new StrategyAlert(this, "Failed to generate a change password token for customer " + CustomerData.Mail);
+			if (oToken == Guid.Empty) {
+				throw new StrategyAlert(
+					this,
+					"Failed to generate a change password token for customer " + CustomerData.Mail
+				);
+			} // if
 
 			Variables = new Dictionary<string, string> {
 				{"Link", CustomerData.OriginSite + "/Account/CreatePassword?token=" + oToken.ToString("N")},
@@ -57,12 +60,11 @@
 					: UnderwriterSite + "/Underwriter/Customers#broker/" + nBrokerID;
 
 				TemplateName = "Mandrill - EZBOB password was restored - to staff";
-			}
+			} // if
 		} // SetTemplateAndVariables
 
 		protected virtual string Salutation {
 			get { return "Dear customer"; }
 		} // Salutation
-
 	} // class PasswordRestored
 } // namespace

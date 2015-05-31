@@ -2,8 +2,9 @@
 	using Ezbob.Database;
 
 	public class BrokerIsBroker : AStrategy {
-		public BrokerIsBroker(string sContactEmail) {
-			m_sContactEmail = (sContactEmail ?? string.Empty).Trim();
+		public BrokerIsBroker(string sContactEmail, int uiOrigin) {
+			this.contactEmail = (sContactEmail ?? string.Empty).Trim();
+			this.uiOrigin = uiOrigin;
 			IsBroker = false;
 		} // constructor
 
@@ -14,7 +15,7 @@
 		} // Name
 
 		public override void Execute() {
-			if (string.IsNullOrWhiteSpace(m_sContactEmail)) {
+			if (string.IsNullOrWhiteSpace(this.contactEmail)) {
 				IsBroker = false;
 				return;
 			} // if
@@ -22,10 +23,12 @@
 			IsBroker = 0 != DB.ExecuteScalar<int>(
 				"BrokerIsBroker",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@ContactEmail", m_sContactEmail)
+				new QueryParameter("@ContactEmail", this.contactEmail),
+				new QueryParameter("@UiOriginID", this.uiOrigin)
 			);
 		} // Execute
 
-		private readonly string m_sContactEmail;
+		private readonly string contactEmail;
+		private readonly int uiOrigin;
 	} // class BrokerIsBroker
 } // namespace Ezbob.Backend.Strategies.Broker

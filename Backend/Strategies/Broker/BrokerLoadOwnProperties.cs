@@ -4,7 +4,6 @@
 	using Ezbob.Database;
 
 	public class BrokerLoadOwnProperties : AStrategy {
-
 		public BrokerLoadOwnProperties(string sContactEmail, int nBrokerID) {
 			m_oSp = new SpBrokerLoadOwnProperties(DB, Log) {
 				ContactEmail = sContactEmail,
@@ -31,12 +30,11 @@
 			Properties.LotteryPlayerID = sr.IsEmpty ? string.Empty : ((Guid)sr["UniqueID"]).ToString("N");
 			Properties.LotteryCode = sr["LotteryCode"];
 
-		    Log.Debug("BrokerLoadOwnProperties loaded \n{0}", Properties.ToString());
+			Log.Debug("BrokerLoadOwnProperties loaded \n{0}", Properties.ToString());
 		} // Execute
 
 		public BrokerProperties Properties { get; private set; }
 
 		private readonly SpBrokerLoadOwnProperties m_oSp;
-
 	} // class BrokerLoadOwnProperties
 } // namespace Ezbob.Backend.Strategies.Broker

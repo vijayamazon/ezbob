@@ -46,7 +46,7 @@ EzBob.Broker.ChangePasswordView = EzBob.Broker.SubmitView.extend({
 			value: this.router.getAuth(),
 		});
 
-		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/UpdatePassword', oData);
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerAccount/UpdatePassword', oData);
 
 		var self = this;
 

@@ -1,0 +1,13 @@
+﻿<div class="page-section hide section-requestacceptterms">
+	<h2>Our terms and conditions have been updated</h2>
+
+	Please accept new terms and conditions to continue.
+
+	<div class="terms-and-conditions">@{ WriteLiteral(Model.Terms); }</div>
+
+	<div class="form_buttons_container">
+		<div class="attardi-button">
+			<button type="submit" id="AcceptTermsButton" data-terms-id="@Model.TermsID" class="button btn-green pull-right" ui-event-control-id="broker:accept-terms">Accept</button>
+		</div>
+	</div>
+</div>

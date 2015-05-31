@@ -6,7 +6,7 @@ EzBob.ScratchCards.Ny2015 = EzBob.View.extend({
 		this.customerID = options.customerID;
 		this.playerID = options.playerID;
 		this.controllerName = window.gRootPath +
-			(options.customerMode ? 'Customer/Scratch' : 'Broker/BrokerHome') + '/';
+			(options.customerMode ? 'Customer/Scratch' : 'Broker/BrokerLottery') + '/';
 
 		this.$mainPage = $(options.mainPageClass);
 		this.$el = $('#ny2015scratch');

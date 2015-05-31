@@ -164,7 +164,7 @@ EzBob.Broker.Router = Backbone.Router.extend({
 		this.setAuth();
 		this.login();
 
-		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Logoff?sContactEmail=' + encodeURIComponent(this.getAuth()));
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerAccount/Logoff?sContactEmail=' + encodeURIComponent(this.getAuth()));
 
 		oRequest.success(function(res) {
 			if (res.antiforgery_token)

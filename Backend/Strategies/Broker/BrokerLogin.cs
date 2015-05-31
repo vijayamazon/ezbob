@@ -9,12 +9,19 @@
 	using JetBrains.Annotations;
 
 	public class BrokerLogin : AStrategy {
-		public BrokerLogin(string sEmail, Password oPassword, string promotionName, DateTime? promotionPageVisitTime) {
+		public BrokerLogin(
+			string sEmail,
+			Password oPassword,
+			string promotionName,
+			DateTime? promotionPageVisitTime,
+			int uiOriginID
+		) {
 			m_oSp = new SpBrokerLogin(DB, Log) {
 				Email = sEmail,
 				Password = oPassword.Primary,
 				LotteryCode = promotionName,
 				PageVisitTime = promotionPageVisitTime,
+				UiOriginID = uiOriginID,
 			};
 
 			Properties = new BrokerProperties();
@@ -67,6 +74,9 @@
 
 			[UsedImplicitly]
 			public DateTime? PageVisitTime { get; set; }
+
+			[UsedImplicitly]
+			public int UiOriginID { get; set; }
 
 			private string m_sPassword;
 		} // class SpBrokerLogin

@@ -47,7 +47,7 @@ EzBob.Broker.LoginView = EzBob.Broker.SubmitView.extend({
 	onSubmit: function(event) {
 		var sEmail = this.$el.find('#LoginEmail').val();
 
-		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Login', this.$el.find('form').serializeArray());
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerAccount/Login', this.$el.find('form').serializeArray());
 
 		var self = this;
 

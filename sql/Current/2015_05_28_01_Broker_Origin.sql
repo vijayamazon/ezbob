@@ -1,0 +1,16 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('Broker') AND Name = 'OriginID')
+BEGIN
+	ALTER TABLE Broker DROP COLUMN TimestampCounter
+
+	ALTER TABLE Broker ADD OriginID INT NOT NULL CONSTRAINT DF_Broker_Origin DEFAULT (1)
+
+	ALTER TABLE Broker DROP CONSTRAINT DF_Broker_Origin
+
+	ALTER TABLE Broker ADD CONSTRAINT FK_Broker_Origin FOREIGN KEY (OriginID) REFERENCES CustomerOrigin (CustomerOriginID)
+
+	ALTER TABLE Broker ADD TimestampCounter ROWVERSION
+END
+GO

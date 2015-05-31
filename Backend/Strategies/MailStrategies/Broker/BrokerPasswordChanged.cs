@@ -2,7 +2,6 @@
 	using Ezbob.Backend.Models;
 
 	public class BrokerPasswordChanged : PasswordChanged {
-
 		public BrokerPasswordChanged(int nBrokerID, Password oPassword) : base(nBrokerID, oPassword) {
 		} // constructor
 
@@ -35,6 +34,5 @@
 			get { return (BrokerData)CustomerData; } // get
 			set { CustomerData = value; } // set
 		} // BrokerData
-
 	} // class BrokerPasswordChanged
 } // namespace

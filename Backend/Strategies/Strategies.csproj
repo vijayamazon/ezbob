@@ -465,10 +465,6 @@
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
       <Name>Reports</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
-      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
-      <Name>EzServiceClient</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>
       <Name>EzServiceConfigurationLoader</Name>
@@ -676,10 +672,6 @@
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\EzServiceAccessor\EzServiceAccessor.csproj">
-      <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
-      <Name>EzServiceAccessor</Name>
     </ProjectReference>
     <ProjectReference Include="..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
       <Project>{fa52d60a-3be9-4938-b8d5-1e64e4fd80ac}</Project>

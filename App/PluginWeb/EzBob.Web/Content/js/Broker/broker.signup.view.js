@@ -46,13 +46,16 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 	changeFCARegisered: function(e) {
 		var isFcaRegistered = $(e.currentTarget).is(':checked');
+
 		$(e.currentTarget).val(isFcaRegistered);
-		if (!isFcaRegistered) {
+
+		if (!isFcaRegistered)
 			this.$el.find('#LicenseNumber').val('');
-		}
+
 		this.$el.find('.license_number_field_container').toggle(isFcaRegistered);
 		this.inputChanged();
-	},
+	}, // changeFCARegisered
+
 	clear: function() {
 		EzBob.Broker.SignupView.__super__.clear.apply(this, arguments);
 
@@ -84,7 +87,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			value: $('#broker-terms-and-conditions').attr('data-terms-version'),
 		});
 
-		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerHome/Signup', oData);
+		var oRequest = $.post('' + window.gRootPath + 'Broker/BrokerAccount/Signup', oData);
 
 		var self = this;
 

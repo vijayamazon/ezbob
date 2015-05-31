@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.MailStrategies {
 	public class BrokerPasswordRestored : PasswordRestored {
-		public BrokerPasswordRestored(int nBrokerID)
-			: base(nBrokerID) {
+		public BrokerPasswordRestored(int nBrokerID) : base(nBrokerID) {
 		} // constructor
 
 		public override string Name { get { return "Broker Password Restored"; } } // Name

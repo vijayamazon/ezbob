@@ -1,0 +1,131 @@
+﻿<div class="page-section hide section-customer-details">
+	<input type="hidden" id="customer-id" class="value" data-field-name="id" />
+
+	<div class="back-to-list-container">
+		<button class="lead-fill-wizard button btn-green"
+				title="Complete the application on behalf of the client.">
+			<i class="fa fa-desktop"></i> Fill
+		</button>
+		<button class="lead-send-invitation button btn-green"
+				title="">
+			<i class="fa fa-envelope"></i> Send
+		</button>
+		<button type="button" class="back-to-list button btn-green btn-wide">Back to client list</button>
+	</div>
+
+	<div class="value-group aka-table table-big box">
+		<div class="box-title aka-caption">Client details</div>
+
+		<div class="aka-row">
+			<div class="aka-column">
+				<div class="aka-table">
+					<div class="aka-row">
+						<span class="value-title">Name:</span>
+						<span class="value" data-field-name="name"></span>
+					</div>
+					<div class="aka-row">
+						<span class="value-title">Date of birth:</span>
+						<span class="value" data-field-name="birthdate"></span>
+					</div>
+					<div class="aka-row">
+						<span class="value-title">Gender:</span>
+						<span class="value" data-field-name="gender"></span>
+					</div>
+					<div class="aka-row">
+						<span class="value-title">Email:</span>
+						<span class="value" data-field-name="email"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="aka-column">
+				<div class="aka-table">
+					<div class="aka-row">
+						<span class="value-title">Marital status:</span>
+						<span class="value" data-field-name="maritalstatus"></span>
+					</div>
+					<div class="aka-row">
+						<span class="value-title">Mobile phone #:</span>
+						<span class="value" data-field-name="mobilephone"></span>
+					</div>
+					<div class="aka-row">
+						<span class="value-title">Daytime phone #:</span>
+						<span class="value" data-field-name="daytimephone"></span>
+					</div>
+				</div>
+			</div>
+
+			<div class="aka-column">
+				<div class="aka-table">
+					<div class="aka-row">
+						<span class="value-title">Address:</span>
+						<span class="value" data-field-name="address"></span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="value-group crm-group aka-table table-big box">
+		<div class="box-title aka-caption">
+			CRM events
+			<button type="button" class="button btn-green add-crm-note" title="Add CRM note">+</button>
+		</div>
+
+		<table class="customer-crm-list table">
+			<thead>
+				<tr>
+					<th>Date</th>
+					<th>Action</th>
+					<th>Status</th>
+					<th>Comment</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+
+	<div class="value-group files-group aka-table table-big box">
+		<div class="box-title aka-caption">Client files</div>
+
+		<div class="aka-row">
+			<div class="aka-column table-responsive">
+				<table class="customer-file-list table">
+					<thead>
+						<tr>
+							<th>File name</th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+
+			<form id="customerFilesUploader" class="aka-column">
+				<div class="dz-message"><span>Drag or click to upload files.</span></div>
+			</form>
+		</div>
+	</div>
+
+	<div class="value-group directors-group aka-table table-big box">
+		<div class="box-title aka-caption">Directors/shareholders</div>
+
+		<div class="aka-row">
+			<div class="aka-column customer-directors-in-broker"></div>
+		</div>
+	</div>
+
+	@{Html.RenderPartial("~/Areas/Underwriter/Views/Shared/CustomerRelations/AddCustomerRelationsEntry.cshtml");}
+</div>

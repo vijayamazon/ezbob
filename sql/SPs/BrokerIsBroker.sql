@@ -1,9 +1,13 @@
+SET QUOTED_IDENTIFIER ON
+GO
+
 IF OBJECT_ID('BrokerIsBroker') IS NULL
 	EXECUTE('CREATE PROCEDURE BrokerIsBroker SELECT 1')
 GO
 
 ALTER PROCEDURE BrokerIsBroker
-@ContactEmail NVARCHAR(255)
+@ContactEmail NVARCHAR(255),
+@UiOriginID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,6 +20,8 @@ BEGIN
 		Broker
 	WHERE
 		ContactEmail = @ContactEmail
+		AND
+		OriginID = @UiOriginID
 
 	SELECT ISNULL(@BrokerID, 0) AS BrokerID
 END

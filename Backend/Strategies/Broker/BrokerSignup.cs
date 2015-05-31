@@ -27,7 +27,8 @@
 			int nBrokerTermsID,
 			string sReferredBy,
 			bool bFCARegistered,
-			string sLicenseNumber
+			string sLicenseNumber,
+			int uiOriginID
 		) {
 			m_bIsCaptchaEnabled = bIsCaptchaEnabled;
 			m_sMobileCode = sMobileCode;
@@ -48,7 +49,8 @@
 				ReferredBy = sReferredBy,
 				Strategy = this,
 				FCARegistered = bFCARegistered,
-				LicenseNumber = sLicenseNumber
+				LicenseNumber = sLicenseNumber,
+				UiOriginID = uiOriginID,
 			};
 
 			Properties = new BrokerProperties();
@@ -86,7 +88,6 @@
 		private readonly SpBrokerSignUp m_oCreateSp;
 
 		private class SpBrokerSignUp : AStoredProc {
-
 			public SpBrokerSignUp(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
 			public override bool HasValidParameters() {
@@ -182,6 +183,9 @@
 
 			[UsedImplicitly]
 			public string LicenseNumber { get; set; }
+
+			[UsedImplicitly]
+			public int UiOriginID { get; set; }
 
 			[NonTraversable]
 			public AStrategy Strategy { private get; set; }

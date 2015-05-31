@@ -8,12 +8,10 @@ namespace Ezbob.Backend.Strategies.CreditSafe
     using System.Xml;
     using ConfigManager;
     using Ezbob.Backend.ModelsWithDB;
-    using Ezbob.CreditSafeLib;
+    using Ezbob.Backend.Strategies.Misc;
     using Ezbob.CreditSafeLib.CreditSafeServiceReference;
     using Ezbob.Database;
     using Ezbob.Logger;
-    using EzServiceAccessor;
-    using StructureMap;
     using EZBob.DatabaseLib.Model.Database;
 
     public class ServiceLogCreditSafeLtd :AStrategy
@@ -43,7 +41,7 @@ namespace Ezbob.Backend.Strategies.CreditSafe
 
             var pkg = new WriteToLogPackage(requestXml, newResponse, ExperianServiceType.CreditSafeLtd, customerId, companyRefNum: regNumber);
 
-            ObjectFactory.GetInstance<IEzServiceAccessor>().ServiceLogWriter(pkg);
+            new ServiceLogWriter(pkg).Execute();
 
             Log.Debug("Downloading data from CreditSafe for company {0} and customer {1} complete.", regNumber, customerId);
         }//ServiceLogCreditSafeLtdData
