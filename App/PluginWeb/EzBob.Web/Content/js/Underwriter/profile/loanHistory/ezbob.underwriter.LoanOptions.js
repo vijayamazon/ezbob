@@ -52,7 +52,10 @@ EzBob.Underwriter.LoanOptionsView = Backbone.Marionette.ItemView.extend({
 	    },
 	    SmsSendingAllowed: {
 	        selector: "#SmsSendingAllowed"
-	    }
+	    },
+	    AutoLateFees: {
+	    	selector: "input[name='AutoLateFees']"
+	    },
 	},
 
 	events: {

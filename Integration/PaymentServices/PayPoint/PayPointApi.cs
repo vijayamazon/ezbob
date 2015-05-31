@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Calculators;
+	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using log4net;
 
@@ -18,9 +19,10 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));
 		private readonly SECVPNService _service = new SECVPNService();
 		private readonly ILoanRepository _loans;
+		private readonly ILoanOptionsRepository loanOptionsRepository;
 
-		public PayPointApi()
-		{
+		public PayPointApi() {
+			this.loanOptionsRepository = ObjectFactory.GetInstance<ILoanOptionsRepository>(); ;
 			_loans = ObjectFactory.GetInstance<ILoanRepository>();
 		}
 
@@ -271,9 +273,14 @@
 		public bool ApplyLateCharge(decimal amount, int loanId, int loanChargesTypeId)
 		{
 			var loan = _loans.Get(loanId);
-
+			var loanOptions = this.loanOptionsRepository.GetByLoanId(loanId);
+			if (loanOptions != null && loanOptions.AutoLateFees == false) {
+				Log.InfoFormat("not applying late fee for loan {0} - auto late fee is disabled", loanId);
+				return false;
+			}
 			var date = DateTime.UtcNow;
 
+			
 			return ApplyLateCharge(loan, amount, loanChargesTypeId, date);
 		}
 

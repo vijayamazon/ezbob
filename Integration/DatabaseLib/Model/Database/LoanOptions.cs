@@ -12,6 +12,23 @@
 		public virtual bool EmailSendingAllowed { get; set; }
 		public virtual bool MailSendingAllowed { get; set; }
 		public virtual bool SmsSendingAllowed { get; set; }
+		public virtual bool AutoLateFees { get; set; }
+
+		public static LoanOptions GetDefault(int loanID) {
+			var options = new LoanOptions {
+				AutoPayment = true,
+				LatePaymentNotification = true,
+				ReductionFee = true,
+				EmailSendingAllowed = true,
+				MailSendingAllowed = true,
+				SmsSendingAllowed = true,
+				CaisAccountStatus = "Calculated value",
+				LoanId = loanID,
+				AutoLateFees = true
+			};
+
+			return options;
+		}
 	}
 
 	public class LoanOptionsMap : ClassMap<LoanOptions> {
@@ -27,6 +44,7 @@
 			Map(x => x.MailSendingAllowed);
 			Map(x => x.SmsSendingAllowed);
 			Map(x => x.ManualCaisFlag);
+			Map(x => x.AutoLateFees);
 		}
 	}
 }

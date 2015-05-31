@@ -11,6 +11,7 @@
 	using NHibernate;
 	using PaymentServices.Calculators;
 	using System.Web.Mvc;
+	using DbConstants;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Models;
@@ -76,26 +77,24 @@
 			customer.CollectionStatus.CurrentStatus = this.customerStatusesRepository.Get(collectionStatus.CurrentStatus);
 			customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
 
-			customerRepository.SaveOrUpdate(customer);
+			this.customerRepository.SaveOrUpdate(customer);
 
 			if (customer.CollectionStatus.CurrentStatus.IsDefault) {
-				
-
 				// Update loan options
 				foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
-					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? new LoanOptions {
-						LoanId = loan.Id,
-						AutoPayment = true,
-						ReductionFee = true,
-						LatePaymentNotification = true,
-						EmailSendingAllowed = false,
-						MailSendingAllowed = false,
-						SmsSendingAllowed = false,
-						ManualCaisFlag = "Calculated value",
-					};
-
+					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
 					options.CaisAccountStatus = "8";
-					loanOptionsRepository.SaveOrUpdate(options);
+					this.loanOptionsRepository.SaveOrUpdate(options);
+				}
+			}
+
+			if (customer.CollectionStatus.CurrentStatus.Id == (int)CollectionStatusNames.DebtManagement || customer.CollectionStatus.CurrentStatus.Id == (int)CollectionStatusNames.LegalCCJ) {
+				// Update loan options
+				foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
+					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
+					options.AutoLateFees = false;
+					//todo stop interest rate
+					this.loanOptionsRepository.SaveOrUpdate(options);
 				}
 			}
 
