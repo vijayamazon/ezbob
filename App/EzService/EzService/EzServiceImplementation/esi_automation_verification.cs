@@ -2,6 +2,7 @@
 	using System;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.AutomationVerification;
+	using Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Backend.Strategies.Tasks;
 
@@ -37,5 +38,9 @@
 		public ActionMetaData TotalMaamMedalAndPricing(bool testMode) {
 			return Execute<TotalMaamMedalAndPricing>(null, null, testMode);
 		} // TotalMaamMedalAndPricing
+
+		public ActionMetaData BravoAutomationReport(DateTime? startTime, DateTime? endTime) {
+			return Execute<Bar>(null, null, startTime, endTime);
+		} // BravoAutomationReport
 	} // class EzServiceImplementation
 } // namespace

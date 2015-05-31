@@ -6,7 +6,7 @@ IF OBJECT_ID('LoadCashRequestsForBravoAutomationReport') IS NULL
 GO
 
 ALTER PROCEDURE LoadCashRequestsForBravoAutomationReport
-@StartTime DATETIME,
+@StartTime DATETIME = NULL,
 @EndTime DATETIME = NULL
 AS
 BEGIN
@@ -17,12 +17,11 @@ BEGIN
 		CustomerID = r.IdCustomer,
 		IsApproved = CONVERT(BIT, CASE r.UnderwriterDecision WHEN 'Rejected' THEN 0 ELSE 1 END),	
 		r.AutoDecisionID,
-		AutoDecisionName = d.DecisionName,
-		DecisionTime = r.UnderwriterDecisionDate
+		DecisionTime = r.UnderwriterDecisionDate,
+		IsAlibaba = CONVERT(BIT, CASE WHEN c.AlibabaId IS NULL THEN 0 ELSE 1 END)
 	FROM
 		CashRequests r
 		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
-		LEFT JOIN Decisions d ON r.AutoDecisionID = d.DecisionID
 	WHERE
 		r.CreationDate > ISNULL(@StartTime, 'May 11 2015') -- on May 11 2015 we have released Auto Approve (the last unreleased auto decision)
 		AND
