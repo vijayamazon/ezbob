@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
+    <Compile Include="ActionResults\AlibabaSaleContractActionResult.cs" />
     <Compile Include="ActionResults\AlibabaAvailableCreditActionResult.cs" />
     <Compile Include="ActionResults\AlibabaCustomerDataSharingActionResult.cs" />
     <Compile Include="ActionResults\BrokerLeadDetailsDataActionResult.cs" />

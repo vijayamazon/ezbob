@@ -1,6 +1,8 @@
 ﻿namespace EzBobTest
 {
+    using System;
     using ExperianLib.Tests.Integration;
+    using Ezbob.Backend.Models.ExternalAPI;
     using Ezbob.Backend.Strategies.CreditSafe;
     using Ezbob.Backend.Strategies;
     using Ezbob.Backend.Strategies.Experian;
@@ -9,6 +11,8 @@
     using EzServiceAccessor;
     using EzServiceShortcut;
     using StructureMap;
+    using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
+    using MarketplaceWebServiceProducts.Model;
 
     [TestFixture]
     public class TestCreditSafe : BaseTest
@@ -122,6 +126,141 @@
             // ser.DownloadOneLimitedFromExperian("X9999999", 27);
         }
 
+        [Test]
+        [Ignore]
+        public void TestAlibabaStra() {
+            var dto = new AlibabaContractDto(){
+                    requestId = "142857",
+                    responseId = "543",
+                    loanId = 24314474,
+                    orderNumber = "23456780",
+                    sellerBusinessName = "Dabao Trading Ltd.",
+                    sellerAliMemberId = "41523",
+                    sellerStreet1 = "128 Xihu Road",
+                    sellerCity = "Hangzhou",
+                    sellerState = "Zhejiang",
+                    sellerCountry = "China",
+                    sellerPostalCode = "310016",
+                    sellerAuthRepFname = "Hong",
+                    sellerAuthRepLname = "Zhang",
+                    sellerPhone = "865218526",
+                    sellerFax = "865218526",
+                    sellerEmail = "zhang.hong@163.com",
+                    buyerBusinessName = "A PLAZA DRIVING SCHOOL",
+                    aliMemberId = 131,
+                    aId = 15123,
+                    buyerStreet1 = "926 E LEWELLING BLVD",
+                    buyerCity = "HAYWARD",
+                    buyerState = "CA",
+                    buyerCountry = "U.S.A",
+                    buyerZip = "94541",
+                    buyerAuthRepFname = "MICHAEL",
+                    buyerAuthRepLname = "ARTE",
+                    buyerPhone = "415222444",
+                    buyerEmail = "marte@aplaza.net",
+                    shippingMark = "WT12345678",
+                    totalOrderAmount = 88000,
+                    deviationQuantityAllowed = 20,
+                    orderAddtlDetails = "",
+                    shippingTerms = "asd",
+                    shippingDate = new DateTime(2015, 03, 01),
+                    loadingPort = "Shanghai",
+                    destinationPort = "Oakland,CA",
+                    orderDeposit = 1000,
+                    beneficiaryBank = "Bank of China",
+                    bankAccountNumber = 1234567890,
+                    bankStreetAddr1 = "108 Ganjiang Road",
+                    bankCity = "Hangzhou",
+                    bankState = "Zhejiang",
+                    bankCountry = "China",
+                    bankPostalCode = "310020",
+                    swiftcode = "ADBNCNBJCD1",
+                    orderCurrency = "gbp",
+                    orderItems = new OrderItems[] {
+                        new OrderItems(){orderProdNumber = 0105, productName = "Battery", productSpecs = "AAA", productQuantity = 20000, productUnit = 6, productUnitPrice = 2, productTotalAmount = 48000},
+                        new OrderItems(){orderProdNumber = 0106, productName = "Screw", productSpecs = "Phillips", productQuantity = 50000, productUnit = 100, productUnitPrice = 8, productTotalAmount = 40000}
+                    }
+                };
+            var test = new SaleContract(dto);
+            test.Execute();
+            //AConnection oDB=new SqlConnection();
+            //EBusinessService ser = new EBusinessService(new SqlConnection());
+            // ser.DownloadOneLimitedFromExperian("X9999999", 27);
+        }
+
+        private const string json = @"{
+    ""requestId"": ""142857"",   
+    ""loanId"":""24314474"",
+    ""orderNumber"": ""23456780"",
+    ""drawType"": ""1"",
+    ""poNumber"": ""23456"",
+    ""createD"":""2015-02-01"",
+    ""sellerBusinessName"":""Dabao Trading Ltd."",
+    ""sellerAliMemberId"":""41523"",
+    ""sellerStreet1"":""128 Xihu Road"",
+    ""sellerCity"": ""Hangzhou"",
+    ""sellerState"":""Zhejiang"",
+    ""sellerCountry"":""China"",
+    ""sellerPostalCode"":""310016"",
+    ""sellerAuthRepFname"":""Hong"",
+    ""sellerAuthRepLname"":""Zhang"",
+    ""sellerPhone"":""8652185264778"",
+    ""sellerFax"":""8652185264779"",
+    ""sellerEmail"":""zhang.hong@163.com"",
+    ""buyerBusinessName"":""A PLAZA DRIVING SCHOOL"",
+    ""buyerAliMemberId"":""852963"",
+    ""buyerStreet1"": ""926 E LEWELLING BLVD"",
+    ""buyerStreet2"": """",
+    ""buyerCity"": ""HAYWARD"",
+    ""buyerState"":""CA"",
+    ""buyerCountry"":""U.S.A."",
+    ""buyerZip"":""94541"",
+    ""buyerAuthRepFname"":""MICHAEL"",
+    ""buyerAuthRepLname"":""ARTE"",
+    ""buyerPhone"":""4152224444"",
+    ""buyerEmail"":""marte@aplaza.net"",
+    ""shippingMark"":""WT12345678"",
+    ""totalOrderAmount"":""88000"",
+    ""deviationQuantityAllowed"":""20"",
+    ""orderAddtlDetails"":"""",
+    ""shippingTerms"":"""",
+    ""shippingDate"":""2015-03-01"",
+    ""loadingPort"":""Shanghai"",
+    ""destinationPort"":""Oakland,CA"",
+    ""orderDeposit"":""1000"",
+    ""orderFinancingAmount"":""88000"",
+    ""beneficiaryBank"":""Bank of China"",
+    ""bankAccountNumber"":""1234567890"",
+    ""bankStreetAddr1"":""108 Ganjiang Road"",
+    ""BankStreetAddr2"":"""",
+    ""bankCity"":""Hangzhou"",
+    ""bankState"":""Zhejiang"",
+    ""bankCountry"":""China"",
+    ""bankPostalCode"":""310020"",
+    ""swiftCode"":""ADBNCNBJCD1"",
+    ""orderItems"":[
+        {
+            ""orderProdNumber"":""0105"",
+            ""productName"":""Battery"",
+            ""productSpecs"":""AAA"",
+            ""productQuantity"":""20000"",
+            ""productUnit"":""6"",
+            ""productUnitPrice"":""2.4"",
+            ""productTotalAmount"":""48000"",
+            ""productShippingD"":""2015-01-07""
+        },
+        {
+            ""orderProdNumber"":""0106"",
+            ""productName"":""Screw"",
+            ""productSpecs"":""Phillips"",
+            ""productQuantity"":""50000"",
+            ""productUnit"":""100"",
+            ""productUnitPrice"":""0.8"",
+            ""productTotalAmount"":""40000"",
+            ""productShippingD"":""2015-01-06""    
+        }
+    ]
+}";
         private const string response = @"<?xml version=""1.0""?>
 <xmlresponse>
   <header>

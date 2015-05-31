@@ -142,6 +142,7 @@
     <Compile Include="Broker\BrokerInstantOffer.cs" />
     <Compile Include="Experian\ExperianTargeting.cs" />
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
+    <Compile Include="ExternalAPI\Alibaba\SaleContract.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />

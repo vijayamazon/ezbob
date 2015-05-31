@@ -16,6 +16,8 @@
 		public long ContractId { get; set; }
 		[Length(100)]
 		public string RequestId { get; set; }
+        [Length(100)]
+        public string ResponseId { get; set; }
 		public long? LoanId { get; set; }
 		[Length(100)]
 		public string OrderNumber { get; set; }
@@ -37,10 +39,10 @@
 		public int? OrderBalance { get; set; }
 		[Length(100)]
 		public string OrderCurrency { get; set; }
-		public byte?[] CommercialInvoice { get; set; }
-		public byte?[] BillOfLading { get; set; }
-		public byte?[] PackingList { get; set; }
-		public byte?[] Other { get; set; }
+		public byte[] CommercialInvoice { get; set; }
+		public byte[] BillOfLading { get; set; }
+		public byte[] PackingList { get; set; }
+		public byte[] Other { get; set; }
 
 		[NonTraversable]
 		public List<AlibabaContractItem> Items { get; set; }

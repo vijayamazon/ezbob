@@ -35,6 +35,14 @@
 
 		} // SaveApiCall
 
+        public AlibabaSaleContractActionResult SaleContract(int customerID, AlibabaContractDto contract)
+        {
+            SaleContract instance;
 
+            ExecuteSync(out instance, customerID, null, contract);
+
+            return new AlibabaSaleContractActionResult { Result = instance.Result };
+
+        } // SaveApiCall
 	} // class EzServiceImplementation
 } // namespace

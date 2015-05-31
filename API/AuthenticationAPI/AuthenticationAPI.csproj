@@ -39,19 +39,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="connection-strings.xml" />
+    <Content Include="..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+    </Content>
     <Content Include="packages.config" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
+      <Link>Properties\CommonAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="App_Start\RequireHttpsAttribute.cs" />
     <Compile Include="App_Start\ValidateModelStateAttribute.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="AuthContext.cs" />
     <Compile Include="AuthRepository.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ContractsController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
     <Compile Include="Controllers\OrdersController.cs" />
     <Compile Include="Controllers\RefreshTokensController.cs" />
@@ -70,6 +76,7 @@
     <Compile Include="Providers\CustomRefreshTokenProvider.cs" />
     <Compile Include="Results\ChallengeResult.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Test_AuthorizedAPI-SaleContract.cs" />
     <Compile Include="Test_AuthorizedAPI.cs" />
   </ItemGroup>
   <ItemGroup>

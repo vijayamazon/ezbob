@@ -786,6 +786,9 @@
 		[OperationContract]
 		ActionMetaData SaveApiCall(ApiCallData data);
 
+	    [OperationContract]
+        AlibabaSaleContractActionResult SaleContract(int customerID, AlibabaContractDto contract);
+
 		[OperationContract]
 		ActionMetaData SilentAutomation(int customerID, int underwriterID);
 

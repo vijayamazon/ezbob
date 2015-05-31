@@ -12,7 +12,7 @@
         public virtual long AliId { get; set; }
         public virtual decimal? Freeze { get; set; }
         public virtual Customer Customer { get; set; }
-        public virtual long ContractId { get; set; }
+        public virtual long? ContractId { get; set; }
         public virtual string BussinessName { get; set; }
         public virtual string street1 { get; set; }
         public virtual string street2 { get; set; }
@@ -49,7 +49,6 @@
 
             Map(x => x.AliId);
             Map(x => x.Freeze);
-			Map(x => x.ContractId);
             Map(x => x.BussinessName);
             Map(x => x.street1);
             Map(x => x.street2);
@@ -66,6 +65,7 @@
             Map(x => x.ConfirmShippingDocAndAmount);
             Map(x => x.FinancingType);
             Map(x => x.ConfirmReleaseFunds);
+		    Map(x => x.ContractId);
 
             References(x => x.Customer, "CustomerId").LazyLoad().Cascade.None();
             

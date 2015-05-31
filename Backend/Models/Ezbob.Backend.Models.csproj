@@ -36,6 +36,7 @@
       <HintPath>..\..\Lib\3rdparty\Json.NET\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
@@ -67,6 +68,8 @@
     <Compile Include="CustomerManualAnnualizedRevenueModel.cs" />
     <Compile Include="ExperianTargetingRequest.cs" />
     <Compile Include="ExternalAPI\AlibabaAvailableCreditResult.cs" />
+    <Compile Include="ExternalAPI\AlibabaContractDto.cs" />
+    <Compile Include="ExternalAPI\AlibabaSaleContractResult.cs" />
     <Compile Include="ExternalAPI\ApiCallData.cs" />
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />

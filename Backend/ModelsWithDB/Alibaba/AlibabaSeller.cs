@@ -45,8 +45,7 @@
 		public string GoldSupplierFlag { get; set; }
 		[Length(100)]
 		public string TenureWithAlibaba { get; set; }
-		[Length(100)]
-		public string BusinessStartDate { get; set; }
+		public DateTime? BusinessStartDate { get; set; }
 		public int? Size { get; set; }
 		public int? suspiciousReportCountCounterfeitProduct { get; set; }
 		public int? suspiciousReportCountRestrictedProhibitedProduct { get; set; }

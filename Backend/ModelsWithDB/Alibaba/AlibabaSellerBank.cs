@@ -20,15 +20,14 @@
 		[Length(100)]
 		public string City { get; set; }
 		[Length(100)]
-		public int? State { get; set; }
+		public string State { get; set; }
 		[Length(100)]
 		public string Country { get; set; }
 		[Length(100)]
 		public string PostalCode { get; set; }
-		[Length(100)]
+        [Length(100)]
 		public string SwiftCode { get; set; }
-		[Length(100)]
-		public string AccountNumber { get; set; }
+		public int? AccountNumber { get; set; }
 		[Length(100)]
 		public string WireInstructions { get; set; }
 	}

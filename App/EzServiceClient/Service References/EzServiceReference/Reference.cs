@@ -189,6 +189,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.BoolActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LotteryActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyCaisDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.CompanyDataForCompanyScoreActionResult))]
@@ -420,6 +421,29 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public Ezbob.Backend.Models.ExternalAPI.AlibabaAvailableCreditResult Result {
+            get {
+                return this.ResultField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ResultField, value) != true)) {
+                    this.ResultField = value;
+                    this.RaisePropertyChanged("Result");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="AlibabaSaleContractActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class AlibabaSaleContractActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private Ezbob.Backend.Models.ExternalAPI.AlibabaSaleContractResult ResultField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public Ezbob.Backend.Models.ExternalAPI.AlibabaSaleContractResult Result {
             get {
                 return this.ResultField;
             }
@@ -3440,6 +3464,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveApiCall", ReplyAction="http://tempuri.org/IEzService/SaveApiCallResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveApiCallAsync(Ezbob.Backend.Models.ExternalAPI.ApiCallData data);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaleContract", ReplyAction="http://tempuri.org/IEzService/SaleContractResponse")]
+        ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult SaleContract(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaleContract", ReplyAction="http://tempuri.org/IEzService/SaleContractResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult> SaleContractAsync(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SilentAutomation", ReplyAction="http://tempuri.org/IEzService/SilentAutomationResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID);
         
@@ -4776,6 +4806,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveApiCallAsync(Ezbob.Backend.Models.ExternalAPI.ApiCallData data) {
             return base.Channel.SaveApiCallAsync(data);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult SaleContract(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract) {
+            return base.Channel.SaleContract(customerID, contract);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult> SaleContractAsync(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract) {
+            return base.Channel.SaleContractAsync(customerID, contract);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID) {
