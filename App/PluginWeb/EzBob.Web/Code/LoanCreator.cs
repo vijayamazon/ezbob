@@ -240,7 +240,10 @@
 				Log.Debug(nlModel.PacnetTransaction.ToString());
 				Log.Debug(nlModel.Loan.ToString());
 
-				this.m_oServiceClient.Instance.AddLoan(this._context.UserId, cus.Id, nlModel);
+				var nlLoanID = this.m_oServiceClient.Instance.AddLoan(this._context.UserId, cus.Id, nlModel);
+				
+				Log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoanID.Value, oldloanID); 
+
  			} catch (Exception ex) {
  				Log.Debug("Failed to save new loan {0}", ex);
  			}

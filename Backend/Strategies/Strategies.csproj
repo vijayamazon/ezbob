@@ -137,17 +137,18 @@
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />
-    <Compile Include="NewLoan\AddPayPointPayment.cs" />
-    <Compile Include="NewLoan\AddLoanSchedule.cs" />
     <Compile Include="NewLoan\AddFee.cs" />
     <Compile Include="NewLoan\AddLoanState.cs" />
     <Compile Include="NewLoan\AddRollover.cs" />
     <Compile Include="NewLoan\AddDecision.cs" />
     <Compile Include="NewLoan\AssignPaymentToLoan.cs" />
+    <Compile Include="NewLoan\AddPayment.cs" />
     <Compile Include="NewLoan\GetLastOffer.cs" />
     <Compile Include="NewLoan\AddOffer.cs" />
     <Compile Include="NewLoan\AddCashRequest.cs" />
+    <Compile Include="NewLoan\NL_ExceptionPaymentSave.cs" />
     <Compile Include="NewLoan\NL_ExceptionInputDataInvalid.cs" />
+    <Compile Include="NewLoan\NL_ExceptionRequiredDataNotFound.cs" />
     <Compile Include="NewLoan\NL_ExceptionOfferNotValid.cs" />
     <Compile Include="NewLoan\NL_Loader.cs" />
     <Compile Include="NewLoan\NL_ExceptionLoanExists.cs" />
@@ -466,10 +467,6 @@
     <ProjectReference Include="..\..\App\EzReporting\Reports\Reports.csproj">
       <Project>{fbd0f86b-fc06-418a-80a1-ada19e973a7e}</Project>
       <Name>Reports</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\App\EzServiceClient\EzServiceClient.csproj">
-      <Project>{A473E5C1-6385-4E43-B909-E9C228DE39DB}</Project>
-      <Name>EzServiceClient</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\App\EzService\EzServiceConfigurationLoader\EzServiceConfigurationLoader.csproj">
       <Project>{b030e475-eb48-463d-99de-160179cd5331}</Project>

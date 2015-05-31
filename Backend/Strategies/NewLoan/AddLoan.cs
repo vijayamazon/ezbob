@@ -15,9 +15,9 @@
 
 	public class AddLoan : AStrategy {
 
-		public AddLoan(int userID, int customerID, NL_Model nlModel) {
-			this.userID = userID;
-			this.customerID = customerID;
+		public AddLoan(NL_Model nlModel) {
+			this.userID = nlModel.UserID;
+			this.customerID = nlModel.CustomerID;
 			NLModel = nlModel;
 			Loader = new NL_Loader(NLModel);
 			this.emailToAddress = "elinar@ezbob.com";
@@ -27,10 +27,8 @@
 
 		public override string Name { get { return "AddLoan"; } }
 
-
 		//AddLoanOptions ??????????????
 		//var addLoanOptions = new AddLoanOptions(new NL_LoanOptions)
-
 
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		/// /// <exception cref="NL_ExceptionLoanExists">Condition. </exception>
@@ -42,7 +40,7 @@
 
 			string message;
 
-			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.customerID));
+			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.customerID), new QueryParameter("@Now", DateTime.UtcNow));
 
 			if (dataForLoan == null) {
 				message = string.Format("No valid offer found. Customer {0} ", this.customerID);
@@ -325,8 +323,7 @@
 
 		public NL_Loader Loader { get; private set; }
 		public NL_Model NLModel { get; private set; }
-
-
+		
 		private readonly string emailToAddress;
 		private readonly string	emailFromAddress;
 		private readonly string	emailFromName;

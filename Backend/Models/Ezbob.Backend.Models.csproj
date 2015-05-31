@@ -71,8 +71,6 @@
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MpModel.cs" />
-    <Compile Include="NewLoan\NL_LoanFullModel.cs" />
-    <Compile Include="NewLoan\NL_LoanScheduleModel.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="PropertyStatusModel.cs" />
     <Compile Include="CustomerDetailsModel.cs" />

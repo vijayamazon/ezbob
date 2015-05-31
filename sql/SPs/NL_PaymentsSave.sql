@@ -10,9 +10,9 @@ IF TYPE_ID('NL_PaymentsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_PaymentsList AS TABLE (
-	[PaymentMethodID] INT NOT NULL,
-	[PaymentStatusID] INT NOT NULL,
+	[PaymentMethodID] INT NOT NULL,	
 	[PaymentTime] DATETIME NOT NULL,
+	[Amount] DECIMAl(18,6) NOT NULL,
 	[IsActive] BIT NOT NULL,
 	[CreationTime] DATETIME NOT NULL,
 	[CreatedByUserID] INT NULL,
@@ -29,9 +29,9 @@ BEGIN
 	SET NOCOUNT ON;
 
 	INSERT INTO NL_Payments (
-		[PaymentMethodID],
-		[PaymentStatusID],
+		[PaymentMethodID],		
 		[PaymentTime],
+		[Amount],
 		[IsActive],
 		[CreationTime],
 		[CreatedByUserID],
@@ -39,9 +39,9 @@ BEGIN
 		[DeletedByUserID],
 		[Notes]
 	) SELECT
-		[PaymentMethodID],
-		[PaymentStatusID],
+		[PaymentMethodID],	
 		[PaymentTime],
+		[Amount],
 		[IsActive],
 		[CreationTime],
 		[CreatedByUserID],

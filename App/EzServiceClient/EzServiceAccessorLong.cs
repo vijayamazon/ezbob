@@ -3,7 +3,8 @@
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB;
+    using Ezbob.Backend.Models.NewLoan;
+    using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
 
@@ -80,6 +81,20 @@
             this.m_oServiceClient.Instance.WriteToServiceLog(package.In.CustomerID, package.In.CustomerID, package.In);
             return null;
         }
-	    private readonly ServiceClient m_oServiceClient;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="customerId"></param>
+		/// <param name="nlModel"></param>
+		/// <returns></returns>
+		public NL_Model AddPayment(NL_Model nlModel) {
+			// TODO
+			//this.m_oServiceClient.Instance.AddPayment(NL_Model nlModel);
+			return null;
+		}
+
+		private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

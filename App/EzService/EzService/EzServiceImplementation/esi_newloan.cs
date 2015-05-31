@@ -48,6 +48,8 @@
 			return stra.Offer;
 		}
 
+		
+
 		//public DateTimeActionResult ExampleMethod(int userID, int customerID) {
 		//	LoaderStrategy loaderStrategy;
 		//	Action<Loader> action = loader => loader.ExampleMethod(customerID);
@@ -65,13 +67,20 @@
 		//	return amd;
 		//} // ExampleOtherMethod
 
-		public IntActionResult AddLoan(int userID, int customerID, NL_Model loanModel) {
+		public IntActionResult AddLoan(NL_Model loanModel) {
 			AddLoan strategy;
-			var amd = ExecuteSync(out strategy, customerID, userID, userID, customerID, loanModel);
+			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
 			return new IntActionResult {
 				MetaData = amd,
 				Value = strategy.LoanID
 			};
 		}
+
+		public NL_Model AddPayment(NL_Model loanModel) {
+			AddPayment strategy;
+			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
+			return strategy.NLModel;
+		}
+
 	}
 }

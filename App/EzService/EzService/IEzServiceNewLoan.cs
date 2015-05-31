@@ -19,10 +19,10 @@
         NL_Offers GetLastOffer(int userID, int customerID);
 		
 		[OperationContract]
-		IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
+		IntActionResult AddLoanLegals(NL_LoanLegals loanLegals);
 
 		[OperationContract]
-		IntActionResult AddLoan(int userID, int customerID, NL_Model loanModel);
+		IntActionResult AddLoan(NL_Model loanModel);
 
 		//[OperationContract]
 		//DateTimeActionResult ExampleMethod(int userID, int customerID);

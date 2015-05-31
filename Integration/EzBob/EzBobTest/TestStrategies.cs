@@ -808,7 +808,7 @@
 				nlModel.PacnetTransactionStatus = "sdfgsdfgsdg"; // oldPacnetTransaction.Status.ToString();
 			}
 
-			var s = new AddLoan(customerID, customerID, nlModel);
+			var s = new AddLoan(nlModel);
 			try {
 				s.Execute();
 			} catch (Exception e) {

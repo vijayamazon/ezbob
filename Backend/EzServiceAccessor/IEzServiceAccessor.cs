@@ -1,6 +1,7 @@
 ﻿namespace EzServiceAccessor {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
@@ -27,6 +28,7 @@
 		/// if service log id provided than by it,
 		/// else if director id provided - last director check
 		/// else last customer check (by customer id)
+		/// 
 		/// </summary>
 		/// <param name="userId">Underwriter.Id</param>
 		/// <param name="customerId">Customer.Id</param>
@@ -45,5 +47,14 @@
 		CompanyDataForCreditBureau GetCompanyDataForCreditBureau(int underwriterId, string refNumber);
 
 		WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="nlModel"></param>
+		/// <returns></returns>
+		NL_Model AddPayment(NL_Model nlModel);
+
+
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

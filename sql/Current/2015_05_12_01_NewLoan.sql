@@ -421,23 +421,23 @@ CREATE TABLE [dbo].[NL_PacnetTransactionStatuses](
 END
 GO
 
-IF OBJECT_ID('NL_PaymentStatuses') IS NULL 
-BEGIN	
-CREATE TABLE [dbo].NL_PaymentStatuses(
-	[PaymentStatusID] [int] NOT NULL IDENTITY(1,1) ,
-	[PaymentStatus] [nvarchar] (60) NOT NULL,
-	[TimestampCounter] rowversion NOT NULL,		
- CONSTRAINT [PK_NL_PaymentStatuses] PRIMARY KEY CLUSTERED ([PaymentStatusID] ASC)
-) ;
-END
-GO
+--IF OBJECT_ID('NL_PaymentStatuses') IS NULL 
+--BEGIN	
+--CREATE TABLE [dbo].NL_PaymentStatuses(
+--	[PaymentStatusID] [int] NOT NULL IDENTITY(1,1) ,
+--	[PaymentStatus] [nvarchar] (60) NOT NULL,
+--	[TimestampCounter] rowversion NOT NULL,		
+-- CONSTRAINT [PK_NL_PaymentStatuses] PRIMARY KEY CLUSTERED ([PaymentStatusID] ASC)
+--) ;
+--END
+--GO
 	
 IF OBJECT_ID('NL_Payments') IS NULL 
 BEGIN	
 CREATE TABLE [dbo].[NL_Payments](
 	[PaymentID] [int] NOT NULL IDENTITY(1,1) ,
 	[PaymentMethodID] [int] NOT NULL,	
-	[PaymentStatusID] [int] NOT NULL,	
+	--[PaymentStatusID] [int] NOT NULL,	
 	[PaymentTime] [datetime] NOT NULL, 
 	[Amount] [decimal](18, 6) NULL,
 	[IsActive] [bit] NOT NULL,
@@ -462,7 +462,7 @@ CREATE TABLE [dbo].[NL_PaypointTransactions](
 	[Amount] [decimal](18, 6) NOT NULL,
 	[Notes] [nvarchar](max) NULL,
 	[PaypointTransactionStatusID] [int] NOT NULL,
-	[PaypointUniqID] [nvarchar](100) NULL,
+	[PaypointUniqID] [nvarchar](100) NOT NULL,
 	[PaypointCardID] [int] NOT NULL,
 	[IP] [nvarchar](32) NULL,
 	[TimestampCounter] rowversion NOT NULL,
@@ -817,10 +817,10 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
  ALTER TABLE [dbo].[NL_Payments]   ADD  CONSTRAINT [FK_NL_Payments_DeletedBySecurity_User] FOREIGN KEY([DeletedByUserID]) REFERENCES [dbo].[Security_User] ([UserID]) ;
 END
 GO
-IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_Payments_NL_PaymentStatuses') BEGIN
- ALTER TABLE [dbo].[NL_Payments] ADD CONSTRAINT FK_NL_Payments_NL_PaymentStatuses FOREIGN KEY([PaymentStatusID]) REFERENCES [dbo].[NL_PaymentStatuses] ([PaymentStatusID]) ;
-END
-GO
+--IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_Payments_NL_PaymentStatuses') BEGIN
+-- ALTER TABLE [dbo].[NL_Payments] ADD CONSTRAINT FK_NL_Payments_NL_PaymentStatuses FOREIGN KEY([PaymentStatusID]) REFERENCES [dbo].[NL_PaymentStatuses] ([PaymentStatusID]) ;
+--END
+--GO
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_PaypointTransactions_NL_PaypointTransactionStatuses') BEGIN
  ALTER TABLE [dbo].[NL_PaypointTransactions] ADD CONSTRAINT [FK_NL_PaypointTransactions_NL_PaypointTransactionStatuses] FOREIGN KEY([PaypointTransactionStatusID]) REFERENCES [dbo].[NL_PaypointTransactionStatuses] ([PaypointTransactionStatusID]) ;
@@ -1112,24 +1112,27 @@ UPDATE [dbo].[LoanAgreementTemplate] SET [TemplateTypeID] = TemplateType;
 END;
 
 -- populate [NL_PaymentStatuses] (enum PaymentStatus)
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'PaidOnTime') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('PaidOnTime');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Late') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Late');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Early') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Early');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'ChargeBack') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('ChargeBack');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'WrongPayment') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('WrongPayment');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'WriteOff') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('WriteOff');
-END;
+--IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'PaidOnTime') BEGIN
+--	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('PaidOnTime');
+--END;
+--IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Late') BEGIN
+--	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Late');
+--END;
+--IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Early') BEGIN
+--	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Early');
+--END;
+--IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'ChargeBack') BEGIN
+--	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('ChargeBack');
+--END;
+--IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'WrongPayment') BEGIN
+--	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('WrongPayment');
+--END;
+--IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'WriteOff') BEGIN
+--	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('WriteOff');
+--END;
+--IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'system-repay') BEGIN
+--	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('system-repay');
+--END;
 
 -- populate NL_PaypointTransactionStatuses (FROM customer)
 IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PaypointTransactionStatuses] WHERE TransactionStatus = 'Done') BEGIN
@@ -1138,6 +1141,11 @@ END;
 IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PaypointTransactionStatuses] WHERE TransactionStatus = 'Error') BEGIN
 	INSERT INTO [dbo].[NL_PaypointTransactionStatuses] (TransactionStatus) VALUES('Error');
 END;
+IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PaypointTransactionStatuses] WHERE TransactionStatus = 'Unknown') BEGIN
+	INSERT INTO [dbo].[NL_PaypointTransactionStatuses] (TransactionStatus) VALUES('Unknown');
+END;
+
+
 
 -- populate NL_PacnetTransactionStatuses (to customer)
 IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PacnetTransactionStatuses] WHERE TransactionStatus = 'InProgress') BEGIN

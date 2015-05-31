@@ -3,6 +3,9 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
+	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -30,7 +33,7 @@
 		/// Заплатить за кредит. Платёж может быть произвольный. Early, On time, Late.
 		/// Perform loan payment. Payment can be manual. Early, On time, Late.
 		/// </summary>
-		public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer", bool interestOnly = false, string sManualPaymentMethod = null) {
+		public virtual decimal PayLoan(Loan loan, string transId, decimal amount, string ip, DateTime? term = null, string description = "payment from customer", bool interestOnly = false, string sManualPaymentMethod = null, NL_Model nlModel = null) {
 			var paymentTime = term ?? DateTime.UtcNow;
 
 			var oldLoan = loan.Clone();
@@ -52,10 +55,37 @@
 			};
 
 			loan.AddTransaction(transactionItem);
-            
-            //TODO add payment to new payment table
-		    Log.InfoFormat("Add payment of {0} to loan {1}", amount, loan.Id);
-			// elina: TODO : get distribution of amount to loan schedules from new loan calculator ALoanCalculator.AssignPaymentToLoan (princpal, interest) and fees and save to DB (design doc: "PayPointCharger" page 13-15; “Manual payment – by Customer” page 19; )
+
+			// add payment to new payment table
+			//	Log.InfoFormat("Add payment of {0} to loan {1}", amount, loan.Id);
+			// elina: get distribution of amount to loan schedules from new loan calculator ALoanCalculator.AssignPaymentToLoan (princpal, interest) and fees and save to DB (design doc: "PayPointCharger" page 13-15; “Manual payment – by Customer” page 19; )
+
+			if (nlModel != null) {
+
+				if (nlModel.Payment == null)
+					nlModel.Payment = new NL_Payments();
+
+				nlModel.Payment.PaymentMethodID = this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod).Id; // [LoanTransactionMethod] 'Auto' ID 2
+				nlModel.Payment.PaymentTime = paymentTime;
+				nlModel.Payment.IsActive = true;
+				nlModel.Payment.Amount = amount;
+				nlModel.Payment.Notes = description;
+
+				if (nlModel.PaypointTransaction == null)
+					nlModel.PaypointTransaction = new NL_PaypointTransactions();
+
+				nlModel.PaypointTransaction.TransactionTime = paymentTime; //??
+				nlModel.PaypointTransaction.Amount = amount;
+				nlModel.PaypointTransaction.Notes = description;
+				nlModel.PaypointTransaction.PaypointUniqID = transId;
+				nlModel.PaypointTransaction.IP = ip;
+				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); //1 (Done) NL_PaypointTransactionStatuses
+				int userID = 0;
+				NL_Model nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
+				//	(1, customerId, isDirector ? directorId : (int?)null, null);
+
+				Log.Debug(nlPayment.Payment.ToString());
+			}
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
@@ -186,8 +216,7 @@
 
 				PayAllLoansForCustomer(customer, amount, transId, date, description, sManualPaymentMethod: sManualPaymentMethod);
 				newInterest = customer.Loans.Sum(l => l.Interest);
-			}
-			else if (type == "totalLate") {
+			} else if (type == "totalLate") {
 				rolloverWasPaid =
 					(from l in customer.Loans
 					 from s in l.Schedule
@@ -197,14 +226,12 @@
 				oldInterest = customer.Loans.Sum(l => l.Interest);
 				PayAllLateLoansForCustomer(customer, amount, transId, date, description, sManualPaymentMethod: sManualPaymentMethod);
 				newInterest = customer.Loans.Sum(l => l.Interest);
-			}
-			else if (paymentType == "nextInterest") {
+			} else if (paymentType == "nextInterest") {
 				oldInterest = 0;
 				var loan = customer.GetLoan(loanId);
 				PayLoan(loan, transId, amount, ip, date, description, true, sManualPaymentMethod: sManualPaymentMethod);
 				newInterest = 0;
-			}
-			else {
+			} else {
 				var loan = customer.GetLoan(loanId);
 				oldInterest = loan.Interest;
 				var rollover = (from s in loan.Schedule

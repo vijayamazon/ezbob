@@ -200,29 +200,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="AddLoanLegalsResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanLegalsResult" nillable="true" type="q19:IntActionResult" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="AddLoan">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
-        <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="loanModel" nillable="true" type="q20:NL_Model" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="AddLoanResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanResult" nillable="true" type="q21:IntActionResult" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+ 
   <xs:element name="UpdateLinkedHmrcPassword">
     <xs:complexType>
       <xs:sequence>

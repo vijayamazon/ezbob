@@ -44,6 +44,11 @@
 			return DB.Fill<NL_RepaymentIntervalTypes>("NL_RepaymentIntervalTypesLoad", CommandSpecies.StoredProcedure);
 		} // RepaymentIntervalTypes
 
+		// lookup data
+		public static List<NL_PaypointTransactionStatuses> PaypointTransactionStatuses() {
+			return DB.Fill<NL_PaypointTransactionStatuses>("NL_PaypointTransactionStatusesLoad", CommandSpecies.StoredProcedure);
+		}// PaypointTransactionStatuses
+
 
 		// delete this strategy later, use the method instead 
 		//public OfferForLoan OfferForLoan() { 
@@ -97,5 +102,9 @@
 
 		private NL_Model model;
 
-	} // class NL_Loader
+	}
+
+	
+
+// class NL_Loader
 }

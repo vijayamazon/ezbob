@@ -15,6 +15,8 @@
 
 		public int CustomerID { get; set; }
 
+		public int UserID { get; set; }
+
 		[DataMember]
 		public NL_FundTransfers FundTransfer { get; set; }
 
@@ -55,7 +57,23 @@
 		[DataMember]
 		public List<NL_LoanSchedulePayments> PaymentAssignedToScheduleItems { get; set; }
 
-		
+
+
+		// "Pay loan" 
+		[DataMember]
+		public string PaypointCardNo { get; set; }
+		[DataMember]
+		public string PaypointTransactionStatus { get; set; }
+		[DataMember]
+		public string PaymentStatus { get; set; }
+
+		[DataMember]
+		public NL_Payments Payment { get; set; }
+
+		[DataMember]
+		public NL_PaypointTransactions PaypointTransaction { get; set; }
+
+
 		/*// NL_OfferForLoan
 		[DataMember]
 		public int LoanLegalID { get; set; }
@@ -86,7 +104,7 @@
 		[DataMember]
 		public string DiscountPlan { get; set; }
 */
-		
+
 
 
 		// lookup objects
@@ -149,7 +167,7 @@
 		public int PaypointTransactionStatusID { get; set; }
 		[DataMember]
 		public DateTime PaypointTransactionTime { get; set; }
-	
+
 	}
 
 
