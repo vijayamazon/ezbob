@@ -7,6 +7,17 @@
 	using OfficeOpenXml.Style;
 
 	public static class ExcelRangeExt {
+		public static int SetCellTitle(this ExcelRange range, object oRaw) {
+			return SetCellValue(
+				range,
+				oRaw,
+				bIsBold: true,
+				bSetZebra: false,
+				oFontColour: ExcelWorksheetExt.ColumnTitleFgColour,
+				oBgColour: ExcelWorksheetExt.ColumnTitleBgColour
+			);
+		} // SetCellTitle
+
 		public static int SetCellValue(
 			this ExcelRange oCell,
 			object oRaw,
