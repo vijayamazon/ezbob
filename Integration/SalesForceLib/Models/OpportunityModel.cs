@@ -45,7 +45,7 @@
 		Resell,
 		[Description("Finish Loan")] //created when customer finishes to repay his loan
 		FinishLoan,
-		[Description("Paid 50% of the balance")]
+		[Description("50% repaid")]
 		FiftyPercentRepaid
 	}
 
