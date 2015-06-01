@@ -15,6 +15,7 @@
 	using NHibernate;
 	using ServiceClientProxy;
 	using log4net;
+	using ServiceClientProxy.EzServiceReference;
 
 	public class CustomerRelationsController : Controller {
 
@@ -80,13 +81,16 @@
 		[Transactional]
 		public JsonResult SaveEntry(string type, int action, int status, int? rank, string comment, int customerId, bool isBroker, string phoneNumber) {
 			try {
+				var actionItem = _crmActionsRepository.Get(action);
+				var statusItem = _crmStatusesRepository.Get(status);
+				var rankItem = rank.HasValue ? _crmRanksRepository.Get(rank.Value) : null;
 				var newEntry = new CustomerRelations {
 					CustomerId = customerId,
 					UserName = User.Identity.Name,
 					Type = type,
-					Action = _crmActionsRepository.Get(action),
-					Status = _crmStatusesRepository.Get(status),
-					Rank = rank.HasValue ? _crmRanksRepository.Get(rank.Value) : null,
+					Action = actionItem,
+					Status = statusItem,
+					Rank =  rankItem,
 					Comment = comment,
 					Timestamp = DateTime.UtcNow,
 					IsBroker = isBroker,
@@ -96,6 +100,20 @@
 				_customerRelationsRepository.SaveOrUpdate(newEntry);
 				_session.Flush();
 				_customerRelationStateRepository.SaveUpdateState(customerId, false, null, newEntry);
+
+				//Add SF activity
+				var customer = this.customerRepository.ReallyTryGet(customerId);
+				if (customer != null) {
+					this._serviceClient.Instance.SalesForceAddActivity(_context.UserId, customerId, new ActivityModel {
+						Description = comment,
+						Email = customer.Name,
+						StartDate = DateTime.UtcNow,
+						EndDate = DateTime.UtcNow,
+						IsOpportunity = false,
+						Originator = _context.User.Name,
+						Type = actionItem.Name,
+					});
+				}
 				return Json(new { success = true, error = "" });
 			}
 			catch (Exception e) {
@@ -312,6 +330,6 @@
 		private readonly ServiceClient _serviceClient;
 		private readonly IWorkplaceContext _context;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(CustomerRelationsController));
-
+	
 	} // class CustomerRelationsController
 } // namespace

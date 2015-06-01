@@ -30,12 +30,12 @@
 				customerRepository.ReallyTryGet(customerId) :
 				customerRepository.TryGetByEmail(id);
 
+			var model = new SalesForceModel();
 			if (customer == null) {
 				Log.WarnFormat("customer not found for email {0} returning empty result", id);
-				
-				return View();
+				return View(model);
 			}
-			var model = new SalesForceModel();
+			
 			model.FromCustomer(customer);
 
 			DateTime? lastCheckDate;
@@ -85,6 +85,5 @@
 		private readonly CustomerRelationsRepository customerRelationsRepository;
 		private readonly CompanyFilesMetaDataRepository companyFilesMetaDataRepository;
 		private readonly ILog Log = LogManager.GetLogger(typeof (SalesForceController));
-
 	}
 }
