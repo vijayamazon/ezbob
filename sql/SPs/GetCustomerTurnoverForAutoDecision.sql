@@ -1,11 +1,11 @@
-IF OBJECT_ID('GetCustomerTurnoverForAutoDecision') IS NULL
-	EXECUTE('CREATE PROCEDURE GetCustomerTurnoverForAutoDecision AS SELECT 1')
-GO
-
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
+GO
+
+IF OBJECT_ID('GetCustomerTurnoverForAutoDecision') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCustomerTurnoverForAutoDecision AS SELECT 1')
 GO
 
 ALTER PROCEDURE GetCustomerTurnoverForAutoDecision
@@ -15,6 +15,8 @@ ALTER PROCEDURE GetCustomerTurnoverForAutoDecision
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	------------------------------------------------------------------------------
 
 	DECLARE @eBay   UNIQUEIDENTIFIER = 'A7120CB7-4C93-459B-9901-0E95E7281B59'
 	DECLARE @Amazon UNIQUEIDENTIFIER = 'A4920125-411F-4BB9-A52D-27E8A00D0A3B'
@@ -33,13 +35,15 @@ BEGIN
 		IsPaymentAccount bit default NULL 
 	)
 
+	------------------------------------------------------------------------------
+
 	INSERT INTO #mp (MpID,LastUpdated,CurrentMonth )
 	SELECT
 		MpID = h.CustomerMarketPlaceId,
 		LastUpdated = MAX(h.UpdatingEnd),
 		CurrentMonth = dbo.udfMonthEnd(
-			dbo.udfGetLatestTotalsMonth(h.CustomerMarketPlaceId, @Now)
-		)	-- with "month tail" consideration	
+			dbo.udfGetLatestTotalsMonth(h.CustomerMarketPlaceId, @Now) -- with "month tail" consideration
+		)
 	FROM
 		dbo.MP_CustomerMarketPlaceUpdatingHistory h
 		INNER JOIN dbo.MP_CustomerMarketPlace m
@@ -65,7 +69,7 @@ BEGIN
 		h.CustomerMarketPlaceId
 
 	-- RELEVANT RECORDS NOT FOUND
-	IF (SELECT COUNT(*) FROM #mp ) = 0
+	IF (SELECT COUNT(*) FROM #mp) = 0
 	BEGIN
 		DROP TABLE #mp
 		RETURN
@@ -93,7 +97,7 @@ BEGIN
 		m.IsPaymentAccount,
 		RowNum = ROW_NUMBER() OVER (
 			PARTITION BY m.MpID, t.TheMonth
-			ORDER BY t.CustomerMarketPlaceUpdatingHistoryID DESC
+			ORDER BY t.CustomerMarketPlaceUpdatingHistoryID DESC, t.AggID DESC
 		)
 	INTO
 		#raw
