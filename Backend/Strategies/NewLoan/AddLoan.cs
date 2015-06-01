@@ -58,13 +58,14 @@
 
 			Log.Debug(dataForLoan.ToString());
 
+			 // check if "creadit available" is enough for this loan amount
 			// loan for the offer exists
-			SafeReader sr = DB.GetFirst(string.Format("SELECT LoanID FROM NL_Loans WHERE OfferID={0}", dataForLoan.OfferID));
+			/*SafeReader sr = DB.GetFirst(string.Format("SELECT LoanID FROM NL_Loans WHERE OfferID={0}", dataForLoan.OfferID));
 			if (sr["LoanID"] > 0) {
 				message = string.Format("Loan for customer {0} and offer {1} exists", NLModel.CustomerID, dataForLoan.OfferID);
 				Log.Alert(message);
 				throw new NL_ExceptionLoanExists(message);
-			}
+			}*/
 
 			// input validation
 			if (NLModel.Loan == null) {
@@ -116,7 +117,7 @@
 			 - fund transfer
 			 - pacnet transaction
 			 */
-			var pconn= DB.GetPersistent();
+
 			int fundTransferID = 0;
 			int setupFeeID = NL_Loader.LoanFeeTypes()
 				.First(s => s.LoanFeeType.StartsWith("SetupFee"))
@@ -126,6 +127,8 @@
 				.LoanStatusID;
 			List<NL_LoanSchedules> scheduleItems = new List<NL_LoanSchedules>();
 			NL_LoanFees setupFee = new NL_LoanFees();
+
+			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
 				NLModel.Loan.IssuedTime = DateTime.UtcNow;
@@ -215,9 +218,14 @@
 				};
 
 				if (dataForLoan.DiscountPlan != null) {
-					string[] stringSeparator = { "," };
-					char[] removeChar = { ',' };
-					string[] result = dataForLoan.DiscountPlan.Trim(removeChar).Split(stringSeparator, StringSplitOptions.None);
+					string[] stringSeparator = {
+							","
+						};
+					char[] removeChar = {
+							','
+						};
+					string[] result = dataForLoan.DiscountPlan.Trim(removeChar)
+						.Split(stringSeparator, StringSplitOptions.None);
 					decimal[] dpe = new decimal[result.Length];
 					var i = 0;
 					foreach (string s in result) {
@@ -268,6 +276,7 @@
 				// ReSharper disable once ThrowingSystemException
 				throw new Exception("Add NL loan failed: {0}", ex);
 			}
+
 
 			// 7. Pacnet transaction
 			try {

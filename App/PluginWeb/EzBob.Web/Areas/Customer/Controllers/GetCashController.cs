@@ -190,9 +190,7 @@
 				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);
 
 				Console.WriteLine("GetCashController: new loan created: " + nlModel.Loan.ToString());
-			
-				nlModel.PaypointCardNo = card_no;
-
+	
 				RebatePayment(amount, loan, trans_id, now, nlModel);
 
 				cus.PayPointErrorsCount = 0;

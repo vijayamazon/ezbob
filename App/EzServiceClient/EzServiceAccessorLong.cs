@@ -90,8 +90,10 @@
 		/// <returns></returns>
 		public NL_Model AddPayment(NL_Model nlModel) {
 			Console.WriteLine("========================!!!!!!!!!!!!ACCESSOR LONG!!!!!!!!!!!=============================");
-			this.m_oServiceClient.Instance.AddPayment(nlModel);
-			return null;
+			var result = this.m_oServiceClient.Instance.AddPayment(nlModel);
+			Console.WriteLine("result====>" + result.Payment.PaymentID);
+			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);
+			return result;
 		}
 	
 

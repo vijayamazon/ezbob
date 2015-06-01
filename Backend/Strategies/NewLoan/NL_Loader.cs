@@ -18,7 +18,7 @@
 			DB = Library.Instance.DB;
 			Log = Library.Instance.Log;
 
-			Console.WriteLine("DB=============" + DB.GetType());
+	//		Console.WriteLine("DB=============" + DB.GetType());
 
 		} // constructor
 
@@ -48,27 +48,7 @@
 		public static List<NL_PaypointTransactionStatuses> PaypointTransactionStatuses() {
 			return DB.Fill<NL_PaypointTransactionStatuses>("NL_PaypointTransactionStatusesLoad", CommandSpecies.StoredProcedure);
 		}// PaypointTransactionStatuses
-
-
-		// delete this strategy later, use the method instead 
-		//public OfferForLoan OfferForLoan() { 
-			
-		//	//OfferForLoan data = new OfferForLoan();
-		//	if (this.model.CustomerID == 0) {
-		//		Log.Debug("OfferForLoan: customerID {0} param is wrong", this.model.CustomerID);
-		//	}
-		//	Console.WriteLine("==" + this.model.CustomerID);
-		//	try {
-		//		return DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", this.model.CustomerID));
-		//	} catch (System.NullReferenceException nref) {
-		//		Console.WriteLine(nref);
-		//	} catch (System.Exception e) {
-		//		Log.Debug("NL_OfferForLoan: valid offer for customerID {0} not found", this.model.CustomerID);
-		//	}
-
-		//	return null;
-		//} // OfferForLoan
-
+		
 
 		// all those are referenced to the latest history ID
 

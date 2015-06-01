@@ -67,9 +67,9 @@
 				//	select ppc.Id from PayPointCard ppc where ppc.TransactionId = '6fc34f9a-422f-4643-b151-06a472bed9d7'
 				SafeReader sr = DB.GetFirst(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqID, NLModel.CustomerID));
 
-				Console.WriteLine(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqID, NLModel.CustomerID));
-				Console.WriteLine("========================" + sr.IsEmpty);
-				Console.WriteLine("========================" + sr.Count);
+				//Console.WriteLine(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqID, NLModel.CustomerID));
+				//Console.WriteLine("========================" + sr.IsEmpty);
+				//Console.WriteLine("========================" + sr.Count);
 				if (sr.IsEmpty) {
 					message = string.Format("Paypoint card for customer {0}, loanID {1}, PaypointUniqID {2} not found", NLModel.CustomerID, NLModel.Loan.LoanID, NLModel.PaypointTransaction.PaypointUniqID);
 					Log.Alert(message);
@@ -81,7 +81,7 @@
 				Console.WriteLine(NLModel.PaypointTransaction.ToString());
 			}
 
-			var pconn= DB.GetPersistent();
+			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
 

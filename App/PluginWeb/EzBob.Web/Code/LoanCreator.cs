@@ -244,7 +244,6 @@
 				Log.Debug(nlModel.Loan.ToString());
 
 				var nlLoan = this.m_oServiceClient.Instance.AddLoan(nlModel);
-	
 				nlModel.Loan.LoanID = nlLoan.Value;
 
 				Log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID); 

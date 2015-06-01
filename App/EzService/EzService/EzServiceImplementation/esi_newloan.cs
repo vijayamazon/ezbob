@@ -1,4 +1,5 @@
 ﻿namespace EzService.EzServiceImplementation {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -77,6 +78,7 @@
 		}
 
 		public NL_Model AddPayment(NL_Model loanModel) {
+			Console.WriteLine("++++++++++++++++++++++ESI++++++++++++++++++++++++++++");
 			AddPayment strategy;
 			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
 			return strategy.NLModel;

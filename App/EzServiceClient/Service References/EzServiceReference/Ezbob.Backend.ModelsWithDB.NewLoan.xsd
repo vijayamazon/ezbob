@@ -118,7 +118,7 @@
       <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanStatusID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="OfferID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="OfferID" type="xs:int" />
       <xs:element minOccurs="0" name="OldLoanID" type="xs:int" />
       <xs:element minOccurs="0" name="Position" type="xs:int" />
       <xs:element minOccurs="0" name="Refnum" nillable="true" type="xs:string" />
@@ -252,7 +252,7 @@
       <xs:element minOccurs="0" name="CreatedByUserID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DeletionTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
       <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PaymentID" type="xs:int" />
@@ -303,10 +303,10 @@
       <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
       <xs:element minOccurs="0" name="IP" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PaymentID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PaymentID" type="xs:int" />
       <xs:element minOccurs="0" name="PaypointCardID" type="xs:int" />
       <xs:element minOccurs="0" name="PaypointTransactionID" type="xs:int" />
-      <xs:element minOccurs="0" name="PaypointTransactionStatusID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="PaypointTransactionStatusID" type="xs:int" />
       <xs:element minOccurs="0" name="PaypointUniqID" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TransactionTime" type="xs:dateTime" />
     </xs:sequence>

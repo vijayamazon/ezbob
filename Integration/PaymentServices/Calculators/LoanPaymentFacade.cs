@@ -81,9 +81,9 @@
 				nlModel.PaypointTransaction.IP = ip;
 				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); 
 	
-				NL_Model nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
-
-				Log.Debug(nlPayment.Payment.ToString());
+				var nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
+				
+				//Log.Debug(nlPayment.Payment.ToString());
 			}
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();

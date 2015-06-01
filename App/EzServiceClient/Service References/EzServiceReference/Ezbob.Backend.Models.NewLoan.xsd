@@ -3,6 +3,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
   <xs:complexType name="NL_Model">
     <xs:sequence>
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="FundTransfer" nillable="true" type="q1:NL_FundTransfers" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Loan" nillable="true" type="q2:NL_Loans" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="LoanAgreements" nillable="true" type="q3:ArrayOfNL_LoanAgreements" />
@@ -44,6 +45,7 @@
       <xs:element minOccurs="0" name="SchedulePosition" type="xs:int" />
       <xs:element minOccurs="0" name="SchedulePrincipal" type="xs:decimal" />
       <xs:element minOccurs="0" name="SchedulePrincipalPaid" type="xs:decimal" />
+      <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="NL_Model" nillable="true" type="tns:NL_Model" />

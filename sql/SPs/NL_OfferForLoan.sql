@@ -28,6 +28,8 @@ BEGIN
 		RETURN NULL;
 	end;
 
+	--select @OfferID
+
 	declare @DiscountPlanID int;
 	declare @LoansCount int;
 
@@ -69,7 +71,7 @@ BEGIN
 		set @LoansCount = (select COUNT(LoanID) 
 							from NL_Loans l inner join NL_Offers o on o.OfferID = l.OfferID inner join NL_Decisions d on d.DecisionID=o.DecisionID 
 							inner join NL_CashRequests cr on cr.CashRequestID = d.CashRequestID 
-							where cr.CustomerID=@CustomerID group by LoanID);
+							where cr.CustomerID=@CustomerID);
 
 		if @LoansCount is not null begin
 			update #offerforloan set LoansCount = @LoansCount;
