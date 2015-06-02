@@ -35,7 +35,6 @@
 	/// </example>
 	/// </summary>
 	public class Harvester : SafeILog, Integration.ChannelGrabberAPI.IHarvester {
-
 		public static void SetBackdoorData(int nCustomerMarketplaceID, Hopper oHopper) {
 			if (oHopper == null)
 				return;
@@ -51,14 +50,14 @@
 		private static SortedDictionary<int, Hopper> ms_oBackdoorData;
 
 		private static Hopper FetchBackdoorData(int nCustomerMarketplaceID, ASafeLog log) {
-			log.Debug("Harvester: fetching backdoor data for marketplace {0}...", nCustomerMarketplaceID);
+			log.Debug("Harvester: fetching back-door data for marketplace {0}...", nCustomerMarketplaceID);
 
 			Hopper oBackdoorData;
 
 			lock (typeof(Harvester)) {
 				if ((ms_oBackdoorData == null) || !ms_oBackdoorData.ContainsKey(nCustomerMarketplaceID)) {
-					log.Debug("Harvester: no backdoor data found for marketplace {0}.", nCustomerMarketplaceID);
-					log.Debug("Harvester: fetching backdoor data for marketplace {0} complete.", nCustomerMarketplaceID);
+					log.Debug("Harvester: no back-door data found for marketplace {0}.", nCustomerMarketplaceID);
+					log.Debug("Harvester: fetching back-door data for marketplace {0} complete.", nCustomerMarketplaceID);
 					return null;
 				} // if
 
@@ -93,9 +92,9 @@
 		public virtual Hopper Hopper { get; private set; } // Hopper
 
 		/// <summary>
-		/// Initialises the Harvester.
+		/// Initializes the Harvester.
 		/// </summary>
-		/// <returns>true, if initialisation was successful; false, otherwise.</returns>
+		/// <returns>true, if initialization was successful; false, otherwise.</returns>
 		public virtual bool Init() {
 			Session = new HttpClient {
 				BaseAddress = new Uri("https://online.hmrc.gov.uk")
@@ -111,10 +110,14 @@
 		/// <summary>
 		/// Main harvest function. Logs in to hmrc.gov.uk and fetches data.
 		/// </summary>
-		/// <param name="bValidateCredentialsOnly">true to validate credentials only, false to login and download data.</param>
-		/// <param name="nCustomerMarketplaceID">Customer marketplace id for fetching backdoor data.</param>
+		/// <param name="bValidateCredentialsOnly">true to validate credentials only,
+		/// false to login and download data.</param>
+		/// <param name="nCustomerMarketplaceID">Customer marketplace id for fetching back-door data.</param>
 		public virtual void Run(bool bValidateCredentialsOnly, int nCustomerMarketplaceID) {
-			Debug("Harvester run mode: {0}.", bValidateCredentialsOnly ? "validate credentials only" : "login and download data");
+			Debug(
+				"Harvester run mode: {0}.",
+				bValidateCredentialsOnly ? "validate credentials only" : "login and download data"
+			);
 
 			try {
 				if (!bValidateCredentialsOnly) {
@@ -128,24 +131,24 @@
 
 					if (Password == VendorInfo.TopSecret) {
 						if (null != ObjectFactory.GetInstance<CustomerRepository>().TryGetByEmail(UserName)) {
-							Debug("This HMRC account for customer {0} was created from uploaded files, nothing to retrieve.", UserName);
+							Debug(
+								"This HMRC account for customer {0} was created from uploaded files, nothing to retrieve.",
+								UserName
+							);
 							return;
 						} // if HMRC login is customer's email
 					} // if the password is...
 				} // if do retrieve data
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new ApiException(e.Message, e);
 			} // try
 
 			try {
 				if (!IsLoggedIn)
 					Login(GetLoginRequestDetails(GetPage("")));
-			}
-			catch (InvalidCredentialsException) {
+			} catch (InvalidCredentialsException) {
 				throw;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new ApiException(e.Message, e);
 			} // try
 
@@ -168,8 +171,7 @@
 				FetchRtiTaxYears();
 
 				Debug("Harvester running is complete.");
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				Alert(e, "Exception caught during retrieving HMRC data.");
 				throw new ApiException(e.Message, e);
 			} // try
@@ -235,16 +237,16 @@
 			/// Validates all the details. Quietly completes on success. Throws HarvesterException on error.
 			/// </summary>
 			public void Validate() {
-				if (string.IsNullOrWhiteSpace(Method))
+				if (string.IsNullOrWhiteSpace(this.Method))
 					throw new HarvesterException("Login method is empty.");
 
-				if (string.IsNullOrWhiteSpace(Url))
+				if (string.IsNullOrWhiteSpace(this.Url))
 					throw new HarvesterException("Login URL is empty.");
 
-				if (string.IsNullOrWhiteSpace(UserNameField))
+				if (string.IsNullOrWhiteSpace(this.UserNameField))
 					throw new HarvesterException("Login user name field is empty.");
 
-				if (string.IsNullOrWhiteSpace(PasswordField))
+				if (string.IsNullOrWhiteSpace(this.PasswordField))
 					throw new HarvesterException("Login password is empty.");
 			} // Validate
 
@@ -255,7 +257,10 @@
 			public override string ToString() {
 				return string.Format(
 					"Login method: {0} {1}\nUser name field: {2}\nPassword field: {3}",
-					Method, Url, UserNameField, PasswordField
+					this.Method,
+					this.Url,
+					this.UserNameField,
+					this.PasswordField
 				);
 			} // ToString
 		} // LoginRequestDetails
@@ -265,30 +270,105 @@
 
 			HtmlDocument doc = GetPage("/home/services");
 
-			HtmlNode oLink =
-				doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVAT\"]")
-				??
-				doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVATMakeVATReturn\"]");
+			string sID;
+			string oldWayError;
+			string newWayError = null;
 
-			if (oLink == null)
-				throw new HarvesterException("Access VAT services link not found.");
+			GetUserVatIDOldFashionWay(doc, out sID, out oldWayError);
 
-			if (!oLink.Attributes.Contains("href"))
-				throw new HarvesterException("Access VAT services link has no HREF attrbute.");
+			if (sID == string.Empty)
+				GetUserVatIDNewFashionWay(doc, out sID, out newWayError);
 
-			string sHref = oLink.Attributes["href"].Value;
+			if (sID == string.Empty)
+				throw new HarvesterException((oldWayError + " " + newWayError).Trim());
 
-			if (!sHref.StartsWith("/vat/trader/"))
-				throw new HarvesterException("Failed to parse Access VAT services link.");
-
-			string sID = sHref.Substring(sHref.LastIndexOf('/') + 1);
-
-			Info("User VAT id is {0}.", sID);
+			Info("User VAT id is '{0}'.", sID);
 
 			ExtractTaxOfficeNumber(doc);
 
 			return sID;
 		} // GetUserVatID
+
+		private void GetUserVatIDOldFashionWay(HtmlDocument doc, out string sID, out string errorMsg) {
+			sID = string.Empty;
+			errorMsg = string.Empty;
+
+			HtmlNode oLink =
+				doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVAT\"]")
+				??
+				doc.DocumentNode.SelectSingleNode("//a[@id=\"LinkAccessVATMakeVATReturn\"]");
+
+			if (oLink == null) {
+				errorMsg = "Access VAT services link not found (old fashion way).";
+				Debug(errorMsg);
+				return;
+			} // if
+
+			const string href = "href";
+
+			if (!oLink.Attributes.Contains(href)) {
+				errorMsg = "Access VAT services link has no HREF attribute (old fashion way).";
+				Debug(errorMsg);
+				return;
+			} // if
+
+			string sHref = oLink.Attributes[href].Value;
+
+			if (!sHref.StartsWith("/vat/trader/")) {
+				errorMsg = "Failed to parse Access VAT services link (old fashion way).";
+				Debug(errorMsg);
+				return;
+			} // if
+
+			sID = sHref.Substring(sHref.LastIndexOf('/') + 1).Trim();
+
+			if (string.IsNullOrEmpty(sID)) {
+				errorMsg = "Could not extract user VAT id in an old fashion way.";
+				Debug(errorMsg);
+			} // if
+		} // GetUserVatIDOldFashionWay
+
+		private void GetUserVatIDNewFashionWay(HtmlDocument doc, out string sID, out string errorMsg) {
+			sID = string.Empty;
+			errorMsg = string.Empty;
+
+			HtmlNode section = doc.DocumentNode.SelectSingleNode("//section[@id=\"section-vat\"]");
+
+			if (section == null) {
+				errorMsg = "VAT section not found (new fashion way).";
+				Debug(errorMsg);
+				return;
+			} // if
+
+			if (!section.HasChildNodes) {
+				errorMsg = "VAT section is empty (new fashion way).";
+				Debug(errorMsg);
+				return;
+			} // if
+
+			HtmlNode para = section.Element("p");
+
+			if (para == null) {
+				errorMsg = "VAT id location not found (new fashion way).";
+				Debug(errorMsg);
+				return;
+			} // if
+
+			string innerText = (para.InnerText ?? string.Empty);
+
+			if (!innerText.StartsWith("VAT registration number")) {
+				errorMsg = "Failed to parse VAT id location (new fashion way).";
+				Debug(errorMsg);
+				return;
+			} // if
+
+			sID = innerText.Substring(innerText.IndexOf(':') + 1).Trim();
+
+			if (string.IsNullOrEmpty(sID)) {
+				errorMsg = "Could not extract user VAT id in a new fashion way.";
+				Debug(errorMsg);
+			} // if
+		} // GetUserVatIDNewFashionWay
 
 		/// <summary>
 		/// Logs in to the Field.
@@ -303,7 +383,11 @@
 				const int nMaxPasswordLength = 12;
 
 				if (sPassword.Length > nMaxPasswordLength) {
-					Warn("Supplied password ({0}) is too long, truncating to {1} characters.", new Encrypted(Password), nMaxPasswordLength);
+					Warn(
+						"Supplied password ({0}) is too long, truncating to {1} characters.",
+						new Encrypted(Password),
+						nMaxPasswordLength
+					);
 					sPassword = sPassword.Substring(0, nMaxPasswordLength);
 				} // if
 
@@ -364,21 +448,17 @@
 
 				default:
 					IsLoggedIn = false;
-					Error("Not logged in because of unexpeced page title in login response: {0}", oTitle.InnerText);
+					Error("Not logged in because of unexpected page title in login response: {0}", oTitle.InnerText);
 					Debug("{0}", sResponse);
 					throw new HarvesterException("Unexpected title in login response.");
 				} // switch
-			}
-			catch (InvalidCredentialsException) {
+			} catch (InvalidCredentialsException) {
 				throw;
-			}
-			catch (ClientHarvesterException) {
+			} catch (ClientHarvesterException) {
 				throw;
-			}
-			catch (HarvesterException) {
+			} catch (HarvesterException) {
 				throw;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				throw new HarvesterException("Failed to log in: " + e.Message, e);
 			} // try
 		} // Login
@@ -469,6 +549,7 @@
 		private HttpClient Session { get; set; }
 
 		private SortedDictionary<string, SheafMetaData> m_oVatReturnsMetaData;
+		private object vatReturnsMetaDataLock = new object();
 
 		/// <summary>
 		/// Fetches "VAT return" data and stores it in the Hopper.
@@ -477,7 +558,9 @@
 		private void VatReturns(string sUserVatID) {
 			Dictionary<string, string> oSubmittedReturns = LoadSubmittedReturnsList(sUserVatID);
 
-			m_oVatReturnsMetaData = new SortedDictionary<string, SheafMetaData>();
+			lock (this.vatReturnsMetaDataLock) {
+				this.m_oVatReturnsMetaData = new SortedDictionary<string, SheafMetaData>();
+			} // lock
 
 			if (oSubmittedReturns != null) {
 				var oTasks = new List<Task>();
@@ -496,23 +579,27 @@
 
 					Info("VatReturns: requesting {0}.html <- {1}", sBaseFileName, sHtmlUrl);
 
-					m_oVatReturnsMetaData[sHtmlUrl] = new SheafMetaData {
-						DataType = DataType.VatReturn,
-						FileType = FileType.Html,
-						BaseFileName = sBaseFileName,
-						Thrasher = new VatReturnThrasher(VerboseLogging, this)
-					};
+					lock (this.vatReturnsMetaDataLock) {
+						this.m_oVatReturnsMetaData[sHtmlUrl] = new SheafMetaData {
+							DataType = DataType.VatReturn,
+							FileType = FileType.Html,
+							BaseFileName = sBaseFileName,
+							Thrasher = new VatReturnThrasher(VerboseLogging, this)
+						};
+					} // lock
 
 					oTasks.Add(Session.GetAsync(sHtmlUrl).ContinueWith(GetFile));
 
 					Info("VatReturns: requesting {0}.pdf <- {1}", sBaseFileName, sPdfUrl);
 
-					m_oVatReturnsMetaData[sPdfUrl] = new SheafMetaData {
-						DataType = DataType.VatReturn,
-						FileType = FileType.Pdf,
-						BaseFileName = sBaseFileName,
-						Thrasher = null
-					};
+					lock (this.vatReturnsMetaDataLock) {
+						this.m_oVatReturnsMetaData[sPdfUrl] = new SheafMetaData {
+							DataType = DataType.VatReturn,
+							FileType = FileType.Pdf,
+							BaseFileName = sBaseFileName,
+							Thrasher = null
+						};
+					} // lock
 
 					oTasks.Add(Session.GetAsync(sPdfUrl).ContinueWith(GetFile));
 				} // for each file
@@ -526,7 +613,12 @@
 
 			HtmlDocument doc = GetPage("/vat-file/trader/" + sUserVatID + "/periods");
 
-			if (doc.DocumentNode.InnerText.IndexOf("There are no returns previously submitted available to view.") >= 0) {
+			bool hasNoPrevious = doc.DocumentNode.InnerText.IndexOf(
+				"There are no returns previously submitted available to view.",
+				StringComparison.InvariantCulture
+			) >= 0;
+
+			if (hasNoPrevious) {
 				Info("There are no returns previously submitted available to view.");
 				return null;
 			} // if
@@ -571,7 +663,11 @@
 				oRes[sHref] = oLink.InnerText;
 			} // for each row
 
-			Info("Loading list of submitted VAT returns complete, {0} file{1} found", oRes.Count, oRes.Count == 1 ? "" : "s");
+			Info(
+				"Loading list of submitted VAT returns complete, {0} file{1} found.",
+				oRes.Count,
+				oRes.Count == 1 ? "" : "s"
+			);
 
 			return oRes;
 		} // Load
@@ -588,8 +684,8 @@
 
 			var sUrl = response.RequestMessage.RequestUri.PathAndQuery;
 
-			lock (m_oVatReturnsMetaData) {
-				fi = m_oVatReturnsMetaData[sUrl];
+			lock (this.vatReturnsMetaDataLock) {
+				fi = this.m_oVatReturnsMetaData[sUrl];
 			} // lock
 
 			Info("GetFile: retrieving {0}", response.RequestMessage);
@@ -765,28 +861,44 @@
 
 				HtmlNodeCollection oCells = oTR.SelectNodes("th | td");
 
-				if ((oCells == null) || (oCells.Count < 1))
-					throw new HarvesterException(string.Format("Failed to fetch RTI tax years: no cells in row {0}", nRowNum));
+				if ((oCells == null) || (oCells.Count < 1)) {
+					throw new HarvesterException(string.Format(
+						"Failed to fetch RTI tax years: no cells in row {0}.",
+						nRowNum
+					));
+				} // if
 
 				if (bFirst) {
 					bFirst = false;
 
 					HtmlNode oCell = oCells[0];
 
-					if (!oCell.Attributes.Contains("colspan") || (oCell.Attributes["colspan"].Value != "3"))
-						throw new HarvesterException(string.Format("Failed to fetch RTI tax years: incorrect format in row {0}", nRowNum));
+					if (!oCell.Attributes.Contains("colspan") || (oCell.Attributes["colspan"].Value != "3")) {
+						throw new HarvesterException(string.Format(
+							"Failed to fetch RTI tax years: incorrect format in row {0}",
+							nRowNum
+						));
+					} // if
 
 					if (oCell.InnerText.Trim() == "Previous tax years")
 						break;
 
 					MatchCollection match = Regex.Matches(oCell.InnerText.Trim(), @"^Current tax year (\d\d)(\d\d)-(\d\d)$");
 
-					if (match.Count != 1)
-						throw new HarvesterException(string.Format("Failed to fetch RTI tax years: incorrect content in row {0}", nRowNum));
+					if (match.Count != 1) {
+						throw new HarvesterException(string.Format(
+							"Failed to fetch RTI tax years: incorrect content in row {0}.",
+							nRowNum
+						));
+					} // if
 
 					GroupCollection grp = match[0].Groups;
-					if (grp.Count != 4)
-						throw new HarvesterException(string.Format("Failed to fetch RTI tax years: unexpected content in row {0}", nRowNum));
+					if (grp.Count != 4) {
+						throw new HarvesterException(string.Format(
+							"Failed to fetch RTI tax years: unexpected content in row {0}.",
+							nRowNum
+						));
+					} // if
 
 					nFirstYear = Convert.ToInt32(grp[1].Value) * 100 + Convert.ToInt32(grp[2].Value);
 					nLastYear = Convert.ToInt32(grp[1].Value) * 100 + Convert.ToInt32(grp[3].Value);
@@ -802,17 +914,25 @@
 					if ((oCells.Count == 1) && (sFirstCell == "Previous tax years"))
 						break;
 
-					throw new HarvesterException(string.Format("Failed to fetch RTI tax years: unexpected number of cells in row {0}", nRowNum));
+					throw new HarvesterException(string.Format(
+						"Failed to fetch RTI tax years: unexpected number of cells in row {0}.",
+						nRowNum
+					));
 				} // if
 
 				if (sFirstCell == "Total")
 					break;
 
 				try {
-					data.Add(new RtiTaxYearRowData(sFirstCell, oCells[1].InnerText.Trim(), oCells[2].InnerText.Trim())); 
-				}
-				catch (Exception e) {
-					throw new HarvesterException(string.Format("Failed to fetch RTI tax years: unexpected format in row {0}", nRowNum), e);
+					data.Add(new RtiTaxYearRowData(sFirstCell, oCells[1].InnerText.Trim(), oCells[2].InnerText.Trim()));
+				} catch (Exception e) {
+					throw new HarvesterException(
+						string.Format(
+							"Failed to fetch RTI tax years: unexpected format in row {0}.",
+							nRowNum
+						),
+						e
+					);
 				} // try
 			} // for each row
 
@@ -836,7 +956,5 @@
 
 			Debug("Fetching RTI Tax Years complete.");
 		} // FetchRtiTaxYears
-
 	} // class Harvester
-
 } // namespace Ezbob.HmrcHarvester

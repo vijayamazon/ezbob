@@ -104,6 +104,7 @@
     <Compile Include="BaseTestFixtue.cs" />
     <Compile Include="PayPalTest.cs" />
     <Compile Include="TestAlibaba.cs" />
+    <Compile Include="TestHmrcHarvester.cs" />
     <Compile Include="TestIovation.cs" />
     <Compile Include="TestCallCredit.cs" />
     <Compile Include="TestCreditSafe.cs" />
