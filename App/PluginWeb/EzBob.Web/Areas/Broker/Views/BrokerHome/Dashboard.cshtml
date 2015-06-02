@@ -1,4 +1,5 @@
 ﻿@using ConfigManager
+@using EzBob.Web.Infrastructure
 <div class="page-section hide section-dashboard">
 	<div id="commission-view">@{ Html.RenderPartial("Commission"); }</div>
 
@@ -69,7 +70,7 @@
 		<h2 class="form_start">Marketing materials</h2>
 
 		<div class="value-group aka-table table-big box">
-			<div class="box-title aka-caption">Add ezbob logo to your web site and email</div>
+			<div class="box-title aka-caption">Add @UiCustomerOrigin.Get().Name logo to your web site and email</div>
 
 			<div class="aka-row logo-example">
 				<div class="aka-column">

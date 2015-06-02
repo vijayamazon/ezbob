@@ -3,22 +3,25 @@ IF OBJECT_ID('BrokerLoadMarketingFiles') IS NULL
 GO
 
 ALTER PROCEDURE BrokerLoadMarketingFiles
+@OriginID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
 
 	SELECT
-		BrokerMarketingFileID AS ID,
-		FileID,
-		FileName,
-		DisplayName,
-		MimeType,
-		SortPosition
+		f.BrokerMarketingFileID AS ID,
+		f.FileID,
+		f.FileName,
+		f.DisplayName,
+		f.MimeType,
+		f.SortPosition
 	FROM
-		BrokerMarketingFile
+		BrokerMarketingFile f
 	WHERE
-		IsActive = 1
+		f.IsActive = 1
+		AND
+		f.OriginID = @OriginID
 	ORDER BY
-		SortPosition
+		f.SortPosition
 END
 GO

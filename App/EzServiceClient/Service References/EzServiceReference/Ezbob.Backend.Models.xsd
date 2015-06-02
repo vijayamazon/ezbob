@@ -168,6 +168,7 @@
       <xs:element minOccurs="0" name="CurrentTermsID" type="xs:int" />
       <xs:element minOccurs="0" name="CurrentTextID" type="xs:int" />
       <xs:element minOccurs="0" name="ErrorMsg" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="FrontendSite" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LicenseNumber" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="LinkedBank" type="xs:boolean" />
       <xs:element minOccurs="0" name="LotteryCode" nillable="true" type="xs:string" />

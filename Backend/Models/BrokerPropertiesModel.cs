@@ -81,6 +81,9 @@
 		[DataMember]
 		public string Origin { get; set; }
 
+		[DataMember]
+		public string FrontendSite { get; set; }
+
 		public override string ToString() {
 			return string.Format(
 @"
@@ -102,6 +105,7 @@
 	CommissionAmount: {15}
 	Origin ID: {16}
 	Origin: {17}
+	Front-end site: {18}
 ",
 				BrokerID,
 				BrokerName,
@@ -120,7 +124,8 @@
 				ApprovedAmount,
 				CommissionAmount,
 				OriginID,
-				Origin
+				Origin,
+				FrontendSite
 			);
 		} // ToString
 	} // class BrokerProperties

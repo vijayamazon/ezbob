@@ -343,7 +343,7 @@
 			try {
 				BrokerLoadMarketingFiles oInstance;
 
-				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, originID);
 
 				if (oMetaData.Status == ActionStatus.Done)
 					oResult.Files = oInstance.Files.ToArray();

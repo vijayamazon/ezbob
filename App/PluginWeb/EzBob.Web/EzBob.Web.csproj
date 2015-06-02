@@ -179,6 +179,7 @@
     <Compile Include="Areas\Broker\Controllers\BrokerHomeController.cs" />
     <Compile Include="Areas\Broker\Controllers\ABrokerBaseController.cs" />
     <Compile Include="Areas\Broker\Controllers\BrokerLotteryController.cs" />
+    <Compile Include="Areas\Broker\Controllers\Helpers\MarketingFiles.cs" />
     <Compile Include="Areas\Broker\Models\BrokerSignupModel.cs" />
     <Compile Include="Areas\Broker\Models\BrokerHomeModel.cs" />
     <Compile Include="Areas\Broker\Models\GetInstantOfferModel.cs" />
@@ -919,6 +920,7 @@
     <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards_Old_Do_NOT_AppendHere.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\Header.cshtml" />
+    <Content Include="Areas\Broker\Files\everline.credit.file.release.and.consent.doc" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

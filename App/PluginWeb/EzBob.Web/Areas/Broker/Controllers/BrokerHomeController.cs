@@ -7,6 +7,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Utils.MimeTypes;
+	using EzBob.Web.Areas.Broker.Controllers.Helpers;
 	using EzBob.Web.Areas.Broker.Models;
 	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
@@ -865,7 +866,7 @@
 
 			string sFileName = fid.Trim();
 
-			var oFiles = new MarketingFiles(this.m_oServiceClient);
+			var oFiles = new MarketingFiles(this.m_oServiceClient, UiCustomerOrigin.Get().CustomerOriginID);
 
 			ms_oLog.Debug("Broker download file request: file with id {0}.", sFileName);
 

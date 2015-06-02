@@ -77,8 +77,10 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;
 
+		console.log('broker props', oProps);
+
 		var oSampleLink = function (sSourceRef, sImagePath, sNewLine, nWidth, nHeight) {
-			return '<a target=_blank href="http://www.ezbob.com?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
+			return '<a target=_blank href="' + oProps.FrontendSite + '?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
 				'\t<img src="' + sImagePath + '" ' +
 				'width=' + nWidth + ' height=' + nHeight +
 				' alt="business loans">' + sNewLine +
@@ -107,7 +109,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 						return '<a href="mailto:' + oFieldValue + '">' + oFieldValue + '</a>';
 
 					case 'SourceRef':
-						return '<a target=_blank href="http://www.ezbob.com?sourceref=' + oFieldValue + '" rel="nofollow">http://www.ezbob.com?sourceref=' + oFieldValue + '</a>';
+						return '<a target=_blank href="' + oProps.FrontendSite + '?sourceref=' + oFieldValue + '" rel="nofollow">' + oProps.FrontendSite + '?sourceref=' + oFieldValue + '</a>';
 				} // switch
 
 				if (sFieldName.indexOf('SourceRef') !== 0)

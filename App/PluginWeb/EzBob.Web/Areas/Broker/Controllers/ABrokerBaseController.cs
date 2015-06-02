@@ -9,7 +9,6 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
 
 	public abstract class ABrokerBaseController : Controller {
 		static ABrokerBaseController() {
@@ -207,44 +206,5 @@
 		} // SignedTermsBrokerForJsonResult
 
 		// ReSharper restore InconsistentNaming
-
-		protected class MarketingFiles {
-			public MarketingFiles(ServiceClient oServiceClient) {
-				IEnumerable<FileDescription> oFiles = Load(oServiceClient);
-
-				m_oAlphabetical = new SortedDictionary<string, FileDescription>();
-
-				foreach (FileDescription fd in oFiles)
-					m_oAlphabetical[fd.FileID] = fd;
-			} // constructor
-
-			public FileDescription Find(string sKey) {
-				if (m_oAlphabetical == null)
-					return null;
-
-				return m_oAlphabetical.ContainsKey(sKey) ? m_oAlphabetical[sKey] : null;
-			} // Find
-
-			private readonly SortedDictionary<string, FileDescription> m_oAlphabetical;
-
-			private IEnumerable<FileDescription> Load(ServiceClient oServiceClient) {
-				ms_oLog.Debug("Loading broker marketing files...");
-
-				BrokerStaticDataActionResult flar = null;
-
-				try {
-					flar = oServiceClient.Instance.BrokerLoadStaticData(true, 0); // OriginID is not used (it is files only).
-				}
-				catch (Exception e) {
-					ms_oLog.Alert(e, "Failed to load broker marketing files.");
-				} // try
-
-				FileDescription[] oResult = (flar == null ? null : flar.Files) ?? new FileDescription[0];
-
-				ms_oLog.Debug("Loading broker marketing files complete, {0} file(s) loaded.", oResult.Length);
-
-				return oResult;
-			} // Load
-		} // class MarketingFiles
 	} // class ABrokerBaseController
 } // namespace

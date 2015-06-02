@@ -5,9 +5,8 @@
 	using Ezbob.Logger;
 
 	public class BrokerLoadMarketingFiles : AStrategy {
-
-		public BrokerLoadMarketingFiles() {
-			m_oSp = new SpBrokerLoadMarketingFiles(DB, Log);
+		public BrokerLoadMarketingFiles(int originID) {
+			m_oSp = new SpBrokerLoadMarketingFiles(DB, Log) { OriginID = originID, };
 			Files = new List<FileDescription>();
 		} // constructor
 
@@ -26,10 +25,11 @@
 		private class SpBrokerLoadMarketingFiles : AStoredProc {
 			public SpBrokerLoadMarketingFiles(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {} // constructor
 
+			public int OriginID { get; set; }
+
 			public override bool HasValidParameters() {
-				return true;
+				return OriginID > 0;
 			} // HasValidParameters
 		} // class SpBrokerLoadMarketingFiles
-
 	} // class BrokerLoadMarketingFiles
 } // namespace Ezbob.Backend.Strategies.Broker
