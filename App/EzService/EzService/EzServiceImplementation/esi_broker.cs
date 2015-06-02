@@ -331,7 +331,7 @@
 			return oMetaData;
 		} // BrokerUpdatePassword
 
-		public BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly) {
+		public BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly, int originID) {
 			var oResult = new BrokerStaticDataActionResult {
 				MaxPerNumber = 3,
 				MaxPerPage = 10,
@@ -358,7 +358,7 @@
 			try {
 				BrokerLoadCurrentTerms oInstance;
 
-				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null);
+				ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, originID);
 
 				if (oMetaData.Status == ActionStatus.Done) {
 					oResult.Terms = oInstance.Terms;

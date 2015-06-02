@@ -78,11 +78,13 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT TOP 1
-		@BrokerTermsID = BrokerTermsID
+		@BrokerTermsID = bt.BrokerTermsID
 	FROM
-		BrokerTerms
+		BrokerTerms bt
+	WHERE
+		bt.OriginID = @BrokerOriginID
 	ORDER BY
-		DateAdded DESC
+		bt.DateAdded DESC
 
 	------------------------------------------------------------------------------
 

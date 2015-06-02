@@ -2,9 +2,10 @@
 	using Ezbob.Database;
 
 	public class BrokerLoadCurrentTerms : AStrategy {
-		public BrokerLoadCurrentTerms() {
+		public BrokerLoadCurrentTerms(int originID) {
 			ID = 0;
 			Terms = "";
+			this.originID = originID;
 		} // constructor
 
 		public override string Name {
@@ -12,19 +13,22 @@
 		} // Name
 
 		public override void Execute() {
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					ID = sr["BrokerTermsID"];
-					Terms = sr["BrokerTerms"];
-					return ActionResult.SkipAll;
-				},
+			SafeReader sr = DB.GetFirst(
 				"BrokerLoadCurrentTerms",
-				CommandSpecies.StoredProcedure
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@OriginID", this.originID)
 			);
+
+			if (!sr.IsEmpty) {
+				ID = sr["BrokerTermsID"];
+				Terms = sr["BrokerTerms"];
+			} // if
 		} // Execute
 
 		public string Terms { get; private set; } // Terms
 
 		public int ID { get; private set; } // ID
+
+		private readonly int originID;
 	} // class BrokerLoadCurrentTerms
 } // namespace Ezbob.Backend.Strategies.Broker

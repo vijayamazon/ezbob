@@ -3422,10 +3422,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.StringListActionResult> BrokerLoadSignedTermsAsync(string sContactEmail);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerLoadStaticData", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerLoadStaticDataResponse")]
-        ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly);
+        ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly, int originID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerLoadStaticData", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerLoadStaticDataResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly, int originID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerLogin", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerLoginResponse")]
         ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID);
@@ -4767,12 +4767,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BrokerLoadSignedTermsAsync(sContactEmail);
         }
         
-        public ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly) {
-            return base.Channel.BrokerLoadStaticData(bLoadFilesOnly);
+        public ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult BrokerLoadStaticData(bool bLoadFilesOnly, int originID) {
+            return base.Channel.BrokerLoadStaticData(bLoadFilesOnly, originID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly) {
-            return base.Channel.BrokerLoadStaticDataAsync(bLoadFilesOnly);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BrokerStaticDataActionResult> BrokerLoadStaticDataAsync(bool bLoadFilesOnly, int originID) {
+            return base.Channel.BrokerLoadStaticDataAsync(bLoadFilesOnly, originID);
         }
         
         public ServiceClientProxy.EzServiceReference.BrokerPropertiesActionResult BrokerLogin(string sEmail, Ezbob.Backend.Models.Password oPassword, string promotionName, System.Nullable<System.DateTime> promotionPageVisitTime, int uiOriginID) {

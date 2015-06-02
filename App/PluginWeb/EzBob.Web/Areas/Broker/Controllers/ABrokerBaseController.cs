@@ -179,8 +179,11 @@
 		} // LeadDetailsBrokerForJsonResult
 
 		public class FileListBrokerForJsonResult : BrokerForJsonResult {
-			public FileListBrokerForJsonResult(string sErrorMsg = "", bool? bExplicitSuccess = null, BrokerCustomerFile[] oFileList = null)
-				: base(sErrorMsg, bExplicitSuccess) {
+			public FileListBrokerForJsonResult(
+				string sErrorMsg = "",
+				bool? bExplicitSuccess = null,
+				BrokerCustomerFile[] oFileList = null
+			) : base(sErrorMsg, bExplicitSuccess) {
 				file_list = oFileList ?? new BrokerCustomerFile[0];
 			} // constructor
 
@@ -230,7 +233,7 @@
 				BrokerStaticDataActionResult flar = null;
 
 				try {
-					flar = oServiceClient.Instance.BrokerLoadStaticData(true);
+					flar = oServiceClient.Instance.BrokerLoadStaticData(true, 0); // OriginID is not used (it is files only).
 				}
 				catch (Exception e) {
 					ms_oLog.Alert(e, "Failed to load broker marketing files.");
