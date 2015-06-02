@@ -1,4 +1,9 @@
-﻿<div class="page-section hide section-signup">
+﻿@using EZBob.DatabaseLib.Model.Database
+@{
+	CustomerOrigin origin = ViewBag.CustomerOrigin;
+	string privacyUrl = (origin.FrontendSite + "/privacy-and-cookie") + (origin.IsEverline() ? "-policy" : "s");
+}
+<div class="page-section hide section-signup">
 	<form class="signup-form broker-form" novalidate="novalidate">
 		@{ int nSignupTabIdx = 1; }
 		<h2 class="form-start">Create broker account</h2>
@@ -128,12 +133,12 @@
 		<div class="form_field_container">
 			<div class="form_read_and_accept">
 				<input id="AgreeToTerms" name="AgreeToTerms" type="checkbox" value="accepted-terms" ui-event-control-id="broker:signup-agree-to-terms" />
-				<label for="AgreeToTerms">I have read and accept the ezbob <a href="#" class="show-terms-and-conditions">terms and conditions</a></label>
+				<label for="AgreeToTerms">I have read and accept the @origin.Name <a href="#" class="show-terms-and-conditions">terms and conditions</a></label>
 			</div>
 
 			<div class="form_read_and_accept">
 				<input id="AgreeToPrivacyPolicy" name="AgreeToPrivacyPolicy" type="checkbox" value="accepted-privacy-policy" ui-event-control-id="broker:signup-agree-to-privacy-policy" />
-				<label for="AgreeToPrivacyPolicy">I have read and accept the ezbob <a target="_blank" href="http://www.ezbob.com/privacy-and-cookies">privacy policy</a></label>
+				<label for="AgreeToPrivacyPolicy">I have read and accept the @origin.Name <a target="_blank" href="@privacyUrl">privacy policy</a></label>
 			</div>
 		</div>
 

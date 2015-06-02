@@ -2,7 +2,7 @@
 EzBob.Broker = EzBob.Broker || {};
 
 EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
-	initialize: function() {
+	initialize: function () {
 		EzBob.Broker.SignupView.__super__.initialize.apply(this, arguments);
 
 		this.$el = $('.section-signup');
@@ -30,7 +30,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		EzBob.App.on('brkr:signup-with-captcha', _.bind(this.switchToCaptcha, this));
 	}, // initialize
 
-	events: function() {
+	events: function () {
 		var evt = EzBob.Broker.SignupView.__super__.events.apply(this, arguments);
 
 		evt['click .show-terms-and-conditions'] = 'showConsent';
@@ -40,11 +40,11 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		return evt;
 	}, // events
 
-	switchToCaptcha: function() {
+	switchToCaptcha: function () {
 		this.trigger('show-captcha');
 	}, // switchToCaptcha
 
-	changeFCARegisered: function(e) {
+	changeFCARegisered: function (e) {
 		var isFcaRegistered = $(e.currentTarget).is(':checked');
 
 		$(e.currentTarget).val(isFcaRegistered);
@@ -56,7 +56,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.inputChanged();
 	}, // changeFCARegisered
 
-	clear: function() {
+	clear: function () {
 		EzBob.Broker.SignupView.__super__.clear.apply(this, arguments);
 
 		this.$el.find(
@@ -69,16 +69,16 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 		this.inputChanged();
 	}, // clear
 
-	onSubmit: function(event) {
+	onSubmit: function (event) {
 		var sEmail = this.$el.find('#ContactEmail').val();
 
 		var oData = this.$el.find('form').serializeArray();
 
-		var amt = _.find(oData, function(d) { return d.name === 'EstimatedMonthlyClientAmount'; });
+		var amt = _.find(oData, function (d) { return d.name === 'EstimatedMonthlyClientAmount'; });
 		if (amt)
 			amt.value = this.$el.find('#EstimatedMonthlyClientAmount').autoNumericGet();
 
-		var fws = _.find(oData, function(d) { return d.name === 'FirmWebSite'; });
+		var fws = _.find(oData, function (d) { return d.name === 'FirmWebSite'; });
 		if (fws && !/^https?:\/\//.test(fws.value))
 			fws.value = 'http://' + fws.value;
 
@@ -91,7 +91,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 
 		var self = this;
 
-		oRequest.success(function(res) {
+		oRequest.success(function (res) {
 			UnBlockUi();
 
 			if (res.success) {
@@ -111,17 +111,17 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			self.setSubmitEnabled(true);
 		}); // on success
 
-		oRequest.fail(function() {
+		oRequest.fail(function () {
 			UnBlockUi();
 			self.setSubmitEnabled(true);
 			EzBob.App.trigger('error', 'Failed to sign up. Please retry.');
 		});
 	}, // onSubmit
 
-	onRender: function() {
+	onRender: function () {
 		EzBob.Broker.SignupView.__super__.onRender.apply(this, arguments);
 		$('body').removeClass('broker-dashboard');
-		
+
 		this.$el.find('#EstimatedMonthlyClientAmount').moneyFormat();
 
 		this.$el.find('.phonenumber').numericOnly(11);
@@ -133,38 +133,37 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 			EzBob.App.trigger('brkr:signup-with-captcha');
 	}, // onRender
 
-	onFocus: function() {
+	onFocus: function () {
 		EzBob.Broker.SignupView.__super__.onFocus.apply(this, arguments);
 
 		this.$el.find('#FirmName').focus();
 	}, // onFocus
 
-	showConsent: function(event) {
-	    event.preventDefault();
-	    event.stopPropagation();
+	showConsent: function (event) {
+		event.preventDefault();
+		event.stopPropagation();
 
-	    $('#broker-terms-and-conditions').dialog({
-	        modal: true,
+		$('#broker-terms-and-conditions').dialog({
+			modal: true,
 
-	        width: 800,
-	        height: 600,
+			width: 800,
+			height: 600,
 
-	        buttons: {
-	            Close:
-	            {
-	                text: 'Close',
-	                'class': 'button btn-green',
-	                click: function () {
-	                    $(this).dialog("close");
-	                }
-	            }, // close button
+			buttons: {
+				Close: {
+					text: 'Close',
+					'class': 'button btn-green',
+					click: function () {
+						$(this).dialog("close");
+					},
+				}, // close button
 			}, // buttons
 		});
 
 		return false;
 	}, // showConsent
 
-	initValidatorCfg: function() {
+	initValidatorCfg: function () {
 		var passPolicy = { required: true, minlength: 6, maxlength: 255 };
 
 		var passPolicyText = EzBob.dbStrings.PasswordPolicyCheck;
@@ -192,7 +191,7 @@ EzBob.Broker.SignupView = EzBob.Broker.MobilePhoneView.extend({
 				EstimatedMonthlyAppCount: { required: true, maxlength: 6, regex: '^[1-9]\\d*', },
 				AgreeToTerms: { required: true, },
 				AgreeToPrivacyPolicy: { required: true, },
-				LicenseNumber: { required:true, maxlength: 50 }
+				LicenseNumber: { required: true, maxlength: 50 }
 			},
 
 			messages: {

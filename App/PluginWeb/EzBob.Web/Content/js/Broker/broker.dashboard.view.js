@@ -77,8 +77,6 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;
 
-		console.log('broker props', oProps);
-
 		var oSampleLink = function (sSourceRef, sImagePath, sNewLine, nWidth, nHeight) {
 			return '<a target=_blank href="' + oProps.FrontendSite + '?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
 				'\t<img src="' + sImagePath + '" ' +
