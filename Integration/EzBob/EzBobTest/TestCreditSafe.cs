@@ -9,6 +9,7 @@
     using EzServiceAccessor;
     using EzServiceShortcut;
     using StructureMap;
+    using Ezbob.Backend.Strategies.CreditSafe;
 
     [TestFixture]
     public class TestCreditSafe : BaseTest
@@ -45,7 +46,8 @@
 
             //CreditSafeLtdGetData test = new CreditSafeLtdGetData();
             //test.LtdGetData("asd");
-
+            var test = new ServiceLogCreditSafeNonLtd(12614);
+            test.Execute();
 
         }
 

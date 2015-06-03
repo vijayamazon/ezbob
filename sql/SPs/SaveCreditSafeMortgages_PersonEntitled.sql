@@ -11,7 +11,7 @@ GO
 
 CREATE TYPE CreditSafeMortgages_PersonEntitledList AS TABLE (
 	CreditSafeMortgagesID BIGINT NULL,
-	Name NVARCHAR(100) NULL
+	Name NVARCHAR(500) NULL
 )
 GO
 
