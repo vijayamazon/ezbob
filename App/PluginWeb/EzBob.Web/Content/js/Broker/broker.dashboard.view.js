@@ -77,11 +77,15 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 		if (!this.router.isMyBroker(oProps)) // e.g. not yet loaded
 			return;
 
-		var oSampleLink = function (sSourceRef, sImagePath, sNewLine, nWidth, nHeight) {
-			return '<a target=_blank href="' + oProps.FrontendSite + '?sourceref=' + sSourceRef + '" rel="nofollow">' + sNewLine +
-				'\t<img src="' + sImagePath + '" ' +
+		var oSampleLink = function (sSourceRef, nWidth, nHeight) {
+			var imagePath = oProps.Origin === 'ezbob'
+				? 'https://www.ezbob.com/brokers/logos/ezbob-logo-200x83px.png'
+				: 'https://www.everline.com/app/uploads/brokers/logos/Everline-primary-logo-200x83px.png';
+
+			return '<a target=_blank href="' + oProps.FrontendSite + '?sourceref=' + sSourceRef + '" rel="nofollow">' +
+				'\t<img src="' + imagePath + '" ' +
 				'width=' + nWidth + ' height=' + nHeight +
-				' alt="business loans">' + sNewLine +
+				' alt="business loans">' +
 				'</a>';
 		};
 
@@ -115,11 +119,7 @@ EzBob.Broker.DashboardView = EzBob.Broker.BaseView.extend({
 
 				var aryMatch = /^SourceRefTo(.{4})_(\d+)x(\d+)$/.exec(sFieldName);
 
-				return oSampleLink(oFieldValue,
-					(aryMatch[1] === 'Text' ? "http://www.ezbob.com/wp-content/themes/ezbob-new/images/new-ezbob-logo.png" : "/Content/img/ezbob-logo-2014.png"),
-					(aryMatch[1] === 'Text' ? '\n' : ''),
-					parseInt(aryMatch[2], 10),
-					parseInt(aryMatch[3], 10));
+				return oSampleLink(oFieldValue, parseInt(aryMatch[2], 10), parseInt(aryMatch[3], 10));
 			}, // callback
 
 			fieldNameSetText: function (sFieldName) {
