@@ -48,7 +48,7 @@ BEGIN
 							   )
 
 	SELECT 
-		l.Status, l.Balance, l.LoanAmount, CAST (CASE WHEN @BadStatuses>0 THEN 1 WHEN @WasLate = 1 THEN 1 ELSE 0 END AS BIT) WasLate
+		l.Status, l.Balance, l.LoanAmount, l.RefNum, CAST (CASE WHEN @BadStatuses>0 THEN 1 WHEN @WasLate = 1 THEN 1 ELSE 0 END AS BIT) WasLate
 	FROM 
 		loan l
 	WHERE

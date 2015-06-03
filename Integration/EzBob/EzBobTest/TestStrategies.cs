@@ -107,7 +107,7 @@ namespace EzBobTest {
 
 		[Test]
 		public void LoanFullyPaid() {
-			var s = new LoanFullyPaid(3060, "fdsfdf", false);
+			var s = new LoanFullyPaid(3060, "fdsfdf");
 			s.Execute();
 		}
 
@@ -632,11 +632,13 @@ namespace EzBobTest {
 		[Test]
 		public void TestGetSmsDetails() {
 			//In case we need to retrieve the status of sms need to invoke this method and update sms message table
-			string m_sAccountSid = CurrentValues.Instance.TwilioAccountSid;
-			string m_sAuthToken = CurrentValues.Instance.TwilioAuthToken;
+			string m_sAccountSid = "ACcc682df6341371ee27ada6858025490b";//CurrentValues.Instance.TwilioAccountSid;
+			string m_sAuthToken = "fab0b8bd342443ff44497273b4ba2aa1";//CurrentValues.Instance.TwilioAuthToken;
 
 			var twilio = new TwilioRestClient(m_sAccountSid, m_sAuthToken);
-			var smsDetails = twilio.GetSmsMessage("SM1511753ccca64868b73c9cf7469a1bc8");
+			var smsDetails = twilio.GetSmsMessage("SM6b5974acc0054605ab0443c9f38d2349");
+			Assert.IsNotNull(smsDetails);
+			Assert.IsNotNull(smsDetails.Status);
 		}
 
         [Test]

@@ -38,21 +38,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="BrokerInstantOfferResponse" nillable="true" type="tns:BrokerInstantOfferResponse" />
-  <xs:complexType name="WriteToLogPackage.InputData">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="CompanyRefNum" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
-      <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DirectorID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="PostCode" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Request" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="Response" nillable="true" type="xs:string" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="ServiceType" type="q1:ExperianServiceType" />
-      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="WriteToLogPackage.InputData" nillable="true" type="tns:WriteToLogPackage.InputData" />
   <xs:complexType name="CampaignSourceRef">
     <xs:sequence>
       <xs:element minOccurs="0" name="FContent" nillable="true" type="xs:string" />
@@ -72,4 +57,19 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="CampaignSourceRef" nillable="true" type="tns:CampaignSourceRef" />
+  <xs:complexType name="WriteToLogPackage.InputData">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="CompanyRefNum" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="DateOfBirth" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DirectorID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Firstname" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="PostCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Request" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Response" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="ServiceType" type="q1:ExperianServiceType" />
+      <xs:element minOccurs="0" name="Surname" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="WriteToLogPackage.InputData" nillable="true" type="tns:WriteToLogPackage.InputData" />
 </xs:schema>

@@ -211,6 +211,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ExperianTargetingActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.GenericActionResultOfGetActivityResultModel0Cv74uD7.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

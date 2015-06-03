@@ -83,8 +83,8 @@
 			} // if
 
 			if (autoPaymentResult.PaymentCollectedSuccessfully) {
-				SendConfirmationMail(customerId, firstName, autoPaymentResult.ActualAmountCharged, refNum, customerMail);
-				SendLoanStatusMail(customerId, loanId, firstName, refNum, customerMail, autoPaymentResult.ActualAmountCharged); // Will send mail for paid off loans
+				SendConfirmationMail(customerId, autoPaymentResult.ActualAmountCharged, refNum);
+				SendLoanStatusMail(customerId, loanId, customerMail, autoPaymentResult.ActualAmountCharged); // Will send mail for paid off loans
 			}//if
 		}//HandleOnePayment
 
@@ -142,53 +142,15 @@
 			return result;
 		} //TryToMakeAutoPayment
 
-		private void SendConfirmationMail(int customerId, string firstName, decimal amountDue, string refNum, string customerMail) {
-			var variables = new Dictionary<string, string>
-			{
-				{"AMOUNT", amountDue.ToString(CultureInfo.InvariantCulture)},
-				{"FirstName", firstName},
-				{"DATE", FormattingUtils.FormatDateToString(DateTime.UtcNow)},
-				{"RefNum", refNum}
-			};
-			PayPointChargerMails payPointChargerMails = new PayPointChargerMails(customerId, "Mandrill - Repayment confirmation", variables);
-			payPointChargerMails.Execute();
+		private void SendConfirmationMail(int customerId, decimal amountDue, string refNum) {
+			PayEarly payEarly = new PayEarly(customerId, amountDue, refNum);
+			payEarly.Execute();
 		} //SendConfirmationMail
 
-		private void SendLoanStatusMail(int customerId, int loanId, string firstName, string refNum, string customerMail, decimal actualAmountCharged) {
-			SafeReader sr = DB.GetFirst(
-				"GetLoanStatus",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("LoanId", loanId)
-			);
-
-			string loanStatus = sr["Status"];
-			bool wasLate = sr["WasLate"];
-			decimal loanAmount = sr["LoanAmount"];
-			decimal balance = sr["Balance"];
-
-			if (loanStatus == "PaidOff") {
-				LoanFullyPaid loanFullyPaid = new LoanFullyPaid(customerId, refNum, wasLate);
-				loanFullyPaid.Execute();
-			} else {
-				decimal repaidPercent = loanAmount == 0 ? 0 : (loanAmount - balance) / loanAmount;
-				decimal repaidPercentBeforePayment = loanAmount == 0 ? 0 : (loanAmount - balance - actualAmountCharged) / loanAmount;
-				const decimal fiftyPercent = 0.5M;
-				if (repaidPercent > fiftyPercent && repaidPercentBeforePayment < fiftyPercent && !wasLate) {
-					AddSalesForceFiftyPercentOpportunity(customerId, customerMail, firstName);
-				}//if
-			}//if
+		private void SendLoanStatusMail(int customerId, int loanId, string customerMail, decimal actualAmountCharged) {
+			LoanStatusAfterPayment loanStatusAfterPayment = new LoanStatusAfterPayment(customerId, customerMail, loanId, actualAmountCharged, true);
+			loanStatusAfterPayment.Execute();
 		}//SendLoanStatusMail
-
-		private void AddSalesForceFiftyPercentOpportunity(int customerID, string customerMail, string customerName) {
-			SalesForce.AddOpportunity addOpportunity = new AddOpportunity(customerID, new OpportunityModel {
-				CreateDate = DateTime.UtcNow,
-				Email = customerMail,
-				Stage = OpportunityStage.s5.DescriptionAttr(),
-				Type = OpportunityType.FiftyPercentRepaid.DescriptionAttr(),
-				Name = customerName + OpportunityType.FiftyPercentRepaid.DescriptionAttr()
-			});
-			addOpportunity.Execute();
-		}//AddSalesForceFiftyPercentOpportunity
 
 		private void SendExceptionMail(decimal initialAmountDue, int customerId, string customerMail, string fullName) {
 

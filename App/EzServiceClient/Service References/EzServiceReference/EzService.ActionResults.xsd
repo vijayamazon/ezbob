@@ -12,4 +12,20 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerInstantOfferResponseActionResult" nillable="true" type="tns:BrokerInstantOfferResponseActionResult" />
+  <xs:complexType name="GenericActionResultOfGetActivityResultModel0Cv74uD7">
+    <xs:annotation>
+      <xs:appinfo>
+        <GenericType Name="GenericActionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
+          <GenericParameter Name="GetActivityResultModel" Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models">
+          </GenericParameter>
+        </GenericType>
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/EzService" base="q3:ActionResult">
+        <xs:sequence />
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="GenericActionResultOfGetActivityResultModel0Cv74uD7" nillable="true" type="tns:GenericActionResultOfGetActivityResultModel0Cv74uD7" />
 </xs:schema>

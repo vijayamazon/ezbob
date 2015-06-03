@@ -75,16 +75,16 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.MainStrategy" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
   </wsdl:types>
@@ -340,17 +340,47 @@
   <wsdl:message name="IEzService_IsBroker_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsBrokerResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_WriteToServiceLog_InputMessage">
-    <wsdl:part name="parameters" element="tns:WriteToServiceLog" />
+  <wsdl:message name="IEzService_SalesForceAddUpdateLeadAccount_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateLeadAccount" />
   </wsdl:message>
-  <wsdl:message name="IEzService_WriteToServiceLog_OutputMessage">
-    <wsdl:part name="parameters" element="tns:WriteToServiceLogResponse" />
+  <wsdl:message name="IEzService_SalesForceAddUpdateLeadAccount_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateLeadAccountResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_InputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoan" />
+  <wsdl:message name="IEzService_SalesForceAddUpdateContact_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateContact" />
   </wsdl:message>
-  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoanResponse" />
+  <wsdl:message name="IEzService_SalesForceAddUpdateContact_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateContactResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddTask_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddTask" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddTask_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddTaskResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddActivity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddActivity" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddActivity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddActivityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddOpportunity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddOpportunity" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceAddOpportunity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceAddOpportunityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceUpdateOpportunity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceUpdateOpportunity" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceUpdateOpportunity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceUpdateOpportunityResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceGetActivity_InputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceGetActivity" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SalesForceGetActivity_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SalesForceGetActivityResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_LoadVatReturnRawData_InputMessage">
     <wsdl:part name="parameters" element="tns:LoadVatReturnRawData" />
@@ -369,6 +399,12 @@
   </wsdl:message>
   <wsdl:message name="IEzService_LoanFullyPaid_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanFullyPaidResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanStatusAfterPayment_InputMessage">
+    <wsdl:part name="parameters" element="tns:LoanStatusAfterPayment" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
+    <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MainStrategy1_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategy1" />
@@ -519,42 +555,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_ResetPassword123456_OutputMessage">
     <wsdl:part name="parameters" element="tns:ResetPassword123456Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddUpdateLeadAccount_InputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateLeadAccount" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddUpdateLeadAccount_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateLeadAccountResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddUpdateContact_InputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateContact" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddUpdateContact_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddUpdateContactResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddTask_InputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddTask" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddTask_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddTaskResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddActivity_InputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddActivity" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddActivity_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddActivityResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddOpportunity_InputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddOpportunity" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceAddOpportunity_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceAddOpportunityResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceUpdateOpportunity_InputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceUpdateOpportunity" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SalesForceUpdateOpportunity_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SalesForceUpdateOpportunityResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SaveAgreement_InputMessage">
     <wsdl:part name="parameters" element="tns:SaveAgreement" />
@@ -861,6 +861,18 @@
   </wsdl:message>
   <wsdl:message name="IEzService_ExperianTarget_OutputMessage">
     <wsdl:part name="parameters" element="tns:ExperianTargetResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_WriteToServiceLog_InputMessage">
+    <wsdl:part name="parameters" element="tns:WriteToServiceLog" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_WriteToServiceLog_OutputMessage">
+    <wsdl:part name="parameters" element="tns:WriteToServiceLogResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_InputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoan" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoanResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
@@ -1543,13 +1555,33 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="WriteToServiceLog">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLog" message="tns:IEzService_WriteToServiceLog_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLogResponse" message="tns:IEzService_WriteToServiceLog_OutputMessage" />
+    <wsdl:operation name="SalesForceAddUpdateLeadAccount">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateLeadAccount" message="tns:IEzService_SalesForceAddUpdateLeadAccount_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateLeadAccountResponse" message="tns:IEzService_SalesForceAddUpdateLeadAccount_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" message="tns:IEzService_PayPointAddedWithoutOpenLoan_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoanResponse" message="tns:IEzService_PayPointAddedWithoutOpenLoan_OutputMessage" />
+    <wsdl:operation name="SalesForceAddUpdateContact">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateContact" message="tns:IEzService_SalesForceAddUpdateContact_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateContactResponse" message="tns:IEzService_SalesForceAddUpdateContact_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddTask">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddTask" message="tns:IEzService_SalesForceAddTask_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddTaskResponse" message="tns:IEzService_SalesForceAddTask_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddActivity">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddActivity" message="tns:IEzService_SalesForceAddActivity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddActivityResponse" message="tns:IEzService_SalesForceAddActivity_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddOpportunity">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddOpportunity" message="tns:IEzService_SalesForceAddOpportunity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddOpportunityResponse" message="tns:IEzService_SalesForceAddOpportunity_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceUpdateOpportunity">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceUpdateOpportunity" message="tns:IEzService_SalesForceUpdateOpportunity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceUpdateOpportunityResponse" message="tns:IEzService_SalesForceUpdateOpportunity_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceGetActivity">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceGetActivity" message="tns:IEzService_SalesForceGetActivity_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceGetActivityResponse" message="tns:IEzService_SalesForceGetActivity_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="LoadVatReturnRawData">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoadVatReturnRawData" message="tns:IEzService_LoadVatReturnRawData_InputMessage" />
@@ -1562,6 +1594,10 @@
     <wsdl:operation name="LoanFullyPaid">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaid" message="tns:IEzService_LoanFullyPaid_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanFullyPaidResponse" message="tns:IEzService_LoanFullyPaid_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="LoanStatusAfterPayment">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MainStrategy1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
@@ -1662,30 +1698,6 @@
     <wsdl:operation name="ResetPassword123456">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456" message="tns:IEzService_ResetPassword123456_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ResetPassword123456Response" message="tns:IEzService_ResetPassword123456_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddUpdateLeadAccount">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccount" message="tns:IEzService_SalesForceAddUpdateLeadAccount_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccountResponse" message="tns:IEzService_SalesForceAddUpdateLeadAccount_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddUpdateContact">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateContact" message="tns:IEzService_SalesForceAddUpdateContact_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddUpdateContactResponse" message="tns:IEzService_SalesForceAddUpdateContact_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddTask">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddTask" message="tns:IEzService_SalesForceAddTask_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddTaskResponse" message="tns:IEzService_SalesForceAddTask_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddActivity">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddActivity" message="tns:IEzService_SalesForceAddActivity_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddActivityResponse" message="tns:IEzService_SalesForceAddActivity_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddOpportunity">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceAddOpportunity" message="tns:IEzService_SalesForceAddOpportunity_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceAddOpportunityResponse" message="tns:IEzService_SalesForceAddOpportunity_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceUpdateOpportunity">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SalesForceUpdateOpportunity" message="tns:IEzService_SalesForceUpdateOpportunity_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SalesForceUpdateOpportunityResponse" message="tns:IEzService_SalesForceUpdateOpportunity_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SaveAgreement">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveAgreement" message="tns:IEzService_SaveAgreement_InputMessage" />
@@ -1890,6 +1902,14 @@
     <wsdl:operation name="ExperianTarget">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/ExperianTarget" message="tns:IEzService_ExperianTarget_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/ExperianTargetResponse" message="tns:IEzService_ExperianTarget_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="WriteToServiceLog">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLog" message="tns:IEzService_WriteToServiceLog_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/WriteToServiceLogResponse" message="tns:IEzService_WriteToServiceLog_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" message="tns:IEzService_PayPointAddedWithoutOpenLoan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoanResponse" message="tns:IEzService_PayPointAddedWithoutOpenLoan_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -2619,8 +2639,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="WriteToServiceLog">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/WriteToServiceLog" style="document" />
+    <wsdl:operation name="SalesForceAddUpdateLeadAccount">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateLeadAccount" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2628,8 +2648,53 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" style="document" />
+    <wsdl:operation name="SalesForceAddUpdateContact">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateContact" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddTask">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceAddTask" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddActivity">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceAddActivity" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceAddOpportunity">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceAddOpportunity" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceUpdateOpportunity">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceUpdateOpportunity" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="SalesForceGetActivity">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceGetActivity" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2657,6 +2722,15 @@
     </wsdl:operation>
     <wsdl:operation name="LoanFullyPaid">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoanFullyPaid" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="LoanStatusAfterPayment">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/LoanStatusAfterPayment" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -2882,60 +2956,6 @@
     </wsdl:operation>
     <wsdl:operation name="ResetPassword123456">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ResetPassword123456" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddUpdateLeadAccount">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddUpdateLeadAccount" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddUpdateContact">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddUpdateContact" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddTask">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddTask" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddActivity">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddActivity" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceAddOpportunity">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceAddOpportunity" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SalesForceUpdateOpportunity">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SalesForceUpdateOpportunity" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -3395,6 +3415,24 @@
     </wsdl:operation>
     <wsdl:operation name="ExperianTarget">
       <soap12:operation soapAction="http://tempuri.org/IEzService/ExperianTarget" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="WriteToServiceLog">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/WriteToServiceLog" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PayPointAddedWithoutOpenLoan">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4170,20 +4208,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://alexbo-pc:7081/" />
+      <soap12:address location="net.tcp://stasd-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>ALEXBO-PC\alexbo</Upn>
+          <Upn>STASD-PC\stasd</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

@@ -233,8 +233,9 @@
 				facade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
 
 				if (model.SendEmail)
-					m_oServiceClient.Instance.PayEarly(_users.Get(customer.Id).Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
+					this.m_oServiceClient.Instance.PayEarly(customer.Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
 
+				this.m_oServiceClient.Instance.LoanStatusAfterPayment(this._context.UserId, customer.Id, customer.Name, model.LoanId, realAmount, model.SendEmail);
 				string requestType = string.Format("UW Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);
 				_logRepository.Log(_context.UserId, date, requestType, "Successful", "");

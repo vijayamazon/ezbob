@@ -4,6 +4,9 @@
 	using System.Linq;
 	using System.Web.Mvc;
 	using Ezbob.Backend.Models;
+	using Ezbob.Database;
+	using Ezbob.Models;
+	using Ezbob.Utils.Extensions;
 	using EzBob.Web.Areas.Customer.Models;
 	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Infrastructure.Attributes;
@@ -12,9 +15,11 @@
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Repository;
 	using log4net;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
+	using SalesForceLib.Models;
 	using ServiceClientProxy;
 
 	public class PaypointController : Controller {
@@ -22,20 +27,19 @@
 			IEzbobWorkplaceContext context,
 			IPacnetPaypointServiceLogRepository pacnetPaypointServiceLogRepository,
 			IPaypointTransactionRepository paypointTransactionRepository,
-			PayPointApi paypoint,
-			PayPointAccountRepository payPointAccountRepository) {
+			PayPointApi paypoint, ILoanOptionsRepository loanOptionsRepository) {
 			_context = context;
 			m_oServiceClient = new ServiceClient();
 			_logRepository = pacnetPaypointServiceLogRepository;
 			_paypointTransactionRepository = paypointTransactionRepository;
 			_paypoint = paypoint;
-			this.payPointAccountRepository = payPointAccountRepository;
+			this.loanOptionsRepository = loanOptionsRepository;
 		}
 
 		[HttpGet]
 		[NoCache]
 		[Transactional]
-		public ActionResult Callback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string type, int loanId, string card_no, string customer, string expiry) {
+		public System.Web.Mvc.ActionResult Callback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string type, int loanId, string card_no, string customer, string expiry) {
 			if (test_status == "true") {
 				// Use last 4 random digits as card number (to enable useful tests)
 				string random4Digits = string.Format("{0}{1}", DateTime.UtcNow.Second, DateTime.UtcNow.Millisecond);
@@ -140,7 +144,7 @@
 		}
 
 		[NoCache]
-		public ActionResult Error() {
+		public System.Web.Mvc.ActionResult Error() {
 			var code = (string)TempData["code"];
 			var message = (string)TempData["message"];
 
@@ -166,13 +170,13 @@
 		}
 
 		[NoCache]
-		public ActionResult ErrorOfferDate() {
+		public System.Web.Mvc.ActionResult ErrorOfferDate() {
 			ViewData["Message"] = "Unfortunately, time of the offer expired! Please apply for a new offer.";
 			return View("ErrorOfferDate");
 		}
 
 		[NoCache]
-		public ActionResult Pay(decimal amount, string type, int loanId, int rolloverId) {
+		public System.Web.Mvc.ActionResult Pay(decimal amount, string type, int loanId, int rolloverId) {
 			try {
 				Log.InfoFormat("Payment request for customer id {0}, amount {1}", _context.Customer.Id, amount);
 
@@ -274,11 +278,9 @@
 
 		private void SendEmails(int loanId, decimal realAmount, Customer customer) {
 			var loan = customer.GetLoan(loanId);
-
-			m_oServiceClient.Instance.PayEarly(_context.User.Id, realAmount, loan.RefNumber);
-
-			if (loan.Status == LoanStatus.PaidOff)
-				m_oServiceClient.Instance.LoanFullyPaid(customer.Id, loan.RefNumber);
+			var loanOptions = this.loanOptionsRepository.GetByLoanId(loanId);
+			this.m_oServiceClient.Instance.PayEarly(this._context.User.Id, realAmount, loan.RefNumber);
+			this.m_oServiceClient.Instance.LoanStatusAfterPayment(this._context.UserId, customer.Id, customer.Name, loanId, realAmount, loanOptions == null || loanOptions.EmailSendingAllowed);
 		}
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof (PaypointController));
@@ -287,6 +289,7 @@
 		private readonly PayPointApi _paypoint;
 		private readonly IPaypointTransactionRepository _paypointTransactionRepository;
 		private readonly ServiceClient m_oServiceClient;
-		private readonly PayPointAccountRepository payPointAccountRepository;
+		private readonly ILoanOptionsRepository loanOptionsRepository;
+
 	}
 }
