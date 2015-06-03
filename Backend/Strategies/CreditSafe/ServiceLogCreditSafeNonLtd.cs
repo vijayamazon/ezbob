@@ -15,7 +15,7 @@
     using Ezbob.Logger;
     using EZBob.DatabaseLib.Model.Database;
 
-    class ServiceLogCreditSafeNonLtd :AStrategy
+    public class ServiceLogCreditSafeNonLtd :AStrategy
     {
         public ServiceLogCreditSafeNonLtd(int customerId) {
             this.o_customerId = customerId;
