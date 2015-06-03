@@ -10,7 +10,7 @@
         public long AliId { get; set; }
         public decimal? Freeze { get; set; }
         [FK("Customer", "Id")]
-        public long? CustomerId { get; set; }
+        public int? CustomerId { get; set; }
         [FK("AlibabaContract", "ContractId")]
         public long? ContractId { get; set; }
         [Length(100)]

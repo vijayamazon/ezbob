@@ -34,9 +34,8 @@
         /// <summary>
         /// save to DB
         /// </summary>
-        public static void SaveApiLog<Req, Res>(Req request, Res response, string reqId, int custId, string statusCode = null, string comments = "", string errorCode = "", string errorMsg = "", string url = "", HttpRequestHeaders headers = null)
+        public static void SaveApiLog<Req, Res>(Req request, Res response, string reqId, string custRefNum, string statusCode = null, string comments = "", string errorCode = "", string errorMsg = "", string url = "", HttpRequestHeaders headers = null)
         {
-
             StringBuilder req = new StringBuilder(JsonConvert.SerializeObject(request, Helper.JsonReferenceLoopHandling())).Append("; HEADERS: ").Append(JsonConvert.SerializeObject(headers, Helper.JsonReferenceLoopHandling()));
 
             try
@@ -46,7 +45,8 @@
                     Request = req.ToString(),
                     RequestId = reqId,
                     Response = JsonConvert.SerializeObject(response, Helper.JsonReferenceLoopHandling()),
-                    CustomerID = custId,
+                 //   CustomerID = custId,
+                    CustomerRefNum = custRefNum,
                     StatusCode = statusCode,
                     ErrorCode =errorCode,
                     ErrorMessage = errorMsg,

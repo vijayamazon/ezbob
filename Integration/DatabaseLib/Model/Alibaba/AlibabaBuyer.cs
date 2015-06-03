@@ -1,12 +1,11 @@
 ﻿namespace EZBob.DatabaseLib.Model.Alibaba {
-	using System;
-	using System.Linq;
-	using ApplicationMng.Repository;
-	using EZBob.DatabaseLib.Model.Database;
-	using FluentNHibernate.Mapping;
-	using NHibernate;
+    using System.Linq;
+    using ApplicationMng.Repository;
+    using EZBob.DatabaseLib.Model.Database;
+    using FluentNHibernate.Mapping;
+    using NHibernate;
 
-	public class AlibabaBuyer {
+    public class AlibabaBuyer {
 
         public virtual int Id { get; set; }
         public virtual long AliId { get; set; }
@@ -37,6 +36,11 @@
 		public AlibabaBuyer ByCustomer(int customerId) {
 			return GetAll().FirstOrDefault(l => l.Customer.Id == customerId);
 		}
+
+        public AlibabaBuyer ByCustomerRefNum(string customerRefNum)
+        {
+            return GetAll().FirstOrDefault(l => l.Customer.RefNumber.Equals(customerRefNum));
+        }
 	}
 
 

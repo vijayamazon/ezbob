@@ -97,7 +97,7 @@
                 sellerEmail = "zhang.hong@163.com",
                 buyerBusinessName = "A PLAZA DRIVING SCHOOL",
                 aliMemberId = 131,
-                aId = 15123,
+                aId = "0170363",
                 buyerStreet1 = "926 E LEWELLING BLVD",
                 buyerCity = "HAYWARD",
                 buyerState = "CA",
@@ -181,14 +181,14 @@
 		[Test]
 		public void Test_Sale_Contract() {
 			try {
-                AuthRequest(this.testServerCredentials.clientID, this.testServerCredentials.clientSecret, this.testServerCredentials.username, this.testServerCredentials.userPwd);
+                AuthRequest(this.staging_aliServerCredentials.clientID, this.staging_aliServerCredentials.clientSecret, this.staging_aliServerCredentials.username, this.staging_aliServerCredentials.userPwd);
 				Console.WriteLine(this.token);
 			} catch (Exception e) {
 				Console.WriteLine("Failed to get access token", e.Message);
 				throw new HttpRequestException("Failed to get access token");
 			}
 			RestClient client = new RestClient(this.baseUrl);
-            RestRequest request = new RestRequest("api/Contracts/Contract");
+            RestRequest request = new RestRequest("api/contracts/contract");
 			request.AddHeader("Accept", "application/json");
 			request.AddHeader("Content-type", "application/json; charset=UTF-8");
 			request.AddHeader("Authorization", "Bearer " + this.token.GetValue("access_token"));

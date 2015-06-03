@@ -6,7 +6,7 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE UpdateAlibabaBuyer
-	@CustomerId BIGINT,
+	@CustomerId INT,
 	@ContractId BIGINT,
 	@BussinessName NVARCHAR(100),
 	@street1 NVARCHAR(100),

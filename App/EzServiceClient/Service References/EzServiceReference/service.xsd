@@ -3,8 +3,8 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.MainStrategy" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
@@ -487,7 +487,7 @@
   <xs:element name="CustomerAvaliableCredit">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="customerID" type="xs:int" />
+        <xs:element minOccurs="0" name="customerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="aliMemberID" type="xs:long" />
       </xs:sequence>
     </xs:complexType>
@@ -502,7 +502,7 @@
   <xs:element name="RequalifyCustomer">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="customerID" type="xs:int" />
+        <xs:element minOccurs="0" name="customerRefNum" nillable="true" type="xs:string" />
         <xs:element minOccurs="0" name="aliMemberID" type="xs:long" />
       </xs:sequence>
     </xs:complexType>
@@ -514,11 +514,25 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
+  <xs:element name="SaleContract">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" minOccurs="0" name="dto" nillable="true" type="q42:AlibabaContractDto" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SaleContractResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaleContractResult" nillable="true" type="q43:AlibabaSaleContractActionResult" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
   <xs:element name="DataSharing">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element xmlns:q42="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="businessType" type="q42:AlibabaBusinessType" />
+        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="businessType" type="q44:AlibabaBusinessType" />
         <xs:element minOccurs="0" name="uwID" nillable="true" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
@@ -526,36 +540,21 @@
   <xs:element name="DataSharingResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q43="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="DataSharingResult" nillable="true" type="q43:ActionMetaData" />
+        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="DataSharingResult" nillable="true" type="q45:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveApiCall">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q44="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" minOccurs="0" name="data" nillable="true" type="q44:ApiCallData" />
+        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" minOccurs="0" name="data" nillable="true" type="q46:ApiCallData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="SaveApiCallResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q45="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveApiCallResult" nillable="true" type="q45:ActionMetaData" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SaleContract">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element xmlns:q46="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" minOccurs="0" name="contract" nillable="true" type="q46:AlibabaContractDto" />
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
-  <xs:element name="SaleContractResponse">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaleContractResult" nillable="true" type="q47:AlibabaSaleContractActionResult" />
+        <xs:element xmlns:q47="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="SaveApiCallResult" nillable="true" type="q47:ActionMetaData" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

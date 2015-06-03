@@ -286,6 +286,12 @@
   <wsdl:message name="IEzService_RequalifyCustomer_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequalifyCustomerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SaleContract_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaleContract" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaleContract_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaleContractResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_DataSharing_InputMessage">
     <wsdl:part name="parameters" element="tns:DataSharing" />
   </wsdl:message>
@@ -297,12 +303,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_SaveApiCall_OutputMessage">
     <wsdl:part name="parameters" element="tns:SaveApiCallResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaleContract_InputMessage">
-    <wsdl:part name="parameters" element="tns:SaleContract" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_SaleContract_OutputMessage">
-    <wsdl:part name="parameters" element="tns:SaleContractResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_SilentAutomation_InputMessage">
     <wsdl:part name="parameters" element="tns:SilentAutomation" />
@@ -1501,6 +1501,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomer" message="tns:IEzService_RequalifyCustomer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomerResponse" message="tns:IEzService_RequalifyCustomer_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="SaleContract">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaleContract" message="tns:IEzService_SaleContract_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaleContractResponse" message="tns:IEzService_SaleContract_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="DataSharing">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/DataSharing" message="tns:IEzService_DataSharing_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/DataSharingResponse" message="tns:IEzService_DataSharing_OutputMessage" />
@@ -1508,10 +1512,6 @@
     <wsdl:operation name="SaveApiCall">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaveApiCall" message="tns:IEzService_SaveApiCall_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaveApiCallResponse" message="tns:IEzService_SaveApiCall_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="SaleContract">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaleContract" message="tns:IEzService_SaleContract_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaleContractResponse" message="tns:IEzService_SaleContract_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="SilentAutomation">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SilentAutomation" message="tns:IEzService_SilentAutomation_InputMessage" />
@@ -2528,6 +2528,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SaleContract">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaleContract" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="DataSharing">
       <soap12:operation soapAction="http://tempuri.org/IEzService/DataSharing" style="document" />
       <wsdl:input>
@@ -2539,15 +2548,6 @@
     </wsdl:operation>
     <wsdl:operation name="SaveApiCall">
       <soap12:operation soapAction="http://tempuri.org/IEzService/SaveApiCall" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="SaleContract">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/SaleContract" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

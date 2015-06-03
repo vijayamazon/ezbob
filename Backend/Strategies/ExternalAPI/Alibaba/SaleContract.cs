@@ -7,7 +7,7 @@
     using Ezbob.Database;
     using Ezbob.Backend.Models.ExternalAPI;
 
-    public class SaleContract:AStrategy
+    public class SaleContract : AStrategy
     {
         public SaleContract(AlibabaContractDto dto)
         {
@@ -18,130 +18,165 @@
         public AlibabaSaleContractResult Result;
         private AlibabaContractDto contract;
 
-        public override string Name {
+        public override string Name
+        {
             get { return "AlibabaSaleContract"; }
         }
 
-        public override void Execute() {
+        public override void Execute()
+        {
             Save(Parse(contract));
         }
 
-		private AlibabaContract Parse(AlibabaContractDto Data) {
+        private AlibabaContract Parse(AlibabaContractDto Data)
+        {
+            int? customerID = DB.ExecuteScalar<int?>(
+                 "CustomerIdByRefNum",
+                 CommandSpecies.StoredProcedure,
+                 new QueryParameter("CustomerRefNum", Data.aId)
+                 );
 
-			var Res = new AlibabaContract();
+            if (customerID == null){
+                Log.Alert("Customer with refnumber {0} not found", Data.aId);
+                this.Result.aId = null;
+                return null;
+            }
 
-			TryRead(() => Res.RequestId = Data.requestId);
-			TryRead(() => Res.LoanId = Data.loanId);
-			TryRead(() => Res.OrderNumber = Data.orderNumber);
-			TryRead(() => Res.ShippingMark = Data.shippingMark);
-			TryRead(() => Res.TotalOrderAmount = Data.totalOrderAmount);
-			TryRead(() => Res.DeviationQuantityAllowed = Data.deviationQuantityAllowed);
-			TryRead(() => Res.OrderAddtlDetails = Data.orderAddtlDetails);
-			TryRead(() => Res.ShippingTerms = Data.shippingTerms);
-			Res.ShippingDate = TryReadDate(() => Data.shippingDate);
-			TryRead(() => Res.LoadingPort = Data.loadingPort);
-			TryRead(() => Res.DestinationPort = Data.destinationPort);
-			TryRead(() => Res.TACoveredAmount = Data.taCoveredAmount);
-			TryRead(() => Res.OrderDeposit = Data.orderDeposit);
-			TryRead(() => Res.OrderBalance = Data.orderBalance);
-			TryRead(() => Res.OrderCurrency = Data.orderCurrency);
-			TryRead(() => Res.CommercialInvoice=Data.attachmentCommercialInvoice);
-			TryRead(() => Res.BillOfLading=Data.attachmentBillOfLading);
-			TryRead(() => Res.PackingList=Data.attachmentPackingList);
-			TryRead(() => Res.Other=Data.attachmentOther);
+            DB.FillFirst(
+                this.Result,
+                "LoadSaleContractResult",
+                CommandSpecies.StoredProcedure,
+                new QueryParameter("CustomerId", customerID),
+                new QueryParameter("AliMemberId", Data.aliMemberId)
+            );
 
-			TryRead(() => Res.Seller.BusinessName = Data.sellerBusinessName);
-			TryRead(() => Res.Seller.AliMemberId = Data.sellerAliMemberId);
-			TryRead(() => Res.Seller.Street1 = Data.sellerStreet1);
-			TryRead(() => Res.Seller.Street2 = Data.sellerStreet2);
-			TryRead(() => Res.Seller.City = Data.sellerCity);
-			TryRead(() => Res.Seller.State = Data.sellerState);
-			TryRead(() => Res.Seller.Country = Data.sellerCountry);
-			TryRead(() => Res.Seller.PostalCode = Data.sellerPostalCode);
-			TryRead(() => Res.Seller.AuthRepFname = Data.sellerAuthRepFname);
-			TryRead(() => Res.Seller.AuthRepLname = Data.sellerAuthRepLname);
-			TryRead(() => Res.Seller.Phone = Data.sellerPhone);
-			TryRead(() => Res.Seller.Fax = Data.sellerFax);
-			TryRead(() => Res.Seller.Email = Data.sellerEmail);
-			TryRead(() => Res.Seller.GoldSupplierFlag = Data.goldSupplierFlag);
-			TryRead(() => Res.Seller.TenureWithAlibaba = Data.supplierTenureWithAlibaba);
-			Res.Seller.BusinessStartDate = TryReadDate(() => Data.supplierBusinessStartDate);
-			TryRead(() => Res.Seller.Size = Data.supplierSize);
-			TryRead(() => Res.Seller.suspiciousReportCountCounterfeitProduct = Data.suspiciousReportCountCounterfeitProduct);
-			TryRead(() => Res.Seller.suspiciousReportCountRestrictedProhibitedProduct = Data.suspiciousReportCountRestrictedProhibitedProduct);
-			TryRead(() => Res.Seller.suspiciousReportCountSuspiciousMember = Data.suspiciousReportCountSuspiciousMember);
-			TryRead(() => Res.Seller.ResponseRate = Data.supplierResponseRate);
-			Res.Seller.GoldMemberStartDate = TryReadDate(() => Data.supplierGoldMemberStartDate);
-			TryRead(() => Res.Seller.QuotationPerformance = Data.quotationPerformance);
+            if (this.Result.aliMemberId == null){
+                Log.Alert("aliMemberId {0} for customer refnum {1} not found", Data.aliMemberId, Data.aId);
+                return null;
+            }
 
-			TryRead(() => Res.Seller.Bank.BeneficiaryBank = Data.beneficiaryBank);
-			TryRead(() => Res.Seller.Bank.StreetAddr1 = Data.bankStreetAddr1);
-			TryRead(() => Res.Seller.Bank.StreetAddr2 = Data.bankStreetAddr2);
-			TryRead(() => Res.Seller.Bank.City = Data.bankCity);
-			TryRead(() => Res.Seller.Bank.State = Data.bankState);
-			TryRead(() => Res.Seller.Bank.Country = Data.bankCountry);
-			TryRead(() => Res.Seller.Bank.PostalCode = Data.bankPostalCode);
-			TryRead(() => Res.Seller.Bank.SwiftCode = Data.swiftcode);
-			TryRead(() => Res.Seller.Bank.AccountNumber = Data.bankAccountNumber);
-			TryRead(() => Res.Seller.Bank.WireInstructions = Data.otherWireInstructions);
+            var Res = new AlibabaContract();
+            Res.Buyer.CustomerId = (int)customerID;
 
-		    if (Data.orderItems != null) {
-		        for (int i = 0; i < Data.orderItems.Length; i++) {
-		            var item = new AlibabaContractItem();
-		            TryRead(() => item.OrderProdNumber = Data.orderItems[i].orderProdNumber);
-		            TryRead(() => item.ProductName = Data.orderItems[i].productName);
-		            TryRead(() => item.ProductSpecs = Data.orderItems[i].productSpecs);
-		            TryRead(() => item.ProductQuantity = Data.orderItems[i].productQuantity);
-		            TryRead(() => item.ProductUnit = Data.orderItems[i].productUnit);
-		            TryRead(() => item.ProductUnitPrice = Data.orderItems[i].productUnitPrice);
-		            TryRead(() => item.ProductTotalAmount = Data.orderItems[i].productTotalAmount);
+            // contract
+            TryRead(() => Res.RequestId = Data.requestId);
+            TryRead(() => Res.LoanId = Data.loanId);
+            TryRead(() => Res.OrderNumber = Data.orderNumber);
+            TryRead(() => Res.ShippingMark = Data.shippingMark);
+            TryRead(() => Res.TotalOrderAmount = Data.totalOrderAmount);
+            TryRead(() => Res.DeviationQuantityAllowed = Data.deviationQuantityAllowed);
+            TryRead(() => Res.OrderAddtlDetails = Data.orderAddtlDetails);
+            TryRead(() => Res.ShippingTerms = Data.shippingTerms);
+            Res.ShippingDate = TryReadDate(() => Data.shippingDate);
+            TryRead(() => Res.LoadingPort = Data.loadingPort);
+            TryRead(() => Res.DestinationPort = Data.destinationPort);
+            TryRead(() => Res.TACoveredAmount = Data.taCoveredAmount);
+            TryRead(() => Res.OrderDeposit = Data.orderDeposit);
+            TryRead(() => Res.OrderBalance = Data.orderBalance);
+            TryRead(() => Res.OrderCurrency = Data.orderCurrency);
+            TryRead(() => Res.CommercialInvoice = Data.attachmentCommercialInvoice);
+            TryRead(() => Res.BillOfLading = Data.attachmentBillOfLading);
+            TryRead(() => Res.PackingList = Data.attachmentPackingList);
+            TryRead(() => Res.Other = Data.attachmentOther);
 
-		            Res.Items.Add(item);
-		        }
-		    }
+            TryRead(() => Res.Seller.BusinessName = Data.sellerBusinessName);
+            TryRead(() => Res.Seller.AliMemberId = Data.sellerAliMemberId);
+            TryRead(() => Res.Seller.Street1 = Data.sellerStreet1);
+            TryRead(() => Res.Seller.Street2 = Data.sellerStreet2);
+            TryRead(() => Res.Seller.City = Data.sellerCity);
+            TryRead(() => Res.Seller.State = Data.sellerState);
+            TryRead(() => Res.Seller.Country = Data.sellerCountry);
+            TryRead(() => Res.Seller.PostalCode = Data.sellerPostalCode);
+            TryRead(() => Res.Seller.AuthRepFname = Data.sellerAuthRepFname);
+            TryRead(() => Res.Seller.AuthRepLname = Data.sellerAuthRepLname);
+            TryRead(() => Res.Seller.Phone = Data.sellerPhone);
+            TryRead(() => Res.Seller.Fax = Data.sellerFax);
+            TryRead(() => Res.Seller.Email = Data.sellerEmail);
+            TryRead(() => Res.Seller.GoldSupplierFlag = Data.goldSupplierFlag);
+            TryRead(() => Res.Seller.TenureWithAlibaba = Data.supplierTenureWithAlibaba);
+            Res.Seller.BusinessStartDate = TryReadDate(() => Data.supplierBusinessStartDate);
+            TryRead(() => Res.Seller.Size = Data.supplierSize);
+            TryRead(() => Res.Seller.suspiciousReportCountCounterfeitProduct = Data.suspiciousReportCountCounterfeitProduct);
+            TryRead(() => Res.Seller.suspiciousReportCountRestrictedProhibitedProduct = Data.suspiciousReportCountRestrictedProhibitedProduct);
+            TryRead(() => Res.Seller.suspiciousReportCountSuspiciousMember = Data.suspiciousReportCountSuspiciousMember);
+            TryRead(() => Res.Seller.ResponseRate = Data.supplierResponseRate);
+            Res.Seller.GoldMemberStartDate = TryReadDate(() => Data.supplierGoldMemberStartDate);
+            TryRead(() => Res.Seller.QuotationPerformance = Data.quotationPerformance);
 
-		    TryRead(() => Res.Buyer.CustomerId = Data.aId);
-			TryRead(() => Res.Buyer.AliId = Data.aliMemberId);
-			TryRead(() => Res.Buyer.BussinessName = Data.buyerBusinessName);
-			TryRead(() => Res.Buyer.street1 = Data.buyerStreet1);
-			TryRead(() => Res.Buyer.street2 = Data.buyerStreet2);
-			TryRead(() => Res.Buyer.City = Data.buyerCity);
-			TryRead(() => Res.Buyer.State = Data.buyerState);
-			TryRead(() => Res.Buyer.Zip = Data.buyerZip);
-			TryRead(() => Res.Buyer.Country = Data.buyerCountry);
-			TryRead(() => Res.Buyer.AuthRepFname = Data.buyerAuthRepFname);
-			TryRead(() => Res.Buyer.AuthRepLname = Data.buyerAuthRepLname);
-			TryRead(() => Res.Buyer.Phone = Data.buyerPhone);
-			TryRead(() => Res.Buyer.Fax = Data.buyerFax);
-			TryRead(() => Res.Buyer.Email = Data.buyerEmail);
-			TryRead(() => Res.Buyer.OrderRequestCountLastYear = Data.buyerOrderRequestCountLastYear);
-			TryRead(() => Res.Buyer.ConfirmShippingDocAndAmount = Data.buyerConfirmShippingDocAndAmount);
-			TryRead(() => Res.Buyer.FinancingType = Data.financingType);
-			TryRead(() => Res.Buyer.ConfirmReleaseFunds = Data.buyerConfirmReleaseFunds);
+            TryRead(() => Res.Seller.Bank.BeneficiaryBank = Data.beneficiaryBank);
+            TryRead(() => Res.Seller.Bank.StreetAddr1 = Data.bankStreetAddr1);
+            TryRead(() => Res.Seller.Bank.StreetAddr2 = Data.bankStreetAddr2);
+            TryRead(() => Res.Seller.Bank.City = Data.bankCity);
+            TryRead(() => Res.Seller.Bank.State = Data.bankState);
+            TryRead(() => Res.Seller.Bank.Country = Data.bankCountry);
+            TryRead(() => Res.Seller.Bank.PostalCode = Data.bankPostalCode);
+            TryRead(() => Res.Seller.Bank.SwiftCode = Data.swiftcode);
+            TryRead(() => Res.Seller.Bank.AccountNumber = Data.bankAccountNumber);
+            TryRead(() => Res.Seller.Bank.WireInstructions = Data.otherWireInstructions);
 
-			return Res;
-		}
+            if (Data.orderItems != null)
+            {
+                for (int i = 0; i < Data.orderItems.Length; i++)
+                {
+                    var item = new AlibabaContractItem();
+                    TryRead(() => item.OrderProdNumber = Data.orderItems[i].orderProdNumber);
+                    TryRead(() => item.ProductName = Data.orderItems[i].productName);
+                    TryRead(() => item.ProductSpecs = Data.orderItems[i].productSpecs);
+                    TryRead(() => item.ProductQuantity = Data.orderItems[i].productQuantity);
+                    TryRead(() => item.ProductUnit = Data.orderItems[i].productUnit);
+                    TryRead(() => item.ProductUnitPrice = Data.orderItems[i].productUnitPrice);
+                    TryRead(() => item.ProductTotalAmount = Data.orderItems[i].productTotalAmount);
+
+                    Res.Items.Add(item);
+                }
+            }
+
+
+            TryRead(() => Res.Buyer.AliId = Data.aliMemberId);
+            TryRead(() => Res.Buyer.BussinessName = Data.buyerBusinessName);
+            TryRead(() => Res.Buyer.street1 = Data.buyerStreet1);
+            TryRead(() => Res.Buyer.street2 = Data.buyerStreet2);
+            TryRead(() => Res.Buyer.City = Data.buyerCity);
+            TryRead(() => Res.Buyer.State = Data.buyerState);
+            TryRead(() => Res.Buyer.Zip = Data.buyerZip);
+            TryRead(() => Res.Buyer.Country = Data.buyerCountry);
+            TryRead(() => Res.Buyer.AuthRepFname = Data.buyerAuthRepFname);
+            TryRead(() => Res.Buyer.AuthRepLname = Data.buyerAuthRepLname);
+            TryRead(() => Res.Buyer.Phone = Data.buyerPhone);
+            TryRead(() => Res.Buyer.Fax = Data.buyerFax);
+            TryRead(() => Res.Buyer.Email = Data.buyerEmail);
+            TryRead(() => Res.Buyer.OrderRequestCountLastYear = Data.buyerOrderRequestCountLastYear);
+            TryRead(() => Res.Buyer.ConfirmShippingDocAndAmount = Data.buyerConfirmShippingDocAndAmount);
+            TryRead(() => Res.Buyer.FinancingType = Data.financingType);
+            TryRead(() => Res.Buyer.ConfirmReleaseFunds = Data.buyerConfirmReleaseFunds);
+
+            return Res;
+        }
 
 
         public void Save(AlibabaContract data)
         {
             if (data == null)
                 return;
+
             Log.Info("Saving Alibaba consumer data into DB...");
 
             var con = DB.GetPersistent();
             con.BeginTransaction();
 
-            try{
+            try
+            {
                 long ContractID = DB.ExecuteScalar<long>(con,
                     "SaveAlibabaContract",
                     CommandSpecies.StoredProcedure,
                     DB.CreateTableParameter<AlibabaContract>("Tbl", new List<AlibabaContract> { data })
                     );
 
-                if (data.Items.Any()){
+                if (data.Items.Any())
+                {
 
-                    foreach (var item in data.Items){
+                    foreach (var item in data.Items)
+                    {
                         item.ContractId = ContractID;
                     }
 
@@ -195,33 +230,31 @@
             }
 
             con.Commit();
-            DB.FillFirst(
-                this.Result,
-                "LoadSaleContractResult",
-                CommandSpecies.StoredProcedure,
-                new QueryParameter("CustomerId", data.Buyer.CustomerId),
-                new QueryParameter("AliMemberId", data.Buyer.AliId)
-                );
+
             Log.Info("Saving/updating Alibaba data into DB completed successfully");
         }
 
         private void TryRead(Action a)
         {
-            try{
+            try
+            {
                 a();
             }
-            catch {
+            catch
+            {
                 return;
             }//Try
         }//TryRead
 
         private DateTime? TryReadDate(Func<DateTime> f)
         {
-            try{
+            try
+            {
                 DateTime d = f();
                 return (d.Year < 1900) ? (DateTime?)null : d;
             }
-            catch{
+            catch
+            {
                 return null;
             } // try
         } // TryReadDate

@@ -2,8 +2,10 @@
 {
     using System;
     using System.ComponentModel.DataAnnotations;
+    using System.Text;
 
-    public class OrderItems {
+    public class OrderItems
+    {
         [Required]
         public int orderProdNumber { get; set; }
 
@@ -35,8 +37,8 @@
         public string responseId { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [Range(1, Int32.MaxValue, ErrorMessage = "Ezbob customer ID is invalid")]
-        public int aId { get; set; }
+        [StringLength(8, ErrorMessage = "Ezbob customer ID is invalid")]
+        public string aId { get; set; }
 
         [Required]
         [Range(1, long.MaxValue, ErrorMessage = "AliMemberId is invalid")]
@@ -143,7 +145,7 @@
 
         [Required]
         public string destinationPort { get; set; }
-       
+
         [Required]
         public int taCoveredAmount { get; set; }
 
@@ -219,5 +221,17 @@
         public byte[] attachmentPackingList { get; set; }
 
         public byte[] attachmentOther { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+            Type t = typeof(AlibabaContractDto);
+            foreach (var prop in t.GetProperties())
+            {
+                if (prop.GetValue(this) != null)
+                    sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
+            }
+            return sb.ToString();
+        }
     }
 }

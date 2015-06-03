@@ -13,7 +13,7 @@
 		}
 
 		public SaveApiCall(ApiCallData data) {
-			this.Data = data;
+			Data = data;
 			this.dataRep = ObjectFactory.GetInstance<ExternalApiLogRepository>();
 		}
 
@@ -32,17 +32,18 @@
 					Source = this.Data.Source ?? ExternalAPISource.Other.DescriptionAttr(),
 					Comments = this.Data.Comments, 
 				};
-
-				if (this.Data.CustomerID != null && this.Data.CustomerID > 0) {
-					apicall.Customer = ObjectFactory.GetInstance<ICustomerRepository>().Get(this.Data.CustomerID);
-				}
+	
+                if (Data.CustomerID != null && Data.CustomerID > 0)
+                {
+                    apicall.Customer = ObjectFactory.GetInstance<ICustomerRepository>().GetCustomerByRefNum(Data.CustomerRefNum);
+                }
 
 				//Log.Debug(apicall);
 
 				this.dataRep.Save(apicall);
 
 			} catch (Exception ex) {
-				Log.Alert(ex, string.Format("Failed to SaveApiCall requestID: {0}", this.Data.RequestId)); 
+				Log.Alert(ex, string.Format("Failed to SaveApiCall requestID: {0}", Data.RequestId)); 
 			}
 			
 		}

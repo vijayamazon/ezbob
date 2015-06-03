@@ -39,9 +39,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="..\..\connection-strings.xml">
+    <None Include="..\..\connection-strings.xml">
       <Link>connection-strings.xml</Link>
-    </Content>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="packages.config" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

@@ -655,7 +655,7 @@ namespace EzBobTest {
 		[Test]
 		public void TestAlibabaDataSharing_01() {
 			// run "requalify before all
-			int customerID = 24322; //  23504; // 24319;  //24321 ; 
+            int customerID = 16134; //  23504; // 24319;  //24321 ; 
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);

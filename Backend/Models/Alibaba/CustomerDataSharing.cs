@@ -1,13 +1,12 @@
 ﻿namespace Ezbob.Backend.Models.Alibaba {
-	using System;
-	using System.Collections.Generic;
-	using System.ComponentModel;
-	using System.Runtime.Serialization;
-	using Ezbob.Utils;
-	using Ezbob.Utils.Extensions;
-	using EZBob.DatabaseLib.Model.Database;
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel;
+    using System.Runtime.Serialization;
+    using Ezbob.Utils;
+    using Ezbob.Utils.Extensions;
 
-	public enum AlibabaLocOfferStatus {
+    public enum AlibabaLocOfferStatus {
 		[Description("Offer Selected")]
 		OfferSelected,
 		[Description("App Submitted")]
@@ -49,8 +48,11 @@
 		private string _locApproveStatus;
 		private string _compEntityType;
 
-		[DataMember(EmitDefaultValue = true, IsRequired = true)] // customerID
-		public int aId { get; set; }
+		[DataMember(EmitDefaultValue = true, IsRequired = true)] // refnumber
+		public string aId { get; set; }
+
+        [DataMember(EmitDefaultValue = false)] // customerID
+        public int CustomerID { get; set; }
 
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] //  AlibabaBuyer table
 		public long aliMemberId { get; set; }
@@ -177,8 +179,8 @@ Limited = "LIMITED"
 		[DataMember(EmitDefaultValue = false)] // % ownership of business
 		public decimal? compOwnershipPercent { get; set; }
 
-		[DataMember(EmitDefaultValue = true)] // yyyy-MM-dd hh:mm:ssUS PT
-		public DateTime applicationDate { get; set; }
+	    [DataMember(EmitDefaultValue = false)] // yyyy-MM-dd hh:mm:ssUS PT
+	    public DateTime? applicationDate { get; set; }
 
 
 		/*

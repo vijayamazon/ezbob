@@ -1,22 +1,21 @@
 ﻿namespace Ezbob.Backend.Strategies.Alibaba {
-	using System;
-	using System.Linq;
-	using System.Web;
-	using AlibabaLib;
-	using ConfigManager;
-	using DbConstants;
-	using Ezbob.Backend.Models.Alibaba;
-	using Ezbob.Backend.Strategies.Exceptions;
-	using Ezbob.Database;
-	using Ezbob.Utils.Extensions;
-	using EZBob.DatabaseLib.Model.Alibaba;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Linq;
-	using NHibernate.SqlCommand;
-	using RestSharp;
-	using StructureMap;
+    using System;
+    using System.Linq;
+    using System.Web;
+    using AlibabaLib;
+    using ConfigManager;
+    using DbConstants;
+    using Ezbob.Backend.Models.Alibaba;
+    using Ezbob.Backend.Strategies.Exceptions;
+    using Ezbob.Database;
+    using Ezbob.Utils.Extensions;
+    using EZBob.DatabaseLib.Model.Alibaba;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Linq;
+    using RestSharp;
+    using StructureMap;
 
-	public class DataSharing : AStrategy {
+    public class DataSharing : AStrategy {
 
 		public JsonSerializerSettings jf = new JsonSerializerSettings { Formatting = Formatting.None, ReferenceLoopHandling = ReferenceLoopHandling.Ignore };
 	
@@ -46,14 +45,8 @@
 				return;
 			}
 
-            //if (this.businessType == AlibabaBusinessType.APPLICATION_WS_1) {
-		        
-            //    this.TypeOfBusinessParam=
-
-            //}
-
 			// check if 001 exists before 002
-			if (this.businessType == AlibabaBusinessType.APPLICATION_REVIEW) {
+			if (businessType == AlibabaBusinessType.APPLICATION_REVIEW) {
 
 				var exists001 = this.sentDataRep.GetAll().FirstOrDefault(c => (c.AlibabaBuyer.Id == aliMember.Id && c.Customer.Id == CustomerID && c.BizTypeCode == AlibabaBusinessType.APPLICATION.DescriptionAttr()));
 	
@@ -63,7 +56,7 @@
 						Result,
 						"AlibabaCustomerDataSharing",
 						CommandSpecies.StoredProcedure,
-						new QueryParameter("CustomerID", this.CustomerID),
+                        new QueryParameter("CustomerID", this.CustomerID),
 						new QueryParameter("FinalDecision", 0)
 					);
 					
@@ -75,18 +68,18 @@
 					Result,
 					"AlibabaCustomerDataSharing",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", this.CustomerID),
-					new QueryParameter("FinalDecision", (this.businessType == AlibabaBusinessType.APPLICATION_REVIEW)?1:0)
+                    new QueryParameter("CustomerID", CustomerID),
+					new QueryParameter("FinalDecision", (businessType == AlibabaBusinessType.APPLICATION_REVIEW)?1:0)
 				);
 
 			Log.Debug("**********DATASHARING4 strategy, execute customerID: {0}, finalDecision: {1}, Result: {2}", CustomerID, this.businessType.DescriptionAttr(), JsonConvert.SerializeObject(Result, jf));
 
-			if (Result == null || Result.aliMemberId == 0 || Result.aId == 0) {
+			if (Result == null || Result.aliMemberId == 0 || Result.aId == "0") {
 				Log.Info("Relevant data for sharing with Alibaba (001/002) for customer {0}, aliId {1} not found", CustomerID, aliMember.AliId);
 				return;
 			}
 
-			SendRequest(aliMember, this.Result, this.businessType);
+			SendRequest(aliMember, Result, businessType);
 		}
 
 
@@ -104,7 +97,7 @@
 				return;
 			if (result.aliMemberId == 0)
 				return;
-			if (result.aId == 0)
+			if (string.IsNullOrEmpty(result.aId))
 				return;
 
 			try {
@@ -117,7 +110,7 @@
 					client = new AlibabaClient(CurrentValues.Instance.AlibabaBaseUrl, CurrentValues.Instance.AlibabaUrlPath, CurrentValues.Instance.AlibabaAppSecret);
 				}
 	
-				IRestResponse response = client.SendDecision(JObject.FromObject(result), bizType);
+				IRestResponse response = client.SendDecision(JObject.FromObject(result,new JsonSerializer{DateParseHandling=DateParseHandling.None}), bizType);
 	
 				AlibabaSentData sent = new AlibabaSentData();
 				sent.AlibabaBuyer = aliMember;
@@ -177,8 +170,7 @@
 		public CustomerDataSharing Result { get; private set; }
 
 		private readonly AlibabaSentDataRepository sentDataRep;
-
-        //private string TypeOfBusinessParam { get; private set; }
+ 
 
 	} //DataSharing
 }

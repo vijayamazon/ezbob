@@ -34,6 +34,9 @@
 		[DataMember]
 		public int? CustomerID { get; set; }
 
+        [DataMember]
+        public string CustomerRefNum { get; set; }
+
 		
 	}
 }

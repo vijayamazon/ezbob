@@ -80,7 +80,7 @@
 			this.model = new AlibabaDto {
 				requestId = "000771",
 				responseId = "000771",
-				aId = 358, // 23504,
+				aId = "358", // 23504,
 				aliMemberId = 710526132, // 789,
 				loanId = 0
 			};
@@ -193,7 +193,7 @@
 			this.model = new AlibabaDto {
 				requestId = "000001",
 				responseId = "1000001",
-				aId = 23504,
+				aId = "23504",
 				aliMemberId = 789,
 				loanId = 0
 			};

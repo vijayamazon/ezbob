@@ -3441,16 +3441,22 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EnlistLotteryAsync(int customerID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerAvaliableCredit", ReplyAction="http://tempuri.org/IEzService/CustomerAvaliableCreditResponse")]
-        ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID);
+        ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(string customerRefNum, long aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CustomerAvaliableCredit", ReplyAction="http://tempuri.org/IEzService/CustomerAvaliableCreditResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, long aliMemberID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(string customerRefNum, long aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequalifyCustomer", ReplyAction="http://tempuri.org/IEzService/RequalifyCustomerResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(int customerID, long aliMemberID);
+        ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(string customerRefNum, long aliMemberID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/RequalifyCustomer", ReplyAction="http://tempuri.org/IEzService/RequalifyCustomerResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(int customerID, long aliMemberID);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(string customerRefNum, long aliMemberID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaleContract", ReplyAction="http://tempuri.org/IEzService/SaleContractResponse")]
+        ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult SaleContract(Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto dto);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaleContract", ReplyAction="http://tempuri.org/IEzService/SaleContractResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult> SaleContractAsync(Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto dto);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/DataSharing", ReplyAction="http://tempuri.org/IEzService/DataSharingResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData DataSharing(int customerID, ServiceClientProxy.EzServiceReference.AlibabaBusinessType businessType, System.Nullable<int> uwID);
@@ -3463,12 +3469,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveApiCall", ReplyAction="http://tempuri.org/IEzService/SaveApiCallResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveApiCallAsync(Ezbob.Backend.Models.ExternalAPI.ApiCallData data);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaleContract", ReplyAction="http://tempuri.org/IEzService/SaleContractResponse")]
-        ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult SaleContract(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaleContract", ReplyAction="http://tempuri.org/IEzService/SaleContractResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult> SaleContractAsync(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SilentAutomation", ReplyAction="http://tempuri.org/IEzService/SilentAutomationResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID);
@@ -4776,20 +4776,28 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EnlistLotteryAsync(customerID);
         }
         
-        public ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID) {
-            return base.Channel.CustomerAvaliableCredit(customerID, aliMemberID);
+        public ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult CustomerAvaliableCredit(string customerRefNum, long aliMemberID) {
+            return base.Channel.CustomerAvaliableCredit(customerRefNum, aliMemberID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(int customerID, long aliMemberID) {
-            return base.Channel.CustomerAvaliableCreditAsync(customerID, aliMemberID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult> CustomerAvaliableCreditAsync(string customerRefNum, long aliMemberID) {
+            return base.Channel.CustomerAvaliableCreditAsync(customerRefNum, aliMemberID);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(int customerID, long aliMemberID) {
-            return base.Channel.RequalifyCustomer(customerID, aliMemberID);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData RequalifyCustomer(string customerRefNum, long aliMemberID) {
+            return base.Channel.RequalifyCustomer(customerRefNum, aliMemberID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(int customerID, long aliMemberID) {
-            return base.Channel.RequalifyCustomerAsync(customerID, aliMemberID);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> RequalifyCustomerAsync(string customerRefNum, long aliMemberID) {
+            return base.Channel.RequalifyCustomerAsync(customerRefNum, aliMemberID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult SaleContract(Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto dto) {
+            return base.Channel.SaleContract(dto);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult> SaleContractAsync(Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto dto) {
+            return base.Channel.SaleContractAsync(dto);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData DataSharing(int customerID, ServiceClientProxy.EzServiceReference.AlibabaBusinessType businessType, System.Nullable<int> uwID) {
@@ -4806,14 +4814,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveApiCallAsync(Ezbob.Backend.Models.ExternalAPI.ApiCallData data) {
             return base.Channel.SaveApiCallAsync(data);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult SaleContract(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract) {
-            return base.Channel.SaleContract(customerID, contract);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult> SaleContractAsync(int customerID, Ezbob.Backend.Models.ExternalAPI.AlibabaContractDto contract) {
-            return base.Channel.SaleContractAsync(customerID, contract);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID) {
