@@ -88,6 +88,27 @@
      <xsd:pattern value="[a-zA-Z0-9]{18}"/>
     </xsd:restriction>
    </xsd:simpleType>
+   <xsd:complexType name="address">
+    <xsd:complexContent>
+     <xsd:extension base="tns:location">
+      <xsd:sequence>
+       <xsd:element name="city" type="xsd:string"/>
+       <xsd:element name="country" type="xsd:string"/>
+       <xsd:element name="countryCode" type="xsd:string"/>
+       <xsd:element name="postalCode" type="xsd:string"/>
+       <xsd:element name="state" type="xsd:string"/>
+       <xsd:element name="stateCode" type="xsd:string"/>
+       <xsd:element name="street" type="xsd:string"/>
+      </xsd:sequence>
+     </xsd:extension>
+    </xsd:complexContent>
+   </xsd:complexType>
+   <xsd:complexType name="location">
+    <xsd:sequence>
+     <xsd:element name="latitude" type="xsd:double"/>
+     <xsd:element name="longitude" type="xsd:double"/>
+    </xsd:sequence>
+   </xsd:complexType>
    <xsd:element name="ChangeEmail">
     <xsd:complexType>
      <xsd:sequence>
@@ -152,6 +173,20 @@
     </xsd:complexType>
    </xsd:element>
    <xsd:element name="CreateTaskResponse">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="result" type="xsd:string" nillable="true"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="GetActivity">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="jsonInput" type="xsd:string" nillable="true"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="GetActivityResponse">
     <xsd:complexType>
      <xsd:sequence>
       <xsd:element name="result" type="xsd:string" nillable="true"/>
@@ -227,6 +262,12 @@
  <message name="CreateTaskResponse">
   <part element="tns:CreateTaskResponse" name="parameters"/>
  </message>
+ <message name="GetActivityRequest">
+  <part element="tns:GetActivity" name="parameters"/>
+ </message>
+ <message name="GetActivityResponse">
+  <part element="tns:GetActivityResponse" name="parameters"/>
+ </message>
  <message name="LeadAccountServiceRequest">
   <part element="tns:LeadAccountService" name="parameters"/>
  </message>
@@ -259,6 +300,10 @@
   <operation name="CreateTask">
    <input message="tns:CreateTaskRequest"/>
    <output message="tns:CreateTaskResponse"/>
+  </operation>
+  <operation name="GetActivity">
+   <input message="tns:GetActivityRequest"/>
+   <output message="tns:GetActivityResponse"/>
   </operation>
   <operation name="LeadAccountService">
    <input message="tns:LeadAccountServiceRequest"/>
@@ -328,6 +373,20 @@
    </output>
   </operation>
   <operation name="CreateTask">
+   <soap:operation soapAction=""/>
+   <input>
+    <soap:header use="literal" part="SessionHeader" message="tns:Header"/>
+    <soap:header use="literal" part="CallOptions" message="tns:Header"/>
+    <soap:header use="literal" part="DebuggingHeader" message="tns:Header"/>
+    <soap:header use="literal" part="AllowFieldTruncationHeader" message="tns:Header"/>
+    <soap:body use="literal" parts="parameters"/>
+   </input>
+   <output>
+    <soap:header use="literal" part="DebuggingInfo" message="tns:Header"/>
+    <soap:body use="literal"/>
+   </output>
+  </operation>
+  <operation name="GetActivity">
    <soap:operation soapAction=""/>
    <input>
     <soap:header use="literal" part="SessionHeader" message="tns:Header"/>

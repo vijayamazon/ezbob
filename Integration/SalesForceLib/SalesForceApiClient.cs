@@ -217,6 +217,30 @@
             LogResult("ChangeEmail", result, new { currentEmail, newEmail }.ToJsonExtension(), newEmail);
         }
 
+		public GetActivityResultModel GetActivity(string email) {
+			this.Log.InfoFormat("SalesForce GetActivity for {0}", email);
+
+			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
+				this.Log.ErrorFormat("SalesForce GetActivity null session id");
+				return null;
+			}
+
+			string result = "";
+			var response = this.api.GetActivity(
+				new SalesForceServiceNS.SessionHeader {
+					sessionId = this.lr.sessionId
+				},
+				new SalesForceServiceNS.CallOptions(),
+				new SalesForceServiceNS.DebuggingHeader(),
+				new SalesForceServiceNS.AllowFieldTruncationHeader(),
+				new { Email = email }.ToJsonExtension(),
+				out result);
+
+			LogResult("GetActivity", result, new { email }.ToJsonExtension(), email);
+
+			return null;
+		}
+
         private void LogResult(string serviceName, string result, string request, string email) {
             var res = result.JsonStringToObject<ApiResponse>();
             if (!res.IsSuccess) {

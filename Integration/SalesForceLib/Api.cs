@@ -65,5 +65,14 @@
 		public ApiResponse ChangeEmail(string currentEmail, string newEmail) {
 			return new ApiResponse();
 		}
+
+		/// <summary>
+		/// Retrieve all activities for account/lead/contact/opportunity
+		/// </summary>
+		/// <param name="email"></param>
+		/// <returns></returns>
+		public ApiResponse GetActivity(string email) {
+			return new ApiResponse();
+		}
 	}
 }

@@ -12,10 +12,9 @@
 	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
 	using EZBob.DatabaseLib.Model.Database;
-	using SalesForceLib.Models;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
-	public interface IEzService : IEzServiceBroker {
+	public interface IEzService : IEzServiceBroker, IEzServiceSalesForce {
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
 
@@ -327,6 +326,9 @@
 		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
+		ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail);
+
+		[OperationContract]
 		ActionMetaData MainStrategy1(
 			int uderwriterId,
 			int customerId,
@@ -423,24 +425,6 @@
 
 		[OperationContract]
 		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
-
-		[OperationContract]
-		ActionMetaData SalesForceAddUpdateLeadAccount(int? userID, string email, int? customerID, bool isBrokerLead, bool isVipLead);
-
-		[OperationContract]
-		ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID, string directorEmail);
-
-		[OperationContract]
-		ActionMetaData SalesForceAddTask(int? userID, int customerID, TaskModel model);
-
-		[OperationContract]
-		ActionMetaData SalesForceAddActivity(int? userID, int customerID, ActivityModel model);
-
-		[OperationContract]
-		ActionMetaData SalesForceAddOpportunity(int? userID, int customerID, OpportunityModel model);
-
-		[OperationContract]
-		ActionMetaData SalesForceUpdateOpportunity(int? userID, int customerID, OpportunityModel model);
 
 		[OperationContract]
 		ActionMetaData SaveAgreement(

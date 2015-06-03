@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="Zn4GUJJm4moVtW7B3l5+yKcpAUQ=">
+<SavedWcfConfigurationInformation xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" Version="9.1" CheckSum="u6pD/qrC+pF3GFcGxaER1GGMqHY=">
   <bindingConfigurations>
-    <bindingConfiguration bindingType="basicHttpBinding" name="EzbobWebServicesBinding1">
+    <bindingConfiguration bindingType="basicHttpBinding" name="EzbobWebServicesBinding">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EzbobWebServicesBinding1</serializedValue>
+          <serializedValue>EzbobWebServicesBinding</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -110,10 +110,10 @@
         </property>
       </properties>
     </bindingConfiguration>
-    <bindingConfiguration bindingType="basicHttpBinding" name="EzbobWebServicesBinding2">
+    <bindingConfiguration bindingType="basicHttpBinding" name="EzbobWebServicesBinding1">
       <properties>
         <property path="/name" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EzbobWebServicesBinding2</serializedValue>
+          <serializedValue>EzbobWebServicesBinding1</serializedValue>
         </property>
         <property path="/closeTimeout" isComplexType="false" isExplicitlyDefined="true" clrType="System.TimeSpan, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue />
@@ -221,7 +221,7 @@
     </bindingConfiguration>
   </bindingConfigurations>
   <endpoints>
-    <endpoint name="EzbobWebServices" contract="SalesForceServiceNS.EzbobWebServicesPortType" bindingType="basicHttpBinding" address="https://eu5.salesforce.com/services/Soap/class/EzbobWebServices" bindingConfiguration="EzbobWebServicesBinding1">
+    <endpoint name="EzbobWebServices" contract="SalesForceServiceNS.EzbobWebServicesPortType" bindingType="basicHttpBinding" address="https://eu5.salesforce.com/services/Soap/class/EzbobWebServices" bindingConfiguration="EzbobWebServicesBinding">
       <properties>
         <property path="/address" isComplexType="false" isExplicitlyDefined="true" clrType="System.Uri, System, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>https://eu5.salesforce.com/services/Soap/class/EzbobWebServices</serializedValue>
@@ -233,7 +233,7 @@
           <serializedValue>basicHttpBinding</serializedValue>
         </property>
         <property path="/bindingConfiguration" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-          <serializedValue>EzbobWebServicesBinding1</serializedValue>
+          <serializedValue>EzbobWebServicesBinding</serializedValue>
         </property>
         <property path="/contract" isComplexType="false" isExplicitlyDefined="true" clrType="System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
           <serializedValue>SalesForceServiceNS.EzbobWebServicesPortType</serializedValue>

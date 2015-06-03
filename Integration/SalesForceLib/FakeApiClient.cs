@@ -75,7 +75,13 @@
 			}
 		}
 
+		public GetActivityResultModel GetActivity(string email) {
+			Log.InfoFormat("SalesForce GetActivity for {0}", email);
+			ApiResponse response = api.GetActivity(email);
+			return null;
+		}
+
 		private readonly Api api;
-		private readonly ILog Log = LogManager.GetLogger(typeof (FakeApiClient));
+		protected static readonly ILog Log = LogManager.GetLogger(typeof (FakeApiClient));
 	}
 }

@@ -1,5 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using Ezbob.Backend.Strategies.SalesForce;
+	using EzService.ActionResults;
 	using SalesForceLib.Models;
 
 	public partial class EzServiceImplementation : IEzService {
@@ -25,6 +26,15 @@
 
 		public ActionMetaData SalesForceUpdateOpportunity(int? userID, int customerID, OpportunityModel model) {
 			return Execute<UpdateOpportunity>(customerID, userID, customerID, model);
+		}
+
+		public GenericActionResult<GetActivityResultModel> SalesForceGetActivity(int? userID, int customerID, string email) {
+			GetActivity stra;
+			var amd = ExecuteSync<GetActivity>(out stra, customerID, userID, customerID, email);
+
+			return new GenericActionResult<GetActivityResultModel> {
+				Value = stra.Result
+			};
 		}
 	}
 }

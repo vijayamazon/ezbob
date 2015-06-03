@@ -134,7 +134,7 @@
             ISalesForceAppClient client = ObjectFactory
                 .With("userName").EqualTo("yarons@ezbob.com.sandbox")
                 .With("password").EqualTo("yaron456")
-                .With("token").EqualTo("FqKCAj7vcgECfAgTf7dCfVMIp")
+				.With("token").EqualTo("UKNRYVzrJk8z1a45hEAb60enW")
                 .With("environment").EqualTo("Sandbox")
                 .GetInstance<ISalesForceAppClient>();
 
@@ -221,6 +221,12 @@
 		public void TestChangeEmail() {
 			ISalesForceAppClient client = GetClient();
 			client.ChangeEmail("a@b.c", "b@a.c");
+		}
+
+		[Test]
+		public void TestGetActivity() {
+			ISalesForceAppClient client = GetClient();
+			client.GetActivity("fff.com");
 		}
 
 	}

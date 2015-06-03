@@ -179,6 +179,20 @@
      </xsd:sequence>
     </xsd:complexType>
    </xsd:element>
+   <xsd:element name="GetActivity">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="jsonInput" type="xsd:string" nillable="true"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
+   <xsd:element name="GetActivityResponse">
+    <xsd:complexType>
+     <xsd:sequence>
+      <xsd:element name="result" type="xsd:string" nillable="true"/>
+     </xsd:sequence>
+    </xsd:complexType>
+   </xsd:element>
    <xsd:element name="LeadAccountService">
     <xsd:complexType>
      <xsd:sequence>
@@ -248,6 +262,12 @@
  <message name="CreateTaskResponse">
   <part element="tns:CreateTaskResponse" name="parameters"/>
  </message>
+ <message name="GetActivityRequest">
+  <part element="tns:GetActivity" name="parameters"/>
+ </message>
+ <message name="GetActivityResponse">
+  <part element="tns:GetActivityResponse" name="parameters"/>
+ </message>
  <message name="LeadAccountServiceRequest">
   <part element="tns:LeadAccountService" name="parameters"/>
  </message>
@@ -280,6 +300,10 @@
   <operation name="CreateTask">
    <input message="tns:CreateTaskRequest"/>
    <output message="tns:CreateTaskResponse"/>
+  </operation>
+  <operation name="GetActivity">
+   <input message="tns:GetActivityRequest"/>
+   <output message="tns:GetActivityResponse"/>
   </operation>
   <operation name="LeadAccountService">
    <input message="tns:LeadAccountServiceRequest"/>
@@ -349,6 +373,20 @@
    </output>
   </operation>
   <operation name="CreateTask">
+   <soap:operation soapAction=""/>
+   <input>
+    <soap:header use="literal" part="SessionHeader" message="tns:Header"/>
+    <soap:header use="literal" part="CallOptions" message="tns:Header"/>
+    <soap:header use="literal" part="DebuggingHeader" message="tns:Header"/>
+    <soap:header use="literal" part="AllowFieldTruncationHeader" message="tns:Header"/>
+    <soap:body use="literal" parts="parameters"/>
+   </input>
+   <output>
+    <soap:header use="literal" part="DebuggingInfo" message="tns:Header"/>
+    <soap:body use="literal"/>
+   </output>
+  </operation>
+  <operation name="GetActivity">
    <soap:operation soapAction=""/>
    <input>
     <soap:header use="literal" part="SessionHeader" message="tns:Header"/>
