@@ -226,7 +226,9 @@
 		[Test]
 		public void TestGetActivity() {
 			ISalesForceAppClient client = GetClient();
-			client.GetActivity("fff.com");
+			//client.GetActivity("fff.com");
+
+			client.GetActivity("stasdes@ezbob.com");
 		}
 
 	}

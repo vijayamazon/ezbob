@@ -46,8 +46,8 @@
 
             //CreditSafeLtdGetData test = new CreditSafeLtdGetData();
             //test.LtdGetData("asd");
-            var test = new ServiceLogCreditSafeNonLtd(12614);
-            test.Execute();
+			//var test = new ServiceLogCreditSafeNonLtd(12614);
+			//test.Execute();
 
         }
 

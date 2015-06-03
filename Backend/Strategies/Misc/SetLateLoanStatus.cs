@@ -492,12 +492,12 @@
             Log.Info("add new late fee and mark loan as late for loanId {0}", loanId);
 		}// UpdateLoanStats
 
-		private const string CollectionDay8to14EmailTemplate = "Mandrill - ezbob - Last warning - Debt recovery";
-		private const string CollectionDay7EmailTemplate     = "Mandrill - ezbob - 20p late fee";
-		private const string CollectionDay31EmailTemplate    = "Mandrill - ezbob - legal process starting";
-		private const string CollectionDay1to6EmailTemplate  = "Mandrill - ezbob - missed payment";
-		private const string CollectionDay15EmailTemplate    = "Mandrill - Warning notice - ezbob - 40p late fee";
-		private const string CollectionDay0EmailTemplate     = "Mandrill - ezbob - you missed your payment";
+		private const string CollectionDay8to14EmailTemplate = "Mandrill - Last warning - Debt recovery";
+		private const string CollectionDay7EmailTemplate     = "Mandrill - 20p late fee";
+		private const string CollectionDay31EmailTemplate    = "Mandrill - legal process starting";
+		private const string CollectionDay1to6EmailTemplate  = "Mandrill - missed payment";
+		private const string CollectionDay15EmailTemplate    = "Mandrill - Warning notice- 40p late fee";
+		private const string CollectionDay0EmailTemplate     = "Mandrill - you missed your payment";
 
 		private readonly IMailLib.CollectionMail collectionIMailer;
 		private DateTime now;
