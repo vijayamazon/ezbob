@@ -72,7 +72,49 @@
 		/// <param name="email"></param>
 		/// <returns></returns>
 		public ApiResponse GetActivity(string email) {
-			return new ApiResponse();
+			string result = @"{ ""Success"" :  ""[ {
+  \""Status\"" : \""Not Started\"",
+  \""Description\"" : \""test content task\"",
+  \""Subject\"" : \""test content task\"",
+  \""Priority\"" : \""Normal\"",
+  \""Place\"" : \""Contact\""
+}, {
+  \""EndDate\"" : \""2015-06-02T14:00:00.000Z\"",
+  \""StartDate\"" : \""2015-06-02T13:00:00.000Z\"",
+  \""Place\"" : \""Contact\""
+}, {
+  \""EndDate\"" : \""2015-06-02T13:00:00.000Z\"",
+  \""StartDate\"" : \""2015-06-02T12:00:00.000Z\"",
+  \""Place\"" : \""Contact\""
+}, {
+  \""Status\"" : \""In Progress\"",
+  \""Priority\"" : \""Normal\"",
+  \""Place\"" : \""Account\""
+}, {
+  \""Status\"" : \""Not Started\"",
+  \""Priority\"" : \""Normal\"",
+  \""Place\"" : \""Opportunity\""
+}, {
+  \""EndDate\"" : \""2015-06-02T13:00:00.000Z\"",
+  \""StartDate\"" : \""2015-06-02T12:00:00.000Z\"",
+  \""Place\"" : \""Account\""
+}, {
+  \""Description\"" : \""test event description\"",
+  \""EndDate\"" : \""2015-06-03T15:00:00.000Z\"",
+  \""StartDate\"" : \""2015-06-03T14:00:00.000Z\"",
+  \""Place\"" : \""Account\""
+}, {
+  \""Description\"" : \""test chat desctiption\"",
+  \""EndDate\"" : \""2015-06-03T15:00:00.000Z\"",
+  \""StartDate\"" : \""2015-06-03T14:00:00.000Z\"",
+  \""Place\"" : \""Account\""
+}, {
+  \""EndDate\"" : \""2015-06-02T13:00:00.000Z\"",
+  \""StartDate\"" : \""2015-06-02T12:00:00.000Z\"",
+  \""Place\"" : \""Opportunity\""
+} ]"",  ""Error"" : """" }";
+			var res = result.JsonStringToObject<ApiResponse>();
+			return res;
 		}
 	}
 }

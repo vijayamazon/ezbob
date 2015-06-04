@@ -406,6 +406,7 @@
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.AddCustomerRelationsFollowUp.js")
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.MarkAsPending.js")
 				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.SendSms.js")
+				.Add("~/Content/js/underwriter/profile/CustomerRelations/ezbob.underwriter.salesForceActivity.js")
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.properties.js")
 				.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.signature.monitor.js")

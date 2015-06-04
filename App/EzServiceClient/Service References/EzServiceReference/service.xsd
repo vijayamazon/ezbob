@@ -775,7 +775,7 @@
   <xs:element name="SalesForceGetActivityResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/EzService.ActionResults" minOccurs="0" name="SalesForceGetActivityResult" nillable="true" type="q61:GenericActionResultOfGetActivityResultModel0Cv74uD7" />
+        <xs:element xmlns:q61="http://schemas.datacontract.org/2004/07/EzService.ActionResults" minOccurs="0" name="SalesForceGetActivityResult" nillable="true" type="q61:SalesForceActivityActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

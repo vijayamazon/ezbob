@@ -862,6 +862,7 @@
     <Content Include="Content\js\Underwriter\profile\alerts\ezbob.underwriter.AlertDocsView.js" />
     <Content Include="Content\js\Underwriter\profile\Calculator\ezbob.underwriter.automationCalculations.js" />
     <Content Include="Content\js\Underwriter\profile\customerInfo\ezbob.underwriter.changeAddress.js" />
+    <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.salesForceActivity.js" />
     <Content Include="Content\js\Underwriter\profile\CustomerRelations\ezbob.underwriter.MarkAsPending.js" />
     <Content Include="Content\js\Underwriter\profile\ezbob.underwriter.customerFullModel.js" />
     <Content Include="Content\js\Underwriter\profile\fraudDetection\ezbob.underwriter.fraudStatus.js" />
@@ -921,6 +922,7 @@
     <Content Include="Areas\Broker\Views\BrokerHome\ScratchCards.cshtml" />
     <Content Include="Areas\Broker\Views\BrokerHome\Header.cshtml" />
     <Content Include="Areas\Broker\Files\everline.credit.file.release.and.consent.doc" />
+    <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SalesForceActivity.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

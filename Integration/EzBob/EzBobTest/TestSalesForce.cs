@@ -226,9 +226,15 @@
 		[Test]
 		public void TestGetActivity() {
 			ISalesForceAppClient client = GetClient();
+			client.GetActivity("alexbo+073@ezbob.com_Frozen");
+			//client.GetActivity("stasdes@ezbob.com");
 			//client.GetActivity("fff.com");
+		}
 
-			client.GetActivity("stasdes@ezbob.com");
+		[Test]
+		public void TestFakeGetActivity() {
+			ISalesForceAppClient client = new FakeApiClient();
+			var activity = client.GetActivity("");
 		}
 
 	}

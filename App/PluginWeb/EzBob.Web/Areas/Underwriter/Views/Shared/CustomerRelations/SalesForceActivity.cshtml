@@ -1,0 +1,38 @@
+﻿@model dynamic
+
+<script type="text/template" id="sales-force-activity-template">
+	<table class="table table-hover centered box">
+		<thead class="box-title">
+			<tr>
+				<th>Start Date</th>
+				<th>End Date</th>
+				<th>Creator</th>
+				<th>Originator</th>
+				<th>Place</th>
+				<th>Type</th>
+				<th>Status</th>
+				<th>Place</th>
+				<th>Priority</th>
+				<th class="customer-relations-description-column">Subject</th>
+				<th class="customer-relations-description-column">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%_.each(activities, function(a){ %>
+			<tr>
+				<td><%-EzBob.formatDateTime3(a.StartDate)%></td>
+				<td><%-EzBob.formatDateTime3(a.EndDate)%></td>
+				<td><%-a.Creator%></td>
+				<td><%-a.Originator%></td>
+				<td><%-a.Place%></td>
+				<td><%-a.Type%></td>
+				<td><%-a.Status%></td>
+				<td><%-a.Place%></td>
+				<td><%-a.Priority%></td>
+				<td style="word-wrap: break-word;"><%-a.Subject%></td>
+				<td style="word-wrap: break-word;"><%-a.Description%></td>
+			</tr>
+			<%})%>
+		</tbody>
+	</table>
+</script>

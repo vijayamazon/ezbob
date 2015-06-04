@@ -2,6 +2,7 @@
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/EzService.ActionResults" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
   <xs:complexType name="BrokerInstantOfferResponseActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
@@ -12,20 +13,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="BrokerInstantOfferResponseActionResult" nillable="true" type="tns:BrokerInstantOfferResponseActionResult" />
-  <xs:complexType name="GenericActionResultOfGetActivityResultModel0Cv74uD7">
-    <xs:annotation>
-      <xs:appinfo>
-        <GenericType Name="GenericActionResultOf{0}{#}" Namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" xmlns="http://schemas.microsoft.com/2003/10/Serialization/">
-          <GenericParameter Name="GetActivityResultModel" Namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models">
-          </GenericParameter>
-        </GenericType>
-      </xs:appinfo>
-    </xs:annotation>
+  <xs:complexType name="SalesForceActivityActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q3="http://schemas.datacontract.org/2004/07/EzService" base="q3:ActionResult">
-        <xs:sequence />
+        <xs:sequence>
+          <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" minOccurs="0" name="Value" nillable="true" type="q4:GetActivityResultModel" />
+        </xs:sequence>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
-  <xs:element name="GenericActionResultOfGetActivityResultModel0Cv74uD7" nillable="true" type="tns:GenericActionResultOfGetActivityResultModel0Cv74uD7" />
+  <xs:element name="SalesForceActivityActionResult" nillable="true" type="tns:SalesForceActivityActionResult" />
 </xs:schema>

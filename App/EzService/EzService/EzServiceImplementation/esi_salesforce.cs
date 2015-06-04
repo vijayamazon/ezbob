@@ -28,11 +28,11 @@
 			return Execute<UpdateOpportunity>(customerID, userID, customerID, model);
 		}
 
-		public GenericActionResult<GetActivityResultModel> SalesForceGetActivity(int? userID, int customerID, string email) {
+		public SalesForceActivityActionResult SalesForceGetActivity(int? userID, int customerID, string email) {
 			GetActivity stra;
 			var amd = ExecuteSync<GetActivity>(out stra, customerID, userID, customerID, email);
 
-			return new GenericActionResult<GetActivityResultModel> {
+			return new SalesForceActivityActionResult {
 				Value = stra.Result
 			};
 		}

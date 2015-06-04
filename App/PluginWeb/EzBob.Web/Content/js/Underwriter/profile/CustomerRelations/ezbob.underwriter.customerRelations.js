@@ -49,6 +49,7 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         "click #closeFollowUp": "closeLastFollowUp",
         "click .btnCloseFollowUp": "closeFollowUp",
         "click #sendSms": "sendSms",
+    	'click .getSalesForceActivity': 'getSalesForceActivityClicked'
     },
 
     ui: {
@@ -150,6 +151,25 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
         xhr.always(function () {
             BlockUi("off");
         });
+
+    },
+
+    getSalesForceActivityClicked: function () {
+	    BlockUi("on", this.$el);
+	    if (!this.salesForceActivityModel) {
+		    this.salesForceActivityModel = new EzBob.Underwriter.SalesForceActivityModel();
+	    }
+
+	    this.salesForceActivityView = new EzBob.Underwriter.SalesForceActivityView({
+	    	model: this.salesForceActivityModel,
+	    	el: this.$el.find('#salesforce-activity')
+	    });
+	    this.salesForceActivityModel.customerId = this.model.customerId;
+
+		var that = this;
+	    this.salesForceActivityModel.fetch().done(function () {
+		    BlockUi("off", that.$el);
+	    });
 
     }
 });

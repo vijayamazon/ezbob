@@ -55,6 +55,22 @@
 		[Ajax]
 		[HttpGet]
 		[ValidateJsonAntiForgeryToken]
+		public JsonResult SalesForceActivity(int id) {
+			var customer = this.customerRepository.ReallyTryGet(id);
+			if (customer == null) {
+				throw new Exception("Customer not found " + id);
+			}
+
+			var activity = this._serviceClient.Instance.SalesForceGetActivity(this._context.UserId, id, customer.Name);
+			return Json(new {
+				Activities = activity.Value.Activities.OrderByDescending(x => x.StartDate),
+				Error = activity.Value.Error
+			}, JsonRequestBehavior.AllowGet);
+		} // SalesForceActivity
+
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
 		public JsonResult CrmStatic() {
 			try {
 				var ar = this._serviceClient.Instance.CrmLoadLookups();
@@ -104,7 +120,7 @@
 				var customer = this.customerRepository.ReallyTryGet(customerId);
 				if (customer != null) {
 					this._serviceClient.Instance.SalesForceAddActivity(this._context.UserId, customerId, new ActivityModel {
-						Description = string.Format("{0}, {1}, {2}, {3}", type, action, status, comment),
+						Description = string.Format("{0}, {1}, {2}, {3}", type, actionItem.Name, statusItem.Name, comment),
 						Email = customer.Name,
 						StartDate = DateTime.UtcNow,
 						EndDate = DateTime.UtcNow,

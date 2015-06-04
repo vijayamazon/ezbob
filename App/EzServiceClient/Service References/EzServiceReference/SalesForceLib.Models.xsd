@@ -50,4 +50,36 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="OpportunityModel" nillable="true" type="tns:OpportunityModel" />
+  <xs:complexType name="GetActivityResultModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Activities" nillable="true" type="tns:ArrayOfActivityResultModel" />
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="GetActivityResultModel" nillable="true" type="tns:GetActivityResultModel" />
+  <xs:complexType name="ArrayOfActivityResultModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="ActivityResultModel" nillable="true" type="tns:ActivityResultModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfActivityResultModel" nillable="true" type="tns:ArrayOfActivityResultModel" />
+  <xs:complexType name="ActivityResultModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Creator" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Description" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="EndDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Originator" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Place" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Priority" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="StartDate" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Status" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Subject" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="ActivityResultModel" nillable="true" type="tns:ActivityResultModel" />
 </xs:schema>

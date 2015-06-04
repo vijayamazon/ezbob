@@ -24,6 +24,6 @@
 		ActionMetaData SalesForceUpdateOpportunity(int? userID, int customerID, OpportunityModel model);
 
 		[OperationContract]
-		GenericActionResult<GetActivityResultModel> SalesForceGetActivity(int? userID, int customerID, string email);
+		SalesForceActivityActionResult SalesForceGetActivity(int? userID, int customerID, string email);
 	} // interface IEzServiceSalesForce
 } // namespace
