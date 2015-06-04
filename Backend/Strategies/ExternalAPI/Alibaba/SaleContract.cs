@@ -3,9 +3,11 @@
     using System;
     using System.Collections.Generic;
     using System.Linq;
+    using System.Web;
     using Ezbob.Backend.ModelsWithDB.Alibaba;
     using Ezbob.Database;
     using Ezbob.Backend.Models.ExternalAPI;
+    using MailApi;
 
     public class SaleContract : AStrategy
     {
@@ -26,6 +28,80 @@
         public override void Execute()
         {
             Save(Parse(contract));
+            SendMail();
+        }
+
+        private void SendMail()
+        {
+            if (Result.aId == null || Result.aliMemberId == null)
+                return;
+            var message = string.Format(@"<style type=""text/css"">
+                                        .tg  {{border-collapse:collapse;border-spacing:0;}}
+                                        .tg td{{font-family:Arial, sans-serif;font-size:14px;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}}
+                                        .tg th{{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:10px 5px;border-style:solid;border-width:1px;overflow:hidden;word-break:normal;}}
+                                        </style>
+                                        <table class=""tg"">
+                                          <tr><th class=""tg-031e"" colspan=""2"">Seller Details</th></tr>
+                                          <tr><td class=""tg-031e"">Business Name</td><td class=""tg-031e"">{0}</td></tr>
+                                          <tr><td class=""tg-031e"">Street1</td><td class=""tg-031e"">{1}</td></tr>
+                                          <tr><td class=""tg-031e"">Street2</td><td class=""tg-031e"">{2}</td></tr>
+                                          <tr><td class=""tg-031e"">City</td><td class=""tg-031e"">{3}</td></tr>
+                                          <tr><td class=""tg-031e"">State</td><td class=""tg-031e"">{4}</td></tr>
+                                          <tr><td class=""tg-031e"">Country</td><td class=""tg-031e"">{5}</td></tr>
+                                          <tr><td class=""tg-031e"">Postal Code</td><td class=""tg-031e"">{6}</td></tr>
+                                          <tr><td class=""tg-031e"">Representitive First Name</td><td class=""tg-031e"">{7}</td></tr>
+                                          <tr><td class=""tg-031e"">Representitive Last Name</td><td class=""tg-031e"">{8}</td></tr>
+                                          <tr><td class=""tg-031e"">Seller Phone</td><td class=""tg-031e"">{9}</td></tr>
+                                        </table>
+                                        <table class=""tg"">
+                                          <tr><th class=""tg-031e"" colspan=""2"">Seller Bank Details</th></tr>
+                                          <tr><td class=""tg-031e"">Beneficiary Bank</td><td class=""tg-031e"">{10}</td></tr>
+                                          <tr><td class=""tg-031e"">Street1</td><td class=""tg-031e"">{11}</td></tr>
+                                          <tr><td class=""tg-031e"">Street2</td><td class=""tg-031e"">{12}</td></tr>
+                                          <tr><td class=""tg-031e"">City</td><td class=""tg-031e"">{13}</td></tr>
+                                          <tr><td class=""tg-031e"">State</td><td class=""tg-031e"">{14}</td></tr>
+                                          <tr><td class=""tg-031e"">Country</td><td class=""tg-031e"">{15}</td></tr>
+                                          <tr><td class=""tg-031e"">Postal Code</td><td class=""tg-031e"">{16}</td></tr>
+                                          <tr><td class=""tg-031e"">SwiftCode</td><td class=""tg-031e"">{17}</td></tr>
+                                          <tr><td class=""tg-031e"">Account Number</td><td class=""tg-031e"">{18}</td></tr>
+                                          <tr><td class=""tg-031e"">Wire Instructions</td><td class=""tg-031e"">{19}</td></tr>
+                                        </table>
+                                        <table class=""tg"">
+                                          <tr><th class=""tg-031e"" colspan=""2"">Buyer Details</th></tr>
+                                          <tr><td class=""tg-031e"">Customer Id</td><td class=""tg-031e"">{20}</td></tr>
+                                          <tr><td class=""tg-031e"">Business Name</td><td class=""tg-031e"">{21}</td></tr>
+                                          <tr><td class=""tg-031e"">Street1</td><td class=""tg-031e"">{22}</td></tr>
+                                          <tr><td class=""tg-031e"">Street2</td><td class=""tg-031e"">{23}</td></tr>
+                                          <tr><td class=""tg-031e"">City</td><td class=""tg-031e"">{24}</td></tr>
+                                          <tr><td class=""tg-031e"">State</td><td class=""tg-031e"">{25}</td></tr>
+                                          <tr><td class=""tg-031e"">Country</td><td class=""tg-031e"">{26}</td></tr>
+                                          <tr><td class=""tg-031e"">Postal Code</td><td class=""tg-031e"">{27}</td></tr>
+                                          <tr><td class=""tg-031e"">Representitive First Name</td><td class=""tg-031e"">{28}</td></tr>
+                                          <tr><td class=""tg-031e"">Representitive Last Name</td><td class=""tg-031e"">{29}</td></tr>
+                                          <tr><td class=""tg-031e"">Phone</td><td class=""tg-031e"">{30}</td></tr>
+                                          <tr><td class=""tg-031e"">Email</td><td class=""tg-031e"">{31}</td></tr>
+                                        </table>
+                                        <table class=""tg"">
+                                          <tr><th class=""tg-031e"" colspan=""2"">Loan Details</th></tr>
+                                          <tr><td class=""tg-031e"">Deposit</td><td class=""tg-031e"">{32}</td></tr>
+                                          <tr><td class=""tg-031e"">Balance</td><td class=""tg-031e"">{33}</td></tr>
+                                          <tr><td class=""tg-031e"">Currency</td><td class=""tg-031e"">{34}</td></tr>
+                                          <tr><td class=""tg-031e"">Financing Type</td><td class=""tg-031e"">{35}</td></tr>
+                                          <tr><td class=""tg-031e"">Confirm Release of Funds</td><td class=""tg-031e"">{36}</td></tr>
+                                        </table>", HttpUtility.HtmlEncode(contract.sellerBusinessName), HttpUtility.HtmlEncode(contract.sellerStreet1), HttpUtility.HtmlEncode(contract.sellerStreet2), HttpUtility.HtmlEncode(contract.sellerCity), HttpUtility.HtmlEncode(contract.sellerState), HttpUtility.HtmlEncode(contract.sellerCountry), HttpUtility.HtmlEncode(contract.sellerPostalCode), HttpUtility.HtmlEncode(contract.sellerAuthRepFname), HttpUtility.HtmlEncode(contract.sellerAuthRepLname), HttpUtility.HtmlEncode(contract.sellerPhone), HttpUtility.HtmlEncode(contract.sellerEmail),
+                                                 HttpUtility.HtmlEncode(contract.beneficiaryBank), HttpUtility.HtmlEncode(contract.bankStreetAddr1), HttpUtility.HtmlEncode(contract.bankStreetAddr2), HttpUtility.HtmlEncode(contract.bankCity), HttpUtility.HtmlEncode(contract.bankState), HttpUtility.HtmlEncode(contract.bankCountry), HttpUtility.HtmlEncode(contract.bankPostalCode), HttpUtility.HtmlEncode(contract.bankAccountNumber.ToString()), HttpUtility.HtmlEncode(contract.otherWireInstructions),
+                                                 HttpUtility.HtmlEncode(this.Result.aId.ToString()), HttpUtility.HtmlEncode(contract.buyerBusinessName), HttpUtility.HtmlEncode(contract.buyerStreet1), HttpUtility.HtmlEncode(contract.buyerStreet2), HttpUtility.HtmlEncode(contract.buyerCity), HttpUtility.HtmlEncode(contract.buyerState), HttpUtility.HtmlEncode(contract.buyerZip), HttpUtility.HtmlEncode(contract.buyerCountry), HttpUtility.HtmlEncode(contract.buyerAuthRepFname), HttpUtility.HtmlEncode(contract.buyerAuthRepLname), HttpUtility.HtmlEncode(contract.buyerPhone), HttpUtility.HtmlEncode(contract.buyerEmail),
+                                                 HttpUtility.HtmlEncode(contract.orderDeposit.ToString()), HttpUtility.HtmlEncode(contract.orderBalance.ToString()), HttpUtility.HtmlEncode(contract.orderCurrency), HttpUtility.HtmlEncode(contract.financingType), HttpUtility.HtmlEncode(contract.buyerConfirmReleaseFunds.ToString())
+                                        );
+
+            new Mail().Send(
+                "dev@ezbob.com;vitasd@ezbob.com",
+                null,
+                message,
+                ConfigManager.CurrentValues.Instance.MailSenderEmail,
+                ConfigManager.CurrentValues.Instance.MailSenderName,
+                "Payment Request: Alibaba Transaction for customer: " + Result.aId+" AliMemberId: "+Result.aliMemberId
+            );
         }
 
         private AlibabaContract Parse(AlibabaContractDto Data)
@@ -36,7 +112,8 @@
                  new QueryParameter("CustomerRefNum", Data.aId)
                  );
 
-            if (customerID == null){
+            if (customerID == null)
+            {
                 Log.Alert("Customer with refnumber {0} not found", Data.aId);
                 this.Result.aId = null;
                 return null;
@@ -50,7 +127,8 @@
                 new QueryParameter("AliMemberId", Data.aliMemberId)
             );
 
-            if (this.Result.aliMemberId == null){
+            if (this.Result.aliMemberId == null)
+            {
                 Log.Alert("aliMemberId {0} for customer refnum {1} not found", Data.aliMemberId, Data.aId);
                 return null;
             }

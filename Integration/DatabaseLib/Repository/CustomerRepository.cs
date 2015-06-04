@@ -63,7 +63,7 @@ namespace EZBob.DatabaseLib.Model.Database.Repository
 		public Customer GetCustomerByRefNum(string refnumber)
 		{
 			var customer = Session.QueryOver<Customer>().Where(c => c.RefNumber == refnumber).SingleOrDefault<Customer>();
-			if (customer == null) throw new InvalidCustomerException(string.Format("Customer ref. #{0} was not found", refnumber));
+			//if (customer == null) throw new InvalidCustomerException(string.Format("Customer ref. #{0} was not found", refnumber));
 			return customer;
 		}
 

@@ -7,6 +7,7 @@
 	using System.Text;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
+	using Ezbob.Database;
 	using Ezbob.Utils.Extensions;
 	using Newtonsoft.Json;
 	using ServiceClientProxy;
@@ -45,7 +46,6 @@
                     Request = req.ToString(),
                     RequestId = reqId,
                     Response = JsonConvert.SerializeObject(response, Helper.JsonReferenceLoopHandling()),
-                 //   CustomerID = custId,
                     CustomerRefNum = custRefNum,
                     StatusCode = statusCode,
                     ErrorCode =errorCode,
