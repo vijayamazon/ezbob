@@ -18,7 +18,7 @@
 			this.loanID = loanID;
 			this.paymentAmount = paymentAmount;
 			this.sendMail = sendMail;
-		}
+		}//constructor
 
 		public override string Name { get { return "LoanStatusAfterPayment"; } }
 
@@ -34,6 +34,9 @@
 			decimal loanAmount = sr["LoanAmount"];
 			decimal balance = sr["Balance"];
 			string loanRefNum = sr["RefNum"];
+
+			Log.Info("LoanStatusAfterPayment customer {0}, loan {1}, status {2}, loan amount {3}, balance {4}, paid {5}, was late {6}",
+				this.customerID, this.loanID, loanStatus, loanAmount, balance, this.paymentAmount, wasLate);
 
 			if (loanStatus == "PaidOff") {
 				if (!wasLate) {
@@ -55,11 +58,11 @@
 				decimal repaidPercent = loanAmount == 0 ? 0 : (loanAmount - balance) / loanAmount;
 				decimal repaidPercentBeforePayment = loanAmount == 0 ? 0 : (loanAmount - balance - this.paymentAmount) / loanAmount;
 				const decimal fiftyPercent = 0.5M;
-				if (repaidPercent > fiftyPercent && repaidPercentBeforePayment < fiftyPercent && !wasLate) {
+				if (repaidPercent >= fiftyPercent && repaidPercentBeforePayment < fiftyPercent && !wasLate) {
 					AddSalesForceFiftyPercentOpportunity();
 				}//if
 			}//if
-		}
+		}//Execute
 
 		private void AddSalesForceFiftyPercentOpportunity() {
 			SalesForce.AddOpportunity addOpportunity = new AddOpportunity(this.customerID, new OpportunityModel {
@@ -77,5 +80,5 @@
 		private readonly int loanID;
 		private readonly decimal paymentAmount;
 		private readonly bool sendMail;
-	}
-}
+	}//class LoanStatusAfterPayment
+}//ns

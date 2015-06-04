@@ -762,5 +762,10 @@ namespace EzBobTest {
 	    public void TestAlibabaReports() {
 			new Alibaba(null, false).Execute();
 	    }
+
+		[Test]
+		public void TestLoanStatusAfterPayment() {
+			new LoanStatusAfterPayment(54, "", 27, 1000, false).Execute();
+		}
 	}
 }
