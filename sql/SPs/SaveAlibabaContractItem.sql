@@ -10,7 +10,7 @@ IF TYPE_ID('AlibabaContractItemList') IS NOT NULL
 GO
 
 CREATE TYPE AlibabaContractItemList AS TABLE (
-	[ContractId] BIGINT NULL,
+	[ContractId] INT NULL,
 	[OrderProdNumber] BIGINT NULL,
 	[ProductName] NVARCHAR(100) NULL,
 	[ProductSpecs] NVARCHAR(100) NULL,

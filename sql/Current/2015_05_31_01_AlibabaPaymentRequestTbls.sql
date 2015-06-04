@@ -4,7 +4,7 @@ GO
 IF OBJECT_ID('AlibabaContract') IS NULL
 BEGIN
 	CREATE TABLE [AlibabaContract] (
-		[ContractId] BIGINT IDENTITY(1, 1) NOT NULL,
+		[ContractId] INT IDENTITY(1, 1) NOT NULL,
 		[RequestId] NVARCHAR(100) NULL,
 		[ResponseId] NVARCHAR(100) NULL,
 		[LoanId] BIGINT NULL,
@@ -34,8 +34,8 @@ GO
 IF OBJECT_ID('AlibabaContractItem') IS NULL
 BEGIN
 	CREATE TABLE [AlibabaContractItem] (
-		[ItemId] BIGINT IDENTITY(1, 1) NOT NULL,
-		[ContractId] BIGINT NOT NULL,
+		[ItemId] INT IDENTITY(1, 1) NOT NULL,
+		[ContractId] INT NOT NULL,
 		[OrderProdNumber] BIGINT NULL,
 		[ProductName] NVARCHAR(100) NULL,
 		[ProductSpecs] NVARCHAR(100) NULL,
@@ -53,8 +53,8 @@ GO
 IF OBJECT_ID('AlibabaSeller') IS NULL
 BEGIN
 	CREATE TABLE [AlibabaSeller] (
-		[SellerId] BIGINT IDENTITY(1, 1) NOT NULL,
-		[ContractId] BIGINT NULL,
+		[SellerId] INT IDENTITY(1, 1) NOT NULL,
+		[ContractId] INT NULL,
 		[BusinessName] NVARCHAR(100) NULL,
 		[AliMemberId] NVARCHAR(100) NULL,
 		[Street1] NVARCHAR(100) NULL,
@@ -88,8 +88,8 @@ GO
 IF OBJECT_ID('AlibabaSellerBank') IS NULL
 BEGIN
 	CREATE TABLE [AlibabaSellerBank] (
-		[BankId] BIGINT IDENTITY(1, 1) NOT NULL,
-		[SellerId] BIGINT NULL,
+		[BankId] INT IDENTITY(1, 1) NOT NULL,
+		[SellerId] INT NULL,
 		[BeneficiaryBank] NVARCHAR(100) NULL,
 		[StreetAddr1] NVARCHAR(100) NULL,
 		[StreetAddr2] NVARCHAR(100) NULL,		
@@ -109,7 +109,7 @@ GO
 
 IF NOT EXISTS(SELECT * FROM sys.columns WHERE Name = N'ContractId' AND Object_ID = Object_ID(N'AlibabaBuyer'))
 BEGIN
-	ALTER TABLE AlibabaBuyer ADD ContractId BIGINT NULL
+	ALTER TABLE AlibabaBuyer ADD ContractId INT NULL
 	ALTER TABLE AlibabaBuyer ADD CONSTRAINT FK_AlibabaBuyer_ContractId FOREIGN KEY ([ContractId]) REFERENCES [AlibabaContract] ([ContractId])
 END
 

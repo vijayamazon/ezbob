@@ -10,7 +10,7 @@ IF TYPE_ID('AlibabaSellerBankList') IS NOT NULL
 GO
 
 CREATE TYPE AlibabaSellerBankList AS TABLE (
-	[SellerID] BIGINT NOT NULL,
+	[SellerID] INT NOT NULL,
 	[BeneficiaryBank] NVARCHAR(100) NULL,
 	[StreetAddr1] NVARCHAR(100) NULL,
 	[StreetAddr2] NVARCHAR(100) NULL,

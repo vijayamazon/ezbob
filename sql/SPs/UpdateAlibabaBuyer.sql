@@ -7,7 +7,7 @@ GO
 
 ALTER PROCEDURE UpdateAlibabaBuyer
 	@CustomerId INT,
-	@ContractId BIGINT,
+	@ContractId INT,
 	@BussinessName NVARCHAR(100),
 	@street1 NVARCHAR(100),
 	@street2 NVARCHAR(100),
