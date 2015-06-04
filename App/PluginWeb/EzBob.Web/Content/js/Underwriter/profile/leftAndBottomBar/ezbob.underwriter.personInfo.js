@@ -297,12 +297,13 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	}, //activateMainStratgey
 
 	activateFinishWizard: function() {
-		var self = this;
-		EzBob.ShowMessage("Finish wizard is in progress, refresh in a couple of seconds", "Ok", function() {
-			$.post("" + window.gRootPath + "Underwriter/ApplicationInfo/ActivateFinishWizard", {
-				customerId: self.model.get('Id')
-			});
+		this.$el.find('#ForceFinishWizard').addClass('hide');
+
+		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/ActivateFinishWizard', {
+			customerId: this.model.get('Id')
 		});
+
+		EzBob.ShowMessage('Finish wizard is in progress, please wait', 'Ok');
 	}, // activateFinishWizard
 
 	updateTrustPilotStatus: function() {

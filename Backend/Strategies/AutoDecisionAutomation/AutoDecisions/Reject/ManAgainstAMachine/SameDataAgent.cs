@@ -22,7 +22,9 @@
 			return this;
 		} // Init
 
-		public virtual bool Decide(long cashRequestID, string tag) {
+		public virtual bool Decide(long? cashRequestID, string tag) {
+			Init();
+
 			RunPrimary();
 
 			Trail.Save(DB, null, cashRequestID, tag);

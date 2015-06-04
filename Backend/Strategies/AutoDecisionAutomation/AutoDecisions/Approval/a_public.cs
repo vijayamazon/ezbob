@@ -22,9 +22,7 @@
 	using StructureMap;
 
 	public partial class Approval {
-	    
-
-	    public Approval(
+		public Approval(
 			int customerId,
 			int offeredCreditLine,
 			Medal medalClassification,
@@ -50,7 +48,7 @@
 				this.log = log.Safe();
 
 				this.loanRepository = ObjectFactory.GetInstance<LoanRepository>();
-                this.loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
+				this.loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
 				var customerRepo = ObjectFactory.GetInstance<CustomerRepository>();
 				this.cashRequestsRepository = ObjectFactory.GetInstance<CashRequestsRepository>();
 				this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();

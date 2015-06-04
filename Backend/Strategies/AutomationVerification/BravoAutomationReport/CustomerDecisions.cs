@@ -156,13 +156,15 @@
 		} // IsRerejected
 
 		private bool IsRejected(int customerID, DateTime decisionTime) {
-			var agent = new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(DB, Log, customerID);
+			var agent =
+				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent(
+					customerID,
+					decisionTime,
+					DB,
+					Log
+				);
 
-			agent.MakeDecision(agent.GetRejectionInputData(decisionTime));
-
-			agent.Trail.Save(DB, null, tag: this.tag);
-
-			return agent.Trail.HasDecided;
+			return agent.Decide(null, this.tag);
 		} // IsRejected
 
 		private int CapOffer(int customerID, int offeredCreditLine) {

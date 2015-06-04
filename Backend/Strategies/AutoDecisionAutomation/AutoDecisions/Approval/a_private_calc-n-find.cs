@@ -52,8 +52,12 @@
 		private decimal CalculateTodaysLoans() {
 			DateTime today = Now;
 
-			var todayLoans = this.loanRepository.GetAll()
-				.Where(l => l.Date.Year == today.Year && l.Date.Month == today.Month && l.Date.Day == today.Day);
+			var todayLoans = this.loanRepository.GetAll().Where(l =>
+				(l.Date.Year == today.Year) &&
+				(l.Date.Month == today.Month) &&
+				(l.Date.Day == today.Day) &&
+				(l.Date < today)
+			);
 
 			decimal todayLoansAmount = 0;
 
