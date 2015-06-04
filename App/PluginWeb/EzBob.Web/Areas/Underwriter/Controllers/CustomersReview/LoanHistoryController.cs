@@ -175,6 +175,7 @@
 
 		[Ajax]
 		[HttpPost]
+		[Transactional]
 		public void ManualPayment(ManualPaymentModel model)
 		{
 			var realAmount = model.TotalSumPaid;
@@ -220,18 +221,16 @@
 				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
 												   model.Description, Environment.NewLine);
 
-				new Transactional(() => {
-					var facade = new LoanPaymentFacade();
+				var facade = new LoanPaymentFacade();
 
-					facade.MakePayment(payPointTransactionId, realAmount, null,
-						"other", model.LoanId, customer,
-						date, description, null, model.PaymentMethod);
+				facade.MakePayment(payPointTransactionId, realAmount, null,
+												 "other", model.LoanId, customer,
+												 date, description, null, model.PaymentMethod);
 
-					//TODO add payment to new table
-					Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);
+                //TODO add payment to new table
+                Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);
 
-					facade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
-				}).Execute();
+				facade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
 
 				if (model.SendEmail)
 					this.m_oServiceClient.Instance.PayEarly(customer.Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);

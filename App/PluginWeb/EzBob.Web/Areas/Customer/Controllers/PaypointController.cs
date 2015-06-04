@@ -38,6 +38,7 @@
 
 		[HttpGet]
 		[NoCache]
+		[Transactional]
 		public System.Web.Mvc.ActionResult Callback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, string type, int loanId, string card_no, string customer, string expiry) {
 			if (test_status == "true") {
 				// Use last 4 random digits as card number (to enable useful tests)
@@ -91,21 +92,12 @@
 				}
 				return View(TempData.Get<PaymentConfirmationModel>());
 			}
-
-			PaymentResult res = null;
-			new Transactional(() => {
-				LoanPaymentFacade loanRepaymentFacade= new LoanPaymentFacade();
-				res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
-				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Callback", "Successful", "");
-
-				if (string.IsNullOrEmpty(customer))
-					customer = customerContext.PersonalInfo.Fullname;
-
-				customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
-
-			}).Execute();
+			LoanPaymentFacade loanRepaymentFacade= new LoanPaymentFacade();
+			var res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
 
 			SendEmails(loanId, amount.Value, customerContext);
+
+			_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Callback", "Successful", "");
 
 			var refNumber = "";
 			bool isEarly = false;
@@ -127,7 +119,10 @@
 				}
 			}
 
-			
+			if (string.IsNullOrEmpty(customer))
+				customer = customerContext.PersonalInfo.Fullname;
+
+			customerContext.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
 			var confirmation = new PaymentConfirmationModel {
 				amount = amount.Value.ToString(CultureInfo.InvariantCulture),
