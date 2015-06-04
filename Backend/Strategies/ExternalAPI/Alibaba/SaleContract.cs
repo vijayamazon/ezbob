@@ -166,7 +166,7 @@
 
             try
             {
-                long ContractID = DB.ExecuteScalar<long>(con,
+                int ContractID = DB.ExecuteScalar<int>(con,
                     "SaveAlibabaContract",
                     CommandSpecies.StoredProcedure,
                     DB.CreateTableParameter<AlibabaContract>("Tbl", new List<AlibabaContract> { data })
@@ -187,7 +187,7 @@
                 }
 
                 data.Seller.ContractID = ContractID;
-                long SellerID = DB.ExecuteScalar<long>(con,
+                int SellerID = DB.ExecuteScalar<int>(con,
                     "SaveAlibabaSeller",
                     CommandSpecies.StoredProcedure,
                     DB.CreateTableParameter<AlibabaSeller>("Tbl", new List<AlibabaSeller> { data.Seller })

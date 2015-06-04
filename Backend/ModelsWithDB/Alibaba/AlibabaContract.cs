@@ -13,7 +13,7 @@
 
 		[PK(true)]
 		[NonTraversable]
-		public long ContractId { get; set; }
+		public int ContractId { get; set; }
 		[Length(100)]
 		public string RequestId { get; set; }
         [Length(100)]

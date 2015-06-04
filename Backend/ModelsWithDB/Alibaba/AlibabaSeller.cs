@@ -12,9 +12,9 @@
 
 		[PK(true)]
 		[NonTraversable]
-		public long SellerID { get; set; }
+		public int SellerID { get; set; }
 		[FK("AlibabaContract", "ContractID")]
-		public long? ContractID { get; set; }
+		public int? ContractID { get; set; }
 		[Length(100)]
 		public string BusinessName { get; set; }
 		[Length(100)]

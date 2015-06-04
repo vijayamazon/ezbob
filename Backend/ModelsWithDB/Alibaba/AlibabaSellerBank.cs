@@ -8,9 +8,9 @@
 
 		[PK(true)]
 		[NonTraversable]
-		public long SellerBankID { get; set; }
+		public int SellerBankID { get; set; }
 		[FK("AlibabaSeller", "SellerID")]
-		public long SellerID { get; set; }
+		public int SellerID { get; set; }
 		[Length(100)]
 		public string BeneficiaryBank { get; set; }
 		[Length(100)]

@@ -6,9 +6,9 @@
     public class AlibabaContractItem {
         [PK(true)]
         [NonTraversable]
-        public long? ItemId { get; set; }
+        public int? ItemId { get; set; }
         [FK("MP_ServiceLog", "Id")]
-        public long? ContractId { get; set; }
+        public int? ContractId { get; set; }
         public long? OrderProdNumber { get; set; }
         [Length(100)]
         public string ProductName { get; set; }

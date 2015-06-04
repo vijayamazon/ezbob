@@ -11,7 +11,7 @@
         public virtual long AliId { get; set; }
         public virtual decimal? Freeze { get; set; }
         public virtual Customer Customer { get; set; }
-        public virtual long? ContractId { get; set; }
+        public virtual int? ContractId { get; set; }
         public virtual string BussinessName { get; set; }
         public virtual string street1 { get; set; }
         public virtual string street2 { get; set; }

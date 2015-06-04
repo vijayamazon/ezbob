@@ -12,7 +12,7 @@
         [FK("Customer", "Id")]
         public int? CustomerId { get; set; }
         [FK("AlibabaContract", "ContractId")]
-        public long? ContractId { get; set; }
+		public int? ContractId { get; set; }
         [Length(100)]
         public string BussinessName { get; set; }
         [Length(100)]
