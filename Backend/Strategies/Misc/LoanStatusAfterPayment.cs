@@ -12,11 +12,13 @@
 	/// If loan 50% repaid and wasn't late/default - add sf opportunity - 50% paid
 	/// </summary>
 	public class LoanStatusAfterPayment : AStrategy {
-		public LoanStatusAfterPayment(int customerID, string customerEmail, int loanID, decimal paymentAmount, bool sendMail) {
+		public LoanStatusAfterPayment(int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
 			this.customerID = customerID;
 			this.customerEmail = customerEmail;
 			this.loanID = loanID;
 			this.paymentAmount = paymentAmount;
+			this.balance = balance;
+			this.isPaidOff = isPaidOff;
 			this.sendMail = sendMail;
 		}//constructor
 
@@ -29,16 +31,14 @@
 					new QueryParameter("LoanId", this.loanID)
 				);
 
-			string loanStatus = sr["Status"];
 			bool wasLate = sr["WasLate"];
 			decimal loanAmount = sr["LoanAmount"];
-			decimal balance = sr["Balance"];
 			string loanRefNum = sr["RefNum"];
 
-			Log.Info("LoanStatusAfterPayment customer {0}, loan {1}, status {2}, loan amount {3}, balance {4}, paid {5}, was late {6}",
-				this.customerID, this.loanID, loanStatus, loanAmount, balance, this.paymentAmount, wasLate);
+			Log.Info("LoanStatusAfterPayment customer {0}, loan {1}, is paid off {2}, loan amount {3}, balance {4}, paid {5}, was late {6}",
+				this.customerID, this.loanID, this.isPaidOff, loanAmount, this.balance, this.paymentAmount, wasLate);
 
-			if (loanStatus == "PaidOff") {
+			if (this.isPaidOff) {
 				if (!wasLate) {
 					SalesForce.AddOpportunity addOpportunity = new AddOpportunity(this.customerID, new OpportunityModel {
 						CreateDate = DateTime.UtcNow,
@@ -55,8 +55,8 @@
 					loanFullyPaid.Execute();
 				}
 			} else {
-				decimal repaidPercent = loanAmount == 0 ? 0 : (loanAmount - balance) / loanAmount;
-				decimal repaidPercentBeforePayment = loanAmount == 0 ? 0 : (loanAmount - balance - this.paymentAmount) / loanAmount;
+				decimal repaidPercent = loanAmount == 0 ? 0 : (loanAmount - this.balance) / loanAmount;
+				decimal repaidPercentBeforePayment = loanAmount == 0 ? 0 : (loanAmount - this.balance - this.paymentAmount) / loanAmount;
 				const decimal fiftyPercent = 0.5M;
 				if (repaidPercent >= fiftyPercent && repaidPercentBeforePayment < fiftyPercent && !wasLate) {
 					AddSalesForceFiftyPercentOpportunity();
@@ -79,6 +79,8 @@
 		private readonly string customerEmail;
 		private readonly int loanID;
 		private readonly decimal paymentAmount;
+		private readonly decimal balance;
+		private readonly bool isPaidOff;
 		private readonly bool sendMail;
 	}//class LoanStatusAfterPayment
 }//ns

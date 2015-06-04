@@ -280,7 +280,15 @@
 			var loan = customer.GetLoan(loanId);
 			var loanOptions = this.loanOptionsRepository.GetByLoanId(loanId);
 			this.m_oServiceClient.Instance.PayEarly(this._context.User.Id, realAmount, loan.RefNumber);
-			this.m_oServiceClient.Instance.LoanStatusAfterPayment(this._context.UserId, customer.Id, customer.Name, loanId, realAmount, loanOptions == null || loanOptions.EmailSendingAllowed);
+			this.m_oServiceClient.Instance.LoanStatusAfterPayment(
+				this._context.UserId, 
+				customer.Id,
+				customer.Name, 
+				loanId, 
+				realAmount, 
+				loan.Balance, 
+				loan.Status == LoanStatus.PaidOff,
+				loanOptions == null || loanOptions.EmailSendingAllowed);
 		}
 
 		private static readonly ILog Log = LogManager.GetLogger(typeof (PaypointController));

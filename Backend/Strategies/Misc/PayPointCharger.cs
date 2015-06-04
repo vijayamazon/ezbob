@@ -148,7 +148,16 @@
 		} //SendConfirmationMail
 
 		private void SendLoanStatusMail(int customerId, int loanId, string customerMail, decimal actualAmountCharged) {
-			LoanStatusAfterPayment loanStatusAfterPayment = new LoanStatusAfterPayment(customerId, customerMail, loanId, actualAmountCharged, true);
+			SafeReader sr = DB.GetFirst(
+				"GetLoanStatus",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("LoanId", loanId)
+			);
+
+			string loanStatus = sr["Status"];
+			decimal balance = sr["Balance"];
+
+			LoanStatusAfterPayment loanStatusAfterPayment = new LoanStatusAfterPayment(customerId, customerMail, loanId, actualAmountCharged, balance, loanStatus == "PaidOff", true);
 			loanStatusAfterPayment.Execute();
 		}//SendLoanStatusMail
 

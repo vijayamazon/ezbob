@@ -765,7 +765,7 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestLoanStatusAfterPayment() {
-			new LoanStatusAfterPayment(54, "", 27, 1000, false).Execute();
+			new LoanStatusAfterPayment(54, "", 27, 1000, 500, false, false).Execute();
 		}
 	}
 }

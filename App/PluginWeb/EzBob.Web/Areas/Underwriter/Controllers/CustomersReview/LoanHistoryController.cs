@@ -229,13 +229,22 @@
 
                 //TODO add payment to new table
                 Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);
-
-				facade.Recalculate(customer.GetLoan(model.LoanId), DateTime.Now);
+				var loan = customer.GetLoan(model.LoanId);
+				facade.Recalculate(loan, DateTime.Now);
 
 				if (model.SendEmail)
 					this.m_oServiceClient.Instance.PayEarly(customer.Id, realAmount, customer.GetLoan(model.LoanId).RefNumber);
 
-				this.m_oServiceClient.Instance.LoanStatusAfterPayment(this._context.UserId, customer.Id, customer.Name, model.LoanId, realAmount, model.SendEmail);
+				this.m_oServiceClient.Instance.LoanStatusAfterPayment(
+					this._context.UserId, 
+					customer.Id, 
+					customer.Name, 
+					model.LoanId,
+					realAmount, 
+					loan.Balance, 
+					loan.Status == LoanStatus.PaidOff,
+					model.SendEmail);
+
 				string requestType = string.Format("UW Manual payment for customer {0}, amount {1}",
 												   customer.PersonalInfo.Fullname, realAmount);
 				_logRepository.Log(_context.UserId, date, requestType, "Successful", "");
