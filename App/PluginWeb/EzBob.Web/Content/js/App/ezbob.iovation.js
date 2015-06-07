@@ -14,7 +14,6 @@ EzBob.Iovation = (function () {
     };
 
     Iovation.prototype.callIovation = function (origin) {
-        console.log('callIovation');
         setTimeout(function () {
             try {
                 var bb_info = window.ioGetBlackbox();

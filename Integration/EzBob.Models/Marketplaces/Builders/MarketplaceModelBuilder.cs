@@ -177,8 +177,14 @@ namespace EzBob.Models.Marketplaces.Builders {
 				return;
 
 			mp.LastTransactionDate = GetLastTransaction(mp);
-
-			ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().SaveOrUpdate(mp);
+			try {
+				if (mp.LastTransactionDate != null) {
+					ObjectFactory.GetInstance<CustomerMarketPlaceRepository>()
+						.SaveOrUpdate(mp);
+				}
+			} catch (Exception ex) {
+				Log.Warn(ex, "Failed to update LastTransactionDate for mp {0}", mp.Id);
+			}
 		}
 
 		public void UpdateOriginationDate(MP_CustomerMarketPlace mp) {

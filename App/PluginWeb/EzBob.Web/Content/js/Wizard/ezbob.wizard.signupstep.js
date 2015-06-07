@@ -295,7 +295,6 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 			if (result.success) {
 				EzBob.Csrf.updateToken(result.antiforgery_token);
-				console.log('success');
 				EzBob.ServerLog.debug('Customer', sEmail, 'signed up successfully.');
 				$('body').attr('auth', 'auth');
 

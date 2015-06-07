@@ -81,5 +81,6 @@ BEGIN
 		#GetCustomersForPayPoint
 	WHERE 
 		LoanScheduleId NOT IN (SELECT LoanScheduleId FROM PaymentRollover WHERE ExpiryDate > @Now) 
+	ORDER BY LoanScheduleId DESC
 END
 GO

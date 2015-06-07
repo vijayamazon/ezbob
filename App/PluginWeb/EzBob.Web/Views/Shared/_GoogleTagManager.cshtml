@@ -25,16 +25,28 @@
 }
 else //Test environment
 {
-    <!-- Google Tag Manager Test -->
-    <noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-NZXBD6"
-    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
-    <script>(function (w, d, s, l, i) {
-    w[l] = w[l] || []; w[l].push({
-    'gtm.start':
-    new Date().getTime(), event: 'gtm.js'
-    }); var f = d.getElementsByTagName(s)[0],
-    j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-    '//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
-    })(window, document, 'script', 'dataLayer', 'GTM-NZXBD6');</script>
-    <!-- End Google Tag Manager -->
+	if (@ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
+		<!-- Google Tag Manager test everline-->
+		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-NLCN62"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+		new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+		j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+		'//www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+		})(window,document,'script','dataLayer','GTM-NLCN62');</script>
+		<!-- End Google Tag Manager -->
+	} else { 
+		<!-- Google Tag Manager Test ezbob-->
+		<noscript><iframe src="//www.googletagmanager.com/ns.html?id=GTM-NZXBD6"
+		height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+		<script>(function (w, d, s, l, i) {
+		w[l] = w[l] || []; w[l].push({
+		'gtm.start':
+		new Date().getTime(), event: 'gtm.js'
+		}); var f = d.getElementsByTagName(s)[0],
+		j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
+		'//www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+		})(window, document, 'script', 'dataLayer', 'GTM-NZXBD6');</script>
+		<!-- End Google Tag Manager -->
+	}
 }
