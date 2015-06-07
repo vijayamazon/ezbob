@@ -4,6 +4,7 @@
     using System.IO;
     using System.Text;
     using System.Reflection;
+    using System.Web;
     using System.Xml;
     using System.Xml.Serialization;
     using ConfigManager;
@@ -42,6 +43,7 @@
             );
 
             string companyName = companySR["CompanyName"];
+            companyName = HttpUtility.HtmlEncode(companyName);
             if (string.IsNullOrEmpty(companyName))
             {
                 Log.Info("CreditSafeNonLtd not retrieving data - customer has no company name.");
