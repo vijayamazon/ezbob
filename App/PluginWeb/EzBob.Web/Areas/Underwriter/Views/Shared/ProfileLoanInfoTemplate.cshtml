@@ -399,6 +399,12 @@
             </tr>
         </thead>
         <tbody class="box-content">
+            <%if(m.Editable){%>
+                @RawCellWithSlider("Spread setup fee", "spreadSetupFeeSwitch", "No", "Yes", "", "info")
+            <%} else{%>
+                @RawCell("Spread setup fee", "<%= m.SpreadSetupFee ? 'Yes' : 'No' %>")
+            <%}%>
+
             <tr>
                 <td>setup fee</td>
                 <td>

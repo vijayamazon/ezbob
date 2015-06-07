@@ -14,17 +14,17 @@
 
 <div class="row-fluid inner loan-taken">
 	<div id="profile-content">
-	    <div id="header-container"></div>
-        
-	    <h1>Congratulations</h1>
-	    
-        @if (!(bool) ViewData["IsAlibaba"]) {
-            <h2 style="font-size: 22px; margin-bottom: 20px;">Funds are being transferred to your account.</h2>
-        }
+		<div id="header-container"></div>
+
+		<h1>Congratulations</h1>
+
+		@if (!(bool)ViewData["IsAlibaba"]) {
+			<h2 style="font-size: 22px; margin-bottom: 20px;">Funds are being transferred to your account.</h2>
+		}
 
 		<h2 style="margin-bottom: 15px;">Loan Summary:</h2>
 
-		<input type="hidden" id="loanid" value="@ViewData["LoanId"]"/>
+		<input type="hidden" id="loanid" value="@ViewData["LoanId"]" />
 
 		<dl class="loan-schedule-info clearfix">
 			<dt>Name:</dt>
@@ -37,23 +37,26 @@
 			<dd>@FormattingUtils.FormatDateToString(DateTime.Now)</dd>
 
 			<dt>Loan Amount:</dt>
-			<dd>£ @ViewData["Amount"]
-				@if (!String.IsNullOrEmpty((string)ViewData["SetupFee"]))
-    {
-					<span style="color: #b7b7b7; font-size: 11px;">An origination fee of £ @ViewData["SetupFee"] was deducted from the transfer</span>
-    }
+			<dd>
+				£ @ViewData["Amount"]
+				@if (!String.IsNullOrEmpty((string)ViewData["SetupFee"])) {
+					<span style="color: #b7b7b7; font-size: 11px;">
+						An origination fee of
+						£ @ViewData["SetupFee"] was deducted from the transfer
+					</span>
+				}
 			</dd>
 
-			<dt>Total Repayments:
+			<dt>
+				Total Repayments:
 				<span style="font-size: 11px;">(inc. interest and fees)</span>
 			</dt>
 			<dd style="height: 40px;">£ @ViewData["Total"]</dd>
-            
-            @if (!(bool)ViewData["IsAlibaba"])
-            {
-                <dt>Bank Account:</dt>
-                <dd>@ViewData["bankNumber"]</dd>
-            }
+
+			@if (!(bool)ViewData["IsAlibaba"]) {
+				<dt>Bank Account:</dt>
+				<dd>@ViewData["bankNumber"]</dd>
+			}
 		</dl>
 
 		<div class="row-fluid">
@@ -62,30 +65,39 @@
 				<div id="schedule"></div>
 			</div>
 		</div>
-	    <div class="row-fluid">
-	        <div class="span12 buttons_container">
-	            <a
-	                href="#" class="schedule-print-link pull-left print-link"
-	                style="margin-top: 8px;"
-	                onclick="window.print();return false;"
-	                ui-event-control-id="loan-taken:print">Print for your records</a>
-	            <a
-	                href='@Url.Action("Index", "Profile", new { Area = "Customer" })' 
-	                class="btn-continue button btn-green pull-right btn-fix btn-wide"
-	                id="pacnet-status-back-to-profile"
-	                ui-event-control-id="loan-taken:back-to-profile">Go to my account</a>
-	        </div>
-	    </div>
+
+		<div class="row-fluid">
+			<div class="span12 buttons_container">
+				<a href="#" class="schedule-print-link pull-left print-link"
+					style="margin-top: 8px;"
+					onclick="window.print();return false;"
+					ui-event-control-id="loan-taken:print">Print for your records</a>
+				<a href='@Url.Action("Index", "Profile", new { Area = "Customer" })'
+					class="btn-continue button btn-green pull-right btn-fix btn-wide"
+					id="pacnet-status-back-to-profile"
+					ui-event-control-id="loan-taken:back-to-profile">Go to my account</a>
+			</div>
+		</div>
 	</div>
-	@if (Request.Cookies["tt"] != null && ttPixelEnabled)
- {
-     string srcStr = string.Format(
-         "{0}?campaignID={1}&productID={2}&conversionType={3}&https={4}&transactionID={5}&transactionAmount={6}&email={7}&descrMerchant={8}&descrAffiliate={9}&currency={10}",
-         Url.Action("TradeTrackerConversion", "PacnetStatus", new { Area = "Customer" }),
-         "12996", "19438", "sales", "1", @ViewData["loanNo"], @ViewData["Amount"], ViewData["email"], "Ezbob", "Loan", "GBP"
-     );
+
+	@if (Request.Cookies["tt"] != null && ttPixelEnabled) {
+		string srcStr = string.Format(
+			"{0}?campaignID={1}&productID={2}&conversionType={3}&https={4}&transactionID={5}&transactionAmount={6}" +
+			"&email={7}&descrMerchant={8}&descrAffiliate={9}&currency={10}",
+			Url.Action("TradeTrackerConversion", "PacnetStatus", new { Area = "Customer" }),
+			"12996",
+			"19438",
+			"sales",
+			"1",
+			@ViewData["loanNo"],
+			@ViewData["Amount"],
+			ViewData["email"],
+			"Ezbob",
+			"Loan",
+			"GBP"
+		);
 		<img src="@srcStr" width="1" height="1" border="0" alt="" />
- }
+	}
 </div>
 
 <script id="paypoint-schedule-template" type="text/template">
@@ -99,27 +111,32 @@
 				<th>Total</th>
 			</tr>
 		</thead>
-		<tbody><%
+		<tbody>
+			<%
 			var totalAmount = 0, totalPrincipal = 0, totalInterest = 0, totalFees = 0;
 
 			_.each(schedule, function(line, i) {
 				totalAmount += line.AmountDue;
 				totalPrincipal += line.LoanRepayment;
 				totalInterest += line.Interest;
-				totalFees += 0;
+				totalFees += line.Fees;
 				%><tr>
-				<td><%-EzBob.formatDateHumanFull(line.Date)%></td>
-				<td><%-EzBob.formatPoundsNoDecimals(line.LoanRepayment)%></td>
-				<td><%-EzBob.formatPounds(line.Interest)%></td>
-				<td><%-EzBob.formatPounds(0)%></td>
-				<td>
-					<b class="apply-loan-total"><%-EzBob.formatPounds(line.AmountDue)%></b>
-				</td>
+					<td><%-EzBob.formatDateHumanFull(line.Date)%></td>
+					<td><%-EzBob.formatPoundsNoDecimals(line.LoanRepayment)%></td>
+					<td><%-EzBob.formatPounds(line.Interest)%></td>
+					<td><%-EzBob.formatPounds(line.Fees)%></td>
+					<td>
+						<b class="apply-loan-total"><%- EzBob.formatPounds(line.AmountDue) %></b>
+					</td>
 				</tr><%
 			});
-		%></tbody>
+			%>
+		</tbody>
 	</table>
-	<p style="margin-top: 25px; color: #767676;">A confirmation email will be sent to your email address: @ViewData["email"]</p>
+	<p style="margin-top: 25px; color: #767676;">
+		A confirmation email will be sent
+		to your email address: @ViewData["email"]
+	</p>
 </script>
 
 @section Js
@@ -130,7 +147,7 @@
 			var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({
 				el: $('#schedule'),
 				schedule: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))
-			});
+				});
 			scheduleView.render();
 
 			$('#header-container').html(_.template($('#wizard-bar-template').html()));
@@ -143,8 +160,8 @@
 		})
 	</script>
 	<script id="wizard-bar-template" type="text/template">
-			<%var current = 2;%>
-			@{Html.RenderPartial("_StepsDashboard");}
+		<%var current = 2;%>
+		@{Html.RenderPartial("_StepsDashboard");}
 	</script>
 
 	@BundleHelper.RenderProfileJs()

@@ -208,6 +208,10 @@
 			get { return this[Variables.SmsTestModeEnabled]; }
 		}
 
+		public virtual VariableValue SpreadSetupFeeCharge {
+			get { return this[Variables.SpreadSetupFeeCharge]; }
+		}
+
 		public virtual VariableValue TaboolaPixelEnabled {
 			get { return this[Variables.TaboolaPixelEnabled]; }
 		}

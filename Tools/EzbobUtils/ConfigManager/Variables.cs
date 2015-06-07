@@ -406,6 +406,7 @@ namespace ConfigManager {
 		SkipServiceOnNewCreditLine,
 		SmallLoanScenarioLimit,
 		SmsTestModeEnabled,
+		SpreadSetupFeeCharge,
 
 		TaboolaPixelEnabled,
 		TargetsEnabled,
