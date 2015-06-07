@@ -441,15 +441,30 @@
 		[ValidateJsonAntiForgeryToken]
 		[Ajax]
 		[Permission(Name = "CreditLineFields")]
-		public JsonResult AllowSendingEmails(long id, bool enabled)
-		{
+		public JsonResult AllowSendingEmails(long id, bool enabled) {
 			var cr = _cashRequestsRepository.Get(id);
 			cr.EmailSendingBanned = !enabled;
 			cr.LoanTemplate = null;
 			log.Debug("CashRequest({0}).EmailSendingBanned = {1}", id, cr.EmailSendingBanned);
 
-            //TODO update new offer table
-            log.Debug("update offer for customer {0} EmailSendingBanned {1}", cr.Customer.Id, cr.EmailSendingBanned);
+			//TODO update new offer table
+			log.Debug("update offer for customer {0} EmailSendingBanned {1}", cr.Customer.Id, cr.EmailSendingBanned);
+			return Json(new { error = (string)null, id = id, status = enabled });
+		}
+
+		[HttpPost]
+		[Transactional]
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		[Permission(Name = "CreditLineFields")]
+		public JsonResult SpreadSetupFee(long id, bool enabled) {
+			var cr = _cashRequestsRepository.Get(id);
+			cr.SpreadSetupFee = enabled;
+			cr.LoanTemplate = null;
+			log.Debug("CashRequest({0}).SpreadSetupFee = {1}", id, cr.SpreadSetupFee);
+
+			//TODO update new offer table
+			log.Debug("update offer for customer {0} SpreadSetupFee {1}", cr.Customer.Id, cr.SpreadSetupFee);
 			return Json(new { error = (string)null, id = id, status = enabled });
 		}
 

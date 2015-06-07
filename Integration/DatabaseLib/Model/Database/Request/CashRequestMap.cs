@@ -1,13 +1,9 @@
-﻿
-namespace EZBob.DatabaseLib.Model.Database
-{
+﻿namespace EZBob.DatabaseLib.Model.Database {
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 
-	public sealed class CashRequestMap : ClassMap<CashRequest>
-	{
-		public CashRequestMap()
-		{
+	public sealed class CashRequestMap : ClassMap<CashRequest> {
+		public CashRequestMap() {
 			Table("CashRequests");
 			LazyLoad();
 			Id(x => x.Id);
@@ -32,7 +28,7 @@ namespace EZBob.DatabaseLib.Model.Database
 			Map(x => x.UseBrokerSetupFee);
 			Map(x => x.ManualSetupFeeAmount);
 			Map(x => x.ManualSetupFeePercent);
-            Map(x => x.BrokerSetupFeePercent);
+			Map(x => x.BrokerSetupFeePercent);
 			Map(x => x.EmailSendingBanned);
 			Map(x => x.UnderwriterComment).Length(200);
 			References(x => x.LoanType, "LoanTypeId");
@@ -59,6 +55,8 @@ namespace EZBob.DatabaseLib.Model.Database
 			HasMany(x => x.DecisionHistories).KeyColumn("CashRequestId").Cascade.All().Inverse();
 
 			Map(x => x.AutoDecisionID);
+
+			Map(x => x.SpreadSetupFee);
 		} // constructor
 	} // class CashRequestMap
 } // namespace

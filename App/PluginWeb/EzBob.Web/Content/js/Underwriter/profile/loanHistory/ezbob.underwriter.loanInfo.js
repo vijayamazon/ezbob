@@ -520,6 +520,7 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			this.LoanTypeSelectionAllowedChanged();
 
 			this.initSwitch(".sendEmailsSwitch", 'AllowSendingEmail', this.toggleValue, 'AllowSendingEmails');
+			this.initSwitch(".spreadSetupFeeSwitch", 'SpreadSetupFee', this.toggleValue, 'SpreadSetupFee');
 
 			var isLoanTypeSelectionAllowed = this.model.get('IsLoanTypeSelectionAllowed');
 
