@@ -137,11 +137,8 @@
 
 			MetaData.Validate();
 
-			// elinar - load turnovers
-
 			CalculateTurnoverForReject(Args.CustomerID, Now);
-
-		}// LoadData
+		} // LoadData
 
 		protected virtual ExperianConsumerData LoadConsumerData() {
 			var lcd = new LoadExperianConsumerData(Args.CustomerID, null, null);

@@ -46,6 +46,8 @@
 			);
 
 			MetaData.Validate();
+
+			CalculateTurnoverForReject(Args.CustomerID, Now);
 		} // LoadData
 
 		protected override ExperianConsumerData LoadConsumerData() {

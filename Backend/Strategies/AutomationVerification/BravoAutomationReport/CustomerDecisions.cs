@@ -106,21 +106,16 @@
 				} // if not alibaba
 			} // if; Reject area
 
-			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal = null;
+			AutomationCalculator.Common.MedalOutputModel medal = null;
 
 			if (doNext) { // Medal area
-				var instance = new Ezbob.Backend.Strategies.MedalCalculations.CalculateMedal(
-					customerID,
-					decisionTime,
-					false,
-					true
-				);
-				instance.Tag = this.tag;
-				instance.Execute();
-				medal = instance.Result;
+				var verification = new AutomationCalculator.MedalCalculation.MedalChooser(DB, Log);
+				medal = verification.GetMedal(customerID, decisionTime);
 			} // if; Medal area
 
-			int offeredCreditLine = medal == null ? 0 : medal.RoundOfferedAmount();
+			int offeredCreditLine = medal == null
+				? 0
+				: Ezbob.Backend.Strategies.MedalCalculations.MedalResult.RoundOfferedAmount(medal.OfferedLoanAmount);
 
 			if (doNext)
 				offeredCreditLine = CapOffer(customerID, offeredCreditLine);
@@ -190,11 +185,16 @@
 		} // CapOffer
 
 		private bool IsReapproved(int customerID, DateTime decisionTime) {
-			var agent = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(DB, Log, customerID, decisionTime);
+			var agent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval.ManAgainstAMachine.SameDataAgent(
+				customerID,
+				decisionTime,
+				DB,
+				Log
+			);
 
-			agent.MakeDecision(agent.GetInputData());
+			agent.Init();
 
-			agent.Trail.Save(DB, null, tag: this.tag);
+			agent.Decide(true, null, this.tag);
 
 			return agent.Trail.HasDecided;
 		} // IsReapproved
@@ -202,7 +202,7 @@
 		private bool IsApproved(
 			int customerID,
 			int offeredCreditLine,
-			Ezbob.Backend.Strategies.MedalCalculations.MedalResult medal,
+			AutomationCalculator.Common.MedalOutputModel medal,
 			DateTime decisionTime,
 			SortedSet<string> allNonAffirmativeTraces
 		) {
@@ -212,9 +212,9 @@
 			var agent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
 				customerID,
 				offeredCreditLine,
-				(AutomationCalculator.Common.Medal)medal.MedalClassification,
-				(AutomationCalculator.Common.MedalType)medal.MedalType,
-				(AutomationCalculator.Common.TurnoverType?)medal.TurnoverType,
+				medal.Medal,
+				medal.MedalType,
+				medal.TurnoverType,
 				decisionTime,
 				DB,
 				Log
