@@ -1,5 +1,7 @@
 ﻿namespace EzBobTest {
 	using System;
+	using CallCreditLib;
+	using Callcredit.CRBSB;
 	using ExperianLib.Tests.Integration;
 	using Ezbob.Backend.ModelsWithDB.CallCredit.CallCreditData;
 	using Ezbob.Backend.Strategies;
@@ -22,15 +24,17 @@
 
 		[Test]
 		
-		public CallCredit TestGetData() {
-			//var user = InitializeUser();
-			//var retrievedata = new CallCreditGetData(user);
-			//return retrievedata.GetSearch07a();
+		public CT_SearchResult TestGetData() {
+			var user = InitializeUser();
+			var retrievedata = new CallCreditGetData(user);
+			CT_SearchResult apiresult = retrievedata.GetSearch07a();
+			ParseCallCreditTest testsave = new ParseCallCreditTest(apiresult, 1);
+			testsave.Execute();
 			return null;
 		}
 
-		/*private static UserInfo InitializeUser() {
-			UserInfo user = new UserInfo();
+		private static CT_searchapplicant InitializeUser() {
+			CT_searchapplicant user = new CT_searchapplicant();
 			
 			/*user.dob = new DateTime(1910, 01, 01);
 			user.title = "MISS";
@@ -39,19 +43,45 @@
 			user.surname = "AUDI";
 			user.buildingno = "1";
 			user.street = "TOP GEAR LANE";
-			user.postcode = "X9 9LF";#1#
+			user.postcode = "X9 9LF";*/
 			
-			user.dob = new DateTime(1960, 11, 05);
-			user.title = "MR";
-			user.forename = "OSCAR";
-			user.othernames = "TEST-PERSON";
-			user.surname = "MANX";
-			user.buildingno = "606";
-			user.street = "ALLEY CAT LANE";
-			user.postcode = "X9 9AA";
+			/*user.dob = new DateTime(1960, 11, 05);
+			user.name[0].title = "MR";
+			user.name[0].forename = "OSCAR";
+			user.name[0].othernames = "TEST-PERSON";
+			user.name[0].surname = "MANX";
+			user.address[0].buildingno = "606";
+			user.address[0].street1 = "ALLEY CAT LANE";
+			user.address[0].postcode = "X9 9AA";
+			user.tpoptout = 0;
+			user.tpoptoutSpecified = true;
+*/
+			/* Create a new request applicant object and attach it to the credit request object. */
+			CT_searchapplicant apiApplicant = new CT_searchapplicant();
+			apiApplicant.dob = new DateTime(1960, 11, 05);
+			apiApplicant.dobSpecified = true;
+			apiApplicant.tpoptout = 0;
+			apiApplicant.tpoptoutSpecified = true;
 
-			return user;
-		}*/
+			/* Create a new name object and attach it to the request applicant object. */
+			CT_inputname apiName = new CT_inputname();
+			apiName.title = "MR";
+			apiName.forename = "OSCAR";
+			apiName.othernames = "TEST-PERSON";
+			apiName.surname = "MANX";
+
+			apiApplicant.name = new CT_inputname[] { apiName };
+
+			/* Create a new input current address object */
+			CT_inputaddress apiInputCurrentAddress = new CT_inputaddress();
+			apiInputCurrentAddress.buildingno = "606";
+			apiInputCurrentAddress.street1 = "ALLEY CAT LANE";
+			apiInputCurrentAddress.postcode = "X9 9AA";
+
+			apiApplicant.address = new CT_inputaddress[] { apiInputCurrentAddress };
+
+			return apiApplicant;
+		}
 		
 		
 		

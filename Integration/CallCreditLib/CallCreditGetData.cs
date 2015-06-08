@@ -58,7 +58,7 @@ namespace CallCreditLib {
 
 			CT_searchrequest srequest = new CT_searchrequest();
 
-			srequest.purpose = "DS";
+			srequest.purpose = "BS";
 			srequest.score = 1;
 			srequest.scoreSpecified = true;
 			srequest.transient = 0;
