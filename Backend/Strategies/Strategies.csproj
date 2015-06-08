@@ -147,6 +147,10 @@
     <Compile Include="NewLoan\GetLastOffer.cs" />
     <Compile Include="NewLoan\AddOffer.cs" />
     <Compile Include="NewLoan\AddCashRequest.cs" />
+    <Compile Include="NewLoan\RescheduleInLoan.cs" />
+    <Compile Include="NewLoan\LoanState.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="NewLoan\NL_ExceptionCustomerNotFound.cs" />
     <Compile Include="NewLoan\NL_ExceptionPaymentSave.cs" />
     <Compile Include="NewLoan\NL_ExceptionInputDataInvalid.cs" />

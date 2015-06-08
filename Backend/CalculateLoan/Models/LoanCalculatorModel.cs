@@ -22,7 +22,11 @@
 			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
 			BadPeriods = new BadPeriods();
-		} // constructor
+			Rollovers = new Rollovers();
+
+		}// constructor
+
+		public Rollovers Rollovers { get; set; }
 
 		public void ValidateSchedule() {
 			if (Schedule.Count < 1)
@@ -145,6 +149,11 @@
 
 			os.AppendFormat("\tBad periods: {0}\n", BadPeriods);
 
+			if (Rollovers !=null)
+				os.AppendFormat("\tRollovers:\n\t\t{0}.\n", string.Join("\n\t\t", Rollovers));
+			else
+				os.Append("\tNo rollovers.\n");
+
 			os.Append("\tLoan calculation model - end.\n");
 
 			return os.ToString();
@@ -159,10 +168,14 @@
 		public int RepaymentCount {
 			get { return this.repaymentCount; }
 			set {
-				if (value < 1)
+
+				//Console.WriteLine(value);
+				//Console.WriteLine(value.GetType());
+
+				if (value < 0)
 					throw new NegativeRepaymentCountException(value);
 
-				this.repaymentCount = value;
+				this.repaymentCount =  value;
 			} // set
 		} // RepaymentCount
 
@@ -252,5 +265,8 @@
 		private int interestOnlyRepayments;
 		private decimal loanAmount;
 		private decimal monthlyInterestRate;
-	} // class LoanCalculatorModel
+	}
+
+	
+// class LoanCalculatorModel
 } // namespace

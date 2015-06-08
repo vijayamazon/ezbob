@@ -927,10 +927,7 @@ GO
 
 -- SortOrder field defines order of entries (ORDER BY SortOrder ASC, DiscountPlanEntryID DESC) and not number of repayment period. Entry is always related to repetition period. I.e. if the same plan is applied to monthly repaid loan and to weekly repaid loan and an entry in the second position says "-10%" that means that in the former case customer receives 10% discound for the second month while in the latter case customer receives 10% discount for the second week.
 -- Value "0.1" in InterestRateDelta means "10%", value "-0.05" means "-5%".
-if OBJECT_ID('tempdb..#discountplanTemp') is not null
-	BEGIN
-		drop table #discountplanTemp;
-	END 
+if OBJECT_ID('tempdb..#discountplanTemp') is not null BEGIN drop table #discountplanTemp;END 
 	 
 	DECLARE @Id INT
 	DECLARE @NL_Id INT
@@ -954,16 +951,17 @@ if OBJECT_ID('tempdb..#discountplanTemp') is not null
 		if @NL_Id is not null 
 		BEGIN					
 			if (SELECT COUNT([DiscountPlanEntryID]) FROM [dbo].[NL_DiscountPlanEntries] WHERE [DiscountPlanID] = @NL_Id group by [DiscountPlanID]) is null			
-			BEGIN					
+			BEGIN
 				INSERT INTO [dbo].[NL_DiscountPlanEntries] ([DiscountPlanID], [PaymentOrder], [InterestDiscount]) 
 					SELECT 
 					@NL_Id, 
 					splitted.Id, 
-					case 
-					when splitted.Data = 0 then 0 
-					else CAST(splitted.Data AS float)/ @Percent 
-					end					 
-					FROM dbo.Split(@VALUESStr, ',') as splitted;
+					--case 
+					--when splitted.Data = 0 then 0 
+					--else 
+					CAST(splitted.Data AS float)/ @Percent 
+					--end					 
+					FROM dbo.udfSplit(@VALUESStr, ',') as splitted;
   			END
 		END
 		delete FROM #discountplanTemp WHERE ID = @Id;		 

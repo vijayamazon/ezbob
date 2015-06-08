@@ -1,11 +1,11 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Loans
+﻿namespace EZBob.DatabaseLib.Model.Loans
 {
-    public enum RolloverStatus
+	using System;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
+
+	public enum RolloverStatus
     {
         New = 0,
         Expired,
@@ -34,7 +34,9 @@ namespace EZBob.DatabaseLib.Model.Loans
 
         public override string ToString()
         {
-            return string.Format("Created: {0}, Payment: {1}, ScheduleDate: {2}", Created, Payment, LoanSchedule.Date);
+			return string.Format("PaymentRollover: Created: {0}, Payment: {1}, ScheduleDate: {2}, PaymentDueDate: {3}, PaymentNewDate: {4}, ExpiryDate: {5}," +
+				"CustomerConfirmationDate: {6}, PaidPaymentAmount: {7}, MounthCount: {8}", Created, Payment, LoanSchedule.Date, PaymentDueDate, PaymentNewDate,
+				ExpiryDate, CustomerConfirmationDate, PaidPaymentAmount, MounthCount);
         }
     }
 

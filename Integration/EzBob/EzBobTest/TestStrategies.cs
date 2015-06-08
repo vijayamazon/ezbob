@@ -5,6 +5,7 @@
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
@@ -12,7 +13,6 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
-	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
@@ -106,7 +106,7 @@
 
 			});
 
-			Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
+			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
 		[Test]
@@ -854,11 +854,34 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
+		}
 
-
-
+		[Test]
+		public void TestMultipleLoanState() {
+			var loans = new[] {1,2,3,4,5};
+			foreach (var lID in loans) {
+				try {
+					var s = new LoanState<Loan>(new Loan(), lID);
+					s.Execute();
+				} catch (Exception e) {
+					Console.WriteLine(e);
+				}
+			}
 		}
 
 
+		[Test]
+		public void TestLoanState() {
+			int loanID = 242; // 3552; // 1049; 
+			var s = new LoanState<Loan>(new Loan(), loanID);
+			try {
+				s.Execute();
+				LoanCalculatorModel calculatorModel = s.CalcModel;
+				//Console.WriteLine(calculatorModel.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+
+		}
 	}
 }

@@ -1,12 +1,13 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-
 namespace EzBob.Models
 {
-    public class EditLoanDetailsModel
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Text;
+	using Newtonsoft.Json;
+	using Newtonsoft.Json.Converters;
+
+	public class EditLoanDetailsModel
     {
         private readonly List<string> _errors = new List<string>();
 
@@ -104,5 +105,16 @@ namespace EzBob.Models
                 Errors.Add("Zero fees are not allowed");
             }
         }
+
+	   
+	    public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+			Type t = typeof(EditLoanDetailsModel);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
+					sb.Append("\t\t" + prop.Name).Append(": ").Append(prop.GetValue(this)).Append(";");
+			}
+			return sb.ToString();
+	    }
     }
 }

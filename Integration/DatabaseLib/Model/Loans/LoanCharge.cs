@@ -1,24 +1,24 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Loans
+﻿namespace EZBob.DatabaseLib.Model.Loans
 {
-    public class LoanCharge
+	using System;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
+
+	public class LoanCharge
     {
         public virtual int Id { get; set; }
         public virtual decimal Amount { get; set; }
         public virtual decimal AmountPaid { get; set; }
         public virtual string State { get; set; }
-        public virtual Database.Loans.Loan Loan { get; set; }
+        public virtual Loan Loan { get; set; }
         public virtual ConfigurationVariable ChargesType { get; set; }
         public virtual DateTime Date { get; set; }
         public virtual string Description { get; set; }
 
         public override string ToString()
         {
-            return string.Format("Amount: {0}, Date: {1}", Amount, Date);
+			return string.Format("LoanCharge: Id: {0}, Amount: {1}, AmountPaid: {2}, State: {3}, ChargesType: {4}, Date: {5}, Description: {6}", Id, Amount, AmountPaid, State, ChargesType.Name, Date, Description);
         }
 
         public virtual string GetDescription()

@@ -133,6 +133,10 @@
       <Project>{DFC5B190-AFA4-40A7-8237-8404687B4513}</Project>
       <Name>HmrcHarvester</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\Models\Models.csproj">
+      <Project>{DDAF0E80-8E9D-49F4-AA8C-30A69489361E}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\EzServiceAccessorShort\EzServiceShortcut.csproj">
       <Project>{3D162D7E-C8EA-4A97-AF1A-58E728093AD0}</Project>
       <Name>EzServiceShortcut</Name>

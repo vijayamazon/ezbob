@@ -444,7 +444,7 @@
 		public override string ToString() {
 			var sb = new StringBuilder();
 
-			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}\n", Id, LoanAmount, InterestRate);
+			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}, Issued: {3}, Closed: {4}\n", Id, LoanAmount, InterestRate, Date, DateClosed);
 
 			sb.AppendLine("Schedule:");
 			foreach (var item in _schedule) {
@@ -469,6 +469,7 @@
 				sb.Append("\t");
 				sb.AppendLine(item.ToString());
 			}
+
 			return sb.ToString();
 		} // ToString
 

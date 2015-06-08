@@ -72,6 +72,7 @@
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MpModel.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
+    <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="PropertyStatusModel.cs" />
     <Compile Include="CustomerDetailsModel.cs" />
     <Compile Include="CrmStatusGroup.cs" />
@@ -106,6 +107,10 @@
     <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
       <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
       <Name>DatabaseLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
+      <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
+      <Name>DbConstants</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>

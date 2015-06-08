@@ -65,6 +65,7 @@
     <Compile Include="Helpers\OneDayLoanStatus.cs" />
     <Compile Include="Helpers\OpenPrincipal.cs" />
     <Compile Include="Helpers\Repayment.cs" />
+    <Compile Include="Helpers\Rollovers.cs" />
     <Compile Include="Helpers\ScheduledItem.cs" />
     <Compile Include="Helpers\ScheduledItemWithAmountDue.cs" />
     <Compile Include="Library.cs" />

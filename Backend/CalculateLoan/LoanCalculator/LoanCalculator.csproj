@@ -92,6 +92,10 @@
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
       <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
       <Name>CalculateLoanExceptions</Name>
