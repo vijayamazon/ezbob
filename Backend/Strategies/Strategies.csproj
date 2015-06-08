@@ -138,6 +138,7 @@
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />
     <Compile Include="NewLoan\AddFee.cs" />
+    <Compile Include="NewLoan\AddLoanOptions.cs" />
     <Compile Include="NewLoan\AddLoanState.cs" />
     <Compile Include="NewLoan\AddRollover.cs" />
     <Compile Include="NewLoan\AddDecision.cs" />

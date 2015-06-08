@@ -11,7 +11,12 @@ GO
 
 CREATE TYPE NL_LoanOptionsList AS TABLE (
 	[LoanID] INT NOT NULL,
-	[AutoPayment] BIT NOT NULL,
+	[AutoCharge] BIT NOT NULL,
+	[StopAutoChargeDate] DATETIME NULL,
+	[AutoLateFees] BIT NOT NULL,
+	[StopAutoLateFeesDate] DATETIME NULL,
+	[AutoInterest] BIT NOT NULL,
+	[StopAutoInterestDate] DATETIME NULL,
 	[ReductionFee] BIT NOT NULL,
 	[LatePaymentNotification] BIT NOT NULL,
 	[CaisAccountStatus] NVARCHAR(50) NULL,
@@ -34,7 +39,12 @@ BEGIN
 
 	INSERT INTO NL_LoanOptions (
 		[LoanID],
-		[AutoPayment],
+		[AutoCharge],
+		[StopAutoChargeDate],
+		[AutoLateFees],
+		[StopAutoLateFeesDate],
+		[AutoInterest],
+		[StopAutoInterestDate],
 		[ReductionFee],
 		[LatePaymentNotification],
 		[CaisAccountStatus],
@@ -48,7 +58,12 @@ BEGIN
 		[Notes]
 	) SELECT
 		[LoanID],
-		[AutoPayment],
+		[AutoCharge],
+		[StopAutoChargeDate],
+		[AutoLateFees],
+		[StopAutoLateFeesDate],
+		[AutoInterest],
+		[StopAutoInterestDate],
 		[ReductionFee],
 		[LatePaymentNotification],
 		[CaisAccountStatus],

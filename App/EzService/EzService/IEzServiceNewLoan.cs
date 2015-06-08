@@ -20,8 +20,9 @@
 		
 		[OperationContract]
 		IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
-		
 
+		[OperationContract]
+		IntActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions);
 		//[OperationContract]
 		//DateTimeActionResult ExampleMethod(int userID, int customerID);
 		//[OperationContract]

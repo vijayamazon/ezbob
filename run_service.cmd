@@ -28,5 +28,5 @@ rem Start EzServiceHost minimised
 echo service start
 start /MIN /D %TARGET_PATH% %TARGET_PATH%\EzServiceHost.exe
 
-cd \
+cd ../../../../..
 

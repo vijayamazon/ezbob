@@ -1,10 +1,13 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database {
+	using System;
 	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
 
 	public class LoanOptions {
 		public virtual int Id { get; set; }
 		public virtual int LoanId { get; set; }
 		public virtual bool AutoPayment { get; set; }
+		public virtual DateTime? StopAutoChargeDate { get; set; }
 		public virtual bool ReductionFee { get; set; }
 		public virtual bool LatePaymentNotification { get; set; }
 		public virtual string CaisAccountStatus { get; set; }
@@ -13,6 +16,9 @@
 		public virtual bool MailSendingAllowed { get; set; }
 		public virtual bool SmsSendingAllowed { get; set; }
 		public virtual bool AutoLateFees { get; set; }
+		public virtual DateTime? StopAutoLateFeesDate { get; set; }
+		public virtual bool AutoInterest { get; set; }
+		public virtual DateTime? StopAutoInterestDate { get; set; }
 
 		public static LoanOptions GetDefault(int loanID) {
 			var options = new LoanOptions {
@@ -24,7 +30,8 @@
 				SmsSendingAllowed = true,
 				CaisAccountStatus = "Calculated value",
 				LoanId = loanID,
-				AutoLateFees = true
+				AutoLateFees = true,
+				AutoInterest = true
 			};
 
 			return options;
@@ -45,6 +52,9 @@
 			Map(x => x.SmsSendingAllowed);
 			Map(x => x.ManualCaisFlag);
 			Map(x => x.AutoLateFees);
+			Map(x => x.StopAutoChargeDate).CustomType<UtcDateTimeType>();
+			Map(x => x.StopAutoInterestDate).CustomType<UtcDateTimeType>();
+			Map(x => x.StopAutoLateFeesDate).CustomType<UtcDateTimeType>();
 		}
 	}
 }

@@ -3,6 +3,8 @@
 	using System.Web.Mvc;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Repository;
@@ -10,6 +12,7 @@
 	using Models;
 	using Infrastructure.csrf;
 	using log4net;
+	using ServiceClientProxy;
 	using StructureMap;
 
 	public class LoanOptionsController : Controller {
@@ -18,13 +21,21 @@
 		private readonly ILoanOptionsRepository _loanOptionsRepository;
 		private readonly ILoanRepository _loanRepository;
 		private readonly ICaisFlagRepository _caisFlagRepository;
-	    private readonly ILog Log = LogManager.GetLogger(typeof (LoanOptionsController));
-		public LoanOptionsController(ILoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository, ICustomerStatusHistoryRepository customerStatusHistoryRepository, CustomerStatusesRepository customerStatusesRepository) {
+		private readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext context;
+	    protected static readonly ILog Log = LogManager.GetLogger(typeof (LoanOptionsController));
+		public LoanOptionsController(
+			ILoanOptionsRepository loanOptionsRepository,
+			ILoanRepository loanRepository, 
+			ICustomerStatusHistoryRepository customerStatusHistoryRepository, 
+			CustomerStatusesRepository customerStatusesRepository, IEzbobWorkplaceContext context) {
 			this._loanOptionsRepository = loanOptionsRepository;
 			this._loanRepository = loanRepository;
 			this._caisFlagRepository = ObjectFactory.GetInstance<CaisFlagRepository>();
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 			this.customerStatusesRepository = customerStatusesRepository;
+			this.context = context;
+			this.serviceClient = new ServiceClient();
 		}
 
 		[Ajax]
@@ -48,9 +59,10 @@
 
 			this._loanOptionsRepository.SaveOrUpdate(options);
 
+			Customer customer = this._loanRepository.Get(options.LoanId).Customer;
 			if (options.CaisAccountStatus == "8") {
 				int minDectForDefault = CurrentValues.Instance.MinDectForDefault;
-				Customer customer = this._loanRepository.Get(options.LoanId).Customer;
+				
 				Loan triggeringLoan = null;
 
 				// Update loan options
@@ -97,7 +109,9 @@
 			}
 
             //TODO update new loan options table
-			this.Log.DebugFormat("update loan options for loan {0}", options.LoanId);
+			Log.DebugFormat("update loan options for loan {0}", options.LoanId);
+
+			//todo this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, new NL_LoanOptions {});
             
 			return Json(new { });
 		}

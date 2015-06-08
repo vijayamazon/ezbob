@@ -14,7 +14,22 @@
         public int LoanID { get; set; }
 
         [DataMember]
-        public bool AutoPayment { get; set; }
+		public bool AutoCharge { get; set; }
+
+		[DataMember]
+		public DateTime? StopAutoChargeDate { get; set; }
+
+		[DataMember]
+		public bool AutoLateFees { get; set; }
+
+		[DataMember]
+		public DateTime? StopAutoLateFeesDate { get; set; }
+
+		[DataMember]
+		public bool AutoInterest { get; set; }
+
+		[DataMember]
+		public DateTime? StopAutoInterestDate { get; set; }
 
         [DataMember]
         public bool ReductionFee { get; set; }
