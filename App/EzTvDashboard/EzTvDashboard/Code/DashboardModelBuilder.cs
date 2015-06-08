@@ -1,7 +1,6 @@
 ﻿namespace EzTvDashboard.Code {
 	using System;
 	using System.Collections.Generic;
-	using System.Data;
 	using Ezbob.Database;
 	using GoogleAnalyticsLib;
 	using Models;
@@ -105,22 +104,37 @@
 			);
 
 			try {
-				var ga = new GoogleAnalytics();
-				ga.Init(DateTime.UtcNow, GaCertThumb);
-				var todayAnalytics = ga.FetchByCountry(DateTime.Today, LastChanged);
-				var monthToDateAnalytics = ga.FetchByCountry(firstOfMonth, LastChanged);
-				if (todayAnalytics.ContainsKey("United Kingdom")) {
-					model.Stats["T_UkVisitors"] = todayAnalytics["United Kingdom"].Users;
-				}
 
-				if (monthToDateAnalytics.ContainsKey("United Kingdom")) {
-					model.Stats["M_UkVisitors"] = monthToDateAnalytics["United Kingdom"].Users;
-				}
+				Tuple<int, int> ezbobVisitors = GetAnalyticsData(DbConsts.EzbobProfileID, firstOfMonth);
+				Tuple<int, int> everlineVisitors = GetAnalyticsData(DbConsts.EverlineProfileID, firstOfMonth);
+
+				model.Stats["T_UkVisitors"] = ezbobVisitors.Item1 + everlineVisitors.Item1;
+				model.Stats["M_UkVisitors"] = ezbobVisitors.Item2 + everlineVisitors.Item2;
 			} catch (Exception ex) {
 				Log.ErrorFormat("Failed to load google analytics values \n{0}", ex);
 			}
 
 			return model;
+		}
+
+		/// <returns>Item1 = todayVisitors, Item2 = monthVisitors</returns>
+		private Tuple<int, int> GetAnalyticsData(string profileID, DateTime firstOfMonth)
+		{
+			int todayVisitors = 0;
+			int monthVisitors = 0;
+			var ga = new GoogleAnalytics();
+			ga.Init(DateTime.UtcNow, GaCertThumb, profileID);
+			var todayAnalytics = ga.FetchByCountry(DateTime.Today, LastChanged);
+			var monthToDateAnalytics = ga.FetchByCountry(firstOfMonth, LastChanged);
+			if (todayAnalytics.ContainsKey("United Kingdom")) {
+				todayVisitors = todayAnalytics["United Kingdom"].Users;
+			}
+
+			if (monthToDateAnalytics.ContainsKey("United Kingdom")) {
+				monthVisitors = monthToDateAnalytics["United Kingdom"].Users;
+			}
+
+			return new Tuple<int, int>(todayVisitors, monthVisitors);
 		}
 
 		public DashboardModel BuildFakeModel() {

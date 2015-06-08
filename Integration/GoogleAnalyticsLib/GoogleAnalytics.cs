@@ -17,11 +17,11 @@
 			Log = new SafeLog(oLog);
 		} // constructor
 
-		public bool Init(DateTime oDate, string thumb) {
+		public bool Init(DateTime oDate, string thumb, string profileID = "ga:60953365") {
 			Log.Debug("Program.Init started...");
 
 			m_oReportDate = oDate;
-
+			this.profileID = profileID;
 			Log.Debug("Processing analytics for {0}", m_oReportDate.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture));
 
 			Log.Debug("Creating authentication data...");
@@ -103,6 +103,7 @@
 				m_oService,
 				startDate,
 				endDate, 
+				profileID,
 				new GoogleReportDimensions[] { GoogleReportDimensions.country, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.users, GoogleReportMetrics.newUsers },
 				null
@@ -144,6 +145,7 @@
 				m_oService,
 				m_oReportDate,
 				m_oReportDate, 
+				profileID,
 				new GoogleReportDimensions[] { GoogleReportDimensions.pagePath, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.users },
 				null
@@ -191,6 +193,7 @@
 				m_oService,
 				m_oReportDate,
 				m_oReportDate,
+				profileID,
 				new GoogleReportDimensions[] { GoogleReportDimensions.sourceMedium, GoogleReportDimensions.country, },
 				new GoogleReportMetrics[] { GoogleReportMetrics.users, GoogleReportMetrics.newUsers },
 				null
@@ -242,6 +245,7 @@
 				m_oService,
 				m_oReportDate,
 				m_oReportDate,
+				profileID,
 				new GoogleReportDimensions[] { GoogleReportDimensions.landingPagePath },
 				new GoogleReportMetrics[] { GoogleReportMetrics.users, GoogleReportMetrics.newUsers },
 				null,
@@ -321,5 +325,6 @@
 
 		private DateTime m_oReportDate;
 		private AnalyticsService m_oService;
+		private string profileID;
 	} // class Program
 } // namespace EzAnalyticsConsoleClient

@@ -127,6 +127,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\connection-strings.xml">
+      <Link>connection-strings.xml</Link>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Content\Css\bootstrap-theme.css" />
     <Content Include="Content\Css\bootstrap.css" />
     <Content Include="Content\Css\dataTables.bootstrap.css" />

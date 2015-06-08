@@ -155,9 +155,8 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 		$('div.street-view').each(function (i, el) {
 			
 			var $el = $(this);
-			console.log($el, $el.data('address'), el, i);
 			var geocoder = new google.maps.Geocoder();
-			geocoder.geocode({ address: "106 Lion Road Bexleyheath England DA6 8PQ" },
+			geocoder.geocode({ address: $el.data('address') },
 				function (results, status) {
 					if (status == 'OK') {
 						var latlng = results[0].geometry.location;

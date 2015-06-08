@@ -10,8 +10,6 @@ namespace GoogleAnalyticsLib
 {
 
 	class GoogleDataFetcher : SafeLog {
-
-		public const string ProfileID = "ga:60953365";
 		public const string KeyFileName = "08a190d7e7b61e5cdfa63301e528134d3699f096-privatekey.p12";
 		public const string ServiceAccountUser = "660066936754-gcs16ckt4dhklhcqrktjispn0l3ddfhl@developer.gserviceaccount.com";
 		public const string Scope = "analytics";
@@ -22,7 +20,7 @@ namespace GoogleAnalyticsLib
 		public const string UA = "Ukraine";
 		public const string UK = "United Kingdom";
 
-		public GoogleDataFetcher(AnalyticsService oService, DateTime oStartDate, DateTime oEndDate, IEnumerable<GoogleReportDimensions> oDimensions, IEnumerable<GoogleReportMetrics> oMetrics, string sFilters = null, ASafeLog oLog = null) : base(oLog) {
+		public GoogleDataFetcher(AnalyticsService oService, DateTime oStartDate, DateTime oEndDate, string profileID, IEnumerable<GoogleReportDimensions> oDimensions, IEnumerable<GoogleReportMetrics> oMetrics, string sFilters = null, ASafeLog oLog = null) : base(oLog) {
 			m_oService = oService;
 			m_oStartDate = oStartDate;
 			m_oEndDate = oEndDate;
@@ -34,13 +32,15 @@ namespace GoogleAnalyticsLib
 			Metrics = FillIndices(m_oMetrics, oMetrics);
 
 			m_sFilters = string.IsNullOrWhiteSpace(sFilters) ? null : sFilters;
+
+			this.profileID = profileID;
 		} // constructor
 
 		public List<GoogleDataItem> Fetch() {
 			string sStartDate = m_oStartDate.ToString(GoogleDataFetcher.OAuthDateFormat, CultureInfo.InvariantCulture);
 			string sEndDate = m_oEndDate.ToString(GoogleDataFetcher.OAuthDateFormat, CultureInfo.InvariantCulture);
 
-			DataResource.GaResource.GetRequest request = m_oService.Data.Ga.Get(GoogleDataFetcher.ProfileID, sStartDate, sEndDate, Metrics);
+			DataResource.GaResource.GetRequest request = m_oService.Data.Ga.Get(this.profileID, sStartDate, sEndDate, Metrics);
 
 			//to retrieve accounts: Accounts accounts = service.Management.Accounts.List().Fetch();
 			//to retrieve profiles: var profiles = service.Management.Profiles.List("32583191", "UA-32583191-1").Fetch();
@@ -122,7 +122,7 @@ namespace GoogleAnalyticsLib
 
 		private readonly SortedDictionary<GoogleReportDimensions, int> m_oDimensions;
 		private readonly SortedDictionary<GoogleReportMetrics, int> m_oMetrics;
-
+		private string profileID;
 	} // class GoogleDataFetcher
 
 } // namespace EzAnalyticsConsoleClient

@@ -21,5 +21,8 @@
 		public const string LandingPageUsers = "LandingPageUsers";
 
 		public const string Page = "Page";
+
+		public const string EzbobProfileID = "ga:60953365";
+		public const string EverlineProfileID = "ga:98329566";
 	} // class DbConsts
 } // namespace
