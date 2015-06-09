@@ -1,0 +1,14 @@
+IF OBJECT_ID('GetSalesForceForRerun') IS NULL
+	EXECUTE('CREATE PROCEDURE GetSalesForceForRerun AS SELECT 1')
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+
+ALTER PROCEDURE GetSalesForceForRerun
+
+AS
+BEGIN
+	SELECT * FROM SalesForceLog WHERE RerunSuccess = 0 AND SalesForceLogID>489
+END 
+GO

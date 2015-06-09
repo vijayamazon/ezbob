@@ -257,6 +257,7 @@
                 Model = request;
                 Error = res.Error;
             } else {
+	            Error = String.Empty;
                 Log.InfoFormat("SalesForce {3} success for customer {0}, request \n{2}\n response: {1}", email, result, request, serviceName);
             }
         }

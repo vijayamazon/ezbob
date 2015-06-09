@@ -41,7 +41,9 @@ namespace SalesForceLib {
 			return "[" + jsonInput + "]";
 		}
 
-		public static T JsonStringToObject<T>(this string strObj) {
+		public static T JsonStringToObject<T>(this string strObj)
+		{
+			strObj = strObj.Replace("[", "").Replace("]", "");
 			T obj = JsonConvert.DeserializeObject<T>(strObj);
 			return obj;
 		}

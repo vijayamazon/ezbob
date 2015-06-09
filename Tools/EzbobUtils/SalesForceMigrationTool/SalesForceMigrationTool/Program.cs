@@ -9,9 +9,6 @@ using SalesForceLib.Models;
 
 namespace SalesForceMigrationTool {
     class Program {
-        
-        
-
         public static ISalesForceAppClient SfClient = new SalesForceApiClient("techapi@ezbob.com", "Ezca$h123", "qCgy7jIz8PwQtIn3bwxuBv9h", "Production");
         private static ILog Log = LogManager.GetLogger(typeof (Program));
         public static AConnection DB = new SqlConnection(new SafeILog(Log));
@@ -25,7 +22,8 @@ namespace SalesForceMigrationTool {
             //MigrateLeadsFromDb();
             //MigrateContact(1189);
             //MigrateContact(1227);
-            
+			SalesForceReruner sfReruner = new SalesForceReruner(SfClient, DB);
+			sfReruner.Rerun();
             Log.Info("End SF Migration tool");
         }
 
