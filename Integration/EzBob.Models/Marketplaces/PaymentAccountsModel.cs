@@ -57,10 +57,9 @@
 
 		public virtual void Load(List<IAnalysisDataParameterInfo> av) {
 			base.Load(av);
-			var freeCashFlow = av.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.FreeCashFlow.ToString());
-			TotalNetOutPayments = TotalNetInPayments - (freeCashFlow == null ? 0M : (decimal)freeCashFlow.Value); //netIn - netOut = freeCashflow
+			var valueAdded = av.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.ValueAdded.ToString());
+			TotalNetOutPayments = TotalNetInPayments - (valueAdded == null ? 0M : (decimal)valueAdded.Value); //netIn - netOut = valueAdded
 			TransactionsNumber = 0; //irrelevant for HMRC
-
 		} // Load
 	} // class ChannelGrabberPaymentAccountsModel
 
