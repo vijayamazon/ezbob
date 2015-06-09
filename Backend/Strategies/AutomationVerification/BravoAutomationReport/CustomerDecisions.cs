@@ -128,9 +128,11 @@
 			} // if; Re-approve area
 
 			if (doNext) { // Approve area
-				if (IsApproved(customerID, offeredCreditLine, medal, decisionTime, allNonAffirmativeTraces)) {
+				Guid? trailID;
+
+				if (IsApproved(customerID, offeredCreditLine, medal, decisionTime, allNonAffirmativeTraces, out trailID)) {
 					doNext = false;
-					result = new AutoDecision(DecisionActions.Approve);
+					result = new AutoDecision(DecisionActions.Approve, trailID);
 				} // if
 			} // if; Approve area
 
@@ -204,8 +206,11 @@
 			int offeredCreditLine,
 			AutomationCalculator.Common.MedalOutputModel medal,
 			DateTime decisionTime,
-			SortedSet<string> allNonAffirmativeTraces
+			SortedSet<string> allNonAffirmativeTraces,
+			out Guid? trailUniqueID
 		) {
+			trailUniqueID = null;
+
 			if (medal == null)
 				return false;
 
@@ -234,6 +239,8 @@
 					allNonAffirmativeTraces.Add(traceName);
 				} // for each trace
 			} // if
+
+			trailUniqueID = agent.Trail.UniqueID;
 
 			return agent.Trail.HasDecided;
 		} // IsApproved

@@ -11,7 +11,7 @@
 
 	public class Bar : AStrategy {
 		public Bar(DateTime? startTime, DateTime? endTime) {
-			this.spLoad = new SpLoadCashRequestsForBravoAutomationReport(DB, Log);
+			this.spLoad = new SpLoadCashRequests(DB, Log);
 			this.customerDecisions = new SortedDictionary<int, CustomerDecisions>();
 
 			StartTime = startTime ?? defaultStartTime;
@@ -46,12 +46,32 @@
 
 			Result = new ExcelPackage();
 
-			CreateResult();
+			SaveResultToDB();
 
-			SaveResult();
+			CreateXlsx();
+			SaveXlsx();
 		} // Execute
 
 		public ExcelPackage Result { get; private set; }
+
+		private void SaveResultToDB() {
+			var sp = new SpSaveResults(this.tag, DB, Log);
+
+			foreach (CustomerDecisions cd in this.customerDecisions.Values) {
+				sp.ItemsToStore.Add(new SpSaveResults.Item {
+					AutoApproveTrailUniqueID = cd.Auto.First.TrailUniqueID,
+					AutoDecisionID = cd.Auto.First.AutoDecisionID,
+					CustomerID = cd.CustomerID,
+					FirstCashRequestID = cd.Manual.First.CashRequestID,
+					HasEnoughData = cd.Manual.First.HasEnoughData,
+					HasSignature = cd.Manual.First.HasSignature,
+					IsOldCustomer = cd.Manual.First.IsOldCustomer,
+					ManualDecisionID = cd.Manual.First.ManualDecisionID,
+				});
+			} // for each customer
+
+			sp.ExecuteNonQuery();
+		} // SaveResultToDB
 
 		private void ProcessManualDecision(SafeReader sr) {
 			int customerID = sr["CustomerID"];
@@ -87,8 +107,8 @@
 			this.pc.Log();
 		} // RunAutomation
 
-		private void CreateResult() {
-			Log.Debug("Generating result...");
+		private void CreateXlsx() {
+			Log.Debug("Generating .xlsx...");
 
 			ExcelWorksheet sheet = Result.CreateSheet("Raw", false);
 
@@ -128,8 +148,8 @@
 
 			prc.Log();
 
-			Log.Debug("Generating result complete.");
-		} // CreateResult
+			Log.Debug("Generating .xlsx complete.");
+		} // CreateXlsx
 
 		private int CreateResultHeader(ExcelWorksheet sheet) {
 			sheet.SetRowTitles(1, ResultHeaders().ToArray());
@@ -144,7 +164,7 @@
 				yield return s;
 		} // ResultHeaders
 
-		private string SaveResult() {
+		private string SaveXlsx() {
 			string filePath = Path.Combine(
 				Path.GetTempPath(),
 				string.Format(
@@ -158,11 +178,11 @@
 			Log.Info("Result has been saved as '{0}'.", filePath);
 
 			return filePath;
-		} // SaveResult
+		} // SaveXlsx
 
 		private ProgressCounter pc;
 
-		private readonly SpLoadCashRequestsForBravoAutomationReport spLoad;
+		private readonly SpLoadCashRequests spLoad;
 
 		private readonly SortedDictionary<int, CustomerDecisions> customerDecisions;
 

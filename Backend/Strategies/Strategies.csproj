@@ -105,7 +105,8 @@
     <Compile Include="AutomationVerification\BravoAutomationReport\CustomerDecisions.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\ADecision.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\ManualDecision.cs" />
-    <Compile Include="AutomationVerification\BravoAutomationReport\SpLoadCashRequestsForBravoAutomationReport.cs" />
+    <Compile Include="AutomationVerification\BravoAutomationReport\SpLoadCashRequests.cs" />
+    <Compile Include="AutomationVerification\BravoAutomationReport\SpSaveResults.cs" />
     <Compile Include="AutomationVerification\KPMG\ADatumItem.cs" />
     <Compile Include="AutomationVerification\KPMG\AutoDatumItem.cs" />
     <Compile Include="AutomationVerification\KPMG\CustomerData.cs" />
