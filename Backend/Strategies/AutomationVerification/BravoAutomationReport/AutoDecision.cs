@@ -3,8 +3,10 @@
 	using DbConstants;
 
 	internal class AutoDecision : ADecision {
-		public AutoDecision(DecisionActions? decision, Guid? trailUniqueID = null) {
+		public AutoDecision(DecisionActions? decision, Guid? trailUniqueID = null, int? runTimeCount = null) {
 			DecisionTime = DateTime.UtcNow;
+
+			TrailUniqueID = trailUniqueID;
 
 			if (decision == null) {
 				ApproveStatus = ApproveStatus.Dunno;
@@ -20,8 +22,6 @@
 				ApproveStatus = ApproveStatus.Dunno;
 
 			AutoDecisionID = (int)decision.Value;
-
-			TrailUniqueID = trailUniqueID;
 		} // constructor
 
 		public Guid? TrailUniqueID { get; private set; }

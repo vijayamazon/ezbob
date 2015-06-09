@@ -60,12 +60,12 @@
 		} // AutoInterface
 
 		public void RunAutomation(DateTime now, SortedSet<string> allNonAffirmativeTraces) {
-			AutoDecisions.Add(RunAutomationOnce(CustomerID, Manual.First.DecisionTime, IsAlibaba));
+			AutoDecisions.Add(RunAutomationOnce(CustomerID, Manual.First.DecisionTime, IsAlibaba, 1));
 
 			if (ManualDecisions.Count > 1)
-				AutoDecisions.Add(RunAutomationOnce(CustomerID, Manual.Last.DecisionTime, IsAlibaba));
+				AutoDecisions.Add(RunAutomationOnce(CustomerID, Manual.Last.DecisionTime, IsAlibaba, 2));
 
-			CurrentAutoDecision = RunAutomationOnce(CustomerID, now, IsAlibaba, allNonAffirmativeTraces);
+			CurrentAutoDecision = RunAutomationOnce(CustomerID, now, IsAlibaba, 0, allNonAffirmativeTraces);
 		} // RunAutomation
 
 		public string NonAffirmativeTraceResult(string traceName) {
@@ -82,6 +82,7 @@
 			int customerID,
 			DateTime decisionTime,
 			bool isAlibaba,
+			int runTimeCount,
 			SortedSet<string> allNonAffirmativeTraces = null
 		) {
 			AutoDecision result = null;
@@ -127,17 +128,38 @@
 				} // if
 			} // if; Re-approve area
 
-			if (doNext) { // Approve area
-				Guid? trailID;
+			Guid? trailID = null;
 
+			if (doNext) { // Approve area
 				if (IsApproved(customerID, offeredCreditLine, medal, decisionTime, allNonAffirmativeTraces, out trailID)) {
 					doNext = false;
-					result = new AutoDecision(DecisionActions.Approve, trailID);
+					result = new AutoDecision(DecisionActions.Approve, trailID, runTimeCount);
+
+					Log.Debug(
+						"{2} time auto approved: trail id is {0} ({1}).",
+						trailID.HasValue ? "not null" : "null",
+						trailID.HasValue ? trailID.Value.ToString() : "---",
+						runTimeCount
+					);
 				} // if
+
+				Log.Debug(
+					"{2} time auto approval: trail id is {0} ({1}).",
+					trailID.HasValue ? "not null" : "null",
+					trailID.HasValue ? trailID.Value.ToString() : "---",
+					runTimeCount
+				);
 			} // if; Approve area
 
 			if (doNext)
-				result = new AutoDecision(null);
+				result = new AutoDecision(null, trailID, runTimeCount);
+
+			Log.Debug(
+				"{2} time automation: trail id is {0} ({1}).",
+				trailID.HasValue ? "not null" : "null",
+				trailID.HasValue ? trailID.Value.ToString() : "---",
+				runTimeCount
+			);
 
 			return result;
 		} // RunAutomationOnce
