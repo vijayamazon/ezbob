@@ -96,16 +96,19 @@
 
 		private void ChangeStatus(int customerID, int loanID, CollectionStatusNames status, CollectionType type) {
 			Log.Info("Changing collection status to customer {0} loan {1} type {2} status {3}", customerID, loanID, type, status);
-			DB.ExecuteNonQuery("UpdateCollectionStatus",
+			bool wasChanged = DB.ExecuteScalar<bool>("UpdateCollectionStatus",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", customerID),
 				new QueryParameter("CollectionStatus", (int)status),
 				new QueryParameter("Now", this.now));
-
+			if(!wasChanged) {
+				Log.Info("ChangeStatus to customer {0} loan {1} status {2} was not changed - customer already in this status", customerID, loanID, status);
+			}
+			
 			AddCollectionLog(customerID, loanID, type, CollectionMethod.ChangeStatus);
-
-            //TODO update loan collection status if want to be on loan level and not on customer level
-            Log.Info("add new late fee and mark loan as late for customer {0}, loan {1}", customerID, loanID);
+			
+			//TODO update loan collection status if want to be on loan level and not on customer level
+			Log.Info("update loan collection status if want to be on loan level and not on customer level for customer {0}, loan {1}", customerID, loanID);
 		}//ChangeStatus
 
 		private void CollectionDay0(CollectionDataModel model, CollectionType type) {

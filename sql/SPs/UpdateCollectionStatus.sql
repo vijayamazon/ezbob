@@ -14,13 +14,14 @@ AS
 BEGIN
 	DECLARE @CurrentStatusIsAutomatic BIT
 	DECLARE @CurrentStatus INT 
-		
+	DECLARE @StatusChaged BIT = 0
+	
 	SELECT @CurrentStatusIsAutomatic = s.IsAutomaticStatus, @CurrentStatus = c.CollectionStatus
 	FROM Customer c 
 	INNER JOIN CustomerStatuses s ON s.Id = c.CollectionStatus 
 	WHERE c.Id=@CustomerID
 	
-	IF(@CurrentStatusIsAutomatic = 1)
+	IF(@CurrentStatusIsAutomatic = 1 AND @CurrentStatus <> @CollectionStatus)
 	BEGIN
 		UPDATE Customer 
 		SET CollectionStatus=@CollectionStatus, CollectionDescription = 'Automatic status change' 
@@ -28,6 +29,12 @@ BEGIN
 		
 		INSERT INTO CustomerStatusHistory (UserName, TimeStamp,CustomerId, PreviousStatus,NewStatus,Description) 
 		VALUES ('se', @Now,@CustomerID,@CurrentStatus,@CollectionStatus,'Automatic status change')
+		
+		SET @StatusChaged = 1
 	END
+	
+	SELECT @StatusChaged AS StatusChaged
 END
+
 GO
+
