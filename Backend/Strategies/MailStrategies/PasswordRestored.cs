@@ -44,7 +44,8 @@
 				int nBrokerID = DB.ExecuteScalar<int>(
 					"BrokerIsBroker",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("ContactEmail", CustomerData.Mail)
+					new QueryParameter("ContactEmail", CustomerData.Mail),
+					new QueryParameter("UiOriginID")
 				);
 
 				SendToCustomer = false;

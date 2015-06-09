@@ -20,8 +20,11 @@ BEGIN
 		Broker
 	WHERE
 		ContactEmail = @ContactEmail
-		AND
-		OriginID = @UiOriginID
+		AND (
+			@UiOriginID IS NULL
+			OR
+			OriginID = @UiOriginID
+		)
 
 	SELECT ISNULL(@BrokerID, 0) AS BrokerID
 END
