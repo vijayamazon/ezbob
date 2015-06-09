@@ -28,8 +28,8 @@
 			var user = InitializeUser();
 			var retrievedata = new CallCreditGetData(user);
 			CT_SearchResult apiresult = retrievedata.GetSearch07a();
-			ParseCallCreditTest testsave = new ParseCallCreditTest(apiresult, 1);
-			testsave.Execute();
+	/*		ParseCallCreditTest testsave = new ParseCallCreditTest(apiresult, 1);
+			testsave.Execute();*/
 			return null;
 		}
 
