@@ -908,17 +908,13 @@
 			reModel.SaveToDB = true;
 			reModel.ReschedulingDate = DateTime.UtcNow;
 
-			reModel.LoanCloseDate = DateTime.UtcNow.AddYears(-1);
-
-				Console.WriteLine(reModel.LoanCloseDate);
-				Console.WriteLine(reModel.ReschedulingDate);
-
-
+			/*reModel.LoanCloseDate = DateTime.UtcNow.AddYears(-1);
+			Console.WriteLine(reModel.LoanCloseDate);
+			Console.WriteLine(reModel.ReschedulingDate);
 			Console.WriteLine(reModel.ReschedulingDate > reModel.LoanCloseDate );
+			return;*/
 
-			return;
-
-			int loanID = 242;
+			int loanID = 3734;
 			var s = new RescheduleInLoan<Loan>(new Loan(), reModel);
 			try {
 				s.Execute();

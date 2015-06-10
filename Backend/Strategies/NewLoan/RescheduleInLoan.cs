@@ -36,6 +36,7 @@
 			if (this.tLoan != null) {
 
 				try {
+
 					LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 					Loan loan = loanRep.Get(this.ReschedulingArguments.LoanID);
 

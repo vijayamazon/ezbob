@@ -5,6 +5,7 @@
 	[DataContract]
 	public class ReschedulingActionResult : ActionResult {
 
+		[DataMember]
 		public ReschedulingResult Value { get; set; }
 
 	} // ReschedulingActionResult

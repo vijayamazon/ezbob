@@ -77,7 +77,6 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/System" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/System.Reflection" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />

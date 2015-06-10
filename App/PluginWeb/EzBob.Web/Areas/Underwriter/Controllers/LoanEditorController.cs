@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Underwriter.Controllers
-{
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers {
 	using System;
 	using System.Globalization;
 	using System.Linq;
@@ -16,11 +15,11 @@
 	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
 	using ServiceClientProxy;
+	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 
 	[RestfullErrorHandlingAttribute]
-	public class LoanEditorController : Controller
-	{
+	public class LoanEditorController : Controller {
 		private readonly ILoanRepository _loans;
 		private readonly ChangeLoanDetailsModelBuilder _builder;
 		private readonly ICashRequestRepository _cashRequests;
@@ -28,10 +27,9 @@
 		private readonly LoanBuilder _loanBuilder;
 		private readonly ILoanChangesHistoryRepository _history;
 		private readonly IWorkplaceContext _context;
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(LoanEditorController));
+		private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(LoanEditorController));
 
-		public LoanEditorController(ILoanRepository loans, ChangeLoanDetailsModelBuilder builder, ICashRequestRepository cashRequests, ChangeLoanDetailsModelBuilder loanModelBuilder, LoanBuilder loanBuilder, ILoanChangesHistoryRepository history, IWorkplaceContext context)
-		{
+		public LoanEditorController(ILoanRepository loans, ChangeLoanDetailsModelBuilder builder, ICashRequestRepository cashRequests, ChangeLoanDetailsModelBuilder loanModelBuilder, LoanBuilder loanBuilder, ILoanChangesHistoryRepository history, IWorkplaceContext context) {
 			_loans = loans;
 			_builder = builder;
 			_cashRequests = cashRequests;
@@ -43,8 +41,7 @@
 
 		[Ajax]
 		[HttpGet]
-		public JsonResult Loan(int id)
-		{
+		public JsonResult Loan(int id) {
 			var loan = _loans.Get(id);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
@@ -52,8 +49,8 @@
 
 			var model = _builder.BuildModel(loan);
 
-            //TODO build loan model
-            Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
+			//TODO build loan model
+			Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -61,8 +58,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult RecalculateCR(EditLoanDetailsModel model)
-		{
+		public JsonResult RecalculateCR(EditLoanDetailsModel model) {
 			var cr = _cashRequests.Get(model.CashRequestId);
 			return Json(RecalculateModel(model, cr, model.Date));
 		}
@@ -70,8 +66,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult Recalculate(int id, EditLoanDetailsModel model)
-		{
+		public JsonResult Recalculate(int id, EditLoanDetailsModel model) {
 			var cr = _loans.Get(id).CashRequest;
 			return Json(RecalculateModel(model, cr, DateTime.UtcNow));
 		}
@@ -79,12 +74,10 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult AddFreezeInterval(int id, string startdate, string enddate, decimal rate)
-		{
+		public JsonResult AddFreezeInterval(int id, string startdate, string enddate, decimal rate) {
 			Loan oLoan = _loans.Get(id);
 
-			oLoan.InterestFreeze.Add(new LoanInterestFreeze
-			{
+			oLoan.InterestFreeze.Add(new LoanInterestFreeze {
 				Loan = oLoan,
 				StartDate = (startdate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(startdate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
 				EndDate = (enddate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(enddate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
@@ -95,8 +88,8 @@
 
 			_loans.SaveOrUpdate(oLoan);
 
-            //TODO update loan (apply add freeze)
-            Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
+			//TODO update loan (apply add freeze)
+			Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
 
 
 			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
@@ -110,8 +103,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult RemoveFreezeInterval(int id, int intervalid)
-		{
+		public JsonResult RemoveFreezeInterval(int id, int intervalid) {
 			Loan oLoan = _loans.Get(id);
 
 			LoanInterestFreeze lif = oLoan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
@@ -121,8 +113,8 @@
 
 			_loans.SaveOrUpdate(oLoan);
 
-            //TODO update loan (apply remove freeze)
-            Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
+			//TODO update loan (apply remove freeze)
+			Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
 
 			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
@@ -135,8 +127,7 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional]
-		public JsonResult LoanCR(long id)
-		{
+		public JsonResult LoanCR(long id) {
 			var cr = _cashRequests.Get(id);
 			var amount = cr.ApprovedSum();
 			var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
@@ -147,8 +138,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult LoanCR(EditLoanDetailsModel model)
-		{
+		public JsonResult LoanCR(EditLoanDetailsModel model) {
 			var cr = _cashRequests.Get(model.CashRequestId);
 
 			model = RecalculateModel(model, cr, model.Date);
@@ -161,12 +151,10 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult Loan(EditLoanDetailsModel model)
-		{
+		public JsonResult Loan(EditLoanDetailsModel model) {
 			var loan = _loans.Get(model.Id);
 
-			var historyItem = new LoanChangesHistory
-			{
+			var historyItem = new LoanChangesHistory {
 				Data = _loanModelBuilder.BuildModel(loan).ToJSON(),
 				Date = DateTime.UtcNow,
 				Loan = loan,
@@ -176,8 +164,8 @@
 
 			_loanModelBuilder.UpdateLoan(model, loan);
 
-            //TODO update loan (apply all modifications)
-            Log.DebugFormat("apply loan modifications for customer {0}", loan.Customer.Id);
+			//TODO update loan (apply all modifications)
+			Log.DebugFormat("apply loan modifications for customer {0}", loan.Customer.Id);
 
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
@@ -185,29 +173,26 @@
 			return Json(_loanModelBuilder.BuildModel(loan));
 		}
 
-		private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now)
-		{
+		private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now) {
 			model.Validate();
 
-			if (model.HasErrors) return model;
+			if (model.HasErrors)
+				return model;
 
 			var loan = _loanModelBuilder.CreateLoan(model);
 			loan.LoanType = cr.LoanType;
 			loan.CashRequest = cr;
 
-			try
-			{
+			try {
 				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 				calc.GetState();
-			}
-			catch (Exception e)
-			{
+			} catch (Exception e) {
 				model.Errors.Add(e.Message);
 				return model;
 			}
 
-            //TODO build loan model
-            Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
+			//TODO build loan model
+			Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 
 			return _loanModelBuilder.BuildModel(loan);
 		}
@@ -215,26 +200,23 @@
 
 		[HttpPost]
 		//[Transactional]
-		public EditLoanDetailsModel RescheduleInLoan(int loanID, bool save, DateTime? stopAutoCharge, DateTime? stopLateFee, DateTime? stopInterest) {
+		public ReschedulingResult RescheduleInLoan(int loanID, DbConstants.RepaymentIntervalTypes intervalType, DateTime? stopAutoCharge, DateTime? stopLateFee, DateTime? stopInterest, bool save = false) {
 
 			var loan = this._loans.Get(loanID);
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LKind = new Loan().GetType();
 			reModel.LoanID = loanID;
+			reModel.SaveToDB = save;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = intervalType;
 
 			// re strategy
 			ServiceClient client = new ServiceClient();
-			var result = client.Instance.RescheduleInLoan(this._context.User.Id, loan.Customer.Id, reModel);
-			return null; 
-
+			ReschedulingActionResult result = client.Instance.RescheduleInLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
 			// loan options
-			if (save != null) {
-
-				reModel.SaveToDB = (bool)save;
-				reModel.ReschedulingDate = DateTime.UtcNow;
-
+			if (save == true) {
 				if (stopAutoCharge != null || stopLateFee != null || stopInterest != null) {
 
 					ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
@@ -258,21 +240,9 @@
 					optionsRep.SaveOrUpdate(options);
 				}
 			}
-			
 
-			// display updated
-			if ( save == true) {
-				
-				var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-				calc.GetState();
-				return this._builder.BuildModel(loan);
-			}
-
-
-			
+			return result.Value;
 		}
-
-
 
 	}
 }

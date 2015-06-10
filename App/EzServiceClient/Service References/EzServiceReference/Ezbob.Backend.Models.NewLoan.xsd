@@ -53,7 +53,6 @@
   <xs:element name="NL_Model" nillable="true" type="tns:NL_Model" />
   <xs:complexType name="ReschedulingArgument">
     <xs:sequence>
-      <xs:element minOccurs="0" name="AutoInterest" nillable="true" type="xs:int" />
       <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="LKind" nillable="true" type="q18:Type" />
       <xs:element minOccurs="0" name="LoanCloseDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="LoanID" type="xs:int" />
@@ -65,4 +64,15 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ReschedulingArgument" nillable="true" type="tns:ReschedulingArgument" />
+  <xs:complexType name="ReschedulingResult">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="IntervalsNum" type="xs:int" />
+      <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="LKind" nillable="true" type="q20:Type" />
+      <xs:element minOccurs="0" name="LoanID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanInterestRate" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="ReschedulingBalance" type="xs:decimal" />
+      <xs:element xmlns:q21="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q21:RepaymentIntervalTypes" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ReschedulingResult" nillable="true" type="tns:ReschedulingResult" />
 </xs:schema>

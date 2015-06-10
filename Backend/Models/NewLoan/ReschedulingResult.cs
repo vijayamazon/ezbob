@@ -3,7 +3,6 @@
 	using System.Runtime.Serialization;
 	using System.Text;
 	using DbConstants;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]
 	public class ReschedulingResult {

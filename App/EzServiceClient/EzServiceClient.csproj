@@ -107,9 +107,6 @@
     <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\EzBob.Models.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
       <SubType>Designer</SubType>
     </None>
