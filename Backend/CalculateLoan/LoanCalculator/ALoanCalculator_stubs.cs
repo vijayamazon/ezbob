@@ -34,8 +34,6 @@
 					rescheduledItems.Add(new ScheduledItemWithAmountDue(shPositions, reschedulingArgument.ReschedulingDate.AddMonths(shPositions), monthlyPrincipal, 30, 14));
 				}
 			}
-
-
 			return rescheduledItems;
 
 		} // RescheduleToIntervals
