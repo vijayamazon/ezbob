@@ -42,8 +42,36 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		'click .remove-freeze-interval': 'onRemoveFreezeInterval'
 	}, // events
 
-	submitForm: function() {
-	    alert("submit");
+	submitForm: function () {
+	    var oData = {
+	        loanID: this.model.attributes.Id,
+	        intervalType: "Week",
+	        stopAutoCharge: null,
+	        stopLateFee: null,
+	        stopInterest: null
+	    };
+	    console.log(oData);
+
+	    var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', oData);
+
+	    var self = this;
+
+	    oRequest.success(function (res) {
+	        if (res.success) {
+	            console.log("success");
+	        } // if
+
+	        if (res.error)
+	            console.log("error");
+	    }); // on success
+
+	    oRequest.fail(function () {
+	        console.log("fail");
+	    });
+
+	    oRequest.always(function () {
+	        console.log("always");
+	    });
 	},
 
     blurWeeks: function() {

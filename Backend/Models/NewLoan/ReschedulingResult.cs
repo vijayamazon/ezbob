@@ -20,7 +20,7 @@
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type 
 
 		[DataMember] // for info only
-		public decimal? LoanInterestRate { get; set; } // outstanding balance for rescheduling
+        public decimal? LoanInterestRate { get; set; } // original loans' Interest Rate
 
 		[DataMember]
 		public int IntervalsNum { get; set; }  // calculated repayment intervals number 

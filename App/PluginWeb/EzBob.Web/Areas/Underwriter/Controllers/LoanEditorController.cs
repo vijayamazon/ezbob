@@ -197,10 +197,10 @@
 			return _loanModelBuilder.BuildModel(loan);
 		}
 
-
+        [Ajax]
 		[HttpPost]
 		//[Transactional]
-		public ReschedulingResult RescheduleInLoan(int loanID, DbConstants.RepaymentIntervalTypes intervalType, DateTime? stopAutoCharge, DateTime? stopLateFee, DateTime? stopInterest, bool save = false) {
+		public JsonResult RescheduleInLoan(int loanID, DbConstants.RepaymentIntervalTypes intervalType, DateTime? stopAutoCharge, DateTime? stopLateFee, DateTime? stopInterest, bool save = false) {
 
 			var loan = this._loans.Get(loanID);
 
@@ -215,8 +215,10 @@
 			ServiceClient client = new ServiceClient();
 			ReschedulingActionResult result = client.Instance.RescheduleInLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
+            Console.WriteLine(result.Value);
+
 			// loan options
-			if (save == true) {
+			if (save) {
 				if (stopAutoCharge != null || stopLateFee != null || stopInterest != null) {
 
 					ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
@@ -241,7 +243,7 @@
 				}
 			}
 
-			return result.Value;
+			return Json(result.Value);
 		}
 
 	}
