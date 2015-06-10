@@ -119,54 +119,62 @@
     </div>
 </script>
 
-<script type="text/template" id="loan_editor_freeze_intervals_template">
-    <h4>Freeze Intervals</h4>
-    <div class="table-big">
-        <table class="table table-selected centered" style="white-space: nowrap;">
-            <thead class="box">
-                <tr class="box-title">
-                    <th>From (inclusive)</th>
-                    <th>To (inclusive)</th>
-                    <th>Interest Rate</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody class="freeze-intervals-list">
-                <%
-			_.each(InterestFreeze, function(item, idx) {
-				var ary = item.split('|');
+<script type="text/template" id="loan_editor_preferences_template">
+    <div class="container">
+        <form>
+            <button class="btn btn-primary show" href="#options" data-toggle="collapse">Show advanced options</button>
+            <div class="span9 collapse"id="options">
+                <h4>Within loan period</h4>
+                <div style="padding-left:20px">
+                    <input type="radio" class="within-weeks-radio form-control pull-left" name="radio" value="within-weeks">&nbsp;Reschedule to
+                    <input class="within-weeks-number form-control disabled" disabled type="number" value="0" min="0" step="1" style="width:100px"> weeks with amount of
+                    <input class="within-weeks-amount form-control disabled" disabled type="number" value="0" min="0" step="10" style="width:100px"> and intrest of
+                    <input class="within-weeks-intrest form-control disabled" disabled type="number" value="0" min="0" step="0.01" style="width:100px"><br />
 
-				if (ary[4] != '')
-					return;
+                    <input type="radio" class="within-month-radio form-control pull-left" name="radio" value="within-month">&nbsp;Reschedule to
+                    <input class="within-month-number form-control disabled" disabled type="number" value="0" min="0" step="1" style="width:100px"> month with amount of
+                    <input class="within-month-amount form-control disabled" disabled type="number" value="0" min="0" step="10" style="width:100px"> and intrest of
+                    <input class="within-month-intrest form-control disabled" disabled type="number" value="0" min="0" step="0.01" style="width:100px">
+                </div>
+                <h4>Outside loan payment arangment</h4>
+                <div style="padding-left:20px">
+                    <div class="alert alert-danger center" style="display: none; text-align: center" id="error">Only numeric values greater then 0 allowed</div>
+                    <input type="radio" class="outside-weeks-radio form-control pull-left" name="radio" value="outside-weeks">&nbsp;Reschedule to
+                    <input class="outside-weeks-number form-control disabled" disabled type="number" value="0" min="0" step="1" style="width:100px"> weeks with amount of
+                    <input class="outside-weeks-amount form-control" type="number" value="0" min="0" step="10" style="width:100px"> and intrest of
+                    <input class="outside-weeks-intrest form-control disabled" disabled type="number" value="0" min="0" step="0.01" style="width:100px"><br />
 
-				%><tr>
-                    <td><%- EzBob.formatDateWithoutTime(ary[0]) %></td>
-                    <td><%- EzBob.formatDateWithoutTime(ary[1]) %></td>
-                    <td class="right"><%- EzBob.formatPercents(ary[2]) %></td>
-                    <td class="centered">
-                        <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-                    </td>
-                </tr>
-                <%
-			});
-		%>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="4">Add New Interval <span class="new-freeze-interval-error"></span></th>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="new-freeze-interval-start form-control" type="date" /></td>
-                    <td>
-                        <input class="new-freeze-interval-end form-control" type="date" /></td>
-                    <td class="right">
-                        <input class="new-freeze-interval-rate form-control" type="number" value="0" min="0" step="0.01" />%</td>
-                    <td class="centered">
-                        <button class="btn btn-mini add-freeze-interval btn-primary"><i class="fa fa-plus-circle"></i></button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
+                    <input type="radio" class="outside-month-radio form-control pull-left" name="radio" value="outside-month">&nbsp;Reschedule to
+                    <input class="outside-month-number form-control disabled" disabled type="number" value="0" min="0" step="1" style="width:100px"> month with amount of
+                    <input class="outside-month-amount form-control" type="number" value="0" min="0" step="10" style="width:100px"> and intrest of
+                    <input class="outside-month-intrest form-control disabled" disabled type="number" value="0" min="0" step="0.01" style="width:100px"><br/>
+                    
+                    <input type="checkbox" class="automatic-charges form-control pull-left" name="automatic-charges" value="automatic-charges">&nbsp;Stop automatic charges after
+                    <input class="automatic-charges form-control" type="number" value="0" min="0" step="1" style="width:100px"> payments.<br />
+                </div>
+                
+                <hr>
+                <input type="checkbox" class="intrest-calculation form-control pull-left" name="intrest-calculation" value="intrest-calculation">&nbsp;Stop intrest calculation from 
+                <input class="intrest-calculation form-control" type="date" style="width:150px"><br />
+
+                <input type="checkbox" class="fees-calculation form-control pull-left" name="fees-calculation" value="fees-calculation">&nbsp;Stop late fees calculation from 
+                <input class="fees-calculation form-control" type="date" style="width:150px"><br />
+
+                <button class="btn btn-primary submit-btn">Submit</button>
+            </div>
+        </form>
     </div>
 </script>
+
+<td>
+    <input class="new-freeze-interval-start form-control" type="date" />
+</td>
+<td>
+    <input class="new-freeze-interval-end form-control" type="date" />
+</td>
+<td class="right">
+    <input class="new-freeze-interval-rate form-control" type="number" value="0" min="0" step="0.01" />%
+</td>
+<td class="centered">
+    <button class="btn btn-mini add-freeze-interval btn-primary"><i class="fa fa-plus-circle"></i></button>
+</td>

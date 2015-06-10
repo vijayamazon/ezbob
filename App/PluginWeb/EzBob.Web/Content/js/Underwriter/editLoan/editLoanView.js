@@ -29,6 +29,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	}, // editors
 
 	events: {
+	    'click .submit-btn': 'submitForm',
+	    'blur .outside-weeks-amount': 'blurWeeks',
+	    'blur .outside-month-amount': 'blurMonth',
 		'click .edit-schedule-item': 'editScheduleItem',
 		'click .remove-schedule-item': 'removeScheduleItem',
 		'click .add-installment': 'addInstallment',
@@ -38,6 +41,21 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		'click .add-freeze-interval': 'onAddFreezeInterval',
 		'click .remove-freeze-interval': 'onRemoveFreezeInterval'
 	}, // events
+
+	submitForm: function() {
+	    alert("submit");
+	},
+
+    blurWeeks: function() {
+        if ($(".outside-weeks-amount").val() <= 0) {
+            $("#error").fadeIn();
+            setTimeout(function () { $("#error").fadeOut(); }, 3000);
+        }
+    },
+
+    blurMonth: function() {
+        alert($(".outside-month-amount").val());
+    },
 
 	addInstallment: function() {
 		var date = new Date(moment(this.model.get('Items').last().get('Date')).utc());
@@ -198,7 +216,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	}, // renderSchedule
 
 	renderFreeze: function(data) {
-		this.ui.freezeEl.html(_.template($('#loan_editor_freeze_intervals_template').html())(data));
+	    this.ui.freezeEl.html(_.template($('#loan_editor_preferences_template').html())(data));
 	}, // renderFreeze
 
 	onAddFreezeInterval: function() {
