@@ -13,8 +13,6 @@
 
 		public LoanState(T t, int loanID) {
 
-			//Console.WriteLine(t.GetType());
-
 			this.loanID = loanID;
 
 			if (t.GetType() == typeof(Loan)) {
@@ -88,7 +86,6 @@
 
 				// schedules
 				foreach (LoanScheduleItem s in this.tLoan.Schedule) {
-
 					ScheduledItem sch= new ScheduledItem(s.Date) { // DateTime scheduledDate
 						Date = s.Date,
 						ClosedDate = null, //???
@@ -117,7 +114,7 @@
 				}
 
 				// rollovers
-				IEnumerable<PaymentRollover> rollovers = this.tLoan.Schedule.SelectMany(s => s.Rollovers);
+				IEnumerable<PaymentRollover> rollovers = this.tLoan.Schedule.SelectMany(s => s.Rollovers).Where(s=>s.CustomerConfirmationDate!=null);
 
 				foreach (PaymentRollover r in rollovers) {
 					// DateTime created, DateTime expired, decimal fee
@@ -138,7 +135,7 @@
 
 		private Loan tLoan;
 		private readonly NL_Model tNLLoan;
-		private int loanID;
+		private readonly int loanID;
 
 		// result
 		public LoanCalculatorModel CalcModel;

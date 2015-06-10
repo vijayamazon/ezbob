@@ -1,9 +1,11 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public partial class EzServiceImplementation : IEzServiceNewLoan {
 
@@ -49,7 +51,7 @@
 			return stra.Offer;
 		}
 
-		
+
 
 		//public DateTimeActionResult ExampleMethod(int userID, int customerID) {
 		//	LoaderStrategy loaderStrategy;
@@ -78,7 +80,7 @@
 		}
 
 		public NL_Model AddPayment(NL_Model loanModel) {
-			Console.WriteLine("++++++++++++++++++++++ESI++++++++++++++++++++++++++++");
+			//	Console.WriteLine("++++++++++++++++++++++ESI++++++++++++++++++++++++++++");
 			AddPayment strategy;
 			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
 			return strategy.NLModel;
@@ -93,5 +95,33 @@
 			};
 		}
 
+
+		public ReschedulingActionResult RescheduleInLoan(int userID, int customerID, ReschedulingArgument reAgrs) {
+
+			if (reAgrs.LKind == typeof(Loan)) {
+
+				RescheduleInLoan<Loan> strategy;
+				var amd = ExecuteSync(out strategy, customerID, userID, reAgrs);
+				
+				return new ReschedulingActionResult {
+					MetaData = amd,
+					Value = strategy.Result
+				};
+			}
+
+			if (reAgrs.LKind == typeof(NL_Model)) {
+				RescheduleInLoan<NL_Model> strategy;
+				var amd = ExecuteSync(out strategy, customerID, userID, reAgrs);
+				// TODO
+				/*return new ReschedulingActionResult {
+					MetaData = amd,
+					NLoanDetailsModel = strategy.NLModel
+				};*/
+			}
+
+			return null;
+		}
+
 	}
+
 }

@@ -10,9 +10,13 @@
 	using EzBob.Models;
 	using Code;
 	using ConfigManager;
+	using Ezbob.Backend.Models.NewLoan;
+	using EZBob.DatabaseLib.Repository;
 	using Infrastructure;
 	using Infrastructure.Attributes;
 	using PaymentServices.Calculators;
+	using ServiceClientProxy;
+	using StructureMap;
 
 	[RestfullErrorHandlingAttribute]
 	public class LoanEditorController : Controller
@@ -207,5 +211,68 @@
 
 			return _loanModelBuilder.BuildModel(loan);
 		}
+
+
+		[HttpPost]
+		//[Transactional]
+		public EditLoanDetailsModel RescheduleInLoan(int loanID, bool save, DateTime? stopAutoCharge, DateTime? stopLateFee, DateTime? stopInterest) {
+
+			var loan = this._loans.Get(loanID);
+
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LKind = new Loan().GetType();
+			reModel.LoanID = loanID;
+
+			// re strategy
+			ServiceClient client = new ServiceClient();
+			var result = client.Instance.RescheduleInLoan(this._context.User.Id, loan.Customer.Id, reModel);
+			return null; 
+
+
+			// loan options
+			if (save != null) {
+
+				reModel.SaveToDB = (bool)save;
+				reModel.ReschedulingDate = DateTime.UtcNow;
+
+				if (stopAutoCharge != null || stopLateFee != null || stopInterest != null) {
+
+					ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
+					LoanOptions options = optionsRep.GetByLoanId(loanID);
+
+					if (stopLateFee != null) {
+						options.AutoLateFees = true;
+						options.StopAutoLateFeesDate = stopLateFee;
+					}
+
+					if (stopInterest != null) {
+						options.AutoInterest = true;
+						options.StopAutoInterestDate = stopInterest;
+					}
+
+					if (stopAutoCharge != null) {
+						options.AutoPayment = false;
+						options.StopAutoChargeDate = stopAutoCharge;
+					}
+
+					optionsRep.SaveOrUpdate(options);
+				}
+			}
+			
+
+			// display updated
+			if ( save == true) {
+				
+				var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+				calc.GetState();
+				return this._builder.BuildModel(loan);
+			}
+
+
+			
+		}
+
+
+
 	}
 }

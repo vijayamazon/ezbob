@@ -9,24 +9,20 @@
 		[OperationContract]
 		IntActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
 
-        [OperationContract]
-        IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons);
+		[OperationContract]
+		IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons);
 
-        [OperationContract]
-        IntActionResult AddOffer(int userID, int customerID, NL_Offers offer);
+		[OperationContract]
+		IntActionResult AddOffer(int userID, int customerID, NL_Offers offer);
 
-        [OperationContract]
-        NL_Offers GetLastOffer(int userID, int customerID);
-		
+		[OperationContract]
+		NL_Offers GetLastOffer(int userID, int customerID);
+
 		[OperationContract]
 		IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
 
 		[OperationContract]
 		IntActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions);
-		//[OperationContract]
-		//DateTimeActionResult ExampleMethod(int userID, int customerID);
-		//[OperationContract]
-		//ActionMetaData ExampleOtherMethod();
 
 		[OperationContract]
 		IntActionResult AddLoan(NL_Model loanModel);
@@ -34,5 +30,9 @@
 		[OperationContract]
 		NL_Model AddPayment(NL_Model loanModel);
 
+		[OperationContract]
+		ReschedulingActionResult RescheduleInLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
+
 	} // interface IEzServiceNewLoan
+
 } // namespace EzService

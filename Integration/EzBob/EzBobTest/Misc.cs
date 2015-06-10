@@ -27,5 +27,9 @@
 
             return sb.ToString().ToLowerInvariant();
         } // CalculateMD5Hash
+
+
+		
+
 	} // class Misc
 } // namespace

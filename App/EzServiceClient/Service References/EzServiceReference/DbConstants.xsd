@@ -1,5 +1,27 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/DbConstants" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/DbConstants" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+  <xs:simpleType name="RepaymentIntervalTypes">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="Month" />
+      <xs:enumeration value="Day" />
+      <xs:enumeration value="Week">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">7</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="TenDays">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">10</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="RepaymentIntervalTypes" nillable="true" type="tns:RepaymentIntervalTypes" />
   <xs:simpleType name="AlibabaBusinessType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="APPLICATION" />

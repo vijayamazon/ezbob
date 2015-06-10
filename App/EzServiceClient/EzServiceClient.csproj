@@ -107,6 +107,9 @@
     <None Include="Service References\EzServiceReference\EZBob.DatabaseLib.Model.Database.xsd">
       <SubType>Designer</SubType>
     </None>
+    <None Include="Service References\EzServiceReference\EzBob.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Utils.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -240,6 +243,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.QuickOfferActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.ReschedulingActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.StringActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
@@ -260,6 +266,12 @@
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.WizardConfigsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\System.Reflection.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\EzServiceReference\System.xsd">
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup>

@@ -1,6 +1,7 @@
 ﻿namespace EzBobTest {
 	using System;
 	using System.Collections.Generic;
+	using System.Reflection;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
@@ -30,6 +31,7 @@
 	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
+	using EzBob.Models;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using EZBob.DatabaseLib.Model.Alibaba;
@@ -38,6 +40,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using NHibernate.Util;
 	using NUnit.Framework;
+	using PaymentServices.Calculators;
 	using SalesForceLib;
 	using StructureMap;
 	using Twilio;
@@ -197,7 +200,7 @@
 				null,
 				MainStrategy.DoAction.Yes,
 				MainStrategy.DoAction.Yes
-			);
+				);
 			ms.Execute();
 		}
 
@@ -217,7 +220,8 @@
 			var decision = new AutoDecisionResponse();
 			//approve.Init().MakeDecision(decision);
 			//Assert.AreEqual(false, decision.IsAutoApproval);
-			reapprove.Init().MakeDecision(decision, null);
+			reapprove.Init()
+				.MakeDecision(decision, null);
 
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(this.m_oDB, this.m_oLog, 21334, reapprove.Trail.InputData.DataAsOf);
 			oSecondary.MakeDecision(oSecondary.GetInputData());
@@ -265,6 +269,7 @@
 			var ucr = new UpdateCurrencyRates();
 			ucr.Execute();
 		}
+
 		[Test]
 		public void TestDecrypt() {
 			string sIn = @"<?xml version=""1.0""?>
@@ -396,7 +401,7 @@
 				new QueryParameter("@IsForApprove", false),
 				new QueryParameter("@CustomerID", 211),
 				new QueryParameter("@Now", DateTime.UtcNow)
-			);
+				);
 
 			this.m_oLog.Info("Turnover for year is {0}, for quarter is {1}.", turnover[12], turnover[3]);
 		} // TestAutoRejectTurnover
@@ -411,7 +416,7 @@
 				new QueryParameter("@IsForApprove", true),
 				new QueryParameter("@CustomerID", 211),
 				new QueryParameter("@Now", DateTime.UtcNow)
-			);
+				);
 
 			turnover.TurnoverType = AutomationCalculator.Common.TurnoverType.HMRC;
 			turnover.Init();
@@ -473,7 +478,7 @@
 					Medal medal = (Medal)Enum.Parse(
 						typeof(Medal),
 						sr["Medal"]
-					);
+						);
 
 					int offeredLoanAmount = sr["OfferedLoanAmount"];
 					int numOfLoans = sr["NumOfLoans"];
@@ -481,12 +486,12 @@
 
 					int roundedAmount = (int)Math.Truncate(
 						(decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep
-					) * CurrentValues.Instance.GetCashSliderStep;
+						) * CurrentValues.Instance.GetCashSliderStep;
 
 					int cappedAmount = Math.Min(
 						roundedAmount,
 						zooplaValue > 0 ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
-					);
+						);
 
 					var calc = new OfferDualCalculator(
 						customerId,
@@ -494,7 +499,7 @@
 						cappedAmount,
 						numOfLoans > 0,
 						medal
-					);
+						);
 
 					OfferResult offer = calc.CalculateOffer();
 
@@ -520,11 +525,11 @@
 						customerId,
 						offerMsg,
 						calc.ResultSummary
-					);
+						);
 				},
 				query,
 				CommandSpecies.Text
-			);
+				);
 
 			this.m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
 
@@ -590,7 +595,7 @@
 				new QueryParameter("@IsForApprove", false),
 				new QueryParameter("@CustomerID", 18416),
 				new QueryParameter("@Now", new DateTime(2015, 2, 2))
-			);
+				);
 		}
 
 		[Test]
@@ -705,14 +710,16 @@
 		public void TestAutoRejectBoth() {
 			int customerID = 20658;
 			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID, this.m_oDB, this.m_oLog);
-			result.Init().MakeAndVerifyDecision();
+			result.Init()
+				.MakeAndVerifyDecision();
 		}
 
 		[Test]
 		public void TestBulkAutoRejectBoth() {
 			this.m_oDB.ForEachRowSafe((sr) => {
 				int customerId = sr["Id"];
-				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init().MakeAndVerifyDecision();
+				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init()
+					.MakeAndVerifyDecision();
 			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 		}
 
@@ -731,9 +738,13 @@
 				Notes = "Reject",
 				DecisionNameID = 2
 			}, 22785, new List<NL_DecisionRejectReasons> {
-                new NL_DecisionRejectReasons {RejectReasonID = 1},
-                new NL_DecisionRejectReasons {RejectReasonID = 3}
-            });
+				new NL_DecisionRejectReasons {
+					RejectReasonID = 1
+				},
+				new NL_DecisionRejectReasons {
+					RejectReasonID = 3
+				}
+			});
 			addDecision.Execute();
 		}
 
@@ -746,7 +757,9 @@
 
 		[Test]
 		public void TestAddLoanLegals() {
-			AddLoanLegals add = new AddLoanLegals(2362, new NL_LoanLegals() { SignatureTime = DateTime.UtcNow });
+			AddLoanLegals add = new AddLoanLegals(2362, new NL_LoanLegals() {
+				SignatureTime = DateTime.UtcNow
+			});
 			add.Execute();
 			Assert.Greater(add.LoanLegalsID, 0);
 		}
@@ -858,7 +871,9 @@
 
 		[Test]
 		public void TestMultipleLoanState() {
-			var loans = new[] {1,2,3,4,5};
+			var loans = new[] {
+				1, 2, 3, 4, 5
+			};
 			foreach (var lID in loans) {
 				try {
 					var s = new LoanState<Loan>(new Loan(), lID);
@@ -878,6 +893,56 @@
 				s.Execute();
 				LoanCalculatorModel calculatorModel = s.CalcModel;
 				//Console.WriteLine(calculatorModel.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+
+		[Test]
+		public void TestRescheduleInLoan() {
+
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LKind = new Loan().GetType();
+			reModel.LoanID = 242;
+			reModel.SaveToDB = true;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+
+			reModel.LoanCloseDate = DateTime.UtcNow.AddYears(-1);
+
+				Console.WriteLine(reModel.LoanCloseDate);
+				Console.WriteLine(reModel.ReschedulingDate);
+
+
+			Console.WriteLine(reModel.ReschedulingDate > reModel.LoanCloseDate );
+
+			return;
+
+			int loanID = 242;
+			var s = new RescheduleInLoan<Loan>(new Loan(), reModel);
+			try {
+				s.Execute();
+				Console.WriteLine(s.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+		[Test]
+		public void TestLoanOldCalculator() {
+			int loanID = 242;
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(loanID);
+
+			try {
+				var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+				calc.GetState();
+
+				Console.WriteLine(loan);
+
+				EditLoanDetailsModel model = new ChangeLoanDetailsModelBuilder().BuildModel(loan);
+
+				Console.WriteLine(model);
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
