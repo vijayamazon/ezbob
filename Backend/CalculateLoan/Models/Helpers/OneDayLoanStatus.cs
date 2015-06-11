@@ -66,7 +66,7 @@
 
 		public decimal AccruedInterest {
 			get { return TotalEarnedInterest - TotalRepaidInterest; }
-		} // AccruedInterest
+		} // AccuredInterest
 
 		public void AddRepayment(Repayment rp) {
 			if (rp == null)

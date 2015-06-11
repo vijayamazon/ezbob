@@ -62,6 +62,7 @@
     <Compile Include="Helpers\BadPeriods.cs" />
     <Compile Include="Helpers\DailyLoanStatus.cs" />
     <Compile Include="Helpers\Fee.cs" />
+    <Compile Include="Helpers\Freeze.cs" />
     <Compile Include="Helpers\OneDayLoanStatus.cs" />
     <Compile Include="Helpers\OpenPrincipal.cs" />
     <Compile Include="Helpers\Repayment.cs" />

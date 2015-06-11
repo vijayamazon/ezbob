@@ -2,10 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using StructureMap;
 
@@ -22,11 +24,10 @@
 				this.tNLLoan = t as NL_Model;
 			}
 
-			this.Result.LKind = t.GetType();
 			this.Result.LoanID = this.ReschedulingArguments.LoanID;
 			this.Result.ReschedulingRepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType;
 
-			Console.WriteLine(t.GetType());
+			Log.Debug(this.ReschedulingArguments);
 		}
 
 		public override string Name { get { return "RescheduleInLoan"; } }
@@ -40,43 +41,74 @@
 					LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 					Loan loan = loanRep.Get(this.ReschedulingArguments.LoanID);
 
-					this.ReschedulingArguments.LoanCloseDate = loan.Schedule.OrderBy(s => s.Date)
-						.Last()
-						.Date;
+					decimal loanBaLance = loan.Balance;
 
+					//Console.WriteLine("loan balance: {0}", loanBaLance);
+
+					// loan close date ('maturity date')
+					this.ReschedulingArguments.LoanCloseDate = loan.Schedule.OrderBy(s => s.Date).Last().Date;
+
+					//  if re date is later than loan "maturity" date - "IN" rescheduling can't be proceeded
 					if (this.ReschedulingArguments.ReschedulingDate > this.ReschedulingArguments.LoanCloseDate) {
 						Log.Info("Re-scheduling date {0} outside of loan period (maturity date) {1}", this.ReschedulingArguments.ReschedulingDate, this.ReschedulingArguments.LoanCloseDate);
 						return;
 					}
 
-					var strategyLoanState = new LoanState<Loan>(this.tLoan, this.ReschedulingArguments.LoanID);
+					var loanState = new LoanState<Loan>(this.tLoan, this.ReschedulingArguments.LoanID);
 
 					// load loan state in a new calculator format
-					strategyLoanState.Execute();
-					LoanCalculatorModel calcModel = strategyLoanState.CalcModel;
+					loanState.Execute();
 
-					// new calc-r
+					LoanCalculatorModel calcModel = loanState.CalcModel;
+
+					// instance of loan calculator - for current balance
 					ALoanCalculator nlCalculator = new LegacyLoanCalculator(calcModel);
 
-					// get outstanding balance for rescheduling
-					this.ReschedulingArguments.ReschedulingBalance = nlCalculator.BalanceForRescheduling(this.ReschedulingArguments);
+					// get current outstanding balance
+					this.ReschedulingArguments.ReschedulingBalance = nlCalculator.CalculateBalance(this.ReschedulingArguments.ReschedulingDate, false);
 
-					this.Result.ReschedulingBalance = (decimal)this.ReschedulingArguments.ReschedulingBalance;
+					// TODO - remove the row (overrides balance from the new loan calculator)
+					//this.ReschedulingArguments.ReschedulingBalance = this.tLoan.Balance;
 
-					Log.Debug(this.ReschedulingArguments);
+					Console.WriteLine("Loan.Balance: {0}, Calc-r balance: {1}", loanBaLance, this.ReschedulingArguments.ReschedulingBalance);
+		
+					if (this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month)
+						this.Result.IntervalsNum = MiscUtils.DateDiffInMonths(this.ReschedulingArguments.ReschedulingDate, this.ReschedulingArguments.LoanCloseDate);
 
-					// get new schedules
-					List<ScheduledItemWithAmountDue> newSchedules = nlCalculator.RescheduleToIntervals(this.ReschedulingArguments);
+					if (this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Week)
+						this.Result.IntervalsNum = MiscUtils.DateDiffInWeeks(this.ReschedulingArguments.ReschedulingDate, this.ReschedulingArguments.LoanCloseDate);
 
-					newSchedules.ForEach(s => Log.Debug(s.ToString()));
+					// new instance of loan calculator - for new schedules list
+					LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+						LoanIssueTime = this.ReschedulingArguments.ReschedulingDate,
+						LoanAmount = this.ReschedulingArguments.ReschedulingBalance,
+						RepaymentCount = this.Result.IntervalsNum,
+						MonthlyInterestRate = loan.InterestRate,
+						RepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType
+					};
 
-					this.Result.IntervalsNum = newSchedules.Count;
+					Log.Debug("Calc model for new schedules list: " + calculatorModel.ToString());
 
-					if (this.ReschedulingArguments.SaveToDB == false)
-						return;
+					ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
 
-					//	Log.Debug("===========================================>Loan1: \n {0}", loan);
+					Log.Debug("Intervals for outstanding balance {0} is {1}, loan original close date ('maturity date'): {2}, reschedule date: {3}, interval type: {4}",
+							this.ReschedulingArguments.ReschedulingBalance, calculatorModel.RepaymentCount, this.ReschedulingArguments.LoanCloseDate, this.ReschedulingArguments.ReschedulingDate
+							, this.ReschedulingArguments.ReschedulingRepaymentIntervalType);
 
+					// populate result object
+					this.Result.ReschedulingBalance = calculatorModel.LoanAmount;
+					this.Result.IntervalsNum = calculatorModel.RepaymentCount;
+
+					// new schedules
+					List<ScheduledItemWithAmountDue> shedules = calculator.CreateScheduleAndPlan(false);
+
+					//shedules.ForEach(s => Log.Debug(s.ToString()));
+			
+					// TEMPORARY
+					//if (this.ReschedulingArguments.SaveToDB == false)
+					//	return;
+		
+					// remove future schedules
 					List<LoanScheduleItem> removedSchedules = new List<LoanScheduleItem>(loan.Schedule.Where(x => x.Date >= this.ReschedulingArguments.ReschedulingDate));
 
 					foreach (LoanScheduleItem r in removedSchedules) {
@@ -84,22 +116,41 @@
 						loan.Schedule.Remove(r);
 					}
 
-					foreach (ScheduledItemWithAmountDue s in newSchedules) {
-						Log.Debug(s.ToString());
-						LoanScheduleItem item = new LoanScheduleItem();
-						item.Date = s.Date;
-						item.LoanRepayment = s.Principal; // p in schedule
-						item.Interest = s.Principal * s.InterestRate;
-						//		item.Fees = s.Fee;
-						item.AmountDue = s.Principal + item.Interest + item.Fees;
-						item.Status = LoanScheduleStatus.StillToPay;
+					// mark Late as LateRescheduled - to prevent processing by PayPointCharger
+					// Display LateRescheduled as Late everywhere
+
+					//List<LoanScheduleItem> latePastSchedules = new List<LoanScheduleItem>(loan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late));
+
+					foreach (LoanScheduleItem l in loan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late)) {
+						Log.Debug("PASSED LATE: {0}", l);
+						l.Status = LoanScheduleStatus.LateRescheduled;
+					}
+
+					// should not be this kind of items - FOR TEST ONLY!!!!!!!!!!!!!!!!!!!!
+					foreach (LoanScheduleItem l in loan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.StillToPay)) {
+						Log.Debug("PASSED OPENED: {0}", l);
+						l.Status = LoanScheduleStatus.StillToPayRescheduled;
+					}
+
+					// add new schedules
+					foreach (ScheduledItemWithAmountDue s in shedules) {
+						LoanScheduleItem item = new LoanScheduleItem() {
+							Date = s.Date,
+							LoanRepayment = Math.Round(s.Principal, 2),  // p in schedule
+							Interest = Math.Round(s.AccuredInterest, 2), 
+							Status = LoanScheduleStatus.StillToPay
+						};
+						item.AmountDue = Math.Round(s.Principal + item.Interest + item.Fees);
 						loan.Schedule.Add(item);
 					}
 
 					Log.Debug("===========================================>Loan2: \n {0}", loan);
 
 					// save modifications to DB
-					//	loanRep.SaveOrUpdate(loan);
+					// removed - will be deleted;
+					// passed late - status changed
+					// new schedules - will be inserted;
+				//	loanRep.SaveOrUpdate(loan);
 
 				} catch (Exception e) {
 					Log.Alert(e, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);

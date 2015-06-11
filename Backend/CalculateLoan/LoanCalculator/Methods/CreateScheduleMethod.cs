@@ -8,6 +8,7 @@
 		public CreateScheduleMethod(ALoanCalculator calculator) : base(calculator, false) {
 		} // constructor
 
+		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
 		public virtual List<ScheduledItem> Execute() {
 			if (WorkingModel.InterestOnlyRepayments >= WorkingModel.RepaymentCount)
 				throw new InterestOnlyMonthsCountException(WorkingModel.InterestOnlyRepayments, WorkingModel.RepaymentCount);

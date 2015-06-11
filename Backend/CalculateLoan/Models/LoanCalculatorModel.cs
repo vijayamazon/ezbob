@@ -16,18 +16,18 @@
 			this.interestOnlyRepayments = 0;
 			this.monthlyInterestRate = 0.06m;
 
+			RepaymentIntervalType = RepaymentIntervalTypes.Month;
 			OpenPrincipalHistory = new List<OpenPrincipal>();
 			DiscountPlan = new List<decimal>();
 			Schedule = new List<ScheduledItem>();
 			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
 			BadPeriods = new BadPeriods();
-			Rollovers = new Rollovers();
+		//	Rollovers = new Rollovers();
+		//	FreezeIntervals = new List<FreezeInterval>();
 
 		}// constructor
-
-		public Rollovers Rollovers { get; set; }
-
+	
 		public void ValidateSchedule() {
 			if (Schedule.Count < 1)
 				throw new NoScheduleException();
@@ -97,67 +97,7 @@
 			return lcm;
 		} // DeepClone
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
-		public override string ToString() {
-			var os = new StringBuilder();
-
-			os.Append("\tLoan calculation model - begin:\n");
-
-			os.AppendFormat(
-				"\t{3} issued on {0} for {1} each {2} at monthly rate {4}.\n",
-				LoanIssueTime.MomentStr(),
-				Grammar.Number(RepaymentCount, "repayment"),
-				RepaymentIntervalType == RepaymentIntervalTypes.Month
-					? "month"
-					: Grammar.Number((int)RepaymentIntervalType, "day"),
-				LoanAmount.ToString("C2", Library.Instance.Culture),
-				MonthlyInterestRate.ToString("P2", Library.Instance.Culture)
-			);
-
-			if (DiscountPlan.Count > 0) {
-				os.AppendFormat(
-					"\tDiscount plan: {0}.\n",
-					string.Join(", ", DiscountPlan.Select(x => x.ToString("P1", Library.Instance.Culture)))
-				);
-			} else
-				os.Append("\tNo discount plan.\n");
-
-			if (OpenPrincipalHistory.Count > 0)
-				os.AppendFormat("\tOpen principal:\n\t\t{0}.\n", string.Join("\n\t\t", OpenPrincipalHistory));
-			else
-				os.Append("\tNo open principal history.\n");
-
-			if (Schedule.Count > 0)
-				os.AppendFormat("\tSchedule:\n\t\t{0}.\n", string.Join("\n\t\t", Schedule));
-			else
-				os.Append("\tNo schedule.\n");
-
-			if (Repayments.Count > 0)
-				os.AppendFormat("\tRepayments:\n\t\t{0}.\n", string.Join("\n\t\t", Repayments));
-			else
-				os.Append("\tNo repayments.\n");
-
-			if (Fees.Count > 0)
-				os.AppendFormat("\tFees:\n\t\t{0}.\n", string.Join("\n\t\t", Fees));
-			else
-				os.Append("\tNo fees.\n");
-
-			os.AppendFormat("\tBad periods: {0}\n", BadPeriods);
-
-			if (Rollovers !=null)
-				os.AppendFormat("\tRollovers:\n\t\t{0}.\n", string.Join("\n\t\t", Rollovers));
-			else
-				os.Append("\tNo rollovers.\n");
-
-			os.Append("\tLoan calculation model - end.\n");
-
-			return os.ToString();
-		} // ToString
+		
 
 		public DateTime LoanIssueTime { get; set; }
 
@@ -259,12 +199,77 @@
 		public List<ScheduledItem> Schedule { get; private set; }
 		public List<Repayment> Repayments { get; private set; }
 		public List<Fee> Fees { get; private set; }
+		//public List<FreezeInterval> FreezeIntervals { get; set; }
+		
 		public BadPeriods BadPeriods { get; private set; }
+		//public Rollovers Rollovers { get; set; }
 
 		private int repaymentCount;
 		private int interestOnlyRepayments;
 		private decimal loanAmount;
 		private decimal monthlyInterestRate;
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			var os = new StringBuilder();
+
+			os.Append("\tLoan calculation model - begin:\n");
+
+			os.AppendFormat(
+				"\t{3} issued on {0} for {1} each {2} at monthly rate {4}.\n",
+				LoanIssueTime.MomentStr(),
+				Grammar.Number(RepaymentCount, "repayment"),
+				RepaymentIntervalType == RepaymentIntervalTypes.Month
+					? "month"
+					: Grammar.Number((int)RepaymentIntervalType, "day"),
+				LoanAmount.ToString("C2", Library.Instance.Culture),
+				MonthlyInterestRate.ToString("P2", Library.Instance.Culture)
+			);
+
+			if (DiscountPlan.Count > 0) {
+				os.AppendFormat(
+					"\tDiscount plan: {0}.\n",
+					string.Join(", ", DiscountPlan.Select(x => x.ToString("P1", Library.Instance.Culture)))
+				);
+			} else
+				os.Append("\tNo discount plan.\n");
+
+			if (OpenPrincipalHistory.Count > 0)
+				os.AppendFormat("\tOpen principal:\n\t\t{0}.\n", string.Join("\n\t\t", OpenPrincipalHistory));
+			else
+				os.Append("\tNo open principal history.\n");
+
+			if (Schedule.Count > 0)
+				os.AppendFormat("\tSchedule:\n\t\t{0}.\n", string.Join("\n\t\t", Schedule));
+			else
+				os.Append("\tNo schedule.\n");
+
+			if (Repayments.Count > 0)
+				os.AppendFormat("\tRepayments:\n\t\t{0}.\n", string.Join("\n\t\t", Repayments));
+			else
+				os.Append("\tNo repayments.\n");
+
+			if (Fees.Count > 0)
+				os.AppendFormat("\tFees:\n\t\t{0}.\n", string.Join("\n\t\t", Fees));
+			else
+				os.Append("\tNo fees.\n");
+
+			os.AppendFormat("\tBad periods: {0}\n", BadPeriods);
+
+			//if (Rollovers != null)
+			//	os.AppendFormat("\tRollovers:\n\t\t{0}.\n", string.Join("\n\t\t", Rollovers));
+			//else
+			//	os.Append("\tNo rollovers.\n");
+
+			os.Append("\tLoan calculation model - end.\n");
+
+			return os.ToString();
+		} // ToString
 	}
 
 	

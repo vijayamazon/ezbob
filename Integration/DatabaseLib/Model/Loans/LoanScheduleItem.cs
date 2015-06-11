@@ -188,7 +188,12 @@
 		[Description("Paid")]
 		Paid,
 		[Description("Almost paid")]
-		AlmostPaid
+		AlmostPaid,
+		[Description("LateRescheduled")]
+		LateRescheduled,
+		// // should not be this kind - FOR TEST ONLY!!!!!!!!!!!!!!!!!!!!
+		[Description("StillToPayRescheduled")]
+		StillToPayRescheduled
 	}
 
 	public class LoanScheduleStatusType : EnumStringType<LoanScheduleStatus>

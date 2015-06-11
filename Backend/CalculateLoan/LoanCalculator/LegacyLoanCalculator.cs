@@ -15,9 +15,9 @@
 		/// </summary>
 		/// <param name="periodCount">A number of months to add.</param>
 		/// <returns>Date after requested number of months have been added to loan issue date.</returns>
-		internal override DateTime AddPeriods(int periodCount) {
+		/*internal override DateTime AddPeriods(int periodCount) {
 			return WorkingModel.LoanIssueTime.AddMonths(periodCount);
-		} // AddPeriods
+		}*/ // AddPeriods
 
 		protected override decimal CalculateDailyInterestRate(
 			DateTime currentDate,
@@ -32,5 +32,6 @@
 
 			return monthlyInterestRate / DateTime.DaysInMonth(d.Year, d.Month);
 		} // CalculateDailyInterestRate
+
 	} // class LegacyLoanCalculator
 } // namespace

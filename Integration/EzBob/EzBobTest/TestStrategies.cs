@@ -901,24 +901,32 @@
 
 		[Test]
 		public void TestRescheduleInLoan() {
+			int loanID = 3734;
+			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LKind = new Loan().GetType();
-			reModel.LoanID = 242;
-			reModel.SaveToDB = true;
+			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanID;
+			reModel.SaveToDB = false;
 			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 
-			/*reModel.LoanCloseDate = DateTime.UtcNow.AddYears(-1);
-			Console.WriteLine(reModel.LoanCloseDate);
-			Console.WriteLine(reModel.ReschedulingDate);
-			Console.WriteLine(reModel.ReschedulingDate > reModel.LoanCloseDate );
-			return;*/
-
-			int loanID = 3734;
-			var s = new RescheduleInLoan<Loan>(new Loan(), reModel);
+			var s = new RescheduleInLoan<Loan>(loan, reModel);
 			try {
 				s.Execute();
-				Console.WriteLine(s.Result.ToString());
+				m_oLog.Debug("RESULT FOR MONTHS");
+				m_oLog.Debug(s.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+			
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+
+			var sw = new RescheduleInLoan<Loan>(loan, reModel);
+			try {
+				sw.Execute();
+				m_oLog.Debug("RESULT FOR WEEKS");
+				m_oLog.Debug(sw.Result.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
@@ -929,20 +937,16 @@
 			int loanID = 242;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan loan = loanRep.Get(loanID);
-
 			try {
 				var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 				calc.GetState();
-
 				Console.WriteLine(loan);
-
 				EditLoanDetailsModel model = new ChangeLoanDetailsModelBuilder().BuildModel(loan);
-
 				Console.WriteLine(model);
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
-
 		}
+
 	}
 }

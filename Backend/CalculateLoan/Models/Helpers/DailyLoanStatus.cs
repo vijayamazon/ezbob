@@ -62,12 +62,6 @@
 			return this.notes.ContainsKey(dd.Date) ? this.notes[dd.Date] : string.Empty;
 		} // GetNote
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
 		public override string ToString() {
 			return string.Join("\n\t\t", Days);
 		} // ToString
@@ -85,7 +79,7 @@
 
 			const string date = "Date";
 			const string openPrincipal = "Open principal";
-			const string dailyInterest = "Daily accrued interest";
+			const string dailyInterest = "Daily accured interest";
 			const string assignedFees = "Assigned fees";
 			const string dailyInterestRate = "Daily interest rate";
 			const string repaidPrincipal = "Principal";

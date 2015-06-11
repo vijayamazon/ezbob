@@ -1,6 +1,7 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
+	using System.Diagnostics;
 	using System.Reflection;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -95,28 +96,35 @@
 			};
 		}
 
-
+		
 		public ReschedulingActionResult RescheduleInLoan(int userID, int customerID, ReschedulingArgument reAgrs) {
 
-			if (reAgrs.LKind == typeof(Loan)) {
+			Type t;
 
+			try {
+				t = Type.GetType(reAgrs.LoanType);
+			} catch (Exception e) {
+				Log.Info("Fail to get type from the argument {0}. ReschedulingArgument: {1}; error: {2}", reAgrs.LoanType, reAgrs, e);
+				return null;
+			}
+
+			if (t == null) {
+				return null;
+			}
+
+			if ( t.Name == "Loan") {
 				RescheduleInLoan<Loan> strategy;
 				var amd = ExecuteSync(out strategy, customerID, userID, reAgrs);
-				
+
 				return new ReschedulingActionResult {
 					MetaData = amd,
 					Value = strategy.Result
 				};
-			}
-
-			if (reAgrs.LKind == typeof(NL_Model)) {
+			} 
+			
+			if (t.Name == "NL_Model") {
 				RescheduleInLoan<NL_Model> strategy;
-				var amd = ExecuteSync(out strategy, customerID, userID, reAgrs);
 				// TODO
-				/*return new ReschedulingActionResult {
-					MetaData = amd,
-					NLoanDetailsModel = strategy.NLModel
-				};*/
 			}
 
 			return null;

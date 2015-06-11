@@ -8,7 +8,7 @@
 
 		public override string Name { get { return "Bank-like calculator"; } }
 
-		/// <summary>
+		/*/// <summary>
 		/// Calculates date after requested number of periods have passed since loan issue date.
 		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
 		/// </summary>
@@ -18,7 +18,7 @@
 			return WorkingModel.IsMonthly
 				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
 				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
-		} // AddPeriods
+		} // AddPeriods*/
 
 		protected override decimal CalculateDailyInterestRate(
 			DateTime currentDate,

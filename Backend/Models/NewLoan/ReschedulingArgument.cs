@@ -10,8 +10,11 @@
 		[DataMember]
 		public int LoanID { get; set; }  // loan ID to re-schedule
 
+		//[DataMember]
+		//public Type LKind { get; set; }  // loan old/new
+
 		[DataMember]
-		public Type LKind { get; set; }  // loan old/new
+		public string LoanType { get; set; }  // loan old/new
 
 		[DataMember]
 		public DateTime ReschedulingDate { get; set; }  // rescheduling date
@@ -20,7 +23,7 @@
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type - selected
 
 		[DataMember]
-		public decimal? ReschedulingBalance { get; set; } // outstanding balance for rescheduling
+		public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
 
 		[DataMember]
 		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planned close date

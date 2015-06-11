@@ -182,6 +182,16 @@
 			return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
 		}
 
+		/// <summary>
+		/// Calculates difference between to DateTime dates in weeks
+		/// </summary>
+		/// <param name="start"></param>
+		/// <param name="end"></param>
+		/// <returns></returns>
+		public static int DateDiffInWeeks(DateTime start, DateTime end) {
+			return (end.Subtract(start)).Days / 7;
+		}
+
 
 	} // class MiscUtils
 } // namespace

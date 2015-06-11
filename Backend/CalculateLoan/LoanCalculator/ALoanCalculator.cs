@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics.CodeAnalysis;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
 	using Ezbob.Backend.CalculateLoan.Models;
@@ -105,7 +104,20 @@
 		/// </summary>
 		/// <param name="periodCount">A number of periods to add.</param>
 		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		internal abstract DateTime AddPeriods(int periodCount);
+		//internal abstract DateTime AddPeriods(int periodCount);
+
+		/// <summary>
+		/// Calculates date after requested number of periods have passed since loan issue date.
+		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
+		/// </summary>
+		/// <param name="periodCount">A number of periods to add.</param>
+		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
+		public virtual DateTime AddPeriods(int periodCount) {
+				return 
+				WorkingModel.IsMonthly
+				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
+				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
+		} // AddPeriods
 
 		/// <summary>
 		/// Calculates interest rate for one day based on monthly interest rate.
@@ -152,5 +164,17 @@
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		);
+
+		
+
+
+		//public virtual List<ScheduledItemWithAmountDue> RescheduleToIntervals(ReschedulingArgument reschedulingArgument, bool writeToLog = true) {
+		//	Console.WriteLine("intervals for balance {0} is {1}, loan original close date ('maturity date'): {2}, reschedule date: {3}, intervat type: {4}",
+		//			reschedulingArgument.ReschedulingBalance, WorkingModel.RepaymentCount, reschedulingArgument.LoanCloseDate, reschedulingArgument.ReschedulingDate
+		//			,reschedulingArgument.ReschedulingRepaymentIntervalType.ToString());
+
+		//	return new RescheduleToIntervalsMethod(this, reschedulingArgument, writeToLog).Execute();
+		//} // RescheduleToIntervals
+
 	} // class LoanCalculator
 } // namespace

@@ -199,51 +199,65 @@
 
         [Ajax]
 		[HttpPost]
-		//[Transactional]
-		public JsonResult RescheduleInLoan(int loanID, DbConstants.RepaymentIntervalTypes intervalType, DateTime? stopAutoCharge, DateTime? stopLateFee, DateTime? stopInterest, bool save = false) {
+		[Transactional]
+		public JsonResult RescheduleInLoan(
+			int loanID, 
+			DbConstants.RepaymentIntervalTypes intervalType,  // month/week
+			decimal? AmountPerInterval, // for "out" reschedule
+			bool? stopAutoCharge, // "flag" - checkbox
+			bool? stopLateFee, // checkbox
+			bool? freezeInterest, //  checkbox
+			int? stopAutoChargePayment, 
+			DateTime? lateFeeStartDate,
+			DateTime? lateFeeEndDate,
+			DateTime? freezeStartDate,
+			DateTime? freezeEndDate, 
+			bool save = false
+			) {
 
 			var loan = this._loans.Get(loanID);
 
+	        save = false; // TEMPORARY - DONT'T SPOIL DB
 			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LKind = new Loan().GetType();
+			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.SaveToDB = save;
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = intervalType;
-
+		
 			// re strategy
 			ServiceClient client = new ServiceClient();
 			ReschedulingActionResult result = client.Instance.RescheduleInLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
-            Console.WriteLine(result.Value);
+          //  Console.WriteLine(result.Value);
 
 			// loan options
-			if (save) {
-				if (stopAutoCharge != null || stopLateFee != null || stopInterest != null) {
+			//if (save) {
+			//	if (stopAutoCharge != null || stopLateFee != null || stopInterest != null) {
 
-					ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
-					LoanOptions options = optionsRep.GetByLoanId(loanID);
+			//		ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
+			//		LoanOptions options = optionsRep.GetByLoanId(loanID);
 
-					if (stopLateFee != null) {
-						options.AutoLateFees = true;
-						options.StopAutoLateFeesDate = stopLateFee;
-					}
+			//		if (stopLateFee != null) {
+			//			options.AutoLateFees = true;
+			//			options.StopAutoLateFeesDate = stopLateFee;
+			//		}
 
-					if (stopInterest != null) {
-						options.AutoInterest = true;
-						options.StopAutoInterestDate = stopInterest;
-					}
+			//		if (stopInterest != null) {
+			//			options.AutoInterest = true;
+			//			options.StopAutoInterestDate = stopInterest;
+			//		}
 
-					if (stopAutoCharge != null) {
-						options.AutoPayment = false;
-						options.StopAutoChargeDate = stopAutoCharge;
-					}
+			//		if (stopAutoCharge != null) {
+			//			options.AutoPayment = false;
+			//			options.StopAutoChargeDate = stopAutoCharge;
+			//		}
 
-					optionsRep.SaveOrUpdate(options);
-				}
-			}
+			//		optionsRep.SaveOrUpdate(options);
+			//	}
+			//}
 
-			return Json(result.Value);
+	        return Json(result.Value);
 		}
 
 	}

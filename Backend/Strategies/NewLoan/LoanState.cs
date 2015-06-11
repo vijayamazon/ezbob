@@ -9,6 +9,10 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using StructureMap;
 
+	/// <summary>
+	/// Transform Loan or NL_Model to LoanCalculatorModel
+	/// </summary>
+	/// <typeparam name="T">Loan or NL_Model</typeparam>
 	public class LoanState<T> : AStrategy {
 
 		public LoanState(T t, int loanID) {
@@ -54,8 +58,7 @@
 	// Rollovers
 	this.tLoan.Schedule.SelectMany(s => s.Rollovers).OrderBy(c => c.Created).ForEach(s => Log.Debug(s.ToString()));
 	*/
-
-			/*  Transactions
+			  /*	Transactions
 					TransactionsWithPaypoint
 					ScheduleTransactions
 					PacnetTransactions
@@ -73,12 +76,12 @@
 				LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 				this.tLoan = loanRep.Get(this.loanID);
 
-				Log.Debug("===========================================>Loan1: \n {0}", this.tLoan);
+				Log.Debug("LoanState--->Loan1: \n {0}", this.tLoan);
 
 				this.CalcModel = new LoanCalculatorModel {
 					LoanAmount = this.tLoan.LoanAmount,
 					LoanIssueTime = this.tLoan.Date,
-					RepaymentIntervalType = RepaymentIntervalTypes.Month, // TODO put real here  //(RepaymentIntervalTypes)Enum.ToObject(typeof(RepaymentIntervalTypesId), Model.RepaymentIntervalTypeID),
+					RepaymentIntervalType = RepaymentIntervalTypes.Month,  // default, old loan does not contain the property
 					RepaymentCount = this.tLoan.Schedule.Count,
 					MonthlyInterestRate = this.tLoan.InterestRate,
 					InterestOnlyRepayments = 0 //InterestOnlyRepayments = this.Model.InterestOnlyRepaymentCount ?? 0 // TODO: exists in old loan?
@@ -114,21 +117,22 @@
 				}
 
 				// rollovers
-				IEnumerable<PaymentRollover> rollovers = this.tLoan.Schedule.SelectMany(s => s.Rollovers).Where(s=>s.CustomerConfirmationDate!=null);
+				//IEnumerable<PaymentRollover> rollovers = this.tLoan.Schedule.SelectMany(s => s.Rollovers).Where(s=>s.CustomerConfirmationDate!=null);
 
-				foreach (PaymentRollover r in rollovers) {
-					// DateTime created, DateTime expired, decimal fee
-					this.CalcModel.Rollovers = new Rollovers(r.Created, r.ExpiryDate, r.Payment);
-				}
+				//foreach (PaymentRollover r in rollovers) { // DateTime created, DateTime expired, decimal fee
+				//	this.CalcModel.Rollovers = new Rollovers(r.Created, r.ExpiryDate, r.Payment);
+				//}
 
-				Log.Debug(this.CalcModel.ToString());
+				//Log.Debug(this.CalcModel.ToString());
 
 				return;
 			}
 
 			// new loan structure
 			if (this.tNLLoan != null) {
-				// cal SP - load nl loan by id
+				// cal SP - load nl by id
+
+				
 			}
 
 		}

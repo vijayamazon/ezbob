@@ -9,13 +9,13 @@
 			DateTime date,
 			decimal principal,
 			decimal interestRate,
-			decimal accruedInterest
+			decimal accuredInterest
 		) {
 			Position = position;
 			Date = date.Date;
 			Principal = principal;
 			InterestRate = interestRate;
-			AccruedInterest = accruedInterest;
+			AccuredInterest = accuredInterest;
 		} // constructor
 
 		public int Position { get; private set; }
@@ -25,9 +25,9 @@
 		public decimal Principal { get; private set; }
 
 		public decimal InterestRate { get; private set; }
-		public decimal AccruedInterest { get; private set; }
+		public decimal AccuredInterest { get; private set; }
 
-		public decimal Amount { get { return Principal + AccruedInterest; } }
+		public decimal Amount { get { return Principal + AccuredInterest; } }
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -42,11 +42,13 @@
 				Date.DateStr(),
 				Amount.ToString("C2", Culture),
 				Principal.ToString("C2", Culture),
-				AccruedInterest.ToString("C2", Culture),
+				AccuredInterest.ToString("C2", Culture),
 				InterestRate.ToString("P2", Culture)
 			);
 		} // ToString
 
-		private static CultureInfo Culture { get { return Models.Library.Instance.Culture; } }
+		private static CultureInfo Culture {
+			get { return Models.Library.Instance.Culture; }
+		}
 	} // class ScheduledItemWithAmountDue
 } // namespace
