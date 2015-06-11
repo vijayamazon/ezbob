@@ -36,32 +36,28 @@
 		public bool IsAvoid { get; set; }
 		public bool AllowSendingEmail { get; set; }
 
-		public string LoanType { get; set; }
-
 		public bool OfferExpired { get; set; }
 
 		public bool IsModified { get; set; }
 
-        public int IsLoanTypeSelectionAllowed { get; set; }
-        public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
+		public int IsLoanTypeSelectionAllowed { get; set; }
+		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
-        public int LoanTypeId { get; set; } //current loan type id
-        public string LoanType { get; set; } //current loan type name
-        public LoanTypesModel[] LoanTypes { get; set; } //all loan types
+		public int LoanTypeId { get; set; } //current loan type id
+		public string LoanType { get; set; } //current loan type name
+		public LoanTypesModel[] LoanTypes { get; set; } //all loan types
 
 		public string Reason { get; set; }
 
-		
 		public int OfferValidForHours { get; set; }
 
 		public DiscountPlanModel[] DiscountPlans { get; set; }
 		public string DiscountPlan { get; set; }
 		public string DiscountPlanPercents { get; set; }
 		public int DiscountPlanId { get; set; }
-		
-        
-        public int LoanSourceID { get; set; } //current loan source id
-        public string LoanSource { get; set; } //current loan source name
+
+		public int LoanSourceID { get; set; } //current loan source id
+		public string LoanSource { get; set; } //current loan source name
 		public LoanSourceModel[] AllLoanSources { get; set; } //all loan sources
 
 		public string AMLResult { get; set; }

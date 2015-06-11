@@ -6,6 +6,7 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzServiceAccessor;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -42,7 +43,8 @@
 			DateTime? term = null,
 			string description = "payment from customer",
 			bool interestOnly = false,
-			string sManualPaymentMethod = null
+			string sManualPaymentMethod = null,
+			NL_Model nlModel = null
 		) {
 			var paymentTime = term ?? DateTime.UtcNow;
 

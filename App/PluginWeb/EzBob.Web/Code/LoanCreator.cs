@@ -1,41 +1,41 @@
-﻿ namespace EzBob.Web.Code {
- 	using System;
- 	using System.Collections.Generic;
- 	using System.Diagnostics.CodeAnalysis;
- 	using System.Linq;
- 	using EZBob.DatabaseLib;
- 	using EZBob.DatabaseLib.Model;
- 	using EZBob.DatabaseLib.Model.Database;
- 	using EZBob.DatabaseLib.Model.Database.Loans;
- 	using EZBob.DatabaseLib.Model.Loans;
- 	using NHibernate;
- 	using Areas.Customer.Controllers;
- 	using Areas.Customer.Controllers.Exceptions;
- 	using Agreements;
- 	using Ezbob.Backend.Models;
- 	using Ezbob.Backend.Models.NewLoan;
- 	using Ezbob.Backend.ModelsWithDB.NewLoan;
- 	using Ezbob.Logger;
- 	using Infrastructure;
- 	using PaymentServices.Calculators;
- 	using PaymentServices.PacNet;
- 	using SalesForceLib.Models;
- 	using ServiceClientProxy;
- 	using StructureMap;
- 
- 	public interface ILoanCreator {
- 		//Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
- 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
- 	} // interface ILoanCreator
- 
- 	public class LoanCreator : ILoanCreator {
- 		public LoanCreator(
- 			IPacnetService pacnetService,
- 			IAgreementsGenerator agreementsGenerator,
- 			IEzbobWorkplaceContext context,
- 			LoanBuilder loanBuilder,
- 			ISession session
- 		) {
+﻿namespace EzBob.Web.Code {
+	using System;
+	using System.Collections.Generic;
+	using System.Diagnostics.CodeAnalysis;
+	using System.Linq;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate;
+	using Areas.Customer.Controllers;
+	using Areas.Customer.Controllers.Exceptions;
+	using Agreements;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
+	using Infrastructure;
+	using PaymentServices.Calculators;
+	using PaymentServices.PacNet;
+	using SalesForceLib.Models;
+	using ServiceClientProxy;
+	using StructureMap;
+
+	public interface ILoanCreator {
+		//Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
+		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
+	} // interface ILoanCreator
+
+	public class LoanCreator : ILoanCreator {
+		public LoanCreator(
+			IPacnetService pacnetService,
+			IAgreementsGenerator agreementsGenerator,
+			IEzbobWorkplaceContext context,
+			LoanBuilder loanBuilder,
+			ISession session
+		) {
 			this.pacnetService = pacnetService;
 			this.serviceClient = new ServiceClient();
 			this.agreementsGenerator = agreementsGenerator;
@@ -43,9 +43,9 @@
 			this.loanBuilder = loanBuilder;
 			this.session = session;
 			this.tranMethodRepo = ObjectFactory.GetInstance<DatabaseDataHelper>().LoanTransactionMethodRepository;
- 		} // constructor
- 
- 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
+		} // constructor
+
+		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
 
 			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
 			ValidateAmount(loanAmount, cus); // continue (loanAmount > customer.CreditSum)
@@ -53,22 +53,22 @@
 			ValidateLoanDelay(cus, now, TimeSpan.FromMinutes(1)); // checks if last loan was taken a minute before "now" - ?? to prevent multiple clicking on "create loan" button?
 			ValidateRepaymentPeriodAndInterestRate(cus);
 
- 			bool isFakeLoanCreate = (card == null);
+			bool isFakeLoanCreate = (card == null);
 			bool isEverlineRefinance = ValidateEverlineRefinance(cus); // NL should also treat it???
- 			var cr = cus.LastCashRequest;
- 
+			var cr = cus.LastCashRequest;
+
 			Loan loan = this.loanBuilder.CreateLoan(cr, loanAmount, now);
 
 			var transfered = loan.LoanAmount - loan.SetupFee;
 
- 			PacnetReturnData ret;
- 
- 			if (PacnetSafeGuard(cus, transfered)) {
- 				if (!isFakeLoanCreate && !cus.IsAlibaba && !isEverlineRefinance) {
- 					ret = SendMoney(cus, transfered);
- 					VerifyAvailableFunds(transfered);
+			PacnetReturnData ret;
 
- 				} else {
+			if (PacnetSafeGuard(cus, transfered)) {
+				if (!isFakeLoanCreate && !cus.IsAlibaba && !isEverlineRefinance) {
+					ret = SendMoney(cus, transfered);
+					VerifyAvailableFunds(transfered);
+
+				} else {
 					log.Debug(
 						"Not sending money via Pacnet. isFake: {0}, isAlibaba: {1}, isEverlineRefinance: {2}.",
 						isFakeLoanCreate,
@@ -76,12 +76,12 @@
 						isEverlineRefinance
 					);
 
- 					ret = new PacnetReturnData {
- 						Status = "Done",
- 						TrackingNumber = "fake"
- 					};
- 
- 					if (isEverlineRefinance) {
+					ret = new PacnetReturnData {
+						Status = "Done",
+						TrackingNumber = "fake"
+					};
+
+					if (isEverlineRefinance) {
 						this.serviceClient.Instance.SendEverlineRefinanceMails(
 							cus.Id,
 							cus.Name,
@@ -91,42 +91,42 @@
 						);
 					} // if
 				} // if
- 			} else {
+			} else {
 				log.Error("PacnetSafeGuard stopped money transfer");
- 				throw new Exception("PacnetSafeGuard stopped money transfer");
- 			} // if
- 
- 			cr.HasLoans = true;
- 
- 			loan.Customer = cus;
- 			loan.Status = LoanStatus.Live;
- 			loan.CashRequest = cr;
- 			loan.LoanType = cr.LoanType;
- 
- 			loan.GenerateRefNumber(cus.RefNumber, cus.Loans.Count);
+				throw new Exception("PacnetSafeGuard stopped money transfer");
+			} // if
 
-			if(nlModel==null) 
-				 nlModel = new NL_Model(cus.Id);
- 			nlModel.FundTransfer = new NL_FundTransfers();
+			cr.HasLoans = true;
+
+			loan.Customer = cus;
+			loan.Status = LoanStatus.Live;
+			loan.CashRequest = cr;
+			loan.LoanType = cr.LoanType;
+
+			loan.GenerateRefNumber(cus.RefNumber, cus.Loans.Count);
+
+			if (nlModel == null)
+				nlModel = new NL_Model(cus.Id);
+			nlModel.FundTransfer = new NL_FundTransfers();
 			nlModel.FundTransfer.Amount = loanAmount; // logic transaction - full amount
 			nlModel.FundTransfer.TransferTime = now;
 			nlModel.FundTransfer.IsActive = true;
- 			nlModel.FundTransfer.LoanTransactionMethodID = this.m_oTranMethodRepo.FindOrDefault("Pacnet").Id; // take from enum or send string and convert to id in db
- 
- 			PacnetTransaction loanTransaction;
- 			if (!cus.IsAlibaba) {
- 				loanTransaction = new PacnetTransaction {
- 					Amount = loan.LoanAmount,
- 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
- 					PostDate = now,
+			nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Pacnet").Id; // take from enum or send string and convert to id in db
+
+			PacnetTransaction loanTransaction;
+			if (!cus.IsAlibaba) {
+				loanTransaction = new PacnetTransaction {
+					Amount = loan.LoanAmount,
+					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
+					PostDate = now,
 					Status = (isFakeLoanCreate || isEverlineRefinance)
 						? LoanTransactionStatus.Done
 						: LoanTransactionStatus.InProgress,
- 					TrackingNumber = ret.TrackingNumber,
- 					PacnetStatus = ret.Status,
+					TrackingNumber = ret.TrackingNumber,
+					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
 					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Pacnet"),
- 				};
+				};
 
 				if (!isFakeLoanCreate && !isEverlineRefinance) {
 					nlModel.PacnetTransaction = new NL_PacnetTransactions();
@@ -138,25 +138,24 @@
 					nlModel.PacnetTransactionStatus = ret.Status;
 				}
 
- 			} else {
- 				loanTransaction = new PacnetTransaction {
- 					Amount = loan.LoanAmount,
- 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
- 					PostDate = now,
- 					Status = LoanTransactionStatus.Done,
+			} else {
+				loanTransaction = new PacnetTransaction {
+					Amount = loan.LoanAmount,
+					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
+					PostDate = now,
+					Status = LoanTransactionStatus.Done,
 					TrackingNumber = "alibaba", // TODO save who got the money
- 					PacnetStatus = ret.Status,
+					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
 					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Manual"),
- 				};
-				
+				};
+
 				// only logic transaction created in "alibaba" case; real money transfer will be done later, not transferred to customer (alibaba buyer) directly, but to seller (3rd party)
-				nlModel.FundTransfer.LoanTransactionMethodID = this.m_oTranMethodRepo.FindOrDefault("Manual").Id;
+				nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Manual").Id;
 
- 				Log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
+				log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
+			} // if
 
- 			} // if
- 
 			// TODO This is the place where the funds transferred to customer saved to DB
 			log.Info(
 				"Save transferred funds to customer {0} amount {1}, isFake {2} , isAlibaba {3}, isEverlineRefinance {4}",
@@ -166,19 +165,19 @@
 				cus.IsAlibaba,
 				isEverlineRefinance
 			);
- 
- 			loan.AddTransaction(loanTransaction);
- 
- 			var aprCalc = new APRCalculator();
+
+			loan.AddTransaction(loanTransaction);
+
+			var aprCalc = new APRCalculator();
 			loan.APR = (decimal)aprCalc.Calculate(loanAmount, loan.Schedule, loan.SetupFee, now);
- 
- 			cus.AddLoan(loan);
- 			cus.FirstLoanDate = cus.Loans.Min(x => x.Date);
- 			cus.LastLoanDate = cus.Loans.Max(x => x.Date);
- 			cus.LastLoanAmount = cus.Loans.First(x => x.Date == cus.LastLoanDate).LoanAmount;
- 			cus.AmountTaken = cus.Loans.Sum(x => x.LoanAmount);
- 			cus.CreditSum = cus.CreditSum - loanAmount;
- 
+
+			cus.AddLoan(loan);
+			cus.FirstLoanDate = cus.Loans.Min(x => x.Date);
+			cus.LastLoanDate = cus.Loans.Max(x => x.Date);
+			cus.LastLoanAmount = cus.Loans.First(x => x.Date == cus.LastLoanDate).LoanAmount;
+			cus.AmountTaken = cus.Loans.Sum(x => x.LoanAmount);
+			cus.CreditSum = cus.CreditSum - loanAmount;
+
 			if (loan.SetupFee > 0)
 				cus.SetupFee = loan.SetupFee;
 
@@ -187,11 +186,11 @@
 			2. RenderAgreements: loan.Agreements.Add
 			3. RenderAgreements: SaveAgreement (file?) \backend\Strategies\Misc\Agreement.cs strategy
 			*/
-			_agreementsGenerator.RenderAgreements(loan, true);
+			this.agreementsGenerator.RenderAgreements(loan, true);
 
- 			var loanHistoryRepository = new LoanHistoryRepository(_session);
- 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
- 
+			var loanHistoryRepository = new LoanHistoryRepository(this.session);
+			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
+
 			this.serviceClient.Instance.SalesForceUpdateOpportunity(
 				cus.Id,
 				cus.Id,
@@ -210,12 +209,12 @@
 				loan.CashRequest.Id,
 				loan.LoanAmount
 			);
- 
+
 			this.session.Flush();
- 
- 			if (!isFakeLoanCreate)
+
+			if (!isFakeLoanCreate)
 				this.serviceClient.Instance.CashTransferred(cus.Id, transfered, loan.RefNumber, cus.Loans.Count() == 1);
- 
+
 			// verify see above line 45-48
 			// 
 			// ++++++++
@@ -245,38 +244,39 @@
 			// SF
 			// flush
 
- 			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
+			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
 
 			nlModel.Loan = new NL_Loans();
- 			nlModel.UserID = this._context.UserId; // ???
+			nlModel.UserID = this.context.UserId; // ???
 			nlModel.Loan.Refnum = loan.RefNumber;
 			nlModel.Loan.OldLoanID = oldloanID;
- 			nlModel.Loan.InitialLoanAmount = loanAmount;
+			nlModel.Loan.InitialLoanAmount = loanAmount;
 			nlModel.LoanHistory = new NL_LoanHistory();
 			nlModel.LoanHistory.AgreementModel = loan.AgreementModel;
- 			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
+			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
+
 			foreach (LoanAgreement agrm in loan.Agreements) {
 				NL_LoanAgreements agreement = new NL_LoanAgreements();
 				agreement.FilePath = agrm.FilePath;
 				agreement.LoanAgreementTemplateID = agrm.TemplateRef.Id;
 				nlModel.LoanAgreements.Add(agreement);
 
-				Log.Debug(agreement.ToString());
-			}
+				log.Debug(agreement.ToString());
+			} // for
 
- 			try {
-				Log.Debug(nlModel.FundTransfer.ToString());
-				Log.Debug(nlModel.PacnetTransaction.ToString());
-				Log.Debug(nlModel.Loan.ToString());
+			try {
+				log.Debug(nlModel.FundTransfer.ToString());
+				log.Debug(nlModel.PacnetTransaction.ToString());
+				log.Debug(nlModel.Loan.ToString());
 
-				var nlLoan = this.m_oServiceClient.Instance.AddLoan(nlModel);
+				var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
 				nlModel.Loan.LoanID = nlLoan.Value;
 
-				Log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID); 
+				log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID);
 
- 			} catch (Exception ex) {
- 				Log.Debug("Failed to save new loan {0}", ex);
- 			}
+			} catch (Exception ex) {
+				log.Debug("Failed to save new loan {0}", ex);
+			} // try
 
 			return loan;
 		} // CreateLoan
@@ -337,93 +337,75 @@
 
 			return name;
 		} // GetCustomerNameForPacNet
- 
- 		private bool ValidateEverlineRefinance(Customer cus) {
- 			if (cus.CustomerOrigin.Name == "everline" && !cus.Loans.Any()) {
- 				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
- 				var status = checker.GetLoginStatus(cus.Name);
- 				return (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan);
+
+		private bool ValidateEverlineRefinance(Customer cus) {
+			if (cus.CustomerOrigin.Name == "everline" && !cus.Loans.Any()) {
+				EverlineLoginLoanChecker checker = new EverlineLoginLoanChecker();
+				var status = checker.GetLoginStatus(cus.Name);
+				return (status.status == EverlineLoanStatus.ExistsWithCurrentLiveLoan);
 			} // if
 
 			return false;
 		} // ValidateEverlineRefinance
- 		/// <summary>
- 		/// not yet implemented function that is
- 		/// going to check last minute details of money transfer to prevent some 
- 		/// hackers’ attacks and fraud.
- 		/// </summary>
- 		/// <returns>
- 		/// true if every thing is ok with this money transfer, else false 
- 		/// currently always true
- 		/// </returns>
- 		[SuppressMessage("ReSharper", "UnusedParameter.Local")]
- 		private bool PacnetSafeGuard(Customer cus, decimal transfered) {
- 			return true;
- 		} // PacnetSafeGuard
- 
- 		private PacnetReturnData SendMoney(Customer cus, decimal transfered) {
- 			var name = GetCustomerNameForPacNet(cus);
- 
- 			if (!cus.HasBankAccount)
- 				throw new Exception("bank account should be added in order to send money");
- 
+		/// <summary>
+		/// not yet implemented function that is
+		/// going to check last minute details of money transfer to prevent some 
+		/// hackers’ attacks and fraud.
+		/// </summary>
+		/// <returns>
+		/// true if every thing is ok with this money transfer, else false 
+		/// currently always true
+		/// </returns>
+		[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+		private bool PacnetSafeGuard(Customer cus, decimal transfered) {
+			return true;
+		} // PacnetSafeGuard
+
+		private PacnetReturnData SendMoney(Customer cus, decimal transfered) {
+			var name = GetCustomerNameForPacNet(cus);
+
+			if (!cus.HasBankAccount)
+				throw new Exception("bank account should be added in order to send money");
+
 			log.Debug(
- 				"SendMoney customerId: {0}, amount: {1}, sortcode: {2}, account number: {3}, name: {4}, ezbob GBP EZBOB",
- 				cus.Id,
- 				transfered,
- 				cus.BankAccount.SortCode,
- 				cus.BankAccount.AccountNumber,
- 				name
- 			);
- 
+				"SendMoney customerId: {0}, amount: {1}, sortcode: {2}, account number: {3}, name: {4}, ezbob GBP EZBOB",
+				cus.Id,
+				transfered,
+				cus.BankAccount.SortCode,
+				cus.BankAccount.AccountNumber,
+				name
+			);
+
 			var sendResponse = this.pacnetService.SendMoney(
- 				cus.Id,
- 				transfered,
- 				cus.BankAccount.SortCode,
- 				cus.BankAccount.AccountNumber,
- 				name,
- 				"ezbob",
- 				"GBP",
- 				"EZBOB" //TODO rename to orange money
- 			);
- 
+				cus.Id,
+				transfered,
+				cus.BankAccount.SortCode,
+				cus.BankAccount.AccountNumber,
+				name,
+				"ezbob",
+				"GBP",
+				"EZBOB" //TODO rename to orange money
+			);
+
 			log.Debug(
- 				"SendMoney response: tracking: {0}, status {1} {2} ",
- 				sendResponse.TrackingNumber,
- 				sendResponse.Status,
- 				sendResponse.HasError ? ",Error: " + sendResponse.Error : ""
- 			);
- 
+				"SendMoney response: tracking: {0}, status {1} {2} ",
+				sendResponse.TrackingNumber,
+				sendResponse.Status,
+				sendResponse.HasError ? ",Error: " + sendResponse.Error : ""
+			);
+
 			var closeResponse = this.pacnetService.CloseFile(cus.Id, "ezbob");
- 
+
 			log.Debug(
- 				"CloseFile response: tracking: {0}, status {1} {2} ",
- 				closeResponse.TrackingNumber,
- 				closeResponse.Status,
- 				closeResponse.HasError ? ",Error: " + closeResponse.Error : ""
- 			);
- 
- 			return sendResponse;
- 		} // SendMoney
- 
- 		public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period) {
- 			var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();
- 
- 			if (lastLoan == null)
- 				return;
- 
- 			var diff = now.Subtract(lastLoan.Date);
- 
- 			if (diff < period) {
- 				var msg = string.Format("Please try again in {0} seconds.", (int)(period.TotalSeconds - diff.TotalSeconds));
- 				Log.Error(msg);
- 				throw new LoanDelayViolationException(msg);
- 			} // if
- 		} // ValidateLoanDelay
- 
- 		public virtual void ValidateOffer(Customer cus) {
- 			cus.ValidateOfferDate();
- 		} // ValidateOffer
+				"CloseFile response: tracking: {0}, status {1} {2} ",
+				closeResponse.TrackingNumber,
+				closeResponse.Status,
+				closeResponse.HasError ? ",Error: " + closeResponse.Error : ""
+			);
+
+			return sendResponse;
+		} // SendMoney
+
 		private void ValidateRepaymentPeriodAndInterestRate(Customer cus) {
 			var cr = cus.LastCashRequest;
 
@@ -452,5 +434,5 @@
 
 		//private NL_Model nlModel ;
 
- 	} // class LoanCreator
- } // namespace
+	} // class LoanCreator
+} // namespace

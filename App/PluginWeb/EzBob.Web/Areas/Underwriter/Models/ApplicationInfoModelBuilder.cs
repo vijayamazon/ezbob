@@ -21,6 +21,7 @@
 		private readonly IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IOfferCalculationsRepository offerCalculationsRepository;
+		private readonly VatReturnSummaryRepository _vatReturnSummaryRepository;
 		private readonly CustomerAnalyticsRepository _customerAnalyticsRepository;
 		private readonly LoanBuilder _loanBuilder;
 		private readonly APRCalculator _aprCalc;
@@ -30,10 +31,12 @@
 			IDiscountPlanRepository discounts,
 			ILoanTypeRepository loanTypes,
 			ILoanSourceRepository loanSources,
+			VatReturnSummaryRepository vatReturnSummaryRepository,
 			CustomerAnalyticsRepository customerAnalyticsRepository,
 			LoanBuilder loanBuilder,
 			APRCalculator aprCalc,
-			IOfferCalculationsRepository offerCalculationsRepository) {
+			IOfferCalculationsRepository offerCalculationsRepository
+		) {
 			this._discounts = discounts;
 			this._loanTypes = loanTypes;
 			this.approvalsWithoutAMLRepository = approvalsWithoutAMLRepository;
@@ -59,8 +62,8 @@
 			}
 
 			var loanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : this._loanSources.GetDefault());
-		    model.LoanSourceID = loanSource.Id;
-		    model.LoanSource = loanSource.Name;
+			model.LoanSourceID = loanSource.Id;
+			model.LoanSource = loanSource.Name;
 
 			model.CustomerId = customer.Id;
 			model.IsTest = customer.IsTest;
@@ -183,7 +186,7 @@
 			model.Reason = cr.UnderwriterComment;
 
 			model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
-            model.IsCustomerRepaymentPeriodSelectionAllowed = cr.IsCustomerRepaymentPeriodSelectionAllowed;
+			model.IsCustomerRepaymentPeriodSelectionAllowed = cr.IsCustomerRepaymentPeriodSelectionAllowed;
 
 			model.AnnualTurnover = cr.AnnualTurnover;
 
