@@ -6,27 +6,37 @@ IF OBJECT_ID('BAR_LoadManualNoSignatureEnoughDataData') IS NULL
 GO
 
 ALTER PROCEDURE BAR_LoadManualNoSignatureEnoughDataData
-@TrailTagID BIGINT
+@TrailTagID BIGINT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
-	
+
+	IF @TrailTagID IS NULL
+	BEGIN
+		SELECT
+			@TrailTagID = MAX(TrailTagID)
+		FROM
+			DecisionTrailTags
+		WHERE
+			TrailTag LIKE '#BravoAutoRpt%'
+	END
+
 	SELECT
+		br.CustomerID,
 		br.FirstCashRequestID,
+		DecisionTime = r.UnderwriterDecisionDate,
 		br.ManualDecisionID,
-		d.DecisionName,
 		rr.Reason,
 		r.UnderwriterComment,
 		MpID = m.Id,
 		MpType = mt.Name,
+		MpTypeInternalID = mt.InternalId,
 		MpTotalsMonth = dbo.udfGetLatestTotalsMonth(m.Id, r.UnderwriterDecisionDate),
 		br.AutoApproveTrailID,
 		t.DecisionStatusID,
-		ds.DecisionStatus,
 		tn.TraceName
 	FROM
 		BAR_Results br
-		INNER JOIN Decisions d ON br.ManualDecisionID = d.DecisionID
 		INNER JOIN CashRequests r
 			ON br.FirstCashRequestID = r.Id
 			AND r.AutoDecisionID IS NULL
@@ -39,7 +49,6 @@ BEGIN
 			AND m.Created < r.UnderwriterDecisionDate
 		LEFT JOIN MP_MarketplaceType mt ON m.MarketPlaceId = mt.Id
 		LEFT JOIN DecisionTrail t ON br.AutoApproveTrailID = t.TrailID
-		LEFT JOIN DecisionStatuses ds ON t.DecisionStatusID = ds.DecisionStatusID
 		LEFT JOIN DecisionTrace tc
 			ON t.TrailID = tc.TrailID
 			AND tc.DecisionStatusID != 1

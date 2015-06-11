@@ -12,17 +12,21 @@
 		} // constructor
 
 		public static ProgressCounter operator ++(ProgressCounter pc) {
-			++pc.m_nCounter;
+			return pc.Increment();
+		} // oprator ++
 
-			if (pc.m_nCounter == pc.m_nCheckpoint) {
-				pc.m_n1k += pc.m_nCounter;
-				pc.m_nCounter = 0;
+		public ProgressCounter Increment() {
+			++this.m_nCounter;
 
-				pc.Say(pc.m_nSeverity, pc.m_sFormat, pc.m_n1k);
+			if (this.m_nCounter == this.m_nCheckpoint) {
+				this.m_n1k += this.m_nCounter;
+				this.m_nCounter = 0;
+
+				Say(this.m_nSeverity, this.m_sFormat, this.m_n1k);
 			} // if
 
-			return pc;
-		} // oprator ++
+			return this;
+		} // Increment
 
 		public void Log() {
 			if (m_nCounter == 0) {

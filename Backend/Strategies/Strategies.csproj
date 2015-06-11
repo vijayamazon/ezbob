@@ -102,8 +102,13 @@
     <Compile Include="AutomationVerification\BravoAutomationReport\ApproveStatus.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\AutoDecision.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\Bar.cs" />
+    <Compile Include="AutomationVerification\BravoAutomationReport\BarLoadAndCategorizeDecisions.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\CustomerDecisions.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\ADecision.cs" />
+    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\DeepData.cs" />
+    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\DigIntoManualNoSignatureEnoughData.cs" />
+    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\MarketplaceData.cs" />
+    <Compile Include="AutomationVerification\BravoAutomationReport\DigIntoManualNoSignatureEnoughData\RawSource.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\ManualDecision.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\SpLoadCashRequests.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\SpSaveResults.cs" />
