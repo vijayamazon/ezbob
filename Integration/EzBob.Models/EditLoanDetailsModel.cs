@@ -25,6 +25,16 @@ namespace EzBob.Models
 
         public DateTime Date { get; set; }
 
+        public int WithinWeek { get; set; }
+
+        public int WithinMonth { get; set; }
+
+        public int OutsideWeek { get; set; }
+
+        public int OutsideMonth { get; set; }
+
+        public decimal? ReschedulingBalance { get; set; }
+
         public static EditLoanDetailsModel Parse(string json)
         {
             return JsonConvert.DeserializeObject<EditLoanDetailsModel>(json);

@@ -6,10 +6,18 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	scheduleTemplate: $('#loan_editor_schedule_template').length > 0 ? _.template($('#loan_editor_schedule_template').html()) : null,
 
 	initialize: function() {
-		this.bindTo(this.model, 'change sync', this.renderRegions, this);
+	    this.bindTo(this.model, 'change sync', this.renderRegions, this);
+	    this.modelBinder = new Backbone.ModelBinder();
 		this.editItemIndex = -1;
 	}, // initialize
-
+    bindings: {
+        WithinWeek: "span[name='withinWeek']",
+        WithinMonth: "span[name='withinMonth']",
+        ReschedulingBalance: "span[name='withinAmount']",
+        InterestRate: "span[name='Intrest']",
+        OutsideWeek: "span[name='outsideWeek']",
+        OutsideMonth: "span[name='outsideMonth']"
+    },
 	serializeData: function() {
 		var data = this.model.toJSON();
 		data.editItemIndex = this.editItemIndex;
@@ -29,9 +37,8 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	}, // editors
 
 	events: {
-	    'click .submit-btn': 'submitForm',
-	    'blur .outside-weeks-amount': 'blurWeeks',
-	    'blur .outside-month-amount': 'blurMonth',
+	    'click .resch-submit-btn': 'reschSubmitForm',
+	    'blur .outsideAmount': 'blurAmount',
 		'click .edit-schedule-item': 'editScheduleItem',
 		'click .remove-schedule-item': 'removeScheduleItem',
 		'click .add-installment': 'addInstallment',
@@ -42,47 +49,25 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		'click .remove-freeze-interval': 'onRemoveFreezeInterval'
 	}, // events
 
-	submitForm: function () {
-	    var oData = {
-	        loanID: this.model.attributes.Id,
-	        intervalType: "Week",
-	        stopAutoCharge: null,
-	        stopLateFee: null,
-	        stopInterest: null
-	    };
-	    console.log(oData);
 
-	    var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', oData);
-
-	    var self = this;
-
-	    oRequest.success(function (res) {
-	        if (res.success) {
-	            console.log("success");
-	        } // if
-
-	        if (res.error)
-	            console.log("error");
-	    }); // on success
-
-	    oRequest.fail(function () {
-	        console.log("fail");
-	    });
-
-	    oRequest.always(function () {
-	        console.log("always");
-	    });
+	reschSubmitForm: function () {
+	    var checked = $('input[name=radio]').filter(':checked').val();
+	    if (checked === 'withinRadio') {
+	        alert("withinRadio");
+	    }
+	    if (checked === 'outsideRadio') {
+	        var isCharges = $('.charges-checkbox').is(':checked');
+	        var chargesVal = $('.charges-payments').val();
+	    }
 	},
 
-    blurWeeks: function() {
-        if ($(".outside-weeks-amount").val() <= 0) {
-            $("#error").fadeIn();
-            setTimeout(function () { $("#error").fadeOut(); }, 3000);
-        }
-    },
-
-    blurMonth: function() {
-        alert($(".outside-month-amount").val());
+	blurAmount: function () {
+	    if ($(".outsideAmount").val() <= 0) {
+	        $("#amount-error").fadeIn();
+	        setTimeout(function() { $("#amount-error").fadeOut(); }, 3000);
+	    } else {
+	        //todo: add outside loan payment ajax request
+	    }
     },
 
 	addInstallment: function() {
@@ -224,18 +209,46 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		this.close();
 	}, // onCancel
 
-	onRender: function() {
+	onRender: function () {
+	    this.modelBinder.bind(this.model, this.el, this.bindings);
+	    console.log(this.model);
 		this.editRegion = new Backbone.Marionette.Region({
 			el: this.$('.editloan-item-editor-region')
 		});
 
 		this.renderRegions();
+
+
+		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Week" });
+
+		var self = this;
+
+		oRequest.success(function (res) {
+		    self.model.set('withinWeek', res.IntervalsNum);
+		}); //on success
+
+		oRequest.fail(function () {
+		    $("#data-error").fadeIn();
+		    setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
+		});//on fail
+
+		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Month" });
+
+		oRequest.success(function (res) {
+		    self.model.set('withinMonth', res.IntervalsNum);
+		}); //on success
+
+		oRequest.fail(function () {
+		    $("#data-error").fadeIn();
+		    setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
+		});//on fail
+
 	}, // onRender
 
 	renderRegions: function() {
 		var data = this.serializeData();
 		this.renderSchedule(data);
-		this.renderFreeze(data);
+		//this.renderFreeze(data);
 	}, // renderRegions
 
 	renderSchedule: function(data) {
