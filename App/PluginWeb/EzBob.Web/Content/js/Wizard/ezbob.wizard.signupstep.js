@@ -313,7 +313,9 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 			    
 			}
 			else {
-				EzBob.ServerLog.warn('Customer', sEmail, 'failed to sign up with error message:', result.errorMessage);
+
+
+				EzBob.ServerLog.warn('Customer', sEmail, 'failed to sign up with error message:', that.strip(result.errorMessage));
 
 				if (result.errorMessage)
 					EzBob.App.trigger('error', result.errorMessage);
@@ -341,6 +343,12 @@ EzBob.QuickSignUpStepView = Backbone.View.extend({
 
 		return false;
 	}, // submit
+
+	strip : function(html) {
+		var tmp = document.createElement("DIV");
+		tmp.innerHTML = html;
+		return tmp.textContent || tmp.innerText || "";
+	}, // strip
 
 	ready: function() {
 		this.setReadOnly();
