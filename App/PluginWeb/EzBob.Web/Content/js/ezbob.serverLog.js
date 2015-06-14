@@ -101,20 +101,27 @@ var EzBob = EzBob || {};
 
 		stringify: function() {
 			var ary = [];
-
+			var self = this;
 			$.each(arguments, function(idx, val) {
 				if (val === undefined)
 					ary.push('-+- undefined -+-');
 				else if (val === null)
 					ary.push('-+- null -+-');
 				else if (typeof(val) === 'string')
-					ary.push(val);
+					ary.push(self.strip(val));
 				else
-					ary.push(JSON.stringify(val));
+					ary.push(self.strip(JSON.stringify(val)));
 			});
-
+			console.log('ary', ary);
 			return ary.join(' ');
 		}, // stringify
+
+		///fix for System.Web.HttpRequestValidationException (0x80004005): A potentially dangerous Request.Form value was detected from the client
+		strip: function (html) {
+			var tmp = document.createElement("DIV");
+			tmp.innerHTML = html;
+			return tmp.textContent || tmp.innerText || "";
+		}, // strip
 
 		debug: function() { this.say('Debug', EzBob.ServerLog.stringify.apply(this, arguments)); }, // debug
 		msg:   function() { this.say('Msg',   EzBob.ServerLog.stringify.apply(this, arguments)); }, // msg
