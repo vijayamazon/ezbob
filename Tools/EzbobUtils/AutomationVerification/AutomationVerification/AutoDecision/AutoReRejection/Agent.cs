@@ -34,10 +34,10 @@
 				GatherData();
 
 				CheckNumOfLoans();
+				CheckReturnRatio();
 				CheckLastDecisionWasReject();
 				CheckNewMarketplaces();
 				CheckRejectionAge();
-				CheckReturnRatio();
 			} catch (Exception e) {
 				Log.Error(e, "Exception during auto re-rejection.");
 				StepNoReject<ExceptionThrown>().Init(e);
@@ -123,14 +123,14 @@
 				? 0
 				: Trail.MyInputData.PrincipalRepaymentAmount / Trail.MyInputData.OpenLoansAmount;
 
-			//don't have open loan
+			// Don't have open loan
 			if (Trail.MyInputData.OpenLoansAmount < 0.00000000001m) {
 				StepNoDecision<OpenLoansRepayments>().Init(
 					Trail.MyInputData.OpenLoansAmount,
 					Trail.MyInputData.PrincipalRepaymentAmount,
 					Trail.MyInputData.AutoReRejectMinRepaidPortion
-					);
-			} else { //have open loan
+				);
+			} else { // Have open loan
 				if (nRatio < Trail.MyInputData.AutoReRejectMinRepaidPortion) {
 					StepReject<OpenLoansRepayments>().Init(
 						Trail.MyInputData.OpenLoansAmount,
@@ -138,7 +138,7 @@
 						Trail.MyInputData.AutoReRejectMinRepaidPortion
 					);
 				} else {
-					StepNoReject<OpenLoansRepayments>().Init(
+					StepNoDecision<OpenLoansRepayments>().Init(
 						Trail.MyInputData.OpenLoansAmount,
 						Trail.MyInputData.PrincipalRepaymentAmount,
 						Trail.MyInputData.AutoReRejectMinRepaidPortion

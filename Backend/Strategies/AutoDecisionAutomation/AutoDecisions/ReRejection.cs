@@ -87,10 +87,10 @@
 			);
 
 			CheckNumOfOpenLoans();
+			CheckOpenLoansRepayments();
 			CheckLastDecisionWasReject();
 			CheckNewMarketPlaceAdded();
 			CheckLRDIsTooOld();
-			CheckOpenLoansRepayments();
 
 			this.log.Debug(
 				"Primary: checking if auto re-reject should take place for customer {0} complete; {1}",
@@ -166,21 +166,21 @@
 				: this.trail.MyInputData.PrincipalRepaymentAmount / this.trail.MyInputData.OpenLoansAmount;
 
 			// no open loans
-			if (this.trail.MyInputData.OpenLoansAmount == 0) {
+			if (this.trail.MyInputData.OpenLoansAmount == 0)
 				StepNoDecision<OpenLoansRepayments>().Init(this.trail.MyInputData.OpenLoansAmount, 0, 0);
-			} else {
+			else {
 				if (ratio < this.trail.MyInputData.AutoReRejectMinRepaidPortion) {
 					StepReReject<OpenLoansRepayments>(true).Init(
 						this.trail.MyInputData.OpenLoansAmount,
 						this.trail.MyInputData.PrincipalRepaymentAmount,
 						this.trail.MyInputData.AutoReRejectMinRepaidPortion
-						);
+					);
 				} else {
-					StepNoReReject<OpenLoansRepayments>(true).Init(
+					StepNoDecision<OpenLoansRepayments>().Init(
 						this.trail.MyInputData.OpenLoansAmount,
 						this.trail.MyInputData.PrincipalRepaymentAmount,
 						this.trail.MyInputData.AutoReRejectMinRepaidPortion
-						);
+					);
 				} // if
 			} // if
 		} // CheckOpenLoansRepayments
