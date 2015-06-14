@@ -75,10 +75,14 @@ BEGIN
 	
 	--loan charges
 	DECLARE @HasLoanCharges BIT = 0
-	IF EXISTS (SELECT * FROM LoanCharges lc 
-			   INNER JOIN Loan l ON l.Id = lc.LoanId 
-			   WHERE l.CustomerId=@CustomerId 
-			   AND lc.[Date]>@ManualApproveDate)
+	IF EXISTS (
+		SELECT lc.*
+		FROM LoanCharges lc
+		INNER JOIN Loan l ON l.Id = lc.LoanId
+		INNER JOIN ConfigurationVariables cv ON lc.ConfigurationVariableId = cv.Id AND cv.Name != 'SpreadSetupFeeCharge'
+		WHERE l.CustomerId = @CustomerId
+		AND lc.[Date] > @ManualApproveDate
+	)
 	BEGIN
 		SET @HasLoanCharges = 1
 	END		   

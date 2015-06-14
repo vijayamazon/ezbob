@@ -49,7 +49,7 @@
 		} // Init
 
 		public virtual bool MakeAndVerifyDecision(string tag = null) {
-		    Trail.SetTag(tag);
+			Trail.SetTag(tag);
 			RunPrimary();
 
 			AutomationCalculator.AutoDecision.AutoReApproval.Agent oSecondary = RunSecondary();
@@ -155,14 +155,14 @@
 			MetaData.Validate();
 
 			Trail.MyInputData.Init(Now, null);
-            Trail.MyInputData.ReApproveAmount = MetaData.ApprovedAmount;
-            Trail.MyInputData.FraudStatus = MetaData.FraudStatus;
+			Trail.MyInputData.ReApproveAmount = MetaData.ApprovedAmount;
+			Trail.MyInputData.FraudStatus = MetaData.FraudStatus;
 			Trail.MyInputData.ManualApproveDate = MetaData.LacrTime;
 			Trail.MyInputData.WasLate = MetaData.LateLoanCount > 0;
 			Trail.MyInputData.WasRejected = MetaData.RejectAfterLacrID > 0;
-            Trail.MyInputData.NumOutstandingLoans = MetaData.OpenLoanCount;
-            Trail.MyInputData.HasLoanCharges = MetaData.SumOfCharges > 0.00000001m;
-		    Trail.MyInputData.LacrID = MetaData.LacrID;
+			Trail.MyInputData.NumOutstandingLoans = MetaData.OpenLoanCount;
+			Trail.MyInputData.HasLoanCharges = MetaData.SumOfCharges > 0.00000001m;
+			Trail.MyInputData.LacrID = MetaData.LacrID;
 
 			Trail.MyInputData.MaxLateDays = LatePayments.Count < 1 ? 0 : LatePayments.Select(lp => lp.Delay).Max();
 			Trail.MyInputData.NewDataSourceAdded = NewMarketplaces.Count > 0;
