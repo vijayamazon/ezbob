@@ -82,6 +82,8 @@
 		public static SortedSet<string> AllNonAffirmativeTraces { get; private set; }
 		public static SortedSet<string> AllStandardRejectReasons { get; private set; }
 
+		public int ConsumerScore { get; set; }
+
 		private AConnection DB { get { return Library.Instance.DB; } }
 	} // class DeepData
 } // namespace

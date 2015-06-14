@@ -21,6 +21,7 @@
 		public void Execute() {
 			LoadCashRequests();
 			LoadMarketplacesData();
+			LoadConsumerScores();
 			CreateXlsx();
 			SaveXlsx();
 		} // Execute
@@ -39,7 +40,7 @@
 					else
 						Result[rs.CustomerID] = new DeepData(rs);
 
-					pc.Increment();
+					pc.Next();
 				},
 				RawSource.SpName,
 				CommandSpecies.StoredProcedure
@@ -47,6 +48,26 @@
 
 			pc.Log();
 		} // LoadCashRequests
+
+		private void LoadConsumerScores() {
+			var pc = new ProgressCounter("{0} consumer score items loaded.", Log, 20);
+
+			DB.ForEachRowSafe(
+				sr => {
+					int customerID = sr["CustomerID"];
+					int score = sr["ConsumerScore"];
+
+					if (Result.ContainsKey(customerID))
+						Result[customerID].ConsumerScore = score;
+
+					pc.Next();
+				},
+				"BAR_LoadConsumerScores",
+				CommandSpecies.StoredProcedure
+			);
+
+			pc.Log();
+		} // LoadConsumerScores
 
 		private void LoadMarketplacesData() {
 			var pc = new ProgressCounter("{0} marketplaces processed.", Log, 20);
@@ -192,6 +213,7 @@
 			column = sheet.SetCellTitle(row, column, "Cash request ID");
 			column = sheet.SetCellTitle(row, column, "Underwriter");
 			column = sheet.SetCellTitle(row, column, "Decision time");
+			column = sheet.SetCellTitle(row, column, "Consumer score");
 			column = sheet.SetCellTitle(row, column, "Decision");
 			column = sheet.SetCellTitle(row, column, "Auto approve");
 
@@ -214,6 +236,7 @@
 				dd.CashRequestID,
 				dd.UnderwriterName,
 				dd.DecisionTime,
+				dd.ConsumerScore,
 				dd.ManualDecision.ToString(),
 				dd.AutoApproved.HasValue ? dd.AutoApproved.ToString() : null,
 			};

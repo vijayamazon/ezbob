@@ -13,7 +13,11 @@
 
 		public static ProgressCounter operator ++(ProgressCounter pc) {
 			return pc.Increment();
-		} // oprator ++
+		} // operator ++
+
+		public ProgressCounter Next() {
+			return Increment();
+		} // Next
 
 		public ProgressCounter Increment() {
 			++this.m_nCounter;
