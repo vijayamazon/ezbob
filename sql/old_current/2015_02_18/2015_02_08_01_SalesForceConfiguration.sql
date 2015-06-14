@@ -21,7 +21,7 @@ BEGIN
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceToken')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'UKNRYVzrJk8z1a45hEAb60enW', 'Used for calls from non white list IPs')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'ALwQ5Giu5uRbiCcuqQezowzdM', 'Used for calls from non white list IPs')
 	END
 	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')
@@ -51,7 +51,7 @@ BEGIN
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceToken')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'UKNRYVzrJk8z1a45hEAb60enW', 'Used for calls from non white list IPs')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'ALwQ5Giu5uRbiCcuqQezowzdM', 'Used for calls from non white list IPs')
 	END
 	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')
