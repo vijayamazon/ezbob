@@ -51,14 +51,74 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
 
 	reschSubmitForm: function () {
-	    var checked = $('input[name=radio]').filter(':checked').val();
-	    if (checked === 'withinRadio') {
-	        alert("withinRadio");
+	    var requestParam = { loanID: this.model.get('Id') };
+
+	    var isStopIntrest = $('.intrest-checkbox').is(':checked');
+	    var interestFrom = $('.intrest-calendar-from').val();
+	    var interestTo = $('.intrest-calendar-to').val();
+	    var isStopFees=$('.fees-checkbox').is(':checked');
+	    var feesFrom = $('.fees-calendar-from').val();
+	    var feesTo = $('.fees-calendar-to').val();
+	   
+	    if (isStopIntrest) {
+	        if (interestTo === "" || interestFrom === "") {
+	            $("#date-empty-intrest").fadeIn();
+	            setTimeout(function () { $("#date-empty-intrest").fadeOut(); }, 3000);
+	            return;
+            }
+	        if (new Date(interestFrom).getTime() > new Date(interestTo).getTime()) {
+	            $("#date-error-intrest").fadeIn();
+	            setTimeout(function() { $("#date-error-intrest").fadeOut(); }, 3000);
+	            return;
+	        }
+	        requestParam.freezeInterest = 'true';
+	        requestParam.freezeStartDate = interestFrom;
+	        requestParam.freezeEndDate = interestTo;
 	    }
-	    if (checked === 'outsideRadio') {
+	    if (isStopFees) {
+	        if (feesTo === "" || feesFrom === "") {
+	            $("#date-empty-intrest").fadeIn();
+	            setTimeout(function () { $("#date-empty-fees").fadeOut(); }, 3000);
+	            return;
+	        }
+	        if (new Date(feesFrom).getTime() > new Date(feesTo).getTime()) {
+	            $("#date-error-intrest").fadeIn();
+	            setTimeout(function () { $("#date-error-fees").fadeOut(); }, 3000);
+	            return;
+	        }
+	        requestParam.stopLateFee = 'true';
+	        requestParam.lateFeeStartDate = feesFrom;
+	        requestParam.lateFeeEndDate = feesTo;
+	    }
+	    var checkedRadio = $('input[name=radio]').filter(':checked').val();
+	    if (checkedRadio === 'withinRadio') {
+	        requestParam.intervalType = $('#withinSelect option:selected').text();
+	    }
+	    else if (checkedRadio === 'outsideRadio') {
+	        requestParam.intervalType = $('#outsideSelect option:selected').text();
+	        requestParam.AmountPerInterval = $('.outsideAmount').val();
 	        var isCharges = $('.charges-checkbox').is(':checked');
 	        var chargesVal = $('.charges-payments').val();
+            if (isCharges) {
+                requestParam.stopAutoCharge = 'true';
+                requestParam.stopAutoChargePayment = chargesVal;
+            }
+	    } else {
+	        return;
 	    }
+	    requestParam.save = 'true';
+
+	    var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', requestParam);
+
+	    var self = this;
+
+	    oRequest.success(function (res) {
+	        alert("success");
+	    }); //on success
+
+	    oRequest.fail(function () {
+	        alert("fail");
+	    });//on fail
 	},
 
 	blurAmount: function () {
@@ -211,7 +271,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
 	onRender: function () {
 	    this.modelBinder.bind(this.model, this.el, this.bindings);
-	    console.log(this.model);
+	    //console.log(this.model);
 		this.editRegion = new Backbone.Marionette.Region({
 			el: this.$('.editloan-item-editor-region')
 		});

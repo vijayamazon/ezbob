@@ -16,9 +16,9 @@
                     <span name="withinAmount" style="font-weight: bold"></span>
                     and intrest of
                     <span name="Intrest" style="font-weight: bold"></span>
-                    <select name="withinSelect" size="1" style="width:100px">
+                    <select id="withinSelect" size="1" style="width:100px">
                         <option value="month">Month</option>
-                        <option value="weeks">Weeks</option>
+                        <option value="weeks">Week</option>
                     </select>
                 </div>
 
@@ -33,19 +33,23 @@
                 <input class="outsideAmount form-control" type="number" value="0" min="0" step="10" style="width:100px">
                 and intrest of
                 <span name="Intrest" style="font-weight: bold"></span>
-                <select name="outsideSelect" size="1" style="width:100px">
+                <select id="outsideSelect" size="1" style="width:100px">
                     <option value="month">Month</option>
-                    <option value="weeks">Weeks</option>
+                    <option value="weeks">Week</option>
                 </select><br />
 
                 <input type="checkbox" class="charges-checkbox form-control pull-left" name="automatic-charges" value="automatic-charges">&nbsp;Stop automatic charges after
                 <input class="charges-payments form-control" type="number" value="0" min="0" step="1" style="width:100px"> payments.<br />
-
-                <input type="checkbox" class="intrest-calculation form-control pull-left" name="intrest-calculation" value="intrest-calculation">&nbsp;Stop intrest calculation from
-                <input class="intrest-cal-from form-control" type="date" style="width:150px"> untill <input class="intrest-cal-to form-control" type="date" style="width:150px"><br />
-
-                <input type="checkbox" class="fees-calculation form-control pull-left" name="fees-calculation" value="fees-calculation">&nbsp;Stop late fees calculation from
-                <input class="fees-cal-from form-control" type="date" style="width:150px"> untill <input class="fees-cal-to form-control" type="date" style="width:150px"><br />
+                
+                <div class="alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then from date</div>
+                <div class="alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
+                <input type="checkbox" class="intrest-checkbox form-control pull-left" name="intrest-calculation" value="intrest-calculation">&nbsp;Stop intrest calculation from
+                <input class="intrest-calendar-from form-control" type="date" style="width:150px"> untill <input class="intrest-calendar-to form-control" type="date" style="width:150px"><br />
+                
+                <div class="alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then from date</div>
+                <div class="alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
+                <input type="checkbox" class="fees-checkbox form-control pull-left" name="fees-calculation" value="fees-calculation">&nbsp;Stop late fees calculation from
+                <input class="fees-calendar-from form-control" type="date" style="width:150px"> untill <input class="fees-calendar-to form-control" type="date" style="width:150px"><br />
 
                 <button class="btn btn-primary resch-submit-btn">Submit</button>
             </div>
