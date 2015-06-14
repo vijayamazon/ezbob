@@ -9,11 +9,13 @@
 	using System.Text;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using EzServiceConfigurationLoader;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using log4net;
 	using Newtonsoft.Json;
 	using ServiceClientProxy.EzServiceReference;
@@ -1046,7 +1048,32 @@ GeneratePassword broker-contact-email@example.com password-itself
 			serviceClient.QuickOfferWithPrerequisites(customerId, bSaveOfferToDB);
 		} // QuickOffer
 
-		[Activation]
+	    [Activation]
+	    private void RescheduleInLoan() {
+	        int loanId;
+	        int userId;
+	        int customerId;
+            if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId))
+	        {
+	            log.Msg("Usage: RescheduleInLoan <Loan Id> <Customer Id> <User Id>");
+	            return;
+	        }
+
+           // int loanID = loanId;
+
+
+            ReschedulingArgument reModel = new ReschedulingArgument();
+            reModel.LoanType = new Loan().GetType().AssemblyQualifiedName;
+            reModel.LoanID = loanId;
+            reModel.SaveToDB = false;
+            reModel.ReschedulingDate = DateTime.UtcNow;
+            reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+
+            var res= this.serviceClient.RescheduleInLoan(userId, customerId, reModel);
+	        log.Msg(res.Value.ToString());
+	    }
+        
+        [Activation]
 		private void RejectUser() {
 			int underwriterId;
 			int customerId;
