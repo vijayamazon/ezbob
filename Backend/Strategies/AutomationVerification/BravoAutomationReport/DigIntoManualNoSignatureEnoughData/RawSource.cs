@@ -21,6 +21,9 @@
 			set { this.reason = (value ?? string.Empty).Trim(); }
 		} // Reason
 
+		[FieldName("UwName")]
+		public string UnderwriterName { get; set; }
+
 		public string UnderwriterComment { get; set; }
 		public int? MpID { get; set; }
 		public string MpType { get; set; }

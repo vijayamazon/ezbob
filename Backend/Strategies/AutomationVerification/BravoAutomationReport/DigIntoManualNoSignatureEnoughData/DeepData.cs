@@ -19,6 +19,7 @@
 
 			CustomerID = src.CustomerID;
 			CashRequestID = src.FirstCashRequestID;
+			UnderwriterName = src.UnderwriterName;
 			DecisionTime = src.DecisionTime;
 			ManualDecision = src.ManualDecision;
 			ManualRejectReason = src.UnderwriterComment;
@@ -65,6 +66,7 @@
 
 		public int CustomerID { get; private set; }
 		public long CashRequestID { get; private set; }
+		public string UnderwriterName { get; private set; }
 		public DateTime DecisionTime { get; private set; }
 
 		public DecisionActions ManualDecision { get; private set; }

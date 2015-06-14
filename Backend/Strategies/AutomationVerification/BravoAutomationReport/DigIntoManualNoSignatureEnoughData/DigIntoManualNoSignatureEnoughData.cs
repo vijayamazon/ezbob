@@ -190,6 +190,7 @@
 
 			column = sheet.SetCellTitle(row, column, "Customer ID");
 			column = sheet.SetCellTitle(row, column, "Cash request ID");
+			column = sheet.SetCellTitle(row, column, "Underwriter");
 			column = sheet.SetCellTitle(row, column, "Decision time");
 			column = sheet.SetCellTitle(row, column, "Decision");
 			column = sheet.SetCellTitle(row, column, "Auto approve");
@@ -211,6 +212,7 @@
 			var values = new List<object> {
 				dd.CustomerID,
 				dd.CashRequestID,
+				dd.UnderwriterName,
 				dd.DecisionTime,
 				dd.ManualDecision.ToString(),
 				dd.AutoApproved.HasValue ? dd.AutoApproved.ToString() : null,

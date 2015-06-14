@@ -6,10 +6,20 @@ IF OBJECT_ID('BAR_LoadResult') IS NULL
 GO
 
 ALTER PROCEDURE BAR_LoadResult
-@TrailTagID BIGINT
+@TrailTagID BIGINT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
+
+	IF @TrailTagID IS NULL
+	BEGIN
+		SELECT
+			@TrailTagID = MAX(TrailTagID)
+		FROM
+			DecisionTrailTags
+		WHERE
+			TrailTag LIKE '#BravoAutoRpt%'
+	END
 
 	SELECT
 		bar.HasEnoughData,

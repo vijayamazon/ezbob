@@ -24,6 +24,7 @@ BEGIN
 	SELECT
 		br.CustomerID,
 		br.FirstCashRequestID,
+		UwName = u.UserName,
 		DecisionTime = r.UnderwriterDecisionDate,
 		br.ManualDecisionID,
 		rr.Reason,
@@ -40,6 +41,7 @@ BEGIN
 		INNER JOIN CashRequests r
 			ON br.FirstCashRequestID = r.Id
 			AND r.AutoDecisionID IS NULL
+		LEFT JOIN Security_User u ON r.IdUnderwriter = u.UserId
 		LEFT JOIN DecisionHistory dh ON r.Id = dh.CashRequestId
 		LEFT JOIN DecisionHistoryRejectReason dhrr ON dh.Id = dhrr.DecisionHistoryId
 		LEFT JOIN RejectReason rr ON dhrr.RejectReasonId = rr.Id
