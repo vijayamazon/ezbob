@@ -21,19 +21,19 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DECLARE
-		@OfferValidUntil DATETIME, 
+		@OfferValidUntil DATETIME,
 		@OfferStart DATETIME,
 		@ValidForHours INT,
 		@PreviousManualApproveCount INT = 0
 
 	------------------------------------------------------------------------------
-	
-	SELECT 
-		@OfferValidUntil = c.ValidFor, 
-		@OfferStart = c.ApplyForLoan 
-	FROM 
+
+	SELECT
+		@OfferValidUntil = c.ValidFor,
+		@OfferStart = c.ApplyForLoan
+	FROM
 		Customer c
-	WHERE 
+	WHERE
 		c.Id = @CustomerId
 
 	------------------------------------------------------------------------------
@@ -53,9 +53,9 @@ BEGIN
 
 		-------------------------------------------------------------------------
 
-		SET @OfferValidUntil = DATEADD(hour, @ValidForHours, @Now) 
-	END	
-	
+		SET @OfferValidUntil = DATEADD(hour, @ValidForHours, @Now)
+	END
+
 	------------------------------------------------------------------------------
 	--
 	-- Select number of customer open loans.
@@ -225,6 +225,8 @@ BEGIN
 			Loan l
 		WHERE
 			CONVERT(DATE, l.[Date]) = @Today
+			AND
+			l.[Date] < @Now
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -241,7 +243,7 @@ BEGIN
 		@Now,
 		@CompanyScore OUTPUT,
 		@IncorporationDate OUTPUT
-	
+
 	------------------------------------------------------------------------------
 	--
 	-- Select number of rollovers.
@@ -513,7 +515,7 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID, @Now
-	
+
 	------------------------------------------------------------------------------
 
 	EXECUTE GetCustomerTurnoverForAutoDecision 1, @CustomerID, @Now

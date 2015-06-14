@@ -149,6 +149,7 @@
     <Compile Include="EzServiceImplementation\esi_implement.IEzServiceAdmin.cs" />
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
+    <Compile Include="IEzAutomationVerification.cs" />
     <Compile Include="IEzServiceSalesForce.cs" />
     <Compile Include="IEzServiceBroker.cs" />
     <Compile Include="SafeValue.cs" />

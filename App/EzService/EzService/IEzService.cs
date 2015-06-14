@@ -14,7 +14,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
-	public interface IEzService : IEzServiceBroker, IEzServiceSalesForce {
+	public interface IEzService : IEzAutomationVerification, IEzServiceBroker, IEzServiceSalesForce {
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
 
@@ -427,6 +427,24 @@
 		ActionMetaData ResetPassword123456(int nUnderwriterID, int nTargetID, PasswordResetTarget nTarget);
 
 		[OperationContract]
+		ActionMetaData SalesForceAddUpdateLeadAccount(int? userID, string email, int? customerID, bool isBrokerLead, bool isVipLead);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddUpdateContact(int? userID, int customerID, int? directorID, string directorEmail);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddTask(int? userID, int customerID, TaskModel model);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddActivity(int? userID, int customerID, ActivityModel model);
+
+		[OperationContract]
+		ActionMetaData SalesForceAddOpportunity(int? userID, int customerID, OpportunityModel model);
+
+		[OperationContract]
+		ActionMetaData SalesForceUpdateOpportunity(int? userID, int customerID, OpportunityModel model);
+
+		[OperationContract]
 		ActionMetaData SaveAgreement(
 			int customerId,
 			AgreementModel model,
@@ -562,27 +580,6 @@
 		BoolActionResult ValidateMobileCode(string phone, string code);
 
 		[OperationContract]
-		ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
-
-		[OperationContract]
-		ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, DateTime? calculationTime);
-
-		[OperationContract]
-		ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
-
-		[OperationContract]
-		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
-
-		[OperationContract]
-		ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
-
-		[OperationContract]
-		ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
-
-		[OperationContract]
-		ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID);
-
-		[OperationContract]
 		ActionMetaData VipRequest(int customerId, string fullname, string email, string phone);
 
 		[OperationContract]
@@ -610,10 +607,7 @@
 		ActionMetaData SaveApiCall(ApiCallData data);
 
 		[OperationContract]
-		ActionMetaData SilentAutomation(int customerID, int underwriterID);
-
-		[OperationContract]
-		ActionMetaData TotalMaamMedalAndPricing(bool testMode);
+		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
 
 		[OperationContract]
 		ActionMetaData ParseCreditSafeLtd(int customerID, int userID, long serviceLogID);

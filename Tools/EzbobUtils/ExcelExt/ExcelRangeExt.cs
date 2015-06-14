@@ -7,6 +7,20 @@
 	using OfficeOpenXml.Style;
 
 	public static class ExcelRangeExt {
+		public static readonly Color ZebraOddBgColour = Color.AliceBlue;
+		public static readonly Color ZebraEvenBgColour = Color.White;
+
+		public static int SetCellTitle(this ExcelRange range, object oRaw) {
+			return SetCellValue(
+				range,
+				oRaw,
+				bIsBold: true,
+				bSetZebra: false,
+				oFontColour: ExcelWorksheetExt.ColumnTitleFgColour,
+				oBgColour: ExcelWorksheetExt.ColumnTitleBgColour
+			);
+		} // SetCellTitle
+
 		public static int SetCellValue(
 			this ExcelRange oCell,
 			object oRaw,
@@ -50,7 +64,7 @@
 			if (bDoZebra) {
 				if (nRow % 2 != 0) {
 					oCell.Style.Fill.PatternType = ExcelFillStyle.Solid;
-					oCell.Style.Fill.BackgroundColor.SetColor(Color.AliceBlue);
+					oCell.Style.Fill.BackgroundColor.SetColor(ZebraOddBgColour);
 				} // if
 			}
 			else {

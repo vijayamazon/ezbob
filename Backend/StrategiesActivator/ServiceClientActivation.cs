@@ -1421,6 +1421,26 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			//this.log.Debug("result: {0}", JsonConvert.SerializeObject(result.Result)); //json
 		}
 
+		[Activation]
+		private void BravoAutomationReport() {
+			bool hasStart = false;
+			DateTime startTime = new DateTime(2015, 5, 11, 0, 0, 0, DateTimeKind.Utc);
+
+			bool hasEnd = false;
+			DateTime endTime = DateTime.UtcNow;
+
+			if (cmdLineArgs.Length > 2)
+				hasStart = DateTime.TryParse(cmdLineArgs[2], out startTime);
+
+			if (hasStart && (cmdLineArgs.Length > 3))
+				hasEnd = DateTime.TryParse(cmdLineArgs[3], out startTime);
+
+			serviceClient.BravoAutomationReport(
+				hasStart ? startTime : (DateTime?)null,
+				hasEnd ? endTime : (DateTime?)null
+			);
+		} // BravoAutomationReport
+
         [Activation]
         private void BrokerTransferCommission()
         {
