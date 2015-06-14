@@ -3549,6 +3549,60 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="EzServiceReference.IEzService")]
     public interface IEzService {
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricingResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/MaamMedalAndPricingResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyMedal", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyMedalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyMedal", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyMedalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyMedalAsync(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyApproval", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyApprovalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyApproval", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyApprovalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyReapproval", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyReapprovalResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyReapproval", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyReapprovalResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyReject", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyRejectResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyReject", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyRejectResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyRerejection", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyRerejectionResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/VerifyRerejection", ReplyAction="http://tempuri.org/IEzAutomationVerification/VerifyRerejectionResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRerejectionAsync(int nCustomerCount, int nLastCheckedCustomerID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/SilentAutomation", ReplyAction="http://tempuri.org/IEzAutomationVerification/SilentAutomationResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/SilentAutomation", ReplyAction="http://tempuri.org/IEzAutomationVerification/SilentAutomationResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricingResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzAutomationVerification/TotalMaamMedalAndPricingResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BravoAutomationReport(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerAcceptTermsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
         
@@ -4185,48 +4239,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ValidateMobileCode", ReplyAction="http://tempuri.org/IEzService/ValidateMobileCodeResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.BoolActionResult> ValidateMobileCodeAsync(string phone, string code);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/MaamMedalAndPricingResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/MaamMedalAndPricingResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyMedal", ReplyAction="http://tempuri.org/IEzService/VerifyMedalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyMedal", ReplyAction="http://tempuri.org/IEzService/VerifyMedalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyMedalAsync(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyApproval", ReplyAction="http://tempuri.org/IEzService/VerifyApprovalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyEnoughAvailableFundsAsync(int underwriterId, decimal deductAmount);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReapproval", ReplyAction="http://tempuri.org/IEzService/VerifyReapprovalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyReject", ReplyAction="http://tempuri.org/IEzService/VerifyRejectResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyRerejection", ReplyAction="http://tempuri.org/IEzService/VerifyRerejectionResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyRerejection", ReplyAction="http://tempuri.org/IEzService/VerifyRerejectionResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRerejectionAsync(int nCustomerCount, int nLastCheckedCustomerID);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VipRequest", ReplyAction="http://tempuri.org/IEzService/VipRequestResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData VipRequest(int customerId, string fullname, string email, string phone);
         
@@ -4281,17 +4293,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SaveApiCall", ReplyAction="http://tempuri.org/IEzService/SaveApiCallResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SaveApiCallAsync(Ezbob.Backend.Models.ExternalAPI.ApiCallData data);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SilentAutomation", ReplyAction="http://tempuri.org/IEzService/SilentAutomationResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/SilentAutomation", ReplyAction="http://tempuri.org/IEzService/SilentAutomationResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/TotalMaamMedalAndPricing", ReplyAction="http://tempuri.org/IEzService/TotalMaamMedalAndPricingResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/VerifyEnoughAvailableFunds", ReplyAction="http://tempuri.org/IEzService/VerifyEnoughAvailableFundsResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyEnoughAvailableFundsAsync(int underwriterId, decimal deductAmount);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/ParseCreditSafeLtd", ReplyAction="http://tempuri.org/IEzService/ParseCreditSafeLtdResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData ParseCreditSafeLtd(int customerID, int userID, long serviceLogID);
@@ -4859,6 +4865,78 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public EzServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress) {
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID) {
+            return base.Channel.MaamMedalAndPricing(nCustomerCount, nLastCheckedCashRequestID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID) {
+            return base.Channel.MaamMedalAndPricingAsync(nCustomerCount, nLastCheckedCashRequestID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime) {
+            return base.Channel.VerifyMedal(topCount, lastCheckedID, includeTest, calculationTime);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyMedalAsync(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime) {
+            return base.Channel.VerifyMedalAsync(topCount, lastCheckedID, includeTest, calculationTime);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyApproval(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyApprovalAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReapprovalAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyReject(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyRejectAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyRerejection(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRerejectionAsync(int nCustomerCount, int nLastCheckedCustomerID) {
+            return base.Channel.VerifyRerejectionAsync(nCustomerCount, nLastCheckedCustomerID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID) {
+            return base.Channel.SilentAutomation(customerID, underwriterID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID) {
+            return base.Channel.SilentAutomationAsync(customerID, underwriterID);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode) {
+            return base.Channel.TotalMaamMedalAndPricing(testMode);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode) {
+            return base.Channel.TotalMaamMedalAndPricingAsync(testMode);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BravoAutomationReport(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
+            return base.Channel.BravoAutomationReport(startTime, endTime);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
+            return base.Channel.BravoAutomationReportAsync(startTime, endTime);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {
@@ -5695,62 +5773,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.ValidateMobileCodeAsync(phone, code);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MaamMedalAndPricing(int nCustomerCount, int nLastCheckedCashRequestID) {
-            return base.Channel.MaamMedalAndPricing(nCustomerCount, nLastCheckedCashRequestID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MaamMedalAndPricingAsync(int nCustomerCount, int nLastCheckedCashRequestID) {
-            return base.Channel.MaamMedalAndPricingAsync(nCustomerCount, nLastCheckedCashRequestID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyMedal(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime) {
-            return base.Channel.VerifyMedal(topCount, lastCheckedID, includeTest, calculationTime);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyMedalAsync(int topCount, int lastCheckedID, bool includeTest, System.Nullable<System.DateTime> calculationTime) {
-            return base.Channel.VerifyMedalAsync(topCount, lastCheckedID, includeTest, calculationTime);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyApproval(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyApproval(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyApprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyApprovalAsync(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount) {
-            return base.Channel.VerifyEnoughAvailableFunds(underwriterId, deductAmount);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyEnoughAvailableFundsAsync(int underwriterId, decimal deductAmount) {
-            return base.Channel.VerifyEnoughAvailableFundsAsync(underwriterId, deductAmount);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReapproval(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyReapproval(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyReapprovalAsync(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyReapprovalAsync(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyReject(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyReject(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRejectAsync(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyRejectAsync(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyRerejection(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyRerejection(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyRerejectionAsync(int nCustomerCount, int nLastCheckedCustomerID) {
-            return base.Channel.VerifyRerejectionAsync(nCustomerCount, nLastCheckedCustomerID);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData VipRequest(int customerId, string fullname, string email, string phone) {
             return base.Channel.VipRequest(customerId, fullname, email, phone);
         }
@@ -5823,20 +5845,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.SaveApiCallAsync(data);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData SilentAutomation(int customerID, int underwriterID) {
-            return base.Channel.SilentAutomation(customerID, underwriterID);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount) {
+            return base.Channel.VerifyEnoughAvailableFunds(underwriterId, deductAmount);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> SilentAutomationAsync(int customerID, int underwriterID) {
-            return base.Channel.SilentAutomationAsync(customerID, underwriterID);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData TotalMaamMedalAndPricing(bool testMode) {
-            return base.Channel.TotalMaamMedalAndPricing(testMode);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> TotalMaamMedalAndPricingAsync(bool testMode) {
-            return base.Channel.TotalMaamMedalAndPricingAsync(testMode);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> VerifyEnoughAvailableFundsAsync(int underwriterId, decimal deductAmount) {
+            return base.Channel.VerifyEnoughAvailableFundsAsync(underwriterId, deductAmount);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData ParseCreditSafeLtd(int customerID, int userID, long serviceLogID) {
