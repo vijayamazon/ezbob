@@ -21,6 +21,7 @@
 			this.customerId = customerId;
 			this.calculationTime = calculationTime;
 			this.quietMode = false;
+			WasMismatch = true;
 		} // constructor
 
 		public virtual string Tag { get; set; }
@@ -29,6 +30,8 @@
 			get { return this.quietMode; }
 			set { this.quietMode = value; }
 		} // QuietMode
+
+		public bool WasMismatch { get; private set; }
 
 		public override void Execute() {
 			try {
@@ -119,10 +122,12 @@
 					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}.", this.customerId);
 
 					Result = result1;
+					WasMismatch = false;
 					return;
 				} // if
 
 				// Mismatch in medal calculations
+				WasMismatch = true;
 
 				if (result1 == null)
 					result1 = new MedalResult(this.customerId, Log);

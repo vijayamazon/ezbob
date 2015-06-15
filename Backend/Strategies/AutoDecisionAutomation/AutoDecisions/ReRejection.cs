@@ -11,7 +11,7 @@
 	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database;
 
-	public class ReRejection {
+	public class ReRejection : AAutoDecisionBase {
 		public ReRejection(int customerId, AConnection db, ASafeLog log) {
 			this.db = db;
 			this.log = log.Safe();
@@ -27,17 +27,17 @@
 		} // constructor
 
 		public bool MakeAndVerifyDecision(string tag = null) {
-		    this.trail.SetTag(tag);
+			this.trail.SetTag(tag);
 
 			RunPrimary();
 
 			Agent oSecondary = RunSecondary();
 
-			bool bSuccess = this.trail.EqualsTo(oSecondary.Trail);
+			WasMismatch = !this.trail.EqualsTo(oSecondary.Trail);
 
 			this.trail.Save(this.db, oSecondary.Trail, tag: tag);
 
-			return bSuccess;
+			return !WasMismatch;
 		} // MakeAndVerifyDecision
 
 		public void MakeDecision(AutoDecisionResponse response, string tag) {
@@ -51,7 +51,7 @@
 					response.DecisionName = "Re-rejection";
 				} // if
 			} catch (Exception ex) {
-				StepNoReReject<ExceptionThrown>(true).Init(ex);
+				StepNoReReject<ExceptionThrown>().Init(ex);
 				this.log.Error(ex, "Exception during re-rejection {0}", this.trail);
 			} // try
 		} // MakeDecision
@@ -111,7 +111,7 @@
 
 		private void CheckLastDecisionWasReject() {
 			if (!this.trail.MyInputData.LastDecisionWasReject) {
-				StepNoReReject<LastDecisionWasReject>(bLockDecisionAfterAddingAStep: true)
+				StepNoReReject<LastDecisionWasReject>()
 					.Init(this.trail.MyInputData.LastDecisionWasReject);
 			} else
 				StepNoDecision<LastDecisionWasReject>().Init(this.trail.MyInputData.LastDecisionWasReject);
@@ -119,7 +119,7 @@
 
 		private void CheckNewMarketPlaceAdded() {
 			if (this.trail.MyInputData.LastDecisionDate.HasValue && this.trail.MyInputData.NewDataSourceAdded) {
-				StepNoReReject<MarketPlaceWasAdded>(bLockDecisionAfterAddingAStep: true)
+				StepNoReReject<MarketPlaceWasAdded>()
 					.Init(this.trail.MyInputData.NewDataSourceAdded);
 			} else
 				StepNoDecision<MarketPlaceWasAdded>().Init(this.trail.MyInputData.NewDataSourceAdded);
@@ -132,7 +132,7 @@
 				).TotalDays > this.trail.MyInputData.AutoReRejectMaxLRDAge;
 
 			if (noReject) {
-				StepNoReReject<LRDIsTooOld>(bLockDecisionAfterAddingAStep: true)
+				StepNoReReject<LRDIsTooOld>()
 					.Init(
 						(decimal)(
 							this.trail.MyInputData.DataAsOf - this.trail.MyInputData.LastRejectDate.Value
@@ -152,7 +152,7 @@
 
 		private void CheckNumOfOpenLoans() {
 			if (this.trail.MyInputData.NumOfOpenLoans >= this.trail.MyInputData.AutoReRejectMaxAllowedLoans) {
-				StepReReject<OpenLoans>(bLockDecisionAfterAddingAStep: true)
+				StepReReject<OpenLoans>()
 					.Init(this.trail.MyInputData.NumOfOpenLoans, this.trail.MyInputData.AutoReRejectMaxAllowedLoans);
 			} else {
 				StepNoDecision<OpenLoans>()
@@ -170,13 +170,13 @@
 				StepNoDecision<OpenLoansRepayments>().Init(this.trail.MyInputData.OpenLoansAmount, 0, 0);
 			else {
 				if (ratio < this.trail.MyInputData.AutoReRejectMinRepaidPortion) {
-					StepReReject<OpenLoansRepayments>(true).Init(
+					StepReReject<OpenLoansRepayments>().Init(
 						this.trail.MyInputData.OpenLoansAmount,
 						this.trail.MyInputData.PrincipalRepaymentAmount,
 						this.trail.MyInputData.AutoReRejectMinRepaidPortion
 					);
 				} else {
-					StepNoDecision<OpenLoansRepayments>().Init(
+					StepNoReReject<OpenLoansRepayments>().Init(
 						this.trail.MyInputData.OpenLoansAmount,
 						this.trail.MyInputData.PrincipalRepaymentAmount,
 						this.trail.MyInputData.AutoReRejectMinRepaidPortion
@@ -185,12 +185,12 @@
 			} // if
 		} // CheckOpenLoansRepayments
 
-		private T StepNoReReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
-			return this.trail.Negative<T>(bLockDecisionAfterAddingAStep);
+		private T StepNoReReject<T>() where T : ATrace {
+			return this.trail.Negative<T>(true);
 		} // StepNoReReject
 
-		private T StepReReject<T>(bool bLockDecisionAfterAddingAStep) where T : ATrace {
-			return this.trail.Affirmative<T>(bLockDecisionAfterAddingAStep);
+		private T StepReReject<T>() where T : ATrace {
+			return this.trail.Affirmative<T>(true);
 		} // StepReReject
 
 		private T StepNoDecision<T>() where T : ATrace {

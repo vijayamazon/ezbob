@@ -24,7 +24,7 @@
 
 	// using Ezbob.Utils.Lingvo;
 
-	public class Agent {
+	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
 
 		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
@@ -40,7 +40,7 @@
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
 				CurrentValues.Instance.MailSenderName
-				);
+			);
 
 			Now = DateTime.UtcNow;
 			Cfg = InitCfg();
@@ -56,20 +56,18 @@
 		} // Init
 
 		public virtual bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
-		    Trail.SetTag(tag);
-			Log.Info("=====================STARTPRIMARY{0}=====================", Args.CustomerID);
-			RunPrimary();
+			Trail.SetTag(tag);
 
-			Log.Info("=====================START SECONDARY{0}=====================", Args.CustomerID);
+			RunPrimary();
 
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
 				RunSecondary();
 
-			bool bSuccess = Trail.EqualsTo(oSecondary.Trail, quiet);
+			WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
 
 			Trail.Save(DB, oSecondary.Trail, tag: tag);
 
-			return bSuccess;
+			return !WasMismatch;
 		} // MakeAndVerifyDecision
 
 		public virtual void RunPrimaryOnly() {

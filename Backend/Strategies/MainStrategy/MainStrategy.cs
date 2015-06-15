@@ -68,6 +68,8 @@
 			this.avoidAutomaticDecision = avoidAutoDecision;
 			this.overrideApprovedRejected = true;
 
+			this.wasMismatch = false;
+
 			this.autoDecisionResponse = new AutoDecisionResponse {
 				DecisionName = "Manual",
 			};
@@ -121,17 +123,9 @@
 			ProcessRejections();
 
 			// Gather LR data - must be done after rejection decisions
-			bool bSkip =
-				this.newCreditLineOption == NewCreditLineOption.SkipEverything ||
-				this.newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
+			GetLandRegistryData();
 
-			if (!bSkip)
-				GetLandRegistryDataIfNotRejected();
-
-			var instance = new CalculateMedal(this.customerId, DateTime.UtcNow, false, true);
-			instance.Execute();
-
-			this.medal = instance.Result;
+			CalculateMedal();
 
 			CapOffer();
 
@@ -160,6 +154,16 @@
 		private long? cashRequestID;
 		private DoAction createCashRequest;
 		private DoAction updateCashRequest;
+
+		private void CalculateMedal() {
+			var instance = new CalculateMedal(this.customerId, DateTime.UtcNow, false, true);
+			instance.Execute();
+
+			if (instance.WasMismatch)
+				this.wasMismatch = true;
+
+			this.medal = instance.Result;
+		} // CalculateMedal
 
 		private void ForceNhibernateResync() {
 			var customer = this.customers.ReallyTryGet(this.customerId);
@@ -381,7 +385,14 @@
 			} // for each
 		} // GetLandRegistryData
 
-		private void GetLandRegistryDataIfNotRejected() {
+		private void GetLandRegistryData() {
+			bool bSkip =
+				this.newCreditLineOption == NewCreditLineOption.SkipEverything ||
+				this.newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
+
+			if (bSkip)
+				return;
+
 			var isHomeOwner = this.customerDetails.IsOwnerOfMainAddress || this.customerDetails.IsOwnerOfOtherProperties;
 
 			if (!this.autoDecisionResponse.DecidedToReject && isHomeOwner) {
@@ -406,12 +417,17 @@
 					this.customerDetails.PropertyStatusDescription
 				);
 			} // if
-		} // GetLandRegistryDataIfNotRejected
+		} // GetLandRegistryData
 
 		private void ProcessApprovals() {
 			bool bContinue = true;
 
 			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
+			if (this.wasMismatch && bContinue) {
+				Log.Info("Not processing approvals: there was a mismatch during rejection.");
+				bContinue = false;
+			} // if
+
 			if (this.autoDecisionResponse.DecidedToReject && bContinue) {
 				Log.Info("Not processing approvals: reject decision has been made.");
 				bContinue = false;
@@ -450,19 +466,27 @@
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(this.customerId, DB, Log)
-					.Init()
-					.MakeDecision(this.autoDecisionResponse, this.tag);
+				var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(this.customerId, DB, Log)
+					.Init();
 
-				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
+				raAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
-				if (!bContinue)
-					Log.Debug("Auto re-approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
+				if (raAgent.WasMismatch) {
+					this.wasMismatch = true;
+					bContinue = false;
+
+					Log.Warn("Mismatch happened while executing re-approval, automation aborted.");
+				} else {
+					bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
+
+					if (!bContinue)
+						Log.Debug("Auto re-approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
+				} // if
 			} else
 				Log.Debug("Not processed auto re-approval: it is currently disabled in configuration.");
 
 			if (EnableAutomaticApproval && bContinue) {
-				new Approval(
+				var aAgent = new Approval(
 					this.customerId,
 					this.offeredCreditLine,
 					this.medal.MedalClassification,
@@ -470,12 +494,21 @@
 					(AutomationCalculator.Common.TurnoverType?)this.medal.TurnoverType,
 					DB,
 					Log
-				).Init().MakeDecision(this.autoDecisionResponse, this.tag);
+				).Init();
 
-				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
+				aAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
-				if (!bContinue)
-					Log.Debug("Auto approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
+				if (aAgent.WasMismatch) {
+					this.wasMismatch = true;
+					bContinue = false;
+
+					Log.Warn("Mismatch happened while executing approval, automation aborted.");
+				} else {
+					bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
+
+					if (!bContinue)
+						Log.Debug("Auto approval has reached decision: {0}.", this.autoDecisionResponse.SystemDecision);
+				} // if
 			} else {
 				Log.Debug(
 					"Not processed auto approval: " +
@@ -502,7 +535,7 @@
 				this.autoDecisionResponse.UserStatus = Status.Manual;
 				this.autoDecisionResponse.SystemDecision = SystemDecision.Manual;
 
-				Log.Debug("Not approval has reached decision: setting it to be 'waiting for decision'.");
+				Log.Debug("Approval has not reached decision: setting it to be 'waiting for decision'.");
 			} // if
 		} // ProcessApprovals
 
@@ -513,8 +546,16 @@
 			if (this.avoidAutomaticDecision == 1)
 				return;
 
-			if (EnableAutomaticReRejection)
-				new ReRejection(this.customerId, DB, Log).MakeDecision(this.autoDecisionResponse, this.tag);
+			if (EnableAutomaticReRejection) {
+				var rrAgent = new ReRejection(this.customerId, DB, Log);
+				rrAgent.MakeDecision(this.autoDecisionResponse, this.tag);
+
+				if (rrAgent.WasMismatch) {
+					this.wasMismatch = true;
+					Log.Warn("Mismatch happened while executing re-rejection, automation aborted.");
+					return;
+				} // if
+			} // if
 
 			if (this.autoDecisionResponse.IsReRejected)
 				return;
@@ -525,7 +566,13 @@
 			if (this.customerDetails.IsAlibaba)
 				return;
 
-			new Agent(this.customerId, DB, Log).Init().MakeDecision(this.autoDecisionResponse, this.tag);
+			var rAgent = new Agent(this.customerId, DB, Log).Init();
+			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
+
+			if (rAgent.WasMismatch) {
+				this.wasMismatch = true;
+				Log.Warn("Mismatch happened while executing rejection, automation aborted.");
+			} // if
 		} // ProcessRejections
 
 		/// <summary>
@@ -626,25 +673,25 @@
 						this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
 					cr.DiscountPlan = this.autoDecisionResponse.DiscountPlanID.HasValue
 						? this.discountPlanRepository.Get(this.autoDecisionResponse.DiscountPlanID.Value)
-                        : this.discountPlanRepository.GetDefault();
+						: this.discountPlanRepository.GetDefault();
 			
 					cr.LoanSource = this.loanSourceRepository.Get(this.autoDecisionResponse.LoanSourceID);
 
-                    if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
-                        Log.Warn("too big interest was assigned for this loan source - adjusting for customer {0}", this.customerId);
-                        cr.InterestRate = cr.LoanSource.MaxInterest.Value;
-                    }
+					if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
+						Log.Warn("too big interest was assigned for this loan source - adjusting for customer {0}", this.customerId);
+						cr.InterestRate = cr.LoanSource.MaxInterest.Value;
+					} // if
 
-                    if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.ApprovedRepaymentPeriod < cr.LoanSource.DefaultRepaymentPeriod) {
-                        Log.Warn("too small repayment period was assigned for this loan source - adjusting for customer {0}", this.customerId);
-                        cr.ApprovedRepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod;
-                        cr.RepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod.Value;
-                    }
+					if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.ApprovedRepaymentPeriod < cr.LoanSource.DefaultRepaymentPeriod) {
+						Log.Warn("too small repayment period was assigned for this loan source - adjusting for customer {0}", this.customerId);
+						cr.ApprovedRepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod;
+						cr.RepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod.Value;
+					} // if
 
-                    if (cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed == false && cr.IsCustomerRepaymentPeriodSelectionAllowed == true) {
-                        Log.Warn("wrong customer repayment period was assigned for this loan source - adjusting for customer {0}", this.customerId);
-                        cr.IsCustomerRepaymentPeriodSelectionAllowed = false;
-                    }
+					if (cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed == false && cr.IsCustomerRepaymentPeriodSelectionAllowed == true) {
+						Log.Warn("wrong customer repayment period was assigned for this loan source - adjusting for customer {0}", this.customerId);
+						cr.IsCustomerRepaymentPeriodSelectionAllowed = false;
+					} // if
 
 					cr.LoanType = this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID);
 					cr.ManualSetupFeePercent = this.autoDecisionResponse.SetupFee;
@@ -655,8 +702,8 @@
 
 			this.customers.SaveOrUpdate(customer);
 
-            //TODO update new offer / decision tables
-            Log.Info("update new offer / decision for customer {0}", customer.Id);
+			//TODO update new offer / decision tables
+			Log.Info("update new offer / decision for customer {0}", customer.Id);
 
 			if (this.autoDecisionResponse.Decision.HasValue) {
 				this.decisionHistory.LogAction(
@@ -851,6 +898,7 @@
 			} // if
 		} // ValidateCashRequestArgs
 
-	    private readonly string tag;
+		private readonly string tag;
+		private bool wasMismatch;
 	} // class MainStrategy
 } // namespace

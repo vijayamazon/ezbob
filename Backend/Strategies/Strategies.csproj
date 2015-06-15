@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Admin\Nop.cs" />
+    <Compile Include="AutoDecisionAutomation\AutoDecisions\AAutoDecisionBase.cs" />
     <Compile Include="AutoDecisionAutomation\AutoDecisions\ReApproval\ManAgainstAMachine\SameDataAgent.cs" />
     <Compile Include="Alibaba\DataSharing.cs" />
     <Compile Include="AutomationVerification\AutoApproveInputRow.cs" />

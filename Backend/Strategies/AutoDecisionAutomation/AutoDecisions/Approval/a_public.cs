@@ -21,7 +21,7 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using StructureMap;
 
-	public partial class Approval {
+	public partial class Approval : AAutoDecisionBase {
 		public Approval(
 			int customerId,
 			int offeredCreditLine,
@@ -199,6 +199,7 @@
 			this.m_oSecondaryImplementation.MakeDecision();
 
 			bool bSuccess = this.m_oTrail.EqualsTo(this.m_oSecondaryImplementation.Trail, quiet);
+			WasMismatch = !bSuccess;
 
 			if (bSuccess && this.m_oTrail.HasDecided) {
 				if (this.m_oTrail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
@@ -210,6 +211,7 @@
 					this.m_oSecondaryImplementation.Trail.Negative<SameAmount>(false)
 						.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
 					bSuccess = false;
+					WasMismatch = true;
 				} // if
 			} // if
 

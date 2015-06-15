@@ -138,7 +138,7 @@
 						Trail.MyInputData.AutoReRejectMinRepaidPortion
 					);
 				} else {
-					StepNoDecision<OpenLoansRepayments>().Init(
+					StepNoReject<OpenLoansRepayments>().Init(
 						Trail.MyInputData.OpenLoansAmount,
 						Trail.MyInputData.PrincipalRepaymentAmount,
 						Trail.MyInputData.AutoReRejectMinRepaidPortion
