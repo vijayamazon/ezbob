@@ -16,6 +16,7 @@
 			StandardRejectReasons = new SortedSet<string>();
 			Marketplaces = new SortedDictionary<int, MarketplaceData>();
 			NonAffirmativeTraces = new SortedSet<string>();
+			CaisAccounts = new CaisAccountList();
 
 			CustomerID = src.CustomerID;
 			CashRequestID = src.FirstCashRequestID;
@@ -28,7 +29,7 @@
 			Add(src);
 		} // constructor
 
-		public void Add(RawSource src) {
+		public DeepData Add(RawSource src) {
 			if (src.MpID.HasValue)
 				if (!Marketplaces.ContainsKey(src.MpID.Value))
 					Marketplaces[src.MpID.Value] = new MarketplaceData(src);
@@ -42,9 +43,11 @@
 				NonAffirmativeTraces.Add(src.TraceName);
 				AllNonAffirmativeTraces.Add(src.TraceName);
 			} // if
+
+			return this;
 		} // Add
 
-		public void LoadMonthTurnover(ProgressCounter pc) {
+		public DeepData LoadMonthTurnover(ProgressCounter pc) {
 			DB.ForEachRowSafe(
 				sr => {
 					int mpID = sr["MpID"];
@@ -62,6 +65,8 @@
 				new QueryParameter("@CustomerID", CustomerID),
 				new QueryParameter("@Now", DecisionTime)
 			);
+
+			return this;
 		} // LoadMonthTurnover
 
 		public int CustomerID { get; private set; }
@@ -83,6 +88,8 @@
 		public static SortedSet<string> AllStandardRejectReasons { get; private set; }
 
 		public int ConsumerScore { get; set; }
+
+		public CaisAccountList CaisAccounts { get; private set; }
 
 		private AConnection DB { get { return Library.Instance.DB; } }
 	} // class DeepData

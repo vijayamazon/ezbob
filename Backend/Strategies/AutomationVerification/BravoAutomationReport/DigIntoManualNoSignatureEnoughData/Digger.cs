@@ -5,7 +5,6 @@
 	using System.IO;
 	using System.Linq;
 	using AutomationCalculator.ProcessHistory;
-	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.ExcelExt;
 	using Ezbob.Logger;
@@ -22,6 +21,8 @@
 			LoadCashRequests();
 			LoadMarketplacesData();
 			LoadConsumerScores();
+			LoadPersonalLates();
+
 			CreateXlsx();
 			SaveXlsx();
 		} // Execute
@@ -49,6 +50,25 @@
 			pc.Log();
 		} // LoadCashRequests
 
+		private void LoadPersonalLates() {
+			var pc = new ProgressCounter("{0} CAIS accounts loaded.", Log, 20);
+
+			DB.ForEachResult<CaisAccount>(
+				ca => {
+					if (Result.ContainsKey(ca.CustomerID))
+						Result[ca.CustomerID].CaisAccounts.Add(ca);
+					else
+						Log.Warn("Customer {0} not found for CAIS account.", ca.CustomerID);
+
+					pc.Next();
+				},
+				CaisAccount.SpName,
+				CommandSpecies.StoredProcedure
+			);
+
+			pc.Log();
+		} // LoadPersonalLates
+
 		private void LoadConsumerScores() {
 			var pc = new ProgressCounter("{0} consumer score items loaded.", Log, 20);
 
@@ -59,6 +79,8 @@
 
 					if (Result.ContainsKey(customerID))
 						Result[customerID].ConsumerScore = score;
+					else
+						Log.Warn("Customer {0} not found for consumer score.", customerID);
 
 					pc.Next();
 				},
@@ -91,6 +113,7 @@
 			CreateXlsxRejectReasonsSheet();
 			CreateXlsxMarketplacesSheet();
 			CreateXlsxNotApprovedReasonsSheet();
+			CreateXlsxLateAccountsSheet();
 
 			Xlsx.AutoFitColumns();
 		} // CreateXlsx
@@ -204,6 +227,77 @@
 				row++;
 			} // for each customer
 		} // CreateXlsxNotApprovedReasonsSheet
+
+		private void CreateXlsxLateAccountsSheet() {
+			ExcelWorksheet sheet = Xlsx.CreateSheet("Late accounts", false);
+
+			int firstDataColumn = FillCommonHeaders(sheet);
+
+			int column = firstDataColumn;
+
+			column = sheet.SetCellTitle(1, column, "Total count");
+			column = sheet.SetCellTitle(1, column, "Late count");
+			column = sheet.SetCellTitle(1, column, "Total balance");
+			column = sheet.SetCellTitle(1, column, "Max balance");
+
+			column = sheet.SetCellTitle(1, column, "Last update date");
+			column = sheet.SetCellTitle(1, column, "Worst status");
+
+			int row = 2;
+
+			Color rowColour = ExcelRangeExt.ZebraOddBgColour;
+
+			foreach (DeepData dd in Result.Values) {
+				FillCommonValues(sheet, row, dd, dd.CaisAccounts.Count, rowColour);
+
+				column = firstDataColumn;
+
+				if (dd.CaisAccounts.Count < 1) {
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+
+					row++;
+				} else {
+					var values = new List<object> {
+						dd.CaisAccounts.Count.Total,
+						dd.CaisAccounts.Count.Late,
+						dd.CaisAccounts.Balance.Total,
+						dd.CaisAccounts.Balance.Max,
+					};
+
+					for (int i = 0; i < values.Count; i++) {
+						var range = sheet.Cells[row, column, row + dd.CaisAccounts.Count - 1, column];
+						range.Merge = true;
+
+						column = sheet.SetCellValue(row, column, values[i], bSetZebra: false);
+
+						range.Style.Fill.PatternType = ExcelFillStyle.Solid;
+						range.Style.Fill.BackgroundColor.SetColor(rowColour);
+						range.Style.VerticalAlignment = ExcelVerticalAlignment.Center;
+					} // for
+
+					int firstAccountColumn = column;
+
+					foreach (CaisAccount ca in dd.CaisAccounts) {
+						column = firstAccountColumn;
+
+						column = sheet.SetCellValue(row, column, ca.LastUpdatedDate.ToString("d-MMM-yyyy"), bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetCellValue(row, column, ca.WorstStatus, bSetZebra: false, oBgColour: rowColour);
+
+						row++;
+					} // for each marketplace
+				} // if
+
+				rowColour = rowColour == ExcelRangeExt.ZebraOddBgColour
+					? ExcelRangeExt.ZebraEvenBgColour
+					: ExcelRangeExt.ZebraOddBgColour;
+			} // for each customer
+		} // CreateXlsxLateAccountsSheet
 
 		private static int FillCommonHeaders(ExcelWorksheet sheet) {
 			const int row = 1;

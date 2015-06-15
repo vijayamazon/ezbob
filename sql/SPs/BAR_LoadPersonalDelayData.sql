@@ -1,21 +1,15 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF OBJECT_ID('BAR_LoadConsumerScores') IS NULL
-	EXECUTE('CREATE PROCEDURE BAR_LoadConsumerScores AS SELECT 1')
+IF OBJECT_ID('BAR_LoadPersonalDelayData') IS NULL
+	EXECUTE('CREATE PROCEDURE BAR_LoadPersonalDelayData AS SELECT 1')
 GO
 
-ALTER PROCEDURE BAR_LoadConsumerScores
+ALTER PROCEDURE BAR_LoadPersonalDelayData
 @TrailTagID BIGINT = NULL
 AS
 BEGIN
 	SET NOCOUNT ON;
-
-	------------------------------------------------------------------------------
-
-	DECLARE @ServiceLogId BIGINT
-	DECLARE @ExperianConsumerDataID BIGINT
-	DECLARE @ConsumerScore INT
 
 	------------------------------------------------------------------------------
 
@@ -38,10 +32,9 @@ BEGIN
 
 	SELECT
 		CustomerID = br.CustomerID,
-		Now = r.UnderwriterDecisionDate,
-		ConsumerScore = CONVERT(INT, 0)
+		Now = r.UnderwriterDecisionDate
 	INTO
-		#res
+		#src
 	FROM
 		BAR_Results br
 		INNER JOIN CashRequests r ON br.FirstCashRequestID = r.Id
@@ -54,7 +47,23 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	DECLARE cur CURSOR FOR SELECT CustomerID, Now FROM #res
+	SELECT
+		CustomerID = CONVERT(INT, NULL),
+		cais.WorstStatus,
+		cais.Balance,
+		cais.CurrentDefBalance,
+		cais.LastUpdatedDate,
+		DecisionTime = CONVERT(DATETIME, NULL)
+	INTO
+		#res
+	FROM
+		ExperianConsumerDataCais cais
+	WHERE
+		1 = 0
+
+	------------------------------------------------------------------------------
+
+	DECLARE cur CURSOR FOR SELECT CustomerID, Now FROM #src
 	OPEN cur
 
 	------------------------------------------------------------------------------
@@ -65,41 +74,18 @@ BEGIN
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @Now
-
-		-------------------------------------------------------------------------
-
+		INSERT INTO #res (CustomerID, WorstStatus, Balance, CurrentDefBalance, LastUpdatedDate, DecisionTime)
 		SELECT
-			@ExperianConsumerDataID = e.Id
+			@CustomerID,
+			r.WorstStatus,
+			r.Balance,
+			r.CurrentDefBalance,
+			r.LastUpdatedDate,
+			@Now
 		FROM
-			ExperianConsumerData e
+			ExperianConsumerDataCais r
 		WHERE
-			e.ServiceLogId = @ServiceLogId
-
-		-------------------------------------------------------------------------
-
-		SET @ConsumerScore = ISNULL((
-			SELECT
-				MIN(x.ExperianConsumerScore)
-			FROM	(
-				SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
-				FROM ExperianConsumerData d
-				INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
-				WHERE d.Id = @ExperianConsumerDataID
-				AND l.InsertDate < @Now
-
-				UNION
-
-				SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
-				FROM CustomerAnalyticsDirector d
-				WHERE d.CustomerID = @CustomerID
-				AND d.AnalyticsDate < @Now
-			) x
-		), 0)
-
-		-------------------------------------------------------------------------
-
-		UPDATE #res SET ConsumerScore = @ConsumerScore WHERE CustomerID = @CustomerID
+			r.ExperianConsumerDataId = dbo.udfLoadExperianConsumerIdForCustomerAndDate(@CustomerId, @Now)
 
 		-------------------------------------------------------------------------
 
@@ -114,13 +100,22 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
-		CustomerID,
-		ConsumerScore
+		r.CustomerID,
+		r.WorstStatus,
+		r.Balance,
+		r.CurrentDefBalance,
+		r.LastUpdatedDate,
+		r.DecisionTime,
+		LoanCount = (SELECT COUNT(*) FROM Loan l WHERE l.CustomerId = r.CustomerID AND l.[Date] < r.DecisionTime)
 	FROM
-		#res
+		#res r
+	ORDER BY
+		r.CustomerID,
+		r.LastUpdatedDate
 
 	------------------------------------------------------------------------------
 
 	DROP TABLE #res
+	DROP TABLE #src
 END
 GO
