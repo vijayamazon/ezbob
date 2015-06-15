@@ -88,6 +88,10 @@
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
+      <Name>ValueIntervals</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Extensions\Extensions.csproj">
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>

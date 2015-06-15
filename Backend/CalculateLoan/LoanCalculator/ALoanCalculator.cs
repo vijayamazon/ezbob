@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
 	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	/// <summary>
@@ -16,7 +18,13 @@
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
 		/// Schedule is stored in WorkingModel.Schedule.
+		/// Each element in Schedule is ScheduledItem
 		/// </summary>
+		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
+		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
+		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
+		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual List<ScheduledItem> CreateSchedule() {
 			return new CreateScheduleMethod(this).Execute();
 		} // CreateSchedule
@@ -102,22 +110,22 @@
 		/// Calculates date after requested number of periods have passed since loan issue date.
 		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
 		/// </summary>
-		/// <param name="periodCount">A number of periods to add.</param>
 		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		//internal abstract DateTime AddPeriods(int periodCount);
-
 		/// <summary>
 		/// Calculates date after requested number of periods have passed since loan issue date.
 		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
 		/// </summary>
-		/// <param name="periodCount">A number of periods to add.</param>
+		/// <param name="periodCount">
+		///     A number of periods to add.
+		///     A number of periods to add.
+		/// </param>
 		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		public virtual DateTime AddPeriods(int periodCount) {
-				return 
-				WorkingModel.IsMonthly
-				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
-				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
-		} // AddPeriods
+		public virtual DateTime AddRepaymentIntervals(int periodCount) {
+			return
+			WorkingModel.IsMonthly
+			? WorkingModel.LoanIssueTime.AddMonths(periodCount)
+			: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
+		} // AddRepaymentIntervals
 
 		/// <summary>
 		/// Calculates interest rate for one day based on monthly interest rate.
@@ -125,23 +133,41 @@
 		/// </summary>
 		/// <param name="currentDate">Current date.</param>
 		/// <param name="monthlyInterestRate">Monthly interest rate.</param>
-		/// <param name="usePeriods">True, to take in account bad and interest freeze periods,
+		/// <param>True, to take in account bad and interest freeze periods,
 		/// or false, to ignore them.</param>
+		/// <param name="considerFreezeInterestPeriod"></param>
 		/// <param name="periodStartDate">Period start date (the first day of the period).</param>
 		/// <param name="periodEndDate">Period end date (the last day of the period).</param>
+		/// <param name="considerBadPeriods"></param>
 		/// <returns>Daily interest rate.</returns>
 		internal decimal GetDailyInterestRate(
 			DateTime currentDate,
 			decimal monthlyInterestRate,
-			bool usePeriods,
+			bool considerBadPeriods,
+			bool considerFreezeInterestPeriod,
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		) {
-			return (usePeriods && WorkingModel.BadPeriods.Contains(currentDate))
-				? 0
-				: CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
+			//return (usePeriods && WorkingModel.BadPeriods.Contains(currentDate))
+			//	? 0
+			//	: CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
+
+			if (considerBadPeriods)
+				return 0;
+
+			if (considerFreezeInterestPeriod) {
+				InterestFreeze interval = WorkingModel.FreezePeriods.First(i => i.Contains(currentDate));
+				var interest = (interval == null) ? CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate) : interval.GetInterest(currentDate);
+				if (interest != null) {
+					return (decimal)interest;
+				}
+			}
+
+			return CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
+
 		} // GetDailyInterestRate
 
+		/// <exception cref="NullLoanCalculatorModelException">Condition. </exception>
 		protected ALoanCalculator(LoanCalculatorModel model) {
 			if (model == null)
 				throw new NullLoanCalculatorModelException();
@@ -165,7 +191,7 @@
 			DateTime? periodEndDate = null
 		);
 
-		
+
 
 
 		//public virtual List<ScheduledItemWithAmountDue> RescheduleToIntervals(ReschedulingArgument reschedulingArgument, bool writeToLog = true) {

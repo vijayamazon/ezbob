@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.Models.Helpers {
 	using System;
 	using System.Collections.Generic;
-	using System.Globalization;
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.Extensions;
@@ -36,6 +35,8 @@
 			get { return this.principalRepayments.Count > 0; }
 		} // HasRepayments
 
+		/// <exception cref="TooEarlyPrincipalRepaymentException">Condition. </exception>
+		/// <exception cref="NegativeRepaymentAmountException">Condition. </exception>
 		public decimal AddPrincipalRepayment(decimal principal, DateTime time) {
 			if (HasRepayments)
 				if (time < this.principalRepayments.Last().Time)
@@ -77,46 +78,10 @@
 			return res;
 		} // DeepClone
 
-		public class RepaidPrincipal {
-			public RepaidPrincipal(decimal amount, DateTime time) {
-				Amount = amount;
-				Time = time;
-			} // constructor
-
-			public RepaidPrincipal DeepClone() {
-				return new RepaidPrincipal(Amount, Time);
-			} // DeepClone
-
-			public decimal Amount {
-				get { return this.amount; }
-
-				private set {
-					if (value <= 0)
-						throw new NegativeRepaymentAmountException(value);
-
-					this.amount = value;
-				} // set
-			} // Amount
-
-			public DateTime Time { get; private set; }
-
-			/// <summary>
-			/// Returns a string that represents the current object.
-			/// </summary>
-			/// <returns>
-			/// A string that represents the current object.
-			/// </returns>
-			public override string ToString() {
-				return string.Format("{0} at {1}", Amount.ToString("C2", Culture), Time.MomentStr());
-			} // ToString
-
-			private decimal amount;
-		} // class RepaidPrincipal
-
 		public override string ToString() {
 			string closedDateStr = ClosedDate.HasValue
 				? string.Format(" (closed on {0})", ClosedDate.DateStr())
-				: string.Format(" (open principal {0})", OpenPrincipal.ToString("C2", Culture));
+				: string.Format(" (open principal {0})", OpenPrincipal.ToString("C2", Library.Instance.Culture));
 
 			string repaymentsStr = HasRepayments
 				? string.Format(" (repaid: {0})", string.Join(", ", this.principalRepayments))
@@ -125,18 +90,14 @@
 			return string.Format(
 				"on {0}: {1} at {2}{3}{4}",
 				Date.DateStr(),
-				Principal.ToString("C2", Culture),
-				InterestRate.ToString("P1", Culture),
+				Principal.ToString("C2", Library.Instance.Culture),
+				InterestRate.ToString("P1", Library.Instance.Culture),
 				closedDateStr,
 				repaymentsStr
 			);
 		} // ToString
 
 		private readonly List<RepaidPrincipal> principalRepayments;
-
-		private static CultureInfo Culture {
-			get { return Library.Instance.Culture; }
-		} // Culture
 
 		private DateTime? closedDate;
 	} // class ScheduledItem

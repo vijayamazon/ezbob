@@ -54,7 +54,7 @@
 						return;
 					}
 
-					var loanState = new LoanState<Loan>(this.tLoan, this.ReschedulingArguments.LoanID);
+					var loanState = new LoanState<Loan>(this.tLoan, this.ReschedulingArguments.LoanID, this.ReschedulingArguments.ReschedulingDate);
 
 					// load loan state in a new calculator format
 					loanState.Execute();
@@ -137,7 +137,7 @@
 						LoanScheduleItem item = new LoanScheduleItem() {
 							Date = s.Date,
 							LoanRepayment = Math.Round(s.Principal, 2),  // p in schedule
-							Interest = Math.Round(s.AccuredInterest, 2), 
+							Interest = Math.Round(s.AccruedInterest, 2), 
 							Status = LoanScheduleStatus.StillToPay
 						};
 						item.AmountDue = Math.Round(s.Principal + item.Interest + item.Fees);

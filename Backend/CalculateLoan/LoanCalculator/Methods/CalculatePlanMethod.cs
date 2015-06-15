@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	internal class CalculatePlanMethod : AMethod {
@@ -12,21 +13,32 @@
 
 		public DailyLoanStatus DailyLoanStatus { get; private set; }
 
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual List<Repayment> Execute() {
+
 			WorkingModel.ValidateSchedule();
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
 			DateTime lastInterestDay = WorkingModel.LastScheduledDate;
 
+			// fill in loan period (since first interest day untill last interest day) with "one day" loan status
 			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
 				DailyLoanStatus.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount, DailyLoanStatus.LastDailyLoanStatus));
 
+			// init prevTime by loan issue date
 			DateTime prevTime = WorkingModel.LoanIssueTime;
 
+			// 
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
 				ScheduledItem sp = WorkingModel.Schedule[i];
 
+				// decrease "one day" loan status entries by schedule planned Principal to be paid at schedule planned Date
 				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(dd => dd.Date > sp.Date))
 					cls.OpenPrincipal -= sp.Principal;
 
@@ -36,7 +48,8 @@
 					cls.DailyInterestRate = Calculator.GetDailyInterestRate(
 						cls.Date,
 						sp.InterestRate,
-						false,
+						false, // considerBadPeriods
+						true, // ???? TODO check the value for considerFreezeInterestPeriod
 						preScheduleEnd,
 						sp.Date
 					);

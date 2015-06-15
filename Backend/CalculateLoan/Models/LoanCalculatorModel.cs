@@ -8,6 +8,7 @@
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Utils.Lingvo;
+	using Ezbob.ValueIntervals;
 
 	public class LoanCalculatorModel {
 		public LoanCalculatorModel() {
@@ -22,12 +23,89 @@
 			Schedule = new List<ScheduledItem>();
 			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
-			BadPeriods = new BadPeriods();
-		//	Rollovers = new Rollovers();
-		//	FreezeIntervals = new List<FreezeInterval>();
+			BadPeriods = new List<BadPeriod>();
+			//BadPeriods = new BadPeriods();
+			//	Rollovers = new Rollovers();
+			FreezePeriods = new List<InterestFreeze>();
+		} // constructor
 
-		}// constructor
-	
+		public RepaymentIntervalTypes RepaymentIntervalType { get; set; }
+
+		public List<BadPeriod> BadPeriods { get; private set; }
+		//public Rollovers Rollovers { get; set; }
+
+		public DateTime LoanIssueTime { get; set; }
+		public DateTime LoanIssueDate { get { return LoanIssueTime.Date; } }
+		public DateTime LastScheduledDate { get { return Schedule.Last().Date; } }
+
+		public List<decimal> DiscountPlan { get; private set; }
+		public List<OpenPrincipal> OpenPrincipalHistory { get; private set; }
+		public List<ScheduledItem> Schedule { get; private set; }
+		public List<Repayment> Repayments { get; private set; }
+		public List<Fee> Fees { get; private set; }
+		public List<InterestFreeze> FreezePeriods { get; set; }
+
+		/// <exception cref="NegativeRepaymentCountException" accessor="set">Condition. </exception>
+		public int RepaymentCount {
+			get { return this.repaymentCount; }
+			set {
+				//Console.WriteLine(value);
+				//Console.WriteLine(value.GetType());
+				if (value < 0)
+					throw new NegativeRepaymentCountException(value);
+
+				this.repaymentCount = value;
+			} // set
+		} // RepaymentCount
+
+		/// <exception cref="NegativeInterestOnlyRepaymentCountException" accessor="set">Condition. </exception>
+		public int InterestOnlyRepayments {
+			get { return this.interestOnlyRepayments; }
+			set {
+				if (value < 0)
+					throw new NegativeInterestOnlyRepaymentCountException(value);
+
+				this.interestOnlyRepayments = value;
+			} // set
+		} // InterestOnlyRepayments
+
+		/// <exception cref="NegativeLoanAmountException" accessor="set">Condition. </exception>
+		public decimal LoanAmount {
+			get { return this.loanAmount; }
+			set {
+				if (value <= 0)
+					throw new NegativeLoanAmountException(value);
+
+				this.loanAmount = value;
+			} // set
+		} // LoanAmount
+
+		/// <exception cref="NegativeMonthlyInterestRateException" accessor="set">Condition. </exception>
+		public decimal MonthlyInterestRate {
+			get { return this.monthlyInterestRate; }
+			set {
+				if (value < 0)
+					throw new NegativeMonthlyInterestRateException(value);
+
+				this.monthlyInterestRate = value;
+			} // set
+		} // MonthlyInterestRate
+
+		public void SetDiscountPlan(params decimal[] deltas) {
+			DiscountPlan.Clear();
+			DiscountPlan.AddRange(deltas);
+		} // SetDiscountPlan
+
+		public bool IsMonthly {
+			get { return RepaymentIntervalType == RepaymentIntervalTypes.Month; }
+		} // IsMonthly
+
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public void ValidateSchedule() {
 			if (Schedule.Count < 1)
 				throw new NoScheduleException();
@@ -65,94 +143,14 @@
 				lastOp = op;
 			} // for each item
 		} // ValidateSchedule
-
-		public void SetDiscountPlan(params decimal[] deltas) {
-			DiscountPlan.Clear();
-			DiscountPlan.AddRange(deltas);
-		} // SetDiscountPlan
-
-		/// <summary>
-		/// Creates a deep copy of current model.
-		/// </summary>
-		/// <returns>A copy of current model.</returns>
-		public LoanCalculatorModel DeepClone() {
-			var lcm = new LoanCalculatorModel {
-				LoanAmount = LoanAmount,
-				LoanIssueTime = LoanIssueTime,
-				RepaymentCount = RepaymentCount,
-				InterestOnlyRepayments = InterestOnlyRepayments,
-				RepaymentIntervalType = RepaymentIntervalType,
-				MonthlyInterestRate = MonthlyInterestRate,
-			};
-
-			lcm.DiscountPlan.AddRange(DiscountPlan);
-
-			lcm.OpenPrincipalHistory.AddRange(OpenPrincipalHistory.Select(v => v.DeepClone()));
-			lcm.Schedule.AddRange(Schedule.Select(v => v.DeepClone()));
-			lcm.Repayments.AddRange(Repayments.Select(v => v.DeepClone()));
-			lcm.Fees.AddRange(Fees.Select(v => v.DeepClone()));
-
-			lcm.BadPeriods.DeepCloneFrom(BadPeriods);
-
-			return lcm;
-		} // DeepClone
-
 		
 
-		public DateTime LoanIssueTime { get; set; }
-
-		public DateTime LoanIssueDate { get { return LoanIssueTime.Date; } }
-
-		public DateTime LastScheduledDate { get { return Schedule.Last().Date; } }
-
-		public int RepaymentCount {
-			get { return this.repaymentCount; }
-			set {
-
-				//Console.WriteLine(value);
-				//Console.WriteLine(value.GetType());
-
-				if (value < 0)
-					throw new NegativeRepaymentCountException(value);
-
-				this.repaymentCount =  value;
-			} // set
-		} // RepaymentCount
-
-		public int InterestOnlyRepayments {
-			get { return this.interestOnlyRepayments; }
-			set {
-				if (value < 0)
-					throw new NegativeInterestOnlyRepaymentCountException(value);
-
-				this.interestOnlyRepayments = value;
-			} // set
-		} // InterestOnlyRepayments
-
-		public decimal LoanAmount {
-			get { return this.loanAmount; }
-			set {
-				if (value <= 0)
-					throw new NegativeLoanAmountException(value);
-
-				this.loanAmount = value;
-			} // set
-		} // LoanAmount
-
-		public decimal MonthlyInterestRate {
-			get { return this.monthlyInterestRate; }
-			set {
-				if (value < 0)
-					throw new NegativeMonthlyInterestRateException(value);
-
-				this.monthlyInterestRate = value;
-			} // set
-		} // MonthlyInterestRate
-
-		public bool IsMonthly {
-			get { return RepaymentIntervalType == RepaymentIntervalTypes.Month; }
-		} // IsMonthly
-
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public void SetScheduleCloseDatesFromPayments() {
 			ValidateSchedule();
 
@@ -191,23 +189,7 @@
 			} // for each repayment
 		} // SetScheduleCloseDatesFromPayments
 
-		public RepaymentIntervalTypes RepaymentIntervalType { get; set; }
 
-		public List<decimal> DiscountPlan { get; private set; }
-
-		public List<OpenPrincipal> OpenPrincipalHistory { get; private set; }
-		public List<ScheduledItem> Schedule { get; private set; }
-		public List<Repayment> Repayments { get; private set; }
-		public List<Fee> Fees { get; private set; }
-		//public List<FreezeInterval> FreezeIntervals { get; set; }
-		
-		public BadPeriods BadPeriods { get; private set; }
-		//public Rollovers Rollovers { get; set; }
-
-		private int repaymentCount;
-		private int interestOnlyRepayments;
-		private decimal loanAmount;
-		private decimal monthlyInterestRate;
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -215,6 +197,9 @@
 		/// <returns>
 		/// A string that represents the current object.
 		/// </returns>
+		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
+		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public override string ToString() {
 			var os = new StringBuilder();
 
@@ -259,7 +244,15 @@
 			else
 				os.Append("\tNo fees.\n");
 
-			os.AppendFormat("\tBad periods: {0}\n", BadPeriods);
+			if (BadPeriods.Count > 0)
+				os.AppendFormat("\tBadPeriods:\n\t\t{0}.\n", string.Join("\n\t\t", BadPeriods));
+			else
+				os.Append("\tNo BadPeriods.\n");
+
+			if (FreezePeriods.Count > 0)
+				os.AppendFormat("\t FreezePeriods:\n\t\t{0}.\n", string.Join("\n\t\t", FreezePeriods));
+			else
+				os.Append("\tNo FreezePeriods.\n");
 
 			//if (Rollovers != null)
 			//	os.AppendFormat("\tRollovers:\n\t\t{0}.\n", string.Join("\n\t\t", Rollovers));
@@ -270,8 +263,41 @@
 
 			return os.ToString();
 		} // ToString
-	}
 
-	
-// class LoanCalculatorModel
+		/// <summary>
+		/// Creates a deep copy of current model.
+		/// </summary>
+		/// <returns>A copy of current model.</returns>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
+		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
+		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
+		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
+		//public LoanCalculatorModel DeepClone() {
+		//	var lcm = new LoanCalculatorModel {
+		//		LoanAmount = LoanAmount,
+		//		LoanIssueTime = LoanIssueTime,
+		//		RepaymentCount = RepaymentCount,
+		//		InterestOnlyRepayments = InterestOnlyRepayments,
+		//		RepaymentIntervalType = RepaymentIntervalType,
+		//		MonthlyInterestRate = MonthlyInterestRate,
+		//	};
+
+		//	lcm.DiscountPlan.AddRange(DiscountPlan);
+
+		//	lcm.OpenPrincipalHistory.AddRange(OpenPrincipalHistory.Select(v => v.DeepClone()));
+		//	lcm.Schedule.AddRange(Schedule.Select(v => v.DeepClone()));
+		//	lcm.Repayments.AddRange(Repayments.Select(v => v.DeepClone()));
+		//	lcm.Fees.AddRange(Fees.Select(v => v.DeepClone()));
+
+		//	lcm.BadPeriods.DeepCloneFrom(BadPeriods);
+
+		//	return lcm;
+		//} // DeepClone
+
+		private int repaymentCount;
+		private int interestOnlyRepayments;
+		private decimal loanAmount;
+		private decimal monthlyInterestRate;
+
+	}// class LoanCalculatorModel
 } // namespace

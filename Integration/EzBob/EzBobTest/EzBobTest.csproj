@@ -129,6 +129,10 @@
     <Compile Include="TestRetrieveDataHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\App\EzReporting\Reports\Reports.csproj">
+      <Project>{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}</Project>
+      <Name>Reports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\App\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj">
       <Project>{DFC5B190-AFA4-40A7-8237-8404687B4513}</Project>
       <Name>HmrcHarvester</Name>
@@ -196,6 +200,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
+      <Name>ValueIntervals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Amazon\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>

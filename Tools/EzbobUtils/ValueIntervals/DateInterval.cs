@@ -8,6 +8,19 @@
 
 		public static DateTime Min(DateTime a, DateTime b) { return (a.Date <= b.Date) ? a.Date : b.Date; } // Min
 		public static DateTime Max(DateTime a, DateTime b) { return (a.Date >= b.Date) ? a.Date : b.Date; } // Max
+		
+		public DateInterval(DateTime? oLeft, DateTime? oRight) : base(InitEdges(oLeft, oRight)) {
+		} // constructor
+		
+		protected DateInterval(TInterval<DateTime> other) : base(other.Left, other.Right) {
+		} // constructor
+
+		protected DateInterval(AIntervalEdge<DateTime> oLeft, AIntervalEdge<DateTime> oRight) : base(oLeft, oRight) {
+		} // constructor
+
+		public virtual bool IsJustBefore(DateInterval other) {
+			return Right.IsFinite && other.Left.IsFinite && (Right.Value.AddDays(1) == other.Left.Value);
+		} // IsJustBefore
 
 		public virtual bool Contains(DateTime oDate) {
 			return Contains(new DateIntervalEdge(oDate, EdgeType.Finite));
@@ -20,23 +33,6 @@
 		public static TDisjointIntervals<DateTime> operator -(DateInterval a, DateInterval b) {
 			return ReferenceEquals(a, null) ? null : a.Difference(b);
 		} // operator -
-
-		public DateInterval(DateTime? oLeft, DateTime? oRight) : base(InitEdges(oLeft, oRight)) {
-		} // constructor
-
-		public virtual bool IsJustBefore(DateInterval other) {
-			return Right.IsFinite && other.Left.IsFinite && (Right.Value.AddDays(1) == other.Left.Value);
-		} // IsJustBefore
-
-		public override string ToString() {
-			return string.Format("[{0}, {1}]", Left, Right);
-		} // ToString
-
-		protected DateInterval(TInterval<DateTime> other) : base(other.Left, other.Right) {
-		} // constructor
-
-		protected DateInterval(AIntervalEdge<DateTime> oLeft, AIntervalEdge<DateTime> oRight) : base(oLeft, oRight) {
-		} // constructor
 
 		protected virtual DateInterval Intersection(DateInterval other) {
 			TInterval<DateTime> oEdges = base.Intersection(other);
@@ -71,6 +67,10 @@
 				new DateIntervalEdge(oRight, EdgeType.PositiveInfinity)
 			);
 		} // InitEdges
+
+		public override string ToString() {
+			return string.Format("[{0}, {1}]", Left, Right);
+		} // ToString
 
 	} // class DateInterval
 

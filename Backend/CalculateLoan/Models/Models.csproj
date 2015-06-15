@@ -59,12 +59,15 @@
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
     <Compile Include="Extensions\RepaymentListExt.cs" />
     <Compile Include="Extensions\ScheduleListExt.cs" />
-    <Compile Include="Helpers\BadPeriods.cs" />
+    <Compile Include="Helpers\BadPeriodsCopy.cs" />
+    <Compile Include="Helpers\BadPeriod.cs" />
     <Compile Include="Helpers\DailyLoanStatus.cs" />
     <Compile Include="Helpers\Fee.cs" />
-    <Compile Include="Helpers\Freeze.cs" />
+    <Compile Include="Helpers\InterestFreezePeriodsCopy.cs" />
+    <Compile Include="Helpers\InterestFreeze.cs" />
     <Compile Include="Helpers\OneDayLoanStatus.cs" />
     <Compile Include="Helpers\OpenPrincipal.cs" />
+    <Compile Include="Helpers\RepaidPrincipal.cs" />
     <Compile Include="Helpers\Repayment.cs" />
     <Compile Include="Helpers\Rollovers.cs" />
     <Compile Include="Helpers\ScheduledItem.cs" />

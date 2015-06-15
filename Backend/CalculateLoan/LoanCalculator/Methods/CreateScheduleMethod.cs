@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	internal class CreateScheduleMethod : AMethod {
@@ -9,7 +10,12 @@
 		} // constructor
 
 		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
+		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
+		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
+		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual List<ScheduledItem> Execute() {
+
 			if (WorkingModel.InterestOnlyRepayments >= WorkingModel.RepaymentCount)
 				throw new InterestOnlyMonthsCountException(WorkingModel.InterestOnlyRepayments, WorkingModel.RepaymentCount);
 
@@ -22,7 +28,7 @@
 			WorkingModel.Schedule.Clear();
 
 			for (int i = 1; i <= WorkingModel.RepaymentCount; i++) {
-				var sp = new ScheduledItem(Calculator.AddPeriods(i).Date);
+				var sp = new ScheduledItem(Calculator.AddRepaymentIntervals(i).Date);
 
 				if (i <= WorkingModel.InterestOnlyRepayments)
 					sp.Principal = 0;

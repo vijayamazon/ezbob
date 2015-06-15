@@ -2,6 +2,7 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	internal abstract class AWithActualDailyLoanStatusMethod : AMethod {
@@ -9,8 +10,15 @@
 			: base(calculator, writeToLog) {
 		} // constructor
 
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		protected virtual DailyLoanStatus CreateActualDailyLoanStatus(DateTime now) {
+
 			WorkingModel.ValidateSchedule();
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
@@ -51,7 +59,8 @@
 					cls.DailyInterestRate = Calculator.GetDailyInterestRate(
 						cls.Date,
 						sp.InterestRate,
-						true,
+						true, // considerBadPeriods
+						true, // considerFreezeInterestPeriod
 						preScheduleEnd,
 						sp.Date
 					);

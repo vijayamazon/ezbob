@@ -9,6 +9,7 @@
 			set { this.date = value.Date; }
 		} // Date
 
+		/// <exception cref="NegativeOpenPrincipalException" accessor="set">Condition. </exception>
 		public decimal Amount {
 			get { return this.amount; }
 			set {
@@ -26,12 +27,7 @@
 			};
 		} // DeepClone
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
+		/// <exception cref="NegativeOpenPrincipalException">Condition. </exception>
 		public override string ToString() {
 			return string.Format("on {0}: {1}",
 				Date.DateStr(),

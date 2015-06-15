@@ -6,8 +6,8 @@
 	using Ezbob.Backend.Extensions;
 	using Ezbob.ValueIntervals;
 
-	public class BadPeriods {
-		public BadPeriods() {
+	public class BadPeriodsCopy {
+		public BadPeriodsCopy() {
 			this.badPeriods = new List<DateInterval>();
 			this.extremumPoints = new List<ExtremumPoint>();
 			Add(DateTime.MinValue, false);
@@ -47,7 +47,7 @@
 			} // get
 		} // Count
 
-		public void DeepCloneFrom(BadPeriods source = null) {
+		/*public void DeepCloneFrom(BadPeriods source = null) {
 			if (source == null)
 				return;
 
@@ -61,7 +61,7 @@
 
 				this.extremumPoints.Add(point.DeepClone());
 			} // for each
-		} // DeepCloneFrom
+		}*/ // DeepCloneFrom
 
 		public override string ToString() {
 			CreateIntervals();
@@ -127,5 +127,5 @@
 
 		private readonly List<DateInterval> badPeriods;
 		private readonly List<ExtremumPoint> extremumPoints;
-	} // class BadPeriods
+	} // class BadPeriodsCopy
 } // namespace
