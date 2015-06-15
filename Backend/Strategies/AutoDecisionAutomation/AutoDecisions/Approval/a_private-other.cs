@@ -156,6 +156,7 @@
 					? this.customer.CashRequests.Count(cr =>
 						cr.UnderwriterDecision == CreditResultStatus.Approved &&
 						cr.UnderwriterDecisionDate.HasValue &&
+						cr.AutoDecisionID == null &&
 						cr.UnderwriterDecisionDate.Value < Now
 					)
 					: 0,
