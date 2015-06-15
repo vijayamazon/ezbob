@@ -138,7 +138,7 @@
                 if (t.Name == "Loan")
                 {
                     RescheduleInLoan<Loan> strategy;
-                    var amd = ExecuteSync(out strategy, customerID, userID, customerID, reAgrs);
+                    var amd = ExecuteSync(out strategy, customerID, userID, t, reAgrs);
 
                     return new ReschedulingActionResult
                     {
