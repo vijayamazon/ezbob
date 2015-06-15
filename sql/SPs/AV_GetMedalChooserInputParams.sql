@@ -29,23 +29,58 @@ BEGIN
 	DECLARE @TypeOfBusiness NVARCHAR(30)
 	DECLARE @CompanyRefNum NVARCHAR(30)
 	DECLARE @PersonalScore INT = 0
-
+	
+	----------------------------------------------------------------------------
 	SELECT
 		@TypeOfBusiness = c.TypeOfBusiness,
-		@CompanyRefNum = co.ExperianRefNum,
-		@PersonalScore = c.ExperianConsumerScore
+		@CompanyRefNum = co.ExperianRefNum
 	FROM
 		Customer c
 		LEFT JOIN Company co ON c.CompanyId = co.Id
 	WHERE
 		c.Id = @CustomerId
+		
+		
+	----------------------------------------------------------------------------
+	DECLARE @ServiceLogId BIGINT
+	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @Now
+	
+	-- Minimal Consumer/Directors score
+	
+	DECLARE @ExperianConsumerDataID BIGINT
+	
+	SELECT
+		@ExperianConsumerDataID = e.Id
+	FROM
+		ExperianConsumerData e
+	WHERE
+		e.ServiceLogId = @ServiceLogId
+	
+	----------------------------------------------------------------------------
+	
+	SELECT
+		@PersonalScore = MIN(x.ExperianConsumerScore)
+	FROM	(
+		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
+		FROM ExperianConsumerData d
+		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
+		WHERE d.Id = @ExperianConsumerDataID
+	
+		UNION
+	
+		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
+		FROM CustomerAnalyticsDirector d
+		WHERE d.CustomerID = @CustomerId
+		AND d.IsActive = 1
+	) x
+	----------------------------------------------------------------------------
 
 	IF @PersonalScore > 0
 		SET @HasPersonalScore = 1
-
+	----------------------------------------------------------------------------
 	IF @TypeOfBusiness = 'Limited' OR @TypeOfBusiness = 'LLP'
 		SET @IsLimited = 1
-
+	----------------------------------------------------------------------------
 	DECLARE @CompanyScore INT = 0	
 
 	IF @IsLimited = 1
@@ -80,7 +115,7 @@ BEGIN
 		IF @CompanyScore > 0
 			SET @HasCompanyScore = 1
 	END
-
+	----------------------------------------------------------------------------
 	IF EXISTS (
 		SELECT *
 		FROM MP_CustomerMarketPlace m
@@ -106,7 +141,7 @@ BEGIN
 	BEGIN
 		SET @HasBank = 1
 	END
-
+	----------------------------------------------------------------------------
 	IF EXISTS (
 		SELECT *
 		FROM MP_CustomerMarketPlace m
@@ -121,7 +156,7 @@ BEGIN
 	BEGIN
 		SET @HasHmrc = 1
 	END
-
+	----------------------------------------------------------------------------
 	SELECT
 		@LastHmrcUpdateDate = MIN(m.UpdatingEnd)
 	FROM
@@ -141,7 +176,7 @@ BEGIN
 		m.Created < @Now
 		AND
 		m.UpdatingEnd IS NOT NULL
-
+	----------------------------------------------------------------------------
 	SELECT
 		@LastBankUpdateDate = MIN(m.UpdatingEnd)
 	FROM
@@ -157,19 +192,19 @@ BEGIN
 		m.UpdatingEnd IS NOT NULL
 		AND
 		m.Created < @Now
-
+	----------------------------------------------------------------------------
 	DECLARE @MinApprovalAmount INT = (
 		SELECT CAST(Value AS INT)
 		FROM ConfigurationVariables
 		WHERE Name = 'MedalMinOffer'
 	)
-
+	----------------------------------------------------------------------------
 	DECLARE @MedalDaysOfMpRelevancy INT = (
 		SELECT CAST(Value AS INT)
 		FROM ConfigurationVariables
 		WHERE Name = 'MedalDaysOfMpRelevancy'
 	)
-
+	----------------------------------------------------------------------------
 	SELECT
 		@IsLimited AS IsLimited,
 		@HasOnline AS HasOnline,
