@@ -25,6 +25,9 @@
 		[DataMember]
 		public int IntervalsNum { get; set; }  // calculated repayment intervals number 
 
+		[DataMember]
+		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planned close date
+
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(ReschedulingResult);

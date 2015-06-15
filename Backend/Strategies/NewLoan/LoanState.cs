@@ -115,11 +115,7 @@
 					};
 					this.CalcModel.Schedule.Add(sch);
 				}
-
-				DateTime loanMaturityDate = this.CalcModel.Schedule.OrderBy(d => d.Date)
-					.Last()
-					.Date;
-
+				
 				// successfull paypoint transactions
 				foreach (PaypointTransaction p in this.tLoan.TransactionsWithPaypointSuccesefull) {
 					this.CalcModel.Repayments.Add(new Repayment( // DateTime time, decimal principal, decimal interest, decimal fees
@@ -156,9 +152,7 @@
 						new InterestFreeze(startDate: (DateTime)fi.StartDate, endDate: (DateTime)fi.EndDate, interestRate: fi.InterestRate, isActive: isActive)
 					);
 				}
-
-				//DateTime now = DateTime.UtcNow;
-
+	
 				// "bad" periods
 				SetBadPariods();
 
@@ -188,7 +182,7 @@
 			foreach (KeyValuePair<int, List<CustomerStatusChange>> pair in customerStatusesHistory.FullData.Data)
 				statusesHistory = pair.Value;
 
-			if (statusesHistory != null) {
+			if (statusesHistory.Count > 0) {
 
 				//		statusesHistory.ForEach(xx => Log.Debug(xx));
 
@@ -197,7 +191,7 @@
 				var badStarts = statusesHistory.Where(s => this.badStatusesNames.Contains<string>(s.NewStatus.ToString()))
 					.ToList();
 
-				//		badStarts.ForEach(b => Console.WriteLine("started===================" + b));
+						badStarts.ForEach(b => Console.WriteLine("started===================" + b));
 
 				var badEnds = statusesHistory.Where(s => this.badStatusesNames.Contains(s.OldStatus.ToString())).ToList();
 
@@ -207,7 +201,7 @@
 					NewStatus = badEnds.Last().NewStatus
 				});
 
-				//	badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
+					badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
 
 				if (badStarts.Count > 0) {
 					foreach (CustomerStatusChange s in badStarts) {

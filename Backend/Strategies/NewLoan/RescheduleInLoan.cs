@@ -43,10 +43,9 @@
 
 					decimal loanBaLance = loan.Balance;
 
-					//Console.WriteLine("loan balance: {0}", loanBaLance);
-
 					// loan close date ('maturity date')
 					this.ReschedulingArguments.LoanCloseDate = loan.Schedule.OrderBy(s => s.Date).Last().Date;
+					this.Result.LoanCloseDate = this.ReschedulingArguments.LoanCloseDate;
 
 					//  if re date is later than loan "maturity" date - "IN" rescheduling can't be proceeded
 					if (this.ReschedulingArguments.ReschedulingDate > this.ReschedulingArguments.LoanCloseDate) {
@@ -71,7 +70,7 @@
 					//this.ReschedulingArguments.ReschedulingBalance = this.tLoan.Balance;
 
 					Console.WriteLine("Loan.Balance: {0}, Calc-r balance: {1}", loanBaLance, this.ReschedulingArguments.ReschedulingBalance);
-		
+
 					if (this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month)
 						this.Result.IntervalsNum = MiscUtils.DateDiffInMonths(this.ReschedulingArguments.ReschedulingDate, this.ReschedulingArguments.LoanCloseDate);
 
@@ -103,11 +102,11 @@
 					List<ScheduledItemWithAmountDue> shedules = calculator.CreateScheduleAndPlan(false);
 
 					//shedules.ForEach(s => Log.Debug(s.ToString()));
-			
+
 					// TEMPORARY
 					//if (this.ReschedulingArguments.SaveToDB == false)
 					//	return;
-		
+
 					// remove future schedules
 					List<LoanScheduleItem> removedSchedules = new List<LoanScheduleItem>(loan.Schedule.Where(x => x.Date >= this.ReschedulingArguments.ReschedulingDate));
 
@@ -118,8 +117,6 @@
 
 					// mark Late as LateRescheduled - to prevent processing by PayPointCharger
 					// Display LateRescheduled as Late everywhere
-
-					//List<LoanScheduleItem> latePastSchedules = new List<LoanScheduleItem>(loan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late));
 
 					foreach (LoanScheduleItem l in loan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late)) {
 						Log.Debug("PASSED LATE: {0}", l);
@@ -137,7 +134,7 @@
 						LoanScheduleItem item = new LoanScheduleItem() {
 							Date = s.Date,
 							LoanRepayment = Math.Round(s.Principal, 2),  // p in schedule
-							Interest = Math.Round(s.AccruedInterest, 2), 
+							Interest = Math.Round(s.AccruedInterest, 2),
 							Status = LoanScheduleStatus.StillToPay
 						};
 						item.AmountDue = Math.Round(s.Principal + item.Interest + item.Fees);
@@ -150,7 +147,7 @@
 					// removed - will be deleted;
 					// passed late - status changed
 					// new schedules - will be inserted;
-				//	loanRep.SaveOrUpdate(loan);
+					//	loanRep.SaveOrUpdate(loan);
 
 				} catch (Exception e) {
 					Log.Alert(e, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);

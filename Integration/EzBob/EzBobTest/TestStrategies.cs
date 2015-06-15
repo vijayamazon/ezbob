@@ -887,7 +887,7 @@
 
 		[Test]
 		public void TestLoanState() {
-			int loanID = 651;   // freeze 
+			int loanID = 3554;   
 			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
 			try {
 				s.Execute();
