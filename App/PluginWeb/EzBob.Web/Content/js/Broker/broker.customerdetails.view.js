@@ -139,6 +139,8 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 			this.CrmTable.fnClearTable();
 			this.CrmTable = null;
 		} // if
+
+		this.$el.find('.lead-fill-wizard, .lead-send-invitation').addClass('hide');
 	}, // clearData
 
 	render: function() {
@@ -177,9 +179,9 @@ EzBob.Broker.CustomerDetailsView = EzBob.Broker.BaseView.extend({
 				} // if
 
 				self.LeadID = oResponse.personal_data.leadID;
-				if (oResponse.personal_data.finishedWizard) {
-				    self.$el.find('.lead-fill-wizard, .lead-send-invitation').hide();
-				}
+
+				self.$el.find('.lead-fill-wizard, .lead-send-invitation')
+					.toggleClass('hide', oResponse.personal_data.finishedWizard);
 
 				self.$el.find('.value').load_display_value({
 					data_source: oResponse.personal_data,
