@@ -39,6 +39,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	events: {
 	    'click .resch-submit-btn': 'reschSubmitForm',
 	    'blur .outsideAmount': 'blurAmount',
+	    'click .option-btn': 'fillData',
 		'click .edit-schedule-item': 'editScheduleItem',
 		'click .remove-schedule-item': 'removeScheduleItem',
 		'click .add-installment': 'addInstallment',
@@ -49,7 +50,33 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		'click .remove-freeze-interval': 'onRemoveFreezeInterval'
 	}, // events
 
+	fillData: function () {
+	    $('#collapsable-content').slideToggle('slow');
 
+        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Week" });
+
+        var self = this;
+
+        oRequest.success(function (res) {
+            self.model.set('withinWeek', res.IntervalsNum);
+        }); //on success
+
+        oRequest.fail(function () {
+            $("#data-error").fadeIn();
+            setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
+        });//on fail
+
+        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Month" });
+
+        oRequest.success(function (res) {
+            self.model.set('withinMonth', res.IntervalsNum);
+        }); //on success
+
+        oRequest.fail(function () {
+            $("#data-error").fadeIn();
+            setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
+        });//on fail
+    },
 	reschSubmitForm: function () {
 	    var requestParam = { loanID: this.model.get('Id') };
 
@@ -97,9 +124,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	    else if (checkedRadio === 'outsideRadio') {
 	        requestParam.intervalType = $('#outsideSelect option:selected').text();
 	        requestParam.AmountPerInterval = $('.outsideAmount').val();
-	        var isCharges = $('.charges-checkbox').is(':checked');
+	        var isStopCharges = $('.charges-checkbox').is(':checked');
 	        var chargesVal = $('.charges-payments').val();
-            if (isCharges) {
+	        if (chargesVal <= 0 || chargesVal === "")
+	            return;
+	        if (isStopCharges) {
                 requestParam.stopAutoCharge = 'true';
                 requestParam.stopAutoChargePayment = chargesVal;
             }
@@ -113,16 +142,19 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	    var self = this;
 
 	    oRequest.success(function (res) {
-	        alert("success");
+	        $("#submit-success").fadeIn();
+	        setTimeout(function () { $("#submit-success").fadeOut(); }, 3000);
 	    }); //on success
 
 	    oRequest.fail(function () {
-	        alert("fail");
+	        $("#submit-fail").fadeIn();
+	        setTimeout(function () { $("#submit-fail").fadeOut(); }, 3000);
 	    });//on fail
 	},
 
 	blurAmount: function () {
-	    if ($(".outsideAmount").val() <= 0) {
+	    var checkedRadio = $('input[name=radio]').filter(':checked').val();
+	    if (checkedRadio === 'outsideRadio' && $(".outsideAmount").val() <= 0) {
 	        $("#amount-error").fadeIn();
 	        setTimeout(function() { $("#amount-error").fadeOut(); }, 3000);
 	    } else {
@@ -277,32 +309,6 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		});
 
 		this.renderRegions();
-
-
-		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Week" });
-
-		var self = this;
-
-		oRequest.success(function (res) {
-		    self.model.set('withinWeek', res.IntervalsNum);
-		}); //on success
-
-		oRequest.fail(function () {
-		    $("#data-error").fadeIn();
-		    setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
-		});//on fail
-
-		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Month" });
-
-		oRequest.success(function (res) {
-		    self.model.set('withinMonth', res.IntervalsNum);
-		}); //on success
-
-		oRequest.fail(function () {
-		    $("#data-error").fadeIn();
-		    setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
-		});//on fail
-
 	}, // onRender
 
 	renderRegions: function() {
