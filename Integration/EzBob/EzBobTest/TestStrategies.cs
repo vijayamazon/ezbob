@@ -6,6 +6,7 @@
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
@@ -947,6 +948,43 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
+		}
+
+		[Test]
+		public void TestLoanCalculator() {
+
+			// new instance of loan calculator - for new schedules list
+			LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = 6000m,
+				RepaymentCount = 7,
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+
+			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+
+			// new schedules
+			/*try {
+				//var shedules = calculator.CreateSchedule();
+			} catch (InterestOnlyMonthsCountException interestOnlyMonthsCountException) {
+				Console.WriteLine(interestOnlyMonthsCountException);
+			} catch (NegativeMonthlyInterestRateException negativeMonthlyInterestRateException) {
+				Console.WriteLine(negativeMonthlyInterestRateException);
+			} catch (NegativeLoanAmountException negativeLoanAmountException) {
+				Console.WriteLine(negativeLoanAmountException);
+			} catch (NegativeRepaymentCountException negativeRepaymentCountException) {
+				Console.WriteLine(negativeRepaymentCountException);
+			} catch (NegativeInterestOnlyRepaymentCountException negativeInterestOnlyRepaymentCountException) {
+				Console.WriteLine(negativeInterestOnlyRepaymentCountException);
+			}*/
+
+			Console.WriteLine();
+
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
 		}
 
 	}

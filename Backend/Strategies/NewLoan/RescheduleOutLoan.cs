@@ -9,11 +9,12 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using PayPoint;
 	using StructureMap;
 
-	public class RescheduleInLoan<T> : AStrategy {
+	public class RescheduleOutLoan<T> : AStrategy {
 
-		public RescheduleInLoan(T t, ReschedulingArgument reschedulingArgument) {
+		public RescheduleOutLoan(T t, ReschedulingArgument reschedulingArgument) {
 
 			this.ReschedulingArguments = reschedulingArgument;
 			this.Result = new ReschedulingResult();
@@ -30,9 +31,18 @@
 			Log.Debug(this.ReschedulingArguments);
 		}
 
-		public override string Name { get { return "RescheduleInLoan"; } }
+		public override string Name { get { return "RescheduleOutLoan"; } }
 
+		/// <exception cref="ReschedulingOutPaymentPerIntervalExcpetion">Condition. </exception>
 		public override void Execute() {
+
+			string message;
+
+			if (this.ReschedulingArguments.PaymentPerInterval == null) {
+				message = string.Format("No valid monthly/weekly (ReschedulingArguments.PaymentPerInterval) amount sent");
+				Log.Alert(message);
+				throw new ReschedulingOutPaymentPerIntervalExcpetion(message);
+			}
 
 			if (this.tLoan != null) {
 
@@ -46,12 +56,6 @@
 					// loan close date ('maturity date')
 					this.ReschedulingArguments.LoanCloseDate = loan.Schedule.OrderBy(s => s.Date).Last().Date;
 					this.Result.LoanCloseDate = this.ReschedulingArguments.LoanCloseDate;
-
-					//  if re date is later than loan "maturity" date - "IN" rescheduling can't be proceeded
-					if (this.ReschedulingArguments.ReschedulingDate > this.ReschedulingArguments.LoanCloseDate) {
-						Log.Info("Re-scheduling date {0} outside of loan period (maturity date) {1}", this.ReschedulingArguments.ReschedulingDate, this.ReschedulingArguments.LoanCloseDate);
-						return;
-					}
 
 					var loanState = new LoanState<Loan>(this.tLoan, this.ReschedulingArguments.LoanID, this.ReschedulingArguments.ReschedulingDate);
 
@@ -91,7 +95,7 @@
 
 					ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
 
-					Log.Debug("'OUT' rescheduling: Intervals for outstanding balance {0} is {1}, loan original close date ('maturity date'): {2}, reschedule date: {3}, interval type: {4}",
+					Log.Debug("Intervals for outstanding balance {0} is {1}, loan original close date ('maturity date'): {2}, reschedule date: {3}, interval type: {4}",
 							this.ReschedulingArguments.ReschedulingBalance, calculatorModel.RepaymentCount, this.ReschedulingArguments.LoanCloseDate, this.ReschedulingArguments.ReschedulingDate
 							, this.ReschedulingArguments.ReschedulingRepaymentIntervalType);
 
@@ -151,14 +155,14 @@
 					//	loanRep.SaveOrUpdate(loan);
 
 				} catch (Exception e) {
-					Log.Alert(e, "Failed to get rescheduling OUT data for loan {0}", this.ReschedulingArguments.LoanID);
+					Log.Alert(e, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);
 					Console.WriteLine(e);
 				}
 			}
 
 			// new loan structure TODO
 			if (this.tNLLoan != null) {
-				Log.Debug("NEW LOAN STRUCTURE NOT IMPLEMENTED YET (OUT)");
+				Log.Debug("NEW LOAN STRUCTURE NOT IMPLEMENTED YET");
 			}
 
 		}

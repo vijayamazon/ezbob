@@ -155,7 +155,7 @@
 			if (considerBadPeriods)
 				return 0;
 
-			if (considerFreezeInterestPeriod) {
+			if (considerFreezeInterestPeriod && WorkingModel.FreezePeriods.Count > 0) {
 				InterestFreeze interval = WorkingModel.FreezePeriods.First(i => i.Contains(currentDate));
 				var interest = (interval == null) ? CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate) : interval.GetInterest(currentDate);
 				if (interest != null) {

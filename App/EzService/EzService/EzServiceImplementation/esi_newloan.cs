@@ -134,6 +134,44 @@
 			return null;
 		} // RescheduleInLoan
 
+
+		public ReschedulingActionResult RescheduleOutLoan(int userID, int customerID, ReschedulingArgument reAgrs) {
+			Type t;
+			try {
+				t = Type.GetType(reAgrs.LoanType);
+			} catch (Exception e) {
+				Log.Alert("OUT: Fail to get type from the argument {0}. ReschedulingArgument: {1}; error: {2}", reAgrs.LoanType, reAgrs, e);
+				return null;
+			}
+
+			if (t == null) {
+				Log.Alert("OUT: Type t (of loan) not found");
+				return null;
+			}
+
+			Log.Debug("OUT: t is {0}, t.Name={1}", t, t.Name);
+
+			try {
+				if (t.Name == "Loan") {
+					RescheduleOutLoan<Loan> strategy;
+					var amd = ExecuteSync(out strategy, customerID, userID, new Loan(), reAgrs);
+					return new ReschedulingActionResult {
+						MetaData = amd,
+						Value = strategy.Result
+					};
+				}
+
+				if (t.Name == "NL_Model") {
+					RescheduleOutLoan<NL_Model> strategy;
+					// TODO
+				}
+
+			} catch (Exception e) {
+				Log.Info("Reschedule OUT of loan exception: ", e);
+			}
+			return null;
+		} // RescheduleOutLoan
+
 	}
 
 }

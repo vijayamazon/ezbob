@@ -137,6 +137,14 @@
       <Project>{DFC5B190-AFA4-40A7-8237-8404687B4513}</Project>
       <Name>HmrcHarvester</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
+      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
+      <Name>CalculateLoanExceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
+      <Project>{D7A03EFE-B175-49EB-9B22-3315C1124091}</Project>
+      <Name>LoanCalculator</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\CalculateLoan\Models\Models.csproj">
       <Project>{DDAF0E80-8E9D-49F4-AA8C-30A69489361E}</Project>
       <Name>Models</Name>

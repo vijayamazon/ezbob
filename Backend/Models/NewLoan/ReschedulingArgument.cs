@@ -10,9 +10,6 @@
 		[DataMember]
 		public int LoanID { get; set; }  // loan ID to re-schedule
 
-		//[DataMember]
-		//public Type LKind { get; set; }  // loan old/new
-
 		[DataMember]
 		public string LoanType { get; set; }  // loan old/new
 
@@ -33,7 +30,6 @@
 
 		[DataMember]
 		public bool SaveToDB { get; set; } // save result (new schedules) or not
-
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");

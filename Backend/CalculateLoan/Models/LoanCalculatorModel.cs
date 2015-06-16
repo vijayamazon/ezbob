@@ -24,8 +24,6 @@
 			Repayments = new List<Repayment>();
 			Fees = new List<Fee>();
 			BadPeriods = new List<BadPeriod>();
-			//BadPeriods = new BadPeriods();
-			//	Rollovers = new Rollovers();
 			FreezePeriods = new List<InterestFreeze>();
 		} // constructor
 
