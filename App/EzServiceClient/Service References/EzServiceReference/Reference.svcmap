@@ -31,12 +31,12 @@
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.xsd" MetadataType="Schema" ID="11d36dfe-f1a9-4260-930c-b5a5691c01b4" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzService.ActionResults.xsd" MetadataType="Schema" ID="acca7cc5-47d8-41d4-9d4e-cbd63763f16a" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="SalesForceLib.Models.xsd" MetadataType="Schema" ID="f6c41055-87b3-4a5a-a61a-0d403bbe445c" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
+    <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="849ef993-aa17-462c-b6e4-87be1ad50bcc" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.MainStrategy.xsd" MetadataType="Schema" ID="0fd5e7e5-3c56-49c8-a7ab-bdc60ed98212" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.ModelsWithDB.Experian.xsd" MetadataType="Schema" ID="5b375dda-feb4-44da-9204-367bb4626a09" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.PricingModel.xsd" MetadataType="Schema" ID="2dc57ad8-a25e-4cf7-b4a8-c51677552829" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Strategies.UserManagement.xsd" MetadataType="Schema" ID="4b5a259a-8411-4e3b-b13b-8608cf6dd5b9" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EzBob.Backend.Models1.xsd" MetadataType="Schema" ID="5daa47c6-bfff-49bf-8a43-74ceadf3e87d" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
-    <MetadataFile FileName="Ezbob.Utils.xsd" MetadataType="Schema" ID="849ef993-aa17-462c-b6e4-87be1ad50bcc" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="Ezbob.Backend.Models.ExternalAPI.xsd" MetadataType="Schema" ID="2fe81f49-2312-4b6a-9c40-c790bf30511b" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="DbConstants.xsd" MetadataType="Schema" ID="b355c8f7-b934-4e63-9f0e-8e4ac0ca77c3" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />
     <MetadataFile FileName="EZBob.DatabaseLib.Model.Database.xsd" MetadataType="Schema" ID="c8b2adcb-eb71-4da7-8c24-214fb79bd930" SourceId="1" SourceUrl="net.tcp://localhost:7081/mex" />

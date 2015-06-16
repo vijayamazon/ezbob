@@ -123,21 +123,6 @@
 			};
 		} // FindAccountsToUpdate
 
-		public ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-			return ExecuteSync<UpdateLinkedHmrcPassword>(null, null, sCustomerID, sDisplayName, sPassword, sHash);
-		} // UpdateLinkedHmrcPassword
-
-		public StringActionResult ValidateAndUpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {
-			ValidateAndUpdateLinkedHmrcPassword oInstanse;
-
-			ActionMetaData oMetaData = ExecuteSync(out oInstanse, null, null, sCustomerID, sDisplayName, sPassword, sHash);
-
-			return new StringActionResult {
-				MetaData = oMetaData,
-				Value = oInstanse.ErrorMessage,
-			};
-		} // ValidateAndUpdateLinkedHmrcPassword
-
 		public MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, DateTime? oHistory) {
 			CalculateModelsAndAffordability oInstance;
 

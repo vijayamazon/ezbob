@@ -17,13 +17,11 @@
 	public interface IEzService : // Add base interfaces in the following lines and in alphabetic order. Please.
 		IEzAutomationVerification,
 		IEzServiceBroker,
-		IEzServiceSalesForce
+		IEzServiceSalesForce,
+		IEzServiceVatReturn
 	{
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);
-
-		[OperationContract]
-		ActionMetaData AndRecalculateVatReturnSummaryForAll();
 
 		[OperationContract]
 		ActionMetaData ApprovedUser(int userId, int customerId, decimal loanAmount, int nValidHours, bool isFirst);
@@ -84,9 +82,6 @@
 			bool hasLoans,
 			Medal medalClassification
 			);
-
-		[OperationContract]
-		ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID);
 
 		[OperationContract]
 		ActionMetaData CashTransferred(int customerId, decimal amount, string loanRefNum, bool isFirst);
@@ -318,15 +313,6 @@
 		VatReturnPeriodsActionResult LoadManualVatReturnPeriods(int nCustomerID);
 
 		[OperationContract]
-		VatReturnDataActionResult LoadVatReturnFullData(int nCustomerID, int nCustomerMarketplaceID);
-
-		[OperationContract]
-		VatReturnDataActionResult LoadVatReturnRawData(int nCustomerMarketplaceID);
-
-		[OperationContract]
-		VatReturnDataActionResult LoadVatReturnSummary(int nCustomerID, int nMarketplaceID);
-
-		[OperationContract]
 		ActionMetaData LoanFullyPaid(int customerId, string loanRefNum);
 
 		[OperationContract]
@@ -419,9 +405,6 @@
 		ActionMetaData RejectUser(int userId, int customerId, bool bSendToCustomer);
 
 		[OperationContract]
-		ActionMetaData RemoveManualVatReturnPeriod(Guid oPeriodID);
-
-		[OperationContract]
 		ActionMetaData RenewEbayToken(int userId, int customerId, string marketplaceName, string eBayAddress);
 
 		[OperationContract]
@@ -453,16 +436,7 @@
 			string sSourceRefList,
 			string sVisitTimeList,
 			CampaignSourceRef campaignSourceRef
-			);
-
-		[OperationContract]
-		ElapsedTimeInfoActionResult SaveVatReturnData(
-			int nCustomerMarketplaceID,
-			int nHistoryRecordID,
-			int nSourceID,
-			VatReturnRawData[] oVatReturn,
-			RtiTaxMonthRawData[] oRtiMonths
-			);
+		);
 
 		[OperationContract]
 		ActionMetaData SendPendingMails(int underwriterId, int customerId);
@@ -511,9 +485,6 @@
 		ActionMetaData UpdateGoogleAnalytics(DateTime? oBackfillStartDate, DateTime? oBackfillEndDate);
 
 		[OperationContract]
-		ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
-
-		[OperationContract]
 		ActionMetaData UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep, int userId);
 
 		[OperationContract]
@@ -553,14 +524,6 @@
 
 		[OperationContract]
 		StringActionResult UserUpdateSecurityQuestion(string sEmail, Password oPassword, int nQuestionID, string sAnswer);
-
-		[OperationContract]
-		StringActionResult ValidateAndUpdateLinkedHmrcPassword(
-			string sCustomerID,
-			string sDisplayName,
-			string sPassword,
-			string sHash
-			);
 
 		[OperationContract]
 		BoolActionResult ValidateMobileCode(string phone, string code);

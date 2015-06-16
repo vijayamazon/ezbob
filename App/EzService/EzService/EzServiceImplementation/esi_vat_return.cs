@@ -4,6 +4,9 @@
 	using Ezbob.Backend.Models;
 
 	partial class EzServiceImplementation {
+		public ActionMetaData BackfillLinkedHmrc() {
+			return Execute<BackfillLinkedHmrc>(null, null);
+		} // BackfillLinkedHmrc
 
 		public ActionMetaData CalculateVatReturnSummary(int nCustomerMarketplaceID) {
 			return Execute<CalculateVatReturnSummary>(null, null, nCustomerMarketplaceID);
@@ -44,7 +47,16 @@
 		) {
 			SaveVatReturnData oInstance;
 
-			ActionMetaData oMetaData = ExecuteSync(out oInstance, null, null, nCustomerMarketplaceID, nHistoryRecordID, nSourceID, oVatReturn, oRtiMonths);
+			ActionMetaData oMetaData = ExecuteSync(
+				out oInstance,
+				null,
+				null,
+				nCustomerMarketplaceID,
+				nHistoryRecordID,
+				nSourceID,
+				oVatReturn,
+				oRtiMonths
+			);
 
 			return new ElapsedTimeInfoActionResult {
 				MetaData = oMetaData,
@@ -83,5 +95,29 @@
 			return ExecuteSync<RemoveManualVatReturnPeriod>(null, null, oPeriodID);
 		} // /RemoveManualVatReturnPeriod
 
+		public ActionMetaData UpdateLinkedHmrcPassword(
+			string sCustomerID,
+			string sDisplayName,
+			string sPassword,
+			string sHash
+		) {
+			return ExecuteSync<UpdateLinkedHmrcPassword>(null, null, sCustomerID, sDisplayName, sPassword, sHash);
+		} // UpdateLinkedHmrcPassword
+
+		public StringActionResult ValidateAndUpdateLinkedHmrcPassword(
+			string sCustomerID,
+			string sDisplayName,
+			string sPassword,
+			string sHash
+		) {
+			ValidateAndUpdateLinkedHmrcPassword oInstanse;
+
+			ActionMetaData oMetaData = ExecuteSync(out oInstanse, null, null, sCustomerID, sDisplayName, sPassword, sHash);
+
+			return new StringActionResult {
+				MetaData = oMetaData,
+				Value = oInstanse.ErrorMessage,
+			};
+		} // ValidateAndUpdateLinkedHmrcPassword
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -350,6 +350,7 @@
     <Compile Include="Broker\BrokerUpdatePassword.cs" />
     <Compile Include="Broker\SpBrokerLoadOwnProperties.cs" />
     <Compile Include="VatReturn\AVatReturnStrategy.cs" />
+    <Compile Include="VatReturn\BackfillLinkedHmrc.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_AnnualizedData.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_LoadBusinessesForVatReturnSummary.cs" />
     <Compile Include="VatReturn\CalculateVatReturnSummary\cvrs_SaveVatReturnSummary.cs" />
