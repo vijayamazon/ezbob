@@ -125,10 +125,10 @@
 
 			int column = firstDataColumn;
 
-			column = sheet.SetCellTitle(1, column, "UW note");
+			column = sheet.SetBorder(1, column).SetCellTitle("UW note");
 
 			foreach (string reason in DeepData.AllStandardRejectReasons)
-				column = sheet.SetCellTitle(1, column, reason);
+				column = sheet.SetBorder(1, column).SetCellTitle(reason);
 
 			int row = 2;
 
@@ -137,10 +137,10 @@
 
 				column = firstDataColumn;
 
-				column = sheet.SetCellValue(row, column, dd.ManualRejectReason);
+				column = sheet.SetBorder(row, column).SetCellValue(dd.ManualRejectReason);
 
 				foreach (string reason in DeepData.AllStandardRejectReasons)
-					column = sheet.SetCellValue(row, column, dd.StandardRejectReasons.Contains(reason) ? "yes" : "no");
+					column = sheet.SetBorder(row, column).SetCellValue(dd.StandardRejectReasons.Contains(reason) ? "yes" : "no");
 
 				row++;
 			} // for each customer
@@ -153,12 +153,12 @@
 
 			int column = firstDataColumn;
 
-			column = sheet.SetCellTitle(1, column, "Mp ID");
-			column = sheet.SetCellTitle(1, column, "Mp type");
-			column = sheet.SetCellTitle(1, column, "Last month");
+			column = sheet.SetBorder(1, column).SetCellTitle("Mp ID");
+			column = sheet.SetBorder(1, column).SetCellTitle("Mp type");
+			column = sheet.SetBorder(1, column).SetCellTitle("Last month");
 
 			for (int i = 0; i < 12; i++)
-				column = sheet.SetCellTitle(1, column, i);
+				column = sheet.SetBorder(1, column).SetCellTitle(i);
 
 			int row = 2;
 
@@ -170,24 +170,24 @@
 				if (dd.Marketplaces.Count < 1) {
 					column = firstDataColumn;
 
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
 
 					for (int i = 0; i < 12; i++)
-						column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
 
 					row++;
 				} else {
 					foreach (MarketplaceData mp in dd.Marketplaces.Values) {
 						column = firstDataColumn;
 
-						column = sheet.SetCellValue(row, column, mp.ID, bSetZebra: false, oBgColour: rowColour);
-						column = sheet.SetCellValue(row, column, mp.Type.Name, bSetZebra: false, oBgColour: rowColour);
-						column = sheet.SetCellValue(row, column, mp.TotalsMonth.ToString("MMM-yyyy"), bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(mp.ID, bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(mp.Type.Name, bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(mp.TotalsMonth.ToString("MMM-yyyy"), bSetZebra: false, oBgColour: rowColour);
 
 						for (int i = 0; i < 12; i++)
-							column = sheet.SetCellValue(row, column, mp.GetTurnover(i), bSetZebra: false, oBgColour: rowColour, sNumberFormat: "£#,##0.00");
+							column = sheet.SetBorder(row, column).SetCellValue(mp.GetTurnover(i), bSetZebra: false, oBgColour: rowColour, sNumberFormat: "£#,##0.00");
 
 						row++;
 					} // for each marketplace
@@ -207,7 +207,7 @@
 			int column = firstDataColumn;
 
 			foreach (string reason in DeepData.AllNonAffirmativeTraces)
-				column = sheet.SetCellTitle(1, column, reason);
+				column = sheet.SetBorder(1, column).SetCellTitle(reason);
 
 			int row = 2;
 
@@ -221,7 +221,7 @@
 						? (dd.NonAffirmativeTraces.Contains(reason) ? "yes" : "no")
 						: null;
 
-					column = sheet.SetCellValue(row, column, display);
+					column = sheet.SetBorder(row, column).SetCellValue(display);
 				} // for each
 
 				row++;
@@ -229,24 +229,26 @@
 		} // CreateXlsxNotApprovedReasonsSheet
 
 		private void CreateXlsxLateAccountsSheet() {
-			ExcelWorksheet sheet = Xlsx.CreateSheet("Late accounts", false);
+			ExcelWorksheet sheet = Xlsx.CreateSheet("Late and default accounts", false);
 
 			int firstDataColumn = FillCommonHeaders(sheet);
 
 			int column = firstDataColumn;
 
-			column = sheet.SetCellTitle(1, column, "Total balance");
-			column = sheet.SetCellTitle(1, column, "Max balance");
-			column = sheet.SetCellTitle(1, column, "Total count");
-
-			column = sheet.SetCellTitle(1, column, "Late for approve count");
-			column = sheet.SetCellTitle(1, column, "Total for reject count");
-			column = sheet.SetCellTitle(1, column, "Late for reject count");
-
-			column = sheet.SetCellTitle(1, column, "For reject");
-			column = sheet.SetCellTitle(1, column, "Last update date");
-			column = sheet.SetCellTitle(1, column, "Worst status");
-			column = sheet.SetCellTitle(1, column, "Account codes");
+			column = sheet.SetBorder(1, column).SetCellTitle("Total balance");
+			column = sheet.SetBorder(1, column).SetCellTitle("Max balance");
+			column = sheet.SetBorder(1, column).SetCellTitle("Total count");
+			column = sheet.SetBorder(1, column).SetCellTitle("Late for approve count");
+			column = sheet.SetBorder(1, column).SetCellTitle("Total for reject count");
+			column = sheet.SetBorder(1, column).SetCellTitle("Late for reject count");
+			column = sheet.SetBorder(1, column).SetCellTitle("Personal default count");
+			column = sheet.SetBorder(1, column).SetCellTitle("Late for reject");
+			column = sheet.SetBorder(1, column).SetCellTitle("For reject");
+			column = sheet.SetBorder(1, column).SetCellTitle("Late for reject");
+			column = sheet.SetBorder(1, column).SetCellTitle("Personal default");
+			column = sheet.SetBorder(1, column).SetCellTitle("Last update date");
+			column = sheet.SetBorder(1, column).SetCellTitle("Worst status");
+			column = sheet.SetBorder(1, column).SetCellTitle("Account codes");
 
 			int row = 2;
 
@@ -258,18 +260,23 @@
 				column = firstDataColumn;
 
 				if (dd.CaisAccounts.Count < 1) {
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
 
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
 
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
-					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetBorder(row, column).SetCellValue(null, bSetZebra: false, oBgColour: rowColour);
 
 					row++;
 				} else {
@@ -281,13 +288,14 @@
 						dd.CaisAccounts.Count.LateForApprove,
 						dd.CaisAccounts.Count.ForReject,
 						dd.CaisAccounts.Count.LateForReject,
+						dd.CaisAccounts.Count.PersonalDefault,
 					};
 
 					for (int i = 0; i < values.Count; i++) {
 						var range = sheet.Cells[row, column, row + dd.CaisAccounts.Count - 1, column];
 						range.Merge = true;
 
-						column = sheet.SetCellValue(row, column, values[i], bSetZebra: false);
+						column = range.SetBorder().SetCellValue(values[i], bSetZebra: false);
 
 						range.Style.Fill.PatternType = ExcelFillStyle.Solid;
 						range.Style.Fill.BackgroundColor.SetColor(rowColour);
@@ -299,10 +307,14 @@
 					foreach (CaisAccount ca in dd.CaisAccounts) {
 						column = firstAccountColumn;
 
-						column = sheet.SetCellValue(row, column, ca.IsForReject ? "yes" : "no", bSetZebra: false, oBgColour: rowColour);
-						column = sheet.SetCellValue(row, column, ca.LastUpdatedDate.ToString("d-MMM-yyyy"), bSetZebra: false, oBgColour: rowColour);
-						column = sheet.SetCellValue(row, column, ca.WorstStatus, bSetZebra: false, oBgColour: rowColour);
-						column = sheet.SetCellValue(row, column, ca.AccountStatusCodes.Replace(" ", "-"), bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(ca.IsLateForApprove ? "yes" : "no", bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(ca.IsForReject ? "yes" : "no", bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(ca.IsLateForReject ? "yes" : "no", bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(ca.IsPersonalDefault ? "yes" : "no", bSetZebra: false, oBgColour: rowColour);
+
+						column = sheet.SetBorder(row, column).SetCellValue(ca.LastUpdatedDate.ToString("d-MMM-yyyy"), bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(ca.WorstStatus, bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetBorder(row, column).SetCellValue(ca.AccountStatusCodes.Replace(' ', '-'), bSetZebra: false, oBgColour: rowColour);
 
 						row++;
 					} // for each marketplace
@@ -318,13 +330,13 @@
 			const int row = 1;
 			int column = 1;
 
-			column = sheet.SetCellTitle(row, column, "Customer ID");
-			column = sheet.SetCellTitle(row, column, "Cash request ID");
-			column = sheet.SetCellTitle(row, column, "Underwriter");
-			column = sheet.SetCellTitle(row, column, "Decision time");
-			column = sheet.SetCellTitle(row, column, "Consumer score");
-			column = sheet.SetCellTitle(row, column, "Decision");
-			column = sheet.SetCellTitle(row, column, "Auto approve");
+			column = sheet.SetBorder(row, column).SetCellTitle("Customer ID");
+			column = sheet.SetBorder(row, column).SetCellTitle("Cash request ID");
+			column = sheet.SetBorder(row, column).SetCellTitle("Underwriter");
+			column = sheet.SetBorder(row, column).SetCellTitle("Decision time");
+			column = sheet.SetBorder(row, column).SetCellTitle("Consumer score");
+			column = sheet.SetBorder(row, column).SetCellTitle("Decision");
+			column = sheet.SetBorder(row, column).SetCellTitle("Auto approve");
 
 			return column;
 		} // FillCommonHeaders
@@ -352,14 +364,14 @@
 
 			for (int i = 0; i < values.Count; i++) {
 				if (rowSpan <= 1) {
-					column = sheet.SetCellValue(row, column, values[i], bSetZebra: zebra, oBgColour: bgColour);
+					column = sheet.SetBorder(row, column).SetCellValue(values[i], bSetZebra: zebra, oBgColour: bgColour);
 					continue;
 				} // if
 
 				var range = sheet.Cells[row, column, row + rowSpan - 1, column];
 				range.Merge = true;
 
-				column = sheet.SetCellValue(row, column, values[i], bSetZebra: false);
+				column = range.SetBorder().SetCellValue(values[i], bSetZebra: false);
 
 				range.Style.Fill.PatternType = ExcelFillStyle.Solid;
 				range.Style.Fill.BackgroundColor.SetColor(bgColour ?? Color.White);

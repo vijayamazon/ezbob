@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using ConfigManager;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
@@ -23,22 +24,8 @@
 		[FieldName("CurrentDefBalance")]
 		public int? DBCurrentDefBalance { get; set; }
 
-		public int? Balance {
-			get {
-				if ((DBBalance == null) && (DBCurrentDefBalance == null))
-					return null;
-
-				if ((DBBalance != null) && (DBCurrentDefBalance == null))
-					return DBBalance;
-
-				if ((DBBalance == null) && (DBCurrentDefBalance != null))
-					return DBCurrentDefBalance;
-
-				// ReSharper disable PossibleInvalidOperationException
-				// Null check can be skipped because of previous conditions.
-				return Math.Max(DBBalance.Value, DBCurrentDefBalance.Value);
-				// ReSharper restore PossibleInvalidOperationException
-			} // get
+		public int Balance {
+			get { return Math.Max(DBBalance ?? 0, DBCurrentDefBalance ?? 0); } // get
 		} // Balance
 
 		public bool IsLateForApprove {
@@ -61,13 +48,8 @@
 
 		public bool IsLateForReject {
 			get {
-				if (this.isLateForReject != null)
-					return this.isLateForReject.Value;
-
-				this.isLateForReject = false;
-
 				if (!IsForReject)
-					return this.isLateForReject.Value;
+					return false;
 
 				int nMonthCount = Math.Min(CurrentValues.Instance.Reject_LateLastMonthsNum, AccountStatusCodes.Length);
 
@@ -82,17 +64,30 @@
 
 					int.TryParse(status.ToString(CultureInfo.InvariantCulture), out nStatus);
 
-					if (nStatus > CurrentValues.Instance.RejectionLastValidLate) {
-						this.isLateForReject = true;
-						break;
-					} // if
+					if (nStatus > CurrentValues.Instance.RejectionLastValidLate)
+						return true;
 				} // for i
 
-				return this.isLateForReject.Value;
+				return false;
 			} // get
 		} // IsLateForReject
 
-		private bool? isLateForReject;
+		public bool IsPersonalDefault {
+			get {
+				var ecdca = new ExperianConsumerDataCaisAccounts {
+					AccountStatusCodes = AccountStatusCodes,
+					Balance = DBBalance,
+					CurrentDefBalance = DBCurrentDefBalance,
+					LastUpdatedDate = LastUpdatedDate,
+					MatchTo = MatchTo,
+				};
+
+				return ecdca.IsPersonalDefault(
+					CurrentValues.Instance.Reject_Defaults_Amount,
+					DecisionTime.AddMonths(-1 * CurrentValues.Instance.Reject_Defaults_MonthsNum)
+				);
+			} // get
+		} // IsPersonalDefault
 
 		private static readonly SortedSet<char> hasLoans = new SortedSet<char>(new [] { '0', '1', '2', '3', });
 		private static readonly SortedSet<char> hasNoLoans = new SortedSet<char>(new [] { '0', '1', '2', });

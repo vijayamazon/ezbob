@@ -59,6 +59,10 @@
 				get { return this.list.data.Count(ca => ca.IsForReject); } // get
 			} // ForReject
 
+			public int PersonalDefault {
+				get { return this.list.data.Count(ca => ca.IsPersonalDefault); } // get
+			} // PersonalDefault
+
 			private readonly CaisAccountList list;
 		} // CountData
 

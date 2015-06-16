@@ -10,6 +10,15 @@
 		public static readonly Color ZebraOddBgColour = Color.AliceBlue;
 		public static readonly Color ZebraEvenBgColour = Color.White;
 
+		public static ExcelRange SetBorder(this ExcelRange range, ExcelBorderStyle? style = null, Color? colour = null) {
+			if (range == null)
+				return null;
+
+			range.Style.Border.BorderAround(style ?? ExcelBorderStyle.Thin, colour ?? Color.Black);
+
+			return range;
+		} // SetBorder
+
 		public static int SetCellTitle(this ExcelRange range, object oRaw) {
 			return SetCellValue(
 				range,
@@ -79,7 +88,7 @@
 			if (!string.IsNullOrWhiteSpace(sNumberFormat))
 				oCell.Style.Numberformat.Format = sNumberFormat;
 
-			return oCell.Start.Column + 1;
+			return oCell.End.Column + 1;
 		} // SetCellValue
 	} // class ExcelRangeExt
 } // namespace

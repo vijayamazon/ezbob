@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.ExcelExt {
 	using System.Drawing;
 	using OfficeOpenXml;
+	using OfficeOpenXml.Style;
 
 	public static class ExcelWorksheetExt {
 		public static readonly Color ColumnTitleBgColour = Color.FromArgb(0x67, 0xc1, 0x0b);
@@ -27,6 +28,28 @@
 
 			return nColumn;
 		} // SetRowTitles
+
+		public static ExcelRange SetBorder(
+			this ExcelWorksheet oSheet,
+			int nRow,
+			int nColumn,
+			ExcelBorderStyle? style = null,
+			Color? colour = null
+		) {
+			return oSheet == null ? null : oSheet.Cells[nRow, nColumn].SetBorder(style, colour);
+		} // SetBorder
+
+		public static ExcelRange SetBorder(
+			this ExcelWorksheet oSheet,
+			int nRow,
+			int nColumn,
+			int nRowEnd,
+			int nColumnEnd,
+			ExcelBorderStyle? style = null,
+			Color? colour = null
+		) {
+			return oSheet == null ? null : oSheet.Cells[nRow, nColumn, nRowEnd, nColumnEnd].SetBorder(style, colour);
+		} // SetBorder
 
 		public static int SetCellValue(
 			this ExcelWorksheet oSheet,
