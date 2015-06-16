@@ -235,13 +235,18 @@
 
 			int column = firstDataColumn;
 
-			column = sheet.SetCellTitle(1, column, "Total count");
-			column = sheet.SetCellTitle(1, column, "Late count");
 			column = sheet.SetCellTitle(1, column, "Total balance");
 			column = sheet.SetCellTitle(1, column, "Max balance");
+			column = sheet.SetCellTitle(1, column, "Total count");
 
+			column = sheet.SetCellTitle(1, column, "Late for approve count");
+			column = sheet.SetCellTitle(1, column, "Total for reject count");
+			column = sheet.SetCellTitle(1, column, "Late for reject count");
+
+			column = sheet.SetCellTitle(1, column, "For reject");
 			column = sheet.SetCellTitle(1, column, "Last update date");
 			column = sheet.SetCellTitle(1, column, "Worst status");
+			column = sheet.SetCellTitle(1, column, "Account codes");
 
 			int row = 2;
 
@@ -256,18 +261,26 @@
 					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
 					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
 					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
 					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
 
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
+					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
 					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
 					column = sheet.SetCellValue(row, column, null, bSetZebra: false, oBgColour: rowColour);
 
 					row++;
 				} else {
 					var values = new List<object> {
-						dd.CaisAccounts.Count.Total,
-						dd.CaisAccounts.Count.Late,
 						dd.CaisAccounts.Balance.Total,
 						dd.CaisAccounts.Balance.Max,
+						dd.CaisAccounts.Count.Total,
+
+						dd.CaisAccounts.Count.LateForApprove,
+						dd.CaisAccounts.Count.ForReject,
+						dd.CaisAccounts.Count.LateForReject,
 					};
 
 					for (int i = 0; i < values.Count; i++) {
@@ -286,8 +299,10 @@
 					foreach (CaisAccount ca in dd.CaisAccounts) {
 						column = firstAccountColumn;
 
+						column = sheet.SetCellValue(row, column, ca.IsForReject ? "yes" : "no", bSetZebra: false, oBgColour: rowColour);
 						column = sheet.SetCellValue(row, column, ca.LastUpdatedDate.ToString("d-MMM-yyyy"), bSetZebra: false, oBgColour: rowColour);
 						column = sheet.SetCellValue(row, column, ca.WorstStatus, bSetZebra: false, oBgColour: rowColour);
+						column = sheet.SetCellValue(row, column, ca.AccountStatusCodes.Replace(" ", "-"), bSetZebra: false, oBgColour: rowColour);
 
 						row++;
 					} // for each marketplace

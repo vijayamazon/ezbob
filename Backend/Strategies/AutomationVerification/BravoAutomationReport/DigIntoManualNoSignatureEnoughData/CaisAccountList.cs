@@ -47,9 +47,17 @@
 				get { return this.list.data.Count; } // get
 			} // Total
 
-			public int Late {
-				get { return this.list.data.Count(ca => ca.IsLate); } // get
-			} // Late
+			public int LateForApprove {
+				get { return this.list.data.Count(ca => ca.IsLateForApprove); } // get
+			} // LateForApprove
+
+			public int LateForReject {
+				get { return this.list.data.Count(ca => ca.IsLateForReject); } // get
+			} // LateForReject
+
+			public int ForReject {
+				get { return this.list.data.Count(ca => ca.IsForReject); } // get
+			} // ForReject
 
 			private readonly CaisAccountList list;
 		} // CountData

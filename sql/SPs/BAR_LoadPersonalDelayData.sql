@@ -53,7 +53,9 @@ BEGIN
 		cais.Balance,
 		cais.CurrentDefBalance,
 		cais.LastUpdatedDate,
-		DecisionTime = CONVERT(DATETIME, NULL)
+		DecisionTime = CONVERT(DATETIME, NULL),
+		cais.AccountStatusCodes,
+		cais.MatchTo
 	INTO
 		#res
 	FROM
@@ -74,14 +76,16 @@ BEGIN
 
 	WHILE @@FETCH_STATUS = 0
 	BEGIN
-		INSERT INTO #res (CustomerID, WorstStatus, Balance, CurrentDefBalance, LastUpdatedDate, DecisionTime)
+		INSERT INTO #res (CustomerID, WorstStatus, Balance, CurrentDefBalance, LastUpdatedDate, DecisionTime, AccountStatusCodes, MatchTo)
 		SELECT
 			@CustomerID,
 			r.WorstStatus,
 			r.Balance,
 			r.CurrentDefBalance,
 			r.LastUpdatedDate,
-			@Now
+			@Now,
+			r.AccountStatusCodes,
+			r.MatchTo
 		FROM
 			ExperianConsumerDataCais r
 		WHERE
@@ -106,7 +110,9 @@ BEGIN
 		r.CurrentDefBalance,
 		r.LastUpdatedDate,
 		r.DecisionTime,
-		LoanCount = (SELECT COUNT(*) FROM Loan l WHERE l.CustomerId = r.CustomerID AND l.[Date] < r.DecisionTime)
+		LoanCount = (SELECT COUNT(*) FROM Loan l WHERE l.CustomerId = r.CustomerID AND l.[Date] < r.DecisionTime),
+		r.AccountStatusCodes,
+		r.MatchTo
 	FROM
 		#res r
 	ORDER BY
