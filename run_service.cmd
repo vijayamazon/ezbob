@@ -3,6 +3,8 @@
 rem Kill all running EzServiceHost instances
 taskkill /IM EzServiceHost.exe
 
+timeout /T 3
+
 set CUR_DISK=c:
 
 %CUR_DISK%
