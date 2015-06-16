@@ -11,22 +11,25 @@
 		public int LoanID { get; set; }  // loan ID to re-schedule
 
 		[DataMember]
-		public Type LKind { get; set; }  // loan old/new
-
-		[DataMember]
 		public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
 
-		[DataMember]
+		//[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type 
 
-		[DataMember] // for info only
-        public decimal? LoanInterestRate { get; set; } // original loans' Interest Rate
+		//[DataMember] // for info only
+		//public decimal LoanInterestRate { get; set; } // original loans' Interest Rate
 
 		[DataMember]
-		public int IntervalsNum { get; set; }  // calculated repayment intervals number 
-
+		public int IntervalsNum { get; set; }  // calculated repayment intervals number in months
+		
 		[DataMember]
-		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planned close date
+		public int IntervalsNumWeeks { get; set; }  // calculated repayment intervals number in weeks
+
+		//[DataMember]
+		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planning close date
+
+	//	[DataMember]
+		public DateTime? RescheduledLoanCloseDate { get; set; } // loan re-scheduled planning close date 
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");

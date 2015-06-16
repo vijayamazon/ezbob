@@ -191,16 +191,5 @@
 			DateTime? periodEndDate = null
 		);
 
-
-
-
-		//public virtual List<ScheduledItemWithAmountDue> RescheduleToIntervals(ReschedulingArgument reschedulingArgument, bool writeToLog = true) {
-		//	Console.WriteLine("intervals for balance {0} is {1}, loan original close date ('maturity date'): {2}, reschedule date: {3}, intervat type: {4}",
-		//			reschedulingArgument.ReschedulingBalance, WorkingModel.RepaymentCount, reschedulingArgument.LoanCloseDate, reschedulingArgument.ReschedulingDate
-		//			,reschedulingArgument.ReschedulingRepaymentIntervalType.ToString());
-
-		//	return new RescheduleToIntervalsMethod(this, reschedulingArgument, writeToLog).Execute();
-		//} // RescheduleToIntervals
-
 	} // class LoanCalculator
 } // namespace

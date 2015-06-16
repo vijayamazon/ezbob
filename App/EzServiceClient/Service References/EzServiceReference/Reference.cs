@@ -1785,23 +1785,6 @@ namespace ServiceClientProxy.EzServiceReference {
         }
     }
     
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="RepaymentIntervalTypes", Namespace="http://schemas.datacontract.org/2004/07/DbConstants")]
-    public enum RepaymentIntervalTypes : int {
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Month = 0,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Day = 1,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        Week = 7,
-        
-        [System.Runtime.Serialization.EnumMemberAttribute()]
-        TenDays = 10,
-    }
-    
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="PricingModelModel", Namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel")]
@@ -2514,6 +2497,23 @@ namespace ServiceClientProxy.EzServiceReference {
                 propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
             }
         }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="RepaymentIntervalTypes", Namespace="http://schemas.datacontract.org/2004/07/DbConstants")]
+    public enum RepaymentIntervalTypes : int {
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Month = 0,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Day = 1,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        Week = 7,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        TenDays = 10,
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]

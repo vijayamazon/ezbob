@@ -184,24 +184,29 @@
 
 			if (statusesHistory.Count > 0) {
 
-				//		statusesHistory.ForEach(xx => Log.Debug(xx));
+//statusesHistory.ForEach(xx => Log.Debug(xx));
+
+				List<CustomerStatusChange> badStarts = statusesHistory.Where(s => this.badStatusesNames.Contains<string>(s.NewStatus.ToString())).ToList();
+
+				if(badStarts.Count == 0)
+					return;
 
 				List<BadPeriod> badsList = new List<BadPeriod>();
 
-				var badStarts = statusesHistory.Where(s => this.badStatusesNames.Contains<string>(s.NewStatus.ToString()))
-					.ToList();
+//badStarts.ForEach(b => Console.WriteLine("started===================" + b));
 
-						badStarts.ForEach(b => Console.WriteLine("started===================" + b));
+				List<CustomerStatusChange> badEnds = statusesHistory.Where(s => this.badStatusesNames.Contains(s.OldStatus.ToString())).ToList();
 
-				var badEnds = statusesHistory.Where(s => this.badStatusesNames.Contains(s.OldStatus.ToString())).ToList();
+				//Console.WriteLine("ends count==========" + badEnds.Count);
+//badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
 
-				badEnds.Add(new CustomerStatusChange() {
-					ChangeDate = StateDate,
-					OldStatus = badEnds.Last().NewStatus,
-					NewStatus = badEnds.Last().NewStatus
-				});
+				CustomerStatusChange lastEnd = new CustomerStatusChange() {ChangeDate = StateDate};
+				if (badEnds.Count > 0) {
+					lastEnd.OldStatus = badEnds.Last().NewStatus;
+					lastEnd.NewStatus = lastEnd.OldStatus;
+				}
 
-					badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
+				badEnds.Add(lastEnd);
 
 				if (badStarts.Count > 0) {
 					foreach (CustomerStatusChange s in badStarts) {

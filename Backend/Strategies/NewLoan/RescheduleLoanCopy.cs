@@ -9,12 +9,11 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
 	using StructureMap;
 
-	public class RescheduleLoan<T> : AStrategy {
+	public class RescheduleLoanCopy<T> : AStrategy {
 
-		public RescheduleLoan(T t, ReschedulingArgument reschedulingArgument) {
+		public RescheduleLoanCopy(T t, ReschedulingArgument reschedulingArgument) {
 
 			this.ReschedulingArguments = reschedulingArgument;
 			this.Result = new ReschedulingResult();
@@ -60,16 +59,16 @@
 				}
 
 				if (this.ReschedulingArguments.RescheduleIn) {
-
 					// 3. intervals number
-					this.Result.IntervalsNum = MiscUtils.DateDiffInMonths(this.ReschedulingArguments.ReschedulingDate, this.Result.LoanCloseDate);
-					this.Result.IntervalsNumWeeks = MiscUtils.DateDiffInWeeks(this.ReschedulingArguments.ReschedulingDate, this.Result.LoanCloseDate);
+					if (this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month)
+						this.Result.IntervalsNum = MiscUtils.DateDiffInMonths(this.ReschedulingArguments.ReschedulingDate, this.Result.LoanCloseDate);
+
+					if (this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Week)
+						this.Result.IntervalsNum = MiscUtils.DateDiffInWeeks(this.ReschedulingArguments.ReschedulingDate, this.Result.LoanCloseDate);
 
 				} else {	// OUT
-
 					// 3. intervals number
 					this.Result.IntervalsNum = (int)Math.Ceiling((decimal)(this.Result.ReschedulingBalance / this.ReschedulingArguments.PaymentPerInterval));
-					this.Result.IntervalsNumWeeks = MiscUtils.DateDiffInWeeks(this.ReschedulingArguments.ReschedulingDate, this.ReschedulingArguments.ReschedulingDate.AddMonths(this.Result.IntervalsNum));
 				}
 
 				if (!this.ReschedulingArguments.SaveToDB)
@@ -80,7 +79,7 @@
 				LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
 					LoanIssueTime = this.ReschedulingArguments.ReschedulingDate,
 					LoanAmount = this.Result.ReschedulingBalance,
-					RepaymentCount = (this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month)?this.Result.IntervalsNum:this.Result.IntervalsNumWeeks,
+					RepaymentCount = this.Result.IntervalsNum,
 					MonthlyInterestRate = this.tLoan.InterestRate,
 					InterestOnlyRepayments = 0,
 					RepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType
@@ -104,6 +103,8 @@
 
 				this.Result.RescheduledLoanCloseDate = shedules.OrderBy(s => s.Date).Last().Date;
 
+				
+
 				LoanRescheduleSave(shedules);
 				NLRescheduleSave(shedules);
 
@@ -124,7 +125,7 @@
 
 				// loan close date ('maturity date')
 				this.Result.LoanCloseDate = this.tLoan.Schedule.OrderBy(s => s.Date).Last().Date;
-		
+
 				var loanState = new LoanState<Loan>(this.tLoan, this.ReschedulingArguments.LoanID, this.ReschedulingArguments.ReschedulingDate);
 				// 1. calculator model
 				// load loan state in a new calculator format
@@ -165,17 +166,6 @@
 			//shedules.ForEach(s => Log.Debug(s.ToString()));
 
 			if (this.tLoan != null) {
-				
-				/*	
-				 * LoanChangesHistory - saving loan state in json - before schedule modifications in EditLoanController 
-				 * 
-				 * var historyItem = new LoanChangesHistory {
-						Data = _loanModelBuilder.BuildModel(loan).ToJSON(),
-						Date = DateTime.UtcNow,
-						Loan = loan,
-						User = _context.User
-					};
-					_history.Save(historyItem);*/
 
 				// DB update/replace
 				// remove future schedules

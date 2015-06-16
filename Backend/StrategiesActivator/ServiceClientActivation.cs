@@ -1049,13 +1049,13 @@ GeneratePassword broker-contact-email@example.com password-itself
 		} // QuickOffer
 
 	    [Activation]
-		private void RescheduleInLoan() {
+		private void RescheduleLoan() {
 	        int loanId;
 	        int userId;
 	        int customerId;
             if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId))
 	        {
-	            log.Msg("Usage: RescheduleInLoan <Loan Id> <Customer Id> <User Id>");
+				log.Msg("Usage: RescheduleLoan <Loan Id> <Customer Id> <User Id>");
 	            return;
 	        }
   
@@ -1067,7 +1067,8 @@ GeneratePassword broker-contact-email@example.com password-itself
             reModel.SaveToDB = false;
             reModel.ReschedulingDate = DateTime.UtcNow;
             reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-		    reModel.RescheduleIn = true;
+		    reModel.RescheduleIn = false; // true;
+		    reModel.PaymentPerInterval = 300;
 	
 			var res= this.serviceClient.RescheduleLoan(userId, customerId, reModel);
 			log.Msg(res.Value);

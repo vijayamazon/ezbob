@@ -231,7 +231,15 @@
 			ServiceClient client = new ServiceClient();
 			ReschedulingActionResult result = client.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
-          //  Console.WriteLine(result.Value);
+
+			// if save=true, save LoanChangesHistory (loan state before changes) before new schedule
+			/*	var historyItem = new LoanChangesHistory {
+					Data = _loanModelBuilder.BuildModel(loan).ToJSON(),
+					Date = DateTime.UtcNow,
+					Loan = loan,
+					User = _context.User
+				};
+				_history.Save(historyItem);*/
 
 			// loan options
 			//if (save) {
@@ -259,8 +267,7 @@
 			//	}
 			//}
 
-	        //return Json(result.Value);
-	        return null;
+	        return Json(result.Value);
         }
 
 	}

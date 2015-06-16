@@ -7,7 +7,9 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
@@ -888,13 +890,12 @@
 
 		[Test]
 		public void TestLoanState() {
-			int loanID = 3554;   
+			int loanID = 3607;   
 			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
 			try {
 				s.Execute();
 				LoanCalculatorModel calculatorModel = s.CalcModel;
 				Console.WriteLine(calculatorModel.ToString());
-			//	Console.WriteLine(calculatorModel.BadPeriods.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
@@ -902,8 +903,8 @@
 
 
 		[Test]
-		public void TestRescheduleInLoan() {
-			int loanID = 3734;
+		public void TestRescheduleLoan() {
+			int loanID = 3354;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
@@ -917,19 +918,20 @@
 			var s = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s.Execute();
-				m_oLog.Debug("RESULT FOR MONTHS");
+				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
 			
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+			// OUT loan
+			reModel.RescheduleIn = false;
+			reModel.PaymentPerInterval = 500m;
 
-			var sw = new RescheduleLoan<Loan>(loan, reModel);
 			try {
-				sw.Execute();
-				m_oLog.Debug("RESULT FOR WEEKS");
-				m_oLog.Debug(sw.Result.ToString());
+				s.Execute();
+				m_oLog.Debug("RESULT FOR OUT");
+				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
@@ -969,7 +971,7 @@
 			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
 
 			// new schedules
-			/*try {
+			try {
 				//var shedules = calculator.CreateSchedule();
 			} catch (InterestOnlyMonthsCountException interestOnlyMonthsCountException) {
 				Console.WriteLine(interestOnlyMonthsCountException);
@@ -981,12 +983,12 @@
 				Console.WriteLine(negativeRepaymentCountException);
 			} catch (NegativeInterestOnlyRepaymentCountException negativeInterestOnlyRepaymentCountException) {
 				Console.WriteLine(negativeInterestOnlyRepaymentCountException);
-			}*/
+			}
 
 			Console.WriteLine();
-
 			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
 		}
+		
 
 	}
 }

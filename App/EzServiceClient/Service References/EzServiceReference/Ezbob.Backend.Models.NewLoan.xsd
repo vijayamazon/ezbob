@@ -2,7 +2,6 @@
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/System" />
   <xs:complexType name="NL_Model">
     <xs:sequence>
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
@@ -68,12 +67,9 @@
   <xs:complexType name="ReschedulingResult">
     <xs:sequence>
       <xs:element minOccurs="0" name="IntervalsNum" type="xs:int" />
-      <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/System" minOccurs="0" name="LKind" nillable="true" type="q19:Type" />
-      <xs:element minOccurs="0" name="LoanCloseDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="IntervalsNumWeeks" type="xs:int" />
       <xs:element minOccurs="0" name="LoanID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanInterestRate" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="ReschedulingBalance" type="xs:decimal" />
-      <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q20:RepaymentIntervalTypes" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ReschedulingResult" nillable="true" type="tns:ReschedulingResult" />

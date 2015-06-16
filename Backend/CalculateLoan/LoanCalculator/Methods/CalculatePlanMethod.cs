@@ -36,26 +36,26 @@
 
 			// 
 			for (int i = 0; i < WorkingModel.Schedule.Count; i++) {
-				ScheduledItem sp = WorkingModel.Schedule[i];
+				ScheduledItem scheduleItem = WorkingModel.Schedule[i];
 
 				// decrease "one day" loan status entries by schedule planned Principal to be paid at schedule planned Date
-				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(dd => dd.Date > sp.Date))
-					cls.OpenPrincipal -= sp.Principal;
+				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(dd => dd.Date > scheduleItem.Date))
+					cls.OpenPrincipal -= scheduleItem.Principal;
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(cls => preScheduleEnd < cls.Date && cls.Date <= sp.Date)) {
+				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(cls => preScheduleEnd < cls.Date && cls.Date <= scheduleItem.Date)) {
 					cls.DailyInterestRate = Calculator.GetDailyInterestRate(
 						cls.Date,
-						sp.InterestRate,
+						scheduleItem.InterestRate,
 						false, // considerBadPeriods
 						true, // ???? TODO check the value for considerFreezeInterestPeriod
 						preScheduleEnd,
-						sp.Date
+						scheduleItem.Date
 					);
 				} // for each
 
-				prevTime = sp.Date;
+				prevTime = scheduleItem.Date;
 			} // for each scheduled payment
 
 			var result = new List<Repayment>(
