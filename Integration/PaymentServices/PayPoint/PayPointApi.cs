@@ -272,16 +272,19 @@
 
 		public bool ApplyLateCharge(decimal amount, int loanId, int loanChargesTypeId)
 		{
+			DateTime now = DateTime.UtcNow;
 			var loan = _loans.Get(loanId);
 			var loanOptions = this.loanOptionsRepository.GetByLoanId(loanId);
 			if (loanOptions != null && loanOptions.AutoLateFees == false) {
-				Log.InfoFormat("not applying late fee for loan {0} - auto late fee is disabled", loanId);
-				return false;
+				if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
+					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) || 
+					(!loanOptions.StopLateFeeFromDate.HasValue && !loanOptions.StopLateFeeToDate.HasValue)) {
+					Log.InfoFormat("not applying late fee for loan {0} - auto late fee is disabled", loanId);
+					return false;
+				}
 			}
-			var date = DateTime.UtcNow;
-
 			
-			return ApplyLateCharge(loan, amount, loanChargesTypeId, date);
+			return ApplyLateCharge(loan, amount, loanChargesTypeId, now);
 		}
 
 		public bool ApplyLateCharge(Loan loan, decimal amount, int loanChargesTypeId, DateTime date)

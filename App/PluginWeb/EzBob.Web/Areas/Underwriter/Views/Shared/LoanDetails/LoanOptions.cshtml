@@ -7,15 +7,44 @@
         <div class="modal-body">
             <div class="row">
                 <div class="span4">
+					<div>
+						* Auto charging is <b><%- autoChageEnabled ? 'enabled' : 'disabled' %></b> 
+						<%if(stopAutoChargeDate){
+							print('since ' + stopAutoChargeDate);
+						}%>
+					</div>
+					<div>
+						* Autotomatic late fees assigning is <b><%-autoLateFeeEnabled ? 'enabled' : 'disabled' %></b>
+						<%if(stopLateFeeFromDate && stopLateFeeToDate) {
+							print('between ' + stopLateFeeFromDate + ' and ' + stopLateFeeToDate);
+						}%>
+					</div>
                     <div class="control-group">
-                        <div class="controls">
+                        <div class="controls hide">
                             <label for="AutoPayment" class="checkbox">
-                                <input id="AutoPayment" name="AutoPayment" type="checkbox" value="true" />Activate automatic money charging
-                            </label>
+                                <input id="AutoPayment" name="AutoPayment" type="checkbox" value="true" /> 
+								Activate automatic money charging  
+								<div class="input-group">from
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									<input class="form-control date-input" id="StopAutoChargeDate" name="StopAutoChargeDate" type="text" />
+								</div>
+							</label>
                         </div>
-						<div class="controls">
+						<div class="controls hide">
 							<label for="AutoLateFees" class="checkbox">
-								<input id="AutoLateFees" name="AutoLateFees" type="checkbox" value="true" />Activate automatic late fees assigning
+								<input id="AutoLateFees" name="AutoLateFees" type="checkbox" value="true" />
+								Activate automatic late fees assigning
+								<div class="input-group">
+									from
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									<input class="form-control date-input" id="StopLateFeeFromDate" name="StopLateFeeFromDate" type="text" />
+								</div>
+								<div class="input-group">
+									to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									<input class="form-control date-input" id="StopLateFeeToDate" name="StopLateFeeToDate" type="text" />
+								</div>
+
 							</label>
 						</div>
                         <div class="controls">

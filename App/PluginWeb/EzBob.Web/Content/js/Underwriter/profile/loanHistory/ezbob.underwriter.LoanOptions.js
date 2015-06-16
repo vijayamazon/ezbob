@@ -28,34 +28,50 @@ EzBob.Underwriter.LoanOptionsView = Backbone.Marionette.ItemView.extend({
 		return this;
 	},
 
+	ui: {
+		dateInput: '.date-input'
+	},
+
 	bindings: {
-	    Id: {
-	        selector: "input[name='Id']"
-	    },
-	    LoanId: {
-	        selector: "input[name='LoanId']"
-	    },
-	    AutoPayment: {
-	        selector: "input[name='AutoPayment']"
-	    },
-	    ReductionFee: {
-	        selector: "input[name='ReductionFee']"
-	    },
-	    LatePaymentNotification: {
-	        selector: "input[name='LatePaymentNotification']"
-	    },
-	    EmailSendingAllowed: {
-	        selector: "#EmailSendingAllowed"
-	    },
-	    MailSendingAllowed: {
-	        selector: "#MailSendingAllowed"
-	    },
-	    SmsSendingAllowed: {
-	        selector: "#SmsSendingAllowed"
-	    },
-	    AutoLateFees: {
-	    	selector: "input[name='AutoLateFees']"
-	    },
+		Id: {
+			selector: "input[name='Id']"
+		},
+		LoanId: {
+			selector: "input[name='LoanId']"
+		},
+		AutoPayment: {
+			selector: "input[name='AutoPayment']"
+		},
+		StopAutoChargeDate: {
+			selector: "input[name='StopAutoChargeDate']",
+			converter: EzBob.BindingConverters.dateTime
+		},
+		ReductionFee: {
+			selector: "input[name='ReductionFee']"
+		},
+		LatePaymentNotification: {
+			selector: "input[name='LatePaymentNotification']"
+		},
+		EmailSendingAllowed: {
+			selector: "#EmailSendingAllowed"
+		},
+		MailSendingAllowed: {
+			selector: "#MailSendingAllowed"
+		},
+		SmsSendingAllowed: {
+			selector: "#SmsSendingAllowed"
+		},
+		AutoLateFees: {
+			selector: "input[name='AutoLateFees']"
+		},
+		StopLateFeeFromDate: {
+			selector: "input[name='StopLateFeeFromDate']",
+			converter: EzBob.BindingConverters.dateTime
+		},
+		StopLateFeeToDate: {
+			selector: "input[name='StopLateFeeToDate']",
+			converter: EzBob.BindingConverters.dateTime
+		},
 	},
 
 	events: {
@@ -103,10 +119,35 @@ EzBob.Underwriter.LoanOptionsView = Backbone.Marionette.ItemView.extend({
 			keyboard: false,
 			width: 700
 		};
+		this.loanOptions.set('StopLateFeeFromDate', this.getDate(this.loanOptions.get('StopLateFeeFromDate')));
+		this.loanOptions.set('StopLateFeeToDate', this.getDate(this.loanOptions.get('StopLateFeeToDate')));
+		this.loanOptions.set('StopAutoChargeDate', this.getDate(this.loanOptions.get('StopAutoChargeDate')));
 
 		this.modelBinder.bind(this.loanOptions, this.el, this.bindings);
 		this.$el.find("#CaisAccountStatus option[value='" + (this.loanOptions.get('CaisAccountStatus')) + "']").attr('selected', 'selected');
 		this.$el.find("#cais-flags option[value='" + (this.loanOptions.get('ManualCaisFlag')) + "']").attr('selected', 'selected');
+		this.ui.dateInput.datepicker({ format: 'dd/mm/yyyy' });
 		this.changeFlags();
+	},
+
+	getDate: function(date) {
+		if (date == null || date === '')
+			return null;
+
+		return moment(date).toJSON();
+	},
+	serializeData: function() {
+		var data = {
+			ManualCaisFlags: this.model.get('ManualCaisFlags'),
+			CalculatedStatus: this.model.get('CalculatedStatus'),
+			autoChageEnabled: this.loanOptions.get('AutoPayment'),
+			stopAutoChargeDate: EzBob.formatDate3(this.loanOptions.get('StopAutoChargeDate')),
+			autoLateFeeEnabled: this.loanOptions.get('AutoLateFees'),
+			stopLateFeeFromDate: EzBob.formatDate3(this.loanOptions.get('StopLateFeeFromDate')),
+			stopLateFeeToDate: EzBob.formatDate3(this.loanOptions.get('StopLateFeeToDate'))
+		};
+
+		return data;
 	}
+
 });

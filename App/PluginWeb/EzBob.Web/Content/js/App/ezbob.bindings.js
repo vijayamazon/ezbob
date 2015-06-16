@@ -45,11 +45,14 @@ EzBob.BindingConverters.notNull = function(direction, value) {
 	return value;
 };
 
-EzBob.BindingConverters.dateTime = function(direction, value) {
+EzBob.BindingConverters.dateTime = function (direction, value) {
+	if (value === "" || value === null)
+		return null;
+
 	if (direction === 'ModelToView')
 		return moment.utc(value).format('DD/MM/YYYY');
 	else
-		return moment.utc(value, "DD/MM/YYYY").toDate();
+		return moment.utc(value, "DD/MM/YYYY").toJSON();
 };
 
 EzBob.BindingConverters.autonumericFormat = function(format) {
