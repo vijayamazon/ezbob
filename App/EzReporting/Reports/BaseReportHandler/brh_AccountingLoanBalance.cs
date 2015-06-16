@@ -240,7 +240,7 @@
 						DBNull.Value,
 						DBNull.Value,
 						IssuedAmount,
-						IssuedAmount - RepaidPrincipal,
+						IssuedAmount - RepaidPrincipal + SetupFee,
 						SetupFee,
 						EarnedInterest,
 						EarnedInterest - RepaidInterest,
@@ -254,7 +254,7 @@
 						DBNull.Value,
 						DBNull.Value,
 						"total"
-						);
+					);
 				} else {
 					tbl.Rows.Add(
 						IssueDate,
@@ -264,7 +264,7 @@
 						ClientEmail,
 						LoanStatus,
 						IssuedAmount,
-						IssuedAmount - RepaidPrincipal,
+						IssuedAmount - RepaidPrincipal + SetupFee,
 						SetupFee,
 						EarnedInterest,
 						EarnedInterest - RepaidInterest,
