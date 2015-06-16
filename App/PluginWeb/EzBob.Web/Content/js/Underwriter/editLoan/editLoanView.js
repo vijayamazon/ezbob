@@ -53,7 +53,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	fillData: function () {
 	    $('#collapsable-content').slideToggle('slow');
 
-        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Week" });
+        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Week" });
 
         var self = this;
 
@@ -66,7 +66,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
         });//on fail
 
-        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', { loanID: this.model.get('Id'), intervalType: "Month" });
+        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month" });
 
         oRequest.success(function (res) {
             self.model.set('withinMonth', res.IntervalsNum);

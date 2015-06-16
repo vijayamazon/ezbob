@@ -3342,11 +3342,11 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse")]
         System.Threading.Tasks.Task<Ezbob.Backend.Models.NewLoan.NL_Model> AddPaymentAsync(Ezbob.Backend.Models.NewLoan.NL_Model loanModel);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleInLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleInLoanResponse")]
-        ServiceClientProxy.EzServiceReference.ReschedulingActionResult RescheduleInLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
+        ServiceClientProxy.EzServiceReference.ReschedulingActionResult RescheduleLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleInLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleInLoanResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleInLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword", ReplyAction="http://tempuri.org/IEzService/UpdateLinkedHmrcPasswordResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash);
@@ -4672,12 +4672,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddPaymentAsync(loanModel);
         }
         
-        public ServiceClientProxy.EzServiceReference.ReschedulingActionResult RescheduleInLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument) {
-            return base.Channel.RescheduleInLoan(userID, customerID, reschedulingArgument);
+        public ServiceClientProxy.EzServiceReference.ReschedulingActionResult RescheduleLoan(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument) {
+            return base.Channel.RescheduleLoan(userID, customerID, reschedulingArgument);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleInLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument) {
-            return base.Channel.RescheduleInLoanAsync(userID, customerID, reschedulingArgument);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument) {
+            return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData UpdateLinkedHmrcPassword(string sCustomerID, string sDisplayName, string sPassword, string sHash) {

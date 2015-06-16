@@ -251,7 +251,7 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RescheduleInLoan">
+  <xs:element name="RescheduleLoan">
     <xs:complexType>
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
@@ -260,10 +260,10 @@
       </xs:sequence>
     </xs:complexType>
   </xs:element>
-  <xs:element name="RescheduleInLoanResponse">
+  <xs:element name="RescheduleLoanResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="RescheduleInLoanResult" nillable="true" type="q27:ReschedulingActionResult" />
+        <xs:element xmlns:q27="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="RescheduleLoanResult" nillable="true" type="q27:ReschedulingActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

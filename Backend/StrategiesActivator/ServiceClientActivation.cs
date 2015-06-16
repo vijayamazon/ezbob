@@ -1067,11 +1067,10 @@ GeneratePassword broker-contact-email@example.com password-itself
             reModel.SaveToDB = false;
             reModel.ReschedulingDate = DateTime.UtcNow;
             reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+		    reModel.RescheduleIn = true;
 	
-			var res= this.serviceClient.RescheduleInLoan(userId, customerId, reModel);
-
+			var res= this.serviceClient.RescheduleLoan(userId, customerId, reModel);
 			log.Msg(res.Value);
-
 	    }
         
         [Activation]

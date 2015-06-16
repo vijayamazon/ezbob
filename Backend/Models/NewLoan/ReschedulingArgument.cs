@@ -31,6 +31,9 @@
 		[DataMember]
 		public bool SaveToDB { get; set; } // save result (new schedules) or not
 
+		[DataMember]
+		public bool RescheduleIn { get; set; } // type of re-scheduling: for "IN" - true, for "OUT" - false
+
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(ReschedulingArgument);

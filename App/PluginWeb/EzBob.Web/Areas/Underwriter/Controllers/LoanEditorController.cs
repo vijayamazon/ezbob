@@ -200,7 +200,7 @@
         [Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult RescheduleInLoan(
+		public JsonResult RescheduleLoan(
 			int loanID, 
 			DbConstants.RepaymentIntervalTypes intervalType,  // month/week
 			decimal? AmountPerInterval, // for "out" reschedule
@@ -212,6 +212,7 @@
 			DateTime? lateFeeEndDate,
 			DateTime? freezeStartDate,
 			DateTime? freezeEndDate, 
+			bool rescheduleIn = true,
 			bool save = false
 			) {
 
@@ -224,10 +225,11 @@
 			reModel.SaveToDB = save;
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = intervalType;
+			reModel.RescheduleIn = rescheduleIn;
 		
 			// re strategy
 			ServiceClient client = new ServiceClient();
-			ReschedulingActionResult result = client.Instance.RescheduleInLoan(this._context.User.Id, loan.Customer.Id, reModel);
+			ReschedulingActionResult result = client.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
           //  Console.WriteLine(result.Value);
 
@@ -257,8 +259,9 @@
 			//	}
 			//}
 
-	        return Json(result.Value);
-		}
+	        //return Json(result.Value);
+	        return null;
+        }
 
 	}
 }

@@ -31,7 +31,7 @@
 		NL_Model AddPayment(NL_Model loanModel);
 
 		[OperationContract]
-		ReschedulingActionResult RescheduleInLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
+		ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
 
 	} // interface IEzServiceNewLoan
 

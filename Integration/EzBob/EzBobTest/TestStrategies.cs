@@ -912,8 +912,9 @@
 			reModel.SaveToDB = false;
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.RescheduleIn = true;
 
-			var s = new RescheduleInLoan<Loan>(loan, reModel);
+			var s = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s.Execute();
 				m_oLog.Debug("RESULT FOR MONTHS");
@@ -924,7 +925,7 @@
 			
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 
-			var sw = new RescheduleInLoan<Loan>(loan, reModel);
+			var sw = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				sw.Execute();
 				m_oLog.Debug("RESULT FOR WEEKS");

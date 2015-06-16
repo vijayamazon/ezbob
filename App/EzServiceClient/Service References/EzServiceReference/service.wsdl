@@ -188,11 +188,11 @@
   <wsdl:message name="IEzService_AddPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:AddPaymentResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_RescheduleInLoan_InputMessage">
-    <wsdl:part name="parameters" element="tns:RescheduleInLoan" />
+  <wsdl:message name="IEzService_RescheduleLoan_InputMessage">
+    <wsdl:part name="parameters" element="tns:RescheduleLoan" />
   </wsdl:message>
-  <wsdl:message name="IEzService_RescheduleInLoan_OutputMessage">
-    <wsdl:part name="parameters" element="tns:RescheduleInLoanResponse" />
+  <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
+    <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_UpdateLinkedHmrcPassword_InputMessage">
     <wsdl:part name="parameters" element="tns:UpdateLinkedHmrcPassword" />
@@ -1461,9 +1461,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddPayment" message="tns:IEzService_AddPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse" message="tns:IEzService_AddPayment_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="RescheduleInLoan">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleInLoan" message="tns:IEzService_RescheduleInLoan_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleInLoanResponse" message="tns:IEzService_RescheduleInLoan_OutputMessage" />
+    <wsdl:operation name="RescheduleLoan">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="UpdateLinkedHmrcPassword">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/UpdateLinkedHmrcPassword" message="tns:IEzService_UpdateLinkedHmrcPassword_InputMessage" />
@@ -2419,8 +2419,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="RescheduleInLoan">
-      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/RescheduleInLoan" style="document" />
+    <wsdl:operation name="RescheduleLoan">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

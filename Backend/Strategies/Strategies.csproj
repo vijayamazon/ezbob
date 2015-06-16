@@ -147,9 +147,9 @@
     <Compile Include="NewLoan\GetLastOffer.cs" />
     <Compile Include="NewLoan\AddOffer.cs" />
     <Compile Include="NewLoan\AddCashRequest.cs" />
-    <Compile Include="NewLoan\ReschedulingOutPaymentPerIntervalExcpetion.cs" />
-    <Compile Include="NewLoan\RescheduleOutLoan.cs" />
-    <Compile Include="NewLoan\RescheduleInLoan.cs" />
+    <Compile Include="NewLoan\RescheduleLoan.cs" />
+    <Compile Include="NewLoan\ReschedulingOutPaymentPerIntervalException.cs" />
+    <Compile Include="NewLoan\ReschedulingInPeriodException.cs" />
     <Compile Include="NewLoan\LoanState.cs">
       <SubType>Code</SubType>
     </Compile>
