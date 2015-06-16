@@ -217,6 +217,39 @@
 			) {
 
 			var loan = this._loans.Get(loanID);
+			
+	        if (save) {
+
+				// save LoanChangesHistory (loan state before changes) before new schedule
+		        var historyItem = new LoanChangesHistory {
+			        Data = this._loanModelBuilder.BuildModel(loan).ToJSON(),
+			        Date = DateTime.UtcNow,
+			        Loan = loan,
+			        User = this._context.User
+		        };
+		        this._history.Save(historyItem);
+
+
+				//		ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
+				//		LoanOptions options = optionsRep.GetByLoanId(loanID);
+
+				//		if (stopLateFee != null) {
+				//			options.AutoLateFees = true;
+				//			options.StopAutoLateFeesDate = stopLateFee;
+				//		}
+
+				//		if (stopInterest != null) {
+				//			options.AutoInterest = true;
+				//			options.StopAutoInterestDate = stopInterest;
+				//		}
+
+				//		if (stopAutoCharge != null) {
+				//			options.AutoPayment = false;
+				//			options.StopAutoChargeDate = stopAutoCharge;
+				//		}
+
+				//		optionsRep.SaveOrUpdate(options);
+	        }
 
 	        save = false; // TEMPORARY - DONT'T SPOIL DB
 			ReschedulingArgument reModel = new ReschedulingArgument();
@@ -226,46 +259,10 @@
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = intervalType;
 			reModel.RescheduleIn = rescheduleIn;
-		
+
 			// re strategy
 			ServiceClient client = new ServiceClient();
 			ReschedulingActionResult result = client.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-
-
-			// if save=true, save LoanChangesHistory (loan state before changes) before new schedule
-			/*	var historyItem = new LoanChangesHistory {
-					Data = _loanModelBuilder.BuildModel(loan).ToJSON(),
-					Date = DateTime.UtcNow,
-					Loan = loan,
-					User = _context.User
-				};
-				_history.Save(historyItem);*/
-
-			// loan options
-			//if (save) {
-			//	if (stopAutoCharge != null || stopLateFee != null || stopInterest != null) {
-
-			//		ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
-			//		LoanOptions options = optionsRep.GetByLoanId(loanID);
-
-			//		if (stopLateFee != null) {
-			//			options.AutoLateFees = true;
-			//			options.StopAutoLateFeesDate = stopLateFee;
-			//		}
-
-			//		if (stopInterest != null) {
-			//			options.AutoInterest = true;
-			//			options.StopAutoInterestDate = stopInterest;
-			//		}
-
-			//		if (stopAutoCharge != null) {
-			//			options.AutoPayment = false;
-			//			options.StopAutoChargeDate = stopAutoCharge;
-			//		}
-
-			//		optionsRep.SaveOrUpdate(options);
-			//	}
-			//}
 
 	        return Json(result.Value);
         }
