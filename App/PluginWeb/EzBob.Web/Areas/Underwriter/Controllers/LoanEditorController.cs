@@ -272,7 +272,6 @@
                     //optionsRep.SaveOrUpdate(options);
                 }
             }
-	       
 
 	        save = false; // TEMPORARY - DONT'T SPOIL DB
 			ReschedulingArgument reModel = new ReschedulingArgument();
@@ -282,12 +281,26 @@
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = intervalType;
 			reModel.RescheduleIn = rescheduleIn;
+	        if(reModel.RescheduleIn==false) // "out"
+				reModel.PaymentPerInterval = AmountPerInterval;
 
-			// re strategy
-			ServiceClient client = new ServiceClient();
-			ReschedulingActionResult result = client.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
+	        try {
 
-            return Json(result.Value);
+		        // re strategy
+		        ServiceClient client = new ServiceClient();
+		        ReschedulingActionResult result = client.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
+
+				return Json(result.Value);
+
+		        //} catch (ReschedulingOutPaymentPerIntervalException inPeriod) {
+
+		        //} catch(ReschedulingOutPaymentPerIntervalException outPaymentPerInterval)
+
+	        } catch (Exception editex) {
+		        Log.Error(editex);
+	        }
+
+	        return null;
         }
 
     }

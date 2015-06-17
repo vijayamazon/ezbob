@@ -1,400 +1,289 @@
 ﻿@model dynamic
 <script type="text/template" id="loan_editor_template">
 
-    <form>
-        <button class="btn btn-primary show option-btn">Show advanced options</button>
-        <div class="container" style="width:50%; display:none" id="collapsable-content">
 
-            <h4>Within loan period</h4>
+	<button class="btn btn-primary show option-btn;">Show advanced options</button>
 
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
+	<div class="container" style="width:80%; display: none;" id="collapsable-content">
 
-            <div class="row">
-                <div class="col-sm-1"><input type="radio" class="form-control pull-left" name="radio" value="withinRadio"></div>
-                <div class="col-sm-3">
-                    Reschedule to
-                    <span name='withinWeek' style=" font-weight: bold"></span>
-                    weeks or
-                    <span name="withinMonth" style="font-weight: bold"></span>
-                </div>
-                <div class="col-sm-3">
-                    month with amount of
-                    <span name="withinAmount" style="font-weight: bold"></span>
-                </div>
-                <div class="col-sm-3">
-                    and intrest of
-                    <span name="Intrest" style="font-weight: bold"></span>
-                </div>
-                <div class="col-sm-2">
-                    <select id="withinSelect" size="1" style="width:100px">
-                        <option value="month">Month</option>
-                        <option value="weeks">Week</option>
-                    </select>
-                </div>
-            </div>
-            
-            <h4>Outside loan payment arangment</h4>
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only numeric values greater then 0 allowed</div>
-            <div class="row">
-                <div class="col-sm-1"><input type="radio" class="form-control pull-left" name="radio" value="outsideRadio"></div>
-                <div class="col-sm-3">
-                    Reschedule to
-                    <span name='outsideWeek' style=" font-weight: bold"></span>
-                    weeks or
-                    <span name="outsideMonth" style="font-weight: bold"></span>
-                </div>
-                <div class="col-sm-3">
-                    month with amount of
-                    <input class="outsideAmount form-control" type="number" value="0" min="0" step="10" style="width:70px"> 
-                </div>
-                <div class="col-sm-3">
-                    and intrest of
-                    <span name="Intrest" style="font-weight: bold"></span>
-                </div>
-                <div class="col-sm-2">
-                    <select id="outsideSelect" size="1" style="width:100px">
-                        <option value="month">Month</option>
-                        <option value="weeks">Week</option>
-                    </select>
-                </div>
-            </div>
+		<form class="form-inline" role="form">
 
-           @* <h4>Outside loan payment arangment</h4>
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only numeric values greater then 0 allowed</div>
-            <div class="row">
-                <div class="col-sm-1"><input type="radio" class="form-control pull-left" name="radio" value="outsideRadio"></div>
-                <div class="col-sm-5">Reschedule to <span name="outsideWeek" style="font-weight: bold">
-                    </span> weeks or <span name="outsideMonth" style="font-weight: bold"></span>
-              month with amount of
-                </div>
-                <div class="col-sm-4">
-                    <input class="outsideAmount form-control" type="number" value="0" min="0" step="10" style="width:80px"> 
-                and intrest of <span name="Intrest" style="font-weight: bold"></span>
-                </div>
-                <div class="col-sm-2">
-                    <select id="outsideSelect" size="1" style="width:100px">
-                        <option value="month">Month</option>
-                        <option value="weeks">Week</option>
-                    </select>
-                </div>
-            </div>*@
+			<div class="row">
+				<h5>Within loan period</h5>
+			</div>
 
-            <div class="row">
-                <div class="col-sm-1"><input type="checkbox" class="charges-checkbox form-control pull-left" name="automatic-charges" value="automatic-charges"></div>
-                <div class="col-sm-6">Stop automatic charges after</div>
-                <div class="col-sm-3"><input class="charges-payments form-control" type="number" value="0" min="0" step="1" style="width:100px"></div>
-                <div class="col-sm-2">payments.</div>
-            </div>
+			<div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
 
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then From date</div>
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
-            <div class="row">
-                <div class="col-sm-1"><input type="checkbox" class="fees-checkbox form-control pull-left" name="fees-calculation" value="fees-calculation"></div>
-                <div class="col-sm-6">Stop late fees calculation from</div>
-                <div class="col-sm-2">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input class="fees-calendar-from form-control" type="text" style="width:100px">
-                    </div>
-                </div>
-                <div class="col-sm-1">untill</div>
-                <div class="col-sm-2">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input class="fees-calendar-to form-control" type="text" style="width:100px"><br />
-                    </div>
-                </div>
-            </div>
+			<div class="row">
+				<div class="col-sm-1">&nbsp;</div>
+				<div class="col-sm-7">
+					<label class="radio-inline">
+						<input type="radio" name="rescheduleIn" value="true">
+						Reschedule to &nbsp;
+						<span name="withinWeek" style="font-weight: bold"></span>
+						weeks or &nbsp;
+						<span name="withinMonth" style="font-weight: bold"></span>
+						month with amount of &nbsp;
+						<span name="withinAmount" style="font-weight: bold"></span>
+						and intrest of &nbsp;
+						<span name="Intrest" style="font-weight: bold"></span>
+					</label>
+				</div>
+				<div class="col-sm-3">
+					<select class="form-control" id="withinSelect" style="width: 150px;">
+						<option value="0">SELECT</option>
+						<option value="month">Month</option>
+						<option value="weeks">Week</option>
+					</select>
+				</div>
+			</div>
 
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then From date</div>
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
-            <div class="row">
-                <div class="col-sm-1"><input type="checkbox" class="intrest-checkbox form-control pull-left" name="intrest-calculation" value="intrest-calculation"></div>
-                <div class="col-sm-6">Stop intrest calculation from</div>
-                <div class="col-sm-2">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input class="intrest-calendar-from form-control" type="text" style="width:100px">
-                    </div>
-                </div>
-                <div class="col-sm-1">untill</div>
-                <div class="col-sm-2">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input class="intrest-calendar-to form-control" type="text" style="width:100px"><br />
-                    </div>
-                </div>
-            </div>
-            
-            <%if(hasFreezInterest===true){ %>
-            <br />
-            <%
-            _.each(InterestFreeze, function(item, idx) {
-            var ary = item.split('|');
-            if (ary[4] === ''){
-            %>
-            <div class="row">
-                <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-                This loan's intrest is stoped from
-                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
-                until
-                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
-            </div>
-            <%	}});	%>
-            <br />
-            <% } %>
+			<div class="row"><h5>Outside loan payment arangment</h5></div>
 
-            <button class="btn btn-primary resch-submit-btn">Submit</button>
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="submit-fail">There has been an error sending data to server</div>
-            <div class="alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server</div>
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only numeric values greater then 0 allowed</div>
 
-        </div>
-    </form>
+			<div class="row">
+				<div class="col-sm-1">&nbsp;</div>
+				<div class="col-sm-7">
+					<label class="radio-inline">
+						<input type="radio" name="rescheduleIn" value="false">
+						Reschedule to &nbsp;
+						<span name="outsideWeek" id="outsideWeek" style="font-weight: bold"></span>
+						weeks or &nbsp;
+						<span name="outsideMonth" id="outsideMonth" style="font-weight: bold"></span>
+						month with amount of &nbsp;
+						<input class="form-control" type="number" value="0" min="0" step="10" style="width:150px" id="outsideAmount" name="outsideAmount">
+						and intrest of &nbsp;
+						<span name="Intrest" style="font-weight: bold"></span>
+					</label>
+				</div>
+				<div class="col-sm-3">
+					<select class="form-control" id="outsideSelect" style="width: 150px;">
+						<option value="0">SELECT</option>
+						<option value="month">Month</option>
+						<option value="weeks">Week</option>
+					</select>
+				</div>
+			</div>
 
+			<div class="row">&nbsp;</div>
 
+			<div class="row">
+				<div class="col-sm-1">&nbsp;</div>
+				<div class="col-sm-3">
+					<label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after</label>
+				</div>
+				<div class="col-sm-6" style="text-align:left;">
+					<div class="form-group">
+						<input class="form-control" type="number" value="0" style="width:150px" id="charges-payments" name="charges-payments">
+					</div>
+					&nbsp;
+				</div>
+			</div>
 
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then From date</div>
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
 
+			<div class="row">
+				<div class="col-sm-3">
+					<label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from</label>
+				</div>
+				<div class="col-sm-3">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input class="form-control" type="text" id="fees-calendar-from" name="fees-calendar-from" style="width:150px">
+					</div>
+				</div>
+				<div class="col-sm-1">
+					untill
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input class="form-control" type="text" id="fees-calendar-to" name="fees-calendar-to" style="width:150px">
+					</div>
+				</div>
+			</div>
 
-    @*      <div class="container">
-            <form>
-                <button class="btn btn-primary show option-btn">Show advanced options</button>
-                <div class="span9" style="display:none" id="collapsable-content">
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then From date</div>
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
 
-                    <div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
-                    <h4>Within loan period</h4>
-                    <input type="radio" class="form-control pull-left" name="radio" value="withinRadio">
-                    <div class="row" style="margin-top: 27px;">
-                        &nbsp;Reschedule to
-                        <span name='withinWeek' style=" font-weight: bold"></span>
-                        weeks or
-                        <span name="withinMonth" style="font-weight: bold"></span>
-                        month with amount of
-                        <span name="withinAmount" style="font-weight: bold"></span>
-                        and intrest of
-                        <span name="Intrest" style="font-weight: bold"></span>
-                        <select id="withinSelect" size="1" style="width:100px">
-                            <option value="month">Month</option>
-                            <option value="weeks">Week</option>
-                        </select>
-                    </div>
+			<div class="row" style="padding-top: 5px;">
+				<div class="col-sm-3">
+					<label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from</label>
+				</div>
+				<div class="col-sm-3">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input class="form-control" type="text" id="intrest-calendar-from" name="intrest-calendar-from" style="width:150px">
+					</div>
+				</div>
+				<div class="col-sm-1">
+					untill
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+						<input class="form-control" type="text" style="width:150px" id="intrest-calendar-to" name="intrest-calendar-to"><br />
+					</div>
+				</div>
+			</div>
 
-                    <h4>Outside loan payment arangment</h4>
-                    <div class="alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only numeric values greater then 0 allowed</div>
-                    <input type="radio" class="form-control pull-left" name="radio" value="outsideRadio">
-                    &nbsp;Reschedule to
-                    <span name="outsideWeek" style="font-weight: bold"></span>
-                    weeks or
-                    <span name="outsideMonth" style="font-weight: bold"></span>
-                    month with amount of
-                    <input class="outsideAmount form-control" type="number" value="0" min="0" step="10" style="width:100px">
-                    and intrest of
-                    <span name="Intrest" style="font-weight: bold"></span>
-                    <select id="outsideSelect" size="1" style="width:100px">
-                        <option value="month">Month</option>
-                        <option value="weeks">Week</option>
-                    </select><br />
+			<%if(hasFreezInterest===true){ %>
+			<br />
+			<%
+			_.each(InterestFreeze, function(item, idx) {
+			var ary = item.split('|');
+			if (ary[4] === ''){
+			%>
+			<div class="row">
+				<button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
+				This loan's intrest is stoped from
+				<span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
+				until
+				<span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+			</div>
+			<%	}});	%>
+			<br />
+			<% } %>
 
+			<div class="row"><button class="btn btn-primary pull-right">Submit</button></div>
 
-
-
-
-
-                    <input type="checkbox" class="charges-checkbox form-control pull-left" name="automatic-charges" value="automatic-charges">&nbsp;Stop automatic charges after
-                    <input class="charges-payments form-control" type="number" value="0" min="0" step="1" style="width:100px"> payments.<br />
-
-                    <div class="alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then From date</div>
-                    <div class="alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
-                    <input type="checkbox" class="fees-checkbox form-control pull-left" name="fees-calculation" value="fees-calculation">&nbsp;Stop late fees calculation from
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input class="fees-calendar-from form-control" type="text" style="width:100px">
-                    </div>
-                     untill
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                        <input class="fees-calendar-to form-control" type="text" style="width:100px"><br />
-                    </div>
-
-
-
-
-
-
-                    <div class="alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then From date</div>
-                    <div class="alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
-                    <div class="row">
-                        <div class="span1">
-                            <input type="checkbox" class="intrest-checkbox form-control pull-left" name="intrest-calculation" value="intrest-calculation">
-                        </div>
-                        <div class="span6">&nbsp;Stop intrest calculation from</div>
-                        <div class="span2">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                <input class="intrest-calendar-from form-control" type="text" style="width:100px">
-                            </div>
-                        </div>
-                        <div class="span1">untill </div>
-                        <div class="span2">
-                            <div class="input-group">
-                                <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-                                <input class="intrest-calendar-to form-control" type="text" style="width:100px"><br />
-                            </div>
-                        </div>
-                    </div>
-
-                    <%if(hasFreezInterest===true){ %>
-                    <br/>
-                        <%
-                        _.each(InterestFreeze, function(item, idx) {
-                        var ary = item.split('|');
-                        if (ary[4] === ''){
-                        %>
-                        <div class="row">
-                            <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-                            This loan's intrest is stoped from
-                            <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
-                             until
-                            <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
-                        </div>
-                        <%	}});	%>
-                    <br/>
-                    <% } %>
-
-                    <button class="btn btn-primary resch-submit-btn">Submit</button>
-                    <div class="alert alert-danger center" style="display: none; text-align: center" id="submit-fail">There has been an error sending data to server</div>
-                    <div class="alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server</div>
-                </div>
-            </form>
-        </div>*@
-
-    <div class="editloan-schedule-region"></div>
-    <div class="editloan-item-editor-region"></div>
-    <div class="buttons">
-        <hr />
-        <button class="btn btn-primary pull-right cancel">Cancel</button>
-        <button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
-    </div>
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="submit-fail">There has been an error sending data to server</div>
+			<div class="row alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server</div>
+		</form>
+	</div>
+	
+	
+	
+	<div class="editloan-schedule-region"></div>
+	<div class="editloan-item-editor-region"></div>
+	<div class="buttons">
+		<hr />
+		<button class="btn btn-primary pull-right cancel">Cancel</button>
+		<button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
+	</div>
 </script>
-
+<hr>
 <script type="text/template" id="loan_editor_schedule_template">
 
 
-    <h4>Standard Schedule</h4>
-    <table class="table table-selected centered" style="white-space: nowrap;">
-        <thead class="box">
-            <tr class="box-title">
-                <th width="90">#</th>
-                <th>Date</th>
-                <th>Principal</th>
-                <th>Balance</th>
-                <th>
-                    Interest<br />
-                    Rate
-                </th>
-                <th>Interest</th>
-                <th>Fees</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th width="200">Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%
-            _.each(Items, function(item, i) {
-            var editClass = editItemIndex == i ? "editing" : "";
-            %>
-            <tr class="<%= editClass %>">
-                <td>
-                    <%- i+1 %>&nbsp;<%
-                    if (item.Editable) { %>
-                    <button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
-                    <%
-                    }
+	<h4>Standard Schedule</h4>
+	<table class="table table-selected centered" style="white-space: nowrap;">
+		<thead class="box">
+			<tr class="box-title">
+				<th width="90">#</th>
+				<th>Date</th>
+				<th>Principal</th>
+				<th>Balance</th>
+				<th>
+					Interest<br />
+					Rate
+				</th>
+				<th>Interest</th>
+				<th>Fees</th>
+				<th>Status</th>
+				<th>Total</th>
+				<th width="200">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			_.each(Items, function(item, i) {
+			var editClass = editItemIndex == i ? "editing" : "";
+			%>
+			<tr class="<%= editClass %>">
+				<td>
+					<%- i+1 %>&nbsp;<%
+					if (item.Editable) { %>
+					<button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
+					<%
+					}
 
-                    if (item.Deletable) { %>
-                    <button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
-                    <%
-                    }
-                    %>
-                </td>
+					if (item.Deletable) { %>
+					<button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
+					<%
+					}
+					%>
+				</td>
 
-                <td style="text-align: center"><%- EzBob.formatDateWithoutTime(item.Date) %></td>
-                <%
+				<td style="text-align: center"><%- EzBob.formatDateWithoutTime(item.Date) %></td>
+				<%
 
-                if (item.Type == "Fee") {
-                %>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-                <td style="text-align: center"><%- item.Status %></td>
-                <td></td>
-                <td style="text-align: center"><%- item.Description %></td>
-                <%
-                } else if (item.Type == "Installment") {
-                %>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
-                <td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-                <td style="text-align: center"><%- item.Status %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
-                <td></td>
-                <%
-                } else if (item.Type == "Pacnet") {
-                %>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-                <td style="text-align: center"><%- item.Status %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
-                <td style="text-align: center"><%- item.Description %></td>
-                <%
-                } else {
-                %>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
-                <td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-                <td style="text-align: center"><%- item.Status %></td>
-                <td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
-                <td style="text-align: center"><%- item.Description %></td>
-                <%
-                }
-                %>
-            </tr>
-            <%
-            });
-            %>
-        </tbody>
-    </table>
-    <%
+				if (item.Type == "Fee") {
+				%>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td></td>
+				<td style="text-align: center"><%- item.Description %></td>
+				<%
+				} else if (item.Type == "Installment") {
+				%>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
+				<td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+				<td></td>
+				<%
+				} else if (item.Type == "Pacnet") {
+				%>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+				<td style="text-align: center"><%- item.Description %></td>
+				<%
+				} else {
+				%>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
+				<td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+				<td style="text-align: center"><%- item.Description %></td>
+				<%
+				}
+				%>
+			</tr>
+			<%
+			});
+			%>
+		</tbody>
+	</table>
+	<%
 
-    if(HasErrors) {
-    %>
-    <div class="alert alert-error">
-        Following conditions(s) were not satisfied:
-        <ul>
-            <%
-            _.each(Errors, function(e) {
-            %>
-            <li><%- e %></li>
-            <%
-            });
-            %>
-        </ul>
-    </div>
-    <%
-    }
+	if(HasErrors) {
+	%>
+	<div class="alert alert-error">
+		Following conditions(s) were not satisfied:
+		<ul>
+			<%
+			_.each(Errors, function(e) {
+			%>
+			<li><%- e %></li>
+			<%
+			});
+			%>
+		</ul>
+	</div>
+	<%
+	}
 
-    %>
-    <div>
-        <button class="btn btn-primary add-installment">Add Installment</button>
-        <button class="btn btn-primary add-fee">Add Fee</button>
-    </div>
+	%>
+	<div>
+		<button class="btn btn-primary add-installment">Add Installment</button>
+		<button class="btn btn-primary add-fee">Add Fee</button>
+	</div>
 </script>

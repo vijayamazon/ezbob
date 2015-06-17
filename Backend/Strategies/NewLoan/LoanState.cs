@@ -197,7 +197,6 @@
 
 				List<CustomerStatusChange> badEnds = statusesHistory.Where(s => this.badStatusesNames.Contains(s.OldStatus.ToString())).ToList();
 
-				//Console.WriteLine("ends count==========" + badEnds.Count);
 //badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
 
 				CustomerStatusChange lastEnd = new CustomerStatusChange() {ChangeDate = StateDate};

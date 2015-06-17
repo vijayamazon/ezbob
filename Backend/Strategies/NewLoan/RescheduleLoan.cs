@@ -9,7 +9,6 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
 	using StructureMap;
 
 	public class RescheduleLoan<T> : AStrategy {
@@ -121,6 +120,8 @@
 				this.tLoan = loanRep.Get(this.ReschedulingArguments.LoanID);
 
 				decimal loanBaLance = this.tLoan.Balance;
+
+				this.Result.LoanInterestRate = this.tLoan.InterestRate;
 
 				// loan close date ('maturity date')
 				this.Result.LoanCloseDate = this.tLoan.Schedule.OrderBy(s => s.Date).Last().Date;

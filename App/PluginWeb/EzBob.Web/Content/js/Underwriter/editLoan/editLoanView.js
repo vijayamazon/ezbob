@@ -11,12 +11,12 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		this.editItemIndex = -1;
 	}, // initialize
     bindings: {
-        WithinWeek: "span[name='withinWeek']",
-        WithinMonth: "span[name='withinMonth']",
-        ReschedulingBalance: "span[name='withinAmount']",
-        InterestRate: "span[name='Intrest']",
-        OutsideWeek: "span[name='outsideWeek']",
-        OutsideMonth: "span[name='outsideMonth']"
+    	WithinWeek: "span[name=\"withinWeek\"]",
+    	WithinMonth: "span[name=\"withinMonth\"]",
+        ReschedulingBalance: "span[name=\"withinAmount\"]",
+        InterestRate: "span[name=\"Intrest\"]",
+        OutsideWeek: "span[name=\"outsideWeek\"]",
+        OutsideMonth: "span[name=\"outsideMonth\"]"
     },
 	serializeData: function() {
 		var data = this.model.toJSON();
@@ -73,7 +73,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	}, // events
 
 	fillData: function () {
-	    $('#collapsable-content').slideToggle('slow');
+	    $("#collapsable-content").slideToggle('slow');
 
         var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Week" });
 
@@ -97,15 +97,37 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             this.ui.data_error.fadeIn().fadeOut(3000);
         });//on fail
     },
-	reschSubmitForm: function () {
-	    var requestParam = { loanID: this.model.get('Id') };
+	reschSubmitForm: function() {
 
-	    var isStopIntrest = $('.intrest-checkbox').is(':checked');
-	    var interestFrom = $('.intrest-calendar-from').val();
-	    var interestTo = $('.intrest-calendar-to').val();
-	    var isStopFees=$('.fees-checkbox').is(':checked');
-	    var feesFrom = $('.fees-calendar-from').val();
-	    var feesTo = $('.fees-calendar-to').val();
+		var requestParam = { loanID: this.model.get('Id') };
+
+		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
+		// if (checkedRadio === 'withinRadio') {
+		if (checkedRadio === 'true') {
+			requestParam.intervalType = $('#withinSelect option:selected').text();
+		}
+		else if (checkedRadio === 'false') {
+			requestParam.intervalType = $('#outsideSelect option:selected').text();
+			requestParam.AmountPerInterval = $('#outsideAmount').val();
+			var isStopCharges = $('#charges-checkbox').is(':checked');
+			var chargesVal = $('#charges-payments').val();
+			if (chargesVal <= 0 || chargesVal === "")
+				return;
+			if (isStopCharges) {
+				requestParam.stopAutoCharge = 'true';
+				requestParam.stopAutoChargePayment = chargesVal;
+			}
+		} else {
+			return;
+		}
+
+		var isStopIntrest = $("#intrest-checkbox").is(':checked');
+		var isStopFees = $('#fees-checkbox').is(':checked');
+
+	    var interestFrom = $('#intrest-calendar-from').val();
+	    var interestTo = $('#intrest-calendar-to').val();
+	    var feesFrom = $('#fees-calendar-from').val();
+	    var feesTo = $('#fees-calendar-to').val();
 	   
 	    if (isStopIntrest) {
 	        if (interestTo === "" || interestFrom === "") {
@@ -133,24 +155,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        requestParam.lateFeeStartDate = feesFrom;
 	        requestParam.lateFeeEndDate = feesTo;
 	    }
-	    var checkedRadio = $('input[name=radio]').filter(':checked').val();
-	    if (checkedRadio === 'withinRadio') {
-	        requestParam.intervalType = $('#withinSelect option:selected').text();
-	    }
-	    else if (checkedRadio === 'outsideRadio') {
-	        requestParam.intervalType = $('#outsideSelect option:selected').text();
-	        requestParam.AmountPerInterval = $('.outsideAmount').val();
-	        var isStopCharges = $('.charges-checkbox').is(':checked');
-	        var chargesVal = $('.charges-payments').val();
-	        if (chargesVal <= 0 || chargesVal === "")
-	            return;
-	        if (isStopCharges) {
-                requestParam.stopAutoCharge = 'true';
-                requestParam.stopAutoChargePayment = chargesVal;
-            }
-	    } else {
-	        return;
-	    }
+	   
 	    requestParam.save = 'true';
 
 	    var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', requestParam);
@@ -167,7 +172,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	},
 
 	blurAmount: function () {
-	    var checkedRadio = $('input[name=radio]').filter(':checked').val();
+		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
 	    if (checkedRadio === 'outsideRadio' && $(".outsideAmount").val() <= 0) {
 	        this.ui.amount_error.fadeIn().fadeOut(3000);
 	    } else {
@@ -322,10 +327,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		});
 
 		this.renderRegions();
-		this.$el.find('.fees-calendar-from').datepicker();
-		this.$el.find('.fees-calendar-to').datepicker();
-		this.$el.find('.intrest-calendar-from').datepicker();
-		this.$el.find('.intrest-calendar-to').datepicker();
+		this.$el.find('#fees-calendar-from').datepicker();
+		this.$el.find('#fees-calendar-to').datepicker();
+		this.$el.find('#intrest-calendar-from').datepicker();
+		this.$el.find('#intrest-calendar-to').datepicker();
 	}, // onRender
 
 	renderRegions: function() {
