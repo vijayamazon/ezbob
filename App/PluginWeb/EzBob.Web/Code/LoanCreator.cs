@@ -250,7 +250,7 @@
 
 		public virtual void ValidateOffer(Customer cus) {
 			cus.ValidateOfferDate();
-		}
+		}// ValidateOffer
 
         private void ValidateRepaymentPeriodAndInterestRate(Customer cus) {
 	        var cr = cus.LastCashRequest;
@@ -262,7 +262,7 @@
 	            throw new ArgumentException("Wrong repayment period");
 	        }
 
-            if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod != cr.RepaymentPeriod) {
+			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.RepaymentPeriod < cr.LoanSource.DefaultRepaymentPeriod) {
                 throw new ArgumentException("Wrong repayment period");
             }
 
@@ -271,8 +271,6 @@
             }
 
 	    }//ValidateRepaymentPeriodAndInterestRate
-
-// ValidateOffer
 
 		public virtual void VerifyAvailableFunds(decimal transfered) {
 			m_oServiceClient.Instance.VerifyEnoughAvailableFunds(_context.UserId, transfered);
