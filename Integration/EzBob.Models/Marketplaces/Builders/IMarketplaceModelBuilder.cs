@@ -11,6 +11,7 @@
 		MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history);
 		MarketPlaceDataModel CreateLightModel(MP_CustomerMarketPlace mp, DateTime? history);
 		void UpdateOriginationDate(MP_CustomerMarketPlace mp);
+		void UpdateLastTransactionDate(MP_CustomerMarketPlace mp);
 		void SetAggregationData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> av);
 	}
 }

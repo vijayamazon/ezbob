@@ -168,7 +168,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return string.Format("https://www.google.com/search?q={0}+{1}", HttpUtility.UrlEncode(mp.Marketplace.Name), mp.DisplayName);
 		}
 
-		public void UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
+		public virtual void UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
 			bool bShouldLastTransactionDateBeUpdated =
 				!mp.LastTransactionDate.HasValue ||
 				(mp.UpdatingEnd.HasValue && mp.LastTransactionDate.Value < mp.UpdatingEnd.Value.AddDays(-2));
@@ -179,8 +179,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 			mp.LastTransactionDate = GetLastTransaction(mp);
 			try {
 				if (mp.LastTransactionDate != null) {
-					ObjectFactory.GetInstance<CustomerMarketPlaceRepository>()
-						.SaveOrUpdate(mp);
+					ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().Merge(mp);
 				}
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to update LastTransactionDate for mp {0}", mp.Id);

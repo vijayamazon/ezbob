@@ -3,6 +3,7 @@ namespace EzBob.Models.Marketplaces.Builders
 {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Common;
 	using EZBob.DatabaseLib.Model.Database;
@@ -23,14 +24,22 @@ namespace EzBob.Models.Marketplaces.Builders
 			return "#";
 		}
 
-		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
-		{
+		public override DateTime? GetSeniority(MP_CustomerMarketPlace mp) {
+			var filesDate = this._companyFiles.GetByCustomerId(mp.Customer.Id)
+				.Select(x => x.Created).ToList();
+			if (filesDate.Any()) {
+				return filesDate.Min();
+			}
 			return null;
 		}
 
 		public override DateTime? GetLastTransaction(MP_CustomerMarketPlace mp)
 		{
 			return null;
+		}
+
+		public override void UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
+			return;
 		}
 
 		protected override PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, DateTime? history, List<IAnalysisDataParameterInfo> av) {
