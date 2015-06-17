@@ -224,17 +224,36 @@
             DateTime? freezeEndDate,
 			bool rescheduleIn = true,
             bool save = false
-            )
-        {
+            ) {
 
             Loan loan = this._loans.Get(loanID);
+
             // loan options
             if (save)
             {
-                if (stopAutoCharge != null || stopLateFee != null || freezeInterest != null)
+				// save LoanChangesHistory (loan state before changes) before new schedule
+				var historyItem = new LoanChangesHistory {
+					Data = this._loanModelBuilder.BuildModel(loan).ToJSON(),
+					Date = DateTime.UtcNow,
+					Loan = loan,
+					User = this._context.User
+				};
+				this._history.Save(historyItem);
+
+				if (freezeInterest == true) {
+					loan.InterestFreeze.Add(new LoanInterestFreeze {
+						Loan = loan,
+						StartDate = freezeStartDate,
+						EndDate = freezeEndDate,
+						InterestRate = 0,
+						ActivationDate = DateTime.UtcNow,
+						DeactivationDate = null
+					});
+					this._loans.SaveOrUpdate(loan);
+				}
+
+                if (stopAutoCharge != null || stopLateFee != null)
                 {
-
-
                     //ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
                     //LoanOptions options = optionsRep.GetByLoanId(loanID);
 
@@ -242,20 +261,6 @@
                     {
                         //options.AutoLateFees = true;
                         //options.StopAutoLateFeesDate = stopLateFee;
-                    }
-
-                    if (freezeInterest == true)
-                    {
-                        loan.InterestFreeze.Add(new LoanInterestFreeze
-                        {
-                            Loan = loan,
-                            StartDate = freezeStartDate,
-                            EndDate = freezeEndDate,
-                            InterestRate = 0,
-                            ActivationDate = DateTime.UtcNow,
-                            DeactivationDate = null
-                        });
-                        this._loans.SaveOrUpdate(loan);
                     }
 
                     if (stopAutoCharge == true)
@@ -267,35 +272,7 @@
                     //optionsRep.SaveOrUpdate(options);
                 }
             }
-			
-	        if (save) {
-
-				// save LoanChangesHistory (loan state before changes) before new schedule
-		        var historyItem = new LoanChangesHistory {
-			        Data = this._loanModelBuilder.BuildModel(loan).ToJSON(),
-			        Date = DateTime.UtcNow,
-			        Loan = loan,
-			        User = this._context.User
-		        };
-		        this._history.Save(historyItem);
-
-				//		ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
-				//		LoanOptions options = optionsRep.GetByLoanId(loanID);
-				//		if (stopLateFee != null) {
-				//			options.AutoLateFees = true;
-				//			options.StopAutoLateFeesDate = stopLateFee;
-				//		}
-				//		if (stopInterest != null) {
-				//			options.AutoInterest = true;
-				//			options.StopAutoInterestDate = stopInterest;
-				//		}
-
-				//		if (stopAutoCharge != null) {
-				//			options.AutoPayment = false;
-				//			options.StopAutoChargeDate = stopAutoCharge;
-				//		}
-				//		optionsRep.SaveOrUpdate(options);
-	        }
+	       
 
 	        save = false; // TEMPORARY - DONT'T SPOIL DB
 			ReschedulingArgument reModel = new ReschedulingArgument();
