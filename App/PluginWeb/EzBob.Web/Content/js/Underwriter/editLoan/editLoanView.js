@@ -75,25 +75,17 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	fillData: function () {
 	    $("#collapsable-content").slideToggle('slow');
 
-        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Week" });
+	    var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", rescheduleIn: 'true' });
 
         var self = this;
 
-        oRequest.success(function (res) {
-            self.model.set('withinWeek', res.IntervalsNum);
+        request.success(function (res) {
+            self.model.set('WithinWeek', res.IntervalsNumWeeks);
+            self.model.set('WithinMonth', res.IntervalsNum);
+            self.model.set('ReschedulingBalance', res.ReschedulingBalance);
         }); //on success
 
-        oRequest.fail(function () {
-            this.ui.data_error.fadeIn().fadeOut(3000);
-        });//on fail
-
-        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month" });
-
-        oRequest.success(function (res) {
-            self.model.set('withinMonth', res.IntervalsNum);
-        }); //on success
-
-        oRequest.fail(function () {
+        request.fail(function () {
             this.ui.data_error.fadeIn().fadeOut(3000);
         });//on fail
     },
@@ -156,9 +148,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        requestParam.lateFeeEndDate = feesTo;
 	    }
 	   
+	        requestParam.rescheduleIn = 'true';
+	        requestParam.rescheduleIn = 'false';
 	    requestParam.save = 'true';
 
-	    var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleInLoan/', requestParam);
+	    var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
 
 	    var self = this;
 
@@ -172,11 +166,21 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	},
 
 	blurAmount: function () {
-		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
-	    if (checkedRadio === 'outsideRadio' && $(".outsideAmount").val() <= 0) {
+	    alert("success");
+	    var amount = $(".outsideAmount").val();
+	    if ( amount<= 0) {
 	        this.ui.amount_error.fadeIn().fadeOut(3000);
 	    } else {
-	        //todo: add outside loan payment ajax request
+	        var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", AmountPerInterval: amount, rescheduleIn: 'false' });
+
+	        request.success(function (res) {
+	            self.model.set('OutsideWeek', res.IntervalsNumWeeks);
+	            self.model.set('OutsideMonth', res.IntervalsNum);
+	        }); //on success
+
+	        request.fail(function () {
+	            this.ui.data_error.fadeIn().fadeOut(3000);
+	        });//on fail
 	    }
     },
 
