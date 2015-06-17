@@ -112,6 +112,7 @@
 			if (doNext) { // Medal area
 				var verification = new AutomationCalculator.MedalCalculation.MedalChooser(DB, Log);
 				medal = verification.GetMedal(customerID, decisionTime);
+				medal.SaveToDb(this.tag, DB, Log);
 			} // if; Medal area
 
 			int offeredCreditLine = medal == null
