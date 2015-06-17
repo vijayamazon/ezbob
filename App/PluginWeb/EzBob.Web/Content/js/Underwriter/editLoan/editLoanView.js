@@ -21,14 +21,36 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	serializeData: function() {
 		var data = this.model.toJSON();
 		data.editItemIndex = this.editItemIndex;
-		return data;
+	    data.hasFreezInterest = this.hasFreeIntrest();
+	    return data;
 	}, // serializeData
+
+	hasFreeIntrest: function() {
+	    var array = this.model.get('InterestFreeze');
+	    var flag = false;
+	    for (var i = 0; i < array.length; i++) {
+	        var item = array[i].split('|');
+	        if (item[4] === '') {
+	            flag = true;
+	            break;
+	        }
+	    }
+	    return flag;
+	},
 
 	ui: {
 		scheduleEl: '.editloan-schedule-region',
 		freezeEl: '.editloan-freeze-intervals-region',
 		ok: '.save',
-		buttons: '.buttons'
+		buttons: '.buttons',
+		data_error: '#data-error',
+		amount_error: '#amount-error',
+		date_empty_intrest: '#date-empty-intrest',
+		date_error_intrest: '#date-error-intrest',
+		date_empty_fees: '#date-empty-fees',
+		date_error_fees: '#date-error-fees',
+		submit_success: '#submit-success',
+        submit_fail: 'submit-fail'
 	}, // ui
 
 	editors: {
@@ -62,8 +84,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         }); //on success
 
         oRequest.fail(function () {
-            $("#data-error").fadeIn();
-            setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
+            this.ui.data_error.fadeIn().fadeOut(3000);
         });//on fail
 
         var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month" });
@@ -73,8 +94,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         }); //on success
 
         oRequest.fail(function () {
-            $("#data-error").fadeIn();
-            setTimeout(function () { $("#data-error").fadeOut(); }, 3000);
+            this.ui.data_error.fadeIn().fadeOut(3000);
         });//on fail
     },
 	reschSubmitForm: function () {
@@ -89,13 +109,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	   
 	    if (isStopIntrest) {
 	        if (interestTo === "" || interestFrom === "") {
-	            $("#date-empty-intrest").fadeIn();
-	            setTimeout(function () { $("#date-empty-intrest").fadeOut(); }, 3000);
+	            this.ui.data_error.fadeIn().fadeOut(3000);
 	            return;
             }
 	        if (new Date(interestFrom).getTime() > new Date(interestTo).getTime()) {
-	            $("#date-error-intrest").fadeIn();
-	            setTimeout(function() { $("#date-error-intrest").fadeOut(); }, 3000);
+	            this.ui.date_error_intrest.fadeIn().fadeOut(3000);
 	            return;
 	        }
 	        requestParam.freezeInterest = 'true';
@@ -104,13 +122,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	    }
 	    if (isStopFees) {
 	        if (feesTo === "" || feesFrom === "") {
-	            $("#date-empty-intrest").fadeIn();
-	            setTimeout(function () { $("#date-empty-fees").fadeOut(); }, 3000);
+	            this.ui.date_empty_fees.fadeIn().fadeOut(3000);
 	            return;
 	        }
 	        if (new Date(feesFrom).getTime() > new Date(feesTo).getTime()) {
-	            $("#date-error-intrest").fadeIn();
-	            setTimeout(function () { $("#date-error-fees").fadeOut(); }, 3000);
+	            this.ui.date_error_fees.fadeIn().fadeOut(3000);
 	            return;
 	        }
 	        requestParam.stopLateFee = 'true';
@@ -142,21 +158,18 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	    var self = this;
 
 	    oRequest.success(function (res) {
-	        $("#submit-success").fadeIn();
-	        setTimeout(function () { $("#submit-success").fadeOut(); }, 3000);
+	        this.ui.submit_success.fadeIn().fadeOut(3000);
 	    }); //on success
 
 	    oRequest.fail(function () {
-	        $("#submit-fail").fadeIn();
-	        setTimeout(function () { $("#submit-fail").fadeOut(); }, 3000);
+	        this.ui.submit_fail.fadeIn().fadeOut(3000);
 	    });//on fail
 	},
 
 	blurAmount: function () {
 	    var checkedRadio = $('input[name=radio]').filter(':checked').val();
 	    if (checkedRadio === 'outsideRadio' && $(".outsideAmount").val() <= 0) {
-	        $("#amount-error").fadeIn();
-	        setTimeout(function() { $("#amount-error").fadeOut(); }, 3000);
+	        this.ui.amount_error.fadeIn().fadeOut(3000);
 	    } else {
 	        //todo: add outside loan payment ajax request
 	    }
@@ -309,6 +322,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		});
 
 		this.renderRegions();
+		this.$el.find('.fees-calendar-from').datepicker();
+		this.$el.find('.fees-calendar-to').datepicker();
+		this.$el.find('.intrest-calendar-from').datepicker();
+		this.$el.find('.intrest-calendar-to').datepicker();
 	}, // onRender
 
 	renderRegions: function() {
