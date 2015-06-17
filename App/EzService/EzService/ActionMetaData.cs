@@ -133,6 +133,7 @@
 				try {
 					m_oDB.ExecuteNonQuery("EzServiceSaveActionMetaData",
 						CommandSpecies.StoredProcedure,
+						new QueryParameter("@Now", DateTime.UtcNow),
 						new QueryParameter("@InstanceID", m_nServiceInstanceID),
 						new QueryParameter("@ActionName", Name),
 						new QueryParameter("@ActionID", ActionID),
