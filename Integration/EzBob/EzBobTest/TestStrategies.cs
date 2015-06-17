@@ -767,5 +767,11 @@ namespace EzBobTest {
 		public void TestLoanStatusAfterPayment() {
 			new LoanStatusAfterPayment(54, "", 27, 1000, 500, false, false).Execute();
 		}
+
+		[Test]
+		public void TestBrokerLeadSendInvitation() {
+			new BrokerLeadSendInvitation(1040, "stasd+evlbrk5@ezbob.com").Execute();
+		}
+
 	}
 }
