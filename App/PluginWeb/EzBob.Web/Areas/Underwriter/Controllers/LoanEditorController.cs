@@ -4,22 +4,21 @@
     using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
+    using ConfigManager;
+    using Ezbob.Backend.Models.NewLoan;
+    using EzBob.Models;
+    using EzBob.Web.Code;
+    using EzBob.Web.Infrastructure;
+    using EzBob.Web.Infrastructure.Attributes;
     using EZBob.DatabaseLib.Model.Database;
     using EZBob.DatabaseLib.Model.Database.Loans;
     using EZBob.DatabaseLib.Model.Loans;
-    using EzBob.Models;
-    using Code;
-    using ConfigManager;
-    using Ezbob.Backend.Models.NewLoan;
-    using EZBob.DatabaseLib.Repository;
-    using Infrastructure;
-    using Infrastructure.Attributes;
+    using log4net;
     using PaymentServices.Calculators;
     using ServiceClientProxy;
     using ServiceClientProxy.EzServiceReference;
-    using StructureMap;
 
-    [RestfullErrorHandlingAttribute]
+    [RestfullErrorHandling]
     public class LoanEditorController : Controller
     {
         private readonly ILoanRepository _loans;
@@ -29,7 +28,7 @@
         private readonly LoanBuilder _loanBuilder;
         private readonly ILoanChangesHistoryRepository _history;
         private readonly IWorkplaceContext _context;
-        private static readonly log4net.ILog Log = log4net.LogManager.GetLogger(typeof(LoanEditorController));
+        private static readonly ILog Log = LogManager.GetLogger(typeof(LoanEditorController));
 
         public LoanEditorController(ILoanRepository loans, ChangeLoanDetailsModelBuilder builder, ICashRequestRepository cashRequests, ChangeLoanDetailsModelBuilder loanModelBuilder, LoanBuilder loanBuilder, ILoanChangesHistoryRepository history, IWorkplaceContext context)
         {

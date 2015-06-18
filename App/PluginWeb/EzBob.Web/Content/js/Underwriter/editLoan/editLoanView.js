@@ -94,7 +94,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     },
     reschSubmitForm: function () {
 
-        var requestParam = { loanID: this.model.get('Id') };
+        var requestParam = { loanID: this.model.get('Id'), save: 'true' };
 
         var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
         if (checkedRadio === 'true') {
@@ -164,10 +164,6 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             requestParam.lateFeeStartDate = feesFrom;
             requestParam.lateFeeEndDate = feesTo;
         }
-
-        requestParam.rescheduleIn = 'true';
-        requestParam.rescheduleIn = 'false';
-        requestParam.save = 'true';
 
         var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
 
