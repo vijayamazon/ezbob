@@ -2,9 +2,9 @@
 <script type="text/template" id="loan_editor_template">
 
 
-	<button class="btn btn-primary show option-btn;">Show advanced options</button>
+    <button class="btn btn-primary show option-btn">Show advanced options</button>
 
-	<div class="container" style="width:80%; display: none;" id="collapsable-content">
+	<div class="Container" style="width:80%; display: none;" id="collapsable-content">
 
 		<form class="form-inline" role="form">
 
@@ -13,6 +13,8 @@
 			</div>
 
 			<div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="selection-error">One of the Radio Buttons must be selected</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="within-selector-error">Please select Week/Month</div>
 
 			<div class="row">
 				<div class="col-sm-1">&nbsp;</div>
@@ -40,7 +42,8 @@
 
 			<div class="row"><h5>Outside loan payment arangment</h5></div>
 
-			<div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only numeric values greater then 0 allowed</div>
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only positive numeric values allowed</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="outside-selector-error">Please select Week/Month</div>
 
 			<div class="row">
 				<div class="col-sm-1">&nbsp;</div>
@@ -75,7 +78,7 @@
 				</div>
 				<div class="col-sm-6" style="text-align:left;">
 					<div class="form-group">
-						<input class="form-control" type="number" value="0" style="width:150px" id="charges-payments" name="charges-payments">
+						<input class="form-control" type="number" value="0" style="width:150px" id="charges-payments" name="charges-payments"> payments.
 					</div>
 					&nbsp;
 				</div>
@@ -147,7 +150,7 @@
 			<br />
 			<% } %>
 
-			<div class="row"><button class="btn btn-primary pull-right">Submit</button></div>
+			<div class="row"><button class="btn btn-primary pull-right" id="resch-submit-btn">Submit</button></div>
 
 			<div class="row alert alert-danger center" style="display: none; text-align: center" id="submit-fail">There has been an error sending data to server</div>
 			<div class="row alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server</div>
