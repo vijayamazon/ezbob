@@ -19,6 +19,7 @@
 			CaisAccounts = new CaisAccountList();
 
 			CustomerID = src.CustomerID;
+			IsBroker = src.BrokerID.HasValue && (src.BrokerID > 0);
 			CashRequestID = src.FirstCashRequestID;
 			UnderwriterName = src.UnderwriterName;
 			DecisionTime = src.DecisionTime;
@@ -70,6 +71,7 @@
 		} // LoadMonthTurnover
 
 		public int CustomerID { get; private set; }
+		public bool IsBroker { get; private set; }
 		public long CashRequestID { get; private set; }
 		public string UnderwriterName { get; private set; }
 		public DateTime DecisionTime { get; private set; }

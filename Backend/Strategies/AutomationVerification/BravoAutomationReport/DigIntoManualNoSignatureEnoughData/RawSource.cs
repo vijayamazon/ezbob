@@ -30,6 +30,7 @@
 		public Guid? MpTypeInternalID { get; set; }
 		public DateTime MpTotalsMonth { get; set; }
 		public long AutoApproveTrailID { get; set; }
+		public int? BrokerID { get; set; }
 
 		public int? DecisionStatusID {
 			get {

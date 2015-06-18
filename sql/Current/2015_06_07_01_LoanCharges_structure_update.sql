@@ -16,7 +16,6 @@ BEGIN
 		   LoanId INT NOT NULL,
 		   ConfigurationVariableId INT,
 		   Date DATETIME,
-		   InstallmentId INT NULL,
 		   AmountPaid DECIMAL(18,4),
 		   State VARCHAR(50),
 		   Description TEXT,
@@ -34,7 +33,6 @@ BEGIN
 			LoanId,
 			ConfigurationVariableId,
 			[Date],
-			InstallmentId,
 			AmountPaid,
 			State,
 			Description
@@ -45,7 +43,6 @@ BEGIN
 			LoanId,
 			ConfigurationVariableId,
 			[Date],
-			InstallmentId,
 			AmountPaid,
 			State,
 			Description

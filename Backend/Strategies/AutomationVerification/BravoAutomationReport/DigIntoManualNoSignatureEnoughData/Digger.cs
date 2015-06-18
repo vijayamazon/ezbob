@@ -331,6 +331,7 @@
 			int column = 1;
 
 			column = sheet.SetBorder(row, column).SetCellTitle("Customer ID");
+			column = sheet.SetBorder(row, column).SetCellTitle("Is broker");
 			column = sheet.SetBorder(row, column).SetCellTitle("Cash request ID");
 			column = sheet.SetBorder(row, column).SetCellTitle("Underwriter");
 			column = sheet.SetBorder(row, column).SetCellTitle("Decision time");
@@ -354,6 +355,7 @@
 
 			var values = new List<object> {
 				dd.CustomerID,
+				dd.IsBroker,
 				dd.CashRequestID,
 				dd.UnderwriterName,
 				dd.DecisionTime,
