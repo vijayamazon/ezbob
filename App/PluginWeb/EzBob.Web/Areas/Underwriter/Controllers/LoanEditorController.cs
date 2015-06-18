@@ -13,6 +13,7 @@
     using EZBob.DatabaseLib.Model.Database;
     using EZBob.DatabaseLib.Model.Database.Loans;
     using EZBob.DatabaseLib.Model.Loans;
+    using EZBob.DatabaseLib.Repository;
     using log4net;
     using PaymentServices.Calculators;
     using ServiceClientProxy;
@@ -27,10 +28,20 @@
         private readonly ChangeLoanDetailsModelBuilder _loanModelBuilder;
         private readonly LoanBuilder _loanBuilder;
         private readonly ILoanChangesHistoryRepository _history;
+	    private ILoanOptionsRepository loanOptionsRepository;
         private readonly IWorkplaceContext _context;
+	    private readonly ServiceClient serviceClient;
         private static readonly ILog Log = LogManager.GetLogger(typeof(LoanEditorController));
 
-        public LoanEditorController(ILoanRepository loans, ChangeLoanDetailsModelBuilder builder, ICashRequestRepository cashRequests, ChangeLoanDetailsModelBuilder loanModelBuilder, LoanBuilder loanBuilder, ILoanChangesHistoryRepository history, IWorkplaceContext context)
+        public LoanEditorController(
+			ILoanRepository loans, 
+			ChangeLoanDetailsModelBuilder builder, 
+			ICashRequestRepository cashRequests, 
+			ChangeLoanDetailsModelBuilder loanModelBuilder, 
+			LoanBuilder loanBuilder, 
+			ILoanChangesHistoryRepository history, 
+			IWorkplaceContext context, 
+			ILoanOptionsRepository loanOptionsRepository)
         {
             _loans = loans;
             _builder = builder;
@@ -39,6 +50,8 @@
             _loanBuilder = loanBuilder;
             _history = history;
             _context = context;
+	        this.loanOptionsRepository = loanOptionsRepository;
+	        this.serviceClient = new ServiceClient();
         }
 
         [Ajax]
@@ -226,6 +239,7 @@
             ) {
 
             Loan loan = this._loans.Get(loanID);
+	        DateTime now = DateTime.UtcNow;
 
             // loan options
             if (save)
@@ -251,25 +265,7 @@
 					this._loans.SaveOrUpdate(loan);
 				}
 
-                if (stopAutoCharge != null || stopLateFee != null)
-                {
-                    //ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
-                    //LoanOptions options = optionsRep.GetByLoanId(loanID);
-
-                    if (stopLateFee == true)
-                    {
-                        //options.AutoLateFees = true;
-                        //options.StopAutoLateFeesDate = stopLateFee;
-                    }
-
-                    if (stopAutoCharge == true)
-                    {
-                        //options.AutoPayment = false;
-                       // options.StopAutoChargeDate = stopAutoCharge;
-                    }
-
-                    //optionsRep.SaveOrUpdate(options);
-                }
+                UpdateLoanOptions(loanID, intervalType, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
             }
 
 	        save = false; // TEMPORARY - DONT'T SPOIL DB
@@ -277,7 +273,7 @@
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.SaveToDB = save;
-			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingDate = now;
 			reModel.ReschedulingRepaymentIntervalType = intervalType;
 			reModel.RescheduleIn = rescheduleIn;
 	        if(reModel.RescheduleIn==false) // "out"
@@ -286,8 +282,8 @@
 	        try {
 
 		        // re strategy
-		        ServiceClient client = new ServiceClient();
-		        ReschedulingActionResult result = client.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
+
+				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
 				return Json(result.Value);
 
@@ -302,5 +298,46 @@
 	        return null;
         }
 
+		[NonAction]
+	    private void UpdateLoanOptions(int loanID, DbConstants.RepaymentIntervalTypes intervalType, bool? stopAutoCharge, bool? stopLateFee, int? stopAutoChargePayment, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate, DateTime now) {
+		    if (stopAutoCharge != null || stopLateFee != null) {
+				LoanOptions options = this.loanOptionsRepository.GetByLoanId(loanID) ?? LoanOptions.GetDefault(loanID);
+
+			    if (stopLateFee == true) {
+				    options.AutoLateFees = false;
+				    options.StopLateFeeFromDate = lateFeeStartDate;
+				    options.StopLateFeeToDate = lateFeeEndDate;
+			    } else {
+				    options.AutoLateFees = true;
+				    options.StopLateFeeFromDate = null;
+				    options.StopLateFeeToDate = null;
+			    }
+
+			    if (stopAutoCharge == true) {
+				    options.AutoPayment = false;
+				    DateTime? stopAutoChargeDate = null;
+
+				    if (stopAutoChargePayment.HasValue) {
+					    switch (intervalType) {
+					    case DbConstants.RepaymentIntervalTypes.Month:
+						    stopAutoChargeDate = now.AddMonths(stopAutoChargePayment.Value + 1);
+						    break;
+					    case DbConstants.RepaymentIntervalTypes.Week:
+						    const int week = 7;
+						    stopAutoChargeDate = now.AddDays((stopAutoChargePayment.Value + 1) * week);
+						    break;
+					    default:
+						    Log.Warn("Not supported period " + intervalType);
+						    break;
+					    }
+				    }
+
+				    options.StopAutoChargeDate = stopAutoChargeDate;
+			    } else
+				    options.AutoPayment = true;
+
+			    this.loanOptionsRepository.SaveOrUpdate(options);
+		    }
+	    }
     }
 }
