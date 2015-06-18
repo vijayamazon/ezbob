@@ -65,6 +65,7 @@
 
             var model = _builder.BuildModel(loan);
 
+            model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
             //TODO build loan model
             Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 

@@ -4,6 +4,7 @@ namespace EzBob.Models
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
+	using EZBob.DatabaseLib.Model.Database;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 
@@ -34,6 +35,8 @@ namespace EzBob.Models
         public int OutsideMonth { get; set; }
 
         public decimal? ReschedulingBalance { get; set; }
+
+        public LoanOptions Options { get; set; }
 
         public static EditLoanDetailsModel Parse(string json)
         {

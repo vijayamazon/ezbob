@@ -343,10 +343,25 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         });
 
         this.renderRegions();
+
         this.$el.find('#fees-calendar-from').datepicker();
         this.$el.find('#fees-calendar-to').datepicker();
         this.$el.find('#intrest-calendar-from').datepicker();
         this.$el.find('#intrest-calendar-to').datepicker();
+        
+        var options = this.model.get('Options');
+        if (options.AutoPayment === false) {
+            this.$el.find('#automatic-charges').prop('checked', true);
+            if (options.StopAutoChargeDate != null) {
+                this.$el.find('#stop-charges').show();
+                this.$el.find('#stop-charges-date').text(EzBob.formatDateWithoutTime(options.StopAutoChargeDate));
+            }
+        }
+        if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null) {
+            this.$el.find('#fees-calculation').prop('checked', true);
+            this.$el.find('#fees-calendar-from').val(EzBob.formatDateWithoutTime(options.StopLateFeeFromDate));
+            this.$el.find('#fees-calendar-to').val(EzBob.formatDateWithoutTime(options.StopLateFeeToDate));
+        }
     }, // onRender
 
     renderRegions: function () {

@@ -80,7 +80,7 @@
 					<div class="form-group">
 						<input class="form-control" type="number" value="0" style="width:150px" id="charges-payments" name="charges-payments"> payments.
 					</div>
-					&nbsp;
+					<span style="display: none; font-weight: bold" id="stop-charges">Auto charges are stopped from <span id="stop-charges-date"></span></span>
 				</div>
 			</div>
 
@@ -148,7 +148,9 @@
 			</div>
 			<%	}});	%>
 			<br />
-			<% } %>
+			<% }else{ %>
+            <div class="row"><br/>There is no freez intrest for this loan.<br/></div>
+            <%}%>
 
 			<div class="row"><button class="btn btn-primary pull-right" id="resch-submit-btn">Submit</button></div>
 
