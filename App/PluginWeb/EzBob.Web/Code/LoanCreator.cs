@@ -320,7 +320,7 @@
 			if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod)
 				throw new ArgumentException("Wrong repayment period");
 
-			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.RepaymentPeriod < cr.LoanSource.DefaultRepaymentPeriod) {
+			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.RepaymentPeriod < cr.LoanSource.DefaultRepaymentPeriod)
 				throw new ArgumentException("Wrong repayment period");
 
 			if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value)
