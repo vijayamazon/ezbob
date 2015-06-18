@@ -66,6 +66,7 @@ BEGIN
 	)
 	SELECT
 		'Customer ID' = m.CustomerId,
+		'Is broker' = CONVERT(BIT, (CASE WHEN c.BrokerId IS NULL THEN 0 ELSE 1 END)),
 		'Cash request id' = br.FirstCashRequestID,
 		'Manual decision' = d.DecisionName,
 		'Underwriter' = u.UserName,
@@ -87,7 +88,7 @@ BEGIN
 		BusinessSeniority, BusinessSeniorityWeight, BusinessSeniorityGrade, BusinessSeniorityScore,
 		ConsumerScore, ConsumerScoreWeight, ConsumerScoreGrade, ConsumerScoreScore,
 		NetWorth, NetWorthWeight, NetWorthGrade, NetWorthScore,
-		MaritalStatus, MaritalStatusWeight, MaritalStatusGrade, MaritalStatusScore,
+		m.MaritalStatus, MaritalStatusWeight, MaritalStatusGrade, MaritalStatusScore,
 		NumberOfStores, NumberOfStoresWeight, NumberOfStoresGrade, NumberOfStoresScore,
 		PositiveFeedbacks, PositiveFeedbacksWeight, PositiveFeedbacksGrade, PositiveFeedbacksScore,
 		EzbobSeniority, EzbobSeniorityWeight, EzbobSeniorityGrade, EzbobSeniorityScore,
@@ -98,6 +99,7 @@ BEGIN
 		AmazonPositiveFeedbacks, EbayPositiveFeedbacks, NumberOfPaypalPositiveTransactions
 	FROM
 		medal_calc m
+		INNER JOIN Customer c ON m.CustomerId = c.Id
 		INNER JOIN no_medal_aa t ON m.CustomerId = t.CustomerID
 		INNER JOIN BAR_Results br
 			ON m.CustomerId = br.CustomerID
