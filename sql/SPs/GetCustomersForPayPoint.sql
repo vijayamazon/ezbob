@@ -70,7 +70,8 @@ BEGIN
 					l1.Status = 'StillToPay' OR 
 					l1.Status = 'Late'
 				) 
-		)
+		)AND
+		c.ExternalCollectionStatusID IS NULL
 		
 	SELECT 
 		LoanScheduleId,
