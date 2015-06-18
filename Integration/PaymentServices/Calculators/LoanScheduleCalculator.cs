@@ -1,127 +1,147 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using EZBob.DatabaseLib.Model.Loans;
+﻿namespace PaymentServices.Calculators {
+	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using ConfigManager;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
 
-namespace PaymentServices.Calculators
-{
-    public class LoanScheduleCalculator
-    {
-        private decimal _setUpFee = .008M;
-        private decimal _setUpfFeeMin = 30;
-        private int _term = 3;
-        private decimal _interest = 0.06M;
+	public class LoanScheduleCalculator {
+		public int Term {
+			get { return Math.Max(this.term, 1); }
+			set { this.term = value; }
+		} // Term
 
-        public decimal SetUpFee
-        {
-            get { return _setUpFee; }
-            set { _setUpFee = value; }
-        }
+		public decimal Interest {
+			get { return this.interest; }
+			set { this.interest = value; }
+		} // Interest
 
-        public decimal SetUpFeeMin
-        {
-            get { return _setUpfFeeMin; }
-            set { _setUpfFeeMin = value; }
-        }
+		/// <summary>
+		/// Calculates loan schedule.
+		/// </summary>
+		/// <param name="total">Total amount, that is taken</param>
+		/// <param name="loan">Loan object, or null. If loan is present, schedule is added to it.</param>
+		/// <param name="startDate">Starting day of loan. First payment is month later.</param>
+		/// <param name="interestOnlyTerm">Number of months in the beginning of the term to repay interest only.</param>
+		/// <param name="spreadSetupFee">Spread set up fee as monthly fees or just not transfer set up fee amount to
+		/// customer.</param>
+		/// <returns>List of scheduled payments.</returns>
+		public IList<LoanScheduleItem> Calculate(
+			decimal total,
+			Loan loan = null,
+			DateTime? startDate = null,
+			int interestOnlyTerm = 0,
+			bool spreadSetupFee = false
+		) {
+			IList<LoanScheduleItem> schedule = loan == null ? new List<LoanScheduleItem>(Term) : loan.Schedule;
 
-        public int Term
-        {
-            get { return Math.Max(_term, 1) ; }
-            set { _term = value; }
-        }
+			if (!startDate.HasValue)
+				startDate = DateTime.UtcNow;
 
-        public decimal Interest
-        {
-            get { return _interest; }
-            set { _interest = value; }
-        }
+			LoanType loanType = loan == null ? new StandardLoanType() : loan.LoanType;
+			decimal[] balances = loanType.GetBalances(total, Term, interestOnlyTerm).ToArray();
 
-        /// <summary>
-        /// Calculates loan schedule
-        /// </summary>
-        /// <param name="total">Total amount, that is taken</param>
-        /// <param name="loan">Loan object, or null. If loan is present, schedule is added to it</param>
-        /// <param name="startDate">Starting day of loan. First payment is mounth later</param>
-        /// <returns></returns>
-        public IList<LoanScheduleItem> Calculate(decimal total, Loan loan = null, DateTime? startDate = null, int interestOnlyTerm = 0)
-        {
-            var schedule = loan == null ? new List<LoanScheduleItem>(Term) : loan.Schedule;
+			decimal[] discounts = GetDiscounts(loan);
 
-            if (!startDate.HasValue)
-            {
-                startDate = DateTime.UtcNow;
-            }
+			decimal[] setupFees = SpreadSetupFee(loan, spreadSetupFee);
 
-            var loanType = loan == null ? new StandardLoanType() : loan.LoanType;
-            var balances = loanType.GetBalances(total, Term, interestOnlyTerm).ToArray();
+			decimal balance = total;
+			decimal repayment = balance;
 
-            var discounts = GetDiscounts(loan, Term);
+			for (int m = 0; m < Term; m++) {
+				LoanScheduleItem item = null;
 
-            var balance = total;
-            var repayment = balance;
+				if (schedule.Count != Term) {
+					item = new LoanScheduleItem { Status = LoanScheduleStatus.StillToPay };
+					schedule.Add(item);
+				} else
+					item = schedule[m];
 
-            for (int m = 0; m < Term; m++)
-            {
-                LoanScheduleItem item = null;
+				decimal currentInterestRate = Interest + Interest * discounts[m];
 
-                if (schedule.Count != Term)
-                {
-                    item = new LoanScheduleItem {Status = LoanScheduleStatus.StillToPay};
-                    schedule.Add(item);
-                }
-                else
-                {
-                    item = schedule[m];
-                }
+				decimal roundedInterest = Math.Round(balance * currentInterestRate, 2);
 
-                var currentInterestRate = Interest + Interest*discounts[m];
+				repayment = balance - balances[m];
+				item.BalanceBeforeRepayment = balance;
+				balance = balances[m];
 
-                var round = Math.Round(balance*currentInterestRate, 2);
-                var interest = round;
+				DateTime scheduledDate = startDate.Value.AddMonths(m + 1);
 
-                repayment = balance - balances[m];
-                item.BalanceBeforeRepayment = balance;
-                balance = balances[m];
+				decimal currentSetupFee = setupFees[m];
 
-                item.Loan = loan;
-                item.Date = startDate.Value.AddMonths(m + 1);
-                item.Balance = balance;
-                item.Interest = interest;
-                item.InterestRate = currentInterestRate;
-                item.AmountDue = repayment + interest;
-                item.LoanRepayment = repayment;
-            }
+				if ((currentSetupFee > 0) && (loan != null)) {
+					loan.Charges.Add(new LoanCharge {
+						Amount = currentSetupFee,
+						AmountPaid = 0,
+						ChargesType = new ConfigurationVariable(CurrentValues.Instance.SpreadSetupFeeCharge),
+						Date = scheduledDate,
+						Description = "Set-up fee (spread)",
+						Loan = loan,
+						State = "Active",
+					});
+				} // if
 
-            if (loan != null)
-            {
-                loan.Interest = schedule.Sum(x => x.Interest);
-                loan.LoanAmount = total;
-                loan.Principal = total;
-                loan.Balance = loan.LoanAmount + loan.Interest;
-                loan.InterestRate = Interest;
-                loan.Date = startDate.Value;
-                loan.UpdateNexPayment();
-            }
+				item.Loan = loan;
+				item.Date = scheduledDate;
+				item.Balance = balance;
+				item.Interest = roundedInterest;
+				item.InterestRate = currentInterestRate;
+				item.AmountDue = repayment + roundedInterest + currentSetupFee;
+				item.Fees = currentSetupFee;
+				item.LoanRepayment = repayment;
+			} // for
 
-            return schedule;
-        }
+			if (loan != null) {
+				loan.Interest = schedule.Sum(x => x.Interest);
+				loan.LoanAmount = total;
+				loan.Principal = total;
+				loan.Balance = loan.LoanAmount + loan.Interest;
+				loan.InterestRate = Interest;
+				loan.Date = startDate.Value;
+				loan.UpdateNexPayment();
+			} // if
 
-        private decimal[] GetDiscounts(Loan loan, int term)
-        {
-            var discounts = new List<decimal>(term);
-            discounts.AddRange(new decimal[term]);
+			return schedule;
+		} // Calculate
 
-            if (loan != null && loan.CashRequest != null && loan.CashRequest.DiscountPlan != null)
-            {
-                for (int i = 0; i < loan.CashRequest.DiscountPlan.Discounts.Length; i++)
-                {
-                    if (i >= term) break;
-                    discounts[i] = loan.CashRequest.DiscountPlan.Discounts[i] / 100.0m;
-                }
-            }
+		private decimal[] GetDiscounts(Loan loan) {
+			var discounts = new decimal[Term];
 
-            return discounts.ToArray();
-        }
-    }
-}
+			if ((loan == null) || (loan.CashRequest == null) || (loan.CashRequest.DiscountPlan == null))
+				return discounts.ToArray();
+
+			for (int i = 0; i < loan.CashRequest.DiscountPlan.Discounts.Length; i++) {
+				if (i >= Term)
+					break;
+
+				discounts[i] = loan.CashRequest.DiscountPlan.Discounts[i] / 100.0m;
+			} // for
+
+			return discounts.ToArray();
+		} // GetDiscounts
+
+		private decimal[] SpreadSetupFee(Loan loan, bool spreadSetupFee) {
+			var setupFee = new decimal[Term];
+
+			if (!spreadSetupFee || (loan == null) || (loan.SetupFee <= 0))
+				return setupFee;
+
+			decimal other = Math.Floor(loan.SetupFee / Term);
+
+			setupFee[0] = loan.SetupFee - other * (Term - 1);
+
+			for (int i = 1; i < Term; i++)
+				setupFee[i] = other;
+
+			loan.Fees = loan.SetupFee;
+			loan.SetupFee = 0;
+
+			return setupFee;
+		} // SpreadSetupFee
+
+		private int term = 3;
+		private decimal interest = 0.06M;
+	} // class LoanScheduleCalculator
+} // namespace

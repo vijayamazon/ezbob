@@ -227,24 +227,33 @@
 
 				realAmount = CalculateRealAmount(type, loanId, realAmount);
 
-				if (realAmount < 0) {
-					return Json(new {
-						error = "amount is too small"
-					});
-				}
+				if (realAmount < 0)
+					return Json(new { error = "amount is too small" });
 
-				PayPointCard card = null;
-				if (cardId == -1)
-					card = customer.PayPointCards.FirstOrDefault(c => c.IsDefaultCard);
-				else
-					card = customer.PayPointCards.FirstOrDefault(c => c.Id == cardId);
+				PayPointCard card = cardId == -1
+					? customer.PayPointCards.FirstOrDefault(c => c.IsDefaultCard)
+					: customer.PayPointCards.FirstOrDefault(c => c.Id == cardId);
 
 				if (card == null)
 					throw new Exception("Card not found");
 
 				_paypoint.RepeatTransactionEx(card.PayPointAccount, card.TransactionId, realAmount);
-				LoanPaymentFacade loanRepaymentFacade= new LoanPaymentFacade();
-				var payFastModel = loanRepaymentFacade.MakePayment(card.TransactionId, realAmount, null, type, loanId, customer, DateTime.UtcNow, "manual payment from customer", paymentType, "CustomerAuto");
+
+				LoanPaymentFacade loanRepaymentFacade = new LoanPaymentFacade();
+
+				PaymentResult payFastModel = loanRepaymentFacade.MakePayment(
+					card.TransactionId,
+					realAmount,
+					null,
+					type,
+					loanId,
+					customer,
+					DateTime.UtcNow,
+					"manual payment from customer",
+					paymentType,
+					"CustomerAuto"
+				);
+
 				payFastModel.CardNo = card.CardNo;
 
 				SendEmails(loanId, realAmount, customer);
@@ -252,17 +261,27 @@
 
 				return Json(payFastModel);
 			} catch (PayPointException e) {
-				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Failed", e.ToString());
-				return Json(new {
-					error = "Error occurred while making payment"
-				});
+				_logRepository.Log(
+					_context.UserId,
+					DateTime.Now,
+					"Paypoint Pay Early Fast Callback",
+					"Failed",
+					e.ToString()
+				);
+
+				return Json(new { error = "Error occurred while making payment" });
 			} catch (Exception e) {
-				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint Pay Early Fast Callback", "Failed", e.ToString());
-				return Json(new {
-					error = e.Message
-				});
-			}
-		}
+				_logRepository.Log(
+					_context.UserId,
+					DateTime.Now,
+					"Paypoint Pay Early Fast Callback",
+					"Failed",
+					e.ToString()
+				);
+
+				return Json(new { error = e.Message });
+			} // try
+		} // PayFast
 
 		private decimal CalculateRealAmount(string type, int loanId, decimal realAmount) {
 			if (type == "total")

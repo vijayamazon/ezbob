@@ -118,8 +118,11 @@ BEGIN
 		SELECT
 			SUM(lc.Amount)
 		FROM
-			Loan l
-			LEFT JOIN LoanCharges lc ON lc.LoanId = l.id
+			LoanCharges lc
+			INNER JOIN Loan l ON lc.LoanId = l.id
+			INNER JOIN ConfigurationVariables cv
+				ON lc.ConfigurationVariableId = cv.Id
+				AND cv.Name != 'SpreadSetupFeeCharge'
 		WHERE
 			l.Customerid = @CustomerId
 			AND

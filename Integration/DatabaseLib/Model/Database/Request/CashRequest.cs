@@ -1,7 +1,5 @@
-﻿namespace EZBob.DatabaseLib.Model.Database
-{
+﻿namespace EZBob.DatabaseLib.Model.Database {
 	using System.Collections.Generic;
-	using DbConstants;
 	using NHibernate.Type;
 	using System;
 	using ApplicationMng.Repository;
@@ -9,13 +7,7 @@
 	using Model.Loans;
 	using NHibernate;
 
-	public class CashRequest
-	{
-		private int _repaymentPeriod = 3;
-		private decimal _interestRate = 0.06M;
-		private bool _useSetupFee = true;
-		private LoanType _loanType;
-
+	public class CashRequest {
 		public virtual long Id { get; set; }
 		public virtual Customer Customer { get; set; }
 		public virtual int? IdUnderwriter { get; set; }
@@ -34,56 +26,52 @@
 		public virtual DateTime? OfferStart { get; set; }
 		public virtual DateTime? OfferValidUntil { get; set; }
 
-		public virtual decimal InterestRate
-		{
-			get { return _interestRate; }
-			set { _interestRate = value; }
-		}
+		public virtual decimal InterestRate {
+			get { return this.interestRate; }
+			set { this.interestRate = value; }
+		} // InterestRate
 
 		public virtual decimal? APR { get; set; }
 		/// <summary>
 		/// The value changes as customer changes the slider if allowed
 		/// </summary>
-		public virtual int RepaymentPeriod
-		{
-			get { return _repaymentPeriod; }
-			set { _repaymentPeriod = value; }
-		}
+		public virtual int RepaymentPeriod {
+			get { return this.repaymentPeriod; }
+			set { this.repaymentPeriod = value; }
+		} // RepaymentPeriod
+
 		/// <summary>
 		/// underwriter approved repayment period
 		/// </summary>
 		public virtual int? ApprovedRepaymentPeriod { get; set; }
 
-        [Obsolete]
-		public virtual bool UseSetupFee
-		{
-			get { return _useSetupFee; }
-			set { _useSetupFee = value; }
-		}
-        [Obsolete]
+		[Obsolete]
+		public virtual bool UseSetupFee {
+			get { return this.useSetupFee; }
+			set { this.useSetupFee = value; }
+		} // UseSetupFee
+
+		[Obsolete]
 		public virtual bool UseBrokerSetupFee { get; set; }
-        [Obsolete]
+
+		[Obsolete]
 		public virtual int? ManualSetupFeeAmount { get; set; }
+
 		public virtual decimal? ManualSetupFeePercent { get; set; }
-        public virtual decimal? BrokerSetupFeePercent { get; set; }
+		public virtual decimal? BrokerSetupFeePercent { get; set; }
 
 		public virtual bool IsSure { get; set; }
 
-		public virtual decimal ApprovedSum()
-		{
+		public virtual decimal ApprovedSum() {
 			return (decimal)(ManagerApprovedSum ?? (SystemCalculatedSum ?? 0));
-		}
+		} // ApprovedSum
 
 		/// <summary>
 		/// Запретить отправку писем пользователю
 		/// </summary>
 		public virtual bool EmailSendingBanned { get; set; }
 
-		public virtual LoanType LoanType
-		{
-			get { return _loanType; }
-			set { _loanType = value; }
-		}
+		public virtual LoanType LoanType { get; set; }
 
 		public virtual bool HasLoans { get; set; }
 
@@ -113,20 +101,29 @@
 		public virtual Iesi.Collections.Generic.ISet<DecisionHistory> DecisionHistories { get; set; }
 
 		public virtual int? AutoDecisionID { get; set; }
+
+		public virtual bool? SpreadSetupFee { get; set; }
+
+		private int repaymentPeriod = 3;
+		private decimal interestRate = 0.06M;
+		private bool useSetupFee = true;
 	} // class CashRequest
 
-	public class CashRequestOriginatorType : EnumStringType<CashRequestOriginator> { }
-	
-	public interface ICashRequestRepository : IRepository<CashRequest>
-	{
+	public static class CashRequestExt {
+		public static bool SpreadSetupFee(this CashRequest cr) {
+			if (cr == null)
+				return false;
 
-	}
+			return cr.SpreadSetupFee.HasValue && cr.SpreadSetupFee.Value;
+		} // SpreadSetupFee
+	} // class CashRequestExt
 
-	public class CashRequestRepository : NHibernateRepositoryBase<CashRequest>, ICashRequestRepository
-	{
-		public CashRequestRepository(ISession session)
-			: base(session)
-		{
-		}
-	}
-}
+	public class CashRequestOriginatorType : EnumStringType<CashRequestOriginator> {}
+
+	public interface ICashRequestRepository : IRepository<CashRequest> {}
+
+	public class CashRequestRepository : NHibernateRepositoryBase<CashRequest>, ICashRequestRepository {
+		public CashRequestRepository(ISession session) : base(session) {
+		} // constructor
+	} // class CashRequestRepository
+} // namespace
