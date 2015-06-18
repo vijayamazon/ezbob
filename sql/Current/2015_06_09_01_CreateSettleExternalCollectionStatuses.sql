@@ -1,4 +1,4 @@
-IF OBJECT_ID('ExternalCollectionSupplier') IS NULL
+IF OBJECT_ID('ExternalCollectionStatuses') IS NULL
 BEGIN
 	CREATE TABLE [ExternalCollectionStatuses] (
 		[ExternalCollectionStatusID] INT UNIQUE NOT NULL,
