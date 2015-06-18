@@ -12,7 +12,7 @@ GO
 CREATE TYPE CreditSafeDirectors_DirectorshipsList AS TABLE (
 	CreditSafeDirectorsID BIGINT NULL,
 	CompanyNumber NVARCHAR(100) NULL,
-	CompanyName NVARCHAR(100) NULL,
+	CompanyName NVARCHAR(500) NULL,
 	CompanyStatus NVARCHAR(100) NULL,
 	[Function] NVARCHAR(100) NULL,
 	AppointedDate DATETIME NULL

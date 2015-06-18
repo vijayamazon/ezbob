@@ -6,7 +6,6 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
 {
     public class CreditSafeDirectors_Directorships
     {
-
         [PK(true)]
         [NonTraversable]
         public long CreditSafeDirectors_DirectorshipsID { get; set; }
@@ -14,14 +13,12 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
         public long? CreditSafeDirectorsID { get; set; }
         [Length(100)]
         public string CompanyNumber { get; set; }
-        [Length(100)]
+        [Length(500)]
         public string CompanyName { get; set; }
         [Length(100)]
         public string CompanyStatus { get; set; }
         [Length(100)]
         public string Function { get; set; }
         public DateTime? AppointedDate { get; set; }
-
-
     }
 }
