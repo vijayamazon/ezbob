@@ -170,7 +170,7 @@
         });
 
         _.each(charges, function(charge, i) {
-            if ( charge.State !== 'Paid' && charge.State !== 'Expired') {
+            if ( charge.State !== 'Paid' && charge.State !== 'Expired' && charge.IsServiceFee != 'yes' ) {
                 %><tr>
                     <td><img  height="31"  src='@Url.Content("~/Content/img/calendarx32.png")'  alt=""/></td>
                     <td><%- EzBob.formatDateHumanFull(charge.Date) %></td>
