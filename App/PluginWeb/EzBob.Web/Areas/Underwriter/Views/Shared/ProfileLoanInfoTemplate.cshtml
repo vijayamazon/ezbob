@@ -77,7 +77,7 @@
 <script id="simple-value-editor-cb-template" type="text/template">
     <select name='simpleValueEdit' class="form-control selectheight">
         <%_.each(options, function(o){%>
-            <option value="<%=o.value%>"><%=o.text%></option>
+           <option value="<%=o.value%>"><%=o.text%></option>			
         <%});%>		
     </select>
 </script>
@@ -303,6 +303,8 @@
         </thead>
         <tbody class="box-content">
             @RowCellWithButtonNear("Customer Status", "<%- data.CustomerStatusName %>", "changeCustomerStatus", "<%= data.IsCustomerStatusInAlertMode ? 'red_cell' : '' %>")
+			
+			@RowCellWithButtonNear("External Collection Status", "<%- data.ExternalCollectionStatusName %>", "changeExternalCollectionStatus")
 
             <tr>
                 <td>
@@ -321,7 +323,7 @@
                     </span>
                 </td>
             </tr>
-
+			
             @RowCellWithSlider("CCI mark", "cciMarkSwitch", "Off", "On", "<%= data.IsCciMarkInAlertMode ? 'red_cell' : '' %> cci-mark-td customer-details-switch-height")
 
             @RowCellWithSlider("Test User", "testUserSwitch", "No", "Yes", "<%= data.IsTestInAlertMode ? 'red_cell' : '' %> is-test-td customer-details-switch-height")

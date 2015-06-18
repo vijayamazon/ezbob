@@ -10,6 +10,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 	}, // initialize
 
 	onRender: function() {
+		
 		this.$el.find(".tltp").tooltip();
 		this.$el.find(".tltp-left").tooltip({ placement: "left" });
 
@@ -115,6 +116,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 	events: {
 		"click button[name=\"changeCustomerStatus\"]": "changeCustomerStatus",
+		"click button[name=\"changeExternalCollectionStatus\"]": "changeExternalCollectionStatus",
 		"click button[name=\"editEmail\"]": "editEmail",
 		"click button[name=\"brokerDetails\"]": "brokerDetails",
 		"click [name=\"changeFraudStatusManualy\"]": "changeFraudStatusManualyClicked",
@@ -298,7 +300,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 	updateTrustPilotStatus: function() {
 		var self = this;
-
+		
 		var d = new EzBob.Dialogs.ComboEdit({
 			model: this.model,
 			propertyName: 'TrustPilotStatusName',
@@ -363,7 +365,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 
 	changeCustomerStatus: function() {
 		var self = this;
-
+		
 		var collectionStatusModel = new EzBob.Underwriter.CollectionStatusModel({
 			customerId: this.model.get('Id'),
 			CurrentStatus: this.model.get('CustomerStatusId')
@@ -375,12 +377,38 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 			});
 
 			collectionStatusLayout.render();
+			
 			EzBob.App.jqmodal.show(collectionStatusLayout);
 			collectionStatusLayout.on('saved', function() {
 				self.model.fetch();
 			});
 		});
 	}, // changeCustomerStatus
+
+	changeExternalCollectionStatus: function() {
+		var self = this;
+		var blank = Object({ text: '', value: '' });
+		if (this.model.get('ExternalCollectionStatusesList')[0].value !== '') {
+			this.model.get('ExternalCollectionStatusesList').unshift(blank);
+		}
+		console.log(this.model.attributes);
+		var d = new EzBob.Dialogs.ComboEdit({
+			model: this.model,
+			propertyName: 'ExternalCollectionStatusID',
+			title: 'External Collection Status',
+			width: 500,
+			postValueName: 'externalStatusID',
+			comboValues: this.model.get('ExternalCollectionStatusesList'),
+			url: "Underwriter/ApplicationInfo/ChangeExternalCollectionStatus",
+			data: {
+				id: this.model.get('Id')
+			},
+		});
+
+		d.render();
+
+		d.on('done', function() { self.model.fetch(); });
+	}, // changeExternalCollectionStatus
 
 	brokerDetails: function() {
 		this.$el.find('.broker-details-rows').toggle();
@@ -452,3 +480,4 @@ EzBob.Underwriter.PersonalInfoModel = Backbone.Model.extend({
 		this.set("FraudHighlightCss", this.get("FraudCheckStatusId") === 2 ? 'red_cell' : '');
 	}, // changeFraudCheckStatus
 }); // EzBob.Underwriter.PersonalInfoModel
+

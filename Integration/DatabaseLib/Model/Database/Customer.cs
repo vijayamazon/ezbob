@@ -573,6 +573,8 @@
 
 		public virtual TrustPilotStatus TrustPilotStatus { get; set; }
 
+		public virtual ExternalCollectionStatuses ExternalCollectionStatus { get; set; }
+
 		public virtual QuickOffer QuickOffer { get; set; }
 
 		public virtual Broker.Broker Broker { get; set; }

@@ -113,6 +113,7 @@ namespace EzBob.Web.Infrastructure
 
 			For<IDatabaseDataHelper>().Use<DatabaseDataHelper>();
 			For<IBugRepository>().Use<BugRepository>();
+			For<IExternalCollectionStatusesRepository>().Use<ExternalCollectionStatusesRepository>();
 		}
 	}
 }

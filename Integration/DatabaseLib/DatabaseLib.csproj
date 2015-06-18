@@ -105,6 +105,7 @@
     <Compile Include="Model\Database\CustomerCompanyHistory.cs" />
     <Compile Include="Model\Database\CustomerOrigin.cs" />
     <Compile Include="Model\Database\CustomerPhone.cs" />
+    <Compile Include="Model\Database\ExternalCollectionStatuses.cs" />
     <Compile Include="Model\Database\PropertyStatus.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrace.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrail.cs" />

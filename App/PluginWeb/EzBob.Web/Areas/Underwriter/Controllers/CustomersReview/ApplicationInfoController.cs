@@ -43,6 +43,7 @@
 		private readonly IEzbobWorkplaceContext _context;
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
+		private readonly IExternalCollectionStatusesRepository externalCollectionStatusesRepository;
 
 		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
 
@@ -59,7 +60,8 @@
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
-			CustomerPhoneRepository customerPhoneRepository) {
+			CustomerPhoneRepository customerPhoneRepository, 
+			IExternalCollectionStatusesRepository externalCollectionStatusesRepository) {
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
 			_loanTypes = loanTypes;
@@ -74,6 +76,7 @@
 			_suggestedAmountRepository = suggestedAmountRepository;
 			serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
+			this.externalCollectionStatusesRepository = externalCollectionStatusesRepository;
 		}
 
 		// Here we get VA\FCF\Turnover
@@ -391,6 +394,31 @@
 
 			return Json(new { error = (string)null, id = id, status = status });
 		} // UpdateTrustPilotStatus
+
+		[HttpPost]
+		[Transactional]
+		[ValidateJsonAntiForgeryToken]
+		[Ajax]
+		public JsonResult ChangeExternalCollectionStatus(int id, int? externalStatusID) {
+			Customer oCustomer = _customerRepository.Get(id);
+
+			if (oCustomer == null) {
+				log.Debug("Customer({0}) not found", id);
+				return Json(new { error = "Customer not found.", id = id, status = externalStatusID });
+			} // if
+
+			var oTsp = (externalStatusID == null) ? null : this.externalCollectionStatusesRepository.Get(externalStatusID);
+
+			if (oTsp == null && externalStatusID != null) {
+				log.Debug("Status({0}) not found in the DB repository.", externalStatusID);
+				return Json(new { error = "Status not found in the DB repository.", id = id, status = externalStatusID });
+			} // if
+
+			oCustomer.ExternalCollectionStatus = oTsp;
+			log.Debug("Customer({0}).ExternalCollectionStatus set to {1}", id, externalStatusID);
+
+			return Json(new { error = (string)null, id = id, status = externalStatusID });
+		} // ChangeExternalCollectionStatus
 
 		[HttpPost]
 		[Transactional]

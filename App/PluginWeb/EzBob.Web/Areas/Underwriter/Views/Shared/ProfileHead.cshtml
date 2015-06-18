@@ -2,7 +2,7 @@
 
 <script id="profile-head-template" type="text/template">
     <div class="row">
-        <%if(loan){ %>
+        <%if(loan){ loan.AutomationOfferModel = loan.AutomationOfferModel || {}; %>
         <div class="col-md-12 col-lg-6">
             <div class="box">
                 <div class="box-title">

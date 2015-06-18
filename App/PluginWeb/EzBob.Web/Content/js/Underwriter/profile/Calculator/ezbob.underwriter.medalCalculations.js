@@ -29,7 +29,10 @@ EzBob.Underwriter.MedalCalculationView = Backbone.View.extend({
     
     render: function() {
 		
-        var medals = this.model.toJSON();
+    	var medals = this.model.toJSON();
+	    if (!medals.DetailedHistory)
+	    	return false;
+
         var that = this;
         var currentMedal = _.find(medals.DetailedHistory.MedalDetailsHistories, function(medalDetails) {
              return medalDetails.Score.Id == that.currentMedalId;

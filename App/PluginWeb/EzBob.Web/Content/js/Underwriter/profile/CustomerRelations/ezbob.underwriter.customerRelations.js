@@ -16,9 +16,9 @@ EzBob.Underwriter.CustomerRelationsView = Backbone.Marionette.ItemView.extend({
     },
 
     serializeData: function () {
-        var actionItems = this.model.get("ActionItems");
+        var actionItems = this.model.get("ActionItems") || [];
         var checkedActionItemsCounter = 0;
-        if (this.model.get("CostumeActionItem").IsChecked) {
+        if (this.model.get("CostumeActionItem") && this.model.get("CostumeActionItem").IsChecked) {
             checkedActionItemsCounter = 1;
         }
         for (var i = 0; i < actionItems.length; i++) {
