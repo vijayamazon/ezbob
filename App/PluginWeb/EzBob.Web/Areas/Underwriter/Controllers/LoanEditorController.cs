@@ -317,7 +317,7 @@
 				    options.AutoPayment = false;
 				    DateTime? stopAutoChargeDate = null;
 
-				    if (stopAutoChargePayment.HasValue) {
+					if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value > 0) {
 					    switch (intervalType) {
 					    case DbConstants.RepaymentIntervalTypes.Month:
 						    stopAutoChargeDate = now.AddMonths(stopAutoChargePayment.Value + 1);
@@ -331,6 +331,10 @@
 						    break;
 					    }
 				    }
+
+					if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value == 0) {
+						stopAutoChargeDate = now.Date;
+					}
 
 				    options.StopAutoChargeDate = stopAutoChargeDate;
 			    } else
