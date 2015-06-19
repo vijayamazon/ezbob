@@ -38,6 +38,7 @@
 					FirmName = sr["FirmName"];
 					UserID = sr["UserID"];
 					Origin = sr["Origin"];
+					OriginSite = sr["CustomerSite"];
 					return ActionResult.SkipAll;
 				},
 				"BrokerLoadContactData",
