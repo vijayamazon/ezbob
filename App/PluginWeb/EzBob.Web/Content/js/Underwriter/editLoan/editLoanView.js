@@ -130,9 +130,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             }
             requestParam.AmountPerInterval = $('#outsideAmount').val();
             requestParam.rescheduleIn = 'false';
-            var isStopCharges = $('#charges-checkbox').is(':checked');
+            var isStopCharges = $('#automatic-charges').is(':checked');
             var chargesVal = $('#charges-payments').val();
-            if (chargesVal <= 0 || chargesVal === "")
+            if (chargesVal < 0 || chargesVal === "")
                 return false;
             if (isStopCharges) {
                 requestParam.stopAutoCharge = 'true';
@@ -144,7 +144,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         }
 
         var isStopIntrest = $("#intrest-checkbox").is(':checked');
-        var isStopFees = $('#fees-checkbox').is(':checked');
+        var isStopFees = $('#fees-calculation').is(':checked');
 
         var interestFrom = $('#intrest-calendar-from').val();
         var interestTo = $('#intrest-calendar-to').val();
