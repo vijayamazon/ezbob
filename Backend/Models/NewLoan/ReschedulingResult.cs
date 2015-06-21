@@ -13,7 +13,7 @@
 		[DataMember]
 		public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
 
-		//[DataMember]
+		[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type 
 
 		[DataMember] // for info only
@@ -21,15 +21,21 @@
 
 		[DataMember]
 		public int IntervalsNum { get; set; }  // calculated repayment intervals number in months
-		
+
 		[DataMember]
 		public int IntervalsNumWeeks { get; set; }  // calculated repayment intervals number in weeks
 
 		//[DataMember]
 		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planning close date
 
-	//	[DataMember]
 		public DateTime? RescheduledLoanCloseDate { get; set; } // loan re-scheduled planning close date 
+
+		//	public bool? IsCustomerStatusBad { get; set; } // see list in the strategy
+
+		public decimal? Fees { get; set; } // fees in loan
+
+		[DataMember]
+		public string Error { get; set; }
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
@@ -40,6 +46,6 @@
 			}
 			return sb.ToString();
 		}
-		
+
 	} //ReschedulingResult
 }

@@ -126,7 +126,93 @@
 		}
 
 
-		
+		// n = A/(m-Ar);
+		// total = A+A*r*((n+1)/2)
+		[Test]
+		public void TestLoanCalculator() {
+
+			decimal A = 6000m;
+			decimal m = 600m;
+			decimal r = 0.06m;
+			decimal F = 100m;
+
+			Console.WriteLine("A: {0}, F: {1}, r: {2}, m: {3}", A, F, r, m);
+
+			//decimal earned = A * r;
+
+			decimal n = Math.Ceiling(A / (m - A * r));
+			
+			//decimal total1 = A + A * r * ((n + 1) / 2);
+			//Console.WriteLine(total1);
+
+			//decimal B = (A + F);
+
+			decimal k = Math.Ceiling((A + F) / (m - (A + F) * r));
+
+			Console.WriteLine("n==================" + n);
+
+			List<decimal> paymentsN = new List<decimal>();
+			decimal pi = 0m;
+			decimal sum = 0m;
+			for (int i = 1; i <= n; i++) {
+				pi = (A + F) / k + ((n - i + 1) / n) * (A + F) * r;
+				Console.WriteLine(pi);
+				paymentsN.Add(pi);
+				sum += pi;
+			}
+
+			Console.WriteLine(sum);Console.WriteLine();
+
+			Console.WriteLine("k=======================" + k);
+			List<decimal> paymentsK = new List<decimal>();
+			decimal pik = 0m;
+			decimal sumK = 0;
+			for (int i = 1; i <= k; i++) {
+				pik = (A + F) / k + ((n - i + 1) / n) * (A + F) * r;
+				Console.WriteLine(pik);
+				paymentsK.Add(pik);
+				sumK += pik;
+			}
+			Console.WriteLine(sumK);Console.WriteLine();
+
+			Console.WriteLine("kkk=======================" + (n + 1));
+			List<decimal> paymentsNK = new List<decimal>();
+			decimal pink = 0m;
+			decimal sumNK = 0m;
+
+			for (int i = 1; i <= (n + 1); i++) {
+				pink = (A + F) / k + ((n - i + 1) / n) * (A + F) * r;
+				Console.WriteLine(pink);
+				paymentsK.Add(pink);
+				sumNK += pink;
+			}
+
+			Console.WriteLine(sumNK);Console.WriteLine();
+
+			decimal totalNK = (A + F) + (A + F) * r * ((n + 1) / 2);
+			
+			Console.WriteLine(totalNK);
+
+			return;
+
+			// new instance of loan calculator - for new schedules list
+			LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = A,
+				RepaymentCount = 25,
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+
+			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+
+			Console.WriteLine();
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
+		}
+
 
 	} // class Misc
 } // namespace

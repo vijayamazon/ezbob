@@ -38,6 +38,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             }
         }
         return flag;
+
     },
 
     ui: {

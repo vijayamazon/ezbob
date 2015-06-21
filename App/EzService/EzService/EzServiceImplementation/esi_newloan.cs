@@ -1,8 +1,6 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Reflection;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
@@ -113,7 +111,10 @@
 
 			Log.Debug("t is {0}, t.Name={1}", t, t.Name);
 
+			ReschedulingResult result = new ReschedulingResult();
+
 			try {
+
 				if (t.Name == "Loan") {
 					RescheduleLoan<Loan> strategy;
 					var amd = ExecuteSync(out strategy, customerID, userID, new Loan(), reAgrs);
@@ -127,15 +128,23 @@
 					RescheduleLoan<NL_Model> strategy;
 					// TODO
 				}
-
+			
 			} catch (Exception e) {
-				Log.Info("Reschedule in loan exception: ", e);
+				Log.Info("Reschedule; exception: ",  e);
+				result.Error = "InternalServerError";
 			}
-			return null;
+
+			return new ReschedulingActionResult {
+				Value = result
+			};
+
 		} // RescheduleLoan
 
 
-	
+
+
+
+
 
 	}
 

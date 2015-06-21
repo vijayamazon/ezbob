@@ -66,9 +66,11 @@
   <xs:element name="ReschedulingArgument" nillable="true" type="tns:ReschedulingArgument" />
   <xs:complexType name="ReschedulingResult">
     <xs:sequence>
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="IntervalsNum" type="xs:int" />
       <xs:element minOccurs="0" name="IntervalsNumWeeks" type="xs:int" />
       <xs:element minOccurs="0" name="LoanID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanInterestRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="ReschedulingBalance" type="xs:decimal" />
     </xs:sequence>
   </xs:complexType>

@@ -285,12 +285,8 @@
 		        // re strategy
 
 				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-
+				
 				return Json(result.Value);
-
-		        //} catch (ReschedulingOutPaymentPerIntervalException inPeriod) {
-
-		        //} catch(ReschedulingOutPaymentPerIntervalException outPaymentPerInterval)
 
 	        } catch (Exception editex) {
 		        Log.Error(editex);

@@ -13,13 +13,13 @@
 		[DataMember]
 		public string LoanType { get; set; }  // loan old/new
 
-		[DataMember]
+		//[DataMember]
 		public DateTime ReschedulingDate { get; set; }  // rescheduling date
 
 		[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type - selected
 
-		[DataMember]
+		//[DataMember]
 		public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
 
 		[DataMember]

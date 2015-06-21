@@ -1,6 +1,7 @@
 ﻿namespace EzBobTest {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using System.Reflection;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
@@ -10,6 +11,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
+	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
@@ -812,7 +814,7 @@
 				nlModel.LoanAgreements.Add(agreement);
 			}
 
-			PacnetTransaction oldPacnetTransaction = oldLoan.PacnetTransactions.First() as PacnetTransaction;
+			PacnetTransaction oldPacnetTransaction = EnumerableExtensions.First(oldLoan.PacnetTransactions) as PacnetTransaction;
 
 			if (oldPacnetTransaction != null) {
 				nlModel.PacnetTransaction = new NL_PacnetTransactions();
@@ -890,7 +892,7 @@
 
 		[Test]
 		public void TestLoanState() {
-			int loanID = 3607;   
+			int loanID = 2151; // cust 329;   
 			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
 			try {
 				s.Execute();
@@ -904,25 +906,26 @@
 
 		[Test]
 		public void TestRescheduleLoan() {
-			int loanID = 3354;
+			int loanID = 2151;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.SaveToDB = false;
+			reModel.SaveToDB = true;
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.RescheduleIn = true;
 
 			var s = new RescheduleLoan<Loan>(loan, reModel);
-			try {
+
+			/*try {
 				s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
-			}
+			}*/
 			
 			// OUT loan
 			reModel.RescheduleIn = false;
@@ -957,7 +960,7 @@
 		public void TestLoanCalculator() {
 
 			// new instance of loan calculator - for new schedules list
-			LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+			/*LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
 				LoanIssueTime = DateTime.UtcNow,
 				LoanAmount = 6000m,
 				RepaymentCount = 7,
@@ -986,7 +989,58 @@
 			}
 
 			Console.WriteLine();
-			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+
+			decimal A = 6000m;
+			decimal m = 600m;
+			decimal r = 0.06m;
+			decimal F = 100m;
+			
+			decimal n = Math.Ceiling(A / (m - A * r));
+			Console.WriteLine("n=" + n);
+			decimal total1 = A + A * r * ((n + 1) / 2);
+			Console.WriteLine(total1);
+			decimal B = (A + F);
+
+		//	decimal total2 = B + B * r * (((n - 1) + 1) / 2);
+		//	Console.WriteLine(total2);
+
+			decimal k = Math.Ceiling(n + 2*F / (A * r));
+
+		/*	LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = A,
+				RepaymentCount = (int)n,
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+
+			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+
+			Console.WriteLine();
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+
+			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = B,
+				RepaymentCount = (int)(k),
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);
+
+			ALoanCalculator calculator2 = new LegacyLoanCalculator(calculatorModel2);
+
+			Console.WriteLine();
+			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
+
+			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
+			
 		}
 		
 

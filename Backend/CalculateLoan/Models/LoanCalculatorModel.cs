@@ -279,16 +279,12 @@
 		//		RepaymentIntervalType = RepaymentIntervalType,
 		//		MonthlyInterestRate = MonthlyInterestRate,
 		//	};
-
 		//	lcm.DiscountPlan.AddRange(DiscountPlan);
-
 		//	lcm.OpenPrincipalHistory.AddRange(OpenPrincipalHistory.Select(v => v.DeepClone()));
 		//	lcm.Schedule.AddRange(Schedule.Select(v => v.DeepClone()));
 		//	lcm.Repayments.AddRange(Repayments.Select(v => v.DeepClone()));
 		//	lcm.Fees.AddRange(Fees.Select(v => v.DeepClone()));
-
 		//	lcm.BadPeriods.DeepCloneFrom(BadPeriods);
-
 		//	return lcm;
 		//} // DeepClone
 

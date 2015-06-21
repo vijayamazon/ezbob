@@ -5,21 +5,22 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using global::Reports;
-	using NHibernate.Linq;
 	using StructureMap;
 
-	public enum BadCustomerStatuses {
-		// name = Id in [dbo].[CustomerStatuses]
-		Default = 1,
-		Bad = 7,
-		WriteOff = 8,
-		DebtManagement = 9,
-		Liquidation = 24,
-		Bankruptcy = 26
-	} // enum CustomerStatus
+	//public enum BadCustomerStatuses {
+	//	// name = Id in [dbo].[CustomerStatuses]
+	//	Default = 1,
+	//	Bad = 7,
+	//	WriteOff = 8,
+	//	DebtManagement = 9,
+	//	Liquidation = 24,
+	//	Bankruptcy = 26,
+	//} // enum CustomerStatus
 
 	/// <summary>
 	/// Transform Loan or NL_Model to LoanCalculatorModel
@@ -38,15 +39,15 @@
 			}
 
 			StateDate = stateDate ?? DateTime.UtcNow;
-			this.badStatusesNames = Enum.GetNames(typeof(BadCustomerStatuses));
 		}
 
 		public DateTime StateDate { get; set; }
 
 		public override string Name { get { return "LoanState"; } }
 
-		public override void Execute() {
 
+		public override void Execute() {
+		
 			/*	List<OpenPrincipal> openPrincipalHistory = new List<OpenPrincipal>();
 				List < decimal> discountPlan = new List<decimal>();
 				//List<ScheduledItem> schedules = new List<ScheduledItem>();
@@ -93,6 +94,7 @@
 				LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 				this.tLoan = loanRep.Get(this.loanID);
 
+				this.customerID = this.tLoan.Customer.Id;
 
 				Log.Debug("LoanState--->Loan1: \n {0}", this.tLoan);
 
@@ -154,14 +156,7 @@
 				}
 	
 				// "bad" periods
-				SetBadPariods();
-
-				// rollovers
-				//IEnumerable<PaymentRollover> rollovers = this.tLoan.Schedule.SelectMany(s => s.Rollovers).Where(s=>s.CustomerConfirmationDate!=null);
-				//foreach (PaymentRollover r in rollovers) { // DateTime created, DateTime expired, decimal fee
-				//	this.CalcModel.Rollovers = new Rollovers(r.Created, r.ExpiryDate, r.Payment);
-				//}
-				//Log.Debug(this.CalcModel.ToString());
+				SetBadPeriods();
 
 				return;
 			}
@@ -174,7 +169,70 @@
 
 		}
 
-		private void SetBadPariods() {
+		private void SetBadPeriods() {
+
+			List<CustomerStatusTransition> statusesHistory = new List<CustomerStatusTransition>();
+
+			DB.ForEachRowSafe(
+				(sr, bRowsetStart) => {
+					statusesHistory.Add(sr.Fill<CustomerStatusTransition>());
+					return ActionResult.Continue;
+				},
+				"LoadCustomerStatusHistory",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", this.customerID),
+				new QueryParameter("@DateEnd", StateDate)
+			);
+
+			Console.WriteLine(statusesHistory.Count);
+
+			statusesHistory.ForEach(x => Console.WriteLine(x.ToString()));
+
+			if (statusesHistory.Count == 0)
+				return;
+
+			List<CustomerStatusTransition> badStarts = statusesHistory.Where(s => s.NewIsDefault).ToList();
+
+			if (badStarts.Count == 0)
+				return;
+
+			List<BadPeriod> badsList = new List<BadPeriod>();
+
+			badStarts.ForEach(b => Console.WriteLine("started===================" + b));
+
+			List<CustomerStatusTransition> badEnds = statusesHistory.Where(s => s.OldIsDefault).ToList();
+
+			badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
+
+			CustomerStatusTransition lastEnd = new CustomerStatusTransition() { ChangeDate = StateDate };
+			if (badEnds.Count > 0) {
+				lastEnd.OldIsDefault = badEnds.Last()
+					.NewIsDefault;
+				lastEnd.NewIsDefault = lastEnd.NewIsDefault;
+			}
+
+			badEnds.Add(lastEnd);
+
+			if (badStarts.Count > 0) {
+				foreach (CustomerStatusTransition s in badStarts) {
+					int index = badStarts.LastIndexOf(s);
+					try {
+						BadPeriod i = new BadPeriod(s.ChangeDate.Date, badEnds.ElementAt(index).ChangeDate.Date);
+						if (!badsList.Contains(i))
+							badsList.Add(i);
+					} catch (Exception e) {
+						// ignored
+					}
+				}
+			}
+
+			if (badsList.Count > 0) {
+				this.CalcModel.BadPeriods.AddRange(badsList);
+			}
+		}
+
+		/*private void bkp_SetBadPariods() {
+
 			CustomerStatusHistory customerStatusesHistory = new CustomerStatusHistory(this.tLoan.Customer.Id, StateDate, DB);
 
 			List<CustomerStatusChange> statusesHistory = new List<CustomerStatusChange>();
@@ -184,9 +242,10 @@
 
 			if (statusesHistory.Count > 0) {
 
-//statusesHistory.ForEach(xx => Log.Debug(xx));
+statusesHistory.ForEach(xx => Log.Debug(xx));
 
-				List<CustomerStatusChange> badStarts = statusesHistory.Where(s => this.badStatusesNames.Contains<string>(s.NewStatus.ToString())).ToList();
+			//	List<CustomerStatusChange> badStarts = statusesHistory.Where(s => this.badStatusesNames.Contains<string>(s.NewStatus.ToString())).ToList();
+				List<CustomerStatusChange> badStarts = statusesHistory.Where(s => s.NewIsDefault==1).ToList();
 
 				if(badStarts.Count == 0)
 					return;
@@ -195,7 +254,8 @@
 
 //badStarts.ForEach(b => Console.WriteLine("started===================" + b));
 
-				List<CustomerStatusChange> badEnds = statusesHistory.Where(s => this.badStatusesNames.Contains(s.OldStatus.ToString())).ToList();
+			//	List<CustomerStatusChange> badEnds = statusesHistory.Where(s => this.badStatusesNames.Contains(s.OldStatus.ToString())).ToList();
+				List<CustomerStatusChange> badEnds = statusesHistory.Where(s => s.OldIsDefault==1).ToList();
 
 //badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
 
@@ -224,12 +284,13 @@
 					this.CalcModel.BadPeriods.AddRange(badsList);
 				}
 			}
-		}
+		}*/
 
 		private Loan tLoan;
 		private readonly NL_Model tNLLoan;
 		private readonly int loanID;
-		private readonly string[] badStatusesNames;
+
+		private int customerID;
 
 		// result
 		public LoanCalculatorModel CalcModel;
