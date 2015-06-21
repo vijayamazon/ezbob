@@ -146,10 +146,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         var isStopIntrest = $("#intrest-checkbox").is(':checked');
         var isStopFees = $('#fees-calculation').is(':checked');
 
-        var interestFrom = $('#intrest-calendar-from').val();
-        var interestTo = $('#intrest-calendar-to').val();
-        var feesFrom = $('#fees-calendar-from').val();
-        var feesTo = $('#fees-calendar-to').val();
+        var interestFrom = EzBob.formatDateTimeCS($('#intrest-calendar-from').val());
+        var interestTo = EzBob.formatDateTimeCS($('#intrest-calendar-to').val());
+        var feesFrom = EzBob.formatDateTimeCS($('#fees-calendar-from').val());
+        var feesTo = EzBob.formatDateTimeCS($('#fees-calendar-to').val());
 
         if (isStopIntrest) {
             if (interestTo === "" || interestFrom === "") {
