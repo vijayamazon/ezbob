@@ -47,124 +47,90 @@
 
 
 		public override void Execute() {
-		
-			/*	List<OpenPrincipal> openPrincipalHistory = new List<OpenPrincipal>();
-				List < decimal> discountPlan = new List<decimal>();
-				//List<ScheduledItem> schedules = new List<ScheduledItem>();
-				//List<Repayment> repayments = new List<Repayment>();
-				List<Fee> fees = new List<Fee>();
-				BadPeriods badPeriods = new BadPeriods();*/
+			try {
 
-			/*// schedules
-	this.tLoan.Schedule.ForEach(s => Log.Debug(s.ToString()));
-	Console.WriteLine();
-	// all transactions
-	this.tLoan.Transactions.ForEach(s => Log.Debug(s.ToString()));
-	Console.WriteLine();
-	// Paypoint transactions
-	this.tLoan.TransactionsWithPaypoint.ForEach(s => Log.Debug(s.ToString()));
-	Console.WriteLine();
-	// successfull Paypoint transactions
-	this.tLoan.TransactionsWithPaypointSuccesefull.ForEach(s => Log.Debug(s.ToString()));
-	Console.WriteLine();
-	// charges
-	this.tLoan.Charges.ForEach(s => Log.Debug(s.ToString()));
-	Console.WriteLine();
-	// Schedule Transactions
-	this.tLoan.ScheduleTransactions.ForEach(s => Log.Debug(s.ToString()));
-	Console.WriteLine();
-	// Rollovers
-	this.tLoan.Schedule.SelectMany(s => s.Rollovers).OrderBy(c => c.Created).ForEach(s => Log.Debug(s.ToString()));
-	*/
-			/*	Transactions
-				  TransactionsWithPaypoint
-				  ScheduleTransactions
-				  PacnetTransactions
-				  InterestFreeze
-				  ActiveInterestFreeze
-			 
-				  TransactionsWithPaypointSuccesefull - Transactions
-				  Charges - Fees
-				  Schedule - Schedule					
-				  Rollovers - Schedule.SelectMany(s => s.Rollovers) 
-			  */
 
-			if (this.tLoan != null) {
 
-				LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-				this.tLoan = loanRep.Get(this.loanID);
+				if (this.tLoan != null) {
 
-				this.customerID = this.tLoan.Customer.Id;
+					LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+					this.tLoan = loanRep.Get(this.loanID);
 
-				Log.Debug("LoanState--->Loan1: \n {0}", this.tLoan);
+					this.customerID = this.tLoan.Customer.Id;
 
-				this.CalcModel = new LoanCalculatorModel {
-					LoanAmount = this.tLoan.LoanAmount,
-					LoanIssueTime = this.tLoan.Date,
-					RepaymentIntervalType = RepaymentIntervalTypes.Month,  // default, old loan does not contain the property
-					RepaymentCount = this.tLoan.Schedule.Count,
-					MonthlyInterestRate = this.tLoan.InterestRate,
-					InterestOnlyRepayments = 0 //InterestOnlyRepayments = this.Model.InterestOnlyRepaymentCount ?? 0 // TODO: exists in old loan?
-				};
+					Log.Debug("LoanState--->Loan1: \n {0}", this.tLoan);
 
-				// schedules
-				foreach (LoanScheduleItem s in this.tLoan.Schedule) {
-					ScheduledItem sch= new ScheduledItem(s.Date) { // DateTime scheduledDate
-						Date = s.Date,
-						ClosedDate = null, //???
-						Principal = s.Principal,
-						InterestRate = s.InterestRate
+					this.CalcModel = new LoanCalculatorModel {
+						LoanAmount = this.tLoan.LoanAmount,
+						LoanIssueTime = this.tLoan.Date,
+						RepaymentIntervalType = RepaymentIntervalTypes.Month, // default, old loan does not contain the property
+						RepaymentCount = this.tLoan.Schedule.Count,
+						MonthlyInterestRate = this.tLoan.InterestRate,
+						InterestOnlyRepayments = 0 //InterestOnlyRepayments = this.Model.InterestOnlyRepaymentCount ?? 0 // TODO: exists in old loan?
 					};
-					this.CalcModel.Schedule.Add(sch);
+
+					// schedules
+					foreach (LoanScheduleItem s in this.tLoan.Schedule) {
+						ScheduledItem sch = new ScheduledItem(s.Date) { // DateTime scheduledDate
+							Date = s.Date,
+							ClosedDate = null, //???
+							Principal = s.Principal,
+							InterestRate = s.InterestRate
+						};
+						this.CalcModel.Schedule.Add(sch);
+					}
+
+					// successfull paypoint transactions
+					foreach (PaypointTransaction p in this.tLoan.TransactionsWithPaypointSuccesefull) {
+						this.CalcModel.Repayments.Add(new Repayment( // DateTime time, decimal principal, decimal interest, decimal fees
+							p.PostDate, p.LoanRepayment, p.Interest, p.Fees
+							));
+					}
+
+					// fees 
+					foreach (var c in this.tLoan.Charges) {
+						this.CalcModel.Fees.Add(new Fee( // DateTime assignTime, decimal amount
+							c.Date, c.Amount
+							));
+					}
+
+					// interest freeze
+					foreach (LoanInterestFreeze fi in this.tLoan.ActiveInterestFreeze) {
+
+						// time interval not defined well
+						if (fi.StartDate == null)
+							continue;
+
+						// time interval not defined well
+						if (fi.EndDate == null)
+							continue;
+
+						bool isActive;
+
+						if (fi.DeactivationDate.HasValue)
+							isActive = (fi.ActivationDate <= StateDate) && (fi.DeactivationDate >= StateDate);
+						else
+							isActive = (fi.ActivationDate <= StateDate);
+
+						this.CalcModel.FreezePeriods.Add( // DateTime start, DateTime end, decimal? nInterestRate, bool isActive
+							new InterestFreeze(startDate: (DateTime)fi.StartDate, endDate: (DateTime)fi.EndDate, interestRate: fi.InterestRate, isActive: isActive)
+							);
+					}
+
+					// "bad" periods
+					SetBadPeriods();
+
+					return;
 				}
-				
-				// successfull paypoint transactions
-				foreach (PaypointTransaction p in this.tLoan.TransactionsWithPaypointSuccesefull) {
-					this.CalcModel.Repayments.Add(new Repayment( // DateTime time, decimal principal, decimal interest, decimal fees
-						p.PostDate, p.LoanRepayment, p.Interest, p.Fees
-					));
+
+				// new loan structure
+				if (this.tNLLoan != null) {
+					// TODO
+					// cal SP - load nl by id
 				}
 
-				// fees 
-				foreach (var c in this.tLoan.Charges) {
-					this.CalcModel.Fees.Add(new Fee( // DateTime assignTime, decimal amount
-						c.Date, c.Amount
-					));
-				}
-
-				// interest freeze
-				foreach (LoanInterestFreeze fi in this.tLoan.ActiveInterestFreeze) {
-
-					// time interval not defined well
-					if (fi.StartDate == null)
-						continue;
-
-					// time interval not defined well
-					if (fi.EndDate == null)
-						continue;
-
-					bool isActive;
-
-					if (fi.DeactivationDate.HasValue)
-						isActive = (fi.ActivationDate <= StateDate) && (fi.DeactivationDate >= StateDate);
-					else
-						isActive = (fi.ActivationDate <= StateDate);
-
-					this.CalcModel.FreezePeriods.Add( // DateTime start, DateTime end, decimal? nInterestRate, bool isActive
-						new InterestFreeze(startDate: (DateTime)fi.StartDate, endDate: (DateTime)fi.EndDate, interestRate: fi.InterestRate, isActive: isActive)
-					);
-				}
-	
-				// "bad" periods
-				SetBadPeriods();
-
-				return;
-			}
-
-			// new loan structure
-			if (this.tNLLoan != null) {
-				// TODO
-				// cal SP - load nl by id
+			} catch (Exception loanStateEx) {
+				Log.Alert("Failed to load loan state err: {0}", loanStateEx);
 			}
 
 		}
@@ -184,9 +150,9 @@
 				new QueryParameter("@DateEnd", StateDate)
 			);
 
-			Console.WriteLine(statusesHistory.Count);
+			//	Console.WriteLine(statusesHistory.Count);
 
-			statusesHistory.ForEach(x => Console.WriteLine(x.ToString()));
+			//	statusesHistory.ForEach(x => Console.WriteLine(x.ToString()));
 
 			if (statusesHistory.Count == 0)
 				return;
@@ -198,11 +164,11 @@
 
 			List<BadPeriod> badsList = new List<BadPeriod>();
 
-			badStarts.ForEach(b => Console.WriteLine("started===================" + b));
+			//badStarts.ForEach(b => Console.WriteLine("started===================" + b));
 
 			List<CustomerStatusTransition> badEnds = statusesHistory.Where(s => s.OldIsDefault).ToList();
 
-			badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
+			//badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
 
 			CustomerStatusTransition lastEnd = new CustomerStatusTransition() { ChangeDate = StateDate };
 			if (badEnds.Count > 0) {
@@ -211,7 +177,7 @@
 				lastEnd.NewIsDefault = lastEnd.NewIsDefault;
 			}
 
-			badEnds.Add(lastEnd);
+			//	badEnds.Add(lastEnd);
 
 			if (badStarts.Count > 0) {
 				foreach (CustomerStatusTransition s in badStarts) {
@@ -230,61 +196,6 @@
 				this.CalcModel.BadPeriods.AddRange(badsList);
 			}
 		}
-
-		/*private void bkp_SetBadPariods() {
-
-			CustomerStatusHistory customerStatusesHistory = new CustomerStatusHistory(this.tLoan.Customer.Id, StateDate, DB);
-
-			List<CustomerStatusChange> statusesHistory = new List<CustomerStatusChange>();
-
-			foreach (KeyValuePair<int, List<CustomerStatusChange>> pair in customerStatusesHistory.FullData.Data)
-				statusesHistory = pair.Value;
-
-			if (statusesHistory.Count > 0) {
-
-statusesHistory.ForEach(xx => Log.Debug(xx));
-
-			//	List<CustomerStatusChange> badStarts = statusesHistory.Where(s => this.badStatusesNames.Contains<string>(s.NewStatus.ToString())).ToList();
-				List<CustomerStatusChange> badStarts = statusesHistory.Where(s => s.NewIsDefault==1).ToList();
-
-				if(badStarts.Count == 0)
-					return;
-
-				List<BadPeriod> badsList = new List<BadPeriod>();
-
-//badStarts.ForEach(b => Console.WriteLine("started===================" + b));
-
-			//	List<CustomerStatusChange> badEnds = statusesHistory.Where(s => this.badStatusesNames.Contains(s.OldStatus.ToString())).ToList();
-				List<CustomerStatusChange> badEnds = statusesHistory.Where(s => s.OldIsDefault==1).ToList();
-
-//badEnds.ForEach(bb => Console.WriteLine("ended--------------" + bb));
-
-				CustomerStatusChange lastEnd = new CustomerStatusChange() {ChangeDate = StateDate};
-				if (badEnds.Count > 0) {
-					lastEnd.OldStatus = badEnds.Last().NewStatus;
-					lastEnd.NewStatus = lastEnd.OldStatus;
-				}
-
-				badEnds.Add(lastEnd);
-
-				if (badStarts.Count > 0) {
-					foreach (CustomerStatusChange s in badStarts) {
-						int index = badStarts.LastIndexOf(s);
-						try {
-							BadPeriod i = new BadPeriod(s.ChangeDate.Date, badEnds.ElementAt(index).ChangeDate.Date);
-							if (!badsList.Contains(i))
-								badsList.Add(i);
-						} catch (Exception e) {
-							// ignored
-						}
-					}
-				}
-
-				if (badsList.Count > 0) {
-					this.CalcModel.BadPeriods.AddRange(badsList);
-				}
-			}
-		}*/
 
 		private Loan tLoan;
 		private readonly NL_Model tNLLoan;

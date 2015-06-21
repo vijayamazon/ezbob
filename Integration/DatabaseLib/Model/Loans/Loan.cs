@@ -470,6 +470,12 @@
 				sb.AppendLine(item.ToString());
 			}
 
+			sb.AppendLine("RemovedOnReschedule:");
+			foreach (var item in RemovedOnReschedule) {
+				sb.Append("\t");
+				sb.AppendLine(item.ToString());
+			}
+
 			return sb.ToString();
 		} // ToString
 
@@ -512,6 +518,17 @@
 
 			return true;
 		} // TryAddCharge
+
+
+		private IList<LoanScheduleDeleted> _removedOnReschedule = new List<LoanScheduleDeleted>();
+		public virtual IList<LoanScheduleDeleted> RemovedOnReschedule {
+			get { return this._removedOnReschedule; }
+			set { this._removedOnReschedule = value; }
+		}
+		public virtual void TryAddRemovedOnReschedule(LoanScheduleDeleted item) {
+			RemovedOnReschedule.Add(item);
+		}
+
 
 	} // class Loan
 

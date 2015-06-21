@@ -8,7 +8,6 @@
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 	using Ezbob.Utils.Lingvo;
-	using Ezbob.ValueIntervals;
 
 	public class LoanCalculatorModel {
 		public LoanCalculatorModel() {

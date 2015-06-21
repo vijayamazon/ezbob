@@ -101,6 +101,9 @@
 			Map(x => x.LoanLegalId);
 
 			Map(x => x.CustomerSelectedTerm);
+
+			HasMany(x => x.RemovedOnReschedule).AsBag().KeyColumn("LoanId").Cascade.AllDeleteOrphan().Inverse();
+
 		} // constructor
 	} // class LoanMap
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

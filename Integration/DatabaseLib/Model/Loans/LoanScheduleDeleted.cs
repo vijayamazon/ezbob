@@ -12,8 +12,8 @@
 		public virtual LoanScheduleStatus Status { get; set; }
 		public virtual decimal LateCharges { get; set; }
 		public virtual decimal RepaymentAmount { get; set; }
-		//	public virtual Loan Loan { get; set; }
-		public virtual int LoanID { get; set; }
+	//	public virtual Loan Loan { get; set; }
+		public virtual int LoanId { get; set; }
 		public virtual decimal LoanRepayment { get; set; }
 		public virtual decimal Principal { get; set; }
 		public virtual decimal AmountDue { get; set; }
@@ -33,14 +33,15 @@
 
 		public virtual LoanScheduleDeleted CloneScheduleItem(LoanScheduleItem fromItem) {
 			var deletedItem = new LoanScheduleDeleted() {
-				Id = fromItem.Id,
+				//Id = fromItem.Id,
 				Date = fromItem.Date,
 				Status = fromItem.Status,
 				LateCharges = fromItem.LateCharges,
 				RepaymentAmount = fromItem.RepaymentAmount,
 				LoanRepayment = fromItem.LoanRepayment,
 				Principal = fromItem.Principal,
-				LoanID = fromItem.Loan.Id,
+				LoanId = fromItem.Loan.Id,
+				//Loan = fromItem.Loan,
 				AmountDue = fromItem.AmountDue,
 				Interest = fromItem.Interest,
 				InterestPaid = fromItem.InterestPaid,
@@ -63,7 +64,7 @@
 			Type t = typeof(LoanScheduleDeleted);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \t");
 			}
 			return sb.ToString();
 		}
@@ -94,7 +95,7 @@
 			Map(x => x.FeesPaid);
 			Map(x => x.LastNoticeSent);
 			Map(x => x.DatePaid).Nullable().CustomType<UtcDateTimeType>();
-			Map(x => x.LoanID);
+			Map(x => x.LoanId);
 			//References(x => x.Loan, "LoanId");
 		}
 	}
