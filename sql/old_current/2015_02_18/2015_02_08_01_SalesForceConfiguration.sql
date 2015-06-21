@@ -16,12 +16,12 @@ BEGIN
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForcePassword')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForcePassword', 'yaron456', 'SF password')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForcePassword', 'yaron789', 'SF password')
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceToken')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'ALwQ5Giu5uRbiCcuqQezowzdM', 'Used for calls from non white list IPs')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', '8ZVLKiPhbXlUcyhLwdViSAxZ', 'Used for calls from non white list IPs')
 	END
 	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')
@@ -46,12 +46,12 @@ BEGIN
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForcePassword')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForcePassword', 'yaron456', 'SF password')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForcePassword', 'yaron789', 'SF password')
 	END
 
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceToken')
 	BEGIN
-		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', 'ALwQ5Giu5uRbiCcuqQezowzdM', 'Used for calls from non white list IPs')
+		INSERT INTO ConfigurationVariables(Name, Value, Description) VALUES ('SalesForceToken', '8ZVLKiPhbXlUcyhLwdViSAxZ', 'Used for calls from non white list IPs')
 	END
 	
 	IF NOT EXISTS (SELECT 1 FROM ConfigurationVariables WHERE Name='SalesForceEnvironment')

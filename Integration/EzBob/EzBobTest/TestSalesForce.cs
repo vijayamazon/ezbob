@@ -133,8 +133,8 @@
             //Sandbox
             ISalesForceAppClient client = ObjectFactory
                 .With("userName").EqualTo("yarons@ezbob.com.sandbox")
-                .With("password").EqualTo("yaron456")
-				.With("token").EqualTo("ALwQ5Giu5uRbiCcuqQezowzdM")
+                .With("password").EqualTo("yaron789")
+				.With("token").EqualTo("8ZVLKiPhbXlUcyhLwdViSAxZ")
                 .With("environment").EqualTo("Sandbox")
                 .GetInstance<ISalesForceAppClient>();
 
