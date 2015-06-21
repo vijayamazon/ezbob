@@ -357,10 +357,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
         this.renderRegions();
 
-        this.$el.find('#fees-calendar-from').datepicker();
-        this.$el.find('#fees-calendar-to').datepicker();
-        this.$el.find('#intrest-calendar-from').datepicker();
-        this.$el.find('#intrest-calendar-to').datepicker();
+        this.$el.find('#fees-calendar-from').datepicker({ dateFormat: 'yy-mm-dd' });
+        this.$el.find('#fees-calendar-to').datepicker({ dateFormat: 'yy-mm-dd' });
+        this.$el.find('#intrest-calendar-from').datepicker({ dateFormat: 'yy-mm-dd' });
+        this.$el.find('#intrest-calendar-to').datepicker({ dateFormat: 'yy-mm-dd' });
         
         var options = this.model.get('Options');
         if (options.AutoPayment === false) {
