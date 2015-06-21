@@ -89,7 +89,7 @@
 		private void LoadCashRequests() {
 			this.pc = new ProgressCounter("{0} manual decisions processed.", Log, 25);
 
-			spLoad.ForEachRowSafe(ProcessManualDecision);
+			this.spLoad.ForEachRowSafe(ProcessManualDecision);
 
 			this.pc.Log();
 
@@ -191,7 +191,7 @@
 		private readonly SortedSet<string> allNonAffirmativeTraces; 
 
 		private static readonly DateTime defaultStartTime = new DateTime(2015, 5, 11, 0, 0, 0, DateTimeKind.Utc);
-		private static readonly DateTime defaultEndTime = new DateTime(2015, 5, 28, 0, 0, 0, DateTimeKind.Utc);
+		private static readonly DateTime defaultEndTime = new DateTime(2015, 6, 21, 0, 0, 0, DateTimeKind.Utc);
 
 		private static readonly string[] standardResultHeaders = {
 			"Customer ID",

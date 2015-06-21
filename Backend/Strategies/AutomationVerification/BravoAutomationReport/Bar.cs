@@ -4,7 +4,7 @@
 
 	public class Bar : AStrategy {
 		public Bar(DateTime? startTime, DateTime? endTime) {
-			// this.loadAndCategorize = new BarLoadAndCategorizeDecisions(startTime, endTime);
+			this.loadAndCategorize = new BarLoadAndCategorizeDecisions(startTime, endTime);
 			this.digIntoManualNoSignatureEnoughData = new Digger();
 		} // constructor
 
@@ -13,11 +13,11 @@
 		} // Name
 
 		public override void Execute() {
-			// this.loadAndCategorize.Execute();
+			this.loadAndCategorize.Execute();
 			this.digIntoManualNoSignatureEnoughData.Execute();
 		} // Execute
 
-		// private readonly BarLoadAndCategorizeDecisions loadAndCategorize;
+		private readonly BarLoadAndCategorizeDecisions loadAndCategorize;
 		private readonly Digger digIntoManualNoSignatureEnoughData;
 	} // class Bar
 } // namespace

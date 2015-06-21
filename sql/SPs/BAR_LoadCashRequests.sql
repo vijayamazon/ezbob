@@ -126,13 +126,16 @@ BEGIN
 		) THEN 1 ELSE 0 END)
 	FROM
 		CashRequests r
-		INNER JOIN Customer c ON r.IdCustomer = c.Id AND c.IsTest = 0
+		INNER JOIN Customer c
+			ON r.IdCustomer = c.Id
+			AND c.IsTest = 0
+			AND c.BrokerID IS NULL
 	WHERE
 		r.CreationDate > ISNULL(@StartTime, 'May 11 2015') -- on May 11 2015 we have released Auto Approve (the last unreleased auto decision)
 		AND
 		(@EndTime IS NULL OR r.CreationDate < @EndTime)
 		AND
-		r.UnderwriterDecision IN ('Approved', 'ApprovedPending', 'Rejected')
+		r.UnderwriterDecision IN ('Approved', 'Rejected')
 	ORDER BY
 		r.IdCustomer,
 		r.UnderwriterDecisionDate
