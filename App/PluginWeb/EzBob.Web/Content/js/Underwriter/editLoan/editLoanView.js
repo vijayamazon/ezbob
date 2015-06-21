@@ -26,10 +26,12 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     }, // serializeData
 
     hasFreeIntrest: function () {
-        var array = this.model.get('InterestFreeze');
+        var freezArray = this.model.get('InterestFreeze');
+        if (freezArray === null)
+            return false;
         var flag = false;
-        for (var i = 0; i < array.length; i++) {
-            var item = array[i].split('|');
+        for (var i = 0; i < freezArray.length; i++) {
+            var item = freezArray[i].split('|');
             if (item[4] === '') {
                 flag = true;
                 break;
