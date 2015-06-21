@@ -283,7 +283,7 @@
 	        try {
 
 		        // re strategy
-
+				
 				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 				
 				return Json(result.Value);
