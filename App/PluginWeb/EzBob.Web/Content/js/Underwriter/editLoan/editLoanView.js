@@ -76,21 +76,31 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     }, // events
 
     fillData: function () {
+        var colapseState = $('#collapsable-content').is(':visible');
         $("#collapsable-content").slideToggle('slow');
+        
+        if (!colapseState) {
+            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", rescheduleIn: 'true' });
 
-        var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", rescheduleIn: 'true' });
+            var self = this;
 
-        var self = this;
+            request.success(function(res) {
+                self.model.set('WithinWeek', res.IntervalsNumWeeks);
+                self.model.set('WithinMonth', res.IntervalsNum);
+                self.model.set('ReschedulingBalance', res.ReschedulingBalance);
+                
+                if (res.Error === "ReschedulingInPeriodException") {
+                    $('#rescheduleIn-true').attr('disabled', true);
+                    $('#within-loan-period-text').css('opacity', 0.8);
+                    $('#within-loan-period-text').css('cursor', 'not-allowed');
+                    $('#withinSelect').attr('disabled', true);
+                }
+            }); //on success
 
-        request.success(function (res) {
-            self.model.set('WithinWeek', res.IntervalsNumWeeks);
-            self.model.set('WithinMonth', res.IntervalsNum);
-            self.model.set('ReschedulingBalance', res.ReschedulingBalance);
-        }); //on success
-
-        request.fail(function () {
-            self.ui.data_error.fadeIn().fadeOut(3000);
-        });//on fail
+            request.fail(function() {
+                self.ui.data_error.fadeIn().fadeOut(3000);
+            }); //on fail
+        }
     },
     reschSubmitForm: function () {
 
