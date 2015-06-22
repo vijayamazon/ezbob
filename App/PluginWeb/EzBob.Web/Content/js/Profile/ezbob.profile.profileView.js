@@ -122,7 +122,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 	}, // hideProfile
 
 	menuWidgetShown: function() {
-		$(document).attr("title", "Dashboard: User Dashboard | EZBOB");
+		$(document).attr("title", "Dashboard: User Dashboard");
 		this.getCashRegion.close();
 		this.showProfile();
 		scrollTop();
@@ -144,7 +144,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 	},
 
 	makePayment: function(id) {
-		var title = (this.customer.get("hasLateLoans") ? "Pay Late:" : "Pay Early:") + " User Payment | EZBOB";
+		var title = (this.customer.get("hasLateLoans") ? "Pay Late:" : "Pay Early:") + " User Payment";
 		$(document).attr("title", title);
 
 		EzBob.App.GA.trackPage('/Customer/Profile/MakePayment');

@@ -82,8 +82,7 @@
 			//if there is transaction with such id in database,
 			//it means that customer refreshes page
 			//show in this case cashed result
-			if (_paypointTransactionRepository.ByGuid(trans_id)
-				.Any()) {
+			if (_paypointTransactionRepository.ByGuid(trans_id).Any()) {
 				var data = TempData.Get<PaymentConfirmationModel>();
 				if (data == null) {
 					return RedirectToAction("Index", "Profile", new {
@@ -91,7 +90,8 @@
 					});
 				}
 				return View(TempData.Get<PaymentConfirmationModel>());
-			}
+			} // if
+
 			LoanPaymentFacade loanRepaymentFacade= new LoanPaymentFacade();
 			var res = loanRepaymentFacade.MakePayment(trans_id, amount.Value, ip, type, loanId, customerContext);
 

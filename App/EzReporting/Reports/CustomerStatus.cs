@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Text;
 	using Ezbob.Database;
 
 	public enum CustomerStatus {
@@ -23,6 +24,19 @@
 		public CustomerStatus OldStatus { get; set; }
 		public CustomerStatus NewStatus { get; set; }
 		public DateTime ChangeDate { get; set; }
+		public int NewIsDefault { get; set; }
+		public int OldIsDefault { get; set; }
+
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+			Type t = typeof(CustomerStatusChange);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \t");
+			}
+			return sb.ToString();
+		}
+
 	} // class CustomerStatusChange
 
 	public class CustomerStatusHistory {
@@ -98,6 +112,9 @@
 				ChangeDate = sr["SetDate"],
 				OldStatus = CustomerStatus.Enabled,
 				NewStatus = ((string)sr["Status"]).ParseCustomerStatus(sr["IsDefault"]),
+
+				NewIsDefault = sr["NewIsDefault"],
+				OldIsDefault = sr["OldIsDefault"]
 			};
 		} // LoadCurrent
 
@@ -108,6 +125,11 @@
 				ChangeDate = sr["ChangeDate"],
 				OldStatus = ((string)sr["OldStatus"]).ParseCustomerStatus(sr["OldIsDefault"]),
 				NewStatus = ((string)sr["NewStatus"]).ParseCustomerStatus(sr["NewIsDefault"]),
+
+
+				NewIsDefault = sr["NewIsDefault"],
+				OldIsDefault = sr["OldIsDefault"]
+
 			};
 
 			if (m_oDateEnd.HasValue && (csc.ChangeDate < m_oDateEnd.Value))

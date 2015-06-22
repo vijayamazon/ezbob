@@ -1,172 +1,297 @@
 ﻿@model dynamic
 <script type="text/template" id="loan_editor_template">
-    <div class="editloan-freeze-intervals-region"></div>
-    <div class="editloan-schedule-region"></div>
-    <div class="editloan-item-editor-region"></div>
-    <div class="buttons">
-        <hr />
-        <button class="btn btn-primary pull-right cancel">Cancel</button>
-        <button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
-    </div>
-</script>
 
-<script type="text/template" id="loan_editor_schedule_template">
-    <h4>Standard Schedule</h4>
-    <table class="table table-selected centered" style="white-space: nowrap;">
-        <thead class="box">
-            <tr class="box-title">
-                <th width="90">#</th>
-                <th>Date</th>
-                <th>Principal</th>
-                <th>Balance</th>
-                <th>Interest<br />
-                    Rate</th>
-                <th>Interest</th>
-                <th>Fees</th>
-                <th>Status</th>
-                <th>Total</th>
-                <th width="200">Description</th>
-            </tr>
-        </thead>
-        <tbody>
-            <%
-			_.each(Items, function(item, i) {
-				var editClass = editItemIndex == i ? "editing" : "";
-				%><tr class="<%= editClass %>">
-                    <td><%- i+1 %>&nbsp;<%
-						if (item.Editable) { %>
-							<button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
-                        <%
-						}
 
-						if (item.Deletable) { %>
-							<button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
-                        <%
-						}
-					%></td>
+    <button class="btn btn-primary show option-btn">Show advanced options</button>
 
-                    <td><%- EzBob.formatDateWithoutTime(item.Date) %></td>
-                    <%
+	<div class="Container" style="width:80%; display: none;" id="collapsable-content">
 
-					if (item.Type == "Fee") {
-						%><td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><%- EzBob.formatPounds(item.Fees) %></td>
-                    <td><%- item.Status %></td>
-                    <td></td>
-                    <td><%- item.Description %></td>
-                    <%
-					} else if (item.Type == "Installment") {
-						%><td><%- EzBob.formatPounds(item.Principal) %></td>
-                    <td><%- EzBob.formatPounds(item.Balance) %></td>
-                    <td><%- EzBob.formatPercents (item.InterestRate) %></td>
-                    <td><%- EzBob.formatPounds(item.Interest) %></td>
-                    <td><%- EzBob.formatPounds(item.Fees) %></td>
-                    <td><%- item.Status %></td>
-                    <td><%- EzBob.formatPounds(item.Total) %></td>
-                    <td></td>
-                    <%
-					} else if (item.Type == "Pacnet") {
-						%><td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><%- EzBob.formatPounds(item.Fees) %></td>
-                    <td><%- item.Status %></td>
-                    <td><%- EzBob.formatPounds(item.Total) %></td>
-                    <td><%- item.Description %></td>
-                    <%
-					} else {
-						%><td><%- EzBob.formatPounds(item.Principal) %></td>
-                    <td><%- EzBob.formatPounds(item.Balance) %></td>
-                    <td><%- EzBob.formatPercents (item.InterestRate) %></td>
-                    <td><%- EzBob.formatPounds(item.Interest) %></td>
-                    <td><%- EzBob.formatPounds(item.Fees) %></td>
-                    <td><%- item.Status %></td>
-                    <td><%- EzBob.formatPounds(item.Total) %></td>
-                    <td><%- item.Description %></td>
-                    <%
-					}
-				%>
-            </tr>
-            <%
-			});
-		%>
-        </tbody>
-    </table>
-    <%
-	
-	if(HasErrors) {
-		%><div class="alert alert-error">
-            Following conditions(s) were not satisfied:
-			<ul>
-                <%
-				_.each(Errors, function(e) {
-					%><li><%- e %></li>
-                <%
-				});
+		<form class="form-inline" role="form">
+
+			<div class="row">
+				<h5>Within loan period</h5>
+			</div>
+
+			<div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="selection-error">One of the Radio Buttons must be selected</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="within-selector-error">Please select Week/Month</div>
+            
+            <div class="row alert alert-info center" style="display: none; text-align: center" id="exception-msg">Within loan arrangement is impossible</div>
+            <div class="row" id="exception-div">
+                <div class="col-sm-1">&nbsp;</div>
+                <div class="col-sm-7">
+                    <label class="radio-inline" id="within-loan-period-text">
+                        <input type="radio" name="rescheduleIn" value="true" id="radio-1">
+                        Reschedule to &nbsp;
+                        <span name="withinWeek" style="font-weight: bold"></span>
+                        weeks or &nbsp;
+                        <span name="withinMonth" style="font-weight: bold"></span>
+                        month with amount of &nbsp;
+                        <span name="withinAmount" style="font-weight: bold"></span>
+                        and intrest of &nbsp;
+                        <span name="Intrest" style="font-weight: bold"></span>
+                    </label>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" id="withinSelect" style="width: 150px;">
+                        <option value="0">SELECT</option>
+                        <option value="month">Month</option>
+                        <option value="weeks">Week</option>
+                    </select>
+                </div>
+            </div>
+
+			<div class="row"><h5>Outside loan payment arangment</h5></div>
+
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only positive numeric values allowed</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="outside-selector-error">Please select Week/Month</div>
+            
+			<div class="row">
+				<div class="col-sm-1">&nbsp;</div>
+				<div class="col-sm-8">
+					<label class="radio-inline">
+						<input type="radio" name="rescheduleIn" value="false" id="radio-2">
+						Reschedule to &nbsp;
+						<span name="outsideWeek" id="outsideWeek" style="font-weight: bold"></span>
+						weeks or &nbsp;
+						<span name="outsideMonth" id="outsideMonth" style="font-weight: bold"></span>
+						month with principal of &nbsp;
+                        <span name="withinAmount" style="font-weight: bold"></span>
+                        &nbsp;, amount of &nbsp;
+                        <input class="form-control input-width" type="number" value="0" min="0" step="10" id="outsideAmount" name="outsideAmount">
+						and intrest of &nbsp;
+						<span name="Intrest" style="font-weight: bold"></span>
+					</label>
+				</div>
+				<div class="col-sm-3">
+					<select class="form-control" id="outsideSelect" style="width: 150px;">
+						<option value="0">SELECT</option>
+						<option value="month">Month</option>
+						<option value="weeks">Week</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="row">&nbsp;</div>
+
+			<div class="row">
+				<div class="col-sm-1">&nbsp;</div>
+				<div class="col-sm-3">
+					<label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after</label>
+				</div>
+				<div class="col-sm-6" style="text-align:left;">
+					<div class="form-group">
+                        <input class="form-control input-width" type="number" value="0" id="charges-payments" name="charges-payments"> payments.
+					</div>
+					<span style="display: none; font-weight: bold" id="stop-charges">Auto charges are stopped from <span id="stop-charges-date"></span></span>
+				</div>
+			</div>
+
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then From date</div>
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
+
+			<div class="row">
+				<div class="col-sm-3">
+					<label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from</label>
+				</div>
+				<div class="col-sm-3">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input class="form-control input-width" type="text" id="fees-calendar-from" name="fees-calendar-from">
+					</div>
+				</div>
+				<div class="col-sm-1">
+					untill
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input class="form-control input-width" type="text" id="fees-calendar-to" name="fees-calendar-to">
+					</div>
+				</div>
+			</div>
+
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then From date</div>
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
+
+			<div class="row" style="padding-top: 5px;">
+				<div class="col-sm-3">
+					<label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from</label>
+				</div>
+				<div class="col-sm-3">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input class="form-control input-width" type="text" id="intrest-calendar-from" name="intrest-calendar-from">
+					</div>
+				</div>
+				<div class="col-sm-1">
+					untill
+				</div>
+				<div class="col-sm-4">
+					<div class="input-group">
+						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                        <input class="form-control input-width" type="text" id="intrest-calendar-to" name="intrest-calendar-to"><br />
+					</div>
+				</div>
+			</div>
+
+			<%if(hasFreezInterest===true){ %>
+			<br />
+			<%
+			_.each(InterestFreeze, function(item, idx) {
+			var ary = item.split('|');
+			if (ary[4] === ''){
 			%>
-            </ul>
-        </div>
-    <%
+			<div class="row">
+				<button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
+				This loan's intrest is stoped from
+				<span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
+				until
+				<span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+			</div>
+			<%	}});	%>
+			<br />
+			<% }else{ %>
+            <div class="row"><br/>There is no intrest freez for this loan.<br/></div>
+            <%}%>
+
+			<div class="row"><button class="btn btn-primary pull-right" id="resch-submit-btn">Submit</button></div>
+
+			<div class="row alert alert-danger center" style="display: none; text-align: center" id="submit-fail">There has been an error sending data to server</div>
+			<div class="row alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server</div>
+		</form>
+	</div>
+	
+	
+	
+	<div class="editloan-schedule-region"></div>
+	<div class="editloan-item-editor-region"></div>
+	<div class="buttons">
+		<hr />
+		<button class="btn btn-primary pull-right cancel">Cancel</button>
+		<button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
+	</div>
+</script>
+<hr>
+<script type="text/template" id="loan_editor_schedule_template">
+
+
+	<h4>Standard Schedule</h4>
+	<table class="table table-selected centered" style="white-space: nowrap;">
+		<thead class="box">
+			<tr class="box-title">
+				<th width="90">#</th>
+				<th>Date</th>
+				<th>Principal</th>
+				<th>Balance</th>
+				<th>
+					Interest<br />
+					Rate
+				</th>
+				<th>Interest</th>
+				<th>Fees</th>
+				<th>Status</th>
+				<th>Total</th>
+				<th width="200">Description</th>
+			</tr>
+		</thead>
+		<tbody>
+			<%
+			_.each(Items, function(item, i) {
+			var editClass = editItemIndex == i ? "editing" : "";
+			%>
+			<tr class="<%= editClass %>">
+				<td>
+					<%- i+1 %>&nbsp;<%
+					if (item.Editable) { %>
+					<button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
+					<%
+					}
+
+					if (item.Deletable) { %>
+					<button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
+					<%
+					}
+					%>
+				</td>
+
+				<td style="text-align: center"><%- EzBob.formatDateWithoutTime(item.Date) %></td>
+				<%
+
+				if (item.Type == "Fee") {
+				%>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td></td>
+				<td style="text-align: center"><%- item.Description %></td>
+				<%
+				} else if (item.Type == "Installment") {
+				%>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
+				<td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+				<td></td>
+				<%
+				} else if (item.Type == "Pacnet") {
+				%>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+				<td style="text-align: center"><%- item.Description %></td>
+				<%
+				} else {
+				%>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
+				<td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+				<td style="text-align: center"><%- item.Status %></td>
+				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+				<td style="text-align: center"><%- item.Description %></td>
+				<%
+				}
+				%>
+			</tr>
+			<%
+			});
+			%>
+		</tbody>
+	</table>
+	<%
+
+	if(HasErrors) {
+	%>
+	<div class="alert alert-error">
+		Following conditions(s) were not satisfied:
+		<ul>
+			<%
+			_.each(Errors, function(e) {
+			%>
+			<li><%- e %></li>
+			<%
+			});
+			%>
+		</ul>
+	</div>
+	<%
 	}
 
-	%><div>
-        <button class="btn btn-primary add-installment">Add Installment</button>
-        <button class="btn btn-primary add-fee">Add Fee</button>
-    </div>
-</script>
-
-<script type="text/template" id="loan_editor_freeze_intervals_template">
-    <h4>Freeze Intervals</h4>
-    <div class="table-big">
-        <table class="table table-selected centered" style="white-space: nowrap;">
-            <thead class="box">
-                <tr class="box-title">
-                    <th>From (inclusive)</th>
-                    <th>To (inclusive)</th>
-                    <th>Interest Rate</th>
-                    <th></th>
-                </tr>
-            </thead>
-            <tbody class="freeze-intervals-list">
-                <%
-			_.each(InterestFreeze, function(item, idx) {
-				var ary = item.split('|');
-
-				if (ary[4] != '')
-					return;
-
-				%><tr>
-                    <td><%- EzBob.formatDateWithoutTime(ary[0]) %></td>
-                    <td><%- EzBob.formatDateWithoutTime(ary[1]) %></td>
-                    <td class="right"><%- EzBob.formatPercents(ary[2]) %></td>
-                    <td class="centered">
-                        <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-                    </td>
-                </tr>
-                <%
-			});
-		%>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="4">Add New Interval <span class="new-freeze-interval-error"></span></th>
-                </tr>
-                <tr>
-                    <td>
-                        <input class="new-freeze-interval-start form-control" type="date" /></td>
-                    <td>
-                        <input class="new-freeze-interval-end form-control" type="date" /></td>
-                    <td class="right">
-                        <input class="new-freeze-interval-rate form-control" type="number" value="0" min="0" step="0.01" />%</td>
-                    <td class="centered">
-                        <button class="btn btn-mini add-freeze-interval btn-primary"><i class="fa fa-plus-circle"></i></button>
-                    </td>
-                </tr>
-            </tfoot>
-        </table>
-    </div>
+	%>
+	<div>
+		<button class="btn btn-primary add-installment">Add Installment</button>
+		<button class="btn btn-primary add-fee">Add Fee</button>
+	</div>
 </script>

@@ -18,6 +18,7 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PersonalInfoModel));
 		private readonly CustomerPhoneRepository customerPhoneRepository = ObjectFactory.GetInstance <CustomerPhoneRepository>();
 		private readonly TrustPilotStatusRepository trustPilotStatusRepository = ObjectFactory.GetInstance<TrustPilotStatusRepository>();
+		private readonly ExternalCollectionStatusesRepository externalCollectionStatusesRepository = ObjectFactory.GetInstance<ExternalCollectionStatusesRepository>();
 
 
 		public int Id { get; set; }
@@ -246,6 +247,11 @@
 			TrustPilotStatusDescription = customer.TrustPilotStatus.Description;
 			TrustPilotStatusName = customer.TrustPilotStatus.Name;
 
+			ExternalCollectionStatusName = customer.ExternalCollectionStatus == null ? "" : customer.ExternalCollectionStatus.Name;
+
+			ExternalCollectionStatusID = customer.ExternalCollectionStatus == null ? "" : Convert.ToString(customer.ExternalCollectionStatus.Id);
+			
+
 			BrokerID = customer.Broker == null ? 0 : customer.Broker.ID;
 			BrokerName = customer.Broker == null ? "" : customer.Broker.ContactName;
 			BrokerFirmName = customer.Broker == null ? "" : customer.Broker.FirmName;
@@ -281,25 +287,45 @@
 		public string TrustPilotStatusDescription { get; set; }
 		public string TrustPilotStatusName { get; set; }
 
+		public string ExternalCollectionStatusName { get; set; }
+		public string ExternalCollectionStatusID { get; set; }
+
 		public int BrokerID { get; set; }
 		public string BrokerName { get; set; }
 		public string BrokerFirmName { get; set; }
 		public string BrokerContactEmail { get; set; }
 		public string BrokerContactMobile { get; set; }
 
-		public List<TrustPilotStatusModel> TrustPilotStatusList {
+		public List<ComboEditModel> ExternalCollectionStatusesList {
+			get {
+				if (m_oExternalCollectionStatusesList != null)
+					return m_oExternalCollectionStatusesList;
+
+				m_oExternalCollectionStatusesList = externalCollectionStatusesRepository
+					.GetAll()
+					.Select(tsp => new ComboEditModel {
+						value = Convert.ToString(tsp.Id),
+						text = tsp.Name
+					})
+					.ToList();
+
+				return m_oExternalCollectionStatusesList;
+			} // get
+		}
+		
+		public List<ComboEditModel> TrustPilotStatusList {
 			get {
 				if (m_oTrustPilotStatusList != null)
 					return m_oTrustPilotStatusList;
 
 				m_oTrustPilotStatusList = trustPilotStatusRepository
 					.GetAll()
-					.Select(tsp => new TrustPilotStatusModel {
+					.Select(tsp => new ComboEditModel {
 						value = tsp.Name,
 						text = tsp.Description
 					})
 					.ToList();
-				
+
 				return m_oTrustPilotStatusList;
 			} // get
 		}
@@ -307,13 +333,15 @@
 		public int NumOfDirectors { get; set; }
 		public int NumOfShareholders { get; set; }
 
-// TrustPilotSatusList
-
-		private List<TrustPilotStatusModel> m_oTrustPilotStatusList;
+		// TrustPilotStatusList
+		private List<ComboEditModel> m_oTrustPilotStatusList;
+		// ExternalCollectionStatusList
+		private List<ComboEditModel> m_oExternalCollectionStatusesList;
 	} // class PersonalInfoModel
 
-	public class TrustPilotStatusModel {
+	public class ComboEditModel {
 		public string value { get; set; }
 		public string text { get; set; }
 	}
+
 } // namespace

@@ -1,10 +1,10 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database.Loans
 {
 	using System;
-	using Model.Loans;
+	using System.ComponentModel;
+	using EZBob.DatabaseLib.Model.Loans;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
-	using System.ComponentModel;
 
 	public class LoanScheduleItem
 	{
@@ -171,8 +171,7 @@
 
 		public override string ToString()
 		{
-			return string.Format("Date: {0, 10} Balance: {1, 10} AmountDue: {2, 10} LoanRepayment: {3, 10} Interest: {4, 10} Fees: {6, 10} Status: {5, 10}",
-									Date, Balance, AmountDue, LoanRepayment, Interest, Status, Fees);
+			return string.Format("LoanScheduleItem: Date: {0, 10} Balance: {1, 10} AmountDue: {2, 10} LoanRepayment: {3, 10} Interest: {4, 10} Fees: {5, 10} Status: {6, 10}, InterestRate: {7, 10}", Date, Balance, AmountDue, LoanRepayment, Interest, Fees, Status, InterestRate);
 		}
 	}
 
@@ -190,6 +189,11 @@
 		Paid,
 		[Description("Almost paid")]
 		AlmostPaid
+
+		//,[Description("RescheduledLate")]
+		//RescheduledLate,
+		//[Description("RescheduledStillToPay")]
+		//RescheduledStillToPay
 	}
 
 	public class LoanScheduleStatusType : EnumStringType<LoanScheduleStatus>
@@ -200,8 +204,8 @@
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using FluentNHibernate.Mapping;
-	using Loans;
 	using NHibernate.Type;
 
 	public class LoanScheduleMap : ClassMap<LoanScheduleItem>

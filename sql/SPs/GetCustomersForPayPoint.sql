@@ -1,11 +1,13 @@
-IF EXISTS (SELECT 1 FROM sys.objects WHERE object_id = OBJECT_ID(N'[dbo].[GetCustomersForPayPoint]') AND TYPE IN (N'P', N'PC'))
-DROP PROCEDURE [dbo].[GetCustomersForPayPoint]
+IF OBJECT_ID('GetCustomersForPayPoint') IS NULL
+	EXECUTE('CREATE PROCEDURE GetCustomersForPayPoint AS SELECT 1')
 GO
+
 SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
-CREATE PROCEDURE [dbo].[GetCustomersForPayPoint]
+
+ALTER PROCEDURE GetCustomersForPayPoint
 AS
 BEGIN
 	DECLARE @Now DATETIME
@@ -50,8 +52,11 @@ BEGIN
 			convert(date, ls.Date) <= @Now
 	WHERE 
 		(
-			lo.AutoPayment IS NULL OR 
-			lo.AutoPayment = 1
+			lo.AutoPayment IS NULL 
+			OR 
+		 	lo.AutoPayment = 1 
+			OR 
+			(lo.AutoPayment = 0 AND lo.StopAutoChargeDate IS NOT NULL AND @Now < lo.StopAutoChargeDate)
 		) AND
 		ls.Date =
 		(
@@ -65,7 +70,8 @@ BEGIN
 					l1.Status = 'StillToPay' OR 
 					l1.Status = 'Late'
 				) 
-		)
+		)AND
+		c.ExternalCollectionStatusID IS NULL
 		
 	SELECT 
 		LoanScheduleId,
@@ -83,4 +89,5 @@ BEGIN
 		LoanScheduleId NOT IN (SELECT LoanScheduleId FROM PaymentRollover WHERE ExpiryDate > @Now) 
 	ORDER BY LoanScheduleId DESC
 END
+
 GO

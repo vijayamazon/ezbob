@@ -72,6 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActionMetaData.cs" />
+    <Compile Include="ActionResults\ReschedulingActionResult.cs" />
     <Compile Include="ActionResults\ActionResult.cs" />
     <Compile Include="ActionResults\AlibabaAvailableCreditActionResult.cs" />
     <Compile Include="ActionResults\AlibabaCustomerDataSharingActionResult.cs" />
@@ -123,9 +124,9 @@
     <Compile Include="EzServiceImplementation\esi_agreement.cs" />
     <Compile Include="EzServiceImplementation\esi_company_files.cs" />
     <Compile Include="EzServiceImplementation\esi_automation_verification.cs" />
-    <Compile Include="EzServiceImplementation\esi_creditsafe.cs" />
     <Compile Include="EzServiceImplementation\esi_customer_manual_annualized_revenue.cs" />
     <Compile Include="EzServiceImplementation\esi_iovation.cs" />
+    <Compile Include="EzServiceImplementation\esi_newloan.cs" />
     <Compile Include="EzServiceImplementation\esi_partner_alibaba.cs" />
     <Compile Include="EzServiceImplementation\esi_external_api.cs" />
     <Compile Include="EzServiceImplementation\esi_lottery.cs" />
@@ -150,6 +151,7 @@
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
+    <Compile Include="IEzServiceNewLoan.cs" />
     <Compile Include="IEzServiceSalesForce.cs" />
     <Compile Include="IEzServiceBroker.cs" />
     <Compile Include="IEzServiceVatReturn.cs" />
@@ -183,6 +185,10 @@
       <Project>{7E526927-9849-4E6E-BBFF-D0D780F81A05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\DatabaseLib\DatabaseLib.csproj">
+      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
+      <Name>DatabaseLib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\DbConstants\DbConstants.csproj">
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
@@ -190,6 +196,10 @@
     <ProjectReference Include="..\..\..\Integration\EchoSign\EchoSignLib\EchoSignLib.csproj">
       <Project>{BADDE16C-DC34-4A2A-8B08-DA0D0CAE6FEC}</Project>
       <Name>EchoSignLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\EzBob.Models\EzBob.Models.csproj">
+      <Project>{66411FF3-AA26-4B45-96D3-56E5E77BB544}</Project>
+      <Name>EzBob.Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Integration\FraudChecker\FraudChecker.csproj">
       <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>

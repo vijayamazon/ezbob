@@ -247,16 +247,14 @@
 		[HttpGet]
 		public JsonResult Index(int id, DateTime? history = null) {
 			try {
-				Log.Info("history before {0}", history);
 				if (history.HasValue) {
 					history = DateTime.SpecifyKind(history.Value, DateTimeKind.Utc);
 				}
-				Log.Info("history after {0}", history);
 				var ar = m_oServiceClient.Instance.CalculateModelsAndAffordability(_context.UserId, id, history);
 				var mps = ar.MpModel.MarketPlaces;
 				return Json(mps, JsonRequestBehavior.AllowGet);
 			} catch (Exception ex) {
-				Log.Error(ex, "failed to retrieve mp data from service");
+				Log.Error(ex, "failed to retrieve mp data from service for customer id {0} history {1}", id, history);
 				return Json(new List<MarketPlaceModel>(), JsonRequestBehavior.AllowGet);
 			} // try
 		} // Index

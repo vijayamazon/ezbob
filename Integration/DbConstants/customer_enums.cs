@@ -82,17 +82,17 @@
 	public enum CashRequestOriginator
 	{
 		[Description("Finished wizard")]
-		FinishedWizard = 0,
+		FinishedWizard = 1,
 		[Description("Quick offer")]
-		QuickOffer = 1,
+		QuickOffer = 2,
 		[Description("Dashboard request cash button")]
-		RequestCashBtn = 2,
+		RequestCashBtn = 3,
 		[Description("UW new credit line button")]
-		NewCreditLineBtn = 3,
+		NewCreditLineBtn = 4,
 		[Description("Other")]
-		Other = 4,
+		Other = 5,
 		[Description("RequalifyCustomerStrategy")]
-		RequalifyCustomerStrategy = 5
+		RequalifyCustomerStrategy = 6
 	} // enum CashRequestOriginator
 
 	public enum FraudStatus {

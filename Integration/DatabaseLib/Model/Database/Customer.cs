@@ -6,7 +6,6 @@
 	using System.Web.Script.Serialization;
 	using Broker;
 	using CustomerRelations;
-	using EZBob.DatabaseLib.Model.Fraud;
 	using Loans;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
@@ -573,6 +572,8 @@
 		} // ManualAddressWarning
 
 		public virtual TrustPilotStatus TrustPilotStatus { get; set; }
+
+		public virtual ExternalCollectionStatuses ExternalCollectionStatus { get; set; }
 
 		public virtual QuickOffer QuickOffer { get; set; }
 

@@ -3,8 +3,9 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Reflection;
+	using Ezbob.Utils.Extensions;
 
-	public class CodeToSql {
+    public class CodeToSql {
 		public static string GetCreateTable<T>() where T : class {
 			var oFields = new List<string>();
 			var oConstraints = new List<string>();
@@ -69,7 +70,7 @@
 
 			string sTableName = typeof(T).Name;
 
-			string sProcName = "Save" + sTableName;
+            string sProcName = sTableName + "Save";
 
 			string sTypeName = sTableName + "List";
 
@@ -112,7 +113,9 @@
 			oProcSql.Add("\t\t" + sFieldNames);
 			oProcSql.Add("\t) SELECT");
 			oProcSql.Add("\t\t" + sFieldNames);
-			oProcSql.Add("\tFROM @Tbl");
+            oProcSql.Add("\tFROM @Tbl\n");
+            oProcSql.Add("\tDECLARE @ScopeID INT = SCOPE_IDENTITY()");
+            oProcSql.Add("\tSELECT @ScopeID AS ScopeID");
 			oProcSql.Add("END");
 			oProcSql.Add("GO");
 
@@ -139,11 +142,21 @@
 			if (oPropInfo.PropertyType == typeof(long))
 				return "BIGINT" + ExtractIdentity(oPropInfo) + " NOT NULL";
 
-			if (oPropInfo.PropertyType == typeof(decimal))
-				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NOT NULL";
+            if (oPropInfo.PropertyType == typeof(decimal)) {
+                var length = ExtractLength(oPropInfo, "18, 6");
+                if (length == LengthType.Money.DescriptionAttr()) {
+                    return length + " NOT NULL";
+                }
+                return "DECIMAL(" + length + ") NOT NULL";
+            }
 
-			if (oPropInfo.PropertyType == typeof(decimal?))
-				return "DECIMAL(" + ExtractLength(oPropInfo, "18, 6") + ") NULL";
+            if (oPropInfo.PropertyType == typeof(decimal?)) {
+                var length = ExtractLength(oPropInfo, "18, 6");
+                if (length == LengthType.Money.DescriptionAttr()) {
+                    return length + " NOT NULL";
+                }
+                return "DECIMAL(" + length + ") NULL";
+            }
 
 			if (oPropInfo.PropertyType == typeof(DateTime?))
 				return "DATETIME NULL";

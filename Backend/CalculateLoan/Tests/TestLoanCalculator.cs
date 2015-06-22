@@ -5,6 +5,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.Extensions;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -20,34 +21,19 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 		} // TestLegacyCalculator
 
 		[Test]
-		public void TestLoan166() {
+		public void TestCreateScheduleAndPlan() {
 			var lcm = new LoanCalculatorModel {
-				LoanAmount = 29100,
-				LoanIssueTime = new DateTime(2012, 11, 30, 14, 15, 16, DateTimeKind.Utc),
+				LoanAmount = 1200,
+				LoanIssueTime = new DateTime(2015, 1, 31, 14, 15, 16, DateTimeKind.Utc),
 				RepaymentIntervalType = RepaymentIntervalTypes.Month,
-				RepaymentCount = 6,
+				RepaymentCount = 15,
 				MonthlyInterestRate = 0.03m,
 			};
 
 			var lc = new LegacyLoanCalculator(lcm);
 
-			lc.CreateSchedule();
-
-			lcm.Repayments.Add(new Repayment(new DateTime(2012, 12, 30), 4850, 873, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2013, 1, 30), 4951.16m, 626.34m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2013, 1, 20), 0, 101.16m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2013, 2, 28), 4748.84m, 541.61m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2013, 3, 30), 4846.98m, 467.68m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2013, 4, 30), 4849.91m, 291.09m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2013, 5, 7), 4849.98m, 33.97m, 0));
-			lcm.Repayments.Add(new Repayment(new DateTime(2013, 10, 15), 3.13m, 0.5m, 0));
-
-			lcm.SetScheduleCloseDatesFromPayments();
-
-			Log.Debug("Model {0}", lcm);
-
-			lc.CalculateBalance(new DateTime(2013, 10, 16));
-		}
+			lc.CreateScheduleAndPlan();
+		} // TestCreateScheduleAndPlan
 
 		[Test]
 		public void TestSetScheduleCloseDatesFromPayments() {
@@ -68,9 +54,15 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			lcm.Repayments.Add(new Repayment(new DateTime(2015, 2, 23), 250, 25, 0));
 			lcm.Repayments.Add(new Repayment(new DateTime(2015, 3, 23), 641, 25, 0));
 
+			lcm.Fees.Add(new Fee(new DateTime(2015, 4, 1), 25m));
+
 			lcm.SetScheduleCloseDatesFromPayments();
 
 			Log.Info("Loan model after close dates applied: {0}", lcm);
+
+			CurrentPaymentModel amount = lc.GetAmountToChargeForDashboard(DateTime.UtcNow, true);
+
+			Log.Info("Amount to charge on {0}: {1}.", DateTime.UtcNow.DateStr(), amount);
 		} // TestSetScheduleCloseDatesFromPayments
 
 		private void TestSpecificLoanCalculator(Func<LoanCalculatorModel, ALoanCalculator> loanCalculatorFactory) {

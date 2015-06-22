@@ -209,6 +209,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.GoogleCookie).Length(300);
 
 			References(x => x.TrustPilotStatus, "TrustPilotStatusID");
+			References(x => x.ExternalCollectionStatus, "ExternalCollectionStatusID");
 
 			References(x => x.QuickOffer, "QuickOfferID").Nullable().Cascade.All();
 

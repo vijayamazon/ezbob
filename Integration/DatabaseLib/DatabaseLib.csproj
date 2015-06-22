@@ -105,6 +105,7 @@
     <Compile Include="Model\Database\CustomerCompanyHistory.cs" />
     <Compile Include="Model\Database\CustomerOrigin.cs" />
     <Compile Include="Model\Database\CustomerPhone.cs" />
+    <Compile Include="Model\Database\ExternalCollectionStatuses.cs" />
     <Compile Include="Model\Database\PropertyStatus.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrace.cs" />
     <Compile Include="Model\Database\Request\AutoDecisionTrail.cs" />
@@ -162,6 +163,7 @@
     <Compile Include="Model\Loans\LoanBrokerCommission.cs" />
     <Compile Include="Model\Loans\LoanLegal.cs" />
     <Compile Include="Model\Loans\LoanMap.cs" />
+    <Compile Include="Model\Loans\LoanScheduleDeleted.cs" />
     <Compile Include="Model\Loans\LoanSource.cs" />
     <Compile Include="Model\Loans\LoanInterestFreeze.cs" />
     <Compile Include="Model\Loans\LoanAgreementTemplate.cs" />

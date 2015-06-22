@@ -40,7 +40,7 @@
 		[Length(-1)]
 		public string Field { get; set; }
 
-		[Length("22, 0")]
+		[Length(LengthType.D22E2)]
 		public decimal Numerical { get; set; }
 	}
 }

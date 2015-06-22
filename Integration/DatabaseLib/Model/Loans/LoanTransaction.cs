@@ -1,12 +1,10 @@
-﻿using System;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using Iesi.Collections.Generic;
-using NHibernate.Type;
-
-namespace EZBob.DatabaseLib.Model.Database.Loans
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans
 {
-    public class LoanTransaction
+	using System;
+	using Iesi.Collections.Generic;
+	using NHibernate.Type;
+
+	public class LoanTransaction
     {
         public virtual int Id { get; set; }
         public virtual DateTime PostDate { get; set; }
@@ -23,6 +21,11 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 			get { return _scheduleTransactions; }
 			set { _scheduleTransactions = value; }
 		} // ScheduleTransactions
+
+
+		public override string ToString() {
+			return string.Format("\nLoanTransaction: Amount: {0, 10} Description: {1, 10} Status: {2, 10} Fees: {3, 10}, RefNumber: {4, 10}, \tPostDate: {5, 10}, \tId: {6, 10}", Amount, Description, Status, Fees, RefNumber, PostDate, Id);
+		}
     }
 
     public enum LoanTransactionStatus
@@ -57,7 +60,11 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
-    public class LoanTransactionMap : ClassMap<Database.Loans.LoanTransaction>
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FluentNHibernate.Mapping;
+	using NHibernate.Type;
+
+	public class LoanTransactionMap : ClassMap<LoanTransaction>
     {
         public LoanTransactionMap()
         {

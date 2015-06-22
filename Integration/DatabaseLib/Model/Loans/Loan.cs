@@ -444,7 +444,7 @@
 		public override string ToString() {
 			var sb = new StringBuilder();
 
-			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}\n", Id, LoanAmount, InterestRate);
+			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}, Issued: {3}, Close date: {4}, Balance: {5}\n", Id, LoanAmount, InterestRate, Date, DateClosed, Balance);
 
 			sb.AppendLine("Schedule:");
 			foreach (var item in _schedule) {
@@ -469,6 +469,13 @@
 				sb.Append("\t");
 				sb.AppendLine(item.ToString());
 			}
+
+			sb.AppendLine("RemovedOnReschedule:");
+			foreach (var item in RemovedOnReschedule) {
+				sb.Append("\t");
+				sb.AppendLine(item.ToString());
+			}
+
 			return sb.ToString();
 		} // ToString
 
@@ -511,6 +518,17 @@
 
 			return true;
 		} // TryAddCharge
+
+
+		private IList<LoanScheduleDeleted> _removedOnReschedule = new List<LoanScheduleDeleted>();
+		public virtual IList<LoanScheduleDeleted> RemovedOnReschedule {
+			get { return this._removedOnReschedule; }
+			set { this._removedOnReschedule = value; }
+		}
+		public virtual void TryAddRemovedOnReschedule(LoanScheduleDeleted item) {
+			RemovedOnReschedule.Add(item);
+		}
+
 
 	} // class Loan
 

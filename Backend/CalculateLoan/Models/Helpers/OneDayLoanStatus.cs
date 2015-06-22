@@ -9,6 +9,12 @@
 			return (length >= 0) ? preResult.PadLeft(length + 2) : preResult.PadRight(2 - length);
 		} // FormatField
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="d"></param>
+		/// <param name="openPrincipal"></param>
+		/// <param name="previousDay"></param>
 		public OneDayLoanStatus(DateTime d, decimal openPrincipal, OneDayLoanStatus previousDay) {
 			Date = d;
 			OpenPrincipal = openPrincipal;
@@ -63,6 +69,10 @@
 		public decimal CurrentBalance {
 			get { return OpenPrincipal + TotalExpectedNonprincipalPayment; }
 		} // CurrentBalance
+
+		public decimal AccruedInterest {
+			get { return TotalEarnedInterest - TotalRepaidInterest; }
+		} // AccruedInterest
 
 		public void AddRepayment(Repayment rp) {
 			if (rp == null)

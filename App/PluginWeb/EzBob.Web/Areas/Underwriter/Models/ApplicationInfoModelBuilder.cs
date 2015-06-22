@@ -60,20 +60,20 @@
 				BuildCashRequestModel(model, customer, cr);
 			}
 
-			model.LoanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : this._loanSources.GetDefault());
+			var loanSource = new LoanSourceModel(cr != null && cr.LoanSource != null ? cr.LoanSource : this._loanSources.GetDefault());
+			model.LoanSourceID = loanSource.Id;
+			model.LoanSource = loanSource.Name;
 
 			model.CustomerId = customer.Id;
 			model.IsTest = customer.IsTest;
 			model.IsOffline = customer.IsOffline;
-			model.HasYodlee = customer.GetYodleeAccounts().ToList().Any();
+			model.HasYodlee = customer.GetYodleeAccounts().Any();
 			model.IsAvoid = customer.IsAvoid;
 			model.SystemDecision = customer.Status.ToString();
 
 			model.AvaliableAmount = customer.CreditSum ?? 0M;
 			model.OfferExpired = customer.OfferValidUntil <= DateTime.UtcNow;
 
-			//Status = "Active";
-			model.Details = customer.Details;
 			var isWaitingOrEscalated = customer.CreditResult == CreditResultStatus.WaitingForDecision ||
 									   customer.CreditResult == CreditResultStatus.Escalated ||
 									   customer.CreditResult == CreditResultStatus.ApprovedPending;
@@ -113,7 +113,6 @@
 			BuildRequestedLoan(model, customer);
 
 			BuildSuggestedAmountModel(model, customer);
-
 			BuildAutomationOfferModel(model, customer);
 		}//InitApplicationInfo
 
@@ -186,6 +185,7 @@
 			model.Reason = cr.UnderwriterComment;
 
 			model.IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed;
+			model.IsCustomerRepaymentPeriodSelectionAllowed = cr.IsCustomerRepaymentPeriodSelectionAllowed;
 
 			model.AnnualTurnover = cr.AnnualTurnover;
 
@@ -212,7 +212,6 @@
 			} else
 				model.AutomationOfferModel = new AutomationOfferModel();
 		}//BuildAutomationOfferModel
-
 		private void BuildSuggestedAmountModel(ApplicationInfoModel model, Customer customer) {
 			if (customer.CustomerMarketPlaces.Any(x => x.Marketplace.Name == "HMRC")) {
 				var hmrc = customer.CustomerMarketPlaces.First(x => x.Marketplace.Name == "HMRC")
@@ -223,11 +222,9 @@
 					model.FreeCashFlow = summary.FreeCashFlow;
 				}
 			}
-
 			var analytics = this._customerAnalyticsRepository.Get(customer.Id);
 			if (analytics != null)
 				model.Turnover = analytics.AnnualTurnover;
-
 			model.SuggestedAmounts = new[] {
 	            new SuggestedAmountModel {
 	                Method = CalculationMethod.Turnover.DescriptionAttr(),

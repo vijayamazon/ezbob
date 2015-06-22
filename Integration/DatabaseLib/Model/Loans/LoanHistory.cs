@@ -2,6 +2,7 @@
 {
 	using System;
 	using System.Linq;
+	using System.Text;
 	using ApplicationMng.Repository;
 	using Database.Loans;
 	using FluentNHibernate.Mapping;
@@ -82,6 +83,22 @@
 		/// If on time repayment, this field populated with expected repayment sum
 		/// </summary>
 		public virtual decimal ExpectedAmountDue { get; set; }
+
+		/// <summary>
+		/// Returns a string that represents the current object.
+		/// </summary>
+		/// <returns>
+		/// A string that represents the current object.
+		/// </returns>
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
+			Type t = typeof(LoanHistory);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
+			}
+			return sb.ToString();
+		}
 	}
 
 	public class LoanHistoryMap : ClassMap<LoanHistory>

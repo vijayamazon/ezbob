@@ -1,5 +1,6 @@
 ﻿namespace EZBob.DatabaseLib.Model.Loans {
 	using System;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using FluentNHibernate.Mapping;
 	using NHibernate.Type;
 

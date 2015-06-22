@@ -1,33 +1,42 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Callcredit.CRBSB;
-using CodeToDbTool.Model;
-using Ezbob.Utils.dbutils;
-using System.IO;
+﻿namespace CodeToDbTool {
+    using Ezbob.Utils.dbutils;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
 
-
-namespace CodeToDbTool {
 	class Program {
 		static void Main(string[] args) {
 
 			//Console.WriteLine(CodeToSql.GetCreateTable<CallCreditDataApplicant>());
 			//Console.WriteLine(CodeToSql.GetCreateSp<CallCreditSearchData>());
-			using (StreamWriter file1 = new System.IO.StreamWriter(@"c:\temp1\BuildDB.txt", true)) {
-                file1.WriteLine(CodeToSql.GetCreateTable<CreditSafeNonLtdRatings>());
-			};
-
-            using (StreamWriter file2 = new System.IO.StreamWriter(@"c:\temp1\SaveCreditSafeNonLtdRatings.sql", true))
-            {
-                file2.WriteLine(CodeToSql.GetCreateSp<CreditSafeNonLtdRatings>());
-			}
-
-
-
-
+           
+		    CreateNewLoanTablesSps();
 		}
+
+	    private static void CreateNewLoanTablesSps()
+	    {
+	        CodeToFile.Folder = @"c:\temp\";
+            CodeToFile.SaveFile<NL_CashRequests>();
+            CodeToFile.SaveFile<NL_Decisions>();
+            CodeToFile.SaveFile<NL_Offers>();
+            CodeToFile.SaveFile<NL_LoanAgreements>();
+            CodeToFile.SaveFile<NL_LoanFeePayments>();
+            CodeToFile.SaveFile<NL_BlendedLoans>();
+            CodeToFile.SaveFile<NL_FundTransfers>();
+            CodeToFile.SaveFile<NL_LoanFees>();
+            CodeToFile.SaveFile<NL_LoanHistory>();
+            CodeToFile.SaveFile<NL_BlendedOffers>();
+            CodeToFile.SaveFile<NL_LoanLegals>();
+            CodeToFile.SaveFile<NL_LoanLienLinks>();
+            CodeToFile.SaveFile<NL_LoanRollovers>();
+            CodeToFile.SaveFile<NL_PaypointTransactions>();
+            CodeToFile.SaveFile<NL_PacnetTransactions>();
+            CodeToFile.SaveFile<NL_Payments>();
+            CodeToFile.SaveFile<NL_LoanSchedulePayments>();
+            CodeToFile.SaveFile<NL_LoanSchedules>();
+            CodeToFile.SaveFile<NL_LoanStates>();
+            CodeToFile.SaveFile<NL_Loans>();
+            CodeToFile.SaveFile<NL_DecisionRejectReasons>();
+            CodeToFile.SaveFile<NL_LoanOptions>();
+	    }
 	}
 
 	public class ExampleDbTable {

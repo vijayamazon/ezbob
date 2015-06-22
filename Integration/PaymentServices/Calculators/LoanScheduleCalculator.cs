@@ -135,7 +135,6 @@
 			for (int i = 1; i < Term; i++)
 				setupFee[i] = other;
 
-			loan.Fees = loan.SetupFee;
 			loan.SetupFee = 0;
 
 			return setupFee;
@@ -144,4 +143,5 @@
 		private int term = 3;
 		private decimal interest = 0.06M;
 	} // class LoanScheduleCalculator
+} // namespace
 } // namespace

@@ -62,12 +62,6 @@
 			return this.notes.ContainsKey(dd.Date) ? this.notes[dd.Date] : string.Empty;
 		} // GetNote
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
 		public override string ToString() {
 			return string.Join("\n\t\t", Days);
 		} // ToString
@@ -85,7 +79,7 @@
 
 			const string date = "Date";
 			const string openPrincipal = "Open principal";
-			const string dailyInterest = "Daily accrued interest";
+			const string dailyInterest = "Daily accured interest";
 			const string assignedFees = "Assigned fees";
 			const string dailyInterestRate = "Daily interest rate";
 			const string repaidPrincipal = "Principal";
@@ -164,6 +158,48 @@
 
 			return string.Join("\n", result);
 		} // ToFormattedString
+
+		public void AddScheduleNotes(LoanCalculatorModel workingModel) {
+			if (workingModel == null)
+				return;
+
+			for(int i = 0; i < workingModel.Schedule.Count; i++) {
+				var sp = workingModel.Schedule[i];
+
+				AddNote(
+					sp.Date,
+					i == workingModel.Schedule.Count - 1 ? "Last scheduled payment." : "Scheduled payment."
+				);
+			} // for each
+		} // AddScheduleNotes
+
+		public void AddPaymentNotes(LoanCalculatorModel workingModel) {
+			if (workingModel == null)
+				return;
+
+			for(int i = 0; i < workingModel.Repayments.Count; i++) {
+				var rp = workingModel.Repayments[i];
+
+				AddNote(
+					rp.Date,
+					"Repaid: " + rp.Amount.ToString("C2", Library.Instance.Culture)
+				);
+			} // for each
+		} // AddPaymentNotes
+
+		public void AddFeeNotes(LoanCalculatorModel workingModel) {
+			if (workingModel == null)
+				return;
+
+			for(int i = 0; i < workingModel.Fees.Count; i++) {
+				var fee = workingModel.Fees[i];
+
+				AddNote(
+					fee.AssignDate,
+					"Fee assigned: " + fee.Amount.ToString("C2", Library.Instance.Culture)
+				);
+			} // for each
+		} // AddFeeNotes
 
 		private readonly SortedDictionary<DateTime, string> notes;
 	} // class DailyLoanStatus

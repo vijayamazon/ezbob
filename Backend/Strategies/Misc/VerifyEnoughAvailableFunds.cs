@@ -10,6 +10,7 @@
 
 		public VerifyEnoughAvailableFunds(decimal deductAmount) {
 			this.deductAmount = deductAmount;
+			HasEnoughFunds = true;
 		} // constructor
 
 		public override string Name {
@@ -28,6 +29,7 @@
 
 			Log.Info("AvailableFunds:{0} Required:{1} Deducted:{2}", availableFunds, relevantLimit, deductAmount);
 			if (availableFunds - deductAmount < relevantLimit) {
+				HasEnoughFunds = false;
 				SendMail(availableFunds - deductAmount, relevantLimit);
 			}
 		} // Execute

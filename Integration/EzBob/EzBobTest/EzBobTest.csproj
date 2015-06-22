@@ -81,6 +81,7 @@
       <HintPath>..\..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -102,12 +103,12 @@
   <ItemGroup>
     <Compile Include="AddressHelperTestFixture.cs" />
     <Compile Include="BaseTestFixtue.cs" />
+    <Compile Include="TestNewLoan.cs" />
     <Compile Include="PayPalTest.cs" />
     <Compile Include="TestAlibaba.cs" />
     <Compile Include="TestHmrcHarvester.cs" />
     <Compile Include="TestIovation.cs" />
     <Compile Include="TestCallCredit.cs" />
-    <Compile Include="TestCreditSafe.cs" />
     <Compile Include="TestMedal.cs" />
     <Compile Include="TestOffer.cs" />
     <Compile Include="Misc.cs" />
@@ -129,9 +130,25 @@
     <Compile Include="TestRetrieveDataHelper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\App\EzReporting\Reports\Reports.csproj">
+      <Project>{FBD0F86B-FC06-418A-80A1-ADA19E973A7E}</Project>
+      <Name>Reports</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\App\HmrcHarvester\HmrcHarvester\HmrcHarvester.csproj">
       <Project>{DFC5B190-AFA4-40A7-8237-8404687B4513}</Project>
       <Name>HmrcHarvester</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
+      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
+      <Name>CalculateLoanExceptions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
+      <Project>{D7A03EFE-B175-49EB-9B22-3315C1124091}</Project>
+      <Name>LoanCalculator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\Models\Models.csproj">
+      <Project>{DDAF0E80-8E9D-49F4-AA8C-30A69489361E}</Project>
+      <Name>Models</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\EzServiceAccessorShort\EzServiceShortcut.csproj">
       <Project>{3D162D7E-C8EA-4A97-AF1A-58E728093AD0}</Project>
@@ -192,6 +209,10 @@
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\NHibernateWrapper\NHibernateWrapper.csproj">
       <Project>{dc706b41-2b3e-4082-b390-51aabac065d3}</Project>
       <Name>NHibernateWrapper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
+      <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
+      <Name>ValueIntervals</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Amazon\AmazonLib\AmazonLib.csproj">
       <Project>{45EB1597-4C92-4AB8-B615-5206D5A9F472}</Project>

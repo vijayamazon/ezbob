@@ -243,6 +243,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LoanCalculator", "Backend\C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Backend\CalculateLoan\Tests\Tests.csproj", "{851866A3-814E-4084-8BD3-86B9E4162DA8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateLoanExceptions", "Backend\CalculateLoan\CalculateLoanExceptions\CalculateLoanExceptions.csproj", "{9F39F6B0-980A-46EA-8977-416449BE9C5C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1212,6 +1214,16 @@ Global
 		{851866A3-814E-4084-8BD3-86B9E4162DA8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{851866A3-814E-4084-8BD3-86B9E4162DA8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{851866A3-814E-4084-8BD3-86B9E4162DA8}.Release|x86.ActiveCfg = Release|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1326,6 +1338,7 @@ Global
 		{EF300F8A-F973-4BB8-987B-A9775E121AF7} = {8D1E3346-B62B-450C-A373-F03EA6430A93}
 		{D7A03EFE-B175-49EB-9B22-3315C1124091} = {42F6911B-E135-442A-A5D1-AF77297A1CFD}
 		{851866A3-814E-4084-8BD3-86B9E4162DA8} = {42F6911B-E135-442A-A5D1-AF77297A1CFD}
+		{9F39F6B0-980A-46EA-8977-416449BE9C5C} = {42F6911B-E135-442A-A5D1-AF77297A1CFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		VisualSVNWorkingCopyRoot = .

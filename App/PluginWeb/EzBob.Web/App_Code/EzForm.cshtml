@@ -1,4 +1,8 @@
-﻿@using ConfigManager
+﻿@using System
+@using System.Collections.Generic
+@using System.Web
+@using System.Web.WebPages
+@using ConfigManager
 @*Renders select*@
 @helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
 {
@@ -184,7 +188,7 @@
     <div class="control-group">
         <label for="@id" class="control-label">@caption</label>
         <div class="controls">
-            <textarea id="@id" name="@id" rows="10" cols="300" class="@css" style=" resize: none; ">@value</textarea>
+            <textarea id="@id" name="@id" rows="10" cols="300" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea>
         </div>
     </div>
 }
@@ -194,7 +198,7 @@
     <div class="form-group">
         <label for="@id" class="control-label">@caption</label>
         <div class="controls">
-            <textarea id="@id" name="@id" rows="5" cols="10" class="@css" style=" resize: none; " >@value</textarea>
+            <textarea id="@id" name="@id" rows="5" cols="10" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;" >@value</textarea>
         </div>
     </div>
 }

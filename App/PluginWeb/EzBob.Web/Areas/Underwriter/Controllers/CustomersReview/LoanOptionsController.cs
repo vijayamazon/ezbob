@@ -3,6 +3,8 @@
 	using System.Web.Mvc;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Repository;
@@ -10,6 +12,7 @@
 	using Models;
 	using Infrastructure.csrf;
 	using log4net;
+	using ServiceClientProxy;
 	using StructureMap;
 
 	public class LoanOptionsController : Controller {
@@ -18,39 +21,33 @@
 		private readonly ILoanOptionsRepository _loanOptionsRepository;
 		private readonly ILoanRepository _loanRepository;
 		private readonly ICaisFlagRepository _caisFlagRepository;
-	    private readonly ILog Log = LogManager.GetLogger(typeof (LoanOptionsController));
-		public LoanOptionsController(ILoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository, ICustomerStatusHistoryRepository customerStatusHistoryRepository, CustomerStatusesRepository customerStatusesRepository) {
-			_loanOptionsRepository = loanOptionsRepository;
-			_loanRepository = loanRepository;
-			_caisFlagRepository = ObjectFactory.GetInstance<CaisFlagRepository>();
+		private readonly ServiceClient serviceClient;
+		private readonly IEzbobWorkplaceContext context;
+	    protected static readonly ILog Log = LogManager.GetLogger(typeof (LoanOptionsController));
+		public LoanOptionsController(
+			ILoanOptionsRepository loanOptionsRepository,
+			ILoanRepository loanRepository, 
+			ICustomerStatusHistoryRepository customerStatusHistoryRepository, 
+			CustomerStatusesRepository customerStatusesRepository, IEzbobWorkplaceContext context) {
+			this._loanOptionsRepository = loanOptionsRepository;
+			this._loanRepository = loanRepository;
+			this._caisFlagRepository = ObjectFactory.GetInstance<CaisFlagRepository>();
 			this.customerStatusHistoryRepository = customerStatusHistoryRepository;
 			this.customerStatusesRepository = customerStatusesRepository;
+			this.context = context;
+			this.serviceClient = new ServiceClient();
 		}
 
 		[Ajax]
 		[HttpGet]
 		public JsonResult Index(int loanId) {
-			var options = _loanOptionsRepository.GetByLoanId(loanId) ?? SetDefaultStatus(loanId);
-			var loan = _loanRepository.Get(loanId);
-			var flags = _caisFlagRepository.GetForStatusType();
+			var options = this._loanOptionsRepository.GetByLoanId(loanId) ?? LoanOptions.GetDefault(loanId);
+			var loan = this._loanRepository.Get(loanId);
+			var flags = this._caisFlagRepository.GetForStatusType();
 			var model = new LoanOptionsViewModel(options, loan, flags);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
-		[NonAction]
-		private LoanOptions SetDefaultStatus(int loanid) {
-			var options = new LoanOptions {
-				AutoPayment = true,
-				LatePaymentNotification = true,
-				ReductionFee = true,
-				EmailSendingAllowed = true,
-				MailSendingAllowed = true,
-				SmsSendingAllowed = true,
-				CaisAccountStatus = "Calculated value",
-				LoanId = loanid
-			};
-			return options;
-		}
 
 		[Transactional]
 		[Ajax]
@@ -60,11 +57,12 @@
 			if (options.ManualCaisFlag == "T")
 				options.ManualCaisFlag = "Calculated value";
 
-			_loanOptionsRepository.SaveOrUpdate(options);
+			this._loanOptionsRepository.SaveOrUpdate(options);
 
+			Customer customer = this._loanRepository.Get(options.LoanId).Customer;
 			if (options.CaisAccountStatus == "8") {
 				int minDectForDefault = CurrentValues.Instance.MinDectForDefault;
-				Customer customer = _loanRepository.Get(options.LoanId).Customer;
+				
 				Loan triggeringLoan = null;
 
 				// Update loan options
@@ -78,27 +76,25 @@
 						continue;
 					}
 
-					LoanOptions currentOptions = _loanOptionsRepository.GetByLoanId(loan.Id);
-					if (currentOptions == null) {
-						currentOptions = new LoanOptions {
-							LoanId = loan.Id,
-							AutoPayment = true,
-							ReductionFee = true,
-							LatePaymentNotification = true,
-							EmailSendingAllowed = false,
-							MailSendingAllowed = false,
-							SmsSendingAllowed = false,
-							ManualCaisFlag = "Calculated value"
-						};
-					}
+					LoanOptions currentOptions = this._loanOptionsRepository.GetByLoanId(loan.Id) ?? new LoanOptions {
+						LoanId = loan.Id,
+						AutoPayment = true,
+						ReductionFee = true,
+						LatePaymentNotification = true,
+						EmailSendingAllowed = false,
+						MailSendingAllowed = false,
+						SmsSendingAllowed = false,
+						ManualCaisFlag = "Calculated value",
+						AutoLateFees = true
+					};
 
 					currentOptions.CaisAccountStatus = "8";
-					_loanOptionsRepository.SaveOrUpdate(currentOptions);
+					this._loanOptionsRepository.SaveOrUpdate(currentOptions);
 				}
 
 				// Update customer status
 				CustomerStatuses prevStatus = customer.CollectionStatus.CurrentStatus;
-				customer.CollectionStatus.CurrentStatus = customerStatusesRepository.Get((int)CollectionStatusNames.Default);
+				customer.CollectionStatus.CurrentStatus = this.customerStatusesRepository.Get((int)CollectionStatusNames.Default);
 				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", triggeringLoan != null ? triggeringLoan.RefNumber : "unknown");
 
 				// Update status history table
@@ -109,11 +105,13 @@
 					PreviousStatus = prevStatus,
 					NewStatus = customer.CollectionStatus.CurrentStatus,
 				};
-				customerStatusHistoryRepository.SaveOrUpdate(newEntry);
+				this.customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}
 
             //TODO update new loan options table
-            Log.DebugFormat("update loan options for loan {0}", options.LoanId);
+			Log.DebugFormat("update loan options for loan {0}", options.LoanId);
+
+			//todo this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, new NL_LoanOptions {});
             
 			return Json(new { });
 		}

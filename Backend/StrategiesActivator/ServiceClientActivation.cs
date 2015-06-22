@@ -9,11 +9,13 @@
 	using System.Text;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Database;
 	using Ezbob.Database.Pool;
 	using Ezbob.Logger;
 	using Ezbob.Utils.Security;
 	using EzServiceConfigurationLoader;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using log4net;
 	using Newtonsoft.Json;
 	using ServiceClientProxy.EzServiceReference;
@@ -1061,7 +1063,33 @@ GeneratePassword broker-contact-email@example.com password-itself
 			this.serviceClient.QuickOfferWithPrerequisites(customerId, bSaveOfferToDB);
 		} // QuickOffer
 
-		[Activation]
+	    [Activation]
+		private void RescheduleLoan() {
+	        int loanId;
+	        int userId;
+	        int customerId;
+            if (this.cmdLineArgs.Length != 4 || !int.TryParse(this.cmdLineArgs[1], out loanId) || !int.TryParse(this.cmdLineArgs[2], out customerId) || !int.TryParse(this.cmdLineArgs[3], out userId))
+	        {
+				log.Msg("Usage: RescheduleLoan <Loan Id> <Customer Id> <User Id>");
+	            return;
+	        }
+  
+		    Console.WriteLine("UserID {0}, CustomerID {1}, LoanID {2}", userId, customerId, loanId);
+
+            ReschedulingArgument reModel = new ReschedulingArgument();
+            reModel.LoanType = new Loan().GetType().AssemblyQualifiedName;
+            reModel.LoanID = loanId;
+            reModel.SaveToDB = false;
+            reModel.ReschedulingDate = DateTime.UtcNow;
+            reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+		    reModel.RescheduleIn = false; // true;
+		    reModel.PaymentPerInterval = 300;
+	
+			var res= this.serviceClient.RescheduleLoan(userId, customerId, reModel);
+			log.Msg(res.Value);
+	    }
+        
+        [Activation]
 		private void RejectUser() {
 			int underwriterId;
 			int customerId;
@@ -1451,6 +1479,27 @@ The digits shown in a group are the maximum number of meaningful digits that can
             ActionMetaData result = this.serviceClient.BrokerTransferCommission();
             this.log.Debug("{0}", result.Status.ToString());
         }
+
+		//[Activation]
+		//private void ExampleMethod() {
+		//	int customerID;
+
+		//	if (cmdLineArgs.Length != 2 || !int.TryParse(cmdLineArgs[1], out customerID)) {
+		//		log.Msg("Usage: ExampleMethod <customer ID>");
+		//		return;
+		//	} // if
+
+		//	DateTime now = DateTime.UtcNow;
+
+		//	DateTimeActionResult result = serviceClient.ExampleMethod(1, customerID);
+
+		//	log.Info(
+		//		"\nTime before the call: {0}\nCustomer          ID: {1}\nReturned       value: {2}\n",
+		//		now.ToString("MMM d yyyy H:mm:ss"),
+		//		customerID,
+		//		result.Value.ToString("MMM d yyyy H:mm:ss")
+		//	);
+		//}
 
 		private readonly EzServiceAdminClient adminClient;
 		private readonly string[] cmdLineArgs;

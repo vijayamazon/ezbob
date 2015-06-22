@@ -1,13 +1,11 @@
-﻿using System;
-using System.Linq;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate;
-
-namespace EZBob.DatabaseLib.Model.Database.Loans
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans
 {
-    public class PaypointTransaction : LoanTransaction
+	using System;
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using NHibernate;
+
+	public class PaypointTransaction : LoanTransaction
     {
         public virtual string PaypointId { get; set; }
         public virtual string IP { get; set; }
@@ -20,7 +18,8 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
         public override string ToString()
         {
-            return string.Format("Amount: {0, 10} Principal: {1, 10} Interest: {2, 10} Fees: {3, 10}, Rollover: {4, 10}", Amount, LoanRepayment, Interest, Fees, Rollover);
+			return string.Format("PaypointTransaction: Amount: {0, 10} Principal: {1, 10} Interest: {2, 10} Fees: {3, 10}, Rollover: {4, 10}, \tDate: {5, 10}, \tPaypointId: {6, 10}",
+				Amount, LoanRepayment, Interest, Fees, Rollover, PostDate, PaypointId);
         }
 
         /// <summary>
@@ -74,7 +73,10 @@ namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping
 {
-    public class PaypointTransactionMap : SubclassMap<PaypointTransaction>
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FluentNHibernate.Mapping;
+
+	public class PaypointTransactionMap : SubclassMap<PaypointTransaction>
     {
         public PaypointTransactionMap()
         {

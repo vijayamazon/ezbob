@@ -1,9 +1,6 @@
 ﻿@model dynamic
 
 <script id="credit-line-dialog-template" type="text/template">
-	<div class="modal-header">
-		<h3>New Credit Line</h3>
-	</div>
 	<div class="modal-body">
 		<form id="credit-line-form" class="form-horizontal" action="/" method="POST">
 			<div class="row">
@@ -25,7 +22,7 @@
                         <div class="controls">
 							<select id="loan-source" name="loan-source" class="valid form-control selectheight">
 								<% _.each(AllLoanSources, function(loanSource) {
-								var selected = (loanSource.Id == LoanSource.Id) ? "selected='selected'" : ""; %>
+								var selected = (loanSource.Id == LoanSourceID) ? "selected='selected'" : ""; %>
 								<option <%= selected  %> value="<%=loanSource.Id%>"><%=loanSource.Name%></option>
 								<%});%>
 							</select>
@@ -35,7 +32,7 @@
 					<div class="control-group">
 						<label for="offeredCreditLine" class="control-label">Offered credit line:</label>
 						<div class="controls cashControlls">
-							<input name="offeredCreditLine" id="offeredCreditLine" type="text" value="<%=EzBob.formatPounds(OfferedCreditLine)%>" class="form-control" />
+							<input name="offeredCreditLine" id="offeredCreditLine" type="text" class="form-control" />
 						</div>
 					</div>
 
@@ -79,18 +76,34 @@
 							<input name="manualSetupFeePercent" id="manualSetupFeePercent" type="text" class="form-control" />
 						</div>
 					</div>
+                    
                     <div class="control-group">
                         <label for="brokerSetupFeePercent" class="control-label">Broker setup fee percent:</label>
                         <div class="controls">
                             <input name="brokerSetupFeePercent" id="brokerSetupFeePercent" type="text" class="form-control" />
                         </div>
                     </div>
-					<div class="control-group">
+					
+                    <div class="control-group">
 						<label for="allowSendingEmail" class="control-label">Send Emails:</label>
 						<div class="controls">
 							<input name="allowSendingEmail" id="allowSendingEmail" type="checkbox" class="form-control" />
 						</div>
 					</div>
+                    
+                    <div class="control-group">
+                        <label for="loanTypeSelection" class="control-label">Loan type selection allowed:</label>
+                        <div class="controls">
+                            <input name="loanTypeSelection" id="loanTypeSelection" type="checkbox" class="form-control" />
+                        </div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="repaymentPeriodSelection" class="control-label">Repayment period selection allowed:</label>
+                        <div class="controls">
+                            <input name="repaymentPeriodSelection" id="repaymentPeriodSelection" type="checkbox" class="form-control" />
+                        </div>
+                    </div>
 
 					<div class="control-group">
 						<label for="loan-type" class="control-label">Discount Plan:</label>

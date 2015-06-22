@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database;
-	using EzBob.Models.Marketplaces;
 	using EzBob.Models.Marketplaces.Builders;
 	using EzBob.PayPal;
 	using StructureMap;

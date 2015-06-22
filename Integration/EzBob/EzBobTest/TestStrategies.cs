@@ -1,17 +1,24 @@
-﻿using Ezbob.Backend.Strategies.CreditSafe;
-
-namespace EzBobTest {
+﻿namespace EzBobTest {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
+	using System.Reflection;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
+	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
+	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
-	using Ezbob.Backend.Strategies;
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
@@ -23,6 +30,7 @@ namespace EzBobTest {
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.OfferCalculation;
 	using Ezbob.Backend.Strategies.Reports;
 	using Ezbob.Backend.Strategies.SalesForce;
@@ -30,13 +38,16 @@ namespace EzBobTest {
 	using Ezbob.Database;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
+	using EzBob.Models;
 	using EzServiceAccessor;
 	using EzServiceShortcut;
 	using EZBob.DatabaseLib.Model.Alibaba;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate.Util;
 	using NUnit.Framework;
+	using PaymentServices.Calculators;
 	using SalesForceLib;
 	using StructureMap;
 	using Twilio;
@@ -100,9 +111,12 @@ namespace EzBobTest {
 					.Use<LoanHistoryRepository>();
 				x.For<ISalesForceAppClient>()
 					.Use<FakeApiClient>();
+				x.For<ILoanTransactionMethodRepository>()
+					.Use<LoanTransactionMethodRepository>();
+
 			});
 
-			Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
+			Ezbob.Backend.Strategies.Library.Initialize(this.m_oEnv, this.m_oDB, this.m_oLog);
 		} // Init
 
 		[Test]
@@ -186,14 +200,14 @@ namespace EzBobTest {
 		[Test]
 		public void test_mainstrat() {
 			var ms = new MainStrategy(
-                14036,
+				14036,
 				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
 				0,
 				null,
 				null,
 				MainStrategy.DoAction.Yes,
 				MainStrategy.DoAction.Yes
-			);
+				);
 			ms.Execute();
 		}
 
@@ -261,6 +275,7 @@ namespace EzBobTest {
 			var ucr = new UpdateCurrencyRates();
 			ucr.Execute();
 		}
+
 		[Test]
 		public void TestDecrypt() {
 			string sIn = @"<?xml version=""1.0""?>
@@ -392,7 +407,7 @@ namespace EzBobTest {
 				new QueryParameter("@IsForApprove", false),
 				new QueryParameter("@CustomerID", 211),
 				new QueryParameter("@Now", DateTime.UtcNow)
-			);
+				);
 
 			this.m_oLog.Info("Turnover for year is {0}, for quarter is {1}.", turnover[12], turnover[3]);
 		} // TestAutoRejectTurnover
@@ -407,7 +422,7 @@ namespace EzBobTest {
 				new QueryParameter("@IsForApprove", true),
 				new QueryParameter("@CustomerID", 211),
 				new QueryParameter("@Now", DateTime.UtcNow)
-			);
+				);
 
 			turnover.TurnoverType = AutomationCalculator.Common.TurnoverType.HMRC;
 			turnover.Init();
@@ -442,7 +457,7 @@ namespace EzBobTest {
 		[Test]
 		public void TestOfferCalculation() {
 			/*
-			var calc = new OfferDualCalculator(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.Model.Database.Medal.Gold);
+			var calc = new OfferDualCalculator(18040, DateTime.UtcNow, 20000, false, EZBob.DatabaseLib.NLModel.Database.Medal.Gold);
 			var offer1 = calc.CalculateOffer();
 			Assert.AreEqual(5.5M, offer1.SetupFee);
 			Assert.AreEqual(4.5M, offer1.InterestRate);
@@ -469,7 +484,7 @@ namespace EzBobTest {
 					Medal medal = (Medal)Enum.Parse(
 						typeof(Medal),
 						sr["Medal"]
-					);
+						);
 
 					int offeredLoanAmount = sr["OfferedLoanAmount"];
 					int numOfLoans = sr["NumOfLoans"];
@@ -477,12 +492,12 @@ namespace EzBobTest {
 
 					int roundedAmount = (int)Math.Truncate(
 						(decimal)offeredLoanAmount / CurrentValues.Instance.GetCashSliderStep
-					) * CurrentValues.Instance.GetCashSliderStep;
+						) * CurrentValues.Instance.GetCashSliderStep;
 
 					int cappedAmount = Math.Min(
 						roundedAmount,
 						zooplaValue > 0 ? CurrentValues.Instance.MaxCapHomeOwner : CurrentValues.Instance.MaxCapNotHomeOwner
-					);
+						);
 
 					var calc = new OfferDualCalculator(
 						customerId,
@@ -490,7 +505,7 @@ namespace EzBobTest {
 						cappedAmount,
 						numOfLoans > 0,
 						medal
-					);
+						);
 
 					OfferResult offer = calc.CalculateOffer();
 
@@ -516,11 +531,11 @@ namespace EzBobTest {
 						customerId,
 						offerMsg,
 						calc.ResultSummary
-					);
+						);
 				},
 				query,
 				CommandSpecies.Text
-			);
+				);
 
 			this.m_oLog.Debug("Calculated offer for {0} customers failed {1}", calculatedOffers, failedVerificationOffers);
 
@@ -586,7 +601,7 @@ namespace EzBobTest {
 				new QueryParameter("@IsForApprove", false),
 				new QueryParameter("@CustomerID", 18416),
 				new QueryParameter("@Now", new DateTime(2015, 2, 2))
-			);
+				);
 		}
 
 		[Test]
@@ -641,17 +656,17 @@ namespace EzBobTest {
 			Assert.IsNotNull(smsDetails.Status);
 		}
 
-        [Test]
-        public void TestBrokerTransferCommission() {
-            var stra = new BrokerTransferCommission();
-            stra.Execute();
-        }
+		[Test]
+		public void TestBrokerTransferCommission() {
+			var stra = new BrokerTransferCommission();
+			stra.Execute();
+		}
 
-        [Test]
-        public void TestUpdateTransactionStatus() {
-            var stra = new UpdateTransactionStatus();
-            stra.Execute();
-        }
+		[Test]
+		public void TestUpdateTransactionStatus() {
+			var stra = new UpdateTransactionStatus();
+			stra.Execute();
+		}
 
 		[Test]
 		public void TestAlibabaDataSharing_01() {
@@ -660,7 +675,7 @@ namespace EzBobTest {
 			// ad cashe request before
 			AlibabaBuyerRepository aliMemberRep = ObjectFactory.GetInstance<AlibabaBuyerRepository>();
 			var v = aliMemberRep.ByCustomer(customerID);
-		//	Console.WriteLine(v.AliId);
+			//	Console.WriteLine(v.AliId);
 			//new RequalifyCustomer(customerID, v.AliId).Execute(); // only for CashRequest creation!!!
 			//new MainStrategy(v.Customer.Id, NewCreditLineOption.SkipEverythingAndApplyAutoRules, 0, null).Execute();
 			/*new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();*/
@@ -702,31 +717,26 @@ namespace EzBobTest {
 		[Test]
 		public void TestAutoRejectBoth() {
 			int customerID = 20658;
-			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID,this.m_oDB, this.m_oLog);
-			result.Init().MakeAndVerifyDecision();
+			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID, this.m_oDB, this.m_oLog);
+			result.Init()
+				.MakeAndVerifyDecision();
 		}
 
-	    [Test]
-	    [Ignore]
-	    public void TestSaveToDB()
-	    {
-	        ParseCreditSafeLtd saveTest = new ParseCreditSafeLtd(1);
-	        saveTest.Execute();
-	    }
 		[Test]
 		public void TestBulkAutoRejectBoth() {
 			this.m_oDB.ForEachRowSafe((sr) => {
 				int customerId = sr["Id"];
-				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init().MakeAndVerifyDecision();
+				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init()
+					.MakeAndVerifyDecision();
 			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
 		}
 
 
-        [Test]
-        public void TestCaisGenerate() {
-            CaisGenerate cg = new CaisGenerate(1);
-            cg.Execute();
-        }
+		[Test]
+		public void TestCaisGenerate() {
+			CaisGenerate cg = new CaisGenerate(1);
+			cg.Execute();
+		}
         
         [Test]
         [Ignore]
@@ -744,13 +754,33 @@ namespace EzBobTest {
 		[Test]
 		[Ignore]
 		public void TestBackFillExperianNonLtdScoreText() {
+				BackFillExperianNonLtdScoreText test = new BackFillExperianNonLtdScoreText();
+				test.Execute(); 		
+								
 
-
-			BackFillExperianNonLtdScoreText test = new BackFillExperianNonLtdScoreText();
-
-			test.Execute();
+			
 		}
-          
+
+
+		[Test]
+		public void TestAddDecision() {
+			AddDecision addDecision = new AddDecision(new NL_Decisions {
+				UserID = 347,
+				DecisionTime = DateTime.UtcNow,
+				Notes = "Reject",
+				DecisionNameID = 2
+			}, 22785, new List<NL_DecisionRejectReasons> {
+				new NL_DecisionRejectReasons {
+					RejectReasonID = 1
+				},
+				new NL_DecisionRejectReasons {
+					RejectReasonID = 3
+				}
+			});
+			addDecision.Execute();
+		}
+
+		
 
 	    [Test]
 	    public void TestUserDisable() {
@@ -772,6 +802,272 @@ namespace EzBobTest {
 		public void TestBrokerLeadSendInvitation() {
 			new BrokerLeadSendInvitation(1040, "stasd+evlbrk5@ezbob.com").Execute();
 		}
+
+		
+
+		[Test]
+		public void TestNL_AddLoan() {
+			int customerID = 369; // 366;
+			int oldLoanID = 1049; //1042;
+
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan oldLoan = loanRep.Get(oldLoanID);
+
+			NL_Model nlModel = new NL_Model(customerID);
+			nlModel.Loan = new NL_Loans();
+			nlModel.Loan.Refnum = oldLoan.RefNumber;
+			nlModel.Loan.OldLoanID = oldLoanID;
+			nlModel.Loan.InitialLoanAmount = oldLoan.LoanAmount;
+
+			nlModel.FundTransfer = new NL_FundTransfers();
+			nlModel.FundTransfer.Amount = nlModel.Loan.InitialLoanAmount; // logic transaction - full amount
+			nlModel.FundTransfer.TransferTime = DateTime.UtcNow;
+			nlModel.FundTransfer.IsActive = true;
+			nlModel.FundTransfer.LoanTransactionMethodID = 1; // 'Pacnet'
+
+			nlModel.LoanHistory = new NL_LoanHistory();
+			nlModel.LoanHistory.AgreementModel = oldLoan.AgreementModel;
+
+			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
+			foreach (var aggr in oldLoan.Agreements) {
+				//Console.WriteLine(aggr);
+				NL_LoanAgreements agreement = new NL_LoanAgreements();
+				agreement.FilePath = aggr.FilePath;
+				agreement.LoanAgreementTemplateID = aggr.TemplateRef.Id;
+				nlModel.LoanAgreements.Add(agreement);
+			}
+
+			PacnetTransaction oldPacnetTransaction = EnumerableExtensions.First(oldLoan.PacnetTransactions) as PacnetTransaction;
+
+			if (oldPacnetTransaction != null) {
+				nlModel.PacnetTransaction = new NL_PacnetTransactions();
+				nlModel.PacnetTransaction.TransactionTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
+				nlModel.PacnetTransaction.StatusUpdatedTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
+				nlModel.PacnetTransaction.Amount = oldPacnetTransaction.Amount; //nlModel.Loan.InitialLoanAmount;
+				nlModel.PacnetTransaction.Notes = oldPacnetTransaction.Description;
+				nlModel.PacnetTransaction.TrackingNumber = oldPacnetTransaction.TrackingNumber;
+				nlModel.PacnetTransactionStatus = "sdfgsdfgsdg"; // oldPacnetTransaction.Status.ToString();
+			}
+
+			var s = new AddLoan(nlModel);
+			try {
+				s.Execute();
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+
+		[Test]
+		public void TestNL_AddPayment() {
+			int customerID = 369;
+			int loanID = 5;
+			decimal amount = 5;
+
+			NL_Model nlModel = new NL_Model(customerID);
+
+			nlModel.Loan = new NL_Loans() {
+				LoanID = loanID
+			};
+
+			nlModel.PaypointTransactionStatus = "Done";
+
+			nlModel.Payment = new NL_Payments() {
+				PaymentMethodID = 2,
+				PaymentTime = DateTime.UtcNow,
+				IsActive = true,
+				Amount = amount,
+				Notes = "bbbbblala"
+			};
+
+			nlModel.PaypointTransaction = new NL_PaypointTransactions() {
+				TransactionTime = DateTime.UtcNow,
+				Amount = amount,
+				Notes = "system-repay",
+				PaypointUniqID = "4f0fce47-deb0-4667-bc65-f6edd3c978b5",
+				IP = "127.0.0.1",
+				PaypointTransactionStatusID = 1
+			};
+
+			var s = new AddPayment(nlModel);
+			try {
+				s.Execute();
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+		[Test]
+		public void TestMultipleLoanState() {
+			var loans = new[] {
+				1, 2, 3, 4, 5
+			};
+			foreach (var lID in loans) {
+				try {
+					var s = new LoanState<Loan>(new Loan(), lID, DateTime.UtcNow);
+					s.Execute();
+				} catch (Exception e) {
+					Console.WriteLine(e);
+				}
+			}
+		}
+
+
+		[Test]
+		public void TestLoanState() {
+			int loanID = 2151; // cust 329;   
+			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
+			try {
+				s.Execute();
+				LoanCalculatorModel calculatorModel = s.CalcModel;
+				Console.WriteLine(calculatorModel.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+
+		[Test]
+		public void TestRescheduleLoan() {
+			int loanID = 246;
+			Loan loan = new Loan();
+
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanID;
+			reModel.SaveToDB = false;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.RescheduleIn = true;
+
+			/*var s = new RescheduleLoan<Loan>(loan, reModel);
+			try {
+				s.Execute();
+				m_oLog.Debug("RESULT FOR IN");
+				m_oLog.Debug(s.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}*/
+			
+			// OUT loan
+			reModel.RescheduleIn = false;
+			reModel.PaymentPerInterval = 1000m;
+			reModel.SaveToDB = true;
+
+			var s1 = new RescheduleLoan<Loan>(loan, reModel);
+
+			try {
+				s1.Execute();
+				m_oLog.Debug("RESULT FOR OUT");
+				m_oLog.Debug(s1.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+		[Test]
+		public void TestLoanOldCalculator() {
+			int loanID = 242;
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(loanID);
+			try {
+				var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+				calc.GetState();
+				Console.WriteLine(loan);
+				EditLoanDetailsModel model = new ChangeLoanDetailsModelBuilder().BuildModel(loan);
+				Console.WriteLine(model);
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+		[Test]
+		public void TestLoanCalculator() {
+
+			// new instance of loan calculator - for new schedules list
+			/*LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = 6000m,
+				RepaymentCount = 7,
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+
+			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+
+			// new schedules
+			try {
+				//var shedules = calculator.CreateSchedule();
+			} catch (InterestOnlyMonthsCountException interestOnlyMonthsCountException) {
+				Console.WriteLine(interestOnlyMonthsCountException);
+			} catch (NegativeMonthlyInterestRateException negativeMonthlyInterestRateException) {
+				Console.WriteLine(negativeMonthlyInterestRateException);
+			} catch (NegativeLoanAmountException negativeLoanAmountException) {
+				Console.WriteLine(negativeLoanAmountException);
+			} catch (NegativeRepaymentCountException negativeRepaymentCountException) {
+				Console.WriteLine(negativeRepaymentCountException);
+			} catch (NegativeInterestOnlyRepaymentCountException negativeInterestOnlyRepaymentCountException) {
+				Console.WriteLine(negativeInterestOnlyRepaymentCountException);
+			}
+
+			Console.WriteLine();
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+
+			decimal A = 6000m;
+			decimal m = 600m;
+			decimal r = 0.06m;
+			decimal F = 100m;
+			
+			decimal n = Math.Ceiling(A / (m - A * r));
+			Console.WriteLine("n=" + n);
+			decimal total1 = A + A * r * ((n + 1) / 2);
+			Console.WriteLine(total1);
+			decimal B = (A + F);
+
+		//	decimal total2 = B + B * r * (((n - 1) + 1) / 2);
+		//	Console.WriteLine(total2);
+
+			decimal k = Math.Ceiling(n + 2*F / (A * r));
+
+		/*	LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = A,
+				RepaymentCount = (int)n,
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+
+			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+
+			Console.WriteLine();
+			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+
+			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
+				LoanIssueTime = DateTime.UtcNow,
+				LoanAmount = B,
+				RepaymentCount = (int)(k),
+				MonthlyInterestRate = 0.06m,
+				InterestOnlyRepayments = 0,
+				RepaymentIntervalType = RepaymentIntervalTypes.Month
+			};
+
+			Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);
+
+			ALoanCalculator calculator2 = new LegacyLoanCalculator(calculatorModel2);
+
+			Console.WriteLine();
+			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
+
+			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
+			
+		}
+		
 
 	}
 }

@@ -33,6 +33,8 @@
 			} // if
 		} // Initialize
 
+
+
 		private Library() {} // constructor
 
 		private static readonly object lockInstance;

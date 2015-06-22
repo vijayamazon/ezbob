@@ -60,6 +60,8 @@
 
 			decimal amountDue = payPointApi.GetAmountToPay(loanScheduleId);
 
+			//el: TODO: call SP NL_LoadLoanForAutomaticPayment - to get all loans to pay today
+
 			if (!ShouldCharge(lastInstallment, amountDue)) {
 				Log.Info("Will not charge loan schedule id {0} (amount {1}): the minimal amount for collection is {2}.",
 						 loanScheduleId, amountDue, amountToChargeFrom);

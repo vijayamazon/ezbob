@@ -45,11 +45,14 @@ EzBob.BindingConverters.notNull = function(direction, value) {
 	return value;
 };
 
-EzBob.BindingConverters.dateTime = function(direction, value) {
+EzBob.BindingConverters.dateTime = function (direction, value) {
+	if (value === "" || value === null)
+		return null;
+
 	if (direction === 'ModelToView')
 		return moment.utc(value).format('DD/MM/YYYY');
 	else
-		return moment.utc(value, "DD/MM/YYYY").toDate();
+		return moment.utc(value, "DD/MM/YYYY").toJSON();
 };
 
 EzBob.BindingConverters.autonumericFormat = function(format) {
@@ -73,6 +76,14 @@ EzBob.BindingConverters.percentsFormat = function(direction, value) {
 		result = EzBob.BindingConverters.percents(direction, value);
 		return result;
 	}
+};
+
+EzBob.BindingConverters.boolFormat = function (direction, value) {
+    if (direction === 'ModelToView') {
+        return value == 1 ? true : false;
+    } else {
+        return value == true ? 1 : 0;
+    }
 };
 
 EzBob.BindingConverters.monthsFormat = function(direction, value) {

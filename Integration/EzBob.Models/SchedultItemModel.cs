@@ -1,8 +1,9 @@
-using System;
-
 namespace EzBob.Models
 {
-    public class SchedultItemModel
+	using System;
+	using System.Text;
+
+	public class SchedultItemModel
     {
         public int Id { get; set; }
 
@@ -23,5 +24,16 @@ namespace EzBob.Models
         public string Editor { get; set; }
         public bool Editable { get; set; }
         public bool Deletable { get; set; }
+
+
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+			Type t = typeof(SchedultItemModel);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \t\t");
+			}
+			return sb.ToString();
+		}
     }
 }

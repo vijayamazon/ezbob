@@ -10,6 +10,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using Calculators;
+	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using log4net;
 
@@ -18,9 +19,10 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(PayPointApi));
 		private readonly SECVPNService _service = new SECVPNService();
 		private readonly ILoanRepository _loans;
+		private readonly ILoanOptionsRepository loanOptionsRepository;
 
-		public PayPointApi()
-		{
+		public PayPointApi() {
+			this.loanOptionsRepository = ObjectFactory.GetInstance<ILoanOptionsRepository>(); ;
 			_loans = ObjectFactory.GetInstance<ILoanRepository>();
 		}
 
@@ -169,7 +171,9 @@
 							.LoanTransactionMethodRepository
 							.FindOrDefault("Auto"),
 					});
+
 					installments.CommitTransaction();
+
 					return ex.PaypointData;
 				}
 
@@ -186,6 +190,8 @@
 					payPointReturnData = new PayPointReturnData { Error = e.Message };
 				installments.Dispose();
 			}
+
+
 			return payPointReturnData;
 		}
 
@@ -252,19 +258,33 @@
 				{
 					Log.ErrorFormat("RepeatTransaction error: {0} error {1} message {2} respCode {3}", str, ret.Error, ret.Message, (ResponseCode)ret.RespCode);
 				}
+
+				//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
+
 				throw new PayPointException(str, ret);
 			}
 			Log.DebugFormat("RepeatTransaction successful: " + str);
+
+			//elina: TODO: save transaction result into NL_Payments, NL_PaypointTransactions : SP NL_PaymentTransactionSave, design doc sections "PayPointCharger", “Pay Loan” - customer - "Manual payment"
+
 			return ret;
 		}
 
 		public bool ApplyLateCharge(decimal amount, int loanId, int loanChargesTypeId)
 		{
+			DateTime now = DateTime.UtcNow;
 			var loan = _loans.Get(loanId);
-
-			var date = DateTime.UtcNow;
-
-			return ApplyLateCharge(loan, amount, loanChargesTypeId, date);
+			var loanOptions = this.loanOptionsRepository.GetByLoanId(loanId);
+			if (loanOptions != null && loanOptions.AutoLateFees == false) {
+				if (((loanOptions.StopLateFeeFromDate.HasValue && now >= loanOptions.StopLateFeeFromDate.Value) &&
+					(loanOptions.StopLateFeeToDate.HasValue && now <= loanOptions.StopLateFeeToDate.Value)) || 
+					(!loanOptions.StopLateFeeFromDate.HasValue && !loanOptions.StopLateFeeToDate.HasValue)) {
+					Log.InfoFormat("not applying late fee for loan {0} - auto late fee is disabled", loanId);
+					return false;
+				}
+			}
+			
+			return ApplyLateCharge(loan, amount, loanChargesTypeId, now);
 		}
 
 		public bool ApplyLateCharge(Loan loan, decimal amount, int loanChargesTypeId, DateTime date)

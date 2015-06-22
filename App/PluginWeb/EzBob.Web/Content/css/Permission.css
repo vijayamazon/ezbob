@@ -3,6 +3,7 @@
 [name="changeMobile"],
 [name="changeDaytime"],
 [name="changeCustomerStatus"],
+[name="changeExternalCollectionStatus"],
 [name="isTestEditButton"],
 [name="newCreditLineBtn"],
 [name="loanType"],
@@ -90,7 +91,8 @@ a[data-bug-type],
 
 /*Customer Status*/
 
-.permission-CustomerStatus [name="changeCustomerStatus"] {
+.permission-CustomerStatus [name="changeCustomerStatus"],
+.permission-CustomerStatus [name="changeExternalCollectionStatus"] {
     display: inline-block;
     visibility: visible;
 }

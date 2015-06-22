@@ -4,6 +4,10 @@
 	using System.Linq;
 	using ConfigManager;
 	using EZBob.DatabaseLib.Model;
+	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzServiceAccessor;
+	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
@@ -40,7 +44,8 @@
 			DateTime? term = null,
 			string description = "payment from customer",
 			bool interestOnly = false,
-			string sManualPaymentMethod = null
+			string sManualPaymentMethod = null,
+			NL_Model nlModel = null
 		) {
 			var paymentTime = term ?? DateTime.UtcNow;
 
@@ -66,6 +71,33 @@
 
 			// TODO add payment to new payment table
 			Log.InfoFormat("Add payment of {0} to loan {1}", amount, loan.Id);
+			// elina: get distribution of amount to loan schedules from new loan calculator ALoanCalculator.AssignPaymentToLoan (princpal, interest) and fees and save to DB (design doc: "PayPointCharger" page 13-15; “Manual payment – by Customer” page 19; )
+
+			if (nlModel != null) {
+
+				if (nlModel.Payment == null)
+					nlModel.Payment = new NL_Payments();
+		
+				nlModel.Payment.PaymentMethodID = this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod).Id; // [LoanTransactionMethod] 'Auto' ID 2
+				nlModel.Payment.PaymentTime = paymentTime;
+				nlModel.Payment.IsActive = true;
+				nlModel.Payment.Amount = amount;
+				nlModel.Payment.Notes = description;
+
+				if (nlModel.PaypointTransaction == null)
+					nlModel.PaypointTransaction = new NL_PaypointTransactions();
+
+				nlModel.PaypointTransaction.TransactionTime = paymentTime; //??
+				nlModel.PaypointTransaction.Amount = amount;
+				nlModel.PaypointTransaction.Notes = description;
+				nlModel.PaypointTransaction.PaypointUniqID = transId;
+				nlModel.PaypointTransaction.IP = ip;
+				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); 
+	
+				var nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
+				
+				//Log.Debug(nlPayment.Payment.ToString());
+			}
 
 			List<InstallmentDelta> deltas = loan.Schedule.Select(inst => new InstallmentDelta(inst)).ToList();
 
@@ -108,6 +140,7 @@
 
 		/// <summary>
 		/// Сколько будет сэкономлено денег, если пользователь погасит все свои кредиты.
+		/// How much money will be saved, if customer pay all his loans now
 		/// </summary>
 		/// <param name="customer"></param>
 		/// <param name="term"></param>

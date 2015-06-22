@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Areas.Customer.Controllers
-{
+﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
 	using System.Linq;
 	using System.Reflection;
@@ -12,6 +11,8 @@
 	using Ezbob.Backend.Models;
 	using Infrastructure.Attributes;
 	using Code;
+	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Customer.Models;
 	using Infrastructure;
@@ -22,6 +23,7 @@
 	using log4net;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate.Util;
 
 	public class GetCashController : Controller {
 		private readonly ServiceClient m_oServiceClient;
@@ -51,42 +53,38 @@
 		}
 
 		[NoCache]
-		public RedirectResult GetTransactionId(decimal loan_amount, int loanType, int repaymentPeriod)
-		{
+		public RedirectResult GetTransactionId(decimal loan_amount, int loanType, int repaymentPeriod) {
 			Customer customer = _context.Customer;
 
 			CheckCustomerStatus(customer);
 
-			if (loan_amount < 0)
-			{
+			if (loan_amount < 0) {
 				loan_amount = (int)Math.Floor(customer.CreditSum.Value);
 			}
 			var cr = customer.LastCashRequest;
 
 
 
-            PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate());
-			if (customer.IsLoanTypeSelectionAllowed == 1)
-			{
+			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate());
+			if (customer.IsLoanTypeSelectionAllowed == 1) {
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 				cr.RepaymentPeriod = repaymentPeriod;
 				cr.LoanType = oDBHelper.LoanTypeRepository.Get(loanType);
 			} // if
-			
+
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointFacade.PayPointAccount.CardExpiryMonths);
 
-			var fee = new SetupFeeCalculator(cr.ManualSetupFeePercent,cr.BrokerSetupFeePercent).Calculate(loan_amount);
+			var fee = new SetupFeeCalculator(cr.ManualSetupFeePercent, cr.BrokerSetupFeePercent).Calculate(loan_amount);
 
 			string callback = Url.Action("PayPointCallback", "GetCash",
-										 new
-											 {
-												 Area = "Customer",
-												 loan_amount,
-												 fee,
-												 username = _context.User.Name,
-												 cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
-												 origin = customer.CustomerOrigin.Name
-											 },
+										 new {
+											 Area = "Customer",
+											 loan_amount,
+											 fee,
+											 username = _context.User.Name,
+											 cardMinExpiryDate = FormattingUtils.FormatDateToString(cardMinExpiryDate),
+											 origin = customer.CustomerOrigin.Name
+										 },
 										 "https");
 
 			string url = payPointFacade.GeneratePaymentUrl(customer, 5.00m, callback);
@@ -94,15 +92,13 @@
 			return Redirect(url);
 		}
 
-		private void CheckCustomerStatus(Customer customer)
-		{
+		private void CheckCustomerStatus(Customer customer) {
 			if (
 				!customer.CreditSum.HasValue ||
 				!customer.Status.HasValue ||
 				customer.Status.Value != Status.Approved ||
-				!customer.CollectionStatus.CurrentStatus.IsEnabled || 
-				!customer.LastCashRequest.LoanLegals.Any())
-			{
+				!customer.CollectionStatus.CurrentStatus.IsEnabled ||
+				!customer.LastCashRequest.LoanLegals.Any()) {
 				throw new Exception("Invalid customer state");
 			}
 		}
@@ -124,16 +120,13 @@
 		/// <param name="expiry">card exipiry month/year</param>
 		/// <returns>redirects customer to confirmation page/error page</returns>
 		[NoCache]
-		public RedirectToRouteResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, decimal loan_amount, string card_no, string customer, string expiry)
-		{
+		public RedirectToRouteResult PayPointCallback(bool valid, string trans_id, string code, string auth_code, decimal? amount, string ip, string test_status, string hash, string message, decimal loan_amount, string card_no, string customer, string expiry) {
 			//Session.Lock(_context.Customer, LockMode.Upgrade);
 
-			if (test_status == "true")
-			{
+			if (test_status == "true") {
 				// Use last 4 random digits as card number (to enable useful tests)
 				string random4Digits = string.Format("{0}{1}", DateTime.UtcNow.Second, DateTime.UtcNow.Millisecond);
-				if (random4Digits.Length > 4)
-				{
+				if (random4Digits.Length > 4) {
 					random4Digits = random4Digits.Substring(random4Digits.Length - 4);
 				}
 				card_no = random4Digits;
@@ -142,19 +135,15 @@
 
 			DateTime now = DateTime.UtcNow;
 			Customer cus = _context.Customer;
-			try
-			{
-				if (!valid || code != "A")
-				{
-					if (code == "N")
-					{
+			try {
+				if (!valid || code != "A") {
+					if (code == "N") {
 						_log.WarnFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
-					}
-					else
-					{
+					} else {
 						_log.ErrorFormat("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id, code, message);
 					}
 
+					// continue to log paypoint and pacnet transactions also for NL, i.e. do nothig new
 					_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
 									   String.Format("Invalid transaction. Id = {0}, Code: {1}, Message: {2}", trans_id,
 													 code, message));
@@ -162,9 +151,9 @@
 					_context.Customer.PayPointErrorsCount++;
 
 					try {
+						// sending mail "Mandrill - Debit card authorization problem"
 						m_oServiceClient.Instance.GetCashFailed(_context.User.Id);
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						_log.Error("Failed to send 'get cash failed' email.", e);
 					} // try
 
@@ -173,11 +162,11 @@
 
 					return RedirectToAction("Error", "Paypoint", new { Area = "Customer" });
 				}
-				
-                PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate());
-				if (!payPointFacade.CheckHash(hash, Request.Url))
-				{
+
+				PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate());
+				if (!payPointFacade.CheckHash(hash, Request.Url)) {
 					_log.ErrorFormat("Paypoint callback is not authenticated for user {0}", _context.Customer.Id);
+					// continue to log paypoint transaction also for NL
 					_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
 									   String.Format("Paypoint callback is not authenticated for user {0}",
 													 _context.Customer.Id));
@@ -185,75 +174,92 @@
 					throw new Exception("check hash failed");
 				}
 
-				
-
 				ValidateCustomerName(customer, cus);
 
+				// 5 pounds charged successfully, continue to save PayPointCard, create new loan, and make "rebate" payment 
+
+				// continue to log paypoint transaction also for NL
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Successful", "");
 
+
+				// save new PayPointCard 
 				var card = cus.TryAddPayPointCard(trans_id, card_no, expiry, customer, payPointFacade.PayPointAccount);
 
-				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now);
+				NL_Model nlModel = new NL_Model(cus.Id);
 
-				RebatePayment(amount, loan, trans_id, now);
+				var loan = _loanCreator.CreateLoan(cus, loan_amount, card, now, nlModel: nlModel);
+
+				Console.WriteLine("GetCashController: new loan created: " + nlModel.Loan.ToString());
+	
+				RebatePayment(amount, loan, trans_id, now, nlModel);
 
 				cus.PayPointErrorsCount = 0;
-				
+
 				TempData["amount"] = loan_amount;
 				TempData["bankNumber"] = cus.BankAccount.AccountNumber;
 				TempData["card_no"] = card_no;
 
 				_customerRepository.Update(cus);
 
+				// el: TODO save NL_Payments -> NL_PaypointTransactions for this PayPointCard; "AssignPaymentToLoan" strategy; 
+				/* 
+				* 1. save NL_Payments with PaymentStatusID (NL_PaymentStatuses ("rebate"? / "system-repay" ?)), PaymentMethodID ([LoanTransactionMethod] 'Auto' ID 2)
+				* 
+				* 2. save NL_PaypointTransactions with:
+				* PaypointCardID - from just created PayPointCard.Id, 
+				* PaypointTransactionStatusID =1 (Done) NL_PaypointTransactionStatuses  
+				* IP - from LoanTransaction IP
+				* Amount - from the method argument amount if not null, otherwise 5 pounds
+				* PaymentID - from 1.				 
+				* 
+				* 3. new strategy AssignPaymentToLoan: argument: NL_Model with Loan.LoanID; decimal amount; output: NL_Model containing list of fees/schedules that covered by the amount/payment
+				* closest unpaid loan fees and schedules (1.fee if exists; 2.interest; 3.principal)
+				* 
+				* 4. save into NL_LoanSchedulePayments : PaymentID just created + NL_LoanSchedules from AssignPaymentToLoan strategy
+				*/
+
 				return RedirectToAction("Index", "PacnetStatus", new { Area = "Customer" });
-			}
-			catch (OfferExpiredException)
-			{
+
+			} catch (OfferExpiredException) {
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Falied",
 								   "Invalid apply for a loan period");
 				return RedirectToAction("ErrorOfferDate", "Paypoint", new { Area = "Customer" });
-			}
-			catch (PacnetException)
-			{
+			} catch (PacnetException) {
 				try {
 					m_oServiceClient.Instance.TransferCashFailed(_context.User.Id);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					_log.Error("Failed to send 'transfer cash failed' email.", e);
 				} // try
 				return RedirectToAction("Error", "Pacnet", new { Area = "Customer" });
-			}
-			catch (TargetInvocationException)
-			{
+			} catch (TargetInvocationException) {
 				return RedirectToAction("ErrorOfferDate", "Paypoint", new { Area = "Customer" });
 			}
 		}
 
-		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now)
-		{
-			if (amount == null || amount <= 0) return;
+		private void RebatePayment(decimal? amount, Loan loan, string transId, DateTime now, NL_Model nlModel = null) {
+			if (amount == null || amount <= 0)
+				return;
 			var f = new LoanPaymentFacade();
-			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay");
+			f.PayLoan(loan, transId, amount.Value, Request.UserHostAddress, now, "system-repay", nlModel: nlModel);
 		}
 
 		[Transactional]
 		[HttpPost]
-		public JsonResult Now(int cardId, decimal amount)
-		{
+		public JsonResult Now(int cardId, decimal amount) {
 			var cus = _context.Customer;
 			var card = cus.PayPointCards.First(c => c.Id == cardId);
 			DateTime now = DateTime.UtcNow;
-			var loan = _loanCreator.CreateLoan(cus, amount, card, now);
+
+			NL_Model nlModel = new NL_Model(cus.Id);
+			var loan = _loanCreator.CreateLoan(cus, amount, card, now, nlModel: nlModel);
 
 			var url = Url.Action("Index", "PacnetStatus", new { Area = "Customer" }, "https");
 
 			return Json(new { url = url });
 		}
 
-		private void ValidateCustomerName(string customer, Customer cus)
-		{
-			if (!_validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname))
-			{
+		private void ValidateCustomerName(string customer, Customer cus) {
+			if (!_validator.CheckCustomerName(customer, cus.PersonalInfo.FirstName, cus.PersonalInfo.Surname)) {
 				_logRepository.Log(_context.UserId, DateTime.Now, "Paypoint GetCash Callback", "Warning",
 								   String.Format("Name {0} did not passed validation check for {1} {2}", customer,
 												 cus.PersonalInfo.Surname, cus.PersonalInfo.Surname));
@@ -262,8 +268,7 @@
 								cus.PersonalInfo.Surname);
 				try {
 					m_oServiceClient.Instance.PayPointNameValidationFailed(_context.User.Id, cus.Id, customer);
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					_log.Error("Failed to send 'paypoint name validation failed' email.", e);
 				} // try
 			}
@@ -272,6 +277,8 @@
 		[Transactional]
 		[HttpPost]
 		public JsonResult LoanLegalSigned(
+			decimal loanAmount,
+			int repaymentPeriod,
 			bool preAgreementTermsRead = false,
 			bool agreementTermsRead = false,
 			bool euAgreementTermsRead = false,
@@ -284,7 +291,7 @@
 				"agreementTermsRead: {0}" +
 				"preAgreementTermsRead: {1}" +
 				"euAgreementTermsRead: {2}" +
-				"cosmeAgreementTermsRead: {3}", 
+				"cosmeAgreementTermsRead: {3}",
 				agreementTermsRead,
 				preAgreementTermsRead,
 				euAgreementTermsRead,
@@ -295,7 +302,7 @@
 			var typeOfBusiness = _context.Customer.PersonalInfo.TypeOfBusiness.AgreementReduce();
 
 			bool hasError =
-				!preAgreementTermsRead ||
+                !preAgreementTermsRead ||
 				!agreementTermsRead ||
 				(cashRequest.LoanSource.Name == LoanSourceName.EU.ToString() && !euAgreementTermsRead) ||
 				(cashRequest.LoanSource.Name == LoanSourceName.COSME.ToString() && !cosmeAgreementTermsRead) ||
@@ -304,9 +311,11 @@
 			if (hasError)
 				return Json(new { error = "You must agree to all agreements." });
 
+			DateTime now = DateTime.UtcNow;
+
 			_context.Customer.LastCashRequest.LoanLegals.Add(new LoanLegal {
 				CashRequest = cashRequest,
-				Created = DateTime.UtcNow,
+				Created = now,
 				EUAgreementAgreed = euAgreementTermsRead,
 				COSMEAgreementAgreed = cosmeAgreementTermsRead,
 				CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Personal,
@@ -318,8 +327,23 @@
 				AlibabaCreditFacilityTemplate = null,
 			});
 
+
+			NL_LoanLegals loanLegals = new NL_LoanLegals {
+				Amount = loanAmount,
+				RepaymentPeriod = repaymentPeriod,
+				SignatureTime = now,
+				EUAgreementAgreed = euAgreementTermsRead,
+				COSMEAgreementAgreed = cosmeAgreementTermsRead,
+				CreditActAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Personal,
+				PreContractAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Personal,
+				PrivateCompanyLoanAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
+				GuarantyAgreementAgreed = typeOfBusiness == TypeOfBusinessAgreementReduced.Business,
+				SignedName = signedName,
+				NotInBankruptcy = notInBankruptcy,
+			};
+			this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, loanLegals);
 			//el: TODO add LoanLegal for offer
-			
+
 			return Json(new { });
 
 		} // LoanLegalSigned
@@ -337,7 +361,7 @@
 				"customer ID: {0}" +
 				"cash request ID: {1}" +
 				"signed name: {2}" +
-				"credit facility accepted: {3}", 
+				"credit facility accepted: {3}",
 				customerID,
 				cashRequestID,
 				signedName,

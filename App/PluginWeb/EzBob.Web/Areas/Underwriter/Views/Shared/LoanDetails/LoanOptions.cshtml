@@ -1,20 +1,52 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@model dynamic
 <script id="loan-options-template" type="text/template">
     <div class="loan-options">
-        <div class="modal-header">
-            <h3>Loan Options</h3>
-        </div>
         <input id="Id" type="hidden" name="Id" />
         <input id="LoanId" type="hidden" name="LoanId" />
         <div class="modal-body">
-            <div class="row" style="margin-left: 1px">
+            <div class="row">
                 <div class="span4">
+					<div>
+						* Auto charging is <b><%- autoChageEnabled ? 'enabled' : 'disabled' %></b> 
+						<%if(stopAutoChargeDate){
+							print('since ' + stopAutoChargeDate);
+						}%>
+					</div>
+					<div>
+						* Autotomatic late fees assigning is <b><%-autoLateFeeEnabled ? 'enabled' : 'disabled' %></b>
+						<%if(stopLateFeeFromDate && stopLateFeeToDate) {
+							print('between ' + stopLateFeeFromDate + ' and ' + stopLateFeeToDate);
+						}%>
+					</div>
                     <div class="control-group">
-                        <div class="controls">
+                        <div class="controls hide">
                             <label for="AutoPayment" class="checkbox">
-                                <input id="AutoPayment" name="AutoPayment" type="checkbox" value="true" />Activate automatic money charging
-                            </label>
+                                <input id="AutoPayment" name="AutoPayment" type="checkbox" value="true" /> 
+								Activate automatic money charging  
+								<div class="input-group">from
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									<input class="form-control date-input" id="StopAutoChargeDate" name="StopAutoChargeDate" type="text" />
+								</div>
+							</label>
                         </div>
+						<div class="controls hide">
+							<label for="AutoLateFees" class="checkbox">
+								<input id="AutoLateFees" name="AutoLateFees" type="checkbox" value="true" />
+								Activate automatic late fees assigning
+								<div class="input-group">
+									from
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									<input class="form-control date-input" id="StopLateFeeFromDate" name="StopLateFeeFromDate" type="text" />
+								</div>
+								<div class="input-group">
+									to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+									<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+									<input class="form-control date-input" id="StopLateFeeToDate" name="StopLateFeeToDate" type="text" />
+								</div>
+
+							</label>
+						</div>
                         <div class="controls">
                             <label for="ReductionFee" class="checkbox">
                                 <input id="ReductionFee" name="ReductionFee" type="checkbox" value="true" />Activate repayment reduction (75%,50%,25%)
@@ -36,43 +68,45 @@
                                 <input id="SmsSendingAllowed" name="SmsSendingAllowed" type="checkbox" value="true" />SMS sending allowed
                             </label>
                         </div>
+                    </div>
+                </div>
 
-                        <div class="controls calculated-status">
-                            <label for="CalculatedStatus">
-                                CAIS calculated status
+                <div class="span4">
+					<div class="controls calculated-status">
+						<label for="CalculatedStatus">
+							CAIS calculated status
+						</label>
+						<input id="CalculatedStatus" readonly="readonly" name="CalculatedStatus" type="text" value="<%-CalculatedStatus%>" class="form-control" />
+					</div>
 
-                            </label>
-                            <input id="CalculatedStatus" readonly="readonly" name="CalculatedStatus" type="text" value="<%-CalculatedStatus%>" class="form-control" />
-                        </div>
-
-                        @EzForm.SelectAdvanced("CaisAccountStatus", "Manual CAIS status", new Dictionary<string, string>
+					@EzForm.SelectAdvanced("CaisAccountStatus", "Manual CAIS status", new Dictionary<string, string>
                         {
                             {"Calculated value", "Calculated value"}, {"0", "0"}, {"1", "1"}, {"2", "2"},
                             {"3", "3"}, {"4", "4"}, {"5", "5"}, {"6", "6"},
                             {"8", "8"}, {"D", "D"}, {"U", "U"}
                         }, css: "form-control selectheight")
-                        <div class="controls hide" id="defaultExplanation">
-                            <label class="red_cell">
-                                Saving this CAIS status will also effect the customer status and other loans
-                            </label>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="span2" style="margin-top: 3px;">
-                    <label for="cais-flags">
-                        Manual CAIS Flag
-                        <select style="width: 320px;" id="cais-flags" name="cais-flags" class="form-control selectheight">
-                            <%var i = 0; _.each(ManualCaisFlags, function(caisFlag){%>
-                            <option data-id="<%-i%>" value="<%-caisFlag.FlagSetting%>"><%-caisFlag.Description == "Calculated value" ? "" : caisFlag.FlagSetting+'-'%><%-caisFlag.Description%></option>
-                            <%i++;}) %>
-                        </select>
-                    </label>
-                    <label for="cais-comment">
-                        Description
-                        <div class="cais-comment" id="cais-comment" name="cais-comment"></div>
-                    </label>
-                </div>
+					<div class="controls hide" id="defaultExplanation">
+						<label class="red_cell">
+							Saving this CAIS status will also effect the customer status and other loans
+						</label>
+					</div>
+					<div class="controls">
+						<label for="cais-flags">
+							Manual CAIS Flag
+							<select id="cais-flags" name="cais-flags" class="form-control selectheight">
+								<%var i = 0; _.each(ManualCaisFlags, function(caisFlag){%>
+								<option data-id="<%-i%>" value="<%-caisFlag.FlagSetting%>"><%-caisFlag.Description == "Calculated value" ? "" : caisFlag.FlagSetting+'-'%><%-caisFlag.Description%></option>
+								<%i++;}) %>
+							</select>
+						</label>
+					</div>
+					<div class="controls">
+						<label for="cais-comment">
+							Description
+							<div class="cais-comment" id="cais-comment" name="cais-comment"></div>
+						</label>
+					</div>
+				</div>
             </div>
         </div>
         <div class="pull-right">

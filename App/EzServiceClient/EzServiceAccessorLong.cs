@@ -1,10 +1,11 @@
 ﻿namespace ServiceClientProxy {
-    using System;
-    using System.Collections.Generic;
+	using System;
+	using System.Collections.Generic;
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.ModelsWithDB;
+    using Ezbob.Backend.Models.NewLoan;
+    using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Utils;
 
@@ -75,16 +76,27 @@
 			return m_oServiceClient.Instance.GetCompanyDataForCreditBureau(underwriterId, refNumber).Result;
 		}
 
-	    public void ParseCreditSafeLtd(int customerID, int userID, long serviceLogID) {
-	        m_oServiceClient.Instance.ParseCreditSafeLtd(customerID, userID, serviceLogID);
-	    }
-
         public WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package)
         {
 	        //should not execute this strategy from web (only from service)
             this.m_oServiceClient.Instance.WriteToServiceLog(package.In.CustomerID, package.In.CustomerID, package.In);
             return null;
         }
-	    private readonly ServiceClient m_oServiceClient;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="nlModel"></param>
+		/// <returns></returns>
+		public NL_Model AddPayment(NL_Model nlModel) {
+			Console.WriteLine("========================!!!!!!!!!!!!ACCESSOR LONG!!!!!!!!!!!=============================");
+			var result = this.m_oServiceClient.Instance.AddPayment(nlModel);
+			Console.WriteLine("result====>" + result.Payment.PaymentID);
+			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);
+			return result;
+		}
+	
+
+		private readonly ServiceClient m_oServiceClient;
 	} // class EzServiceAccessorLong
 } // namespace ServiceClientProxy

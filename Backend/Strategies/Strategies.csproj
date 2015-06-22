@@ -78,6 +78,7 @@
       <HintPath>..\..\Lib\3rdparty\StructureMap\StructureMap.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
@@ -147,7 +148,6 @@
     <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
-    <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ServiceLogCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ServiceLogCreditSafeNonLtd.cs" />
     <Compile Include="CustomerManualAnnualizedRevenue\SetCustomerManualAnnualizedRevenue.cs" />
@@ -166,6 +166,32 @@
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
+    <Compile Include="NewLoan\AddLoanLegals.cs" />
+    <Compile Include="NewLoan\AddLoan.cs" />
+    <Compile Include="NewLoan\AddFee.cs" />
+    <Compile Include="NewLoan\AddLoanOptions.cs" />
+    <Compile Include="NewLoan\AddLoanState.cs" />
+    <Compile Include="NewLoan\AddRollover.cs" />
+    <Compile Include="NewLoan\AddDecision.cs" />
+    <Compile Include="NewLoan\AssignPaymentToLoan.cs" />
+    <Compile Include="NewLoan\AddPayment.cs" />
+    <Compile Include="NewLoan\GetLastOffer.cs" />
+    <Compile Include="NewLoan\AddOffer.cs" />
+    <Compile Include="NewLoan\AddCashRequest.cs" />
+    <Compile Include="NewLoan\RescheduleLoan.cs" />
+    <Compile Include="NewLoan\ReschedulingSaveException.cs" />
+    <Compile Include="NewLoan\ReschedulingOutPaymentPerIntervalException.cs" />
+    <Compile Include="NewLoan\ReschedulingInPeriodException.cs" />
+    <Compile Include="NewLoan\LoanState.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewLoan\NL_ExceptionCustomerNotFound.cs" />
+    <Compile Include="NewLoan\NL_ExceptionPaymentSave.cs" />
+    <Compile Include="NewLoan\NL_ExceptionInputDataInvalid.cs" />
+    <Compile Include="NewLoan\NL_ExceptionRequiredDataNotFound.cs" />
+    <Compile Include="NewLoan\NL_ExceptionOfferNotValid.cs" />
+    <Compile Include="NewLoan\NL_Loader.cs" />
+    <Compile Include="NewLoan\NL_ExceptionLoanExists.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultOutstandingLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\DefaultIssuedLoans.cs" />
     <Compile Include="Tasks\StatsForWeeklyMaamMedalAndPricing\AStatItem.cs" />

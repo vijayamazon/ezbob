@@ -169,6 +169,36 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
+    <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
+    <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="NewLoan\NL_LoanLienLinks.cs" />
+    <Compile Include="NewLoan\NL_LoanRollovers.cs" />
+    <Compile Include="NewLoan\NL_LoanOptions.cs" />
+    <Compile Include="NewLoan\NL_LoanStates.cs" />
+    <Compile Include="NewLoan\NL_BlendedLoans.cs" />
+    <Compile Include="NewLoan\NL_BlendedOffers.cs" />
+    <Compile Include="NewLoan\NL_LoanAgreements.cs" />
+    <Compile Include="NewLoan\NL_LoanFeePayments.cs" />
+    <Compile Include="NewLoan\NL_LoanFees.cs" />
+    <Compile Include="NewLoan\NL_LoanLegals.cs" />
+    <Compile Include="NewLoan\NL_LoanHistory.cs" />
+    <Compile Include="NewLoan\NL_LoanSchedules.cs" />
+    <Compile Include="NewLoan\NL_LoanStatuses.cs" />
+    <Compile Include="NewLoan\NL_PaypointTransactionStatuses.cs" />
+    <Compile Include="NewLoan\NL_PacnetTransactionStatuses.cs" />
+    <Compile Include="NewLoan\NL_Payments.cs" />
+    <Compile Include="NewLoan\NL_PaypointTransactions.cs" />
+    <Compile Include="NewLoan\NL_LoanSchedulePayments.cs" />
+    <Compile Include="NewLoan\NL_FundTransfers.cs" />
+    <Compile Include="NewLoan\NL_PacnetTransactions.cs" />
+    <Compile Include="NewLoan\NL_Loans.cs" />
+    <Compile Include="NewLoan\NL_Offers.cs" />
+    <Compile Include="NewLoan\NL_Decisions.cs" />
+    <Compile Include="NewLoan\NL_CashRequests.cs" />
+    <Compile Include="NewLoan\NL_RepaymentIntervalTypes.cs" />
+    <Compile Include="NewLoan\OfferForLoan.cs" />
     <Compile Include="ServiceLog.cs" />
     <Compile Include="IovationLastCheckModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

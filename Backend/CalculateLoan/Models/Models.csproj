@@ -43,14 +43,33 @@
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="CurrentPaymentModel.cs" />
+    <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
+    <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
+    <Compile Include="Exceptions\ANegativeDecimalException.cs" />
+    <Compile Include="Exceptions\NegativeRepaymentAmountException.cs" />
+    <Compile Include="Exceptions\NegativeMonthlyInterestRateException.cs" />
+    <Compile Include="Exceptions\NegativeLoanAmountException.cs" />
+    <Compile Include="Exceptions\NegativeRepaymentCountException.cs" />
+    <Compile Include="Exceptions\NegativeOpenPrincipalException.cs" />
+    <Compile Include="Exceptions\NoScheduleException.cs" />
+    <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
+    <Compile Include="Exceptions\TooLateOpenPrincipalException.cs" />
+    <Compile Include="Exceptions\WrongFirstOpenPrincipalException.cs" />
+    <Compile Include="Exceptions\WrongOpenPrincipalOrderException.cs" />
+    <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
     <Compile Include="Extensions\RepaymentListExt.cs" />
     <Compile Include="Extensions\ScheduleListExt.cs" />
-    <Compile Include="Helpers\BadPeriods.cs" />
+    <Compile Include="Helpers\BadPeriod.cs" />
     <Compile Include="Helpers\DailyLoanStatus.cs" />
     <Compile Include="Helpers\Fee.cs" />
+    <Compile Include="Helpers\InterestFreeze.cs" />
     <Compile Include="Helpers\OneDayLoanStatus.cs" />
+    <Compile Include="Helpers\OpenPrincipal.cs" />
+    <Compile Include="Helpers\RepaidPrincipal.cs" />
     <Compile Include="Helpers\Repayment.cs" />
-    <Compile Include="Helpers\Scheduled.cs" />
+    <Compile Include="Helpers\Rollovers.cs" />
+    <Compile Include="Helpers\ScheduledItem.cs" />
+    <Compile Include="Helpers\ScheduledItemWithAmountDue.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="LoanCalculatorModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -87,6 +106,10 @@
     <ProjectReference Include="..\..\Extensions\Extensions.csproj">
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
+      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
+      <Name>CalculateLoanExceptions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

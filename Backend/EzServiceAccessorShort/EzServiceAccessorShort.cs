@@ -1,14 +1,16 @@
 ﻿namespace EzServiceShortcut {
+	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.VatReturn;
 	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
-	using Ezbob.Backend.Strategies.CreditSafe;
 	using Ezbob.Backend.Strategies.Misc;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Utils;
 
 	public class EzServiceAccessorShort : IEzServiceAccessor {
@@ -87,17 +89,32 @@
 			};
 		}
 
-	    public void ParseCreditSafeLtd(int customerID, int userID, long serviceLogID) {
-            var stra = new ParseCreditSafeLtd(serviceLogID);
-            stra.Execute();
-	    }
-
-
         public WriteToLogPackage.OutputData ServiceLogWriter(WriteToLogPackage package)
         {
             var stra = new ServiceLogWriter(package);
             stra.Execute();
             return stra.Package.Out;
         }
+	
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="userId"></param>
+		/// <param name="customerId"></param>
+		/// <param name="nlModel"></param>
+		/// <returns></returns>
+		public NL_Model AddPayment(NL_Model nlModel) {
+			var strategy = new AddPayment(nlModel);
+			try {
+				strategy.Execute();
+				return strategy.NLModel;
+			} catch (Exception) {
+				Console.WriteLine("xxx");
+				//this.ServiceLogWriter(new WriteToLogPackage(new WriteToLogPackage.InputData("xxxx")));
+			}
+
+			return null;
+		}
 	} // class EzServiceAccessorShort
 } // namespace EzServiceShortcut

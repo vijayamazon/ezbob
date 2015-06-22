@@ -102,6 +102,8 @@
 					<input type="text" name="signedName" id="signedName" class="form_field" ui-event-control-id="loan-legal:signed-name" />
 				</label>
 			</div>
+            <input type="hidden" name="loanAmount" id="loanAmount" />
+            <input type="hidden" name="repaymentPeriod" id="repaymentPeriod" />
 		</div>
 	    <div class="buttons_container">
             <a class="btn-continue button btn-green submit <% if (!agree) { %>disabled<% } %>" href="url" ui-event-control-id="loan-legal:continue">Continue</a>
