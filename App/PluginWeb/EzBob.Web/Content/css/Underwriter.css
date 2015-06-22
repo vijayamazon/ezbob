@@ -2236,3 +2236,8 @@ button.btn-update-address, .button.btn-update-address{
     width: 100%;
     display: inline-block;
 }
+
+
+.form-control.input-width {
+    width:100px;
+}
