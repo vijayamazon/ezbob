@@ -14,7 +14,9 @@ EzBob.Underwriter.AutomationCalculationView = Backbone.View.extend({
     },//initialize
 
     render: function() {
-        var automations = this.model.toJSON();
+    	var automations = this.model.toJSON();
+    	automations.current = automations.current || {};
+
         this.$el.html(this.template({
             automations: automations,
             current: automations.current,

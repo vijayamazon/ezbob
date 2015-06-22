@@ -112,11 +112,14 @@ EzBob.Underwriter.AlertDocsView = Backbone.Marionette.ItemView.extend({
 		this.bindTo(this.model, 'change reset fetch sync', this.render, this);
 	}, // initialize
 
+	onRender: function(){
+		$('.messages-tab').html('Messages / Files (' + this.model.length + ')');
+	},
+
 	create: function(customerId) {
 		this.customerId = customerId;
 		this.dialogId = '#uploadAlertDocDialog' + customerId;
 		this.model.customerId = customerId;
-		$('.messages-tab').html('Messages / Files (' + this.model.length + ')');
 	}, // create
 
 	serializeData: function() {

@@ -8,7 +8,6 @@ EzBob.Underwriter.MarketPlaceDetailModel = Backbone.Model.extend({
 	},
 
 	url: function() {
-		console.log('mod', this.get('marketplaceId'), this.get('historyDate'), this);
 		return window.gRootPath + "Underwriter/MarketPlaces/Details/?umi=" + this.get('marketplaceId') + "&history=" + this.get('historyDate');
 	},
 
@@ -52,19 +51,12 @@ EzBob.Underwriter.MarketPlaceDetailsView = EzBob.MarionetteView.extend({
         data.hideAccounts = data.accounts.length == 0;
         data.hideMarketplaces = data.marketplaces == 0;
 
-	    console.log('market places data:', data);
-	    console.log('model:', this.model);
-
         this.$el.html(this.template(data));
 
 		this.renderHmrcSummary(data);
 
-        // TODO: story EZ-1971 fix it. The issue: when this tooltip is enabled moving mouse over (or out) the
-        // element with the tooltip causes entire dialog window content to shake a bit.
-
-        // this.$el.find('a[data-bug-type]').tooltip({ title: 'Report bug' });
-        // this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
-        // this.$el.find('.clear-filter').tooltip({ title: 'Clear all filters', placement: 'bottom' });
+        this.$el.find('i[data-yodlee-calculated]').tooltip({ title: 'Calculated Field' });
+        this.$el.find('.clear-filter').tooltip({ title: 'Clear all filters', placement: 'bottom' });
 
         if (this.shop.get('Name') == 'eBay') {
             //drawChart(this.shop.get('Id'));

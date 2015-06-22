@@ -237,10 +237,19 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 					});
 					break;
 				case '#messages-tab':
-					self.messagesModel.set({ Id: self.customerId }, { silent: true });
-					self.messagesModel.fetch().done(function() {
-						BlockUi('off', $content);
+					BlockUi('off', $content);
+					BlockUi('on', self.alertDocsView.$el);
+					BlockUi('on', self.Message.$el);
+					self.alertDocs.customerId = self.customerId;
+					self.alertDocs.fetch().done(function () {
+						BlockUi('off', self.alertDocsView.$el);
 					});
+
+					self.messagesModel.set({ Id: self.customerId }, { silent: true });
+					self.messagesModel.fetch().done(function () {
+						BlockUi('off', self.Message.$el);
+					});
+
 					self.signatureMonitorView.reload(self.customerId);
 					break;
 				case '#payment-accounts':
@@ -256,14 +265,20 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 					});
 					break;
 				case '#calculator':
+					BlockUi('off', $content);
+					BlockUi('on', self.automationCalculationView.$el);
+					BlockUi('on', self.pricingModelCalculationsView.$el);
+
 				    self.automationCalculationModel.set({ Id: self.customerId }, { silent: true });
-				    self.automationCalculationModel.fetch();
+					self.automationCalculationModel.fetch().done(function() {
+						BlockUi('off', self.automationCalculationView.$el);
+					});
 
 				    self.pricingModelCalculationsModel.set({ Id: self.customerId }, { silent: true });
 					self.pricingModelScenarios.fetch();
 					self.pricingModelCalculationsModel.fetch().done(function () {
-					    self.pricingModelCalculationsModel.trigger('fetch');
-						BlockUi('off', $content);
+						self.pricingModelCalculationsModel.trigger('fetch');
+						BlockUi('off', self.pricingModelCalculationsView.$el);
 					});
 
 					break;
@@ -345,10 +360,8 @@ EzBob.Underwriter.ProfileView = EzBob.View.extend({
 			self.crmModel.set(fullModel.get('CustomerRelations'), { silent: true });
 			self.crmModel.trigger('sync');
 
-			self.alertDocs.reset(fullModel.get('AlertDocs'), { silent: true });
 			self.alertDocsView.create(id);
-			self.alertDocs.trigger('sync');
-
+			
 			self.companyScoreModel.customerId = id;
 			self.companyScoreModel.set(fullModel.get('CompanyScore'), { silent: true });
 			self.companyScoreModel.trigger('sync');

@@ -90,9 +90,6 @@
 					model.CustomerRelations = crm.Create(customer.Id);
 				} // using
 
-				using (tc.AddStep("AlertDocs Time taken"))
-                    model.AlertDocs = (from d in this._docRepo.GetAll() where d.Customer.Id == id select AlertDoc.FromDoc(d)).ToArray();
-
 				using (tc.AddStep("Bugs Time taken"))
                     model.Bugs = this._bugs.GetAll().Where(x => x.Customer.Id == customer.Id).Select(x => BugModel.ToModel(x)).ToList();
 
@@ -117,10 +114,7 @@
 					model.PersonalInfoModel.NumOfShareholders = expDirModel.NumOfShareHolders;
 				}
 
-				using (tc.AddStep("MarketplacesHistory Time taken")) {
-					model.State = "Ok";
-                    model.MarketplacesHistory = this._marketPlaces.GetMarketPlaceHistoryModel(customer).ToList();
-				} // using
+				model.State = "Ok";
 			} // using "Total" step
 
 			Log.Info(tc.ToString());

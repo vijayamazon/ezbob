@@ -91,8 +91,6 @@ EzBob.Underwriter.ProfileHeadView = Backbone.Marionette.ItemView.extend({
 	onRender: function() {
 		var loanInfo = this.ui.editOfferDiv;
 
-		console.log('this.loanModel ist', this.loanModel);
-
 		this.loanInfoView = new EzBob.Underwriter.LoanInfoView({
 			el: loanInfo,
 			model: this.loanModel,

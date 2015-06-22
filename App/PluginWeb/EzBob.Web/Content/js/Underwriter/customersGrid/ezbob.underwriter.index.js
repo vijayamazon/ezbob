@@ -25,7 +25,7 @@
 				fundingModelFetchDone();
 				setInterval(
 					function() { oFundingModel.fetch().done(function() { fundingModelFetchDone(); }); },
-					oFundingModel.get('RefreshInterval')
+					oFundingModel.get('RefreshInterval') || 5000
 				);
 			});
 
