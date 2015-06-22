@@ -109,7 +109,7 @@
       <Name>Extensions</Name>
     </ProjectReference>
     <ProjectReference Include="..\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
-      <Project>{9F39F6B0-980A-46EA-8977-416449BE9C5C}</Project>
+      <Project>{9f39f6b0-980a-46ea-8977-416449be9c5c}</Project>
       <Name>CalculateLoanExceptions</Name>
     </ProjectReference>
   </ItemGroup>
