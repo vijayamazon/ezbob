@@ -4,6 +4,7 @@
 	using System.Globalization;
 	using System.Linq;
 	using System.Text;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.Strategies.Extensions;
 	using Ezbob.ValueIntervals;
 

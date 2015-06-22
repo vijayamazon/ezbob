@@ -41,12 +41,11 @@
 
 		public bool IsModified { get; set; }
 
-		public LoanTypesModel[] LoanTypes { get; set; }
 		public int IsLoanTypeSelectionAllowed { get; set; }
 		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
 		public int LoanTypeId { get; set; } //current loan type id
-		public string LoanType { get; set; } //current loan type name
+		
 		public LoanTypesModel[] LoanTypes { get; set; } //all loan types
 
 		public string Reason { get; set; }

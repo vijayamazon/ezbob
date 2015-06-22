@@ -24,7 +24,7 @@ namespace Ezbob.Backend.ModelsWithDB.CreditSafe
         [Length(20)]
         public string Status { get; set; }
         public int? AmountSecured { get; set; }
-        [Length("max")]
+		[Length(LengthType.MAX)]
         public string Details { get; set; }
         [NonTraversable]
         public List<CreditSafeMortgages_PersonEntitled> PersonEntitled { get; set; }

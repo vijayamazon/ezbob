@@ -22,6 +22,7 @@
 	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
+	using Ezbob.Backend.Strategies.CreditSafe;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.ExternalAPI;
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;

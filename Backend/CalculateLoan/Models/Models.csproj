@@ -42,6 +42,7 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="BadPeriods.cs" />
     <Compile Include="CurrentPaymentModel.cs" />
     <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
     <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />

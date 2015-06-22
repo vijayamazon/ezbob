@@ -147,6 +147,7 @@
     <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
     <Compile Include="Broker\BrokerTransferCommission.cs" />
     <Compile Include="CallCreditStrategy\ParseCallCredit.cs" />
+    <Compile Include="CreditSafe\ParseCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ParseCreditSafeNonLtd.cs" />
     <Compile Include="CreditSafe\ServiceLogCreditSafeLtd.cs" />
     <Compile Include="CreditSafe\ServiceLogCreditSafeNonLtd.cs" />

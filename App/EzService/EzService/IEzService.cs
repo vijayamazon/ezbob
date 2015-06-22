@@ -18,7 +18,8 @@
 		IEzAutomationVerification,
 		IEzServiceBroker,
 		IEzServiceSalesForce,
-		IEzServiceVatReturn
+		IEzServiceVatReturn,
+		IEzServiceNewLoan
 	{
 		[OperationContract]
 		ActionMetaData AddCciHistory(int nCustomerID, int nUnderwriterID, bool bCciMark);

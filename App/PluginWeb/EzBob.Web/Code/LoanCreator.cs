@@ -349,8 +349,6 @@
 			return false;
 		} // ValidateEverlineRefinance
 
-			return false;
-		} // ValidateEverlineRefinance
 		/// <summary>
 		/// not yet implemented function that is
 		/// going to check last minute details of money transfer to prevent some 

@@ -7,21 +7,7 @@
 		} // constructor
 
 		public override string Name { get { return "Bank-like calculator"; } }
-
-		public override string Name { get { return "Bank-like calculator"; } }
-
-		/*/// <summary>
-		/// Calculates date after requested number of periods have passed since loan issue date.
-		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
-		/// </summary>
-		/// <param name="periodCount">A number of periods to add.</param>
-		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		internal override DateTime AddRepaymentIntervals(int periodCount) {
-			return WorkingModel.IsMonthly
-				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
-				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
-		} // AddRepaymentIntervals*/
-
+		
 		protected override decimal CalculateDailyInterestRate(
 			DateTime currentDate,
 			decimal monthlyInterestRate,

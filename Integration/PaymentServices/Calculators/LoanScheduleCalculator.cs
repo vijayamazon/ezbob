@@ -144,4 +144,4 @@
 		private decimal interest = 0.06M;
 	} // class LoanScheduleCalculator
 } // namespace
-} // namespace
+
