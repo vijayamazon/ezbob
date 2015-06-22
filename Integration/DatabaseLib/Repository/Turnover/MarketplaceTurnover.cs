@@ -74,7 +74,6 @@
 			Map(x => x.Turnover).Precision(18).Scale(2);
 			Map(x => x.TheMonth).CustomType<UtcDateTimeType>();
 			Map(x => x.IsActive);
-		    Map(x => x.AggID);
 			Map(x => x.UpdatingEnd).CustomType<UtcDateTimeType>();
 
 			References(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
