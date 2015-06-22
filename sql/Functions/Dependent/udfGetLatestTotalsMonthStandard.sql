@@ -1,5 +1,5 @@
-IF OBJECT_ID('dbo.udfGetLatestTotalsMonth') IS NOT NULL
-	DROP FUNCTION dbo.udfGetLatestTotalsMonth
+IF OBJECT_ID('dbo.udfGetLatestTotalsMonthStandard') IS NOT NULL
+	DROP FUNCTION dbo.udfGetLatestTotalsMonthStandard
 GO
 
 SET QUOTED_IDENTIFIER ON
@@ -30,7 +30,7 @@ else
 
 */
 
-CREATE FUNCTION dbo.udfGetLatestTotalsMonth(
+CREATE FUNCTION dbo.udfGetLatestTotalsMonthStandard(
 @MpID INT,
 @Now DATETIME
 )
