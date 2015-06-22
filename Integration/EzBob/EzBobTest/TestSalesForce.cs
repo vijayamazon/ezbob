@@ -1,5 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
+	using System.Linq;
 	using Ezbob.Utils.Extensions;
 	using EzBob.CommonLib;
 	using log4net;
@@ -226,9 +227,13 @@
 		[Test]
 		public void TestGetActivity() {
 			ISalesForceAppClient client = GetClient();
-			client.GetActivity("alexbo+073@ezbob.com_Frozen");
+			//var activity = client.GetActivity("alexbo+073@ezbob.com_Frozen");
 			//client.GetActivity("stasdes@ezbob.com");
-			//client.GetActivity("fff.com");
+			var activity = client.GetActivity("tanyag+t3793_1@ezbob.com");
+			Assert.IsNotNull(activity);
+			Assert.IsNullOrEmpty(client.Error);
+			Assert.IsNullOrEmpty(activity.Error);
+			Assert.Greater(activity.Activities.Count(), 0);
 		}
 
 		[Test]

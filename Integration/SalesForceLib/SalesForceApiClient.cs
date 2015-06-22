@@ -238,9 +238,9 @@
 				out result);
 
 			LogResult("GetActivity", result, new { email }.ToJsonExtension(), email);
-			var res = result.JsonStringToObject<ApiResponse>();
+			var res = result.JsonStringToObject<ApiResponse>(true);
 			try {
-				var activities = res.Success.Replace("\\", "").JsonStringToObject<IEnumerable<ActivityResultModel>>();
+				var activities = res.Success.Replace("\\", "").JsonStringToObject<IEnumerable<ActivityResultModel>>(true);
 				return new GetActivityResultModel(activities, res.Error);
 			} catch (Exception) {
 				Error = string.Format("Failed parsing activity model {0}", res.Success);
