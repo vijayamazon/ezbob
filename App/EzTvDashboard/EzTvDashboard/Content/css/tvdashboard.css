@@ -7,22 +7,24 @@
 }
 
 .logo {
-    background-image: url(../img/ezbob_everline_logos.png);
+	background-image: url(../img/ezbob_everline_logos.png);
     background-position: left;
     background-repeat: no-repeat;
+	-ms-background-size: contain;
+	background-size: contain;
     width: 50%;
     margin-left: 1%;
+	min-height: 40px;
 }
 
 .tvdashboard {
-    display: inline-block;
     height: 100%;
     vertical-align: middle;
-    position: relative;
+    position: absolute;
     text-align: center;
     margin: 0 auto;
     font-size: 60px;
-    width: 78%;
+    width: 100%;
 }
 
 table.table {
@@ -83,6 +85,7 @@ table.table {
 
 .tile {
     margin-bottom: 5px;
+	padding: 0;
 }
 
 .box .box-title {
@@ -100,6 +103,8 @@ table.table {
     font-weight: bold;
     position: absolute;
     right: 10px;
+	line-height: 120px;
+	vertical-align: middle;
 }
 
 .tile .caption {
@@ -108,8 +113,8 @@ table.table {
     left: 0;
     vertical-align: middle;
     height: 100%;
-    top: 40px;
     padding-left: 10px;
+	line-height: 120px;
 }
 
 .tile-ezgrey .caption {
@@ -168,6 +173,26 @@ strong {
     background-color: #00ced1;
 }
 
+@media (max-width: 1200px){
+	 .tvdashboard {
+        display: none;
+    }
+	
+	.tile {
+        height: 70px;
+    }
+
+	.tile p.title {
+		font-size: 45px;
+		line-height: 70px;
+	}
+
+	.tile .caption {
+		font-size: 27px;
+		line-height: 70px;
+	}
+}
+
 @media (max-width: 762px) {
     .login-page .login-wrapper form {
         width: 100%;
@@ -177,25 +202,10 @@ strong {
         height: initial;
     }
 
-    .tvdashboard {
-        display: none;
-    }
-
     .last-updated {
         position: relative;
         float: right;
         top: 0;
-    }
-
-    .navbar .navbar-brand.ezbob-logo {
-        background-image: url(../img/new-ezbob-logo.png);
-        background-position: left;
-        background-repeat: no-repeat;
-        background-size: contain;
-        width: 100px;
-        height: 100%;
-        margin-left: 0;
-        margin-top: 5px;
     }
 
     .box .box-title h3 {
@@ -205,7 +215,7 @@ strong {
     }
 
     .tile {
-        height: initial;
+        height: 25px;
     }
 
         .tile p.title {
@@ -213,7 +223,7 @@ strong {
             font-weight: bold;
             position: absolute;
             right: 2px;
-            top: 2px;
+			line-height: 25px;
         }
 
         .tile .caption {
@@ -222,8 +232,8 @@ strong {
             left: 0;
             vertical-align: middle;
             height: 100%;
-            top: 2px;
             padding-left: 2px;
+			line-height: 25px;
         }
 
     .skin-orange .box > .box-title {
