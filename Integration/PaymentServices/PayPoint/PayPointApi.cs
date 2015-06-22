@@ -22,8 +22,8 @@
 		private readonly ILoanOptionsRepository loanOptionsRepository;
 
 		public PayPointApi() {
-			this.loanOptionsRepository = ObjectFactory.GetInstance<ILoanOptionsRepository>(); ;
-			_loans = ObjectFactory.GetInstance<ILoanRepository>();
+			this.loanOptionsRepository = ObjectFactory.GetInstance<ILoanOptionsRepository>();
+			this._loans = ObjectFactory.GetInstance<ILoanRepository>();
 		}
 
 		public void PayPointPayPal(PayPointAccount account, string notificationUrl, string returnUrl, string cancelUrl, decimal amount, string currency = "GBP", bool isTest = false)
@@ -33,9 +33,9 @@
 				string transactionId = "TRAN" + Guid.NewGuid();
 				string options = string.Format("notificationurl={0},returnurl={1},cancelurl={2}", notificationUrl, returnUrl, cancelUrl);
 				if (isTest) options += ",test_status=true";
-				_service.Url = account.ServiceUrl;
+				this._service.Url = account.ServiceUrl;
 
-				var str = _service.
+				var str = this._service.
 					performTransactionViaAlternatePaymentMethod(account.Mid, account.VpnPassword, "PayPal",
 																			   "ExpressCheckout", "Initialise", "Transaction",
 																			   transactionId,
@@ -58,7 +58,7 @@
 		public PayPointReturnData RefundCard(PayPointAccount account, string cardHolder, string cardNumber, decimal amount, DateTime expiryDate, string issueNumber, DateTime startDate, string order, string cv2, bool isTest)
 		{
 			Log.InfoFormat("RefundCard: cardHolder={0}, cardNumber={1}, amount = {2}, expiryDate = {3}, issueNumber={4}, startDate={5}, order={6}, cv2={7}, isTest = {8}", cardHolder, cardNumber, amount, expiryDate, issueNumber, startDate, order, cv2, isTest);
-			_service.Url = account.ServiceUrl;
+			this._service.Url = account.ServiceUrl;
 			try
 			{
 				string transactionId = "TRAN" + Guid.NewGuid();
@@ -68,7 +68,7 @@
 				string startDateStr = startDate.ToString("MMyy");
 				string expiryDateStr = expiryDate.ToString("MMyy");
 
-				var str = _service.validateCardFull(account.Mid, account.VpnPassword, transactionId,
+				var str = this._service.validateCardFull(account.Mid, account.VpnPassword, transactionId,
 												   "127.0.0.1", cardHolder, cardNumber,
 												   amount.ToString(CultureInfo.InvariantCulture),
 												   expiryDateStr, issueNumber, startDateStr, order,
@@ -78,7 +78,7 @@
 
 				if (!ret.HasError)
 				{
-					str = _service.refundCardFull(account.Mid, account.VpnPassword, transactionId, amount.ToString(CultureInfo.InvariantCulture), account.RemotePassword, transactionIdNew);
+					str = this._service.refundCardFull(account.Mid, account.VpnPassword, transactionId, amount.ToString(CultureInfo.InvariantCulture), account.RemotePassword, transactionIdNew);
 					ret = new PayPointReturnData(str);
 					Log.Debug("refundCardFull result: " + str);
 				}
