@@ -271,10 +271,9 @@
 				log.Debug(nlModel.PacnetTransaction.ToString());
 				log.Debug(nlModel.Loan.ToString());
 
-				var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
-				nlModel.Loan.LoanID = nlLoan.Value;
-
-				log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID);
+				//var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
+				//nlModel.Loan.LoanID = nlLoan.Value;
+				//log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID);
 
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);

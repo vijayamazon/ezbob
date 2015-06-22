@@ -64,6 +64,7 @@
                 this._customerRepository.SaveOrUpdate(customer);
             }).Execute();
 
+			/*
 		    m_oServiceClient.Instance.AddCashRequest(this.context.UserId, new NL_CashRequests {
 		        CashRequestOriginID = (int)originator,
 		        CustomerID = customer.Id,
@@ -71,6 +72,7 @@
 		        RequestTime = now,
 		        UserID = this.context.UserId
 		    });
+			*/
 
             //TODO add new cash request
             Log.DebugFormat("add new cash request for customer {0}", customer.Id);
@@ -163,6 +165,7 @@
                 this._customerRepository.SaveOrUpdate(customer);
             }).Execute();
 
+			/*
             var nlCashRequestID = m_oServiceClient.Instance.AddCashRequest(this.context.UserId, new NL_CashRequests {
                 CashRequestOriginID = (int)CashRequestOriginator.QuickOffer,
                 CustomerID = customer.Id,
@@ -202,6 +205,7 @@
                 StartTime = now,
                 IsLoanTypeSelectionAllowed = false,
             });
+			 * */
 
             //TODO add new cash request / offer / decision
             Log.DebugFormat("add new cash request for customer {0}", customer.Id);
