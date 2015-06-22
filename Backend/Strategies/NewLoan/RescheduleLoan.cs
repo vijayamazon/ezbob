@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
@@ -9,6 +10,7 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using PaymentServices.Calculators;
 	using StructureMap;
 
 	public class RescheduleLoan<T> : AStrategy {
@@ -133,7 +135,7 @@
 
 			} catch (Exception e) {
 				Log.Alert(e, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);
-				//Console.WriteLine(e);
+
 			}
 		}
 
@@ -162,10 +164,7 @@
 
 				// get current outstanding balance
 				this.Result.ReschedulingBalance = nlCalculator.CalculateBalance(this.ReschedulingArguments.ReschedulingDate, false);
-
-				// TODO - remove the row (overrides balance from the new loan calculator)
-				// this.Result.ReschedulingBalance =   this.tLoan.Balance;
-
+	
 			//	Console.WriteLine("Loan.Balance: {0}, Calc-r balance: {1}", loanBaLance, this.Result.ReschedulingBalance);
 
 				// future unpaid fees
@@ -193,20 +192,16 @@
 				return;
 
 			if (this.tLoan != null) {
-
-				List<LoanScheduleDeleted> deletedList = new List<LoanScheduleDeleted>();
-
+		
 				foreach (var r in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 					if (r.Date >= this.ReschedulingArguments.ReschedulingDate)
 						this.tLoan.Schedule.Remove(r);
 					if (r.Date <= this.ReschedulingArguments.ReschedulingDate && r.Status == LoanScheduleStatus.Late) {
 						this.tLoan.Schedule.Remove(r);
-						//deletedList.Add(new LoanScheduleDeleted().CloneScheduleItem(r));
 						this.tLoan.TryAddRemovedOnReschedule(new LoanScheduleDeleted().CloneScheduleItem(r));
 					}
 					if (r.Date <= this.ReschedulingArguments.ReschedulingDate && r.Status == LoanScheduleStatus.StillToPay) {
 						this.tLoan.Schedule.Remove(r);
-						//deletedList.Add(new LoanScheduleDeleted().CloneScheduleItem(r));
 						this.tLoan.TryAddRemovedOnReschedule(new LoanScheduleDeleted().CloneScheduleItem(r));
 					}
 				}
@@ -225,20 +220,23 @@
 						Interest = Decimal.Round(s.AccruedInterest, 2),
 
 						//Sum to be repaid, including principal, interest and fees Сумма к оплате по кредиту, включающая выплату по телу, проценты и комисии
-						//AmountDue = Decimal.Round((s.Principal + s.AccruedInterest), 2),
+						AmountDue = Decimal.Round((s.Principal + s.AccruedInterest), 2),
 
 						Status = LoanScheduleStatus.StillToPay,
 						Loan = this.tLoan,
 						Fees = 0.0000m,
-
 					};
 
 					//item.AmountDue = (s.Principal + s.AccruedInterest + item.Fees);
-
 					this.tLoan.Schedule.Add(item);
 				}
 
-				Log.Debug(">>>>>>>>>>>>>>>>>>Loan modified schedules: \n {0}", this.tLoan);
+				this.tLoan.RepaymentsNum = this.tLoan.Schedule.Count;
+			//	this.tLoan.Date = this.tLoan.Schedule.Last().Date;
+
+
+
+			//	Log.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", this.tLoan);
 
 				try {
 					this.loanRep.BeginTransaction();
@@ -246,120 +244,139 @@
 						this.loanRep.SaveOrUpdate(this.tLoan);
 					});
 					this.loanRep.CommitTransaction();
+
+					//try {
+
+					//	this.tLoan = this.loanRep.Get(this.tLoan.Id);
+
+					//	this.tLoan.UpdateBalance();
+
+					//	Log.Debug(this.tLoan);
+					//	var calc = new LoanRepaymentScheduleCalculator(this.tLoan, this.ReschedulingArguments.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
+					//	calc.GetState();
+					//	Log.Debug(">>>>>>>>>>>>>>>>>>Loan after LoanRepaymentScheduleCalculator.GetState : \n {0}", this.tLoan);
+					//} catch (Exception e) {
+					//	Log.Debug(e.Message);
+					//}
+
+
 				} catch (Exception transactionEx) {
 					this.loanRep.RollbackTransaction();
 					this.message = string.Format("Re-schedule rolled back. Arguments {0}, err: {1}", this.ReschedulingArguments, transactionEx);
 					Log.Alert(this.message);
 					this.Result.Error = "ReschedulingSaveException";
 				}
+
+			
+
 			}
 		}
 
 
 
 
-		private void bkp_LoanRescheduleSave(List<ScheduledItemWithAmountDue> shedules) {
+		//private void bkp_LoanRescheduleSave(List<ScheduledItemWithAmountDue> shedules) {
 
-			if (this.ReschedulingArguments.SaveToDB == false)
-				return;
+		//	if (this.ReschedulingArguments.SaveToDB == false)
+		//		return;
 
-			Log.Debug("NEW SCHEDULE==================");
-			shedules.ForEach(s => Log.Debug(s.ToString()));
+		//	Log.Debug("NEW SCHEDULE==================");
+		//	shedules.ForEach(s => Log.Debug(s.ToString()));
 
-			if (this.tLoan != null) {
+		//	if (this.tLoan != null) {
 
-				var currentList = this.tLoan.Schedule;
+		//		var currentList = this.tLoan.Schedule;
 
-				// DB update/replace
-				// remove future schedules
-				List<LoanScheduleItem> removedSchedules = new List<LoanScheduleItem>(this.tLoan.Schedule.Where(x => x.Date >= this.ReschedulingArguments.ReschedulingDate));
-
-
-				// remove future
-				foreach (LoanScheduleItem r in this.tLoan.Schedule.Where(x => x.Date >= this.ReschedulingArguments.ReschedulingDate)) {
-					//Log.Debug("REMOVED: {0}", r);
-					currentList.Remove(r);
-				}
-
-				List<LoanScheduleDeleted> deletedSchedules = new List<LoanScheduleDeleted>();
-
-				var lates = this.tLoan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late);
-
-				// remove past LATE
-				foreach (LoanScheduleItem l in this.tLoan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late)) {
-					//Log.Debug("PASSED LATE: {0}", l);
-					//l.Status = LoanScheduleStatus.RescheduledLate;
-					//deletedSchedules.Add(new LoanScheduleDeleted().CloneScheduleItem(l));
-					currentList.Remove(l);
-					//this.tLoan.TryAddRemovedOnReschedule(new LoanScheduleDeleted().CloneScheduleItem(l));
-				}
-
-				// should not be this kind of items - FOR TEST ONLY!!!!!!!!!!!!!!!!!!!!
-				// remove past StillToPay
-				foreach (LoanScheduleItem l in this.tLoan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.StillToPay)) {
-					//Log.Debug("PASSED OPENED: {0}", l);
-					//l.Status = LoanScheduleStatus.RescheduledStillToPay;
-					//deletedSchedules.Add(new LoanScheduleDeleted().CloneScheduleItem(l));
-					currentList.Remove(l);
-					//this.tLoan.TryAddRemovedOnReschedule(new LoanScheduleDeleted().CloneScheduleItem(l));
-				}
-
-				//	deletedSchedules.ForEach(d => Log.Debug(d));
-
-				// add new schedules
-				foreach (ScheduledItemWithAmountDue s in shedules.OrderBy(pp => pp.Position)) {
-					LoanScheduleItem item = new LoanScheduleItem() {
-						Date = s.Date,
-						// Interest rate for current period Процентная ставка, которая действует(ла) на протажении данного периода.
-						InterestRate = Decimal.Round(s.InterestRate, 7),
-
-						// principal to be repaid Выплата по телу кредита
-						LoanRepayment = Decimal.Round(s.Principal, 2),
-
-						// Interest to be repaid  Доход банка от кредита. Имеется в виду, доход, который банк получит после выплаты всего платежа.
-						Interest = Decimal.Round(s.AccruedInterest, 2),
-
-						//Sum to be repaid, including principal, interest and fees Сумма к оплате по кредиту, включающая выплату по телу, проценты и комисии
-						//AmountDue = Decimal.Round((s.Principal + s.AccruedInterest), 2),
-
-						Status = LoanScheduleStatus.StillToPay,
-						Loan = this.tLoan,
-						Fees = 0.0000m
-					};
-
-					//item.AmountDue = (s.Principal + s.AccruedInterest + item.Fees);
-					//item.UpdateStatus(this.ReschedulingArguments.ReschedulingDate);
-					currentList.Add(item);
-				}
-
-				//this.tLoan.RemovedOnReschedule = deletedSchedules;
-				this.tLoan.Schedule = currentList;
-
-				Log.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", this.tLoan);
+		//		// DB update/replace
+		//		// remove future schedules
+		//		List<LoanScheduleItem> removedSchedules = new List<LoanScheduleItem>(this.tLoan.Schedule.Where(x => x.Date >= this.ReschedulingArguments.ReschedulingDate));
 
 
-				/*try {
-					var calc = new LoanRepaymentScheduleCalculator(this.tLoan, this.ReschedulingArguments.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
-					calc.GetState();
-					Log.Debug(">>>>>>>>>>>>>>>>>>Loan after LoanRepaymentScheduleCalculator.GetState : \n {0}", this.tLoan);
-				} catch (Exception e) {
-					Log.Debug(e.Message);
-				}*/
+		//		// remove future
+		//		foreach (LoanScheduleItem r in this.tLoan.Schedule.Where(x => x.Date >= this.ReschedulingArguments.ReschedulingDate)) {
+		//			//Log.Debug("REMOVED: {0}", r);
+		//			currentList.Remove(r);
+		//		}
 
-				// save modifications to DB
-				// removed - will be deleted;
-				// passed late - status changed
-				// new schedules - will be inserted;
-				//this.loanRep.SaveOrUpdate(this.tLoan);
+		//		List<LoanScheduleDeleted> deletedSchedules = new List<LoanScheduleDeleted>();
 
-				// commented tempraray, don't delete
-				// move "deleted" past schedule items to LoanScheduleDeleted table (copy of LoanSchedule)
-				//ILoanScheduleDeletedRepository deletedItemsRep = ObjectFactory.GetInstance<LoanScheduleDeletedRepository>();
-				//foreach ( LoanScheduleDeleted d in deletedSchedules) {
-				//	deletedItemsRep.Delete(d);
-				//}
-			}
-		}
+		//		var lates = this.tLoan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late);
+
+		//		// remove past LATE
+		//		foreach (LoanScheduleItem l in this.tLoan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.Late)) {
+		//			//Log.Debug("PASSED LATE: {0}", l);
+		//			//l.Status = LoanScheduleStatus.RescheduledLate;
+		//			//deletedSchedules.Add(new LoanScheduleDeleted().CloneScheduleItem(l));
+		//			currentList.Remove(l);
+		//			//this.tLoan.TryAddRemovedOnReschedule(new LoanScheduleDeleted().CloneScheduleItem(l));
+		//		}
+
+		//		// should not be this kind of items - FOR TEST ONLY!!!!!!!!!!!!!!!!!!!!
+		//		// remove past StillToPay
+		//		foreach (LoanScheduleItem l in this.tLoan.Schedule.Where(x => x.Date < this.ReschedulingArguments.ReschedulingDate && x.Status == LoanScheduleStatus.StillToPay)) {
+		//			//Log.Debug("PASSED OPENED: {0}", l);
+		//			//l.Status = LoanScheduleStatus.RescheduledStillToPay;
+		//			//deletedSchedules.Add(new LoanScheduleDeleted().CloneScheduleItem(l));
+		//			currentList.Remove(l);
+		//			//this.tLoan.TryAddRemovedOnReschedule(new LoanScheduleDeleted().CloneScheduleItem(l));
+		//		}
+
+		//		//	deletedSchedules.ForEach(d => Log.Debug(d));
+
+		//		// add new schedules
+		//		foreach (ScheduledItemWithAmountDue s in shedules.OrderBy(pp => pp.Position)) {
+		//			LoanScheduleItem item = new LoanScheduleItem() {
+		//				Date = s.Date,
+		//				// Interest rate for current period Процентная ставка, которая действует(ла) на протажении данного периода.
+		//				InterestRate = Decimal.Round(s.InterestRate, 7),
+
+		//				// principal to be repaid Выплата по телу кредита
+		//				LoanRepayment = Decimal.Round(s.Principal, 2),
+
+		//				// Interest to be repaid  Доход банка от кредита. Имеется в виду, доход, который банк получит после выплаты всего платежа.
+		//				Interest = Decimal.Round(s.AccruedInterest, 2),
+
+		//				//Sum to be repaid, including principal, interest and fees Сумма к оплате по кредиту, включающая выплату по телу, проценты и комисии
+		//				AmountDue = Decimal.Round((s.Principal + s.AccruedInterest), 2),
+
+		//				Status = LoanScheduleStatus.StillToPay,
+		//				Loan = this.tLoan,
+		//				Fees = 0.0000m,
+		//				//Position = 
+		//			};
+
+		//			//item.AmountDue = (s.Principal + s.AccruedInterest + item.Fees);
+		//			currentList.Add(item);
+		//		}
+
+			
+		//		this.tLoan.Schedule = currentList;
+		//		this.tLoan.Date = this.tLoan.Schedule.Last().Date;
+
+		//		Log.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", this.tLoan);
+
+		//		/*try {
+		//			var calc = new LoanRepaymentScheduleCalculator(this.tLoan, this.ReschedulingArguments.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
+		//			calc.GetState();
+		//			Log.Debug(">>>>>>>>>>>>>>>>>>Loan after LoanRepaymentScheduleCalculator.GetState : \n {0}", this.tLoan);
+		//		} catch (Exception e) {
+		//			Log.Debug(e.Message);
+		//		}*/
+
+		//		// save modifications to DB
+		//		// removed - will be deleted;
+		//		// passed late - status changed
+		//		// new schedules - will be inserted;
+		//		//this.loanRep.SaveOrUpdate(this.tLoan);
+
+		//		// commented tempraray, don't delete
+		//		// move "deleted" past schedule items to LoanScheduleDeleted table (copy of LoanSchedule)
+		//		//ILoanScheduleDeletedRepository deletedItemsRep = ObjectFactory.GetInstance<LoanScheduleDeletedRepository>();
+		//		//foreach ( LoanScheduleDeleted d in deletedSchedules) {
+		//		//	deletedItemsRep.Delete(d);
+		//		//}
+		//	}
+		//}
 
 		/// <summary>
 		/// Saving rescheduling results for NL ("new" loan)

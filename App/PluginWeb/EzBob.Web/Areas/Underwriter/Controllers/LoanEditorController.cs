@@ -60,14 +60,23 @@
         {
             var loan = _loans.Get(id);
 
+			//Log.Debug("CurrentValues.Instance.AmountToChargeFrom: " + CurrentValues.Instance.AmountToChargeFrom +  "; " + loan);
+
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+
+			//Log.Debug("AFTER calculator CONSTRUCTOR");
+			//Log.Debug(loan);
+
             calc.GetState();
+
+			//Log.Debug("AFTER GetState");
+			//Log.Debug(loan);
 
             var model = _builder.BuildModel(loan);
 
             model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
             //TODO build loan model
-            Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
+            //Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 
             return Json(model, JsonRequestBehavior.AllowGet);
         }
@@ -269,7 +278,7 @@
                 UpdateLoanOptions(loanID, intervalType, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
             }
 
-	        save = false; // TEMPORARY - DONT'T SPOIL DB
+	      //  save = false; // TEMPORARY - DONT'T SPOIL DB
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
@@ -283,7 +292,6 @@
 	        try {
 
 		        // re strategy
-				
 				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 				
 				return Json(result.Value);

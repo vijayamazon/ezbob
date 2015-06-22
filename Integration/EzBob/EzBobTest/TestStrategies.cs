@@ -906,7 +906,7 @@
 
 		[Test]
 		public void TestRescheduleLoan() {
-			int loanID = 42;
+			int loanID = 246;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
@@ -918,7 +918,6 @@
 			reModel.RescheduleIn = true;
 
 			/*var s = new RescheduleLoan<Loan>(loan, reModel);
-
 			try {
 				s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
@@ -929,7 +928,8 @@
 			
 			// OUT loan
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 124m;
+			reModel.PaymentPerInterval = 1000m;
+			reModel.SaveToDB = true;
 
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 

@@ -8,6 +8,7 @@
 
 	public class LoanScheduleDeleted {
 		public virtual int Id { get; set; }
+		public virtual int LoanScheduleID { get; set; }
 		public virtual DateTime Date { get; set; }
 		public virtual LoanScheduleStatus Status { get; set; }
 		public virtual decimal LateCharges { get; set; }
@@ -33,7 +34,7 @@
 
 		public virtual LoanScheduleDeleted CloneScheduleItem(LoanScheduleItem fromItem) {
 			var deletedItem = new LoanScheduleDeleted() {
-				//Id = fromItem.Id,
+				LoanScheduleID = fromItem.Id,
 				Date = fromItem.Date,
 				Status = fromItem.Status,
 				LateCharges = fromItem.LateCharges,
@@ -79,6 +80,7 @@
 			Table("LoanScheduleDeleted");
 
 			Id(x => x.Id).GeneratedBy.Native();
+			Map(x => x.LoanScheduleID);
 			Map(x => x.Date).CustomType<UtcDateTimeType>();
 			Map(x => x.RepaymentAmount);
 			Map(x => x.Principal);
