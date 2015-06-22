@@ -93,10 +93,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
                 self.model.set('ReschedulingBalance', res.ReschedulingBalance);
                 
                 if (res.Error === "ReschedulingInPeriodException") {
-                    $('#rescheduleIn-true').attr('disabled', true);
-                    $('#within-loan-period-text').css('opacity', 0.8);
-                    $('#within-loan-period-text').css('cursor', 'not-allowed');
-                    $('#withinSelect').attr('disabled', true);
+                    $('#exception-msg').fadeIn();
+                    $('#exception-div').fadeOut();
+                    $('#radio-2').prop('checked', true);
                 }
             }); //on success
 

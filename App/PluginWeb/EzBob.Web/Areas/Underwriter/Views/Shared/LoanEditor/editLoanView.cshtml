@@ -15,47 +15,50 @@
 			<div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
             <div class="row alert alert-danger center" style="display: none; text-align: center" id="selection-error">One of the Radio Buttons must be selected</div>
             <div class="row alert alert-danger center" style="display: none; text-align: center" id="within-selector-error">Please select Week/Month</div>
-
-			<div class="row">
-				<div class="col-sm-1">&nbsp;</div>
-				<div class="col-sm-7">
-					<label class="radio-inline" id="within-loan-period-text">
-                        <input type="radio" name="rescheduleIn" value="true" id="rescheduleIn-true">
-						Reschedule to &nbsp;
-						<span name="withinWeek" style="font-weight: bold"></span>
-						weeks or &nbsp;
-						<span name="withinMonth" style="font-weight: bold"></span>
-						month with amount of &nbsp;
-						<span name="withinAmount" style="font-weight: bold"></span>
-						and intrest of &nbsp;
-						<span name="Intrest" style="font-weight: bold"></span>
-					</label>
-				</div>
-				<div class="col-sm-3">
-					<select class="form-control" id="withinSelect" style="width: 150px;">
-						<option value="0">SELECT</option>
-						<option value="month">Month</option>
-						<option value="weeks">Week</option>
-					</select>
-				</div>
-			</div>
+            
+            <div class="row alert alert-info center" style="display: none; text-align: center" id="exception-msg">Within loan arrangement is impossible</div>
+            <div class="row" id="exception-div">
+                <div class="col-sm-1">&nbsp;</div>
+                <div class="col-sm-7">
+                    <label class="radio-inline" id="within-loan-period-text">
+                        <input type="radio" name="rescheduleIn" value="true" id="radio-1">
+                        Reschedule to &nbsp;
+                        <span name="withinWeek" style="font-weight: bold"></span>
+                        weeks or &nbsp;
+                        <span name="withinMonth" style="font-weight: bold"></span>
+                        month with amount of &nbsp;
+                        <span name="withinAmount" style="font-weight: bold"></span>
+                        and intrest of &nbsp;
+                        <span name="Intrest" style="font-weight: bold"></span>
+                    </label>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" id="withinSelect" style="width: 150px;">
+                        <option value="0">SELECT</option>
+                        <option value="month">Month</option>
+                        <option value="weeks">Week</option>
+                    </select>
+                </div>
+            </div>
 
 			<div class="row"><h5>Outside loan payment arangment</h5></div>
 
 			<div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only positive numeric values allowed</div>
             <div class="row alert alert-danger center" style="display: none; text-align: center" id="outside-selector-error">Please select Week/Month</div>
-
+            
 			<div class="row">
 				<div class="col-sm-1">&nbsp;</div>
-				<div class="col-sm-7">
+				<div class="col-sm-8">
 					<label class="radio-inline">
-						<input type="radio" name="rescheduleIn" value="false">
+						<input type="radio" name="rescheduleIn" value="false" id="radio-2">
 						Reschedule to &nbsp;
 						<span name="outsideWeek" id="outsideWeek" style="font-weight: bold"></span>
 						weeks or &nbsp;
 						<span name="outsideMonth" id="outsideMonth" style="font-weight: bold"></span>
-						month with amount of &nbsp;
-						<input class="form-control" type="number" value="0" min="0" step="10" style="width:150px" id="outsideAmount" name="outsideAmount">
+						month with principal of &nbsp;
+                        <span name="withinAmount" style="font-weight: bold"></span>
+                        &nbsp;, amount of &nbsp;
+						<input class="form-control" type="number" value="0" min="0" step="10" style="width:100px" id="outsideAmount" name="outsideAmount">
 						and intrest of &nbsp;
 						<span name="Intrest" style="font-weight: bold"></span>
 					</label>
@@ -78,7 +81,7 @@
 				</div>
 				<div class="col-sm-6" style="text-align:left;">
 					<div class="form-group">
-						<input class="form-control" type="number" value="0" style="width:150px" id="charges-payments" name="charges-payments"> payments.
+						<input class="form-control" type="number" value="0" style="width:100px" id="charges-payments" name="charges-payments"> payments.
 					</div>
 					<span style="display: none; font-weight: bold" id="stop-charges">Auto charges are stopped from <span id="stop-charges-date"></span></span>
 				</div>
@@ -94,7 +97,7 @@
 				<div class="col-sm-3">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-						<input class="form-control" type="text" id="fees-calendar-from" name="fees-calendar-from" style="width:150px">
+						<input class="form-control" type="text" id="fees-calendar-from" name="fees-calendar-from" style="width:100px">
 					</div>
 				</div>
 				<div class="col-sm-1">
@@ -103,7 +106,7 @@
 				<div class="col-sm-4">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-						<input class="form-control" type="text" id="fees-calendar-to" name="fees-calendar-to" style="width:150px">
+						<input class="form-control" type="text" id="fees-calendar-to" name="fees-calendar-to" style="width:100px">
 					</div>
 				</div>
 			</div>
@@ -118,7 +121,7 @@
 				<div class="col-sm-3">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-						<input class="form-control" type="text" id="intrest-calendar-from" name="intrest-calendar-from" style="width:150px">
+						<input class="form-control" type="text" id="intrest-calendar-from" name="intrest-calendar-from" style="width:100px">
 					</div>
 				</div>
 				<div class="col-sm-1">
@@ -127,7 +130,7 @@
 				<div class="col-sm-4">
 					<div class="input-group">
 						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
-						<input class="form-control" type="text" style="width:150px" id="intrest-calendar-to" name="intrest-calendar-to"><br />
+						<input class="form-control" type="text" style="width:100px" id="intrest-calendar-to" name="intrest-calendar-to"><br />
 					</div>
 				</div>
 			</div>
