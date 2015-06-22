@@ -6,14 +6,12 @@
     background: initial;
 }
 
-.ezbob-logo {
-    background-image: url(../img/new-ezbob-logo.png);
-    background-position: center;
+.logo {
+    background-image: url(../img/ezbob_everline_logos.png);
+    background-position: left;
     background-repeat: no-repeat;
-    background-size: contain;
-    width: 150px;
-    height: 100%;
-    margin-left: 10px;
+    width: 50%;
+    margin-left: 1%;
 }
 
 .tvdashboard {
