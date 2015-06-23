@@ -120,6 +120,9 @@
     <Compile Include="AutomationVerification\CharlieAutomationReport\AutoApprove\CaisAccount.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\AutoApprove\Checker.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\Car.cs" />
+    <Compile Include="AutomationVerification\CharlieAutomationReport\CarCaisAccount.cs" />
+    <Compile Include="AutomationVerification\CharlieAutomationReport\DigIntoManualNoSignatureEnoughData\CaisAccount.cs" />
+    <Compile Include="AutomationVerification\CharlieAutomationReport\DigIntoManualNoSignatureEnoughData\Digger.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\LoadAndCategorize\LoadAndCategorizeDecisions.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\LoadAndCategorize\CustomerDecisions.cs" />
     <Compile Include="AutomationVerification\KPMG\ADatumItem.cs" />

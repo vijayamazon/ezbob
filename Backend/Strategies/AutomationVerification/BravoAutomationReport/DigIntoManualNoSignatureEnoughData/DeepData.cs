@@ -6,7 +6,7 @@
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
-	internal class DeepData {
+	public class DeepData {
 		static DeepData() {
 			AllNonAffirmativeTraces = new SortedSet<string>();
 			AllStandardRejectReasons = new SortedSet<string>();

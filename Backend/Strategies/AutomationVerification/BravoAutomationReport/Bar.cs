@@ -18,7 +18,7 @@
 			if (!SkipLoadAndCategorize)
 				CreateLoadAndCategorize().Execute();
 
-			new Digger().Execute();
+			CreateDigger().Execute();
 		} // Execute
 
 		protected virtual DateTime? StartTime { get; private set; }
@@ -27,6 +27,10 @@
 		protected virtual LoadAndCategorizeDecisions CreateLoadAndCategorize() {
 			return new LoadAndCategorizeDecisions(StartTime, EndTime);
 		} // LoadAndCategorize
+
+		protected virtual Digger CreateDigger() {
+			return new Digger();
+		} // CreateDigger
 
 		protected virtual bool SkipLoadAndCategorize {
 			get { return this.skipLoadAndCategorize; }

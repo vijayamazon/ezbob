@@ -119,6 +119,7 @@
     <Compile Include="TestSageParser.cs" />
     <Compile Include="TestSalesForce.cs" />
     <Compile Include="TestSetupFeeCalcLegacy.cs" />
+    <Compile Include="AlexTestStrategies.cs" />
     <Compile Include="TestStrategies.cs" />
     <Compile Include="TestCurrencyUpdateController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

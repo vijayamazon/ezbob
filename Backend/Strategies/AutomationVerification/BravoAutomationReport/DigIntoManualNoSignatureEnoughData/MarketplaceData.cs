@@ -2,7 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 
-	internal class MarketplaceData {
+	public class MarketplaceData {
 		public MarketplaceData(RawSource src) {
 			MonthTurnover = new SortedDictionary<int, decimal>();
 

@@ -65,6 +65,8 @@
 			ConfigManager.CurrentValues.Init(m_oDB, m_oLog);
 			DbConnectionPool.ReuseCount = CurrentValues.Instance.ConnectionPoolReuseCount;
 			AConnection.UpdateConnectionPoolMaxSize(CurrentValues.Instance.ConnectionPoolMaxSize);
+
+			Ezbob.Backend.Strategies.Library.Initialize(m_oEnv, m_oDB, m_oLog);
 		} // Init
 
 		protected AConnection m_oDB;
