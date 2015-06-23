@@ -130,7 +130,9 @@
 
 						this.loanRepository.SaveOrUpdate(loan);
 					}
-				} else if (!prevStatus.IsEnabled && customer.CollectionStatus.CurrentStatus.IsEnabled) {
+
+					//collection and external status is ok
+				} else if (!prevStatus.IsEnabled && customer.CollectionStatus.CurrentStatus.IsEnabled && customer.ExternalCollectionStatus == null) {
 					// Update loan options add freeze interest
 					foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
 						LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
