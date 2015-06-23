@@ -59,19 +59,10 @@
         public JsonResult Loan(int id)
         {
             var loan = _loans.Get(id);
-
-			//Log.Debug("CurrentValues.Instance.AmountToChargeFrom: " + CurrentValues.Instance.AmountToChargeFrom +  "; " + loan);
-
+	
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-
-			//Log.Debug("AFTER calculator CONSTRUCTOR");
-			//Log.Debug(loan);
-
             calc.GetState();
-
-			//Log.Debug("AFTER GetState");
-			//Log.Debug(loan);
-
+	
             var model = _builder.BuildModel(loan);
 
             model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
@@ -90,6 +81,12 @@
             return Json(RecalculateModel(model, cr, model.Date));
         }
 
+		/// <summary>
+		/// called on deleting/adding one installment etc.
+		/// </summary>
+		/// <param name="id"></param>
+		/// <param name="model"></param>
+		/// <returns></returns>
         [Ajax]
         [HttpPost]
         [Transactional]
@@ -98,55 +95,6 @@
             var cr = _loans.Get(id).CashRequest;
             return Json(RecalculateModel(model, cr, DateTime.UtcNow));
         }
-
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonResult AddFreezeInterval(int id, string startdate, string enddate, decimal rate)
-        {
-            Loan oLoan = _loans.Get(id);
-
-            oLoan.InterestFreeze.Add(new LoanInterestFreeze
-            {
-                Loan = oLoan,
-                StartDate = (startdate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(startdate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                EndDate = (enddate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(enddate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
-                InterestRate = rate,
-                ActivationDate = DateTime.UtcNow,
-                DeactivationDate = null
-            });
-
-            _loans.SaveOrUpdate(oLoan);
-
-            //TODO update loan (apply add freeze)
-            Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
-
-
-            var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-            calc.GetState();
-
-            EditLoanDetailsModel model = _builder.BuildModel(oLoan);
-
-            return Json(model);
-        } // AddFreezeInterval
-
-        [Ajax]
-        [HttpPost]
-        [Transactional]
-        public JsonResult RemoveFreezeInterval(int id, int intervalid) {
-            Loan oLoan = _loans.Get(id);
-            LoanInterestFreeze lif = oLoan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
-            if (lif != null)
-                lif.DeactivationDate = DateTime.UtcNow;
-            _loans.SaveOrUpdate(oLoan);
-            //TODO update loan (apply remove freeze)
-            Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
-
-            var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-            calc.GetState();
-            EditLoanDetailsModel model = _builder.BuildModel(oLoan);
-            return Json(model);
-        } // RemoveFreezeInterval
 
         [Ajax]
         [HttpGet]
@@ -174,6 +122,11 @@
             return Json(model);
         }
 
+		/// <summary>
+		/// saving all modifications - deleting/adding of installments etc.
+		/// </summary>
+		/// <param name="model"></param>
+		/// <returns></returns>
         [Ajax]
         [HttpPost]
         [Transactional]
@@ -348,5 +301,55 @@
 			    this.loanOptionsRepository.SaveOrUpdate(options);
 		    }
 	    }
+
+
+
+		//[Ajax]
+		//[HttpPost]
+		//[Transactional]
+		//public JsonResult AddFreezeInterval(int id, string startdate, string enddate, decimal rate)
+		//{
+		//	Loan oLoan = _loans.Get(id);
+
+		//	oLoan.InterestFreeze.Add(new LoanInterestFreeze
+		//	{
+		//		Loan = oLoan,
+		//		StartDate = (startdate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(startdate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+		//		EndDate = (enddate == string.Empty) ? (DateTime?)null : DateTime.ParseExact(enddate, "yyyy-MM-dd", CultureInfo.InvariantCulture),
+		//		InterestRate = rate,
+		//		ActivationDate = DateTime.UtcNow,
+		//		DeactivationDate = null
+		//	});
+
+		//	_loans.SaveOrUpdate(oLoan);
+
+		//	//TODO update loan (apply add freeze)
+		//	Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
+
+		//	var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+		//	calc.GetState();
+
+		//	EditLoanDetailsModel model = _builder.BuildModel(oLoan);
+
+		//	return Json(model);
+		//} // AddFreezeInterval
+
+		//[Ajax]
+		//[HttpPost]
+		//[Transactional]
+		//public JsonResult RemoveFreezeInterval(int id, int intervalid) {
+		//	Loan oLoan = _loans.Get(id);
+		//	LoanInterestFreeze lif = oLoan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
+		//	if (lif != null)
+		//		lif.DeactivationDate = DateTime.UtcNow;
+		//	_loans.SaveOrUpdate(oLoan);
+		//	//TODO update loan (apply remove freeze)
+		//	Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
+
+		//	var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+		//	calc.GetState();
+		//	EditLoanDetailsModel model = _builder.BuildModel(oLoan);
+		//	return Json(model);
+		//} // RemoveFreezeInterval
     }
 }

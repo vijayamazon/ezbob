@@ -189,11 +189,6 @@
 		Paid,
 		[Description("Almost paid")]
 		AlmostPaid
-
-		//,[Description("RescheduledLate")]
-		//RescheduledLate,
-		//[Description("RescheduledStillToPay")]
-		//RescheduledStillToPay
 	}
 
 	public class LoanScheduleStatusType : EnumStringType<LoanScheduleStatus>

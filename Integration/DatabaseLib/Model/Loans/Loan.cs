@@ -444,7 +444,7 @@
 		public override string ToString() {
 			var sb = new StringBuilder();
 
-			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}, Issued: {3}, Close date: {4}, Balance: {5}\n", Id, LoanAmount, InterestRate, Date, DateClosed, Balance);
+			sb.AppendFormat("Id: {0}, Amount: {1}, Rate: {2}, Issued: {3}, Close date: {4}, Balance: {5}, Principal: {6}\n", Id, LoanAmount, InterestRate, Date, DateClosed, Balance, Principal);
 
 			sb.AppendLine("Schedule:");
 			foreach (var item in _schedule) {

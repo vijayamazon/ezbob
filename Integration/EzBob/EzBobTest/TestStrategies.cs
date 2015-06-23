@@ -930,7 +930,7 @@
 
 		[Test]
 		public void TestRescheduleLoan() {
-			int loanID = 246;
+			int loanID = 322;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
@@ -952,7 +952,7 @@
 			
 			// OUT loan
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 1000m;
+			reModel.PaymentPerInterval = 800m;
 			reModel.SaveToDB = true;
 
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
@@ -968,15 +968,17 @@
 
 		[Test]
 		public void TestLoanOldCalculator() {
-			int loanID = 242;
+			int loanID = 202;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan loan = loanRep.Get(loanID);
 			try {
 				var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-				calc.GetState();
 				Console.WriteLine(loan);
-				EditLoanDetailsModel model = new ChangeLoanDetailsModelBuilder().BuildModel(loan);
-				Console.WriteLine(model);
+				calc.GetState();
+				Console.WriteLine();
+				Console.WriteLine(loan);
+				//EditLoanDetailsModel model = new ChangeLoanDetailsModelBuilder().BuildModel(loan);
+				//Console.WriteLine(model);
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
