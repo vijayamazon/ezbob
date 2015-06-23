@@ -29,7 +29,7 @@ CREATE FUNCTION dbo.udfGetLatestTotalsMonth(
 RETURNS DATETIME
 AS
 BEGIN
-	DECLARE @CurrentMonth DATETIME = dbo.udfGetLatestTotalsMonth(@MpID, @Now)
+	DECLARE @CurrentMonth DATETIME = dbo.udfGetLatestTotalsMonthStandard(@MpID, @Now)
 
 	IF @CurrentMonth IS NULL
 		RETURN NULL
