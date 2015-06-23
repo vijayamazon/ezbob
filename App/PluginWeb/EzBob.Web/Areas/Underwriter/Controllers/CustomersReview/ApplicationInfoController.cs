@@ -24,6 +24,9 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
+	using EZBob.DatabaseLib.Repository;
+	using DbConstants;
+	
 
 	public class ApplicationInfoController : Controller {
 		private readonly ServiceClient serviceClient;
@@ -35,7 +38,7 @@
 		private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
-
+		private readonly LoanOptionsRepository loanOptionsRepository;
 		private readonly ILoanSourceRepository _loanSources;
 		private readonly IUsersRepository _users;
 		private readonly IEzbobWorkplaceContext _context;
@@ -59,7 +62,7 @@
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
 			CustomerPhoneRepository customerPhoneRepository, 
-			IExternalCollectionStatusesRepository externalCollectionStatusesRepository) {
+			IExternalCollectionStatusesRepository externalCollectionStatusesRepository, LoanOptionsRepository loanOptionsRepository) {
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
 			_loanTypes = loanTypes;
@@ -75,6 +78,7 @@
 			serviceClient = new ServiceClient();
 			this.customerPhoneRepository = customerPhoneRepository;
 			this.externalCollectionStatusesRepository = externalCollectionStatusesRepository;
+			this.loanOptionsRepository = loanOptionsRepository;
 		}
 
 		// Here we get VA\FCF\Turnover
@@ -405,15 +409,27 @@
 				return Json(new { error = "Customer not found.", id = id, status = externalStatusID });
 			} // if
 
-			var oTsp = (externalStatusID == null) ? null : this.externalCollectionStatusesRepository.Get(externalStatusID);
+			var prevExternalCollectionStatus = oCustomer.ExternalCollectionStatus;
 
-			if (oTsp == null && externalStatusID != null) {
+			var newExternalCollectionStatus = (externalStatusID == null) ? null : this.externalCollectionStatusesRepository.Get(externalStatusID);
+
+			if (newExternalCollectionStatus == null && externalStatusID != null) {
 				log.Debug("Status({0}) not found in the DB repository.", externalStatusID);
 				return Json(new { error = "Status not found in the DB repository.", id = id, status = externalStatusID });
 			} // if
 
-			oCustomer.ExternalCollectionStatus = oTsp;
+			oCustomer.ExternalCollectionStatus = newExternalCollectionStatus;
 			log.Debug("Customer({0}).ExternalCollectionStatus set to {1}", id, externalStatusID);
+
+			if (newExternalCollectionStatus != prevExternalCollectionStatus && (newExternalCollectionStatus == null || prevExternalCollectionStatus == null)) {
+				foreach (Loan loan in oCustomer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
+					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
+					//Update Late Fees flag according to the new External Collection Status or absense of any status
+					options.AutoLateFees = newExternalCollectionStatus == null;
+					//todo stop interest rate
+					this.loanOptionsRepository.SaveOrUpdate(options);
+				}
+			} 
 
 			return Json(new { error = (string)null, id = id, status = externalStatusID });
 		} // ChangeExternalCollectionStatus
