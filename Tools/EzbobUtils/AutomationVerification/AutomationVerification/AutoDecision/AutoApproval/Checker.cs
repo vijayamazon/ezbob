@@ -9,12 +9,12 @@
 	using AutomationCalculator.ProcessHistory.Trails;
 	using EZBob.DatabaseLib.Model.Database;
 
-	internal class Checker {
+	public class Checker {
 		public Checker(Agent oAgent) {
 			this.m_oAgent = oAgent;
 		} // constructor
 
-		public void Run() {
+		public virtual void Run() {
 			// Once a step is not passed there is no need to continue result-wise. However the
 			// process continues because we want to pick all the possible reasons for not
 			// approving a customer in order to compare different implementations of the process.
@@ -39,10 +39,7 @@
 			IsDirector();
 			HmrcIsRelevant();
 			TotalLoanCount();
-			CaisStatuses(Trail.MyInputData.MetaData.TotalLoanCount > 0
-				? Trail.MyInputData.Configuration.GetAllowedCaisStatusesWithLoan()
-				: Trail.MyInputData.Configuration.GetAllowedCaisStatusesWithoutLoan()
-			);
+			CaisStatuses();
 			Rollovers();
 			LatePayments();
 			CustomerOpenLoans();
@@ -57,6 +54,33 @@
 			ApprovedAmount = 0;
 			return Trail.Negative<T>(false);
 		} // StepForceFailed
+
+		public virtual void CaisStatuses() {
+			CaisStatuses(Trail.MyInputData.MetaData.TotalLoanCount > 0
+				? Trail.MyInputData.Configuration.GetAllowedCaisStatusesWithLoan()
+				: Trail.MyInputData.Configuration.GetAllowedCaisStatusesWithoutLoan()
+			);
+		} // CaisStatuses
+
+		protected virtual Agent Agent { get { return this.m_oAgent; } }
+
+		protected virtual T StepDone<T>() where T : ATrace {
+			return Trail.Affirmative<T>(false);
+		} // StepFailed
+
+		protected virtual T StepFailed<T>() where T : ATrace {
+			bool isStepEnabled = Trail.MyInputData.Configuration.IsTraceEnabled<T>();
+
+			if (!isStepEnabled) {
+				Trail.AddNote(
+					"Step '" + typeof(T).FullName + "' has failed but is disabled hence marked as passed."
+				);
+			} // if
+
+			return isStepEnabled
+				? StepForceFailed<T>()
+				: StepDone<T>();
+		} // StepFailed
 
 		private void RoundAmount() {
 			decimal roundTo = Trail.MyInputData.Configuration.GetCashSliderStep;
@@ -494,24 +518,6 @@
 			else
 				StepFailed<Complete>().Init(nApprovedAmount);
 		} // Complete
-
-		private T StepDone<T>() where T : ATrace {
-			return Trail.Affirmative<T>(false);
-		} // StepFailed
-
-		private T StepFailed<T>() where T : ATrace {
-			bool isStepEnabled = Trail.MyInputData.Configuration.IsTraceEnabled<T>();
-
-			if (!isStepEnabled) {
-				Trail.AddNote(
-					"Step '" + typeof(T).FullName + "' has failed but is disabled hence marked as passed."
-				);
-			} // if
-
-			return isStepEnabled
-				? StepForceFailed<T>()
-				: StepDone<T>();
-		} // StepFailed
 
 		private readonly Agent m_oAgent;
 	} // class Checker

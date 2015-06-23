@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport.LoadAndCategorize {
 	using System;
 	using System.Collections.Generic;
 	using ConfigManager;
@@ -6,7 +6,17 @@
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
-	internal class CustomerDecisions {
+	using RerejectAgent = AutomationCalculator.AutoDecision.AutoReRejection.Agent;
+
+	using RejectAgent =
+		Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent;
+
+	using ApproveAgent = AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent;
+
+	using ReapproveAgent =
+		Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval.ManAgainstAMachine.SameDataAgent;
+
+	public class CustomerDecisions {
 		public CustomerDecisions(int customerID, bool isAlibaba, string tag) {
 			Manual = new ManualInterface(this);
 			Auto = new AutoInterface(this);
@@ -60,12 +70,12 @@
 		} // AutoInterface
 
 		public void RunAutomation(DateTime now, SortedSet<string> allNonAffirmativeTraces) {
-			AutoDecisions.Add(RunAutomationOnce(CustomerID, Manual.First.DecisionTime, IsAlibaba, 1));
+			AutoDecisions.Add(RunAutomationOnce(Manual.First.DecisionTime, 1));
 
 			if (ManualDecisions.Count > 1)
-				AutoDecisions.Add(RunAutomationOnce(CustomerID, Manual.Last.DecisionTime, IsAlibaba, 2));
+				AutoDecisions.Add(RunAutomationOnce(Manual.Last.DecisionTime, 2));
 
-			CurrentAutoDecision = RunAutomationOnce(CustomerID, now, IsAlibaba, 0, allNonAffirmativeTraces);
+			CurrentAutoDecision = RunAutomationOnce(now, 0, allNonAffirmativeTraces);
 		} // RunAutomation
 
 		public string NonAffirmativeTraceResult(string traceName) {
@@ -78,10 +88,25 @@
 			return "ok";
 		} // NonAffirmativeTraceResult
 
+		protected virtual ApproveAgent CreateAutoApproveAgent(
+			int offeredCreditLine,
+			AutomationCalculator.Common.MedalOutputModel medal,
+			DateTime decisionTime
+		) {
+			return new ApproveAgent(
+				CustomerID,
+				offeredCreditLine,
+				medal.Medal,
+				medal.MedalType,
+				medal.TurnoverType,
+				decisionTime,
+				DB,
+				Log
+			);
+		} // CreateAutoApproveAgent
+
 		private AutoDecision RunAutomationOnce(
-			int customerID,
 			DateTime decisionTime,
-			bool isAlibaba,
 			int runTimeCount,
 			SortedSet<string> allNonAffirmativeTraces = null
 		) {
@@ -92,15 +117,15 @@
 			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
 			// Just for code consistency.
 			if (doNext) { // Re-reject area
-				if (IsRerejected(customerID, decisionTime)) {
+				if (IsRerejected(decisionTime)) {
 					doNext = false;
 					result = new AutoDecision(DecisionActions.ReReject);
 				} // if
 			} // if; Re-reject area
 
 			if (doNext) {
-				if (!isAlibaba) {
-					if (IsRejected(customerID, decisionTime)) {
+				if (!IsAlibaba) {
+					if (IsRejected(decisionTime)) {
 						doNext = false;
 						result = new AutoDecision(DecisionActions.Reject);
 					} // if
@@ -111,7 +136,7 @@
 
 			if (doNext) { // Medal area
 				var verification = new AutomationCalculator.MedalCalculation.MedalChooser(DB, Log);
-				medal = verification.GetMedal(customerID, decisionTime);
+				medal = verification.GetMedal(CustomerID, decisionTime);
 				medal.SaveToDb(this.tag, DB, Log);
 			} // if; Medal area
 
@@ -120,10 +145,10 @@
 				: Ezbob.Backend.Strategies.MedalCalculations.MedalResult.RoundOfferedAmount(medal.OfferedLoanAmount);
 
 			if (doNext)
-				offeredCreditLine = CapOffer(customerID, offeredCreditLine);
+				offeredCreditLine = CapOffer(offeredCreditLine);
 
 			if (doNext) { // Re-approve area
-				if (IsReapproved(customerID, decisionTime)) {
+				if (IsReapproved(decisionTime)) {
 					doNext = false;
 					result = new AutoDecision(DecisionActions.ReApprove);
 				} // if
@@ -132,7 +157,7 @@
 			Guid? trailID = null;
 
 			if (doNext) { // Approve area
-				if (IsApproved(customerID, offeredCreditLine, medal, decisionTime, allNonAffirmativeTraces, out trailID)) {
+				if (IsApproved(offeredCreditLine, medal, decisionTime, allNonAffirmativeTraces, out trailID)) {
 					doNext = false;
 					result = new AutoDecision(DecisionActions.Approve, trailID, runTimeCount);
 
@@ -165,8 +190,8 @@
 			return result;
 		} // RunAutomationOnce
 
-		private bool IsRerejected(int customerID, DateTime decisionTime) {
-			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(customerID, decisionTime, DB, Log);
+		private bool IsRerejected(DateTime decisionTime) {
+			var agent = new RerejectAgent(CustomerID, decisionTime, DB, Log);
 			agent.Init();
 			agent.MakeDecision();
 
@@ -175,25 +200,19 @@
 			return agent.Trail.HasDecided;
 		} // IsRerejected
 
-		private bool IsRejected(int customerID, DateTime decisionTime) {
-			var agent =
-				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.ManAgainstAMachine.SameDataAgent(
-					customerID,
-					decisionTime,
-					DB,
-					Log
-				);
+		private bool IsRejected(DateTime decisionTime) {
+			var agent = new RejectAgent(CustomerID, decisionTime, DB, Log);
 
 			return agent.Decide(null, this.tag);
 		} // IsRejected
 
-		private int CapOffer(int customerID, int offeredCreditLine) {
-			Log.Debug("Capping offer for customer {0} with uncapped offer {1}.", customerID, offeredCreditLine);
+		private int CapOffer(int offeredCreditLine) {
+			Log.Debug("Capping offer for customer {0} with uncapped offer {1}.", CustomerID, offeredCreditLine);
 
 			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
 				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", customerID)
+				new QueryParameter("CustomerId", CustomerID)
 			);
 
 			if (isHomeOwnerAccordingToLandRegistry) {
@@ -204,18 +223,13 @@
 				offeredCreditLine = Math.Min(offeredCreditLine, MaxCapNotHomeOwner);
 			} // if
 
-			Log.Debug("Capped offer for customer {0} is {1}.", customerID, offeredCreditLine);
+			Log.Debug("Capped offer for customer {0} is {1}.", CustomerID, offeredCreditLine);
 
 			return offeredCreditLine;
 		} // CapOffer
 
-		private bool IsReapproved(int customerID, DateTime decisionTime) {
-			var agent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval.ManAgainstAMachine.SameDataAgent(
-				customerID,
-				decisionTime,
-				DB,
-				Log
-			);
+		private bool IsReapproved(DateTime decisionTime) {
+			var agent = new ReapproveAgent(CustomerID, decisionTime, DB, Log);
 
 			agent.Init();
 
@@ -225,7 +239,6 @@
 		} // IsReapproved
 
 		private bool IsApproved(
-			int customerID,
 			int offeredCreditLine,
 			AutomationCalculator.Common.MedalOutputModel medal,
 			DateTime decisionTime,
@@ -237,16 +250,7 @@
 			if (medal == null)
 				return false;
 
-			var agent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
-				customerID,
-				offeredCreditLine,
-				medal.Medal,
-				medal.MedalType,
-				medal.TurnoverType,
-				decisionTime,
-				DB,
-				Log
-			);
+			var agent = CreateAutoApproveAgent(offeredCreditLine, medal, decisionTime);
 
 			agent.Init();
 
@@ -272,8 +276,8 @@
 
 		private readonly string tag;
 
-		private static AConnection DB { get { return Library.Instance.DB; } }
-		private static ASafeLog Log { get { return Library.Instance.Log; } }
+		protected static AConnection DB { get { return Library.Instance.DB; } }
+		protected static ASafeLog Log { get { return Library.Instance.Log; } }
 
 		private static int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		private static int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }

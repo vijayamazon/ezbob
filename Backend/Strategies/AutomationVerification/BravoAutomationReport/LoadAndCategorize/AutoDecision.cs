@@ -1,8 +1,8 @@
-﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport.LoadAndCategorize {
 	using System;
 	using DbConstants;
 
-	internal class AutoDecision : ADecision {
+	public class AutoDecision : ADecision {
 		public AutoDecision(DecisionActions? decision, Guid? trailUniqueID = null, int? runTimeCount = null) {
 			DecisionTime = DateTime.UtcNow;
 

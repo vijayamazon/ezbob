@@ -1,11 +1,11 @@
-﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport.LoadAndCategorize {
 	using System;
 	using System.Collections.Generic;
 	using DbConstants;
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
-	internal abstract class ADecision {
+	public abstract class ADecision {
 		static ADecision() {
 			DecisionActions[] daList = (DecisionActions[])Enum.GetValues(typeof(DecisionActions));
 
