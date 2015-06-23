@@ -27,5 +27,7 @@
 		Liquidation = 24,
 		Insolvency = 25,
 		Bankruptcy = 26,
+		CUST_INSOLVENT_PROCEED_PG = 27,
+		PG_INSOLVENT_PROCEED_CUST = 28,
 	} // enum CollectionStatusNames
 } // namespace

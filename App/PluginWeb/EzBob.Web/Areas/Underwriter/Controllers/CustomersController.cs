@@ -61,7 +61,7 @@
             var grids = new LoansGrids {
                 IsEscalated = this._context.User.Roles.Any(r => r.Name == "manager"),
                 MpTypes = this._mpType.GetAll().ToList(),
-                CollectionStatuses = this._customerStatusesRepository.GetAll().ToList(),
+                CollectionStatuses = this._customerStatusesRepository.GetVisible().ToList(),
                 MaxLoan = this._limit.GetMaxLimit(),
                 ManagerMaxLoan = CurrentValues.Instance.ManagerMaxLoan
             };

@@ -1,5 +1,6 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database {
 	using System;
+	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using NHibernate;
@@ -13,6 +14,7 @@
 		public virtual bool IsWarning { get; set; }
 		public virtual bool IsDefault { get; set; }
 		public virtual bool IsAutomaticStatus { get; set; }
+		public virtual bool IsVisible { get; set; }
 	}
 
 	public sealed class CustomerStatusesMap : ClassMap<CustomerStatuses> {
@@ -25,6 +27,7 @@
 			Map(x => x.IsWarning);
 			Map(x => x.IsDefault);
 			Map(x => x.IsAutomaticStatus);
+			Map(x => x.IsVisible);
 		}
 	}
 
@@ -32,6 +35,7 @@
 		bool GetIsEnabled(int id);
 		bool GetIsWarning(int id);
 		CustomerStatuses GetByName(string name);
+		IEnumerable<CustomerStatuses> GetVisible();
 	}
 
 	public class CustomerStatusesRepository : NHibernateRepositoryBase<CustomerStatuses>, ICustomerStatusesRepository {
@@ -59,6 +63,10 @@
 
 		public CustomerStatuses GetByName(string name) {
 			return GetAll().FirstOrDefault(s => s.Name == name);
+		}
+
+		public IEnumerable<CustomerStatuses> GetVisible() {
+			return GetAll().Where(s => s.IsVisible);
 		}
 	}
 }
