@@ -2,24 +2,21 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using System.Reflection;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
-	using Ezbob.Backend.Strategies.Alibaba;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CreditSafe;
@@ -46,6 +43,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate.Linq;
 	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
@@ -738,28 +736,27 @@
 			CaisGenerate cg = new CaisGenerate(1);
 			cg.Execute();
 		}
-        
-        [Test]
-        [Ignore]
-        public void TestCreditSfaeServiceLogWriter()
-        {
-            ServiceLogCreditSafeLtd saveTest = new ServiceLogCreditSafeLtd("X999999",1);
-            saveTest.Execute();
-        }
-        [Test]
-        public void TestPPNoLoan() {
-	    PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
-            p.Execute();
-        }
-        
+
+		[Test]
+		[Ignore]
+		public void TestCreditSfaeServiceLogWriter() {
+			ServiceLogCreditSafeLtd saveTest = new ServiceLogCreditSafeLtd("X999999", 1);
+			saveTest.Execute();
+		}
+		[Test]
+		public void TestPPNoLoan() {
+			PayPointAddedWithoutOpenLoan p = new PayPointAddedWithoutOpenLoan(6548, 5, "safdhdf533f");
+			p.Execute();
+		}
+
 		[Test]
 		[Ignore]
 		public void TestBackFillExperianNonLtdScoreText() {
-				BackFillExperianNonLtdScoreText test = new BackFillExperianNonLtdScoreText();
-				test.Execute(); 		
-								
+			BackFillExperianNonLtdScoreText test = new BackFillExperianNonLtdScoreText();
+			test.Execute();
 
-			
+
+
 		}
 
 
@@ -781,18 +778,18 @@
 			addDecision.Execute();
 		}
 
-		
 
-	    [Test]
-	    public void TestUserDisable() {
-	        UserDisable ud = new UserDisable(1, "a@b.com", true);
-	        ud.Execute();
-	    }
 
-	    [Test]
-	    public void TestAlibabaReports() {
+		[Test]
+		public void TestUserDisable() {
+			UserDisable ud = new UserDisable(1, "a@b.com", true);
+			ud.Execute();
+		}
+
+		[Test]
+		public void TestAlibabaReports() {
 			new Alibaba(null, false).Execute();
-	    }
+		}
 
 		[Test]
 		public void TestLoanStatusAfterPayment() {
@@ -804,7 +801,7 @@
 			new BrokerLeadSendInvitation(1040, "stasd+evlbrk5@ezbob.com").Execute();
 		}
 
-		
+
 
 		[Test]
 		public void TestNL_AddLoan() {
@@ -930,7 +927,7 @@
 
 		[Test]
 		public void TestRescheduleLoan() {
-			int loanID = 322;
+			int loanID = 47;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
@@ -949,10 +946,10 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}*/
-			
+
 			// OUT loan
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 800m;
+			reModel.PaymentPerInterval = 500m;
 			reModel.SaveToDB = true;
 
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
@@ -964,6 +961,125 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
+
+			/*ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
+			EditLoanDetailsModel model = new EditLoanDetailsModel();
+
+			// display
+			var loaan =  ObjectFactory.GetInstance<LoanRepository>().Get(loanID);
+			model = loanModelBuilder.BuildModel(loaan);
+			var loan2 = loanModelBuilder.CreateLoan(model);
+			try {
+				var calc = new LoanRepaymentScheduleCalculator(loan2, reModel.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
+				calc.GetState();
+				m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan saved: \n {0}", loan);
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}*/
+		}
+
+
+		[Test]
+		public void TestRescheduleOutLoan() {
+			int loanID = 47;
+
+			LoanRepository rep = ObjectFactory.GetInstance<LoanRepository>();
+			//	ICashRequestRepository crRep = ObjectFactory.GetInstance<CashRequestRepository>();
+			//	ILoanChangesHistoryRepository historyRep = ObjectFactory.GetInstance<ILoanChangesHistoryRepository>();
+			//	ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
+
+			ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
+			EditLoanDetailsModel model = new EditLoanDetailsModel();
+			//LoanBuilder loanBuilder = new LoanBuilder(loanModelBuilder);
+			//IWorkplaceContext context = null;
+
+			Loan tLoan = rep.Get(loanID);
+
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LoanType = tLoan.GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanID;
+			reModel.RescheduleIn = false;
+			reModel.PaymentPerInterval = 500m;
+			reModel.SaveToDB = true;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+
+			// copied original state
+			Loan loanCopy = tLoan.Clone();
+			foreach (var charge in tLoan.Charges) {
+				loanCopy.Charges.Add(charge);
+			}
+			loanCopy.Transactions.AddAll(tLoan.Transactions);
+			foreach (var agr in tLoan.Agreements) {
+				loanCopy.Agreements.Add(agr);
+			}
+			this.m_oLog.Debug(" CLONED : \n {0}", loanCopy);
+			// copied original state
+
+			// update schedule
+			LoanScheduleItem removed = (LoanScheduleItem)EnumerableExtensions.First(tLoan.Schedule.Where(r => r.Status == LoanScheduleStatus.Late));
+			tLoan.Schedule.Remove(removed);
+
+			/*[Ajax]
+			[HttpPost]
+			[Transactional]
+			public JsonResult Recalculate(int id, EditLoanDetailsModel model) {
+				var cr = _loans.Get(id).CashRequest;
+				return Json(RecalculateModel(model, cr, DateTime.UtcNow));
+			}		 
+			private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now){
+				var loan = _loanModelBuilder.CreateLoan(model);
+				loan.LoanType = cr.LoanType;
+				loan.CashRequest = cr;
+				try {
+					var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
+					calc.GetState();
+				} catch (Exception e) {
+					model.Errors.Add(e.Message);
+					return model;
+				}			
+				return _loanModelBuilder.BuildModel(loan);
+			}*/
+			
+			// model from updated schedule
+			model = loanModelBuilder.BuildModel(tLoan);
+			
+			var loan = loanModelBuilder.CreateLoan(model);
+			var cr = rep.Get(loanID).CashRequest;
+			loan.LoanType = cr.LoanType;
+			loan.CashRequest = cr;
+
+			try {
+				var calc = new LoanRepaymentScheduleCalculator(loan, reModel.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
+				calc.GetState();
+			} catch (Exception e) {
+				model.Errors.Add(e.Message);
+			}
+
+			EditLoanDetailsModel mmm = loanModelBuilder.BuildModel(loan);
+
+			//model.Items.Where(s=>s.Type=="Installment").ForEach(s => this.m_oLog.Debug(s.ToString()));
+
+			m_oLog.Debug("MODEL: \n {0}", mmm);
+
+			return;
+
+			int n = 2;
+
+			for (int i=1; i <= n; i++) {
+				LoanScheduleItem item = new LoanScheduleItem() {
+					Date = reModel.ReschedulingDate.AddMonths(n).Date,
+					InterestRate = tLoan.InterestRate,
+					LoanRepayment = (decimal)reModel.PaymentPerInterval,
+					Status = LoanScheduleStatus.StillToPay,
+					Loan = tLoan
+				};
+				item.Interest = item.InterestRate * item.LoanRepayment;
+				tLoan.Schedule.Add(item);
+			}
+
+			m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", tLoan);
+
 		}
 
 		[Test]
@@ -1023,33 +1139,33 @@
 			decimal m = 600m;
 			decimal r = 0.06m;
 			decimal F = 100m;
-			
+
 			decimal n = Math.Ceiling(A / (m - A * r));
 			Console.WriteLine("n=" + n);
 			decimal total1 = A + A * r * ((n + 1) / 2);
 			Console.WriteLine(total1);
 			decimal B = (A + F);
 
-		//	decimal total2 = B + B * r * (((n - 1) + 1) / 2);
-		//	Console.WriteLine(total2);
+			//	decimal total2 = B + B * r * (((n - 1) + 1) / 2);
+			//	Console.WriteLine(total2);
 
-			decimal k = Math.Ceiling(n + 2*F / (A * r));
+			decimal k = Math.Ceiling(n + 2 * F / (A * r));
 
-		/*	LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
-				LoanIssueTime = DateTime.UtcNow,
-				LoanAmount = A,
-				RepaymentCount = (int)n,
-				MonthlyInterestRate = 0.06m,
-				InterestOnlyRepayments = 0,
-				RepaymentIntervalType = RepaymentIntervalTypes.Month
-			};
+			/*	LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
+					LoanIssueTime = DateTime.UtcNow,
+					LoanAmount = A,
+					RepaymentCount = (int)n,
+					MonthlyInterestRate = 0.06m,
+					InterestOnlyRepayments = 0,
+					RepaymentIntervalType = RepaymentIntervalTypes.Month
+				};
 
-			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
+				Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
 
-			ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
+				ALoanCalculator calculator = new LegacyLoanCalculator(calculatorModel);
 
-			Console.WriteLine();
-			var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
+				Console.WriteLine();
+				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
 
 			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
 				LoanIssueTime = DateTime.UtcNow,
@@ -1068,9 +1184,9 @@
 			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
 
 			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
-			
+
 		}
-		
+
 
 	}
 }

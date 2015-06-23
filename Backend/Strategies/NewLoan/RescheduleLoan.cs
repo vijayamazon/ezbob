@@ -11,6 +11,7 @@
 	using Ezbob.Utils;
 	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using NHibernate.Linq;
 	using PaymentServices.Calculators;
 	using StructureMap;
 
@@ -28,8 +29,8 @@
 
 				this.loanRep = ObjectFactory.GetInstance<LoanRepository>();
 
-				this.actual = new Loan();
-				this.actual = this.loanRep.Get(this.ReschedulingArguments.LoanID);
+				//this.actual = new Loan();
+				//this.actual = this.loanRep.Get(this.ReschedulingArguments.LoanID);
 
 			} else if (t.GetType() == typeof(NL_Model)) {
 				this.tNLLoan = t as NL_Model;
@@ -117,12 +118,12 @@
 				};
 
 				if (this.ReschedulingArguments.RescheduleIn) {
-					Log.Debug("'IN': Outstanding balance: {0}, Intervals: {1}, loan original close date: {2}, reschedule date: {3}, interval type: {4}",
+					Log.Debug("================='IN': Outstanding balance: {0}, Intervals: {1}, loan original close date: {2}, reschedule date: {3}, interval type: {4}",
 						this.Result.ReschedulingBalance, calculatorModel.RepaymentCount, this.Result.LoanCloseDate, this.ReschedulingArguments.ReschedulingDate
 						, this.ReschedulingArguments.ReschedulingRepaymentIntervalType);
 
 				} else {
-					Log.Debug("'OUT': Outstanding balance: {0}, Intervals: {1}, loan original close date: {2}, reschedule date: {3}, interval type: {4}, payment per interval: {5}",
+					Log.Debug("==============='OUT': Outstanding balance: {0}, Intervals: {1}, loan original close date: {2}, reschedule date: {3}, interval type: {4}, payment per interval: {5}",
 						this.Result.ReschedulingBalance, calculatorModel.RepaymentCount, this.Result.LoanCloseDate, this.ReschedulingArguments.ReschedulingDate
 						, this.ReschedulingArguments.ReschedulingRepaymentIntervalType
 						, this.ReschedulingArguments.PaymentPerInterval);
@@ -157,6 +158,13 @@
 
 				Log.Debug("==========================Loanstate: {0}", this.tLoan);
 
+				var loan = this.loanRep.Get(this.tLoan.Id);
+
+				var calc = new LoanRepaymentScheduleCalculator(loan, this.ReschedulingArguments.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
+				calc.GetState();
+
+				Log.Debug("==========================LoanRepaymentScheduleCalculatorLoanstate: {0}", loan);
+
 				return;
 			}
 
@@ -181,11 +189,14 @@
 				//Log.Debug("+++++++++++++NEW SCHEDULES+++++++++++");
 				//shedules.ForEach(s => Log.Debug(s));
 
+				Loan loanCopy = this.tLoan.Clone();
+
 				ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
 				EditLoanDetailsModel model = new EditLoanDetailsModel();
-				model = loanModelBuilder.BuildModel(this.actual);
+				//model = loanModelBuilder.BuildModel(this.actual);
 
 				foreach (var r in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
+
 					if (r.Date >= this.ReschedulingArguments.ReschedulingDate)
 						this.tLoan.Schedule.Remove(r);
 					// lates, stilltopays passed
@@ -199,6 +210,8 @@
 					}
 				}
 
+				//int i = 1;
+				
 				// add new schedules
 				foreach (ScheduledItemWithAmountDue s in shedules.OrderBy(pp => pp.Position)) {
 					LoanScheduleItem item = new LoanScheduleItem() {
@@ -208,38 +221,71 @@
 						// principal to be repaid Выплата по телу кредита
 						LoanRepayment = Decimal.Round(s.Principal, 2),
 						Status = LoanScheduleStatus.StillToPay,
-						Loan = this.tLoan,
+						Loan = this.tLoan
 					};
+					
+					item.Interest = item.InterestRate * item.LoanRepayment;
+
+					//item.Balance = this.Result.ReschedulingBalance - (i * item.LoanRepayment);
+					//i++;
+
 					this.tLoan.Schedule.Add(item);
 				}
 
+				Log.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", this.tLoan);
 
+				foreach (var charge in this.tLoan.Charges) {
+					loanCopy.Charges.Add(charge);
+				}
+
+				loanCopy.Transactions.AddAll(this.tLoan.Transactions);
+
+				foreach (var agr in this.tLoan.Agreements) {
+					loanCopy.Agreements.Add(agr);
+				}
+
+				Log.Debug(" CLONED : \n {0}", loanCopy);
+
+				// new
+				model = loanModelBuilder.BuildModel(this.tLoan);
+
+				//  _loanModelBuilder.UpdateLoan(model, loan);
+				loanModelBuilder.UpdateLoan(model, loanCopy);
+
+			//	Log.Debug(">>>>>>>>>>>>>>>>>>Loan UpdateLoan modified: \n {0}", this.tLoan);
+
+				model.Items.Where(s=>s.Type=="Installment").ForEach(s => Log.Debug(s));
+
+				Log.Debug("MODIFIED??????????????????=== {0}", loanCopy.Modified);
+
+				var calc = new LoanRepaymentScheduleCalculator(loanCopy, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+				calc.GetState();
+				Log.Debug(">>>>>>>>>>>>>>>>>>Loan saved: \n {0}", loanCopy);
+
+				/*// display
+				var loaan = this.loanRep.Get(this.tLoan.Id);
+				model = loanModelBuilder.BuildModel(loaan);
+				var loan = loanModelBuilder.CreateLoan(model);
 				try {
+					var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+					calc.GetState();
+					Log.Debug(">>>>>>>>>>>>>>>>>>Loan saved: \n {0}", loan);
+				} catch (Exception e) {
+					Console.WriteLine(e);
+				}*/
+
+				/*try {
 					this.loanRep.BeginTransaction();
 					this.loanRep.EnsureTransaction(() => {
 						this.loanRep.SaveOrUpdate(this.tLoan);
 					});
 					this.loanRep.CommitTransaction();
-
-
-
-					var loaan = this.loanRep.Get(this.tLoan.Id);
-					model = loanModelBuilder.BuildModel(loaan);
-					var loan = loanModelBuilder.CreateLoan(model);
-					try {
-						var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-						calc.GetState();
-						Log.Debug(">>>>>>>>>>>>>>>>>>Loan  modified: \n {0}", loan);
-					} catch (Exception e) {
-						Console.WriteLine(e);
-					}
-
 				} catch (Exception transactionEx) {
 					this.loanRep.RollbackTransaction();
 					this.message = string.Format("Re-schedule rolled back. Arguments {0}, err: {1}", this.ReschedulingArguments, transactionEx);
 					Log.Alert(this.message);
 					this.Result.Error = "ReschedulingSaveException";
-				}
+				}*/
 
 			}
 		}
@@ -248,7 +294,7 @@
 
 		private Loan tLoan;
 
-		private Loan actual;
+		//private Loan actual;
 
 		private readonly NL_Model tNLLoan;
 
@@ -256,7 +302,7 @@
 
 		private readonly LoanRepository loanRep;
 
-		private LoanCalculatorModel CalcModel;
+		//private LoanCalculatorModel CalcModel;
 
 	}
 }

@@ -15,6 +15,7 @@
 		public virtual decimal RepaymentAmount { get; set; }
 	//	public virtual Loan Loan { get; set; }
 		public virtual int LoanId { get; set; }
+		public virtual int Position { get; set; }
 		public virtual decimal LoanRepayment { get; set; }
 		public virtual decimal Principal { get; set; }
 		public virtual decimal AmountDue { get; set; }
@@ -42,6 +43,7 @@
 				LoanRepayment = fromItem.LoanRepayment,
 				Principal = fromItem.Principal,
 				LoanId = fromItem.Loan.Id,
+			//	Position = fromItem.p
 				//Loan = fromItem.Loan,
 				AmountDue = fromItem.AmountDue,
 				Interest = fromItem.Interest,
@@ -84,6 +86,7 @@
 			Map(x => x.Date).CustomType<UtcDateTimeType>();
 			Map(x => x.RepaymentAmount);
 			Map(x => x.Principal);
+			Map(x => x.Position);
 			Map(x => x.LoanRepayment);
 			Map(x => x.Interest);
 			Map(x => x.InterestPaid);

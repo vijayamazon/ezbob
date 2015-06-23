@@ -120,14 +120,28 @@ namespace EzBob.Models
         }
 
 	   
-	    public override string ToString() {
+	   /* public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(EditLoanDetailsModel);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)
-					sb.Append("\t\t" + prop.Name).Append(": ").Append(prop.GetValue(this)).Append(";");
+					sb.Append("\n" + prop.Name).Append(": ").Append(prop.GetValue(this)).Append(";");
 			}
 			return sb.ToString();
-	    }
+	    }*/
+
+		public override string ToString() {
+			var sb = new StringBuilder();
+
+		
+			sb.AppendLine("Installment:");
+			foreach (var item in Items.Where(s => s.Type == "Installment")){
+				sb.Append("\t");
+				sb.AppendLine(item.ToString());
+			}
+
+			return sb.ToString();
+		
+		}
     }
 }

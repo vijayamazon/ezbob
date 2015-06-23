@@ -8,7 +8,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using NHibernate.Linq;
-	using NHibernate.Util;
 
 	public class ChangeLoanDetailsModelBuilder {
 		public EditLoanDetailsModel BuildModel(Loan loan) {
@@ -214,13 +213,26 @@
 		}
 
 		private static void UpdateInstallments(Loan loan, Loan actual) {
-			
+
+			//Console.WriteLine("================loan.Schedule=====================");
+			//loan.Schedule.ForEach(ls => Console.WriteLine(ls));
+			//Console.WriteLine("==========actual.Schedule=========");
+			//actual.Schedule.ForEach(ls => Console.WriteLine(ls));
+
+
+
 			for (int i = loan.Schedule.Count - 1; i >= 0; i--) {
 				var item = loan.Schedule[i];
+
+				//Console.WriteLine(item);
+				//Console.WriteLine();
+
 				//если в модели есть installment с таким id, то обновляем его
 				if (actual.Schedule.Any(x => x.Id == item.Id)) {
-					var installment = actual.Schedule.Single(x => x.Id == item.Id);
-			//		var installment = actual.Schedule.First(x => x.Id == item.Id);
+
+
+			//		var installment = actual.Schedule.Single(x => x.Id == item.Id);
+					var installment = actual.Schedule.First(x => x.Id == item.Id);
 					actual.Schedule.Remove(installment);
 					item.Balance = installment.Balance;
 					item.Date = installment.Date;

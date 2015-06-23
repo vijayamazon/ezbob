@@ -171,7 +171,7 @@
 
 		public override string ToString()
 		{
-			return string.Format("LoanScheduleItem: Date: {0, 10} Balance: {1, 10} AmountDue: {2, 10} LoanRepayment: {3, 10} Interest: {4, 10} Fees: {5, 10} Status: {6, 10}, InterestRate: {7, 10}", Date, Balance, AmountDue, LoanRepayment, Interest, Fees, Status, InterestRate);
+			return string.Format("LoanScheduleItem: Date: {0, 10} Balance: {1, 10} AmountDue: {2, 10} LoanRepayment: {3, 10} Interest: {4, 10} Fees: {5, 10} Status: {6, 10}, InterestRate: {7, 10}, Id: {8,10}", Date, Balance, AmountDue, LoanRepayment, Interest, Fees, Status, InterestRate, Id);
 		}
 	}
 
