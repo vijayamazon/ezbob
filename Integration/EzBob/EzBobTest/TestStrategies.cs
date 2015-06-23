@@ -981,104 +981,74 @@
 
 		[Test]
 		public void TestRescheduleOutLoan() {
-			int loanID = 47;
+			int loanID = 27;
 
-			LoanRepository rep = ObjectFactory.GetInstance<LoanRepository>();
-			//	ICashRequestRepository crRep = ObjectFactory.GetInstance<CashRequestRepository>();
-			//	ILoanChangesHistoryRepository historyRep = ObjectFactory.GetInstance<ILoanChangesHistoryRepository>();
-			//	ILoanOptionsRepository optionsRep = ObjectFactory.GetInstance<LoanOptionsRepository>();
-
-			ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
-			EditLoanDetailsModel model = new EditLoanDetailsModel();
-			//LoanBuilder loanBuilder = new LoanBuilder(loanModelBuilder);
-			//IWorkplaceContext context = null;
-
-			Loan tLoan = rep.Get(loanID);
-
-			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LoanType = tLoan.GetType().AssemblyQualifiedName;
-			reModel.LoanID = loanID;
-			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 500m;
-			reModel.SaveToDB = true;
-			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-
-			// copied original state
-			Loan loanCopy = tLoan.Clone();
-			foreach (var charge in tLoan.Charges) {
-				loanCopy.Charges.Add(charge);
-			}
-			loanCopy.Transactions.AddAll(tLoan.Transactions);
-			foreach (var agr in tLoan.Agreements) {
-				loanCopy.Agreements.Add(agr);
-			}
-			this.m_oLog.Debug(" CLONED : \n {0}", loanCopy);
-			// copied original state
-
-			// update schedule
-			LoanScheduleItem removed = (LoanScheduleItem)EnumerableExtensions.First(tLoan.Schedule.Where(r => r.Status == LoanScheduleStatus.Late));
-			tLoan.Schedule.Remove(removed);
-
-			/*[Ajax]
-			[HttpPost]
-			[Transactional]
-			public JsonResult Recalculate(int id, EditLoanDetailsModel model) {
-				var cr = _loans.Get(id).CashRequest;
-				return Json(RecalculateModel(model, cr, DateTime.UtcNow));
-			}		 
-			private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now){
-				var loan = _loanModelBuilder.CreateLoan(model);
-				loan.LoanType = cr.LoanType;
-				loan.CashRequest = cr;
-				try {
-					var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
-					calc.GetState();
-				} catch (Exception e) {
-					model.Errors.Add(e.Message);
-					return model;
-				}			
-				return _loanModelBuilder.BuildModel(loan);
-			}*/
+			LoanRepository loanRepository = ObjectFactory.GetInstance<LoanRepository>();
+			ChangeLoanDetailsModelBuilder changeLoanModelBuilder = new ChangeLoanDetailsModelBuilder();
 			
-			// model from updated schedule
-			model = loanModelBuilder.BuildModel(tLoan);
+			Loan tLoan = loanRepository.Get(loanID);
+			CashRequest cr = tLoan.CashRequest;
+			LoanType lt = tLoan.LoanType;
 			
-			var loan = loanModelBuilder.CreateLoan(model);
-			var cr = rep.Get(loanID).CashRequest;
-			loan.LoanType = cr.LoanType;
+			//build reschedule model
+			EditLoanDetailsModel model = changeLoanModelBuilder.BuildModel(tLoan);
+
+			//edit it (remove schedules and add new ones)
+
+			//Choose schedules you want to delete
+			var removeInstallment = model.Items.First(x => x.Id == 129 && x.Type == "Installment");
+			var principal = removeInstallment.Principal;
+			var newPrincipal = principal / 2;
+			model.Items.Remove(removeInstallment);
+
+			DateTime now = DateTime.Today;
+			//Add new schedules Date,Principal,InterestRate,Balance,Type are required
+			model.Items.Add(new SchedultItemModel() {
+				Date = now.AddMonths(1),
+				Principal = newPrincipal,
+				InterestRate = model.InterestRate,
+				Interest = newPrincipal * model.InterestRate,
+				Total = newPrincipal + newPrincipal * model.InterestRate,
+				Balance = newPrincipal,
+				Type = "Installment"
+			});
+
+			model.Items.Add(new SchedultItemModel() {
+				Date = now.AddMonths(2),
+				Principal = newPrincipal,
+				InterestRate = model.InterestRate,
+				Interest = newPrincipal * model.InterestRate,
+				Total = newPrincipal + newPrincipal * model.InterestRate,
+				Balance = 0,
+				Type = "Installment"
+			});
+
+			//Validate the reschedule model
+			model.Validate();
+
+			if (model.HasErrors) {
+				Console.WriteLine("Has Errors");
+				return; // model;
+			}
+
+			//Create modified loan from the reschedule model
+			var loan = changeLoanModelBuilder.CreateLoan(model);
+			loan.LoanType = lt;
 			loan.CashRequest = cr;
 
+			//Recalculate the loan 
 			try {
-				var calc = new LoanRepaymentScheduleCalculator(loan, reModel.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
+				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
 				calc.GetState();
 			} catch (Exception e) {
 				model.Errors.Add(e.Message);
+				return;// model;
 			}
 
-			EditLoanDetailsModel mmm = loanModelBuilder.BuildModel(loan);
+			//Return the model to UW
+			EditLoanDetailsModel rescheduledLoanModel = changeLoanModelBuilder.BuildModel(loan);
 
-			//model.Items.Where(s=>s.Type=="Installment").ForEach(s => this.m_oLog.Debug(s.ToString()));
-
-			m_oLog.Debug("MODEL: \n {0}", mmm);
-
-			return;
-
-			int n = 2;
-
-			for (int i=1; i <= n; i++) {
-				LoanScheduleItem item = new LoanScheduleItem() {
-					Date = reModel.ReschedulingDate.AddMonths(n).Date,
-					InterestRate = tLoan.InterestRate,
-					LoanRepayment = (decimal)reModel.PaymentPerInterval,
-					Status = LoanScheduleStatus.StillToPay,
-					Loan = tLoan
-				};
-				item.Interest = item.InterestRate * item.LoanRepayment;
-				tLoan.Schedule.Add(item);
-			}
-
-			m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", tLoan);
+			m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", rescheduledLoanModel);
 
 		}
 
