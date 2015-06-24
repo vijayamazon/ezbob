@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-
-namespace Reports {
+﻿namespace Reports.UiReports {
+	using System;
+	using System.Collections.Generic;
 
 	public class UiReportItemGroupData {
-
 		public UiReportItemGroupData(CustomerInfo oCustomerInfo, UiItemGroups nItemGroup, SortedDictionary<int, string> oRelevantControls) {
 			m_oCustomerInfo = oCustomerInfo;
 			m_nItemGroup = nItemGroup;
@@ -80,7 +77,5 @@ namespace Reports {
 		private int m_nCount;
 		private readonly CustomerInfo m_oCustomerInfo;
 		private readonly UiItemGroups m_nItemGroup;
-
 	} // class UiReportItemGroupData
-
-} // namespace Reports
+} // namespace

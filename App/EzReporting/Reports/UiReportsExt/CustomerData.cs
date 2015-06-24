@@ -1,9 +1,9 @@
-﻿namespace Reports {
+﻿namespace Reports.UiReportsExt {
 	using System;
 	using System.Data;
+	using Reports.UiReports;
 
 	public class CustomerData : Extractor, IComparable<CustomerData> {
-
 		public CustomerData(IDataRecord oRow) : base(oRow) {
 			ID = Retrieve<int>("CustomerID").Value;
 			FirstName = Retrieve("FirstName");
@@ -11,6 +11,7 @@
 			TypeOfBusiness = Retrieve("TypeOfBusiness");
 			WizardStepName = Retrieve("WizardStepTypeName");
 			WizardStepIsLast = Convert.ToBoolean(oRow["TheLastOne"]);
+			Origin = Retrieve("Origin");
 
 			bool? bIsOffline = Retrieve<bool>("IsOffline");
 
@@ -24,11 +25,12 @@
 		public bool IsOffline { get; private set; }
 		public string WizardStepName { get; private set; }
 		public bool WizardStepIsLast { get; private set; }
+		public string Origin { get; private set; }
 
 		public override string ToString() {
 			return string.Format(
-				"{0}: {1} {2} {3} {4}",
-				ID, Value(FirstName), Value(Surname), Segment(), Value(TypeOfBusiness)
+				"{5} {0}: {1} {2} {3} {4}",
+				ID, Value(FirstName), Value(Surname), Segment(), Value(TypeOfBusiness), Origin
 			);
 		} // ToString
 
@@ -39,16 +41,14 @@
 			if (ReferenceEquals(this, y))
 				return 0;
 
-			if (this.WizardStepIsLast == y.WizardStepIsLast)
-				return this.WizardStepName.CompareTo(y.WizardStepName);
+			if (WizardStepIsLast == y.WizardStepIsLast)
+				return WizardStepName.CompareTo(y.WizardStepName);
 
-			return this.WizardStepIsLast ? -1 : 1;
+			return WizardStepIsLast ? -1 : 1;
 		} // Compare
 
 		protected string Segment() {
 			return IsOffline ? "Offline" : "Online";
 		} // Segment
-
 	} // class CustomerData
-
-} // namespace Reports
+} // namespace

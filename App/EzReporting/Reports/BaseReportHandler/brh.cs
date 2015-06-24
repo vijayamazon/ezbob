@@ -10,6 +10,8 @@
 	using Ezbob.Utils.Html.Tags;
 	using JetBrains.Annotations;
 	using OfficeOpenXml;
+	using Reports.UiReports;
+	using Reports.UiReportsExt;
 
 	using Cci;
 	using TraficReport;

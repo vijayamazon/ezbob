@@ -79,11 +79,13 @@ BEGIN
 		c.TypeOfBusiness,
 		c.IsOffline,
 		w.TheLastOne,
-		w.WizardStepTypeName
+		w.WizardStepTypeName,
+		Origin = zl.Name
 	FROM
 		Customer c
 		INNER JOIN #RelevantCustomers rc ON c.Id = rc.CustomerID
 		INNER JOIN WizardStepTypes w ON c.WizardStep = w.WizardStepTypeID
+		INNER JOIN CustomerOrigin zl ON c.OriginID = zl.CustomerOriginID
 
 	-----------------------------------------------------------------------
 	--

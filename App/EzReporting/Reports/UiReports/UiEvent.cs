@@ -1,10 +1,8 @@
-﻿using System;
-using System.Data;
-
-namespace Reports {
+﻿namespace Reports.UiReports {
+	using System;
+	using System.Data;
 
 	public class UiEvent : Extractor {
-
 		public UiEvent(IDataRecord oRow) : base(oRow) {
 			ControlID = Retrieve<int>("UiControlID").Value;
 			ActionID = Retrieve<int>("UiActionID").Value;
@@ -31,7 +29,5 @@ namespace Reports {
 				Value(EventArguments)
 			);
 		} // ToString
-
 	} // class UiEvent
-
-} // namespace Reports
+} // namespace

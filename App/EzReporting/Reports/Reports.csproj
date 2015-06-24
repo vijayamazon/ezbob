@@ -130,9 +130,9 @@
     <Compile Include="TraficReport\TraficReportRow.cs" />
     <Compile Include="TraficReport\SourceRefMapper.cs" />
     <Compile Include="TraficReport\TrafficReport.cs" />
-    <Compile Include="UiReportExt\CustomerData.cs" />
-    <Compile Include="UiReportExt\UiControlData.cs" />
-    <Compile Include="UiReportExt\UiReportExt.cs" />
+    <Compile Include="UiReportsExt\CustomerData.cs" />
+    <Compile Include="UiReportsExt\UiControlData.cs" />
+    <Compile Include="UiReportsExt\UiReportExt.cs" />
     <Compile Include="UiReports\AddressInfo.cs" />
     <Compile Include="UiReports\CustomerInfo.cs" />
     <Compile Include="UiReports\Extractor.cs" />

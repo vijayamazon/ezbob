@@ -1,8 +1,7 @@
-﻿namespace Reports {
+﻿namespace Reports.UiReportsExt {
 	using System;
 
 	class UiControlData : IComparable<UiControlData>{
-
 		public int ID { get; set; }
 		public string Name { get; set; }
 		public int Position { get; set; }
@@ -20,7 +19,5 @@
 
 			return Position.CompareTo(y.Position);
 		} // Compare
-
 	} // class UiControlData
-
-} // namespace Reports
+} // namespace

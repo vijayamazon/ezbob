@@ -1,15 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Text;
-
-namespace Reports {
+﻿namespace Reports.UiReports {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Text;
 
 	public class UiReportItem : IComparable<UiReportItem> {
-
 		public static DataTable CreateTable() {
 			var oOutput = new DataTable();
 
+			oOutput.Columns.Add("Origin", typeof(string));
 			oOutput.Columns.Add("UserID", typeof(int));
 			oOutput.Columns.Add("FirstName", typeof(string));
 			oOutput.Columns.Add("LastName", typeof(string));
@@ -53,6 +52,7 @@ namespace Reports {
 
 		public void ToRow(DataTable tbl) {
 			var oRow = new List<object> {
+				CustomerInfo.Origin,
 				CustomerInfo.ID, CustomerInfo.FirstName, CustomerInfo.Surname,
 				CustomerInfo.WizardStepName, CustomerInfo.TypeOfBusiness,
 				CustomerInfo.IsOffline ? "offline" : "online"
@@ -89,7 +89,5 @@ namespace Reports {
 		} // Compare
 
 		private readonly SortedDictionary<UiItemGroups, UiReportItemGroupData> m_oData; 
-
 	} // class UiReportItem
-
-} // namespace Reports
+} // namespace

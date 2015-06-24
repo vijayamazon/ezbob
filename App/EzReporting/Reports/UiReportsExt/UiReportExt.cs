@@ -1,15 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Ezbob.Utils;
-
-namespace Reports {
+﻿namespace Reports.UiReportsExt {
+	using System;
+	using System.Collections.Generic;
 	using System.Data;
+	using System.Data.Common;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
 
 	public class UiReportExt : SafeLog {
-
 		public UiReportExt(AConnection oDB, DateTime oDateStart, DateTime oDateEnd, ASafeLog log) : base(log) {
 			VerboseLogging = false;
 
@@ -42,6 +40,7 @@ namespace Reports {
 
 			var oColumns = new List<ColumnInfo>();
 
+			oOutput.Columns.Add("Origin", typeof(string));
 			oOutput.Columns.Add("UserID", typeof(int));
 			oOutput.Columns.Add("FirstName", typeof(string));
 			oOutput.Columns.Add("LastName", typeof(string));
@@ -49,6 +48,7 @@ namespace Reports {
 			oOutput.Columns.Add("TypeOfBusiness", typeof(string));
 			oOutput.Columns.Add("Offline", typeof(string));
 
+			oColumns.Add(new ColumnInfo("Origin", "Origin"));
 			oColumns.Add(new ColumnInfo("UserID", "UserID"));
 			oColumns.Add(new ColumnInfo("FirstName", "FirstName"));
 			oColumns.Add(new ColumnInfo("LastName", "LastName"));
@@ -71,6 +71,7 @@ namespace Reports {
 
 			foreach (var oCustomer in oCustomers) {
 				var oRow = new List<object> {
+					oCustomer.Origin,
 					oCustomer.ID, oCustomer.FirstName, oCustomer.Surname,
 					oCustomer.WizardStepName, oCustomer.TypeOfBusiness,
 					oCustomer.IsOffline ? "offline" : "online"
@@ -174,7 +175,5 @@ namespace Reports {
 		private readonly DateTime m_oDateEnd;
 
 		private Action<DbDataReader> m_oCurHandler;
-
 	} // class UiReportExt
-
-} // namespace Reports
+} // namespace

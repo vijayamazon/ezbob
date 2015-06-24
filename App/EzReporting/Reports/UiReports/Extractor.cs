@@ -1,11 +1,9 @@
-﻿using System;
-using System.Data;
-using System.Globalization;
-
-namespace Reports {
+﻿namespace Reports.UiReports {
+	using System;
+	using System.Data;
+	using System.Globalization;
 
 	public abstract class Extractor {
-
 		protected Extractor(IDataRecord oRow) {
 			m_oRow = oRow;
 		} // constructor
@@ -54,7 +52,5 @@ namespace Reports {
 		} // Get
 
 		private readonly IDataRecord m_oRow;
-
 	} // class Extractor
-
-} // namespace Reports
+} // namespace

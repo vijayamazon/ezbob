@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-
-namespace Reports {
+﻿namespace Reports.UiReports {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
 	using EZBob.DatabaseLib.Model.Database;
 	using MainAppReferences;
+	using Reports.UiReportsExt;
 
 	public class CustomerInfo : CustomerData {
-
 		public CustomerInfo(
 			IDataRecord oRow,
 			SortedDictionary<int, AddressInfo> oAddressList,
@@ -22,6 +21,7 @@ namespace Reports {
 			TimeAtAddress = Retrieve<int>("TimeAtAddress");
 			PropertyStatusDescription = Retrieve("Description");
 			CompanyName = Retrieve("CompanyName");
+			Origin = Retrieve("Origin");
 
 			WizardStep = Retrieve<int>("WizardStep").Value;
 
@@ -39,6 +39,7 @@ namespace Reports {
 		public string PropertyStatusDescription { get; private set; }
 		public string CompanyName { get; private set; }
 		public int WizardStep { get; private set; }
+		public string Origin { get; private set; }
 
 		public AddressInfo AddressInfo { get; private set; }
 		public int DirectorCount { get; private set; }
@@ -73,7 +74,7 @@ namespace Reports {
 
 		public override string ToString() {
 			return string.Format(
-				"{13}: {12} {0} {1} {2}, born on {3}, currently {4}, available at {5} or {6}, " +
+				"{17} {13}: {12} {0} {1} {2}, born on {3}, currently {4}, available at {5} or {6}, " +
 				"residental age is {7}, is a {8}, business {9}, company name {10} " +
 				"addresses {14}, director count {15}, account count {16}",
 				NameTitle(),
@@ -92,7 +93,8 @@ namespace Reports {
 				ID,
 				Value(AddressInfo),
 				DirectorCount,
-				AccountCount
+				AccountCount,
+				Origin
 			);
 		} // ToString
 
@@ -144,7 +146,5 @@ namespace Reports {
 
 			return true;
 		} // HasHomeAddress
-
 	} // class CustomerInfo
-
-} // namespace Reports
+} // namespace

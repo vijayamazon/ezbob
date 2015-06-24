@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Common;
-using Ezbob.Database;
-using Ezbob.Logger;
-using Ezbob.Utils;
-
-namespace Reports {
+﻿namespace Reports.UiReports {
+	using System;
+	using System.Collections.Generic;
+	using System.Data.Common;
+	using Ezbob.Database;
+	using Ezbob.Logger;
+	using Ezbob.Utils;
 
 	public class UiReport : SafeLog {
-
 		public UiReport(AConnection oDB, DateTime oDateStart, DateTime oDateEnd, ASafeLog log) : base(log) {
 			VerboseLogging = false;
 
@@ -310,7 +308,5 @@ namespace Reports {
 		private Action<DbDataReader> m_oCurHandler;
 
 		private readonly SortedDictionary<UiItemGroups, SortedDictionary<int, string>> m_oControlGroups;
-
 	} // class UiReport
-
-} // namespace Reports
+} // namespace

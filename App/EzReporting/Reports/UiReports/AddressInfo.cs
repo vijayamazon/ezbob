@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
-using System.Linq;
-
-namespace Reports {
+﻿namespace Reports.UiReports {
+	using System;
+	using System.Collections.Generic;
+	using System.Data;
+	using System.Linq;
 	using MainAppReferences;
 
 	public class AddressInfo {
@@ -39,7 +38,5 @@ namespace Reports {
 		} // ToString
 
 		private readonly SortedDictionary<CustomerAddressType, int> m_oAddressCount;
-
 	} // class AddressInfo
-
-} // namespace Reports
+} // namespace
