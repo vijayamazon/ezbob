@@ -16,7 +16,7 @@ UPDATE CustomerStatuses SET IsEnabled=0 WHERE Id IN (1,2,3,4,5,8,9,18,20,21,27,2
 GO
 
 
-IF EXISTS (SELECT * FROM syscolumns WHERE id=object_id('CustomerStatuses') AND name='IsVisible')
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('CustomerStatuses') AND name='IsVisible')
 BEGIN
 	ALTER TABLE CustomerStatuses DROP COLUMN TimestampCounter
 	ALTER TABLE CustomerStatuses ADD IsVisible BIT NOT NULL DEFAULT(0)
