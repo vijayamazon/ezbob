@@ -117,7 +117,6 @@
     <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\SpLoadCashRequests.cs" />
     <Compile Include="AutomationVerification\BravoAutomationReport\LoadAndCategorize\SpSaveResults.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\AutoApprove\Agent.cs" />
-    <Compile Include="AutomationVerification\CharlieAutomationReport\AutoApprove\CaisAccount.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\AutoApprove\Checker.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\Car.cs" />
     <Compile Include="AutomationVerification\CharlieAutomationReport\CarCaisAccount.cs" />

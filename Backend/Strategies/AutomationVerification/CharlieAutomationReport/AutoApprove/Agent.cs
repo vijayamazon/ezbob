@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 
@@ -20,37 +21,32 @@
 			AConnection oDB,
 			ASafeLog oLog
 		) : base(nCustomerID, nSystemCalculatedAmount, nMedal, nMedalType, turnoverType, now, oDB, oLog) {
-			this.badCaisAccounts = new List<CaisAccount>();
 		} // constructor
 
 		public IEnumerable<string> FindBadCaisStatuses() {
-			return this.badCaisAccounts.Select(ca => ca.ToString());
+			return CaisAccounts
+				.Where(ca => CarCaisAccount.IsBad(
+					Now,
+					ca.LastUpdatedDate,
+					Math.Max(ca.Balance ?? 0, ca.CurrentDefBalance ?? 0),
+					ca.AccountStatusCodes
+				))
+				.Select(ca => string.Format(
+					"ID {0}, updated on {1}, balance {2}, codes {3}",
+					ca.Id,
+					(ca.LastUpdatedDate ?? DateTime.UtcNow).DateStr(),
+					Math.Max(ca.Balance ?? 0, ca.CurrentDefBalance ?? 0),
+					ca.AccountStatusCodes
+				));
 		} // FindBadCaisStatuses
 
 		protected override BaseChecker CreateChecker() {
 			return new CarChecker(this);
 		} // CreateChecker
 
-		protected override void GatherData() {
-			base.GatherData();
-
-			Trail.MyInputData.WorstStatusList.Clear();
-
-			Trail.MyInputData.SetWorstStatuses(FindBadCaisStatuses());
-		} // GatherData
-
-		protected override void ProcessRow(SafeReader sr) {
-			base.ProcessRow(sr);
-
-			if (LastRowType != RowType.Cais)
-				return;
-
-			CaisAccount ca = sr.Fill<CaisAccount>();
-
-			if (ca.IsBad(Now))
-				this.badCaisAccounts.Add(ca);
-		} // ProcessRow
-
-		private readonly List<CaisAccount> badCaisAccounts;
+		protected override bool WorstCaisStatusIsRelevant(SafeReader sr) {
+			DateTime? lastUpdated = sr["LastUpdatedDate"];
+			return lastUpdated.HasValue && (lastUpdated.Value.AddYears(1) >= Now);
+		} // WorstCaisStatusIsRelevant
 	} // class Agent
 } // namespace

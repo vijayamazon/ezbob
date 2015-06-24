@@ -218,7 +218,8 @@
 				break;
 
 			case RowType.Cais:
-				WorstStatuses.Add(sr["WorstStatus"]);
+				if (WorstCaisStatusIsRelevant(sr))
+					WorstStatuses.Add(sr["WorstStatus"]);
 				break;
 
 			case RowType.OriginationTime:
@@ -249,6 +250,12 @@
 				throw new ArgumentOutOfRangeException();
 			} // switch
 		} // ProcessRow
+
+		protected virtual bool WorstCaisStatusIsRelevant(SafeReader sr) {
+			return true;
+		} // WorstCaisStatusIsRelevant
+
+		protected virtual List<ExperianConsumerDataCaisAccounts> CaisAccounts { get { return this.caisAccounts; } }
 
 		private readonly List<ExperianConsumerDataCaisAccounts> caisAccounts;
 	} // class Agent
