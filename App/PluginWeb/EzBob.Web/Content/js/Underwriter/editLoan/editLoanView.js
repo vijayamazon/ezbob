@@ -102,6 +102,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             request.fail(function() {
                 self.ui.data_error.fadeIn().fadeOut(3000);
             }); //on fail
+        } else {
+            $('#exception-msg').hide();
+            $('#exception-div').show();
+            $('#radio-2').prop('checked', false);
+            $('#outside-return-error').hide();
         }
     },
     reschSubmitForm: function () {
@@ -200,6 +205,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             request.success(function (res) {
                 self.model.set('OutsideWeek', res.IntervalsNumWeeks);
                 self.model.set('OutsideMonth', res.IntervalsNum);
+                if (res.Error !== "") {
+                    $('#return-error-text').text(res.Error);
+                    $('#outside-return-error').fadeIn();
+                }
             }); //on success
 
             request.fail(function () {
