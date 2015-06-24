@@ -45,6 +45,7 @@
 		private readonly ISuggestedAmountRepository _suggestedAmountRepository;
 		private readonly CustomerPhoneRepository customerPhoneRepository;
 		private readonly IExternalCollectionStatusesRepository externalCollectionStatusesRepository;
+		private readonly ILoanRepository loanRepository;
 
 		private static readonly ASafeLog log = new SafeILog(typeof(ApplicationInfoController));
 
@@ -62,7 +63,7 @@
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
 			CustomerPhoneRepository customerPhoneRepository, 
-			IExternalCollectionStatusesRepository externalCollectionStatusesRepository, LoanOptionsRepository loanOptionsRepository) {
+			IExternalCollectionStatusesRepository externalCollectionStatusesRepository, LoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository) {
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
 			_loanTypes = loanTypes;
@@ -79,6 +80,7 @@
 			this.customerPhoneRepository = customerPhoneRepository;
 			this.externalCollectionStatusesRepository = externalCollectionStatusesRepository;
 			this.loanOptionsRepository = loanOptionsRepository;
+			this.loanRepository = loanRepository;
 		}
 
 		// Here we get VA\FCF\Turnover
@@ -421,13 +423,32 @@
 			oCustomer.ExternalCollectionStatus = newExternalCollectionStatus;
 			log.Debug("Customer({0}).ExternalCollectionStatus set to {1}", id, externalStatusID);
 
+			DateTime now = DateTime.UtcNow;
+
 			if (newExternalCollectionStatus != prevExternalCollectionStatus && (newExternalCollectionStatus == null || prevExternalCollectionStatus == null)) {
 				foreach (Loan loan in oCustomer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
+					bool customerInGoodStatus = newExternalCollectionStatus == null && oCustomer.CollectionStatus.CurrentStatus.IsEnabled;
 					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
-					//Update Late Fees flag according to the new External Collection Status or absense of any status
-					options.AutoLateFees = newExternalCollectionStatus == null;
-					//todo stop interest rate
+					options.AutoLateFees = customerInGoodStatus;
+
 					this.loanOptionsRepository.SaveOrUpdate(options);
+
+					if (!customerInGoodStatus) {
+						loan.InterestFreeze.Add(new LoanInterestFreeze {
+							Loan = loan,
+							StartDate = now.Date,
+							EndDate = (DateTime?)null,
+							InterestRate = 0,
+							ActivationDate = now,
+							DeactivationDate = null
+						});
+					} else if (loan.InterestFreeze.Any(f => f.EndDate == null && f.DeactivationDate == null)) {
+						foreach (var interestFreeze in loan.InterestFreeze.Where(f => f.EndDate == null && f.DeactivationDate == null)) {
+							interestFreeze.DeactivationDate = now;
+						}
+					}
+
+					this.loanRepository.SaveOrUpdate(loan);
 				}
 			} 
 
