@@ -700,7 +700,7 @@
                     
                 } // if
 
-                AddNewDecisionOffer(now, cr, loanTypeIdToUse);
+               // AddNewDecisionOffer(now, cr, loanTypeIdToUse);
             } // if
 
             customer.LastStartedMainStrategyEndTime = now;

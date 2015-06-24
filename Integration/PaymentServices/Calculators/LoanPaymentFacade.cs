@@ -94,7 +94,7 @@
 				nlModel.PaypointTransaction.IP = ip;
 				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); 
 	
-				var nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
+				//var nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
 				
 				//Log.Debug(nlPayment.Payment.ToString());
 			}
