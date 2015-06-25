@@ -6,6 +6,7 @@
 	using System.Web.Script.Serialization;
 	using Broker;
 	using CustomerRelations;
+	using Ezbob.Utils.Extensions;
 	using Loans;
 	using Iesi.Collections.Generic;
 	using NHibernate.Type;
@@ -142,13 +143,17 @@
 		public virtual string Surname { get; set; }
 		public virtual string Fullname { get; set; }
 		public virtual DateTime? DateOfBirth { get; set; }
+		public virtual int Age { get { return DateOfBirth == null ? 0 : (int)(DateTime.Today - DateOfBirth.Value).TotalDays / 365;} }
 		public virtual int? TimeAtAddress { get; set; }
 		public virtual int PropertyStatus { get; set; }
 		public virtual Gender Gender { get; set; }
+		public virtual string GenderName { get { return Gender.ToString(); } }
 		public virtual MaritalStatus MaritalStatus { get; set; }
 		public virtual TypeOfBusiness TypeOfBusiness { get; set; }
 		public virtual string TypeOfBusinessName { get { return TypeOfBusiness.ToString(); } }
+		public virtual string TypeOfBusinessDescription { get { return TypeOfBusiness.DescriptionAttr(); } }
 		public virtual IndustryType? IndustryType { get; set; }
+		public virtual string IndustryTypeDescription { get { return IndustryType == null ? null : IndustryType.Value.ToString(); }}
 		public virtual string DaytimePhone { get; set; }
 		public virtual string MobilePhone { get; set; }
 		public virtual bool MobilePhoneVerified { get; set; }

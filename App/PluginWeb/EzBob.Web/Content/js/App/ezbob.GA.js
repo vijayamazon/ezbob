@@ -3,13 +3,24 @@ var EzBob = EzBob || {};
 EzBob.GA = (function() {
 	function GA() { }
 
-	GA.prototype.trackPage = function(url, title) {
+	GA.prototype.trackPage = function(url, title, options) {
 		if (dataLayer) {
-			dataLayer.push({
-				'event':'VirtualPageview',
-				'virtualPageURL':url,
-				'virtualPageTitle' : title
-			});
+			var gtmPushRequest = {
+				'event': 'VirtualPageview',
+				'virtualPageURL': url,
+				'virtualPageTitle': title,
+				'Device': navigator.userAgent
+			};
+
+			if (options) {
+				for (var i in options) {
+					if (options.hasOwnProperty(i)) {
+						gtmPushRequest[i] = options[i];
+					}
+				}
+			}
+
+			dataLayer.push(gtmPushRequest);
 		}
 
 		//if ((typeof _gaq !== "undefined" && _gaq !== null))

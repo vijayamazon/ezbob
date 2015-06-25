@@ -94,8 +94,27 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 	},
 
 	getCash: function() {
-		$(document).attr("title", "Get Cash: Select Loan Amount | EZBOB");
-		EzBob.App.GA.trackPage('/Customer/Profile/GetCash');
+		$(document).attr("title", "Get Cash: Select Loan Amount");
+
+
+		var address = this.customer.get('PersonalAddress');
+		var postcode = '';
+		if (address && address.models && address.models.length > 0) {
+			postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
+		}
+
+		var personalInfo = this.customer.get('CustomerPersonalInfo');
+
+		EzBob.App.GA.trackPage('/Customer/Profile/GetCash', 'Get Cash: Select Loan Amount', {
+			Amount: this.customer.get('CreditSum'),
+			Length: this.customer.get('LastApprovedRepaymentPeriod'),
+			Gender: personalInfo ? personalInfo.GenderName || '' : '',
+			Age: personalInfo ? personalInfo.Age || '' : '',
+			Postcode: postcode,
+			TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
+			IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
+			LeadID: this.customer.get('RefNumber') || ''
+		});
 
 		var applyForLoanView = new EzBob.Profile.ApplyForLoanTopView({ customer: this.customer, model: new EzBob.Profile.ApplyForLoanTopViewModel() });
 

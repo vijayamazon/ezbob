@@ -239,7 +239,26 @@ EzBob.WizardView = EzBob.View.extend({
             return;
 
         var currStep = this.steps[current];
-        EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle);
+
+        var address = this.customer.get('PersonalAddress');
+	    var postcode = '';
+	    if (address && address.models && address.models.length > 0) {
+		    postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
+	    }
+
+	    var personalInfo = this.customer.get('CustomerPersonalInfo');
+
+	    EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle,
+	    {
+	    	Amount: this.customer.get('RequestedAmount') || '',
+	    	Length: '',
+	    	Gender: personalInfo ? personalInfo.GenderName || '' : '',
+	    	Age: personalInfo ? personalInfo.Age || '' : '',
+	    	Postcode: postcode,
+	    	TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
+	    	IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
+	    	LeadID: this.customer.get('RefNumber') || ''
+	    });
         $(document).attr('title', currStep.documentTitle);
         EzBob.App.trigger('wizard:progress', currStep.progress);
 
