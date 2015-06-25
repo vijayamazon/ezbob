@@ -209,7 +209,7 @@ BEGIN
 		WHERE
 			cr.AutoDecisionID = 1 -- Auto Approval
 			AND
-			CONVERT(DATE, cr.CreationDate) = @Today
+			CONVERT(DATE, cr.UnderwriterDecisionDate) = @Today
 	), 0)
 
 	------------------------------------------------------------------------------

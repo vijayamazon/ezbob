@@ -38,14 +38,12 @@
 		} // CalculateSeniority
 
 		private int CalculateTodaysApprovals() {
-			DateTime today = Now;
-
 			return this.cashRequestsRepository.GetAll().Count(cr =>
-				cr.CreationDate.HasValue &&
-				cr.CreationDate.Value.Year == today.Year &&
-				cr.CreationDate.Value.Month == today.Month &&
-				cr.CreationDate.Value.Day == today.Day &&
-				cr.UnderwriterComment == "Auto Approval"
+				cr.UnderwriterDecisionDate.HasValue &&
+				cr.UnderwriterDecisionDate.Value.Year == Now.Year &&
+				cr.UnderwriterDecisionDate.Value.Month == Now.Month &&
+				cr.UnderwriterDecisionDate.Value.Day == Now.Day &&
+				cr.AutoDecisionID == 1
 			);
 		} // CalculateTodaysApprovals
 
