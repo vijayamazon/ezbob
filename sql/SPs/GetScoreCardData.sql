@@ -124,6 +124,7 @@ BEGIN
 			INNER JOIN Loan l ON l.Id = lc.LoanId
 			WHERE cv.Name = 'LatePaymentCharge'
 			AND l.CustomerId = @CustomerId
+			AND lc.State!='Deleted'
 		) AS LatePayments,
 		-- EZBOB #of previous early payments
 		(

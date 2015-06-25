@@ -30,6 +30,7 @@ BEGIN
 		INNER JOIN ConfigurationVariables cv ON ch.ConfigurationVariableId = cv.Id
 	WHERE
 		cv.Name LIKE '%Charge'
+		AND ch.State!='Deleted'
 	GROUP BY
 		l.Id
 

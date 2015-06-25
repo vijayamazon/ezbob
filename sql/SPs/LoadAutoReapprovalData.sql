@@ -127,6 +127,8 @@ BEGIN
 			l.Customerid = @CustomerId
 			AND
 			@LacrTime < lc.[Date] AND lc.[Date] < @Now
+			AND
+			lc.State!='Deleted'
 	), 0)
 
 	------------------------------------------------------------------------------

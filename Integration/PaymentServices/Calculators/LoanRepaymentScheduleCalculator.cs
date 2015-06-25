@@ -126,7 +126,7 @@
             _loan = loan;
             _schedule = loan.Schedule;
             _payments = loan.TransactionsWithPaypointSuccesefull;
-            _charges = loan.Charges.OrderBy(x => x.Date).ToList();
+            _charges = loan.Charges.Where(x => x.State != "Deleted").OrderBy(x => x.Date).ToList();
 
             _term = (term ?? DateTime.UtcNow).Date;
 

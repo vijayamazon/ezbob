@@ -49,7 +49,8 @@ a[data-bug-type],
 #SuspendBtn,
 #ReturnBtn,
 .disable-shop,
-.permission-HideBrokerClientDetails .broker-client-detail
+.permission-HideBrokerClientDetails .broker-client-detail,
+.old-schedule-button
 {
     display: none;
     visibility: hidden; /* JQuery hide/show function use display:none. So we need to property visibility */
@@ -73,6 +74,12 @@ a[data-bug-type],
      visibility: visible;
 }
 
+/*delete and update installments option in edit loan*/
+.permission-RemoveFee .old-schedule-button
+{
+     display: inline-block;
+     visibility: visible;
+}
 /*Email confirmation button / change phones */
 
 .permission-EmailConfirmationButton [name="editEmail"]

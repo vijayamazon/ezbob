@@ -13,6 +13,8 @@
 		public virtual ConfigurationVariable ChargesType { get; set; }
 		public virtual DateTime Date { get; set; }
 		public virtual string Description { get; set; }
+        public virtual DateTime? DeletedDate { get; set; }
+        public virtual int? UserId { get; set; }
 
 		public override string ToString() {
 			return string.Format("Amount: {0}, Date: {1}", Amount, Date);
@@ -37,6 +39,8 @@
 			References(x => x.Loan, "LoanId");
 			Map(x => x.Date, "`Date`").CustomType<UtcDateTimeType>();
 			Map(x => x.Description);
+            Map(x => x.DeletedDate).CustomType<UtcDateTimeType>();
+            Map(x => x.UserId);
 		} // constructor
 	} // class LoanChargesMap
 } // namespace

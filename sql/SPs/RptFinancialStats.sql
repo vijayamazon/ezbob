@@ -427,6 +427,7 @@ BEGIN
 		@DateStart <= ch.Date AND ch.Date < @DateEnd
 		AND
 		cv.Name LIKE '%Charge'
+		AND ch.State!='Deleted'
 	GROUP BY
 		cv.Name
 	

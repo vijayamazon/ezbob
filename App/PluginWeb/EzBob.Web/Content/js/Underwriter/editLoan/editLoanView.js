@@ -70,6 +70,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click .option-btn': 'fillData',
         'click .edit-schedule-item': 'editScheduleItem',
         'click .remove-schedule-item': 'removeScheduleItem',
+        'click .remove-schedule-fee': 'removeScheduleFee',
         'click .add-installment': 'addInstallment',
         'click .add-fee': 'addFee',
         'click .save': 'onOk',
@@ -283,6 +284,26 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         this.editRegion.show(view);
         this.ui.buttons.hide();
     }, // showEditView
+
+    removeScheduleFee: function (e) {
+        var self = this;
+        var id = e.currentTarget.getAttribute('data-id');
+
+        var d = new EzBob.Dialogs.TextEdit({
+            model: this.model,
+            title: 'Comment this fee deletion',
+            width: 400,
+            postValueName: 'comment',
+            url: "Underwriter/LoanEditor/RemoveFee/",
+            data: {
+                id: id
+            },
+        });
+
+        d.render();
+
+        d.on('done', function () { self.model.fetch().done(function() { self.model.trigger('sync');}); });
+    }, // removeScheduleFee
 
     removeScheduleItem: function (e) {
         var self = this;

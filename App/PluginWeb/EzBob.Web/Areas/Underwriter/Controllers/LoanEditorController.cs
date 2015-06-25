@@ -31,6 +31,7 @@
 	    private ILoanOptionsRepository loanOptionsRepository;
         private readonly IWorkplaceContext _context;
 	    private readonly ServiceClient serviceClient;
+        private readonly LoanChargesRepository loanChargesRepository;
         private static readonly ILog Log = LogManager.GetLogger(typeof(LoanEditorController));
 
         public LoanEditorController(
@@ -41,6 +42,7 @@
 			LoanBuilder loanBuilder, 
 			ILoanChangesHistoryRepository history, 
 			IWorkplaceContext context, 
+            LoanChargesRepository loanChargesRepository,
 			ILoanOptionsRepository loanOptionsRepository)
         {
             _loans = loans;
@@ -52,6 +54,7 @@
             _context = context;
 	        this.loanOptionsRepository = loanOptionsRepository;
 	        this.serviceClient = new ServiceClient();
+            this.loanChargesRepository = loanChargesRepository;
         }
 
         [Ajax]
@@ -348,5 +351,23 @@
 			    this.loanOptionsRepository.SaveOrUpdate(options);
 		    }
 	    }
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult RemoveFee(int id, string comment) {
+
+            //this._context.UserId
+
+            LoanCharge fee = this.loanChargesRepository.GetByFeeId(id);
+            if (fee==null)
+                return Json(new {error="Fee not found"});
+            fee.UserId = this._context.UserId;
+            fee.DeletedDate = DateTime.UtcNow;
+            fee.State = "Deleted";
+            fee.Description = string.Format("Creation comment: {0}, Deletion comment: {1}", fee.Description,comment);
+            this.loanChargesRepository.SaveOrUpdate(fee);
+            return Json(true);
+        }
     }
 }

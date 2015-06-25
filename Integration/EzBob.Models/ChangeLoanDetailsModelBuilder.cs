@@ -109,7 +109,7 @@
 				Status = item.State ?? "Active",
 				Description = item.Description,
 				Editable = true,
-				Deletable = true,
+                Deletable = item.State == null || item.State == "Active" ? true : false,
 				Type = "Fee",
 				Editor = "Fee"
 			};

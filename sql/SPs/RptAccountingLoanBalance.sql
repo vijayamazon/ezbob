@@ -50,6 +50,7 @@ BEGIN
 		LEFT JOIN LoanCharges lc
 			ON l.Id = lc.LoanId
 			AND lc.Date < @DateEnd
+			AND lc.State != 'Deleted'
 		LEFT JOIN LoanTransactionMethod lm
 			ON t.LoanTransactionMethodId = lm.Id
 	WHERE

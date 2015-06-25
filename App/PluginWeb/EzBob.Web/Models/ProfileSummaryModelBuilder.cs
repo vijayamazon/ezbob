@@ -551,13 +551,15 @@
 			var totalFees =
 				(from l in customer.Loans
 					from c in l.Charges
-					where c.State != "Expired"
+					where c.State != "Expired" 
+                    where c.State != "Deleted"
 					where c.Amount > 0
 					select c.Amount).Sum();
 			var feesCount =
 				(from l in customer.Loans
 					from c in l.Charges
 					where c.State != "Expired"
+                    where c.State != "Deleted"
 					where c.Amount > 0
 					select c.Amount).Count();
 

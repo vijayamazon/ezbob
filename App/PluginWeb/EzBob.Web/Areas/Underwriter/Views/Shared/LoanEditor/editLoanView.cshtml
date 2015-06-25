@@ -176,7 +176,7 @@
 <script type="text/template" id="loan_editor_schedule_template">
 
 
-	<h4>Standard Schedule</h4>
+	<h4>Loan Info</h4>
 	<table class="table table-selected centered" style="white-space: nowrap;">
 		<thead class="box">
 			<tr class="box-title">
@@ -204,22 +204,26 @@
 				<td>
 					<%- i+1 %>&nbsp;<%
 					if (item.Editable) { %>
-					<button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
+                    <button class="btn btn-primary btn-mini edit-schedule-item old-schedule-button" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
 					<%
 					}
 
-					if (item.Deletable) { %>
-					<button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
-					<%
-					}
-					%>
+                    if (item.Deletable) { %>
+                    <button class="btn btn-primary btn-mini remove-schedule-item old-schedule-button" data-id="<%- i %>"><i class="fa fa-trash"></i></button>
+                    <%
+                    }
+                    if (item.Type === "Fee" && item.Deletable) { %>
+                    <button class="btn btn-primary btn-mini remove-schedule-fee" data-id="<%- item.Id %>"><i class="fa fa-trash-o"></i></button>
+                    <%
+                    }
+                    %>
 				</td>
 
 				<td style="text-align: center"><%- EzBob.formatDateWithoutTime(item.Date) %></td>
 				<%
 
 				if (item.Type == "Fee") {
-				%>
+				    if(item.Status=="Active"){%>
 				<td></td>
 				<td></td>
 				<td></td>
@@ -228,7 +232,16 @@
 				<td style="text-align: center"><%- item.Status %></td>
 				<td></td>
 				<td style="text-align: center"><%- item.Description %></td>
-				<%
+                    <%}else{%>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: center;text-decoration:line-through"><%- EzBob.formatPounds(item.Fees) %></td>
+                <td style="text-align: center"><%- item.Status %></td>
+                <td></td>
+                <td style="text-align: center"><%- item.Description %></td>
+				<%}
 				} else if (item.Type == "Installment") {
 				%>
 				<td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
