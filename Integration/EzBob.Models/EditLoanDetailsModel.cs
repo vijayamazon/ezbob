@@ -57,9 +57,15 @@ namespace EzBob.Models
 
         public bool HasErrors { get { return Errors.Any(); } }
 
-		public List<string> InterestFreeze { get; set; } 
+		public List<string> SInterestFreeze { get; set; }
 
-        public void Validate()
+		private IList<InterestFreezeModel> _interestFreeze = new List<InterestFreezeModel>();
+		public IList<InterestFreezeModel> InterestFreeze {
+			get { return this._interestFreeze; }
+			set { this._interestFreeze = value; }
+		}
+
+		public void Validate()
         {
             Errors.Clear();
             
@@ -136,6 +142,13 @@ namespace EzBob.Models
 		
 			sb.AppendLine("Installment:");
 			foreach (var item in Items.Where(s => s.Type == "Installment")){
+				sb.Append("\t");
+				sb.AppendLine(item.ToString());
+			}
+
+
+			sb.AppendLine("Freezes:");
+			foreach (var item in InterestFreeze.Where(f=>f.DeactivationDate==null)) {
 				sb.Append("\t");
 				sb.AppendLine(item.ToString());
 			}

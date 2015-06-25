@@ -7,7 +7,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using NHibernate.Linq;
 
 	public class ChangeLoanDetailsModelBuilder {
 		public EditLoanDetailsModel BuildModel(Loan loan) {
@@ -32,8 +31,19 @@
 
 			model.Items = model.Items.OrderBy(i => i.Date).ToList();
 
-			model.InterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList();
-
+			model.SInterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList();
+			
+			foreach (LoanInterestFreeze fr in loan.InterestFreeze.OrderBy(fr => fr.StartDate).Where(fr => fr.DeactivationDate == null)) {
+				model.InterestFreeze.Add(new InterestFreezeModel {
+					Id = fr.Id,
+					StartDate = (DateTime)fr.StartDate,
+					EndDate = fr.EndDate,
+					InterestRate = fr.InterestRate,
+					ActivationDate = fr.ActivationDate,
+					DeactivationDate = fr.DeactivationDate
+				});
+			}
+			
 			return model;
 		}
 
@@ -150,6 +160,15 @@
 				loan.Charges.Add(x);
 			}
 
+			loan.InterestFreeze = model.InterestFreeze.Select(item => new LoanInterestFreeze() {
+				StartDate = item.StartDate,
+				EndDate = item.EndDate,
+				ActivationDate = item.ActivationDate,
+				DeactivationDate = item.DeactivationDate,
+				InterestRate = item.InterestRate,
+				Id = item.Id
+			}).ToList();
+			
 			return loan;
 		}
 
@@ -231,7 +250,7 @@
 				if (actual.Schedule.Any(x => x.Id == item.Id)) {
 
 
-			//		var installment = actual.Schedule.Single(x => x.Id == item.Id);
+					//		var installment = actual.Schedule.Single(x => x.Id == item.Id);
 					var installment = actual.Schedule.First(x => x.Id == item.Id);
 					actual.Schedule.Remove(installment);
 					item.Balance = installment.Balance;
@@ -239,7 +258,7 @@
 					item.InterestRate = installment.InterestRate;
 					continue;
 				}
-				
+
 				//иначе Installment был удален
 				loan.Schedule.Remove(item);
 			}

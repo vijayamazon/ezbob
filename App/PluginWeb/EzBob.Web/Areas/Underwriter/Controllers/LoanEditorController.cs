@@ -231,7 +231,7 @@
                 UpdateLoanOptions(loanID, intervalType, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
             }
 
-	      //  save = false; // TEMPORARY - DONT'T SPOIL DB
+	     
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;

@@ -13,7 +13,6 @@
 		public virtual LoanScheduleStatus Status { get; set; }
 		public virtual decimal LateCharges { get; set; }
 		public virtual decimal RepaymentAmount { get; set; }
-	//	public virtual Loan Loan { get; set; }
 		public virtual int LoanId { get; set; }
 		public virtual int Position { get; set; }
 		public virtual decimal LoanRepayment { get; set; }
@@ -43,8 +42,6 @@
 				LoanRepayment = fromItem.LoanRepayment,
 				Principal = fromItem.Principal,
 				LoanId = fromItem.Loan.Id,
-			//	Position = fromItem.p
-				//Loan = fromItem.Loan,
 				AmountDue = fromItem.AmountDue,
 				Interest = fromItem.Interest,
 				InterestPaid = fromItem.InterestPaid,
@@ -63,13 +60,7 @@
 		}
 
 		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(LoanScheduleDeleted);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \t");
-			}
-			return sb.ToString();
+			return string.Format("LoanScheduleDeleted: Date: {0, 10} Balance: {1, 10} AmountDue: {2, 10} LoanRepayment: {3, 10} Interest: {4, 10} Fees: {5, 10} Status: {6, 10}, InterestRate: {7, 10}, Id: {8,10}", Date, Balance, AmountDue, LoanRepayment, Interest, Fees, Status, InterestRate, Id);
 		}
 	}
 
@@ -78,9 +69,7 @@
 
 	public sealed class LoanScheduleDeletedMap : ClassMap<LoanScheduleDeleted> {
 		public LoanScheduleDeletedMap() {
-
 			Table("LoanScheduleDeleted");
-
 			Id(x => x.Id).GeneratedBy.Native();
 			Map(x => x.LoanScheduleID);
 			Map(x => x.Date).CustomType<UtcDateTimeType>();
@@ -101,7 +90,6 @@
 			Map(x => x.LastNoticeSent);
 			Map(x => x.DatePaid).Nullable().CustomType<UtcDateTimeType>();
 			Map(x => x.LoanId);
-			//References(x => x.Loan, "LoanId");
 		}
 	}
 

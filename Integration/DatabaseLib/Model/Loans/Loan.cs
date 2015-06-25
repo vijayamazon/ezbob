@@ -476,6 +476,12 @@
 				sb.AppendLine(item.ToString());
 			}
 
+			sb.AppendLine("InterestFreeze:");
+			foreach (var item in InterestFreeze) {
+				sb.Append("\t");
+				sb.AppendLine(item.ToString());
+			}
+
 			return sb.ToString();
 		} // ToString
 

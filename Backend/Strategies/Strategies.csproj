@@ -166,7 +166,6 @@
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
-    <Compile Include="NewLoan\RescheduleLoanCopy.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />

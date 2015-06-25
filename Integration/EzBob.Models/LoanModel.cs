@@ -53,7 +53,7 @@
 
         public decimal? InterestDue { get; set; }
 
-        public List<string> InterestFreeze { get; set; }
+        public List<string> SInterestFreeze { get; set; }
 
 		public bool IsEarly { get; set; }
 
@@ -95,7 +95,7 @@
                     LoanType = loan.LoanType.Name,
                     Modified = loan.Modified || (loan.CashRequest != null && !string.IsNullOrEmpty(loan.CashRequest.LoanTemplate)),
                     InterestDue = loan.InterestDue,
-                    InterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList()
+                    SInterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList()
                 };
 
 			if (loan.Schedule != null)

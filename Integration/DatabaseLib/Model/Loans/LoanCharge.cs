@@ -9,13 +9,13 @@
 		public virtual decimal Amount { get; set; }
 		public virtual decimal AmountPaid { get; set; }
 		public virtual string State { get; set; }
-		public virtual Database.Loans.Loan Loan { get; set; }
+		public virtual Loan Loan { get; set; }
 		public virtual ConfigurationVariable ChargesType { get; set; }
 		public virtual DateTime Date { get; set; }
 		public virtual string Description { get; set; }
 
 		public override string ToString() {
-			return string.Format("Amount: {0}, Date: {1}", Amount, Date);
+			return string.Format("Amount: {0}, Date: {1}, Amount paid: {2}, State: {3}", Amount, Date, AmountPaid, State);
 		} // ToString
 
 		public virtual string GetDescription() {

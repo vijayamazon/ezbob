@@ -66,6 +66,14 @@ namespace ApplicationMng.Repository {
 			return this.Session.Load<T>(id);
 		} // Load
 
+		/// <summary>
+		/// evict object
+		/// </summary>
+		/// <param name="val"></param>
+		public void Evict(T val) {
+			this.Session.Evict(val);
+		} // Evict
+
 		public virtual void EnsureTransaction(System.Action action) {
 			this.EnsureTransaction(delegate(ITransaction transaction) { action(); });
 		} // EnsureTransaction

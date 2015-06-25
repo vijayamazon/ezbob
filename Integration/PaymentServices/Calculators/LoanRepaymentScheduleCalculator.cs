@@ -3,7 +3,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using ConfigManager;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 
@@ -397,9 +396,10 @@
 
 			decimal nTotalInterest = 0;
 
-			if (!_loan.HasInterestFreeze) {
-				nTotalInterest = days * InterestRate / _daysInMonth;
+			List<LoanInterestFreeze> freezes = this._loan.InterestFreeze.Where(f => f.DeactivationDate == null).ToList();
 
+			if(freezes.Count == 0 ){
+				nTotalInterest = days * InterestRate / _daysInMonth;
 				/*
 				_log.DebugFormat(
 					"Loan {0}: total interest {5} between {1} and {2} for {3} earning day{4}.",
@@ -422,11 +422,16 @@
 			for (DateTime oCurrent = start.Date; oCurrent < end.Date; oCurrent = oCurrent.AddDays(1)) {
 				bool bContains = false;
 
-				foreach (LoanInterestFreeze lif in _loan.ActiveInterestFreeze) {
+				foreach (LoanInterestFreeze lif in freezes) {
 					if (lif.Contains(oCurrent)) {
+
+						//Console.WriteLine(lif.ToString());
+						
 						nTotalInterest += lif.InterestRate / _daysInMonth;
 
 						bContains = true;
+
+						//Console.WriteLine(nTotalInterest);
 
 						/*
 						_log.DebugFormat(
@@ -455,6 +460,8 @@
 				} // if
 			} // for each day in the month
 
+
+			
 			return nTotalInterest;
 		} // GetInterestRateOneMonth
 

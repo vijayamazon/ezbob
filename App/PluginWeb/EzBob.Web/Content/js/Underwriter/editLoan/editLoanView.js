@@ -26,8 +26,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     }, // serializeData
 
     hasFreeIntrest: function () {
-        var freezArray = this.model.get('InterestFreeze');
-        if (freezArray === null)
+    	var freezArray = this.model.get('SInterestFreeze');
+	    
+	    if (freezArray === null)
             return false;
         var flag = false;
         for (var i = 0; i < freezArray.length; i++) {
@@ -92,7 +93,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
                 self.model.set('WithinMonth', res.IntervalsNum);
                 self.model.set('ReschedulingBalance', res.ReschedulingBalance);
                 
-                if (res.Error === "ReschedulingInPeriodException") {
+                if (res.Error.length > 0) {
                     $('#exception-msg').fadeIn();
                     $('#exception-div').fadeOut();
                     $('#radio-2').prop('checked', true);

@@ -460,14 +460,14 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			this.personalInfoModel.get('CompanyType') === 'Entrepreneur'
 		);
 
-		console.debug(
+		/*console.debug(
 			'document template ids updated for',
 			this.personalInfoModel.get('Origin'),
 			'customer',
 			this.personalInfoModel.get('Id'),
 			': BR =', this.boardResolutionTemplateID,
 			' PG =', this.personalGuaranteeTemplateID
-		);
+		);*/
 	}, // updateDocumentTemplateIDs
 
 	fromTemplate: function(sSelector) {

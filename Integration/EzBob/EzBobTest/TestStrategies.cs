@@ -926,7 +926,45 @@
 
 
 		[Test]
-		public void TestRescheduleLoan() {
+		public void TestRescheduleOUT() {
+			int loanID = 47;
+			Loan loan = new Loan();
+
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanID;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.SaveToDB = true;
+			reModel.RescheduleIn = false;
+			reModel.PaymentPerInterval = 951m;
+
+			var s1 = new RescheduleLoan<Loan>(loan, reModel);
+			try {
+				s1.Execute();
+				m_oLog.Debug("RESULT FOR OUT");
+				m_oLog.Debug(s1.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+			// display
+			/*
+			ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
+			EditLoanDetailsModel model = new EditLoanDetailsModel();
+			var loaan =  ObjectFactory.GetInstance<LoanRepository>().Get(loanID);
+			// 1. build model from DB loan
+			model = loanModelBuilder.BuildModel(loaan);
+			this.m_oLog.Debug("----------------model: \n {0}", model);
+			// 2. create DB loan from the model
+			Loan loan1 = loanModelBuilder.CreateLoan(model);
+			var calc = new LoanRepaymentScheduleCalculator(loan1, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan1);*/
+		}
+
+		[Test]
+		public void TestRescheduleIN() {
 			int loanID = 47;
 			Loan loan = new Loan();
 
@@ -935,61 +973,30 @@
 			reModel.LoanID = loanID;
 			reModel.SaveToDB = false;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
 
-			/*var s = new RescheduleLoan<Loan>(loan, reModel);
+			var s = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
-			}*/
-
-			// OUT loan
-			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 500m;
-			reModel.SaveToDB = true;
-
-			var s1 = new RescheduleLoan<Loan>(loan, reModel);
-
-			try {
-				s1.Execute();
-				m_oLog.Debug("RESULT FOR OUT");
-				m_oLog.Debug(s1.Result.ToString());
-			} catch (Exception e) {
-				Console.WriteLine(e);
 			}
-
-			/*ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
-			EditLoanDetailsModel model = new EditLoanDetailsModel();
-
-			// display
-			var loaan =  ObjectFactory.GetInstance<LoanRepository>().Get(loanID);
-			model = loanModelBuilder.BuildModel(loaan);
-			var loan2 = loanModelBuilder.CreateLoan(model);
-			try {
-				var calc = new LoanRepaymentScheduleCalculator(loan2, reModel.ReschedulingDate, CurrentValues.Instance.AmountToChargeFrom);
-				calc.GetState();
-				m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan saved: \n {0}", loan);
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}*/
 		}
 
-
 		[Test]
-		public void TestRescheduleOutLoan() {
+		public void TestRescheduleOutLoanSimple() {
 			int loanID = 27;
 
 			LoanRepository loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			ChangeLoanDetailsModelBuilder changeLoanModelBuilder = new ChangeLoanDetailsModelBuilder();
-			
+
 			Loan tLoan = loanRepository.Get(loanID);
 			CashRequest cr = tLoan.CashRequest;
 			LoanType lt = tLoan.LoanType;
-			
+
 			//build reschedule model
 			EditLoanDetailsModel model = changeLoanModelBuilder.BuildModel(tLoan);
 
@@ -1049,25 +1056,29 @@
 			EditLoanDetailsModel rescheduledLoanModel = changeLoanModelBuilder.BuildModel(loan);
 
 			m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", rescheduledLoanModel);
-
 		}
 
 		[Test]
 		public void TestLoanOldCalculator() {
-			int loanID = 202;
+			int loanID = 47;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan loan = loanRep.Get(loanID);
-			try {
-				var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-				Console.WriteLine(loan);
-				calc.GetState();
-				Console.WriteLine();
-				Console.WriteLine(loan);
-				//EditLoanDetailsModel model = new ChangeLoanDetailsModelBuilder().BuildModel(loan);
-				//Console.WriteLine(model);
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
+
+			ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
+			EditLoanDetailsModel model = new EditLoanDetailsModel();
+			var loaan =  ObjectFactory.GetInstance<LoanRepository>().Get(loanID);
+
+			// 1. build model from DB loan
+			model = loanModelBuilder.BuildModel(loaan);
+			//m_oLog.Debug("===========================" + model.InterestFreeze.Count);
+
+			// 2. create DB loan from the model
+			Loan loan1 = loanModelBuilder.CreateLoan(model);
+			//m_oLog.Debug("----------------------" + loan1.InterestFreeze.Count);
+
+			var calc = new LoanRepaymentScheduleCalculator(loan1, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan1);
 		}
 
 		[Test]
