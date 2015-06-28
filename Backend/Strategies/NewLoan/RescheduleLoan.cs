@@ -22,6 +22,8 @@
 				this.tLoan = t as Loan;
 				this.tNLLoan = null;
 				this.loanRep = ObjectFactory.GetInstance<LoanRepository>();
+				this.loanRep.Clear();
+
 			} else if (t.GetType() == typeof(NL_Model)) {
 				this.tNLLoan = t as NL_Model;
 				this.tLoan = null;
@@ -47,7 +49,7 @@
 				return;
 			}
 
-			Log.Debug("\n\n\n ==================================================================RE-SCHEDULING=============================================" + this.ReschedulingArguments);
+			Log.Debug("\n\n\n ==================================================================RE-SCHEDULING===========ARGUMENTS:==================================" + this.ReschedulingArguments);
 
 			try {
 
@@ -69,8 +71,8 @@
 
 					if (!this.ReschedulingArguments.SaveToDB)
 						return;
-				} 
-				
+				}
+
 				// remove unpaid (lates, stilltopays passed) and future schedule items
 				foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 					if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
@@ -84,7 +86,7 @@
 						this.tLoan.TryAddRemovedOnReschedule(new LoanScheduleDeleted().CloneScheduleItem(rmv));
 					}
 				}
-				
+
 				decimal P = this.tLoan.Principal;
 				this.Result.ReschedulingBalance = P;
 				decimal F = this.tLoan.Charges.Sum(f => f.Amount);
@@ -92,9 +94,9 @@
 				int periods = 0;
 				decimal I = 0m;
 				var calc = new LoanRepaymentScheduleCalculator(this.tLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-				
+
 				// OUT
-				if( this.ReschedulingArguments.RescheduleIn == false){
+				if (this.ReschedulingArguments.RescheduleIn == false) {
 
 					// get I - Accrued interest to pay untill Rescheduling date
 					DateTime sDate0 = this.ReschedulingArguments.ReschedulingDate; // this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? this.ReschedulingArguments.ReschedulingDate.AddMonths(1) : this.ReschedulingArguments.ReschedulingDate.AddDays(7);
@@ -109,10 +111,8 @@
 					});
 					calc.GetState();
 					I = Decimal.Ceiling(calc.InterestToPay);
-
 					//Log.Debug("-------------------------------I= {0}", I);
-					//Log.Debug("---------------------Accrued interest estimaltion : \n {0}", this.tLoan);
-
+					//Log.Debug("---------------------Accrued interest till now : \n {0}", this.tLoan);
 					// remove "check accrued interest" payment
 					foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 						if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
@@ -132,16 +132,16 @@
 						return;
 					}
 
-					this.Result.LoanCloseDate = this.ReschedulingArguments.ReschedulingDate.AddMonths((k));
+					this.Result.LoanCloseDate = this.ReschedulingArguments.ReschedulingDate.AddMonths(k);
 
 					this.Result.IntervalsNum = MiscUtils.DateDiffInMonths(this.ReschedulingArguments.ReschedulingDate.Date, this.Result.LoanCloseDate.Date);
 					this.Result.IntervalsNumWeeks = MiscUtils.DateDiffInWeeks(this.ReschedulingArguments.ReschedulingDate.Date, this.Result.LoanCloseDate.Date);
 
 					Log.Debug("OUT PaymentPerInterval: {0}, k: {1}", this.ReschedulingArguments.PaymentPerInterval, k);
-
-					if (!this.ReschedulingArguments.SaveToDB)
-						return;
 				}
+
+				if (!this.ReschedulingArguments.SaveToDB)
+					return;
 
 				periods = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? this.Result.IntervalsNum : this.Result.IntervalsNumWeeks;
 
@@ -165,14 +165,15 @@
 					this.tLoan.Schedule.Add(item);
 					balance += Decimal.Ceiling(newInstallmentPrincipal + interestRate * newInstallmentPrincipal);
 				}
+
 				Log.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", this.tLoan);
 
 				calc.GetState();
 
 				Log.Debug("--------------Loan recalculated: \n {0}", this.tLoan);
 
+				// check "too much" payment per interval
 				if (!this.ReschedulingArguments.RescheduleIn) {
-					// check "too much" payment per interval
 					List<LoanScheduleItem> paidEarlyInstallment = this.tLoan.Schedule.Where(s => s.Date.Date >= this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly).ToList();
 					int paidEarlyCount = paidEarlyInstallment.Count;
 					if (paidEarlyCount > 0) {
@@ -183,10 +184,7 @@
 						return;
 					}
 				}
-
-				if (!this.ReschedulingArguments.SaveToDB)
-					return;
-
+				
 				// FOR NL ONLY
 				// 4. new schedules list 
 				// new instance of loan calculator - for new schedules list
@@ -225,24 +223,15 @@
 
 		private void GetCurrentLoanState() {
 			if (this.tLoan != null) {
-				Loan originalLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
-				this.Result.LoanInterestRate = originalLoan.InterestRate;
-				LoanScheduleItem lastScheduleItem = originalLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
+				//this.loanRep.Clear();
+				this.tLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
+				this.Result.LoanInterestRate = this.tLoan.InterestRate;
+				LoanScheduleItem lastScheduleItem = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
 				if (lastScheduleItem != null) {
 					this.Result.LoanCloseDate = lastScheduleItem.Date; // 'maturity date'
 				}
-
-				// clone DB to this.tLoan
-				this.tLoan = originalLoan.Clone();
-				this.tLoan.Transactions.AddAll(originalLoan.Transactions);
-				foreach (var charge in originalLoan.Charges) {
-					this.tLoan.Charges.Add(charge);
-				}
-				foreach (var agr in originalLoan.Agreements) {
-					this.tLoan.Agreements.Add(agr);
-				}
-				Log.Debug("==========================LoanState: {0} : \n {0}", this.tLoan);
 				
+				Log.Debug("==========================LoanState: {0} : \n {0}", this.tLoan);
 				return;
 			}
 			if (this.tNLLoan != null) {
@@ -267,6 +256,7 @@
 				try {
 					this.loanRep.EvictAll();
 					this.loanRep.Evict(this.tLoan);
+
 					this.loanRep.BeginTransaction();
 					this.loanRep.EnsureTransaction(() => {
 						this.loanRep.SaveOrUpdate(this.tLoan);
@@ -280,7 +270,6 @@
 				}
 			}
 		}
-
 
 
 		private Loan tLoan;

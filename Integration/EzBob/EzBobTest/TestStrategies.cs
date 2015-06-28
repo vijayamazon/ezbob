@@ -955,7 +955,7 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 3921;
+			int	loanID = 3921;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
@@ -975,15 +975,8 @@
 				Console.WriteLine(e);
 			}
 
-			//ReschedulingArgument reModel1 = new ReschedulingArgument();
-			//reModel1.LoanType = loan.GetType().AssemblyQualifiedName;
-			//reModel1.LoanID = loanID;
-			//reModel1.SaveToDB = false;
-			//reModel1.ReschedulingDate = DateTime.UtcNow;
-			//reModel1.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.RescheduleIn = false;
 			reModel.PaymentPerInterval = 351m;
-
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s1.Execute();
