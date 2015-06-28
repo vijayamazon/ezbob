@@ -22,9 +22,16 @@ namespace SalesForceMigrationTool {
             //MigrateLeadsFromDb();
             //MigrateContact(1189);
             //MigrateContact(1227);
-			SalesForceReruner sfReruner = new SalesForceReruner(SfClient, DB);
-			sfReruner.Rerun();
-            Log.Info("End SF Migration tool");
+			
+			//SalesForceReruner sfReruner = new SalesForceReruner(SfClient, DB);
+			//sfReruner.Rerun();
+
+	        SalesForceAddMissingLeadsAccounts addMissingLeadsAccounts = new SalesForceAddMissingLeadsAccounts(SfClient, DB);
+			foreach (var customerID in SalesForceAddMissingLeadsAccounts.missingCustomers) {
+				addMissingLeadsAccounts.AddLead(customerID);
+				Thread.Sleep(200);
+			}
+			Log.Info("End SF Migration tool");
         }
 
         private static void MigrateLeadsFromDb()

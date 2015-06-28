@@ -51,6 +51,7 @@
     <Compile Include="LeadsMigration.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SalesForceAddMissingLeadsAccounts.cs" />
     <Compile Include="SalesForceReruner.cs" />
   </ItemGroup>
   <ItemGroup>
