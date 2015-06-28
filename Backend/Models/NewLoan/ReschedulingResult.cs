@@ -6,7 +6,6 @@
 
 	[DataContract]
 	public class ReschedulingResult {
-
 		[DataMember]
 		public int LoanID { get; set; }  // loan ID to re-schedule
 
@@ -20,17 +19,13 @@
 		public decimal LoanInterestRate { get; set; } // original loans' Interest Rate
 
 		[DataMember]
-		public int IntervalsNum { get; set; }  // calculated repayment intervals number in months
+		public int IntervalsNum { get; set; } // calculated repayment intervals number in months
 
 		[DataMember]
 		public int IntervalsNumWeeks { get; set; }  // calculated repayment intervals number in weeks
 
-		//[DataMember]
+		[DataMember]
 		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planning close date
-
-		public DateTime? RescheduledLoanCloseDate { get; set; } // loan re-scheduled planning close date 
-
-		//	public bool? IsCustomerStatusBad { get; set; } // see list in the strategy
 
 		public decimal? Fees { get; set; } // fees in loan
 

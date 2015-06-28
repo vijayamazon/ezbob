@@ -955,13 +955,13 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 4018;
+			int loanID = 3921;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.SaveToDB = true;
+			reModel.SaveToDB = false;
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.RescheduleIn = true;
@@ -974,6 +974,36 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
+
+			//ReschedulingArgument reModel1 = new ReschedulingArgument();
+			//reModel1.LoanType = loan.GetType().AssemblyQualifiedName;
+			//reModel1.LoanID = loanID;
+			//reModel1.SaveToDB = false;
+			//reModel1.ReschedulingDate = DateTime.UtcNow;
+			//reModel1.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.RescheduleIn = false;
+			reModel.PaymentPerInterval = 351m;
+
+			var s1 = new RescheduleLoan<Loan>(loan, reModel);
+			try {
+				s1.Execute();
+				m_oLog.Debug("RESULT FOR OUT");
+				m_oLog.Debug(s1.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+		}
+
+		[Test]
+		public void TestMultipleRescheduling() {
+			TestRescheduleIN();
+			TestRescheduleIN();
+			TestRescheduleIN();
+			TestRescheduleIN();
+			TestRescheduleIN();
+			TestRescheduleIN();
+			TestRescheduleIN();
+			TestRescheduleIN();
 		}
 
 		[Test]
