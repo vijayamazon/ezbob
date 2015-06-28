@@ -39,6 +39,7 @@
 			var addr = customer.AddressInfo.PersonalAddress.FirstOrDefault();
 			ViewData["Postcode"] = addr == null ? null : addr.Postcode;
 			ViewData["LeadID"] = customer.RefNumber;
+			ViewData["Status"] = customer.Status.ToString();
 			return View("Index");
 		}
 

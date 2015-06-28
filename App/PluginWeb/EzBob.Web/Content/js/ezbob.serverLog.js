@@ -112,7 +112,7 @@ var EzBob = EzBob || {};
 				else
 					ary.push(self.strip(JSON.stringify(val)));
 			});
-			console.log('ary', ary);
+			
 			return ary.join(' ');
 		}, // stringify
 

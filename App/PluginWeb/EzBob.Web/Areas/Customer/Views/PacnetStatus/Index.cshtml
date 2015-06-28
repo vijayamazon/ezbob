@@ -144,30 +144,31 @@
 {
 	<script type='text/javascript' src='https://my.nanorep.com/common/API/conversionUpdate.js?account=ezbob&revenue=@ViewData["Amount"]&orderId=@ViewData["loanNo"]'></script>
 	<script type="text/javascript">
-		$(function() {
-			var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({
-				el: $('#schedule'),
-				schedule: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))
+	$(function() {
+		var scheduleView = new EzBob.Profile.PaypointLoanScheduleView({
+			el: $('#schedule'),
+			schedule: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(@ViewData["schedule"]))
 			});
-			scheduleView.render();
+		scheduleView.render();
 
-			$('#header-container').html(_.template($('#wizard-bar-template').html()));
-			$('.sidebarBox').find('li[rel]').setPopover('left');
+		$('#header-container').html(_.template($('#wizard-bar-template').html()));
+		$('.sidebarBox').find('li[rel]').setPopover('left');
 
-			var oView = new EzBob.Profile.LoanTakenView();
-			oView.render();
-			$('.header-info').show();
-			$('.header-info-text').text('MY ACCOUNT');
+		var oView = new EzBob.Profile.LoanTakenView();
+		oView.render();
+		$('.header-info').show();
+		$('.header-info-text').text('MY ACCOUNT');
 
-			EzBob.App.GA.trackPage('/Customer/Profile/LoanConfirmation', 'Loan Confirmation', {
-			   	Amount: '@ViewData["Amount"]',
-			   	Length: '@ViewData["Term"]',
-			   	Gender: '@ViewData["Gender"]',
-			   	Age: '@ViewData["Age"]',
-			   	Postcode: '@ViewData["Postcode"]',
-			   	TypeofBusiness: '@ViewData["TypeOfBusiness"]',
-				IndustryType: '@ViewData["IndustryType"]',
-				LeadID: '@ViewData["LeadID"]'
+		EzBob.App.GA.trackPage('/Customer/Profile/LoanConfirmation', 'Loan Confirmation', {
+			Amount: '@ViewData["Amount"]',
+			Length: '@ViewData["Term"]',
+			Gender: '@ViewData["Gender"]',
+			Age: '@ViewData["Age"]',
+			Postcode: '@ViewData["Postcode"]',
+			TypeofBusiness: '@ViewData["TypeOfBusiness"]',
+			IndustryType: '@ViewData["IndustryType"]',
+			LeadID: '@ViewData["LeadID"]',
+			AccountStatus: '@ViewData["Status"]'
 			});
 		})
 	</script>

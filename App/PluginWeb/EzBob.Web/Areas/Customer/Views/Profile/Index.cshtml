@@ -390,6 +390,7 @@
 
             var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
             options.createdInProfile = true;
+            options.isFinishedWizard = finishedWizard;
 
             var profileView = new EzBob.Profile.ProfileView(options);
             profileView.render();

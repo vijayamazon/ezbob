@@ -60,6 +60,10 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		EzBob.UiAction.registerView(this);
 		EzBob.UiAction.registerChildren(this.profileMain);
 
+		if (this.customer.isFinishedWizard) {
+			this.finishedWizard();
+		}
+
 		/*
 		if (this.customer.get('state') == 'get' && !this.customer.get('hasLoans'))
 			window.location.href = "#GetCash";
@@ -96,25 +100,9 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 	getCash: function() {
 		$(document).attr("title", "Get Cash: Select Loan Amount");
 
+		
 
-		var address = this.customer.get('PersonalAddress');
-		var postcode = '';
-		if (address && address.models && address.models.length > 0) {
-			postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
-		}
-
-		var personalInfo = this.customer.get('CustomerPersonalInfo');
-
-		EzBob.App.GA.trackPage('/Customer/Profile/GetCash', 'Get Cash: Select Loan Amount', {
-			Amount: this.customer.get('CreditSum'),
-			Length: this.customer.get('LastApprovedRepaymentPeriod'),
-			Gender: personalInfo ? personalInfo.GenderName || '' : '',
-			Age: personalInfo ? personalInfo.Age || '' : '',
-			Postcode: postcode,
-			TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
-			IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
-			LeadID: this.customer.get('RefNumber') || ''
-		});
+		EzBob.App.GA.trackPage('/Customer/Profile/GetCash', 'Get Cash: Select Loan Amount', this.getGTMVariables());
 
 		var applyForLoanView = new EzBob.Profile.ApplyForLoanTopView({ customer: this.customer, model: new EzBob.Profile.ApplyForLoanTopViewModel() });
 
@@ -126,6 +114,33 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.marketing("GetCash");
 	},
 
+	finishedWizard: function (){
+		EzBob.App.GA.trackPage('/Customer/Profile/FinishedWizard', 'Profile: Finished Wizard', this.getGTMVariables());
+	}, //finishedWizard
+
+	getGTMVariables: function(){
+		var address = this.customer.get('PersonalAddress');
+		var postcode = '';
+		if (address && address.models && address.models.length > 0) {
+			postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
+		}
+
+		var personalInfo = this.customer.get('CustomerPersonalInfo');
+
+		var varaibles = {
+			Amount: this.customer.get('CreditSum'),
+			Length: this.customer.get('LastApprovedRepaymentPeriod'),
+			Gender: personalInfo ? personalInfo.GenderName || '' : '',
+			Age: personalInfo ? personalInfo.Age || '' : '',
+			Postcode: postcode,
+			TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
+			IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
+			LeadID: this.customer.get('RefNumber') || '',
+			AccountStatus: this.customer.get('Status')
+		};
+
+		return varaibles;
+	},
 	showProfile: function() {
 		this.profileMain.show();
 
