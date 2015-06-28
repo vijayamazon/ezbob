@@ -359,7 +359,7 @@
 
             //this._context.UserId
 
-            LoanCharge fee = this.loanChargesRepository.GetByFeeId(id);
+            LoanCharge fee = this.loanChargesRepository.Get(id);
             if (fee==null)
                 return Json(new {error="Fee not found"});
             fee.UserId = this._context.UserId;
