@@ -203,6 +203,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", AmountPerInterval: amount, rescheduleIn: 'false' });
             var self = this;
             request.success(function (res) {
+                self.model.set('ReschedulingOUTNotification', res.Error);
                 self.model.set('OutsideAmount', amount);
                 self.model.set('OutsideWeek', res.IntervalsNumWeeks);
                 self.model.set('OutsideMonth', res.IntervalsNum);
