@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Utils;
 	using EZBob.DatabaseLib.Model.Database.Loans;
@@ -29,7 +31,7 @@
 			this.Result.LoanID = this.ReschedulingArguments.LoanID;
 			this.Result.ReschedulingRepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType;
 
-			
+			this.cultureInfo = new CultureInfo("en-GB");
 		}
 
 		public override string Name { get { return "RescheduleLoan"; } }
@@ -53,8 +55,6 @@
 
 				// input validation for "IN"
 				if (this.ReschedulingArguments.RescheduleIn && (this.ReschedulingArguments.ReschedulingDate > this.Result.LoanCloseDate)) {
-					//this.message = string.Format("Re-scheduling date {0} within loan period (maturity date) {1}", this.ReschedulingArguments.ReschedulingDate, this.Result.LoanCloseDate);
-					//Log.Info(this.message);
 					this.Result.Error = "Within loan arrangement is impossible";
 					return;
 				}
@@ -92,7 +92,7 @@
 				} else {	// OUT
 
 					// get I - Accrued interest to pay untill Rescheduling date
-					DateTime sDate0 = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? this.ReschedulingArguments.ReschedulingDate.AddMonths(1) : this.ReschedulingArguments.ReschedulingDate.AddDays(7);
+					DateTime sDate0 = this.ReschedulingArguments.ReschedulingDate; // this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? this.ReschedulingArguments.ReschedulingDate.AddMonths(1) : this.ReschedulingArguments.ReschedulingDate.AddDays(7);
 					DateTime endDate0 = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? sDate0.AddMonths(1) : sDate0.AddDays(7);
 					decimal interestRate0 = calc.GetInterestRate(sDate0, endDate0);
 					this.tLoan.Schedule.Add(new LoanScheduleItem() {
@@ -105,17 +105,27 @@
 					calc.GetState();
 					I = Decimal.Ceiling(calc.InterestToPay);
 					//Log.Debug("-------------------------------I= {0}", I);
+					//Log.Debug("---------------------Accrued interest estimaltion : \n {0}", this.tLoan);
+					// remove "check accrued interest" payment
 					foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 						if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
 							this.tLoan.Schedule.Remove(rmv);
 					}
-					// ### get I - Accrued interest to pay till Rescheduling date
+					// ### get I - Accrued interest to pay untill Rescheduling date
 
 					// ReSharper disable once PossibleInvalidOperationException
 					decimal m = (decimal)this.ReschedulingArguments.PaymentPerInterval;
 					//int n = (int)Math.Ceiling(P / ((m - P) * r));
 					int k = (int)Math.Ceiling((P + I + F) / (m - (P + I + F) * r));
-					this.Result.LoanCloseDate = this.ReschedulingArguments.ReschedulingDate.AddMonths(Math.Abs(k + 1));
+					// unsufficient payment per interval
+					if (k < 0) {
+						this.message = string.Format("{0}ly payment of {1} is not sufficient to pay the loan outstanding balance. Accrued interest until {2} is {3}, accumulated fees: {4}",
+							this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo), this.ReschedulingArguments.ReschedulingDate.Date.DateStr(), I.ToString("C2", this.cultureInfo), calc.FeesToPay.ToString("C2", this.cultureInfo));
+						this.Result.Error = this.message;
+						return;
+					}
+
+					this.Result.LoanCloseDate = this.ReschedulingArguments.ReschedulingDate.AddMonths((k + 1));
 
 					this.Result.IntervalsNum = MiscUtils.DateDiffInMonths(this.ReschedulingArguments.ReschedulingDate, this.Result.LoanCloseDate);
 					this.Result.IntervalsNumWeeks = MiscUtils.DateDiffInWeeks(this.ReschedulingArguments.ReschedulingDate, this.Result.LoanCloseDate);
@@ -153,21 +163,12 @@
 
 				if (!this.ReschedulingArguments.RescheduleIn) {
 					// check "too much" payment per interval
-					List<LoanScheduleItem> paidEarlyInstallment = this.tLoan.Schedule.Where(s => s.Date.Date >= this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly)
-						.ToList();
+					List<LoanScheduleItem> paidEarlyInstallment = this.tLoan.Schedule.Where(s => s.Date.Date >= this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly).ToList();
 					int paidEarlyCount = paidEarlyInstallment.Count;
 					if (paidEarlyCount > 0) {
-						this.message = string.Format("{0}ly payment of {1} GBP more than minimum, needed for paying a loan. {2} future installment(s) of new schedule was/were registered as \"paid early\"",
-							this.ReschedulingArguments.ReschedulingRepaymentIntervalType.ToString(), this.ReschedulingArguments.PaymentPerInterval, paidEarlyCount);
-						this.Result.Error = this.message;
-						return;
-					}
-					// check max payment per period
-					var overAmountInstallment = this.tLoan.Schedule.FirstOrDefault(s => s.AmountDue > this.ReschedulingArguments.PaymentPerInterval);
-					if (overAmountInstallment != null) {
-						this.message = string.Format("{0}ly payment of {1} GBP is not sufficient to pay the loan outstanding balance. Accrued interest is {2}, accumulated fees: {3}. Minimal first payment required: {4}",
-							this.ReschedulingArguments.ReschedulingRepaymentIntervalType.ToString(), this.ReschedulingArguments.PaymentPerInterval, overAmountInstallment.Interest, overAmountInstallment.Fees
-							, overAmountInstallment.AmountDue);
+						this.message = string.Format("{0}ly payment of {1} GBP more than minimum, needed for paying a loan. {2} future installments of new schedule registered as \"paid early\"",
+							// ReSharper disable once PossibleInvalidOperationException
+							this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo), paidEarlyCount);
 						this.Result.Error = this.message;
 						return;
 					}
@@ -217,7 +218,10 @@
 
 				this.tLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
 				this.Result.LoanInterestRate = this.tLoan.InterestRate;
-				this.Result.LoanCloseDate = this.tLoan.Schedule.OrderBy(s => s.Date).Last().Date; // 'maturity date'
+				var lastScheduleItem = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
+				if (lastScheduleItem != null) {
+					this.Result.LoanCloseDate = lastScheduleItem.Date; // 'maturity date'
+				}
 
 				Log.Debug("==========================LoanState: {0}", this.tLoan);
 				return;
@@ -261,12 +265,10 @@
 
 
 		private Loan tLoan;
-
 		private readonly NL_Model tNLLoan;
-
 		private string message;
-
 		private readonly LoanRepository loanRep;
+		private readonly CultureInfo cultureInfo;
 
 	}
 }

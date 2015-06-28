@@ -927,18 +927,19 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 47;
-			Loan loan = new Loan();
+			int loanID = 298;
 
+			TestLoanOldCalculator(loanID);
+
+			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-			reModel.SaveToDB = true;
+			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 951m;
+			reModel.PaymentPerInterval = 351m;
 
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			try {
@@ -948,32 +949,21 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
-			// display
-			/*
-			ChangeLoanDetailsModelBuilder loanModelBuilder = new ChangeLoanDetailsModelBuilder();
-			EditLoanDetailsModel model = new EditLoanDetailsModel();
-			var loaan =  ObjectFactory.GetInstance<LoanRepository>().Get(loanID);
-			// 1. build model from DB loan
-			model = loanModelBuilder.BuildModel(loaan);
-			this.m_oLog.Debug("----------------model: \n {0}", model);
-			// 2. create DB loan from the model
-			Loan loan1 = loanModelBuilder.CreateLoan(model);
-			var calc = new LoanRepaymentScheduleCalculator(loan1, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-			calc.GetState();
-			this.m_oLog.Debug("---------------------------------------Loan recalculated: \n {0}", loan1);*/
+			if (reModel.SaveToDB)
+				TestLoanOldCalculator(loanID);
 		}
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 47;
+			int loanID = 4018;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.SaveToDB = false;
+			reModel.SaveToDB = true;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.RescheduleIn = true;
 
 			var s = new RescheduleLoan<Loan>(loan, reModel);
@@ -1059,8 +1049,9 @@
 		}
 
 		[Test]
-		public void TestLoanOldCalculator() {
-			int loanID = 47;
+		public void TestLoanOldCalculator(int loanID = 0) {
+			if(loanID==0)
+			 loanID = 4018;
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan loan = loanRep.Get(loanID);
 

@@ -27,6 +27,10 @@
 		/// <exception cref="NL_ExceptionRequiredDataNotFound">Condition. </exception>
 		public override void Execute() {
 
+			// TEMPORARY FOR PHASE1
+			Log.Debug("TEMPORARY DISABLED FOR PHASE1");
+			return;
+
 			Log.Debug("--------+++++++++++---------- customer {0}----------++++++++++++++--------------", NLModel.CustomerID);
 
 			string message;
