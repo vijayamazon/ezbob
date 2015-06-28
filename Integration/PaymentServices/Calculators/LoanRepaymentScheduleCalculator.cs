@@ -225,13 +225,15 @@
             get
             {
                 var item = _schedule.FirstOrDefault(i => i.Date >= _lastActionDate);
-	            if (item == null) {
-		            item = _schedule.LastOrDefault();
-	            }
+                if (item == null)
+                {
+                    item = _schedule.LastOrDefault();
+                }
                 if (item == null) return _loan.InterestRate;
                 return item.InterestRate;
             }
         }
+
 
         public decimal TotalEarlyPayment()
         {

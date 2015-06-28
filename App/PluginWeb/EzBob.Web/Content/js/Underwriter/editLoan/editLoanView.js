@@ -84,31 +84,29 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         $("#collapsable-content").slideToggle('slow');
         
         if (!colapseState) {
-            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", rescheduleIn: 'true' });
-
-            var self = this;
-
-            request.success(function(res) {
-                self.model.set('WithinWeek', res.IntervalsNumWeeks);
-                self.model.set('WithinMonth', res.IntervalsNum);
-                self.model.set('ReschedulingBalance', res.ReschedulingBalance);
+            var temp = this.model.get('OutsideAmount');
+            $('#outsideAmount').val(this.model.get('OutsideAmount'));
+            var errText = this.model.get('ReschedulingINNotification');
+            if (errText != null && errText.length > 0) {
+                $('#ReschedulingINNotification').text(errText);
+                $('#ReschedulingINNotification').fadeIn();
+                $('#exception-div').fadeOut();
+                $('#radio-2').prop('checked', true);
                 
-                if (res.Error.length > 0) {
-                    $('#exception-msg').fadeIn();
-                    $('#exception-div').fadeOut();
-                    $('#radio-2').prop('checked', true);
-                }
-            }); //on success
-
-            request.fail(function() {
-                self.ui.data_error.fadeIn().fadeOut(3000);
-            }); //on fail
+            }
+            errText = this.model.get('ReschedulingOUTNotification');
+            if (errText != null && errText.length > 0) {
+                $('#ReschedulingOUTNotification').text(errText);
+                $('#ReschedulingOUTNotification').fadeIn();
+            }
         } else {
-            $('#exception-msg').hide();
+            $('#ReschedulingINNotification').hide();
             $('#exception-div').show();
             $('#radio-2').prop('checked', false);
-            $('#outside-return-error').hide();
+            $('#ReschedulingOUTNotification').hide(); 
         }
+
+        
     },
     reschSubmitForm: function () {
 
@@ -197,6 +195,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     },
 
     onChangeAmount: function () {
+        $('#ReschedulingOUTNotification').hide();
         var amount = $("#outsideAmount").val();
         if (typeof amount === 'undefined' || amount <= 0) {
             this.ui.amount_error.fadeIn().fadeOut(3000);
@@ -204,11 +203,12 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", AmountPerInterval: amount, rescheduleIn: 'false' });
             var self = this;
             request.success(function (res) {
+                self.model.set('OutsideAmount', amount);
                 self.model.set('OutsideWeek', res.IntervalsNumWeeks);
                 self.model.set('OutsideMonth', res.IntervalsNum);
-                if (res.Error !== "") {
-                    $('#return-error-text').text(res.Error);
-                    $('#outside-return-error').fadeIn();
+                if (res.Error!=null && res.Error.length > 0) {
+                    $('#ReschedulingOUTNotification').text(res.Error);
+                    $('#ReschedulingOUTNotification').fadeIn();
                 }
             }); //on success
 
@@ -370,7 +370,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         this.$el.find('#fees-calendar-to').datepicker({ dateFormat: 'yy-mm-dd' });
         this.$el.find('#intrest-calendar-from').datepicker({ dateFormat: 'yy-mm-dd' });
         this.$el.find('#intrest-calendar-to').datepicker({ dateFormat: 'yy-mm-dd' });
-        
+
         var options = this.model.get('Options');
         if (options.AutoPayment === false) {
             this.$el.find('#automatic-charges').prop('checked', true);
@@ -435,7 +435,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
         var bConflict = false;
 
-        _.each(this.model.get('InterestFreeze'), function (item) {
+        _.each(this.model.get('SInterestFreeze'), function (item) {
             if (bConflict)
                 return;
 

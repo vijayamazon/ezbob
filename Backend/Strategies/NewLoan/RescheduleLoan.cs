@@ -222,6 +222,8 @@
 				if (lastScheduleItem != null) {
 					this.Result.LoanCloseDate = lastScheduleItem.Date; // 'maturity date'
 				}
+                }
+
 
 				Log.Debug("==========================LoanState: {0}", this.tLoan);
 				return;

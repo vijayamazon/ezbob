@@ -69,6 +69,43 @@
             //TODO build loan model
             //Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 
+            ReschedulingArgument reModel = new ReschedulingArgument();
+            reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+            reModel.LoanID = id;
+            reModel.SaveToDB = false;
+            reModel.ReschedulingDate = DateTime.UtcNow;
+            reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+            reModel.RescheduleIn = true;
+
+            try
+            {
+                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
+                model.WithinWeek = result.Value.IntervalsNumWeeks;
+                model.WithinMonth =result.Value.IntervalsNum;
+                model.ReschedulingBalance = result.Value.ReschedulingBalance;
+                model.ReschedulingINNotification = result.Value.Error;
+            }
+            catch (Exception editex)
+            {
+                Log.Error(editex);
+            }
+            
+            reModel.RescheduleIn = false;
+            reModel.PaymentPerInterval = 100m;
+            try
+            {
+                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
+                model.OutsideWeek = result.Value.IntervalsNumWeeks;
+                model.OutsideMonth = result.Value.IntervalsNum;
+                model.ReschedulingBalance = result.Value.ReschedulingBalance;
+                model.ReschedulingOUTNotification = result.Value.Error;
+                model.OutsideAmount = reModel.PaymentPerInterval;
+            }
+            catch (Exception editex)
+            {
+                Log.Error(editex);
+            }
+
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 

@@ -34,7 +34,12 @@ namespace EzBob.Models
 
         public int OutsideMonth { get; set; }
 
+        public decimal? OutsideAmount { get; set; }
+
         public decimal? ReschedulingBalance { get; set; }
+
+        public string ReschedulingINNotification { get; set; }
+        public string ReschedulingOUTNotification { get; set; }
 
         public LoanOptions Options { get; set; }
 
