@@ -3644,12 +3644,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/BravoAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/BravoAutomationReportResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/CharlieAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/CharlieAutomationReportResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CharlieAutomationReport(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzAutomationVerification/CharlieAutomationReport", ReplyAction="http://tempuri.org/IEzAutomationVerification/CharlieAutomationReportResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CharlieAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceBroker/BrokerAcceptTerms", ReplyAction="http://tempuri.org/IEzServiceBroker/BrokerAcceptTermsResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail);
         
@@ -5048,14 +5042,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BravoAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
             return base.Channel.BravoAutomationReportAsync(startTime, endTime);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CharlieAutomationReport(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
-            return base.Channel.CharlieAutomationReport(startTime, endTime);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CharlieAutomationReportAsync(System.Nullable<System.DateTime> startTime, System.Nullable<System.DateTime> endTime) {
-            return base.Channel.CharlieAutomationReportAsync(startTime, endTime);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData BrokerAcceptTerms(int nTermsID, string sContactEmail) {

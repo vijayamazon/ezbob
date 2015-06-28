@@ -1,6 +1,8 @@
 ﻿namespace AutomationCalculator.AutoDecision.AutoApproval {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
+	using System.Linq;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
 	using AutomationCalculator.ProcessHistory.Common;
@@ -101,6 +103,23 @@
 				);
 			} // using timer step
 		} // MakeDecision
+
+		public virtual IEnumerable<string> FindBadCaisStatuses() {
+			return CaisAccounts
+				.Where(ca => ExperianConsumerDataCaisAccountsExt.IsBad(
+					Now,
+					ca.LastUpdatedDate,
+					Math.Max(ca.Balance ?? 0, ca.CurrentDefBalance ?? 0),
+					ca.AccountStatusCodes
+				))
+				.Select(ca => string.Format(
+					"ID {0}, updated on {1}, balance {2}, codes {3}",
+					ca.Id,
+					(ca.LastUpdatedDate ?? DateTime.UtcNow).ToString("d-MMM-yyyy", CultureInfo.InvariantCulture),
+					Math.Max(ca.Balance ?? 0, ca.CurrentDefBalance ?? 0),
+					ca.AccountStatusCodes
+				));
+		} // FindBadCaisStatuses
 
 		protected virtual Checker CreateChecker() {
 			return new Checker(this);
@@ -252,7 +271,8 @@
 		} // ProcessRow
 
 		protected virtual bool WorstCaisStatusIsRelevant(SafeReader sr) {
-			return true;
+			DateTime? lastUpdated = sr["LastUpdatedDate"];
+			return lastUpdated.HasValue && (lastUpdated.Value.AddYears(1) >= Now);
 		} // WorstCaisStatusIsRelevant
 
 		protected virtual List<ExperianConsumerDataCaisAccounts> CaisAccounts { get { return this.caisAccounts; } }

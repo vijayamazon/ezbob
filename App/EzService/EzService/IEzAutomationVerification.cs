@@ -30,8 +30,5 @@
 
 		[OperationContract]
 		ActionMetaData BravoAutomationReport(DateTime? startTime, DateTime? endTime);
-
-		[OperationContract]
-		ActionMetaData CharlieAutomationReport(DateTime? startTime, DateTime? endTime);
 	} // interface IEzAutomationVerification
 } // namespace

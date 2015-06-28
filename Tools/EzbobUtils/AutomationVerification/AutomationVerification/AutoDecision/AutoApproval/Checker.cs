@@ -11,7 +11,7 @@
 
 	public class Checker {
 		public Checker(Agent oAgent) {
-			this.m_oAgent = oAgent;
+			this.agent = oAgent;
 		} // constructor
 
 		public virtual void Run() {
@@ -56,13 +56,13 @@
 		} // StepForceFailed
 
 		public virtual void CaisStatuses() {
-			CaisStatuses(Trail.MyInputData.MetaData.TotalLoanCount > 0
-				? Trail.MyInputData.Configuration.GetAllowedCaisStatusesWithLoan()
-				: Trail.MyInputData.Configuration.GetAllowedCaisStatusesWithoutLoan()
-			);
-		} // CaisStatuses
+			var diff = new List<string>(this.agent.FindBadCaisStatuses());
 
-		protected virtual Agent Agent { get { return this.m_oAgent; } }
+			if (diff.Count > 0)
+				StepFailed<WorstCaisStatus>().Init(diff);
+			else
+				StepDone<WorstCaisStatus>().Init(null);
+		} // CaisStatuses
 
 		protected virtual T StepDone<T>() where T : ATrace {
 			return Trail.Affirmative<T>(false);
@@ -88,7 +88,7 @@
 			if (roundTo < 0.00000001m)
 				roundTo = 1m;
 
-			m_oAgent.Log.Debug(
+			agent.Log.Debug(
 				"Secondary before rounding: amount = {0}, minLoanAmount = {1}",
 				Trail.SafeAmount,
 				roundTo
@@ -98,7 +98,7 @@
 				Trail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
 			);
 
-			m_oAgent.Log.Debug(
+			agent.Log.Debug(
 				"Secondary after rounding: amount = {0}, minLoanAmount = {1}",
 				Trail.SafeAmount,
 				roundTo
@@ -106,16 +106,16 @@
 		} // RoundAmount
 
 		private ApprovalTrail Trail {
-			get { return this.m_oAgent.Trail; }
+			get { return this.agent.Trail; }
 		} // Trail
 
 		private decimal ApprovedAmount {
-			get { return this.m_oAgent.Trail.SafeAmount; }
-			set { this.m_oAgent.Trail.Amount = value; }
+			get { return this.agent.Trail.SafeAmount; }
+			set { this.agent.Trail.Amount = value; }
 		} // ApprovedAmount
 
 		private DateTime Now {
-			get { return this.m_oAgent.Now; }
+			get { return this.agent.Now; }
 		} // Now
 
 		private void CompanyIsDissolved() {
@@ -153,7 +153,7 @@
 				var nc = new NameComparer(
 					Trail.MyInputData.CustomerName,
 					Trail.MyInputData.DirectorNames,
-					this.m_oAgent.DB
+					this.agent.DB
 				);
 
 				foreach (Name name in Trail.MyInputData.DirectorNames) {
@@ -400,15 +400,6 @@
 			StepDone<TotalLoanCount>().Init(Trail.MyInputData.MetaData.TotalLoanCount);
 		} // TotalLoanCount
 
-		private void CaisStatuses(List<string> oAllowedStatuses) {
-			List<string> diff = Trail.MyInputData.WorstStatusList.Except(oAllowedStatuses).ToList();
-
-			if (diff.Count > 0)
-				StepFailed<WorstCaisStatus>().Init(diff, Trail.MyInputData.WorstStatusList, oAllowedStatuses);
-			else
-				StepDone<WorstCaisStatus>().Init(null, Trail.MyInputData.WorstStatusList, oAllowedStatuses);
-		} // CaisStatuses
-
 		private void Rollovers() {
 			if (Trail.MyInputData.MetaData.NumOfRollovers > 0)
 				StepFailed<Rollovers>().Init();
@@ -519,6 +510,6 @@
 				StepFailed<Complete>().Init(nApprovedAmount);
 		} // Complete
 
-		private readonly Agent m_oAgent;
+		private readonly Agent agent;
 	} // class Checker
 } // namespace

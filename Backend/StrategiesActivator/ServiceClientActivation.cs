@@ -1460,13 +1460,6 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			this.serviceClient.BravoAutomationReport(dates.Item1, dates.Item2);
 		} // BravoAutomationReport
 
-		[Activation]
-		private void CharlieAutomationReport() {
-			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
-
-			this.serviceClient.CharlieAutomationReport(dates.Item1, dates.Item2);
-		} // CharlieAutomationReport
-
 		private Tuple<DateTime?, DateTime?> GetDatesForAutomationReports() {
 			bool hasStart = false;
 			DateTime startTime = new DateTime(2015, 5, 11, 0, 0, 0, DateTimeKind.Utc);
