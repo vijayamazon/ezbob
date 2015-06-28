@@ -149,7 +149,7 @@ namespace EzBob.Models.Marketplaces.Builders
 
         public override DateTime? GetSeniority(MP_CustomerMarketPlace mp)
         {
-	        var mpEbayUserData = mp.EbayUserData.FirstOrDefault(e => e.CustomerMarketPlace == mp);
+	        var mpEbayUserData = mp.EbayUserData.FirstOrDefault(e => e.CustomerMarketPlaceId == mp.Id);
 	        return mpEbayUserData != null ? mpEbayUserData.RegistrationDate : null;
         }
 

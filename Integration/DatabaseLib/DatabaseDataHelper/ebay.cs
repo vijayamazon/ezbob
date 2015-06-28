@@ -219,7 +219,7 @@
 			var userData = new MP_EbayUserData
 			{
 
-				CustomerMarketPlace = customerMarketPlace,
+				CustomerMarketPlaceId = customerMarketPlace.Id,
 				Created = data.SubmittedDate.ToUniversalTime(),
 				BillingEmail = data.BillingEmail,
 				EIASToken = data.EIASToken,

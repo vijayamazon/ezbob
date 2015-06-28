@@ -5,7 +5,7 @@ namespace EZBob.DatabaseLib.Model.Database
 	public class MP_EbayUserData
 	{
 		public virtual int Id { get; set; }
-		public virtual MP_CustomerMarketPlace CustomerMarketPlace { get; set; }
+		public virtual int CustomerMarketPlaceId { get; set; }
 		public virtual DateTime Created { get; set; }
 
 		public virtual string BillingEmail { get; set; }

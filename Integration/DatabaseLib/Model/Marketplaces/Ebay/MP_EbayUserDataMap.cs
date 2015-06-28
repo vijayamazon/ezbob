@@ -10,7 +10,8 @@ namespace EZBob.DatabaseLib.Model.Database
 			Table( "MP_EbayUserData" );
 			Id( x => x.Id );
 			Map( x => x.Created ).CustomType<UtcDateTimeType>().Not.Nullable();
-			References( x => x.CustomerMarketPlace, "CustomerMarketPlaceId" );
+			//References( x => x.CustomerMarketPlace, "CustomerMarketPlaceId" );
+			Map(x => x.CustomerMarketPlaceId);
 
 			Map( x => x.BillingEmail );
 			Map( x => x.eBayGoodStanding );
@@ -45,7 +46,6 @@ namespace EZBob.DatabaseLib.Model.Database
 
 			References( x => x.HistoryRecord )
 				.Column( "CustomerMarketPlaceUpdatingHistoryRecordId" )
-				.Unique()
 				.Cascade.None();
 		}
 	}
