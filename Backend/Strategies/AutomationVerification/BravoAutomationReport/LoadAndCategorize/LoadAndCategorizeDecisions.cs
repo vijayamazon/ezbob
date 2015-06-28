@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport.LoadAndCategorize {
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
@@ -10,8 +10,8 @@
 	using Ezbob.Utils.Lingvo;
 	using OfficeOpenXml;
 
-	internal class BarLoadAndCategorizeDecisions {
-		public BarLoadAndCategorizeDecisions(DateTime? startTime, DateTime? endTime) {
+	public class LoadAndCategorizeDecisions {
+		public LoadAndCategorizeDecisions(DateTime? startTime, DateTime? endTime) {
 			this.spLoad = new SpLoadCashRequests(DB, Log);
 			this.customerDecisions = new SortedDictionary<int, CustomerDecisions>();
 
@@ -51,6 +51,12 @@
 
 		public ExcelPackage Result { get; private set; }
 
+		protected virtual CustomerDecisions CreateCustomerDecisionsInstance(int customerID, bool isAlibaba) {
+			return new CustomerDecisions(customerID, isAlibaba, Tag);
+		} // CreateCustomerDecisionsInstance
+
+		protected virtual string Tag { get { return this.tag; } }
+
 		private AConnection DB { get { return Library.Instance.DB; } }
 		private ASafeLog Log { get { return Library.Instance.Log; } }
 
@@ -79,7 +85,7 @@
 			ManualDecision md = sr.Fill<ManualDecision>();
 
 			if (!this.customerDecisions.ContainsKey(customerID))
-				this.customerDecisions[customerID] = new CustomerDecisions(customerID, sr["IsAlibaba"], this.tag);
+				this.customerDecisions[customerID] = CreateCustomerDecisionsInstance(customerID, sr["IsAlibaba"]);
 
 			this.customerDecisions[customerID].ManualDecisions.Add(md);
 
@@ -208,5 +214,5 @@
 			"Auto decision last",
 			"Auto decision current",
 		};
-	} // class BarLoadAndCategorizeDecisions
+	} // class LoadAndCategorizeDecisions
 } // namespace

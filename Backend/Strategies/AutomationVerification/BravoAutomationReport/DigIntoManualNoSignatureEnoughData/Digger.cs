@@ -12,7 +12,7 @@
 	using OfficeOpenXml;
 	using OfficeOpenXml.Style;
 
-	internal class Digger {
+	public class Digger {
 		public Digger() {
 			Result = new SortedDictionary<int, DeepData>();
 		} // constructor
@@ -30,6 +30,28 @@
 		public SortedDictionary<int, DeepData> Result { get; private set; }
 
 		public ExcelPackage Xlsx { get; private set; }
+
+		protected virtual void LoadPersonalLates() {
+			var pc = new ProgressCounter("{0} CAIS accounts loaded.", Log, 20);
+
+			DB.ForEachResult<CaisAccount>(
+				ca => {
+					if (Result.ContainsKey(ca.CustomerID))
+						Result[ca.CustomerID].CaisAccounts.Add(ca);
+					else
+						Log.Warn("Customer {0} not found for CAIS account.", ca.CustomerID);
+
+					pc.Next();
+				},
+				CaisAccount.SpName,
+				CommandSpecies.StoredProcedure
+			);
+
+			pc.Log();
+		} // LoadPersonalLates
+
+		protected AConnection DB { get { return Library.Instance.DB; } }
+		protected ASafeLog Log { get { return Library.Instance.Log; } }
 
 		private void LoadCashRequests() {
 			var pc = new ProgressCounter("{0} raw lines processed.", Log, 100);
@@ -49,25 +71,6 @@
 
 			pc.Log();
 		} // LoadCashRequests
-
-		private void LoadPersonalLates() {
-			var pc = new ProgressCounter("{0} CAIS accounts loaded.", Log, 20);
-
-			DB.ForEachResult<CaisAccount>(
-				ca => {
-					if (Result.ContainsKey(ca.CustomerID))
-						Result[ca.CustomerID].CaisAccounts.Add(ca);
-					else
-						Log.Warn("Customer {0} not found for CAIS account.", ca.CustomerID);
-
-					pc.Next();
-				},
-				CaisAccount.SpName,
-				CommandSpecies.StoredProcedure
-			);
-
-			pc.Log();
-		} // LoadPersonalLates
 
 		private void LoadConsumerScores() {
 			var pc = new ProgressCounter("{0} consumer score items loaded.", Log, 20);
@@ -242,7 +245,7 @@
 			column = sheet.SetBorder(1, column).SetCellTitle("Total for reject count");
 			column = sheet.SetBorder(1, column).SetCellTitle("Late for reject count");
 			column = sheet.SetBorder(1, column).SetCellTitle("Personal default count");
-			column = sheet.SetBorder(1, column).SetCellTitle("Late for reject");
+			column = sheet.SetBorder(1, column).SetCellTitle("Late for approve");
 			column = sheet.SetBorder(1, column).SetCellTitle("For reject");
 			column = sheet.SetBorder(1, column).SetCellTitle("Late for reject");
 			column = sheet.SetBorder(1, column).SetCellTitle("Personal default");
@@ -396,8 +399,5 @@
 
 			return filePath;
 		} // SaveXlsx
-
-		private AConnection DB { get { return Library.Instance.DB; } }
-		private ASafeLog Log { get { return Library.Instance.Log; } }
 	} // class Digger
 } // namespace

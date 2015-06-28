@@ -3,6 +3,7 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport;
+	using Ezbob.Backend.Strategies.AutomationVerification.CharlieAutomationReport;
 	using Ezbob.Backend.Strategies.AutomationVerification.KPMG;
 	using Ezbob.Backend.Strategies.Tasks;
 
@@ -42,5 +43,9 @@
 		public ActionMetaData BravoAutomationReport(DateTime? startTime, DateTime? endTime) {
 			return Execute<Bar>(null, null, startTime, endTime);
 		} // BravoAutomationReport
+
+		public ActionMetaData CharlieAutomationReport(DateTime? startTime, DateTime? endTime) {
+			return Execute<Car>(null, null, startTime, endTime);
+		} // CharlieAutomationReport
 	} // class EzServiceImplementation
 } // namespace

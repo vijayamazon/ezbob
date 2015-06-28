@@ -7,7 +7,7 @@
 	using Ezbob.Database;
 	using Ezbob.Utils;
 
-	internal class CaisAccount : AResultRow {
+	public class CaisAccount : AResultRow {
 		public const string SpName = "BAR_LoadPersonalDelayData";
 
 		public int CustomerID { get; set; }
@@ -28,7 +28,7 @@
 			get { return Math.Max(DBBalance ?? 0, DBCurrentDefBalance ?? 0); } // get
 		} // Balance
 
-		public bool IsLateForApprove {
+		public virtual bool IsLateForApprove {
 			get {
 				char c = WorstStatus.Length > 0 ? WorstStatus[0] : '0';
 

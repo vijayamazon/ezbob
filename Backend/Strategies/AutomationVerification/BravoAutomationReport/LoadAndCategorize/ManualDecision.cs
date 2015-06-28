@@ -1,7 +1,7 @@
-﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport {
+﻿namespace Ezbob.Backend.Strategies.AutomationVerification.BravoAutomationReport.LoadAndCategorize {
 	using DbConstants;
 
-	internal class ManualDecision : ADecision {
+	public class ManualDecision : ADecision {
 		public long CashRequestID { get; set; }
 
 		public bool IsOldCustomer { get; set; }

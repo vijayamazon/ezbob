@@ -1455,6 +1455,19 @@ The digits shown in a group are the maximum number of meaningful digits that can
 
 		[Activation]
 		private void BravoAutomationReport() {
+			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
+
+			this.serviceClient.BravoAutomationReport(dates.Item1, dates.Item2);
+		} // BravoAutomationReport
+
+		[Activation]
+		private void CharlieAutomationReport() {
+			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
+
+			this.serviceClient.CharlieAutomationReport(dates.Item1, dates.Item2);
+		} // CharlieAutomationReport
+
+		private Tuple<DateTime?, DateTime?> GetDatesForAutomationReports() {
 			bool hasStart = false;
 			DateTime startTime = new DateTime(2015, 5, 11, 0, 0, 0, DateTimeKind.Utc);
 
@@ -1467,11 +1480,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			if (hasStart && (this.cmdLineArgs.Length > 3))
 				hasEnd = DateTime.TryParse(this.cmdLineArgs[3], out startTime);
 
-			this.serviceClient.BravoAutomationReport(
+			return new Tuple<DateTime?, DateTime?>(
 				hasStart ? startTime : (DateTime?)null,
 				hasEnd ? endTime : (DateTime?)null
 			);
-		} // BravoAutomationReport
+		} // GetDatesForAutomationReports
 
         [Activation]
         private void BrokerTransferCommission()

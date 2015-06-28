@@ -10,7 +10,11 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 		public List<string> AllCustomerStatuses { get; private set; }
 		public List<string> AllowedStatuses { get; private set; }
 
-		public void Init(IEnumerable<string> oFoundForbiddenStatuses, IEnumerable<string> oAllCustomerStatuses, IEnumerable<string> oAllowedStatuses) {
+		public void Init(
+			IEnumerable<string> oFoundForbiddenStatuses,
+			IEnumerable<string> oAllCustomerStatuses,
+			IEnumerable<string> oAllowedStatuses
+		) {
 			FoundForbiddenStatuses = oFoundForbiddenStatuses == null ? new List<string>() : oFoundForbiddenStatuses.ToList();
 			AllCustomerStatuses = oAllCustomerStatuses == null ? new List<string>() : oAllCustomerStatuses.ToList();
 			AllowedStatuses = oAllowedStatuses == null ? new List<string>() : oAllowedStatuses.ToList();
@@ -30,6 +34,16 @@ namespace AutomationCalculator.ProcessHistory.AutoApproval {
 					string.Join(", ", FoundForbiddenStatuses)
 				);
 			} // if
+		} // Init
+
+		public void Init(IEnumerable<string> oFoundForbiddenStatuses) {
+			FoundForbiddenStatuses = oFoundForbiddenStatuses == null ? new List<string>() : oFoundForbiddenStatuses.ToList();
+			AllCustomerStatuses = new List<string>();
+			AllowedStatuses = new List<string>();
+
+			Comment = FoundForbiddenStatuses.Count < 1
+				? "no forbidden statuses found"
+				: string.Format("forbidden statuses found '{0}'", string.Join(", ", AllCustomerStatuses));
 		} // Init
 	} // class WorstCaisStatus
 } // namespace

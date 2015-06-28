@@ -34,7 +34,6 @@
 			DB = oDB;
 			Log = oLog.Safe();
 			Args = new Arguments(nCustomerID, nSystemCalculatedAmount, nMedal, medalType, turnoverType);
-			this.m_oCheck = new Checker(this);
 			this.caisAccounts = new List<ExperianConsumerDataCaisAccounts>();
 		} // constructor
 
@@ -70,15 +69,17 @@
 			using (Trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				Log.Debug("Secondary: checking if auto approval should take place for customer {0}...", Args.CustomerID);
 
+				Checker check = CreateChecker();
+
 				try {
 					using (Trail.AddCheckpoint(ProcessCheckpoints.GatherData))
 						GatherData();
 
 					using (Trail.AddCheckpoint(ProcessCheckpoints.RunCheck))
-						this.m_oCheck.Run();
+						check.Run();
 				} catch (Exception e) {
 					Log.Error(e, "Exception during auto approval.");
-					this.m_oCheck.StepForceFailed<ExceptionThrown>().Init(e);
+					check.StepForceFailed<ExceptionThrown>().Init(e);
 				} // try
 
 				string logMsg = string.Empty;
@@ -100,6 +101,10 @@
 				);
 			} // using timer step
 		} // MakeDecision
+
+		protected virtual Checker CreateChecker() {
+			return new Checker(this);
+		} // CreateChecker
 
 		protected virtual Arguments Args { get; private set; }
 
@@ -173,7 +178,7 @@
 			return new Configuration(DB, Log);
 		} // InitCfg
 
-		private enum RowType {
+		protected enum RowType {
 			MetaData,
 			Payment,
 			Cais,
@@ -185,7 +190,11 @@
 			CompanyDissolutionDate,
 		} // enum RowType
 
-		private void ProcessRow(SafeReader sr) {
+		protected virtual RowType? LastRowType { get; set; }
+
+		protected virtual void ProcessRow(SafeReader sr) {
+			LastRowType = null;
+
 			RowType nRowType;
 
 			string sRowType = sr.ContainsField("DatumType", "RowType") ? sr["DatumType"] : sr["RowType"];
@@ -194,6 +203,8 @@
 				Log.Alert("Unsupported row type encountered: '{0}'.", sRowType);
 				return;
 			} // if
+
+			LastRowType = nRowType;
 
 			Log.Debug("Auto approve agent, processing input row of type {0}.", sRowType);
 
@@ -207,7 +218,8 @@
 				break;
 
 			case RowType.Cais:
-				WorstStatuses.Add(sr["WorstStatus"]);
+				if (WorstCaisStatusIsRelevant(sr))
+					WorstStatuses.Add(sr["WorstStatus"]);
 				break;
 
 			case RowType.OriginationTime:
@@ -239,7 +251,12 @@
 			} // switch
 		} // ProcessRow
 
-		private readonly Checker m_oCheck;
+		protected virtual bool WorstCaisStatusIsRelevant(SafeReader sr) {
+			return true;
+		} // WorstCaisStatusIsRelevant
+
+		protected virtual List<ExperianConsumerDataCaisAccounts> CaisAccounts { get { return this.caisAccounts; } }
+
 		private readonly List<ExperianConsumerDataCaisAccounts> caisAccounts;
 	} // class Agent
 } // namespace

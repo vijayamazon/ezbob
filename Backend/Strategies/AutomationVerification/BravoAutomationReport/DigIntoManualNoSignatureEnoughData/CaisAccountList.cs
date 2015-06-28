@@ -3,7 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 
-	internal class CaisAccountList : IEnumerable<CaisAccount> {
+	public class CaisAccountList : IEnumerable<CaisAccount> {
 		public CaisAccountList() {
 			this.data = new List<CaisAccount>();
 			Balance = new BalanceData(this);
@@ -28,7 +28,7 @@
 			} // Max
 
 			public int? Total {
-				get { return this.list.data.Where(ca => ca.Balance != null).Sum(ca => ca.Balance); } // get
+				get { return this.list.data.Sum(ca => ca.Balance); } // get
 			} // Total
 
 			private readonly CaisAccountList list;

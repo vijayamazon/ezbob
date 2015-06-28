@@ -4,7 +4,7 @@
 	using DbConstants;
 	using Ezbob.Database;
 
-	internal class RawSource : AResultRow {
+	public class RawSource : AResultRow {
 		public const string SpName = "BAR_LoadManualNoSignatureEnoughDataData";
 
 		public int CustomerID { get; set; }
