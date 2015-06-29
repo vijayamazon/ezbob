@@ -107,7 +107,6 @@
 			cellNum = this.sheet.SetCellValue(this.rowNum, cellNum, aid.MetaData.PreviousManualApproveCount);
 			cellNum = this.sheet.SetCellValue(this.rowNum, cellNum, aid.ReservedFunds);
 			cellNum = this.sheet.SetCellValue(this.rowNum, cellNum, aid.SystemCalculatedAmount);
-			cellNum = this.sheet.SetCellValue(this.rowNum, cellNum, aid.WorstStatuses);
 		} // TrailsToExcel
 
 		private static IEnumerable<string> GetApprovalColumnNames() {

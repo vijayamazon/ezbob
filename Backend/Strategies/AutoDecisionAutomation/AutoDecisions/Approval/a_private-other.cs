@@ -42,8 +42,8 @@
 					repaymentPeriod,
 					interestRate.ToString("P2", Library.Instance.Culture),
 					setupFee.ToString("P2", Library.Instance.Culture),
-					HttpUtility.HtmlEncode(this.m_oTrail.ToString()),
-					HttpUtility.HtmlEncode(this.m_oTrail.InputData.Serialize())
+					HttpUtility.HtmlEncode(this.trail.ToString()),
+					HttpUtility.HtmlEncode(this.trail.InputData.Serialize())
 				);
 
 				new Mail().Send(
@@ -60,7 +60,7 @@
 		} // NotifyAutoApproveSilentMode
 
 		private void SaveTrailInputData(GetAvailableFunds availFunds) {
-			this.m_oTrail.MyInputData.SetDataAsOf(Now);
+			this.trail.MyInputData.SetDataAsOf(Now);
 
 			var cfg = new Configuration {
 				ExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold,
@@ -95,23 +95,23 @@
 				Reject_Defaults_MonthsNum = CurrentValues.Instance.Reject_Defaults_MonthsNum,
 			};
 			
-			this.m_oTrail.MyInputData.SetConfiguration(cfg);
+			this.trail.MyInputData.SetConfiguration(cfg);
 
 			this.db.ForEachRowSafe(
-				srName => this.m_oTrail.MyInputData.Configuration.EnabledTraces.Add(srName["Name"]),
+				srName => this.trail.MyInputData.Configuration.EnabledTraces.Add(srName["Name"]),
 				"LoadEnabledTraces",
 				CommandSpecies.StoredProcedure
 			);
 
-			this.m_oTrail.MyInputData.SetArgs(
+			this.trail.MyInputData.SetArgs(
 				this.customerId,
-				this.m_oTrail.SafeAmount,
+				this.trail.SafeAmount,
 				(AutomationCalculator.Common.Medal)this.medalClassification,
 				this.medalType,
 				this.turnoverType
 			);
 
-			this.m_oTrail.MyInputData.SetMetaData(new MetaData {
+			this.trail.MyInputData.SetMetaData(new MetaData {
 				RowType = "MetaData",
 				FirstName = (this.customer != null) && (this.customer.PersonalInfo != null)
 					? this.customer.PersonalInfo.FirstName
@@ -136,7 +136,7 @@
 					(this.customer.PersonalInfo != null) &&
 					this.customer.PersonalInfo.DateOfBirth.HasValue
 				) ? this.customer.PersonalInfo.DateOfBirth.Value : Now,
-				NumOfDefaultAccounts = this.m_oConsumerData.FindNumOfPersonalDefaults(
+				NumOfDefaultAccounts = this.experianConsumerData.FindNumOfPersonalDefaults(
 					cfg.Reject_Defaults_Amount,
 					Now.AddMonths(-1 * cfg.Reject_Defaults_MonthsNum)
 				),
@@ -172,40 +172,39 @@
 				new QueryParameter("Now", Now)
 			);
 
-			this.m_oTrail.MyInputData.MetaData.EmailSendingBanned = sr["EmailSendingBanned"];
-			this.m_oTrail.MyInputData.MetaData.OfferStart = sr["OfferStart"];
-			this.m_oTrail.MyInputData.MetaData.OfferValidUntil = sr["OfferValidUntil"];
+			this.trail.MyInputData.MetaData.EmailSendingBanned = sr["EmailSendingBanned"];
+			this.trail.MyInputData.MetaData.OfferStart = sr["OfferStart"];
+			this.trail.MyInputData.MetaData.OfferValidUntil = sr["OfferValidUntil"];
 
-			this.m_oTrail.MyInputData.SetDirectorNames(this.directors);
-			this.m_oTrail.MyInputData.SetHmrcBusinessNames(this.hmrcNames);
+			this.trail.MyInputData.SetDirectorNames(this.directors);
+			this.trail.MyInputData.SetHmrcBusinessNames(this.hmrcNames);
 
-			this.m_oTrail.MyInputData.SetWorstStatuses(this.consumerCaisDetailWorstStatuses);
 			FindLatePayments();
-			this.m_oTrail.MyInputData.SetSeniority(CalculateSeniority());
-			this.m_oTrail.MyInputData.SetAvailableFunds(availFunds.AvailableFunds, availFunds.ReservedAmount);
+			this.trail.MyInputData.SetSeniority(CalculateSeniority());
+			this.trail.MyInputData.SetAvailableFunds(availFunds.AvailableFunds, availFunds.ReservedAmount);
 
 			this.db.ForEachResult<TurnoverDbRow>(
-				r => this.m_oTurnover.Add(r),
+				r => this.turnover.Add(r),
 				"GetCustomerTurnoverForAutoDecision",
 				new QueryParameter("IsForApprove", true),
 				new QueryParameter("CustomerID", this.customerId),
 				new QueryParameter("Now", Now)
 			);
 
-			this.m_oTrail.MyInputData.SetTurnoverData(this.m_oTurnover);
+			this.trail.MyInputData.SetTurnoverData(this.turnover);
 
-			this.m_oTrail.MyInputData.MetaData.Validate();
+			this.trail.MyInputData.MetaData.Validate();
 		} // SaveTrailInputData
 
 		private T StepDone<T>() where T : ATrace {
-			return this.m_oTrail.Affirmative<T>(false);
+			return this.trail.Affirmative<T>(false);
 		} // StepDone
 
 		private T StepFailed<T>() where T : ATrace {
-			bool isStepEnabled = this.m_oTrail.MyInputData.Configuration.IsTraceEnabled<T>();
+			bool isStepEnabled = this.trail.MyInputData.Configuration.IsTraceEnabled<T>();
 
 			if (!isStepEnabled) {
-				this.m_oTrail.AddNote(
+				this.trail.AddNote(
 					"Step '" + typeof(T).FullName + "' has failed but is disabled hence marked as passed."
 				);
 			} // if
@@ -214,12 +213,11 @@
 		} // StepFailed
 
 		private T StepForceFailed<T>() where T : ATrace {
-			this.m_oTrail.Amount = 0;
-			return this.m_oTrail.Negative<T>(false);
+			this.trail.Amount = 0;
+			return this.trail.Negative<T>(false);
 		} // StepForceFailed
 
 		private readonly CashRequestsRepository cashRequestsRepository;
-		private readonly List<string> consumerCaisDetailWorstStatuses;
 		private readonly Customer customer;
 		private readonly int customerId;
 		private readonly AConnection db;
@@ -228,8 +226,8 @@
 		private readonly LoanScheduleTransactionRepository loanScheduleTransactionRepository;
 		private readonly ASafeLog log;
 		private readonly AutomationCalculator.AutoDecision.AutoApproval.Agent m_oSecondaryImplementation;
-		private readonly ApprovalTrail m_oTrail;
-		private readonly AutoApprovalTurnover m_oTurnover;
+		private readonly ApprovalTrail trail;
+		private readonly AutoApprovalTurnover turnover;
 		private readonly Medal medalClassification;
 		private readonly AutomationCalculator.Common.TurnoverType? turnoverType;
 		private readonly AutomationCalculator.Common.MedalType medalType;
@@ -240,7 +238,7 @@
 		private bool hasLoans;
 		private List<String> hmrcNames;
 		private bool isBrokerCustomer;
-		private ExperianConsumerData m_oConsumerData;
+		private ExperianConsumerData experianConsumerData;
 		private int minCompanyScore;
 		private int minExperianScore;
 	} // class Approval

@@ -34,7 +34,7 @@
 				CheckIsDirector();
 				CheckHmrcIsCompany();
 				CheckTotalLoanCount();
-				CheckWorstCaisStatus(this.m_oTrail.MyInputData.MetaData.TotalLoanCount > 0
+				CheckWorstCaisStatus(this.trail.MyInputData.MetaData.TotalLoanCount > 0
 					? CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan
 					: CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan
 				);
@@ -55,7 +55,7 @@
 				this.customerId
 			);
 
-			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.m_oTrail.RoundedAmount, this.m_oTrail);
+			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.trail.RoundedAmount, this.trail);
 		} // CheckAutoApprovalConformance
 
 		private void RoundAmount() {
@@ -66,30 +66,30 @@
 
 			this.log.Debug(
 				"Primary before rounding: amount = {0}, minLoanAmount = {1}",
-				this.m_oTrail.SafeAmount,
+				this.trail.SafeAmount,
 				roundTo
 			);
 
-			this.m_oTrail.Amount = roundTo * Math.Round(
-				this.m_oTrail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
+			this.trail.Amount = roundTo * Math.Round(
+				this.trail.SafeAmount / roundTo, 0, MidpointRounding.AwayFromZero
 			);
 
 			this.log.Debug(
 				"Primary after rounding: amount = {0}, minLoanAmount = {1}",
-				this.m_oTrail.SafeAmount,
+				this.trail.SafeAmount,
 				roundTo
 			);
 		} // RoundAmount
 
 		private void CheckCompanyIsDissolved() {
 			bool isDissolved =
-				this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.HasValue &&
-				this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate.Value <= Now;
+				this.trail.MyInputData.MetaData.CompanyDissolutionDate.HasValue &&
+				this.trail.MyInputData.MetaData.CompanyDissolutionDate.Value <= Now;
 
 			if (isDissolved)
-				StepFailed<CompanyIsDissolved>().Init(this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
+				StepFailed<CompanyIsDissolved>().Init(this.trail.MyInputData.MetaData.CompanyDissolutionDate);
 			else
-				StepDone<CompanyIsDissolved>().Init(this.m_oTrail.MyInputData.MetaData.CompanyDissolutionDate);
+				StepDone<CompanyIsDissolved>().Init(this.trail.MyInputData.MetaData.CompanyDissolutionDate);
 		} // CheckCompanyIsDissolved
 
 		private void CheckAge() {
@@ -119,22 +119,22 @@
 		} // CheckAge
 
 		private void CheckAllowedRange() {
-			if (this.m_oTrail.MyInputData.Configuration.IsSilent) {
+			if (this.trail.MyInputData.Configuration.IsSilent) {
 				StepDone<AmountOutOfRangle>()
-					.Init(this.m_oTrail.RoundedAmount, this.m_oTrail.MyInputData.Configuration.IsSilent);
+					.Init(this.trail.RoundedAmount, this.trail.MyInputData.Configuration.IsSilent);
 			} else {
-				int autoApproveMinAmount = this.m_oTrail.MyInputData.Configuration.MinLoan;
-				int autoApproveMaxAmount = this.m_oTrail.MyInputData.Configuration.MaxAmount;
+				int autoApproveMinAmount = this.trail.MyInputData.Configuration.MinLoan;
+				int autoApproveMaxAmount = this.trail.MyInputData.Configuration.MaxAmount;
 
-				if (this.m_oTrail.RoundedAmount < autoApproveMinAmount || this.m_oTrail.RoundedAmount > autoApproveMaxAmount) {
+				if (this.trail.RoundedAmount < autoApproveMinAmount || this.trail.RoundedAmount > autoApproveMaxAmount) {
 					StepFailed<AmountOutOfRangle>().Init(
-						this.m_oTrail.RoundedAmount,
+						this.trail.RoundedAmount,
 						autoApproveMinAmount,
 						autoApproveMaxAmount
 					);
 				} else {
 					StepDone<AmountOutOfRangle>().Init(
-						this.m_oTrail.RoundedAmount,
+						this.trail.RoundedAmount,
 						autoApproveMinAmount,
 						autoApproveMaxAmount
 					);
@@ -144,18 +144,18 @@
 
 		private void CheckAMLResult() {
 			bool amlPassed =
-				(this.m_oTrail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
-				(this.m_oTrail.MyInputData.MetaData.AmlResult == "Passed");
+				(this.trail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
+				(this.trail.MyInputData.MetaData.AmlResult == "Passed");
 
 			if (amlPassed)
-				StepDone<AmlCheck>().Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
+				StepDone<AmlCheck>().Init(this.trail.MyInputData.MetaData.AmlResult);
 			else
-				StepFailed<AmlCheck>().Init(this.m_oTrail.MyInputData.MetaData.AmlResult);
+				StepFailed<AmlCheck>().Init(this.trail.MyInputData.MetaData.AmlResult);
 		} // CheckAMLResult
 
 		private void CheckBusinessScore() {
 			int nThreshold = CurrentValues.Instance.AutoApproveBusinessScoreThreshold;
-			int nScore = this.m_oTrail.MyInputData.MetaData.CompanyScore;
+			int nScore = this.trail.MyInputData.MetaData.CompanyScore;
 
 			if (nScore <= 0)
 				StepDone<BusinessScore>().Init(nScore, nThreshold);
@@ -166,7 +166,7 @@
 		} // CheckBusinessScore
 
 		private void CheckComplete() {
-			int nAutoApprovedAmount = this.m_oTrail.RoundedAmount;
+			int nAutoApprovedAmount = this.trail.RoundedAmount;
 
 			if (nAutoApprovedAmount > 0)
 				StepDone<Complete>().Init(nAutoApprovedAmount);
@@ -177,36 +177,36 @@
 		private void CheckCustomerOpenLoans() {
 			int autoApproveMaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans;
 
-			if (this.m_oTrail.MyInputData.MetaData.OpenLoanCount > autoApproveMaxNumOfOutstandingLoans) {
+			if (this.trail.MyInputData.MetaData.OpenLoanCount > autoApproveMaxNumOfOutstandingLoans) {
 				StepFailed<OutstandingLoanCount>().Init(
-					this.m_oTrail.MyInputData.MetaData.OpenLoanCount,
+					this.trail.MyInputData.MetaData.OpenLoanCount,
 					autoApproveMaxNumOfOutstandingLoans
 				);
 			} else {
 				StepDone<OutstandingLoanCount>().Init(
-					this.m_oTrail.MyInputData.MetaData.OpenLoanCount,
+					this.trail.MyInputData.MetaData.OpenLoanCount,
 					autoApproveMaxNumOfOutstandingLoans
 				);
 			} // if
 		} // CheckCustomerOpenLoans
 
 		private void CheckCustomerStatus() {
-			if (!this.m_oTrail.MyInputData.MetaData.CustomerStatusEnabled)
-				StepFailed<CustomerStatus>().Init(this.m_oTrail.MyInputData.MetaData.CustomerStatusName);
+			if (!this.trail.MyInputData.MetaData.CustomerStatusEnabled)
+				StepFailed<CustomerStatus>().Init(this.trail.MyInputData.MetaData.CustomerStatusName);
 			else
-				StepDone<CustomerStatus>().Init(this.m_oTrail.MyInputData.MetaData.CustomerStatusName);
+				StepDone<CustomerStatus>().Init(this.trail.MyInputData.MetaData.CustomerStatusName);
 		} // CheckCustomerStatus
 
 		private void CheckDefaultAccounts() {
-			if (this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts > 0)
-				StepFailed<DefaultAccounts>().Init(this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
+			if (this.trail.MyInputData.MetaData.NumOfDefaultAccounts > 0)
+				StepFailed<DefaultAccounts>().Init(this.trail.MyInputData.MetaData.NumOfDefaultAccounts);
 			else
-				StepDone<DefaultAccounts>().Init(this.m_oTrail.MyInputData.MetaData.NumOfDefaultAccounts);
+				StepDone<DefaultAccounts>().Init(this.trail.MyInputData.MetaData.NumOfDefaultAccounts);
 		} // CheckDefaultAccounts
 
 		private void CheckExperianScore() {
 			int nThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold;
-			int nScore = this.m_oTrail.MyInputData.MetaData.ConsumerScore;
+			int nScore = this.trail.MyInputData.MetaData.ConsumerScore;
 
 			if (nScore < nThreshold)
 				StepFailed<ConsumerScore>().Init(nScore, nThreshold);
@@ -217,13 +217,13 @@
 		private void CheckHmrcIsCompany() {
 			bool isCompany = false;
 
-			if (this.m_oTrail.MyInputData.HmrcBusinessNames.Count < 1) {
+			if (this.trail.MyInputData.HmrcBusinessNames.Count < 1) {
 				StepDone<HmrcIsOfBusiness>().Init();
 				return;
 			} // if
 
-			foreach (string hmrcName in this.m_oTrail.MyInputData.HmrcBusinessNames) {
-				if (hmrcName.Equals(this.m_oTrail.MyInputData.CompanyName)) {
+			foreach (string hmrcName in this.trail.MyInputData.HmrcBusinessNames) {
+				if (hmrcName.Equals(this.trail.MyInputData.CompanyName)) {
 					isCompany = true;
 					break;
 				} // if
@@ -231,40 +231,40 @@
 
 			if (!isCompany) {
 				StepFailed<HmrcIsOfBusiness>().Init(
-					this.m_oTrail.MyInputData.HmrcBusinessNames,
-					this.m_oTrail.MyInputData.CompanyName
+					this.trail.MyInputData.HmrcBusinessNames,
+					this.trail.MyInputData.CompanyName
 				);
 			} else {
 				StepDone<HmrcIsOfBusiness>().Init(
-					this.m_oTrail.MyInputData.HmrcBusinessNames,
-					this.m_oTrail.MyInputData.CompanyName
+					this.trail.MyInputData.HmrcBusinessNames,
+					this.trail.MyInputData.CompanyName
 				);
 			} // if
 		} // CheckHmrcIsCompany
 
 		private void CheckTurnovers() {
-			if (this.m_oTrail.MyInputData.IsTurnoverGood()) {
+			if (this.trail.MyInputData.IsTurnoverGood()) {
 				StepDone<ThreeMonthsTurnover>().Init(
-					this.m_oTrail.MyInputData.Turnover3M,
-					this.m_oTrail.MyInputData.Turnover1Y,
-					this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio
+					this.trail.MyInputData.Turnover3M,
+					this.trail.MyInputData.Turnover1Y,
+					this.trail.MyInputData.Configuration.TurnoverDropQuarterRatio
 				);
 			} else {
 				StepFailed<ThreeMonthsTurnover>().Init(
-					this.m_oTrail.MyInputData.Turnover3M,
-					this.m_oTrail.MyInputData.Turnover1Y,
-					this.m_oTrail.MyInputData.Configuration.TurnoverDropQuarterRatio
+					this.trail.MyInputData.Turnover3M,
+					this.trail.MyInputData.Turnover1Y,
+					this.trail.MyInputData.Configuration.TurnoverDropQuarterRatio
 				);
 			} // if
 		} // CheckTurnovers
 
 		private void CheckInit() {
-			int nAutoApprovedAmount = this.m_oTrail.RoundedAmount;
+			int nAutoApprovedAmount = this.trail.RoundedAmount;
 
 			if (nAutoApprovedAmount > 0)
-				StepDone<InitialAssignment>().Init(this.m_oTrail.RoundedAmount);
+				StepDone<InitialAssignment>().Init(this.trail.RoundedAmount);
 			else
-				StepFailed<InitialAssignment>().Init(this.m_oTrail.RoundedAmount);
+				StepFailed<InitialAssignment>().Init(this.trail.RoundedAmount);
 		} // CheckInit
 
 		private void CheckIsBroker() {
@@ -275,20 +275,20 @@
 		} // CheckIsBroker
 
 		private void CheckIsDirector() {
-			if (!this.m_oTrail.MyInputData.MetaData.IsLimitedCompanyType) {
-				StepDone<CustomerIsDirector>().Init(this.m_oTrail.MyInputData.MetaData.IsLimitedCompanyType);
+			if (!this.trail.MyInputData.MetaData.IsLimitedCompanyType) {
+				StepDone<CustomerIsDirector>().Init(this.trail.MyInputData.MetaData.IsLimitedCompanyType);
 				return;
 			} // if
 
 			bool isDirector = false;
 
-			if (this.m_oTrail.MyInputData.DirectorNames.Count < 1) {
-				StepFailed<CustomerIsDirector>().Init(this.m_oTrail.MyInputData.CustomerName.ToString());
+			if (this.trail.MyInputData.DirectorNames.Count < 1) {
+				StepFailed<CustomerIsDirector>().Init(this.trail.MyInputData.CustomerName.ToString());
 				return;
 			} // if
 
-			foreach (Name directorName in this.m_oTrail.MyInputData.DirectorNames) {
-				if (directorName.Equals(this.m_oTrail.MyInputData.CustomerName)) {
+			foreach (Name directorName in this.trail.MyInputData.DirectorNames) {
+				if (directorName.Equals(this.trail.MyInputData.CustomerName)) {
 					isDirector = true;
 					break;
 				} // if
@@ -296,16 +296,16 @@
 
 			if (!isDirector) {
 				var nc = new NameComparer(
-					this.m_oTrail.MyInputData.CustomerName,
-					this.m_oTrail.MyInputData.DirectorNames,
+					this.trail.MyInputData.CustomerName,
+					this.trail.MyInputData.DirectorNames,
 					this.db
 				);
 
-				foreach (Name name in this.m_oTrail.MyInputData.DirectorNames) {
-					StringDifference firstNameDiff = nc[this.m_oTrail.MyInputData.CustomerName.FirstName, name.FirstName];
+				foreach (Name name in this.trail.MyInputData.DirectorNames) {
+					StringDifference firstNameDiff = nc[this.trail.MyInputData.CustomerName.FirstName, name.FirstName];
 
 					if ((int)firstNameDiff >= (int)StringDifference.SoundVerySimilar) {
-						StringDifference lastNameDiff = nc[this.m_oTrail.MyInputData.CustomerName.LastName, name.LastName];
+						StringDifference lastNameDiff = nc[this.trail.MyInputData.CustomerName.LastName, name.LastName];
 						
 						if ((int)lastNameDiff >= (int)StringDifference.SoundVerySimilar) {
 							isDirector = true;
@@ -317,37 +317,37 @@
 
 			if (!isDirector) {
 				StepFailed<CustomerIsDirector>().Init(
-					this.m_oTrail.MyInputData.CustomerName.ToString(),
-					this.m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
+					this.trail.MyInputData.CustomerName.ToString(),
+					this.trail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
 				);
 			} else {
 				StepDone<CustomerIsDirector>().Init(
-					this.m_oTrail.MyInputData.CustomerName.ToString(),
-					this.m_oTrail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
+					this.trail.MyInputData.CustomerName.ToString(),
+					this.trail.MyInputData.DirectorNames.Select(x => x.ToString()).ToList()
 				);
 			} // if
 		} // CheckIsDirector
 
 		private void CheckIsFraud() {
 			bool fraudPassed =
-				(this.m_oTrail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
-				(this.m_oTrail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok);
+				(this.trail.MyInputData.MetaData.PreviousManualApproveCount > 0) ||
+				(this.trail.MyInputData.MetaData.FraudStatus == FraudStatus.Ok);
 
 			if (fraudPassed)
-				StepDone<FraudSuspect>().Init(this.m_oTrail.MyInputData.MetaData.FraudStatus);
+				StepDone<FraudSuspect>().Init(this.trail.MyInputData.MetaData.FraudStatus);
 			else
-				StepFailed<FraudSuspect>().Init(this.m_oTrail.MyInputData.MetaData.FraudStatus);
+				StepFailed<FraudSuspect>().Init(this.trail.MyInputData.MetaData.FraudStatus);
 		} // CheckIsFraud
 
 		private void CheckLateDays() {
 			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 
-			if (this.m_oTrail.MyInputData.LatePayments.Count < 1) {
+			if (this.trail.MyInputData.LatePayments.Count < 1) {
 				StepDone<LatePayment>().Init(0, 0, Now, 0, Now, autoApproveMaxAllowedDaysLate);
 				return;
 			} // if
 
-			foreach (Payment oPayment in this.m_oTrail.MyInputData.LatePayments) {
+			foreach (Payment oPayment in this.trail.MyInputData.LatePayments) {
 				StepFailed<LatePayment>().Init(
 					oPayment.LoanID,
 					oPayment.ScheduleID, oPayment.ScheduleDate,
@@ -376,21 +376,21 @@
 		private void CheckRepaidRatio() {
 			decimal autoApproveMinRepaidPortion = CurrentValues.Instance.AutoApproveMinRepaidPortion;
 
-			if (this.m_oTrail.MyInputData.MetaData.RepaidRatio >= autoApproveMinRepaidPortion) {
+			if (this.trail.MyInputData.MetaData.RepaidRatio >= autoApproveMinRepaidPortion) {
 				StepDone<OutstandingRepayRatio>().Init(
-					this.m_oTrail.MyInputData.MetaData.RepaidRatio,
+					this.trail.MyInputData.MetaData.RepaidRatio,
 					autoApproveMinRepaidPortion
 				);
 			} else {
 				StepFailed<OutstandingRepayRatio>().Init(
-					this.m_oTrail.MyInputData.MetaData.RepaidRatio,
+					this.trail.MyInputData.MetaData.RepaidRatio,
 					autoApproveMinRepaidPortion
 				);
 			} // if
 		} // CheckRepaidRatio
 
 		private void CheckRollovers() {
-			if (this.m_oTrail.MyInputData.MetaData.NumOfRollovers > 0)
+			if (this.trail.MyInputData.MetaData.NumOfRollovers > 0)
 				StepFailed<Rollovers>().Init();
 			else
 				StepDone<Rollovers>().Init();
@@ -399,14 +399,14 @@
 		private void CheckSeniority() {
 			int autoApproveMinMpSeniorityDays = CurrentValues.Instance.AutoApproveMinMPSeniorityDays;
 
-			if (this.m_oTrail.MyInputData.MarketplaceSeniority < autoApproveMinMpSeniorityDays) {
+			if (this.trail.MyInputData.MarketplaceSeniority < autoApproveMinMpSeniorityDays) {
 				StepFailed<MarketplaceSeniority>().Init(
-					this.m_oTrail.MyInputData.MarketplaceSeniority,
+					this.trail.MyInputData.MarketplaceSeniority,
 					autoApproveMinMpSeniorityDays
 				);
 			} else {
 				StepDone<MarketplaceSeniority>().Init(
-					this.m_oTrail.MyInputData.MarketplaceSeniority,
+					this.trail.MyInputData.MarketplaceSeniority,
 					autoApproveMinMpSeniorityDays
 				);
 			} // if
@@ -415,14 +415,14 @@
 		private void CheckTodaysApprovals() {
 			int autoApproveMaxDailyApprovals = CurrentValues.Instance.AutoApproveMaxDailyApprovals;
 
-			if (this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval >= autoApproveMaxDailyApprovals) {
+			if (this.trail.MyInputData.MetaData.NumOfTodayAutoApproval >= autoApproveMaxDailyApprovals) {
 				StepFailed<TodayApprovalCount>().Init(
-					this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval,
+					this.trail.MyInputData.MetaData.NumOfTodayAutoApproval,
 					autoApproveMaxDailyApprovals
 				);
 			} else {
 				StepDone<TodayApprovalCount>().Init(
-					this.m_oTrail.MyInputData.MetaData.NumOfTodayAutoApproval,
+					this.trail.MyInputData.MetaData.NumOfTodayAutoApproval,
 					autoApproveMaxDailyApprovals
 				);
 			} // if
@@ -431,42 +431,40 @@
 		private void CheckTodaysLoans() {
 			int autoApproveMaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans;
 
-			if (this.m_oTrail.MyInputData.MetaData.TodayLoanSum >= autoApproveMaxTodayLoans)
-				StepFailed<TodayLoans>().Init(this.m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
+			if (this.trail.MyInputData.MetaData.TodayLoanSum >= autoApproveMaxTodayLoans)
+				StepFailed<TodayLoans>().Init(this.trail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
 			else
-				StepDone<TodayLoans>().Init(this.m_oTrail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
+				StepDone<TodayLoans>().Init(this.trail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
 		} // CheckTodaysLoans
 
 		private void CheckTotalLoanCount() {
-			StepDone<TotalLoanCount>().Init(this.m_oTrail.MyInputData.MetaData.TotalLoanCount);
+			StepDone<TotalLoanCount>().Init(this.trail.MyInputData.MetaData.TotalLoanCount);
 		} // CheckTotalLoanCount
 
 		private void CheckWorstCaisStatus(string allowedStatuses) {
-			List<string> oAllowedStatuses = allowedStatuses.Split(',').ToList();
-
-			List<string> diff = this.consumerCaisDetailWorstStatuses.Except(oAllowedStatuses).ToList();
+			var diff = new List<string>(FindBadCaisStatuses());
 
 			if (diff.Count > 0)
-				StepFailed<WorstCaisStatus>().Init(diff, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
+				StepFailed<WorstCaisStatus>().Init(diff);
 			else
-				StepDone<WorstCaisStatus>().Init(null, this.consumerCaisDetailWorstStatuses, oAllowedStatuses);
+				StepDone<WorstCaisStatus>().Init(null);
 		} // CheckWorstCaisStatus
 
 		private void ReduceOutstandingPrincipal() {
-			this.m_oTrail.Amount = this.m_oTrail.SafeAmount - this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal;
+			this.trail.Amount = this.trail.SafeAmount - this.trail.MyInputData.MetaData.OutstandingPrincipal;
 
-			if (this.m_oTrail.RoundedAmount < 0)
-				this.m_oTrail.Amount = 0;
+			if (this.trail.RoundedAmount < 0)
+				this.trail.Amount = 0;
 
-			if (this.m_oTrail.SafeAmount > 0.00000001m) {
+			if (this.trail.SafeAmount > 0.00000001m) {
 				StepDone<ReduceOutstandingPrincipal>().Init(
-					this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal,
-					this.m_oTrail.SafeAmount
+					this.trail.MyInputData.MetaData.OutstandingPrincipal,
+					this.trail.SafeAmount
 				);
 			} else {
 				StepFailed<ReduceOutstandingPrincipal>().Init(
-					this.m_oTrail.MyInputData.MetaData.OutstandingPrincipal,
-					this.m_oTrail.SafeAmount
+					this.trail.MyInputData.MetaData.OutstandingPrincipal,
+					this.trail.SafeAmount
 				);
 			} // if
 		} // ReduceOutstandingPrincipal

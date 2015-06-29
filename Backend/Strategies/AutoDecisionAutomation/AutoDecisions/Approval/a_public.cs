@@ -31,7 +31,7 @@
 			AConnection db,
 			ASafeLog log
 		) {
-			this.m_oTrail = new ApprovalTrail(
+			this.trail = new ApprovalTrail(
 				customerId,
 				this.log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
@@ -41,7 +41,7 @@
 				Amount = offeredCreditLine,
 			};
 
-			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.Creation)) {
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.Creation)) {
 				Now = DateTime.UtcNow;
 
 				this.db = db;
@@ -59,14 +59,12 @@
 				this.medalType = medalType;
 				this.turnoverType = turnoverType;
 
-				this.consumerCaisDetailWorstStatuses = new List<string>();
-
 				this.customer = customerRepo.ReallyTryGet(customerId);
 
-				this.m_oTurnover = new AutoApprovalTurnover {
+				this.turnover = new AutoApprovalTurnover {
 					TurnoverType = this.turnoverType,
 				};
-				this.m_oTurnover.Init();
+				this.turnover.Init();
 			} // using timer step
 
 			this.m_oSecondaryImplementation = new Agent(
@@ -81,11 +79,11 @@
 		} // constructor
 
 		public Approval Init() {
-			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
 				var stra = new LoadExperianConsumerData(this.customerId, null, null);
 				stra.Execute();
 
-				this.m_oConsumerData = stra.Result;
+				this.experianConsumerData = stra.Result;
 
 				if (this.customer == null) {
 					this.isBrokerCustomer = false;
@@ -162,16 +160,6 @@
 				if (int.TryParse(oScore.SafeReturnedValue, out nScore))
 					this.minCompanyScore = nScore;
 
-				this.consumerCaisDetailWorstStatuses.Clear();
-				var oWorstStatuses = new SortedSet<string>();
-
-				if (this.m_oConsumerData.Cais != null) {
-					foreach (var c in this.m_oConsumerData.Cais)
-						oWorstStatuses.Add(c.WorstStatus.Trim());
-				} // if
-
-				this.consumerCaisDetailWorstStatuses.AddRange(oWorstStatuses);
-
 				this.m_oSecondaryImplementation.Init();
 			} // using timer step
 
@@ -179,12 +167,12 @@
 		} // Init
 
 		public bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
-			this.m_oTrail.SetTag(tag);
+			this.trail.SetTag(tag);
 
-			using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
+			using (this.trail.AddCheckpoint(ProcessCheckpoints.MakeDecision)) {
 				GetAvailableFunds availFunds;
 
-				using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
+				using (this.trail.AddCheckpoint(ProcessCheckpoints.GatherData)) {
 					availFunds = new GetAvailableFunds();
 					GetAvailableFunds.LoadFromDB();
 					availFunds.Execute();
@@ -192,22 +180,22 @@
 					SaveTrailInputData(availFunds);
 				} // using timer step
 
-				using (this.m_oTrail.AddCheckpoint(ProcessCheckpoints.RunCheck))
+				using (this.trail.AddCheckpoint(ProcessCheckpoints.RunCheck))
 					CheckAutoApprovalConformance(availFunds.ReservedAmount);
 			} // using timer step
 
 			this.m_oSecondaryImplementation.MakeDecision();
 
-			bool bSuccess = this.m_oTrail.EqualsTo(this.m_oSecondaryImplementation.Trail, quiet);
+			bool bSuccess = this.trail.EqualsTo(this.m_oSecondaryImplementation.Trail, quiet);
 			WasMismatch = !bSuccess;
 
-			if (bSuccess && this.m_oTrail.HasDecided) {
-				if (this.m_oTrail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
-					this.m_oTrail.Affirmative<SameAmount>(false).Init(this.m_oTrail.RoundedAmount);
+			if (bSuccess && this.trail.HasDecided) {
+				if (this.trail.RoundedAmount == this.m_oSecondaryImplementation.Trail.RoundedAmount) {
+					this.trail.Affirmative<SameAmount>(false).Init(this.trail.RoundedAmount);
 					this.m_oSecondaryImplementation.Trail.Affirmative<SameAmount>(false)
 						.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
 				} else {
-					this.m_oTrail.Negative<SameAmount>(false).Init(this.m_oTrail.RoundedAmount);
+					this.trail.Negative<SameAmount>(false).Init(this.trail.RoundedAmount);
 					this.m_oSecondaryImplementation.Trail.Negative<SameAmount>(false)
 						.Init(this.m_oSecondaryImplementation.Trail.RoundedAmount);
 					bSuccess = false;
@@ -215,7 +203,7 @@
 				} // if
 			} // if
 
-			this.m_oTrail.Save(this.db, this.m_oSecondaryImplementation.Trail, tag: tag);
+			this.trail.Save(this.db, this.m_oSecondaryImplementation.Trail, tag: tag);
 
 			return bSuccess;
 		} // MakeAndVerifyDecision
@@ -229,18 +217,18 @@
 				if (bSuccess) {
 					this.log.Info(
 						"Both Auto Approval implementations have reached the same decision: {0}",
-						this.m_oTrail.HasDecided ? "approved" : "not approved"
+						this.trail.HasDecided ? "approved" : "not approved"
 					);
-					response.AutoApproveAmount = this.m_oTrail.RoundedAmount;
+					response.AutoApproveAmount = this.trail.RoundedAmount;
 				} else {
 					this.log.Alert(
 						"Switching to manual decision: Auto Approval implementations " +
 						"have not reached the same decision for customer {0}, diff id is {1}.",
 						this.customerId,
-						this.m_oTrail.UniqueID.ToString("N")
+						this.trail.UniqueID.ToString("N")
 					);
 
-					response.LoanOfferUnderwriterComment = "Mismatch - " + this.m_oTrail.UniqueID;
+					response.LoanOfferUnderwriterComment = "Mismatch - " + this.trail.UniqueID;
 
 					response.AutoApproveAmount = 0;
 
@@ -252,7 +240,7 @@
 				this.log.Info("Decided to auto approve rounded amount: {0}", response.AutoApproveAmount);
 
 				if (response.AutoApproveAmount != 0) {
-					if (this.m_oTrail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
+					if (this.trail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
 					    var source = this.loanSourceRepository.GetDefault();
 						var offerDualCalculator = new OfferDualCalculator(
 							this.customerId,
@@ -277,9 +265,9 @@
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
-								response.LoanOfferUnderwriterComment = "Calculator failure - " + this.m_oTrail.UniqueID;
+								response.LoanOfferUnderwriterComment = "Calculator failure - " + this.trail.UniqueID;
 							} else {
-								response.LoanOfferUnderwriterComment = "Silent Approve - " + this.m_oTrail.UniqueID;
+								response.LoanOfferUnderwriterComment = "Silent Approve - " + this.trail.UniqueID;
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
@@ -302,17 +290,17 @@
 								response.CreditResult = CreditResultStatus.WaitingForDecision;
 								response.UserStatus = Status.Manual;
 								response.SystemDecision = SystemDecision.Manual;
-								response.LoanOfferUnderwriterComment = "Calculator failure - " + this.m_oTrail.UniqueID;
+								response.LoanOfferUnderwriterComment = "Calculator failure - " + this.trail.UniqueID;
 							} else {
 								response.CreditResult = CreditResultStatus.Approved;
 								response.UserStatus = Status.Approved;
 								response.SystemDecision = SystemDecision.Approve;
 								response.LoanOfferUnderwriterComment = "Auto Approval";
 								response.DecisionName = "Approval";
-								response.AppValidFor = Now.AddDays(this.m_oTrail.MyInputData.MetaData.OfferLength);
+								response.AppValidFor = Now.AddDays(this.trail.MyInputData.MetaData.OfferLength);
 								response.Decision = DecisionActions.Approve;
 								response.LoanOfferEmailSendingBannedNew =
-									this.m_oTrail.MyInputData.MetaData.IsEmailSendingBanned;
+									this.trail.MyInputData.MetaData.IsEmailSendingBanned;
 
 								// Use offer calculated data
 								response.RepaymentPeriod = offerResult.Period;
@@ -326,7 +314,7 @@
 				} // if auto approved amount is not 0
 			} catch (Exception e) {
 				this.log.Error(e, "Exception during auto approval.");
-				response.LoanOfferUnderwriterComment = "Exception - " + this.m_oTrail.UniqueID;
+				response.LoanOfferUnderwriterComment = "Exception - " + this.trail.UniqueID;
 			} // try
 		} // MakeDecision
 	} // class Approval

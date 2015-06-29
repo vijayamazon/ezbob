@@ -31,8 +31,6 @@
 		public MetaData MetaData { get; private set; }
 		public decimal ReservedFunds { get; private set; }
 		public decimal SystemCalculatedAmount { get { return this.m_oArguments.SystemCalculatedAmount; } }
-		public string WorstStatuses { get { return string.Join(",", WorstStatusList); } }
-		public List<string> WorstStatusList { get; private set; }
 
 		[JsonIgnore]
 		public Name CustomerName { get { return new Name(MetaData.FirstName, MetaData.LastName); } }
@@ -70,7 +68,6 @@
 			Configuration oCfg,
 			Arguments oArgs,
 			MetaData oMetaData,
-			IEnumerable<string> oWorstStatuses,
 			IEnumerable<Payment> oPayments,
 			OriginationTime oOriginationTime,
 			AutoApprovalTurnover oTurnover,
@@ -82,7 +79,6 @@
 			SetConfiguration(oCfg);
 			this.m_oArguments = oArgs;
 			SetMetaData(oMetaData);
-			SetWorstStatuses(oWorstStatuses);
 
 			if (oPayments != null)
 				LatePayments.AddRange(oPayments);
@@ -155,14 +151,6 @@
 			SetTurnover(12, oTurnover[12]);
 		} // SetTurnoverData
 
-		public void SetWorstStatuses(IEnumerable<string> oWorstStatuses) {
-			if (WorstStatusList == null)
-				WorstStatusList = new List<string>();
-
-			if (oWorstStatuses != null)
-				WorstStatusList.AddRange(oWorstStatuses);
-		} // SetWorstStatuses
-
 		private decimal GetTurnover(int nMonthCount) {
 			if (this.turnover == null)
 				return 0;
@@ -183,7 +171,6 @@
 			DataAsOf = default(DateTime);
 			Configuration = null;
 			MetaData = null;
-			WorstStatusList = null;
 
 			MarketplaceSeniority = 0;
 

@@ -1,9 +1,11 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
 	using ConfigManager;
+	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
 	using EzBob.Models;
@@ -88,7 +90,7 @@
 					double nTotalLateDays = (transactionDate - scheduleDate).TotalDays;
 
 					if (nTotalLateDays > autoApproveMaxAllowedDaysLate) {
-						this.m_oTrail.MyInputData.AddLatePayment(new Payment {
+						this.trail.MyInputData.AddLatePayment(new Payment {
 							LoanID = innerLoanId,
 							ScheduleDate = paymentMapping.Schedule.Date.Date,
 							ScheduleID = paymentMapping.Schedule.Id,
@@ -101,7 +103,7 @@
 		} // FindLatePayments
 
 		private void FindOutstandingLoans() {
-			MetaData oMeta = this.m_oTrail.MyInputData.MetaData; // just a shortcut
+			MetaData oMeta = this.trail.MyInputData.MetaData; // just a shortcut
 
 			List<Loan> outstandingLoans = FirstOfMonthStatusStrategyHelper.GetOutstandingLoans(this.customerId);
 
@@ -145,5 +147,18 @@
 
 			return oDate ?? DateTime.UtcNow;
 		} // GetCustomerIncorporationDate
+
+		private IEnumerable<string> FindBadCaisStatuses() {
+			return this.experianConsumerData.Cais
+				.Where(ca => ca.IsBad(Now))
+				.Select(ca => string.Format(
+					"ID {0}, updated on {1}, balance {2}, codes {3}",
+					ca.Id,
+					(ca.LastUpdatedDate ?? DateTime.UtcNow).ToString("d-MMM-yyyy", CultureInfo.InvariantCulture),
+					Math.Max(ca.Balance ?? 0, ca.CurrentDefBalance ?? 0),
+					ca.AccountStatusCodes
+				));
+		} // FindBadCaisStatuses
+
 	} // class Approval
 } // namespace

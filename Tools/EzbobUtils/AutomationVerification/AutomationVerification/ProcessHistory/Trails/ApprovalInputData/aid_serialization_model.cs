@@ -66,9 +66,6 @@
 			[UsedImplicitly]
 			public decimal SystemCalculatedAmount { get; set; }
 
-			[UsedImplicitly]
-			public List<string> WorstStatusList { get; set; }
-
 			public void FlushTo(ApprovalInputData dst) {
 				Configuration.EnabledTraces.Clear();
 
@@ -88,7 +85,6 @@
 				else
 					dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal, MedalType, null);
 
-				dst.SetWorstStatuses(WorstStatusList);
 				dst.SetSeniority(MarketplaceSeniority);
 				dst.LatePayments = new List<Payment>(LatePayments);
 
@@ -121,10 +117,6 @@
 				Medal = src.Medal;
 				MedalType = src.MedalType;
 				TurnoverTypeStr = src.TurnoverType == null ? string.Empty : src.TurnoverType.ToString();
-
-				WorstStatusList = new List<string>();
-				if (src.WorstStatusList != null)
-					WorstStatusList.AddRange(src.WorstStatusList);
 
 				MarketplaceSeniority = src.MarketplaceSeniority;
 

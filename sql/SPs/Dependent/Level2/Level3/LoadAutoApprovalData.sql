@@ -504,17 +504,6 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	SELECT DISTINCT
-		RowType         = 'Cais',
-		WorstStatus     = ec.WorstStatus,
-		LastUpdatedDate = ec.LastUpdatedDate
-	FROM
-		ExperianConsumerDataCais ec
-	WHERE
-		ec.ExperianConsumerDataId = @ExperianConsumerDataID
-
-	------------------------------------------------------------------------------
-
 	EXECUTE LoadCustomerMarketplaceOriginationTimes @CustomerID, @Now
 
 	------------------------------------------------------------------------------

@@ -49,7 +49,6 @@
 				Payments = new List<Payment>();
 
 				Funds = new AvailableFunds();
-				WorstStatuses = new SortedSet<string>();
 
 				Turnover = new AutoApprovalTurnover {
 					TurnoverType = Args.TurnoverType,
@@ -143,8 +142,6 @@
 
 		protected virtual AutoApprovalTurnover Turnover { get; private set; }
 
-		protected virtual SortedSet<string> WorstStatuses { get; private set; }
-
 		protected virtual void GatherAvailableFunds() {
 			DB.GetFirst("GetAvailableFunds", CommandSpecies.StoredProcedure).Fill(Funds);
 		} // GatherAvailableFunds
@@ -181,7 +178,6 @@
 				Cfg,
 				Args,
 				MetaData,
-				WorstStatuses,
 				Payments,
 				OriginationTime,
 				Turnover,
@@ -200,7 +196,6 @@
 		protected enum RowType {
 			MetaData,
 			Payment,
-			Cais,
 			OriginationTime,
 			Turnover,
 			DirectorName,
@@ -236,11 +231,6 @@
 				Payments.Add(sr.Fill<Payment>());
 				break;
 
-			case RowType.Cais:
-				if (WorstCaisStatusIsRelevant(sr))
-					WorstStatuses.Add(sr["WorstStatus"]);
-				break;
-
 			case RowType.OriginationTime:
 				OriginationTime.Process(sr);
 				break;
@@ -269,11 +259,6 @@
 				throw new ArgumentOutOfRangeException();
 			} // switch
 		} // ProcessRow
-
-		protected virtual bool WorstCaisStatusIsRelevant(SafeReader sr) {
-			DateTime? lastUpdated = sr["LastUpdatedDate"];
-			return lastUpdated.HasValue && (lastUpdated.Value.AddYears(1) >= Now);
-		} // WorstCaisStatusIsRelevant
 
 		protected virtual List<ExperianConsumerDataCaisAccounts> CaisAccounts { get { return this.caisAccounts; } }
 

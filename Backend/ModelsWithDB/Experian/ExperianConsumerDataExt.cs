@@ -42,5 +42,14 @@
 
 			return numOfDefaultConsumerAccounts;
 		} // FindNumOfPersonalDefaults
+
+		public static bool IsBad(this ExperianConsumerDataCais ca, DateTime now) {
+			return ExperianConsumerDataCaisAccountsExt.IsBad(
+				now,
+				ca.LastUpdatedDate,
+				Math.Max(ca.Balance ?? 0, ca.CurrentDefBalance ?? 0),
+				ca.AccountStatusCodes
+			);
+		} // IsBad
 	} // class ExperianConsumerDataExt
 } // namespace
