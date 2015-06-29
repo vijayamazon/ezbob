@@ -6,16 +6,16 @@
 
 	<div class="Container" style="width:80%; display: none;" id="collapsable-content">
 
-		<form class="form-inline" role="form">
+        <form class="form-inline" role="form" id="form-reschedule" onsubmit="return false;">
 
-			<div class="row">
-				<h5>Within loan period</h5>
-			</div>
+            <div class="row">
+                <h5>Within loan period</h5>
+            </div>
 
-			<div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
+            <div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
             <div class="row alert alert-danger center" style="display: none; text-align: center" id="selection-error">One of the Radio Buttons must be selected</div>
             <div class="row alert alert-danger center" style="display: none; text-align: center" id="within-selector-error">Please select Week/Month</div>
-            
+
             <div class="row alert alert-info center" style="text-align: center; display: none;" id="ReschedulingINNotification"></div>
             <div class="row" id="exception-div">
                 <div class="col-sm-1">&nbsp;</div>
@@ -41,126 +41,126 @@
                 </div>
             </div>
 
-			<div class="row"><h5>Outside loan payment arangment</h5></div>
+            <div class="row"><h5>Outside loan payment arangment</h5></div>
 
-			<div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only positive numeric values allowed</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only positive numeric values allowed</div>
             <div class="row alert alert-danger center" style="display: none; text-align: center" id="outside-selector-error">Please select Week/Month</div>
             <div class="row alert alert-danger center" style="display: none; text-align: center" id="ReschedulingOUTNotification"></div>
-            
-			<div class="row">
-				<div class="col-sm-1">&nbsp;</div>
-				<div class="col-sm-8">
-					<label class="radio-inline">
-						<input type="radio" name="rescheduleIn" value="false" id="radio-2" style="margin-top: 14px;">
-						Reschedule to &nbsp;
-						<span name="outsideWeek" id="outsideWeek" style="font-weight: bold"></span>
-						weeks or &nbsp;
-						<span name="outsideMonth" id="outsideMonth" style="font-weight: bold"></span>
-						month with principal of &nbsp;
+
+            <div class="row">
+                <div class="col-sm-1">&nbsp;</div>
+                <div class="col-sm-8">
+                    <label class="radio-inline">
+                        <input type="radio" name="rescheduleIn" value="false" id="radio-2" style="margin-top: 14px;">
+                        Reschedule to &nbsp;
+                        <span name="outsideWeek" id="outsideWeek" style="font-weight: bold"></span>
+                        weeks or &nbsp;
+                        <span name="outsideMonth" id="outsideMonth" style="font-weight: bold"></span>
+                        month with principal of &nbsp;
                         <span name="withinAmount" style="font-weight: bold"></span>
                         &nbsp;, amount of &nbsp;
                         <input class="form-control input-width" type="number" id="outsideAmount" name="outsideAmount">
-						and intrest of &nbsp;
-						<span name="Intrest" style="font-weight: bold"></span>
-					</label>
-				</div>
-				<div class="col-sm-3">
-					<select class="form-control" id="outsideSelect" style="width: 150px;">
-						<option value="0">SELECT</option>
-						<option value="month">Month</option>
-						<option value="weeks">Week</option>
-					</select>
-				</div>
-			</div>
+                        and intrest of &nbsp;
+                        <span name="Intrest" style="font-weight: bold"></span>
+                    </label>
+                </div>
+                <div class="col-sm-3">
+                    <select class="form-control" id="outsideSelect" style="width: 150px;">
+                        <option value="0">SELECT</option>
+                        <option value="month">Month</option>
+                        <option value="weeks">Week</option>
+                    </select>
+                </div>
+            </div>
 
-			<div class="row">&nbsp;</div>
+            <div class="row">&nbsp;</div>
 
-			<div class="row">
-				<div class="col-sm-1">&nbsp;</div>
-				<div class="col-sm-3">
-					<label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after</label>
-				</div>
-				<div class="col-sm-6" style="text-align:left;">
-					<div class="form-group">
+            <div class="row">
+                <div class="col-sm-1">&nbsp;</div>
+                <div class="col-sm-3">
+                    <label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after</label>
+                </div>
+                <div class="col-sm-6" style="text-align:left;">
+                    <div class="form-group">
                         <input class="form-control input-width" type="number" value="0" id="charges-payments" name="charges-payments"> payments.
-					</div>
-					<span style="display: none; font-weight: bold" id="stop-charges">Auto charges are stopped from <span id="stop-charges-date"></span></span>
-				</div>
-			</div>
+                    </div>
+                    <span style="display: none; font-weight: bold" id="stop-charges">Auto charges are stopped from <span id="stop-charges-date"></span></span>
+                </div>
+            </div>
 
-			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then From date</div>
-			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then From date</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
 
-			<div class="row">
-				<div class="col-sm-3">
-					<label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from</label>
-				</div>
-				<div class="col-sm-3">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <div class="row">
+                <div class="col-sm-3">
+                    <label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from</label>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input class="form-control input-width" type="text" id="fees-calendar-from" name="fees-calendar-from">
-					</div>
-				</div>
-				<div class="col-sm-1">
-					untill
-				</div>
-				<div class="col-sm-4">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    untill
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input class="form-control input-width" type="text" id="fees-calendar-to" name="fees-calendar-to">
-					</div>
-				</div>
-			</div>
+                    </div>
+                </div>
+            </div>
 
-			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then From date</div>
-			<div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then From date</div>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
 
-			<div class="row" style="padding-top: 5px;">
-				<div class="col-sm-3">
-					<label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from</label>
-				</div>
-				<div class="col-sm-3">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+            <div class="row" style="padding-top: 5px;">
+                <div class="col-sm-3">
+                    <label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from</label>
+                </div>
+                <div class="col-sm-3">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input class="form-control input-width" type="text" id="intrest-calendar-from" name="intrest-calendar-from">
-					</div>
-				</div>
-				<div class="col-sm-1">
-					untill
-				</div>
-				<div class="col-sm-4">
-					<div class="input-group">
-						<span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                    </div>
+                </div>
+                <div class="col-sm-1">
+                    untill
+                </div>
+                <div class="col-sm-4">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
                         <input class="form-control input-width" type="text" id="intrest-calendar-to" name="intrest-calendar-to"><br />
-					</div>
-				</div>
-			</div>
+                    </div>
+                </div>
+            </div>
 
-			<%if(hasFreezInterest===true){ %>
-			<br />
-			<%
-			_.each(SInterestFreeze, function(item, idx) {
-			var ary = item.split('|');
-			if (ary[4] === ''){
-			%>
-			<div class="row">
-				<button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-				This loan's intrest is stoped from
-				<span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
-				until
-				<span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
-			</div>
-			<%	}});	%>
-			<br />
-			<% }else{ %>
-            <div class="row"><br/>There is no intrest freez for this loan.<br/></div>
+            <%if(hasFreezInterest===true){ %>
+            <br />
+            <%
+            _.each(SInterestFreeze, function(item, idx) {
+            var ary = item.split('|');
+            if (ary[4] === ''){
+            %>
+            <div class="row">
+                <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
+                This loan's intrest is stoped from
+                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
+                until
+                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+            </div>
+            <%	}});	%>
+            <br />
+            <% }else{ %>
+            <div class="row"><br />There is no intrest freez for this loan.<br /></div>
             <%}%>
 
-			<div class="row"><button class="btn btn-primary pull-right" id="resch-submit-btn">Submit</button></div>
+            <div class="row"><button class="btn btn-primary pull-right" id="resch-submit-btn">Submit</button></div>
 
-			<div class="row alert alert-danger center" style="display: none; text-align: center" id="submit-fail"></div>
-			<div class="row alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server. Window will auto close</div>
-		</form>
+            <div class="row alert alert-danger center" style="display: none; text-align: center" id="submit-fail"></div>
+            <div class="row alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server. Window will auto close</div>
+        </form>
 	</div>
 	
 	

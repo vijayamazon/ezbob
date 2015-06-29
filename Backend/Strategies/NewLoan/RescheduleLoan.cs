@@ -177,7 +177,15 @@
 				}
 				// ### re-arrange by position
 
-				calc.GetState();
+                try{
+                    calc.GetState();
+                }
+                catch (Exception e){
+                    this.Result.Error = e.Message; 
+                    Log.Debug("GET CALC STATE EXCEPTION: {0}", this.Result.Error);
+                    return;
+                }
+
 				Log.Debug("--------------Loan recalculated: \n {0}", this.tLoan);
 			
 				if (!this.ReschedulingArguments.RescheduleIn) {
