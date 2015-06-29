@@ -17,6 +17,8 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		if (this.model.get('IsWizardComplete'))
 			this.$el.find('#ForceFinishWizard').addClass('hide');
 
+		this.$el.find('.left-pane-header').toggleClass('alert-external-collection-status', this.model.get('ExternalCollectionStatusName') !== '');
+
 		this.initSwitch(".cciMarkSwitch", this.model.get('IsCciMarkInAlertMode'), this.toggleCciMark);
 
 		this.initSwitch(".testUserSwitch", this.model.get('IsTestInAlertMode'), this.toggleIsTest);
@@ -365,7 +367,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		var sIcon = (
 			sEmailState === 'Confirmed' || sEmailState === 'ManuallyConfirmed' || sEmailState === 'ImplicitlyConfirmed'
 		) ? 'fa fa-check-circle' : 'fa fa-question-circle';
-
+		
 		return {
 			data: this.model.toJSON(),
 			icon: sIcon,

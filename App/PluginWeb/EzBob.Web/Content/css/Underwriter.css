@@ -1119,6 +1119,10 @@ table.table.table-finaccount {
     padding-bottom: 0 !important;
 }
 
+.alert-external-collection-status {
+	background-color: #F55F6F;
+}
+
 .pricing-model-bold {
     font-weight: bold;
 }
