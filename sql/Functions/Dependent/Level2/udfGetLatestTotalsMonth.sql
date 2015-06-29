@@ -65,7 +65,7 @@ BEGIN
 	IF @LastExistingMonth IS NULL
 		RETURN @CurrentMonth
 
-	IF DATEDIFF(month, @LastExistingMonth, @CurrentMonth) <= 4
+	IF DATEDIFF(month, @LastExistingMonth, @CurrentMonth) <= 3
 		RETURN dbo.udfMonthStart(@LastExistingMonth)
 
 	RETURN @CurrentMonth

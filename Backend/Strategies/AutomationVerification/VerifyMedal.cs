@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.Strategies.AutomationVerification {
 	using System;
+	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using Ezbob.Utils;
@@ -26,13 +28,32 @@
 		} // Name
 
 		public override void Execute() {
-			this.progressCounter = new ProgressCounter("{0} out of " + CustomerCount + " customers processed.", Log, 10);
+			var customerIDs = new List<int>[3];
+
+			for (int i = 0; i < customerIDs.Length; i++)
+				customerIDs[i] = new List<int>();
+
+			int j = 0;
 
 			DB.ForEachRowSafe(
-				sr => DoCustomer(sr["Id"]),
+				sr => {
+					customerIDs[j].Add(sr["Id"]);
+
+					j++;
+
+					if (j == customerIDs.Length)
+						j = 0;
+				},
 				this.condition.Apply("c.Id", true),
 				CommandSpecies.Text
 			);
+
+			this.progressCounter = new ProgressCounter("{0} out of " + CustomerCount + " customers processed.", Log, 10);
+
+			if (customerIDs.Length == 1)
+				DoCustomerList(customerIDs[0]);
+			else
+				customerIDs.AsParallel().ForAll(DoCustomerList);
 
 			this.progressCounter.Log();
 		} // Execute
@@ -50,20 +71,22 @@
 			} // get
 		} // CustomerCount
 
-		private void DoCustomer(int customerID) {
-			try {
-				new CalculateMedal(customerID, this.calculationTime, false, true) { Tag = this.tag, }.Execute();
-			} catch (Exception e) {
-				Log.Alert(
-					e,
-					"Medal verification failed for customer {0} and calculation time {1}.",
-					customerID,
-					this.calculationTime.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
-				);
-			} // try
+		private void DoCustomerList(List<int> lst) {
+			foreach (int customerID in lst) {
+				try {
+					new CalculateMedal(customerID, this.calculationTime, false, true) { Tag = this.tag, }.Execute();
+				} catch (Exception e) {
+					Log.Alert(
+						e,
+						"Medal verification failed for customer {0} and calculation time {1}.",
+						customerID,
+						this.calculationTime.ToString("MMMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					);
+				} // try
 
-			progressCounter++;
-		} // DoCustomer
+				this.progressCounter++;
+			} // for each
+		} // DoCustomerList
 
 		private class Condition {
 			public Condition(VerifyMedal vm) {

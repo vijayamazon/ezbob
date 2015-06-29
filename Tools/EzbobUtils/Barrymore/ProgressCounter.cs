@@ -1,14 +1,14 @@
 ﻿namespace Ezbob.Utils {
 	using Ezbob.Logger;
 
-	public class ProgressCounter : SafeLog {
-
-		public ProgressCounter(string sFormat, ASafeLog oLog = null, ulong nCheckpoint = 1000, Severity nSeverity = 0) : base(oLog) {
-			m_nCounter = 0;
-			m_n1k = 0;
-			m_nCheckpoint = nCheckpoint;
-			m_nSeverity = nSeverity;
-			m_sFormat = sFormat ?? "";
+	public class ProgressCounter {
+		public ProgressCounter(string sFormat, ASafeLog oLog = null, ulong nCheckpoint = 1000, Severity nSeverity = 0) {
+			this.log = oLog.Safe();
+			this.counter = 0;
+			this.thousands = 0;
+			this.checkpoint = nCheckpoint;
+			this.severity = nSeverity;
+			this.format = sFormat ?? "";
 		} // constructor
 
 		public static ProgressCounter operator ++(ProgressCounter pc) {
@@ -20,32 +20,43 @@
 		} // Next
 
 		public ProgressCounter Increment() {
-			++this.m_nCounter;
+			bool say = false;
+			ulong sayWhat = 0;
 
-			if (this.m_nCounter == this.m_nCheckpoint) {
-				this.m_n1k += this.m_nCounter;
-				this.m_nCounter = 0;
+			lock (locker) {
+				++this.counter;
 
-				Say(this.m_nSeverity, this.m_sFormat, this.m_n1k);
-			} // if
+				if (this.counter == this.checkpoint) {
+					this.thousands += this.counter;
+					this.counter = 0;
+
+					say = true;
+					sayWhat = this.thousands;
+				} // if
+			} // lock
+
+			if (say)
+				this.log.Say(this.severity, this.format, sayWhat);
 
 			return this;
 		} // Increment
 
 		public void Log() {
-			if (m_nCounter == 0) {
-				if (m_n1k == 0)
-					Say(m_nSeverity, m_sFormat, 0);
+			if (this.counter == 0) {
+				if (this.thousands == 0)
+					this.log.Say(this.severity, this.format, 0);
 			}
 			else
-				Say(m_nSeverity, m_sFormat, m_n1k + m_nCounter);
+				this.log.Say(this.severity, this.format, this.thousands + this.counter);
 		} // Log
 
-		private ulong m_nCounter;
-		private ulong m_n1k;
-		private readonly ulong m_nCheckpoint;
-		private readonly Severity m_nSeverity;
-		private readonly string m_sFormat;
+		private ulong counter;
+		private ulong thousands;
+		private readonly ulong checkpoint;
+		private readonly Severity severity;
+		private readonly string format;
+		private readonly ASafeLog log;
 
+		private static readonly object locker = new object();
 	} // class ProgressCounter
 } // namespace

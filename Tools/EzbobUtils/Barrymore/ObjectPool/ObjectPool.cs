@@ -4,41 +4,43 @@
 	using Logger;
 
 	public class ObjectPool<T> where T: class, IPoolable, new() {
-
 		public ObjectPool(int nMaxSize, ASafeLog oLog = null) {
-			m_nIDGenerator = 0;
-			Log = new SafeLog(oLog);
-			m_sName = string.Format("ObjectPool<{0}>", typeof (T));
+			this.idGenerator = 0;
+
+			var log = oLog.Safe();
+			Log = log;
+
+			this.name = string.Format("ObjectPool<{0}>", typeof (T));
 
 			if (nMaxSize < 1) {
-				string sMsg = string.Format("Cannot create {0}: pool size must be greater than 0.", this.StringifyStatus());
+				string sMsg = string.Format("Cannot create {0}: pool size must be greater than 0.", StringifyStatus());
 
-				Log.Alert("{0}", sMsg);
+				log.Alert("{0}", sMsg);
 				throw new ArgumentOutOfRangeException("nMaxSize", sMsg);
 			} // if
 
-			m_oPool = new Queue<T>();
-			m_oLock = new object();
+			this.pool = new Queue<T>();
+			this.locker = new object();
 
-			m_nMaxSize = nMaxSize;
-			m_nCurrentlyOut = 0;
+			this.m_nMaxSize = nMaxSize;
+			this.m_nCurrentlyOut = 0;
 
-			Log.Debug("New {0} has been created with max size of {1}.", this, MaxSize);
+			log.Debug("New {0} has been created with max size of {1}.", this, MaxSize);
 		} // constructor
 
 		public virtual void SetLog(ASafeLog oLog) {} // SetLog
 
-		public virtual SafeLog Log { get; private set; } // Log
+		public virtual ASafeLog Log { get; private set; } // Log
 
 		public int MaxSize {
 			get {
-				lock (m_oLock)
-					return m_nMaxSize;
+				lock (this.locker)
+					return this.m_nMaxSize;
 			} // get
 			set {
-				lock (m_oLock) {
-					m_nMaxSize = Math.Max(value, 1);
-				} // lock
+				lock (this.locker) {
+					this.m_nMaxSize = Math.Max(value, 1);
+				} // locker
 			} // set
 		} // MaxSize
 
@@ -46,8 +48,8 @@
 
 		public virtual int CurrentlyOut {
 			get {
-				lock (m_oLock)
-					return m_nCurrentlyOut;
+				lock (this.locker)
+					return this.m_nCurrentlyOut;
 			} // get
 		} // CurrentlyOut
 
@@ -55,67 +57,89 @@
 
 		public virtual int CurrentSize {
 			get {
-				lock (m_oLock)
-					return m_nCurrentlyOut + m_oPool.Count;
+				lock (this.locker)
+					return this.m_nCurrentlyOut + this.pool.Count;
 			} // get
 		} // CurrentSize
 
 		public virtual T Give() {
-			lock (m_oLock) {
-				if (m_nCurrentlyOut >= m_nMaxSize) {
-					Log.Debug("The pool {0} cannot give any object as everything is currently out.", this.StringifyStatus());
-					return null;
+			string sMsg = null;
+			Severity severity = Severity.Debug;
+			T result = null;
+
+			lock (this.locker) {
+				if (this.m_nCurrentlyOut >= this.m_nMaxSize) {
+					severity = Severity.Info;
+					sMsg = string.Format(
+						"The pool {0} cannot give any object as everything is currently out.",
+						StringifyStatus()
+					);
+				} else {
+					// string newOrUsed;
+
+					if (this.pool.Count > 0) {
+						result = this.pool.Dequeue();
+						// newOrUsed = "previously used";
+					} else {
+						result = new T { PoolItemID = ++this.idGenerator, };
+						// newOrUsed = "new";
+					} // if
+
+					this.m_nCurrentlyOut++;
+
+					//sMsg = string.Format(
+					//	"The pool {0} gives a {1} object with {3}({2}).",
+					//	StringifyStatus(),
+					//	newOrUsed,
+					//	result.PoolItemID,
+					//	result.Name
+					//);
 				} // if
+			} // locker
 
-				T obj;
-				string sMsg;
+			if (sMsg != null)
+				Log.Say(severity, "{0}", sMsg);
 
-				if (m_oPool.Count > 0) {
-					obj = m_oPool.Dequeue();
-					sMsg = "previously used";
-				}
-				else {
-					obj = new T {
-						PoolItemID = ++m_nIDGenerator,
-					};
-
-					sMsg = "new";
-				} // if
-
-				m_nCurrentlyOut++;
-				Log.Debug("The pool {0} gives a {1} object with {3}({2}).", this.StringifyStatus(), sMsg, obj.PoolItemID, obj.Name);
-
-				return obj;
-			} // lock
+			return result;
 		} // Give
 
 		public virtual bool Take(T obj) {
 			if (obj == null) {
-				Log.Debug("An object to take is null for {0}, no object taken.", this.StringifyStatus());
+				// Log.Debug("An object to take is null for {0}, no object taken.", StringifyStatus());
 				return false;
 			} // if
 
-			lock (m_oLock) {
-				if (m_oPool.Count >= m_nMaxSize) {
-					Log.Debug("The pool {0} is full, object {2}({1}) has not been taken.", this.StringifyStatus(), obj.PoolItemID, obj.Name);
+			lock (this.locker) {
+				if (this.pool.Count >= this.m_nMaxSize) {
+					//Log.Debug(
+					//	"The pool {0} is full, object {2}({1}) has not been taken.",
+					//	StringifyStatus(),
+					//	obj.PoolItemID,
+					//	obj.Name
+					//);
 					return false;
 				} // if
 
-				if (m_nCurrentlyOut < 1) {
-					Log.Debug("Currently out count is 0 for {0}, object {2}({1}) has not been taken.", this.StringifyStatus(), obj.PoolItemID, obj.Name);
+				if (this.m_nCurrentlyOut < 1) {
+					//Log.Debug(
+					//	"Currently out count is 0 for {0}, object {2}({1}) has not been taken.",
+					//	StringifyStatus(),
+					//	obj.PoolItemID,
+					//	obj.Name
+					//);
 					return false;
 				} // if
 
-				m_nCurrentlyOut--;
-				m_oPool.Enqueue(obj);
+				this.m_nCurrentlyOut--;
+				this.pool.Enqueue(obj);
 
-				Log.Debug("An object {2}({1}) has been stored to {0}.", this.StringifyStatus(), obj.PoolItemID, obj.Name);
+				// Log.Debug("An object {2}({1}) has been stored to {0}.", StringifyStatus(), obj.PoolItemID, obj.Name);
 				return true;
-			} // lock
+			} // locker
 		} // Take
 
 		public override string ToString() {
-			lock (m_oLock)
+			lock (this.locker)
 				return StringifyStatus();
 		} // ToString
 
@@ -123,37 +147,36 @@
 			if (nHowMany <= 0)
 				return;
 
-			lock (m_oLock) {
-				m_nCurrentlyOut -= nHowMany;
+			lock (this.locker) {
+				this.m_nCurrentlyOut -= nHowMany;
 
-				if (m_nCurrentlyOut < 0)
-					m_nCurrentlyOut = 0;
+				if (this.m_nCurrentlyOut < 0)
+					this.m_nCurrentlyOut = 0;
 
-				Log.Debug(
-					"{0} item{1} ha{2} been forgotten. Current status: {3}.",
-					nHowMany,
-					nHowMany == 1 ? "" : "s",
-					nHowMany == 1 ? "ve" : "s",
-					this.StringifyStatus()
-				);
-			} // lock
+				//Log.Debug(
+				//	"{0} item{1} ha{2} been forgotten. Current status: {3}.",
+				//	nHowMany,
+				//	nHowMany == 1 ? "" : "s",
+				//	nHowMany == 1 ? "ve" : "s",
+				//	StringifyStatus()
+				//);
+			} // locker
 		} // Forget
 
-		private readonly Queue<T> m_oPool;
-		private readonly object m_oLock;
-		private readonly string m_sName;
-		private ulong m_nIDGenerator;
+		private readonly Queue<T> pool;
+		private readonly object locker;
+		private readonly string name;
+		private ulong idGenerator;
 
 		private string StringifyStatus() {
 			return string.Format(
 				"{0}(out {1}/in {2}/size {3}/max {4})",
-				m_sName,
-				m_nCurrentlyOut,
-				m_oPool.Count,
-				m_oPool.Count + m_nCurrentlyOut,
-				m_nMaxSize
+				this.name,
+				this.m_nCurrentlyOut,
+				this.pool.Count,
+				this.pool.Count + this.m_nCurrentlyOut,
+				this.m_nMaxSize
 			);
 		} // StringifyStatus
-
 	} // class ObjectPool
 } // namespace Ezbob.Utils.ObjectPool

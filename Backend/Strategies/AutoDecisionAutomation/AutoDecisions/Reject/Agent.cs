@@ -101,9 +101,9 @@
 				this.quarterTurnover = 0;
 
 				// all histories of customer that updateEnd is relevant
-				var h = mpTurnoverRep.GetByCustomerAndDate(customerId, calculationTime).ToList();
+				List<MarketplaceTurnover> h = mpTurnoverRep.GetByCustomerAndDate(customerId, calculationTime).ToList();
 
-				if (h.Equals(null)) {
+				if (h.Count < 1) {
 					Log.Info(
 						"Updating histories (customer {0}, @now {1}) not exists in MarketplaceTurnover view",
 						customerId,
@@ -113,7 +113,13 @@
 				} // if
 
 				// all MP types of selection
-				var mpTypes = from t in h group t by t.CustomerMarketPlace.Marketplace into mpt select mpt;
+				IEnumerable<Guid> mpTypes = h.Select(x => x.CustomerMarketPlace.Marketplace.InternalId).Distinct();
+
+				SortedSet<Guid> paymentAccounts = new SortedSet<Guid> (h
+					.Where(x => x.CustomerMarketPlace.Marketplace.IsPaymentAccount)
+					.Select(x => x.CustomerMarketPlace.Marketplace.InternalId)
+					.Distinct()
+				);
 
 				List<FilteredAggregationResult> accounting = new List<FilteredAggregationResult>();
 				List<FilteredAggregationResult> ecommerce = new List<FilteredAggregationResult>();
@@ -123,8 +129,23 @@
 				List<FilteredAggregationResult> paypal = new List<FilteredAggregationResult>();
 
 				foreach (var mpType in mpTypes) {
-					if (mpType.Key.InternalId.Equals(MpType.Hmrc)) {
-						hmrc.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, MpType.Hmrc, calculationTime));
+					if (mpType.Equals(MpType.Hmrc)) {
+						IEnumerable<int> marketplaceIDs = h
+							.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == MpType.Hmrc)
+							.Select(x => x.CustomerMarketPlace.Id)
+							.Distinct();
+
+						foreach (int mpID in marketplaceIDs) {
+							List<MarketplaceTurnover> thisMp = h.Where(x => x.CustomerMarketPlace.Id == mpID).ToList();
+
+							hmrc.AddRange(LastUpdedEndHistoryTurnoversByMpType(
+								thisMp,
+								MpType.Hmrc,
+								calculationTime,
+								thisMp.Max(y => y.TheMonth)
+							));
+						} // for each marketplace
+
 						//hmrc.ForEach(x => Log.Info(
 						//	"HMRC: {0}, {1}, {2}, {3}",
 						//	x.TheMonth,
@@ -132,7 +153,7 @@
 						//	x.MpId,
 						//	x.Distance
 						//));
-					} else if (mpType.Key.InternalId.Equals(MpType.Yodlee)) {
+					} else if (mpType.Equals(MpType.Yodlee)) {
 						bank.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, MpType.Yodlee, calculationTime));
 						// bank.ForEach(x => Log.Info(
 						//	"bank: {0}, {1}, {2}, {3}",
@@ -141,7 +162,7 @@
 						//	x.MpId,
 						//	x.Distance
 						//));
-					} else if (mpType.Key.InternalId.Equals(MpType.Ebay)) {
+					} else if (mpType.Equals(MpType.Ebay)) {
 						ebay.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, MpType.Ebay, calculationTime));
 						//ebay.ForEach(x => Log.Info(
 						//	"ebay: {0}, {1}, {2}, {3}",
@@ -150,7 +171,7 @@
 						//	x.MpId,
 						//	x.Distance
 						//));
-					} else if (mpType.Key.InternalId.Equals(MpType.PayPal)) {
+					} else if (mpType.Equals(MpType.PayPal)) {
 						paypal.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, MpType.PayPal, calculationTime));
 						// paypal.ForEach(x => Log.Info(
 						//	"paypal: {0}, {1}, {2}, {3}",
@@ -161,19 +182,10 @@
 						//));
 					} else {
 						// isPayment
-						if (mpType.Key.IsPaymentAccount) {
-							accounting.AddRange(LastUpdedEndHistoryTurnoversByMpType(
-								h,
-								mpType.Key.InternalId,
-								calculationTime
-							));
-						} else {
-							ecommerce.AddRange(LastUpdedEndHistoryTurnoversByMpType(
-								h,
-								mpType.Key.InternalId,
-								calculationTime
-							));
-						} // if
+						if (paymentAccounts.Contains(mpType))
+							accounting.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, mpType, calculationTime));
+						else
+							ecommerce.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, mpType, calculationTime));
 					} // if
 				} // for each
 
@@ -595,7 +607,8 @@
 		private static IEnumerable<FilteredAggregationResult> LastUpdedEndHistoryTurnoversByMpType(
 			List<MarketplaceTurnover> inputList,
 			Guid type,
-			DateTime calculationTime
+			DateTime calculationTime,
+			DateTime? lastExistingDataTime = null
 		) {
 			List<MarketplaceTurnover> ofcurrentType =
 				inputList.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == type).ToList();
@@ -617,7 +630,8 @@
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,
 				lastUpdateDate,
-				CurrentValues.Instance.TotalsMonthTail
+				CurrentValues.Instance.TotalsMonthTail,
+				lastExistingDataTime
 			);
 			DateTime periodEnd = periodStart.AddMonths(11);
 
@@ -642,17 +656,25 @@
 			if (histories.Equals(null))
 				return null;
 
-			var result = from ag in histories
-				group ag by new { ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id, ag.TheMonth } into grouping
-				select new FilteredAggregationResult {
-					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, grouping.First().TheMonth)), 
-					TheMonth = grouping.First().TheMonth,
-					MpId = grouping.First().CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-					Turnover = histories.First(xx =>
-						xx.TheMonth == grouping.First().TheMonth &&
-						xx.AggID == grouping.Max(p => p.AggID)
-					).Turnover
+			var groups = histories.GroupBy(ag => new {
+				ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+				ag.TheMonth
+			});
+
+			var result = new List<FilteredAggregationResult>();
+
+			foreach (var grp in groups) {
+				MarketplaceTurnover first = grp.OrderByDescending(p => p.AggID).First();
+
+				var far = new FilteredAggregationResult {
+					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, first.TheMonth)),
+					TheMonth = first.TheMonth,
+					MpId = first.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+					Turnover = first.Turnover
 				};
+
+				result.Add(far);
+			} // for each group
 
 			return result;
 		} // LastUpdedEndHistoryTurnoversByMpType

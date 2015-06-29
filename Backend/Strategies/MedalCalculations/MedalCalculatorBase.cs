@@ -6,6 +6,7 @@
 	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.Experian;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using Ezbob.Matrices;
@@ -13,7 +14,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository.Turnover;
-	using NHibernate.Linq;
 	using StructureMap;
 
 	/// <summary>
@@ -22,14 +22,8 @@
 	/// Medal type and medal value: https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
 	/// </summary>
 	public abstract class MedalCalculatorBase {
-		/// <summary>
-		///     The set initial weights.
-		/// </summary>
 		public abstract void SetInitialWeights();
 
-		/// <summary>
-		///     Gets or sets the results.
-		/// </summary>
 		public MedalResult Results { get; set; }
 
 		public void Init(
@@ -60,10 +54,6 @@
 			this.isInitialized = true;
 		} // Init
 
-		/// <summary>
-		///     The calculate medal score.
-		/// </summary>
-		/// <returns>The <see cref="MedalResult" />.</returns>
 		public MedalResult CalculateMedalScore() {
 			if (this.isCalculated)
 				return Results;
@@ -73,8 +63,13 @@
 
 			this.isCalculated = true;
 
-			// set medal type here per each extending class
 			SetMedalType();
+
+			this.log.Debug(
+				"Primary {0} medal calculator: medal type was set to '{1}'.",
+				GetType().Name,
+				Results.MedalType
+			);
 
 			try {
 				GatherInputData();
@@ -84,26 +79,54 @@
 				CalculateTurnoverForMedal();
 
 				this.log.Debug(
-					"Turnover for customer {5} on {6}: type {0}, final {1}, HMRC {2}, bank {3}, online {4}.",
+					"Primary {7} medal calculator: " +
+					"turnover for customer {5} on {6}: type {0}, final {1}, HMRC {2}, bank {3}, online {4}.",
 					Results.TurnoverType,
 					Results.AnnualTurnover,
 					Results.HmrcAnnualTurnover,
 					Results.BankAnnualTurnover,
 					Results.OnlineAnnualTurnover,
 					Results.CustomerId,
-					Results.CalculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					Results.CalculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					GetType().Name
 				);
 
 				CalculateRatiosOfAnnualTurnover();
 				CalculateNetWorth();
 
-				// Calculate weights
 				SetInitialWeights();
+
+				this.log.Debug(
+					"Primary {0} medal calculator: initial weights are\n\t{1}.",
+					GetType().Name,
+					string.Join(",\n\t", Results.GetValuesByMaskForLog("Weight"))
+				);
+
 				AdjustCompanyScoreWeight();
+
+				this.log.Debug(
+					"Primary {0} medal calculator: after adjusting business score weight:\n\t{1}.",
+					GetType().Name, 
+					string.Join(",\n\t", Results.GetValuesByMaskForLog("Weight"))
+				);
+
 				AdjustConsumerScoreWeight();
 
-				if (Results.TurnoverType != TurnoverType.HMRC)
+				this.log.Debug(
+					"Primary {0} medal calculator: after adjusting consumer score weights are:\n\t{1}.",
+					GetType().Name, 
+					string.Join(",\n\t", Results.GetValuesByMaskForLog("Weight"))
+				);
+
+				if (Results.TurnoverType != TurnoverType.HMRC) {
 					RedistributeFreeCashFlowWeight();
+
+					this.log.Debug(
+						"Primary {0} medal calculator: turnover is not HMRC, after redistributing FCF weights are\n\t{1}.",
+						GetType().Name,
+						string.Join(",\n\t", Results.GetValuesByMaskForLog("Weight"))
+					);
+				} // if
 
 				if (Results.FirstRepaymentDatePassed) {
 					Results.EzbobSeniorityWeight = 2;
@@ -112,9 +135,21 @@
 					Results.NumOfEarlyRepaymentsWeight = 2;
 
 					RedistributeWeightsForPayingCustomer();
+
+					this.log.Debug(
+						"Primary {0} medal calculator: first payment passed, redistributed weights are\n\t{1}.",
+						GetType().Name,
+						string.Join(",\n\t", Results.GetValuesByMaskForLog("Weight"))
+					);
 				} // if
 
 				AdjustSumOfWeights();
+
+				this.log.Debug(
+					"Primary {0} medal calculator: after adjusting weights sum weights are\n\t{1}.",
+					GetType().Name,
+					string.Join(",\n\t", Results.GetValuesByMaskForLog("Weight"))
+				);
 
 				CalculateGrades();
 
@@ -138,19 +173,9 @@
 			return Results;
 		} // CalculateMedalScore
 
-		/// <summary>
-		///     The db.
-		/// </summary>
 		protected readonly AConnection db;
-
-		/// <summary>
-		///     The log.
-		/// </summary>
 		protected readonly ASafeLog log;
 
-		/// <summary>
-		///     Initializes a new instance of the <see cref="MedalCalculatorBase" /> class.
-		/// </summary>
 		protected MedalCalculatorBase() {
 			this.isInitialized = false;
 			this.isCalculated = false;
@@ -159,17 +184,8 @@
 			this.db = Library.Instance.DB;
 		} // constructor
 
-		/// <summary>
-		///     The adjust weights with ratio.
-		/// </summary>
-		/// <param name="ratio">The ratio.</param>
 		protected abstract void AdjustWeightsWithRatio(decimal ratio);
 
-		// CalculateMedalScore constructor
-		/// <summary>
-		///     The gather input data.
-		/// </summary>
-		/// <exception cref="Exception"></exception>
 		protected virtual void GatherInputData() {
 			SafeReader sr = this.db.GetFirst(
 				"GetDataForMedalCalculation1",
@@ -193,7 +209,10 @@
 					RowType rt;
 
 					if (!Enum.TryParse(srfv["RowType"], out rt)) {
-						log.Alert("MedalCalculatorBase.GatherInputData: Cannot parse row type from {0}", srfv["RowType"]);
+						this.log.Alert(
+							"MedalCalculatorBase.GatherInputData: Cannot parse row type from {0}",
+							srfv["RowType"]
+						);
 						return;
 					} // if
 
@@ -230,63 +249,28 @@
 			FcfValueAdded,
 		} // enum RowType
 
-		/// <summary>
-		///     The get company score weight for low score.
-		/// </summary>
-		/// <returns>The <see cref="decimal" />.</returns>
 		protected abstract decimal GetCompanyScoreWeightForLowScore();
 
-		// GatherInputData
-		/// <summary>
-		///     The get consumer score weight for low score.
-		/// </summary>
-		/// <returns>The <see cref="decimal" />.</returns>
 		protected abstract decimal GetConsumerScoreWeightForLowScore();
 
-		/// <summary>
-		///     The get sum of non fixed weights.
-		/// </summary>
-		/// <returns>The <see cref="decimal" />.</returns>
 		protected abstract decimal GetSumOfNonFixedWeights();
 
-		/// <summary>
-		///     The redistribute free cash flow weight.
-		/// </summary>
 		protected virtual void RedistributeFreeCashFlowWeight() { }
 
-		/// <summary>
-		///     The redistribute weights for paying customer.
-		/// </summary>
 		protected abstract void RedistributeWeightsForPayingCustomer();
 
-		/// <summary>
-		///     The set medal type.
-		/// </summary>
 		protected abstract void SetMedalType();
 
-		/**
-		 * implementation of https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28
-		 */
-
-		/// <summary>
-		///     The adjust company score weight.
-		/// </summary>
 		private void AdjustCompanyScoreWeight() {
 			if (Results.BusinessScore <= 30)
 				Results.BusinessScoreWeight = GetCompanyScoreWeightForLowScore();
-		}// AdjustCompanyScoreWeight
+		} // AdjustCompanyScoreWeight
 
-		/// <summary>
-		///     The adjust consumer score weight.
-		/// </summary>
 		private void AdjustConsumerScoreWeight() {
 			if (Results.ConsumerScore <= 800)
 				Results.ConsumerScoreWeight = GetConsumerScoreWeightForLowScore();
-		}// AdjustConsumerScoreWeight
+		} // AdjustConsumerScoreWeight
 
-		/// <summary>
-		///     The adjust sum of weights.
-		/// </summary>
 		private void AdjustSumOfWeights() {
 			decimal sumOfWeights = Results.BusinessScoreWeight + Results.FreeCashFlowWeight
 				+ Results.AnnualTurnoverWeight + Results.TangibleEquityWeight
@@ -301,12 +285,9 @@
 				decimal sumOfNonFixedDestination = sumOfNonFixed - sumOfWeights + 100;
 				decimal ratioForDestination = sumOfNonFixedDestination / sumOfNonFixed;
 				AdjustWeightsWithRatio(ratioForDestination);
-			}// if
-		}// AdjustSumOfWeights
+			} // if
+		} // AdjustSumOfWeights
 
-		/// <summary>
-		///     The calculate annual turnover grade.
-		/// </summary>
 		private void CalculateAnnualTurnoverGrade() {
 			if (Results.AnnualTurnover < 30000)
 				Results.AnnualTurnoverGrade = 0;
@@ -322,11 +303,8 @@
 				Results.AnnualTurnoverGrade = 5;
 			else
 				Results.AnnualTurnoverGrade = 6;
-		}// CalculateAnnualTurnoverGrade
+		} // CalculateAnnualTurnoverGrade
 
-		/// <summary>
-		///     The calculate business score grade.
-		/// </summary>
 		private void CalculateBusinessScoreGrade() {
 			if (Results.BusinessScore < 11)
 				Results.BusinessScoreGrade = 0;
@@ -348,29 +326,27 @@
 				Results.BusinessScoreGrade = 8;
 			else
 				Results.BusinessScoreGrade = 9;
-		}// CalculateBusinessScoreGrade
+		} // CalculateBusinessScoreGrade
 
-		/// <summary>
-		///     The calculate business seniority grade.
-		/// </summary>
 		private void CalculateBusinessSeniorityGrade() {
-			var dateOnlyCalculationTime = Results.CalculationTime.Date;
-			if (!Results.BusinessSeniority.HasValue
-				|| Results.BusinessSeniority.Value.Date.AddYears(1) > dateOnlyCalculationTime)
+			DateTime dateOnlyCalculationTime = Results.CalculationTime.Date;
+
+			bool shouldBeZero =
+				!Results.BusinessSeniority.HasValue ||
+				Results.BusinessSeniority.Value.Date.AddYears(1) > dateOnlyCalculationTime;
+
+			if (shouldBeZero)
 				Results.BusinessSeniorityGrade = 0;
-            else if (Results.BusinessSeniority.Value.Date.AddYears(3) > dateOnlyCalculationTime)
+			else if (Results.BusinessSeniority.Value.Date.AddYears(3) > dateOnlyCalculationTime)
 				Results.BusinessSeniorityGrade = 1;
-            else if (Results.BusinessSeniority.Value.Date.AddYears(5) > dateOnlyCalculationTime)
+			else if (Results.BusinessSeniority.Value.Date.AddYears(5) > dateOnlyCalculationTime)
 				Results.BusinessSeniorityGrade = 2;
-            else if (Results.BusinessSeniority.Value.Date.AddYears(10) > dateOnlyCalculationTime)
+			else if (Results.BusinessSeniority.Value.Date.AddYears(10) > dateOnlyCalculationTime)
 				Results.BusinessSeniorityGrade = 3;
 			else
 				Results.BusinessSeniorityGrade = 4;
-		}// CalculateBusinessSeniorityGrade
+		} // CalculateBusinessSeniorityGrade
 
-		/// <summary>
-		///     The calculate consumer score grade.
-		/// </summary>
 		private void CalculateConsumerScoreGrade() {
 			if (Results.ConsumerScore < 481)
 				Results.ConsumerScoreGrade = 0;
@@ -390,11 +366,8 @@
 				Results.ConsumerScoreGrade = 7;
 			else
 				Results.ConsumerScoreGrade = 8;
-		}// CalculateConsumerScoreGrade
+		} // CalculateConsumerScoreGrade
 
-		/// <summary>
-		///     The calculate customer score.
-		/// </summary>
 		private void CalculateCustomerScore() {
 			Results.AnnualTurnoverScore = Results.AnnualTurnoverWeight * Results.AnnualTurnoverGrade;
 			Results.BusinessScoreScore = Results.BusinessScoreWeight * Results.BusinessScoreGrade;
@@ -422,15 +395,12 @@
 				+ Results.NumOfLateRepaymentsScore + Results.NumOfEarlyRepaymentsScore;
 		} // CalculateCustomerScore
 
-		/// <summary>
-		///     The calculate ezbob seniority grade.
-		/// </summary>
 		private void CalculateEzbobSeniorityGrade() {
 			if (!Results.EzbobSeniority.HasValue)
 				Results.EzbobSeniority = Results.CalculationTime;
 
 			decimal ezbobSeniorityMonths =
-                (decimal)(Results.CalculationTime - Results.EzbobSeniority.Value).TotalDays / (365.0M / 12.0M);
+				(decimal)(Results.CalculationTime - Results.EzbobSeniority.Value).TotalDays / (365.0M / 12.0M);
 			if (ezbobSeniorityMonths < 1)
 				Results.EzbobSeniorityGrade = 0;
 			else if (ezbobSeniorityMonths < 6)
@@ -439,13 +409,10 @@
 				Results.EzbobSeniorityGrade = 3;
 			else
 				Results.EzbobSeniorityGrade = 4;
-		}// CalculateEzbobSeniorityGrade
+		} // CalculateEzbobSeniorityGrade
 
-		/// <summary>
-		///     The calculate free cash flow grade.
-		/// </summary>
 		private void CalculateFreeCashFlowGrade() {
-			// When turnover is zero we can't calc FCF, we want the min grade
+			// When turnover is zero we can't calculate FCF, we want the min grade
 			if (Results.FreeCashFlow < -0.1m || Results.AnnualTurnover <= 0)
 				Results.FreeCashFlowGrade = 0;
 			else if (Results.FreeCashFlow < 0)
@@ -463,11 +430,8 @@
 
 			if (!Results.UseHmrc())
 				Results.FreeCashFlowGrade = 0;
-		}// CalculateFreeCashFlowGrade
+		} // CalculateFreeCashFlowGrade
 
-		/// <summary>
-		///     The calculate grades.
-		/// </summary>
 		private void CalculateGrades() {
 			CalculateBusinessScoreGrade();
 			CalculateFreeCashFlowGrade();
@@ -483,26 +447,17 @@
 			CalculateNumOfLoansGrade();
 			CalculateNumOfLateRepaymentsGrade();
 			CalculateNumOfEarlyRepaymentsGrade();
-		}// CalculateGrades
+		} // CalculateGrades
 
-		/// <summary>
-		///     The calculate marital status grade.
-		/// </summary>
 		private void CalculateMaritalStatusGrade() {
-			if (Results.MaritalStatus == MaritalStatus.Married || Results.MaritalStatus == MaritalStatus.Widowed)
+			if (Results.MaritalStatus.In(MaritalStatus.Married, MaritalStatus.Widowed))
 				Results.MaritalStatusGrade = 4;
-			else if (Results.MaritalStatus == MaritalStatus.Divorced
-				|| Results.MaritalStatus == MaritalStatus.LivingTogether)
+			else if (Results.MaritalStatus.In(MaritalStatus.Divorced, MaritalStatus.LivingTogether))
 				Results.MaritalStatusGrade = 3;
-			else {
-				// Single, Separated, Other
+			else // Single, Separated, Other
 				Results.MaritalStatusGrade = 2;
-			} // if
-		}// CalculateMaritalStatusGrade
+		} // CalculateMaritalStatusGrade
 
-		/// <summary>
-		///     The calculate medal.
-		/// </summary>
 		private void CalculateMedal() {
 			if (Results.TotalScoreNormalized <= 0.4m)
 				Results.MedalClassification = Medal.Silver;
@@ -512,21 +467,14 @@
 				Results.MedalClassification = Medal.Platinum;
 			else
 				Results.MedalClassification = Medal.Diamond;
-		}// CalculateMedal
+		} // CalculateMedal
 
-		/// <summary>
-		///     The calculate net worth.
-		/// </summary>
 		private void CalculateNetWorth() {
-			if (Results.ZooplaValue != 0)
-				Results.NetWorth = (Results.ZooplaValue - Results.MortgageBalance) / Results.ZooplaValue;
-			else
-				Results.NetWorth = 0;
-		}// CalculateNetWorth
+			Results.NetWorth = (Results.ZooplaValue == 0)
+				? 0
+				: (Results.ZooplaValue - Results.MortgageBalance) / Results.ZooplaValue;
+		} // CalculateNetWorth
 
-		/// <summary>
-		///     The calculate net worth grade.
-		/// </summary>
 		private void CalculateNetWorthGrade() {
 			if (Results.NetWorth < 0.15m)
 				Results.NetWorthGrade = 0;
@@ -534,15 +482,10 @@
 				Results.NetWorthGrade = 1;
 			else if (Results.NetWorth < 1)
 				Results.NetWorthGrade = 2;
-			else {
-				// We know that we sometimes miss mortgages the customer has, so instead of grade=3 we give 1
+			else // We know that we sometimes miss mortgages the customer has, so instead of grade=3 we give 1
 				Results.NetWorthGrade = 1;
-			}// if
-		}// CalculateNetWorthGrade
+		} // CalculateNetWorthGrade
 
-		/// <summary>
-		///     The calculate number of stores grade.
-		/// </summary>
 		private void CalculateNumberOfStoresGrade() {
 			if (Results.NumberOfStores < 3)
 				Results.NumberOfStoresGrade = 1;
@@ -550,11 +493,8 @@
 				Results.NumberOfStoresGrade = 3;
 			else
 				Results.NumberOfStoresGrade = 5;
-		}// CalculateNumberOfStoresGrade
+		} // CalculateNumberOfStoresGrade
 
-		/// <summary>
-		///     The calculate num of early repayments grade.
-		/// </summary>
 		private void CalculateNumOfEarlyRepaymentsGrade() {
 			if (Results.NumOfEarlyRepayments == 0)
 				Results.NumOfEarlyRepaymentsGrade = 2;
@@ -562,11 +502,8 @@
 				Results.NumOfEarlyRepaymentsGrade = 3;
 			else
 				Results.NumOfEarlyRepaymentsGrade = 5;
-		}// CalculateNumOfEarlyRepaymentsGrade
+		} // CalculateNumOfEarlyRepaymentsGrade
 
-		/// <summary>
-		///     The calculate num of late repayments grade.
-		/// </summary>
 		private void CalculateNumOfLateRepaymentsGrade() {
 			if (Results.NumOfLateRepayments == 0)
 				Results.NumOfLateRepaymentsGrade = 5;
@@ -574,11 +511,8 @@
 				Results.NumOfLateRepaymentsGrade = 2;
 			else
 				Results.NumOfLateRepaymentsGrade = 0;
-		}// CalculateNumOfLateRepaymentsGrade
+		} // CalculateNumOfLateRepaymentsGrade
 
-		/// <summary>
-		///     The calculate num of loans grade.
-		/// </summary>
 		private void CalculateNumOfLoansGrade() {
 			if (Results.NumOfLoans > 3)
 				Results.NumOfLoansGrade = 4;
@@ -588,9 +522,6 @@
 				Results.NumOfLoansGrade = 1;
 		} // CalculateNumOfLoansGrade
 
-		/// <summary>
-		///     The calculate offer.
-		/// </summary>
 		private void CalculateOffer() {
 			if (Results == null || !string.IsNullOrEmpty(Results.Error) || Results.MedalType == MedalType.NoMedal)
 				return;
@@ -660,9 +591,6 @@
 				this.log.Debug("Primary medal - all the offer amounts are not valid.");
 		} // CalculateOffer
 
-		/// <summary>
-		///     The calculate positive feedbacks grade.
-		/// </summary>
 		private void CalculatePositiveFeedbacksGrade() {
 			if (Results.PositiveFeedbacks < 1)
 				Results.PositiveFeedbacksGrade = 0;
@@ -672,11 +600,8 @@
 				Results.PositiveFeedbacksGrade = 3;
 			else
 				Results.PositiveFeedbacksGrade = 5;
-		}// CalculatePositiveFeedbacksGrade
+		} // CalculatePositiveFeedbacksGrade
 
-		/// <summary>
-		///     The calculate ratios of annual turnover.
-		/// </summary>
 		private void CalculateRatiosOfAnnualTurnover() {
 			if (Results.AnnualTurnover > 0) {
 				Results.TangibleEquity = Results.TangibleEquityValue / Results.AnnualTurnover;
@@ -687,10 +612,6 @@
 			} // if
 		} // CalculateRatiosOfAnnualTurnover
 
-		/// <summary>
-		///     The calculate score max.
-		/// </summary>
-		/// <returns>The <see cref="decimal" />.</returns>
 		private decimal CalculateScoreMax() {
 			const int annualTurnoverMaxGrade = 6;
 			const int businessScoreMaxGrade = 9;
@@ -727,12 +648,8 @@
 				+ businessSeniorityScoreMax + consumerScoreScoreMax + netWorthScoreMax + maritalStatusScoreMax
 				+ numberOfStoresMax + positiveFeedbacksScoreMax + ezbobSeniorityScoreMax + ezbobNumOfLoansScoreMax
 				+ ezbobNumOfLateRepaymentsScoreMax + ezbobNumOfEarlyRepaymentsScoreMax;
-		}// CalculateScoreMax
+		} // CalculateScoreMax
 
-		/// <summary>
-		///     The calculate score min.
-		/// </summary>
-		/// <returns>The <see cref="decimal" />.</returns>
 		private decimal CalculateScoreMin() {
 			const int annualTurnoverMinGrade = 0;
 			const int businessScoreMinGrade = 0;
@@ -768,14 +685,11 @@
 				+ businessSeniorityScoreMin + consumerScoreScoreMin + netWorthScoreMin + maritalStatusScoreMin
 				+ numberOfStoresMin + positiveFeedbacksScoreMin + ezbobSeniorityScoreMin + ezbobNumOfLoansScoreMin
 				+ ezbobNumOfLateRepaymentsScoreMin + ezbobNumOfEarlyRepaymentsScoreMin;
-		}// CalculateScoreMin
+		} // CalculateScoreMin
 
-		/// <summary>
-		///     The calculate tangible equity grade.
-		/// </summary>
 		private void CalculateTangibleEquityGrade() {
 			if (Results.TangibleEquity < -0.05m || Results.AnnualTurnover <= 0) {
-				// When turnover is zero we can't calc tangible equity, we want the min grade
+				// When turnover is zero we can't calculate tangible equity, we want the min grade
 				Results.TangibleEquityGrade = 0;
 			} else if (Results.TangibleEquity < 0)
 				Results.TangibleEquityGrade = 1;
@@ -787,11 +701,6 @@
 				Results.TangibleEquityGrade = 4;
 		} // CalculateTangibleEquityGrade
 
-		/// <summary>
-		///     The get mortgages.
-		/// </summary>
-		/// <param name="customerId">The customer id.</param>
-		/// <returns>The <see cref="decimal" />.</returns>
 		private decimal GetMortgages(int customerId) {
 			var instance = new LoadExperianConsumerMortgageData(customerId);
 			instance.Execute();
@@ -811,11 +720,12 @@
 				Results.BankAnnualTurnover = 0;
 				Results.OnlineAnnualTurnover = 0;
 
-				var h = this.updatingHistoryRep
+				List<MP_CustomerMarketplaceUpdatingHistory> h = this.updatingHistoryRep
 					.GetByCustomerId(Results.CustomerId)
-					.Where(x => x.UpdatingEnd < Results.CalculationTime && (x.Error == null || x.Error.Trim().Length == 0));
+					.Where(x => x.UpdatingEnd < Results.CalculationTime && (x.Error == null || x.Error.Trim().Length == 0))
+					.ToList();
 
-				if (h.Equals(null)) {
+				if (h.Count < 1) {
 					this.log.Info(
 						"Updating history for customer {0}, calculationDate {1} not found",
 						Results.CustomerId,
@@ -824,18 +734,32 @@
 					return;
 				} // if
 
-				var hmrcs = from row in h.SelectMany(y => y.HmrcAggregations).Where(y => y.IsActive)
+				List<MarketplaceTurnover> hmrcs = (
+					from row in h.SelectMany(y => y.HmrcAggregations).Where(y => y.IsActive)
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
 						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
-					};
+					}
+				).ToList();
 
-				if (!hmrcs.Equals(null)) {
-					var hmrcList = this.LastHistoryTurnovers(hmrcs.ToList(), Results.CalculationTime);
+				if (hmrcs.Count > 0) {
+					List<FilteredAggregationResult> hmrcList = new List<FilteredAggregationResult>();
 
-					if (hmrcList != null) {
-						// get hmrc turnover for all months received
+					IEnumerable<int> marketplaceIDs = hmrcs.Select(x => x.CustomerMarketPlace.Id).Distinct();
+
+					foreach (int mpID in marketplaceIDs) {
+						List<MarketplaceTurnover> thisMp = hmrcs.Where(x => x.CustomerMarketPlace.Id == mpID).ToList();
+
+						List<FilteredAggregationResult> filtered =
+							LastHistoryTurnovers(thisMp, Results.CalculationTime, thisMp.Max(x => x.TheMonth));
+
+						if (filtered != null)
+							hmrcList.AddRange(filtered);
+					} // for each marketplace
+
+					if (hmrcList.Count > 0) {
+						// get HMRC turnover for all months received
 						Results.HmrcAnnualTurnover = hmrcList.Sum(t => t.Turnover);
 						Results.HmrcAnnualTurnover = (Results.HmrcAnnualTurnover < 0) ? 0 : Results.HmrcAnnualTurnover;
 					} // if
@@ -845,21 +769,32 @@
 						Results.TurnoverType = TurnoverType.HMRC;
 						Results.AnnualTurnover = Results.HmrcAnnualTurnover;
 
-						this.log.Debug("Base: (HMRC) AnnualTurnover: {0}," + "HmrcAnnualTurnover: {1}," + "BankAnnualTurnover: {2}," + "OnlineAnnualTurnover: {3}," + "Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+						this.log.Debug(
+							"Base: (HMRC) AnnualTurnover: {0}," + "HmrcAnnualTurnover: {1}," +
+							"BankAnnualTurnover: {2}," + "OnlineAnnualTurnover: {3}," + "Type: {4}",
+							Results.AnnualTurnover,
+							Results.HmrcAnnualTurnover,
+							Results.BankAnnualTurnover,
+							Results.OnlineAnnualTurnover,
+							Results.TurnoverType
+						);
 
 						return;
 					} // if
 				} // if
 
-				var yodlees = from row in h.SelectMany(y => y.YodleeAggregations).Where(y => y.IsActive)
+				List<MarketplaceTurnover> yodlees = (
+					from row in h.SelectMany(y => y.YodleeAggregations).Where(y => y.IsActive)
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
 						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
-					};
+					}
+				).ToList();
 
-				if (!yodlees.Equals(null)) {
-					var yodleeList = this.LastHistoryTurnovers(yodlees.ToList(), Results.CalculationTime);
+				if (yodlees.Count > 0) {
+					List<FilteredAggregationResult> yodleeList =
+						LastHistoryTurnovers(yodlees.ToList(), Results.CalculationTime);
 
 					if (yodleeList != null) {
 						// get yoodlee turnover for all months received
@@ -875,8 +810,15 @@
 						Results.TurnoverType = TurnoverType.Bank;
 						Results.AnnualTurnover = Results.BankAnnualTurnover;
 
-						this.log.Info("Base: (bank) AnnualTurnover: {0}," + "HmrcAnnualTurnover: {1}," + "BankAnnualTurnover: {2}," + "OnlineAnnualTurnover: {3}," + "Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover,
-							Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+						this.log.Debug(
+							"Base: (bank) AnnualTurnover: {0}," + "HmrcAnnualTurnover: {1}," +
+							"BankAnnualTurnover: {2}," + "OnlineAnnualTurnover: {3}," + "Type: {4}",
+							Results.AnnualTurnover,
+							Results.HmrcAnnualTurnover,
+							Results.BankAnnualTurnover,
+							Results.OnlineAnnualTurnover,
+							Results.TurnoverType
+						);
 
 						return;
 					} // if
@@ -905,59 +847,107 @@
 				List<decimal> list_t6 = new List<decimal>(filltt);
 				List<decimal> list_t12 = new List<decimal>(filltt);
 
-				var amazons = from row in h.SelectMany(y => y.AmazonAggregations).Where(y => y.IsActive)
+				List<MarketplaceTurnover> amazons = (
+					from row in h.SelectMany(y => y.AmazonAggregations).Where(y => y.IsActive)
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
 						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
-					};
+					}
+				).ToList();
 
-				var amazonList = this.LastHistoryTurnovers(amazons.ToList(), Results.CalculationTime);
+				List<FilteredAggregationResult> amazonList = LastHistoryTurnovers(amazons, Results.CalculationTime);
 
 				if (amazonList != null) {
 					// Amazon: calculate "last month", "last 3 months", "last 6 months", and "last 12 months"/annualize 
-					amazonList.ForEach(x => log.Info("TheMonth: {0}, Turnover: {1}, MpId: {2}, Distance: {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
-					list_t1.Insert(0, this.CalcAnnualTurnoverBasedOnPartialData(amazonList, T1, Ec1));
-					list_t3.Insert(0, this.CalcAnnualTurnoverBasedOnPartialData(amazonList, T3, Ec3));
-					list_t6.Insert(0, this.CalcAnnualTurnoverBasedOnPartialData(amazonList, T6, Ec6));
-					list_t12.Insert(0, this.CalcAnnualTurnoverBasedOnPartialData(amazonList, T12, Ec12));
-					log.Debug("amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(0), list_t3.ElementAtOrDefault(0), list_t6.ElementAtOrDefault(0), list_t12.ElementAtOrDefault(0));
+					amazonList.ForEach(x => this.log.Debug(
+						"TheMonth: {0}, Turnover: {1}, MpId: {2}, Distance: {3}",
+						x.TheMonth,
+						x.Turnover,
+						x.MpId,
+						x.Distance
+					));
+
+					list_t1.Insert(0, CalcAnnualTurnoverBasedOnPartialData(amazonList, T1, Ec1));
+					list_t3.Insert(0, CalcAnnualTurnoverBasedOnPartialData(amazonList, T3, Ec3));
+					list_t6.Insert(0, CalcAnnualTurnoverBasedOnPartialData(amazonList, T6, Ec6));
+					list_t12.Insert(0, CalcAnnualTurnoverBasedOnPartialData(amazonList, T12, Ec12));
+
+					this.log.Debug(
+						"amazon TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}",
+						list_t1.ElementAtOrDefault(0),
+						list_t3.ElementAtOrDefault(0),
+						list_t6.ElementAtOrDefault(0),
+						list_t12.ElementAtOrDefault(0)
+					);
 				} // if
 
-				var ebays = from row in h.SelectMany(y => y.EbayAggregations).Where(y => y.IsActive)
+				List<MarketplaceTurnover> ebays = (
+					from row in h.SelectMany(y => y.EbayAggregations).Where(y => y.IsActive)
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
 						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
-					};
+					}
+				).ToList();
 
-				var ebayList = this.LastHistoryTurnovers(ebays.ToList(), Results.CalculationTime);
+				List<FilteredAggregationResult> ebayList = LastHistoryTurnovers(ebays, Results.CalculationTime);
 
 				if (ebayList != null) {
-					ebayList.ForEach(x => log.Info("TheMonth: {0}, Turnover: {1}, MpId: {2}, Distance: {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
-					list_t1.Insert(1, this.CalcAnnualTurnoverBasedOnPartialData(ebayList, T1, Ec1));
-					list_t3.Insert(1, this.CalcAnnualTurnoverBasedOnPartialData(ebayList, T3, Ec3));
-					list_t6.Insert(1, this.CalcAnnualTurnoverBasedOnPartialData(ebayList, T6, Ec6));
-					list_t12.Insert(1, this.CalcAnnualTurnoverBasedOnPartialData(ebayList, T12, Ec12));
-					log.Debug(" ebay TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(1), list_t3.ElementAtOrDefault(1), list_t6.ElementAtOrDefault(1), list_t12.ElementAtOrDefault(1));
-				}
+					ebayList.ForEach(x => this.log.Debug(
+						"TheMonth: {0}, Turnover: {1}, MpId: {2}, Distance: {3}",
+						x.TheMonth,
+						x.Turnover,
+						x.MpId,
+						x.Distance
+					));
 
-				var paypals = from row in h.SelectMany(y => y.PayPalAggregations).Where(y => y.IsActive)
+					list_t1.Insert(1, CalcAnnualTurnoverBasedOnPartialData(ebayList, T1, Ec1));
+					list_t3.Insert(1, CalcAnnualTurnoverBasedOnPartialData(ebayList, T3, Ec3));
+					list_t6.Insert(1, CalcAnnualTurnoverBasedOnPartialData(ebayList, T6, Ec6));
+					list_t12.Insert(1, CalcAnnualTurnoverBasedOnPartialData(ebayList, T12, Ec12));
+
+					this.log.Debug(
+						"ebay TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}",
+						list_t1.ElementAtOrDefault(1),
+						list_t3.ElementAtOrDefault(1),
+						list_t6.ElementAtOrDefault(1),
+						list_t12.ElementAtOrDefault(1)
+					);
+				} // if
+
+				List<MarketplaceTurnover> paypals = (
+					from row in h.SelectMany(y => y.PayPalAggregations).Where(y => y.IsActive)
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
 						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
-					};
+					}
+				).ToList();
 
-				var paypalList = this.LastHistoryTurnovers(paypals.ToList(), Results.CalculationTime);
+				List<FilteredAggregationResult> paypalList = LastHistoryTurnovers(paypals, Results.CalculationTime);
 
 				if (paypalList != null) {
-					paypalList.ForEach(x => log.Info("TheMonth: {0}, Turnover: {1}, MpId: {2}, Distance: {3}", x.TheMonth, x.Turnover, x.MpId, x.Distance));
-					list_t1.Insert(2, this.CalcAnnualTurnoverBasedOnPartialData(paypalList, T1, Ec1));
-					list_t3.Insert(2, this.CalcAnnualTurnoverBasedOnPartialData(paypalList, T3, Ec3));
-					list_t6.Insert(2, this.CalcAnnualTurnoverBasedOnPartialData(paypalList, T6, Ec6));
-					list_t12.Insert(2, this.CalcAnnualTurnoverBasedOnPartialData(paypalList, T12, Ec12));
-					log.Debug(" paypals TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}", list_t1.ElementAtOrDefault(2), list_t3.ElementAtOrDefault(2), list_t6.ElementAtOrDefault(2), list_t12.ElementAtOrDefault(2));
+					paypalList.ForEach(x => this.log.Debug(
+						"TheMonth: {0}, Turnover: {1}, MpId: {2}, Distance: {3}",
+						x.TheMonth,
+						x.Turnover,
+						x.MpId,
+						x.Distance
+					));
+
+					list_t1.Insert(2, CalcAnnualTurnoverBasedOnPartialData(paypalList, T1, Ec1));
+					list_t3.Insert(2, CalcAnnualTurnoverBasedOnPartialData(paypalList, T3, Ec3));
+					list_t6.Insert(2, CalcAnnualTurnoverBasedOnPartialData(paypalList, T6, Ec6));
+					list_t12.Insert(2, CalcAnnualTurnoverBasedOnPartialData(paypalList, T12, Ec12));
+
+					this.log.Debug(
+						"paypals TT: t1: {0}, t3: {1}, t6: {2}, t12: {3}",
+						list_t1.ElementAtOrDefault(2),
+						list_t3.ElementAtOrDefault(2),
+						list_t6.ElementAtOrDefault(2),
+						list_t12.ElementAtOrDefault(2)
+					);
 				} // if
 
 				// Online turnover: Amazon + MAX(eBay, Pay Pal)
@@ -967,17 +957,19 @@
 				// paypal: index 2
 				ArrayList onlineList = new ArrayList();
 
-				onlineList.Add(list_t1.ElementAtOrDefault(0) + Math.Max(list_t1.ElementAtOrDefault(1), list_t1.ElementAtOrDefault(2)));
-				onlineList.Add(list_t3.ElementAtOrDefault(0) + Math.Max(list_t3.ElementAtOrDefault(1), list_t3.ElementAtOrDefault(2)));
-				onlineList.Add(list_t6.ElementAtOrDefault(0) + Math.Max(list_t6.ElementAtOrDefault(1), list_t6.ElementAtOrDefault(2)));
-				onlineList.Add(list_t12.ElementAtOrDefault(0) + Math.Max(list_t12.ElementAtOrDefault(1), list_t12.ElementAtOrDefault(2)));
+				onlineList.Add(OnlineMax(list_t1));
+				onlineList.Add(OnlineMax(list_t3));
+				onlineList.Add(OnlineMax(list_t6));
+				onlineList.Add(OnlineMax(list_t12));
 
 				foreach (var zz in onlineList)
-					log.Info("onlineList {0}", zz);
+					this.log.Debug("onlineList {0}", zz);
 
-				Results.OnlineAnnualTurnover = (from decimal r in onlineList where r > 0 select r).AsQueryable().DefaultIfEmpty(0).Min();
+				Results.OnlineAnnualTurnover = (
+					from decimal r in onlineList where r > 0 select r
+				).AsQueryable().DefaultIfEmpty(0).Min();
 
-				log.Info("===> min from 4 {0}", Results.OnlineAnnualTurnover);
+				this.log.Debug("===> min from 4 {0}", Results.OnlineAnnualTurnover);
 
 				decimal onlineMedalTurnoverCutoff = CurrentValues.Instance.OnlineMedalTurnoverCutoff;
 
@@ -985,7 +977,15 @@
 					Results.TurnoverType = TurnoverType.HMRC;
 					Results.AnnualTurnover = Results.HmrcAnnualTurnover;
 
-					this.log.Info("Base: (HmrcAnnualTurnover-><-onlineMedalTurnoverCutoff): AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+					this.log.Debug(
+						"Base: (HmrcAnnualTurnover-><-onlineMedalTurnoverCutoff): AnnualTurnover: {0}, " +
+						"HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}",
+						Results.AnnualTurnover,
+						Results.HmrcAnnualTurnover,
+						Results.BankAnnualTurnover,
+						Results.OnlineAnnualTurnover,
+						Results.TurnoverType
+					);
 
 					return;
 				} // if
@@ -994,7 +994,15 @@
 					Results.TurnoverType = TurnoverType.Bank;
 					Results.AnnualTurnover = Results.BankAnnualTurnover;
 
-					this.log.Info("Base: (BankAnnualTurnover-><-onlineMedalTurnoverCutoff): AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
+					this.log.Debug(
+						"Base: (BankAnnualTurnover-><-onlineMedalTurnoverCutoff): AnnualTurnover: {0}, " +
+						"HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}",
+						Results.AnnualTurnover,
+						Results.HmrcAnnualTurnover,
+						Results.BankAnnualTurnover,
+						Results.OnlineAnnualTurnover,
+						Results.TurnoverType
+					);
 
 					return;
 				} // if
@@ -1002,61 +1010,120 @@
 				Results.TurnoverType = TurnoverType.Online;
 				Results.AnnualTurnover = Results.OnlineAnnualTurnover;
 
-				this.log.Info("Base: AnnualTurnover: {0}, HmrcAnnualTurnover: {1}, BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}", Results.AnnualTurnover, Results.HmrcAnnualTurnover, Results.BankAnnualTurnover, Results.OnlineAnnualTurnover, Results.TurnoverType);
-
+				this.log.Debug(
+					"Base: AnnualTurnover: {0}, HmrcAnnualTurnover: {1}," +
+					" BankAnnualTurnover: {2}, OnlineAnnualTurnover: {3}, Type: {4}",
+					Results.AnnualTurnover,
+					Results.HmrcAnnualTurnover,
+					Results.BankAnnualTurnover,
+					Results.OnlineAnnualTurnover,
+					Results.TurnoverType
+				);
 			} catch (Exception ex) {
 				this.log.Error(
 					ex,
-					"Failed to get|calculate annual turnover for medal. customerID: {0}, calculationTime: {1}, IsForApprove: true",
+					"Failed to get/calculate annual turnover for medal. " +
+					"customerID: {0}, calculationTime: {1}, IsForApprove: true",
 					Results.CustomerId,
 					Results.CalculationTime
 				);
 			} // try
 		} // CalculateTurnoverForMedal
 
-		/// <summary>
-		///     The is online medal not via hmrc inner flow.
-		/// </summary>
-		/// <returns>The <see cref="bool" />.</returns>
+		// Online turnover: Amazon + MAX(eBay, Pay Pal)
+		// amazon: index 0
+		// ebay: index 1
+		// paypal: index 2
+		private decimal OnlineMax(List<decimal> lst) {
+			return lst.ElementAtOrDefault(0) + Math.Max(lst.ElementAtOrDefault(1), lst.ElementAtOrDefault(2));
+		} // OnlineMax
+
 		private bool IsOnlineMedalNotViaHmrcInnerFlow() {
 			return Results.MedalType.IsOnline() && Results.TurnoverType != TurnoverType.HMRC;
 		} // IsOnlineMedalNotViaHmrcInnerFlow
 
-		public virtual IEnumerable<FilteredAggregationResult> LastHistoryTurnovers(List<MarketplaceTurnover> inputList, DateTime calculationTime) {
+		private List<FilteredAggregationResult> LastHistoryTurnovers(
+			List<MarketplaceTurnover> inputList,
+			DateTime calculationTime,
+			DateTime? lastExistingDataMonth = null
+		) {
 			if (inputList.Count == 0)
 				return null;
 
-			//inputList.ForEach(x => this.log.Info("before: {0}, {1}, historyID: {2}, mpID: {3}", x.TheMonth, x.Turnover, x.CustomerMarketPlaceUpdatingHistory.Id, x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id));
+			inputList.ForEach(x => this.log.Debug(
+				"before: {0}, {1}, historyID: {2}, mpID: {3}",
+				x.TheMonth.MomentStr(),
+				x.Turnover,
+				x.CustomerMarketPlaceUpdatingHistory.Id,
+				x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id
+			));
 
 			// check type
-			var lastUpdated = inputList.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id).First();
+			var lastUpdated = inputList.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id).FirstOrDefault();
 
-			if (lastUpdated.Equals(null))
+			if (lastUpdated == null)
 				return null;
 
-			DateTime lastUpdateDate = (DateTime)lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd;
-			DateTime periodStart = MiscUtils.GetPeriodAgo(calculationTime, lastUpdateDate, CurrentValues.Instance.TotalsMonthTail);
+			if (lastUpdated.CustomerMarketPlaceUpdatingHistory == null)
+				return null;
+
+			if (lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd == null)
+				return null;
+
+			DateTime lastUpdateDate = lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value;
+			DateTime periodStart = MiscUtils.GetPeriodAgo(
+				calculationTime,
+				lastUpdateDate,
+				CurrentValues.Instance.TotalsMonthTail,
+				lastExistingDataMonth
+			);
 			DateTime periodEnd = periodStart.AddMonths(11);
 
-			//this.log.Info("calculationTime: {2}, lastUpdateDate: {1}, yearAgo: {0}, yearAgoEnd: {3}", periodStart, lastUpdateDate, calculationTime, periodEnd);
+			this.log.Debug(
+				"calculationTime: {2}, lastUpdateDate: {1}, yearAgo: {0}, yearAgoEnd: {3}, HMRC last known: '{4}'",
+				periodStart.MomentStr(),
+				lastUpdateDate.MomentStr(),
+				calculationTime.MomentStr(),
+				periodEnd.MomentStr(),
+				lastExistingDataMonth.MomentStr()
+			);
 
-			List<MarketplaceTurnover> histories = inputList.Where(z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd).ToList();
+			List<MarketplaceTurnover> histories = inputList.Where(
+				z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd
+			).ToList();
 
-			//histories.ForEach(x => this.log.Info(" relevant months: {0}, {1}, historyID: {2}, mpID: {3}", x.TheMonth, x.Turnover, x.CustomerMarketPlaceUpdatingHistory.Id, x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id));
+			histories.ForEach(x => this.log.Debug(
+				"Relevant month: {0}, {1}, historyID: {2}, mpID: {3}",
+				x.TheMonth.MomentStr(),
+				x.Turnover,
+				x.CustomerMarketPlaceUpdatingHistory.Id,
+				x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id
+			));
 
-			if (histories.Equals(null))
+			if (histories.Count < 1)
 				return null;
 
-			IEnumerable<FilteredAggregationResult> result = from ag in histories
-				group ag by new { ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id, ag.TheMonth } into grouping
-				select new FilteredAggregationResult {
-					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, grouping.First().TheMonth)),
-					TheMonth = grouping.First().TheMonth,
-					MpId = grouping.First().CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
-					Turnover = histories.First(xx => xx.TheMonth == grouping.First().TheMonth && xx.CustomerMarketPlaceUpdatingHistory.Id == grouping.Max(p => p.CustomerMarketPlaceUpdatingHistory.Id)).Turnover
+			List<FilteredAggregationResult> result = new List<FilteredAggregationResult>();
+
+			var groups = histories.GroupBy(ag => new {
+				ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+				ag.TheMonth
+			});
+
+			foreach (var grp in groups) {
+				MarketplaceTurnover first = grp.OrderByDescending(p => p.AggID).First();
+
+				var far = new FilteredAggregationResult {
+					Distance = (11 - MiscUtils.DateDiffInMonths(periodStart, first.TheMonth)),
+					TheMonth = first.TheMonth,
+					MpId = first.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+					Turnover = first.Turnover
 				};
 
-			result.ForEach(x => this.log.Info("Filtered: {0}, {1}, {2}", x.TheMonth, x.Turnover, x.MpId));
+				result.Add(far);
+			} // for each
+
+			result.ForEach(x => this.log.Debug("Filtered: {0}, {1}, {2}", x.TheMonth.MomentStr(), x.Turnover, x.MpId));
 
 			return result;
 		} // LastHistoryTurnovers

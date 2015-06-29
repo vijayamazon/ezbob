@@ -8,7 +8,12 @@
 			return Security.SecurityUtils.MD5(input);
 		} // MD5
 
-		public static string ValidateStringArg(string sValue, string sArgName, bool bThrow = true, int nMaxAllowedLength = 255) {
+		public static string ValidateStringArg(
+			string sValue,
+			string sArgName,
+			bool bThrow = true,
+			int nMaxAllowedLength = 255
+		) {
 			sValue = (sValue ?? string.Empty).Trim();
 
 			if (sValue.Length == 0) {
@@ -113,7 +118,9 @@
 		/// Calculates number of full calendar months between the months represented by arguments.
 		/// If a > b the result is negative.
 		/// </summary>
-		/// <example>If a is November 15th 2014 and b is July 16 2014 then result is 3 (August, September, October).</example>
+		/// <example>
+		/// If a is November 15th 2014 and b is July 16 2014 then result is 3 (August, September, October).
+		/// </example>
 		/// <example>If a is November 15th 2012 and b is March 16 2014 then result is 15
 		/// (December 2012, entire 2013, January 2014, and February).</example>
 		/// <param name="a">First date.</param>
@@ -138,13 +145,61 @@
 		} // CountMonthsBetween
 
 		/// <summary>
-		///  Calculate "last 12 months" for turnovers (3 last months days tail)
+		/// <para>Calculates the first of 12 months for calculating marketplace annual turnover. First month calculation rule
+		/// is: if calculation date is in month's tail and marketplace last update time is in the same month tail then
+		/// requested year end at the month of calculation date. Otherwise requested year ends one month before the month of
+		/// calculation date.</para>
+		/// <para>There is special handling for HMRC marketplace.</para>
+		/// <para>For HMRC there is one more step after applying standard procedure (described above): check
+		/// what is the last reported month. HMRC is normally reported every three months so if requested year ends at
+		/// May 2015 then it's all right NOT to have data for March'15, April'15, and May'15. In such cases
+		/// we step back up to four months.</para>
 		/// </summary>
-		/// <param name="calculationDate"></param>
-		/// <param name="lastUpdate"></param>
-		/// <param name="tailLength"></param>
-		/// <returns></returns>
-		public static DateTime GetPeriodAgo(DateTime calculationDate, DateTime lastUpdate, int tailLength) {
+		/// <example>
+		/// Non-HMRC marketplace.
+		/// Month tail is 28, 29, 30; calculation date is June 30 2015, marketplace last update time is June 29 =>
+		/// returned value is July 2014, annual turnover is calculated based on July'14-June'15.
+		/// </example>
+		/// <example>
+		/// Non-HMRC marketplace.
+		/// Month tail is 28, 29, 30; calculation date is June 30 2015, marketplace last update time is June 19 =>
+		/// returned value is June 2014, annual turnover is calculated based on June'14-May'15.
+		/// </example>
+		/// <example>
+		/// Non-HMRC marketplace.
+		/// Month tail is 28, 29, 30; calculation date is June 20 2015, marketplace last update time is not considered =>
+		/// returned value is June 2014, annual turnover is calculated based on June'14-May'15.
+		/// </example>
+		/// <example>
+		/// HMRC marketplace.
+		/// Standard calculated month is June 2014. Last reported month is February 15 =>
+		/// returned value is March 2014, annual turnover is calculated based on March'14-February'15.
+		/// </example>
+		/// <example>
+		/// HMRC marketplace.
+		/// Standard calculated month is June 2014. Last reported month is April 15 =>
+		/// returned value is May 2014, annual turnover is calculated based on May'14-April'15.
+		/// </example>
+		/// <example>
+		/// HMRC marketplace.
+		/// Standard calculated month is June 2014. Last reported month is January 15 =>
+		/// returned value is June 2014, annual turnover is calculated based on June'14-May'15.
+		/// </example>
+		/// <param name="calculationDate">A day when this calculation takes place.
+		/// It can differ from DateTime.UtcNow in case of simulations or test executions.
+		/// </param>
+		/// <param name="lastUpdate">Marketplace last update time (i.e. maximum for marketplace from
+		/// MP_CustomerMarketplaceUpdatingHistory.UpdatingEnd).</param>
+		/// <param name="tailLength">Number of days in month tail. If month tail length is 3
+		/// and the month is July then month tail is the 29th, the 30th, and the 31st.</param>
+		/// <param name="lastExistingDataTime">Specified only for HMRC marketplaces: last reported month.</param>
+		/// <returns>First month of the year for turnover calculation.</returns>
+		public static DateTime GetPeriodAgo(
+			DateTime calculationDate,
+			DateTime lastUpdate,
+			int tailLength,
+			DateTime? lastExistingDataTime
+		) {
 			int daysInMonth = DateTime.DaysInMonth(calculationDate.Year, calculationDate.Month);
 
 			bool inTheSameTail =
@@ -155,7 +210,28 @@
 
 			DateTime months = calculationDate.AddMonths(inTheSameTail ? -11 : -12);
 
-			return new DateTime(months.Year, months.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+			var standardResult = new DateTime(months.Year, months.Month, 1, 0, 0, 0, DateTimeKind.Utc);
+
+			if (lastExistingDataTime == null)
+				return standardResult;
+
+			DateTime standardYearEnd = standardResult.AddMonths(11);
+
+			DateTime lastExisting = new DateTime(
+				lastExistingDataTime.Value.Year,
+				lastExistingDataTime.Value.Month,
+				1,
+				0,
+				0,
+				0,
+				DateTimeKind.Utc
+			);
+
+			if ((lastExisting >= standardYearEnd) || (lastExisting.AddMonths(3) < standardYearEnd))
+				return standardResult;
+
+			// Note order of arguments: result should be negative.
+			return standardResult.AddMonths(DateDiffInMonths(standardYearEnd, lastExisting));
 		} // GetPeriodAgo
 
 		/// <summary>
@@ -165,12 +241,14 @@
 		/// <returns></returns>
 		public static string ByteArr2Hex(byte[] raw) {
 			string hex = null;
+
 			if (raw != null) {
 				hex = BitConverter.ToString(raw);
 				hex = (hex.Replace("-", "")).ToLower();
-			}
+			} // if
+
 			return hex;
-		}
+		} // ByteArr2Hex
 
 		/// <summary>
 		/// Calculates difference between to DatTime dates in months
@@ -180,7 +258,7 @@
 		/// <returns></returns>
 		public static int DateDiffInMonths(DateTime start, DateTime end) {
 			return (end.Month + end.Year * 12) - (start.Month + start.Year * 12);
-		}
+		} // DateDiffInMonths
 
 		/// <summary>
 		/// Calculates difference between to DateTime dates in weeks
@@ -190,8 +268,6 @@
 		/// <returns></returns>
 		public static int DateDiffInWeeks(DateTime start, DateTime end) {
 			return (end.Subtract(start)).Days / 7;
-		}
-
-
+		} // DateDiffInWeeks
 	} // class MiscUtils
 } // namespace

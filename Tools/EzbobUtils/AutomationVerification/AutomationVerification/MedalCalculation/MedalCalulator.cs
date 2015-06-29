@@ -214,11 +214,13 @@
 			model.TurnoverType = null;
 			model.Turnovers = new List<TurnoverDbRow>();
 
-			this.DB.ForEachResult<TurnoverDbRow>(r => model.Turnovers.Add(r),
-					"GetCustomerTurnoverForAutoDecision",
-					new QueryParameter("IsForApprove", true),
-					new QueryParameter("CustomerID", customerId),
-					new QueryParameter("Now", model.CalculationDate));
+			this.DB.ForEachResult<TurnoverDbRow>(
+				r => model.Turnovers.Add(r),
+				"GetCustomerTurnoverForAutoDecision",
+				new QueryParameter("IsForApprove", true),
+				new QueryParameter("CustomerID", customerId),
+				new QueryParameter("Now", model.CalculationDate)
+			);
 
 			// extract hmrc data 
 			var hmrcList = (from TurnoverDbRow r in model.Turnovers where r.MpTypeID.Equals(MpType.Hmrc) select r).AsQueryable();

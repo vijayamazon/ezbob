@@ -16,6 +16,16 @@
 		Other
 	} // enum MaritalStatus
 
+	public static class MaritalStatusExt {
+		public static bool In(this MaritalStatus status, params MaritalStatus[] lst) {
+			foreach (MaritalStatus s in lst)
+				if (status == s)
+					return true;
+
+			return false;
+		} // In
+	} // class MaritalStatusExt
+
 	public enum Medal {
 		NoClassification,
 		Silver,

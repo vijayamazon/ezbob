@@ -29,11 +29,11 @@
 			this.earliestYodleeLastUpdateDate = earliestYodleeLastUpdateDate;
 		} // constructor
 
-		/**
-		 * implementation of 
-		 * https://drive.draw.io/?#G0B1Io_qu9i44SVzVqV19nbnMxRW8
-		 * https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28 (get medal type and medal value)
-		 */
+		/// <summary>
+		/// implementation of 
+		/// https://drive.draw.io/?#G0B1Io_qu9i44SVzVqV19nbnMxRW8
+		/// https://drive.draw.io/?#G0B1Io_qu9i44ScEJqeUlLNEhaa28 (get medal type and medal value)
+		/// </summary>
 		public MedalResult CalculateMedal() {
 			double relevancyLen = CurrentValues.Instance.MedalDaysOfMpRelevancy;
 
@@ -90,7 +90,7 @@
 			MedalCalculatorBase calculator = Activator.CreateInstance(calculatorType) as MedalCalculatorBase;
 
 			if (calculator == null)
-				return SetNoMedal("Failed to create medal of type " + calculatorType);
+				return SetNoMedal("Failed to create medal calculator of type " + calculatorType);
 
 			calculator.Init(
 				this.customerId,

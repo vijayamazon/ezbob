@@ -110,6 +110,7 @@
     <Compile Include="Stopper.cs" />
     <Compile Include="TimeCounter.cs" />
     <Compile Include="TypeUtils.cs" />
+    <Compile Include="ValueReaderExt.cs" />
     <Compile Include="XmlUtils\Xml.cs" />
     <Compile Include="XmlUtils\XmlNodeExtensions.cs" />
     <Compile Include="XmlUtils\XmlSeldenException.cs" />

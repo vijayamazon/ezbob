@@ -269,12 +269,12 @@
 				break;
 			} // switch
 
-			Log.Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
-				pc.OutOfPoolCount,
-				sSuffix,
-				pc.PoolItemID,
-				pc.Name
-			);
+			//Log.Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
+			//	pc.OutOfPoolCount,
+			//	sSuffix,
+			//	pc.PoolItemID,
+			//	pc.Name
+			//);
 
 			return new ConnectionWrapper(pc);
 		} // TakeFromPool
