@@ -20,6 +20,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     },
     serializeData: function () {
         var data = this.model.toJSON();
+        console.log('Data:', data);
         data.editItemIndex = this.editItemIndex;
         data.hasFreezInterest = this.hasFreeIntrest();
         return data;
@@ -185,12 +186,21 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
         var self = this;
 
-        oRequest.success(function (res) {
-            self.ui.submit_success.fadeIn().fadeOut(3000);
+        oRequest.success(function(res) {
+            if (res.Error == null || res.Error === "") {
+                self.ui.submit_success.fadeIn().fadeOut(3000);
+                setTimeout(function() { self.close(); }, 3500);
+            } else {
+                self.ui.submit_fail.text(res.Error);
+                self.ui.submit_fail.fadeIn().fadeOut(10000);
+            }
+            return false;
         }); //on success
 
         oRequest.fail(function () {
+            self.ui.submit_fail.text("There has been an error sending data to server");
             self.ui.submit_fail.fadeIn().fadeOut(3000);
+            return false;
         });//on fail
     },
 

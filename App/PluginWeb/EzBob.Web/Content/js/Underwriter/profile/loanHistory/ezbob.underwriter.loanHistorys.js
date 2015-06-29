@@ -70,6 +70,7 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 
 		var xhr = loan.fetch();
 
+		BlockUi("on");
 		var self = this;
 
 		xhr.done(function() {
@@ -78,6 +79,7 @@ EzBob.Underwriter.LoanHistoryView = Backbone.Marionette.View.extend({
 				model: loan
 			});
 			view.on("item:saved", self.updateView, self);
+			BlockUi("off");
 			EzBob.App.jqmodal.show(view);
 		});
 
