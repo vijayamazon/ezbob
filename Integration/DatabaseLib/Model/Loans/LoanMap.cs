@@ -1,6 +1,7 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database.Mapping {
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using FluentNHibernate.Mapping;
+	using NHibernate.Mapping.ByCode;
 	using NHibernate.Type;
 
 	public class LoanMap : ClassMap<Loans.Loan> {
@@ -51,15 +52,21 @@
 				.Inverse()
 				.ForeignKeyConstraintName("FK_Loan_Transactions")
 				.Cache.ReadWrite().Region("LongTerm").ReadWrite();
-			HasMany(x => x.Schedule)
-				//.AsList(i => i.Column("Position"))
-				.AsBag()
-				.KeyColumn("LoanId")
-				.OrderBy("Date")
-				.Cascade.AllDeleteOrphan()
-				.Inverse()
-				.ForeignKeyConstraintName("FK_Loan_Schedule")
-				.Cache.ReadWrite().Region("LongTerm").ReadWrite();
+		    HasMany(x => x.Schedule)
+		        //.AsList(i => i.Column("Position"))
+		        .AsBag()
+		        .KeyColumn("LoanId")
+		        .OrderBy("Date")
+		        .Cascade.AllDeleteOrphan()
+		        .Inverse()
+
+                .NotFound.Ignore()
+
+		        .ForeignKeyConstraintName("FK_Loan_Schedule")
+		        .Cache.ReadWrite()
+		        .Region("LongTerm")
+		        .ReadWrite();
+              
 			Map(x => x.RefNumber, "RefNum").Length(11);
 			References(x => x.CashRequest, "RequestCashId");
 			HasMany(x => x.Agreements)

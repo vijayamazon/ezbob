@@ -183,26 +183,27 @@
 				if (!this.ReschedulingArguments.RescheduleIn) {
 
 					// check "too much" payment per interval
-					List<LoanScheduleItem> paidEarlyInstallment = this.tLoan.Schedule.Where(s => s.Date.Date >= this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly).ToList();
-					int paidEarlyCount = paidEarlyInstallment.Count;
-					if (paidEarlyCount > 0) {
-						this.message = string.Format("{0}ly payment of {1} GBP more than minimum, needed for paying a loan. {2} future installments of new schedule registered as \"paid early\"",
-							// ReSharper disable once PossibleInvalidOperationException
-							this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo), paidEarlyCount);
-						this.Result.Error = this.message;
-						return;
-					}
+                    List<LoanScheduleItem> paidEarlyInstallment = this.tLoan.Schedule.Where(s => s.Date.Date >= this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly).ToList();
+                    int paidEarlyCount = paidEarlyInstallment.Count;
+                    if (paidEarlyCount > 0) {
+                        this.message = string.Format("{0}ly payment of {1} GBP more than minimum, needed for paying a loan. {2} future installments of new schedule registered as \"paid early\"",
+                            // ReSharper disable once PossibleInvalidOperationException
+                            this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo), paidEarlyCount);
+                        this.Result.Error = this.message;
+                        return;
+                    }
 
 					// unsufficient payment per period
-					LoanScheduleItem overInstallment = this.tLoan.Schedule.FirstOrDefault(s => s.AmountDue > this.ReschedulingArguments.PaymentPerInterval);
-					if (overInstallment != null) {
-						this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance. Accrued interest: {2}, accumulated fees: {3}, first new installment: {4} ",
-							// ReSharper disable once PossibleInvalidOperationException
-							this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo),
-							overInstallment.Interest.ToString("C2", this.cultureInfo), overInstallment.Fees.ToString("C2", this.cultureInfo), overInstallment.AmountDue.ToString("C2", this.cultureInfo));
-						this.Result.Error = this.message;
-						return;
-					}
+                    LoanScheduleItem overInstallment = this.tLoan.Schedule.FirstOrDefault(s => s.AmountDue > this.ReschedulingArguments.PaymentPerInterval);
+                    if (overInstallment != null)
+                    {
+                        this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance. Accrued interest: {2}, accumulated fees: {3}, first new installment: {4} ",
+                            // ReSharper disable once PossibleInvalidOperationException
+                            this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo),
+                            overInstallment.Interest.ToString("C2", this.cultureInfo), overInstallment.Fees.ToString("C2", this.cultureInfo), overInstallment.AmountDue.ToString("C2", this.cultureInfo));
+                        this.Result.Error = this.message;
+                        return;
+                    }
 				}
 
 				ChangeLoanDetailsModelBuilder changeLoanModelBuilder = new ChangeLoanDetailsModelBuilder();

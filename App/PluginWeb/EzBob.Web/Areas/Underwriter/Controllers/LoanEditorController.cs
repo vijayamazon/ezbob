@@ -271,7 +271,8 @@
 
 				// re strategy
 				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-
+              
+                Log.Debug(string.Format("ReschedulingResult: {0}, {1}", reModel, result.Value));
 				return Json(result.Value);
 
 			} catch (Exception editex) {
