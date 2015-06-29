@@ -43,7 +43,6 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using NHibernate.Linq;
 	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
@@ -927,10 +926,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 298;
-
-			TestLoanOldCalculator(loanID);
-
+			int loanID = 1846;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -939,8 +935,7 @@
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 351m;
-
+			reModel.PaymentPerInterval = 80m;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s1.Execute();
@@ -949,21 +944,19 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
-			if (reModel.SaveToDB)
-				TestLoanOldCalculator(loanID);
 		}
 
 		[Test]
 		public void TestRescheduleIN() {
-			int	loanID = 3921;
+			int	loanID = 2662;
 			Loan loan = new Loan();
 
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.SaveToDB = false;
+			reModel.SaveToDB = true;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
 
 			var s = new RescheduleLoan<Loan>(loan, reModel);
@@ -971,17 +964,6 @@
 				s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
-
-			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 351m;
-			var s1 = new RescheduleLoan<Loan>(loan, reModel);
-			try {
-				s1.Execute();
-				m_oLog.Debug("RESULT FOR OUT");
-				m_oLog.Debug(s1.Result.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}

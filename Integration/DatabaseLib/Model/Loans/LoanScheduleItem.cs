@@ -144,6 +144,9 @@
 			}
 		}
 
+		public virtual int? Position { get; set; }
+
+
 		/// <summary>
 		/// Creates a clone of LoanScheduleItem that is not bound to loan or NHibernate session.
 		/// </summary>
@@ -171,7 +174,7 @@
 
 		public override string ToString()
 		{
-			return string.Format("LoanScheduleItem: Date: {0, 10} Balance: {1, 10} AmountDue: {2, 10} LoanRepayment: {3, 10} Interest: {4, 10} Fees: {5, 10} Status: {6, 10}, InterestRate: {7, 10}, Id: {8,10}", Date, Balance, AmountDue, LoanRepayment, Interest, Fees, Status, InterestRate, Id);
+			return string.Format("LoanScheduleItem: Date: {0, 10} Balance: {1, 10} AmountDue: {2, 10} LoanRepayment: {3, 10} Interest: {4, 10} Fees: {5, 10} Status: {6, 10}, InterestRate: {7, 10}, Id: {8,10}, Position: {9,10}", Date, Balance, AmountDue, LoanRepayment, Interest, Fees, Status, InterestRate, Id, Position);
 		}
 	}
 
@@ -213,6 +216,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
 			Map(x => x.Date).CustomType<UtcDateTimeType>();
 			Map(x => x.RepaymentAmount);
 			Map(x => x.Principal);
+			Map(x => x.Position);
 			Map(x => x.LoanRepayment);
 			Map(x => x.Interest);
 			Map(x => x.InterestPaid);
