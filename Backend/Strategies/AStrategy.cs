@@ -21,6 +21,20 @@
 		public class StrategyContext {
 			public int? UserID { get; set; }
 			public int? CustomerID { get; set; }
+
+			/// <summary>
+			/// Returns a string that represents the current object.
+			/// </summary>
+			/// <returns>
+			/// A string that represents the current object.
+			/// </returns>
+			public override string ToString() {
+				return string.Format(
+					"user ID: '{0}', customer ID: '{1}'",
+					UserID.HasValue ? UserID.Value.ToString() : "-- null --",
+					CustomerID.HasValue ? CustomerID.Value.ToString() : "-- null --"
+				);
+			} // ToString
 		} // class Context
 
 		public StrategyContext Context { get; private set; }
