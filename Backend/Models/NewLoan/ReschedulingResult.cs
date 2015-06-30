@@ -22,7 +22,13 @@
 		public int IntervalsNum { get; set; } // calculated repayment intervals number in months
 
 		[DataMember]
-		public int IntervalsNumWeeks { get; set; }  // calculated repayment intervals number in weeks
+		public decimal? FirstPaymentInterest { get; set; } // calculated interest to be paid in the first new payment (interval - months)
+
+		//[DataMember]
+		//public decimal? FirstPaymentInterestWeeks { get; set; } // calculated interest to be paid in the first new payment (interval - weeks)
+
+		//[DataMember]
+		//public int IntervalsNumWeeks { get; set; }  // calculated repayment intervals number in weeks
 
 		[DataMember]
 		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planning close date
@@ -30,7 +36,7 @@
 		[DataMember]
 		public decimal DefaultPaymentPerInterval { get; set; } // interest accrued untill ReschedulingDate including
 
-		public decimal? Fees { get; set; } // fees in loan
+		//public decimal? Fees { get; set; } // fees in loan
 
 		[DataMember]
 		public string Error { get; set; }

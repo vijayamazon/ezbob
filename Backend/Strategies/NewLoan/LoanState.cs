@@ -186,7 +186,7 @@
 						BadPeriod i = new BadPeriod(s.ChangeDate.Date, badEnds.ElementAt(index).ChangeDate.Date);
 						if (!badsList.Contains(i))
 							badsList.Add(i);
-					} catch (Exception e) {
+					} catch (Exception) {
 						// ignored
 					}
 				}

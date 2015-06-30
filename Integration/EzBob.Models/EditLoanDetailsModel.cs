@@ -4,6 +4,7 @@ namespace EzBob.Models
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Text;
+	using Ezbob.Backend.Models.NewLoan;
 	using EZBob.DatabaseLib.Model.Database;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
@@ -26,22 +27,25 @@ namespace EzBob.Models
 
         public DateTime Date { get; set; }
 
-        public int WithinWeek { get; set; }
+		public ReschedulingResult ReResultIn { get; set; }
+		public ReschedulingResult ReResultOut { get; set; }
 
-        public int WithinMonth { get; set; }
+		//public int WithinWeek { get; set; }
 
-        public int OutsideWeek { get; set; }
+		//public int WithinMonth { get; set; }
 
-        public int OutsideMonth { get; set; }
+		//public int OutsideWeek { get; set; }
 
-        public decimal? OutsideAmount { get; set; }
+		//public int OutsideMonth { get; set; }
 
-        public decimal? ReschedulingBalance { get; set; }
+		//public decimal? OutsideAmount { get; set; }
 
-        public string ReschedulingINNotification { get; set; }
-        public string ReschedulingOUTNotification { get; set; }
+		//public decimal? ReschedulingBalance { get; set; }
 
-		public decimal? DefaultPaymentPerInterval { get; set; }
+		//public string ReschedulingINNotification { get; set; }
+		//public string ReschedulingOUTNotification { get; set; }
+
+		//public decimal? DefaultPaymentPerInterval { get; set; }
 
         public LoanOptions Options { get; set; }
 

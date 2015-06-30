@@ -932,10 +932,10 @@
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-			reModel.SaveToDB = false;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+			reModel.SaveToDB = true;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 80m;
+			reModel.PaymentPerInterval = 480m;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s1.Execute();
@@ -948,9 +948,8 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int	loanID = 2662;
+			int loanID = 1846; //2662;
 			Loan loan = new Loan();
-
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
@@ -958,7 +957,6 @@
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
-
 			var s = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s.Execute();

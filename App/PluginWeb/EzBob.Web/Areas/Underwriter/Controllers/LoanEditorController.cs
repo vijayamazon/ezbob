@@ -79,10 +79,11 @@
             try
             {
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-                model.WithinWeek = result.Value.IntervalsNumWeeks;
-                model.WithinMonth = result.Value.IntervalsNum;
-                model.ReschedulingBalance = result.Value.ReschedulingBalance;
-                model.ReschedulingINNotification = result.Value.Error;
+	            model.ReResultIn = result.Value;
+				//model.WithinWeek = result.Value.IntervalsNumWeeks;
+				//model.WithinMonth = result.Value.IntervalsNum;
+				//model.ReschedulingBalance = result.Value.ReschedulingBalance;
+				//model.ReschedulingINNotification = result.Value.Error;
 
                 Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
             }
@@ -96,12 +97,13 @@
             try
             {
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-                model.OutsideWeek = result.Value.IntervalsNumWeeks;
-                model.OutsideMonth = result.Value.IntervalsNum;
-                model.ReschedulingBalance = result.Value.ReschedulingBalance;
-                model.ReschedulingOUTNotification = result.Value.Error;
-                model.OutsideAmount = reModel.PaymentPerInterval;
-	            model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
+				model.ReResultOut = result.Value;
+				//model.OutsideWeek = result.Value.IntervalsNumWeeks;
+				//model.OutsideMonth = result.Value.IntervalsNum;
+				//model.ReschedulingBalance = result.Value.ReschedulingBalance;
+				//model.ReschedulingOUTNotification = result.Value.Error;
+				//model.OutsideAmount = reModel.PaymentPerInterval;
+				//model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
 
                 Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
             }
