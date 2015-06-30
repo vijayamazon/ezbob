@@ -10,6 +10,8 @@
 	using Ezbob.Utils;
 	using EzBob.Models;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Database.UserManagement;
+	using EZBob.DatabaseLib.Model.Loans;
 	using PaymentServices.Calculators;
 	using StructureMap;
 
@@ -233,6 +235,7 @@
 
 		private void GetCurrentLoanState() {
 			if (this.tLoan != null) {
+
 				this.tLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
 				this.Result.LoanInterestRate = this.tLoan.InterestRate;
 				LoanScheduleItem lastScheduleItem = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
@@ -244,6 +247,14 @@
 
 				var defaultPaymentPerInterval = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
 				this.Result.DefaultPaymentPerInterval = defaultPaymentPerInterval == null ? 0 : defaultPaymentPerInterval.LoanRepayment;
+
+				// hold LoanChangesHistory (loan state before changes) before re-schedule
+				this.loanHistory = new LoanChangesHistory {
+					Data = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan).ToJSON(),
+					Date = this.ReschedulingArguments.ReschedulingDate,
+					Loan = this.tLoan
+					//,User = user
+				};
 
 				return;
 			}
@@ -264,6 +275,12 @@
 				return;
 
 			if (this.tLoan != null && this.tLoan.Schedule.Count > 0) {
+
+				// save LoanChangesHistory (loan state before changes) before re-schedule
+				this.loanHistory.User = ObjectFactory.GetInstance<UsersRepository>().Get(this.ReschedulingArguments.UserID);
+				ObjectFactory.GetInstance<LoanChangesHistoryRepository>().Save(this.loanHistory);
+
+
 				try {
 
 					this.tLoan.Status = LoanStatus.Late;
@@ -277,6 +294,7 @@
 						this.loanRep.SaveOrUpdate(this.tLoan);
 					});
 					this.loanRep.CommitTransaction();
+
 				} catch (Exception transactionEx) {
 					this.loanRep.RollbackTransaction();
 					this.message = string.Format("Re-schedule rolled back. Arguments {0}, err: {1}", this.ReschedulingArguments, transactionEx);
@@ -294,6 +312,7 @@
 		private string message;
 		private readonly LoanRepository loanRep;
 		private readonly CultureInfo cultureInfo;
+		private LoanChangesHistory loanHistory;
 
 	}
 }

@@ -932,10 +932,11 @@
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = true;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 480m;
+			reModel.PaymentPerInterval = 580m;
+			reModel.UserID = 25852;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s1.Execute();
@@ -957,6 +958,7 @@
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
+			reModel.UserID = 25852;
 			var s = new RescheduleLoan<Loan>(loan, reModel);
 			try {
 				s.Execute();

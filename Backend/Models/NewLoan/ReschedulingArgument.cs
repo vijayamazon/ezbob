@@ -19,11 +19,8 @@
 		[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type - selected
 
-		//[DataMember]
-		//public decimal ReschedulingBalance { get; set; } // outstanding balance for rescheduling
-
-		//[DataMember]
-		//public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planned close date
+		[DataMember]
+		public int? UserID { get; set; } // user processing the action
 
 		[DataMember]
 		public decimal? PaymentPerInterval { get; set; } // monthly/weekly A amount for "outside" rescheduling

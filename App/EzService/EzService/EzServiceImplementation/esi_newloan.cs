@@ -112,6 +112,7 @@
 			Log.Debug("t is {0}, t.Name={1}", t, t.Name);
 
 			ReschedulingResult result = new ReschedulingResult();
+			reAgrs.UserID = userID;
 
 			try {
 
