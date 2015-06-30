@@ -64,15 +64,10 @@
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
             calc.GetState();
 
-            //var model = _builder.BuildModel(loan);
-
-            EditLoanDetailsModel model = _builder.BuildModel(loan);
+            var model = _builder.BuildModel(loan);
 
             model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
-
-            //TODO build loan model
-            //Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
-
+   
             ReschedulingArgument reModel = new ReschedulingArgument();
             reModel.LoanType = loan.GetType().AssemblyQualifiedName;
             reModel.LoanID = id;
@@ -83,7 +78,6 @@
 
             try
             {
-
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
                 model.WithinWeek = result.Value.IntervalsNumWeeks;
                 model.WithinMonth = result.Value.IntervalsNum;
@@ -107,6 +101,7 @@
                 model.ReschedulingBalance = result.Value.ReschedulingBalance;
                 model.ReschedulingOUTNotification = result.Value.Error;
                 model.OutsideAmount = reModel.PaymentPerInterval;
+	            model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
 
                 Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
             }
@@ -230,7 +225,6 @@
 
         [Ajax]
         [HttpPost]
-        //[Transactional]
         public JsonResult RescheduleLoan(
             int loanID,
             DbConstants.RepaymentIntervalTypes intervalType,  // month/week
@@ -246,12 +240,13 @@
             bool rescheduleIn = true,
             bool save = false
             ){
+
             try
             {
                 Loan loan = this._loans.Get(loanID);
                 DateTime now = DateTime.UtcNow;
 
-               //  loan options
+                //  loan options
                 if (save)
                 {
                     // save LoanChangesHistory (loan state before changes) before new schedule
@@ -295,11 +290,10 @@
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
                 Log.Debug(string.Format("ReschedulingResult: {0}, {1}", reModel, result.Value));
+
                 return Json(result.Value);
 
-            }
-            catch (Exception editex)
-            {
+            } catch (Exception editex){
                 Log.Error("rescheduling edditor EXCEPTION: " + editex);
             }
 

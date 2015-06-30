@@ -41,6 +41,8 @@ namespace EzBob.Models
         public string ReschedulingINNotification { get; set; }
         public string ReschedulingOUTNotification { get; set; }
 
+		public decimal? DefaultPaymentPerInterval { get; set; }
+
         public LoanOptions Options { get; set; }
 
         public static EditLoanDetailsModel Parse(string json)

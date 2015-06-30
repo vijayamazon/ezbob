@@ -27,6 +27,9 @@
 		[DataMember]
 		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planning close date
 
+		[DataMember]
+		public decimal DefaultPaymentPerInterval { get; set; } // interest accrued untill ReschedulingDate including
+
 		public decimal? Fees { get; set; } // fees in loan
 
 		[DataMember]

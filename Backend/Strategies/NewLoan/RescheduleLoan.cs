@@ -117,7 +117,7 @@
 					// remove "check accrued interest" payment
 					this.tLoan.Schedule.Remove(accruedInterestItem);
 					// ### get I - Accrued interest to pay untill Rescheduling date
-
+					
 					// ReSharper disable once PossibleInvalidOperationException
 					decimal m = (decimal)this.ReschedulingArguments.PaymentPerInterval;
 					int k = (int)Math.Ceiling((P + I + F) / (m - (P + I + F) * r));
@@ -140,7 +140,7 @@
 
 				periods = (this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? this.Result.IntervalsNum : this.Result.IntervalsNumWeeks);
 
-				decimal newInstallmentPrincipal =  Decimal.Ceiling((P+I) / periods);
+				decimal newInstallmentPrincipal =  Decimal.Ceiling((P + I) / periods);
 
 				Log.Debug("Periods: {0}, newInstallemnt: {1}, close date: {2}", periods, newInstallmentPrincipal, this.Result.LoanCloseDate);
 
@@ -177,41 +177,39 @@
 				}
 				// ### re-arrange by position
 
-                try{
-                    calc.GetState();
-                }
-                catch (Exception e){
-                    this.Result.Error = e.Message; 
-                    Log.Debug("GET CALC STATE EXCEPTION: {0}", this.Result.Error);
-                    return;
-                }
+				try {
+					calc.GetState();
+				} catch (Exception e) {
+					this.Result.Error = e.Message;
+					Log.Debug("GET CALC STATE EXCEPTION: {0}", this.Result.Error);
+					return;
+				}
 
 				Log.Debug("--------------Loan recalculated: \n {0}", this.tLoan);
-			
+
 				if (!this.ReschedulingArguments.RescheduleIn) {
 
 					// check "too much" payment per interval
-                    List<LoanScheduleItem> paidEarlyInstallment = this.tLoan.Schedule.Where(s => s.Date.Date >= this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly).ToList();
-                    int paidEarlyCount = paidEarlyInstallment.Count;
-                    if (paidEarlyCount > 0) {
-                        this.message = string.Format("{0}ly payment of {1} GBP more than minimum, needed for paying a loan. {2} future installments of new schedule registered as \"paid early\"",
-                            // ReSharper disable once PossibleInvalidOperationException
-                            this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo), paidEarlyCount);
-                        this.Result.Error = this.message;
-                        return;
-                    }
+					List<LoanScheduleItem> paidEarlyInstallment = this.tLoan.Schedule.Where(s => s.Date.Date >= this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly).ToList();
+					int paidEarlyCount = paidEarlyInstallment.Count;
+					if (paidEarlyCount > 0) {
+						this.message = string.Format("{0}ly payment of {1} GBP more than minimum, needed for paying a loan. {2} future installments of new schedule registered as \"paid early\"",
+							// ReSharper disable once PossibleInvalidOperationException
+							this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo), paidEarlyCount);
+						this.Result.Error = this.message;
+						return;
+					}
 
 					// unsufficient payment per period
-                    LoanScheduleItem overInstallment = this.tLoan.Schedule.FirstOrDefault(s => s.AmountDue > this.ReschedulingArguments.PaymentPerInterval);
-                    if (overInstallment != null)
-                    {
-                        this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance. Accrued interest: {2}, accumulated fees: {3}, first new installment: {4} ",
-                            // ReSharper disable once PossibleInvalidOperationException
-                            this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo),
-                            overInstallment.Interest.ToString("C2", this.cultureInfo), overInstallment.Fees.ToString("C2", this.cultureInfo), overInstallment.AmountDue.ToString("C2", this.cultureInfo));
-                        this.Result.Error = this.message;
-                        return;
-                    }
+					LoanScheduleItem overInstallment = this.tLoan.Schedule.FirstOrDefault(s => s.AmountDue > this.ReschedulingArguments.PaymentPerInterval);
+					if (overInstallment != null) {
+						this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance. Accrued interest: {2}, accumulated fees: {3}, first new installment: {4} ",
+							// ReSharper disable once PossibleInvalidOperationException
+							this.ReschedulingArguments.ReschedulingRepaymentIntervalType, this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo),
+							overInstallment.Interest.ToString("C2", this.cultureInfo), overInstallment.Fees.ToString("C2", this.cultureInfo), overInstallment.AmountDue.ToString("C2", this.cultureInfo));
+						this.Result.Error = this.message;
+						return;
+					}
 				}
 
 				ChangeLoanDetailsModelBuilder changeLoanModelBuilder = new ChangeLoanDetailsModelBuilder();
@@ -220,9 +218,9 @@
 				if (model.HasErrors) {
 					this.Result.Error = model.Errors.ToString();
 					Log.Debug(this.Result.Error);
-					return; 
+					return;
 				}
-				
+
 				if (!this.ReschedulingArguments.SaveToDB)
 					return;
 
@@ -246,6 +244,10 @@
 				}
 
 				Log.Debug("==========================LoanState: {0} : \n {0}", this.tLoan);
+
+				var defaultPaymentPerInterval = this.tLoan.Schedule.OrderBy(s => s.Date).LastOrDefault();
+				this.Result.DefaultPaymentPerInterval = defaultPaymentPerInterval == null ? 0 : defaultPaymentPerInterval.LoanRepayment;
+
 				return;
 			}
 			if (this.tNLLoan != null) {
@@ -257,10 +259,8 @@
 
 
 		/// <summary>
-		/// 
+		/// saving "rescheduling" to DB
 		/// </summary>
-		/// <param name="rescheduledLoan"></param>
-		//private void LoanRescheduleSave(Loan rescheduledLoan) {
 		private void LoanRescheduleSave() {
 
 			if (this.ReschedulingArguments.SaveToDB == false)
@@ -268,6 +268,10 @@
 
 			if (this.tLoan != null && this.tLoan.Schedule.Count > 0) {
 				try {
+
+					this.tLoan.Status = LoanStatus.Late;
+					this.tLoan.LastRecalculation = DateTime.UtcNow;
+
 					this.loanRep.EvictAll();
 					this.loanRep.Evict(this.tLoan);
 
