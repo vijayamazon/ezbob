@@ -34,11 +34,11 @@
 				string.Join("\n\t", args.Errors)
 			);
 
-			oConnection.StateChange += (sender, args) => Log.Debug(
-				"Database connection state change: {0} -> {1}.",
-				args.OriginalState,
-				args.CurrentState
-			);
+			//oConnection.StateChange += (sender, args) => Log.Debug(
+			//	"Database connection state change: {0} -> {1}.",
+			//	args.OriginalState,
+			//	args.CurrentState
+			//);
 
 			oConnection.Disposed += (obj, args) => Log.Debug("Database connection is disposed.");
 

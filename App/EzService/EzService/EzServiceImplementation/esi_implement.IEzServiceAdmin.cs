@@ -20,15 +20,15 @@
 
 				Log.Msg("Shutdown() method started...");
 
-				lock (ms_oLockActiveActions) {
-					foreach (KeyValuePair<Guid, ActionMetaData> kv in ms_oActiveActions)
+				lock (lockActiveActions) {
+					foreach (KeyValuePair<Guid, ActionMetaData> kv in activeActions)
 						kv.Value.UnderlyingThread.Abort();
 				} // lock
 
 				ActionStatus nNewStatus;
 
-				if ((m_oData != null) && (m_oData.Host != null)) {
-					m_oData.Host.Shutdown();
+				if ((this.data != null) && (this.data.Host != null)) {
+					this.data.Host.Shutdown();
 					nNewStatus = ActionStatus.Done;
 				}
 				else {
@@ -56,7 +56,7 @@
 		} // Shutdown
 
 		public ActionMetaData Terminate(Guid oActionID) {
-			lock (ms_oLockTerminateAction) {
+			lock (lockTerminateAction) {
 				try {
 					ActionMetaData amd = NewSync("Admin.Terminate", comment: "condemned: " + oActionID);
 
@@ -66,9 +66,9 @@
 
 					ActionMetaData oCondemned = null;
 
-					lock (ms_oLockActiveActions) {
-						if (ms_oActiveActions.ContainsKey(oActionID))
-							oCondemned = ms_oActiveActions[oActionID];
+					lock (lockActiveActions) {
+						if (activeActions.ContainsKey(oActionID))
+							oCondemned = activeActions[oActionID];
 					} // lock
 
 					if (oCondemned == null) {
@@ -110,8 +110,8 @@
 			try {
 				int nActiveCount = 0;
 
-				lock (ms_oLockActiveActions) {
-					nActiveCount = ms_oActiveActions.Count;
+				lock (lockActiveActions) {
+					nActiveCount = activeActions.Count;
 				} // lock
 
 				sMsg = (sMsg ?? string.Empty).Trim();
@@ -160,8 +160,8 @@
 			try {
 				int nActiveCount = 0;
 
-				lock (ms_oLockActiveActions) {
-					nActiveCount = ms_oActiveActions.Count;
+				lock (lockActiveActions) {
+					nActiveCount = activeActions.Count;
 				} // lock
 
 				sMsg = (sMsg ?? string.Empty).Trim();
@@ -204,8 +204,8 @@
 
 				var oResult = new List<string>();
 
-				lock (ms_oLockActiveActions) {
-					oResult.AddRange(ms_oActiveActions.Select(
+				lock (lockActiveActions) {
+					oResult.AddRange(activeActions.Select(
 						kv => kv.Value + " - thread state: " + kv.Value.UnderlyingThread.ThreadState
 					));
 				} // lock

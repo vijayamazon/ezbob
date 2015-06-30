@@ -253,21 +253,21 @@
 			if (pc.Connection == null)
 				pc.Connection = CreateConnection();
 
-			uint nReminder = pc.OutOfPoolCount % 10;
+			// uint nReminder = pc.OutOfPoolCount % 10;
 
-			string sSuffix = "th";
+			//string sSuffix = "th";
 
-			switch (nReminder) {
-			case 1:
-				sSuffix = "st";
-				break;
-			case 2:
-				sSuffix = "nd";
-				break;
-			case 3:
-				sSuffix = "rd";
-				break;
-			} // switch
+			//switch (nReminder) {
+			//case 1:
+			//	sSuffix = "st";
+			//	break;
+			//case 2:
+			//	sSuffix = "nd";
+			//	break;
+			//case 3:
+			//	sSuffix = "rd";
+			//	break;
+			//} // switch
 
 			//Log.Debug("An object (i.e. connection) {3}({2}) is taken from the pool for the {0}{1} time.",
 			//	pc.OutOfPoolCount,

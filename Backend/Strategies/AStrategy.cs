@@ -18,6 +18,13 @@
 
 		public abstract void Execute();
 
+		public class StrategyContext {
+			public int? UserID { get; set; }
+			public int? CustomerID { get; set; }
+		} // class Context
+
+		public StrategyContext Context { get; private set; }
+
 		public AConnection DB { get; private set; }
 		public StrategyLog Log { get; private set; }
 
@@ -27,6 +34,7 @@
 
 			DB = Library.Instance.DB;
 			Log = new StrategyLog(this, Library.Instance.Log);
+			Context = new StrategyContext();
 
 			InitDefaults(); // should not be moved to static constructor
 		} // constructor
