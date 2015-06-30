@@ -2,6 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
+	using Ezbob.Logger;
 
 	public abstract class AVerificationBase : AStrategy {
 		public override string Name {
@@ -9,29 +11,43 @@
 		} // Name
 
 		public override void Execute() {
-			m_nExceptionCount = 0;
-			m_nMatchCount = 0;
-			m_nMismatchCount = 0;
+			Log.Debug("Strategy context is: {0}.", Context);
 
-			List<AutoApproveInputRow> lst = AutoApproveInputRow.Load(DB, m_nTopCount, m_nLastCheckedCustomerID);
+			this.allCustomers = AutoApproveInputRow.Load(DB, this.topCount, this.lastCheckedCustomerID);
 
-			for (int i = 0; i < lst.Count; i++) {
-				AutoApproveInputRow oRow = lst[i];
+			this.dispatcher.AllCustomersCount = this.allCustomers.Count;
 
-				Log.Debug("Customer {0} out of {1}, id {2}...", i + 1, lst.Count, oRow.CustomerId);
+			List<AutoApproveInputRow>[] lst = new List<AutoApproveInputRow>[3];
+
+			if (lst.Length > 1) {
+				for (int i = 0; i < lst.Length; i++)
+					lst[i] = new List<AutoApproveInputRow>();
+
+				int j = 0;
+
+				foreach (AutoApproveInputRow row in this.allCustomers) {
+					lst[j].Add(row);
+
+					j++;
+
+					if (j == lst.Length)
+						j = 0;
+				} // for each
+
+				lst.AsParallel().ForAll(DoOneRowList);
+			} else
+				DoOneRowList(this.allCustomers);
+		} // Execute
+
+		private void DoOneRowList(List<AutoApproveInputRow> lst) {
+			foreach (AutoApproveInputRow oRow in lst) {
+				int customerNo = this.dispatcher.GetCustomerNo(oRow.CustomerId);
 
 				string sResult = VerifyOne(oRow);
 
-				Log.Debug("Customer {0} out of {1}, id {2} complete, result: {3}.",
-					i + 1, lst.Count, oRow.CustomerId, sResult
-				);
-
-				Log.Debug(
-					"{4}: total {0}, sent {5} = mismatch {1} + exception {2} + match {3}.",
-					lst.Count, m_nMismatchCount, m_nExceptionCount, m_nMatchCount, DecisionName, i + 1
-				);
+				this.dispatcher.CustomerDone(customerNo, oRow.CustomerId, sResult, DecisionName);
 			} // for
-		} // Execute
+		} // DoOneRowList
 
 		protected abstract string DecisionName { get; }
 
@@ -49,8 +65,9 @@
 		} // Tag
 
 		protected AVerificationBase(int nTopCount, int nLastCheckedCustomerID) {
-			m_nTopCount = nTopCount;
-			m_nLastCheckedCustomerID = nLastCheckedCustomerID;
+			this.dispatcher = new Dispatcher(Log);
+			this.topCount = nTopCount;
+			this.lastCheckedCustomerID = nLastCheckedCustomerID;
 		} // constructor
 
 		protected abstract bool MakeAndVerifyDecision(AutoApproveInputRow oRow);
@@ -61,26 +78,95 @@
 
 				if (MakeAndVerifyDecision(oRow)) {
 					sResult = "match";
-					m_nMatchCount++;
+					this.dispatcher.AddMatch();
 				} else {
 					sResult = "mismatch";
-					m_nMismatchCount++;
+					this.dispatcher.AddMismatch();
 				} // if
 
 				return sResult;
 			} catch (Exception e) {
 				Log.Debug(e, "Exception caught.");
-				m_nExceptionCount++;
+				this.dispatcher.AddException();
 				return "exception";
 			} // try
 		} // VerifyOne
 
-		private readonly int m_nTopCount;
-		private readonly int m_nLastCheckedCustomerID;
+		private readonly int topCount;
+		private readonly int lastCheckedCustomerID;
 
-		private int m_nMatchCount;
-		private int m_nMismatchCount;
-		private int m_nExceptionCount;
+		private List<AutoApproveInputRow> allCustomers;
+
+		private readonly Dispatcher dispatcher;
+
+		private class Dispatcher {
+			public Dispatcher(ASafeLog log) {
+				this.log = log;
+				this.matchCount = 0;
+				this.mismatchCount = 0;
+				this.exceptionCount = 0;
+				this.lastCustomerNo = 0;
+			} // constructor
+
+			public void AddMatch() {
+				lock (locker)
+					this.matchCount++;
+			} // AddMatch
+
+			public void AddMismatch() {
+				lock (locker)
+					this.mismatchCount++;
+			} // AddMismatch
+
+			public void AddException() {
+				lock (locker)
+					this.exceptionCount++;
+			} // AddException
+
+			public int GetCustomerNo(int customerID) {
+				int customerNo;
+
+				lock (locker)
+					customerNo = ++this.lastCustomerNo;
+
+				this.log.Debug("Customer {0} out of {1}, id {2}...", customerNo, AllCustomersCount, customerID);
+
+				return customerNo;
+			} // GetCustomerNo
+
+			public void CustomerDone(int customerNo, int customerID, string result, string decisionName) {
+				this.log.Debug("Customer {0} out of {1}, id {2} complete, result: {3}.",
+					customerNo, AllCustomersCount, customerID, result
+				);
+
+				int match;
+				int mismatch;
+				int exception;
+
+				lock (locker) {
+					match = this.matchCount;
+					mismatch = this.mismatchCount;
+					exception = this.exceptionCount;
+				} // lock
+
+				this.log.Debug(
+					"{4}: total {0}, sent {5} = mismatch {1} + exception {2} + match {3}.",
+					AllCustomersCount, mismatch, exception, match, decisionName, customerNo
+				);
+			} // CustomerDone
+
+			public int AllCustomersCount { private get; set; }
+
+			private readonly ASafeLog log;
+
+			private int matchCount;
+			private int mismatchCount;
+			private int exceptionCount;
+
+			private int lastCustomerNo;
+
+			private static readonly object locker = new object();
+		} // class Dispatcher
 
 		private string tag;
 	} // class AVerificationBase
