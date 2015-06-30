@@ -78,6 +78,22 @@
 
 				CalculateTurnoverForMedal();
 
+				if (Results.TurnoverType == null) {
+					Results.AnnualTurnover = 0;
+					Results.HmrcAnnualTurnover = 0;
+					Results.BankAnnualTurnover = 0;
+					Results.OnlineAnnualTurnover = 0;
+
+					if (Results.MedalType.IsOnline())
+						Results.TurnoverType = TurnoverType.Online;
+					else {
+						if (Results.NumOfHmrcMps > 0)
+							Results.TurnoverType = TurnoverType.HMRC;
+						else if (Results.NumOfBanks > 0)
+							Results.TurnoverType = TurnoverType.Bank;
+					} //if
+				} // if
+
 				this.log.Debug(
 					"Primary {7} medal calculator: " +
 					"turnover for customer {5} on {6}: type {0}, final {1}, HMRC {2}, bank {3}, online {4}.",
@@ -739,17 +755,21 @@
 					select new MarketplaceTurnover {
 						TheMonth = row.TheMonth,
 						Turnover = row.Turnover,
-						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory
+						CustomerMarketPlaceUpdatingHistory = row.CustomerMarketPlaceUpdatingHistory,
 					}
 				).ToList();
 
 				if (hmrcs.Count > 0) {
 					List<FilteredAggregationResult> hmrcList = new List<FilteredAggregationResult>();
 
-					IEnumerable<int> marketplaceIDs = hmrcs.Select(x => x.CustomerMarketPlace.Id).Distinct();
+					IEnumerable<int> marketplaceIDs = hmrcs
+						.Select(x => x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id)
+						.Distinct();
 
 					foreach (int mpID in marketplaceIDs) {
-						List<MarketplaceTurnover> thisMp = hmrcs.Where(x => x.CustomerMarketPlace.Id == mpID).ToList();
+						List<MarketplaceTurnover> thisMp = hmrcs
+							.Where(x => x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id == mpID)
+							.ToList();
 
 						List<FilteredAggregationResult> filtered =
 							LastHistoryTurnovers(thisMp, Results.CalculationTime, thisMp.Max(x => x.TheMonth));
@@ -1059,24 +1079,23 @@
 			));
 
 			// check type
-			var lastUpdated = inputList.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id).FirstOrDefault();
+			List<MarketplaceTurnover> lastUpdated = inputList.Where(z =>
+				(z.CustomerMarketPlaceUpdatingHistory != null) &&
+				z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue
+			).ToList();
 
-			if (lastUpdated == null)
+			if (lastUpdated.Count < 1)
 				return null;
 
-			if (lastUpdated.CustomerMarketPlaceUpdatingHistory == null)
-				return null;
+			DateTime lastUpdateDate = lastUpdated.Max(z => z.UpdatingEnd);
 
-			if (lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd == null)
-				return null;
-
-			DateTime lastUpdateDate = lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value;
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,
 				lastUpdateDate,
 				CurrentValues.Instance.TotalsMonthTail,
 				lastExistingDataMonth
 			);
+
 			DateTime periodEnd = periodStart.AddMonths(11);
 
 			this.log.Debug(

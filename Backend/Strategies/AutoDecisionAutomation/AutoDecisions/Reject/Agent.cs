@@ -617,22 +617,23 @@
 				return null;
 
 			// check type
-			MarketplaceTurnover lastUpdated =
-				ofcurrentType.OrderByDescending(z => z.CustomerMarketPlaceUpdatingHistory.Id).FirstOrDefault();
+			List<MarketplaceTurnover> lastUpdated = ofcurrentType.Where(z =>
+				(z.CustomerMarketPlaceUpdatingHistory != null) &&
+				z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue
+			).ToList();
 
-			if (lastUpdated == null)
+			if (lastUpdated.Count < 1)
 				return null;
 
-			if (lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd == null)
-				return null;
+			DateTime lastUpdateDate = lastUpdated.Max(z => z.UpdatingEnd);
 
-			DateTime lastUpdateDate = lastUpdated.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value;
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,
 				lastUpdateDate,
 				CurrentValues.Instance.TotalsMonthTail,
 				lastExistingDataTime
 			);
+
 			DateTime periodEnd = periodStart.AddMonths(11);
 
 			// Log.Info(

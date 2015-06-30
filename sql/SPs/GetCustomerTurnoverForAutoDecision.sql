@@ -97,7 +97,7 @@ BEGIN
 		m.IsPaymentAccount,
 		RowNum = ROW_NUMBER() OVER (
 			PARTITION BY m.MpID, t.TheMonth
-			ORDER BY t.CustomerMarketPlaceUpdatingHistoryID DESC, t.AggID DESC
+			ORDER BY t.AggID DESC
 		)
 	INTO
 		#raw
