@@ -7,6 +7,7 @@ SET ANSI_NULLS ON
 GO
 SET QUOTED_IDENTIFIER ON
 GO
+
 ALTER PROCEDURE GetBrokerCommissionsForStatusUpdate
 AS
 BEGIN
@@ -18,8 +19,9 @@ BEGIN
 	FROM 
 		LoanBrokerCommission lb 
 	WHERE 
-		(lb.Status = 'InProgress' OR lb.Status IS NULL)
+		(lb.Status = 'InProgress' OR lb.Status IS NULL OR (lb.Description = 'Raven server communication error.' AND lb.Status='Error'))
 		AND lb.TrackingNumber IS NOT NULL
 		
 END
+
 GO
