@@ -11,16 +11,15 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         this.editItemIndex = -1;
     }, // initialize
     bindings: {
-        WithinWeek: "span[name=\"withinWeek\"]",
-        WithinMonth: "span[name=\"withinMonth\"]",
-        ReschedulingBalance: "span[name=\"withinAmount\"]",
-        InterestRate: "span[name=\"Intrest\"]",
-        OutsideWeek: "span[name=\"outsideWeek\"]",
-        OutsideMonth: "span[name=\"outsideMonth\"]"
-    },
+        //WithinWeek: "span[name=\"withinWeek\"]",
+        //WithinMonth: "span[name=\"withinMonth\"]",
+        //ReschedulingBalance: "span[name=\"withinAmount\"]",
+        //InterestRate: "span[name=\"Intrest\"]",
+        //OutsideWeek: "span[name=\"outsideWeek\"]",
+        //OutsideMonth: "span[name=\"outsideMonth\"]"
+    },//bindings
     serializeData: function () {
         var data = this.model.toJSON();
-        console.log('Data:', data);
         data.editItemIndex = this.editItemIndex;
         data.hasFreezInterest = this.hasFreeIntrest();
         return data;
@@ -40,8 +39,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             }
         }
         return flag;
-
-    },
+    },//hasFreeIntrest
 
     ui: {
         scheduleEl: '.editloan-schedule-region',
@@ -55,8 +53,6 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         date_empty_fees: '#date-empty-fees',
         date_error_fees: '#date-error-fees',
         selection_error: '#selection-error',
-        within_selector_error: '#within-selector-error',
-        outside_selector_error: '#outside-selector-error',
         submit_success: '#submit-success',
         submit_fail: '#submit-fail'
     }, // ui
@@ -68,8 +64,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
     events: {
         'click #resch-submit-btn': 'reschSubmitForm',
-        'blur #outsideAmount': 'onChangeAmount',
-        'click .option-btn': 'fillData',
+        'blur #outsidePrincipal': 'onChangeAmount',
+        'change #withinSelect': 'withinSelectChange',
+        'change #outsideSelect': 'outsideSelectChange',
         'click .edit-schedule-item': 'editScheduleItem',
         'click .remove-schedule-item': 'removeScheduleItem',
         'click .add-installment': 'addInstallment',
@@ -80,34 +77,42 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click .remove-freeze-interval': 'onRemoveFreezeInterval'
     }, // events
 
-    fillData: function () {
-        var colapseState = $('#collapsable-content').is(':visible');
-        $("#collapsable-content").slideToggle('slow');
-        
-        if (!colapseState) {
-            var temp = this.model.get('OutsideAmount');
-            $('#outsideAmount').val(this.model.get('OutsideAmount'));
-            var errText = this.model.get('ReschedulingINNotification');
-            if (errText != null && errText.length > 0) {
-                $('#ReschedulingINNotification').text(errText);
-                $('#ReschedulingINNotification').fadeIn();
-                $('#exception-div').fadeOut();
-                $('#radio-2').prop('checked', true);
-                
-            }
-            errText = this.model.get('ReschedulingOUTNotification');
-            if (errText != null && errText.length > 0) {
-                $('#ReschedulingOUTNotification').text(errText);
-                $('#ReschedulingOUTNotification').fadeIn();
-            }
-        } else {
-            $('#ReschedulingINNotification').hide();
-            $('#exception-div').show();
-            $('#radio-2').prop('checked', false);
-            $('#ReschedulingOUTNotification').hide(); 
-        }
+    withinSelectChange: function() {
+        var duration = $('#withinSelect option:selected').text();
+        var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, rescheduleIn: 'true' });
+        var self = this;
+        request.success(function (res) {
+            $('#withinPayments').text(res.IntervalsNum + " " + duration);
+            $('#withinPrincipal').text(EzBob.formatPounds(res.ReschedulingBalance));
+            $('#withinIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
+        }); //on success
 
-        
+        request.fail(function () {
+            self.ui.data_error.fadeIn().fadeOut(3000);
+        });//on fail
+    },
+    outsideSelectChange: function() {
+        $('#ReschedulingOUTNotification').hide();
+        var amount = $("#outsidePrincipal").val();
+        var duration = $('#outsideSelect option:selected').text();
+        if (typeof amount === 'undefined' || amount <= 0) {
+            this.ui.amount_error.fadeIn().fadeOut(3000);
+        } else {
+            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false' });
+            var self = this;
+            request.success(function (res) {
+                $('#outsidePayments').text(res.IntervalsNum + " " + duration);
+                $('#outsideIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
+                if (res.Error != null && res.Error.length > 0) {
+                    $('#ReschedulingOUTNotification').text(res.Error);
+                    $('#ReschedulingOUTNotification').fadeIn();
+                }
+            }); //on success
+
+            request.fail(function () {
+                self.ui.data_error.fadeIn().fadeOut(3000);
+            });//on fail
+        }
     },
     reschSubmitForm: function () {
 
@@ -115,49 +120,39 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
         var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
         if (checkedRadio === 'true') {
-            var inSelector = $('#withinSelect option:selected').text();
-            if (inSelector === 'Week' || inSelector === 'Month')
-                requestParam.intervalType = inSelector;
-            else {
-                this.ui.within_selector_error.fadeIn().fadeOut(3000);
-                return false;
-            }
+            requestParam.intervalType = $('#withinSelect option:selected').text();
             requestParam.rescheduleIn = 'true';
         }
         else if (checkedRadio === 'false') {
-            var outSelector = $('#outsideSelect option:selected').text();
-            if (outSelector === 'Week' || outSelector === 'Month')
-                requestParam.intervalType = outSelector;
-            else {
-                this.ui.outside_selector_error.fadeIn().fadeOut(3000);
-                return false;
-            }
+            requestParam.intervalType = $('#outsideSelect option:selected').text();
             requestParam.AmountPerInterval = $('#outsideAmount').val();
             requestParam.rescheduleIn = 'false';
-            var isStopCharges = $('#automatic-charges').is(':checked');
-            var chargesVal = $('#charges-payments').val();
-            if (chargesVal < 0 || chargesVal === "")
-                return false;
-            if (isStopCharges) {
-                requestParam.stopAutoCharge = 'true';
-                requestParam.stopAutoChargePayment = chargesVal;
-            }
         } else {
             this.ui.selection_error.fadeIn().fadeOut(3000);
             return false;
         }
 
+        var isStopCharges = $('#automatic-charges').is(':checked');
         var isStopIntrest = $("#intrest-checkbox").is(':checked');
         var isStopFees = $('#fees-calculation').is(':checked');
 
+        var chargesVal = $('#charges-payments').val();
         var interestFrom = EzBob.formatDateTimeCS($('#intrest-calendar-from').val());
         var interestTo = EzBob.formatDateTimeCS($('#intrest-calendar-to').val());
         var feesFrom = EzBob.formatDateTimeCS($('#fees-calendar-from').val());
         var feesTo = EzBob.formatDateTimeCS($('#fees-calendar-to').val());
 
+        if (chargesVal < 0 || chargesVal === "") {
+            $('#charges-error').fadeIn().fadeOut(3000);
+            return false;
+        }
+        if (isStopCharges) {
+            requestParam.stopAutoCharge = 'true';
+            requestParam.stopAutoChargePayment = chargesVal;
+        }
         if (isStopIntrest) {
             if (interestTo === "" || interestFrom === "") {
-                this.ui.data_error.fadeIn().fadeOut(3000);
+                this.ui.date_empty_intrest.fadeIn().fadeOut(3000);
                 return false;
             }
             if (new Date(interestFrom).getTime() > new Date(interestTo).getTime()) {
@@ -206,17 +201,16 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
     onChangeAmount: function () {
         $('#ReschedulingOUTNotification').hide();
-        var amount = $("#outsideAmount").val();
+        var amount = $("#outsidePrincipal").val();
+        var duration = $('#outsideSelect option:selected').text();
         if (typeof amount === 'undefined' || amount <= 0) {
             this.ui.amount_error.fadeIn().fadeOut(3000);
         } else {
-            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: "Month", AmountPerInterval: amount, rescheduleIn: 'false' });
+            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false' });
             var self = this;
             request.success(function (res) {
-                self.model.set('ReschedulingOUTNotification', res.Error);
-                self.model.set('OutsideAmount', amount);
-                self.model.set('OutsideWeek', res.IntervalsNumWeeks);
-                self.model.set('OutsideMonth', res.IntervalsNum);
+                $('#outsidePayments').text(res.IntervalsNum + " " + duration);
+                $('#outsideIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
                 if (res.Error!=null && res.Error.length > 0) {
                     $('#ReschedulingOUTNotification').text(res.Error);
                     $('#ReschedulingOUTNotification').fadeIn();
@@ -370,17 +364,39 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
     onRender: function () {
         this.modelBinder.bind(this.model, this.el, this.bindings);
-        //console.log(this.model);
         this.editRegion = new Backbone.Marionette.Region({
             el: this.$('.editloan-item-editor-region')
         });
 
         this.renderRegions();
+        this.setUpView();
+    }, // onRender
 
-        this.$el.find('#fees-calendar-from').datepicker({ dateFormat: 'yy-mm-dd' });
-        this.$el.find('#fees-calendar-to').datepicker({ dateFormat: 'yy-mm-dd' });
-        this.$el.find('#intrest-calendar-from').datepicker({ dateFormat: 'yy-mm-dd' });
-        this.$el.find('#intrest-calendar-to').datepicker({ dateFormat: 'yy-mm-dd' });
+    setUpView: function() {
+        this.$el.find('#fees-calendar-from').datepicker('setDate', new Date());
+        this.$el.find('#fees-calendar-to').datepicker();
+        this.$el.find('#intrest-calendar-from').datepicker('setDate', new Date());
+        this.$el.find('#intrest-calendar-to').datepicker();
+
+        var within = this.model.get('ReResultIn');
+        if (within.Error != null && within.Error.length > 0) {
+            this.$el.find('#ReschedulingINNotification').text(within.Error);
+            this.$el.find('#ReschedulingINNotification').show();
+            this.$el.find('#exception-div').hide();
+            this.$el.find('#radio-2').prop('checked', true);
+        }
+        this.$el.find('#withinPayments').text(within.IntervalsNum + " Month");
+        this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.ReschedulingBalance));
+        this.$el.find('#withinIntrest').text(EzBob.formatPounds(within.FirstPaymentInterest));
+
+        var outside = this.model.get('ReResultOut');
+        if (outside.Error != null && outside.Error.length > 0) {
+            this.$el.find('#ReschedulingOUTNotification').text(outside.Error);
+            this.$el.find('#ReschedulingOUTNotification').show();
+        }
+        this.$el.find('#outsidePayments').text(outside.IntervalsNum + " Month");
+        this.$el.find('#outsidePrincipal').val(outside.DefaultPaymentPerInterval);
+        this.$el.find('#outsideIntrest').text(EzBob.formatPounds(outside.FirstPaymentInterest));
 
         var options = this.model.get('Options');
         if (options.AutoPayment === false) {
@@ -395,8 +411,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             this.$el.find('#fees-calendar-from').val(EzBob.formatDateWithoutTime(options.StopLateFeeFromDate));
             this.$el.find('#fees-calendar-to').val(EzBob.formatDateWithoutTime(options.StopLateFeeToDate));
         }
-    }, // onRender
-
+    },
     renderRegions: function () {
         var data = this.serializeData();
         this.renderSchedule(data);

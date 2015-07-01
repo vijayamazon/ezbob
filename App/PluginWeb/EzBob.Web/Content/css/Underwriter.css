@@ -2250,3 +2250,39 @@ button.btn-update-address, .button.btn-update-address{
 .form-control.input-width {
     width:100px;
 }
+
+.border-span {
+  border: solid 1px #C5C5C5;
+  border-radius: 4px;
+  font-family: 'Titillium Web Semi Bold';
+  color: #67c10b;
+  min-width: 120px;
+  text-align: center;
+  font-size: 16px;
+  height: 34px;
+  vertical-align: middle;
+  line-height: 34px;
+}
+
+.reg-span {
+    margin-left: 20px;
+    line-height: 34px;
+}
+
+.input-symbol-euro {
+    position: relative;
+}
+.input-symbol-euro input {
+    padding-left:18px;
+}
+
+.input-symbol-euro:before {
+    position: absolute;
+    top: 0;
+    content:"£";
+    left: 24px;
+}
+
+.float_left {
+    float: left;
+}
