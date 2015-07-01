@@ -112,7 +112,11 @@
 		} // AppendParameter
 
 		protected override Utils.ARetryer CreateRetryer() {
-			return new SqlRetryer(nRetryCount: 3, nSleepBeforeRetryMilliseconds: 500, oLog: Log);
+			var rnd = new Random();
+
+			int nSleepBeforeRetryMilliseconds = 400 + rnd.Next(200);
+
+			return new SqlRetryer(3, nSleepBeforeRetryMilliseconds, Log);
 		} // CreateRetryer
 	} // class SqlConnection
 } // namespace Ezbob.Database

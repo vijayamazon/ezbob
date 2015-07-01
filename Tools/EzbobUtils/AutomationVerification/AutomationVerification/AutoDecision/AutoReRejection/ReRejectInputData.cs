@@ -49,7 +49,7 @@
 
 			NewDataSourceAdded = oNewMps.Count > 0;
 			OpenLoansAmount = meta.TakenLoanAmount;
-			PrincipalRepaymentAmount = meta.RepaidPrincipal + meta.SetupFees;
+			PrincipalRepaymentAmount = meta.RepaidPrincipal;
 
 			//config
 			AutoReRejectMaxLRDAge = cfg.MaxLRDAge;

@@ -21,81 +21,83 @@ BEGIN
 	DECLARE @NumOfOpenLoans INT = 0
 	DECLARE @OpenLoansAmount INT = 0
 	DECLARE @PrincipalRepaymentAmount DECIMAL(18,4) = 0
-	DECLARE @SetupFees DECIMAL(18,4) = 0
 
 	------------------------------------------------------------------------------
 	-- last reject date (automatic or manual)
 	SELECT
 		@LastRejectDate = MAX(cr.UnderwriterDecisionDate)
 	FROM
-		CashRequests cr LEFT JOIN Decisions d ON d.DecisionID = cr.AutoDecisionID
+		CashRequests cr
+		LEFT JOIN Decisions d ON d.DecisionID = cr.AutoDecisionID
 	WHERE
 		cr.IdCustomer = @CustomerId 
 		AND 
-		((cr.IdUnderwriter IS NOT NULL AND cr.UnderwriterDecision='Rejected') OR (d.DecisionName = 'Reject'))
-		
+		cr.UnderwriterDecision = 'Rejected'
+		AND (
+			cr.AutoDecisionID IS NULL
+			OR
+			d.DecisionName != 'ReReject'
+		)
+
 	-- last decision
-	SELECT
-		@LastDecisionDate = MAX(cr.UnderwriterDecisionDate)
+	SELECT TOP 1
+		@LastDecisionDate = cr.UnderwriterDecisionDate,
+		@LastDecisionWasReject = CASE WHEN cr.UnderwriterDecision = 'Rejected' THEN 1 ELSE 0 END
 	FROM
 		CashRequests cr
 	WHERE
-		cr.IdCustomer = @CustomerId 
+		cr.IdCustomer = @CustomerId
 		AND
-		cr.UnderwriterDecisionDate IS NOT NULL 
+		cr.UnderwriterDecisionDate IS NOT NULL
 		AND
-		cr.UnderwriterDecision != 'WaitingForDecision'
-		
-	-- last decision was reject	
-	IF @LastDecisionDate IS NOT NULL
-	BEGIN 
-		SELECT @LastDecisionWasReject = CASE WHEN cr.UnderwriterDecision='Rejected' THEN 1 ELSE 0 END  
-		FROM CashRequests cr 
-		WHERE UnderwriterDecisionDate=@LastDecisionDate
-	END 
-			
+		cr.UnderwriterDecision IN ('Approved', 'Rejected')
+	ORDER BY
+		cr.UnderwriterDecisionDate DESC
+
 	-- open loans amount
-	SELECT @OpenLoansAmount = isnull(sum(LoanAmount), 0), @NumOfOpenLoans = count(*)
-	FROM Loan 
-	WHERE CustomerId=@CustomerId 
-	AND Status<>'PaidOff'
-	
-	--principal repayment of open loans
-	SELECT @PrincipalRepaymentAmount = isnull(sum(lt.LoanRepayment), 0) 
-	FROM Loan l INNER JOIN LoanTransaction lt ON l.Id=lt.LoanId
-	WHERE l.CustomerId=@CustomerId 
-	AND l.Status<>'PaidOff'
-	AND lt.Type='PaypointTransaction'
-	AND lt.Status='Done'
-	
-	SELECT @SetupFees = isnull(sum(lt.Fees), 0) 
-	FROM Loan l INNER JOIN LoanTransaction lt ON l.Id=lt.LoanId
-	WHERE l.CustomerId=@CustomerId 
-	AND l.Status<>'PaidOff'
-	AND lt.Type='PacnetTransaction'
-	AND lt.Status='Done'
+	SELECT
+		@OpenLoansAmount = ISNULL(SUM(LoanAmount), 0),
+		@NumOfOpenLoans = COUNT(*)
+	FROM
+		Loan
+	WHERE
+		CustomerId = @CustomerId
+		AND
+		Status != 'PaidOff'
 
-	IF @LastDecisionDate IS NOT NULL
+	-- principal repayment of open loans
+	SELECT
+		@PrincipalRepaymentAmount = ISNULL(SUM(lt.LoanRepayment), 0)
+	FROM
+		Loan l
+		INNER JOIN LoanTransaction lt ON l.Id = lt.LoanId
+	WHERE
+		l.CustomerId = @CustomerId
+		AND
+		l.Status != 'PaidOff'
+		AND
+		lt.Type = 'PaypointTransaction'
+		AND
+		lt.Status = 'Done'
+
+	-- added new mp after last decision
+	IF @LastDecisionDate IS NOT NULL AND EXISTS (
+		SELECT * FROM MP_CustomerMarketPlace mp
+		WHERE mp.CustomerId = @CustomerId
+		AND mp.Disabled = 0
+		AND mp.Created > @LastDecisionDate
+	)
 	BEGIN
-		-- added new mp after last decision
-		IF EXISTS (SELECT * FROM MP_CustomerMarketPlace mp
-				   WHERE mp.CustomerId=@CustomerId 
-				   AND mp.Disabled=0 
-				   AND mp.Created > @LastDecisionDate)
-		BEGIN
-			SET @NewDataSourceAdded = 1
-		END
+		SET @NewDataSourceAdded = 1
 	END
-	
+
 	SELECT 
-	    @LastRejectDate AS LastRejectDate
-	   ,@LastDecisionDate AS LastDecisionDate
-	   ,@LastDecisionWasReject AS LastDecisionWasReject
-	   ,@NewDataSourceAdded AS NewDataSourceAdded
-	   ,@NumOfOpenLoans AS NumOfOpenLoans
-	   ,@OpenLoansAmount AS OpenLoansAmount
-	   ,isnull(@PrincipalRepaymentAmount, 0) + isnull(@SetupFees, 0) AS PrincipalRepaymentAmount
+		@LastRejectDate AS LastRejectDate,
+		@LastDecisionDate AS LastDecisionDate,
+		ISNULL(@LastDecisionWasReject, 0) AS LastDecisionWasReject,
+		@NewDataSourceAdded AS NewDataSourceAdded,
+		@NumOfOpenLoans AS NumOfOpenLoans,
+		@OpenLoansAmount AS OpenLoansAmount,
+		ISNULL(@PrincipalRepaymentAmount, 0) AS PrincipalRepaymentAmount
 END
-
 GO
-

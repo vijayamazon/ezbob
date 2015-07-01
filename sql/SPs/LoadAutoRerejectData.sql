@@ -27,7 +27,7 @@ BEGIN
 			AND
 			r.UnderwriterDecision IS NOT NULL
 			AND
-			r.UnderwriterDecision != 'WaitingForDecision'
+			r.UnderwriterDecision IN ('Approved', 'Rejected')
 			AND
 			r.UnderwriterDecisionDate < @Now
 		ORDER BY
@@ -137,32 +137,11 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	DECLARE @SetupFees DECIMAL(18, 2) = ISNULL((
-		SELECT
-			SUM(ISNULL(t.Fees, 0))
-		FROM
-			LoanTransaction t
-			INNER JOIN Loan l ON t.LoanId = l.Id
-		WHERE
-			l.CustomerId = @CustomerID
-			AND
-			l.Status != 'PaidOff'
-			AND
-			l.[Date] < @Now
-			AND
-			t.Status = 'Done'
-			AND
-			t.Type LIKE 'Pacnet%'
-	), 0)
-
-	------------------------------------------------------------------------------
-
 	SELECT
 		RowType               = 'MetaData',
 		LoanCount             = @LoanCount,
 		TakenLoanAmount       = @TakenLoanAmount,
 		RepaidPrincipal       = @RepaidPrincipal,
-		SetupFees             = @SetupFees,
 		LastDecisionWasReject = @LastDecisionWasReject,
 		LastDecisionDate      = @LastDecisionDate,
 		LastRejectDate        = @LastRejectDate,
