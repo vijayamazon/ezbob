@@ -1,15 +1,15 @@
 namespace EzBob.Models
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Linq;
-	using System.Text;
-	using Ezbob.Backend.Models.NewLoan;
-	using EZBob.DatabaseLib.Model.Database;
-	using Newtonsoft.Json;
-	using Newtonsoft.Json.Converters;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Text;
+    using Ezbob.Backend.Models.NewLoan;
+    using EZBob.DatabaseLib.Model.Database;
+    using Newtonsoft.Json;
+    using Newtonsoft.Json.Converters;
 
-	public class EditLoanDetailsModel
+    public class EditLoanDetailsModel
     {
         private readonly List<string> _errors = new List<string>();
 
@@ -27,8 +27,11 @@ namespace EzBob.Models
 
         public DateTime Date { get; set; }
 
-		public ReschedulingResult ReResultIn { get; set; }
-		public ReschedulingResult ReResultOut { get; set; }
+        public ReschedulingResult ReResultIn { get; set; }
+        public ReschedulingResult ReResultOut { get; set; }
+
+
+        //public int WithinWeek { get; set; }
 
 		//public int WithinWeek { get; set; }
 
@@ -68,18 +71,19 @@ namespace EzBob.Models
 
         public bool HasErrors { get { return Errors.Any(); } }
 
-		public List<string> SInterestFreeze { get; set; }
+        public List<string> SInterestFreeze { get; set; }
 
-		private IList<InterestFreezeModel> _interestFreeze = new List<InterestFreezeModel>();
-		public IList<InterestFreezeModel> InterestFreeze {
-			get { return this._interestFreeze; }
-			set { this._interestFreeze = value; }
-		}
+        private IList<InterestFreezeModel> _interestFreeze = new List<InterestFreezeModel>();
+        public IList<InterestFreezeModel> InterestFreeze
+        {
+            get { return this._interestFreeze; }
+            set { this._interestFreeze = value; }
+        }
 
-		public void Validate()
+        public void Validate()
         {
             Errors.Clear();
-            
+
             var installments = Items.Where(i => i.Type == "Installment").OrderBy(i => i.Date).ToList();
             var fees = Items.Where(i => i.Type == "Fee").OrderBy(i => i.Date).ToList();
 
@@ -136,36 +140,39 @@ namespace EzBob.Models
             }
         }
 
-	   
-	   /* public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(EditLoanDetailsModel);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append("\n" + prop.Name).Append(": ").Append(prop.GetValue(this)).Append(";");
-			}
-			return sb.ToString();
-	    }*/
 
-		public override string ToString() {
-			var sb = new StringBuilder();
+        /* public override string ToString() {
+             StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+             Type t = typeof(EditLoanDetailsModel);
+             foreach (var prop in t.GetProperties()) {
+                 if (prop.GetValue(this) != null)
+                     sb.Append("\n" + prop.Name).Append(": ").Append(prop.GetValue(this)).Append(";");
+             }
+             return sb.ToString();
+         }*/
 
-		
-			sb.AppendLine("Installment:");
-			foreach (var item in Items.Where(s => s.Type == "Installment")){
-				sb.Append("\t");
-				sb.AppendLine(item.ToString());
-			}
+        public override string ToString()
+        {
+            var sb = new StringBuilder();
 
 
-			sb.AppendLine("Freezes:");
-			foreach (var item in InterestFreeze.Where(f=>f.DeactivationDate==null)) {
-				sb.Append("\t");
-				sb.AppendLine(item.ToString());
-			}
+            sb.AppendLine("Installment:");
+            foreach (var item in Items.Where(s => s.Type == "Installment"))
+            {
+                sb.Append("\t");
+                sb.AppendLine(item.ToString());
+            }
 
-			return sb.ToString();
-		
-		}
+
+            sb.AppendLine("Freezes:");
+            foreach (var item in InterestFreeze.Where(f => f.DeactivationDate == null))
+            {
+                sb.Append("\t");
+                sb.AppendLine(item.ToString());
+            }
+
+            return sb.ToString();
+
+        }
     }
 }
