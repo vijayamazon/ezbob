@@ -417,17 +417,15 @@ BEGIN
 		FROM
 			CashRequests r
 		WHERE
-			r.IdUnderwriter IS NOT NULL
+			r.IdCustomer = @CustomerID
 			AND
 			r.UnderwriterDecision = 'Approved'
 			AND
-			r.IdUnderwriter IS NOT NULL
+			r.UnderwriterDecisionDate IS NOT NULL
 			AND
-			r.IdUnderwriter != 1
+			r.AutoDecisionID IS NULL
 			AND
 			r.UnderwriterDecisionDate < @Now
-			AND
-			r.IdCustomer = @CustomerID
 	), 0)
 
 	------------------------------------------------------------------------------
