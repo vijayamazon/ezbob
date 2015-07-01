@@ -37,13 +37,13 @@
 			this.Result.ReschedulingRepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType;
 
 			this.cultureInfo = new CultureInfo("en-GB");
+
+			
 		}
 
 		public override string Name { get { return "RescheduleLoan"; } }
-		// input
-		public ReschedulingArgument ReschedulingArguments;
-		// output
-		public ReschedulingResult Result;
+		public ReschedulingArgument ReschedulingArguments;	// input
+		public ReschedulingResult Result;	// output
 
 		public override void Execute() {
 
@@ -56,18 +56,18 @@
 
 				GetCurrentLoanState();
 
-				// if sent "default" value (0), replace by default calculated
-				if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
-					this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
-
-				Log.Debug("\n\n\n ==================================================================RE-SCHEDULING===========ARGUMENTS:==================================" + this.ReschedulingArguments);
+				Log.Debug("\n\n\n ==================================================================RE-SCHEDULING===========ARGUMENTS:================================={0}, Context.UserID: {1}", this.ReschedulingArguments, Context.UserID);
 
 				// input validation for "IN"
 				if (this.ReschedulingArguments.RescheduleIn && (this.ReschedulingArguments.ReschedulingDate > this.Result.LoanCloseDate)) {
 					this.Result.Error = "Within loan arrangement is impossible";
 					return;
 				}
-				
+
+				// if sent "default" value (0), replace by default calculated
+				if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
+					this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
+
 				// remove unpaid (lates, stilltopays passed) and future schedule items
 				foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 					if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
@@ -190,7 +190,7 @@
 				EditLoanDetailsModel model = changeLoanModelBuilder.BuildModel(this.tLoan);
 				model.Validate();
 				if (model.HasErrors) {
-					this.Result.Error = model.Errors.ToString();
+					this.Result.Error = string.Join("<br/>", model.Errors.ToArray());
 					Log.Debug(this.Result.Error);
 					return;
 				}
@@ -253,18 +253,17 @@
 					Data = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan).ToJSON(),
 					Date = this.ReschedulingArguments.ReschedulingDate,
 					Loan = this.tLoan
-					//,User = user
 				};
-
-				return;
 			}
 			if (this.tNLLoan != null) {
 				// new loan structure TODO
 				Log.Debug("NEW LOAN STRUCTURE NOT IMPLEMENTED YET");
 			}
+
+			// if sent "default" value (0), replace by default calculated
+			if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
+				this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
 		}
-
-
 
 		/// <summary>
 		/// saving "rescheduling" to DB
@@ -276,10 +275,9 @@
 
 			if (this.tLoan != null && this.tLoan.Schedule.Count > 0) {
 
-				// save LoanChangesHistory (loan state before changes) before re-schedule
-				this.loanHistory.User = ObjectFactory.GetInstance<UsersRepository>().Get(this.ReschedulingArguments.UserID);
+				 //save LoanChangesHistory (loan state before changes) before re-schedule
+				this.loanHistory.User = ObjectFactory.GetInstance<UsersRepository>().Get(Context.UserID);
 				ObjectFactory.GetInstance<LoanChangesHistoryRepository>().Save(this.loanHistory);
-
 
 				try {
 

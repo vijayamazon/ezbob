@@ -109,11 +109,10 @@
 				return null;
 			}
 
-			Log.Debug("t is {0}, t.Name={1}", t, t.Name);
+			//Log.Debug("t is {0}, t.Name={1}", t, t.Name);
 
 			ReschedulingResult result = new ReschedulingResult();
-			reAgrs.UserID = userID;
-
+	
 			try {
 
 				if (t.Name == "Loan") {
@@ -131,7 +130,7 @@
 				}
 			
 			} catch (Exception e) {
-				Log.Info("Reschedule; exception: ",  e);
+				Log.Alert("Reschedule; exception: ",  e);
 				result.Error = "InternalServerError";
 			}
 

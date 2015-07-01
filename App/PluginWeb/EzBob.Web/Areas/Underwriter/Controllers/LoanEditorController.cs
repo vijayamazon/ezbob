@@ -75,7 +75,6 @@
             reModel.ReschedulingDate = DateTime.UtcNow;
             reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
             reModel.RescheduleIn = true;
-			reModel.UserID = this._context.User.Id;
 
             try
             {
@@ -94,7 +93,7 @@
             }
 
             reModel.RescheduleIn = false;
-            reModel.PaymentPerInterval = 100m;
+            reModel.PaymentPerInterval = 0m;
             try
             {
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
@@ -287,7 +286,7 @@
                 reModel.ReschedulingDate = now;
                 reModel.ReschedulingRepaymentIntervalType = intervalType;
                 reModel.RescheduleIn = rescheduleIn;
-	            reModel.UserID = this._context.User.Id;
+	            
                 if (reModel.RescheduleIn == false) // "out"
                     reModel.PaymentPerInterval = AmountPerInterval;
 

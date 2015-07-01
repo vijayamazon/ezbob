@@ -18,10 +18,7 @@
 
 		[DataMember]
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type - selected
-
-		[DataMember]
-		public int? UserID { get; set; } // user processing the action
-
+	
 		[DataMember]
 		public decimal? PaymentPerInterval { get; set; } // monthly/weekly A amount for "outside" rescheduling
 
