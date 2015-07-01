@@ -7,20 +7,16 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE RptSalesReport (@DateStart DATETIME,@DateEnd   DATETIME)
- 
 AS
 BEGIN
- 
 if OBJECT_ID('tempdb..#ApprovedData') is not NULL
 BEGIN
                 DROP TABLE #ApprovedData
 END
- 
 if OBJECT_ID('tempdb..#CRMSales') is not NULL
 BEGIN
                 DROP TABLE #CRMSales
 END
- 
 ------------------ APPROVED DATA -------------------
 SELECT DISTINCT
                    R.IdCustomer AS CustomerId,
@@ -43,33 +39,29 @@ WHERE R.IdCustomer NOT IN
                   AND R.UnderwriterDecision = 'approved'
                   AND R.UnderwriterDecisionDate > @DateStart
                   AND R.UnderwriterDecisionDate < @DateEnd
-                 
+                
  
 -------------------- SALES DATA --------------------
- 
 SELECT DISTINCT
                    CR.CustomerId,
                    CR.Timestamp AS CRM_SaleDate,
                    CR.UserName AS CRM_Username,
                    CS.Name AS CRM_Status,
                    CA.Name AS CRM_Action
-                  
-INTO #CRMSales                
+                 
+INTO #CRMSales               
 FROM CustomerRelations CR
 JOIN Customer C ON C.Id = CR.CustomerId
 JOIN CRMStatuses CS ON CS.Id = CR.StatusId
 JOIN CRMActions CA ON CA.Id = CR.ActionId
- 
 WHERE CR.Timestamp > @DateStart
       AND CR.Timestamp < @DateEnd
       AND CS.Name = 'Sale'
-      AND CR.UserName IN ('rosb','clareh','travism','sarahd')
+      AND CR.UserName IN ('rosb','clareh','travism','sarahd','sarahb','everline')
 --    AND C.BrokerID is NULL
 ORDER BY 2
  
- 
 -------------------- ISSUED LOANS --------------------
- 
 DECLARE @IssuedLoans TABLE
                 (
                 CustomerId INT
@@ -94,13 +86,10 @@ DECLARE @IssuedLoans TABLE
                 , AlibabaOrNot VARCHAR (10)
                 );
  
- 
 INSERT INTO @IssuedLoans
 EXECUTE RptAllLoansIssued;
  
- 
 --------------------- FINAL TABLE --------------------
- 
 SELECT DISTINCT
                    A.CustomerId,
                    CU.Fullname,
@@ -110,7 +99,7 @@ SELECT DISTINCT
                    A.ManagerApprovedSum AS ApprovedAmount,
                    C.CRM_Username,
                    convert(DATE,C.CRM_SaleDate) AS CRM_SaleDate,
-                   C.CRM_Status,
+      C.CRM_Status,
                    A.LoanId,
                    A.LoanAmount,
                    A.LoanDate,
@@ -124,8 +113,6 @@ FROM #ApprovedData A
 JOIN #CRMSales C ON C.CustomerId = A.CustomerId
 JOIN Customer CU ON CU.Id = A.CustomerId
 LEFT JOIN @IssuedLoans L ON L.LoanId = A.LoanId
- 
 WHERE A.LoanId IS NOT NULL
- 
 END
 GO
