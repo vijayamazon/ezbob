@@ -108,8 +108,6 @@ BEGIN
 			r.Id >= @LacrID
 			AND
 			l.[Date] < @Now
-			AND
-			(l.DateClosed IS NULL OR l.DateClosed > @Now)
 	), 0)
 
 	------------------------------------------------------------------------------
@@ -126,7 +124,7 @@ BEGIN
 		WHERE
 			l.Customerid = @CustomerId
 			AND
-			@LacrTime < lc.[Date] AND lc.[Date] < @Now
+			@LacrTime < lc.[Date]
 	), 0)
 
 	------------------------------------------------------------------------------

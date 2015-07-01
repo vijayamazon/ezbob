@@ -55,7 +55,7 @@
 		} // LacrAge
 
 		public decimal ApprovedAmount {
-			get { return ManagerApprovedSum - TakenLoanAmount; } // get
+			get { return ManagerApprovedSum - TakenLoanAmount + RepaidPrincipal; } // get
 		} // ApprovedAmount
 
 		public MetaData() {

@@ -41,7 +41,7 @@
 				MaxLateDays = dbData.MaxLateDays,
 				NewDataSourceAdded = dbData.NewDataSourceAdded,
 				NumOutstandingLoans = dbData.NumOutstandingLoans,
-				ReApproveAmount = dbData.ApprovedAmount - dbData.TookLoanAmount,
+				ReApproveAmount = dbData.ApprovedAmount - dbData.TookLoanAmount + dbData.RepaidPrincipal,
 				WasLate = dbData.WasLate,
 				WasRejected = dbData.WasRejected,
 				MinLoan = dbData.MinLoan,

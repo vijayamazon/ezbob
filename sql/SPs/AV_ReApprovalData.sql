@@ -71,7 +71,7 @@ BEGIN
 	END	
 	
 	--num of outstanding loans
-	DECLARE @NumOutstandingLoans INT = (SELECT count(*) FROM Loan WHERE CustomerId=@CustomerId AND Status<>'PaidOff')
+	DECLARE @NumOutstandingLoans INT = (SELECT count(*) FROM Loan WHERE CustomerId=@CustomerId AND Status<>'PaidOff' AND DateClosed IS NULL)
 	
 	--loan charges
 	DECLARE @HasLoanCharges BIT = 0
