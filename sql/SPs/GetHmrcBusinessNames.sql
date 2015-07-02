@@ -12,7 +12,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	SELECT DISTINCT
-		b.Name AS BusinessName
+		b.Name AS BusinessName,
+		ISNULL(b.BelongsToCustomer, 0) AS BelongsToCustomer
 	FROM
 		MP_CustomerMarketPlace mp
 		INNER JOIN MP_VatReturnRecords r ON r.CustomerMarketPlaceId = mp.Id 

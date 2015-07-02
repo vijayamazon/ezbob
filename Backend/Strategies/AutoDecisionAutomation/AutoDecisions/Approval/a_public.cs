@@ -118,6 +118,9 @@
 
 				this.db.ForEachRowSafe(
 					names => {
+						if (!names["BelongsToCustomer"])
+							return;
+
 						string name = AutomationCalculator.Utils.AdjustCompanyName(names["BusinessName"]);
 						if (name != string.Empty)
 							this.hmrcNames.Add(name);
