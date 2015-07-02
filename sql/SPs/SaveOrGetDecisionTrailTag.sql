@@ -38,6 +38,8 @@ BEGIN
 			@TagID = TrailTagID
 		FROM
 			DecisionTrailTags
+		WITH
+			(UPDLOCK)
 		WHERE
 			TrailTag = @Tag
 

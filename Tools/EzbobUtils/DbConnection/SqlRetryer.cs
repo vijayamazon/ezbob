@@ -41,25 +41,26 @@
 					sErrName = ForceRetryException.Name;
 				} catch (SqlException e) {
 					ex = e;
-					sErrName = null;
 
 					switch (e.Number) {
-					case 1205:
+					case ErrorNumber.Deadlock:
+					case ErrorNumber.Locking:
+					case ErrorNumber.UpdateConflict:
 						sErrName = "Deadlock";
 						break;
 
-					case -2:
-					case -2147217871:
+					case ErrorNumber.Timeout1:
+					case ErrorNumber.Timeout2:
 						sErrName = "Timeout";
 						break;
 
-					case 11:
+					case ErrorNumber.Network:
 						sErrName = "Network error";
 						break;
 					} // switch
 				} // try
 
-				if ((sErrName == null) && (ex != null))
+				if (sErrName == null)
 					throw new DbException(ex.Message, ex);
 
 				if (nCount < RetryCount) {
@@ -74,5 +75,14 @@
 
 			throw new DbException("Out of retry attempts.", ex);
 		} // Retry
+
+		private static class ErrorNumber {
+			public const int Network = 11;
+			public const int Deadlock = 1205;
+			public const int Locking = 1222;
+			public const int UpdateConflict = 3960;
+			public const int Timeout1 = -2;
+			public const int Timeout2 =  -2147217871;
+		} // class ErrorNumber
 	} // class SqlRetryer
 } // namespace Ezbob.Database
