@@ -23,6 +23,6 @@ BEGIN
 		AND
 		mp.Disabled = 0
 		AND
-		r.IsDeleted = 0
+		ISNULL(r.IsDeleted, 0) = 0
 END 
 GO
