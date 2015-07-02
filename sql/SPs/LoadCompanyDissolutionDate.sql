@@ -24,7 +24,9 @@ BEGIN
 		c.Id = @CustomerID
 		AND
 		l.InsertDate < @Now
-	ORDER BY l.InsertDate DESC
+		AND
+		co.TypeOfBusiness IN ('Limited', 'LLP')
+	ORDER BY
+		l.InsertDate DESC
 END
-
 GO

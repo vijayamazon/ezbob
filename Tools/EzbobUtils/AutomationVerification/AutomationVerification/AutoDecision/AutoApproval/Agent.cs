@@ -244,7 +244,8 @@
 				break;
 
 			case RowType.HmrcBusinessName:
-				HmrcBusinessNames.Add(AutomationCalculator.Utils.AdjustCompanyName(sr["Name"]));
+				if (sr["BelongsToCustomer"])
+					HmrcBusinessNames.Add(AutomationCalculator.Utils.AdjustCompanyName(sr["Name"]));
 				break;
 
 			case RowType.ExperianConsumerDataCais:

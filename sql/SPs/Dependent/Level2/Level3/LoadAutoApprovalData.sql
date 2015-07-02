@@ -486,7 +486,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	EXECUTE LoadHmrcBusinessNames @CustomerID, @Now, 0
+	EXECUTE LoadHmrcBusinessNames @CustomerID, @Now
 
 	------------------------------------------------------------------------------
 

@@ -7,8 +7,7 @@ GO
 
 ALTER PROCEDURE LoadHmrcBusinessNames
 @CustomerID INT,
-@Now DATETIME,
-@SelectID BIT
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -16,8 +15,8 @@ BEGIN
 	SELECT DISTINCT
 		RowType = 'HmrcBusinessName',
 		b.Name,
-		BusinessID = CASE WHEN @SelectID = 1 THEN b.Id ELSE NULL END,
-		BelongsToCustomer = CASE WHEN @SelectID = 1 THEN b.BelongsToCustomer ELSE NULL END
+		BusinessID = b.Id,
+		BelongsToCustomer = ISNULL(b.BelongsToCustomer, 0)
 	FROM
 		Business b
 		INNER JOIN MP_VatReturnRecords o

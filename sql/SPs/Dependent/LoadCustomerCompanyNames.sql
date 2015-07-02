@@ -35,7 +35,7 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	EXECUTE LoadHmrcBusinessNames @CustomerID, @Now, 1
+	EXECUTE LoadHmrcBusinessNames @CustomerID, @Now
 
 	------------------------------------------------------------------------------
 
