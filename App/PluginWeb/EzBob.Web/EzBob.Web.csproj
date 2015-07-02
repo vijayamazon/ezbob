@@ -922,6 +922,7 @@
     <Content Include="Areas\Broker\Views\BrokerHome\Header.cshtml" />
     <Content Include="Areas\Broker\Files\everline.credit.file.release.and.consent.doc" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SalesForceActivity.cshtml" />
+    <Content Include="Areas\Underwriter\Views\SalesForce\SalesForce.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1596,7 +1597,7 @@
     <Content Include="Views\Shared\security_template.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
-    <Content Include="Views\Shared\EditExperianDirectorData.cshtml" />
+    <Content Include="App_Code\EditExperianDirectorData.cshtml" />
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />

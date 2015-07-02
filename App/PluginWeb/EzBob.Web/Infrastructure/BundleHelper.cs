@@ -118,11 +118,14 @@
 
 		public static MvcHtmlString RenderSalesForceCss() {
 			return Bundle.Css()
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/common.css")
 				//libs
 				.Add("~/Content/css/lib/font-awesome.min.css")
 				.Add("~/Content/css/lib/bootstrap3.css")
-                .Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/dataTables.bootstrap.css")
 				//custom
+				.Add("~/Content/css/edit-experian-director-data.css")
 				.Add("~/Content/css/salesforce.css")
 				.MvcRender("~/Content/css/min/salesforce_#.css");
 		} // RenderUnderwriterCss
@@ -611,19 +614,40 @@
 				.Add("~/Content/js/lib/jquery.validate.js")
 				.Add("~/Content/js/lib/jquery-ui-1.8.24.custom.js")
 				.Add("~/Content/js/lib/jquery.placeholder.js")
+				.Add("~/Content/js/lib/jquery.dataTables.js")
 				.Add("~/Content/js/lib/flaty/bootstrap3.js")
 				.Add("~/Content/js/lib/jquery.blockUI.js")
 				.Add("~/Content/js/lib/underscore.js")
 				.Add("~/Content/js/lib/backbone.js")
 				.Add("~/Content/js/lib/backbone.marionette.js")
-			// custom
+				.Add("~/Content/js/lib/moment.js")
+				.Add("~/Content/js/lib/attardi.labels.js")
+				.Add("~/Content/js/lib/jquery.field_status.js")
+			//main
 				.Add("~/Content/js/ezbob.design.js")
+				.Add("~/Content/js/ezbob.csrf.js")
+				.Add("~/Content/js/ezbob.view.js")
+				.Add("~/Content/js/ezbob.internal.debug.js")
+				.Add("~/Content/js/ezbob.uiaction.js")
+				.Add("~/Content/js/ezbob.serverlog.js")
+				.Add("~/Content/js/EzBob.DataTables.Helper.js")
+				.Add("~/Content/js/ezbob.models.js")
+				.Add("~/Content/js/ezbob.addDirectorInfoView.js")
+				.Add("~/Content/js/ezbob.edit.experian.director.data.js")
+
+			//controls
 				.Add("~/Content/js/controls/ezbob.modal.js")
 				.Add("~/Content/js/controls/ezbob.jqmodal.js")
+				.Add("~/Content/js/controls/ezbob.address.js")
+			//app
 				.Add("~/Content/js/App/ezbob.app.js")
-				.Add("~/Content/js/ezbob.csrf.js")
-				.Add("~/Content/js/Underwriter/ezbob.underwriter.salesforce.js")
+				.Add("~/Content/js/App/ezbob.validation.js")
+			//uw
 				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.functionsDialog.js")
+				.Add("~/Content/js/Underwriter/profile/leftAndBottomBar/ezbob.underwriter.personInfo.js")
+				.Add("~/Content/js/Underwriter/profile/ezbob.underwriter.signature.monitor.js")
+			// custom
+				.Add("~/Content/js/Underwriter/ezbob.underwriter.salesforce.js")
 			.MvcRender("~/Content/js/min/jsSalesForce_#.js");
 		} // RenderSalesForceJs
 

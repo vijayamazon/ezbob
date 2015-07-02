@@ -22,6 +22,10 @@
 			this.companyFilesMetaDataRepository = companyFilesMetaDataRepository;
 		}
 
+		public ActionResult Main() {
+			return View("SalesForce");
+		}
+
 		public ActionResult Index(string id) {
 			Response.AddHeader("X-FRAME-OPTIONS", "");
 			Log.InfoFormat("Loading sales force iframe for customer {0}", id);

@@ -481,9 +481,16 @@ EzBob.Underwriter.PersonalInfoModel = Backbone.Model.extend({
 
 		this.changeFraudCheckStatus();
 
-		if (this.StatusesArr === void 0)
-			this.statuses = EzBob.Underwriter.StaticData.CollectionStatuses;
+		if (EzBob.Underwriter.StaticData) {
+			this.initCollectionStatuses();
+		}
+	}, // initialize
 
+	initCollectionStatuses: function(){
+		if (this.StatusesArr === void 0) {
+			EzBob.Underwriter.StaticData = EzBob.Underwriter.StaticData;
+			this.statuses = EzBob.Underwriter.StaticData.CollectionStatuses;
+		}
 		this.StatusesArr = {};
 		var _ref = this.statuses.models;
 		var _results = [];
@@ -492,7 +499,7 @@ EzBob.Underwriter.PersonalInfoModel = Backbone.Model.extend({
 			_results.push(this.StatusesArr[status.get('Id')] = status.get('Name'));
 		} // for
 		return _results;
-	}, // initialize
+	},
 
 	changeFraudCheckStatus: function() {
 		this.set("FraudHighlightCss", this.get("FraudCheckStatusId") === 2 ? 'red_cell' : '');

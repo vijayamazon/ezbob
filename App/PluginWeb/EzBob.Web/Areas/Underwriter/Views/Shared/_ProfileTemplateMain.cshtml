@@ -41,7 +41,6 @@
 </script>
 
 @{
-	Html.RenderPartial("EditExperianDirectorData");
     Html.RenderPartial("ControlButtons");
     Html.RenderPartial("_MarketplaceValuesTemplate");
     Html.RenderPartial("MarketPlacesHistory");
@@ -72,6 +71,7 @@
     Html.RenderPartial("_Messages");
     Html.RenderPartial("_FunctionsDialog");
 }
+@EditExperianDirectorData.Render(this)
 
 <script id="approve-details" type="text/template">
     <div id="loan-schedule"></div>
