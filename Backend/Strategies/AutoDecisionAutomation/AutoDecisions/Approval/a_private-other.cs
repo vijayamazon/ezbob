@@ -122,9 +122,7 @@
 				IsBrokerCustomer = this.isBrokerCustomer,
 				NumOfTodayAutoApproval = CalculateTodaysApprovals(),
 				TodayLoanSum = CalculateTodaysLoans(),
-				FraudStatusValue = (int)(
-					(this.customer == null) ? FraudStatus.UnderInvestigation : this.customer.FraudStatus
-				),
+				FraudStatusValue = DetectFraudStatusValue(),
 				AmlResult = (this.customer == null) ? "failed because customer not found" : this.customer.AMLResult,
 				CustomerStatusName = this.customer == null ? "unknown" : this.customer.CollectionStatus.CurrentStatus.Name,
 				CustomerStatusEnabled = this.customer != null && this.customer.CollectionStatus.CurrentStatus.IsEnabled,

@@ -34,10 +34,7 @@
 				CheckIsDirector();
 				CheckHmrcIsCompany();
 				CheckTotalLoanCount();
-				CheckWorstCaisStatus(this.trail.MyInputData.MetaData.TotalLoanCount > 0
-					? CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithLoan
-					: CurrentValues.Instance.AutoApproveAllowedCaisStatusesWithoutLoan
-				);
+				CheckWorstCaisStatus();
 				CheckRollovers();
 				CheckLateDays();
 				CheckCustomerOpenLoans();
@@ -441,7 +438,7 @@
 			StepDone<TotalLoanCount>().Init(this.trail.MyInputData.MetaData.TotalLoanCount);
 		} // CheckTotalLoanCount
 
-		private void CheckWorstCaisStatus(string allowedStatuses) {
+		private void CheckWorstCaisStatus() {
 			var diff = new List<string>(FindBadCaisStatuses());
 
 			if (diff.Count > 0)

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval {
 	using System;
 	using System.Collections.Generic;
+	using System.Data;
 	using System.Globalization;
 	using System.Linq;
 	using AutomationCalculator.AutoDecision.AutoApproval;
@@ -28,9 +29,9 @@
 
 			DateTime oMpOriginationDate = this.customer.GetMarketplaceOriginationDate(oIncludeMp: mp =>
 				!mp.Marketplace.IsPaymentAccount ||
-				mp.Marketplace.InternalId == PayPal ||
-				mp.Marketplace.InternalId == Hmrc
-			);
+					mp.Marketplace.InternalId == PayPal ||
+					mp.Marketplace.InternalId == Hmrc
+				);
 
 			DateTime oIncorporationDate = GetCustomerIncorporationDate();
 
@@ -40,24 +41,26 @@
 		} // CalculateSeniority
 
 		private int CalculateTodaysApprovals() {
-			return this.cashRequestsRepository.GetAll().Count(cr =>
-				cr.UnderwriterDecisionDate.HasValue &&
-				cr.UnderwriterDecisionDate.Value.Year == Now.Year &&
-				cr.UnderwriterDecisionDate.Value.Month == Now.Month &&
-				cr.UnderwriterDecisionDate.Value.Day == Now.Day &&
-				cr.AutoDecisionID == 1
-			);
+			return this.cashRequestsRepository.GetAll()
+				.Count(cr =>
+					cr.UnderwriterDecisionDate.HasValue &&
+						cr.UnderwriterDecisionDate.Value.Year == Now.Year &&
+						cr.UnderwriterDecisionDate.Value.Month == Now.Month &&
+						cr.UnderwriterDecisionDate.Value.Day == Now.Day &&
+						cr.AutoDecisionID == 1
+				);
 		} // CalculateTodaysApprovals
 
 		private decimal CalculateTodaysLoans() {
 			DateTime today = Now;
 
-			var todayLoans = this.loanRepository.GetAll().Where(l =>
-				(l.Date.Year == today.Year) &&
-				(l.Date.Month == today.Month) &&
-				(l.Date.Day == today.Day) &&
-				(l.Date < today)
-			);
+			var todayLoans = this.loanRepository.GetAll()
+				.Where(l =>
+					(l.Date.Year == today.Year) &&
+						(l.Date.Month == today.Month) &&
+						(l.Date.Day == today.Day) &&
+						(l.Date < today)
+				);
 
 			decimal todayLoansAmount = 0;
 
@@ -70,7 +73,9 @@
 		private void FindLatePayments() {
 			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 
-			List<int> customerLoanIds = this.loanRepository.ByCustomer(this.customerId).Select(d => d.Id).ToList();
+			List<int> customerLoanIds = this.loanRepository.ByCustomer(this.customerId)
+				.Select(d => d.Id)
+				.ToList();
 
 			foreach (int loanId in customerLoanIds) {
 				int innerLoanId = loanId;
@@ -125,7 +130,7 @@
 
 			bool bIsLimited =
 				(this.customer.Company != null) &&
-				(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited);
+					(this.customer.Company.TypeOfBusiness.Reduce() == TypeOfBusinessReduced.Limited);
 
 			if (bIsLimited) {
 				CustomerAnalytics oAnalytics = this.customerAnalytics.GetAll()
@@ -160,5 +165,23 @@
 				));
 		} // FindBadCaisStatuses
 
+		private int DetectFraudStatusValue() {
+			if (this.customer == null)
+				return (int)FraudStatus.UnderInvestigation;
+
+			var fraudStatus = new QueryParameter("@FraudStatus") {
+				Direction = ParameterDirection.Output,
+				Type = DbType.Int32,
+			};
+
+			this.db.ExecuteNonQuery(
+				"DetectCustomerFraudStatus",
+				new QueryParameter("@CustomerID", this.customer.Id),
+				new QueryParameter("@Now", Now),
+				fraudStatus
+			);
+
+			return (int)fraudStatus.ReturnedValue;
+		} // DetectFraudStatusValue
 	} // class Approval
 } // namespace

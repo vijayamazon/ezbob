@@ -377,36 +377,8 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	DECLARE @FraudStatus INT
-	DECLARE @FraudRqID INT
 
-	IF @Now IS NOT NULL
-	BEGIN
-		SELECT TOP 1
-			@FraudRqID = r.Id
-		FROM
-			FraudRequest r
-		WHERE
-			r.CustomerId = @CustomerID
-			AND
-			r.CheckDate < @Now
-		ORDER BY
-			r.CheckDate DESC
-
-		IF EXISTS (SELECT * FROM FraudDetection WHERE FraudRequestId = @FraudRqID)
-			SET @FraudStatus = 2 -- Fraud suspect
-	END
-
-	------------------------------------------------------------------------------
-
-	IF @FraudStatus IS NULL
-	BEGIN
-		SELECT
-			@FraudStatus = c.FraudStatus
-		FROM
-			Customer c
-		WHERE
-			c.Id = @CustomerID
-	END
+	EXECUTE DetectCustomerFraudStatus @CustomerID, @Now, @FraudStatus OUTPUT
 
 	------------------------------------------------------------------------------
 	------------------------------------------------------------------------------
