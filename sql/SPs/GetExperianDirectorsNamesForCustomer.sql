@@ -37,17 +37,16 @@ BEGIN
 			l.Id
 		FROM
 			MP_ServiceLog l
-		WHERE (
-				l.CompanyRefNum = @RefNum
-				OR
-				l.CompanyID = @CompanyID
-			)
+			INNER JOIN ExperianLtd e ON l.Id = e.ServiceLogID
+		WHERE
+			l.CompanyRefNum = @RefNum
 			AND
 			l.ServiceType = 'E-SeriesLimitedData'
 			AND
 			(@Now IS NULL OR l.InsertDate < @Now)
 		ORDER BY
-			l.InsertDate DESC
+			l.InsertDate DESC,
+			l.Id DESC
 	)
 
 	------------------------------------------------------------------------------
