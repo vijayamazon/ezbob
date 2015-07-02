@@ -16,6 +16,7 @@
 	public partial class Approval {
 		private static readonly Guid Hmrc = new Guid("AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA");
 		private static readonly Guid PayPal = new Guid("3FA5E327-FCFD-483B-BA5A-DC1815747A28");
+		private static readonly Guid CompanyFiles = new Guid("1C077670-6D6C-4CE9-BEBC-C1F9A9723908");
 
 		private int CalculateRollovers() {
 			return this.loanRepository.ByCustomer(this.customerId)
@@ -28,10 +29,12 @@
 				return -1;
 
 			DateTime oMpOriginationDate = this.customer.GetMarketplaceOriginationDate(oIncludeMp: mp =>
-				!mp.Marketplace.IsPaymentAccount ||
+				mp.Marketplace.InternalId != CompanyFiles && (
+					!mp.Marketplace.IsPaymentAccount ||
 					mp.Marketplace.InternalId == PayPal ||
 					mp.Marketplace.InternalId == Hmrc
-				);
+				)
+			);
 
 			DateTime oIncorporationDate = GetCustomerIncorporationDate();
 
