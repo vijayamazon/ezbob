@@ -115,12 +115,16 @@
 
 			List<Loan> outstandingLoans = FirstOfMonthStatusStrategyHelper.GetOutstandingLoans(this.customerId);
 
-			oMeta.OpenLoanCount = outstandingLoans.Count;
+			oMeta.OpenLoanCount = 0;
 			oMeta.TakenLoanAmount = 0;
 			oMeta.RepaidPrincipal = 0;
 			oMeta.SetupFees = 0;
 
-			foreach (var loan in outstandingLoans) {
+			foreach (Loan loan in outstandingLoans) {
+				if (loan.DateClosed != null)
+					continue;
+
+				oMeta.OpenLoanCount++;
 				oMeta.TakenLoanAmount += loan.LoanAmount;
 				oMeta.RepaidPrincipal += loan.LoanAmount - loan.Principal;
 				oMeta.SetupFees += loan.SetupFee;
