@@ -11,9 +11,11 @@
 
 		//Contact Data
 		[DataMember]
+		public string CustomerID { get; set; }
+		[DataMember]
 		public string Name { get; set; }
 		[DataMember]
-		public string Gender { get; set; } //Gender enum
+		public string Gender { get; set; }
 		[DataMember]
 		public string PhoneNumber { get; set; }
 		[DataMember]
@@ -52,40 +54,14 @@
 
 		//state source data
 		[DataMember]
-		public string EzbobStatus { get; set; } //EzbobStatus enum
+		public string EzbobStatus { get; set; } 
 		[DataMember]
-		public string EzbobSource { get; set; } //EzbobSource enum
+		public string EzbobSource { get; set; } 
 		[DataMember]
 		public string LeadSource { get; set; }
 		[DataMember]
 		public int RequestedLoanAmount { get; set; }
+		[DataMember]
+		public int? NumOfLoans { get; set; }
 	}
-
-    public enum EzbobSource
-    {
-        [Description("Wizard")]
-        Wizard,
-        [Description("Wizard")]
-        VIP,
-        [Description("Landing page")]
-        LandingPage,
-        [Description("Broker lead")]
-        BrokerLead
-    }
-
-    public enum EzbobStatus
-    {
-        Contacted,
-        Open,
-        Qualified,
-        Unqualified
-    }
-
-    public enum Gender
-    {
-        Male,
-        Female
-    }
-
-
 }
