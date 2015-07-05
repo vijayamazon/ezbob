@@ -30,7 +30,7 @@ BEGIN
 	)
 
 	SET @HistoryRecordID = CONVERT(INT, SCOPE_IDENTITY())
-	
+
 	SELECT
 		HistoryRecordID   = @HistoryRecordID,
 		MarketplaceTypeID = t.InternalId

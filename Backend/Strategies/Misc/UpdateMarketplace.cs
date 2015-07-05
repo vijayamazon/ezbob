@@ -19,10 +19,10 @@
 
 	public class UpdateMarketplace : AStrategy {
 		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
-			mailer = new StrategiesMailer();
+			this.mailer = new StrategiesMailer();
 			this.customerId = customerId;
 			this.marketplaceId = marketplaceId;
-			m_bDoUpdateWizardStep = doUpdateWizardStep;
+			this.m_bDoUpdateWizardStep = doUpdateWizardStep;
 		} // constructor
 
 		public override string Name {
@@ -32,11 +32,11 @@
 		public override void Execute() {
 			string errorMessage = string.Empty;
 
-			if (m_bDoUpdateWizardStep) {
+			if (this.m_bDoUpdateWizardStep) {
 				DB.ExecuteNonQuery(
 					"CustomerSetWizardStepIfNotLast",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@CustomerID", customerId),
+					new QueryParameter("@CustomerID", this.customerId),
 					new QueryParameter("@NewStepID", (int)WizardStepType.Marketplace)
 				);
 			} // if
@@ -44,29 +44,35 @@
 			string marketplaceName = string.Empty;
 			bool disabled = false;
 			string marketplaceDisplayName = string.Empty;
+			bool firstTime = false;
 
-			DB.ForEachRowSafe(
-				(sr, bRowsetStart) => {
-					marketplaceName = sr["Name"];
-					disabled = sr["Disabled"];
-					marketplaceDisplayName = sr["DisplayName"];
-					return ActionResult.SkipAll;
-				},
+			SafeReader sr = DB.GetFirst(
 				"GetMarketplaceDetailsForUpdate",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("MarketplaceId", marketplaceId)
+				new QueryParameter("MarketplaceId", this.marketplaceId)
 			);
 
+			if (!sr.IsEmpty) {
+				marketplaceName = sr["Name"];
+				disabled = sr["Disabled"];
+				marketplaceDisplayName = sr["DisplayName"];
+				firstTime = sr["FirstTime"];
+			} // if
+
 			if (disabled) {
-				Log.Info("MP:{0} is disabled and won't be updated", marketplaceId);
+				Log.Info("MP:{0} is disabled and won't be updated", this.marketplaceId);
 				return;
 			} // if
 
 			int tokenExpired = 0;
 
-			var oMpUpdateTimesSetter = new MarketplaceInstantUpdate(marketplaceId);
+			var oMpUpdateTimesSetter = new MarketplaceInstantUpdate(this.marketplaceId);
 
-			Log.Info("Start Update Data for Customer Market Place: id: {0}, name: {1} ", marketplaceId, marketplaceDisplayName);
+			Log.Info(
+				"Start Update Data for Customer Market Place: id: {0}, name: {1} ",
+				this.marketplaceId,
+				marketplaceDisplayName
+			);
 
 			try {
 				oMpUpdateTimesSetter.Start();
@@ -113,14 +119,14 @@
 				} // if
 
 				if (oRetrieveDataHelper != null)
-					oRetrieveDataHelper.Update(marketplaceId);
+					oRetrieveDataHelper.Update(this.marketplaceId);
 			} catch (Exception e) {
 				errorMessage = e.Message;
-				Log.Warn("Exception occurred during marketplace update, id: {0}.", marketplaceId);
+				Log.Warn("Exception occurred during marketplace update, id: {0}.", this.marketplaceId);
 
 				var variables = new Dictionary<string, string> {
-					{"userID", customerId.ToString(CultureInfo.InvariantCulture)},
-					{"CustomerMarketPlaceId", marketplaceId.ToString(CultureInfo.InvariantCulture)},
+					{"userID", this.customerId.ToString(CultureInfo.InvariantCulture)},
+					{"CustomerMarketPlaceId", this.marketplaceId.ToString(CultureInfo.InvariantCulture)},
 				};
 
 				bool bHasEbayMsgNum = marketplaceName == "eBay" && (
@@ -147,13 +153,22 @@
 					sTemplateName = "Mandrill - UpdateCMP Error";
 				} // if
 
-				mailer.Send(sTemplateName, variables);
+				this.mailer.Send(sTemplateName, variables);
 			} finally {
-				Log.Info("End update data for umi: id: {0}, name: {1}. {2}", marketplaceId, marketplaceDisplayName, string.IsNullOrEmpty(errorMessage) ? "Successfully" : "With error!");
+				Log.Info(
+					"End update data for umi: id: {0}, name: {1}. {2}",
+					this.marketplaceId,
+					marketplaceDisplayName,
+					string.IsNullOrEmpty(errorMessage) ? "Successfully" : "With error!"
+				);
 
 				oMpUpdateTimesSetter.End(errorMessage, tokenExpired);
 
-				new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.UpdateMarketplace).Execute();
+				new SilentAutomation(this.customerId).SetTag(
+					firstTime
+					?  SilentAutomation.Callers.AddMarketplace
+					: SilentAutomation.Callers.UpdateMarketplace
+				).Execute();
 			} // try
 		} // Execute
 

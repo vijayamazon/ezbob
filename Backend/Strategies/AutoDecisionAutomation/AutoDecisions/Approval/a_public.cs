@@ -211,6 +211,10 @@
 			return bSuccess;
 		} // MakeAndVerifyDecision
 
+		public int ApprovedAmount {
+			get { return this.trail.RoundedAmount; }
+		} // ApprovedAmount
+
 		public void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
 				response.LoanOfferUnderwriterComment = "Checking auto approve...";
