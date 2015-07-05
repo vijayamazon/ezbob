@@ -926,7 +926,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 3033;
+			int loanID = 3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -935,7 +935,7 @@
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = true;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 0m;
+			reModel.PaymentPerInterval = 5000m;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
 			s1.Context.UserID = 25852;
 			try {
@@ -949,14 +949,14 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 1846; //2662;
+			int loanID = 3534; //1846; //2662;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.SaveToDB = true;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
 			var s = new RescheduleLoan<Loan>(loan, reModel);
 			s.Context.UserID = 25852;

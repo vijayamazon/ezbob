@@ -259,7 +259,7 @@
 			nlModel.LoanHistory = new NL_LoanHistory();
 			nlModel.LoanHistory.AgreementModel = loan.AgreementModel;
 			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
-
+			// place real NL agreements later EX_
 			foreach (LoanAgreement agrm in loan.Agreements) {
 				NL_LoanAgreements agreement = new NL_LoanAgreements();
 				agreement.FilePath = agrm.FilePath;
