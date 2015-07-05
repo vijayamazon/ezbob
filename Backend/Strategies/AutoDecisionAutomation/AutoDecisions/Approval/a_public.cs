@@ -244,15 +244,15 @@
 
 				if (response.AutoApproveAmount != 0) {
 					if (this.trail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
-					    var source = this.loanSourceRepository.GetDefault();
+						var source = this.loanSourceRepository.GetDefault();
 						var offerDualCalculator = new OfferDualCalculator(
 							this.customerId,
 							Now,
 							response.AutoApproveAmount,
 							this.hasLoans,
 							this.medalClassification,
-                            source.ID,
-                            source.DefaultRepaymentPeriod ?? 15
+							source.ID,
+							source.DefaultRepaymentPeriod ?? 15
 						);
 
 						OfferResult offerResult = offerDualCalculator.CalculateOffer();

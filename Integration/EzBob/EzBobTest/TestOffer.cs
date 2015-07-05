@@ -1,5 +1,6 @@
 namespace EzBobTest {
 	using System;
+	using System.Collections.Generic;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.MedalCalculations;
@@ -61,18 +62,28 @@ namespace EzBobTest {
 
 		[Test]
 		public void TestOneOffer() {
-			var odc = new OfferDualCalculator(
-				31,
-				DateTime.UtcNow,
-				6000,
-				false,
-				EZBob.DatabaseLib.Model.Database.Medal.Silver,
-                3,
-                15,
-				false
-			);
+			// List of { loan amount, has loans }.
+			Tuple<int, bool>[] testCases = {
+				new Tuple<int, bool>(6000, false),
+				new Tuple<int, bool>(6000, true),
+				new Tuple<int, bool>(16000, false),
+				new Tuple<int, bool>(16000, true),
+			};
 
-			odc.CalculateOffer();
+			foreach (var tc in testCases) {
+				var odc = new OfferDualCalculator(
+					31,
+					DateTime.UtcNow,
+					tc.Item1,
+					tc.Item2,
+					EZBob.DatabaseLib.Model.Database.Medal.Silver,
+					3,
+					15,
+					false
+				);
+
+				odc.CalculateOffer();
+			} // for each test case
 		} // TestOneOffer
 
 		[Test]

@@ -6,36 +6,47 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 ALTER PROCEDURE LoadOfferRanges
-	@Amount INT,
-	@MedalClassification NVARCHAR(50)
+@Amount DECIMAL(18, 6),
+@IsNewLoan BIT
 AS
 BEGIN
-	DECLARE
-		@MinInterestRate DECIMAL(18,6),
-		@MaxInterestRate DECIMAL(18,6),
-		@MinSetupFee DECIMAL(18,6),
-		@MaxSetupFee DECIMAL(18,6)
-	
-	SELECT
-		@MinInterestRate = MinInterestRate,
-		@MaxInterestRate = MaxInterestRate
+	SET NOCOUNT ON;
+
+	DECLARE @Name NVARCHAR(50)
+	DECLARE @MinSetupFee DECIMAL(18, 6)
+	DECLARE @MaxSetupFee DECIMAL(18, 6)
+
+	SELECT TOP 1
+		@Name = r.LoanSizeName,
+		@MinSetupFee = r.MinSetupFee,
+		@MaxSetupFee = r.MaxSetupFee
 	FROM
-		OfferInterestRateRanges
+		OfferSetupFeeRanges r
 	WHERE
-		MedalClassification = @MedalClassification
-	
+		r.MaxLoanAmount IS NOT NULL
+		AND
+		@Amount <= r.MaxLoanAmount
+		AND
+		@IsNewLoan = r.IsNewLoan
+	ORDER BY
+		r.MaxLoanAmount
+
+	IF @MinSetupFee IS NULL
+	BEGIN
+		SELECT TOP 1
+			@Name = r.LoanSizeName,
+			@MinSetupFee = r.MinSetupFee,
+			@MaxSetupFee = r.MaxSetupFee
+		FROM
+			OfferSetupFeeRanges r
+		WHERE
+			r.MaxLoanAmount IS NULL
+			AND
+			@IsNewLoan = r.IsNewLoan
+	END
+
 	SELECT
-		@MinSetupFee = MinSetupFee,
-		@MaxSetupFee = MaxSetupFee
-	FROM
-		OfferSetupFeeRanges
-	WHERE
-		FromLoanAmount <= @Amount AND
-		ToLoanAmount >= @Amount
-		
-	SELECT
-		@MinInterestRate AS MinInterestRate,
-		@MaxInterestRate AS MaxInterestRate,
+		@Name AS LoanSizeName,
 		@MinSetupFee AS MinSetupFee,
 		@MaxSetupFee AS MaxSetupFee
 END

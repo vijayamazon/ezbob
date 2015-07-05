@@ -171,11 +171,6 @@
 			return customers;
 		}
 
-		public OfferSetupFeeRangeModelDb GetOfferSetupFeeRange(int amount) {
-			return _db.FillFirst<OfferSetupFeeRangeModelDb>("AV_GetOfferSetupFeeRange", CommandSpecies.StoredProcedure,
-				new QueryParameter("Amount", amount));
-		}
-
 		public OfferInterestRateRangeModelDb GetOfferIneterestRateRange(Medal medal) {
 			return _db.FillFirst<OfferInterestRateRangeModelDb>("AV_OfferInterestRateRange", CommandSpecies.StoredProcedure,
 				new QueryParameter("Medal", medal.ToString()));
