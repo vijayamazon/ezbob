@@ -125,6 +125,16 @@ padding-top: 0;
     color: #428bca;
 }
 
+#broker-terms-and-conditions dd,
+#broker-terms-and-conditions ol,
+#broker-terms-and-conditions ul {
+    padding-left: 20px;
+}
+
+#broker-terms-and-conditions p {
+    margin-bottom: 7px;
+}
+
 .ui-tabs .ui-tabs-nav li.ui-tabs-selected a,
 .ui-tabs .ui-tabs-nav li.ui-state-disabled a,
 .ui-tabs .ui-tabs-nav li.ui-state-processing a,
