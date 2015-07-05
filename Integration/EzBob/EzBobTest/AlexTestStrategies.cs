@@ -1,5 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
+	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Utils;
 	using NUnit.Framework;
 
@@ -59,5 +60,11 @@
 			Assert.AreEqual(lastJune1, MiscUtils.GetPeriodAgo(june20, june29, tailLength, november20));
 			Assert.AreEqual(lastJune1, MiscUtils.GetPeriodAgo(june20, june20, tailLength, november20));
 		} // TestCaisAccountIsBad
+
+		[Test]
+		public void TestMedal() {
+			var x = new CalculateMedal(29486, DateTime.UtcNow, false, false);
+			x.Execute();
+		} // TestMedal
 	} // class AlexTestStrategies
 } // namespace

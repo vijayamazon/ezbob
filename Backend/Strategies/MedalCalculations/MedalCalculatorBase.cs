@@ -814,7 +814,7 @@
 
 				if (yodlees.Count > 0) {
 					List<FilteredAggregationResult> yodleeList =
-						LastHistoryTurnovers(yodlees.ToList(), Results.CalculationTime);
+						LastHistoryTurnovers(yodlees, Results.CalculationTime);
 
 					if (yodleeList != null) {
 						// get yoodlee turnover for all months received
