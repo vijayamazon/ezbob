@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
 	using System;
+	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using Ezbob.Logger;
 	using JetBrains.Annotations;
@@ -23,7 +24,11 @@
 		} // Name
 
 		public override void Execute() {
-			m_oSp.ExecuteNonQuery();
+			this.m_oSp.ExecuteNonQuery();
+
+			//update account in SF IsBroker flag can be changed.
+			var sfAccountUpdate = new AddUpdateLeadAccount("", this.m_oSp.CustomerID, false, false);
+			sfAccountUpdate.Execute();
 		} // Execute
 
 		private readonly AttachCustomerToBroker m_oSp;
