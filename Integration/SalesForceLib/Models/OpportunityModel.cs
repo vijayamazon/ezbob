@@ -37,13 +37,13 @@
 		Lost
 	}
 	public enum OpportunityType {
-		[Description("New Deal")] //created when lead converted to account
+		[Description("Finished wizard")] //created when lead converted to account
 		New, 
-		[Description("Partial")] // created when took amount is less then approved amount
+		[Description("Top up")] // created when took amount is less then approved amount
 		Partial,
 		[Description("Resell")] // created when customer requests cash
 		Resell,
-		[Description("Finish Loan")] //created when customer finishes to repay his loan
+		[Description("Fully repaid")] //created when customer finishes to repay his loan
 		FinishLoan,
 		[Description("50% repaid")]
 		FiftyPercentRepaid
