@@ -1,6 +1,6 @@
 IF NOT EXISTS (SELECT * FROM BrokerTerms WHERE OriginID = 2 AND DateAdded = '5 July 2015')
 BEGIN
-	INSERT INTO BrokerTerms (BrokerTermsID, DateAdded, BrokerTerms, TermsTextID, OriginID) VALUES(SELECT COUNT(BrokerTermsID) FROM BrokerTerms )+1, 'July 5 2015',
+	INSERT INTO BrokerTerms (BrokerTermsID, DateAdded, BrokerTerms, TermsTextID, OriginID) VALUES((SELECT COUNT(BrokerTermsID) FROM BrokerTerms )+1, 'July 5 2015',
 	'<h2 align=center style="text-align: center;"><strong>Broker and Intermediary Terms and Conditions</strong></h2>
 	<p>The following terms and conditions govern Your relationship with Orange Money Ltd. (trading as Everline) and participation in Our broker and intermediary program ("Program"). Our privacy policy, found at: <a target=_blank href="https://www.everline.com/privacy-and-cookie-policy/">https://www.everline.com/privacy-and-cookie-policy/</a>, is incorporated in these terms and conditions and made a part hereof. These terms and conditions are an important legal document and by accepting they will be legally binding upon You. Please read them carefully and print out a copy for Your records before You agree to them.</p>
 	<p>References in these terms and conditions to "We", "Us" and "Our", means, Orange Money Ltd. References to "You" and "Your" means the person identified in the registration process and any person who accesses Your Account (defined below) whether as an individual or on behalf of such entity.</p>
