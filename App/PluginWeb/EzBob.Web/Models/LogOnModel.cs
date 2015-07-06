@@ -17,6 +17,7 @@
 		} // SetCookie
 
 		[Required]
+		[MaxLength(128)]
 		[Display(Name = @"User name")]
 		public string UserName { get; set; }
 
