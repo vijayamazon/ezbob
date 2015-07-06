@@ -8,6 +8,7 @@
 	public class WriteToLogPackage {
         public WriteToLogPackage(InputData input) {
             In = input;
+	        Out = new OutputData();
         }
 
 		public WriteToLogPackage(
@@ -77,7 +78,11 @@
 			public string PostCode { get; private set; }
             [DataMember]
 			public string CompanyRefNum { get; private set; }
-		} // class In
+
+	        public override string ToString() {
+		        return this.CustomerID + " " + this.ServiceType;
+	        }
+        } // class In
 
 
 		public class OutputData {
