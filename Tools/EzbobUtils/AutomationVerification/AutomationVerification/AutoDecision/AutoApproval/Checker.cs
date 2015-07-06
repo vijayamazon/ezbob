@@ -12,22 +12,11 @@
 	public class Checker {
 		public Checker(Agent oAgent) {
 			this.agent = oAgent;
-
-			this.officeHoursHandler = new OfficeHoursHandler(
-				this.agent.Now,
-				this.agent.Trail.MyInputData.Configuration.OfficeTimeStart,
-				this.agent.Trail.MyInputData.Configuration.OfficeTimeEnd,
-				this.agent.Trail.MyInputData.Configuration.Weekend
-			);
-
-			this.officeHoursHandler.ApprovalCount[0] = this.agent.Trail.MyInputData.MetaData.NumOfTodayAutoApproval;
-			this.officeHoursHandler.ApprovalCount[1] = this.agent.Trail.MyInputData.MetaData.NumOfYesterdayAutoApproval;
-
-			this.officeHoursHandler.OpenLoanAmount[0] = this.agent.Trail.MyInputData.MetaData.TodayLoanSum;
-			this.officeHoursHandler.OpenLoanAmount[1] = this.agent.Trail.MyInputData.MetaData.YesterdayLoanSum;
 		} // constructor
 
 		public virtual void Run() {
+			InitOfficeHoursHandler();
+
 			// Once a step is not passed there is no need to continue result-wise. However the
 			// process continues because we want to pick all the possible reasons for not
 			// approving a customer in order to compare different implementations of the process.
@@ -568,7 +557,22 @@
 				StepFailed<AvailableFundsOverdraft>().Init(reminder, allowedOverdraft);
 		} // AvailableFundsOverdraft
 
+		private void InitOfficeHoursHandler() {
+			this.officeHoursHandler = new OfficeHoursHandler(
+				this.agent.Now,
+				this.agent.Trail.MyInputData.Configuration.OfficeTimeStart,
+				this.agent.Trail.MyInputData.Configuration.OfficeTimeEnd,
+				this.agent.Trail.MyInputData.Configuration.Weekend
+			);
+
+			this.officeHoursHandler.ApprovalCount[0] = this.agent.Trail.MyInputData.MetaData.NumOfTodayAutoApproval;
+			this.officeHoursHandler.ApprovalCount[1] = this.agent.Trail.MyInputData.MetaData.NumOfYesterdayAutoApproval;
+
+			this.officeHoursHandler.OpenLoanAmount[0] = this.agent.Trail.MyInputData.MetaData.TodayLoanSum;
+			this.officeHoursHandler.OpenLoanAmount[1] = this.agent.Trail.MyInputData.MetaData.YesterdayLoanSum;
+		} // InitOfficeHoursHandler
+
 		private readonly Agent agent;
-		private readonly OfficeHoursHandler officeHoursHandler;
+		private OfficeHoursHandler officeHoursHandler;
 	} // class Checker
 } // namespace
