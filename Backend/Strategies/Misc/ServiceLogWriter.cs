@@ -10,10 +10,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using StructureMap;
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB;
-	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.CallCreditStrategy;
 	using Ezbob.Backend.Strategies.CreditSafe;
 
@@ -115,14 +112,14 @@
 							if (oPackage.Out.ExperianConsumer != null) {
 								history.Score = oPackage.Out.ExperianConsumer.BureauScore;
 								history.CII = oPackage.Out.ExperianConsumer.CII;
-								history.CaisBalance = GetConsumerCaisBalance(oPackage.Out.ExperianConsumer.Cais);
+								history.CaisBalance = ExperianLib.Utils.GetConsumerCaisBalance(oPackage.Out.ExperianConsumer.Cais);
 							}
 							historyRepo.SaveOrUpdate(history);
 							break;
 
 						case ExperianServiceType.LimitedData:
 							history.Score = (oPackage.Out.ExperianLtd == null) ? -1 : (oPackage.Out.ExperianLtd.CommercialDelphiScore ?? -1);
-							history.CaisBalance = GetLimitedCaisBalance(oPackage.Out.ExperianLtd);
+							history.CaisBalance = ExperianLib.Utils.GetLimitedCaisBalance(oPackage.Out.ExperianLtd);
 							historyRepo.SaveOrUpdate(history);
 							break;
 
@@ -151,35 +148,6 @@
 				);
 			} // try
 		} // WriteToLog
-
-		public static decimal? GetConsumerCaisBalance(List<ExperianConsumerDataCais> cais) {
-			if (cais != null) {
-				return cais.Where(c => c.AccountStatus != "S" && c.Balance.HasValue && c.MatchTo == 1).Sum(c => c.Balance);
-			}
-			return null;
-		}
-
-		public static decimal? GetLimitedCaisBalance(ExperianLtd oExperianLtd) {
-			if (oExperianLtd == null)
-				return null;
-
-			int nFoundCount = 0;
-			decimal balance = 0;
-
-			foreach (var oRow in oExperianLtd.Children) {
-				if (oRow.GetType() != typeof(ExperianLtdDL97))
-					continue;
-
-				nFoundCount++;
-
-				var dl97 = (ExperianLtdDL97)oRow;
-
-				if ((dl97.AccountState != null) && (dl97.AccountState != "S"))
-					balance += dl97.CurrentBalance ?? 0;
-			} // for each
-
-			return nFoundCount == 0 ? (decimal?)null : balance;
-		} // GetLimitedCaisBalance
 
 		public WriteToLogPackage Package { get; set; }
 	}

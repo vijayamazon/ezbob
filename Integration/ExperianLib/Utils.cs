@@ -1,6 +1,8 @@
 ﻿namespace ExperianLib
 {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Text;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
@@ -56,6 +58,13 @@
 				errors.AppendFormat("Can't read value for {0} because of exception: {1}", key, e.Message);
 			} // try
 		} // TryRead
+
+		public static decimal? GetConsumerCaisBalance(List<ExperianConsumerDataCais> cais) {
+			if (cais != null) {
+				return cais.Where(c => c.AccountStatus != "S" && c.Balance.HasValue && c.MatchTo == 1).Sum(c => c.Balance);
+			}
+			return null;
+		}
 
         public static decimal? GetLimitedCaisBalance(ExperianLtd oExperianLtd)
         {
