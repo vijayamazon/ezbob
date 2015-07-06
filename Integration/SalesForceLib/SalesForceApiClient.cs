@@ -174,7 +174,7 @@
         }
 
         public void CreateActivity(ActivityModel model) {
-            string modelStr = model.ToJsonExtension(true);
+            string modelStr = model.ToJsonExtension();
             Log.InfoFormat("SalesForce CreateActivity\n {0}", modelStr);
 
             if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {

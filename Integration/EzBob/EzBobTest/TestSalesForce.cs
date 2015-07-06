@@ -2,9 +2,7 @@
 	using System;
 	using System.Linq;
 	using Ezbob.Utils.Extensions;
-	using EzBob.CommonLib;
 	using log4net;
-	using Newtonsoft.Json;
 	using NUnit.Framework;
 	using SalesForceLib;
 	using SalesForceLib.Models;
@@ -12,7 +10,7 @@
 
 	[TestFixture]
 	public class TestSalesForce {
-		protected readonly ILog Log = LogManager.GetLogger(typeof (TestSalesForce));
+		protected readonly static ILog Log = LogManager.GetLogger(typeof (TestSalesForce));
 
 		[SetUp]
 		public void Init() {
@@ -111,7 +109,7 @@
 				EndDate = new DateTime(2015, 01, 28),
 				IsOpportunity = false,
 			};
-			Log.Debug(aModel.ToJsonExtension(true));
+			Log.Debug(aModel.ToJsonExtension());
 			Log.Debug("call ChangeEmail");
 
 			var changeModel = new {
@@ -240,6 +238,10 @@
 		public void TestFakeGetActivity() {
 			ISalesForceAppClient client = new FakeApiClient();
 			var activity = client.GetActivity("");
+			Assert.IsNotNull(activity);
+			Assert.IsNullOrEmpty(client.Error);
+			Assert.IsNullOrEmpty(activity.Error);
+			Assert.Greater(activity.Activities.Count(), 0);
 		}
 
 	}
