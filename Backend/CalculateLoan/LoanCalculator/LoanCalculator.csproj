@@ -53,6 +53,7 @@
     <Compile Include="Library.cs" />
     <Compile Include="Methods\AGetAmountToChargeMethod.cs" />
     <Compile Include="Methods\AMethod.cs" />
+    <Compile Include="Methods\APRCalculateMethod.cs" />
     <Compile Include="Methods\AWithActualDailyLoanStatusMethod.cs" />
     <Compile Include="Methods\CalculateBalanceMethod.cs" />
     <Compile Include="Methods\CalculateEarnedInterestMethod.cs" />

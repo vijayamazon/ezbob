@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 
 	internal class APRCalculateMethod : AMethod {
 
@@ -15,27 +16,29 @@
 
 
 		// see \ezbob\Integration\PaymentServices\Calculators\APRCalculator.cs
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual decimal Execute() {
-			try {
-				WorkingModel.ValidateSchedule();
 
-				//var x = 1.0;
-				//for (var i = 0; i < 10000; i++) {
-				//	var f_x = f(x, amount - setupFee, monthlyRepayments);
-				//	if (Math.Abs(f_x) < 1e-6)
-				//		break;
-				//	var f_prime_x = f_prime(x, monthlyRepayments);
-				//	var dx = f_x / f_prime_x;
-				//	x -= dx;
-				//}
-				//return Math.Round(x * 100, 2);
+			WorkingModel.ValidateSchedule();
 
-			} catch (Exception) {
-				
-				throw;
-			}
-			
-		
+			//var x = 1.0;
+			//for (var i = 0; i < 10000; i++) {
+			//	var f_x = f(x, amount - setupFee, monthlyRepayments);
+			//	if (Math.Abs(f_x) < 1e-6)
+			//		break;
+			//	var f_prime_x = f_prime(x, monthlyRepayments);
+			//	var dx = f_x / f_prime_x;
+			//	x -= dx;
+			//}
+			//return Math.Round(x * 100, 2);
+
+
+
 			return 0m;
 		} // Execute
 
