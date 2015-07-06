@@ -1,7 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
     using System;
-    using System.Globalization;
     using System.Linq;
     using System.Web.Mvc;
     using ConfigManager;
@@ -46,13 +45,13 @@
             ILoanOptionsRepository loanOptionsRepository, 
 			ISession session)
         {
-            _loans = loans;
-            _builder = builder;
-            _cashRequests = cashRequests;
-            _loanModelBuilder = loanModelBuilder;
-            _loanBuilder = loanBuilder;
-            _history = history;
-            _context = context;
+			this._loans = loans;
+			this._builder = builder;
+			this._cashRequests = cashRequests;
+			this._loanModelBuilder = loanModelBuilder;
+			this._loanBuilder = loanBuilder;
+			this._history = history;
+			this._context = context;
             this.loanOptionsRepository = loanOptionsRepository;
 	        this.session = session;
 	        this.serviceClient = new ServiceClient();
@@ -63,12 +62,12 @@
         [NoCache]
         public JsonResult Loan(int id)
         {
-            var loan = _loans.Get(id);
+			var loan = this._loans.Get(id);
 
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
             calc.GetState();
 
-            var model = _builder.BuildModel(loan);
+			var model = this._builder.BuildModel(loan);
 
             model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
@@ -115,7 +114,7 @@
         [Transactional]
         public JsonResult RecalculateCR(EditLoanDetailsModel model)
         {
-            var cr = _cashRequests.Get(model.CashRequestId);
+			var cr = this._cashRequests.Get(model.CashRequestId);
             return Json(RecalculateModel(model, cr, model.Date));
         }
 
@@ -130,7 +129,7 @@
         [Transactional]
         public JsonResult Recalculate(int id, EditLoanDetailsModel model)
         {
-            var cr = _loans.Get(id).CashRequest;
+			var cr = this._loans.Get(id).CashRequest;
             return Json(RecalculateModel(model, cr, DateTime.UtcNow));
         }
 
@@ -139,10 +138,10 @@
         [Transactional]
         public JsonResult LoanCR(long id)
         {
-            var cr = _cashRequests.Get(id);
+			var cr = this._cashRequests.Get(id);
             var amount = cr.ApprovedSum();
-            var loan = _loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
-            var model = _builder.BuildModel(loan);
+			var loan = this._loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
+			var model = this._builder.BuildModel(loan);
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
@@ -151,7 +150,7 @@
         [Transactional]
         public JsonResult LoanCR(EditLoanDetailsModel model)
         {
-            var cr = _cashRequests.Get(model.CashRequestId);
+			var cr = this._cashRequests.Get(model.CashRequestId);
 
             model = RecalculateModel(model, cr, model.Date);
 
@@ -170,18 +169,18 @@
         [Transactional]
         public JsonResult Loan(EditLoanDetailsModel model)
         {
-            var loan = _loans.Get(model.Id);
+			var loan = this._loans.Get(model.Id);
 
             var historyItem = new LoanChangesHistory
             {
-                Data = _loanModelBuilder.BuildModel(loan).ToJSON(),
+				Data = this._loanModelBuilder.BuildModel(loan).ToJSON(),
                 Date = DateTime.UtcNow,
                 Loan = loan,
-                User = _context.User
+				User = this._context.User
             };
-            _history.Save(historyItem);
+			this._history.Save(historyItem);
 
-            _loanModelBuilder.UpdateLoan(model, loan);
+			this._loanModelBuilder.UpdateLoan(model, loan);
 
             //TODO update loan (apply all modifications)
             Log.DebugFormat("apply loan modifications for customer {0}", loan.Customer.Id);
@@ -189,7 +188,7 @@
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
             calc.GetState();
 
-            return Json(_loanModelBuilder.BuildModel(loan));
+			return Json(this._loanModelBuilder.BuildModel(loan));
         }
 
         private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now)
@@ -199,7 +198,7 @@
             if (model.HasErrors)
                 return model;
 
-            var loan = _loanModelBuilder.CreateLoan(model);
+			var loan = this._loanModelBuilder.CreateLoan(model);
             loan.LoanType = cr.LoanType;
             loan.CashRequest = cr;
 
@@ -217,7 +216,7 @@
             //TODO build loan model
             //Log.DebugFormat("calculate offer for customer {0}", loan.Customer.Id);
 
-            return _loanModelBuilder.BuildModel(loan);
+			return this._loanModelBuilder.BuildModel(loan);
         }
 
         [Ajax]
@@ -284,25 +283,26 @@
                 }
 
 	            if (save) {
-		            UpdateLoanOptions(loanID, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
+		            this.session.Refresh(loan);
+		            UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
 	            }
 	            return Json(result.Value);
 
             }
             catch (Exception editex)
             {
-                Log.Error("rescheduling edditor EXCEPTION: " + editex);
+                Log.Error("rescheduling editor EXCEPTION: " + editex);
             }
 
             return null;
         }
 
         [NonAction]
-        private void UpdateLoanOptions(int loanID, bool? stopAutoCharge, bool? stopLateFee, int? stopAutoChargePayment, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate, DateTime now)
+        private void UpdateLoanOptions(Loan loan, bool? stopAutoCharge, bool? stopLateFee, int? stopAutoChargePayment, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate, DateTime now)
         {
             if (stopAutoCharge != null || stopLateFee != null)
             {
-                LoanOptions options = this.loanOptionsRepository.GetByLoanId(loanID) ?? LoanOptions.GetDefault(loanID);
+                LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
 
                 if (stopLateFee == true)
                 {
@@ -323,13 +323,12 @@
                     DateTime? stopAutoChargeDate = null;
 
                     if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value > 0) {
-	                    var loan = this._loans.Get(loanID);
 	                    var loanSchedulesOrdered = loan.Schedule.Where(x => x.Date > now).OrderBy(x => x.Date).ToArray();
 						if (loanSchedulesOrdered.Any() && loanSchedulesOrdered.Count() >= stopAutoChargePayment.Value) {
 							stopAutoChargeDate = loanSchedulesOrdered[stopAutoChargePayment.Value-1].Date.Date.AddDays(1);
 						} else {
 							Log.ErrorFormat("Stop payment after {0} payments is impossible, new schedule have only {1} payments left. LoanID {2}",
-								stopAutoChargePayment.Value, loanSchedulesOrdered.Count(), loanID);
+								stopAutoChargePayment.Value, loanSchedulesOrdered.Count(), loan.Id);
 						}
                     }
                     
@@ -344,6 +343,7 @@
                     options.AutoPayment = true;
 
                 this.loanOptionsRepository.SaveOrUpdate(options);
+	            this.session.Flush();
             }
         }
 
@@ -382,17 +382,17 @@
         [Transactional]
         public JsonResult RemoveFreezeInterval(int id, int intervalid)
         {
-            Loan oLoan = _loans.Get(id);
+            Loan oLoan = this._loans.Get(id);
             LoanInterestFreeze lif = oLoan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
             if (lif != null)
                 lif.DeactivationDate = DateTime.UtcNow;
-            _loans.SaveOrUpdate(oLoan);
+			this._loans.SaveOrUpdate(oLoan);
             //TODO update loan (apply remove freeze)
             Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
 
             var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
             calc.GetState();
-            EditLoanDetailsModel model = _builder.BuildModel(oLoan);
+			EditLoanDetailsModel model = this._builder.BuildModel(oLoan);
 
             model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
