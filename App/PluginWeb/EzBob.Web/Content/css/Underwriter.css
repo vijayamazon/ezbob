@@ -2286,3 +2286,21 @@ button.btn-update-address, .button.btn-update-address{
 .float_left {
     float: left;
 }
+
+.err-region {
+    border: solid;
+    padding-left: 30px;
+    padding-bottom: 23px;
+    border-color: red;
+    border-radius: 5px;
+    border-width: 2px;
+    margin-top: 130px;
+}
+
+input[type="text"].err-field-black {
+    border-color: black;
+}
+
+input[type="text"].err-field-red {
+    border-color: red;
+}

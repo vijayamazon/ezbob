@@ -203,8 +203,8 @@ EzBob.LoanModel = Backbone.Model.extend({
 
 	removeFreezeInterval: function(intervalId) {
 		this.save({}, {
-			url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveFreezeInterval/' + (this.get('Id')) + '?intervalid=' + intervalId
-		});
+		    url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveFreezeInterval/' + (this.get('Id')) + '?intervalid=' + intervalId
+		}).always(function () { BlockUi('off'); });
 	}, // removeFreezeInterval
 
 	getInstallmentBefore: function(date) {

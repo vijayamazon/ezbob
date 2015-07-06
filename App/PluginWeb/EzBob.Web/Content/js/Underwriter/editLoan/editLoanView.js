@@ -6,17 +6,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     scheduleTemplate: $('#loan_editor_schedule_template').length > 0 ? _.template($('#loan_editor_schedule_template').html()) : null,
 
     initialize: function () {
-        this.bindTo(this.model, 'change sync', this.renderRegions, this);
+        this.bindTo(this.model, 'change sync', this.render, this);
         this.modelBinder = new Backbone.ModelBinder();
         this.editItemIndex = -1;
     }, // initialize
     bindings: {
-        //WithinWeek: "span[name=\"withinWeek\"]",
-        //WithinMonth: "span[name=\"withinMonth\"]",
-        //ReschedulingBalance: "span[name=\"withinAmount\"]",
-        //InterestRate: "span[name=\"Intrest\"]",
-        //OutsideWeek: "span[name=\"outsideWeek\"]",
-        //OutsideMonth: "span[name=\"outsideMonth\"]"
     },//bindings
     serializeData: function () {
         var data = this.model.toJSON();
@@ -46,15 +40,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         freezeEl: '.editloan-freeze-intervals-region',
         ok: '.save',
         buttons: '.buttons',
-        data_error: '#data-error',
-        amount_error: '#amount-error',
-        date_empty_intrest: '#date-empty-intrest',
-        date_error_intrest: '#date-error-intrest',
-        date_empty_fees: '#date-empty-fees',
-        date_error_fees: '#date-error-fees',
-        selection_error: '#selection-error',
-        submit_success: '#submit-success',
-        submit_fail: '#submit-fail'
+        err_head: '#err-head',
+        err_body: '#err-body',
+        err_footer: '#err-footer',
+        err_region: '#err-region'
     }, // ui
 
     editors: {
@@ -77,40 +66,59 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click .remove-freeze-interval': 'onRemoveFreezeInterval'
     }, // events
 
-    withinSelectChange: function() {
+    fillErrorPopup: function (params) {
+        var self = this;
+        this.ui.err_head.text(params.head);
+        this.ui.err_body.text(params.body);
+        this.ui.err_footer.text(params.footer);
+        this.ui.err_head.css('color', params.color);
+        this.ui.err_region.css('border-color', params.color);
+        this.ui.err_region.fadeIn();
+        for (var i=0; i<params.selectors.length;i++)
+            params.selectors[i].addClass('err-field-red');
+        setTimeout(function() {
+            for (var i = 0; i < params.selectors.length; i++)
+                params.selectors[i].removeClass('err-field-red');
+            self.ui.err_region.fadeOut();
+        }, params.timeout);
+    },
+
+    withinSelectChange: function () {
         var duration = $('#withinSelect option:selected').text();
-        var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, rescheduleIn: 'true' });
+        var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, rescheduleIn: 'true', save: 'false'});
         var self = this;
         request.success(function (res) {
-            $('#withinPayments').text(res.IntervalsNum + " " + duration);
+            $('#withinPayments').text(res.IntervalsNum);
             $('#withinPrincipal').text(EzBob.formatPounds(res.ReschedulingBalance));
             $('#withinIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
         }); //on success
 
         request.fail(function () {
-            self.ui.data_error.fadeIn().fadeOut(3000);
+            var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+            self.fillErrorPopup(params);
         });//on fail
     },
     outsideSelectChange: function() {
-        $('#ReschedulingOUTNotification').hide();
         var amount = $("#outsidePrincipal").val();
         var duration = $('#outsideSelect option:selected').text();
         if (typeof amount === 'undefined' || amount <= 0) {
-            this.ui.amount_error.fadeIn().fadeOut(3000);
+            var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '7000' };
+            this.fillErrorPopup(params);
         } else {
-            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false' });
+            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
             var self = this;
             request.success(function (res) {
-                $('#outsidePayments').text(res.IntervalsNum + " " + duration);
+                $('#outsidePayments').text(res.IntervalsNum);
                 $('#outsideIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
                 if (res.Error != null && res.Error.length > 0) {
-                    $('#ReschedulingOUTNotification').text(res.Error);
-                    $('#ReschedulingOUTNotification').fadeIn();
+                    var params = { head: 'Please fix the marked field', body: res.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [self.$el.find('#outsidePrincipal')], timeout: '7000' };
+                    self.fillErrorPopup(params);
                 }
             }); //on success
 
             request.fail(function () {
-                self.ui.data_error.fadeIn().fadeOut(3000);
+                var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+                self.fillErrorPopup(params);
             });//on fail
         }
     },
@@ -123,13 +131,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             requestParam.intervalType = $('#withinSelect option:selected').text();
             requestParam.rescheduleIn = 'true';
         }
-        else if (checkedRadio === 'false') {
+        if (checkedRadio === 'false') {
             requestParam.intervalType = $('#outsideSelect option:selected').text();
             requestParam.AmountPerInterval = $('#outsideAmount').val();
             requestParam.rescheduleIn = 'false';
-        } else {
-            this.ui.selection_error.fadeIn().fadeOut(3000);
-            return false;
         }
 
         var isStopCharges = $('#automatic-charges').is(':checked');
@@ -142,39 +147,45 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         var feesFrom = EzBob.formatDateTimeCS($('#fees-calendar-from').val());
         var feesTo = EzBob.formatDateTimeCS($('#fees-calendar-to').val());
 
-        if (chargesVal < 0 || chargesVal === "") {
-            $('#charges-error').fadeIn().fadeOut(3000);
-            return false;
-        }
+
         if (isStopCharges) {
+            if (chargesVal < 0 || chargesVal === "") {
+                var params = { head: 'Please fix the marked field', body: 'Number of payments must be 0 or greater', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#charges-payments')], timeout: '7000' };
+                this.fillErrorPopup(params);
+                return false;
+            }
             requestParam.stopAutoCharge = 'true';
             requestParam.stopAutoChargePayment = chargesVal;
         }
-        if (isStopIntrest) {
-            if (interestTo === "" || interestFrom === "") {
-                this.ui.date_empty_intrest.fadeIn().fadeOut(3000);
-                return false;
-            }
-            if (new Date(interestFrom).getTime() > new Date(interestTo).getTime()) {
-                this.ui.date_error_intrest.fadeIn().fadeOut(3000);
-                return false;
-            }
-            requestParam.freezeInterest = 'true';
-            requestParam.freezeStartDate = interestFrom;
-            requestParam.freezeEndDate = interestTo;
-        }
         if (isStopFees) {
             if (feesTo === "" || feesFrom === "") {
-                this.ui.date_empty_fees.fadeIn().fadeOut(3000);
+                var params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
                 return false;
             }
             if (new Date(feesFrom).getTime() > new Date(feesTo).getTime()) {
-                this.ui.date_error_fees.fadeIn().fadeOut(3000);
+                var params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
                 return false;
             }
             requestParam.stopLateFee = 'true';
             requestParam.lateFeeStartDate = feesFrom;
             requestParam.lateFeeEndDate = feesTo;
+        }
+        if (isStopIntrest) {
+            if (interestTo === "" || interestFrom === "") {
+                var params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
+                return false;
+            }
+            if (new Date(interestFrom).getTime() > new Date(interestTo).getTime()) {
+                var params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
+                return false;
+            }
+            requestParam.freezeInterest = 'true';
+            requestParam.freezeStartDate = interestFrom;
+            requestParam.freezeEndDate = interestTo;
         }
 
         var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
@@ -183,42 +194,45 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
         oRequest.success(function(res) {
             if (res.Error == null || res.Error === "") {
-                self.ui.submit_success.fadeIn().fadeOut(3000);
+                var params = { head: 'Data has been successfuly sent to server', body: '', footer: 'Window will auto close', color: 'green', selectors: [], timeout: '7000' };
+                self.fillErrorPopup(params);
+                
                 setTimeout(function() { self.close(); }, 3500);
             } else {
-                self.ui.submit_fail.text(res.Error);
-                self.ui.submit_fail.fadeIn().fadeOut(10000);
+                var params = { head: 'Unexpected error occured', body: res.Error, footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+                self.fillErrorPopup(params);
             }
             return false;
         }); //on success
 
         oRequest.fail(function () {
-            self.ui.submit_fail.text("There has been an error sending data to server");
-            self.ui.submit_fail.fadeIn().fadeOut(3000);
+            var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+            self.fillErrorPopup(params);
             return false;
         });//on fail
     },
 
     onChangeAmount: function () {
-        $('#ReschedulingOUTNotification').hide();
         var amount = $("#outsidePrincipal").val();
         var duration = $('#outsideSelect option:selected').text();
         if (typeof amount === 'undefined' || amount <= 0) {
-            this.ui.amount_error.fadeIn().fadeOut(3000);
+            var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
+            this.fillErrorPopup(params);
         } else {
-            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false' });
+            var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
             var self = this;
             request.success(function (res) {
-                $('#outsidePayments').text(res.IntervalsNum + " " + duration);
+                $('#outsidePayments').text(res.IntervalsNum);
                 $('#outsideIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
                 if (res.Error!=null && res.Error.length > 0) {
-                    $('#ReschedulingOUTNotification').text(res.Error);
-                    $('#ReschedulingOUTNotification').fadeIn();
+                    var params1 = { head: 'Please fix the marked field', body: res.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [self.$el.find('#outsidePrincipal')], timeout: '60000' };
+                    self.fillErrorPopup(params1);
                 }
             }); //on success
 
             request.fail(function () {
-                self.ui.data_error.fadeIn().fadeOut(3000);
+                var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+                self.fillErrorPopup(params);
             });//on fail
         }
     },
@@ -372,7 +386,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         this.setUpView();
     }, // onRender
 
-    setUpView: function() {
+    setUpView: function () {
         this.$el.find('#fees-calendar-from').datepicker('setDate', new Date());
         this.$el.find('#fees-calendar-to').datepicker();
         this.$el.find('#intrest-calendar-from').datepicker('setDate', new Date());
@@ -380,21 +394,22 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
         var within = this.model.get('ReResultIn');
         if (within.Error != null && within.Error.length > 0) {
-            this.$el.find('#ReschedulingINNotification').text(within.Error);
-            this.$el.find('#ReschedulingINNotification').show();
-            this.$el.find('#exception-div').hide();
-            this.$el.find('#radio-2').prop('checked', true);
+            if (within.Error === "Within loan arrangement is impossible") {
+                this.$el.find('#exception-div').css('opacity', '0.5');
+                this.$el.find('#radio-1').attr('disabled', true);
+                this.$el.find('#withinSelect').attr('disabled', true);
+            }
         }
-        this.$el.find('#withinPayments').text(within.IntervalsNum + " Month");
+        this.$el.find('#withinPayments').text(within.IntervalsNum);
         this.$el.find('#withinPrincipal').text(EzBob.formatPounds(within.ReschedulingBalance));
         this.$el.find('#withinIntrest').text(EzBob.formatPounds(within.FirstPaymentInterest));
 
         var outside = this.model.get('ReResultOut');
         if (outside.Error != null && outside.Error.length > 0) {
-            this.$el.find('#ReschedulingOUTNotification').text(outside.Error);
-            this.$el.find('#ReschedulingOUTNotification').show();
+            var params = { head: 'Please fix the marked field', body: outside.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
+            this.fillErrorPopup(params);
         }
-        this.$el.find('#outsidePayments').text(outside.IntervalsNum + " Month");
+        this.$el.find('#outsidePayments').text(outside.IntervalsNum);
         this.$el.find('#outsidePrincipal').val(outside.DefaultPaymentPerInterval);
         this.$el.find('#outsideIntrest').text(EzBob.formatPounds(outside.FirstPaymentInterest));
 
@@ -441,6 +456,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     }, // onAddFreezeInterval
 
     onRemoveFreezeInterval: function (evt) {
+        BlockUi('on');
         this.model.removeFreezeInterval(evt.currentTarget.getAttribute('data-id'));
     }, // onRemoveFreezeInterval
 

@@ -1,294 +1,303 @@
 ﻿@model dynamic
 <script type="text/template" id="loan_editor_template">
-    
-	<div class="Container" style="width:1000px;">
 
-        <form class="form-inline" role="form" id="form-reschedule" onsubmit="return false;">
+    <div class="row Container" style="width:1200px;">
+        <div class="col-sm-8">
+            <form class="form-inline" role="form" id="form-reschedule" onsubmit="return false;">
 
-            <div class="row">
-                <h5>Within loan period</h5>
-            </div>
+                <div class="row">
+                    <h5><input type="radio" name="rescheduleIn" value="true" id="radio-1" style="vertical-align: top; margin-top: 7px;"><label for="radio-1">Within loan period</label></h5>
+                </div>
 
-            <div class="alert alert-danger center" style="display: none; text-align: center" id="data-error">Error retrieving data</div>
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="selection-error">One of the Radio Buttons must be selected</div>
-            <div class="row alert alert-info center" style="text-align: center; display: none;" id="ReschedulingINNotification"></div>
+                <div class="row" id="exception-div">
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <span class="float_left" style="vertical-align: top;">
+                            Re-schedule
+                            <span style="width: 150px; margin-top: -10px; display: inline-block">
+                                <select class="form-control" id="withinSelect" style="width: 150px; border-color: black;">
+                                    <option value="month">Month</option>
+                                    <option value="weeks">Week</option>
+                                </select>
+                                <span style="margin-left: 50px;">interval</span>
+                            </span>
+                        </span>
+                        <span class="float_left" style="vertical-align: top;">
+                            <span style="width: 130px; margin-top: -10px; display: inline-block">
+                                <span id="withinPayments" class="border-span"></span>
+                                <span style="margin-left: 40px;">#Payments</span>
+                            </span>
+                        </span>
+                        <span class="reg-span" style="margin-top: -10px;">of</span>
+                        <span class="float_left" style="vertical-align: top;">
+                            <span style="width: 130px; margin-top: -10px; display: inline-block">
+                                <span id="withinPrincipal" class="border-span"></span>
+                                <span style="margin-left: 48px;">£Principal</span>
+                            </span>
+                        </span>
+                        <span class="float_left" style="vertical-align: top;">
+                            <span style="width: 130px; margin-top: -10px; display: inline-block">
+                                <span id="withinIntrest" class="border-span"></span>
+                                <span style="margin-left: 50px;">£Interest</span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
 
-            <div class="row" id="exception-div">
-                <div class="col-sm-11 col-sm-offset-1">
+                <div class="row">
+                    <h5><input type="radio" name="rescheduleIn" value="false" id="radio-2" style="vertical-align: top; margin-top: 7px;"><label for="radio-2">Outside loan payment arangment</label></h5>
+                </div>
+
+                <div class="row" style="margin-bottom: 20px;">
+                    <div class="col-sm-11 col-sm-offset-1">
+                        <span class="float_left" style="vertical-align: top;">
+                            Re-schedule
+                            <span style="width: 150px; margin-top: -10px; display: inline-block">
+                                <select class="form-control" id="outsideSelect" style="width: 150px; border-color: black;">
+                                    <option value="month">Month</option>
+                                    <option value="weeks">Week</option>
+                                </select>
+                                <span style="margin-left: 50px;">interval</span>
+                            </span>
+                        </span>
+                        <span class="float_left" style="vertical-align: top;">
+                            <span style="width: 130px; margin-top: -10px; display: inline-block">
+                                <span id="outsidePayments" class="border-span"></span>
+                                <span style="margin-left: 40px;">#Payments</span>
+                            </span>
+                        </span>
+                        <span class="reg-span" style="margin-top: -10px;">of</span>
+                        <span class="float_left" style="vertical-align: top;">
+                            <span style="width: 130px; margin-top: -10px; display: inline-block">
+                                <span class="input-symbol-euro"><input class="form-control input-width err-field-black" type="text" id="outsidePrincipal" style="width:120px; margin-left: 20px; margin-bottom:0px;text-align: center;"></span>
+                                <span style="margin-left: 48px;">£Principal</span>
+                            </span>
+                        </span>
+                        <span class="float_left" style="vertical-align: top;">
+                            <span style="width: 130px; margin-top: -10px; display: inline-block">
+                                <span id="outsideIntrest" class="border-span"></span>
+                                <span style="margin-left: 50px;">£Interest</span>
+                            </span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="row">
                     <span class="float_left">
-                        <input type="radio" name="rescheduleIn" value="true" id="radio-1">
-                        Re-schedule
-                        <select class="form-control" id="withinSelect" style="width: 150px;">
-                            <option value="month">Month</option>
-                            <option value="weeks">Week</option>
-                        </select>
+                        <label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after&nbsp;</label>
                     </span>
+                    <input class="form-control input-width float_left" type="text" value="0" id="charges-payments" name="charges-payments" style="margin-top: -7px;margin-left: 9px;">
                     <span class="float_left">
-                        <span id="withinPayments" class="border-span"></span>
-                        <span class="reg-span">of</span>
-                    </span>
-                    <span class="float_left">
-                        <span id="withinPrincipal" class="border-span"></span>
-                    </span>
-                    <span class="float_left">
-                        <span id="withinIntrest" class="border-span"></span>
+                        &nbsp;payments.&nbsp;
                     </span>
                 </div>
-            </div>
+                <div class="row" style="margin-bottom: 14px;">
+                    <span style="display: none; font-weight: bold; margin-left: 22px;" id="stop-charges">Auto charges are stopped from <span id="stop-charges-date"></span></span>
+                </div>
 
-            <div class="row">
-                <h5>Outside loan payment arangment</h5>
-            </div>
-
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="amount-error">Only positive numeric values allowed</div>
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="ReschedulingOUTNotification"></div>
-
-            <div class="row">
-                <div class="col-sm-11 col-sm-offset-1">
+                <div class="row" style="margin-bottom: 20px;">
                     <span class="float_left">
-                        <input type="radio" name="rescheduleIn" value="false" id="radio-2">
-                        Re-schedule
-                        <select class="form-control" id="outsideSelect" style="width: 150px;">
-                            <option value="month">Month</option>
-                            <option value="weeks">Week</option>
-                        </select>
+                        <label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from&nbsp;</label>
+                    </span>
+                    <span class="float_left" style="margin-top: -5px;">
+                        <div class="input-group">
+                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            <input class="form-control input-width" type="text" id="fees-calendar-from">
+                        </div>
                     </span>
                     <span class="float_left">
-                        <span id="outsidePayments" class="border-span"></span>
-                        <span class="reg-span">of</span>
+                        &nbsp;until&nbsp;
                     </span>
                     <span class="float_left">
-                        <span class="input-symbol-euro"><input class="form-control input-width" type="number" id="outsidePrincipal" style="margin-left: 20px;"></span>
-                    </span>
-                    <span class="float_left">
-                        <span id="outsideIntrest" class="border-span"></span>
+                        <div class="input-group" style="margin-top: -5px;">
+                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            <input class="form-control input-width" type="text" id="fees-calendar-to">
+                        </div>
                     </span>
                 </div>
-            </div>
 
-            
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="charges-error">Number of payments must be 0 or greater</div>
-            
-            <div class="row">
-                <span class="float_left">
-                    <label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after&nbsp;</label>
-                </span>
-                <input class="form-control input-width float_left" type="number" value="0" id="charges-payments" name="charges-payments">
-                <span class="float_left">
-                    &nbsp;payments.&nbsp;<span style="display: none; font-weight: bold" id="stop-charges">Auto charges are stopped from <span id="stop-charges-date"></span></span>
-                </span>
-            </div>
-            
+                <div class="row" style="margin-bottom: 20px;">
+                    <span class="float_left">
+                        <label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from&nbsp;</label>
+                    </span>
+                    <span class="float_left" style="margin-left: 13px;">
+                        <div class="input-group" style="margin-top: -5px;">
+                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            <input class="form-control input-width" type="text" id="intrest-calendar-from">
+                        </div>
+                    </span>
+                    <span class="float_left">
+                        &nbsp;until&nbsp;
+                    </span>
+                    <span class="float_left">
+                        <div class="input-group" style="margin-top: -5px;">
+                            <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
+                            <input class="form-control input-width" type="text" id="intrest-calendar-to"><br />
+                        </div>
+                    </span>
+                </div>
 
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-fees">Until date must be greater then From date</div>
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-fees">Both dates must be set for this operation</div>
-
-            <div class="row">
-                <span class="float_left">
-                    <label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from&nbsp;</label>
-                </span>
-                <span class="float_left">
-                    <div class="input-group">
-                        <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                        <input class="form-control input-width" type="text" id="fees-calendar-from">
+                <div class="row" style="margin-top: -39px; margin-left: 20px;">
+                    <%if(hasFreezInterest===true){ %>
+                    <br />
+                    <%
+                    _.each(SInterestFreeze, function(item, idx) {
+                    var ary = item.split('|');
+                    if (ary[4] === ''){
+                    %>
+                    <div class="row">
+                        <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
+                        This loan's intrest is stoped from
+                        <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
+                        until
+                        <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
                     </div>
-                </span>
-                <span class="float_left">
-                    &nbsp;untill&nbsp;
-                </span>
-                <span class="float_left">
-                    <div class="input-group">
-                        <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                        <input class="form-control input-width" type="text" id="fees-calendar-to">
-                    </div>
-                </span>
+                    <%	}});}	%>
+                </div>
+
+                <div class="row">
+                    <button class="btn btn-primary pull-right cancel" id="resch-cancel-btn">Cancel</button>
+                    <button class="btn btn-primary pull-right" id="resch-submit-btn" style="  margin-right: 10px;">Submit</button>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-4">
+            <div class="row err-region" id="err-region" style="display: none">
+                <h4><div class="row" id="err-head" style="color:red;"></div></h4>
+                <div class="row" id="err-body"></div>
+                <hr />
+                <div class="row" id="err-footer"></div>
             </div>
-
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-error-intrest">Until date must be greater then From date</div>
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="date-empty-intrest">Both dates must be set for this operation</div>
-
-            <div class="row">
-                <span class="float_left">
-                    <label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from&nbsp;</label>
-                </span>
-                <span class="float_left">
-                    <div class="input-group">
-                        <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                        <input class="form-control input-width" type="text" id="intrest-calendar-from">
-                    </div>
-                </span>
-                <span class="float_left">
-                    &nbsp;untill&nbsp;
-                </span>
-                <span class="float_left">
-                    <div class="input-group">
-                        <span class="input-group-addon" style="display: inline"><i class="fa fa-calendar"></i></span>
-                        <input class="form-control input-width" type="text" id="intrest-calendar-to"><br />
-                    </div>
-                </span>
-            </div>
-
-            <%if(hasFreezInterest===true){ %>
-            <br />
-            <%
-            _.each(SInterestFreeze, function(item, idx) {
-            var ary = item.split('|');
-            if (ary[4] === ''){
-            %>
-            <div class="row">
-                <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-                This loan's intrest is stoped from
-                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
-                until
-                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
-            </div>
-            <%	}});	%>
-            <br />
-            <% }else{ %>
-            <div class="row"><br />There is no intrest freez for this loan.<br /></div>
-            <%}%>
-
-            <div class="row">
-                <button class="btn btn-primary pull-right cancel" id="resch-cancel-btn">Cancel</button>
-                <button class="btn btn-primary pull-right" id="resch-submit-btn">Submit</button>
-            </div>
+        </div>
+    </div>
 
 
-            <div class="row alert alert-danger center" style="display: none; text-align: center" id="submit-fail">See possible error text</div>
-            <div class="row alert alert-success center" style="display: none; text-align: center" id="submit-success">Data has been successfuly sent to server. Window will auto close</div>
-        </form>
-	</div>
-	
-	
-	
-	<div class="editloan-schedule-region"></div>
-	<div class="editloan-item-editor-region"></div>
-	<div class="buttons">
-		<hr />
-		<button class="btn btn-primary pull-right cancel">Cancel</button>
-		<button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
-	</div>
+    <div class="editloan-schedule-region"></div>
+    <div class="editloan-item-editor-region"></div>
+    <div class="buttons">
+        <hr />
+        <button class="btn btn-primary pull-right cancel">Cancel</button>
+        <button class="btn btn-primary pull-right save" style="margin-right: 10px;">Save Standard Schedule</button>
+    </div>
 </script>
 <hr>
 <script type="text/template" id="loan_editor_schedule_template">
 
+    <h4>Standard Schedule</h4>
+    <table class="table table-selected centered" style="white-space: nowrap;">
+        <thead class="box">
+            <tr class="box-title">
+                <th width="90">#</th>
+                <th>Date</th>
+                <th>Principal</th>
+                <th>Balance</th>
+                <th>
+                    Interest<br />
+                    Rate
+                </th>
+                <th>Interest</th>
+                <th>Fees</th>
+                <th>Status</th>
+                <th>Total</th>
+                <th width="200">Description</th>
+            </tr>
+        </thead>
+        <tbody>
+            <%
+            _.each(Items, function(item, i) {
+            var editClass = editItemIndex == i ? "editing" : "";
+            %>
+            <tr class="<%= editClass %>">
+                <td>
+                    <%- i+1 %>&nbsp;<%
+                    if (item.Editable) { %>
+                    <button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
+                    <%
+                    }
 
-	<h4>Standard Schedule</h4>
-	<table class="table table-selected centered" style="white-space: nowrap;">
-		<thead class="box">
-			<tr class="box-title">
-				<th width="90">#</th>
-				<th>Date</th>
-				<th>Principal</th>
-				<th>Balance</th>
-				<th>
-					Interest<br />
-					Rate
-				</th>
-				<th>Interest</th>
-				<th>Fees</th>
-				<th>Status</th>
-				<th>Total</th>
-				<th width="200">Description</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%
-			_.each(Items, function(item, i) {
-			var editClass = editItemIndex == i ? "editing" : "";
-			%>
-			<tr class="<%= editClass %>">
-				<td>
-					<%- i+1 %>&nbsp;<%
-					if (item.Editable) { %>
-					<button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
-					<%
-					}
+                    if (item.Deletable) { %>
+                    <button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
+                    <%
+                    }
+                    %>
+                </td>
 
-					if (item.Deletable) { %>
-					<button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
-					<%
-					}
-					%>
-				</td>
+                <td style="text-align: center"><%- EzBob.formatDateWithoutTime(item.Date) %></td>
+                <%
 
-				<td style="text-align: center"><%- EzBob.formatDateWithoutTime(item.Date) %></td>
-				<%
+                if (item.Type == "Fee") {
+                %>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+                <td style="text-align: center"><%- item.Status %></td>
+                <td></td>
+                <td style="text-align: center"><%- item.Description %></td>
+                <%
+                } else if (item.Type == "Installment") {
+                %>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
+                <td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+                <td style="text-align: center"><%- item.Status %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+                <td></td>
+                <%
+                } else if (item.Type == "Pacnet") {
+                %>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+                <td style="text-align: center"><%- item.Status %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+                <td style="text-align: center"><%- item.Description %></td>
+                <%
+                } else {
+                %>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
+                <td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
+                <td style="text-align: center"><%- item.Status %></td>
+                <td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
+                <td style="text-align: center"><%- item.Description %></td>
+                <%
+                }
+                %>
+            </tr>
+            <%
+            });
+            %>
+        </tbody>
+    </table>
+    <%
 
-				if (item.Type == "Fee") {
-				%>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-				<td style="text-align: center"><%- item.Status %></td>
-				<td></td>
-				<td style="text-align: center"><%- item.Description %></td>
-				<%
-				} else if (item.Type == "Installment") {
-				%>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
-				<td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-				<td style="text-align: center"><%- item.Status %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
-				<td></td>
-				<%
-				} else if (item.Type == "Pacnet") {
-				%>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-				<td style="text-align: center"><%- item.Status %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
-				<td style="text-align: center"><%- item.Description %></td>
-				<%
-				} else {
-				%>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Principal) %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Balance) %></td>
-				<td style="text-align: center"><%- EzBob.formatPercents (item.InterestRate) %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Interest) %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Fees) %></td>
-				<td style="text-align: center"><%- item.Status %></td>
-				<td style="text-align: center"><%- EzBob.formatPounds(item.Total) %></td>
-				<td style="text-align: center"><%- item.Description %></td>
-				<%
-				}
-				%>
-			</tr>
-			<%
-			});
-			%>
-		</tbody>
-	</table>
-	<%
+    if(HasErrors) {
+    %>
+    <div class="alert alert-error">
+        Following conditions(s) were not satisfied:
+        <ul>
+            <%
+            _.each(Errors, function(e) {
+            %>
+            <li><%- e %></li>
+            <%
+            });
+            %>
+        </ul>
+    </div>
+    <%
+    }
 
-	if(HasErrors) {
-	%>
-	<div class="alert alert-error">
-		Following conditions(s) were not satisfied:
-		<ul>
-			<%
-			_.each(Errors, function(e) {
-			%>
-			<li><%- e %></li>
-			<%
-			});
-			%>
-		</ul>
-	</div>
-	<%
-	}
-
-	%>
-	<div>
-		<button class="btn btn-primary add-installment">Add Installment</button>
-		<button class="btn btn-primary add-fee">Add Fee</button>
-	</div>
+    %>
+    <div>
+        <button class="btn btn-primary add-installment">Add Installment</button>
+        <button class="btn btn-primary add-fee">Add Fee</button>
+    </div>
 </script>
