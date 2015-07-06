@@ -63,6 +63,9 @@
     <Compile Include="AutoDecision\AutoApproval\Name.cs" />
     <Compile Include="Common\NameComparer.cs" />
     <Compile Include="MedalCalculation\OnlineCalculator.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\LastHourApprovalCount.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\HourlyApprovalCount.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\AvailableFundsOverdraft.cs" />
     <Compile Include="ProcessHistory\AutoApproval\CompanyIsDissolved.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
     <Compile Include="ProcessHistory\ProcessCheckpoints.cs" />

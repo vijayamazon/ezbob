@@ -44,15 +44,31 @@
 		} // CalculateSeniority
 
 		private int CalculateTodaysApprovals() {
-			return this.cashRequestsRepository.GetAll()
-				.Count(cr =>
-					cr.UnderwriterDecisionDate.HasValue &&
-						cr.UnderwriterDecisionDate.Value.Year == Now.Year &&
-						cr.UnderwriterDecisionDate.Value.Month == Now.Month &&
-						cr.UnderwriterDecisionDate.Value.Day == Now.Day &&
-						cr.AutoDecisionID == 1
-				);
+			return this.cashRequestsRepository.GetAll().Count(cr =>
+				cr.UnderwriterDecisionDate.HasValue &&
+				cr.UnderwriterDecisionDate.Value.Date == Now.Date &&
+				cr.AutoDecisionID == 1
+			);
 		} // CalculateTodaysApprovals
+
+		private int CalculateHourlyApprovals() {
+			return this.cashRequestsRepository.GetAll().Count(cr =>
+				cr.UnderwriterDecisionDate.HasValue &&
+				cr.UnderwriterDecisionDate.Value.Date == Now.Date &&
+				cr.UnderwriterDecisionDate.Value.Hour == Now.Hour &&
+				cr.AutoDecisionID == 1
+			);
+		} // CalculateHourlyTodaysApprovals
+
+		private int CalculateLastHourApprovals() {
+			DateTime anHourAgo = Now.AddHours(-1);
+
+			return this.cashRequestsRepository.GetAll().Count(cr =>
+				cr.UnderwriterDecisionDate.HasValue &&
+				cr.UnderwriterDecisionDate.Value >= anHourAgo &&
+				cr.AutoDecisionID == 1
+			);
+		} // CalculateLastHourApprovals
 
 		private decimal CalculateTodaysLoans() {
 			DateTime today = Now;

@@ -21,6 +21,8 @@
 				CheckIsBroker();
 				CheckCompanyIsDissolved();
 				CheckTodaysApprovals();
+				CheckHourlyApprovals();
+				CheckLastHourApprovals();
 				CheckTodaysLoans();
 				CheckOutstandingOffers(outstandingOffers);
 				CheckAMLResult();
@@ -438,6 +440,38 @@
 				);
 			} // if
 		} // CheckTodaysApprovals
+
+		private void CheckHourlyApprovals() {
+			int autoApproveMaxHourlyApprovals = this.trail.MyInputData.Configuration.MaxHourlyApprovals;
+
+			if (this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals >= autoApproveMaxHourlyApprovals) {
+				StepFailed<HourlyApprovalCount>().Init(
+					this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals,
+					autoApproveMaxHourlyApprovals
+				);
+			} else {
+				StepDone<HourlyApprovalCount>().Init(
+					this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals,
+					autoApproveMaxHourlyApprovals
+				);
+			} // if
+		} // CheckHourlyApprovals
+
+		private void CheckLastHourApprovals() {
+			int autoApproveMaxLastHourApprovals = this.trail.MyInputData.Configuration.MaxLastHourApprovals;
+
+			if (this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals >= autoApproveMaxLastHourApprovals) {
+				StepFailed<LastHourApprovalCount>().Init(
+					this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals,
+					autoApproveMaxLastHourApprovals
+				);
+			} else {
+				StepDone<LastHourApprovalCount>().Init(
+					this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals,
+					autoApproveMaxLastHourApprovals
+				);
+			} // if
+		} // CheckLastHourApprovals
 
 		private void CheckTodaysLoans() {
 			int autoApproveMaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans;

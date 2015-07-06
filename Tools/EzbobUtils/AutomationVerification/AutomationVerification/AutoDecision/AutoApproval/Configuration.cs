@@ -20,6 +20,8 @@
 		public virtual int MaxOutstandingOffers { get; set; }
 		public virtual int MaxTodayLoans { get; set; }
 		public virtual int MaxDailyApprovals { get; set; }
+		public virtual int MaxHourlyApprovals { get; set; }
+		public virtual int MaxLastHourApprovals { get; set; }
 		public virtual int MaxAllowedDaysLate { get; set; }
 		public virtual int MaxNumOfOutstandingLoans { get; set; }
 		public virtual decimal MinRepaidPortion { get; set; }

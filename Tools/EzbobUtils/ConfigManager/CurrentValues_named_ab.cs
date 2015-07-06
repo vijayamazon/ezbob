@@ -156,6 +156,14 @@
 			get { return this[Variables.AutoApproveMaxDailyApprovals]; }
 		}
 
+		public virtual VariableValue AutoApproveMaxHourlyApprovals {
+			get { return this[Variables.AutoApproveMaxHourlyApprovals]; }
+		}
+
+		public virtual VariableValue AutoApproveMaxLastHourApprovals {
+			get { return this[Variables.AutoApproveMaxLastHourApprovals]; }
+		}
+
 		public virtual VariableValue AutoApproveMaxNumOfOutstandingLoans {
 			get { return this[Variables.AutoApproveMaxNumOfOutstandingLoans]; }
 		}

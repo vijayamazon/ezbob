@@ -13,6 +13,8 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @Today DATE = CONVERT(DATE, @Now)
+	DECLARE @CurrentCalendarHour INT = DATEPART(hour, @Now)
+	DECLARE @AnHourAgo DATETIME = DATEADD(hour, -1, @Now)
 
 	------------------------------------------------------------------------------
 	--
@@ -214,6 +216,56 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	--
+	-- Select number of loans auto approved during this calendar hour
+	-- (i.e. if it is 12:44 now calendar hour is 12:00 - 13:00).
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE @HourlyAutoApprovalCount INT = ISNULL((
+		SELECT
+			COUNT(DISTINCT cr.Id)
+		FROM
+			CashRequests cr
+			INNER JOIN Customer c
+				ON cr.IdCustomer = c.Id
+				AND c.IsTest = 0
+		WHERE
+			cr.AutoDecisionID = 1 -- Auto Approval
+			AND
+			cr.UnderwriterDecisionDate IS NOT NULL
+			AND
+			CONVERT(DATE, cr.UnderwriterDecisionDate) = @Today
+			AND
+			DATEPART(hour, cr.UnderwriterDecisionDate) = @CurrentCalendarHour
+	), 0)
+
+	------------------------------------------------------------------------------
+	--
+	-- Select number of loans auto approved during last hour
+	-- (i.e. if it is 12:44 now last hour is 11:44 - 12:44).
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE @LastHourAutoApprovalCount INT = ISNULL((
+		SELECT
+			COUNT(DISTINCT cr.Id)
+		FROM
+			CashRequests cr
+			INNER JOIN Customer c
+				ON cr.IdCustomer = c.Id
+				AND c.IsTest = 0
+		WHERE
+			cr.AutoDecisionID = 1 -- Auto Approval
+			AND
+			cr.UnderwriterDecisionDate IS NOT NULL
+			AND
+			@AnHourAgo <= cr.UnderwriterDecisionDate
+			AND
+			cr.UnderwriterDecisionDate <= @Now
+	), 0)
+
+	------------------------------------------------------------------------------
+	--
 	-- Select amount of loans auto approved today.
 	--
 	------------------------------------------------------------------------------
@@ -411,7 +463,10 @@ BEGIN
 
 		IsBrokerCustomer           = CONVERT(BIT, (CASE WHEN c.BrokerID IS NULL THEN 0 ELSE 1 END)),
 		IsLimitedCompanyType       = CONVERT(BIT, (CASE WHEN c.TypeOfBusiness IN ('Limited', 'LLP') THEN 1 ELSE 0 END)),
+
 		NumOfTodayAutoApproval     = @TodayAutoApprovalCount,
+		NumOfHourlyAutoApprovals   = @HourlyAutoApprovalCount,
+		NumOfLastHourAutoApprovals = @LastHourAutoApprovalCount,
 		TodayLoanSum               = @TodayLoanSum,
 
 		FraudStatusValue           = @FraudStatus,

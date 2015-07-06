@@ -53,6 +53,8 @@ namespace ConfigManager {
 		AutoApproveMaxAllowedDaysLate,
 		AutoApproveMaxAmount,
 		AutoApproveMaxDailyApprovals,
+		AutoApproveMaxHourlyApprovals,
+		AutoApproveMaxLastHourApprovals,
 		AutoApproveMaxNumOfOutstandingLoans,
 		AutoApproveMaxOutstandingOffers,
 		AutoApproveMaxTodayLoans,
