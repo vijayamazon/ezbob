@@ -71,15 +71,12 @@
 		} // CalculateLastHourApprovals
 
 		private decimal CalculateTodaysLoans() {
-			DateTime today = Now;
-
-			var todayLoans = this.loanRepository.GetAll()
-				.Where(l =>
-					(l.Date.Year == today.Year) &&
-						(l.Date.Month == today.Month) &&
-						(l.Date.Day == today.Day) &&
-						(l.Date < today)
-				);
+			var todayLoans = this.loanRepository.GetAll().Where(l =>
+				(l.Date.Date == Now.Date) &&
+				(l.Date < Now) &&
+				(l.CashRequest != null) &&
+				(l.CashRequest.AutoDecisionID == 1)
+			);
 
 			decimal todayLoansAmount = 0;
 

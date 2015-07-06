@@ -275,6 +275,9 @@ BEGIN
 			SUM(l.LoanAmount)
 		FROM
 			Loan l
+			INNER JOIN CashRequests r
+				ON l.RequestCashId = r.Id
+				AND r.AutoDecisionID = 1 -- auto approve
 		WHERE
 			CONVERT(DATE, l.[Date]) = @Today
 			AND
