@@ -108,6 +108,10 @@
 			get { return this[Variables.AutoApproveAllowedCaisStatusesWithoutLoan]; }
 		}
 
+		public virtual VariableValue AutoApproveAvailableFundsOverdraft {
+			get { return this[Variables.AutoApproveAvailableFundsOverdraft]; }
+		}
+
 		public virtual VariableValue AutoApproveBusinessScoreThreshold {
 			get { return this[Variables.AutoApproveBusinessScoreThreshold]; }
 		}

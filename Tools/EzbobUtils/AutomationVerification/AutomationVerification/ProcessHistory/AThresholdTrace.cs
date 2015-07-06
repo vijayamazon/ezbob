@@ -3,9 +3,9 @@
 		protected AThresholdTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
-		public virtual ATrace Init(decimal nScore, decimal nThreshold) {
-			Value = nScore;
-			Threshold = nThreshold;
+		public virtual ATrace Init(decimal value, decimal threshold) {
+			Value = value;
+			Threshold = threshold;
 
 			Comment = string.Format(
 				"{0} is {1}, threshold is {2}",

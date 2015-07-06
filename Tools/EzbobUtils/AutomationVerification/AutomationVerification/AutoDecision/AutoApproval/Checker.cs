@@ -48,6 +48,7 @@
 			RoundAmount();
 			AllowedRange();
 			Complete();
+			AvailableFundsOverdraft();
 		} // Run
 
 		public T StepForceFailed<T>() where T : ATrace {
@@ -113,6 +114,10 @@
 			get { return this.agent.Trail.SafeAmount; }
 			set { this.agent.Trail.Amount = value; }
 		} // ApprovedAmount
+
+		private decimal RoundedAmount {
+			get { return this.agent.Trail.RoundedAmount; }
+		} // RoundedAmount
 
 		private DateTime Now {
 			get { return this.agent.Now; }
@@ -509,6 +514,19 @@
 			else
 				StepFailed<Complete>().Init(nApprovedAmount);
 		} // Complete
+
+		private void AvailableFundsOverdraft() {
+			decimal autoApprovedAmount = RoundedAmount;
+			decimal availableFunds = Trail.MyInputData.AvailableFunds;
+			decimal allowedOverdraft = -Math.Abs(Trail.MyInputData.Configuration.AvailableFundsOverdraft);
+
+			decimal reminder = availableFunds - autoApprovedAmount;
+
+			if (reminder >= allowedOverdraft)
+				StepDone<AvailableFundsOverdraft>().Init(reminder, allowedOverdraft);
+			else
+				StepFailed<AvailableFundsOverdraft>().Init(reminder, allowedOverdraft);
+		} // AvailableFundsOverdraft
 
 		private readonly Agent agent;
 	} // class Checker

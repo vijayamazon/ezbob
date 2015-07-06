@@ -43,6 +43,7 @@
 				RoundAmount();
 				CheckAllowedRange();
 				CheckComplete();
+				CheckAvailableFunds();
 			} catch (Exception ex) {
 				StepForceFailed<ExceptionThrown>().Init(ex);
 			} // try
@@ -170,6 +171,19 @@
 			else
 				StepFailed<Complete>().Init(nAutoApprovedAmount);
 		} // CheckComplete
+
+		private void CheckAvailableFunds() {
+			int autoApprovedAmount = this.trail.RoundedAmount;
+			decimal availableFunds = this.trail.MyInputData.AvailableFunds;
+			decimal allowedOverdraft = -Math.Abs(this.trail.MyInputData.Configuration.AvailableFundsOverdraft);
+
+			decimal reminder = availableFunds - autoApprovedAmount;
+
+			if (reminder >= allowedOverdraft)
+				StepDone<AvailableFundsOverdraft>().Init(reminder, allowedOverdraft);
+			else
+				StepFailed<AvailableFundsOverdraft>().Init(reminder, allowedOverdraft);
+		} // CheckAvailableFunds
 
 		private void CheckCustomerOpenLoans() {
 			int autoApproveMaxNumOfOutstandingLoans = CurrentValues.Instance.AutoApproveMaxNumOfOutstandingLoans;

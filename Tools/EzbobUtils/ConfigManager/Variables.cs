@@ -41,6 +41,7 @@ namespace ConfigManager {
 		AspireToMinSetupFee,
 		AutoApproveAllowedCaisStatusesWithLoan,
 		AutoApproveAllowedCaisStatusesWithoutLoan,
+		AutoApproveAvailableFundsOverdraft,
 		AutoApproveBusinessScoreThreshold,
 		AutoApproveCustomerMaxAge,
 		AutoApproveCustomerMinAge,

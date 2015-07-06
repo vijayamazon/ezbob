@@ -246,79 +246,63 @@
 
 				this.log.Info("Decided to auto approve rounded amount: {0}", response.AutoApproveAmount);
 
-				if (response.AutoApproveAmount != 0) {
-					if (this.trail.MyInputData.AvailableFunds > response.AutoApproveAmount) {
-						var source = this.loanSourceRepository.GetDefault();
-						var offerDualCalculator = new OfferDualCalculator(
-							this.customerId,
-							Now,
-							response.AutoApproveAmount,
-							this.hasLoans,
-							this.medalClassification,
-							source.ID,
-							source.DefaultRepaymentPeriod ?? 15
-						);
+				if (response.AutoApproveAmount == 0)
+					return;
 
-						OfferResult offerResult = offerDualCalculator.CalculateOffer();
+				var source = this.loanSourceRepository.GetDefault();
+				var offerDualCalculator = new OfferDualCalculator(
+					this.customerId,
+					Now,
+					response.AutoApproveAmount,
+					this.hasLoans,
+					this.medalClassification,
+					source.ID,
+					source.DefaultRepaymentPeriod ?? 15
+				);
 
-						if (CurrentValues.Instance.AutoApproveIsSilent) {
-							if (offerResult == null || offerResult.IsError) {
-								this.log.Alert(
-									"Customer {1} - will use manual. Offer result: {0}",
-									offerResult != null ? offerResult.Description : "",
-									this.customerId
-								);
+				OfferResult offerResult = offerDualCalculator.CalculateOffer();
 
-								response.CreditResult = CreditResultStatus.WaitingForDecision;
-								response.UserStatus = Status.Manual;
-								response.SystemDecision = SystemDecision.Manual;
-								response.LoanOfferUnderwriterComment = "Calculator failure - " + this.trail.UniqueID;
-							} else {
-								response.LoanOfferUnderwriterComment = "Silent Approve - " + this.trail.UniqueID;
-								response.CreditResult = CreditResultStatus.WaitingForDecision;
-								response.UserStatus = Status.Manual;
-								response.SystemDecision = SystemDecision.Manual;
-							} // if
+				if (offerResult == null || offerResult.IsError) {
+					this.log.Alert(
+						"Customer {1} - will use manual. Offer result: {0}",
+						offerResult != null ? offerResult.Description : "",
+						this.customerId
+					);
 
-							NotifyAutoApproveSilentMode(
-								response.AutoApproveAmount,
-								offerResult == null ? 0 : offerResult.Period,
-								offerResult == null ? 0 : offerResult.InterestRate / 100m,
-								offerResult == null ? 0 : offerResult.SetupFee / 100m
-							);
-						} else {
-							if (offerResult == null || offerResult.IsError) {
-								this.log.Alert(
-									"Customer {1} - will use manual. Offer result: {0}",
-									offerResult != null ? offerResult.Description : "",
-									this.customerId
-								);
+					response.CreditResult = CreditResultStatus.WaitingForDecision;
+					response.UserStatus = Status.Manual;
+					response.SystemDecision = SystemDecision.Manual;
+					response.LoanOfferUnderwriterComment = "Calculator failure - " + this.trail.UniqueID;
+				} else if (CurrentValues.Instance.AutoApproveIsSilent) {
+					response.CreditResult = CreditResultStatus.WaitingForDecision;
+					response.UserStatus = Status.Manual;
+					response.SystemDecision = SystemDecision.Manual;
+					response.LoanOfferUnderwriterComment = "Silent Approve - " + this.trail.UniqueID;
 
-								response.CreditResult = CreditResultStatus.WaitingForDecision;
-								response.UserStatus = Status.Manual;
-								response.SystemDecision = SystemDecision.Manual;
-								response.LoanOfferUnderwriterComment = "Calculator failure - " + this.trail.UniqueID;
-							} else {
-								response.CreditResult = CreditResultStatus.Approved;
-								response.UserStatus = Status.Approved;
-								response.SystemDecision = SystemDecision.Approve;
-								response.LoanOfferUnderwriterComment = "Auto Approval";
-								response.DecisionName = "Approval";
-								response.AppValidFor = Now.AddDays(this.trail.MyInputData.MetaData.OfferLength);
-								response.Decision = DecisionActions.Approve;
-								response.LoanOfferEmailSendingBannedNew =
-									this.trail.MyInputData.MetaData.IsEmailSendingBanned;
+					NotifyAutoApproveSilentMode(
+						response.AutoApproveAmount,
+						offerResult.Period,
+						offerResult.InterestRate / 100m,
+						offerResult.SetupFee / 100m
+					);
+				} else {
+					response.CreditResult = CreditResultStatus.Approved;
+					response.UserStatus = Status.Approved;
+					response.SystemDecision = SystemDecision.Approve;
+					response.LoanOfferUnderwriterComment = "Auto Approval";
 
-								// Use offer calculated data
-								response.RepaymentPeriod = offerResult.Period;
-								response.LoanSourceID = (int)LoanSourceName.COSME; // TODO replace with Loan source and not IsEU
-								response.LoanTypeID = offerResult.LoanTypeId;
-								response.InterestRate = offerResult.InterestRate / 100;
-								response.SetupFee = offerResult.SetupFee / 100;
-							}
-						} // if is silent
-					} // if there are enough funds
-				} // if auto approved amount is not 0
+					response.DecisionName = "Approval";
+					response.AppValidFor = Now.AddDays(this.trail.MyInputData.MetaData.OfferLength);
+					response.Decision = DecisionActions.Approve;
+					response.LoanOfferEmailSendingBannedNew = this.trail.MyInputData.MetaData.IsEmailSendingBanned;
+
+					// Use offer calculated data
+					response.RepaymentPeriod = offerResult.Period;
+					response.LoanSourceID = (int)LoanSourceName.COSME; // TODO replace with Loan source and not IsEU
+					response.LoanTypeID = offerResult.LoanTypeId;
+					response.InterestRate = offerResult.InterestRate / 100;
+					response.SetupFee = offerResult.SetupFee / 100;
+				} // if
 			} catch (Exception e) {
 				this.log.Error(e, "Exception during auto approval.");
 				response.LoanOfferUnderwriterComment = "Exception - " + this.trail.UniqueID;

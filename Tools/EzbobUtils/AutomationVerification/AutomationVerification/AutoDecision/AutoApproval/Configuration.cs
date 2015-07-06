@@ -4,12 +4,12 @@
 	using System.Reflection;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Newtonsoft.Json;
 
 	/// <summary>
-	///     Contains auto approval configuration parameters (max and min amount to approve, silent mode, etc.).
+	/// Contains auto approval configuration parameters (max and min amount to approve, silent mode, etc.).
 	/// </summary>
 	public class Configuration {
+		public virtual int AvailableFundsOverdraft { get; set; }
 		public virtual int ExperianScoreThreshold { get; set; }
 		public virtual int CustomerMinAge { get; set; }
 		public virtual int CustomerMaxAge { get; set; }

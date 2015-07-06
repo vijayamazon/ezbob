@@ -63,6 +63,7 @@
 			this.trail.MyInputData.SetDataAsOf(Now);
 
 			var cfg = new Configuration {
+				AvailableFundsOverdraft = CurrentValues.Instance.AutoApproveAvailableFundsOverdraft,
 				ExperianScoreThreshold = CurrentValues.Instance.AutoApproveExperianScoreThreshold,
 				CustomerMinAge = CurrentValues.Instance.AutoApproveCustomerMinAge,
 				CustomerMaxAge = CurrentValues.Instance.AutoApproveCustomerMaxAge,
