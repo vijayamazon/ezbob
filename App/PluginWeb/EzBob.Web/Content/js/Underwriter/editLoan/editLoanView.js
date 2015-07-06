@@ -98,7 +98,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             self.fillErrorPopup(params);
         });//on fail
     },
-    outsideSelectChange: function() {
+    outsideSelectChange: function () {
+        this.ui.err_region.fadeOut();
+        $('#outsidePrincipal').removeClass('err-field-red');
         var amount = $("#outsidePrincipal").val();
         var duration = $('#outsideSelect option:selected').text();
         if (typeof amount === 'undefined' || amount <= 0) {
@@ -213,6 +215,8 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     },
 
     onChangeAmount: function () {
+        this.ui.err_region.fadeOut();
+        $('#outsidePrincipal').removeClass('err-field-red');
         var amount = $("#outsidePrincipal").val();
         var duration = $('#outsideSelect option:selected').text();
         if (typeof amount === 'undefined' || amount <= 0) {
