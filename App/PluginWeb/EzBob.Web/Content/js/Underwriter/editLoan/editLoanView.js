@@ -87,6 +87,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         var duration = $('#withinSelect option:selected').text();
         var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, rescheduleIn: 'true', save: 'false'});
         var self = this;
+        BlockUi('on');
         request.success(function (res) {
             $('#withinPayments').text(res.IntervalsNum);
             $('#withinPrincipal').text(EzBob.formatPounds(res.ReschedulingBalance));
@@ -97,6 +98,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
             self.fillErrorPopup(params);
         });//on fail
+
+        request.always(function() {
+            BlockUi('off');
+        });
     },
     outsideSelectChange: function () {
         this.ui.err_region.fadeOut();
@@ -109,6 +114,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         } else {
             var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
             var self = this;
+            BlockUi('on');
             request.success(function (res) {
                 $('#outsidePayments').text(res.IntervalsNum);
                 $('#outsideIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
@@ -122,6 +128,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
                 var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
                 self.fillErrorPopup(params);
             });//on fail
+
+            request.always(function() {
+                BlockUi('off');
+            });
         }
     },
     reschSubmitForm: function () {
@@ -193,6 +203,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
 
         var self = this;
+        BlockUi('on');
 
         oRequest.success(function(res) {
             if (res.Error == null || res.Error === "") {
@@ -212,6 +223,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             self.fillErrorPopup(params);
             return false;
         });//on fail
+        oRequest.always(function() {
+            BlockUi('off');
+        });
     },
 
     onChangeAmount: function () {
@@ -225,6 +239,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         } else {
             var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
             var self = this;
+            BlockUi('on');
             request.success(function (res) {
                 $('#outsidePayments').text(res.IntervalsNum);
                 $('#outsideIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
@@ -238,6 +253,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
                 var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
                 self.fillErrorPopup(params);
             });//on fail
+            request.always(function() {
+                BlockUi('off');
+            });
         }
     },
 
