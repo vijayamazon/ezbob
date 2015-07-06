@@ -104,7 +104,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         var amount = $("#outsidePrincipal").val();
         var duration = $('#outsideSelect option:selected').text();
         if (typeof amount === 'undefined' || amount <= 0) {
-            var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '7000' };
+            var params = { head: 'Please fix the marked field', body: 'Only positive numeric values allowed', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
             this.fillErrorPopup(params);
         } else {
             var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', { loanID: this.model.get('Id'), intervalType: duration, AmountPerInterval: amount, rescheduleIn: 'false', save: 'false' });
@@ -113,7 +113,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
                 $('#outsidePayments').text(res.IntervalsNum);
                 $('#outsideIntrest').text(EzBob.formatPounds(res.FirstPaymentInterest));
                 if (res.Error != null && res.Error.length > 0) {
-                    var params = { head: 'Please fix the marked field', body: res.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [self.$el.find('#outsidePrincipal')], timeout: '7000' };
+                    var params = { head: 'Please fix the marked field', body: res.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [self.$el.find('#outsidePrincipal')], timeout: '60000' };
                     self.fillErrorPopup(params);
                 }
             }); //on success
