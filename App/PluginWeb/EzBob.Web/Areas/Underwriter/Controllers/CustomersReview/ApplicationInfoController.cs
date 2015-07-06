@@ -699,6 +699,7 @@
 				EmailSendingBanned = !allowSendingEmail,
 				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
 				SetupFeePercent = manualSetupFeePercent ?? 0,
+				// DistributedSetupFeePercent TODO EZ-3515
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				LoanSourceID = loanSource,
 				LoanTypeID = loanType,
@@ -710,7 +711,7 @@
 				//todo Notes = 
 				//todo InterestOnlyRepaymentCount = 
 			});
-			 */ 
+			 */
 			//TODO update new offer table
 			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
 

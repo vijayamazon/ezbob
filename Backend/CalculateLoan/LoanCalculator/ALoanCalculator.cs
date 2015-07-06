@@ -32,7 +32,6 @@
 		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual List<ScheduledItem> CreateSchedule() {
 			return new CreateScheduleMethod(this).Execute();
-
 		} // CreateSchedule
 
 
@@ -44,7 +43,6 @@
 		/// <returns>Loan plan (list of repayments).</returns>
 		public virtual List<Repayment> CalculatePlan(bool writeToLog = true) {
 			return new CalculatePlanMethod(this, writeToLog).Execute();
-
 		} // CalculatePlan
 
 
@@ -144,6 +142,13 @@
 			return WorkingModel.IsMonthly? WorkingModel.LoanIssueTime.AddMonths(periodCount): WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
 		} // AddRepaymentIntervals
 
+
+		public virtual decimal APRCalculate(
+		//	decimal amount, // LoanCalculatorModel this.loanAmount
+		//	IEnumerable<LoanScheduleItem> monthlyRepayments,  // LoanCalculatorModel this.repaymentCount
+			decimal setupFee = 0M, DateTime? date = null, bool writeToLog = true ) {
+			return new APRCalculateMethod(this, setupFee, date , writeToLog).Execute();
+		} 
 
 
 		/// <summary>

@@ -26,16 +26,14 @@
 
 		public override string Name { get { return "AddLoan"; } }
 
-
 		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
-		/// <exception cref="NL_ExceptionLoanExists">Condition. </exception>
 		/// <exception cref="NL_ExceptionOfferNotValid">Condition. </exception>
 		/// <exception cref="Exception">Add loan failed: {0}</exception>
 		/// <exception cref="NL_ExceptionCustomerNotFound">Condition. </exception>
 		public override void Execute() {
 
 			// TEMPORARY FOR PHASE1
-			return;
+			//return;
 
 			Log.Debug("------------------ customer {0}------------------------", NLModel.CustomerID);
 

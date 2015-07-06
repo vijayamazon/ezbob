@@ -12,6 +12,7 @@
 	using EZBob.DatabaseLib.Repository;
 	using EzBob.Models;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.NewLoan;
 	using EzBob.Web.Models;
 	using PaymentServices.Calculators;
 	using StructureMap;
@@ -181,5 +182,14 @@
 			                          (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient*currencyRate*
 			                           schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 		}
+
+
+		public AgreementModel NL_BuildAgreementModel(Customer customer, decimal amount, NL_Model loan) {
+			var model = new AgreementModel();
+			//TODO EZ-3483 fill in model by appropriate data
+			return model;
+		}
+		
+
 	}
 }

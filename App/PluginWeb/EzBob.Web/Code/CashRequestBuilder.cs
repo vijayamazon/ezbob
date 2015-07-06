@@ -194,6 +194,7 @@
                 Amount = customer.QuickOffer.Amount,
                 BrokerSetupFeePercent = 0,
                 SetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
+			 // DistributedSetupFeePercent TODO EZ-3515 
                 DiscountPlanID = discountPlan.Id,
                 EmailSendingBanned = false,
                 EndTime = now.AddDays(1),
@@ -207,7 +208,7 @@
             });
 			 * */
 
-            //TODO add new cash request / offer / decision
+			//TODO add new cash request / offer / decision
             Log.DebugFormat("add new cash request for customer {0}", customer.Id);
 
 			return cashRequest;

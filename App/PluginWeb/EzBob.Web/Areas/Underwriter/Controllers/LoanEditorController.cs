@@ -345,6 +345,7 @@
 
                 this.loanOptionsRepository.SaveOrUpdate(options);
                 this.session.Flush();
+				// TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
             }
         }
 

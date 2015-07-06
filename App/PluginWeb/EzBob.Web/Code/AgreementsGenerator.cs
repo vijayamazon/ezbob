@@ -9,11 +9,14 @@
 	using Ezbob.Backend.Models;
 	using Newtonsoft.Json;
 	using System.IO;
+	using Ezbob.Backend.Models.NewLoan;
 	using ServiceClientProxy;
 
 	public interface IAgreementsGenerator
 	{
 		void RenderAgreements(Loan loan, bool isRebuld);
+
+		void NL_RenderAgreements(NL_Model loan, bool isRebuld);
 	}
 
 	public class AgreementsGenerator : IAgreementsGenerator
@@ -101,5 +104,15 @@
 
 			loan.AgreementModel = JsonConvert.SerializeObject(model);
 		}
+
+		public void NL_RenderAgreements(NL_Model loan, bool isRebuld) {
+			//TODO EZ-3483 
+			// 1. get model _builder.NL_BuildAgreementModel(...);
+			// 2. generate agreement using template and the model
+			// 3. create paths for file system
+			// 4. save to FS using m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "agreement", template, path1, path2);
+
+		}
+		
 	}
 }

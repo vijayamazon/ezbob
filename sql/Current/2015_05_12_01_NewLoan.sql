@@ -280,6 +280,7 @@ CREATE TABLE [dbo].[NL_Offers](
 	[BrokerSetupFeePercent] [DECIMAL](18, 6) NULL,
 	[Notes] [nvarchar](max) NULL,
 	[SetupFeePercent] [DECIMAL](18, 6) NULL,
+	[DistributedSetupFeePercent] [decimal](18, 6) NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
 	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,

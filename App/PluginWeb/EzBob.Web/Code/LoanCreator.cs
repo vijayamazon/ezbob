@@ -206,7 +206,7 @@
 
 			
 
-			// TODO This is the place where the loan is created and saved to DB
+			// This is the place where the loan is created and saved to DB
 			log.Info(
 				"Create loan for customer {0} cash request {1} amount {2}",
 				cus.Id,
@@ -214,6 +214,7 @@
 				loan.LoanAmount
 			);
 
+			// actually this is the place where the loan saved to DB
 			this.session.Flush();
 
 			this.serviceClient.Instance.SalesForceAddUpdateLeadAccount(cus.Id, cus.Name, cus.Id, false, false); //update account with new number of loans
@@ -257,15 +258,18 @@
 			nlModel.Loan.OldLoanID = oldloanID;
 			nlModel.Loan.InitialLoanAmount = loanAmount;
 			nlModel.LoanHistory = new NL_LoanHistory();
+
+			// place real NL agreements generation (EZ-3483)
+			this.agreementsGenerator.NL_RenderAgreements(nlModel, true);
+
+			// that should be done by attaching NL agreements to NL_Model in NL_RenderAgreements
 			nlModel.LoanHistory.AgreementModel = loan.AgreementModel;
 			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
-			// place real NL agreements later EX_
 			foreach (LoanAgreement agrm in loan.Agreements) {
 				NL_LoanAgreements agreement = new NL_LoanAgreements();
 				agreement.FilePath = agrm.FilePath;
 				agreement.LoanAgreementTemplateID = agrm.TemplateRef.Id;
 				nlModel.LoanAgreements.Add(agreement);
-
 				log.Debug(agreement.ToString());
 			} // for
 

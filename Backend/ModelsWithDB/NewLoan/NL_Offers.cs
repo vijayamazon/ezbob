@@ -46,6 +46,9 @@
         [DataMember]
         public decimal? SetupFeePercent { get; set; }
 
+		[DataMember]
+		public decimal? DistributedSetupFeePercent { get; set; }
+
         [DataMember]
         public decimal? BrokerSetupFeePercent { get; set; }
 

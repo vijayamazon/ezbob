@@ -786,6 +786,7 @@
 				RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, //todo
 				SetupFeePercent = this.autoDecisionResponse.SetupFee,
+				// DistributedSetupFeePercent TODO EZ-3515
 				StartTime = now,
 				EndTime = now.AddHours(CurrentValues.Instance.OfferValidForHours)
 			});
