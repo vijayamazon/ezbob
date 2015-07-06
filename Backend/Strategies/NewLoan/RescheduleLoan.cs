@@ -181,7 +181,8 @@
 					LoanScheduleItem overInstalment = this.tLoan.Schedule.FirstOrDefault(s => s.AmountDue > this.ReschedulingArguments.PaymentPerInterval);
 					if (overInstalment != null) {
 						// ReSharper disable once PossibleInvalidOperationException
-						this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance (in {2} new payments). Accrued interest: {3}, accumulated fees: {4}, first new instalment: {5}",
+						this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance (in {2} new payments). Accrued interest: {3}, accumulated fees: {4}, first new instalment: {5}. " +
+							"You can choose to reduce the accumulated fees & interest by clearing them via manual payment, before setting the new payment schedual.",
 							this.ReschedulingArguments.ReschedulingRepaymentIntervalType,
 							this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo),
 							this.Result.IntervalsNum,
