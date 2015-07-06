@@ -196,6 +196,34 @@
 			get { return this[Variables.AutoApproveMinTurnover3M]; }
 		}
 
+		public virtual VariableValue AutoApproveOffHoursMaxDailyApprovals {
+			get { return this[Variables.AutoApproveOffHoursMaxDailyApprovals]; }
+		}
+
+		public virtual VariableValue AutoApproveOffHoursMaxHourlyApprovals {
+			get { return this[Variables.AutoApproveOffHoursMaxHourlyApprovals]; }
+		}
+
+		public virtual VariableValue AutoApproveOffHoursMaxLastHourApprovals {
+			get { return this[Variables.AutoApproveOffHoursMaxLastHourApprovals]; }
+		}
+
+		public virtual VariableValue AutoApproveOffHoursMaxTodayLoans {
+			get { return this[Variables.AutoApproveOffHoursMaxTodayLoans]; }
+		}
+
+		public virtual VariableValue AutoApproveOffHoursMaxOutstandingOffers {
+			get { return this[Variables.AutoApproveOffHoursMaxOutstandingOffers]; }
+		}
+
+		public virtual VariableValue AutoApproveOfficeTimeStart {
+			get { return this[Variables.AutoApproveOfficeTimeStart]; }
+		}
+
+		public virtual VariableValue AutoApproveOfficeTimeEnd {
+			get { return this[Variables.AutoApproveOfficeTimeEnd]; }
+		}
+
 		public virtual VariableValue AutoApproveOnlineTurnoverAge {
 			get { return this[Variables.AutoApproveOnlineTurnoverAge]; }
 		}
@@ -218,6 +246,10 @@
 
 		public virtual VariableValue AutoApproveTurnoverDropQuarterRatio {
 			get { return this[Variables.AutoApproveTurnoverDropQuarterRatio]; }
+		}
+
+		public virtual VariableValue AutoApproveWeekend {
+			get { return this[Variables.AutoApproveWeekend]; }
 		}
 
 		public virtual VariableValue AutomaticTestBrokerMark {

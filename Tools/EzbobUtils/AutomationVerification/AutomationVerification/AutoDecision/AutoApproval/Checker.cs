@@ -12,6 +12,19 @@
 	public class Checker {
 		public Checker(Agent oAgent) {
 			this.agent = oAgent;
+
+			this.officeHoursHandler = new OfficeHoursHandler(
+				this.agent.Now,
+				this.agent.Trail.MyInputData.Configuration.OfficeTimeStart,
+				this.agent.Trail.MyInputData.Configuration.OfficeTimeEnd,
+				this.agent.Trail.MyInputData.Configuration.Weekend
+			);
+
+			this.officeHoursHandler.ApprovalCount[0] = this.agent.Trail.MyInputData.MetaData.NumOfTodayAutoApproval;
+			this.officeHoursHandler.ApprovalCount[1] = this.agent.Trail.MyInputData.MetaData.NumOfYesterdayAutoApproval;
+
+			this.officeHoursHandler.OpenLoanAmount[0] = this.agent.Trail.MyInputData.MetaData.TodayLoanSum;
+			this.officeHoursHandler.OpenLoanAmount[1] = this.agent.Trail.MyInputData.MetaData.YesterdayLoanSum;
 		} // constructor
 
 		public virtual void Run() {
@@ -25,11 +38,13 @@
 			IsFraud();
 			IsBrokerCustomer();
 			CompanyIsDissolved();
+
 			TodayApprovedCount();
+			TodayOpenLoans();
 			HourlyApprovals();
 			LastHourApprovals();
-			TodayOpenLoans();
 			OutstandingOffers();
+
 			Aml();
 			CustomerStatus();
 			CompanyScore();
@@ -247,77 +262,68 @@
 		} // IsBrokerCustomer
 
 		private void TodayApprovedCount() {
-			if (Trail.MyInputData.MetaData.NumOfTodayAutoApproval > Trail.MyInputData.Configuration.MaxDailyApprovals) {
-				StepFailed<TodayApprovalCount>().Init(
-					Trail.MyInputData.MetaData.NumOfTodayAutoApproval,
-					Trail.MyInputData.Configuration.MaxDailyApprovals
-				);
-			} else {
-				StepDone<TodayApprovalCount>().Init(
-					Trail.MyInputData.MetaData.NumOfTodayAutoApproval,
-					Trail.MyInputData.Configuration.MaxDailyApprovals
-				);
-			} // if
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? Trail.MyInputData.Configuration.MaxDailyApprovals
+				: Trail.MyInputData.Configuration.OffHoursMaxDailyApprovals;
+
+			int counter = this.officeHoursHandler.Current.ApprovalCount;
+
+			if (counter >= threshold)
+				StepFailed<TodayApprovalCount>().Init(counter, threshold);
+			else
+				StepDone<TodayApprovalCount>().Init(counter, threshold);
 		} // TodayApprovedCount
 
 		private void HourlyApprovals() {
-			int autoApproveMaxHourlyApprovals = Trail.MyInputData.Configuration.MaxHourlyApprovals;
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? Trail.MyInputData.Configuration.MaxHourlyApprovals
+				: Trail.MyInputData.Configuration.OffHoursMaxHourlyApprovals;
 
-			if (Trail.MyInputData.MetaData.NumOfHourlyAutoApprovals > autoApproveMaxHourlyApprovals) {
-				StepFailed<HourlyApprovalCount>().Init(
-					Trail.MyInputData.MetaData.NumOfHourlyAutoApprovals,
-					autoApproveMaxHourlyApprovals
-				);
-			} else {
-				StepDone<HourlyApprovalCount>().Init(
-					Trail.MyInputData.MetaData.NumOfHourlyAutoApprovals,
-					autoApproveMaxHourlyApprovals
-				);
-			} // if
+			int counter = Trail.MyInputData.MetaData.NumOfHourlyAutoApprovals; 
+
+			if (counter > threshold)
+				StepFailed<HourlyApprovalCount>().Init(counter, threshold);
+			else
+				StepDone<HourlyApprovalCount>().Init(counter, threshold);
 		} // HourlyApprovals
 
 		private void LastHourApprovals() {
-			int autoApproveMaxLastHourApprovals = Trail.MyInputData.Configuration.MaxLastHourApprovals;
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? Trail.MyInputData.Configuration.MaxLastHourApprovals
+				: Trail.MyInputData.Configuration.OffHoursMaxLastHourApprovals;
 
-			if (Trail.MyInputData.MetaData.NumOfLastHourAutoApprovals > autoApproveMaxLastHourApprovals) {
-				StepFailed<LastHourApprovalCount>().Init(
-					Trail.MyInputData.MetaData.NumOfLastHourAutoApprovals,
-					autoApproveMaxLastHourApprovals
-				);
-			} else {
-				StepDone<LastHourApprovalCount>().Init(
-					Trail.MyInputData.MetaData.NumOfLastHourAutoApprovals,
-					autoApproveMaxLastHourApprovals
-				);
-			} // if
+			int counter = Trail.MyInputData.MetaData.NumOfLastHourAutoApprovals;
+
+			if (counter > threshold)
+				StepFailed<LastHourApprovalCount>().Init(counter, threshold);
+			else
+				StepDone<LastHourApprovalCount>().Init(counter, threshold);
 		} // LastHourApprovals
 
 		private void TodayOpenLoans() {
-			if (Trail.MyInputData.MetaData.TodayLoanSum > Trail.MyInputData.Configuration.MaxTodayLoans) {
-				StepFailed<TodayLoans>().Init(
-					Trail.MyInputData.MetaData.TodayLoanSum,
-					Trail.MyInputData.Configuration.MaxTodayLoans
-				);
-			} else {
-				StepDone<TodayLoans>().Init(
-					Trail.MyInputData.MetaData.TodayLoanSum,
-					Trail.MyInputData.Configuration.MaxTodayLoans
-				);
-			} // if
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? Trail.MyInputData.Configuration.MaxTodayLoans
+				: Trail.MyInputData.Configuration.OffHoursMaxTodayLoans;
+
+			decimal amount = this.officeHoursHandler.Current.OpenLoanAmount;
+
+			if (amount >= threshold)
+				StepFailed<TodayLoans>().Init(amount, threshold);
+			else
+				StepDone<TodayLoans>().Init(amount, threshold);
 		} // TodayOpenLoans
 
 		private void OutstandingOffers() {
-			if (Trail.MyInputData.ReservedFunds >= Trail.MyInputData.Configuration.MaxOutstandingOffers) {
-				StepFailed<OutstandingOffers>().Init(
-					Trail.MyInputData.ReservedFunds,
-					Trail.MyInputData.Configuration.MaxOutstandingOffers
-				);
-			} else {
-				StepDone<OutstandingOffers>().Init(
-					Trail.MyInputData.ReservedFunds,
-					Trail.MyInputData.Configuration.MaxOutstandingOffers
-				);
-			} // if
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? Trail.MyInputData.Configuration.MaxOutstandingOffers
+				: Trail.MyInputData.Configuration.OffHoursMaxOutstandingOffers;
+
+			decimal amount = Trail.MyInputData.ReservedFunds;
+
+			if (amount >= threshold)
+				StepFailed<OutstandingOffers>().Init(amount, threshold);
+			else
+				StepDone<OutstandingOffers>().Init(amount, threshold);
 		} // OutstandingOffers
 
 		private void Aml() {
@@ -563,5 +569,6 @@
 		} // AvailableFundsOverdraft
 
 		private readonly Agent agent;
+		private readonly OfficeHoursHandler officeHoursHandler;
 	} // class Checker
 } // namespace

@@ -23,11 +23,13 @@
 		public bool IsLimitedCompanyType { get; set; }
 
 		public int NumOfTodayAutoApproval { get; set; }
+		public int NumOfYesterdayAutoApproval { get; set; }
 
 		public int NumOfHourlyAutoApprovals { get; set; }
 		public int NumOfLastHourAutoApprovals { get; set; }
 
 		public decimal TodayLoanSum { get; set; }
+		public decimal YesterdayLoanSum { get; set; }
 
 		public int FraudStatusValue {
 			get { return (int)FraudStatus; }

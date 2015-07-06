@@ -43,10 +43,10 @@
 			return (int)(DateTime.UtcNow - oDate).TotalDays;
 		} // CalculateSeniority
 
-		private int CalculateTodaysApprovals() {
+		private int CalculateTodaysApprovals(DateTime now) {
 			return this.cashRequestsRepository.GetAll().Count(cr =>
 				cr.UnderwriterDecisionDate.HasValue &&
-				cr.UnderwriterDecisionDate.Value.Date == Now.Date &&
+				cr.UnderwriterDecisionDate.Value.Date == now.Date &&
 				cr.AutoDecisionID == 1
 			);
 		} // CalculateTodaysApprovals
@@ -70,9 +70,9 @@
 			);
 		} // CalculateLastHourApprovals
 
-		private decimal CalculateTodaysLoans() {
+		private decimal CalculateTodaysLoans(DateTime now) {
 			var todayLoans = this.loanRepository.GetAll().Where(l =>
-				(l.Date.Date == Now.Date) &&
+				(l.Date.Date == now.Date) &&
 				(l.Date < Now) &&
 				(l.CashRequest != null) &&
 				(l.CashRequest.AutoDecisionID == 1)

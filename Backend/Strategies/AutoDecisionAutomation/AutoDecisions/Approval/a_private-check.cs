@@ -13,6 +13,19 @@
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
 			this.log.Debug("Primary: checking if auto approval should take place for customer {0}...", this.customerId);
 
+			this.officeHoursHandler = new OfficeHoursHandler(
+				Now,
+				this.trail.MyInputData.Configuration.OfficeTimeStart,
+				this.trail.MyInputData.Configuration.OfficeTimeEnd,
+				this.trail.MyInputData.Configuration.Weekend
+			);
+
+			this.officeHoursHandler.ApprovalCount[0] = this.trail.MyInputData.MetaData.NumOfTodayAutoApproval;
+			this.officeHoursHandler.ApprovalCount[1] = this.trail.MyInputData.MetaData.NumOfYesterdayAutoApproval;
+
+			this.officeHoursHandler.OpenLoanAmount[0] = this.trail.MyInputData.MetaData.TodayLoanSum;
+			this.officeHoursHandler.OpenLoanAmount[1] = this.trail.MyInputData.MetaData.YesterdayLoanSum;
+
 			try {
 				CheckInit();
 
@@ -20,11 +33,13 @@
 				CheckIsFraud();
 				CheckIsBroker();
 				CheckCompanyIsDissolved();
+
 				CheckTodaysApprovals();
+				CheckTodaysLoans();
 				CheckHourlyApprovals();
 				CheckLastHourApprovals();
-				CheckTodaysLoans();
 				CheckOutstandingOffers(outstandingOffers);
+
 				CheckAMLResult();
 				CheckCustomerStatus();
 				CheckBusinessScore();
@@ -378,12 +393,14 @@
 		} // CheckMedal
 
 		private void CheckOutstandingOffers(decimal outstandingOffers) {
-			int autoApproveMaxOutstandingOffers = CurrentValues.Instance.AutoApproveMaxOutstandingOffers;
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? CurrentValues.Instance.AutoApproveMaxOutstandingOffers
+				: CurrentValues.Instance.AutoApproveOffHoursMaxOutstandingOffers;
 
-			if (outstandingOffers >= autoApproveMaxOutstandingOffers)
-				StepFailed<OutstandingOffers>().Init(outstandingOffers, autoApproveMaxOutstandingOffers);
+			if (outstandingOffers >= threshold)
+				StepFailed<OutstandingOffers>().Init(outstandingOffers, threshold);
 			else
-				StepDone<OutstandingOffers>().Init(outstandingOffers, autoApproveMaxOutstandingOffers);
+				StepDone<OutstandingOffers>().Init(outstandingOffers, threshold);
 		} // CheckOutstandingOffers
 
 		private void CheckRepaidRatio() {
@@ -426,60 +443,55 @@
 		} // CheckSeniority
 
 		private void CheckTodaysApprovals() {
-			int autoApproveMaxDailyApprovals = CurrentValues.Instance.AutoApproveMaxDailyApprovals;
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? CurrentValues.Instance.AutoApproveMaxDailyApprovals
+				: CurrentValues.Instance.AutoApproveOffHoursMaxDailyApprovals;
 
-			if (this.trail.MyInputData.MetaData.NumOfTodayAutoApproval >= autoApproveMaxDailyApprovals) {
-				StepFailed<TodayApprovalCount>().Init(
-					this.trail.MyInputData.MetaData.NumOfTodayAutoApproval,
-					autoApproveMaxDailyApprovals
-				);
-			} else {
-				StepDone<TodayApprovalCount>().Init(
-					this.trail.MyInputData.MetaData.NumOfTodayAutoApproval,
-					autoApproveMaxDailyApprovals
-				);
-			} // if
+			int counter = this.officeHoursHandler.Current.ApprovalCount;
+
+			if (counter >= threshold)
+				StepFailed<TodayApprovalCount>().Init(counter, threshold);
+			else
+				StepDone<TodayApprovalCount>().Init(counter, threshold);
 		} // CheckTodaysApprovals
 
 		private void CheckHourlyApprovals() {
-			int autoApproveMaxHourlyApprovals = this.trail.MyInputData.Configuration.MaxHourlyApprovals;
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? this.trail.MyInputData.Configuration.MaxHourlyApprovals
+				: this.trail.MyInputData.Configuration.OffHoursMaxHourlyApprovals;
 
-			if (this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals > autoApproveMaxHourlyApprovals) {
-				StepFailed<HourlyApprovalCount>().Init(
-					this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals,
-					autoApproveMaxHourlyApprovals
-				);
-			} else {
-				StepDone<HourlyApprovalCount>().Init(
-					this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals,
-					autoApproveMaxHourlyApprovals
-				);
-			} // if
+			int counter = this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals; 
+
+			if (counter > threshold)
+				StepFailed<HourlyApprovalCount>().Init(counter, threshold);
+			else
+				StepDone<HourlyApprovalCount>().Init(counter, threshold);
 		} // CheckHourlyApprovals
 
 		private void CheckLastHourApprovals() {
-			int autoApproveMaxLastHourApprovals = this.trail.MyInputData.Configuration.MaxLastHourApprovals;
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? this.trail.MyInputData.Configuration.MaxLastHourApprovals
+				: this.trail.MyInputData.Configuration.OffHoursMaxLastHourApprovals;
 
-			if (this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals > autoApproveMaxLastHourApprovals) {
-				StepFailed<LastHourApprovalCount>().Init(
-					this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals,
-					autoApproveMaxLastHourApprovals
-				);
-			} else {
-				StepDone<LastHourApprovalCount>().Init(
-					this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals,
-					autoApproveMaxLastHourApprovals
-				);
-			} // if
+			int counter = this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals;
+
+			if (counter > threshold)
+				StepFailed<LastHourApprovalCount>().Init(counter, threshold);
+			else
+				StepDone<LastHourApprovalCount>().Init(counter, threshold);
 		} // CheckLastHourApprovals
 
 		private void CheckTodaysLoans() {
-			int autoApproveMaxTodayLoans = CurrentValues.Instance.AutoApproveMaxTodayLoans;
+			int threshold = this.officeHoursHandler.IsWorkingTime
+				? CurrentValues.Instance.AutoApproveMaxTodayLoans
+				: CurrentValues.Instance.AutoApproveOffHoursMaxTodayLoans;
 
-			if (this.trail.MyInputData.MetaData.TodayLoanSum >= autoApproveMaxTodayLoans)
-				StepFailed<TodayLoans>().Init(this.trail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
+			decimal amount = this.officeHoursHandler.Current.OpenLoanAmount;
+
+			if (amount >= threshold)
+				StepFailed<TodayLoans>().Init(amount, threshold);
 			else
-				StepDone<TodayLoans>().Init(this.trail.MyInputData.MetaData.TodayLoanSum, autoApproveMaxTodayLoans);
+				StepDone<TodayLoans>().Init(amount, threshold);
 		} // CheckTodaysLoans
 
 		private void CheckTotalLoanCount() {

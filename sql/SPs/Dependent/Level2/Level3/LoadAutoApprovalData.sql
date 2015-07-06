@@ -13,6 +13,7 @@ BEGIN
 	SET NOCOUNT ON;
 
 	DECLARE @Today DATE = CONVERT(DATE, @Now)
+	DECLARE @Yesterday DATE = DATEADD(day, -1, @Today)
 	DECLARE @CurrentCalendarHour INT = DATEPART(hour, @Now)
 	DECLARE @AnHourAgo DATETIME = DATEADD(hour, -1, @Now)
 
@@ -216,6 +217,26 @@ BEGIN
 
 	------------------------------------------------------------------------------
 	--
+	-- Select number of loans auto approved yesterday.
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE @YesterdayAutoApprovalCount INT = ISNULL((
+		SELECT
+			COUNT(DISTINCT cr.Id)
+		FROM
+			CashRequests cr
+			INNER JOIN Customer c
+				ON cr.IdCustomer = c.Id
+				AND c.IsTest = 0
+		WHERE
+			cr.AutoDecisionID = 1 -- Auto Approval
+			AND
+			CONVERT(DATE, cr.UnderwriterDecisionDate) = @Yesterday
+	), 0)
+
+	------------------------------------------------------------------------------
+	--
 	-- Select number of loans auto approved during this calendar hour
 	-- (i.e. if it is 12:44 now calendar hour is 12:00 - 13:00).
 	--
@@ -280,6 +301,26 @@ BEGIN
 				AND r.AutoDecisionID = 1 -- auto approve
 		WHERE
 			CONVERT(DATE, l.[Date]) = @Today
+			AND
+			l.[Date] < @Now
+	), 0)
+
+	------------------------------------------------------------------------------
+	--
+	-- Select amount of loans auto approved yesterday.
+	--
+	------------------------------------------------------------------------------
+
+	DECLARE @YesterdayLoanSum DECIMAL(18, 0) = ISNULL((
+		SELECT
+			SUM(l.LoanAmount)
+		FROM
+			Loan l
+			INNER JOIN CashRequests r
+				ON l.RequestCashId = r.Id
+				AND r.AutoDecisionID = 1 -- auto approve
+		WHERE
+			CONVERT(DATE, l.[Date]) = @Yesterday
 			AND
 			l.[Date] < @Now
 	), 0)
@@ -471,6 +512,9 @@ BEGIN
 		NumOfHourlyAutoApprovals   = @HourlyAutoApprovalCount,
 		NumOfLastHourAutoApprovals = @LastHourAutoApprovalCount,
 		TodayLoanSum               = @TodayLoanSum,
+
+		NumOfYesterdayAutoApproval = @YesterdayAutoApprovalCount,
+		YesterdayLoanSum           = @YesterdayLoanSum,
 
 		FraudStatusValue           = @FraudStatus,
 		AmlResult                  = c.AMLResult,

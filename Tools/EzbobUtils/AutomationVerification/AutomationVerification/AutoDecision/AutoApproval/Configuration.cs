@@ -9,38 +9,46 @@
 	/// Contains auto approval configuration parameters (max and min amount to approve, silent mode, etc.).
 	/// </summary>
 	public class Configuration {
+		public virtual bool IsSilent { get; set; }
+		public virtual decimal GetCashSliderStep { get; set; }
+		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
+		public virtual decimal HmrcTurnoverDropQuarterRatio { get; set; }
+		public virtual decimal MinRepaidPortion { get; set; }
+		public virtual decimal OnlineTurnoverDropMonthRatio { get; set; }
+		public virtual decimal OnlineTurnoverDropQuarterRatio { get; set; }
+		public virtual decimal Reject_Defaults_Amount { get; set; }
+		public virtual decimal TurnoverDropQuarterRatio { get; set; }
 		public virtual int AvailableFundsOverdraft { get; set; }
-		public virtual int ExperianScoreThreshold { get; set; }
-		public virtual int CustomerMinAge { get; set; }
+		public virtual int BusinessScoreThreshold { get; set; }
 		public virtual int CustomerMaxAge { get; set; }
-		public virtual int MinTurnover1M { get; set; }
-		public virtual int MinTurnover3M { get; set; }
-		public virtual int MinTurnover1Y { get; set; }
-		public virtual int MinMPSeniorityDays { get; set; }
-		public virtual int MaxOutstandingOffers { get; set; }
-		public virtual int MaxTodayLoans { get; set; }
+		public virtual int CustomerMinAge { get; set; }
+		public virtual int ExperianScoreThreshold { get; set; }
+		public virtual int HmrcTurnoverAge { get; set; }
+		public virtual int MaxAllowedDaysLate { get; set; }
+		public virtual int MaxAmount { get; set; }
 		public virtual int MaxDailyApprovals { get; set; }
 		public virtual int MaxHourlyApprovals { get; set; }
 		public virtual int MaxLastHourApprovals { get; set; }
-		public virtual int MaxAllowedDaysLate { get; set; }
 		public virtual int MaxNumOfOutstandingLoans { get; set; }
-		public virtual decimal MinRepaidPortion { get; set; }
+		public virtual int MaxOutstandingOffers { get; set; }
+		public virtual int MaxTodayLoans { get; set; }
 		public virtual int MinLoan { get; set; }
-		public virtual int MaxAmount { get; set; }
-		public virtual bool IsSilent { get; set; }
+		public virtual int MinMPSeniorityDays { get; set; }
+		public virtual int MinTurnover1M { get; set; }
+		public virtual int MinTurnover1Y { get; set; }
+		public virtual int MinTurnover3M { get; set; }
+		public virtual int OffHoursMaxDailyApprovals { get; set; }
+		public virtual int OffHoursMaxHourlyApprovals { get; set; }
+		public virtual int OffHoursMaxLastHourApprovals { get; set; }
+		public virtual int OffHoursMaxOutstandingOffers { get; set; }
+		public virtual int OffHoursMaxTodayLoans { get; set; }
+		public virtual int OnlineTurnoverAge { get; set; }
+		public virtual int Reject_Defaults_MonthsNum { get; set; }
+		public virtual string OfficeTimeEnd { get; set; }
+		public virtual string OfficeTimeStart { get; set; }
 		public virtual string SilentTemplateName { get; set; }
 		public virtual string SilentToAddress { get; set; }
-		public virtual int BusinessScoreThreshold { get; set; }
-		public virtual decimal TurnoverDropQuarterRatio { get; set; }
-		public virtual int OnlineTurnoverAge { get; set; }
-		public virtual decimal OnlineTurnoverDropQuarterRatio { get; set; }
-		public virtual decimal OnlineTurnoverDropMonthRatio { get; set; }
-		public virtual int HmrcTurnoverAge { get; set; }
-		public virtual decimal HmrcTurnoverDropQuarterRatio { get; set; }
-		public virtual decimal HmrcTurnoverDropHalfYearRatio { get; set; }
-		public virtual decimal Reject_Defaults_Amount { get; set; }
-		public virtual int Reject_Defaults_MonthsNum { get; set; }
-		public virtual decimal GetCashSliderStep { get; set; }
+		public virtual string Weekend { get; set; }
 
 		public virtual string AllowedCaisStatusesWithLoan {
 			get { return string.Join(", ", this.m_oAllowedCaisStatusesWithLoan); } // get
@@ -149,7 +157,7 @@
 			Log.Debug("Auto approval configuration: '{0}' was set to {1}.", sName, pi.GetValue(this));
 		} // SetCfgValue
 
-		private void SaveCaisStatuses(string sList, List<string> oList) {
+		private static void SaveCaisStatuses(string sList, List<string> oList) {
 			oList.Clear();
 
 			if (string.IsNullOrWhiteSpace(sList))
