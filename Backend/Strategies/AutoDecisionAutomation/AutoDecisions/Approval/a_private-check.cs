@@ -444,7 +444,7 @@
 		private void CheckHourlyApprovals() {
 			int autoApproveMaxHourlyApprovals = this.trail.MyInputData.Configuration.MaxHourlyApprovals;
 
-			if (this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals >= autoApproveMaxHourlyApprovals) {
+			if (this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals > autoApproveMaxHourlyApprovals) {
 				StepFailed<HourlyApprovalCount>().Init(
 					this.trail.MyInputData.MetaData.NumOfHourlyAutoApprovals,
 					autoApproveMaxHourlyApprovals
@@ -460,7 +460,7 @@
 		private void CheckLastHourApprovals() {
 			int autoApproveMaxLastHourApprovals = this.trail.MyInputData.Configuration.MaxLastHourApprovals;
 
-			if (this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals >= autoApproveMaxLastHourApprovals) {
+			if (this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals > autoApproveMaxLastHourApprovals) {
 				StepFailed<LastHourApprovalCount>().Init(
 					this.trail.MyInputData.MetaData.NumOfLastHourAutoApprovals,
 					autoApproveMaxLastHourApprovals
