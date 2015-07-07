@@ -16,6 +16,8 @@
 
 
 		// see \ezbob\Integration\PaymentServices\Calculators\APRCalculator.cs
+		// https://en.wikipedia.org/wiki/Annual_percentage_rate
+
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
 		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
