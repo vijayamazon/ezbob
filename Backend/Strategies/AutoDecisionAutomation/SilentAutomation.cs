@@ -145,9 +145,9 @@
 			} // if
 
 			long cashRequestID = sr["CashRequestID"];
-			string uwDecision = sr["UnderwriterDecision"];
+			string uwDecision = (sr["UnderwriterDecision"] ?? string.Empty).Trim();
 
-			if (uwDecision != CreditResultStatus.WaitingForDecision.ToString()) {
+			if ((uwDecision != string.Empty) && (uwDecision != CreditResultStatus.WaitingForDecision.ToString())) {
 				Log.Debug(
 					"Not running auto decision for customer {0}: " +
 					"last cash request (id: {3}) has decision '{1}' while desired is '{2}'.",
