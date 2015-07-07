@@ -15,7 +15,7 @@ namespace SalesForceMigrationTool {
 		}
 
 		public void Rerun() {
-			DB.ForEachRowSafe(RerunOneSalesForce, "GetSalesForceForRerun", CommandSpecies.StoredProcedure);
+			this.DB.ForEachRowSafe(RerunOneSalesForce, "GetSalesForceForRerun", CommandSpecies.StoredProcedure);
 		}
 
 		private ActionResult RerunOneSalesForce(SafeReader sf, bool bRowSetStart) {
@@ -76,7 +76,7 @@ namespace SalesForceMigrationTool {
 
 		private void UpdateStatus(int salesForceLogID)
 		{
-			DB.ExecuteNonQuery("UpdateSalesForceRerunStatus", CommandSpecies.StoredProcedure,
+			this.DB.ExecuteNonQuery("UpdateSalesForceRerunStatus", CommandSpecies.StoredProcedure,
 				new QueryParameter("@SalesForceLogID", salesForceLogID),
 				new QueryParameter("Now", DateTime.UtcNow),
 				new QueryParameter("RerunSuccess", !this.sfClient.HasError),
