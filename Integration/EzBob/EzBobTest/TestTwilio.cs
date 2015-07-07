@@ -50,6 +50,7 @@
 
 			Message message = this.twilioClient.SendMessage(this.fromPhone, toPhone, content);
 			Assert.IsNotNull(message);
+			Assert.IsNull(message.RestException);
 			Assert.IsNullOrEmpty(message.ErrorMessage);
 			Assert.IsNotNullOrEmpty(message.Sid);
 		}
@@ -59,6 +60,7 @@
 			string sid = "SM3525083bbed8443db5356767f7562d29";
 			var message = this.twilioClient.GetMessage(sid);
 			Assert.IsNotNull(message);
+			Assert.IsNull(message.RestException);
 			Assert.IsNullOrEmpty(message.ErrorMessage);
 			Assert.AreNotEqual(message.Price, 0M);
 		}
