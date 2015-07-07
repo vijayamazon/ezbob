@@ -207,10 +207,12 @@
                     return;
                 }
 
-                var next = _schedule.FirstOrDefault(s => s.Date >= _lastActionDate && s.LoanRepayment > 0) ??
-                           _schedule.Last();
-                var expectedPrincipal = next.Balance;
-                amount = Math.Round(Math.Max(0, principal - expectedPrincipal + InterestToPay + FeesToPay), 2);
+				var next = _schedule.FirstOrDefault(s => s.Date >= _lastActionDate && s.LoanRepayment > 0) ??
+						   _schedule.LastOrDefault();
+	            if (next != null) {
+		            var expectedPrincipal = next.Balance;
+		            amount = Math.Round(Math.Max(0, principal - expectedPrincipal + InterestToPay + FeesToPay), 2);
+	            }
             };
             Recalculate();
             _eventDayEnd.Action = null;

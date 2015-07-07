@@ -34,29 +34,39 @@
 			return new CreateScheduleMethod(this).Execute();
 		} // CreateSchedule
 
-
-
 		/// <summary>
 		/// Calculates loan plan.
 		/// </summary>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan plan (list of repayments).</returns>
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual List<Repayment> CalculatePlan(bool writeToLog = true) {
 			return new CalculatePlanMethod(this, writeToLog).Execute();
 		} // CalculatePlan
-
-
 
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
 		/// Also calculates loan plan.
 		/// Schedule is stored in WorkingModel.Schedule.
 		/// </summary>
+		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
+		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
+		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
+		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		public virtual List<ScheduledItemWithAmountDue> CreateScheduleAndPlan(bool writeToLog = true) {
 			return new CreateScheduleAndPlanMethod(this, writeToLog).Execute();
 		} // CreateScheduleAndPlan
-
-
 
 		/// <summary>
 		/// Calculates current loan balance.
@@ -64,6 +74,12 @@
 		/// <param name="today">Date to calculate balance on.</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual decimal CalculateBalance(DateTime today, bool writeToLog = true) {
 			return new CalculateBalanceMethod(this, today, writeToLog).Execute();
 		} // CalculateBalance
@@ -142,18 +158,22 @@
 			return WorkingModel.IsMonthly? WorkingModel.LoanIssueTime.AddMonths(periodCount): WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
 		} // AddRepaymentIntervals
 
-
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
+		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual decimal APRCalculate(
 		//	decimal amount, // LoanCalculatorModel this.loanAmount
 		//	IEnumerable<LoanScheduleItem> monthlyRepayments,  // LoanCalculatorModel this.repaymentCount
 			decimal setupFee = 0M, DateTime? date = null, bool writeToLog = true ) {
 			return new APRCalculateMethod(this, setupFee, date , writeToLog).Execute();
-		} 
-
+		}
 
 		/// <summary>
 		/// Calculates interest rate for one day based on monthly interest rate.
-		/// Bad periods and interest freeze periods can be ignored (<paramref name="usePeriods"/>).
+		/// Bad periods and interest freeze periods can be ignored (<paramref />).
 		/// </summary>
 		/// <param name="currentDate">Current date.</param>
 		/// <param name="monthlyInterestRate">Monthly interest rate.</param>

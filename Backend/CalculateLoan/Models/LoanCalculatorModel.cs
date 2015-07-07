@@ -31,25 +31,17 @@
 
 		} // constructor
 
-
-
 		public RepaymentIntervalTypes RepaymentIntervalType { get; set; }
-
-
 
 		public List<BadPeriod> BadPeriods { get; private set; }
 
 		//public Rollovers Rollovers { get; set; }
-
-
 
 		public DateTime LoanIssueTime { get; set; }
 
 		public DateTime LoanIssueDate { get { return LoanIssueTime.Date; } }
 
 		public DateTime LastScheduledDate { get { return Schedule.Last().Date; } }
-
-
 
 		public List<decimal> DiscountPlan { get; private set; }
 
@@ -63,19 +55,12 @@
 
 		public List<InterestFreeze> FreezePeriods { get; set; }
 
-
-
 		/// <exception cref="NegativeRepaymentCountException" accessor="set">Condition. </exception>
-
 		public int RepaymentCount {
 			get { return this.repaymentCount; }
 			set {
-
-				//Console.WriteLine(value);
-				//Console.WriteLine(value.GetType());
 				if (value < 0)
 					throw new NegativeRepaymentCountException(value);
-
 				this.repaymentCount = value;
 			} // set
 		} // RepaymentCount
@@ -86,10 +71,8 @@
 		public int InterestOnlyRepayments {
 			get { return this.interestOnlyRepayments; }
 			set {
-
 				if (value < 0)
 					throw new NegativeInterestOnlyRepaymentCountException(value);
-
 				this.interestOnlyRepayments = value;
 			} // set
 		} // InterestOnlyRepayments
@@ -103,7 +86,6 @@
 				if (value <= 0)
 					throw new NegativeLoanAmountException(value);
 				this.loanAmount = value;
-
 			} // set
 		} // LoanAmount
 
@@ -111,7 +93,6 @@
 
 		/// <exception cref="NegativeMonthlyInterestRateException" accessor="set">Condition. </exception>
 		public decimal MonthlyInterestRate {
-
 			get { return this.monthlyInterestRate; }
 			set {
 				if (value < 0)
@@ -179,16 +160,14 @@
 			} // for each item
 		} // ValidateSchedule
 
-
-
-
-
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
 		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
 		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
 		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
+		/// <exception cref="TooEarlyPrincipalRepaymentException">Condition. </exception>
+		/// <exception cref="NegativeRepaymentAmountException">Condition. </exception>
 		public void SetScheduleCloseDatesFromPayments() {
 
 			ValidateSchedule();
@@ -311,67 +290,36 @@
 
 
 		/// <summary>
-
 		/// Creates a deep copy of current model.
-
 		/// </summary>
-
 		/// <returns>A copy of current model.</returns>
-
 		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
-
 		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
-
 		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
-
 		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
-
 		//public LoanCalculatorModel DeepClone() {
-
 		//     var lcm = new LoanCalculatorModel {
-
 		//            LoanAmount = LoanAmount,
-
 		//            LoanIssueTime = LoanIssueTime,
-
 		//            RepaymentCount = RepaymentCount,
-
 		//            InterestOnlyRepayments = InterestOnlyRepayments,
-
 		//            RepaymentIntervalType = RepaymentIntervalType,
-
 		//            MonthlyInterestRate = MonthlyInterestRate,
-
 		//     };
-
 		//     lcm.DiscountPlan.AddRange(DiscountPlan);
-
 		//     lcm.OpenPrincipalHistory.AddRange(OpenPrincipalHistory.Select(v => v.DeepClone()));
-
 		//     lcm.Schedule.AddRange(Schedule.Select(v => v.DeepClone()));
-
 		//     lcm.Repayments.AddRange(Repayments.Select(v => v.DeepClone()));
-
 		//     lcm.Fees.AddRange(Fees.Select(v => v.DeepClone()));
-
 		//     lcm.BadPeriods.DeepCloneFrom(BadPeriods);
-
 		//     return lcm;
-
 		//} // DeepClone
-
-
+		
 
 		private int repaymentCount;
-
 		private int interestOnlyRepayments;
-
 		private decimal loanAmount;
-
 		private decimal monthlyInterestRate;
 
-
-
 	}// class LoanCalculatorModel
-
 } // namespace

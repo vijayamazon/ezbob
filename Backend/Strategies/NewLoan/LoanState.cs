@@ -9,7 +9,6 @@
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
-	using global::Reports;
 	using StructureMap;
 
 	//public enum BadCustomerStatuses {
@@ -41,15 +40,24 @@
 			StateDate = stateDate ?? DateTime.UtcNow;
 		}
 
-		public DateTime StateDate { get; set; }
-
 		public override string Name { get { return "LoanState"; } }
 
+		public DateTime StateDate { get; set; }
 
 		public override void Execute() {
 			try {
 
+				// new loan structure
+				if (this.tNLLoan != null) {
+					// TODO
+					// cal SP - load nl by id
 
+
+
+
+
+					return;
+				}
 
 				if (this.tLoan != null) {
 
@@ -60,6 +68,7 @@
 
 					Log.Debug("LoanState--->Loan1: \n {0}", this.tLoan);
 
+					// init model - loan' properties
 					this.CalcModel = new LoanCalculatorModel {
 						LoanAmount = this.tLoan.LoanAmount,
 						LoanIssueTime = this.tLoan.Date,
@@ -119,14 +128,6 @@
 
 					// "bad" periods
 					SetBadPeriods();
-
-					return;
-				}
-
-				// new loan structure
-				if (this.tNLLoan != null) {
-					// TODO
-					// cal SP - load nl by id
 				}
 
 			} catch (Exception loanStateEx) {
