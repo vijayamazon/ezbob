@@ -923,7 +923,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 4182; // 1718; // 4439; //3534;
+			int loanID = 3946; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -946,7 +946,7 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 4192; // 4439; // 3534; //1846; //2662;
+			int loanID = 3946; //4192; // 4439; // 3534; //1846; //2662;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;

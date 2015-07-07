@@ -166,7 +166,6 @@
 					//Log.Debug("Start: {0}, End: {1}, Rate: {2}", iStartDate, itEndDate, interestRate);
 
 					decimal iLoanRepayment = (j == 0) ? firstPrincipal : iPrincipal;
-
 					balance -= iLoanRepayment;
 
 					LoanScheduleItem item = new LoanScheduleItem() {
@@ -189,6 +188,11 @@
 					return;
 
 				Log.Debug("--------------Loan recalculated: \n {0}", this.tLoan);
+
+				var firstRescheduledItem = this.tLoan.Schedule.FirstOrDefault(s => s.Date.Date == firstItemDate.Date);
+				if (firstRescheduledItem != null) {
+					this.Result.FirstPaymentInterest = firstRescheduledItem.Interest;
+				}
 
 				if (this.ReschedulingArguments.RescheduleIn == false) { // OUT
 

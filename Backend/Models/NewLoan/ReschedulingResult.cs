@@ -22,7 +22,7 @@
 		public int IntervalsNum { get; set; } // calculated repayment intervals number in months
 
 		[DataMember]
-		public decimal? FirstPaymentInterest { get; set; } // calculated interest to be paid in the first new payment (interval - months)
+		public decimal? FirstPaymentInterest { get; set; } // calculated interest to be paid in the first new payment 
 
 		[DataMember]
 		public DateTime LoanCloseDate { get; set; } // loan "maturity date", i.e. planning close date

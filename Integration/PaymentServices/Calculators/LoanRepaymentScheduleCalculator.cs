@@ -430,14 +430,10 @@
 
 				foreach (LoanInterestFreeze lif in freezes) {
 					if (lif.Contains(oCurrent)) {
-
-						//Console.WriteLine(lif.ToString());
 						
 						nTotalInterest += lif.InterestRate / _daysInMonth;
 
 						bContains = true;
-
-						//Console.WriteLine(nTotalInterest);
 
 						/*
 						_log.DebugFormat(
