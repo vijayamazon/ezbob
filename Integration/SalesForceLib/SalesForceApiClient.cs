@@ -47,8 +47,8 @@
 		}
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", modelStr);
+			Model = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", Model);
 			string result = null;
 
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
@@ -61,16 +61,18 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					modelStr,
+					Model,
 					out result);
+
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
 
-			LogResult("LeadAccountService", result, modelStr, model.Email);
+			LogResult("LeadAccountService", result, model.Email);
 		}
 
 		public void CreateOpportunity(OpportunityModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", modelStr);
+			Model = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", Model);
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce CreateOpportunity null session id");
@@ -84,16 +86,18 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					modelStr,
+					Model,
 					out result);
+
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("CreateOpportunityService", result, modelStr, model.Email);
+			LogResult("CreateOpportunityService", result, model.Email);
 
 		}
 
 		public void UpdateOpportunity(OpportunityModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce UpdateCloseOpportunityService\n {0}", modelStr);
+			Model = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce UpdateCloseOpportunityService\n {0}", Model);
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce UpdateCloseOpportunityService null session id");
@@ -110,20 +114,21 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					modelStr,
+					Model,
 					out result);
+
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("UpdateCloseOpportunityService", result, modelStr, model.Email);
+			LogResult("UpdateCloseOpportunityService", result, model.Email);
 
 		}
 
 		public void CreateUpdateContact(ContactModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", modelStr);
+			Model = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", Model);
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce CreateUpdateContact null session id");
-				return;
 			} else {
 				var response = this.api.ContactService(
 					new SalesForceServiceNS.SessionHeader {
@@ -132,16 +137,17 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					modelStr,
+					Model,
 					out result);
-			}
-			LogResult("ContactService", result, modelStr, model.Email);
 
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
+			}
+			LogResult("ContactService", result, model.Email);
 		}
 
 		public void CreateTask(TaskModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateTask\n {0}", modelStr);
+			Model = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateTask\n {0}", Model);
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce CreateTask null session id");
@@ -153,16 +159,18 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					modelStr,
+					Model,
 					out result);
+
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("CreateTask", result, modelStr, model.Email);
+			LogResult("CreateTask", result, model.Email);
 
 		}
 
 		public void CreateActivity(ActivityModel model) {
-			string modelStr = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateActivity\n {0}", modelStr);
+			Model = model.ToJsonExtension();
+			Log.InfoFormat("SalesForce CreateActivity\n {0}", Model);
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce CreateActivity null session id");
@@ -174,14 +182,17 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					modelStr,
+					Model,
 					out result);
+
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("CreateActivity", result, modelStr, model.Email);
+			LogResult("CreateActivity", result, model.Email);
 		}
 
 		public void ChangeEmail(string currentEmail, string newEmail) {
 			Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", currentEmail, newEmail);
+			Model=new { currentEmail, newEmail }.ToJsonExtension();
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce ChangeEmail null session id");
@@ -193,17 +204,17 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					new {
-						currentEmail,
-						newEmail
-					}.ToJsonExtension(),
+					Model,
 					out result);
+
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("ChangeEmail", result, new { currentEmail, newEmail }.ToJsonExtension(), newEmail);
+			LogResult("ChangeEmail", result, newEmail);
 		}
 
 		public GetActivityResultModel GetActivity(string email) {
 			Log.InfoFormat("SalesForce GetActivity for {0}", email);
+			Model = new { email }.ToJsonExtension(); 
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce GetActivity null session id");
@@ -215,12 +226,12 @@
 					new SalesForceServiceNS.CallOptions(),
 					new SalesForceServiceNS.DebuggingHeader(),
 					new SalesForceServiceNS.AllowFieldTruncationHeader(),
-					new {
-						Email = email
-					}.ToJsonExtension(),
+					Model,
 					out result);
+
+				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
-			LogResult("GetActivity", result, new { email }.ToJsonExtension(), email);
+			LogResult("GetActivity", result, email);
 			var res = result.JsonStringToObject<ApiResponse>(true);
 			try {
 				var activities = res.Success.Replace("\\", "").JsonStringToObject<IEnumerable<ActivityResultModel>>(true);
@@ -233,15 +244,14 @@
 			return new GetActivityResultModel { Error = Error };
 		}
 
-		private void LogResult(string serviceName, string result, string request, string email) {
+		private void LogResult(string serviceName, string result, string email) {
 			var res = string.IsNullOrEmpty(result) ? new ApiResponse(null, "result is null") : result.JsonStringToObject<ApiResponse>();
 			if (!res.IsSuccess) {
-				Log.ErrorFormat("SalesForce {3} failed for customer {0}, request \n{2}\n error: {1}", email, res.Error, request, serviceName);
-				Model = request;
+				Log.ErrorFormat("SalesForce {3} failed for customer {0}, request \n{2}\n error: {1}", email, res.Error, Model, serviceName);
 				Error = res.Error;
 			} else {
 				Error = String.Empty;
-				Log.InfoFormat("SalesForce {3} success for customer {0}, request \n{2}\n response: {1}", email, result, request, serviceName);
+				Log.InfoFormat("SalesForce {3} success for customer {0}, request \n{2}\n response: {1}", email, result, Model, serviceName);
 			}
 		}
 
