@@ -164,9 +164,8 @@
 
 				oMpUpdateTimesSetter.End(errorMessage, tokenExpired);
 
-				new SilentAutomation(this.customerId).SetTag(
-					firstTime
-					?  SilentAutomation.Callers.AddMarketplace
+				new SilentAutomation(this.customerId).SetTag(firstTime
+					? SilentAutomation.Callers.AddMarketplace
 					: SilentAutomation.Callers.UpdateMarketplace
 				).Execute();
 			} // try

@@ -19,18 +19,18 @@
 			IEnumerable<VatReturnRawData> oVatReturn,
 			IEnumerable<RtiTaxMonthRawData> oRtiMonths
 		) {
-			m_oStopper = new Stopper();
+			this.stopper = new Stopper();
 
-			m_oSp = new SpSaveVatReturnData(this, DB, Log) {
+			this.saveVatReturnData = new SpSaveVatReturnData(this, DB, Log) {
 				CustomerMarketplaceID = nCustomerMarketplaceID,
 				HistoryRecordID = nHistoryRecordID,
 				SourceID = nSourceID,
 				VatReturnRecords = new List<VatReturnRawData>(oVatReturn),
 				RtiTaxMonthRawData = new List<RtiTaxMonthRawData>(oRtiMonths),
 			};
-			m_oSp.InitEntries((VatReturnSourceType)nSourceID);
+			this.saveVatReturnData.InitEntries((VatReturnSourceType)nSourceID);
 
-			m_oRaw = new LoadVatReturnRawData(nCustomerMarketplaceID);
+			this.loadVatReturnRawData = new LoadVatReturnRawData(nCustomerMarketplaceID);
 		} // constructor
 
 		public override string Name {
@@ -38,19 +38,19 @@
 		} // Name
 
 		public override void Execute() {
-			if (m_oSp.IsEmptyInput())
+			if (this.saveVatReturnData.IsEmptyInput())
 				return;
 
-			m_oStopper.Execute(ElapsedDataMemberType.RetrieveDataFromDatabase, () => {
-				m_oRaw.Execute();
+			this.stopper.Execute(ElapsedDataMemberType.RetrieveDataFromDatabase, () => {
+				this.loadVatReturnRawData.Execute();
 
-				foreach (var oOld in m_oRaw.VatReturnRawData)
-					foreach (var oNew in m_oSp.VatReturnRecords)
+				foreach (var oOld in this.loadVatReturnRawData.VatReturnRawData)
+					foreach (var oNew in this.saveVatReturnData.VatReturnRecords)
 						if (oOld.Overlaps(oNew))
-							m_oSp.AddHistoryItem(oOld, oNew);
+							this.saveVatReturnData.AddHistoryItem(oOld, oNew);
 			});
 
-			Log.Debug(m_oSp);
+			Log.Debug(this.saveVatReturnData);
 
 			var os = new StringBuilder();
 
@@ -58,8 +58,8 @@
 
 			int nRowNum = 0;
 
-			m_oStopper.Execute(ElapsedDataMemberType.StoreDataToDatabase, () => {
-				m_oSp.ForEachRow((oReader, bRowsetStart) => {
+			this.stopper.Execute(ElapsedDataMemberType.StoreDataToDatabase, () => {
+				this.saveVatReturnData.ForEachRow((oReader, bRowsetStart) => {
 					var vals = new object[oReader.FieldCount];
 
 					int nRead = oReader.GetValues(vals);
@@ -84,14 +84,20 @@
 
 			Log.Debug("\n{0}\n", os);
 
-			var oSummary = new CalculateVatReturnSummary(m_oSp.CustomerMarketplaceID)
-				.SetHistoryRecordID(m_oSp.HistoryRecordID);
+			var oSummary = new CalculateVatReturnSummary(this.saveVatReturnData.CustomerMarketplaceID)
+				.SetHistoryRecordID(this.saveVatReturnData.HistoryRecordID);
 			oSummary.Execute();
+
+			DB.ExecuteNonQuery(
+				"UpdateMpTotalsHmrc",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@HistoryID", this.saveVatReturnData.HistoryRecordID)
+			);
 
 			ElapsedTimeInfo.MergeData(oSummary.Stopper.ElapsedTimeInfo);
 		} // Execute
 
-		public ElapsedTimeInfo ElapsedTimeInfo { get { return m_oStopper.ElapsedTimeInfo; } } // ElapsedTimeInfo
+		public ElapsedTimeInfo ElapsedTimeInfo { get { return this.stopper.ElapsedTimeInfo; } } // ElapsedTimeInfo
 
 		[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
 		[SuppressMessage("ReSharper", "UnusedMember.Local")]
@@ -99,9 +105,9 @@
 		private class SpSaveVatReturnData : AStoredProc {
 			public SpSaveVatReturnData(AStrategy oStrategy, AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {
 				HistoryItems = new List<HistoryItem>();
-				m_oOldDeletedItems = new SortedSet<int>();
+				this.m_oOldDeletedItems = new SortedSet<int>();
 
-				m_oStrategy = oStrategy;
+				this.m_oStrategy = oStrategy;
 			} // constructor
 
 			public override bool HasValidParameters() {
@@ -161,7 +167,7 @@
 						break;
 
 					default:
-						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
+						throw new StrategyAlert(this.m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
 					} // switch
 
 					break;
@@ -184,13 +190,13 @@
 						break;
 
 					default:
-						throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
+						throw new StrategyAlert(this.m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
 					} // switch
 
 					break;
 
 				default:
-					throw new StrategyAlert(m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
+					throw new StrategyAlert(this.m_oStrategy, "Non implemented VAT return source type: " + oNew.SourceType);
 				} // switch
 
 				oDeletedItem.IsDeleted = true;
@@ -222,7 +228,7 @@
 			public List<HistoryItem> HistoryItems { get; set; } // HistoryItems
 
 			public List<int> OldDeletedItems {
-				get { return m_oOldDeletedItems.ToList(); }
+				get { return this.m_oOldDeletedItems.ToList(); }
 				set { }
 			} // HistoryItems
 
@@ -308,7 +314,7 @@
 			} // HistoryItem
 
 			private VatReturnRawData Delete(VatReturnRawData oItem) {
-				m_oOldDeletedItems.Add(oItem.RecordID);
+				this.m_oOldDeletedItems.Add(oItem.RecordID);
 				return oItem;
 			} // Delete
 
@@ -325,8 +331,8 @@
 			private readonly SortedSet<int> m_oOldDeletedItems; 
 		} // class SpSaveVatReturnData
 
-		private readonly Stopper m_oStopper;
-		private readonly SpSaveVatReturnData m_oSp;
-		private readonly LoadVatReturnRawData m_oRaw;
+		private readonly Stopper stopper;
+		private readonly SpSaveVatReturnData saveVatReturnData;
+		private readonly LoadVatReturnRawData loadVatReturnRawData;
 	} // class SaveVatReturnData
 } // namespace Ezbob.Backend.Strategies.VatReturn
