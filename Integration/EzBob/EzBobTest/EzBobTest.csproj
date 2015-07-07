@@ -116,6 +116,7 @@
     <Compile Include="TestDbConnection.cs" />
     <Compile Include="TestEchoSign.cs" />
     <Compile Include="TestExperianLateCount.cs" />
+    <Compile Include="TestTwilio.cs" />
     <Compile Include="TestSageParser.cs" />
     <Compile Include="TestSalesForce.cs" />
     <Compile Include="TestSetupFeeCalcLegacy.cs" />
