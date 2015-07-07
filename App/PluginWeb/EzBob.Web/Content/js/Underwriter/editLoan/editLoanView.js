@@ -409,10 +409,12 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     }, // onRender
 
     setUpView: function () {
+        this.$el.find('#fees-calendar-from').datepicker({ format: 'dd/mm/yyyy' });
         this.$el.find('#fees-calendar-from').datepicker('setDate', new Date());
-        this.$el.find('#fees-calendar-to').datepicker();
+        this.$el.find('#fees-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
+        this.$el.find('#intrest-calendar-from').datepicker({ format: 'dd/mm/yyyy' });
         this.$el.find('#intrest-calendar-from').datepicker('setDate', new Date());
-        this.$el.find('#intrest-calendar-to').datepicker();
+        this.$el.find('#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
 
         var within = this.model.get('ReResultIn');
         if (within.Error != null && within.Error.length > 0) {
@@ -439,9 +441,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         if (options.AutoPayment === false) {
             this.$el.find('#automatic-charges').prop('checked', true);
             if (options.StopAutoChargeDate != null) {
-                this.$el.find('#stop-charges').show();
-                this.$el.find('#stop-charges-date').text(EzBob.formatDateWithoutTime(options.StopAutoChargeDate));
+                this.$el.find('#stop-charges-date').text("stopped from "+EzBob.formatDateWithoutTime(options.StopAutoChargeDate));
+            } else {
+                this.$el.find('#stop-charges-date').text("permanently stoped.");
             }
+            this.$el.find('#stop-charges').show();
         }
         if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null) {
             this.$el.find('#fees-calculation').prop('checked', true);

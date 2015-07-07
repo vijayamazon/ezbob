@@ -56,7 +56,7 @@
 
 				// input validation for "IN"
 				if (this.ReschedulingArguments.RescheduleIn && (this.ReschedulingArguments.ReschedulingDate > this.Result.LoanCloseDate)) {
-					this.Result.Error = "ReschedulingInPeriodException"; // "Within loan arrangement is impossible";
+                    this.Result.Error = "Within loan arrangement is impossible"; // "Within loan arrangement is impossible";
 					return;
 				}
 
