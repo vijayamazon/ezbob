@@ -55,6 +55,7 @@
       <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
       <xs:element minOccurs="0" name="DiscountPlanID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DistributedSetupFeePercent" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="EmailSendingBanned" type="xs:boolean" />
       <xs:element minOccurs="0" name="EndTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" nillable="true" type="xs:int" />
