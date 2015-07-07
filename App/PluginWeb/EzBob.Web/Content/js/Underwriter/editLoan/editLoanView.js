@@ -137,16 +137,18 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     reschSubmitForm: function () {
 
         var requestParam = { loanID: this.model.get('Id'), save: 'true' };
-
+        var submitBlank = true;
         var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
         if (checkedRadio === 'true') {
             requestParam.intervalType = $('#withinSelect option:selected').text();
             requestParam.rescheduleIn = 'true';
+            submitBlank = false;
         }
         if (checkedRadio === 'false') {
             requestParam.intervalType = $('#outsideSelect option:selected').text();
-            requestParam.AmountPerInterval = $('#outsideAmount').val();
+            requestParam.AmountPerInterval = $('#outsidePrincipal').val();
             requestParam.rescheduleIn = 'false';
+            submitBlank = false;
         }
 
         var isStopCharges = $('#automatic-charges').is(':checked');
@@ -168,6 +170,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             }
             requestParam.stopAutoCharge = 'true';
             requestParam.stopAutoChargePayment = chargesVal;
+            submitBlank = false;
         }
         if (isStopFees) {
             if (feesTo === "" || feesFrom === "") {
@@ -183,6 +186,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             requestParam.stopLateFee = 'true';
             requestParam.lateFeeStartDate = feesFrom;
             requestParam.lateFeeEndDate = feesTo;
+            submitBlank = false;
         }
         if (isStopIntrest) {
             if (interestTo === "" || interestFrom === "") {
@@ -198,6 +202,12 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             requestParam.freezeInterest = 'true';
             requestParam.freezeStartDate = interestFrom;
             requestParam.freezeEndDate = interestTo;
+            submitBlank = false;
+        }
+        if (submitBlank) {
+            var params = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
+            this.fillErrorPopup(params);
+            return false;
         }
 
         var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
