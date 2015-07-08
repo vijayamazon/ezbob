@@ -29,6 +29,11 @@
 				new QueryParameter("IsBrokerLead", this.isBrokerLead),
 				new QueryParameter("IsVipLead", this.isVipLead));
 
+			if (string.IsNullOrEmpty(model.Email)) {
+				Log.Error("email is null or empty for the following parameters:\n exec SF_LoadAccountLead {0}, {1}, {2}, {3}", 
+					this.email, this.customerID, this.isBrokerLead, this.isVipLead);
+				return;
+			}
 
 			if (string.IsNullOrEmpty(model.CompanyName)) {
 				model.CompanyName = model.Name;
