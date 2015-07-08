@@ -15,7 +15,7 @@
 				m_sSpName = Constants.GetFirstStepCustomersSp;
 				break;
 
-			case Constants.CampaignsType.OnlyRegisteredStore:
+			case Constants.CampaignsType.DidntFinishWizard:
 				m_sSpName = Constants.GetSecondStepCustomersSp;
 				break;
 
