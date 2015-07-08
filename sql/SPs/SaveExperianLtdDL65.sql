@@ -15,7 +15,7 @@ CREATE TYPE ExperianLtdDL65List AS TABLE (
 	FormNumber NVARCHAR(255) NULL,
 	CurrencyIndicator NVARCHAR(255) NULL,
 	TotalAmountOfDebentureSecured NVARCHAR(255) NULL,
-	ChargeType NVARCHAR(255) NULL,
+	ChargeType NVARCHAR(4000) NULL,
 	AmountSecured NVARCHAR(4000) NULL,
 	PropertyDetails NVARCHAR(4000) NULL,
 	ChargeeText NVARCHAR(255) NULL,
