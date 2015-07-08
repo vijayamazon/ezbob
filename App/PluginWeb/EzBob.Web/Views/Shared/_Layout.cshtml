@@ -1,4 +1,6 @@
-﻿@using System.Globalization
+﻿@using System
+@using System.Globalization
+@using System.Web.Helpers
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
@@ -189,7 +191,7 @@
 
 	@if (!IsSectionDefined("customJs")) {
 		<div style="display: none;" class="hide" id="cg-account-model-template">@JsonConvert.SerializeObject(new Integration.ChannelGrabberFrontend.AccountModel())</div>
-		<div style="display: none;" class="hide" id="current-server-time-zone">@DateTimeOffset.Now.ToString("zzz", CultureInfo.InvariantCulture)</div>
+		<div style="display: none;" class="hide" id="current-server-offset"></div>
 		<div style="display: none;" class="hide" id="yodlee-banks">@oDBHelper.YodleeBanks</div>
 		<div style="display: none;" class="hide" id="customer-name"></div>
 	}
@@ -242,6 +244,10 @@
 			EzBob_CgVendors_init();
 
 			EzBob.CustomerLeadFieldNames = JSON.parse($('#customer-lead-field-names').html());
+
+			var serverDate = '@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss")';
+			var serverOffset = moment.utc(serverDate).diff(new Date());
+			$('#current-server-offset').text(serverOffset);
 		});
 
 		function EzBob_CgVendors_init() {

@@ -652,6 +652,10 @@ EzBob.UpdateBugsIcons = function(data) {
 	});
 };
 
+EzBob.currentServerDate = function() {
+	return moment().utc().add('milliseconds', $('#current-server-offset').text());
+};
+
 EzBob.currentDateFormatted = function() {
 	return moment.utc().format('DD/MM/YYYY');
 };
