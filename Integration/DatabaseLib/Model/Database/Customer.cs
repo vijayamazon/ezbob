@@ -612,13 +612,15 @@
 		public virtual CampaignSource CampaignSource { get; set; }
 
         public virtual DateTime? MinOpenLoanDate() {
-            DateTime? firstLoanDate = null;
-            if (Loans.Any(x => x.Status != LoanStatus.PaidOff)) {
-                firstLoanDate = Loans.Where(x => x.Status != LoanStatus.PaidOff)
-                    .Min(x => x.Date);
-            }
 
-            return firstLoanDate;
+	        var firstLoan = Loans.Where(x => x.Status != LoanStatus.PaidOff)
+		        .OrderBy(x => x.Date)
+		        .FirstOrDefault();
+
+	        if (firstLoan != null)
+		        return firstLoan.Date;
+
+	        return null;
         }
 	} // class Customer
 

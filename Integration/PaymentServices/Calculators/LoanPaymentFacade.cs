@@ -3,17 +3,15 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
-	using EZBob.DatabaseLib.Model;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using EzServiceAccessor;
 	using EZBob.DatabaseLib.Model;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
-	using StructureMap;
 	using log4net;
 	using NHibernate.Linq;
+	using StructureMap;
 
 	public class LoanPaymentFacade {
 		public LoanPaymentFacade() {

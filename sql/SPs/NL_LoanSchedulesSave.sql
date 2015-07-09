@@ -16,6 +16,7 @@ CREATE TYPE NL_LoanSchedulesList AS TABLE (
 	[ClosedTime] DATETIME NULL,
 	[Principal] DECIMAL(18, 6) NOT NULL,
 	[InterestRate] DECIMAL(18, 6) NOT NULL
+	--,[Fee] DECIMAL(18, 6)  NULL
 )
 GO
 
@@ -32,6 +33,7 @@ BEGIN
 		[ClosedTime],
 		[Principal],
 		[InterestRate]
+		--,[Fee]
 	) SELECT
 		[LoanHistoryID],
 		[Position],
@@ -39,6 +41,7 @@ BEGIN
 		[ClosedTime],
 		[Principal],
 		[InterestRate]
+	--	,[Fee]
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

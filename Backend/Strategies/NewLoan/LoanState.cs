@@ -33,8 +33,11 @@
 
 			if (t.GetType() == typeof(Loan)) {
 				this.tLoan = t as Loan;
+				this.tNLLoan = null;
+
 			} else if (t.GetType() == typeof(NL_Model)) {
 				this.tNLLoan = t as NL_Model;
+				this.tLoan = null;
 			}
 
 			StateDate = stateDate ?? DateTime.UtcNow;
@@ -49,10 +52,17 @@
 
 				// new loan structure
 				if (this.tNLLoan != null) {
+
 					// TODO
-					// cal SP - load nl by id
+					// cal SP - load NL by id [NL_LoanStateLoad]
 
-
+					// loan - flat data
+					//		fees - list
+					//		historeis - list
+					//			history entry: 
+					//				schedules - list
+					//  logic payments - list
+					 
 
 
 

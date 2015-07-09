@@ -29,6 +29,9 @@
         [DataMember]
         public decimal InterestRate { get; set; }
 
+		//[DataMember]
+		//public decimal? Fee { get; set; }
+
 	    /// <summary>
 	    /// Returns a string that represents the current object.
 	    /// </summary>

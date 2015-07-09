@@ -335,8 +335,8 @@ CREATE TABLE [dbo].[NL_LoanSchedules](
 	[PlannedDate] [DATETIME] NOT NULL,
 	[ClosedTime] [DATETIME] NULL,
 	[Principal] [DECIMAL] (18,6) NOT NULL,
-	[InterestRate] [DECIMAL](18, 6) NOT NULL,
-	[AgreementModel] [nvarchar](max) NULL,
+	[InterestRate] [DECIMAL](18, 6) NOT NULL,	
+	--[Fee] [DECIMAL](18, 6)  NULL,	
 	[TimestampCounter] rowversion NOT NULL,	
  CONSTRAINT [PK_NL_LoanSchedules] PRIMARY KEY CLUSTERED ([LoanScheduleID] ASC)
 ) ;

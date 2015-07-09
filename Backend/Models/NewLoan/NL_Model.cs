@@ -30,6 +30,9 @@
 		public NL_LoanHistory LoanHistory { get; set; }
 
 		[DataMember]
+		public List<NL_LoanSchedules> Schedule { get; set; }
+
+		[DataMember]
 		public List<NL_LoanAgreements> LoanAgreements { get; set; }
 
 		[DataMember]
@@ -76,37 +79,6 @@
 		[DataMember]
 		public NL_PaypointTransactions PaypointTransaction { get; set; }
 
-
-		/*// NL_OfferForLoan
-		[DataMember]
-		public int LoanLegalID { get; set; }
-		[DataMember]
-		public int OfferID { get; set; }
-		[DataMember]
-		public int LoanTypeID { get; set; }
-		[DataMember]
-		public int RepaymentIntervalTypeID { get; set; }
-		[DataMember]
-		public int LoanSourceID { get; set; }
-		[DataMember]
-		public int OfferRepaymentCount { get; set; }
-		[DataMember]
-		public decimal OfferAmount { get; set; }
-		[DataMember]
-		public decimal MonthlyInterestRate { get; set; }
-		[DataMember]
-		public decimal SetupFeePercent { get; set; }
-		[DataMember]
-		public decimal BrokerSetupFeePercent { get; set; }
-		[DataMember]
-		public int InterestOnlyRepaymentCount { get; set; }
-		[DataMember]
-		public decimal LoanLegalAmount { get; set; }
-		[DataMember]
-		public int LoanLegalRepaymentPeriod { get; set; }
-		[DataMember]
-		public string DiscountPlan { get; set; }
-*/
 
 
 
@@ -170,6 +142,12 @@
 		public int PaypointTransactionStatusID { get; set; }
 		[DataMember]
 		public DateTime PaypointTransactionTime { get; set; }
+
+		[DataMember]
+		public string Error { get; set; }
+
+		[DataMember]
+		public decimal? APR { get; set; }
 
 		/// <summary>
 		/// Returns a string that represents the current object.
