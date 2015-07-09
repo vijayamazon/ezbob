@@ -79,31 +79,25 @@
             reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
             reModel.RescheduleIn = true;
 
-            try
-            {
+            try{
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
                 model.ReResultIn = result.Value;
-                //model.ReschedulingINNotification = result.Value.Error;
                 Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
             }
-            catch (Exception editex)
-            {
+            catch (Exception editex){
                 Log.Error(editex);
             }
 
-            reModel.RescheduleIn = false;
-            reModel.PaymentPerInterval = 0m;
-            try
-            {
-                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-                model.ReResultOut = result.Value;
-                //model.OutsideAmount = reModel.PaymentPerInterval;
-                //model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
-                Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
-            }
-            catch (Exception editex)
-            {
-                Log.Error(editex);
+            if (!model.ReResultIn.Error.Contains("Loan balance: £0.00")){
+                reModel.RescheduleIn = false;
+                reModel.PaymentPerInterval = 0m;
+                try {
+                    ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
+                    model.ReResultOut = result.Value;
+                    Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
+                } catch (Exception editex) {
+                    Log.Error(editex);
+                }
             }
 
             return Json(model, JsonRequestBehavior.AllowGet);

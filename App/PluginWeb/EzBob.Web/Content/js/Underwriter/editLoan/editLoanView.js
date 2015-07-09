@@ -419,19 +419,18 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     }, // onRender
 
     setUpView: function () {
-        this.$el.find('#fees-calendar-from').datepicker({ format: 'dd/mm/yyyy' });
-        this.$el.find('#fees-calendar-from').datepicker('setDate', new Date());
-        this.$el.find('#fees-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
-        this.$el.find('#intrest-calendar-from').datepicker({ format: 'dd/mm/yyyy' });
-        this.$el.find('#intrest-calendar-from').datepicker('setDate', new Date());
-        this.$el.find('#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
+        this.$el.find('#fees-calendar-from,#fees-calendar-to,#intrest-calendar-from,#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
+        this.$el.find('#fees-calendar-from,#intrest-calendar-from').datepicker('setDate', new Date());
 
         var within = this.model.get('ReResultIn');
         if (within.Error != null && within.Error.length > 0) {
             if (within.Error === "Within loan arrangement is impossible") {
-                this.$el.find('#exception-div').css('opacity', '0.5');
-                this.$el.find('#radio-1').attr('disabled', true);
-                this.$el.find('#withinSelect').attr('disabled', true);
+                this.$el.find('#within-div').css('opacity', '0.5');
+                this.$el.find('#radio-1,#withinSelect').attr('disabled', true);
+            }
+            if (within.Error.indexOf("paid off. Loan balance: ") !== -1) {
+                this.$el.find('#within-div,#outside-div').css('opacity', '0.5');
+                this.$el.find('#radio-1,#withinSelect,#radio-2,#outsideSelect,#outsidePrincipal').attr('disabled', true);
             }
         }
         this.$el.find('#withinPayments').text(within.IntervalsNum);
@@ -439,14 +438,19 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         this.$el.find('#withinIntrest').text(EzBob.formatPounds(within.FirstPaymentInterest));
 
         var outside = this.model.get('ReResultOut');
-        if (outside.Error != null && outside.Error.length > 0) {
-            var params = { head: 'Please fix the marked field', body: outside.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
-            this.fillErrorPopup(params);
+        if (outside != null) {
+            if (outside.Error != null && outside.Error.length > 0) {
+                var params = { head: 'Please fix the marked field', body: outside.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
+                this.fillErrorPopup(params);
+            }
+            this.$el.find('#outsidePayments').text(outside.IntervalsNum);
+            this.$el.find('#outsidePrincipal').val(outside.DefaultPaymentPerInterval);
+            this.$el.find('#outsideIntrest').text(EzBob.formatPounds(outside.FirstPaymentInterest));
+        } else {
+            this.$el.find('#outsidePayments').text('0');
+            this.$el.find('#outsidePrincipal').val('0');
+            this.$el.find('#outsideIntrest').text(EzBob.formatPounds('0'));
         }
-        this.$el.find('#outsidePayments').text(outside.IntervalsNum);
-        this.$el.find('#outsidePrincipal').val(outside.DefaultPaymentPerInterval);
-        this.$el.find('#outsideIntrest').text(EzBob.formatPounds(outside.FirstPaymentInterest));
-
         var options = this.model.get('Options');
         if (options.AutoPayment === false) {
             this.$el.find('#automatic-charges').prop('checked', true);

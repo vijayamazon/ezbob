@@ -30,26 +30,6 @@ namespace EzBob.Models
         public ReschedulingResult ReResultIn { get; set; }
         public ReschedulingResult ReResultOut { get; set; }
 
-
-        //public int WithinWeek { get; set; }
-
-		//public int WithinWeek { get; set; }
-
-		//public int WithinMonth { get; set; }
-
-		//public int OutsideWeek { get; set; }
-
-		//public int OutsideMonth { get; set; }
-
-		//public decimal? OutsideAmount { get; set; }
-
-		//public decimal? ReschedulingBalance { get; set; }
-
-		//public string ReschedulingINNotification { get; set; }
-		//public string ReschedulingOUTNotification { get; set; }
-
-		//public decimal? DefaultPaymentPerInterval { get; set; }
-
         public LoanOptions Options { get; set; }
 
         public static EditLoanDetailsModel Parse(string json)
@@ -132,15 +112,12 @@ namespace EzBob.Models
             }
         }
 
-        private void CheckNoZeroFees(IEnumerable<SchedultItemModel> fees)
-        {
+        private void CheckNoZeroFees(IEnumerable<SchedultItemModel> fees){
             if (fees.Count(i => i.Fees == 0) > 1)
             {
                 Errors.Add("Zero fees are not allowed");
             }
         }
-
-
         /* public override string ToString() {
              StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
              Type t = typeof(EditLoanDetailsModel);
@@ -150,11 +127,9 @@ namespace EzBob.Models
              }
              return sb.ToString();
          }*/
-
-        public override string ToString()
-        {
+        
+        public override string ToString(){
             var sb = new StringBuilder();
-
 
             sb.AppendLine("Installment:");
             foreach (var item in Items.Where(s => s.Type == "Installment"))
