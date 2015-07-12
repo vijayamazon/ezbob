@@ -431,6 +431,9 @@
 					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
 					options.AutoLateFees = customerInGoodStatus;
 
+					options.AutoPayment = customerInGoodStatus;
+					options.StopAutoChargeDate = customerInGoodStatus ? (DateTime?)null : now;
+
 					this.loanOptionsRepository.SaveOrUpdate(options);
 
 					if (!customerInGoodStatus) {

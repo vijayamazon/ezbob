@@ -403,7 +403,7 @@ EzBob.Underwriter.PersonInfoView = Backbone.Marionette.ItemView.extend({
 		if (this.model.get('ExternalCollectionStatusesList')[0].value !== '') {
 			this.model.get('ExternalCollectionStatusesList').unshift(blank);
 		}
-		console.log(this.model.attributes);
+		
 		var d = new EzBob.Dialogs.ComboEdit({
 			model: this.model,
 			propertyName: 'ExternalCollectionStatusID',
