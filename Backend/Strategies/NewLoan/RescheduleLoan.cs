@@ -371,6 +371,7 @@
 		/// <param name="subject"></param>
 		/// <param name="transactionEx"></param>
 		private void SendMail(string subject, Exception transactionEx = null) {
+			subject = subject + " for customerID: " + this.tLoan.Customer.Id + ", by userID: " + Context.UserID;
 			this.message = string.Format(
 				"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
 				 + "<h4>Arguments</h4>: {2} <br/>"
