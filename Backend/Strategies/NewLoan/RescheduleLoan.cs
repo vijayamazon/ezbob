@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using System.Linq;
+	using System.Web;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models.NewLoan;
@@ -10,6 +11,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
+	using MailApi;
 	using PaymentServices.Calculators;
 	using StructureMap;
 
@@ -35,6 +37,10 @@
 			this.Result.ReschedulingRepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType;
 
 			this.cultureInfo = new CultureInfo("en-GB");
+
+			this.emailToAddress = CurrentValues.Instance.EzbobMailTo;
+			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
+			this.emailFromName = CurrentValues.Instance.MailSenderName;
 		}
 
 		public override string Name { get { return "RescheduleLoan"; } }
@@ -83,7 +89,7 @@
 				} catch (Exception calcEx) {
 					Log.Info("LoanRepaymentScheduleCalculator NextEarlyPayment EXCEPTION: {0}", calcEx.Message);
 				}
-	
+
 				// remove unpaid (lates, stilltopays passed) and future schedule items
 				foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 					if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
@@ -343,18 +349,48 @@
 					});
 					this.loanRep.CommitTransaction();
 
+					SendMail("Re-schedule saved successfully");
+
 					// ReSharper disable once CatchAllClause
 				} catch (Exception transactionEx) {
 					this.loanRep.RollbackTransaction();
 					this.message = string.Format("Re-schedule rolled back. Arguments {0}, err: {1}", this.ReschedulingArguments, transactionEx);
 					Log.Alert(this.message);
 					this.Result.Error = "Failed to save new schedules list to DB. Try again, please.";
+
+					SendMail("Re-schedule rolled back", transactionEx);
 				}
 
 				this.loanRep.Clear();
 			}
 		}
 
+		/// <summary>
+		/// sending mail on re-schedule saving
+		/// </summary>
+		/// <param name="subject"></param>
+		/// <param name="transactionEx"></param>
+		private void SendMail(string subject, Exception transactionEx = null) {
+			this.message = string.Format(
+				"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
+				 + "<h3>Arguments:</h3>: {2} <br/>"
+				 + "<h3>Result:</h3>: {3} <br/>"
+				 + "<h3>ERROR:</h3>: {4} <br/></p>",
+
+				this.tLoan.Customer.Id, Context.UserID
+				, HttpUtility.HtmlEncode(this.ReschedulingArguments.ToString())
+				, HttpUtility.HtmlEncode(this.Result.ToString())
+				, HttpUtility.HtmlEncode(transactionEx == null ? "NO errors" : transactionEx.ToString())
+			);
+			new Mail().Send(
+				this.emailToAddress,
+				null,					// message text
+				this.message,			//html
+				this.emailFromAddress,	// fromEmail
+				this.emailFromName,		// fromName
+				subject					// subject
+			);
+		} // SendMail
 
 		private Loan tLoan;
 		private readonly NL_Model tNLLoan;
@@ -362,6 +398,11 @@
 		private readonly LoanRepository loanRep;
 		private readonly CultureInfo cultureInfo;
 		private LoanChangesHistory loanHistory;
+
+		private readonly string emailToAddress;
+		private readonly string	emailFromAddress;
+		private readonly string	emailFromName;
+
 
 	}
 }

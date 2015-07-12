@@ -209,12 +209,12 @@
             <tr class="<%= editClass %>">
                 <td>
                     <%- i+1 %>&nbsp;<%
-                    if (item.Editable) { %>
+                    if (item.Editable && item.Type != 'Installment') { %>
                     <button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
                     <%
                     }
 
-                    if (item.Deletable) { %>
+                    if (item.Deletable && item.Type != 'Installment') { %>
                     <button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
                     <%
                     }
@@ -297,7 +297,7 @@
 
     %>
     <div>
-        <button class="btn btn-primary add-installment">Add Installment</button>
+        @*<button class="btn btn-primary add-installment">Add Installment</button>*@
         <button class="btn btn-primary add-fee">Add Fee</button>
     </div>
 </script>

@@ -8,6 +8,7 @@
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.Models.NewLoan;
 
 
 
@@ -237,7 +238,15 @@
 			   DateTime? periodStartDate = null,
 			   DateTime? periodEndDate = null
 		);
-		
+
+		/// <summary>
+		/// Creates loan schedule by rescheduling time .............
+		/// Also calculates loan plan.
+		/// Schedule is stored in WorkingModel.Schedule ????????????????
+		/// </summary>
+		public virtual List<ScheduledItemWithAmountDue> RescheduleToIntervals(ReschedulingArgument reschedulingArgument, bool writeToLog = true) {
+			return new RescheduleToIntervalsMethod(this, reschedulingArgument, writeToLog).Execute();
+		} // RescheduleToIntervals
 
 	} // class LoanCalculator
 } // namespace
