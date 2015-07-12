@@ -60,8 +60,7 @@
         [Ajax]
         [HttpGet]
         [NoCache]
-        public JsonResult Loan(int id)
-        {
+        public JsonResult Loan(int id){
             var loan = this._loans.Get(id);
 
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
@@ -79,7 +78,8 @@
             reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
             reModel.RescheduleIn = true;
 
-            try{
+            try
+            {
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
                 model.ReResultIn = result.Value;
                 Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
@@ -88,14 +88,14 @@
                 Log.Error(editex);
             }
 
-            if (!model.ReResultIn.Error.Contains("Loan balance: £0.00")){
+            if (model.ReResultIn != null && (model.ReResultIn.Error==null || !model.ReResultIn.Error.Contains("Loan balance: £0.00"))){
                 reModel.RescheduleIn = false;
                 reModel.PaymentPerInterval = 0m;
-                try {
+                try{
                     ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
                     model.ReResultOut = result.Value;
                     Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
-                } catch (Exception editex) {
+                }catch (Exception editex){
                     Log.Error(editex);
                 }
             }
@@ -240,8 +240,10 @@
                 DateTime now = DateTime.UtcNow;
 
                 //  loan options
-                if (save){
-                    if (freezeInterest == true){
+                if (save)
+                {
+                    if (freezeInterest == true)
+                    {
                         loan.InterestFreeze.Add(new LoanInterestFreeze
                         {
                             Loan = loan,
@@ -256,7 +258,8 @@
                     }
                 }//  ### loan options
 
-                if (rescheduleIn != null){
+                if (rescheduleIn != null)
+                {
                     ReschedulingArgument reModel = new ReschedulingArgument();
                     reModel.LoanType = loan.GetType().AssemblyQualifiedName;
                     reModel.LoanID = loanID;
@@ -275,7 +278,8 @@
                 }
 
                 //  loan options
-                if (save){
+                if (save)
+                {
                     this.session.Refresh(loan);
                     UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
                 }
@@ -339,7 +343,7 @@
 
                 this.loanOptionsRepository.SaveOrUpdate(options);
                 this.session.Flush();
-				// TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
+                // TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
             }
         }
 
