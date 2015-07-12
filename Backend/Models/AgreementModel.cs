@@ -11,6 +11,8 @@
 		public List<FormattedSchedule> FormattedSchedules { get; set; }
 		[DataMember]
 		public List<LoanScheduleItemModel> Schedule { get; set; }
+        //[DataMember]
+        //public List<LoanScheduleItemModel> NL_Schedule { get; set; }
 
 		[DataMember]
 		public string TotalAmount { get; set; }

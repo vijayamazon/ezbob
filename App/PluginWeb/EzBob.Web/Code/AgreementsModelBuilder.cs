@@ -183,12 +183,108 @@
 			                           schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 		}
 
+        //public void NL_CalculateTotal(decimal fee, List<LoanScheduleItem> schedule, AgreementModel model)
+        //{
+        //    model.TotalAmount = FormattingUtils.NumericFormats(schedule.Sum(a => a.AmountDue));
+        //    model.TotalPrincipal = FormattingUtils.NumericFormats(schedule.Sum(a => a.LoanRepayment));
+        //    model.TotalInterest = FormattingUtils.NumericFormats(schedule.Sum(a => a.Interest));
+        //    model.TotalAmoutOfCredit = FormattingUtils.NumericFormats(schedule.Sum(a => a.LoanRepayment));
+        //    model.TotalFees = FormattingUtils.NumericFormats(fee);
 
-		public AgreementModel NL_BuildAgreementModel(Customer customer, decimal amount, NL_Model loan) {
-			var model = new AgreementModel();
-			//TODO EZ-3483 fill in model by appropriate data
-			return model;
-		}
+        //    var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
+        //    decimal currencyRate = (decimal)currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
+        //    model.TotalPrincipalUsd = "$ " +
+        //                              (CurrentValues.Instance.AlibabaCurrencyConversionCoefficient * currencyRate *
+        //                               schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
+        //}
+
+
+        //public AgreementModel NL_BuildAgreementModel(Customer customer, decimal amount, NL_Model loan) {
+        //    var model = new AgreementModel();
+
+        //    model.NL_Schedule = loan.Schedule.Select(LoanScheduleExtention.FromLoanScheduleItem).ToList();
+        //    model.CustomerEmail = customer.Name;
+        //    model.FullName = customer.PersonalInfo.Fullname;
+        //    model.TypeOfBusinessName = customer.PersonalInfo.TypeOfBusinessName;
+
+        //    var businessType = customer.PersonalInfo.TypeOfBusiness;
+        //    var company = customer.Company;
+        //    CustomerAddress companyAddress = null;
+        //    if (company != null)
+        //    {
+        //        switch (businessType.Reduce())
+        //        {
+        //            case TypeOfBusinessReduced.Limited:
+        //                model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
+        //                goto case TypeOfBusinessReduced.NonLimited;
+        //            case TypeOfBusinessReduced.NonLimited:
+        //                model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+        //                companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+        //                break;
+        //        }
+        //    }
+
+        //    model.CompanyAdress = companyAddress.GetFormatted();
+        //    model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
+
+        //    var loanSetupFee = loan.LoanFees.FirstOrDefault(x => x.LoanFeeTypeID == 1) == null ? 0 : loan.LoanFees.First(x => x.LoanFeeTypeID == 1).Amount;
+        //    CalculateTotal(loanSetupFee, model.NL_Schedule.ToList(), model);
+
+        //    model.CurentDate = FormattingUtils.FormatDateTimeToString(DateTime.UtcNow);
+        //    model.CurrentDate = DateTime.UtcNow;
+
+        //    model.FormattedSchedules = CreateSchedule(loan.Schedule.ToList()).ToList();
+
+        //    model.InterestRate = loan.InterestRate * 100;
+        //    model.SetupFee = FormattingUtils.NumericFormats(loan.SetupFee);
+
+        //    model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
+        //    model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
+
+        //    //According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
+        //    if ((loan.CashRequest.ManualSetupFeePercent.HasValue && loan.CashRequest.ManualSetupFeePercent.Value > 0) ||
+        //       (loan.CashRequest.BrokerSetupFeePercent.HasValue && loan.CashRequest.BrokerSetupFeePercent.Value > 0))
+        //    {
+        //        decimal setupFeePercent = (loan.CashRequest.ManualSetupFeePercent ?? 0M) + (loan.CashRequest.BrokerSetupFeePercent ?? 0M);
+        //        model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
+        //    }
+        //    model.IsBrokerFee = false;
+        //    model.IsManualSetupFee = false;
+
+        //    model.APR = apr;
+
+        //    var start = loan.Schedule.First().Date.AddMonths(-1);
+        //    var end = loan.Schedule.Last().Date;
+        //    var days = (end - start).TotalDays;
+
+
+
+        //    //model.InterestRatePerDay = (model.Schedule.Count * model.InterestRate) / (decimal)days;
+        //    model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
+        //    model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);
+        //    model.InterestRatePerYearFormatted = string.Format("{0:0.00}", model.InterestRate * 12);
+
+        //    var loanType = customer.LastCashRequest.LoanType ?? new StandardLoanType();
+
+        //    model.LoanType = loanType.Type;
+        //    model.TermOnlyInterest = loan.Schedule.Count(s => s.LoanRepayment == 0);
+        //    model.TermOnlyInterestWords = FormattingUtils.ConvertToWord(model.TermOnlyInterest).ToLower();
+        //    model.TermInterestAndPrincipal = loan.Schedule.Count(s => s.LoanRepayment != 0 && s.Interest != 0);
+        //    model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
+        //    model.isHalwayLoan = loanType.IsHalwayLoan;
+        //    model.CountRepayment = _repaymentCalculator.CalculateCountRepayment(loan);
+        //    model.Term = _repaymentCalculator.CalculateCountRepayment(loan);
+
+        //    model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(loan.Schedule.Sum(a => a.LoanRepayment) - loan.SetupFee);
+
+        //    if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString())
+        //    {
+        //        CreateEverlineRefinance(model, customer.Name);
+        //    }
+
+
+        //    return model;
+        //}
 		
 
 	}
