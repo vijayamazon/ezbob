@@ -148,6 +148,9 @@ EzBob.Underwriter.PropertiesView = Backbone.Marionette.ItemView.extend({
 	accordionClicked: function (el) {
 		if (!$(el.currentTarget).hasClass('collapsed') && $(el.currentTarget).attr('href').indexOf('zoopla') > -1) {
 			this.googleStreetView();
+			this.$el.find('img.zoppla-graph').each(function () {
+				$(this).attr('src', $(this).attr('data-src'));
+			});
 		}
 	},
 

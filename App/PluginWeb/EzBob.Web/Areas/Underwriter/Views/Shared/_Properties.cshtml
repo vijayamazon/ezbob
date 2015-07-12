@@ -431,13 +431,13 @@
 												</tr>
 											</tbody>
 										</table>
-										<img src="<%-data.AverageValuesGraphUrl%>" />
-										<img src="<%-data.HomeValuesGraphUrl%>" />
+										<img class="zoppla-graph" data-src="<%-data.AverageValuesGraphUrl%>" />
+										<img class="zoppla-graph" data-src="<%-data.HomeValuesGraphUrl%>" />
 										<a href="<%-data.PricesUrl%>" class="btn btn-primary" target="_blank">Go to Zoopla <i class="fa fa-info-circle" data-zoopla=""></i></a>
 									</div>
 									<div class="col-md-6">
-										<img src="<%-data.ValueRangesGraphUrl%>" />
-										<img src="<%-data.ValueTrendGraphUrl%>" />
+										<img class="zoppla-graph" data-src="<%-data.ValueRangesGraphUrl%>" />
+										<img class="zoppla-graph" data-src="<%-data.ValueTrendGraphUrl%>" />
 										<div class="street-view" id="pano<%-i%>" style="width: 100%; height: 360px;" data-address="<%-property.FormattedAddress%>"></div>
 										<button class="btn btn-link btn-xs btn-street-view-static">static view</button>
 										<img class="street-view-static hide" src="https://maps.googleapis.com/maps/api/streetview?size=640x640&sensor=false&location=<%-property.FormattedAddress%>" />
