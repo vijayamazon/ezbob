@@ -123,7 +123,14 @@ BEGIN
 			AND u.UpdatingEnd BETWEEN r.CreationDate AND r.UnderwriterDecisionDate
 			GROUP BY u.MpID
 			HAVING COUNT(*) > 1
-		) THEN 1 ELSE 0 END)
+		) THEN 1 ELSE 0 END),
+		PreviousApproveCount = (
+			SELECT COUNT(*)
+			FROM CashRequests ir
+			WHERE ir.IdCustomer = r.IdCustomer
+			AND ir.Id < r.Id
+			AND ir.CreationDate > ISNULL(@StartTime, 'May 11 2015')
+		)
 	FROM
 		CashRequests r
 		INNER JOIN Customer c
