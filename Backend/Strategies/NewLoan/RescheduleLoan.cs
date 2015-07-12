@@ -332,6 +332,7 @@
 
 					this.tLoan.Status = LoanStatus.Late;
 					this.tLoan.LastRecalculation = DateTime.UtcNow;
+					this.tLoan.Modified = true;
 
 					this.loanRep.EvictAll();
 					this.loanRep.Evict(this.tLoan);
