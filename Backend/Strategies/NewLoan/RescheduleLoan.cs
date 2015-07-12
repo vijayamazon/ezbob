@@ -373,14 +373,14 @@
 		private void SendMail(string subject, Exception transactionEx = null) {
 			this.message = string.Format(
 				"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
-				 + "<h3>Arguments:</h3>: {2} <br/>"
-				 + "<h3>Result:</h3>: {3} <br/>"
-				 + "<h3>ERROR:</h3>: {4} <br/></p>",
+				 + "<h4>Arguments</h4>: {2} <br/>"
+				 + "<h4>Result</h4>: {3} <br/>"
+				 + "<h4>ERROR</h4>: {4} <br/></p>",
 
 				this.tLoan.Customer.Id, Context.UserID
-				, HttpUtility.HtmlEncode(this.ReschedulingArguments.ToString())
-				, HttpUtility.HtmlEncode(this.Result.ToString())
-				, HttpUtility.HtmlEncode(transactionEx == null ? "NO errors" : transactionEx.ToString())
+				, (this.ReschedulingArguments)
+				, (this.Result)
+				, (transactionEx == null ? "NO errors" : transactionEx.ToString())
 			);
 			new Mail().Send(
 				this.emailToAddress,

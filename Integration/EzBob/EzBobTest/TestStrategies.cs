@@ -946,14 +946,14 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 3946; //4192; // 4439; // 3534; //1846; //2662;
+			int loanID = 4438; //3946; //4192; // 4439; // 3534; //1846; //2662;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.SaveToDB = false;
+			reModel.SaveToDB = true;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
