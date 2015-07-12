@@ -13,7 +13,8 @@ ALTER PROCEDURE UpdateBrokerCommissionTransferStatus
 	@TrackingNumber nvarchar(100), 
 	@TransactionStatus nvarchar(50),
 	@Description nvarchar(100),
-	@Now DATETIME = NULL
+	@Now DATETIME = NULL,
+	@InvoiceSent BIT = NULL
 )
 AS
 BEGIN
@@ -35,5 +36,16 @@ BEGIN
 	    WHERE
 	    	LoanBrokerCommissionID = @LoanBrokerCommissionID
     END
+        
+    IF @InvoiceSent IS NOT NULL
+    BEGIN
+    	UPDATE 
+    		LoanBrokerCommission
+	    SET 
+	    	InvoiceSent = @InvoiceSent
+	    WHERE
+	    	LoanBrokerCommissionID = @LoanBrokerCommissionID
+    END
 END
+
 GO

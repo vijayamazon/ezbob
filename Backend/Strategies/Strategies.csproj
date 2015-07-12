@@ -162,6 +162,7 @@
     <Compile Include="Experian\ExperianTargeting.cs" />
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
+    <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />

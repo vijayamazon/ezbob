@@ -25,6 +25,7 @@
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MailStrategies.Broker;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -1162,6 +1163,20 @@
 
 			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
 
+		}
+
+		[Test]
+		public void TestBrokerInvoice() {
+			BrokerCommissionInvoice brokerCommissionInvoice = new BrokerCommissionInvoice(new BrokerInvoiceCommissionModel {
+				BrokerID = 139,
+				BankAccount = "00000000",
+				SortCode = "123456",
+				CommissionTime = DateTime.Today,
+				InvoiceID = 3,
+				CommissionAmount = 60,
+				CustomerName = "Jada Xoff"
+			});
+			brokerCommissionInvoice.Execute();
 		}
 
 
