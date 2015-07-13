@@ -13,6 +13,7 @@
 	using StructureMap;
 	using System.Text.RegularExpressions;
 	using Ezbob.Utils.Extensions;
+	using EZBob.DatabaseLib.Repository;
 	using NHibernate.Criterion;
 	using NHibernate.Transform;
 
@@ -20,10 +21,11 @@
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(InternalChecker));
 		private readonly ISession _session;
-
+		protected readonly MP_WhiteListRepository _whiteList;
 		public InternalChecker()
 		{
 			this._session = ObjectFactory.GetInstance<ISession>();
+			this._whiteList = ObjectFactory.GetInstance<MP_WhiteListRepository>();
 		}
 
 		public List<FraudDetection> InternalSystemDecision(int customerId, FraudMode mode)
@@ -278,14 +280,22 @@
 		private void InternalShopCheck(Customer customer, List<FraudDetection> fraudDetections, IList<Customer> customers)
 		{
 			//Shop ID
-			var customerMps = customer.CustomerMarketPlaces.Select(m => m.DisplayName).ToList();
+			var customerMps = customer.CustomerMarketPlaces
+				.Where(m => m.Marketplace.Name != "Yodlee" && m.Marketplace.Name != "Sage" && m.DisplayName != "Can't get company's name")
+				.Select(m => new { m.DisplayName, m.Marketplace.InternalId })
+				.ToList();
 
-			var mps = customers.SelectMany(c => c.CustomerMarketPlaces).Where(m => m.Marketplace.Name != "Yodlee" && m.Marketplace.Name != "Sage").ToList();
+			customerMps.RemoveAll(m => this._whiteList.IsMarketPlaceInWhiteList(m.InternalId, m.DisplayName));
+
+			var mps = customers
+				.SelectMany(c => c.CustomerMarketPlaces)
+				.Where(m => m.Marketplace.Name != "Yodlee" && m.Marketplace.Name != "Sage" && m.DisplayName != "Can't get company's name")
+				.ToList();
 
 			fraudDetections.AddRange(
 				from m in mps
 				from cm in customerMps
-				where m.DisplayName == cm
+				where m.DisplayName == cm.DisplayName
 				select
 					Helper.CreateDetection("Customer Marketplace Name", customer, m.Customer, "Customer Marketplace Name",
 									null, string.Format("{0}: {1}", m.Marketplace.Name, m.DisplayName)));
@@ -407,7 +417,9 @@
 				from c in customerPortion
 				where c.WizardStep.TheLastOne
 				where c.BankAccount != null
-				where !string.IsNullOrEmpty(c.BankAccount.AccountNumber) && !string.IsNullOrEmpty(c.BankAccount.SortCode)
+				where !string.IsNullOrEmpty(c.BankAccount.AccountNumber) && !string.IsNullOrEmpty(c.BankAccount.SortCode) && 
+					  c.BankAccount.AccountNumber != "00000000" && 
+					  c.BankAccount.SortCode != "000000"
 				where
 					c.BankAccount.SortCode == customer.BankAccount.SortCode &&
 					c.BankAccount.AccountNumber == customer.BankAccount.AccountNumber
@@ -501,7 +513,11 @@
 								IEnumerable<Customer> customerPortion,
 								Customer customer)
 		{
-			var customerIps = customer.Session.Select(x => x.Ip).Distinct().ToList();
+			var customerIps = customer.Session
+				.Where(x => x.Ip != "127.0.0.1" && x.Ip != "::1")
+				.Select(x => x.Ip)
+				.Distinct()
+				.ToList();
 			if (!customerIps.Any())
 			{
 				return;
