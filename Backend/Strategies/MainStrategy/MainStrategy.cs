@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Linq;
 	using System.Runtime.Serialization;
 	using ConfigManager;
 	using DbConstants;
@@ -21,16 +20,9 @@
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using EZBob.DatabaseLib.Model.Loans;
-	using EZBob.DatabaseLib.Repository;
-	using EZBob.DatabaseLib.Repository.Turnover;
 	using LandRegistryLib;
-	using NHibernate;
 	using SalesForceLib.Models;
-	using StructureMap;
 
 	public class MainStrategy : AStrategy {
 		[DataContract]
@@ -56,15 +48,6 @@
 			this.updateCashRequest = updateCashRequest;
 			this.finishWizardArgs = fwa;
 
-			this.session = ObjectFactory.GetInstance<ISession>();
-			this.customers = ObjectFactory.GetInstance<CustomerRepository>();
-			this.decisionHistory = ObjectFactory.GetInstance<DecisionHistoryRepository>();
-			this.loanSourceRepository = ObjectFactory.GetInstance<LoanSourceRepository>();
-			this.loanTypeRepository = ObjectFactory.GetInstance<LoanTypeRepository>();
-			this.discountPlanRepository = ObjectFactory.GetInstance<DiscountPlanRepository>();
-			this.customerAddressRepository = ObjectFactory.GetInstance<CustomerAddressRepository>();
-			this.landRegistryRepository = ObjectFactory.GetInstance<LandRegistryRepository>();
-
 			this.customerId = customerId;
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = avoidAutoDecision;
@@ -81,6 +64,8 @@
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
 				Guid.NewGuid().ToString("N")
 			);
+
+			this.customerDetails = new CustomerDetails(this.customerId);
 		} // constructor
 
 		public override string Name {
@@ -113,14 +98,12 @@
 				ExecuteAdditionalStrategies();
 			} // if
 
-			this.customerDetails = new CustomerDetails(this.customerId);
-
 			if (!this.customerDetails.IsTest) {
 				var fraudChecker = new FraudChecker(this.customerId, FraudMode.FullCheck);
 				fraudChecker.Execute();
 			} // if
 
-			ForceNhibernateResync();
+			ForceNhibernateResync.Do(this.customerId);
 
 			ProcessRejections();
 
@@ -153,10 +136,6 @@
 			get { return this.autoDecisionResponse; }
 		} // AutoDecisionResponse
 
-		private long? cashRequestID;
-		private DoAction createCashRequest;
-		private DoAction updateCashRequest;
-
 		private void CalculateMedal() {
 			var instance = new CalculateMedal(this.customerId, DateTime.UtcNow, false, true);
 			instance.Execute();
@@ -167,26 +146,9 @@
 			this.medal = instance.Result;
 		} // CalculateMedal
 
-		private void ForceNhibernateResync() {
-			var customer = this.customers.ReallyTryGet(this.customerId);
-			if (customer != null)
-				this.session.Evict(customer);
-
-			MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
-			foreach (MarketplaceTurnover mpt in mpTurnoverRep.GetByCustomerId(this.customerId))
-				if (mpt != null)
-					this.session.Evict(mpt);
-		} // ForceNhibernateResync
-
 		private void SendEmails(StrategiesMailer mailer) {
-			bool sendToCustomer = true;
-			Customer customer = this.customers.ReallyTryGet(this.customerId);
-
-			if (customer != null) {
-				int numOfPreviousApprovals = customer.DecisionHistory.Count(x => x.Action == DecisionActions.Approve);
-
-				sendToCustomer = !customer.FilledByBroker || (numOfPreviousApprovals != 0);
-			} // if
+			bool sendToCustomer =
+				!this.customerDetails.FilledByBroker || (this.customerDetails.NumOfPreviousApprovals != 0);
 
 			var postMaster = new MainStrategyMails(
 				mailer,
@@ -349,24 +311,20 @@
 					LandRegistryDataModel landRegistryDataModel = lrr.RawResult;
 
 					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success) {
-						// Verify customer is among owners
-						Customer customer = this.customers.Get(this.customerId);
-
 						bool isOwnerAccordingToLandRegistry = LandRegistryRes.IsOwner(
-							customer,
+							this.customerDetails.ID,
+							this.customerDetails.FullName,
 							landRegistryDataModel.Response,
 							landRegistryDataModel.Res.TitleNumber
 						);
 
-						CustomerAddress dbAdress = this.customerAddressRepository.Get(address.AddressId);
-
-						dbLandRegistry.CustomerAddress = dbAdress;
-						this.landRegistryRepository.SaveOrUpdate(dbLandRegistry);
-
-						if (isOwnerAccordingToLandRegistry) {
-							dbAdress.IsOwnerAccordingToLandRegistry = true;
-							this.customerAddressRepository.SaveOrUpdate(dbAdress);
-						} // if
+						DB.ExecuteNonQuery(
+							"AttachCustomerAddrToLandRegistryAddr",
+							CommandSpecies.StoredProcedure,
+							new QueryParameter("@LandRegistryAddressID", dbLandRegistry.Id),
+							new QueryParameter("@CustomerAddressID", address.AddressId),
+							new QueryParameter("@IsOwnerAccordingToLandRegistry", isOwnerAccordingToLandRegistry)
+						);
 					} // if
 				} else {
 					int num = 0;
@@ -583,24 +541,32 @@
 		private void UpdateCustomerAndCashRequest() {
 			var now = DateTime.UtcNow;
 
+			SafeReader ltsr = DB.GetFirst(
+				"GetLoanTypeAndDefault",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@LoanTypeID", this.autoDecisionResponse.LoanTypeID)
+			);
+			int? dbLoanTypeID = ltsr["LoanTypeID"];
+			int defaultLoanTypeID = ltsr["DefaultLoanTypeID"];
+
 			decimal interestRateToUse;
 			decimal setupFeePercentToUse;
 			int repaymentPeriodToUse;
-			LoanType loanTypeIdToUse;
+			int loanTypeIdToUse;
 
 			if (this.autoDecisionResponse.IsAutoApproval) {
 				interestRateToUse = this.autoDecisionResponse.InterestRate;
 				setupFeePercentToUse = this.autoDecisionResponse.SetupFee;
 				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
-				loanTypeIdToUse =
-					this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID) ??
-					this.loanTypeRepository.GetDefault();
+				loanTypeIdToUse = dbLoanTypeID ?? defaultLoanTypeID;
 			} else {
 				//TODO check this code!!!
 				interestRateToUse = this.lastOffer.LoanOfferInterestRate;
 				setupFeePercentToUse = this.lastOffer.ManualSetupFeePercent;
 				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
-				loanTypeIdToUse = this.loanTypeRepository.GetDefault();
+				loanTypeIdToUse = this.autoDecisionResponse.IsAutoReApproval
+					? (dbLoanTypeID ?? defaultLoanTypeID)
+					: defaultLoanTypeID;
 			} // if
 
 			var customer = this.customers.Get(this.customerId);
@@ -623,6 +589,7 @@
 				: "N/A";
 			customer.SystemCalculatedSum = this.medal.RoundOfferedAmount();
 			customer.ManagerApprovedSum = this.offeredCreditLine;
+
 			if (this.autoDecisionResponse.DecidedToReject) {
 				customer.DateRejected = now;
 				customer.RejectedReason = this.autoDecisionResponse.DecisionName;
@@ -718,7 +685,7 @@
 						cr.IsCustomerRepaymentPeriodSelectionAllowed = false;
 					} // if
 
-					cr.LoanType = this.loanTypeRepository.Get(this.autoDecisionResponse.LoanTypeID);
+					cr.LoanType = loanTypeIdToUse;
 					cr.ManualSetupFeePercent = this.autoDecisionResponse.SetupFee;
 				} // if
 
@@ -741,14 +708,13 @@
 			} // if
 
 			// TEMPORARY DISABLED TODO - sync for proper launch
-			UpdateSalesForceOpportunity(customer.Name);
+			UpdateSalesForceOpportunity(this.customerDetails.AppEmail);
 
-			if (customer.IsAlibaba)
-				UpdatePartnerAlibaba(customer.Id);
+			if (this.customerDetails.IsAlibaba)
+				UpdatePartnerAlibaba(this.customerId);
+		} // UpdateCustomerAndCashRequest
 
-		}// UpdateCustomerAndCashRequest
-
-		private void AddNewDecisionOffer(DateTime now, CashRequest cr, LoanType loanTypeIdToUse) {
+		private void AddNewDecisionOffer(DateTime now, CashRequest cr, int loanTypeIdToUse) {
 			AddDecision addDecisionStra = new AddDecision(new NL_Decisions {
 				DecisionNameID = this.autoDecisionResponse.Decision.HasValue
 					? (int)this.autoDecisionResponse.Decision.Value
@@ -781,7 +747,7 @@
 				LoanSourceID = this.autoDecisionResponse.LoanSourceID > 0
 					? this.autoDecisionResponse.LoanSourceID
 					: this.loanSourceRepository.GetDefault().ID,
-				LoanTypeID = loanTypeIdToUse.Id,
+				LoanTypeID = loanTypeIdToUse,
 				MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 				RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, //todo
@@ -877,38 +843,6 @@
 		private int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		private int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
-		private readonly CustomerRepository customers;
-		private readonly DecisionHistoryRepository decisionHistory;
-		private readonly DiscountPlanRepository discountPlanRepository;
-		private readonly LoanSourceRepository loanSourceRepository;
-		private readonly LoanTypeRepository loanTypeRepository;
-		private readonly ISession session;
-		private readonly int avoidAutomaticDecision;
-		private readonly CustomerAddressRepository customerAddressRepository;
-		private readonly LandRegistryRepository landRegistryRepository;
-
-		// Inputs
-		private readonly int customerId;
-		private readonly FinishWizardArgs finishWizardArgs;
-
-		// Helpers
-		private readonly NewCreditLineOption newCreditLineOption;
-		private readonly AutoDecisionResponse autoDecisionResponse;
-
-		private CustomerDetails customerDetails;
-		private LastOfferData lastOffer;
-
-		private MedalResult medal;
-
-		private int offeredCreditLine;
-
-		/// <summary>
-		/// Default: true. However when Main strategy is executed as a part of
-		/// Finish Wizard strategy and customer is already approved/rejected
-		/// then customer's status should not change.
-		/// </summary>
-		private bool overrideApprovedRejected;
-
 		/// <summary>
 		/// Auto decision only treated 
 		/// In case of auto decision occurred (RR, R, RA, A), 002 sent immediately
@@ -970,6 +904,33 @@
 				);
 			} // if
 		} // ValidateCashRequestArgs
+
+		// Inputs
+		private readonly int customerId;
+		private readonly FinishWizardArgs finishWizardArgs;
+		private readonly int avoidAutomaticDecision;
+
+		// Helpers
+		private readonly NewCreditLineOption newCreditLineOption;
+		private readonly AutoDecisionResponse autoDecisionResponse;
+
+		private readonly CustomerDetails customerDetails;
+		private LastOfferData lastOffer;
+
+		private MedalResult medal;
+
+		private int offeredCreditLine;
+
+		/// <summary>
+		/// Default: true. However when Main strategy is executed as a part of
+		/// Finish Wizard strategy and customer is already approved/rejected
+		/// then customer's status should not change.
+		/// </summary>
+		private bool overrideApprovedRejected;
+
+		private long? cashRequestID;
+		private DoAction createCashRequest;
+		private DoAction updateCashRequest;
 
 		private readonly string tag;
 		private bool wasMismatch;
