@@ -145,27 +145,24 @@
 
 
 		public NewLoanModelActionResult CalculateLoanSchedule(int userID, int customerID, NL_Model model) {
-
-			NL_Model result = new NL_Model();
+	
 			ActionMetaData amd = null;
+			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
 
 			try {
-
-				CalculateLoanSchedule strategy;
 				amd = ExecuteSync(out strategy, customerID, userID, model);
-
 				// ReSharper disable once CatchAllClause
 			} catch (Exception e) {
 				Log.Alert("CalculateLoanSchedule exception: ", e);
-				result.Error = "InternalServerError";
+				strategy.Result.Error = "InternalServerError";
 			}
 
 			return new NewLoanModelActionResult() {
 				MetaData = amd,
-				Value = result
+				Value = strategy.Result
 			};
 
-		} // RescheduleLoan
+		} // CalculateLoanSchedule
 
 
 

@@ -4,7 +4,7 @@
 	using Ezbob.Backend.Extensions;
 
 	/// <summary>
-	/// Partitioning of schedule item to P, I, F
+	/// Loan transaction partitioning to P, I, F
 	/// </summary>
 	public class Repayment {
 		public Repayment(DateTime time, decimal principal, decimal interest, decimal fees) {

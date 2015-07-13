@@ -1041,25 +1041,19 @@
 		[Test]
 		public void TestRescheduleOutLoanSimple() {
 			int loanID = 27;
-
 			LoanRepository loanRepository = ObjectFactory.GetInstance<LoanRepository>();
 			ChangeLoanDetailsModelBuilder changeLoanModelBuilder = new ChangeLoanDetailsModelBuilder();
-
 			Loan tLoan = loanRepository.Get(loanID);
 			CashRequest cr = tLoan.CashRequest;
 			LoanType lt = tLoan.LoanType;
-
 			//build reschedule model
 			EditLoanDetailsModel model = changeLoanModelBuilder.BuildModel(tLoan);
-
 			//edit it (remove schedules and add new ones)
-
 			//Choose schedules you want to delete
 			var removeInstallment = model.Items.First(x => x.Id == 129 && x.Type == "Installment");
 			var principal = removeInstallment.Principal;
 			var newPrincipal = principal / 2;
 			model.Items.Remove(removeInstallment);
-
 			DateTime now = DateTime.Today;
 			//Add new schedules Date,Principal,InterestRate,Balance,Type are required
 			model.Items.Add(new SchedultItemModel() {
@@ -1071,7 +1065,6 @@
 				Balance = newPrincipal,
 				Type = "Installment"
 			});
-
 			model.Items.Add(new SchedultItemModel() {
 				Date = now.AddMonths(2),
 				Principal = newPrincipal,
@@ -1081,20 +1074,16 @@
 				Balance = 0,
 				Type = "Installment"
 			});
-
 			//Validate the reschedule model
 			model.Validate();
-
 			if (model.HasErrors) {
 				Console.WriteLine("Has Errors");
 				return; // model;
 			}
-
 			//Create modified loan from the reschedule model
 			var loan = changeLoanModelBuilder.CreateLoan(model);
 			loan.LoanType = lt;
 			loan.CashRequest = cr;
-
 			//Recalculate the loan 
 			try {
 				var calc = new LoanRepaymentScheduleCalculator(loan, now, CurrentValues.Instance.AmountToChargeFrom);
@@ -1103,10 +1092,8 @@
 				model.Errors.Add(e.Message);
 				return;// model;
 			}
-
 			//Return the model to UW
 			EditLoanDetailsModel rescheduledLoanModel = changeLoanModelBuilder.BuildModel(loan);
-
 			m_oLog.Debug(">>>>>>>>>>>>>>>>>>Loan modified: \n {0}", rescheduledLoanModel);
 		}
 
@@ -1225,18 +1212,24 @@
 		[Test]
 		public void TestNL_LoanCalculator() {
 			NL_Model model = new NL_Model() {
-				CustomerID = 123
+				CustomerID = 123,
+				CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName,
+				Loan = new NL_Loans() { IssuedTime = DateTime.UtcNow }
 			};
+
+			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
+			strategy.Context.UserID = 25852;
+			try {
+				strategy.Execute();
+			} catch (NL_ExceptionCustomerNotFound nlExceptionCustomerNotFound) {
+				Console.WriteLine("NL_ExceptionCustomerNotFound" + nlExceptionCustomerNotFound);
+			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
+				Console.WriteLine("NL_ExceptionInputDataInvalid" + nlExceptionInputDataInvalid.Message);
+			} catch (NL_ExceptionOfferNotValid nlExceptionOfferNotValid) {
+				Console.WriteLine("NL_ExceptionOfferNotValid"  + nlExceptionOfferNotValid.Message);
+			}
+
 			
-			model.Loan = new NL_Loans() {
-				IssuedTime = DateTime.UtcNow
-			};
-
-			ALoanCalculator calculator = new BankLikeLoanCalculator(new LoanCalculatorModel());
-			model.CalculatorImplementation = calculator.GetType().AssemblyQualifiedName;
-
-			//s1.Context.UserID = 25852;
-
 		}
 
 	}

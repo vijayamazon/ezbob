@@ -31,6 +31,8 @@
 		[DataMember]
 		public decimal BrokerSetupFeePercent { get; set; }
 		[DataMember]
+		public decimal DistributedSetupFeePercent { get; set; }
+		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }
 		[DataMember]
 		public string DiscountPlan { get; set; }

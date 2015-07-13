@@ -52,20 +52,15 @@
 
 	public enum NLScheduleStatuses {
 		[Description("Open")]
-		StillToPay = 1,
-
+		StillToPay = 1, // db ID
 		[Description("Paid ontime")]
 		PaidOnTime = 2,
-
 		[Description("Late")]
 		Late = 3,
-
 		[Description("Paid early")]
 		PaidEarly = 4,
-
 		[Description("Paid")]
 		Paid = 5,
-
 		[Description("Almost paid")]
 		AlmostPaid = 6
 	}

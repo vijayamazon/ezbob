@@ -6,6 +6,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
+	using Ezbob.Utils;
 	using NUnit.Framework;
 
 	[TestFixture]
@@ -111,5 +112,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 
 			Log.Info("{1} earned interest on 10/02/2015 - 19/03/2015 is {0}.", earnedInterest, lc.Name);
 		} // TestSpecificLoanCalculator
+
+
 	} // class TestLoanCalculator
 } // namespace

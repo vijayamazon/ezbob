@@ -153,8 +153,11 @@ IF object_id('NL_LoanSchedules') IS NOT NULL begin
 		ALTER TABLE [dbo].[NL_LoanSchedules] DROP CONSTRAINT [FK_NL_LoanSchedules_LoanHistory] ;END; 
 	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanScheduleTransaction_LoanSchedules') BEGIN
 		ALTER TABLE [dbo].[NL_LoanSchedulePayments] DROP CONSTRAINT [FK_LoanScheduleTransaction_LoanSchedules] ;END;  
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanSchedules_NL_LoanScheduleStatuses') BEGIN
+		ALTER TABLE [dbo].[NL_LoanSchedules] DROP CONSTRAINT [FK_NL_LoanSchedules_NL_LoanScheduleStatuses] ;END; 
 	DROP TABLE NL_LoanSchedules;
 end;
+IF object_id('NL_LoanScheduleStatuses') IS NOT NULL DROP TABLE NL_LoanScheduleStatuses;
 IF object_id('NL_LoanSchedulePayment') IS NOT NULL DROP TABLE NL_LoanSchedulePayment;
 IF object_id('NL_LoanSchedulePayments') IS NOT NULL DROP TABLE NL_LoanSchedulePayments;
 IF object_id('NL_LoanSources') IS NOT NULL DROP TABLE NL_LoanSources;

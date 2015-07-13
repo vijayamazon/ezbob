@@ -37,7 +37,8 @@
 					si.Date,
 					payment.Principal,
 					si.InterestRate,
-					payment.Interest
+					payment.Interest,
+					payment.Fees
 				));
 			} // for each
 
