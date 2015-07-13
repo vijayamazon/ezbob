@@ -336,7 +336,7 @@
 
 				try {
 
-					this.tLoan.Status = LoanStatus.Late;
+					this.tLoan.Status = this.ReschedulingArguments.RescheduleIn ? LoanStatus.Live : LoanStatus.Late;
 					this.tLoan.LastRecalculation = DateTime.UtcNow;
 					this.tLoan.Modified = true;
 
