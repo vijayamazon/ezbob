@@ -23,19 +23,19 @@
 
 		public InternalChecker()
 		{
-			_session = ObjectFactory.GetInstance<ISession>();
+			this._session = ObjectFactory.GetInstance<ISession>();
 		}
 
 		public List<FraudDetection> InternalSystemDecision(int customerId, FraudMode mode)
 		{
 			Log.InfoFormat("Starting fraud internal system check for customerId={0}", customerId);
-			var customer = _session.Get<Customer>(customerId);
+			var customer = this._session.Get<Customer>(customerId);
 			if (customer == null)
 				throw new Exception("Customer not found");
 
 			var fraudDetections = new List<FraudDetection>();
 
-			int[] customerIds = _session.CreateSQLQuery("EXEC FraudGetDetections " + customerId).List<int>().ToArray();
+			int[] customerIds = this._session.CreateSQLQuery("EXEC FraudGetDetections " + customerId).List<int>().ToArray();
 			Log.DebugFormat("Num of potential fraud customer ids: {0}", customerIds.Count());
 			
 			//fixing exception of too many input parameters if too many potential fraud detections returned
@@ -43,7 +43,7 @@
 				customerIds = customerIds.Take(2000).ToArray();
 			}
 
-			var customers = _session.QueryOver<Customer>().Where(x => x.Id.IsIn(customerIds)).List<Customer>();
+			var customers = this._session.QueryOver<Customer>().Where(x => x.Id.IsIn(customerIds)).List<Customer>();
 			if (customers.Any())
 			{
 				Log.DebugFormat("Num of potential fraud customers: {0}", customers.Count());
@@ -307,7 +307,7 @@
 						 a.Line1 != null || a.Line2 != null || a.Line3 != null ||
 						 a.Postcode != null || a.Town != null).ToList();
 			var postcodes = customerAddresses.Select(a => a.Postcode).ToList();
-			var addresses = customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Postcode));
+			var addresses = customers.SelectMany(c => c.AddressInfo.AllAddresses).Where(address => postcodes.Contains(address.Postcode)).ToList();
 
 			fraudDetections.AddRange(
 				from ca in customerAddresses
@@ -382,16 +382,16 @@
 				from cm in customerYodleesItems
 				where m.Name == cm.Name && m.Number == cm.Number
 				select
-					Helper.CreateDetection("Customer Bank Account Name And Number", customer, _session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
+					Helper.CreateDetection("Customer Bank Account Name And Number", customer, this._session.Query<Customer>().FirstOrDefault(c => c.Id == m.CustomerId), "Customer Bank Account Name And Number",
 									null, string.Format("{0}: {1}", m.Name, m.Number)));
 
 			if (customer.CustomerMarketPlaces.Any(x => x.DisplayName == "ParsedBank")) {
-				var parsedBankMatchedCustomers = _session.CreateSQLQuery("EXEC FraudGetDetectionsParsedBank :CustomerID")
+				var parsedBankMatchedCustomers = this._session.CreateSQLQuery("EXEC FraudGetDetectionsParsedBank :CustomerID")
 					.SetParameter("CustomerID", customer.Id)
 					.SetResultTransformer(new AliasToBeanResultTransformer(typeof(ParsedBank)))
 					.List<ParsedBank>().ToList();
 				foreach (var match in parsedBankMatchedCustomers) {
-					var matchCustomer = _session.Get<Customer>(match.CustomerId);
+					var matchCustomer = this._session.Get<Customer>(match.CustomerId);
 					fraudDetections.Add(Helper.CreateDetection("Customer ParsedBank", customer, matchCustomer, "Customer ParsedBank transactions ",
 									null, string.Format("same transactions {0}", match.MatchedTransactions)));
 				}
@@ -519,19 +519,19 @@
 				fraudDetections.AddRange(
 					brokerFilledClients
 						.Where(c => c.Broker.FirmName != customer.Broker.FirmName && c.Session.Any(s => customerIps.Contains(s.Ip)))
-						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, null)));
+						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, c.Session.First(s => customerIps.Contains(s.Ip)).Ip)));
 
 				fraudDetections.AddRange(
 					otherClients
 						.Where(c => c.Session.Any(x => customerIps.Contains(x.Ip)))
-						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, null)));
+						.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, c.Session.First(x => customerIps.Contains(x.Ip)).Ip)));
 			}
 			else
 			{
 				fraudDetections.AddRange(
 					customerPortion
 					.Where(c => c.Session.Any(s => customerIps.Contains(s.Ip)))
-					.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, null)));
+					.Select(c => Helper.CreateDetection("Customer IP", customer, c, "Customer IP", null, c.Session.First(s => customerIps.Contains(s.Ip)).Ip)));
 			}
 		}
 
