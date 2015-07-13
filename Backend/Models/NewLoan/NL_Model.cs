@@ -149,6 +149,11 @@
 		[DataMember]
 		public decimal? APR { get; set; }
 
+
+		[DataMember]
+		public string CalculatorImplementation { get; set; }  // AloanCalculator BankLikeLoanCalculator/BankLikeLoanCalculator
+
+
 		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>

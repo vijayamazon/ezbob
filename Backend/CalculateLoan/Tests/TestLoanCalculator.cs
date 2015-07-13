@@ -54,7 +54,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			lcm.Repayments.Add(new Repayment(new DateTime(2015, 2, 23), 250, 25, 0));
 			lcm.Repayments.Add(new Repayment(new DateTime(2015, 3, 23), 641, 25, 0));
 
-			lcm.Fees.Add(new Fee(new DateTime(2015, 4, 1), 25m));
+			lcm.Fees.Add(new Fee(new DateTime(2015, 4, 1), 25m,  FeeTypes.AdminFee));
 
 			lcm.SetScheduleCloseDatesFromPayments();
 

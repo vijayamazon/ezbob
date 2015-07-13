@@ -4,6 +4,7 @@
 	using System.Linq;
 	using System.Web;
 	using DbConstants;
+	using EchoSignLib.EchoSignService;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
@@ -160,12 +161,12 @@
 				Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
 
 				// setup fee
-				var feeCalc = new SetupFeeCalculator(dataForLoan.SetupFeePercent, dataForLoan.BrokerSetupFeePercent);
+				var feeCalculator = new SetupFeeCalculator(dataForLoan.SetupFeePercent, dataForLoan.BrokerSetupFeePercent);
 
 				// 2. fees
 				setupFee.LoanID = this.LoanID;
 				setupFee.LoanFeeTypeID = setupFeeID;
-				setupFee.Amount = feeCalc.Calculate(NLModel.Loan.InitialLoanAmount);
+				setupFee.Amount = feeCalculator.Calculate(NLModel.Loan.InitialLoanAmount);
 				setupFee.AssignTime = DateTime.UtcNow;
 				setupFee.CreatedTime = setupFee.AssignTime;
 				setupFee.DisabledTime = null;
@@ -177,7 +178,7 @@
 				Log.Debug("NL_LoanFeesSave: LoanID: {0}, setupfeeID: {1}", this.LoanID, setupfeeID);
 
 				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
-				var brokerComissions = feeCalc.CalculateBrokerFee(NLModel.Loan.InitialLoanAmount);
+				var brokerComissions = feeCalculator.CalculateBrokerFee(NLModel.Loan.InitialLoanAmount);
 				if (brokerComissions > 0) {
 					DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, NLModel.Loan.OldLoanID));
 				}
@@ -248,6 +249,7 @@
 					sch.Position = s.Position;
 					sch.Principal = s.Principal;
 					sch.LoanHistoryID = historyID;
+					//sch.LoanScheduleStatusID = NLScheduleStatuses.StillToPay;
 					scheduleItems.Add(sch);
 					Log.Debug(sch.ToString());
 				}

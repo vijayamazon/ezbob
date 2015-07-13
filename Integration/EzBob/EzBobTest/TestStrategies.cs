@@ -968,7 +968,7 @@
 
 		[Test]
 		public void TestMultipleRescheduling() {
-			/*var loans = new[] {
+			var loans = new[] {
 				18,19,20,22,29,30,31,32,33,34,36,37,38, 35, 4439, 3534, 1846, 2662,	1721,1758,1718,1764,1781,1795,1808,1810,1825,1831,1838,1841,1847,1856,1895,1903,1904,
 				3456,3462,3476,3478,3509,3510,3513,3521,3533,3535,3538,3539,3547,3583,3593,3607,3651,3670,3700,3710,3711,3714,3754,3827,3860,3917,3946,4081,4139,4174,4183,4192,
 				2990,2996,3003,3007,3032,3038,3083,3084,3094,3096,3113,3118,3141,3142,3166,3196,3208,3236,3275,3285,3302
@@ -994,7 +994,7 @@
 				} catch (Exception e) {
 					Console.WriteLine(e);
 				}
-			}*/
+			}
 
 			this.m_oDB.ForEachRowSafe((sr) => {
 				try {
@@ -1221,6 +1221,23 @@
 
 		}
 
+
+		[Test]
+		public void TestNL_LoanCalculator() {
+			NL_Model model = new NL_Model() {
+				CustomerID = 123
+			};
+			
+			model.Loan = new NL_Loans() {
+				IssuedTime = DateTime.UtcNow
+			};
+
+			ALoanCalculator calculator = new BankLikeLoanCalculator(new LoanCalculatorModel());
+			model.CalculatorImplementation = calculator.GetType().AssemblyQualifiedName;
+
+			//s1.Context.UserID = 25852;
+
+		}
 
 	}
 }

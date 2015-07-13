@@ -325,18 +325,31 @@ CREATE TABLE [dbo].[NL_LoanLienLinks](
 ) ;
 END
 GO
+
+
+IF OBJECT_ID('NL_LoanScheduleStatuses') IS NULL 
+BEGIN
+CREATE TABLE [dbo].[NL_LoanScheduleStatuses](
+	[LoanScheduleStatusID] [INT] NOT NULL IDENTITY(1,1) ,
+	[LoanScheduleStatus] [nchar](50) NOT NULL,
+	[Description] [nchar](70) NOT NULL,
+	[TimestampCounter] rowversion NOT NULL,
+ CONSTRAINT [PK_NL_LoanScheduleStatuses] PRIMARY KEY CLUSTERED ([LoanScheduleStatusID] ASC)
+) ;	
+END
+GO
 	
 IF OBJECT_ID('NL_LoanSchedules') IS NULL 
 BEGIN
 CREATE TABLE [dbo].[NL_LoanSchedules](
 	[LoanScheduleID] [INT] NOT NULL IDENTITY(1,1) ,
 	[LoanHistoryID] [INT] NOT NULL,
+	[LoanScheduleStatusID] INT NOT NULL,	
 	[Position] [INT] NOT NULL,
 	[PlannedDate] [DATETIME] NOT NULL,
 	[ClosedTime] [DATETIME] NULL,
 	[Principal] [DECIMAL] (18,6) NOT NULL,
-	[InterestRate] [DECIMAL](18, 6) NOT NULL,	
-	--[Fee] [DECIMAL](18, 6)  NULL,	
+	[InterestRate] [DECIMAL](18, 6) NOT NULL,		
 	[TimestampCounter] rowversion NOT NULL,	
  CONSTRAINT [PK_NL_LoanSchedules] PRIMARY KEY CLUSTERED ([LoanScheduleID] ASC)
 ) ;
@@ -714,6 +727,11 @@ END
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanSchedules_LoanHistory') BEGIN
 ALTER TABLE [dbo].[NL_LoanSchedules] ADD CONSTRAINT [FK_NL_LoanSchedules_LoanHistory] FOREIGN KEY([LoanHistoryID]) REFERENCES [dbo].[NL_LoanHistory] ([LoanHistoryID]) ;
+END
+GO
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanSchedules_NL_LoanScheduleStatuses') BEGIN
+ALTER TABLE [dbo].[NL_LoanSchedules] ADD CONSTRAINT [FK_NL_LoanSchedules_NL_LoanScheduleStatuses] FOREIGN KEY([LoanScheduleStatusID]) REFERENCES [dbo].[NL_LoanScheduleStatuses] ([LoanScheduleStatusID]) ;
 END
 GO
 
@@ -1189,7 +1207,28 @@ END;
 END; 
  IF NOT EXISTS( SELECT RepaymentIntervalType FROM [dbo].[NL_RepaymentIntervalTypes] WHERE RepaymentIntervalType = 10) BEGIN -- 'TenDays'
 	INSERT INTO [dbo].[NL_RepaymentIntervalTypes] (RepaymentIntervalType) VALUES(10);
-END; 		 
+END; 	
+
+
+--NL_LoanScheduleStatuses
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'StillToPay' ) BEGIN -- 'StillToPay'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('StillToPay', 'Open');
+END; 
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'PaidOnTime' ) BEGIN -- 'PaidOnTime'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('PaidOnTime', 'Paid ontime');
+END;
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'Late' ) BEGIN -- 'Late'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('Late', 'Late');
+END;
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'PaidEarly' ) BEGIN -- 'PaidEarly'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('PaidEarly', 'Paid early');
+END;
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'Paid' ) BEGIN -- 'Paid'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('Paid', 'Paid');
+END;  
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'AlmostPaid' ) BEGIN -- 'AlmostPaid'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('AlmostPaid', 'Almost paid');
+END;   
 
 -- NL_OfferStatuses
 --IF NOT EXISTS( SELECT OfferStatus FROM [dbo].[NL_OfferStatuses] WHERE OfferStatus = 'Live') BEGIN 

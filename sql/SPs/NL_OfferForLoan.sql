@@ -12,8 +12,6 @@ AS
 
 declare @OfferID int;
 
-
-
 BEGIN
 	
 	-- get last valid 'Approve' or 'ReApprove' offer for the customer
@@ -51,6 +49,7 @@ BEGIN
 			o.MonthlyInterestRate,
 			o.SetupFeePercent, 
 			o.BrokerSetupFeePercent, 
+			o.DistributedSetupFeePercent,
 			o.InterestOnlyRepaymentCount,
 			0 as LoansCount		
 		into #offerforloan

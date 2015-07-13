@@ -1,4 +1,6 @@
 ﻿namespace DbConstants {
+	using System.ComponentModel;
+
 	// Numeric value: number of days in the interval, except Month (where it can vary).
 	public enum RepaymentIntervalTypes {
 		Month = 0,
@@ -41,5 +43,31 @@
 		//Legal ??? claim process                                                         	=	23     
 	} // enum NLLoanStatuses
 
+	public enum FeeTypes {
+		SetupFee = 1,
+		RolloverFee = 2,
+		AdminFee = 3
+	}
+
+
+	public enum NLScheduleStatuses {
+		[Description("Open")]
+		StillToPay = 1,
+
+		[Description("Paid ontime")]
+		PaidOnTime = 2,
+
+		[Description("Late")]
+		Late = 3,
+
+		[Description("Paid early")]
+		PaidEarly = 4,
+
+		[Description("Paid")]
+		Paid = 5,
+
+		[Description("Almost paid")]
+		AlmostPaid = 6
+	}
 
 } // namespace

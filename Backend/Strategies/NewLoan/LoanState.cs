@@ -108,8 +108,9 @@
 
 					// fees 
 					foreach (var c in this.tLoan.Charges) {
+						//var ftype = c.ChargesType.Name
 						this.CalcModel.Fees.Add(new Fee( // DateTime assignTime, decimal amount
-							c.Date, c.Amount
+							c.Date, c.Amount, FeeTypes.AdminFee
 							));
 					}
 

@@ -1,9 +1,11 @@
 ﻿namespace EzService.EzServiceImplementation {
 	using System;
 	using System.Collections.Generic;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using EzService.ActionResults;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public partial class EzServiceImplementation : IEzServiceNewLoan {
@@ -112,7 +114,7 @@
 			//Log.Debug("t is {0}, t.Name={1}", t, t.Name);
 
 			ReschedulingResult result = new ReschedulingResult();
-	
+
 			try {
 
 				if (t.Name == "Loan") {
@@ -128,9 +130,9 @@
 					RescheduleLoan<NL_Model> strategy;
 					// TODO
 				}
-			
+
 			} catch (Exception e) {
-				Log.Alert("Reschedule; exception: ",  e);
+				Log.Alert("Reschedule; exception: ", e);
 				result.Error = "InternalServerError";
 			}
 
@@ -142,10 +144,30 @@
 
 
 
+		public NewLoanModelActionResult CalculateLoanSchedule(int userID, int customerID, NL_Model model) {
 
+			NL_Model result = new NL_Model();
+			ActionMetaData amd = null;
+
+			try {
+
+				CalculateLoanSchedule strategy;
+				amd = ExecuteSync(out strategy, customerID, userID, model);
+
+				// ReSharper disable once CatchAllClause
+			} catch (Exception e) {
+				Log.Alert("CalculateLoanSchedule exception: ", e);
+				result.Error = "InternalServerError";
+			}
+
+			return new NewLoanModelActionResult() {
+				MetaData = amd,
+				Value = result
+			};
+
+		} // RescheduleLoan
 
 
 
 	}
-
 }
