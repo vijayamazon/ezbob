@@ -4044,6 +4044,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest);
         
@@ -4518,6 +4524,12 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillZooplaValue", ReplyAction="http://tempuri.org/IEzService/BackfillZooplaValueResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillZooplaValueAsync();
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillBrokerCommissionInvoice", ReplyAction="http://tempuri.org/IEzService/BackfillBrokerCommissionInvoiceResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData BackfillBrokerCommissionInvoice();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/BackfillBrokerCommissionInvoice", ReplyAction="http://tempuri.org/IEzService/BackfillBrokerCommissionInvoiceResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillBrokerCommissionInvoiceAsync();
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CaisGenerate", ReplyAction="http://tempuri.org/IEzService/CaisGenerateResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId);
         
@@ -4937,12 +4949,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategy1", ReplyAction="http://tempuri.org/IEzService/MainStrategy1Response")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -5556,6 +5562,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument) {
             return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest) {
+            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison, cashRequestID, createCashRequest, updateCashRequest);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest) {
+            return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, cashRequestID, createCashRequest, updateCashRequest);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest) {
@@ -6190,6 +6204,14 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.BackfillZooplaValueAsync();
         }
         
+        public ServiceClientProxy.EzServiceReference.ActionMetaData BackfillBrokerCommissionInvoice() {
+            return base.Channel.BackfillBrokerCommissionInvoice();
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> BackfillBrokerCommissionInvoiceAsync() {
+            return base.Channel.BackfillBrokerCommissionInvoiceAsync();
+        }
+        
         public ServiceClientProxy.EzServiceReference.ActionMetaData CaisGenerate(int underwriterId) {
             return base.Channel.CaisGenerate(underwriterId);
         }
@@ -6748,14 +6770,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
             return base.Channel.LoanStatusAfterPaymentAsync(userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategy1(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest) {
-            return base.Channel.MainStrategy1(uderwriterId, customerId, newCreditLine, avoidAutoDescison, cashRequestID, createCashRequest, updateCashRequest);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MainStrategy1Async(int uderwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest) {
-            return base.Channel.MainStrategy1Async(uderwriterId, customerId, newCreditLine, avoidAutoDescison, cashRequestID, createCashRequest, updateCashRequest);
         }
     }
 }
