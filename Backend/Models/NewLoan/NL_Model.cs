@@ -13,12 +13,15 @@
 		public NL_Model(int customerID) {
 			CustomerID = customerID;
 			Schedule = new List<NLScheduleItem>();
+			Fees = new List<NLFeeItem>();
 		}
 	
 		[DataMember]
 		public int CustomerID { get; set; }
+
 		[DataMember]
 		public int? UserID { get; set; }
+
 		[DataMember]
 		public NL_FundTransfers FundTransfer { get; set; }
 
@@ -34,6 +37,10 @@
 		[DataMember]
 		public List<NLScheduleItem> Schedule { get; set; }
 
+		[DataMember]
+		public List<NLFeeItem> Fees { get; set; }
+
+		
 		[DataMember]
 		public NL_PacnetTransactions PacnetTransaction { get; set; }
 		[DataMember]

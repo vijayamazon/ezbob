@@ -12,9 +12,9 @@
 	using PaymentServices.Calculators;
 
 	/// <summary>
-	/// Create loan schedule.
+	/// Create loan Schedule and setup Fees
 	/// Arguments: NL_Model with CustomerID, CalculatorImplementation (BankLikeLoanCalculator|LegacyLoanCalculator), Loan.IssuedTime
-	/// If the customer has valid offer, NL_Model Result contains Schedule 
+	/// If the customer has valid offer, NL_Model Result contains Schedule, Fees, APR, Error
 	/// </summary>
 	public class CalculateLoanSchedule : AStrategy {
 
@@ -81,7 +81,6 @@
 
 				Log.Debug(model.Loan.ToString());
 
-				// 5. schedules
 				LoanCalculatorModel nlCalculatorModel = new LoanCalculatorModel {
 					LoanIssueTime = model.Loan.IssuedTime, // input
 					RepaymentIntervalType = (RepaymentIntervalTypes)Enum.ToObject(typeof(RepaymentIntervalTypesId), model.Loan.RepaymentIntervalTypeID), // offer|LoanLegal
@@ -93,8 +92,8 @@
 
 				// set discounts
 				if (dataForLoan.DiscountPlan != null) {
-					string[] stringSeparator = {","};
-					char[] removeChar = {','};
+					string[] stringSeparator = { "," };
+					char[] removeChar = { ',' };
 					string[] result = dataForLoan.DiscountPlan.Trim(removeChar).Split(stringSeparator, StringSplitOptions.None);
 					decimal[] dpe = new decimal[result.Length];
 					var i = 0;
@@ -120,12 +119,13 @@
 				var feeCalculator = new SetupFeeCalculator(dataForLoan.SetupFeePercent, dataForLoan.BrokerSetupFeePercent);
 				decimal setupFeeAmount = feeCalculator.Calculate(model.Loan.InitialLoanAmount);
 
-				Log.Debug("setupFeeAmount: {0}", setupFeeAmount);
+				Log.Debug("setupFeeAmount initial: {0}", setupFeeAmount);
 
 				// add setup fees if distributed
 				if (dataForLoan.DistributedSetupFeePercent > 0) {
 
 					decimal distributedFeeAmount = setupFeeAmount * dataForLoan.DistributedSetupFeePercent;
+					setupFeeAmount -= distributedFeeAmount;
 					int schedulesCount = shedules.Count;
 
 					decimal iFee = Decimal.Round(distributedFeeAmount / schedulesCount);
@@ -137,15 +137,18 @@
 					}
 				}
 
+				// get schedules with fees
 				shedules = nlCalculator.CreateScheduleAndPlan();
 
 				Log.Debug("SCHEDULES with fees: {0}", shedules);
 
-				// fill in NL_Model - composite NLScheduleItem
+				// fill in NL_Model
 				model.Schedule = new List<NLScheduleItem>();
+				model.Fees = new List<NLFeeItem>();
+
 				foreach (var s in shedules) {
 
-					// set schedule item
+					// schedule item
 					NL_LoanSchedules iItem = new NL_LoanSchedules() {
 						InterestRate = s.InterestRate,
 						PlannedDate = s.Date,
@@ -154,22 +157,37 @@
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay
 					};
 
-					// set appropriate setup fee item
-					NL_LoanFees distributedFeeItem = null;
-					var fee = nlCalculatorModel.Fees.FirstOrDefault(f => f.AssignDate == s.Date && f.FType == FeeTypes.SetupFee);
-					if (fee != null) {
-						distributedFeeItem = new NL_LoanFees() {
-							Amount = fee.Amount,
-							AssignTime = fee.AssignDate,
-							Notes = "distributed setup fee",
-							LoanFeeTypeID = (int)FeeTypes.SetupFee
-						};
-					}
+					model.Schedule.Add(new NLScheduleItem() { ScheduleItem = iItem });
 
-					model.Schedule.Add(new NLScheduleItem() { ScheduleItem = iItem, Fee = distributedFeeItem });
+					// set appropriate distributed setup fee and add it to the model.Fees list
+					var fee = nlCalculatorModel.Fees.FirstOrDefault(f => f.AssignDate.Date == s.Date.Date && f.FType == FeeTypes.SetupFee);
+
+					if (fee != null) {
+						model.Fees.Add(new NLFeeItem() {
+							Fee = new NL_LoanFees() {
+								Amount = fee.Amount,
+								AssignTime = fee.AssignDate,
+								Notes = "distributed setup fee part",
+								LoanFeeTypeID = (int)FeeTypes.SetupFee
+							}
+						});
+					}// distributed setup fee
 				}
 
-				// set APR
+				// regular setupFee
+				if (setupFeeAmount > 0) {
+					model.Fees.Add(new NLFeeItem() {
+						Fee = new NL_LoanFees() {
+							LoanFeeTypeID = (int)FeeTypes.SetupFee,
+							Amount = setupFeeAmount,
+							AssignTime = DateTime.UtcNow,
+							CreatedTime = DateTime.UtcNow,
+							Notes = "setup fee",
+						}
+					});
+				}
+
+				// set APR - TBD
 				model.APR = nlCalculator.APRCalculate(setupFeeAmount, model.Loan.IssuedTime);
 
 				// init result by the model
