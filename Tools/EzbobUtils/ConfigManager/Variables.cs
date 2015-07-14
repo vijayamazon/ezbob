@@ -437,6 +437,7 @@ namespace ConfigManager {
 		TotalsMonthTail,
 		TradeTrackerPixelEnabled,
 		TrustPilotBccMail,
+		TrustPilotBccMailEverline,
 		TrustPilotReviewEnabled,
 		TwilioAccountSid,
 		TwilioAuthToken,

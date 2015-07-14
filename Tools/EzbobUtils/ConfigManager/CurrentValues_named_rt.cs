@@ -268,6 +268,10 @@
 			get { return this[Variables.TrustPilotBccMail]; }
 		}
 
+		public virtual VariableValue TrustPilotBccMailEverline {
+			get { return this[Variables.TrustPilotBccMailEverline]; }
+		}
+
 		public virtual VariableValue TrustPilotReviewEnabled {
 			get { return this[Variables.TrustPilotReviewEnabled]; }
 		}

@@ -87,11 +87,23 @@
 		} // ToTrustPilot
 
 		protected virtual Addressee[] GetRecipients() {
+			string bcc = String.Empty;
+
+			if (ToTrustPilot && !CustomerData.IsTest) {
+				if (CustomerData.Origin == CustomerOriginEnum.ezbob.ToString()) {
+					bcc = CurrentValues.Instance.TrustPilotBccMail;
+				}
+
+				if (CustomerData.Origin == CustomerOriginEnum.everline.ToString()) {
+					bcc = CurrentValues.Instance.TrustPilotBccMailEverline;
+				}
+			}
+
 			return SendToCustomer
 				? new[] {
 					new Addressee(
 						CustomerData.Mail,
-						ToTrustPilot && !CustomerData.IsTest ? CurrentValues.Instance.TrustPilotBccMail : "",
+						bcc,
 						userID:this.CustomerId
 					)
 				}
