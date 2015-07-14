@@ -47,6 +47,8 @@
 		[DataMember]
 		public List<NLFeeItem> Fees { get; set; }
 
+		[DataMember]
+		public NL_Offers Offer { get; set; }
 		
 
 		// AssignPaymentToLoan strategy

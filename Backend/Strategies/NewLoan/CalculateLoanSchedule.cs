@@ -74,6 +74,12 @@
 				model.Loan.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
 				model.Loan.Position = dataForLoan.LoansCount;
 
+				model.Offer = new NL_Offers() {
+					BrokerSetupFeePercent = dataForLoan.BrokerSetupFeePercent,
+					SetupFeePercent = dataForLoan.SetupFeePercent,
+					DistributedSetupFeePercent = dataForLoan.DistributedSetupFeePercent
+				};
+
 				Log.Debug(model.Loan.ToString());
 
 				LoanCalculatorModel nlCalculatorModel = new LoanCalculatorModel {
