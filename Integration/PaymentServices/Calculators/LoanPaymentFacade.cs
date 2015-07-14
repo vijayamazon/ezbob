@@ -16,6 +16,7 @@
 	public class LoanPaymentFacade {
 		public LoanPaymentFacade() {
 			loanTransactionMethodRepository = ObjectFactory.GetInstance<LoanTransactionMethodRepository>();
+			writeOffReasonRepository = ObjectFactory.GetInstance<WriteOffReasonRepository>();
 			_historyRepository = ObjectFactory.GetInstance<LoanHistoryRepository>();
 			this.amountToChargeFrom = CurrentValues.Instance.AmountToChargeFrom;
 		} // constructor
@@ -23,10 +24,12 @@
 		public LoanPaymentFacade(
 			ILoanHistoryRepository historyRepository,
 			ILoanTransactionMethodRepository loanTransactionMethodRepository,
+			IWriteOffReasonRepository writeOffReasonRepository,
 			int? amountToChargeFrom = null
 		) {
 			_historyRepository = historyRepository;
 			this.loanTransactionMethodRepository = loanTransactionMethodRepository;
+			this.writeOffReasonRepository = writeOffReasonRepository;
 			this.amountToChargeFrom = amountToChargeFrom ?? CurrentValues.Instance.AmountToChargeFrom;
 		} // constructor
 
@@ -43,6 +46,7 @@
 			string description = "payment from customer",
 			bool interestOnly = false,
 			string sManualPaymentMethod = null,
+			string writeOffReason = null,
 			NL_Model nlModel = null
 		) {
 			var paymentTime = term ?? DateTime.UtcNow;
@@ -62,7 +66,8 @@
 				LoanRepayment = oldLoan.Principal - loan.Principal,
 				Interest = loan.InterestPaid - oldLoan.InterestPaid,
 				InterestOnly = interestOnly,
-				LoanTransactionMethod = loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod)
+				LoanTransactionMethod = loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod),
+				WriteOffReason = writeOffReasonRepository.Find(writeOffReason)
 			};
 
 			loan.AddTransaction(transactionItem);
@@ -240,6 +245,7 @@
 		/// <param name="paymentType">If payment type is null - ordinary payment(reduces principal),
 		/// if nextInterest then it is for Interest Only loans, and reduces interest in the future.</param>
 		/// <param name="sManualPaymentMethod"></param>
+		/// <param name="writeOffReason"></param>
 		/// <returns></returns>
 		public PaymentResult MakePayment(
 			string transId,
@@ -251,11 +257,12 @@
 			DateTime? date = null,
 			string description = "payment from customer",
 			string paymentType = null,
-			string sManualPaymentMethod = null
+			string sManualPaymentMethod = null,
+			string writeOffReason = null
 		) {
 			Log.DebugFormat(
 				"MakePayment transId: {0}, amount: {1}, ip: {2}, type: {3}, loanId: {4}, customer: {5}," +
-				"date: {6}, description: {7}, paymentType: {8}, manualPaymentMethod: {9}",
+				"date: {6}, description: {7}, paymentType: {8}, manualPaymentMethod: {9}, writeOffReason: {10}",
 				transId,
 				amount,
 				ip,
@@ -265,7 +272,8 @@
 				date,
 				description,
 				paymentType,
-				sManualPaymentMethod
+				sManualPaymentMethod,
+				writeOffReason
 			);
 
 			decimal oldInterest;
@@ -336,7 +344,7 @@
 					select r
 				).FirstOrDefault();
 
-				PayLoan(loan, transId, amount, ip, date, description, sManualPaymentMethod: sManualPaymentMethod);
+				PayLoan(loan, transId, amount, ip, date, description, sManualPaymentMethod: sManualPaymentMethod, writeOffReason: writeOffReason);
 
 				newInterest = loan.Interest;
 
@@ -395,6 +403,7 @@
 		private readonly ILoanHistoryRepository _historyRepository;
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanPaymentFacade));
 		private readonly ILoanTransactionMethodRepository loanTransactionMethodRepository;
+		private readonly IWriteOffReasonRepository writeOffReasonRepository;
 		private readonly int amountToChargeFrom;
 	} // class LoanPaymentFacade
 } // namespace

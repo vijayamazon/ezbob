@@ -175,15 +175,19 @@
         .Select(x => x.Name)
         .ToList();
 
+	List<string> writeOffReasons = ObjectFactory.GetInstance<WriteOffReasonRepository>()
+		.GetAll()
+		.OrderBy(x => x.WriteOffReasonId)
+		.Select(x => x.ReasonName)
+		.ToList();
+
     <input type="hidden" name="loanId" value="<%-loanId%>" />
-    <div class="modal-header">
-        <h3 id="myModalLabel">Manual Payment</h3>
-    </div>
 
     <div class="modal-body">
 
         <form id="payment-form" class="form-horizontal" action="/" method="POST">
             @EzForm.Select("paymentMethod", "Payment method", paymentMethods, "form-control")
+			@EzForm.Select("writeOffReason", "Write-off reason", writeOffReasons, "form-control", "", "writeOffReason canDisableWriteOffReason")
             @EzForm.InputTextUnderwriter(this, "totalSumPaid", "Total sum paid", "")
             @EzForm.DateInputUnderwriter("paymentDate", "Date", false, new[] { DateTime.Now.AddYears(-1), DateTime.Now.AddYears(1), DateTime.Now })
             @EzForm.InputTextUnderwriter(this, "fees", "Fees", "", "text", isDisabled: true)

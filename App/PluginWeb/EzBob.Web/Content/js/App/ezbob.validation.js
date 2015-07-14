@@ -180,12 +180,21 @@ $.validator.addMethod(
         "Should be positive"
 );
 
-$.validator.addMethod(
+jQuery.validator.addMethod(
         "minDate",
         function (value, element, minDate) {
             var d1 = moment.utc(minDate).toDate();
             var d2 = moment.utc(value, "DD/MM/YYYY").toDate();
             return d2 >= d1;
+        }
+);
+
+jQuery.validator.addMethod(
+        "maxDate",
+        function(value, element, maxDate) {
+        	var d1 = moment.utc(maxDate).toDate();
+        	var d2 = moment.utc(value, "DD/MM/YYYY").toDate();
+        	return d2 <= d1 ;
         }
 );
 

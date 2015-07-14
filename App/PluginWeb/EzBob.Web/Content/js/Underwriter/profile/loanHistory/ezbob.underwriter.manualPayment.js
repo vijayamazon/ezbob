@@ -29,22 +29,27 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 		"click .confirm": "confirmClicked",
 		"click .uploadFiles": "uploadFilesClicked",
 		"change [name='totalSumPaid']": "updatePaymentData",
+		"change [name='paymentMethod']": "updatePaymentMethod",
 		"change [name='paymentDate']": "updatePaymentData"
 	},
 
 	ui: {
 		form: '#payment-form',
-		money: "[name='totalSumPaid']",
-		date: "[name='paymentDate']",
-		fees: "[name='fees']",
-		interest: "[name='interest']",
-		principal: "[name='principal']"
+		money: '[name="totalSumPaid"]',
+		date: '[name="paymentDate"]',
+		fees: '[name="fees"]',
+		interest: '[name="interest"]',
+		principal: '[name="principal"]',
+		writeOffReason: '#writeOffReason',
+		writeOffReasonDiv: '.writeOffReason',
+		paymentMethod: '#paymentMethod'
 	},
 
 	confirmClicked: function() {
+
 		if (!this.validator.form())
 			return;
-
+		this.ui.money.removeAttr('disabled');
 		this.trigger("addPayment", this.ui.form.serialize());
 		this.close();
 	},
@@ -64,7 +69,7 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 		var request = $.get(window.gRootPath + "Underwriter/LoanHistory/GetPaymentInfo", data);
 
 		var self = this;
-		
+
 		request.done(function(r) {
 			if (r.error)
 				return;
@@ -83,5 +88,24 @@ EzBob.Underwriter.ManualPaymentView = Backbone.Marionette.ItemView.extend({
 			});
 			self.ui.money.tooltip("enable").tooltip('fixTitle');
 		});
+	},
+
+	updatePaymentMethod: function() {
+		var jqElem = this.ui.paymentMethod;
+
+		var nCurrentValue = jqElem.val();
+
+		var self = this;
+
+		if ((nCurrentValue === "Write Off")) {
+			self.ui.money.val(self.maxAmount).attr("disabled", "disabled").addClass('text');
+			self.ui.writeOffReasonDiv.removeClass('canDisableWriteOffReason');
+		}
+		else {
+			self.ui.money.val(self.minAmount).removeAttr('disabled').removeClass('text');
+			self.ui.writeOffReasonDiv.addClass('canDisableWriteOffReason');
+		}
+
+		this.updatePaymentData();
 	}
 });

@@ -225,7 +225,7 @@
 
 				facade.MakePayment(payPointTransactionId, realAmount, null,
 												 "other", model.LoanId, customer,
-												 date, description, null, model.PaymentMethod);
+												 date, description, null, model.PaymentMethod, model.WriteOffReason);
 
                 //TODO add payment to new table
                 Log.InfoFormat("add payment to new payment table customer {0}", customer.Id);

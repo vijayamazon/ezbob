@@ -1376,19 +1376,26 @@ EzBob.validateChangeEmailForm = function(el) {
 
 EzBob.validatemanualPaymentForm = function(el) {
 	var e = el || $('form');
+	
+	var today = this.currentServerDate();
+	var firstDay = moment(today).add('days', -4);
 
 	return e.validate({
 		rules: {
-			experiedDate: { required: true, requiredDate: true },
+			paymentDate: { requiredDate: true, minDate: firstDay, maxDate: today },
 			description: { required: true },
 			paymentMethod: { required: true, regex: "[a-zA-Z]+" },
+			writeOffReason: { required: true, regex: "[a-zA-Z]+" },
 			totalSumPaid: { required: true, number: true },
 		},
 		messages: {
+			paymentDate: { minDate: "You can set only up to 3 days back, from today, including", maxDate: "Future dates are not allowed; You can set only up to 3 days back, from today, including" },
 			PaymentMethod: { regex: "This field is required" }
-		}//,
-		//errorPlacement: EzBob.Validation.errorPlacement,
-		//unhighlight: EzBob.Validation.unhighlight
+		},
+		errorPlacement: EzBob.Validation.errorPlacement,
+		unhighlight: EzBob.Validation.unhighlight,
+		highlight: EzBob.Validation.highlight,
+		ignore: ":not(:visible)"
 	});
 };
 

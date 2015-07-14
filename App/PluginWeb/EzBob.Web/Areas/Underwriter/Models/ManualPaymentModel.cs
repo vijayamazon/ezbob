@@ -7,6 +7,7 @@
         public decimal? Fees { get; set; }
         public decimal? Interest { get; set; }
         public string PaymentMethod { get; set; }
+		public string WriteOffReason { get; set; }
         public bool SendEmail { get; set; }
         public bool ChargeClient { get; set; }
         public decimal? Principle { get; set; }

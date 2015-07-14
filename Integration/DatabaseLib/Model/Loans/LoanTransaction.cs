@@ -15,6 +15,7 @@
         public virtual decimal Fees { get; set; }
         public virtual string RefNumber { get; set; }
 	    public virtual LoanTransactionMethod LoanTransactionMethod { get; set; }
+		public virtual WriteOffReason WriteOffReason { get; set; }
 
 	    private ISet<LoanScheduleTransaction> _scheduleTransactions = new HashedSet<LoanScheduleTransaction>();
 		public virtual ISet<LoanScheduleTransaction> ScheduleTransactions {
@@ -80,6 +81,7 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping
             Map(x => x.RefNumber).Length(14);
 
 	        References(x => x.LoanTransactionMethod, "LoanTransactionMethodId");
+			References(x => x.WriteOffReason, "WriteOffReasonId");
 
 			HasMany(x => x.ScheduleTransactions)
                .AsSet()

@@ -28,6 +28,8 @@
 				x.For<IEzServiceAccessor>().Use<EzServiceAccessorLong>();
 				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 				x.For<ILoanTransactionMethodRepository>().Use<LoanTransactionMethodRepository>();
+				x.For<IWriteOffReasonRepository>().Use<WriteOffReasonRepository>();
+
 				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
 
 				x.For<ICustomerRepository>().Use<CustomerRepository>();

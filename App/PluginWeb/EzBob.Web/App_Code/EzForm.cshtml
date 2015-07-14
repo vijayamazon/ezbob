@@ -4,9 +4,9 @@
 @using System.Web.WebPages
 @using ConfigManager
 @*Renders select*@
-@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
+@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "", string divClass = "")
 {
-    <div class="form-group">
+    <div class="form-group @divClass">
         <label class="control-label" for="@id">@caption</label>
         <div class="controls">
             <select id="@id" name="@id" class="selectheight @css" data-placeholder="@placeHolder" >

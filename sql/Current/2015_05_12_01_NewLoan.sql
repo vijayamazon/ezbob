@@ -511,16 +511,16 @@ CREATE TABLE [dbo].[NL_PaypointTransactionStatuses](
 ) ;
 END ;
 
-IF OBJECT_ID('WriteOffReasons') IS NULL 
+/*implemented in the script 2015_07_13_01_WriteOffReasonsCreateInsert for EZ-3713 (subtask of EZ-3445)*/
+/*IF OBJECT_ID('WriteOffReasons') IS NULL 
 BEGIN	
 CREATE TABLE [dbo].[WriteOffReasons](
 	[WriteOffReasonID] [INT] NOT NULL IDENTITY(1,1) ,
 	[ReasonName] [nvarchar](100) NOT NULL,
-	[PaymentID] [INT] NOT NULL ,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_WriteOffReasons] PRIMARY KEY CLUSTERED ( [WriteOffReasonID] ASC)
 ) ;
-END ;
+END ;*/
 
 
 IF OBJECT_ID('NL_LoanStates') IS NULL BEGIN	
@@ -903,11 +903,12 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
  ALTER TABLE [dbo].[LoanBrokerCommission] ADD CONSTRAINT [FK_LoanBrokerCommission_NL_Loan] FOREIGN KEY([NLLoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]) ; 
 END
 GO
+--no need payment id in writeoff reasons lookup table
+-- IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_WriteOffReasons_Payments') BEGIN
+-- ALTER TABLE [dbo].[WriteOffReasons] ADD CONSTRAINT [FK_WriteOffReasons_Payments] FOREIGN KEY([PaymentID]) REFERENCES [dbo].[NL_Payments] ([PaymentID]) ;
+-- END
+-- GO
 
-IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_WriteOffReasons_Payments') BEGIN
- ALTER TABLE [dbo].[WriteOffReasons] ADD CONSTRAINT [FK_WriteOffReasons_Payments] FOREIGN KEY([PaymentID]) REFERENCES [dbo].[NL_Payments] ([PaymentID]) ;
-END
-GO
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanStates_NL_Loans') BEGIN
  ALTER TABLE [dbo].[NL_LoanStates] ADD CONSTRAINT [FK_NL_LoanStates_NL_Loans] FOREIGN KEY([LoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]) ;
 END
