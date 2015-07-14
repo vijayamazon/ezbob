@@ -218,8 +218,8 @@
 					_paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
 				}
 
-				string description = string.Format("UW Manual payment method: {0}, description: {2}{2}{1}", model.PaymentMethod,
-												   model.Description, Environment.NewLine);
+				string description = string.Format("UW Manual payment method: {0}, {3}description: {2}{2}{1}", model.PaymentMethod,
+												   model.Description, Environment.NewLine, model.WriteOffReason != "-" ? "Write-off reason: " +  model.WriteOffReason + ", " : " ");
 
 				var facade = new LoanPaymentFacade();
 
