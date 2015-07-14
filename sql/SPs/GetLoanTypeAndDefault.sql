@@ -14,24 +14,10 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	DECLARE @OutputLoanTypeID INT = NULL
-	DECLARE @DefaultLoanTypeID INT = NULL
-
-	IF EXISTS (SELECT * FROM LoanType WHERE Id = @LoanTypeID)
-		SET @OutputLoanTypeID = @LoanTypeID
-
-	SELECT TOP 1
-		@DefaultLoanTypeID = Id
-	FROM
-		LoanType
-	WHERE
-		IsDefault = 1
-
-	IF @DefaultLoanTypeID IS NULL
-		SELECT @DefaultLoanTypeId = Id FROM LoanType WHERE Type = 'StandardLoanType'
-
 	SELECT
-		LoanTypeID = @OutputLoanTypeID,
-		DefaultLoanTypeID = @DefaultLoanTypeID
+		LoanTypeID,
+		DefaultLoanTypeID
+	FROM
+		dbo.udfGetLoanTypeAndDefault(@LoanTypeID)
 END
 GO

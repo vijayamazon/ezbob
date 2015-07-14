@@ -20,7 +20,6 @@
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using LandRegistryLib;
 	using SalesForceLib.Models;
 
@@ -32,7 +31,7 @@
 
 			[EnumMember]
 			No,
-		} // enum UpdateCashRequest
+		} // enum DoAction
 
 		public MainStrategy(
 			int customerId,
@@ -46,6 +45,7 @@
 			this.cashRequestID = cashRequestID;
 			this.createCashRequest = createCashRequest;
 			this.updateCashRequest = updateCashRequest;
+
 			this.finishWizardArgs = fwa;
 
 			this.customerId = customerId;
@@ -539,173 +539,44 @@
 		/// Last stage of auto-decision process
 		/// </summary>
 		private void UpdateCustomerAndCashRequest() {
-			var now = DateTime.UtcNow;
-
-			SafeReader ltsr = DB.GetFirst(
-				"GetLoanTypeAndDefault",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@LoanTypeID", this.autoDecisionResponse.LoanTypeID)
-			);
-			int? dbLoanTypeID = ltsr["LoanTypeID"];
-			int defaultLoanTypeID = ltsr["DefaultLoanTypeID"];
-
-			decimal interestRateToUse;
-			decimal setupFeePercentToUse;
-			int repaymentPeriodToUse;
-			int loanTypeIdToUse;
-
-			if (this.autoDecisionResponse.IsAutoApproval) {
-				interestRateToUse = this.autoDecisionResponse.InterestRate;
-				setupFeePercentToUse = this.autoDecisionResponse.SetupFee;
-				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
-				loanTypeIdToUse = dbLoanTypeID ?? defaultLoanTypeID;
-			} else {
-				//TODO check this code!!!
-				interestRateToUse = this.lastOffer.LoanOfferInterestRate;
-				setupFeePercentToUse = this.lastOffer.ManualSetupFeePercent;
-				repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
-				loanTypeIdToUse = this.autoDecisionResponse.IsAutoReApproval
-					? (dbLoanTypeID ?? defaultLoanTypeID)
-					: defaultLoanTypeID;
-			} // if
-
-			var customer = this.customers.Get(this.customerId);
-
-			if (customer == null)
+			if (this.updateCashRequest != DoAction.Yes)
 				return;
 
-			if (this.overrideApprovedRejected) {
-				customer.CreditResult = this.autoDecisionResponse.CreditResult;
-				customer.Status = this.autoDecisionResponse.UserStatus;
+			if (this.cashRequestID == null) {
+				Log.Alert("Customer {0}: update cash request needed but cash request ID is null.", this.customerId);
+				return;
 			} // if
 
-			customer.OfferStart = now;
-			customer.OfferValidUntil = now.AddHours(CurrentValues.Instance.OfferValidForHours);
-			customer.SystemDecision = this.autoDecisionResponse.SystemDecision;
-			customer.Medal = this.medal.MedalClassification;
-			customer.CreditSum = this.offeredCreditLine;
-			customer.LastStatus = this.autoDecisionResponse.CreditResult.HasValue
-				? this.autoDecisionResponse.CreditResult.ToString()
-				: "N/A";
-			customer.SystemCalculatedSum = this.medal.RoundOfferedAmount();
-			customer.ManagerApprovedSum = this.offeredCreditLine;
+			var sp = new MainStrategyUpdateCrC(
+				this.customerId,
+				this.cashRequestID,
+				this.autoDecisionResponse,
+				this.lastOffer,
+				DB,
+				Log
+			) {
+				OverrideApprovedRejected = this.overrideApprovedRejected,
+				MedalClassification = this.medal.MedalClassification.ToString(),
+				OfferedCreditLine = this.offeredCreditLine,
+				SystemCalculatedSum = this.medal.RoundOfferedAmount(),
+				TotalScoreNormalized = this.medal.TotalScoreNormalized,
+				ExperianConsumerScore = this.customerDetails.ExperianConsumerScore,
+				AnnualTurnover = (int)this.medal.AnnualTurnover,
+			};
 
-			if (this.autoDecisionResponse.DecidedToReject) {
-				customer.DateRejected = now;
-				customer.RejectedReason = this.autoDecisionResponse.DecisionName;
-				customer.NumRejects++;
-			} // if
+			sp.ExecuteNonQuery();
 
-			if (this.autoDecisionResponse.DecidedToApprove) {
-				customer.DateApproved = now;
-				customer.ApprovedReason = this.autoDecisionResponse.DecisionName;
-				customer.NumApproves++;
-				customer.IsLoanTypeSelectionAllowed =
-					this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed ? 1 : 0;
-			} // if
+			//AddNewDecisionOffer(
+			//	now,
+			//	isLoanTypeSelectionAllowedToUse,
+			//	isCustomerRepaymentPeriodSelectionAllowedToUse,
+			//	loanTypeIdToUse,
+			//	!this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
+			//	discountPlanIDToUse
+			//);
 
-			var cr = customer.LastCashRequest;
-
-			if (cr != null) {
-				cr.OfferStart = customer.OfferStart;
-				cr.OfferValidUntil = customer.OfferValidUntil;
-
-				cr.SystemDecision = this.autoDecisionResponse.SystemDecision;
-				cr.SystemCalculatedSum = this.medal.RoundOfferedAmount();
-				cr.SystemDecisionDate = now;
-				cr.ManagerApprovedSum = this.offeredCreditLine;
-				cr.UnderwriterDecision = this.autoDecisionResponse.CreditResult;
-				cr.UnderwriterDecisionDate = now;
-				cr.UnderwriterComment = this.autoDecisionResponse.DecisionName;
-				cr.AutoDecisionID = this.autoDecisionResponse.DecisionCode;
-				cr.MedalType = this.medal.MedalClassification;
-				cr.ScorePoints = (double)this.medal.TotalScoreNormalized;
-				cr.ExpirianRating = this.customerDetails.ExperianConsumerScore;
-				cr.AnnualTurnover = (int)this.medal.AnnualTurnover;
-				cr.LoanType = loanTypeIdToUse;
-				cr.LoanSource = this.loanSourceRepository.GetDefault();
-
-				if (this.autoDecisionResponse.DecidedToApprove)
-					cr.InterestRate = interestRateToUse;
-
-				if (repaymentPeriodToUse != 0) {
-					cr.ApprovedRepaymentPeriod = repaymentPeriodToUse;
-					cr.RepaymentPeriod = repaymentPeriodToUse;
-				} // if
-
-				cr.ManualSetupFeePercent = setupFeePercentToUse;
-				cr.APR = this.lastOffer.LoanOfferApr;
-
-				if (this.autoDecisionResponse.IsAutoReApproval) {
-					cr.EmailSendingBanned = this.autoDecisionResponse.LoanOfferEmailSendingBannedNew;
-					cr.IsCustomerRepaymentPeriodSelectionAllowed =
-						this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
-					cr.DiscountPlan = this.autoDecisionResponse.DiscountPlanID.HasValue
-						? this.discountPlanRepository.Get(this.autoDecisionResponse.DiscountPlanID.Value)
-						: this.discountPlanRepository.GetDefault();
-
-					cr.LoanSource = this.loanSourceRepository.Get(this.autoDecisionResponse.LoanSourceID);
-
-					if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value) {
-						Log.Warn(
-							"Too big interest ({1}) was assigned for this loan source - adjusting to {2} for customer {0}.",
-							this.customerId,
-							cr.InterestRate,
-							cr.LoanSource.MaxInterest.Value
-						);
-						cr.InterestRate = cr.LoanSource.MaxInterest.Value;
-					} // if
-
-					if (
-						cr.LoanSource.DefaultRepaymentPeriod.HasValue &&
-						cr.ApprovedRepaymentPeriod < cr.LoanSource.DefaultRepaymentPeriod
-					) {
-						Log.Warn(
-							"Too small repayment period ({1}) was assigned for this loan source - " +
-							"adjusting to {2} for customer {0}",
-							this.customerId,
-							cr.ApprovedRepaymentPeriod,
-							cr.LoanSource.DefaultRepaymentPeriod
-						);
-
-						cr.ApprovedRepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod;
-						cr.RepaymentPeriod = cr.LoanSource.DefaultRepaymentPeriod.Value;
-					} // if
-
-					if (
-						!cr.LoanSource.IsCustomerRepaymentPeriodSelectionAllowed &&
-						cr.IsCustomerRepaymentPeriodSelectionAllowed
-					) {
-						Log.Warn(
-							"Wrong period selection option ('enabled') was assigned for this loan source - " +
-							"adjusting to ('disabled') for customer {0}.",
-							this.customerId
-						);
-
-						cr.IsCustomerRepaymentPeriodSelectionAllowed = false;
-					} // if
-
-					cr.LoanType = loanTypeIdToUse;
-					cr.ManualSetupFeePercent = this.autoDecisionResponse.SetupFee;
-				} // if
-
-				// AddNewDecisionOffer(now, cr, loanTypeIdToUse);
-			} // if
-
-			customer.LastStartedMainStrategyEndTime = now;
-
-			this.customers.SaveOrUpdate(customer);
-
-			//TODO update new offer / decision tables
-			Log.Info("update new offer / decision for customer {0}", customer.Id);
-
-			if (this.autoDecisionResponse.Decision.HasValue) {
-				this.decisionHistory.LogAction(
-					this.autoDecisionResponse.Decision.Value,
-					this.autoDecisionResponse.DecisionName,
-					this.session.Get<User>(1), customer
-				);
-			} // if
+			// TODO update new offer / decision tables
+			Log.Info("update new offer / decision for customer {0}", this.customerId);
 
 			// TEMPORARY DISABLED TODO - sync for proper launch
 			UpdateSalesForceOpportunity(this.customerDetails.AppEmail);
@@ -714,43 +585,58 @@
 				UpdatePartnerAlibaba(this.customerId);
 		} // UpdateCustomerAndCashRequest
 
-		private void AddNewDecisionOffer(DateTime now, CashRequest cr, int loanTypeIdToUse) {
+		private void AddNewDecisionOffer(
+			DateTime now,
+			bool isLoanTypeSelectionAllowed,
+			bool isCustomerRepaymentPeriodSelectionAllowed,
+			int loanTypeIdToUse,
+			bool sendEmailNotification,
+			int discountPlanID
+		) {
 			AddDecision addDecisionStra = new AddDecision(new NL_Decisions {
 				DecisionNameID = this.autoDecisionResponse.Decision.HasValue
 					? (int)this.autoDecisionResponse.Decision.Value
 					: (int)DecisionActions.Waiting,
 				DecisionTime = now,
-				InterestOnlyRepaymentCount = 0, //todo
-				IsAmountSelectionAllowed = cr.IsLoanTypeSelectionAllowed == 1, //todo
-				IsRepaymentPeriodSelectionAllowed = cr.IsCustomerRepaymentPeriodSelectionAllowed,
+				InterestOnlyRepaymentCount = 0, // TODO
+				// TODO ALERT! GEVOLT! FIX! Amount selection allowed IS NOT RELATED to period selection allowed!
+				IsAmountSelectionAllowed = isLoanTypeSelectionAllowed, // TODO
+				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
 				Notes = this.autoDecisionResponse.CreditResult.HasValue
 					? this.autoDecisionResponse.CreditResult.Value.DescriptionAttr()
 					: "",
 				// todo Position = 
 				// todo CashRequestID = 
-				SendEmailNotification = !cr.EmailSendingBanned,
+				SendEmailNotification = sendEmailNotification,
 				UserID = 1,
-			}, cr.Id, null);
+			}, this.cashRequestID, null);
 
 			addDecisionStra.Execute();
 			int decisionID = addDecisionStra.DecisionID;
+
+			int loanSourceID;
+
+			if (this.autoDecisionResponse.LoanSourceID > 0)
+				loanSourceID = this.autoDecisionResponse.LoanSourceID;
+			else {
+				SafeReader lssr = DB.GetFirst("GetDefaultLoanSource", CommandSpecies.StoredProcedure);
+				loanSourceID = lssr["LoanSourceID"];
+			} // if
 
 			AddOffer addOfferStra = new AddOffer(new NL_Offers {
 				DecisionID = decisionID,
 				Amount = this.offeredCreditLine,
 				// todo BrokerSetupFeePercent = 0 
 				CreatedTime = now,
-				DiscountPlanID = cr.DiscountPlan.Id,
-				EmailSendingBanned = cr.EmailSendingBanned,
+				DiscountPlanID = discountPlanID,
+				EmailSendingBanned = !sendEmailNotification,
 				InterestOnlyRepaymentCount = 0, //todo
-				IsLoanTypeSelectionAllowed = cr.IsLoanTypeSelectionAllowed == 1,
-				LoanSourceID = this.autoDecisionResponse.LoanSourceID > 0
-					? this.autoDecisionResponse.LoanSourceID
-					: this.loanSourceRepository.GetDefault().ID,
+				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed,
+				LoanSourceID = loanSourceID,
 				LoanTypeID = loanTypeIdToUse,
 				MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 				RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
-				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, //todo
+				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO
 				SetupFeePercent = this.autoDecisionResponse.SetupFee,
 				// DistributedSetupFeePercent TODO EZ-3515
 				StartTime = now,
