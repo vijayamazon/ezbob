@@ -65,4 +65,13 @@
 		AlmostPaid = 6
 	}
 
+	public enum NLLoanTypes {
+		[Description("Standard Loan")]
+		StandardLoanType = 1, // DB table id
+		[Description("HalfWay Loan")]
+		HalfWayLoanType = 2,
+		[Description("Alibaba Loan")]
+		AlibabaLoanType = 3
+	}
+
 } // namespace

@@ -1646,6 +1646,14 @@
     <Content Include="Views\Shared\_SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\LoanCalculator\LoanCalculator.csproj">
+      <Project>{D7A03EFE-B175-49EB-9B22-3315C1124091}</Project>
+      <Name>LoanCalculator</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Backend\CalculateLoan\Models\Models.csproj">
+      <Project>{DDAF0E80-8E9D-49F4-AA8C-30A69489361E}</Project>
+      <Name>Models</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
       <Project>{d283ad52-fe57-4cd8-a928-a7a3af9f04ec}</Project>
       <Name>EzServiceAccessor</Name>

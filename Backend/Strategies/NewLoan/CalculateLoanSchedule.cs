@@ -34,26 +34,19 @@
 			string message;
 
 			if (model.CustomerID == 0) {
-				message = string.Format("No valid Customer ID {0} ", model.CustomerID);
-				//Log.Alert(message);
-				//throw new NL_ExceptionCustomerNotFound(message);
-				this.Result.Error = message;
+				this.Result.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
 			}
 
 			// input validation
 			if (model.Loan == null) {
 				message = string.Format("Expected input data not found (NL_Model initialized by: Loan.InitialLoanAmount, Loan.IssuedTime). Customer {0}", model.CustomerID);
-				//Log.Alert(message);
-				//throw new NL_ExceptionInputDataInvalid(message);
 				this.Result.Error = message;
 				return;
 			}
 
 			if (model.CalculatorImplementation == null) {
 				message = string.Format("Expected input data not found (NL_Model initialized by: CalculatorImplementation (example: model. ).");
-				//Log.Alert(message);
-				//throw new NL_ExceptionInputDataInvalid(message);
 				this.Result.Error = message;
 				return;
 			}
@@ -61,10 +54,7 @@
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("@Now", DateTime.UtcNow));
 
 			if (dataForLoan == null) {
-				message = string.Format("No valid offer found. Customer {0} ", model.CustomerID);
-				//Log.Alert(message);
-				//throw new NL_ExceptionOfferNotValid(message);
-				this.Result.Error = message;
+				this.Result.Error = NL_ExceptionOfferNotValid.DefaultMessage;
 				return;
 			}
 
@@ -73,11 +63,16 @@
 			try {
 
 				// from offer 
-				model.Loan.RepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
 				model.Loan.InitialLoanAmount = dataForLoan.LoanLegalAmount;
+				model.Loan.CreationTime = DateTime.UtcNow;
+				model.Loan.RepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
+				model.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
+				//model.Loan.LoanSourceID = dataForLoan.LoanSourceID;
+				//model.Loan.LoanStatusID = (int)NLLoanStatuses.Live; 
 				model.Loan.RepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
 				model.Loan.InterestRate = dataForLoan.MonthlyInterestRate;
 				model.Loan.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
+				model.Loan.Position = dataForLoan.LoansCount;
 
 				Log.Debug(model.Loan.ToString());
 

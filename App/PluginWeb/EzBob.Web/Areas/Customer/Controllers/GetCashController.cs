@@ -341,7 +341,8 @@
 				SignedName = signedName,
 				NotInBankruptcy = notInBankruptcy,
 			};
-			//this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, loanLegals);
+
+			this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, loanLegals);
 			//el: TODO add LoanLegal for offer
 
 			return Json(new { });

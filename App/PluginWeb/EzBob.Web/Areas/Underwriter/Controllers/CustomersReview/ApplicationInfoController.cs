@@ -26,7 +26,7 @@
 	using StructureMap;
 	using EZBob.DatabaseLib.Repository;
 	using DbConstants;
-	
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	public class ApplicationInfoController : Controller {
 		private readonly ServiceClient serviceClient;
@@ -678,7 +678,7 @@
 			}).Execute();
 
 			DateTime now = DateTime.UtcNow;
-			/*
+			
 			var decisionId = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
 				UserID = this._context.UserId,
 				SendEmailNotification = allowSendingEmail,
@@ -711,7 +711,7 @@
 				//todo Notes = 
 				//todo InterestOnlyRepaymentCount = 
 			});
-			 */
+			 
 			//TODO update new offer table
 			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
 

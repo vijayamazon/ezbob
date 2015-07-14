@@ -819,8 +819,10 @@
 			nlModel.FundTransfer.IsActive = true;
 			nlModel.FundTransfer.LoanTransactionMethodID = 1; // 'Pacnet'
 
-			nlModel.LoanHistory = new NL_LoanHistory();
-			nlModel.LoanHistory.AgreementModel = oldLoan.AgreementModel;
+		//	nlModel.LoanHistory = new NL_LoanHistory();
+		//	nlModel.LoanHistory.AgreementModel = oldLoan.AgreementModel;
+
+			nlModel.AgreementModel = oldLoan.AgreementModel;
 
 			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
 			foreach (var aggr in oldLoan.Agreements) {
@@ -1210,26 +1212,30 @@
 
 
 		[Test]
-		public void TestNL_LoanCalculator() {
+		public void TestNL_CalculateLoanSchedule() {
+			const int userID = 25852;
 			NL_Model model = new NL_Model() {
 				CustomerID = 123,
+				UserID = userID,
 				CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName,
 				Loan = new NL_Loans() { IssuedTime = DateTime.UtcNow }
 			};
 
 			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
-			strategy.Context.UserID = 25852;
+			strategy.Context.UserID = userID;
 			try {
 				strategy.Execute();
-			} catch (NL_ExceptionCustomerNotFound nlExceptionCustomerNotFound) {
-				Console.WriteLine("NL_ExceptionCustomerNotFound" + nlExceptionCustomerNotFound);
-			} catch (NL_ExceptionInputDataInvalid nlExceptionInputDataInvalid) {
-				Console.WriteLine("NL_ExceptionInputDataInvalid" + nlExceptionInputDataInvalid.Message);
-			} catch (NL_ExceptionOfferNotValid nlExceptionOfferNotValid) {
-				Console.WriteLine("NL_ExceptionOfferNotValid"  + nlExceptionOfferNotValid.Message);
+
+				strategy.Result.Schedule.ForEach(s => Console.WriteLine(s.ScheduleItem));
+				strategy.Result.Fees.ForEach(f => Console.WriteLine(f.Fee));
+				Console.WriteLine(strategy.Result.APR);
+
+
+			} catch (Exception ex) {
+				Console.WriteLine(ex);
 			}
 
-			
+
 		}
 
 	}

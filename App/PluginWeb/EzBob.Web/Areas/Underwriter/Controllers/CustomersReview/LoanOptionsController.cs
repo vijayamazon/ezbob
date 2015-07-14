@@ -111,7 +111,7 @@
             //TODO update new loan options table
 			Log.DebugFormat("update loan options for loan {0}", options.LoanId);
 
-			//todo this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, new NL_LoanOptions {});
+			this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, new NL_LoanOptions {});
             
 			return Json(new { });
 		}

@@ -48,6 +48,7 @@
 		} // constructor
 
 		/// <exception cref="Exception">PacnetSafeGuard stopped money transfer</exception>
+		/// <exception cref="OverflowException"><paramref name="value" /> is less than <see cref="F:System.TimeSpan.MinValue" /> or greater than <see cref="F:System.TimeSpan.MaxValue" />.-or-<paramref name="value" /> is <see cref="F:System.Double.PositiveInfinity" />.-or-<paramref name="value" /> is <see cref="F:System.Double.NegativeInfinity" />. </exception>
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
 
 			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
@@ -110,6 +111,7 @@
 
 			if (nlModel == null)
 				nlModel = new NL_Model(cus.Id);
+			// NL fund transfer
 			nlModel.FundTransfer = new NL_FundTransfers();
 			nlModel.FundTransfer.Amount = loanAmount; // logic transaction - full amount
 			nlModel.FundTransfer.TransferTime = now;
@@ -130,7 +132,7 @@
 					Fees = loan.SetupFee,
 					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Pacnet"),
 				};
-
+				// NL pacnet transaction
 				if (!isFakeLoanCreate && !isEverlineRefinance) {
 					nlModel.PacnetTransaction = new NL_PacnetTransactions();
 					nlModel.PacnetTransaction.TransactionTime = now;
@@ -154,10 +156,10 @@
 				};
 
 				log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
-				// only logic transaction created in "alibaba" case; real money transfer will be done later, not transferred to customer (alibaba buyer) directly, but to seller (3rd party)
-				nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Manual").Id;
 
-				log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
+				// NL: only logic transaction created in "alibaba" case; real money transfer will be done later, not transferred to customer (alibaba buyer) directly, but to seller (3rd party)
+				nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Manual").Id;
+				
 			} // if
 
 			// TODO This is the place where the funds transferred to customer saved to DB
@@ -186,12 +188,13 @@
 				cus.SetupFee = loan.SetupFee;
 
 			this.agreementsGenerator.RenderAgreements(loan, true);
+
 			/**
 			1. Build/ReBuild agreement model - private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr); in \App\PluginWeb\EzBob.Web\Code\AgreementsModelBuilder.cs
 			2. RenderAgreements: loan.Agreements.Add
 			3. RenderAgreements: SaveAgreement (file?) \backend\Strategies\Misc\Agreement.cs strategy
 			*/
-			this.agreementsGenerator.RenderAgreements(loan, true);
+			
 
 			var loanHistoryRepository = new LoanHistoryRepository(this.session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
@@ -206,9 +209,7 @@
 					DealCloseType = OpportunityDealCloseReason.Won.ToString()
 				}
 			);
-
 			
-
 			// This is the place where the loan is created and saved to DB
 			log.Info(
 				"Create loan for customer {0} cash request {1} amount {2}",
@@ -260,30 +261,32 @@
 			nlModel.Loan.Refnum = loan.RefNumber;
 			nlModel.Loan.OldLoanID = oldloanID;
 			nlModel.Loan.InitialLoanAmount = loanAmount;
-			nlModel.LoanHistory = new NL_LoanHistory();
+			
+			//nlModel.LoanHistory = new NL_LoanHistory();
 
 			// place real NL agreements generation (EZ-3483)
 			this.agreementsGenerator.NL_RenderAgreements(nlModel, true);
 
+			// moved to this.agreementsGenerator.NL_RenderAgreements
 			// that should be done by attaching NL agreements to NL_Model in NL_RenderAgreements
-			nlModel.LoanHistory.AgreementModel = loan.AgreementModel;
-			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
-			foreach (LoanAgreement agrm in loan.Agreements) {
-				NL_LoanAgreements agreement = new NL_LoanAgreements();
-				agreement.FilePath = agrm.FilePath;
-				agreement.LoanAgreementTemplateID = agrm.TemplateRef.Id;
-				nlModel.LoanAgreements.Add(agreement);
-				log.Debug(agreement.ToString());
-			} // for
+			//nlModel.LoanHistory.AgreementModel = loan.AgreementModel;
+			//nlModel.LoanAgreements = new List<NL_LoanAgreements>();
+			//foreach (LoanAgreement agrm in loan.Agreements) {
+			//	NL_LoanAgreements agreement = new NL_LoanAgreements();
+			//	agreement.FilePath = agrm.FilePath;
+			//	agreement.LoanAgreementTemplateID = agrm.TemplateRef.Id;
+			//	nlModel.LoanAgreements.Add(agreement);
+			//	log.Debug(agreement.ToString());
+			//} // for
 
 			try {
 				log.Debug(nlModel.FundTransfer.ToString());
 				log.Debug(nlModel.PacnetTransaction.ToString());
 				log.Debug(nlModel.Loan.ToString());
 
-				//var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
-				//nlModel.Loan.LoanID = nlLoan.Value;
-				//log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID);
+				var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
+				nlModel.Loan.LoanID = nlLoan.Value;
+				log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID);
 
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);
@@ -292,6 +295,7 @@
 			return loan;
 		} // CreateLoan
 
+		/// <exception cref="LoanDelayViolationException">Condition. </exception>
 		public virtual void ValidateLoanDelay(Customer customer, DateTime now, TimeSpan period) {
 			var lastLoan = customer.Loans.OrderByDescending(l => l.Date).FirstOrDefault();
 

@@ -38,6 +38,20 @@
                     new QueryParameter("TransactionStatus", newStatus),
                     new QueryParameter("Description", description)
                 );
+
+				// UPDATE [dbo].[LoanTransaction] SET [Status] = @TransactionStatus, PacnetStatus=@TransactionStatus, [Description] = @Description WHERE TrackingNumber = @TrackingId
+
+				
+				// update NL_PacnetTransactions:
+
+				// PacnetTransactionStatusID = @TransactionStatus 
+				// TrackingNumber = @TrackingId
+				// StatusUpdatedTime = now
+				// Notes = @Description
+
+
+				
+
             } // foreach
         }//UpdateLoanTransactionStatus
 

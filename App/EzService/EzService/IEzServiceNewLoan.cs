@@ -3,6 +3,7 @@
 	using System.ServiceModel;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using EzService.ActionResults;
 
 	[ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceNewLoan {
@@ -32,6 +33,9 @@
 
 		[OperationContract]
 		ReschedulingActionResult RescheduleLoan(int userID, int customerID, ReschedulingArgument reschedulingArgument);
+
+		[OperationContract]
+		NewLoanModelActionResult CalculateLoanSchedule(int userID, int customerID, NL_Model model);
 
 	} // interface IEzServiceNewLoan
 

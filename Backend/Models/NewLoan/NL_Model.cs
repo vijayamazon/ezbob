@@ -28,11 +28,18 @@
 		[DataMember]
 		public NL_Loans Loan { get; set; }
 
-		[DataMember]
-		public NL_LoanHistory LoanHistory { get; set; }
-
+		// used in agreement builder upon adding new loan
 		[DataMember]
 		public List<NL_LoanAgreements> LoanAgreements { get; set; }
+		// used in LoanCreator.cs on adding new loan
+		[DataMember]
+		public string AgreementModel { get; set; }
+		[DataMember]
+		public NL_PacnetTransactions PacnetTransaction { get; set; }
+		[DataMember]
+		public string PacnetTransactionStatus { get; set; }
+		// ### used in LoanCreator.cs on adding new loan
+
 
 		[DataMember]
 		public List<NLScheduleItem> Schedule { get; set; }
@@ -41,10 +48,6 @@
 		public List<NLFeeItem> Fees { get; set; }
 
 		
-		[DataMember]
-		public NL_PacnetTransactions PacnetTransaction { get; set; }
-		[DataMember]
-		public string PacnetTransactionStatus { get; set; }
 
 		// AssignPaymentToLoan strategy
 		// 1. argument for the strategy - logic payment to assign (distribute) to loan
@@ -96,6 +99,9 @@
 			}
 			return sb.ToString();
 		}
+
+		//[DataMember]
+		//public NL_LoanHistory LoanHistory { get; set; }
 
 
 		// lookup objects

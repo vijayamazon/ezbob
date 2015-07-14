@@ -64,15 +64,13 @@
                 this._customerRepository.SaveOrUpdate(customer);
             }).Execute();
 
-			/*
-		    m_oServiceClient.Instance.AddCashRequest(this.context.UserId, new NL_CashRequests {
+			this.m_oServiceClient.Instance.AddCashRequest(this.context.UserId, new NL_CashRequests {
 		        CashRequestOriginID = (int)originator,
 		        CustomerID = customer.Id,
 		        OldCashRequestID = cashRequest.Id,
 		        RequestTime = now,
 		        UserID = this.context.UserId
 		    });
-			*/
 
             //TODO add new cash request
             Log.DebugFormat("add new cash request for customer {0}", customer.Id);
@@ -165,8 +163,8 @@
                 this._customerRepository.SaveOrUpdate(customer);
             }).Execute();
 
-			/*
-            var nlCashRequestID = m_oServiceClient.Instance.AddCashRequest(this.context.UserId, new NL_CashRequests {
+			
+            var nlCashRequestID = this.m_oServiceClient.Instance.AddCashRequest(this.context.UserId, new NL_CashRequests {
                 CashRequestOriginID = (int)CashRequestOriginator.QuickOffer,
                 CustomerID = customer.Id,
                 OldCashRequestID = cashRequest.Id,
@@ -174,7 +172,7 @@
                 UserID = this.context.UserId
             });
 
-            var nlDecisionID = m_oServiceClient.Instance.AddDecision(this.context.UserId, customer.Id, new NL_Decisions {
+            var nlDecisionID = this.m_oServiceClient.Instance.AddDecision(this.context.UserId, customer.Id, new NL_Decisions {
                 CashRequestID = nlCashRequestID.Value,
                 DecisionTime = now,
                 Notes = CashRequestOriginator.QuickOffer.DescriptionAttr(),
@@ -186,7 +184,7 @@
                 UserID = user.Id
             }, null, null);
 
-            var nlOfferID = m_oServiceClient.Instance.AddOffer(this.context.UserId, customer.Id, new NL_Offers {
+            var nlOfferID = this.m_oServiceClient.Instance.AddOffer(this.context.UserId, customer.Id, new NL_Offers {
                 DecisionID = nlDecisionID.Value,
                 CreatedTime = now,
                 Notes = CashRequestOriginator.QuickOffer.DescriptionAttr(),
@@ -206,7 +204,6 @@
                 StartTime = now,
                 IsLoanTypeSelectionAllowed = false,
             });
-			 * */
 
 			//TODO add new cash request / offer / decision
             Log.DebugFormat("add new cash request for customer {0}", customer.Id);

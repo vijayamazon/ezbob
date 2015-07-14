@@ -23,7 +23,6 @@
 		public override string Name { get { return "AddLoan"; } }
 		public NL_Model Result; // output
 
-		/// <exception cref="NL_ExceptionInputDataInvalid">Condition. </exception>
 		/// <exception cref="Exception">Add loan failed: {0}</exception>
 		public override void Execute() {
 
@@ -32,16 +31,14 @@
 			string message;
 
 			if (NLModel.CustomerID == 0) {
-				message = string.Format("No valid Customer ID {0} ", NLModel.CustomerID);
-				this.Result.Error = message;
+				this.Result.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
 			}
 
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", NLModel.CustomerID), new QueryParameter("@Now", DateTime.UtcNow));
 
 			if (dataForLoan == null) {
-				message = string.Format("No valid offer found. Customer {0} ", NLModel.CustomerID);
-				this.Result.Error = message;
+				this.Result.Error = NL_ExceptionOfferNotValid.DefaultMessage;
 				return;
 			}
 
@@ -65,12 +62,6 @@
 
 			if (NLModel.FundTransfer == null) {
 				message = string.Format("Expected input data not found (NL_Model initialized by: FundTransfer). Customer {0}", NLModel.CustomerID);
-				this.Result.Error = message;
-				return;
-			}
-
-			if (NLModel.LoanHistory == null) {
-				message = string.Format("Expected input data not found (NL_Model initialized by: LoanHistory.AgreementModel). Customer {0}", NLModel.CustomerID);
 				this.Result.Error = message;
 				return;
 			}
@@ -110,7 +101,8 @@
 			int fundTransferID = 0;
 			List<NL_LoanSchedules> scheduleItems = new List<NL_LoanSchedules>();
 			List<NL_LoanFees> fees = new List<NL_LoanFees>();
-			
+			NL_LoanHistory history = null;
+
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
@@ -175,19 +167,21 @@
 				}
 
 				// 7. history
-				NLModel.LoanHistory.LoanID = this.LoanID;
-				NLModel.LoanHistory.UserID = NLModel.UserID;
-				NLModel.LoanHistory.LoanLegalID = dataForLoan.LoanLegalID;
-				NLModel.LoanHistory.Amount = NLModel.Loan.InitialLoanAmount;
-				NLModel.LoanHistory.RepaymentCount = NLModel.Loan.RepaymentCount;
-				NLModel.LoanHistory.InterestRate = NLModel.Loan.InterestRate;
-				NLModel.LoanHistory.EventTime = DateTime.UtcNow;
-				NLModel.LoanHistory.Description = "add loan ID " + this.LoanID;
-				NLModel.LoanHistory.AgreementModel = NLModel.LoanHistory.AgreementModel;
+				history = new NL_LoanHistory() {
+					LoanID = this.LoanID,
+					UserID = NLModel.UserID,
+					LoanLegalID = dataForLoan.LoanLegalID,
+					Amount = NLModel.Loan.InitialLoanAmount,
+					RepaymentCount = NLModel.Loan.RepaymentCount,
+					InterestRate = NLModel.Loan.InterestRate,
+					EventTime = DateTime.UtcNow,
+					Description = "add loan ID " + this.LoanID,
+					AgreementModel = NLModel.AgreementModel
+				};
 
-				Log.Debug(NLModel.LoanHistory.ToString());
+				Log.Debug(history.ToString());
 
-				int historyID = DB.ExecuteScalar<int>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.LoanHistory));
+				int historyID = DB.ExecuteScalar<int>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
 
 				Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", this.LoanID, historyID);
 
@@ -222,7 +216,7 @@
 				pconn.Rollback();
 
 				Log.Error(message);
-				SendErrorMail(message, fees, scheduleItems);
+				SendErrorMail(message, fees, scheduleItems, history);
 
 				// ReSharper disable once ThrowingSystemException
 				throw new Exception("Add NL loan failed: {0}", ex);
@@ -244,14 +238,14 @@
 				}
 			} catch (Exception e1) {
 				message = string.Format("Failed to write NL PacnetTransaction: Customer {0}, oldLoanID {1}, err: {2}", NLModel.CustomerID, NLModel.Loan.OldLoanID, e1);
-				SendErrorMail(message, fees, scheduleItems);
+				SendErrorMail(message, fees, scheduleItems, history);
 				Log.Error(message);
 			}
 
 		}//Execute
 
 
-		private void SendErrorMail(string sMsg, List<NL_LoanFees> setupFee = null, List<NL_LoanSchedules> scheduleItems = null) {
+		private void SendErrorMail(string sMsg, List<NL_LoanFees> setupFee = null, List<NL_LoanSchedules> scheduleItems = null, NL_LoanHistory history=null) {
 			var message = string.Format(
 				"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
 				 + "<h3>Input data</h3>: {2} <br/>"
@@ -267,7 +261,7 @@
 				, NLModel.UserID
 				, HttpUtility.HtmlEncode(NLModel.ToString())
 				, HttpUtility.HtmlEncode(NLModel.Loan == null ? "no Loan specified" : NLModel.Loan.ToString())
-				, HttpUtility.HtmlEncode(NLModel.LoanHistory == null ? "no LoanHistory specified" : NLModel.LoanHistory.ToString())
+				, HttpUtility.HtmlEncode(history == null ? "no LoanHistory specified" : history.ToString())
 				, HttpUtility.HtmlEncode(setupFee == null ? "no LoanFees specified" : setupFee.ToString())
 				, HttpUtility.HtmlEncode(scheduleItems == null ? "no scheduleItems specified" : scheduleItems.ToString()) // NL_LoanSchedules
 				, HttpUtility.HtmlEncode(NLModel.LoanAgreements == null ? "no LoanAgreements specified" : NLModel.LoanAgreements.ToString()) // NL_LoanAgreements
