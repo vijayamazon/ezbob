@@ -12,6 +12,7 @@
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Utils;
+	using Ezbob.Utils.Extensions;
 	using Ezbob.ValueIntervals;
 	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 	using FluentNHibernate.Utils;
@@ -213,6 +214,13 @@
 			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
 		}
 
+
+	    [Test]
+	    public void TestEnumGetName() {
+            Console.WriteLine(Enum.GetName(typeof(NLScheduleStatuses), 3));
+	        Console.WriteLine(NLScheduleStatuses.Paid.DescriptionAttr());
+            Console.WriteLine(Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), 3).ToString()).DescriptionAttr());
+	    }
 
 	} // class Misc
 } // namespace

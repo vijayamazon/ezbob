@@ -552,6 +552,12 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_CalculateLoanSchedule_InputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateLoanSchedule" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_CalculateLoanSchedule_OutputMessage">
+    <wsdl:part name="parameters" element="tns:CalculateLoanScheduleResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
     <wsdl:part name="parameters" element="tns:MainStrategySync1" />
   </wsdl:message>
@@ -1762,6 +1768,10 @@
     <wsdl:operation name="RescheduleLoan">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="CalculateLoanSchedule">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule" message="tns:IEzService_CalculateLoanSchedule_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanScheduleResponse" message="tns:IEzService_CalculateLoanSchedule_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MainStrategySync1">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
@@ -3059,6 +3069,15 @@
     </wsdl:operation>
     <wsdl:operation name="RescheduleLoan">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="CalculateLoanSchedule">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4419,20 +4438,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://mishas-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://mishas-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>MISHAS-PC\mishas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://mishas-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://mishas-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>MISHAS-PC\mishas</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

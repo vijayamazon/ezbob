@@ -5,7 +5,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzService.ActionResults;
 
-	[ServiceContract(SessionMode = SessionMode.Allowed)]
+    [ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceNewLoan {
 		[OperationContract]
 		IntActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
@@ -37,6 +37,6 @@
 		[OperationContract]
 		NewLoanModelActionResult CalculateLoanSchedule(int userID, int customerID, NL_Model model);
 
-	} // interface IEzServiceNewLoan
+    } // interface IEzServiceNewLoan
 
 } // namespace EzService

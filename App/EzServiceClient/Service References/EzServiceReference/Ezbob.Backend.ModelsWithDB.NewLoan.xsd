@@ -173,44 +173,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_LoanAgreements" nillable="true" type="tns:NL_LoanAgreements" />
-  <xs:complexType name="ArrayOfNL_LoanFeeTypes">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanFeeTypes" nillable="true" type="tns:NL_LoanFeeTypes" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfNL_LoanFeeTypes" nillable="true" type="tns:ArrayOfNL_LoanFeeTypes" />
-  <xs:complexType name="NL_LoanFeeTypes">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="LoanFeeType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_LoanFeeTypes" nillable="true" type="tns:NL_LoanFeeTypes" />
-  <xs:complexType name="ArrayOfNL_LoanFees">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanFees" nillable="true" type="tns:NL_LoanFees" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfNL_LoanFees" nillable="true" type="tns:ArrayOfNL_LoanFees" />
-  <xs:complexType name="NL_LoanFees">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
-      <xs:element minOccurs="0" name="AssignTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="AssignedByUserID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="DisabledTime" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="LoanFeeID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="LoanID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_LoanFees" nillable="true" type="tns:NL_LoanFees" />
   <xs:complexType name="NL_LoanHistory">
     <xs:sequence>
       <xs:element minOccurs="0" name="AgreementModel" nillable="true" type="xs:string" />
@@ -228,21 +190,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_LoanHistory" nillable="true" type="tns:NL_LoanHistory" />
-  <xs:complexType name="ArrayOfNL_LoanStatuses">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanStatuses" nillable="true" type="tns:NL_LoanStatuses" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfNL_LoanStatuses" nillable="true" type="tns:ArrayOfNL_LoanStatuses" />
-  <xs:complexType name="NL_LoanStatuses">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="LoanStatus" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="LoanStatusID" type="xs:int" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_LoanStatuses" nillable="true" type="tns:NL_LoanStatuses" />
   <xs:complexType name="NL_PacnetTransactions">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
@@ -258,21 +205,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_PacnetTransactions" nillable="true" type="tns:NL_PacnetTransactions" />
-  <xs:complexType name="ArrayOfNL_PacnetTransactionStatuses">
-    <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_PacnetTransactionStatuses" nillable="true" type="tns:NL_PacnetTransactionStatuses" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfNL_PacnetTransactionStatuses" nillable="true" type="tns:ArrayOfNL_PacnetTransactionStatuses" />
-  <xs:complexType name="NL_PacnetTransactionStatuses">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="PacnetTransactionStatusID" type="xs:int" />
-      <xs:element minOccurs="0" name="TransactionStatus" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="NL_PacnetTransactionStatuses" nillable="true" type="tns:NL_PacnetTransactionStatuses" />
   <xs:complexType name="NL_Payments">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:decimal" />
@@ -341,19 +273,36 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_PaypointTransactions" nillable="true" type="tns:NL_PaypointTransactions" />
-  <xs:complexType name="ArrayOfNL_RepaymentIntervalTypes">
+  <xs:complexType name="NL_LoanFees">
     <xs:sequence>
-      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_RepaymentIntervalTypes" nillable="true" type="tns:NL_RepaymentIntervalTypes" />
-    </xs:sequence>
-  </xs:complexType>
-  <xs:element name="ArrayOfNL_RepaymentIntervalTypes" nillable="true" type="tns:ArrayOfNL_RepaymentIntervalTypes" />
-  <xs:complexType name="NL_RepaymentIntervalTypes">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="RepaymentIntervalType" nillable="true" type="xs:string" />
-      <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+      <xs:element minOccurs="0" name="AssignTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="AssignedByUserID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="DisabledTime" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="LoanFeeID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanID" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
-  <xs:element name="NL_RepaymentIntervalTypes" nillable="true" type="tns:NL_RepaymentIntervalTypes" />
+  <xs:element name="NL_LoanFees" nillable="true" type="tns:NL_LoanFees" />
+  <xs:complexType name="NL_LoanSchedules">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="LoanHistoryID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanScheduleID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanScheduleStatusID" type="xs:int" />
+      <xs:element minOccurs="0" name="PlannedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Position" type="xs:int" />
+      <xs:element minOccurs="0" name="Principal" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_LoanSchedules" nillable="true" type="tns:NL_LoanSchedules" />
 </xs:schema>

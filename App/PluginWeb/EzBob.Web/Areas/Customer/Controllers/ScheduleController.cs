@@ -72,7 +72,7 @@
             var schedule = loan.Schedule;
             var apr = _aprCalc.Calculate(amount, schedule, loan.SetupFee, loan.Date);
 
-            var b = new AgreementsModelBuilder();
+            var b = new AgreementsModelBuilder(_context);
             var agreement = b.Build(_customer, amount, loan);
 
             //TODO calculate offer

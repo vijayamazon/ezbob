@@ -26,8 +26,9 @@
       <xs:element minOccurs="0" name="IsManualSetupFee" type="xs:boolean" />
       <xs:element minOccurs="0" name="LoanType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="ManualSetupFee" nillable="true" type="xs:string" />
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="NL_Schedule" nillable="true" type="q1:ArrayOfLoanScheduleItemModel" />
       <xs:element minOccurs="0" name="PersonAddress" nillable="true" type="xs:string" />
-      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Schedule" nillable="true" type="q1:ArrayOfLoanScheduleItemModel" />
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="Schedule" nillable="true" type="q2:ArrayOfLoanScheduleItemModel" />
       <xs:element minOccurs="0" name="SetupFee" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SetupFeeAmount" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SetupFeePercent" nillable="true" type="xs:string" />

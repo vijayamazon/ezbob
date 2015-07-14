@@ -3,6 +3,7 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/EzService" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
   <xs:complexType name="BrokerInstantOfferResponseActionResult">
     <xs:complexContent mixed="false">
       <xs:extension xmlns:q1="http://schemas.datacontract.org/2004/07/EzService" base="q1:ActionResult">
@@ -23,4 +24,14 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="SalesForceActivityActionResult" nillable="true" type="tns:SalesForceActivityActionResult" />
+  <xs:complexType name="NewLoanModelActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension xmlns:q5="http://schemas.datacontract.org/2004/07/EzService" base="q5:ActionResult">
+        <xs:sequence>
+          <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="Value" nillable="true" type="q6:NL_Model" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NewLoanModelActionResult" nillable="true" type="tns:NewLoanModelActionResult" />
 </xs:schema>

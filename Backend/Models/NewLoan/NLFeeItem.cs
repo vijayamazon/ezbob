@@ -3,16 +3,14 @@ namespace Ezbob.Backend.Models.NewLoan {
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]
-	public class NLFeeItem {
+	public class NLScheduleItem {
 
-		[DataMember]
-		public NL_LoanFees Fee { get; set; }
+        [DataMember]
+        public NL_LoanFees Fee { get; set; }
 
-		[DataMember]
-		public NL_LoanFeePayments FeePayment { get; set; }
-
-	
-
+        [DataMember]
+		public decimal? PrincipalPaid { get; set; }
+		
 
 	}
 }

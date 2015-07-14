@@ -8,11 +8,13 @@
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Code;
 	using Code.Agreements;
+	using EzBob.Web.Infrastructure;
 	using Infrastructure.Attributes;
 	using Newtonsoft.Json;
 
 	public class GenerateAgreementsController : Controller
 	{
+        private readonly IEzbobWorkplaceContext _context;
 		private readonly AgreementsGenerator _agreementsGenerator;
 		private readonly ILoanRepository _loanRepository;
 		private readonly IConcentAgreementHelper _concentAgreementHelper;
@@ -51,7 +53,7 @@
 		[NoCache]
 		public RedirectToRouteResult ReloadAgreementsModel()
 		{
-			var agreementsModelBuilder = new AgreementsModelBuilder();
+			var agreementsModelBuilder = new AgreementsModelBuilder(_context);
 			var loans = _loanRepository.GetAll();
 
 			foreach (var loan in loans)
