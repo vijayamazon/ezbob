@@ -74,4 +74,13 @@
 		AlibabaLoanType = 3
 	}
 
+	public enum NLPacnetTransactionStatuses {
+		InProgress = 1,// DB table id
+		Done = 2,
+		Error = 3,
+		Unknown = 4,
+		//Submited = 1,  
+		//PaymentByCustomer = 5,
+	}
+
 } // namespace

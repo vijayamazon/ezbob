@@ -214,6 +214,18 @@
 			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
 		}
 
+		[Test]
+		public void TestEnum() {
+			string newStatus = "Done";
+			var nlStatus = Enum.GetNames(typeof(NLPacnetTransactionStatuses)).FirstOrDefault(s => s.Equals(newStatus));
+			Console.WriteLine(nlStatus);
+			try {
+				var val = (int)Enum.Parse(typeof(NLPacnetTransactionStatuses), nlStatus);
+				Console.WriteLine(val);
+			} catch (OverflowException overflowException) {
+			}
+		}
+
 
 	    [Test]
 	    public void TestEnumGetName() {
