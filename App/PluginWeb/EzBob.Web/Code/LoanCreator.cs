@@ -12,6 +12,8 @@
 	using Areas.Customer.Controllers;
 	using Areas.Customer.Controllers.Exceptions;
 	using Agreements;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
+	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -24,7 +26,7 @@
 	using StructureMap;
 
 	public interface ILoanCreator {
-		//Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now);
+		
 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
 	} // interface ILoanCreator
 
@@ -45,6 +47,7 @@
 			this.tranMethodRepo = ObjectFactory.GetInstance<DatabaseDataHelper>().LoanTransactionMethodRepository;
 		} // constructor
 
+		/// <exception cref="Exception">PacnetSafeGuard stopped money transfer</exception>
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
 
 			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
@@ -251,7 +254,7 @@
 			// flush
 
 			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-
+			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName;
 			nlModel.Loan = new NL_Loans();
 			nlModel.UserID = this.context.UserId; // ???
 			nlModel.Loan.Refnum = loan.RefNumber;
