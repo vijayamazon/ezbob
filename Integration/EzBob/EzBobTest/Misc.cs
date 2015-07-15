@@ -229,9 +229,12 @@
 
 	    [Test]
 	    public void TestEnumGetName() {
-            Console.WriteLine(Enum.GetName(typeof(NLScheduleStatuses), 3));
-	        Console.WriteLine(NLScheduleStatuses.Paid.DescriptionAttr());
-            Console.WriteLine(Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), 3).ToString()).DescriptionAttr());
+            //Console.WriteLine(Enum.GetName(typeof(NLScheduleStatuses), 3));
+            //Console.WriteLine(NLScheduleStatuses.Paid.DescriptionAttr());
+            //Console.WriteLine(Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), 3).ToString()).DescriptionAttr());
+            Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2));
+            Console.WriteLine(NLLoanTypes.HalfWayLoanType.ToString());
+            Console.WriteLine(Enum.GetName(typeof(NLLoanTypes), 2) == NLLoanTypes.HalfWayLoanType.ToString());
 	    }
 
 	} // class Misc

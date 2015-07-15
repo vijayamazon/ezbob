@@ -186,7 +186,7 @@
                 AmountDue = FormattingUtils.NumericFormats(installment.AmountDue),
                 Principal = FormattingUtils.NumericFormats(installment.LoanRepayment),
                 Interest = FormattingUtils.NumericFormats(installment.Interest),
-                Fees = "0", //  TODO if !=null, put formatted value
+                Fees = FormattingUtils.NumericFormats(installment.Fees),
                 Date = FormattingUtils.FormatDateToString(installment.Date),
                 StringNumber = FormattingUtils.ConvertingNumberToWords(i + 1),
                 InterestRate = string.Format("{0:0.00}", installment.InterestRate * 100),
@@ -227,7 +227,7 @@
         }
 
 
-        public AgreementModel NL_BuildAgreementModel(Customer customer, decimal amount, NL_Model nlModel)
+        public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel)
         {
             var model = new AgreementModel();
             var result = this.serviceClient.Instance.CalculateLoanSchedule(this._context.UserId, customer.Id, nlModel).Value;
@@ -240,12 +240,11 @@
                     Id = s.ScheduleItem.LoanScheduleID,
                     AmountDue = s.ScheduleItem.Principal + s.ScheduleItem.InterestRate * s.ScheduleItem.Principal+(fee==null?0:fee.Fee.Amount), // P+I=(r*P)+F
                     Date = s.ScheduleItem.PlannedDate,
-                    Interest = s.ScheduleItem.InterestRate * s.ScheduleItem.Principal,  // I(r*P)
+                    Interest = s.ScheduleItem.InterestRate * s.ScheduleItem.Principal,  // I=(r*P)
                     Status =  Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID), 
                     StatusDescription = Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID).ToString()).DescriptionAttr(),
                     LoanRepayment = s.ScheduleItem.Principal, //P
-                    Balance = nlModel.Loan.InitialLoanAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1), // 
-                    //BalanceBeforeRepayment = s.BalanceBeforeRepayment,
+                    Balance = nlModel.Loan.InitialLoanAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1),
                     Fees = fee == null ? 0 : fee.Fee.Amount, //F
                     InterestRate = s.ScheduleItem.InterestRate //r
                 };
@@ -276,7 +275,6 @@
             model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
 
             // TODO see original implementation
-            //var loanSetupFee = nlModel.Fees.FirstOrDefault(x => x.Fee.LoanFeeTypeID == (int)FeeTypes.SetupFee) == null ? 0 : nlModel.Fees.First(x => x.Fee.LoanFeeTypeID == (int)FeeTypes.SetupFee).Fee.Amount;
             decimal setupFeeAmount = nlModel.Fees.Where(f => f.Fee.LoanFeeTypeID == (int)FeeTypes.SetupFee)
                 .Sum(f => f.Fee.Amount);
             NL_CalculateTotal(setupFeeAmount, model); //loanSetupFee, model);
@@ -292,18 +290,13 @@
             model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
             model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
 
-            // TODO remove; will be done in CalculateLoanSchedule service
-            //NL_Offers offerForLoan = this.serviceClient.Instance.GetLastOffer(this._context.UserId, customer.Id);
-
             //According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
-            //if ((offerForLoan.SetupFeePercent.HasValue && offerForLoan.SetupFeePercent.Value > 0) || 
-            //   (offerForLoan.BrokerSetupFeePercent.HasValue && offerForLoan.BrokerSetupFeePercent.Value > 0)){
-            //    decimal setupFeePercent = (offerForLoan.SetupFeePercent ?? 0M) + (offerForLoan.BrokerSetupFeePercent ?? 0M);
-            //    model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
-            //}
-
-            // TODO use this instead 295-304
-         //   model.SetupFeePercent = nlModel.SetupFeePercent;
+            if ((result.Offer.SetupFeePercent.HasValue && result.Offer.SetupFeePercent.Value > 0) ||
+               (result.Offer.BrokerSetupFeePercent.HasValue && result.Offer.BrokerSetupFeePercent.Value > 0))
+            {
+                decimal setupFeePercent = (result.Offer.SetupFeePercent ?? 0M) + (result.Offer.BrokerSetupFeePercent ?? 0M);
+                model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
+            }
 
             model.IsBrokerFee = false;
             model.IsManualSetupFee = false;
@@ -318,15 +311,12 @@
             model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);
             model.InterestRatePerYearFormatted = string.Format("{0:0.00}", model.InterestRate * 12);
 
-            // TODO  use nlmodel.Loan.LoanType
-            //var loanType = customer.LastCashRequest.LoanType ?? new StandardLoanType();
-
-            //model.LoanType = loanType.Type;
+            model.LoanType = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID);
             model.TermOnlyInterest = model.Schedule.Count(s => s.LoanRepayment == 0);
             model.TermOnlyInterestWords = FormattingUtils.ConvertToWord(model.TermOnlyInterest).ToLower();
             model.TermInterestAndPrincipal = model.Schedule.Count(s => s.LoanRepayment != 0 && s.Interest != 0);
             model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
-            //model.isHalwayLoan = loanType.IsHalwayLoan;  // TODO  use nlmodel.Loan.LoanType
+            model.isHalwayLoan = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID) == NLLoanTypes.HalfWayLoanType.ToString() ? true : false;
             model.CountRepayment = model.Schedule.Count;
             model.Term = model.Schedule.Count;
 
