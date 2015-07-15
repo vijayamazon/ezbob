@@ -19,7 +19,7 @@
 				SetTemplateAndVariables();
 				Log.Debug("Setting template and variables complete.");
 
-				if (SendToCustomer && CustomerData.Origin == CustomerOriginEnum.everline.ToString()) {
+				if (CustomerData.Origin == CustomerOriginEnum.everline.ToString()) {
 					Log.Debug("Customer's origin is Everline adding EVL to template name");
 					TemplateName = string.Format("EVL {0}", TemplateName);
 				} // if
