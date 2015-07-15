@@ -5,7 +5,12 @@
 
 	internal class CustomerDetails {
 		public CustomerDetails(int customerID) {
-			Library.Instance.Log.Info("Getting personal info for customer:{0}", customerID);
+			ID = 0;
+
+			if (customerID <= 0)
+				return;
+
+			Library.Instance.Log.Debug("Getting personal info for customer {0}...", customerID);
 
 			SafeReader results = Library.Instance.DB.GetFirst(
 				"GetPersonalInfo",
@@ -13,13 +18,18 @@
 				new QueryParameter("CustomerId", customerID)
 			);
 
-			results.Fill(this);
+			if (results.IsEmpty)
+				return;
 
-			ID = customerID;
+			results.Fill(this);
 
 			var scoreStrat = new GetExperianConsumerScore(customerID);
 			scoreStrat.Execute();
 			ExperianConsumerScore = scoreStrat.Score;
+
+			ID = customerID;
+
+			Library.Instance.Log.Debug("Getting personal info for customer {0} complete.", customerID);
 		} // constructor
 
 		public int ID { get; private set; }

@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
-	using System.Runtime.Serialization;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
@@ -24,34 +23,28 @@
 	using SalesForceLib.Models;
 
 	public class MainStrategy : AStrategy {
-		[DataContract]
-		public enum DoAction {
-			[EnumMember]
-			Yes,
-
-			[EnumMember]
-			No,
-		} // enum DoAction
-
 		public MainStrategy(
+			int underwriterID,
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
 			FinishWizardArgs fwa,
 			long? cashRequestID,
-			DoAction createCashRequest,
-			DoAction updateCashRequest
+			CashRequestOriginator? cashRequestOriginator
 		) {
-			this.cashRequestID = cashRequestID;
-			this.createCashRequest = createCashRequest;
-			this.updateCashRequest = updateCashRequest;
-
-			this.finishWizardArgs = fwa;
-
+			this.underwriterID = underwriterID;
 			this.customerId = customerId;
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = avoidAutoDecision;
+			this.finishWizardArgs = fwa;
 			this.overrideApprovedRejected = true;
+			this.cashRequestID = cashRequestID;
+			this.cashRequestOriginator = cashRequestOriginator;
+
+			if (this.finishWizardArgs != null) {
+				this.cashRequestOriginator = this.finishWizardArgs.CashRequestOriginator;
+				this.finishWizardArgs.DoMain = false;
+			} // if
 
 			this.wasMismatch = false;
 
@@ -73,10 +66,12 @@
 		} // Name
 
 		public override void Execute() {
-			ValidateCashRequestArgs();
+			ValidateInput();
 
 			if (this.finishWizardArgs != null)
-				FinishWizard();
+				new FinishWizard(this.finishWizardArgs).Execute();
+
+			CreateCashRequest();
 
 			if (this.newCreditLineOption == NewCreditLineOption.SkipEverything) {
 				Log.Debug(
@@ -85,6 +80,16 @@
 				);
 
 				return;
+			} // if
+
+			if (this.cashRequestID == null) { // Should never happen at this point but just in case...
+				throw new StrategyAlert(
+					this,
+					string.Format(
+						"No cash request to update for customer {0} (neither specified nor created).",
+						this.customerId
+					)
+				);
 			} // if
 
 			StrategiesMailer mailer = null;
@@ -236,32 +241,6 @@
 			} // if
 		} // CapOffer
 
-		private void FinishWizard() {
-			if (this.finishWizardArgs == null)
-				return;
-
-			this.finishWizardArgs.DoMain = false;
-
-			new FinishWizard(this.finishWizardArgs).Execute();
-
-			SafeReader sr = DB.GetFirst(
-				"GetCashRequestData",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerId", this.customerId)
-			);
-
-			if (sr.IsEmpty) {
-				throw new StrategyException(
-					this,
-					"Cannot execute Main strategy: no cash request found after executing FinishWizard."
-				);
-			} // if
-
-			this.cashRequestID = sr["Id"];
-			this.createCashRequest = DoAction.No;
-			this.updateCashRequest = DoAction.Yes;
-		} // FinishWizard
-
 		private void GetLandRegistryData(List<CustomerAddressModel> addresses) {
 			foreach (CustomerAddressModel address in addresses) {
 				LandRegistryDataModel model = null;
@@ -296,7 +275,7 @@
 				} // if
 
 				bool doLandRegistry =
-                    (model != null) &&
+					(model != null) &&
 					(model.Enquery != null) &&
 					(model.ResponseType == LandRegistryResponseType.Success) &&
 					(model.Enquery.Titles != null) &&
@@ -334,12 +313,13 @@
 
 					Log.Warn(
 						"No land registry retrieved for customer id: {5}," +
-						"house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, num of enquries {4}",
+						"house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, # of inquiries {4}",
 						address.HouseName,
 						address.HouseNumber,
 						address.FlatOrApartmentNumber,
 						address.PostCode,
-						num, this.customerId
+						num,
+						this.customerId
 					);
 				} // if
 			} // for each
@@ -539,14 +519,6 @@
 		/// Last stage of auto-decision process
 		/// </summary>
 		private void UpdateCustomerAndCashRequest() {
-			if (this.updateCashRequest != DoAction.Yes)
-				return;
-
-			if (this.cashRequestID == null) {
-				Log.Alert("Customer {0}: update cash request needed but cash request ID is null.", this.customerId);
-				return;
-			} // if
-
 			var sp = new MainStrategyUpdateCrC(
 				this.customerId,
 				this.cashRequestID,
@@ -576,7 +548,7 @@
 			//);
 
 			// TODO update new offer / decision tables
-			Log.Info("update new offer / decision for customer {0}", this.customerId);
+			Log.Debug("update new offer / decision for customer {0}", this.customerId);
 
 			// TEMPORARY DISABLED TODO - sync for proper launch
 			UpdateSalesForceOpportunity(this.customerDetails.AppEmail);
@@ -585,6 +557,7 @@
 				UpdatePartnerAlibaba(this.customerId);
 		} // UpdateCustomerAndCashRequest
 
+		/*
 		private void AddNewDecisionOffer(
 			DateTime now,
 			bool isLoanTypeSelectionAllowed,
@@ -605,8 +578,8 @@
 				Notes = this.autoDecisionResponse.CreditResult.HasValue
 					? this.autoDecisionResponse.CreditResult.Value.DescriptionAttr()
 					: "",
-				// todo Position = 
-				// todo CashRequestID = 
+				// TODO Position = 
+				// TODO CashRequestID = 
 				SendEmailNotification = sendEmailNotification,
 				UserID = 1,
 			}, this.cashRequestID, null);
@@ -626,11 +599,11 @@
 			AddOffer addOfferStra = new AddOffer(new NL_Offers {
 				DecisionID = decisionID,
 				Amount = this.offeredCreditLine,
-				// todo BrokerSetupFeePercent = 0 
+				// TODO BrokerSetupFeePercent = 0 
 				CreatedTime = now,
 				DiscountPlanID = discountPlanID,
 				EmailSendingBanned = !sendEmailNotification,
-				InterestOnlyRepaymentCount = 0, //todo
+				InterestOnlyRepaymentCount = 0, // TODO
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed,
 				LoanSourceID = loanSourceID,
 				LoanTypeID = loanTypeIdToUse,
@@ -645,6 +618,7 @@
 			addOfferStra.Execute();
 			int offerID = addOfferStra.OfferID;
 		} // AddNewDecisionOffer
+		*/
 
 		private void UpdateSalesForceOpportunity(string customerEmail) {
 			new AddUpdateLeadAccount(customerEmail, this.customerId, false, false).Execute();
@@ -710,7 +684,7 @@
 				new AmlChecker(this.customerId).Execute();
 
 			bool shouldRunBwa =
-                preData.AppBankAccountType == "Personal" &&
+				preData.AppBankAccountType == "Personal" &&
 				preData.BwaBusinessCheck == "1" &&
 				preData.AppSortCode != null &&
 				preData.AppAccountNumber != null;
@@ -722,12 +696,12 @@
 			new ZooplaStub(this.customerId).Execute();
 		} // ExecuteAdditionalStrategies
 
-		private bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
-		private bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }
-		private bool EnableAutomaticRejection { get { return CurrentValues.Instance.EnableAutomaticRejection; } }
-		private bool EnableAutomaticReRejection { get { return CurrentValues.Instance.EnableAutomaticReRejection; } }
-		private int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
-		private int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
+		private static bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
+		private static bool EnableAutomaticReApproval { get { return CurrentValues.Instance.EnableAutomaticReApproval; } }
+		private static bool EnableAutomaticRejection { get { return CurrentValues.Instance.EnableAutomaticRejection; } }
+		private static bool EnableAutomaticReRejection { get { return CurrentValues.Instance.EnableAutomaticReRejection; } }
+		private static int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
+		private static int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
 		/// <summary>
 		/// Auto decision only treated 
@@ -739,7 +713,7 @@
 		private void UpdatePartnerAlibaba(int customerID) {
 			DecisionActions autoDecision = this.autoDecisionResponse.Decision ?? DecisionActions.Waiting;
 
-			Log.Info(
+			Log.Debug(
 				"UpdatePartnerAlibaba ******************************************************{0}, {1}",
 				customerID,
 				autoDecision
@@ -761,7 +735,7 @@
 				new DataSharing(customerID, AlibabaBusinessType.APPLICATION).Execute();
 				break;
 
-			default:  // unknown auto decision status
+			default: // unknown auto decision status
 				throw new StrategyAlert(
 					this,
 					string.Format("Auto decision invalid value {0} for customer {1}", autoDecision, customerID)
@@ -769,29 +743,100 @@
 			} // switch
 		} // UpdatePartnerAlibaba
 
-		private void ValidateCashRequestArgs() {
-			if (this.finishWizardArgs != null) {
-				// Setting these three parameters to some default values that enable passing verification.
-				// Real values will be loaded after FinishWizard has completed.
-				this.cashRequestID = null;
-				this.createCashRequest = DoAction.Yes;
-				this.updateCashRequest = DoAction.No;
-			} // if
-
-			bool crIsNotNull = (this.cashRequestID != null);
-			bool doCreate = (this.createCashRequest == DoAction.Yes);
-
-			if (crIsNotNull == doCreate) {
-				throw new StrategyException(
+		private void ValidateInput() {
+			if ((this.customerDetails.ID <= 0) || (this.customerDetails.ID != this.customerId)) {
+				throw new StrategyAlert(
 					this,
-					"Cannot execute Main strategy: cash request " +
-					(crIsNotNull ? "not specified, Create not" : "specified, Create") +
-					" requested."
+					string.Format("Customer details were not found for id {0}.", this.customerId)
 				);
 			} // if
-		} // ValidateCashRequestArgs
+
+			if (this.cashRequestID == null) {
+				if (this.cashRequestOriginator == null) { // Should never happen but just in case...
+					throw new StrategyAlert(
+						this,
+						string.Format(
+							"Neither cash request id nor cash request originator specified for customer {0} " +
+							"(cash request cannot be created).",
+							this.customerId
+						)
+					);
+				} // if
+			} else {
+				bool isMatch = DB.ExecuteScalar<bool>(
+					"ValidateCustomerAndCashRequest",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@CustomerID", this.customerId),
+					new QueryParameter("@CashRequestID", this.cashRequestID.Value)
+				);
+
+				if (!isMatch) {
+					throw new StrategyAlert(
+						this,
+						string.Format(
+							"Cash request id {0} does not belong to customer {1}.",
+							this.cashRequestID.Value,
+							this.customerId
+						)
+					);
+				} // if
+			} // if
+		} // ValidateInput
+
+		private void CreateCashRequest() {
+			if (this.cashRequestID != null)
+				return;
+
+			DateTime now = DateTime.UtcNow;
+
+			SafeReader sr = DB.GetFirst(
+				"MainStrategyCreateCashRequest",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", this.customerId),
+				new QueryParameter("@Now", now),
+				// ReSharper disable once PossibleInvalidOperationException
+				// This check is done in ValidateInput().
+				new QueryParameter("@Originator", this.cashRequestOriginator.Value.ToString())
+			);
+
+			if (sr.IsEmpty) {
+				throw new StrategyAlert(
+					this,
+					string.Format("Cash request was not created for customer {0}.", this.customerId)
+				);
+			} // if
+
+			this.cashRequestID = sr["CashRequestID"];
+			decimal? lastLoanAmount = sr["LastLoanAmount"];
+			int cashRequestCount = sr["CashRequestCount"];
+
+			new AddCashRequest(new NL_CashRequests {
+				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
+				CustomerID = this.customerId,
+				OldCashRequestID = this.cashRequestID.Value,
+				RequestTime = now,
+				UserID = this.underwriterID,
+			}).Execute();
+
+			// TODO add new cash request
+
+			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
+				new AddOpportunity(this.customerId,
+					new OpportunityModel {
+						Email = this.customerDetails.AppEmail,
+						CreateDate = now,
+						ExpectedEndDate = now.AddDays(7),
+						RequestedAmount = lastLoanAmount.HasValue ? (int)lastLoanAmount.Value : (int?)null,
+						Type = OpportunityType.Resell.DescriptionAttr(),
+						Stage = OpportunityStage.s5.DescriptionAttr(),
+						Name = this.customerDetails.FullName + cashRequestCount
+					}
+				).Execute();
+			} // if
+		} // CreateCashRequest
 
 		// Inputs
+		private readonly int underwriterID;
 		private readonly int customerId;
 		private readonly FinishWizardArgs finishWizardArgs;
 		private readonly int avoidAutomaticDecision;
@@ -815,8 +860,7 @@
 		private bool overrideApprovedRejected;
 
 		private long? cashRequestID;
-		private DoAction createCashRequest;
-		private DoAction updateCashRequest;
+		private readonly CashRequestOriginator? cashRequestOriginator;
 
 		private readonly string tag;
 		private bool wasMismatch;

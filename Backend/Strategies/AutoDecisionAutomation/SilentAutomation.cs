@@ -168,13 +168,13 @@
 			);
 
 			new MainStrategy(
+				1, // this is an underwriter ID that is used for auto decisions
 				this.customerID,
 				NewCreditLineOption.SkipEverythingAndApplyAutoRules,
 				0,
 				null,
 				cashRequestID,
-				MainStrategy.DoAction.No,
-				MainStrategy.DoAction.Yes
+				null
 			).Execute();
 
 			Log.Debug(

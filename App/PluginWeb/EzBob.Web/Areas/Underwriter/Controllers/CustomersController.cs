@@ -472,6 +472,7 @@
                         CurrentValues.Instance.FinishWizardForApproved
                         );
                     oArgs.CustomerID = customer.Id;
+					oArgs.CashRequestOriginator = CashRequestOriginator.Approved;
 
                     this.m_oServiceClient.Instance.FinishWizard(oArgs, user.Id);
                 } catch (Exception e) {

@@ -1,5 +1,6 @@
 ﻿namespace EZBob.DatabaseLib.Model.Database {
 	using System.ComponentModel;
+	using System.Runtime.Serialization;
 
 	public enum Gender {
 		M,
@@ -95,20 +96,45 @@
 		CompanyEmployee = 5,
 	} // enum VatReporting
 
-	public enum CashRequestOriginator
-	{
+	[DataContract]
+	public enum CashRequestOriginator {
+		// When customer completes wizard in a standard way
+		[EnumMember]
 		[Description("Finished wizard")]
 		FinishedWizard = 1,
+
+		[EnumMember]
 		[Description("Quick offer")]
 		QuickOffer = 2,
+
+		[EnumMember]
 		[Description("Dashboard request cash button")]
 		RequestCashBtn = 3,
+
+		[EnumMember]
 		[Description("UW new credit line button")]
 		NewCreditLineBtn = 4,
+
+		[EnumMember]
 		[Description("Other")]
 		Other = 5,
+
+		[EnumMember]
 		[Description("RequalifyCustomerStrategy")]
-		RequalifyCustomerStrategy = 6
+		RequalifyCustomerStrategy = 6,
+
+		// When wizard is completed for customer from underwriter (Finish wizard button)
+		[EnumMember]
+		[Description("Forced wizard completion")]
+		ForcedWizardCompletion = 7,
+
+		[EnumMember]
+		[Description("Approved")]
+		Approved = 8,
+
+		[EnumMember]
+		[Description("Manual strategy activation")]
+		Manual = 9,
 	} // enum CashRequestOriginator
 
 	public enum FraudStatus {

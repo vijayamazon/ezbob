@@ -818,53 +818,32 @@ GeneratePassword broker-contact-email@example.com password-itself
 			int customerId;
 			NewCreditLineOption newCreditLineOption;
 			int avoidAutoDescison;
-			bool createCashRequest;
-			bool updateCashRequest;
+			long cashRequestID;
 
-			if (int.TryParse(this.cmdLineArgs[1], out underwriterId) && int.TryParse(this.cmdLineArgs[2], out customerId) && Enum.TryParse(this.cmdLineArgs[3], out newCreditLineOption) && int.TryParse(this.cmdLineArgs[4], out avoidAutoDescison) && bool.TryParse(this.cmdLineArgs[5], out createCashRequest) && bool.TryParse(this.cmdLineArgs[6], out updateCashRequest)) {
-				this.serviceClient.MainStrategy1(
+			if (
+				int.TryParse(this.cmdLineArgs[1], out underwriterId) &&
+				int.TryParse(this.cmdLineArgs[2], out customerId) &&
+				Enum.TryParse(this.cmdLineArgs[3], out newCreditLineOption) &&
+				int.TryParse(this.cmdLineArgs[4], out avoidAutoDescison) &&
+				long.TryParse(this.cmdLineArgs[5], out cashRequestID)
+			) {
+				this.serviceClient.MainStrategyAsync(
 					underwriterId,
 					customerId,
 					newCreditLineOption,
 					avoidAutoDescison,
-					null,
-					createCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No,
-					updateCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No
+					cashRequestID <= 0 ? (long?)null : cashRequestID,
+					CashRequestOriginator.Manual
 				);
 				return;
 			}
 
-			// MainStrategy null 18234 3 1
-
-			//	NewCreditLineOption.UpdateEverythingAndApplyAutoRules 3
+			// NewCreditLineOption.UpdateEverythingAndApplyAutoRules 3
 			// avoidAutoDescison 0
 
-			this.log.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <create cash request (true/false)> <update cash request (true/false)>");
-		}
-
-		[Activation]
-		private void MainStrategySync() {
-			int underwriterId;
-			int customerId, avoidAutoDescison;
-			NewCreditLineOption newCreditLineOption;
-			bool createCashRequest;
-			bool updateCashRequest;
-
-			if (this.cmdLineArgs.Length == 5 && int.TryParse(this.cmdLineArgs[1], out underwriterId) && int.TryParse(this.cmdLineArgs[2], out customerId) && Enum.TryParse(this.cmdLineArgs[3], out newCreditLineOption) && int.TryParse(this.cmdLineArgs[4], out avoidAutoDescison) && bool.TryParse(this.cmdLineArgs[5], out createCashRequest) && bool.TryParse(this.cmdLineArgs[6], out updateCashRequest)) {
-				this.serviceClient.MainStrategySync1(
-					underwriterId,
-					customerId,
-					newCreditLineOption,
-					avoidAutoDescison,
-					null,
-					createCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No,
-					updateCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No
-				);
-				return;
-			}
-
-			this.log.Msg("Usage: MainStrategySync <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
-		}
+			this.log.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <cash request id>");
+			this.log.Msg("Cash request id: 0 (or negative) to create a new one, or id to update existing one.");
+		} // MainStrategy
 
 		[Activation]
 		private void MarketplaceInstantUpdate() {

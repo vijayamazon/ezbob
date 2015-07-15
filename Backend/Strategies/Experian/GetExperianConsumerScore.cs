@@ -2,10 +2,9 @@
 	using Ezbob.Database;
 
 	public class GetExperianConsumerScore : AStrategy {
-
-		public GetExperianConsumerScore(int customerId) {
+		public GetExperianConsumerScore(int customerID) {
 			Score = 0;
-			m_nCustomerId = customerId;
+			this.customerID = customerID;
 		} // constructor
 
 		public override string Name {
@@ -13,16 +12,14 @@
 		} // Name
 
 		public override void Execute() {
-			Score = DB.ExecuteScalar<int>("GetExperianConsumerScore",
+			Score = DB.ExecuteScalar<int>(
+				"GetExperianConsumerScore",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", m_nCustomerId)
+				new QueryParameter("CustomerId", this.customerID)
 			);
-
 		} // Execute
 
 		public int Score { get; private set; }
-
-		private readonly int m_nCustomerId;
-
+		private readonly int customerID;
 	} // class LoadExperianConsumerData
 } // namespace
