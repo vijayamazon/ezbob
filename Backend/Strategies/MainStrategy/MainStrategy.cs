@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Threading.Tasks;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
@@ -18,6 +19,7 @@
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
+	using Ezbob.Utils.Lingvo;
 	using EZBob.DatabaseLib.Model.Database;
 	using LandRegistryLib;
 	using SalesForceLib.Models;
@@ -95,6 +97,8 @@
 			StrategiesMailer mailer = null;
 
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
+				UpdateMarketplaces();
+
 				mailer = new StrategiesMailer();
 
 				var staller = new Staller(this.customerId, mailer);
@@ -834,6 +838,65 @@
 				).Execute();
 			} // if
 		} // CreateCashRequest
+
+		private void UpdateMarketplaces() {
+			bool updateEverything =
+				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
+				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
+
+			if (!updateEverything)
+				return;
+
+			Log.Debug("Checking which marketplaces should be updated for customer {0}...", this.customerId);
+
+			DateTime now = DateTime.UtcNow;
+
+			var mpsToUpdate = new List<int>();
+
+			DB.ForEachRowSafe(
+				sr => {
+					DateTime lastUpdateTime = sr["UpdatingEnd"];
+
+					if ((now - lastUpdateTime).Days > CurrentValues.Instance.UpdateOnReapplyLastDays)
+						mpsToUpdate.Add(sr["MpID"]);
+				},
+				"LoadMarketplacesLastUpdateTime",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", this.customerId)
+			);
+
+			if (mpsToUpdate.Count < 1) {
+				Log.Debug("No marketplace should be updated for customer {0}.", this.customerId);
+				return;
+			} // if
+
+			Log.Debug(
+				"{2} to update for customer {0}: {1}.",
+				this.customerId,
+				string.Join(", ", mpsToUpdate),
+				Grammar.Number(mpsToUpdate.Count, "Marketplace")
+			);
+
+			foreach (int mpID in mpsToUpdate) {
+				int thisMpID = mpID; // to avoid "Access to foreach variable in closure".
+
+				Task.Run(() => {
+					Log.Debug("Updating marketplace {0} for customer {1}...", thisMpID, this.customerId);
+
+					new UpdateMarketplace(this.customerId, thisMpID, false)
+						.PreventSilentAutomation()
+						.Execute();
+
+					Log.Debug("Updating marketplace {0} for customer {1} complete.", thisMpID, this.customerId);
+				});
+			} // for each
+
+			Log.Debug(
+				"Update launched for marketplaces {1} of customer {0}.",
+				this.customerId,
+				string.Join(", ", mpsToUpdate)
+			);
+		} // UpdateMarketplaces
 
 		// Inputs
 		private readonly int underwriterID;

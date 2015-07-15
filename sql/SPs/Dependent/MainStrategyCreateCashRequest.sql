@@ -73,13 +73,13 @@ BEGIN
 
 	INSERT INTO CashRequests (
 		IdCustomer, CreationDate, InterestRate,
-		LoanTypeId,
+		UseSetupFee, LoanTypeId,
 		RepaymentPeriod, ApprovedRepaymentPeriod,
 		LoanSourceID, IsCustomerRepaymentPeriodSelectionAllowed,
 		Originator
 	) VALUES (
 		@CustomerID, @Now, ISNULL(@LsMaxInterestRate, 0.0225),
-		@LtID,
+		0, @LtID,
 		@RepaymentPeriod, @RepaymentPeriod,
 		@LsID, @LsIsCustomerRepaymentPeriodSelectionAllowed,
 		@Originator

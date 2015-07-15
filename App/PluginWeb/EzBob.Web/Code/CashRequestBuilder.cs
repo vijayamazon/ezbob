@@ -159,20 +159,6 @@
 			long? cashRequestID,
 			EZBob.DatabaseLib.Model.Database.CashRequestOriginator? cashRequestOriginator
 		) {
-			bool bUpdateMarketplaces =
-				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
-				newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
-
-			bUpdateMarketplaces = bUpdateMarketplaces && customer.CustomerMarketPlaces.Any(x =>
-				x.UpdatingEnd != null &&
-				(DateTime.UtcNow - x.UpdatingEnd.Value).Days > CurrentValues.Instance.UpdateOnReapplyLastDays
-			);
-
-			if (bUpdateMarketplaces) {
-				foreach (var mp in customer.CustomerMarketPlaces)
-					m_oServiceClient.Instance.UpdateMarketplace(customer.Id, mp.Id, false, underwriterId);
-			} // if
-
 			if (isSync) {
 				return m_oServiceClient.Instance.MainStrategySync(
 					underwriterId,
