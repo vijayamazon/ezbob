@@ -96,6 +96,26 @@
 		}
 
 		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		[HttpPost]
+		public JsonResult UpdateBrokerCommissionDefaults(long id){
+			var cr = this._cashRequestsRepository.Get(id);
+			if (cr == null) {
+				return Json(new { }, JsonRequestBehavior.AllowGet);
+			}
+			if (cr.Customer.Broker != null) {
+                BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
+                bool hasLoans = cr.Customer.Loans.Any();
+                DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
+				Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(cr.ApprovedSum(), hasLoans, firstLoanDate);
+                cr.BrokerSetupFeePercent = commission.Item1;
+                cr.ManualSetupFeePercent = commission.Item2;
+            }
+			this._cashRequestsRepository.SaveOrUpdate(cr);
+			return Json(new { brokerCommission = cr.BrokerSetupFeePercent, setupFeePercent = cr.ManualSetupFeePercent }, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
 		[HttpPost]
 		public JsonResult VerifyPhone(int customerId, string phoneType, bool verifiedPreviousState) {
 			CustomerPhone customerPhone = customerPhoneRepository.GetAll().FirstOrDefault(x => x.CustomerId == customerId && x.PhoneType == phoneType && x.IsCurrent);

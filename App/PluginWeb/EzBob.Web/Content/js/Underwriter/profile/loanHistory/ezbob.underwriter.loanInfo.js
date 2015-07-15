@@ -257,13 +257,18 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		showCreditLineDialog: function() {
 			var self = this;
-
-			this.model.fetch().done(function() {
-				var dialog = new EzBob.Underwriter.CreditLineDialog({
-					model: self.model
+			BlockUi();
+			var id = this.model.get('CashRequestId');
+			$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
+				id: id
+			}).done(function() {
+				self.model.fetch().done(function() {
+					UnBlockUi();
+					var dialog = new EzBob.Underwriter.CreditLineDialog({
+						model: self.model
+					});
+					EzBob.App.jqmodal.show(dialog);
 				});
-
-				EzBob.App.jqmodal.show(dialog);
 			});
 		}, // showCreditLineDialog
 

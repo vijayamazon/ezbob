@@ -16,6 +16,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		'click .btnOk': 'save',
 		'change #loan-type': 'onChangeLoanType',
 		'change #loan-source': 'onChangeLoanSource',
+		'change #offeredCreditLine': 'onChangeOfferedAmout',
+
 	}, // events
 
 	ui: {
@@ -46,6 +48,19 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			this.cloneModel.set("OfferValidateUntil", endDate.format('DD/MM/YYYY'));
 		} // if
 	}, // onChangeStartingDate
+
+	onChangeOfferedAmout: function () {
+		BlockUi();
+		var self = this;
+		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
+			id: this.cloneModel.get('CashRequestId')
+		}).done(function(result) {
+			self.cloneModel.set('BrokerSetupFeePercent', result.brokerCommission);
+			self.cloneModel.set('ManualSetupFeePercent', result.setupFeePercent);
+		}).always(function() {
+			UnBlockUi();
+		});
+	},
 
 	onChangeLoanType: function() {
 		var loanTypeId = this.$el.find("#loan-type option:selected").val();
