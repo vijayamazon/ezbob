@@ -28,6 +28,7 @@
 		}
 
 		[Test]
+		[Ignore]
 		public void TestRequestsToJson() {
 			Log.Debug("call CreateUpdateLeadAccount");
 			LeadAccountModel model = new LeadAccountModel {
@@ -137,9 +138,9 @@
 		private ISalesForceAppClient GetSandboxDevClient() {
 			//Sandbox dev
 			return ObjectFactory
-				.With("userName").EqualTo("yarons@ezbob.com.devsandbox")
+				.With("userName").EqualTo("techapi@ezbob.com.devsandbox")
 				.With("password").EqualTo("Ezca$h123")
-				.With("token").EqualTo("H3pfFEE09tKxp0vTCoK0mfiS")
+				.With("token").EqualTo("HfEt5jFnAuyqo2vs5Da6ZK9q")
 				.With("environment").EqualTo("Sandbox")
 				.GetInstance<ISalesForceAppClient>();
 		}
@@ -196,21 +197,24 @@
 				PhoneNumber = "0564564654",
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
-                Origin = "ezbob"
+                Origin = "ezbob",
+				CustomerID = 1111.ToString(),
+				IsTest = true,
+				NumOfLoans = 2
 			};
 
 			this.client.CreateUpdateLeadAccount(model);
-
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestTask() {
-			
+			var now = DateTime.UtcNow;
 			var tModel = new TaskModel {
 
-                Email = "stasd+vip221@ezbob.com",
-				CreateDate = new DateTime(2015, 01, 27),
-				DueDate = new DateTime(2015, 01, 29),
+				Email = "testdev1@b.c",
+				CreateDate = now,
+				DueDate = now.AddDays(3),
 				Originator = "Originator",
 				Status = "Status",
 				Subject = "Subject",
@@ -218,38 +222,84 @@
 			};
 
 			this.client.CreateTask(tModel);
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestActivity() {
+			var now = DateTime.UtcNow;
 			var aModel = new ActivityModel {
 
-				Email = "a@b.c",
+				Email = "testdev1@b.c",
 				Description = "Description",
 				Type = "Mail",
 				Originator = "Originator",
-				StartDate = new DateTime(2015, 01, 27),
-				EndDate = new DateTime(2015, 01, 28),
+				StartDate = now,
+				EndDate = now,
 				IsOpportunity = false,
 			};
 
 			this.client.CreateActivity(aModel);
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestChangeEmail() {
-			this.client.ChangeEmail("a@b.c", "b@a.c");
+			this.client.ChangeEmail("testdev1@b.c", "testdev2@b.c");
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestGetActivity() {
+
 			//var activity = client.GetActivity("alexbo+073@ezbob.com_Frozen");
 			//client.GetActivity("stasdes@ezbob.com");
-			var activity = this.client.GetActivity("tanyag+t3793_1@ezbob.com");
+			var activity = this.client.GetActivity("testdev1@b.c");
 			Assert.IsNotNull(activity);
 			Assert.IsNullOrEmpty(this.client.Error);
 			Assert.IsNullOrEmpty(activity.Error);
 			Assert.Greater(activity.Activities.Count(), 0);
+		}
+
+		[Test]
+		public void TestUpdateCloseOpportunity() {
+			var now = DateTime.UtcNow;
+			/*
+			this.client.UpdateOpportunity(new OpportunityModel() {
+				Email = "testdev1@b.c",
+				ApprovedAmount = 100,
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				Stage = OpportunityStage.s90.DescriptionAttr(),
+			});
+			*/
+			this.client.UpdateOpportunity(new OpportunityModel() {
+				Email = "testdev1@b.c",
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				DealCloseType = OpportunityDealCloseReason.Lost.DescriptionAttr(),
+ 				DealLostReason = "test lost",
+				CloseDate = now
+			});
+
+			Assert.IsNullOrEmpty(this.client.Error);
+		}
+
+		[Test]
+		public void TestCreateOpportunity() {
+			var now = DateTime.UtcNow;
+			
+			this.client.CreateOpportunity(new OpportunityModel() {
+				Name = "NewOpportunity",
+				Email = "testdev1@b.c",
+				CreateDate = now,
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				Stage = OpportunityStage.s5.DescriptionAttr(),
+				Type = OpportunityType.Resell.DescriptionAttr()
+			});
+
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]

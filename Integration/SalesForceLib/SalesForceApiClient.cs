@@ -214,7 +214,7 @@
 
 		public GetActivityResultModel GetActivity(string email) {
 			Log.InfoFormat("SalesForce GetActivity for {0}", email);
-			Model = new { email }.ToJsonExtension(); 
+			Model = new { Email = email }.ToJsonExtension(); 
 			string result = null;
 			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
 				Log.ErrorFormat("SalesForce GetActivity null session id");
