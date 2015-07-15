@@ -15,6 +15,7 @@
 	using Models;
 	using Code;
 	using Code.ReportGenerator;
+	using DbConstants;
 	using Infrastructure;
 	using PaymentServices.Calculators;
 	using PaymentServices.PayPoint;
@@ -27,7 +28,10 @@
 		private static readonly ILog Log = LogManager.GetLogger(typeof(LoanHistoryController));
 		private readonly ServiceClient m_oServiceClient;
 		private readonly IEzbobWorkplaceContext _context;
+		private readonly CustomerStatusesRepository _customerStatusesRepository;
+		private readonly ICustomerRepository _icustomerRepository;
 		private readonly CustomerRepository _customerRepository;
+		private readonly ILoanOptionsRepository _loanOptionsRepository;
 		private readonly LoanRepository _loanRepository;
 		private readonly LoanScheduleRepository _loanScheduleRepository;
 		private readonly IPacnetPaypointServiceLogRepository _logRepository;
@@ -36,6 +40,9 @@
 		private readonly PayPointApi _paypoint;
 
 		public LoanHistoryController(CustomerRepository customersRepository,
+									 ICustomerRepository icustomerRepository,
+									 CustomerStatusesRepository customerStatusesRepository,
+									 ILoanOptionsRepository loanOptionsRepository,
 									 PaymentRolloverRepository rolloverRepository,
 									 LoanScheduleRepository loanScheduleRepository, IEzbobWorkplaceContext context,
 									 
@@ -44,6 +51,9 @@
 									 PayPointApi paypoint)
 		{
 			_customerRepository = customersRepository;
+			_icustomerRepository = icustomerRepository;
+			_customerStatusesRepository = customerStatusesRepository;
+			_loanOptionsRepository = loanOptionsRepository;
 			_rolloverRepository = rolloverRepository;
 			_loanScheduleRepository = loanScheduleRepository;
 			_context = context;
@@ -183,7 +193,6 @@
 
 			try
 			{
-
 				Log.InfoFormat("Manual payment request for customer id {0}, amount {1}", customer.Id, realAmount);
 
 				if (realAmount < 0)
@@ -218,9 +227,34 @@
 					_paypoint.RepeatTransactionEx(paypointCard.PayPointAccount, payPointTransactionId, realAmount);
 				}
 
-				string description = string.Format("UW Manual payment method: {0}, {3}description: {2}{2}{1}", model.PaymentMethod,
-												   model.Description, Environment.NewLine, model.WriteOffReason != "-" ? "Write-off reason: " +  model.WriteOffReason + ", " : " ");
+				if (model.PaymentMethod == "Write Off") {
+					var activeLoans = customer.Loans.Count(l => l.Status != LoanStatus.PaidOff);
 
+					if (activeLoans == 1) {
+						customer.CollectionStatus.CurrentStatus = this._customerStatusesRepository.Get((int)CollectionStatusNames.WriteOff);
+						customer.CollectionStatus.CollectionDescription = string.Format("Manual payment of type Write-off with reason {0}", model.WriteOffReason);
+						this._icustomerRepository.SaveOrUpdate(customer);
+
+						LoanOptions currentOptions = this._loanOptionsRepository.GetByLoanId(model.LoanId) ?? new LoanOptions {
+							LoanId = model.LoanId,
+							AutoPayment = true,
+							ReductionFee = true,
+							LatePaymentNotification = true,
+							EmailSendingAllowed = false,
+							MailSendingAllowed = false,
+							SmsSendingAllowed = false,
+							ManualCaisFlag = "Calculated value",
+							AutoLateFees = true
+						};
+
+						currentOptions.CaisAccountStatus = "9";
+						this._loanOptionsRepository.SaveOrUpdate(currentOptions);
+					}
+				}
+
+				string description = string.Format("UW Manual payment method: {0}, {3}description: {2}{2}{1}", model.PaymentMethod,
+						model.Description, Environment.NewLine, model.WriteOffReason != "-" ? "Write-off reason: " + model.WriteOffReason + ", " : " ");
+				
 				var facade = new LoanPaymentFacade();
 
 				facade.MakePayment(payPointTransactionId, realAmount, null,
