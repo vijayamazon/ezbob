@@ -5,7 +5,7 @@ IF OBJECT_ID('NL_OfferForLoan') IS NULL
 	EXECUTE('CREATE PROCEDURE NL_OfferForLoan AS SELECT 1')
 GO
 
-ALTER PROCEDURE [dbo].[NL_OfferForLoan]	
+ALTER  PROCEDURE [dbo].[NL_OfferForLoan]	
 	@CustomerID INT,
 	@Now DATETIME
 AS
@@ -48,8 +48,9 @@ BEGIN
 			o.Amount as OfferAmount, 
 			o.MonthlyInterestRate,
 			o.SetupFeePercent, 
+			o.SetupFeeAddedToLoan,
+			o.ServicingFeePercent,
 			o.BrokerSetupFeePercent, 
-			o.DistributedSetupFeePercent,
 			o.InterestOnlyRepaymentCount,
 			0 as LoansCount		
 		into #offerforloan

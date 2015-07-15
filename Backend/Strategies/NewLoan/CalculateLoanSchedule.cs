@@ -77,7 +77,8 @@
 				model.Offer = new NL_Offers() {
 					BrokerSetupFeePercent = dataForLoan.BrokerSetupFeePercent,
 					SetupFeePercent = dataForLoan.SetupFeePercent,
-					DistributedSetupFeePercent = dataForLoan.DistributedSetupFeePercent
+					ServicingFeePercent = dataForLoan.DistributedSetupFeePercent,
+					SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan
 				};
 
 				Log.Debug(model.Loan.ToString());

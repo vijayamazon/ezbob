@@ -223,7 +223,8 @@ IF OBJECT_ID('NL_LoanFeeTypes') IS NULL
 BEGIN
 CREATE TABLE [dbo].[NL_LoanFeeTypes](
 	[LoanFeeTypeID] [INT] NOT NULL IDENTITY(1,1) ,
-	[LoanFeeType] [nchar](50) NOT NULL,
+	[LoanFeeType] [nchar](50) NOT NULL,	
+	[Description] [nvarchar](max) NULL,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_LoanFeeTypes] PRIMARY KEY CLUSTERED ([LoanFeeTypeID] ASC)
 ) ;	
@@ -252,16 +253,16 @@ CREATE TABLE [dbo].[NL_RepaymentIntervalTypes](
 END
 GO
 
-IF OBJECT_ID('NL_OfferStatuses') IS NULL 
-BEGIN
-CREATE TABLE [dbo].[NL_OfferStatuses](
-	[OfferStatusID] [INT] NOT NULL IDENTITY(1,1) ,
-	[OfferStatus] [nchar](20) NOT NULL,
-	[TimestampCounter] rowversion NOT NULL,
- CONSTRAINT [PK_NL_OfferStatuses] PRIMARY KEY CLUSTERED ([OfferStatusID] ASC)
-) ;
-END
-GO
+-- IF OBJECT_ID('NL_OfferStatuses') IS NULL 
+-- BEGIN
+-- CREATE TABLE [dbo].[NL_OfferStatuses](
+	-- [OfferStatusID] [INT] NOT NULL IDENTITY(1,1) ,
+	-- [OfferStatus] [nchar](20) NOT NULL,
+	-- [TimestampCounter] rowversion NOT NULL,
+ -- CONSTRAINT [PK_NL_OfferStatuses] PRIMARY KEY CLUSTERED ([OfferStatusID] ASC)
+-- ) ;
+-- END
+-- GO
 	
 IF OBJECT_ID('NL_Offers') IS NULL 
 BEGIN
@@ -276,15 +277,16 @@ CREATE TABLE [dbo].[NL_Offers](
 	[RepaymentCount] [INT] NOT NULL,	
 	[Amount] [DECIMAL](18, 6) NOT NULL,
 	[MonthlyInterestRate] [DECIMAL] (18, 6) NOT NULL,
-	[CreatedTime] [DATETIME] NOT NULL,
-	[BrokerSetupFeePercent] [DECIMAL](18, 6) NULL,
-	[Notes] [nvarchar](max) NULL,
+	[CreatedTime] [DATETIME] NOT NULL,	
 	[SetupFeePercent] [DECIMAL](18, 6) NULL,
-	[DistributedSetupFeePercent] [decimal](18, 6) NULL,
+	[SetupFeeAddedToLoan] BIT NULL,
+	[ServicingFeePercent] [decimal](18, 6) NULL,	
+	[BrokerSetupFeePercent] [DECIMAL](18, 6) NULL,	
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
 	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,
 	[EmailSendingBanned] [BIT] NOT NULL DEFAULT 0,
+	[Notes] [nvarchar](max) NULL,
 	[TimestampCounter] rowversion NOT NULL,
   CONSTRAINT [PK_NL_Offers] PRIMARY KEY CLUSTERED ([OfferID] ASC)
 );
@@ -1053,7 +1055,10 @@ IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'RolloverF
 END;
 IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'AdminFee') IS NULL BEGIN
 	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('AdminFee');
-END;  
+END; 
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'ServicingFee') IS NULL BEGIN
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('ServicingFee');
+END;   
 
 -- NL_CashRequestOrigins
 IF( SELECT CashRequestOriginID FROM dbo.NL_CashRequestOrigins WHERE CashRequestOrigin = 'FinishedWizard') IS NULL BEGIN

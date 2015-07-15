@@ -29,6 +29,8 @@
 		[DataMember]
 		public decimal SetupFeePercent { get; set; }
 		[DataMember]
+		public bool SetupFeeAddedToLoan { get; set; }
+		[DataMember]
 		public decimal BrokerSetupFeePercent { get; set; }
 		[DataMember]
 		public decimal DistributedSetupFeePercent { get; set; }
