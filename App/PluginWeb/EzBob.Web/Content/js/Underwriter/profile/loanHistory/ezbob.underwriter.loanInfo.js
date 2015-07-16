@@ -259,8 +259,10 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			var self = this;
 			BlockUi();
 			var id = this.model.get('CashRequestId');
+			var amount = this.model.get('OfferedCreditLine');
 			$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
-				id: id
+				id: id,
+				amount: amount
 			}).done(function() {
 				self.model.fetch().done(function() {
 					UnBlockUi();

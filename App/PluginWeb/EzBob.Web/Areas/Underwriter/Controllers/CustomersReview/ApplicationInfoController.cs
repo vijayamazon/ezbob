@@ -98,7 +98,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult UpdateBrokerCommissionDefaults(long id){
+		public JsonResult UpdateBrokerCommissionDefaults(long id, decimal amount){
 			var cr = this._cashRequestsRepository.Get(id);
 			if (cr == null) {
 				return Json(new { }, JsonRequestBehavior.AllowGet);
@@ -107,7 +107,7 @@
                 BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
                 bool hasLoans = cr.Customer.Loans.Any();
                 DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
-				Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(cr.ApprovedSum(), hasLoans, firstLoanDate);
+				Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(amount, hasLoans, firstLoanDate);
                 cr.BrokerSetupFeePercent = commission.Item1;
                 cr.ManualSetupFeePercent = commission.Item2;
             }

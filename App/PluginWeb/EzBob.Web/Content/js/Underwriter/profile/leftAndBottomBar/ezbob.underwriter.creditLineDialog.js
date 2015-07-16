@@ -17,11 +17,11 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		'change #loan-type': 'onChangeLoanType',
 		'change #loan-source': 'onChangeLoanSource',
 		'change #offeredCreditLine': 'onChangeOfferedAmout',
-
 	}, // events
 
 	ui: {
-		form: "form"
+		form: "form",
+		offeredCreditLine: '#offeredCreditLine'
 	}, // ui
 
 	jqoptions: function() {
@@ -53,7 +53,8 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		BlockUi();
 		var self = this;
 		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
-			id: this.cloneModel.get('CashRequestId')
+			id: this.cloneModel.get('CashRequestId'),
+			amount: self.ui.offeredCreditLine.autoNumericGet()
 		}).done(function(result) {
 			self.cloneModel.set('BrokerSetupFeePercent', result.brokerCommission);
 			self.cloneModel.set('ManualSetupFeePercent', result.setupFeePercent);
