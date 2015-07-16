@@ -348,7 +348,7 @@
 		private void DoApplyForLoan() {
 			Customer customer = m_oContext.Customer;
 
-			ms_oLog.Debug("Customer {0} applied for loan, creating a cash request...", customer.Stringify());
+			ms_oLog.Debug("Customer {0} applied for a loan, processing...", customer.Stringify());
 
 			Transactional.Execute(() => {
 				customer.CreditResult = null;
@@ -361,19 +361,19 @@
 				if (customer.LastCashRequest != null && customer.LastCashRequest.HasLoans)
 					m_oServiceClient.Instance.RequestCashWithoutTakenLoan(customer.Id);
 
-				m_oCashRequestBuilder.ForceEvaluate(
-					customer.Id,
-					customer,
-					NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
-					false,
-					null,
-					CashRequestOriginator.RequestCashBtn
-				);
-
 				m_oSession.Flush();
 			});
 
-			ms_oLog.Debug("Customer {0} applied for loan, cash request is ready.", customer.Stringify());
+			new MainStrategyClient(
+				customer.Id,
+				customer.Id,
+				customer.IsAvoid,
+				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
+				null,
+				CashRequestOriginator.RequestCashBtn
+			).ExecuteAsync();
+
+			ms_oLog.Debug("Customer {0} applied for a loan, processing complete.", customer.Stringify());
 		} // DoApplyForLoan
 
 		private readonly CustomerModelBuilder m_oCustomerModelBuilder;

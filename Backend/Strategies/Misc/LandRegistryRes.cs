@@ -15,10 +15,16 @@
 
 	public class LandRegistryRes : AStrategy {
 		public LandRegistryRes(int customerId, string titleNumber) {
+			this.doSilentAutomation = true;
 			this.customerID = customerId;
 			this.titleNumber = titleNumber;
 			DoLinkWithAddress = true;
 		} // constructor
+
+		public LandRegistryRes PreventSilentAutomation() {
+			this.doSilentAutomation = false;
+			return this;
+		} // PreventSilentAutomation
 
 		public override string Name { get { return "Land Registry RES"; } } // Name
 
@@ -44,7 +50,8 @@
 
 			Result = new Serialized(RawResult);
 
-			new SilentAutomation(this.customerID).SetTag(SilentAutomation.Callers.LandRegistry).Execute();
+			if (this.doSilentAutomation)
+				new SilentAutomation(this.customerID).SetTag(SilentAutomation.Callers.LandRegistry).Execute();
 		} // Execute
 
 		public static void LinkLandRegistryAndAddress(int customerId, string response, string titleNumber, int landRegistryId) {
@@ -261,5 +268,6 @@
 
 		private readonly int customerID;
 		private readonly string titleNumber;
+		private bool doSilentAutomation;
 	} // class LandRegistryRes
 } // namespace

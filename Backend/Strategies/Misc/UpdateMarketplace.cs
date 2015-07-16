@@ -10,6 +10,7 @@
 	using System.Globalization;
 	using EKM;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
+	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Database;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
@@ -19,6 +20,7 @@
 
 	public class UpdateMarketplace : AStrategy {
 		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+			this.marketplaceUpdateStatus = null;
 			this.doSilentAutomation = true;
 
 			this.mailer = new StrategiesMailer();
@@ -171,6 +173,9 @@
 
 				oMpUpdateTimesSetter.End(errorMessage, tokenExpired);
 
+				if (this.marketplaceUpdateStatus != null)
+					this.marketplaceUpdateStatus.NotifyDone(this.marketplaceId);
+
 				if (this.doSilentAutomation) {
 					new SilentAutomation(this.customerId).SetTag(firstTime
 						? SilentAutomation.Callers.AddMarketplace
@@ -180,10 +185,16 @@
 			} // try
 		} // Execute
 
+		internal UpdateMarketplace SetMarketplaceUpdateStatus(MarketplaceUpdateStatus mpus) {
+			this.marketplaceUpdateStatus = mpus;
+			return this;
+		} // SetMarketplaceUpdateStatus
+
 		private readonly StrategiesMailer mailer;
 		private readonly int customerId;
 		private readonly int marketplaceId;
 		private readonly bool doUpdateWizardStep;
 		private bool doSilentAutomation;
+		private MarketplaceUpdateStatus marketplaceUpdateStatus;
 	} // class UpdateMarketplace
 } // namespace

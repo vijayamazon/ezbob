@@ -11,6 +11,7 @@
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject;
 	using Ezbob.Backend.Strategies.Alibaba;
+	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
 	using Ezbob.Backend.Strategies.Exceptions;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MailStrategies.API;
@@ -77,6 +78,16 @@
 
 			if (this.newCreditLineOption == NewCreditLineOption.SkipEverything) {
 				Log.Debug(
+					"Main strategy was activated in 'skip everything go to manual decision mode' for customer {0}.",
+					this.customerId
+				);
+
+				new SilentAutomation(this.customerId)
+					.PreventMainStrategy()
+					.SetTag(SilentAutomation.Callers.MainSkipEverything)
+					.Execute();
+
+				Log.Debug(
 					"Main strategy was activated in 'skip everything go to manual decision mode'." +
 					"Nothing more to do for customer id '{0}'. Bye.", this.customerId
 				);
@@ -94,15 +105,14 @@
 				);
 			} // if
 
-			StrategiesMailer mailer = null;
+			var mailer = new StrategiesMailer();
 
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
-				UpdateMarketplaces();
+				MarketplaceUpdateStatus mpus = UpdateMarketplaces();
 
-				mailer = new StrategiesMailer();
-
-				var staller = new Staller(this.customerId, mailer);
-				staller.Stall();
+				new Staller(this.customerId, mailer)
+					.SetMarketplaceUpdateStatus(mpus)
+					.Stall();
 
 				ExecuteAdditionalStrategies();
 			} // if
@@ -121,6 +131,14 @@
 
 			CalculateMedal();
 
+			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision) {
+				new SilentAutomation(this.customerId)
+					.PreventMainStrategy()
+					.SetTag(SilentAutomation.Callers.MainUpdateAndGoManual)
+					.SetMedal(this.medal)
+					.Execute();
+			} // if
+
 			CapOffer();
 
 			ProcessApprovals();
@@ -133,7 +151,7 @@
 
 			UpdateCustomerAnalyticsLocalData();
 
-			SendEmails(mailer ?? new StrategiesMailer());
+			SendEmails(mailer);
 		} // Execute
 
 		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
@@ -656,8 +674,9 @@
 		private void ExecuteAdditionalStrategies() {
 			var preData = new PreliminaryData(this.customerId);
 
-			var strat = new ExperianConsumerCheck(this.customerId, null, false);
-			strat.Execute();
+			new ExperianConsumerCheck(this.customerId, null, false)
+				.PreventSilentAutomation()
+				.Execute();
 
 			if (preData.TypeOfBusiness != "Entrepreneur") {
 				Library.Instance.DB.ForEachRowSafe(
@@ -680,12 +699,13 @@
 
 			if (preData.LastStartedMainStrategyEndTime.HasValue) {
 				Library.Instance.Log.Info("Performing experian company check");
-				var experianCompanyChecker = new ExperianCompanyCheck(this.customerId, false);
-				experianCompanyChecker.Execute();
+				new ExperianCompanyCheck(this.customerId, false)
+					.PreventSilentAutomation()
+					.Execute();
 			} // if
 
 			if (preData.LastStartedMainStrategyEndTime.HasValue)
-				new AmlChecker(this.customerId).Execute();
+				new AmlChecker(this.customerId).PreventSilentAutomation().Execute();
 
 			bool shouldRunBwa =
 				preData.AppBankAccountType == "Personal" &&
@@ -839,13 +859,13 @@
 			} // if
 		} // CreateCashRequest
 
-		private void UpdateMarketplaces() {
+		private MarketplaceUpdateStatus UpdateMarketplaces() {
 			bool updateEverything =
 				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndApplyAutoRules ||
 				this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision;
 
 			if (!updateEverything)
-				return;
+				return null;
 
 			Log.Debug("Checking which marketplaces should be updated for customer {0}...", this.customerId);
 
@@ -867,7 +887,7 @@
 
 			if (mpsToUpdate.Count < 1) {
 				Log.Debug("No marketplace should be updated for customer {0}.", this.customerId);
-				return;
+				return null;
 			} // if
 
 			Log.Debug(
@@ -877,6 +897,8 @@
 				Grammar.Number(mpsToUpdate.Count, "Marketplace")
 			);
 
+			var mpus = new MarketplaceUpdateStatus(mpsToUpdate);
+
 			foreach (int mpID in mpsToUpdate) {
 				int thisMpID = mpID; // to avoid "Access to foreach variable in closure".
 
@@ -885,6 +907,7 @@
 
 					new UpdateMarketplace(this.customerId, thisMpID, false)
 						.PreventSilentAutomation()
+						.SetMarketplaceUpdateStatus(mpus)
 						.Execute();
 
 					Log.Debug("Updating marketplace {0} for customer {1} complete.", thisMpID, this.customerId);
@@ -896,6 +919,8 @@
 				this.customerId,
 				string.Join(", ", mpsToUpdate)
 			);
+
+			return mpus;
 		} // UpdateMarketplaces
 
 		// Inputs

@@ -838,14 +838,14 @@
 			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
 			// finish wizard => Main strategy runs Alibaba 001 ("data sharing") full info
-			m_oCashRequestBuilder.ForceEvaluate(
+			new MainStrategyClient(
 				customer.Id,
-				customer,
+				customer.Id,
+				customer.IsAvoid,
 				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
-				false,
 				null,
 				EZBob.DatabaseLib.Model.Database.CashRequestOriginator.FinishedWizard
-			);
+			).ExecuteAsync();
 
 			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
 		} // WizardComplete

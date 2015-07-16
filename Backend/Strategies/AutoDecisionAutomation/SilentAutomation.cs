@@ -7,10 +7,6 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository.Turnover;
-	using NHibernate;
-	using StructureMap;
 
 	/// <summary>
 	/// <para>Executes non-repeating automation decisions (reject, approve) in silent mode,
@@ -31,13 +27,27 @@
 			Aml,
 			Consumer,
 			Company,
+			MainSkipEverything,
+			MainUpdateAndGoManual,
 		} // enum Callers
 
 		public SilentAutomation(int customerID) {
+			this.medalToUse = null;
+			this.doMainStrategy = true;
 			this.customerID = customerID;
 			this.caller = Callers.Unknown;
 			this.tag = CreateTag();
 		} // constructor
+
+		public SilentAutomation PreventMainStrategy() {
+			this.doMainStrategy = false;
+			return this;
+		} // PreventMainStrategy
+
+		public SilentAutomation SetMedal(MedalResult medal) {
+			this.medalToUse = medal;
+			return this;
+		} // SetMedal
 
 		public override string Name { get { return "SilentAutomation"; } }
 
@@ -66,7 +76,7 @@
 				return;
 			} // if
 
-			ForceNhibernateResync();
+			ForceNhibernateResync.Do(this.customerID);
 
 			Log.Debug("Executing silent reject for customer '{0}'...", this.customerID);
 
@@ -78,15 +88,7 @@
 
 			rejectAgent.MakeAndVerifyDecision(Tag, true);
 
-			Log.Debug("Executing silent medal for customer '{0}'...", this.customerID);
-
-			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
-				Tag = Tag,
-				QuietMode = true,
-			};
-			instance.Execute();
-
-			MedalResult medal = instance.Result;
+			MedalResult medal = CalculateMedal();
 
 			int offeredCreditLine = CapOffer(medal);
 
@@ -124,6 +126,23 @@
 		} // Execute
 
 		private void ExecuteMain() {
+			bool skipMain =
+				!this.doMainStrategy ||
+				(this.caller == Callers.MainSkipEverything) ||
+				(this.caller == Callers.MainUpdateAndGoManual);
+
+			if (skipMain) {
+				Log.Debug(
+					"Silent decision for customer {0} is 'approve', but main strategy won't be executed " +
+					"(prevent main: '{1}', caller: '{2}').",
+					this.customerID,
+					this.doMainStrategy ? "yes" : "no",
+					this.caller
+				);
+
+				return;
+			} // if
+
 			Log.Debug(
 				"Silent decision for customer {0} is 'approve', checking whether there is available cash request...",
 				this.customerID
@@ -194,21 +213,6 @@
 			this.mainStrategyExecutedBefore = sr.IsEmpty ? false : sr["MainStrategyExecutedBefore"];
 		} // LoadMainStrategyExecutedBefore 
 
-		private void ForceNhibernateResync() {
-			ISession session = ObjectFactory.GetInstance<ISession>();
-
-			Customer customer = ObjectFactory.GetInstance<CustomerRepository>().ReallyTryGet(this.customerID);
-
-			if (customer != null)
-				session.Evict(customer);
-
-			MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
-
-			foreach (MarketplaceTurnover mpt in mpTurnoverRep.GetByCustomerId(this.customerID))
-				if (mpt != null)
-					session.Evict(mpt);
-		} // ForceNhibernateResync
-
 		private int CapOffer(MedalResult medal) {
 			Log.Info("Finalizing and capping offer");
 
@@ -240,6 +244,23 @@
 			);
 		} // CreateTag
 
+		private MedalResult CalculateMedal() {
+			if (this.medalToUse != null) {
+				Log.Debug("Using preset medal for customer '{0}'...", this.customerID);
+				return this.medalToUse;
+			} // if
+
+			Log.Debug("Executing silent medal for customer '{0}'...", this.customerID);
+
+			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
+				Tag = Tag,
+				QuietMode = true,
+			};
+			instance.Execute();
+
+			return instance.Result;
+		} // CalculateMedal
+
 		private int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		private int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
@@ -247,5 +268,7 @@
 		private readonly int customerID;
 		private string tag;
 		private bool mainStrategyExecutedBefore;
+		private bool doMainStrategy;
+		private MedalResult medalToUse;
 	} // class SilentAutomation
 } // namespace

@@ -12,6 +12,8 @@
 
 	public class ExperianConsumerCheck : AStrategy {
 		public ExperianConsumerCheck(int customerId, int? directorId, bool bForceCheck) {
+			this.doSilentAutomation = true;
+
 			this.customerId = customerId;
 			this.directorId = directorId.HasValue && directorId.Value == 0 ? null : directorId;
 			this.forceCheck = bForceCheck;
@@ -23,6 +25,11 @@
 			this.addressLines = new GetCustomerAddresses(customerId, directorId, DB, Log)
 				.FillFirst<GetCustomerAddresses.ResultRow>();
 		} // constructor
+
+		public ExperianConsumerCheck PreventSilentAutomation() {
+			this.doSilentAutomation = false;
+			return this;
+		} // PreventSilentAutomation
 
 		public int Score { get; private set; }
 		public ExperianConsumerData Result { get; private set; }
@@ -59,7 +66,8 @@
 				bSuccess ? "succeeded" : "failed"
 			);
 
-			new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.Consumer).Execute();
+			if (this.doSilentAutomation)
+				new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.Consumer).Execute();
 		} // Execute
 
 		private bool CanUsePrevAddress() {
@@ -238,6 +246,8 @@
 
 		private readonly GetCustomerAddresses.ResultRow addressLines;
 		private readonly GetPersonalInfoForConsumerCheck.ResultRow personalData;
+
+		private bool doSilentAutomation;
 	} // class ExperianConsumerCheck
 
 	internal static class CustomerAddressExt {

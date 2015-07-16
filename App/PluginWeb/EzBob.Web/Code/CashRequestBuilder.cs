@@ -1,5 +1,4 @@
 ﻿namespace EzBob.Web.Code {
-	using ConfigManager;
 	using System;
 	using System.Linq;
 	using DbConstants;
@@ -7,13 +6,11 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
-	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using log4net;
 	using ServiceClientProxy;
-	using ServiceClientProxy.EzServiceReference;
 
 	public class CashRequestBuilder {
 		public CashRequestBuilder(
@@ -150,35 +147,6 @@
 
 			return cashRequest;
 		} // CreateQuickOfferCashRequest
-
-		public ActionMetaData ForceEvaluate(
-			int underwriterId,
-			Customer customer,
-			NewCreditLineOption newCreditLineOption,
-			bool isSync,
-			long? cashRequestID,
-			EZBob.DatabaseLib.Model.Database.CashRequestOriginator? cashRequestOriginator
-		) {
-			if (isSync) {
-				return m_oServiceClient.Instance.MainStrategySync(
-					underwriterId,
-					_users.Get(customer.Id).Id,
-					newCreditLineOption,
-					Convert.ToInt32(customer.IsAvoid),
-					null,
-					(ServiceClientProxy.EzServiceReference.CashRequestOriginator)cashRequestOriginator
-				);
-			} else {
-				return m_oServiceClient.Instance.MainStrategyAsync(
-					underwriterId,
-					_users.Get(customer.Id).Id,
-					newCreditLineOption,
-					Convert.ToInt32(customer.IsAvoid),
-					null,
-					(ServiceClientProxy.EzServiceReference.CashRequestOriginator)cashRequestOriginator
-				);
-			} // if
-		} // ForceEvaluate
 
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly IDiscountPlanRepository _discounts;

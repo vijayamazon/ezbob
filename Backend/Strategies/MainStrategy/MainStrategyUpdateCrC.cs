@@ -134,6 +134,15 @@
 			set { }
 		} // AutoDecisionID
 
+		public string AutoDecisionName {
+			get {
+				return this.autoDecisionResponse.Decision == null
+					? null
+					: this.autoDecisionResponse.Decision.Value.ToString();
+			} // get
+			set { }
+		} // AutoDecisionName
+
 		public decimal TotalScoreNormalized { get; set; }
 		public int ExperianConsumerScore { get; set; }
 		public int AnnualTurnover { get; set; }

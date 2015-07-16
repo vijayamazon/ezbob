@@ -23,6 +23,7 @@ ALTER PROCEDURE MainStrategyUpdateCrC
 @DecidedToApprove BIT,
 @IsLoanTypeSelectionAllowed BIT,
 @AutoDecisionID INT,
+@AutoDecisionName NVARCHAR(50),
 @TotalScoreNormalized DECIMAL(8, 3),
 @ExperianConsumerScore INT,
 @AnnualTurnover INT,
@@ -104,7 +105,7 @@ BEGIN
 			LoanTypeId
 		) VALUES (
 			@Now,
-			@AutoDecisionID,
+			@AutoDecisionName,
 			1, -- underwriter #1 is a reserved id for auto decisions
 			@CustomerID,
 			@Reason,
