@@ -1,0 +1,27 @@
+IF OBJECT_ID('NL_LoanInterestFreezeGet') IS NULL
+	EXECUTE('CREATE PROCEDURE NL_LoanInterestFreezeGet AS SELECT 1')
+GO
+
+ALTER PROCEDURE NL_LoanInterestFreezeGet
+@loanID INT
+AS
+BEGIN
+	SET NOCOUNT ON;
+
+	SELECT
+		[LoanInterestFreezeID]
+      ,[LoanID]
+      ,[StartDate]
+      ,[EndDate]
+      ,[InterestRate]
+      ,[ActivationDate]
+      ,[DeactivationDate]
+	FROM
+		[ezbob].[dbo].[NL_LoanInterestFreeze]
+	WHERE
+		[LoanID]=@loanID
+END
+
+GO
+
+

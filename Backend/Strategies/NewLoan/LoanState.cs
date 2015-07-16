@@ -7,6 +7,7 @@
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using StructureMap;
@@ -27,9 +28,10 @@
 	/// <typeparam name="T">Loan or NL_Model</typeparam>
 	public class LoanState<T> : AStrategy {
 
-		public LoanState(T t, int loanID, DateTime? stateDate) {
+		public LoanState(T t, int loanID, int customerId, DateTime? stateDate) {
 
 			this.loanID = loanID;
+		    this.customerID = customerId;
 
 			if (t.GetType() == typeof(Loan)) {
 				this.tLoan = t as Loan;
@@ -62,19 +64,68 @@
 					//			history entry: 
 					//				schedules - list
 					//  logic payments - list
-					 
 
+                    // NL_LoanSchedulesGet
 
+                    NL_Loans loan = DB.FillFirst<NL_Loans>("NL_LoansGet",CommandSpecies.StoredProcedure,new QueryParameter("@loanID", this.loanID));
+                    // init model - loan' properties
+                    this.CalcModel = new LoanCalculatorModel{
+                        LoanAmount = loan.InitialLoanAmount,
+                        LoanIssueTime = loan.IssuedTime,
+                        RepaymentIntervalType = (RepaymentIntervalTypes)loan.RepaymentIntervalTypeID,//Enum.GetName(typeof(RepaymentIntervalTypes), loan.RepaymentIntervalTypeID),
+                        RepaymentCount = loan.RepaymentCount,
+                        MonthlyInterestRate = loan.InterestRate,
+                        InterestOnlyRepayments = loan.InterestOnlyRepaymentCount ?? 0
+                    };
 
-					return;
+                    //this.CalcModel.OpenPrincipalHistory - fill list
+
+                    List<NL_LoanSchedules> schedules = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet", CommandSpecies.StoredProcedure, new QueryParameter("@loanID", this.loanID));
+                    // schedules
+                    foreach (NL_LoanSchedules s in schedules){
+                        ScheduledItem sch = new ScheduledItem(s.PlannedDate){
+                            Date = s.PlannedDate,
+                            ClosedDate = s.ClosedTime,
+                            Principal = s.Principal,
+                            InterestRate = s.InterestRate
+                        };
+                        this.CalcModel.Schedule.Add(sch);
+                    }
+
+                    DB.ForEachRowSafe(sr => { this.CalcModel.Repayments.Add(new Repayment(sr["Time"], sr["Principal"], sr["Interest"], sr["Fees"])); },
+                        "NL_PaymentsGet",
+                        CommandSpecies.StoredProcedure,
+                        new QueryParameter("@loanID", this.loanID));
+
+                    DB.ForEachRowSafe(sr => { this.CalcModel.Fees.Add(new Fee(sr["AssignTime"], sr["Amount"], (FeeTypes)(int)sr["LoanFeeTypeID"])); },
+                        "NL_FeesGet",
+                        CommandSpecies.StoredProcedure,
+                        new QueryParameter("@loanID", this.loanID));
+
+                    DB.ForEachRowSafe(sr => {
+                        DateTime? start = sr["StartDate"];
+                        DateTime? end = sr["EndDate"];
+                        DateTime? deactivation = sr["DeactivationDate"];
+                        DateTime? activation = sr["ActivationDate"];
+
+                        if (start != null && end != null) {
+                            bool isActive = deactivation.HasValue ? (activation <= StateDate) && (deactivation >= StateDate) : (activation <= StateDate);
+                            this.CalcModel.FreezePeriods.Add(
+                                new InterestFreeze(startDate: (DateTime)start, endDate: (DateTime)end, interestRate: sr["InterestRate"], isActive: isActive)
+                                );
+                        }
+                    },
+                        "NL_InterestFreezeGet",
+                        CommandSpecies.StoredProcedure,
+                        new QueryParameter("@loanID", this.loanID));
+                    // "bad" periods
+                    SetBadPeriods();
 				}
 
 				if (this.tLoan != null) {
 
 					LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 					this.tLoan = loanRep.Get(this.loanID);
-
-					this.customerID = this.tLoan.Customer.Id;
 
 					Log.Debug("LoanState--->Loan1: \n {0}", this.tLoan);
 

@@ -5,6 +5,7 @@
 
 	/// <summary>
 	/// Loan transaction partitioning to P, I, F
+	/// list of payments for loan
 	/// </summary>
 	public class Repayment {
 		public Repayment(DateTime time, decimal principal, decimal interest, decimal fees) {

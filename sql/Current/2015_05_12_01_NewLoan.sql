@@ -383,6 +383,22 @@ CREATE TABLE [dbo].[NL_Loans](
 ) ;
 END
 GO
+
+IF OBJECT_ID('NL_LoanInterestFreeze') IS NULL 
+BEGIN	
+CREATE TABLE [dbo].[NL_LoanInterestFreeze](
+	[LoanInterestFreezeID] [INT] NOT NULL IDENTITY(1,1) ,
+	[LoanID] [INT] NOT NULL,
+	[StartDate] [DATETIME] NULL,
+	[EndDate] [DATETIME] NULL,
+	[InterestRate] [DECIMAL](18, 6) NOT NULL,
+	[ActivationDate] [DATETIME] NULL,
+	[DeactivationDate] [DATETIME] NULL,
+	[TimestampCounter] rowversion NOT NULL,	
+ CONSTRAINT [PK_NL_LoanInterestFreeze] PRIMARY KEY CLUSTERED ([LoanInterestFreezeID] ASC),
+) ;
+END
+GO
 	
 IF OBJECT_ID('NL_LoanSchedulePayments') IS NULL 
 BEGIN	
@@ -644,8 +660,9 @@ END ;
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_DecisionRejectReasons_RejectReasons') BEGIN
 ALTER TABLE [dbo].[NL_DecisionRejectReasons] ADD CONSTRAINT [FK_NL_DecisionRejectReasons_RejectReasons] FOREIGN KEY([RejectReasonID]) REFERENCES [dbo].[RejectReason] ([Id])
 END ;
-
-
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanID') BEGIN
+ALTER TABLE [dbo].[NL_LoanInterestFreeze] ADD CONSTRAINT [FK_LoanID] FOREIGN KEY ([LoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]);
+END ;
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_Decisions_NL_CashRequests') BEGIN
 ALTER TABLE [dbo].[NL_Decisions] ADD CONSTRAINT FK_NL_Decisions_NL_CashRequests FOREIGN KEY([CashRequestID]) REFERENCES [dbo].[NL_CashRequests] ([CashRequestID]);
 END ;

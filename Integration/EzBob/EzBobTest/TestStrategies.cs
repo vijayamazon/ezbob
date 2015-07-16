@@ -900,8 +900,8 @@
 			};
 			foreach (var lID in loans) {
 				try {
-					var s = new LoanState<Loan>(new Loan(), lID, DateTime.UtcNow);
-					s.Execute();
+					//var s = new LoanState<Loan>(new Loan(), lID, DateTime.UtcNow);
+					//s.Execute();
 				} catch (Exception e) {
 					Console.WriteLine(e);
 				}
@@ -912,11 +912,11 @@
 		[Test]
 		public void TestLoanState() {
 			int loanID = 2151; // cust 329;   
-			var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
+			//var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
 			try {
-				s.Execute();
-				LoanCalculatorModel calculatorModel = s.CalcModel;
-				Console.WriteLine(calculatorModel.ToString());
+				//s.Execute();
+				//LoanCalculatorModel calculatorModel = s.CalcModel;
+				//Console.WriteLine(calculatorModel.ToString());
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
