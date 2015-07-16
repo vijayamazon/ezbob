@@ -67,7 +67,7 @@
 
                     // NL_LoanSchedulesGet
 
-                    NL_Loans loan = DB.FillFirst<NL_Loans>("NL_LoansGet",CommandSpecies.StoredProcedure,new QueryParameter("@loanID", this.loanID));
+                    NL_Loans loan = DB.FillFirst<NL_Loans>("NL_LoansGet", CommandSpecies.StoredProcedure, new QueryParameter("@loanID", this.loanID));
                     // init model - loan' properties
                     this.CalcModel = new LoanCalculatorModel{
                         LoanAmount = loan.InitialLoanAmount,
@@ -98,7 +98,7 @@
                         new QueryParameter("@loanID", this.loanID));
 
                     DB.ForEachRowSafe(sr => { this.CalcModel.Fees.Add(new Fee(sr["AssignTime"], sr["Amount"], (FeeTypes)(int)sr["LoanFeeTypeID"])); },
-                        "NL_FeesGet",
+                        "NL_LoansFeesGet",
                         CommandSpecies.StoredProcedure,
                         new QueryParameter("@loanID", this.loanID));
 
