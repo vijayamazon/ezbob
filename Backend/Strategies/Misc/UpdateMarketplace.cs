@@ -10,6 +10,7 @@
 	using System.Globalization;
 	using EKM;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation;
+	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Database;
 	using FreeAgent;
 	using Integration.ChannelGrabberFrontend;
@@ -19,20 +20,28 @@
 
 	public class UpdateMarketplace : AStrategy {
 		public UpdateMarketplace(int customerId, int marketplaceId, bool doUpdateWizardStep) {
+			this.marketplaceUpdateStatus = null;
+			this.doSilentAutomation = true;
+
 			this.mailer = new StrategiesMailer();
 			this.customerId = customerId;
 			this.marketplaceId = marketplaceId;
-			this.m_bDoUpdateWizardStep = doUpdateWizardStep;
+			this.doUpdateWizardStep = doUpdateWizardStep;
 		} // constructor
 
 		public override string Name {
 			get { return "Update Marketplace"; }
 		} // Name
 
+		public UpdateMarketplace PreventSilentAutomation() {
+			this.doSilentAutomation = false;
+			return this;
+		} // PreventSilentAutomation
+
 		public override void Execute() {
 			string errorMessage = string.Empty;
 
-			if (this.m_bDoUpdateWizardStep) {
+			if (this.doUpdateWizardStep) {
 				DB.ExecuteNonQuery(
 					"CustomerSetWizardStepIfNotLast",
 					CommandSpecies.StoredProcedure,
@@ -164,16 +173,28 @@
 
 				oMpUpdateTimesSetter.End(errorMessage, tokenExpired);
 
-				new SilentAutomation(this.customerId).SetTag(firstTime
-					? SilentAutomation.Callers.AddMarketplace
-					: SilentAutomation.Callers.UpdateMarketplace
-				).Execute();
+				if (this.marketplaceUpdateStatus != null)
+					this.marketplaceUpdateStatus.NotifyDone(this.marketplaceId);
+
+				if (this.doSilentAutomation) {
+					new SilentAutomation(this.customerId).SetTag(firstTime
+						? SilentAutomation.Callers.AddMarketplace
+						: SilentAutomation.Callers.UpdateMarketplace
+					) .Execute();
+				} // if
 			} // try
 		} // Execute
+
+		internal UpdateMarketplace SetMarketplaceUpdateStatus(MarketplaceUpdateStatus mpus) {
+			this.marketplaceUpdateStatus = mpus;
+			return this;
+		} // SetMarketplaceUpdateStatus
 
 		private readonly StrategiesMailer mailer;
 		private readonly int customerId;
 		private readonly int marketplaceId;
-		private readonly bool m_bDoUpdateWizardStep;
+		private readonly bool doUpdateWizardStep;
+		private bool doSilentAutomation;
+		private MarketplaceUpdateStatus marketplaceUpdateStatus;
 	} // class UpdateMarketplace
 } // namespace

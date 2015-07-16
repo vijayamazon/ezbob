@@ -4,7 +4,9 @@
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
   <xs:complexType name="NL_Model">
     <xs:sequence>
+      <xs:element minOccurs="0" name="APR" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
+      <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="FundTransfer" nillable="true" type="q1:NL_FundTransfers" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Loan" nillable="true" type="q2:NL_Loans" />
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="LoanAgreements" nillable="true" type="q3:ArrayOfNL_LoanAgreements" />
@@ -38,6 +40,7 @@
       <xs:element minOccurs="0" name="PaypointTransactionStatusID" type="xs:int" />
       <xs:element minOccurs="0" name="PaypointTransactionTime" type="xs:dateTime" />
       <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="RepaymentIntervalTypes" nillable="true" type="q17:ArrayOfNL_RepaymentIntervalTypes" />
+      <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Schedule" nillable="true" type="q18:ArrayOfNL_LoanSchedules" />
       <xs:element minOccurs="0" name="ScheduleCloseTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="ScheduleID" type="xs:int" />
       <xs:element minOccurs="0" name="ScheduleInterestPaid" type="xs:decimal" />
@@ -57,7 +60,7 @@
       <xs:element minOccurs="0" name="PaymentPerInterval" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="RescheduleIn" type="xs:boolean" />
       <xs:element minOccurs="0" name="ReschedulingDate" type="xs:dateTime" />
-      <xs:element xmlns:q18="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q18:RepaymentIntervalTypes" />
+      <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q19:RepaymentIntervalTypes" />
       <xs:element minOccurs="0" name="SaveToDB" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
@@ -72,7 +75,7 @@
       <xs:element minOccurs="0" name="LoanID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanInterestRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="ReschedulingBalance" type="xs:decimal" />
-      <xs:element xmlns:q19="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q19:RepaymentIntervalTypes" />
+      <xs:element xmlns:q20="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q20:RepaymentIntervalTypes" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ReschedulingResult" nillable="true" type="tns:ReschedulingResult" />

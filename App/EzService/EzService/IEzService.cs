@@ -7,7 +7,6 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.ModelsWithDB;
-	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.PricingModel;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using EzBob.Backend.Models;
@@ -17,6 +16,7 @@
 	public interface IEzService : // Add base interfaces in the following lines and in alphabetic order. Please.
 		IEzAutomationVerification,
 		IEzServiceBroker,
+		IEzServiceMainStrategy,
 		IEzServiceSalesForce,
 		IEzServiceVatReturn,
 		IEzServiceNewLoan
@@ -318,28 +318,6 @@
 
 		[OperationContract]
 		ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
-
-		[OperationContract]
-		ActionMetaData MainStrategy1(
-			int uderwriterId,
-			int customerId,
-			NewCreditLineOption newCreditLine,
-			int avoidAutoDescison,
-			long? cashRequestID,
-			MainStrategy.DoAction createCashRequest,
-			MainStrategy.DoAction updateCashRequest
-		);
-
-		[OperationContract]
-		ActionMetaData MainStrategySync1(
-			int underwriterId,
-			int customerId,
-			NewCreditLineOption newCreditLine,
-			int avoidAutoDescison,
-			long? cashRequestID,
-			MainStrategy.DoAction createCashRequest,
-			MainStrategy.DoAction updateCashRequest
-		);
 
 		[OperationContract]
 		ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);

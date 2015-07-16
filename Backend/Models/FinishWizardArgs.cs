@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Models {
 	using System.Runtime.Serialization;
+	using EZBob.DatabaseLib.Model.Database;
 	using Newtonsoft.Json;
 	using Newtonsoft.Json.Converters;
 
@@ -12,6 +13,7 @@
 			NewCreditLineOption = NewCreditLineOption.UpdateEverythingAndApplyAutoRules;
 			FraudMode = FraudMode.FullCheck;
 			AvoidAutoDecision = 0;
+			CashRequestOriginator = CashRequestOriginator.Other;
 		} // constructor
 
 		[DataMember]
@@ -36,5 +38,9 @@
 		[JsonConverter(typeof(StringEnumConverter))]
 		[DataMember]
 		public FraudMode FraudMode { get; set; }
+
+		[JsonConverter(typeof(StringEnumConverter))]
+		[DataMember]
+		public CashRequestOriginator CashRequestOriginator { get; set; }
 	} // class FinishWizardArgs
 } // namespace Ezbob.Backend.Models

@@ -75,18 +75,17 @@
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzService.ActionResults" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/SalesForceLib.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Utils" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.MainStrategy" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.Experian" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.PricingModel" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Strategies.UserManagement" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EzBob.Backend.Models" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.ExternalAPI" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
       <xsd:import namespace="http://schemas.datacontract.org/2004/07/EchoSignLib" />
     </xsd:schema>
   </wsdl:types>
@@ -396,6 +395,18 @@
   <wsdl:message name="IEzService_IsBroker_OutputMessage">
     <wsdl:part name="parameters" element="tns:IsBrokerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategyAsync_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategyAsync" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategyAsync_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategyAsyncResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync_InputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySync" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MainStrategySync_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MainStrategySyncResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_SalesForceAddUpdateLeadAccount_InputMessage">
     <wsdl:part name="parameters" element="tns:SalesForceAddUpdateLeadAccount" />
   </wsdl:message>
@@ -551,18 +562,6 @@
   </wsdl:message>
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategySync1_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategySync1Response" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
   </wsdl:message>
   <wsdl:message name="IEzService_MarkSessionEnded_InputMessage">
     <wsdl:part name="parameters" element="tns:MarkSessionEnded" />
@@ -1446,11 +1445,11 @@
   <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy1_InputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy1" />
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MainStrategy1_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MainStrategy1Response" />
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
   </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
@@ -1659,6 +1658,14 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBroker" message="tns:IEzService_IsBroker_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceBroker/IsBrokerResponse" message="tns:IEzService_IsBroker_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="MainStrategyAsync">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync" message="tns:IEzService_MainStrategyAsync_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsyncResponse" message="tns:IEzService_MainStrategyAsync_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategySync">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategySync" message="tns:IEzService_MainStrategySync_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceMainStrategy/MainStrategySyncResponse" message="tns:IEzService_MainStrategySync_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="SalesForceAddUpdateLeadAccount">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateLeadAccount" message="tns:IEzService_SalesForceAddUpdateLeadAccount_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateLeadAccountResponse" message="tns:IEzService_SalesForceAddUpdateLeadAccount_OutputMessage" />
@@ -1762,14 +1769,6 @@
     <wsdl:operation name="RescheduleLoan">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1" message="tns:IEzService_MainStrategySync1_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategySync1Response" message="tns:IEzService_MainStrategySync1_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarkSessionEnded" message="tns:IEzService_MarkSessionEnded_InputMessage" />
@@ -2359,9 +2358,9 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
     </wsdl:operation>
-    <wsdl:operation name="MainStrategy1">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MainStrategy1" message="tns:IEzService_MainStrategy1_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MainStrategy1Response" message="tns:IEzService_MainStrategy1_OutputMessage" />
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -2832,6 +2831,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MainStrategyAsync">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceMainStrategy/MainStrategyAsync" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="MainStrategySync">
+      <soap12:operation soapAction="http://tempuri.org/IEzServiceMainStrategy/MainStrategySync" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="SalesForceAddUpdateLeadAccount">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceSalesForce/SalesForceAddUpdateLeadAccount" style="document" />
       <wsdl:input>
@@ -3059,24 +3076,6 @@
     </wsdl:operation>
     <wsdl:operation name="RescheduleLoan">
       <soap12:operation soapAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MainStrategySync1">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategySync1" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4407,8 +4406,8 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
-    <wsdl:operation name="MainStrategy1">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MainStrategy1" style="document" />
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -4419,20 +4418,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

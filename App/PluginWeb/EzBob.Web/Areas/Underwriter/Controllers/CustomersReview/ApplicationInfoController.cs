@@ -25,8 +25,6 @@
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
 	using EZBob.DatabaseLib.Repository;
-	using DbConstants;
-	
 
 	public class ApplicationInfoController : Controller {
 		private readonly ServiceClient serviceClient;
@@ -35,7 +33,6 @@
 		private readonly ILoanTypeRepository _loanTypes;
 		private readonly LoanLimit _limit;
 		private readonly IDiscountPlanRepository _discounts;
-		private readonly CashRequestBuilder _crBuilder;
 		private readonly ApplicationInfoModelBuilder _infoModelBuilder;
 		private readonly IApprovalsWithoutAMLRepository _approvalsWithoutAmlRepository;
 		private readonly LoanOptionsRepository loanOptionsRepository;
@@ -55,7 +52,6 @@
 			ILoanTypeRepository loanTypes,
 			LoanLimit limit,
 			IDiscountPlanRepository discounts,
-			CashRequestBuilder crBuilder,
 			ApplicationInfoModelBuilder infoModelBuilder,
 			IApprovalsWithoutAMLRepository approvalsWithoutAMLRepository,
 			ILoanSourceRepository loanSources,
@@ -63,13 +59,15 @@
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
 			CustomerPhoneRepository customerPhoneRepository, 
-			IExternalCollectionStatusesRepository externalCollectionStatusesRepository, LoanOptionsRepository loanOptionsRepository, ILoanRepository loanRepository) {
+			IExternalCollectionStatusesRepository externalCollectionStatusesRepository,
+			LoanOptionsRepository loanOptionsRepository,
+			ILoanRepository loanRepository
+		) {
 			_customerRepository = customerRepository;
 			_cashRequestsRepository = cashRequestsRepository;
 			_loanTypes = loanTypes;
 			_limit = limit;
 			_discounts = discounts;
-			_crBuilder = crBuilder;
 			_infoModelBuilder = infoModelBuilder;
 			_approvalsWithoutAmlRepository = approvalsWithoutAMLRepository;
 			_loanSources = loanSources;
@@ -598,45 +596,26 @@
 		[ValidateJsonAntiForgeryToken]
 		[Permission(Name = "NewCreditLineButton")]
 		public JsonResult RunNewCreditLine(int Id, int newCreditLineOption) {
-			log.Debug("RunNewCreditLine({0}, {1}) start", Id, newCreditLineOption);
+			NewCreditLineOption typedNewCreditLineOption = (NewCreditLineOption)newCreditLineOption;
+			User underwriter = this._users.GetUserByLogin(User.Identity.Name);
 
-			var customer = _customerRepository.Get(Id);
+			log.Debug("RunNewCreditLine({0}, {1}) start", Id, typedNewCreditLineOption);
 
-			new Transactional(() => {
-				var cashRequest = _crBuilder.CreateCashRequest(customer, CashRequestOriginator.NewCreditLineBtn);
-				cashRequest.LoanType = _loanTypes.GetDefault();
+			ActionMetaData amd = ExecuteNewCreditLine(underwriter.Id, Id, typedNewCreditLineOption);
 
-				customer.CreditResult = null;
-				customer.OfferStart = cashRequest.OfferStart;
-				customer.OfferValidUntil = cashRequest.OfferValidUntil;
+			// Reload from DB
+			Customer customer = this._customerRepository.Load(Id);
 
-				_customerRepository.SaveOrUpdate(customer);
-			}).Execute();
+			string strategyError = amd.Status == ActionStatus.Done ? null : "Error: " + amd.Comment;
+			CreditResultStatus? status = customer.CreditResult;
 
-			CreditResultStatus? status;
-			string strategyError;
-
-			var typedNewCreditLineOption = (NewCreditLineOption)newCreditLineOption;
-
-			if (typedNewCreditLineOption == NewCreditLineOption.SkipEverything) {
-				customer.CreditResult = CreditResultStatus.WaitingForDecision;
-				_customerRepository.SaveOrUpdate(customer);
-
-				strategyError = null;
-				status = customer.CreditResult;
-			} else {
-				var underwriter = _users.GetUserByLogin(User.Identity.Name);
-
-				ActionMetaData amd = _crBuilder.ForceEvaluate(underwriter.Id, customer, typedNewCreditLineOption, true);
-
-				// Reload from DB
-				var updatedCustomer = _customerRepository.Load(customer.Id);
-
-				strategyError = amd.Status == ActionStatus.Done ? null : "Error: " + amd.Comment;
-				status = updatedCustomer.CreditResult;
-			} // if
-
-			log.Debug("RunNewCreditLine({0}, {1}) ended; status = {2}, error = '{3}'", Id, newCreditLineOption, status, strategyError);
+			log.Debug(
+				"RunNewCreditLine({0}, {1}) ended; status = {2}, error = '{3}'",
+				Id,
+				typedNewCreditLineOption,
+				status,
+				strategyError
+			);
 
 			return Json(new {
 				status = (status ?? CreditResultStatus.WaitingForDecision).ToString(),
@@ -748,18 +727,23 @@
 		public JsonResult ActivateMainStrategy(int customerId) {
 			int underwriterId = _context.User.Id;
 
-            new ServiceClient().Instance.MainStrategy1(
-                underwriterId,
-                customerId,
-                NewCreditLineOption.SkipEverythingAndApplyAutoRules,
-                0,
-                null,
-                MainStrategyDoAction.Yes,
-                MainStrategyDoAction.Yes
-            );
+			Customer customer = _customerRepository.Get(customerId);
+
+			CashRequest cr = customer.LastCashRequest;
+
+			if (cr != null) {
+				new MainStrategyClient(
+					underwriterId,
+					customer.Id,
+					customer.IsAvoid,
+					NewCreditLineOption.SkipEverythingAndApplyAutoRules,
+					cr.Id,
+					null
+				).ExecuteAsync();
+			} // if
 
 			return Json(true);
-		}
+		} // ActivateMainStrategy
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult ActivateFinishWizard(int customerId) {
@@ -767,12 +751,15 @@
 
 			_customerRepository.Get(customerId).AddAlibabaDefaultBankAccount();
 
-			var oArgs = new FinishWizardArgs { CustomerID = customerId, };
+			var oArgs = new FinishWizardArgs {
+				CustomerID = customerId,
+				CashRequestOriginator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.ForcedWizardCompletion,
+			};
 
 			new ServiceClient().Instance.FinishWizard(oArgs, underwriterId);
 
 			return Json(true);
-		}
+		} // ActivateFinishWizard
 
 		[HttpPost, Ajax, ValidateJsonAntiForgeryToken]
 		public JsonResult CreateLoanHidden(int nCustomerID, decimal nAmount, string sDate) {
@@ -803,5 +790,26 @@
 			new ServiceClient().Instance.ResetPassword123456(_context.User.Id, nCustomerID, PasswordResetTarget.Customer);
 			return Json(true);
 		} // ResetPassword123456
+
+		private ActionMetaData ExecuteNewCreditLine(
+			int underwriterID,
+			int customerID,
+			NewCreditLineOption newCreditLineOption
+		) {
+			Customer customer = this._customerRepository.Get(customerID);
+
+			ActionMetaData amd = new MainStrategyClient(
+				underwriterID,
+				customer.Id,
+				customer.IsAvoid,
+				newCreditLineOption,
+				null,
+				EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineBtn
+			).ExecuteSync();
+
+			ForceNhibernateResync.ForCustomer(customerID);
+
+			return amd;
+		} // ExecuteNewCreditLine
 	} // class ApplicationInfoController
 } // namespace

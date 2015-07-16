@@ -818,9 +818,6 @@
 				m_oSession.Flush();
 				ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-				m_oCashRequestBuilder.CreateCashRequest(customer, CashRequestOriginator.FinishedWizard);
-				ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
-
 				m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 				ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
@@ -841,18 +838,16 @@
 			ms_oLog.Debug("Customer {1} ({0}): email under review started.", customer.Id, customer.PersonalInfo.Fullname);
 
 			// finish wizard => Main strategy runs Alibaba 001 ("data sharing") full info
-			m_oServiceClient.Instance.MainStrategy1(
-				m_oContext.User.Id,
-				m_oContext.User.Id,
+			new MainStrategyClient(
+				customer.Id,
+				customer.Id,
+				customer.IsAvoid,
 				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
-				Convert.ToInt32(customer.IsAvoid),
 				null,
-				MainStrategyDoAction.Yes,
-				MainStrategyDoAction.Yes
-			);
+				EZBob.DatabaseLib.Model.Database.CashRequestOriginator.FinishedWizard
+			).ExecuteAsync();
 
 			ms_oLog.Debug("Customer {1} ({0}): main strategy started.", customer.Id, customer.PersonalInfo.Fullname);
-
 		} // WizardComplete
 
 		/// <summary>

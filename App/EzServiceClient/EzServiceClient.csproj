@@ -95,9 +95,6 @@
     <None Include="Service References\EzServiceReference\Ezbob.Backend.ModelsWithDB.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.MainStrategy.xsd">
-      <SubType>Designer</SubType>
-    </None>
     <None Include="Service References\EzServiceReference\Ezbob.Backend.Strategies.PricingModel.xsd">
       <SubType>Designer</SubType>
     </None>

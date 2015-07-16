@@ -10,6 +10,8 @@
 
 	public class AmlChecker : AStrategy {
 		public AmlChecker(int customerId) {
+			this.doSilentAutomation = true;
+
 			this.isCustom = false;
 			this.customerId = customerId;
 			GetPersonalInfo();
@@ -28,6 +30,8 @@
 			string idhubCounty,
 			string idhubPostCode
 		) {
+			this.doSilentAutomation = true;
+
 			this.isCustom = true;
 			this.customerId = customerId;
 			GetPersonalInfo();
@@ -40,6 +44,11 @@
 			this.idhubCounty = idhubCounty;
 			this.idhubPostCode = idhubPostCode;
 		} // constructor
+
+		public AmlChecker PreventSilentAutomation() {
+			this.doSilentAutomation = false;
+			return this;
+		} // PreventSilentAutomation
 
 		public override string Name { get { return "AML check"; } }
 
@@ -61,7 +70,8 @@
 				new QueryParameter("AmlDescription", description)
 			);
 
-			new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.Aml).Execute();
+			if (this.doSilentAutomation)
+				new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.Aml).Execute();
 		} // Execute
 
 		private bool GetAmlData(out string result, out decimal authentication, out string description) {
@@ -220,5 +230,7 @@
 		private readonly SortedSet<string> warningRules = new SortedSet<string> {
 			"U001", "U004", "U007", "U013", "U015", "U131", "U133", "U135", "U018", "U0132", "U0134",
 		};
+
+		private bool doSilentAutomation;
 	} // class AmlChecker
 } // namespace

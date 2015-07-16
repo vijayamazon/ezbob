@@ -2,6 +2,7 @@
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/Arrays" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" />
   <xs:complexType name="BrokerAddBankModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="AccountNumber" nillable="true" type="xs:string" />
@@ -246,6 +247,39 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="Password" nillable="true" type="tns:Password" />
+  <xs:simpleType name="NewCreditLineOption">
+    <xs:restriction base="xs:string">
+      <xs:enumeration value="SkipEverything">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="SkipEverythingAndApplyAutoRules">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingAndApplyAutoRules">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="UpdateEverythingAndGoToManualDecision">
+        <xs:annotation>
+          <xs:appinfo>
+            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
+          </xs:appinfo>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+  <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
   <xs:complexType name="BankStatementDataModel">
     <xs:sequence>
       <xs:element minOccurs="0" name="ActualLoansRepayment" type="xs:double" />
@@ -372,39 +406,6 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="VatReturnRawData" nillable="true" type="tns:VatReturnRawData" />
-  <xs:simpleType name="NewCreditLineOption">
-    <xs:restriction base="xs:string">
-      <xs:enumeration value="SkipEverything">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">1</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="SkipEverythingAndApplyAutoRules">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">2</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingAndApplyAutoRules">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">3</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-      <xs:enumeration value="UpdateEverythingAndGoToManualDecision">
-        <xs:annotation>
-          <xs:appinfo>
-            <EnumerationValue xmlns="http://schemas.microsoft.com/2003/10/Serialization/">4</EnumerationValue>
-          </xs:appinfo>
-        </xs:annotation>
-      </xs:enumeration>
-    </xs:restriction>
-  </xs:simpleType>
-  <xs:element name="NewCreditLineOption" nillable="true" type="tns:NewCreditLineOption" />
   <xs:complexType name="ArrayOfScoreAtDate">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="ScoreAtDate" nillable="true" type="tns:ScoreAtDate" />
@@ -671,6 +672,7 @@
   <xs:complexType name="FinishWizardArgs">
     <xs:sequence>
       <xs:element minOccurs="0" name="AvoidAutoDecision" type="xs:int" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/EZBob.DatabaseLib.Model.Database" minOccurs="0" name="CashRequestOriginator" type="q5:CashRequestOriginator" />
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
       <xs:element minOccurs="0" name="DoFraud" type="xs:boolean" />
       <xs:element minOccurs="0" name="DoMain" type="xs:boolean" />
@@ -760,8 +762,8 @@
       <xs:element minOccurs="0" name="ScoreHistory" nillable="true" type="tns:ArrayOfScoreAtDate" />
       <xs:element minOccurs="0" name="SearchType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SearchTypeDesc" nillable="true" type="xs:string" />
-      <xs:element xmlns:q5="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SicCodes" nillable="true" type="q5:ArrayOfstring" />
-      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SicDescs" nillable="true" type="q6:ArrayOfstring" />
+      <xs:element xmlns:q6="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SicCodes" nillable="true" type="q6:ArrayOfstring" />
+      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="SicDescs" nillable="true" type="q7:ArrayOfstring" />
       <xs:element minOccurs="0" name="StabilityOdds" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SupplierName" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="TelephoneNumber" nillable="true" type="xs:string" />
@@ -831,7 +833,7 @@
       <xs:element minOccurs="0" name="PostCode" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RecordType" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RecordTypeFullName" nillable="true" type="xs:string" />
-      <xs:element xmlns:q7="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RegisteredAgainst" nillable="true" type="q7:ArrayOfstring" />
+      <xs:element xmlns:q8="http://schemas.microsoft.com/2003/10/Serialization/Arrays" minOccurs="0" name="RegisteredAgainst" nillable="true" type="q8:ArrayOfstring" />
       <xs:element minOccurs="0" name="SatisfactionDate" type="xs:dateTime" />
       <xs:element minOccurs="0" name="SatisfactionFlag" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="SatisfactionFlagDesc" nillable="true" type="xs:string" />

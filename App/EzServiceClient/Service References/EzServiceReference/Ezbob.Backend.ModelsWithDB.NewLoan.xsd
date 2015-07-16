@@ -356,4 +356,24 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_RepaymentIntervalTypes" nillable="true" type="tns:NL_RepaymentIntervalTypes" />
+  <xs:complexType name="ArrayOfNL_LoanSchedules">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_LoanSchedules" nillable="true" type="tns:NL_LoanSchedules" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_LoanSchedules" nillable="true" type="tns:ArrayOfNL_LoanSchedules" />
+  <xs:complexType name="NL_LoanSchedules">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="ClosedTime" nillable="true" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
+      <xs:element minOccurs="0" name="LoanHistoryID" type="xs:int" />
+      <xs:element minOccurs="0" name="LoanScheduleID" type="xs:int" />
+      <xs:element minOccurs="0" name="PlannedDate" type="xs:dateTime" />
+      <xs:element minOccurs="0" name="Position" type="xs:int" />
+      <xs:element minOccurs="0" name="Principal" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_LoanSchedules" nillable="true" type="tns:NL_LoanSchedules" />
 </xs:schema>

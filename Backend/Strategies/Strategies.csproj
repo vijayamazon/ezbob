@@ -163,6 +163,9 @@
     <Compile Include="Extensions\Q1AddressTypeExt.cs" />
     <Compile Include="Iovation\IovationCheck.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
+    <Compile Include="MainStrategy\ForceNhibernateResync.cs" />
+    <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
+    <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />

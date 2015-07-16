@@ -15,10 +15,16 @@
 
 	public class LandRegistryRes : AStrategy {
 		public LandRegistryRes(int customerId, string titleNumber) {
+			this.doSilentAutomation = true;
 			this.customerID = customerId;
 			this.titleNumber = titleNumber;
 			DoLinkWithAddress = true;
 		} // constructor
+
+		public LandRegistryRes PreventSilentAutomation() {
+			this.doSilentAutomation = false;
+			return this;
+		} // PreventSilentAutomation
 
 		public override string Name { get { return "Land Registry RES"; } } // Name
 
@@ -44,7 +50,8 @@
 
 			Result = new Serialized(RawResult);
 
-			new SilentAutomation(this.customerID).SetTag(SilentAutomation.Callers.LandRegistry).Execute();
+			if (this.doSilentAutomation)
+				new SilentAutomation(this.customerID).SetTag(SilentAutomation.Callers.LandRegistry).Execute();
 		} // Execute
 
 		public static void LinkLandRegistryAndAddress(int customerId, string response, string titleNumber, int landRegistryId) {
@@ -95,21 +102,41 @@
 				return false;
 			} // if
 
-			if ((customer.PersonalInfo == null) || string.IsNullOrWhiteSpace(customer.PersonalInfo.Fullname)) {
-				Library.Instance.Log.Warn("IsOwner: returning false for customer {0} because full name is null or empty.", customer.Id);
+			if (customer.PersonalInfo == null) {
+				Library.Instance.Log.Warn(
+					"IsOwner: returning false for customer {0} because personal info is null.",
+					customer.Id
+				);
+				return false;
+			} // if
+
+			return IsOwner(customer.Id, customer.PersonalInfo.Fullname, response, titleNumber);
+		} // IsOwner
+
+		public static bool IsOwner(int customerID, string customerFullName, string response, string titleNumber) {
+			if (string.IsNullOrWhiteSpace(customerFullName)) {
+				Library.Instance.Log.Warn(
+					"IsOwner: returning false for customer {0} because full name is empty.",
+					customerID
+				);
 				return false;
 			} // if
 
 			var b = new LandRegistryModelBuilder();
 			var lrData = b.BuildResModel(response, titleNumber);
 
-            if (lrData.Proprietorship == null || lrData.Proprietorship.ProprietorshipParties == null) {
-                return false;
-            }
+			if (lrData.Proprietorship == null || lrData.Proprietorship.ProprietorshipParties == null)
+				return false;
+
+			string lowerCasedFullName = customerFullName.ToLower();
 
 			foreach (ProprietorshipPartyModel proprietorshipParty in lrData.Proprietorship.ProprietorshipParties) {
-				// We are taking the first part of the LR first name as it may contain both first and middle name, while we might be missing the middle name
-				if (string.IsNullOrEmpty(proprietorshipParty.PrivateIndividualForename) || string.IsNullOrEmpty(proprietorshipParty.PrivateIndividualSurname))
+				// We are taking the first part of the LR first name as it may contain
+				// both first and middle name, while we might be missing the middle name
+				if (string.IsNullOrEmpty(proprietorshipParty.PrivateIndividualForename))
+					continue;
+
+				if (string.IsNullOrEmpty(proprietorshipParty.PrivateIndividualSurname))
 					continue;
 
 				string firstPartOfFirstName = proprietorshipParty.PrivateIndividualForename;
@@ -117,11 +144,9 @@
 				if (indexOfSpace != -1)
 					firstPartOfFirstName = firstPartOfFirstName.Substring(0, indexOfSpace);
 
-				string lowerCasedFullName = customer.PersonalInfo.Fullname.ToLower();
-
 				if (lowerCasedFullName.Contains(firstPartOfFirstName.ToLower()) &&
 					lowerCasedFullName.Contains(proprietorshipParty.PrivateIndividualSurname.ToLower())
-					) {
+				) {
 					// Customer is owner
 					return true;
 				} // if
@@ -243,5 +268,6 @@
 
 		private readonly int customerID;
 		private readonly string titleNumber;
+		private bool doSilentAutomation;
 	} // class LandRegistryRes
 } // namespace
