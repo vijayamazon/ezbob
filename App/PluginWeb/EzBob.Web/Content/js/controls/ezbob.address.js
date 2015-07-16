@@ -499,7 +499,7 @@ EzBob.Popup = Backbone.View.extend({
 EzBob.AddressView = Backbone.View.extend({
 	initialize: function (options) {
 		this.template = _.template($('#address-template').html());
-		this.model.on('all', this.render, this);
+		this.model.on('add change remove', this.render, this);
 		this.name = options.name;
 		this.max = options.max || 5;
 	    this.title = options.title || "Enter postcode";

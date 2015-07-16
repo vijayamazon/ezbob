@@ -572,7 +572,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var title = view.getDocumentTitle();
 
 		if (title)
-			$(document).attr("title", "Step 4: " + title + " | EZBOB");
+			$(document).attr("title", "Step 4: " + title);
 	}, // setDocumentTitle
 
 	close: function() {
