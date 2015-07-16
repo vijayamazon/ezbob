@@ -260,14 +260,16 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 			BlockUi();
 			var id = this.model.get('CashRequestId');
 			var amount = this.model.get('OfferedCreditLine');
-			$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
-				id: id,
-				amount: amount
-			}).done(function() {
-				self.model.fetch().done(function() {
+			
+			self.model.fetch().done(function() {
+				$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
+					id: id,
+					amount: amount
+				}).done(function (result) {
 					UnBlockUi();
 					var dialog = new EzBob.Underwriter.CreditLineDialog({
-						model: self.model
+						model: self.model,
+						brokerCommissionDefaultResult: result
 					});
 					EzBob.App.jqmodal.show(dialog);
 				});

@@ -101,18 +101,20 @@
 		public JsonResult UpdateBrokerCommissionDefaults(long id, decimal amount){
 			var cr = this._cashRequestsRepository.Get(id);
 			if (cr == null) {
-				return Json(new { }, JsonRequestBehavior.AllowGet);
+				return Json(new { brokerCommission = 0, setupFeePercent = 0 }, JsonRequestBehavior.AllowGet);
 			}
+			var brokerCommissionPercent = cr.BrokerSetupFeePercent;
+			var setupFeePercent = cr.ManualSetupFeePercent;
+
 			if (cr.Customer.Broker != null) {
                 BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
                 bool hasLoans = cr.Customer.Loans.Any();
                 DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
 				Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(amount, hasLoans, firstLoanDate);
-                cr.BrokerSetupFeePercent = commission.Item1;
-                cr.ManualSetupFeePercent = commission.Item2;
+				brokerCommissionPercent = commission.Item1;
+				setupFeePercent = commission.Item2;
             }
-			this._cashRequestsRepository.SaveOrUpdate(cr);
-			return Json(new { brokerCommission = cr.BrokerSetupFeePercent, setupFeePercent = cr.ManualSetupFeePercent }, JsonRequestBehavior.AllowGet);
+			return Json(new { brokerCommission = brokerCommissionPercent, setupFeePercent = setupFeePercent }, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]

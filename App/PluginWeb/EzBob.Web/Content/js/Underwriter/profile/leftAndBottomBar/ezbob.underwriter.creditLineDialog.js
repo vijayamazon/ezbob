@@ -5,8 +5,10 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	template: '#credit-line-dialog-template',
 
-	initialize: function() {
+	initialize: function(options) {
 		this.cloneModel = this.model.clone();
+		this.cloneModel.set('BrokerSetupFeePercent', options.brokerCommissionDefaultResult.brokerCommission);
+		this.cloneModel.set('ManualSetupFeePercent', options.brokerCommissionDefaultResult.setupFeePercent);
 		this.modelBinder = new Backbone.ModelBinder();
 		this.bindTo(this.cloneModel, "change:StartingFromDate", this.onChangeStartingDate, this);
 		this.bind('close', this.closeDialog);
