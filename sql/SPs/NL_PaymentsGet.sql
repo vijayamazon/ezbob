@@ -2,7 +2,7 @@ IF OBJECT_ID('NL_PaymentsGet') IS NULL
 	EXECUTE('CREATE PROCEDURE NL_PaymentsGet AS SELECT 1')
 GO
 
-ALTER PROCEDURE NL_loansGet
+ALTER PROCEDURE NL_PaymentsGet
 @loanID INT
 AS
 BEGIN
@@ -42,7 +42,7 @@ p.PaymentTime AS [Time],
 --fp.LoanFeePaymentID,
 --fp.LoanFeeID,
 --fp.PaymentID,
-fp.Amount AS [Fees],
+fp.Amount AS [Fees]
 
 
 
