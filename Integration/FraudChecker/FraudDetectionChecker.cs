@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using EZBob.DatabaseLib.Model.Database;
-using EZBob.DatabaseLib.Model.Fraud;
-using NHibernate;
-using StructureMap;
-
-namespace FraudChecker {
+﻿namespace FraudChecker {
+	using System;
+	using System.Collections.Generic;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Fraud;
+	using NHibernate;
+	using StructureMap;
 	using System.Linq;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
@@ -14,19 +13,13 @@ namespace FraudChecker {
 
 	public class FraudDetectionChecker {
 		private readonly ISession _session;
-		private readonly InternalChecker _internalChecker;
-		private readonly ExternalChecker _externalChecker;
-		private readonly BussinessChecker _bussinessChecker;
 		private readonly CustomerRepository _customerRepository;
 		protected static ILog Log = LogManager.GetLogger(typeof(FraudDetectionChecker));
 
 		public FraudDetectionChecker() {
-			this._bussinessChecker = new BussinessChecker();
-			this._internalChecker = new InternalChecker();
-			this._externalChecker = new ExternalChecker();
 			this._session = ObjectFactory.GetInstance<ISession>();
 			this._customerRepository = ObjectFactory.GetInstance<CustomerRepository>();
-		}
+		} // constructor
 
 		/// <summary>
 		/// run fraud all checks
@@ -37,9 +30,9 @@ namespace FraudChecker {
 		public bool Check(int customerId, FraudMode mode = FraudMode.FullCheck) {
 			var startDate = DateTime.UtcNow;
 			var detections = new List<FraudDetection>();
-			detections.AddRange(this._internalChecker.InternalSystemDecision(customerId, mode));
-			detections.AddRange(this._externalChecker.ExternalSystemDecision(customerId));
-			detections.AddRange(this._bussinessChecker.SpecialBussinesRulesSystemDecision(customerId));
+			detections.AddRange(new InternalChecker(customerId, mode).Decide());
+			detections.AddRange(new ExternalChecker(customerId).Decide());
+			detections.AddRange(new BussinessChecker().SpecialBussinesRulesSystemDecision(customerId));
 
 			SaveToDb(detections, startDate, customerId);
 			return detections.Any();
@@ -56,7 +49,7 @@ namespace FraudChecker {
 				var count = fraudDetections.Count;
 				for (var i = 0; i < count; i++) {
 					var fraud = fraudDetections[i];
-					fraud.Concurrence = Helper.ConcurrencePrepare(fraud);
+					fraud.Concurrence = ConcurrencePrepare(fraud);
 					fraud.FraudRequest = req;
 					req.FraudDetections.Add(fraud);
 
@@ -78,5 +71,32 @@ namespace FraudChecker {
 				Log.ErrorFormat("Failed to save fraud detections for customer {0} number of detections {1}\n{2}", customerId, fraudDetections.Count(), ex);
 			}
 		}
+
+		private static string ConcurrencePrepare(FraudDetection val)
+		{
+			if (val.ExternalUser != null)
+			{
+				return string.Format("{0} {1} (id={2})",
+					val.ExternalUser.FirstName,
+					val.ExternalUser.LastName,
+					val.ExternalUser.Id);
+			}
+
+			string fullname;
+			int id;
+
+			if (val.InternalCustomer == null) //for own check as DOB<21
+			{
+				fullname = val.CurrentCustomer.PersonalInfo.Fullname;
+				id = val.CurrentCustomer.Id;
+			}
+			else
+			{
+				fullname = val.InternalCustomer.PersonalInfo != null ? val.InternalCustomer.PersonalInfo.Fullname : "-";
+				id = val.InternalCustomer.Id;
+			}
+			return string.Format("{0} (id={1})", fullname, id);
+		}
+
 	}
 }
