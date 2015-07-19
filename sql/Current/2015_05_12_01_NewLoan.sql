@@ -660,8 +660,8 @@ END ;
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_DecisionRejectReasons_RejectReasons') BEGIN
 ALTER TABLE [dbo].[NL_DecisionRejectReasons] ADD CONSTRAINT [FK_NL_DecisionRejectReasons_RejectReasons] FOREIGN KEY([RejectReasonID]) REFERENCES [dbo].[RejectReason] ([Id])
 END ;
-IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanID') BEGIN
-ALTER TABLE [dbo].[NL_LoanInterestFreeze] ADD CONSTRAINT [FK_LoanID] FOREIGN KEY ([LoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]);
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanInterestFreeze_NL_Loans') BEGIN
+ALTER TABLE [dbo].[NL_LoanInterestFreeze] ADD CONSTRAINT [FK_NL_LoanInterestFreeze_NL_Loans] FOREIGN KEY ([LoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]);
 END ;
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_Decisions_NL_CashRequests') BEGIN
 ALTER TABLE [dbo].[NL_Decisions] ADD CONSTRAINT FK_NL_Decisions_NL_CashRequests FOREIGN KEY([CashRequestID]) REFERENCES [dbo].[NL_CashRequests] ([CashRequestID]);

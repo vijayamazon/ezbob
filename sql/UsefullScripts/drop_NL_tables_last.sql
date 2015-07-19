@@ -1,7 +1,7 @@
 IF OBJECT_ID('NL_LoanInterestFreeze') IS NOT NULL
 BEGIN
-	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_LoanID') 
-		ALTER TABLE [dbo].[NL_LoanInterestFreeze] DROP CONSTRAINT FK_LoanID  ;   		
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_NL_LoanInterestFreeze_NL_Loans') 
+		ALTER TABLE [dbo].[NL_LoanInterestFreeze] DROP CONSTRAINT FK_NL_LoanInterestFreeze_NL_Loans  ;   		
 	DROP TABLE [dbo].[NL_LoanInterestFreeze];
 END;
 
