@@ -21,8 +21,11 @@ BEGIN
 -- registered customer
 IF @CustomerID IS NOT NULL AND @CustomerId <> 0
 BEGIN 
+	DECLARE @NumOfLoans INT = (SELECT count(*) FROM Loan WHERE CustomerId = @CustomerID)
+
     SELECT 
         c.Name AS Email,
+        CAST(@CustomerID AS NVARCHAR(10)) AS CustomerID,
         isnull(c.Fullname, 'NoName') AS Name,
          c.Gender AS Gender,
         c.DaytimePhone AS PhoneNumber,
@@ -45,7 +48,8 @@ BEGIN
         s.RSource AS LeadSource,
         r.Amount AS RequestedLoanAmount,
         o.Name AS Origin,
-        c.IsTest AS IsTest
+        c.IsTest AS IsTest,
+        @NumOfLoans AS NumOfLoans
     FROM Customer c 
     LEFT JOIN CustomerAddress a ON c.Id = a.CustomerId AND a.addressType=1
     LEFT JOIN Company co ON co.Id = c.CompanyId
@@ -92,8 +96,4 @@ SELECT @Email AS Email,
        'Unknown' AS EzbobSource
 
 END
-
-
-
-
 GO
