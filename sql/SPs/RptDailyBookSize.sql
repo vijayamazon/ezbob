@@ -80,7 +80,10 @@ BEGIN
 		b.TheDate,
 		b.Issued,
 		b.Repaid,
-		BookSize = b.Issued - b.Repaid
+		BookSize = b.Issued - b.Repaid,
+		InMillions = CONVERT(INT, (b.Issued - b.Repaid) / 1000000)
+	INTO
+		#bs
 	FROM
 		daily_book_data b
 	ORDER BY
@@ -90,6 +93,51 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	SELECT
+		'Date' = b.TheDate,
+		'Issued amount' = b.Issued,
+		'Repaid amount' = b.Repaid,
+		'Book size' = b.BookSize
+	FROM
+		#bs b
+	ORDER BY
+		b.TheDate
+
+	------------------------------------------------------------------------------
+
+	;WITH in_mil AS (
+		SELECT
+			b.TheDate,
+			b.Issued,
+			b.Repaid,
+			b.InMillions,
+			Pos = (ROW_NUMBER() OVER (PARTITION BY b.InMillions ORDER BY b.TheDate))
+		FROM
+			#bs b
+	), in_mil_filtered AS (
+		SELECT
+			b.TheDate,
+			b.Issued,
+			b.Repaid,
+			b.InMillions
+		FROM
+			in_mil b
+		WHERE
+			b.Pos = 1
+	)
+	SELECT
+		'Date' = b.TheDate,
+		'Book size' = b.InMillions,
+		'Days to achive' = ISNULL(DATEDIFF(day, a.TheDate, b.TheDate), 0)
+	FROM
+		in_mil_filtered b
+		LEFT JOIN in_mil_filtered a ON b.InMillions = a.InMillions + 1
+	ORDER BY
+		b.TheDate
+
+	------------------------------------------------------------------------------
+
+	DROP TABLE #bs
 	DROP TABLE #d
 	DROP TABLE #p
 	DROP TABLE #i
