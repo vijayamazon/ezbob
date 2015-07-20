@@ -15,6 +15,9 @@
                 return;
             }
 
+			//if(this.offer.ServicingFeePercent!=null)
+			//	this.offer.SetupFeePercent = null;
+
             OfferID = DB.ExecuteScalar<int>("NL_OffersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Offers>("Tbl", this.offer)); 
         }//Execute
 

@@ -46,7 +46,8 @@
 	public enum FeeTypes {
 		SetupFee = 1,
 		RolloverFee = 2,
-		AdminFee = 3
+		AdminFee = 3,
+		ServicingFee = 4
 	}
 
 

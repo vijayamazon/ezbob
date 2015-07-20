@@ -372,6 +372,14 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="VatReturnRawData" nillable="true" type="tns:VatReturnRawData" />
+  <xs:complexType name="TemplateModel">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="TemplateModel" nillable="true" type="tns:TemplateModel" />
   <xs:simpleType name="NewCreditLineOption">
     <xs:restriction base="xs:string">
       <xs:enumeration value="SkipEverything">
@@ -471,14 +479,6 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="LoanScheduleItemModel" nillable="true" type="tns:LoanScheduleItemModel" />
-  <xs:complexType name="TemplateModel">
-    <xs:sequence>
-      <xs:element minOccurs="0" name="Template" nillable="true" type="xs:string" />
-    </xs:sequence>
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="TemplateModel" nillable="true" type="tns:TemplateModel" />
   <xs:simpleType name="ConfigTableType">
     <xs:restriction base="xs:string">
       <xs:enumeration value="LoanOfferMultiplier" />

@@ -11,12 +11,13 @@ GO
 
 CREATE TYPE NL_LoanSchedulesList AS TABLE (
 	[LoanHistoryID] INT NOT NULL,
+	[LoanScheduleStatusID] INT NOT NULL, 
 	[Position] INT NOT NULL,
 	[PlannedDate] DATETIME NOT NULL,
 	[ClosedTime] DATETIME NULL,
 	[Principal] DECIMAL(18, 6) NOT NULL,
 	[InterestRate] DECIMAL(18, 6) NOT NULL
-	--,[Fee] DECIMAL(18, 6)  NULL
+	
 )
 GO
 
@@ -28,20 +29,20 @@ BEGIN
 
 	INSERT INTO NL_LoanSchedules (
 		[LoanHistoryID],
+		[LoanScheduleStatusID],
 		[Position],
 		[PlannedDate],
 		[ClosedTime],
 		[Principal],
-		[InterestRate]
-		--,[Fee]
+		[InterestRate]		
 	) SELECT
 		[LoanHistoryID],
+		[LoanScheduleStatusID],
 		[Position],
 		[PlannedDate],
 		[ClosedTime],
 		[Principal],
-		[InterestRate]
-	--	,[Fee]
+		[InterestRate]	
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

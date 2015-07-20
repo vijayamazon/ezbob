@@ -114,14 +114,15 @@
                                 new InterestFreeze(startDate: (DateTime)start, endDate: (DateTime)end, interestRate: sr["InterestRate"], isActive: isActive)
                                 );
                         }
-                    },
-                        "NL_InterestFreezeGet",
+                    },	"NL_InterestFreezeGet",
                         CommandSpecies.StoredProcedure,
                         new QueryParameter("@loanID", this.loanID));
+
                     // "bad" periods
                     SetBadPeriods();
 				}
 
+				// "old" Loan structure
 				if (this.tLoan != null) {
 
 					LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();

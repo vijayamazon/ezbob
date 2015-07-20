@@ -1,30 +1,59 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" xmlns:xs="http://www.w3.org/2001/XMLSchema">
   <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
   <xs:complexType name="NL_Model">
     <xs:sequence>
       <xs:element minOccurs="0" name="APR" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="AgreementModel" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Agreements" nillable="true" type="tns:ArrayOfNLAgreementItem" />
       <xs:element minOccurs="0" name="CalculatorImplementation" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="CustomerID" type="xs:int" />
       <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="Fees" nillable="true" type="tns:ArrayOfNLFeeItem" />
       <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="FundTransfer" nillable="true" type="q1:NL_FundTransfers" />
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Loan" nillable="true" type="q2:NL_Loans" />
-      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="LoanAgreements" nillable="true" type="q3:ArrayOfNL_LoanAgreements" />
-      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="LoanHistory" nillable="true" type="q4:NL_LoanHistory" />
-      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PacnetTransaction" nillable="true" type="q5:NL_PacnetTransactions" />
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Offer" nillable="true" type="q3:NL_Offers" />
+      <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PacnetTransaction" nillable="true" type="q4:NL_PacnetTransactions" />
       <xs:element minOccurs="0" name="PacnetTransactionStatus" nillable="true" type="xs:string" />
-      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Payment" nillable="true" type="q6:NL_Payments" />
-      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaymentAssignedToLoanFees" nillable="true" type="q7:ArrayOfNL_LoanFeePayments" />
-      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaymentAssignedToScheduleItems" nillable="true" type="q8:ArrayOfNL_LoanSchedulePayments" />
-      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaymentToAssign" nillable="true" type="q9:NL_Payments" />
-      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaypointTransaction" nillable="true" type="q10:NL_PaypointTransactions" />
+      <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Payment" nillable="true" type="q5:NL_Payments" />
+      <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaymentAssignedToLoanFees" nillable="true" type="q6:ArrayOfNL_LoanFeePayments" />
+      <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaymentAssignedToScheduleItems" nillable="true" type="q7:ArrayOfNL_LoanSchedulePayments" />
+      <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaymentToAssign" nillable="true" type="q8:NL_Payments" />
+      <xs:element xmlns:q9="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="PaypointTransaction" nillable="true" type="q9:NL_PaypointTransactions" />
       <xs:element minOccurs="0" name="PaypointTransactionStatus" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Schedule" nillable="true" type="tns:ArrayOfNLScheduleItem" />
       <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="NL_Model" nillable="true" type="tns:NL_Model" />
+  <xs:complexType name="ArrayOfNLAgreementItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NLAgreementItem" nillable="true" type="tns:NLAgreementItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNLAgreementItem" nillable="true" type="tns:ArrayOfNLAgreementItem" />
+  <xs:complexType name="NLAgreementItem">
+    <xs:sequence>
+      <xs:element xmlns:q10="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Agreement" nillable="true" type="q10:NL_LoanAgreements" />
+      <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models" minOccurs="0" name="TemplateModel" nillable="true" type="q11:TemplateModel" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="NLAgreementItem" nillable="true" type="tns:NLAgreementItem" />
+  <xs:complexType name="ArrayOfNLFeeItem">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NLFeeItem" nillable="true" type="tns:NLFeeItem" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNLFeeItem" nillable="true" type="tns:ArrayOfNLFeeItem" />
+  <xs:complexType name="NLFeeItem">
+    <xs:sequence>
+      <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Fee" nillable="true" type="q12:NL_LoanFees" />
+      <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="FeePayment" nillable="true" type="q13:NL_LoanFeePayments" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="NLFeeItem" nillable="true" type="tns:NLFeeItem" />
   <xs:complexType name="ArrayOfNLScheduleItem">
     <xs:sequence>
       <xs:element minOccurs="0" maxOccurs="unbounded" name="NLScheduleItem" nillable="true" type="tns:NLScheduleItem" />
@@ -33,9 +62,8 @@
   <xs:element name="ArrayOfNLScheduleItem" nillable="true" type="tns:ArrayOfNLScheduleItem" />
   <xs:complexType name="NLScheduleItem">
     <xs:sequence>
-      <xs:element xmlns:q11="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="Fee" nillable="true" type="q11:NL_LoanFees" />
-      <xs:element xmlns:q12="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="ScheduleItem" nillable="true" type="q12:NL_LoanSchedules" />
-      <xs:element xmlns:q13="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="ScheduleItemPayment" nillable="true" type="q13:NL_LoanSchedulePayments" />
+      <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="ScheduleItem" nillable="true" type="q14:NL_LoanSchedules" />
+      <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="ScheduleItemPayment" nillable="true" type="q15:NL_LoanSchedulePayments" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="NLScheduleItem" nillable="true" type="tns:NLScheduleItem" />
@@ -46,7 +74,7 @@
       <xs:element minOccurs="0" name="PaymentPerInterval" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="RescheduleIn" type="xs:boolean" />
       <xs:element minOccurs="0" name="ReschedulingDate" type="xs:dateTime" />
-      <xs:element xmlns:q14="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q14:RepaymentIntervalTypes" />
+      <xs:element xmlns:q16="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q16:RepaymentIntervalTypes" />
       <xs:element minOccurs="0" name="SaveToDB" type="xs:boolean" />
     </xs:sequence>
   </xs:complexType>
@@ -61,7 +89,7 @@
       <xs:element minOccurs="0" name="LoanID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanInterestRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="ReschedulingBalance" type="xs:decimal" />
-      <xs:element xmlns:q15="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q15:RepaymentIntervalTypes" />
+      <xs:element xmlns:q17="http://schemas.datacontract.org/2004/07/DbConstants" minOccurs="0" name="ReschedulingRepaymentIntervalType" type="q17:RepaymentIntervalTypes" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ReschedulingResult" nillable="true" type="tns:ReschedulingResult" />

@@ -3,9 +3,8 @@
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 
-    [Serializable]
+	[Serializable]
 	[DataContract(IsReference = true)]
 	public class AgreementModel {
 		[DataMember]

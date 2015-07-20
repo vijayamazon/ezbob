@@ -1208,8 +1208,8 @@
   <xs:element name="CalculateLoanSchedule">
     <xs:complexType>
       <xs:sequence>
-        <xs:element minOccurs="0" name="userID" type="xs:int" />
-        <xs:element minOccurs="0" name="customerID" type="xs:int" />
+        <xs:element minOccurs="0" name="userID" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="customerID" nillable="true" type="xs:int" />
         <xs:element xmlns:q102="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="model" nillable="true" type="q102:NL_Model" />
       </xs:sequence>
     </xs:complexType>

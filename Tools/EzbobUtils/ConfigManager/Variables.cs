@@ -317,6 +317,11 @@ namespace ConfigManager {
 		NumOfInvalidPasswordAttempts,
 		NumberOfMobileCodeAttempts,
 
+		NL_AgreementPdfLoanPath1,
+		NL_AgreementPdfLoanPath2,
+		NL_AgreementPdfConsentPath1,
+		NL_AgreementPdfConsentPath2,
+
 		OfferValidForHours,
 		OnlineMedalTurnoverCutoff,
 		OtherCharge,

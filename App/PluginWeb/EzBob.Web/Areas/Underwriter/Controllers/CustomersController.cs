@@ -553,6 +553,9 @@
 
 			lastOffer.DecisionID = decisionID.Value;
 			lastOffer.CreatedTime = now;
+			// ???
+	       // lastOffer.ServicingFeePercent = (oldCashRequest.SpreadSetupFee != null && oldCashRequest.SpreadSetupFee == true) ? oldCashRequest.ManualSetupFeePercent : null;   //  TODO EZ-3515
+
 			this.m_oServiceClient.Instance.AddOffer(user.Id, customer.Id, lastOffer);
 
             var stage = OpportunityStage.s90.DescriptionAttr();

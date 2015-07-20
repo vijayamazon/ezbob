@@ -4,21 +4,20 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using Backend.Models;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Utils.Extensions;
+	using EzBob.Backend.Models;
+	using EzBob.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Models;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using EzBob.Models;
-	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Database;
-	using Ezbob.Utils.Extensions;
-	using EzBob.Web.Infrastructure;
-	using EzBob.Web.Models;
 	using PaymentServices.Calculators;
 	using ServiceClientProxy;
 	using StructureMap;
@@ -30,12 +29,13 @@
 	    protected readonly ServiceClient serviceClient;
         private readonly IEzbobWorkplaceContext _context;
 
-		public AgreementsModelBuilder(IEzbobWorkplaceContext context)
-		{
-            serviceClient = new ServiceClient();
-            _repaymentCalculator = new RepaymentCalculator();
+
+		public AgreementsModelBuilder(IEzbobWorkplaceContext context = null) {
 			_aprCalc = new APRCalculator();
-		    _context = context;
+
+			serviceClient = new ServiceClient();
+			_repaymentCalculator = new RepaymentCalculator();
+			_context = context;
 		}
 
 		/// <summary>
@@ -230,101 +230,95 @@
         public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel)
         {
             var model = new AgreementModel();
-            var result = this.serviceClient.Instance.CalculateLoanSchedule(this._context.UserId, customer.Id, nlModel).Value;
+			var result = this.serviceClient.Instance.CalculateLoanSchedule(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 
-            foreach (var s in result.Schedule)
-            {
-                var fee = result.Fees.FirstOrDefault(f => f.Fee.AssignTime == s.ScheduleItem.PlannedDate);
-                var item=new LoanScheduleItemModel
-                {
-                    Id = s.ScheduleItem.LoanScheduleID,
-                    AmountDue = s.ScheduleItem.Principal + s.ScheduleItem.InterestRate * s.ScheduleItem.Principal+(fee==null?0:fee.Fee.Amount), // P+I=(r*P)+F
-                    Date = s.ScheduleItem.PlannedDate,
-                    Interest = s.ScheduleItem.InterestRate * s.ScheduleItem.Principal,  // I=(r*P)
-                    Status =  Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID), 
-                    StatusDescription = Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID).ToString()).DescriptionAttr(),
-                    LoanRepayment = s.ScheduleItem.Principal, //P
-                    Balance = nlModel.Loan.InitialLoanAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1),
-                    Fees = fee == null ? 0 : fee.Fee.Amount, //F
-                    InterestRate = s.ScheduleItem.InterestRate //r
-                };
-                model.Schedule.Add(item);
-            }
-            model.CustomerEmail = customer.Name;
-            model.FullName = customer.PersonalInfo.Fullname;
-            model.TypeOfBusinessName = customer.PersonalInfo.TypeOfBusinessName;
+			foreach (var s in result.Schedule) {
+				var fee = result.Fees.FirstOrDefault(f => f.Fee.AssignTime == s.ScheduleItem.PlannedDate);
+				var item=new LoanScheduleItemModel {
+					Id = s.ScheduleItem.LoanScheduleID,
+					AmountDue = s.ScheduleItem.Principal + s.ScheduleItem.InterestRate * s.ScheduleItem.Principal + (fee == null ? 0 : fee.Fee.Amount), // P+I=(r*P)+F
+					Date = s.ScheduleItem.PlannedDate,
+					Interest = s.ScheduleItem.InterestRate * s.ScheduleItem.Principal,  // I=(r*P)
+					Status = Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID),
+					StatusDescription = Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID).ToString()).DescriptionAttr(),
+					LoanRepayment = s.ScheduleItem.Principal, //P
+					Balance = nlModel.Loan.InitialLoanAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1),
+					Fees = fee == null ? 0 : fee.Fee.Amount, //F
+					InterestRate = s.ScheduleItem.InterestRate //r
+				};
+				model.Schedule.Add(item);
+			}
+			model.CustomerEmail = customer.Name;
+			model.FullName = customer.PersonalInfo.Fullname;
+			model.TypeOfBusinessName = customer.PersonalInfo.TypeOfBusinessName;
 
-            var businessType = customer.PersonalInfo.TypeOfBusiness;
-            var company = customer.Company;
-            CustomerAddress companyAddress = null;
-            if (company != null)
-            {
-                switch (businessType.Reduce())
-                {
-                    case TypeOfBusinessReduced.Limited:
-                        model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
-                        goto case TypeOfBusinessReduced.NonLimited;
-                    case TypeOfBusinessReduced.NonLimited:
-                        model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
-                        companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
-                        break;
-                }
-            }
+			var businessType = customer.PersonalInfo.TypeOfBusiness;
+			var company = customer.Company;
+			CustomerAddress companyAddress = null;
+			if (company != null) {
+				switch (businessType.Reduce()) {
+				case TypeOfBusinessReduced.Limited:
+					model.CompanyNumber = company.ExperianRefNum ?? company.CompanyNumber;
+					goto case TypeOfBusinessReduced.NonLimited;
+				case TypeOfBusinessReduced.NonLimited:
+					model.CompanyName = company.ExperianCompanyName ?? company.CompanyName;
+					companyAddress = company.ExperianCompanyAddress.LastOrDefault() ?? company.CompanyAddress.LastOrDefault();
+					break;
+				}
+			}
 
-            model.CompanyAdress = companyAddress.GetFormatted();
-            model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
+			model.CompanyAdress = companyAddress.GetFormatted();
+			model.PersonAddress = customer.AddressInfo.PersonalAddress.FirstOrDefault().GetFormatted();
 
-            // TODO see original implementation
-            decimal setupFeeAmount = nlModel.Fees.Where(f => f.Fee.LoanFeeTypeID == (int)FeeTypes.SetupFee)
-                .Sum(f => f.Fee.Amount);
-            NL_CalculateTotal(setupFeeAmount, model); //loanSetupFee, model);
+			// TODO see original implementation
+			decimal setupFeeAmount = nlModel.Fees.Where(f => f.Fee.LoanFeeTypeID == (int)FeeTypes.SetupFee).Sum(f => f.Fee.Amount);
+			NL_CalculateTotal(setupFeeAmount, model); //loanSetupFee, model);
 
-            model.CurentDate = FormattingUtils.FormatDateTimeToString(DateTime.UtcNow);
-            model.CurrentDate = DateTime.UtcNow;
+			model.CurentDate = FormattingUtils.FormatDateTimeToString(DateTime.UtcNow);
+			model.CurrentDate = DateTime.UtcNow;
 
-            model.FormattedSchedules = NL_CreateSchedule(model.Schedule).ToList();
+			model.FormattedSchedules = NL_CreateSchedule(model.Schedule).ToList();
 
-            model.InterestRate = nlModel.Loan.InterestRate * 100;
-            model.SetupFee = FormattingUtils.NumericFormats(setupFeeAmount); //loanSetupFee);
+			model.InterestRate = nlModel.Loan.InterestRate * 100;
+			model.SetupFee = FormattingUtils.NumericFormats(setupFeeAmount); //loanSetupFee);
 
-            model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
-            model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
+			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
+			model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
 
-            //According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
-            if ((result.Offer.SetupFeePercent.HasValue && result.Offer.SetupFeePercent.Value > 0) ||
-               (result.Offer.BrokerSetupFeePercent.HasValue && result.Offer.BrokerSetupFeePercent.Value > 0))
-            {
-                decimal setupFeePercent = (result.Offer.SetupFeePercent ?? 0M) + (result.Offer.BrokerSetupFeePercent ?? 0M);
-                model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
-            }
+			//According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
+			if ((result.Offer.SetupFeePercent.HasValue && result.Offer.SetupFeePercent.Value > 0) ||
+			   (result.Offer.BrokerSetupFeePercent.HasValue && result.Offer.BrokerSetupFeePercent.Value > 0)) {
+				decimal setupFeePercent = (result.Offer.SetupFeePercent ?? 0M) + (result.Offer.BrokerSetupFeePercent ?? 0M);
+				model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
+			}
 
-            model.IsBrokerFee = false;
-            model.IsManualSetupFee = false;
+			model.IsBrokerFee = false;
+			model.IsManualSetupFee = false;
 
-            model.APR = result.APR == null ? 0 : (double)result.APR;
+			model.APR = result.APR == null ? 0 : (double)result.APR;
 
-            var start = model.Schedule.First().Date.AddMonths(-1);
-            var end = model.Schedule.Last().Date;
-            var days = (end - start).TotalDays;
-           
-            model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
-            model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);
-            model.InterestRatePerYearFormatted = string.Format("{0:0.00}", model.InterestRate * 12);
+			var start = model.Schedule.First().Date.AddMonths(-1);
+			var end = model.Schedule.Last().Date;
+			var days = (end - start).TotalDays;
 
-            model.LoanType = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID);
-            model.TermOnlyInterest = model.Schedule.Count(s => s.LoanRepayment == 0);
-            model.TermOnlyInterestWords = FormattingUtils.ConvertToWord(model.TermOnlyInterest).ToLower();
-            model.TermInterestAndPrincipal = model.Schedule.Count(s => s.LoanRepayment != 0 && s.Interest != 0);
-            model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
-            model.isHalwayLoan = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID) == NLLoanTypes.HalfWayLoanType.ToString() ? true : false;
-            model.CountRepayment = model.Schedule.Count;
-            model.Term = model.Schedule.Count;
+			model.InterestRatePerDay = model.Schedule[1].InterestRate / 30; // For first month
+			model.InterestRatePerDayFormatted = string.Format("{0:0.00}", model.InterestRatePerDay);
+			model.InterestRatePerYearFormatted = string.Format("{0:0.00}", model.InterestRate * 12);
 
-            model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.LoanRepayment) - setupFeeAmount);
+			model.LoanType = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID);
+			model.TermOnlyInterest = model.Schedule.Count(s => s.LoanRepayment == 0);
+			model.TermOnlyInterestWords = FormattingUtils.ConvertToWord(model.TermOnlyInterest).ToLower();
+			model.TermInterestAndPrincipal = model.Schedule.Count(s => s.LoanRepayment != 0 && s.Interest != 0);
+			model.TermInterestAndPrincipalWords = FormattingUtils.ConvertToWord(model.TermInterestAndPrincipal).ToLower();
+			model.isHalwayLoan = Enum.GetName(typeof(NLLoanTypes), result.Loan.LoanTypeID) == NLLoanTypes.HalfWayLoanType.ToString() ? true : false;
+			model.CountRepayment = model.Schedule.Count;
+			model.Term = model.Schedule.Count;
 
-            if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString()){
-                CreateEverlineRefinance(model, customer.Name);
-            }
+			model.TotalPrincipalWithSetupFee = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.LoanRepayment) - setupFeeAmount);
+
+			if (customer.CustomerOrigin.Name == CustomerOriginEnum.everline.ToString()) {
+				CreateEverlineRefinance(model, customer.Name);
+			}
 
             return model;
         }

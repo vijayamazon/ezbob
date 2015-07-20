@@ -6,6 +6,7 @@
 
 	[DataContract(IsReference = true)]
 	public class NL_Offers {
+
 		[PK(true)]
 		public int OfferID { get; set; }
 
@@ -21,18 +22,15 @@
 		[DataMember]
 		public int RepaymentIntervalTypeID { get; set; }
 
+		[FK("LoanSource", "LoanSourceID")]
+		[DataMember]
+		public int LoanSourceID { get; set; }
+
 		[DataMember]
 		public DateTime StartTime { get; set; }
 
 		[DataMember]
 		public DateTime EndTime { get; set; }
-
-		[DataMember]
-		public DateTime CreatedTime { get; set; }
-
-		[FK("LoanSource", "LoanSourceID")]
-		[DataMember]
-		public int LoanSourceID { get; set; }
 
 		[DataMember]
 		public int RepaymentCount { get; set; }
@@ -43,23 +41,20 @@
 		[DataMember]
 		public decimal MonthlyInterestRate { get; set; }
 
-
+		[DataMember]
+		public DateTime CreatedTime { get; set; }
 
 		[DataMember]
 		public decimal? SetupFeePercent { get; set; }
 
 		[DataMember]
-		public bool SetupFeeAddedToLoan { get; set; }
-
-
+		public bool? SetupFeeAddedToLoan { get; set; }
 
 		[DataMember]
 		public decimal? ServicingFeePercent { get; set; }
 
 		[DataMember]
 		public decimal? BrokerSetupFeePercent { get; set; }
-
-
 
 		[DataMember]
 		public int? InterestOnlyRepaymentCount { get; set; }
@@ -78,12 +73,6 @@
 		[DataMember]
 		public string Notes { get; set; }
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(NL_Offers);

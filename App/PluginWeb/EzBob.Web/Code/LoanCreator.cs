@@ -1,24 +1,23 @@
 ﻿namespace EzBob.Web.Code {
 	using System;
-	using System.Collections.Generic;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
-	using EZBob.DatabaseLib;
-	using EZBob.DatabaseLib.Model;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Loans;
-	using NHibernate;
-	using Areas.Customer.Controllers;
-	using Areas.Customer.Controllers.Exceptions;
-	using Agreements;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
-	using Infrastructure;
+	using EzBob.Models.Agreements;
+	using EzBob.Web.Areas.Customer.Controllers;
+	using EzBob.Web.Areas.Customer.Controllers.Exceptions;
+	using EzBob.Web.Infrastructure;
+	using EZBob.DatabaseLib;
+	using EZBob.DatabaseLib.Model;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using SalesForceLib.Models;
@@ -49,6 +48,7 @@
 
 		/// <exception cref="Exception">PacnetSafeGuard stopped money transfer</exception>
 		/// <exception cref="OverflowException"><paramref name="value" /> is less than <see cref="F:System.TimeSpan.MinValue" /> or greater than <see cref="F:System.TimeSpan.MaxValue" />.-or-<paramref name="value" /> is <see cref="F:System.Double.PositiveInfinity" />.-or-<paramref name="value" /> is <see cref="F:System.Double.NegativeInfinity" />. </exception>
+		/// <exception cref="LoanDelayViolationException">Condition. </exception>
 		public Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel = null) {
 
 			ValidateCustomer(cus); // continue (customer's data/status, finish wizard, bank account data)
@@ -97,6 +97,7 @@
 				} // if
 			} else {
 				log.Error("PacnetSafeGuard stopped money transfer");
+				// ReSharper disable once ThrowingSystemException
 				throw new Exception("PacnetSafeGuard stopped money transfer");
 			} // if
 
@@ -115,7 +116,7 @@
 			nlModel.FundTransfer = new NL_FundTransfers();
 			nlModel.FundTransfer.Amount = loanAmount; // logic transaction - full amount
 			nlModel.FundTransfer.TransferTime = now;
-			nlModel.FundTransfer.IsActive = true;
+			//nlModel.FundTransfer.IsActive = true; // ???
 			nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Pacnet").Id; // take from enum or send string and convert to id in db
 
 			PacnetTransaction loanTransaction;
@@ -187,14 +188,21 @@
 			if (loan.SetupFee > 0)
 				cus.SetupFee = loan.SetupFee;
 
-			this.agreementsGenerator.RenderAgreements(loan, true);
+			
+			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName;
+			nlModel.Loan = new NL_Loans();
+			nlModel.UserID = this.context.UserId;
+			nlModel.Loan.Refnum = loan.RefNumber;
+			nlModel.Loan.InitialLoanAmount = loanAmount;
+
+			// populate nlModel by agreements data also
+			this.agreementsGenerator.RenderAgreements(loan, true, nlModel);
 
 			/**
 			1. Build/ReBuild agreement model - private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr); in \App\PluginWeb\EzBob.Web\Code\AgreementsModelBuilder.cs
 			2. RenderAgreements: loan.Agreements.Add
 			3. RenderAgreements: SaveAgreement (file?) \backend\Strategies\Misc\Agreement.cs strategy
 			*/
-			
 
 			var loanHistoryRepository = new LoanHistoryRepository(this.session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
@@ -255,34 +263,14 @@
 			// flush
 
 			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName;
-			nlModel.Loan = new NL_Loans();
-			nlModel.UserID = this.context.UserId; // ???
-			nlModel.Loan.Refnum = loan.RefNumber;
 			nlModel.Loan.OldLoanID = oldloanID;
-			nlModel.Loan.InitialLoanAmount = loanAmount;
-			
-			//nlModel.LoanHistory = new NL_LoanHistory();
-
-			// place real NL agreements generation (EZ-3483)
-			this.agreementsGenerator.NL_RenderAgreements(nlModel, true);
-
-			// moved to this.agreementsGenerator.NL_RenderAgreements
-			// that should be done by attaching NL agreements to NL_Model in NL_RenderAgreements
-			//nlModel.LoanHistory.AgreementModel = loan.AgreementModel;
-			//nlModel.LoanAgreements = new List<NL_LoanAgreements>();
-			//foreach (LoanAgreement agrm in loan.Agreements) {
-			//	NL_LoanAgreements agreement = new NL_LoanAgreements();
-			//	agreement.FilePath = agrm.FilePath;
-			//	agreement.LoanAgreementTemplateID = agrm.TemplateRef.Id;
-			//	nlModel.LoanAgreements.Add(agreement);
-			//	log.Debug(agreement.ToString());
-			//} // for
 
 			try {
 				log.Debug(nlModel.FundTransfer.ToString());
 				log.Debug(nlModel.PacnetTransaction.ToString());
 				log.Debug(nlModel.Loan.ToString());
+				nlModel.Agreements.ForEach(a => log.Debug(a.Agreement.ToString()));
+				nlModel.Agreements.ForEach(t => log.Debug(t.TemplateModel.ToString()));
 
 				var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
 				nlModel.Loan.LoanID = nlLoan.Value;

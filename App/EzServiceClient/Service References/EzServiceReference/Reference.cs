@@ -4069,10 +4069,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule", ReplyAction="http://tempuri.org/IEzServiceNewLoan/CalculateLoanScheduleResponse")]
-        ServiceClientProxy.EzServiceReference.NewLoanModelActionResult CalculateLoanSchedule(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model model);
+        ServiceClientProxy.EzServiceReference.NewLoanModelActionResult CalculateLoanSchedule(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.Models.NewLoan.NL_Model model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/CalculateLoanSchedule", ReplyAction="http://tempuri.org/IEzServiceNewLoan/CalculateLoanScheduleResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> CalculateLoanScheduleAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model model);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> CalculateLoanScheduleAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.Models.NewLoan.NL_Model model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MainStrategySync1", ReplyAction="http://tempuri.org/IEzService/MainStrategySync1Response")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MainStrategySync1(int underwriterId, int customerId, Ezbob.Backend.Models.NewCreditLineOption newCreditLine, int avoidAutoDescison, System.Nullable<long> cashRequestID, ServiceClientProxy.EzServiceReference.MainStrategyDoAction createCashRequest, ServiceClientProxy.EzServiceReference.MainStrategyDoAction updateCashRequest);
@@ -5588,11 +5588,11 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
         }
         
-        public ServiceClientProxy.EzServiceReference.NewLoanModelActionResult CalculateLoanSchedule(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model model) {
+        public ServiceClientProxy.EzServiceReference.NewLoanModelActionResult CalculateLoanSchedule(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.Models.NewLoan.NL_Model model) {
             return base.Channel.CalculateLoanSchedule(userID, customerID, model);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> CalculateLoanScheduleAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.NL_Model model) {
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NewLoanModelActionResult> CalculateLoanScheduleAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.Models.NewLoan.NL_Model model) {
             return base.Channel.CalculateLoanScheduleAsync(userID, customerID, model);
         }
         

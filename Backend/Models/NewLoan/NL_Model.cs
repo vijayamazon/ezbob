@@ -12,8 +12,10 @@
 
 		public NL_Model(int customerID) {
 			CustomerID = customerID;
+
 			Schedule = new List<NLScheduleItem>();
 			Fees = new List<NLFeeItem>();
+			Agreements = new List<NLAgreementItem>();
 		}
 	
 		[DataMember]
@@ -28,24 +30,25 @@
 		[DataMember]
 		public NL_Loans Loan { get; set; }
 
-		// used in agreement builder upon adding new loan
+		
 		[DataMember]
-		public List<NL_LoanAgreements> LoanAgreements { get; set; }
-		// used in LoanCreator.cs on adding new loan
+		public List<NLAgreementItem> Agreements { get; set; }
+
 		[DataMember]
-		public string AgreementModel { get; set; }
+		public string AgreementModel { get; set; }	
+
 		[DataMember]
 		public NL_PacnetTransactions PacnetTransaction { get; set; }
 		[DataMember]
 		public string PacnetTransactionStatus { get; set; }
-		// ### used in LoanCreator.cs on adding new loan
+		
 
 
 		[DataMember]
 		public List<NLScheduleItem> Schedule { get; set; }
-
 		[DataMember]
 		public List<NLFeeItem> Fees { get; set; }
+
 
 		[DataMember]
 		public NL_Offers Offer { get; set; }

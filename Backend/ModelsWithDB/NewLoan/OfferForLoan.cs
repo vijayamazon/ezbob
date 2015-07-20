@@ -31,9 +31,9 @@
 		[DataMember]
 		public bool SetupFeeAddedToLoan { get; set; }
 		[DataMember]
-		public decimal BrokerSetupFeePercent { get; set; }
+		public decimal ServicingFeePercent { get; set; }
 		[DataMember]
-		public decimal DistributedSetupFeePercent { get; set; }
+		public decimal BrokerSetupFeePercent { get; set; }
 		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }
 		[DataMember]

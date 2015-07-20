@@ -1,32 +1,32 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers.CustomersReview {
+	using System;
 	using System.Globalization;
 	using System.Linq;
-	using Code.Agreements;
-	using ConfigManager;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using System;
 	using System.Web.Mvc;
+	using ConfigManager;
+	using DbConstants;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
+	using EzBob.Models.Agreements;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
+	using EzBob.Web.Infrastructure.csrf;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
-	using Ezbob.Backend.Models;
-	using Ezbob.Logger;
-	using Infrastructure.Attributes;
-	using Models;
-	using Code;
-	using Infrastructure;
-	using Infrastructure.csrf;
+	using EZBob.DatabaseLib.Repository;
 	using NHibernate;
 	using PaymentServices.Calculators;
 	using PaymentServices.PacNet;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
-	using EZBob.DatabaseLib.Repository;
-	using DbConstants;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	public class ApplicationInfoController : Controller {
 		private readonly ServiceClient serviceClient;
@@ -684,12 +684,14 @@
 				SendEmailNotification = allowSendingEmail,
 				DecisionTime = now,
 				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
-				DecisionNameID = (int)DecisionActions.Waiting
+				DecisionNameID = (int)DecisionActions.Waiting,
+				Notes = "Waiting; oldCashRequest: " + cr.Id,
 				//todo IsAmountSelectionAllowed = 
 				//todo InterestOnlyRepaymentCount = 
-				//todo Notes = 
-				//todo Position = 
+				//todo Position =
 			}, cr.Id, null);
+
+			log.Info("NL decisionID: {0}, oldCashRequestID: {1}", decisionId, cr.Id);
 
 			this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
 				Amount = (decimal)amount,
@@ -699,7 +701,8 @@
 				EmailSendingBanned = !allowSendingEmail,
 				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
 				SetupFeePercent = manualSetupFeePercent ?? 0,
-				// DistributedSetupFeePercent TODO EZ-3515
+				// SetupFeeAddedToLoan = 1|0 default null TODO EZ-3515
+				ServicingFeePercent = (cr.SpreadSetupFee != null && cr.SpreadSetupFee==true) ? manualSetupFeePercent : null,   //  TODO EZ-3515
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				LoanSourceID = loanSource,
 				LoanTypeID = loanType,

@@ -456,5 +456,21 @@
 			get { return this[Variables.AlibabaClientEnvironment]; }
 		}
 
+		public virtual VariableValue NL_AgreementPdfLoanPath1 {
+			get { return this[Variables.NL_AgreementPdfLoanPath1]; }
+		}
+
+		public virtual VariableValue NL_AgreementPdfLoanPath2 {
+			get { return this[Variables.NL_AgreementPdfLoanPath2]; }
+		}
+
+		public virtual VariableValue NL_AgreementPdfConsentPath1 {
+			get { return this[Variables.NL_AgreementPdfConsentPath1]; }
+		}
+
+		public virtual VariableValue NL_AgreementPdfConsentPath2 {
+			get { return this[Variables.NL_AgreementPdfConsentPath2]; }
+		}
+
 	} // class CurrentValues
 } // namespace

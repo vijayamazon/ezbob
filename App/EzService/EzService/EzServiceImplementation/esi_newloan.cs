@@ -142,7 +142,7 @@
 
 
 
-		public NewLoanModelActionResult CalculateLoanSchedule(int userID, int customerID, NL_Model model) {
+		public NewLoanModelActionResult CalculateLoanSchedule(int? userID, int? customerID, NL_Model model) {
 	
 			ActionMetaData amd = null;
 			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);

@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
-	using System.Diagnostics;
 	using System.IO;
 	using System.Threading.Tasks;
 	using System.Web;
@@ -16,9 +15,9 @@
 	using Newtonsoft.Json;
 	using PaymentServices.Calculators;
 
-	public class AddLoan : AStrategy {
+	public class AddLoanCopy : AStrategy {
 
-		public AddLoan(NL_Model nlModel) {
+		public AddLoanCopy(NL_Model nlModel) {
 			NLModel = nlModel;
 			Loader = new NL_Loader(NLModel);
 
@@ -200,9 +199,7 @@
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanAgreementsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanAgreements>("Tbl", agreements));
 
-				//await SaveAgreementsAsync();
-
-				Task.Run(() => SaveAgreementsAsync());
+				await SaveAgreementsAsync();
 
 				// 5. schedules 
 				foreach (NLScheduleItem s in sCalcScheduleAndFee.Result.Schedule) {
@@ -228,7 +225,7 @@
 				pconn.Rollback();
 
 				Log.Error(message);
-				SendErrorMail(message, fees, scheduleItems, history, agreements);
+				SendErrorMail(message, fees, scheduleItems, history);
 
 				// ReSharper disable once ThrowingSystemException
 				throw new Exception("Add NL loan failed: {0}", ex);
@@ -251,15 +248,13 @@
 				}
 			} catch (Exception e1) {
 				message = string.Format("Failed to write NL PacnetTransaction: Customer {0}, oldLoanID {1}, err: {2}", NLModel.CustomerID, NLModel.Loan.OldLoanID, e1);
-				SendErrorMail(message, fees, scheduleItems, history, agreements);
+				SendErrorMail(message, fees, scheduleItems, history);
 				Log.Error(message);
 			}
 
 		}//Execute
 
-	//	async Task SaveAgreementsAsync() {
-		private	void SaveAgreementsAsync() {
-
+		async Task SaveAgreementsAsync() {
 			// save agreements to file system
 			if (NLModel.AgreementModel == null) {
 				Log.Alert("AgreementModel not exists on creating Nloan");
@@ -273,31 +268,29 @@
 			}
 		}
 
-		private void SendErrorMail(string sMsg, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> scheduleItems = null, NL_LoanHistory history = null, List<NL_LoanAgreements> agreements = null) {
-			
+		private void SendErrorMail(string sMsg, List<NL_LoanFees> setupFee = null, List<NL_LoanSchedules> scheduleItems = null, NL_LoanHistory history = null) {
 			var message = string.Format(
-					"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
-						+ "<h3>Input data</h3>: {2} <br/>"
-						+ "<h3>NL_Loan</h3>: {3} <br/>"
-						+ "<h3>NL_LoanHistory</h3>: {4} <br/>"
-						+ "<h3>NL_LoanFees</h3>: {5} <br/>"
-						+ "<h3>NL_LoanSchedules</h3>: {6} <br/>"
-						+ "<h3>NL_LoanAgreements</h3>: {7} <br/>"
-						+ "<h3>NL_FundTransfer</h3>: {8} <br/>"
-						+ "<h3>NL_PacnetTransactionr</h3>: {9} <br/></p>",
+				  "<h3>CustomerID: {0}; UserID: {1}</h3><p>"
+				  + "<h3>Input data</h3>: {2} <br/>"
+				  + "<h3>NL_Loan</h3>: {3} <br/>"
+				  + "<h3>NL_LoanHistory</h3>: {4} <br/>"
+				  + "<h3>NL_LoanFees</h3>: {5} <br/>"
+				  + "<h3>NL_LoanSchedules</h3>: {6} <br/>"
+				  + "<h3>NL_LoanAgreements</h3>: {7} <br/>"
+				  + "<h3>NL_FundTransfer</h3>: {8} <br/>"
+				  + "<h3>NL_PacnetTransactionr</h3>: {9} <br/></p>",
 
-					NLModel.CustomerID
-					, NLModel.UserID
-					, HttpUtility.HtmlEncode(NLModel.ToString())
-					, HttpUtility.HtmlEncode(NLModel.Loan == null ? "no Loan specified" : NLModel.Loan.ToString())
-					, HttpUtility.HtmlEncode(history == null ? "no LoanHistory specified" : history.ToString())
-					, HttpUtility.HtmlEncode(fees == null ? "no LoanFees specified" : fees.ToString())
-					, HttpUtility.HtmlEncode(scheduleItems == null ? "no scheduleItems specified" : scheduleItems.ToString()) // NL_LoanSchedules
-					, HttpUtility.HtmlEncode(agreements == null ? "no LoanAgreements specified" : agreements.ToString()) // NL_LoanAgreements
-					, HttpUtility.HtmlEncode(NLModel.FundTransfer == null ? "no FundTransfer specified" : NLModel.FundTransfer.ToString())
-					, HttpUtility.HtmlEncode(NLModel.PacnetTransaction == null ? "no PacnetTransaction specified" : NLModel.PacnetTransaction.ToString())
-					);
-			
+				  NLModel.CustomerID
+				  , NLModel.UserID
+				  , HttpUtility.HtmlEncode(NLModel.ToString())
+				  , HttpUtility.HtmlEncode(NLModel.Loan == null ? "no Loan specified" : NLModel.Loan.ToString())
+				  , HttpUtility.HtmlEncode(history == null ? "no LoanHistory specified" : history.ToString())
+				  , HttpUtility.HtmlEncode(setupFee == null ? "no LoanFees specified" : setupFee.ToString())
+				  , HttpUtility.HtmlEncode(scheduleItems == null ? "no scheduleItems specified" : scheduleItems.ToString()) // NL_LoanSchedules
+				  , HttpUtility.HtmlEncode(NLModel.Agreements == null ? "no LoanAgreements specified" : NLModel.Agreements.ToString()) // NL_LoanAgreements
+				  , HttpUtility.HtmlEncode(NLModel.FundTransfer == null ? "no FundTransfer specified" : NLModel.FundTransfer.ToString())
+				  , HttpUtility.HtmlEncode(NLModel.PacnetTransaction == null ? "no PacnetTransaction specified" : NLModel.PacnetTransaction.ToString())
+			);
 
 			new Mail().Send(
 				  this.emailToAddress,

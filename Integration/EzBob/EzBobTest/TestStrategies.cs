@@ -43,6 +43,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using NHibernate;
 	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
@@ -759,18 +760,20 @@
 		[Test]
 		public void TestAddDecision() {
 			AddDecision addDecision = new AddDecision(new NL_Decisions {
-				UserID = 347,
+				UserID = 357,
 				DecisionTime = DateTime.UtcNow,
-				Notes = "Reject",
-				DecisionNameID = 2
-			}, 22785, new List<NL_DecisionRejectReasons> {
-				new NL_DecisionRejectReasons {
-					RejectReasonID = 1
-				},
-				new NL_DecisionRejectReasons {
-					RejectReasonID = 3
-				}
-			});
+				Notes = "Waiting",
+				DecisionNameID = (int)DecisionActions.Waiting
+			}, 329, null
+				//,new List<NL_DecisionRejectReasons> {
+				//	new NL_DecisionRejectReasons {
+				//		RejectReasonID = 1
+				//	},
+				//	new NL_DecisionRejectReasons {
+				//		RejectReasonID = 3
+				//	}
+				//}
+			);
 			addDecision.Execute();
 		}
 
@@ -797,60 +800,64 @@
 			new BrokerLeadSendInvitation(1040, "stasd+evlbrk5@ezbob.com").Execute();
 		}
 
-
+		[Test]
+		public void Test1() {
+			Console.WriteLine("AAA");
+		}
 
 		[Test]
 		public void TestNL_AddLoan() {
-			int customerID = 369; // 366;
-			int oldLoanID = 1049; //1042;
+
+			const int customerID = 371; // 366;
+			const int oldLoanID = 1063; //1042;
 
 			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
 			Loan oldLoan = loanRep.Get(oldLoanID);
-
+			
+			ISession session = ObjectFactory.GetInstance<ISession>();
+	
 			NL_Model nlModel = new NL_Model(customerID);
+			nlModel.UserID = 354;
+			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName;
 			nlModel.Loan = new NL_Loans();
 			nlModel.Loan.Refnum = oldLoan.RefNumber;
 			nlModel.Loan.OldLoanID = oldLoanID;
-			nlModel.Loan.InitialLoanAmount = oldLoan.LoanAmount;
 
 			nlModel.FundTransfer = new NL_FundTransfers();
-			nlModel.FundTransfer.Amount = nlModel.Loan.InitialLoanAmount; // logic transaction - full amount
+			nlModel.FundTransfer.Amount = oldLoan.LoanAmount; // logic transaction - full amount
 			nlModel.FundTransfer.TransferTime = DateTime.UtcNow;
-			nlModel.FundTransfer.IsActive = true;
 			nlModel.FundTransfer.LoanTransactionMethodID = 1; // 'Pacnet'
-
-		//	nlModel.LoanHistory = new NL_LoanHistory();
-		//	nlModel.LoanHistory.AgreementModel = oldLoan.AgreementModel;
-
-			nlModel.AgreementModel = oldLoan.AgreementModel;
-
-			nlModel.LoanAgreements = new List<NL_LoanAgreements>();
-			foreach (var aggr in oldLoan.Agreements) {
-				//Console.WriteLine(aggr);
-				NL_LoanAgreements agreement = new NL_LoanAgreements();
-				agreement.FilePath = aggr.FilePath;
-				agreement.LoanAgreementTemplateID = aggr.TemplateRef.Id;
-				nlModel.LoanAgreements.Add(agreement);
-			}
-
+			
 			PacnetTransaction oldPacnetTransaction = EnumerableExtensions.First(oldLoan.PacnetTransactions) as PacnetTransaction;
 
 			if (oldPacnetTransaction != null) {
 				nlModel.PacnetTransaction = new NL_PacnetTransactions();
-				nlModel.PacnetTransaction.TransactionTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
-				nlModel.PacnetTransaction.StatusUpdatedTime = oldPacnetTransaction.PostDate; //DateTime.UtcNow;
-				nlModel.PacnetTransaction.Amount = oldPacnetTransaction.Amount; //nlModel.Loan.InitialLoanAmount;
+				nlModel.PacnetTransaction.TransactionTime = oldPacnetTransaction.PostDate; 
+				nlModel.PacnetTransaction.StatusUpdatedTime = oldPacnetTransaction.PostDate; 
+				nlModel.PacnetTransaction.Amount = oldPacnetTransaction.Amount; 
 				nlModel.PacnetTransaction.Notes = oldPacnetTransaction.Description;
 				nlModel.PacnetTransaction.TrackingNumber = oldPacnetTransaction.TrackingNumber;
-				nlModel.PacnetTransactionStatus = "sdfgsdfgsdg"; // oldPacnetTransaction.Status.ToString();
+				nlModel.PacnetTransactionStatus = oldPacnetTransaction.Status.ToString();
 			}
 
-			var s = new AddLoan(nlModel);
-			try {
-				s.Execute();
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
+			//AgreementsGenerator agreementsGenerator = new AgreementsGenerator(
+			//	builder: new AgreementsModelBuilder(), 
+			//	templates: new AgreementsTemplatesProvider(), 
+			//	helper: new DatabaseDataHelper(session));
+
+			//agreementsGenerator.RenderAgreements(oldLoan, false, nlModel); // now nlModel.Agreements should contain all must agreements data
+
+			this.m_oLog.Debug(nlModel.FundTransfer);
+			this.m_oLog.Debug(nlModel.PacnetTransaction);
+			this.m_oLog.Debug(nlModel.Loan);
+			this.m_oLog.Debug(nlModel.Agreements);
+
+			//var s = new AddLoan(nlModel);
+			//try {
+			//	s.Execute();
+			//} catch (Exception e) {
+			//	Console.WriteLine(e);
+			//}
 		}
 
 

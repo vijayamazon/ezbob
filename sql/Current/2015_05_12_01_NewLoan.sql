@@ -25,6 +25,7 @@ RETURN
 )
 GO
 
+
 -----------------------------
 
 IF OBJECT_ID('LoanAgreementTemplateTypes') IS NULL 
@@ -110,7 +111,7 @@ CREATE TABLE [dbo].[NL_Decisions](
 	[DecisionTime] [DATETIME] NOT NULL,
 	[DecisionNameID] [INT] NOT NULL,
 	[Notes] [nvarchar](max) NULL,
-	[IsRepaymentPeriodSelectionAllowed] [BIT] NULL,
+	[IsRepaymentPeriodSelectionAllowed] [BIT] NULL,-- set
 	[IsAmountSelectionAllowed] [BIT] NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[SendEmailNotification] [BIT] NULL,
@@ -542,16 +543,16 @@ CREATE TABLE [dbo].[NL_PaypointTransactionStatuses](
 ) ;
 END ;
 
-IF OBJECT_ID('WriteOffReasons') IS NULL 
-BEGIN	
-CREATE TABLE [dbo].[WriteOffReasons](
-	[WriteOffReasonID] [INT] NOT NULL IDENTITY(1,1) ,
-	[ReasonName] [nvarchar](100) NOT NULL,
-	[PaymentID] [INT] NOT NULL ,
-	[TimestampCounter] rowversion NOT NULL,
- CONSTRAINT [PK_WriteOffReasons] PRIMARY KEY CLUSTERED ( [WriteOffReasonID] ASC)
-) ;
-END ;
+-- IF OBJECT_ID('WriteOffReasons') IS NULL 
+-- BEGIN	
+-- CREATE TABLE [dbo].[WriteOffReasons](
+	-- [WriteOffReasonID] [INT] NOT NULL IDENTITY(1,1) ,
+	-- [ReasonName] [nvarchar](100) NOT NULL,
+	-- [PaymentID] [INT] NOT NULL ,
+	-- [TimestampCounter] rowversion NOT NULL,
+ -- CONSTRAINT [PK_WriteOffReasons] PRIMARY KEY CLUSTERED ( [WriteOffReasonID] ASC)
+-- ) ;
+-- END ;
 
 
 IF OBJECT_ID('NL_LoanStates') IS NULL BEGIN	
@@ -941,10 +942,10 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
 END
 GO
 
-IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_WriteOffReasons_Payments') BEGIN
- ALTER TABLE [dbo].[WriteOffReasons] ADD CONSTRAINT [FK_WriteOffReasons_Payments] FOREIGN KEY([PaymentID]) REFERENCES [dbo].[NL_Payments] ([PaymentID]) ;
-END
-GO
+-- IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_WriteOffReasons_Payments') BEGIN
+ -- ALTER TABLE [dbo].[WriteOffReasons] ADD CONSTRAINT [FK_WriteOffReasons_Payments] FOREIGN KEY([PaymentID]) REFERENCES [dbo].[NL_Payments] ([PaymentID]) ;
+-- END
+-- GO
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanStates_NL_Loans') BEGIN
  ALTER TABLE [dbo].[NL_LoanStates] ADD CONSTRAINT [FK_NL_LoanStates_NL_Loans] FOREIGN KEY([LoanID]) REFERENCES [dbo].[NL_Loans] ([LoanID]) ;
 END

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
     using System;
     using System.Runtime.Serialization;
+    using System.Text;
     using Ezbob.Utils.dbutils;
 
     [DataContract(IsReference = true)]
@@ -42,6 +43,17 @@
 
         [DataMember]
         public bool? SendEmailNotification { get; set; }
+
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+			Type t = typeof(NL_Decisions);
+			foreach (var prop in t.GetProperties()) {
+				if (prop.GetValue(this) != null)
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
+			}
+			return sb.ToString();
+		}
+
     }//class NL_Decisions
 }//ns
 
