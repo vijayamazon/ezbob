@@ -129,6 +129,9 @@ namespace TestRail.Types
             r.AssignedTo = (ulong?)json["assignedto_id"];
             r.IncludeAll = (bool)json["include_all"];
             r.Url = (string)json["url"];
+
+			JArray jarray = json["config_ids"] as JArray;
+			r.ConfigIDs = null != jarray ? jarray.ToObject<List<ulong>>() : new List<ulong>();
             return r;
         }
 

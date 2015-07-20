@@ -9,13 +9,13 @@
 
 	class Program {
 		private static TestRailClient client;
+		private static string input;
+
 		static void Main(string[] args) {
 			var url = System.Configuration.ConfigurationManager.AppSettings["testRailUrl"];
 			var user = System.Configuration.ConfigurationManager.AppSettings["testRailUser"];
 			var apikey = System.Configuration.ConfigurationManager.AppSettings["testRailApiKey"];
 			client = new TestRailClient(url, user, apikey);
-			
-			
 
 			var ezbobProject = client.Projects.FirstOrDefault(x => x.Name == "EZbob");
 
@@ -27,11 +27,31 @@
 				}
 
 				return;
-			} 
-			
+			}
+
 			Console.WriteLine("Project found: {0}, id: {1}", ezbobProject.Name, ezbobProject.ID);
 			Console.WriteLine();
-			
+
+			var configurationGroups = client.GetConfigurationGroups(ezbobProject.ID);
+			List<Configuration> configs = new List<Configuration>();
+			foreach (var confGroup in configurationGroups) {
+				Console.WriteLine("Configuration group: {0}, id {1}", confGroup.Name, confGroup.ID);
+				foreach (var conf in confGroup.Configurations) {
+					Console.WriteLine("\tConfiguration: {0} id {1}", conf.Name, conf.ID);
+				}
+				Console.WriteLine("select {0} configuration id:", confGroup.Name);
+				input = Console.ReadLine();
+				ulong confID = 0;
+				if (!ulong.TryParse(input, out confID)) {
+					Console.WriteLine("wrong input");
+					return;
+				}
+				var selectedConf = confGroup.Configurations.FirstOrDefault(x => x.ID == confID);
+				if (selectedConf != null) {
+					configs.Add(selectedConf);
+				}
+			}
+
 			var suites = client.GetSuites(ezbobProject.ID);
 
 			foreach (var s in suites) {
@@ -39,7 +59,7 @@
 			}
 
 			Console.Write("Select suit id:");
-			string input = Console.ReadLine();
+			input = Console.ReadLine();
 
 			ulong suitId = 0;
 			if (!ulong.TryParse(input, out suitId)) {
@@ -59,15 +79,9 @@
 				string labels = c.Labels.Any() ? c.Labels.Select(x => x.ToString()).Aggregate((a, b) => a + ", " + b) : "";
 				Console.WriteLine("case: {0}, id: {1} \n {2}", c.Title, c.ID, labels);
 			}
-			
-			/*
-			var plans = client.GetPlans(ezbobProject.ID);
-			foreach (var p in plans) {
-				Console.WriteLine("plan: {0}, id: {1}", p.Name, p.ID);
-			}
-			*/
 
 			var milestones = client.GetMilestones(ezbobProject.ID);
+
 			foreach (var m in milestones) {
 				Console.WriteLine("milestone {0}, id {1}", m.Name, m.ID);
 			}
@@ -111,7 +125,7 @@
 
 				HashSet<ulong> selectedCases = cases.Where(x => x.Labels.Contains(selectedLabel) && x.ID.HasValue).Select(x => x.ID.Value).ToHashSet();
 				if (selectedCases.Any()) {
-					RunSelectedCases(ezbobProject, suit, milestone, selectedCases, selectedLabel);
+					RunSelectedCases(ezbobProject, suit, milestone, selectedCases, selectedLabel, configs, configurationGroups);
 				} else {
 					Console.WriteLine("No cases match your filter");
 					return;
@@ -119,9 +133,51 @@
 			}
 		}
 
-		private static void RunSelectedCases(Project project, Suite suit, Milestone milestone, HashSet<ulong> selectedCases, Label label) {
-			var run = client.AddRun(project.ID, suit.ID.Value, suit.Name + " " + label, suit.Description, milestone.ID, caseIDs: selectedCases);
-			RunCases(run);
+		private static void RunSelectedCases(Project project, Suite suit, Milestone milestone, HashSet<ulong> selectedCases, Label label, List<Configuration> configs, List<ConfigurationGroup> configurationGroups) {
+			//var run = client.AddRun(project.ID, suit.ID.Value, suit.Name + " " + label, suit.Description, milestone.ID, caseIDs: selectedCases);
+
+			var plan = client.AddPlan(project.ID, suit.Name + " " + label, suit.Description, milestone.ID, new List<PlanEntry>() {
+				new PlanEntry() {
+					Name = suit.Name,
+					CaseIDs = selectedCases.ToList(),
+					ConfigIDs = configs.Select(x => x.ID).ToList(),
+					SuiteID = suit.ID,
+					RunList = new List<Run>() {
+						new Run {
+							Name = suit.Name + " " + label,
+							ConfigIDs = configs.Select(x => x.ID)
+								.ToList(),
+							SuiteID = suit.ID,
+							CaseIDs = selectedCases,
+							Description = suit.Description,
+							IncludeAll = false,
+							MilestoneID = milestone.ID
+						}
+					}
+				}
+			});
+
+			RunPlan(plan, configurationGroups);
+		}
+
+		private static void RunPlan(CommandResult<ulong> plan, List<ConfigurationGroup> configurationGroups) {
+			if (!plan.WasSuccessful) {
+				Console.WriteLine("failed to create plan \n{0}", plan.Exception);
+				return;
+			}
+
+			var p = client.GetPlan(plan.Value);
+			foreach (var entry in p.Entries) {
+				
+				foreach (var run in entry.RunList) {
+					var configurations = configurationGroups.SelectMany(x => x.Configurations)
+					.Where(x => run.ConfigIDs.Contains(x.ID)).ToList();
+					RunCases(new CommandResult<ulong>(true, run.ID.Value), configurations);
+				}
+			}
+
+			client.ClosePlan(p.ID);
+
 		}
 
 		private static void RunAllCases(Project project, Suite suite, Milestone milestone) {
@@ -129,7 +185,7 @@
 			RunCases(run);
 		}
 
-		private static void RunCases(CommandResult<ulong> run) {
+		private static void RunCases(CommandResult<ulong> run, List<Configuration> configs = null) {
 			if (!run.WasSuccessful) {
 				Console.WriteLine("failed to create run \n{0}", run.Exception);
 				return;
@@ -137,13 +193,12 @@
 			Console.WriteLine("run {0}", run.Value);
 			var tests = client.GetTests(run.Value);
 			foreach (var t in tests) {
-				RunOneTest(t);
-
+				RunOneTest(t, configs);
 			}
 			client.CloseRun(run.Value);
 		}
 
-		private static void RunOneTest(Test test) {
+		private static void RunOneTest(Test test, List<Configuration> configs = null) {
 			Console.WriteLine("test {0}, id {1}", test.Title, test.ID);
 			if (!test.ID.HasValue || !test.CaseID.HasValue) {
 				Console.WriteLine("test {0} has no Id skipping", test.Title);
@@ -158,7 +213,7 @@
 				client.AddResult(test.ID.Value, ResultStatus.Untested, "Not implemented");
 			} else {
 				ITest instance = (ITest)Activator.CreateInstance(type);
-				var testResult = instance.Run();
+				var testResult = instance.Run(configs);
 
 				var result = client.AddResult(test.ID.Value, testResult.Status, testResult.Comment, null, new TimeSpan(testResult.TimeElapsed));
 				if (!result.WasSuccessful) {
