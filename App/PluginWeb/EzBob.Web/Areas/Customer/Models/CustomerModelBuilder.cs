@@ -168,11 +168,11 @@
 
 			customerModel.CompanyEmployeeCountInfo = new CompanyEmployeeCountInfo(customer.Company);
 
-			customerModel.CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
+			customerModel.CustomerStatusName = customer.CollectionStatus.Name;
 
 			// customerModel.LoyaltyPoints = customer.LoyaltyPoints();
 			customerModel.IsOffline = customer.IsOffline;
-			customerModel.IsDisabled = !customer.CollectionStatus.CurrentStatus.IsEnabled;
+			customerModel.IsDisabled = !customer.CollectionStatus.IsEnabled;
 
 			customerModel.LastSavedWizardStep = ((customer.WizardStep == null) || customer.WizardStep.TheLastOne)
 				? string.Empty
@@ -314,8 +314,7 @@
 
 			var isDefault =
 				customer.CollectionStatus != null &&
-				customer.CollectionStatus.CurrentStatus != null &&
-				customer.CollectionStatus.CurrentStatus.IsDefault;
+				customer.CollectionStatus.IsDefault;
 
 			customerModel.Perks = isDefault ? null : m_oPerksRepository.GetActivePerk();
 
@@ -348,7 +347,7 @@
 				});
 
 			customerModel.ApplyCount = customer.ApplyCount;
-			customerModel.IsDefaultCustomerStatus = customer.CollectionStatus.CurrentStatus.IsDefault;
+			customerModel.IsDefaultCustomerStatus = customer.CollectionStatus.IsDefault;
 			customerModel.HasRollovers = customerModel.ActiveRollovers.Any();
 
 			var inviteFriend = customer.CustomerInviteFriend.FirstOrDefault();

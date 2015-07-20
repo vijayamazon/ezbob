@@ -126,16 +126,16 @@
 				});
 			}
 
-			if (customer.CollectionStatus.CurrentStatus.IsDefault || customer.CollectionStatus.CurrentStatus.Name == "Bad") {
+			if (customer.CollectionStatus.IsDefault || customer.CollectionStatus.Name == "Bad") {
 				summary.Alerts.Errors.Add(new AlertModel {
 					Abbreviation = "Bad",
-					Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name),
+					Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.Name),
 					AlertType = AlertType.Error.DescriptionAttr()
 				});
-			} else if (customer.CollectionStatus.CurrentStatus.Name == "Risky") {
+			} else if (customer.CollectionStatus.Name == "Risky") {
 				summary.Alerts.Warnings.Add(new AlertModel {
 					Abbreviation = "Risky",
-					Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.CurrentStatus.Name),
+					Alert = string.Format("Customer Status : {0}", customer.CollectionStatus.Name),
 					AlertType = AlertType.Warning.DescriptionAttr()
 				});
 			}

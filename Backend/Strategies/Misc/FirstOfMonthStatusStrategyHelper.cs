@@ -25,9 +25,9 @@
 			var customersToWorkOn = new List<Customer>();
 
 			if (firstOfMonthStatusMailEnabled) {
-				customersToWorkOn.AddRange(_customers.GetAll().Where(c => !c.IsTest && c.CollectionStatus.CurrentStatus.IsEnabled && (!c.MonthlyStatusEnabled.HasValue || c.MonthlyStatusEnabled.Value)));
+				customersToWorkOn.AddRange(_customers.GetAll().Where(c => !c.IsTest && c.CollectionStatus.IsEnabled && (!c.MonthlyStatusEnabled.HasValue || c.MonthlyStatusEnabled.Value)));
 			} else {
-				customersToWorkOn.AddRange(_customers.GetAll().Where(c => !c.IsTest && c.CollectionStatus.CurrentStatus.IsEnabled && c.MonthlyStatusEnabled.HasValue && c.MonthlyStatusEnabled.Value));
+				customersToWorkOn.AddRange(_customers.GetAll().Where(c => !c.IsTest && c.CollectionStatus.IsEnabled && c.MonthlyStatusEnabled.HasValue && c.MonthlyStatusEnabled.Value));
 			}
 
 			log.InfoFormat("Starting to send first of month status mails");

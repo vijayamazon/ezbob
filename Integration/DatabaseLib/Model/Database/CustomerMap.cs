@@ -163,11 +163,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.BankAccountValidationInvalidAttempts);
 			Map(x => x.ABTesting).Length(512);
 
-			Component(x => x.CollectionStatus, m => {
-				m.Map(x => x.CollectionDescription);
-				m.References(x => x.CurrentStatus, "CollectionStatus").Cascade.All();
-			});
-
+			Map(x => x.CollectionDescription);
+			References(x => x.CollectionStatus, "CollectionStatus");
+			
 			References(x => x.WizardStep, "WizardStep");
 
 			Map(x => x.NumApproves);

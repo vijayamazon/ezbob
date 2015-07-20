@@ -210,13 +210,6 @@
 		}
 	} // class AddressInfo
 
-	[Serializable]
-	public class CollectionStatus {
-		[Newtonsoft.Json.JsonIgnore]
-		[ScriptIgnore]
-		public virtual CustomerStatuses CurrentStatus { get; set; }
-		public virtual string CollectionDescription { get; set; }
-	} // class CollectionStatus
 
 	public class Customer : IEqualityComparer<Customer> {
 		public Customer() {
@@ -403,11 +396,8 @@
 
 		public virtual WizardStep WizardStep { get; set; }
 
-		private CollectionStatus _collectionStatus;
-		public virtual CollectionStatus CollectionStatus {
-			get { return _collectionStatus ?? (_collectionStatus = new CollectionStatus { CurrentStatus = new CustomerStatuses() }); }
-			set { _collectionStatus = value; }
-		} // CollectionStatus
+		public virtual CustomerStatuses CollectionStatus { get; set; }
+		public virtual string CollectionDescription { get; set; }
 
 		/// <summary>
 		/// Количество неудачных проверок банковского счета
