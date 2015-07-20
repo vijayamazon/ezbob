@@ -449,7 +449,7 @@
 
 			if (newExternalCollectionStatus != prevExternalCollectionStatus && (newExternalCollectionStatus == null || prevExternalCollectionStatus == null)) {
 				foreach (Loan loan in oCustomer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
-					bool customerInGoodStatus = newExternalCollectionStatus == null && oCustomer.CollectionStatus.CurrentStatus.IsEnabled;
+					bool customerInGoodStatus = newExternalCollectionStatus == null && oCustomer.CollectionStatus.IsEnabled;
 					LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
 					options.AutoLateFees = customerInGoodStatus;
 

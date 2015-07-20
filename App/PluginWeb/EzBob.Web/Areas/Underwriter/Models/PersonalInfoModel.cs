@@ -218,12 +218,12 @@
 			UserStatus = customer.Status.ToString();
 			CreditResult = customer.CreditResult.ToString();
 
-			CustomerStatusId = customer.CollectionStatus.CurrentStatus.Id;
-			IsCustomerInEnabledStatus = customer.CollectionStatus.CurrentStatus.IsEnabled;
-			IsCustomerStatusInAlertMode = customer.CollectionStatus.CurrentStatus.Name != "Enabled";
-			CustomerStatusName = customer.CollectionStatus.CurrentStatus.Name;
+			CustomerStatusId = customer.CollectionStatus.Id;
+			IsCustomerInEnabledStatus = customer.CollectionStatus.IsEnabled;
+			IsCustomerStatusInAlertMode = customer.CollectionStatus.Name != "Enabled";
+			CustomerStatusName = customer.CollectionStatus.Name;
 
-			IsWarning = customer.CollectionStatus.CurrentStatus.IsWarning;
+			IsWarning = customer.CollectionStatus.IsWarning;
 
 			ReferenceSource = customer.ReferenceSource;
 			ABTesting = customer.ABTesting;

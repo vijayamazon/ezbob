@@ -311,7 +311,7 @@
 				}, JsonRequestBehavior.AllowGet);
 			} // try
 
-			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
+			if (customer.CollectionStatus.Name == "Disabled") {
 				string sDisabledError =
 					"This account is closed, please contact <span class='bold'>ezbob</span> customer care<br/> " +
 					uiOrigin.CustomerCareEmail;
@@ -899,7 +899,7 @@
 				}, JsonRequestBehavior.AllowGet);
 			} // try
 
-			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled") {
+			if (customer.CollectionStatus.Name == "Disabled") {
 				CustomerOrigin uiOrigin = UiCustomerOrigin.Get();
 
 				string sDisabledError =
@@ -1045,9 +1045,7 @@
 				Status = Status.Registered,
 				RefNumber = g.GenerateForCustomer(),
 				WizardStep = m_oDatabaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.SignUp),
-				CollectionStatus = new CollectionStatus {
-					CurrentStatus = m_oCustomerStatusesRepository.Get((int)CollectionStatusNames.Enabled)
-				},
+				CollectionStatus = m_oCustomerStatusesRepository.Get((int)CollectionStatusNames.Enabled),
 				IsTest = isAutomaticTest,
 				IsOffline = null,
 				PromoCode = promoCode,

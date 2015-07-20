@@ -61,8 +61,8 @@
 			var loansNonClosed = loans.Where(l => l.DateClosed == null).ToList();
 
 			var data = new CollectionStatusModel {
-				CurrentStatus = collectionStatus.CurrentStatus.Id,
-				CollectionDescription = collectionStatus.CollectionDescription,
+				CurrentStatus = collectionStatus.Id,
+				CollectionDescription = customer.CollectionDescription,
 				Items = loansNonClosed.Select(loan => new CollectionStatusItem {
 					LoanId = loan.Id,
 					LoanRefNumber = loan.RefNumber
@@ -78,19 +78,19 @@
 		public JsonResult Save(int customerId, CollectionStatusModel collectionStatus) {
 
 			var customer = this.customerRepository.Get(customerId);
-			var prevStatus = customer.CollectionStatus.CurrentStatus;
+			var prevStatus = customer.CollectionStatus;
 
 			if (prevStatus.Id == collectionStatus.CurrentStatus) {
 				return Json(new { });
 			}
 
-			customer.CollectionStatus.CurrentStatus = this.customerStatusesRepository.Get(collectionStatus.CurrentStatus);
-			customer.CollectionStatus.CollectionDescription = collectionStatus.CollectionDescription;
+			customer.CollectionStatus = this.customerStatusesRepository.Get(collectionStatus.CurrentStatus);
+			customer.CollectionDescription = collectionStatus.CollectionDescription;
 
 			new Transactional(() => {
 				this.customerRepository.SaveOrUpdate(customer);
 
-				if (customer.CollectionStatus.CurrentStatus.IsDefault) {
+				if (customer.CollectionStatus.IsDefault) {
 
 					// Update loan options
 					foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
@@ -110,7 +110,7 @@
 				}
 
 				DateTime now = DateTime.UtcNow;
-				if (!customer.CollectionStatus.CurrentStatus.IsEnabled) {
+				if (!customer.CollectionStatus.IsEnabled) {
 
 					// Update loan options add freeze interest
 					foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
@@ -132,7 +132,7 @@
 					}
 
 					//collection and external status is ok
-				} else if (!prevStatus.IsEnabled && customer.CollectionStatus.CurrentStatus.IsEnabled && customer.ExternalCollectionStatus == null) {
+				} else if (!prevStatus.IsEnabled && customer.CollectionStatus.IsEnabled && customer.ExternalCollectionStatus == null) {
 					// Update loan options add remove freeze interest
 					foreach (Loan loan in customer.Loans.Where(l => l.Status != LoanStatus.PaidOff && l.Balance >= CurrentValues.Instance.MinDectForDefault)) {
 						LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
@@ -161,7 +161,7 @@
 					Timestamp = DateTime.UtcNow,
 					CustomerId = customerId,
 					PreviousStatus = prevStatus,
-					NewStatus = customer.CollectionStatus.CurrentStatus,
+					NewStatus = customer.CollectionStatus,
 					Description = collectionStatus.CollectionDescription,
 					Amount = collectionStatus.Amount,
 					ApplyForJudgmentDate = hasApplyForJudgmentDate ? applyForJudgmentDate : (DateTime?)null,
@@ -172,7 +172,7 @@
 				this.customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}).Execute();
 
-			if (customer.CollectionStatus.CurrentStatus.Name == "Disabled" && (collectionStatus.Unsubscribe || collectionStatus.ChangeEmail)) {
+			if (customer.CollectionStatus.Name == "Disabled" && (collectionStatus.Unsubscribe || collectionStatus.ChangeEmail)) {
 				this.serviceClient.Instance.UserDisable(this.context.UserId, customer.Id, customer.Name, collectionStatus.Unsubscribe, collectionStatus.ChangeEmail);
 			}
 			return Json(new { });
