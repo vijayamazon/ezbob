@@ -11,6 +11,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 	using Ezbob.Logger;
 	using NHibernate;
 	using CommonLib.TimePeriodLogic;
+	using Ezbob.Database;
+	using Ezbob.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Marketplaces;
 	using StructureMap;
@@ -19,7 +21,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 		public MarketplaceModelBuilder(ISession session) {
 			_session = session ?? ObjectFactory.GetInstance<ISession>();
 		}
-		
+
 		public MarketPlaceModel Create(MP_CustomerMarketPlace mp, DateTime? history) {
 			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
 			var updatingStatus = mp.GetUpdatingStatus(history);
@@ -115,14 +117,14 @@ namespace EzBob.Models.Marketplaces.Builders {
 					TheMonth = x.TheMonth,
 					Turnover = x.Turnover
 				}).ToList();
-			
+
 			var monthSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Month && x.ParameterName == AggregationFunction.Turnover.ToString());
 			model.MonthSales = monthSales == null ? 0 : (decimal)monthSales.Value;
 
 			var yearSales = aggregations.FirstOrDefault(x => x.TimePeriod.TimePeriodType == TimePeriodEnum.Year && x.ParameterName == AggregationFunction.Turnover.ToString());
 			model.AnnualSales = yearSales == null ? 0 : (decimal)yearSales.Value;
 
-			
+
 			var feedbacks = GetFeedbackData(aggregations);
 			model.RaitingPercent = feedbacks.RaitingPercent;
 
@@ -168,26 +170,43 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return string.Format("https://www.google.com/search?q={0}+{1}", HttpUtility.UrlEncode(mp.Marketplace.Name), mp.DisplayName);
 		}
 
-		public virtual void UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
+		public virtual DateTime? UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
 			bool bShouldLastTransactionDateBeUpdated =
 				!mp.LastTransactionDate.HasValue ||
 				(mp.UpdatingEnd.HasValue && mp.LastTransactionDate.Value < mp.UpdatingEnd.Value.AddDays(-2));
 
 			if (!bShouldLastTransactionDateBeUpdated)
-				return;
+				return mp.LastTransactionDate;
 
-			mp.LastTransactionDate = GetLastTransaction(mp);
+			DateTime? lastTransactionDate = GetLastTransaction(mp);
 			try {
-				if (mp.LastTransactionDate != null) {
-					ObjectFactory.GetInstance<CustomerMarketPlaceRepository>().Merge(mp);
+				if (lastTransactionDate.HasValue) {
+					Library.Instance.DB.ExecuteNonQuery("UpdateMarketPlaceLastTransactionDate", CommandSpecies.StoredProcedure,
+						new QueryParameter("MpID", mp.Id),
+						new QueryParameter("LastTransactionDate", lastTransactionDate));
 				}
 			} catch (Exception ex) {
 				Log.Warn(ex, "Failed to update LastTransactionDate for mp {0}", mp.Id);
 			}
+
+			return lastTransactionDate;
 		}
 
-		public void UpdateOriginationDate(MP_CustomerMarketPlace mp) {
-			mp.OriginationDate = mp.OriginationDate ?? GetSeniority(mp);
+		public DateTime? UpdateOriginationDate(MP_CustomerMarketPlace mp) {
+			if (mp.OriginationDate.HasValue) {
+				return mp.OriginationDate;
+			}
+			DateTime? seniority = GetSeniority(mp);
+			try {
+				if (seniority.HasValue) {
+					Library.Instance.DB.ExecuteNonQuery("UpdateMarketPlaceOriginationDate", CommandSpecies.StoredProcedure,
+							new QueryParameter("MpID", mp.Id),
+							new QueryParameter("OriginationDate", seniority));
+				}
+			} catch (Exception ex) {
+				Log.Warn(ex, "Failed to update LastTransactionDate for mp {0}", mp.Id);
+			}
+			return seniority;
 		}
 
 		public virtual void SetAggregationData(MarketPlaceModel model, List<IAnalysisDataParameterInfo> av) {
