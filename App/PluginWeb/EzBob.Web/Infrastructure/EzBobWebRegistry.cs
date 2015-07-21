@@ -23,7 +23,7 @@ namespace EzBob.Web.Infrastructure
     using ServiceClientProxy;
     using StructureMap.Configuration.DSL;
 
-    public class PluginWebRegistry : Registry
+	public class PluginWebRegistry : Registry
 	{
 		public PluginWebRegistry()
 		{
