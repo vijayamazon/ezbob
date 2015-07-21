@@ -209,12 +209,12 @@
             <tr class="<%= editClass %>">
                 <td>
                     <%- i+1 %>&nbsp;<%
-                    if (item.Editable && item.Type != 'Installment') { %>
+                    if (item.Editable) { %>
                     <button class="btn btn-primary btn-mini edit-schedule-item" data-id="<%- i %>"><i class="fa fa-pencil"></i></button>
                     <%
                     }
 
-                    if (item.Deletable && item.Type != 'Installment') { %>
+                    if (item.Deletable) { %>
                     <button class="btn btn-primary btn-mini remove-schedule-item" data-id="<%- i %>"><i class="fa fa-trash-o"></i></button>
                     <%
                     }

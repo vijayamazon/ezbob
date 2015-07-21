@@ -30,6 +30,8 @@
 #btnAMLandBWAInformation,
 #btnBWAInformation,
 .edit-loan,
+.edit-schedule-item,
+.remove-schedule-item,
 .couple_buttons,
 a[data-bug-type],
 .addNewDebitCard,
@@ -191,6 +193,11 @@ a[data-bug-type],
     visibility: visible;
 }
 
+.permission-OldEditLoanDetails .edit-schedule-item,
+.permission-OldEditLoanDetails .remove-schedule-item{
+	display: inline-block;
+    visibility: visible;
+}
 /*Rerunning MPs - Registered tab*/
 
 .permission-RerunningMarketplaces .recheck-mp {
