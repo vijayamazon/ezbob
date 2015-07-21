@@ -225,21 +225,17 @@
             DateTime? freezeEndDate,
             bool? rescheduleIn,
             bool save = false
-            )
-        {
+            ){
 
             ReschedulingActionResult result = null;
 
-            try
-            {
+            try{
                 Loan loan = this._loans.Get(loanID);
                 DateTime now = DateTime.UtcNow;
 
                 //  loan options
-                if (save)
-                {
-                    if (freezeInterest == true)
-                    {
+                if (save){
+                    if (freezeInterest == true){
                         loan.InterestFreeze.Add(new LoanInterestFreeze
                         {
                             Loan = loan,
@@ -254,8 +250,7 @@
                     }
                 }//  ### loan options
 
-                if (rescheduleIn != null)
-                {
+                if (rescheduleIn != null){
                     ReschedulingArgument reModel = new ReschedulingArgument();
                     reModel.LoanType = loan.GetType().AssemblyQualifiedName;
                     reModel.LoanID = loanID;
@@ -270,18 +265,18 @@
                     // re strategy
                     result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
-                    Log.Debug(string.Format("ReschedulingResult: {0}, {1}", reModel, result.Value));
+					Log.Debug(string.Format("RescheduleLoanSubmitted: {0}, {1}", reModel, result.Value));
                 }
 
                 //  loan options
-                if (save)
-                {
+                if (save){
+					Log.Debug(string.Format("before: {0}", loan));
                     this.session.Refresh(loan);
+					Log.Debug(string.Format("after: {0}", loan));
                     UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
                 }
             }
-            catch (Exception editex)
-            {
+            catch (Exception editex){
                 Log.Error("rescheduling editor EXCEPTION: " + editex);
             }
 
@@ -336,8 +331,9 @@
                 }
                 else
                     options.AutoPayment = true;
-
+				
                 this.loanOptionsRepository.SaveOrUpdate(options);
+				Log.Debug(string.Format("BEFOREFLUSH: {0}", loan));
                 this.session.Flush();
                 // TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
             }
@@ -375,7 +371,7 @@
 
         [Ajax]
         [HttpPost]
-        [Transactional]
+		//[Transactional]
         public JsonResult RemoveFreezeInterval(int id, int intervalid)
         {
             Loan oLoan = this._loans.Get(id);
@@ -392,40 +388,42 @@
 
             model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-            ReschedulingArgument reModel = new ReschedulingArgument();
-            reModel.LoanType = oLoan.GetType().AssemblyQualifiedName;
-            reModel.LoanID = id;
-            reModel.SaveToDB = false;
-            reModel.ReschedulingDate = DateTime.UtcNow;
-            reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-            reModel.RescheduleIn = true;
+	        RescheduleSetmodel(model, oLoan);
 
-            try
-            {
-                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
-                model.ReResultIn = result.Value;
-                //model.ReschedulingINNotification = result.Value.Error;
-                Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
-            }
-            catch (Exception editex)
-            {
-                Log.Error(editex);
-            }
+			//ReschedulingArgument reModel = new ReschedulingArgument();
+			//reModel.LoanType = oLoan.GetType().AssemblyQualifiedName;
+			//reModel.LoanID = id;
+			//reModel.SaveToDB = false;
+			//reModel.ReschedulingDate = DateTime.UtcNow;
+			//reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+			//reModel.RescheduleIn = true;
 
-            reModel.RescheduleIn = false;
-            reModel.PaymentPerInterval = 0m;
-            try
-            {
-                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
-                model.ReResultOut = result.Value;
-                //model.OutsideAmount = reModel.PaymentPerInterval;
-                //model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
-                Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
-            }
-            catch (Exception editex)
-            {
-                Log.Error(editex);
-            }
+			//try
+			//{
+			//	ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
+			//	model.ReResultIn = result.Value;
+			//	//model.ReschedulingINNotification = result.Value.Error;
+			//	Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
+			//}
+			//catch (Exception editex)
+			//{
+			//	Log.Error(editex);
+			//}
+
+			//reModel.RescheduleIn = false;
+			//reModel.PaymentPerInterval = 0m;
+			//try
+			//{
+			//	ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
+			//	model.ReResultOut = result.Value;
+			//	//model.OutsideAmount = reModel.PaymentPerInterval;
+			//	//model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
+			//	Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
+			//}
+			//catch (Exception editex)
+			//{
+			//	Log.Error(editex);
+			//}
 
 
             return Json(model);

@@ -36,8 +36,8 @@ BEGIN
 		MaxEmployeeCount,
 		MaxAnnualTurnover,
 		IsDefault,
-		AlertOnCustomerReasonType,
-		IsDisabled
+		AlertOnCustomerReasonType--,
+	--	IsDisabled
 	)
 	SELECT TOP 1
 		ls.LoanSourceID,
@@ -48,8 +48,8 @@ BEGIN
 		ls.MaxEmployeeCount,
 		ls.MaxAnnualTurnover,
 		ls.IsDefault,
-		ls.AlertOnCustomerReasonType,
-		ls.IsDisabled
+		ls.AlertOnCustomerReasonType--,
+	--	ls.IsDisabled
 	FROM
 		LoanSource ls
 	WHERE (

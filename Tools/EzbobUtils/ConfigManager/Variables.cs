@@ -198,6 +198,7 @@ namespace ConfigManager {
 		EzServiceUpdateConfiguration,
 		EzbobMailCc,
 		EzbobMailTo,
+		EzbobTechMailTo,
 
 		FCFFactor,
 

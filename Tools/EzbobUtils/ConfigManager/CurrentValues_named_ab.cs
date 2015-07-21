@@ -455,6 +455,10 @@
 		public virtual VariableValue AlibabaClientEnvironment {
 			get { return this[Variables.AlibabaClientEnvironment]; }
 		}
+		public virtual VariableValue EzbobTechMailTo {
+			get { return this[Variables.EzbobTechMailTo]; }
+		}
+		
 
 	} // class CurrentValues
 } // namespace
