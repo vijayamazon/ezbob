@@ -34,6 +34,7 @@
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
+	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using EzBob.Models;
@@ -49,6 +50,7 @@
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
 	using SalesForceLib;
+	using SalesForceLib.Models;
 	using StructureMap;
 	using Twilio;
 
@@ -1279,6 +1281,20 @@
 			session.Flush();
 		}
 
+		[Test]
+		public void TestSFRetrier() {
+			DateTime now = DateTime.UtcNow;
+			AddOpportunity add = new AddOpportunity(28, new OpportunityModel {
+				Name = "NewOpportunity",
+				Email = "alexbo+off02@ezbob.com",
+				CreateDate = now,
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				Stage = OpportunityStage.s5.DescriptionAttr(),
+				Type = OpportunityType.FinishLoan.DescriptionAttr()
+			});
 
+			add.Execute();
+		}
 	}
 }

@@ -412,6 +412,8 @@ namespace ConfigManager {
 		SalesForcePassword,
 		SalesForceToken,
 		SalesForceEnvironment,
+		SalesForceNumberOfRetries,
+		SalesForceRetryWaitSeconds,
 		SessionTimeout,
 		SetupFeeEnabled,
 		SetupFeeFixed,

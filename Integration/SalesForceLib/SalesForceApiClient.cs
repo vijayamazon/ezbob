@@ -7,29 +7,28 @@
 	using SalesForceLib.SalesForceServiceNS;
 
 	public class SalesForceApiClient : ISalesForceAppClient {
-		public string Error { get; set; }
-
-		public bool HasError {
-			get {
-				return !string.IsNullOrEmpty(Error);
-			}
-		}
-
+		public string Error { get; private set; }
+		public bool HasLoginError { get; private set; }
+		public bool HasError { get { return !string.IsNullOrEmpty(Error) || HasLoginError; } }
 		public string Model { get; set; }
 
 		public SalesForceApiClient(string userName, string password, string token, string environment) {
 			this.api = new EzbobWebServicesPortTypeClient("EzbobWebServices" + environment);
 			this.partnersClient = new SoapClient("PartnersServices" + environment);
 			Error = string.Empty;
-			Login(userName, password, token);
+			this.userName = userName;
+			this.password = password;
+			this.token = token;
+			Login();
 		}
 
-		private void Login(string userName, string password, string token) {
+		public void Login() {
+			HasLoginError = false;
 			this.lr = null;
 			try {
 				var response = this.partnersClient.login(new loginRequest {
-					username = userName,
-					password = password + token,
+					username = this.userName,
+					password = this.password + this.token,
 					CallOptions = new SalesForceLib.SalesForcePartnersServiceNS.CallOptions(),
 					LoginScopeHeader = new LoginScopeHeader(),
 				});
@@ -37,23 +36,27 @@
 			} catch (Exception ex) {
 				Error = string.Format("Failed to login to sales force partners server \n{0}", ex);
 				Log.Error(Error);
+				HasLoginError = true;
 				return;
 			}
 
 			if (this.lr != null && this.lr.passwordExpired) {
 				Error = "Sales Force: Your password is expired.";
 				Log.Error(Error);
+				HasLoginError = true;
+			}
+
+			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
+				Log.ErrorFormat("SalesForce Login null session id");
+				HasLoginError = true;
 			}
 		}
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
 			Model = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", Model);
 			string result = null;
 
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce CreateUpdateLeadAccount null session id");
-			} else {
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				var response = this.api.LeadAccountService(
 					new SalesForceServiceNS.SessionHeader {
 						sessionId = this.lr.sessionId
@@ -72,13 +75,8 @@
 
 		public void CreateOpportunity(OpportunityModel model) {
 			Model = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateOpportunity\n {0}", Model);
 			string result = null;
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce CreateOpportunity null session id");
-			} else {
-
-
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				var response = this.api.CreateOpportunityService(
 					new SalesForceServiceNS.SessionHeader {
 						sessionId = this.lr.sessionId
@@ -97,11 +95,8 @@
 
 		public void UpdateOpportunity(OpportunityModel model) {
 			Model = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce UpdateCloseOpportunityService\n {0}", Model);
 			string result = null;
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce UpdateCloseOpportunityService null session id");
-			} else {
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				// max length of deal lost reason is 255
 				const int maxDealLostReasonLength = 255;
 				if (model.DealLostReason != null && model.DealLostReason.Length > maxDealLostReasonLength) {
@@ -120,16 +115,12 @@
 				Log.DebugFormat("Debug log: {0}", response == null ? "" : response.debugLog);
 			}
 			LogResult("UpdateCloseOpportunityService", result, model.Email);
-
 		}
 
 		public void CreateUpdateContact(ContactModel model) {
 			Model = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateUpdateContact\n {0}", Model);
 			string result = null;
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce CreateUpdateContact null session id");
-			} else {
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				var response = this.api.ContactService(
 					new SalesForceServiceNS.SessionHeader {
 						sessionId = this.lr.sessionId
@@ -147,11 +138,8 @@
 
 		public void CreateTask(TaskModel model) {
 			Model = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateTask\n {0}", Model);
 			string result = null;
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce CreateTask null session id");
-			} else {
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				var response = this.api.CreateTask(
 					new SalesForceServiceNS.SessionHeader {
 						sessionId = this.lr.sessionId
@@ -170,11 +158,8 @@
 
 		public void CreateActivity(ActivityModel model) {
 			Model = model.ToJsonExtension();
-			Log.InfoFormat("SalesForce CreateActivity\n {0}", Model);
 			string result = null;
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce CreateActivity null session id");
-			} else {
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				var response = this.api.CreateActivity(
 					new SalesForceServiceNS.SessionHeader {
 						sessionId = this.lr.sessionId
@@ -191,12 +176,9 @@
 		}
 
 		public void ChangeEmail(string currentEmail, string newEmail) {
-			Log.InfoFormat("SalesForce ChangeEmail from {0} to {1}", currentEmail, newEmail);
 			Model=new { currentEmail, newEmail }.ToJsonExtension();
 			string result = null;
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce ChangeEmail null session id");
-			} else {
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				var response = this.api.ChangeEmail(
 					new SalesForceServiceNS.SessionHeader {
 						sessionId = this.lr.sessionId
@@ -213,12 +195,9 @@
 		}
 
 		public GetActivityResultModel GetActivity(string email) {
-			Log.InfoFormat("SalesForce GetActivity for {0}", email);
 			Model = new { Email = email }.ToJsonExtension(); 
 			string result = null;
-			if (this.lr == null || string.IsNullOrEmpty(this.lr.sessionId)) {
-				Log.ErrorFormat("SalesForce GetActivity null session id");
-			} else {
+			if (this.lr != null && !string.IsNullOrEmpty(this.lr.sessionId)) {
 				var response = this.api.GetActivity(
 					new SalesForceServiceNS.SessionHeader {
 						sessionId = this.lr.sessionId
@@ -259,5 +238,8 @@
 		private readonly Soap partnersClient;
 		protected static readonly ILog Log = LogManager.GetLogger(typeof(SalesForceApiClient));
 		private LoginResult lr;
+		private readonly string token;
+		private readonly string password;
+		private readonly string userName;
 	}
 }

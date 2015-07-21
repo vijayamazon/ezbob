@@ -167,6 +167,14 @@
 		public virtual VariableValue SalesForceEnvironment {
 			get { return this[Variables.SalesForceEnvironment]; }
 		}
+
+		public virtual VariableValue SalesForceNumberOfRetries {
+			get { return this[Variables.SalesForceNumberOfRetries]; }
+		}
+
+		public virtual VariableValue SalesForceRetryWaitSeconds {
+			get { return this[Variables.SalesForceRetryWaitSeconds]; }
+		}
 		
 		public virtual VariableValue SessionTimeout {
 			get { return this[Variables.SessionTimeout]; }
