@@ -74,6 +74,7 @@
     <Compile Include="MpModel.cs" />
     <Compile Include="NewLoan\NLFeeItem.cs" />
     <Compile Include="NewLoan\NLAgreementItem.cs" />
+    <Compile Include="NewLoan\NLLoanOptions.cs" />
     <Compile Include="NewLoan\NLScheduleItem.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
