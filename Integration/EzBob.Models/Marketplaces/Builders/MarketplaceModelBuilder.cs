@@ -26,7 +26,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
 			var updatingStatus = mp.GetUpdatingStatus(history);
 			var updatingError = mp.GetUpdatingError(history);
-			var age = GetAccountAge(mp);
+			DateTime? originationDate;
+			var age = GetAccountAge(mp, out originationDate);
 			var url = GetUrl(mp, mp.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(mp.Id));
 			var lastTransactionDate = GetLastTransactionDate(mp);
 
@@ -49,7 +50,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				IsNew = mp.IsNew,
 				IsHistory = history.HasValue,
 				History = history,
-				LastTransactionDate = lastTransactionDate
+				LastTransactionDate = lastTransactionDate,
 			};
 
 			var aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
@@ -83,7 +84,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 			var lastChecked = mp.UpdatingEnd.HasValue ? FormattingUtils.FormatDateToString(mp.UpdatingEnd.Value) : "never/in progress";
 			var updatingStatus = mp.GetUpdatingStatus(history);
 			var updatingError = mp.GetUpdatingError(history);
-			var age = GetAccountAge(mp);
+			DateTime? originationDate;
+			var age = GetAccountAge(mp, out originationDate);
 			var url = GetUrl(mp, mp.GetRetrieveDataHelper().RetrieveCustomerSecurityInfo(mp.Id));
 			var lastTransactionDate = GetLastTransactionDate(mp);
 
@@ -104,7 +106,7 @@ namespace EzBob.Models.Marketplaces.Builders {
 				IsHistory = history.HasValue,
 				History = history,
 				LastTransactionDate = lastTransactionDate,
-				OriginationDate = mp.OriginationDate
+				OriginationDate = originationDate
 			};
 
 			var aggregations = mp.Marketplace.GetAggregations(mp, history).ToList();
@@ -142,11 +144,11 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return new MarketPlaceFeedbackModel();
 		}
 
-		public string GetAccountAge(MP_CustomerMarketPlace mp) {
-			UpdateOriginationDate(mp);
-			return mp.OriginationDate == null
+		public string GetAccountAge(MP_CustomerMarketPlace mp, out DateTime? originationDate) {
+			originationDate = UpdateOriginationDate(mp);
+			return originationDate == null
 					   ? "-"
-					   : Convert.ToString(Math.Round((DateTime.UtcNow - mp.OriginationDate).Value.TotalDays / 30.0, 1), CultureInfo.InvariantCulture);
+					   : Convert.ToString(Math.Round((DateTime.UtcNow - originationDate).Value.TotalDays / 30.0, 1), CultureInfo.InvariantCulture);
 		}
 
 		public virtual DateTime? GetLastTransaction(MP_CustomerMarketPlace mp) {
@@ -154,8 +156,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 		}
 
 		public DateTime? GetLastTransactionDate(MP_CustomerMarketPlace mp) {
-			UpdateLastTransactionDate(mp);
-			return mp.LastTransactionDate;
+			DateTime? lastTransactionDate = UpdateLastTransactionDate(mp);
+			return lastTransactionDate;
 		}
 
 		protected virtual PaymentAccountsModel GetPaymentAccountModel(MP_CustomerMarketPlace mp, DateTime? history, List<IAnalysisDataParameterInfo> av) {
