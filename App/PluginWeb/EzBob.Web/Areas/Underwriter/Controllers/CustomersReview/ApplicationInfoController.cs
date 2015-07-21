@@ -798,13 +798,42 @@
 		) {
 			Customer customer = this._customerRepository.Get(customerID);
 
+			EZBob.DatabaseLib.Model.Database.CashRequestOriginator originator;
+
+			switch (newCreditLineOption) {
+			case NewCreditLineOption.SkipEverything:
+				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineSkipAll;
+				break;
+
+			case NewCreditLineOption.SkipEverythingAndApplyAutoRules:
+				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineSkipAndGoAuto;
+				break;
+
+			case NewCreditLineOption.UpdateEverythingAndApplyAutoRules:
+				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineUpdateAndGoAuto;
+				break;
+
+			case NewCreditLineOption.UpdateEverythingAndGoToManualDecision:
+				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineUpdateAndGoManual;
+				break;
+
+			default:
+				originator = EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineBtn;
+				log.Alert(
+					"New credit line option not specified for customer {0}, underwriter {1} - defaulting to obsolete value.",
+					customerID,
+					underwriterID
+				);
+				break;
+			} // switch
+
 			ActionMetaData amd = new MainStrategyClient(
 				underwriterID,
 				customer.Id,
 				customer.IsAvoid,
 				newCreditLineOption,
 				null,
-				EZBob.DatabaseLib.Model.Database.CashRequestOriginator.NewCreditLineBtn
+				originator
 			).ExecuteSync();
 
 			ForceNhibernateResync.ForCustomer(customerID);

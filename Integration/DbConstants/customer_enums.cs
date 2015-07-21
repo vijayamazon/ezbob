@@ -135,6 +135,22 @@
 		[EnumMember]
 		[Description("Manual strategy activation")]
 		Manual = 9,
+
+		[EnumMember]
+		[Description("UW new credit line button and selected 'Skip all' option")]
+		NewCreditLineSkipAll = 10,
+
+		[EnumMember]
+		[Description("UW new credit line button and selected 'Skip all and go auto' option")]
+		NewCreditLineSkipAndGoAuto = 11,
+
+		[EnumMember]
+		[Description("UW new credit line button and selected 'Update all and go manual' option")]
+		NewCreditLineUpdateAndGoManual = 12,
+
+		[EnumMember]
+		[Description("UW new credit line button and selected 'Update all and go auto' option")]
+		NewCreditLineUpdateAndGoAuto = 13,
 	} // enum CashRequestOriginator
 
 	public enum FraudStatus {

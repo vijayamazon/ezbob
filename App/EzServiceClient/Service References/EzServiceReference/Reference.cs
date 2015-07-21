@@ -2836,6 +2836,18 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.EnumMemberAttribute()]
         Manual = 9,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NewCreditLineSkipAll = 10,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NewCreditLineSkipAndGoAuto = 11,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NewCreditLineUpdateAndGoManual = 12,
+        
+        [System.Runtime.Serialization.EnumMemberAttribute()]
+        NewCreditLineUpdateAndGoAuto = 13,
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
