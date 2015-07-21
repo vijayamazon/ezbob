@@ -85,9 +85,10 @@
 			return strategy.NLModel;
 		}
 
-		public IntActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions) {
+        public IntActionResult AddLoanOptions(int userID, int customerID, NLLoanOptions loanOptions, int? oldLoanId)
+        {
 			AddLoanOptions stra;
-			var amd = ExecuteSync(out stra, customerID, userID, customerID, loanOptions);
+            var amd = ExecuteSync(out stra, customerID, userID, customerID, loanOptions, oldLoanId);
 			return new IntActionResult {
 				MetaData = amd,
 				Value = stra.LoanOptionsID

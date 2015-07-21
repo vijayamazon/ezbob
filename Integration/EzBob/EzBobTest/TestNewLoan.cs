@@ -2,10 +2,11 @@
 	using System;
 	using DbConstants;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan;
 	using NUnit.Framework;
 
 	[TestFixture]
-	class TestNewLoan {
+	class TestNewLoan :BaseTestFixtue {
 
 
 		[Test]
@@ -43,7 +44,34 @@
 			Console.WriteLine(Enum.ToObject(typeof(RepaymentIntervalTypesId), 1));
 		}
 
-	
+	    [Test]
+	    public void TestLoanOptions1() {
+            NL_LoanOptions NL_options = new NL_LoanOptions
+            {
+                LoanID = 123,
+                AutoCharge = true,
+                StopAutoChargeDate = DateTime.UtcNow,
+                AutoLateFees = true,
+                StopAutoLateFeesDate = DateTime.UtcNow,
+                AutoInterest = true,
+                StopAutoInterestDate = DateTime.UtcNow,
+                ReductionFee = true,
+                LatePaymentNotification = true,
+                CaisAccountStatus = "asd",
+                ManualCaisFlag = "qwe",
+                EmailSendingAllowed = true,
+                SmsSendingAllowed = true,
+                MailSendingAllowed = true,
+                UserID = 25,
+                InsertDate = DateTime.UtcNow,
+                IsActive = true,
+                Notes = null
+            };
+            //var stra = new AddLoanOptions(NL_options, null);
+            //stra.Execute();
+	    }
+
+
 
 	} // class TestNewLoan
 } // namespace

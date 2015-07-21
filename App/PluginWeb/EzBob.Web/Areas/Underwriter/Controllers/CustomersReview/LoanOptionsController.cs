@@ -3,6 +3,7 @@
 	using System.Web.Mvc;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Infrastructure;
 	using EZBob.DatabaseLib.Model.Database;
@@ -111,7 +112,28 @@
             //TODO update new loan options table
 			Log.DebugFormat("update loan options for loan {0}", options.LoanId);
 
-			this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, new NL_LoanOptions {});
+            //oldloan id => nl loanid
+            NLLoanOptions NLoptions = new NLLoanOptions {
+                        AutoCharge=options.AutoPayment,
+                        StopAutoChargeDate=options.StopAutoChargeDate,
+                        AutoLateFees=options.AutoLateFees,
+                        StopAutoLateFeesDate=options.StopLateFeeFromDate,
+                        AutoInterest=false,
+                        StopAutoInterestDate=null,
+                        ReductionFee=options.ReductionFee,
+                        LatePaymentNotification=options.LatePaymentNotification,
+                        CaisAccountStatus=options.CaisAccountStatus,
+                        ManualCaisFlag=options.ManualCaisFlag,
+                        EmailSendingAllowed=options.EmailSendingAllowed,
+                        SmsSendingAllowed=options.SmsSendingAllowed,
+                        MailSendingAllowed=options.MailSendingAllowed,
+                        UserID=this.context.UserId,
+                        InsertDate=DateTime.UtcNow,
+                        IsActive=true,
+                        Notes=null
+            };
+
+            this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, NLoptions,options.LoanId);
             
 			return Json(new { });
 		}

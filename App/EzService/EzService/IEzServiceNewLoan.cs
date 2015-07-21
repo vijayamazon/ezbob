@@ -23,7 +23,7 @@
 		IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
 
 		[OperationContract]
-		IntActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions);
+        IntActionResult AddLoanOptions(int userID, int customerID, NLLoanOptions loanOptions, int? oldLoanId);
 
 		[OperationContract]
 		IntActionResult AddLoan(NL_Model loanModel);

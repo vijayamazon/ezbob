@@ -4,6 +4,8 @@
 	using System.Web.Mvc;
 	using ConfigManager;
 	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
 	using EzBob.Models;
 	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
@@ -259,7 +261,7 @@
 				//  loan options
 				if (save) {
 					this.session.Refresh(loan);
-					UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
+					UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now,loan.Customer.Id);
 				}
 			} catch (Exception editex) {
 				Log.Error("rescheduling editor EXCEPTION: " + editex);
@@ -269,7 +271,7 @@
 		}
 
 		[NonAction]
-		private void UpdateLoanOptions(Loan loan, bool? stopAutoCharge, bool? stopLateFee, int? stopAutoChargePayment, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate, DateTime now) {
+		private void UpdateLoanOptions(Loan loan, bool? stopAutoCharge, bool? stopLateFee, int? stopAutoChargePayment, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate, DateTime now,int customerId) {
 			if (stopAutoCharge != null || stopLateFee != null) {
 				LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
 
@@ -307,6 +309,27 @@
 
 				this.loanOptionsRepository.SaveOrUpdate(options);
 				this.session.Flush();
+
+                NLLoanOptions NLoptions = new NLLoanOptions{
+                    AutoCharge = options.AutoPayment,
+                    StopAutoChargeDate = options.StopAutoChargeDate,
+                    AutoLateFees = options.AutoLateFees,
+                    StopAutoLateFeesDate = options.StopLateFeeFromDate,
+                    AutoInterest = false,
+                    StopAutoInterestDate = null,
+                    ReductionFee = options.ReductionFee,
+                    LatePaymentNotification = options.LatePaymentNotification,
+                    CaisAccountStatus = options.CaisAccountStatus,
+                    ManualCaisFlag = options.ManualCaisFlag,
+                    EmailSendingAllowed = options.EmailSendingAllowed,
+                    SmsSendingAllowed = options.SmsSendingAllowed,
+                    MailSendingAllowed = options.MailSendingAllowed,
+                    UserID = this._context.UserId,
+                    InsertDate = DateTime.UtcNow,
+                    IsActive = true,
+                    Notes = null
+                };
+                this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, NLoptions, options.LoanId);
 				// TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
 			}
 		}

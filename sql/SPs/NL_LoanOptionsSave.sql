@@ -32,10 +32,13 @@ CREATE TYPE NL_LoanOptionsList AS TABLE (
 GO
 
 CREATE PROCEDURE NL_LoanOptionsSave
-@Tbl NL_LoanOptionsList READONLY
+@Tbl NL_LoanOptionsList READONLY,
+@LoanID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
+	
+	UPDATE NL_LoanOptions SET IsActive=0 WHERE LoanID=@LoanID
 
 	INSERT INTO NL_LoanOptions (
 		[LoanID],

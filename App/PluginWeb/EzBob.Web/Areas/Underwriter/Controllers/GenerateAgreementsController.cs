@@ -1,18 +1,17 @@
 ﻿namespace EzBob.Web.Areas.Underwriter.Controllers
 {
-	using System.Data;
-	using System;
-	using System.Linq;
-	using System.Web.Mvc;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using Code;
-	using Code.Agreements;
-	using EzBob.Web.Infrastructure;
-	using Infrastructure.Attributes;
-	using Newtonsoft.Json;
+    using System;
+    using System.Linq;
+    using System.Web.Mvc;
+    using EzBob.Models.Agreements;
+    using EzBob.Web.Code;
+    using EzBob.Web.Infrastructure;
+    using EzBob.Web.Infrastructure.Attributes;
+    using EZBob.DatabaseLib.Model.Database.Loans;
+    using EZBob.DatabaseLib.Model.Database.Repository;
+    using Newtonsoft.Json;
 
-	public class GenerateAgreementsController : Controller
+    public class GenerateAgreementsController : Controller
 	{
         private readonly IEzbobWorkplaceContext _context;
 		private readonly AgreementsGenerator _agreementsGenerator;
