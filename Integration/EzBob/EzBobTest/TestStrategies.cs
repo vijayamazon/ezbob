@@ -43,6 +43,8 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
+	using NHibernate;
 	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
@@ -1218,7 +1220,63 @@
 			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
 
 			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
+		}
 
+		[Test]
+		public void TestReBug() {
+			const int loanID = 1050;
+
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			LoanOptionsRepository optionsRepository = ObjectFactory.GetInstance<LoanOptionsRepository>();
+			ISession session = ObjectFactory.GetInstance<ISession>();
+
+			Loan loan = loanRep.Get(loanID);
+
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanID;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.SaveToDB = false;
+			reModel.RescheduleIn = true;
+			
+			var s = new RescheduleLoan<Loan>(loan, reModel);
+			s.Context.UserID = 25852;
+
+			try {
+				s.Execute();
+				m_oLog.Debug("RESULT FOR IN");
+				m_oLog.Debug(s.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+
+			ReschedulingArgument reModel1 = new ReschedulingArgument();
+			reModel1.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel1.LoanID = loanID;
+			reModel1.ReschedulingDate = DateTime.UtcNow;
+			reModel1.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel1.SaveToDB = false;
+			reModel1.RescheduleIn = false;
+			reModel1.PaymentPerInterval = 90m;
+			var s1 = new RescheduleLoan<Loan>(loan, reModel1);
+			s1.Context.UserID = 25852;
+
+			try {
+				s1.Execute();
+				m_oLog.Debug("RESULT FOR OUT");
+				m_oLog.Debug(s1.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+
+			LoanOptions options = optionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
+			options.AutoPayment = true;
+			optionsRepository.SaveOrUpdate(options);
+			session.Flush();
 		}
 
 

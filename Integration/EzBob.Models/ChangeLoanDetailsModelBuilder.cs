@@ -36,7 +36,7 @@
 			foreach (LoanInterestFreeze fr in loan.InterestFreeze.OrderBy(fr => fr.StartDate).Where(fr => fr.DeactivationDate == null)) {
 				model.InterestFreeze.Add(new InterestFreezeModel {
 					Id = fr.Id,
-					StartDate = (DateTime)fr.StartDate,
+					StartDate = fr.StartDate,
 					EndDate = fr.EndDate,
 					InterestRate = fr.InterestRate,
 					ActivationDate = fr.ActivationDate,
