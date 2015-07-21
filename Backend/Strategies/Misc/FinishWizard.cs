@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.Misc {
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Database;
@@ -18,6 +19,11 @@
 				"FinishWizard",
 				new QueryParameter("CustomerId", this.strategyArgs.CustomerID)
 			);
+
+			new BrokerDeleteCustomerLead(DB, Log) {
+				CustomerID = this.strategyArgs.CustomerID,
+				ReasonCode = BrokerDeleteCustomerLead.DeleteReasonCode.FinishWzrd.ToString(),
+			}.ExecuteNonQuery();
 
 			if (this.strategyArgs.DoSendEmail)
 				new EmailUnderReview(this.strategyArgs.CustomerID).Execute();
