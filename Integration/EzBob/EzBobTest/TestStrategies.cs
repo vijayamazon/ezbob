@@ -214,32 +214,6 @@
 		}
 
 		[Test]
-		public void TestAutoReRejection() {
-			var rerejection = new ReRejection(21334, this.m_oDB, this.m_oLog);
-			var rejection = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(21334, this.m_oDB, this.m_oLog);
-			var approve = new Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, AutomationCalculator.Common.TurnoverType.HMRC, this.m_oDB, this.m_oLog);
-			var reapprove = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(21334, this.m_oDB, this.m_oLog);
-
-			//rerejection.MakeDecision(rejectionDecision);
-			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
-
-			//rejection.Init().MakeDecision(rejectionDecision);
-			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
-
-			var decision = new AutoDecisionResponse();
-			//approve.Init().MakeDecision(decision);
-			//Assert.AreEqual(false, decision.IsAutoApproval);
-			reapprove.Init().MakeDecision(decision, null);
-
-			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(this.m_oDB, this.m_oLog, 21334, reapprove.Trail.InputData.DataAsOf);
-			oSecondary.MakeDecision(oSecondary.GetInputData());
-
-			bool bSuccess = reapprove.Trail.EqualsTo(oSecondary.Trail);
-
-			Assert.AreEqual(false, decision.IsAutoApproval);
-		}
-
-		[Test]
 		public void TestBackfillExperianConsumer() {
 			var s = new BackfillExperianConsumer();
 			s.Execute();
@@ -715,24 +689,6 @@
 			});
 			sf.Execute();
 		}
-
-		[Test]
-		public void TestAutoRejectBoth() {
-			int customerID = 20658;
-			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID, this.m_oDB, this.m_oLog);
-			result.Init()
-				.MakeAndVerifyDecision();
-		}
-
-		[Test]
-		public void TestBulkAutoRejectBoth() {
-			this.m_oDB.ForEachRowSafe((sr) => {
-				int customerId = sr["Id"];
-				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init()
-					.MakeAndVerifyDecision();
-			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
-		}
-
 
 		[Test]
 		public void TestCaisGenerate() {

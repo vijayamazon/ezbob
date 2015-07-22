@@ -11,7 +11,7 @@
 
 	public partial class Approval {
 		private void CheckAutoApprovalConformance(decimal outstandingOffers) {
-			this.log.Debug("Primary: checking if auto approval should take place for customer {0}...", this.customerId);
+			this.log.Debug("Primary: checking if auto approval should take place for customer {0}...", this.trail.CustomerID);
 
 			this.officeHoursHandler = new OfficeHoursHandler(
 				Now,
@@ -67,7 +67,7 @@
 
 			this.log.Debug(
 				"Primary: checking if auto approval should take place for customer {0} complete.",
-				this.customerId
+				this.trail.CustomerID
 			);
 
 			this.log.Msg("Primary: auto approved amount: {0}. {1}", this.trail.RoundedAmount, this.trail);

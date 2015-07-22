@@ -17,7 +17,13 @@
 		/// <summary>
 		/// Constructor get db, log customer id and rejection configuration variables
 		/// </summary>
-		public RejectionAgent(AConnection oDB, ASafeLog oLog, int nCustomerID, RejectionConfigs configs = null) {
+		public RejectionAgent(
+			AConnection oDB,
+			ASafeLog oLog,
+			int nCustomerID,
+			long? cashRequestID,
+			RejectionConfigs configs = null
+		) {
 			IsAutoRejected = false;
 
 			this.customerId = nCustomerID;
@@ -29,7 +35,7 @@
 
 			this.configs = configs ?? this.dbHelper.GetRejectionConfigs();
 
-			Trail = new RejectionTrail(nCustomerID, oLog);
+			Trail = new RejectionTrail(nCustomerID, cashRequestID, oLog);
 		} // constructor
 
 		public bool IsAutoRejected { get; private set; }

@@ -70,12 +70,12 @@
 		} // AutoInterface
 
 		public void RunAutomation(DateTime now, SortedSet<string> allNonAffirmativeTraces) {
-			AutoDecisions.Add(RunAutomationOnce(Manual.First.DecisionTime, 1));
+			AutoDecisions.Add(RunAutomationOnce(Manual.First.DecisionTime, 1, Manual.First.CashRequestID));
 
 			if (ManualDecisions.Count > 1)
-				AutoDecisions.Add(RunAutomationOnce(Manual.Last.DecisionTime, 2));
+				AutoDecisions.Add(RunAutomationOnce(Manual.Last.DecisionTime, 2, Manual.Last.CashRequestID));
 
-			CurrentAutoDecision = RunAutomationOnce(now, 0, allNonAffirmativeTraces);
+			CurrentAutoDecision = RunAutomationOnce(now, 0, null, allNonAffirmativeTraces);
 		} // RunAutomation
 
 		public string NonAffirmativeTraceResult(string traceName) {
@@ -91,10 +91,12 @@
 		protected virtual ApproveAgent CreateAutoApproveAgent(
 			int offeredCreditLine,
 			AutomationCalculator.Common.MedalOutputModel medal,
-			DateTime decisionTime
+			DateTime decisionTime,
+			long? cashRequestID
 		) {
 			return new ApproveAgent(
 				CustomerID,
+				cashRequestID,
 				offeredCreditLine,
 				medal.Medal,
 				medal.MedalType,
@@ -108,6 +110,7 @@
 		private AutoDecision RunAutomationOnce(
 			DateTime decisionTime,
 			int runTimeCount,
+			long? cashRequestID,
 			SortedSet<string> allNonAffirmativeTraces = null
 		) {
 			AutoDecision result = null;
@@ -117,7 +120,7 @@
 			// ReSharper disable once ConditionIsAlwaysTrueOrFalse
 			// Just for code consistency.
 			if (doNext) { // Re-reject area
-				if (IsRerejected(decisionTime)) {
+				if (IsRerejected(decisionTime, cashRequestID)) {
 					doNext = false;
 					result = new AutoDecision(DecisionActions.ReReject);
 				} // if
@@ -125,7 +128,7 @@
 
 			if (doNext) {
 				if (!IsAlibaba) {
-					if (IsRejected(decisionTime)) {
+					if (IsRejected(decisionTime, cashRequestID)) {
 						doNext = false;
 						result = new AutoDecision(DecisionActions.Reject);
 					} // if
@@ -148,7 +151,7 @@
 				offeredCreditLine = CapOffer(offeredCreditLine);
 
 			if (doNext) { // Re-approve area
-				if (IsReapproved(decisionTime)) {
+				if (IsReapproved(decisionTime, cashRequestID)) {
 					doNext = false;
 					result = new AutoDecision(DecisionActions.ReApprove);
 				} // if
@@ -157,7 +160,7 @@
 			Guid? trailID = null;
 
 			if (doNext) { // Approve area
-				if (IsApproved(offeredCreditLine, medal, decisionTime, allNonAffirmativeTraces, out trailID)) {
+				if (IsApproved(offeredCreditLine, medal, decisionTime, cashRequestID, allNonAffirmativeTraces, out trailID)) {
 					doNext = false;
 					result = new AutoDecision(DecisionActions.Approve, trailID, runTimeCount);
 
@@ -190,20 +193,20 @@
 			return result;
 		} // RunAutomationOnce
 
-		private bool IsRerejected(DateTime decisionTime) {
-			var agent = new RerejectAgent(CustomerID, decisionTime, DB, Log);
+		private bool IsRerejected(DateTime decisionTime, long? cashRequestID) {
+			var agent = new RerejectAgent(CustomerID, cashRequestID, decisionTime, DB, Log);
 			agent.Init();
 			agent.MakeDecision();
 
-			agent.Trail.Save(DB, null, tag: this.tag);
+			agent.Trail.SetTag(this.tag).Save(DB, null);
 
 			return agent.Trail.HasDecided;
 		} // IsRerejected
 
-		private bool IsRejected(DateTime decisionTime) {
-			var agent = new RejectAgent(CustomerID, decisionTime, DB, Log);
+		private bool IsRejected(DateTime decisionTime, long? cashRequestID) {
+			var agent = new RejectAgent(CustomerID, cashRequestID, decisionTime, DB, Log);
 
-			return agent.Decide(null, this.tag);
+			return agent.Decide(this.tag);
 		} // IsRejected
 
 		private int CapOffer(int offeredCreditLine) {
@@ -228,12 +231,12 @@
 			return offeredCreditLine;
 		} // CapOffer
 
-		private bool IsReapproved(DateTime decisionTime) {
-			var agent = new ReapproveAgent(CustomerID, decisionTime, DB, Log);
+		private bool IsReapproved(DateTime decisionTime, long? cashRequestID) {
+			var agent = new ReapproveAgent(CustomerID, cashRequestID, decisionTime, DB, Log);
 
 			agent.Init();
 
-			agent.Decide(true, null, this.tag);
+			agent.Decide(this.tag);
 
 			return agent.Trail.HasDecided;
 		} // IsReapproved
@@ -242,6 +245,7 @@
 			int offeredCreditLine,
 			AutomationCalculator.Common.MedalOutputModel medal,
 			DateTime decisionTime,
+			long? cashRequestID,
 			SortedSet<string> allNonAffirmativeTraces,
 			out Guid? trailUniqueID
 		) {
@@ -250,13 +254,13 @@
 			if (medal == null)
 				return false;
 
-			var agent = CreateAutoApproveAgent(offeredCreditLine, medal, decisionTime);
+			var agent = CreateAutoApproveAgent(offeredCreditLine, medal, decisionTime, cashRequestID);
 
 			agent.Init();
 
 			agent.MakeDecision();
 
-			agent.Trail.Save(DB, null, tag: this.tag);
+			agent.Trail.SetTag(this.tag).Save(DB, null);
 
 			if (!agent.Trail.HasDecided && (allNonAffirmativeTraces != null)) {
 				this.nonAffirmativeTraces = new SortedSet<string>();

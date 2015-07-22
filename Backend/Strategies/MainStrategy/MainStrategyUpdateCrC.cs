@@ -14,7 +14,7 @@
 	internal class MainStrategyUpdateCrC : AStoredProcedure {
 		public MainStrategyUpdateCrC(
 			int customerID,
-			long? cashRequestID,
+			long cashRequestID,
 			AutoDecisionResponse autoDecisionResponse,
 			LastOfferData lastOffer,
 			AConnection db,
@@ -23,7 +23,7 @@
 			this.now = DateTime.UtcNow;
 
 			this.customerID = customerID;
-			this.cashRequestID = cashRequestID;
+			CashRequestID = cashRequestID;
 			this.autoDecisionResponse = autoDecisionResponse;
 			this.lastOffer = lastOffer;
 
@@ -47,7 +47,6 @@
 		public override bool HasValidParameters() {
 			return
 				(CustomerID > 0) &&
-				CashRequestID.HasValue &&
 				(CashRequestID > 0)
 			;
 		} // HasValidParameters
@@ -59,10 +58,7 @@
 			set { }
 		} // CustomerID
 
-		public long? CashRequestID {
-			get { return this.cashRequestID; }
-			set { }
-		} // CashRequestID
+		public long CashRequestID { get; set; } // CashRequestID
 
 		public bool OverrideApprovedRejected { get; set; }
 
@@ -294,7 +290,6 @@
 		private readonly AutoDecisionResponse autoDecisionResponse;
 		private readonly LastOfferData lastOffer;
 		private readonly int customerID;
-		private readonly long? cashRequestID;
 		private readonly decimal setupFeePercentToUse;
 
 		private LoanSource loanSourceToUse;

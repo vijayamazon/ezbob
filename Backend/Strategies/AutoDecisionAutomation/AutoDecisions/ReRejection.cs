@@ -12,13 +12,13 @@
 	using EZBob.DatabaseLib.Model.Database;
 
 	public class ReRejection : AAutoDecisionBase {
-		public ReRejection(int customerId, AConnection db, ASafeLog log) {
+		public ReRejection(int customerId, long? cashRequestID, AConnection db, ASafeLog log) {
 			this.db = db;
 			this.log = log.Safe();
-			this.customerId = customerId;
 
 			this.trail = new ReRejectionTrail(
 				customerId,
+				cashRequestID,
 				this.log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -35,7 +35,7 @@
 
 			WasMismatch = !this.trail.EqualsTo(oSecondary.Trail);
 
-			this.trail.Save(this.db, oSecondary.Trail, tag: tag);
+			this.trail.Save(this.db, oSecondary.Trail);
 
 			return !WasMismatch;
 		} // MakeAndVerifyDecision
@@ -57,12 +57,12 @@
 		} // MakeDecision
 
 		private void RunPrimary() {
-			this.log.Debug("Primary: checking if auto re-reject should take place for customer {0}...", this.customerId);
+			this.log.Debug("Primary: checking if auto re-reject should take place for customer {0}...", this.trail.CustomerID);
 
 			SafeReader sr = this.db.GetFirst(
 				"GetCustomerDataForReRejection",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId)
+				new QueryParameter("CustomerId", this.trail.CustomerID)
 			);
 
 			bool lastDecisionWasReject = sr["LastDecisionWasReject"];
@@ -94,14 +94,14 @@
 
 			this.log.Debug(
 				"Primary: checking if auto re-reject should take place for customer {0} complete; {1}",
-				this.customerId,
+				this.trail.CustomerID,
 				this.trail
 			);
 		} // RunPrimary
 
 		private AutomationCalculator.AutoDecision.AutoReRejection.Agent RunSecondary() {
 			var oSecondary = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
-				this.customerId, this.trail.InputData.DataAsOf, this.db, this.log
+				this.trail.CustomerID, this.trail.CashRequestID, this.trail.InputData.DataAsOf, this.db, this.log
 			).Init();
 
 			oSecondary.MakeDecision();
@@ -199,7 +199,6 @@
 
 		private readonly AConnection db;
 		private readonly ASafeLog log;
-		private readonly int customerId;
 		private readonly ReRejectionTrail trail;
 	} // class ReRejection
 } // namespace

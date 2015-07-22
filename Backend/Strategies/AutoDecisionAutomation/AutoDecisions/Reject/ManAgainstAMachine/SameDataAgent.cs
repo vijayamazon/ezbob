@@ -10,7 +10,9 @@
 	/// Verifies whether the customer should be rejected using customer data that was available on specific date.
 	/// </summary>
 	public class SameDataAgent : Agent {
-		public SameDataAgent(int nCustomerID, DateTime oNow, AConnection oDB, ASafeLog oLog) : base(nCustomerID, oDB, oLog) {
+		public SameDataAgent(int nCustomerID, long? cashRequestID, DateTime oNow, AConnection oDB, ASafeLog oLog)
+			: base(nCustomerID, cashRequestID, oDB, oLog)
+		{
 			this.m_oNow = oNow;
 		} // constructor
 
@@ -22,12 +24,12 @@
 			return this;
 		} // Init
 
-		public virtual bool Decide(long? cashRequestID, string tag) {
+		public virtual bool Decide(string tag) {
 			Init();
 
 			RunPrimary();
 
-			Trail.Save(DB, null, cashRequestID, tag);
+			Trail.SetTag(tag).Save(DB, null);
 
 			return Trail.HasDecided;
 		} // Decide

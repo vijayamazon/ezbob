@@ -24,6 +24,7 @@
 	public partial class Approval : AAutoDecisionBase {
 		public Approval(
 			int customerId,
+			long? cashRequestID,
 			int offeredCreditLine,
 			Medal medalClassification,
 			AutomationCalculator.Common.MedalType medalType,
@@ -33,6 +34,7 @@
 		) {
 			this.trail = new ApprovalTrail(
 				customerId,
+				cashRequestID,
 				this.log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -54,7 +56,6 @@
 				this.loanScheduleTransactionRepository = ObjectFactory.GetInstance<LoanScheduleTransactionRepository>();
 				this.customerAnalytics = ObjectFactory.GetInstance<CustomerAnalyticsRepository>();
 
-				this.customerId = customerId;
 				this.medalClassification = medalClassification;
 				this.medalType = medalType;
 				this.turnoverType = turnoverType;
@@ -68,7 +69,8 @@
 			} // using timer step
 
 			this.m_oSecondaryImplementation = new Agent(
-				customerId,
+				this.trail.CustomerID,
+				this.trail.CashRequestID,
 				offeredCreditLine,
 				(AutomationCalculator.Common.Medal)medalClassification,
 				medalType,
@@ -80,7 +82,7 @@
 
 		public Approval Init() {
 			using (this.trail.AddCheckpoint(ProcessCheckpoints.Initializtion)) {
-				var stra = new LoadExperianConsumerData(this.customerId, null, null);
+				var stra = new LoadExperianConsumerData(this.trail.CustomerID, null, null);
 				stra.Execute();
 
 				this.experianConsumerData = stra.Result;
@@ -127,13 +129,13 @@
 					},
 					"GetHmrcBusinessNames",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", this.customerId)
+					new QueryParameter("CustomerId", this.trail.CustomerID)
 				);
 
 				SafeReader sr = this.db.GetFirst(
 					"GetExperianMinMaxConsumerDirectorsScore",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", this.customerId),
+					new QueryParameter("CustomerId", this.trail.CustomerID),
 					new QueryParameter("Now", Now)
 				);
 
@@ -153,7 +155,7 @@
 				this.db.ExecuteNonQuery(
 					"GetCompanyScoreAndIncorporationDate",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", this.customerId),
+					new QueryParameter("CustomerId", this.trail.CustomerID),
 					new QueryParameter("TakeMinScore", true),
 					oScore,
 					oDate
@@ -206,7 +208,7 @@
 				} // if
 			} // if
 
-			this.trail.Save(this.db, this.m_oSecondaryImplementation.Trail, tag: tag);
+			this.trail.SetTag(tag).Save(this.db, this.m_oSecondaryImplementation.Trail);
 
 			return bSuccess;
 		} // MakeAndVerifyDecision
@@ -231,7 +233,7 @@
 					this.log.Alert(
 						"Switching to manual decision: Auto Approval implementations " +
 						"have not reached the same decision for customer {0}, diff id is {1}.",
-						this.customerId,
+						this.trail.CustomerID,
 						this.trail.UniqueID.ToString("N")
 					);
 
@@ -251,7 +253,7 @@
 
 				var source = this.loanSourceRepository.GetDefault();
 				var offerDualCalculator = new OfferDualCalculator(
-					this.customerId,
+					this.trail.CustomerID,
 					Now,
 					response.AutoApproveAmount,
 					this.hasLoans,
@@ -266,7 +268,7 @@
 					this.log.Alert(
 						"Customer {1} - will use manual. Offer result: {0}",
 						offerResult != null ? offerResult.Description : "",
-						this.customerId
+						this.trail.CustomerID
 					);
 
 					response.CreditResult = CreditResultStatus.WaitingForDecision;

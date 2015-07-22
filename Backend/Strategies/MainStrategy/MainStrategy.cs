@@ -41,7 +41,7 @@
 			this.avoidAutomaticDecision = avoidAutoDecision;
 			this.finishWizardArgs = fwa;
 			this.overrideApprovedRejected = true;
-			this.cashRequestID = cashRequestID;
+			this.cashRequestID = new InternalCashRequestID(cashRequestID);
 			this.cashRequestOriginator = cashRequestOriginator;
 
 			if (this.finishWizardArgs != null) {
@@ -95,7 +95,7 @@
 				return;
 			} // if
 
-			if (this.cashRequestID == null) { // Should never happen at this point but just in case...
+			if (this.cashRequestID.LacksValue) { // Should never happen at this point but just in case...
 				throw new StrategyAlert(
 					this,
 					string.Format(
@@ -428,8 +428,12 @@
 			// ReSharper disable ConditionIsAlwaysTrueOrFalse
 			if (EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
-				var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(this.customerId, DB, Log)
-					.Init();
+				var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
+					this.customerId,
+					this.cashRequestID,
+					DB,
+					Log
+				).Init();
 
 				raAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
@@ -450,6 +454,7 @@
 			if (EnableAutomaticApproval && bContinue) {
 				var aAgent = new Approval(
 					this.customerId,
+					this.cashRequestID,
 					this.offeredCreditLine,
 					this.medal.MedalClassification,
 					(AutomationCalculator.Common.MedalType)this.medal.MedalType,
@@ -509,7 +514,7 @@
 				return;
 
 			if (EnableAutomaticReRejection) {
-				var rrAgent = new ReRejection(this.customerId, DB, Log);
+				var rrAgent = new ReRejection(this.customerId, this.cashRequestID, DB, Log);
 				rrAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 				if (rrAgent.WasMismatch) {
@@ -528,7 +533,7 @@
 			if (this.customerDetails.IsAlibaba)
 				return;
 
-			var rAgent = new Agent(this.customerId, DB, Log).Init();
+			var rAgent = new Agent(this.customerId, this.cashRequestID, DB, Log).Init();
 			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 			if (rAgent.WasMismatch) {
@@ -775,7 +780,7 @@
 				);
 			} // if
 
-			if (this.cashRequestID == null) {
+			if (this.cashRequestID.LacksValue) {
 				if (this.cashRequestOriginator == null) { // Should never happen but just in case...
 					throw new StrategyAlert(
 						this,
@@ -808,7 +813,7 @@
 		} // ValidateInput
 
 		private void CreateCashRequest() {
-			if (this.cashRequestID != null)
+			if (this.cashRequestID.HasValue)
 				return;
 
 			DateTime now = DateTime.UtcNow;
@@ -830,14 +835,14 @@
 				);
 			} // if
 
-			this.cashRequestID = sr["CashRequestID"];
+			this.cashRequestID.Value = sr["CashRequestID"];
 			decimal? lastLoanAmount = sr["LastLoanAmount"];
 			int cashRequestCount = sr["CashRequestCount"];
 
 			new AddCashRequest(new NL_CashRequests {
 				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 				CustomerID = this.customerId,
-				OldCashRequestID = this.cashRequestID.Value,
+				OldCashRequestID = this.cashRequestID,
 				RequestTime = now,
 				UserID = this.underwriterID,
 			}).Execute();
@@ -940,6 +945,33 @@
 
 		private int offeredCreditLine;
 
+		private class InternalCashRequestID {
+			public static implicit operator long(InternalCashRequestID cr) {
+				return cr == null ? 0 : cr.Value;
+			} // operator long
+
+			public InternalCashRequestID(long? cashRequestID) {
+				this.cashRequestID = cashRequestID;
+			} // constructor
+
+			public bool HasValue {
+				get { return this.cashRequestID.HasValue && (this.cashRequestID.Value > 0); }
+			} // HasValue
+
+			public bool LacksValue {
+				get { return !HasValue; }
+			} // HasValue
+
+			public long Value {
+				get { return this.cashRequestID ?? 0; }
+				set { this.cashRequestID = value; }
+			} // HasValue
+
+			private long? cashRequestID;
+		} // class InternalCashRequestID
+
+		private readonly InternalCashRequestID cashRequestID;
+
 		/// <summary>
 		/// Default: true. However when Main strategy is executed as a part of
 		/// Finish Wizard strategy and customer is already approved/rejected
@@ -947,7 +979,6 @@
 		/// </summary>
 		private bool overrideApprovedRejected;
 
-		private long? cashRequestID;
 		private readonly CashRequestOriginator? cashRequestOriginator;
 
 		private readonly string tag;

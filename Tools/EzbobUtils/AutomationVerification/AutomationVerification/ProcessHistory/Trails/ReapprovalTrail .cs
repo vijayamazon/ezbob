@@ -4,10 +4,22 @@
 	using Ezbob.Logger;
 
 	public class ReapprovalTrail : ATrail {
-
-		public ReapprovalTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
-			: base(nCustomerID, DecisionStatus.Affirmative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
-		{
+		public ReapprovalTrail(
+			int nCustomerID,
+			long? cashRequestID,
+			ASafeLog oLog,
+			string toExplanationMailAddress = null,
+			string fromEmailAddress = null,
+			string fromEmailName = null
+		) : base(
+			nCustomerID,
+			cashRequestID,
+			DecisionStatus.Affirmative,
+			oLog,
+			toExplanationMailAddress,
+			fromEmailAddress,
+			fromEmailName
+		) {
 			MyInputData = new ReApprovalInputData();
 		} // constructor
 
@@ -35,6 +47,5 @@
 			if (nDecisionStatus != DecisionStatus.Affirmative)
 				DecisionStatus = DecisionStatus.Negative;
 		} // UpdateDecision
-
-	} // class ApprovalTrail
+	} // class ReapprovalTrail
 } // namespace

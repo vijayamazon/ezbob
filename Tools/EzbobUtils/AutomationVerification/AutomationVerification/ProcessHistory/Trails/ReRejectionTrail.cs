@@ -4,10 +4,22 @@
 	using Ezbob.Logger;
 
 	public class ReRejectionTrail : ATrail {
-
-		public ReRejectionTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
-			: base(nCustomerID, DecisionStatus.Affirmative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName)
-		{
+		public ReRejectionTrail(
+			int nCustomerID,
+			long? cashRequestID,
+			ASafeLog oLog,
+			string toExplanationMailAddress = null,
+			string fromEmailAddress = null,
+			string fromEmailName = null
+		) : base(
+			nCustomerID,
+			cashRequestID,
+			DecisionStatus.Affirmative,
+			oLog,
+			toExplanationMailAddress,
+			fromEmailAddress,
+			fromEmailName
+		) {
 			MyInputData = new ReRejectInputData();
 		} // constructor
 
@@ -24,11 +36,11 @@
 
 		public override string PositiveDecisionName {
 			get { return "re-rejected"; }
-		}
+		} // PositiveDecisionName
 
 		public override string NegativeDecisionName {
 			get { return "not re-rejected"; }
-		}
+		} // NegativeDecisionName
 
 		public override ITrailInputData InputData {
 			get { return MyInputData; }
@@ -37,12 +49,10 @@
 		public virtual ReRejectInputData MyInputData { get; private set; }
 
 		protected override void UpdateDecision(DecisionStatus nDecisionStatus) {
-			if (nDecisionStatus == DecisionStatus.Dunno) {
+			if (nDecisionStatus == DecisionStatus.Dunno)
 				return;
-			}
 
 			DecisionStatus = nDecisionStatus;
 		} // UpdateDecision
-
-	} // class ApprovalTrail
+	} // class RerejectionTrail
 } // namespace

@@ -76,12 +76,34 @@
 				return;
 			} // if
 
+			SafeReader sr = DB.GetFirst(
+				"LoadLastCustomerCashRequest",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customerID)
+			);
+
+			if (sr.IsEmpty) {
+				Log.Debug(
+					"Not running silent automation for customer {0}: there is no available cash request.",
+					this.customerID
+				);
+
+				return;
+			} // if
+
+			this.cashRequestID = sr["CashRequestID"];
+
 			ForceNhibernateResync.Do(this.customerID);
 
-			Log.Debug("Executing silent reject for customer '{0}'...", this.customerID);
+			Log.Debug(
+				"Executing silent reject for customer '{0}' using cash request '{1}'...",
+				this.customerID,
+				this.cashRequestID
+			);
 
 			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID,
+				this.cashRequestID,
 				DB,
 				Log
 			).Init();
@@ -92,10 +114,15 @@
 
 			int offeredCreditLine = CapOffer(medal);
 
-			Log.Debug("Executing silent approve for customer '{0}'...", this.customerID);
+			Log.Debug(
+				"Executing silent approve for customer '{0}' using cash request '{1}'...",
+				this.customerID,
+				this.cashRequestID
+			);
 
 			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
 				this.customerID,
+				this.cashRequestID,
 				offeredCreditLine,
 				medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)medal.MedalType,
@@ -114,10 +141,11 @@
 					ExecuteMain();
 				else {
 					Log.Debug(
-						"Not running auto decision for customer {0}: no potential ({1} and {2}).",
+						"Not running auto decision for customer {0} using cash request {3}: no potential ({1} and {2}).",
 						this.customerID,
 						isRejected ? "rejected" : "not rejected",
-						isApproved ? "approved" : "not approved"
+						isApproved ? "approved" : "not approved",
+						this.cashRequestID
 					);
 				} // if
 			} // if
@@ -144,8 +172,10 @@
 			} // if
 
 			Log.Debug(
-				"Silent decision for customer {0} is 'approve', checking whether there is available cash request...",
-				this.customerID
+				"Silent decision for customer {0} using cash request {1} is 'approve', " +
+				"checking whether cash request is intact...",
+				this.customerID,
+				this.cashRequestID
 			);
 
 			SafeReader sr = DB.GetFirst(
@@ -154,26 +184,35 @@
 				new QueryParameter("CustomerID", this.customerID)
 			);
 
-			if (sr.IsEmpty) {
-				Log.Debug(
-					"Not running auto decision for customer {0}: there is no available cash request.",
-					this.customerID
+			if (sr.IsEmpty) { // should never happen because cash request was loaded earlier.
+				Log.Alert(
+					"Not running auto decision for customer {0} using cash request {1}: there is no available cash request.",
+					this.customerID,
+					this.cashRequestID
 				);
 
 				return;
 			} // if
 
-			long cashRequestID = sr["CashRequestID"];
+			long currentCashRequestID = sr["CashRequestID"];
 			string uwDecision = (sr["UnderwriterDecision"] ?? string.Empty).Trim();
 
-			if ((uwDecision != string.Empty) && (uwDecision != CreditResultStatus.WaitingForDecision.ToString())) {
+			bool suitableCashRequest = this.cashRequestID == currentCashRequestID;
+
+			bool suitableDecision =
+				(uwDecision == string.Empty) ||
+				(uwDecision == CreditResultStatus.WaitingForDecision.ToString());
+
+			if (!suitableCashRequest || !suitableDecision) {
 				Log.Debug(
 					"Not running auto decision for customer {0}: " +
-					"last cash request (id: {3}) has decision '{1}' while desired is '{2}'.",
+					"new cash request was added (id change {1} -> {2} or " +
+					"last cash request (id: {1}) has decision '{3}' while desired is '{4}'.",
 					this.customerID,
+					this.cashRequestID,
+					currentCashRequestID,
 					uwDecision,
-					CreditResultStatus.WaitingForDecision,
-					cashRequestID
+					CreditResultStatus.WaitingForDecision
 				);
 
 				return;
@@ -182,7 +221,7 @@
 			Log.Debug(
 				"Running auto decision for customer {0}: last cash request (id: {1}) has decision '{2}'...",
 				this.customerID,
-				cashRequestID,
+				this.cashRequestID,
 				uwDecision
 			);
 
@@ -192,14 +231,14 @@
 				NewCreditLineOption.SkipEverythingAndApplyAutoRules,
 				0,
 				null,
-				cashRequestID,
+				this.cashRequestID,
 				null
 			).Execute();
 
 			Log.Debug(
 				"Running auto decision for customer {0}, last cash request (id: {1}) complete.",
 				this.customerID,
-				cashRequestID
+				this.cashRequestID
 			);
 		} // ExecuteMain
 
@@ -267,6 +306,7 @@
 		private Callers caller;
 		private readonly int customerID;
 		private string tag;
+		private long cashRequestID;
 		private bool mainStrategyExecutedBefore;
 		private bool doMainStrategy;
 		private MedalResult medalToUse;
