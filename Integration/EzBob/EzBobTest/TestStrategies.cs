@@ -925,7 +925,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 3946; //4182; // 1718; // 4439; //3534;
+			int loanID = 16; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -948,19 +948,19 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 4438; //3946; //4192; // 4439; // 3534; //1846; //2662;
+			int loanID = 16; //3946; //4192; // 4439; // 3534; //1846; //2662;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
-			reModel.SaveToDB = true;
+			reModel.SaveToDB = false;
 			reModel.ReschedulingDate = DateTime.UtcNow;
 			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
 				s.Context.UserID = 25852;
-				s.Execute();
+				//s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
@@ -1001,21 +1001,21 @@
 			this.m_oDB.ForEachRowSafe((sr) => {
 				try {
 					int loanid = sr["Id"];
-					//ReschedulingArgument reModel = new ReschedulingArgument();
-					//Loan loan = new Loan();
-					//reModel.LoanID = loanid;
-					//reModel.LoanType = loan.GetType().AssemblyQualifiedName;
-					//reModel.RescheduleIn = true;
-					//reModel.SaveToDB = false;
-					//reModel.ReschedulingDate = DateTime.UtcNow;
-					//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-					//if (reModel.RescheduleIn == false) {
-					//	reModel.PaymentPerInterval = 900m;
-					//}
-					//var s = new RescheduleLoan<Loan>(loan, reModel);
-					//s.Context.UserID = 25852;
-					//s.Execute();
-					//m_oLog.Debug(s.Result.ToString());
+					ReschedulingArgument reModel = new ReschedulingArgument();
+					Loan loan = new Loan();
+					reModel.LoanID = loanid;
+					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+					reModel.RescheduleIn = true;
+					reModel.SaveToDB = false;
+					reModel.ReschedulingDate = DateTime.UtcNow;
+					reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+					if (reModel.RescheduleIn == false) {
+						reModel.PaymentPerInterval = 900m;
+					}
+					var s = new RescheduleLoan<Loan>(loan, reModel);
+					s.Context.UserID = 25852;
+					s.Execute();
+					m_oLog.Debug(s.Result.ToString());
 
 					// OUT
 					ReschedulingArgument reModel1 = new ReschedulingArgument();

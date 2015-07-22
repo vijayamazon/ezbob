@@ -45,7 +45,7 @@
 			ObjectFactory.Configure(x => {
 				x.For<ISession>()
 				 .LifecycleIs(new ThreadLocalStorageLifecycle())
-				 .Use(ctx => NHibernateManager.SessionFactory.OpenSession());
+				 .Use(ctx => NHibernateManager.OpenSession());
 
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 				x.For<ICustomerRepository>().Use<CustomerRepository>();
