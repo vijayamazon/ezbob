@@ -19,12 +19,9 @@ BEGIN
 	FROM
 		Customer c
 		INNER JOIN Company co ON c.CompanyId = co.Id
-		LEFT JOIN CustomerAnalyticsCompany a ON c.Id = a.CustomerID
 	WHERE
 		co.ExperianRefNum IS NOT NULL
 		AND
 		co.ExperianRefNum NOT IN ('NotFound', 'exception')
-		AND
-		a.CustomerID IS NULL
 END
 GO
