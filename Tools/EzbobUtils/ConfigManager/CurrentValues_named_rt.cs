@@ -208,6 +208,14 @@
 			get { return this[Variables.SmsTestModeEnabled]; }
 		}
 
+		public virtual VariableValue SmsApprovedUserEnabled {
+			get { return this[Variables.SmsApprovedUserEnabled]; }
+		}
+
+		public virtual VariableValue SmsApprovedUserTemplate {
+			get { return this[Variables.SmsApprovedUserTemplate]; }
+		}
+		
 		public virtual VariableValue SpreadSetupFeeCharge {
 			get { return this[Variables.SpreadSetupFeeCharge]; }
 		}

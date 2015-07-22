@@ -4,6 +4,7 @@
 	using System.Collections.Generic;
 	using API;
 	using ConfigManager;
+	using Ezbob.Backend.Strategies.Misc;
 	using EZBob.DatabaseLib.Repository;
 	using Ezbob.Database;
 	using Ezbob.Utils;
@@ -11,12 +12,12 @@
 
 	public class ApprovedUser : ABrokerMailToo {
 
-		public ApprovedUser(int customerId, decimal nLoanAmount, int nValidHours, bool isFirst)
+		public ApprovedUser(int customerId, decimal loanAmount, int validHours, bool isFirst)
 			: base(customerId, true) {
-			m_nLoanAmount = nLoanAmount;
-			m_nValidHours = nValidHours;
-			m_bIsFirst = isFirst;
-			amountInUsd = CalculateLoanAmountInUsd();
+				this.loanAmount = loanAmount;
+				this.validHours = validHours;
+				this.isFirst = isFirst;
+				this.amountInUsd = CalculateLoanAmountInUsd();
 		} // constructor
 
 		public override string Name { get { return "Approved User"; } } // Name
@@ -41,29 +42,29 @@
 				"GetCashRequestData",
 				new QueryParameter("@CustomerId", CustomerData.Id));
 
-			decimal setupFeePercents;
+			
 			if (cashRequestRelevantData.ManagerApprovedSum != 0) {
-				setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.ManagerApprovedSum;
+				this.setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.ManagerApprovedSum;
 			}
 			else if (cashRequestRelevantData.SystemCalculatedSum != 0) {
-				setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.SystemCalculatedSum;
+				this.setupFeePercents = (decimal)cashRequestRelevantData.ManualSetupFeeAmount * 100 / cashRequestRelevantData.SystemCalculatedSum;
 			}
 			else {
-				setupFeePercents = 0;
+				this.setupFeePercents = 0;
 			}
 
-			decimal interestRatePercents = cashRequestRelevantData.InterestRate * 100;
-			setupFeePercents = MathUtils.Round2DecimalDown(setupFeePercents);
-			decimal remainingPercentsAfterSetupFee = 100 - setupFeePercents;
+			this.interestRatePercents = cashRequestRelevantData.InterestRate * 100;
+			this.setupFeePercents = MathUtils.Round2DecimalDown(this.setupFeePercents);
+			decimal remainingPercentsAfterSetupFee = 100 - this.setupFeePercents;
 
 			Variables = new Dictionary<string, string> {
 				{ "FirstName", CustomerData.FirstName },
-				{ "LoanAmount", m_nLoanAmount.ToString("#,#") },
-				{ "ValidFor", m_nValidHours.ToString(CultureInfo.InvariantCulture) },
-				{ "AmountInUsd", MathUtils.Round2DecimalDown(amountInUsd).ToString("#,#.00") },
+				{ "LoanAmount", this.loanAmount.ToString("#,#") },
+				{ "ValidFor", this.validHours.ToString(CultureInfo.InvariantCulture) },
+				{ "AmountInUsd", MathUtils.Round2DecimalDown(this.amountInUsd).ToString("#,#.00") },
 				{ "AlibabaId", CustomerData.AlibabaId.ToString(CultureInfo.InvariantCulture) },
-				{ "InterestRate", MathUtils.Round2DecimalDown(interestRatePercents).ToString("#,#.00") },
-				{ "SetupFee", setupFeePercents.ToString("#,#.00") },
+				{ "InterestRate", MathUtils.Round2DecimalDown(this.interestRatePercents).ToString("#,#.00") },
+				{ "SetupFee", this.setupFeePercents.ToString("#,#.00") },
 				{ "RemainingPercentsAfterSetupFee", remainingPercentsAfterSetupFee.ToString(CultureInfo.InvariantCulture) },
 				{ "RefNum", CustomerData.RefNum.ToString(CultureInfo.InvariantCulture) },
 				{ "Surname", CustomerData.Surname.ToString(CultureInfo.InvariantCulture) },
@@ -76,8 +77,7 @@
 			}
 			else if (CustomerData.IsCampaign) {
 				TemplateName = "Mandrill - Approval Campaign (1st time)";
-			}
-			else if (m_bIsFirst) {
+			} else if (this.isFirst) {
 				TemplateName = "Mandrill - Approval (1st time)";
 			}
 			else {
@@ -91,19 +91,42 @@
 				Log.Info("Sending Alibaba internal approval mail");
 				SendCostumeMail("Mandrill - Alibaba - Internal approval email", Variables, new[] { address });
 			}
+
+			if (CurrentValues.Instance.SmsApprovedUserEnabled && !CustomerData.IsTest && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
+				string smsTemplate = CurrentValues.Instance.SmsApprovedUserTemplate;
+
+				smsTemplate = smsTemplate
+					.Replace("*FirstName*", CustomerData.FirstName)
+					.Replace("*LoanAmount*", this.loanAmount.ToString("#,#"))
+					.Replace("*ValidFor*", this.validHours.ToString(CultureInfo.InvariantCulture))
+					.Replace("*InterestRate*", MathUtils.Round2DecimalDown(this.interestRatePercents).ToString("#,#.00"))
+					.Replace("*SetupFee*", this.setupFeePercents.ToString("#,#.00"))
+					.Replace("*Origin*", CustomerData.Origin);
+
+				SendSms sendSms = new SendSms(CustomerId, 1, CustomerData.MobilePhone, smsTemplate);
+				sendSms.Execute();
+			} else {
+				Log.Info("Not sending approved user sms to customer {3}, SmsApprovedUserEnabled {0}, is test {1}, SmsTestModeEnabled {2}", 
+					(bool)CurrentValues.Instance.SmsApprovedUserEnabled, 
+					CustomerData.IsTest, 
+					(bool)ConfigManager.CurrentValues.Instance.SmsTestModeEnabled,
+					CustomerId);
+			}
 		}
 
 		private double CalculateLoanAmountInUsd() {
 			var currencyRateRepository = ObjectFactory.GetInstance<CurrencyRateRepository>();
 			double currencyRate = currencyRateRepository.GetCurrencyHistoricalRate(DateTime.UtcNow, "USD");
-			double convertedLoanAmount = (double)m_nLoanAmount * currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;
-			Log.Info("Calculating Alibaba loan amount in USD. CurrencyRate:{0} Coefficient:{1} LoanAmount:{2} ConvertedLoanAmount:{3}", currencyRate, CurrentValues.Instance.AlibabaCurrencyConversionCoefficient, m_nLoanAmount, convertedLoanAmount);
+			double convertedLoanAmount = (double)this.loanAmount * currencyRate * CurrentValues.Instance.AlibabaCurrencyConversionCoefficient;
+			Log.Info("Calculating Alibaba loan amount in USD. CurrencyRate:{0} Coefficient:{1} LoanAmount:{2} ConvertedLoanAmount:{3}", currencyRate, CurrentValues.Instance.AlibabaCurrencyConversionCoefficient, this.loanAmount, convertedLoanAmount);
 			return convertedLoanAmount;
 		}
 
-		private readonly decimal m_nLoanAmount;
+		private readonly decimal loanAmount;
 		private readonly double amountInUsd;
-		private readonly int m_nValidHours;
-		private readonly bool m_bIsFirst;
+		private readonly int validHours;
+		private readonly bool isFirst;
+		private decimal interestRatePercents;
+		private decimal setupFeePercents;
 	} // class ApprovedUser
 } // namespace

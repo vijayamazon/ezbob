@@ -56,7 +56,7 @@
 	public class TestStrategies : BaseTestFixtue {
 		[Test]
 		public void ApprovedUser() {
-			var s = new ApprovedUser(3060, 2500, 24, true);
+			var s = new ApprovedUser(182, 1000, 24, true);
 			s.Execute();
 		}
 
