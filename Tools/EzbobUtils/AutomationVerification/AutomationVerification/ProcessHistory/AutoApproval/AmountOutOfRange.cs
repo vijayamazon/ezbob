@@ -1,6 +1,6 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoApproval {
-	public class AmountOutOfRangle : ARangeTrace {
-		public AmountOutOfRangle(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
+	public class AmountOutOfRange : ARangeTrace {
+		public AmountOutOfRange(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
 		public void Init(int amount, bool isInSilentMode) {

@@ -6,7 +6,7 @@
 
 		public void Init(decimal threeMonthTurnover, decimal annualTurnover, decimal dropRatio) {
 			Comment = string.Format(
-				"Three months turnover {0}, annual turnover {1}, drop ratio {2}, allowed drop ratio {3}",
+				"Three months turnover £{0:N2}, annual turnover £{1:N2}, drop ratio {2}, allowed drop ratio {3}",
 				threeMonthTurnover,
 				annualTurnover,
 				annualTurnover != 0 ? (threeMonthTurnover * 4 / annualTurnover).ToString("N2") : "NAN",

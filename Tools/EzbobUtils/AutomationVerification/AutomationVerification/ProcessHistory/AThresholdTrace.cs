@@ -3,15 +3,17 @@
 		protected AThresholdTrace(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
-		public virtual ATrace Init(decimal nScore, decimal nThreshold) {
+		public virtual ATrace Init(decimal nScore, decimal nThreshold, bool isPlural = false, string units = "") {
 			Value = nScore;
 			Threshold = nThreshold;
 
 			Comment = string.Format(
-				"{0} is {1}, threshold is {2}",
+				"{0} {3} {1:N0} {4}, threshold is {2:N0} {4}",
 				ValueName,
 				Value,
-				Threshold
+				Threshold,
+				isPlural ? "are" : "is",
+				units
 			);
 
 			return this;

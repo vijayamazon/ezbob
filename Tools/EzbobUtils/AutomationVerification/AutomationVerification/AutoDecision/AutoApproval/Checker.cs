@@ -234,9 +234,9 @@
 
 		private void IsBrokerCustomer() {
 			if (Trail.MyInputData.MetaData.IsBrokerCustomer)
-				StepFailed<IsBrokerCustomer>().Init();
+				StepFailed<IsBrokerCustomer>().Init(Trail.MyInputData.MetaData.IsBrokerCustomer);
 			else
-				StepDone<IsBrokerCustomer>().Init();
+				StepDone<IsBrokerCustomer>().Init(Trail.MyInputData.MetaData.IsBrokerCustomer);
 		} // IsBrokerCustomer
 
 		private void TodayApprovedCount() {
@@ -257,12 +257,14 @@
 			if (Trail.MyInputData.MetaData.TodayLoanSum > Trail.MyInputData.Configuration.MaxTodayLoans) {
 				StepFailed<TodayLoans>().Init(
 					Trail.MyInputData.MetaData.TodayLoanSum,
-					Trail.MyInputData.Configuration.MaxTodayLoans
+					Trail.MyInputData.Configuration.MaxTodayLoans,
+					units: "£"
 				);
 			} else {
 				StepDone<TodayLoans>().Init(
 					Trail.MyInputData.MetaData.TodayLoanSum,
-					Trail.MyInputData.Configuration.MaxTodayLoans
+					Trail.MyInputData.Configuration.MaxTodayLoans,
+					units: "£"
 				);
 			} // if
 		} // TodayOpenLoans
@@ -271,12 +273,16 @@
 			if (Trail.MyInputData.ReservedFunds >= Trail.MyInputData.Configuration.MaxOutstandingOffers) {
 				StepFailed<OutstandingOffers>().Init(
 					Trail.MyInputData.ReservedFunds,
-					Trail.MyInputData.Configuration.MaxOutstandingOffers
+					Trail.MyInputData.Configuration.MaxOutstandingOffers,
+					true,
+					"£"
 				);
 			} else {
 				StepDone<OutstandingOffers>().Init(
 					Trail.MyInputData.ReservedFunds,
-					Trail.MyInputData.Configuration.MaxOutstandingOffers
+					Trail.MyInputData.Configuration.MaxOutstandingOffers,
+					true,
+					"£"
 				);
 			} // if
 		} // OutstandingOffers
@@ -379,12 +385,14 @@
 			if (Trail.MyInputData.MarketplaceSeniority >= Trail.MyInputData.Configuration.MinMPSeniorityDays) {
 				StepDone<MarketplaceSeniority>().Init(
 					Trail.MyInputData.MarketplaceSeniority,
-					Trail.MyInputData.Configuration.MinMPSeniorityDays
+					Trail.MyInputData.Configuration.MinMPSeniorityDays,
+					units: "days"
 				);
 			} else {
 				StepFailed<MarketplaceSeniority>().Init(
 					Trail.MyInputData.MarketplaceSeniority,
-					Trail.MyInputData.Configuration.MinMPSeniorityDays
+					Trail.MyInputData.Configuration.MinMPSeniorityDays,
+					units: "days"
 				);
 			}
 		} // CompanyAge
@@ -402,9 +410,9 @@
 
 		private void Rollovers() {
 			if (Trail.MyInputData.MetaData.NumOfRollovers > 0)
-				StepFailed<Rollovers>().Init();
+				StepFailed<Rollovers>().Init(true);
 			else
-				StepDone<Rollovers>().Init();
+				StepDone<Rollovers>().Init(false);
 		} // Rollovers
 
 		private void LatePayments() {
@@ -473,7 +481,7 @@
 			decimal nApprovedAmount = ApprovedAmount;
 
 			if (Trail.MyInputData.Configuration.IsSilent) {
-				StepDone<AmountOutOfRangle>().Init(
+				StepDone<AmountOutOfRange>().Init(
 					nApprovedAmount,
 					Trail.MyInputData.Configuration.MinLoan,
 					Trail.MyInputData.Configuration.MaxAmount
@@ -487,13 +495,13 @@
 				(nApprovedAmount <= Trail.MyInputData.Configuration.MaxAmount);
 
 			if (inRange) {
-				StepDone<AmountOutOfRangle>().Init(
+				StepDone<AmountOutOfRange>().Init(
 					nApprovedAmount,
 					Trail.MyInputData.Configuration.MinLoan,
 					Trail.MyInputData.Configuration.MaxAmount
 				);
 			} else {
-				StepFailed<AmountOutOfRangle>().Init(
+				StepFailed<AmountOutOfRange>().Init(
 					nApprovedAmount,
 					Trail.MyInputData.Configuration.MinLoan,
 					Trail.MyInputData.Configuration.MaxAmount
