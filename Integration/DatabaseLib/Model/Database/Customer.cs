@@ -612,6 +612,8 @@
 
 	        return null;
         }
+
+		public virtual bool? HasApprovalChance { get; set; }
 	} // class Customer
 
 	public static class CustomerExt {

@@ -276,6 +276,7 @@
 					response.SystemDecision = SystemDecision.Manual;
 					response.LoanOfferUnderwriterComment = "Calculator failure - " + this.trail.UniqueID;
 				} else if (CurrentValues.Instance.AutoApproveIsSilent) {
+					response.HasApprovalChance = true;
 					response.CreditResult = CreditResultStatus.WaitingForDecision;
 					response.UserStatus = Status.Manual;
 					response.SystemDecision = SystemDecision.Manual;
@@ -288,6 +289,7 @@
 						offerResult.SetupFee / 100m
 					);
 				} else {
+					response.HasApprovalChance = true;
 					response.CreditResult = CreditResultStatus.Approved;
 					response.UserStatus = Status.Approved;
 					response.SystemDecision = SystemDecision.Approve;

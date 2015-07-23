@@ -92,6 +92,7 @@
 		public virtual void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
 				if (MakeAndVerifyDecision(tag) && Trail.HasDecided) {
+					response.HasApprovalChance = true;
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.Decision = DecisionActions.ReApprove;
 					response.CreditResult = CreditResultStatus.Approved;

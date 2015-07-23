@@ -22,3 +22,14 @@ GO
 
 ALTER TABLE CashRequests ADD TimestampCounter ROWVERSION
 GO
+
+IF EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('DecisionTrail') AND name = 'TimestampCounter')
+	ALTER TABLE DecisionTrail DROP COLUMN TimestampCounter
+GO
+
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id = OBJECT_ID('DecisionTrail') AND name = 'HasApprovalChance')
+	ALTER TABLE DecisionTrail ADD HasApprovalChance BIT NULL
+GO
+
+ALTER TABLE DecisionTrail ADD TimestampCounter ROWVERSION
+GO

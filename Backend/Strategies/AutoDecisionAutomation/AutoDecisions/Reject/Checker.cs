@@ -6,22 +6,26 @@
 	using Ezbob.Logger;
 
 	internal class Checker {
-
-		public RejectionTrail Trail { get; private set; }
-
-		public ASafeLog Log { get; private set; }
-
 		public Checker(RejectionTrail oTrail, ASafeLog oLog) {
 			Trail = oTrail;
 			Log = oLog.Safe();
 		} // constructor
 
-		public void Run() {
+		public RejectionTrail Trail { get; private set; }
+
+		public ASafeLog Log { get; private set; }
+
+		public Checker Run() {
 			Preventers();
-
 			Trail.LockDecision();
-
 			Regulars();
+
+			Trail.HasApprovalChance = 
+				(!this.lowPersonalScore || !this.lowBusinessScore) &&
+				!this.unresolvedPersonalDefaults &&
+				!this.companyTooYoung;
+
+			return this;
 		} // Run
 
 		private void Preventers() {
@@ -53,10 +57,13 @@
 		} // WasApproved
 
 		private void HighAnnualTurnover() {
-			if (Trail.MyInputData.AnnualTurnover > Trail.MyInputData.AutoRejectionException_AnualTurnover)
-				StepNoReject<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
-			else
-				StepNoDecision<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+			if (Trail.MyInputData.AnnualTurnover > Trail.MyInputData.AutoRejectionException_AnualTurnover) {
+				StepNoReject<AnnualTurnoverPreventer>()
+					.Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+			} else {
+				StepNoDecision<AnnualTurnoverPreventer>()
+					.Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+			} // if
 		} // HighAnnualTurnover
 
 		private void IsBroker() {
@@ -76,17 +83,23 @@
 		} // IsBroker
 
 		private void HighConsumerScore() {
-			if (Trail.MyInputData.ConsumerScore > Trail.MyInputData.AutoRejectionException_CreditScore)
-				StepNoReject<ConsumerScorePreventer>().Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
-			else
-				StepNoDecision<ConsumerScorePreventer>().Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
+			if (Trail.MyInputData.ConsumerScore > Trail.MyInputData.AutoRejectionException_CreditScore) {
+				StepNoReject<ConsumerScorePreventer>()
+					.Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
+			} else {
+				StepNoDecision<ConsumerScorePreventer>()
+					.Init(Trail.MyInputData.ConsumerScore, Trail.MyInputData.AutoRejectionException_CreditScore);
+			} // if
 		} // HighConsumerScore
 
 		private void HighBusinessScore() {
-			if (Trail.MyInputData.BusinessScore > Trail.MyInputData.RejectionExceptionMaxCompanyScore)
-				StepNoReject<BusinessScorePreventer>().Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
-			else
-				StepNoDecision<BusinessScorePreventer>().Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
+			if (Trail.MyInputData.BusinessScore > Trail.MyInputData.RejectionExceptionMaxCompanyScore) {
+				StepNoReject<BusinessScorePreventer>()
+					.Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
+			} else {
+				StepNoDecision<BusinessScorePreventer>()
+					.Init(Trail.MyInputData.BusinessScore, Trail.MyInputData.RejectionExceptionMaxCompanyScore);
+			} // if
 		} // HighBusinessScore
 
 		private void MpErrors() {
@@ -111,32 +124,54 @@
 
 		private void ConsumerDataAge() {
 			Log.Debug(
-				"Consumer data age status:\n\tdata time: {0}\n\tnow: {1}\n\tmonth count: {2}\n\tnow - month count: {3}\n\ttoo old: {4}",
-				Trail.MyInputData.ConsumerDataTime.HasValue ? Trail.MyInputData.ConsumerDataTime.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture) : "-- null --",
+				"Consumer data age status:\n\tdata time: {0}\n\tnow: {1}\n" +
+				"\tmonth count: {2}\n\tnow - month count: {3}\n\ttoo old: {4}",
+				Trail.MyInputData.ConsumerDataTime.HasValue
+					? Trail.MyInputData.ConsumerDataTime.Value.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					: "-- null --",
 				Trail.MyInputData.DataAsOf.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
 				Trail.MyInputData.AutoRejectConsumerCheckAge,
-				Trail.MyInputData.DataAsOf.AddMonths(-Trail.MyInputData.AutoRejectConsumerCheckAge).ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
+				Trail.MyInputData.DataAsOf
+					.AddMonths(-Trail.MyInputData.AutoRejectConsumerCheckAge)
+					.ToString("d/MMM/yyyy H:mm:ss", CultureInfo.InvariantCulture),
 				Trail.MyInputData.ConsumerDataIsTooOld ? "yes" : "no"
 			);
 
-			if (Trail.MyInputData.ConsumerDataIsTooOld)
-				StepNoReject<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
-			else
-				StepNoDecision<ConsumerDataTooOldPreventer>().Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
+			if (Trail.MyInputData.ConsumerDataIsTooOld) {
+				StepNoReject<ConsumerDataTooOldPreventer>()
+					.Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
+			} else {
+				StepNoDecision<ConsumerDataTooOldPreventer>()
+					.Init(Trail.MyInputData.ConsumerDataTime, Trail.InputData.DataAsOf);
+			} // if
 		} // ConsumerDataAge
 
 		private void LowConsumerScore() {
-			if ((0 < Trail.MyInputData.ConsumerScore) && (Trail.MyInputData.ConsumerScore < Trail.MyInputData.LowCreditScore))
-				StepReject<ConsumerScore>().Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
-			else
-				StepNoDecision<ConsumerScore>().Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
+			this.lowPersonalScore =
+				(0 < Trail.MyInputData.ConsumerScore) &&
+				(Trail.MyInputData.ConsumerScore < Trail.MyInputData.LowCreditScore);
+
+			if (this.lowPersonalScore) {
+				StepReject<ConsumerScore>()
+					.Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
+			} else {
+				StepNoDecision<ConsumerScore>()
+					.Init(Trail.MyInputData.ConsumerScore, 0, Trail.MyInputData.LowCreditScore, false);
+			} // if
 		} // LowConsumerScore
 
 		private void LowBusinessScore() {
-			if ((0 < Trail.MyInputData.BusinessScore) && (Trail.MyInputData.BusinessScore < Trail.MyInputData.RejectionCompanyScore))
-				StepReject<BusinessScore>().Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
-			else
-				StepNoDecision<BusinessScore>().Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
+			this.lowBusinessScore =
+				(0 < Trail.MyInputData.BusinessScore) &&
+				(Trail.MyInputData.BusinessScore < Trail.MyInputData.RejectionCompanyScore);
+
+			if (this.lowBusinessScore) {
+				StepReject<BusinessScore>()
+					.Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
+			} else {
+				StepNoDecision<BusinessScore>()
+					.Init(Trail.MyInputData.BusinessScore, 0, Trail.MyInputData.RejectionCompanyScore, false);
+			} // if
 		} // LowBusinessScore
 
 		private void PersonalDefauls() {
@@ -149,9 +184,12 @@
 				NumDefaultAccountsThreshhold = Trail.MyInputData.Reject_Defaults_AccountsNum,
 			};
 
+			this.unresolvedPersonalDefaults =
+				(Trail.MyInputData.NumOfDefaultConsumerAccounts >= Trail.MyInputData.Reject_Defaults_AccountsNum);
+
 			bool bReject =
 				(Trail.MyInputData.ConsumerScore < Trail.MyInputData.Reject_Defaults_CreditScore) &&
-				(Trail.MyInputData.NumOfDefaultConsumerAccounts >= Trail.MyInputData.Reject_Defaults_AccountsNum);
+				this.unresolvedPersonalDefaults;
 
 			if (bReject)
 				StepReject<ConsumerDefaults>().Init(data);
@@ -180,10 +218,17 @@
 		} // BusinessDefaults
 
 		private void CompanyAge() {
-			if ((0 < Trail.MyInputData.BusinessSeniorityDays) && (Trail.MyInputData.BusinessSeniorityDays < Trail.MyInputData.Reject_Minimal_Seniority))
-				StepReject<Seniority>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
-			else
-				StepNoDecision<Seniority>().Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
+			this.companyTooYoung =
+				(0 < Trail.MyInputData.BusinessSeniorityDays) &&
+				(Trail.MyInputData.BusinessSeniorityDays < Trail.MyInputData.Reject_Minimal_Seniority);
+
+			if (this.companyTooYoung) {
+				StepReject<Seniority>()
+					.Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
+			} else {
+				StepNoDecision<Seniority>()
+					.Init(Trail.MyInputData.BusinessSeniorityDays, 0, Trail.MyInputData.Reject_Minimal_Seniority, false);
+			} // if
 		} // CompanyAge
 
 		private void CustomerStatus() {
@@ -239,5 +284,9 @@
 			return Trail.Dunno<T>();
 		} // StepNoDecision
 
+		private bool lowPersonalScore;
+		private bool lowBusinessScore;
+		private bool companyTooYoung;
+		private bool unresolvedPersonalDefaults;
 	} // class Checker
 } // namespace

@@ -35,7 +35,8 @@ ALTER PROCEDURE MainStrategyUpdateCrC
 @Apr DECIMAL(18, 0),
 @IsCustomerRepaymentPeriodSelectionAllowed BIT,
 @EmailSendingBanned BIT,
-@DiscountPlanID INT
+@DiscountPlanID INT,
+@HasApprovalChance BIT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -60,7 +61,8 @@ BEGIN
 		ApprovedReason = CASE WHEN @DecidedToApprove = 1 THEN @Reason ELSE ApprovedReason END,
 		NumApproves = NumApproves + CONVERT(INT, @DecidedToApprove),
 		IsLoanTypeSelectionAllowed = CASE WHEN @DecidedToApprove = 1 THEN @IsLoanTypeSelectionAllowed ELSE IsLoanTypeSelectionAllowed END,
-		LastStartedMainStrategyEndTime = @Now
+		LastStartedMainStrategyEndTime = @Now,
+		HasApprovalChance = @HasApprovalChance
 	WHERE
 		Id = @CustomerID
 
@@ -89,7 +91,8 @@ BEGIN
 		IsLoanTypeSelectionAllowed = CONVERT(INT, @IsLoanTypeSelectionAllowed),
 		IsCustomerRepaymentPeriodSelectionAllowed = @IsCustomerRepaymentPeriodSelectionAllowed,
 		EmailSendingBanned = @EmailSendingBanned,
-		DiscountPlanId = @DiscountPlanID
+		DiscountPlanId = @DiscountPlanID,
+		HasApprovalChance = @HasApprovalChance
 	WHERE
 		Id = @CashRequestID
 

@@ -188,6 +188,11 @@
 			set { }
 		} // DiscountPlanID
 
+		public bool HasApprovalChance {
+			get { return this.autoDecisionResponse.HasApprovalChance; }
+			set { }
+		} // HasApprovalChance
+
 		// Stored procedure arguments - end
 
 		private void InitLoanSource() {

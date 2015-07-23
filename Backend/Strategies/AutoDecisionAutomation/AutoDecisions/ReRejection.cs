@@ -157,7 +157,7 @@
 			} else {
 				StepNoDecision<OpenLoans>()
 					.Init(this.trail.MyInputData.NumOfOpenLoans, this.trail.MyInputData.AutoReRejectMaxAllowedLoans);
-			}
+			} // if
 		} // CheckNumOfOpenLoans
 
 		private void CheckOpenLoansRepayments() {

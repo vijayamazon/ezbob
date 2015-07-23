@@ -20,6 +20,7 @@
 			fromEmailName
 		) {
 			MyInputData = new ApprovalInputData();
+			HasApprovalChance = true;
 		} // constructor
 
 		public override string PositiveDecisionName {

@@ -69,6 +69,7 @@
     <Compile Include="ProcessHistory\AutoApproval\AvailableFundsOverdraft.cs" />
     <Compile Include="ProcessHistory\AutoApproval\CompanyIsDissolved.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\SameApprovalChance.cs" />
     <Compile Include="ProcessHistory\ProcessCheckpoints.cs" />
     <Compile Include="Turnover\ACalculatedTurnoverBase.cs" />
     <Compile Include="Turnover\AOneMonthValue.cs" />

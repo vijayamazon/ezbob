@@ -51,9 +51,7 @@
 
 			this.wasMismatch = false;
 
-			this.autoDecisionResponse = new AutoDecisionResponse {
-				DecisionName = "Manual",
-			};
+			this.autoDecisionResponse = new AutoDecisionResponse();
 
 			this.tag = string.Format(
 				"#MainStrategy_{0}_{1}",

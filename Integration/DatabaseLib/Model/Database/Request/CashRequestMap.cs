@@ -57,6 +57,8 @@
 			Map(x => x.AutoDecisionID);
 
 			Map(x => x.SpreadSetupFee);
+
+			Map(x => x.HasApprovalChance);
 		} // constructor
 	} // class CashRequestMap
 } // namespace

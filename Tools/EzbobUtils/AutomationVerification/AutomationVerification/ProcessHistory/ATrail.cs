@@ -41,6 +41,8 @@
 
 		public long? CashRequestID { get; private set; }
 
+		public bool HasApprovalChance { get; set; }
+
 		public abstract string PositiveDecisionName { get; }
 
 		public abstract string NegativeDecisionName { get; }
@@ -365,6 +367,7 @@
 			m_oLog = oLog.Safe();
 
 			this.timer = new TimeCounter();
+			HasApprovalChance = false;
 		} // constructor
 
 		protected virtual bool IsDecisionLocked {
@@ -399,6 +402,7 @@
 				DecisionStatusID = (int)oTrail.DecisionStatus;
 				InputData = oTrail.InputData.Serialize();
 				IsPrimary = bIsPrimary;
+				HasApprovalChance = oTrail.HasApprovalChance;
 				CashRequestID = cashRequestID;
 				Tag = tag;
 
@@ -495,6 +499,9 @@
 
 			[UsedImplicitly]
 			public bool IsPrimary { get; set; }
+
+			[UsedImplicitly]
+			public bool HasApprovalChance { get; set; }
 
 			[UsedImplicitly]
 			public List<ATrace.DBModel> Traces { get; set; }

@@ -143,6 +143,11 @@
 				StepNoDecision<ExceptionThrown>().Init(e);
 			} // try
 
+			Trail.HasApprovalChance = 
+				(!this.lowPersonalScore || !this.lowBusinessScore) &&
+				!this.unresolvedPersonalDefaults &&
+				!this.companyTooYoung;
+
 			Trail.DecideIfNotDecided();
 
 			if (Trail.HasDecided)
@@ -281,6 +286,8 @@
 
 		private void CheckLowConsumerScore() {
 			if (Trail.MyInputData.ConsumerScore > 0 && Trail.MyInputData.ConsumerScore < Trail.MyInputData.LowCreditScore) {
+				this.lowPersonalScore = true;
+
 				StepReject<ConsumerScore>(true).Init(
 					Trail.MyInputData.ConsumerScore,
 					0,
@@ -288,6 +295,8 @@
 					false
 				);
 			} else {
+				this.lowPersonalScore = false;
+
 				StepNoDecision<ConsumerScore>().Init(
 					Trail.MyInputData.ConsumerScore,
 					0,
@@ -298,11 +307,11 @@
 		} // CheckLowConsumerScore
 
 		private void CheckLowBusinessScore() {
-			bool lowScore =
+			this.lowBusinessScore =
 				(Trail.MyInputData.BusinessScore > 0) &&
 				(Trail.MyInputData.BusinessScore < Trail.MyInputData.RejectionCompanyScore);
 
-			if (lowScore) {
+			if (this.lowBusinessScore) {
 				StepReject<BusinessScore>(true).Init(
 					Trail.MyInputData.BusinessScore,
 					0,
@@ -329,6 +338,8 @@
 				NumDefaultAccountsThreshhold = Trail.MyInputData.Reject_Defaults_AccountsNum
 			};
 
+			this.unresolvedPersonalDefaults = data.TooManyDefaults;
+
 			if (data.RejectStep)
 				StepReject<ConsumerDefaults>(true).Init(data);
 			else
@@ -352,11 +363,11 @@
 		} // CheckCompanyDefaults
 
 		private void CheckSeniority() {
-			bool rejectStep =
+			this.companyTooYoung =
 				0 < Trail.MyInputData.BusinessSeniorityDays &&
 				Trail.MyInputData.BusinessSeniorityDays < Trail.MyInputData.Reject_Minimal_Seniority;
 
-			if (rejectStep) {
+			if (this.companyTooYoung) {
 				StepReject<Seniority>(true).Init(
 					Trail.MyInputData.BusinessSeniorityDays, 
 					0,
@@ -467,5 +478,10 @@
 		private readonly RejectionConfigs configs;
 
 		private readonly DbHelper dbHelper;
+
+		private bool lowPersonalScore;
+		private bool lowBusinessScore;
+		private bool companyTooYoung;
+		private bool unresolvedPersonalDefaults;
 	} // class RejectionAgent
 } // namespace
