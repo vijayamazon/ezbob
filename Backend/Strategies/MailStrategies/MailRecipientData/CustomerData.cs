@@ -20,7 +20,7 @@
 		public override string ToString() {
 			return string.Format(
 				"{0}: {1} {2} ({5}, {3}) {4} loan #: {6}, mobile: {7}, land line: {8}, " +
-				"test: {9} {10}{11}, broker: {12}, filled by broker: {13} origin {14} origin site {15}",
+				"test: {9} {10}{11}, broker: {12}, filled by broker: {13} origin {14} origin site {15} origin phone {16}",
 				Id,
 				FirstName,
 				Surname,
@@ -36,7 +36,8 @@
 				BrokerID > 0 ? BrokerID.ToString() : "none",
 				IsFilledByBroker ? "yes" : "no",
 				Origin,
-				OriginSite
+				OriginSite,
+				OriginPhone
 			);
 		} // ToString
 
@@ -64,7 +65,7 @@
 		public virtual int ReportedAnnualTurnover { get; protected set; }
 		public virtual string Origin { get; protected set; }
 		public virtual string OriginSite { get; protected set; }
-
+		public virtual string OriginPhone { get; protected set; }
 		protected AStrategy Strategy { get; private set; }
 		protected AConnection DB { get; private set; }
 		protected int RequestedID { get; private set; }
@@ -104,6 +105,7 @@
 			ReportedAnnualTurnover = sr["ReportedAnnualTurnover"];
 			Origin = sr["Origin"];
 			OriginSite = sr["CustomerSite"];
+			OriginPhone = sr["OriginPhone"];
 		} // Load
 	} // class CustomerData
 } // namespace

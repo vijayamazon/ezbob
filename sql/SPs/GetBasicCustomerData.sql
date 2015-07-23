@@ -73,7 +73,8 @@ BEGIN
 		c.OverallTurnOver AS ReportedAnnualTurnover,
 		ISNULL(crl.Amount, 0) AS RequestedLoanAmount,
 		o.Name AS Origin,
-		o.CustomerSite
+		o.CustomerSite,
+		o.PhoneNumber OriginPhone
 	FROM
 		Customer c
 		LEFT JOIN CustomerAddress a
