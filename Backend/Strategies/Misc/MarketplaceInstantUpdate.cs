@@ -29,14 +29,16 @@
 		} // Start
 
 		public void End(string sError, int nTokenExpired) {
+			// flush the session after updating mp
+			var session = ObjectFactory.GetInstance<ISession>();
+			session.Flush();
+
 			Log.Info("Executing end update for mp {0} ", m_oStart.MarketplaceID);
 			m_oEnd.ErrorMessage = sError;
 			m_oEnd.TokenExpired = nTokenExpired;
 			m_oEnd.ExecuteNonQuery();
 
-			// clear the session cache after updating mp
-			var session = ObjectFactory.GetInstance<ISession>();
-			session.Clear();
+			
 		} // End
 
 		private readonly StartMarketplaceUpdate m_oStart;
