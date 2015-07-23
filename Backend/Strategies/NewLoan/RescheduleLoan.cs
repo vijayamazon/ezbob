@@ -2,6 +2,7 @@
 	using System;
 	using System.Globalization;
 	using System.Linq;
+	using System.Text;
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models.NewLoan;
@@ -11,6 +12,7 @@
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using EZBob.DatabaseLib.Model.Loans;
 	using MailApi;
+	using Newtonsoft.Json;
 	using PaymentServices.Calculators;
 	using StructureMap;
 
@@ -98,6 +100,17 @@
 
 				// remove unpaid (lates, stilltopays passed) and future schedule items
 				foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
+
+					// if loan has future items that already paid ("paid early"), re-scheduling not allowed
+					if ((rmv.Status == LoanScheduleStatus.Paid || rmv.Status == LoanScheduleStatus.PaidOnTime || rmv.Status == LoanScheduleStatus.PaidEarly)
+						&& rmv.Date > this.ReschedulingArguments.ReschedulingDate) {
+						this.Result.Error = string.Format("Currently it is not possible to apply rescheduling future if payment/s relaying in the future have been already covered with early made payment, partially or entirely. " +
+							"You can apply rescheduling option after [last covered payment day].");
+						Log.Debug("Exist11==========================LoanState: {0}", this.tLoan);
+						this.loanRep.Clear();
+						return;
+					}
+						
 					if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
 						this.tLoan.Schedule.Remove(rmv);
 					if (rmv.Date <= this.ReschedulingArguments.ReschedulingDate && rmv.Status == LoanScheduleStatus.Late) {
@@ -169,7 +182,6 @@
 
 				if (this.Result.IntervalsNum == 0) {
 					this.Result.Error = "Rescheduling impossible (calculated payments number 0)";
-
 					Log.Debug("Exist7==========================LoanState: {0}", this.tLoan);
 					this.loanRep.Clear();
 					return;
@@ -210,10 +222,8 @@
 
 				//  after modification
 				if (CheckValidateLoanState(calc) == false) {
-
 					Log.Debug("Exist8==========================LoanState: {0}", this.tLoan);
 					this.loanRep.Clear();
-
 					return;
 				}
 
@@ -249,7 +259,6 @@
 							);
 						this.Result.Error = this.message;
 						Log.Debug("Exist9==========================LoanState: {0}", this.tLoan);
-
 						this.loanRep.Clear();
 						return;
 					}
@@ -399,17 +408,29 @@
 		/// <param name="subject"></param>
 		/// <param name="transactionEx"></param>
 		private void SendMail(string subject, Exception transactionEx = null) {
-			subject = subject + " for customerID: " + this.tLoan.Customer.Id + ", by userID: " + Context.UserID;
+
+			subject = subject + " for customerID: " + this.tLoan.Customer.Id + ", by userID: " + Context.UserID + ", Loan ref: " + this.tLoan.RefNumber;
+
+			var stateBefore = JsonConvert.DeserializeObject<EditLoanDetailsModel>(this.loanHistory.Data).Items;
+			StringBuilder sb = new StringBuilder();
+			if (stateBefore != null) {
+				foreach (var i in stateBefore) {
+					sb.Append("<p>").Append(i.ToString()).Append("</p>");
+				}
+			}
+
 			this.message = string.Format(
 				"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
 				 + "<h4>Arguments</h4>: {2} <br/>"
 				 + "<h4>Result</h4>: {3} <br/>"
-				 + "<h4>ERROR</h4>: {4} <br/></p>",
+				 + "<h4>Error</h4>: {4} <br/>"
+				 + "<h4>Loan state before action</h4>: {5}</p>",
 
 				this.tLoan.Customer.Id, Context.UserID
 				, (this.ReschedulingArguments)
 				, (this.Result)
 				, (transactionEx == null ? "NO errors" : transactionEx.ToString())
+				, (sb.ToString().Length>0) ? sb.ToString() : "not found"
 			);
 			new Mail().Send(
 				this.emailToAddress,

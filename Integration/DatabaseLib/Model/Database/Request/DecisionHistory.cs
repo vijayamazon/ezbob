@@ -92,7 +92,7 @@
 
 	public class DecisionHistoryMap : ClassMap<DecisionHistory> {
 		public DecisionHistoryMap() {
-			Id(x => x.Id).GeneratedBy.HiLo("100");
+			Id(x => x.Id).GeneratedBy.Native();
 			Map(x => x.Date).CustomType<UtcDateTimeType>();
 			Map(x => x.Comment).Length(2000);
 			References(x => x.Underwriter, "UnderwriterId");
