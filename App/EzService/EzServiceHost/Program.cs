@@ -204,7 +204,7 @@
 			Ezbob.RegistryScanner.Scanner.Register();
 
 			ObjectFactory.Configure(x => {
-				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.SessionFactory.OpenSession());
+				x.For<ISession>().LifecycleIs(new ThreadLocalStorageLifecycle()).Use(ctx => NHibernateManager.OpenSession());
 				x.For<ISessionFactory>().Use(() => NHibernateManager.SessionFactory);
 				x.AddRegistry<ServiceRegistry>();
 
