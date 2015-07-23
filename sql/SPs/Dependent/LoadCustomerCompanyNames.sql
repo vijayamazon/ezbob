@@ -35,7 +35,13 @@ BEGIN
 	--
 	------------------------------------------------------------------------------
 
-	EXECUTE LoadHmrcBusinessNames @CustomerID, @Now
+	SELECT
+		RowType,
+		Name,
+		BusinessID,
+		BelongsToCustomer
+	FROM
+		dbo.udfLoadHmrcBusinessNames(@CustomerID, @Now)
 
 	------------------------------------------------------------------------------
 

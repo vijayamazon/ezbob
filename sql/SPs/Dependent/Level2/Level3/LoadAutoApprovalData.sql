@@ -588,7 +588,13 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	EXECUTE LoadHmrcBusinessNames @CustomerID, @Now
+	SELECT
+		RowType,
+		Name,
+		BusinessID,
+		BelongsToCustomer = ISNULL(BelongsToCustomer, 0)
+	FROM
+		dbo.udfLoadHmrcBusinessNames(@CustomerID, @Now)
 
 	------------------------------------------------------------------------------
 
