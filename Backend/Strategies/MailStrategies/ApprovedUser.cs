@@ -101,8 +101,10 @@
 					.Replace("*ValidFor*", this.validHours.ToString(CultureInfo.InvariantCulture))
 					.Replace("*InterestRate*", MathUtils.Round2DecimalDown(this.interestRatePercents).ToString("#,#.00"))
 					.Replace("*SetupFee*", this.setupFeePercents.ToString("#,#.00"))
-					.Replace("*Origin*", CustomerData.Origin);
-
+					.Replace("*Origin*", CustomerData.Origin)
+					.Replace("*OriginLogin*", CustomerData.OriginSite + "/Customer/Profile")
+					.Replace("*OriginPhone*", CustomerData.OriginPhone);
+				
 				SendSms sendSms = new SendSms(CustomerId, 1, CustomerData.MobilePhone, smsTemplate);
 				sendSms.Execute();
 			} else {
