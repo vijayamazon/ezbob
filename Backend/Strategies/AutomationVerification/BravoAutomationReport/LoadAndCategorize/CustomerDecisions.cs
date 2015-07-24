@@ -29,6 +29,8 @@
 			this.tag = tag;
 
 			this.nonAffirmativeTraces = null;
+
+			Log.Debug("CustomerDecisions({0}, {1}, {2}) has been created.", customerID, isAlibaba, tag);
 		} // constructor
 
 		public int CustomerID { get; private set; }

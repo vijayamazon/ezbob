@@ -104,10 +104,6 @@
 
 			Log.Info("All standard reject reason count: {0}.", DeepData.AllStandardRejectReasons.Count);
 			Log.Info("All non-affirmative traces count: {0}.", DeepData.AllNonAffirmativeTraces.Count);
-
-			Log.Info("Max marketplace count: {0}.", Result.Values.Select(dd => dd.Marketplaces.Count).Max());
-			Log.Info("Max standard reject reason count: {0}.", Result.Values.Select(dd => dd.StandardRejectReasons.Count).Max());
-			Log.Info("Max non-affirmative traces count: {0}.", Result.Values.Select(dd => dd.NonAffirmativeTraces.Count).Max());
 		} // LoadMarketplacesData
 
 		private void CreateXlsx() {

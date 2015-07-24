@@ -1436,6 +1436,12 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void BravoAutomationReport() {
 			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
 
+			log.Debug(
+				"Start date is {0}, end date is {1}", 
+				dates.Item1.HasValue ? dates.Item1.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty,
+				dates.Item2.HasValue ? dates.Item2.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty
+			);
+
 			this.serviceClient.BravoAutomationReport(dates.Item1, dates.Item2);
 		} // BravoAutomationReport
 
@@ -1446,11 +1452,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			bool hasEnd = false;
 			DateTime endTime = DateTime.UtcNow;
 
-			if (this.cmdLineArgs.Length > 2)
-				hasStart = DateTime.TryParse(this.cmdLineArgs[2], out startTime);
+			if (this.cmdLineArgs.Length > 1)
+				hasStart = DateTime.TryParse(this.cmdLineArgs[1], out startTime);
 
-			if (hasStart && (this.cmdLineArgs.Length > 3))
-				hasEnd = DateTime.TryParse(this.cmdLineArgs[3], out startTime);
+			if (hasStart && (this.cmdLineArgs.Length > 2))
+				hasEnd = DateTime.TryParse(this.cmdLineArgs[2], out endTime);
 
 			return new Tuple<DateTime?, DateTime?>(
 				hasStart ? startTime : (DateTime?)null,
