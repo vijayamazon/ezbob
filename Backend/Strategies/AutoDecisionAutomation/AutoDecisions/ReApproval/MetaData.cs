@@ -5,7 +5,7 @@
 
 	public class MetaData {
 		public string RowType { get; set; }
-		public int LacrID { get; set; }
+		public long LacrID { get; set; }
 		public int RejectAfterLacrID { get; set; }
 		public DateTime? LacrTime { get; set; }
 		public int LateLoanCount { get; set; }

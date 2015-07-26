@@ -16,7 +16,6 @@
 			int customerID,
 			long cashRequestID,
 			AutoDecisionResponse autoDecisionResponse,
-			LastOfferData lastOffer,
 			AConnection db,
 			ASafeLog log
 		) : base(db, log) {
@@ -25,18 +24,14 @@
 			this.customerID = customerID;
 			CashRequestID = cashRequestID;
 			this.autoDecisionResponse = autoDecisionResponse;
-			this.lastOffer = lastOffer;
 
 			this.repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
 			this.isCustomerRepaymentPeriodSelectionAllowedToUse =
 				this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
 
-			if (this.autoDecisionResponse.IsAutoApproval) {
+			if (this.autoDecisionResponse.DecidedToApprove) {
 				this.interestRateToUse = this.autoDecisionResponse.InterestRate;
 				this.setupFeePercentToUse = this.autoDecisionResponse.SetupFee;
-			} else { //TODO check this code!!!
-				this.interestRateToUse = this.lastOffer.LoanOfferInterestRate;
-				this.setupFeePercentToUse = this.lastOffer.ManualSetupFeePercent;
 			} // if
 
 			InitLoanSource();
@@ -168,11 +163,6 @@
 			set { }
 		} // ManualSetupFeePercent
 
-		public decimal Apr {
-			get { return this.lastOffer.LoanOfferApr; }
-			set { }
-		} // Apr
-
 		public bool IsCustomerRepaymentPeriodSelectionAllowed {
 			get { return this.isCustomerRepaymentPeriodSelectionAllowedToUse; }
 			set { }
@@ -293,7 +283,6 @@
 
 		private readonly DateTime now;
 		private readonly AutoDecisionResponse autoDecisionResponse;
-		private readonly LastOfferData lastOffer;
 		private readonly int customerID;
 		private readonly decimal setupFeePercentToUse;
 

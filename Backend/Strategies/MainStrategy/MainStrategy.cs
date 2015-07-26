@@ -51,6 +51,8 @@
 
 			this.wasMismatch = false;
 
+			this.backdoorSimpleDetails = null;
+
 			this.autoDecisionResponse = new AutoDecisionResponse();
 
 			this.tag = string.Format(
@@ -60,11 +62,22 @@
 			);
 
 			this.customerDetails = new CustomerDetails(this.customerId);
+
+			this.mailer = new StrategiesMailer();
 		} // constructor
 
 		public override string Name {
 			get { return "Main strategy"; }
 		} // Name
+
+		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
+			this.overrideApprovedRejected = bOverrideApprovedRejected;
+			return this;
+		} // SetOverrideApprovedRejected
+
+		public AutoDecisionResponse AutoDecisionResponse {
+			get { return this.autoDecisionResponse; }
+		} // AutoDecisionResponse
 
 		public override void Execute() {
 			ValidateInput();
@@ -103,12 +116,23 @@
 				);
 			} // if
 
-			var mailer = new StrategiesMailer();
+			bool useStandardFlow = !UseBackdoorSimpleFlow() || !BackdoorSimpleFlow();
 
+			if (useStandardFlow)
+				StandardFlow();
+
+			UpdateCustomerAndCashRequest();
+
+			UpdateCustomerAnalyticsLocalData();
+
+			SendEmails();
+		} // Execute
+
+		private void StandardFlow() {
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
 				MarketplaceUpdateStatus mpus = UpdateMarketplaces();
 
-				new Staller(this.customerId, mailer)
+				new Staller(this.customerId, this.mailer)
 					.SetMarketplaceUpdateStatus(mpus)
 					.Stall();
 
@@ -127,7 +151,7 @@
 			// Gather LR data - must be done after rejection decisions
 			GetLandRegistryData();
 
-			CalculateMedal();
+			CalculateMedal(true);
 
 			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision) {
 				new SilentAutomation(this.customerId)
@@ -142,44 +166,83 @@
 			ProcessApprovals();
 
 			AdjustOfferredCreditLine();
+		} // StandardFlow
 
-			this.lastOffer = new LastOfferData(this.customerId);
+		/// <summary>
+		/// Executes back door simple flow.
+		/// This method result is used to determine whether to execute a standard flow.
+		/// </summary>
+		/// <returns>True if back door flow was executed, false otherwise.</returns>
+		private bool BackdoorSimpleFlow() {
+			if (this.backdoorSimpleDetails == null)
+				return false;
 
-			UpdateCustomerAndCashRequest();
+			bool success = this.backdoorSimpleDetails.SetResult(this.autoDecisionResponse);
 
-			UpdateCustomerAnalyticsLocalData();
+			if (!success)
+				return false;
 
-			SendEmails(mailer);
-		} // Execute
+			CalculateMedal(false);
 
-		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
-			this.overrideApprovedRejected = bOverrideApprovedRejected;
-			return this;
-		} // SetOverrideApprovedRejected
+			if (this.backdoorSimpleDetails.Decision != DecisionActions.Approve)
+				return true;
 
-		public AutoDecisionResponse AutoDecisionResponse {
-			get { return this.autoDecisionResponse; }
-		} // AutoDecisionResponse
+			BackdoorSimpleApprove bsa = this.backdoorSimpleDetails as BackdoorSimpleApprove;
 
-		private void CalculateMedal() {
+			if (bsa == null) // Should never happen because of the "if" condition.
+				return false;
+
+			this.offeredCreditLine = bsa.ApprovedAmount;
+
+			this.medal.MedalClassification = bsa.MedalClassification;
+			this.medal.OfferedLoanAmount = bsa.ApprovedAmount;
+			this.medal.TotalScoreNormalized = 1m;
+			this.medal.AnnualTurnover = bsa.ApprovedAmount;
+
+			return true;
+		} // BackdoorSimpleFlow
+
+		private bool UseBackdoorSimpleFlow() {
+			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
+				Log.Debug(
+					"Not using back door simple flow for customer '{0}': originator is '{1}'.",
+					this.customerId,
+					this.cashRequestOriginator == null ? "-- null --" : this.cashRequestOriginator.Value.ToString()
+				);
+				return false;
+			} // if
+
+			if (!this.customerDetails.IsTest) {
+				Log.Debug(
+					"Not using back door simple flow for customer '{0}': not a text customer.",
+					this.customerId
+				);
+				return false;
+			} // if
+
+			this.backdoorSimpleDetails = ABackdoorSimpleDetails.Create(this.customerDetails);
+
+			return this.backdoorSimpleDetails != null;
+		} // UseBackdoorSimpleFlow
+
+		private void CalculateMedal(bool updateWasMismatch) {
 			var instance = new CalculateMedal(this.customerId, DateTime.UtcNow, false, true);
 			instance.Execute();
 
-			if (instance.WasMismatch)
+			if (instance.WasMismatch && updateWasMismatch)
 				this.wasMismatch = true;
 
 			this.medal = instance.Result;
 		} // CalculateMedal
 
-		private void SendEmails(StrategiesMailer mailer) {
+		private void SendEmails() {
 			bool sendToCustomer =
 				!this.customerDetails.FilledByBroker || (this.customerDetails.NumOfPreviousApprovals != 0);
 
 			var postMaster = new MainStrategyMails(
-				mailer,
+				this.mailer,
 				this.customerId,
 				this.offeredCreditLine,
-				this.lastOffer,
 				this.medal,
 				this.customerDetails,
 				this.autoDecisionResponse,
@@ -548,7 +611,6 @@
 				this.customerId,
 				this.cashRequestID,
 				this.autoDecisionResponse,
-				this.lastOffer,
 				DB,
 				Log
 			) {
@@ -937,7 +999,6 @@
 		private readonly AutoDecisionResponse autoDecisionResponse;
 
 		private readonly CustomerDetails customerDetails;
-		private LastOfferData lastOffer;
 
 		private MedalResult medal;
 
@@ -970,6 +1031,8 @@
 
 		private readonly InternalCashRequestID cashRequestID;
 
+		private readonly StrategiesMailer mailer;
+
 		/// <summary>
 		/// Default: true. However when Main strategy is executed as a part of
 		/// Finish Wizard strategy and customer is already approved/rejected
@@ -981,5 +1044,6 @@
 
 		private readonly string tag;
 		private bool wasMismatch;
+		private ABackdoorSimpleDetails backdoorSimpleDetails;
 	} // class MainStrategy
 } // namespace

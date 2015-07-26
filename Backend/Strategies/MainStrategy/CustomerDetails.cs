@@ -66,5 +66,9 @@
 		public string FullName { get; set; }
 
 		public int ExperianConsumerScore { get; private set; }
+
+		public bool OwnsProperty {
+			get { return IsOwnerOfMainAddress || IsOwnerOfOtherProperties; }
+		} // OwnsProperty
 	} // class CustomerDetails
 } // namespace

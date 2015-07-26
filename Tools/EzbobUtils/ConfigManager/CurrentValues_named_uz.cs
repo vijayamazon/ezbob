@@ -32,6 +32,10 @@
 			get { return this[Variables.VipMaxRequests]; }
 		}
 
+		public virtual VariableValue WizardAutomationTimeout {
+			get { return this[Variables.WizardAutomationTimeout]; }
+		}
+
 		public virtual VariableValue WizardInstructionsEnabled {
 			get { return this[Variables.WizardInstructionsEnabled]; }
 		}
@@ -95,5 +99,5 @@
 		public virtual VariableValue YodleeUsername {
 			get { return this[Variables.YodleeUsername]; }
 		}
-	}
-}
+	} // class CurrentValues
+} // namespace

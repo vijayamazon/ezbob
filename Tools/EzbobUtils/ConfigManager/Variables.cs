@@ -458,6 +458,7 @@ namespace ConfigManager {
 		VipMailReceiver,
 		VipMaxRequests,
 
+		WizardAutomationTimeout,
 		WizardInstructionsEnabled,
 		WizardTopNaviagtionEnabled,
 
