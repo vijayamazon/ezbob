@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.CalculateLoan.Models.Exceptions {
+﻿namespace Ezbob.Backend.CalculateLoan.Exceptions {
 	using System;
 
 	public abstract class ACalculateLoanException : Exception {
@@ -12,3 +12,4 @@
 		} // constructor
 	} // class ACalculateLoanException
 } // namespace
+

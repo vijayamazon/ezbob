@@ -1,22 +1,15 @@
 ﻿namespace EzBobTest {
 	using System;
-	using System.Collections;
 	using System.Collections.Generic;
 	using System.Linq;
 	using System.Security.Cryptography;
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Utils;
 	using Ezbob.ValueIntervals;
-	using EzBob.eBayServiceLib.com.ebay.developer.soap;
-	using FluentNHibernate.Utils;
 	using NHibernate.Linq;
-	using NHibernate.Util;
 	using NUnit.Framework;
 	using Reports;
 

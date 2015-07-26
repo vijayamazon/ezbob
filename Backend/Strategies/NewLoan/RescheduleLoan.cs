@@ -57,31 +57,30 @@
 			}
 
 			try {
+				
+				this.loanRep.BeginTransaction();
 
 				GetCurrentLoanState();
 
 				// check status, don't continue for "PaidOff"
 				if (this.tLoan.Status == LoanStatus.PaidOff) {
 					this.Result.Error = string.Format("Loan ID {0} paid off. Loan balance: {1}", this.tLoan.Id, 0m.ToString("C2", this.cultureInfo));
-					Log.Debug("Exist2==========================LoanState: {0}", this.tLoan);
-					this.loanRep.Clear();
+					ExitStrategy("Exist2");
 					return;
 				}
 
 				// input validation for "IN"
 				if (this.ReschedulingArguments.RescheduleIn && (this.ReschedulingArguments.ReschedulingDate > this.Result.LoanCloseDate)) {
 					this.Result.Error = "Within loan arrangement is impossible";
-					Log.Debug("Exist3==========================LoanState: {0}", this.tLoan);
-					this.loanRep.Clear();
+					ExitStrategy("Exist3");
 					return;
 				}
 
 				// if sent "default" value (0), replace by default calculated
 				if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
 					this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
-
-				Log.Debug("\n\n======RE-SCHEDULING===========ARGUMENTS:====={0} Context.UserID: {1}", this.ReschedulingArguments, Context.UserID);
-				Log.Debug("==========================LoanState: {0}", this.tLoan);
+				
+				Log.Debug("\n\n==========RE-SCHEDULING======ARGUMENTS: {0}==========LoanState: {1}", this.tLoan);
 
 				// check Marking loan {0} as 'PaidOff' in \ezbob\Integration\DatabaseLib\Model\Loans\Loan.cs(362)
 				var calc = new LoanRepaymentScheduleCalculator(this.tLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
@@ -89,8 +88,7 @@
 				try {
 					if (calc.NextEarlyPayment() == 0) {
 						this.Result.Error = string.Format("Loan {0} marked as 'PaidOff'. Loan balance: {1}", this.tLoan.Id, 0m.ToString("C2", this.cultureInfo));
-						Log.Debug("Exist4==========================LoanState: {0}", this.tLoan);
-						this.loanRep.Clear();
+						ExitStrategy("Exist4");
 						return;
 					}
 					// ReSharper disable once CatchAllClause
@@ -102,12 +100,10 @@
 				foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 
 					// if loan has future items that already paid ("paid early"), re-scheduling not allowed
-					if ((rmv.Status == LoanScheduleStatus.Paid || rmv.Status == LoanScheduleStatus.PaidOnTime || rmv.Status == LoanScheduleStatus.PaidEarly)
-						&& rmv.Date > this.ReschedulingArguments.ReschedulingDate) {
+					if ((rmv.Status == LoanScheduleStatus.Paid || rmv.Status == LoanScheduleStatus.PaidOnTime || rmv.Status == LoanScheduleStatus.PaidEarly) && rmv.Date > this.ReschedulingArguments.ReschedulingDate) {
 						this.Result.Error = string.Format("Currently it is not possible to apply rescheduling future if payment/s relaying in the future have been already covered with early made payment, partially or entirely. " +
 							"You can apply rescheduling option after [last covered payment day].");
-						Log.Debug("Exist11==========================LoanState: {0}", this.tLoan);
-						this.loanRep.Clear();
+						ExitStrategy("Exist11");
 						return;
 					}
 						
@@ -141,8 +137,7 @@
 						this.message = string.Format("The entered amount accedes the outstanding balance of {0} for payment of {1}",
 							this.Result.ReschedulingBalance.ToString("C2", this.cultureInfo), this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo));
 						this.Result.Error = this.message;
-						Log.Debug("Exist5==========================LoanState: {0}", this.tLoan);
-						this.loanRep.Clear();
+						ExitStrategy("Exist5");
 						return;
 					}
 
@@ -162,8 +157,7 @@
 					// uncovered loan - too small payment per interval
 					if (k < 0) {
 						this.Result.Error = "Chosen amount is not sufficient for covering the loan overtime, i.e. accrued interest will be always greater than the repaid amount per payment";
-						Log.Debug("Exist6==========================LoanState: {0}", this.tLoan);
-						this.loanRep.Clear();
+						ExitStrategy("Exist6");
 						return;
 					}
 
@@ -182,8 +176,7 @@
 
 				if (this.Result.IntervalsNum == 0) {
 					this.Result.Error = "Rescheduling impossible (calculated payments number 0)";
-					Log.Debug("Exist7==========================LoanState: {0}", this.tLoan);
-					this.loanRep.Clear();
+					ExitStrategy("Exist7");
 					return;
 				}
 
@@ -222,8 +215,7 @@
 
 				//  after modification
 				if (CheckValidateLoanState(calc) == false) {
-					Log.Debug("Exist8==========================LoanState: {0}", this.tLoan);
-					this.loanRep.Clear();
+					ExitStrategy("Exist8");
 					return;
 				}
 
@@ -258,15 +250,13 @@
 							overInstalment.AmountDue.ToString("C2", this.cultureInfo)
 							);
 						this.Result.Error = this.message;
-						Log.Debug("Exist9==========================LoanState: {0}", this.tLoan);
-						this.loanRep.Clear();
+						ExitStrategy("Exist9");
 						return;
 					}
 				}
 
 				if (!this.ReschedulingArguments.SaveToDB) {
-					Log.Debug("Exist10==========================LoanState: {0}", this.tLoan);
-					this.loanRep.Clear();
+					ExitStrategy("Exist10}");
 					return;
 				}
 
@@ -276,6 +266,12 @@
 			} catch (Exception e) {
 				Log.Alert(e, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);
 			}
+		}
+
+		private void ExitStrategy(string logMessage) {
+			Log.Debug(logMessage + "==========================LoanState: {0}", this.tLoan); 
+			this.loanRep.Clear();
+			this.loanRep.RollbackTransaction();
 		}
 
 		/// <summary>
@@ -365,11 +361,11 @@
 
 			if (this.tLoan != null && this.tLoan.Schedule.Count > 0) {
 
-				//save LoanChangesHistory (loan state before changes) before re-schedule
-				this.loanHistory.User = ObjectFactory.GetInstance<UsersRepository>().Get(Context.UserID);
-				ObjectFactory.GetInstance<LoanChangesHistoryRepository>().Save(this.loanHistory);
-
 				try {
+
+					//save LoanChangesHistory (loan state before changes) before re-schedule
+					this.loanHistory.User = ObjectFactory.GetInstance<UsersRepository>().Get(Context.UserID);
+					ObjectFactory.GetInstance<LoanChangesHistoryRepository>().Save(this.loanHistory);
 
 					Log.Debug("==========================Saving rescheduled loan: {0}", this.tLoan);
 
