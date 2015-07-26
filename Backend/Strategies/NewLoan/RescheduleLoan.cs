@@ -256,7 +256,7 @@
 				}
 
 				if (!this.ReschedulingArguments.SaveToDB) {
-					ExitStrategy("Exist10}");
+					ExitStrategy("Exist10");
 					return;
 				}
 
