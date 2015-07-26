@@ -36,9 +36,10 @@
 		public override void Execute() {
 			try {
 				Log.Debug(
-					"Loading customer data for medal calculation, customer = {0}, calculation time = {1}.",
+					"Loading customer data for medal calculation, customer = {0}, calculation time = {1}. {2}",
 					this.customerId,
-					this.calculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture)
+					this.calculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture),
+					Tag
 				);
 
 				SafeReader sr = DB.GetFirst(
@@ -70,7 +71,8 @@
 					"Yodlee count = {7}, " +
 					"Online count = {8}, " +
 					"earliest HMRC update = '{9}', " +
-					"earliest Yodlee update = '{10}'.",
+					"earliest Yodlee update = '{10}'." +
+					"tag = '{11}'",
 					this.customerId,
 					this.calculationTime.ToString("MMM d yyyy H:mm:ss", CultureInfo.InvariantCulture),
 					sr.IsEmpty,
@@ -81,7 +83,8 @@
 					this.numOfYodleeMps,
 					this.numOfEbayAmazonPayPalMps,
 					this.earliestHmrcLastUpdateDate,
-					this.earliestYodleeLastUpdateDate
+					this.earliestYodleeLastUpdateDate,
+					Tag
 				);
 
 				// The first scenario (1) for checking medal type and getting medal value
@@ -119,7 +122,7 @@
 					if (this.doStoreMedal)
 						result1.SaveToDb(Tag, DB, Log);
 
-					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}.", this.customerId);
+					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
 
 					Result = result1;
 					WasMismatch = false;
@@ -139,11 +142,20 @@
 					result1.SaveToDb(Tag, DB, Log);
 
 				SendExplanationMail(result1, result2);
-				Log.Error("Mismatch found in the 2 medal calculations of customer: {0}.", this.customerId);
+
+				if (QuietMode) {
+					Log.Warn("Mismatch found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
+				} else {
+					Log.Error("Mismatch found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
+				}
 
 				Result = result1;
 			} catch (Exception e) {
-				Log.Warn(e, "Medal calculation for customer {0} failed with exception.", this.customerId);
+				if (QuietMode) {
+					Log.Warn(e, "Medal calculation for customer {0} failed with exception. {1}", this.customerId, Tag);
+				} else {
+					Log.Error(e, "Medal calculation for customer {0} failed with exception. {1}", this.customerId, Tag);
+				}
 
 				Result = new MedalResult(this.customerId, Log) {
 					Error = "Exception thrown: " + e.Message,
