@@ -227,6 +227,7 @@
 			customerModel.IsLastApprovedLoanSourceCOSME = false;
 			customerModel.SignedLegalID = 0;
 			customerModel.LastApprovedAmount = 0;
+			customerModel.HasApprovalChance = customer.HasApprovalChance;
 
 			if (customer.LastCashRequest != null) {
 				customerModel.LastApprovedAmount = (int)(customer.LastCashRequest.ManagerApprovedSum ?? 0);
