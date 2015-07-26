@@ -1,6 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions {
 	using System;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
+	using Ezbob.Backend.CalculateLoan.Exceptions;
 
 	public abstract class ALoanCalculatorException : ACalculateLoanException {
 		protected ALoanCalculatorException() {
