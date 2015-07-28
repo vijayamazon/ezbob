@@ -548,6 +548,7 @@
 				.Add("~/Content/js/Profile/ezbob.profile.Agreements.js")
 				.Add("~/Content/js/ezbob.edit.experian.director.data.js")
 				.Add("~/Content/js/Profile/ezbob.profile.companyDirectorsView.js")
+				.Add("~/Content/js/Profile/ezbob.profile.processingAutomationPopupView.js")
 				.MvcRender("~/Content/js/min/profile_#.js");
 		} // RenderProfileJs
 

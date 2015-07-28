@@ -1,0 +1,118 @@
+﻿@using EZBob.DatabaseLib.Model.Database
+<script type="text/template" id="request-processing-template">
+	<div class="automation-popup">
+		@AutomationPopupHeader()
+		
+		<div class="automation-popup-content">
+			<h3>We are processing your application</h3>
+			<h4><strong>Please hold for up to <%-automationTimeout%> seconds...</strong></h4>
+			<div>There is a good chance you will get an immediate answer</div>
+			
+			<div class="progress progress-striped progress-success active automation-processing">
+				<div class="bar automation-processing-bar" style="width: 0%;"></div>
+			</div>
+			<div class="alignright" style="padding: 0 10px 0 0;">
+				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-popup-continue">Continue</button>
+			</div>
+			<div class="clear"></div>
+			<br />
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="request-processing-reject-nochance-template">
+	<div class="automation-popup">
+		@AutomationPopupHeader()
+		<div class="automation-popup-content">
+			<h4><strong><%-name%>,</strong></h4>
+			<div>unfortunately we cannot offer you financing at this time</div>
+			<div class="alignright" style="padding: 0 10px 0 0;">
+				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-nochance-popup-continue">Continue</button>
+			</div>
+			<div class="clear"></div>
+			<br />
+		</div>
+		<br />
+	</div>
+</script>
+
+<script type="text/template" id="request-processing-reject-haschance-template">
+	<div class="automation-popup">
+		@AutomationPopupHeader()
+		<div class="automation-popup-content">
+			<h4><strong><%-name%>,</strong></h4>
+			<span>we don't have enough data to approve your loan.</span>
+			<hr/>
+			<div>Please click continue to provide us an additional data source to add more</div>
+			<div class="alignright" style="padding: 0 10px 0 0;">
+				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-haschance-popup-continue">Continue</button>
+			</div>
+			<div class="clear"></div>
+			<br />
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="request-processing-nodecision-template">
+	<div class="automation-popup">
+		@AutomationPopupHeader()
+		<div class="automation-popup-content">
+			<h4><strong>Your application is complete.</strong></h4>
+			<hr/>
+			<div>Your application is now being processed and you should be receiving an email with an offer in the next business day.</div>
+			<div class="alignright" style="padding: 0 10px 0 0;">
+				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-haschance-popup-continue">Continue</button>
+			</div>
+			<div class="clear"></div>
+			<br />
+		</div>
+	</div>
+</script>
+
+<script type="text/template" id="request-processing-approved-template">
+	<div class="automation-popup">
+		@AutomationPopupHeader()
+		<div class="automation-popup-content">
+			<h4><strong><%-name%>, Congratulations</strong></h4>
+			<span>Your credit is approved and can be taken</span>
+			<hr/>
+			<div>Available Credit</div>
+			<div class="well">Up to <%-amount%></div>
+			<div>Offer Valid for</div>
+			<div class="well offerValidFor"></div>
+			<div class="alignright" style="padding: 0 10px 0 0;">
+				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-haschance-popup-continue">Continue</button>
+			</div>
+			<div class="clear"></div>
+			<br />
+		</div>
+	</div>
+</script>
+
+@helper AutomationPopupHeader() { 
+	switch ((CustomerOriginEnum)ViewBag.CustomerOrigin.GetOrigin()) {
+		case CustomerOriginEnum.everline:
+			<header class="everline_header">
+				<nav>
+					<div class="pin"><span></span></div>
+					<span class="everlinelogo svg"></span>
+				</nav>
+			</header>
+			break;
+		default:
+		<div id="header">
+			<div class="header-bg-strip"></div>
+			<div class="header-inner">
+				<div class="header-logo">
+					<div class="newlogo"></div>
+				</div>
+				<div class="header-info" style="display: none;">
+					<div class="header-info-left"></div>
+					<div class="header-info-text-popup">Request processing</div>
+					<div class="header-info-right"></div>
+				</div>
+			</div>
+		</div>
+		break;
+	}
+}

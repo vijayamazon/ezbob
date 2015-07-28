@@ -693,3 +693,22 @@ table.directors-list td.l {
 	margin-bottom: 20px;
 }
 
+.automation-popup{
+	background-color: #E2E3E4;
+}
+
+.automation-popup-content{
+	margin: 10px;
+}
+
+.automation-processing{
+	height: 40px;
+}
+
+.header-info-text-popup {
+  height: 77px;
+  float: left;
+  background-color: #292929;
+  padding: 0 15px;
+  margin-left: -1px;
+}

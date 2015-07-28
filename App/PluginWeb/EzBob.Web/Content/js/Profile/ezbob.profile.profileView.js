@@ -15,6 +15,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.getCashModel = new EzBob.Profile.GetCashModel({ customer: options });
 		this.getCashView = new EzBob.Profile.GetCashView({ model: this.getCashModel, customer: options });
 
+		this.processingPopup = new EzBob.Profile.ProccessingAutomationPopupView({ model: this.getCashModel });
+
 		this.signWidget = new EzBob.Profile.SignWidget({ customerModel: options });
 		this.signWidget.on('payEarly', this.makePayment, this);
 
@@ -48,6 +50,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.profileMain.show();
 
 		this.getCashView.render();
+		//this.processingPopup.render();
 		this.payEarlyView.render();
 		this.signWidget.render();
 		this.processingMessageView.render();
