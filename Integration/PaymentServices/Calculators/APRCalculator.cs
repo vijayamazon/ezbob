@@ -1,7 +1,9 @@
 ﻿namespace PaymentServices.Calculators {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
+	using Ezbob.Logger;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public class APRCalculator {
@@ -17,11 +19,15 @@
 
 			List<LoanScheduleItem> payments = monthlyRepayments.ToList();
 
-			for (var i = 0; i < 10000; i++) {
+			int? accuracyReachedOn = null;
+
+			for (int i = 0; i < 10000; i++) {
 				double f_x = f(x, amount - setupFee, payments);
 
-				if (Math.Abs(f_x) < 1e-6)
+				if (Math.Abs(f_x) < 1e-6) {
+					accuracyReachedOn = i;
 					break;
+				} // if
 
 				double f_prime_x = f_prime(x, payments);
 
@@ -30,7 +36,28 @@
 				x -= dx;
 			} // for
 
-			return Math.Round(x * 100, 2);
+			double apr = Math.Round(x * 100, 2);
+
+			log.Debug(
+				"On {0} APR = {1} (after {2}) with loan amount of {3} and setup fee of {4}.\nAmount due dates:\n\t{5}",
+				this.date.ToString("MMM d yyyy", CultureInfo.InvariantCulture),
+				apr,
+				accuracyReachedOn.HasValue
+					? "accuracy reached on iteration " + accuracyReachedOn.Value
+					: "max iterations limit reached",
+				amount.ToString("C2", CultureInfo.InvariantCulture),
+				setupFee.ToString("C2", CultureInfo.InvariantCulture),
+				string.Join("\n\t", payments.Select(
+					sch => string.Format(
+						"{0} on {1}, days count = {2}",
+						sch.AmountDue.ToString("C2", CultureInfo.InvariantCulture),
+						sch.Date.ToString("MMM dd yyyy", CultureInfo.InvariantCulture),
+						(sch.Date - this.date).Days
+					)
+				))
+			);
+
+			return apr;
 		} // Calculate
 
 		private double f(double x, decimal credit, List<LoanScheduleItem> monthlyRepayments) {
@@ -51,5 +78,6 @@
 		} // f_prime
 
 		private DateTime date;
+		private static readonly ASafeLog log = new SafeILog(typeof(APRCalculator));
 	} // class APRCalculator
 } // namespace

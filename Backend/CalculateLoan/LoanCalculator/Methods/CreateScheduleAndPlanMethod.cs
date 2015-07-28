@@ -43,7 +43,7 @@
 			} // for each
 
 			if (WriteToLog) {
-				Library.Instance.Log.Debug(
+				Log.Debug(
 					"\n\n{3}.CreateScheduleAndPlan - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nSchedule + plan:\n\t{1}" +

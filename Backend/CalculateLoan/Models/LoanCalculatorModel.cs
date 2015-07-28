@@ -11,9 +11,7 @@
 	using Ezbob.Utils.Lingvo;
 
 	public class LoanCalculatorModel {
-
 		public LoanCalculatorModel() {
-
 			this.loanAmount = 0;
 			this.repaymentCount = 1;
 			this.interestOnlyRepayments = 0;
@@ -65,8 +63,6 @@
 			} // set
 		} // RepaymentCount
 
-
-
 		/// <exception cref="NegativeInterestOnlyRepaymentCountException" accessor="set">Condition. </exception>
 		public int InterestOnlyRepayments {
 			get { return this.interestOnlyRepayments; }
@@ -76,8 +72,6 @@
 				this.interestOnlyRepayments = value;
 			} // set
 		} // InterestOnlyRepayments
-
-
 
 		/// <exception cref="NegativeLoanAmountException" accessor="set">Condition. </exception>
 		public decimal LoanAmount {
@@ -89,8 +83,6 @@
 			} // set
 		} // LoanAmount
 
-
-
 		/// <exception cref="NegativeMonthlyInterestRateException" accessor="set">Condition. </exception>
 		public decimal MonthlyInterestRate {
 			get { return this.monthlyInterestRate; }
@@ -101,20 +93,30 @@
 			} // set
 		} // MonthlyInterestRate
 
-
-
 		public void SetDiscountPlan(params decimal[] deltas) {
 			DiscountPlan.Clear();
 			DiscountPlan.AddRange(deltas);
 		} // SetDiscountPlan
 
-
-
 		public bool IsMonthly {
 			get { return RepaymentIntervalType == RepaymentIntervalTypes.Month; }
 		} // IsMonthly
 
+		/// <summary>
+		/// Actual amount transfered to customer.
+		/// </summary>
+		/// <remarks>
+		/// Currently (July 28 2015) actual issued amount is loan amount (principal) without set up fee.
+		/// If and when "set up fee on top" is implemented this property should be updated to take
+		/// on top set up fee into account.
+		/// </remarks>
+		public decimal ActualIssuedAmount {
+			get {
+				decimal setupFee = Fees.Where(fee => fee.FType == FeeTypes.SetupFee).Sum(fee => fee.Amount);
 
+				return LoanAmount - setupFee;
+			} // get
+		} // ActualIssuedAmount
 
 		/// <exception cref="NoScheduleException">Condition. </exception>
 		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
@@ -169,7 +171,6 @@
 		/// <exception cref="TooEarlyPrincipalRepaymentException">Condition. </exception>
 		/// <exception cref="NegativeRepaymentAmountException">Condition. </exception>
 		public void SetScheduleCloseDatesFromPayments() {
-
 			ValidateSchedule();
 
 			var qsp = new Queue<ScheduledItem>();
@@ -210,7 +211,6 @@
 			} // for each repayment
 		} // SetScheduleCloseDatesFromPayments
 
-		
 		/// <summary>
 		/// Returns a string that represents the current object.
 		/// </summary>
@@ -221,7 +221,6 @@
 		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
 		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public override string ToString() {
-
 			var os = new StringBuilder();
 
 			os.Append("\tLoan calculation model - begin:\n");
@@ -284,10 +283,7 @@
 			os.Append("\tLoan calculation model - end.\n");
 
 			return os.ToString();
-
 		} // ToString
-
-
 
 		/// <summary>
 		/// Creates a deep copy of current model.
@@ -314,12 +310,10 @@
 		//     lcm.BadPeriods.DeepCloneFrom(BadPeriods);
 		//     return lcm;
 		//} // DeepClone
-		
 
 		private int repaymentCount;
 		private int interestOnlyRepayments;
 		private decimal loanAmount;
 		private decimal monthlyInterestRate;
-
-	}// class LoanCalculatorModel
+	} // class LoanCalculatorModel
 } // namespace

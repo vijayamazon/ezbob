@@ -8,6 +8,19 @@
 
 			string sCount = nCount == 0 ? "no" : nCount.ToString("N0", CultureInfo.InvariantCulture);
 
+			return Number(sCount, sSingular, sPlural);
+		} // Number
+
+		public string Number(ulong nCount, string sSingular, string sPlural = null) {
+			if (nCount == 1)
+				return "1 " + sSingular;
+
+			string sCount = nCount == 0 ? "no" : nCount.ToString("N0", CultureInfo.InvariantCulture);
+
+			return Number(sCount, sSingular, sPlural);
+		} // Number
+
+		private string Number(string sCount, string sSingular, string sPlural) {
 			if (!string.IsNullOrWhiteSpace(sPlural))
 				return sCount + " " + sPlural;
 

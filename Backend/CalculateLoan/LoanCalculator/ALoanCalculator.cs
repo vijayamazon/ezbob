@@ -1,5 +1,4 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
-
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
@@ -9,16 +8,12 @@
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
-
-
 	/// <summary>
 	/// This class is implemented as Facade pattern.
 	/// https://en.wikipedia.org/wiki/Facade_pattern
 	/// </summary>
 	public abstract partial class ALoanCalculator {
-
 		public abstract string Name { get; }
-
 
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
@@ -84,8 +79,6 @@
 			return new CalculateBalanceMethod(this, today, writeToLog).Execute();
 		} // CalculateBalance
 
-
-
 		/// <summary>
 		/// Calculates payment options (late/current/next installment/full balance) for requested date.
 		/// Method logic: https://drive.google.com/open?id=0B1Io_qu9i44SaWlHX0FKQy0tcWM&amp;authuser=0
@@ -102,8 +95,6 @@
 			   bool writeToLog = true) {
 			return new GetAmountToChargeForDashboardMethod(this, today, setClosedDateFromPayments, writeToLog).Execute();
 		} // GetAmountToChargeForDashboard
-
-
 
 		/// <summary>
 		/// Calculates payment options (late/current installment) for requested date.
@@ -122,8 +113,6 @@
 			return new GetAmountToChargeForAutoChargerMethod(this, today, setClosedDateFromPayments, writeToLog).Execute();
 		} // GetAmountToChargeForAutoCharger
 
-
-
 		/// <summary>
 		/// Calculates loan earned interest between two dates including both dates.
 		/// </summary>
@@ -135,41 +124,51 @@
 			return new CalculateEarnedInterestMethod(this, startDate, endDate, writeToLog).Execute();
 		} // CalculateEarnedInterest
 
-
-
 		public virtual LoanCalculatorModel WorkingModel { get; private set; }
 
-
-
 		/// <summary>
 		/// Calculates date after requested number of periods have passed since loan issue date.
 		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
 		/// </summary>
 		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		/// <summary>
-		/// Calculates date after requested number of periods have passed since loan issue date.
-		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
-		/// </summary>
-		/// <param name="periodCount">
-		///     A number of periods to add.
-		/// </param>
+		/// <param name="periodCount">A number of periods to add.</param>
 		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
 		public virtual DateTime AddRepaymentIntervals(int periodCount) {
-			return WorkingModel.IsMonthly? WorkingModel.LoanIssueTime.AddMonths(periodCount): WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
+			return WorkingModel.IsMonthly
+				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
+				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
 		} // AddRepaymentIntervals
 
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
-		public virtual decimal APRCalculate(
-		//	decimal amount, // LoanCalculatorModel this.loanAmount
-		//	IEnumerable<LoanScheduleItem> monthlyRepayments,  // LoanCalculatorModel this.repaymentCount
-			decimal setupFee = 0M, DateTime? date = null, bool writeToLog = true ) {
-			return new APRCalculateMethod(this, setupFee, date , writeToLog).Execute();
-		}
+		/// <summary>
+		/// Calculates loan APR relative to specific date.
+		/// </summary>
+		/// <param name="aprDate">Date to calculate APR. Current date if omitted.</param>
+		/// <param name="calculationAccuracy">Calculation stops when this accuracy was reached.
+		/// If not specified default (1e-7) is used.
+		/// </param>
+		/// <param name="maxIterationCount">
+		/// Calculation stops if this number of iterations was reached.
+		/// Zero means iterate as many as needed.
+		/// If not specified default (100k) is used.
+		/// </param>
+		/// <param name="writeToLog">Write result to log or not.</param>
+		/// <returns>Loan APR.</returns>
+		public virtual decimal CalculateApr(
+			DateTime? aprDate = null,
+			double? calculationAccuracy = null,
+			ulong? maxIterationCount = null,
+			bool writeToLog = true
+		) {
+			var method = new CalculateAprMethod(this, aprDate, writeToLog);
+
+			if (calculationAccuracy.HasValue)
+				method.CalculationAccuracy = calculationAccuracy.Value;
+
+			if (maxIterationCount.HasValue)
+				method.MaxIterationLimit = maxIterationCount.Value;
+
+			return method.Execute();
+		} // CalculateApr
 
 		/// <summary>
 		/// Calculates interest rate for one day based on monthly interest rate.
@@ -185,13 +184,13 @@
 		/// <param name="considerBadPeriods"></param>
 		/// <returns>Daily interest rate.</returns>
 		internal decimal GetDailyInterestRate(
-			   DateTime currentDate,
-			   decimal monthlyInterestRate,
-			   bool considerBadPeriods,
-			   bool considerFreezeInterestPeriod,
-			   DateTime? periodStartDate = null,
-			   DateTime? periodEndDate = null) {
-
+			DateTime currentDate,
+			decimal monthlyInterestRate,
+			bool considerBadPeriods,
+			bool considerFreezeInterestPeriod,
+			DateTime? periodStartDate = null,
+			DateTime? periodEndDate = null
+		) {
 			//return (usePeriods && WorkingModel.BadPeriods.Contains(currentDate))
 			//     ? 0
 			//     : CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
@@ -201,16 +200,17 @@
 
 			if (considerFreezeInterestPeriod && WorkingModel.FreezePeriods.Count > 0) {
 				InterestFreeze interval = WorkingModel.FreezePeriods.First(i => i.Contains(currentDate));
-				var interest = (interval == null) ? CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate) : interval.GetInterest(currentDate);
-				if (interest != null) {
+
+				var interest = (interval == null)
+					? CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate)
+					: interval.GetInterest(currentDate);
+
+				if (interest != null)
 					return (decimal)interest;
-				}
-			}
+			} // if
 
 			return CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
 		} // GetDailyInterestRate
-
-
 
 		/// <exception cref="NullLoanCalculatorModelException">Condition. </exception>
 		protected ALoanCalculator(LoanCalculatorModel model) {
@@ -219,8 +219,6 @@
 
 			WorkingModel = model;
 		} // constructor
-
-
 
 		/// <summary>
 		/// Calculates interest rate for one day based on monthly interest rate.
@@ -232,12 +230,10 @@
 		/// <param name="periodEndDate">Period end date (the last day of the period).</param>
 		/// <returns>Daily interest rate.</returns>
 		protected abstract decimal CalculateDailyInterestRate(
-			   DateTime currentDate,
-			   decimal monthlyInterestRate,
-			   DateTime? periodStartDate = null,
-			   DateTime? periodEndDate = null
+			DateTime currentDate,
+			decimal monthlyInterestRate,
+			DateTime? periodStartDate = null,
+			DateTime? periodEndDate = null
 		);
-		
-
 	} // class LoanCalculator
 } // namespace

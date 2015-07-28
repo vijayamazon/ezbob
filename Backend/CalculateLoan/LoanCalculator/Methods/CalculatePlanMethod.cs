@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
@@ -20,14 +21,13 @@
 		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual List<Repayment> Execute() {
-
 			WorkingModel.ValidateSchedule();
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
 			DateTime lastInterestDay = WorkingModel.LastScheduledDate;
 
-			// fill in loan period (since first interest day untill last interest day) with "one day" loan status
+			// fill in loan period (since first interest day until last interest day) with "one day" loan status
 			for (DateTime d = firstInterestDay; d <= lastInterestDay; d = d.AddDays(1))
 				DailyLoanStatus.Add(new OneDayLoanStatus(d, WorkingModel.LoanAmount, DailyLoanStatus.LastDailyLoanStatus));
 
@@ -74,10 +74,33 @@
 				prevTime = r.Time;
 			} // for
 
+			foreach (Fee fee in WorkingModel.Fees) {
+				if (fee.FType == FeeTypes.SetupFee)
+					continue;
+
+				Repayment scheduledPaymentToPayFee =
+					result.FirstOrDefault(sp => sp.Date >= fee.AssignDate) ??
+					result.Last();
+
+				if (scheduledPaymentToPayFee == null) { // Should never happen but just in case...
+					Library.Instance.Log.Alert(
+						"{0}.CreatePlan: failed to find a scheduled payment to pay a fee.\n\tFee is: {1}." +
+						"\n\tLoan calculator model:\n{2}",
+						Calculator.Name,
+						fee,
+						WorkingModel
+					);
+
+					continue;
+				} // if
+
+				scheduledPaymentToPayFee.Fees += fee.Amount;
+			} // for each fee
+
 			if (WriteToLog) {
 				DailyLoanStatus.AddScheduleNotes(WorkingModel);
 
-				Library.Instance.Log.Debug(
+				Log.Debug(
 					"\n\n{3}.CreatePlan - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nLoan plan:\n\t\t{1}" +

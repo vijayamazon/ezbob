@@ -87,7 +87,7 @@
 				days.AddPaymentNotes(WorkingModel);
 				days.AddNote(this.today, "Requested balance date.");
 
-				LoanCalculator.Library.Instance.Log.Debug(
+				Log.Debug(
 					"\n\n{4}.GetAmountToChargeOptions - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nPayment options on {3}:\n\t\t{1}" +

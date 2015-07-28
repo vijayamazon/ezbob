@@ -33,7 +33,7 @@
 				days.AddPaymentNotes(WorkingModel);
 				days.AddNote(this.today, "Requested balance date.");
 
-				Library.Instance.Log.Debug(
+				Log.Debug(
 					"\n\n{4}.CalculateBalance - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nBalance on {3}:\n\t\t{1}" +

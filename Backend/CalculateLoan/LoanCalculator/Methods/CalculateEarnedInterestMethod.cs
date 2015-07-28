@@ -34,7 +34,7 @@
 				days.AddNote(firstDay, "First earned interest period date.");
 				days.AddNote(lastDay, "Last earned interest period date.");
 
-				Library.Instance.Log.Debug(
+				Log.Debug(
 					"\n\n{5}.CalculateEarnedInterest - begin:" +
 					"\n\nLoan calculator model:\n{0}" +
 					"\n\nEarned interest between {3} and {4}:\n\t\t{1}" +

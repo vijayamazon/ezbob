@@ -201,10 +201,10 @@
 							Notes = "setup fee",
 						}
 					});
-				}
+				} // if
 
 				// set APR - TBD
-				model.APR = nlCalculator.APRCalculate(setupFeeAmount, model.Loan.IssuedTime);
+				model.APR = nlCalculator.CalculateApr();
 
 				// init result by the model
 				this.Result = model;
