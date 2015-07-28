@@ -15,11 +15,13 @@
 			} // if
 
 			return new BackdoorSimpleReject(
-				match.Groups[1].Value == "s" ? CurrentValues.Instance.WizardAutomationTimeout : 0
+				match.Groups[1].Value == "s" ? CurrentValues.Instance.WizardAutomationTimeout : 0,
+				match.Groups[2].Value == "a"
 			);
 		} // Create
 
-		public BackdoorSimpleReject(int delay) : base(DecisionActions.Reject, delay) {
+		public BackdoorSimpleReject(int delay, bool hasApprovalChance) : base(DecisionActions.Reject, delay) {
+			this.hasApprovalChance = hasApprovalChance;
 		} // constructor
 
 		public override bool SetResult(AutoDecisionResponse response) {
@@ -31,6 +33,8 @@
 			response.DecisionName = "Rejection";
 			response.Decision = DecisionActions.Reject;
 			response.LoanOfferUnderwriterComment = "Auto rejection - back door simple";
+
+			response.HasApprovalChance = this.hasApprovalChance;
 
 			DoDelay();
 
@@ -46,9 +50,16 @@
 		/// A string that represents the current object.
 		/// </returns>
 		public override string ToString() {
-			return string.Format("back door decision '{0}' after '{1}' seconds.", Decision, Delay);
+			return string.Format(
+				"back door decision '{0}' (with{2} a chance of approval) after '{1}' seconds.",
+				Decision,
+				Delay,
+				this.hasApprovalChance ? string.Empty : "out"
+			);
 		} // ToString
 
-		private static readonly Regex regex = new Regex(@"^bds-r([f|s])$");
+		private readonly bool hasApprovalChance;
+
+		private static readonly Regex regex = new Regex(@"^bds-r([fs])(a?)$");
 	} // class BackdoorSimpleReject
 } // namespace

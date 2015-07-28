@@ -170,6 +170,6 @@
 
 		private readonly int customerID;
 		private readonly bool ownsProperty;
-		private static readonly Regex regex = new Regex(@"^bds-a([f|s])([sgpd])(\d{0,3})$");
+		private static readonly Regex regex = new Regex(@"^bds-a([fs])([sgpd])(\d{0,3})$");
 	} // class BackdoorSimpleApprove
 } // namespace
