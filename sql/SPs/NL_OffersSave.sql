@@ -20,15 +20,13 @@ CREATE TYPE NL_OffersList AS TABLE (
 	[Amount] [DECIMAL](18, 6) NOT NULL,
 	[MonthlyInterestRate] [DECIMAL] (18, 6) NOT NULL,
 	[CreatedTime] [DATETIME] NOT NULL,	
-	[SetupFeePercent] [DECIMAL](18, 6) NULL,
-	[SetupFeeAddedToLoan] BIT NULL,
-	[ServicingFeePercent] [decimal](18, 6) NULL,	
 	[BrokerSetupFeePercent] [DECIMAL](18, 6) NULL,	
+	[SetupFeeAddedToLoan] BIT NULL,
+	[Notes] [nvarchar](max) NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
 	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,
-	[EmailSendingBanned] [BIT] NOT NULL DEFAULT 0,
-	[Notes] [nvarchar](max) NULL	
+	[EmailSendingBanned] [BIT] NOT NULL DEFAULT 0
 )
 GO
 
@@ -48,16 +46,14 @@ BEGIN
 		[RepaymentCount] ,	
 		[Amount] ,
 		[MonthlyInterestRate] ,
-		[CreatedTime] ,	
-		[SetupFeePercent] ,
-		[SetupFeeAddedToLoan] ,
-		[ServicingFeePercent] ,	
+		[CreatedTime] ,			
 		[BrokerSetupFeePercent] ,	
+		[SetupFeeAddedToLoan] ,	
+		[Notes] ,		
 		[InterestOnlyRepaymentCount] ,
 		[DiscountPlanID] ,
 		[IsLoanTypeSelectionAllowed] ,
-		[EmailSendingBanned] ,
-		[Notes] 
+		[EmailSendingBanned] 		
 	) SELECT
 		[DecisionID],
 		[LoanTypeID] , 
@@ -68,16 +64,14 @@ BEGIN
 		[RepaymentCount] ,	
 		[Amount] ,
 		[MonthlyInterestRate] ,
-		[CreatedTime] ,	
-		[SetupFeePercent] ,
-		[SetupFeeAddedToLoan] ,
-		[ServicingFeePercent] ,	
+		[CreatedTime] ,			
 		[BrokerSetupFeePercent] ,	
+		[SetupFeeAddedToLoan] ,	
+		[Notes] ,		
 		[InterestOnlyRepaymentCount] ,
 		[DiscountPlanID] ,
 		[IsLoanTypeSelectionAllowed] ,
-		[EmailSendingBanned] ,
-		[Notes] 
+		[EmailSendingBanned] 	
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

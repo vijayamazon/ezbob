@@ -114,6 +114,7 @@
 			List<NL_LoanFees> fees = new List<NL_LoanFees>();
 			NL_LoanHistory history = null;
 			List<NL_LoanAgreements> agreements = new List<NL_LoanAgreements>();
+			List<NL_OfferFees> offerFees = new List<NL_OfferFees>();
 
 			ConnectionWrapper pconn = DB.GetPersistent();
 
@@ -149,7 +150,7 @@
 				this.LoanID = DB.ExecuteScalar<int>(pconn, "NL_LoansSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.Loan));
 
 				Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
-
+				
 				// 5. save setup fees
 				foreach (NLFeeItem f in sCalcScheduleAndFee.Result.Fees) {
 					if (f.Fee.LoanFeeTypeID == (int)FeeTypes.SetupFee) {

@@ -3,7 +3,7 @@ IF OBJECT_ID('NL_LoansFeesGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoansFeesGet
-@loanID INT
+@LoanID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -19,10 +19,7 @@ BEGIN
       ,[DeletedByUserID]
       ,[DisabledTime]
       ,[Notes]
-	FROM
-		[ezbob].[dbo].[NL_LoanFees]
-	WHERE
-		[LoanID]=@loanID
+	FROM  [dbo].[NL_LoanFees] WHERE	[LoanID]=@LoanID
 END
 
 GO

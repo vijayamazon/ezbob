@@ -47,7 +47,8 @@
 		SetupFee = 1,
 		RolloverFee = 2,
 		AdminFee = 3,
-		ServicingFee = 4
+		ServicingFee = 4,
+		ArrangementFee  = 5
 	}
 
 

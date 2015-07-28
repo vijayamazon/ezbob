@@ -6,7 +6,6 @@
 
 	[DataContract(IsReference = true)]
 	public class NL_Offers {
-
 		[PK(true)]
 		public int OfferID { get; set; }
 
@@ -45,16 +44,14 @@
 		public DateTime CreatedTime { get; set; }
 
 		[DataMember]
-		public decimal? SetupFeePercent { get; set; }
+		public decimal? BrokerSetupFeePercent { get; set; }
 
 		[DataMember]
 		public bool? SetupFeeAddedToLoan { get; set; }
 
+		[Length(LengthType.MAX)]
 		[DataMember]
-		public decimal? ServicingFeePercent { get; set; }
-
-		[DataMember]
-		public decimal? BrokerSetupFeePercent { get; set; }
+		public string Notes { get; set; }
 
 		[DataMember]
 		public int? InterestOnlyRepaymentCount { get; set; }
@@ -68,10 +65,6 @@
 
 		[DataMember]
 		public bool EmailSendingBanned { get; set; }
-
-		[Length(LengthType.MAX)]
-		[DataMember]
-		public string Notes { get; set; }
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");

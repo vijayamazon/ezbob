@@ -49,7 +49,7 @@
 			}
 
 			try {
-				
+
 				this.loanRep.BeginTransaction();
 
 				GetCurrentLoanState();
@@ -71,7 +71,7 @@
 				// if sent "default" value (0), replace by default calculated
 				if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
 					this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
-				
+
 				Log.Debug("\n\n==========RE-SCHEDULING======ARGUMENTS: {0}==========LoanState: {1}", this.ReschedulingArguments, this.tLoan);
 
 				// check Marking loan {0} as 'PaidOff' in \ezbob\Integration\DatabaseLib\Model\Loans\Loan.cs(362)
@@ -87,11 +87,13 @@
 				} catch (Exception calcEx) {
 					Log.Info("LoanRepaymentScheduleCalculator NextEarlyPayment EXCEPTION: {0}", calcEx.Message);
 				}
-	
+
 				// remove unpaid (lates, stilltopays passed) and future schedule items
 				foreach (var rmv in this.tLoan.Schedule.ToList<LoanScheduleItem>()) {
 					if ((rmv.Status == LoanScheduleStatus.Paid || rmv.Status == LoanScheduleStatus.PaidOnTime || rmv.Status == LoanScheduleStatus.PaidEarly) && rmv.Date > this.ReschedulingArguments.ReschedulingDate) {
 						ExitStrategy("Exist11");
+						return;
+					}
 					if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
 						this.tLoan.Schedule.Remove(rmv);
 					if (rmv.Date <= this.ReschedulingArguments.ReschedulingDate && rmv.Status == LoanScheduleStatus.Late) {
@@ -193,9 +195,10 @@
 				Log.Debug("--------------Loan modified: \n {0}", this.tLoan);
 
 				//  after modification
-				if (CheckValidateLoanState(calc) == false)
+				if (CheckValidateLoanState(calc) == false) {
 					ExitStrategy("Exist8");
 					return;
+				}
 
 				Log.Debug("--------------Loan recalculated: \n {0}", this.tLoan);
 
@@ -233,9 +236,10 @@
 					}
 				}
 
-				if (!this.ReschedulingArguments.SaveToDB)
+				if (!this.ReschedulingArguments.SaveToDB) {
 					ExitStrategy("Exist10");
 					return;
+				}
 
 				LoanRescheduleSave();
 
@@ -243,11 +247,12 @@
 			} catch (Exception e) {
 				Log.Alert(e, "Failed to get rescheduling data for loan {0}", this.ReschedulingArguments.LoanID);
 			}
+
 		}
 
 		private void ExitStrategy(string logMessage) {
-			Log.Debug(logMessage + "==========================LoanState: {0}", this.tLoan); 
 			this.loanRep.Clear();
+			Log.Debug(logMessage + "==========================LoanState: {0}", this.tLoan);
 			this.loanRep.RollbackTransaction();
 		}
 

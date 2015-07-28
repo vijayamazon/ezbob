@@ -1,3 +1,9 @@
+IF object_id('NL_LoanAgreementTemplateTypes') IS NOT NULL begin
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes') 
+		ALTER TABLE [dbo].[LoanAgreementTemplate] DROP CONSTRAINT FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes  ;   		
+	DROP TABLE [dbo].[NL_LoanAgreementTemplateTypes];
+end;
+
 IF OBJECT_ID('NL_LoanInterestFreeze') IS NOT NULL
 BEGIN
 	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_NL_LoanInterestFreeze_NL_Loans') 
@@ -127,10 +133,13 @@ IF object_id('NL_LoanFees') IS NOT NULL begin
 	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanFees_DeleteUser') BEGIN
 		ALTER TABLE [dbo].[NL_LoanFees] DROP CONSTRAINT [FK_NL_LoanFees_DeleteUser] ; END;
 	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanRollovers_NL_LoanFees') BEGIN
-		ALTER TABLE [dbo].[NL_LoanRollovers] DROP CONSTRAINT [FK_NL_LoanRollovers_NL_LoanFees] ; END;			
+		ALTER TABLE [dbo].[NL_LoanRollovers] DROP CONSTRAINT [FK_NL_LoanRollovers_NL_LoanFees] ; END;	
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanFees_LoanFeeTypes') BEGIN
+		ALTER TABLE [dbo].[NL_LoanFees] DROP CONSTRAINT [FK_LoanFees_LoanFeeTypes] ; END; 	
+
 	DROP TABLE NL_LoanFees;	
 	end;
-IF object_id('NL_LoanFeeTypes') IS NOT NULL DROP TABLE NL_LoanFeeTypes;
+
 IF object_id('NL_CollectionLog') IS NOT NULL DROP TABLE NL_CollectionLog;
 IF object_id('NL_LoanHistorySchedules') IS NOT NULL DROP TABLE NL_LoanHistorySchedules;
 IF object_id('NL_LoanInterestFreeze') IS NOT NULL DROP TABLE NL_LoanInterestFreeze;
@@ -178,6 +187,12 @@ IF object_id('NL_PaymentStatuses') IS NOT NULL	begin
 	DROP TABLE NL_PaymentStatuses;
 end;
 
+IF object_id('NL_OfferFees') IS NOT NULL begin
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_OfferFees_NL_FeeTypes') BEGIN
+		ALTER TABLE [dbo].[NL_OfferFees] DROP CONSTRAINT [FK_NL_OfferFees_NL_FeeTypes] ; END; 
+	DROP TABLE NL_OfferFees;
+end;
+
 IF object_id('NL_Offers') IS NOT NULL begin
 	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanLegals_NL_Offers') BEGIN
 		ALTER TABLE [dbo].[NL_LoanLegals]  DROP CONSTRAINT [FK_NL_LoanLegals_NL_Offers]  ;END;
@@ -195,9 +210,22 @@ IF object_id('NL_Offers') IS NOT NULL begin
 		ALTER TABLE [dbo].[NL_Offers] DROP CONSTRAINT FK_NL_Offers_NL_OfferStatuses  ;  END; 
 	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_BlendedOffers_NL_Offers') BEGIN
 		ALTER TABLE [dbo].[NL_BlendedOffers] DROP CONSTRAINT [FK_NL_BlendedOffers_NL_Offers]  ;  END; 
-			
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'DEFAULT_CONSTRAINT' and name = 'DF_NL_Offers_LoanType') BEGIN
+		ALTER TABLE [dbo].[NL_Offers] DROP CONSTRAINT [DF_NL_Offers_LoanType]  ;  END; 
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'DEFAULT_CONSTRAINT' and name = 'DF_NL_Offers_RepaymentIntervalType') BEGIN
+		ALTER TABLE [dbo].[NL_Offers] DROP CONSTRAINT [DF_NL_Offers_RepaymentIntervalType]  ;  END; 
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'DEFAULT_CONSTRAINT' and name = 'DF_NL_Offers_LoanSource') BEGIN
+		ALTER TABLE [dbo].[NL_Offers] DROP CONSTRAINT [DF_NL_Offers_LoanSource]  ;  END; 
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_OfferFees_NL_Offers') BEGIN
+		ALTER TABLE [dbo].[NL_Offers] DROP CONSTRAINT [FK_NL_OfferFees_NL_Offers]  ;  END; 			
+	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanLegals_NL_Offers') BEGIN
+		ALTER TABLE [dbo].[NL_LoanLegals] DROP CONSTRAINT [FK_NL_LoanLegals_NL_Offers]  ;  END; 	
+
 	DROP TABLE NL_Offers;
 end;
+
+
+IF object_id('NL_LoanFeeTypes') IS NOT NULL DROP TABLE NL_LoanFeeTypes;
 IF object_id('NL_PacnetTransactions') IS NOT NULL	DROP TABLE NL_PacnetTransactions;
 IF object_id('NL_PacnetTransactionStatuses') IS NOT NULL	DROP TABLE NL_PacnetTransactionStatuses;
 IF object_id('NL_PaymentMethods') IS NOT NULL	DROP TABLE NL_PaymentMethods;
@@ -267,7 +295,8 @@ end;
 IF object_id('WriteOffReasons') IS NOT NULL DROP TABLE WriteOffReasons;
 
 
-IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemplate') AND name = 'TemplateTypeID') begin
+--IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemplate') AND name = 'TemplateTypeID') begin
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_TemplateTypeID') begin
 ALTER TABLE [dbo].[LoanAgreementTemplate] DROP CONSTRAINT [DF_TemplateTypeID];
 ALTER TABLE [dbo].[LoanAgreementTemplate] DROP COLUMN TemplateTypeID;
 end;
@@ -305,21 +334,16 @@ ALTER TABLE [dbo].[NL_LoanFees] DROP CONSTRAINT [FK_NL_LoanFees_NL_LoanHistory] 
  IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanHistory_NL_LoanLegals') BEGIN
  ALTER TABLE [dbo].[NL_LoanHistory] DROP CONSTRAINT FK_NL_LoanHistory_NL_LoanLegals ;END; 
 	
-
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanHistorySchedule_NL_LoanHistory') BEGIN
 ALTER TABLE [dbo].[NL_LoanHistorySchedules] DROP CONSTRAINT [FK_NL_LoanHistorySchedule_NL_LoanHistory]  ;END;
 
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanHistorySchedule_NL_LoanSchedules') BEGIN
 ALTER TABLE [dbo].[NL_LoanHistorySchedules] DROP CONSTRAINT [FK_NL_LoanHistorySchedule_NL_LoanSchedules]  ;END;
 
-
-
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanLienLink_LoanLien') BEGIN
 ALTER TABLE [dbo].[NL_LoanLienLinks] DROP CONSTRAINT [FK_NL_LoanLienLink_LoanLien]  ;END;
 
-
- 
-IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanRollovers_Security_User') BEGIN
+ IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanRollovers_Security_User') BEGIN
  ALTER TABLE [dbo].[NL_LoanRollovers] DROP CONSTRAINT [FK_NL_LoanRollovers_Security_User] ; END;
 
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_LoanRollovers_Security_User1') BEGIN
@@ -336,20 +360,14 @@ IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanScheduleTransaction_LoanTransactions') BEGIN
  ALTER TABLE [dbo].[NL_LoanSchedulePayment] DROP CONSTRAINT [FK_LoanScheduleTransaction_LoanTransactions] ; END;
 
-
-
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_PacnetTransactions_NL_PacnetTransactionStatuses') BEGIN
  ALTER TABLE [dbo].[NL_PacnetTransactions] DROP CONSTRAINT [FK_NL_PacnetTransactions_NL_PacnetTransactionStatuses]  ; END; 
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_PacnetTransactions_FundTransfers') BEGIN
  ALTER TABLE [dbo].[NL_PacnetTransactions] DROP CONSTRAINT [FK_PacnetTransactions_FundTransfers]  ; END; 
 
 
-
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_PaypointTransactions_NL_PaypointTransactionStatuses') BEGIN
  ALTER TABLE [dbo].[NL_PaypointTransactions] DROP CONSTRAINT [FK_NL_PaypointTransactions_NL_PaypointTransactionStatuses] ; END;
-
-
-
 
 
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_DiscountPlanEntries_NL_DiscountPlans') BEGIN

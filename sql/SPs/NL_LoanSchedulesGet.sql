@@ -3,7 +3,7 @@ IF OBJECT_ID('NL_LoanSchedulesGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoanSchedulesGet
-@loanID INT
+@LoanID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -17,14 +17,8 @@ BEGIN
       ,ls.[ClosedTime]
       ,ls.[Principal]
       ,ls.[InterestRate]
-	FROM
-		[ezbob].[dbo].[NL_LoanHistory] lh
-	LEFT JOIN
-		[ezbob].[dbo].[NL_LoanShedule] ls
-	ON
-		ls.[LoanHistoryID]=lh.[LoanHistoryID]
-	WHERE
-		lh.[LoanID]=@loanID
+	FROM [ezbob].[dbo].[NL_LoanHistory] lh inner JOIN [ezbob].[dbo].[NL_LoanShedule] ls ON ls.[LoanHistoryID]=lh.[LoanHistoryID]
+	WHERE lh.[LoanID]=@LoanID
 END
 
 GO

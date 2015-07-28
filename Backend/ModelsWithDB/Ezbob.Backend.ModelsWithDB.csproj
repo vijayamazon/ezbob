@@ -170,6 +170,7 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
+    <Compile Include="NewLoan\NL_OfferFees.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
     <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
       <SubType>Code</SubType>

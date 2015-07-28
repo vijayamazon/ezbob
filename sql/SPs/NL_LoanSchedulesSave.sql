@@ -16,8 +16,7 @@ CREATE TYPE NL_LoanSchedulesList AS TABLE (
 	[PlannedDate] DATETIME NOT NULL,
 	[ClosedTime] DATETIME NULL,
 	[Principal] DECIMAL(18, 6) NOT NULL,
-	[InterestRate] DECIMAL(18, 6) NOT NULL
-	
+	[InterestRate] DECIMAL(18, 6) NOT NULL		
 )
 GO
 

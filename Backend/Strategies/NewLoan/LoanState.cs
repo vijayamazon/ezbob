@@ -80,7 +80,7 @@
 
                     //this.CalcModel.OpenPrincipalHistory - fill list
 
-                    List<NL_LoanSchedules> schedules = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet", CommandSpecies.StoredProcedure, new QueryParameter("@loanID", this.loanID));
+                    List<NL_LoanSchedules> schedules = DB.Fill<NL_LoanSchedules>("NL_LoanSchedulesGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.loanID));
                     // schedules
                     foreach (NL_LoanSchedules s in schedules){
                         ScheduledItem sch = new ScheduledItem(s.PlannedDate){
@@ -95,12 +95,12 @@
                     DB.ForEachRowSafe(sr => { this.CalcModel.Repayments.Add(new Repayment(sr["Time"], sr["Principal"], sr["Interest"], sr["Fees"])); },
                         "NL_PaymentsGet",
                         CommandSpecies.StoredProcedure,
-                        new QueryParameter("@loanID", this.loanID));
+                        new QueryParameter("@LoanID", this.loanID));
 
                     DB.ForEachRowSafe(sr => { this.CalcModel.Fees.Add(new Fee(sr["AssignTime"], sr["Amount"], (FeeTypes)(int)sr["LoanFeeTypeID"])); },
                         "NL_LoansFeesGet",
                         CommandSpecies.StoredProcedure,
-                        new QueryParameter("@loanID", this.loanID));
+                        new QueryParameter("@LoanID", this.loanID));
 
                     DB.ForEachRowSafe(sr => {
                         DateTime? start = sr["StartDate"];
@@ -116,7 +116,7 @@
                         }
                     },	"NL_InterestFreezeGet",
                         CommandSpecies.StoredProcedure,
-                        new QueryParameter("@loanID", this.loanID));
+                        new QueryParameter("@LoanID", this.loanID));
 
                     // "bad" periods
                     SetBadPeriods();
@@ -215,7 +215,6 @@
 			);
 
 			//	Console.WriteLine(statusesHistory.Count);
-
 			//	statusesHistory.ForEach(x => Console.WriteLine(x.ToString()));
 
 			if (statusesHistory.Count == 0)

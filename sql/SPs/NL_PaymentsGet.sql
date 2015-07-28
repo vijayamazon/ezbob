@@ -3,7 +3,7 @@ IF OBJECT_ID('NL_PaymentsGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_PaymentsGet
-@loanID INT
+@LoanID INT
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -44,8 +44,6 @@ p.PaymentTime AS [Time],
 --fp.PaymentID,
 fp.Amount AS [Fees]
 
-
-
 FROM [dbo].[NL_LoanHistory] h 
 INNER JOIN [dbo].[NL_LoanSchedules] lsch ON lsch.LoanHistoryID=h.LoanHistoryID
 INNER JOIN [dbo].[NL_LoanSchedulePayments] sp ON lsch.LoanScheduleID = sp.LoanScheduleID
@@ -55,7 +53,7 @@ INNER JOIN [dbo].[NL_PaypointTransactionStatuses] ppts ON ppts.PaypointTransacti
 INNER JOIN [dbo].[NL_LoanFeePayments] fp ON fp.PaymentID= p.PaymentID
 INNER JOIN [dbo].[NL_LoanFees] f ON f.LoanFeeID = fp.LoanFeeID
 WHERE
-h.LoanID = @loanID;
-END
+h.LoanID = @LoanID;
 
+END
 GO

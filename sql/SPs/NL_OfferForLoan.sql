@@ -26,8 +26,6 @@ BEGIN
 		RETURN NULL;
 	end;
 
-	--select @OfferID
-
 	declare @DiscountPlanID int;
 	declare @LoansCount int;
 
@@ -46,20 +44,19 @@ BEGIN
 			o.LoanSourceID, 			 
 			o.RepaymentCount as OfferRepaymentCount, 
 			o.Amount as OfferAmount, 
-			o.MonthlyInterestRate,
-			o.SetupFeePercent, 
-			o.SetupFeeAddedToLoan,
-			o.ServicingFeePercent,
+			o.MonthlyInterestRate,			 
+			o.SetupFeeAddedToLoan,			
 			o.BrokerSetupFeePercent, 
-			o.InterestOnlyRepaymentCount,
+			o.InterestOnlyRepaymentCount,			
 			0 as LoansCount		
 		into #offerforloan
-			FROM NL_LoanLegals ll INNER JOIN NL_Offers o on ll.OfferID = o.OfferID	
+			FROM 
+				NL_LoanLegals ll 
+				INNER JOIN NL_Offers o on ll.OfferID = o.OfferID	
+				--INNER JOIN NL_OfferFees f on f.OfferID = o.OfferID
 				LEFT JOIN NL_DiscountPlans dp on dp.DiscountPlanID = o.DiscountPlanID -- and dp.IsActive = 1 				
 			WHERE o.OfferID = @OfferID
 			order by ll.LoanLegalID desc; 
-
-		--select * from #offerforloan;
 
 		set @DiscountPlanID = (select DiscountPlanID from #offerforloan) ;
 
