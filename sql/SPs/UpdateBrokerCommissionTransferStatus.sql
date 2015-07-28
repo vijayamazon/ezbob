@@ -36,7 +36,7 @@ BEGIN
 	    WHERE
 	    	LoanBrokerCommissionID = @LoanBrokerCommissionID
     END
-        
+        /*
     IF @InvoiceSent IS NOT NULL
     BEGIN
     	UPDATE 
@@ -46,6 +46,7 @@ BEGIN
 	    WHERE
 	    	LoanBrokerCommissionID = @LoanBrokerCommissionID
     END
+    */
 END
 
 GO
