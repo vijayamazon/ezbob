@@ -13,10 +13,6 @@
 			return Execute<CashTransferred>(customerId, null, customerId, amount, loanRefNum, isFirst);
 		} // CashTransferred
 
-		public ActionMetaData EmailUnderReview(int customerId) {
-			return Execute<EmailUnderReview>(customerId, null, customerId);
-		} // EmailUnderReview
-
 		public ActionMetaData Escalated(int customerId, int userId) {
 			return Execute<Escalated>(customerId, customerId, customerId);
 		} // Escalated

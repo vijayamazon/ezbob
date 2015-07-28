@@ -4089,12 +4089,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarketplaceInstantUpdateAsync(int nMarketplaceID);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarkSessionEnded", ReplyAction="http://tempuri.org/IEzService/MarkSessionEndedResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> nCustomerId);
         
@@ -4707,12 +4701,6 @@ namespace ServiceClientProxy.EzServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailRolloverAdded", ReplyAction="http://tempuri.org/IEzService/EmailRolloverAddedResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailRolloverAddedAsync(int userId, int customerId, decimal amount);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData EmailUnderReview(int customerId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EmailUnderReview", ReplyAction="http://tempuri.org/IEzService/EmailUnderReviewResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailUnderReviewAsync(int customerId);
-        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplaces", ReplyAction="http://tempuri.org/IEzService/EncryptChannelGrabberMarketplacesResponse")]
         ServiceClientProxy.EzServiceReference.ActionMetaData EncryptChannelGrabberMarketplaces();
         
@@ -4982,6 +4970,12 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/LoanStatusAfterPayment", ReplyAction="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse")]
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
+        ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate", ReplyAction="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse")]
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarketplaceInstantUpdateAsync(int nMarketplaceID);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -5611,14 +5605,6 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ReschedulingActionResult> RescheduleLoanAsync(int userID, int customerID, Ezbob.Backend.Models.NewLoan.ReschedulingArgument reschedulingArgument) {
             return base.Channel.RescheduleLoanAsync(userID, customerID, reschedulingArgument);
-        }
-        
-        public ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
-            return base.Channel.MarketplaceInstantUpdate(nMarketplaceID);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarketplaceInstantUpdateAsync(int nMarketplaceID) {
-            return base.Channel.MarketplaceInstantUpdateAsync(nMarketplaceID);
         }
         
         public ServiceClientProxy.EzServiceReference.ActionMetaData MarkSessionEnded(int nSessionID, string sComment, System.Nullable<int> nCustomerId) {
@@ -6437,14 +6423,6 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.EmailRolloverAddedAsync(userId, customerId, amount);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData EmailUnderReview(int customerId) {
-            return base.Channel.EmailUnderReview(customerId);
-        }
-        
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> EmailUnderReviewAsync(int customerId) {
-            return base.Channel.EmailUnderReviewAsync(customerId);
-        }
-        
         public ServiceClientProxy.EzServiceReference.ActionMetaData EncryptChannelGrabberMarketplaces() {
             return base.Channel.EncryptChannelGrabberMarketplaces();
         }
@@ -6803,6 +6781,14 @@ namespace ServiceClientProxy.EzServiceReference {
         
         public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> LoanStatusAfterPaymentAsync(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
             return base.Channel.LoanStatusAfterPaymentAsync(userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
+        }
+        
+        public ServiceClientProxy.EzServiceReference.ActionMetaData MarketplaceInstantUpdate(int nMarketplaceID) {
+            return base.Channel.MarketplaceInstantUpdate(nMarketplaceID);
+        }
+        
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> MarketplaceInstantUpdateAsync(int nMarketplaceID) {
+            return base.Channel.MarketplaceInstantUpdateAsync(nMarketplaceID);
         }
     }
 }

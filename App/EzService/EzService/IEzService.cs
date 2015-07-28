@@ -177,9 +177,6 @@
 		ActionMetaData EmailRolloverAdded(int userId, int customerId, decimal amount);
 
 		[OperationContract]
-		ActionMetaData EmailUnderReview(int customerId);
-
-		[OperationContract]
 		ActionMetaData EncryptChannelGrabberMarketplaces();
 
 		[OperationContract]

@@ -418,17 +418,6 @@
 		}
 
 		[Activation]
-		private void EmailUnderReview() {
-			int customerId;
-			if (this.cmdLineArgs.Length != 2 || !int.TryParse(this.cmdLineArgs[1], out customerId)) {
-				this.log.Msg("Usage: EmailUnderReview <CustomerId>");
-				return;
-			}
-
-			this.serviceClient.EmailUnderReview(customerId);
-		}
-
-		[Activation]
 		private void Encrypt() {
 			if (this.cmdLineArgs.Length < 2) {
 				this.log.Msg("Usage: Encrypt <what to encrypt>");
