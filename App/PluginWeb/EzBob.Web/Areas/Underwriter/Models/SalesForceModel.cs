@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Utils.Extensions;
 	using EzBob.Models;
 	using EzBob.Models.Marketplaces;
 	using EZBob.DatabaseLib.Model.Database;
@@ -47,7 +48,14 @@
                 IsPendingDecision = customer.CreditResult.HasValue && 
                                     customer.CreditResult.Value == CreditResultStatus.ApprovedPending &&
                                    (!customer.IsWaitingForSignature.HasValue || (!customer.IsWaitingForSignature.Value)),
+				TypeOfBusiness = customer.PersonalInfo != null ? customer.PersonalInfo.TypeOfBusiness.DescriptionAttr() : string.Empty
 			};
+
+			if (customer.Company != null) {
+				
+				PersonalModel.CompanyName = string.IsNullOrEmpty(customer.Company.ExperianCompanyName) ? customer.Company.CompanyName : customer.Company.ExperianCompanyName;
+				PersonalModel.CompanyRefNumber = string.IsNullOrEmpty(customer.Company.ExperianRefNum) ? customer.Company.CompanyNumber : customer.Company.ExperianRefNum;
+			}
 
             if (customer.IsWaitingForSignature.HasValue && customer.IsWaitingForSignature.Value) {
                 PersonalModel.CreditStatus += " (Signatures)";
@@ -84,6 +92,9 @@
 		public int ID { get; set; }
 		public string Email { get; set; }
 		public string Name { get; set; }
+		public string TypeOfBusiness { get; set; }
+		public string CompanyName { get; set; }
+		public string CompanyRefNumber { get; set; }
 		public string FraudStatus { get; set; }
 		public string CreditStatus { get; set; }
 		public int? ExperianScore { get; set; }

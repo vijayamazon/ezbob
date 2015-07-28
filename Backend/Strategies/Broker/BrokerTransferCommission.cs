@@ -1,5 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.Broker {
     using System;
+    using Ezbob.Backend.Models;
+    using Ezbob.Backend.Strategies.MailStrategies.Broker;
     using Ezbob.Database;
     using PaymentServices.PacNet;
     using StructureMap;
@@ -29,7 +31,7 @@
             int brokerID = sr["BrokerID"];
 
             decimal commissionAmount = sr["CommissionAmount"];
-
+	        string customerName = sr["CustomerName"];
             string brokerName = sr["ContactName"];
             if (brokerName.Length > 18)
                 brokerName = brokerName.Substring(0, 17);
@@ -41,6 +43,16 @@
             Log.Info("PacNet sending commission of {0} to broker {1} tracking {2} {3}",
                 commissionAmount, brokerID, response.TrackingNumber, response.HasError ? "error: " + response.Error : "");
 
+	        BrokerCommissionInvoice brokerCommissionInvoice = new BrokerCommissionInvoice(new BrokerInvoiceCommissionModel {
+		        BrokerID = brokerID,
+		        BankAccount = accountNumber,
+		        SortCode = sortcode,
+		        CommissionTime = this.now,
+		        InvoiceID = loanBrokerCommissionID,
+		        CommissionAmount = commissionAmount,
+		        CustomerName = customerName
+	        });
+	        brokerCommissionInvoice.Execute();
 
             DB.ExecuteNonQuery("UpdateBrokerCommissionTransferStatus",
                 CommandSpecies.StoredProcedure,
@@ -48,7 +60,8 @@
                 new QueryParameter("TrackingNumber", response.TrackingNumber),
                 new QueryParameter("TransactionStatus"),
                 new QueryParameter("Description", "Commission"),
-                new QueryParameter("Now", this.now)
+                new QueryParameter("Now", this.now),
+				new QueryParameter("InvoiceSent", true)
             );
 
             this.anyCommission = true;

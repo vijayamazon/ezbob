@@ -1471,6 +1471,12 @@ The digits shown in a group are the maximum number of meaningful digits that can
             this.log.Debug("{0}", result.Status.ToString());
         }
 
+		[Activation]
+		private void BackFillBrokerCommissionInvoice() {
+			ActionMetaData result = this.serviceClient.BackfillBrokerCommissionInvoice();
+			this.log.Debug("BackFillBrokerCommissionInvoice {0}", result.Status.ToString());
+		}
+
 		//[Activation]
 		//private void ExampleMethod() {
 		//	int customerID;

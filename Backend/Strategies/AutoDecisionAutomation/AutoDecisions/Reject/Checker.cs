@@ -58,11 +58,9 @@
 
 		private void HighAnnualTurnover() {
 			if (Trail.MyInputData.AnnualTurnover > Trail.MyInputData.AutoRejectionException_AnualTurnover) {
-				StepNoReject<AnnualTurnoverPreventer>()
-					.Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+				StepNoReject<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover, units: "£");
 			} else {
-				StepNoDecision<AnnualTurnoverPreventer>()
-					.Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover);
+				StepNoDecision<AnnualTurnoverPreventer>().Init(Trail.MyInputData.AnnualTurnover, Trail.MyInputData.AutoRejectionException_AnualTurnover, units: "£");
 			} // if
 		} // HighAnnualTurnover
 

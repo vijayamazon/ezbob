@@ -1,11 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoRejection
 {
-	public class BrokerClientPreventer : ABoolTrace {
+	public class BrokerClientPreventer : ATrace {
 		public BrokerClientPreventer(DecisionStatus nDecisionStatus): base(nDecisionStatus){} // constructor
 
-		protected override string PropertyName
-		{
-			get { return "broker client"; }
+		public void Init(bool isBrokerClient) {
+			Comment = string.Format("Customer is {0}broker's client", isBrokerClient ? "" : "not ");
 		}
 	}  // class
 } // namespace

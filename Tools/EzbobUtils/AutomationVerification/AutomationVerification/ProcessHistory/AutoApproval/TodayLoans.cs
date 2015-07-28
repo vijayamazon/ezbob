@@ -4,7 +4,7 @@
 		} // constructor
 
 		protected override string ValueName {
-			get { return "today loans"; }
+			get { return "sum of today loans"; }
 		} // ValueName
 	}  // class TodayLoans
 } // namespace

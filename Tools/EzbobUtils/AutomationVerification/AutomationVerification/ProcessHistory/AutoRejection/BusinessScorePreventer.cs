@@ -4,7 +4,7 @@
 		public BusinessScorePreventer(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {} // constructor
 
 		protected override string ValueName {
-			get { return "business score exception"; }
+			get { return "business score"; }
 		} // ValueName
 	}  // class
 } // namespace

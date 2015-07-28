@@ -186,12 +186,14 @@
 			if (Trail.MyInputData.AnnualTurnover > Trail.MyInputData.AutoRejectionException_AnualTurnover) {
 				StepNoReject<AnnualTurnoverPreventer>(true).Init(
 					Trail.MyInputData.AnnualTurnover,
-					Trail.MyInputData.AutoRejectionException_AnualTurnover
+					Trail.MyInputData.AutoRejectionException_AnualTurnover,
+					units: "£"
 				);
 			} else {
 				StepNoDecision<AnnualTurnoverPreventer>().Init(
 					Trail.MyInputData.AnnualTurnover,
-					Trail.MyInputData.AutoRejectionException_AnualTurnover
+					Trail.MyInputData.AutoRejectionException_AnualTurnover,
+					units: "£"
 				);
 			}
 		} // CheckHighAnnualTurnover

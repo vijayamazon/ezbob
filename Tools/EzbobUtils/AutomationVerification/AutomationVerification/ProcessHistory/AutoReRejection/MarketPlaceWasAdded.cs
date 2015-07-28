@@ -1,10 +1,10 @@
 ﻿namespace AutomationCalculator.ProcessHistory.AutoReRejection
 {
-	public class MarketPlaceWasAdded : ABoolTrace {
+	public class MarketPlaceWasAdded : ATrace {
 		public MarketPlaceWasAdded(DecisionStatus nDecisionStatus) : base(nDecisionStatus) { } // constructor
 
-		protected override string PropertyName {
-			get { return "Marketplace was added after last decision date"; }
-		} // PropertyName
+		public void Init(bool mpWasAdded) {
+			Comment = string.Format("Marketplace was{0} added after last decision date", mpWasAdded ? "" : "n't");
+		}//Init
 	}  // class 
 } // namespace

@@ -111,6 +111,7 @@
 					string loginError;
 					var membershipCreateStatus = ValidateUser(model.UserName, model.Password, null, null, out loginError);
 					if (MembershipCreateStatus.Success == membershipCreateStatus) {
+						
 						model.SetCookie(LogOnModel.Roles.Underwriter);
 
 						bool bRedirectToUrl =
@@ -122,6 +123,7 @@
 
 						if (bRedirectToUrl)
 							return Redirect(model.ReturnUrl);
+
 
 						return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 					} // if
@@ -1219,7 +1221,7 @@
 			} // try
 
 			if (nStatus == MembershipCreateStatus.Success) {
-				ObjectFactory.GetInstance<IEzbobWorkplaceContext>().SessionId =
+				this.m_oContext.SessionId =
 					nSessionID.ToString(CultureInfo.InvariantCulture);
 
 				ms_oLog.Debug("User '{0}' password has been validated.", username);

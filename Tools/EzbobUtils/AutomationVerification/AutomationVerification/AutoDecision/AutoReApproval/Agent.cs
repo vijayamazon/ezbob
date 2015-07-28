@@ -74,10 +74,10 @@
 
 				if (this.m_nApprovedAmount >= Trail.MyInputData.MinLoan) {
 					StepDone<Complete>()
-						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan);
+						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 				} else {
 					StepFailed<Complete>()
-						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan);
+						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 				}
 			} catch (Exception e) {
 				this.m_oLog.Error(e, "Exception during auto approval.");
@@ -158,10 +158,10 @@
 		private void CheckHasAddedMp() {
 			if (!Trail.MyInputData.NewDataSourceAdded) {
 				StepDone<NewMarketplace>()
-					.Init(!Trail.MyInputData.NewDataSourceAdded);
+					.Init(Trail.MyInputData.NewDataSourceAdded);
 			} else {
 				StepFailed<NewMarketplace>()
-					.Init(!Trail.MyInputData.NewDataSourceAdded);
+					.Init(Trail.MyInputData.NewDataSourceAdded);
 			} // if
 		} // CheckHasAddedMp
 
@@ -178,10 +178,10 @@
 		private void CheckHasLateLoans() {
 			if (!Trail.MyInputData.WasLate) {
 				StepDone<LateLoans>()
-					.Init();
+					.Init(Trail.MyInputData.WasLate);
 			} else {
 				StepFailed<LateLoans>()
-					.Init();
+					.Init(Trail.MyInputData.WasLate);
 			} // if
 		} // CheckHasLateLoans
 

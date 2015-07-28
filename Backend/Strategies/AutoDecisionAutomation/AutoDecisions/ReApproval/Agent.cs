@@ -230,9 +230,9 @@
 
 		private void CheckComplete() {
 			if (ApprovedAmount >= Trail.MyInputData.MinLoan)
-				StepDone<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);
+				StepDone<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 			else
-				StepFailed<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);
+				StepFailed<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 		} // CheckComplete
 
 		private void CheckInit() {
@@ -294,10 +294,10 @@
 
 		private void CheckNewMarketplaces() {
 			if (NewMarketplaces.Count < 1)
-				StepDone<NewMarketplace>().Init(NewMarketplaces.Count < 1);
+				StepDone<NewMarketplace>().Init(null);
 			else {
-				StepFailed<NewMarketplace>().Init(NewMarketplaces.Count < 1);
-				// foreach (var mp in NewMarketplaces) mp.Fill(StepFailed<NewMarketplace>());
+				StepFailed<NewMarketplace>().Init(NewMarketplaces.Select(x => string.Format("a marketplace {1}({2} - {3}) on {0}",
+					x.AddTime, x.Name, x.ID, x.Type)).Aggregate((a, b) => a + ", " + b));
 			} // if
 		} // CheckNewMarketplaces
 

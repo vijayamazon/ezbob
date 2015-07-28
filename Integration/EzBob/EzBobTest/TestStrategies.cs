@@ -25,6 +25,7 @@
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MailStrategies.Broker;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -1211,7 +1212,7 @@
 			} catch (Exception e) {
 				Console.WriteLine(e);
 			}
-
+			
 			ReschedulingArgument reModel1 = new ReschedulingArgument();
 			reModel1.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel1.LoanID = loanID;

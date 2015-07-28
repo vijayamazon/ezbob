@@ -51,6 +51,7 @@
     <Compile Include="Alibaba\CustomerDataSharing.cs" />
     <Compile Include="BankStatementDataModel.cs" />
     <Compile Include="BrokerAddBankModel.cs" />
+    <Compile Include="BrokerInvoiceCommissionModel.cs" />
     <Compile Include="BrokerCustomerEntryModel.cs" />
     <Compile Include="BrokerCustomerCrmEntryModel.cs" />
     <Compile Include="BrokerLeadDataModel.cs" />

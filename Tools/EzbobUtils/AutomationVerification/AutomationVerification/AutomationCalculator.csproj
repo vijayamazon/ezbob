@@ -111,7 +111,7 @@
     <Compile Include="OfferCalculation\PricingCalculator.cs" />
     <Compile Include="ProcessHistory\ARangeTrace.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
-    <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRange.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ATurnoverAge.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OnlineThreeMonthsTurnover.cs" />

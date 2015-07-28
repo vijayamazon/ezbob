@@ -926,6 +926,7 @@
     <Content Include="Areas\Broker\Files\everline.credit.file.release.and.consent.doc" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SalesForceActivity.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Profile\ProcessingAutomationPopupTemplate.cshtml" />
+    <Content Include="Areas\Underwriter\Views\SalesForce\SalesForce.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1600,7 +1601,7 @@
     <Content Include="Views\Shared\security_template.cshtml" />
     <Content Include="Views\Shared\_GoogleTagManager.cshtml" />
     <Content Include="App_Code\AddDirectorInfoTemplate.cshtml" />
-    <Content Include="Views\Shared\EditExperianDirectorData.cshtml" />
+    <Content Include="App_Code\EditExperianDirectorData.cshtml" />
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
@@ -1645,9 +1646,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Account\LogOn.cshtml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Views\Shared\_SignUp.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Backend\EzServiceAccessor\EzServiceAccessor.csproj">
@@ -1967,8 +1965,6 @@
     <Content Include="Content\img\ny2015scratch\titilliumweb-extralight-webfont.ttf" />
     <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Shared\_LoginSimple.cshtml" />
-    <Content Include="Views\Shared\_DynamicLogin.cshtml" />
     <Content Include="Views\Account\AdminLogOn.cshtml" />
     <Content Include="Views\Home\ActivateStore.cshtml" />
     <Content Include="Views\Account\SimpleCaptcha.cshtml" />

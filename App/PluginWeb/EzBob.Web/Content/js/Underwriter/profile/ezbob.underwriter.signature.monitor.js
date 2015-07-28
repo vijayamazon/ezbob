@@ -2,7 +2,7 @@
 EzBob.Underwriter = EzBob.Underwriter || {};
 
 EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
-	initialize: function() {
+	initialize: function () {
 		this.SignaturesList = null;
 		this.SignersList = null;
 
@@ -75,9 +75,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		EzBob.ShowMessage('Confirm deleting director', sTitle, doDeleteDirector, 'Delete', null, 'Keep');
 	}, // deleteDirector
 
-	startEditDirector: function(event) {
-		var oRow = $(event.target).closest('TR.experian-director');
-
+	startEditDirector: function(e) {
+		var oRow = $(e.target).closest('TR.experian-director');
 		if (oRow.length !== 1)
 			return;
 
@@ -128,7 +127,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			Directors: this.personalInfoModel.get('Directors')
 		};
 
-		var directorEl = this.$el.find('.add-director-container');
+		var directorEl = this.$el.find('.add-director-container, .add-director-container-wrapper');
 
 		var addDirectorView = new EzBob.AddDirectorInfoView({
 			model: new EzBob.DirectorModel(),
@@ -185,7 +184,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		this.reload(nCustomerID, true);
 	}, // pollStatus
 
-	reloadCurrent: function() {
+	reloadCurrent: function () {
 		this.reload(this.$el.find('.do-send').data('CustomerID'));
 	}, // reloadCurrent
 
@@ -341,7 +340,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		this.$el.find('.signature' + nSignatureID).toggleClass('hide');
 	}, // toggleShowSigners
 
-	reload: function(nCustomerID, bPollStatus) {
+	reload: function (nCustomerID, bPollStatus) {
 		if (!EzBob.Config.EchoSignEnabledUnderwriter) {
 			this.$el.hide();
 			return;
@@ -448,7 +447,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		});
 	}, // reload
 
-	updateDocumentTemplateIDs: function() {
+	updateDocumentTemplateIDs: function () {
 		this.boardResolutionTemplateID = this.personalInfoModel.get('BoardResolutionTemplateID');
 		this.personalGuaranteeTemplateID = this.personalInfoModel.get('PersonalGuaranteeTemplateID');
 

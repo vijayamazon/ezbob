@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.Strategies.Backfill;
 	using Ezbob.Backend.Strategies.Experian;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -255,6 +256,10 @@
 
 		public ActionMetaData LoanStatusAfterPayment(int userId, int customerID, string customerEmail, int loanID, decimal paymentAmount, decimal balance, bool isPaidOff, bool sendMail) {
 			return Execute<LoanStatusAfterPayment>(customerID, userId, customerID, customerEmail, loanID, paymentAmount, balance, isPaidOff, sendMail);
+		}
+
+		public ActionMetaData BackfillBrokerCommissionInvoice() {
+			return Execute<BackFillBrokerCommissionInvoice>(null, null);
 		}
 	} // class EzServiceImplementation
 } // namespace EzService

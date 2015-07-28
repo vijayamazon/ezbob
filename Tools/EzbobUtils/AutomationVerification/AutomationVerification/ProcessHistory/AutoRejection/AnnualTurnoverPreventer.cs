@@ -12,7 +12,7 @@
 		public AnnualTurnoverPreventer(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {} // constructor
 
 		protected override string ValueName {
-			get { return "Annual turnover exception"; }
+			get { return "Annual turnover"; }
 		} // ValueName
 	}  // class
 } // namespace

@@ -14,7 +14,7 @@
 		public void Init(DataModel model) {
 			Model = model;
 			Comment = string.Format(
-				"customer annual turnover {0} (min allowed {1}) quarter turnover {2} (min allowed {3}) and has {4} company files",
+				"customer annual turnover £{0:N0} (min allowed £{1:N0}) quarter turnover £{2:N0} (min allowed £{3:N0}) and has {4} company files",
 				model.AnnualTurnover,
 				model.AnnualTurnoverThreshhold,
 				model.QuarterTurnover,

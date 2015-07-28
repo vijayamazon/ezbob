@@ -135,20 +135,20 @@
 
 		private void CheckAllowedRange() {
 			if (this.trail.MyInputData.Configuration.IsSilent) {
-				StepDone<AmountOutOfRangle>()
+				StepDone<AmountOutOfRange>()
 					.Init(this.trail.RoundedAmount, this.trail.MyInputData.Configuration.IsSilent);
 			} else {
 				int autoApproveMinAmount = this.trail.MyInputData.Configuration.MinLoan;
 				int autoApproveMaxAmount = this.trail.MyInputData.Configuration.MaxAmount;
 
 				if (this.trail.RoundedAmount < autoApproveMinAmount || this.trail.RoundedAmount > autoApproveMaxAmount) {
-					StepFailed<AmountOutOfRangle>().Init(
+					StepFailed<AmountOutOfRange>().Init(
 						this.trail.RoundedAmount,
 						autoApproveMinAmount,
 						autoApproveMaxAmount
 					);
 				} else {
-					StepDone<AmountOutOfRangle>().Init(
+					StepDone<AmountOutOfRange>().Init(
 						this.trail.RoundedAmount,
 						autoApproveMinAmount,
 						autoApproveMaxAmount
@@ -297,9 +297,9 @@
 
 		private void CheckIsBroker() {
 			if (this.isBrokerCustomer)
-				StepFailed<IsBrokerCustomer>().Init();
+				StepFailed<IsBrokerCustomer>().Init(this.isBrokerCustomer);
 			else
-				StepDone<IsBrokerCustomer>().Init();
+				StepDone<IsBrokerCustomer>().Init(this.isBrokerCustomer);
 		} // CheckIsBroker
 
 		private void CheckIsDirector() {
@@ -398,9 +398,9 @@
 				: CurrentValues.Instance.AutoApproveOffHoursMaxOutstandingOffers;
 
 			if (outstandingOffers >= threshold)
-				StepFailed<OutstandingOffers>().Init(outstandingOffers, threshold);
+				StepFailed<OutstandingOffers>().Init(outstandingOffers, threshold, true, "£");
 			else
-				StepDone<OutstandingOffers>().Init(outstandingOffers, threshold);
+				StepDone<OutstandingOffers>().Init(outstandingOffers, threshold, true, "£");
 		} // CheckOutstandingOffers
 
 		private void CheckRepaidRatio() {
@@ -421,9 +421,9 @@
 
 		private void CheckRollovers() {
 			if (this.trail.MyInputData.MetaData.NumOfRollovers > 0)
-				StepFailed<Rollovers>().Init();
+				StepFailed<Rollovers>().Init(true);
 			else
-				StepDone<Rollovers>().Init();
+				StepDone<Rollovers>().Init(false);
 		} // CheckRollovers
 
 		private void CheckSeniority() {
@@ -432,12 +432,14 @@
 			if (this.trail.MyInputData.MarketplaceSeniority < autoApproveMinMpSeniorityDays) {
 				StepFailed<MarketplaceSeniority>().Init(
 					this.trail.MyInputData.MarketplaceSeniority,
-					autoApproveMinMpSeniorityDays
+					autoApproveMinMpSeniorityDays,
+					units: "days"
 				);
 			} else {
 				StepDone<MarketplaceSeniority>().Init(
 					this.trail.MyInputData.MarketplaceSeniority,
-					autoApproveMinMpSeniorityDays
+					autoApproveMinMpSeniorityDays,
+					units: "days"
 				);
 			} // if
 		} // CheckSeniority
@@ -487,11 +489,11 @@
 				: CurrentValues.Instance.AutoApproveOffHoursMaxTodayLoans;
 
 			decimal amount = this.officeHoursHandler.Current.OpenLoanAmount;
-
+				
 			if (amount >= threshold)
-				StepFailed<TodayLoans>().Init(amount, threshold);
+				StepFailed<TodayLoans>().Init(amount, threshold, units: "£");
 			else
-				StepDone<TodayLoans>().Init(amount, threshold);
+				StepDone<TodayLoans>().Init(amount, threshold, units: "£");
 		} // CheckTodaysLoans
 
 		private void CheckTotalLoanCount() {
