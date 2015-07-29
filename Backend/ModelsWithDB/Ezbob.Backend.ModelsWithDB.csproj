@@ -189,6 +189,7 @@
     <Compile Include="NewLoan\NL_LoanSchedules.cs" />
     <Compile Include="NewLoan\NL_LoanScheduleStatuses.cs" />
     <Compile Include="NewLoan\NL_LoanStatuses.cs" />
+    <Compile Include="NewLoan\NL_PaymentStatuses.cs" />
     <Compile Include="NewLoan\NL_PaypointTransactionStatuses.cs" />
     <Compile Include="NewLoan\NL_PacnetTransactionStatuses.cs" />
     <Compile Include="NewLoan\NL_Payments.cs" />

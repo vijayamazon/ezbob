@@ -9,14 +9,13 @@ IF TYPE_ID('NL_OfferFeesList') IS NOT NULL
 	DROP TYPE NL_OfferFeesList
 GO
 
-CREATE TYPE NL_OfferFeesList AS TABLE (	
-	[LoanID] INT ,
-	[OfferID] [INT]   ,	
-	[LoanFeeTypeID] [INT]   ,
-	[Percent] [DECIMAL](18, 6) ,
-	[Amount] [DECIMAL](18, 6) 
-)
-GO
+ CREATE TYPE NL_OfferFeesList AS TABLE (		
+	 [OfferID] INT NOT NULL ,	
+	 [LoanFeeTypeID] INT NOT NULL ,
+	 [Percent] DECIMAL(18, 6) NULL,
+	 [Amount] DECIMAL(18, 6) NULL 	
+ )
+ GO
 
 CREATE PROCEDURE NL_OfferFeesSave
 @Tbl NL_OfferFeesList READONLY
@@ -24,23 +23,22 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	INSERT INTO NL_LoanFees (		
-		[LoanID],
-		[OfferID],	
-		[LoanFeeTypeID],
-		[Percent],
-		[Amount]  
-	) SELECT		
-		[LoanID],
-		[OfferID],	
-		[LoanFeeTypeID],
-		[Percent],
-		[Amount] 
-	FROM @Tbl
+	 INSERT INTO NL_OfferFees (		
+		 [OfferID]  ,	
+		 [LoanFeeTypeID] ,
+		 [Percent]  ,
+		 [Amount]    
+	 ) SELECT			
+		 [OfferID]  ,	
+		 [LoanFeeTypeID] ,
+		 [Percent]  ,
+		 [Amount]    
+	 FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
-	SELECT @ScopeID AS ScopeID
+	 DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	 SELECT @ScopeID AS ScopeID
 END
 GO
+
 
 

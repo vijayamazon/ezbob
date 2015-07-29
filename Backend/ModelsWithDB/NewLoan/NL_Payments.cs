@@ -21,7 +21,7 @@
 		public decimal? Amount { get; set; }
 
         [DataMember]
-        public bool IsActive { get; set; }
+		public NL_PaymentStatuses PaymentStatusID { get; set; }
 
         [DataMember]
         public DateTime CreationTime { get; set; }
@@ -41,12 +41,7 @@
         [DataMember]
         public string Notes { get; set; }
 
-	    /// <summary>
-	    /// Returns a string that represents the current object.
-	    /// </summary>
-	    /// <returns>
-	    /// A string that represents the current object.
-	    /// </returns>
+	
 	    public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(NL_Payments);

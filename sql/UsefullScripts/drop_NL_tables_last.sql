@@ -18,7 +18,7 @@ IF object_id('LoanAgreementTemplateTypes') IS NOT NULL begin
 end;
 
 
---IF object_id('NL_OfferStatuses') IS NOT NULL DROP TABLE [dbo].[NL_OfferStatuses];
+IF object_id('NL_OfferStatuses') IS NOT NULL DROP TABLE [dbo].[NL_OfferStatuses];
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_Offers_NL_OfferStatuses') BEGIN
 		ALTER TABLE [dbo].[NL_Offers] DROP CONSTRAINT FK_NL_Offers_NL_OfferStatuses  ;  END; 	
 IF object_id('NL_BlendedLoans') IS NOT NULL DROP TABLE  [dbo].[NL_BlendedLoans];

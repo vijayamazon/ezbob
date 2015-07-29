@@ -7,7 +7,7 @@ ALTER PROCEDURE NL_OfferFeesGet
 AS
 BEGIN
 	SET NOCOUNT ON;
-
+	
 	SELECT
 		[OfferFeeID]  ,
 		[OfferID]  ,	

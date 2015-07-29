@@ -47,7 +47,10 @@ fp.Amount AS [Fees]
 FROM [dbo].[NL_LoanHistory] h 
 INNER JOIN [dbo].[NL_LoanSchedules] lsch ON lsch.LoanHistoryID=h.LoanHistoryID
 INNER JOIN [dbo].[NL_LoanSchedulePayments] sp ON lsch.LoanScheduleID = sp.LoanScheduleID
-INNER JOIN [dbo].[NL_Payments] p ON sp.PaymentID = p.PaymentID AND p.IsActive = 1 AND p.DeletionTime IS NULL
+
+INNER JOIN [dbo].[NL_Payments] p ON sp.PaymentID = p.PaymentID 
+AND p.PaymentStatusID = 1 -- PUT HERE REAL GOOD VALUE
+AND p.DeletionTime IS NULL
 LEFT JOIN [dbo].[NL_PaypointTransactions] ppt ON p.PaymentID = ppt.PaymentID 
 INNER JOIN [dbo].[NL_PaypointTransactionStatuses] ppts ON ppts.PaypointTransactionStatusID = ppt.PaypointTransactionStatusID AND ppts.TransactionStatus = 'Done'
 INNER JOIN [dbo].[NL_LoanFeePayments] fp ON fp.PaymentID= p.PaymentID

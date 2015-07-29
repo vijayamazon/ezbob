@@ -1,6 +1,9 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
+	using System;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
 
 	public class AssignPaymentToLoan : AStrategy {
 
@@ -25,19 +28,34 @@
 		/// </summary>
 		public override void Execute() {
 
-			// check loan
+			// loan loan state
+			LoanState<NL_Model> stateStrategy = new LoanState<NL_Model>(new NL_Model(), NLModel.Loan.LoanID, NLModel.CustomerID, DateTime.UtcNow);
+			stateStrategy.Execute();
+			ALoanCalculator calculator = new LegacyLoanCalculator(stateStrategy.CalcModel);
+		//	calculator.
 
-			// check payment - validate before usage - isActive, already assigned / to assign, to cancel, etc. 
+
+			// check payment - validate before usage -  already assigned / to assign, to cancel, etc. 
 
 			// distribution logic
 
 			// results
 			// payment covering whole schedule item(s) or fee(s) OR partial
 
-			NLModel.PaymentAssignedToScheduleItems.Add(new NL_LoanSchedulePayments() { LoanScheduleID = 1, PaymentID = NLModel.PaymentToAssign.PaymentID, InterestPaid = 20, PrincipalPaid = 5  });
-			NLModel.PaymentAssignedToScheduleItems.Add(new NL_LoanSchedulePayments() { LoanScheduleID = 1, InterestPaid = 20, PrincipalPaid = 5 });
+			ConnectionWrapper pconn = DB.GetPersistent();
+			pconn.BeginTransaction();
 
-			NLModel.PaymentAssignedToLoanFees.Add(new NL_LoanFeePayments() { LoanFeeID = 1, PaymentID = NLModel.PaymentToAssign.PaymentID, Amount = 7 });
+			NL_LoanSchedulePayments schedulePayment1 = new NL_LoanSchedulePayments() {LoanScheduleID = 1,PaymentID = NLModel.PaymentToAssign.PaymentID,InterestPaid = 20,PrincipalPaid = 5};
+			NL_LoanSchedulePayments schedulePayment2 = new NL_LoanSchedulePayments() {LoanScheduleID = 1,InterestPaid = 20,PrincipalPaid = 5};
+
+			NL_LoanFeePayments feePayment = new NL_LoanFeePayments() { LoanFeeID = 1, PaymentID = NLModel.PaymentToAssign.PaymentID, Amount = 7 };
+
+			// save schedulePayment1, schedulePayment2, feePayment
+
+			pconn.Commit();
+
+			// into catch
+			//pconn.Rollback();
 
 		} // Execute
 
