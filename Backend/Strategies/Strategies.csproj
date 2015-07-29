@@ -56,6 +56,10 @@
     <Reference Include="log4net">
       <HintPath>..\..\Lib\3rdparty\log4net\log4net.dll</HintPath>
     </Reference>
+    <Reference Include="MailBee.NET, Version=7.1.2.341, Culture=neutral, PublicKeyToken=cd85b70fb26f9fc1, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Lib\3rdparty\MailBee\MailBee.NET.dll</HintPath>
+    </Reference>
     <Reference Include="MailChimp">
       <HintPath>..\..\Lib\3rdparty\MailChimp\MailChimp.dll</HintPath>
     </Reference>
@@ -166,8 +170,12 @@
     <Compile Include="MailStrategies\Broker\BrokerCommissionInvoice.cs" />
     <Compile Include="MailStrategies\SendWinInLotteryMail.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
+    <Compile Include="Misc\PacnetDelivery.cs" />
+    <Compile Include="Misc\PacnetTopUpMailProcessor.cs" />
+    <Compile Include="Exceptions\PacnetMailProcessorException.cs" />
     <Compile Include="Misc\ServiceLogWriter.cs" />
     <Compile Include="Misc\PayPointAddedWithoutOpenLoan.cs" />
+    <Compile Include="Misc\TopUpDelivery.cs" />
     <Compile Include="SalesForce\GetActivity.cs" />
     <Compile Include="NewLoan\AddLoanLegals.cs" />
     <Compile Include="NewLoan\AddLoan.cs" />

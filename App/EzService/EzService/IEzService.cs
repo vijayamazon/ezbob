@@ -575,5 +575,11 @@
 
 		[OperationContract]
 		ActionMetaData PayPointAddedWithoutOpenLoan(int customerID, int userID, decimal amount, string paypointTransactionID);
+
+		[OperationContract]
+		ActionMetaData TopUpDelivery(int underwriterId, decimal amount, int contentCase);
+
+		[OperationContract]
+		ActionMetaData PacnetDelivery(int underwriterId, decimal amount);
 	} // interface IEzService
 } // namespace EzService

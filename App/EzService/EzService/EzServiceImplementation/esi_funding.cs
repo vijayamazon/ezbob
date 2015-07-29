@@ -29,5 +29,13 @@
 		{
 			return ExecuteSync<VerifyEnoughAvailableFunds>(0, underwriterId, deductAmount);
 		}
+
+		public ActionMetaData TopUpDelivery(int underwriterId, decimal amount, int contentCase) {
+			return Execute<TopUpDelivery>(null, underwriterId, underwriterId, amount, contentCase);
+		}
+
+		public ActionMetaData PacnetDelivery(int underwriterId, decimal amount) {
+			return Execute<PacnetDelivery>(null, underwriterId, underwriterId, amount);
+		}
 	} // class EzServiceImplementation
 } // namespace EzService

@@ -11,7 +11,9 @@ EzBob.Underwriter.FundingView = Backbone.Marionette.ItemView.extend({
 
 	events: {
 		"click #addFundsBtn": "addFunds",
-		"click #cancelManuallyAddedFundsBtn": "cancelManuallyAddedFunds"
+		"click #cancelManuallyAddedFundsBtn": "cancelManuallyAddedFunds",
+		"click #pacnetTopUpRequestBtn": "pacnetTopUpRequest",
+		"click #pacnetConfMailBtn": "pacnetConfMail"
 	},
 
 	addFunds: function(e) {
@@ -61,9 +63,57 @@ EzBob.Underwriter.FundingView = Backbone.Marionette.ItemView.extend({
 		});
 	},
 
+	pacnetTopUpRequest: function(e) {
+		var that = this;
+
+		var d = new EzBob.Dialogs.PacentManual({
+			model: this.model,
+			title: "Pacnet Balance - Funds",
+			buttonName: 'Send SMS for Approval',
+			width: 400,
+			postValueName: "amount",
+			url: "Underwriter/Funding/TopUpRequest",
+			data: {
+				limit: EzBob.Config.PacnetBalanceMaxManualChange
+			},
+			min: 0,
+			required: true,
+		});
+
+		d.render();
+
+		d.on("done", function() {
+			that.model.fetch();
+		});
+	},
+
+	pacnetConfMail: function(e) {
+		var that = this;
+
+		var d = new EzBob.Dialogs.PacentManual({
+			model: this.model,
+			title: "Pacnet Balance - Funds",
+			buttonName: 'Send Mail to Pacnet',
+			width: 400,
+			postValueName: "amount",
+			url: "Underwriter/Funding/SendForPacnetConfirm",
+			data: {
+				limit: EzBob.Config.PacnetBalanceMaxManualChange
+			},
+			min: 0,
+			required: true,
+		});
+
+		d.render();
+
+		d.on("done", function() {
+			that.model.fetch();
+		});
+	},
+
 	onRender: function() {
 		if (!$("body").hasClass("role-manager"))
-			this.$el.find('#addFundsBtn, #cancelManuallyAddedFundsBtn').hide();
+			this.$el.find('#addFundsBtn, #cancelManuallyAddedFundsBtn, #pacnetTopUpRequestBtn, #pacnetConfMailBtn').hide();
 	},
 
 	hide: function() {
