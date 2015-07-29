@@ -125,33 +125,34 @@
 
 				var setup = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.SetupFee);
 
+				// FEES TODO
 				// setup fee
-				if (setup != null) {
+				//if (setup != null) {
 
-					var feeCalculator = new SetupFeeCalculator(setup.Percent, dataForLoan.BrokerSetupFeePercent);
-					decimal setupFeeAmount = feeCalculator.Calculate(model.Loan.InitialLoanAmount);
+				//	var feeCalculator = new SetupFeeCalculator(setup.Percent, dataForLoan.BrokerSetupFeePercent);
+				//	decimal setupFeeAmount = feeCalculator.Calculate(model.Loan.InitialLoanAmount);
 
-					Log.Debug("setupFeeAmount initial: {0}", setupFeeAmount);
+				//	Log.Debug("setupFeeAmount initial: {0}", setupFeeAmount);
 
-					var servicing = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.ServicingFee);
+				//	var servicing = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.ServicingFee);
 
-					// CashRequest.SpreadSetupFee => ServicingFeePercent in "old loan": in NL - add service fees 
-					if (servicing != null) {
-						if (servicing.Percent != null) {
-							//decimal servicingFeeAmount = setupFeeAmount * (decimal)servicing.Percent;
-							//setupFeeAmount -= servicingFeeAmount;
-							int schedulesCount = shedules.Count;
+				//	// CashRequest.SpreadSetupFee => ServicingFeePercent in "old loan": in NL - add service fees 
+				//	if (servicing != null) {
+				//		if (servicing.Percent != null) {
+				//			//decimal servicingFeeAmount = setupFeeAmount * (decimal)servicing.Percent;
+				//			//setupFeeAmount -= servicingFeeAmount;
+				//			int schedulesCount = shedules.Count;
 
-							decimal iFee = Decimal.Round(servicingFeeAmount / schedulesCount);
-							decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
+				//			decimal iFee = Decimal.Round(servicingFeeAmount / schedulesCount);
+				//			decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
 
-							foreach (ScheduledItemWithAmountDue s1 in shedules) {
-								nlCalculatorModel.Fees.Add(new Fee(s1.Date, (schedulesCount > 0) ? firstFee : iFee, FeeTypes.ServicingFee));
-								schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
-							}
-						}
-					}
-				}
+				//			foreach (ScheduledItemWithAmountDue s1 in shedules) {
+				//				nlCalculatorModel.Fees.Add(new Fee(s1.Date, (schedulesCount > 0) ? firstFee : iFee, FeeTypes.ServicingFee));
+				//				schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
+				//			}
+				//		}
+				//	}
+				//}
 
 				// get schedules with fees
 				shedules = nlCalculator.CreateScheduleAndPlan();
@@ -190,18 +191,19 @@
 					}// distributed setup fee
 				}
 
+				// FEES TODO
 				// regular setupFee
-				if (setupFeeAmount > 0) {
-					model.Fees.Add(new NLFeeItem() {
-						Fee = new NL_LoanFees() {
-							LoanFeeTypeID = (int)FeeTypes.SetupFee,
-							Amount = setupFeeAmount,
-							AssignTime = DateTime.UtcNow,
-							CreatedTime = DateTime.UtcNow,
-							Notes = "setup fee",
-						}
-					});
-				} // if
+				//if (setupFeeAmount > 0) {
+				//	model.Fees.Add(new NLFeeItem() {
+				//		Fee = new NL_LoanFees() {
+				//			LoanFeeTypeID = (int)FeeTypes.SetupFee,
+				//			Amount = setupFeeAmount,
+				//			AssignTime = DateTime.UtcNow,
+				//			CreatedTime = DateTime.UtcNow,
+				//			Notes = "setup fee",
+				//		}
+				//	});
+				//} // if
 
 				// set APR - TBD
 				model.APR = nlCalculator.CalculateApr();

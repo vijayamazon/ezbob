@@ -878,7 +878,7 @@
 			nlModel.Payment = new NL_Payments() {
 				PaymentMethodID = 2,
 				PaymentTime = DateTime.UtcNow,
-				IsActive = true,
+				PaymentStatusID = (int)NLPaymentStatuses.SystemRepay,
 				Amount = amount,
 				Notes = "bbbbblala"
 			};

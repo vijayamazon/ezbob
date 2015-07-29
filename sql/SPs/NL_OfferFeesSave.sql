@@ -13,7 +13,9 @@ GO
 	 [OfferID] INT NOT NULL ,	
 	 [LoanFeeTypeID] INT NOT NULL ,
 	 [Percent] DECIMAL(18, 6) NULL,
-	 [Amount] DECIMAL(18, 6) NULL 	
+	 [Amount] DECIMAL(18, 6) NULL ,
+	 [OneTimePartPercent] [DECIMAL](18, 6) NULL,
+	 [DistributedPartPercent] [DECIMAL](18, 6) NULL	 
  )
  GO
 
@@ -24,21 +26,22 @@ BEGIN
 	SET NOCOUNT ON;
 
 	 INSERT INTO NL_OfferFees (		
-		 [OfferID]  ,	
-		 [LoanFeeTypeID] ,
-		 [Percent]  ,
-		 [Amount]    
+		[OfferID]  ,	
+		[LoanFeeTypeID] ,
+		[Percent]  ,
+		[Amount]  ,
+		[OneTimePartPercent] ,
+		[DistributedPartPercent]		 
 	 ) SELECT			
-		 [OfferID]  ,	
-		 [LoanFeeTypeID] ,
-		 [Percent]  ,
-		 [Amount]    
+		[OfferID]  ,	
+		[LoanFeeTypeID] ,
+		[Percent]  ,
+		[Amount]  ,
+		[OneTimePartPercent] ,
+		[DistributedPartPercent]
 	 FROM @Tbl
 
 	 DECLARE @ScopeID INT = SCOPE_IDENTITY()
 	 SELECT @ScopeID AS ScopeID
 END
 GO
-
-
-

@@ -161,13 +161,14 @@
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", fees));
 
+				// TODO FEES
 				// 6. broker comissions
 				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
-				var feeCalculator = new SetupFeeCalculator(dataForLoan.SetupFeePercent, dataForLoan.BrokerSetupFeePercent); // moved to CalculateLoanSchedule
-				var brokerComissions = feeCalculator.CalculateBrokerFee(NLModel.Loan.InitialLoanAmount);
-				if (brokerComissions > 0) {
-					DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, NLModel.Loan.OldLoanID));
-				}
+				//var feeCalculator = new SetupFeeCalculator(dataForLoan.SetupFeePercent, dataForLoan.BrokerSetupFeePercent); // moved to CalculateLoanSchedule
+				//var brokerComissions = feeCalculator.CalculateBrokerFee(NLModel.Loan.InitialLoanAmount);
+				//if (brokerComissions > 0) {
+				//	DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, NLModel.Loan.OldLoanID));
+				//}
 
 				// 7. history
 				history = new NL_LoanHistory() {

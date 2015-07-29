@@ -11,9 +11,11 @@ BEGIN
 	SELECT
 		[OfferFeeID]  ,
 		[OfferID]  ,	
-		[LoanFeeTypeID]  ,
-		[Percent] ,
-		[Amount] 	
+		[LoanFeeTypeID] ,
+		[Percent]  ,
+		[Amount]  ,
+		[OneTimePartPercent] ,
+		[DistributedPartPercent]	
 	FROM [dbo].[NL_OfferFees] WHERE	[OfferID]=@OfferID
 END
 

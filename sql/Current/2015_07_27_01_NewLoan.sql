@@ -208,6 +208,7 @@ IF OBJECT_ID('NL_LoanFeeTypes') IS NULL BEGIN
 CREATE TABLE [dbo].[NL_LoanFeeTypes](
 	[LoanFeeTypeID] [INT] NOT NULL IDENTITY(1,1) ,
 	[LoanFeeType] [nchar](50) NOT NULL,	
+	[DefaultAmount] [DECIMAL](18, 6) NULL,
 	[Description] [nvarchar](max) NULL,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_LoanFeeTypes] PRIMARY KEY CLUSTERED ([LoanFeeTypeID] ASC)
@@ -268,6 +269,8 @@ CREATE TABLE [dbo].[NL_OfferFees](
 	[LoanFeeTypeID] [INT] NOT NULL ,
 	[Percent] [DECIMAL](18, 6) NULL,
 	[Amount] [DECIMAL](18, 6) NULL,	
+	[OneTimePartPercent] [DECIMAL](18, 6) NULL,
+	[DistributedPartPercent] [DECIMAL](18, 6) NULL,
 	[TimestampCounter] rowversion NOT NULL,
   CONSTRAINT [PK_NL_OfferFees] PRIMARY KEY CLUSTERED ([OfferFeeID] ASC) 
  );
@@ -989,24 +992,37 @@ IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'DebtManagem
 -- IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Collection: Site Visit') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Collection: Site Visit'); END;
 
 -- NL_LoanFeeTypes
-IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'SetupFee') IS NULL BEGIN
-	-- INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, [Description]) VALUES('SetupFee', 'One-time fee upon loan creation, may be added or didacted from loan');
-	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('SetupFee');
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'SetupFee') IS NULL BEGIN	
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, [Description]) VALUES('SetupFee', 'One-time fee upon loan creation, may be added or didacted from loan');
 END;
 IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'RolloverFee') IS NULL BEGIN
-	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('RolloverFee');
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('RolloverFee', 50, 'A rollover has been agreed');
 END;
 IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'AdminFee') IS NULL BEGIN
-	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('AdminFee');
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('AdminFee', 75, 'A fee applied when no payment is received or less than (repayment interest + late payment fee)');
 END; 
-IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'ServicingFee') IS NULL BEGIN
-	--INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, [Description]) VALUES('ServicingFee', 'Distributed through the entire loan period. On paying early - not to charge remaining part.');
-	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('ServicingFee');
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'ServicingFee') IS NULL BEGIN	
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, [Description]) VALUES('ServicingFee', 'Distributed through the entire loan period. On paying early - not to charge remaining part');
 END; 
 IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'ArrangementFee') IS NULL BEGIN
-	--INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, [Description]) VALUES('ArrangementFee', 'Distributed through the payments. On paying early - all remaned amount need to be charged.');
-	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType) VALUES('ArrangementFee');
-END;    
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, [Description]) VALUES('ArrangementFee', 'Distributed through the payments. On paying early - all remaned amount need to be charged');
+END; 
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'LatePeriod1') IS NULL BEGIN	
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('LatePeriod1', 7, 'first collection period');
+END; 
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'LatePeriod2') IS NULL BEGIN	
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('LatePeriod2', 14, 'second collection period');
+END; 
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'LatePeriod3') IS NULL BEGIN	
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('LatePeriod3', 30, 'third collection period');
+END; 
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'LatePaymentFee') IS NULL BEGIN	
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('LatePaymentFee', 20, 'A charge when an instalment is paid after 5 UK working days of the grace period');
+END; 
+IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'PartialPaymentFee') IS NULL BEGIN	
+	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('PartialPaymentFee', 45, 'A payment has been made (more than repayment interest + late payment fee but was not made in full)');
+END; 
+
 
 -- NL_CashRequestOrigins
 IF( SELECT CashRequestOriginID FROM dbo.NL_CashRequestOrigins WHERE CashRequestOrigin = 'FinishedWizard') IS NULL BEGIN
@@ -1117,8 +1133,11 @@ END;
 IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'WriteOff') BEGIN
 	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('WriteOff');
 END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'system-repay') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('system-repay');
+IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'SystemRepay') BEGIN
+	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('SystemRepay');
+END;
+IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'PacnetRefund') BEGIN
+	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('PacnetRefund');
 END;
 
 -- populate NL_PaypointTransactionStatuses (FROM customer)

@@ -1,15 +1,15 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+	using System.Runtime.Serialization;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
+	[DataContract(IsReference = true)]
 	public class NL_OfferFees {
-        [PK(true)]
-        [DataMember]
+		[PK(true)]
+		[DataMember]
 		public int OfferFeeID { get; set; }
 
 		[FK("NL_Offers", "OfferID")]
-        [DataMember]
+		[DataMember]
 		public int OfferID { get; set; }
 
 		[FK("NL_LoanFeeTypes", "LoanFeeTypeID")]
@@ -21,6 +21,12 @@
 
 		[DataMember]
 		public decimal? Amount { get; set; }
+
+		[DataMember]
+		public decimal? OneTimePartPercent { get; set; }
+
+		[DataMember]
+		public decimal? DistributedPartPercent { get; set; }
 
 	}//class NL_OfferFees
 }//ns

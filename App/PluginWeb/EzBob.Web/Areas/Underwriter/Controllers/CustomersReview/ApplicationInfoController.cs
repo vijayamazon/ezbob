@@ -700,9 +700,10 @@
 				DiscountPlanID = discountPlan,
 				EmailSendingBanned = !allowSendingEmail,
 				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
-				SetupFeePercent = manualSetupFeePercent ?? 0,
+				// FEES -TODO
+				//SetupFeePercent = manualSetupFeePercent ?? 0,
 				// SetupFeeAddedToLoan = 1|0 default null TODO EZ-3515
-				ServicingFeePercent = (cr.SpreadSetupFee != null && cr.SpreadSetupFee==true) ? manualSetupFeePercent : null,   //  TODO EZ-3515
+				//ServicingFeePercent = (cr.SpreadSetupFee != null && cr.SpreadSetupFee==true) ? manualSetupFeePercent : null,   //  TODO EZ-3515
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				LoanSourceID = loanSource,
 				LoanTypeID = loanType,

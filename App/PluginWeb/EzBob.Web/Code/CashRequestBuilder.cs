@@ -191,9 +191,10 @@
                 InterestOnlyRepaymentCount = 0,
                 Amount = customer.QuickOffer.Amount,
                 BrokerSetupFeePercent = 0,
-                SetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
+				//FEES  -TODO
+				//SetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
 				// SetupFeeAddedToLoan = 1|0 default null TODO EZ-3515
-				ServicingFeePercent = (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true) ? customer.QuickOffer.ImmediateSetupFee : (decimal?)null,   //  TODO EZ-3515
+				//ServicingFeePercent = (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true) ? customer.QuickOffer.ImmediateSetupFee : (decimal?)null,   //  TODO EZ-3515
                 DiscountPlanID = discountPlan.Id,
                 EmailSendingBanned = false,
                 EndTime = now.AddDays(1),

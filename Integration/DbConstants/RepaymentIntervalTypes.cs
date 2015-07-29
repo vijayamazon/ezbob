@@ -85,4 +85,15 @@
 		//PaymentByCustomer = 5,
 	}
 
+
+	public enum NLPaymentStatuses {
+		PaidOnTime = 1,// DB table id
+		Late = 2,
+		Early = 3,
+		ChargeBack = 4,
+		WrongPayment = 5,  
+		WriteOff = 6,
+		SystemRepay = 7
+	}
+
 } // namespace

@@ -285,12 +285,13 @@
 			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);
 			model.SetupFeePercent = CurrentValues.Instance.SetupFeePercent;
 
+			// FEES TODO
 			//According to new logic the setup fee is always percent and min setup fee is amount SetupFeeFixed
-			if ((result.Offer.SetupFeePercent.HasValue && result.Offer.SetupFeePercent.Value > 0) ||
+			/*if ((result.Offer.SetupFeePercent.HasValue && result.Offer.SetupFeePercent.Value > 0) ||
 			   (result.Offer.BrokerSetupFeePercent.HasValue && result.Offer.BrokerSetupFeePercent.Value > 0)) {
 				decimal setupFeePercent = (result.Offer.SetupFeePercent ?? 0M) + (result.Offer.BrokerSetupFeePercent ?? 0M);
 				model.SetupFeePercent = (setupFeePercent * 100).ToString(CultureInfo.InvariantCulture);
-			}
+			}*/
 
 			model.IsBrokerFee = false;
 			model.IsManualSetupFee = false;

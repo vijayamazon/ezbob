@@ -78,7 +78,7 @@
 		
 				nlModel.Payment.PaymentMethodID = this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod).Id; // [LoanTransactionMethod] 'Auto' ID 2
 				nlModel.Payment.PaymentTime = paymentTime;
-				nlModel.Payment.IsActive = true;
+				//nlModel.Payment.IsActive = true; TODO check status here
 				nlModel.Payment.Amount = amount;
 				nlModel.Payment.Notes = description;
 

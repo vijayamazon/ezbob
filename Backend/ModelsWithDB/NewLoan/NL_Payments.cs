@@ -20,8 +20,9 @@
 		[DataMember]
 		public decimal? Amount { get; set; }
 
+		[FK("NL_PaymentStatuses", "PaymentStatusID")]
         [DataMember]
-		public NL_PaymentStatuses PaymentStatusID { get; set; }
+		public int PaymentStatusID { get; set; }
 
         [DataMember]
         public DateTime CreationTime { get; set; }
