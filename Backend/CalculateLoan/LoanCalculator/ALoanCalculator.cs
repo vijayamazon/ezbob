@@ -15,6 +15,8 @@
 	public abstract partial class ALoanCalculator {
 		public abstract string Name { get; }
 
+		public virtual LoanCalculatorModel WorkingModel { get; private set; }
+
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
 		/// Schedule is stored in WorkingModel.Schedule.
@@ -123,8 +125,6 @@
 		public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate, bool writeToLog = true) {
 			return new CalculateEarnedInterestMethod(this, startDate, endDate, writeToLog).Execute();
 		} // CalculateEarnedInterest
-
-		public virtual LoanCalculatorModel WorkingModel { get; private set; }
 
 		/// <summary>
 		/// Calculates date after requested number of periods have passed since loan issue date.
