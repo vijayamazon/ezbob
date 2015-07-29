@@ -644,7 +644,7 @@
 			if (lastUpdated.Count < 1)
 				return null;
 
-			DateTime lastUpdateDate = lastUpdated.Max(z => z.UpdatingEnd);
+			DateTime lastUpdateDate = lastUpdated.Max(z => z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value);
 
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,

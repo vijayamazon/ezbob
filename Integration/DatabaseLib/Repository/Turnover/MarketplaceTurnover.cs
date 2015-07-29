@@ -12,7 +12,6 @@
         public virtual DateTime TheMonth { get; set; }
 		public virtual bool IsActive { get; set; }
 		public virtual decimal Turnover { get; set; }
-		public virtual DateTime UpdatingEnd { get; set; }
 
 		public virtual MP_CustomerMarketplaceUpdatingHistory CustomerMarketPlaceUpdatingHistory { get; set; }
 
@@ -43,8 +42,7 @@
 				Customer.Id,
 				CustomerMarketPlace.Id,
 				TheMonth,
-				Turnover,
-				UpdatingEnd
+				Turnover
 			);
 		} // ToString
 	} // class MarketplaceTurnover
@@ -59,8 +57,10 @@
 		public IQueryable<MarketplaceTurnover> GetByCustomerAndDate(int customerID, DateTime calculationDate) {
 			return GetAll().Where(x =>
 				x.Customer.Id == customerID &&
-				x.UpdatingEnd < calculationDate &&
-				x.CustomerMarketPlace.Disabled == false
+				x.CustomerMarketPlaceUpdatingHistory != null &&
+				x.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue &&
+				x.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value < calculationDate &&
+				!x.CustomerMarketPlace.Disabled
 			);
 		} // GetByCustomerAndDate
 	} // class MarketplaceTurnoverRepository
@@ -74,7 +74,6 @@
 			Map(x => x.Turnover).Precision(18).Scale(2);
 			Map(x => x.TheMonth).CustomType<UtcDateTimeType>();
 			Map(x => x.IsActive);
-			Map(x => x.UpdatingEnd).CustomType<UtcDateTimeType>();
 
 			References(x => x.CustomerMarketPlaceUpdatingHistory, "CustomerMarketPlaceUpdatingHistoryID").Cascade.None();
 			References(x => x.CustomerMarketPlace, "CustomerMarketPlaceId").Cascade.None();
