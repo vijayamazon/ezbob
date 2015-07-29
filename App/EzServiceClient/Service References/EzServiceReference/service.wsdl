@@ -941,6 +941,18 @@
   <wsdl:message name="IEzService_PayPointAddedWithoutOpenLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:PayPointAddedWithoutOpenLoanResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_TopUpDelivery_InputMessage">
+    <wsdl:part name="parameters" element="tns:TopUpDelivery" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_TopUpDelivery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:TopUpDeliveryResponse" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PacnetDelivery_InputMessage">
+    <wsdl:part name="parameters" element="tns:PacnetDelivery" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_PacnetDelivery_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PacnetDeliveryResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_AddCciHistory_InputMessage">
     <wsdl:part name="parameters" element="tns:AddCciHistory" />
   </wsdl:message>
@@ -2021,6 +2033,14 @@
     <wsdl:operation name="PayPointAddedWithoutOpenLoan">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoan" message="tns:IEzService_PayPointAddedWithoutOpenLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PayPointAddedWithoutOpenLoanResponse" message="tns:IEzService_PayPointAddedWithoutOpenLoan_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="TopUpDelivery">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/TopUpDelivery" message="tns:IEzService_TopUpDelivery_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/TopUpDeliveryResponse" message="tns:IEzService_TopUpDelivery_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PacnetDelivery">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/PacnetDelivery" message="tns:IEzService_PacnetDelivery_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/PacnetDeliveryResponse" message="tns:IEzService_PacnetDelivery_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/AddCciHistory" message="tns:IEzService_AddCciHistory_InputMessage" />
@@ -3650,6 +3670,24 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="TopUpDelivery">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/TopUpDelivery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PacnetDelivery">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/PacnetDelivery" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="AddCciHistory">
       <soap12:operation soapAction="http://tempuri.org/IEzService/AddCciHistory" style="document" />
       <wsdl:input>
@@ -4418,20 +4456,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://stasd-pc:7081/" />
+      <soap12:address location="net.tcp://dell-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://stasd-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>STASD-PC\stasd</Upn>
+          <Upn>Dell-PC\sashaf</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>

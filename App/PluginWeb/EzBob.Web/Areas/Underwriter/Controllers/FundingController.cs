@@ -9,12 +9,13 @@
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 	using StructureMap;
+	
 
 	public class FundingController : Controller
 	{
 		private readonly ServiceClient serviceClient;
 		private readonly IWorkplaceContext context;
-
+		
 		public FundingController()
 		{
 			context = ObjectFactory.GetInstance<IWorkplaceContext>();
@@ -50,5 +51,28 @@
 			}
 			return Json(true);
 		}
+
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult TopUpRequest(decimal amount) {
+
+			serviceClient.Instance.TopUpDelivery(context.UserId, amount, 1); 
+			
+			return Json(true);
+		}
+
+		[HttpPost]
+		[Ajax]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult SendForPacnetConfirm(decimal amount) {
+
+			serviceClient.Instance.PacnetDelivery(context.UserId, amount); 
+
+			return Json(true);
+		}
+
+
 	}
 }

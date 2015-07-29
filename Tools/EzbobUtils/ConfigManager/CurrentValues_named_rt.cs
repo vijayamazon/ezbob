@@ -248,6 +248,10 @@
 			get { return this[Variables.TeraPeakUrl]; }
 		}
 
+		public virtual VariableValue TopUpSendingEmail {
+			get { return this[Variables.TopUpSendingEmail]; }
+		}
+
 		public virtual VariableValue TotalAnnualTurnover {
 			get { return this[Variables.TotalAnnualTurnover]; }
 		}
@@ -302,6 +306,10 @@
 
 		public virtual VariableValue TwilioSendingNumber {
 			get { return this[Variables.TwilioSendingNumber]; }
+		}
+
+		public virtual VariableValue TwilioSendingNumberIsrael {
+			get { return this[Variables.TwilioSendingNumberIsrael]; }
 		}
 	}
 }

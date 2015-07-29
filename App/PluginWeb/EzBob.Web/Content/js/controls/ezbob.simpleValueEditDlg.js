@@ -16,7 +16,8 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
         return true;
     },
     render:function () {
-        var dialog = this.template;
+    	var dialog = this.template;
+	    
         dialog.dialog({
             autoOpen: false,
             title: this.options.title,
@@ -27,11 +28,14 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
             open: _.bind(this.dlgOpened, this),
             close: _.bind(this.dlgClosed, this),
             buttons: {
-                'Save': _.bind(this.onSave, this)
-            },
+				Save: {
+		            text: this.options.buttonName || 'Save',
+		            click: _.bind(this.onSave, this)
+	            }
+            }
         });
 
-        this.setElement(dialog);
+    	this.setElement(dialog);
         var val = this.model.get(this.options.propertyName);
         val = this.onBeforeValuePassedToEditor(val);
 
@@ -41,6 +45,7 @@ EzBob.Dialogs.SimpleValueEdit = Backbone.View.extend({
         
         dialog.dialog('open');
     },
+
     dlgOpened: function (event, ui) {
         this.$el.parent('.ui-dialog').find('.ui-dialog-buttonset button').addClass('btn btn-primary');
         this.onDialogOpened(event, ui, this.options.required);
