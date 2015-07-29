@@ -899,13 +899,13 @@
 			decimal? lastLoanAmount = sr["LastLoanAmount"];
 			int cashRequestCount = sr["CashRequestCount"];
 
-			new AddCashRequest(new NL_CashRequests {
+		/*	new AddCashRequest(new NL_CashRequests {
 				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 				CustomerID = this.customerId,
 				OldCashRequestID = this.cashRequestID,
 				RequestTime = now,
 				UserID = this.underwriterID,
-			}).Execute();
+			}).Execute(); */
 
 			// TODO add new cash request
 
