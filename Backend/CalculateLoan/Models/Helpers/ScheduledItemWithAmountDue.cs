@@ -31,6 +31,7 @@
 
 		public decimal? Fee { get; private set; }
 
+        // AmountDue
 		public decimal Amount { get { return (decimal)(Principal + AccruedInterest + Fee); } }
 
 		/// <summary>
