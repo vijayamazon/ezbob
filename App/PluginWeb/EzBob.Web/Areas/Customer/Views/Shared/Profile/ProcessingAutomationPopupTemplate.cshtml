@@ -1,36 +1,27 @@
-﻿@using EZBob.DatabaseLib.Model.Database
-<script type="text/template" id="request-processing-template">
+﻿<script type="text/template" id="request-processing-template">
 	<div class="automation-popup">
-		@AutomationPopupHeader()
-		
 		<div class="automation-popup-content">
-			<h3>We are processing your application</h3>
-			<h4><strong>Please hold for up to <%-automationTimeout%> seconds...</strong></h4>
-			<div>There is a good chance you will get an immediate answer</div>
+			<div class="automation-header">We are processing your application</div>
+			<hr/>
+			<div class="automation-secondary-header">Please hold for up to <%-automationTimeout%> seconds...</div>
+			<div class="automation-text">There is a good chance you will get an immediate answer</div>
 			
-			<div class="progress progress-striped progress-success active automation-processing">
-				<div class="bar automation-processing-bar" style="width: 0%;"></div>
+			<div class="automation-processing">
+				<div class="automation-processing-bar" style="width: 0;"></div>
 			</div>
-			<div class="alignright" style="padding: 0 10px 0 0;">
-				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-popup-continue">Continue</button>
-			</div>
-			<div class="clear"></div>
-			<br />
+			@ContinueButton("processing")
 		</div>
 	</div>
 </script>
 
 <script type="text/template" id="request-processing-reject-nochance-template">
 	<div class="automation-popup">
-		@AutomationPopupHeader()
 		<div class="automation-popup-content">
-			<h4><strong><%-name%>,</strong></h4>
-			<div>unfortunately we cannot offer you financing at this time</div>
-			<div class="alignright" style="padding: 0 10px 0 0;">
-				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-nochance-popup-continue">Continue</button>
-			</div>
-			<div class="clear"></div>
-			<br />
+			<div class="automation-header"><%-name%>,</div>
+			<hr/>
+			<div class="automation-secondary-header">unfortunately we cannot offer you financing at this time</div>
+			<div class="automation-text">You are welcome to check with us when your credit status improves</div>
+			@ContinueButton("reject-have-chance")
 		</div>
 		<br />
 	</div>
@@ -38,81 +29,47 @@
 
 <script type="text/template" id="request-processing-reject-haschance-template">
 	<div class="automation-popup">
-		@AutomationPopupHeader()
 		<div class="automation-popup-content">
-			<h4><strong><%-name%>,</strong></h4>
-			<span>we don't have enough data to approve your loan.</span>
+			<div class="automation-header"><%-name%>,</div>
 			<hr/>
-			<div>Please click continue to provide us an additional data source to add more</div>
-			<div class="alignright" style="padding: 0 10px 0 0;">
-				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-haschance-popup-continue">Continue</button>
-			</div>
-			<div class="clear"></div>
-			<br />
+			<div class="automation-secondary-header">we don't have enough data to approve your loan.</div>
+			<div class="automation-text">Please click continue to provide us an additional data source to add more</div>
+				@ContinueButton("reject-nochance")
 		</div>
 	</div>
 </script>
 
 <script type="text/template" id="request-processing-nodecision-template">
 	<div class="automation-popup">
-		@AutomationPopupHeader()
 		<div class="automation-popup-content">
-			<h4><strong>Your application is complete.</strong></h4>
+			<div class="automation-header">Your application is complete.</div>
 			<hr/>
-			<div>Your application is now being processed and you should be receiving an email with an offer in the next business day.</div>
-			<div class="alignright" style="padding: 0 10px 0 0;">
-				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-haschance-popup-continue">Continue</button>
-			</div>
-			<div class="clear"></div>
-			<br />
+			<div class="automation-secondary-header">Your application is now being processed and you should be receiving an email with an offer in the next business day.</div>
+			<div class="automation-text">todo</div>
+			@ContinueButton("nodecision")
 		</div>
 	</div>
 </script>
 
 <script type="text/template" id="request-processing-approved-template">
 	<div class="automation-popup">
-		@AutomationPopupHeader()
 		<div class="automation-popup-content">
-			<h4><strong><%-name%>, Congratulations</strong></h4>
-			<span>Your credit is approved and can be taken</span>
-			<hr/>
-			<div>Available Credit</div>
-			<div class="well">Up to <%-amount%></div>
-			<div>Offer Valid for</div>
-			<div class="well offerValidFor"><%-offerValid%> hours</div>
-			<div class="alignright" style="padding: 0 10px 0 0;">
-				<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-reject-haschance-popup-continue">Continue</button>
-			</div>
-			<div class="clear"></div>
-			<br />
+			<div class="automation-header"><%-name%>, Congratulations</div>
+			<hr />
+			<div class="automation-secondary-header">Your credit is approved and can be taken</div>
+			<div class="automation-label">Available Credit</div>
+			<div class="automation-value">Up to <%-amount%></div>
+			<div class="automation-label">Offer Valid for</div>
+			<div class="automation-value offerValidFor"><%-offerValid%> hours</div>
+			@ContinueButton("approved")
 		</div>
 	</div>
 </script>
 
-@helper AutomationPopupHeader() { 
-	switch ((CustomerOriginEnum)ViewBag.CustomerOrigin.GetOrigin()) {
-		case CustomerOriginEnum.everline:
-			<header class="everline_header">
-				<nav>
-					<div class="pin"><span></span></div>
-					<span class="everlinelogo svg"></span>
-				</nav>
-			</header>
-			break;
-		default:
-		<div id="header">
-			<div class="header-bg-strip"></div>
-			<div class="header-inner">
-				<div class="header-logo">
-					<div class="newlogo"></div>
-				</div>
-				<div class="header-info">
-					<div class="header-info-left"></div>
-					<div class="header-info-text-popup">Request processing</div>
-					<div class="header-info-right"></div>
-				</div>
-			</div>
-		</div>
-		break;
-	}
+@helper ContinueButton(string popup) {
+	<div class="alignright">
+		<button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:request-processing-continue-popup-@popup">Continue</button>
+	</div>
+	<div class="clear"></div>
+	<br />
 }
