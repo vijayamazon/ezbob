@@ -65,9 +65,7 @@
       <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
       <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
-      <xs:element minOccurs="0" name="ServicingFeePercent" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="SetupFeeAddedToLoan" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="SetupFeePercent" nillable="true" type="xs:decimal" />
       <xs:element minOccurs="0" name="StartTime" type="xs:dateTime" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />
@@ -192,10 +190,10 @@
       <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
       <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
       <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="PaymentID" type="xs:int" />
       <xs:element minOccurs="0" name="PaymentMethodID" type="xs:int" />
+      <xs:element minOccurs="0" name="PaymentStatusID" type="xs:int" />
       <xs:element minOccurs="0" name="PaymentTime" type="xs:dateTime" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />

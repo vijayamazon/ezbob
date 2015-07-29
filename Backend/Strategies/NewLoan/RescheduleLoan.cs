@@ -275,12 +275,6 @@ namespace Ezbob.Backend.Strategies.NewLoan {
 		}
 
 		private void ExitStrategy(string logMessage) {
-			this.loanRep.Clear();
-			Log.Debug(logMessage + "==========================LoanState: {0}", this.tLoan);
-			this.loanRep.RollbackTransaction();
-		}
-
-		private void ExitStrategy(string logMessage) {
 			Log.Debug(logMessage + "==========================LoanState: {0}", this.tLoan); 
 			this.loanRep.Clear();
 			this.loanRep.RollbackTransaction();

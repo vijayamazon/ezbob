@@ -226,7 +226,7 @@
 
 			ReschedulingActionResult result = null;
 
-            try{
+			try {
 				Loan loan = this._loans.Get(loanID);
 				DateTime now = DateTime.UtcNow;
 
@@ -244,11 +244,12 @@
 						this._loans.SaveOrUpdate(loan);
 						this.session.Flush();
 					}
-				}//  ### loan options
+				} //  ### loan options
 
 				if (rescheduleIn != null) {
 					ReschedulingArgument reModel = new ReschedulingArgument();
-					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+					reModel.LoanType = loan.GetType()
+						.AssemblyQualifiedName;
 					reModel.LoanID = loanID;
 					reModel.SaveToDB = save;
 					reModel.ReschedulingDate = now;
@@ -269,7 +270,7 @@
 					Log.Debug(string.Format("before: {0}", loan));
 					this.session.Refresh(loan);
 				}
-            catch (Exception editex){
+			} catch (Exception editex) {
 				Log.Error("rescheduling editor EXCEPTION: " + editex);
 			}
 

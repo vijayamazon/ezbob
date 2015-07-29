@@ -45,6 +45,7 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
 	using NHibernate;
 	using NHibernate;
 	using NHibernate.Util;
