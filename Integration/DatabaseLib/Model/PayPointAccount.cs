@@ -4,6 +4,7 @@ namespace EZBob.DatabaseLib.Model {
     using FluentNHibernate.Mapping;
     using System.Linq;
     using ApplicationMng.Repository;
+    using log4net;
     using NHibernate;
     using NHibernate.Type;
 
@@ -58,6 +59,7 @@ namespace EZBob.DatabaseLib.Model {
     }
 
     public class PayPointAccountRepository : NHibernateRepositoryBase<PayPointAccount>, IPayPointAccountRepository {
+	    protected static ILog Log = LogManager.GetLogger(typeof(PayPointAccountRepository));
         public PayPointAccountRepository(ISession session)
             : base(session) {
         }
@@ -67,9 +69,14 @@ namespace EZBob.DatabaseLib.Model {
                 return GetAll().First(x => x.IsDefault);
             }
 
-            return GetAll()
-                .First(x => firstOpenLoanDate.Value >= x.LoanFromDate &&
-                            firstOpenLoanDate.Value < x.LoanToDate);
+            var account = GetAll().FirstOrDefault(x => firstOpenLoanDate.Value >= x.LoanFromDate && firstOpenLoanDate.Value < x.LoanToDate);
+			if (account == null) {
+				//in case not configured for this date range return the default account
+				Log.ErrorFormat("no paypoint account found for loan date {0}, returning default account", firstOpenLoanDate.Value);
+				return GetAll().First(x => x.IsDefault);
+			}
+
+	        return account;
         }
     }
 

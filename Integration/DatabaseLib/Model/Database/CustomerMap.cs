@@ -163,11 +163,9 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.BankAccountValidationInvalidAttempts);
 			Map(x => x.ABTesting).Length(512);
 
-			Component(x => x.CollectionStatus, m => {
-				m.Map(x => x.CollectionDescription);
-				m.References(x => x.CurrentStatus, "CollectionStatus").Cascade.All();
-			});
-
+			Map(x => x.CollectionDescription);
+			References(x => x.CollectionStatus, "CollectionStatus");
+			
 			References(x => x.WizardStep, "WizardStep");
 
 			Map(x => x.NumApproves);
@@ -248,6 +246,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			HasOne(x => x.CampaignSource)
 				.PropertyRef(p => p.Customer)
 				.Cascade.All();
+
+			Map(x => x.HasApprovalChance);
 		} // constructor
 	} // class CustomerMap
 } // namespace EZBob.DatabaseLib.Model.Database

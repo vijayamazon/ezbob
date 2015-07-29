@@ -177,6 +177,7 @@
 		private void RunAutoRerejection() {
 			var agent = new AutomationCalculator.AutoDecision.AutoReRejection.Agent(
 				CustomerID,
+				CashRequestID,
 				DecisionTime,
 				this.db,
 				Log
@@ -184,7 +185,7 @@
 
 			agent.MakeDecision();
 
-			agent.Trail.Save(this.db, null, CashRequestID, Tag);
+			agent.Trail.SetTag(Tag).Save(this.db, null);
 
 			IsAutoReRejected = agent.Trail.HasDecided;
 		} // RunAutoRerejection
@@ -192,22 +193,22 @@
 		private void RunAutoReapproval() {
 			var agent = new
 				Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.
-				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, DecisionTime, this.db, Log);
+				ReApproval.ManAgainstAMachine.SameDataAgent(CustomerID, CashRequestID, DecisionTime, this.db, Log);
 
 			agent.Init();
 
-			agent.Decide(true, CashRequestID, Tag);
+			agent.Decide(Tag);
 
 			IsAutoReApproved = agent.Trail.HasDecided;
 		} // RunAutoReapproval
 
 		private void RunAutoReject(AutomationTrails atra) {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent agent =
-				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(this.db, Log, CustomerID);
+				new AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent(this.db, Log, CustomerID, CashRequestID);
 
 			agent.MakeDecision(agent.GetRejectionInputData(DecisionTime));
 
-			agent.Trail.Save(this.db, null, CashRequestID, Tag);
+			agent.Trail.SetTag(Tag).Save(this.db, null);
 
 			atra.Rejection = agent.Trail;
 
@@ -232,6 +233,7 @@
 
 			var approveAgent = new AutomationCalculator.AutoDecision.AutoApproval.ManAgainstAMachine.SameDataAgent(
 				CustomerID,
+				CashRequestID,
 				120000, // this is currently max loan amount
 				(AutomationCalculator.Common.Medal)this.medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)this.medal.MedalType,
@@ -242,7 +244,7 @@
 
 			approveAgent.MakeDecision();
 
-			approveAgent.Trail.Save(this.db, null, CashRequestID, Tag);
+			approveAgent.Trail.SetTag(Tag).Save(this.db, null);
 
 			atra.Approval = approveAgent.Trail;
 

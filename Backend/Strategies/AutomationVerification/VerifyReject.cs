@@ -15,6 +15,7 @@
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
 			return new Agent(
 				oRow.CustomerId,
+				null,
 				DB,
 				Log
 			).Init().MakeAndVerifyDecision(Tag);

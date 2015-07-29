@@ -23,7 +23,6 @@
 	[RestfullErrorHandling]
 	public class LoanEditorController : Controller {
 		private readonly ILoanRepository _loans;
-		private readonly ChangeLoanDetailsModelBuilder _builder;
 		private readonly ICashRequestRepository _cashRequests;
 		private readonly ChangeLoanDetailsModelBuilder _loanModelBuilder;
 		private readonly LoanBuilder _loanBuilder;
@@ -45,7 +44,6 @@
 			ILoanOptionsRepository loanOptionsRepository,
 			ISession session) {
 			this._loans = loans;
-			this._builder = builder;
 			this._cashRequests = cashRequests;
 			this._loanModelBuilder = loanModelBuilder;
 			this._loanBuilder = loanBuilder;
@@ -65,37 +63,10 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-			var model = this._builder.BuildModel(loan);
+            var model = this._loanModelBuilder.BuildModel(loan);
 
 			model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
-
-			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
-			reModel.LoanID = id;
-			reModel.SaveToDB = false;
-			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-			reModel.RescheduleIn = true;
-
-			try {
-				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-				model.ReResultIn = result.Value;
-				Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
-			} catch (Exception editex) {
-				Log.Error(editex);
-			}
-
-			if (model.ReResultIn != null && !model.ReResultIn.Error.Contains("Loan balance: £0.00")) {
-				reModel.RescheduleIn = false;
-				reModel.PaymentPerInterval = 0m;
-				try {
-					ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
-					model.ReResultOut = result.Value;
-					Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
-				} catch (Exception editex) {
-					Log.Error(editex);
-				}
-			}
+            RescheduleSetmodel(model, loan);
 
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
@@ -103,7 +74,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult RecalculateCR(EditLoanDetailsModel model) {
+        public JsonResult RecalculateCR(EditLoanDetailsModel model){
 			var cr = this._cashRequests.Get(model.CashRequestId);
 			return Json(RecalculateModel(model, cr, model.Date));
 		}
@@ -117,7 +88,7 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult Recalculate(int id, EditLoanDetailsModel model) {
+        public JsonResult Recalculate(int id, EditLoanDetailsModel model){
 			var cr = this._loans.Get(id).CashRequest;
 			return Json(RecalculateModel(model, cr, DateTime.UtcNow));
 		}
@@ -125,18 +96,18 @@
 		[Ajax]
 		[HttpGet]
 		[Transactional]
-		public JsonResult LoanCR(long id) {
+        public JsonResult LoanCR(long id){
 			var cr = this._cashRequests.Get(id);
 			var amount = cr.ApprovedSum();
 			var loan = this._loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
-			var model = this._builder.BuildModel(loan);
+            var model = this._loanModelBuilder.BuildModel(loan);
 			return Json(model, JsonRequestBehavior.AllowGet);
 		}
 
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult LoanCR(EditLoanDetailsModel model) {
+        public JsonResult LoanCR(EditLoanDetailsModel model){
 			var cr = this._cashRequests.Get(model.CashRequestId);
 
 			model = RecalculateModel(model, cr, model.Date);
@@ -154,10 +125,10 @@
 		[Ajax]
 		[HttpPost]
 		[Transactional]
-		public JsonResult Loan(EditLoanDetailsModel model) {
+        public JsonResult Loan(EditLoanDetailsModel model){
 			var loan = this._loans.Get(model.Id);
 
-			var historyItem = new LoanChangesHistory {
+            var historyItem = new LoanChangesHistory{
 				Data = this._loanModelBuilder.BuildModel(loan).ToJSON(),
 				Date = DateTime.UtcNow,
 				Loan = loan,
@@ -173,7 +144,42 @@
 			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
 
-			return Json(this._loanModelBuilder.BuildModel(loan));
+            RescheduleSetmodel(model, loan);
+
+            return Json(model, JsonRequestBehavior.AllowGet);
+        }
+
+        private void RescheduleSetmodel(EditLoanDetailsModel model, Loan loan) {
+            model.Options = this.loanOptionsRepository.GetByLoanId(model.Id) ?? LoanOptions.GetDefault(model.Id);
+
+            ReschedulingArgument renewModel = new ReschedulingArgument();
+            renewModel.LoanType = loan.GetType().AssemblyQualifiedName;
+            renewModel.LoanID = model.Id;
+            renewModel.SaveToDB = false;
+            renewModel.ReschedulingDate = DateTime.UtcNow;
+            renewModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+            renewModel.RescheduleIn = true;
+
+            try {
+                ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
+                model.ReResultIn = result.Value;
+                Log.Debug(string.Format("IN=={0}, {1}", renewModel, result.Value));
+            } catch (Exception editex) {
+                Log.Error(editex);
+            }
+
+            if (model.ReResultIn != null && (model.ReResultIn.Error == null || !model.ReResultIn.Error.Contains("Loan balance: £0.00")))
+            {
+                renewModel.RescheduleIn = false;
+                renewModel.PaymentPerInterval = 0m;
+                try {
+                    ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
+                    model.ReResultOut = result.Value;
+                    Log.Debug(string.Format("OUT=={0}, {1}", renewModel, result.Value));
+                } catch (Exception editex) {
+                    Log.Error(editex);
+                }
+            }
 		}
 
 		private EditLoanDetailsModel RecalculateModel(EditLoanDetailsModel model, CashRequest cr, DateTime now) {
@@ -216,11 +222,11 @@
 			DateTime? freezeEndDate,
 			bool? rescheduleIn,
 			bool save = false
-			) {
+            ){
 
 			ReschedulingActionResult result = null;
 
-			try {
+            try{
 				Loan loan = this._loans.Get(loanID);
 				DateTime now = DateTime.UtcNow;
 
@@ -255,15 +261,15 @@
 					// re strategy
 					result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
-					Log.Debug(string.Format("ReschedulingResult: {0}, {1}", reModel, result.Value));
+					Log.Debug(string.Format("RescheduleLoanSubmitted: {0}, {1}", reModel, result.Value));
 				}
 
 				//  loan options
 				if (save) {
+					Log.Debug(string.Format("before: {0}", loan));
 					this.session.Refresh(loan);
-					UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now,loan.Customer.Id);
 				}
-			} catch (Exception editex) {
+            catch (Exception editex){
 				Log.Error("rescheduling editor EXCEPTION: " + editex);
 			}
 
@@ -306,8 +312,9 @@
 					options.StopAutoChargeDate = stopAutoChargeDate;
 				} else
 					options.AutoPayment = true;
-
+				
 				this.loanOptionsRepository.SaveOrUpdate(options);
+				Log.Debug(string.Format("BEFOREFLUSH: {0}", loan));
 				this.session.Flush();
 
                 NLLoanOptions NLoptions = new NLLoanOptions{
@@ -330,7 +337,7 @@
                     Notes = null
                 };
                 this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, NLoptions, options.LoanId);
-				// TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
+                // TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
 			}
 		}
 
@@ -359,7 +366,7 @@
 		//	var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 		//	calc.GetState();
 
-		//	EditLoanDetailsModel model = _builder.BuildModel(oLoan);
+        //	EditLoanDetailsModel model = _loanModelBuilder.BuildModel(oLoan);
 
 		//	return Json(model);
 		//} // AddFreezeInterval
@@ -378,38 +385,46 @@
 
 			var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
 			calc.GetState();
-			EditLoanDetailsModel model = this._builder.BuildModel(oLoan);
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(oLoan);
 
 			model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LoanType = oLoan.GetType().AssemblyQualifiedName;
-			reModel.LoanID = id;
-			reModel.SaveToDB = false;
-			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-			reModel.RescheduleIn = true;
+	        RescheduleSetmodel(model, oLoan);
 
-			try {
-				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
-				model.ReResultIn = result.Value;
-				//model.ReschedulingINNotification = result.Value.Error;
-				Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
-			} catch (Exception editex) {
-				Log.Error(editex);
-			}
+			//ReschedulingArgument reModel = new ReschedulingArgument();
+			//reModel.LoanType = oLoan.GetType().AssemblyQualifiedName;
+			//reModel.LoanID = id;
+			//reModel.SaveToDB = false;
+			//reModel.ReschedulingDate = DateTime.UtcNow;
+			//reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
+			//reModel.RescheduleIn = true;
 
-			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 0m;
-			try {
-				ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
-				model.ReResultOut = result.Value;
-				//model.OutsideAmount = reModel.PaymentPerInterval;
-				//model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
-				Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
-			} catch (Exception editex) {
-				Log.Error(editex);
-			}
+			//try
+			//{
+			//	ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
+			//	model.ReResultIn = result.Value;
+			//	//model.ReschedulingINNotification = result.Value.Error;
+			//	Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
+			//}
+			//catch (Exception editex)
+			//{
+			//	Log.Error(editex);
+			//}
+
+			//reModel.RescheduleIn = false;
+			//reModel.PaymentPerInterval = 0m;
+			//try
+			//{
+			//	ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
+			//	model.ReResultOut = result.Value;
+			//	//model.OutsideAmount = reModel.PaymentPerInterval;
+			//	//model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
+			//	Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
+			//}
+			//catch (Exception editex)
+			//{
+			//	Log.Error(editex);
+			//}
 
 
 			return Json(model);

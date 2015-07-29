@@ -127,18 +127,17 @@
         var alert = '';
         if(!EzBob.isDarkColor(experian.ScoreColor)){
         tileColor = 'tile-light';
-        }
-        %>
+        }%>
         <div class="col-lg-6 col-md-12 col-sm-12">
             <div class="box">
                 <div class="box-title">
-                    <h3>Customer & Directors <span class="applicant-name"><%-experian.Consumer.ApplicantFullName%></span></h3>
+                    <h3>Customer & Directors <span class="applicant-name"><%-experian.Consumer.ApplicantFullNameAge%></span></h3>
                     @BoxTools("CustomerAndDirectors", "#credit-bureau")
                 </div>
                 <div class="box-content box-no-padding">
                     <div class="tabbable tabs-left">
                         <ul class="nav nav-tabs active">
-                            <li class="active"><a href="#customerExperian" data-toggle="tab" data-applicantname="<%-experian.Consumer.ApplicantFullName%>"><span class="<%-tileColor%>" style="background-color: <%-experian.Consumer.ScoreColor%>;"><%-experian.Consumer.Score%></span>&nbsp;Applicant</a></li>
+                            <li class="active"><a href="#customerExperian" data-toggle="tab" data-applicantname="<%-experian.Consumer.ApplicantFullNameAge%>"><span class="<%-tileColor%>" style="background-color: <%-experian.Consumer.ScoreColor%>;"><%-experian.Consumer.Score%></span>&nbsp;Applicant</a></li>
                             <%if(experian.Directors && experian.Directors.length > 0){
                             _.each(experian.Directors, function(item, i){
                             var directorTileColor='';
@@ -146,7 +145,7 @@
                             directorTileColor = 'tile-light';
                             }
                             %>
-                            <li><a href="#director<%-i%>" data-toggle="tab" data-applicantname="<%-item.ApplicantFullName%>"><span class="<%-directorTileColor%>" style="background-color: <%-item.ScoreColor%>;"><%-item.Score%></span> Director <%-(i+1)%></a></li>
+                            <li><a href="#director<%-i%>" data-toggle="tab" data-applicantname="<%-item.ApplicantFullNameAge%>"><span class="<%-directorTileColor%>" style="background-color: <%-item.ScoreColor%>;"><%-item.Score%></span> Director <%-(i+1)%></a></li>
                             <%});}%>
                         </ul>
                         <div class="tab-content">

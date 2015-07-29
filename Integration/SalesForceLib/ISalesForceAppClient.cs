@@ -9,9 +9,11 @@
 		void CreateTask(TaskModel model);
 		void CreateActivity(ActivityModel model);
 		void ChangeEmail(string currentEmail, string newEmail);
+		void Login();
 		GetActivityResultModel GetActivity(string email);
-        string Error { get; set; }
+        string Error { get; }
         bool HasError { get; }
+		bool HasLoginError { get; }
         string Model { get; set; }
 	}
 }

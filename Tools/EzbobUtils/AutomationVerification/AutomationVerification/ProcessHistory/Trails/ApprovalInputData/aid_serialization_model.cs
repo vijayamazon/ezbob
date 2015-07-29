@@ -23,6 +23,9 @@
 			public int CustomerID { get; set; }
 
 			[UsedImplicitly]
+			public long CashRequestID { get; set; }
+
+			[UsedImplicitly]
 			public DateTime DataAsOf { get; set; }
 
 			[UsedImplicitly]
@@ -81,9 +84,9 @@
 
 				AutomationCalculator.Common.TurnoverType turnoverType;
 				if (Enum.TryParse(TurnoverTypeStr, out turnoverType))
-					dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal, MedalType, turnoverType);
+					dst.SetArgs(CustomerID, CashRequestID, SystemCalculatedAmount, Medal, MedalType, turnoverType);
 				else
-					dst.SetArgs(CustomerID, SystemCalculatedAmount, Medal, MedalType, null);
+					dst.SetArgs(CustomerID, CashRequestID, SystemCalculatedAmount, Medal, MedalType, null);
 
 				dst.SetSeniority(MarketplaceSeniority);
 				dst.LatePayments = new List<Payment>(LatePayments);

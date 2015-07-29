@@ -39,6 +39,10 @@
 
 		public virtual int CustomerID { get; private set; }
 
+		public long? CashRequestID { get; private set; }
+
+		public bool HasApprovalChance { get; set; }
+
 		public abstract string PositiveDecisionName { get; }
 
 		public abstract string NegativeDecisionName { get; }
@@ -296,7 +300,7 @@
 
 		private Guid? m_oUniqueID;
 
-		public virtual void Save(AConnection oDB, ATrail oTrail, long? cashRequestID = null, string tag = null) {
+		public virtual void Save(AConnection oDB, ATrail oTrail) {
 			ConnectionWrapper cw = null;
 
 			try {
@@ -305,7 +309,7 @@
 
 				m_oLog.Debug("Transaction has been started, saving primary trail...");
 
-				var sp = new SaveDecisionTrail(this, UniqueID, true, cashRequestID, tag, oDB, this.m_oLog);
+				var sp = new SaveDecisionTrail(this, UniqueID, true, CashRequestID, this.tag, oDB, this.m_oLog);
 				sp.ExecuteNonQuery(cw);
 
 				m_oLog.Debug("Saving primary trail done (pending transaction commit).");
@@ -313,7 +317,7 @@
 				if (oTrail != null) {
 					m_oLog.Debug("Saving secondary trail...");
 
-					sp = new SaveDecisionTrail(oTrail, UniqueID, false, cashRequestID, tag, oDB, this.m_oLog);
+					sp = new SaveDecisionTrail(oTrail, UniqueID, false, CashRequestID, this.tag, oDB, this.m_oLog);
 					sp.ExecuteNonQuery(cw);
 
 					m_oLog.Debug("Saving secondary trail done (pending transaction commit).");
@@ -336,12 +340,14 @@
 			return this.timer.AddStep(((int)checkpoint).ToString());
 		} // AddCheckpoint
 
-		public void SetTag(string tag) {
-			this.m_sTag = tag;
+		public ATrail SetTag(string aTag) {
+			this.tag = aTag;
+			return this;
 		} // SetTag
 
 		protected ATrail(
 			int nCustomerID,
+			long? cashRequestID,
 			DecisionStatus nDecisionStatus,
 			ASafeLog oLog,
 			string toExplanationEmailAddress,
@@ -353,6 +359,7 @@
 			m_oSteps = new List<ATrace>();
 
 			CustomerID = nCustomerID;
+			CashRequestID = cashRequestID;
 			m_nDecisionStatus = nDecisionStatus;
 			m_sToExplanationEmailAddress = toExplanationEmailAddress;
 			m_sFromEmailAddress = fromEmailAddress;
@@ -360,6 +367,7 @@
 			m_oLog = oLog.Safe();
 
 			this.timer = new TimeCounter();
+			HasApprovalChance = false;
 		} // constructor
 
 		protected virtual bool IsDecisionLocked {
@@ -394,6 +402,7 @@
 				DecisionStatusID = (int)oTrail.DecisionStatus;
 				InputData = oTrail.InputData.Serialize();
 				IsPrimary = bIsPrimary;
+				HasApprovalChance = oTrail.HasApprovalChance;
 				CashRequestID = cashRequestID;
 				Tag = tag;
 
@@ -492,6 +501,9 @@
 			public bool IsPrimary { get; set; }
 
 			[UsedImplicitly]
+			public bool HasApprovalChance { get; set; }
+
+			[UsedImplicitly]
 			public List<ATrace.DBModel> Traces { get; set; }
 
 			[UsedImplicitly]
@@ -545,7 +557,7 @@
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.ToString()),
 				HttpUtility.HtmlEncode(InputData.Serialize()),
 				HttpUtility.HtmlEncode(oTrail == null ? "no Trail specified" : oTrail.InputData.Serialize()),
-				this.m_sTag,
+				this.tag,
 				UniqueID
 			);
 
@@ -579,6 +591,6 @@
 		private readonly string m_sFromEmailAddress;
 		private readonly string m_sFromEmailName;
 		private readonly TimeCounter timer;
-	    private string m_sTag;
+		private string tag;
 	} // class Trail
 } // namespace

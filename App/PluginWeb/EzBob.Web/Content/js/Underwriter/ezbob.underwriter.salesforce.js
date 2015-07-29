@@ -1,5 +1,7 @@
 ﻿var EzBob = EzBob || {};
 
+EzBob.Underwriter = EzBob.Underwriter || {};
+
 (function () {
     EzBob.SalesForce = {
         returnToWaitingForDecision: "button.btn-return-waiting-for-decision",
@@ -16,6 +18,16 @@
                     return false;
                 }
             );
+
+            this.personalInfoModel = new EzBob.Underwriter.PersonalInfoModel({ Id: this.customerID });
+	        this.signatureMonitorView = new EzBob.Underwriter.SignatureMonitorView({
+            	el: $('#signature-monitor'),
+            	personalInfoModel: this.personalInfoModel
+            });
+	        var self = this;
+	        this.personalInfoModel.fetch().done(function () {
+	        	self.signatureMonitorView.reload(self.customerID);
+            });
 
             EzBob.SalesForceRouter = Backbone.Router.extend({
                 routes: {

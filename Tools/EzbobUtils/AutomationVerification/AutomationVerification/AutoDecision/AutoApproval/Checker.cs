@@ -245,9 +245,9 @@
 
 		private void IsBrokerCustomer() {
 			if (Trail.MyInputData.MetaData.IsBrokerCustomer)
-				StepFailed<IsBrokerCustomer>().Init();
+				StepFailed<IsBrokerCustomer>().Init(Trail.MyInputData.MetaData.IsBrokerCustomer);
 			else
-				StepDone<IsBrokerCustomer>().Init();
+				StepDone<IsBrokerCustomer>().Init(Trail.MyInputData.MetaData.IsBrokerCustomer);
 		} // IsBrokerCustomer
 
 		private void TodayApprovedCount() {
@@ -297,9 +297,10 @@
 			decimal amount = this.officeHoursHandler.Current.OpenLoanAmount;
 
 			if (amount >= threshold)
-				StepFailed<TodayLoans>().Init(amount, threshold);
+				StepFailed<TodayLoans>().Init(amount, threshold, units: "£");
 			else
-				StepDone<TodayLoans>().Init(amount, threshold);
+				StepDone<TodayLoans>().Init(amount, threshold, units: "£");
+					
 		} // TodayOpenLoans
 
 		private void OutstandingOffers() {
@@ -310,9 +311,10 @@
 			decimal amount = Trail.MyInputData.ReservedFunds;
 
 			if (amount >= threshold)
-				StepFailed<OutstandingOffers>().Init(amount, threshold);
+				StepFailed<OutstandingOffers>().Init(amount, threshold, true, units: "£");
 			else
-				StepDone<OutstandingOffers>().Init(amount, threshold);
+				StepDone<OutstandingOffers>().Init(amount, threshold, true, units: "£");
+					
 		} // OutstandingOffers
 
 		private void Aml() {
@@ -413,12 +415,14 @@
 			if (Trail.MyInputData.MarketplaceSeniority >= Trail.MyInputData.Configuration.MinMPSeniorityDays) {
 				StepDone<MarketplaceSeniority>().Init(
 					Trail.MyInputData.MarketplaceSeniority,
-					Trail.MyInputData.Configuration.MinMPSeniorityDays
+					Trail.MyInputData.Configuration.MinMPSeniorityDays,
+					units: "days"
 				);
 			} else {
 				StepFailed<MarketplaceSeniority>().Init(
 					Trail.MyInputData.MarketplaceSeniority,
-					Trail.MyInputData.Configuration.MinMPSeniorityDays
+					Trail.MyInputData.Configuration.MinMPSeniorityDays,
+					units: "days"
 				);
 			}
 		} // CompanyAge
@@ -436,9 +440,9 @@
 
 		private void Rollovers() {
 			if (Trail.MyInputData.MetaData.NumOfRollovers > 0)
-				StepFailed<Rollovers>().Init();
+				StepFailed<Rollovers>().Init(true);
 			else
-				StepDone<Rollovers>().Init();
+				StepDone<Rollovers>().Init(false);
 		} // Rollovers
 
 		private void LatePayments() {
@@ -507,7 +511,7 @@
 			decimal nApprovedAmount = ApprovedAmount;
 
 			if (Trail.MyInputData.Configuration.IsSilent) {
-				StepDone<AmountOutOfRangle>().Init(
+				StepDone<AmountOutOfRange>().Init(
 					nApprovedAmount,
 					Trail.MyInputData.Configuration.MinLoan,
 					Trail.MyInputData.Configuration.MaxAmount
@@ -521,13 +525,13 @@
 				(nApprovedAmount <= Trail.MyInputData.Configuration.MaxAmount);
 
 			if (inRange) {
-				StepDone<AmountOutOfRangle>().Init(
+				StepDone<AmountOutOfRange>().Init(
 					nApprovedAmount,
 					Trail.MyInputData.Configuration.MinLoan,
 					Trail.MyInputData.Configuration.MaxAmount
 				);
 			} else {
-				StepFailed<AmountOutOfRangle>().Init(
+				StepFailed<AmountOutOfRange>().Init(
 					nApprovedAmount,
 					Trail.MyInputData.Configuration.MinLoan,
 					Trail.MyInputData.Configuration.MaxAmount

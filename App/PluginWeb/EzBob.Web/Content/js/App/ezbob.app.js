@@ -31,4 +31,5 @@ EzBob.Config = {
 	PayPalEnabled: false,
 	PasswordPolicyType: 'simple',
 	isTest: false,
+	WizardAutomationTimeout: 20
 };

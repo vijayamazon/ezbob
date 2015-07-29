@@ -7,6 +7,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
 	using ServiceClientProxy;
 	using StructureMap;
 	using StructureMap.Pipeline;
@@ -29,9 +30,8 @@
 				x.For<ILoanScheduleRepository>().Use<LoanScheduleRepository>();
 				x.For<ILoanTransactionMethodRepository>().Use<LoanTransactionMethodRepository>();
 				x.For<ILoanHistoryRepository>().Use<LoanHistoryRepository>();
-
+				x.For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
 				x.For<ICustomerRepository>().Use<CustomerRepository>();
-
 			});
 
 			try {

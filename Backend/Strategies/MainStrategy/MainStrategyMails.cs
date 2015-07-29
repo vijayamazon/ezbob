@@ -11,7 +11,6 @@
 			StrategiesMailer mailer,
 			int customerId,
 			int offeredCreditLine,
-			LastOfferData lastOffer,
 			MedalResult medal,
 			CustomerDetails customerDetails,
 			AutoDecisionResponse autoDecisionResponse,
@@ -20,7 +19,6 @@
 			this.mailer = mailer;
 			this.customerId = customerId;
 			this.offeredCreditLine = offeredCreditLine;
-			this.lastOffer = lastOffer;
 			this.medal = medal;
 			this.customerDetails = customerDetails;
 			this.autoDecisionResponse = autoDecisionResponse;
@@ -28,20 +26,20 @@
 		} // constructor
 
 		public void SendEmails() {
-			if (autoDecisionResponse.DecidedToReject)
-				new RejectUser(customerId, sendToCustomer).Execute();
-			else if (autoDecisionResponse.IsAutoApproval)
+			if (this.autoDecisionResponse.DecidedToReject)
+				new RejectUser(this.customerId, this.sendToCustomer).Execute();
+			else if (this.autoDecisionResponse.IsAutoApproval)
 				SendApprovalMails();
-			else if (autoDecisionResponse.IsAutoBankBasedApproval)
+			else if (this.autoDecisionResponse.IsAutoBankBasedApproval)
 				SendBankBasedApprovalMails();
-			else if (autoDecisionResponse.IsAutoReApproval)
+			else if (this.autoDecisionResponse.IsAutoReApproval)
 				SendReApprovalMails();
-			else if (!autoDecisionResponse.HasAutomaticDecision)
+			else if (!this.autoDecisionResponse.HasAutomaticDecision)
 				SendWaitingForDecisionMail();
 		} // SendEmails
 
 		private void SendApprovalMails() {
-			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
+			this.mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Approved" },
 				{ "RegistrationDate", this.customerDetails.AppRegistrationDate.DateStr() },
 				{ "userID", this.customerId.ToString(Library.Instance.Culture) },
@@ -50,31 +48,30 @@
 				{ "Surname", this.customerDetails.AppSurname },
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
 				{ "MedalType", this.medal.MedalClassification.ToString() },
-				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
-				{ "ApprovalAmount", autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
-				{ "RepaymentPeriod", this.lastOffer.LoanOfferRepaymentPeriod.ToString(Library.Instance.Culture) },
-				{ "InterestRate", autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
+				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
+				{ "ApprovalAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
+				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
 				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
+					"OfferValidUntil", this.autoDecisionResponse.AppValidFor.HasValue
+						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
 						: string.Empty
 				}
 			});
 
 			var customerMailVariables = new Dictionary<string, string> {
 				{ "FirstName", this.customerDetails.AppFirstName },
-				{ "LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
 				{
-					"ValidFor", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
+					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
+						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
 						: string.Empty
 				}
 			};
 
 			var isFirstLoan = this.customerDetails.NumOfLoans == 0;
 
-			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(
-				customerId,
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(this.customerId,
 				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
 				customerMailVariables
 			);
@@ -82,25 +79,24 @@
 		} // SendApprovalMails
 
 		private void SendBankBasedApprovalMails() {
-			mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
+			this.mailer.Send("Mandrill - User is approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Approved" },
 				{ "RegistrationDate", this.customerDetails.AppRegistrationDate.ToString(Library.Instance.Culture) },
-				{ "userID", customerId.ToString(Library.Instance.Culture) },
+				{ "userID", this.customerId.ToString(Library.Instance.Culture) },
 				{ "Name", this.customerDetails.AppEmail },
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{ "Surname", this.customerDetails.AppSurname },
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
 				{ "MedalType", this.medal.MedalClassification.ToString() },
-				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
+				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
 				{
-					"ApprovalAmount",
-					autoDecisionResponse.BankBasedAutoApproveAmount.ToString(Library.Instance.Culture)
+					"ApprovalAmount", this.autoDecisionResponse.BankBasedAutoApproveAmount.ToString(Library.Instance.Culture)
 				},
-				{ "RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
-				{ "InterestRate", this.lastOffer.LoanOfferInterestRate.ToString(Library.Instance.Culture) },
+				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
+				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
 				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
+					"OfferValidUntil", this.autoDecisionResponse.AppValidFor.HasValue
+						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
 						: string.Empty
 				}
 			});
@@ -108,19 +104,17 @@
 			var customerMailVariables = new Dictionary<string, string> {
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{
-					"LoanAmount",
-					autoDecisionResponse.BankBasedAutoApproveAmount.ToString(Library.Instance.Culture)
+					"LoanAmount", this.autoDecisionResponse.BankBasedAutoApproveAmount.ToString(Library.Instance.Culture)
 				},
-				{ "ValidFor", autoDecisionResponse.AppValidFor.HasValue
-					? autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
+				{ "ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
+					? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
 					: string.Empty
 				}
 			};
 
 			var isFirstLoan = this.customerDetails.NumOfLoans == 0;
 
-			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(
-				customerId,
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(this.customerId,
 				"Mandrill - Approval (" + (isFirstLoan ? "" : "not ") + "1st time)",
 				customerMailVariables
 			);
@@ -128,37 +122,37 @@
 		} // SendBankBasedApprovalMails
 
 		private void SendReApprovalMails() {
-			mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
+			this.mailer.Send("Mandrill - User is re-approved", new Dictionary<string, string> {
 				{ "ApprovedReApproved", "Re-Approved" },
 				{ "RegistrationDate", this.customerDetails.AppRegistrationDate.ToString(Library.Instance.Culture) },
-				{ "userID", customerId.ToString(Library.Instance.Culture) },
+				{ "userID", this.customerId.ToString(Library.Instance.Culture) },
 				{ "Name", this.customerDetails.AppEmail },
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{ "Surname", this.customerDetails.AppSurname },
 				{ "MP_Counter", this.customerDetails.AllMPsNum.ToString(Library.Instance.Culture) },
 				{ "MedalType", this.medal.MedalClassification.ToString() },
-				{ "SystemDecision", autoDecisionResponse.SystemDecision.ToString() },
-				{ "ApprovalAmount", offeredCreditLine.ToString(Library.Instance.Culture) },
-				{ "RepaymentPeriod", autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
-				{ "InterestRate", autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
+				{ "SystemDecision", this.autoDecisionResponse.SystemDecision.ToString() },
+				{ "ApprovalAmount", this.offeredCreditLine.ToString(Library.Instance.Culture) },
+				{ "RepaymentPeriod", this.autoDecisionResponse.RepaymentPeriod.ToString(Library.Instance.Culture) },
+				{ "InterestRate", this.autoDecisionResponse.InterestRate.ToString(Library.Instance.Culture) },
 				{
-					"OfferValidUntil", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
+					"OfferValidUntil", this.autoDecisionResponse.AppValidFor.HasValue
+						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
 						: string.Empty
 				}
 			});
 
 			var customerMailVariables = new Dictionary<string, string> {
 				{ "FirstName", this.customerDetails.AppFirstName },
-				{ "LoanAmount", autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
+				{ "LoanAmount", this.autoDecisionResponse.AutoApproveAmount.ToString(Library.Instance.Culture) },
 				{
-					"ValidFor", autoDecisionResponse.AppValidFor.HasValue
-						? autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
+					"ValidFor", this.autoDecisionResponse.AppValidFor.HasValue
+						? this.autoDecisionResponse.AppValidFor.Value.ToString(Library.Instance.Culture)
 						: string.Empty
 				}
 			};
 
-			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(customerId,
+			AutomationDecsionMails automationDecsionMails = new AutomationDecsionMails(this.customerId,
 				this.customerDetails.IsAlibaba ? "Mandrill - Alibaba - Approval" : "Mandrill - Approval (not 1st time)",
 				customerMailVariables
 			);
@@ -166,9 +160,9 @@
 		} // SendReApprovalMails
 
 		private void SendWaitingForDecisionMail() {
-			mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
+			this.mailer.Send("Mandrill - User is waiting for decision", new Dictionary<string, string> {
 				{ "RegistrationDate", this.customerDetails.AppRegistrationDate.ToString(Library.Instance.Culture) },
-				{ "userID", customerId.ToString(Library.Instance.Culture) },
+				{ "userID", this.customerId.ToString(Library.Instance.Culture) },
 				{ "Name", this.customerDetails.AppEmail },
 				{ "FirstName", this.customerDetails.AppFirstName },
 				{ "Surname", this.customerDetails.AppSurname },
@@ -180,7 +174,6 @@
 
 		private readonly int customerId;
 		private readonly int offeredCreditLine;
-		private readonly LastOfferData lastOffer;
 		private readonly MedalResult medal;
 		private readonly CustomerDetails customerDetails;
 		private readonly AutoDecisionResponse autoDecisionResponse;

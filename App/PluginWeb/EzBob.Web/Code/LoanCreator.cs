@@ -317,7 +317,7 @@
 			if (!cus.WizardStep.TheLastOne)
 				throw new CustomerIsNotFullyRegisteredException();
 
-			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.CurrentStatus.IsEnabled)
+			if (!cus.CreditSum.HasValue || !cus.CollectionStatus.IsEnabled)
 				throw new Exception("Invalid customer state");
 		} // ValidateCustomer
 
@@ -416,7 +416,7 @@
 			if (!cr.IsCustomerRepaymentPeriodSelectionAllowed && cr.RepaymentPeriod != cr.ApprovedRepaymentPeriod)
 				throw new ArgumentException("Wrong repayment period");
 
-			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod < cr.RepaymentPeriod)
+			if (cr.LoanSource.DefaultRepaymentPeriod.HasValue && cr.LoanSource.DefaultRepaymentPeriod > cr.RepaymentPeriod)
 				throw new ArgumentException("Wrong repayment period");
 			if (cr.LoanSource.MaxInterest.HasValue && cr.InterestRate > cr.LoanSource.MaxInterest.Value)
 				throw new ArgumentException("Wrong interest rate");

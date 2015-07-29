@@ -15,6 +15,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.getCashModel = new EzBob.Profile.GetCashModel({ customer: options });
 		this.getCashView = new EzBob.Profile.GetCashView({ model: this.getCashModel, customer: options });
 
+		this.processingPopup = new EzBob.Profile.ProccessingAutomationPopupView({ model: this.getCashModel });
+
 		this.signWidget = new EzBob.Profile.SignWidget({ customerModel: options });
 		this.signWidget.on('payEarly', this.makePayment, this);
 
@@ -46,8 +48,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 
 	render: function() {
 		this.profileMain.show();
-
 		this.getCashView.render();
+		
 		this.payEarlyView.render();
 		this.signWidget.render();
 		this.processingMessageView.render();
@@ -61,6 +63,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		EzBob.UiAction.registerChildren(this.profileMain);
 
 		if (this.customer.isFinishedWizard) {
+			this.processingPopup.render();
 			this.finishedWizard();
 		}
 
@@ -114,7 +117,8 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		this.marketing("GetCash");
 	},
 
-	finishedWizard: function (){
+	finishedWizard: function () {
+		dataLayer.push({ 'event': 'finished-wizard' });
 		EzBob.App.GA.trackPage('/Customer/Profile/FinishedWizard', 'Profile: Finished Wizard', this.getGTMVariables());
 	}, //finishedWizard
 

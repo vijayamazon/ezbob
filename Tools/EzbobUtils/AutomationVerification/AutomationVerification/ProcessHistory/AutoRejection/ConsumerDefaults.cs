@@ -22,12 +22,12 @@
 			public int NumDefaultAccountsThreshhold { get; set; }
 			public int AmountDefaultAccountsThreshhold { get; set; }
 
+			public bool TooManyDefaults {
+				get { return (NumOfDefaults >= NumDefaultAccountsThreshhold); } // get
+			} // TooManyDefaults
+
 			public bool RejectStep {
-				get {
-					return
-						(NumOfDefaults >= NumDefaultAccountsThreshhold) &&
-						(MaxConsumerScore < MaxConsumerScoreThreshhold);
-				} // get
+				get { return TooManyDefaults && (MaxConsumerScore < MaxConsumerScoreThreshhold); } // get
 			} // RejectStep
 		} // class DataModel
 	} // class ConsumerDefaults

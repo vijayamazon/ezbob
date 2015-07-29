@@ -1064,8 +1064,8 @@ table.dashboard_sources {
     margin: 0;
     overflow: visible;
     text-indent: -9999px;
-    width: 20px;
-    height: 20px;
+    width: 25px;
+    height: 25px;
     position: absolute;
     top: -20px;
     background: url(images/cb/controls.png) no-repeat 0 0;
@@ -1095,18 +1095,15 @@ table.dashboard_sources {
     }
 
 #cboxClose {
-	background-position: -51px -2px;
+	background-position: -48px 0px;
+	border-radius: 0;
     right: 3px;
 	top: 3px;
-	border: 1px grey solid;
-	-ms-border-radius: 50%;
-	border-radius: 50%;
 }
 
 #cboxClose:hover {
-        background-position: -51px -27px;
-		border: 1px black solid;
-    }
+    background-position: -48px -25px;
+}
 
 .cboxSlideshow_on #cboxPrevious, .cboxSlideshow_off #cboxPrevious {
     right: 66px;

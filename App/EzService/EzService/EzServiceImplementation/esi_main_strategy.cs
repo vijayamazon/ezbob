@@ -3,56 +3,52 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Database;
+	using EZBob.DatabaseLib.Model.Database;
 
 	partial class EzServiceImplementation {
-		public ActionMetaData MainStrategy1(
+		public ActionMetaData MainStrategyAsync(
 			int underwriterId,
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDescison,
 			long? cashRequestID,
-			MainStrategy.DoAction createCashRequest,
-			MainStrategy.DoAction updateCashRequest
+			CashRequestOriginator? cashRequestOriginator
 		) {
-			return Execute(PrepageMainStrategyArguments(
+			return Execute(PrepareMainStrategyArguments(
 				underwriterId,
 				customerId,
 				newCreditLine,
 				avoidAutoDescison,
 				cashRequestID,
-				createCashRequest,
-				updateCashRequest
+				cashRequestOriginator
 			));
-		} // MainStrategy1
+		} // MainStrategyAsync
 
-		public ActionMetaData MainStrategySync1(
+		public ActionMetaData MainStrategySync(
 			int underwriterId,
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDescison,
 			long? cashRequestID,
-			MainStrategy.DoAction createCashRequest,
-			MainStrategy.DoAction updateCashRequest
+			CashRequestOriginator? cashRequestOriginator
 		) {
-			return ExecuteSync<MainStrategy>(PrepageMainStrategyArguments(
+			return ExecuteSync<MainStrategy>(PrepareMainStrategyArguments(
 				underwriterId,
 				customerId,
 				newCreditLine,
 				avoidAutoDescison,
 				cashRequestID,
-				createCashRequest,
-				updateCashRequest
+				cashRequestOriginator
 			));
-		} // MainStrategySync1
+		} // MainStrategySync
 
-		private ExecuteArguments PrepageMainStrategyArguments(
+		private ExecuteArguments PrepareMainStrategyArguments(
 			int underwriterId,
 			int customerId,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDescison,
 			long? cashRequestID,
-			MainStrategy.DoAction createCashRequest,
-			MainStrategy.DoAction updateCashRequest
+			CashRequestOriginator? cashRequestOriginator
 		) {
 			var onfail = new Action<ActionMetaData>(
 				amd => DB.ExecuteNonQuery(
@@ -64,13 +60,13 @@
 			);
 
 			return new ExecuteArguments(
+				underwriterId,
 				customerId,
 				newCreditLine,
 				avoidAutoDescison,
 				null,
 				cashRequestID,
-				createCashRequest,
-				updateCashRequest
+				cashRequestOriginator
 			) {
 				CustomerID = customerId,
 				UserID = underwriterId,
@@ -78,6 +74,6 @@
 				OnException = onfail,
 				OnFail = onfail,
 			};
-		} // PrepageMainStrategyArguments
+		} // PrepareMainStrategyArguments
 	} // class EzServiceImplementation
 } // namespace EzService

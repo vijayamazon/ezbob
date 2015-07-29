@@ -1,0 +1,28 @@
+﻿@model dynamic
+
+@{
+	ViewBag.Title = "SalesForce";
+	Layout = "~/Areas/Underwriter/Views/Shared/_LayoutSalesForce.cshtml";
+}
+
+<div class="login-page">
+	<div class="login-wrapper">
+		@using (Html.BeginForm("Index", "SalesForce", new { Area = "Underwriter" })) {
+			<div class="pager">
+				<h3>Enter customer's email or id</h3>
+			</div>
+			<hr />
+			<div class="form-group">
+				<div class="controls">
+					@Html.TextBox("id", "", new { placeholder = "email or id", tabindex = "1", autofocus = "autofocus", required = "required" })
+				</div>
+			</div>
+			<hr />
+			<div class="form-group">
+				<div class="controls">
+					<input type="submit" name="Show" value="Show" tabindex="2" class="btn btn-success" />
+				</div>
+			</div>
+		}
+	</div>
+</div>

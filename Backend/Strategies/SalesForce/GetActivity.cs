@@ -24,7 +24,9 @@
                 Log.Info("Getting SalesForce activities for customer {0} ", this.customerID.Value);
 			}
 
-            Result = this.salesForce.GetActivity(this.email);
+			SalesForceRetier.Execute(ConfigManager.CurrentValues.Instance.SalesForceNumberOfRetries, ConfigManager.CurrentValues.Instance.SalesForceRetryWaitSeconds, this.salesForce, () => {
+				Result = this.salesForce.GetActivity(this.email);
+			});
 
             if (this.salesForce.HasError) {
                 DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
-	public abstract partial class ALoanCalculator {
+	public abstract partial class ALoanCalculator_stubs {
 		// TODO: missing functionality
 
-	} // class ALoanCalculator
+
+	} // class ALoanCalculator_stubs
 } // namespace

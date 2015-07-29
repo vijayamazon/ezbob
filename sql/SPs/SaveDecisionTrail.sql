@@ -47,6 +47,7 @@ CREATE PROCEDURE SaveDecisionTrail
 @DecisionStatusID INT,
 @InputData NVARCHAR(MAX),
 @IsPrimary BIT,
+@HasApprovalChance BIT,
 @CashRequestID BIGINT,
 @Tag NVARCHAR(256),
 @Traces DecisionTraceList READONLY,
@@ -71,10 +72,12 @@ BEGIN
 
 	INSERT INTO DecisionTrail (
 		CustomerID, DecisionID, DecisionTime, UniqueID,
-		DecisionStatusID, InputData, IsPrimary, CashRequestID, TrailTagID, Amount
+		DecisionStatusID, InputData, IsPrimary, CashRequestID, TrailTagID, Amount,
+		HasApprovalChance
 	) VALUES (
 		@CustomerID, @DecisionID, @DecisionTime, @UniqueID,
-		@DecisionStatusID, @InputData, @IsPrimary, @CashRequestID, @TagID, @Amount
+		@DecisionStatusID, @InputData, @IsPrimary, @CashRequestID, @TagID, @Amount,
+		@HasApprovalChance
 	)
 
 	------------------------------------------------------------------------------

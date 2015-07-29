@@ -15,6 +15,8 @@
 
 		public int CustomerID { get { return this.m_oArguments.CustomerID; } }
 
+		public long? CashRequestID { get { return this.m_oArguments.CashRequestID; } }
+
 		public Configuration Configuration { get; private set; }
 
 		public DateTime DataAsOf { get; private set; }
@@ -103,12 +105,13 @@
 
 		public void SetArgs(
 			int nCustomerID,
+			long? cashRequestID,
 			decimal nAmount,
 			Medal nMedal,
 			MedalType medalType,
 			TurnoverType? turnoverType
 		) {
-			this.m_oArguments = new Arguments(nCustomerID, nAmount, nMedal, medalType, turnoverType);
+			this.m_oArguments = new Arguments(nCustomerID, cashRequestID, nAmount, nMedal, medalType, turnoverType);
 		} // SetArgs
 
 		public void SetAvailableFunds(decimal nTotalAvailable, decimal nReserved) {

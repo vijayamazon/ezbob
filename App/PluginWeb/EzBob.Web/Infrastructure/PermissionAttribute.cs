@@ -17,7 +17,7 @@
 
             var ctx = ObjectFactory.GetInstance<IWorkplaceContext>();
 
-            if (ctx.User.Permissions.All(p => p.Name != Name))
+			if (ctx.User == null || ctx.User.Permissions.All(p => p.Name != Name))
             {
                 filterContext.Result = new HttpUnauthorizedResult();
             }

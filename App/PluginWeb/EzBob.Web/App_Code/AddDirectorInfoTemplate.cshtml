@@ -1,4 +1,5 @@
-﻿@helper Render(WebPageBase page, string sUrl) {
+﻿@using System.Web.WebPages
+@helper Render(WebPageBase page, string sUrl) {
 	<script id="add-director-info-template" type="text/template">
 		<div class="director">
 			<form method="post" action="@sUrl" class="addDirectorInfoForm" novalidate="novalidate">

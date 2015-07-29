@@ -257,13 +257,22 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 
 		showCreditLineDialog: function() {
 			var self = this;
-
-			this.model.fetch().done(function() {
-				var dialog = new EzBob.Underwriter.CreditLineDialog({
-					model: self.model
+			BlockUi();
+			var id = this.model.get('CashRequestId');
+			var amount = this.model.get('OfferedCreditLine');
+			
+			self.model.fetch().done(function() {
+				$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
+					id: id,
+					amount: amount
+				}).done(function (result) {
+					UnBlockUi();
+					var dialog = new EzBob.Underwriter.CreditLineDialog({
+						model: self.model,
+						brokerCommissionDefaultResult: result
+					});
+					EzBob.App.jqmodal.show(dialog);
 				});
-
-				EzBob.App.jqmodal.show(dialog);
 			});
 		}, // showCreditLineDialog
 

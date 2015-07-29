@@ -30,7 +30,8 @@ namespace EzBob.Models.Marketplaces.Builders {
 			return null;
 		} // GetLastTransaction
 
-		public override void UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
+		public override DateTime? UpdateLastTransactionDate(MP_CustomerMarketPlace mp) {
+			return null;
 			// Nothing to do here, base method should not be executed.
 		} // UpdateLastTransactionDate
 

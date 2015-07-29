@@ -19,10 +19,10 @@
 
 		public virtual decimal ApprovedAmount { get; private set; }
 
-		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, long? cashRequestID, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID);
+			Args = new Arguments(nCustomerID, cashRequestID);
 		} // constructor
 
 		public virtual Agent Init() {
@@ -35,6 +35,7 @@
 
 			Trail = new ReapprovalTrail(
 				Args.CustomerID,
+				Args.CashRequestID,
 				Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -83,7 +84,7 @@
 				} // if
 			} // if
 
-			Trail.Save(DB, oSecondary.Trail, tag: tag);
+			Trail.Save(DB, oSecondary.Trail);
 
 			return bSuccess;
 		} // MakeAndVerifyDecision
@@ -91,6 +92,7 @@
 		public virtual void MakeDecision(AutoDecisionResponse response, string tag) {
 			try {
 				if (MakeAndVerifyDecision(tag) && Trail.HasDecided) {
+					response.HasApprovalChance = true;
 					response.AutoApproveAmount = (int)ApprovedAmount;
 					response.Decision = DecisionActions.ReApprove;
 					response.CreditResult = CreditResultStatus.Approved;
@@ -218,6 +220,7 @@
 				DB,
 				Log,
 				Args.CustomerID,
+				Args.CashRequestID,
 				Trail.InputData.DataAsOf
 			);
 			oSecondary.MakeDecision(oSecondary.GetInputData());
@@ -227,9 +230,9 @@
 
 		private void CheckComplete() {
 			if (ApprovedAmount >= Trail.MyInputData.MinLoan)
-				StepDone<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);
+				StepDone<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 			else
-				StepFailed<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan);
+				StepFailed<Complete>().Init(ApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 		} // CheckComplete
 
 		private void CheckInit() {
@@ -291,10 +294,10 @@
 
 		private void CheckNewMarketplaces() {
 			if (NewMarketplaces.Count < 1)
-				StepDone<NewMarketplace>().Init(NewMarketplaces.Count < 1);
+				StepDone<NewMarketplace>().Init(null);
 			else {
-				StepFailed<NewMarketplace>().Init(NewMarketplaces.Count < 1);
-				// foreach (var mp in NewMarketplaces) mp.Fill(StepFailed<NewMarketplace>());
+				StepFailed<NewMarketplace>().Init(NewMarketplaces.Select(x => string.Format("a marketplace {1}({2} - {3}) on {0}",
+					x.AddTime, x.Name, x.ID, x.Type)).Aggregate((a, b) => a + ", " + b));
 			} // if
 		} // CheckNewMarketplaces
 

@@ -7,10 +7,6 @@
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
-	using EZBob.DatabaseLib.Repository.Turnover;
-	using NHibernate;
-	using StructureMap;
 
 	/// <summary>
 	/// <para>Executes non-repeating automation decisions (reject, approve) in silent mode,
@@ -31,13 +27,27 @@
 			Aml,
 			Consumer,
 			Company,
+			MainSkipEverything,
+			MainUpdateAndGoManual,
 		} // enum Callers
 
 		public SilentAutomation(int customerID) {
+			this.medalToUse = null;
+			this.doMainStrategy = true;
 			this.customerID = customerID;
 			this.caller = Callers.Unknown;
 			this.tag = CreateTag();
 		} // constructor
+
+		public SilentAutomation PreventMainStrategy() {
+			this.doMainStrategy = false;
+			return this;
+		} // PreventMainStrategy
+
+		public SilentAutomation SetMedal(MedalResult medal) {
+			this.medalToUse = medal;
+			return this;
+		} // SetMedal
 
 		public override string Name { get { return "SilentAutomation"; } }
 
@@ -66,34 +76,53 @@
 				return;
 			} // if
 
-			ForceNhibernateResync();
+			SafeReader sr = DB.GetFirst(
+				"LoadLastCustomerCashRequest",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", this.customerID)
+			);
 
-			Log.Debug("Executing silent reject for customer '{0}'...", this.customerID);
+			if (sr.IsEmpty) {
+				Log.Debug(
+					"Not running silent automation for customer {0}: there is no available cash request.",
+					this.customerID
+				);
+
+				return;
+			} // if
+
+			this.cashRequestID = sr["CashRequestID"];
+
+			ForceNhibernateResync.Do(this.customerID);
+
+			Log.Debug(
+				"Executing silent reject for customer '{0}' using cash request '{1}'...",
+				this.customerID,
+				this.cashRequestID
+			);
 
 			var rejectAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(
 				this.customerID,
+				this.cashRequestID,
 				DB,
 				Log
 			).Init();
 
 			rejectAgent.MakeAndVerifyDecision(Tag, true);
 
-			Log.Debug("Executing silent medal for customer '{0}'...", this.customerID);
-
-			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
-				Tag = Tag,
-				QuietMode = true,
-			};
-			instance.Execute();
-
-			MedalResult medal = instance.Result;
+			MedalResult medal = CalculateMedal();
 
 			int offeredCreditLine = CapOffer(medal);
 
-			Log.Debug("Executing silent approve for customer '{0}'...", this.customerID);
+			Log.Debug(
+				"Executing silent approve for customer '{0}' using cash request '{1}'...",
+				this.customerID,
+				this.cashRequestID
+			);
 
 			var approveAgent = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval.Approval(
 				this.customerID,
+				this.cashRequestID,
 				offeredCreditLine,
 				medal.MedalClassification,
 				(AutomationCalculator.Common.MedalType)medal.MedalType,
@@ -112,10 +141,11 @@
 					ExecuteMain();
 				else {
 					Log.Debug(
-						"Not running auto decision for customer {0}: no potential ({1} and {2}).",
+						"Not running auto decision for customer {0} using cash request {3}: no potential ({1} and {2}).",
 						this.customerID,
 						isRejected ? "rejected" : "not rejected",
-						isApproved ? "approved" : "not approved"
+						isApproved ? "approved" : "not approved",
+						this.cashRequestID
 					);
 				} // if
 			} // if
@@ -124,9 +154,28 @@
 		} // Execute
 
 		private void ExecuteMain() {
+			bool skipMain =
+				!this.doMainStrategy ||
+				(this.caller == Callers.MainSkipEverything) ||
+				(this.caller == Callers.MainUpdateAndGoManual);
+
+			if (skipMain) {
+				Log.Debug(
+					"Silent decision for customer {0} is 'approve', but main strategy won't be executed " +
+					"(prevent main: '{1}', caller: '{2}').",
+					this.customerID,
+					this.doMainStrategy ? "yes" : "no",
+					this.caller
+				);
+
+				return;
+			} // if
+
 			Log.Debug(
-				"Silent decision for customer {0} is 'approve', checking whether there is available cash request...",
-				this.customerID
+				"Silent decision for customer {0} using cash request {1} is 'approve', " +
+				"checking whether cash request is intact...",
+				this.customerID,
+				this.cashRequestID
 			);
 
 			SafeReader sr = DB.GetFirst(
@@ -135,26 +184,35 @@
 				new QueryParameter("CustomerID", this.customerID)
 			);
 
-			if (sr.IsEmpty) {
-				Log.Debug(
-					"Not running auto decision for customer {0}: there is no available cash request.",
-					this.customerID
+			if (sr.IsEmpty) { // should never happen because cash request was loaded earlier.
+				Log.Alert(
+					"Not running auto decision for customer {0} using cash request {1}: there is no available cash request.",
+					this.customerID,
+					this.cashRequestID
 				);
 
 				return;
 			} // if
 
-			long cashRequestID = sr["CashRequestID"];
+			long currentCashRequestID = sr["CashRequestID"];
 			string uwDecision = (sr["UnderwriterDecision"] ?? string.Empty).Trim();
 
-			if ((uwDecision != string.Empty) && (uwDecision != CreditResultStatus.WaitingForDecision.ToString())) {
+			bool suitableCashRequest = this.cashRequestID == currentCashRequestID;
+
+			bool suitableDecision =
+				(uwDecision == string.Empty) ||
+				(uwDecision == CreditResultStatus.WaitingForDecision.ToString());
+
+			if (!suitableCashRequest || !suitableDecision) {
 				Log.Debug(
 					"Not running auto decision for customer {0}: " +
-					"last cash request (id: {3}) has decision '{1}' while desired is '{2}'.",
+					"new cash request was added (id change {1} -> {2} or " +
+					"last cash request (id: {1}) has decision '{3}' while desired is '{4}'.",
 					this.customerID,
+					this.cashRequestID,
+					currentCashRequestID,
 					uwDecision,
-					CreditResultStatus.WaitingForDecision,
-					cashRequestID
+					CreditResultStatus.WaitingForDecision
 				);
 
 				return;
@@ -163,24 +221,24 @@
 			Log.Debug(
 				"Running auto decision for customer {0}: last cash request (id: {1}) has decision '{2}'...",
 				this.customerID,
-				cashRequestID,
+				this.cashRequestID,
 				uwDecision
 			);
 
 			new MainStrategy(
+				1, // this is an underwriter ID that is used for auto decisions
 				this.customerID,
 				NewCreditLineOption.SkipEverythingAndApplyAutoRules,
 				0,
 				null,
-				cashRequestID,
-				MainStrategy.DoAction.No,
-				MainStrategy.DoAction.Yes
+				this.cashRequestID,
+				null
 			).Execute();
 
 			Log.Debug(
 				"Running auto decision for customer {0}, last cash request (id: {1}) complete.",
 				this.customerID,
-				cashRequestID
+				this.cashRequestID
 			);
 		} // ExecuteMain
 
@@ -193,21 +251,6 @@
 
 			this.mainStrategyExecutedBefore = sr.IsEmpty ? false : sr["MainStrategyExecutedBefore"];
 		} // LoadMainStrategyExecutedBefore 
-
-		private void ForceNhibernateResync() {
-			ISession session = ObjectFactory.GetInstance<ISession>();
-
-			Customer customer = ObjectFactory.GetInstance<CustomerRepository>().ReallyTryGet(this.customerID);
-
-			if (customer != null)
-				session.Evict(customer);
-
-			MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
-
-			foreach (MarketplaceTurnover mpt in mpTurnoverRep.GetByCustomerId(this.customerID))
-				if (mpt != null)
-					session.Evict(mpt);
-		} // ForceNhibernateResync
 
 		private int CapOffer(MedalResult medal) {
 			Log.Info("Finalizing and capping offer");
@@ -240,12 +283,32 @@
 			);
 		} // CreateTag
 
+		private MedalResult CalculateMedal() {
+			if (this.medalToUse != null) {
+				Log.Debug("Using preset medal for customer '{0}'...", this.customerID);
+				return this.medalToUse;
+			} // if
+
+			Log.Debug("Executing silent medal for customer '{0}'...", this.customerID);
+
+			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true) {
+				Tag = Tag,
+				QuietMode = true,
+			};
+			instance.Execute();
+
+			return instance.Result;
+		} // CalculateMedal
+
 		private int MaxCapHomeOwner { get { return CurrentValues.Instance.MaxCapHomeOwner; } }
 		private int MaxCapNotHomeOwner { get { return CurrentValues.Instance.MaxCapNotHomeOwner; } }
 
 		private Callers caller;
 		private readonly int customerID;
 		private string tag;
+		private long cashRequestID;
 		private bool mainStrategyExecutedBefore;
+		private bool doMainStrategy;
+		private MedalResult medalToUse;
 	} // class SilentAutomation
 } // namespace

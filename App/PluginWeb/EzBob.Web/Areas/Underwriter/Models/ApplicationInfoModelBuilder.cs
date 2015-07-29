@@ -78,7 +78,7 @@
 									   customer.CreditResult == CreditResultStatus.Escalated ||
 									   customer.CreditResult == CreditResultStatus.ApprovedPending;
 
-			model.Editable = isWaitingOrEscalated && cr != null && customer.CollectionStatus.CurrentStatus.IsEnabled;
+			model.Editable = isWaitingOrEscalated && cr != null && customer.CollectionStatus.IsEnabled;
 
 			model.IsModified = cr != null && !string.IsNullOrEmpty(cr.LoanTemplate);
 

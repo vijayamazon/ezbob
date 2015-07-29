@@ -6,6 +6,7 @@
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
+	using AutomationCalculator.ProcessHistory.AutoRejection;
 	using AutomationCalculator.ProcessHistory.Common;
 	using AutomationCalculator.ProcessHistory.Trails;
 	using AutomationCalculator.Turnover;
@@ -25,15 +26,17 @@
 	public class Agent : AAutoDecisionBase {
 		public virtual RejectionTrail Trail { get; private set; }
 
-		public Agent(int nCustomerID, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, long? cashRequestID, AConnection oDB, ASafeLog oLog) {
 			DB = oDB;
 			Log = oLog.Safe();
-			Args = new Arguments(nCustomerID);
+			Args = new Arguments(nCustomerID, cashRequestID);
+			HasApprovalChance = false;
 		} // constructor
 
 		public virtual Agent Init() {
 			Trail = new RejectionTrail(
 				Args.CustomerID,
+				Args.CashRequestID,
 				Log,
 				CurrentValues.Instance.AutomationExplanationMailReciever,
 				CurrentValues.Instance.MailSenderEmail,
@@ -52,6 +55,8 @@
 			return this;
 		} // Init
 
+		public bool HasApprovalChance { get; private set; }
+
 		public virtual bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
 			Trail.SetTag(tag);
 
@@ -59,9 +64,21 @@
 
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary = RunSecondary();
 
+			if (Trail.HasApprovalChance == oSecondary.Trail.HasApprovalChance) {
+				Trail.Negative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				oSecondary.Trail.Negative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+			} else {
+				Trail.Affirmative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+				oSecondary.Trail.Affirmative<SameApprovalChance>(false)
+					.Init(Trail.HasApprovalChance, oSecondary.Trail.HasApprovalChance);
+			} // if
+
 			WasMismatch = !Trail.EqualsTo(oSecondary.Trail, quiet);
 
-			Trail.Save(DB, oSecondary.Trail, tag: tag);
+			Trail.Save(DB, oSecondary.Trail);
 
 			return !WasMismatch;
 		} // MakeAndVerifyDecision
@@ -278,7 +295,9 @@
 
 			GatherData();
 
-			new Checker(Trail, Log).Run();
+			var checker = new Checker(Trail, Log).Run();
+
+			HasApprovalChance = checker.Trail.HasApprovalChance;
 
 			Trail.DecideIfNotDecided();
 
@@ -482,7 +501,7 @@
 
 		private AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent RunSecondary() {
 			AutomationCalculator.AutoDecision.AutoRejection.RejectionAgent oSecondary =
-				new RejectionAgent(DB, Log, Args.CustomerID, Cfg.Values);
+				new RejectionAgent(DB, Log, Args.CustomerID, Args.CashRequestID, Cfg.Values);
 
 			oSecondary.MakeDecision(oSecondary.GetRejectionInputData(Trail.InputData.DataAsOf));
 

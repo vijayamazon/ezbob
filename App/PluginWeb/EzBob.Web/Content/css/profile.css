@@ -693,3 +693,67 @@ table.directors-list td.l {
 	margin-bottom: 20px;
 }
 
+
+/*Automation wizard complete popup*/
+.automation-popup {
+	
+}
+
+.automation-popup-content {
+	margin-left: 42px;
+	margin-right: 42px;
+}
+
+.automation-processing {
+	height: 70px;
+	margin-top: -20px;
+	margin-bottom: 60px;
+	background-image: -webkit-gradient(linear,left top,left bottom,color-stop(0, #696969),color-stop(1, #A2A2A2));
+	background-image: -o-linear-gradient(bottom, #696969 0%, #A2A2A2 100%);
+	background-image: -moz-linear-gradient(bottom, #696969 0%, #A2A2A2 100%);
+	background-image: -webkit-linear-gradient(bottom, #696969 0%, #A2A2A2 100%);
+	background-image: -ms-linear-gradient(bottom, #696969 0%, #A2A2A2 100%);
+	background-image: linear-gradient(to bottom, #696969 0%, #A2A2A2 100%);
+}
+
+.automation-processing .automation-processing-bar {
+	background-image: url('images/automation-stripe.png');
+	background-size: cover;
+	background-repeat: repeat-x;
+	height: 100%;
+}
+
+.automation-header {
+	font-family: 'Titillium Web Semi Bold';
+	font-size: 32px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.automation-secondary-header {
+	font-family: 'Titillium Web Semi Bold';
+	font-size: 24px;
+	margin-top: 30px;
+	margin-bottom: 40px;
+}
+
+.automation-text {
+	font-family: 'Titillium Web Light';
+	font-size: 24px;
+	margin-bottom: 60px;
+}
+
+.automation-label {
+	font-family: 'Titillium Web Regular';
+	font-size: 24px;
+}
+
+.automation-value {
+	font-family: 'Titillium Web Regular';
+	font-size: 28px;
+	border: 1px #ccc solid;
+	margin-bottom: 20px;
+}
+
+
+

@@ -1,5 +1,154 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using EZBob.DatabaseLib.Model.Database.UserManagement
+@using EzBob.Web.Infrastructure
+@using ConfigManager
+@model dynamic
+@{
+	var securityQuestions = ViewData["Questions"] as List<SecurityQuestion>;
+	string captchamode = CurrentValues.Instance.CaptchaMode;
+	bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
+	var bml = new WizardBrokerLeadModel(Session);
+	var sInitialEmail = bml.IsSet ? bml.LeadEmail : string.Empty;
+	var sBrokerForCustomerIndicator = bml.BrokerFillsForCustomer ? "broker-for-customer" : string.Empty;
+}
 
 <script id="signup-template" type="text/template">
-    @{Html.RenderPartial("_SignUp");}
+    @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" })) {
+		@*
+			The following control is only used to save customer name for Alibaba customer.
+			ui-event-control-id attribute is used to copy a value from cookie to the control.
+		*@
+		<input type="hidden" name="FirstName" ui-event-control-id="personal-info:first_name" />
+		<input type="hidden" name="Surname" ui-event-control-id="personal-info:last_name" />
+
+		<h2 class="form_start @sBrokerForCustomerIndicator">Create account</h2>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Email address</span>
+				<input type="email" name="Email" id="Email" tabindex="1" class="form_field" value="@sInitialEmail" autocorrect="off" autocapitalize="off" maxlength="128" ui-event-control-id="signup:email" />
+				<img id="EmailImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div id="strength-password-view" class="form_field_container">
+			<label class="attardi-input">
+				<span>Password</span>
+				<input type="password" tabindex="2" class="form_field" name="signupPass1" id="signupPass1" ui-event-control-id="signup:password1" />
+				<img id="Password1Image" class="field_status required" />
+			</label>
+			<p id="message" class="help-block"></p>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Confirm password</span>
+				<input type="password" tabindex="3" class="form_field" name="signupPass2" id="signupPass2" ui-event-control-id="signup:password2" />
+				<img id="Password2Image" class="field_status required" />
+			</label>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Secret question</span>
+				<select name="securityQuestion" id="securityQuestion" tabindex="4" class="form_field" ui-event-control-id="signup:security_question">
+					<option value=""></option>
+					@if (securityQuestions != null) {
+						foreach (var item in securityQuestions) {
+							<option value="@item.Id">@item.Name</option>
+						} // foreach
+					} // if
+				</select>
+				<img id="SecurityQuestionImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Secret answer</span>
+				<input type="text" name="SecurityAnswer" id="SecurityAnswer" tabindex="5" class="form_field" ui-event-control-id="signup:security-answer" />
+				<img id="SecretAnswerImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Promotional code (optional)</span>
+				<input type="text" class="form_field" name="promoCode" id="promoCode" ui-event-control-id="signup:promo-code" />
+				<img id="promoCodeImage" class="field_status" />
+			</label>
+		</div>
+
+		<div class="form_field_container">
+			<label class="attardi-input">
+				<span>Requested loan amount</span>
+				<input type="tel" name="amount" id="amount" tabindex="6" class="form_field" ui-event-control-id="signup:requested-amount" />
+				<img id="amountImage" class="field_status required" />
+			</label>
+		</div>
+
+		<div id="twilioDiv" class="hide">
+			<div class="form_field_container">
+				<label class="attardi-input">
+					<div class="code-sent-style-container">
+						<label id="codeSentLabel" class="code-sent-style">Code sent</label>
+					</div>
+					<span>Mobile phone</span>
+					<input type="tel" class="phonenumber form_field_left_side form_field" name="mobilePhone" id="mobilePhone" tabindex="11" ui-event-control-id="signup:mobile-phone" />
+					<img id="mobilePhoneImage" class="field_status required" />
+					<button id="generateMobileCode" class="button btn-green form_field_right_side_signup_phone disabled" type="button" ui-event-control-id="signup:generate-mobile-code">Send activation code</button>
+				</label>
+			</div>
+
+			<div id="mobileCodeDiv" class="form_field_container hide">
+				<label class="attardi-input">
+					<span>Mobile phone authentication code</span>
+					<input type="text" class="phonenumbercode form_field_left_side form_field" name="mobileCode" id="mobileCode" tabindex="12" ui-event-control-id="signup:mobile-code" />
+					<img id="mobileCodeImage" class="field_status required" />
+					<button id="switchToCaptcha" class="button btn-green form_field_right_side_signup_phone" type="button" ui-event-control-id="signup:switch-to-captcha">Did not receive code</button>
+				</label>
+			</div>
+		</div>
+
+		<div id="captchaDiv" class="hide">
+			<div class="form_field_container">
+				@EzForm.Captcha(captchamode)
+			</div>
+		</div>
+
+		<div class="form_buttons_container">
+			<div class="attardi-button">
+				<input type="submit" id="signupSubmitButton" value="Continue" class="button btn-green continue disabled" tabindex="13" ui-event-control-id="signup:submit">
+			</div>
+		</div>
+
+		<div class="hide">
+			@if (instructionsEnabled) {
+				<div id="offline_help" class="help_window">
+					<h2>Welcome to the @ViewBag.CustomerOrigin.Name application process</h2>
+					<p>Please find below what you need to complete your application successfully.</p>
+					<div class="help_image help_offline"></div>
+					<p>Complete it in five minutes.</p>
+					<br>
+					<div class="alignright" style="padding: 0 10px 0 0;">
+						<a href="javascript:$.colorbox.close()" target="_blank" class="button btn-green pull-right" ui-event-control-id="signup:offline-popup-continue">Continue</a>
+					</div>
+					<div class="clear"></div>
+					<hr>
+					<div class="help_security"></div>
+				</div>
+			}
+			<div id="everline_help" class="help_window" ui-event-control-id="signup:everline-help-popup">
+				<div class="help_everline_header"></div>
+				<div class="help_everline_content">
+					<p><h3><strong>Dear Everline registered user</strong></h3></p>
+					<p><strong>Everline</strong> has been purchased by <strong>Orange Money Ltd</strong>, the first online SME lender to be an approved financial intermediary for the European Investment Fund (EIF) and it is also backed by the Business Bank supported Angel Co-Fund.</p>
+					<p>If you would like to apply for a new loan, for the protection of your personal information, we require you to create new login credentials. The application process will take less than 10 minutes and once we have created your new account we will retain all your details so it is simple to login on your next visit.</p>
+					<p>You can apply for up to £150,000 for 18 months and will also benefit from a 28 – 40% saving in loan costs – based on risk based pricing - when compared to the old Everline annual loan costs. Previously Everline had offered loans up to £50,000 for 12 months at rates of 26% per annum.</p>
+					<p>Please click here to Apply or simply close this popup window.</p>
+					<p style="text-align: center;"><a class="org-btn btn-sm" onclick="javascript: $.colorbox.close();" ui-event-control-id="signup:everline-popup-apply">Apply <i class="fa fa-chevron-right"></i></a></p>
+				</div>
+			</div>
+		</div>
+	}
 </script>

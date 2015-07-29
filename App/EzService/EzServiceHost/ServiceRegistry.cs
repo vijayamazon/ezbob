@@ -9,6 +9,7 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Loans;
+	using EZBob.DatabaseLib.Repository;
 	using SalesForceLib;
 	using StructureMap.Configuration.DSL;
 
@@ -30,8 +31,7 @@
 			For<ILoanTypeRepository>().Use<LoanTypeRepository>();
 			For<ILoanSourceRepository>().Use<LoanSourceRepository>();
 			For<IDiscountPlanRepository>().Use<DiscountPlanRepository>();
-
-
+			For<ILoanOptionsRepository>().Use<LoanOptionsRepository>();
 			
 			if (CurrentValues.Instance.SalesForceFakeMode) {
 				For<ISalesForceAppClient>().Use<FakeApiClient>();

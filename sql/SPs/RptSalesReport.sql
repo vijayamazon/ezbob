@@ -57,7 +57,7 @@ JOIN CRMActions CA ON CA.Id = CR.ActionId
 WHERE CR.Timestamp > @DateStart
       AND CR.Timestamp < @DateEnd
       AND CS.Name = 'Sale'
-      AND CR.UserName IN ('rosb','clareh','travism','sarahd','sarahb','everline')
+      AND CR.UserName IN ('rosb','clareh','travism','sarahd','sarahb','everline', 'scotth')
 --    AND C.BrokerID is NULL
 ORDER BY 2
  
@@ -115,4 +115,5 @@ JOIN Customer CU ON CU.Id = A.CustomerId
 LEFT JOIN @IssuedLoans L ON L.LoanId = A.LoanId
 WHERE A.LoanId IS NOT NULL
 END
+
 GO

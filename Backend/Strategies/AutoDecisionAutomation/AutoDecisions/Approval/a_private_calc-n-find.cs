@@ -19,7 +19,7 @@
 		private static readonly Guid CompanyFiles = new Guid("1C077670-6D6C-4CE9-BEBC-C1F9A9723908");
 
 		private int CalculateRollovers() {
-			return this.loanRepository.ByCustomer(this.customerId)
+			return this.loanRepository.ByCustomer(this.trail.CustomerID)
 				.SelectMany(loan => loan.Schedule)
 				.Sum(sch => sch.Rollovers.Count());
 		} // CalculateRollovers
@@ -89,7 +89,7 @@
 		private void FindLatePayments() {
 			int autoApproveMaxAllowedDaysLate = CurrentValues.Instance.AutoApproveMaxAllowedDaysLate;
 
-			List<int> customerLoanIds = this.loanRepository.ByCustomer(this.customerId)
+			List<int> customerLoanIds = this.loanRepository.ByCustomer(this.trail.CustomerID)
 				.Select(d => d.Id)
 				.ToList();
 
@@ -126,7 +126,7 @@
 		private void FindOutstandingLoans() {
 			MetaData oMeta = this.trail.MyInputData.MetaData; // just a shortcut
 
-			List<Loan> outstandingLoans = FirstOfMonthStatusStrategyHelper.GetOutstandingLoans(this.customerId);
+			List<Loan> outstandingLoans = FirstOfMonthStatusStrategyHelper.GetOutstandingLoans(this.trail.CustomerID);
 
 			oMeta.OpenLoanCount = 0;
 			oMeta.TakenLoanAmount = 0;

@@ -66,7 +66,7 @@ namespace AutomationCalculator.AutoDecision.AutoReApproval
 		public bool HasLoanCharges { get; set; }
 		public decimal ReApproveAmount { get; set; }
 		public decimal AvaliableFunds { get; set; }
-        public int LacrID { get; set; }
+        public long LacrID { get; set; }
 
 		//configs
 		public int AutoReApproveMaxLacrAge { get; set; }

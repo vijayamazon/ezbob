@@ -167,6 +167,14 @@
 		public virtual VariableValue SalesForceEnvironment {
 			get { return this[Variables.SalesForceEnvironment]; }
 		}
+
+		public virtual VariableValue SalesForceNumberOfRetries {
+			get { return this[Variables.SalesForceNumberOfRetries]; }
+		}
+
+		public virtual VariableValue SalesForceRetryWaitSeconds {
+			get { return this[Variables.SalesForceRetryWaitSeconds]; }
+		}
 		
 		public virtual VariableValue SessionTimeout {
 			get { return this[Variables.SessionTimeout]; }
@@ -208,6 +216,14 @@
 			get { return this[Variables.SmsTestModeEnabled]; }
 		}
 
+		public virtual VariableValue SmsApprovedUserEnabled {
+			get { return this[Variables.SmsApprovedUserEnabled]; }
+		}
+
+		public virtual VariableValue SmsApprovedUserTemplate {
+			get { return this[Variables.SmsApprovedUserTemplate]; }
+		}
+		
 		public virtual VariableValue SpreadSetupFeeCharge {
 			get { return this[Variables.SpreadSetupFeeCharge]; }
 		}
@@ -230,6 +246,10 @@
 
 		public virtual VariableValue TeraPeakUrl {
 			get { return this[Variables.TeraPeakUrl]; }
+		}
+
+		public virtual VariableValue TopUpSendingEmail {
+			get { return this[Variables.TopUpSendingEmail]; }
 		}
 
 		public virtual VariableValue TotalAnnualTurnover {
@@ -268,6 +288,10 @@
 			get { return this[Variables.TrustPilotBccMail]; }
 		}
 
+		public virtual VariableValue TrustPilotBccMailEverline {
+			get { return this[Variables.TrustPilotBccMailEverline]; }
+		}
+
 		public virtual VariableValue TrustPilotReviewEnabled {
 			get { return this[Variables.TrustPilotReviewEnabled]; }
 		}
@@ -282,6 +306,10 @@
 
 		public virtual VariableValue TwilioSendingNumber {
 			get { return this[Variables.TwilioSendingNumber]; }
+		}
+
+		public virtual VariableValue TwilioSendingNumberIsrael {
+			get { return this[Variables.TwilioSendingNumberIsrael]; }
 		}
 	}
 }

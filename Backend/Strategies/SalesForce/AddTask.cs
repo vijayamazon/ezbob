@@ -29,8 +29,10 @@
 
 		    this.taskModel.Email = this.taskModel.Email.ToLower();
 
-		    this.salesForce.CreateTask(this.taskModel);
-
+			SalesForceRetier.Execute(ConfigManager.CurrentValues.Instance.SalesForceNumberOfRetries, ConfigManager.CurrentValues.Instance.SalesForceRetryWaitSeconds, this.salesForce, () => {
+				this.salesForce.CreateTask(this.taskModel);
+			});
+			
             if (this.salesForce.HasError) {
                 DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,
                     new QueryParameter("Now", DateTime.UtcNow),

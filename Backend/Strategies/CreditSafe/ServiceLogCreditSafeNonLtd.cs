@@ -82,7 +82,7 @@
                 }//if
                 else
                 {
-                    Log.Alert("CreditSafeNonLtd Targeting failed for customer {0}", customerId);
+                    Log.Info("CreditSafeNonLtd Targeting failed for customer {0}", customerId);
                 }//else
             }//try
             catch (Exception ex)

@@ -69,6 +69,7 @@
     <Compile Include="ProcessHistory\AutoApproval\AvailableFundsOverdraft.cs" />
     <Compile Include="ProcessHistory\AutoApproval\CompanyIsDissolved.cs" />
     <Compile Include="ProcessHistory\AutoApproval\Complete.cs" />
+    <Compile Include="ProcessHistory\AutoRejection\SameApprovalChance.cs" />
     <Compile Include="ProcessHistory\ProcessCheckpoints.cs" />
     <Compile Include="Turnover\ACalculatedTurnoverBase.cs" />
     <Compile Include="Turnover\AOneMonthValue.cs" />
@@ -110,7 +111,7 @@
     <Compile Include="OfferCalculation\PricingCalculator.cs" />
     <Compile Include="ProcessHistory\ARangeTrace.cs" />
     <Compile Include="ProcessHistory\AutoApproval\AmlCheck.cs" />
-    <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRangle.cs" />
+    <Compile Include="ProcessHistory\AutoApproval\AmountOutOfRange.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ATurnoverAge.cs" />
     <Compile Include="ProcessHistory\AutoApproval\ThreeMonthsTurnover.cs" />
     <Compile Include="ProcessHistory\AutoApproval\OnlineThreeMonthsTurnover.cs" />

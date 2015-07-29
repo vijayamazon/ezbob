@@ -74,7 +74,7 @@
             if (changeEmail) {
                 UserChangeEmail uceInstance;
 
-                ActionMetaData oMetaData = ExecuteSync(out uceInstance, customerID, userID, customerID, string.Format("{0}_Frozen", email));
+                ActionMetaData oMetaData = ExecuteSync(out uceInstance, customerID, userID, customerID, string.Format("{0}frozen", email));
 
                 return new StringActionResult {
                     MetaData = oMetaData,

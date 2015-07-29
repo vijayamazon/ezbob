@@ -49,9 +49,11 @@
 
             model.Email = model.Email.ToLower();
 
-			this.salesForce.CreateUpdateLeadAccount(model);
+			SalesForceRetier.Execute(ConfigManager.CurrentValues.Instance.SalesForceNumberOfRetries, ConfigManager.CurrentValues.Instance.SalesForceRetryWaitSeconds, this.salesForce, () => {
+				this.salesForce.CreateUpdateLeadAccount(model); 
+			});
 
-            if (this.salesForce.HasError) {
+			if (this.salesForce.HasError) {
                 DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,
                     new QueryParameter("Now", DateTime.UtcNow),
                     new QueryParameter("CustomerID", this.customerID),

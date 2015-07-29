@@ -1,6 +1,6 @@
 ﻿@model dynamic
 
-<div id="esignature-list-container">
+<div class="col-md-12" id="esignature-list-container" >
 	<table id="esignature-list" class="table centered box">
 		<thead class="box-title">
 			<tr>
@@ -23,7 +23,7 @@
 	</table>
 </div>
 
-<div id="esigners-list-container" class="hide">
+<div class="col-md-12" id="esigners-list-container" class="hide">
 	<table id="esigners-list" class="table centered box">
 		<thead class="box-title">
 			<tr>
@@ -51,25 +51,30 @@
 		</tbody>
 	</table>
 	<div class="center buttons">
-		<button class="btn btn-mini btn-primary add-director" id="add-director-from-esign"><i class="fa fa-users" /> Add director/shareholder</button>
+		<button class="btn btn-mini btn-primary add-director" id="add-director-from-esign"><i class="fa fa-users"></i>  Add director/shareholder</button>
 		<input type="checkbox" class="initially-checked document-type" id="esign-board-resolution"><label for="esign-board-resolution">Board resolution</label>
 		<input type="checkbox" class="initially-checked document-type" id="esign-personal-guarantee"><label for="esign-personal-guarantee">Personal guarantee</label>
-		<button class="do-send btn btn-primary"><i class="fa fa-send-o"/> Send</button>
-		<button class="cancel-send btn btn-primary"><i class="fa fa-undo"/> Cancel</button>
+		<button class="do-send btn btn-primary"><i class="fa fa-send-o"></i> Send</button>
+		<button class="cancel-send btn btn-primary"><i class="fa fa-undo"></i> Cancel</button>
 	</div>
 
 	<div class="alert duplicate-director-detected" style="display: none;">You are going to add a duplicate director.</div>
-	<div class=add-director-container></div>
+	
+	<div class="box add-director-container-wrapper" style="display: none;">
+		<div class="box-content">
+			<div class="add-director-container"></div>
+		</div>
+	</div>
 </div>
 
-<div class=templates style="display: none;">
+<div class="templates col-md-12" style="display: none;">
 	<button class="esign-send-another btn btn-link">List of directors</button>
 	<button class="esign-send-another btn btn-link">Add / Edit directors</button>
-	<button class="esign-send-another btn btn-primary btn-sm"><i class="fa fa-send-o" /> Send documents</button>
+	<button class="esign-send-another btn btn-primary btn-sm"><i class="fa fa-send-o"></i> Send documents</button>
 
-	<button class="esign-poll-status btn btn-primary btn-sm" title="Poll document status"><i class="fa fa-refresh" /> Reload</button>
+	<button class="esign-poll-status btn btn-primary btn-sm" title="Poll document status"><i class="fa fa-refresh"></i>  Reload</button>
 
-	<button class="download-signed-document btn btn-primary btn-sm" title="Download signed document"><i class="fa fa-download" /> Download</button>
+	<button class="download-signed-document btn btn-primary btn-sm" title="Download signed document"><i class="fa fa-download"></i> Download</button>
 
-	<button class="toggle-signers btn btn-primary btn-sm" title="Show/hide signers"><i class="fa fa-navicon" /></button>
+	<button class="toggle-signers btn btn-primary btn-sm" title="Show/hide signers"><i class="fa fa-navicon"></i></button>
 </div>

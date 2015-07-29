@@ -98,6 +98,8 @@ namespace EzBob.Models {
 
 		public bool HasRollovers { get; set; }
 
+		public bool? HasApprovalChance { get; set; }
+
 		public int Id { get; set; }
         
         public string RefNumber { get; set; }

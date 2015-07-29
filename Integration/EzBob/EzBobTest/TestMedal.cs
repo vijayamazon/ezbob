@@ -34,17 +34,6 @@ namespace EzBobTest {
 			stra.Execute();
 		} // TestMaamMedalAndPricing
 
-
-		[Test]
-		public void Test_TurnoverForRejectThrougtMarketPlaceTurnoverView() {
-			int customerId = 415; // 9582; //6500; //  5935; // 6500; // 9582; //10331;
-			DateTime calculationTime = new DateTime(2015, 02, 02);
-			Agent agent = new Agent(customerId, this.m_oDB, this.m_oLog);
-			agent.Init();
-			agent.CalculateTurnoverForReject(customerId, calculationTime);
-		}
-
-
 		[Test]
 		public void Test_TurnoverForMedalTest_NH_AV() {
 

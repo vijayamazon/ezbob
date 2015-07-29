@@ -15,6 +15,7 @@
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
 			return new ReRejection(
 				oRow.CustomerId,
+				null,
 				DB,
 				Log
 			).MakeAndVerifyDecision(Tag);

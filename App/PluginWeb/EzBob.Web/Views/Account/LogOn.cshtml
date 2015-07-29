@@ -1,4 +1,6 @@
-﻿@using EzBob.Web.Infrastructure
+﻿@using System
+@using System.Collections.Generic
+@using EzBob.Web.Infrastructure
 @model EzBob.Web.Models.LogOnModel
 
 @{
@@ -51,7 +53,7 @@
                     <div class="controls">
                         <label class="attardi-input">
                             <span>Email address</span>
-                            <input type="email" name="UserName" id="UserName" class="form_field login-form-user-name" autocorrect="off" autocapitalize="off" value="" ui-event-control-id="login:user_name" />
+                            <input type="email" name="UserName" id="UserName" class="form_field login-form-user-name" autocorrect="off" autocapitalize="off" value="" ui-event-control-id="login:user_name" maxlength="128" />
                             <img id="UserNameImage" class="field_status required"/>
                         </label>
                     </div>

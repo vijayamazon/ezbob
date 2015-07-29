@@ -129,29 +129,5 @@ namespace EzBobTest {
 
 		    Assert.AreEqual(true, passed);
 		} // TestOfferDualCalc
-
-        [Test]
-        public void TestAutoApprove() {
-            AutoDecisionResponse response = new AutoDecisionResponse();
-            new Approval(
-                    29,
-                    10000,
-                    Medal.Silver,
-                    AutomationCalculator.Common.MedalType.Limited,
-                    AutomationCalculator.Common.TurnoverType.Online,
-                    m_oDB,
-                    m_oLog
-                ).Init().MakeDecision(response, null);
-        }
-
-		private class MedalOffer {
-			public MedalOffer(MedalResult m, OfferDualCalculator o) {
-				Medal = m;
-				Offer = o;
-			} // constructor
-
-			public MedalResult Medal { get; private set; }
-			public OfferDualCalculator Offer { get; private set; }
-		} // MedalOffer
 	} // class TestOffer
 } // namespace

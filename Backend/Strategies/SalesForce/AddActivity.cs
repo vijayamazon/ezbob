@@ -34,9 +34,10 @@
 				Thread.Sleep(5000);
 			}
 
-
-            this.salesForce.CreateActivity(this.activityModel);
-
+			SalesForceRetier.Execute(ConfigManager.CurrentValues.Instance.SalesForceNumberOfRetries, ConfigManager.CurrentValues.Instance.SalesForceRetryWaitSeconds, this.salesForce, () => {
+				this.salesForce.CreateActivity(this.activityModel);
+			});
+            
             if (this.salesForce.HasError) {
                 DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,
                     new QueryParameter("Now", DateTime.UtcNow),

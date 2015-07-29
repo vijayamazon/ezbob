@@ -94,9 +94,9 @@
 				}
 
 				// Update customer status
-				CustomerStatuses prevStatus = customer.CollectionStatus.CurrentStatus;
-				customer.CollectionStatus.CurrentStatus = this.customerStatusesRepository.Get((int)CollectionStatusNames.Default);
-				customer.CollectionStatus.CollectionDescription = string.Format("Triggered via loan options:{0}", triggeringLoan != null ? triggeringLoan.RefNumber : "unknown");
+				CustomerStatuses prevStatus = customer.CollectionStatus;
+				customer.CollectionStatus = this.customerStatusesRepository.Get((int)CollectionStatusNames.Default);
+				customer.CollectionDescription = string.Format("Triggered via loan options:{0}", triggeringLoan != null ? triggeringLoan.RefNumber : "unknown");
 
 				// Update status history table
 				var newEntry = new CustomerStatusHistory {
@@ -104,7 +104,7 @@
 					Timestamp = DateTime.UtcNow,
 					CustomerId = customer.Id,
 					PreviousStatus = prevStatus,
-					NewStatus = customer.CollectionStatus.CurrentStatus,
+					NewStatus = customer.CollectionStatus,
 				};
 				this.customerStatusHistoryRepository.SaveOrUpdate(newEntry);
 			}

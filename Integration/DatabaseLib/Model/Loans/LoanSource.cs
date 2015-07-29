@@ -1,19 +1,19 @@
-﻿using System.Linq;
-using ApplicationMng.Repository;
-using EZBob.DatabaseLib.Model.Database.Loans;
-using FluentNHibernate.Mapping;
-using NHibernate;
+﻿namespace EZBob.DatabaseLib.Model.Database.Loans {
+	using System.Linq;
+	using ApplicationMng.Repository;
+	using Ezbob.Database;
+	using NHibernate;
 
-namespace EZBob.DatabaseLib.Model.Database.Loans {
 	public enum LoanSourceName {
 		Standard = 1,
 		EU = 2,
 		COSME = 3,
-	}
+	} // enum LoanSourceName
 
 	public class LoanSource {
-
+		[FieldName("LoanSourceID")]
 		public virtual int ID { get; set; }
+		[FieldName("LoanSourceName")]
 		public virtual string Name { get; set; }
 		public virtual decimal? MaxInterest { get; set; }
 		public virtual int? DefaultRepaymentPeriod { get; set; }
@@ -22,7 +22,6 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 		public virtual decimal? MaxAnnualTurnover { get; set; }
 		public virtual bool IsDefault { get; set; }
 		public virtual int? AlertOnCustomerReasonType { get; set; }
-
 	} // class LoanSource
 
 	public interface ILoanSourceRepository : IRepository<LoanSource> {
@@ -33,18 +32,19 @@ namespace EZBob.DatabaseLib.Model.Database.Loans {
 	public class LoanSourceRepository : NHibernateRepositoryBase<LoanSource>, ILoanSourceRepository {
 		public LoanSourceRepository(ISession session) : base(session) {} // constructor
 
-		public LoanSource GetDefault() { return GetAll().FirstOrDefault(p => p.IsDefault) ?? GetAll().Single(p => p.ID == 1); }
+		public LoanSource GetDefault() {
+			return GetAll().FirstOrDefault(p => p.IsDefault) ?? GetAll().Single(p => p.ID == 1);
+		} // GetDefault
 
 		public LoanSource GetByName(string name) {
 			return GetAll().FirstOrDefault(x => x.Name == name);
-		}
-
-// GetDefault
+		} // GetByName
 	} // class LoanSourceRepository
-
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
+	using EZBob.DatabaseLib.Model.Database.Loans;
+	using FluentNHibernate.Mapping;
 
 	public sealed class LoanSourceMap : ClassMap<LoanSource> {
 		public LoanSourceMap() {
@@ -62,5 +62,4 @@ namespace EZBob.DatabaseLib.Model.Database.Mapping {
 			Map(x => x.AlertOnCustomerReasonType);
 		} // constructor
 	} // class LoanSourceMap
-
 } // namespace EZBob.DatabaseLib.Model.Database.Mapping

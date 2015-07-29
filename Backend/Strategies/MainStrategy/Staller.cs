@@ -5,13 +5,14 @@
 	using System.Collections.Generic;
 	using System.Threading;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 
 	public class Staller {
 		public Staller(int customerId, StrategiesMailer mailer) {
-			this.customerId = customerId;
-			this.mailer = mailer;
+			this.marketplaceUpdateStatus = null;
 
-			this.db = Library.Instance.DB;
+			this.customerID = customerId;
+			this.mailer = mailer;
 
 			this.totalTimeToWaitForMarketplacesUpdate = CurrentValues.Instance.TotalTimeToWaitForMarketplacesUpdate;
 			this.intervalWaitForMarketplacesUpdate = CurrentValues.Instance.IntervalWaitForMarketplacesUpdate;
@@ -25,10 +26,10 @@
 			this.totalTimeToWaitForAmlCheck = CurrentValues.Instance.TotalTimeToWaitForAmlCheck;
 			this.intervalWaitForAmlCheck = CurrentValues.Instance.IntervalWaitForAmlCheck;
 
-			SafeReader sr = this.db.GetFirst(
+			SafeReader sr = DB.GetFirst(
 				"GetMainStrategyStallerData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId)
+				new QueryParameter("CustomerId", this.customerID)
 			);
 
 			if (!sr.IsEmpty) {
@@ -66,31 +67,44 @@
 				this.mailer.Send(
 					"Mandrill - No Information about shops", new Dictionary<string, string> {
 						{"UserEmail", this.customerEmail},
-						{"CustomerID", this.customerId.ToString(Library.Instance.Culture)},
+						{"CustomerID", this.customerID.ToString(Library.Instance.Culture)},
 						{"ApplicationID", this.customerEmail}
 					}
 				);
 			} // if
 		} // Stall
 
+		internal Staller SetMarketplaceUpdateStatus(MarketplaceUpdateStatus mpus) {
+			this.marketplaceUpdateStatus = mpus;
+			return this;
+		} // SetMarketplaceUpdateStatus
+
 		private bool GetIsMarketPlacesUpdated() {
+			if (this.marketplaceUpdateStatus != null) {
+				if (this.marketplaceUpdateStatus.HasPending) {
+					Log.Debug("Customer {0}, mp are NOT up to date according to in-memory status.", this.customerID);
+					return false;
+				} // if
+			} // if
+
 			bool result = true;
 
-			this.db.ForEachRowSafe(
-				(sr, rowsetStart) => {
+			DB.ForEachRowSafe(
+				sr => {
+					int mpID = sr["Id"];
 					string lastStatus = sr["CurrentStatus"];
 
-					if (lastStatus == "In progress") {
-						result = false;
-						return ActionResult.SkipAll;
-					} // if
+					Log.Debug("Customer {0}, mp {1} status: {2}.", this.customerID, mpID, lastStatus);
 
-					return ActionResult.Continue;
+					if (lastStatus == "In progress")
+						result = false;
 				},
 				"GetAllLastMarketplaceStatuses",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId)
+				new QueryParameter("CustomerId", this.customerID)
 			);
+
+			Log.Debug("Customer {0}, mp are up to date: {1}.", this.customerID, result ? "yes" : "no");
 
 			return result;
 		} // GetIsMarketPlacesUpdated
@@ -98,15 +112,15 @@
 		private void WaitForExperianConsumerCheck() {
 			var directors = new List<int?> { null }; // The "null" is to wait for customer data.
 
-			if (typeOfBusiness != "Entrepreneur") {
-				this.db.ForEachRowSafe(
+			if (this.typeOfBusiness != "Entrepreneur") {
+				DB.ForEachRowSafe(
 					sr => {
 						if (!string.IsNullOrEmpty(sr["DirName"]) && !string.IsNullOrEmpty(sr["DirSurname"]))
 							directors.Add(sr["DirId"]);
 					},
 					"GetCustomerDirectorsForConsumerCheck",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", this.customerId)
+					new QueryParameter("CustomerId", this.customerID)
 				);
 			} // if
 
@@ -122,29 +136,29 @@
 		} // WaitForExperianConsumerCheck
 
 		private bool GetIsExperianCompanyUpdated() {
-			return db.ExecuteScalar<bool>(
+			return DB.ExecuteScalar<bool>(
 				"GetIsCompanyDataUpdated",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId),
+				new QueryParameter("CustomerId", this.customerID),
 				new QueryParameter("Today", DateTime.Today)
 			);
 		} // GetIsExperianCompanyUpdated
 
 		private bool GetIsExperianConsumerUpdated(int? directorId) {
-			return db.ExecuteScalar<bool>(
+			return DB.ExecuteScalar<bool>(
 				"GetIsConsumerDataUpdated",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId),
+				new QueryParameter("CustomerId", this.customerID),
 				new QueryParameter("DirectorId", directorId),
 				new QueryParameter("Today", DateTime.Today)
 			);
 		} // GetIsExperianConsumerUpdated
 
 		private bool GetIsAmlUpdated() {
-			return db.ExecuteScalar<bool>(
+			return DB.ExecuteScalar<bool>(
 				"GetIsAmlUpdated",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId)
+				new QueryParameter("CustomerId", this.customerID)
 			);
 		} // GetIsAmlUpdated
 
@@ -162,9 +176,16 @@
 			} // while
 		} // WaitForUpdateToFinish
 
+		private static ASafeLog Log {
+			get { return Library.Instance.Log; }
+		} // Log
+
+		private static AConnection DB {
+			get { return Library.Instance.DB; }
+		} // DB
+
 		private readonly StrategiesMailer mailer;
-		private readonly int customerId;
-		private readonly AConnection db;
+		private readonly int customerID;
 
 		private readonly int totalTimeToWaitForMarketplacesUpdate;
 		private readonly int intervalWaitForMarketplacesUpdate;
@@ -179,5 +200,7 @@
 		private readonly bool wasMainStrategyExecutedBefore;
 		private readonly string typeOfBusiness;
 		private readonly string customerEmail;
+
+		private MarketplaceUpdateStatus marketplaceUpdateStatus;
 	} // class Staller
 } // namespace

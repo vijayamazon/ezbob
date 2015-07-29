@@ -24,7 +24,9 @@
 		    
             this.opportunityModel.Email = this.opportunityModel.Email.ToLower();
 
-            this.salesForce.CreateOpportunity(this.opportunityModel);
+			SalesForceRetier.Execute(ConfigManager.CurrentValues.Instance.SalesForceNumberOfRetries, ConfigManager.CurrentValues.Instance.SalesForceRetryWaitSeconds, this.salesForce, () => {
+				this.salesForce.CreateOpportunity(this.opportunityModel);
+			});
 
             if (this.salesForce.HasError) {
                 DB.ExecuteNonQuery("SalesForceSaveError", CommandSpecies.StoredProcedure,

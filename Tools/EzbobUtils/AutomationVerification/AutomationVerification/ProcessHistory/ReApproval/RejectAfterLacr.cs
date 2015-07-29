@@ -3,10 +3,10 @@ namespace AutomationCalculator.ProcessHistory.ReApproval {
 		public RejectAfterLacr(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
 		} // constructor
 
-		public int LacrID { get; private set; }
+		public long LacrID { get; private set; }
 		public int RejectID { get; private set; }
 
-		public void Init(int nRejectID, int nLacrID) {
+		public void Init(int nRejectID, long nLacrID) {
 			LacrID = nLacrID;
 			RejectID = nRejectID;
 

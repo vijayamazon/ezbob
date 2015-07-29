@@ -36,7 +36,8 @@
 		public void Init() {
 			//prod
 			//this.twilioClient = new TwilioRestClient("ACcc682df6341371ee27ada6858025490b", "fab0b8bd342443ff44497273b4ba2aa1");
-			//this.fromPhone = "+441301272000"; //uk only phone number
+			//this.fromPhone = "+441301272000"; //UK only phone number
+			//this.fromPhone = "+972526285470"; //Israel only phone number
 			
 			//sandbox
 			this.twilioClient = new TwilioRestClient("AC763a10874713c9d2f502aad30417073f", "29b8830923bbc679f8a501851916e3b8");

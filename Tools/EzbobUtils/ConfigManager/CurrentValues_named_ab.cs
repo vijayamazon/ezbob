@@ -455,6 +455,10 @@
 		public virtual VariableValue AlibabaClientEnvironment {
 			get { return this[Variables.AlibabaClientEnvironment]; }
 		}
+		public virtual VariableValue EzbobTechMailTo {
+			get { return this[Variables.EzbobTechMailTo]; }
+		}
+		
 
 		public virtual VariableValue NL_AgreementPdfLoanPath1 {
 			get { return this[Variables.NL_AgreementPdfLoanPath1]; }

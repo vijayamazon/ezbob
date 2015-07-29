@@ -5,14 +5,29 @@
 
 	/// <summary>
 	/// Rejection trail contains list of all the rejection steps (traces),
-	/// the rejection input model and determines weather customer should be auto rejected or not and based on which trace the decision was made
+	/// the rejection input model and determines weather customer should be auto rejected or not
+	/// and based on which trace the decision was made.
 	/// </summary>
 	public class RejectionTrail : ATrail {
 		/// <summary>
 		/// Initial state is no decision is made (if in the end still no decision - then no auto reject is done
 		/// </summary>
-		public RejectionTrail(int nCustomerID, ASafeLog oLog, string toExplanationMailAddress = null, string fromEmailAddress = null, string fromEmailName = null)
-			: base(nCustomerID, DecisionStatus.Dunno, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName) {
+		public RejectionTrail(
+			int nCustomerID,
+			long? cashRequestID,
+			ASafeLog oLog,
+			string toExplanationMailAddress = null,
+			string fromEmailAddress = null,
+			string fromEmailName = null
+		) : base(
+			nCustomerID,
+			cashRequestID,
+			DecisionStatus.Dunno,
+			oLog,
+			toExplanationMailAddress,
+			fromEmailAddress,
+			fromEmailName
+		) {
 			MyInputData = new RejectionInputData();
 		} // constructor
 

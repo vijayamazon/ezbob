@@ -12,12 +12,23 @@
 	public class TestSalesForce {
 		protected readonly static ILog Log = LogManager.GetLogger(typeof (TestSalesForce));
 
+		private ISalesForceAppClient client;
+		
 		[SetUp]
 		public void Init() {
 			log4net.Config.XmlConfigurator.Configure();
+			ObjectFactory.Configure(x => {
+				x.For<ISalesForceAppClient>().Use<SalesForceApiClient>();
+			});
+
+			this.client = GetSandboxDevClient();
+			//this.client = GetSandboxClient();
+			//this.client = GetProdClient();
+			//this.client = GetFakeClient();
 		}
 
 		[Test]
+		[Ignore]
 		public void TestRequestsToJson() {
 			Log.Debug("call CreateUpdateLeadAccount");
 			LeadAccountModel model = new LeadAccountModel {
@@ -124,36 +135,47 @@
 			Log.Debug(rModel.ToJsonExtension());
 		}
 
-		private ISalesForceAppClient GetClient(){
-			ObjectFactory.Configure(x => {
-				x.For<ISalesForceAppClient>().Use<SalesForceApiClient>();
-			});
+		private ISalesForceAppClient GetSandboxDevClient() {
+			//Sandbox dev
+			return ObjectFactory
+				.With("userName").EqualTo("techapi@ezbob.com.devsandbox")
+				.With("password").EqualTo("Ezca$h123")
+				.With("token").EqualTo("HfEt5jFnAuyqo2vs5Da6ZK9q")
+				.With("environment").EqualTo("Sandbox")
+				.GetInstance<ISalesForceAppClient>();
+		}
 
-            //Sandbox
-            ISalesForceAppClient client = ObjectFactory
-                .With("userName").EqualTo("yarons@ezbob.com.sandbox")
+		private ISalesForceAppClient GetSandboxClient() {
+			//Sandbox
+			return ObjectFactory
+				.With("userName").EqualTo("yarons@ezbob.com.sandbox")
 				.With("password").EqualTo("Ezca$h123")
 				.With("token").EqualTo("H3pfFEE09tKxp0vTCoK0mfiS")
-                .With("environment").EqualTo("Sandbox")
-                .GetInstance<ISalesForceAppClient>();
+				.With("environment").EqualTo("Sandbox")
+				.GetInstance<ISalesForceAppClient>();
+		}
 
+		private ISalesForceAppClient GetProdClient() {
             //Production
-            //ISalesForceAppClient client = ObjectFactory
-            //    .With("userName").EqualTo("techapi@ezbob.com")
-            //    .With("password").EqualTo("Ezca$h123")
-            //    .With("token").EqualTo("qCgy7jIz8PwQtIn3bwxuBv9h")
-            //    .With("environment").EqualTo("Production")
-            //    .GetInstance<ISalesForceAppClient>();
-            
-            return client;
+			return ObjectFactory
+                .With("userName").EqualTo("techapi@ezbob.com")
+                .With("password").EqualTo("Ezca$h123")
+                .With("token").EqualTo("qCgy7jIz8PwQtIn3bwxuBv9h")
+                .With("environment").EqualTo("Production")
+                .GetInstance<ISalesForceAppClient>();
+		}
+
+		private ISalesForceAppClient GetFakeClient() {
+			ObjectFactory.Configure(x => {
+				x.For<ISalesForceAppClient>().Use<FakeApiClient>();
+			});
+			return new FakeApiClient();
 		}
 
 		[Test]
 		public void TestLead() {
-			ISalesForceAppClient client = GetClient();
-
 			LeadAccountModel model = new LeadAccountModel {
-				Email = "a@b.c",
+				Email = "testdev1@b.c",
 				AddressCountry = "Country",
 				AddressCounty = "County",
 				AddressLine1 = "Line1",
@@ -167,7 +189,7 @@
 				CompanyNumber = "056456446",
 				DateOfBirth = new DateTime(1966, 12, 11),
 				EzbobSource = "EzbobSource",
-				EzbobStatus = "Status",
+				EzbobStatus = "Wizard complete",
 				Gender = "M",
 				Industry = "Building",
 				IsBroker = false,
@@ -175,71 +197,117 @@
 				PhoneNumber = "0564564654",
 				RegistrationDate = new DateTime(2015, 01, 27),
 				RequestedLoanAmount = 10000,
-                Origin = "ezbob"
+                Origin = "ezbob",
+				CustomerID = 1111.ToString(),
+				IsTest = true,
+				NumOfLoans = 2
 			};
 
-			client.CreateUpdateLeadAccount(model);
-
+			this.client.CreateUpdateLeadAccount(model);
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestTask() {
-			ISalesForceAppClient client = GetClient();
+			var now = DateTime.UtcNow;
 			var tModel = new TaskModel {
 
-                Email = "stasd+vip221@ezbob.com",
-				CreateDate = new DateTime(2015, 01, 27),
-				DueDate = new DateTime(2015, 01, 29),
+				Email = "testdev1@b.c",
+				CreateDate = now,
+				DueDate = now.AddDays(3),
 				Originator = "Originator",
 				Status = "Status",
 				Subject = "Subject",
                 Description = "Description"
 			};
 
-			client.CreateTask(tModel);
+			this.client.CreateTask(tModel);
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestActivity() {
-			ISalesForceAppClient client = GetClient();
+			var now = DateTime.UtcNow;
 			var aModel = new ActivityModel {
 
-				Email = "a@b.c",
+				Email = "testdev1@b.c",
 				Description = "Description",
 				Type = "Mail",
 				Originator = "Originator",
-				StartDate = new DateTime(2015, 01, 27),
-				EndDate = new DateTime(2015, 01, 28),
+				StartDate = now,
+				EndDate = now,
 				IsOpportunity = false,
 			};
 
-			client.CreateActivity(aModel);
+			this.client.CreateActivity(aModel);
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestChangeEmail() {
-			ISalesForceAppClient client = GetClient();
-			client.ChangeEmail("a@b.c", "b@a.c");
+			this.client.ChangeEmail("testdev1@b.c", "testdev2@b.c");
+			Assert.IsNullOrEmpty(this.client.Error);
 		}
 
 		[Test]
 		public void TestGetActivity() {
-			ISalesForceAppClient client = GetClient();
+
 			//var activity = client.GetActivity("alexbo+073@ezbob.com_Frozen");
 			//client.GetActivity("stasdes@ezbob.com");
-			var activity = client.GetActivity("tanyag+t3793_1@ezbob.com");
+			var activity = this.client.GetActivity("testdev1@b.c");
 			Assert.IsNotNull(activity);
-			Assert.IsNullOrEmpty(client.Error);
+			Assert.IsNullOrEmpty(this.client.Error);
 			Assert.IsNullOrEmpty(activity.Error);
 			Assert.Greater(activity.Activities.Count(), 0);
 		}
 
 		[Test]
+		public void TestUpdateCloseOpportunity() {
+			var now = DateTime.UtcNow;
+			/*
+			this.client.UpdateOpportunity(new OpportunityModel() {
+				Email = "testdev1@b.c",
+				ApprovedAmount = 100,
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				Stage = OpportunityStage.s90.DescriptionAttr(),
+			});
+			*/
+			this.client.UpdateOpportunity(new OpportunityModel() {
+				Email = "testdev1@b.c",
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				DealCloseType = OpportunityDealCloseReason.Lost.DescriptionAttr(),
+ 				DealLostReason = "test lost",
+				CloseDate = now
+			});
+
+			Assert.IsNullOrEmpty(this.client.Error);
+		}
+
+		[Test]
+		public void TestCreateOpportunity() {
+			var now = DateTime.UtcNow;
+			
+			this.client.CreateOpportunity(new OpportunityModel() {
+				Name = "NewOpportunity",
+				Email = "testdev1@b.c",
+				CreateDate = now,
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				Stage = OpportunityStage.s5.DescriptionAttr(),
+				Type = OpportunityType.Resell.DescriptionAttr()
+			});
+
+			Assert.IsNullOrEmpty(this.client.Error);
+		}
+
+		[Test]
 		public void TestFakeGetActivity() {
-			ISalesForceAppClient client = new FakeApiClient();
-			var activity = client.GetActivity("");
+			ISalesForceAppClient fakeClient = new FakeApiClient();
+			var activity = fakeClient.GetActivity("");
 			Assert.IsNotNull(activity);
-			Assert.IsNullOrEmpty(client.Error);
+			Assert.IsNullOrEmpty(fakeClient.Error);
 			Assert.IsNullOrEmpty(activity.Error);
 			Assert.Greater(activity.Activities.Count(), 0);
 		}

@@ -101,24 +101,26 @@ EzBob.CompanyFilesAccountInfoView = Backbone.Marionette.ItemView.extend({
 			return false;
 
 		BlockUi('on');
+		var self = this;
 
 		var xhr = $.post(window.gRootPath + 'CompanyFilesMarketPlaces/Connect', {
 			customerId: this.customerId
 		});
 
 		xhr.done(function(res) {
-			if (res.error !== void 0)
-				return EzBob.App.trigger('error', 'Failed to upload company files');
-			else
-				return EzBob.App.trigger('info', 'Company files uploaded successfully');
+			if (res.error !== void 0) {
+				EzBob.App.trigger('error', 'Failed to upload company files');
+			} else {
+				EzBob.App.trigger('info', 'Company files uploaded successfully');
+			}
+
+			self.trigger('completed');
+			self.trigger('back');
 		});
 
 		xhr.always(function() {
-			return BlockUi('off');
+			BlockUi('off');
 		});
-
-		this.trigger('completed');
-		this.trigger('back');
 
 		return false;
 	}, // connect

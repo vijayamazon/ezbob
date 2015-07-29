@@ -332,7 +332,6 @@
         Html.RenderPartial("StoreInfoMain");
         Html.RenderPartial("InviteFriendTemplate");
         Html.RenderPartial("CompanyDirectorsTemplate");
-        Html.RenderPartial("EditExperianDirectorData");
         Html.RenderPartial("PerksTemplate");
         Html.RenderPartial("../Shared/Profile/_PayPointCardSelectViewTemplate");
         Html.RenderPartial("Shops/EKMAccoutInfoTemplate");
@@ -341,7 +340,10 @@
         Html.RenderPartial("Shops/CGAccountInfoTemplate");
         Html.RenderPartial("Shops/HMRCAccountInfoTemplate");
         Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");
+		Html.RenderPartial("../Shared/Profile/ProcessingAutomationPopupTemplate");
     }
+	
+	@EditExperianDirectorData.Render(this)
 
     <script type="text/javascript">
         EzBob.Config.GetCashSliderStep = @currVals.GetCashSliderStep.Value;
@@ -356,7 +358,7 @@
         EzBob.Config.CaptchaMode = '@currVals.CaptchaMode.Value';
 
         EzBob.Config.EchoSignEnabledCustomer = @(currVals.EchoSignEnabledCustomer ? "true" : "false");
-
+		EzBob.Config.WizardAutomationTimeout = @currVals.WizardAutomationTimeout.Value;
         @{
 			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
 			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");
@@ -381,13 +383,6 @@
 
             var finishedWizard = @wizardComplete;
 
-            if (finishedWizard === true) {
-                dataLayer.push({'event': 'finished-wizard'});
-                var oDialog = $('#thankyou_help');
-                if (oDialog.length > 0)
-                    $.colorbox({ inline: true, transition: 'elastic',href: oDialog, open: true, show: true, width: 600, scrolling: false });
-            }
-
             var options = new EzBob.CustomerModel(@Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer)));
             options.createdInProfile = true;
             options.isFinishedWizard = finishedWizard;
@@ -409,42 +404,3 @@
 
     @BundleHelper.RenderProfileJs()
 }
-
-<div class="hide">
-    <div id="thankyou_help" class="help_window">
-        <h2 class="form_section">Your application is complete!</h2>
-        @if (Model.WhiteLabel != null && Model.WhiteLabel.Id != 0) {
-            @Html.Raw(Model.WhiteLabel.FinishWizardText)
-        } else {
-            if (customer.IsOffline.HasValue && customer.IsOffline.Value) {
-                <div class="offline">
-                    <p>Your application is now being processed and you should be receiving an email with an offer in the next business day.</p>
-                    <p>
-                        In case you don't receive a funding decision from us in the next 24 hours please check your spam or junk folder.
-                        If you still have not received an email, please contact our customer care department by phone: @ViewBag.PhoneNumber or by emailing:
-                        <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a>.
-                    </p>
-                    <p>If you have additional accounts we recommend that you link them to @ViewBag.CustomerOrigin.Name, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-                </div>
-            } else {
-                <div class="notoffline">
-            <p>Your application is now being processed and you should be receiving an email with an offer within the next 30 minutes. Please note that in certain cases the decision may be delayed for up to twelve hours.</p>
-            <p>
-                In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
-                If you still have not received an email, please contact our customer care department by phone: @ViewBag.PhoneNumber or by emailing: 
-                <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a>.
-            </p>
-            <p>If you have additional accounts we recommend that you link them to @ViewBag.CustomerOrigin.Name, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-        </div>
-            }
-                        <p>
-                            Thank You,<br>
-                            The <span class="bold">@ViewBag.CustomerOrigin.Name</span> Team
-                        </p>
-                        }
-                        <div class="alignright" style="padding: 0 10px 0 0;">
-                            <button onclick="javascript:$.colorbox.close(); return false;" class="button btn-green pull-right" ui-event-control-id="profile:thank-you-popup">Continue</button>
-                        </div>
-                        <div class="clear"></div>
-                    </div>
-                </div>

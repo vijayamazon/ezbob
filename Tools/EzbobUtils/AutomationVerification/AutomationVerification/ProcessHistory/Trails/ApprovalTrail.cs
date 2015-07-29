@@ -5,12 +5,22 @@
 	public class ApprovalTrail : ATrail {
 		public ApprovalTrail(
 			int nCustomerID,
+			long? cashRequestID,
 			ASafeLog oLog,
 			string toExplanationMailAddress = null,
 			string fromEmailAddress = null,
 			string fromEmailName = null
-		) : base(nCustomerID, DecisionStatus.Affirmative, oLog, toExplanationMailAddress, fromEmailAddress, fromEmailName) {
+		) : base(
+			nCustomerID,
+			cashRequestID,
+			DecisionStatus.Affirmative,
+			oLog,
+			toExplanationMailAddress,
+			fromEmailAddress,
+			fromEmailName
+		) {
 			MyInputData = new ApprovalInputData();
+			HasApprovalChance = true;
 		} // constructor
 
 		public override string PositiveDecisionName {

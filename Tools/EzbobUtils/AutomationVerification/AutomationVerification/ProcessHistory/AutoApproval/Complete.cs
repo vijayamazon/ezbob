@@ -5,7 +5,7 @@
 		} // constructor
 
 		protected override string ValueStr {
-			get { return string.Format("approved amount is {0}", Value.ToString("N2")); }
+			get { return string.Format("approved amount of {0}", Value.ToString("N2")); }
 		} // ValueStr
 	}  // class Complete
 } // namespace

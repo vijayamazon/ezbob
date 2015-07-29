@@ -418,17 +418,6 @@
 		}
 
 		[Activation]
-		private void EmailUnderReview() {
-			int customerId;
-			if (this.cmdLineArgs.Length != 2 || !int.TryParse(this.cmdLineArgs[1], out customerId)) {
-				this.log.Msg("Usage: EmailUnderReview <CustomerId>");
-				return;
-			}
-
-			this.serviceClient.EmailUnderReview(customerId);
-		}
-
-		[Activation]
 		private void Encrypt() {
 			if (this.cmdLineArgs.Length < 2) {
 				this.log.Msg("Usage: Encrypt <what to encrypt>");
@@ -818,53 +807,32 @@ GeneratePassword broker-contact-email@example.com password-itself
 			int customerId;
 			NewCreditLineOption newCreditLineOption;
 			int avoidAutoDescison;
-			bool createCashRequest;
-			bool updateCashRequest;
+			long cashRequestID;
 
-			if (int.TryParse(this.cmdLineArgs[1], out underwriterId) && int.TryParse(this.cmdLineArgs[2], out customerId) && Enum.TryParse(this.cmdLineArgs[3], out newCreditLineOption) && int.TryParse(this.cmdLineArgs[4], out avoidAutoDescison) && bool.TryParse(this.cmdLineArgs[5], out createCashRequest) && bool.TryParse(this.cmdLineArgs[6], out updateCashRequest)) {
-				this.serviceClient.MainStrategy1(
+			if (
+				int.TryParse(this.cmdLineArgs[1], out underwriterId) &&
+				int.TryParse(this.cmdLineArgs[2], out customerId) &&
+				Enum.TryParse(this.cmdLineArgs[3], out newCreditLineOption) &&
+				int.TryParse(this.cmdLineArgs[4], out avoidAutoDescison) &&
+				long.TryParse(this.cmdLineArgs[5], out cashRequestID)
+			) {
+				this.serviceClient.MainStrategyAsync(
 					underwriterId,
 					customerId,
 					newCreditLineOption,
 					avoidAutoDescison,
-					null,
-					createCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No,
-					updateCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No
+					cashRequestID <= 0 ? (long?)null : cashRequestID,
+					CashRequestOriginator.Manual
 				);
 				return;
 			}
 
-			// MainStrategy null 18234 3 1
-
-			//	NewCreditLineOption.UpdateEverythingAndApplyAutoRules 3
+			// NewCreditLineOption.UpdateEverythingAndApplyAutoRules 3
 			// avoidAutoDescison 0
 
-			this.log.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <create cash request (true/false)> <update cash request (true/false)>");
-		}
-
-		[Activation]
-		private void MainStrategySync() {
-			int underwriterId;
-			int customerId, avoidAutoDescison;
-			NewCreditLineOption newCreditLineOption;
-			bool createCashRequest;
-			bool updateCashRequest;
-
-			if (this.cmdLineArgs.Length == 5 && int.TryParse(this.cmdLineArgs[1], out underwriterId) && int.TryParse(this.cmdLineArgs[2], out customerId) && Enum.TryParse(this.cmdLineArgs[3], out newCreditLineOption) && int.TryParse(this.cmdLineArgs[4], out avoidAutoDescison) && bool.TryParse(this.cmdLineArgs[5], out createCashRequest) && bool.TryParse(this.cmdLineArgs[6], out updateCashRequest)) {
-				this.serviceClient.MainStrategySync1(
-					underwriterId,
-					customerId,
-					newCreditLineOption,
-					avoidAutoDescison,
-					null,
-					createCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No,
-					updateCashRequest ? MainStrategyDoAction.Yes : MainStrategyDoAction.No
-				);
-				return;
-			}
-
-			this.log.Msg("Usage: MainStrategySync <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison>");
-		}
+			this.log.Msg("Usage: MainStrategy <Underwriter ID> <customerId> <newCreditLineOption> <avoidAutoDescison> <cash request id>");
+			this.log.Msg("Cash request id: 0 (or negative) to create a new one, or id to update existing one.");
+		} // MainStrategy
 
 		[Activation]
 		private void MarketplaceInstantUpdate() {
@@ -1457,6 +1425,12 @@ The digits shown in a group are the maximum number of meaningful digits that can
 		private void BravoAutomationReport() {
 			Tuple<DateTime?, DateTime?> dates = GetDatesForAutomationReports();
 
+			log.Debug(
+				"Start date is {0}, end date is {1}", 
+				dates.Item1.HasValue ? dates.Item1.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty,
+				dates.Item2.HasValue ? dates.Item2.Value.ToString("MMM d yyyy", CultureInfo.InvariantCulture) : string.Empty
+			);
+
 			this.serviceClient.BravoAutomationReport(dates.Item1, dates.Item2);
 		} // BravoAutomationReport
 
@@ -1467,11 +1441,11 @@ The digits shown in a group are the maximum number of meaningful digits that can
 			bool hasEnd = false;
 			DateTime endTime = DateTime.UtcNow;
 
-			if (this.cmdLineArgs.Length > 2)
-				hasStart = DateTime.TryParse(this.cmdLineArgs[2], out startTime);
+			if (this.cmdLineArgs.Length > 1)
+				hasStart = DateTime.TryParse(this.cmdLineArgs[1], out startTime);
 
-			if (hasStart && (this.cmdLineArgs.Length > 3))
-				hasEnd = DateTime.TryParse(this.cmdLineArgs[3], out startTime);
+			if (hasStart && (this.cmdLineArgs.Length > 2))
+				hasEnd = DateTime.TryParse(this.cmdLineArgs[2], out endTime);
 
 			return new Tuple<DateTime?, DateTime?>(
 				hasStart ? startTime : (DateTime?)null,
@@ -1485,6 +1459,12 @@ The digits shown in a group are the maximum number of meaningful digits that can
             ActionMetaData result = this.serviceClient.BrokerTransferCommission();
             this.log.Debug("{0}", result.Status.ToString());
         }
+
+		[Activation]
+		private void BackFillBrokerCommissionInvoice() {
+			ActionMetaData result = this.serviceClient.BackfillBrokerCommissionInvoice();
+			this.log.Debug("BackFillBrokerCommissionInvoice {0}", result.Status.ToString());
+		}
 
 		//[Activation]
 		//private void ExampleMethod() {

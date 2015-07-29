@@ -30,7 +30,8 @@ BEGIN
 		@NumOfHmrcMps INT,
 		@NumOfYodleeMps INT,
 		@EarliestYodleeLastUpdateDate DATETIME,
-		@EarliestHmrcLastUpdateDate DATETIME
+		@EarliestHmrcLastUpdateDate DATETIME,
+		@NumOfPreviousApprovals INT
 		
 	------------------------------------------------------------------------------
 
@@ -40,10 +41,10 @@ BEGIN
 		@CustomerStatusName = CustomerStatuses.Name
 	FROM
 		CustomerStatuses,
-		Customer
+		Customer c
 	WHERE
-		Customer.CollectionStatus = CustomerStatuses.Id AND
-		Customer.Id = @CustomerId
+		c.CollectionStatus = CustomerStatuses.Id AND
+		c.Id = @CustomerId
 	
 	------------------------------------------------------------------------------
 
@@ -96,6 +97,17 @@ BEGIN
 	------------------------------------------------------------------------------
 
 	SELECT
+		@NumOfPreviousApprovals = COUNT(*)
+	FROM
+		DecisionHistory h
+	WHERE
+		h.CustomerId = @CustomerId
+		AND
+		h.Action = 'Approve'
+
+	------------------------------------------------------------------------------
+
+	SELECT
 		@CustomerStatusIsEnabled AS CustomerStatusIsEnabled,
 		@CustomerStatusIsWarning AS CustomerStatusIsWarning,
 		@CustomerStatusName AS CustomerStatusName,
@@ -110,27 +122,30 @@ BEGIN
 		CustomerPropertyStatuses.IsOwnerOfOtherProperties AS IsOwnerOfOtherProperties,
 		CustomerPropertyStatuses.Description AS PropertyStatusDescription,
 		@NumOfMps AS NumOfMps,
-		Customer.TimeAtAddress,
+		c.TimeAtAddress,
 		AccountNumber,
 		SortCode,
 		GreetingMailSentDate AS RegistrationDate,
 		BankAccountType,
 		@NumOfLoans AS NumOfLoans,
-		Customer.TypeOfBusiness,
+		c.TypeOfBusiness,
 		@NumOfHmrcMps AS NumOfHmrcMps,
-		Customer.IsAlibaba,
-		Customer.BrokerID AS BrokerId,
-		Customer.LastStartedMainStrategyEndTime,
+		c.IsAlibaba,
+		c.BrokerID AS BrokerId,
+		c.LastStartedMainStrategyEndTime,
 		@NumOfYodleeMps AS NumOfYodleeMps,
 		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
-		Customer.IsTest
+		c.IsTest,
+		c.FilledByBroker,
+		ISNULL(@NumOfPreviousApprovals, 0) AS NumOfPreviousApprovals,
+		c.Fullname AS FullName
 	FROM
-		Customer
-		INNER JOIN CustomerPropertyStatuses ON Customer.PropertyStatusId = CustomerPropertyStatuses.Id
-		LEFT JOIN Company ON Company.Id = Customer.CompanyId
+		Customer c
+		INNER JOIN CustomerPropertyStatuses ON c.PropertyStatusId = CustomerPropertyStatuses.Id
+		LEFT JOIN Company ON Company.Id = c.CompanyId
 	WHERE
-		Customer.Id = @CustomerId
+		c.Id = @CustomerId
 
 	------------------------------------------------------------------------------
 END

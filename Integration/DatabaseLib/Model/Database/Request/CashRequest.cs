@@ -104,6 +104,8 @@
 
 		public virtual bool? SpreadSetupFee { get; set; }
 
+		public virtual bool? HasApprovalChance { get; set; }
+
 		private int repaymentPeriod = 3;
 		private decimal interestRate = 0.06M;
 		private bool useSetupFee = true;

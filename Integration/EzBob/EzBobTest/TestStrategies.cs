@@ -25,6 +25,7 @@
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
+	using Ezbob.Backend.Strategies.MailStrategies.Broker;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -34,6 +35,7 @@
 	using Ezbob.Backend.Strategies.SalesForce;
 	using Ezbob.Backend.Strategies.UserManagement;
 	using Ezbob.Database;
+	using Ezbob.Utils.Extensions;
 	using Ezbob.Utils.Security;
 	using Ezbob.Utils.Serialization;
 	using EzBob.Models;
@@ -44,10 +46,12 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using NHibernate;
+	using NHibernate;
 	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
 	using SalesForceLib;
+	using SalesForceLib.Models;
 	using StructureMap;
 	using Twilio;
 
@@ -55,7 +59,7 @@
 	public class TestStrategies : BaseTestFixtue {
 		[Test]
 		public void ApprovedUser() {
-			var s = new ApprovedUser(3060, 2500, 24, true);
+			var s = new ApprovedUser(182, 1000, 24, true);
 			s.Execute();
 		}
 
@@ -199,41 +203,15 @@
 		[Test]
 		public void test_mainstrat() {
 			var ms = new MainStrategy(
+				1,
 				14036,
 				NewCreditLineOption.UpdateEverythingAndApplyAutoRules,
 				0,
 				null,
 				null,
-				MainStrategy.DoAction.Yes,
-				MainStrategy.DoAction.Yes
-				);
+				CashRequestOriginator.Other
+			);
 			ms.Execute();
-		}
-
-		[Test]
-		public void TestAutoReRejection() {
-			var rerejection = new ReRejection(21334, this.m_oDB, this.m_oLog);
-			var rejection = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(21334, this.m_oDB, this.m_oLog);
-			var approve = new Approval(21334, 10000, EZBob.DatabaseLib.Model.Database.Medal.Gold, AutomationCalculator.Common.MedalType.Limited, AutomationCalculator.Common.TurnoverType.HMRC, this.m_oDB, this.m_oLog);
-			var reapprove = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(21334, this.m_oDB, this.m_oLog);
-
-			//rerejection.MakeDecision(rejectionDecision);
-			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
-
-			//rejection.Init().MakeDecision(rejectionDecision);
-			//Assert.AreEqual(false, rejectionDecision.IsReRejected);
-
-			var decision = new AutoDecisionResponse();
-			//approve.Init().MakeDecision(decision);
-			//Assert.AreEqual(false, decision.IsAutoApproval);
-			reapprove.Init().MakeDecision(decision, null);
-
-			var oSecondary = new AutomationCalculator.AutoDecision.AutoReApproval.Agent(this.m_oDB, this.m_oLog, 21334, reapprove.Trail.InputData.DataAsOf);
-			oSecondary.MakeDecision(oSecondary.GetInputData());
-
-			bool bSuccess = reapprove.Trail.EqualsTo(oSecondary.Trail);
-
-			Assert.AreEqual(false, decision.IsAutoApproval);
 		}
 
 		[Test]
@@ -714,24 +692,6 @@
 		}
 
 		[Test]
-		public void TestAutoRejectBoth() {
-			int customerID = 20658;
-			var result = new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerID, this.m_oDB, this.m_oLog);
-			result.Init()
-				.MakeAndVerifyDecision();
-		}
-
-		[Test]
-		public void TestBulkAutoRejectBoth() {
-			this.m_oDB.ForEachRowSafe((sr) => {
-				int customerId = sr["Id"];
-				new Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Reject.Agent(customerId, this.m_oDB, this.m_oLog).Init()
-					.MakeAndVerifyDecision();
-			}, "select Id from dbo.Customer where IsTest = 0 and WizardStep=4 order by Id desc", CommandSpecies.Text);
-		}
-
-
-		[Test]
 		public void TestCaisGenerate() {
 			CaisGenerate cg = new CaisGenerate(1);
 			cg.Execute();
@@ -932,7 +892,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 3946; //4182; // 1718; // 4439; //3534;
+			int loanID = 16; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -955,19 +915,19 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 3946; //4192; // 4439; // 3534; //1846; //2662;
+			int loanID = 16; //3946; //4192; // 4439; // 3534; //1846; //2662;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.SaveToDB = false;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
 			reModel.RescheduleIn = true;
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
 				s.Context.UserID = 25852;
-				s.Execute();
+				//s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
@@ -1008,21 +968,21 @@
 			this.m_oDB.ForEachRowSafe((sr) => {
 				try {
 					int loanid = sr["Id"];
-					//ReschedulingArgument reModel = new ReschedulingArgument();
-					//Loan loan = new Loan();
-					//reModel.LoanID = loanid;
-					//reModel.LoanType = loan.GetType().AssemblyQualifiedName;
-					//reModel.RescheduleIn = true;
-					//reModel.SaveToDB = false;
-					//reModel.ReschedulingDate = DateTime.UtcNow;
-					//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-					//if (reModel.RescheduleIn == false) {
-					//	reModel.PaymentPerInterval = 900m;
-					//}
-					//var s = new RescheduleLoan<Loan>(loan, reModel);
-					//s.Context.UserID = 25852;
-					//s.Execute();
-					//m_oLog.Debug(s.Result.ToString());
+					ReschedulingArgument reModel = new ReschedulingArgument();
+					Loan loan = new Loan();
+					reModel.LoanID = loanid;
+					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+					reModel.RescheduleIn = true;
+					reModel.SaveToDB = false;
+					reModel.ReschedulingDate = DateTime.UtcNow;
+					reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+					if (reModel.RescheduleIn == false) {
+						reModel.PaymentPerInterval = 900m;
+					}
+					var s = new RescheduleLoan<Loan>(loan, reModel);
+					s.Context.UserID = 25852;
+					s.Execute();
+					m_oLog.Debug(s.Result.ToString());
 
 					// OUT
 					ReschedulingArgument reModel1 = new ReschedulingArgument();
@@ -1214,9 +1174,79 @@
 			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
 
 			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
-
 		}
 
+		[Test]
+		public void TestReBug() {
+			const int loanID = 1050;
+
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			LoanOptionsRepository optionsRepository = ObjectFactory.GetInstance<LoanOptionsRepository>();
+			ISession session = ObjectFactory.GetInstance<ISession>();
+
+			Loan loan = loanRep.Get(loanID);
+
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			
+			ReschedulingArgument reModel = new ReschedulingArgument();
+			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel.LoanID = loanID;
+			reModel.ReschedulingDate = DateTime.UtcNow;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel.SaveToDB = false;
+			reModel.RescheduleIn = true;
+			
+			var s = new RescheduleLoan<Loan>(loan, reModel);
+			s.Context.UserID = 25852;
+
+			try {
+				s.Execute();
+				m_oLog.Debug("RESULT FOR IN");
+				m_oLog.Debug(s.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+			
+			ReschedulingArgument reModel1 = new ReschedulingArgument();
+			reModel1.LoanType = loan.GetType().AssemblyQualifiedName;
+			reModel1.LoanID = loanID;
+			reModel1.ReschedulingDate = DateTime.UtcNow;
+			reModel1.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
+			reModel1.SaveToDB = false;
+			reModel1.RescheduleIn = false;
+			reModel1.PaymentPerInterval = 90m;
+			var s1 = new RescheduleLoan<Loan>(loan, reModel1);
+			s1.Context.UserID = 25852;
+
+			try {
+				s1.Execute();
+				m_oLog.Debug("RESULT FOR OUT");
+				m_oLog.Debug(s1.Result.ToString());
+			} catch (Exception e) {
+				Console.WriteLine(e);
+			}
+
+			LoanOptions options = optionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
+			options.AutoPayment = true;
+			optionsRepository.SaveOrUpdate(options);
+			session.Flush();
+		}
+
+		[Test]
+		public void TestSFRetrier() {
+			DateTime now = DateTime.UtcNow;
+			AddOpportunity add = new AddOpportunity(28, new OpportunityModel {
+				Name = "NewOpportunity",
+				Email = "alexbo+off02@ezbob.com",
+				CreateDate = now,
+				ExpectedEndDate = now.AddDays(7),
+				RequestedAmount = 1000,
+				Stage = OpportunityStage.s5.DescriptionAttr(),
+				Type = OpportunityType.FinishLoan.DescriptionAttr()
+			});
+			add.Execute();
+		}
 
 		[Test]
 		public void TestNL_CalculateLoanSchedule() {

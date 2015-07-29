@@ -4,6 +4,30 @@ namespace ConfigManager {
 			get { return this[Variables.MaamEmailReceiver]; }
 		}
 
+		public virtual VariableValue MailBeeLicenseKey {
+			get { return this[Variables.MailBeeLicenseKey]; }
+		}
+		
+		public virtual VariableValue MailBeeLoginAddress {
+			get { return this[Variables.MailBeeLoginAddress]; }
+		}
+
+		public virtual VariableValue MailBeeLoginPassword {
+			get { return this[Variables.MailBeeLoginPassword]; }
+		}
+
+		public virtual VariableValue MailBeeMailboxReconnectionIntervalSeconds {
+			get { return this[Variables.MailBeeMailboxReconnectionIntervalSeconds]; }
+		}
+
+		public virtual VariableValue MailBeePort {
+			get { return this[Variables.MailBeePort]; }
+		}
+
+		public virtual VariableValue MailBeeServer {
+			get { return this[Variables.MailBeeServer]; }
+		}
+
         public virtual VariableValue MailChimpApiKey {
             get { return this[Variables.MailChimpApiKey]; }
 		}
@@ -46,6 +70,10 @@ namespace ConfigManager {
 
 		public virtual VariableValue MaxPerNumber {
 			get { return this[Variables.MaxPerNumber]; }
+		}
+
+		public virtual VariableValue MaxTimeToWaitForPacnetrConfirmation {
+			get { return this[Variables.MaxTimeToWaitForPacnetrConfirmation]; }
 		}
 
 		public virtual VariableValue MaxYodleeOtherCategoryAmount {
@@ -120,6 +148,10 @@ namespace ConfigManager {
 			get { return this[Variables.PacnetBalanceWeekendLimit]; }
 		}
 
+		public virtual VariableValue PacnetDublinEmails {
+			get { return this[Variables.PacnetDublinEmails]; }
+		}
+
 		public virtual VariableValue PacnetRAVEN_GATEWAY {
 			get { return this[Variables.PacnetRAVEN_GATEWAY]; }
 		}
@@ -142,6 +174,10 @@ namespace ConfigManager {
 
 		public virtual VariableValue PacnetSERVICE_TYPE {
 			get { return this[Variables.PacnetSERVICE_TYPE]; }
+		}
+
+		public virtual VariableValue PacnetVancouverEmails {
+			get { return this[Variables.PacnetVancouverEmails]; }
 		}
 
 		public virtual VariableValue PartialPaymentCharge {

@@ -1098,7 +1098,7 @@ EzBob.validateLoginForm = function(el) {
 	}
 	return e.validate({
 		rules: {
-			UserName: { required: true, email: true },
+			UserName: { required: true, email: true, maxlength: 128 },
 			Password: $.extend({}, passPolicy)
 		},
 		messages: {
@@ -1140,7 +1140,7 @@ EzBob.validateSignUpForm = function(el) {
 			signupPass1: $.extend({}, passPolicy),
 			signupPass2: passPolicy2,
 			promoCode: { required: false, maxlength: 30 },
-			Email: { required: true, email: true },
+			Email: { required: true, email: true, maxlength: 128 },
 			securityQuestion: { required: true },
 			SecurityAnswer: { required: true, maxlength: 199 },
 			CaptchaInputText: { required: true, minlength: 6, maxlength: 6 },

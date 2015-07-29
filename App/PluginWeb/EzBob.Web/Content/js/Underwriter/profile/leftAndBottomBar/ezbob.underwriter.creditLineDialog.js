@@ -5,8 +5,10 @@ EzBob.Underwriter = EzBob.Underwriter || {};
 EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 	template: '#credit-line-dialog-template',
 
-	initialize: function() {
+	initialize: function(options) {
 		this.cloneModel = this.model.clone();
+		this.cloneModel.set('BrokerSetupFeePercent', options.brokerCommissionDefaultResult.brokerCommission);
+		this.cloneModel.set('ManualSetupFeePercent', options.brokerCommissionDefaultResult.setupFeePercent);
 		this.modelBinder = new Backbone.ModelBinder();
 		this.bindTo(this.cloneModel, "change:StartingFromDate", this.onChangeStartingDate, this);
 		this.bind('close', this.closeDialog);
@@ -16,10 +18,12 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 		'click .btnOk': 'save',
 		'change #loan-type': 'onChangeLoanType',
 		'change #loan-source': 'onChangeLoanSource',
+		'change #offeredCreditLine': 'onChangeOfferedAmout',
 	}, // events
 
 	ui: {
-		form: "form"
+		form: "form",
+		offeredCreditLine: '#offeredCreditLine'
 	}, // ui
 
 	jqoptions: function() {
@@ -46,6 +50,20 @@ EzBob.Underwriter.CreditLineDialog = EzBob.ItemView.extend({
 			this.cloneModel.set("OfferValidateUntil", endDate.format('DD/MM/YYYY'));
 		} // if
 	}, // onChangeStartingDate
+
+	onChangeOfferedAmout: function () {
+		BlockUi();
+		var self = this;
+		$.post(window.gRootPath + 'Underwriter/ApplicationInfo/UpdateBrokerCommissionDefaults', {
+			id: this.cloneModel.get('CashRequestId'),
+			amount: self.ui.offeredCreditLine.autoNumericGet()
+		}).done(function(result) {
+			self.cloneModel.set('BrokerSetupFeePercent', result.brokerCommission);
+			self.cloneModel.set('ManualSetupFeePercent', result.setupFeePercent);
+		}).always(function() {
+			UnBlockUi();
+		});
+	},
 
 	onChangeLoanType: function() {
 		var loanTypeId = this.$el.find("#loan-type option:selected").val();

@@ -11,6 +11,7 @@
 		protected override bool MakeAndVerifyDecision(AutoApproveInputRow oRow) {
 			return new Approval(
 				oRow.CustomerId,
+				null,
 				oRow.OfferedLoanAmount,
 				oRow.GetMedal(),
 				oRow.GetMedalType(),

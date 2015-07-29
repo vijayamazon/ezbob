@@ -15,18 +15,25 @@
 	        }
 	    }
 
-	    public string Model { get; set; }
+		public bool HasLoginError { get; private set; }
+
+		public string Model { get; set; }
 
 		public FakeApiClient(string userName = "", string password = "", string token = "", string environment = "") {
 			this.api = new Api();
 		}
 
 		public void CreateUpdateLeadAccount(LeadAccountModel model) {
+			HasLoginError = false;
 			Log.InfoFormat("SalesForce CreateUpdateLeadAccount\n {0}", model.ToStringExtension());
 			ApiResponse response = this.api.CreateUpdateLeadAccount(model);
 			if (!response.IsSuccess) {
 				Log.ErrorFormat("SalesForce CreateUpdateLeadAccount failed for customer {0}, error: {1}", model.Email, response.Error);
 			}
+		}
+
+		public void Login() {
+
 		}
 
 		public void CreateOpportunity(OpportunityModel model) {

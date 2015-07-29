@@ -1,16 +1,16 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
-IF object_id('RapprovalGetLastApproveTerms') IS NULL
-BEGIN
+IF OBJECT_ID('RapprovalGetLastApproveTerms') IS NULL
 	EXECUTE('CREATE PROCEDURE RapprovalGetLastApproveTerms AS SELECT 1')
-END
 GO
 
 ALTER PROCEDURE RapprovalGetLastApproveTerms
-  @LacrID INT
+@LacrID BIGINT
 AS 
 BEGIN
+	SET NOCOUNT ON;
+
 	SELECT 
 		LoanTypeId LoanTypeID, 
 		LoanSourceId LoanSourceID, 
@@ -25,6 +25,6 @@ BEGIN
 	FROM
 		CashRequests 
 	WHERE 
-		Id=@LacrID
+		Id = @LacrID
 END
 GO

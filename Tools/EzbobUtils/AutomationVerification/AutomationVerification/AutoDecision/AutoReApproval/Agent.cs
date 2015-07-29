@@ -16,12 +16,12 @@
 
 		public ReapprovalTrail Trail { get; private set; }
 
-		public Agent(AConnection oDB, ASafeLog oLog, int customerId, DateTime? dataAsOf = null) {
+		public Agent(AConnection oDB, ASafeLog oLog, int customerId, long? cashRequestID, DateTime? dataAsOf = null) {
 			this.m_oDB = oDB;
 			this.m_oLog = oLog.Safe();
 			this.CustomerId = customerId;
 			this.Now = dataAsOf ?? DateTime.UtcNow;
-			Trail = new ReapprovalTrail(customerId, this.m_oLog);
+			Trail = new ReapprovalTrail(customerId, cashRequestID, this.m_oLog);
 			Result = new ReApprovalResult(false, 0);
 		} // constructor
 
@@ -74,10 +74,10 @@
 
 				if (this.m_nApprovedAmount >= Trail.MyInputData.MinLoan) {
 					StepDone<Complete>()
-						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan);
+						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 				} else {
 					StepFailed<Complete>()
-						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan);
+						.Init(this.m_nApprovedAmount, Trail.MyInputData.MinLoan, units: "£");
 				}
 			} catch (Exception e) {
 				this.m_oLog.Error(e, "Exception during auto approval.");
@@ -158,10 +158,10 @@
 		private void CheckHasAddedMp() {
 			if (!Trail.MyInputData.NewDataSourceAdded) {
 				StepDone<NewMarketplace>()
-					.Init(!Trail.MyInputData.NewDataSourceAdded);
+					.Init(Trail.MyInputData.NewDataSourceAdded);
 			} else {
 				StepFailed<NewMarketplace>()
-					.Init(!Trail.MyInputData.NewDataSourceAdded);
+					.Init(Trail.MyInputData.NewDataSourceAdded);
 			} // if
 		} // CheckHasAddedMp
 
@@ -178,10 +178,10 @@
 		private void CheckHasLateLoans() {
 			if (!Trail.MyInputData.WasLate) {
 				StepDone<LateLoans>()
-					.Init();
+					.Init(Trail.MyInputData.WasLate);
 			} else {
 				StepFailed<LateLoans>()
-					.Init();
+					.Init(Trail.MyInputData.WasLate);
 			} // if
 		} // CheckHasLateLoans
 

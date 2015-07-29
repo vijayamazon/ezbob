@@ -8,6 +8,7 @@
 		public enum DeleteReasonCode {
 			SignedUp,
 			Manual,
+			FinishWzrd,
 		} // enum DeleteReasonCode
 
 		public BrokerDeleteCustomerLead(AConnection oDB, ASafeLog oLog) : base(oDB, oLog) {

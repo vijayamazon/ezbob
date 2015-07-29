@@ -194,8 +194,6 @@
 			}
 		}
 
-		public Customer FindCustomerByEmail(string sEmail) { return _CustomerRepository.TryGetByEmail(sEmail); }
-
 		public EkmOrdersList GetAllEkmOrdersData(DateTime submittedDate, IDatabaseCustomerMarketPlace databaseCustomerMarketPlace) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
 
@@ -589,11 +587,6 @@
 		}
 
 		//public CustomerLoyaltyProgramPointsRepository CustomerLoyaltyPoints { get { Session.Evict(_CustomerLoyaltyPoints); return _CustomerLoyaltyPoints; } }
-
-		public void SaveCustomer(Customer oCustomer) {
-			if (oCustomer != null)
-				_CustomerRepository.SaveOrUpdate(oCustomer);
-		}
 
 		public void StoreEkmOrdersData(IDatabaseCustomerMarketPlace databaseCustomerMarketPlace, EkmOrdersList ordersData, MP_CustomerMarketplaceUpdatingHistory historyRecord) {
 			MP_CustomerMarketPlace customerMarketPlace = GetCustomerMarketPlace(databaseCustomerMarketPlace.Id);
@@ -1093,6 +1086,6 @@
 		private readonly WizardStepSequenceRepository _wizardStepSequenceRepository;
 		private readonly CustomerMarketPlaceUpdatingHistoryRepository customerMarketPlaceUpdatingHistoryRepository;
 		private readonly ExperianDirectorRepository m_oExperianDirectorRepository;
-		private ISession _session;
+		private readonly ISession _session;
 	} // class DatabaseDataHelper
 } // namespace

@@ -9,15 +9,15 @@
 	using Ezbob.Logger;
 
 	public class Agent {
-		public Agent(int nCustomerID, DateTime? dataAsOf, AConnection oDB, ASafeLog oLog) {
+		public Agent(int nCustomerID, long? cashRequestID, DateTime? dataAsOf, AConnection oDB, ASafeLog oLog) {
 			Log = oLog.Safe();
 			DB = oDB;
 
-			Args = new Arguments(nCustomerID, dataAsOf);
+			Args = new Arguments(nCustomerID, cashRequestID, dataAsOf);
 		} // constructor
 
 		public virtual Agent Init() {
-			Trail = new ReRejectionTrail(Args.CustomerID, Log);
+			Trail = new ReRejectionTrail(Args.CustomerID, Args.CashRequestID, Log);
 
 			Cfg = new Configuration(DB, Log);
 

@@ -5,23 +5,19 @@
 
 	public class LatePayment : ATrace {
 
-		public LatePayment(DecisionStatus nDecisionStatus) : base(nDecisionStatus) {
+		public LatePayment(DecisionStatus nDecisionStatus)
+			: base(nDecisionStatus) {
 		} // constructor
 
 		public void Init(int delay, int threshhold) {
-			if (DecisionStatus == DecisionStatus.Affirmative)
-			{
+			Threshold = threshhold;
+			if (DecisionStatus == DecisionStatus.Affirmative) {
+				Comment = string.Format("customer has no payments that are more than {0} days late", threshhold);
+			} else {
 				Comment = string.Format(
-					"customer has no payments that are more than {0} late",
-					Grammar.Number(Threshold, "day")
-				);
-			}
-			else
-			{
-				Comment = string.Format(
-					"customer was {0} late; allowed delay: {1}",
+					"customer was {0} late; allowed delay: {1} days",
 					Grammar.Number(delay, "day"),
-					Grammar.Number(Threshold, "day")
+					threshhold
 				);
 			} // if
 		}
@@ -47,8 +43,7 @@
 					"there are no payments that are more than {0} late",
 					Grammar.Number(Threshold, "day")
 				);
-			}
-			else {
+			} else {
 				Comment = string.Format(
 					"customer was {1} late for loan {2}, schedule id {3}, transaction id {4}; " +
 					"paid on {5} instead of {6}; allowed delay: {0}",
@@ -71,8 +66,7 @@
 
 		public int Threshold { get; private set; }
 
-		public int Delay
-		{
+		public int Delay {
 			get { return (int)(TransactionTime.Date - ScheduleDate.Date).TotalDays; } // get
 		} // Delay
 	} // class LatePayment

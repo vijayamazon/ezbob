@@ -10,6 +10,7 @@
 
 	public class ExperianCompanyCheck : AStrategy {
 		public ExperianCompanyCheck(int customerId, bool forceCheck) {
+			this.doSilentAutomation = true;
 			this.customerId = customerId;
 			this.forceCheck = forceCheck;
 			this.foundCompany = false;
@@ -33,6 +34,11 @@
 			if (!this.foundCompany)
 				Log.Info("Can't find company data for customer {0} (is the customer an entrepreneur?).", this.customerId);
 		} // constructor
+
+		public ExperianCompanyCheck PreventSilentAutomation() {
+			this.doSilentAutomation = false;
+			return this;
+		} // PreventSilentAutomation
 
 		public override string Name {
 			get { return "Experian company check"; }
@@ -239,7 +245,8 @@
 			else
 				UpdateAnalyticsForNonLimited(MaxScore, this.experianRefNum, this.customerId);
 
-			new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.Company).Execute();
+			if (this.doSilentAutomation)
+				new SilentAutomation(this.customerId).SetTag(SilentAutomation.Callers.Company).Execute();
 		} // Execute
 
 		private bool IsCustomerAlreadyInAnalytics() {
@@ -255,5 +262,6 @@
 		private bool foundCompany;
 		private bool isLimited;
 		private string experianRefNum;
+		private bool doSilentAutomation;
 	} // class ExperianCompanyCheck
 } // namespace

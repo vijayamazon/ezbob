@@ -37,7 +37,7 @@
 					<h2><b>Decision flow:</b></h2>
 					<pre><h3>{5}</h3></pre><br>
 					<h2><b>Decision data:</b></h2>
-					<pre><h3>{6}</h3></pre>", this.customerId,
+					<pre><h3>{6}</h3></pre>", this.trail.CustomerID,
 					autoApprovedAmount.ToString("C0", Library.Instance.Culture),
 					repaymentPeriod,
 					interestRate.ToString("P2", Library.Instance.Culture),
@@ -52,7 +52,7 @@
 					message,
 					CurrentValues.Instance.MailSenderEmail,
 					CurrentValues.Instance.MailSenderName,
-					"#SilentApprove for customer " + this.customerId
+					"#SilentApprove for customer " + this.trail.CustomerID
 				);
 			} catch (Exception e) {
 				this.log.Error(e, "Failed sending alert mail - silent auto approval.");
@@ -115,7 +115,8 @@
 			);
 
 			this.trail.MyInputData.SetArgs(
-				this.customerId,
+				this.trail.CustomerID,
+				this.trail.CashRequestID,
 				this.trail.SafeAmount,
 				(AutomationCalculator.Common.Medal)this.medalClassification,
 				this.medalType,
@@ -139,8 +140,8 @@
 				YesterdayLoanSum = CalculateTodaysLoans(Now.AddDays(-1)),
 				FraudStatusValue = DetectFraudStatusValue(),
 				AmlResult = (this.customer == null) ? "failed because customer not found" : this.customer.AMLResult,
-				CustomerStatusName = this.customer == null ? "unknown" : this.customer.CollectionStatus.CurrentStatus.Name,
-				CustomerStatusEnabled = this.customer != null && this.customer.CollectionStatus.CurrentStatus.IsEnabled,
+				CustomerStatusName = this.customer == null ? "unknown" : this.customer.CollectionStatus.Name,
+				CustomerStatusEnabled = this.customer != null && this.customer.CollectionStatus.IsEnabled,
 				CompanyScore = this.minCompanyScore,
 				ConsumerScore = this.minExperianScore,
 				IncorporationDate = GetCustomerIncorporationDate(),
@@ -154,7 +155,7 @@
 					Now.AddMonths(-1 * cfg.Reject_Defaults_MonthsNum)
 				),
 				NumOfRollovers = CalculateRollovers(),
-				TotalLoanCount = this.loanRepository.ByCustomer(this.customerId).Count(),
+				TotalLoanCount = this.loanRepository.ByCustomer(this.trail.CustomerID).Count(),
 				ExperianCompanyName = (this.customer != null) && (this.customer.Company != null)
 					? this.customer.Company.ExperianCompanyName
 					: null,
@@ -181,7 +182,7 @@
 			SafeReader sr = this.db.GetFirst(
 				"GetLastOfferDataForApproval",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerId),
+				new QueryParameter("CustomerId", this.trail.CustomerID),
 				new QueryParameter("Now", Now)
 			);
 
@@ -200,7 +201,7 @@
 				r => this.turnover.Add(r),
 				"GetCustomerTurnoverForAutoDecision",
 				new QueryParameter("IsForApprove", true),
-				new QueryParameter("CustomerID", this.customerId),
+				new QueryParameter("CustomerID", this.trail.CustomerID),
 				new QueryParameter("Now", Now)
 			);
 
@@ -232,7 +233,6 @@
 
 		private readonly CashRequestsRepository cashRequestsRepository;
 		private readonly Customer customer;
-		private readonly int customerId;
 		private readonly AConnection db;
 		private readonly LoanRepository loanRepository;
         private readonly LoanSourceRepository loanSourceRepository;

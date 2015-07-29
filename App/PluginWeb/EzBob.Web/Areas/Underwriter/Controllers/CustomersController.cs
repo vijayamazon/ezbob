@@ -29,6 +29,7 @@
     using SalesForceLib.Models;
     using ActionResult = Ezbob.Database.ActionResult;
 
+	//in order to block sales from UW dashboard uncomment and add this permission to all relevant roles [Permission(Name = "Underwriter")]
     public class CustomersController : Controller {
         public CustomersController(
             ISession session,
@@ -474,6 +475,7 @@
                         CurrentValues.Instance.FinishWizardForApproved
                         );
                     oArgs.CustomerID = customer.Id;
+					oArgs.CashRequestOriginator = CashRequestOriginator.Approved;
 
                     this.m_oServiceClient.Instance.FinishWizard(oArgs, user.Id);
                 } catch (Exception e) {

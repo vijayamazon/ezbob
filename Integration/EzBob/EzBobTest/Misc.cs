@@ -208,6 +208,20 @@
 		}
 
 		[Test]
+		public void DateDiffInMonths() {
+			DateTime start = DateTime.UtcNow;
+			start = start.AddDays(1);
+			DateTime end = new DateTime(2016, 3, 24);
+
+			Console.WriteLine(start);
+			Console.WriteLine(end);
+
+			int montha = MiscUtils.DateDiffInMonths(end, start);
+
+			Console.WriteLine(montha);
+		}
+
+		[Test]
 		public void TestEnum() {
 			string newStatus = "Done";
 			var nlStatus = Enum.GetNames(typeof(NLPacnetTransactionStatuses)).FirstOrDefault(s => s.Equals(newStatus));

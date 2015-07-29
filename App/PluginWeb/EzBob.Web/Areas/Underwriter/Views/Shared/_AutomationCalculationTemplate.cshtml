@@ -33,32 +33,34 @@
                                 <th>Comment</th>
                             </tr>
                         </thead>
-                        <tbody class="box-content">
-                            <% _.each( current.Traces, function(trace, i){
-                            var traceNames = trace.TraceName.split('.');
-                            var traceName = traceNames[traceNames.length - 1];
-                            var rowClass = ''
-                            switch (trace.DecisionStatus){
-                            case 'Affirmative':
-                            rowClass = 'success';
-                            break;
-                            case 'Negative':
-                            rowClass = 'danger';
-                            break;
-                            }
+						<tbody class="box-content"><%
+							var sorted = _.sortBy(current.Traces, function(trc) { return trc.Position; });
 
-                            if(trace.HasLockedDecision){
-                            rowClass = 'warning'
-                            }
-                            %>
-                            <tr class="<%-rowClass%>">
-                                <td><%-trace.Position%></td>
-                                <td><%-traceName%></td>
-                                <td><%-trace.DecisionStatus%></td>
-                                <td><%-trace.Comment%></td>
-                            </tr>
-                            <%});%>
-                        </tbody>
+							_.each(sorted, function(trace, i) {
+								var traceNames = trace.TraceName.split('.');
+								var traceName = traceNames[traceNames.length - 1];
+								var rowClass = ''
+
+								switch (trace.DecisionStatus) {
+								case 'Affirmative':
+									rowClass = 'success';
+									break;
+								case 'Negative':
+									rowClass = 'danger';
+									break;
+								}
+
+								if (trace.HasLockedDecision)
+									rowClass = 'warning'
+
+								%><tr class="<%-rowClass%>">
+									<td><%-trace.Position%></td>
+									<td><%-traceName%></td>
+									<td><%-trace.DecisionStatus%></td>
+									<td><%-trace.Comment%></td>
+								</tr><%
+							});
+						%></tbody>
                     </table>
 
                     <div><pre><%=current.InputData%></pre></div>
