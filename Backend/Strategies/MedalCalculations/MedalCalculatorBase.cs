@@ -1071,11 +1071,14 @@
 				return null;
 
 			inputList.ForEach(x => this.log.Debug(
-				"before: {0}, {1}, historyID: {2}, mpID: {3}",
+				"before: {0}, {1}, historyID: {2}, mpID: {3}, updatingEnd: {4}",
 				x.TheMonth.MomentStr(),
 				x.Turnover,
 				x.CustomerMarketPlaceUpdatingHistory.Id,
-				x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id
+				x.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
+				(x.CustomerMarketPlaceUpdatingHistory != null)
+					? x.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.MomentStr() 
+					: "null"
 			));
 
 			// check type
@@ -1087,7 +1090,7 @@
 			if (lastUpdated.Count < 1)
 				return null;
 
-			DateTime lastUpdateDate = lastUpdated.Max(z => z.UpdatingEnd);
+			DateTime lastUpdateDate = lastUpdated.Max(z => z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value);
 
 			DateTime periodStart = MiscUtils.GetPeriodAgo(
 				calculationTime,
