@@ -2,6 +2,7 @@
 	using System.Linq;
 	using ApplicationMng.Repository;
 	using Ezbob.Database;
+	using Ezbob.Logger;
 	using NHibernate;
 
 	public enum LoanSourceName {
@@ -40,6 +41,73 @@
 			return GetAll().FirstOrDefault(x => x.Name == name);
 		} // GetByName
 	} // class LoanSourceRepository
+
+	public static class LoanSourceExt {
+		public static decimal ValidateInterestRate(this LoanSource loanSource, decimal setInterestRate) {
+			if (loanSource == null) { // Should never happen.
+				log.Alert("Cannot validate interest rate: loan source not specified.");
+				return setInterestRate;
+			} // if
+
+			bool interestRateIsGood = !loanSource.MaxInterest.HasValue || (setInterestRate <= loanSource.MaxInterest.Value);
+
+			if (interestRateIsGood)
+				return setInterestRate;
+
+			log.Warn(
+				"Too big interest ({0}) was assigned for this loan source - adjusting to {1}.",
+				setInterestRate,
+				loanSource.MaxInterest.Value
+			);
+
+			return loanSource.MaxInterest.Value;
+		} // ValidateInterestRate
+
+		public static int ValidateRepaymentPeriod(this LoanSource loanSource, int setRepaymentPeriod) {
+			if (loanSource == null) { // Should never happen.
+				log.Alert("Cannot validate repayment period: loan source not specified.");
+				return setRepaymentPeriod;
+			} // if
+
+			bool repaymentPeriodIsGood =
+				!loanSource.DefaultRepaymentPeriod.HasValue ||
+				(setRepaymentPeriod >= loanSource.DefaultRepaymentPeriod);
+
+			if (repaymentPeriodIsGood)
+				return setRepaymentPeriod;
+
+			log.Warn(
+				"Too small repayment period ({0}) was assigned for this loan source - adjusting to {1}.",
+				setRepaymentPeriod,
+				loanSource.DefaultRepaymentPeriod
+			);
+
+			return loanSource.DefaultRepaymentPeriod.Value;
+		} // ValidateRepaymentPeriod
+
+		public static bool ValidatePeriodSelectionAllowed(this LoanSource loanSource, bool setPeriodSelectionAllowed) {
+			if (loanSource == null) { // Should never happen.
+				log.Alert("Cannot validate period selection allowed: loan source not specified.");
+				return setPeriodSelectionAllowed;
+			} // if
+
+			bool periodSelectionAllowedIsGood =
+				loanSource.IsCustomerRepaymentPeriodSelectionAllowed ||
+				!setPeriodSelectionAllowed;
+
+			if (periodSelectionAllowedIsGood)
+				return setPeriodSelectionAllowed;
+
+			log.Warn(
+				"Wrong period selection option ('enabled') was assigned for this loan source - " +
+				"adjusting to ('disabled')."
+			);
+
+			return false;
+		} // ValidatePeriodSelectionAllowed
+
+		private static readonly ASafeLog log = new SafeILog(typeof(LoanSource));
+	} // class LoanSourceExt
 } // namespace EZBob.DatabaseLib.Model.Database.Loans
 
 namespace EZBob.DatabaseLib.Model.Database.Mapping {
