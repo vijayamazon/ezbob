@@ -28,15 +28,14 @@
 	public class MainStrategy : AStrategy {
 		public MainStrategy(
 			int underwriterID,
-			int customerId,
+			int customerID,
 			NewCreditLineOption newCreditLine,
 			int avoidAutoDecision,
 			FinishWizardArgs fwa,
 			long? cashRequestID,
 			CashRequestOriginator? cashRequestOriginator
 		) {
-			this.underwriterID = underwriterID;
-			this.customerID = customerId;
+			UnderwriterID = underwriterID;
 			this.newCreditLineOption = newCreditLine;
 			this.avoidAutomaticDecision = avoidAutoDecision;
 			this.finishWizardArgs = fwa;
@@ -61,7 +60,7 @@
 				Guid.NewGuid().ToString("N")
 			);
 
-			this.customerDetails = new CustomerDetails(this.customerID);
+			this.customerDetails = new CustomerDetails(customerID);
 
 			this.mailer = new StrategiesMailer();
 		} // constructor
@@ -70,14 +69,16 @@
 			get { return "Main strategy"; }
 		} // Name
 
+		public int UnderwriterID { get; private set; }
+
+		public int CustomerID {
+			get { return this.customerDetails.ID; }
+		} // CustomerID
+
 		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
 			this.overrideApprovedRejected = bOverrideApprovedRejected;
 			return this;
 		} // SetOverrideApprovedRejected
-
-		public AutoDecisionResponse AutoDecisionResponse {
-			get { return this.autoDecisionResponse; }
-		} // AutoDecisionResponse
 
 		/// <exception cref="StrategyAlert">Should never happen.</exception>
 		public override void Execute() {
@@ -88,42 +89,12 @@
 
 			CreateCashRequest();
 
-			if (this.newCreditLineOption == NewCreditLineOption.SkipEverything) {
-				Log.Debug(
-					"Main strategy was activated in 'skip everything go to manual decision mode'" +
-					" for customer {0} by underwriter {1}.",
-					this.customerID,
-					this.underwriterID
-				);
-
-				new SilentAutomation(this.customerID)
-					.PreventMainStrategy()
-					.SetTag(SilentAutomation.Callers.MainSkipEverything)
-					.Execute();
-
-				Log.Debug(
-					"Main strategy was activated in 'skip everything go to manual decision mode' by underwriter '{1}'. " +
-					"Nothing more to do for customer id '{0}'. Bye.",
-					this.customerID,
-					this.underwriterID
-				);
-
+			if (SkipEverything())
 				return;
-			} // if
 
-			if (this.cashRequestID.LacksValue) { // Should never happen at this point but just in case...
-				throw new StrategyAlert(
-					this,
-					string.Format(
-						"No cash request to update for customer {0} (neither specified nor created).",
-						this.customerID
-					)
-				);
-			} // if
+			this.cashRequestID.Validate(this);
 
-			bool useStandardFlow = !UseBackdoorSimpleFlow() || !BackdoorSimpleFlow();
-
-			if (useStandardFlow)
+			if (!UseBackdoorSimpleFlow() || !BackdoorSimpleFlow())
 				StandardFlow();
 
 			UpdateCustomerAndCashRequest();
@@ -133,11 +104,37 @@
 			SendEmails();
 		} // Execute
 
+		private bool SkipEverything() {
+			if (this.newCreditLineOption != NewCreditLineOption.SkipEverything)
+				return false;
+
+			Log.Debug(
+				"Main strategy was activated in 'skip everything go to manual decision mode'" +
+				" for customer {0} by underwriter {1}.",
+				CustomerID,
+				UnderwriterID
+			);
+
+			new SilentAutomation(CustomerID)
+				.PreventMainStrategy()
+				.SetTag(SilentAutomation.Callers.MainSkipEverything)
+				.Execute();
+
+			Log.Debug(
+				"Main strategy was activated in 'skip everything go to manual decision mode' by underwriter '{1}'. " +
+				"Nothing more to do for customer id '{0}'. Bye.",
+				CustomerID,
+				UnderwriterID
+			);
+
+			return true;
+		} // SkipEverything
+
 		private void StandardFlow() {
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverythingAndApplyAutoRules) {
 				MarketplaceUpdateStatus mpus = UpdateMarketplaces();
 
-				new Staller(this.customerID, this.mailer)
+				new Staller(CustomerID, this.mailer)
 					.SetMarketplaceUpdateStatus(mpus)
 					.Stall();
 
@@ -145,21 +142,25 @@
 			} // if
 
 			if (!this.customerDetails.IsTest) {
-				var fraudChecker = new FraudChecker(this.customerID, FraudMode.FullCheck);
+				var fraudChecker = new FraudChecker(CustomerID, FraudMode.FullCheck);
 				fraudChecker.Execute();
 			} // if
 
-			ForceNhibernateResync.Do(this.customerID);
+			ForceNhibernateResync.Do(CustomerID);
 
 			ProcessRejections();
 
 			// Gather LR data - must be done after rejection decisions
-			GetLandRegistryData();
+			new MainStrategyUpdateLandRegistryData(
+				this.customerDetails,
+				this.newCreditLineOption,
+				this.autoDecisionResponse
+			).Execute();
 
 			CalculateMedal(true);
 
 			if (this.newCreditLineOption == NewCreditLineOption.UpdateEverythingAndGoToManualDecision) {
-				new SilentAutomation(this.customerID)
+				new SilentAutomation(CustomerID)
 					.PreventMainStrategy()
 					.SetTag(SilentAutomation.Callers.MainUpdateAndGoManual)
 					.SetMedal(this.medal)
@@ -211,7 +212,7 @@
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
 				Log.Debug(
 					"Not using back door simple flow for customer '{0}': originator is '{1}'.",
-					this.customerID,
+					CustomerID,
 					this.cashRequestOriginator == null ? "-- null --" : this.cashRequestOriginator.Value.ToString()
 				);
 				return false;
@@ -220,7 +221,7 @@
 			if (!this.customerDetails.IsTest) {
 				Log.Debug(
 					"Not using back door simple flow for customer '{0}': not a text customer.",
-					this.customerID
+					CustomerID
 				);
 				return false;
 			} // if
@@ -231,7 +232,7 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(this.customerID, DateTime.UtcNow, false, true);
+			var instance = new CalculateMedal(CustomerID, DateTime.UtcNow, false, true);
 			instance.Execute();
 
 			if (instance.WasMismatch && updateWasMismatch)
@@ -246,7 +247,7 @@
 
 			var postMaster = new MainStrategyMails(
 				this.mailer,
-				this.customerID,
+				CustomerID,
 				this.offeredCreditLine,
 				this.medal,
 				this.customerDetails,
@@ -261,7 +262,7 @@
 			SafeReader scoreCardResults = DB.GetFirst(
 				"GetScoreCardData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerID),
+				new QueryParameter("CustomerId", CustomerID),
 				new QueryParameter("Today", DateTime.Today)
 			);
 
@@ -283,7 +284,7 @@
 			DB.ExecuteNonQuery(
 				"CustomerAnalyticsUpdateLocalData",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerID", this.customerID),
+				new QueryParameter("CustomerID", CustomerID),
 				new QueryParameter("AnalyticsDate", DateTime.UtcNow),
 				new QueryParameter("AnnualTurnover", this.medal.AnnualTurnover),
 				new QueryParameter("TotalSumOfOrdersForLoanOffer", (decimal)0), // Not used any more, was part of old medal.
@@ -310,142 +311,26 @@
 		} // AdjustOfferredCreditLine
 
 		private void CapOffer() {
-			Log.Info("Finalizing and capping offer");
-
-			this.offeredCreditLine = this.medal.RoundOfferedAmount();
-
-			bool isHomeOwnerAccordingToLandRegistry = DB.ExecuteScalar<bool>(
+			bool isHomeOwner = DB.ExecuteScalar<bool>(
 				"GetIsCustomerHomeOwnerAccordingToLandRegistry",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("CustomerId", this.customerID)
+				new QueryParameter("CustomerId", CustomerID)
 			);
 
-			if (isHomeOwnerAccordingToLandRegistry) {
-				Log.Info("Capped for home owner according to land registry");
-				this.offeredCreditLine = Math.Min(this.offeredCreditLine, MaxCapHomeOwner);
-			} else {
-				Log.Info("Capped for not home owner");
-				this.offeredCreditLine = Math.Min(this.offeredCreditLine, MaxCapNotHomeOwner);
-			} // if
+			this.offeredCreditLine = Math.Min(
+				this.medal.RoundOfferedAmount(),
+				isHomeOwner ? MaxCapHomeOwner : MaxCapNotHomeOwner
+			);
+
+			Log.Debug(
+				"Capped for {0}home owner according to land registry: " +
+				"capped amount {1} for customer {2} and underwriter {3}.",
+				isHomeOwner ? string.Empty : "not ",
+				this.offeredCreditLine,
+				CustomerID,
+				UnderwriterID
+			);
 		} // CapOffer
-
-		private void GetLandRegistryData(List<CustomerAddressModel> addresses) {
-			foreach (CustomerAddressModel address in addresses) {
-				LandRegistryDataModel model = null;
-
-				if (!string.IsNullOrEmpty(address.HouseName)) {
-					model = LandRegistryEnquiry.Get(this.customerID,
-						null,
-						address.HouseName,
-						null,
-						null,
-						address.PostCode
-					);
-				} else if (!string.IsNullOrEmpty(address.HouseNumber)) {
-					model = LandRegistryEnquiry.Get(this.customerID,
-						address.HouseNumber,
-						null,
-						null,
-						null,
-						address.PostCode
-					);
-				} else if (
-					!string.IsNullOrEmpty(address.FlatOrApartmentNumber) &&
-					string.IsNullOrEmpty(address.HouseNumber)
-				) {
-					model = LandRegistryEnquiry.Get(this.customerID,
-						address.FlatOrApartmentNumber,
-						null,
-						null,
-						null,
-						address.PostCode
-					);
-				} // if
-
-				bool doLandRegistry =
-					(model != null) &&
-					(model.Enquery != null) &&
-					(model.ResponseType == LandRegistryResponseType.Success) &&
-					(model.Enquery.Titles != null) &&
-					(model.Enquery.Titles.Count == 1);
-
-				if (doLandRegistry) {
-					var lrr = new LandRegistryRes(this.customerID, model.Enquery.Titles[0].TitleNumber);
-					lrr.PartialExecute();
-
-					LandRegistry dbLandRegistry = lrr.LandRegistry;
-
-					LandRegistryDataModel landRegistryDataModel = lrr.RawResult;
-
-					if (landRegistryDataModel.ResponseType == LandRegistryResponseType.Success) {
-						bool isOwnerAccordingToLandRegistry = LandRegistryRes.IsOwner(
-							this.customerDetails.ID,
-							this.customerDetails.FullName,
-							landRegistryDataModel.Response,
-							landRegistryDataModel.Res.TitleNumber
-						);
-
-						DB.ExecuteNonQuery(
-							"AttachCustomerAddrToLandRegistryAddr",
-							CommandSpecies.StoredProcedure,
-							new QueryParameter("@LandRegistryAddressID", dbLandRegistry.Id),
-							new QueryParameter("@CustomerAddressID", address.AddressId),
-							new QueryParameter("@IsOwnerAccordingToLandRegistry", isOwnerAccordingToLandRegistry)
-						);
-					} // if
-				} else {
-					int num = 0;
-
-					if (model != null && model.Enquery != null && model.Enquery.Titles != null)
-						num = model.Enquery.Titles.Count;
-
-					Log.Warn(
-						"No land registry retrieved for customer id: {5}," +
-						"house name: {0}, house number: {1}, flat number: {2}, postcode: {3}, # of inquiries {4}",
-						address.HouseName,
-						address.HouseNumber,
-						address.FlatOrApartmentNumber,
-						address.PostCode,
-						num,
-						this.customerID
-					);
-				} // if
-			} // for each
-		} // GetLandRegistryData
-
-		private void GetLandRegistryData() {
-			bool bSkip =
-				this.newCreditLineOption == NewCreditLineOption.SkipEverything ||
-				this.newCreditLineOption == NewCreditLineOption.SkipEverythingAndApplyAutoRules;
-
-			if (bSkip)
-				return;
-
-			var isHomeOwner = this.customerDetails.IsOwnerOfMainAddress || this.customerDetails.IsOwnerOfOtherProperties;
-
-			if (!this.autoDecisionResponse.DecidedToReject && isHomeOwner) {
-				Log.Debug(
-					"Retrieving LandRegistry system decision: {0} residential status: {1}",
-					this.autoDecisionResponse.DecisionName,
-					this.customerDetails.PropertyStatusDescription
-				);
-
-				var customerAddressesHelper = new CustomerAddressHelper(this.customerID);
-				customerAddressesHelper.Execute();
-
-				try {
-					GetLandRegistryData(customerAddressesHelper.OwnedAddresses);
-				} catch (Exception e) {
-					Log.Error("Error while getting land registry data: {0}", e);
-				} // try
-			} else {
-				Log.Info(
-					"Not retrieving LandRegistry system decision: {0} residential status: {1}",
-					this.autoDecisionResponse.DecisionName,
-					this.customerDetails.PropertyStatusDescription
-				);
-			} // if
-		} // GetLandRegistryData
 
 		private void ProcessApprovals() {
 			bool bContinue = true;
@@ -495,7 +380,7 @@
 			if (EnableAutomaticReApproval && bContinue) {
 				// ReSharper restore ConditionIsAlwaysTrueOrFalse
 				var raAgent = new AutoDecisionAutomation.AutoDecisions.ReApproval.Agent(
-					this.customerID,
+					CustomerID,
 					this.cashRequestID,
 					DB,
 					Log
@@ -519,7 +404,7 @@
 
 			if (EnableAutomaticApproval && bContinue) {
 				var aAgent = new Approval(
-					this.customerID,
+					CustomerID,
 					this.cashRequestID,
 					this.offeredCreditLine,
 					this.medal.MedalClassification,
@@ -550,7 +435,7 @@
 			} // if
 
 			if (CurrentValues.Instance.BankBasedApprovalIsEnabled && bContinue) {
-				new BankBasedApproval(this.customerID).MakeDecision(this.autoDecisionResponse);
+				new BankBasedApproval(CustomerID).MakeDecision(this.autoDecisionResponse);
 
 				bContinue = !this.autoDecisionResponse.SystemDecision.HasValue;
 
@@ -580,7 +465,7 @@
 				return;
 
 			if (EnableAutomaticReRejection) {
-				var rrAgent = new ReRejection(this.customerID, this.cashRequestID, DB, Log);
+				var rrAgent = new ReRejection(CustomerID, this.cashRequestID, DB, Log);
 				rrAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 				if (rrAgent.WasMismatch) {
@@ -599,7 +484,7 @@
 			if (this.customerDetails.IsAlibaba)
 				return;
 
-			var rAgent = new Agent(this.customerID, this.cashRequestID, DB, Log).Init();
+			var rAgent = new Agent(CustomerID, this.cashRequestID, DB, Log).Init();
 			rAgent.MakeDecision(this.autoDecisionResponse, this.tag);
 
 			if (rAgent.WasMismatch) {
@@ -627,7 +512,7 @@
 		private void AddOldDecisionOffer(DateTime now) {
 			var sp = new MainStrategyUpdateCrC(
 				now,
-				this.customerID,
+				CustomerID,
 				this.cashRequestID,
 				this.autoDecisionResponse,
 				DB,
@@ -701,7 +586,7 @@
 		private void UpdateSalesForceOpportunity() {
 			string customerEmail = this.customerDetails.AppEmail;
 
-			new AddUpdateLeadAccount(customerEmail, this.customerID, false, false).Execute();
+			new AddUpdateLeadAccount(customerEmail, CustomerID, false, false).Execute();
 
 			if (!this.autoDecisionResponse.Decision.HasValue)
 				return;
@@ -709,7 +594,7 @@
 			switch (this.autoDecisionResponse.Decision.Value) {
 			case DecisionActions.Approve:
 			case DecisionActions.ReApprove:
-				new UpdateOpportunity(this.customerID, new OpportunityModel {
+				new UpdateOpportunity(CustomerID, new OpportunityModel {
 					ApprovedAmount = this.autoDecisionResponse.AutoApproveAmount,
 					Email = customerEmail,
 					ExpectedEndDate = this.autoDecisionResponse.AppValidFor,
@@ -719,7 +604,7 @@
 
 			case DecisionActions.Reject:
 			case DecisionActions.ReReject:
-				new UpdateOpportunity(this.customerID, new OpportunityModel {
+				new UpdateOpportunity(CustomerID, new OpportunityModel {
 					Email = customerEmail,
 					DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
 					DealLostReason = "Auto " + this.autoDecisionResponse.Decision.Value.ToString(),
@@ -730,9 +615,9 @@
 		} // UpdateSalesForceOpportunity
 
 		private void ExecuteAdditionalStrategies() {
-			var preData = new PreliminaryData(this.customerID);
+			var preData = new PreliminaryData(CustomerID);
 
-			new ExperianConsumerCheck(this.customerID, null, false)
+			new ExperianConsumerCheck(CustomerID, null, false)
 				.PreventSilentAutomation()
 				.Execute();
 
@@ -746,24 +631,24 @@
 						if (string.IsNullOrEmpty(appDirName) || string.IsNullOrEmpty(appDirSurname))
 							return;
 
-						var directorExperianConsumerCheck = new ExperianConsumerCheck(this.customerID, appDirId, false);
+						var directorExperianConsumerCheck = new ExperianConsumerCheck(CustomerID, appDirId, false);
 						directorExperianConsumerCheck.Execute();
 					},
 					"GetCustomerDirectorsForConsumerCheck",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerId", this.customerID)
+					new QueryParameter("CustomerId", CustomerID)
 				);
 			} // if
 
 			if (preData.LastStartedMainStrategyEndTime.HasValue) {
 				Library.Instance.Log.Info("Performing experian company check");
-				new ExperianCompanyCheck(this.customerID, false)
+				new ExperianCompanyCheck(CustomerID, false)
 					.PreventSilentAutomation()
 					.Execute();
 			} // if
 
 			if (preData.LastStartedMainStrategyEndTime.HasValue)
-				new AmlChecker(this.customerID).PreventSilentAutomation().Execute();
+				new AmlChecker(CustomerID).PreventSilentAutomation().Execute();
 
 			bool shouldRunBwa =
 				preData.AppBankAccountType == "Personal" &&
@@ -772,10 +657,10 @@
 				preData.AppAccountNumber != null;
 
 			if (shouldRunBwa)
-				new BwaChecker(this.customerID).Execute();
+				new BwaChecker(CustomerID).Execute();
 
-			Library.Instance.Log.Info("Getting Zoopla data for customer {0}", this.customerID);
-			new ZooplaStub(this.customerID).Execute();
+			Library.Instance.Log.Info("Getting Zoopla data for customer {0}", CustomerID);
+			new ZooplaStub(CustomerID).Execute();
 		} // ExecuteAdditionalStrategies
 
 		private static bool EnableAutomaticApproval { get { return CurrentValues.Instance.EnableAutomaticApproval; } }
@@ -796,7 +681,7 @@
 
 			Log.Debug(
 				"UpdatePartnerAlibaba ******************************************************{0}, {1}",
-				this.customerID,
+				CustomerID,
 				autoDecision
 			);
 
@@ -807,28 +692,28 @@
 			case DecisionActions.Reject:
 			case DecisionActions.ReApprove:
 			case DecisionActions.Approve:
-				new DataSharing(this.customerID, AlibabaBusinessType.APPLICATION).Execute();
-				new DataSharing(this.customerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
+				new DataSharing(CustomerID, AlibabaBusinessType.APPLICATION).Execute();
+				new DataSharing(CustomerID, AlibabaBusinessType.APPLICATION_REVIEW).Execute();
 				break;
 
 			// auto not final
 			case DecisionActions.Waiting:
-				new DataSharing(this.customerID, AlibabaBusinessType.APPLICATION).Execute();
+				new DataSharing(CustomerID, AlibabaBusinessType.APPLICATION).Execute();
 				break;
 
 			default: // unknown auto decision status
 				throw new StrategyAlert(
 					this,
-					string.Format("Auto decision invalid value {0} for customer {1}", autoDecision, this.customerID)
+					string.Format("Auto decision invalid value {0} for customer {1}", autoDecision, CustomerID)
 				);
 			} // switch
 		} // UpdatePartnerAlibaba
 
 		private void ValidateInput() {
-			if ((this.customerDetails.ID <= 0) || (this.customerDetails.ID != this.customerID)) {
+			if (!this.customerDetails.IsValid) {
 				throw new StrategyAlert(
 					this,
-					string.Format("Customer details were not found for id {0}.", this.customerID)
+					string.Format("Customer details were not found for id {0}.", this.customerDetails.RequestedID)
 				);
 			} // if
 
@@ -839,7 +724,7 @@
 						string.Format(
 							"Neither cash request id nor cash request originator specified for customer {0} " +
 							"(cash request cannot be created).",
-							this.customerID
+							CustomerID
 						)
 					);
 				} // if
@@ -847,7 +732,7 @@
 				bool isMatch = DB.ExecuteScalar<bool>(
 					"ValidateCustomerAndCashRequest",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@CustomerID", this.customerID),
+					new QueryParameter("@CustomerID", CustomerID),
 					new QueryParameter("@CashRequestID", this.cashRequestID.Value)
 				);
 
@@ -857,7 +742,7 @@
 						string.Format(
 							"Cash request id {0} does not belong to customer {1}.",
 							this.cashRequestID.Value,
-							this.customerID
+							CustomerID
 						)
 					);
 				} // if
@@ -879,7 +764,7 @@
 			SafeReader sr = DB.GetFirst(
 				"MainStrategyCreateCashRequest",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", this.customerID),
+				new QueryParameter("@CustomerID", CustomerID),
 				new QueryParameter("@Now", now),
 				// ReSharper disable once PossibleInvalidOperationException
 				// This check is done in ValidateInput().
@@ -889,7 +774,7 @@
 			if (sr.IsEmpty) {
 				throw new StrategyAlert(
 					this,
-					string.Format("Cash request was not created for customer {0}.", this.customerID)
+					string.Format("Cash request was not created for customer {0}.", CustomerID)
 				);
 			} // if
 
@@ -897,10 +782,10 @@
 	
 			AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
 				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
-				CustomerID = this.customerID,
+				CustomerID = CustomerID,
 				OldCashRequestID = this.cashRequestID,
 				RequestTime = now,
-				UserID = this.underwriterID,
+				UserID = UnderwriterID,
 			});
 			cashRequestStrategy.Execute();
 			this.nlCashRequestID = cashRequestStrategy.CashRequestID;
@@ -911,7 +796,7 @@
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
 				int cashRequestCount = sr["CashRequestCount"];
 
-				new AddOpportunity(this.customerID,
+				new AddOpportunity(CustomerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
 						CreateDate = now,
@@ -933,7 +818,7 @@
 			if (!updateEverything)
 				return null;
 
-			Log.Debug("Checking which marketplaces should be updated for customer {0}...", this.customerID);
+			Log.Debug("Checking which marketplaces should be updated for customer {0}...", CustomerID);
 
 			DateTime now = DateTime.UtcNow;
 
@@ -948,17 +833,17 @@
 				},
 				"LoadMarketplacesLastUpdateTime",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@CustomerID", this.customerID)
+				new QueryParameter("@CustomerID", CustomerID)
 			);
 
 			if (mpsToUpdate.Count < 1) {
-				Log.Debug("No marketplace should be updated for customer {0}.", this.customerID);
+				Log.Debug("No marketplace should be updated for customer {0}.", CustomerID);
 				return null;
 			} // if
 
 			Log.Debug(
 				"{2} to update for customer {0}: {1}.",
-				this.customerID,
+				CustomerID,
 				string.Join(", ", mpsToUpdate),
 				Grammar.Number(mpsToUpdate.Count, "Marketplace")
 			);
@@ -969,20 +854,20 @@
 				int thisMpID = mpID; // to avoid "Access to foreach variable in closure".
 
 				Task.Run(() => {
-					Log.Debug("Updating marketplace {0} for customer {1}...", thisMpID, this.customerID);
+					Log.Debug("Updating marketplace {0} for customer {1}...", thisMpID, CustomerID);
 
-					new UpdateMarketplace(this.customerID, thisMpID, false)
+					new UpdateMarketplace(CustomerID, thisMpID, false)
 						.PreventSilentAutomation()
 						.SetMarketplaceUpdateStatus(mpus)
 						.Execute();
 
-					Log.Debug("Updating marketplace {0} for customer {1} complete.", thisMpID, this.customerID);
+					Log.Debug("Updating marketplace {0} for customer {1} complete.", thisMpID, CustomerID);
 				});
 			} // for each
 
 			Log.Debug(
 				"Update launched for marketplaces {1} of customer {0}.",
-				this.customerID,
+				CustomerID,
 				string.Join(", ", mpsToUpdate)
 			);
 
@@ -990,8 +875,6 @@
 		} // UpdateMarketplaces
 
 		// Inputs
-		private readonly int underwriterID;
-		private readonly int customerID;
 		private readonly FinishWizardArgs finishWizardArgs;
 		private readonly int avoidAutomaticDecision;
 
@@ -1004,31 +887,6 @@
 		private MedalResult medal;
 
 		private int offeredCreditLine;
-
-		private class InternalCashRequestID {
-			public static implicit operator long(InternalCashRequestID cr) {
-				return cr == null ? 0 : cr.Value;
-			} // operator long
-
-			public InternalCashRequestID(long? cashRequestID) {
-				this.cashRequestID = cashRequestID;
-			} // constructor
-
-			public bool HasValue {
-				get { return this.cashRequestID.HasValue && (this.cashRequestID.Value > 0); }
-			} // HasValue
-
-			public bool LacksValue {
-				get { return !HasValue; }
-			} // HasValue
-
-			public long Value {
-				get { return this.cashRequestID ?? 0; }
-				set { this.cashRequestID = value; }
-			} // HasValue
-
-			private long? cashRequestID;
-		} // class InternalCashRequestID
 
 		private readonly InternalCashRequestID cashRequestID;
 		private int nlCashRequestID;

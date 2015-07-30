@@ -173,7 +173,9 @@
     <Compile Include="MainStrategy\BackdoorSimpleReject.cs" />
     <Compile Include="MainStrategy\BackdoorSimpleApprove.cs" />
     <Compile Include="MainStrategy\ForceNhibernateResync.cs" />
+    <Compile Include="MainStrategy\InternalCashRequestID.cs" />
     <Compile Include="MainStrategy\MainStrategyUpdateCrC.cs" />
+    <Compile Include="MainStrategy\MainStrategyUpdateLandRegistryData.cs" />
     <Compile Include="MainStrategy\MarketplaceUpdateStatus.cs" />
     <Compile Include="Misc\LoanStatusAfterPayment.cs" />
     <Compile Include="Misc\PacnetDelivery.cs" />
