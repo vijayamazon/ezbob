@@ -632,7 +632,7 @@
 
 			sp.ExecuteNonQuery();
 
-			AddNewDecisionOffer(now); 
+			// AddNewDecisionOffer(now); 
 
 			// TODO update new offer / decision tables
 			Log.Debug("update new offer / decision for customer {0}", this.customerID);
