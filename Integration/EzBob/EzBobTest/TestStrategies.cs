@@ -837,9 +837,10 @@
 			nlModel.PaypointTransactionStatus = "Done";
 
 			nlModel.Payment = new NL_Payments() {
-				PaymentMethodID = 2,
+				PaymentMethodID = (int)LoanTransactionMethods.Auto,  //2,
 				PaymentTime = DateTime.UtcNow,
 				PaymentStatusID = (int)NLPaymentStatuses.SystemRepay,
+
 				Amount = amount,
 				Notes = "bbbbblala"
 			};

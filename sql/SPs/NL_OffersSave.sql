@@ -11,9 +11,9 @@ GO
 
 CREATE TYPE NL_OffersList AS TABLE (
 	[DecisionID] [INT] NOT NULL,
-	[LoanTypeID] [INT] CONSTRAINT [DF_NL_Offers_LoanType] DEFAULT 1 NOT NULL,
-	[RepaymentIntervalTypeID] [INT]  CONSTRAINT [DF_NL_Offers_RepaymentIntervalType] DEFAULT 1 NOT NULL,
-	[LoanSourceID] [INT] CONSTRAINT [DF_NL_Offers_LoanSource] DEFAULT 1 NOT NULL, 
+	[LoanTypeID] [INT] NOT NULL  DEFAULT 1,
+	[RepaymentIntervalTypeID] [INT]	NOT NULL DEFAULT  1,
+	[LoanSourceID] [INT] NOT NULL DEFAULT 1, 
 	[StartTime] [DATETIME] NOT NULL,
 	[EndTime] [DATETIME] NOT NULL,	
 	[RepaymentCount] [INT] NOT NULL,	
@@ -21,7 +21,7 @@ CREATE TYPE NL_OffersList AS TABLE (
 	[MonthlyInterestRate] [DECIMAL] (18, 6) NOT NULL,
 	[CreatedTime] [DATETIME] NOT NULL,
 	[BrokerSetupFeePercent] [DECIMAL](18, 6) NULL,	
-	[SetupFeeAddedToLoan] bit NULL,	
+	[SetupFeeAddedToLoan] BIT NOT NULL DEFAULT 0,	
 	[Notes] [nvarchar](max) NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
@@ -77,7 +77,7 @@ BEGIN
 		[IsLoanTypeSelectionAllowed] ,			
 		[IsRepaymentPeriodSelectionAllowed],
 		[IsAmountSelectionAllowed] ,		
-		[SendEmailNotification] ,
+		[SendEmailNotification] 
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

@@ -489,6 +489,7 @@
 
             var sum = oldCashRequest.ApprovedSum();
             if (sum <= 0)
+	            // ReSharper disable once ThrowingSystemException
                 throw new Exception("Credit sum cannot be zero or less");
 
             this._limit.Check(sum);

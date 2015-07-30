@@ -234,9 +234,9 @@ IF OBJECT_ID('NL_Offers') IS NULL BEGIN
 CREATE TABLE [dbo].[NL_Offers](
 	[OfferID] [INT] NOT NULL IDENTITY(1,1) ,
 	[DecisionID] [INT] NOT NULL,
-	[LoanTypeID] [INT] CONSTRAINT [DF_NL_Offers_LoanType] DEFAULT 1 NOT NULL,
-	[RepaymentIntervalTypeID] [INT]  CONSTRAINT [DF_NL_Offers_RepaymentIntervalType] DEFAULT 1 NOT NULL,
-	[LoanSourceID] [INT] CONSTRAINT [DF_NL_Offers_LoanSource] DEFAULT 1 NOT NULL, 
+	[LoanTypeID] [INT] NOT NULL,
+	[RepaymentIntervalTypeID] [INT] , 
+	[LoanSourceID] [INT] NOT NULL, 
 	[StartTime] [DATETIME] NOT NULL,
 	[EndTime] [DATETIME] NOT NULL,	
 	[RepaymentCount] [INT] NOT NULL,	
@@ -244,7 +244,7 @@ CREATE TABLE [dbo].[NL_Offers](
 	[MonthlyInterestRate] [DECIMAL] (18, 6) NOT NULL,
 	[CreatedTime] [DATETIME] NOT NULL,
 	[BrokerSetupFeePercent] [DECIMAL](18, 6) NULL,	
-	[SetupFeeAddedToLoan] bit NULL,	
+	[SetupFeeAddedToLoan] BIT NULL DEFAULT 0,
 	[Notes] [nvarchar](max) NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
@@ -253,7 +253,7 @@ CREATE TABLE [dbo].[NL_Offers](
 	[IsRepaymentPeriodSelectionAllowed] [BIT] DEFAULT 0,
 	[IsAmountSelectionAllowed] [BIT] DEFAULT 0,
 	[TimestampCounter] rowversion NOT NULL,
-  CONSTRAINT [PK_NL_Offers] PRIMARY KEY CLUSTERED ([OfferID] ASC)
+  CONSTRAINT [PK_NL_Offers] PRIMARY KEY CLUSTERED ([OfferID] ASC) 
 );
 END
 GO
@@ -476,7 +476,7 @@ CREATE TABLE [dbo].[NL_Payments](
 	[DeletedByUserID] [INT] NULL,
 	[Notes] [nvarchar](max) NULL,
 	[TimestampCounter] rowversion NOT NULL,
- CONSTRAINT [PK_NL_LoanTransactions] PRIMARY KEY CLUSTERED ([PaymentID] ASC),
+ CONSTRAINT [PK_NL_Payment] PRIMARY KEY CLUSTERED ([PaymentID] ASC),
  CONSTRAINT [FK_NL_Payments_NL_PaymentStatuses] FOREIGN KEY([PaymentStatusID]) REFERENCES [dbo].[NL_PaymentStatuses] ([PaymentStatusID])
 ) ;
 END
@@ -778,6 +778,16 @@ GO
  ALTER TABLE [dbo].[Esignatures]  ADD CONSTRAINT [FK_Esignatures_NL_Decisions] FOREIGN KEY([DecisionID]) REFERENCES [dbo].[NL_Decisions] ([DecisionID]) ;
  END
 GO
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_NL_Offers_RepaymentIntervalType')
+	ALTER TABLE [dbo].[NL_Offers] add constraint DF_NL_Offers_RepaymentIntervalType DEFAULT 1 for RepaymentIntervalTypeID	;
+GO
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_NL_Offers_LoanSource')
+	ALTER TABLE [dbo].[NL_Offers] add constraint DF_NL_Offers_LoanSource DEFAULT 1 for LoanSourceID	;
+GO
+ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_NL_Offers_LoanType')
+	ALTER TABLE [dbo].[NL_Offers] add constraint DF_NL_Offers_LoanType DEFAULT 1 for LoanTypeID	;
+GO
+  
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_PacnetTransactions_NL_PacnetTransactionStatuses') BEGIN
  ALTER TABLE [dbo].[NL_PacnetTransactions] ADD CONSTRAINT [FK_NL_PacnetTransactions_NL_PacnetTransactionStatuses] FOREIGN KEY([PacnetTransactionStatusID]) REFERENCES [dbo].[NL_PacnetTransactionStatuses] ([PacnetTransactionStatusID]) ;
@@ -914,9 +924,6 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
 END
 GO
 
-
-
-
 -- NL_DiscountPlans/NL_DiscountPlanEntries migration
 
 -- SortOrder field defines order of entries (ORDER BY SortOrder ASC, DiscountPlanEntryID DESC) and not number of repayment period. Entry is always related to repetition period. I.e. if the same plan is applied to monthly repaid loan and to weekly repaid loan and an entry in the second position says "-10%" that means that in the former case customer receives 10% discound for the second month while in the latter case customer receives 10% discount for the second week.
@@ -965,14 +972,14 @@ if OBJECT_ID('tempdb..#discountplanTemp') is not null BEGIN drop table #discount
 
 
 -- NL_LoanStatuses
+IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Pending') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Pending');		END;
 IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Live') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Live');	END;
 IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Late') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Late');		END;
 IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'PaidOff') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('PaidOff');	END;
-IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Pending') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Pending');		END;
-IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Default') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Default');		END;
 IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'WriteOff') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('WriteOff');	END;
+--IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Default') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Default');		END;
 -- FROM [dbo].[CustomerStatuses] ???
-IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'DebtManagement') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('DebtManagement'); END;
+--IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'DebtManagement') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('DebtManagement'); END;
 -- IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = '1-14DaysMissed') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('1-14DaysMissed'); END;
 -- IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = '15-30DaysMissed') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('15-30DaysMissed'); END;
 -- IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = '31-45DaysMissed') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('31-45DaysMissed'); END;
@@ -1019,7 +1026,6 @@ IF( SELECT LoanFeeTypeID FROM dbo.NL_LoanFeeTypes WHERE LoanFeeType = 'PartialPa
 	INSERT INTO [dbo].[NL_LoanFeeTypes] (LoanFeeType, DefaultAmount, [Description]) VALUES('PartialPaymentFee', 45, 'A payment has been made (more than repayment interest + late payment fee but was not made in full)');
 END; 
 
-
 -- NL_CashRequestOrigins
 IF( SELECT CashRequestOriginID FROM dbo.NL_CashRequestOrigins WHERE CashRequestOrigin = 'FinishedWizard') IS NULL BEGIN
 	INSERT INTO [dbo].[NL_CashRequestOrigins] (CashRequestOrigin) VALUES('FinishedWizard');
@@ -1060,12 +1066,43 @@ IF NOT EXISTS( SELECT PacnetTransactionStatusID FROM dbo.NL_PacnetTransactionSta
 	INSERT INTO [dbo].[NL_PacnetTransactionStatuses] ([TransactionStatus]) VALUES('Done');
 END;
 
--- add new payment method
-IF NOT EXISTS( SELECT Id FROM dbo.LoanTransactionMethod WHERE [Name] = 'Write Off') BEGIN
-declare @lastid int;
-SET @lastid = (SELECT Max(Id) as i FROM dbo.LoanTransactionMethod);
-INSERT INTO dbo.LoanTransactionMethod (Id, Name, DisplaySort) VALUES( (@lastid +1), 'Write Off', 0);	
+-- add new payment methods
+IF EXISTS( SELECT Id FROM dbo.LoanTransactionMethod WHERE [Name] = 'Write Off') BEGIN
+	DELETE FROM dbo.LoanTransactionMethod WHERE [Name] = 'Write Off';
 END;
+declare @lastid int;
+IF NOT EXISTS( SELECT Id FROM dbo.LoanTransactionMethod WHERE [Name] = 'WriteOff') BEGIN
+SET @lastid = (SELECT Max(Id) as i FROM dbo.LoanTransactionMethod);
+INSERT INTO dbo.LoanTransactionMethod (Id, Name, DisplaySort) VALUES( (@lastid +1), 'WriteOff', 0);	
+END;
+IF NOT EXISTS( SELECT Id FROM dbo.LoanTransactionMethod WHERE [Name] = 'ChargeBack') BEGIN
+SET @lastid = (SELECT Max(Id) as i FROM dbo.LoanTransactionMethod);
+INSERT INTO dbo.LoanTransactionMethod (Id, Name, DisplaySort) VALUES( (@lastid +1), 'ChargeBack', 0);	
+END;
+IF NOT EXISTS( SELECT Id FROM dbo.LoanTransactionMethod WHERE [Name] = 'WrongPayment') BEGIN
+SET @lastid = (SELECT Max(Id) as i FROM dbo.LoanTransactionMethod);
+INSERT INTO dbo.LoanTransactionMethod (Id, Name, DisplaySort) VALUES( (@lastid +1), 'WrongPayment', 0);	
+END;
+IF NOT EXISTS( SELECT Id FROM dbo.LoanTransactionMethod WHERE [Name] = 'SystemRepay') BEGIN
+SET @lastid = (SELECT Max(Id) as i FROM dbo.LoanTransactionMethod);
+INSERT INTO dbo.LoanTransactionMethod (Id, Name, DisplaySort) VALUES( (@lastid +1), 'SystemRepay', 0);	
+END;
+
+ -- populate [NL_PaymentStatuses] (enum NLPaymentStatus)
+IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Pending') BEGIN -- "InProgress"
+	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Pending');
+END;
+IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Active') BEGIN
+	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Active');
+END;
+IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Deleted') BEGIN
+	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Deleted');
+END;
+IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Cancelled') BEGIN
+	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Cancelled');
+END;
+
+
 
 -- populate [NL_LoanAgreementTemplateTypes]
 IF NOT EXISTS( SELECT [TemplateTypeID] FROM dbo.NL_LoanAgreementTemplateTypes WHERE TemplateType = 'GuarantyAgreement') BEGIN
@@ -1101,39 +1138,13 @@ IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemp
 	ALTER TABLE [dbo].[LoanAgreementTemplate] ADD TemplateTypeID [INT] NULL ;	
 GO
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_TemplateTypeID')
-	ALTER TABLE [dbo].[LoanAgreementTemplate] add constraint DF_TemplateTypeID DEFAULT 1 for TemplateTypeID	
+	ALTER TABLE [dbo].[LoanAgreementTemplate] add constraint DF_TemplateTypeID DEFAULT 1 for TemplateTypeID	;
 GO
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes') BEGIN
 	ALTER TABLE [dbo].[LoanAgreementTemplate] ADD CONSTRAINT FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes FOREIGN KEY(TemplateTypeID) REFERENCES [dbo].[NL_LoanAgreementTemplateTypes] ([TemplateTypeID]) ;
 END ;
 IF EXISTS(SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemplate') AND name = 'TemplateTypeID') BEGIN
 UPDATE [dbo].[LoanAgreementTemplate] SET [TemplateTypeID] = TemplateType;
-END;
-
- -- populate [NL_PaymentStatuses] (enum PaymentStatus)
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'PaidOnTime') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('PaidOnTime');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Late') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Late');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'Early') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('Early');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'ChargeBack') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('ChargeBack');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'WrongPayment') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('WrongPayment');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'WriteOff') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('WriteOff');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'SystemRepay') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('SystemRepay');
-END;
-IF NOT EXISTS( SELECT [PaymentStatusID] FROM [dbo].[NL_PaymentStatuses] WHERE PaymentStatus = 'PacnetRefund') BEGIN
-	INSERT INTO [dbo].[NL_PaymentStatuses] ([PaymentStatus]) VALUES('PacnetRefund');
 END;
 
 -- populate NL_PaypointTransactionStatuses (FROM customer)
@@ -1146,22 +1157,7 @@ END;
 IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PaypointTransactionStatuses] WHERE TransactionStatus = 'Unknown') BEGIN
 	INSERT INTO [dbo].[NL_PaypointTransactionStatuses] (TransactionStatus) VALUES('Unknown');
 END;
-
-
-
--- populate NL_PacnetTransactionStatuses (to customer)
-IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PacnetTransactionStatuses] WHERE TransactionStatus = 'InProgress') BEGIN
-	INSERT INTO [dbo].[NL_PacnetTransactionStatuses] (TransactionStatus) VALUES('InProgress');
-END;
-IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PacnetTransactionStatuses] WHERE TransactionStatus = 'Done') BEGIN
-	INSERT INTO [dbo].[NL_PacnetTransactionStatuses] (TransactionStatus) VALUES('Done');
-END;
-IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PacnetTransactionStatuses] WHERE TransactionStatus = 'Error') BEGIN
-	INSERT INTO [dbo].[NL_PacnetTransactionStatuses] (TransactionStatus) VALUES('Error');
-END;     
-IF NOT EXISTS( SELECT TransactionStatus FROM [dbo].[NL_PacnetTransactionStatuses] WHERE TransactionStatus = 'Unknown') BEGIN
-	INSERT INTO [dbo].[NL_PacnetTransactionStatuses] (TransactionStatus) VALUES('Unknown');
-END;  
+  
 
 -- NL_RepaymentIntervalTypes
 IF NOT EXISTS( SELECT RepaymentIntervalType FROM [dbo].[NL_RepaymentIntervalTypes] WHERE RepaymentIntervalType = 30 ) BEGIN -- 'Month'

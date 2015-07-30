@@ -34,7 +34,7 @@
 		public string Error { get; set; }
 
 		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
+			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
 			Type t = typeof(ReschedulingResult);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)

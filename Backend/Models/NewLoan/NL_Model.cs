@@ -163,14 +163,4 @@
 	}
 
 
-
-	//public enum PacnetTransactionStatus {
-	//	Submited = 1,
-	//	//2	ConfigError:MultipleCandidateChannels
-	//	Error = 3,
-	//	InProgress = 4,
-	//	//PaymentByCustomer = 5,
-	//	Done = 6
-	//}
 }
-
