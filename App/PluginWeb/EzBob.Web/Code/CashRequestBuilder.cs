@@ -56,7 +56,6 @@
 				OfferStart = now,
 				LoanSource = loanSource, // TODO: can it be EU loan?
 				IsCustomerRepaymentPeriodSelectionAllowed = false,
-
 				ManualSetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
 				SystemCalculatedSum = (double) customer.QuickOffer.Amount,
 				ManagerApprovedSum = (double) customer.QuickOffer.Amount,
@@ -109,37 +108,46 @@
 				UserID = userID
 			});
 
+			Log.DebugFormat("Added NL nlCashRequestID: {0}", nlCashRequestID);
+
 			var nlDecisionID = this.m_oServiceClient.Instance.AddDecision(userID, customer.Id, new NL_Decisions {
 				CashRequestID = nlCashRequestID.Value,
 				DecisionTime = now,
 				Notes = CashRequestOriginator.QuickOffer.DescriptionAttr(),
-				
 				DecisionNameID = (int)DecisionActions.Approve,
 				UserID = user.Id
-			}, null, null);
+			}, cashRequest.Id, null);
+
+			Log.DebugFormat("Added NL nlDecisionID: {0}", nlDecisionID);
+
+			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee };
+			if (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true)
+				setupFee.LoanFeeTypeID = (int)FeeTypes.ArrangementFee;
+			NL_OfferFees[] ofeerFees = { setupFee };
 
 			var nlOfferID = this.m_oServiceClient.Instance.AddOffer(userID, customer.Id, new NL_Offers {
 				DecisionID = nlDecisionID.Value,
-				CreatedTime = now,
-				Notes = CashRequestOriginator.QuickOffer.DescriptionAttr(),
-				InterestOnlyRepaymentCount = 0,
 				Amount = customer.QuickOffer.Amount,
-				BrokerSetupFeePercent = 0,
-			 //	SetupFeePercent = customer.QuickOffer.ImmediateSetupFee,
-			 // DistributedSetupFeePercent TODO EZ-3515 
-				DiscountPlanID = discountPlan.Id,
-				//IsAmountSelectionAllowed = false, // equal to default, no need to be set
-				//IsRepaymentPeriodSelectionAllowed = false, // equal to default, no need to be set
-				//SendEmailNotification = false, // equal to default, no need to be set
-				//IsLoanTypeSelectionAllowed = false, // equal to default, no need to be set
+				CreatedTime = now,
+				StartTime = now,
 				EndTime = now.AddDays(1),
-				MonthlyInterestRate = customer.QuickOffer.ImmediateInterestRate,
-				RepaymentCount = customer.QuickOffer.ImmediateTerm,
 				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
 				LoanSourceID = loanSource.ID,
 				LoanTypeID = loanType.Id,
-				StartTime = now
-			}, null);
+				DiscountPlanID = discountPlan.Id,
+				Notes = CashRequestOriginator.QuickOffer.DescriptionAttr(),
+				InterestOnlyRepaymentCount = 0,
+				BrokerSetupFeePercent = 0,
+				MonthlyInterestRate = customer.QuickOffer.ImmediateInterestRate,
+				RepaymentCount = customer.QuickOffer.ImmediateTerm,
+				// defaults, can be ommited
+				IsAmountSelectionAllowed = false,
+				IsRepaymentPeriodSelectionAllowed = false,
+				IsLoanTypeSelectionAllowed = false
+				// ### defaults, can be ommited
+			}, ofeerFees);
+
+			Log.DebugFormat("Added nlOfferID: {0}", nlOfferID);
 			
 			//TODO add new cash request / offer / decision
 			Log.DebugFormat("add new cash request for customer {0}", customer.Id);

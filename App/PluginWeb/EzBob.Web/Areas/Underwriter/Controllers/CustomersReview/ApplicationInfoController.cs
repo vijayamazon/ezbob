@@ -645,7 +645,7 @@
 			bool isCustomerRepaymentPeriodSelectionAllowed,
 			int isLoanTypeSelectionAllowed
 		) {
-			CashRequest cr = _cashRequestsRepository.Get(id);
+			CashRequest cr = this._cashRequestsRepository.Get(id);
 
 			new Transactional(() => {
 
@@ -679,27 +679,28 @@
 				c.OfferStart = cr.OfferStart;
 				c.OfferValidUntil = cr.OfferValidUntil;
 				c.ManagerApprovedSum = sum;
-				_cashRequestsRepository.SaveOrUpdate(cr);
-				_customerRepository.SaveOrUpdate(c);
+				this._cashRequestsRepository.SaveOrUpdate(cr);
+				this._customerRepository.SaveOrUpdate(c);
 			}).Execute();
 
 			DateTime now = DateTime.UtcNow;
 
 			var decisionId = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
 				UserID = this._context.UserId,
-				//SendEmailNotification = allowSendingEmail,
 				DecisionTime = now,
-				//IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
 				DecisionNameID = (int)DecisionActions.Waiting,
-				Notes = "Waiting; oldCashRequest: " + cr.Id,
-				//todo IsAmountSelectionAllowed = 
-				//todo InterestOnlyRepaymentCount = 
+				Notes = "Waiting; oldCashRequest: " + cr.Id
 				//todo Position =
 			}, cr.Id, null);
 
-			log.Info("NL decisionID: {0}, oldCashRequestID: {1}", decisionId, cr.Id);
+			log.Info("NL--- decisionID: {0}, oldCashRequestID: {1}", decisionId, cr.Id);
 
-			this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
+			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = manualSetupFeePercent ?? 0 };
+			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true) 
+				setupFee.LoanFeeTypeID = (int)FeeTypes.ArrangementFee;
+			NL_OfferFees[] ofeerFees = { setupFee };
+
+			var offerID = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
 				Amount = (decimal)amount,
 				DecisionID = decisionId.Value,
 				DiscountPlanID = discountPlan,
@@ -712,21 +713,19 @@
 				MonthlyInterestRate = interestRate,
 				RepaymentCount = repaymentPeriod,
 				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
-				// FEES -TODO
-				//SetupFeePercent = manualSetupFeePercent ?? 0,
-				// SetupFeeAddedToLoan = 1|0 default null TODO EZ-3515
-				//ServicingFeePercent = (cr.SpreadSetupFee != null && cr.SpreadSetupFee==true) ? manualSetupFeePercent : null,   //  TODO EZ-3515
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
-				//IsAmountSelectionAllowed = ,
 				SendEmailNotification = allowSendingEmail,
 				Notes = "offer from ChangeCreditLine, ApplicationInfoController"
-				//todo InterestOnlyRepaymentCount = 
-			}, null);
+				// InterestOnlyRepaymentCount = 
+				//SetupFeeAddedToLoan = 1|0 default 0 TODO EZ-3515
+				//IsAmountSelectionAllowed = 1 default 1 always allowed
+			}, ofeerFees);
+
+			log.Info("NL--- offerID: {0}, decisionID: {1} oldCashRequestID: {2}", offerID.Value, decisionId.Value, cr.Id);
 
 			//TODO update new offer table
 			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
-
 
 			return Json(true);
 		} // ChangeCreditLine

@@ -47,7 +47,7 @@
 		public decimal? BrokerSetupFeePercent { get; set; }
 
 		[DataMember]
-		public bool? SetupFeeAddedToLoan { get; set; }
+		public bool SetupFeeAddedToLoan { get; set; }
 
 		[Length(LengthType.MAX)]
 		[DataMember]

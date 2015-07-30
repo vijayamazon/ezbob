@@ -39,7 +39,6 @@
 		        Log.Alert("Failed to add NL Offer or OfferFee. Rolling back. {0} ", ex);
 		        pconn.Rollback();
 	        }
-          
 
         }//Execute
 

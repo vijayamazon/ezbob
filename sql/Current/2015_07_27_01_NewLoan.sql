@@ -244,14 +244,14 @@ CREATE TABLE [dbo].[NL_Offers](
 	[MonthlyInterestRate] [DECIMAL] (18, 6) NOT NULL,
 	[CreatedTime] [DATETIME] NOT NULL,
 	[BrokerSetupFeePercent] [DECIMAL](18, 6) NULL,	
-	[SetupFeeAddedToLoan] BIT NULL DEFAULT 0,
+	[SetupFeeAddedToLoan] BIT NOT NULL DEFAULT 0,
 	[Notes] [nvarchar](max) NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
 	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,	
 	[SendEmailNotification] [BIT] NOT NULL DEFAULT 1,
 	[IsRepaymentPeriodSelectionAllowed] [BIT] DEFAULT 0,
-	[IsAmountSelectionAllowed] [BIT] DEFAULT 0,
+	[IsAmountSelectionAllowed] [BIT] NOT NULL DEFAULT 1,
 	[TimestampCounter] rowversion NOT NULL,
   CONSTRAINT [PK_NL_Offers] PRIMARY KEY CLUSTERED ([OfferID] ASC) 
 );

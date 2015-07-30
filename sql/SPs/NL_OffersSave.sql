@@ -27,7 +27,7 @@ CREATE TYPE NL_OffersList AS TABLE (
 	[DiscountPlanID] [INT] NULL,
 	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,		
 	[IsRepaymentPeriodSelectionAllowed] [BIT] DEFAULT 0,
-	[IsAmountSelectionAllowed] [BIT] DEFAULT 0,
+	[IsAmountSelectionAllowed] [BIT] NOT NULL DEFAULT 1,
 	[SendEmailNotification] [BIT] NOT NULL DEFAULT 1
 )
 GO
