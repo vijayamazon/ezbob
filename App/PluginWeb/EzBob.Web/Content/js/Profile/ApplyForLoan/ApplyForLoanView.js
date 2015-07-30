@@ -229,7 +229,7 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 		this.$el.find('li[rel]').setPopover('left');
 
 		var pi = this.customer.get('CustomerPersonalInfo');
-
+		pi.Fullname = pi.Fullname || '';
 		this.$el.find('#signedName').attr('maxlength', pi.Fullname.length + 10);
 
 		this.validator = EzBob.validateLoanLegalForm(this.ui.form, [pi.FirstName, pi.MiddleInitial, pi.Surname]);
