@@ -5,6 +5,7 @@
 
 	internal class CustomerDetails {
 		public CustomerDetails(int customerID) {
+			RequestedID = customerID;
 			ID = 0;
 
 			if (customerID <= 0)
@@ -33,6 +34,7 @@
 		} // constructor
 
 		public int ID { get; private set; }
+		public int RequestedID { get; private set; }
 
 		public bool CustomerStatusIsEnabled { get; set; }
 		public bool CustomerStatusIsWarning { get; set; }
@@ -70,5 +72,9 @@
 		public bool OwnsProperty {
 			get { return IsOwnerOfMainAddress || IsOwnerOfOtherProperties; }
 		} // OwnsProperty
+
+		public bool IsValid {
+			get { return (ID > 0) && (ID == RequestedID); }
+		} // IsValid
 	} // class CustomerDetails
 } // namespace
