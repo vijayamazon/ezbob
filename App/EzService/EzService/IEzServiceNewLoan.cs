@@ -14,7 +14,7 @@
 		IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons);
 
 		[OperationContract]
-		IntActionResult AddOffer(int userID, int customerID, NL_Offers offer);
+		IntActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null);
 
 		[OperationContract]
 		NL_Offers GetLastOffer(int userID, int customerID);

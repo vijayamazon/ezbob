@@ -556,12 +556,19 @@
 
 			lastOffer.DecisionID = decisionID.Value;
 			lastOffer.CreatedTime = now;
-			// ???
-	       // lastOffer.ServicingFeePercent = (oldCashRequest.SpreadSetupFee != null && oldCashRequest.SpreadSetupFee == true) ? oldCashRequest.ManualSetupFeePercent : null;   //  TODO EZ-3515
+			
 
-			this.m_oServiceClient.Instance.AddOffer(user.Id, customer.Id, lastOffer);
-
-            var stage = OpportunityStage.s90.DescriptionAttr();
+			NL_OfferFees setupFee = new NL_OfferFees() {
+				LoanFeeTypeID = (int)FeeTypes.SetupFee,
+				Percent = oldCashRequest.ManualSetupFeePercent
+			};
+	        if (oldCashRequest.SpreadSetupFee == true && oldCashRequest.SpreadSetupFee != null) {
+		        setupFee.LoanFeeTypeID = (int)FeeTypes.ArrangementFee;
+	        }
+			NL_OfferFees[] ofeerFees = new NL_OfferFees[]{setupFee};
+			var offerID = this.m_oServiceClient.Instance.AddOffer(user.Id, customer.Id, lastOffer, ofeerFees);
+	
+	        var stage = OpportunityStage.s90.DescriptionAttr();
 
             this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
                 new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage,

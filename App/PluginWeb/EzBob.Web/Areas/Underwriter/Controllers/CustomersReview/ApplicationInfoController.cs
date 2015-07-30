@@ -722,7 +722,7 @@
 				SendEmailNotification = allowSendingEmail,
 				Notes = "offer from ChangeCreditLine, ApplicationInfoController"
 				//todo InterestOnlyRepaymentCount = 
-			});
+			}, null);
 
 			//TODO update new offer table
 			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);

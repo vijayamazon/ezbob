@@ -202,9 +202,8 @@
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanAgreementsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanAgreements>("Tbl", agreements));
 
-				//await SaveAgreementsAsync();
-
-				Task.Run(() => SaveAgreementsAsync());
+				await SaveAgreementsAsync();
+				//Task.Run(() => SaveAgreementsAsync());
 
 				// 5. schedules 
 				foreach (NLScheduleItem s in sCalcScheduleAndFee.Result.Schedule) {
@@ -259,20 +258,29 @@
 
 		}//Execute
 
-	//	async Task SaveAgreementsAsync() {
-		private	void SaveAgreementsAsync() {
+		//	private	void SaveAgreementsAsync() {
+		async Task SaveAgreementsAsync() {
 
-			// save agreements to file system
-			if (NLModel.AgreementModel == null) {
-				Log.Alert("AgreementModel not exists on creating Nloan");
-				this.Result.Error = "AgreementModel not exists on creating Nloan";
-				return;
+			try {
+
+				// save agreements to file system
+				if (NLModel.AgreementModel == null) {
+					Log.Alert("AgreementModel not exists on creating Nloan");
+					this.Result.Error = "AgreementModel not exists on creating Nloan";
+					return;
+				}
+				AgreementModel agreementModel =  JsonConvert.DeserializeObject<AgreementModel>(NLModel.AgreementModel);
+				foreach (NLAgreementItem  item in NLModel.Agreements) {
+					SaveAgreement saveAgreement = new SaveAgreement(customerId: NLModel.CustomerID, model: agreementModel, refNumber: NLModel.Loan.Refnum, name: "blabla", template: item.TemplateModel, path1: item.Path1, path2: item.Path2);
+					saveAgreement.Execute();
+				}
+
+			} catch (Exception) {
+				
+				throw;
 			}
-			AgreementModel agreementModel =  JsonConvert.DeserializeObject<AgreementModel>(NLModel.AgreementModel);
-			foreach (NLAgreementItem  item in NLModel.Agreements) {
-				SaveAgreement saveAgreement = new SaveAgreement(customerId: NLModel.CustomerID, model: agreementModel, refNumber: NLModel.Loan.Refnum, name: "blabla", template: item.TemplateModel, path1: item.Path1, path2: item.Path2);
-				saveAgreement.Execute();
-			}
+
+			
 		}
 
 		private void SendErrorMail(string sMsg, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> scheduleItems = null, NL_LoanHistory history = null, List<NL_LoanAgreements> agreements = null) {

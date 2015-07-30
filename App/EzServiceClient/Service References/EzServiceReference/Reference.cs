@@ -4072,10 +4072,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddDecisionAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Decisions decision, System.Nullable<long> oldCashRequest, Ezbob.Backend.ModelsWithDB.NewLoan.NL_DecisionRejectReasons[] decisionRejectReasons);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse")]
-        ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer);
+        ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer, Ezbob.Backend.ModelsWithDB.NewLoan.NL_OfferFees[] fees);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddOfferResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer, Ezbob.Backend.ModelsWithDB.NewLoan.NL_OfferFees[] fees);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/GetLastOffer", ReplyAction="http://tempuri.org/IEzServiceNewLoan/GetLastOfferResponse")]
         Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers GetLastOffer(int userID, int customerID);
@@ -5593,12 +5593,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddDecisionAsync(userID, customerID, decision, oldCashRequest, decisionRejectReasons);
         }
         
-        public ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer) {
-            return base.Channel.AddOffer(userID, customerID, offer);
+        public ServiceClientProxy.EzServiceReference.IntActionResult AddOffer(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer, Ezbob.Backend.ModelsWithDB.NewLoan.NL_OfferFees[] fees) {
+            return base.Channel.AddOffer(userID, customerID, offer, fees);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer) {
-            return base.Channel.AddOfferAsync(userID, customerID, offer);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.IntActionResult> AddOfferAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers offer, Ezbob.Backend.ModelsWithDB.NewLoan.NL_OfferFees[] fees) {
+            return base.Channel.AddOfferAsync(userID, customerID, offer, fees);
         }
         
         public Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers GetLastOffer(int userID, int customerID) {

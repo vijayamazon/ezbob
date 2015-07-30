@@ -27,9 +27,9 @@
 			};
 		}
 
-		public IntActionResult AddOffer(int userID, int customerID, NL_Offers offer) {
+		public IntActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null ) {
 			AddOffer stra;
-			var amd = ExecuteSync(out stra, customerID, userID, offer);
+			var amd = ExecuteSync(out stra, customerID, userID, offer, fees);
 			return new IntActionResult {
 				MetaData = amd,
 				Value = stra.OfferID

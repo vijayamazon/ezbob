@@ -139,7 +139,7 @@
 				LoanSourceID = loanSource.ID,
 				LoanTypeID = loanType.Id,
 				StartTime = now
-			});
+			}, null);
 			
 			//TODO add new cash request / offer / decision
 			Log.DebugFormat("add new cash request for customer {0}", customer.Id);

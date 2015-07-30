@@ -20,12 +20,8 @@
       <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
       <xs:element minOccurs="0" name="DecisionNameID" type="xs:int" />
       <xs:element minOccurs="0" name="DecisionTime" type="xs:dateTime" />
-      <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="IsAmountSelectionAllowed" nillable="true" type="xs:boolean" />
-      <xs:element minOccurs="0" name="IsRepaymentPeriodSelectionAllowed" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="Position" type="xs:int" />
-      <xs:element minOccurs="0" name="SendEmailNotification" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="UserID" type="xs:int" />
     </xs:sequence>
     <xs:attribute ref="ser:Id" />
@@ -55,16 +51,18 @@
       <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="DecisionID" type="xs:int" />
       <xs:element minOccurs="0" name="DiscountPlanID" nillable="true" type="xs:int" />
-      <xs:element minOccurs="0" name="EmailSendingBanned" type="xs:boolean" />
       <xs:element minOccurs="0" name="EndTime" type="xs:dateTime" />
       <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" nillable="true" type="xs:int" />
+      <xs:element minOccurs="0" name="IsAmountSelectionAllowed" type="xs:boolean" />
       <xs:element minOccurs="0" name="IsLoanTypeSelectionAllowed" type="xs:boolean" />
+      <xs:element minOccurs="0" name="IsRepaymentPeriodSelectionAllowed" type="xs:boolean" />
       <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
       <xs:element minOccurs="0" name="LoanTypeID" type="xs:int" />
       <xs:element minOccurs="0" name="MonthlyInterestRate" type="xs:decimal" />
       <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
       <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="SendEmailNotification" type="xs:boolean" />
       <xs:element minOccurs="0" name="SetupFeeAddedToLoan" nillable="true" type="xs:boolean" />
       <xs:element minOccurs="0" name="StartTime" type="xs:dateTime" />
     </xs:sequence>
@@ -72,6 +70,26 @@
     <xs:attribute ref="ser:Ref" />
   </xs:complexType>
   <xs:element name="NL_Offers" nillable="true" type="tns:NL_Offers" />
+  <xs:complexType name="ArrayOfNL_OfferFees">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="NL_OfferFees" nillable="true" type="tns:NL_OfferFees" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfNL_OfferFees" nillable="true" type="tns:ArrayOfNL_OfferFees" />
+  <xs:complexType name="NL_OfferFees">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="DistributedPartPercent" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
+      <xs:element minOccurs="0" name="OfferFeeID" type="xs:int" />
+      <xs:element minOccurs="0" name="OfferID" type="xs:int" />
+      <xs:element minOccurs="0" name="OneTimePartPercent" nillable="true" type="xs:decimal" />
+      <xs:element minOccurs="0" name="Percent" nillable="true" type="xs:decimal" />
+    </xs:sequence>
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="NL_OfferFees" nillable="true" type="tns:NL_OfferFees" />
   <xs:complexType name="NL_LoanLegals">
     <xs:sequence>
       <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
