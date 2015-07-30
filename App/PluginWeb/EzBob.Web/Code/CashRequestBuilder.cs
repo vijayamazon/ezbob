@@ -98,8 +98,7 @@
 				customer.CashRequests.Add(cashRequest);
 				this._customerRepository.SaveOrUpdate(customer);
 			}).Execute();
-
-
+			
 			var nlCashRequestID = this.m_oServiceClient.Instance.AddCashRequest(userID, new NL_CashRequests {
 				CashRequestOriginID = (int)CashRequestOriginator.QuickOffer,
 				CustomerID = customer.Id,
