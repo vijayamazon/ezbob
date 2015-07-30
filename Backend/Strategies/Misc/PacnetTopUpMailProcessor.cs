@@ -2,10 +2,12 @@
 	using System;
 	using System.Threading;
 	using Ezbob.Backend.Strategies.Exceptions;
+	using Ezbob.Database;
 	using MailBee;
 	using MailBee.ImapMail;
 	using MailBee.Mime;
 	using MailApi;
+
 
 	public class PacnetTopUpMailProcessor : AStrategy{
 		/// <summary>
@@ -14,7 +16,8 @@
 		/// <param name="underwriterId">underwriter's system identifier</param>
 		/// <param name="amount">amount of transferred money</param>
 		/// <param name="reqMailSubject">email subject of message sent to pacnet</param>
-		public PacnetTopUpMailProcessor(int underwriterId, decimal amount, string reqMailSubject) {
+		/// <param name="datesentreq">date of message sent to pacnet</param>
+		public PacnetTopUpMailProcessor(int underwriterId, decimal amount, string reqMailSubject, DateTime dateSentReq) {
 			this.underwriterId = underwriterId;
 			this.amount = amount;
 			this.totalWaitingTime = TimeSpan.FromMinutes(ConfigManager.CurrentValues.Instance.MaxTimeToWaitForPacnetrConfirmation);
@@ -25,7 +28,7 @@
 			this.mailboxReconnectionIntervalSeconds = ConfigManager.CurrentValues.Instance.MailBeeMailboxReconnectionIntervalSeconds;
 			this.isLicenseKeyValid = IsLicenseKeyValid();
 			this.reqMailSubject = reqMailSubject;
-			this.topUpSendingEmail = ConfigManager.CurrentValues.Instance.TopUpSendingEmail;
+			this.dateSentReq = dateSentReq;
 		} // constructor
 
 		public override string Name {
@@ -49,9 +52,10 @@
 				Mail mail = new Mail();
 				TimeZoneInfo dublinTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
 				DateTime startTime = DateTime.UtcNow;
+				DateTime dublinStartTime = TimeZoneInfo.ConvertTimeFromUtc(startTime, dublinTimeZone);
 
 				//Irish pacnet office boundary hour to receive pacnet confirmation regarding money transfer
-				const int boundaryHour = 16;
+				const int boundaryHour = 15;
 				const int boundaryMinutes = 20;
 
 				DateTime irishOfficeBoundaryMoment = startTime.Date.AddHours(boundaryHour).AddMinutes(boundaryMinutes);
@@ -64,7 +68,7 @@
 					bool boundaryMomentHasPassed = dublinNow > irishOfficeBoundaryMoment;
 
 					//checking either has an hour passed since request for confirmation or is it later than 15:20 GMT and it is necessary to notify the top-up  
-					if (now.Subtract(startTime).CompareTo(this.totalWaitingTime) > 0 || (startTime < irishOfficeBoundaryMoment && boundaryMomentHasPassed)) {
+					if (now.Subtract(startTime).CompareTo(this.totalWaitingTime) > 0 || (dublinStartTime < irishOfficeBoundaryMoment && boundaryMomentHasPassed)) {
 						Log.Info("Confirmation email did not arrive, not waiting for it any more. Alert Ezbob top-up");
 
 						var topup = new TopUpDelivery(this.underwriterId, this.amount, 2);
@@ -122,7 +126,14 @@
 					Log.Info("Recent message index: {0} Subject: {1}", msg.IndexOnServer, msg.Subject);
 
 					if (msg.Subject.Contains(this.reqMailSubject)) {
+						Log.Info("Pacnet confirmation message has been received with subject: {0}", msg.Subject);
 						handledMail = true;
+						DB.ExecuteNonQuery(
+							"SetPacnetTopUpConfirmationRequestConfirmed",
+							CommandSpecies.StoredProcedure,
+							new QueryParameter("DateSent", this.dateSentReq),
+							new QueryParameter("DateConfirmed", TimeZoneInfo.ConvertTimeToUtc(msg.DateReceived))
+						);
 					} // if has matching subject 
 				} // foreach email
 
@@ -142,8 +153,6 @@
 		private readonly int mailboxReconnectionIntervalSeconds;
 		private readonly bool isLicenseKeyValid;
 		private readonly string reqMailSubject;
-		private readonly string topUpSendingEmail;
+		private readonly DateTime dateSentReq;
 	}
-
-
 }
