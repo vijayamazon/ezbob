@@ -13,30 +13,33 @@
 	[SuppressMessage("ReSharper", "ValueParameterNotUsed")]
 	internal class MainStrategyUpdateCrC : AStoredProcedure {
 		public MainStrategyUpdateCrC(
+			DateTime now,
 			int customerID,
 			long cashRequestID,
 			AutoDecisionResponse autoDecisionResponse,
 			AConnection db,
 			ASafeLog log
 		) : base(db, log) {
-			this.now = DateTime.UtcNow;
+			this.now = now;
 
 			this.customerID = customerID;
 			CashRequestID = cashRequestID;
 			this.autoDecisionResponse = autoDecisionResponse;
 
+			this.loanSourceToUse = this.autoDecisionResponse.LoanSource;
+
 			this.repaymentPeriodToUse = this.autoDecisionResponse.RepaymentPeriod;
-			this.isCustomerRepaymentPeriodSelectionAllowedToUse =
-				this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed;
+
+			this.isCustomerRepaymentPeriodSelectionAllowedToUse = this.loanSourceToUse.ValidatePeriodSelectionAllowed(
+				this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed
+			);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
-				this.interestRateToUse = this.autoDecisionResponse.InterestRate;
+				this.interestRateToUse = this.loanSourceToUse.ValidateInterestRate(this.autoDecisionResponse.InterestRate);
 				this.setupFeePercentToUse = this.autoDecisionResponse.SetupFee;
 			} // if
 
-			InitLoanSource();
-			InitDiscountPlan();
-			InitLoanType();
+			this.repaymentPeriodToUse = this.loanSourceToUse.ValidateRepaymentPeriod(this.repaymentPeriodToUse);
 		} // constructor
 
 		public override bool HasValidParameters() {
@@ -110,8 +113,7 @@
 		} // DecidedToApprove
 
 		public bool IsLoanTypeSelectionAllowed {
-			// Currently (July 2015) it is always false. It was true/false in the past and may be such in the future.
-			get { return false; }
+			get { return this.autoDecisionResponse.IsLoanTypeSelectionAllowed; }
 			set { }
 		} // IsLoanTypeSelectionAllowed
 
@@ -139,7 +141,7 @@
 		public int AnnualTurnover { get; set; }
 
 		public int LoanTypeID {
-			get { return this.loanTypeIDToUse; }
+			get { return this.autoDecisionResponse.LoanTypeID; }
 			set { }
 		} // LoanTypeID
 
@@ -174,7 +176,7 @@
 		} // EmailSendingBanned
 
 		public int DiscountPlanID {
-			get { return this.discountPlanIDToUse; }
+			get { return this.autoDecisionResponse.DiscountPlanIDToUse; }
 			set { }
 		} // DiscountPlanID
 
@@ -185,112 +187,13 @@
 
 		// Stored procedure arguments - end
 
-		private void InitLoanSource() {
-			SafeReader lssr = DB.GetFirst(
-				"GetLoanSource",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter( // Get specific for re-approval or default otherwise
-					"@LoanSourceID",
-					this.autoDecisionResponse.IsAutoReApproval ? this.autoDecisionResponse.LoanSourceID : (int?)null
-				)
-			);
-
-			this.loanSourceToUse = lssr.Fill<LoanSource>();
-
-			ValidateInterestRateAgainstLoanSource();
-			ValidateRepaymentPeriodAgainstLoanSource();
-			ValidatePeriodSelectionAllowedAgainstLoanSource();
-		} // InitLoanSource
-
-		private void ValidateInterestRateAgainstLoanSource() {
-			bool interestRateIsGood =
-				!this.loanSourceToUse.MaxInterest.HasValue ||
-				(this.interestRateToUse <= this.loanSourceToUse.MaxInterest.Value)
-			;
-
-			if (interestRateIsGood)
-				return;
-
-			Log.Warn(
-				"Too big interest ({1}) was assigned for this loan source - adjusting to {2} for customer {0}.",
-				CustomerID,
-				this.interestRateToUse,
-				this.loanSourceToUse.MaxInterest.Value
-			);
-
-			this.interestRateToUse = this.loanSourceToUse.MaxInterest.Value;
-		} // ValidateInterestRateAgainstLoanSource
-
-		private void ValidateRepaymentPeriodAgainstLoanSource() {
-			bool repaymentPeriodIsGood =
-				!this.loanSourceToUse.DefaultRepaymentPeriod.HasValue ||
-				(this.repaymentPeriodToUse >= this.loanSourceToUse.DefaultRepaymentPeriod);
-
-			if (repaymentPeriodIsGood)
-				return;
-
-			Log.Warn(
-				"Too small repayment period ({1}) was assigned for this loan source - adjusting to {2} for customer {0}",
-				CustomerID,
-				this.repaymentPeriodToUse,
-				this.loanSourceToUse.DefaultRepaymentPeriod
-			);
-
-			this.repaymentPeriodToUse = this.loanSourceToUse.DefaultRepaymentPeriod.Value;
-		} // ValidateRepaymentPeriodAgainstLoanSource
-
-		private void ValidatePeriodSelectionAllowedAgainstLoanSource() {
-			bool periodSelectionAllowedIsGood =
-				this.loanSourceToUse.IsCustomerRepaymentPeriodSelectionAllowed ||
-				!this.isCustomerRepaymentPeriodSelectionAllowedToUse;
-
-			if (periodSelectionAllowedIsGood)
-				return;
-
-			Log.Warn(
-				"Wrong period selection option ('enabled') was assigned for this loan source - " +
-				"adjusting to ('disabled') for customer {0}.",
-				CustomerID
-			);
-
-			this.isCustomerRepaymentPeriodSelectionAllowedToUse = false;
-		} // ValidatePeriodSelectionAllowedAgainstLoanSource
-
-		private void InitDiscountPlan() {
-			SafeReader dpsr = DB.GetFirst(
-				"GetDiscountPlan",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@DiscountPlanID", this.autoDecisionResponse.DiscountPlanID)
-			);
-
-			this.discountPlanIDToUse = dpsr["DiscountPlanID"];
-		} // InitDiscountPlan
-
-		private void InitLoanType() {
-			SafeReader ltsr = DB.GetFirst(
-				"GetLoanTypeAndDefault",
-				CommandSpecies.StoredProcedure,
-				new QueryParameter("@LoanTypeID", this.autoDecisionResponse.LoanTypeID)
-			);
-
-			int? dbLoanTypeID = ltsr["LoanTypeID"];
-			int defaultLoanTypeID = ltsr["DefaultLoanTypeID"];
-
-			this.loanTypeIDToUse = this.autoDecisionResponse.DecidedToApprove
-				? (dbLoanTypeID ?? defaultLoanTypeID)
-				: defaultLoanTypeID;
-		} // InitLoanType
-
 		private readonly DateTime now;
 		private readonly AutoDecisionResponse autoDecisionResponse;
 		private readonly int customerID;
 		private readonly decimal setupFeePercentToUse;
-
-		private LoanSource loanSourceToUse;
-		private decimal interestRateToUse;
-		private int repaymentPeriodToUse;
-		private bool isCustomerRepaymentPeriodSelectionAllowedToUse;
-		private int discountPlanIDToUse;
-		private int loanTypeIDToUse;
+		private readonly LoanSource loanSourceToUse;
+		private readonly decimal interestRateToUse;
+		private readonly int repaymentPeriodToUse;
+		private readonly bool isCustomerRepaymentPeriodSelectionAllowedToUse;
 	} // class MainStrategyUpdateCrC
 } // namespace
