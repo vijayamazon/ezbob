@@ -79,6 +79,7 @@
 			get { return this.autoDecisionResponse; }
 		} // AutoDecisionResponse
 
+		/// <exception cref="StrategyAlert">Should never happen.</exception>
 		public override void Execute() {
 			ValidateInput();
 
@@ -218,7 +219,7 @@
 
 			if (!this.customerDetails.IsTest) {
 				Log.Debug(
-					"Not using back door simple flow for customer '{0}': not a test customer.",
+					"Not using back door simple flow for customer '{0}': not a text customer.",
 					this.customerID
 				);
 				return false;
@@ -613,6 +614,17 @@
 		private void UpdateCustomerAndCashRequest() {
 			DateTime now = DateTime.UtcNow;
 
+			AddOldDecisionOffer(now); 
+
+			AddNLDecisionOffer(now); 
+
+			UpdateSalesForceOpportunity();
+
+			if (this.customerDetails.IsAlibaba)
+				UpdatePartnerAlibaba();
+		} // UpdateCustomerAndCashRequest
+
+		private void AddOldDecisionOffer(DateTime now) {
 			var sp = new MainStrategyUpdateCrC(
 				now,
 				this.customerID,
@@ -631,65 +643,60 @@
 			};
 
 			sp.ExecuteNonQuery();
+		} // AddOldDecisionOffer
 
-			// AddNewDecisionOffer(now); 
-
-			// TODO update new offer / decision tables
-			Log.Debug("update new offer / decision for customer {0}", this.customerID);
-
-			// TEMPORARY DISABLED TODO - sync for proper launch
-			UpdateSalesForceOpportunity();
-
-			if (this.customerDetails.IsAlibaba)
-				UpdatePartnerAlibaba();
-		} // UpdateCustomerAndCashRequest
-
-		private void AddNewDecisionOffer(DateTime now) {
+		private void AddNLDecisionOffer(DateTime now) {
+			if (!this.autoDecisionResponse.HasAutoDecided)
+				return;
+			
 			AddDecision addDecisionStra = new AddDecision(new NL_Decisions {
-				DecisionNameID = this.autoDecisionResponse.Decision.HasValue
-					? (int)this.autoDecisionResponse.Decision.Value
-					: (int)DecisionActions.Waiting,
+				DecisionNameID = this.autoDecisionResponse.DecisionCode ?? (int)DecisionActions.Waiting,
 				DecisionTime = now,
-				InterestOnlyRepaymentCount = 0, // TODO
-				// TODO ALERT! GEVOLT! FIX! Amount selection allowed IS NOT RELATED to period selection allowed!
-				IsAmountSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed, // TODO
-				IsRepaymentPeriodSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
 				Notes = this.autoDecisionResponse.CreditResult.HasValue
 					? this.autoDecisionResponse.CreditResult.Value.DescriptionAttr()
-					: "",
-				// TODO Position = 
-				// TODO CashRequestID = 
-				SendEmailNotification = !this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
+					: string.Empty,
+				CashRequestID = this.nlCashRequestID,
 				UserID = 1,
 			}, this.cashRequestID, null);
 
 			addDecisionStra.Execute();
 			int decisionID = addDecisionStra.DecisionID;
 
-			int loanSourceID = this.autoDecisionResponse.LoanSource.ID;
+			Log.Debug("Added NL decision: {0}", decisionID);
 
-			AddOffer addOfferStra = new AddOffer(new NL_Offers {
-				DecisionID = decisionID,
-				Amount = this.offeredCreditLine,
-				// TODO BrokerSetupFeePercent = 0 
-				CreatedTime = now,
-				DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
-				EmailSendingBanned = this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
-				InterestOnlyRepaymentCount = 0, // TODO
-				IsLoanTypeSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
-				LoanSourceID = loanSourceID,
-				LoanTypeID = this.autoDecisionResponse.LoanTypeID,
-				MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
-				RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
-				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO
-				// SetupFeePercent = this.autoDecisionResponse.SetupFee,
-				// DistributedSetupFeePercent TODO EZ-3515
-				StartTime = now,
-				EndTime = now.AddHours(CurrentValues.Instance.OfferValidForHours)
-			});
-			addOfferStra.Execute();
-			int offerID = addOfferStra.OfferID;
-		} // AddNewDecisionOffer
+			if (this.autoDecisionResponse.DecidedToApprove) {
+				List<NL_OfferFees> offerFees = new List<NL_OfferFees>();
+
+				offerFees.Add(new NL_OfferFees {
+					LoanFeeTypeID = (int)FeeTypes.SetupFee,
+					Percent = this.autoDecisionResponse.SetupFee
+				});
+
+				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
+					DecisionID = decisionID,
+					Amount = this.offeredCreditLine,
+					StartTime = now,
+					EndTime = now.AddHours(CurrentValues.Instance.OfferValidForHours),
+					CreatedTime = now,
+					DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
+					LoanSourceID = this.autoDecisionResponse.LoanSource.ID,
+					LoanTypeID = this.autoDecisionResponse.LoanTypeID,
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO some day...
+					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
+					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
+					BrokerSetupFeePercent = 0, // TODO BUG FILL IN AUTO REAPPROVE
+					IsLoanTypeSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
+					IsRepaymentPeriodSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
+					SendEmailNotification = !this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
+					// ReSharper disable once PossibleInvalidOperationException
+					Notes = "Auto decision: " + this.autoDecisionResponse.Decision.Value,
+				}, offerFees);
+
+				addOfferStrategy.Execute();
+				
+				Log.Debug("Added NL offer: {0}", addOfferStrategy.OfferID);
+			} // if
+		} // AddNLDecisionOffer
 
 		private void UpdateSalesForceOpportunity() {
 			string customerEmail = this.customerDetails.AppEmail;
@@ -858,8 +865,14 @@
 		} // ValidateInput
 
 		private void CreateCashRequest() {
-			if (this.cashRequestID.HasValue)
+			if (this.cashRequestID.HasValue) {
+				this.nlCashRequestID = DB.ExecuteScalar<int>(
+					"NL_CashRequestGetByOldID",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@OldCashRequestID", this.cashRequestID)
+				);
 				return;
+			} // if
 
 			DateTime now = DateTime.UtcNow;
 
@@ -881,20 +894,23 @@
 			} // if
 
 			this.cashRequestID.Value = sr["CashRequestID"];
-			decimal? lastLoanAmount = sr["LastLoanAmount"];
-			int cashRequestCount = sr["CashRequestCount"];
-
-		/*	new AddCashRequest(new NL_CashRequests {
+	
+			AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
 				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 				CustomerID = this.customerID,
 				OldCashRequestID = this.cashRequestID,
 				RequestTime = now,
 				UserID = this.underwriterID,
-			}).Execute(); */
+			});
+			cashRequestStrategy.Execute();
+			this.nlCashRequestID = cashRequestStrategy.CashRequestID;
 
-			// TODO add new cash request
+			Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
 
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
+				decimal? lastLoanAmount = sr["LastLoanAmount"];
+				int cashRequestCount = sr["CashRequestCount"];
+
 				new AddOpportunity(this.customerID,
 					new OpportunityModel {
 						Email = this.customerDetails.AppEmail,
@@ -1015,6 +1031,7 @@
 		} // class InternalCashRequestID
 
 		private readonly InternalCashRequestID cashRequestID;
+		private int nlCashRequestID;
 
 		private readonly StrategiesMailer mailer;
 

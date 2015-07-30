@@ -34,7 +34,7 @@
 				SendBankBasedApprovalMails();
 			else if (this.autoDecisionResponse.IsAutoReApproval)
 				SendReApprovalMails();
-			else if (!this.autoDecisionResponse.HasAutomaticDecision)
+			else if (!this.autoDecisionResponse.HasAutoDecided)
 				SendWaitingForDecisionMail();
 		} // SendEmails
 

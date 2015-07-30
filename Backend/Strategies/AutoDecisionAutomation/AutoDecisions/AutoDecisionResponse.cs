@@ -40,7 +40,6 @@
 
 		public bool IsAutoBankBasedApproval { get; set; }
 
-		public bool HasAutomaticDecision { get { return Decision != null; } }
 		public DecisionActions? Decision { get; set; }
 
 		public int? DecisionCode { get { return Decision == null ? (int?)null : (int)Decision; } }
@@ -52,6 +51,7 @@
 
 		public bool DecidedToReject { get { return IsReRejected || IsRejected; } }
 		public bool DecidedToApprove { get { return IsAutoApproval || IsAutoBankBasedApproval || IsAutoReApproval; } }
+		public bool HasAutoDecided { get { return DecidedToApprove || DecidedToReject; } }
 
 		public string AutoRejectReason { get; set; }
 		public CreditResultStatus? CreditResult { get; set; } // Rejected / Approved / WaitingForDecision
