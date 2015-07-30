@@ -214,7 +214,7 @@
 
 			if (!this.customerDetails.IsTest) {
 				Log.Debug(
-					"Not using back door simple flow for customer '{0}': not a text customer.",
+					"Not using back door simple flow for customer '{0}': not a test customer.",
 					this.customerId
 				);
 				return false;

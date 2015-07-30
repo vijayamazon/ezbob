@@ -118,9 +118,9 @@ BEGIN
 		Surname,
 		Gender,
 		DateOfBirth,
-		CustomerPropertyStatuses.IsOwnerOfMainAddress AS IsOwnerOfMainAddress,
-		CustomerPropertyStatuses.IsOwnerOfOtherProperties AS IsOwnerOfOtherProperties,
-		CustomerPropertyStatuses.Description AS PropertyStatusDescription,
+		CAST(isnull(ps.IsOwnerOfMainAddress, 0) AS BIT) AS IsOwnerOfMainAddress,
+		CAST(isnull(ps.IsOwnerOfOtherProperties, 0) AS BIT) AS IsOwnerOfOtherProperties,
+		ps.Description AS PropertyStatusDescription,
 		@NumOfMps AS NumOfMps,
 		c.TimeAtAddress,
 		AccountNumber,
@@ -142,11 +142,12 @@ BEGIN
 		c.Fullname AS FullName
 	FROM
 		Customer c
-		INNER JOIN CustomerPropertyStatuses ON c.PropertyStatusId = CustomerPropertyStatuses.Id
+		LEFT JOIN CustomerPropertyStatuses ps ON c.PropertyStatusId = ps.Id
 		LEFT JOIN Company ON Company.Id = c.CompanyId
 	WHERE
 		c.Id = @CustomerId
 
 	------------------------------------------------------------------------------
 END
+
 GO

@@ -121,6 +121,8 @@
 					IsOwnerOfOtherProperties = customer.PropertyStatus.IsOwnerOfOtherProperties,
 					IsOwnerOfMainAddress = customer.PropertyStatus.IsOwnerOfMainAddress
 				};
+			} else {
+				customerModel.PropertyStatus = new PropertyStatusModel();
 			} // if
 
 			customerModel.BusinessTypeReduced = customerModel.CustomerPersonalInfo == null ?

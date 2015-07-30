@@ -89,6 +89,10 @@
 			if (Delay < 1)
 				return;
 
+			//fix for too small delay configuration
+			if (Delay < 20) {
+				Delay = 20;
+			}
 			Log.Debug(
 				"Back door simple flow: delaying for {0}...",
 				Grammar.Number(Delay, "second")
