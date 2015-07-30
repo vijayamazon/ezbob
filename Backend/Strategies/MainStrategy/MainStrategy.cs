@@ -625,7 +625,14 @@
 		} // UpdateCustomerAndCashRequest
 
 		private void AddOldDecisionOffer(DateTime now) {
-			var sp = new MainStrategyUpdateCrC(now, this.customerID, this.cashRequestID, this.autoDecisionResponse, DB, Log) {
+			var sp = new MainStrategyUpdateCrC(
+				now,
+				this.customerID,
+				this.cashRequestID,
+				this.autoDecisionResponse,
+				DB,
+				Log
+			) {
 				OverrideApprovedRejected = this.overrideApprovedRejected,
 				MedalClassification = this.medal.MedalClassification.ToString(),
 				OfferedCreditLine = this.offeredCreditLine,
@@ -643,9 +650,11 @@
 				return;
 			
 			AddDecision addDecisionStra = new AddDecision(new NL_Decisions {
-				DecisionNameID = this.autoDecisionResponse.Decision.HasValue? (int)this.autoDecisionResponse.Decision.Value: (int)DecisionActions.Waiting,
+				DecisionNameID = this.autoDecisionResponse.DecisionCode ?? (int)DecisionActions.Waiting,
 				DecisionTime = now,
-				Notes = this.autoDecisionResponse.CreditResult.HasValue? this.autoDecisionResponse.CreditResult.Value.DescriptionAttr(): "",
+				Notes = this.autoDecisionResponse.CreditResult.HasValue
+					? this.autoDecisionResponse.CreditResult.Value.DescriptionAttr()
+					: string.Empty,
 				CashRequestID = this.nlCashRequestID,
 				UserID = 1,
 			}, this.cashRequestID, null);
