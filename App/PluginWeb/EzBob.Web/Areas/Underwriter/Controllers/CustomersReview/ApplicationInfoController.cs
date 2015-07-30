@@ -60,7 +60,7 @@
 			IUsersRepository users,
 			IEzbobWorkplaceContext context,
 			ISuggestedAmountRepository suggestedAmountRepository,
-			CustomerPhoneRepository customerPhoneRepository, 
+			CustomerPhoneRepository customerPhoneRepository,
 			IExternalCollectionStatusesRepository externalCollectionStatusesRepository,
 			LoanOptionsRepository loanOptionsRepository,
 			ILoanRepository loanRepository
@@ -98,7 +98,7 @@
 		[Ajax]
 		[ValidateJsonAntiForgeryToken]
 		[HttpPost]
-		public JsonResult UpdateBrokerCommissionDefaults(long id, decimal amount){
+		public JsonResult UpdateBrokerCommissionDefaults(long id, decimal amount) {
 			var cr = this._cashRequestsRepository.Get(id);
 			if (cr == null) {
 				return Json(new { brokerCommission = 0, setupFeePercent = 0 }, JsonRequestBehavior.AllowGet);
@@ -107,13 +107,13 @@
 			var setupFeePercent = cr.ManualSetupFeePercent;
 
 			if (cr.Customer.Broker != null) {
-                BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
-                bool hasLoans = cr.Customer.Loans.Any();
-                DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
+				BrokerCommissionDefaultCalculator brokerCommissionDefaultCalculator = new BrokerCommissionDefaultCalculator();
+				bool hasLoans = cr.Customer.Loans.Any();
+				DateTime? firstLoanDate = hasLoans ? cr.Customer.Loans.Min(x => x.Date) : (DateTime?)null;
 				Tuple<decimal, decimal> commission = brokerCommissionDefaultCalculator.Calculate(amount, hasLoans, firstLoanDate);
 				brokerCommissionPercent = commission.Item1;
 				setupFeePercent = commission.Item2;
-            }
+			}
 			return Json(new { brokerCommission = brokerCommissionPercent, setupFeePercent = setupFeePercent }, JsonRequestBehavior.AllowGet);
 		}
 
@@ -475,7 +475,7 @@
 
 					this.loanRepository.SaveOrUpdate(loan);
 				}
-			} 
+			}
 
 			return Json(new { error = (string)null, id = id, status = externalStatusID });
 		} // ChangeExternalCollectionStatus
@@ -684,12 +684,12 @@
 			}).Execute();
 
 			DateTime now = DateTime.UtcNow;
-			
+
 			var decisionId = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
 				UserID = this._context.UserId,
-				SendEmailNotification = allowSendingEmail,
+				//SendEmailNotification = allowSendingEmail,
 				DecisionTime = now,
-				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
+				//IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
 				DecisionNameID = (int)DecisionActions.Waiting,
 				Notes = "Waiting; oldCashRequest: " + cr.Id,
 				//todo IsAmountSelectionAllowed = 
@@ -701,27 +701,29 @@
 
 			this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
 				Amount = (decimal)amount,
-				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
-				CreatedTime = now,
+				DecisionID = decisionId.Value,
 				DiscountPlanID = discountPlan,
-				EmailSendingBanned = !allowSendingEmail,
+				LoanSourceID = loanSource,
+				LoanTypeID = loanType,
+				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
+				StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
 				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
+				CreatedTime = now,
+				MonthlyInterestRate = interestRate,
+				RepaymentCount = repaymentPeriod,
+				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
 				// FEES -TODO
 				//SetupFeePercent = manualSetupFeePercent ?? 0,
 				// SetupFeeAddedToLoan = 1|0 default null TODO EZ-3515
 				//ServicingFeePercent = (cr.SpreadSetupFee != null && cr.SpreadSetupFee==true) ? manualSetupFeePercent : null,   //  TODO EZ-3515
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
-				LoanSourceID = loanSource,
-				LoanTypeID = loanType,
-				MonthlyInterestRate = interestRate,
-				RepaymentCount = repaymentPeriod,
-				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
-				StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
-				DecisionID = decisionId.Value,
-				//todo Notes = 
+				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
+				//IsAmountSelectionAllowed = ,
+				SendEmailNotification = allowSendingEmail,
+				Notes = "offer from ChangeCreditLine, ApplicationInfoController"
 				//todo InterestOnlyRepaymentCount = 
 			});
-			 
+
 			//TODO update new offer table
 			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
 

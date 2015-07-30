@@ -42,7 +42,7 @@ BEGIN
 			o.LoanTypeID, 
 			o.RepaymentIntervalTypeID, 
 			o.LoanSourceID, 			 
-			o.RepaymentCount as OfferRepaymentCount, 
+			o.RepaymentCount as OfferRepaymentCount, 			
 			o.Amount as OfferAmount, 
 			o.MonthlyInterestRate,			 
 			o.SetupFeeAddedToLoan,			

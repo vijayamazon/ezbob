@@ -101,10 +101,6 @@ CREATE TABLE [dbo].[NL_Decisions](
 	[DecisionTime] [DATETIME] NOT NULL,
 	[DecisionNameID] [INT] NOT NULL,
 	[Notes] [nvarchar](max) NULL,
-	[IsRepaymentPeriodSelectionAllowed] [BIT] NULL,-- set
-	[IsAmountSelectionAllowed] [BIT] NULL,
-	[InterestOnlyRepaymentCount] [INT] NULL,
-	[SendEmailNotification] [BIT] NULL,
 	[TimestampCounter] rowversion NOT NULL,
  CONSTRAINT [PK_NL_Decisions] PRIMARY KEY CLUSTERED ([DecisionID] ASC) 
 ) ;
@@ -171,8 +167,6 @@ CREATE TABLE [dbo].[NL_LoanAgreements](
 );
 END
 GO
-
-
 	
 IF OBJECT_ID('NL_LoanFeePayments') IS NULL BEGIN
 CREATE TABLE [dbo].[NL_LoanFeePayments](
@@ -254,8 +248,10 @@ CREATE TABLE [dbo].[NL_Offers](
 	[Notes] [nvarchar](max) NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
-	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,
-	[EmailSendingBanned] [BIT] NOT NULL DEFAULT 0,
+	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,	
+	[SendEmailNotification] [BIT] NOT NULL DEFAULT 1,
+	[IsRepaymentPeriodSelectionAllowed] [BIT] DEFAULT 0,
+	[IsAmountSelectionAllowed] [BIT] DEFAULT 0,
 	[TimestampCounter] rowversion NOT NULL,
   CONSTRAINT [PK_NL_Offers] PRIMARY KEY CLUSTERED ([OfferID] ASC)
 );

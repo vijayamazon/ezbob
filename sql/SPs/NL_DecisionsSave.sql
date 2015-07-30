@@ -9,17 +9,13 @@ IF TYPE_ID('NL_DecisionsList') IS NOT NULL
 	DROP TYPE NL_DecisionsList
 GO
 
-CREATE TYPE NL_DecisionsList AS TABLE (
-	[CashRequestID] INT NOT NULL,
-	[UserID] INT NOT NULL,
-	[DecisionNameID] INT NOT NULL,
-	[DecisionTime] DATETIME NOT NULL,
-	[Position] INT NOT NULL,
-	[Notes] NVARCHAR(MAX) NULL,
-	[IsRepaymentPeriodSelectionAllowed] BIT NULL,
-	[IsAmountSelectionAllowed] BIT NULL,
-	[InterestOnlyRepaymentCount] INT NULL,
-	[SendEmailNotification] BIT NULL
+CREATE TYPE NL_DecisionsList AS TABLE (	
+	[CashRequestID] [INT] NOT NULL,
+	[UserID] [INT] NOT NULL,
+	[Position] [INT] NOT NULL,
+	[DecisionTime] [DATETIME] NOT NULL,
+	[DecisionNameID] [INT] NOT NULL,
+	[Notes] [nvarchar](max) NULL
 )
 GO
 
@@ -35,22 +31,14 @@ BEGIN
 		[DecisionNameID],
 		[DecisionTime],
 		[Position],
-		[Notes],
-		[IsRepaymentPeriodSelectionAllowed],
-		[IsAmountSelectionAllowed],
-		[InterestOnlyRepaymentCount],
-		[SendEmailNotification]
+		[Notes]
 	) SELECT
 		[CashRequestID],
 		[UserID],
 		[DecisionNameID],
 		[DecisionTime],
 		[Position],
-		[Notes],
-		[IsRepaymentPeriodSelectionAllowed],
-		[IsAmountSelectionAllowed],
-		[InterestOnlyRepaymentCount],
-		[SendEmailNotification]
+		[Notes]		
 	FROM @Tbl
 
 	DECLARE @ScopeID INT = SCOPE_IDENTITY()

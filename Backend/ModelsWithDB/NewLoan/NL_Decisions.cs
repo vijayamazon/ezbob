@@ -30,19 +30,7 @@
 
         [Length(LengthType.MAX)]
         [DataMember]
-        public string Notes { get; set; }
-
-        [DataMember]
-        public bool? IsRepaymentPeriodSelectionAllowed { get; set; }
-
-        [DataMember]
-        public bool? IsAmountSelectionAllowed { get; set; }
-
-        [DataMember]
-        public int? InterestOnlyRepaymentCount { get; set; }
-
-        [DataMember]
-        public bool? SendEmailNotification { get; set; }
+        public string Notes { get; set; }  
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
@@ -56,4 +44,3 @@
 
     }//class NL_Decisions
 }//ns
-

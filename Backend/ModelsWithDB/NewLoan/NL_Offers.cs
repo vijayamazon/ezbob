@@ -62,9 +62,15 @@
 
 		[DataMember]
 		public bool IsLoanTypeSelectionAllowed { get; set; }
+		
+		[DataMember]
+		public bool IsRepaymentPeriodSelectionAllowed { get; set; }
 
 		[DataMember]
-		public bool EmailSendingBanned { get; set; }
+		public bool IsAmountSelectionAllowed { get; set; }
+
+		[DataMember]
+		public bool SendEmailNotification { get; set; }
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");

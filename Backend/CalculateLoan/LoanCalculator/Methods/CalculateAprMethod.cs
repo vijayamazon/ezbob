@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
@@ -16,6 +17,11 @@
 			this.aprDate = (aprDate ?? DateTime.UtcNow).Date;
 		} // constructor
 
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
+		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
+		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
+		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		public virtual decimal Execute() {
 			if (WriteToLog) {
 				Log.Debug(
@@ -29,10 +35,11 @@
 				);
 			} // if
 
-			this.loanPlan = new CalculatePlanMethod(Calculator, false)
-				.Execute()
-				.Select(r => new AmountDueDate(this, r))
-				.ToList();
+			try {
+				this.loanPlan = new CalculatePlanMethod(Calculator, false).Execute()
+					.Select(r => new AmountDueDate(this, r))
+					.ToList();
+			} catch (NegativeLoanAmountException negativeLoanAmountException) {}
 
 			this.issuedAmount = (double)WorkingModel.ActualIssuedAmount;
 
