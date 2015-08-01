@@ -55,7 +55,6 @@
     </div>
 
     <a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i class="fa fa-chevron-up"></i></a>
-	<div style="display: none;" class="hide" id="current-server-offset"></div>
 
     <script type="text/javascript">
         window.gRootPath = '@Url.Content("~/")';
@@ -68,6 +67,10 @@
 
 	$('.navbar.menu .roleImg').tooltip({ placement: "bottom" });
 	var EzBob = EzBob || {};
+	var serverDate = '@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss")';
+	var serverOffset = moment.utc(serverDate).diff(new Date());
+	EzBob.serverOffset = serverOffset;
+
 	EzBob.CrmActions = [];
 	EzBob.CrmStatuses = [];
 	EzBob.CrmRanks = [];
@@ -78,9 +81,6 @@
 
 	$(document).ready(function () {
 		EzBob_CgVendors_init();
-		var serverDate = '@DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss")';
-		var serverOffset = moment.utc(serverDate).diff(new Date());
-		$('#current-server-offset').text(serverOffset);
 	});
     </script>
     @RenderSection("Js", false)
