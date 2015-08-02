@@ -16,6 +16,8 @@
 		/// <param name="openPrincipal"></param>
 		/// <param name="previousDay"></param>
 		public OneDayLoanStatus(DateTime d, decimal openPrincipal, OneDayLoanStatus previousDay) {
+			IsReschedulingDay = false;
+			IsBetweenLastPaymentAndReschedulingDay = false;
 			Date = d;
 			OpenPrincipal = openPrincipal;
 			AssignedFees = 0;
@@ -30,10 +32,17 @@
 			set { this.date = value.Date; }
 		} // Date
 
-		public decimal OpenPrincipal { get; set; }
+		public decimal RawOpenPrincipal { get; private set; }
+
+		public decimal OpenPrincipal {
+			get { return IsBetweenLastPaymentAndReschedulingDay ? 0 : RawOpenPrincipal; }
+			set { RawOpenPrincipal = value; }
+		} // OpenPrincipal
+
 		public decimal DailyInterest {
 			get { return OpenPrincipal * DailyInterestRate; }
 		} // DailyInterest
+
 		public decimal AssignedFees { get; set; }
 
 		public decimal DailyInterestRate { get; set; }
@@ -151,6 +160,14 @@
 		} // class FormattedData
 
 		public FormattedData Str { get; private set; }
+
+		public bool IsReschedulingDay { get; set; }
+
+		public bool IsBetweenLastPaymentAndReschedulingDay { get; set; }
+
+		public bool IsPaymentDay {
+			get { return (RepaidPrincipal > 0) || (RepaidInterest > 0); }
+		} // IsPaymentDay
 
 		private static CultureInfo Culture {
 			get { return Library.Instance.Culture; }

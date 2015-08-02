@@ -19,7 +19,6 @@
 		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
 		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		public List<ScheduledItemWithAmountDue> Execute() {
-
 			new CreateScheduleMethod(Calculator).Execute();
 
 			var method = new CalculatePlanMethod(Calculator, false);

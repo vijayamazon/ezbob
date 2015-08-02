@@ -15,7 +15,6 @@
 		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
 		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual List<ScheduledItem> Execute() {
-
 			if (WorkingModel.InterestOnlyRepayments >= WorkingModel.RepaymentCount)
 				throw new InterestOnlyMonthsCountException(WorkingModel.InterestOnlyRepayments, WorkingModel.RepaymentCount);
 

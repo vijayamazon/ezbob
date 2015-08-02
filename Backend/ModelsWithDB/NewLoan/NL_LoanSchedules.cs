@@ -2,6 +2,7 @@
 	using System;
 	using System.Runtime.Serialization;
 	using System.Text;
+	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -34,13 +35,16 @@
 		public decimal InterestRate { get; set; }
 
 		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(NL_LoanSchedules);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
+			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
+
+			this.Traverse((ignored, pi) => {
+				object obj = pi.GetValue(this);
+
+				if (obj != null)
+					sb.Append(pi.Name).Append(": ").Append(obj).Append(";\n");
+			});
+
 			return sb.ToString();
-		}
-	}//NL_LoanSchedules
-}//ns
+		} // ToString
+	} // NL_LoanSchedules
+} // ns

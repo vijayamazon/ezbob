@@ -201,6 +201,61 @@
 			} // for each
 		} // AddFeeNotes
 
+		/// <summary>
+		/// Finite state machine with logic explanation: https://drive.google.com/open?id=0B1Io_qu9i44SYVZDMUVzX2NiVmc
+		/// </summary>
+		public void SetIgnoredDueToRescheduleDays() {
+			if (IsEmpty)
+				return;
+
+			var days = new List<OneDayLoanStatus>(Dates.Values);
+
+			foreach (OneDayLoanStatus day in days)
+				day.IsBetweenLastPaymentAndReschedulingDay = false;
+
+			int currentIdx = days.Count - 1;
+
+			char state = 'A';
+
+			for ( ; ; ) {
+				if (currentIdx < 0)
+					break;
+
+				var current = days[currentIdx];
+
+				switch (state) {
+				case 'A':
+					state = current.IsReschedulingDay ? 'C' : 'B';
+					break;
+
+				case 'B':
+					currentIdx--;
+					state = 'A';
+					break;
+
+				case 'C':
+					currentIdx--;
+					state = 'D';
+					break;
+
+				case 'D':
+					if (current.IsReschedulingDay)
+						state = 'C';
+					else if (current.IsPaymentDay)
+						state = 'B';
+					else
+						state = 'E';
+
+					break;
+
+				case 'E':
+					current.IsBetweenLastPaymentAndReschedulingDay = true;
+					state = 'C';
+					break;
+				} // switch
+			} // forever
+		} // SetIgnoredDueToRescheduleDays
+
 		private readonly SortedDictionary<DateTime, string> notes;
 	} // class DailyLoanStatus
 } // namespace

@@ -191,7 +191,6 @@
 				decimal currentPaidPrincipal = curRepayment.Principal;
 
 				while (currentPaidPrincipal > 0) {
-
 					currentPaidPrincipal = curSchedule.AddPrincipalRepayment(currentPaidPrincipal, curRepayment.Date);
 
 					if (curSchedule.ClosedDate.HasValue) {
@@ -207,7 +206,6 @@
 
 				if (curSchedule == null)
 					break;
-
 			} // for each repayment
 		} // SetScheduleCloseDatesFromPayments
 
@@ -226,22 +224,21 @@
 			os.Append("\tLoan calculation model - begin:\n");
 
 			os.AppendFormat(
-				  "\t{3} issued on {0} for {1} each {2} at monthly rate {4}.\n",
-				  LoanIssueTime.MomentStr(),
-				  Grammar.Number(RepaymentCount, "repayment"),
-				  RepaymentIntervalType == RepaymentIntervalTypes.Month
-						 ? "month"
-						 : Grammar.Number((int)RepaymentIntervalType, "day"),
-				  LoanAmount.ToString("C2", Library.Instance.Culture),
-				  MonthlyInterestRate.ToString("P2", Library.Instance.Culture)
+				"\t{3} issued on {0} for {1} each {2} at monthly rate {4}.\n",
+				LoanIssueTime.MomentStr(),
+				Grammar.Number(RepaymentCount, "repayment"),
+				RepaymentIntervalType == RepaymentIntervalTypes.Month
+					? "month"
+					: Grammar.Number((int)RepaymentIntervalType, "day"),
+				LoanAmount.ToString("C2", Library.Instance.Culture),
+				MonthlyInterestRate.ToString("P2", Library.Instance.Culture)
 			);
 
 			if (DiscountPlan.Count > 0) {
 				os.AppendFormat(
-					   "\tDiscount plan: {0}.\n",
-					   string.Join(", ", DiscountPlan.Select(x => x.ToString("P1", Library.Instance.Culture)))
+					"\tDiscount plan: {0}.\n",
+					string.Join(", ", DiscountPlan.Select(x => x.ToString("P1", Library.Instance.Culture)))
 				);
-
 			} else
 				os.Append("\tNo discount plan.\n");
 

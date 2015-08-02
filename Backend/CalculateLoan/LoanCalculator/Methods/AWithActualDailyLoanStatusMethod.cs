@@ -7,7 +7,8 @@
 
 	internal abstract class AWithActualDailyLoanStatusMethod : AMethod {
 		protected AWithActualDailyLoanStatusMethod(ALoanCalculator calculator, bool writeToLog)
-			: base(calculator, writeToLog) {
+			: base(calculator, writeToLog)
+		{
 		} // constructor
 
 		/// <exception cref="NoScheduleException">Condition. </exception>
@@ -18,7 +19,6 @@
 		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		protected virtual DailyLoanStatus CreateActualDailyLoanStatus(DateTime now) {
-
 			WorkingModel.ValidateSchedule();
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
@@ -40,6 +40,9 @@
 
 			foreach (OpenPrincipal op in WorkingModel.OpenPrincipalHistory) {
 				DateTime curOpDate = op.Date;
+
+				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date == curOpDate))
+					cls.IsReschedulingDay = true;
 
 				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date >= curOpDate))
 					cls.OpenPrincipal = op.Amount;
@@ -125,6 +128,8 @@
 					);
 				} // if
 			} // for
+
+			days.SetIgnoredDueToRescheduleDays();
 
 			return days;
 		} // CreateActualDailyLoanStatus

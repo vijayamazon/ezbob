@@ -7,7 +7,6 @@
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
-	using Ezbob.Backend.Models.NewLoan;
 
 	/// <summary>
 	/// This class is implemented as Facade pattern.
@@ -93,9 +92,10 @@
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
 		public virtual CurrentPaymentModel GetAmountToChargeForDashboard(
-			   DateTime today,
-			   bool setClosedDateFromPayments = false,
-			   bool writeToLog = true) {
+			DateTime today,
+			bool setClosedDateFromPayments = false,
+			bool writeToLog = true
+		) {
 			return new GetAmountToChargeForDashboardMethod(this, today, setClosedDateFromPayments, writeToLog).Execute();
 		} // GetAmountToChargeForDashboard
 
@@ -110,9 +110,10 @@
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
 		public virtual CurrentPaymentModel GetAmountToChargeForAutoCharger(
-			   DateTime today,
+			DateTime today,
 			bool setClosedDateFromPayments = false,
-			   bool writeToLog = true) {
+			bool writeToLog = true
+		) {
 			return new GetAmountToChargeForAutoChargerMethod(this, today, setClosedDateFromPayments, writeToLog).Execute();
 		} // GetAmountToChargeForAutoCharger
 
@@ -236,13 +237,5 @@
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		);
-		/// <summary>
-		/// Creates loan schedule by rescheduling time .............
-		/// Also calculates loan plan.
-		/// Schedule is stored in WorkingModel.Schedule ????????????????
-		/// </summary>
-		public virtual List<ScheduledItemWithAmountDue> RescheduleToIntervals(ReschedulingArgument reschedulingArgument, bool writeToLog = true) {
-			return new RescheduleToIntervalsMethod(this, reschedulingArgument, writeToLog).Execute();
-		} // RescheduleToIntervals
-	} // class LoanCalculator
+	} // class ALoanCalculator
 } // namespace

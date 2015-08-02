@@ -112,9 +112,6 @@
 		} // LoadOldLoanStructure
 
 		private void LoadNewLoanStructure() {
-			// TODO
-			// cal SP - load NL by id [NL_LoanStateLoad]
-
 			NL_Loans loan = DB.FillFirst<NL_Loans>(
 				"NL_LoansGet",
 				CommandSpecies.StoredProcedure,

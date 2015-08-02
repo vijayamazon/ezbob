@@ -1,3 +1,11 @@
+IF OBJECT_ID('NL_LoanPaymentLinkHistory') IS NOT NULL
+	DROP TABLE NL_LoanPaymentLinkHistory
+GO
+
+IF OBJECT_ID('NL_LoanPaymentLinkHistoryReasons') IS NOT NULL
+	DROP TABLE NL_LoanPaymentLinkHistoryReasons
+GO
+
 IF object_id('NL_LoanAgreementTemplateTypes') IS NOT NULL begin
 	IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes') 
 		ALTER TABLE [dbo].[LoanAgreementTemplate] DROP CONSTRAINT FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes  ;   		

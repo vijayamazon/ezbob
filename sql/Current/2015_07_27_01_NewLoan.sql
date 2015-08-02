@@ -1192,7 +1192,15 @@ IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] 
 END;  
 IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'AlmostPaid' ) BEGIN -- 'AlmostPaid'
 	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('AlmostPaid', 'Almost paid');
-END;   
+END;
+
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'DeletedOnReschedule' ) BEGIN -- 'DeletedOnReschedule'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('DeletedOnReschedule', 'Deleted on reshedule (nothing was paid before reschedule)');
+END;
+
+IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'ClosedOnReschedule' ) BEGIN -- 'ClosedOnReschedule'
+	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('ClosedOnReschedule', 'Closed on reshedule (was partially paid before reschedule)');
+END;
 
 -- NL_OfferStatuses
 --IF NOT EXISTS( SELECT OfferStatus FROM [dbo].[NL_OfferStatuses] WHERE OfferStatus = 'Live') BEGIN 
