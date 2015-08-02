@@ -755,5 +755,11 @@ table.directors-list td.l {
 	margin-bottom: 20px;
 }
 
-
+.automation-button {
+	width: 160px;
+	height: 47px;
+	font-family: 'Titillium Web Semi Bold';
+	font-size: 24px;
+	margin-bottom: 40px
+}
 
