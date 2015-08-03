@@ -115,6 +115,7 @@
 					response.LoanTypeID = sr["LoanTypeID"];
 					response.LoanSourceID = sr["LoanSourceID"];
 					response.IsCustomerRepaymentPeriodSelectionAllowed = sr["IsCustomerRepaymentPeriodSelectionAllowed"];
+					response.BrokerSetupFeePercent = sr["BrokerSetupFeePercent"];
 				} // if
 			} catch (Exception e) {
 				Log.Error(e, "Exception during re-approval.");

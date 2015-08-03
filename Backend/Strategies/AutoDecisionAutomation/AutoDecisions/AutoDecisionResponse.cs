@@ -31,6 +31,7 @@
 			LoanTypeID = 0;
 			InterestRate = 0;
 			SetupFee = 0;
+			BrokerSetupFeePercent = null;
 			IsCustomerRepaymentPeriodSelectionAllowed = false;
 			DiscountPlanID = null;
 			HasApprovalChance = false;
@@ -104,6 +105,7 @@
 
 		public decimal InterestRate { get; set; }
 		public decimal SetupFee { get; set; }
+		public decimal? BrokerSetupFeePercent { get; set; }
 		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
 		/// <summary>

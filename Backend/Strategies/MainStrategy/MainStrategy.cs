@@ -560,7 +560,7 @@
 
 				offerFees.Add(new NL_OfferFees {
 					LoanFeeTypeID = (int)FeeTypes.SetupFee,
-					Percent = this.autoDecisionResponse.SetupFee
+					Percent = this.autoDecisionResponse.SetupFee,
 				});
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
@@ -575,7 +575,7 @@
 					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO some day...
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
-					BrokerSetupFeePercent = 0, // TODO BUG FILL IN AUTO REAPPROVE
+					BrokerSetupFeePercent = this.autoDecisionResponse.BrokerSetupFeePercent,
 					IsLoanTypeSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
 					IsRepaymentPeriodSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
 					SendEmailNotification = !this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
