@@ -893,6 +893,12 @@
   <wsdl:message name="IEzService_RequalifyCustomer_OutputMessage">
     <wsdl:part name="parameters" element="tns:RequalifyCustomerResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_SaleContract_InputMessage">
+    <wsdl:part name="parameters" element="tns:SaleContract" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_SaleContract_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SaleContractResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_DataSharing_InputMessage">
     <wsdl:part name="parameters" element="tns:DataSharing" />
   </wsdl:message>
@@ -2001,6 +2007,10 @@
     <wsdl:operation name="RequalifyCustomer">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomer" message="tns:IEzService_RequalifyCustomer_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/RequalifyCustomerResponse" message="tns:IEzService_RequalifyCustomer_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="SaleContract">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/SaleContract" message="tns:IEzService_SaleContract_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/SaleContractResponse" message="tns:IEzService_SaleContract_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="DataSharing">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/DataSharing" message="tns:IEzService_DataSharing_InputMessage" />
@@ -3598,6 +3608,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="SaleContract">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/SaleContract" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="DataSharing">
       <soap12:operation soapAction="http://tempuri.org/IEzService/DataSharing" style="document" />
       <wsdl:input>
@@ -4456,20 +4475,20 @@
   </wsdl:binding>
   <wsdl:service name="EzServiceImplementation">
     <wsdl:port name="NetTcpBinding_IEzServiceAdmin" binding="tns:NetTcpBinding_IEzServiceAdmin">
-      <soap12:address location="net.tcp://dell-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>Dell-PC\sashaf</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
     <wsdl:port name="NetTcpBinding_IEzService" binding="tns:NetTcpBinding_IEzService">
-      <soap12:address location="net.tcp://dell-pc:7081/" />
+      <soap12:address location="net.tcp://alexbo-pc:7081/" />
       <wsa10:EndpointReference>
-        <wsa10:Address>net.tcp://dell-pc:7081/</wsa10:Address>
+        <wsa10:Address>net.tcp://alexbo-pc:7081/</wsa10:Address>
         <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
-          <Upn>Dell-PC\sashaf</Upn>
+          <Upn>ALEXBO-PC\alexbo</Upn>
         </Identity>
       </wsa10:EndpointReference>
     </wsdl:port>
