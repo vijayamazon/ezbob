@@ -11,19 +11,20 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 
-	SELECT 
-		LoanTypeId LoanTypeID, 
-		LoanSourceId LoanSourceID, 
-		ManualSetupFeeAmount, 
-		ManualSetupFeePercent, 
-		CAST(UseSetupFee AS BIT) UseSetupFee, 
-		UseBrokerSetupFee, 
-		InterestRate, 
-		RepaymentPeriod, 
-		DiscountPlanId DiscountPlanID, 
-		IsCustomerRepaymentPeriodSelectionAllowed
+	SELECT
+		LoanTypeId LoanTypeID,
+		LoanSourceId LoanSourceID,
+		ManualSetupFeeAmount,
+		ManualSetupFeePercent,
+		CAST(UseSetupFee AS BIT) UseSetupFee,
+		UseBrokerSetupFee,
+		InterestRate,
+		RepaymentPeriod,
+		DiscountPlanId DiscountPlanID,
+		IsCustomerRepaymentPeriodSelectionAllowed,
+		BrokerSetupFeePercent
 	FROM
-		CashRequests 
+		CashRequests
 	WHERE 
 		Id = @LacrID
 END

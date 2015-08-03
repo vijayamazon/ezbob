@@ -34,10 +34,8 @@
 				this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed
 			);
 
-			if (this.autoDecisionResponse.DecidedToApprove) {
+			if (this.autoDecisionResponse.DecidedToApprove)
 				this.interestRateToUse = this.loanSourceToUse.ValidateInterestRate(this.autoDecisionResponse.InterestRate);
-				this.setupFeePercentToUse = this.autoDecisionResponse.SetupFee;
-			} // if
 
 			this.repaymentPeriodToUse = this.loanSourceToUse.ValidateRepaymentPeriod(this.repaymentPeriodToUse);
 		} // constructor
@@ -161,9 +159,14 @@
 		} // RepaymentPeriod
 
 		public decimal ManualSetupFeePercent {
-			get { return this.setupFeePercentToUse; }
+			get { return this.autoDecisionResponse.SetupFee; }
 			set { }
 		} // ManualSetupFeePercent
+
+		public decimal? BrokerSetupFeePercent {
+			get { return this.autoDecisionResponse.BrokerSetupFeePercent; }
+			set { }
+		} // BrokerSetupFeePercent
 
 		public bool IsCustomerRepaymentPeriodSelectionAllowed {
 			get { return this.isCustomerRepaymentPeriodSelectionAllowedToUse; }
@@ -190,7 +193,6 @@
 		private readonly DateTime now;
 		private readonly AutoDecisionResponse autoDecisionResponse;
 		private readonly int customerID;
-		private readonly decimal setupFeePercentToUse;
 		private readonly LoanSource loanSourceToUse;
 		private readonly decimal interestRateToUse;
 		private readonly int repaymentPeriodToUse;
