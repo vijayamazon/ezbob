@@ -44,8 +44,10 @@
 	using EZBob.DatabaseLib.Model.Alibaba;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
+	using EZBob.DatabaseLib.Model.Fraud;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
+	using FraudChecker;
 	using NHibernate;
 	using NHibernate.Util;
 	using NUnit.Framework;
@@ -299,8 +301,34 @@
 
 		[Test]
 		public void testFraud() {
-			var s = new FraudChecker(21394, FraudMode.FullCheck);
-			s.Execute();
+			// var s = new FraudChecker(21394, FraudMode.FullCheck);
+			// s.Execute();
+
+			var chk = new InternalChecker(126, FraudMode.FullCheck);
+			List<FraudDetection> lst = chk.Decide();
+
+			m_oLog.Debug("{0} collisions found.", lst.Count);
+
+			foreach (FraudDetection fd in lst) {
+				m_oLog.Debug(
+					"\n\nCollision:" +
+					"\n\tCurrent customer: {0}" +
+					"\n\tOther customer: {1}" +
+					"\n\tExternal user: {2}" +
+					"\n\tCurrent field: {3}" +
+					"\n\tCompare field: {4}" +
+					"\n\tValue: {5}" +
+					"\n\tConcurrence: {6}" +
+					"\n",
+					fd.CurrentCustomer.Id,
+					fd.InternalCustomer == null ? "null" : fd.InternalCustomer.Id.ToString(),
+					fd.ExternalUser == null ? "null" : fd.ExternalUser.FirstName,
+					fd.CurrentField,
+					fd.CompareField,
+					fd.Value,
+					fd.Concurrence
+				);
+			} // for each
 		}
 
 		[Test]

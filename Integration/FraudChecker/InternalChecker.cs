@@ -345,7 +345,7 @@
 					"Customer Last Name, Postcode",
 					this.customer,
 					ca.Customer,
-					"Customer Last Name, Posstcode",
+					"Customer Last Name, Postcode",
 					null,
 					string.Format("{0}: {1}", ca.Postcode, this.customer.PersonalInfo.Surname)
 				)
@@ -455,13 +455,8 @@
 
 		private void Address() {
 			List<CustomerAddress> customerAddresses = this.customer.AddressInfo.AllAddresses.Where(a =>
-				a.County != null ||
 				a.Director != null ||
-				a.Line1 != null ||
-				a.Line2 != null ||
-				a.Line3 != null ||
-				a.Postcode != null ||
-				a.Town != null
+				!AddressIsEmpty(a)
 			).ToList();
 
 			List<string> postcodes = customerAddresses.Select(a => a.Postcode).ToList();
@@ -474,12 +469,7 @@
 			this.fraudDetections.AddRange(
 				from ca in customerAddresses
 				from a in addresses
-				where
-					ca.Line1 == a.Line1 &&
-					ca.Line2 == a.Line2 &&
-					ca.Line3 == a.Line3 &&
-					ca.Town == a.Town &&
-					ca.County == a.County
+				where IsSameAddress(ca, a)
 				select Helper.CreateDetection(
 					"Customer " + ca.AddressType,
 					this.customer,
@@ -490,6 +480,29 @@
 				)
 			);
 		} // Address
+
+		private static bool AddressIsEmpty(CustomerAddress a) {
+			return
+				string.IsNullOrWhiteSpace(a.County) &&
+				string.IsNullOrWhiteSpace(a.Line1) &&
+				string.IsNullOrWhiteSpace(a.Line2) &&
+				string.IsNullOrWhiteSpace(a.Line3) &&
+				string.IsNullOrWhiteSpace(a.Postcode) &&
+				string.IsNullOrWhiteSpace(a.Town);
+		} // AddressIsEmpty
+
+		private static bool IsSameAddress(CustomerAddress ca, CustomerAddress a) {
+			return
+				IsSameAddressComponent(ca.Line1, a.Line1) &&
+				IsSameAddressComponent(ca.Line2, a.Line2) &&
+				IsSameAddressComponent(ca.Line3, a.Line3) &&
+				IsSameAddressComponent(ca.Town, a.Town) &&
+				IsSameAddressComponent(ca.County, a.County);
+		} // IsSameAddress
+
+		private static bool IsSameAddressComponent(string a, string b) {
+			return (a ?? string.Empty).Trim() == (b ?? string.Empty).Trim();
+		} // IsSameAddressComponent
 
 		private void DirectorFirstMiddleLastName(bool isSkipLastName = false) {
 			List<Director> directorPortion = this.customers

@@ -288,6 +288,10 @@
       <Project>{66411ff3-aa26-4b45-96d3-56e5e77bb544}</Project>
       <Name>EzBob.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\FraudChecker\FraudChecker.csproj">
+      <Project>{EDC99346-E59D-44B7-BDD0-A08CD3D56941}</Project>
+      <Name>FraudChecker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\FreeAgent\FreeAgent.csproj">
       <Project>{ee7f496f-963f-4383-b0c2-3bcf9fc15511}</Project>
       <Name>FreeAgent</Name>
