@@ -60,6 +60,8 @@
 				Guid.NewGuid().ToString("N")
 			);
 
+			this.nlExists = DB.ExecuteScalar<bool>("NL_Exists", CommandSpecies.StoredProcedure);
+
 			this.customerDetails = new CustomerDetails(customerID);
 
 			this.mailer = new StrategiesMailer();
@@ -501,7 +503,8 @@
 
 			AddOldDecisionOffer(now); 
 
-			AddNLDecisionOffer(now); 
+			if (this.nlExists)
+				AddNLDecisionOffer(now); 
 
 			UpdateSalesForceOpportunity();
 
@@ -531,6 +534,9 @@
 		} // AddOldDecisionOffer
 
 		private void AddNLDecisionOffer(DateTime now) {
+			if (!this.nlExists)
+				return;
+
 			if (!this.autoDecisionResponse.HasAutoDecided)
 				return;
 			
@@ -751,11 +757,14 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
-				this.nlCashRequestID = DB.ExecuteScalar<int>(
-					"NL_CashRequestGetByOldID",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@OldCashRequestID", this.cashRequestID)
-				);
+				if (this.nlExists) {
+					this.nlCashRequestID = DB.ExecuteScalar<int>(
+						"NL_CashRequestGetByOldID",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@OldCashRequestID", this.cashRequestID)
+					);
+				} // if
+
 				return;
 			} // if
 
@@ -779,18 +788,20 @@
 			} // if
 
 			this.cashRequestID.Value = sr["CashRequestID"];
-	
-			AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
-				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
-				CustomerID = CustomerID,
-				OldCashRequestID = this.cashRequestID,
-				RequestTime = now,
-				UserID = UnderwriterID,
-			});
-			cashRequestStrategy.Execute();
-			this.nlCashRequestID = cashRequestStrategy.CashRequestID;
 
-			Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
+			if (this.nlExists) {
+				AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
+					CashRequestOriginID = (int)this.cashRequestOriginator.Value,
+					CustomerID = CustomerID,
+					OldCashRequestID = this.cashRequestID,
+					RequestTime = now,
+					UserID = UnderwriterID,
+				});
+				cashRequestStrategy.Execute();
+				this.nlCashRequestID = cashRequestStrategy.CashRequestID;
+
+				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
+			} // if
 
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
@@ -874,11 +885,9 @@
 			return mpus;
 		} // UpdateMarketplaces
 
-		// Inputs
 		private readonly FinishWizardArgs finishWizardArgs;
 		private readonly int avoidAutomaticDecision;
 
-		// Helpers
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly AutoDecisionResponse autoDecisionResponse;
 
@@ -902,6 +911,7 @@
 
 		private readonly CashRequestOriginator? cashRequestOriginator;
 
+		private readonly bool nlExists;
 		private readonly string tag;
 		private bool wasMismatch;
 		private ABackdoorSimpleDetails backdoorSimpleDetails;
