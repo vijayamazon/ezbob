@@ -22,6 +22,7 @@
 	using Infrastructure.csrf;
 	using Iesi.Collections.Generic;
 	using NHibernate;
+	using Reports.Alibaba.DataSharing;
 	using ServiceClientProxy;
 	using ServiceClientProxy.EzServiceReference;
 
@@ -241,7 +242,8 @@
 				this.session.Refresh(customer);
 			} // if
 
-			// TODO: Alibaba 001 - end of step 3
+            // Data Sharing with Alibaba 0001 - end of step 3
+            m_oServiceClient.Instance.DataSharing(customer.Id, ServiceClientProxy.EzServiceReference.AlibabaBusinessType.APPLICATION_WS_3, null);
 
 			return Json(new { });
 		}
@@ -928,8 +930,6 @@
 
 			customer.WizardStep = this.databaseHelper.WizardSteps.GetAll().FirstOrDefault(x => x.ID == (int)WizardStepType.PersonalDetails);
 			this.session.Flush();
-
-			// TODO: Alibaba 001 - end of step 2
 
 			ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.PersonalDetails);
 		}

@@ -523,16 +523,19 @@
 		ActionMetaData EnlistLottery(int customerID);
 
 		[OperationContract]
-		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID);
+		AlibabaAvailableCreditActionResult CustomerAvaliableCredit(string customerRefNum, long aliMemberID);
 
 		[OperationContract]
-		ActionMetaData RequalifyCustomer(int customerID, long aliMemberID);
+		ActionMetaData RequalifyCustomer(string customerRefNum, long aliMemberID);
 
-		[OperationContract]
-		ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+	    [OperationContract]
+        AlibabaSaleContractActionResult SaleContract(AlibabaContractDto dto);
 
-		[OperationContract]
-		ActionMetaData SaveApiCall(ApiCallData data);
+        [OperationContract]
+        ActionMetaData DataSharing(int customerID, AlibabaBusinessType businessType, int? uwID);
+
+        [OperationContract]
+        ActionMetaData SaveApiCall(ApiCallData data);
 
 		[OperationContract]
 		ActionMetaData VerifyEnoughAvailableFunds(int underwriterId, decimal deductAmount);

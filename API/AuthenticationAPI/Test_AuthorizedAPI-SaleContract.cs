@@ -6,12 +6,13 @@
 	using System.Net.Http;
 	using System.Threading;
 	using Ezbob.API.AuthenticationAPI.Models;
+	using Ezbob.Backend.Models.ExternalAPI;
 	using Newtonsoft.Json.Linq;
 	using NUnit.Framework;
 	using RestSharp;
 
 	[TestFixture]
-	public class Test_AuthorizedAPI {
+	public class Test_AuthorizedAPI_SaleContract {
 
 		public class ClientCredentialModel {
 			[Required]
@@ -27,7 +28,7 @@
 		private string baseUrl = "https://localhost:44302/";
 		private string authBaseUrl = "https://localhost:44302/";
 		private string access_token = "";
-		private AlibabaDto model;
+		private AlibabaContractDto model;
 		private JObject token;
 
 		// grant_type=password&client_id=pAliServer7c60C021e70B&client_secret=152863423315581&username=partherAppAlibaba&password=XDroz4HhR1EI2zsvd
@@ -77,12 +78,57 @@
 		// { "requestId": "000771", "responseId": "000771", "aliMemberId" : 789, "loanId": "0", "aId" : 23504 }
 		[TestFixtureSetUp]
 		public void FixtureInit() {
-			this.model = new AlibabaDto {
-				requestId = "000771",
-				responseId = "000771",
-				aId = "358", // 23504,
-				aliMemberId = 710526132, // 789,
-				loanId = 0
+			this.model = new AlibabaContractDto {
+                requestId = "142857",
+                responseId = "543",
+                loanId = 24314474,
+                orderNumber = "23456780",
+                sellerBusinessName = "Dabao Trading Ltd.",
+                sellerAliMemberId = "41523",
+                sellerStreet1 = "128 Xihu Road",
+                sellerCity = "Hangzhou",
+                sellerState = "Zhejiang",
+                sellerCountry = "China",
+                sellerPostalCode = "310016",
+                sellerAuthRepFname = "Hong",
+                sellerAuthRepLname = "Zhang",
+                sellerPhone = "865218526",
+                sellerFax = "865218526",
+                sellerEmail = "zhang.hong@163.com",
+                buyerBusinessName = "A PLAZA DRIVING SCHOOL",
+                aliMemberId = 131,
+                aId = "0170363",
+                buyerStreet1 = "926 E LEWELLING BLVD",
+                buyerCity = "HAYWARD",
+                buyerState = "CA",
+                buyerCountry = "U.S.A",
+                buyerZip = "94541",
+                buyerAuthRepFname = "MICHAEL",
+                buyerAuthRepLname = "ARTE",
+                buyerPhone = "415222444",
+                buyerEmail = "marte@aplaza.net",
+                shippingMark = "WT12345678",
+                totalOrderAmount = 88000,
+                deviationQuantityAllowed = 20,
+                orderAddtlDetails = "",
+                shippingTerms = "asd",
+                shippingDate = new DateTime(2015,03,01),
+                loadingPort = "Shanghai",
+                destinationPort = "Oakland,CA",
+                orderDeposit = 1000,
+                beneficiaryBank = "Bank of China",
+                bankAccountNumber = 1234567890,
+                bankStreetAddr1 = "108 Ganjiang Road",
+                bankCity = "Hangzhou",
+                bankState = "Zhejiang",
+                bankCountry = "China",
+                bankPostalCode = "310020",
+                swiftcode = "ADBNCNBJCD1",
+                orderCurrency = "gbp",
+                orderItems = new OrderItems[] {
+                    new OrderItems(){orderProdNumber = 0105, productName = "Battery", productSpecs = "AAA", productQuantity = 20000, productUnit = 6, productUnitPrice = 2, productTotalAmount = 48000},
+                    new OrderItems(){orderProdNumber = 0106, productName = "Screw", productSpecs = "Phillips", productQuantity = 50000, productUnit = 100, productUnitPrice = 8, productTotalAmount = 40000}
+                }
 			};
 		}
 		
@@ -120,7 +166,7 @@
 			try {
 				var response = client.Post(request);
 
-				Console.WriteLine(response.Content);
+				//Console.WriteLine(response.Content);
 
 				if (response.StatusCode != HttpStatusCode.OK)
 					throw new Exception(response.ErrorMessage);
@@ -133,16 +179,16 @@
 
 
 		[Test]
-		public void Test_Credit_Autorize_SSL() {
+		public void Test_Sale_Contract() {
 			try {
-				AuthRequest(this.aliServerCredentials.clientID, this.aliServerCredentials.clientSecret, this.aliServerCredentials.username, this.aliServerCredentials.userPwd);
+                AuthRequest(this.staging_aliServerCredentials.clientID, this.staging_aliServerCredentials.clientSecret, this.staging_aliServerCredentials.username, this.staging_aliServerCredentials.userPwd);
 				Console.WriteLine(this.token);
 			} catch (Exception e) {
 				Console.WriteLine("Failed to get access token", e.Message);
 				throw new HttpRequestException("Failed to get access token");
 			}
 			RestClient client = new RestClient(this.baseUrl);
-			RestRequest request = new RestRequest("api/customers/availableCredit");
+            RestRequest request = new RestRequest("api/contracts/contract");
 			request.AddHeader("Accept", "application/json");
 			request.AddHeader("Content-type", "application/json; charset=UTF-8");
 			request.AddHeader("Authorization", "Bearer " + this.token.GetValue("access_token"));
@@ -184,20 +230,20 @@
 				throw new HttpRequestException("Failed to get access token");
 			}
 
-			Console.WriteLine(string.Format("==={0},=========={1}======", this.model.aId, this.model.aliMemberId));
+			//Console.WriteLine(string.Format("==={0},=========={1}======", this.model.aId, this.model.aliMemberId));
 			this.callAvailCredit();
 			this.callAvailCredit();
 			//this.callAvailCredit();
 			//this.callAvailCredit();
 
-			this.model = new AlibabaDto {
-				requestId = "000001",
-				responseId = "1000001",
-				aId = "23504",
-				aliMemberId = 789,
-				loanId = 0
-			};
-			Console.WriteLine(string.Format("==={0},=========={1}======", this.model.aId, this.model.aliMemberId));
+            //this.model = new AlibabaDto {
+            //    requestId = "000001",
+            //    responseId = "1000001",
+            //    aId = 23504,
+            //    aliMemberId = 789,
+            //    loanId = 0
+            //};
+			//Console.WriteLine(string.Format("==={0},=========={1}======", this.model.aId, this.model.aliMemberId));
 			// other 
 			this.callAvailCredit();
 			this.callAvailCredit();

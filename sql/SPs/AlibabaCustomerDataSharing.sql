@@ -1,19 +1,25 @@
-IF OBJECT_ID('AlibabaCustomerDataSharing') IS NULL
-	EXECUTE('CREATE PROCEDURE AlibabaCustomerDataSharing AS SELECT 1')
+USE [ezbob]
 GO
-
+/****** Object:  StoredProcedure [dbo].[AlibabaCustomerDataSharing]    Script Date: 02/06/2015 10:56:12 ******/
+SET ANSI_NULLS ON
+GO
 SET QUOTED_IDENTIFIER ON
 GO
 
 
 ALTER PROCEDURE [dbo].[AlibabaCustomerDataSharing]
-	@CustomerID int, @FinalDecision bit
+	@CustomerID int,
+--	@CustomerRefNum varchar(8), 
+	@FinalDecision bit
 AS
-BEGIN
+BEGIN 
 	
 	SET NOCOUNT ON;	
 
 	DECLARE @AlibabaMemberID bigint;
+	--DECLARE @CustomerID int;
+
+	--set @CustomerID = (select Id from Customer where [RefNumber] = @CustomerRefNum);
 
 	SET @AlibabaMemberID = (select AliId from AlibabaBuyer where CustomerID = @CustomerID);	
 
@@ -26,8 +32,8 @@ BEGIN
 	SET @TypeOfBusiness = (select TypeOfBusiness from Customer where Id = @CustomerID);	
 
 --364	PShip3P
---44	PShip
---3888	NULL
+--44	NULL
+--3888	PShip
 --5664	Limited
 --8753	Entrepreneur
 --1075	SoleTrader
@@ -39,9 +45,10 @@ BEGIN
 		RETURN;	
 		
 	SELECT 
-		@AlibabaMemberID as  aliMemberId,		
-		@CustomerID as aId ,
-		
+		@AlibabaMemberID as  aliMemberId,				
+		@CustomerID as CustomerID ,
+		c.[RefNumber] as aId,
+
 		--loanId int default NULL,		
 		(select top 1 l.Amount from CustomerRequestedLoan l where l.CustomerId = @CustomerID order by l.Id desc) as requestedAmt,
 
@@ -67,7 +74,7 @@ BEGIN
 	   -- CashRequests date
 	   r.CreationDate	as applicationDate,		
 
-		co.ExperianCompanyName as  compName,  
+		co.CompanyName as  compName,  
 
 		-- adress type 3 or 5 by company id		
 		adcomp.Line1 as compStreetAddr1 , 
@@ -103,11 +110,12 @@ BEGIN
 	into
 		 #customer_data
 	FROM 
-		dbo.Customer as c INNER JOIN dbo.CustomerAddress ad on (ad.CustomerId = c.Id and ad.addressType = 1)												-- personal address
-		INNER JOIN CustomerStatuses st on st.Id = c.CollectionStatus 																						-- customer disabled ?
-		LEFT JOIN dbo.Company co on c.CompanyId = co.Id INNER JOIN dbo.CustomerAddress adcomp on (adcomp.CompanyId = co.Id and adcomp.addressType in (3,5))	-- company data including company address	
+		dbo.Customer as c 
+		LEFT JOIN dbo.CustomerAddress ad on (ad.CustomerId = c.Id and ad.addressType = 1)												-- personal address
+		LEFT JOIN CustomerStatuses st on st.Id = c.CollectionStatus 																						-- customer disabled ?
+		LEFT JOIN dbo.Company co on c.CompanyId = co.Id LEFT JOIN dbo.CustomerAddress adcomp on (adcomp.CompanyId = co.Id and adcomp.addressType in (3,5))	-- company data including company address	
 		LEFT JOIN (select top 1 IncorporationDate, CustomerID from dbo.CustomerAnalyticsCompany where CustomerID = @CustomerID and IsActive = 1 order by AnalyticsDate desc) as analytic on analytic.CustomerID = c.Id -- 	
-		INNER JOIN (select top 1 			
+		LEFT JOIN (select top 1 			
 			IdCustomer, 		
 			UnderwriterDecision,		 
 			UnderwriterDecisionDate,

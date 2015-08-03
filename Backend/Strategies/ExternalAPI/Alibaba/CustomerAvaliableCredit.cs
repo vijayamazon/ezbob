@@ -8,8 +8,8 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 			get { return "Alibaba CustomerAvaliableCredit"; }
 		}
 
-		public CustomerAvaliableCredit(int customerID, long aliMemberID) {
-			CustomerID = customerID;
+		public CustomerAvaliableCredit(string customerRefNum, long aliMemberID) {
+			CustomerRefNum = customerRefNum;
 			AliMemberID = aliMemberID;
 			Result = new AlibabaAvailableCreditResult();
 		}
@@ -19,12 +19,12 @@ namespace Ezbob.Backend.Strategies.ExternalAPI.Alibaba {
 					Result,
 					"AlibabaCustomerAvalableCredit",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("CustomerID", this.CustomerID),
+					new QueryParameter("CustomerRefNum", this.CustomerRefNum),
 					new QueryParameter("AliMemberId", this.AliMemberID)
 				);
 		}
 
-		public int CustomerID { get; private set; }
+        public string CustomerRefNum { get; private set; }
 		public long AliMemberID { get; private set; }
 		public AlibabaAvailableCreditResult Result { get; private set; }
 	}

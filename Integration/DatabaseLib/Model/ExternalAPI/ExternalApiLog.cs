@@ -43,7 +43,7 @@
 			Map(x => x.Comments);
 			Map(x => x.Source);
 
-			References(x => x.Customer, "CustomerId").LazyLoad().Cascade.None();
+			References(x => x.Customer, "CustomerId").Nullable().LazyLoad().Cascade.None();
 
 		} // constructor
 	}

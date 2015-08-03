@@ -1,40 +1,49 @@
-﻿namespace EzService.EzServiceImplementation {
-	using Ezbob.Backend.Models.ExternalAPI;
-	using Ezbob.Backend.Strategies.ExternalAPI;
-	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
+﻿namespace EzService.EzServiceImplementation
+{
+    using Ezbob.Backend.Models.ExternalAPI;
+    using Ezbob.Backend.Strategies.ExternalAPI;
+    using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 
-	partial class EzServiceImplementation {
+    partial class EzServiceImplementation
+    {
+        public AlibabaAvailableCreditActionResult CustomerAvaliableCredit(string customerRefNum, long aliMemberID)
+        {
+            CustomerAvaliableCredit instance;
 
-		public AlibabaAvailableCreditActionResult CustomerAvaliableCredit(int customerID, long aliMemberID) {
+            Log.Info("ESI CustomerAvaliableCredit: customerID: {0}, customerID: {1}", customerRefNum, aliMemberID);
 
-			CustomerAvaliableCredit instance;
+            ExecuteSync(out instance, null, null, customerRefNum, aliMemberID);
 
-			Log.Info("ESI CustomerAvaliableCredit: customerID: {0}, customerID: {1}", customerID, aliMemberID);
+            return new AlibabaAvailableCreditActionResult { Result = instance.Result };
 
-			ExecuteSync(out instance, customerID, null, customerID, aliMemberID);
+        } // CustomerAvaliableCredit
 
-			return new AlibabaAvailableCreditActionResult { Result = instance.Result };
+        public ActionMetaData RequalifyCustomer(string customerRefNum, long aliMemberID)
+        {
+            Log.Info("ESI RequalifyCustomer: customerID: {0}, customerID: {1}", customerRefNum, aliMemberID);
 
-		} // CustomerAvaliableCredit
+            ActionMetaData amd = Execute<RequalifyCustomer>(null, null, customerRefNum, aliMemberID);
 
-		public ActionMetaData RequalifyCustomer(int customerID, long aliMemberID) {
+            return amd;
 
-			Log.Info("ESI RequalifyCustomer: customerID: {0}, customerID: {1}", customerID, aliMemberID);
+        } //RequalifyCustomer
 
-			ActionMetaData amd = Execute<RequalifyCustomer>(customerID, null, customerID, aliMemberID);
+        public ActionMetaData SaveApiCall(ApiCallData data)
+        {
+            ActionMetaData amd = Execute<SaveApiCall>(data.CustomerID, null, data);
 
-			return amd;
+            return amd;
 
-		} //RequalifyCustomer
+        } // SaveApiCall
 
-		public ActionMetaData SaveApiCall(ApiCallData data) {
+        public AlibabaSaleContractActionResult SaleContract(AlibabaContractDto dto)
+        {
+            SaleContract instance;
 
-			ActionMetaData amd = Execute<SaveApiCall>(data.CustomerID, null, data);
+            ExecuteSync(out instance, null, null, dto);
 
-			return amd;
+            return new AlibabaSaleContractActionResult { Result = instance.Result };
 
-		} // SaveApiCall
-
-
-	} // class EzServiceImplementation
+        } // SaveApiCall
+    } // class EzServiceImplementation
 } // namespace

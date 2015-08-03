@@ -132,6 +132,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AlibabaAvailableCreditActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AlibabaSaleContractActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.AvailableFundsActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

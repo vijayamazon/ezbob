@@ -10,7 +10,10 @@
 		public long? aliMemberId { get; set; }
 
 		[DataMember(EmitDefaultValue = true)]
-		public int? aId { get; set; }
+		public string aId { get; set; }
+
+        [DataMember(EmitDefaultValue = true)]
+        public int CustomerID { get; set; }
 
 		[DataMember(EmitDefaultValue = true)]
 		public string currency = "GBP";
