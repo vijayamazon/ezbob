@@ -925,7 +925,7 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			int loanID = 16; //4182; // 1718; // 4439; //3534;
+			int loanID = 5055; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -948,7 +948,7 @@
 
 		[Test]
 		public void TestRescheduleIN() {
-			int loanID = 16; //3946; //4192; // 4439; // 3534; //1846; //2662;
+			int loanID = 5055; //3946; //4192; // 4439; // 3534; //1846; //2662;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
@@ -960,7 +960,7 @@
 			try {
 				var s = new RescheduleLoan<Loan>(loan, reModel);
 				s.Context.UserID = 25852;
-				//s.Execute();
+				s.Execute();
 				m_oLog.Debug("RESULT FOR IN");
 				m_oLog.Debug(s.Result.ToString());
 			} catch (Exception e) {
@@ -1015,7 +1015,7 @@
 					var s = new RescheduleLoan<Loan>(loan, reModel);
 					s.Context.UserID = 25852;
 					s.Execute();
-					m_oLog.Debug(s.Result.ToString());
+					this.m_oLog.Debug("INRESULT: {0}", s.Result.ToString());
 
 					// OUT
 					ReschedulingArgument reModel1 = new ReschedulingArgument();
@@ -1027,17 +1027,17 @@
 					reModel1.ReschedulingDate = DateTime.UtcNow;
 					reModel1.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 					if (reModel1.RescheduleIn == false) {
-						reModel1.PaymentPerInterval = 900m;
+						reModel1.PaymentPerInterval = 90m;
 					}
 					var s1 = new RescheduleLoan<Loan>(loan1, reModel1);
 					s1.Context.UserID = 25852;
 					s1.Execute();
-					m_oLog.Debug(s1.Result.ToString());
+					this.m_oLog.Debug("OUTRESULT: {0}", s1.Result.ToString());
 
 				} catch (Exception e) {
 					Console.WriteLine(e);
 				}
-			}, "select l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL", CommandSpecies.Text);
+			}, "select l.Id from [dbo].[Loan] l left join [dbo].[LoanScheduleDeleted] d on l.Id=d.LoanId where d.Id IS NULL", CommandSpecies.Text); //top 100 
 		}
 
 		[Test]

@@ -49,6 +49,16 @@
 			Console.WriteLine(weeksa);
 		}
 
+		[Test]
+		public void DateDiffInWeeks2() {
+			DateTime start = new DateTime(2015,8,2);
+			Console.WriteLine(start);
+			DateTime end = new DateTime(2016, 3, 29);
+			Console.WriteLine(end);
+			int weeksa = MiscUtils.DateDiffInWeeks(start, end);
+			Console.WriteLine(weeksa);
+		}
+
 
 		public enum BadCustomerStatuses2 {
 			// name = Id in [dbo].[CustomerStatuses]
