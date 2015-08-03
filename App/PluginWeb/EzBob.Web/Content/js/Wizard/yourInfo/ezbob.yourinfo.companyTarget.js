@@ -11,16 +11,19 @@ EzBob.companyTargets = Backbone.View.extend({
     },
   
     render: function () {
-        this.$el.html(this.template());
+    	this.$el.html(this.template({ jsonModel: this.jsonModel }));
         var that = this;
 
+	    var screenWidth = $(document).width();
+	    if (screenWidth > 920) {
+		    screenWidth = 920;
+	    }
         this.$el.dialog({
             autoOpen: true,
             title: "Select company",
             modal: true,
             resizable: true,
-            width: 920,
-            minWidth: 500,
+            width: screenWidth,
             height: 500,
             minHeight:200,
             buttons: [
@@ -36,7 +39,6 @@ EzBob.companyTargets = Backbone.View.extend({
                     click: function () { that.btnNotFoundClick(); },
                     'ui-event-control-id': 'company-target:not-found',
                 },
-                
                 {
                     text: 'OK',
                     'class': 'button btn-green btnTargetOk disabled',
@@ -51,24 +53,10 @@ EzBob.companyTargets = Backbone.View.extend({
         oWidget.find('.ui-dialog-title').addClass('address-dialog-title');
         oWidget.find('.ui-dialog-titlebar').addClass('address-dialog-titlebar');
         oWidget.find('.ui-dialog-buttonpane').addClass('address-dialog-buttonpane');
+		
         EzBob.UiAction.registerView(this);
 
-        this.targetsList = this.$el.find(".targets");
-
-        $.each(this.jsonModel, function (i, val) {
-            that.targetsList.append($('<li></li>')
-                    .attr("data", i)
-                    .html(
-                            val.BusName + ", " + val.BusRefNum +
-                            (val.PostCode  ? (", " + val.PostCode)  : "") +
-                            (val.AddrLine1 ? (", " + val.AddrLine1) : "") +
-                            (val.AddrLine2 ? (", " + val.AddrLine2) : "") +
-                            (val.AddrLine3 ? (", " + val.AddrLine3) : "") +
-                            (val.AddrLine4 ? (", " + val.AddrLine4) : "")
-                    ));
-        });
-
-        this.targetsList.beautifullList();
+        this.$el.find('.targets').beautifullList();
 
         return this;
     },
