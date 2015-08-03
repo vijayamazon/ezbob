@@ -48,27 +48,6 @@
 			);
 		} // Create
 
-		public BackdoorSimpleApprove(
-			int customerID,
-			int delay,
-			MedalClass medalClass,
-			string approvedAmount,
-			bool ownsProperty
-		) : base(DecisionActions.Approve, delay) {
-			this.customerID = customerID;
-			MedalClassification = medalClass;
-			this.ownsProperty = ownsProperty;
-
-			int appAmount;
-
-			if (int.TryParse(approvedAmount, out appAmount))
-				ApprovedAmount = MedalResult.RoundOfferedAmount(Cap(appAmount * 1000));
-			else {
-				var rnd = new Random();
-				ApprovedAmount = MedalResult.RoundOfferedAmount(Cap(rnd.Next(CurrentValues.Instance.MinLoan, Pac)));
-			} // if
-		} // constructor
-
 		public MedalClass MedalClassification { get; private set; }
 
 		public int ApprovedAmount { get; private set; }
@@ -151,6 +130,27 @@
 				ApprovedAmount
 			);
 		} // ToString
+
+		private BackdoorSimpleApprove(
+			int customerID,
+			int delay,
+			MedalClass medalClass,
+			string approvedAmount,
+			bool ownsProperty
+		) : base(DecisionActions.Approve, delay) {
+			this.customerID = customerID;
+			MedalClassification = medalClass;
+			this.ownsProperty = ownsProperty;
+
+			int appAmount;
+
+			if (int.TryParse(approvedAmount, out appAmount))
+				ApprovedAmount = MedalResult.RoundOfferedAmount(Cap(appAmount * 1000));
+			else {
+				var rnd = new Random();
+				ApprovedAmount = MedalResult.RoundOfferedAmount(Cap(rnd.Next(CurrentValues.Instance.MinLoan, Pac)));
+			} // if
+		} // constructor
 
 		private int Cap(int val) {
 			return Math.Min(

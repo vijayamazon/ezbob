@@ -20,10 +20,6 @@
 			);
 		} // Create
 
-		public BackdoorSimpleReject(int delay, bool hasApprovalChance) : base(DecisionActions.Reject, delay) {
-			this.hasApprovalChance = hasApprovalChance;
-		} // constructor
-
 		public override bool SetResult(AutoDecisionResponse response) {
 			Log.Debug("Back door simple flow: rejecting..."); 
 
@@ -57,6 +53,10 @@
 				this.hasApprovalChance ? string.Empty : "out"
 			);
 		} // ToString
+
+		private BackdoorSimpleReject(int delay, bool hasApprovalChance) : base(DecisionActions.Reject, delay) {
+			this.hasApprovalChance = hasApprovalChance;
+		} // constructor
 
 		private readonly bool hasApprovalChance;
 

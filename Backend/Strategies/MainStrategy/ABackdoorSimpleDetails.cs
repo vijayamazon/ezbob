@@ -52,7 +52,8 @@
 
 			ABackdoorSimpleDetails result =
 				(ABackdoorSimpleDetails)BackdoorSimpleReject.Create(backdoorCode) ??
-				(ABackdoorSimpleDetails)BackdoorSimpleApprove.Create(customer.ID, backdoorCode, customer.OwnsProperty);
+				(ABackdoorSimpleDetails)BackdoorSimpleApprove.Create(customer.ID, backdoorCode, customer.OwnsProperty) ??
+				(ABackdoorSimpleDetails)BackdoorSimpleManual.Create(backdoorCode);
 
 			if (result != null) {
 				Log.Debug("Using back door simple for customer '{0}' as: {1}.", customer.ID, result);
