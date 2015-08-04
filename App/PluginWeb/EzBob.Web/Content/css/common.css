@@ -1099,8 +1099,8 @@ table.dashboard_sources {
 #cboxClose {
 	background-position: -48px 0px;
 	border-radius: 0;
-    right: 3px;
-	top: 3px;
+    right: 6px;
+	top: 6px;
 }
 
 #cboxClose:hover {
