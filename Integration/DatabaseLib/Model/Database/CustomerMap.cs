@@ -163,7 +163,7 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.BankAccountValidationInvalidAttempts);
 			Map(x => x.ABTesting).Length(512);
 
-			Map(x => x.CollectionDescription);
+			Map(x => x.CollectionDescription).Length(500);
 			References(x => x.CollectionStatus, "CollectionStatus");
 			
 			References(x => x.WizardStep, "WizardStep");
