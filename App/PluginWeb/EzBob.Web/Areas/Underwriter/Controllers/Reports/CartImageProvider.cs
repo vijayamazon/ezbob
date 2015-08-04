@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
+﻿namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
 {
     public class CartImageProvider : IImageProvider
     {
@@ -18,7 +16,8 @@ namespace EzBob.Web.Areas.Underwriter.Controllers.Reports
                 return @"..\..\Content\img\cart_diamond.png";
             if (o.ToString() == "Total")
                 return null;
-            throw new Exception("UnknownCartType");
+
+			return @"..\..\Content\img\no-face.png";
         }
     }
 }
