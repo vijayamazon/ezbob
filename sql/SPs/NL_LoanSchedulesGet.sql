@@ -6,7 +6,8 @@ IF OBJECT_ID('NL_LoanSchedulesGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoanSchedulesGet
-@LoanID INT
+@LoanID INT,
+@Now DATETIME
 AS
 BEGIN
 	SET NOCOUNT ON;
@@ -25,5 +26,7 @@ BEGIN
 		INNER JOIN NL_LoanHistory h ON s.LoanHistoryID = h.LoanHistoryID
 	WHERE
 		h.LoanID = @LoanID
+		AND
+		(@Now IS NULL OR h.EventTime < @Now)
 END
 GO

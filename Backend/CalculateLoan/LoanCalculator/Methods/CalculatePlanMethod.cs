@@ -39,8 +39,12 @@
 				ScheduledItem scheduleItem = WorkingModel.Schedule[i];
 
 				// decrease "one day" loan status entries by schedule planned Principal to be paid at schedule planned Date
-				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(dd => dd.Date > scheduleItem.Date))
-					cls.OpenPrincipal -= scheduleItem.Principal;
+				foreach (OneDayLoanStatus cls in DailyLoanStatus.Where(dd => dd.Date >= scheduleItem.Date)) {
+					if (cls.Date != scheduleItem.Date)
+						cls.OpenPrincipalForInterest -= scheduleItem.Principal;
+
+					cls.OpenPrincipalAfterRepayments -= scheduleItem.Principal;
+				} // for each
 
 				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
@@ -49,7 +53,7 @@
 						cls.Date,
 						scheduleItem.InterestRate,
 						false, // considerBadPeriods
-						true, // ???? TODO check the value for considerFreezeInterestPeriod
+						false, // considerFreezeInterestPeriod
 						preScheduleEnd,
 						scheduleItem.Date
 					);

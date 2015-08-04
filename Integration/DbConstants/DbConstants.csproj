@@ -44,6 +44,7 @@
     <Compile Include="CollectionStatusNames.cs" />
     <Compile Include="customer_enums.cs" />
     <Compile Include="DecisionActions.cs" />
+    <Compile Include="NewLoanEnumsExt.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>

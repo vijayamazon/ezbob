@@ -178,29 +178,25 @@
 		/// </summary>
 		/// <param name="currentDate">Current date.</param>
 		/// <param name="monthlyInterestRate">Monthly interest rate.</param>
-		/// <param>True, to take in account bad and interest freeze periods,
+		/// <param name="considerBadPeriods">True, to take in account bad periods,
 		/// or false, to ignore them.</param>
-		/// <param name="considerFreezeInterestPeriod"></param>
+		/// <param name="considerFreezeInterestPeriods">True, to take in account interest freeze periods,
+		/// or false, to ignore them.</param>
 		/// <param name="periodStartDate">Period start date (the first day of the period).</param>
 		/// <param name="periodEndDate">Period end date (the last day of the period).</param>
-		/// <param name="considerBadPeriods"></param>
 		/// <returns>Daily interest rate.</returns>
 		internal decimal GetDailyInterestRate(
 			DateTime currentDate,
 			decimal monthlyInterestRate,
 			bool considerBadPeriods,
-			bool considerFreezeInterestPeriod,
+			bool considerFreezeInterestPeriods,
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		) {
-			//return (usePeriods && WorkingModel.BadPeriods.Contains(currentDate))
-			//     ? 0
-			//     : CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
-			
-			if (considerBadPeriods)
+			if (considerBadPeriods && WorkingModel.BadPeriods.Any(bp => bp.Contains(currentDate)))
 				return 0;
 
-			if (considerFreezeInterestPeriod && WorkingModel.FreezePeriods.Count > 0) {
+			if (considerFreezeInterestPeriods && (WorkingModel.FreezePeriods.Count > 0)) {
 				InterestFreeze interval = WorkingModel.FreezePeriods.First(i => i.Contains(currentDate));
 
 				var interest = (interval == null)

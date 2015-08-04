@@ -42,7 +42,8 @@
 					"\n\n",
 					WorkingModel,
 					string.Join("\n\t\t", balance.ToString("C2", Library.Instance.Culture)),
-					days.ToFormattedString("\t\t"), this.today.DateStr(),
+					days.ToFormattedString("\t\t"),
+					this.today.DateStr(),
 					Calculator.Name
 				);
 			} // if

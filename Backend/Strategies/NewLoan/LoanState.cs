@@ -37,7 +37,7 @@
 		public DateTime StateDate { get; set; }
 
 		// Result.
-		public LoanCalculatorModel CalcModel;
+		public LoanCalculatorModel CalcModel { get; private set; }
 
 		public override void Execute() {
 			try {
@@ -115,7 +115,8 @@
 			NL_Loans loan = DB.FillFirst<NL_Loans>(
 				"NL_LoansGet",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@loanID", this.loanID)
+				new QueryParameter("@loanID", this.loanID),
+				new QueryParameter("@Now", StateDate)
 			);
 
 			// Init loan's properties.
@@ -128,10 +129,25 @@
 				InterestOnlyRepayments = loan.InterestOnlyRepaymentCount ?? 0,
 			};
 
+			List<NL_LoanHistory> history = DB.Fill<NL_LoanHistory>(
+				"NL_LoanHistoryGet",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@LoanID", this.loanID),
+				new QueryParameter("@Now", StateDate)
+			);
+
+			foreach (NL_LoanHistory h in history) {
+				this.CalcModel.OpenPrincipalHistory.Add(new OpenPrincipal {
+					Date = h.EventTime,
+					Amount = h.Amount,
+				});
+			} // for each
+
 			List<NL_LoanSchedules> schedules = DB.Fill<NL_LoanSchedules>(
 				"NL_LoanSchedulesGet",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@LoanID", this.loanID)
+				new QueryParameter("@LoanID", this.loanID),
+				new QueryParameter("@Now", StateDate)
 			);
 
 			// Schedules.
@@ -151,7 +167,8 @@
 				},
 				"NL_PaymentsGet",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@LoanID", this.loanID)
+				new QueryParameter("@LoanID", this.loanID),
+				new QueryParameter("@Now", StateDate)
 			);
 
 			DB.ForEachRowSafe(
@@ -160,7 +177,8 @@
 				},
 				"NL_LoansFeesGet",
 				CommandSpecies.StoredProcedure,
-				new QueryParameter("@LoanID", this.loanID)
+				new QueryParameter("@LoanID", this.loanID),
+				new QueryParameter("@Now", StateDate)
 			);
 
 			DB.ForEachRowSafe(
@@ -170,15 +188,16 @@
 					DateTime? deactivation = sr["DeactivationDate"];
 					DateTime? activation = sr["ActivationDate"];
 
-					if ((start != null) && (end != null)) {
-						bool isActive = deactivation.HasValue
-							? (activation <= StateDate) && (deactivation >= StateDate)
-							: (activation <= StateDate);
+					if ((start == null) || (end == null))
+						return;
 
-						this.CalcModel.FreezePeriods.Add(
-							new InterestFreeze(start.Value, end.Value, sr["InterestRate"], isActive)
-						);
-					} // if
+					bool isActive = deactivation.HasValue
+						? (activation <= StateDate) && (deactivation >= StateDate)
+						: (activation <= StateDate);
+
+					this.CalcModel.FreezePeriods.Add(
+						new InterestFreeze(start.Value, end.Value, sr["InterestRate"], isActive)
+					);
 				},
 				"NL_InterestFreezeGet",
 				CommandSpecies.StoredProcedure,

@@ -6,11 +6,31 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
-	using Ezbob.Utils;
 	using NUnit.Framework;
 
 	[TestFixture]
 	public class TestLoanCalculator : TestFoundation {
+		[Test]
+		public void ForRetrospectivePayment() {
+			var lcm = new LoanCalculatorModel {
+				LoanAmount = 1000,
+				LoanIssueTime = new DateTime(2015, 6, 1, 15, 0, 0, DateTimeKind.Utc),
+				RepaymentIntervalType = RepaymentIntervalTypes.Month,
+				RepaymentCount = 15,
+				MonthlyInterestRate = 0.0225m,
+			};
+
+			var lc = new LegacyLoanCalculator(lcm);
+
+			lc.CreateScheduleAndPlan();
+
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 7, 1, 15, 0, 0, DateTimeKind.Utc), 76m, 22.5m, 0m));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 7, 31, 8, 0, 0, DateTimeKind.Utc), 69.88m, 20.12m, 0m));
+			lcm.Repayments.Add(new Repayment(new DateTime(2015, 8, 1, 15, 0, 0, DateTimeKind.Utc), 66m, 20.79m, 0m));
+
+			lc.CalculateBalance(new DateTime(2015, 8, 2, 15, 0, 0, DateTimeKind.Utc));
+		} // ForRetrospectivePayment
+
 		[Test]
 		public void TestBankLikeCalculator() {
 			TestSpecificLoanCalculator(lcm => new BankLikeLoanCalculator(lcm));
@@ -112,7 +132,5 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 
 			Log.Info("{1} earned interest on 10/02/2015 - 19/03/2015 is {0}.", earnedInterest, lc.Name);
 		} // TestSpecificLoanCalculator
-
-
 	} // class TestLoanCalculator
 } // namespace

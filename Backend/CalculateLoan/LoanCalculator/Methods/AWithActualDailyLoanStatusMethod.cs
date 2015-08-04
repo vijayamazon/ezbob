@@ -44,8 +44,10 @@
 				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date == curOpDate))
 					cls.IsReschedulingDay = true;
 
-				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date >= curOpDate))
-					cls.OpenPrincipal = op.Amount;
+				foreach (OneDayLoanStatus cls in days.Where(dd => dd.Date >= curOpDate)) {
+					cls.OpenPrincipalForInterest = op.Amount;
+					cls.OpenPrincipalAfterRepayments = op.Amount;
+				} // for each
 			} // for each
 
 			// Step 3. Fill daily interest for each day within scheduled period.
@@ -96,7 +98,7 @@
 			if (maxDate > days.LastKnownDate) {
 				OneDayLoanStatus lastKnownDayData = days[days.LastKnownDate];
 
-				if (lastKnownDayData.OpenPrincipal > 0) {
+				if (lastKnownDayData.OpenPrincipalForInterest > 0) {
 					for (DateTime dt = lastKnownDayData.Date.AddDays(1); dt.Date <= maxDate; dt = dt.AddDays(1)) {
 						days.Add(new OneDayLoanStatus(dt, WorkingModel.LoanAmount, days.LastDailyLoanStatus) {
 							DailyInterestRate = lastKnownDayData.DailyInterestRate,
@@ -115,8 +117,12 @@
 			for (var i = 0; i < WorkingModel.Repayments.Count; i++) {
 				Repayment rp = WorkingModel.Repayments[i];
 
-				foreach (OneDayLoanStatus odls in days.Where(dd => dd.Date > rp.Date))
-					odls.OpenPrincipal -= rp.Principal;
+				foreach (OneDayLoanStatus odls in days.Where(dd => dd.Date >= rp.Date)) {
+					if (odls.Date != rp.Date)
+						odls.OpenPrincipalForInterest -= rp.Principal;
+
+					odls.OpenPrincipalAfterRepayments -= rp.Principal;
+				} // if
 
 				if (days.Contains(rp.Date))
 					days[rp.Date].AddRepayment(rp);

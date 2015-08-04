@@ -67,75 +67,79 @@
 		} // ToString
 
 		public string ToFormattedString(string rowPrefix) {
-			int dateLen = 0;
-			int openPrincipalLen = 0;
-			int dailyInterestLen = 0;
-			int assignedFeeLen = 0;
-			int dailyInterestRateLen = 0;
-			int repaidPrincipalLen = 0;
-			int repaidInterestLen = 0;
-			int repaidFeeLen = 0;
-			int notesLen = 0;
-
 			const string date = "Date";
-			const string openPrincipal = "Open principal";
-			const string dailyInterest = "Daily accured interest";
+			const string openPrincipalForInterest = "For interest";
+			const string openPrincipalAfterRepayments = "After repayments";
+			const string dailyInterest = "Daily accrued interest";
 			const string assignedFees = "Assigned fees";
 			const string dailyInterestRate = "Daily interest rate";
+			const string currentBalance = "Current balance";
 			const string repaidPrincipal = "Principal";
 			const string repaidInterest = "Interest";
 			const string repaidFees = "Fees";
+			const string ignoredDay = "Ignored";
 			const string notesTitle = "Notes";
 
 			const string separator = "|";
 
+			int dateLen = date.Length;
+			int openPrincipalLen = Math.Max(openPrincipalForInterest.Length, openPrincipalAfterRepayments.Length);
+			int dailyInterestLen = dailyInterest.Length;
+			int assignedFeeLen = assignedFees.Length;
+			int dailyInterestRateLen = dailyInterestRate.Length;
+			int currentBalanceLen = currentBalance.Length;
+			int repaidPrincipalLen = repaidPrincipal.Length;
+			int repaidInterestLen = repaidInterest.Length;
+			int repaidFeeLen = repaidFees.Length;
+			int ignoredDayLen = ignoredDay.Length;
+			int notesLen = notesTitle.Length;
+
 			foreach (OneDayLoanStatus dd in Days) {
 				dateLen = Math.Max(dateLen, dd.Str.Date.Length);
-				openPrincipalLen = Math.Max(openPrincipalLen, dd.Str.OpenPrincipal.Length);
+				openPrincipalLen = Math.Max(openPrincipalLen, dd.Str.OpenPrincipalForInterest.Length);
+				openPrincipalLen = Math.Max(openPrincipalLen, dd.Str.OpenPrincipalAfterRepayments.Length);
 				dailyInterestLen = Math.Max(dailyInterestLen, dd.Str.DailyInterest.Length);
 				assignedFeeLen = Math.Max(assignedFeeLen, dd.Str.AssignedFees.Length);
 				dailyInterestRateLen = Math.Max(dailyInterestRateLen, dd.Str.DailyInterestRate.Length);
+				currentBalanceLen = Math.Max(currentBalanceLen, dd.Str.CurrentBalance.Length);
 				repaidPrincipalLen = Math.Max(repaidPrincipalLen, dd.Str.RepaidPrincipal.Length);
 				repaidInterestLen = Math.Max(repaidInterestLen, dd.Str.RepaidInterest.Length);
 				repaidFeeLen = Math.Max(repaidFeeLen, dd.Str.RepaidFees.Length);
 				notesLen = Math.Max(notesLen, GetNote(dd.Date).Length);
 			} // for each day
 
-			dateLen = Math.Max(dateLen, date.Length);
-			openPrincipalLen = Math.Max(openPrincipalLen, openPrincipal.Length);
-			dailyInterestLen = Math.Max(dailyInterestLen, dailyInterest.Length);
-			assignedFeeLen = Math.Max(assignedFeeLen, assignedFees.Length);
-			dailyInterestRateLen = Math.Max(dailyInterestRateLen, dailyInterestRate.Length);
-			repaidPrincipalLen = Math.Max(repaidPrincipalLen, repaidPrincipal.Length);
-			repaidInterestLen = Math.Max(repaidInterestLen, repaidInterest.Length);
-			repaidFeeLen = Math.Max(repaidFeeLen, repaidFees.Length);
-			notesLen = Math.Max(notesLen, notesTitle.Length);
-
 			var repaidLen = repaidPrincipalLen + repaidInterestLen + repaidFeeLen + 4 + 2 * separator.Length;
+
+			var openPrincipalHeaderLen = 2 * openPrincipalLen + 1 + 2 * separator.Length;
 
 			var result = new List<string>();
 
 			result.Add(string.Format("{0}{1}{2}{1}", rowPrefix, separator, string.Join(
 				separator,
 				OneDayLoanStatus.FormatField(string.Empty, dateLen),
-				OneDayLoanStatus.FormatField(string.Empty, openPrincipalLen),
+				OneDayLoanStatus.FormatField("Open principal", -openPrincipalHeaderLen),
 				OneDayLoanStatus.FormatField(string.Empty, dailyInterestLen),
 				OneDayLoanStatus.FormatField(string.Empty, assignedFeeLen),
 				OneDayLoanStatus.FormatField(string.Empty, dailyInterestRateLen),
+				OneDayLoanStatus.FormatField(string.Empty, currentBalanceLen),
 				OneDayLoanStatus.FormatField("Repaid", -repaidLen),
+				OneDayLoanStatus.FormatField(string.Empty, ignoredDayLen),
 				OneDayLoanStatus.FormatField(string.Empty, notesLen)
 			)));
 
 			result.Add(string.Format("{0}{1}{2}{1}", rowPrefix, separator, string.Join(
 				separator,
 				OneDayLoanStatus.FormatField(date, -dateLen),
-				OneDayLoanStatus.FormatField(openPrincipal, -openPrincipalLen),
+				OneDayLoanStatus.FormatField(openPrincipalForInterest, -openPrincipalLen),
+				OneDayLoanStatus.FormatField(openPrincipalAfterRepayments, -openPrincipalLen),
 				OneDayLoanStatus.FormatField(dailyInterest, -dailyInterestLen),
 				OneDayLoanStatus.FormatField(assignedFees, -assignedFeeLen),
 				OneDayLoanStatus.FormatField(dailyInterestRate, -dailyInterestRateLen),
+				OneDayLoanStatus.FormatField(currentBalance, -currentBalanceLen),
 				OneDayLoanStatus.FormatField(repaidPrincipal, -repaidPrincipalLen),
 				OneDayLoanStatus.FormatField(repaidInterest, -repaidInterestLen),
 				OneDayLoanStatus.FormatField(repaidFees, -repaidFeeLen),
+				OneDayLoanStatus.FormatField(ignoredDay, -ignoredDayLen),
 				OneDayLoanStatus.FormatField(notesTitle, -notesLen)
 			)));
 
@@ -149,9 +153,11 @@
 					dailyInterestLen,
 					assignedFeeLen,
 					dailyInterestRateLen,
+					currentBalanceLen,
 					repaidPrincipalLen,
 					repaidInterestLen,
 					repaidFeeLen,
+					ignoredDayLen,
 					-notesLen
 				));
 			} // for each day

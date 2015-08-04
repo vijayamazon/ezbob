@@ -19,7 +19,8 @@
 			IsReschedulingDay = false;
 			IsBetweenLastPaymentAndReschedulingDay = false;
 			Date = d;
-			OpenPrincipal = openPrincipal;
+			OpenPrincipalForInterest = openPrincipal;
+			OpenPrincipalAfterRepayments = openPrincipal;
 			AssignedFees = 0;
 			DailyInterestRate = 0;
 			this.previousDay = previousDay;
@@ -32,15 +33,28 @@
 			set { this.date = value.Date; }
 		} // Date
 
-		public decimal RawOpenPrincipal { get; private set; }
+		public decimal RawOpenPrincipalForInterest { get; private set; }
 
-		public decimal OpenPrincipal {
-			get { return IsBetweenLastPaymentAndReschedulingDay ? 0 : RawOpenPrincipal; }
-			set { RawOpenPrincipal = value; }
-		} // OpenPrincipal
+		public decimal RawOpenPrincipalAfterRepayments { get; private set; }
+
+		/// <summary>
+		/// This is loan open principal at the beginning of the day. This amount is used to calculate daily earned interest.
+		/// </summary>
+		public decimal OpenPrincipalForInterest {
+			get { return IsBetweenLastPaymentAndReschedulingDay ? 0 : RawOpenPrincipalForInterest; }
+			set { RawOpenPrincipalForInterest = value; }
+		} // OpenPrincipalForInterest
+
+		/// <summary>
+		/// This is loan open principal at the end of the day. This amount is used to calculate daily current balance.
+		/// </summary>
+		public decimal OpenPrincipalAfterRepayments {
+			get { return IsBetweenLastPaymentAndReschedulingDay ? 0 : RawOpenPrincipalAfterRepayments; }
+			set { RawOpenPrincipalAfterRepayments = value; }
+		} // OpenPrincipalAfterRepayments
 
 		public decimal DailyInterest {
-			get { return OpenPrincipal * DailyInterestRate; }
+			get { return OpenPrincipalForInterest * DailyInterestRate; }
 		} // DailyInterest
 
 		public decimal AssignedFees { get; set; }
@@ -72,11 +86,11 @@
 		} // TotalRepaidFees
 
 		public decimal TotalExpectedNonprincipalPayment {
-			get { return TotalEarnedInterest + TotalAssignedFees - TotalRepaidInterest - TotalRepaidFees; }
+			get { return AccruedInterest + TotalAssignedFees - TotalRepaidFees; }
 		} // TotalExpectedNonprincipalPayment
 
-		public decimal CurrentBalance {
-			get { return OpenPrincipal + TotalExpectedNonprincipalPayment; }
+		public decimal CurrentBalance{
+			get { return OpenPrincipalAfterRepayments + TotalExpectedNonprincipalPayment; }
 		} // CurrentBalance
 
 		public decimal AccruedInterest {
@@ -100,9 +114,10 @@
 		/// </returns>
 		public override string ToString() {
 			return string.Format(
-				"on {0}: p{1} i{2} f{3} (dr {4}) rp{5} ri{6} rf{7}",
+				"on {0}: p({1}::{2}) i{3} f{4} (dr {5}) rp{6} ri{7} rf{8}",
 				Str.Date,
-				Str.OpenPrincipal,
+				Str.OpenPrincipalForInterest,
+				Str.OpenPrincipalAfterRepayments,
 				Str.DailyInterest,
 				Str.AssignedFees,
 				Str.DailyInterestRate,
@@ -121,9 +136,11 @@
 			int dailyInterestLen,
 			int assignedFeesLen,
 			int dailyInterestRateLen,
+			int currentBalanceLen,
 			int repaidPrincipalLen,
 			int repaidInterestLen,
 			int repaidFeesLen,
+			int ignoredDayLen,
 			int notesLen
 		) {
 			return string.Format(
@@ -132,13 +149,16 @@
 				separator,
 				string.Join(separator,
 					FormatField(Str.Date, dateLen),
-					FormatField(Str.OpenPrincipal, openPrincipalLen),
+					FormatField(Str.OpenPrincipalForInterest, openPrincipalLen),
+					FormatField(Str.OpenPrincipalAfterRepayments, openPrincipalLen),
 					FormatField(Str.DailyInterest, dailyInterestLen),
 					FormatField(Str.AssignedFees, assignedFeesLen),
 					FormatField(Str.DailyInterestRate, dailyInterestRateLen),
+					FormatField(Str.CurrentBalance, currentBalanceLen),
 					FormatField(Str.RepaidPrincipal, repaidPrincipalLen),
 					FormatField(Str.RepaidInterest, repaidInterestLen),
 					FormatField(Str.RepaidFees, repaidFeesLen),
+					FormatField(Str.IgnoredDay, ignoredDayLen),
 					FormatField(note, notesLen)
 				)
 			);
@@ -148,13 +168,16 @@
 			internal FormattedData(OneDayLoanStatus odls) { this.odls = odls; }
 
 			public string Date { get { return this.odls.Date.DateStr(); } }
-			public string OpenPrincipal { get { return this.odls.OpenPrincipal.ToString("C8", Culture); } }
+			public string OpenPrincipalForInterest { get { return this.odls.OpenPrincipalForInterest.ToString("C8", Culture); } }
+			public string OpenPrincipalAfterRepayments { get { return this.odls.OpenPrincipalAfterRepayments.ToString("C8", Culture); } }
 			public string DailyInterest { get { return this.odls.DailyInterest.ToString("C8", Culture); } }
 			public string AssignedFees { get { return this.odls.AssignedFees.ToString("C8", Culture); } }
 			public string DailyInterestRate { get { return this.odls.DailyInterestRate.ToString("P8", Culture); } }
+			public string CurrentBalance { get { return this.odls.CurrentBalance.ToString("C8", Culture); } }
 			public string RepaidPrincipal { get { return this.odls.RepaidPrincipal.ToString("C8", Culture); } }
 			public string RepaidInterest { get { return this.odls.RepaidInterest.ToString("C8", Culture); } }
 			public string RepaidFees { get { return this.odls.RepaidFees.ToString("C8", Culture); } }
+			public string IgnoredDay { get { return this.odls.IsBetweenLastPaymentAndReschedulingDay ? "yes" : "no"; } }
 
 			private readonly OneDayLoanStatus odls;
 		} // class FormattedData
