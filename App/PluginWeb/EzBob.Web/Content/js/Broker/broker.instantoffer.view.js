@@ -79,7 +79,7 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 						default:
 							var companyTargets = new EzBob.companyTargets({ model: reqData });
 							companyTargets.render();
-							companyTargets.on("BusRefNumGetted", function (targetingData) {
+							companyTargets.on("BusRefNumGot", function (targetingData) {
 								self.getInstantOffer(oData, targetingData);
 							});
 							break;

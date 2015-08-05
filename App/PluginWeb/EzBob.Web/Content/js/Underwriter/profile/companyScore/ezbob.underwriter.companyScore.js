@@ -210,7 +210,7 @@ EzBob.Underwriter.ChangeCompanyView = Backbone.Marionette.ItemView.extend({
 
 							companyTargets.render();
 
-							companyTargets.on("BusRefNumGetted", function (targetingData) {
+							companyTargets.on("BusRefNumGot", function (targetingData) {
 								that.saveTargetingData(targetingData);
 							});
 

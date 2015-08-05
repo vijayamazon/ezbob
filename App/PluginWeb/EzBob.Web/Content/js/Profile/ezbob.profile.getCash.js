@@ -576,7 +576,7 @@ EzBob.Profile.GetCashView = Backbone.View.extend({
 
 								companyTargets.render();
 
-								companyTargets.on('BusRefNumGetted', function(targetingData) {
+								companyTargets.on('BusRefNumGot', function(targetingData) {
 									that.saveTargeting(targetingData);
 								});
 
