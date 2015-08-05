@@ -1,7 +1,8 @@
-﻿namespace S1.Application.OrangeMoney.S1.Application.Orange_Money
+﻿namespace UIAutomationTests.S1.Application.Orange_Money
 {
     using System;
     using System.Threading;
+    using global::S1.Application.OrangeMoney;
     using NUnit.Framework;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
