@@ -11,7 +11,7 @@
         static BrowserHost() {
                 instance = new SelenoHost();
                 instance.Run(configure => configure
-                .WithWebServer(new InternetWebServer("https://localhost:44300/Customer/Wizard")));
+                .WithWebServer(new InternetWebServer("https://app.ezbob.com/Customer/Wizard#SignUp")));
         }
 
 
