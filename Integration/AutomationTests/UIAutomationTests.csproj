@@ -32,15 +32,15 @@
   <ItemGroup>
     <Reference Include="Castle.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\Castle.Core.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\Microsoft.Web.Infrastructure.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.4.14350, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\nunit.framework.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -53,44 +53,44 @@
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Helpers, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\System.Web.Helpers.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\System.Web.Helpers.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Mvc, Version=4.0.0.1, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\System.Web.Mvc.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\System.Web.Mvc.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\System.Web.Razor.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\System.Web.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\System.Web.WebPages.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\System.Web.WebPages.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Deployment, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\System.Web.WebPages.Deployment.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\System.Web.WebPages.Deployment.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.WebPages.Razor, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\System.Web.WebPages.Razor.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestStack.Seleno, Version=0.9.11.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="TestStack.Seleno, Version=0.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\TestStack.Seleno.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\TestStack.Seleno.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver, Version=2.47.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver, Version=2.42.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\WebDriver.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\WebDriver.dll</HintPath>
     </Reference>
-    <Reference Include="WebDriver.Support, Version=2.45.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="WebDriver.Support, Version=2.42.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\Aoutomation\WebDriver.Support.dll</HintPath>
+      <HintPath>..\..\Lib\3rdparty\AutomationSet4\WebDriver.Support.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>

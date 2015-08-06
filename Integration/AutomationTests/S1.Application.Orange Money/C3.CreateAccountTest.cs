@@ -1,13 +1,10 @@
 ﻿namespace UIAutomationTests.S1.Application.Orange_Money
 {
     using System;
-    using System.Configuration;
-    using System.Text;
     using System.Threading;
     using NUnit.Framework;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Support.UI;
-    using OpenQA.Selenium;
 
     [TestFixture]
     public class CreateAccountTests {
@@ -28,7 +25,7 @@
            
             //WebDriverWait wait = new WebDriverWait(BrowserHost.instance.Application.Browser, new TimeSpan(3000));
             //var cBoxOverlay = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("Email")));
-            try {
+            
                 Thread.Sleep(5000);
 
                 var emailBox = BrowserHost.instance.Application.Browser.FindElement(By.Id("Email"));
@@ -63,9 +60,7 @@
 
                 Thread.Sleep(5000);
                 Assert.IsTrue(BrowserHost.instance.Application.Browser.FindElement(By.Id("FirstName")) != null);
-            } catch (Exception ex) {
-                Console.WriteLine(ex.ToString());
-            }
+
         }
     }
 }
