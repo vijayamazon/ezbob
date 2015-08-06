@@ -247,7 +247,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculateLoanExceptions", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{C261C250-B7A7-4DF0-8CA0-5C73AB80D3B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIAutomationTests", "Integration\Tests\AutomationUIFunctionalTests\UIAutomationTests.csproj", "{5D1AEA30-CD91-41E7-8E08-BCACE4610331}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UIAutomationTests", "Integration\AutomationTests\UIAutomationTests.csproj", "{5D1AEA30-CD91-41E7-8E08-BCACE4610331}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
