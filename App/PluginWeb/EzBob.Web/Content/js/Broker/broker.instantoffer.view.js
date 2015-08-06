@@ -41,19 +41,16 @@ EzBob.Broker.InstantOfferView = EzBob.Broker.SubmitView.extend({
 		this.$el.find('#CompanyNameNumber').focus();
 	}, // onFocus
 
-	
 	onSubmit: function () {
 		var self = this;
 		var oData = this.$el.find('form').serializeArray();
 		
 		oData = _.filter(oData, function(obj) {
-			if (obj.name == "IsHomeOwner") {
+			if (obj.name == "IsHomeOwner")
 				obj.value = self.$el.find('#IsHomeOwner').is(":checked");
-			}
 			
-			if (obj.name == "AnnualTurnover" || obj.name == "AnnualProfit") {
+			if (obj.name == "AnnualTurnover" || obj.name == "AnnualProfit")
 				obj.value = self.$el.find('#' + obj.name).autoNumericGet();
-			}
 			
 			return obj;
 		});
