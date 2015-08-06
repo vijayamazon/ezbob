@@ -599,7 +599,7 @@ using Ezbob.Backend.ModelsWithDB;
 
 				var CallCreditDataTpdDecisionAlertIndividualsID = DB.ExecuteScalar<long>(
 					con,
-					"SaveCCallCreditDataTpdReviewAlertIndividuals",
+					"SaveCallCreditDataTpdDecisionAlertIndividuals",
 					CommandSpecies.StoredProcedure,
 					DB.CreateTableParameter<CallCreditDataTpdDecisionAlertIndividuals>("Tbl", new List<CallCreditDataTpdDecisionAlertIndividuals> { decalind }));
 
@@ -607,7 +607,7 @@ using Ezbob.Backend.ModelsWithDB;
 					rtrnotice.CallCreditDataTpdDecisionAlertIndividualsID = CallCreditDataTpdDecisionAlertIndividualsID;
 				}
 				if (decalind.DecisionAlertIndividualNocs.Any())
-				DB.ExecuteNonQuery(con, "SaveCCallCreditDataTpdReviewAlertIndividualsNocs", CommandSpecies.StoredProcedure,
+					DB.ExecuteNonQuery(con, "SaveCallCreditDataTpdDecisionAlertIndividualsNocs", CommandSpecies.StoredProcedure,
 						   DB.CreateTableParameter<CallCreditDataTpdDecisionAlertIndividualsNocs>("Tbl", decalind.DecisionAlertIndividualNocs));
 			}
 		}
