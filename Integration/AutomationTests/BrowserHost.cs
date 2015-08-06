@@ -1,14 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-
-using TestStack.Seleno.Configuration;
-
-namespace S1.Application.OrangeMoney
+﻿namespace UIAutomationTests 
 {
+    using TestStack.Seleno.Configuration;
     using TestStack.Seleno.Configuration.WebServers;
 
     public static class BrowserHost {
