@@ -12,7 +12,8 @@
         [Test, Category("C3")]
         public void CreateAccountTest() {
             //BrowserHost.instance.Application.Browser.Navigate().GoToUrl("https://localhost:44300/Customer/Wizard");
-            WebDriverWait wait = new WebDriverWait(BrowserHost.instance.Application.Browser, new TimeSpan(60000));
+            WebDriverWait wait = new WebDriverWait(BrowserHost.instance.Application.Browser, new TimeSpan(3000));
+            
             var cBoxOverlay = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("Email")));
 
             var emailBox = BrowserHost.instance.Application.Browser.FindElement(By.Id("Email"));
