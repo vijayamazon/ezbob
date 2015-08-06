@@ -3,7 +3,7 @@
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_LoanScheduleStatuses {
+	public class NL_LoanScheduleStatuses : AStringable {
 		[PK]
 		[DataMember]
 		public int LoanScheduleStatusID { get; set; }
@@ -13,6 +13,5 @@
 
 		[DataMember]
 		public string Descriptions { get; set; }
-
-	}//class NL_LoanScheduleStatuses
-}//ns
+	} // class NL_LoanScheduleStatuses
+} // ns

@@ -170,6 +170,11 @@
     <Compile Include="Experian\ExperianLtdLenderDetails.cs" />
     <Compile Include="Experian\ExperianLtdPrevCompanyNames.cs" />
     <Compile Include="Experian\ExperianLtdShareholders.cs" />
+    <Compile Include="NewLoan\AStringable.cs" />
+    <Compile Include="NewLoan\NLAgreementItem.cs" />
+    <Compile Include="NewLoan\NLFeeItem.cs" />
+    <Compile Include="NewLoan\NLScheduleItem.cs" />
+    <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\NL_OfferFees.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />
     <Compile Include="NewLoan\NL_LoanFeeTypes.cs">
@@ -225,6 +230,10 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\Logger\Logger.csproj">
       <Project>{f92ca169-9532-4c4d-8d84-6f48ace5719c}</Project>
       <Name>Logger</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Models\Ezbob.Backend.Models.csproj">
+      <Project>{6f7fc0db-e5a4-42ef-91ff-4dfea42a7621}</Project>
+      <Name>Ezbob.Backend.Models</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

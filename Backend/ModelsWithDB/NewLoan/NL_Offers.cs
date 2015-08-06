@@ -1,11 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Text;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_Offers {
+	public class NL_Offers : AStringable {
 		[PK(true)]
 		public long OfferID { get; set; }
 
@@ -54,7 +53,7 @@
 		public string Notes { get; set; }
 
 		[DataMember]
-		public int? InterestOnlyRepaymentCount { get; set; }
+		public int InterestOnlyRepaymentCount { get; set; }
 
 		[FK("NL_DiscountPlans", "DiscountPlanID")]
 		[DataMember]
@@ -71,15 +70,5 @@
 
 		[DataMember]
 		public bool SendEmailNotification { get; set; }
-
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(NL_Offers);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
-		}
-	}//class NL_Offers
-}//ns
+	} // class NL_Offers
+} // ns

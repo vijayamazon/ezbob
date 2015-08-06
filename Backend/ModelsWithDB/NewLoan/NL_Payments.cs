@@ -1,56 +1,44 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System;
-    using System.Runtime.Serialization;
-    using System.Text;
-    using Ezbob.Utils.dbutils;
+	using System;
+	using System.Runtime.Serialization;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_Payments {
+	[DataContract(IsReference = true)]
+	public class NL_Payments : AStringable {
 		[PK(true)]
-        [DataMember]
+		[DataMember]
 		public long PaymentID { get; set; }
 
-        [FK("LoanTransactionMethod", "Id")]
-        [DataMember]
-        public int PaymentMethodID { get; set; }
+		[FK("LoanTransactionMethod", "Id")]
+		[DataMember]
+		public int PaymentMethodID { get; set; }
 
-        [DataMember]
-        public DateTime PaymentTime { get; set; }
+		[DataMember]
+		public DateTime PaymentTime { get; set; }
 
 		[DataMember]
 		public decimal? Amount { get; set; }
 
 		[FK("NL_PaymentStatuses", "PaymentStatusID")]
-        [DataMember]
+		[DataMember]
 		public int PaymentStatusID { get; set; }
 
-        [DataMember]
-        public DateTime CreationTime { get; set; }
+		[DataMember]
+		public DateTime CreationTime { get; set; }
 
-        [FK("Security_User", "UserId")]
-        [DataMember]
-        public int? CreatedByUserID { get; set; }
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int? CreatedByUserID { get; set; }
 
-        [DataMember]
-        public DateTime? DeletionTime { get; set; }
+		[DataMember]
+		public DateTime? DeletionTime { get; set; }
 
-        [FK("Security_User", "UserId")]
-        [DataMember]
-        public int? DeletedByUserID { get; set; }
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int? DeletedByUserID { get; set; }
 
-        [Length(LengthType.MAX)]
-        [DataMember]
-        public string Notes { get; set; }
-
-	
-	    public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(NL_Payments);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
-	    }
-    }//class NL_Payments
-}//ns
+		[Length(LengthType.MAX)]
+		[DataMember]
+		public string Notes { get; set; }
+	} // class NL_Payments
+} // ns

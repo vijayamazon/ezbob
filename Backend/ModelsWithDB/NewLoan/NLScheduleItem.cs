@@ -1,14 +1,12 @@
-namespace Ezbob.Backend.Models.NewLoan {
+namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System.Runtime.Serialization;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]
-	public class NLScheduleItem {
+	public class NLScheduleItem : AStringable {
 		[DataMember]
 		public NL_LoanSchedules ScheduleItem { get; set; }
 
 		[DataMember]
 		public NL_LoanSchedulePayments ScheduleItemPayment { get; set; }
-
-	}
-}
+	} // class NLScheduleItem
+} // namespace

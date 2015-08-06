@@ -1,42 +1,37 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System;
-    using System.Runtime.Serialization;
-    using System.Text;
-    using Ezbob.Utils.dbutils;
+	using System;
+	using System.Runtime.Serialization;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_FundTransfers {
+	[DataContract(IsReference = true)]
+	public class NL_FundTransfers : AStringable {
 		[PK(true)]
-        [DataMember]
+		[DataMember]
 		public long FundTransferID { get; set; }
 
-        [FK("NL_Loans", "LoanID")]
-        [DataMember]
+		[FK("NL_Loans", "LoanID")]
+		[DataMember]
 		public long LoanID { get; set; }
 
-        [DataMember]
-        public decimal Amount { get; set; }
+		[DataMember]
+		public decimal Amount { get; set; }
 
-        [DataMember]
-        public DateTime TransferTime { get; set; }
+		[DataMember]
+		public DateTime TransferTime { get; set; }
 
-        [DataMember]
-        public bool IsActive { get; set; }
+		[FK("NL_FundTransferStatuses", "FundTransferStatusID")]
+		[DataMember]
+		public int FundTransferStatusID { get; set; }
 
 		[FK("LoanTransactionMethod", "Id")]
 		[DataMember]
 		public int LoanTransactionMethodID { get; set; }
 
-	
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name+ ": ");
-			Type t = typeof(NL_FundTransfers);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(":").Append(prop.GetValue(this)).Append(@"; \n");
-			}
-			return sb.ToString();
-		}
+		[DataMember]
+		public DateTime? DeletionTime { get; set; }
 
-    }//class NL_FundTransfers
-}//ns
+		[FK("Security_User", "UserId")]
+		[DataMember]
+		public int? DeletedByUserID { get; set; }
+	} // class NL_FundTransfers
+} // ns

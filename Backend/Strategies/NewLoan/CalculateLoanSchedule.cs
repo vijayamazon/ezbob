@@ -81,7 +81,7 @@
 					LoanAmount = model.Loan.InitialLoanAmount, // offer|LoanLegal
 					RepaymentCount = model.Loan.RepaymentCount, //  offer|LoanLegal
 					MonthlyInterestRate = model.Loan.InterestRate, //  offer|LoanLegal
-					InterestOnlyRepayments = model.Loan.InterestOnlyRepaymentCount ?? 0 //  offer|LoanLegal
+					InterestOnlyRepayments = model.Loan.InterestOnlyRepaymentCount, //  offer|LoanLegal
 				};
 
 				// init calculator

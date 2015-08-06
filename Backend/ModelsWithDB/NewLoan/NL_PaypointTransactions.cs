@@ -1,54 +1,42 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System;
-    using System.Runtime.Serialization;
-    using System.Text;
-    using Ezbob.Utils.dbutils;
+	using System;
+	using System.Runtime.Serialization;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_PaypointTransactions {
+	[DataContract(IsReference = true)]
+	public class NL_PaypointTransactions : AStringable {
 		[PK(true)]
-        [DataMember]
+		[DataMember]
 		public long PaypointTransactionID { get; set; }
 
-        [FK("NL_Payments", "PaymentID")]
-        [DataMember]
+		[FK("NL_Payments", "PaymentID")]
+		[DataMember]
 		public long PaymentID { get; set; }
 
-        [DataMember]
-        public DateTime TransactionTime { get; set; }
+		[DataMember]
+		public DateTime TransactionTime { get; set; }
 
-        [DataMember]
-        public decimal Amount { get; set; }
+		[DataMember]
+		public decimal Amount { get; set; }
 
-        [Length(LengthType.MAX)]
-        [DataMember]
-        public string Notes { get; set; }
+		[Length(LengthType.MAX)]
+		[DataMember]
+		public string Notes { get; set; }
 
-        [FK("NL_PaypointTransactionStatuses", "PaypointTransactionStatusID")]
-        [DataMember]
-        public int PaypointTransactionStatusID { get; set; }
+		[FK("NL_PaypointTransactionStatuses", "PaypointTransactionStatusID")]
+		[DataMember]
+		public int PaypointTransactionStatusID { get; set; }
 
-        [Length(100)]
-        [DataMember]
-        public string PaypointUniqID { get; set; }
+		[Length(100)]
+		[DataMember]
+		public string PaypointUniqID { get; set; }
 
-        [FK("PayPointCard", "Id")]
-        [DataMember]
-        public int PaypointCardID { get; set; }
+		[FK("PayPointCard", "Id")]
+		[DataMember]
+		public int PaypointCardID { get; set; }
 
-        [Length(10)]
-        [DataMember]
-        public string IP { get; set; }
-
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(NL_PaypointTransactions);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
-		}
-
-    }//class NL_PaypointTransactions
-}//ns
+		[Length(10)]
+		[DataMember]
+		public string IP { get; set; }
+	} // class NL_PaypointTransactions
+} // ns

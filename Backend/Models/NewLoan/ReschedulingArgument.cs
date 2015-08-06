@@ -1,14 +1,12 @@
 ﻿namespace Ezbob.Backend.Models.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Text;
 	using DbConstants;
 
 	[DataContract]
-	public class ReschedulingArgument {
-	
+	public class ReschedulingArgument : AStringable {
 		[DataMember]
-		public int LoanID { get; set; }  // loan ID to re-schedule
+		public long LoanID { get; set; }  // loan ID to re-schedule
 
 		[DataMember]
 		public string LoanType { get; set; }  // loan old/new
@@ -27,16 +25,5 @@
 
 		[DataMember]
 		public bool RescheduleIn { get; set; } // type of re-scheduling: for "IN" - true, for "OUT" - false
-
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
-			Type t = typeof(ReschedulingArgument);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
-		}
-
-	}
-}
+	} // class ReschedulingArgument
+} // namespace

@@ -65,6 +65,7 @@
     </None>
     <None Include="Properties\DataSources\Ezbob.Backend.Models.NewLoan.NL_Model.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions.datasource" />
+    <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model.datasource" />
     <None Include="Properties\DataSources\Ezbob.Backend.ModelsWithDB.NewLoan.NL_Offers.datasource" />
     <None Include="Service References\EzServiceReference\Arrays.xsd">
       <SubType>Designer</SubType>
@@ -218,6 +219,9 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LongActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LotteryActionResult.datasource">

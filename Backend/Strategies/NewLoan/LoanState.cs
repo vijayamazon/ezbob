@@ -127,7 +127,7 @@
 				RepaymentIntervalType = (RepaymentIntervalTypes)loan.RepaymentIntervalTypeID,
 				RepaymentCount = loan.RepaymentCount,
 				MonthlyInterestRate = loan.InterestRate,
-				InterestOnlyRepayments = loan.InterestOnlyRepaymentCount ?? 0,
+				InterestOnlyRepayments = loan.InterestOnlyRepaymentCount,
 			};
 
 			List<NL_LoanHistory> history = DB.Fill<NL_LoanHistory>(

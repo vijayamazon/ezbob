@@ -6,9 +6,9 @@
 	using Ezbob.Backend.Strategies.VatReturn;
 	using EzServiceAccessor;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Utils;

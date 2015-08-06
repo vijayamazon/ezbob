@@ -465,7 +465,7 @@
       <xs:element minOccurs="0" name="BalanceBeforeRepayment" type="xs:decimal" />
       <xs:element minOccurs="0" name="Date" type="xs:dateTime" />
       <xs:element minOccurs="0" name="Fees" type="xs:decimal" />
-      <xs:element minOccurs="0" name="Id" type="xs:int" />
+      <xs:element minOccurs="0" name="Id" type="xs:long" />
       <xs:element minOccurs="0" name="Interest" type="xs:decimal" />
       <xs:element minOccurs="0" name="InterestPaid" type="xs:decimal" />
       <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />

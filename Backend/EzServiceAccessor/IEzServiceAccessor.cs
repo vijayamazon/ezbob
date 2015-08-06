@@ -1,9 +1,9 @@
 ﻿namespace EzServiceAccessor {
 	using System.Collections.Generic;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 
 	public interface IEzServiceAccessor {
@@ -54,7 +54,5 @@
 		/// <param name="nlModel"></param>
 		/// <returns></returns>
 		NL_Model AddPayment(NL_Model nlModel);
-
-
 	} // interface IEzServiceAccessor
 } // namespace EzServiceAccessor

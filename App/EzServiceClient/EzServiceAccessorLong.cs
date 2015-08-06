@@ -4,9 +4,9 @@
 	using EzServiceAccessor;
 	using EzServiceReference;
 	using Ezbob.Backend.Models;
-    using Ezbob.Backend.Models.NewLoan;
     using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.Experian;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 
 	public class EzServiceAccessorLong : IEzServiceAccessor {

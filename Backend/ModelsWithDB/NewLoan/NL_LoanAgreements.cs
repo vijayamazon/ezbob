@@ -1,36 +1,23 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-	using System;
 	using System.Runtime.Serialization;
-    using System.Text;
-    using Ezbob.Utils.dbutils;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_LoanAgreements {
+	[DataContract(IsReference = true)]
+	public class NL_LoanAgreements : AStringable {
 		[PK(true)]
-        [DataMember]
+		[DataMember]
 		public long LoanAgreementID { get; set; }
 
-        [FK("NL_LoanHistory", "LoanHistoryID")]
-        [DataMember]
+		[FK("NL_LoanHistory", "LoanHistoryID")]
+		[DataMember]
 		public long LoanHistoryID { get; set; }
 
-        [Length(250)] 
-        [DataMember]
-        public string FilePath { get; set; }
+		[Length(250)]
+		[DataMember]
+		public string FilePath { get; set; }
 
-        [FK("LoanAgreementTemplate", "Id")]
-        [DataMember]
-        public int? LoanAgreementTemplateID { get; set; }
-
-	   
-	    public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name+": ");
-			Type t = typeof(NL_LoanAgreements);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \t");
-			}
-			return sb.ToString();
-	    }
-    }//class NL_LoanAgreements
-}//ns
+		[FK("LoanAgreementTemplate", "Id")]
+		[DataMember]
+		public int? LoanAgreementTemplateID { get; set; }
+	} // class NL_LoanAgreements
+} // ns

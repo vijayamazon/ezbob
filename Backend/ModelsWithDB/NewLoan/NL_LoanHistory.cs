@@ -1,11 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Text;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_LoanHistory {
+	public class NL_LoanHistory : AStringable {
 		[PK(true)]
 		[DataMember]
 		public long LoanHistoryID { get; set; }
@@ -42,26 +41,8 @@
 		[DataMember]
 		public string AgreementModel { get; set; }
 
-
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
-			Type t = typeof(NL_LoanHistory);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null) {
-					if (prop.Name != "AgreementModel") {
-						sb.Append(prop.Name)
-							.Append(": " + prop.GetValue(this))
-							.Append("; \n");
-					}
-				}
-			}
-			return sb.ToString();
-		}
-	}//class NL_LoanHistory
-}//ns
+		protected override bool DisplayFieldInToString(string fieldName) {
+			return fieldName != "AgreementModel";
+		} // DisplayFieldInToString
+	} // class NL_LoanHistory
+} // ns

@@ -6,7 +6,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;

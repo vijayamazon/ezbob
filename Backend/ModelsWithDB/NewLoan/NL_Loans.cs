@@ -1,11 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Text;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_Loans {
+	public class NL_Loans : AStringable {
 		[PK(true)]
 		[DataMember]
 		public long LoanID { get; set; }
@@ -60,20 +59,10 @@
 		public decimal InterestRate { get; set; }
 
 		[DataMember]
-		public int? InterestOnlyRepaymentCount { get; set; }
+		public int InterestOnlyRepaymentCount { get; set; }
 
 		[FK("Loan", "Id")]
 		[DataMember]
-		public long OldLoanID { get; set; }
-
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
-			Type t = typeof(NL_Loans);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
-			}
-			return sb.ToString();
-		}
-	}//class NL_Loans
-}//ns
+		public int? OldLoanID { get; set; }
+	} // class NL_Loans
+} // ns

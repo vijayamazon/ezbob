@@ -1,14 +1,10 @@
-﻿namespace Ezbob.Backend.Models.NewLoan {
-	using System;
+﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
-	using System.Text;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]
-	public class NL_Model {
-
-		public NL_Model() {}
+	public class NL_Model : AStringable {
+		public NL_Model() { } // constructor
 
 		public NL_Model(int customerID) {
 			CustomerID = customerID;
@@ -16,8 +12,8 @@
 			Schedule = new List<NLScheduleItem>();
 			Fees = new List<NLFeeItem>();
 			Agreements = new List<NLAgreementItem>();
-		}
-	
+		} // constructor
+
 		[DataMember]
 		public int CustomerID { get; set; }
 
@@ -30,15 +26,14 @@
 		[DataMember]
 		public NL_Loans Loan { get; set; }
 
-		
 		[DataMember]
 		public List<NLAgreementItem> Agreements { get; set; }
 
 		[DataMember]
-		public string AgreementModel { get; set; }	
+		public string AgreementModel { get; set; }
 
 		[DataMember]
-		public decimal? BrokerComissions { get; set; }	 
+		public decimal? BrokerComissions { get; set; }
 
 		[DataMember]
 		public NL_PacnetTransactions PacnetTransaction { get; set; }
@@ -52,7 +47,6 @@
 
 		[DataMember]
 		public NL_Offers Offer { get; set; }
-		
 
 		// AssignPaymentToLoan strategy
 		// 1. argument for the strategy - logic payment to assign (distribute) to loan
@@ -64,7 +58,6 @@
 		// 2. result used in AssignPaymentToLoan strategy: schedule items that covered by the amount/or NL_Payments
 		[DataMember]
 		public List<NL_LoanSchedulePayments> PaymentAssignedToScheduleItems { get; set; }
-
 
 		// "Pay loan" 
 		//[DataMember]
@@ -86,26 +79,9 @@
 
 		[DataMember]
 		public string CalculatorImplementation { get; set; }  // AloanCalculator BankLikeLoanCalculator/BankLikeLoanCalculator
-	
-
-		/*public override string ToString() {
-			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
-			Type t = typeof(NL_Model);
-			foreach (var prop in t.GetProperties()) {
-				if (prop.GetValue(this) != null) {
-					if (prop.Name != "AgreementModel") {
-						sb.Append(prop.Name)
-							.Append(": " + prop.GetValue(this))
-							.Append("; \n");
-					}
-				}
-			}
-			return sb.ToString();
-		}*/
 
 		//[DataMember]
 		//public NL_LoanHistory LoanHistory { get; set; }
-
 
 		// lookup objects
 		//[DataMember]
@@ -117,8 +93,6 @@
 		//[DataMember]
 		//public List<NL_RepaymentIntervalTypes> RepaymentIntervalTypes { get; set; }
 		// ### lookup objects
-
-
 
 		//[DataMember]
 		//public NL_Offers Offer { get; set; }
@@ -157,8 +131,8 @@
 		//[DataMember]
 		//public DateTime PaypointTransactionTime { get; set; }
 
-
-	}
-
-
-}
+		protected override bool DisplayFieldInToString(string fieldName) {
+			return fieldName != "AgreementModel";
+		} // DisplayFieldInToString
+	} // class NL_Model
+} // namespace

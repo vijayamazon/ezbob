@@ -1,9 +1,8 @@
-namespace Ezbob.Backend.Models.NewLoan {
+namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System.Runtime.Serialization;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	[DataContract]
-	public class NLFeeItem {
+	public class NLFeeItem : AStringable {
 		[DataMember]
 		public NL_LoanFees Fee { get; set; }
 
@@ -12,5 +11,5 @@ namespace Ezbob.Backend.Models.NewLoan {
 
 		[DataMember]
 		public NL_OfferFees OfferFees { get; set; }
-	}
-}
+	} // class NLFeeItem
+} // namespace

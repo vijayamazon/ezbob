@@ -1,22 +1,22 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
-    using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+	using System.Runtime.Serialization;
+	using Ezbob.Utils.dbutils;
 
-    [DataContract(IsReference = true)]
-    public class NL_LoanFeePayments {
+	[DataContract(IsReference = true)]
+	public class NL_LoanFeePayments : AStringable {
 		[PK(true)]
-        [DataMember]
+		[DataMember]
 		public long LoanFeePaymentID { get; set; }
 
-        [FK("NL_LoanFees", "LoanFeeID")]
-        [DataMember]
+		[FK("NL_LoanFees", "LoanFeeID")]
+		[DataMember]
 		public long LoanFeeID { get; set; }
 
-        [FK("NL_Payments", "PaymentID")]
-        [DataMember]
+		[FK("NL_Payments", "PaymentID")]
+		[DataMember]
 		public long PaymentID { get; set; }
 
-        [DataMember]
-        public decimal Amount { get; set; }
-    }//class NL_LoanFeePayments
-}//ns
+		[DataMember]
+		public decimal Amount { get; set; }
+	} // class NL_LoanFeePayments
+} // ns

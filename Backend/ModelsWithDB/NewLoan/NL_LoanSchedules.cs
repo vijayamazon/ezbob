@@ -1,12 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
 	using System.Runtime.Serialization;
-	using System.Text;
-	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_LoanSchedules {
+	public class NL_LoanSchedules : AStringable {
 		[PK(true)]
 		[DataMember]
 		public long LoanScheduleID { get; set; }
@@ -33,18 +31,5 @@
 
 		[DataMember]
 		public decimal InterestRate { get; set; }
-
-		public override string ToString() {
-			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
-
-			this.Traverse((ignored, pi) => {
-				object obj = pi.GetValue(this);
-
-				if (obj != null)
-					sb.Append(pi.Name).Append(": ").Append(obj).Append(";\t");
-			});
-
-			return sb.ToString();
-		} // ToString
-	} // NL_LoanSchedules
+	} // class NL_LoanSchedules
 } // ns

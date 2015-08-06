@@ -1,30 +1,64 @@
-﻿namespace Ezbob.Backend.Models.NewLoan
-{
-    using System;
-    using System.Runtime.Serialization;
-    using Ezbob.Utils.dbutils;
+﻿namespace Ezbob.Backend.Models.NewLoan {
+	using System;
+	using System.Runtime.Serialization;
 
-    [DataContract(IsReference = true)]
-    public class NLLoanOptions
-    {
-        public int? LoanOptionsID { get; set; }
-        public int? LoanID { get; set; }
-        public bool? AutoCharge { get; set; }
-        public DateTime? StopAutoChargeDate { get; set; }
-        public bool? AutoLateFees { get; set; }
-        public DateTime? StopAutoLateFeesDate { get; set; }
-        public bool? AutoInterest { get; set; }
-        public DateTime? StopAutoInterestDate { get; set; }
-        public bool? ReductionFee { get; set; }
-        public bool? LatePaymentNotification { get; set; }
-        public string CaisAccountStatus { get; set; }
-        public string ManualCaisFlag { get; set; }
-        public bool? EmailSendingAllowed { get; set; }
-        public bool? SmsSendingAllowed { get; set; }
-        public bool? MailSendingAllowed { get; set; }
-        public int? UserID { get; set; }
-        public DateTime? InsertDate { get; set; }
-        public bool? IsActive { get; set; }
-        public string Notes { get; set; }
-    }//class NL_LoanOptions
-}//ns
+	[DataContract(IsReference = true)]
+	public class NLLoanOptions : AStringable {
+		[DataMember]
+		public long? LoanOptionsID { get; set; }
+
+		[DataMember]
+		public long? LoanID { get; set; }
+
+		[DataMember]
+		public bool? AutoCharge { get; set; }
+
+		[DataMember]
+		public DateTime? StopAutoChargeDate { get; set; }
+
+		[DataMember]
+		public bool? AutoLateFees { get; set; }
+
+		[DataMember]
+		public DateTime? StopAutoLateFeesDate { get; set; }
+
+		[DataMember]
+		public bool? AutoInterest { get; set; }
+
+		[DataMember]
+		public DateTime? StopAutoInterestDate { get; set; }
+
+		[DataMember]
+		public bool? ReductionFee { get; set; }
+
+		[DataMember]
+		public bool? LatePaymentNotification { get; set; }
+
+		[DataMember]
+		public string CaisAccountStatus { get; set; }
+
+		[DataMember]
+		public string ManualCaisFlag { get; set; }
+
+		[DataMember]
+		public bool? EmailSendingAllowed { get; set; }
+
+		[DataMember]
+		public bool? SmsSendingAllowed { get; set; }
+
+		[DataMember]
+		public bool? MailSendingAllowed { get; set; }
+
+		[DataMember]
+		public int? UserID { get; set; }
+
+		[DataMember]
+		public DateTime? InsertDate { get; set; }
+
+		[DataMember]
+		public bool? IsActive { get; set; }
+
+		[DataMember]
+		public string Notes { get; set; }
+	} // class NL_LoanOptions
+} // ns

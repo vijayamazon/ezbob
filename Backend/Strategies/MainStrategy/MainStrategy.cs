@@ -898,7 +898,7 @@
 		private int offeredCreditLine;
 
 		private readonly InternalCashRequestID cashRequestID;
-		private int nlCashRequestID;
+		private long nlCashRequestID;
 
 		private readonly StrategiesMailer mailer;
 

@@ -7,11 +7,10 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils.Extensions;
 	using EzBob.Backend.Models;
 	using EzBob.Models;
-	using EzBob.Web.Code;
 	using EzBob.Web.Infrastructure;
 	using EzBob.Web.Models;
 	using EZBob.DatabaseLib.Model.Database;

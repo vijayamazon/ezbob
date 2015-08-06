@@ -73,11 +73,8 @@
     <Compile Include="LotteryResult.cs" />
     <Compile Include="MarketPlaceDataModel.cs" />
     <Compile Include="MpModel.cs" />
-    <Compile Include="NewLoan\NLFeeItem.cs" />
-    <Compile Include="NewLoan\NLAgreementItem.cs" />
+    <Compile Include="NewLoan\AStringable.cs" />
     <Compile Include="NewLoan\NLLoanOptions.cs" />
-    <Compile Include="NewLoan\NLScheduleItem.cs" />
-    <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\ReschedulingArgument.cs" />
     <Compile Include="NewLoan\ReschedulingResult.cs" />
     <Compile Include="PropertyStatusModel.cs" />
@@ -111,10 +108,6 @@
     <Compile Include="VatReturnUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Integration\DatabaseLib\DatabaseLib.csproj">
-      <Project>{FA67314A-0560-41D4-BC19-6524663E9D0D}</Project>
-      <Name>DatabaseLib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\Integration\DbConstants\DbConstants.csproj">
       <Project>{0527009D-A650-4505-9385-49FACA6991CB}</Project>
       <Name>DbConstants</Name>
@@ -126,10 +119,6 @@
     <ProjectReference Include="..\..\Tools\EzbobUtils\ValueIntervals\ValueIntervals.csproj">
       <Project>{90CC3A5F-5BEA-4C13-82B7-992ADC41F854}</Project>
       <Name>ValueIntervals</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
-      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
-      <Name>Ezbob.Backend.ModelsWithDB</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

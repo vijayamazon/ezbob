@@ -3,16 +3,19 @@
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_RepaymentIntervalTypes {
-
+	public class NL_RepaymentIntervalTypes : AStringable {
 		[PK]
 		[DataMember]
 		public int RepaymentIntervalTypeID { get; set; }
 
 		[DataMember]
-		public string RepaymentIntervalType { get; set; }
+		public bool IsMonthly { get; set; }
 
+		[DataMember]
+		public int? LengthInDays { get; set; }
 
-
-	}
-}
+		[Length(255)]
+		[DataMember]
+		public string Description { get; set; }
+	} // class NL_RepaymentIntervalTypes
+} // namespace

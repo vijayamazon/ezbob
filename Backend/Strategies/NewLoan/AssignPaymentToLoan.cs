@@ -1,7 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.Models.NewLoan;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
 	public class AssignPaymentToLoan : AStrategy {
