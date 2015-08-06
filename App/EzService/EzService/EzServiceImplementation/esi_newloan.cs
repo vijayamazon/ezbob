@@ -51,25 +51,6 @@
 			return stra.Offer;
 		}
 
-
-
-		//public DateTimeActionResult ExampleMethod(int userID, int customerID) {
-		//	LoaderStrategy loaderStrategy;
-		//	Action<Loader> action = loader => loader.ExampleMethod(customerID);
-		//	ActionMetaData amd = ExecuteSync(out loaderStrategy, customerID, userID, action);
-		//	return new DateTimeActionResult {
-		//		MetaData = amd,
-		//		Value = loaderStrategy.NLModel.SomeTime,
-		//	};
-		//} // ExampleMethod
-
-		//public ActionMetaData ExampleOtherMethod() {
-		//	LoaderStrategy loaderStrategy;
-		//	Action<Loader> action = loader => loader.ExampleOtherMethod();
-		//	ActionMetaData amd = ExecuteSync(out loaderStrategy, null, null, action);
-		//	return amd;
-		//} // ExampleOtherMethod
-
 		public IntActionResult AddLoan(NL_Model loanModel) {
 			AddLoan strategy;
 			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
