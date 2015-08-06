@@ -6,7 +6,7 @@ IF OBJECT_ID('NL_LoanSchedulesGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoanSchedulesGet
-@LoanID INT,
+@LoanID BIGINT,
 @Now DATETIME
 AS
 BEGIN

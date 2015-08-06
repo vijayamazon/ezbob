@@ -6,7 +6,7 @@ IF OBJECT_ID('NL_LoansGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoansGet
-@loanID INT,
+@LoanID BIGINT,
 @Now DATETIME
 AS
 BEGIN
@@ -33,7 +33,7 @@ BEGIN
 	FROM
 		NL_Loans l
 	WHERE
-		l.LoanID = @loanID
+		l.LoanID = @LoanID
 		AND
 		(@Now IS NULL OR l.IssuedTime < @Now)
 END

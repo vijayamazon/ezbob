@@ -8,11 +8,11 @@
     public class NL_LoanLegals {
 		[PK(true)]
         [DataMember]
-        public int LoanLegalID { get; set; }
+		public long LoanLegalID { get; set; }
 
         [FK("NL_Offers", "OfferID")]
         [DataMember]
-        public int OfferID { get; set; }
+		public long OfferID { get; set; }
         
         [DataMember]
         public DateTime SignatureTime { get; set; }

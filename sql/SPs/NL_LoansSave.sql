@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoansList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoansList AS TABLE (
-	[OfferID] INT NOT NULL,
+	[OfferID] BIGINT NOT NULL,
 	[LoanTypeID] INT NOT NULL,
 	[RepaymentIntervalTypeID] INT NULL,
 	[LoanStatusID] INT NULL,
@@ -72,7 +72,7 @@ BEGIN
 		[OldLoanID]
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

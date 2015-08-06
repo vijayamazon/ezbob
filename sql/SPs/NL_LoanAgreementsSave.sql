@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoanAgreementsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanAgreementsList AS TABLE (
-	[LoanHistoryID] INT NOT NULL,
+	[LoanHistoryID] BIGINT NOT NULL,
 	[FilePath] NVARCHAR(250) NULL,
 	[LoanAgreementTemplateID] INT NULL
 )

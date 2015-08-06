@@ -6,7 +6,6 @@
 	public class NL_RepaymentIntervalTypes {
 
 		[PK]
-	//	[NonTraversable]
 		[DataMember]
 		public int RepaymentIntervalTypeID { get; set; }
 

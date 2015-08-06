@@ -19,7 +19,7 @@
 			try {
 				if (this.oldCashRequestID.HasValue) {
 
-					this.decision.CashRequestID = DB.ExecuteScalar<int>("NL_CashRequestGetByOldID", CommandSpecies.StoredProcedure, new QueryParameter("OldCashRequestID", this.oldCashRequestID));
+					this.decision.CashRequestID = DB.ExecuteScalar<long>("NL_CashRequestGetByOldID", CommandSpecies.StoredProcedure, new QueryParameter("OldCashRequestID", this.oldCashRequestID));
 
 					Log.Info("cashRequestID: {0}", this.decision.CashRequestID);
 
@@ -31,7 +31,7 @@
 
 				Log.Debug(this.decision);
 
-				DecisionID = DB.ExecuteScalar<int>("NL_DecisionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Decisions>("Tbl", this.decision));
+				DecisionID = DB.ExecuteScalar<long>("NL_DecisionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", this.decision));
 
 				if (this.decisionRejectReasons != null && this.decisionRejectReasons.Any()) {
 					foreach (var decisionRejectReason in this.decisionRejectReasons) {
@@ -40,7 +40,7 @@
 
 					DB.ExecuteNonQuery("NL_DecisionRejectReasonsSave",
 						CommandSpecies.StoredProcedure,
-						DB.CreateTableParameter<NL_DecisionRejectReasons>("Tbl", this.decisionRejectReasons));
+						DB.CreateTableParameter("Tbl", this.decisionRejectReasons));
 				}
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -49,7 +49,7 @@
 
         }//Execute
 
-        public int DecisionID { get; set; }
+		public long DecisionID { get; set; }
         private readonly NL_Decisions decision;
         private long? oldCashRequestID;
         private readonly IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons;

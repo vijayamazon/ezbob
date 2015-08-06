@@ -10,7 +10,7 @@ IF TYPE_ID('NL_DecisionsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_DecisionsList AS TABLE (	
-	[CashRequestID] [INT] NOT NULL,
+	[CashRequestID] [BIGINT] NOT NULL,
 	[UserID] [INT] NOT NULL,
 	[Position] [INT] NOT NULL,
 	[DecisionTime] [DATETIME] NOT NULL,

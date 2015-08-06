@@ -10,12 +10,12 @@
         public override string Name { get { return "AddCashRequest"; } }
 
         public override void Execute() {
-            CashRequestID = DB.ExecuteScalar<int>("NL_CashRequestsSave", CommandSpecies.StoredProcedure,
+			CashRequestID = DB.ExecuteScalar<long>("NL_CashRequestsSave", CommandSpecies.StoredProcedure,
 				DB.CreateTableParameter<NL_CashRequests>("Tbl", this.cashRequest)); 
         }//Execute
 
 
-        public int CashRequestID { get; set; }
+        public long CashRequestID { get; set; }
 
         private readonly NL_CashRequests cashRequest;
     }//class AddCashRequest

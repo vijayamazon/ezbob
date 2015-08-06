@@ -8,11 +8,11 @@
     public class NL_PacnetTransactions {
 		[PK(true)]
         [DataMember]
-        public int PacnetTransactionID { get; set; }
+		public long PacnetTransactionID { get; set; }
 
         [FK("NL_FundTransfers", "FundTransferID")]
         [DataMember]
-        public int FundTransferID { get; set; }
+		public long FundTransferID { get; set; }
 
         [DataMember]
         public DateTime TransactionTime { get; set; }

@@ -10,7 +10,7 @@ IF TYPE_ID('NL_PaypointTransactionsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_PaypointTransactionsList AS TABLE (
-	[PaymentID] INT NOT NULL,
+	[PaymentID] BIGINT NOT NULL,
 	[TransactionTime] DATETIME NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[Notes] NVARCHAR(MAX) NULL,
@@ -47,7 +47,7 @@ BEGIN
 		[IP]
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

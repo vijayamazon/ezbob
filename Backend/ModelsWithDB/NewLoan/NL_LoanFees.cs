@@ -8,11 +8,11 @@
     public class NL_LoanFees {
 		[PK(true)]
         [DataMember]
-        public int LoanFeeID { get; set; }
+		public long LoanFeeID { get; set; }
        
         [FK("NL_Loans", "LoanID")]
         [DataMember]
-        public int? LoanID { get; set; }
+		public long LoanID { get; set; }
 
 		[FK("NL_LoanFeeTypes", "LoanFeeTypeID")]
 		[DataMember]
@@ -42,12 +42,6 @@
         [DataMember]
         public string Notes { get; set; }
 
-		/// <summary>
-		/// Returns a string that represents the current object.
-		/// </summary>
-		/// <returns>
-		/// A string that represents the current object.
-		/// </returns>
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name +  ": ");
 			Type t = typeof(NL_LoanFees);

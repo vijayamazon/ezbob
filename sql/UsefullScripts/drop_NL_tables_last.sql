@@ -36,7 +36,13 @@ IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_
 		ALTER TABLE [dbo].[LoanOptions]  DROP CONSTRAINT FK_LoanOptions_Security_User; END ;
 		
 IF EXISTS (select object_id from sys.all_objects where type_desc = 'DEFAULT_CONSTRAINT' and name = 'DF__LoanOptio__Inser__4D80A7ED') BEGIN
-		ALTER TABLE [dbo].[LoanOptions]  DROP CONSTRAINT DF__LoanOptio__Inser__4D80A7ED; END ;	
+		ALTER TABLE [dbo].[LoanOptions]  DROP CONSTRAINT DF__LoanOptio__Inser__4D80A7ED; END ;
+		
+IF EXISTS (select object_id from sys.all_objects where type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_CollectionLog_NL_LoanHistory') BEGIN
+		ALTER TABLE [dbo].[CollectionLog] DROP CONSTRAINT FK_CollectionLog_NL_LoanHistory  ;  END; 			
+IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('CollectionLog') AND name = 'LoanHistoryID')
+	ALTER TABLE [dbo].[CollectionLog] DROP COLUMN [LoanHistoryID]  ; 
+
 
 
 IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanOptions') AND name = 'UserID')

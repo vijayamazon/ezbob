@@ -8,11 +8,11 @@
     public class NL_LoanAgreements {
 		[PK(true)]
         [DataMember]
-        public int LoanAgreementID { get; set; }
+		public long LoanAgreementID { get; set; }
 
         [FK("NL_LoanHistory", "LoanHistoryID")]
         [DataMember]
-        public int LoanHistoryID { get; set; }
+		public long LoanHistoryID { get; set; }
 
         [Length(250)] 
         [DataMember]

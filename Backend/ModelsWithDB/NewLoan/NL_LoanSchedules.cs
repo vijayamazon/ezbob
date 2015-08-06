@@ -9,11 +9,11 @@
 	public class NL_LoanSchedules {
 		[PK(true)]
 		[DataMember]
-		public int LoanScheduleID { get; set; }
+		public long LoanScheduleID { get; set; }
 
 		[FK("NL_LoanHistory", "LoanHistoryID")]
 		[DataMember]
-		public int LoanHistoryID { get; set; }
+		public long LoanHistoryID { get; set; }
 
 		[FK("NL_LoanScheduleStatuses", "LoanScheduleStatusID")]
 		[DataMember]

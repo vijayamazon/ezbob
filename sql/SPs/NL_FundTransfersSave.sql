@@ -10,7 +10,7 @@ IF TYPE_ID('NL_FundTransfersList') IS NOT NULL
 GO
 
 CREATE TYPE NL_FundTransfersList AS TABLE (
-	[LoanID] INT NOT NULL,
+	[LoanID] BIGINT NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[TransferTime] DATETIME NOT NULL,
 	[IsActive] BIT NOT NULL,

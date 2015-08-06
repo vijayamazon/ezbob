@@ -10,7 +10,7 @@ ALTER PROCEDURE NL_CashRequestGetByOldID
 @OldCashRequestID BIGINT
 AS
 BEGIN
-	declare @CashRequestID int;
+	declare @CashRequestID BIGINT;
 	set  @CashRequestID = isnull((SELECT TOP 1 CashRequestID FROM NL_CashRequests WHERE OldCashRequestID= @OldCashRequestID), 0);
 	select @CashRequestID;
 END 	

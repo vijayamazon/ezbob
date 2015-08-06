@@ -10,7 +10,7 @@
 
         [FK("NL_Decisions", "DecisionID")]
         [DataMember]
-        public int DecisionID { get; set; }
+		public long DecisionID { get; set; }
 
         [FK("RejectReason", "Id")]
         [DataMember]

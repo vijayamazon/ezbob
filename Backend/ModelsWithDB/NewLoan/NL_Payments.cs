@@ -8,7 +8,7 @@
     public class NL_Payments {
 		[PK(true)]
         [DataMember]
-        public int PaymentID { get; set; }
+		public long PaymentID { get; set; }
 
         [FK("LoanTransactionMethod", "Id")]
         [DataMember]

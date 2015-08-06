@@ -6,15 +6,15 @@
     public class NL_LoanSchedulePayments {
 		[PK(true)]
         [DataMember]
-        public int LoanSchedulePaymentID { get; set; }
+		public long LoanSchedulePaymentID { get; set; }
 
         [FK("NL_LoanSchedules", "LoanScheduleID")]
         [DataMember]
-        public int LoanScheduleID { get; set; }
+		public long LoanScheduleID { get; set; }
 
         [FK("NL_Payments", "PaymentID")]
         [DataMember]
-        public int PaymentID { get; set; }
+		public long PaymentID { get; set; }
 
         [DataMember]
         public decimal PrincipalPaid { get; set; }

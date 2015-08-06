@@ -10,7 +10,7 @@ IF TYPE_ID('NL_OffersList') IS NOT NULL
 GO
 
 CREATE TYPE NL_OffersList AS TABLE (
-	[DecisionID] [INT] NOT NULL,
+	[DecisionID] [BIGINT] NOT NULL,
 	[LoanTypeID] [INT] NOT NULL  DEFAULT 1,
 	[RepaymentIntervalTypeID] [INT]	NOT NULL DEFAULT  1,
 	[LoanSourceID] [INT] NOT NULL DEFAULT 1, 
@@ -80,7 +80,7 @@ BEGIN
 		[SendEmailNotification] 
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

@@ -8,11 +8,11 @@
     public class NL_Decisions {
         [PK(true)]
         [DataMember]
-        public int DecisionID { get; set; }
+		public long DecisionID { get; set; }
 
         [FK("NL_CashRequests", "CashRequestID")]
         [DataMember]
-        public int CashRequestID { get; set; }
+		public long CashRequestID { get; set; }
 
         [FK("Security_User", "UserId")]
         [DataMember]

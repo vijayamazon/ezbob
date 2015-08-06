@@ -8,22 +8,19 @@
 	public class NL_LoanHistory {
 		[PK(true)]
 		[DataMember]
-		public int LoanHistoryID { get; set; }
-
+		public long LoanHistoryID { get; set; }
 
 		[FK("NL_Loans", "LoanID")]
 		[DataMember]
-		public int? LoanID { get; set; }
-
+		public long LoanID { get; set; }
 
 		[FK("Security_User", "UserId")]
 		[DataMember]
 		public int? UserID { get; set; }
 
-
 		[FK("NL_LoanLegals", "LoanLegalID")]
 		[DataMember]
-		public int? LoanLegalID { get; set; }
+		public long? LoanLegalID { get; set; }
 
 		[DataMember]
 		public decimal Amount { get; set; }

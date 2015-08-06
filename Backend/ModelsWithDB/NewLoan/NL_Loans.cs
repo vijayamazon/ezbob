@@ -8,11 +8,11 @@
 	public class NL_Loans {
 		[PK(true)]
 		[DataMember]
-		public int LoanID { get; set; }
+		public long LoanID { get; set; }
 
 		[FK("NL_Offers", "OfferID")]
 		[DataMember]
-		public int OfferID { get; set; }
+		public long OfferID { get; set; }
 
 		[FK("LoanType", "Id")]
 		[DataMember]
@@ -64,7 +64,7 @@
 
 		[FK("Loan", "Id")]
 		[DataMember]
-		public int OldLoanID { get; set; }
+		public long OldLoanID { get; set; }
 
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");

@@ -1,6 +1,7 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
+	using System.Configuration;
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.Models;
@@ -17,7 +18,7 @@
 	/// </summary>
 	/// <typeparam name="T">Loan or NL_Model</typeparam>
 	public class LoanState<T> : AStrategy {
-		public LoanState(T t, int loanID, int customerId, DateTime? stateDate) {
+		public LoanState(T t, long loanID, int customerId, DateTime? stateDate) {
 			this.loanID = loanID;
 			this.customerID = customerId;
 
@@ -265,7 +266,7 @@
 
 		private Loan tLoan;
 		private readonly NL_Model tNLLoan;
-		private readonly int loanID;
+		private readonly long loanID;
 		private readonly int customerID;
 	} // class LoanState
 } // namespace

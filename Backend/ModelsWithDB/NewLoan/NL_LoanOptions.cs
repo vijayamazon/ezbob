@@ -7,11 +7,11 @@
     public class NL_LoanOptions {
 		[PK(true)]
         [DataMember]
-        public int LoanOptionsID { get; set; }
+		public long LoanOptionsID { get; set; }
 
         [FK("NL_Loans", "LoanID")]
         [DataMember]
-        public int LoanID { get; set; }
+		public long LoanID { get; set; }
 
         [DataMember]
 		public bool AutoCharge { get; set; }

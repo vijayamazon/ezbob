@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoanOptionsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanOptionsList AS TABLE (
-	[LoanID] INT NOT NULL,
+	[LoanID] BIGINT NOT NULL,
 	[AutoCharge] BIT NOT NULL,
 	[StopAutoChargeDate] DATETIME NULL,
 	[AutoLateFees] BIT NOT NULL,
@@ -80,7 +80,7 @@ BEGIN
 		[Notes]
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

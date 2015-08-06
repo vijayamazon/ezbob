@@ -7,13 +7,13 @@
 	public class OfferForLoan {
 
 		[DataMember]
-		public int LoanLegalID { get; set; }
+		public long LoanLegalID { get; set; }
 		[DataMember]
 		public decimal LoanLegalAmount { get; set; }
 		[DataMember]
 		public int LoanLegalRepaymentPeriod { get; set; }
 		[DataMember]
-		public int OfferID { get; set; }
+		public long OfferID { get; set; }
 		[DataMember]
 		public int LoanTypeID { get; set; }
 		[DataMember]

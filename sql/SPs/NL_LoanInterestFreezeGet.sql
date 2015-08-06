@@ -3,7 +3,7 @@ IF OBJECT_ID('NL_LoanInterestFreezeGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoanInterestFreezeGet
-@loanID INT
+@loanID BIGINT
 AS
 BEGIN
 	SET NOCOUNT ON;

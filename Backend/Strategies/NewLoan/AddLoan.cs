@@ -112,7 +112,7 @@
 			- pacnet transaction
 			*/
 
-			int fundTransferID = 0;
+			long fundTransferID = 0;
 			List<NL_LoanSchedules> schedule = new List<NL_LoanSchedules>();
 			List<NL_LoanFees> fees = new List<NL_LoanFees>();
 			NL_LoanHistory history = null;
@@ -146,7 +146,7 @@
 				pconn.BeginTransaction();
 
 				// 4. save loan
-				this.LoanID = DB.ExecuteScalar<int>(pconn, "NL_LoansSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.Loan));
+				this.LoanID = DB.ExecuteScalar<long>(pconn, "NL_LoansSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.Loan));
 
 				Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
 
@@ -182,7 +182,7 @@
 
 				Log.Debug("Adding history: {0}", history);
 
-				int historyID = DB.ExecuteScalar<int>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
+				long historyID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
 
 				Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", this.LoanID, historyID);
 
@@ -206,7 +206,7 @@
 				scheduleAndFees.Result.Schedule.ForEach(s => schedule.Add(s.ScheduleItem));
 				schedule.ForEach(s => s.LoanHistoryID = historyID);
 
-				Log.Debug("Adding schedule:");schedule.ForEach(s => Log.Debug(s));
+				Log.Debug("Adding schedule:"); schedule.ForEach(s => Log.Debug(s));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedule));
 
@@ -214,7 +214,7 @@
 				if (model.FundTransfer != null) {
 
 					model.FundTransfer.LoanID = this.LoanID;
-					fundTransferID = DB.ExecuteScalar<int>(pconn, "NL_FundTransfersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.FundTransfer));
+					fundTransferID = DB.ExecuteScalar<long>(pconn, "NL_FundTransfersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.FundTransfer));
 
 					Log.Debug("NL_FundTransfersSave: LoanID: {0}, fundTransferID: {1}", this.LoanID, fundTransferID);
 				}
@@ -317,7 +317,7 @@
 
 		} // SendMail
 
-		public int LoanID;
+		public long LoanID;
 		public NL_Model model { get; private set; }
 
 		private readonly string emailToAddress;

@@ -9,7 +9,7 @@
 
 	public partial class EzServiceImplementation : IEzServiceNewLoan {
 
-		public IntActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
+		public LongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
 			AddCashRequest stra;
 			var amd = ExecuteSync(out stra, cashRequest.CustomerID, userID, cashRequest);
 			return new IntActionResult {
@@ -18,7 +18,7 @@
 			};
 		}
 
-		public IntActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
+		public LongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
 			AddDecision stra;
 			var amd = ExecuteSync(out stra, customerID, userID, decision, oldCashRequest, decisionRejectReasons);
 			return new IntActionResult {
@@ -27,7 +27,7 @@
 			};
 		}
 
-		public IntActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null ) {
+		public LongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null) {
 			AddOffer stra;
 			var amd = ExecuteSync(out stra, customerID, userID, offer, fees);
 			return new IntActionResult {
@@ -36,7 +36,7 @@
 			};
 		}
 
-		public IntActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals) {
+		public LongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals) {
 			AddLoanLegals stra;
 			var amd = ExecuteSync(out stra, customerID, userID, customerID, loanLegals);
 			return new IntActionResult {
@@ -51,7 +51,7 @@
 			return stra.Offer;
 		}
 
-		public IntActionResult AddLoan(NL_Model loanModel) {
+		public LongActionResult AddLoan(NL_Model loanModel) {
 			AddLoan strategy;
 			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
 			return new IntActionResult {
@@ -66,7 +66,7 @@
 			return strategy.NLModel;
 		}
 
-        public IntActionResult AddLoanOptions(int userID, int customerID, NLLoanOptions loanOptions, int? oldLoanId)
+		public LongActionResult AddLoanOptions(int userID, int customerID, NLLoanOptions loanOptions, int? oldLoanId)
         {
 			AddLoanOptions stra;
             var amd = ExecuteSync(out stra, customerID, userID, customerID, loanOptions, oldLoanId);

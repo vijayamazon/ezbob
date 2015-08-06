@@ -7,11 +7,11 @@
     public class NL_LoanStates {
 		[PK(true)]
         [DataMember]
-        public int LoanStateID { get; set; }
+		public long LoanStateID { get; set; }
 
         [FK("NL_Loans", "LoanID")]
         [DataMember]
-        public int LoanID { get; set; }
+		public long LoanID { get; set; }
 
         [DataMember]
         public DateTime InsertDate { get; set; }

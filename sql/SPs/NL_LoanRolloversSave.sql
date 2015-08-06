@@ -10,10 +10,10 @@ IF TYPE_ID('NL_LoanRolloversList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanRolloversList AS TABLE (
-	[LoanHistoryID] INT NOT NULL,
+	[LoanHistoryID] BIGINT NOT NULL,
 	[CreatedByUserID] INT NOT NULL,
 	[DeletedByUserID] INT NULL,
-	[LoanFeeID] INT NULL,
+	[LoanFeeID] BIGINT NULL,
 	[FeeAmount] DECIMAL(18, 6) NOT NULL,
 	[CreationTime] DATETIME NOT NULL,
 	[ExpirationTime] DATETIME NOT NULL,
@@ -53,7 +53,7 @@ BEGIN
 		[DeletionTime]
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

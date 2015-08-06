@@ -10,7 +10,7 @@ ALTER PROCEDURE [dbo].[NL_OfferForLoan]
 	@Now DATETIME
 AS
 
-declare @OfferID int;
+declare @OfferID bigint;
 
 BEGIN
 	
@@ -101,9 +101,6 @@ BEGIN
 
 			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (@TakenAmount- @PaidPrincipal);
 		end; -- @LoansCount
-
-
-
 
 		select * from #offerforloan;
 	END;

@@ -7,11 +7,11 @@
 	[DataContract(IsReference = true)]
 	public class NL_Offers {
 		[PK(true)]
-		public int OfferID { get; set; }
+		public long OfferID { get; set; }
 
 		[FK("NL_Decisions", "DecisionID")]
 		[DataMember]
-		public int DecisionID { get; set; }
+		public long DecisionID { get; set; }
 
 		[FK("LoanType", "Id")]
 		[DataMember]

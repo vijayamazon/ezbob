@@ -7,11 +7,11 @@
     public class NL_LoanRollovers {
 		[PK(true)]
         [DataMember]
-        public int LoanRolloverID { get; set; }
+		public long LoanRolloverID { get; set; }
 
         [FK("NL_LoanHistory", "LoanHistoryID")]
         [DataMember]
-        public int LoanHistoryID { get; set; }
+		public long LoanHistoryID { get; set; }
 
         [FK("Security_User", "UserId")]
         [DataMember]

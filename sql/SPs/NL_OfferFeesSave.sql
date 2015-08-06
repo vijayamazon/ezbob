@@ -10,7 +10,7 @@ IF TYPE_ID('NL_OfferFeesList') IS NOT NULL
 GO
 
  CREATE TYPE NL_OfferFeesList AS TABLE (		
-	 [OfferID] INT NOT NULL ,	
+	 [OfferID] BIGINT NOT NULL ,	
 	 [LoanFeeTypeID] INT NOT NULL ,
 	 [Percent] DECIMAL(18, 6) NULL,
 	 [Amount] DECIMAL(18, 6) NULL ,
@@ -41,7 +41,7 @@ BEGIN
 		[DistributedPartPercent]
 	 FROM @Tbl
 
-	 DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	 DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	 SELECT @ScopeID AS ScopeID
 END
 GO

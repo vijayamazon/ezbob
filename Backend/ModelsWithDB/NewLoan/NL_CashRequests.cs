@@ -7,7 +7,7 @@
     public class NL_CashRequests {
         [PK(true)]
         [DataMember]
-        public int CashRequestID { get; set; }
+		public long CashRequestID { get; set; }
         
         [FK("Customer", "Id")]
         [DataMember]

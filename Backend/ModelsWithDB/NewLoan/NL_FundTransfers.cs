@@ -8,11 +8,11 @@
     public class NL_FundTransfers {
 		[PK(true)]
         [DataMember]
-        public int FundTransferID { get; set; }
+		public long FundTransferID { get; set; }
 
         [FK("NL_Loans", "LoanID")]
         [DataMember]
-        public int LoanID { get; set; }
+		public long LoanID { get; set; }
 
         [DataMember]
         public decimal Amount { get; set; }

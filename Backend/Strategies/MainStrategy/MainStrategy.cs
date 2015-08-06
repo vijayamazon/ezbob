@@ -551,7 +551,7 @@
 			}, this.cashRequestID, null);
 
 			addDecisionStra.Execute();
-			int decisionID = addDecisionStra.DecisionID;
+			long decisionID = addDecisionStra.DecisionID;
 
 			Log.Debug("Added NL decision: {0}", decisionID);
 

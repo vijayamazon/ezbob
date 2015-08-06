@@ -10,7 +10,7 @@
 
         [FK("NL_Loans", "LoanID")]
         [DataMember]
-        public int LoanID { get; set; }
+		public long LoanID { get; set; }
 
         [FK("LoanLien", "Id")]
         [DataMember]

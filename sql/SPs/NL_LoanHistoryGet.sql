@@ -6,7 +6,7 @@ IF OBJECT_ID('NL_LoanHistoryGet') IS NULL
 GO
 
 ALTER PROCEDURE NL_LoanHistoryGet
-@LoanID INT,
+@LoanID BIGINT,
 @Now DATETIME
 AS
 BEGIN

@@ -10,7 +10,7 @@ IF TYPE_ID('NL_LoanFeesList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanFeesList AS TABLE (	
-	[LoanID] INT NULL,
+	[LoanID] BIGINT NULL,
 	[LoanFeeTypeID] INT NOT NULL,
 	[AssignedByUserID] INT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,

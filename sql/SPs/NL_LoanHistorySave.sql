@@ -10,9 +10,9 @@ IF TYPE_ID('NL_LoanHistoryList') IS NOT NULL
 GO
 
 CREATE TYPE NL_LoanHistoryList AS TABLE (	
-	[LoanID]  [int] NOT NULL,
+	[LoanID]  [BIGINT] NOT NULL,
 	[UserID] [int] NULL,
-	[LoanLegalID] [int] NULL,
+	[LoanLegalID] [BIGINT] NULL,
 	[Amount] [decimal](18, 6) NOT NULL,
 	[RepaymentCount] [int] NOT NULL,
 	[InterestRate] [decimal](18, 6) NULL,	
@@ -51,7 +51,7 @@ BEGIN
 	 
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

@@ -10,7 +10,7 @@ IF TYPE_ID('NL_PacnetTransactionsList') IS NOT NULL
 GO
 
 CREATE TYPE NL_PacnetTransactionsList AS TABLE (
-	[FundTransferID] INT NOT NULL,
+	[FundTransferID] BIGINT NOT NULL,
 	[TransactionTime] DATETIME NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[Notes] NVARCHAR(MAX) NULL,
@@ -44,7 +44,7 @@ BEGIN
 		[TrackingNumber]
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

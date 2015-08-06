@@ -8,11 +8,11 @@
 	public class NL_OfferFees {
 		[PK(true)]
 		[DataMember]
-		public int OfferFeeID { get; set; }
+		public long OfferFeeID { get; set; }
 
 		[FK("NL_Offers", "OfferID")]
 		[DataMember]
-		public int OfferID { get; set; }
+		public long OfferID { get; set; }
 
 		[FK("NL_LoanFeeTypes", "LoanFeeTypeID")]
 		[DataMember]
