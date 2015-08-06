@@ -51,9 +51,6 @@
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] // refnumber
 		public string aId { get; set; }
 
-        [DataMember(EmitDefaultValue = false)] // customerID
-        public int CustomerID { get; set; }
-
 		[DataMember(EmitDefaultValue = true, IsRequired = true)] //  AlibabaBuyer table
 		public long aliMemberId { get; set; }
 

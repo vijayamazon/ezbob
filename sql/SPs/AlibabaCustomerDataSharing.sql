@@ -45,8 +45,7 @@ BEGIN
 		RETURN;	
 		
 	SELECT 
-		@AlibabaMemberID as  aliMemberId,				
-		@CustomerID as CustomerID ,
+		@AlibabaMemberID as  aliMemberId,		
 		c.[RefNumber] as aId,
 
 		--loanId int default NULL,		
