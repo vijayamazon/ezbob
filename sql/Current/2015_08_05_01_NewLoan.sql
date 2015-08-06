@@ -951,8 +951,8 @@ if OBJECT_ID('tempdb..#discountplanTemp') is not null BEGIN drop table #discount
 -- NL_LoanStatuses
 IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Pending') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Pending');		END;
 IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Live') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Live');	END;
-IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Late') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Late');		END;
-IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'PaidOff') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('PaidOff');	END;
+IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Late') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Late');		END; -- Overdue
+IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'PaidOff') IS NULL BEGIN INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('PaidOff');	END; -- Paid
 IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'WriteOff') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('WriteOff');	END;
 --IF( SELECT LoanStatusID FROM dbo.NL_LoanStatuses WHERE LoanStatus = 'Default') IS NULL BEGIN	INSERT INTO [dbo].[NL_LoanStatuses] (LoanStatus) VALUES('Default');		END;
 -- FROM [dbo].[CustomerStatuses] ???
@@ -1167,10 +1167,6 @@ END;
 IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'Paid' ) BEGIN -- 'Paid'
 	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, [Description]) VALUES('Paid', 'Paid');
 END;
-IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'AlmostPaid' ) BEGIN -- 'AlmostPaid'
-	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('AlmostPaid', 'Almost paid');
-END;
-
 IF NOT EXISTS( SELECT LoanScheduleStatusID FROM [dbo].[NL_LoanScheduleStatuses] WHERE LoanScheduleStatus = 'DeletedOnReschedule' ) BEGIN -- 'DeletedOnReschedule'
 	INSERT INTO [dbo].[NL_LoanScheduleStatuses] (LoanScheduleStatus, Description) VALUES('DeletedOnReschedule', 'Deleted on reshedule (nothing was paid before reschedule)');
 END;

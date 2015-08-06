@@ -26,12 +26,8 @@
 		public decimal OfferAmount { get; set; }
 		[DataMember]
 		public decimal MonthlyInterestRate { get; set; }
-		//[DataMember]
-		//public decimal SetupFeePercent { get; set; }
 		[DataMember]
 		public bool SetupFeeAddedToLoan { get; set; }
-		//[DataMember]
-		//public decimal ServicingFeePercent { get; set; }
 		[DataMember]
 		public decimal BrokerSetupFeePercent { get; set; }
 		[DataMember]
@@ -40,7 +36,9 @@
 		public string DiscountPlan { get; set; }
 		[DataMember]
 		public int LoansCount { get; set; }
-	
+		[DataMember]
+		public decimal AvailableAmount { get; set; }
+
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
 			Type t = typeof(OfferForLoan);

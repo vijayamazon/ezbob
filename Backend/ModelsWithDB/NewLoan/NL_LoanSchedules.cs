@@ -41,7 +41,7 @@
 				object obj = pi.GetValue(this);
 
 				if (obj != null)
-					sb.Append(pi.Name).Append(": ").Append(obj).Append(";\n");
+					sb.Append(pi.Name).Append(": ").Append(obj).Append(";\t");
 			});
 
 			return sb.ToString();

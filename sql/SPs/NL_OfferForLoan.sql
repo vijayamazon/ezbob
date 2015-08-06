@@ -5,7 +5,7 @@ IF OBJECT_ID('NL_OfferForLoan') IS NULL
 	EXECUTE('CREATE PROCEDURE NL_OfferForLoan AS SELECT 1')
 GO
 
-ALTER  PROCEDURE [dbo].[NL_OfferForLoan]	
+ALTER PROCEDURE [dbo].[NL_OfferForLoan]	
 	@CustomerID INT,
 	@Now DATETIME
 AS
@@ -48,12 +48,12 @@ BEGIN
 			o.SetupFeeAddedToLoan,			
 			o.BrokerSetupFeePercent, 
 			o.InterestOnlyRepaymentCount,			
-			0 as LoansCount		
+			0 as LoansCount	,
+			ll.Amount as AvailableAmount
 		into #offerforloan
 			FROM 
 				NL_LoanLegals ll 
-				INNER JOIN NL_Offers o on ll.OfferID = o.OfferID	
-				--INNER JOIN NL_OfferFees f on f.OfferID = o.OfferID
+				INNER JOIN NL_Offers o on ll.OfferID = o.OfferID					
 				LEFT JOIN NL_DiscountPlans dp on dp.DiscountPlanID = o.DiscountPlanID -- and dp.IsActive = 1 				
 			WHERE o.OfferID = @OfferID
 			order by ll.LoanLegalID desc; 
@@ -68,11 +68,42 @@ BEGIN
 		set @LoansCount = (select COUNT(LoanID) 
 							from NL_Loans l inner join NL_Offers o on o.OfferID = l.OfferID inner join NL_Decisions d on d.DecisionID=o.DecisionID 
 							inner join NL_CashRequests cr on cr.CashRequestID = d.CashRequestID 
-							where cr.CustomerID=@CustomerID);
+							where cr.CustomerID=@CustomerID);	
+
+
 
 		if @LoansCount is not null begin
-			update #offerforloan set LoansCount = @LoansCount;
-		end;
+						
+			declare @TakenAmount decimal;
+			declare @PaidPrincipal decimal;
+			
+			-- can be queried [dbo].[NL_LoanStates] ??? TODO check
+			set @TakenAmount = 
+					(select 
+						SUM( l.[InitialLoanAmount]) 
+					from 
+						NL_Loans l inner join [dbo].[NL_LoanStatuses] lstatus on lstatus.[LoanStatusID] = l.[LoanStatusID] and lstatus.[LoanStatus] in ('Pending', 'Live', 'Late')				
+						where l.OfferID =  @OfferID);
+
+
+			-- check already taken and returned loans for this offer
+			set @PaidPrincipal = 
+					(select 
+						SUM(sp.PrincipalPaid)	
+					from 
+						NL_Loans l inner join [dbo].[NL_LoanHistory] h on l.[LoanID] = h.LoanID 
+						inner join [dbo].[NL_LoanSchedules] s on s.[LoanHistoryID] = h.[LoanHistoryID] and s.[ClosedTime] is not null 
+						inner join [dbo].[NL_LoanScheduleStatuses] sstatus on sstatus.[LoanScheduleStatusID] = s.[LoanScheduleStatusID] and sstatus.[LoanScheduleStatus] in ('Paid', 'PaidEarly', 'PaidOnTime')		
+						inner join [dbo].[NL_LoanSchedulePayments]	sp on sp.LoanScheduleID = s.LoanScheduleID
+						inner join [dbo].[NL_Payments] p on p.PaymentID = sp.LoanSchedulePaymentID and p.[DeletionTime] is null
+						inner join [dbo].[NL_PaymentStatuses] pstatus on pstatus.[PaymentStatusID] = p.PaymentStatusID and pstatus.PaymentStatus in ('Pending', 'Active')			
+					where l.OfferID = @OfferID);
+
+			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (@TakenAmount- @PaidPrincipal);
+		end; -- @LoansCount
+
+
+
 
 		select * from #offerforloan;
 	END;

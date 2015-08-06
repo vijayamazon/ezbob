@@ -38,17 +38,17 @@
 		public string AgreementModel { get; set; }	
 
 		[DataMember]
+		public decimal? BrokerComissions { get; set; }	 
+
+		[DataMember]
 		public NL_PacnetTransactions PacnetTransaction { get; set; }
 		[DataMember]
 		public string PacnetTransactionStatus { get; set; }
-		
-
 
 		[DataMember]
 		public List<NLScheduleItem> Schedule { get; set; }
 		[DataMember]
 		public List<NLFeeItem> Fees { get; set; }
-
 
 		[DataMember]
 		public NL_Offers Offer { get; set; }
@@ -86,11 +86,9 @@
 
 		[DataMember]
 		public string CalculatorImplementation { get; set; }  // AloanCalculator BankLikeLoanCalculator/BankLikeLoanCalculator
-
-
 	
 
-		public override string ToString() {
+		/*public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": \n");
 			Type t = typeof(NL_Model);
 			foreach (var prop in t.GetProperties()) {
@@ -103,7 +101,7 @@
 				}
 			}
 			return sb.ToString();
-		}
+		}*/
 
 		//[DataMember]
 		//public NL_LoanHistory LoanHistory { get; set; }

@@ -696,8 +696,8 @@
 			log.Info("NL--- decisionID: {0}, oldCashRequestID: {1}", decisionId, cr.Id);
 
 			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = manualSetupFeePercent ?? 0 };
-			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true) 
-				setupFee.LoanFeeTypeID = (int)FeeTypes.ArrangementFee;
+			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true)
+				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
 			NL_OfferFees[] ofeerFees = { setupFee };
 
 			var offerID = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
@@ -716,9 +716,9 @@
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
 				SendEmailNotification = allowSendingEmail,
-				Notes = "offer from ChangeCreditLine, ApplicationInfoController"
+				Notes = "offer from ChangeCreditLine, ApplicationInfoController",
+				// SetupFeeAddedToLoan = 0 // default 0 TODO EZ-3515
 				// InterestOnlyRepaymentCount = 
-				//SetupFeeAddedToLoan = 1|0 default 0 TODO EZ-3515
 				//IsAmountSelectionAllowed = 1 default 1 always allowed
 			}, ofeerFees);
 

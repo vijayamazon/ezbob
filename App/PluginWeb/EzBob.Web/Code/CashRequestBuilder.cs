@@ -121,7 +121,7 @@
 
 			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee };
 			if (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true)
-				setupFee.LoanFeeTypeID = (int)FeeTypes.ArrangementFee;
+				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
 			NL_OfferFees[] ofeerFees = { setupFee };
 
 			var nlOfferID = this.m_oServiceClient.Instance.AddOffer(userID, customer.Id, new NL_Offers {
