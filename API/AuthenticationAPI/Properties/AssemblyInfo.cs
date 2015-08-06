@@ -6,4 +6,4 @@ using System.Runtime.InteropServices;
 // associated with an assembly.
 [assembly: AssemblyTitle("AuthenticationAPI")]
 [assembly: AssemblyDescription("")]
-[assembly: Guid("be43788b-19be-45e0-82ea-fe900ad1a7f5")]
+[assembly: Guid("589528C5-2A53-4CE0-8A00-B13444833047")] 
