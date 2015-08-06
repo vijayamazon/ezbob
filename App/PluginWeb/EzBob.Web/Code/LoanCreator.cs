@@ -200,11 +200,10 @@
 					Email = cus.Name,
 					CloseDate = now,
 					TookAmount = (int)loan.LoanAmount,
+					ApprovedAmount = (int)(cus.CreditSum ?? 0) + (int)loanAmount,
 					DealCloseType = OpportunityDealCloseReason.Won.ToString()
 				}
 			);
-
-			
 
 			// This is the place where the loan is created and saved to DB
 			log.Info(
