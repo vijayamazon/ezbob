@@ -113,7 +113,7 @@ GO
 
 IF OBJECT_ID('NL_Decisions') IS NULL
 BEGIN
-	CREATE TABLE NL_Decisions(
+	CREATE TABLE NL_Decisions (
 		DecisionID BIGINT IDENTITY(1, 1) NOT NULL,
 		CashRequestID BIGINT NOT NULL,
 		UserID INT NOT NULL,
@@ -135,7 +135,7 @@ GO
 
 IF OBJECT_ID('NL_DecisionRejectReasons') IS NULL
 BEGIN
-	CREATE TABLE NL_DecisionRejectReasons(
+	CREATE TABLE NL_DecisionRejectReasons (
 		DecisionRejectReasonID INT NOT NULL,
 		DecisionID BIGINT NOT NULL,
 		RejectReasonID INT NOT NULL,
@@ -638,8 +638,10 @@ BEGIN
 		Position INT NOT NULL,
 		PlannedDate DATETIME NOT NULL,
 		ClosedTime DATETIME NULL,
-		Principal DECIMAL (18,6) NOT NULL,
+		Principal DECIMAL (18, 6) NOT NULL,
 		InterestRate DECIMAL(18, 6) NOT NULL,
+		TwoDaysDueMailSent BIT NOT NULL CONSTRAINT DF_NL_LoanSchedules_TwoDaysSent DEFAULT (0),
+		FiveDaysDueMailSent BIT NOT NULL CONSTRAINT DF_NL_LoanSchedules_FiveDaysSent DEFAULT (0),
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanSchedules PRIMARY KEY (LoanScheduleID),
 		CONSTRAINT FK_NL_LoanSchedules_Status FOREIGN KEY(LoanScheduleStatusID) REFERENCES NL_LoanScheduleStatuses (LoanScheduleStatusID),
