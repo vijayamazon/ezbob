@@ -66,3 +66,15 @@ GO
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_LoanBrokerCommission_NL_Loan')
 	ALTER TABLE LoanBrokerCommission ADD CONSTRAINT FK_LoanBrokerCommission_NL_Loan FOREIGN KEY (NLLoanID) REFERENCES NL_Loans (LoanID)
 GO
+
+IF NOT EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemplate') AND name = 'TemplateTypeID')
+BEGIN
+	ALTER TABLE LoanAgreementTemplate ADD TemplateTypeID INT NULL CONSTRAINT DF_LoanAgreementTemplate_TemplateTypeID DEFAULT (1)
+	UPDATE LoanAgreementTemplate SET TemplateTypeID = TemplateType
+END
+GO
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes')
+	ALTER TABLE LoanAgreementTemplate ADD CONSTRAINT FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes FOREIGN KEY (TemplateTypeID) REFERENCES NL_LoanAgreementTemplateTypes (TemplateTypeID)
+GO
+

@@ -15,6 +15,17 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanAgreementTemplateTypes PRIMARY KEY (TemplateTypeID)
 	)
+
+	INSERT INTO NL_LoanAgreementTemplateTypes (TemplateTypeID, TemplateType) VALUES
+		(1, 'GuarantyAgreement'),
+		(2, 'PreContractAgreement'),
+		(3, 'CreditActAgreement'),
+		(4, 'PrivateCompanyLoanAgreement'),
+		(5, 'AlibabaGuarantyAgreement'),
+		(6, 'AlibabaPreContractAgreement'),
+		(7, 'AlibabaCreditActAgreement'),
+		(8, 'AlibabaPrivateCompanyLoanAgreement'),
+		(9, 'AlibabaCreditFacility')
 END
 GO
 
@@ -57,6 +68,21 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_CashRequestOrigins PRIMARY KEY (CashRequestOriginID)
 	)
+
+	INSERT INTO NL_CashRequestOrigins (CashRequestOriginID, CashRequestOrigin) VALUES
+		( 1, 'FinishedWizard'),
+		( 2, 'QuickOffer'),
+		( 3, 'RequestCashBtn'),
+		( 4, 'NewCreditLineBtn'),
+		( 5, 'Other'),
+		( 6, 'RequalifyCustomerStrategy'),
+		( 7, 'ForcedWizardCompletion'),
+		( 8, 'Approved'),
+		( 9, 'Manual'),
+		(10, 'NewCreditLineSkipAll'),
+		(11, 'NewCreditLineSkipAndGoAuto'),
+		(12, 'NewCreditLineUpdateAndGoManual'),
+		(13, 'NewCreditLineUpdateAndGoAuto')
 END
 GO
 
@@ -182,6 +208,11 @@ BEGIN
 		CONSTRAINT UC_NL_FundTransferStatuses UNIQUE (FundTransferStatus),
 		CONSTRAINT CHK_NL_FundTransferStatuses CHECK (LTRIM(RTRIM(FundTransferStatus)))
 	)
+
+	INSERT INTO NL_FundTransferStatuses (FundTransferStatusID, FundTransferStatus) VALUES
+		(1, 'Pending'),
+		(2, 'Active'),
+		(3, 'Deleted')
 END
 GO
 
@@ -198,6 +229,18 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanFeeTypes PRIMARY KEY (LoanFeeTypeID)
 	)
+
+	INSERT INTO NL_LoanFeeTypes (LoanFeeTypeID, LoanFeeType, DefaultAmount, Description) VALUES
+		  ( 1, 'SetupFee',        NULL, 'One-time fee upon loan creation, may be added or didacted from loan')
+		, ( 2, 'RolloverFee',       50, 'A rollover has been agreed')
+		, ( 3, 'AdminFee',          75, 'A fee applied when no payment is received or less than (repayment interest + late payment fee)')
+		, ( 4, 'ServicingFee',    NULL, 'Distributed through the entire loan period. On paying early - not to charge remaining part')
+		, ( 5, 'ArrangementFee',  NULL, 'Distributed through the payments. On paying early - all remaned amount need to be charged')
+		, ( 6, 'LatePeriod1',        7, 'first collection period')
+		, ( 7, 'LatePeriod2',       14, 'second collection period')
+		, ( 8, 'LatePeriod3',       30, 'third collection period')
+		, ( 9, 'LatePaymentFee',    20, 'A charge when an instalment is paid after 5 UK working days of the grace period')
+		, (10, 'PartialPaymentFee', 45, 'A payment has been made (more than repayment interest + late payment fee but was not made in full)')
 END
 GO
 
@@ -212,6 +255,28 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanStatuses PRIMARY KEY (LoanStatusID)
 	)
+
+	INSERT INTO NL_LoanStatuses (LoanStatusID, LoanStatus) VALUES
+		  (1, 'Pending')
+		, (2, 'Live')
+		, (3, 'Late') -- Overdue
+		, (4, 'PaidOff') -- Paid
+		, (5, 'WriteOff')
+		-- , (6, 'Default')
+		-- , (7, 'DebtManagement')
+		-- , (8, '1-14DaysMissed')
+		-- , (9, '15-30DaysMissed')
+		-- , (10, '31-45DaysMissed')
+		-- , (11, '46-90DaysMissed')
+		-- , (12, '60-90DaysMissed')
+		-- , (13, '90DaysMissed')
+		-- , (14, 'Legal ??? claim process')
+		-- , (15, 'Legal - apply for judgment')
+		-- , (16, 'Legal: CCJ')
+		-- , (17, 'Legal: bailiff')
+		-- , (18, 'Legal: charging order')
+		-- , (19, 'Collection: Tracing')
+		-- , (20, 'Collection: Site Visit')
 END
 GO
 
@@ -234,6 +299,12 @@ BEGIN
 		),
 		CONSTRAINT CHK_RepaymentIntervalTypes_Description CHECK (LTRIM(RTRIM(Description)) != '')
 	)
+
+	INSERT INTO NL_RepaymentIntervalTypes (RepaymentIntervalTypeID, IsMonthly, LengthInDays, Description) VALUES
+		(1, 1, NULL, 'Month'),
+		(2, 0, 1, 'Day'),
+		(3, 0, 7, 'Week'),
+		(4, 0, 10, '10 days')
 END
 GO
 
@@ -543,6 +614,15 @@ BEGIN
 		CONSTRAINT PK_NL_LoanScheduleStatuses PRIMARY KEY (LoanScheduleStatusID),
 		CONSTRAINT UC_NL_LoanScheduleStatuses UNIQUE (LoanScheduleStatus)
 	)
+
+	INSERT INTO NL_LoanScheduleStatuses (LoanScheduleStatusID, LoanScheduleStatus, Description) VALUES
+		(1, 'StillToPay', 'Open'),
+		(2, 'PaidOnTime', 'Paid on time'),
+		(3, 'Late', 'Late'),
+		(4, 'PaidEarly', 'Paid early'),
+		(5, 'Paid', 'Paid'),
+		(6, 'DeletedOnReschedule', 'Deleted on reshedule (nothing was paid before reschedule)'),
+		(7, 'ClosedOnReschedule', 'Closed on reshedule (was partially paid before reschedule)')
 END
 GO
 
@@ -608,6 +688,14 @@ BEGIN
 		CONSTRAINT PK_NL_PacnetTransactionStatuses PRIMARY KEY (PacnetTransactionStatusID),
 		CONSTRAINT UC_NL_PacnetTransactionStatuses UNIQUE (TransactionStatus)
 	)
+
+	INSERT INTO NL_PacnetTransactionStatuses (PacnetTransactionStatusID, TransactionStatus) VALUES
+		(1, 'Submited'),
+		(2, 'ConfigError:MultipleCandidateChannels'),
+		(3, 'Error'),
+		(4, 'InProgress'),
+		(5, 'PaymentByCustomer'),
+		(6, 'Done')
 END
 GO
 
@@ -646,6 +734,12 @@ BEGIN
 		CONSTRAINT UC_NL_PaymentStatuses UNIQUE (PaymentStatus),
 		CONSTRAINT CHK_NL_PaymentStatuses CHECK (LTRIM(RTRIM(PaymentStatus)) != '')
 	)
+
+	INSERT INTO NL_PaymentStatuses (PaymentStatusID, PaymentStatus) VALUES
+		(1, 'Pending'),
+		(2, 'Active'),
+		(3, 'Deleted'),
+		(4, 'Cancelled')
 END
 GO
 
@@ -731,6 +825,11 @@ BEGIN
 		CONSTRAINT UC_NL_PaypointTransactionStatuses UNIQUE (TransactionStatus),
 		CONSTRAINT CHK_NL_PaypointTransactionStatuses CHECK (LTRIM(RTRIM(TransactionStatus)) != '')
 	)
+
+	INSERT INTO NL_PaypointTransactionStatuses (PaypointTransactionStatusID, TransactionStatus) VALUES
+		(1, 'Done'),
+		(2, 'Error'),
+		(3, 'Unknown')
 END
 GO
 
