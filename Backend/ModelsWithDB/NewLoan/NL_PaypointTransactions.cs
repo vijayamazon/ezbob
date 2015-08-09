@@ -35,7 +35,7 @@
 		[DataMember]
 		public int PaypointCardID { get; set; }
 
-		[Length(10)]
+		[Length(32)]
 		[DataMember]
 		public string IP { get; set; }
 	} // class NL_PaypointTransactions

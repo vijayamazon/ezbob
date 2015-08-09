@@ -23,9 +23,9 @@
 		public decimal? Amount { get; set; }
 
 		[DataMember]
-		public decimal? OneTimePartPercent { get; set; }
+		public decimal OneTimePartPercent { get; set; }
 
 		[DataMember]
-		public decimal? DistributedPartPercent { get; set; }
+		public decimal DistributedPartPercent { get; set; }
 	} // class NL_OfferFees
 } // ns

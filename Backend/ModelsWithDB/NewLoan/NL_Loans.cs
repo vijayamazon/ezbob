@@ -48,7 +48,7 @@
 		[DataMember]
 		public int RepaymentCount { get; set; }
 
-		[Length(10)]
+		[Length(50)]
 		[DataMember]
 		public string Refnum { get; set; }
 

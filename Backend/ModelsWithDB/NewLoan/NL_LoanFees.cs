@@ -19,7 +19,7 @@
 
 		[FK("Security_User", "UserId")]
 		[DataMember]
-		public int? AssignedByUserID { get; set; }
+		public int AssignedByUserID { get; set; } // Use 1 for automatically assigned fees. 
 
 		[DataMember]
 		public decimal Amount { get; set; }
