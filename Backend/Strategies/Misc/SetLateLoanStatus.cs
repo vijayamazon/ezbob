@@ -2,9 +2,12 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
+	using System.Linq;
 	using ConfigManager;
 	using Ezbob.Backend.Strategies.MailStrategies;
 	using DbConstants;
+	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using IMailLib;
@@ -39,6 +42,8 @@
             CommandSpecies.StoredProcedure, new QueryParameter("Now", this.now));
 
             //-----------Send collection mails sms imails and change status --------------------
+			LoadSmsTemplates();
+
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				try {
 					HandleCollectionLogic(sr);
@@ -63,6 +68,10 @@
             }, "GetCuredLoansForCollection",  CommandSpecies.StoredProcedure);
 		}//Execute
 
+		private void LoadSmsTemplates() {
+			this.smsTemplates = DB.Fill<CollectionSmsTemplate>("LoadCollectionSmsTemplates", CommandSpecies.StoredProcedure);
+		}//LoadSmsTemplates
+		
 	    private void HandleCuredLoan(int customerID, int loanID) {
 	        ChangeStatus(customerID, loanID, CollectionStatusNames.Enabled, CollectionType.Cured);
 	    }//HandleCuredLoan
@@ -116,9 +125,7 @@
 			SendCollectionEmail(CollectionDay0EmailTemplate, model, type);
 
 			//send sms Default SMS0
-			string smsTemplate = string.Format("{0} This is a courtesy message to remind you that a payment of {1} is overdue with ezbob. Please call Emma at 02033711842 to arrange your payment ASAP.",
-				model.FirstName, model.AmountDue);
-			SendCollectionSms(smsTemplate, model, type);
+			SendCollectionSms(model, type);
 		}//CollectionDay0
 
 		private void CollectionDay15(CollectionDataModel model, CollectionType type) {
@@ -132,9 +139,7 @@
 			SendCollectionImail(model, type);
 
 			//send sms Default SMS14
-			string smsTemplate = string.Format("{0} final reminder that your account in the amount of {1} on your account was due on {2}. If we do not receive the payment in full ezbob will submit your action to our legal department.",
-				model.FirstName, model.AmountDue, model.DueDate.ToString("dd/MM/yyyy"));
-			SendCollectionSms(smsTemplate, model, type);
+			SendCollectionSms(model, type);
 		}//CollectionDay15
 
 		private void CollectionDay1to6(CollectionDataModel model, CollectionType type) {
@@ -144,16 +149,12 @@
 			SendCollectionEmail(CollectionDay1to6EmailTemplate, model, type);
 
 			//send sms Default SMS1-6
-			string smsTemplate = string.Format("{0} the outstanding balance of {1} with ezbob has not been settled. Failure to settle the account will result in additional late payment fees being added to your account balance. Emma 02033711842",
-				model.FirstName, model.AmountDue);
-			SendCollectionSms(smsTemplate, model, type);
+			SendCollectionSms(model, type);
 		}//CollectionDay1to6
 
 		private void CollectionDay21(CollectionDataModel model, CollectionType type) {
 			//send sms Default SMS21
-			string smsTemplate = string.Format("{0} you have failed to settle your payment. Ezbob has submitted your account for legal proceedings. Emma 02033711842",
-				model.FirstName);
-			SendCollectionSms(smsTemplate, model, type);
+			SendCollectionSms(model, type);
 		}//CollectionDay21
 
 		private void CollectionDay31(CollectionDataModel model, CollectionType type) {
@@ -165,9 +166,7 @@
 			SendCollectionImail(model, type);
 
 			//send sms Default SMS31
-			string smsTemplate = string.Format("{0} you have failed to settle your payment. Ezbob has submitted your account for legal proceedings. Emma 02033711842",
-				model.FirstName);
-			SendCollectionSms(smsTemplate, model, type);
+			SendCollectionSms(model, type);
 		}//CollectionDay31
 
 		private void CollectionDay46(CollectionDataModel model, CollectionType type) {
@@ -186,9 +185,7 @@
 			SendCollectionImail(model, type);
 
 			//send sms Default SMS7
-			string smsTemplate = string.Format("{0}, the outstanding balance of {1}, including a late payment of £20 on your account with ezbob has not been settled. Failure to settle the account within 2 days will result in debt collection proceedings being taken to retrieve the debt. Emma 02033711842",
-				model.FirstName, model.AmountDue);
-			SendCollectionSms(smsTemplate, model, type);
+			SendCollectionSms(model, type);
 		}//CollectionDay7
 
 		private void CollectionDay8to14(CollectionDataModel model, CollectionType type) {
@@ -196,8 +193,7 @@
 			SendCollectionEmail(CollectionDay8to14EmailTemplate, model, type);
 
 			//send sms Default SMS8-13
-			string smsTemplate = string.Format("Warning – {0} late fees and daily interest has been added to your ezbob account. If you don’t do something quickly, ezbob can take actions against you. Please call Emma 02033711842 to arrange your payment ASAP.", model.FirstName);
-			SendCollectionSms(smsTemplate, model, type);
+			SendCollectionSms(model, type);
 		}//CollectionDay8to14
 
 		private void CollectionDay90(CollectionDataModel model, CollectionType type) {
@@ -277,6 +273,7 @@
 
 			var model = new CollectionDataModel {
 				CustomerID = sr["CustomerID"],
+				OriginID = sr["OriginID"],
 				LoanID = loanId,
 				ScheduleID = sr["ScheduleID"],
 				LoanRefNum = sr["LoanRefNum"],
@@ -436,7 +433,19 @@
 			}
 		}//SendCollectionImail
 
-		private void SendCollectionSms(string smsTemplate, CollectionDataModel model, CollectionType type) {
+		private void SendCollectionSms(CollectionDataModel model, CollectionType type) {
+			var smsModel = this.smsTemplates.FirstOrDefault(x => x.IsActive && x.OriginID == model.OriginID && x.Type == type.ToString());
+			if (smsModel == null) {
+				Log.Info("Collection not sending sms, sms template is not found. customer {0} origin {1} type {2}",
+					model.CustomerID, model.OriginID, type);
+				return;
+			}
+
+			var smsTemplate = string.Format(smsModel.Template, 
+				model.FirstName, 
+				FormattingUtils.NumericFormats(model.AmountDue), 
+				FormattingUtils.FormatDateToString(model.DueDate));
+
 			if (model.SmsSendingAllowed && !ConfigManager.CurrentValues.Instance.SmsTestModeEnabled) {
 				Log.Info("Collection sending sms to customer {0} phone number {1}\n content {2}",
 					model.CustomerID, model.PhoneNumber, smsTemplate);
@@ -504,6 +513,7 @@
 
 		private readonly IMailLib.CollectionMail collectionIMailer;
 		private DateTime now;
+		private List<CollectionSmsTemplate> smsTemplates;
 
 		public enum CollectionMethod {
 			Email,
@@ -529,6 +539,7 @@
 		public class CollectionDataModel {
 			public decimal AmountDue { get; set; }
 			public int CustomerID { get; set; }
+			public int OriginID { get; set; }
 			public DateTime DueDate { get; set; }
 			public string Email { get; set; }
 			public bool EmailSendingAllowed { get; set; }
@@ -545,7 +556,7 @@
 			public bool SmsSendingAllowed { get; set; }
 			public override string ToString() {
 				return string.Format(@"Collection model for 
-CustomerID:{0}
+CustomerID:{0}, OriginID: {17}
 LoanID:{1},LoanRefNum:{11},
 ScheduleID:{2},
 Email:{6},FirstName:{3}{4},FullName:{5}, 
@@ -556,7 +567,7 @@ LateDays: {13}
 EmailSendingAllowed:{14}, SmsSendingAllowed: {15}, ImailSendingAllowed: {16}",
 					CustomerID, LoanID, ScheduleID,
 					FirstName, "", FullName, Email, PhoneNumber, AmountDue, FeeAmount, Interest, LoanRefNum, DueDate, LateDays,
-					EmailSendingAllowed, SmsSendingAllowed, ImailSendingAllowed);
+					EmailSendingAllowed, SmsSendingAllowed, ImailSendingAllowed, OriginID);
 			}
 		} //class CollectionDataModel
 
