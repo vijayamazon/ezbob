@@ -65,6 +65,7 @@ EzBob.Profile.ProfileView = Backbone.View.extend({
 		if (this.customer.isFinishedWizard) {
 			this.processingPopup.render();
 			this.finishedWizard();
+			this.customer.isFinishedWizard = false;
 		}
 
 		/*
