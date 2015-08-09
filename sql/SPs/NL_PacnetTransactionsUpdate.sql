@@ -6,17 +6,29 @@ IF OBJECT_ID('NL_PacnetTransactionsUpdate') IS NULL
 GO
 
 ALTER PROCEDURE  NL_PacnetTransactionsUpdate
-	@TrackingNumber nvarchar(100), 
-	@PacnetTransactionStatusID int, 
-	@Notes nvarchar(max),
-	@UpdateTime datetime,
-	@FundTransferActive bit
+	@TrackingNumber NVARCHAR(100),
+	@PacnetTransactionStatusID INT,
+	@Notes NVARCHAR(MAX),
+	@UpdateTime DATETIME,
+	@FundTransferActive BIT
 AS
 BEGIN
-	
 	SET NOCOUNT ON;
 
-	UPDATE [NL_PacnetTransactions] set [PacnetTransactionStatusID] = @PacnetTransactionStatusID, [Notes] = @Notes, [StatusUpdatedTime] = @UpdateTime  WHERE [TrackingNumber] = @TrackingNumber;
-	UPDATE [NL_FundTransfers] set [IsActive] = @FundTransferActive;	
+	UPDATE [NL_PacnetTransactions] SET
+		[PacnetTransactionStatusID] = @PacnetTransactionStatusID,
+		[Notes] = @Notes,
+		[StatusUpdatedTime] = @UpdateTime
+	WHERE
+		[TrackingNumber] = @TrackingNumber
 
+	IF @FundTransferActive = 1
+	BEGIN
+		UPDATE [NL_FundTransfers] SET
+			FundTransferStatusID = (SELECT FundTransferStatusID FROM NL_FundTransferStatuses WHERE FundTransferStatus = 'Active')
+		FROM
+			NL_FundTransfers t
+			INNER JOIN NL_PacnetTransactions p ON t.FundTransferID = p.FundTransferID
+	END
 END
+GO

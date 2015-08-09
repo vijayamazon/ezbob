@@ -15,7 +15,7 @@ CREATE TYPE NL_PaypointTransactionsList AS TABLE (
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[Notes] NVARCHAR(MAX) NULL,
 	[PaypointTransactionStatusID] INT NOT NULL,
-	[PaypointUniqID] NVARCHAR(100) NOT NULL, -- extra not needed?
+	[PaypointUniqueID] NVARCHAR(100) NOT NULL, -- extra not needed?
 	[PaypointCardID] INT NOT NULL, -- PaypointUniqID is in PayPointCard [TransactionId] filed
 	[IP] NVARCHAR(10) NULL
 )
@@ -33,7 +33,7 @@ BEGIN
 		[Amount],
 		[Notes],
 		[PaypointTransactionStatusID],
-		[PaypointUniqID],
+		[PaypointUniqueID],
 		[PaypointCardID],
 		[IP]
 	) SELECT
@@ -42,7 +42,7 @@ BEGIN
 		[Amount],
 		[Notes],
 		[PaypointTransactionStatusID],
-		[PaypointUniqID],
+		[PaypointUniqueID],
 		[PaypointCardID],
 		[IP]
 	FROM @Tbl

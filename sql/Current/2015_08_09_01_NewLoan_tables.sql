@@ -7,6 +7,13 @@ GO
 -------------------------------------------------------------------------------
 -------------------------------------------------------------------------------
 
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'PRIMARY_KEY_CONSTRAINT' AND name = 'PK_PaypointCard')
+	ALTER TABLE PaypointCard ADD CONSTRAINT PK_PaypointCard PRIMARY KEY (Id)
+GO
+
+-------------------------------------------------------------------------------
+-------------------------------------------------------------------------------
+
 IF OBJECT_ID('NL_LoanAgreementTemplateTypes') IS NULL
 BEGIN
 	CREATE TABLE NL_LoanAgreementTemplateTypes (
@@ -188,7 +195,7 @@ BEGIN
 	CREATE TABLE NL_EzbobBankAccounts (
 		EzbobBankAccountID INT NOT NULL,
 		EzbobBankAccount NVARCHAR(10) NOT NULL,
-		IsDefault BIT NOT,
+		IsDefault BIT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_EzbobBankAccounts PRIMARY KEY (EzbobBankAccountID)
 	)
@@ -206,7 +213,7 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_FundTransferStatuses PRIMARY KEY (FundTransferStatusID),
 		CONSTRAINT UC_NL_FundTransferStatuses UNIQUE (FundTransferStatus),
-		CONSTRAINT CHK_NL_FundTransferStatuses CHECK (LTRIM(RTRIM(FundTransferStatus)))
+		CONSTRAINT CHK_NL_FundTransferStatuses CHECK (LTRIM(RTRIM(FundTransferStatus)) != '')
 	)
 
 	INSERT INTO NL_FundTransferStatuses (FundTransferStatusID, FundTransferStatus) VALUES
@@ -323,7 +330,7 @@ BEGIN
 		EndTime DATETIME NOT NULL,
 		RepaymentCount INT NOT NULL,
 		Amount DECIMAL(18, 6) NOT NULL,
-		MonthlyInterestRate DECIMAL (18, 6) NOT NULL,
+		MonthlyInterestRate DECIMAL(18, 6) NOT NULL,
 		CreatedTime DATETIME NOT NULL,
 		BrokerSetupFeePercent DECIMAL(18, 6) NULL,
 		SetupFeeAddedToLoan BIT NOT NULL CONSTRAINT DF_Offers_SF_Added DEFAULT (0),
@@ -336,10 +343,10 @@ BEGIN
 		IsAmountSelectionAllowed BIT NOT NULL CONSTRAINT DF_Offers_AmountSelectable DEFAULT (1),
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Offers PRIMARY KEY (OfferID),
-		CONSTRAINT FK_NL_Offers_Decision (DecisionID) REFERENCES NL_Decisions (DecisionID),
-		CONSTRAINT FK_NL_Offers_LoanType (LoanTypeID) REFERENCES LoanType (Id),
-		CONSTRAINT FK_NL_Offers_Period (RepaymentIntervalTypeID) REFERENCES NL_RepaymentIntervalTypes (RepaymentIntervalTypeID),
-		CONSTRAINT FK_NL_Offers_LoanSource (LoanSourceID) REFERENCES LoanSource (LoanSourceID)
+		CONSTRAINT FK_NL_Offers_Decision FOREIGN KEY (DecisionID) REFERENCES NL_Decisions (DecisionID),
+		CONSTRAINT FK_NL_Offers_LoanType FOREIGN KEY (LoanTypeID) REFERENCES LoanType (Id),
+		CONSTRAINT FK_NL_Offers_Period FOREIGN KEY (RepaymentIntervalTypeID) REFERENCES NL_RepaymentIntervalTypes (RepaymentIntervalTypeID),
+		CONSTRAINT FK_NL_Offers_LoanSource FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID)
 	)
 END
 GO
@@ -353,8 +360,8 @@ BEGIN
 		OfferFeeID BIGINT IDENTITY(1, 1) NOT NULL,
 		OfferID BIGINT NOT NULL,
 		LoanFeeTypeID INT NOT NULL,
-		Percent DECIMAL(18, 6) NULL,
-		Amount DECIMAL(18, 6) NULL,
+		PercentOfIssued DECIMAL(18, 6) NULL,
+		AbsoluteAmount DECIMAL(18, 6) NULL,
 		OneTimePartPercent DECIMAL(18, 6) NOT NULL,
 		DistributedPartPercent DECIMAL(18, 6) NOT NULL,
 		TimestampCounter ROWVERSION,
@@ -362,11 +369,11 @@ BEGIN
 		CONSTRAINT FK_NL_OfferFees_Offer FOREIGN KEY (OfferID) REFERENCES NL_Offers (OfferID),
 		CONSTRAINT FK_NL_OfferFees_FeeType FOREIGN KEY (LoanFeeTypeID) REFERENCES NL_LoanFeeTypes (LoanFeeTypeID),
 		CONSTRAINT CHK_NL_OfferFees CHECK (
-			(Percent IS NOT NULL OR Amount IS NOT NULL)
+			(PercentOfIssued IS NOT NULL OR AbsoluteAmount IS NOT NULL)
 			AND
-			(Percent IS NULL OR (0 < Percent AND Percent <= 1))
+			(PercentOfIssued IS NULL OR (0 < PercentOfIssued AND PercentOfIssued <= 1))
 			AND
-			(Amount IS NULL OR Amount > 0)
+			(AbsoluteAmount IS NULL OR AbsoluteAmount > 0)
 			AND
 			0 <= OneTimePartPercent AND OneTimePartPercent <= 1
 			AND
@@ -428,14 +435,14 @@ BEGIN
 		DateClosed DATETIME NULL,
 		InterestRate DECIMAL(18, 6) NOT NULL,
 		InterestOnlyRepaymentCount INT NOT NULL,
-		OldLoanID BIGINT NOT NULL,
+		OldLoanID INT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Loans PRIMARY KEY (LoanID),
 		CONSTRAINT FK_NL_Loans_Offer FOREIGN KEY (OfferID) REFERENCES NL_Offers (OfferID),
 		CONSTRAINT FK_NL_Loans_LoanType FOREIGN KEY (LoanTypeID) REFERENCES LoanType (Id),
 		CONSTRAINT FK_NL_Loans_Interval FOREIGN KEY (RepaymentIntervalTypeID) REFERENCES NL_RepaymentIntervalTypes (RepaymentIntervalTypeID),
 		CONSTRAINT FK_NL_Loans_Status FOREIGN KEY (LoanStatusID) REFERENCES NL_LoanStatuses (LoanStatusID),
-		CONSTRAINT FK_NL_Loans_Account FOREIGN KEY (EzbobBankAccountID) REFERENCES NL_EzbobBankAccouns (EzbobBankAccountID),
+		CONSTRAINT FK_NL_Loans_Account FOREIGN KEY (EzbobBankAccountID) REFERENCES NL_EzbobBankAccounts (EzbobBankAccountID),
 		CONSTRAINT FK_NL_Loans_Source FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID),
 		CONSTRAINT FK_NL_Loans_Old FOREIGN KEY (OldLoanID) REFERENCES Loan (Id),
 		CONSTRAINT CHK_NL_Loans CHECK (
@@ -466,7 +473,7 @@ BEGIN
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanLienLinks PRIMARY KEY (LoanLienLinkID),
 		CONSTRAINT FK_NL_LoanLienLinks_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
-		CONSTRAINT FK_NL_LoanLienLinks_Lien FOREIGN KEY (LoanLienID) REFERENCES LoanLien (LoanLienID),
+		CONSTRAINT FK_NL_LoanLienLinks_Lien FOREIGN KEY (LoanLienID) REFERENCES LoanLien (Id),
 		CONSTRAINT CHK_LoanLienLinks CHECK (Amount > 0)
 	)
 END
@@ -572,7 +579,7 @@ BEGIN
 		CONSTRAINT FK_NL_LoanHistory_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
 		CONSTRAINT FK_NL_LoanHistory_Rescheduler FOREIGN KEY (UserID) REFERENCES Security_User (UserId),
 		CONSTRAINT FK_NL_LoanHistory_Legal FOREIGN KEY (LoanLegalID) REFERENCES NL_LoanLegals (LoanLegalID),
-		CONSTRAINT CHK_NL_LoanHistory (
+		CONSTRAINT CHK_NL_LoanHistory CHECK (
 			Amount > 0
 			AND
 			RepaymentCount > 0
@@ -777,15 +784,15 @@ GO
 IF OBJECT_ID('NL_LoanSchedulePayments') IS NULL
 BEGIN
 	CREATE TABLE NL_LoanSchedulePayments (
-		LoanSchedulePaymentID BIGINT NOT NULL,
+		LoanSchedulePaymentID BIGINT IDENTITY(1, 1) NOT NULL,
 		LoanScheduleID BIGINT NOT NULL,
 		PaymentID BIGINT NOT NULL,
 		PrincipalPaid DECIMAL(18, 6) NOT NULL,
 		InterestPaid DECIMAL(18, 6) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanSchedulePayments PRIMARY KEY (LoanSchedulePaymentID),
-		CONSTRAINT FK_NL_LoanSchedulePayments_Schedule FOREIGN KEY (LoanScheduleID),
-		CONSTRAINT FK_NL_LoanSchedulePayments_Payment FOREIGN KEY (PaymentID),
+		CONSTRAINT FK_NL_LoanSchedulePayments_Schedule FOREIGN KEY (LoanScheduleID) REFERENCES NL_LoanSchedules (LoanScheduleID),
+		CONSTRAINT FK_NL_LoanSchedulePayments_Payment FOREIGN KEY (PaymentID) REFERENCES NL_Payments (PaymentID),
 		CONSTRAINT UC_NL_LoanSchedulePayments UNIQUE (LoanScheduleID, PaymentID),
 		CONSTRAINT CHK_NL_LoanSchedulePayments_Principal CHECK (PrincipalPaid >= 0),
 		CONSTRAINT CHK_NL_LoanSchedulePayments_Interest CHECK (InterestPaid >= 0),
@@ -806,8 +813,8 @@ BEGIN
 		Amount DECIMAL(18, 6) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_LoanFeePayments PRIMARY KEY (LoanFeePaymentID),
-		CONSTRAINT FK_LoanFeePayments_Fee FOREIGN KEY (LoanFeeID) REFERENCES NL_LoanFess (LoanFeeID),
-		CONSTRAINT FK_LoanFeePayments_Payment FOREIGN KEY (PaymentID) REFERENCES NL_Payment (PaymentID),
+		CONSTRAINT FK_LoanFeePayments_Fee FOREIGN KEY (LoanFeeID) REFERENCES NL_LoanFees (LoanFeeID),
+		CONSTRAINT FK_LoanFeePayments_Payment FOREIGN KEY (PaymentID) REFERENCES NL_Payments (PaymentID),
 		CONSTRAINT UC_LoanFeePayments UNIQUE (LoanFeeID, PaymentID),
 		CONSTRAINT CHK_LoanFeePayments CHECK (Amount > 0)
 	)
@@ -922,4 +929,3 @@ BEGIN
 	)
 END
 GO
-

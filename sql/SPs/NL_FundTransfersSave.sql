@@ -13,7 +13,7 @@ CREATE TYPE NL_FundTransfersList AS TABLE (
 	[LoanID] BIGINT NOT NULL,
 	[Amount] DECIMAL(18, 6) NOT NULL,
 	[TransferTime] DATETIME NOT NULL,
-	[IsActive] BIT NOT NULL,
+	FundTransferStatusID INT NOT NULL,
 	[LoanTransactionMethodID] INT NOT NULL
 )
 GO
@@ -28,13 +28,13 @@ BEGIN
 		[LoanID],
 		[Amount],
 		[TransferTime],
-		[IsActive],		
+		FundTransferStatusID,		
 		[LoanTransactionMethodID]
 	) SELECT
 		[LoanID],
 		[Amount],
 		[TransferTime],
-		[IsActive],
+		FundTransferStatusID,
 		[LoanTransactionMethodID]
 	FROM @Tbl
 

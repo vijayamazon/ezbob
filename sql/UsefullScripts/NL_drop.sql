@@ -199,7 +199,10 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
 GO
 
 IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemplate') AND name = 'TemplateTypeID')
+BEGIN
+	ALTER TABLE LoanAgreementTemplate DROP CONSTRAINT DF_LoanAgreementTemplate_TemplateTypeID
 	ALTER TABLE LoanAgreementTemplate DROP COLUMN TemplateTypeID
+END
 GO
 
 IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_LoanBrokerCommission_NL_Loan')
@@ -224,10 +227,6 @@ GO
 
 IF (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculationsAV' AND cl.name = 'CashRequestID') IS NOT NULL
 	ALTER TABLE MedalCalculationsAV DROP COLUMN CashRequestID
-GO
-
-IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'PRIMARY_KEY_CONSTRAINT' AND name = 'PK_PaypointCard')
-	ALTER TABLE PaypointCard DROP CONSTRAINT PK_PaypointCard
 GO
 
 IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_Esignatures_NL_Decisions')
@@ -416,3 +415,6 @@ IF OBJECT_ID('NL_LoanAgreementTemplateTypes') IS NOT NULL
 	DROP TABLE NL_LoanAgreementTemplateTypes
 GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'PRIMARY_KEY_CONSTRAINT' AND name = 'PK_PaypointCard')
+	ALTER TABLE PaypointCard DROP CONSTRAINT PK_PaypointCard
+GO

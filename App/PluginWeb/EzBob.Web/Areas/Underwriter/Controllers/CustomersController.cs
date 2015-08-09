@@ -570,7 +570,7 @@
 				lastOffer.CreatedTime = now;
 				lastOffer.Notes = model.reason;
 
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent };
+				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, PercentOfIssued = oldCashRequest.ManualSetupFeePercent };
 				if (oldCashRequest.SpreadSetupFee == true && oldCashRequest.SpreadSetupFee != null)
 					setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
 				NL_OfferFees[] ofeerFees = { setupFee };

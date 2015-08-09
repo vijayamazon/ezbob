@@ -848,7 +848,7 @@
 				TransactionTime = DateTime.UtcNow,
 				Amount = amount,
 				Notes = "system-repay",
-				PaypointUniqID = "4f0fce47-deb0-4667-bc65-f6edd3c978b5",
+				PaypointUniqueID = "4f0fce47-deb0-4667-bc65-f6edd3c978b5",
 				IP = "127.0.0.1",
 				PaypointTransactionStatusID = 1
 			};

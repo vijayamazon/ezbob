@@ -123,7 +123,7 @@
 					// calculator's model - setup fee
 					if (setupFee != null) {
 
-						var feeCalculator = new SetupFeeCalculator(setupFee.Percent, dataForLoan.BrokerSetupFeePercent);
+						var feeCalculator = new SetupFeeCalculator(setupFee.PercentOfIssued, dataForLoan.BrokerSetupFeePercent);
 
 						decimal setupFeeAmount = feeCalculator.Calculate(model.Loan.InitialLoanAmount);
 						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.Loan.InitialLoanAmount);
@@ -136,7 +136,7 @@
 					// calculator's model - servicing fees
 					if (servicingFee != null) {
 
-						var feeCalculator = new SetupFeeCalculator(servicingFee.Percent, dataForLoan.BrokerSetupFeePercent);
+						var feeCalculator = new SetupFeeCalculator(servicingFee.PercentOfIssued, dataForLoan.BrokerSetupFeePercent);
 
 						decimal servicingFeeAmount = feeCalculator.Calculate(model.Loan.InitialLoanAmount);
 						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.Loan.InitialLoanAmount);

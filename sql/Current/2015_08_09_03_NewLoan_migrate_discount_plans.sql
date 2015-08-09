@@ -11,6 +11,7 @@ GO
 -- discound for the second month while in the latter case customer receives 10% discount for
 -- the second week.
 -- Value "0.1" in InterestRateDelta means "10%", value "-0.05" means "-5%".
+
 BEGIN TRY
 	DROP TABLE #discountplanTemp
 END TRY
@@ -21,9 +22,9 @@ DECLARE @Id INT
 DECLARE @NL_Id INT
 DECLARE @Name NVARCHAR(50)
 DECLARE @ValuesStr NVARCHAR(100)
-DECLARE @IsDefault bit
-Declare @ForbiddenForReuse bit
-Declare @Percent float
+DECLARE @IsDefault BIT
+Declare @ForbiddenForReuse BIT
+Declare @Percent FLOAT
 
 SELECT
 	Id,
@@ -52,7 +53,7 @@ BEGIN
 		#discountplanTemp
 
 	IF (SELECT DiscountPlan FROM NL_DiscountPlans WHERE DiscountPlan = @Name ) IS NULL
-		INSERT INTO NL_DiscountPlans (DiscountPlan, IsDefault, IsActive) VALUES (ltrim(rtrim(@Name)), @IsDefault, @ForbiddenForReuse)
+		INSERT INTO NL_DiscountPlans (DiscountPlanID, DiscountPlan, IsDefault, IsActive) VALUES (@Id, LTRIM(RTRIM(@Name)), @IsDefault, @ForbiddenForReuse)
 
 	SELECT @NL_Id = DiscountPlanID FROM NL_DiscountPlans WHERE DiscountPlan = @Name
 	
@@ -70,7 +71,7 @@ BEGIN
 		END
 	END
 
-	DELETE FROM #discountplanTemp WHERE ID = @Id;
+	DELETE FROM #discountplanTemp WHERE ID = @Id
 END
 
 DROP TABLE #discountplanTemp

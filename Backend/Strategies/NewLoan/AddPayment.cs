@@ -58,20 +58,20 @@
 					throw new NL_ExceptionInputDataInvalid(message);
 				}
 
-				if (NLModel.PaypointTransaction.PaypointUniqID == null) {
-					message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus.PaypointUniqID). Customer {0}", NLModel.CustomerID);
+				if (NLModel.PaypointTransaction.PaypointUniqueID == null) {
+					message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus.PaypointUniqueID). Customer {0}", NLModel.CustomerID);
 					Log.Alert(message);
 					throw new NL_ExceptionInputDataInvalid(message);
 				}
 
 				//	select ppc.Id from PayPointCard ppc where ppc.TransactionId = '6fc34f9a-422f-4643-b151-06a472bed9d7'
-				SafeReader sr = DB.GetFirst(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqID, NLModel.CustomerID));
+				SafeReader sr = DB.GetFirst(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
 
-				//Console.WriteLine(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqID, NLModel.CustomerID));
+				//Console.WriteLine(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
 				//Console.WriteLine("========================" + sr.IsEmpty);
 				//Console.WriteLine("========================" + sr.Count);
 				if (sr.IsEmpty) {
-					message = string.Format("Paypoint card for customer {0}, loanID {1}, PaypointUniqID {2} not found", NLModel.CustomerID, NLModel.Loan.LoanID, NLModel.PaypointTransaction.PaypointUniqID);
+					message = string.Format("Paypoint card for customer {0}, loanID {1}, PaypointUniqueID {2} not found", NLModel.CustomerID, NLModel.Loan.LoanID, NLModel.PaypointTransaction.PaypointUniqueID);
 					Log.Alert(message);
 					throw new NL_ExceptionRequiredDataNotFound(message);
 				}

@@ -17,10 +17,10 @@
 		public int LoanFeeTypeID { get; set; }
 
 		[DataMember]
-		public decimal? Percent { get; set; }
+		public decimal? PercentOfIssued { get; set; }
 
 		[DataMember]
-		public decimal? Amount { get; set; }
+		public decimal? AbsoluteAmount { get; set; }
 
 		[DataMember]
 		public decimal OneTimePartPercent { get; set; }

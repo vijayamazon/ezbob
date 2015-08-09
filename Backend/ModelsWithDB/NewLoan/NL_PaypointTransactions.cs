@@ -29,7 +29,7 @@
 
 		[Length(100)]
 		[DataMember]
-		public string PaypointUniqID { get; set; }
+		public string PaypointUniqueID { get; set; }
 
 		[FK("PayPointCard", "Id")]
 		[DataMember]

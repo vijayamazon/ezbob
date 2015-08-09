@@ -88,7 +88,7 @@
 				nlModel.PaypointTransaction.TransactionTime = paymentTime; //??
 				nlModel.PaypointTransaction.Amount = amount;
 				nlModel.PaypointTransaction.Notes = description;
-				nlModel.PaypointTransaction.PaypointUniqID = transId;
+				nlModel.PaypointTransaction.PaypointUniqueID = transId;
 				nlModel.PaypointTransaction.IP = ip;
 				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); 
 	

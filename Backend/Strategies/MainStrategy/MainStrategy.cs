@@ -558,10 +558,12 @@
 			if (this.autoDecisionResponse.DecidedToApprove) {
 				List<NL_OfferFees> offerFees = new List<NL_OfferFees>();
 
-				offerFees.Add(new NL_OfferFees {
-					LoanFeeTypeID = (int)FeeTypes.SetupFee,
-					Percent = this.autoDecisionResponse.SetupFee,
-				});
+				if (this.autoDecisionResponse.SetupFee > 0) {
+					offerFees.Add(new NL_OfferFees {
+						LoanFeeTypeID = (int)FeeTypes.SetupFee,
+						PercentOfIssued = this.autoDecisionResponse.SetupFee,
+					});
+				} // if
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
 					DecisionID = decisionID,
