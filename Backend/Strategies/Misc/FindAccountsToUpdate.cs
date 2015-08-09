@@ -41,7 +41,7 @@
 			foreach (LoadCustomerMarketplaceSecurityData.ResultRow oRes in m_oStra.Result) {
 				if (oRes.InternalID == oEkmType)
 					CheckEkm(oRes);
-				else if (oRes.InternalID == oYodleeType)
+				else if (oRes.InternalID == oYodleeType && oRes.DisplayName != "ParsedBank")
 					Result.HasYodlee = CurrentValues.Instance.RefreshYodleeEnabled;
 				else if (oRes.InternalID == oHmrc.Guid())
 					CheckHmrc(oRes);
