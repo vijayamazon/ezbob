@@ -555,7 +555,7 @@ BEGIN
 		Amount DECIMAL(18, 6) NOT NULL,
 		RepaymentIntervalTypeID INT NOT NULL,
 		RepaymentCount INT NOT NULL,
-		InterestRate DECIMAL(18, 6) NULL,
+		InterestRate DECIMAL(18, 6) NOT NULL,
 		EventTime DATETIME NOT NULL,
 		[Description] NVARCHAR(MAX) NOT NULL,
 		AgreementModel NVARCHAR(MAX) NULL,

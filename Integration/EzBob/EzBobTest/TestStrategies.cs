@@ -1259,7 +1259,8 @@
 				CustomerID = 123,
 				UserID = userID,
 				CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName,
-				Loan = new NL_Loans() { IssuedTime = DateTime.UtcNow }
+				Loan = new NL_Loans(),
+				IssuedTime = DateTime.UtcNow,
 			};
 
 			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);

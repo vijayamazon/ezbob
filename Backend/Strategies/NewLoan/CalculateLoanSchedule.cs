@@ -48,7 +48,12 @@
 			//	return;
 			//}
 
-			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("@Now", model.Loan.IssuedTime));
+			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
+				"NL_OfferForLoan",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", model.CustomerID),
+				new QueryParameter("@Now", model.IssuedTime)
+			);
 
 			if (dataForLoan == null) {
 				this.Result.Error = NL_ExceptionOfferNotValid.DefaultMessage;
@@ -60,14 +65,14 @@
 			try {
 	
 				// from offer => Loan
-				model.Loan.InitialLoanAmount = dataForLoan.LoanLegalAmount;
-				model.Loan.RepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
+				model.InitialAmount = dataForLoan.LoanLegalAmount;
+				model.InitialRepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
 				model.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
 				model.Loan.LoanSourceID = dataForLoan.LoanSourceID;
 				model.Loan.OfferID = dataForLoan.OfferID;
 				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
-				model.Loan.RepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
-				model.Loan.InterestRate = dataForLoan.MonthlyInterestRate;
+				model.InitialRepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
+				model.InitialInterestRate = dataForLoan.MonthlyInterestRate;
 				model.Loan.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
 				model.Loan.Position = dataForLoan.LoansCount;
 
@@ -128,12 +133,12 @@
 
 						var feeCalculator = new SetupFeeCalculator(setupFee.PercentOfIssued, dataForLoan.BrokerSetupFeePercent);
 
-						decimal setupFeeAmount = feeCalculator.Calculate(model.Loan.InitialLoanAmount);
-						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.Loan.InitialLoanAmount);
+						decimal setupFeeAmount = feeCalculator.Calculate(model.InitialAmount);
+						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.InitialAmount);
 
 						Log.Debug("setupFeeAmount: {0}, brokerComissions: {1}", setupFeeAmount, model.BrokerComissions);
 
-						nlCalculatorModel.Fees.Add(new Fee(model.Loan.IssuedTime, setupFeeAmount, FeeTypes.SetupFee));
+						nlCalculatorModel.Fees.Add(new Fee(model.IssuedTime, setupFeeAmount, FeeTypes.SetupFee));
 					}
 
 					// calculator's model - servicing fees
@@ -141,8 +146,8 @@
 
 						var feeCalculator = new SetupFeeCalculator(servicingFee.PercentOfIssued, dataForLoan.BrokerSetupFeePercent);
 
-						decimal servicingFeeAmount = feeCalculator.Calculate(model.Loan.InitialLoanAmount);
-						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.Loan.InitialLoanAmount);
+						decimal servicingFeeAmount = feeCalculator.Calculate(model.InitialAmount);
+						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.InitialAmount);
 
 						Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
 
@@ -179,7 +184,7 @@
 						}
 					});
 
-					//  add appropriate "spreaded" fees model.Fees list
+					//  add appropriate "spread" fees model.Fees list
 					var servicingFeeSchedule = nlCalculatorModel.Fees.FirstOrDefault(f => f.AssignDate.Date == s.Date.Date && f.FeeType == FeeTypes.ServicingFee);
 
 					if (servicingFeeSchedule != null) {
@@ -187,11 +192,11 @@
 							Fee = new NL_LoanFees() {
 								Amount = servicingFeeSchedule.Amount,
 								AssignTime = servicingFeeSchedule.AssignDate,
-								Notes = "spreaded (servicing) fee",
+								Notes = "spread (servicing) fee",
 								LoanFeeTypeID = (int)FeeTypes.ServicingFee
 							}
 						});
-					} // "spreaded" fees
+					} // "spread" fees
 				}
 
 				// setup fee
@@ -208,7 +213,7 @@
 				}
 
 				// set APR - TBD
-				model.APR = nlCalculator.CalculateApr(model.Loan.IssuedTime);
+				model.APR = nlCalculator.CalculateApr(model.IssuedTime);
 
 				Log.Debug("model.Loan: {0}, model.Offer: {1}, model.APR: {2}", model.Loan, model.Offer, model.APR);
 				Log.Debug("Schedule: ");

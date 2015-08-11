@@ -24,11 +24,15 @@
 		[DataMember]
 		public decimal Amount { get; set; }
 
+		[FK("NL_RepaymentIntervalTypes", "RepaymentIntervalTypeID")]
+		[DataMember]
+		public int RepaymentIntervalTypeID { get; set; }
+
 		[DataMember]
 		public int RepaymentCount { get; set; }
 
 		[DataMember]
-		public decimal? InterestRate { get; set; }
+		public decimal InterestRate { get; set; }
 
 		[DataMember]
 		public DateTime EventTime { get; set; }

@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
+	using System;
 	using System.Collections.Generic;
 	using System.Runtime.Serialization;
 
@@ -25,6 +26,21 @@
 
 		[DataMember]
 		public NL_Loans Loan { get; set; }
+
+		[DataMember]
+		public decimal InitialAmount { get; set; }
+
+		[DataMember]
+		public int InitialRepaymentCount { get; set; }
+
+		[DataMember]
+		public int InitialRepaymentIntervalTypeID { get; set; }
+
+		[DataMember]
+		public decimal InitialInterestRate { get; set; }
+
+		[DataMember]
+		public DateTime IssuedTime { get; set; }
 
 		[DataMember]
 		public List<NLAgreementItem> Agreements { get; set; }

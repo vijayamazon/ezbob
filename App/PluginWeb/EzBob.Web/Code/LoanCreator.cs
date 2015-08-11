@@ -193,7 +193,8 @@
 			nlModel.Loan = new NL_Loans();
 			nlModel.UserID = this.context.UserId;
 			nlModel.Loan.Refnum = loan.RefNumber;
-			nlModel.Loan.InitialLoanAmount = loanAmount;
+			nlModel.InitialAmount = loanAmount;
+			nlModel.IssuedTime = now;
 
 			// populate nlModel by agreements data also
 			this.agreementsGenerator.RenderAgreements(loan, true, nlModel);

@@ -17,10 +17,6 @@
 		[DataMember]
 		public int LoanTypeID { get; set; }
 
-		[FK("NL_RepaymentIntervalTypes", "RepaymentIntervalTypeID")]
-		[DataMember]
-		public int RepaymentIntervalTypeID { get; set; }
-
 		[FK("NL_LoanStatuses", "LoanStatusID")]
 		[DataMember]
 		public int LoanStatusID { get; set; }
@@ -37,16 +33,7 @@
 		public int Position { get; set; }
 
 		[DataMember]
-		public decimal InitialLoanAmount { get; set; }
-
-		[DataMember]
 		public DateTime CreationTime { get; set; }
-
-		[DataMember]
-		public DateTime IssuedTime { get; set; }
-
-		[DataMember]
-		public int RepaymentCount { get; set; }
 
 		[Length(50)]
 		[DataMember]
@@ -54,9 +41,6 @@
 
 		[DataMember]
 		public DateTime? DateClosed { get; set; }
-
-		[DataMember]
-		public decimal InterestRate { get; set; }
 
 		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }

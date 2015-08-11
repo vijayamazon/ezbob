@@ -33,6 +33,7 @@
 		public NL_Model Result; // output
 		
 		public override async void Execute() {
+			DateTime nowTime = DateTime.UtcNow;
 
 			string message;
 
@@ -41,7 +42,7 @@
 				return;
 			}
 
-			// check if "creadit available" is enough for this loan amount
+			// check if "credit available" is enough for this loan amount
 			// loan for the offer exists
 			/*SafeReader sr = DB.GetFirst(string.Format("SELECT LoanID FROM NL_Loans WHERE OfferID={0}", dataForLoan.OfferID));
 			if (sr["LoanID"] > 0) {
@@ -72,7 +73,12 @@
 				return;
 			}
 
-			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>("NL_OfferForLoan", CommandSpecies.StoredProcedure, new QueryParameter("CustomerID", model.CustomerID), new QueryParameter("@Now", model.Loan.IssuedTime));
+			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
+				"NL_OfferForLoan",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("CustomerID", model.CustomerID),
+				new QueryParameter("@Now", model.IssuedTime)
+			);
 
 			if (dataForLoan == null) {
 				this.Result.Error = NL_ExceptionOfferNotValid.DefaultMessage;
@@ -118,14 +124,10 @@
 			NL_LoanHistory history = null;
 			List<NL_LoanAgreements> agreements = new List<NL_LoanAgreements>();
 
-			DateTime nowTime = DateTime.UtcNow;
 
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
-
-				// 1. set required data for Schedule and Fees init
-				model.Loan.IssuedTime = nowTime;
 
 				// 2. Init Schedule and Fees
 				CalculateLoanSchedule scheduleAndFees = new CalculateLoanSchedule(model);
@@ -161,7 +163,7 @@
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", fees));
 				}
 
-				// 6. broker comissions
+				// 6. broker commissions
 				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
 				if (scheduleAndFees.Result.BrokerComissions > 0) {
 					DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, model.Loan.OldLoanID));
@@ -172,10 +174,10 @@
 					LoanID = this.LoanID,
 					UserID = model.UserID,
 					LoanLegalID = dataForLoan.LoanLegalID,
-					Amount = model.Loan.InitialLoanAmount,
-					RepaymentCount = model.Loan.RepaymentCount,
-					InterestRate = model.Loan.InterestRate,
-					EventTime = nowTime,
+					Amount = model.InitialAmount,
+					RepaymentCount = model.InitialRepaymentCount,
+					InterestRate = model.InitialInterestRate,
+					EventTime = model.IssuedTime,
 					Description = "add loan ID " + this.LoanID,
 					AgreementModel = model.AgreementModel
 				};

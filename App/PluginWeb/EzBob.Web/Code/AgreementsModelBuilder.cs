@@ -241,7 +241,7 @@
 					Status = Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID),
 					StatusDescription = Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID).ToString()).DescriptionAttr(),
 					LoanRepayment = s.ScheduleItem.Principal, //P
-					Balance = nlModel.Loan.InitialLoanAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1),
+					Balance = nlModel.InitialAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1),
 					Fees = fee == null ? 0 : fee.Fee.Amount, //F
 					InterestRate = s.ScheduleItem.InterestRate //r
 				};
@@ -278,7 +278,7 @@
 
 			model.FormattedSchedules = NL_CreateSchedule(model.Schedule).ToList();
 
-			model.InterestRate = nlModel.Loan.InterestRate * 100;
+			model.InterestRate = nlModel.InitialInterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(setupFeeAmount); //loanSetupFee);
 
 			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);

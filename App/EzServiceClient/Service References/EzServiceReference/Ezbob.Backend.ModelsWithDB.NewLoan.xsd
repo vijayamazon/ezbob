@@ -142,6 +142,11 @@
           <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="Fees" nillable="true" type="tns:ArrayOfNLFeeItem" />
           <xs:element minOccurs="0" name="FundTransfer" nillable="true" type="tns:NL_FundTransfers" />
+          <xs:element minOccurs="0" name="InitialAmount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InitialInterestRate" type="xs:decimal" />
+          <xs:element minOccurs="0" name="InitialRepaymentCount" type="xs:int" />
+          <xs:element minOccurs="0" name="InitialRepaymentIntervalTypeID" type="xs:int" />
+          <xs:element minOccurs="0" name="IssuedTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Loan" nillable="true" type="tns:NL_Loans" />
           <xs:element minOccurs="0" name="Offer" nillable="true" type="tns:NL_Offers" />
           <xs:element minOccurs="0" name="PacnetTransaction" nillable="true" type="tns:NL_PacnetTransactions" />
@@ -265,10 +270,7 @@
           <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="DateClosed" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="EzbobBankAccountID" nillable="true" type="xs:int" />
-          <xs:element minOccurs="0" name="InitialLoanAmount" type="xs:decimal" />
           <xs:element minOccurs="0" name="InterestOnlyRepaymentCount" type="xs:int" />
-          <xs:element minOccurs="0" name="InterestRate" type="xs:decimal" />
-          <xs:element minOccurs="0" name="IssuedTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="LoanID" type="xs:long" />
           <xs:element minOccurs="0" name="LoanSourceID" type="xs:int" />
           <xs:element minOccurs="0" name="LoanStatusID" type="xs:int" />
@@ -277,8 +279,6 @@
           <xs:element minOccurs="0" name="OldLoanID" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="Position" type="xs:int" />
           <xs:element minOccurs="0" name="Refnum" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="RepaymentCount" type="xs:int" />
-          <xs:element minOccurs="0" name="RepaymentIntervalTypeID" type="xs:int" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
