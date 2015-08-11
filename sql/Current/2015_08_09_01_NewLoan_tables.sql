@@ -764,8 +764,9 @@ BEGIN
 		Amount DECIMAL(18, 6) NOT NULL,
 		PaymentStatusID INT NOT NULL,
 		CreationTime DATETIME NOT NULL,
-		CreatedByUserID INT NULL,
+		CreatedByUserID INT NOT NULL,
 		DeletionTime DATETIME NULL,
+		DeletionNotificationTime DATETIME NULL,
 		DeletedByUserID INT NULL,
 		Notes NVARCHAR(MAX) NULL,
 		TimestampCounter ROWVERSION,
@@ -773,7 +774,12 @@ BEGIN
 		CONSTRAINT FK_NL_Payments_Method FOREIGN KEY (PaymentMethodID) REFERENCES LoanTransactionMethod (Id),
 		CONSTRAINT FK_NL_Payments_Status FOREIGN KEY (PaymentStatusID) REFERENCES NL_PaymentStatuses (PaymentStatusID),
 		CONSTRAINT FK_NL_Payments_Creator FOREIGN KEY (CreatedByUserID) REFERENCES Security_User (UserId),
-		CONSTRAINT FK_NL_Payments_Deleter FOREIGN KEY (DeletedByUserID) REFERENCES Security_User (UserId)
+		CONSTRAINT FK_NL_Payments_Deleter FOREIGN KEY (DeletedByUserID) REFERENCES Security_User (UserId),
+		CONSTRAINT CHK_NL_Payments CHECK (
+			(DeletionTime IS NULL AND DeletionNotificationTime IS NULL AND DeletedByUserID IS NULL)
+			OR
+			(DeletionTime >= CreationTime AND DeletionNotificationTime >= DeletionTime AND DeletionNotificationTime >= CreationTime AND DeletedByUserID IS NOT NULL)
+		)
 	)
 END
 GO

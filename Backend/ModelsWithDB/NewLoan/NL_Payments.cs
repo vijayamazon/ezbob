@@ -17,7 +17,7 @@
 		public DateTime PaymentTime { get; set; }
 
 		[DataMember]
-		public decimal? Amount { get; set; }
+		public decimal Amount { get; set; }
 
 		[FK("NL_PaymentStatuses", "PaymentStatusID")]
 		[DataMember]
@@ -28,10 +28,13 @@
 
 		[FK("Security_User", "UserId")]
 		[DataMember]
-		public int? CreatedByUserID { get; set; }
+		public int CreatedByUserID { get; set; }
 
 		[DataMember]
 		public DateTime? DeletionTime { get; set; }
+
+		[DataMember]
+		public DateTime? DeletionNotificationTime { get; set; }
 
 		[FK("Security_User", "UserId")]
 		[DataMember]

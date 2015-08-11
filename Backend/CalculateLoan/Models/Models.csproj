@@ -67,7 +67,6 @@
     <Compile Include="Helpers\OpenPrincipal.cs" />
     <Compile Include="Helpers\RepaidPrincipal.cs" />
     <Compile Include="Helpers\Repayment.cs" />
-    <Compile Include="Helpers\Rollovers.cs" />
     <Compile Include="Helpers\ScheduledItem.cs" />
     <Compile Include="Helpers\ScheduledItemWithAmountDue.cs" />
     <Compile Include="Library.cs" />
@@ -111,6 +110,9 @@
       <Project>{9f39f6b0-980a-46ea-8977-416449be9c5c}</Project>
       <Name>CalculateLoanExceptions</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LoanCalculatorModels.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

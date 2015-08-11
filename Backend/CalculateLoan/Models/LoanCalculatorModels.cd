@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.LoanCalculatorModel">
+    <Position X="2.75" Y="0.5" Width="3.5" />
+    <TypeIdentifier>
+      <HashCode>AEEHEAGAAgABQAAEAKABAAAAAEQAAAAEAiAoAABAAAA=</HashCode>
+      <FileName>LoanCalculatorModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.CurrentPaymentModel">
+    <Position X="1.25" Y="7.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAgAAACAgAABAgCAAAIAAAAAAAA=</HashCode>
+      <FileName>CurrentPaymentModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.ScheduledItemWithAmountDue">
+    <Position X="3.75" Y="7.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAAAAAAAAkAAAAAACAAQEAAACBAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\ScheduledItemWithAmountDue.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.ScheduledItem">
+    <Position X="6.5" Y="6.25" Width="3.25" />
+    <TypeIdentifier>
+      <HashCode>AAAQAAAAIAAQAAAEAIAAAAAAIIEAACIBAAACAAAEAAA=</HashCode>
+      <FileName>Helpers\ScheduledItem.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.Repayment">
+    <Position X="10" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAARAAAAAAAAAAAEAAAAACCAAYAAAAABAAAAAAAAAQA=</HashCode>
+      <FileName>Helpers\Repayment.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.RepaidPrincipal">
+    <Position X="10" Y="5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAACAAIAAgAAAAAAAAAAAAQA=</HashCode>
+      <FileName>Helpers\RepaidPrincipal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.OpenPrincipal">
+    <Position X="6.5" Y="3.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEAAAAAACAAIAAgAABAAAAAQAAAAA=</HashCode>
+      <FileName>Helpers\OpenPrincipal.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.OneDayLoanStatus">
+    <Position X="12.5" Y="5.75" Width="3.5" />
+    <NestedTypes>
+      <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.OneDayLoanStatus.FormattedData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>Helpers\OneDayLoanStatus.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>KAAAACgIBAAAABIEAAACgARBIQIECCCBAAAABQIBEIA=</HashCode>
+      <FileName>Helpers\OneDayLoanStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.InterestFreeze" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="3.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAMkAAAAAAgAAEAAIAAAAAAAEAAAAA=</HashCode>
+      <FileName>Helpers\InterestFreeze.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.Fee">
+    <Position X="6.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAIAAAAQAAAAAAAEEAAAAACAAYAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\Fee.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.DailyLoanStatus">
+    <Position X="12.5" Y="0.5" Width="3.75" />
+    <TypeIdentifier>
+      <HashCode>AANAAAAAAAAAAAIECgBgAAAAEAEAAAAAQAAAAAIaIQA=</HashCode>
+      <FileName>Helpers\DailyLoanStatus.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.BadPeriod" BaseTypeListCollapsed="true">
+    <Position X="0.5" Y="0.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAEoBAAAAAAAAAAAIAAAAAAAAAAAAA=</HashCode>
+      <FileName>Helpers\BadPeriod.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
