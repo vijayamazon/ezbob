@@ -97,6 +97,7 @@
     <Compile Include="CallCredit\CallCreditData\CallCreditEmail.cs" />
     <Compile Include="CallCredit\CallCreditData\CallCreditTelephone.cs" />
     <Compile Include="CampaignSourceRef.cs" />
+    <Compile Include="CollectionSnailMailTemplate.cs" />
     <Compile Include="CollectionSmsTemplate.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItem.cs" />
     <Compile Include="CompanyScore\CompanyScoreModelItemValues.cs" />

@@ -68,6 +68,10 @@
 			}
 		}
 
+		public static Stream ByteArrayToStream(byte[] byteArray) {
+			return new MemoryStream(byteArray);
+		}
+
 		public static Stream ExtractResourceAsStream(string filename) {
 			System.Reflection.Assembly a = System.Reflection.Assembly.GetExecutingAssembly();
 			Stream resFilestream = a.GetManifestResourceStream(filename);
