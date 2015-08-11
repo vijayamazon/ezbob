@@ -207,6 +207,29 @@ EzBob.LoanModel = Backbone.Model.extend({
 		}).always(function () { BlockUi('off'); });
 	}, // removeFreezeInterval
 
+	saveAutoChargeOptions: function (stopAutoChargePayment) {
+        this.save({}, {
+            url: '' + window.gRootPath + 'Underwriter/LoanEditor/SaveAutoChargesOption/' + (this.get('Id')) + '?stopAutoChargePayment=' + stopAutoChargePayment
+        }).always(function () { BlockUi('off'); });
+	},
+
+	removeAutoChargeOptions: function () {
+	    this.save({}, {
+	        url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveAutoChargesOption/' + (this.get('Id'))
+	    }).always(function () { BlockUi('off'); });
+	},
+
+	SaveLateFeeOption: function (lateFeeStartDate, lateFeeEndDate) {
+	    this.save({}, {
+	        url: '' + window.gRootPath + 'Underwriter/LoanEditor/SaveLateFeeOption/' + (this.get('Id')) + '?lateFeeStartDate=' + lateFeeStartDate + '&lateFeeEndDate=' + lateFeeEndDate
+	    }).always(function () { BlockUi('off'); });
+	},
+	RemoveLateFeeOption: function () {
+	    this.save({}, {
+	        url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveLateFeeOption/' + (this.get('Id'))
+	    }).always(function () { BlockUi('off'); });
+	},
+
 	getInstallmentBefore: function(date) {
 		date = moment.utc(date).toDate();
 
