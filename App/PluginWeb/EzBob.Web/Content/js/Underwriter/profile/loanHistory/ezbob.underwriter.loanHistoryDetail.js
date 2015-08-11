@@ -57,9 +57,7 @@ EzBob.Underwriter.LoanDetailsView = Backbone.Marionette.View.extend({
 		}));
 
 		if (modelLoan.Modified) {
-			this.$el.find('.offer-status').append("<strong>Loan was manually modified</strong>").css({
-				"margin-top": "-20px"
-			});
+			this.$el.find('.offer-status').append("<strong>Loan was manually modified</strong>");
 		}
 	},
 

@@ -408,7 +408,7 @@
 					case CollectionType.CollectionDay15:
 						if (mailModel.IsLimited) {
 							Log.Info("Sending imail {0} to customer {1}", model.CustomerID, type);
-                            this.collectionIMailer.SendDefaultNoticeComm7Borrower(mailModel);
+                            this.collectionIMailer.SendDefaultNoticeComm14Borrower(mailModel);
 							//TODO uncomment when guarantor is implemented: 
 							//collectionIMailer.SendDefaultWarningComm7Guarantor(mailModel);
 						} else {
