@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
@@ -9,12 +11,13 @@
 		public CreateScheduleMethod(ALoanCalculator calculator) : base(calculator, false) {
 		} // constructor
 
-		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
-		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
-		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
-		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual List<ScheduledItem> Execute() {
+			return new List<ScheduledItem>();
+
+			// TODO: revive
+
+			/*
+
 			if (WorkingModel.InterestOnlyRepayments >= WorkingModel.RepaymentCount)
 				throw new InterestOnlyMonthsCountException(WorkingModel.InterestOnlyRepayments, WorkingModel.RepaymentCount);
 
@@ -45,6 +48,23 @@
 			} // for
 
 			return WorkingModel.Schedule;
+
+			*/
 		} // Execute
+
+		/// <summary>
+		/// Calculates date after requested number of periods have passed since loan issue date.
+		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
+		/// </summary>
+		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
+		/// <param name="periodCount">A number of periods to add.</param>
+		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
+		private DateTime AddRepaymentIntervals(int periodCount) {
+			var lh = WorkingModel.LoanHistory.Last();
+
+			return lh.RepaymentIntervalType == RepaymentIntervalTypes.Month
+				? lh.Time.AddMonths(periodCount)
+				: lh.Time.AddDays(periodCount * (int)lh.RepaymentIntervalType);
+		} // AddRepaymentIntervals
 	} // class CreateScheduleMethod
 } // namespace

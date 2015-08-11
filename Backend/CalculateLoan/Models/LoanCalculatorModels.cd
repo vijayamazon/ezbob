@@ -42,11 +42,11 @@
       <FileName>Helpers\RepaidPrincipal.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.OpenPrincipal">
+  <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.LoanHistory">
     <Position X="6.5" Y="3.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAEAAAAAACAAIAAgAABAAAAAQAAAAA=</HashCode>
-      <FileName>Helpers\OpenPrincipal.cs</FileName>
+      <FileName>Helpers\LoanHistory.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.OneDayLoanStatus">
@@ -74,7 +74,7 @@
   <Class Name="Ezbob.Backend.CalculateLoan.Models.Helpers.Fee">
     <Position X="6.5" Y="0.5" Width="2" />
     <TypeIdentifier>
-      <HashCode>AAIAAAAQAAAAAAAEEAAAAACAAYAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAQAAAAAAAEEAACAACAAYAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Helpers\Fee.cs</FileName>
     </TypeIdentifier>
   </Class>

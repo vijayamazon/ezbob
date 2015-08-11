@@ -18,6 +18,12 @@
 		public virtual decimal Execute() {
 			WorkingModel.ValidateSchedule();
 
+			return 0;
+
+			// TODO: revive
+
+			/*
+
 			DateTime firstDay = (this.startDate ?? WorkingModel.LoanIssueDate).Date;
 
 			DateTime lastDay = (this.endDate ?? WorkingModel.LastScheduledDate).Date;
@@ -51,6 +57,7 @@
 			} // if
 
 			return earnedInterest;
+			*/
 		} // Execute
 
 		private readonly DateTime? startDate;

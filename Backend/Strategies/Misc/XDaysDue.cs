@@ -84,7 +84,7 @@
             int customerId = sr["customerId"];
             //int loanScheduleId = sr["id"];
 
-            var loanState = new LoanState<NL_Model>(new NL_Model(), loanId, customerId, DateTime.UtcNow);
+            var loanState = new LoanState(new NL_Model(), loanId, customerId, DateTime.UtcNow);
             loanState.Execute();
 
             LegacyLoanCalculator calc = new LegacyLoanCalculator(loanState.CalcModel);

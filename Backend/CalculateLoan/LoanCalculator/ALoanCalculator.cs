@@ -5,7 +5,6 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	/// <summary>
@@ -22,11 +21,6 @@
 		/// Schedule is stored in WorkingModel.Schedule.
 		/// Each element in Schedule is ScheduledItem
 		/// </summary>
-		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
-		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
-		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
-		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual List<ScheduledItem> CreateSchedule() {
 			return new CreateScheduleMethod(this).Execute();
 		} // CreateSchedule
@@ -36,12 +30,6 @@
 		/// </summary>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan plan (list of repayments).</returns>
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual List<Repayment> CalculatePlan(bool writeToLog = true) {
 			return new CalculatePlanMethod(this, writeToLog).Execute();
 		} // CalculatePlan
@@ -51,16 +39,6 @@
 		/// Also calculates loan plan.
 		/// Schedule is stored in WorkingModel.Schedule.
 		/// </summary>
-		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
-		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
-		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
-		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		public virtual List<ScheduledItemWithAmountDue> CreateScheduleAndPlan(bool writeToLog = true) {
 			return new CreateScheduleAndPlanMethod(this, writeToLog).Execute();
 		} // CreateScheduleAndPlan
@@ -71,12 +49,6 @@
 		/// <param name="today">Date to calculate balance on.</param>
 		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual decimal CalculateBalance(DateTime today, bool writeToLog = true) {
 			return new CalculateBalanceMethod(this, today, writeToLog).Execute();
 		} // CalculateBalance
@@ -127,19 +99,6 @@
 		public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate, bool writeToLog = true) {
 			return new CalculateEarnedInterestMethod(this, startDate, endDate, writeToLog).Execute();
 		} // CalculateEarnedInterest
-
-		/// <summary>
-		/// Calculates date after requested number of periods have passed since loan issue date.
-		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
-		/// </summary>
-		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		/// <param name="periodCount">A number of periods to add.</param>
-		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		public virtual DateTime AddRepaymentIntervals(int periodCount) {
-			return WorkingModel.IsMonthly
-				? WorkingModel.LoanIssueTime.AddMonths(periodCount)
-				: WorkingModel.LoanIssueTime.AddDays(periodCount * (int)WorkingModel.RepaymentIntervalType);
-		} // AddRepaymentIntervals
 
 		/// <summary>
 		/// Calculates loan APR relative to specific date.
@@ -210,7 +169,6 @@
 			return CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
 		} // GetDailyInterestRate
 
-		/// <exception cref="NullLoanCalculatorModelException">Condition. </exception>
 		protected ALoanCalculator(LoanCalculatorModel model) {
 			if (model == null)
 				throw new NullLoanCalculatorModelException();

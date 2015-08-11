@@ -95,13 +95,13 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AStringable">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="DistributedPartPercent" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="AbsoluteAmount" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DistributedPartPercent" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
           <xs:element minOccurs="0" name="OfferFeeID" type="xs:long" />
           <xs:element minOccurs="0" name="OfferID" type="xs:long" />
-          <xs:element minOccurs="0" name="OneTimePartPercent" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="Percent" nillable="true" type="xs:decimal" />
+          <xs:element minOccurs="0" name="OneTimePartPercent" type="xs:decimal" />
+          <xs:element minOccurs="0" name="PercentOfIssued" nillable="true" type="xs:decimal" />
         </xs:sequence>
       </xs:extension>
     </xs:complexContent>
@@ -215,7 +215,7 @@
         <xs:sequence>
           <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
           <xs:element minOccurs="0" name="AssignTime" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="AssignedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="AssignedByUserID" type="xs:int" />
           <xs:element minOccurs="0" name="CreatedTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
           <xs:element minOccurs="0" name="DisabledTime" nillable="true" type="xs:dateTime" />
@@ -305,10 +305,11 @@
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AStringable">
         <xs:sequence>
-          <xs:element minOccurs="0" name="Amount" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="CreatedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="Amount" type="xs:decimal" />
+          <xs:element minOccurs="0" name="CreatedByUserID" type="xs:int" />
           <xs:element minOccurs="0" name="CreationTime" type="xs:dateTime" />
           <xs:element minOccurs="0" name="DeletedByUserID" nillable="true" type="xs:int" />
+          <xs:element minOccurs="0" name="DeletionNotificationTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="DeletionTime" nillable="true" type="xs:dateTime" />
           <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="PaymentID" type="xs:long" />
@@ -357,7 +358,7 @@
           <xs:element minOccurs="0" name="PaypointCardID" type="xs:int" />
           <xs:element minOccurs="0" name="PaypointTransactionID" type="xs:long" />
           <xs:element minOccurs="0" name="PaypointTransactionStatusID" type="xs:int" />
-          <xs:element minOccurs="0" name="PaypointUniqID" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="PaypointUniqueID" nillable="true" type="xs:string" />
           <xs:element minOccurs="0" name="TransactionTime" type="xs:dateTime" />
         </xs:sequence>
       </xs:extension>

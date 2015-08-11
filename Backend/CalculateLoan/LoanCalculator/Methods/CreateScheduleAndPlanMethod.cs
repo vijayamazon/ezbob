@@ -8,16 +8,6 @@
 		public CreateScheduleAndPlanMethod(ALoanCalculator calculator, bool writeToLog) : base(calculator, writeToLog) {
 		} // constructor
 
-		/// <exception cref="InterestOnlyMonthsCountException">Condition. </exception>
-		/// <exception cref="NegativeMonthlyInterestRateException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
-		/// <exception cref="NegativeRepaymentCountException">Condition. </exception>
-		/// <exception cref="NegativeInterestOnlyRepaymentCountException">Condition. </exception>
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		public List<ScheduledItemWithAmountDue> Execute() {
 			new CreateScheduleMethod(Calculator).Execute();
 
@@ -26,6 +16,10 @@
 			List<Repayment> payments = method.Execute();
 
 			var result = new List<ScheduledItemWithAmountDue>();
+
+			// TODO: revive
+
+			/*
 
 			for (int i = 0; i < payments.Count; i++) {
 				ScheduledItem si = WorkingModel.Schedule[i];
@@ -55,6 +49,8 @@
 					Calculator.Name
 				);
 			} // if
+
+			*/
 
 			return result;
 		} // Execute

@@ -53,9 +53,7 @@
     <Compile Include="Exceptions\NegativeOpenPrincipalException.cs" />
     <Compile Include="Exceptions\NoScheduleException.cs" />
     <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
-    <Compile Include="Exceptions\TooLateOpenPrincipalException.cs" />
-    <Compile Include="Exceptions\WrongFirstOpenPrincipalException.cs" />
-    <Compile Include="Exceptions\WrongOpenPrincipalOrderException.cs" />
+    <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
     <Compile Include="Extensions\RepaymentListExt.cs" />
     <Compile Include="Extensions\ScheduleListExt.cs" />
@@ -64,7 +62,7 @@
     <Compile Include="Helpers\Fee.cs" />
     <Compile Include="Helpers\InterestFreeze.cs" />
     <Compile Include="Helpers\OneDayLoanStatus.cs" />
-    <Compile Include="Helpers\OpenPrincipal.cs" />
+    <Compile Include="Helpers\LoanHistory.cs" />
     <Compile Include="Helpers\RepaidPrincipal.cs" />
     <Compile Include="Helpers\Repayment.cs" />
     <Compile Include="Helpers\ScheduledItem.cs" />

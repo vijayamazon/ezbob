@@ -76,11 +76,14 @@
 
 				// init calculator's model - loan's details
 				LoanCalculatorModel nlCalculatorModel = new LoanCalculatorModel {
+					// TODO: revive
+					/*
 					LoanIssueTime = model.Loan.IssuedTime, // input arg
 					RepaymentIntervalType = (RepaymentIntervalTypes)Enum.ToObject(typeof(RepaymentIntervalTypesId), model.Loan.RepaymentIntervalTypeID), // offer|LoanLegal
 					LoanAmount = model.Loan.InitialLoanAmount, // offer|LoanLegal
 					RepaymentCount = model.Loan.RepaymentCount, //  offer|LoanLegal
 					MonthlyInterestRate = model.Loan.InterestRate, //  offer|LoanLegal
+					*/
 					InterestOnlyRepayments = model.Loan.InterestOnlyRepaymentCount, //  offer|LoanLegal
 				};
 
@@ -110,7 +113,7 @@
 
 				Log.Debug("SCHEDULES primary = {0}", shedules);
 
-				// FEES: untill fees 2.0 implemented, suppose: Percent == OneTimePartPercent
+				// FEES: until fees 2.0 implemented, suppose: Percent == OneTimePartPercent
 
 				// get offers' fees
 				List<NL_OfferFees> offerFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", dataForLoan.OfferID));

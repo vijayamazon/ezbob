@@ -14,15 +14,14 @@
 
 		public DailyLoanStatus DailyLoanStatus { get; private set; }
 
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual List<Repayment> Execute() {
 			WorkingModel.ValidateSchedule();
 
+			return new List<Repayment>();
+
+			// TODO: revive
+
+			/*
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
 			DateTime lastInterestDay = WorkingModel.LastScheduledDate;
@@ -119,6 +118,7 @@
 			} // if
 
 			return result;
+			*/
 		} // Execute
 	} // class CalculatePlanMethod
 } // namespace

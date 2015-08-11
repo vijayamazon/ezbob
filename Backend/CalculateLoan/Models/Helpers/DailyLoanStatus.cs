@@ -169,14 +169,16 @@
 			if (workingModel == null)
 				return;
 
-			for(int i = 0; i < workingModel.Schedule.Count; i++) {
-				var sp = workingModel.Schedule[i];
+			// TODO: revive
 
-				AddNote(
-					sp.Date,
-					i == workingModel.Schedule.Count - 1 ? "Last scheduled payment." : "Scheduled payment."
-				);
-			} // for each
+			//for(int i = 0; i < workingModel.Schedule.Count; i++) {
+			//	var sp = workingModel.Schedule[i];
+
+			//	AddNote(
+			//		sp.Date,
+			//		i == workingModel.Schedule.Count - 1 ? "Last scheduled payment." : "Scheduled payment."
+			//	);
+			//} // for each
 		} // AddScheduleNotes
 
 		public void AddPaymentNotes(LoanCalculatorModel workingModel) {

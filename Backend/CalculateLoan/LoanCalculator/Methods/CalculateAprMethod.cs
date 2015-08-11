@@ -17,11 +17,6 @@
 			this.aprDate = (aprDate ?? DateTime.UtcNow).Date;
 		} // constructor
 
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
 		public virtual decimal Execute() {
 			if (WriteToLog) {
 				Log.Debug(

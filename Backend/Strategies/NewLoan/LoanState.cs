@@ -16,19 +16,12 @@
 	/// <summary>
 	/// Transform Loan or NL_Model to LoanCalculatorModel
 	/// </summary>
-	/// <typeparam name="T">Loan or NL_Model</typeparam>
-	public class LoanState<T> : AStrategy {
-		public LoanState(T t, long loanID, int customerId, DateTime? stateDate) {
+	public class LoanState : AStrategy {
+		public LoanState(NL_Model t, long loanID, int customerId, DateTime? stateDate) {
 			this.loanID = loanID;
 			this.customerID = customerId;
 
-			if (t.GetType() == typeof(Loan)) {
-				this.tLoan = t as Loan;
-				this.tNLLoan = null;
-			} else if (t.GetType() == typeof(NL_Model)) {
-				this.tNLLoan = t as NL_Model;
-				this.tLoan = null;
-			} // if
+			this.tNLLoan = t;
 
 			StateDate = stateDate ?? DateTime.UtcNow;
 		} // constructor
@@ -42,77 +35,16 @@
 
 		public override void Execute() {
 			try {
-				if (this.tNLLoan != null)
-					LoadNewLoanStructure();
-				else if (this.tLoan != null)
-					LoadOldLoanStructure();
+				LoadNewLoanStructure();
 			} catch (Exception loanStateEx) {
 				Log.Alert(loanStateEx, "Failed to load loan state.");
 			} // try
 		} // Execute
 
-		private void LoadOldLoanStructure() {
-			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			this.tLoan = loanRep.Get(this.loanID);
-
-			Log.Debug("LoanState--->Loan1: \n {0}", this.tLoan);
-
-			// Init loan's properties
-			this.CalcModel = new LoanCalculatorModel {
-				LoanAmount = this.tLoan.LoanAmount,
-				LoanIssueTime = this.tLoan.Date,
-				RepaymentIntervalType = RepaymentIntervalTypes.Month, // default, old loan does not contain the property
-				RepaymentCount = this.tLoan.Schedule.Count,
-				MonthlyInterestRate = this.tLoan.InterestRate,
-				InterestOnlyRepayments = 0, // default, old loan does not contain the property
-			};
-
-			// Schedules.
-			foreach (LoanScheduleItem s in this.tLoan.Schedule) {
-				ScheduledItem sch = new ScheduledItem(s.Date) {
-					Date = s.Date,
-					ClosedDate = null, //???
-					Principal = s.Principal,
-					InterestRate = s.InterestRate
-				};
-
-				this.CalcModel.Schedule.Add(sch);
-			} // for each
-
-			// Successful incoming transactions.
-			foreach (PaypointTransaction p in this.tLoan.TransactionsWithPaypointSuccesefull)
-				this.CalcModel.Repayments.Add(new Repayment(p.PostDate, p.LoanRepayment, p.Interest, p.Fees));
-
-			// Fees.
-			foreach (var c in this.tLoan.Charges)
-				this.CalcModel.Fees.Add(new Fee(c.Date, c.Amount, FeeTypes.AdminFee));
-
-			// Interest freeze periods.
-			foreach (LoanInterestFreeze fi in this.tLoan.ActiveInterestFreeze) {
-				// time interval not defined well
-				if (fi.StartDate == null)
-					continue;
-
-				// time interval not defined well
-				if (fi.EndDate == null)
-					continue;
-
-				bool isActive;
-
-				if (fi.DeactivationDate.HasValue)
-					isActive = (fi.ActivationDate <= StateDate) && (fi.DeactivationDate >= StateDate);
-				else
-					isActive = (fi.ActivationDate <= StateDate);
-
-				this.CalcModel.FreezePeriods.Add(
-					new InterestFreeze((DateTime)fi.StartDate, (DateTime)fi.EndDate, fi.InterestRate, isActive)
-				);
-			} // for each
-
-			SetBadPeriods();
-		} // LoadOldLoanStructure
-
 		private void LoadNewLoanStructure() {
+			// TODO: revive
+
+			/*
 			NL_Loans loan = DB.FillFirst<NL_Loans>(
 				"NL_LoansGet",
 				CommandSpecies.StoredProcedure,
@@ -206,6 +138,7 @@
 			);
 
 			SetBadPeriods();
+			*/
 		} // LoadNewLoanStructure
 
 		private void SetBadPeriods() {
@@ -264,7 +197,6 @@
 				this.CalcModel.BadPeriods.AddRange(badsList);
 		} // SetBadPeriods
 
-		private Loan tLoan;
 		private readonly NL_Model tNLLoan;
 		private readonly long loanID;
 		private readonly int customerID;

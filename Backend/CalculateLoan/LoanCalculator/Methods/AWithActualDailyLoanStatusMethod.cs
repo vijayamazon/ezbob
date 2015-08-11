@@ -11,21 +11,20 @@
 		{
 		} // constructor
 
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
 		protected virtual DailyLoanStatus CreateActualDailyLoanStatus(DateTime now) {
 			WorkingModel.ValidateSchedule();
+
+			var days = new DailyLoanStatus();
+
+			// TODO: revive
+
+			/*
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
 			DateTime lastInterestDay = WorkingModel.Schedule.Last().Date;
 
-			var days = new DailyLoanStatus();
 
 			// Step 1. Create a list of days within scheduled period.
 			// Open principal is equal to 0.
@@ -136,6 +135,7 @@
 			} // for
 
 			days.SetIgnoredDueToRescheduleDays();
+			*/
 
 			return days;
 		} // CreateActualDailyLoanStatus

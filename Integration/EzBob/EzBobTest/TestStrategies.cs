@@ -1159,12 +1159,15 @@
 				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
 
 			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
+				// TODO: revive (Test)
+				/*
 				LoanIssueTime = DateTime.UtcNow,
 				LoanAmount = B,
 				RepaymentCount = (int)(k),
 				MonthlyInterestRate = 0.06m,
 				InterestOnlyRepayments = 0,
 				RepaymentIntervalType = RepaymentIntervalTypes.Month
+				*/
 			};
 
 			Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);

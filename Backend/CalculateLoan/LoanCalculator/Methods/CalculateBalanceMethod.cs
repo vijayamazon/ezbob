@@ -13,13 +13,12 @@
 			this.today = today.Date;
 		} // constructor
 
-		/// <exception cref="NoScheduleException">Condition. </exception>
-		/// <exception cref="WrongInstallmentOrderException">Condition. </exception>
-		/// <exception cref="WrongFirstOpenPrincipalException">Condition. </exception>
-		/// <exception cref="TooLateOpenPrincipalException">Condition. </exception>
-		/// <exception cref="WrongOpenPrincipalOrderException">Condition. </exception>
-		/// <exception cref="NegativeLoanAmountException">Condition. </exception>
 		public virtual decimal Execute() {
+			return 0;
+
+			// TODO: revive
+
+			/*
 			if (this.today <= WorkingModel.LoanIssueDate)
 				return 0;
 
@@ -49,6 +48,7 @@
 			} // if
 
 			return balance;
+			*/
 		} // Execute
 
 		private readonly DateTime today;

@@ -13,6 +13,45 @@
 
 		public NL_Model NLModel { get; private set; }
 
+		//public void SetScheduleCloseDatesFromPayments() {
+		//	ValidateSchedule();
+
+		//	var qsp = new Queue<ScheduledItem>();
+
+		//	foreach (ScheduledItem s in Schedule) {
+		//		s.ClearRepayments();
+		//		qsp.Enqueue(s);
+		//	} // for each
+			
+		//	if (Repayments.Count < 1)
+		//		return;
+
+		//	ScheduledItem curSchedule = qsp.Dequeue();
+
+		//	for (var i = 0; i < Repayments.Count; i++) {
+		//		Repayment curRepayment = Repayments[i];
+
+		//		decimal currentPaidPrincipal = curRepayment.Principal;
+
+		//		while (currentPaidPrincipal > 0) {
+		//			currentPaidPrincipal = curSchedule.AddPrincipalRepayment(currentPaidPrincipal, curRepayment.Date);
+
+		//			if (curSchedule.ClosedDate.HasValue) {
+		//				if (qsp.Count > 0)
+		//					curSchedule = qsp.Dequeue();
+
+		//				else {
+		//					curSchedule = null;
+		//					break;
+		//				} // if
+		//			} // if
+		//		} // while
+
+		//		if (curSchedule == null)
+		//			break;
+		//	} // for each repayment
+		//} // SetScheduleCloseDatesFromPayments
+
 		/// <summary>
 		/// Strategy makes (and removes) assignment of payment to loan. 
 		/// 
@@ -25,7 +64,7 @@
 		/// by the payment (in NL_Model).
 		/// </summary>
 		public override void Execute() {
-			LoanState<NL_Model> stateStrategy = new LoanState<NL_Model>(
+			var stateStrategy = new LoanState(
 				new NL_Model(),
 				NLModel.Loan.LoanID,
 				NLModel.CustomerID,

@@ -422,40 +422,24 @@ BEGIN
 		LoanID BIGINT IDENTITY(1, 1) NOT NULL,
 		OfferID BIGINT NOT NULL,
 		LoanTypeID INT NOT NULL,
-		RepaymentIntervalTypeID INT NOT NULL,
 		LoanStatusID INT NOT NULL,
 		EzbobBankAccountID INT NULL,
 		LoanSourceID INT NOT NULL,
 		Position INT NOT NULL,
-		InitialLoanAmount DECIMAL (18, 6) NOT NULL,
 		CreationTime DATETIME NOT NULL,
-		IssuedTime DATETIME NOT NULL,
-		RepaymentCount INT NOT NULL,
 		Refnum NVARCHAR(50) NOT NULL,
 		DateClosed DATETIME NULL,
-		InterestRate DECIMAL(18, 6) NOT NULL,
 		InterestOnlyRepaymentCount INT NOT NULL,
 		OldLoanID INT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_Loans PRIMARY KEY (LoanID),
 		CONSTRAINT FK_NL_Loans_Offer FOREIGN KEY (OfferID) REFERENCES NL_Offers (OfferID),
 		CONSTRAINT FK_NL_Loans_LoanType FOREIGN KEY (LoanTypeID) REFERENCES LoanType (Id),
-		CONSTRAINT FK_NL_Loans_Interval FOREIGN KEY (RepaymentIntervalTypeID) REFERENCES NL_RepaymentIntervalTypes (RepaymentIntervalTypeID),
 		CONSTRAINT FK_NL_Loans_Status FOREIGN KEY (LoanStatusID) REFERENCES NL_LoanStatuses (LoanStatusID),
 		CONSTRAINT FK_NL_Loans_Account FOREIGN KEY (EzbobBankAccountID) REFERENCES NL_EzbobBankAccounts (EzbobBankAccountID),
 		CONSTRAINT FK_NL_Loans_Source FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID),
 		CONSTRAINT FK_NL_Loans_Old FOREIGN KEY (OldLoanID) REFERENCES Loan (Id),
-		CONSTRAINT CHK_NL_Loans CHECK (
-			Position >= 1
-			AND
-			InitialLoanAmount > 0
-			AND
-			RepaymentCount > 0
-			AND
-			InterestRate >= 0
-			AND
-			0 <= InterestOnlyRepaymentCount AND InterestOnlyRepaymentCount < RepaymentCount
-		)
+		CONSTRAINT CHK_NL_Loans CHECK (Position >= 1)
 	)
 END
 GO
@@ -569,6 +553,7 @@ BEGIN
 		UserID INT NULL,
 		LoanLegalID BIGINT NULL,
 		Amount DECIMAL(18, 6) NOT NULL,
+		RepaymentIntervalTypeID INT NOT NULL,
 		RepaymentCount INT NOT NULL,
 		InterestRate DECIMAL(18, 6) NULL,
 		EventTime DATETIME NOT NULL,
@@ -579,6 +564,7 @@ BEGIN
 		CONSTRAINT FK_NL_LoanHistory_Loan FOREIGN KEY (LoanID) REFERENCES NL_Loans (LoanID),
 		CONSTRAINT FK_NL_LoanHistory_Rescheduler FOREIGN KEY (UserID) REFERENCES Security_User (UserId),
 		CONSTRAINT FK_NL_LoanHistory_Legal FOREIGN KEY (LoanLegalID) REFERENCES NL_LoanLegals (LoanLegalID),
+		CONSTRAINT FK_NL_LoanHistory_Interval FOREIGN KEY (RepaymentIntervalTypeID) REFERENCES NL_RepaymentIntervalTypes (RepaymentIntervalTypeID),
 		CONSTRAINT CHK_NL_LoanHistory CHECK (
 			Amount > 0
 			AND

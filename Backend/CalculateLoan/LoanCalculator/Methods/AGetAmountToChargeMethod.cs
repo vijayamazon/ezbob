@@ -10,6 +10,10 @@
 		public virtual CurrentPaymentModel Execute() {
 			var cpm = new CurrentPaymentModel();
 
+			// TODO: revive
+
+			/*
+
 			if (this.today <= WorkingModel.LoanIssueTime.Date) {
 				cpm.IsError = true;
 				return cpm;
@@ -100,6 +104,7 @@
 					Calculator.Name
 				);
 			} // if
+			*/
 
 			return cpm;
 		} // GetAmountToCharge
@@ -120,6 +125,10 @@
 		} // enum RequesterType
 
 		protected abstract RequesterType MyRequester { get; }
+
+		// TODO: revive
+
+		/*
 
 		private void AlphaDelta(
 			CurrentPaymentModel cpm,
@@ -154,6 +163,8 @@
 				? 0
 				: thatDay.TotalExpectedNonprincipalPayment - thisDay.TotalExpectedNonprincipalPayment;
 		} // AlphaDelta
+
+		*/
 
 		private readonly DateTime today;
 		private readonly bool setClosedDateFromPayments;
