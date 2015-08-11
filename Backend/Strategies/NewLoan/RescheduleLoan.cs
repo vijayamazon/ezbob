@@ -35,6 +35,7 @@
 			this.Result = new ReschedulingResult();
 			this.Result.LoanID = this.ReschedulingArguments.LoanID;
 			this.Result.ReschedulingRepaymentIntervalType = this.ReschedulingArguments.ReschedulingRepaymentIntervalType;
+			this.Result.BlockAction = false;
 
 			this.cultureInfo = new CultureInfo("en-GB");
 
@@ -51,26 +52,26 @@
 
 			if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == null) {
 				this.Result.Error = "Weekly/monthly payment amount for OUT rescheduling not provided";
-				Log.Debug("Exit1==========================LoanState: {0}", this.tLoan);
 				this.loanRep.Clear();
 				return;
 			}
 
 			try {
-				
+
 				this.loanRep.BeginTransaction();
 
 				GetCurrentLoanState();
 
 				if (this.tLoan == null) {
 					this.Result.Error = string.Format("Loan ID {0} not found", this.ReschedulingArguments.LoanID);
-					ExitStrategy("Exit0");
+					ExitStrategy("Exit1");
 					return;
 				}
 
 				// check status, don't continue for "PaidOff"
 				if (this.tLoan.Status == LoanStatus.PaidOff) {
 					this.Result.Error = string.Format("Loan ID {0} paid off. Loan balance: {1}", this.tLoan.Id, 0m.ToString("C2", this.cultureInfo));
+					this.Result.BlockAction = true;
 					ExitStrategy("Exit2");
 					return;
 				}
@@ -78,6 +79,7 @@
 				// input validation for "IN"
 				if (this.ReschedulingArguments.RescheduleIn && (this.ReschedulingArguments.ReschedulingDate > this.Result.LoanCloseDate)) {
 					this.Result.Error = "Within loan arrangement is impossible";
+					this.Result.BlockAction = true;
 					ExitStrategy("Exit3");
 					return;
 				}
@@ -85,7 +87,7 @@
 				// if sent "default" value (0), replace by default calculated
 				if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
 					this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
-				
+
 				Log.Debug("\n\n==========RE-SCHEDULING======ARGUMENTS: {0}==========LoanState: {1}", this.ReschedulingArguments, this.tLoan);
 
 				// check Marking loan {0} as 'PaidOff' in \ezbob\Integration\DatabaseLib\Model\Loans\Loan.cs(362)
@@ -94,6 +96,7 @@
 				try {
 					if (calc.NextEarlyPayment() == 0) {
 						this.Result.Error = string.Format("Loan {0} marked as 'PaidOff'. Loan balance: {1}", this.tLoan.Id, 0m.ToString("C2", this.cultureInfo));
+						this.Result.BlockAction = true;
 						ExitStrategy("Exit4");
 						return;
 					}
@@ -109,10 +112,11 @@
 					if ((rmv.Status == LoanScheduleStatus.Paid || rmv.Status == LoanScheduleStatus.PaidOnTime || rmv.Status == LoanScheduleStatus.PaidEarly) && rmv.Date > this.ReschedulingArguments.ReschedulingDate) {
 						this.Result.Error = string.Format("Currently it is not possible to apply rescheduling future if payment/s relaying in the future have been already covered with early made payment, partially or entirely. " +
 							"You can apply rescheduling option after [last covered payment day].");
-						ExitStrategy("Exit11");
+						this.Result.BlockAction = true;
+						ExitStrategy("Exit5");
 						return;
 					}
-						
+
 					if (rmv.Date >= this.ReschedulingArguments.ReschedulingDate)
 						this.tLoan.Schedule.Remove(rmv);
 					if (rmv.Date <= this.ReschedulingArguments.ReschedulingDate && rmv.Status == LoanScheduleStatus.Late) {
@@ -127,17 +131,36 @@
 
 				calc.GetState(); // reload state after removing unpaid (lates, stilltopays passed) and future schedule items
 
-				Log.Debug("state: {0}", this.tLoan);
-				Log.Debug("P: {0}", this.tLoan.Principal);
-				
 				decimal I = calc.NextEarlyPayment();
 				decimal P = this.tLoan.Principal;
-				decimal F = this.tLoan.Charges.Sum(f => f.Amount);
+				decimal F = (this.tLoan.Charges.Sum(f => f.Amount) - this.tLoan.Charges.Sum(f => f.AmountPaid));
 				decimal r = this.tLoan.InterestRate;
 				// ReSharper disable once TooWideLocalVariableScope
 				decimal x = 0m;
 				this.Result.ReschedulingBalance = (P + I + F);
-				DateTime firstItemDate = this.ReschedulingArguments.ReschedulingDate.AddDays(1);
+				DateTime firstItemDate = this.ReschedulingArguments.ReschedulingDate.Date.AddDays(1);
+
+				Log.Debug("--------------P: {0}, I: {1}, F: {2}, Result.LoanCloseDate: {3}", P, I, F, this.Result.LoanCloseDate.Date);
+
+				// 3. intervals number
+
+				// IN
+				if (this.ReschedulingArguments.RescheduleIn) {
+
+					this.Result.IntervalsNum = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? MiscUtils.DateDiffInMonths(firstItemDate.Date, this.Result.LoanCloseDate.Date) : MiscUtils.DateDiffInWeeks(firstItemDate.Date, this.Result.LoanCloseDate.Date);
+
+					// adjust intervals number +1 if needed
+					DateTime rescheduledCloseDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? firstItemDate.AddMonths(this.Result.IntervalsNum) : firstItemDate.AddDays(this.Result.IntervalsNum * 7);
+
+					Log.Debug("rescheduledCloseDate: {0}, Result.IntervalsNum: {1}, Result.LoanCloseDate: {2}", rescheduledCloseDate, this.Result.IntervalsNum, this.Result.LoanCloseDate.Date);
+
+					TimeSpan ts = this.Result.LoanCloseDate.Date.Subtract(rescheduledCloseDate.Date);
+
+					if (ts.Days > 0) 
+						this.Result.IntervalsNum += 1;
+
+					Log.Debug("rescheduledCloseDate: {0}, Result.IntervalsNum: {1}, Result.LoanCloseDate: {2}, dDays: {3}", rescheduledCloseDate, this.Result.IntervalsNum, this.Result.LoanCloseDate.Date, ts.Days);
+				}
 
 				// OUT
 				if (this.ReschedulingArguments.RescheduleIn == false) {
@@ -148,7 +171,7 @@
 						this.message = string.Format("The entered amount accedes the outstanding balance of {0} for payment of {1}",
 							this.Result.ReschedulingBalance.ToString("C2", this.cultureInfo), this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo));
 						this.Result.Error = this.message;
-						ExitStrategy("Exit5");
+						ExitStrategy("Exit6");
 						return;
 					}
 
@@ -168,26 +191,27 @@
 					// uncovered loan - too small payment per interval
 					if (k < 0) {
 						this.Result.Error = "Chosen amount is not sufficient for covering the loan overtime, i.e. accrued interest will be always greater than the repaid amount per payment";
-						ExitStrategy("Exit6");
+						ExitStrategy("Exit7");
 						return;
 					}
 
-					this.Result.LoanCloseDate = firstItemDate.AddMonths(k);
+					this.Result.LoanCloseDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? firstItemDate.AddMonths(k) : firstItemDate.AddDays(k * 7);
+
+					this.Result.IntervalsNum = k;
 
 					int n = (int)Math.Ceiling(P / (m - P * r));
 
 					x = this.Result.ReschedulingBalance * r * (int)((k + 1) / 2) - P * r * (int)((n + 1) / 2);
 
-					Log.Debug("n: {0}, k: {1}, P: {2}, I: {3}, F: {4}, r: {5}, oustandingBalance: {6}, m: {7}, X: {8}", n, k, P, I, F, r, this.Result.ReschedulingBalance, m, x);
+					Log.Debug("n: {0}, k: {1}, P: {2}, I: {3}, F: {4}, r: {5}, oustandingBalance: {6}, m: {7}, X: {8}, closeDate: {9}, Result.IntervalsNum: {10}(==k)", n, k, P, I, F, r, this.Result.ReschedulingBalance, m, x, this.Result.LoanCloseDate, this.Result.IntervalsNum);
 				}
 
-				// 3. intervals number
-				this.Result.IntervalsNum = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ?
-					MiscUtils.DateDiffInMonths(firstItemDate, this.Result.LoanCloseDate.Date) : MiscUtils.DateDiffInWeeks(firstItemDate, this.Result.LoanCloseDate.Date);
+				Log.Debug("close date: {0}, intervals: {1}", this.Result.LoanCloseDate, this.Result.IntervalsNum);
 
 				if (this.Result.IntervalsNum == 0) {
 					this.Result.Error = "Rescheduling impossible (calculated payments number 0)";
-					ExitStrategy("Exit7");
+					this.Result.BlockAction = true;
+					ExitStrategy("Exit8");
 					return;
 				}
 
@@ -204,7 +228,7 @@
 
 					if ((iPrincipal * (this.Result.IntervalsNum - 1) + firstPrincipal) != balance) {
 						this.Result.Error = "Failed to create new schedule.";
-						ExitStrategy("Exit11");
+						ExitStrategy("Exit9");
 					}
 				}
 
@@ -216,9 +240,6 @@
 				for (int j = 0; j < this.Result.IntervalsNum; j++) {
 
 					DateTime iStartDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? firstItemDate.AddMonths(j) : firstItemDate.AddDays(7 * j);
-					//DateTime iEndDate = this.ReschedulingArguments.ReschedulingRepaymentIntervalType == RepaymentIntervalTypes.Month ? iStartDate.AddMonths(1) : firstItemDate.AddDays(7);
-					//decimal iInterestRate = calc.GetInterestRate(iStartDate, iEndDate);
-					//Log.Debug("Start: {0}, End: {1}, Rate: {2}", iStartDate, itEndDate, interestRate);
 
 					decimal iLoanRepayment = (j == 0) ? firstPrincipal : iPrincipal;
 					balance -= iLoanRepayment;
@@ -229,22 +250,37 @@
 						Status = LoanScheduleStatus.StillToPay,
 						Loan = this.tLoan,
 						LoanRepayment = iLoanRepayment,
-						//Interest = iInterestRate * iLoanRepayment,
 						Balance = balance,
 						Position = ++position
 					};
 					this.tLoan.Schedule.Add(item);
 				}
 
-				Log.Debug("--------------Loan modified: \n {0}", this.tLoan);
+				//Log.Debug("--------------Loan modified: \n {0}", this.tLoan);
 
 				//  after modification
 				if (CheckValidateLoanState(calc) == false) {
-					ExitStrategy("Exit8");
+					ExitStrategy("Exit10");
 					return;
 				}
 
 				Log.Debug("--------------Loan recalculated: \n {0}", this.tLoan);
+
+				// prevent schedules with negative iPrincipal (i.e. LoanRepayment:-4.00)
+				var negativeIPrincipal = this.tLoan.Schedule.FirstOrDefault(s => s.LoanRepayment < 0);
+				if (negativeIPrincipal != null) {
+					this.Result.Error = "Negative principal in loan schedule";
+					ExitStrategy("Exit11");
+					return;
+				}
+
+				// prevent "paidEarly" for newly created schedule items
+				var newPaidEarly = this.tLoan.Schedule.FirstOrDefault(s => s.Date > this.ReschedulingArguments.ReschedulingDate && s.Status == LoanScheduleStatus.PaidEarly);
+				if (newPaidEarly != null) {
+					this.Result.Error = "Wrong balance for re-scheduling calculated. Please, contact support.";
+					ExitStrategy("Exit12");
+					return;
+				}
 
 				var firstRescheduledItem = this.tLoan.Schedule.FirstOrDefault(s => s.Date.Date == firstItemDate.Date);
 				if (firstRescheduledItem != null) {
@@ -263,25 +299,22 @@
 					LoanScheduleItem overInstalment = this.tLoan.Schedule.FirstOrDefault(s => s.AmountDue > this.ReschedulingArguments.PaymentPerInterval);
 					if (overInstalment != null) {
 						// ReSharper disable once PossibleInvalidOperationException
-						this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance. " +
-							//"(in {2} new payments). " +
-							"Accrued interest: {2}, accumulated fees: {3}, first new instalment: {4}. " +
+						this.message = string.Format("{0}ly payment of {1} not sufficient to pay the loan outstanding balance. Accrued interest: {2}, accumulated fees: {3}, first new instalment: {4}. " +
 							"You can choose to reduce the accumulated fees & interest by clearing them via manual payment, before setting the new payment schedule.",
 							this.ReschedulingArguments.ReschedulingRepaymentIntervalType,
 							this.ReschedulingArguments.PaymentPerInterval.Value.ToString("C2", this.cultureInfo),
-							//this.Result.IntervalsNum,
 							overInstalment.Interest.ToString("C2", this.cultureInfo), //I.ToString("C2", this.cultureInfo),
 							overInstalment.Fees.ToString("C2", this.cultureInfo),
 							overInstalment.AmountDue.ToString("C2", this.cultureInfo)
 							);
 						this.Result.Error = this.message;
-						ExitStrategy("Exit9");
+						ExitStrategy("Exit13");
 						return;
 					}
 				}
 
 				if (!this.ReschedulingArguments.SaveToDB) {
-					ExitStrategy("Exit10");
+					ExitStrategy("Exit14");
 					return;
 				}
 
@@ -294,7 +327,7 @@
 		}
 
 		private void ExitStrategy(string logMessage) {
-			Log.Debug(logMessage + ": " +  this.Result.Error);
+			Log.Debug(logMessage + ": " + this.Result.Error);
 			this.loanRep.Clear();
 			this.loanRep.RollbackTransaction();
 		}
@@ -343,13 +376,6 @@
 				return false;
 			}
 
-			// prevent schedules with negative iPrincipal (i.e. LoanRepayment:-4.00)
-			var negativeIPrincipal = this.tLoan.Schedule.FirstOrDefault(s => s.LoanRepayment < 0);
-			if (negativeIPrincipal!=null) {
-				this.Result.Error = "Negative principal in loan schedule";
-				return false;
-			}
-
 			return true;
 		}
 
@@ -358,7 +384,7 @@
 
 				this.tLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
 
-				if(this.tLoan==null)
+				if (this.tLoan == null)
 					return;
 
 				this.Result.LoanInterestRate = this.tLoan.InterestRate;
@@ -408,6 +434,7 @@
 					this.tLoan.Status = this.ReschedulingArguments.RescheduleIn ? LoanStatus.Live : LoanStatus.Late;
 					this.tLoan.LastRecalculation = DateTime.UtcNow;
 					this.tLoan.Modified = true;
+					this.tLoan.DateClosed = null;
 
 					this.loanRep.EvictAll();
 					this.loanRep.Evict(this.tLoan);
@@ -465,14 +492,14 @@
 				 + "<h4>Result</h4> {3}"
 				 + "<h4>Error</h4> {4}"
 				 + "<h4>Loan state before action</h4> {5}"
-				 + "<h4>Current schedule</h4> {6}</p>",
+				 + "<h4>Current schedule - after action</h4> {6}</p>",
 
 				this.tLoan.Customer.Id, Context.UserID
 				, (this.ReschedulingArguments)
 				, (this.Result)
 				, (transactionEx == null ? "NO errors" : transactionEx.ToString())
-				, (sb.ToString().Length>0) ? sb.ToString() : "not found"
-				, (currentStateStr.ToString().Length>0) ? currentStateStr.ToString() : "not found"
+				, (sb.ToString().Length > 0) ? sb.ToString() : "not found"
+				, (currentStateStr.ToString().Length > 0) ? currentStateStr.ToString() : "not found"
 			);
 			new Mail().Send(
 				this.emailToAddress,

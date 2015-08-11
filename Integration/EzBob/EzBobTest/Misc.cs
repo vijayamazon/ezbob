@@ -9,6 +9,7 @@
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Utils;
 	using Ezbob.ValueIntervals;
+	using EzBob.eBayServiceLib.com.ebay.developer.soap;
 	using NHibernate.Linq;
 	using NUnit.Framework;
 	using Reports;
@@ -51,9 +52,10 @@
 
 		[Test]
 		public void DateDiffInWeeks2() {
-			DateTime start = new DateTime(2015,8,2);
+			//09/24/2016
+			DateTime start = new DateTime(2015, 8, 11);
 			Console.WriteLine(start);
-			DateTime end = new DateTime(2016, 3, 29);
+			DateTime end = new DateTime(2016, 9, 24);
 			Console.WriteLine(end);
 			int weeksa = MiscUtils.DateDiffInWeeks(start, end);
 			Console.WriteLine(weeksa);
@@ -216,6 +218,48 @@
 			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
 		}
 
+
+		[Test]
+		public void DateDiffInMonth() {
+			// 10/11/2016
+			DateTime start = new DateTime(2015, 8, 11);
+			Console.WriteLine(start);
+			DateTime end = new DateTime(2016, 10, 11);
+			Console.WriteLine(end);
+			int dif = MiscUtils.DateDiffInMonths(start, end);
+			Console.WriteLine(dif);
+		}
+
+		[Test]
+		public void DateDiffs() {
+
+			// 2/11/2016
+			DateTime end = new DateTime(2016, 11, 2);
+
+			// 31/10/2016
+			DateTime  start= new DateTime(2016, 10, 31);
+
+			Console.WriteLine(start);
+			Console.WriteLine(end);
+
+			TimeSpan ts = start.Subtract(end);
+
+			double totalDays = ts.TotalDays;
+			int dDays = ts.Days;
+
+			Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
+
+			// 12/10/2016
+			end = new DateTime(2016, 10, 12);
+			Console.WriteLine(end);
+
+			ts = start.Subtract(end);
+
+			 totalDays = ts.TotalDays;
+			 dDays = ts.Days;
+
+			 Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
+		}
 
 	} // class Misc
 } // namespace
