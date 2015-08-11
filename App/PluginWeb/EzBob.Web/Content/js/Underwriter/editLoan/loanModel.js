@@ -195,18 +195,6 @@ EzBob.LoanModel = Backbone.Model.extend({
 		});
 	}, // recalculate
 
-	addFreezeInterval: function(sStartDate, sEndDate, nRate) {
-		this.save({}, {
-			url: '' + window.gRootPath + 'Underwriter/LoanEditor/AddFreezeInterval/' + (this.get('Id')) + '?startdate=' + sStartDate + '&enddate=' + sEndDate + '&rate=' + nRate
-		});
-	}, // addFreezeInterval
-
-	removeFreezeInterval: function(intervalId) {
-		this.save({}, {
-		    url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveFreezeInterval/' + (this.get('Id')) + '?intervalid=' + intervalId
-		}).always(function () { BlockUi('off'); });
-	}, // removeFreezeInterval
-
 	saveAutoChargeOptions: function (stopAutoChargePayment) {
         this.save({}, {
             url: '' + window.gRootPath + 'Underwriter/LoanEditor/SaveAutoChargesOption/' + (this.get('Id')) + '?stopAutoChargePayment=' + stopAutoChargePayment
@@ -229,6 +217,17 @@ EzBob.LoanModel = Backbone.Model.extend({
 	        url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveLateFeeOption/' + (this.get('Id'))
 	    }).always(function () { BlockUi('off'); });
 	},
+	saveFreezeInterval: function (sStartDate, sEndDate) {
+	    this.save({}, {
+	        url: '' + window.gRootPath + 'Underwriter/LoanEditor/SaveFreezeInterval/' + (this.get('Id')) + '?startdate=' + sStartDate + '&enddate=' + sEndDate
+	    }).always(function () { BlockUi('off'); });
+	}, // addFreezeInterval
+
+	removeFreezeInterval: function (intervalId) {
+	    this.save({}, {
+	        url: '' + window.gRootPath + 'Underwriter/LoanEditor/RemoveFreezeInterval/' + (this.get('Id')) + '?intervalid=' + intervalId
+	    }).always(function () { BlockUi('off'); });
+	}, // removeFreezeInterval
 
 	getInstallmentBefore: function(date) {
 		date = moment.utc(date).toDate();

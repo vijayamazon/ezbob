@@ -58,7 +58,8 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click #charges-save-btn': 'chargesSaveBtn',
         'click #fees-save-btn': 'feesSaveBtn',
         'click #fees-delete-btn': 'feesDeleteBtn',
-        'click #intrest-save-btn': 'onAddFreezeInterval',
+        'click #intrest-save-btn': 'intrestSaveBtn',
+        'click .remove-freeze-interval': 'onRemoveFreezeInterval',
         'blur #outsidePrincipal': 'onChangeAmount',
         'change #withinSelect': 'withinSelectChange',
         'change #outsideSelect': 'outsideSelectChange',
@@ -68,62 +69,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         'click .add-fee': 'addFee',
         'click .save': 'onOk',
         'click .cancel': 'onCancel',
-        'click .add-freeze-interval': 'onAddFreezeInterval',
-        'click .remove-freeze-interval': 'onRemoveFreezeInterval'
     }, // events
-
-    makeAjaxPostSave: function (requestParam, divName) {
-        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/SaveLateFeeOption/', requestParam);
-
-        var self = this;
-        BlockUi('on');
-
-        oRequest.success(function (res) {
-            if (res.Error == null || res.Error === "") {
-                if (divName === "#stop-charges")
-                    $('stop-charges-date').text(EzBob.formatDateWithoutTime(res.options.StopLateFeeFromDate));
-                $(divName).show();
-            } else {
-                var params = { head: 'Unexpected error occured', body: res.Error, footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
-                self.fillErrorPopup(params);
-            }
-            return false;
-        }); //on success
-
-        oRequest.fail(function () {
-            var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
-            self.fillErrorPopup(params);
-            return false;
-        });//on fail
-        oRequest.always(function () {
-            BlockUi('off');
-        });
-    },
-
-    makeAjaxPostDelete: function (divName) {
-        var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/' + this.model.get('Id'));
-        var self = this;
-        BlockUi('on');
-
-        oRequest.success(function (res) {
-            if (res.Error == null || res.Error === "") {
-                $(divName).hide();
-            } else {
-                var params = { head: 'Unexpected error occured', body: res.Error, footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
-                self.fillErrorPopup(params);
-            }
-            return false;
-        }); //on success
-
-        oRequest.fail(function () {
-            var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
-            self.fillErrorPopup(params);
-            return false;
-        });//on fail
-        oRequest.always(function () {
-            BlockUi('off');
-        });
-    },
 
     chargesSaveBtn: function () {
         var chargesVal = $('#charges-payments').val();
@@ -144,6 +90,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     feesSaveBtn: function () {
         var lateFeeStartDate = $('#fees-calendar-from').val();
         var lateFeeEndDate = $('#fees-calendar-to').val();
+        //Check that both input are not empty
         if (lateFeeEndDate === "" || lateFeeStartDate === "") {
             var params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
@@ -154,9 +101,11 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             this.fillErrorPopup(params);
             return false;
         }
+
+        //Validation work.
         BlockUi('on');
 
-        this.model.SaveLateFeeOption(EzBob.formatDateWithoutTime(lateFeeStartDate), EzBob.formatDateWithoutTime(lateFeeEndDate));
+        this.model.SaveLateFeeOption(lateFeeStartDate,lateFeeEndDate);
     },
 
 	feesDeleteBtn: function () {
@@ -165,7 +114,6 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	},
 
     intrestSaveBtn: function () {
-        var requestParam = { loanID: this.model.get('Id'), save: 'true' };
         var interestFrom = $('#intrest-calendar-from').val();
         var interestTo = $('#intrest-calendar-to').val();
 
@@ -179,7 +127,8 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
             this.fillErrorPopup(params);
             return false;
         }
-        this.makeAjaxPostSave(requestParam,'');
+        BlockUi('on');
+        this.model.saveFreezeInterval(interestFrom, interestTo);
     },
 
 	fillErrorPopup: function(params) {

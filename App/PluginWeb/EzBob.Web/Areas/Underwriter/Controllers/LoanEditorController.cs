@@ -326,8 +326,10 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonResult SaveLateFeeOption(int id, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate)
-        {
+        public JsonResult SaveLateFeeOption(int id) {
+            DateTime? lateFeeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeStartDate"]);
+            DateTime? lateFeeEndDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeEndDate"]);
+
             LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
             options.AutoLateFees = true;
@@ -418,9 +420,10 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonResult SaveFreezeInterval(int loanID, DateTime? freezeStartDate, DateTime? freezeEndDate)
-        {
-            Loan loan = this._loans.Get(loanID);
+        public JsonResult SaveFreezeInterval(int id) {
+            DateTime? freezeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["startdate"]);
+            DateTime? freezeEndDate = Convert.ToDateTime(HttpContext.Request.QueryString["enddate"]);
+            Loan loan = this._loans.Get(id);
             loan.InterestFreeze.Add(new LoanInterestFreeze{
                 Loan = loan,
                 StartDate = freezeStartDate,
@@ -431,9 +434,10 @@
             });
 
             this._loans.SaveOrUpdate(loan);
-     
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(loanID));
-            model.Options = this.loanOptionsRepository.GetByLoanId(loanID);
+
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+            model.Options = this.loanOptionsRepository.GetByLoanId(id);
+            RescheduleSetmodel(model, loan);
             return Json(model);      
         }
 
@@ -458,7 +462,7 @@
 
             model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-            //RescheduleSetmodel(model, loan);
+            RescheduleSetmodel(model, loan);
 
             return Json(model);
         } // RemoveFreezeInterval
