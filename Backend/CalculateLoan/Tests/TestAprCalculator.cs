@@ -36,7 +36,7 @@
 				lst.Add(item);
 			} // for each repayment
 
-			var setupFee = lc.WorkingModel.Fees.Where(fee => fee.FType == FeeTypes.SetupFee).Sum(fee => fee.Amount);
+			var setupFee = lc.WorkingModel.Fees.Where(fee => fee.FeeType == FeeTypes.SetupFee).Sum(fee => fee.Amount);
 
 			var calc = new APRCalculator();
 

@@ -79,7 +79,7 @@
 			} // for
 
 			foreach (Fee fee in WorkingModel.Fees) {
-				if (fee.FType == FeeTypes.SetupFee)
+				if (fee.FeeType == FeeTypes.SetupFee)
 					continue;
 
 				Repayment scheduledPaymentToPayFee =

@@ -177,7 +177,7 @@
 					});
 
 					//  add appropriate "spreaded" fees model.Fees list
-					var servicingFeeSchedule = nlCalculatorModel.Fees.FirstOrDefault(f => f.AssignDate.Date == s.Date.Date && f.FType == FeeTypes.ServicingFee);
+					var servicingFeeSchedule = nlCalculatorModel.Fees.FirstOrDefault(f => f.AssignDate.Date == s.Date.Date && f.FeeType == FeeTypes.ServicingFee);
 
 					if (servicingFeeSchedule != null) {
 						model.Fees.Add(new NLFeeItem() {
@@ -192,7 +192,7 @@
 				}
 
 				// setup fee
-				var setupFeeSchedule = nlCalculatorModel.Fees.FirstOrDefault(f => f.FType == FeeTypes.SetupFee);
+				var setupFeeSchedule = nlCalculatorModel.Fees.FirstOrDefault(f => f.FeeType == FeeTypes.SetupFee);
 				if (setupFeeSchedule != null) {
 					model.Fees.Add(new NLFeeItem() {
 						Fee = new NL_LoanFees() {

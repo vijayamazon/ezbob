@@ -112,7 +112,7 @@
 		/// </remarks>
 		public decimal ActualIssuedAmount {
 			get {
-				decimal setupFee = Fees.Where(fee => fee.FType == FeeTypes.SetupFee).Sum(fee => fee.Amount);
+				decimal setupFee = Fees.Where(fee => fee.FeeType == FeeTypes.SetupFee).Sum(fee => fee.Amount);
 
 				return LoanAmount - setupFee;
 			} // get
