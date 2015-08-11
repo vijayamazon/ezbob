@@ -231,13 +231,13 @@ BEGIN
 	CREATE TABLE NL_LoanFeeTypes (
 		LoanFeeTypeID INT NOT NULL,
 		LoanFeeType NVARCHAR(50) NOT NULL,
-		DefaultAmount DECIMAL(18, 6) NULL,
-		Description NVARCHAR(MAX) NULL,
+		[DefaultAmount] DECIMAL(18, 6) NULL,
+		[Description] NVARCHAR(MAX) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanFeeTypes PRIMARY KEY (LoanFeeTypeID)
-	)
+	);
 
-	INSERT INTO NL_LoanFeeTypes (LoanFeeTypeID, LoanFeeType, DefaultAmount, Description) VALUES
+	INSERT INTO NL_LoanFeeTypes (LoanFeeTypeID, LoanFeeType, [DefaultAmount], [Description]) VALUES
 		  ( 1, 'SetupFee',        NULL, 'One-time fee upon loan creation, may be added or didacted from loan')
 		, ( 2, 'RolloverFee',       50, 'A rollover has been agreed')
 		, ( 3, 'AdminFee',          75, 'A fee applied when no payment is received or less than (repayment interest + late payment fee)')
@@ -296,7 +296,7 @@ BEGIN
 		RepaymentIntervalTypeID INT NOT NULL,
 		IsMonthly BIT NOT NULL,
 		LengthInDays INT NULL,
-		Description NVARCHAR(255) NOT NULL,
+		[Description] NVARCHAR(255) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_RepaymentIntervalTypes PRIMARY KEY (RepaymentIntervalTypeID),
 		CONSTRAINT UC_RepaymentIntervalTypes UNIQUE (IsMonthly, LengthInDays),
@@ -304,10 +304,10 @@ BEGIN
 			(IsMonthly = 1 AND LengthInDays IS NULL) OR
 			(IsMonthly = 0 AND LengthInDays > 0)
 		),
-		CONSTRAINT CHK_RepaymentIntervalTypes_Description CHECK (LTRIM(RTRIM(Description)) != '')
+		CONSTRAINT CHK_RepaymentIntervalTypes_Description CHECK (LTRIM(RTRIM([Description])) != '')
 	)
 
-	INSERT INTO NL_RepaymentIntervalTypes (RepaymentIntervalTypeID, IsMonthly, LengthInDays, Description) VALUES
+	INSERT INTO NL_RepaymentIntervalTypes (RepaymentIntervalTypeID, IsMonthly, LengthInDays, [Description]) VALUES
 		(1, 1, NULL, 'Month'),
 		(2, 0, 1, 'Day'),
 		(3, 0, 7, 'Week'),
@@ -572,7 +572,7 @@ BEGIN
 		RepaymentCount INT NOT NULL,
 		InterestRate DECIMAL(18, 6) NULL,
 		EventTime DATETIME NOT NULL,
-		Description NVARCHAR(MAX) NOT NULL,
+		[Description] NVARCHAR(MAX) NOT NULL,
 		AgreementModel NVARCHAR(MAX) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanHistory PRIMARY KEY (LoanHistoryID),
@@ -616,13 +616,13 @@ BEGIN
 	CREATE TABLE NL_LoanScheduleStatuses (
 		LoanScheduleStatusID INT NOT NULL,
 		LoanScheduleStatus NVARCHAR(50) NOT NULL,
-		Description NVARCHAR(70) NOT NULL,
+		[Description] NVARCHAR(70) NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_LoanScheduleStatuses PRIMARY KEY (LoanScheduleStatusID),
 		CONSTRAINT UC_NL_LoanScheduleStatuses UNIQUE (LoanScheduleStatus)
 	)
 
-	INSERT INTO NL_LoanScheduleStatuses (LoanScheduleStatusID, LoanScheduleStatus, Description) VALUES
+	INSERT INTO NL_LoanScheduleStatuses (LoanScheduleStatusID, LoanScheduleStatus, [Description]) VALUES
 		(1, 'StillToPay', 'Open'),
 		(2, 'PaidOnTime', 'Paid on time'),
 		(3, 'Late', 'Late'),

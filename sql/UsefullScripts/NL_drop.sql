@@ -198,11 +198,20 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
 	ALTER TABLE LoanAgreementTemplate DROP CONSTRAINT FK_LoanAgreementTemplate_NL_LoanAgreementTemplateTypes
 GO
 
-IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemplate') AND name = 'TemplateTypeID')
-BEGIN
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanAgreementTemplate_LoanAgreementTemplateTypes')
+	ALTER TABLE LoanAgreementTemplate DROP CONSTRAINT FK_LoanAgreementTemplate_LoanAgreementTemplateTypes
+GO
+
+IF OBJECT_ID('DF_LoanAgreementTemplate_TemplateTypeID') IS NOT NULL
 	ALTER TABLE LoanAgreementTemplate DROP CONSTRAINT DF_LoanAgreementTemplate_TemplateTypeID
+GO
+
+IF OBJECT_ID('DF_TemplateTypeID') IS NOT NULL
+	ALTER TABLE LoanAgreementTemplate DROP CONSTRAINT DF_TemplateTypeID
+GO
+
+IF EXISTS (SELECT id FROM syscolumns WHERE id = OBJECT_ID('LoanAgreementTemplate') AND name = 'TemplateTypeID')
 	ALTER TABLE LoanAgreementTemplate DROP COLUMN TemplateTypeID
-END
 GO
 
 IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_LoanBrokerCommission_NL_Loan')
@@ -217,7 +226,7 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
 	ALTER TABLE MedalCalculations DROP CONSTRAINT FK_MedalCalculations_NL_CashRequests
 GO
 
-IF (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculations' AND cl.name = 'CashRequestID') IS NOT NULL
+IF EXISTS (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculations' AND cl.name = 'CashRequestID')
 	ALTER TABLE MedalCalculations DROP COLUMN CashRequestID
 GO
 
@@ -225,7 +234,7 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
 	ALTER TABLE MedalCalculationsAV DROP CONSTRAINT FK_MedalCalculationsAV_NL_CashRequests
 GO
 
-IF (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculationsAV' AND cl.name = 'CashRequestID') IS NOT NULL
+IF EXISTS (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculationsAV' AND cl.name = 'CashRequestID')
 	ALTER TABLE MedalCalculationsAV DROP COLUMN CashRequestID
 GO
 
