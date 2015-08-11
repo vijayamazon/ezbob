@@ -39,24 +39,24 @@ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_
 	ALTER TABLE Esignatures ADD CONSTRAINT FK_Esignatures_NL_Decisions FOREIGN KEY (DecisionID) REFERENCES NL_Decisions (DecisionID)
 GO
 
-IF (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculationsAV' AND cl.name = 'CashRequestID') IS NULL
-	ALTER TABLE MedalCalculationsAV ADD CashRequestID BIGINT NULL
+IF (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculationsAV' AND cl.name = 'NLCashRequestID') IS NULL
+	ALTER TABLE MedalCalculationsAV ADD NLCashRequestID BIGINT NULL
 GO
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_MedalCalculationsAV_NL_CashRequests')
-	ALTER TABLE MedalCalculationsAV ADD CONSTRAINT FK_MedalCalculationsAV_NL_CashRequests FOREIGN KEY (CashRequestID) REFERENCES NL_CashRequests (CashRequestID)
+	ALTER TABLE MedalCalculationsAV ADD CONSTRAINT FK_MedalCalculationsAV_NL_CashRequests FOREIGN KEY (NLCashRequestID) REFERENCES NL_CashRequests (NLCashRequestID)
 GO
 
-IF (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculations' AND cl.name = 'CashRequestID') IS NULL
-	ALTER TABLE MedalCalculations ADD CashRequestID BIGINT NULL
+IF (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculations' AND cl.name = 'NLCashRequestID') IS NULL
+	ALTER TABLE MedalCalculations ADD NLCashRequestID BIGINT NULL
 GO
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_MedalCalculations_NL_CashRequests')
-	ALTER TABLE MedalCalculations ADD CONSTRAINT FK_MedalCalculations_NL_CashRequests FOREIGN KEY (CashRequestID) REFERENCES NL_CashRequests (CashRequestID)
+	ALTER TABLE MedalCalculations ADD CONSTRAINT FK_MedalCalculations_NL_CashRequests FOREIGN KEY (NLCashRequestID) REFERENCES NL_CashRequests (NLCashRequestID)
 GO
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_DecisionTrail_NL_CashRequests')
-	ALTER TABLE DecisionTrail ADD CONSTRAINT FK_DecisionTrail_NL_CashRequests FOREIGN KEY(NLCashRequestID) REFERENCES NL_CashRequests (CashRequestID)
+	ALTER TABLE DecisionTrail ADD CONSTRAINT FK_DecisionTrail_NL_CashRequests FOREIGN KEY(NLCashRequestID) REFERENCES NL_CashRequests (NLCashRequestID)
 GO
 
 IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_LoanBrokerCommission_NL_Loan')

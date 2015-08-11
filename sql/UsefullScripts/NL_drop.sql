@@ -226,16 +226,16 @@ IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_
 	ALTER TABLE MedalCalculations DROP CONSTRAINT FK_MedalCalculations_NL_CashRequests
 GO
 
-IF EXISTS (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculations' AND cl.name = 'CashRequestID')
-	ALTER TABLE MedalCalculations DROP COLUMN CashRequestID
+IF EXISTS (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculations' AND cl.name = 'NLCashRequestID')
+	ALTER TABLE MedalCalculations DROP COLUMN NLCashRequestID
 GO
 
 IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_MedalCalculationsAV_NL_CashRequests')
 	ALTER TABLE MedalCalculationsAV DROP CONSTRAINT FK_MedalCalculationsAV_NL_CashRequests
 GO
 
-IF EXISTS (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculationsAV' AND cl.name = 'CashRequestID')
-	ALTER TABLE MedalCalculationsAV DROP COLUMN CashRequestID
+IF EXISTS (SELECT cl.OBJECT_ID FROM sys.all_objects ob inner join sys.all_columns cl on ob.OBJECT_ID = cl.OBJECT_ID AND ob.name = 'MedalCalculationsAV' AND cl.name = 'NLCashRequestID')
+	ALTER TABLE MedalCalculationsAV DROP COLUMN NLCashRequestID
 GO
 
 IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_Esignatures_NL_Decisions')
