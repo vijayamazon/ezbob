@@ -276,6 +276,14 @@ GO
 --
 -------------------------------------------------------------------------------
 
+IF OBJECT_ID('NL_BlendedOffers') IS NOT NULL
+	DROP TABLE NL_BlendedOffers
+GO
+
+IF OBJECT_ID('NL_BlendedLoans') IS NOT NULL
+	DROP TABLE NL_BlendedLoans
+GO
+
 IF OBJECT_ID('NL_LoanOptions') IS NOT NULL
 	DROP TABLE NL_LoanOptions
 GO
@@ -410,14 +418,6 @@ GO
 
 IF OBJECT_ID('NL_CashRequestOrigins') IS NOT NULL
 	DROP TABLE NL_CashRequestOrigins
-GO
-
-IF OBJECT_ID('NL_BlendedOffers') IS NOT NULL
-	DROP TABLE NL_BlendedOffers
-GO
-
-IF OBJECT_ID('NL_BlendedLoans') IS NOT NULL
-	DROP TABLE NL_BlendedLoans
 GO
 
 IF OBJECT_ID('NL_LoanAgreementTemplateTypes') IS NOT NULL
