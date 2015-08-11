@@ -27,7 +27,7 @@
         private readonly ChangeLoanDetailsModelBuilder _loanModelBuilder;
         private readonly LoanBuilder _loanBuilder;
         private readonly ILoanChangesHistoryRepository _history;
-        private ILoanOptionsRepository loanOptionsRepository;
+        private readonly ILoanOptionsRepository loanOptionsRepository;
         private readonly IWorkplaceContext _context;
         private readonly ServiceClient serviceClient;
         private readonly ISession session;
@@ -35,6 +35,7 @@
 
         public LoanEditorController(
             ILoanRepository loans,
+            ILoanOptionsRepository loanOptions,
             ChangeLoanDetailsModelBuilder builder,
             ICashRequestRepository cashRequests,
             ChangeLoanDetailsModelBuilder loanModelBuilder,
@@ -42,7 +43,8 @@
             ILoanChangesHistoryRepository history,
             IWorkplaceContext context,
             ILoanOptionsRepository loanOptionsRepository,
-            ISession session){
+            ISession session)
+        {
             this._loans = loans;
             this._cashRequests = cashRequests;
             this._loanModelBuilder = loanModelBuilder;
@@ -57,7 +59,8 @@
         [Ajax]
         [HttpGet]
         [NoCache]
-        public JsonResult Loan(int id){
+        public JsonResult Loan(int id)
+        {
             var loan = this._loans.Get(id);
 
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
@@ -73,7 +76,8 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonResult RecalculateCR(EditLoanDetailsModel model){
+        public JsonResult RecalculateCR(EditLoanDetailsModel model)
+        {
             var cr = this._cashRequests.Get(model.CashRequestId);
             return Json(RecalculateModel(model, cr, model.Date));
         }
@@ -87,7 +91,8 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonResult Recalculate(int id, EditLoanDetailsModel model){
+        public JsonResult Recalculate(int id, EditLoanDetailsModel model)
+        {
             var cr = this._loans.Get(id).CashRequest;
             return Json(RecalculateModel(model, cr, DateTime.UtcNow));
         }
@@ -95,7 +100,8 @@
         [Ajax]
         [HttpGet]
         [Transactional]
-        public JsonResult LoanCR(long id){
+        public JsonResult LoanCR(long id)
+        {
             var cr = this._cashRequests.Get(id);
             var amount = cr.ApprovedSum();
             var loan = this._loanBuilder.CreateLoan(cr, amount, DateTime.UtcNow);
@@ -106,7 +112,8 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonResult LoanCR(EditLoanDetailsModel model){
+        public JsonResult LoanCR(EditLoanDetailsModel model)
+        {
             var cr = this._cashRequests.Get(model.CashRequestId);
 
             model = RecalculateModel(model, cr, model.Date);
@@ -124,10 +131,12 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonResult Loan(EditLoanDetailsModel model){
+        public JsonResult Loan(EditLoanDetailsModel model)
+        {
             var loan = this._loans.Get(model.Id);
 
-            var historyItem = new LoanChangesHistory{
+            var historyItem = new LoanChangesHistory
+            {
                 Data = this._loanModelBuilder.BuildModel(loan).ToJSON(),
                 Date = DateTime.UtcNow,
                 Loan = loan,
@@ -148,7 +157,8 @@
             return Json(model, JsonRequestBehavior.AllowGet);
         }
 
-        private void RescheduleSetmodel(EditLoanDetailsModel model, Loan loan) {
+        private void RescheduleSetmodel(EditLoanDetailsModel model, Loan loan)
+        {
             model.Options = this.loanOptionsRepository.GetByLoanId(model.Id) ?? LoanOptions.GetDefault(model.Id);
 
             ReschedulingArgument renewModel = new ReschedulingArgument();
@@ -159,11 +169,14 @@
             renewModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
             renewModel.RescheduleIn = true;
 
-            try {
+            try
+            {
                 ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
                 model.ReResultIn = result.Value;
                 Log.Debug(string.Format("IN=={0}, {1}", renewModel, result.Value));
-            } catch (Exception editex) {
+            }
+            catch (Exception editex)
+            {
                 Log.Error(editex);
             }
 
@@ -171,11 +184,14 @@
             {
                 renewModel.RescheduleIn = false;
                 renewModel.PaymentPerInterval = 0m;
-                try {
+                try
+                {
                     ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, renewModel);
                     model.ReResultOut = result.Value;
                     Log.Debug(string.Format("OUT=={0}, {1}", renewModel, result.Value));
-                } catch (Exception editex) {
+                }
+                catch (Exception editex)
+                {
                     Log.Error(editex);
                 }
             }
@@ -211,46 +227,22 @@
 
         [Ajax]
         [HttpPost]
-        public JsonResult RescheduleLoan(
-            int loanID,
+        public JsonResult RescheduleLoan(int loanID,
             DbConstants.RepaymentIntervalTypes? intervalType,  // month/week
             decimal? AmountPerInterval, // for "out" reschedule
-            bool? stopAutoCharge, // "flag" - checkbox
-            bool? stopLateFee, // checkbox
-            bool? freezeInterest, //  checkbox
-            int? stopAutoChargePayment,
-            DateTime? lateFeeStartDate,
-            DateTime? lateFeeEndDate,
-            DateTime? freezeStartDate,
-            DateTime? freezeEndDate,
             bool? rescheduleIn,
             bool save = false
             ){
 
             ReschedulingActionResult result = null;
 
-            try{
+            try
+            {
                 Loan loan = this._loans.Get(loanID);
                 DateTime now = DateTime.UtcNow;
 
-                //  loan options
-                if (save){
-                    if (freezeInterest == true){
-                        loan.InterestFreeze.Add(new LoanInterestFreeze
-                        {
-                            Loan = loan,
-                            StartDate = freezeStartDate,
-                            EndDate = freezeEndDate,
-                            InterestRate = 0,
-                            ActivationDate = DateTime.UtcNow,
-                            DeactivationDate = null
-                        });
-                        this._loans.SaveOrUpdate(loan);
-                        this.session.Flush();
-                    }
-                }//  ### loan options
-
-                if (rescheduleIn != null){
+                if (rescheduleIn != null)
+                {
                     ReschedulingArgument reModel = new ReschedulingArgument();
                     reModel.LoanType = loan.GetType().AssemblyQualifiedName;
                     reModel.LoanID = loanID;
@@ -265,79 +257,292 @@
                     // re strategy
                     result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
 
-					Log.Debug(string.Format("RescheduleLoanSubmitted: {0}, {1}", reModel, result.Value));
-                }
-
-                //  loan options
-                if (save){
-					Log.Debug(string.Format("before: {0}", loan));
-                    this.session.Refresh(loan);
-					Log.Debug(string.Format("after: {0}", loan));
-                    UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
+                    Log.Debug(string.Format("RescheduleLoanSubmitted: {0}, {1}", reModel, result.Value));
                 }
             }
             catch (Exception editex){
                 Log.Error("rescheduling editor EXCEPTION: " + editex);
             }
-
             return result == null ? null : Json(result.Value);
         }
 
-        [NonAction]
-        private void UpdateLoanOptions(Loan loan, bool? stopAutoCharge, bool? stopLateFee, int? stopAutoChargePayment, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate, DateTime now)
+        // should be removed
+        //[NonAction]
+        //private void UpdateLoanOptions(Loan loan, bool? stopAutoCharge, bool? stopLateFee, int? stopAutoChargePayment, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate, DateTime now)
+        //{
+        //    if (stopAutoCharge != null || stopLateFee != null)
+        //    {
+        //        LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
+
+        //        if (stopLateFee == true)
+        //        {
+        //            options.AutoLateFees = false;
+        //            options.StopLateFeeFromDate = lateFeeStartDate;
+        //            options.StopLateFeeToDate = lateFeeEndDate;
+        //        }
+        //        else
+        //        {
+        //            options.AutoLateFees = true;
+        //            options.StopLateFeeFromDate = null;
+        //            options.StopLateFeeToDate = null;
+        //        }
+
+        //        if (stopAutoCharge == true)
+        //        {
+        //            options.AutoPayment = false;
+        //            DateTime? stopAutoChargeDate = null;
+
+        //            if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value > 0)
+        //            {
+        //                var loanSchedulesOrdered = loan.Schedule.Where(x => x.Date > now).OrderBy(x => x.Date).ToArray();
+        //                if (loanSchedulesOrdered.Any() && loanSchedulesOrdered.Count() >= stopAutoChargePayment.Value)
+        //                {
+        //                    stopAutoChargeDate = loanSchedulesOrdered[stopAutoChargePayment.Value - 1].Date.Date.AddDays(1);
+        //                }
+        //                else
+        //                {
+        //                    Log.ErrorFormat("Stop payment after {0} payments is impossible, new schedule have only {1} payments left. LoanID {2}",
+        //                        stopAutoChargePayment.Value, loanSchedulesOrdered.Count(), loan.Id);
+        //                }
+        //            }
+
+        //            if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value == 0)
+        //            {
+        //                stopAutoChargeDate = now.Date;
+        //            }
+
+        //            options.StopAutoChargeDate = stopAutoChargeDate;
+        //        }
+        //        else
+        //            options.AutoPayment = true;
+
+        //        this.loanOptionsRepository.SaveOrUpdate(options);
+        //        Log.Debug(string.Format("BEFOREFLUSH: {0}", loan));
+        //        this.session.Flush();
+        //         TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
+        //    }
+        //}
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult SaveLateFeeOption(int id, DateTime? lateFeeStartDate, DateTime? lateFeeEndDate)
         {
-            if (stopAutoCharge != null || stopLateFee != null)
-            {
-                LoanOptions options = this.loanOptionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
+            LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-                if (stopLateFee == true)
-                {
-                    options.AutoLateFees = false;
-                    options.StopLateFeeFromDate = lateFeeStartDate;
-                    options.StopLateFeeToDate = lateFeeEndDate;
-                }
-                else
-                {
-                    options.AutoLateFees = true;
-                    options.StopLateFeeFromDate = null;
-                    options.StopLateFeeToDate = null;
-                }
+            options.AutoLateFees = true;
+            options.StopLateFeeFromDate = lateFeeStartDate;
+            options.StopLateFeeToDate = lateFeeEndDate;
 
-                if (stopAutoCharge == true)
-                {
-                    options.AutoPayment = false;
-                    DateTime? stopAutoChargeDate = null;
+            this.loanOptionsRepository.SaveOrUpdate(options);
 
-                    if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value > 0)
-                    {
-                        var loanSchedulesOrdered = loan.Schedule.Where(x => x.Date > now).OrderBy(x => x.Date).ToArray();
-                        if (loanSchedulesOrdered.Any() && loanSchedulesOrdered.Count() >= stopAutoChargePayment.Value)
-                        {
-                            stopAutoChargeDate = loanSchedulesOrdered[stopAutoChargePayment.Value - 1].Date.Date.AddDays(1);
-                        }
-                        else
-                        {
-                            Log.ErrorFormat("Stop payment after {0} payments is impossible, new schedule have only {1} payments left. LoanID {2}",
-                                stopAutoChargePayment.Value, loanSchedulesOrdered.Count(), loan.Id);
-                        }
-                    }
-
-                    if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value == 0)
-                    {
-                        stopAutoChargeDate = now.Date;
-                    }
-
-                    options.StopAutoChargeDate = stopAutoChargeDate;
-                }
-                else
-                    options.AutoPayment = true;
-				
-                this.loanOptionsRepository.SaveOrUpdate(options);
-				Log.Debug(string.Format("BEFOREFLUSH: {0}", loan));
-                this.session.Flush();
-                // TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
-            }
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+            model.Options = this.loanOptionsRepository.GetByLoanId(id);
+            RescheduleSetmodel(model, this._loans.Get(id));
+            return Json(model);
         }
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult RemoveLateFeeOption(int id)
+        {
+            LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
+
+            options.AutoLateFees = false;
+            options.StopLateFeeFromDate = null;
+            options.StopLateFeeToDate = null;
+
+            this.loanOptionsRepository.SaveOrUpdate(options);
+
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+            model.Options = this.loanOptionsRepository.GetByLoanId(id);
+            RescheduleSetmodel(model, this._loans.Get(id));
+            return Json(model);
+        }
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult SaveAutoChargesOption(int id, int? stopAutoChargePayment)
+        {
+            DateTime now = DateTime.UtcNow;
+            LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
+            var loan = this._loans.Get(id);
+
+            options.AutoPayment = false;
+
+            if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value > 0){
+
+                var loanSchedulesOrdered = loan.Schedule.Where(x => x.Date > now).OrderBy(x => x.Date).ToArray();
+                if (loanSchedulesOrdered.Any() && loanSchedulesOrdered.Count() >= stopAutoChargePayment.Value){
+                    options.AutoPayment = true;
+                    options.StopAutoChargeDate = loanSchedulesOrdered[stopAutoChargePayment.Value - 1].Date.Date.AddDays(1);
+                }
+                else{
+                    Log.ErrorFormat("Stop payment after {0} payments is impossible, new schedule have only {1} payments left. LoanID {2}",
+                        stopAutoChargePayment.Value, loanSchedulesOrdered.Count(), loan.Id);
+                }
+
+                if (stopAutoChargePayment.Value == 0){
+                    options.AutoPayment = true;
+                    options.StopAutoChargeDate = now.Date;
+                }
+            } 
+            this.loanOptionsRepository.SaveOrUpdate(options);
+
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+            model.Options = this.loanOptionsRepository.GetByLoanId(id);
+            RescheduleSetmodel(model, loan);
+            return Json(model);
+        }
+
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult RemoveAutoChargesOption(int id)
+        {
+            LoanOptions loanOptions = this.loanOptionsRepository.GetByLoanId(id);
+
+            loanOptions.AutoPayment = true;
+            loanOptions.StopAutoChargeDate = null;
+            this.loanOptionsRepository.SaveOrUpdate(loanOptions);
+
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+            model.Options = this.loanOptionsRepository.GetByLoanId(id);
+            RescheduleSetmodel(model, this._loans.Get(id));
+            return Json(model);
+        }
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult SaveFreezeInterval(int loanID, DateTime? freezeStartDate, DateTime? freezeEndDate)
+        {
+            Loan loan = this._loans.Get(loanID);
+            loan.InterestFreeze.Add(new LoanInterestFreeze{
+                Loan = loan,
+                StartDate = freezeStartDate,
+                EndDate = freezeEndDate,
+                InterestRate = 0,
+                ActivationDate = DateTime.UtcNow,
+                DeactivationDate = null
+            });
+
+            this._loans.SaveOrUpdate(loan);
+     
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(loanID));
+            model.Options = this.loanOptionsRepository.GetByLoanId(loanID);
+            return Json(model);      
+        }
+
+        [Ajax]
+        [HttpPost]
+        [Transactional]
+        public JsonResult RemoveFreezeInterval(int id, int intervalid)
+        {
+            Loan loan = this._loans.Get(id);
+            LoanInterestFreeze lif = loan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
+            
+            if (lif != null)
+                lif.DeactivationDate = DateTime.UtcNow;
+            this._loans.SaveOrUpdate(loan);
+
+            Log.DebugFormat("remove freeze interest for customer {0}", loan.Customer.Id);
+
+            var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+            calc.GetState();
+
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
+
+            model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
+
+            //RescheduleSetmodel(model, loan);
+
+            return Json(model);
+        } // RemoveFreezeInterval
+
+       /* [Ajax]
+        [HttpPost]
+        public JsonResult RescheduleLoan(
+            int loanID,
+            DbConstants.RepaymentIntervalTypes? intervalType,  // month/week
+            decimal? AmountPerInterval, // for "out" reschedule
+            bool? stopAutoCharge, // "flag" - checkbox
+            bool? stopLateFee, // checkbox
+            bool? freezeInterest, //  checkbox
+            int? stopAutoChargePayment,
+            DateTime? lateFeeStartDate,
+            DateTime? lateFeeEndDate,
+            DateTime? freezeStartDate,
+            DateTime? freezeEndDate,
+            bool? rescheduleIn,
+            bool save = false
+            )
+        {
+
+            ReschedulingActionResult result = null;
+
+            try
+            {
+                Loan loan = this._loans.Get(loanID);
+                DateTime now = DateTime.UtcNow;
+
+                //  loan options
+                if (save)
+                {
+                    if (freezeInterest == true)
+                    {
+                        loan.InterestFreeze.Add(new LoanInterestFreeze
+                        {
+                            Loan = loan,
+                            StartDate = freezeStartDate,
+                            EndDate = freezeEndDate,
+                            InterestRate = 0,
+                            ActivationDate = DateTime.UtcNow,
+                            DeactivationDate = null
+                        });
+                        this._loans.SaveOrUpdate(loan);
+                        this.session.Flush();
+                    }
+                }//  ### loan options
+
+                if (rescheduleIn != null)
+                {
+                    ReschedulingArgument reModel = new ReschedulingArgument();
+                    reModel.LoanType = loan.GetType().AssemblyQualifiedName;
+                    reModel.LoanID = loanID;
+                    reModel.SaveToDB = save;
+                    reModel.ReschedulingDate = now;
+                    reModel.ReschedulingRepaymentIntervalType = (DbConstants.RepaymentIntervalTypes)intervalType;
+                    reModel.RescheduleIn = (bool)rescheduleIn;
+
+                    if (reModel.RescheduleIn == false) // "out"
+                        reModel.PaymentPerInterval = AmountPerInterval;
+
+                    // re strategy
+                    result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, loan.Customer.Id, reModel);
+
+                    Log.Debug(string.Format("RescheduleLoanSubmitted: {0}, {1}", reModel, result.Value));
+                }
+
+                //  loan options
+                if (save)
+                {
+                    Log.Debug(string.Format("before: {0}", loan));
+                    this.session.Refresh(loan);
+                    Log.Debug(string.Format("after: {0}", loan));
+                    UpdateLoanOptions(loan, stopAutoCharge, stopLateFee, stopAutoChargePayment, lateFeeStartDate, lateFeeEndDate, now);
+                }
+            }
+            catch (Exception editex)
+            {
+                Log.Error("rescheduling editor EXCEPTION: " + editex);
+            }
+
+            return result == null ? null : Json(result.Value);
+        }*/
 
         //[Ajax]
         //[HttpPost]
@@ -368,65 +573,5 @@
 
         //	return Json(model);
         //} // AddFreezeInterval
-
-        [Ajax]
-        [HttpPost]
-		//[Transactional]
-        public JsonResult RemoveFreezeInterval(int id, int intervalid)
-        {
-            Loan oLoan = this._loans.Get(id);
-            LoanInterestFreeze lif = oLoan.InterestFreeze.FirstOrDefault(v => v.Id == intervalid);
-            if (lif != null)
-                lif.DeactivationDate = DateTime.UtcNow;
-            this._loans.SaveOrUpdate(oLoan);
-            //TODO update loan (apply remove freeze)
-            Log.DebugFormat("apply loan modifications for customer {0}", oLoan.Customer.Id);
-
-            var calc = new LoanRepaymentScheduleCalculator(oLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-            calc.GetState();
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(oLoan);
-
-            model.Options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
-
-	        RescheduleSetmodel(model, oLoan);
-
-			//ReschedulingArgument reModel = new ReschedulingArgument();
-			//reModel.LoanType = oLoan.GetType().AssemblyQualifiedName;
-			//reModel.LoanID = id;
-			//reModel.SaveToDB = false;
-			//reModel.ReschedulingDate = DateTime.UtcNow;
-			//reModel.ReschedulingRepaymentIntervalType = DbConstants.RepaymentIntervalTypes.Month;
-			//reModel.RescheduleIn = true;
-
-			//try
-			//{
-			//	ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
-			//	model.ReResultIn = result.Value;
-			//	//model.ReschedulingINNotification = result.Value.Error;
-			//	Log.Debug(string.Format("IN=={0}, {1}", reModel, result.Value));
-			//}
-			//catch (Exception editex)
-			//{
-			//	Log.Error(editex);
-			//}
-
-			//reModel.RescheduleIn = false;
-			//reModel.PaymentPerInterval = 0m;
-			//try
-			//{
-			//	ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
-			//	model.ReResultOut = result.Value;
-			//	//model.OutsideAmount = reModel.PaymentPerInterval;
-			//	//model.DefaultPaymentPerInterval = result.Value.DefaultPaymentPerInterval;
-			//	Log.Debug(string.Format("OUT=={0}, {1}", reModel, result.Value));
-			//}
-			//catch (Exception editex)
-			//{
-			//	Log.Error(editex);
-			//}
-
-
-            return Json(model);
-        } // RemoveFreezeInterval
     }
 }

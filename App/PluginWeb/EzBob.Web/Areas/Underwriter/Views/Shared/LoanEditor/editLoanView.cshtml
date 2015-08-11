@@ -83,20 +83,21 @@
 
                 <div class="row">
                     <span class="float_left">
-                        <label class="checkbox-inline"><input type="checkbox" name="automatic-charges" id="automatic-charges" value="">Stop automatic charges after&nbsp;</label>
+                        Stop automatic charges after
                     </span>
                     <input class="form-control input-width float_left" type="text" value="0" id="charges-payments" name="charges-payments" style="margin-top: -7px;margin-left: 9px;">
                     <span class="float_left">
                         &nbsp;payments.&nbsp;
                     </span>
+                    <button class="btn btn-primary pull-left" id="charges-save-btn" style="  margin-right: 10px;">Save</button>
                 </div>
                 <div class="row" style="margin-bottom: 14px;">
-                    <span style="display: none; font-weight: bold; margin-left: 22px;" id="stop-charges">Auto charges are <span id="stop-charges-date"></span></span>
+                    <span style="display: none; font-weight: bold; margin-left: 22px;" id="stop-charges"><button class="btn btn-primary btn-mini remove-auto-charges"><i class="fa fa-trash-o"></i></button>Auto charges are <span id="stop-charges-date"></span></span>
                 </div>
 
                 <div class="row" style="margin-bottom: 20px;">
                     <span class="float_left">
-                        <label class="checkbox-inline"><input type="checkbox" id="fees-calculation" name="fees-calculation" value="">Stop late fees calculation from&nbsp;</label>
+                        Stop late fees calculation from
                     </span>
                     <span class="float_left" style="margin-top: -5px;">
                         <div class="input-group">
@@ -113,11 +114,21 @@
                             <input class="form-control input-width" type="text" id="fees-calendar-to">
                         </div>
                     </span>
+                    <button class="btn btn-primary pull-left" id="fees-save-btn" style="  margin-right: 10px;">Save</button>
+                </div>
+                <div class="row" id="fees-dates" style="margin-bottom: 20px; display: none;">
+                    <div class="row">
+                        <button class="btn btn-primary btn-mini" id="fees-delete-btn"><i class="fa fa-trash-o"></i></button>
+                        This loan's fee is stoped from
+                        <span style="font-weight: bold" id="fees-date-from"></span>
+                        until
+                        <span style="font-weight: bold" id="fees-date-to"></span>
+                    </div>
                 </div>
 
                 <div class="row" style="margin-bottom: 20px;">
                     <span class="float_left">
-                        <label class="checkbox-inline"><input type="checkbox" id="intrest-checkbox" name="intrest-checkbox" value="">Stop intrest calculation from&nbsp;</label>
+                        Stop intrest calculation from
                     </span>
                     <span class="float_left" style="margin-left: 13px;">
                         <div class="input-group" style="margin-top: -5px;">
@@ -134,8 +145,8 @@
                             <input class="form-control input-width" type="text" id="intrest-calendar-to"><br />
                         </div>
                     </span>
+                    <button class="btn btn-primary pull-left" id="intrest-save-btn" style="  margin-right: 10px;">Save</button>
                 </div>
-
                 <div class="row" style="margin-top: -39px; margin-left: 20px;">
                     <%if(hasFreezInterest===true){ %>
                     <br />
