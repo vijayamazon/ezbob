@@ -14,27 +14,52 @@
 			.Add("~/Content/css/paypoint-template.css")				
 			.MvcRender("~/Content/css/min/paypoint_#.css");
 		} // RenderPaypointTemplateCss
-
-		public static MvcHtmlString RenderCustomerCss() {
-			return Bundle.Css()
+        public static MvcHtmlString RenderCustomerCss()
+        {
+           return Bundle.Css()
 				//libs
-				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
-				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
-				.Add("~/Content/css/lib/bootstrap2.css")
-				.Add("~/Content/css/lib/dropzone.css")
-				.Add("~/Content/css/lib/font-awesome.min.css")
-				.Add("~/Content/css/lib/notifications.css")
-				.Add("~/Content/css/lib/coin-slider-styles.css")
-				.Add("~/Content/css/lib/chosen.css")
+			
+		
+                .MvcRender("~/Content/css/min/customer_#.css");
+        }//RenderCustomerCss
+        public static MvcHtmlString RenderEverlineCustomerCss()
+        {
+            return Bundle.Css()
+                //libs
+                .Add("~/Content/css/lib/dropzone.css")
+                .Add("~/Content/css/lib/font-awesome.min.css")
+                .Add("~/Content/css/lib/notifications.css")
+                .Add("~/Content/css/lib/coin-slider-styles.css")
+                .Add("~/Content/css/lib/chosen.css")
 
+                //common
+                .Add("~/Content/css/profile-ny2015scratch.css")
+                .Add("~/Content/css/valentine2015scratch.css")
+                .Add("~/Content/css/easter2015scratch.css")
+                //custom css
+                .Add("~/Content/css/Everlinecustomer.css")
+                .MvcRender("~/Content/css/min/customereverline_#.css");
+                
+        }// RenderEverlineCustomerCss
+		public static MvcHtmlString RenderEzbobCustomerCss() {
+			return Bundle.Css()
+                //libs
+                .Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+                .Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+                .Add("~/Content/css/lib/bootstrap2.css")
+                .Add("~/Content/css/lib/dropzone.css")
+                .Add("~/Content/css/lib/font-awesome.min.css")
+                .Add("~/Content/css/lib/notifications.css")
+                .Add("~/Content/css/lib/coin-slider-styles.css")
+                .Add("~/Content/css/lib/chosen.css")
 				//custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/customer.css")
 				.Add("~/Content/css/profile-ny2015scratch.css")
 				.Add("~/Content/css/valentine2015scratch.css")
 				.Add("~/Content/css/easter2015scratch.css")
-				.MvcRender("~/Content/css/min/customer_#.css");
-		} // RenderCustomerCss
+				.MvcRender("~/Content/css/min/customerezbob_#.css");
+		} // RenderEzbobCustomerCss
 
 		public static MvcHtmlString RenderEzbobCss() {
 			return Bundle.Css()

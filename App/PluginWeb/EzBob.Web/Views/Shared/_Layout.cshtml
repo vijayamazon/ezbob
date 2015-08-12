@@ -50,15 +50,19 @@
 	@{ Html.RenderPartial("_FavIcon"); }
 
 	@BundleHelper.RenderPrintCss()
-	@BundleHelper.RenderCustomerCss()
+	@*@BundleHelper.RenderCustomerCss()*@
 
-	@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline) {
+	@if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline)
+    {
+        @BundleHelper.RenderEverlineCustomerCss()
 		@BundleHelper.RenderEverlineCss()
+        
 	} else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
 		@BundleHelper.RenderAlibabaCss()
 		@BundleHelper.RenderEzbobCss()
 	} else {
-		@BundleHelper.RenderEzbobCss()
+        @BundleHelper.RenderEzbobCustomerCss()
+		@BundleHelper.RenderEzbobCss() 
 	}
 
 	@RenderSection("css", false)

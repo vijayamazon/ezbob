@@ -1,4 +1,7 @@
-﻿@using Integration.ChannelGrabberConfig
+﻿@using System
+@using System.Collections.Generic
+@using System.Web
+@using Integration.ChannelGrabberConfig
 @model dynamic
 
 @foreach (KeyValuePair<string, VendorInfo> vip in Configuration.Instance.PureVendors)

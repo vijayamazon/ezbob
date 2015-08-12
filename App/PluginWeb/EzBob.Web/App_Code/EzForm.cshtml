@@ -3,8 +3,12 @@
 @using System.Web
 @using System.Web.WebPages
 @using ConfigManager
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@using EZBob.DatabaseLib.Model.Database.UserManagement
+
 @*Renders select*@
-@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
+@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "" )
 {
     <div class="form-group">
         <label class="control-label" for="@id">@caption</label>
@@ -36,93 +40,239 @@
     <div class="control-group">
         <div class="controls">
             <label for="@id" class="editor-label-with-checkbox checkbox">
-                <input id="@id" name="@id" type="checkbox" value="true"/>@caption</label>
+                <input id="@id" name="@id" type="checkbox" value="true" />@caption
+            </label>
         </div>
     </div>
 }
+@helper SelectWizard(EzSelectModel selectProp, CustomerOriginEnum origin)
+{
+    var identificator = new HtmlString(selectProp.Id);
+    if (origin != CustomerOriginEnum.everline) {
 
-@helper InputText(string id, string caption, string value = "", string type = "text", string cls = "", bool isDisabled = false, bool isRequired = false, bool statusIcon = false, int tabIndex = 0, int maxLength = 0, string uiEventControlID = "")
+
+        <div class="form_field_container">
+            <label class="attardi-input">
+                <span>@selectProp.Caption</span>
+                @SelectTag(selectProp,identificator)
+                @if (selectProp.StatusIcon) {
+                    var sId = identificator + "Image";
+                    var sReq = selectProp.IsRequired ? "required" : "";
+                    <img id="@sId" class="field_status @sReq"/>
+                } else if (selectProp.IsRequired) {
+                    <span class="required">*</span>
+                }
+            </label>
+        </div>
+    }
+    else
+    {
+        <div class="form-element">
+            <label class="input-title" for="@identificator">@selectProp.Caption</label>
+            <div class="input-wrapper">
+                <div class="select">
+                    @SelectTag(selectProp,identificator)
+                    <div class="error-wrap"></div>
+                </div>
+
+            </div>
+        </div>
+    }
+
+}
+@helper SelectTag(EzSelectModel selectProp, HtmlString identificator)
+{
+    <select name="@identificator"
+            id="@identificator"
+            class="@selectProp.Cls"
+            ui-event-control-id="@selectProp.UiEventControlID"
+            @if (selectProp.IsDisabled) {  @: disabled="disabled"
+                                                     }
+            @if (selectProp.TabIndex > 0) { @: tabindex="@selectProp.TabIndex"
+                                                     }>
+        <option value=""></option>
+        @if (selectProp.ListItems != null)
+        {
+            foreach (var item in selectProp.ListItems)
+            {
+                <option value="@item.Item1">@item.Item2</option>
+            } // foreach
+        } // if
+    </select>
+}
+@helper InputText(
+string id, 
+string caption, 
+string value = "", 
+string type = "text", 
+string cls = "", 
+bool isDisabled = false, 
+bool isRequired = false,
+bool statusIcon = false,
+int tabIndex = 0,
+int maxLength = 0, 
+string uiEventControlID = "",
+string autoCorrect = "", 
+string autoCapitalize = "", 
+string formFieldID = ""  )
 {
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
-
     
-    <div class="form_field_container control-group">
+
+    <div @( !string.IsNullOrWhiteSpace(formFieldID) ? "id=" + formFieldID : "")  class="form_field_container control-group ">
         <div class="controls">
             <label class="attardi-input">
                 <span>@caption</span>
-                <input 
-                    type="@type" 
-                    name="@identificator" 
-                    id="@identificator" 
-                    class="@cls" 
-                    value="@val"
-                    @if (isDisabled)
-                    { 
-                        @:disabled="disabled"
-                    } 
-                    @if (tabIndex > 0)
-                    {
-                        @:tabindex="@tabIndex"
-                    }
-                    @if (maxLength > 0)
-                    {
-                        @:maxlength="@maxLength"
-                    }
-                    @if (!string.IsNullOrWhiteSpace(uiEventControlID))
-                    {
-                        @:ui-event-control-id="@uiEventControlID"
-                    }
-                    />
+                <input type="@type"
+                       name="@identificator"
+                       id="@identificator"
+                       class="@cls"
+                       value="@val"
+                       @if (isDisabled) {  @: disabled="disabled"
+                       }
+                       @if (tabIndex > 0) { @: tabindex="@tabIndex"
+                       }
+                       @if (maxLength > 0) { @: maxlength="@maxLength"
+                       }
+                       @if (!string.IsNullOrWhiteSpace(autoCorrect)) { @: autocorrect="@autoCorrect"
+                       }
+                       @if (!string.IsNullOrWhiteSpace(autoCapitalize)) { @: autocapitalize="@autoCapitalize"
+                       }
+                       @if (!string.IsNullOrWhiteSpace(uiEventControlID)) { @: ui-event-control-id="@uiEventControlID"
+                       }
+                 />
+
+
+
                 @if (statusIcon)
                 {
                     var sId = identificator + "Image";
                     var sReq = isRequired ? "required" : "";
-                    <img id="@sId" class="field_status @sReq"/>
+                    <img id="@sId" class="field_status @sReq" />
                 }
                 else if (isRequired)
                 {
                     <span class="required">*</span>
                 }
             </label>
+                @if (@type.Equals("password"))
+                {
+                    <p id="message" class="help-block"></p>
+                }
         </div>
     </div>
 }
 
+
+@helper InputTextWizard(EzInputBuilder inputProp, CustomerOriginEnum origin)
+
+{
+        var identificator = new HtmlString(inputProp.Id);
+    if (origin != CustomerOriginEnum.everline) {
+        <div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "") class="form_field_container control-group @(inputProp.ToHide ? "hide" : "")">
+            <div class="controls">
+                <label class="attardi-input">
+                    @if (!string.IsNullOrWhiteSpace(inputProp.InnerMessage)) {
+                        <div class="inner-input-message-container">
+                            <label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
+                        </div>
+                    }
+                    <span>@inputProp.Caption</span>
+                   @InputTextTag(inputProp, identificator)
+                    @if (inputProp.StatusIcon)
+                    {
+                    var sId = identificator + "Image";
+                    var sReq = inputProp.IsRequired ? "required" : "";
+                    <img id="@sId" class="field_status @sReq" />
+                    }
+                    else if (inputProp.IsRequired)
+                    {
+                    <span class="required">*</span>
+                    }
+                    @if (@inputProp.Button != null) {
+                        <button id="@inputProp.Button.Id" class="@inputProp.Button.Cls" type="button" ui-event-control-id="@inputProp.Button.UiEventControlID">@inputProp.Button.Caption</button>
+                    }
+                </label>
+                @if (@inputProp.Type.Equals("password")) {
+                    <p id="message" class="help-block"></p>
+                }
+
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="form-element">
+            <label class="input-title" for="@identificator">@inputProp.Caption</label>
+            <div class="input-wrapper">
+                @InputTextTag(inputProp, identificator)
+                <div class="error-wrap"></div>
+            </div>
+        </div>
+    }
+
+}
+
+
+@helper InputTextTag(EzInputBuilder inputProp, HtmlString identificator)
+{   
+    var val = new HtmlString(inputProp.Value);
+  
+        <input type="@inputProp.Type"
+               name="@identificator"
+               id="@identificator"
+               class="@inputProp.Cls"
+               value="@inputProp.Value"
+               @if (inputProp.IsDisabled) {  @: disabled="disabled"
+                                                                                                      }
+               @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
+                                                                                                      }
+               @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
+                                                                                                      }
+               @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
+                                                                                                      }
+               @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
+                                                                                                      }
+               @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
+                                                                                                      } />
+
+   
+}
 @helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
-	var identificator = new HtmlString(id);
+    var identificator = new HtmlString(id);
 
-	var sInput = string.Format(
-		"<input id=\"{0}\" name=\"{0}\" type=text value=\"{1}\" class=\"{2} form-control\" {3}>",
-		id, value, cls, isDisabled ? "disabled=disabled" : ""
-	);
+    var sInput = string.Format(
+        "<input id=\"{0}\" name=\"{0}\" type=text value=\"{1}\" class=\"{2} form-control\" {3}>",
+        id, value, cls, isDisabled ? "disabled=disabled" : ""
+    );
 
-	<div class="form-group">
-		<label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
-		<div class="controls">@{ page.WriteLiteral(sInput); }</div>
-	</div>
+    <div class="form-group">
+        <label for="@identificator" class="control-label">@(new HtmlString(caption))</label>
+        <div class="controls">@{ page.WriteLiteral(sInput); }</div>
+    </div>
 }
 
 @helper Password(string id, string caption, string value = "", string cls = "", bool isDisabled = false, bool isRequired = true, bool statusIcon = false, string uiEventControlID = "")
 {
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
-    
+
     <div class="form_field_container control-group">
         <div class="controls">
             <label class="attardi-input">
                 <span>@caption</span>
                 <input 
                     type="password" 
-                    name="@identificator" 
-                    id="@identificator" 
-                    class="@cls" 
-                    value="@val"
+                       name="@identificator"
+                       id="@identificator"
+                       class="@cls"
+                       value="@val"
                     @if (isDisabled)
                     { 
                         @:disabled="disabled"
-                    } 
+                                                                                                                                       }
                     @if (!string.IsNullOrWhiteSpace(uiEventControlID))
                     {
                         @:ui-event-control-id="@uiEventControlID"
@@ -178,7 +328,7 @@
     <div class="control-group @divClass">
         <label for="@id" class="control-label">@caption</label>
         <div class="controls">
-            <input class="input-small" id="@id" name="@id"  type="text" value="@value" />
+            <input class="input-small" id="@id" name="@id" type="text" value="@value" />
         </div>
     </div>
 }
@@ -236,7 +386,7 @@
     <tr>
         @foreach (var s in arguments)
         {
-            <td>@s</td>	
+            <td>@s</td>
         }
     </tr>
 }
@@ -268,10 +418,10 @@
 
     if (oByPostcode != null)
     { // !!! intentional inline style in the following line
-    <div style="display: none;" class="dummy_address_search_result">
-        <div class="by_postcode">@oByPostcode</div>
-        <div class="by_id">@oById</div>
-    </div>
+        <div style="display: none;" class="dummy_address_search_result">
+            <div class="by_postcode">@oByPostcode</div>
+            <div class="by_id">@oById</div>
+        </div>
     }
 }
 
@@ -289,11 +439,11 @@
     var dayIdentificator = new HtmlString(identificator + "Day");
     var monthIdentificator = new HtmlString(identificator + "Month");
     var yearIdentificator = new HtmlString(identificator + "Year");
-    
+
     var sDayUiEventControlID = "";
     var sMonthUiEventControlID = "";
     var sYearUiEventControlID = "";
-    
+
     if (!string.IsNullOrWhiteSpace(uiEventControlID))
     {
         sDayUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_day";
@@ -306,14 +456,14 @@
     var yearSelect = string.Format("<select id='{0}' name='year' class='selectheight form_field form_field_date {1}' empty_value='-' {2}>", yearIdentificator, css, sYearUiEventControlID);
     const string endSelect = "</select>";
     var hidden = string.Format("<input id='{0}' class='{0} {1} hidden-field {2} ' style='display: none !important' name='{0}'/>", identificator, validationClass, hiddenFieldAuxClass);
-    
+
     <div class="control-group form_field_container">
         <div class="fs16">@title</div>
         <div class="controls ezDateTime">
             <label class="attardi-input @labelCss">
                 <span>Day</span>
                 @{ page.WriteLiteral(daySelect); }
-                   
+
                 <option value="-"></option>
                 @for (var i = 1; i <= 31; i++)
                 {
@@ -321,13 +471,13 @@
                         @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
                         {
                             @:selected="selected"
-                        }
+                                                                                                                                                                    }
                         value="@i"
                         >@i</option>
                 }
-                 
+
                 @{ page.WriteLiteral(endSelect); }
-                 
+
             </label>
 
             <label class="attardi-input @labelCss">
@@ -340,7 +490,7 @@
                         @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
                         {
                             @:selected="selected"
-                        }
+                                                                                                                                                                    }
                         value="@i"
                         >@month[i - 1]</option>
                 }
@@ -360,14 +510,14 @@
                             @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
                             {
                                 @:selected="selected"
-                            }
+                                                                                                                                                                                            }
                             value="@i"
                             >@i</option>
                     }
                 }
                 @{ page.WriteLiteral(endSelect); }
             </label>
-            
+
             @{ page.WriteLiteral(hidden); }
 
             @if (statusIcon)
@@ -375,7 +525,7 @@
                 var sReq = required ? "required" : "";
                 var sId = new HtmlString(identificator + "Image");
                 page.WriteLiteral(string.Format("<img id='{0}' class='field_status {1}'/>", sId, sReq));
-                
+
             }
         </div>
     </div>
@@ -393,25 +543,25 @@
             <select name="day" style="width: 33%;" class="form-control selectheight">
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 31; i++)
-                   {
+                 {
                     <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
                             {
                                    @:selected="selected"
-                               }
+                                                                                                                                                                           }
                         value="@i">@i</option>
-                   } }
+                 } }
             </select>
 
             <select name="month" style="width: 32%;" class="form-control selectheight">
                 <option value="-">-</option>
                 @{ for (var i = 1; i <= 12; i++)
-                   {
+                 {
                     <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
                             {
                                    @:selected="selected"
-                               }
+                                                                                                                                                                           }
                            value="@i">@month[i - 1]</option>
-                   } 
+                 }
                 }
             </select>
 
@@ -425,7 +575,7 @@
                     <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
                             {
                                     @:selected="selected"
-                                }
+                                                                                                                                                                                                }
                             value="@i">@i</option>
                     }
                 }
@@ -450,11 +600,11 @@
                 {
                     if (i == defVal || v.Key == defStrVal)
                     {
-                    <option selected="selected" value="@v.Key">@v.Value</option>
+                        <option selected="selected" value="@v.Key">@v.Value</option>
                     }
                     else
                     {
-                    <option value="@v.Key">@v.Value</option>
+                        <option value="@v.Key">@v.Value</option>
                     }
                     i++;
                 }
@@ -472,11 +622,11 @@
         {
             if (i == defVal || v.Key == defStrVal)
             {
-            <option selected="selected" value="@v.Key">@v.Value</option>
+                <option selected="selected" value="@v.Key">@v.Value</option>
             }
             else
             {
-            <option value="@v.Key">@v.Value</option>
+                <option value="@v.Key">@v.Value</option>
             }
             i++;
         }
@@ -484,7 +634,7 @@
 }
 
 @helper Captcha(string captchaType, string cls = "", string sId = "captcha")
-{	 
+{
     <div class="control-group">
         <div class="captcha">
             <div id="@sId">
@@ -514,7 +664,7 @@
     <tr>
         @foreach (var s in arguments)
         {
-            <td>@(new HtmlString(s))</td>	
+            <td>@(new HtmlString(s))</td>
         }
     </tr>
 }

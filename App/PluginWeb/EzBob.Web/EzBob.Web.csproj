@@ -230,6 +230,9 @@
     <Compile Include="Areas\Underwriter\Models\BugModel.cs" />
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
+    <Compile Include="Infrastructure\Html\EzButtonModel.cs" />
+    <Compile Include="Infrastructure\Html\EzInputBuilder.cs" />
+    <Compile Include="Infrastructure\Html\EzSelectModel.cs" />
     <Compile Include="Infrastructure\UiCustomerOrigin.cs" />
     <Compile Include="Models\CompanyScoreModelBuilder.cs" />
     <Compile Include="Models\CreatePasswordModel.cs" />
@@ -474,6 +477,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\Everlinecustomer.css" />
     <Content Include="Content\css\ezbob.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.svg" />

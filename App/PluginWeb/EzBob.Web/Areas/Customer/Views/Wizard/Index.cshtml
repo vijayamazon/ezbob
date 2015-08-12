@@ -3,6 +3,7 @@
 @using EZBob.DatabaseLib
 @using EzBob.CommonLib
 @using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @using StructureMap
 @model EzBob.Web.Models.WizardModel
 @{
@@ -24,7 +25,11 @@
 }
 
 @section css{
+@if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline)
+{
     @BundleHelper.RenderWizardCss()
+}
+ 
 
 	@if (Model.WhiteLabel != null) {
 		<style>
@@ -94,7 +99,7 @@
 
         EzBob.Config.PayPalEnabled = @CurrentValues.Instance.PayPalEnabled.Value.ToLower(CultureInfo.InvariantCulture);
         EzBob.Config.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value.ToLower(CultureInfo.InvariantCulture)';
-
+        EzBob.Config.Origin = '@ViewBag.CustomerOrigin.GetOrigin()';
 		@{
 			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
 			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");

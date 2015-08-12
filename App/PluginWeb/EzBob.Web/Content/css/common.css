@@ -1648,13 +1648,13 @@ td.account-logo {
     padding-top: 32px;
 }
 
-.code-sent-style-container {
+.inner-input-message-container {
     width: 60%;
     max-width: 60%;
     position: relative;
 }
 
-.code-sent-style {
+.inner-input-message {
     top: 6px;
     right: 4px;
     position: absolute;
