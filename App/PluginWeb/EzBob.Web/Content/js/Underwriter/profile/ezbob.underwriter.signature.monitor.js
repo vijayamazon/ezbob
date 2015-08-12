@@ -127,7 +127,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			Directors: this.personalInfoModel.get('Directors')
 		};
 
-		var directorEl = this.$el.find('.add-director-container, .add-director-container-wrapper');
+		var directorEl = this.$el.find('.add-director-container');
 
 		var addDirectorView = new EzBob.AddDirectorInfoView({
 			model: new EzBob.DirectorModel(),
@@ -158,6 +158,7 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		addDirectorView.setCustomerID(nCustomerID);
 
 		directorEl.show();
+		this.$el.find('.add-director-container-wrapper').show();
 
 		return false;
 	}, // addDirectorClicked
@@ -285,6 +286,8 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 
 		var self = this;
 
+		var emailLess = {};
+
 		this.$el.find('.selected-signer').each(function() {
 			var oChk = $(this);
 
@@ -292,6 +295,11 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 				return;
 
 			var oSigner = oChk.data();
+
+			if (!oSigner.Email) {
+				emailLess[oSigner.DirectorID + oSigner.Type] = oSigner.FirstName + ' ' + oSigner.LastName;
+				return;
+			} // if
 
 			if (oSigner.IsDirector && oPackage[self.boardResolutionTemplateID]) {
 				if (oSigner.DirectorID) {
@@ -319,6 +327,25 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 		if (!oPackage.length) {
 			EzBob.ShowMessage('No signer specified.', 'Cannot send');
 			return null;
+		} // if
+
+		var emailLessStr = '';
+
+		_.each(emailLess, function(name) {
+			if (!name)
+				return;
+
+			if (emailLessStr)
+				emailLessStr += ', ';
+
+			emailLessStr += name;
+		});
+
+		if (emailLessStr) {
+			EzBob.ShowMessage(
+				'Documents for signature were not sent to directors without email address: ' + emailLessStr,
+				'Warning'
+			);
 		} // if
 
 		return oPackage;
@@ -503,6 +530,9 @@ EzBob.Underwriter.SignatureMonitorView = Backbone.View.extend({
 			IsDirector: oData.IsDirector,
 			IsShareholder: oData.IsShareholder,
 			Type: oData.Type,
+			Email: oData.Email,
+			FirstName: oData.FirstName,
+			LastName: oData.LastName,
 		});
 
 		oRow.find('.grid-item-IsSelected').empty().append(oSelected);
