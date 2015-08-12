@@ -92,6 +92,16 @@
 			} // for each
 		} // ValidateSchedule
 
+		public LoanHistory Clear() {
+			this.amount = 0;
+			this.repaymentCount = 0;
+			this.monthlyInterestRate = 0;
+			RepaymentIntervalType = RepaymentIntervalTypes.Month;
+			IsFirst = true;
+			Schedule.Clear();
+			return this;
+		} // Clear
+
 		public override string ToString() {
 			StringBuilder os = new StringBuilder();
 

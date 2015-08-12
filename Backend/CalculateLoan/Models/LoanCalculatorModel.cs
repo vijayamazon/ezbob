@@ -61,11 +61,6 @@
 			get { return LoanHistory.First().Amount; }
 		} // IssuedAmount
 
-		public void SetDiscountPlan(params decimal[] deltas) {
-			DiscountPlan.Clear();
-			DiscountPlan.AddRange(deltas);
-		} // SetDiscountPlan
-
 		/// <summary>
 		/// Actual amount transfered to customer.
 		/// </summary>

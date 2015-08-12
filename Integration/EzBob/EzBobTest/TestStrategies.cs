@@ -1158,16 +1158,15 @@
 				Console.WriteLine();
 				var scheduleswithinterests = calculator.CreateScheduleAndPlan();*/
 
-			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
 				// TODO: revive (Test)
 				/*
+			LoanCalculatorModel calculatorModel2 = new LoanCalculatorModel() {
 				LoanIssueTime = DateTime.UtcNow,
 				LoanAmount = B,
 				RepaymentCount = (int)(k),
 				MonthlyInterestRate = 0.06m,
 				InterestOnlyRepayments = 0,
 				RepaymentIntervalType = RepaymentIntervalTypes.Month
-				*/
 			};
 
 			Console.WriteLine("Calc model for new schedules list: " + calculatorModel2);
@@ -1178,6 +1177,7 @@
 			List<ScheduledItemWithAmountDue> scheduleswithinterests2 = calculator2.CreateScheduleAndPlan();
 
 			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
+				*/
 		}
 
 		[Test]

@@ -88,6 +88,13 @@
             loanState.Execute();
 
             LegacyLoanCalculator calc = new LegacyLoanCalculator(loanState.CalcModel);
+
+			// TODO: revive
+
+			// TODO: this is wrong usage of CreateScheduleAndPlan method.
+			// It should use GetAmountToChargeForAutoCharger with relevant date.
+
+			/*
             List<ScheduledItemWithAmountDue> schedules = calc.CreateScheduleAndPlan();
 
             ScheduledItemWithAmountDue schedule = schedules.First(x => x.Date == DateTime.UtcNow.AddDays(dayNum));
@@ -107,6 +114,7 @@
                 new QueryParameter("@LoanID", loanId),
                 new QueryParameter("@Date", DateTime.UtcNow.AddDays(dayNum))
                 );
+			*/
 
             //TODO update loan schedule x days due 
             Log.Info("update loan schedule x days due for customer {0}", customerId);

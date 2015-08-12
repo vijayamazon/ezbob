@@ -59,6 +59,7 @@
     <Compile Include="Extensions\ScheduleListExt.cs" />
     <Compile Include="Helpers\BadPeriod.cs" />
     <Compile Include="Helpers\DailyLoanStatus.cs" />
+    <Compile Include="Helpers\OfferFee.cs" />
     <Compile Include="Helpers\Fee.cs" />
     <Compile Include="Helpers\InterestFreeze.cs" />
     <Compile Include="Helpers\OneDayLoanStatus.cs" />

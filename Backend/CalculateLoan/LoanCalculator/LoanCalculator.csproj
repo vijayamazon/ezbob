@@ -46,9 +46,13 @@
     <Compile Include="ALoanCalculator.cs" />
     <Compile Include="BankLikeLoanCalculator.cs" />
     <Compile Include="Exceptions\ALoanCalculatorException.cs" />
-    <Compile Include="Exceptions\InterestOnlyMonthsCountException.cs" />
+    <Compile Include="Exceptions\InvalidInitialInterestOnlyRepaymentCountException.cs" />
+    <Compile Include="Exceptions\InvalidInitialRepaymentCountException.cs" />
+    <Compile Include="Exceptions\InvalidInitialInterestRateException.cs" />
+    <Compile Include="Exceptions\InvalidInitialDataException.cs" />
+    <Compile Include="Exceptions\InvalidInitialAmountException.cs" />
+    <Compile Include="Exceptions\NoInitialDataException.cs" />
     <Compile Include="Exceptions\NoPeriodEndDateException.cs" />
-    <Compile Include="Exceptions\NullLoanCalculatorModelException.cs" />
     <Compile Include="LegacyLoanCalculator.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="Methods\AGetAmountToChargeMethod.cs" />
@@ -97,6 +101,10 @@
     <ProjectReference Include="..\..\Extensions\Extensions.csproj">
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Models\Ezbob.Backend.Models.csproj">
       <Project>{6F7FC0DB-E5A4-42EF-91FF-4DFEA42A7621}</Project>

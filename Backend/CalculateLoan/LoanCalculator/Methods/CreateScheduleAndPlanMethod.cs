@@ -1,15 +1,24 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System.Collections.Generic;
+	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	internal class CreateScheduleAndPlanMethod : AMethod {
-		public CreateScheduleAndPlanMethod(ALoanCalculator calculator, bool writeToLog) : base(calculator, writeToLog) {
+		public CreateScheduleAndPlanMethod(
+			ALoanCalculator calculator,
+			NL_Model loanToCreateModel,
+			bool writeToLog
+		) : base(calculator, writeToLog) {
+			this.loanToCreateModel = loanToCreateModel;
+			this.offerFees = GetOfferFees();
 		} // constructor
 
 		public List<ScheduledItemWithAmountDue> Execute() {
-			new CreateScheduleMethod(Calculator).Execute();
+			new CreateScheduleMethod(Calculator, this.loanToCreateModel).Execute();
 
 			var method = new CalculatePlanMethod(Calculator, false);
 
@@ -54,5 +63,35 @@
 
 			return result;
 		} // Execute
+
+		private List<OfferFee> GetOfferFees() {
+			var result = new List<OfferFee>();
+
+			if ((loanToCreateModel.Fees != null) && (loanToCreateModel.Fees.Count > 0)) {
+				foreach (var ff in loanToCreateModel.Fees) {
+					NL_OfferFees assignedFee = ff.OfferFees;
+
+					if (assignedFee == null)
+						continue;
+
+					var offerFee = new OfferFee(
+						(FeeTypes)assignedFee.LoanFeeTypeID,
+						WorkingModel.LoanHistory.Last().Amount,
+						assignedFee.PercentOfIssued,
+						assignedFee.AbsoluteAmount,
+						assignedFee.OneTimePartPercent,
+						assignedFee.DistributedPartPercent
+					);
+
+					if (offerFee.Amount > 0)
+						this.offerFees.Add(offerFee);
+				} // for each fee
+			} // if
+
+			return result;
+		} // GetOfferFees
+
+		private readonly NL_Model loanToCreateModel;
+		private readonly List<OfferFee> offerFees;
 	} // class CreateScheduleAndPlanMethod
 } // namespace

@@ -14,10 +14,7 @@
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		) {
-
 			return monthlyInterestRate * 12.0m / 365.0m;
-
 		} // CalculateDailyInterestRate
-
 	} // class BankLikeCalculator
 } // namespace

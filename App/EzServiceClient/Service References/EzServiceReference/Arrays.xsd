@@ -50,6 +50,12 @@
     </xs:sequence>
   </xs:complexType>
   <xs:element name="ArrayOfKeyValueOfElapsedDataMemberTypelongpoA0JYJE" nillable="true" type="tns:ArrayOfKeyValueOfElapsedDataMemberTypelongpoA0JYJE" />
+  <xs:complexType name="ArrayOfdecimal">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="decimal" type="xs:decimal" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfdecimal" nillable="true" type="tns:ArrayOfdecimal" />
   <xs:complexType name="ArrayOfKeyValueOfstringstring">
     <xs:annotation>
       <xs:appinfo>

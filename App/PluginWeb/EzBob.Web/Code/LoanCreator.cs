@@ -189,7 +189,7 @@
 				cus.SetupFee = loan.SetupFee;
 
 			
-			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName;
+			nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
 			nlModel.Loan = new NL_Loans();
 			nlModel.UserID = this.context.UserId;
 			nlModel.Loan.Refnum = loan.RefNumber;

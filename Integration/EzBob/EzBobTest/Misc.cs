@@ -190,16 +190,15 @@
 			return;
 
 			// new instance of loan calculator - for new schedules list
-			LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
 				// TODO: revive (test)
 				/*
+			LoanCalculatorModel calculatorModel = new LoanCalculatorModel() {
 				LoanIssueTime = DateTime.UtcNow,
 				LoanAmount = A,
 				RepaymentCount = 25,
 				MonthlyInterestRate = 0.06m,
 				InterestOnlyRepayments = 0,
 				RepaymentIntervalType = RepaymentIntervalTypes.Month
-				*/
 			};
 
 			Console.WriteLine("Calc model for new schedules list: " + calculatorModel);
@@ -208,6 +207,7 @@
 
 			Console.WriteLine();
 			var scheduleswithinterests = calculator.CreateScheduleAndPlan();
+				*/
 		}
 
 		[Test]

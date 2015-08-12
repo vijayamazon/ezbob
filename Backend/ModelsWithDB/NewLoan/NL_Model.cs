@@ -43,6 +43,9 @@
 		public DateTime IssuedTime { get; set; }
 
 		[DataMember]
+		public decimal[] DiscountPlan { get; set; }
+
+		[DataMember]
 		public List<NLAgreementItem> Agreements { get; set; }
 
 		[DataMember]

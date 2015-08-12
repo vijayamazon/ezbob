@@ -2,10 +2,11 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Logger;
 
 	/// <summary>
 	/// This class is implemented as Facade pattern.
@@ -18,29 +19,15 @@
 
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
-		/// Schedule is stored in WorkingModel.Schedule.
-		/// Each element in Schedule is ScheduledItem
-		/// </summary>
-		public virtual List<ScheduledItem> CreateSchedule() {
-			return new CreateScheduleMethod(this).Execute();
-		} // CreateSchedule
-
-		/// <summary>
-		/// Calculates loan plan.
-		/// </summary>
-		/// <param name="writeToLog">Write result to log or not.</param>
-		/// <returns>Loan plan (list of repayments).</returns>
-		public virtual List<Repayment> CalculatePlan(bool writeToLog = true) {
-			return new CalculatePlanMethod(this, writeToLog).Execute();
-		} // CalculatePlan
-
-		/// <summary>
-		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
 		/// Also calculates loan plan.
-		/// Schedule is stored in WorkingModel.Schedule.
+		/// Schedule is stored in the Schedule property of the last item of WorkingModel.LoanHistory
+		/// (i.e. WorkingModel.LoanHistory.Last() is overwritten).
 		/// </summary>
-		public virtual List<ScheduledItemWithAmountDue> CreateScheduleAndPlan(bool writeToLog = true) {
-			return new CreateScheduleAndPlanMethod(this, writeToLog).Execute();
+		public virtual List<ScheduledItemWithAmountDue> CreateScheduleAndPlan(
+			NL_Model loanToCreate,
+			bool writeToLog = true
+		) {
+			return new CreateScheduleAndPlanMethod(this, loanToCreate, writeToLog).Execute();
 		} // CreateScheduleAndPlan
 
 		/// <summary>
@@ -171,9 +158,9 @@
 
 		protected ALoanCalculator(LoanCalculatorModel model) {
 			if (model == null)
-				throw new NullLoanCalculatorModelException();
+				Log.Msg("No model specified for loan calculator, using a new empty model.");
 
-			WorkingModel = model;
+			WorkingModel = model ?? new LoanCalculatorModel();
 		} // constructor
 
 		/// <summary>
@@ -191,5 +178,7 @@
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		);
+
+		protected static ASafeLog Log { get { return Library.Instance.Log; } }
 	} // class ALoanCalculator
 } // namespace

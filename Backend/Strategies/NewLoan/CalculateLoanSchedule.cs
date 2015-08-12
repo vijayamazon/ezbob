@@ -17,7 +17,6 @@
 	/// If the customer has valid offer, NL_Model Result contains Schedule, Fees, APR, Error
 	/// </summary>
 	public class CalculateLoanSchedule : AStrategy {
-
 		public CalculateLoanSchedule(NL_Model nlModel) {
 			model = nlModel;
 			this.Result = nlModel;
@@ -28,7 +27,6 @@
 		public NL_Model Result; // output
 
 		public override void Execute() {
-	
 			if (model.CustomerID == 0) {
 				this.Result.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
@@ -63,7 +61,6 @@
 			Log.Debug("OfferDataForLoan: {0}", dataForLoan);
 
 			try {
-	
 				// from offer => Loan
 				model.InitialAmount = dataForLoan.LoanLegalAmount;
 				model.InitialRepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
@@ -77,20 +74,13 @@
 				model.Loan.Position = dataForLoan.LoansCount;
 
 				// from offer => Offer
-				model.Offer = new NL_Offers() { BrokerSetupFeePercent = dataForLoan.BrokerSetupFeePercent, SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan };
+				model.Offer = new NL_Offers {
+					BrokerSetupFeePercent = dataForLoan.BrokerSetupFeePercent,
+					SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan,
+				};
 
 				// init calculator's model - loan's details
-				LoanCalculatorModel nlCalculatorModel = new LoanCalculatorModel {
-					// TODO: revive
-					/*
-					LoanIssueTime = model.Loan.IssuedTime, // input arg
-					RepaymentIntervalType = (RepaymentIntervalTypes)Enum.ToObject(typeof(RepaymentIntervalTypesId), model.Loan.RepaymentIntervalTypeID), // offer|LoanLegal
-					LoanAmount = model.Loan.InitialLoanAmount, // offer|LoanLegal
-					RepaymentCount = model.Loan.RepaymentCount, //  offer|LoanLegal
-					MonthlyInterestRate = model.Loan.InterestRate, //  offer|LoanLegal
-					*/
-					InterestOnlyRepayments = model.Loan.InterestOnlyRepaymentCount, //  offer|LoanLegal
-				};
+				LoanCalculatorModel nlCalculatorModel = new LoanCalculatorModel();
 
 				// init calculator
 				ALoanCalculator nlCalculator = new LegacyLoanCalculator(nlCalculatorModel);
@@ -103,26 +93,22 @@
 					string[] stringSeparator = { "," };
 					char[] removeChar = { ',' };
 					string[] result = dataForLoan.DiscountPlan.Trim(removeChar).Split(stringSeparator, StringSplitOptions.None);
-					decimal[] dpe = new decimal[result.Length];
+					model.DiscountPlan = new decimal[result.Length];
 					var i = 0;
-					foreach (string s in result) {
-						dpe.SetValue(Decimal.Parse(s), i++);
-					}
-					nlCalculatorModel.SetDiscountPlan(dpe);
+					foreach (string s in result)
+						model.DiscountPlan.SetValue(Decimal.Parse(s), i++);
 				}
 
-				Log.Debug("nlCalculator model: {0}", nlCalculatorModel);
+				List<NL_OfferFees> offerFees = DB.Fill<NL_OfferFees>(
+					"NL_OfferFeesGet",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@OfferID", dataForLoan.OfferID)
+				);
 
-				// init schedule - dates, intervals
-				List<ScheduledItem> shedules = nlCalculator.CreateSchedule();
+				foreach (NL_OfferFees nof in offerFees)
+					model.Fees.Add(new NLFeeItem { OfferFees = nof });
 
-				Log.Debug("SCHEDULES primary = {0}", shedules);
-
-				// FEES: until fees 2.0 implemented, suppose: Percent == OneTimePartPercent
-
-				// get offers' fees
-				List<NL_OfferFees> offerFees = DB.Fill<NL_OfferFees>("NL_OfferFeesGet", CommandSpecies.StoredProcedure, new QueryParameter("@OfferID", dataForLoan.OfferID));
-
+				/*
 				if (offerFees != null) {
 
 					var setupFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.SetupFee);
@@ -162,9 +148,10 @@
 						}
 					}
 				}
+				*/
 
 				// get schedules and fees
-				List<ScheduledItemWithAmountDue> sheduleFeeList = nlCalculator.CreateScheduleAndPlan();
+				List<ScheduledItemWithAmountDue> sheduleFeeList = nlCalculator.CreateScheduleAndPlan(model);
 
 				Log.Debug("SCHEDULES plan + fees: {0}", sheduleFeeList);
 
