@@ -42,20 +42,17 @@
 <script type="text/template" id="request-processing-nodecision-template">
 	<div class="automation-popup">
 		<div class="automation-popup-content">
-			<div class="automation-header">Your application is complete.</div>
+			<div class="automation-header">Your business loan application is complete.</div>
 			<hr/>
-			<div class="automation-secondary-header">Your application is now being processed and you should be receiving an email with an offer in the next business day.</div>
+			<div class="automation-secondary-header">Hi <%-name%>,</div>
 			<div class="automation-text">
-				<p>
-					In case you don't receive a funding decision from us in the next twelve hours please check your spam or junk folder.
-					If you still have not received an email, please contact our customer care department by phone: @ViewBag.PhoneNumber or by emailing:
-					<a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a>.
-				</p>
-				<p>If you have additional accounts we recommend that you link them to @ViewBag.CustomerOrigin.Name, so we can have a clearer understanding of your business and be able to increase the amount we can offer.</p>
-				<p>
-					Thank You,<br>
-					The <span class="bold">@ViewBag.CustomerOrigin.Name</span> Team
-				</p>
+				<p>Thank you. Your application is now complete.</p>
+				<p>You will receive further correspondence within the next business day. If you do not receive a decision from us, this may be because it has dropped in to your spam filter and we suggest to double check.</p>
+				<p>Please contact your business account manager on @ViewBag.PhoneNumber or contact <a href="mailto:@ViewBag.CustomerOrigin.CustomerCareEmail">@ViewBag.CustomerOrigin.CustomerCareEmail</a> if you do not receive.</p>
+				<p>Do you need more?</p>
+				<p>We may be able to offer you more funds. Please link any additional accounts you may have to @ViewBag.CustomerOrigin.Name as this will provide us with a clearer understanding of your business and increased amount.</p>
+				<p>Best regards</p>
+				<p>The <span class="bold">@ViewBag.CustomerOrigin.Name</span> team</p>
 			</div>
 			@ContinueButton("nodecision")
 		</div>
