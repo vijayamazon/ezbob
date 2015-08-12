@@ -236,6 +236,7 @@
 				//OutstandingBalance = sr["OutstandingBalance"],
 				OutstandingPrincipal = sr["OutstandingPrincipal"],
 				CustomerId = model.CustomerID,
+				OriginId = model.OriginID,
 				MissedPayment = new MissedPaymentModel {
 					AmountDue = sr["AmountDue"],
 					DateDue = sr["SchedDate"],

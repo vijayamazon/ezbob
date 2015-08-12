@@ -55,7 +55,16 @@
 		
 		private void TestCollectionMails(int originId) {
 			CollectionMail cm = new CollectionMail("ezbobapiuser", "Ezbob2014#", true, "stasd@ezbob.com");
-
+			List<CollectionSnailMailTemplate> templates = this.DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
+			cm.SetTemplates(templates.Select(x => new SnailMailTemplate {
+				Type = x.Type,
+				OriginID = x.OriginID,
+				Template = x.Template,
+				IsActive = x.IsActive,
+				TemplateName = x.TemplateName,
+				FileName = x.FileName,
+				IsLimited = x.IsLimited
+			}));
 			var model = GetMailModel(true, originId);
 			var consumerModel = GetMailModel(false, originId);
 
