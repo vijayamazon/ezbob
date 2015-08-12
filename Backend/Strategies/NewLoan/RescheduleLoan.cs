@@ -88,7 +88,7 @@
 				if (!this.ReschedulingArguments.RescheduleIn && this.ReschedulingArguments.PaymentPerInterval == 0)
 					this.ReschedulingArguments.PaymentPerInterval = this.Result.DefaultPaymentPerInterval;
 
-				Log.Debug("\n\n==========RE-SCHEDULING======ARGUMENTS: {0}==========LoanState: {1}", this.ReschedulingArguments, this.tLoan);
+				Log.Debug("\n==========RE-SCHEDULING======ARGUMENTS: {0}==========LoanState: {1}\n", this.ReschedulingArguments, this.tLoan);
 
 				// check Marking loan {0} as 'PaidOff' in \ezbob\Integration\DatabaseLib\Model\Loans\Loan.cs(362)
 				var calc = new LoanRepaymentScheduleCalculator(this.tLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
@@ -264,7 +264,7 @@
 					return;
 				}
 
-				Log.Debug("--------------Loan recalculated: \n {0}", this.tLoan);
+				Log.Debug("\n--------------Loan recalculated: \n {0}", this.tLoan);
 
 				// prevent schedules with negative iPrincipal (i.e. LoanRepayment:-4.00)
 				var negativeIPrincipal = this.tLoan.Schedule.FirstOrDefault(s => s.LoanRepayment < 0);

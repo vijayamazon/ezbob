@@ -408,13 +408,9 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
 		var within = this.model.get('ReResultIn');
 		if (within.Error != null) {
-			if (within.Error === "Within loan arrangement is impossible") {
+		    if (within.BlockAction === true) {
 				this.$el.find('#within-div').css('opacity', '0.5');
 				this.$el.find('#radio-1,#withinSelect').attr('disabled', true);
-			}
-			if (within.Error.indexOf("paid off. Loan balance: ") !== -1) {
-				this.$el.find('#within-div,#outside-div').css('opacity', '0.5');
-				this.$el.find('#radio-1,#withinSelect,#radio-2,#outsideSelect,#outsidePrincipal').attr('disabled', true);
 			}
 		}
 		this.$el.find('#withinPayments').text(within.IntervalsNum);
@@ -427,6 +423,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 				if (outside.Error.length > 0) {
 					var params = { head: 'Please fix the marked field', body: outside.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
 					this.fillErrorPopup(params);
+				}
+				if (within.BlockAction === true) {
+				    this.$el.find('#outside-div').css('opacity', '0.5');
+				    this.$el.find('#radio-2,#outsideSelect,#outsidePrincipal').attr('disabled', true);
 				}
 			}
 			this.$el.find('#outsidePayments').text(outside.IntervalsNum);
