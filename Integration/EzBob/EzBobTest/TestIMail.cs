@@ -220,24 +220,24 @@
 				IsLimited = isLimited,
 				OriginId = originId,
 				CustomerAddress = new Address {
-					Line1 = "cl1",
+					Line1 = "6 Upperkirkgate",
 					Line2 = "cl2",
 					Line3 = "cl3",
-					Line4 = "cls4",
+					Line4 = "Aberdeen",
 					Postcode = "AB10 1BA"
 				},
 				CompanyAddress = new Address {
-					Line1 = "bl1",
+					Line1 = "6 Upperkirkgate",
 					Line2 = "bl2",
 					Line3 = "bl3",
-					Line4 = "bl4",
+					Line4 = "Aberdeen",
 					Postcode = "AB10 1BA"
 				},
 				GuarantorAddress = new Address {
-					Line1 = "gl1",
+					Line1 = "6 Upperkirkgate",
 					Line2 = "gl2",
 					Line3 = "gl3",
-					Line4 = "gl4",
+					Line4 = "Aberdeen",
 					Postcode = "AB10 1BA"
 				},
 				CompanyName = "compname",
