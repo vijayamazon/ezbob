@@ -16,6 +16,10 @@ IF OBJECT_ID('FK_MedalCalculationsAV_CashRequests') IS NOT NULL
 	ALTER TABLE MedalCalculationsAV DROP CONSTRAINT FK_MedalCalculationsAV_CashRequests
 GO
 
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE Id = OBJECT_ID('MedalCalculationsAV') AND name = 'CashRequestID')
+	ALTER TABLE MedalCalculationsAV ADD CashRequestID BIGINT NULL
+GO
+
 IF 56 = (SELECT xtype FROM syscolumns WHERE Id = OBJECT_ID('MedalCalculationsAV') AND name = 'CashRequestID')
 	ALTER TABLE MedalCalculationsAV ALTER COLUMN CashRequestID BIGINT NULL
 GO
