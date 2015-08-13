@@ -424,7 +424,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 					var params = { head: 'Please fix the marked field', body: outside.Error, footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#outsidePrincipal')], timeout: '60000' };
 					this.fillErrorPopup(params);
 				}
-				if (within.BlockAction === true) {
+				if (outside.BlockAction === true) {
 				    this.$el.find('#outside-div').css('opacity', '0.5');
 				    this.$el.find('#radio-2,#outsideSelect,#outsidePrincipal').attr('disabled', true);
 				}
