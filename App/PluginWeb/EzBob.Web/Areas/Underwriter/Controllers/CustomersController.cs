@@ -372,32 +372,30 @@
 			return Json(new { warning = sWarning });
 		}//ChangeStatus
 
-		private void ReturnCustomerToWaitingForDecision(Customer customer, User user, CashRequest oldCashRequest, NL_Decisions newDecision = null) {
+		private void ReturnCustomerToWaitingForDecision(Customer customer, User user, CashRequest oldCashRequest, NL_Decisions nlDecision = null) {
 			customer.CreditResult = CreditResultStatus.WaitingForDecision;
 			this._historyRepository.LogAction(DecisionActions.Waiting, "", user, customer);
 			var stage = OpportunityStage.s40.DescriptionAttr();
 
-			if (newDecision != null) {
-
-				newDecision.DecisionNameID = (int)DecisionActions.Waiting;
-
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
+			if (nlDecision != null) {
+				nlDecision.DecisionNameID = (int)DecisionActions.Waiting;
+				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
 			}
 
 			this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
 				new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage });
 		}//ReturnCustomerToWaitingForDecision
 
-		private void PendCustomer(DecisionModel model, Customer customer, CashRequest oldCashRequest, User user, NL_Decisions newDecision = null) {
+		private void PendCustomer(DecisionModel model, Customer customer, CashRequest oldCashRequest, User user, NL_Decisions nlDecision = null) {
 			customer.IsWaitingForSignature = model.signature == 1;
 			customer.CreditResult = CreditResultStatus.ApprovedPending;
 			customer.PendingStatus = PendingStatus.Manual;
 			customer.ManagerApprovedSum = oldCashRequest.ApprovedSum();
 			this._historyRepository.LogAction(DecisionActions.Pending, "", user, customer);
 
-			if (newDecision != null) {
-				newDecision.DecisionNameID = (int)DecisionActions.Pending;
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
+			if (nlDecision != null) {
+				nlDecision.DecisionNameID = (int)DecisionActions.Pending;
+				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
 			}
 
 			var stage = model.signature == 1
@@ -408,7 +406,7 @@
 				new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage });
 		}//PendCustomer
 
-		private void EscalateCustomer(DecisionModel model, Customer customer, User user, CashRequest oldCashRequest, ref string sWarning, NL_Decisions newDecision = null) {
+		private void EscalateCustomer(DecisionModel model, Customer customer, User user, CashRequest oldCashRequest, ref string sWarning, NL_Decisions nlDecision = null) {
 			customer.CreditResult = CreditResultStatus.Escalated;
 			customer.DateEscalated = DateTime.UtcNow;
 			customer.EscalationReason = model.reason;
@@ -422,15 +420,15 @@
 				log.Warn(e, "Failed to send 'escalated' email.");
 			} // try
 
-			if (newDecision != null) {
-				newDecision.DecisionNameID = (int)DecisionActions.Escalate;
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
+			if (nlDecision != null) {
+				nlDecision.DecisionNameID = (int)DecisionActions.Escalate;
+				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
 			}
 			this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
 				new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage });
 		}//EscalateCustomer
 
-		private void RejectCustomer(DecisionModel model, Customer customer, DateTime now, User user, CashRequest oldCashRequest, int numOfPreviousApprovals, ref string sWarning, NL_Decisions newDecision = null) {
+		private void RejectCustomer(DecisionModel model, Customer customer, DateTime now, User user, CashRequest oldCashRequest, int numOfPreviousApprovals, ref string sWarning, NL_Decisions nlDecision = null) {
 			customer.DateRejected = now;
 			customer.RejectedReason = model.reason;
 			customer.Status = Status.Rejected;
@@ -455,25 +453,23 @@
 				} // try
 			} // if
 
-			if (newDecision != null) {
+			if (nlDecision != null) {
+				nlDecision.DecisionNameID = (int)DecisionActions.Reject;
+				var rejectReasons = model.rejectionReasons.Select(x => new NL_DecisionRejectReasons {RejectReasonID = x}).ToArray();
+				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, rejectReasons);
+			}
 
-				newDecision.DecisionNameID = (int)DecisionActions.Reject;
-
-				var rejectReasons = model.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToArray();
-
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, rejectReasons);
-
-				this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
+			this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
 					new ServiceClientProxy.EzServiceReference.OpportunityModel {
 						Email = customer.Name,
 						CloseDate = now,
 						DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
 						DealLostReason = customer.RejectedReason
 					});
-			}
+			
 		}//RejectCustomer
 
-		private void ApproveCustomer(DecisionModel model, Customer customer, User user, DateTime now, CashRequest oldCashRequest, int numOfPreviousApprovals, ref string sWarning, NL_Decisions newDecision = null) {
+		private void ApproveCustomer(DecisionModel model, Customer customer, User user, DateTime now, CashRequest oldCashRequest, int numOfPreviousApprovals, ref string sWarning, NL_Decisions nlDecision = null) {
 			if (!customer.WizardStep.TheLastOne) {
 				try {
 					customer.AddAlibabaDefaultBankAccount();
@@ -556,21 +552,21 @@
 			} // if
 
 			// NL decision, offer, offerFees
-			if (newDecision != null) {
+			if (nlDecision != null) {
 
-				newDecision.DecisionNameID = (int)DecisionActions.Approve;
-				newDecision.Notes = model.reason;
+				nlDecision.DecisionNameID = (int)DecisionActions.Approve;
+				nlDecision.Notes = model.reason;
 
 				NL_Offers lastOffer = this.m_oServiceClient.Instance.GetLastOffer(user.Id, customer.Id);
-				var decisionID = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, newDecision, oldCashRequest.Id, null);
+				var decisionID = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
 
-				log.Debug("NL: decision added: {0}", decisionID);
+				log.Debug("NL: decision added: {0}, customer: {1}", decisionID, customer.Id);
 
 				lastOffer.DecisionID = decisionID.Value;
 				lastOffer.CreatedTime = now;
 				lastOffer.Notes = model.reason;
 
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, PercentOfIssued = oldCashRequest.ManualSetupFeePercent };
+				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent };
 				if (oldCashRequest.SpreadSetupFee == true && oldCashRequest.SpreadSetupFee != null)
 					setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
 				NL_OfferFees[] ofeerFees = { setupFee };

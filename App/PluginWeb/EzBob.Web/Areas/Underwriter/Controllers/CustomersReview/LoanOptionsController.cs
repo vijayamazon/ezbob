@@ -113,7 +113,7 @@
 			Log.DebugFormat("update loan options for loan {0}", options.LoanId);
 
             //oldloan id => nl loanid
-            NLLoanOptions NLoptions = new NLLoanOptions {
+            NL_LoanOptions nlOptions = new NL_LoanOptions {
                         AutoCharge=options.AutoPayment,
                         StopAutoChargeDate=options.StopAutoChargeDate,
                         AutoLateFees=options.AutoLateFees,
@@ -133,7 +133,7 @@
                         Notes=null
             };
 
-            this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, NLoptions,options.LoanId);
+			this.serviceClient.Instance.AddLoanOptions(this.context.UserId, customer.Id, nlOptions,  options.LoanId);
             
 			return Json(new { });
 		}

@@ -2,6 +2,7 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
+	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models;
@@ -25,7 +26,7 @@
 	using StructureMap;
 
 	public interface ILoanCreator {
-		
+
 		Loan CreateLoan(Customer cus, decimal loanAmount, PayPointCard card, DateTime now, NL_Model nlModel);
 	} // interface ILoanCreator
 
@@ -113,14 +114,16 @@
 			if (nlModel == null)
 				nlModel = new NL_Model(cus.Id);
 			// NL fund transfer
-			nlModel.FundTransfer = new NL_FundTransfers();
-			nlModel.FundTransfer.Amount = loanAmount; // logic transaction - full amount
-			nlModel.FundTransfer.TransferTime = now;
-			//nlModel.FundTransfer.IsActive = true; // ???
-			nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Pacnet").Id; // take from enum or send string and convert to id in db
+			nlModel.FundTransfer = new NL_FundTransfers() {
+				Amount = loanAmount, // logic transaction - full amount
+				TransferTime = now,
+				FundTransferStatusID = (int)NLPacnetTransactionStatuses.InProgress,
+				LoanTransactionMethodID = (int)NLLoanTransactionMethods.Pacnet
+			};
 
 			PacnetTransaction loanTransaction;
 			if (!cus.IsAlibaba) {
+
 				loanTransaction = new PacnetTransaction {
 					Amount = loan.LoanAmount,
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
@@ -133,16 +136,16 @@
 					Fees = loan.SetupFee,
 					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Pacnet"),
 				};
+
 				// NL pacnet transaction
-				if (!isFakeLoanCreate && !isEverlineRefinance) {
-					nlModel.PacnetTransaction = new NL_PacnetTransactions();
-					nlModel.PacnetTransaction.TransactionTime = now;
-					nlModel.PacnetTransaction.Amount = loanAmount;
-					nlModel.PacnetTransaction.Notes = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now) + ret.Error;
-					nlModel.PacnetTransaction.StatusUpdatedTime = DateTime.UtcNow;
-					nlModel.PacnetTransaction.TrackingNumber = ret.TrackingNumber;
-					nlModel.PacnetTransactionStatus = ret.Status;
-				}
+				nlModel.PacnetTransaction = new NL_PacnetTransactions() {
+					TransactionTime = now,
+					Amount = loanAmount,
+					Notes = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now) + " Status: " + ret.Status + " Err:" + ret.Error,
+					StatusUpdatedTime = DateTime.UtcNow,
+					TrackingNumber = ret.TrackingNumber,
+					PacnetTransactionStatusID = (isFakeLoanCreate || isEverlineRefinance) ? (int)NLPacnetTransactionStatuses.Done : (int)NLPacnetTransactionStatuses.InProgress,
+				};
 
 			} else {
 				loanTransaction = new PacnetTransaction {
@@ -160,10 +163,10 @@
 
 				// NL: only logic transaction created in "alibaba" case; real money transfer will be done later, not transferred to customer (alibaba buyer) directly, but to seller (3rd party)
 				nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Manual").Id;
-				
+
 			} // if
 
-			// TODO This is the place where the funds transferred to customer saved to DB
+			//  This is the place where the funds transferred to customer saved to DB
 			log.Info(
 				"Save transferred funds to customer {0} amount {1}, isFake {2} , isAlibaba {3}, isEverlineRefinance {4}",
 				cus.Id,
@@ -188,7 +191,7 @@
 			if (loan.SetupFee > 0)
 				cus.SetupFee = loan.SetupFee;
 
-			
+
 			nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
 			nlModel.Loan = new NL_Loans();
 			nlModel.UserID = this.context.UserId;
@@ -196,14 +199,14 @@
 			nlModel.InitialAmount = loanAmount;
 			nlModel.IssuedTime = now;
 
-			// populate nlModel by agreements data also
-			this.agreementsGenerator.RenderAgreements(loan, true, nlModel);
-
 			/**
 			1. Build/ReBuild agreement model - private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr); in \App\PluginWeb\EzBob.Web\Code\AgreementsModelBuilder.cs
 			2. RenderAgreements: loan.Agreements.Add
 			3. RenderAgreements: SaveAgreement (file?) \backend\Strategies\Misc\Agreement.cs strategy
 			*/
+
+			// populate nlModel by agreements data also
+			this.agreementsGenerator.RenderAgreements(loan, true, nlModel);
 
 			var loanHistoryRepository = new LoanHistoryRepository(this.session);
 			loanHistoryRepository.SaveOrUpdate(new LoanHistory(loan, now));
@@ -218,7 +221,7 @@
 					DealCloseType = OpportunityDealCloseReason.Won.ToString()
 				}
 			);
-			
+
 			// This is the place where the loan is created and saved to DB
 			log.Info(
 				"Create loan for customer {0} cash request {1} amount {2}",
@@ -270,12 +273,13 @@
 				log.Debug(nlModel.FundTransfer.ToString());
 				log.Debug(nlModel.PacnetTransaction.ToString());
 				log.Debug(nlModel.Loan.ToString());
+
 				nlModel.Agreements.ForEach(a => log.Debug(a.Agreement.ToString()));
 				nlModel.Agreements.ForEach(t => log.Debug(t.TemplateModel.ToString()));
 
 				var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
 				nlModel.Loan.LoanID = nlLoan.Value;
-				log.Debug("NewLoan saved successfully: nlLoan.Value {0}, oldLoanID {1}, LoanID {2}", nlLoan.Value, oldloanID, nlModel.Loan.LoanID);
+				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoan.Value, oldloanID);
 
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);
@@ -432,7 +436,7 @@
 		private readonly LoanBuilder loanBuilder;
 		private readonly ISession session;
 		private readonly LoanTransactionMethodRepository tranMethodRepo;
-		
+
 
 		private static readonly ASafeLog log = new SafeILog(typeof(LoanCreator));
 	} // class LoanCreator

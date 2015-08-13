@@ -3,7 +3,6 @@
 	using System.IO;
 	using ConfigManager;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Code;
 	using EZBob.DatabaseLib;
@@ -136,7 +135,8 @@
 				path2 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath2, agreementAgreement.FilePath);
 				template = new TemplateModel { Template = agreement };
 				this.m_oServiceClient.Instance.SaveAgreement(loan.Customer.Id, model, loan.RefNumber, "agreement", template, path1, path2);
-				
+
+				// NL - agreement
 				if (nlModel != null) {
 					nlModel.Agreements.Add(item: new NLAgreementItem() {
 						Agreement = new NL_LoanAgreements() {

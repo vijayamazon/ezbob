@@ -91,7 +91,7 @@
 		Cancelled = 4
 	} // enum NLPaymentStatuses
 
-	public enum LoanTransactionMethods {
+	public enum NLLoanTransactionMethods {
 		Unknown = 0, // DB table id
 		Pacnet = 1,
 		Auto = 2,
@@ -106,7 +106,7 @@
 		ChargeBack = 12,
 		WrongPayment = 13,
 		SystemRepay = 14
-	} //enum LoanTransactionMethods
+	} //enum NLLoanTransactionMethods (table LoanTransactionMethods)
 
 
 

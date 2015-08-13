@@ -119,7 +119,7 @@
 
 			Log.DebugFormat("Added NL nlDecisionID: {0}", nlDecisionID);
 
-			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, PercentOfIssued = customer.QuickOffer.ImmediateSetupFee };
+			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee };
 			if (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true)
 				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
 			NL_OfferFees[] ofeerFees = { setupFee };

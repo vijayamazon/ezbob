@@ -15,8 +15,6 @@
 	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Alibaba;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
-	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions.Approval;
 	using Ezbob.Backend.Strategies.AutomationVerification;
 	using Ezbob.Backend.Strategies.Broker;
 	using Ezbob.Backend.Strategies.CreditSafe;
@@ -25,7 +23,6 @@
 	using Ezbob.Backend.Strategies.ExternalAPI.Alibaba;
 	using Ezbob.Backend.Strategies.Lottery;
 	using Ezbob.Backend.Strategies.MailStrategies;
-	using Ezbob.Backend.Strategies.MailStrategies.Broker;
 	using Ezbob.Backend.Strategies.MainStrategy;
 	using Ezbob.Backend.Strategies.MedalCalculations;
 	using Ezbob.Backend.Strategies.Misc;
@@ -46,7 +43,6 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
-	using NHibernate;
 	using NHibernate;
 	using NHibernate.Util;
 	using NUnit.Framework;
@@ -837,11 +833,11 @@
 			nlModel.PaypointTransactionStatus = "Done";
 
 			nlModel.Payment = new NL_Payments() {
-				PaymentMethodID = (int)LoanTransactionMethods .SystemRepay, //2,
+				PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay, //2,
 				PaymentTime = DateTime.UtcNow,
 				PaymentStatusID = (int)NLPaymentStatuses.Active, //???
 				Amount = amount,
-				Notes = "bbbbblala"
+				Notes = "system-repay"
 			};
 
 			nlModel.PaypointTransaction = new NL_PaypointTransactions() {
@@ -850,7 +846,7 @@
 				Notes = "system-repay",
 				PaypointUniqueID = "4f0fce47-deb0-4667-bc65-f6edd3c978b5",
 				IP = "127.0.0.1",
-				PaypointTransactionStatusID = 1
+				PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done
 			};
 
 			var s = new AddPayment(nlModel);

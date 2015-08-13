@@ -318,7 +318,7 @@
 				Log.Debug(string.Format("BEFOREFLUSH: {0}", loan));
 				this.session.Flush();
 
-                NLLoanOptions NLoptions = new NLLoanOptions{
+                NL_LoanOptions nlOptions = new NL_LoanOptions{
                     AutoCharge = options.AutoPayment,
                     StopAutoChargeDate = options.StopAutoChargeDate,
                     AutoLateFees = options.AutoLateFees,
@@ -337,7 +337,8 @@
                     IsActive = true,
                     Notes = null
                 };
-                this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, NLoptions, options.LoanId);
+
+				this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
                 // TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
 			}
 		}

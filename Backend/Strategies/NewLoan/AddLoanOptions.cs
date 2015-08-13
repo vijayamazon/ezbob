@@ -1,20 +1,19 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
-    using Ezbob.Backend.Models.NewLoan;
-    using Ezbob.Backend.ModelsWithDB.NewLoan;
-    using Ezbob.Database;
-    using Ezbob.Utils;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
+	using Ezbob.Utils;
 
-    public class AddLoanOptions : AStrategy {
-        public AddLoanOptions(NLLoanOptions loanOptions, int? OldLoanId) {
+	public class AddLoanOptions : AStrategy {
+        public AddLoanOptions(NL_LoanOptions loanOptions, int? OldLoanId) {
             this.loanOptions = loanOptions;
-            this.oldLoanId = OldLoanId;
+            oldLoanId = OldLoanId;
         }//constructor
 
         public override string Name { get { return "AddLoanOptions"; } }
 
         public override void Execute() {
-            if (this.oldLoanId != null)
-                this.loanOptions.LoanID = DB.ExecuteScalar<int>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.oldLoanId));
+            if (oldLoanId != null)
+                this.loanOptions.LoanID = DB.ExecuteScalar<int>("GetNewLoanIdByOldLoanId", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", oldLoanId));
 
             NL_LoanOptions UpdateOptions = DB.FillFirst<NL_LoanOptions>("NL_LoanOptionsGet", CommandSpecies.StoredProcedure, new QueryParameter("@LoanID", this.loanOptions.LoanID));
 
@@ -50,6 +49,6 @@
 
         public int LoanOptionsID { get; set; }
         private int? oldLoanId { get; set; }
-        private readonly NLLoanOptions loanOptions;
-    }//class AddLoan
+        private readonly NL_LoanOptions loanOptions;
+	}//class AddLoanOptions
 }//ns

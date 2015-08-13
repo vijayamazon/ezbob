@@ -6,7 +6,6 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 	using PaymentServices.Calculators;
@@ -117,7 +116,7 @@
 					// calculator's model - setup fee
 					if (setupFee != null) {
 
-						var feeCalculator = new SetupFeeCalculator(setupFee.PercentOfIssued, dataForLoan.BrokerSetupFeePercent);
+						var feeCalculator = new SetupFeeCalculator(setupFee.Percent, dataForLoan.BrokerSetupFeePercent);
 
 						decimal setupFeeAmount = feeCalculator.Calculate(model.InitialAmount);
 						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.InitialAmount);
@@ -130,7 +129,7 @@
 					// calculator's model - servicing fees
 					if (servicingFee != null) {
 
-						var feeCalculator = new SetupFeeCalculator(servicingFee.PercentOfIssued, dataForLoan.BrokerSetupFeePercent);
+						var feeCalculator = new SetupFeeCalculator(servicingFee.Percent, dataForLoan.BrokerSetupFeePercent);
 
 						decimal servicingFeeAmount = feeCalculator.Calculate(model.InitialAmount);
 						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.InitialAmount);

@@ -12,7 +12,7 @@ BEGIN
 		[OfferFeeID]  ,
 		[OfferID]  ,	
 		[LoanFeeTypeID] ,
-		[PercentOfIssued]  ,
+		[Percent]  ,
 		[AbsoluteAmount]  ,
 		[OneTimePartPercent] ,
 		[DistributedPartPercent]	

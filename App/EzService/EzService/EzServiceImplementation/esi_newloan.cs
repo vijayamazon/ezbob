@@ -65,7 +65,7 @@
 			return strategy.NLModel;
 		} // AddPayment
 
-		public LongActionResult AddLoanOptions(int userID, int customerID, NLLoanOptions loanOptions, int? oldLoanId) {
+		public LongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId) {
 			AddLoanOptions stra;
 			var amd = ExecuteSync(out stra, customerID, userID, customerID, loanOptions, oldLoanId);
 			return new LongActionResult {
@@ -104,7 +104,7 @@
 				} // if
 
 				if (t.Name == "NL_Model") {
-					RescheduleLoan<NL_Model> strategy;
+					//RescheduleLoan<NL_Model> strategy;
 					// TODO
 				} // if
 			} catch (Exception e) {

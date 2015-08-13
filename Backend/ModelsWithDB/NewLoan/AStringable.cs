@@ -12,7 +12,7 @@
 				object val = pi.GetValue(this);
 
 				if ((val != null) && DisplayFieldInToString(pi.Name))
-					sb.Append(pi.Name).Append(": ").Append(val).Append("; \n");
+					sb.Append(pi.Name).Append(": ").Append(val).Append("; \t");
 			});
 
 			return sb.ToString();

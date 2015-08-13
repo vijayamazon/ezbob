@@ -6,7 +6,6 @@
 	using System.Web;
 	using ConfigManager;
 	using DbConstants;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.Misc;
 	using Ezbob.Database;
@@ -21,12 +20,14 @@
 
 			if (CurrentValues.Instance.Environment.Value.Contains("dev")) {
 				this.emailToAddress = "elinar@ezbob.com";
-				this.emailFromAddress = "elinar@ezbob.com";
 			} else {
 				this.emailToAddress = CurrentValues.Instance.EzbobTechMailTo;
-				this.emailFromAddress = "elinar@ezbob.com";
 			}
-			this.emailFromName = "ezbob-system";
+			this.emailFromName = "ezbob-dev-system";
+			this.emailFromName = CurrentValues.Instance.MailSenderName;
+
+			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
+
 		}//constructor
 
 		public override string Name { get { return "AddLoan"; } }

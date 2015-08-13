@@ -82,7 +82,7 @@
 			return this;
 		} // SetOverrideApprovedRejected
 
-		/// <exception cref="StrategyAlert">Should never happen.</exception>
+		
 		public override void Execute() {
 			ValidateInput();
 
@@ -561,7 +561,7 @@
 				if (this.autoDecisionResponse.SetupFee > 0) {
 					offerFees.Add(new NL_OfferFees {
 						LoanFeeTypeID = (int)FeeTypes.SetupFee,
-						PercentOfIssued = this.autoDecisionResponse.SetupFee,
+						Percent = this.autoDecisionResponse.SetupFee,
 					});
 				} // if
 
@@ -792,17 +792,17 @@
 			this.cashRequestID.Value = sr["CashRequestID"];
 
 			if (this.nlExists) {
-				AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
+				AddCashRequest nlCashRequest = new AddCashRequest(new NL_CashRequests {
 					CashRequestOriginID = (int)this.cashRequestOriginator.Value,
 					CustomerID = CustomerID,
 					OldCashRequestID = this.cashRequestID,
 					RequestTime = now,
 					UserID = UnderwriterID,
 				});
-				cashRequestStrategy.Execute();
-				this.nlCashRequestID = cashRequestStrategy.CashRequestID;
+				nlCashRequest.Execute();
+				this.nlCashRequestID = nlCashRequest.CashRequestID;
 
-				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
+				Log.Debug("Added NL CashRequest: {0}, OldCashRequestID: {1}", this.nlCashRequestID, this.cashRequestID);
 			} // if
 
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {

@@ -1,41 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:ser="http://schemas.microsoft.com/2003/10/Serialization/" xmlns:tns="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:import namespace="http://schemas.datacontract.org/2004/07/DbConstants" />
-  <xs:complexType name="NLLoanOptions">
-    <xs:complexContent mixed="false">
-      <xs:extension base="tns:AStringable">
-        <xs:sequence>
-          <xs:element minOccurs="0" name="AutoCharge" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="AutoInterest" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="AutoLateFees" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="CaisAccountStatus" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="EmailSendingAllowed" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="InsertDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="IsActive" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="LatePaymentNotification" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="LoanID" nillable="true" type="xs:long" />
-          <xs:element minOccurs="0" name="LoanOptionsID" nillable="true" type="xs:long" />
-          <xs:element minOccurs="0" name="MailSendingAllowed" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="ManualCaisFlag" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
-          <xs:element minOccurs="0" name="ReductionFee" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="SmsSendingAllowed" nillable="true" type="xs:boolean" />
-          <xs:element minOccurs="0" name="StopAutoChargeDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="StopAutoInterestDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="StopAutoLateFeesDate" nillable="true" type="xs:dateTime" />
-          <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
-        </xs:sequence>
-      </xs:extension>
-    </xs:complexContent>
-  </xs:complexType>
-  <xs:element name="NLLoanOptions" nillable="true" type="tns:NLLoanOptions" />
-  <xs:complexType name="AStringable">
-    <xs:sequence />
-    <xs:attribute ref="ser:Id" />
-    <xs:attribute ref="ser:Ref" />
-  </xs:complexType>
-  <xs:element name="AStringable" nillable="true" type="tns:AStringable" />
+  <xs:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
   <xs:complexType name="ReschedulingArgument">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AStringable">
@@ -52,6 +18,12 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="ReschedulingArgument" nillable="true" type="tns:ReschedulingArgument" />
+  <xs:complexType name="AStringable">
+    <xs:sequence />
+    <xs:attribute ref="ser:Id" />
+    <xs:attribute ref="ser:Ref" />
+  </xs:complexType>
+  <xs:element name="AStringable" nillable="true" type="tns:AStringable" />
   <xs:complexType name="ReschedulingResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AStringable">

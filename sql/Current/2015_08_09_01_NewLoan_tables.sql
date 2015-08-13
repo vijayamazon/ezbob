@@ -166,6 +166,7 @@ BEGIN
 		IsActive BIT NOT NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_DiscountPlans PRIMARY KEY (DiscountPlanID)
+		
 	)
 END
 GO
@@ -346,9 +347,14 @@ BEGIN
 		CONSTRAINT FK_NL_Offers_Decision FOREIGN KEY (DecisionID) REFERENCES NL_Decisions (DecisionID),
 		CONSTRAINT FK_NL_Offers_LoanType FOREIGN KEY (LoanTypeID) REFERENCES LoanType (Id),
 		CONSTRAINT FK_NL_Offers_Period FOREIGN KEY (RepaymentIntervalTypeID) REFERENCES NL_RepaymentIntervalTypes (RepaymentIntervalTypeID),
-		CONSTRAINT FK_NL_Offers_LoanSource FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID)
+		CONSTRAINT FK_NL_Offers_LoanSource FOREIGN KEY (LoanSourceID) REFERENCES LoanSource (LoanSourceID),
+		CONSTRAINT [FK_NL_Offers_NL_DiscountPlans] FOREIGN KEY([DiscountPlanID]) REFERENCES [dbo].[NL_DiscountPlans] ([DiscountPlanID])		
 	)
 END
+GO
+
+ IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_NL_Offers_LoanType')
+	ALTER TABLE [dbo].[NL_Offers] add constraint DF_NL_Offers_LoanType DEFAULT 1 for LoanTypeID	;
 GO
 
 -------------------------------------------------------------------------------
@@ -360,7 +366,7 @@ BEGIN
 		OfferFeeID BIGINT IDENTITY(1, 1) NOT NULL,
 		OfferID BIGINT NOT NULL,
 		LoanFeeTypeID INT NOT NULL,
-		PercentOfIssued DECIMAL(18, 6) NULL,
+		[Percent] DECIMAL(18, 6) NULL,
 		AbsoluteAmount DECIMAL(18, 6) NULL,
 		OneTimePartPercent DECIMAL(18, 6) NOT NULL,
 		DistributedPartPercent DECIMAL(18, 6) NOT NULL,
@@ -369,9 +375,9 @@ BEGIN
 		CONSTRAINT FK_NL_OfferFees_Offer FOREIGN KEY (OfferID) REFERENCES NL_Offers (OfferID),
 		CONSTRAINT FK_NL_OfferFees_FeeType FOREIGN KEY (LoanFeeTypeID) REFERENCES NL_LoanFeeTypes (LoanFeeTypeID),
 		CONSTRAINT CHK_NL_OfferFees CHECK (
-			(PercentOfIssued IS NOT NULL OR AbsoluteAmount IS NOT NULL)
+			([Percent] IS NOT NULL OR AbsoluteAmount IS NOT NULL)
 			AND
-			(PercentOfIssued IS NULL OR (0 < PercentOfIssued AND PercentOfIssued <= 1))
+			([Percent] IS NULL OR (0 < [Percent] AND [Percent] <= 1))
 			AND
 			(AbsoluteAmount IS NULL OR AbsoluteAmount > 0)
 			AND

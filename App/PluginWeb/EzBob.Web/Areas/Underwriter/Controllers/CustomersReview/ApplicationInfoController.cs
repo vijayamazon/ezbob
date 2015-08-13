@@ -695,7 +695,7 @@
 
 			log.Info("NL--- decisionID: {0}, oldCashRequestID: {1}", decisionId, cr.Id);
 
-			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, PercentOfIssued = manualSetupFeePercent ?? 0 };
+			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = manualSetupFeePercent ?? 0 };
 			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true)
 				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
 			NL_OfferFees[] ofeerFees = { setupFee };

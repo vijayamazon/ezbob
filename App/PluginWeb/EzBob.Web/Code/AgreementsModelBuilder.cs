@@ -1,5 +1,4 @@
-﻿namespace EzBob.Web.Code
-{
+﻿namespace EzBob.Web.Code {
 	using System;
 	using System.Collections.Generic;
 	using System.Globalization;
@@ -21,8 +20,7 @@
 	using ServiceClientProxy;
 	using StructureMap;
 
-	public class AgreementsModelBuilder
-	{
+	public class AgreementsModelBuilder {
 		private readonly APRCalculator _aprCalc;
 	    private readonly RepaymentCalculator _repaymentCalculator;
 	    protected readonly ServiceClient serviceClient;
@@ -44,8 +42,7 @@
 		/// <param name="amount"></param>
 		/// <param name="loan"></param>
 		/// <returns></returns>
-		public virtual AgreementModel Build(Customer customer, decimal amount, Loan loan)
-		{
+		public virtual AgreementModel Build(Customer customer, decimal amount, Loan loan) {
 			var now = DateTime.UtcNow;
 
 			if (customer.LastCashRequest == null && loan == null) throw new ArgumentException("LastCashRequest or Loan is required");
@@ -54,8 +51,7 @@
 			return GenerateAgreementModel(customer, loan, now, apr);
 		}
 
-		public virtual AgreementModel ReBuild(Customer customer, Loan loan)
-		{
+		public virtual AgreementModel ReBuild(Customer customer, Loan loan){
 			return GenerateAgreementModel(customer, loan, loan.Date, (double)loan.APR);
 		}
 
@@ -70,8 +66,7 @@
 			var businessType = customer.PersonalInfo.TypeOfBusiness;
 			var company = customer.Company;
 			CustomerAddress companyAddress = null;
-			if (company != null)
-			{
+			if (company != null){
 				switch (businessType.Reduce())
 				{
 					case TypeOfBusinessReduced.Limited:
@@ -156,17 +151,13 @@
                     model.EverlineRefinanceLoanDate = FormattingUtils.FormatDateToString(evlOpenLoan.FundedOn);
                     model.EverlineRefinanceLoanOutstandingAmount = FormattingUtils.NumericFormats(evlOpenLoan.BalanceDetails.TotalOutstandingBalance.Value);
                 }
-            }
-            catch
-            {
+            } catch {
                 //failed to build everline refinance 
             }
         }
 
-        private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule)
-        {
-            return schedule.Select((installment, i) => new FormattedSchedule
-            {
+        private IList<FormattedSchedule> CreateSchedule(IEnumerable<LoanScheduleItem> schedule) {
+            return schedule.Select((installment, i) => new FormattedSchedule {
                 AmountDue = FormattingUtils.NumericFormats(installment.AmountDue),
                 Principal = FormattingUtils.NumericFormats(installment.LoanRepayment),
                 Interest = FormattingUtils.NumericFormats(installment.Interest),
@@ -178,10 +169,8 @@
             }).ToList();
         }
 
-        private IList<FormattedSchedule> NL_CreateSchedule(IEnumerable<LoanScheduleItemModel> schedule)
-        {
-            return schedule.Select((installment, i) => new FormattedSchedule
-            {
+        private IList<FormattedSchedule> NL_CreateSchedule(IEnumerable<LoanScheduleItemModel> schedule) {
+            return schedule.Select((installment, i) => new FormattedSchedule {
                 AmountDue = FormattingUtils.NumericFormats(installment.AmountDue),
                 Principal = FormattingUtils.NumericFormats(installment.LoanRepayment),
                 Interest = FormattingUtils.NumericFormats(installment.Interest),
@@ -193,8 +182,7 @@
             }).ToList();
         }
 
-		public void CalculateTotal(decimal fee, List<LoanScheduleItem> schedule, AgreementModel model)
-		{
+		public void CalculateTotal(decimal fee, List<LoanScheduleItem> schedule, AgreementModel model) {
 			model.TotalAmount = FormattingUtils.NumericFormats(schedule.Sum(a => a.AmountDue));
 			model.TotalPrincipal = FormattingUtils.NumericFormats(schedule.Sum(a => a.LoanRepayment));
 			model.TotalInterest = FormattingUtils.NumericFormats(schedule.Sum(a => a.Interest));
@@ -208,8 +196,7 @@
 			                           schedule.Sum(a => a.LoanRepayment)).ToString("N", CultureInfo.CreateSpecificCulture("en-gb"));
 		}
 
-        public void NL_CalculateTotal(decimal fee, AgreementModel model)
-        {
+        public void NL_CalculateTotal(decimal fee, AgreementModel model) {
             model.TotalAmount = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.AmountDue));
             model.TotalPrincipal = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.LoanRepayment));
             model.TotalInterest = FormattingUtils.NumericFormats(model.Schedule.Sum(a => a.Interest));
@@ -226,8 +213,7 @@
         }
 
 
-        public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel)
-        {
+        public AgreementModel NL_BuildAgreementModel(Customer customer, NL_Model nlModel) {
             var model = new AgreementModel();
 			var result = this.serviceClient.Instance.CalculateLoanSchedule(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 

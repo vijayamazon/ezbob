@@ -12,7 +12,7 @@ GO
  CREATE TYPE NL_OfferFeesList AS TABLE (		
 	 [OfferID] BIGINT NOT NULL ,	
 	 [LoanFeeTypeID] INT NOT NULL ,
-	 [PercentOfIssued] DECIMAL(18, 6) NULL,
+	 [Percent] DECIMAL(18, 6) NULL,
 	 [AbsoluteAmount] DECIMAL(18, 6) NULL ,
 	 [OneTimePartPercent] [DECIMAL](18, 6) NULL,
 	 [DistributedPartPercent] [DECIMAL](18, 6) NULL	 
@@ -28,14 +28,14 @@ BEGIN
 	 INSERT INTO NL_OfferFees (		
 		[OfferID]  ,	
 		[LoanFeeTypeID] ,
-		[PercentOfIssued]  ,
+		[Percent]  ,
 		[AbsoluteAmount]  ,
 		[OneTimePartPercent] ,
 		[DistributedPartPercent]		 
 	 ) SELECT			
 		[OfferID]  ,	
 		[LoanFeeTypeID] ,
-		[PercentOfIssued]  ,
+		[Percent]  ,
 		[AbsoluteAmount]  ,
 		[OneTimePartPercent] ,
 		[DistributedPartPercent]

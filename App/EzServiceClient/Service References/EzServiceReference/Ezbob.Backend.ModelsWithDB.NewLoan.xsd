@@ -130,6 +130,34 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="NL_LoanLegals" nillable="true" type="tns:NL_LoanLegals" />
+  <xs:complexType name="NL_LoanOptions">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:AStringable">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="AutoCharge" type="xs:boolean" />
+          <xs:element minOccurs="0" name="AutoInterest" type="xs:boolean" />
+          <xs:element minOccurs="0" name="AutoLateFees" type="xs:boolean" />
+          <xs:element minOccurs="0" name="CaisAccountStatus" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="EmailSendingAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="InsertDate" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="IsActive" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LatePaymentNotification" type="xs:boolean" />
+          <xs:element minOccurs="0" name="LoanID" type="xs:long" />
+          <xs:element minOccurs="0" name="LoanOptionsID" type="xs:long" />
+          <xs:element minOccurs="0" name="MailSendingAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="ManualCaisFlag" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Notes" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="ReductionFee" type="xs:boolean" />
+          <xs:element minOccurs="0" name="SmsSendingAllowed" type="xs:boolean" />
+          <xs:element minOccurs="0" name="StopAutoChargeDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StopAutoInterestDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="StopAutoLateFeesDate" nillable="true" type="xs:dateTime" />
+          <xs:element minOccurs="0" name="UserID" nillable="true" type="xs:int" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NL_LoanOptions" nillable="true" type="tns:NL_LoanOptions" />
   <xs:complexType name="NL_Model">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:AStringable">

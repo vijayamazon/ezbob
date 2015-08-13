@@ -1188,7 +1188,7 @@
       <xs:sequence>
         <xs:element minOccurs="0" name="userID" type="xs:int" />
         <xs:element minOccurs="0" name="customerID" type="xs:int" />
-        <xs:element xmlns:q101="http://schemas.datacontract.org/2004/07/Ezbob.Backend.Models.NewLoan" minOccurs="0" name="loanOptions" nillable="true" type="q101:NLLoanOptions" />
+        <xs:element xmlns:q101="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="loanOptions" nillable="true" type="q101:NL_LoanOptions" />
         <xs:element minOccurs="0" name="oldLoanId" nillable="true" type="xs:int" />
       </xs:sequence>
     </xs:complexType>
