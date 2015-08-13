@@ -77,7 +77,7 @@
 					var offerFee = new OfferFee(
 						(FeeTypes)assignedFee.LoanFeeTypeID,
 						WorkingModel.LoanHistory.Last().Amount,
-						assignedFee.PercentOfIssued,
+						assignedFee.Percent,
 						assignedFee.AbsoluteAmount,
 						assignedFee.OneTimePartPercent,
 						assignedFee.DistributedPartPercent
