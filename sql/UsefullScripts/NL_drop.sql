@@ -1,6 +1,41 @@
 SET QUOTED_IDENTIFIER ON
 GO
 
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_NL_Payments_LoanTransactionMethod')
+	ALTER TABLE NL_Payments DROP CONSTRAINT FK_NL_Payments_LoanTransactionMethod;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_Payments_CreatedBySecurity_User')
+	ALTER TABLE NL_Payments DROP CONSTRAINT FK_Payments_CreatedBySecurity_User;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_NL_Payments_DeletedBySecurity_User')
+	ALTER TABLE NL_Payments DROP CONSTRAINT FK_NL_Payments_DeletedBySecurity_User;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' AND name = 'FK_LoanScheduleTransaction_LoanTransactions')
+	ALTER TABLE NL_LoanSchedulePayments DROP CONSTRAINT FK_LoanScheduleTransaction_LoanTransactions;	
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_LoanFeePayments_LoanTransactions') 
+	ALTER TABLE NL_LoanFeePayments DROP CONSTRAINT [FK_LoanFeePayments_LoanTransactions] ;
+GO
+
+IF  EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_PaypointTransactions_Payments') 
+ ALTER TABLE [NL_PaypointTransactions] DROP CONSTRAINT FK_PaypointTransactions_Payments;
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_NL_Payments_NL_PaymentStatuses') 
+ ALTER TABLE [NL_Payments] DROP CONSTRAINT FK_NL_Payments_NL_PaymentStatuses ;
+GO
+
+IF EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type_desc = 'FOREIGN_KEY_CONSTRAINT' and name = 'FK_WriteOffReasons_Payments') 
+ ALTER TABLE [WriteOffReasons] DROP CONSTRAINT FK_WriteOffReasons_Payments ;
+GO
+
+
+
+
 -------------------------------------------------------------------------------
 --
 -- Drop procedures
