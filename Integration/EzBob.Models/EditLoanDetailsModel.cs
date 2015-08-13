@@ -6,6 +6,7 @@ namespace EzBob.Models
     using System.Text;
     using Ezbob.Backend.Models.NewLoan;
     using EZBob.DatabaseLib.Model.Database;
+    using EZBob.DatabaseLib.Model.Database.Loans;
     using Newtonsoft.Json;
     using Newtonsoft.Json.Converters;
 
@@ -14,6 +15,8 @@ namespace EzBob.Models
         private readonly List<string> _errors = new List<string>();
 
         public int Id { get; set; }
+
+        public string LoanStatus { get; set; }
 
         public List<SchedultItemModel> Items { get; set; }
 

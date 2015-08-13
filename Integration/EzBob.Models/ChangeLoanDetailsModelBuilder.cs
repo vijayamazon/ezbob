@@ -19,6 +19,8 @@
 				LoanType = loan.LoanType.Type
 			};
 
+            model.LoanStatus = Enum.GetName(typeof(LoanStatus), loan.Status);
+
 			if (loan.CashRequest != null)
 				model.CashRequestId = loan.CashRequest.Id;
 

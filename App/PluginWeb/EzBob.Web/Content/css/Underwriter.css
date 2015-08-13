@@ -2304,3 +2304,18 @@ input[type="text"].err-field-black {
 input[type="text"].err-field-red {
     border-color: red;
 }
+.editloan-actions-region {
+    margin-bottom: 20px;
+}
+    
+.editloan-actions-region  span{
+
+    line-height:35px;
+}
+.editloan-actions-region button {
+   margin-left: 10px;
+}
+.editloan-actions-region .input-group {
+   
+    margin-left: 10px;
+}

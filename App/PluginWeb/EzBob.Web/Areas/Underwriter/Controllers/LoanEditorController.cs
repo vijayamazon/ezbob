@@ -338,7 +338,8 @@
 				// to.Subtract(from)
 			    if (options.StopLateFeeToDate.Value.Subtract(options.StopLateFeeFromDate.Value).Days < 0) {
 				    model.Errors.Add("'Until date must be greater then From date");
-					return Json(model);
+                    RescheduleSetmodel(model, this._loans.Get(id));
+                    return Json(model);
 			    }
 		    } 
 
@@ -404,7 +405,7 @@
 
             EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
             model.Options = this.loanOptionsRepository.GetByLoanId(id);
-            
+            RescheduleSetmodel(model, this._loans.Get(id));
             return Json(model);
         }
 
@@ -428,25 +429,36 @@
 
         [Ajax]
         [HttpPost]
-        [Transactional]
-        public JsonResult SaveFreezeInterval(int id)
-        {
-            DateTime? freezeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["startdate"]);
-            DateTime? freezeEndDate = Convert.ToDateTime(HttpContext.Request.QueryString["enddate"]);
-            Loan loan = this._loans.Get(id);
-            loan.InterestFreeze.Add(new LoanInterestFreeze
-            {
-                Loan = loan,
-                StartDate = freezeStartDate,
-                EndDate = freezeEndDate,
-                InterestRate = 0,
-                ActivationDate = DateTime.UtcNow,
-                DeactivationDate = null
-            });
+        
+        public JsonResult SaveFreezeInterval(int id) {
+            
+                DateTime? freezeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["startdate"]);
+                DateTime? freezeEndDate = Convert.ToDateTime(HttpContext.Request.QueryString["enddate"]);
 
-            this._loans.SaveOrUpdate(loan);
+                if (freezeStartDate > freezeEndDate) {
+                    EditLoanDetailsModel errorModel = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+                    errorModel.Errors.Add("'Until date must be greater then From date");
+                    RescheduleSetmodel(errorModel, this._loans.Get(id));
+                    return Json(errorModel);
+                }
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+                Loan loan = this._loans.Get(id);
+                new Transactional(() =>
+                {
+            
+                loan.InterestFreeze.Add(new LoanInterestFreeze {
+                    Loan = loan,
+                    StartDate = freezeStartDate,
+                    EndDate = freezeEndDate,
+                    InterestRate = 0,
+                    ActivationDate = DateTime.UtcNow,
+                    DeactivationDate = null
+                });
+
+                this._loans.SaveOrUpdate(loan);
+            }).Execute();
+
+            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
             model.Options = this.loanOptionsRepository.GetByLoanId(id);
             RescheduleSetmodel(model, loan);
             return Json(model);
@@ -468,6 +480,7 @@
 
             var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
             calc.GetState();
+
 
             EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
 
