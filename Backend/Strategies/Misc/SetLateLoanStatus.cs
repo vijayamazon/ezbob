@@ -43,7 +43,7 @@
 
             //-----------Send collection mails sms imails and change status --------------------
 			LoadSmsTemplates();
-
+			LoadImailTemplates();
 			DB.ForEachRowSafe((sr, bRowsetStart) => {
 				try {
 					HandleCollectionLogic(sr);
@@ -68,6 +68,19 @@
             }, "GetCuredLoansForCollection",  CommandSpecies.StoredProcedure);
 		}//Execute
 
+		private void LoadImailTemplates() {
+			List<CollectionSnailMailTemplate> templates = this.DB.Fill<CollectionSnailMailTemplate>("LoadCollectionSnailMailTemplates", CommandSpecies.StoredProcedure);
+			this.collectionIMailer.SetTemplates(templates.Select(x => new SnailMailTemplate {
+				Type = x.Type,
+				OriginID = x.OriginID,
+				Template = x.Template,
+				IsActive = x.IsActive,
+				TemplateName = x.TemplateName,
+				FileName = x.FileName,
+				IsLimited = x.IsLimited
+			}));
+		}
+		
 		private void LoadSmsTemplates() {
 			this.smsTemplates = DB.Fill<CollectionSmsTemplate>("LoadCollectionSmsTemplates", CommandSpecies.StoredProcedure);
 		}//LoadSmsTemplates
