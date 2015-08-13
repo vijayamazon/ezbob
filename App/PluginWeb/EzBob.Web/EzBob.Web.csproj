@@ -682,6 +682,7 @@
     <Content Include="Content\css\lib\jquery.jqplot.css" />
     <Content Include="Content\css\lib\jquery.jscrollpane.css" />
     <Content Include="Content\css\lib\jquery.ui.1.8.16.ie.css" />
+    <Content Include="Content\css\lib\normalize.css" />
     <Content Include="Content\css\lib\notifications.css" />
     <Content Include="Content\css\mobile.css" />
     <Content Include="Content\css\paypoint-template.css" />

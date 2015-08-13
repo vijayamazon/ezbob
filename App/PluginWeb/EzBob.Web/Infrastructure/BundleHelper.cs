@@ -26,12 +26,13 @@
         {
             return Bundle.Css()
                 //libs
+                .Add("~/Content/css/lib/normalize.css")
                 .Add("~/Content/css/lib/dropzone.css")
                 .Add("~/Content/css/lib/font-awesome.min.css")
                 .Add("~/Content/css/lib/notifications.css")
                 .Add("~/Content/css/lib/coin-slider-styles.css")
                 .Add("~/Content/css/lib/chosen.css")
-
+               
                 //common
                 .Add("~/Content/css/profile-ny2015scratch.css")
                 .Add("~/Content/css/valentine2015scratch.css")

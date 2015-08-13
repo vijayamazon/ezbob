@@ -3,7 +3,7 @@
 }
 .hide {
     display:none;
-    visibility: hidden;
+  
 }
 .vip-container {
      display:none;
@@ -26,11 +26,11 @@
     font-size:22px;
     margin-bottom:35px;
 }
-.wizard-wrap .wizard-inner-wrap  .form-element {
+.wizard-wrap .wizard-inner-wrap  .form_field_container {
     clear: both;
     margin-bottom: 15px;
 }
-.wizard-wrap .wizard-inner-wrap  .form-element .input-title {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-title {
     width: 30%;
     float: left;
     font-size: 15px;
@@ -39,19 +39,28 @@
     text-align: right;
     line-height: 42px;
 }
-.wizard-wrap .wizard-inner-wrap  .form-element .input-title.long {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-title.long {
     line-height: 16px;
 }
-.wizard-wrap .wizard-inner-wrap  .form-element .error-wrap {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .error-wrap {
     height: 15px;
 }
-.wizard-wrap .wizard-inner-wrap  .form-element .error {
-    color: red;
+.wizard-wrap .wizard-inner-wrap  .form_field_container .error {
+    color: #d20002;
     font-size: 13px;
     line-height: 25px;
     font-weight: 400;
 }
-.wizard-wrap .wizard-inner-wrap  .form-element .input-wrapper {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .help-block {
+    color:#d20002;
+    display: block;
+    width: 70%;
+    float: right;
+    box-sizing: border-box;
+    padding-left: 20px;
+    font-size: 14px;
+}
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper {
     width: 70%;
     display: inline-block;
     padding-left: 20px;
@@ -63,9 +72,9 @@
     position: relative;
 }
 
-.wizard-wrap .wizard-inner-wrap  .form-element .input-wrapper select,
-.wizard-wrap .wizard-inner-wrap  .form-element .input-wrapper input,
-.wizard-wrap .wizard-inner-wrap  .form-element .input-wrapper textarea {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper select,
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper input,
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper textarea {
     display: block;
     background: #ffffff;
     height: 50px;
@@ -82,13 +91,56 @@
     -o-box-sizing: border-box;
     box-sizing: border-box;
 }
-.wizard-wrap .wizard-inner-wrap .form-element .input-wrapper input:focus,
-.wizard-wrap .wizard-inner-wrap .form-element .input-wrapper select:focus,
-.wizard-wrap .wizard-inner-wrap .form-element .input-wrapper textarea:focus,
-.wizard-wrap .wizard-inner-wrap .form-element .input-wrapper button:focus {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input:focus,
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper select:focus,
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea:focus,
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper button:focus {
     outline: none;
 }
-
-.om-form-wrap .om-form-inner-wrap .om-form-body .om-form-element .om-input-wrapper input:-webkit-autofill {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper .form_field_left_side {
+    width:50%;
+    float:left;
+}
+.wizard-wrap .wizard-inner-wrap   .form_field_container .input-wrapper input:-webkit-autofill {
     background-color: white !important;
 }
+.wizard-wrap .wizard-inner-wrap   .form_field_container .input-wrapper .clean-btn, .simpleCaptcha a {
+    float: left;
+    width: 45%;
+    box-sizing: border-box;
+    border: 2px solid #e28023;
+    margin-left: 5%;
+    height:48px;
+    line-height: 42px;
+    text-align: center;
+    color: #e28023;
+    font-weight: 600;
+    opacity:1;
+    cursor:pointer;
+        background-color: transparent;
+        text-decoration:none;
+}
+.wizard-wrap .wizard-inner-wrap   .form_field_container .input-wrapper .clean-btn.disabled {
+    opacity:0.3;
+    cursor:default;
+}
+.simpleCaptcha {
+     width: 70%;
+    float: right;
+    box-sizing: border-box;
+    padding-left: 20px;
+}
+.simpleCaptcha .captcha-image-margin {
+        float: left;
+    height: 50px;
+    width: 190px;
+}
+.form_buttons_container {
+    clear:both;
+}
+
+.captcha-wrap {
+    margin-bottom: 22px;
+    height: 50px;
+}
+ 

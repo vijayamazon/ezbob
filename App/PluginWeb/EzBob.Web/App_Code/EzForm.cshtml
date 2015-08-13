@@ -48,37 +48,39 @@
 @helper SelectWizard(EzSelectModel selectProp, CustomerOriginEnum origin)
 {
     var identificator = new HtmlString(selectProp.Id);
-    if (origin != CustomerOriginEnum.everline) {
-
-
-        <div class="form_field_container">
+    <div class="form_field_container">
+        @if (origin != CustomerOriginEnum.everline)
+        {
             <label class="attardi-input">
                 <span>@selectProp.Caption</span>
-                @SelectTag(selectProp,identificator)
-                @if (selectProp.StatusIcon) {
+                @SelectTag(selectProp, identificator)
+                @if (selectProp.StatusIcon)
+                {
                     var sId = identificator + "Image";
                     var sReq = selectProp.IsRequired ? "required" : "";
-                    <img id="@sId" class="field_status @sReq"/>
-                } else if (selectProp.IsRequired) {
+                    <img id="@sId" class="field_status @sReq" />
+                }
+                else if (selectProp.IsRequired)
+                {
                     <span class="required">*</span>
                 }
             </label>
-        </div>
-    }
-    else
-    {
-        <div class="form-element">
-            <label class="input-title" for="@identificator">@selectProp.Caption</label>
-            <div class="input-wrapper">
-                <div class="select">
-                    @SelectTag(selectProp,identificator)
-                    <div class="error-wrap"></div>
+
+        }
+        else
+        {
+           
+                <label class="input-title" for="@identificator">@selectProp.Caption</label>
+                <div class="input-wrapper">
+                    <div class="select">
+                        @SelectTag(selectProp, identificator)
+                        <div class="error-wrap"></div>
+                    </div>
+
                 </div>
-
-            </div>
-        </div>
-    }
-
+            
+        }
+    </div>
 }
 @helper SelectTag(EzSelectModel selectProp, HtmlString identificator)
 {
@@ -168,50 +170,57 @@ string formFieldID = ""  )
 @helper InputTextWizard(EzInputBuilder inputProp, CustomerOriginEnum origin)
 
 {
-        var identificator = new HtmlString(inputProp.Id);
-    if (origin != CustomerOriginEnum.everline) {
-        <div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "") class="form_field_container control-group @(inputProp.ToHide ? "hide" : "")">
-            <div class="controls">
-                <label class="attardi-input">
+    var identificator = new HtmlString(inputProp.Id);
+    <div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "") class="form_field_container control-group @(inputProp.ToHide ? "hide" : "")">
+        @if (origin != CustomerOriginEnum.everline) {
+
+        <div class="controls">
+            <label class="attardi-input">
                     @if (!string.IsNullOrWhiteSpace(inputProp.InnerMessage)) {
-                        <div class="inner-input-message-container">
-                            <label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
-                        </div>
-                    }
-                    <span>@inputProp.Caption</span>
-                   @InputTextTag(inputProp, identificator)
-                    @if (inputProp.StatusIcon)
-                    {
+                    <div class="inner-input-message-container">
+                        <label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
+                    </div>
+                }
+                <span>@inputProp.Caption</span>
+                @InputTextTag(inputProp, identificator)
+                @if (inputProp.StatusIcon)
+                {
                     var sId = identificator + "Image";
                     var sReq = inputProp.IsRequired ? "required" : "";
                     <img id="@sId" class="field_status @sReq" />
-                    }
-                    else if (inputProp.IsRequired)
-                    {
-                    <span class="required">*</span>
-                    }
-                    @if (@inputProp.Button != null) {
-                        <button id="@inputProp.Button.Id" class="@inputProp.Button.Cls" type="button" ui-event-control-id="@inputProp.Button.UiEventControlID">@inputProp.Button.Caption</button>
-                    }
-                </label>
-                @if (@inputProp.Type.Equals("password")) {
-                    <p id="message" class="help-block"></p>
                 }
+                else if (inputProp.IsRequired)
+                {
+                    <span class="required">*</span>
+                }
+                    @if (@inputProp.Button != null) {
+                    <button id="@inputProp.Button.Id" class="@inputProp.Button.Cls" type="button" ui-event-control-id="@inputProp.Button.UiEventControlID">@inputProp.Button.Caption</button>
+                }
+            </label>
+          
 
-            </div>
         </div>
-    }
-    else
-    {
-        <div class="form-element">
+
+        }
+        else
+        {
+      
             <label class="input-title" for="@identificator">@inputProp.Caption</label>
             <div class="input-wrapper">
                 @InputTextTag(inputProp, identificator)
+                @if (@inputProp.Button != null)
+                {
+                    <button id="@inputProp.Button.Id" class="@inputProp.Button.Cls" type="button" ui-event-control-id="@inputProp.Button.UiEventControlID">@inputProp.Button.Caption</button>
+                }
                 <div class="error-wrap"></div>
             </div>
-        </div>
-    }
-
+        
+        }
+        @if (@inputProp.Type.Equals("password"))
+        {
+            <p id="message" class="help-block"></p>
+        }
+    </div>
 }
 
 
@@ -276,7 +285,7 @@ string formFieldID = ""  )
                     @if (!string.IsNullOrWhiteSpace(uiEventControlID))
                     {
                         @:ui-event-control-id="@uiEventControlID"
-                    }
+                                                                                                                                       }
                     />
                 @if (statusIcon)
                 {
@@ -633,12 +642,16 @@ string formFieldID = ""  )
     </select>
 }
 
-@helper Captcha(string captchaType, string cls = "", string sId = "captcha")
+@helper Captcha(string captchaType, string cls = "", string sId = "captcha", CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
     <div class="control-group">
         <div class="captcha">
-            <div id="@sId">
+            
+            <div class="captcha-wrap"id="@sId">
+                
             </div>
+            @EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", cls: "form_field", isRequired: true
+                                       , statusIcon: true, uiEventControlID: "signup:captcha", maxLength: 6), origin: origin)
         </div>
     </div>
 }
@@ -648,7 +661,7 @@ string formFieldID = ""  )
     <div class="control-group">
         <label for="@id" class="control-label">@labelText</label>
         <div class="controls">
-            <input type="button" id="@id" class="@cls btn input-medium" style="@css" value="@buttonText"/>
+            <input type="button" id="@id" class="@cls btn input-medium" style="@css" value="@buttonText" />
         </div>
     </div>
 }
