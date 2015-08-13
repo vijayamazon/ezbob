@@ -317,7 +317,8 @@
         //    }
         //}
 
-        [Ajax]
+	    
+	    [Ajax]
         [HttpPost]
         [Transactional]
         public JsonResult SaveLateFeeOption(int id)
@@ -331,9 +332,18 @@
             options.StopLateFeeFromDate = lateFeeStartDate;
             options.StopLateFeeToDate = lateFeeEndDate;
 
-            this.loanOptionsRepository.SaveOrUpdate(options);
+			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+		    if (options.StopLateFeeFromDate!=null && options.StopLateFeeToDate!=null) {
+				// to.Subtract(from)
+			    if (options.StopLateFeeToDate.Value.Subtract(options.StopLateFeeFromDate.Value).Days < 0) {
+				    model.Errors.Add("'Until date must be greater then From date");
+					return Json(model);
+			    }
+		    } 
+
+            this.loanOptionsRepository.SaveOrUpdate(options);
+           
             model.Options = this.loanOptionsRepository.GetByLoanId(id);
             RescheduleSetmodel(model, this._loans.Get(id));
             return Json(model);
@@ -394,7 +404,7 @@
 
             EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
             model.Options = this.loanOptionsRepository.GetByLoanId(id);
-            RescheduleSetmodel(model, loan);
+            
             return Json(model);
         }
 

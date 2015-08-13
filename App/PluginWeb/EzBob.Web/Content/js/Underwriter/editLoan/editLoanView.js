@@ -88,16 +88,19 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     },
 
     feesSaveBtn: function () {
-        var lateFeeStartDate = $('#fees-calendar-from').val();
-        var lateFeeEndDate = $('#fees-calendar-to').val();
+        var startDate = $('#fees-calendar-from').val();
+        var endDate = $('#fees-calendar-to').val();
+	    var params;
         //Check that both input are not empty
-        if (lateFeeEndDate === "" || lateFeeStartDate === "") {
-            var params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+        if (startDate === "" || endDate === "") {
+            params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
-        if (new Date(lateFeeStartDate).getTime() > new Date(lateFeeEndDate).getTime()) {
-            var params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+        var star = new Date(startDate);
+        var end = new Date(endDate);
+        if (star > end) {
+            params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
@@ -105,7 +108,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         //Validation work.
         BlockUi('on');
 
-        this.model.SaveLateFeeOption(lateFeeStartDate,lateFeeEndDate);
+        this.model.SaveLateFeeOption(startDate, endDate);
     },
 
 	feesDeleteBtn: function () {
@@ -116,14 +119,14 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     intrestSaveBtn: function () {
         var interestFrom = $('#intrest-calendar-from').val();
         var interestTo = $('#intrest-calendar-to').val();
-
+	    var params;
         if (interestTo === "" || interestFrom === "") {
-            var params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+            params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
         if (new Date(interestFrom).getTime() > new Date(interestTo).getTime()) {
-            var params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+            params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
@@ -447,8 +450,8 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 			this.$el.find('#stop-charges').show();
 		}
 		if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null) {
-		    this.$el.find('#fees-date-from').text(EzBob.formatDateWithoutTime(options.StopLateFeeFromDate));
-		    this.$el.find('#fees-date-to').text(EzBob.formatDateWithoutTime(options.StopLateFeeToDate));
+			this.$el.find('#fees-date-from').text(EzBob.formatDate3(options.StopLateFeeFromDate));
+			this.$el.find('#fees-date-to').text(EzBob.formatDate3(options.StopLateFeeToDate));
 		    this.$el.find('#fees-dates').show();
 		}
 	},

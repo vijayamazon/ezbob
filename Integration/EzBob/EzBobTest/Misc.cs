@@ -234,31 +234,33 @@
 		public void DateDiffs() {
 
 			// 2/11/2016
-			DateTime end = new DateTime(2016, 11, 2);
+			DateTime to = new DateTime(2015, 8, 9);
 
 			// 31/10/2016
-			DateTime  start= new DateTime(2016, 10, 31);
+			DateTime  from = new DateTime(2015, 8, 13);
 
-			Console.WriteLine(start);
-			Console.WriteLine(end);
+			Console.WriteLine(from);
+			Console.WriteLine(to);
 
-			TimeSpan ts = start.Subtract(end);
+			TimeSpan ts = to.Subtract(from);
 
 			double totalDays = ts.TotalDays;
 			int dDays = ts.Days;
 
 			Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
 
+			return;
+
 			// 12/10/2016
-			end = new DateTime(2016, 10, 12);
-			Console.WriteLine(end);
+			//end = new DateTime(2016, 10, 12);
+			//Console.WriteLine(end);
 
-			ts = start.Subtract(end);
+			//ts = start.Subtract(end);
 
-			 totalDays = ts.TotalDays;
-			 dDays = ts.Days;
+			// totalDays = ts.TotalDays;
+			// dDays = ts.Days;
 
-			 Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
+			// Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
 		}
 
 	} // class Misc
