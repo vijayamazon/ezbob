@@ -4,7 +4,6 @@
 	using System.Globalization;
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.MailStrategies;
@@ -87,9 +86,8 @@
             var loanState = new LoanState(new NL_Model(), loanId, customerId, DateTime.UtcNow);
             loanState.Execute();
 
-            LegacyLoanCalculator calc = new LegacyLoanCalculator(loanState.CalcModel);
-
 			// TODO: revive
+            // LegacyLoanCalculator calc = new LegacyLoanCalculator(loanState.CalcModel);
 
 			// TODO: this is wrong usage of CreateScheduleAndPlan method.
 			// It should use GetAmountToChargeForAutoCharger with relevant date.

@@ -5,7 +5,6 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using EZBob.DatabaseLib.Model.Database.Loans;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;

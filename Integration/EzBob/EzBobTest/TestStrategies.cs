@@ -8,7 +8,6 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
@@ -775,7 +774,7 @@
 	
 			NL_Model nlModel = new NL_Model(customerID);
 			nlModel.UserID = 354;
-			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName;
+			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(nlModel).GetType().AssemblyQualifiedName;
 			nlModel.Loan = new NL_Loans();
 			nlModel.Loan.Refnum = oldLoan.RefNumber;
 			nlModel.Loan.OldLoanID = oldLoanID;
@@ -1254,7 +1253,7 @@
 			NL_Model model = new NL_Model() {
 				CustomerID = 123,
 				UserID = userID,
-				CalculatorImplementation = new BankLikeLoanCalculator(new LoanCalculatorModel()).GetType().AssemblyQualifiedName,
+				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
 				Loan = new NL_Loans(),
 				IssuedTime = DateTime.UtcNow,
 			};

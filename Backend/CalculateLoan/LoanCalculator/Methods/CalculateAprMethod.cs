@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Lingvo;
 
@@ -30,11 +29,18 @@
 				);
 			} // if
 
+			return 0;
+			// TODO: revive
+
+			/*
+
 			try {
 				this.loanPlan = new CalculatePlanMethod(Calculator, false).Execute()
 					.Select(r => new AmountDueDate(this, r))
 					.ToList();
-			} catch (NegativeLoanAmountException negativeLoanAmountException) {}
+			} catch (NegativeLoanAmountException negativeLoanAmountException) {
+				// TODO: revive (do something)
+			}
 
 			this.issuedAmount = (double)WorkingModel.ActualIssuedAmount;
 
@@ -87,6 +93,7 @@
 			} // if
 
 			return apr;
+			*/
 		} // Execute
 
 		/// <summary>
@@ -103,6 +110,9 @@
 		/// </summary>
 		public ulong MaxIterationLimit { get; set; }
 
+		// TODO: revive
+		
+		/*
 		private class AmountDueDate {
 			public AmountDueDate(CalculateAprMethod aprMethod, Repayment repayment) {
 				this.date = repayment.Date;
@@ -146,6 +156,8 @@
 			return this.loanPlan.Sum(add => add.ForDerivative(x));
 		} // AprDerivative
 
+		*/
+
 		private bool TooManyIterations() {
 			if (MaxIterationLimit == 0)
 				return false;
@@ -154,7 +166,8 @@
 		} // TooManyIterations
 
 		private readonly DateTime aprDate;
-		private List<AmountDueDate> loanPlan;
+		// TODO: revive
+		// private List<AmountDueDate> loanPlan;
 		private double issuedAmount;
 		private double calculationAccuracy;
 		private ProgressCounter calculationProgress;

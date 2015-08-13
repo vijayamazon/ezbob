@@ -4,7 +4,6 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	internal class CreateScheduleAndPlanMethod : AMethod {
@@ -13,11 +12,15 @@
 			NL_Model loanToCreateModel,
 			bool writeToLog
 		) : base(calculator, writeToLog) {
-			this.loanToCreateModel = loanToCreateModel;
-			this.offerFees = GetOfferFees();
+			// TODO: revive
+			// this.loanToCreateModel = loanToCreateModel;
+			// this.offerFees = GetOfferFees();
 		} // constructor
 
-		public List<ScheduledItemWithAmountDue> Execute() {
+		public void /* List<ScheduledItemWithAmountDue> */ Execute() {
+			// TODO: revive
+
+			/*
 			new CreateScheduleMethod(Calculator, this.loanToCreateModel).Execute();
 
 			var method = new CalculatePlanMethod(Calculator, false);
@@ -25,10 +28,6 @@
 			List<Repayment> payments = method.Execute();
 
 			var result = new List<ScheduledItemWithAmountDue>();
-
-			// TODO: revive
-
-			/*
 
 			for (int i = 0; i < payments.Count; i++) {
 				ScheduledItem si = WorkingModel.Schedule[i];
@@ -59,10 +58,11 @@
 				);
 			} // if
 
-			*/
-
 			return result;
+			*/
 		} // Execute
+
+		/*
 
 		private List<OfferFee> GetOfferFees() {
 			var result = new List<OfferFee>();
@@ -93,5 +93,6 @@
 
 		private readonly NL_Model loanToCreateModel;
 		private readonly List<OfferFee> offerFees;
+		*/
 	} // class CreateScheduleAndPlanMethod
 } // namespace

@@ -4,7 +4,6 @@
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	internal class CreateScheduleMethod : AMethod {
@@ -42,7 +41,8 @@
 				this.discountPlan.AddRange(loanToCreateModel.DiscountPlan);
 		} // constructor
 
-		public virtual List<ScheduledItem> Execute() {
+		public virtual void /* List<ScheduledItem> */ Execute() {
+			/*
 			LoanHistory loan = WorkingModel.LoanHistory.Last();
 
 			loan.Clear();
@@ -84,6 +84,7 @@
 			} // for
 
 			return loan.Schedule;
+			*/
 		} // Execute
 
 		/// <summary>

@@ -73,7 +73,7 @@
 			stateStrategy.Execute();
 
 			// TODO: choose proper calculator
-			ALoanCalculator calculator = new LegacyLoanCalculator(stateStrategy.CalcModel);
+			// ALoanCalculator calculator = new LegacyLoanCalculator(stateStrategy.CalcModel);
 
 			ConnectionWrapper pconn = DB.GetPersistent();
 			pconn.BeginTransaction();

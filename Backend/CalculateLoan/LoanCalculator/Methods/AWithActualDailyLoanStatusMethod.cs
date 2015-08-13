@@ -2,8 +2,6 @@
 	using System;
 	using System.Diagnostics.CodeAnalysis;
 	using System.Linq;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	internal abstract class AWithActualDailyLoanStatusMethod : AMethod {
 		protected AWithActualDailyLoanStatusMethod(ALoanCalculator calculator, bool writeToLog)
@@ -12,14 +10,14 @@
 		} // constructor
 
 		[SuppressMessage("ReSharper", "PossibleInvalidOperationException")]
-		protected virtual DailyLoanStatus CreateActualDailyLoanStatus(DateTime now) {
-			WorkingModel.ValidateSchedule();
-
-			var days = new DailyLoanStatus();
-
+		protected virtual void /* DailyLoanStatus */ CreateActualDailyLoanStatus(DateTime now) {
 			// TODO: revive
 
 			/*
+
+			WorkingModel.ValidateSchedule();
+
+			var days = new DailyLoanStatus();
 
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
@@ -135,9 +133,9 @@
 			} // for
 
 			days.SetIgnoredDueToRescheduleDays();
-			*/
 
 			return days;
+			*/
 		} // CreateActualDailyLoanStatus
 	} // class AWithActualDailyLoanStatusMethod
 } // namespace

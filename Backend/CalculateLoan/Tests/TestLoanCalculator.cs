@@ -4,7 +4,6 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 	using NUnit.Framework;
 
@@ -36,12 +35,12 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 
 		[Test]
 		public void TestBankLikeCalculator() {
-			TestSpecificLoanCalculator(lcm => new BankLikeLoanCalculator(lcm));
+			// TestSpecificLoanCalculator(lcm => new BankLikeLoanCalculator(lcm));
 		} // TestBankLikeCalculator
 
 		[Test]
 		public void TestLegacyCalculator() {
-			TestSpecificLoanCalculator(lcm => new LegacyLoanCalculator(lcm));
+			// TestSpecificLoanCalculator(lcm => new LegacyLoanCalculator(lcm));
 		} // TestLegacyCalculator
 
 		[Test]
@@ -95,7 +94,7 @@ namespace Ezbob.Backend.CalculateLoan.Tests {
 			*/
 		} // TestSetScheduleCloseDatesFromPayments
 
-		private void TestSpecificLoanCalculator(Func<LoanCalculatorModel, ALoanCalculator> loanCalculatorFactory) {
+		private void TestSpecificLoanCalculator(/*Func<LoanCalculatorModel, ALoanCalculator> loanCalculatorFactory*/) {
 			// TODO: revive (test)
 			/*
 			var lcm = new LoanCalculatorModel {

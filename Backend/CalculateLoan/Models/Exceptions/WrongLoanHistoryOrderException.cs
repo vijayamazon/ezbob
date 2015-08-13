@@ -1,4 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.Models.Exceptions {
+	// TODO: revive
+	/*
 	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	public class WrongLoanHistoryOrderException : ALoanCalculatorModelException {
@@ -9,4 +11,5 @@
 			) {
 		} // constructor
 	} // class WrongOpenPrincipalOrderException
+	*/
 } // namespace

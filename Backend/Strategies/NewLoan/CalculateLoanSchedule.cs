@@ -5,7 +5,6 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 	using PaymentServices.Calculators;
@@ -78,13 +77,10 @@
 					SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan,
 				};
 
-				// init calculator's model - loan's details
-				LoanCalculatorModel nlCalculatorModel = new LoanCalculatorModel();
-
 				// init calculator
-				ALoanCalculator nlCalculator = new LegacyLoanCalculator(nlCalculatorModel);
+				ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
 				if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator)) {
-					nlCalculator = new BankLikeLoanCalculator(nlCalculatorModel);
+					nlCalculator = new BankLikeLoanCalculator(model);
 				}
 
 				// calculator's model - set discounts
@@ -147,7 +143,6 @@
 						}
 					}
 				}
-				*/
 
 				// get schedules and fees
 				List<ScheduledItemWithAmountDue> sheduleFeeList = nlCalculator.CreateScheduleAndPlan(model);
@@ -198,6 +193,7 @@
 					});
 				}
 
+				*/
 				// set APR - TBD
 				model.APR = nlCalculator.CalculateApr(model.IssuedTime);
 

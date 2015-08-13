@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Utils;
 
@@ -13,7 +12,7 @@
 			this.reschedulingArgument = reschedulingArgument;
 		} // constructor
 
-		public List<ScheduledItemWithAmountDue> Execute() {
+		public void /* List<ScheduledItemWithAmountDue> */ Execute() {
 
 			//if (this.reschedulingArgument.ReschedulingBalance != null) {
 			//	WorkingModel.LoanAmount = (decimal)this.reschedulingArgument.ReschedulingBalance;
@@ -39,7 +38,7 @@
 
 			//List<Repayment> payments = method.Execute();
 
-			var result = new List<ScheduledItemWithAmountDue>();
+			// var result = new List<ScheduledItemWithAmountDue>();
 
 			//for (int i = 0; i < payments.Count; i++) {
 			//	ScheduledItem si = WorkingModel.Schedule[i];
@@ -69,7 +68,7 @@
 			//	);
 			//} // if
 
-			return result;
+			// return result;
 
 		} // Execute
 

@@ -5,23 +5,22 @@
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 
 	internal class CalculatePlanMethod : AMethod {
 		public CalculatePlanMethod(ALoanCalculator calculator, bool writeToLog) : base(calculator, writeToLog) {
-			DailyLoanStatus = new DailyLoanStatus();
+			// TODO: revive
+			// DailyLoanStatus = new DailyLoanStatus();
 		} // constructor
 
-		public DailyLoanStatus DailyLoanStatus { get; private set; }
+		// TODO: revive
+		// public DailyLoanStatus DailyLoanStatus { get; private set; }
 
-		public virtual List<Repayment> Execute() {
-			WorkingModel.ValidateSchedule();
-
-			return new List<Repayment>();
-
+		public virtual void /* List<Repayment> */ Execute() {
 			// TODO: revive
 
 			/*
+			WorkingModel.ValidateSchedule();
+
 			DateTime firstInterestDay = WorkingModel.LoanIssueTime.Date.AddDays(1);
 
 			DateTime lastInterestDay = WorkingModel.LastScheduledDate;

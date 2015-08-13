@@ -4,7 +4,7 @@
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
+	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 
@@ -15,7 +15,12 @@
 	public abstract partial class ALoanCalculator {
 		public abstract string Name { get; }
 
-		public virtual LoanCalculatorModel WorkingModel { get; private set; }
+		public virtual bool WriteToLog {
+			get { return this.writeToLog; }
+			set { this.writeToLog = value; }
+		} // WriteToLog
+
+		public virtual NL_Model WorkingModel { get; private set; }
 
 		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
@@ -23,21 +28,19 @@
 		/// Schedule is stored in the Schedule property of the last item of WorkingModel.LoanHistory
 		/// (i.e. WorkingModel.LoanHistory.Last() is overwritten).
 		/// </summary>
-		public virtual List<ScheduledItemWithAmountDue> CreateScheduleAndPlan(
-			NL_Model loanToCreate,
-			bool writeToLog = true
-		) {
-			return new CreateScheduleAndPlanMethod(this, loanToCreate, writeToLog).Execute();
+		public virtual void CreateScheduleAndPlan() {
+			// TODO: revive
+			// new CreateScheduleAndPlanMethod(this, WriteToLog).Execute();
 		} // CreateScheduleAndPlan
 
 		/// <summary>
 		/// Calculates current loan balance.
 		/// </summary>
 		/// <param name="today">Date to calculate balance on.</param>
-		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual decimal CalculateBalance(DateTime today, bool writeToLog = true) {
-			return new CalculateBalanceMethod(this, today, writeToLog).Execute();
+		public virtual void CalculateBalance(DateTime today) {
+			// TODO: revive
+			// new CalculateBalanceMethod(this, today, WriteToLog).Execute();
 		} // CalculateBalance
 
 		/// <summary>
@@ -48,14 +51,13 @@
 		/// <param name="today">Date to calculate payment on.</param>
 		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
 		/// or leave it as is.</param>
-		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual CurrentPaymentModel GetAmountToChargeForDashboard(
+		public virtual void /* CurrentPaymentModel */ GetAmountToChargeForDashboard(
 			DateTime today,
-			bool setClosedDateFromPayments = false,
-			bool writeToLog = true
+			bool setClosedDateFromPayments = false
 		) {
-			return new GetAmountToChargeForDashboardMethod(this, today, setClosedDateFromPayments, writeToLog).Execute();
+			// TODO: revive
+			// new GetAmountToChargeForDashboardMethod(this, today, setClosedDateFromPayments, WriteToLog).Execute();
 		} // GetAmountToChargeForDashboard
 
 		/// <summary>
@@ -66,14 +68,13 @@
 		/// <param name="today">Date to calculate payment on.</param>
 		/// <param name="setClosedDateFromPayments">Update scheduled payment closed date from actual payments
 		/// or leave it as is.</param>
-		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan balance on specific date.</returns>
-		public virtual CurrentPaymentModel GetAmountToChargeForAutoCharger(
+		public virtual void /* CurrentPaymentModel */ GetAmountToChargeForAutoCharger(
 			DateTime today,
-			bool setClosedDateFromPayments = false,
-			bool writeToLog = true
+			bool setClosedDateFromPayments = false
 		) {
-			return new GetAmountToChargeForAutoChargerMethod(this, today, setClosedDateFromPayments, writeToLog).Execute();
+			// TODO: revive
+			// new GetAmountToChargeForAutoChargerMethod(this, today, setClosedDateFromPayments, WriteToLog).Execute();
 		} // GetAmountToChargeForAutoCharger
 
 		/// <summary>
@@ -81,10 +82,9 @@
 		/// </summary>
 		/// <param name="startDate">First day of the calculation period; loan issue date is used if omitted.</param>
 		/// <param name="endDate">Last day of the calculation period; last scheduled payment date is used is omitted.</param>
-		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan earned interest during specific date range.</returns>
-		public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate, bool writeToLog = true) {
-			return new CalculateEarnedInterestMethod(this, startDate, endDate, writeToLog).Execute();
+		public virtual decimal CalculateEarnedInterest(DateTime? startDate, DateTime? endDate) {
+			return new CalculateEarnedInterestMethod(this, startDate, endDate, WriteToLog).Execute();
 		} // CalculateEarnedInterest
 
 		/// <summary>
@@ -99,15 +99,13 @@
 		/// Zero means iterate as many as needed.
 		/// If not specified default (100k) is used.
 		/// </param>
-		/// <param name="writeToLog">Write result to log or not.</param>
 		/// <returns>Loan APR.</returns>
 		public virtual decimal CalculateApr(
 			DateTime? aprDate = null,
 			double? calculationAccuracy = null,
-			ulong? maxIterationCount = null,
-			bool writeToLog = true
+			ulong? maxIterationCount = null
 		) {
-			var method = new CalculateAprMethod(this, aprDate, writeToLog);
+			var method = new CalculateAprMethod(this, aprDate, WriteToLog);
 
 			if (calculationAccuracy.HasValue)
 				method.CalculationAccuracy = calculationAccuracy.Value;
@@ -139,6 +137,9 @@
 			DateTime? periodStartDate = null,
 			DateTime? periodEndDate = null
 		) {
+			// TODO: revive
+			return 0;
+			/*
 			if (considerBadPeriods && WorkingModel.BadPeriods.Any(bp => bp.Contains(currentDate)))
 				return 0;
 
@@ -154,13 +155,15 @@
 			} // if
 
 			return CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
+			*/
 		} // GetDailyInterestRate
 
-		protected ALoanCalculator(LoanCalculatorModel model) {
+		protected ALoanCalculator(NL_Model model) {
 			if (model == null)
 				Log.Msg("No model specified for loan calculator, using a new empty model.");
 
-			WorkingModel = model ?? new LoanCalculatorModel();
+			WorkingModel = model;
+			this.writeToLog = true;
 		} // constructor
 
 		/// <summary>
@@ -180,5 +183,7 @@
 		);
 
 		protected static ASafeLog Log { get { return Library.Instance.Log; } }
+
+		private bool writeToLog;
 	} // class ALoanCalculator
 } // namespace

@@ -2,17 +2,15 @@
 	using System;
 	using System.Linq;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Extensions;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 
 	internal abstract class AGetAmountToChargeMethod : AWithActualDailyLoanStatusMethod {
-		public virtual CurrentPaymentModel Execute() {
-			var cpm = new CurrentPaymentModel();
-
+		public virtual void Execute() {
 			// TODO: revive
 
 			/*
+
+			var cpm = new CurrentPaymentModel();
 
 			if (this.today <= WorkingModel.LoanIssueTime.Date) {
 				cpm.IsError = true;
@@ -104,9 +102,9 @@
 					Calculator.Name
 				);
 			} // if
-			*/
 
 			return cpm;
+			*/
 		} // GetAmountToCharge
 
 		protected AGetAmountToChargeMethod(

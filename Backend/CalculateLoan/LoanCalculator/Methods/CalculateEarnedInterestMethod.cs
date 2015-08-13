@@ -1,7 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
 	using System.Linq;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Extensions;
 
 	internal class CalculateEarnedInterestMethod : AWithActualDailyLoanStatusMethod {
@@ -16,13 +15,13 @@
 		} // constructor
 
 		public virtual decimal Execute() {
-			WorkingModel.ValidateSchedule();
-
 			return 0;
 
 			// TODO: revive
 
 			/*
+
+			WorkingModel.ValidateSchedule();
 
 			DateTime firstDay = (this.startDate ?? WorkingModel.LoanIssueDate).Date;
 

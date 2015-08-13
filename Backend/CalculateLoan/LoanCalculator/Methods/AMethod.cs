@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 
 	internal abstract class AMethod {
@@ -8,7 +9,7 @@
 			WriteToLog = writeToLog;
 		} // constructor
 
-		protected virtual LoanCalculatorModel WorkingModel {
+		protected virtual NL_Model WorkingModel {
 			get { return Calculator.WorkingModel; }
 		} // WorkingModel
 

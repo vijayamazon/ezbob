@@ -5,7 +5,6 @@
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.CalculateLoan.Models.Helpers;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
@@ -29,9 +28,6 @@
 		public override string Name { get { return "LoanState"; } }
 
 		public DateTime StateDate { get; set; }
-
-		// Result.
-		public LoanCalculatorModel CalcModel { get; private set; }
 
 		public override void Execute() {
 			try {
@@ -142,6 +138,8 @@
 		} // LoadNewLoanStructure
 
 		private void SetBadPeriods() {
+			// TODO: revive
+			/*
 			List<CustomerStatusTransition> statusesHistory = new List<CustomerStatusTransition>();
 
 			DB.ForEachRowSafe(
@@ -195,6 +193,7 @@
 
 			if (badsList.Count > 0)
 				this.CalcModel.BadPeriods.AddRange(badsList);
+			*/
 		} // SetBadPeriods
 
 		private readonly NL_Model tNLLoan;

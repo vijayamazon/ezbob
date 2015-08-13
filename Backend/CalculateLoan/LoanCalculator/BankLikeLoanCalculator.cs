@@ -1,9 +1,9 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
-	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	public class BankLikeLoanCalculator : ALoanCalculator {
-		public BankLikeLoanCalculator(LoanCalculatorModel model) : base(model) {
+		public BankLikeLoanCalculator(NL_Model model) : base(model) {
 		} // constructor
 
 		public override string Name { get { return "Bank-like calculator"; } }
