@@ -39,7 +39,7 @@
 
 			this.cultureInfo = new CultureInfo("en-GB");
 
-			this.emailToAddress = "elinar@ezbob.com"; //CurrentValues.Instance.EzbobMailTo;
+			this.emailToAddress = CurrentValues.Instance.EzbobMailTo;
 			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 			this.emailFromName = CurrentValues.Instance.MailSenderName;
 		}
