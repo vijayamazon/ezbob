@@ -209,27 +209,114 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 		}
 	},
 
-	reschSubmitForm: function() {
+	/*reschSubmitForm: function() {
 		var requestParam = { loanID: this.model.get('Id'), save: 'true' };
 		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
+		if (checkedRadio == null) {
+			var params = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
+			this.fillErrorPopup(params);
+			return false;
+		}
 		if (checkedRadio === 'true') {
 			requestParam.intervalType = $('#withinSelect option:selected').text();
 			requestParam.rescheduleIn = 'true';
-			this.makeAjaxPost(requestParam);
+			//this.RescheduleSave(requestParam);
 		}
 		if (checkedRadio === 'false') {
 			requestParam.intervalType = $('#outsideSelect option:selected').text();
 			requestParam.AmountPerInterval = $('#outsidePrincipal').val();
 			requestParam.rescheduleIn = 'false';
-			this.makeAjaxPost(requestParam);
+			//this.rescheduleSave(requestParam);
 		}
-        else{
-	    	var params = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
-	    	this.fillErrorPopup(params);
-	    	return false;
-	    }
-	},
+        //else{
+	    //	var params = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
+	    //	this.fillErrorPopup(params);
+	    //	return false;
+		//}
 
+		requestParam.save = 'true';
+
+		var request = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam
+			//{ loanID: this.model.get('Id'), intervalType: requestParam.intervalType, AmountPerInterval: amount, rescheduleIn: 'false', save: 'true' }
+			);
+		var self = this;
+		BlockUi('on');
+
+		request.success(function(res) {
+			if (res.Error == null || res.Error === "") {
+				$(divName).hide();
+			} else {
+				var params = { head: 'Unexpected error occured', body: res.Error, footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+				self.fillErrorPopup(params);
+			}
+			return false;
+		}); //on success
+
+		request.fail(function() {
+			var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+			self.fillErrorPopup(params);
+			return false;
+		});//on fail
+
+		request.always(function() {
+			BlockUi('off');
+		});
+
+		return true;
+	},*/
+
+	reschSubmitForm: function() {
+		var checkedRadio = $('input[name=rescheduleIn]').filter(':checked').val();
+		var requestParam;
+
+		if (checkedRadio == null) {
+			requestParam = { head: 'No actions were selected', body: '', footer: 'Please make the desired changes and click submit', color: 'red', selectors: [], timeout: '7000' };
+			this.fillErrorPopup(requestParam);
+			return false;
+		}
+
+		requestParam = { loanID: this.model.get('Id'), save: 'true' };
+
+		if (checkedRadio === 'true') {
+			requestParam.intervalType = $('#withinSelect option:selected').text();
+			requestParam.rescheduleIn = 'true';
+		}
+		if (checkedRadio === 'false') {
+			requestParam.intervalType = $('#outsideSelect option:selected').text();
+			requestParam.AmountPerInterval = $('#outsidePrincipal').val();
+			requestParam.rescheduleIn = 'false';
+		}
+
+		var oRequest = $.post('' + window.gRootPath + 'Underwriter/LoanEditor/RescheduleLoan/', requestParam);
+		var self = this;
+		BlockUi('on');
+
+		oRequest.success(function(res) {
+			if (res.Error == null || res.Error === "") {
+				var params = { head: 'Data has been successfuly sent to server', body: '', footer: 'Window will auto close', color: 'green', selectors: [], timeout: '7000' };
+				self.fillErrorPopup(params);
+
+				setTimeout(function() { self.close(); }, 3500);
+			} else {
+				var params = { head: 'Unexpected error occured', body: res.Error, footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+				self.fillErrorPopup(params);
+			}
+			return false;
+		}); //on success
+
+		oRequest.fail(function() {
+			var params = { head: 'Data transmission failed', body: 'if this error returns, please contact support', footer: 'Please try sending again', color: 'red', selectors: [], timeout: '7000' };
+			self.fillErrorPopup(params);
+			return false;
+		});//on fail
+
+		oRequest.always(function() {
+			BlockUi('off');
+		});
+
+		return true;
+	},
+	
 	onChangeAmount: function() {
 		this.ui.err_region.fadeOut();
 		$('#outsidePrincipal').removeClass('err-field-red');

@@ -39,7 +39,7 @@
 
 			this.cultureInfo = new CultureInfo("en-GB");
 
-			this.emailToAddress = CurrentValues.Instance.EzbobMailTo;
+			this.emailToAddress = "elinar@ezbob.com"; //CurrentValues.Instance.EzbobMailTo;
 			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 			this.emailFromName = CurrentValues.Instance.MailSenderName;
 		}
@@ -64,6 +64,7 @@
 
 				if (this.tLoan == null) {
 					this.Result.Error = string.Format("Loan ID {0} not found", this.ReschedulingArguments.LoanID);
+					this.Result.BlockAction = true;
 					ExitStrategy("Exit1");
 					return;
 				}
@@ -478,7 +479,10 @@
 				}
 			}
 
-			var currentState = this.tLoan.Schedule;
+			this.tLoan = this.loanRep.Get(this.ReschedulingArguments.LoanID);
+			var calc = new LoanRepaymentScheduleCalculator(this.tLoan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+			calc.GetState();
+			var currentState = new ChangeLoanDetailsModelBuilder().BuildModel(this.tLoan).Items;
 			StringBuilder currentStateStr = new StringBuilder();
 			if (currentState != null) {
 				foreach (var ii in currentState) {
@@ -488,7 +492,7 @@
 
 			this.message = string.Format(
 				"<h3>CustomerID: {0}; UserID: {1}</h3><p>"
-				 + "<h4>Arguments</h4> {2}>"
+				 + "<h4>Arguments</h4> {2}"
 				 + "<h4>Result</h4> {3}"
 				 + "<h4>Error</h4> {4}"
 				 + "<h4>Loan state before action</h4> {5}"
