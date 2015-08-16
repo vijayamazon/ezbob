@@ -8,8 +8,7 @@
 @using EZBob.DatabaseLib.Model.Database.UserManagement
 
 @*Renders select*@
-@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
-{
+@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "") {
     <div class="form-group">
         <label class="control-label" for="@id">@caption</label>
         <div class="controls">
@@ -723,19 +722,6 @@ string formFieldID = "")
     </select>
 }
 
-@helper Captcha(string captchaType, string cls = "", string sId = "captcha", CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
-{
-    <div class="control-group">
-        <div class="captcha">
-            
-            <div class="captcha-wrap"id="@sId">
-                
-            </div>
-            @EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", cls: "form_field", isRequired: true
-                                       , statusIcon: true, uiEventControlID: "signup:captcha", maxLength: 6), origin: origin)
-        </div>
-    </div>
-}
 
 @helper Button(string id, string labelText, string buttonText, string cls = "", string css = "")
 {
