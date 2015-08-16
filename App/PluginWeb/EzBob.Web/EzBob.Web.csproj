@@ -932,6 +932,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\SalesForceActivity.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Profile\ProcessingAutomationPopupTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\SalesForce\SalesForce.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_PersonalInfoTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1919,7 +1920,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_LoanhistoryViewTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\_PaymentAccountsTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_MedalCalculationTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\_SignUpButton.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_Messages.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\DailyReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\_LayoutDayReport.cshtml" />

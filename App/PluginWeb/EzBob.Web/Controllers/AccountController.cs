@@ -412,14 +412,6 @@
 
 			return RedirectToAction("Index", "Customers", new { Area = "Underwriter" });
 		} // LogOffUnderwriter
-
-		[Ajax]
-		[HttpGet]
-		public JsonResult GetPropertyStatuses() {
-			PropertyStatusesActionResult propertyStatusesActionResult = m_oServiceClient.Instance.GetPropertyStatuses();
-			return Json(propertyStatusesActionResult.Groups, JsonRequestBehavior.AllowGet);
-		} // GetPropertyStatuses
-
 		
 		[HttpPost]
 		[Ajax]

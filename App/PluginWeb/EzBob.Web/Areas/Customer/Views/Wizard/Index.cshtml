@@ -70,6 +70,7 @@
 @section Js{
     @{Html.RenderPartial("_Wizard", new ViewDataDictionary(ViewData));}
     @{Html.RenderPartial("_SignUpTemplate");}
+	@{Html.RenderPartial("_PersonalInfoTemplate");}
     @{Html.RenderPartial("_CompanyDetails");}
     @{Html.RenderPartial("StoreInfoMain");}
     @{Html.RenderPartial("StoreButton");}
@@ -116,31 +117,15 @@
             var options = @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(customer));
             options.el = $('#wizard');
 
-            if (!EzBob.PropertyStatusesData) {
-                var req = $.get(window.gRootPath + "Account/GetPropertyStatuses");
-                req.done(function(data) {
-                    EzBob.PropertyStatusesData = data;
-                    var customer = new EzBob.CustomerModel(options);
-                    options.customer = customer;
+            var customer = new EzBob.CustomerModel(options);
+            options.customer = customer;
 
-                    var signupWizard = new EzBob.WizardView(options);
-                    signupWizard.render();
+            var signupWizard = new EzBob.WizardView(options);
+            signupWizard.render();
 
-                    var strengthPasswordModel = new EzBob.StrengthPassword();
-                    var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
-                    strengthPasswordView.render();
-                });
-            } else {
-                var customer = new EzBob.CustomerModel(options);
-                options.customer = customer;
-
-                var signupWizard = new EzBob.WizardView(options);
-                signupWizard.render();
-
-                var strengthPasswordModel = new EzBob.StrengthPassword();
-                var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
-                strengthPasswordView.render();
-            }
+            var strengthPasswordModel = new EzBob.StrengthPassword();
+            var strengthPasswordView = new EzBob.StrengthPasswordView({ model: strengthPasswordModel, el: $('#strength-password-view') });
+            strengthPasswordView.render();
         });
     </script>
 }

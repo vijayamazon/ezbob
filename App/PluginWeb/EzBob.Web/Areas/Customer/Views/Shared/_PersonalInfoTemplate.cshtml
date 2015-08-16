@@ -1,0 +1,158 @@
+﻿@using System
+@using System.Collections.Generic
+@using System.Linq
+@using EzBob.CommonLib
+@using EzBob.Web.Infrastructure
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
+@using ServiceClientProxy
+@model dynamic
+
+@{
+	var bml = new WizardBrokerLeadModel(Session);
+	var sInitialFirstName = bml.IsSet ? bml.FirstName : string.Empty;
+	var sInitialLastName = bml.IsSet ? bml.LastName : string.Empty;
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+
+	var timeAtAddress = new List<Tuple<string, string>>  {
+		new Tuple<string, string>("1", "1 year"),
+		new Tuple<string, string>("2", "1 year"),
+		new Tuple<string, string>("3", "3 years or more"),
+	};
+	var serviceClient = new ServiceClient();
+	var propertyStatuses = serviceClient.Instance.GetPropertyStatuses();
+	List<EzSelectOptionGroup> propertyStatusGroups = propertyStatuses.Groups.Select(x => new EzSelectOptionGroup{
+		GroupTitle = x.Title,
+		Options = x.Statuses
+			.Select(y => new EzSelectOption(y.Id.ToString(), y.Description, y.IsOwnerOfOtherProperties ? "OtherPropertyOwner" : ""))
+			.ToList()
+	}).ToList();
+}
+
+<script id="personinfo-template" type="text/template">
+	<div class="row-fluid">
+		<h2 class="form_start">Personal details</h2>
+
+		@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "PersonalDetailsForm" })) {
+	  
+			@EzForm.InputTextWizard(new EzInputBuilder("FirstName", "First name", 
+				value:sInitialFirstName,
+				cls: "form_field", 
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: "personal-info:first_name"), 
+				origin: origin)
+			
+			@EzForm.InputTextWizard(new EzInputBuilder("MiddleInitial", "Middle name",
+				cls: "form_field alphaOnly",
+				isRequired: false,
+				statusIcon: true,
+				uiEventControlID: "personal-info:middle_name"),
+				origin: origin)
+
+			@EzForm.InputTextWizard(new EzInputBuilder("Surname", "Surname",
+				value: sInitialLastName,
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: "personal-info:last_name"),
+				origin: origin)
+			
+			<input type="hidden" name="Fullname" />
+
+			<div class="form_field_container">
+				<div class="attardi-input FormRadioCtrl">
+					<input type="radio" name="Gender" value="M" id="FormRadioCtrl_M" class="required" ui-event-control-id="personal-info:gender"><label for="FormRadioCtrl_M">Male</label>
+					<input class="gender-margin" type="radio" name="Gender" value="F" id="FormRadioCtrl_F" ui-event-control-id="personal-info:gender"><label for="FormRadioCtrl_F">Female</label>
+					<img id="GenderImage" class="field_status required personal-details-gender-image" alt="" />
+				</div>
+
+			</div>
+
+			@EzForm.DateInput(this, "DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date")
+
+			@EzForm.SelectWizard(new EzSelectModel("MaritalStatus", "Marital status", 
+				MaritalStatus.Divorced.ToTuple<MaritalStatus>(),
+				cls: "form_field", 
+				isRequired: true, 
+				statusIcon:true, 
+				uiEventControlID: "personal-info:marital_status"),
+				origin: origin)
+			
+			<hr />
+			<h2 class="form_section">Home address</h2>
+
+			@EzForm.AddressInput(this, "PersonalAddress", "Home address", "personal")
+	
+			@EzForm.SelectWizard(new EzSelectModel("TimeAtAddress", "How long at this address", 
+				timeAtAddress,
+				cls: "TimeAtAddress select form_field",
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: "personal-info:time_at_address"),
+				origin: origin)
+			
+			@EzForm.AddressInput(this, "PrevPersonAddresses", "Previous address", "previous-personal", "prevPersonAddress canDisabledAddress")
+
+			@EzForm.SelectWizard(new EzSelectModel("PropertyStatus", "Residential status",
+				propertyStatusGroups,
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: "personal-info:residential_status"),
+				origin: origin)
+
+			<div id="otherPropertiesSection" class="hide">
+				<h2 class="form_section">Other owned properties</h2>
+				@EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal", "otherPropertiesAddress canDisabledAddress")
+			</div>
+
+			<hr />
+			<h2 class="form_section">Contact details</h2>
+
+			@EzForm.InputTextWizard(new EzInputBuilder("MobilePhone", "Mobile number",
+				value: "<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>",
+				cls: "phonenumber form_field",
+				type: "tel",
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: "personal-info:mobile_phone"),
+				origin: origin)
+			
+			@EzForm.InputTextWizard(new EzInputBuilder("DayTimePhone", "Home phone number",
+				value: "<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>",
+				cls: "phonenumber form_field",
+				type: "tel",
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: "personal-info:daytime_phone"),
+				origin: origin)
+			
+			<div class="control-group form_read_and_accept">
+				<div class="controls">
+					<input id="ConsentToSearch" name="ConsentToSearch" type="checkbox" value="false" ui-event-control-id="personal-info:consent_to_search" />
+					<label for="ConsentToSearch" class="editor-label-with-checkbox">I have read and accept the <a href="#" ui-event-control-id="personal-info:terms-and-conditions">Terms &amp; Conditions</a> of the credit bureau search</label>
+				</div>
+			</div>
+  }
+
+		<div class="form_buttons_container">
+			<div class="attardi-button">
+				<a href="#" class="button btn-green btn-continue disabled" ui-event-control-id="personal-info:continue">Continue</a>
+			</div>
+		</div>
+	</div>
+</script>
+
+<script id="consent-agreement-temlate" type="text/template">
+	<div id="consent-conent" class="modal-body consent-dialog">
+		@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+
+		<p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%></p>
+		<p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
+	</div>
+	<div style="margin-top: 20px;">
+		<a href="#" class="pull-right print print-link" ui-event-control-id="wizard:print_consent">Print</a>
+		<a style="margin-right: 20px;" class="pull-right download pdf-link" ui-event-control-id="wizard:download_consent">Download</a>
+	</div>
+</script>

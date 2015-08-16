@@ -27,11 +27,14 @@
             return Bundle.Css()
                 //libs
                 .Add("~/Content/css/lib/normalize.css")
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
                 .Add("~/Content/css/lib/dropzone.css")
                 .Add("~/Content/css/lib/font-awesome.min.css")
                 .Add("~/Content/css/lib/notifications.css")
                 .Add("~/Content/css/lib/coin-slider-styles.css")
                 .Add("~/Content/css/lib/chosen.css")
+				
                
                 //common
                 .Add("~/Content/css/profile-ny2015scratch.css")
