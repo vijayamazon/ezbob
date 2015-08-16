@@ -195,7 +195,7 @@ string formFieldID = "")
                     @if (@inputProp.Button != null)
                     {
 
-                        @ButtonTag(inputProp.Button)
+                        @ButtonTag(new List <EzButtonModel>{inputProp.Button})
                     }
                 </label>
 
@@ -211,7 +211,7 @@ string formFieldID = "")
                 @InputTextTag(inputProp, identificator)
                 @if (@inputProp.Button != null)
                 {
-                    @ButtonTag(inputProp.Button)
+                    @ButtonTag(new List<EzButtonModel> { inputProp.Button })
                 }
                 <div class="error-wrap"></div>
             </div>
@@ -276,55 +276,64 @@ string formFieldID = "")
         </div>
     </div>
 }
-@helper WizardButton(EzButtonModel buttonProp, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
-{       var identificator = new HtmlString(buttonProp.Id);
+
+@helper WizardButton(EzButtonModel button, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{
+    @WizardButton(new List<EzButtonModel> {button}, origin);
+}
+
+@helper WizardButton(List<EzButtonModel> buttons, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{       
         <div class="form_buttons_container form_field_container">
             @if (origin != CustomerOriginEnum.everline)
             {
                 <div class="attardi-button">
-                    <input type="submit" id="@identificator" value="@buttonProp.Caption" class="@buttonProp.Cls" tabindex="@buttonProp.TabIndex" ui-event-control-id="@buttonProp.UiEventControlID">
+              @ButtonTag(buttons)
                 </div>
             }
             else
             {
                 <label class="input-title">&nbsp;</label>
                 <div class="input-wrapper">
-                    @ButtonTag(buttonProp)
+                    @ButtonTag(buttons)
+                  
                 </div>
             }
         </div>
 }
-@helper ButtonTag(EzButtonModel buttonProp)
+@helper ButtonTag(List<EzButtonModel> buttons )
 {
-    var identificator = new HtmlString(buttonProp.Id);
-    if (buttonProp.ButtonType == EzButtonType.button)
+    foreach (var buttonProp in buttons)
     {
-        <button id="@buttonProp.Id" class="@buttonProp.Cls"
-                @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-            @buttonProp.Caption
-        </button>
-    }
-    else if (buttonProp.ButtonType == EzButtonType.submit)
-    {
-        <input type="submit" id="@identificator" value="@buttonProp.Caption" class="@buttonProp.Cls"
-               
-               @( buttonProp.TabIndex!=0 ? "tabindex=" + buttonProp.TabIndex: "")
-    
-               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-    }
-    else if (buttonProp.ButtonType == EzButtonType.button)
-    {
-        <input type="button" id="@identificator" value="@buttonProp.Caption"
+        var identificator = new HtmlString(buttonProp.Id);
+        if (buttonProp.ButtonType == EzButtonType.button)
+        {
+            <button id="@buttonProp.Id" class="@buttonProp.Cls"
+                    @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+                @buttonProp.Caption
+            </button>
+        }
+        else if (buttonProp.ButtonType == EzButtonType.submit)
+        {
+            <input type="submit" id="@identificator" value="@buttonProp.Caption" class="@buttonProp.Cls"
+                   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+        }
+        else if (buttonProp.ButtonType == EzButtonType.button)
+        {
+            <input type="button" id="@identificator" value="@buttonProp.Caption"
+                   class="@buttonProp.Cls"
+                   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+        }
+        else if (buttonProp.ButtonType == EzButtonType.link)
+        {
+            <a id="@identificator" value="@buttonProp.Caption" href="@buttonProp.Href"
                class="@buttonProp.Cls"
                @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-    }
-    else if (buttonProp.ButtonType == EzButtonType.link)
-    {
-        <a id="@identificator" value="@buttonProp.Caption" href="@buttonProp.Href"
-           class="@buttonProp.Cls"
-           @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-           @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>@buttonProp.Caption</a>
+               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>@buttonProp.Caption</a>
+        }
+
     }
 
 }

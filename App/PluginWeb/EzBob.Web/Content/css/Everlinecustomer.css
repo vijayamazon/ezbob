@@ -42,8 +42,9 @@ h2 {
 .wizard-wrap .wizard-inner-wrap .form_field_container .input-title.long {
     line-height: 16px;
 }
-.wizard-wrap .wizard-inner-wrap .form_field_container .error-wrap {
+.wizard-wrap .wizard-inner-wrap .form_field_container .error-wrap, .wizard-wrap .wizard-inner-wrap .form_field_container #message {
     height: 15px;
+    clear:both;
 }
 .wizard-wrap .wizard-inner-wrap .form_field_container .error {
     color: #d20002;
@@ -125,6 +126,7 @@ h2 {
     cursor:default;
 }
 .wizard-wrap .wizard-inner-wrap   .form_buttons_container .input-wrapper .ev-btn-org  {
+    margin-left:5%;
      line-height: 44px;
     font-size: 18px;
     font-weight: 600;
