@@ -99,7 +99,6 @@
 
         EzBob.Config.PayPalEnabled = @CurrentValues.Instance.PayPalEnabled.Value.ToLower(CultureInfo.InvariantCulture);
         EzBob.Config.PasswordPolicyType = '@CurrentValues.Instance.PasswordPolicyType.Value.ToLower(CultureInfo.InvariantCulture)';
-        EzBob.Config.Origin = '@ViewBag.CustomerOrigin.GetOrigin()';
 		@{
 			OneUploadLimitation oHmrcOul = CurrentValues.Instance.GetUploadLimitations("HmrcController", "SaveFile");
 			OneUploadLimitation oComanyFilesOul = CurrentValues.Instance.GetUploadLimitations("CompanyFilesMarketPlaces", "UploadedFiles");

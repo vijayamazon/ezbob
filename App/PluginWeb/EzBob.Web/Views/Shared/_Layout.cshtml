@@ -219,6 +219,8 @@
 
 	<script type="text/javascript">
 		var EzBob = EzBob || {};
+		EzBob.Config = EzBob.Config || {};
+		EzBob.Config.Origin = '@ViewBag.CustomerOrigin.GetOrigin()';
 
 		window.ShowHideSignLogOnOff = function () {
 			var sEmail = $('body').attr('data-user-name');
@@ -258,7 +260,7 @@
 			if (EzBob.CgVendors)
 				EzBob.CgVendors.init(@{ WriteLiteral(JsonConvert.SerializeObject(Configuration.Instance.Vendors)); });
 		} // EzBob_CgVendors_init
-	</script>
+</script>
 
 	@{ Html.RenderPartial("_Iovation"); }
 </body>

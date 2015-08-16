@@ -1,24 +1,24 @@
 ﻿@using EzBob.Web.Infrastructure
-@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 <script type="text/template" id="wizard-template">
     <div class="wizard-progress"></div>
     <div class="vip-container"></div>
     <div class="inner">
-        <section id="content">
-            <div class="row-fluid notifications"></div>
-            <div class='pages'></div>
-        </section>
-        @if (ViewBag.CustomerOrigin.GetOrigin() != CustomerOriginEnum.everline) {
-            <aside class="customer-sidebar wizard">
-                @{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData)); }
-
-            </aside>
-        }
-       
-       
+		<section id="content">
+			<div class="wizard-wrap">
+				<div class="wizard-inner-wrap">
+					<div class="row-fluid notifications"></div>
+					<div class='pages'></div>
+				</div>
+			</div>
+		</section>
+        
+        <aside class="customer-sidebar wizard">
+            @{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData)); }
+        </aside>
+        
     </div>
-    <div class="clear" />
+    <div class="clear" ></div>
 </script>
 
 <script type="text/template" id="progress-indicator">

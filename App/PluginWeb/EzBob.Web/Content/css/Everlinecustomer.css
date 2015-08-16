@@ -17,7 +17,7 @@
     margin:0 auto;
 }
 
-.wizard-wrap .wizard-inner-wrap h2.form_start {
+h2 {
     margin:0;
     color: #8dc641;
     text-align: left;
@@ -26,11 +26,11 @@
     font-size:22px;
     margin-bottom:35px;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container {
+.wizard-wrap .wizard-inner-wrap .form_field_container {
     clear: both;
     margin-bottom: 15px;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-title {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-title {
     width: 30%;
     float: left;
     font-size: 15px;
@@ -39,19 +39,19 @@
     text-align: right;
     line-height: 42px;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-title.long {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-title.long {
     line-height: 16px;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .error-wrap {
+.wizard-wrap .wizard-inner-wrap .form_field_container .error-wrap {
     height: 15px;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .error {
+.wizard-wrap .wizard-inner-wrap .form_field_container .error {
     color: #d20002;
     font-size: 13px;
     line-height: 25px;
     font-weight: 400;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .help-block {
+.wizard-wrap .wizard-inner-wrap .form_field_container .help-block {
     color:#d20002;
     display: block;
     width: 70%;
@@ -60,7 +60,7 @@
     padding-left: 20px;
     font-size: 14px;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper {
     width: 70%;
     display: inline-block;
     padding-left: 20px;
@@ -72,9 +72,9 @@
     position: relative;
 }
 
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper select,
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper input,
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper textarea {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper select,
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input,
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea {
     display: block;
     background: #ffffff;
     height: 50px;
@@ -97,14 +97,14 @@
 .wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper button:focus {
     outline: none;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper .form_field_left_side {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper .form_field_left_side {
     width:50%;
     float:left;
 }
-.wizard-wrap .wizard-inner-wrap   .form_field_container .input-wrapper input:-webkit-autofill {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper input:-webkit-autofill {
     background-color: white !important;
 }
-.wizard-wrap .wizard-inner-wrap   .form_field_container .input-wrapper .clean-btn, .simpleCaptcha a {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper .clean-btn, .simpleCaptcha a {
     float: left;
     width: 45%;
     box-sizing: border-box;
@@ -120,7 +120,7 @@
         background-color: transparent;
         text-decoration:none;
 }
-.wizard-wrap .wizard-inner-wrap   .form_field_container .input-wrapper .clean-btn.disabled {
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper .clean-btn.disabled {
     opacity:0.3;
     cursor:default;
 }

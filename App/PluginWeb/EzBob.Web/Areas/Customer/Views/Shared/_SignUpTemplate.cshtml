@@ -21,27 +21,15 @@
 <script id="signup-template" type="text/template">
     @using (Html.BeginForm("SignUp", "Account", new { Area = "" }, FormMethod.Post, new { @class = "signup clearfix" }))
     {
-        <div class="wizard-wrap">
-            <div class="wizard-inner-wrap">
-
-
-                @*
-            The following control is only used to save customer name for Alibaba customer.
-            ui-event-control-id attribute is used to copy a value from cookie to the control.
-                *@
+                @*The following control is only used to save customer name for Alibaba customer. ui-event-control-id attribute is used to copy a value from cookie to the control.*@
                 <input type="hidden" name="FirstName" ui-event-control-id="personal-info:first_name" />
                 <input type="hidden" name="Surname" ui-event-control-id="personal-info:last_name" />
-               @if (origin == CustomerOriginEnum.everline)
-               {
-                <h2 class="form_start @sBrokerForCustomerIndicator">Your details</h2>
-
-               }
-               else
-               {
-                <h2 class="form_start @sBrokerForCustomerIndicator">Create account</h2>
+               if (origin == CustomerOriginEnum.everline) {
+			        <h2 class="@sBrokerForCustomerIndicator">Your details</h2>
+               } else {
+					<h2 class="@sBrokerForCustomerIndicator">Create account</h2>
                }
                 
-
                 @EzForm.InputTextWizard(new EzInputBuilder("Email", "Email address", value: @sInitialEmail, type: "email", cls: "form_field"
 , isRequired: true, statusIcon: true, uiEventControlID: "signup:email", tabIndex: 1, autoCorrect: "off", autoCapitalize: "off"), origin: origin)
                 @EzForm.InputTextWizard(new EzInputBuilder("signupPass1", "Password", type: "password", cls: "form_field"
@@ -109,7 +97,5 @@
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
     }
 </script>
