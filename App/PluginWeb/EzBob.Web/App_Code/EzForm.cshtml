@@ -223,6 +223,20 @@ string formFieldID = ""  )
     </div>
 }
 
+@helper InputTextArea(string id, string caption, string cls = "", CustomerOriginEnum origin = CustomerOriginEnum.ezbob) {
+	<div class="form_field_container control-group">
+		@if (origin != CustomerOriginEnum.everline) {
+			<textarea style="resize: vertical; height: 32px" disabled="disabled" id="@id" class="form_field"></textarea>
+		} else {
+		<div class="form_field_container control-group">
+			<label for="@id" class="input-title">@caption</label>
+			<div class="input-wrapper">
+				<textarea style="resize: vertical; height: 50px" disabled="disabled" id="@id" class="@cls"></textarea>
+			</div>
+		</div>
+		}
+	</div>
+}
 
 @helper InputTextTag(EzInputBuilder inputProp, HtmlString identificator)
 {   
