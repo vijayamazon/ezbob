@@ -10,7 +10,8 @@
 	<add name="dev-shlomim" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-stasd" connectionString="Server=STASD-PC\SQLEXPRESS;Database=ezbob;User Id=stas;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-yarons" connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=123456;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
-
+  <add name="dev-dora" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+  
 	<add name="qa" connectionString="user id=sa;password=Ezbobqadb1;server=ezqa01;Trusted_Connection=no;database=ezbob;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="qa-prod-auto" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_auto;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="qa-prod-medal" connectionString="user id=sa;password=Ezbobqadb1;server=192.168.120.11;Trusted_Connection=no;database=ezbob_prod_medal;connection timeout=30;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
