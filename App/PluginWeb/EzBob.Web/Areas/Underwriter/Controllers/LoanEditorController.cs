@@ -436,18 +436,40 @@
         }
 
         [Ajax]
-        [HttpPost]
-        
+        [HttpPost]        
         public JsonResult SaveFreezeInterval(int id) {
             
                 DateTime? freezeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["startdate"]);
-                DateTime? freezeEndDate = Convert.ToDateTime(HttpContext.Request.QueryString["enddate"]);
+                DateTime? freezeEndDate ;
+
+                string freezeEndDateStr = HttpContext.Request.QueryString["enddate"];
+
+                if (string.IsNullOrEmpty(freezeEndDateStr))
+                {
+                    freezeEndDate = this._loans.Get(id)
+                        .Schedule.OrderBy(x => x.Date)
+                        .Last()
+                        .Date;
+                }
+                else
+                {
+                    freezeEndDate = Convert.ToDateTime(freezeEndDateStr);
+                }
+
+                EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+
+                if (string.IsNullOrEmpty(freezeEndDateStr) && freezeStartDate > freezeEndDate)
+                {
+                    model.Errors.Add("'Start date is bigger loan maturity date");
+                    RescheduleSetmodel(model, this._loans.Get(id));
+                    return Json(model);
+                }
 
                 if (freezeStartDate > freezeEndDate) {
-                    EditLoanDetailsModel errorModel = this._loanModelBuilder.BuildModel(this._loans.Get(id));
-                    errorModel.Errors.Add("'Until date must be greater then From date");
-                    RescheduleSetmodel(errorModel, this._loans.Get(id));
-                    return Json(errorModel);
+                    
+                    model.Errors.Add("'Until date must be greater then From date");
+                    RescheduleSetmodel(model, this._loans.Get(id));
+                    return Json(model);
                 }
 
                 Loan loan = this._loans.Get(id);
@@ -466,7 +488,7 @@
                 this._loans.SaveOrUpdate(loan);
             }).Execute();
 
-            EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(loan);
+            model = this._loanModelBuilder.BuildModel(loan);
             model.Options = this.loanOptionsRepository.GetByLoanId(id);
             RescheduleSetmodel(model, loan);
             return Json(model);

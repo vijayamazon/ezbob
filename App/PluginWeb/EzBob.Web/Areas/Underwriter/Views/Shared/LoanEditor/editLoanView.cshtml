@@ -93,7 +93,7 @@
                         <button class="btn btn-primary pull-left" id="charges-save-btn" style="  margin-right: 10px;">Save</button>
                     </div>
                     <div class="row" style="margin-bottom: 15px;">
-                        <span style="display: none; font-weight: bold; margin-left: 22px;" id="stop-charges"><button class="btn btn-primary btn-mini remove-auto-charges"><i class="fa fa-trash-o"></i></button>Auto charges are <span id="stop-charges-date"></span></span>
+                        <span style="display: none; font-weight: bold;" id="stop-charges"><button class="btn btn-primary btn-mini remove-auto-charges"><i class="fa fa-trash-o"></i></button><span class="bin-text">Auto charges are</span><span id="stop-charges-date"></span></span>
                     </div>
                     <div class="row" style="margin-bottom: 15px;">
                         <span class="float_left">
@@ -119,7 +119,7 @@
                     <div class="row" id="fees-dates" style="margin-bottom: 20px; display: none;">
                         <div class="row">
                             <button class="btn btn-primary btn-mini" id="fees-delete-btn"><i class="fa fa-trash-o"></i></button>
-                            This loan's fee is stoped from
+                            <span class="bin-text">This loan's fee is stoped from</span>
                             <span style="font-weight: bold" id="fees-date-from"></span>
                             until
                             <span style="font-weight: bold" id="fees-date-to"></span>
@@ -146,7 +146,7 @@
                         </span>
                         <button class="btn btn-primary pull-left" id="intrest-save-btn" style="  margin-right: 10px;">Save</button>
                     </div>
-                    <div class="row" style="margin-top: -39px; margin-left: 20px;">
+                    <div class="row" style="margin-top: -39px;">
                         <%if(hasFreezInterest===true){ %>
                         <br />
                         <%
@@ -156,7 +156,7 @@
                         %>
                         <div class="row">
                             <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
-                            This loan's intrest is stoped from
+                            <span class="bin-text">This loan's intrest is stoped from</span>
                             <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
                             until
                             <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>

@@ -94,7 +94,7 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	    var params;
         //Check that both input are not empty
         if (startDate === '' ) {
-            params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+            params = { head: 'Please fix the marked fields', body: 'From dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
@@ -120,12 +120,12 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	    this.model.RemoveLateFeeOption();
 	},
 
-    intrestSaveBtn: function () {
+	intrestSaveBtn: function () {
         var interestFrom = $('#intrest-calendar-from').val();
         var interestTo = $('#intrest-calendar-to').val();
 	    var params;
-        if (interestTo === "" || interestFrom === "") {
-            params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+	    if (interestFrom === "") {
+            params = { head: 'Please fix the marked fields', body: 'From date must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
@@ -133,10 +133,13 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         var star = moment(interestFrom, "DD/MM/YYYY");
         var end = moment(interestTo, "DD/MM/YYYY");
 
-        if (star > end) {
-            params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
-            this.fillErrorPopup(params);
-            return false;
+        if (end !== null)
+        {
+            if (star > end) {
+                params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#intrest-calendar-from'), this.$el.find('#intrest-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
+                return false;
+            }
         }
 
         BlockUi('on');

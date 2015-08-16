@@ -2313,10 +2313,9 @@ input[type="text"].err-field-red {
     line-height:35px;
 }
 .editloan-actions-region button {
-   margin-left: 10px;
+   margin-left: 20px;
 }
 .editloan-actions-region .input-group {
-   
     margin-left: 10px;
 }
 
@@ -2324,3 +2323,8 @@ input[type="text"].err-field-red {
     margin-left: 10px;
     width: 200px;
 }
+
+.bin-text {
+     margin-left:10px; 
+}
+
