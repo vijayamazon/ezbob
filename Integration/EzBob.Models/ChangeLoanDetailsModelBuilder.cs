@@ -33,6 +33,21 @@
 
 			model.Items = model.Items.OrderBy(i => i.Date).ToList();
 
+            DateTime now = DateTime.UtcNow;
+
+		   var loanFutureScheduleItems = loan.Schedule.Where(x => x.Date > now)
+		            .OrderBy(x => x.Date)
+                    .ToDictionary(pair => pair.Date.ToString("dd/MM/yyyy"), pair => pair.Id.ToString());
+
+		    model.LoanFutureScheduleItems = new Dictionary<string, string>();
+            model.LoanFutureScheduleItems.Add("Immediately Stop...", "-1");
+            
+            for (int i = 0; i <= loanFutureScheduleItems.Count - 1; i++) {
+                model.LoanFutureScheduleItems.Add(string.Format("{0} : {1}", i+1, loanFutureScheduleItems.ElementAt(i)
+                    .Key), loanFutureScheduleItems.ElementAt(i)
+                        .Value);
+            }
+
 			model.SInterestFreeze = loan.InterestFreeze.OrderBy(f => f.StartDate).Select(f => f.ToString()).ToList();
 			
 			foreach (LoanInterestFreeze fr in loan.InterestFreeze.OrderBy(fr => fr.StartDate).Where(fr => fr.DeactivationDate == null)) {

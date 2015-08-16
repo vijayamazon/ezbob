@@ -20,6 +20,8 @@ namespace EzBob.Models
 
         public List<SchedultItemModel> Items { get; set; }
 
+        public Dictionary<string, string> LoanFutureScheduleItems { get; set; }
+
         public decimal InterestRate { get; set; }
 
         public decimal SetupFee { get; set; }

@@ -195,9 +195,9 @@ EzBob.LoanModel = Backbone.Model.extend({
 		});
 	}, // recalculate
 
-	saveAutoChargeOptions: function (stopAutoChargePayment) {
+	saveAutoChargeOptions: function (schedultItemId) {
         this.save({}, {
-            url: '' + window.gRootPath + 'Underwriter/LoanEditor/SaveAutoChargesOption/' + (this.get('Id')) + '?stopAutoChargePayment=' + stopAutoChargePayment
+            url: '' + window.gRootPath + 'Underwriter/LoanEditor/SaveAutoChargesOption/' + (this.get('Id')) + '?schedultItemId=' + schedultItemId
         }).always(function () { BlockUi('off'); });
 	},
 

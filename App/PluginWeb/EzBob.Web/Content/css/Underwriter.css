@@ -2319,3 +2319,8 @@ input[type="text"].err-field-red {
    
     margin-left: 10px;
 }
+
+.LoanFutureScheduleItemsDDL {
+    margin-left: 10px;
+    width: 200px;
+}

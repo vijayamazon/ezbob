@@ -324,15 +324,29 @@
         public JsonResult SaveLateFeeOption(int id)
         {
             DateTime? lateFeeStartDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeStartDate"]);
-            DateTime? lateFeeEndDate = Convert.ToDateTime(HttpContext.Request.QueryString["lateFeeEndDate"]);
+	        DateTime? lateFeeEndDate; 
+            
+            string lateFeeEndDateStr = HttpContext.Request.QueryString["lateFeeEndDate"];
+
+            if (string.IsNullOrEmpty(lateFeeEndDateStr))
+            {
+	            lateFeeEndDate = this._loans.Get(id)
+                    .Schedule.OrderBy(x => x.Date)
+                    .Last()
+                    .Date;
+            } else {
+                lateFeeEndDate = Convert.ToDateTime(lateFeeEndDateStr);
+            }
 
             LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
-            options.AutoLateFees = true;
-            options.StopLateFeeFromDate = lateFeeStartDate;
-            options.StopLateFeeToDate = lateFeeEndDate;
-
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
+
+	        if (string.IsNullOrEmpty(lateFeeEndDateStr) && lateFeeStartDate > lateFeeEndDate) {
+                model.Errors.Add("'Start date is bigger loan maturity date");
+                RescheduleSetmodel(model, this._loans.Get(id));
+                return Json(model);
+	        }
 
 		    if (options.StopLateFeeFromDate!=null && options.StopLateFeeToDate!=null) {
 				// to.Subtract(from)
@@ -341,7 +355,11 @@
                     RescheduleSetmodel(model, this._loans.Get(id));
                     return Json(model);
 			    }
-		    } 
+		    }
+
+            options.AutoLateFees = true;
+            options.StopLateFeeFromDate = lateFeeStartDate;
+            options.StopLateFeeToDate = lateFeeEndDate;
 
             this.loanOptionsRepository.SaveOrUpdate(options);
            
@@ -372,35 +390,25 @@
         [Ajax]
         [HttpPost]
         [Transactional]
-        public JsonResult SaveAutoChargesOption(int id, int? stopAutoChargePayment)
+        public JsonResult SaveAutoChargesOption(int id, int schedultItemId) 
         {
             DateTime now = DateTime.UtcNow;
             LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
             var loan = this._loans.Get(id);
 
             options.AutoPayment = false;
+            options.StopAutoChargeDate = null;
 
-            if (stopAutoChargePayment.HasValue && stopAutoChargePayment.Value > 0)
-            {
-
-                var loanSchedulesOrdered = loan.Schedule.Where(x => x.Date > now).OrderBy(x => x.Date).ToArray();
-                if (loanSchedulesOrdered.Any() && loanSchedulesOrdered.Count() >= stopAutoChargePayment.Value)
-                {
-                    options.AutoPayment = true;
-                    options.StopAutoChargeDate = loanSchedulesOrdered[stopAutoChargePayment.Value - 1].Date.Date.AddDays(1);
-                }
-                else
-                {
-                    Log.ErrorFormat("Stop payment after {0} payments is impossible, new schedule have only {1} payments left. LoanID {2}",
-                        stopAutoChargePayment.Value, loanSchedulesOrdered.Count(), loan.Id);
-                }
-
-                if (stopAutoChargePayment.Value == 0)
-                {
-                    options.AutoPayment = true;
-                    options.StopAutoChargeDate = now.Date;
+            if (schedultItemId > -1) {
+                var loanScheduleItem = loan.Schedule.Where(x => x.Date > now).FirstOrDefault(x=> x.Id == schedultItemId);
+                if (loanScheduleItem != null) {
+                    options.StopAutoChargeDate = loanScheduleItem.Date;
+                } 
+                else {
+                    Log.ErrorFormat("The date selected from DDL is not valid");
                 }
             }
+            
             this.loanOptionsRepository.SaveOrUpdate(options);
 
             EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));

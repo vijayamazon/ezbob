@@ -72,14 +72,15 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
     }, // events
 
     chargesSaveBtn: function () {
-        var chargesVal = $('#charges-payments').val();
-        if (chargesVal < 0 || chargesVal === "") {
-            var params = { head: 'Please fix the marked field', body: 'Number of payments must be 0 or greater', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#charges-payments')], timeout: '7000' };
+        var schedultItemId = this.$el.find("#LoanFutureScheduleItemsDDL :selected").val();
+        if (schedultItemId < -1)
+        {
+            var params = { head: 'Please fix the marked field', body: 'Unvalid charge selected', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#charges-payments')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
         BlockUi('on');
-        this.model.saveAutoChargeOptions(chargesVal);
+        this.model.saveAutoChargeOptions(schedultItemId);
     },
 
     chargesDeleteBtn: function () {
@@ -92,17 +93,20 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
         var endDate = $('#fees-calendar-to').val();
 	    var params;
         //Check that both input are not empty
-        if (startDate === "" || endDate === "") {
+        if (startDate === '' ) {
             params = { head: 'Please fix the marked fields', body: 'Both dates must be set for this operation', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
             this.fillErrorPopup(params);
             return false;
         }
         var star = moment(startDate, "DD/MM/YYYY");
         var end = moment(endDate, "DD/MM/YYYY");
-        if (star > end) {
-            params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
-            this.fillErrorPopup(params);
-            return false;
+
+        if (end !== null) {
+            if (star > end) {
+                params = { head: 'Please fix the marked fields', body: 'Until date must be greater then From date', footer: 'Please update and click Submit to continue', color: 'red', selectors: [this.$el.find('#fees-calendar-from'), this.$el.find('#fees-calendar-to')], timeout: '7000' };
+                this.fillErrorPopup(params);
+                return false;
+            }            
         }
 
         //Validation work.
@@ -495,7 +499,19 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 
 		this.renderRegions();
 		this.setUpView();
+	    this.SetLoanOptionsDDL();
 	}, // onRender
+
+
+	SetLoanOptionsDDL: function () {
+        var LoanFutureScheduleItems = this.model.get('LoanFutureScheduleItems');
+        var ddl = this.$el.find("#LoanFutureScheduleItemsDDL");
+        $.each(LoanFutureScheduleItems, function (key, value) {
+            ddl.append("<option value='" + value + "'>" + key + "</option>");
+        });
+        
+
+    },
 
 	setUpView: function () {
 	        this.$el.find('#fees-calendar-from,#fees-calendar-to,#intrest-calendar-from,#intrest-calendar-to').datepicker({ format: 'dd/mm/yyyy' });
