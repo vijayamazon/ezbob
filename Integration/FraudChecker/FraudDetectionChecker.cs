@@ -32,7 +32,7 @@
 			var detections = new List<FraudDetection>();
 			detections.AddRange(new InternalChecker(customerId, mode).Decide());
 			detections.AddRange(new ExternalChecker(customerId).Decide());
-			detections.AddRange(new BussinessChecker().SpecialBussinesRulesSystemDecision(customerId));
+			detections.AddRange(new BussinessChecker(customerId).Decide());
 
 			SaveToDb(detections, startDate, customerId);
 			return detections.Any();
