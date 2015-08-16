@@ -985,11 +985,14 @@
 				}
 			}*/
 
+            Loan loan = new Loan();
+
 			this.m_oDB.ForEachRowSafe((sr) => {
 				try {
 					int loanid = sr["Id"];
 
 					// IN
+				    /*ReschedulingArgument reModel = new ReschedulingArgument();
 					reModel.LoanID = loanid;
 					reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 					reModel.RescheduleIn = true;
@@ -997,10 +1000,12 @@
 					reModel.ReschedulingDate = DateTime.UtcNow;
 					reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 					if (reModel.RescheduleIn == false) {
-					//reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+					    reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+                    var s = new RescheduleLoan<Loan>(loan, reModel);
+					s.Context.UserID = 25852;
 					s.Execute();
 					m_oLog.Debug(s.Result.ToString());
-					//this.m_oLog.Debug("INRESULT: {0}", s.Result.ToString());
+					this.m_oLog.Debug("INRESULT: {0}", s.Result.ToString());*/
 
 					// OUT
 					ReschedulingArgument reModel1 = new ReschedulingArgument();
@@ -1041,6 +1046,8 @@
 
 			//edit it (remove schedules and add new ones)
 
+            Loan loan = new Loan();
+
 			//Choose schedules you want to delete
 			var removeInstallment = model.Items.First(x => x.Id == 129 && x.Type == "Installment");
 			var principal = removeInstallment.Principal;
@@ -1078,7 +1085,7 @@
 			}
 
 			//Create modified loan from the reschedule model
-			var loan = changeLoanModelBuilder.CreateLoan(model);
+			loan = changeLoanModelBuilder.CreateLoan(model);
 			loan.LoanType = lt;
 			loan.CashRequest = cr;
 
@@ -1207,61 +1214,7 @@
 			Console.WriteLine(scheduleswithinterests2.Sum(x => x.AccruedInterest));
 		}
 
-		[Test]
-		public void TestReBug() {
-			const int loanID = 1050;
-
-			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			LoanOptionsRepository optionsRepository = ObjectFactory.GetInstance<LoanOptionsRepository>();
-			ISession session = ObjectFactory.GetInstance<ISession>();
-
-			Loan loan = loanRep.Get(loanID);
-
-			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
-			calc.GetState();
-			
-			ReschedulingArgument reModel = new ReschedulingArgument();
-			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
-			reModel.LoanID = loanID;
-			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-			reModel.SaveToDB = false;
-			reModel.RescheduleIn = true;
-			
-			var s = new RescheduleLoan<Loan>(loan, reModel);
-			s.Context.UserID = 25852;
-			try {
-				s.Execute();
-				m_oLog.Debug("RESULT FOR IN");
-				m_oLog.Debug(s.Result.ToString());
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
-			
-		
-			reModel1.LoanType = loan.GetType().AssemblyQualifiedName;
-			reModel1.LoanID = loanID;
-			reModel1.ReschedulingDate = DateTime.UtcNow;
-			reModel1.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
-			reModel1.SaveToDB = false;
-			reModel1.RescheduleIn = false;
-			reModel1.PaymentPerInterval = 90m;
-			var s1 = new RescheduleLoan<Loan>(loan, reModel1);
-			s1.Context.UserID = 25852;
-
-			try {
-				s1.Execute();
-				m_oLog.Debug("RESULT FOR OUT");
-				m_oLog.Debug(s1.Result.ToString());
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
-
-			LoanOptions options = optionsRepository.GetByLoanId(loan.Id) ?? LoanOptions.GetDefault(loan.Id);
-			options.AutoPayment = true;
-			optionsRepository.SaveOrUpdate(options);
-			session.Flush();
-		}
+	
 
 		[Test]
 		public void TestSFRetrier() {

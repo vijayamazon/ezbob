@@ -601,7 +601,7 @@
              return result == null ? null : Json(result.Value);
          }*/
 
-				Log.Debug(string.Format("BEFOREFLUSH: {0}", loan));
+				
         //[Ajax]
         //[HttpPost]
         //[Transactional]
@@ -631,7 +631,7 @@
 
         //	return Json(model);
         //} // AddFreezeInterval
-        [Transactional]
+       // [Transactional]
 			//try
 			//{
 			//	ReschedulingActionResult result = this.serviceClient.Instance.RescheduleLoan(this._context.User.Id, oLoan.Customer.Id, reModel);
