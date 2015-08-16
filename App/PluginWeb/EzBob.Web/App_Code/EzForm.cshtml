@@ -8,12 +8,12 @@
 @using EZBob.DatabaseLib.Model.Database.UserManagement
 
 @*Renders select*@
-@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "" )
+@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
 {
     <div class="form-group">
         <label class="control-label" for="@id">@caption</label>
         <div class="controls">
-            <select id="@id" name="@id" class="selectheight @css" data-placeholder="@placeHolder" >
+            <select id="@id" name="@id" class="selectheight @css" data-placeholder="@placeHolder">
                 <option>-</option>
                 @foreach (var v in values)
                 {
@@ -69,16 +69,16 @@
         }
         else
         {
-           
-                <label class="input-title" for="@identificator">@selectProp.Caption</label>
-                <div class="input-wrapper">
-                    <div class="select">
-                        @SelectTag(selectProp, identificator)
-                        <div class="error-wrap"></div>
-                    </div>
 
+            <label class="input-title" for="@identificator">@selectProp.Caption</label>
+            <div class="input-wrapper">
+                <div class="select">
+                    @SelectTag(selectProp, identificator)
+                    <div class="error-wrap"></div>
                 </div>
-            
+
+            </div>
+
         }
     </div>
 }
@@ -89,9 +89,9 @@
             class="@selectProp.Cls"
             ui-event-control-id="@selectProp.UiEventControlID"
             @if (selectProp.IsDisabled) {  @: disabled="disabled"
-                                                     }
+                                                                             }
             @if (selectProp.TabIndex > 0) { @: tabindex="@selectProp.TabIndex"
-                                                     }>
+                                                                             }>
         <option value=""></option>
         @if (selectProp.ListItems != null)
         {
@@ -103,26 +103,26 @@
     </select>
 }
 @helper InputText(
-string id, 
-string caption, 
-string value = "", 
-string type = "text", 
-string cls = "", 
-bool isDisabled = false, 
+string id,
+string caption,
+string value = "",
+string type = "text",
+string cls = "",
+bool isDisabled = false,
 bool isRequired = false,
 bool statusIcon = false,
 int tabIndex = 0,
-int maxLength = 0, 
+int maxLength = 0,
 string uiEventControlID = "",
-string autoCorrect = "", 
-string autoCapitalize = "", 
-string formFieldID = ""  )
+string autoCorrect = "",
+string autoCapitalize = "",
+string formFieldID = "")
 {
     var identificator = new HtmlString(id);
     var val = new HtmlString(value);
-    
 
-    <div @( !string.IsNullOrWhiteSpace(formFieldID) ? "id=" + formFieldID : "")  class="form_field_container control-group ">
+
+    <div @( !string.IsNullOrWhiteSpace(formFieldID) ? "id=" + formFieldID : "") class="form_field_container control-group ">
         <div class="controls">
             <label class="attardi-input">
                 <span>@caption</span>
@@ -132,18 +132,17 @@ string formFieldID = ""  )
                        class="@cls"
                        value="@val"
                        @if (isDisabled) {  @: disabled="disabled"
-                       }
+                                                                     }
                        @if (tabIndex > 0) { @: tabindex="@tabIndex"
-                       }
+                                                                     }
                        @if (maxLength > 0) { @: maxlength="@maxLength"
-                       }
+                                                                     }
                        @if (!string.IsNullOrWhiteSpace(autoCorrect)) { @: autocorrect="@autoCorrect"
-                       }
+                                                                     }
                        @if (!string.IsNullOrWhiteSpace(autoCapitalize)) { @: autocapitalize="@autoCapitalize"
-                       }
+                                                                     }
                        @if (!string.IsNullOrWhiteSpace(uiEventControlID)) { @: ui-event-control-id="@uiEventControlID"
-                       }
-                 />
+                                                                     } />
 
 
 
@@ -158,63 +157,66 @@ string formFieldID = ""  )
                     <span class="required">*</span>
                 }
             </label>
-                @if (@type.Equals("password"))
-                {
-                    <p id="message" class="help-block"></p>
-                }
+            @if (@type.Equals("password"))
+            {
+                <p id="message" class="help-block"></p>
+            }
         </div>
     </div>
 }
 
 
 @helper InputTextWizard(EzInputBuilder inputProp, CustomerOriginEnum origin)
-
 {
     var identificator = new HtmlString(inputProp.Id);
     <div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "") class="form_field_container control-group @(inputProp.ToHide ? "hide" : "")">
-        @if (origin != CustomerOriginEnum.everline) {
+        @if (origin != CustomerOriginEnum.everline)
+        {
 
-        <div class="controls">
-            <label class="attardi-input">
-                    @if (!string.IsNullOrWhiteSpace(inputProp.InnerMessage)) {
-                    <div class="inner-input-message-container">
-                        <label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
-                    </div>
-                }
-                <span>@inputProp.Caption</span>
-                @InputTextTag(inputProp, identificator)
-                @if (inputProp.StatusIcon)
-                {
-                    var sId = identificator + "Image";
-                    var sReq = inputProp.IsRequired ? "required" : "";
-                    <img id="@sId" class="field_status @sReq" />
-                }
-                else if (inputProp.IsRequired)
-                {
-                    <span class="required">*</span>
-                }
-                    @if (@inputProp.Button != null) {
-                    <button id="@inputProp.Button.Id" class="@inputProp.Button.Cls" type="button" ui-event-control-id="@inputProp.Button.UiEventControlID">@inputProp.Button.Caption</button>
-                }
-            </label>
-          
+            <div class="controls">
+                <label class="attardi-input">
+                    @if (!string.IsNullOrWhiteSpace(inputProp.InnerMessage))
+                    {
+                        <div class="inner-input-message-container">
+                            <label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
+                        </div>
+                    }
+                    <span>@inputProp.Caption</span>
+                    @InputTextTag(inputProp, identificator)
+                    @if (inputProp.StatusIcon)
+                    {
+                        var sId = identificator + "Image";
+                        var sReq = inputProp.IsRequired ? "required" : "";
+                        <img id="@sId" class="field_status @sReq" />
+                    }
+                    else if (inputProp.IsRequired)
+                    {
+                        <span class="required">*</span>
+                    }
+                    @if (@inputProp.Button != null)
+                    {
 
-        </div>
+                        @ButtonTag(inputProp.Button)
+                    }
+                </label>
+
+
+            </div>
 
         }
         else
         {
-      
+
             <label class="input-title" for="@identificator">@inputProp.Caption</label>
             <div class="input-wrapper">
                 @InputTextTag(inputProp, identificator)
                 @if (@inputProp.Button != null)
                 {
-                    <button id="@inputProp.Button.Id" class="@inputProp.Button.Cls" type="button" ui-event-control-id="@inputProp.Button.UiEventControlID">@inputProp.Button.Caption</button>
+                    @ButtonTag(inputProp.Button)
                 }
                 <div class="error-wrap"></div>
             </div>
-        
+
         }
         @if (@inputProp.Type.Equals("password"))
         {
@@ -239,28 +241,93 @@ string formFieldID = ""  )
 }
 
 @helper InputTextTag(EzInputBuilder inputProp, HtmlString identificator)
-{   
+{
     var val = new HtmlString(inputProp.Value);
-  
-        <input type="@inputProp.Type"
-               name="@identificator"
-               id="@identificator"
-               class="@inputProp.Cls"
-               value="@inputProp.Value"
-               @if (inputProp.IsDisabled) {  @: disabled="disabled"
-                                                                                                      }
-               @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
-                                                                                                      }
-               @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
-                                                                                                      }
-               @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
-                                                                                                      }
-               @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
-                                                                                                      }
-               @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
-                                                                                                      } />
 
-   
+    <input type="@inputProp.Type"
+           name="@identificator"
+           id="@identificator"
+           class="@inputProp.Cls"
+           value="@inputProp.Value"
+           @if (inputProp.IsDisabled) {  @: disabled="disabled"
+                                                                                                                            }
+           @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
+                                                                                                                            }
+           @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
+                                                                                                                            }
+           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
+                                                                                                                            }
+           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
+                                                                                                                            }
+           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
+                                                                                                                            } />
+
+
+}
+@helper Captcha(string captchaType, string cls = "", string sId = "captcha", CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{
+    <div class="control-group">
+        <div class="captcha">
+
+            <div class="captcha-wrap" id="@sId">
+
+            </div>
+            @EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", cls: "form_field", isRequired: true
+                                       , statusIcon: true, uiEventControlID: "signup:captcha", maxLength: 6), origin: origin)
+        </div>
+    </div>
+}
+@helper WizardButton(EzButtonModel buttonProp, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{       var identificator = new HtmlString(buttonProp.Id);
+        <div class="form_buttons_container form_field_container">
+            @if (origin != CustomerOriginEnum.everline)
+            {
+                <div class="attardi-button">
+                    <input type="submit" id="@identificator" value="@buttonProp.Caption" class="@buttonProp.Cls" tabindex="@buttonProp.TabIndex" ui-event-control-id="@buttonProp.UiEventControlID">
+                </div>
+            }
+            else
+            {
+                <label class="input-title">&nbsp;</label>
+                <div class="input-wrapper">
+                    @ButtonTag(buttonProp)
+                </div>
+            }
+        </div>
+}
+@helper ButtonTag(EzButtonModel buttonProp)
+{
+    var identificator = new HtmlString(buttonProp.Id);
+    if (buttonProp.ButtonType == EzButtonType.button)
+    {
+        <button id="@buttonProp.Id" class="@buttonProp.Cls"
+                @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+            @buttonProp.Caption
+        </button>
+    }
+    else if (buttonProp.ButtonType == EzButtonType.submit)
+    {
+        <input type="submit" id="@identificator" value="@buttonProp.Caption" class="@buttonProp.Cls"
+               
+               @( buttonProp.TabIndex!=0 ? "tabindex=" + buttonProp.TabIndex: "")
+    
+               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+    }
+    else if (buttonProp.ButtonType == EzButtonType.button)
+    {
+        <input type="button" id="@identificator" value="@buttonProp.Caption"
+               class="@buttonProp.Cls"
+               @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+    }
+    else if (buttonProp.ButtonType == EzButtonType.link)
+    {
+        <a id="@identificator" value="@buttonProp.Caption" href="@buttonProp.Href"
+           class="@buttonProp.Cls"
+           @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+           @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>@buttonProp.Caption</a>
+    }
+
 }
 @helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
@@ -299,7 +366,7 @@ string formFieldID = ""  )
                     @if (!string.IsNullOrWhiteSpace(uiEventControlID))
                     {
                         @:ui-event-control-id="@uiEventControlID"
-                                                                                                                                       }
+                                                                                                                                                                                     }
                     />
                 @if (statusIcon)
                 {
@@ -494,7 +561,7 @@ string formFieldID = ""  )
                         @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
                         {
                             @:selected="selected"
-                                                                                                                                                                    }
+                                                                                                                                                                                                                            }
                         value="@i"
                         >@i</option>
                 }
@@ -513,7 +580,7 @@ string formFieldID = ""  )
                         @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
                         {
                             @:selected="selected"
-                                                                                                                                                                    }
+                                                                                                                                                                                                                            }
                         value="@i"
                         >@month[i - 1]</option>
                 }
@@ -533,7 +600,7 @@ string formFieldID = ""  )
                             @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
                             {
                                 @:selected="selected"
-                                                                                                                                                                                            }
+                                                                                                                                                                                                                                                            }
                             value="@i"
                             >@i</option>
                     }
@@ -570,7 +637,7 @@ string formFieldID = ""  )
                     <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
                             {
                                    @:selected="selected"
-                                                                                                                                                                           }
+                                                                                                                                                                                                                                   }
                         value="@i">@i</option>
                  } }
             </select>
@@ -582,7 +649,7 @@ string formFieldID = ""  )
                     <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
                             {
                                    @:selected="selected"
-                                                                                                                                                                           }
+                                                                                                                                                                                                                                   }
                            value="@i">@month[i - 1]</option>
                  }
                 }
@@ -598,7 +665,7 @@ string formFieldID = ""  )
                     <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
                             {
                                     @:selected="selected"
-                                                                                                                                                                                                }
+                                                                                                                                                                                                                                                                }
                             value="@i">@i</option>
                     }
                 }
