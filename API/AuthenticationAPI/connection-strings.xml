@@ -5,7 +5,7 @@
 	<add name="dev-yarons" connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=123456;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-elinar" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-elinar-prod-auto" connectionString="Server=localhost;Database=prod_auto;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
-	<add name="dev-server" connectionString="Server=10.0.0.220;Database=prod_auto;User Id=sa;Password=Ezbobdevdb1;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
+  <add name="dev-dora" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
   <add name="dev-sashaf" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
 	<add name="dev-shlomim" connectionString="Server=localhost;Database=ezbob;User Id=ezbobuser;Password=ezbobuser;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
   <add name="dev-mishas" connectionString="Server=localhost;Database=ezbob;User Id=sa;Password=Or@nge123;MultipleActiveResultSets=true" providerName="System.Data.SqlClient"/>
