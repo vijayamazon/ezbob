@@ -10,18 +10,21 @@
     public class CreateAccountTests {
 
         [Test]
+        [Category("c1")]
         public void MustSucseedTest() {
             Assert.IsTrue( true);
         }
 
         [Test]
+        [Category("c2")]
         public void MustFailTest()
         {
             Assert.IsTrue(false);
         }
 
         [Test]
-        public void CreateAccountTest1() {
+        [Category("c3")]
+        public void CreateAccountTest() {
            
             //WebDriverWait wait = new WebDriverWait(BrowserHost.instance.Application.Browser, new TimeSpan(3000));
             //var cBoxOverlay = wait.Until(ExpectedConditions.ElementIsVisible(By.Id("Email")));
