@@ -9,6 +9,11 @@
 			WriteToLog = writeToLog;
 		} // constructor
 
+
+		protected AMethod(ALoanCalculator calculator) {
+			Calculator = calculator;
+		} // constructor
+
 		protected virtual NL_Model WorkingModel {
 			get { return Calculator.WorkingModel; }
 		} // WorkingModel

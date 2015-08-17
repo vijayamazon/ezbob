@@ -18,7 +18,7 @@
 		public RepaymentIntervalTypes ReschedulingRepaymentIntervalType { get; set; }  // repayment interval type - selected
 	
 		[DataMember]
-		public decimal? PaymentPerInterval { get; set; } // monthly/weekly A amount for "outside" rescheduling
+		public decimal? PaymentPerInterval { get; set; } // monthly/weekly  amount for "outside" rescheduling
 
 		[DataMember]
 		public bool SaveToDB { get; set; } // save result (new schedules) or not

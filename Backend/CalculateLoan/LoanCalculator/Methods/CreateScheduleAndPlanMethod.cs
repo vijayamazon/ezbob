@@ -1,66 +1,106 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
-	using System.Collections.Generic;
-	using System.Linq;
-	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
-	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
+	using System;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	internal class CreateScheduleAndPlanMethod : AMethod {
-		public CreateScheduleAndPlanMethod(
-			ALoanCalculator calculator,
-			NL_Model loanToCreateModel,
-			bool writeToLog
-		) : base(calculator, writeToLog) {
-			// TODO: revive
-			// this.loanToCreateModel = loanToCreateModel;
-			// this.offerFees = GetOfferFees();
+
+		public CreateScheduleAndPlanMethod(ALoanCalculator calculator,NL_Model loanModel) : base(calculator) {
+			this.loanModel = loanModel;
 		} // constructor
 
-		public void /* List<ScheduledItemWithAmountDue> */ Execute() {
-			// TODO: revive
 
-			/*
-			new CreateScheduleMethod(Calculator, this.loanToCreateModel).Execute();
+		public void Execute() {
+			try {
 
-			var method = new CalculatePlanMethod(Calculator, false);
+			// create schedule
+			new CreateScheduleMethod(Calculator, this.loanModel).Execute();
 
-			List<Repayment> payments = method.Execute();
+			var planMethod = new CalculatePlanMethod(Calculator, false);
 
-			var result = new List<ScheduledItemWithAmountDue>();
+			//List<Repayment> payments = method.Execute();
 
-			for (int i = 0; i < payments.Count; i++) {
-				ScheduledItem si = WorkingModel.Schedule[i];
-				Repayment payment = payments[i];
+			//var result = new List<ScheduledItemWithAmountDue>();
 
-				result.Add(new ScheduledItemWithAmountDue(
-					i + 1,
-					si.Date,
-					payment.Principal,
-					si.InterestRate,
-					payment.Interest,
-					payment.Fees
-				));
-			} // for each
+			//for (int i = 0; i < payments.Count; i++) {
+			//	ScheduledItem si = WorkingModel.Schedule[i];
+			//	Repayment payment = payments[i];
 
-			if (WriteToLog) {
-				Log.Debug(
-					"\n\n{3}.CreateScheduleAndPlan - begin:" +
-					"\n\nLoan calculator model:\n{0}" +
-					"\n\nSchedule + plan:\n\t{1}" +
-					"\n\nDaily data:\n{2}" +
-					"\n\n{3}.CreateScheduleAndPlan - end." +
-					"\n\n",
-					WorkingModel,
-					string.Join("\n\t", result),
-					method.DailyLoanStatus.ToFormattedString("\t\t"),
-					Calculator.Name
-				);
-			} // if
+			//	result.Add(new ScheduledItemWithAmountDue(
+			//		i + 1,
+			//		si.Date,
+			//		payment.Principal,
+			//		si.InterestRate,
+			//		payment.Interest,
+			//		payment.Fees
+			//	));
+			//} // for each
 
-			return result;
-			*/
+			//if (WriteToLog) {
+			//	Log.Debug(
+			//		"\n\n{3}.CreateScheduleAndPlan - begin:" +
+			//		"\n\nLoan calculator model:\n{0}" +
+			//		"\n\nSchedule + plan:\n\t{1}" +
+			//		"\n\nDaily data:\n{2}" +
+			//		"\n\n{3}.CreateScheduleAndPlan - end." +
+			//		"\n\n",
+			//		WorkingModel,
+			//		string.Join("\n\t", result),
+			//		method.DailyLoanStatus.ToFormattedString("\t\t"),
+			//		Calculator.Name
+			//	);
+			//} // if
+
+			} catch (Exception) {
+
+				throw;
+			}
+			
 		} // Execute
+
+		//public void /* List<ScheduledItemWithAmountDue> */ Execute() {
+		//	// TODO: revive
+
+		//	/*
+		//	new CreateScheduleMethod(Calculator, this.loanToCreateModel).Execute();
+
+		//	var method = new CalculatePlanMethod(Calculator, false);
+
+		//	List<Repayment> payments = method.Execute();
+
+		//	var result = new List<ScheduledItemWithAmountDue>();
+
+		//	for (int i = 0; i < payments.Count; i++) {
+		//		ScheduledItem si = WorkingModel.Schedule[i];
+		//		Repayment payment = payments[i];
+
+		//		result.Add(new ScheduledItemWithAmountDue(
+		//			i + 1,
+		//			si.Date,
+		//			payment.Principal,
+		//			si.InterestRate,
+		//			payment.Interest,
+		//			payment.Fees
+		//		));
+		//	} // for each
+
+		//	if (WriteToLog) {
+		//		Log.Debug(
+		//			"\n\n{3}.CreateScheduleAndPlan - begin:" +
+		//			"\n\nLoan calculator model:\n{0}" +
+		//			"\n\nSchedule + plan:\n\t{1}" +
+		//			"\n\nDaily data:\n{2}" +
+		//			"\n\n{3}.CreateScheduleAndPlan - end." +
+		//			"\n\n",
+		//			WorkingModel,
+		//			string.Join("\n\t", result),
+		//			method.DailyLoanStatus.ToFormattedString("\t\t"),
+		//			Calculator.Name
+		//		);
+		//	} // if
+
+		//	return result;
+		//	*/
+		//} // Execute
 
 		/*
 
@@ -90,9 +130,9 @@
 
 			return result;
 		} // GetOfferFees
-
-		private readonly NL_Model loanToCreateModel;
-		private readonly List<OfferFee> offerFees;
-		*/
+*/
+		private readonly NL_Model loanModel;
+		//private readonly List<OfferFee> offerFees;
+		
 	} // class CreateScheduleAndPlanMethod
 } // namespace

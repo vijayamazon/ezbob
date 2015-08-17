@@ -1,10 +1,7 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
-	using System.Collections.Generic;
-	using System.Linq;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
-	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.ModelsWithDB;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 
@@ -23,14 +20,37 @@
 		public virtual NL_Model WorkingModel { get; private set; }
 
 		/// <summary>
+		/// Create shcedule by amount/issue date/schedules number (+interest only)/interval type
+		/// If input model contains offer-fee data and contains the ony one history - creates setup/servicing loan fees. 
+		/// On fees 2.0 full support - complete logic accordingly
+		/// 
+		/// Expected model structure: 
+		/// 1. loanModel.Histories (List<NL_LoanHistory>) includes at least one history
+		/// 2. history with: EventTime, Amount, InterestRate, RepaymentCount, RepaymentIntervalTypeID
+		/// 3. optional: Loan.InterestOnlyRepaymentCount
+		/// 4. optional: DiscountPlan (List<decimal>)
+		/// 5. optional: model.Fees (List<NLFeeItem>) with list of NL_OfferFees
+		/// 6. optional: model.Offer.BrokerSetupFeePercent (decimal?)
+		/// 
+		/// </summary>
+		/// <exception cref="NoInitialDataException">Condition. </exception>
+		/// <exception cref="InvalidInitialInterestOnlyRepaymentCountException">Condition. </exception>
+		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
+		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
+		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
+		public virtual void CreateSchedule() {
+			new CreateScheduleMethod(this, WorkingModel).Execute();
+		} // CreateScheduleAndPlan
+
+
+		/// <summary>
 		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
 		/// Also calculates loan plan.
 		/// Schedule is stored in the Schedule property of the last item of WorkingModel.LoanHistory
 		/// (i.e. WorkingModel.LoanHistory.Last() is overwritten).
 		/// </summary>
 		public virtual void CreateScheduleAndPlan() {
-			// TODO: revive
-			// new CreateScheduleAndPlanMethod(this, WriteToLog).Execute();
+			 new CreateScheduleAndPlanMethod(this, WorkingModel).Execute();
 		} // CreateScheduleAndPlan
 
 		/// <summary>
@@ -54,8 +74,7 @@
 		/// <returns>Loan balance on specific date.</returns>
 		public virtual void /* CurrentPaymentModel */ GetAmountToChargeForDashboard(
 			DateTime today,
-			bool setClosedDateFromPayments = false
-		) {
+			bool setClosedDateFromPayments = false) {
 			// TODO: revive
 			// new GetAmountToChargeForDashboardMethod(this, today, setClosedDateFromPayments, WriteToLog).Execute();
 		} // GetAmountToChargeForDashboard
@@ -184,6 +203,6 @@
 
 		protected static ASafeLog Log { get { return Library.Instance.Log; } }
 
-		private bool writeToLog;
+		private bool writeToLog ;
 	} // class ALoanCalculator
 } // namespace

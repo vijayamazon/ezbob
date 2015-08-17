@@ -1,91 +1,154 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using PaymentServices.Calculators;
 
 	internal class CreateScheduleMethod : AMethod {
-		public CreateScheduleMethod(ALoanCalculator calculator, NL_Model loanToCreateModel) : base(calculator, false) {
-			if (loanToCreateModel == null)
+
+		/// <exception cref="NoInitialDataException">Condition. </exception>
+		public CreateScheduleMethod(ALoanCalculator calculator, NL_Model loanModel) : base(calculator, false) {
+
+			if (loanModel == null)
 				throw new NoInitialDataException();
 
-			this.amount = loanToCreateModel.InitialAmount;
-			if (this.amount <= 0)
-				throw new InvalidInitialAmountException(this.amount);
+			this.loanModel = loanModel;
 
-			this.interestRate = loanToCreateModel.InitialInterestRate;
-			if (this.interestRate <= 0)
-				throw new InvalidInitialInterestRateException(this.interestRate);
-
-			this.repaymentCount = loanToCreateModel.InitialRepaymentCount;
-			if (this.repaymentCount < 1)
-				throw new InvalidInitialRepaymentCountException(this.repaymentCount);
-
-			this.interestOnlyRepaymentCount = loanToCreateModel.Loan.InterestOnlyRepaymentCount;
-			if ((this.interestOnlyRepaymentCount < 0) || (this.interestOnlyRepaymentCount >= this.repaymentCount)) {
-				throw new InvalidInitialInterestOnlyRepaymentCountException(
-					this.interestOnlyRepaymentCount,
-					this.repaymentCount
-				);
-			} // if
-
-			this.repaymentIntervalType = (RepaymentIntervalTypes)loanToCreateModel.InitialRepaymentIntervalTypeID;
-
-			this.issuedTime = loanToCreateModel.IssuedTime;
-
-			this.discountPlan = new List<decimal>();
-
-			if ((loanToCreateModel.DiscountPlan != null) && (loanToCreateModel.DiscountPlan.Length > 0))
-				this.discountPlan.AddRange(loanToCreateModel.DiscountPlan);
 		} // constructor
 
-		public virtual void /* List<ScheduledItem> */ Execute() {
-			/*
-			LoanHistory loan = WorkingModel.LoanHistory.Last();
+		/// <exception cref="NoInitialDataException">Condition. </exception>
+		/// <exception cref="InvalidInitialAmountException">Condition. </exception>
+		/// <exception cref="InvalidInitialInterestRateException">Condition. </exception>
+		/// <exception cref="InvalidInitialRepaymentCountException">Condition. </exception>
+		/// <exception cref="InvalidInitialInterestOnlyRepaymentCountException">Condition. </exception>
+		public virtual void Execute () {
 
-			loan.Clear();
+			NL_LoanHistory lastHistory = this.loanModel.Histories.OrderBy(h => h.EventTime).LastOrDefault();
 
-			loan.Amount = this.amount;
-			loan.RepaymentCount = this.repaymentCount;
-			loan.MonthlyInterestRate = this.interestRate;
-			loan.RepaymentIntervalType = this.repaymentIntervalType;
-			loan.IsFirst = WorkingModel.LoanHistory.Count == 1;
+			if (lastHistory == null) {
+				throw new NoInitialDataException();
+			}
 
-			if (loan.IsFirst) {
-				WorkingModel.InterestOnlyRepayments = this.interestOnlyRepaymentCount;
-				WorkingModel.DiscountPlan.Clear();
-				WorkingModel.DiscountPlan.AddRange(this.discountPlan);
-			} // if
+			if (lastHistory.Amount <= 0)
+				throw new InvalidInitialAmountException(lastHistory.Amount);
 
-			int principalRepaymentCount = this.repaymentCount - this.interestOnlyRepaymentCount;
+			if (lastHistory.InterestRate <= 0)
+				throw new InvalidInitialInterestRateException(lastHistory.InterestRate);
 
-			decimal otherPayments = Math.Floor(this.amount / principalRepaymentCount);
+			if (lastHistory.RepaymentCount < 1)
+				throw new InvalidInitialRepaymentCountException(lastHistory.RepaymentCount);
 
-			decimal firstPayment = this.amount - otherPayments * (principalRepaymentCount - 1);
+			int interestOnlyRepaymentCount = this.loanModel.Loan.InterestOnlyRepaymentCount;
+			if ((interestOnlyRepaymentCount < 0) || (interestOnlyRepaymentCount >= lastHistory.RepaymentCount)) {
+				throw new InvalidInitialInterestOnlyRepaymentCountException(interestOnlyRepaymentCount, lastHistory.RepaymentCount);
+			}
 
-			for (int i = 1; i <= this.repaymentCount; i++) {
-				var sp = new ScheduledItem(AddRepaymentIntervals(i).Date);
+			this.repaymentIntervalType = (RepaymentIntervalTypes)lastHistory.RepaymentIntervalTypeID;
+			this.issuedTime = lastHistory.EventTime;
 
-				if (i <= this.interestOnlyRepaymentCount)
-					sp.Principal = 0;
-				else if (i == this.interestOnlyRepaymentCount + 1)
-					sp.Principal = firstPayment;
-				else
-					sp.Principal = otherPayments;
+			int principalPayments = lastHistory.RepaymentCount - interestOnlyRepaymentCount;
+			decimal otherPayments = Math.Floor(lastHistory.Amount / principalPayments);
+			decimal firstPayment = lastHistory.Amount - otherPayments * (principalPayments - 1);
+			int discountPayments = this.loanModel.DiscountPlan.Count;
 
-				sp.InterestRate = this.interestRate;
+			// create Schedule - by initial or re-scheduling data (last history)
+			for (int i = 1; i <= lastHistory.RepaymentCount; i++) {
 
-				if (i <= this.discountPlan.Count)
-					sp.InterestRate *= 1 + this.discountPlan[i - 1];
+				decimal principal = otherPayments;
 
-				loan.Schedule.Add(sp);
+				if (i <= interestOnlyRepaymentCount)
+					principal = 0;
+				else if (i == interestOnlyRepaymentCount + 1)
+					principal = firstPayment;
+
+				this.loanModel.Schedule.Add(new NLScheduleItem() {
+					ScheduleItem = new NL_LoanSchedules() {
+						InterestRate = (i <= discountPayments) ? (lastHistory.InterestRate *= 1 + this.loanModel.DiscountPlan[i - 1]) : lastHistory.InterestRate,
+						PlannedDate = AddRepaymentIntervals(i).Date,
+						Principal = principal,
+						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
+						Position = i
+					}
+				});
 			} // for
 
-			return loan.Schedule;
-			*/
-		} // Execute
+			// no fees defined
+			if (this.loanModel.Fees == null || this.loanModel.Fees.Count==0) {
+				return;
+			}
+			
+			// extract offer-fees
+			var offerFees = this.loanModel.Fees.OfType<NL_OfferFees>().ToList();
+
+			if (offerFees.Count== 0) {
+				Log.Debug("No offer fees defined");
+				return;
+			}
+
+			// for now: only one-time or "spreaded" setup fees supported
+ 			// add full fees 2.0 support later
+
+			var setupFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.SetupFee);
+			var servicingFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.ServicingFee); // equal to "setup spreaded"
+			decimal? brokerFeePercent = this.loanModel.Offer.BrokerSetupFeePercent;
+
+			// setup fee - add one NL_LoanFees entry 
+			if (setupFee != null) {
+
+				var feeCalculator = new SetupFeeCalculator(setupFee.Percent, brokerFeePercent);
+
+				decimal setupFeeAmount = feeCalculator.Calculate(lastHistory.Amount);
+				this.loanModel.BrokerComissions = feeCalculator.CalculateBrokerFee(lastHistory.Amount);
+
+				//Log.Debug("setupFeeAmount: {0}, brokerComissions: {1}", setupFeeAmount, model.BrokerComissions);
+				Log.Debug("setupFeeAmount: {0}", setupFeeAmount);
+
+				this.loanModel.Fees.Add(new NLFeeItem() {
+					Fee = new NL_LoanFees() {
+						Amount = setupFeeAmount,
+						AssignTime = lastHistory.EventTime,
+						Notes = "setup fee one-part",
+						LoanFeeTypeID = (int)FeeTypes.SetupFee
+					}
+				});
+			}
+
+			// servicing fees - distribute according to timing of schedule items
+			if (servicingFee != null) {
+
+				var feeCalculator = new SetupFeeCalculator(servicingFee.Percent, brokerFeePercent);
+
+				decimal servicingFeeAmount = feeCalculator.Calculate(lastHistory.Amount);
+				this.loanModel.BrokerComissions = feeCalculator.CalculateBrokerFee(lastHistory.Amount);
+
+				Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
+
+				// prevent schedules from previos histories 
+				var newlyCreatedSchedule = this.loanModel.Schedule.OfType<NL_LoanSchedules>().Where(s => s.PlannedDate >= lastHistory.EventTime).ToList();
+
+				int schedulesCount = newlyCreatedSchedule.Count;
+
+				decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
+				decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
+
+				foreach (NL_LoanSchedules s in newlyCreatedSchedule) {
+
+					this.loanModel.Fees.Add(new NLFeeItem() {
+						Fee = new NL_LoanFees() {
+							Amount =  (schedulesCount > 0) ? firstFee : iFee,
+							AssignTime = s.PlannedDate,
+							Notes = "spread (servicing) fee",
+							LoanFeeTypeID = (int)FeeTypes.ServicingFee
+						}
+					});
+
+					schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
+				}
+			}
+		}
+
 
 		/// <summary>
 		/// Calculates date after requested number of periods have passed since loan issue date.
@@ -100,12 +163,105 @@
 				: this.issuedTime.AddDays(periodCount * (int)this.repaymentIntervalType);
 		} // AddRepaymentIntervals
 
-		private readonly decimal amount;
-		private readonly DateTime issuedTime;
-		private readonly decimal interestRate;
-		private readonly int repaymentCount;
-		private readonly int interestOnlyRepaymentCount;
-		private readonly RepaymentIntervalTypes repaymentIntervalType;
-		private readonly List<decimal> discountPlan;
+
+
+		private DateTime issuedTime;
+		private RepaymentIntervalTypes repaymentIntervalType;
+		private readonly NL_Model loanModel;
+
+
+
+
+		//public CreateScheduleMethod(ALoanCalculator calculator, NL_Model loanModel)
+		//	: base(calculator, false) {
+		//	if (loanModel == null)
+		//		throw new NoInitialDataException();
+
+		//	this.amount = loanModel.InitialAmount;
+		//	if (this.amount <= 0)
+		//		throw new InvalidInitialAmountException(this.amount);
+
+		//	this.interestRate = loanModel.InitialInterestRate;
+		//	if (this.interestRate <= 0)
+		//		throw new InvalidInitialInterestRateException(this.interestRate);
+
+		//	this.repaymentCount = loanModel.InitialRepaymentCount;
+		//	if (this.repaymentCount < 1)
+		//		throw new InvalidInitialRepaymentCountException(this.repaymentCount);
+
+		//	this.interestOnlyRepaymentCount = loanModel.Loan.InterestOnlyRepaymentCount;
+		//	if ((this.interestOnlyRepaymentCount < 0) || (this.interestOnlyRepaymentCount >= this.repaymentCount)) {
+		//		throw new InvalidInitialInterestOnlyRepaymentCountException(
+		//			this.interestOnlyRepaymentCount,
+		//			this.repaymentCount
+		//		);
+		//	} // if
+
+		//	this.repaymentIntervalType = (RepaymentIntervalTypes)loanModel.InitialRepaymentIntervalTypeID;
+
+		//	this.issuedTime = loanModel.IssuedTime;
+
+		//	this.discountPlan = new List<decimal>();
+
+		//	if ((loanModel.DiscountPlan != null) && (loanModel.DiscountPlan.Length > 0))
+		//		this.discountPlan.AddRange(loanModel.DiscountPlan);
+		//} // constructor
+	
+
+		//public virtual void /* List<ScheduledItem> */ Execute() {
+		//	/*
+		//	LoanHistory loan = WorkingModel.LoanHistory.Last();
+
+		//	loan.Clear();
+
+		//	loan.Amount = this.amount;
+		//	loan.RepaymentCount = this.repaymentCount;
+		//	loan.MonthlyInterestRate = this.interestRate;
+		//	loan.RepaymentIntervalType = this.repaymentIntervalType;
+		//	loan.IsFirst = WorkingModel.LoanHistory.Count == 1;
+
+		//	if (loan.IsFirst) {
+		//		WorkingModel.InterestOnlyRepayments = this.interestOnlyRepaymentCount;
+		//		WorkingModel.DiscountPlan.Clear();
+		//		WorkingModel.DiscountPlan.AddRange(this.discountPlan);
+		//	} // if
+
+		//	int principalRepaymentCount = this.repaymentCount - this.interestOnlyRepaymentCount;
+
+		//	decimal otherPayments = Math.Floor(this.amount / principalRepaymentCount);
+
+		//	decimal firstPayment = this.amount - otherPayments * (principalRepaymentCount - 1);
+
+		//	for (int i = 1; i <= this.repaymentCount; i++) {
+		//		var sp = new ScheduledItem(AddRepaymentIntervals(i).Date);
+
+		//		if (i <= this.interestOnlyRepaymentCount)
+		//			sp.Principal = 0;
+		//		else if (i == this.interestOnlyRepaymentCount + 1)
+		//			sp.Principal = firstPayment;
+		//		else
+		//			sp.Principal = otherPayments;
+
+		//		sp.InterestRate = this.interestRate;
+
+		//		if (i <= this.discountPlan.Count)
+		//			sp.InterestRate *= 1 + this.discountPlan[i - 1];
+
+		//		loan.Schedule.Add(sp);
+		//	} // for
+
+		//	return loan.Schedule;
+		//	*/
+		//} // Execute
+
+	
+
+		//private readonly decimal amount;
+		
+		//private readonly decimal interestRate;
+		//private readonly int repaymentCount;
+		//private readonly int interestOnlyRepaymentCount;
+		
+		//private readonly List<decimal> discountPlan;
 	} // class CreateScheduleMethod
 } // namespace

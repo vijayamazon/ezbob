@@ -173,7 +173,10 @@
     <Compile Include="NewLoan\AStringable.cs" />
     <Compile Include="NewLoan\NLAgreementItem.cs" />
     <Compile Include="NewLoan\NLFeeItem.cs" />
+    <Compile Include="NewLoan\NLHistoryItem.cs" />
     <Compile Include="NewLoan\NLScheduleItem.cs" />
+    <Compile Include="NewLoan\NL_DiscountPlanEntries.cs" />
+    <Compile Include="NewLoan\NL_DiscountPlans.cs" />
     <Compile Include="NewLoan\NL_Model.cs" />
     <Compile Include="NewLoan\NL_OfferFees.cs" />
     <Compile Include="NewLoan\NL_DecisionRejectReasons.cs" />

@@ -1,17 +1,18 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
-	using PaymentServices.Calculators;
+	using NHibernate.Linq;
 
 	/// <summary>
 	/// Create loan Schedule and setup/arrangement/servicing Fees
-	/// Arguments: NL_Model with CustomerID, CalculatorImplementation (BankLikeLoanCalculator|LegacyLoanCalculator), Loan.IssuedTime
+	/// Arguments: NL_Model with CustomerID, CalculatorImplementation (BankLikeLoanCalculator|LegacyLoanCalculator), Histories.NL_LoanHistory.EventTime
 	/// If the customer has valid offer, NL_Model Result contains Schedule, Fees, APR, Error
 	/// </summary>
 	public class CalculateLoanSchedule : AStrategy {
@@ -25,30 +26,24 @@
 		public NL_Model Result; // output
 
 		public override void Execute() {
+
 			if (model.CustomerID == 0) {
 				this.Result.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
 			}
 
 			// input validation
-			if (model.Loan == null) {
-				this.Result.Error = string.Format("Expected input data not found (NL_Model initialized by: Loan.IssuedTime). Customer {0}", model.CustomerID);
+			var lastHistory = model.Histories.OrderBy(h => h.EventTime).LastOrDefault();
+
+			if (lastHistory == null) {
+				this.Result.Error = "Expected input data not found (NL_Model initialized by: Histories.NL_LoanHistory.EventTime)";
 				return;
 			}
-
-			// use default
-			//if (model.CalculatorImplementation == null) {
-			//	message = string.Format("Expected input data not found (NL_Model initialized by: CalculatorImplementation (example: model. ).");
-			//	model.Error = message;
-			//	this.Result = model;
-			//	return;
-			//}
-
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
 				"NL_OfferForLoan",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", model.CustomerID),
-				new QueryParameter("@Now", model.IssuedTime)
+				new QueryParameter("@Now", lastHistory.EventTime)
 			);
 
 			if (dataForLoan == null) {
@@ -59,17 +54,23 @@
 			Log.Debug("OfferDataForLoan: {0}", dataForLoan);
 
 			try {
+
 				// from offer => Loan
-				model.InitialAmount = dataForLoan.LoanLegalAmount;
-				model.InitialRepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
-				model.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
-				model.Loan.LoanSourceID = dataForLoan.LoanSourceID;
 				model.Loan.OfferID = dataForLoan.OfferID;
+				model.Loan.LoanTypeID = dataForLoan.LoanTypeID; // if need a string: get description from NLLoanTypes Enum
 				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
-				model.InitialRepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
-				model.InitialInterestRate = dataForLoan.MonthlyInterestRate;
+				// EzbobBankAccountID - TODO
+				model.Loan.LoanSourceID = dataForLoan.LoanSourceID;
 				model.Loan.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
 				model.Loan.Position = dataForLoan.LoansCount;
+				model.Loan.CreationTime = DateTime.UtcNow;
+
+				// from offer => history initial data
+				lastHistory.Amount = dataForLoan.LoanLegalAmount;
+				lastHistory.RepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
+				lastHistory.RepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
+				lastHistory.InterestRate = dataForLoan.MonthlyInterestRate;
+				lastHistory.EventTime = DateTime.UtcNow;
 
 				// from offer => Offer
 				model.Offer = new NL_Offers {
@@ -77,135 +78,57 @@
 					SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan,
 				};
 
+				// offer-fees
+				List<NL_OfferFees> offerFees = DB.Fill<NL_OfferFees>(
+						"NL_OfferFeesGet",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@OfferID", dataForLoan.OfferID)
+					);
+
+				foreach (NL_OfferFees offerFee in offerFees)
+					model.Fees.Add(new NLFeeItem { OfferFees = offerFee });
+
+				if (dataForLoan.DiscountPlanID > 0) {
+					var discounts = DB.Fill<NL_DiscountPlanEntries>(
+						"NL_DiscountPlanEntriesGet",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@DiscountPlanID", dataForLoan.DiscountPlanID)
+						);
+
+					foreach (NL_DiscountPlanEntries dpe in discounts) {
+						model.DiscountPlan.Insert(dpe.PaymentOrder, Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
+					}
+				}
+
 				// init calculator
 				ALoanCalculator nlCalculator = new LegacyLoanCalculator(model);
 				if (model.CalculatorImplementation.GetType() == typeof(BankLikeLoanCalculator)) {
 					nlCalculator = new BankLikeLoanCalculator(model);
 				}
 
-				// calculator's model - set discounts
-				if (dataForLoan.DiscountPlan != null) {
-					string[] stringSeparator = { "," };
-					char[] removeChar = { ',' };
-					string[] result = dataForLoan.DiscountPlan.Trim(removeChar).Split(stringSeparator, StringSplitOptions.None);
-					model.DiscountPlan = new decimal[result.Length];
-					var i = 0;
-					foreach (string s in result)
-						model.DiscountPlan.SetValue(Decimal.Parse(s), i++);
-				}
+				// model should contain Schedule and Fees after this invocation
+				nlCalculator.CreateSchedule();
 
-				List<NL_OfferFees> offerFees = DB.Fill<NL_OfferFees>(
-					"NL_OfferFeesGet",
-					CommandSpecies.StoredProcedure,
-					new QueryParameter("@OfferID", dataForLoan.OfferID)
-				);
+				model.Histories.Where(h => h.EventTime == lastHistory.EventTime).ForEach( h => h= lastHistory);
+		
+				// set APR 
+				model.APR = nlCalculator.CalculateApr(lastHistory.EventTime);
 
-				foreach (NL_OfferFees nof in offerFees)
-					model.Fees.Add(new NLFeeItem { OfferFees = nof });
-
-				/*
-				if (offerFees != null) {
-
-					var setupFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.SetupFee);
-					var servicingFee = offerFees.FirstOrDefault(f => f.LoanFeeTypeID == (int)FeeTypes.ServicingFee); // equal to "setup spreaded"
-
-					// calculator's model - setup fee
-					if (setupFee != null) {
-
-						var feeCalculator = new SetupFeeCalculator(setupFee.Percent, dataForLoan.BrokerSetupFeePercent);
-
-						decimal setupFeeAmount = feeCalculator.Calculate(model.InitialAmount);
-						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.InitialAmount);
-
-						Log.Debug("setupFeeAmount: {0}, brokerComissions: {1}", setupFeeAmount, model.BrokerComissions);
-
-						nlCalculatorModel.Fees.Add(new Fee(model.IssuedTime, setupFeeAmount, FeeTypes.SetupFee));
-					}
-
-					// calculator's model - servicing fees
-					if (servicingFee != null) {
-
-						var feeCalculator = new SetupFeeCalculator(servicingFee.Percent, dataForLoan.BrokerSetupFeePercent);
-
-						decimal servicingFeeAmount = feeCalculator.Calculate(model.InitialAmount);
-						model.BrokerComissions = feeCalculator.CalculateBrokerFee(model.InitialAmount);
-
-						Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
-
-						int schedulesCount = shedules.Count;
-
-						decimal iFee = Decimal.Round(servicingFeeAmount / schedulesCount);
-						decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
-
-						foreach (ScheduledItem scheduleItem in shedules) {
-							nlCalculatorModel.Fees.Add(new Fee(scheduleItem.Date, (schedulesCount > 0) ? firstFee : iFee, FeeTypes.ServicingFee));
-							schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
-						}
-					}
-				}
-
-				// get schedules and fees
-				List<ScheduledItemWithAmountDue> sheduleFeeList = nlCalculator.CreateScheduleAndPlan(model);
-
-				Log.Debug("SCHEDULES plan + fees: {0}", sheduleFeeList);
-
-				// fill in result NL_Model
-				model.Schedule = new List<NLScheduleItem>();
-				model.Fees = new List<NLFeeItem>();
-
-				foreach (var s in sheduleFeeList) {
-
-					model.Schedule.Add(new NLScheduleItem() {
-						ScheduleItem = new NL_LoanSchedules() {
-							InterestRate = s.InterestRate,
-							PlannedDate = s.Date,
-							Position = s.Position,
-							Principal = s.Principal,
-							LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay
-						}
-					});
-
-					//  add appropriate "spread" fees model.Fees list
-					var servicingFeeSchedule = nlCalculatorModel.Fees.FirstOrDefault(f => f.AssignDate.Date == s.Date.Date && f.FeeType == FeeTypes.ServicingFee);
-
-					if (servicingFeeSchedule != null) {
-						model.Fees.Add(new NLFeeItem() {
-							Fee = new NL_LoanFees() {
-								Amount = servicingFeeSchedule.Amount,
-								AssignTime = servicingFeeSchedule.AssignDate,
-								Notes = "spread (servicing) fee",
-								LoanFeeTypeID = (int)FeeTypes.ServicingFee
-							}
-						});
-					} // "spread" fees
-				}
-
-				// setup fee
-				var setupFeeSchedule = nlCalculatorModel.Fees.FirstOrDefault(f => f.FeeType == FeeTypes.SetupFee);
-				if (setupFeeSchedule != null) {
-					model.Fees.Add(new NLFeeItem() {
-						Fee = new NL_LoanFees() {
-							Amount = setupFeeSchedule.Amount,
-							AssignTime = setupFeeSchedule.AssignDate,
-							Notes = "setup fee",
-							LoanFeeTypeID = (int)FeeTypes.SetupFee
-						}
-					});
-				}
-
-				*/
-				// set APR - TBD
-				model.APR = nlCalculator.CalculateApr(model.IssuedTime);
-
-				Log.Debug("model.Loan: {0}, model.Offer: {1}, model.APR: {2}", model.Loan, model.Offer, model.APR);
+				Log.Debug("model.Loan: {0}, model.Offer: {1}, model.APR: {2}, history: {3}", model.Loan, model.Offer, model.APR, lastHistory);
 				Log.Debug("Schedule: ");
-				model.Schedule.ForEach(s=>Log.Debug(s.ScheduleItem.ToString()));
+				model.Schedule.ForEach(s => Log.Debug(s.ScheduleItem.ToString()));
 				Log.Debug("Fees: ");
 				model.Fees.ForEach(f => Log.Debug(f.Fee));
+
+				model.Histories.ForEach(h => Log.Debug(h));
 
 				// init result by the model
 				this.Result = model;
 
+			} catch (NoInitialDataException ex1) {
+				this.Result = model;
+				this.Result.Error = ex1.Message;
+			
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				this.Result = model;

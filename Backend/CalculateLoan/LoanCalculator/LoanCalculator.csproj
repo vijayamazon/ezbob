@@ -74,6 +74,10 @@
       <Project>{0527009d-a650-4505-9385-49faca6991cb}</Project>
       <Name>DbConstants</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\Integration\PaymentServices\PaymentServices.csproj">
+      <Project>{544A1FD5-76D3-4B73-97DD-0C7AA32F66C2}</Project>
+      <Name>PaymentServices</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\Tools\EzbobUtils\Barrymore\Barrymore.csproj">
       <Project>{6e34c540-073a-44b1-9bbc-31dac15a6f5e}</Project>
       <Name>Barrymore</Name>

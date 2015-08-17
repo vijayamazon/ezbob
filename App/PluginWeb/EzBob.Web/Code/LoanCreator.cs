@@ -4,10 +4,9 @@
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Database;
 	using Ezbob.Logger;
 	using EzBob.Models.Agreements;
 	using EzBob.Web.Areas.Customer.Controllers;
@@ -113,6 +112,9 @@
 
 			if (nlModel == null)
 				nlModel = new NL_Model(cus.Id);
+
+			nlModel.UserID = this.context.UserId;
+
 			// NL fund transfer
 			nlModel.FundTransfer = new NL_FundTransfers() {
 				Amount = loanAmount, // logic transaction - full amount
@@ -148,6 +150,7 @@
 				};
 
 			} else {
+				// alibaba 
 				loanTransaction = new PacnetTransaction {
 					Amount = loan.LoanAmount,
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
@@ -156,13 +159,13 @@
 					TrackingNumber = "alibaba", // TODO save who got the money
 					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
-					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Manual"),
+					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Manual")
 				};
 
 				log.Debug("Alibaba loan, adding manual pacnet transaction to loan schedule");
 
 				// NL: only logic transaction created in "alibaba" case; real money transfer will be done later, not transferred to customer (alibaba buyer) directly, but to seller (3rd party)
-				nlModel.FundTransfer.LoanTransactionMethodID = this.tranMethodRepo.FindOrDefault("Manual").Id;
+				nlModel.FundTransfer.LoanTransactionMethodID = (int)NLLoanTransactionMethods.Manual;
 
 			} // if
 
@@ -190,14 +193,6 @@
 
 			if (loan.SetupFee > 0)
 				cus.SetupFee = loan.SetupFee;
-
-
-			nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
-			nlModel.Loan = new NL_Loans();
-			nlModel.UserID = this.context.UserId;
-			nlModel.Loan.Refnum = loan.RefNumber;
-			nlModel.InitialAmount = loanAmount;
-			nlModel.IssuedTime = now;
 
 			/**
 			1. Build/ReBuild agreement model - private AgreementModel GenerateAgreementModel(Customer customer, Loan loan, DateTime now, double apr); in \App\PluginWeb\EzBob.Web\Code\AgreementsModelBuilder.cs
@@ -267,19 +262,27 @@
 			// flush
 
 			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-			nlModel.Loan.OldLoanID = oldloanID;
+
+			// NL model - loan
+			nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
+			nlModel.Loan = new NL_Loans() { Refnum = loan.RefNumber,  OldLoanID = oldloanID };
+			nlModel.Histories.Add(new NL_LoanHistory() {
+				Amount = loanAmount,
+				EventTime = now // former IssuedTime
+			});
 
 			try {
 				log.Debug(nlModel.FundTransfer.ToString());
 				log.Debug(nlModel.PacnetTransaction.ToString());
 				log.Debug(nlModel.Loan.ToString());
 
+				nlModel.Histories.ForEach(h => log.Debug(h));
 				nlModel.Agreements.ForEach(a => log.Debug(a.Agreement.ToString()));
 				nlModel.Agreements.ForEach(t => log.Debug(t.TemplateModel.ToString()));
 
-				var nlLoan = this.serviceClient.Instance.AddLoan(nlModel);
+				/*var nlLoan = this.serviceClient.Instance.AddLoan(this.context.UserId, cus.Id, nlModel);
 				nlModel.Loan.LoanID = nlLoan.Value;
-				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoan.Value, oldloanID);
+				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoan.Value, oldloanID);*/
 
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);

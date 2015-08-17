@@ -50,12 +50,13 @@
 			return stra.Offer;
 		} // GetLastOffer
 
-		public LongActionResult AddLoan(NL_Model loanModel) {
+		public NLLongActionResult AddLoan(int? userID, int? customerID, NL_Model model) {
 			AddLoan strategy;
-			var amd = ExecuteSync(out strategy, loanModel.CustomerID, loanModel.UserID, loanModel);
-			return new LongActionResult {
+			var amd = ExecuteSync(out strategy, model.CustomerID, model.UserID, model);
+			return new NLLongActionResult {
 				MetaData = amd,
-				Value = strategy.LoanID
+				Value = strategy.LoanID,
+				Error = strategy.Error
 			};
 		} // AddLoan
 

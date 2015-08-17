@@ -26,7 +26,7 @@
 		LongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId);
 
 		[OperationContract]
-		LongActionResult AddLoan(NL_Model loanModel);
+		NLLongActionResult AddLoan(int? userID, int? customerID, NL_Model model);
 
 		[OperationContract]
 		NL_Model AddPayment(NL_Model loanModel);

@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections.Generic;
 	using System.IO;
+	using System.Linq;
 	using System.Threading.Tasks;
 	using System.Web;
 	using ConfigManager;
@@ -15,79 +16,99 @@
 
 	public class AddLoan : AStrategy {
 
+		/// <summary>
+		/// Create new loan
+		/// Expected input:
+		///		NL_Model with:
+		///			- Loan.OldLoanID
+		///			- Loan.Refnum
+		///			- Histories => history: EventTime (former IssuedTime)
+		///			- Agreements
+		///			- AgreementModel (JSON)
+		///		Expected result:
+		///			- int LoanID newly created
+		///			- optional string Error
+		/// </summary>
+		/// <param name="nlModel"></param>
 		public AddLoan(NL_Model nlModel) {
 			model = nlModel;
 
-			if (CurrentValues.Instance.Environment.Value.Contains("dev")) {
-				this.emailToAddress = "elinar@ezbob.com";
-			} else {
-				this.emailToAddress = CurrentValues.Instance.EzbobTechMailTo;
-			}
+			this.emailToAddress = CurrentValues.Instance.Environment.Value.Contains("dev") ? "elinar@ezbob.com" : CurrentValues.Instance.EzbobTechMailTo;
+
 			this.emailFromName = "ezbob-dev-system";
 			this.emailFromName = CurrentValues.Instance.MailSenderName;
-
 			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
 		}//constructor
 
 		public override string Name { get { return "AddLoan"; } }
-		public NL_Model Result; // output
+		public string Error; // output
 		
 		public override async void Execute() {
+
 			DateTime nowTime = DateTime.UtcNow;
 
 			string message;
 
+			// TODO check if "credit available" is enough for this loan amount
+
 			if (model.CustomerID == 0) {
-				this.Result.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
+				this.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
 			}
 
-			// check if "credit available" is enough for this loan amount
-			// loan for the offer exists
-			/*SafeReader sr = DB.GetFirst(string.Format("SELECT LoanID FROM NL_Loans WHERE OfferID={0}", dataForLoan.OfferID));
-			if (sr["LoanID"] > 0) {
-				  message = string.Format("Loan for customer {0} and offer {1} exists", model.CustomerID, dataForLoan.OfferID);
-				  Log.Alert(message);
-				  throw new NL_ExceptionLoanExists(message);
-			}*/
+			var history = model.Histories.OrderBy(h => h.EventTime).LastOrDefault();
 
-			// input validation
+			if (history == null) {
+				this.Error = NL_ExceptionRequiredDataNotFound.LastHistory; //"Expected input data not found (NL_Model initialized by: Histories.NL_LoanHistory.EventTime)";
+				return;
+			}
+
+			if (history.EventTime == DateTime.MinValue) {
+				this.Error = NL_ExceptionRequiredDataNotFound.HistoryEventTime;
+				return;
+			}
+		
 			if (model.Loan == null) {
-				this.Result.Error = string.Format("Expected input data not found (NL_Model initialized by: Loan.OldLoanID, Loan.Refnum). Customer {0}", model.CustomerID);
+				this.Error = NL_ExceptionRequiredDataNotFound.Loan; //string.Format("Expected input data not found (NL_Model initialized by: Loan.OldLoanID, Loan.Refnum). Customer {0}", model.CustomerID);
 				return;
 			}
 
-			// for Alibaba and Everline - money should'n be transferred
-			//if (model.FundTransfer == null) {
-			//	this.Result.Error = string.Format("Expected input data not found (NL_Model initialized by: FundTransfer). Customer {0}", model.CustomerID);
-			//	return;
-			//}
+			if (model.Loan.OldLoanID == null) {
+				this.Error = NL_ExceptionRequiredDataNotFound.OldLoan;
+				return;
+			}
+
+			if (model.Loan.Refnum == null) {
+				this.Error = NL_ExceptionRequiredDataNotFound.LoanRefNum;
+				return;
+			}
 
 			if (model.Agreements == null || model.Agreements.Count == 0) {
-				this.Result.Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
+				this.Error = string.Format("Expected input data not found (NL_Model initialized by: NLAgreementItem list). Customer {0}", model.CustomerID);
 				return;
 			}
 
 			if (model.AgreementModel == null) {
-				this.Result.Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
+				this.Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
 				return;
 			}
-
+			
+			// valid offer
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
 				"NL_OfferForLoan",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", model.CustomerID),
-				new QueryParameter("@Now", model.IssuedTime)
+				new QueryParameter("@Now", lastHistory.EventTime)
 			);
 
 			if (dataForLoan == null) {
-				this.Result.Error = NL_ExceptionOfferNotValid.DefaultMessage;
+				this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
 				return;
 			}
 
 			if (dataForLoan.AvailableAmount < dataForLoan.LoanLegalAmount) {
-				this.Result.Error = "No available credit for current offer. New loan is not allowed."; // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
+				this.Error = "No available credit for current offer. New loan is not allowed."; // duplicate of ValidateAmount(loanAmount, cus); (loanAmount > customer.CreditSum)
 				return;
 			}
 
@@ -103,12 +124,7 @@
 				  Log.Alert("No enough funds for loan: customer {0}; offer {1}", model.CustomerID, dataForLoan.Offer.OfferID);
 			}
 			****/
-
-			// TODO check usage of DefaultRepaymentPeriod from LoanSource
-			// TODO additional check to be replicated here in master, commits 
-			// adding safe check before creating loan that the interest rate is correct 4b6d139658203863dc57cc13748ea49da498ff27
-			// add server side validation of repayment period when CreateLoan  b6926a4428919dd0343dd4f8c7ceb0d5d6b1b03d
-
+			
 			/**
 			- loan
 			- fees
@@ -122,25 +138,26 @@
 			long fundTransferID = 0;
 			List<NL_LoanSchedules> schedule = new List<NL_LoanSchedules>();
 			List<NL_LoanFees> fees = new List<NL_LoanFees>();
-			NL_LoanHistory history = null;
 			List<NL_LoanAgreements> agreements = new List<NL_LoanAgreements>();
-
 
 			ConnectionWrapper pconn = DB.GetPersistent();
 
 			try {
 
 				// 2. Init Schedule and Fees
-				CalculateLoanSchedule scheduleAndFees = new CalculateLoanSchedule(model);
-				scheduleAndFees.Context.UserID = model.UserID;
-				scheduleAndFees.Execute();
-				if (scheduleAndFees.Result.Schedule == null || scheduleAndFees.Result.Error != "") {
-					this.Result.Error = "Failed to generate Schedule or error occured during schedule/fees creation. " + scheduleAndFees.Result.Error;
+				CalculateLoanSchedule scheduleStrategy = new CalculateLoanSchedule(model);
+				scheduleStrategy.Context.UserID = model.UserID;
+				scheduleStrategy.Execute();
+
+				schedule = scheduleStrategy.Result.Schedule.OfType<NL_LoanSchedules>().ToList();
+
+				if (schedule.Count==0 || scheduleStrategy.Result.Error != "") {
+					this.Error = "Failed to generate Schedule or error occured during schedule/fees creation. " + scheduleStrategy.Result.Error;
 					return;
 				}
 
 				// 3. complete NL_Loans object data
-				model.Loan = scheduleAndFees.Result.Loan;
+				model.Loan = scheduleStrategy.Result.Loan;
 				model.Loan.CreationTime = nowTime;
 				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
 
@@ -153,12 +170,17 @@
 
 				Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
 
+				fees = scheduleStrategy.Result.Fees.OfType<NL_LoanFees>().ToList();
+
 				// 5. fees
-				if (scheduleAndFees.Result.Fees != null) {
+				if (fees.Count > 0) {
 
-					scheduleAndFees.Result.Fees.ForEach(f => fees.Add(f.Fee));
-					fees.ForEach(f => f.LoanID = this.LoanID); // set newly created LoanID
-
+					foreach (NL_LoanFees f in fees) {
+						f.LoanID = this.LoanID; // set newly created LoanID
+						f.CreatedTime = nowTime;
+						f.AssignedByUserID = 1;
+					}
+					
 					Log.Debug("Adding fees: "); fees.ForEach(f => Log.Debug(f));
 
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", fees));
@@ -166,23 +188,17 @@
 
 				// 6. broker commissions
 				// done in controller. When old loan removed: check if this is the broker's customer, calc broker fees, insert into LoanBrokerCommission
-				if (scheduleAndFees.Result.BrokerComissions > 0) {
+				if (scheduleStrategy.Result.BrokerComissions > 0) {
 					DB.ExecuteNonQuery(string.Format("UPDATE dbo.LoanBrokerCommission SET NLLoanID = {0} WHERE LoanID = {1}", this.LoanID, model.Loan.OldLoanID));
 				}
 
 				// 7. history
-				history = new NL_LoanHistory() {
-					LoanID = this.LoanID,
-					UserID = model.UserID,
-					LoanLegalID = dataForLoan.LoanLegalID,
-					Amount = model.InitialAmount,
-					RepaymentCount = model.InitialRepaymentCount,
-					InterestRate = model.InitialInterestRate,
-					EventTime = model.IssuedTime,
-					Description = "add loan ID " + this.LoanID,
-					AgreementModel = model.AgreementModel
-				};
-
+				history.LoanID = this.LoanID;
+				//history.UserID = model.UserID;
+				history.LoanLegalID = dataForLoan.LoanLegalID;
+				history.Description = "adding loan " + this.LoanID + ", old ID: " + model.Loan.OldLoanID;
+				history.AgreementModel = model.AgreementModel;
+				
 				Log.Debug("Adding history: {0}", history);
 
 				long historyID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
@@ -206,7 +222,6 @@
 				Log.Debug("agreementSave to FS: {0}", agreementSaveFS);
 
 				// 9. schedules 
-				scheduleAndFees.Result.Schedule.ForEach(s => schedule.Add(s.ScheduleItem));
 				schedule.ForEach(s => s.LoanHistoryID = historyID);
 
 				Log.Debug("Adding schedule:"); schedule.ForEach(s => Log.Debug(s));
@@ -217,12 +232,15 @@
 				if (model.FundTransfer != null) {
 
 					model.FundTransfer.LoanID = this.LoanID;
+
 					fundTransferID = DB.ExecuteScalar<long>(pconn, "NL_FundTransfersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.FundTransfer));
 
 					Log.Debug("NL_FundTransfersSave: LoanID: {0}, fundTransferID: {1}", this.LoanID, fundTransferID);
 				}
 
 				pconn.Commit();
+
+				
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
@@ -260,6 +278,7 @@
 				Log.Error(message);
 			}
 
+			SendMail("", fees, schedule, history, agreements);
 
 		}//Execute
 
@@ -269,7 +288,7 @@
 				// save agreements to file system
 				if (model.AgreementModel == null) {
 					Log.Alert("AgreementModel not exists on creating Nloan");
-					this.Result.Error = "AgreementModel not exists on creating Nloan";
+					this.Error = "AgreementModel not exists on creating Nloan";
 					return 0;
 				}
 
