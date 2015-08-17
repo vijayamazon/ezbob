@@ -257,7 +257,7 @@ string formFieldID = "")
 
 
 }
-@helper Captcha(string captchaType, string cls = "", string sId = "captcha", CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+@helper Captcha(string captchaType, string cls = "", string sId = "captcha", string uiEventControlID = "", int tabIndex = 0, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
 	<div class="form_field_container control-group control-group">
 		<div class="captcha">
@@ -265,8 +265,14 @@ string formFieldID = "")
 			<div class="captcha-wrap" id="@sId">
 
 			</div>
-			@EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", cls: "form_field", isRequired: true
-									   , statusIcon: true, uiEventControlID: "signup:captcha", maxLength: 6), origin: origin)
+			@EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", 
+				cls: "form_field", 
+				isRequired: true, 
+				statusIcon: true, 
+				uiEventControlID: uiEventControlID, 
+				maxLength: 6, 
+				tabIndex: tabIndex), 
+				origin: origin)
 		</div>
 	</div>
 }

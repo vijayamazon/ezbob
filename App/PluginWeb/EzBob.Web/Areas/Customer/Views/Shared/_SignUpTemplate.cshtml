@@ -58,7 +58,7 @@
 
                 <div id="captchaDiv" class="hide">
                     <div class="form_field_container">
-                        @EzForm.Captcha(captchamode, origin: origin)
+                        @EzForm.Captcha(captchamode, uiEventControlID: "signup:captcha", origin: origin)
                     </div>
                 </div>
                 @EzForm.WizardButton(new EzButtonModel("signupSubmitButton", "Continue", cls: "button btn-green ev-btn-org continue disabled", tabIndex: 13, uiEventControlID: "signup:submit", buttonType: EzButtonType.submit), origin)

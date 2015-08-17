@@ -17,6 +17,15 @@
     margin:0 auto;
 }
 
+/*todo correct style for h1*/
+h1 {
+    font-size: 24px;
+    margin: 20px 0;
+    color: #999;
+    padding: 0 0 10px 0;
+    border-bottom: 1px #eee solid;
+}
+
 h2 {
     margin:0;
     color: #8dc641;
@@ -80,11 +89,13 @@ h2 {
     display: block;
     background: #ffffff;
     height: 50px;
+	line-height: 50px;
+    vertical-align: middle;
     font-size: 15px;
     font-family: 'Open Sans', sans-serif;
     color: #494949;
     width: 100%;
-    padding: 10px 15px;
+    padding: 0 15px;
     border: none;
     border-bottom: 2px solid #c7c7c7;
     -webkit-box-sizing: border-box;
@@ -95,12 +106,12 @@ h2 {
 }
 
 	
-	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input[readonly="readonly"],
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input[readonly="readonly"]:not([type="submit"]):not([type="button"]),
 	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea[readonly="readonly"] 
-	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input[disabled="disabled"],
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input[disabled="disabled"]:not([type="submit"]):not([type="button"]),
 	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea[disabled="disabled"],
-	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input.disabled,
-	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea.disabled {
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input.disabled:not([type="submit"]):not([type="button"]),
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea.disabled:not([type="submit"]):not([type="button"]) {
 		color: #A6A6A6; 
 		background-color: #F6F6F6; 
 	}
@@ -116,10 +127,10 @@ h2 {
     width:53%;
     float:left;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper input:-webkit-autofill {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input:-webkit-autofill {
     background-color: white !important;
 }
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper .clean-btn, .simpleCaptcha a {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper .clean-btn, .simpleCaptcha a {
     float: left;
     width: 42%;
     box-sizing: border-box;
@@ -135,15 +146,15 @@ h2 {
         text-decoration:none;
 }
 
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper a.clean-btn, .simpleCaptcha a{
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper a.clean-btn, .simpleCaptcha a{
 	line-height: 42px;
 }
 
-.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper .clean-btn.disabled {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper .clean-btn.disabled {
     opacity:0.3;
     cursor:default;
 }
-.wizard-wrap .wizard-inner-wrap   .form_buttons_container .input-wrapper .ev-btn-org  {
+.wizard-wrap .wizard-inner-wrap .form_buttons_container .input-wrapper .ev-btn-org  {
     margin-left:5%;
      line-height: 44px;
     font-size: 18px;
@@ -153,7 +164,7 @@ h2 {
     cursor: pointer;
     text-align: center;
     padding: 0 28px;
-    background: #e28023;
+    background-color: #e28023;
     border-bottom: 2px solid #c86d14;
     border-top: 2px solid #f39e4b;
     -webkit-transition: all 0.1s ease-out;
@@ -165,26 +176,27 @@ h2 {
     display: inline;
     box-sizing: border-box;
     float:right;
+	text-decoration: none;
 }
-.wizard-wrap .wizard-inner-wrap   .form_buttons_container .input-wrapper .ev-btn-org.disabled {
+.wizard-wrap .wizard-inner-wrap .form_buttons_container .input-wrapper .ev-btn-org.disabled {
     opacity:0.3;
 }
-.wizard-wrap .wizard-inner-wrap   .form_field_container .simpleCaptcha {
+.wizard-wrap .wizard-inner-wrap .form_field_container .simpleCaptcha {
      width: 70%;
     float: right;
     box-sizing: border-box;
     padding-left: 20px;
 }
-.wizard-wrap .wizard-inner-wrap   .form_field_container .simpleCaptcha .captcha-image-margin {
+.wizard-wrap .wizard-inner-wrap .form_field_container .simpleCaptcha .captcha-image-margin {
         float: left;
     height: 50px;
     width: 190px;
 }
-.wizard-wrap .wizard-inner-wrap   .form_field_container .form_buttons_container {
+.wizard-wrap .wizard-inner-wrap .form_field_container .form_buttons_container {
     clear:both;
 }
 
-.wizard-wrap .wizard-inner-wrap   .form_field_container .captcha-wrap {
+.wizard-wrap .wizard-inner-wrap .form_field_container .captcha-wrap {
     margin-bottom: 22px;
     height: 50px;
 }
