@@ -912,18 +912,18 @@
 
 		[Test]
 		public void TestRescheduleOUT() {
-			const int loanID = 5520; //4182; // 1718; // 4439; //3534;
+			const int loanID = 12; //4182; // 1718; // 4439; //3534;
 			Loan loan = new Loan();
 			ReschedulingArgument reModel = new ReschedulingArgument();
 			reModel.LoanType = loan.GetType().AssemblyQualifiedName;
 			reModel.LoanID = loanID;
 			reModel.ReschedulingDate = DateTime.UtcNow;
-			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Week;
+			reModel.ReschedulingRepaymentIntervalType = RepaymentIntervalTypes.Month;
 			reModel.SaveToDB = false;
 			reModel.RescheduleIn = false;
-			reModel.PaymentPerInterval = 50m;
+			reModel.PaymentPerInterval = 78m;
 			var s1 = new RescheduleLoan<Loan>(loan, reModel);
-			s1.Context.UserID = 25852;
+			s1.Context.UserID = 357; //25852;
 			try {
 				s1.Execute();
 				m_oLog.Debug("RESULT FOR OUT");
@@ -1230,6 +1230,35 @@
 			});
 
 			add.Execute();
+		}
+
+
+		[Test]
+		public void TestLoanInterestRate() {
+			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
+			Loan loan = loanRep.Get(12);
+
+			var firstSchedule = loan.Schedule.OrderBy(s => s.Date)
+				.FirstOrDefault();
+
+			var lastSchedule = loan.Schedule.OrderBy(s => s.Date)
+				.LastOrDefault();
+
+			Console.WriteLine(firstSchedule);
+			Console.WriteLine(lastSchedule);
+
+			var calc = new LoanRepaymentScheduleCalculator(loan, DateTime.UtcNow, CurrentValues.Instance.AmountToChargeFrom);
+
+			decimal r = 5;
+			if (firstSchedule != null && lastSchedule!=null)
+				//r = calc.GetInterestRate(firstSchedule.Date, lastSchedule.Date);
+			r = calc.GetInterestRate(firstSchedule.Date, new DateTime(2099, 01,01));
+
+			this.m_oLog.Debug("{0}", loan);
+
+			Console.WriteLine(r);
+
+			
 		}
 	}
 }
