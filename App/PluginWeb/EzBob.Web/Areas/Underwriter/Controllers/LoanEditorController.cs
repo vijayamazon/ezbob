@@ -32,6 +32,7 @@
         private readonly ServiceClient serviceClient;
         private readonly ISession session;
         private static readonly ILog Log = LogManager.GetLogger(typeof(LoanEditorController));
+        public static readonly DateTime NoLimitDate = new DateTime(2099, 1, 1);
 
         public LoanEditorController(
             ILoanRepository loans,
@@ -330,10 +331,7 @@
 
             if (string.IsNullOrEmpty(lateFeeEndDateStr))
             {
-	            lateFeeEndDate = this._loans.Get(id)
-                    .Schedule.OrderBy(x => x.Date)
-                    .Last()
-                    .Date;
+                lateFeeEndDate = NoLimitDate;
             } else {
                 lateFeeEndDate = Convert.ToDateTime(lateFeeEndDateStr);
             }
@@ -341,12 +339,6 @@
             LoanOptions options = this.loanOptionsRepository.GetByLoanId(id) ?? LoanOptions.GetDefault(id);
 
 			EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
-
-	        if (string.IsNullOrEmpty(lateFeeEndDateStr) && lateFeeStartDate > lateFeeEndDate) {
-                model.Errors.Add("'Start date is bigger loan maturity date");
-                RescheduleSetmodel(model, this._loans.Get(id));
-                return Json(model);
-	        }
 
 		    if (options.StopLateFeeFromDate!=null && options.StopLateFeeToDate!=null) {
 				// to.Subtract(from)
@@ -446,10 +438,7 @@
 
                 if (string.IsNullOrEmpty(freezeEndDateStr))
                 {
-                    freezeEndDate = this._loans.Get(id)
-                        .Schedule.OrderBy(x => x.Date)
-                        .Last()
-                        .Date;
+                freezeEndDate = NoLimitDate;
                 }
                 else
                 {
@@ -458,12 +447,6 @@
 
                 EditLoanDetailsModel model = this._loanModelBuilder.BuildModel(this._loans.Get(id));
 
-                if (string.IsNullOrEmpty(freezeEndDateStr) && freezeStartDate > freezeEndDate)
-                {
-                    model.Errors.Add("'Start date is bigger loan maturity date");
-                    RescheduleSetmodel(model, this._loans.Get(id));
-                    return Json(model);
-                }
 
                 if (freezeStartDate > freezeEndDate) {
                     
