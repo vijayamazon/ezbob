@@ -245,9 +245,7 @@
 	@{Html.RenderPartial("_AddressPopupTemplate");}
 </script>
 
-<script id="address-template" type="text/template">
-	@{Html.RenderPartial("_AddressTemplate");}
-</script>
+@{ Html.RenderPartial("_AddressTemplate"); }
 
 @helper CompanyCountFields(string sPrefix) {
 	<fieldset>

@@ -137,7 +137,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			max: 3,
 			title: 'Enter previous postcode',
 		    required: "empty",
-			uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		    cls: 'prevPersonAddress canDisabledAddress'
 		});
 		this.prevPersonAddressesView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.prevPersonAddressesView.$el, this.prevPersonAddressesView.model);
@@ -149,6 +150,7 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		    max: 3,
 		    required: "empty",
 		    uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
+		    cls: 'otherPropertiesAddress canDisabledAddress'
 		});
 		this.otherPropertiesAddressesView.render().$el.appendTo(oAddressContainer);
 		EzBob.Validation.addressErrorPlacement(this.otherPropertiesAddressesView.$el, this.otherPropertiesAddressesView.model);

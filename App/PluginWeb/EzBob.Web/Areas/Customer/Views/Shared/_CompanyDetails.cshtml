@@ -221,10 +221,6 @@
     @{Html.RenderPartial("_AddressPopupTemplate");}
 </script>
 
-<script id="address-template" type="text/template">
-    @{Html.RenderPartial("_AddressTemplate");}
-</script>
-
 <script id="oneDirector" type="text/template">
     <%_.each(directors, function(director, i){%>
         <div class="Directors">
@@ -306,6 +302,7 @@
 </script>
 
 @{
+	Html.RenderPartial("_AddressTemplate");
 	Html.RenderPartial("_TargetingTemplate");
 }
 

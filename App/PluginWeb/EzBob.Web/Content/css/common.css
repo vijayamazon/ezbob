@@ -1755,6 +1755,12 @@ input.form_field_right_side {
     resize: none;
 }
 
+.removeAddress{
+	margin-top: -12px;
+    margin-bottom: 10px;
+    display: block;
+}
+
 .add-customer-entry-comment-size {
     width: 96%;
     height: 80px !important;

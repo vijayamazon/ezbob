@@ -1,4 +1,6 @@
-﻿@model dynamic
+﻿@using System.Web.WebPages
+@model dynamic
+
 @helper Render(WebPageBase page, string url) {
     <script id="change-address-template" type="text/template">
         <form class="change-address-form" action="@url" method="POST">

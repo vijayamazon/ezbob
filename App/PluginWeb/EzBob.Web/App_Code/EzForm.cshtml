@@ -93,7 +93,7 @@
 			foreach (var optionGroup in selectProp.ListItems) {
 				<optgroup label="@optionGroup.GroupTitle">
 					@foreach (var item in optionGroup.Options) {
-					<option value="@item.Value">@item.Text</option>
+					<option value="@item.Value" class="@item.Cls">@item.Text</option>
 					}
 				</optgroup>
 			} 
@@ -182,26 +182,18 @@ string formFieldID = "")
                     }
                     <span>@inputProp.Caption</span>
                     @InputTextTag(inputProp, identificator)
-                    @if (inputProp.StatusIcon)
-                    {
-                        var sId = identificator + "Image";
-                        var sReq = inputProp.IsRequired ? "required" : "empty";
-                        <img id="@sId" class="field_status @sReq" />
-                    }
-                    else if (inputProp.IsRequired)
-                    {
+                    @if (inputProp.StatusIcon) {
+						var sId = identificator + "Image";
+						var sReq = inputProp.IsRequired ? "required" : "empty";
+						<img id="@sId" class="field_status @sReq" width="16" height="16" />
+					} else if (inputProp.IsRequired) {
                         <span class="required">*</span>
                     }
-                    @if (@inputProp.Button != null)
-                    {
-
+                    @if (@inputProp.Button != null) {
                         @ButtonTag(new List <EzButtonModel>{inputProp.Button})
                     }
                 </label>
-
-
             </div>
-
         }
         else
         {
@@ -244,8 +236,10 @@ string formFieldID = "")
     var val = new HtmlString(inputProp.Value);
 
     <input type="@inputProp.Type"
-           name="@identificator"
-           id="@identificator"
+           @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name = "@identificator"
+			                                                                                                                }
+	       @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: id="@identificator"
+	                                                                                                                        }
            class="@inputProp.Cls"
            value="@inputProp.Value"
            @if (inputProp.IsDisabled) {  @: disabled="disabled"
@@ -265,16 +259,16 @@ string formFieldID = "")
 }
 @helper Captcha(string captchaType, string cls = "", string sId = "captcha", CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
-    <div class="control-group">
-        <div class="captcha">
+	<div class="form_field_container control-group control-group">
+		<div class="captcha">
 
-            <div class="captcha-wrap" id="@sId">
+			<div class="captcha-wrap" id="@sId">
 
-            </div>
-            @EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", cls: "form_field", isRequired: true
-                                       , statusIcon: true, uiEventControlID: "signup:captcha", maxLength: 6), origin: origin)
-        </div>
-    </div>
+			</div>
+			@EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", cls: "form_field", isRequired: true
+									   , statusIcon: true, uiEventControlID: "signup:captcha", maxLength: 6), origin: origin)
+		</div>
+	</div>
 }
 
 @helper WizardButton(EzButtonModel button, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
@@ -303,38 +297,45 @@ string formFieldID = "")
 }
 @helper ButtonTag(List<EzButtonModel> buttons )
 {
-    foreach (var buttonProp in buttons)
-    {
-        var identificator = new HtmlString(buttonProp.Id);
-        if (buttonProp.ButtonType == EzButtonType.button)
-        {
-            <button id="@buttonProp.Id" class="@buttonProp.Cls"
-                    @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-                @buttonProp.Caption
-            </button>
-        }
-        else if (buttonProp.ButtonType == EzButtonType.submit)
-        {
-            <input type="submit" id="@identificator" value="@buttonProp.Caption" class="@buttonProp.Cls"
-                   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-        }
-        else if (buttonProp.ButtonType == EzButtonType.button)
-        {
-            <input type="button" id="@identificator" value="@buttonProp.Caption"
-                   class="@buttonProp.Cls"
-                   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-        }
-        else if (buttonProp.ButtonType == EzButtonType.link)
-        {
-            <a id="@identificator" value="@buttonProp.Caption" href="@buttonProp.Href"
-               class="@buttonProp.Cls"
-               @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>@buttonProp.Caption</a>
-        }
-
-    }
+	foreach (var buttonProp in buttons) {
+		var identificator = new HtmlString(buttonProp.Id);
+		switch (buttonProp.ButtonType) {
+			case EzButtonType.button:
+			<button class="@buttonProp.Cls"
+					@( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+					@( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+					@( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+				@buttonProp.Caption
+			</button>
+				break;
+			case EzButtonType.submit:
+			<input type="submit"
+				   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+				   value="@buttonProp.Caption"
+				   class="@buttonProp.Cls"
+				   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+				   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+				break;
+			case EzButtonType.input:
+			<input type="button"
+				   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+				   value="@buttonProp.Caption"
+				   class="@buttonProp.Cls"
+				   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+				   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+				break;
+			case EzButtonType.link:
+			<a href="@buttonProp.Href"
+			   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+			   value="@buttonProp.Caption"
+			   class="@buttonProp.Cls"
+			   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+			   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+				@buttonProp.Caption
+			</a>
+				break;
+		}
+	}
 
 }
 @helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)
@@ -491,36 +492,20 @@ string formFieldID = "")
 
 @helper AddressInput(WebPageBase page, string name, string title, string sUiEventControlID, string css = "")
 {
-    sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;
+	sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;
 
-    var identificator = new HtmlString(name);
-
-    HtmlString oByPostcode = null;
-    HtmlString oById = null;
-
-    if ((CurrentValues.Instance.DummyPostcodeSearchResult.Value != string.Empty) && (CurrentValues.Instance.DummyAddressSearchResult.Value != string.Empty))
-    {
-        oByPostcode = new HtmlString(CurrentValues.Instance.DummyPostcodeSearchResult.Value);
-        oById = new HtmlString(CurrentValues.Instance.DummyAddressSearchResult.Value);
-    } // if
-
-    var input = string.Format("<div id={0} class='address-field' data-ui-event-control-id-prefix='{1}'></div>", identificator, sUiEventControlID);
-    <div class="control-group form_field_container @css">
-        <label class="control-label addressCaption">@title</label>
-        <div class="controls">
-            <label class="control-label">
-                @{ page.WriteLiteral(input);}
-            </label>
-        </div>
-    </div>
-
-    if (oByPostcode != null)
-    { // !!! intentional inline style in the following line
-        <div style="display: none;" class="dummy_address_search_result">
-            <div class="by_postcode">@oByPostcode</div>
-            <div class="by_id">@oById</div>
-        </div>
-    }
+	var identificator = new HtmlString(name);
+	var input = string.Format("<div id={0} class=\"address-field\" data-ui-event-control-id-prefix=\"{1}\" data-title=\"{2}\" data-css=\"{3}\"></div>",
+		identificator, 
+		sUiEventControlID,
+		title,
+		css,
+		true,
+		true);
+		
+	<div>
+		@{page.WriteLiteral(input);}
+	</div>
 }
 
 @helper DateInput(WebPageBase page, string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "", string uiEventControlID = "", string hiddenFieldAuxClass = "", string labelCss = "")

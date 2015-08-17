@@ -16,7 +16,7 @@
 
 	var timeAtAddress = new List<Tuple<string, string>>  {
 		new Tuple<string, string>("1", "1 year"),
-		new Tuple<string, string>("2", "1 year"),
+		new Tuple<string, string>("2", "2 years"),
 		new Tuple<string, string>("3", "3 years or more"),
 	};
 	var serviceClient = new ServiceClient();
@@ -104,14 +104,13 @@
 
 			<div id="otherPropertiesSection" class="hide">
 				<h2 class="form_section">Other owned properties</h2>
-				@EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal", "otherPropertiesAddress canDisabledAddress")
+				@EzForm.AddressInput(this, "OtherPropertiesAddresses", "Other properties addresses", "other-properties-personal")
 			</div>
 
 			<hr />
 			<h2 class="form_section">Contact details</h2>
 
 			@EzForm.InputTextWizard(new EzInputBuilder("MobilePhone", "Mobile number",
-				value: "<%- CustomerPersonalInfo ? CustomerPersonalInfo.MobilePhone : '' %>",
 				cls: "phonenumber form_field",
 				type: "tel",
 				isRequired: true,
@@ -120,7 +119,6 @@
 				origin: origin)
 			
 			@EzForm.InputTextWizard(new EzInputBuilder("DayTimePhone", "Home phone number",
-				value: "<%- CustomerPersonalInfo ? CustomerPersonalInfo.DayTimePhone : '' %>",
 				cls: "phonenumber form_field",
 				type: "tel",
 				isRequired: true,
@@ -135,12 +133,13 @@
 				</div>
 			</div>
   }
-
-		<div class="form_buttons_container">
-			<div class="attardi-button">
-				<a href="#" class="button btn-green btn-continue disabled" ui-event-control-id="personal-info:continue">Continue</a>
-			</div>
-		</div>
+		
+		@EzForm.WizardButton(new EzButtonModel("personInfoContinueBtn", "Continue",
+				cls: "button btn-green ev-btn-org btn-continue disabled", 
+				uiEventControlID: "personal-info:continue",
+				buttonType: EzButtonType.link,
+				href:"#"), 
+				origin)
 	</div>
 </script>
 

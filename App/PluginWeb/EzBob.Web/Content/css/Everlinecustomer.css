@@ -30,7 +30,8 @@ h2 {
     clear: both;
     margin-bottom: 15px;
 }
-.wizard-wrap .wizard-inner-wrap .form_field_container .input-title {
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-title,
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-title-address {
     width: 30%;
     float: left;
     font-size: 15px;
@@ -92,6 +93,19 @@ h2 {
     -o-box-sizing: border-box;
     box-sizing: border-box;
 }
+
+	
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input[readonly="readonly"],
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea[readonly="readonly"] 
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input[disabled="disabled"],
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea[disabled="disabled"],
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input.disabled,
+	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea.disabled {
+		color: #A6A6A6; 
+		background-color: #F6F6F6; 
+	}
+
+
 .wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input:focus,
 .wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper select:focus,
 .wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea:focus,
@@ -111,8 +125,7 @@ h2 {
     box-sizing: border-box;
     border: 2px solid #e28023;
     margin-left: 5%;
-    height:48px;
-    line-height: 42px;
+    height: 48px;
     text-align: center;
     color: #e28023;
     font-weight: 600;
@@ -121,6 +134,11 @@ h2 {
         background-color: transparent;
         text-decoration:none;
 }
+
+.wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper a.clean-btn, .simpleCaptcha a{
+	line-height: 42px;
+}
+
 .wizard-wrap .wizard-inner-wrap  .form_field_container .input-wrapper .clean-btn.disabled {
     opacity:0.3;
     cursor:default;
@@ -171,3 +189,6 @@ h2 {
     height: 50px;
 }
  
+div.canDisabledAddress {
+    display: none;
+}
