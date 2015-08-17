@@ -80,12 +80,12 @@
 						Remember me<input data-val="true" data-val-required="The Remember me? field is required." id="RememberMe" name="RememberMe" type="checkbox" value="@Model.RememberMe.ToString().ToLowerInvariant()" ui-event-control-id="login:remember_me" />
 					</label>
 				</div>
-
-				<div class="form_buttons_container">
-					<div class="attardi-button">
-						<input type="submit" value="Login" class="button btn-green login-btn disabled" id="loginSubmit" ui-event-control-id="login:submit" />
-					</div>
-				</div>
+				
+				@EzForm.WizardButton(new EzButtonModel("loginSubmit", "Login", 
+					"button btn-green login-btn disabled ev-btn-org", 
+					"login:submit", 
+					buttonType: EzButtonType.submit), 
+					origin)
 			</section>
 		</section>
 		<aside class="customer-sidebar login">
