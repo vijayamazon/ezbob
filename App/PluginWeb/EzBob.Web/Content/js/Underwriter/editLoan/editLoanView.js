@@ -562,7 +562,10 @@ EzBob.EditLoanView = Backbone.Marionette.ItemView.extend({
 	        }
 	        if (options.StopLateFeeFromDate != null && options.StopLateFeeToDate != null) {
 	            this.$el.find('#fees-date-from').text(EzBob.formatDate3(options.StopLateFeeFromDate));
-	            this.$el.find('#fees-date-to').text(EzBob.formatDate3(options.StopLateFeeToDate));
+	            if (EzBob.formatDate3(options.StopLateFeeToDate) !== "01/01/2099") {
+	                this.$el.find('#fees-delete-btn-until-text').show();
+	                this.$el.find('#fees-date-to').text(EzBob.formatDate3(options.StopLateFeeToDate));
+	            }
 	            this.$el.find('#fees-dates').show();
 	        }
 

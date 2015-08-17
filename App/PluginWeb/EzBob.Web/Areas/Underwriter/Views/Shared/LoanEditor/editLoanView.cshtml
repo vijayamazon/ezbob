@@ -121,7 +121,7 @@
                             <button class="btn btn-primary btn-mini" id="fees-delete-btn"><i class="fa fa-trash-o"></i></button>
                             <span class="bin-text">This loan's fee is stoped from</span>
                             <span style="font-weight: bold" id="fees-date-from"></span>
-                            until
+                            <span id="fees-delete-btn-until-text" style="display:none;">until</span>
                             <span style="font-weight: bold" id="fees-date-to"></span>
                         </div>
                     </div>
@@ -158,8 +158,10 @@
                             <button class="btn btn-primary btn-mini remove-freeze-interval" data-id="<%- ary[5] %>"><i class="fa fa-trash-o"></i></button>
                             <span class="bin-text">This loan's intrest is stoped from</span>
                             <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[0]) %></span>
-                            until
-                            <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+                            <% if (ary[1] !=="2099-01-01"){%>
+                                <span>until</span>
+                                <span style="font-weight: bold"><%- EzBob.formatDateWithoutTime(ary[1]) %></span>
+                            <%}%>
                         </div>
                         <%	}});}	%>
                     </div>
