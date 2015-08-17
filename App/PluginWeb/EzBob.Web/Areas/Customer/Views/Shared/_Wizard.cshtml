@@ -1,5 +1,12 @@
 ﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
+		   
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+	var privacyPolicy = origin == CustomerOriginEnum.everline ? "/privacy-and-cookie-policy/" : "/privacy-and-cookies/";
+	var privacyPolicyLink = ViewBag.CustomerOrigin.FrontendSite + privacyPolicy;
+}
 <script type="text/template" id="wizard-template">
     <div class="wizard-progress"></div>
     <div class="vip-container"></div>
@@ -81,6 +88,18 @@
         </div>
         }
     }
+	
+	<%if(current == 0) {%>
+	<div class="wizard-top">
+		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
+		<h2>Apply in just 10 minutes</h2>
+		<p>It's quick and easy to apply for a business loan. We just need a few details before we can make a loan decision.</p>
+		<p>
+			To start the process we need you to first register to create a Customer Account. If you would like to know more about how we collect and use your data, please see our
+			<a href="@privacyPolicyLink" target="_blank">Privacy Policy</a>
+		</p>
+	</div>
+	<%}%>
 </script>
 
 <script type="text/template" id="vip-template">

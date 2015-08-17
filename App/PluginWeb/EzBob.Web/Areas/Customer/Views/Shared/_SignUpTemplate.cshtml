@@ -10,7 +10,7 @@
 @{
     List<Tuple<string, string>> securityQuestions = (ViewData["Questions"] as List<SecurityQuestion>).Select(x => new Tuple<string, string>(x.Id.ToString(), x.Name)).ToList(); ;
     // var securityQuestions = ViewData["Questions"] as List<Tuple<int, string>>;
-    var origin = ViewBag.CustomerOrigin.GetOrigin();
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
     string captchamode = CurrentValues.Instance.CaptchaMode;
     bool instructionsEnabled = CurrentValues.Instance.WizardInstructionsEnabled;
     var bml = new WizardBrokerLeadModel(Session);
