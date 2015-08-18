@@ -6,14 +6,14 @@
 /*wizard progres*/
 /*--------------*/
 
-.wizard-progress {
+.wizard-steps-wrapper {
     height: 177px;
     width: 100%;
     background: #f1f0f0;
     position: relative;
 }
 
-    .wizard-progress .wizard-steps {
+    .wizard-steps-wrapper .wizard-steps {
         max-width: 960px;
         margin: 0 auto;
         padding: 0 0 0 10px;
@@ -24,7 +24,7 @@
         position: relative;
     }
 
-    .wizard-progress .side-strip {
+    .wizard-steps-wrapper .side-strip {
         position: absolute;
         width: 50%;
         right: 0;
@@ -33,7 +33,7 @@
         top: 78px;
     }
 
-    .wizard-progress .wizard-steps .progress-time {
+    .wizard-steps-wrapper .wizard-steps .progress-time {
         font-size: 39px;
         width: 40%;
         font-weight: lighter;
@@ -44,13 +44,13 @@
         line-height: 160px;
     }
 
-    .wizard-progress .wizard-steps .steps-wrap {
+    .wizard-steps-wrapper .wizard-steps .steps-wrap {
         position: relative;
         width: 60%;
         float: right;
     }
 
-    .wizard-progress .wizard-steps .stripe {
+    .wizard-steps-wrapper .wizard-steps .stripe {
         height: 12px;
         margin-left: 20px;
         width: 36%;
@@ -60,7 +60,7 @@
         position: absolute;
     }
 
-    .wizard-progress .wizard-steps .progress-bar {
+    .wizard-steps-wrapper .wizard-steps .progress-bar {
         height: 12px;
         margin-left: 20px;
         width: 64%;
@@ -69,7 +69,7 @@
         position: absolute;
     }
 
-        .wizard-progress .wizard-steps .progress-bar .green-line {
+        .wizard-steps-wrapper .wizard-steps .progress-bar .green-line {
             height: 12px;
             z-index: -1;
             position: absolute;
@@ -85,7 +85,7 @@
             background: #8dc63f;
         }
 
-        .wizard-progress .wizard-steps .progress-bar .grey-line {
+        .wizard-steps-wrapper .wizard-steps .progress-bar .grey-line {
             float: left;
             height: 12px;
             z-index: -2;
@@ -102,7 +102,7 @@
             background: #6b6862;
         }
 
-    .wizard-progress .wizard-steps ul.application_steps {
+    .wizard-steps-wrapper .wizard-steps ul.application_steps {
         width: 64%;
         float: right;
         margin: 0;
@@ -119,18 +119,18 @@
         background-repeat: no-repeat;
     }
 
-    .wizard-progress ul.application_steps li {
+    .wizard-steps-wrapper ul.application_steps li {
         display: inline-block;
         list-style: none;
         width: 23%;
         direction: rtl;
     }
 
-        .wizard-progress ul.application_steps li:first-child .step_label {
+        .wizard-steps-wrapper ul.application_steps li:first-child .step_label {
             margin-right: 1px;
         }
 
-        .wizard-progress ul.application_steps li .progress-circle {
+        .wizard-steps-wrapper ul.application_steps li .progress-circle {
             text-align: center;
             -webkit-box-sizing: border-box;
             -moz-box-sizing: border-box;
@@ -146,17 +146,17 @@
             color: white;
         }
 
-        .wizard-progress ul.application_steps li.complete .progress-circle {
+        .wizard-steps-wrapper ul.application_steps li.complete .progress-circle {
             background: url('../everline/circle_done.png');
         }
-          .wizard-progress ul.application_steps li.complete .progress-circle .percent {
+          .wizard-steps-wrapper ul.application_steps li.complete .progress-circle .percent {
           visibility: hidden;
         }
-        .wizard-progress ul.application_steps li .progress-circle.current {
+        .wizard-steps-wrapper ul.application_steps li .progress-circle.current {
             background: url('../everline/circle_green.png');
         }
 
-        .wizard-progress ul.application_steps li .step_label {
+        .wizard-steps-wrapper ul.application_steps li .step_label {
             display: block;
             /* width: 100px; */
             float: right;
@@ -181,7 +181,7 @@
     max-width: 944px;
     padding: 40px 35px 40px 40px;
     background: #f1f0f0;
-    margin: 0 auto;
+    margin: 0 auto 80px;
 }
 
 
@@ -206,19 +206,22 @@ h2 {
 }
 
 .wizard-top {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
     box-sizing: border-box;
     max-width: 944px;
     padding: 0;
     background: transparent;
-    margin: 0 auto;
+    margin: 40px auto 20px;
 }
 
 div.verisign {
-	background: url(images/verisign_seal.gif) no-repeat 30px 0;
+    background: url(images/verisign_seal.gif) no-repeat 30px 0;
 	height: 60px;
 	width: 130px;
 	float: right;
-	background-size: contain;
+    -ms-background-size: contain;
+    background-size: contain;
 }
 
 div.truste{
@@ -469,23 +472,23 @@ div.canDisabledAddress {
 }*/
 
 @media screen and (max-width: 960px) {
-    .wizard-progress .wizard-steps .progress-time {
+    .wizard-steps-wrapper .wizard-steps .progress-time {
         line-height: 164px;
         font-size: 32px;
     }
 }
 
 @media screen and (max-width: 800px) {
-    .wizard-progress .wizard-steps .progress-time {
+    .wizard-steps-wrapper .wizard-steps .progress-time {
         width: 100%;
         text-align: center;
     }
 
-    .wizard-progress .wizard-steps .steps-wrap {
+    .wizard-steps-wrapper .wizard-steps .steps-wrap {
         width: 100%;
     }
 
-    .wizard-progress .wizard-steps .progress-bar {
+    .wizard-steps-wrapper .wizard-steps .progress-bar {
         height: 12px;
         margin-left: 20px;
         width: 64%;
@@ -495,11 +498,11 @@ div.canDisabledAddress {
         position: absolute;
     }
 
-    .wizard-progress .wizard-steps .stripe {
+    .wizard-steps-wrapper .wizard-steps .stripe {
         display: none;
     }
 
-    .wizard-progress .wizard-steps ul.application_steps {
+    .wizard-steps-wrapper .wizard-steps ul.application_steps {
         float: none;
         margin: 0 auto;
     }

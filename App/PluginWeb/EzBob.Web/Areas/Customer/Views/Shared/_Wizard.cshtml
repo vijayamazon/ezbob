@@ -28,69 +28,68 @@
 </script>
 
 <script type="text/template" id="progress-indicator">
-    <div class="side-strip">
-
-    </div>
-    <div class="wizard-steps">
-        @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline)
-        {
-            <div class="progress-time">
-                <%-caption%>
-            </div>
+    <div class="wizard-steps-wrapper">
 
 
-        }
-        else
-        {
-            
-            <div class="progress-time">
-                <span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span>
-            </div>
-        }
-        <div class="steps-wrap">
-            <div class="stripe"></div>
-            <div class="progress-bar">
-                <div class="green-line">
-
+        <div class="side-strip"></div>
+        <div class="wizard-steps">
+            @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline)
+            {
+                <div class="progress-time">
+                    <%-caption%>
                 </div>
-                <div class="grey-line">
-
+            }
+            else
+            {
+                <div class="progress-time">
+                    <span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span>
                 </div>
-            </div>
-            <ul class="application_steps">
-                <%(function() {
-                var last = steps.length - 1;
-
-                _.each(steps, function(step, i) {
-                var css = '';
-                var lastcss = '';
-                var circleType = 'center-circle';
-                if (i == current) css += 'current';
-
-                if (i < current) css += 'complete';
-
-                if (i == last) {
-                lastcss = 'last';
-                circleType = 'last-circle';
-                }
-                if ( i == 0 ) {
-                lastcss='first';
-                circleType = 'first-circle';
-                }
-                %>
-                <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
-                    <div class="progress-circle">
-                        <div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
+            }
+            <div class="steps-wrap">
+                <div class="stripe"></div>
+                <div class="progress-bar">
+                    <div class="green-line">
 
                     </div>
-                    <div class="progress-line"></div>
-                    <div class="progress-line-<%-css%>"></div>
-                    <span class="step_label"><% print(step.title) %></span>
-                </li>
-                <%}); // for each step
-                })(); // inline function - local scope
-                %>
-            </ul>
+                    <div class="grey-line">
+
+                    </div>
+                </div>
+                <ul class="application_steps">
+                    <%(function() {
+                    var last = steps.length - 1;
+
+                    _.each(steps, function(step, i) {
+                    var css = '';
+                    var lastcss = '';
+                    var circleType = 'center-circle';
+                    if (i == current) css += 'current';
+
+                    if (i < current) css += 'complete';
+
+                    if (i == last) {
+                    lastcss = 'last';
+                    circleType = 'last-circle';
+                    }
+                    if ( i == 0 ) {
+                    lastcss='first';
+                    circleType = 'first-circle';
+                    }
+                    %>
+                    <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
+                        <div class="progress-circle">
+                            <div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
+
+                        </div>
+                        <div class="progress-line"></div>
+                        <div class="progress-line-<%-css%>"></div>
+                        <span class="step_label"><% print(step.title) %></span>
+                    </li>
+                    <%}); // for each step
+                    })(); // inline function - local scope
+                    %>
+                </ul>
+            </div>
         </div>
     </div>
     @{
@@ -112,18 +111,18 @@
             </div>
         }
     }
-	
-	<%if(current == 0) {%>
-	<div class="wizard-top">
-		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
-		<h2>Apply in just 10 minutes</h2>
-		<p>It's quick and easy to apply for a business loan. We just need a few details before we can make a loan decision.</p>
-		<p>
-			To start the process we need you to first register to create a Customer Account. If you would like to know more about how we collect and use your data, please see our
-			<a href="@privacyPolicyLink" target="_blank">Privacy Policy</a>
-		</p>
-	</div>
-	<%}%>
+
+    <%if(current == 0) {%>
+    <div class="wizard-top">
+        @{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
+        <h2>Apply in just 10 minutes</h2>
+        <p>It's quick and easy to apply for a business loan. We just need a few details before we can make a loan decision.</p>
+        <p>
+            To start the process we need you to first register to create a Customer Account. If you would like to know more about how we collect and use your data, please see our
+            <a href="@privacyPolicyLink" target="_blank">Privacy Policy</a>
+        </p>
+    </div>
+    <%}%>
 </script>
 
 <script type="text/template" id="vip-template">
