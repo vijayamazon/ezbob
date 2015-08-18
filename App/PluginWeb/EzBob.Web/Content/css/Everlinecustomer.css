@@ -578,3 +578,84 @@ hr.wizard-hr {
         margin: 0 auto;
     }
 }
+
+
+/**Notifications**/
+.notification_green, .notification_yellow, .notification_orange, .notification_red, .notification_pink, .notification_darkblue, .notification_lightblue, .notification_white {
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	border-radius: 0;
+
+	-moz-box-shadow:none;
+	-webkit-box-shadow: none;
+	box-shadow:none;
+
+	text-shadow: none;
+	font-size: 11pt;
+	font-family: 'Open Sans', sans-serif;
+	padding-left: 50px;
+}
+
+.notification_green .close, .notification_yellow .close, .notification_orange .close, .notification_red .close, .notification_pink .close, .notification_darkblue .close, .notification_lightblue .close, .notification_white .close {
+	background: transparent;
+	width: 15px;
+	height: 15px;
+	-moz-border-radius: 0;
+	-webkit-border-radius: 0;
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	font-family: 'Open Sans', sans-serif;
+	font-size: 25px;
+	text-shadow: none;
+	line-height: 15px;
+	color: #e28023;
+}
+
+.notification_green .close:hover, .notification_yellow .close:hover, .notification_orange .close:hover, .notification_red .close:hover, .notification_pink .close:hover, .notification_darkblue .close:hover, .notification_lightblue .close:hover, .notification_white .close:hover {
+	background: transparent;
+}
+
+
+.specular_wrapper {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	height: 100%;
+	width: 100%;
+	overflow: hidden;
+}
+
+.notification_green .specular, .notification_yellow .specular, .notification_orange .specular, .notification_red .specular, .notification_pink .specular, .notification_darkblue .specular, .notification_lightblue .specular, .notification_white .specular {
+	display: none;
+}
+
+.notification_green .specular_wrapper{
+	background: url('../everline/green-sign.png') no-repeat 0 0;
+}
+
+.notification_yellow .specular_wrapper{
+	background: url('../everline/yellow-sign.png') no-repeat 0 0;
+}
+
+.notification_red .specular_wrapper{
+	background: url('../everline/red-sign.png') no-repeat 0 0;
+}
+
+
+.notification_green {
+	background: transparent; 
+    border: 2px solid #8dc63f;
+	color: #8dc63f;
+}
+.notification_yellow {
+	background: transparent;
+	border: 2px solid #e28023;
+	color: #e28023;
+}
+.notification_red {
+	background: transparent;
+	border: 2px solid #d20002;
+	color: #d20002;
+}
+/**End Notifications**/

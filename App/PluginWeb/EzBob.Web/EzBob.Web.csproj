@@ -702,10 +702,13 @@
     <Content Include="Content\everline\favicons\76x76.png" />
     <Content Include="Content\everline\favicons\faviconeverline.ico" />
     <Content Include="Content\everline\help-button.png" />
+    <Content Include="Content\everline\green-sign.png" />
     <Content Include="Content\everline\help\help_ebay_everline.jpg" />
     <Content Include="Content\everline\help\help_freeagent_everline.jpg" />
     <Content Include="Content\everline\help\help_paypal_everline.jpg" />
     <Content Include="Content\everline\help\help_sage_everline.jpg" />
+    <Content Include="Content\everline\yellow-sign.png" />
+    <Content Include="Content\everline\red-sign.png" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
     <Content Include="Content\img\basket-diamond-32.png" />
     <Content Include="Content\img\basket-gold-32.png" />
