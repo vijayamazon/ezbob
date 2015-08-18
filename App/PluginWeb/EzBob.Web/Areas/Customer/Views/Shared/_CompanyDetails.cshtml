@@ -43,26 +43,19 @@
         <h2 class="form_start">Business details</h2>
 		
         @using (Html.BeginForm("SaveCompany", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
-			
-			@EzForm.SelectWizard(new EzSelectModel("TypeOfBusiness", "Type of business",
-				typeOfBusinessOptions,
-				cls: "type-of-business-form_field",
-				isRequired: true,
-				statusIcon: true,
-				uiEventControlID: "personal-info:type_of_business",
-				autoFocus : true,
-				size: 6,
-				hasEmpty: false),
-				origin: origin)
-			
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <div class="oobts oobts-common oobts-offline oobts-selected" data-oobts="offline" ui-event-control-id="personal-info:i_am_offline"><i class="fa fa-check-square-o"></i>&nbsp;&nbsp;I am a small business</div>
-                    <div class="oobts oobts-common oobts-online" data-oobts="online" ui-event-control-id="personal-info:i_am_online"><i class="fa fa-square-o"></i>&nbsp;&nbsp;I am an online business</div>
-                </div>
-            </div>
 
-            <div class="after-business-type">
+			<div class="after-business-name">
+				@EzForm.SelectWizard(new EzSelectModel("TypeOfBusiness", "Type of business",
+					typeOfBusinessOptions,
+					cls: "type-of-business-form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "personal-info:type_of_business",
+					autoFocus: true,
+					size: 6,
+					hasEmpty: false),
+					origin: origin)
+
 				@EzForm.SelectWizard(new EzSelectModel("IndustryType", "Industry type",
 					IndustryType.Other.ToTupleInt<IndustryType>(),
 					cls: "form_field",
@@ -70,18 +63,19 @@
 					statusIcon: true,
 					uiEventControlID: "personal-info:industry_type"),
 					origin: origin)
-				
-                <div class="after-financial-details">
-					@EzForm.InputTextWizard(new EzInputBuilder("OverallTurnOver", "Total annual revenue",
-						type: "tel",
-						cls: "cashInput form_field",
-						isRequired: true,
-						statusIcon: true,
-						uiEventControlID: "personal-info:overall_turnover"),
-						origin: origin)
-                </div>
-                <div class="row-fluid company-full-details"></div>
+			</div>
+			
+            <div class="after-financial-details">
+				@EzForm.InputTextWizard(new EzInputBuilder("OverallTurnOver", "Total annual revenue (sales)",
+					type: "tel",
+					cls: "cashInput form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "personal-info:overall_turnover"),
+					origin: origin)
             </div>
+            <div class="row-fluid company-full-details"></div>
+            
 		}
     </div>
 	
