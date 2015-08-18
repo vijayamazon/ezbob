@@ -65,6 +65,16 @@ div.truste img{
 	margin-top: 13px;
 }
 
+a, a:visited {
+	text-decoration: none;
+	color: #e28023;
+}
+
+a:hover{
+	color: #dc6e23 !important;
+}
+
+
 .wizard-wrap .wizard-inner-wrap .form_field_container {
     clear: both;
     margin-bottom: 15px;
