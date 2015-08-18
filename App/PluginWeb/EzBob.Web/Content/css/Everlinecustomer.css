@@ -205,6 +205,11 @@ h2 {
     margin-bottom: 35px;
 }
 
+h2 .sub-h2 {
+	font-size: 70%;
+	color:#494949;
+}
+
 .wizard-top {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -213,6 +218,10 @@ h2 {
     padding: 0;
     background: transparent;
     margin: 40px auto 20px;
+}
+
+.security-icons {
+	padding-bottom: 20px;
 }
 
 div.verisign {
@@ -334,6 +343,12 @@ a:hover{
             border-radius: 0;
         }
 
+.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper select.type-of-business-form_field{
+	    height: 148px;
+    overflow-y: auto;
+    padding: 10px;
+}
+
 	
 	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper input[readonly="readonly"]:not([type="submit"]):not([type="button"]),
 	.wizard-wrap .wizard-inner-wrap .form_field_container .input-wrapper textarea[readonly="readonly"] 
@@ -407,6 +422,17 @@ a:hover{
                 cursor: default;
             }
 
+.wizard-wrap .wizard-inner-wrap .add-director-container.form_field_container .input-wrapper {
+	float: right;
+}
+
+.wizard-wrap .wizard-inner-wrap .add-director-container.form_field_container .input-wrapper .clean-btn{
+	float: right;
+    margin-top: -30px;
+    margin-bottom: 20px;
+}
+
+
 .wizard-wrap .wizard-inner-wrap .form_buttons_container .input-wrapper .ev-btn-org  {
     margin-left: 5%;
     line-height: 44px;
@@ -477,6 +503,15 @@ div.canDisabledAddress {
         font-size: 32px;
     }
 }
+hr.wizard-hr {
+	background-color: #494949;
+	margin-bottom: 20px;
+}
+
+.add-director-container{
+	margin-top: 20px;
+}
+
 
 @media screen and (max-width: 800px) {
     .wizard-steps-wrapper .wizard-steps .progress-time {

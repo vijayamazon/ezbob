@@ -75,28 +75,35 @@
 }
 @helper SelectTag(EzSelectModel selectProp, HtmlString identificator)
 {
-    <select name="@identificator"
-            id="@identificator"
-            class="@selectProp.Cls"
-            ui-event-control-id="@selectProp.UiEventControlID"
-            @if (selectProp.IsDisabled) { @: disabled="disabled"
-            }
-            @if (selectProp.TabIndex > 0) { @: tabindex="@selectProp.TabIndex"
-            }
-	>
-        <option value=""></option>
-        @if (selectProp.ListItems.Count == 1) {
-            foreach (var item in selectProp.ListItems[0].Options) {
-                <option value="@item.Value">@item.Text</option>
+	<select name="@identificator"
+			id="@identificator"
+			class="@selectProp.Cls"
+			ui-event-control-id="@selectProp.UiEventControlID"
+			@if (selectProp.IsDisabled) { @: disabled="disabled"
+									            }
+			@if (selectProp.TabIndex > 0) { @: tabindex="@selectProp.TabIndex"
+									            }
+			@if (selectProp.Size > 1) { @: size="@selectProp.Size"
+									            }
+			@if (selectProp.AutoFocus) { @: autofocus="autofocus"
+									            }>
+		
+		@if (selectProp.HasEmpty) {
+			<option value=""></option>
+		}
+		
+		@if (selectProp.ListItems.Count == 1) {
+			foreach (var item in selectProp.ListItems[0].Options) {
+				<option value="@item.Value">@item.Text</option>
 			} // foreach
 		} else {
 			foreach (var optionGroup in selectProp.ListItems) {
 				<optgroup label="@optionGroup.GroupTitle">
 					@foreach (var item in optionGroup.Options) {
-					<option value="@item.Value" class="@item.Cls">@item.Text</option>
+						<option value="@item.Value" class="@item.Cls">@item.Text</option>
 					}
 				</optgroup>
-			} 
+			}
 		}
 	</select>
 }
@@ -233,27 +240,31 @@ string formFieldID = "")
 
 @helper InputTextTag(EzInputBuilder inputProp, HtmlString identificator)
 {
-    var val = new HtmlString(inputProp.Value);
+	var val = new HtmlString(inputProp.Value);
 
-    <input type="@inputProp.Type"
-           @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name = "@identificator"
-			                                                                                                                }
-	       @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: id="@identificator"
-	                                                                                                                        }
-           class="@inputProp.Cls"
-           value="@inputProp.Value"
-           @if (inputProp.IsDisabled) {  @: disabled="disabled"
-                                                                                                                            }
-           @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
-                                                                                                                            }
-           @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
-                                                                                                                            }
-           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
-                                                                                                                            }
-           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
-                                                                                                                            }
-           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
-                                                                                                                            } />
+	<input type="@inputProp.Type"
+		   @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name="@identificator"
+		   		   			                                                                                                                   }
+		   @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: id="@identificator"
+		   		   	                                                                                                                           }
+		   class="@inputProp.Cls"
+		   value="@val"
+		   @if (inputProp.IsDisabled) {  @: disabled="disabled"
+		   		                                                                                                                               }
+		   @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
+		   		                                                                                                                               }
+		   @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
+		   		                                                                                                                               }
+		   @if (inputProp.Min.HasValue) { @: min="@inputProp.Min.Value"
+		   		                                                                                                                               }
+		   @if (inputProp.Max.HasValue) { @: max="@inputProp.Max.Value"
+		                                                                                                                                       }
+		   @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
+		   		                                                                                                                               }
+		   @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
+		   		                                                                                                                               }
+		   @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
+		   		                                                                                                                               } />
 
 
 }

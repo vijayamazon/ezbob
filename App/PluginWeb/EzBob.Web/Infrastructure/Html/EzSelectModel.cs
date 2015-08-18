@@ -16,6 +16,9 @@ namespace EzBob.Web.Infrastructure.Html
         public bool StatusIcon { get; set; }
         public int TabIndex { get; set; }
         public string UiEventControlID { get; set; }
+		public int Size { get; set; }
+		public bool AutoFocus { get; set; }
+		public bool HasEmpty { get; set; }
 
         public EzSelectModel() { }
 
@@ -27,7 +30,10 @@ namespace EzBob.Web.Infrastructure.Html
             bool isRequired = false,
             bool statusIcon = false,
             int tabIndex = 0,
-            string uiEventControlID = "")
+            string uiEventControlID = "",
+			bool autoFocus = false,
+			int size = 1,
+			bool hasEmpty = true)
         {
             Id = id;
             Caption = caption;
@@ -38,7 +44,12 @@ namespace EzBob.Web.Infrastructure.Html
             StatusIcon = statusIcon; 
             TabIndex = tabIndex;
             UiEventControlID = uiEventControlID;
+	        AutoFocus = autoFocus;
+	        Size = size;
+	        HasEmpty = hasEmpty;
         }
+
+		
 
 		public EzSelectModel(string id,
 			string caption,
@@ -48,7 +59,11 @@ namespace EzBob.Web.Infrastructure.Html
 			bool isRequired = false,
 			bool statusIcon = false,
 			int tabIndex = 0,
-			string uiEventControlID = "") : this (id,
+			string uiEventControlID = "",
+			bool autoFocus = false,
+			int size = 1,
+			bool hasEmpty = true)
+			: this(id,
 			caption, 
 			new List<EzSelectOptionGroup> { 
 				new EzSelectOptionGroup { 
@@ -60,7 +75,10 @@ namespace EzBob.Web.Infrastructure.Html
 			isRequired,
 			statusIcon, 
 			tabIndex, 
-			uiEventControlID) { }
+			uiEventControlID, 
+			autoFocus,
+			size, 
+			hasEmpty) { }
     }
 
 	public class EzSelectOption {
