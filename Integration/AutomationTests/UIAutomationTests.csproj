@@ -97,8 +97,10 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BrowserHost.cs" />
-    <Compile Include="S1.Application.Orange Money\C3.CreateAccountTest.cs" />
+    <Compile Include="Core\BrowserWebDriver.cs" />
+    <Compile Include="Core\Browser.cs" />
+    <Compile Include="Core\TestBase.cs" />
+    <Compile Include="Tests\UITests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +109,11 @@
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebDrivers\chromedriver.exe" />
+    <Content Include="WebDrivers\IEDriverServer.exe" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
