@@ -467,9 +467,9 @@ IF object_id('NL_OfferStatuses') IS NOT NULL BEGIN
 	DROP TABLE [dbo].[NL_OfferStatuses];
 END;
 
-IF OBJECT_ID('NL_Exists') IS NOT NULL BEGIN
-	DROP PROCEDURE [dbo].[NL_Exists];
-END;
+-- if object_id('nl_exists') is not null begin
+	-- drop procedure [dbo].[nl_exists];
+-- end;
 
 IF OBJECT_ID('NL_CancelledSchedulesLoad') IS NOT NULL BEGIN
 	DROP PROCEDURE NL_CancelledSchedulesLoad;
