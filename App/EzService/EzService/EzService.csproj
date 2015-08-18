@@ -153,12 +153,15 @@
     <Compile Include="EzServiceImplementation\esi_implement.IEzServiceAdmin.cs" />
     <Compile Include="EzServiceImplementation\esi_main.cs" />
     <Compile Include="EzServiceImplementation\esi_quick_offer.cs" />
+    <Compile Include="Helpers\Experian.cs" />
     <Compile Include="IEzAutomationVerification.cs" />
     <Compile Include="IEzServiceMainStrategy.cs" />
     <Compile Include="IEzServiceNewLoan.cs" />
     <Compile Include="IEzServiceSalesForce.cs" />
     <Compile Include="IEzServiceBroker.cs" />
     <Compile Include="IEzServiceVatReturn.cs" />
+    <Compile Include="Interfaces\IEzExperian.cs" />
+    <Compile Include="Interfaces\IToBeRemoved.cs" />
     <Compile Include="SafeValue.cs" />
     <Compile Include="ActionResults\StringListActionResult.cs" />
     <Compile Include="EzServiceInstanceRuntimeData.cs" />

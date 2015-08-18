@@ -15,7 +15,7 @@
 		InstanceContextMode = InstanceContextMode.PerCall,
 		IncludeExceptionDetailInFaults = true
 	)]
-	public partial class EzServiceImplementation : IEzServiceAdmin, IEzService, IDisposable {
+	public partial class EzServiceImplementation : IEzServiceAdmin, Interfaces.IToBeRemoved, IEzService, IDisposable {
 		static EzServiceImplementation() {
 			activeActions = new SortedDictionary<Guid, ActionMetaData>();
 			lockActiveActions = new object();
