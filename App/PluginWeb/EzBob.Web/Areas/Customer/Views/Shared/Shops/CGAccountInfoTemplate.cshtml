@@ -1,8 +1,12 @@
 ﻿@using System
 @using System.Collections.Generic
 @using System.Web
+@using EzBob.Web.Infrastructure.Html
 @using Integration.ChannelGrabberConfig
 @model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 @foreach (KeyValuePair<string, VendorInfo> vip in Configuration.Instance.PureVendors)
 {
@@ -23,11 +27,26 @@
                         switch (fi.Type)
                         {
                             case "Text":
-                        @EzForm.InputText(vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(), fi.Caption, "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:cg_account_property")
+								@EzForm.InputTextWizard(
+									new EzInputBuilder(
+											vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(),
+											fi.Caption,
+											cls: "form_field",
+											isRequired: true, statusIcon: true, 
+											uiEventControlID: "link-account:cg_account_property"), 
+									origin: origin)
                                 break;
 
                             case "Password":
-                        @EzForm.Password(vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(), fi.Caption, "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:cg_account_password")
+								@EzForm.InputTextWizard(
+									new EzInputBuilder(
+											vi.Name.ToLower() + "_" + fi.PropertyName.ToLower(), fi.Caption,
+											type: "password", 
+											cls: "form_field", 
+											isRequired: true, 
+											statusIcon: true, 
+											uiEventControlID: "link-account:cg_account_password"), 
+									origin: origin)
                                 break;
 
                             default:
@@ -37,8 +56,24 @@
 
                     <div class="form_buttons_container">
                         <div class="attardi-button">
-                            <a href="#" class="button btn-green disabled connect-account" ui-event-control-id="link-account:cg_connect">Link Account</a>
-                            <a href="#" class="back button btn-grey" ui-event-control-id="link-account:cg_back">Back</a>
+							@EzForm.WizardButton(
+								new List<EzButtonModel>{
+									new EzButtonModel(
+										vi.Name.ToLower() + "_link_account_button", 
+										"Link Account", 
+										cls: "button btn-green disabled connect-account ev-btn-org", 
+										uiEventControlID: "link-account:cg_connect", 
+										buttonType: EzButtonType.link, 
+										href: "#"),
+									new EzButtonModel(
+										vi.Name.ToLower() + "_back_button", 
+										"Back", 
+										cls: "back button btn-grey ev-btn-org", 
+										uiEventControlID: "link-account:cg_back", 
+										buttonType: EzButtonType.link, 
+										href: "#")
+								}, 
+								origin: origin)
                         </div>
                     </div>
 

@@ -701,6 +701,7 @@
     <Content Include="Content\everline\favicons\60x60.png" />
     <Content Include="Content\everline\favicons\76x76.png" />
     <Content Include="Content\everline\favicons\faviconeverline.ico" />
+    <Content Include="Content\everline\help-button.png" />
     <Content Include="Content\everline\help\help_ebay_everline.jpg" />
     <Content Include="Content\everline\help\help_freeagent_everline.jpg" />
     <Content Include="Content\everline\help\help_paypal_everline.jpg" />

@@ -1,6 +1,15 @@
-﻿<script id="HMRCAccountInfoTemplate" type="text/template">
+﻿@using EzBob.Web.Infrastructure.Html
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
+<script id="HMRCAccountInfoTemplate" type="text/template">
+	
+
 	<div id="initialDiv" class="row-fluid">
-		<h2>VAT account<div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin" ui-event-control-id="hmrc:upload_and_link_info_button"></div></h2>
+		<h2>VAT account
+			<div id="uploadAndLinkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin" ui-event-control-id="hmrc:upload_and_link_info_button"></div>
+		</h2>
 		<div class="wizard-top-notification">
 			<h5>You can upload or link your VAT account, so @ViewBag.CustomerOrigin.Name can evaluate your business by reading the VAT payments and return.</h5>
 		</div>
@@ -37,22 +46,56 @@
 	</div>
 
 	<div id="linkAccountDiv" class="row-fluid hide">
-		<h2>HMRC link<div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link" ui-event-control-id="hmrc:link_info_button"></div></h2>
+		<h2>HMRC link
+			<div id="linkInfoButton" class="hmrc-info-button hmrc-info-button-right-margin-link" ui-event-control-id="hmrc:link_info_button"></div>
+		</h2>
 		<h5>Please link your HMRC account by entering your HMRC credentials exactly as used on the HMRC website. To upload the HMRC files, press the back button.</h5>
 
 		<form id="hmrcLinkAccountForm" class="cg-link-account-form">
 			<div id="hmrc_fields_link_wrapper">
 				<div id="hmrc_fields" class="hmrc_fields_margin">
-					@EzForm.InputText("hmrc_user_id", "User ID", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "hmrc:user_id")
-					@EzForm.Password("hmrc_password", "Password", "", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "hmrc:password")
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"hmrc_user_id", "User ID",
+							cls: "form_field", 
+							isRequired: true, 
+							statusIcon: true, 
+							uiEventControlID: "hmrc:user_id"),
+						origin: origin)
+					@EzForm.InputTextWizard(
+						new EzInputBuilder(
+							"hmrc_password", 
+							"Password", 
+							type: "password", 
+							cls: "form_field", 
+							isRequired: true, 
+							statusIcon: true, 
+							uiEventControlID: "hmrc:password"), 
+						origin: origin)
 				</div>
 			</div>
 
 			<div class="clearfix">
 				<div class="form_buttons_container hmrc_margin_from_header">
 					<div class="attardi-button">
-						<a href="#" class="button btn-green disabled connect-account" ui-event-control-id="hmrc:do_link_button">Link Account</a>
-						<a href="#" class="back button btn-grey linkAccountBack" ui-event-control-id="hmrc:link_back">Back</a>
+						@EzForm.WizardButton(
+							new List<EzButtonModel>{
+								new EzButtonModel(
+									"hmrc_link_account_button", 
+									"Link Account", 
+									cls: "button btn-green disabled connect-account ev-btn-org", 
+									uiEventControlID: "hmrc:do_link_button", 
+									buttonType: EzButtonType.link, 
+									href: "#"),
+								new EzButtonModel(
+									"hmrc_back_button", 
+									"Back", 
+									cls: "back button btn-grey linkAccountBack ev-btn-org", 
+									uiEventControlID: "hmrc:link_back", 
+									buttonType: EzButtonType.link, 
+									href: "#")
+							}, 
+							origin: origin)
 					</div>
 				</div>
 			</div>
@@ -74,7 +117,7 @@
 			<div id="uploadHelpButton" class="hmrc-question-button float_left" style="margin-top: 55px;" ui-event-control-id="hmrc:upload_info_button_lower"></div>
 			<div class="hmrc-why">
 				<p>Don’t know where to locate your last 15 months VAT returns?</p>
-				<p>You should have received the files directly from the HMRC for your records.  We suggest you  request from your  filing agent or accountant to email your last 15 months VAT returns.</p>
+				<p>You should have received the files directly from the HMRC for your records. We suggest you request from your filing agent or accountant to email your last 15 months VAT returns.</p>
 				<p>Remember to mention that you need files titled “Printed Copy of Submitted VAT return for your records” </p>
 			</div>
 		</div>
@@ -97,4 +140,5 @@
 			<img src="@Url.Content("~/Content/img/hmrc_vat_and_login_sample.png")" />
 		</div>
 	</div>
+
 </script>

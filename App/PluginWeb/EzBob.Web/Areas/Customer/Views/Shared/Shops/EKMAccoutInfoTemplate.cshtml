@@ -1,23 +1,56 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure.Html
+@model dynamic
 <script id="EKMAccoutInfoTemplate" type="text/template">
     @accountInfo()
 </script>
 
 @helper accountInfo()
 {
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
     <div class="row-fluid">
         <div class="wizard-top-notification">
             <h2 class="form_start">Please enter ekmpowershop credentials</h2>
         </div>
         <form id="ekmAccount">
             <div class="clearfix">
-                @EzForm.InputText("ekm_login", "ekm login", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_login")
-                @EzForm.Password("ekm_password", "ekm password", cls: "form_field", isRequired: true, statusIcon: true, uiEventControlID: "link-account:ekm_password")
-
+                @EzForm.InputTextWizard(
+					new EzInputBuilder(
+							"ekm_login", "ekm login", 
+							cls: "form_field", 
+							isRequired: true, 
+							statusIcon: true, 
+							uiEventControlID: "link-account:ekm_login"), 
+					origin: origin)
+                @EzForm.InputTextWizard(
+					new EzInputBuilder(
+							"ekm_password", 
+							"ekm password", 
+							type: "password", 
+							cls: "form_field", 
+							isRequired: true, 
+							statusIcon: true, 
+							uiEventControlID: "link-account:ekm_password"), 
+					origin: origin)
                 <div class="form_buttons_container">
                     <div class="attardi-button">
-                        <a href="#" class="button btn-green connect-ekm disabled" ui-event-control-id="link-account:ekm_connect">Link account</a>
-                        <a href="#" class="button btn-grey back" ui-event-control-id="link-account:ekm_back">Back</a>
+						@EzForm.WizardButton(
+							new List<EzButtonModel>{
+								new EzButtonModel(
+									"ekm_link_account_button", 
+									"Link Account", 
+									cls: "button btn-green connect-ekm disabled ev-btn-org", 
+									uiEventControlID: "link-account:ekm_connect", 
+									buttonType: EzButtonType.link, 
+									href: "#"),
+								new EzButtonModel(
+									"ekm_back_button", 
+									"Back", 
+									cls: "button btn-grey back ev-btn-org", 
+									uiEventControlID: "link-account:ekm_back", 
+									buttonType: EzButtonType.link, 
+									href: "#")
+							}, 
+							origin: origin)
                     </div>
                 </div>
             </div>
