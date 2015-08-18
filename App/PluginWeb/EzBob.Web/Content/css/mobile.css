@@ -243,6 +243,12 @@
         width: 100%;
 	}
 
+	ul.application_steps li .step_label {
+		width: 100%;
+		font-size: 0.8em;
+		text-align: left;
+	}
+
 	.progress-line {
         margin-left: 20px;
         top: 18px;
@@ -275,8 +281,18 @@
     }
 
     ul.application_steps li.current .progress-line-current {
-        left: -20px;
+        left: 0px;
     }
+
+	ul.application_steps li.last .progress-circle {
+		right: inherit ;
+	}
+
+	ul.application_steps li.last .step_label {
+		top: 47px;
+		right: 0;
+		margin-left: 0;
+	}
     
     input[disabled], 
     select[disabled], 

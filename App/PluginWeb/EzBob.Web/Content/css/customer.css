@@ -667,3 +667,31 @@ blockquote {
 .AmazonForm{
     padding-top: 1.6em;
 }
+
+
+.wizard-top {
+    box-sizing: border-box;
+    max-width: 1000px;
+    padding: 0;
+    background: transparent;
+    margin: 0 auto;
+}
+
+div.verisign {
+	background: url(images/verisign_seal.gif) no-repeat 30px 0;
+	height: 60px;
+	width: 130px;
+	float: right;
+	background-size: contain;
+}
+
+div.truste{
+	display: inline-block;
+    float: right;
+    height: 60px;
+}
+
+div.truste img{
+	height: 40px;
+	margin-top: 13px;
+}
