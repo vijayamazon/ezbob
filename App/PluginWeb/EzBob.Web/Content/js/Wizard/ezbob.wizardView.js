@@ -233,85 +233,107 @@ EzBob.WizardView = EzBob.View.extend({
     }, // renderStep
 
     stepChanged: function () {
-        var current = this.model.get('current');
+        
+            var current = this.model.get('current');
+            if (!this.renderStep(current))
+                return;
 
-        if (!this.renderStep(current))
-            return;
+            var currStep = this.steps[current];
+            var address = this.customer.get('PersonalAddress');
+            var postcode = '';
+            if (address && address.models && address.models.length > 0) {
+                postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
+            }
 
-        var currStep = this.steps[current];
+            var personalInfo = this.customer.get('CustomerPersonalInfo');
 
-        var address = this.customer.get('PersonalAddress');
-	    var postcode = '';
-	    if (address && address.models && address.models.length > 0) {
-		    postcode = this.customer.get('PersonalAddress').models[0].get('Postcode') || '';
-	    }
+            EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle,
+            {
+                Amount: this.customer.get('RequestedAmount') || '',
+                Length: '',
+                Gender: personalInfo ? personalInfo.GenderName || '' : '',
+                Age: personalInfo ? personalInfo.Age || '' : '',
+                Postcode: postcode,
+                TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
+                IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
+                LeadID: this.customer.get('RefNumber') || ''
+            });
+            $(document).attr('title', currStep.documentTitle);
+            EzBob.App.trigger('wizard:progress', currStep.progress);
 
-	    var personalInfo = this.customer.get('CustomerPersonalInfo');
+            var marketing = EzBob.dbStrings.MarketingDefault;
+            var isWizard = false;
 
-	    EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle,
-	    {
-	    	Amount: this.customer.get('RequestedAmount') || '',
-	    	Length: '',
-	    	Gender: personalInfo ? personalInfo.GenderName || '' : '',
-	    	Age: personalInfo ? personalInfo.Age || '' : '',
-	    	Postcode: postcode,
-	    	TypeofBusiness: personalInfo ? personalInfo.TypeOfBusinessDescription || '' : '',
-	    	IndustryType: personalInfo ? personalInfo.IndustryTypeDescription || '' : '',
-	    	LeadID: this.customer.get('RefNumber') || ''
-	    });
-        $(document).attr('title', currStep.documentTitle);
-        EzBob.App.trigger('wizard:progress', currStep.progress);
+            if (this.progress === 100) {
+                isWizard = true;
+                marketing = EzBob.dbStrings.MarketingWizardStepDone;
+            }
+            else if (this.steps[current]) {
+                isWizard = true;
+                marketing = EzBob.dbStrings[this.steps[current].marketingStrKey] || marketing;
+            } // if
 
-        var marketing = EzBob.dbStrings.MarketingDefault;
-        var isWizard = false;
+            if (isWizard) {
+                this.$el.find('#defaultMarketing').hide();
+                this.$el.find('#marketingProggress').show().html(marketing);
+            }
+            else {
+                this.$el.find('#defaultMarketing').show();
+                this.$el.find('#marketingProggress').hide().html(marketing);
+            } // if
 
-        if (this.progress === 100) {
-            isWizard = true;
-            marketing = EzBob.dbStrings.MarketingWizardStepDone;
-        }
-        else if (this.steps[current]) {
-            isWizard = true;
-            marketing = EzBob.dbStrings[this.steps[current].marketingStrKey] || marketing;
-        } // if
+            this.$el.find('.wizard-progress').html(this.progressTemplate({
+                steps: this.steps,
+                current: current,
+                progress: this.progress,
+                caption: currStep.documentTitle
+            }));
 
-        if (isWizard) {
-            this.$el.find('#defaultMarketing').hide();
-            this.$el.find('#marketingProggress').show().html(marketing);
-        }
-        else {
-            this.$el.find('#defaultMarketing').show();
-            this.$el.find('#marketingProggress').hide().html(marketing);
-        } // if
+            if (this.topNavigationEnabled)
+                this.$el.find('li[data-step-num]').click($.proxy(this.handleTopNavigation, this));
+            else
+                this.$el.find('li[data-step-num]').css('cursor', 'default');
 
-        this.$el.find('.wizard-progress').html(this.progressTemplate({
-            steps: this.steps,
-            current: current,
-            progress: this.progress
-        }));
+            this.$el.find('.pages > div').hide().filter('[data-wizard-page-rendered="' + current + '"]').show();
 
-        if (this.topNavigationEnabled)
-            this.$el.find('li[data-step-num]').click($.proxy(this.handleTopNavigation, this));
-        else
-            this.$el.find('li[data-step-num]').css('cursor', 'default');
+            if (this.steps[current])
+                this.$el.find('.wizard-header').text(this.steps[current].header);
+            var $numofsteps = $('ul.application_steps li').size();
+            var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete");
+            var $proggresLineCurrent = this.$el.find("ul.application_steps li.current .progress-line-current");
+            var $circleCurrent = this.$el.find("ul.application_steps li.current .inner-circle");
+            var $circleCurrentev = this.$el.find("ul.application_steps li.current .progress-circle");
+            $circleCurrent.removeClass('current');
+            $circleCurrentev.removeClass('current');
+            if (EzBob.Config.Origin === 'everline') {
+                var sterpval= ((100 / $numofsteps) - 2) ;
+                var movepercentage = (sterpval) * (current + 1);
+                if (current != 0) {
+                    $('.progress-bar .green-line').css("width", (movepercentage - sterpval) + '%');
+                } else {
+                    $circleCurrentev.addClass('current');
+                }
+             
+                $('.progress-bar .green-line').show().animate({ width: movepercentage + '%' }, 800, function() {
+                    $circleCurrentev.addClass('current');
+                });
+             
 
-        this.$el.find('.pages > div').hide().filter('[data-wizard-page-rendered="' + current + '"]').show();
 
-        if (this.steps[current])
-            this.$el.find('.wizard-header').text(this.steps[current].header);
+            } else {
+               
+                $proggressLine.last().css("width", "35%");
+                $proggresLineCurrent.hide().css("width", "0");
 
-        var $proggressLine = this.$el.find("ul.application_steps li.complete .progress-line-complete").last().css("width", "35%");
-        var $proggresLineCurrent = this.$el.find("ul.application_steps li.current .progress-line-current");
-        var $circleCurrent = this.$el.find("ul.application_steps li.current .inner-circle");
-        $circleCurrent.removeClass('current');
-        $proggresLineCurrent.hide().css("width", "0");
+                if (this.$el.find("ul.application_steps li:first").hasClass("current"))
+                    $proggresLineCurrent.show().css("width", "35%");
 
-        if (this.$el.find("ul.application_steps li:first").hasClass("current"))
-            $proggresLineCurrent.show().css("width", "35%");
-
-        $proggressLine.show().animate({ width: "110%" }, 1000, function () {
-            $circleCurrent.addClass('current');
-            $proggresLineCurrent.show().animate({ width: "35%" }, 800, function () { });
-        });
+                $proggressLine.show().animate({ width: "110%" }, 1000, function () {
+                    $circleCurrent.addClass('current');
+                    $proggresLineCurrent.show().animate({ width: "35%" }, 800, function () { });
+                });
+            }
+      
     }, // stepChanged
 
     progressChanged: function (progress) {

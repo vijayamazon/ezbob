@@ -28,63 +28,88 @@
 </script>
 
 <script type="text/template" id="progress-indicator">
-    <div class="wizard-steps">
-        <div class="progress-time">
-            <span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span>
-        </div>
-        <ul class="application_steps">
-            <%(function() {
-                    var last = steps.length - 1;
+    <div class="side-strip">
 
-                    _.each(steps, function(step, i) {
-                        var css = '';
-                        var lastcss = '';
-                        var circleType = 'center-circle';
-                        if (i == current) css += 'current';
-
-                        if (i < current) css += 'complete';
-
-                        if (i == last) {
-                            lastcss = 'last';
-                            circleType = 'last-circle';
-                        }
-                        if ( i == 0 ) {
-                            lastcss='first';
-                            circleType = 'first-circle';
-                        }
-            %>
-            <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
-                <div class="progress-circle">
-                    <div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
-                    
-                </div>
-                <div class="progress-line"></div>
-                <div class="progress-line-<%-css%>"></div>
-                <span class="step_label"><% print(step.title) %></span>
-            </li>
-            <%}); // for each step
-                })(); // inline function - local scope
-            %>
-        </ul>
     </div>
-	<div class="vip-container"></div>
+    <div class="wizard-steps">
+        @if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.everline)
+        {
+            <div class="progress-time">
+                <%-caption%>
+            </div>
+
+
+        }
+        else
+        {
+            
+            <div class="progress-time">
+                <span>Just <span class="progress-time-remainig"><%=progress%> minutes</span> to complete your application</span>
+            </div>
+        }
+        <div class="steps-wrap">
+            <div class="stripe"></div>
+            <div class="progress-bar">
+                <div class="green-line">
+
+                </div>
+                <div class="grey-line">
+
+                </div>
+            </div>
+            <ul class="application_steps">
+                <%(function() {
+                var last = steps.length - 1;
+
+                _.each(steps, function(step, i) {
+                var css = '';
+                var lastcss = '';
+                var circleType = 'center-circle';
+                if (i == current) css += 'current';
+
+                if (i < current) css += 'complete';
+
+                if (i == last) {
+                lastcss = 'last';
+                circleType = 'last-circle';
+                }
+                if ( i == 0 ) {
+                lastcss='first';
+                circleType = 'first-circle';
+                }
+                %>
+                <li class="<%- css %> <%-lastcss%> <%-circleType%>" data-step-num="<%= step.num %>">
+                    <div class="progress-circle">
+                        <div class="inner-circle <%-css%>"><div class="percent"><%=(i+1)%></div></div>
+
+                    </div>
+                    <div class="progress-line"></div>
+                    <div class="progress-line-<%-css%>"></div>
+                    <span class="step_label"><% print(step.title) %></span>
+                </li>
+                <%}); // for each step
+                })(); // inline function - local scope
+                %>
+            </ul>
+        </div>
+    </div>
     @{
         var blm = new WizardBrokerLeadModel(Session);
 
         if (blm.BrokerFillsForCustomer)
         {
-        <div class="broker-finish-wizard-later">
-            <div class="broker-finish-inner">
-                <div>Dear Broker,</div>
-                <div>
-                    You are filling the loan application forms for your customer, @blm.FirstName @blm.LastName.
-                </div>
-                <div class="button-container">
-                    For any assistance, please contact us.
-                    <button class="button btn-green" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
+            <div class="broker-finish-wizard-later">
+                <div class="broker-finish-inner">
+                    <div>Dear Broker,</div>
+                    <div>
+                        You are filling the loan application forms for your customer, @blm.FirstName @blm.LastName.
+                    </div>
+                    <div class="button-container">
+                        For any assistance, please contact us.
+                        <button class="button btn-green" title="Click to finish sign up process later and return to dashboard.">Finish later</button>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     }
 	

@@ -691,6 +691,9 @@
     <Content Include="Content\css\alibaba.css" />
     <Content Include="Content\css\easter2015scratch.css" />
     <Content Include="Content\css\valentine2015scratch.css" />
+    <Content Include="Content\everline\circle_done.png" />
+    <Content Include="Content\everline\circle_gray.png" />
+    <Content Include="Content\everline\circle_green.png" />
     <Content Include="Content\everline\EverlineLogo.png" />
     <Content Include="Content\everline\EverlineLogo.svg" />
     <Content Include="Content\everline\favicons\120x120.png" />
@@ -1920,6 +1923,7 @@
     <Content Include="Areas\Underwriter\Views\Shared\_LoanhistoryViewTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\_PaymentAccountsTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_MedalCalculationTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_SignUpButton.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_Messages.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\DailyReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\_LayoutDayReport.cshtml" />

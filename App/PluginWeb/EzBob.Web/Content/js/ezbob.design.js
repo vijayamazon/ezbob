@@ -1145,7 +1145,7 @@ EzBob.validateSignUpForm = function(el) {
 		},
 		messages: {
 			"Email": { required: EzBob.dbStrings.NotValidEmailAddress, email: EzBob.dbStrings.NotValidEmailAddress },
-			"signupPass1": { required: passPolicyText, regex: passPolicyText },
+			"signupPass1": { required: passPolicyText, regex: passPolicyText, minlength: EzBob.Config.Origin == 'everline' ? '' : $.validator.format("Please enter at least {0} characters.") },
 			"signupPass2": { equalTo: EzBob.dbStrings.PasswordDoesNotMatch },
 			"promoCode": { maxlength: "Maximum promo code length is 30 characters" },
 			"securityQuestion": { required: "This field is required" },
