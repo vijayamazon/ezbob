@@ -7,7 +7,6 @@
 	using ConfigManager;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
-	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Models.ExternalAPI;
 	using Ezbob.Backend.Models.NewLoan;
@@ -43,6 +42,7 @@
 	using EZBob.DatabaseLib.Model.Loans;
 	using EZBob.DatabaseLib.Repository;
 	using NHibernate;
+	using NHibernate.Linq;
 	using NHibernate.Util;
 	using NUnit.Framework;
 	using PaymentServices.Calculators;
@@ -718,9 +718,9 @@
 			AddDecision addDecision = new AddDecision(new NL_Decisions {
 				UserID = 357,
 				DecisionTime = DateTime.UtcNow,
-				Notes = "Waiting",
-				DecisionNameID = (int)DecisionActions.Waiting
-			}, 329, null
+				Notes = " 336",
+				DecisionNameID = (int)DecisionActions.Escalate
+			}, 336, null
 				//,new List<NL_DecisionRejectReasons> {
 				//	new NL_DecisionRejectReasons {
 				//		RejectReasonID = 1
@@ -731,6 +731,8 @@
 				//}
 			);
 			addDecision.Execute();
+			Console.WriteLine(addDecision.DecisionID);
+
 		}
 
 
@@ -1247,33 +1249,7 @@
 			add.Execute();
 		}
 
-		[Test]
-		public void TestNL_CalculateLoanSchedule() {
-			const int userID = 25852;
-			NL_Model model = new NL_Model() {
-				CustomerID = 123,
-				UserID = userID,
-				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-				Loan = new NL_Loans(),
-				IssuedTime = DateTime.UtcNow,
-			};
-
-			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
-			strategy.Context.UserID = userID;
-			try {
-				strategy.Execute();
-
-				strategy.Result.Schedule.ForEach(s => Console.WriteLine(s.ScheduleItem));
-				strategy.Result.Fees.ForEach(f => Console.WriteLine(f.Fee));
-				Console.WriteLine(strategy.Result.APR);
-
-
-			} catch (Exception ex) {
-				Console.WriteLine(ex);
-			}
-
-
-		}
+		
 
 	}
 }

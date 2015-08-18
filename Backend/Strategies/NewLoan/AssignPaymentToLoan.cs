@@ -22,7 +22,7 @@
 		//		s.ClearRepayments();
 		//		qsp.Enqueue(s);
 		//	} // for each
-			
+
 		//	if (Repayments.Count < 1)
 		//		return;
 
@@ -65,9 +65,9 @@
 		/// </summary>
 		public override void Execute() {
 			var stateStrategy = new LoanState(
-				new NL_Model(),
+				new NL_Model(NLModel.CustomerID),
 				NLModel.Loan.LoanID,
-				NLModel.CustomerID,
+		NLModel.CustomerID,
 				DateTime.UtcNow
 			);
 			stateStrategy.Execute();

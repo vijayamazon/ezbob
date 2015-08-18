@@ -25,10 +25,10 @@ CREATE TYPE NL_OffersList AS TABLE (
 	[Notes] [nvarchar](max) NULL,
 	[InterestOnlyRepaymentCount] [INT] NULL,
 	[DiscountPlanID] [INT] NULL,
-	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,		
+	[IsLoanTypeSelectionAllowed] [BIT] NOT NULL DEFAULT 0,
+	[SendEmailNotification] [BIT] NOT NULL DEFAULT 1,	
 	[IsRepaymentPeriodSelectionAllowed] [BIT] DEFAULT 0,
-	[IsAmountSelectionAllowed] [BIT] NOT NULL DEFAULT 1,
-	[SendEmailNotification] [BIT] NOT NULL DEFAULT 1
+	[IsAmountSelectionAllowed] [BIT] NOT NULL DEFAULT 1	
 )
 GO
 
@@ -54,10 +54,10 @@ BEGIN
 		[Notes] ,		
 		[InterestOnlyRepaymentCount] ,
 		[DiscountPlanID] ,
-		[IsLoanTypeSelectionAllowed] ,			
+		[IsLoanTypeSelectionAllowed] ,
+		[SendEmailNotification] ,		
 		[IsRepaymentPeriodSelectionAllowed],
-		[IsAmountSelectionAllowed] ,
-		[SendEmailNotification] 		
+		[IsAmountSelectionAllowed] 				
 	) SELECT
 		[DecisionID],
 		[LoanTypeID] , 
@@ -74,10 +74,10 @@ BEGIN
 		[Notes] ,		
 		[InterestOnlyRepaymentCount] ,
 		[DiscountPlanID] ,
-		[IsLoanTypeSelectionAllowed] ,			
+		[IsLoanTypeSelectionAllowed] ,
+		[SendEmailNotification] ,		
 		[IsRepaymentPeriodSelectionAllowed],
-		[IsAmountSelectionAllowed] ,		
-		[SendEmailNotification] 
+		[IsAmountSelectionAllowed] 	
 	FROM @Tbl
 
 	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()

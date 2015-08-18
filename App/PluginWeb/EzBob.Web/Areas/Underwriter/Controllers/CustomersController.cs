@@ -26,6 +26,7 @@
 	using Ezbob.Utils.Extensions;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
 	using Infrastructure.csrf;
+	using NHibernate.Hql.Ast;
 	using SalesForceLib.Models;
 	using ActionResult = Ezbob.Database.ActionResult;
 
@@ -455,7 +456,7 @@
 
 			if (nlDecision != null) {
 				nlDecision.DecisionNameID = (int)DecisionActions.Reject;
-				var rejectReasons = model.rejectionReasons.Select(x => new NL_DecisionRejectReasons {RejectReasonID = x}).ToArray();
+				var rejectReasons = model.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToArray();
 				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, rejectReasons);
 			}
 
@@ -466,7 +467,7 @@
 						DealCloseType = OpportunityDealCloseReason.Lost.ToString(),
 						DealLostReason = customer.RejectedReason
 					});
-			
+
 		}//RejectCustomer
 
 		private void ApproveCustomer(DecisionModel model, Customer customer, User user, DateTime now, CashRequest oldCashRequest, int numOfPreviousApprovals, ref string sWarning, NL_Decisions nlDecision = null) {
@@ -565,6 +566,16 @@
 				lastOffer.DecisionID = decisionID.Value;
 				lastOffer.CreatedTime = now;
 				lastOffer.Notes = model.reason;
+				lastOffer.StartTime = (DateTime)oldCashRequest.OfferStart;
+				lastOffer.EndTime = (DateTime)oldCashRequest.OfferValidUntil;
+				lastOffer.IsLoanTypeSelectionAllowed = oldCashRequest.IsLoanTypeSelectionAllowed==1;
+				lastOffer.SendEmailNotification = !oldCashRequest.EmailSendingBanned ;
+				lastOffer.MonthlyInterestRate = oldCashRequest.InterestRate;
+				lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month;
+				lastOffer.RepaymentCount = oldCashRequest.RepaymentPeriod;
+				lastOffer.IsRepaymentPeriodSelectionAllowed = oldCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
+			//	lastOffer.IsAmountSelectionAllowed = oldCashRequest. TODO
+				lastOffer.DiscountPlanID = oldCashRequest.DiscountPlan.Id;
 
 				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent };
 				if (oldCashRequest.SpreadSetupFee == true && oldCashRequest.SpreadSetupFee != null)

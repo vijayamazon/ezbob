@@ -12,9 +12,9 @@ GO
 CREATE TYPE NL_DecisionsList AS TABLE (	
 	[CashRequestID] [BIGINT] NOT NULL,
 	[UserID] [INT] NOT NULL,
-	[Position] [INT] NOT NULL,
-	[DecisionTime] [DATETIME] NOT NULL,
 	[DecisionNameID] [INT] NOT NULL,
+	[DecisionTime] [DATETIME] NOT NULL,
+	[Position] [INT] NOT NULL,
 	[Notes] [nvarchar](max) NULL
 )
 GO
@@ -41,7 +41,7 @@ BEGIN
 		[Notes]		
 	FROM @Tbl
 
-	DECLARE @ScopeID INT = SCOPE_IDENTITY()
+	DECLARE @ScopeID BIGINT = SCOPE_IDENTITY()
 	SELECT @ScopeID AS ScopeID
 END
 GO

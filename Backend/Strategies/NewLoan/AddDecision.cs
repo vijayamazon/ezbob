@@ -16,6 +16,7 @@
 
         public override void Execute() {
 
+	        Log.Debug("ADDIND decision: {0}", this.decision);
 			try {
 				if (this.oldCashRequestID.HasValue) {
 

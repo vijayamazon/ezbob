@@ -238,6 +238,17 @@
     </xs:complexContent>
   </xs:complexType>
   <xs:element name="LongActionResult" nillable="true" type="tns:LongActionResult" />
+  <xs:complexType name="NLLongActionResult">
+    <xs:complexContent mixed="false">
+      <xs:extension base="tns:ActionResult">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
+          <xs:element minOccurs="0" name="Value" type="xs:long" />
+        </xs:sequence>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <xs:element name="NLLongActionResult" nillable="true" type="tns:NLLongActionResult" />
   <xs:complexType name="ReschedulingActionResult">
     <xs:complexContent mixed="false">
       <xs:extension base="tns:ActionResult">

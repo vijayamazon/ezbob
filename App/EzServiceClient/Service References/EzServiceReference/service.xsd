@@ -1203,14 +1203,16 @@
   <xs:element name="AddLoan">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q103="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="loanModel" nillable="true" type="q103:NL_Model" />
+        <xs:element minOccurs="0" name="userID" nillable="true" type="xs:int" />
+        <xs:element minOccurs="0" name="customerID" nillable="true" type="xs:int" />
+        <xs:element xmlns:q103="http://schemas.datacontract.org/2004/07/Ezbob.Backend.ModelsWithDB.NewLoan" minOccurs="0" name="model" nillable="true" type="q103:NL_Model" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
   <xs:element name="AddLoanResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q104="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanResult" nillable="true" type="q104:LongActionResult" />
+        <xs:element xmlns:q104="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanResult" nillable="true" type="q104:NLLongActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

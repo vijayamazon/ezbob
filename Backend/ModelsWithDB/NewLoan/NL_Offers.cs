@@ -61,14 +61,15 @@
 
 		[DataMember]
 		public bool IsLoanTypeSelectionAllowed { get; set; }
-		
+
+		[DataMember]
+		public bool SendEmailNotification { get; set; }
+
 		[DataMember]
 		public bool IsRepaymentPeriodSelectionAllowed { get; set; }
 
 		[DataMember]
 		public bool IsAmountSelectionAllowed { get; set; }
 
-		[DataMember]
-		public bool SendEmailNotification { get; set; }
 	} // class NL_Offers
 } // ns

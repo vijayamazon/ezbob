@@ -83,7 +83,7 @@
             int customerId = sr["customerId"];
             //int loanScheduleId = sr["id"];
 
-            var loanState = new LoanState(new NL_Model(), loanId, customerId, DateTime.UtcNow);
+			var loanState = new LoanState(new NL_Model(customerId), loanId, customerId, DateTime.UtcNow);
             loanState.Execute();
 
 			// TODO: revive

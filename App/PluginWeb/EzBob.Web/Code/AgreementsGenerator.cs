@@ -2,6 +2,7 @@
 {
 	using System.IO;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EzBob.Web.Code;
@@ -62,7 +63,6 @@
 
 				// specific LoanAgreementTemplate for current type: 
 				var preContractTemplate = this._helper.GetOrCreateLoanAgreementTemplate(preContract, isAlibaba ? LoanAgreementTemplateType.AlibabaPreContractAgreement : LoanAgreementTemplateType.PreContractAgreement);
-
 				// LoanAgreement (table) instance by preContract string == table LoanAgreementTemplate.Template && LoanAgreementTemplate.TemplateType== Enum.LoanAgreementTemplateType ID
 				var preContractAgreement = new LoanAgreement("precontract", loan, preContractTemplate);
 				loan.Agreements.Add(preContractAgreement);

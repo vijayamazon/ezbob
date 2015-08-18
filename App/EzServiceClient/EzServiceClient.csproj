@@ -233,6 +233,9 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NewLoanModelActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
+    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NLLongActionResult.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.NullableDateTimeActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

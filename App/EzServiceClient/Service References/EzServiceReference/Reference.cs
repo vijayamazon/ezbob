@@ -197,6 +197,7 @@ namespace ServiceClientProxy.EzServiceReference {
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.VatReturnDataActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ElapsedTimeInfoActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.LongActionResult))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.NLLongActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ReschedulingActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianConsumerActionResult))]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ServiceClientProxy.EzServiceReference.ExperianLtdActionResult))]
@@ -797,6 +798,45 @@ namespace ServiceClientProxy.EzServiceReference {
         
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private long ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public long Value {
+            get {
+                return this.ValueField;
+            }
+            set {
+                if ((this.ValueField.Equals(value) != true)) {
+                    this.ValueField = value;
+                    this.RaisePropertyChanged("Value");
+                }
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="NLLongActionResult", Namespace="http://schemas.datacontract.org/2004/07/EzService")]
+    [System.SerializableAttribute()]
+    public partial class NLLongActionResult : ServiceClientProxy.EzServiceReference.ActionResult {
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ErrorField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private long ValueField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Error {
+            get {
+                return this.ErrorField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ErrorField, value) != true)) {
+                    this.ErrorField = value;
+                    this.RaisePropertyChanged("Error");
+                }
+            }
+        }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public long Value {
@@ -4120,10 +4160,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LongActionResult> AddLoanOptionsAsync(int userID, int customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_LoanOptions loanOptions, System.Nullable<int> oldLoanId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
-        ServiceClientProxy.EzServiceReference.LongActionResult AddLoan(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel);
+        ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoan(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddLoan", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddLoanResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LongActionResult> AddLoanAsync(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzServiceNewLoan/AddPayment", ReplyAction="http://tempuri.org/IEzServiceNewLoan/AddPaymentResponse")]
         Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model AddPayment(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel);
@@ -5649,12 +5689,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.AddLoanOptionsAsync(userID, customerID, loanOptions, oldLoanId);
         }
         
-        public ServiceClientProxy.EzServiceReference.LongActionResult AddLoan(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel) {
-            return base.Channel.AddLoan(loanModel);
+        public ServiceClientProxy.EzServiceReference.NLLongActionResult AddLoan(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {
+            return base.Channel.AddLoan(userID, customerID, model);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.LongActionResult> AddLoanAsync(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel) {
-            return base.Channel.AddLoanAsync(loanModel);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.NLLongActionResult> AddLoanAsync(System.Nullable<int> userID, System.Nullable<int> customerID, Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model model) {
+            return base.Channel.AddLoanAsync(userID, customerID, model);
         }
         
         public Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model AddPayment(Ezbob.Backend.ModelsWithDB.NewLoan.NL_Model loanModel) {

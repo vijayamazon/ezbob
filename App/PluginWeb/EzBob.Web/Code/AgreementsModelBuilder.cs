@@ -217,6 +217,7 @@
             var model = new AgreementModel();
 			var result = this.serviceClient.Instance.CalculateLoanSchedule(this._context != null ? this._context.UserId : customer.Id, nlModel.CustomerID, nlModel).Value;
 
+			// TODO REPLACE BY full Schedule data: p, i, p*i, f, amountDue; paid-p, paid-i, paid-f, 
 			foreach (var s in result.Schedule) {
 				var fee = result.Fees.FirstOrDefault(f => f.Fee.AssignTime == s.ScheduleItem.PlannedDate);
 				var item=new LoanScheduleItemModel {
@@ -227,7 +228,7 @@
 					Status = Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID),
 					StatusDescription = Enum.Parse(typeof(NLScheduleStatuses), Enum.GetName(typeof(NLScheduleStatuses), s.ScheduleItem.LoanScheduleStatusID).ToString()).DescriptionAttr(),
 					LoanRepayment = s.ScheduleItem.Principal, //P
-					Balance = nlModel.InitialAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1),
+					//Balance = nlModel.InitialAmount - s.ScheduleItem.Principal * (s.ScheduleItem.Position - 1),
 					Fees = fee == null ? 0 : fee.Fee.Amount, //F
 					InterestRate = s.ScheduleItem.InterestRate //r
 				};
@@ -264,7 +265,8 @@
 
 			model.FormattedSchedules = NL_CreateSchedule(model.Schedule).ToList();
 
-			model.InterestRate = nlModel.InitialInterestRate * 100;
+			// TODO update from history?
+			//model.InterestRate = nlModel.InitialInterestRate * 100;
 			model.SetupFee = FormattingUtils.NumericFormats(setupFeeAmount); //loanSetupFee);
 
 			model.SetupFeeAmount = FormattingUtils.NumericFormats((int)CurrentValues.Instance.SetupFeeFixed);

@@ -5,7 +5,7 @@
 	[DataContract]
 	public class NL_Model : AStringable {
 
-		public NL_Model() { } // constructor
+		//public NL_Model() { } // constructor
 
 		public NL_Model(int customerID) {
 			CustomerID = customerID;

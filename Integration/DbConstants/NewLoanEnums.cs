@@ -110,5 +110,18 @@
 
 
 
+	// duplicate of enum LoanAgreementTemplateType
+	public enum NLLoanAgreementTemplateTypes {
+		GuarantyAgreement = 1, // DB table id
+		PreContractAgreement = 2,
+		CreditActAgreement = 3,
+		PrivateCompanyLoanAgreement = 4,
+
+		AlibabaGuarantyAgreement = 5,
+		AlibabaPreContractAgreement = 6,
+		AlibabaCreditActAgreement = 7,
+		AlibabaPrivateCompanyLoanAgreement = 8,
+		AlibabaCreditFacility = 9,
+	}
 
 } // namespace

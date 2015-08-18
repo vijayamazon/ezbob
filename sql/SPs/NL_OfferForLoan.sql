@@ -10,6 +10,7 @@ ALTER PROCEDURE [dbo].[NL_OfferForLoan]
 	@Now DATETIME
 AS
 
+
 declare @OfferID bigint;
 
 BEGIN
@@ -23,7 +24,7 @@ BEGIN
 	order by OfferID desc);
 
 	IF @OfferID IS NULL begin		
-		RETURN NULL;
+		RETURN ;
 	end;
 
 	declare @DiscountPlanID int;

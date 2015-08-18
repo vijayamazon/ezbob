@@ -28,28 +28,25 @@
 		///		Expected result:
 		///			- int LoanID newly created
 		///			- optional string Error
+		/// 
+		/// Creation of loan from underwriter not supported
+		/// mail notifications sent on success/on error
 		/// </summary>
 		/// <param name="nlModel"></param>
 		public AddLoan(NL_Model nlModel) {
 			model = nlModel;
 
-			this.emailToAddress = CurrentValues.Instance.Environment.Value.Contains("dev") ? "elinar@ezbob.com" : CurrentValues.Instance.EzbobTechMailTo;
 
-			this.emailFromName = "ezbob-dev-system";
-			this.emailFromName = CurrentValues.Instance.MailSenderName;
-			this.emailFromAddress = CurrentValues.Instance.MailSenderEmail;
 
 		}//constructor
 
 		public override string Name { get { return "AddLoan"; } }
-		public string Error; // output
-		
-		public override async void Execute() {
+		public string Error; 
+
+		public override void Execute() {
 
 			DateTime nowTime = DateTime.UtcNow;
-
-			string message;
-
+		
 			// TODO check if "credit available" is enough for this loan amount
 
 			if (model.CustomerID == 0) {
@@ -68,7 +65,7 @@
 				this.Error = NL_ExceptionRequiredDataNotFound.HistoryEventTime;
 				return;
 			}
-		
+
 			if (model.Loan == null) {
 				this.Error = NL_ExceptionRequiredDataNotFound.Loan; //string.Format("Expected input data not found (NL_Model initialized by: Loan.OldLoanID, Loan.Refnum). Customer {0}", model.CustomerID);
 				return;
@@ -93,16 +90,16 @@
 				this.Error = string.Format("Expected input data not found (NL_Model initialized by: AgreementModel in JSON). Customer {0}", model.CustomerID);
 				return;
 			}
-			
+
 			// valid offer
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
 				"NL_OfferForLoan",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", model.CustomerID),
-				new QueryParameter("@Now", lastHistory.EventTime)
+				new QueryParameter("@Now", history.EventTime)
 			);
 
-			if (dataForLoan == null) {
+			if (dataForLoan.OfferID == 0) {
 				this.Error = NL_ExceptionOfferNotValid.DefaultMessage;
 				return;
 			}
@@ -124,7 +121,7 @@
 				  Log.Alert("No enough funds for loan: customer {0}; offer {1}", model.CustomerID, dataForLoan.Offer.OfferID);
 			}
 			****/
-			
+
 			/**
 			- loan
 			- fees
@@ -151,7 +148,7 @@
 
 				schedule = scheduleStrategy.Result.Schedule.OfType<NL_LoanSchedules>().ToList();
 
-				if (schedule.Count==0 || scheduleStrategy.Result.Error != "") {
+				if (schedule.Count == 0 || scheduleStrategy.Result.Error != "") {
 					this.Error = "Failed to generate Schedule or error occured during schedule/fees creation. " + scheduleStrategy.Result.Error;
 					return;
 				}
@@ -167,6 +164,7 @@
 
 				// 4. save loan
 				this.LoanID = DB.ExecuteScalar<long>(pconn, "NL_LoansSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.Loan));
+				model.Loan.LoanID = this.LoanID;
 
 				Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
 
@@ -176,12 +174,13 @@
 				if (fees.Count > 0) {
 
 					foreach (NL_LoanFees f in fees) {
-						f.LoanID = this.LoanID; // set newly created LoanID
+						f.LoanID = model.Loan.LoanID; // set newly created LoanID
 						f.CreatedTime = nowTime;
 						f.AssignedByUserID = 1;
 					}
-					
-					Log.Debug("Adding fees: "); fees.ForEach(f => Log.Debug(f));
+
+					Log.Debug("Adding fees: ");
+					fees.ForEach(f => Log.Debug(f));
 
 					DB.ExecuteNonQuery(pconn, "NL_LoanFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanFees>("Tbl", fees));
 				}
@@ -194,37 +193,48 @@
 
 				// 7. history
 				history.LoanID = this.LoanID;
-				//history.UserID = model.UserID;
 				history.LoanLegalID = dataForLoan.LoanLegalID;
 				history.Description = "adding loan " + this.LoanID + ", old ID: " + model.Loan.OldLoanID;
 				history.AgreementModel = model.AgreementModel;
-				
+
 				Log.Debug("Adding history: {0}", history);
 
-				long historyID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
+				history.LoanHistoryID = DB.ExecuteScalar<long>(pconn, "NL_LoanHistorySave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", history));
 
-				Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", this.LoanID, historyID);
+				Log.Debug("NL_LoanHistorySave: LoanID: {0}, LoanHistoryID: {1}", model.Loan.LoanID, history.LoanHistoryID);
 
 				// 8. loan agreements
+
+				AgreementModel agreementModel =  JsonConvert.DeserializeObject<AgreementModel>(model.AgreementModel);
+
 				foreach (NLAgreementItem item in model.Agreements) {
-					item.Agreement.LoanHistoryID = historyID;
+					// prepare for NL_LoanAgreementsSave
+					item.Agreement.LoanHistoryID = history.LoanHistoryID;
 					agreements.Add(item.Agreement);
 
 					item.Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, item.Agreement.FilePath);
 					item.Path2 = Path.Combine(CurrentValues.Instance.AgreementPdfLoanPath2, item.Agreement.FilePath);
+
+					// saving to FS
+					var item1 = item;
+					Task task = new Task(() => {
+						new SaveAgreement( model.CustomerID, agreementModel, model.Loan.Refnum, "NLsavingAgreement", item1.TemplateModel, item1.Path1, item1.Path2).Execute();
+					});
+					task.Start();
 				}
 
 				Log.Debug("Adding agreements:"); agreements.ForEach(a => Log.Debug(a));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanAgreementsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanAgreements>("Tbl", agreements));
 
-				int agreementSaveFS = await SaveAgreementsAsync();
-				Log.Debug("agreementSave to FS: {0}", agreementSaveFS);
+				//int agreementSaveFS = await SaveAgreementsAsync();
+				//Log.Debug("agreementSave to FS: {0}", agreementSaveFS);
 
 				// 9. schedules 
-				schedule.ForEach(s => s.LoanHistoryID = historyID);
+				schedule.ForEach(s => s.LoanHistoryID = history.LoanHistoryID);
 
-				Log.Debug("Adding schedule:"); schedule.ForEach(s => Log.Debug(s));
+				Log.Debug("Adding schedule:");
+				schedule.ForEach(s => Log.Debug(s));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedule));
 
@@ -235,22 +245,26 @@
 
 					fundTransferID = DB.ExecuteScalar<long>(pconn, "NL_FundTransfersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", model.FundTransfer));
 
+					model.FundTransfer.FundTransferID = fundTransferID;
+
 					Log.Debug("NL_FundTransfersSave: LoanID: {0}, fundTransferID: {1}", this.LoanID, fundTransferID);
 				}
 
 				pconn.Commit();
 
-				
-
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 
-				message = string.Format("Failed to create NL_Loan for customer {0}, oldLoanID {1}, err: {2}", model.CustomerID, model.Loan.OldLoanID, ex);
-				this.LoanID = 0;
-				pconn.Rollback();
+				this.Error = string.Format("Failed to save new loan: {0}", ex);
 
-				Log.Error(message);
-				SendMail(message, fees, schedule, history, agreements);
+				this.LoanID = 0;
+
+				// general error
+				SendMail(this.Error, history, fees, schedule, agreements, fundTransferID);
+
+				Log.Error(this.Error);
+
+				pconn.Rollback();
 			}
 
 
@@ -273,78 +287,93 @@
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception e1) {
-				message = string.Format("Failed to write NL PacnetTransaction: Customer {0}, oldLoanID {1}, err: {2}", model.CustomerID, model.Loan.OldLoanID, e1);
-				SendMail(message, fees, schedule, history, agreements);
-				Log.Error(message);
+
+				this.Error = string.Format("Failed to save NL PacnetTransaction: {0}", e1);
+
+				// PacnetTransaction error
+				SendMail(this.Error, history, fees, schedule, agreements, fundTransferID);
+
+				Log.Error(this.Error);
 			}
 
-			SendMail("", fees, schedule, history, agreements);
+			// OK
+			SendMail("Saved successfully", history, fees, schedule, agreements, fundTransferID);
 
 		}//Execute
 
 
-		private async Task<int> SaveAgreementsAsync() {
-			try {
-				// save agreements to file system
-				if (model.AgreementModel == null) {
-					Log.Alert("AgreementModel not exists on creating Nloan");
-					this.Error = "AgreementModel not exists on creating Nloan";
-					return 0;
-				}
+		//private async Task<int> SaveAgreementsAsync() {
+		//	try {
+		//		// save agreements to file system
+		//		if (model.AgreementModel == null) {
+		//			Log.Alert("AgreementModel not exists on creating Nloan");
+		//			this.Error = "AgreementModel not exists on creating Nloan";
+		//			return 0;
+		//		}
 
-				AgreementModel agreementModel =  JsonConvert.DeserializeObject<AgreementModel>(model.AgreementModel);
-				foreach (NLAgreementItem  item in model.Agreements) {
-					SaveAgreement saveAgreement = new SaveAgreement(customerId: model.CustomerID, model: agreementModel, refNumber: model.Loan.Refnum, name: "savingAgreement", template: item.TemplateModel, path1: item.Path1, path2: item.Path2);
-					saveAgreement.Execute();
-				}
+		//		AgreementModel agreementModel =  JsonConvert.DeserializeObject<AgreementModel>(model.AgreementModel);
+		//		foreach (NLAgreementItem  item in model.Agreements) {
+		//			SaveAgreement saveAgreement = new SaveAgreement(customerId: model.CustomerID, model: agreementModel, refNumber: model.Loan.Refnum, name: "savingAgreement", template: item.TemplateModel, path1: item.Path1, path2: item.Path2);
+		//			saveAgreement.Execute();
+		//		}
 
-				return await Task.FromResult(1);
+		//		return await Task.FromResult(1);
+				
+		//		// ReSharper disable once CatchAllClause
+		//	} catch (Exception exSaveAgreement) {
+		//		Log.Debug("Failed to save agreements to FS. {0}", exSaveAgreement);
+		//		return 0;
+		//	}
+		//}
 
-				// ReSharper disable once CatchAllClause
-			} catch (Exception exSaveAgreement) {
-				Log.Debug("Failed to save agreements to FS. {0}", exSaveAgreement);
-				return 0;
-			}
-		}
+		private void SendMail(string sMsg, NL_LoanHistory history = null, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> schedule = null, List<NL_LoanAgreements> agreements = null, long fundTransferID = 0) {
 
-		private void SendMail(string sMsg, List<NL_LoanFees> fees = null, List<NL_LoanSchedules> scheduleItems = null, NL_LoanHistory history = null, List<NL_LoanAgreements> agreements = null, int fundTransferID = 0) {
+			string emailToAddress = CurrentValues.Instance.Environment.Value.Contains("dev") ? "elinar@ezbob.com" : CurrentValues.Instance.EzbobTechMailTo;
+			string emailFromName = CurrentValues.Instance.MailSenderName;
+			string emailFromAddress = CurrentValues.Instance.MailSenderEmail;
+
+			string subject = string.Format("New loan adding: CustomerID: {0}, UserID: {1}, old loanID: {2}, LoanID: {3}", model.CustomerID, model.UserID, model.Loan.OldLoanID, this.LoanID);
+
+			//- loan
+			//- fees
+			//- history
+			//- schedules
+			//- broker comissions ? - update NLLoanID
+			//- fund transfer
+			//- pacnet transaction
 
 			var message = string.Format(
-					"<h5>CustomerID: {0}; UserID: {1}</h5>, Message: {2}<p>"
-						+ "<h5>NL_Loan</h5>: {3} "
-						+ "<h5>NL_LoanHistory</h5>: {4} "
-						+ "<h5>NL_LoanFees</h5>: {5} "
-						+ "<h5>NL_LoanSchedules</h5>: {6} "
-						+ "<h5>NL_LoanAgreements</h5>: {7} "
-						+ "<h5>NL_FundTransfer</h5>: {8} "
-						+ "<h5>NL_PacnetTransaction</h5>: {9}",
+						"<h5>{0}</h5>"
+						+ "<h5>Loan</h5> {1}"
+						+ "<h5>History</h5> {2}"
+						+ "<h5>Fees</h5> {3}"
+						+ "<h5>Schedules</h5> {4}"
+						+ "<h5>Agreements</h5> {5}"
+						+ "<h5>Transfer</h5> {6}"
+						+ "<h5>PacnetTransaction</h5> {7}",
 
-					model.CustomerID, model.UserID, sMsg
+						HttpUtility.HtmlEncode(sMsg)
 					, HttpUtility.HtmlEncode(model.Loan == null ? "no Loan specified" : model.Loan.ToString())
 					, HttpUtility.HtmlEncode(history == null ? "no LoanHistory specified" : history.ToString())
 					, HttpUtility.HtmlEncode(fees == null ? "no LoanFees specified" : fees.ToString())
-					, HttpUtility.HtmlEncode(scheduleItems == null ? "no Schedule specified" : scheduleItems.ToString()) // NL_LoanSchedules
+					, HttpUtility.HtmlEncode(schedule == null ? "no Schedule specified" : schedule.ToString()) // NL_LoanSchedules
 					, HttpUtility.HtmlEncode(agreements == null ? "no LoanAgreements specified" : agreements.ToString()) // NL_LoanAgreements
 					, HttpUtility.HtmlEncode(model.FundTransfer == null ? "no FundTransfer specified" : model.FundTransfer + ", fundTransferID: " + fundTransferID)
 					, HttpUtility.HtmlEncode(model.PacnetTransaction == null ? "no PacnetTransaction specified" : model.PacnetTransaction.ToString()));
 
 			new Mail().Send(
-				  this.emailToAddress,
+				  emailToAddress,
 				  null, // message text
 				  message, //html
-				  this.emailFromAddress, // fromEmail
-				  this.emailFromName, // fromName
-				  sMsg //"#NL_Loan failed oldLoanID: " + (int)model.Loan.OldLoanID + " for customer " + model.CustomerID // subject
+				  emailFromAddress, // fromEmail
+				  emailFromName, // fromName
+				  subject
 			);
 
 		} // SendMail
 
 		public long LoanID;
 		public NL_Model model { get; private set; }
-
-		private readonly string emailToAddress;
-		private readonly string emailFromAddress;
-		private readonly string emailFromName;
 
 	}//class AddLoan
 }//ns

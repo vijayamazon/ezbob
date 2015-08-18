@@ -280,10 +280,11 @@
 				nlModel.Agreements.ForEach(a => log.Debug(a.Agreement.ToString()));
 				nlModel.Agreements.ForEach(t => log.Debug(t.TemplateModel.ToString()));
 
-				/*var nlLoan = this.serviceClient.Instance.AddLoan(this.context.UserId, cus.Id, nlModel);
+				var nlLoan = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
 				nlModel.Loan.LoanID = nlLoan.Value;
-				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoan.Value, oldloanID);*/
+				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoan.Value, oldloanID);
 
+				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				log.Debug("Failed to save new loan {0}", ex);
 			} // try
