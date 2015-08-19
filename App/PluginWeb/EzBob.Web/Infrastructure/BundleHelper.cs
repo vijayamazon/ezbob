@@ -177,7 +177,7 @@
 				.MvcRender("~/Content/css/min/print_combined_#.css");
 		} // RenderPrintCss
 
-		public static MvcHtmlString RenderBrokerCss() {
+		public static MvcHtmlString RenderEzbobBrokerCss() {
 			return Bundle.Css()
 			// libs
 				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
@@ -206,7 +206,30 @@
 				.Add("~/Content/css/easter2015scratch.css")
 
 			.MvcRender("~/Content/css/min/broker_#.css");
-		} // RenderBrokerCss
+		} // RenderEzbobBrokerCss
+
+		public static MvcHtmlString RenderEverlineBrokerCss() {
+			return Bundle.Css()
+				// libs
+				.Add("~/Content/css/lib/normalize.css")
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/lib/dropzone.css")
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/notifications.css")
+
+				// custom css
+				.Add("~/Content/css/Everlinecustomer.css")
+				.Add("~/Content/css/everline.css")
+				.Add("~/Content/css/broker.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
+				.Add("~/Content/css/profile-ny2015scratch.css")
+				.Add("~/Content/css/valentine2015scratch.css")
+				.Add("~/Content/css/easter2015scratch.css")
+
+			.MvcRender("~/Content/css/min/broker_#.css");
+		} // RenderEverlineBrokerCss
 
 		public static MvcHtmlString RenderCommonJs() {
 			return Bundle.JavaScript()

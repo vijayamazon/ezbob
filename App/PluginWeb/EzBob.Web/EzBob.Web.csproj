@@ -941,6 +941,8 @@
     <Content Include="Areas\Underwriter\Views\SalesForce\SalesForce.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_PersonalInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_SecurityIcons.cshtml" />
+    <Content Include="Areas\Broker\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Broker\Views\Shared\_LayoutBroker.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1992,9 +1994,7 @@
     <Content Include="Views\Shared\_FrameKiller.cshtml" />
     <Content Include="Views\Account\Recaptcha.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\Broker\Views\Shared\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
