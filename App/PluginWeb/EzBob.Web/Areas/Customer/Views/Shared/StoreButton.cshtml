@@ -1,6 +1,11 @@
 ﻿@model dynamic
 <script id="store-button-template" type="text/template">
     <a href="#" class="marketplace-button-account-<%- shopClass %>" ui-event-control-id="link-account:add_name_link_<%- shopClass %>">
+		<% if(isUpload) { %>
+			<div class="link-upload"><i class="pe-7s-upload"></i> upload</div>
+		<% } else { %>
+		<div class="link-upload"><i class="pe-7s-link"></i> link</div>
+		<% } %>
         <img alt="<%- shopClass %>" src="/Content/css/images/accounts/<%- shopClass %>.png" />
         <div class="onhover"><div class="onhover-cell">Add <%- shopDescription %></div></div>
     </a>

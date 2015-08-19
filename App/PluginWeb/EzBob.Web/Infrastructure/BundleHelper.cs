@@ -14,14 +14,7 @@
 			.Add("~/Content/css/paypoint-template.css")				
 			.MvcRender("~/Content/css/min/paypoint_#.css");
 		} // RenderPaypointTemplateCss
-        public static MvcHtmlString RenderCustomerCss()
-        {
-           return Bundle.Css()
-				//libs
-			
-		
-                .MvcRender("~/Content/css/min/customer_#.css");
-        }//RenderCustomerCss
+        
         public static MvcHtmlString RenderEverlineCustomerCss()
         {
             return Bundle.Css()
@@ -57,6 +50,9 @@
                 .Add("~/Content/css/lib/notifications.css")
                 .Add("~/Content/css/lib/coin-slider-styles.css")
                 .Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
+
 				//custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/customer.css")

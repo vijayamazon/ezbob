@@ -1544,7 +1544,7 @@ td.account-logo {
 .marketplace-button {
     margin-bottom: 17px;
     width: 31%;
-    height: 60px;
+    height: 75px;
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
@@ -1597,7 +1597,7 @@ td.account-logo {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
-    height: 60px !important;
+    height: 75px !important;
     width: 100%;
     display: table-cell;
     text-align: center;
@@ -1608,6 +1608,10 @@ td.account-logo {
     border-radius: 5px;
 }
 
+.marketplace-button .link-upload, .marketplace-button .link-upload:hover {
+	color: #4d4d4d;
+}
+
 .hmrc-main-button a {
     height: 80px !important;
 }
@@ -1615,14 +1619,14 @@ td.account-logo {
 .marketplace-button a img { vertical-align: middle; }
 
 .marketplace-button a div.onhover {
-    height: 60px; 
+    height: 75px; 
     width: 100%;
     font-weight: bold;
     font-size: 20px;
     text-align: center;
     position: absolute;
     display: table;
-    top: 60px;
+    top: 75px;
     left: 0;
     border-radius: 5px;
     background-color: #e8fcc6;

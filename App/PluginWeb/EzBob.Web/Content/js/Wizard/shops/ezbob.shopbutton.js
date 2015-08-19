@@ -9,6 +9,7 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 		this.mpAccounts = options.mpAccounts.get('customer').get('mpAccounts');
 		this.shops = this.mpAccounts ? _.where(this.mpAccounts, { MpName: this.name }) : [];
 		this.shopClass = options.name.replace(' ', '');
+		this.isUpload = options.isUpload || false;
 		this.origin = options.mpAccounts.get('customer').get('Origin');
 	}, // initialize
 
@@ -17,6 +18,7 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 			name: this.name,
 			shopClass: this.shopClass,
 			shopDescription: this.description,
+			isUpload: this.isUpload,
 			origin: this.origin
 		};
 	}, // serializeData
@@ -102,7 +104,7 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 
 				$('.onhover', this).animate({ top: sTop, opacity: 1 });
 			},
-			function() { $('.onhover', this).animate({ top: '60px', opacity: 0 }); }
+			function() { $('.onhover', this).animate({ top: '75px', opacity: 0 }); }
 		);
 	}, // onRender
 

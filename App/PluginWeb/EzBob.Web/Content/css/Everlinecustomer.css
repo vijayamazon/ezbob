@@ -228,25 +228,32 @@ h2 {
 	padding-bottom: 20px;
 }
 
-div.verisign {
-	background: url(images/verisign_seal.gif) no-repeat 30px 0;
-	height: 60px;
-	width: 130px;
-	float: right;
-	-ms-background-size: contain;
-	background-size: contain;
-}
-
-div.truste {
-	display: inline-block;
-	float: right;
-	height: 60px;
-}
-
-	div.truste img {
-		height: 40px;
-		margin-top: 13px;
+	.security-icons .item {
+		height: 60px;
+		float: right;
+		display: inline-block;
 	}
+
+		.security-icons .item .verisign {
+			background: url(images/verisign_seal.gif) no-repeat 30px 0;
+			width: 130px;
+			-ms-background-size: contain;
+			background-size: contain;
+		}
+
+		.security-icons .item .truste img {
+			height: 40px;
+			margin-top: 13px;
+		}
+
+		.security-icons .item .verisign img{
+			height: 60px;
+		}
+
+		.security-icons .item .lock-icon {
+			font-size: 22pt;
+			line-height: 60px;
+		}
 
 a, a:visited {
 	text-decoration: none;

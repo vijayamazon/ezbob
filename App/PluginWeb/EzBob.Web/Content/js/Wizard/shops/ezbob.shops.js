@@ -83,7 +83,10 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			this.stores = {
 				Yodlee: { view: this.YodleeAccountInfoView },
 				CompanyFiles: { view: this.companyFilesAccountInfoView },
-				HMRC: { view: this['HMRC'] }
+				HMRC: { view: this['HMRC'] },
+
+				YodleeUpload: { view: this.companyFilesAccountInfoView },
+				HMRCUpload: { view: this['HMRC'] }
 			};
 			
 		} else {
@@ -96,29 +99,38 @@ EzBob.StoreInfoView = EzBob.View.extend({
 				Yodlee: { view: this.YodleeAccountInfoView },
 				FreeAgent: { view: this.FreeAgentAccountInfoView },
 				Sage: { view: this.sageAccountInfoView },
-				CompanyFiles: { view: this.companyFilesAccountInfoView },
+				CompanyFiles: { view: this.companyFilesAccountInfoView, isUpload: true },
+
+				YodleeUpload: { view: this.companyFilesAccountInfoView }
+				
 			};
 
 			for (accountTypeName in oAllCgVendors) {
-				lc = accountTypeName.toLowerCase();
+				if (oAllCgVendors.hasOwnProperty(accountTypeName)) {
+					lc = accountTypeName.toLowerCase();
 
-				var acc = new EzBob.CgAccounts([], { accountType: accountTypeName });
+					var acc = new EzBob.CgAccounts([], { accountType: accountTypeName });
 
-				this[lc + 'Accounts'] = acc;
+					this[lc + 'Accounts'] = acc;
 
-				if (lc === 'hmrc') {
-					this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
-						model: acc,
-						companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
-					});
-				} else {
-					this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
-						model: acc,
-						accountType: accountTypeName,
-					});
-				} // if
+					if (lc === 'hmrc') {
+						this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
+							model: acc,
+							companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
+						});
+					} else {
+						this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
+							model: acc,
+							accountType: accountTypeName,
+						});
+					} // if
 
-				this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
+					this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
+
+					if (lc === 'hmrc') {
+						this.stores['HMRCUpload'] = { view: this[lc + 'AccountInfoView'] };
+					}
+				}
 			} // for each account type
 		}
 		
@@ -183,6 +195,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			this.mpGroups[grp.Id] = grp;
 			grp.ui = null;
 		} // for each group
+		
+		var bankGroup = 0;
+		var hmrcGroup = 0;
 
 		for (i = 0; i < EzBob.Config.MarketPlaces.length; i++) {
 			var oMp = EzBob.Config.MarketPlaces[i];
@@ -190,26 +205,35 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			var storeTypeName = oMp.Name === "Pay Pal" ? "paypal" : oMp.Name;
 
 			if (this.stores[storeTypeName]) {
-				this.stores[storeTypeName].active = this.isProfile() ? (this.isOffline() ? oMp.ActiveDashboardOffline : oMp.ActiveDashboardOnline) : (this.isOffline() ? oMp.ActiveWizardOffline : oMp.ActiveWizardOnline);
-				this.stores[storeTypeName].priority = this.isOffline() ? oMp.PriorityOffline : oMp.PriorityOnline;
-				this.stores[storeTypeName].ribbon = oMp.Ribbon ? oMp.Ribbon : "";
-				this.stores[storeTypeName].button = new EzBob.StoreButtonView({
-					name: storeTypeName,
-					mpAccounts: this.model,
-					description: oMp.Description,
-				});
-				this.stores[storeTypeName].button.ribbon = oMp.Ribbon ? oMp.Ribbon : "";
-				this.stores[storeTypeName].mandatory = this.isOffline() ? oMp.MandatoryOffline : oMp.MandatoryOnline;
-				this.stores[storeTypeName].groupid = oMp.Group ? oMp.Group.Id : 0;
+				this.setStore(storeTypeName, oMp.Description, oMp.Group ? oMp.Group.Id : 0,
+					this.isProfile() ? (this.isOffline() ? oMp.ActiveDashboardOffline : oMp.ActiveDashboardOnline) : (this.isOffline() ? oMp.ActiveWizardOffline : oMp.ActiveWizardOnline),
+					this.isOffline() ? oMp.PriorityOffline : oMp.PriorityOnline,
+					oMp.Ribbon ? oMp.Ribbon : '',
+					this.isOffline() ? oMp.MandatoryOffline : oMp.MandatoryOnline,
+					this.stores[storeTypeName].isUpload || false);
+				
+				if (storeTypeName === 'Yodlee') {
+					bankGroup = this.stores[storeTypeName].groupid;
+				}
+
+				if (storeTypeName === 'HMRC') {
+					hmrcGroup = this.stores[storeTypeName].groupid;
+				}
 			} // if
 		} // for
-
+		this.setStore('YodleeUpload', 'Bank statements', bankGroup, true, 100, '', false, true);
+		this.setStore('HMRCUpload', 'Vat reports', hmrcGroup, true, 100, '', false, true);
+		
 		for (var name in this.stores) {
+			if (!this.stores.hasOwnProperty(name)) {
+				continue;
+			}
+			console.log('mp', name, this.stores[name]);
 			var store = this.stores[name];
-			store.button.on("selected", this.connect, this);
-			store.view.on("completed", _.bind(this.completed, this, store.button.name));
-			store.view.on("back", this.back, this);
-			store.button.on("ready", this.ready, this);
+				store.button.on("selected", this.connect, this);
+				store.view.on("completed", _.bind(this.completed, this, store.button.name));
+				store.view.on("back", this.back, this);
+				store.button.on("ready", this.ready, this);
 		} // for
 
 		this.canContinue();
@@ -312,11 +336,27 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		this.$el.find('.btn-showmore').hoverIntent(
 			function() { $('.onhover', this).animate({ top: 0,      opacity: 1, }); },
-			function() { $('.onhover', this).animate({ top: '60px', opacity: 0, }); }
+			function() { $('.onhover', this).animate({ top: '75px', opacity: 0, }); }
 		);
 
 		return this;
 	}, // render
+
+	setStore: function (name, description, group, active, priority, ribbon, mandatory, isUpload) {
+		console.log('isUpload');
+		this.stores[name].active = active;
+		this.stores[name].priority = priority;
+		this.stores[name].ribbon = ribbon;
+		this.stores[name].button = new EzBob.StoreButtonView({
+			name: name,
+			mpAccounts: this.model,
+			description: description,
+			isUpload: isUpload
+	});
+		this.stores[name].button.ribbon = '';
+		this.stores[name].mandatory = mandatory;
+		this.stores[name].groupid = group;
+	},
 
 	renderQuickOfferForm: function() {
 		this.storeList.find('.immediate-offer .amount, .quick-offer-amount').text(EzBob.formatPoundsNoDecimals(this.quickOffer.Amount));
