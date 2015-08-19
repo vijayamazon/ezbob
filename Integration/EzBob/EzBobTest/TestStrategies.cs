@@ -1260,5 +1260,13 @@
 
 			
 		}
+
+        [Test]
+        public void TestDataSharing() {
+            DataSharing stra = new DataSharing(16142, AlibabaBusinessType.APPLICATION_WS_3);
+            stra.Execute();
+            Console.WriteLine(stra.Result);
+
+        }
 	}
 }

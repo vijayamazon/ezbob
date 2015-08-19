@@ -2,11 +2,13 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using System.Security.AccessControl;
 	using System.Security.Cryptography;
 	using System.Text;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.Models;
+	using Ezbob.Backend.Models.Alibaba;
 	using Ezbob.Utils;
 	using Ezbob.ValueIntervals;
 	using EzBob.eBayServiceLib.com.ebay.developer.soap;
@@ -262,6 +264,16 @@
 
 			// Console.WriteLine("totalDays: {0}, dDays: {1}", totalDays, dDays);
 		}
+
+	    [Test]
+	    public void TestDateTimeFormat() {
+	        CustomerDataSharing cds = new CustomerDataSharing();
+	        DateTime xx = new DateTime(2000, 03, 12, 12, 12, 12, 122);
+            Console.WriteLine(xx);
+	        cds.applicationDate = xx;
+	        Console.WriteLine(cds.applicationDate.ToString());
+	    }
+
 
 	} // class Misc
 } // namespace
