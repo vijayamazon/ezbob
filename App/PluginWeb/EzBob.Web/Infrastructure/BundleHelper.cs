@@ -34,7 +34,8 @@
                 .Add("~/Content/css/lib/notifications.css")
                 .Add("~/Content/css/lib/coin-slider-styles.css")
                 .Add("~/Content/css/lib/chosen.css")
-				
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
                
                 //common
                 .Add("~/Content/css/profile-ny2015scratch.css")
@@ -218,6 +219,8 @@
 				.Add("~/Content/css/lib/font-awesome.min.css")
 				.Add("~/Content/css/lib/chosen.css")
 				.Add("~/Content/css/lib/notifications.css")
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
 
 				// custom css
 				.Add("~/Content/css/Everlinecustomer.css")

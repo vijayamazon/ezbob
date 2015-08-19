@@ -636,18 +636,12 @@ hr.wizard-hr {
 	display: none;
 }
 
-.notification_green .specular_wrapper {
-	background: url('../everline/green-sign.png') no-repeat 0 0;
+.notification_green i, .notification_yellow i, .notification_orange i, .notification_red i, .notification_pink i, .notification_darkblue i, .notification_lightblue i, .notification_white i {
+	font-size: 25pt;
+    position: absolute;
+    left: 5px;
+	top: 0;
 }
-
-.notification_yellow .specular_wrapper {
-	background: url('../everline/yellow-sign.png') no-repeat 0 0;
-}
-
-.notification_red .specular_wrapper {
-	background: url('../everline/red-sign.png') no-repeat 0 0;
-}
-
 
 .notification_green {
 	background: transparent;
