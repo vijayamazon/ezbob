@@ -22,25 +22,7 @@
 		</div>
 
 		<div class="item-security-seals hide">
-			<div class="item">
-				<div class="icon"></div>
-				<div class="text verisign">
-					<a href="javascript:vrsn_splash()">
-						<img alt="Click to Verify - This site has chosen an SSL Certificate to improve Web site security" width="50" height="45" oncontextmenu="return false;" src="https://seal.verisign.com/getseal?at=0&sealid=2&dn=www.ezbob.com&lang=en" name="seal">
-					</a>
-				</div>
-			</div>
-
-			<div class="item">
-				<div class="icon"></div>
-				<div class="text truste">
-					<div id="05e2e3f7-3f8d-4968-b85e-c0d6ba74d080">
-						<a href="//privacy.truste.com/privacy-seal/Orange-Money/validation?rid=2cd8c34b-8ee6-47c9-8f75-10998cf23ad9" title="TRUSTe online privacy certification" target="_blank">
-							<img src="//privacy-policy.truste.com/privacy-seal/Orange-Money/seal?rid=2cd8c34b-8ee6-47c9-8f75-10998cf23ad9" alt="TRUSTe online privacy certification"/>
-						</a>
-					</div>
-				</div>
-			</div>
+			@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
 		</div>
 
 		<div class="item item-faster-platform">
@@ -74,16 +56,18 @@
 		</div>
 
 		<hr/>
-		@*	<div class="item item-competitive-prices">
-		<div class="icon">
-			<img src="@Url.Content("~/Content/img/customer-sidebar/prices.png")" alt="Competitive prices" width="50" height="45" class="sb-icon" />
+		@*	
+		<div class="item item-competitive-prices">
+			<div class="icon">
+				<img src="@Url.Content("~/Content/img/customer-sidebar/prices.png")" alt="Competitive prices" width="50" height="45" class="sb-icon" />
+			</div>
+			<div class="text">
+				<h3>Competitive prices</h3>
+				Our rates are<br />
+				very competitive
+			</div>
 		</div>
-		<div class="text">
-			<h3>Competitive prices</h3>
-			Our rates are<br />
-			very competitive
-		</div>
-	</div>*@
+		*@
 
 		<div class="item-call-us">
 			<a href="tel:@ViewBag.PhoneNumber">

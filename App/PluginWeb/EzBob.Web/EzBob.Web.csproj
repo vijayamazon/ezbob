@@ -1445,7 +1445,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_StepsDashboard.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ApplyForLoanTopTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\CGAccountInfoTemplate.cshtml" />
@@ -1488,7 +1487,6 @@
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RecheckYodleeCallback.cshtml" />
     <Content Include="Areas\Customer\Views\PacnetStatus\TradeTrackerConversion.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\InviteFriendTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\EU.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\Zoopla.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
@@ -1883,7 +1881,6 @@
     <Content Include="Areas\Customer\Views\Wizard\Index.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SignUpTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_CompanyDetails.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_SecurityStatement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_ProfileTemplateMain.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\Error.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\BankAccountInstructions.cshtml" />
@@ -1985,7 +1982,6 @@
     <Content Include="Views\Home\ActivateStore.cshtml" />
     <Content Include="Views\Account\SimpleCaptcha.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Shared\_Truste.cshtml" />
     <Content Include="Views\Shared\_FavIcon.cshtml" />
     <None Include="Properties\PublishProfiles\EzBob.Release.pubxml" />
     <None Include="Properties\PublishProfiles\EzBob.Test.pubxml" />
