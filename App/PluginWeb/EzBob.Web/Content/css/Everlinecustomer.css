@@ -507,6 +507,34 @@ div.canDisabledAddress {
 	display: none;
 }
 
+.hmrc-info-button {
+    background: url(../everline/help-button.png) no-repeat 0 0;
+    -moz-background-size: contain;
+    -o-background-size: contain;
+    -webkit-background-size: contain;
+	-ms-background-size: contain;
+    background-size: contain;
+    background-position: left center;
+	-ms-border-radius: 50%;
+    border-radius: 50%;
+    cursor: help;
+    width: 24px;
+    height: 24px;
+    margin-left: 10px;
+    margin-top: 7px;
+    display: inline-block;
+}
+
+.hmrc-info-button:hover {
+	-ms-opacity: 0.3;
+	opacity: 0.3;
+}
+
+.hmrc-info-button:active {
+	-ms-opacity: 0.6;
+	opacity: 0.6;
+}
+
 .hmrc-question-button {
 	background: url(../everline/help-button.png) no-repeat 0 0;
 	-moz-background-size: contain;

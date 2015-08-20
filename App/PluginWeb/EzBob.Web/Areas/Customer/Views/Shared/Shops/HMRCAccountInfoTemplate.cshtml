@@ -112,7 +112,25 @@
 		<h5>Upload your last five  VAT returns. Upload files titled “<strong>Printed Copy of Submitted VAT return for your records</strong>”.</h5>
 
 		<div class="hmrc-upload-ui"></div>
-
+|
+			@EzForm.WizardButton(
+							new List<EzButtonModel>{
+								new EzButtonModel(
+									"hmrc_upload_done_button",
+									"Done",
+									cls: "button btn-green ev-btn-org",
+									uiEventControlID: "hmrc:do_upload",
+									buttonType: EzButtonType.button),
+								new EzButtonModel(
+									"hmrc_upload_back_button",
+									"Back",
+									cls: "button btn-grey back ev-btn-org",
+									uiEventControlID: "hmrc:upload_back",
+									buttonType: EzButtonType.button)
+							},
+							origin: origin)
+		
+		
 		<div class="hmrc-why-question offline_entry_message wizard_message" style="width: 100%;">
 			<div id="uploadHelpButton" class="hmrc-question-button float_left" style="margin-top: 55px;" ui-event-control-id="hmrc:upload_info_button_lower"></div>
 			<div class="hmrc-why">

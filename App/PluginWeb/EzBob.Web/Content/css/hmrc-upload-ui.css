@@ -14,12 +14,7 @@
 .hmrc-upload-ui .period-details {
 	border-collapse: collapse;
 	color: #777777;
-	font-size: 12px;
-}
-
-.hmrc-upload-ui .period-details caption {
-	font-weight: bold;
-	font-size: 1.3em;
+	margin: 20px;
 }
 
 .hmrc-upload-ui .period-details tbody td,
@@ -58,8 +53,6 @@
 .hmrc-upload-ui .buttons-and-legend .legend {
 	display: table-cell;
 	width: 350px;
-	font-size: 14px;
-	line-height: 14px;
 }
 
 .hmrc-upload-ui .buttons-and-legend .legend > div {
