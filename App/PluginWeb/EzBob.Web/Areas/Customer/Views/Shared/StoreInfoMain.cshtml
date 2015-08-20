@@ -1,47 +1,14 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using Ezbob.Backend.Models
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
 @{ bool bIsWizard = (string)ViewContext.RouteData.Values["controller"] == "Wizard"; }
 
 <script id="store-info" type="text/template">
     <div>
 		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml"); }
 
-        <div class="quick-offer-form hide">
-            <h2 class="form_start">Congratulations, you are already approved for <span class="quick-offer-amount"></span></h2>
-
-            <div class="quick-offer-form-column pull-left immediate-offer">
-                <h3>Get <span class="quick-offer-amount"></span> now!</h3>
-
-                <div class="link-container">
-                    <a class="btn-take-quick-offer" ui-event-control-id="link-account:take-quick-offer">
-                        <div class="amount"></div>
-                        <div class="term quick-offer-form-item"></div>
-                        <div class="interest-rate quick-offer-form-item">Interest rate: <span class="value"></span></div>
-                        <div class="onhover">
-                            <br />
-                            <br />
-                            <h4>Get <span class="quick-offer-amount"></span> now!</h4>
-                        </div>
-                    </a>
-                </div>
-            </div>
-
-            <div class="quick-offer-form-column pull-right potential-offer">
-                <h3>Continue</h3>
-
-                <div class="link-container">
-                    <a class="btn-go-to-link-accounts" ui-event-control-id="link-account:go-to-link-accounts">
-                        <div class="amount"></div>
-                        <div class="term quick-offer-form-item"></div>
-                        <div class="interest-rate quick-offer-form-item">Interest rate: <span class="value"></span></div>
-                        <div class="onhover">
-                            <br />
-                            <br />
-                            <h4>Continue</h4>
-                        </div>
-                    </a>
-                </div>
-            </div>
-        </div>
+        @{ Html.RenderPartial("~/Areas/Customer/Views/Shared/QuickOffer.cshtml"); }
 
         <div class="link-accounts-form hide">
             @if (bIsWizard)
@@ -52,11 +19,10 @@
             {
                 <h2 class="form_start">Link more accounts</h2>
             }
-            <div style="display: none;" class="online_entry_message wizard_message">Please connect at least one account.</div>
+            <div style="display: none;" class="online_entry_message wizard_message">We base our loan decisions on the business information you provide.  Please let us have at least one of the following. The more you link or upload the better your chances of being accepted.</div>
 
             <div style="display: none;" class="offline_entry_message wizard_message">
-                In order to properly evaluate your business, we need a view into it.
-                Please upload your company’s financial documents or link one of the accounts below.
+				We base our loan decisions on the business information you provide.  Please let us have at least one of the following. The more you link or upload the better your chances of being accepted.
             </div>
 
             <div style="display: none;" class="offline_entry_message profile_message">Add more accounts to improve your <strong>@ViewBag.CustomerOrigin.Name</strong> funding.</div>
@@ -76,15 +42,29 @@
                     <div class="onhover"><div class="onhover-cell">Show more data source connectors</div></div>
                 </a>
             </div>
-
-            <div class="attardi-button cunt-button form_buttons_container">
-                <button class="back-store button btn-grey pull-right">Back</button>
-                <a href="@Url.Action("Dashboard", "CustomerDetails", new { Area="Customer" })" class="btn-continue button btn-green continue disabled alignright" id="finish-wizard" ui-event-control-id="link-account:submit">Complete</a>
-                <a href="#" class="hide button btn-green disabled alignright" id="finish-wizard-placeholder">Complete</a>
-                <a class="btn-back-to-quick-offer button btn-green alignright" ui-event-control-id="link-account:back_to_quick_offer">Back</a>
-                <a id="link_account_implicit_back" style="display: none;" class="hide" ui-event-control-id="link-account:implicit_back"></a>
-            </div>
-
+			
+			@EzForm.WizardButton(new List<EzButtonModel>{
+				new EzButtonModel("link_account_back", "Back",
+					cls: "back-store button btn-grey ev-btn-org",
+					buttonType: EzButtonType.button,
+					uiEventControlID: "link-account:back"),
+				new EzButtonModel("finish-wizard", "Complete",
+					cls: "btn-continue button btn-green continue disabled ev-btn-org",
+					buttonType: EzButtonType.link,
+					uiEventControlID: "link-account:submit",
+					href: @Url.Action("Dashboard", "CustomerDetails", new { Area="Customer" })),
+				new EzButtonModel("link_account_back_to_quick-offer", "Back",
+					cls: "btn-back-to-quick-offer button btn-green ev-btn-org",
+					buttonType: EzButtonType.link,
+					uiEventControlID: "link-account:back_to_quick_offer",
+					href: "#"),
+				new EzButtonModel("link_account_implicit_back", "",
+					cls: "hide",
+					buttonType: EzButtonType.button,
+					uiEventControlID: "link-account:back",
+					href: "#"),
+			})
+            
             <div style="display: none;" class="hmrc-why-question offline_entry_message wizard_message">
                 <div class="hmrc-question-sign"></div>
                 <div class="hmrc-why">
@@ -95,6 +75,7 @@
 
             <div class="marketplace-group-template marketplace-group hide">
                 <h3 class="group-title"></h3>
+				<p class="group-description"></p>
             </div>
         </div>
     </div>

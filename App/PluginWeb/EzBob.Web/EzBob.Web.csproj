@@ -946,6 +946,7 @@
     <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.eot" />
     <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.ttf" />
     <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Areas\Customer\Views\Shared\QuickOffer.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

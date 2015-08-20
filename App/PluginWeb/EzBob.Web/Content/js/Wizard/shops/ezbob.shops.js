@@ -293,7 +293,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 			var grpui = this.storeList.find('.marketplace-group-template').clone().removeClass('marketplace-group-template hide').addClass(sGroupClass).appendTo(accountsList);
 
-			$('.group-title', grpui).text(grp.DisplayName);
+			grpui.find('.group-title').text(grp.DisplayName);
+			grpui.find('.group-description').html(grp.Description);
+			
 			this.mpGroups[grp.Id].ui = grpui;
 		} // for
 
