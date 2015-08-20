@@ -368,8 +368,8 @@ BEGIN
 		LoanFeeTypeID INT NOT NULL,
 		[Percent] DECIMAL(18, 6) NULL,
 		AbsoluteAmount DECIMAL(18, 6) NULL,
-		OneTimePartPercent DECIMAL(18, 6) NOT NULL,
-		DistributedPartPercent DECIMAL(18, 6) NOT NULL,
+		OneTimePartPercent DECIMAL(18, 6) NULL,
+		DistributedPartPercent DECIMAL(18, 6) NULL,
 		TimestampCounter ROWVERSION,
 		CONSTRAINT PK_NL_OfferFees PRIMARY KEY (OfferFeeID),
 		CONSTRAINT FK_NL_OfferFees_Offer FOREIGN KEY (OfferID) REFERENCES NL_Offers (OfferID),
@@ -389,6 +389,14 @@ BEGIN
 		)
 	)
 END
+GO
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_NL_OfferFees_OneTimePartPercent')
+	ALTER TABLE [dbo].[NL_OfferFees] add constraint DF_NL_OfferFees_OneTimePartPercent DEFAULT 1 for OneTimePartPercent	;
+GO
+
+IF NOT EXISTS (SELECT OBJECT_ID FROM sys.all_objects WHERE type = 'D' and name = 'DF_NL_OfferFees_DistributedPartPercent')
+	ALTER TABLE [dbo].[NL_OfferFees] add constraint DF_NL_OfferFees_DistributedPartPercent DEFAULT 0 for DistributedPartPercent	;
 GO
 
 -------------------------------------------------------------------------------

@@ -10,7 +10,6 @@ ALTER PROCEDURE [dbo].[NL_OfferForLoan]
 	@Now DATETIME
 AS
 
-
 declare @OfferID bigint;
 
 BEGIN
@@ -87,6 +86,8 @@ BEGIN
 						inner join 	[dbo].[NL_LoanHistory] h on h.LoanID = l.LoanID
 						where l.OfferID =  @OfferID);
 
+
+			-- consider use Customer.CreditSum
 
 			-- check already taken and returned loans for this offer
 			set @PaidPrincipal = 

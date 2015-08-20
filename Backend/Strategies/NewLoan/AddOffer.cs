@@ -1,11 +1,14 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
 	using System.Collections.Generic;
+	using System.Linq;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
     using Ezbob.Database;
+	using NHibernate.Linq;
+	using NHibernate.Util;
 
-    public class AddOffer : AStrategy {
-        public AddOffer(NL_Offers offer, List<NL_OfferFees> fees = null ) {
+	public class AddOffer : AStrategy {
+		public AddOffer(NL_Offers offer, IEnumerable<NL_OfferFees> fees = null) {
             this.offer = offer;
 	        this.fees = fees;
         }//constructor
@@ -19,31 +22,34 @@
                 return;
             }
 
+	        Log.Debug("{0}", this.offer);
+
 			ConnectionWrapper pconn = DB.GetPersistent();
-	        try {
-				pconn.BeginTransaction();
 
-				OfferID = DB.ExecuteScalar<int>(pconn, "NL_OffersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Offers>("Tbl", this.offer));
+			try {
 
-				if (this.fees != null && this.fees.Count > 0) {
-					foreach (NL_OfferFees offerFee in this.fees) {
-						offerFee.OfferID = OfferID;
-						int offerFeeID = DB.ExecuteScalar<int>(pconn, "NL_OfferFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_OfferFees>("Tbl", offerFee));
-						Log.Debug("OfferFee {0} added", offerFee);
-					}
+				OfferID = DB.ExecuteScalar<long>(pconn, "NL_OffersSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_Offers>("Tbl", this.offer));
+
+				Log.Debug("NL_Offer saved: {0}", OfferID);
+
+				if (this.fees.Any()) {
+					this.fees.ForEach(f => f.OfferID = OfferID);
+					this.fees.ForEach(f=>Log.Debug("{0}", f));
+					DB.ExecuteNonQuery(pconn, "NL_OfferFeesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_OfferFees>("Tbl", this.fees));
 				}
-		        pconn.Commit();
 
-		        // ReSharper disable once CatchAllClause
-	        } catch (Exception ex) {
-		        Log.Alert("Failed to add NL Offer or OfferFee. Rolling back. {0} ", ex);
-		        pconn.Rollback();
-	        }
+				pconn.Commit();
 
+				// ReSharper disable once CatchAllClause
+			} catch (Exception ex) {
+				Log.Alert("Failed to add NL Offer or OfferFee. Rolling back. {0} ", ex);
+				//pconn.Rollback();
+			}
+		
         }//Execute
 
-        public int OfferID { get; set; }
+        public long OfferID { get; set; }
         private readonly NL_Offers offer;
-		private readonly List<NL_OfferFees> fees;
+		private readonly IEnumerable<NL_OfferFees> fees;
     }//class AddOffer
 }//ns

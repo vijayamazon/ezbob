@@ -35,9 +35,6 @@
 		/// <param name="nlModel"></param>
 		public AddLoan(NL_Model nlModel) {
 			model = nlModel;
-
-
-
 		}//constructor
 
 		public override string Name { get { return "AddLoan"; } }

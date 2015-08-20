@@ -564,27 +564,34 @@
 				log.Debug("NL: decision added: {0}, customer: {1}", decisionID, customer.Id);
 
 				lastOffer.DecisionID = decisionID.Value;
-				lastOffer.CreatedTime = now;
-				lastOffer.Notes = model.reason;
+				lastOffer.LoanSourceID = oldCashRequest.LoanSource.ID;
+				lastOffer.LoanTypeID = oldCashRequest.LoanType.Id;
+				lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month;
 				lastOffer.StartTime = (DateTime)oldCashRequest.OfferStart;
 				lastOffer.EndTime = (DateTime)oldCashRequest.OfferValidUntil;
-				lastOffer.IsLoanTypeSelectionAllowed = oldCashRequest.IsLoanTypeSelectionAllowed==1;
-				lastOffer.SendEmailNotification = !oldCashRequest.EmailSendingBanned ;
+				lastOffer.RepaymentCount = oldCashRequest.ApprovedRepaymentPeriod ?? 0;
+				lastOffer.Amount = sum;
 				lastOffer.MonthlyInterestRate = oldCashRequest.InterestRate;
-				lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month;
-				lastOffer.RepaymentCount = oldCashRequest.RepaymentPeriod;
-				lastOffer.IsRepaymentPeriodSelectionAllowed = oldCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
-			//	lastOffer.IsAmountSelectionAllowed = oldCashRequest. TODO
+				lastOffer.CreatedTime = now;
+				lastOffer.BrokerSetupFeePercent = oldCashRequest.BrokerSetupFeePercent;
+				lastOffer.Notes = model.reason;
 				lastOffer.DiscountPlanID = oldCashRequest.DiscountPlan.Id;
+				lastOffer.IsLoanTypeSelectionAllowed = oldCashRequest.IsLoanTypeSelectionAllowed == 1;
+				lastOffer.SendEmailNotification = !oldCashRequest.EmailSendingBanned;
+				lastOffer.IsRepaymentPeriodSelectionAllowed = oldCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
+				//lastOffer.IsAmountSelectionAllowed = true; default false
+				
+				// offer-fees
+				NL_OfferFees offerFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent, OneTimePartPercent = 1, DistributedPartPercent = 0};
+				if (oldCashRequest.SpreadSetupFee != null && oldCashRequest.SpreadSetupFee == true) {
+					offerFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
+					offerFee.OneTimePartPercent = 0;
+					offerFee.DistributedPartPercent = 1;
+				}
 
-				NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent };
-				if (oldCashRequest.SpreadSetupFee == true && oldCashRequest.SpreadSetupFee != null)
-					setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
-				NL_OfferFees[] ofeerFees = { setupFee };
+				var offerID = this.m_oServiceClient.Instance.AddOffer(user.Id, customer.Id, lastOffer, new NL_OfferFees[]{ offerFee });
 
-				var offerID = this.m_oServiceClient.Instance.AddOffer(user.Id, customer.Id, lastOffer, ofeerFees);
-
-				log.Debug("NL: offer added: {0}", offerID);
+				log.Debug("NL: offer: {0}, offerFee: {1}, offerID: {2}", lastOffer, offerFee, offerID);
 			}
 
 			var stage = OpportunityStage.s90.DescriptionAttr();

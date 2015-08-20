@@ -1,5 +1,6 @@
 ﻿namespace EzBobTest {
 	using System;
+	using System.Collections;
 	using System.Collections.Generic;
 	using System.IO;
 	using System.Linq;
@@ -9,8 +10,10 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate.Linq;
 	using NUnit.Framework;
+	using StructureMap;
 
 	[TestFixture]
 	class TestNewLoan : BaseTestFixtue {
@@ -110,9 +113,56 @@
 
 
 		[Test]
+		public void AddOffer() {
+
+			GetLastOffer lastOfferstrategy = new GetLastOffer(374);
+			lastOfferstrategy.Execute();
+			NL_Offers lastOffer = lastOfferstrategy.Offer;
+			long crID = 337;
+			long decisionID = 23;
+
+			ICashRequestRepository crRep = ObjectFactory.GetInstance<CashRequestRepository>();
+			CashRequest	oldCashRequest = crRep.Get(crID);
+
+			lastOffer.DecisionID = decisionID;
+			lastOffer.LoanSourceID = oldCashRequest.LoanSource.ID;
+			lastOffer.LoanTypeID = oldCashRequest.LoanType.Id;
+			lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month;
+			lastOffer.StartTime = (DateTime)oldCashRequest.OfferStart;
+			lastOffer.EndTime = (DateTime)oldCashRequest.OfferValidUntil;
+			lastOffer.RepaymentCount = oldCashRequest.ApprovedRepaymentPeriod ?? 0;
+			lastOffer.Amount = (decimal)oldCashRequest.ManagerApprovedSum;
+			lastOffer.MonthlyInterestRate = oldCashRequest.InterestRate;
+			lastOffer.CreatedTime = DateTime.UtcNow;
+			lastOffer.BrokerSetupFeePercent = oldCashRequest.BrokerSetupFeePercent;
+			lastOffer.Notes = "bbb";
+			lastOffer.DiscountPlanID = oldCashRequest.DiscountPlan.Id;
+			lastOffer.IsLoanTypeSelectionAllowed = oldCashRequest.IsLoanTypeSelectionAllowed == 1;
+			lastOffer.SendEmailNotification = !oldCashRequest.EmailSendingBanned;
+			lastOffer.IsRepaymentPeriodSelectionAllowed = oldCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
+			lastOffer.IsAmountSelectionAllowed = true;
+
+			// offer-fees
+			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent, 
+				//OneTimePartPercent = 1, DistributedPartPercent = 0 // default
+			};
+			if (oldCashRequest.SpreadSetupFee != null && oldCashRequest.SpreadSetupFee == true) {
+				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
+				setupFee.OneTimePartPercent = 0;
+				setupFee.DistributedPartPercent = 1;
+			}
+			List<NL_OfferFees> offerFees = new List<NL_OfferFees>(){setupFee};
+			//this.m_oLog.Debug("NL: offer: {0}, offerFees: {1}" + "", lastOffer, offerFees);
+			AddOffer offerStrategy = new AddOffer(lastOffer, offerFees);
+			offerStrategy.Execute();
+			Console.WriteLine(offerStrategy.OfferID);
+		}
+
+
+		[Test]
 		public void AddLoan() {
 
-			NL_Model model = new NL_Model(47) {
+			NL_Model model = new NL_Model(374) {
 				UserID = 25852,
 				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
 				Loan = new NL_Loans() { OldLoanID = 44, Refnum = "111111" }
@@ -145,6 +195,8 @@
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}
+
+
 		}
 
 
