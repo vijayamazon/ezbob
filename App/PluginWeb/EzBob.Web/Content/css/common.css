@@ -1390,7 +1390,7 @@ DIV#upload-files-form {
 div.form_buttons_container {
     position: relative; 
     height: 38px;
-    width: 96%;
+    margin-left: 18px;
     margin-bottom: 20px;
 }
 

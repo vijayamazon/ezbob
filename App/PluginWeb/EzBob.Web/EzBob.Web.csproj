@@ -895,6 +895,7 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrcUpload.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\MarkAsPending.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditActAgreement.cshtml" />
@@ -947,6 +948,7 @@
     <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.ttf" />
     <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.woff" />
     <Content Include="Areas\Customer\Views\Shared\QuickOffer.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\HMRCUploadAccountInfoTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

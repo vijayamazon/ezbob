@@ -74,65 +74,53 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var lc;
 		var accountTypeName;
 
-		if (this.isWhiteLabel() && !this.isProfile()) {
-			this['HMRC'] = new EzBob.HmrcAccountInfoView({
-				model: acc,
-				companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
-			});
-			
-			this.stores = {
-				Yodlee: { view: this.YodleeAccountInfoView },
-				CompanyFiles: { view: this.companyFilesAccountInfoView },
-				HMRC: { view: this['HMRC'] },
-
-				YodleeUpload: { view: this.companyFilesAccountInfoView },
-				HMRCUpload: { view: this['HMRC'] }
-			};
-			
-		} else {
-			this.stores = {
-				eBay: { view: this.EbayStoreView },
-				Amazon: { view: this.AmazonStoreInfoView },
-				paypal: { view: this.PayPalInfoView },
-				EKM: { view: this.EKMAccountInfoView },
-				PayPoint: { view: this.PayPointAccountInfoView },
-				Yodlee: { view: this.YodleeAccountInfoView },
-				FreeAgent: { view: this.FreeAgentAccountInfoView },
-				Sage: { view: this.sageAccountInfoView },
-				CompanyFiles: { view: this.companyFilesAccountInfoView, isUpload: true },
-
-				YodleeUpload: { view: this.companyFilesAccountInfoView }
+		this.stores = {
+			eBay: { view: this.EbayStoreView },
+			Amazon: { view: this.AmazonStoreInfoView },
+			paypal: { view: this.PayPalInfoView },
+			EKM: { view: this.EKMAccountInfoView },
+			PayPoint: { view: this.PayPointAccountInfoView },
+			Yodlee: { view: this.YodleeAccountInfoView },
+			FreeAgent: { view: this.FreeAgentAccountInfoView },
+			Sage: { view: this.sageAccountInfoView },
+			CompanyFiles: { view: this.companyFilesAccountInfoView, isUpload: true },
+			YodleeUpload: { view: this.companyFilesAccountInfoView }
 				
-			};
+		};
 
-			for (accountTypeName in oAllCgVendors) {
-				if (oAllCgVendors.hasOwnProperty(accountTypeName)) {
-					lc = accountTypeName.toLowerCase();
+		for (accountTypeName in oAllCgVendors) {
+			if (oAllCgVendors.hasOwnProperty(accountTypeName)) {
+				lc = accountTypeName.toLowerCase();
 
-					var acc = new EzBob.CgAccounts([], { accountType: accountTypeName });
+				var acc = new EzBob.CgAccounts([], { accountType: accountTypeName });
 
-					this[lc + 'Accounts'] = acc;
+				this[lc + 'Accounts'] = acc;
 
-					if (lc === 'hmrc') {
-						this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
-							model: acc,
-							companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
-						});
-					} else {
-						this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
-							model: acc,
-							accountType: accountTypeName,
-						});
-					} // if
+				if (lc === 'hmrc') {
+					this[lc + 'AccountInfoView'] = new EzBob.HmrcAccountInfoView({
+						model: acc,
+						companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
+					});
 
-					this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
+					this[lc + 'UploadAccountInfoView'] = new EzBob.HmrcUploadAccountInfoView({
+						model: acc,
+						companyRefNum: (this.fromCustomer('CompanyInfo') || {}).ExperianRefNum,
+					});
+				} else {
+					this[lc + 'AccountInfoView'] = new EzBob.CgAccountInfoView({
+						model: acc,
+						accountType: accountTypeName,
+					});
+				} // if
 
-					if (lc === 'hmrc') {
-						this.stores['HMRCUpload'] = { view: this[lc + 'AccountInfoView'] };
-					}
+				this.stores[accountTypeName] = { view: this[lc + 'AccountInfoView'] };
+
+				if (lc === 'hmrc') {
+					this.stores['HMRCUpload'] = { view: this[lc + 'UploadAccountInfoView'] };
 				}
-			} // for each account type
-		}
+			}
+		} // for each account type
+		
 		
 		this.storeList = $(_.template($("#store-info").html(), { }));
 
@@ -228,7 +216,6 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			if (!this.stores.hasOwnProperty(name)) {
 				continue;
 			}
-			console.log('mp', name, this.stores[name]);
 			var store = this.stores[name];
 				store.button.on("selected", this.connect, this);
 				store.view.on("completed", _.bind(this.completed, this, store.button.name));
@@ -345,7 +332,6 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	}, // render
 
 	setStore: function (name, description, group, active, priority, ribbon, mandatory, isUpload) {
-		console.log('isUpload');
 		this.stores[name].active = active;
 		this.stores[name].priority = priority;
 		this.stores[name].ribbon = ribbon;
