@@ -23,9 +23,9 @@
 		public decimal? AbsoluteAmount { get; set; }
 
 		[DataMember]
-		public decimal? OneTimePartPercent { get; set; } // default 1
+		public decimal OneTimePartPercent { get; set; } // default 1
 
 		[DataMember]
-		public decimal? DistributedPartPercent { get; set; } // default 0
+		public decimal DistributedPartPercent { get; set; } // default 0
 	} // class NL_OfferFees
 } // ns
