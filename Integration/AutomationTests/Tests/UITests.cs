@@ -2,49 +2,46 @@
 {
     using System;
     using System.Reflection;
-    using System.Threading;
     using NUnit.Framework;
     using OpenQA.Selenium;
-    using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Firefox;
-    using OpenQA.Selenium.IE;
-    using OpenQA.Selenium.Safari;
     using OpenQA.Selenium.Support.UI;
     using UIAutomationTests.Core;
-    
+
     [TestFixture]
     public class UITests : TestBase
     {
 
 
         [Test]
-        [Category("C1")]
+        [Category("1")]
         public void MustSucseedTest() {
             Assert.IsTrue( true);
         }
 
         [Test]
-        [Category("C2")]
+        [Category("2")]
         public void MustFailTest()
         {
             Assert.IsTrue(false);
         }
 
-        public static Browser IsBrowserChrome(string caseId) {
-            return Browser.Chrome; 
+        public static AutomationEnums IsBrowserChrome(string caseId) {
+            return AutomationEnums.Chrome; 
         }
 
         [Test]
-        [Category("C3")]
+        [Category("3")]
         public void CreateAccountTest() {
 
             MethodBase method = MethodBase.GetCurrentMethod();
-            var category = ((NUnit.Framework.CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name;
+            var category = ((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name;
 
-            this.ExecuteFaultHandledOperation<object>(category, () => {
+            if (category != null)
+               this.ExecuteFaultHandledOperation<object>(ulong.Parse(category), () => {
+                    var url = EnvironmentConfig.GetString("WizardHost");
                 
                 Driver.Navigate()
-                    .GoToUrl("https://app.ezbob.com/Customer/Wizard#SignUp");
+                    .GoToUrl(url);
 
                 var emailBox = Driver.FindElement(By.Id("Email"));
                 emailBox.SendKeys("dor+" + DateTime.Now.Ticks + "@ezbob.com");

@@ -97,14 +97,51 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="configs\BrandConfigs\BrandDefaultConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BrandDefaultConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\BrandConfigs\EverlineConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EverlineConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\BrandConfigs\AlibabaConfig.Designer.cs">
+      <DependentUpon>AlibabaConfig.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="configs\BrandConfigs\EzbobConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EzbobConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\EnviormentConfig\EnvDefaultConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>EnvDefaultConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\EnviormentConfig\QAConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QAConfig.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\EnviormentConfig\StagingConfig.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StagingConfig.resx</DependentUpon>
+    </Compile>
     <Compile Include="Core\BrowserWebDriver.cs" />
-    <Compile Include="Core\Browser.cs" />
+    <Compile Include="Core\Enums.cs" />
+    <Compile Include="Core\Resources.cs" />
     <Compile Include="Core\TestBase.cs" />
     <Compile Include="Tests\UITests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="configs\Scripts\category-include.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
@@ -114,6 +151,36 @@
     <Content Include="WebDrivers\IEDriverServer.exe" />
   </ItemGroup>
   <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="configs\BrandConfigs\BrandDefaultConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>BrandDefaultConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\BrandConfigs\EverlineConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EverlineConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\BrandConfigs\AlibabaConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AlibabaConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\BrandConfigs\EzbobConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EzbobConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\EnviormentConfig\EnvDefaultConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnvDefaultConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\EnviormentConfig\QAConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>QAConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\EnviormentConfig\StagingConfig.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>StagingConfig.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

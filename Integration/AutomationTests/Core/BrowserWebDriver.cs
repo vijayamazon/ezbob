@@ -2,14 +2,8 @@
 {
     using System;
     using System.IO;
-    using System.Reflection;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
-    using OpenQA.Selenium.Firefox;
-    using OpenQA.Selenium.IE;
-    using OpenQA.Selenium.Safari;
-    using TestStack.Seleno.Configuration;
-    using TestStack.Seleno.Configuration.WebServers;
 
     public static class GetBrowserWebDriver
     {
@@ -22,13 +16,13 @@
         public static IWebDriver InternetExplorerDriver { get; set; }
         public static IWebDriver SafariDriver { get; set; }
 
-        public static IWebDriver GetWebDriverForBrowser(Browser browser)
+        public static IWebDriver GetWebDriverForBrowser(AutomationEnums browser)
         {
             IWebDriver driver = null;
-            var path = Directory.GetParent(Directory.GetParent(Environment.CurrentDirectory).FullName).FullName;
+            var path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
             switch (browser)
             {
-                case Browser.Chrome:
+                case AutomationEnums.Chrome:
                     if (ChromeDriver == null)
                     {
                         ChromeDriver = new ChromeDriver(path + @"\WebDrivers");
@@ -36,7 +30,7 @@
                     driver = ChromeDriver;
                     break;
 
-                case Browser.Firefox:
+                case AutomationEnums.Firefox:
                     if (FirefoxDriver == null)
                     {
                         FirefoxDriver = new ChromeDriver(path + @"\WebDrivers");
@@ -44,7 +38,7 @@
                 driver = FirefoxDriver;
                     break;
 
-                case Browser.IE:
+                case AutomationEnums.IE:
                     if (InternetExplorerDriver == null)
                     {
                         InternetExplorerDriver = new ChromeDriver(path + @"\WebDrivers");
@@ -52,7 +46,7 @@
                 driver =  InternetExplorerDriver;
                     break;
 
-                case Browser.Safari:
+                case AutomationEnums.Safari:
                     if (SafariDriver == null)
                     {
                         SafariDriver = new ChromeDriver(path + @"\WebDrivers");
