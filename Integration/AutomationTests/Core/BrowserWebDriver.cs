@@ -34,7 +34,9 @@
                 case AutomationEnums.Firefox:
                     if (FirefoxDriver == null)
                     {
-                        FirefoxDriver = new FirefoxDriver();
+                        FirefoxProfile profile = new FirefoxProfile();
+                        profile.SetPreference("webdriver.firefox.bin", "C:\\Program Files (x86)\\Mozilla Firefox\\firefox.exe");
+                        FirefoxDriver = new FirefoxDriver(profile);
                     }
                 driver = FirefoxDriver;
                     break;
