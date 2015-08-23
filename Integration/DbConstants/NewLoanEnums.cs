@@ -28,7 +28,7 @@
 		DebtManagement = 7
 	} // enum NLLoanStatuses
 
-	public enum FeeTypes {
+	public enum NLFeeTypes {
 		SetupFee = 1, // DB table id
 		RolloverFee = 2,
 		AdminFee = 3,

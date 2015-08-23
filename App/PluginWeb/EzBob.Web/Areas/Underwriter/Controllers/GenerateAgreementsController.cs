@@ -3,6 +3,8 @@
     using System;
     using System.Linq;
     using System.Web.Mvc;
+    using Ezbob.Backend.CalculateLoan.LoanCalculator;
+    using Ezbob.Backend.ModelsWithDB.NewLoan;
     using EzBob.Models.Agreements;
     using EzBob.Web.Code;
     using EzBob.Web.Infrastructure;
@@ -42,7 +44,16 @@
 
 			foreach (var loan in loans)
 			{
-				_agreementsGenerator.RenderAgreements(loan, true);
+				//NL_Model nlModel = new NL_Model(loan.Customer.Id);
+				//nlModel.UserID = this._context.UserId;
+				//nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
+				////TODO if relevant history exists use it
+				//nlModel.Histories.Add(new NL_LoanHistory() {
+				//	Amount = loan.LoanAmount,
+				//	EventTime = DateTime.Now // former IssuedTime
+				//});
+
+				_agreementsGenerator.RenderAgreements(loan, true/*, nlModel*/);
 			}
 
 			return View("Index");

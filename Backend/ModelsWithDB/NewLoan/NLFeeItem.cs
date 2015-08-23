@@ -10,6 +10,7 @@ namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 		public NL_LoanFeePayments FeePayment { get; set; }
 
 		[DataMember]
-		public NL_OfferFees OfferFees { get; set; }
+		public NL_OfferFees OfferFee { get; set; }
+
 	} // class NLFeeItem
 } // namespace

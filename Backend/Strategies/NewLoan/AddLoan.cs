@@ -38,7 +38,9 @@
 		}//constructor
 
 		public override string Name { get { return "AddLoan"; } }
-		public string Error; 
+		public string Error;
+		public long LoanID;
+		public NL_Model model { get; private set; }
 
 		public override void Execute() {
 
@@ -142,8 +144,8 @@
 				CalculateLoanSchedule scheduleStrategy = new CalculateLoanSchedule(model);
 				scheduleStrategy.Context.UserID = model.UserID;
 				scheduleStrategy.Execute();
-
-				schedule = scheduleStrategy.Result.Schedule.OfType<NL_LoanSchedules>().ToList();
+				
+				scheduleStrategy.Result.Schedule.ForEach(s => schedule.Add(s.ScheduleItem));
 
 				if (schedule.Count == 0 || scheduleStrategy.Result.Error != "") {
 					this.Error = "Failed to generate Schedule or error occured during schedule/fees creation. " + scheduleStrategy.Result.Error;
@@ -154,6 +156,7 @@
 				model.Loan = scheduleStrategy.Result.Loan;
 				model.Loan.CreationTime = nowTime;
 				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
+				model.Loan.Position = ++dataForLoan.LoansCount;
 
 				Log.Debug("Adding loan: {0}", model.Loan);
 
@@ -165,15 +168,25 @@
 
 				Log.Debug("NL_LoansSave: LoanID: {0}", this.LoanID);
 
-				fees = scheduleStrategy.Result.Fees.OfType<NL_LoanFees>().ToList();
+
+				foreach (NLFeeItem f in scheduleStrategy.Result.Fees) {
+					if (f.Fee != null)
+						fees.Add(f.Fee);
+				}
+			
+				fees.ForEach(f => Log.Debug(f));
+				Log.Debug("loan fees: {0}", fees.Count);
+
+				return;
 
 				// 5. fees
 				if (fees.Count > 0) {
-
 					foreach (NL_LoanFees f in fees) {
-						f.LoanID = model.Loan.LoanID; // set newly created LoanID
-						f.CreatedTime = nowTime;
-						f.AssignedByUserID = 1;
+						if (f != null) {
+							f.LoanID = model.Loan.LoanID; // set newly created LoanID
+							f.CreatedTime = nowTime;
+							f.AssignedByUserID = 1;
+						}
 					}
 
 					Log.Debug("Adding fees: ");
@@ -230,8 +243,7 @@
 				// 9. schedules 
 				schedule.ForEach(s => s.LoanHistoryID = history.LoanHistoryID);
 
-				Log.Debug("Adding schedule:");
-				schedule.ForEach(s => Log.Debug(s));
+				Log.Debug("Adding schedule:"); schedule.ForEach(s => Log.Debug(s));
 
 				DB.ExecuteNonQuery(pconn, "NL_LoanSchedulesSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanSchedules>("Tbl", schedule));
 
@@ -369,8 +381,7 @@
 
 		} // SendMail
 
-		public long LoanID;
-		public NL_Model model { get; private set; }
+	
 
 	}//class AddLoan
 }//ns

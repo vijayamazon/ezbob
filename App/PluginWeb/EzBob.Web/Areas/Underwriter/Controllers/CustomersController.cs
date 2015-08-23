@@ -7,28 +7,26 @@
 	using System.Web.Script.Serialization;
 	using ConfigManager;
 	using DbConstants;
-	using EZBob.DatabaseLib.Model.Database;
-	using EZBob.DatabaseLib.Model.Database.Repository;
 	using Ezbob.Backend.Models;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 	using Ezbob.Logger;
-	using Infrastructure;
-	using Infrastructure.Attributes;
-	using NHibernate;
-	using NHibernate.Linq;
-	using Newtonsoft.Json;
-	using ServiceClientProxy;
-	using StructureMap;
-	using Models;
-	using Code;
-	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Utils;
 	using Ezbob.Utils.Extensions;
+	using EzBob.Web.Areas.Underwriter.Models;
+	using EzBob.Web.Code;
+	using EzBob.Web.Infrastructure;
+	using EzBob.Web.Infrastructure.Attributes;
+	using EzBob.Web.Infrastructure.csrf;
+	using EZBob.DatabaseLib.Model.Database;
+	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Database.UserManagement;
-	using Infrastructure.csrf;
-	using NHibernate.Hql.Ast;
+	using Newtonsoft.Json;
+	using NHibernate;
+	using NHibernate.Linq;
 	using SalesForceLib.Models;
-	using ActionResult = Ezbob.Database.ActionResult;
+	using ServiceClientProxy;
+	using StructureMap;
 
 	//in order to block sales from UW dashboard uncomment and add this permission to all relevant roles [Permission(Name = "Underwriter")]
 	public class CustomersController : Controller {
@@ -41,8 +39,7 @@
 			LoanLimit limit,
 			MarketPlaceRepository mpType,
 			UnderwriterRecentCustomersRepository underwriterRecentCustomersRepository,
-			RejectReasonRepository rejectReasonRepository
-		) {
+			RejectReasonRepository rejectReasonRepository ) {
 			this.m_oDB = DbConnectionGenerator.Get();
 
 			this._context = context;
@@ -117,7 +114,7 @@
 						Description = (string)sr["LogbookEntryTypeDescription"],
 					});
 
-					return ActionResult.Continue;
+					return Ezbob.Database.ActionResult.Continue;
 				},
 				sSpName,
 				CommandSpecies.StoredProcedure
@@ -226,8 +223,7 @@
 			GridActions nSpName,
 			bool bIncludeTestCustomers,
 			Func<AGridRow> oFactory,
-			IEnumerable<QueryParameter> oMoreSpArgs = null
-		) {
+			IEnumerable<QueryParameter> oMoreSpArgs = null) {
 			return LoadGrid(
 				nSpName,
 				bIncludeTestCustomers,
@@ -243,8 +239,7 @@
 			Func<AGridRow> oFactory,
 			bool? bIncludeAllCustomers,
 			DateTime? now = null,
-			IEnumerable<QueryParameter> oMoreSpArgs = null
-		) {
+			IEnumerable<QueryParameter> oMoreSpArgs = null) {
 
 			TimeCounter tc = new TimeCounter("LoadGrid building time for grid " + nSpName);
 			var oRes = new SortedDictionary<long, AGridRow>();
@@ -274,7 +269,7 @@
 						if (r.IsValid())
 							oRes[nRowID] = r;
 
-						return ActionResult.Continue;
+						return Ezbob.Database.ActionResult.Continue;
 					},
 					nSpName.ToString(),
 					CommandSpecies.StoredProcedure,
@@ -380,7 +375,8 @@
 
 			if (nlDecision != null) {
 				nlDecision.DecisionNameID = (int)DecisionActions.Waiting;
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
+				var addnlDecision=this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
+				log.Debug("ReturnCustomerToWaitingForDecision NL_decision: {0}, Error: {1}", addnlDecision.Value, addnlDecision.Error);
 			}
 
 			this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
@@ -396,7 +392,8 @@
 
 			if (nlDecision != null) {
 				nlDecision.DecisionNameID = (int)DecisionActions.Pending;
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
+				var addnlDecision = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
+				log.Debug("PendCustomer NL_decision: {0}, Error: {1}", addnlDecision.Value, addnlDecision.Error);
 			}
 
 			var stage = model.signature == 1
@@ -423,7 +420,8 @@
 
 			if (nlDecision != null) {
 				nlDecision.DecisionNameID = (int)DecisionActions.Escalate;
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
+				var addnlDecision = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
+				log.Debug("EscalateCustomer NL_decision: {0}, Error: {1}", addnlDecision.Value, addnlDecision.Error);
 			}
 			this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
 				new ServiceClientProxy.EzServiceReference.OpportunityModel { Email = customer.Name, Stage = stage });
@@ -457,7 +455,8 @@
 			if (nlDecision != null) {
 				nlDecision.DecisionNameID = (int)DecisionActions.Reject;
 				var rejectReasons = model.rejectionReasons.Select(x => new NL_DecisionRejectReasons { RejectReasonID = x }).ToArray();
-				this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, rejectReasons);
+				var addnlDecision = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, rejectReasons);
+				log.Debug("RejectCustomer NL_decision: {0}, Error: {1}", addnlDecision.Value, addnlDecision.Error);
 			}
 
 			this.m_oServiceClient.Instance.SalesForceUpdateOpportunity(this._context.UserId, customer.Id,
@@ -559,39 +558,49 @@
 				nlDecision.Notes = model.reason;
 
 				NL_Offers lastOffer = this.m_oServiceClient.Instance.GetLastOffer(user.Id, customer.Id);
-				var decisionID = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
+				var decision = this.m_oServiceClient.Instance.AddDecision(user.Id, customer.Id, nlDecision, oldCashRequest.Id, null);
 
-				log.Debug("NL: decision added: {0}, customer: {1}", decisionID, customer.Id);
+				log.Debug("ApproveCustomer NL_Decision: {0}, Error: {1}, customer: {2}", decision.Value, decision.Error, customer.Id);
 
-				lastOffer.DecisionID = decisionID.Value;
-				lastOffer.LoanSourceID = oldCashRequest.LoanSource.ID;
-				lastOffer.LoanTypeID = oldCashRequest.LoanType.Id;
-				lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month;
-				lastOffer.StartTime = (DateTime)oldCashRequest.OfferStart;
-				lastOffer.EndTime = (DateTime)oldCashRequest.OfferValidUntil;
-				lastOffer.RepaymentCount = oldCashRequest.ApprovedRepaymentPeriod ?? 0;
-				lastOffer.Amount = sum;
-				lastOffer.MonthlyInterestRate = oldCashRequest.InterestRate;
-				lastOffer.CreatedTime = now;
-				lastOffer.BrokerSetupFeePercent = oldCashRequest.BrokerSetupFeePercent;
-				lastOffer.Notes = model.reason;
-				lastOffer.DiscountPlanID = oldCashRequest.DiscountPlan.Id;
-				lastOffer.IsLoanTypeSelectionAllowed = oldCashRequest.IsLoanTypeSelectionAllowed == 1;
-				lastOffer.SendEmailNotification = !oldCashRequest.EmailSendingBanned;
-				lastOffer.IsRepaymentPeriodSelectionAllowed = oldCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
-				//lastOffer.IsAmountSelectionAllowed = true; default false
-				
-				// offer-fees
-				NL_OfferFees offerFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent, OneTimePartPercent = 1, DistributedPartPercent = 0};
-				if (oldCashRequest.SpreadSetupFee != null && oldCashRequest.SpreadSetupFee == true) {
-					offerFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
-					offerFee.OneTimePartPercent = 0;
-					offerFee.DistributedPartPercent = 1;
+				if (decision.Error != "") {
+
+					lastOffer.DecisionID = decision.Value;
+					lastOffer.LoanSourceID = oldCashRequest.LoanSource.ID;
+					lastOffer.LoanTypeID = oldCashRequest.LoanType.Id;
+					lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month;
+					lastOffer.StartTime = (DateTime)oldCashRequest.OfferStart;
+					lastOffer.EndTime = (DateTime)oldCashRequest.OfferValidUntil;
+					lastOffer.RepaymentCount = oldCashRequest.ApprovedRepaymentPeriod ?? 0;
+					lastOffer.Amount = sum;
+					lastOffer.MonthlyInterestRate = oldCashRequest.InterestRate;
+					lastOffer.CreatedTime = now;
+					lastOffer.BrokerSetupFeePercent = oldCashRequest.BrokerSetupFeePercent;
+					lastOffer.Notes = model.reason;
+					lastOffer.DiscountPlanID = oldCashRequest.DiscountPlan.Id;
+					lastOffer.IsLoanTypeSelectionAllowed = oldCashRequest.IsLoanTypeSelectionAllowed == 1;
+					lastOffer.SendEmailNotification = !oldCashRequest.EmailSendingBanned;
+					lastOffer.IsRepaymentPeriodSelectionAllowed = oldCashRequest.IsCustomerRepaymentPeriodSelectionAllowed;
+					//lastOffer.IsAmountSelectionAllowed = true; default false
+
+					// offer-fees
+					NL_OfferFees offerFee = new NL_OfferFees() {
+						LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+						Percent = oldCashRequest.ManualSetupFeePercent,
+						OneTimePartPercent = 1,
+						DistributedPartPercent = 0
+					};
+					if (oldCashRequest.SpreadSetupFee != null && oldCashRequest.SpreadSetupFee == true) {
+						offerFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+						offerFee.OneTimePartPercent = 0;
+						offerFee.DistributedPartPercent = 1;
+					}
+
+					log.Debug("NL: offer: {0}, offerFee: {1}", lastOffer, offerFee);
+
+					var nlOffer = this.m_oServiceClient.Instance.AddOffer(user.Id, customer.Id, lastOffer, new NL_OfferFees[] {offerFee});
+
+					log.Debug("NL saved OfferID: {0}, Error: {1}", nlOffer.Value, nlOffer.Error);
 				}
-
-				var offerID = this.m_oServiceClient.Instance.AddOffer(user.Id, customer.Id, lastOffer, new NL_OfferFees[]{ offerFee });
-
-				log.Debug("NL: offer: {0}, offerFee: {1}, offerID: {2}", lastOffer, offerFee, offerID);
 			}
 
 			var stage = OpportunityStage.s90.DescriptionAttr();
@@ -682,7 +691,7 @@
 					else if (sCustomerType == CreditResultStatus.WaitingForDecision.ToString())
 						nWaiting = sr["CustomerCount"];
 
-					return ActionResult.Continue;
+					return Ezbob.Database.ActionResult.Continue;
 				},
 				"UwGetCounters",
 				CommandSpecies.StoredProcedure,

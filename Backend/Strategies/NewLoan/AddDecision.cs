@@ -26,6 +26,7 @@
 
 					if (this.decision.CashRequestID == 0) {
 						Log.Error("CashRequestID is 0 for and oldCashRequest {0}", this.oldCashRequestID);
+						Error = string.Format("CashRequestID is 0 for and oldCashRequest {0}", this.oldCashRequestID);
 						return;
 					}
 				}
@@ -46,11 +47,14 @@
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
 				Log.Alert("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex);
+				Error = string.Format("Failed to save NL_Decision for oldCashrequestID {0}, err {1}", this.oldCashRequestID, ex.Message);
 			}
 
         }//Execute
 
 		public long DecisionID { get; set; }
+		public string Error { get; set; }
+
         private readonly NL_Decisions decision;
         private long? oldCashRequestID;
         private readonly IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons;

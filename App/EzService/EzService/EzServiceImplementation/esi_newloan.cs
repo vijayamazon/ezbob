@@ -8,39 +8,43 @@
 	using EZBob.DatabaseLib.Model.Database.Loans;
 
 	public partial class EzServiceImplementation : IEzServiceNewLoan {
-		public LongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
-			AddCashRequest stra;
-			var amd = ExecuteSync(out stra, cashRequest.CustomerID, userID, cashRequest);
-			return new LongActionResult {
+		public NLLongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest) {
+			AddCashRequest strategy;
+			var amd = ExecuteSync(out strategy, cashRequest.CustomerID, userID, cashRequest);
+			return new NLLongActionResult {
 				MetaData = amd,
-				Value = stra.CashRequestID
+				Value = strategy.CashRequestID,
+				Error = strategy.Error
 			};
 		} // AddCashRequest
 
-		public LongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
-			AddDecision stra;
-			var amd = ExecuteSync(out stra, customerID, userID, decision, oldCashRequest, decisionRejectReasons);
-			return new LongActionResult {
+		public NLLongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons) {
+			AddDecision strategy;
+			var amd = ExecuteSync(out strategy, customerID, userID, decision, oldCashRequest, decisionRejectReasons);
+			return new NLLongActionResult {
 				MetaData = amd,
-				Value = stra.DecisionID
+				Value = strategy.DecisionID,
+				Error = strategy.Error
 			};
 		} // AddDecision
 
-		public LongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null) {
-			AddOffer stra;
-			var amd = ExecuteSync(out stra, customerID, userID, offer, fees);
-			return new LongActionResult {
+		public NLLongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null) {
+			AddOffer strategy;
+			var amd = ExecuteSync(out strategy, customerID, userID, offer, fees);
+			return new NLLongActionResult {
 				MetaData = amd,
-				Value = stra.OfferID
+				Value = strategy.OfferID,
+				Error = strategy.Error
 			};
 		} // AddOffer
 
-		public LongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals) {
-			AddLoanLegals stra;
-			var amd = ExecuteSync(out stra, customerID, userID, customerID, loanLegals);
-			return new LongActionResult {
+		public NLLongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals) {
+			AddLoanLegals strategy;
+			var amd = ExecuteSync(out strategy, customerID, userID, customerID, loanLegals);
+			return new NLLongActionResult {
 				MetaData = amd,
-				Value = stra.LoanLegalsID
+				Value = strategy.LoanLegalsID,
+				Error = strategy.Error
 			};
 		} // AddLoanLegals
 
@@ -66,10 +70,10 @@
 			return strategy.NLModel;
 		} // AddPayment
 
-		public LongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId) {
+		public NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId) {
 			AddLoanOptions stra;
 			var amd = ExecuteSync(out stra, customerID, userID, customerID, loanOptions, oldLoanId);
-			return new LongActionResult {
+			return new NLLongActionResult {
 				MetaData = amd,
 				Value = stra.LoanOptionsID
 			};

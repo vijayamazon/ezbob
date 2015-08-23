@@ -130,9 +130,7 @@
 					Amount = loan.LoanAmount,
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
 					PostDate = now,
-					Status = (isFakeLoanCreate || isEverlineRefinance)
-						? LoanTransactionStatus.Done
-						: LoanTransactionStatus.InProgress,
+					Status = (isFakeLoanCreate || isEverlineRefinance)? LoanTransactionStatus.Done: LoanTransactionStatus.InProgress,
 					TrackingNumber = ret.TrackingNumber,
 					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
@@ -156,7 +154,7 @@
 					Description = "Ezbob " + FormattingUtils.FormatDateToString(DateTime.Now),
 					PostDate = now,
 					Status = LoanTransactionStatus.Done,
-					TrackingNumber = "alibaba", // TODO save who got the money
+					TrackingNumber = "alibaba deal. CustomerID: " + cus.Id , // TODO save who got the money
 					PacnetStatus = ret.Status,
 					Fees = loan.SetupFee,
 					LoanTransactionMethod = this.tranMethodRepo.FindOrDefault("Manual")
@@ -199,6 +197,13 @@
 			2. RenderAgreements: loan.Agreements.Add
 			3. RenderAgreements: SaveAgreement (file?) \backend\Strategies\Misc\Agreement.cs strategy
 			*/
+
+			// NL model - loan
+			nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
+			nlModel.Histories.Add(new NL_LoanHistory() {
+				Amount = loanAmount,
+				EventTime = now // former IssuedTime
+			});
 
 			// populate nlModel by agreements data also
 			this.agreementsGenerator.RenderAgreements(loan, true, nlModel);
@@ -262,15 +267,7 @@
 			// flush
 
 			int oldloanID = cus.Loans.First(s => s.RefNumber.Equals(loan.RefNumber)).Id;
-
-			// NL model - loan
-			nlModel.CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName;
-			nlModel.Loan = new NL_Loans() { Refnum = loan.RefNumber,  OldLoanID = oldloanID };
-			nlModel.Histories.Add(new NL_LoanHistory() {
-				Amount = loanAmount,
-				EventTime = now // former IssuedTime
-			});
-
+			nlModel.Loan = new NL_Loans() { Refnum = loan.RefNumber, OldLoanID = oldloanID };
 			try {
 				log.Debug(nlModel.FundTransfer.ToString());
 				log.Debug(nlModel.PacnetTransaction.ToString());
@@ -280,9 +277,9 @@
 				nlModel.Agreements.ForEach(a => log.Debug(a.Agreement.ToString()));
 				nlModel.Agreements.ForEach(t => log.Debug(t.TemplateModel.ToString()));
 
-				var nlLoan = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
-				nlModel.Loan.LoanID = nlLoan.Value;
-				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}", nlLoan.Value, oldloanID);
+				var nlLoanStrategy = this.serviceClient.Instance.AddLoan(null, cus.Id, nlModel);
+				nlModel.Loan.LoanID = nlLoanStrategy.Value;
+				log.Debug("NewLoan saved successfully: new LoanID {0}, oldLoanID {1}, Error: {2}", nlLoanStrategy.Value, oldloanID, nlLoanStrategy.Error);
 
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {

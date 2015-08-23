@@ -1,4 +1,5 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
+	using System;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Database;
 
@@ -9,8 +10,7 @@
         } //constructor
 
         public override string Name { get { return "AddLoanLegal"; } }
-
-	    /// <exception cref="NL_ExceptionOfferNotValid">Condition. </exception>
+	    
 	    public override void Execute() {
 
             GetLastOffer g = new GetLastOffer(this.customerID);
@@ -21,16 +21,25 @@
                 this.loanLegals.OfferID = lastOffer.OfferID;
             } else {
                 Log.Alert("Last offer not found");
-
-	            throw new NL_ExceptionOfferNotValid();
+	            Error = "Last offer not found";
+				return;
             }
 
+		    try {
 
-            this.loanLegals.OfferID = lastOffer.OfferID;
-            LoanLegalsID = DB.ExecuteScalar<int>("NL_LoanLegalsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanLegals>("Tbl", this.loanLegals)); 
+			    this.loanLegals.OfferID = lastOffer.OfferID;
+			    LoanLegalsID = DB.ExecuteScalar<long>("NL_LoanLegalsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter<NL_LoanLegals>("Tbl", this.loanLegals));
+
+			    // ReSharper disable once CatchAllClause
+		    } catch (Exception ex) {
+				Log.Alert("Failed to add NL_LoanLegals. err: {0}", ex);
+			    Error = "Failed to add NL_LoanLegals. Err: " + ex.Message;
+		    }
+          
         }//Execute
 
-        public int LoanLegalsID { get; set; }
+        public long LoanLegalsID { get; set; }
+		public string Error { get; set; }
 
         private readonly int customerID;
         private readonly NL_LoanLegals loanLegals;

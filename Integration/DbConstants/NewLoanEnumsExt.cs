@@ -1,7 +1,7 @@
 ﻿namespace DbConstants {
 	public static class FeeTypesExt {
-		public static bool In(this FeeTypes ft, params FeeTypes[] args) {
-			foreach (FeeTypes a in args)
+		public static bool In(this NLFeeTypes ft, params NLFeeTypes[] args) {
+			foreach (NLFeeTypes a in args)
 				if (a == ft)
 					return true;
 

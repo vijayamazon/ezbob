@@ -685,7 +685,7 @@
 
 			DateTime now = DateTime.UtcNow;
 
-			var decisionId = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
+			var decision = this.serviceClient.Instance.AddDecision(this._context.UserId, cr.Customer.Id, new NL_Decisions {
 				UserID = this._context.UserId,
 				DecisionTime = now,
 				DecisionNameID = (int)DecisionActions.Waiting,
@@ -693,38 +693,45 @@
 				//todo Position =
 			}, cr.Id, null);
 
-			log.Info("NL--- decisionID: {0}, oldCashRequestID: {1}", decisionId, cr.Id);
+			log.Info("NL decisionID: {0}, oldCashRequestID: {1}, Error: {2}", decision.Value, cr.Id, decision.Error);
 
-			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = manualSetupFeePercent ?? 0 };
-			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true)
-				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
-			NL_OfferFees[] ofeerFees = { setupFee };
+			NL_OfferFees offerFee = new NL_OfferFees() {
+				LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+				Percent = manualSetupFeePercent ?? 0,
+				OneTimePartPercent = 1,
+				DistributedPartPercent = 0
+			};
+			if (cr.SpreadSetupFee != null && cr.SpreadSetupFee == true) {
+				offerFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
+				offerFee.OneTimePartPercent = 0;
+				offerFee.DistributedPartPercent = 1;
+			}
+			NL_OfferFees[] ofeerFees = { offerFee };
 
-			var offerID = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
-				Amount = (decimal)amount,
-				DecisionID = decisionId.Value,
-				DiscountPlanID = discountPlan,
-				LoanSourceID = loanSource,
+			var offer = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
+				DecisionID = decision.Value,
 				LoanTypeID = loanType,
 				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
+				LoanSourceID = loanSource,
 				StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
 				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),
-				CreatedTime = now,
-				MonthlyInterestRate = interestRate,
 				RepaymentCount = repaymentPeriod,
+				Amount = (decimal)amount,
+				MonthlyInterestRate = interestRate,
+				CreatedTime = now,
 				BrokerSetupFeePercent = brokerSetupFeePercent ?? 0,
+				Notes = "offer from ChangeCreditLine, ApplicationInfoController",
+				DiscountPlanID = discountPlan,
 				IsLoanTypeSelectionAllowed = isLoanTypeSelectionAllowed == 1,
 				IsRepaymentPeriodSelectionAllowed = isCustomerRepaymentPeriodSelectionAllowed,
 				SendEmailNotification = allowSendingEmail,
-				Notes = "offer from ChangeCreditLine, ApplicationInfoController",
 				// SetupFeeAddedToLoan = 0 // default 0 TODO EZ-3515
 				// InterestOnlyRepaymentCount = 
 				//IsAmountSelectionAllowed = 1 default 1 always allowed
 			}, ofeerFees);
 
-			log.Info("NL--- offerID: {0}, decisionID: {1} oldCashRequestID: {2}", offerID.Value, decisionId.Value, cr.Id);
-
-			//TODO update new offer table
+			log.Info("NL--- offerID: {0}, decisionID: {1} oldCashRequestID: {2}, Error: {3}", offer.Value, decision.Value, cr.Id, offer.Error);
+	
 			log.Debug("update offer for customer {0} all the offer is changed", cr.Customer.Id);
 
 			return Json(true);

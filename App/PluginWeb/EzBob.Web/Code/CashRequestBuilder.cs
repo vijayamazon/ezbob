@@ -99,7 +99,7 @@
 				this._customerRepository.SaveOrUpdate(customer);
 			}).Execute();
 			
-			var nlCashRequestID = this.m_oServiceClient.Instance.AddCashRequest(userID, new NL_CashRequests {
+			var nlCashRequest = this.m_oServiceClient.Instance.AddCashRequest(userID, new NL_CashRequests {
 				CashRequestOriginID = (int)CashRequestOriginator.QuickOffer,
 				CustomerID = customer.Id,
 				OldCashRequestID = cashRequest.Id,
@@ -107,25 +107,25 @@
 				UserID = userID
 			});
 
-			Log.DebugFormat("Added NL nlCashRequestID: {0}", nlCashRequestID);
+			Log.DebugFormat("Added NL CashRequestID: {0}, Error: {1}", nlCashRequest.Value, nlCashRequest.Error);
 
-			var nlDecisionID = this.m_oServiceClient.Instance.AddDecision(userID, customer.Id, new NL_Decisions {
-				CashRequestID = nlCashRequestID.Value,
+			var nlDecision = this.m_oServiceClient.Instance.AddDecision(userID, customer.Id, new NL_Decisions {
+				CashRequestID = nlCashRequest.Value,
 				DecisionTime = now,
 				Notes = CashRequestOriginator.QuickOffer.DescriptionAttr(),
 				DecisionNameID = (int)DecisionActions.Approve,
 				UserID = user.Id
 			}, cashRequest.Id, null);
 
-			Log.DebugFormat("Added NL nlDecisionID: {0}", nlDecisionID);
+			Log.DebugFormat("Added NL DecisionID: {0}, Error: {1}", nlDecision.Value, nlDecision.Error);
 
-			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee };
+			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)NLFeeTypes.SetupFee, Percent = customer.QuickOffer.ImmediateSetupFee };
 			if (cashRequest.SpreadSetupFee != null && cashRequest.SpreadSetupFee == true)
-				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
+				setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
 			NL_OfferFees[] ofeerFees = { setupFee };
 
-			var nlOfferID = this.m_oServiceClient.Instance.AddOffer(userID, customer.Id, new NL_Offers {
-				DecisionID = nlDecisionID.Value,
+			var nlOffer = this.m_oServiceClient.Instance.AddOffer(userID, customer.Id, new NL_Offers {
+				DecisionID = nlDecision.Value,
 				Amount = customer.QuickOffer.Amount,
 				CreatedTime = now,
 				StartTime = now,
@@ -139,14 +139,13 @@
 				BrokerSetupFeePercent = 0,
 				MonthlyInterestRate = customer.QuickOffer.ImmediateInterestRate,
 				RepaymentCount = customer.QuickOffer.ImmediateTerm,
-				// defaults, can be ommited
 				IsAmountSelectionAllowed = false,
 				IsRepaymentPeriodSelectionAllowed = false,
 				IsLoanTypeSelectionAllowed = false
 				// ### defaults, can be ommited
 			}, ofeerFees);
 
-			Log.DebugFormat("Added nlOfferID: {0}", nlOfferID);
+			Log.DebugFormat("Added NL OfferID: {0}, Error: {1}", nlOffer.Value, nlOffer.Error);
 			
 			//TODO add new cash request / offer / decision
 			Log.DebugFormat("add new cash request for customer {0}", customer.Id);

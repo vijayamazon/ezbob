@@ -8,7 +8,7 @@ AS
 BEGIN
 	SET NOCOUNT ON;
 	
-	SELECT	[DiscountPlanEntryID],	[PaymentOrder], [InterestDiscount], [DiscountPlanID] FROM [dbo].[NL_DiscountPlanEntries] WHERE [DiscountPlanID] = @DiscountPlanID
+	SELECT	[DiscountPlanEntryID],	[PaymentOrder], [InterestDiscount], [DiscountPlanID] FROM [dbo].[NL_DiscountPlanEntries] WHERE [DiscountPlanID] = @DiscountPlanID order by [PaymentOrder];
 END
 
 GO

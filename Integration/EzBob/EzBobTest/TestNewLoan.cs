@@ -2,6 +2,7 @@
 	using System;
 	using System.Collections;
 	using System.Collections.Generic;
+	using System.Globalization;
 	using System.IO;
 	using System.Linq;
 	using ConfigManager;
@@ -10,6 +11,7 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
+	using Ezbob.Database;
 	using EZBob.DatabaseLib.Model.Database;
 	using NHibernate.Linq;
 	using NUnit.Framework;
@@ -143,19 +145,22 @@
 			lastOffer.IsAmountSelectionAllowed = true;
 
 			// offer-fees
-			NL_OfferFees setupFee = new NL_OfferFees() { LoanFeeTypeID = (int)FeeTypes.SetupFee, Percent = oldCashRequest.ManualSetupFeePercent, 
+			NL_OfferFees setupFee = new NL_OfferFees() {
+				LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+				Percent = oldCashRequest.ManualSetupFeePercent,
 				//OneTimePartPercent = 1, DistributedPartPercent = 0 // default
 			};
 			if (oldCashRequest.SpreadSetupFee != null && oldCashRequest.SpreadSetupFee == true) {
-				setupFee.LoanFeeTypeID = (int)FeeTypes.ServicingFee;
+				setupFee.LoanFeeTypeID = (int)NLFeeTypes.ServicingFee;
 				setupFee.OneTimePartPercent = 0;
 				setupFee.DistributedPartPercent = 1;
 			}
-			List<NL_OfferFees> offerFees = new List<NL_OfferFees>(){setupFee};
+			List<NL_OfferFees> offerFees = new List<NL_OfferFees>() { setupFee };
 			//this.m_oLog.Debug("NL: offer: {0}, offerFees: {1}" + "", lastOffer, offerFees);
 			AddOffer offerStrategy = new AddOffer(lastOffer, offerFees);
 			offerStrategy.Execute();
 			Console.WriteLine(offerStrategy.OfferID);
+			Console.WriteLine(offerStrategy.Error);
 		}
 
 
@@ -163,9 +168,10 @@
 		public void AddLoan() {
 
 			NL_Model model = new NL_Model(374) {
-				UserID = 25852,
+				UserID = 357,
 				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-				Loan = new NL_Loans() { OldLoanID = 44, Refnum = "111111" }
+				Loan = new NL_Loans() { OldLoanID = 1068, Refnum = "01825919001" },
+				AgreementModel = @"{ccccccccccccccccccc:ddd}"
 			};
 
 			model.Agreements.Add(new NLAgreementItem() {
@@ -186,19 +192,75 @@
 
 			model.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
 
+
 			AddLoan strategy = new AddLoan(model);
 			strategy.Context.UserID = model.UserID;
 			try {
 				strategy.Execute();
 				this.m_oLog.Debug(strategy.Error);
 				this.m_oLog.Debug(strategy.LoanID);
+
+				Console.WriteLine("LoanID: {0}, Error: {1}", strategy.LoanID, strategy.Error);
 			} catch (Exception ex) {
 				Console.WriteLine(ex);
 			}
-
-
 		}
 
+		[Test]
+		public void CalculateLoanSchedule() {
+			NL_Model model = new NL_Model(374) {
+				UserID = 357,
+				CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
+				Loan = new NL_Loans()
+			};
+			model.Histories.Add(new NL_LoanHistory() { EventTime = DateTime.UtcNow });
+			CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
+			strategy.Context.UserID = model.UserID;
+			try {
+				strategy.Execute();
+				Console.WriteLine(strategy.Result.Error);
+			} catch (Exception ex) {
+				Console.WriteLine(ex);
+			}
+		}
+
+		/// <exception cref="OverflowException"><paramref /> represents a number less than <see cref="F:System.Decimal.MinValue" /> or greater than <see cref="F:System.Decimal.MaxValue" />. </exception>
+		[Test]
+		public void DiscountPlan() {
+			var discounts = this.m_oDB.Fill<NL_DiscountPlanEntries>(
+						"NL_DiscountPlanEntriesGet",
+						CommandSpecies.StoredProcedure,
+						new QueryParameter("@DiscountPlanID", 2)
+						);
+			if (discounts != null) {
+				discounts.ForEach(d => this.m_oLog.Debug(d));
+				NL_Model model = new NL_Model(374);
+				foreach (NL_DiscountPlanEntries dpe in discounts) {
+
+					model.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
+				}
+				model.DiscountPlan.ForEach(d => Console.WriteLine(d));
+			}
+		}
+
+		[Test]
+		public void OfferFees() {
+			// offer-fees
+			List<NL_OfferFees> offerFees = this.m_oDB.Fill<NL_OfferFees>(
+				"NL_OfferFeesGet",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@OfferID", 27)
+				);
+			offerFees.ForEach(ff => Console.WriteLine(ff));
+			NL_Model model = new NL_Model(374);
+			foreach (NL_OfferFees ff in offerFees) {
+				model.Fees.Add(new NLFeeItem(){OfferFee =ff});
+			}
+			model.Fees.ForEach(f => Console.WriteLine("===" + f.OfferFee));
+			var offs = new List<NL_OfferFees>();
+			model.Fees.ForEach(f => offs.Add(f.OfferFee));
+			Console.WriteLine(offs.Count);
+		}
 
 	} // class TestNewLoan
 } // namespace

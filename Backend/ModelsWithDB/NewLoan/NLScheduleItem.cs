@@ -8,5 +8,6 @@ namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 
 		[DataMember]
 		public NL_LoanSchedulePayments ScheduleItemPayment { get; set; }
+
 	} // class NLScheduleItem
 } // namespace

@@ -315,7 +315,6 @@
 					options.AutoPayment = true;
 				
 				this.loanOptionsRepository.SaveOrUpdate(options);
-				Log.Debug(string.Format("BEFOREFLUSH: {0}", loan));
 				this.session.Flush();
 
                 NL_LoanOptions nlOptions = new NL_LoanOptions{
@@ -338,8 +337,11 @@
                     Notes = null
                 };
 
-				this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
-                // TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
+				var nlStrategy = this.serviceClient.Instance.AddLoanOptions(this._context.UserId, customerId, nlOptions, options.LoanId);
+
+				//Log.Debug("NL_LoanOptions update/save: ID: {0}, Error: {1}", nlStrategy.Value, nlStrategy.Error);
+
+				// TODO - add/update NL_LoanOptions via EZ service AddLoanOptions EZ-EZ-3421
 			}
 		}
 

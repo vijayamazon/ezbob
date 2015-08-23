@@ -14,6 +14,13 @@
 	/// Create loan Schedule and setup/arrangement/servicing Fees
 	/// Arguments: NL_Model with CustomerID, CalculatorImplementation (BankLikeLoanCalculator|LegacyLoanCalculator), Histories.NL_LoanHistory.EventTime
 	/// If the customer has valid offer, NL_Model Result contains Schedule, Fees, APR, Error
+	/// 
+	/// Expected input:
+	///		NL_Model with:			
+	///			- Histories => history: EventTime (former IssuedTime)			
+	///		Expected result:
+	///			- int LoanID newly created
+	///			- optional string Error
 	/// </summary>
 	public class CalculateLoanSchedule : AStrategy {
 		public CalculateLoanSchedule(NL_Model nlModel) {
@@ -27,6 +34,7 @@
 
 		public override void Execute() {
 
+			
 			if (model.CustomerID == 0) {
 				this.Result.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
@@ -58,6 +66,8 @@
 
 			Log.Debug("OfferDataForLoan: {0}", dataForLoan);
 
+			string message = string.Empty;
+
 			try {
 
 				// from offer => Loan
@@ -81,6 +91,7 @@
 				model.Offer = new NL_Offers {
 					BrokerSetupFeePercent = dataForLoan.BrokerSetupFeePercent,
 					SetupFeeAddedToLoan = dataForLoan.SetupFeeAddedToLoan,
+					OfferID = dataForLoan.OfferID
 				};
 
 				// offer-fees
@@ -90,23 +101,27 @@
 					new QueryParameter("@OfferID", dataForLoan.OfferID)
 					);
 
-				foreach (NL_OfferFees offerFee in offerFees)
-					model.Fees.Add(new NLFeeItem {
-						OfferFees = offerFee
-					});
+				if (offerFees != null) {
+					foreach (NL_OfferFees offerFee in offerFees)
+						model.Fees.Add(new NLFeeItem {
+							OfferFee = offerFee
+						});
+				}
+
+				model.Fees.ForEach(ff => Log.Debug(ff.OfferFee));
 
 				if (dataForLoan.DiscountPlanID > 0) {
 					var discounts = DB.Fill<NL_DiscountPlanEntries>(
 						"NL_DiscountPlanEntriesGet",
 						CommandSpecies.StoredProcedure,
 						new QueryParameter("@DiscountPlanID", dataForLoan.DiscountPlanID)
-						);
+					);
 
 					foreach (NL_DiscountPlanEntries dpe in discounts) {
-						model.DiscountPlan.Insert(dpe.PaymentOrder, Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
+						model.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
 					}
 
-					Log.Debug("Discounts: {0}", model.DiscountPlan);
+					Log.Debug("Discounts"); model.DiscountPlan.ForEach(d=>Log.Debug(d));
 				}
 
 				// init calculator
@@ -119,37 +134,37 @@
 				nlCalculator.CreateSchedule();
 
 				// update relevant history entry
-				model.Histories.Where(h => h.EventTime == history.EventTime)
-					.ForEach(h => h = history);
+				model.Histories.Where(h => h.EventTime == history.EventTime).ForEach(h => h = history);
 
 				// set APR 
 				model.APR = nlCalculator.CalculateApr(history.EventTime);
 
-				Log.Debug("model.Loan: {0}, model.Offer: {1}, model.APR: {2}, history: {3}", model.Loan, model.Offer, model.APR, history);
-				Log.Debug("Schedule: ");
-				model.Schedule.ForEach(s => Log.Debug(s.ScheduleItem.ToString()));
-				Log.Debug("Fees: ");
-				model.Fees.ForEach(f => Log.Debug(f.Fee));
-				Log.Debug("Histories: ");
-				model.Histories.ForEach(h => Log.Debug(h));
+				Log.Debug("model.Loan: {0}, model.Offer: {1}", model.Loan, model.Offer);
 
-				// init result by the model
-				this.Result = model;
+				Log.Debug("Schedule:===> "); model.Schedule.ForEach(s => Log.Debug(s.ScheduleItem));
+				Log.Debug("Offer Fees:===> "); model.Fees.ForEach(f => Log.Debug(f.OfferFee));
+				Log.Debug("Loan Fees:===> ");	model.Fees.ForEach(f => Log.Debug(f.Fee));
+				Log.Debug("Histories:===> "); model.Histories.ForEach(h => Log.Debug(h));
+				Log.Debug("APR: {0}", model.APR);
 
 			} catch (NoInitialDataException noDataException) {
-				this.Result.Error = noDataException.Message;
+				message = noDataException.Message;
 			} catch (InvalidInitialAmountException amountException) {
-				this.Result.Error = amountException.Message;
+				message = amountException.Message;
 			} catch (InvalidInitialInterestRateException interestRateException) {
-				this.Result.Error = interestRateException.Message;
+				message = interestRateException.Message;
 			} catch (InvalidInitialRepaymentCountException paymentsException) {
-				this.Result.Error = paymentsException.Message;
+				message = paymentsException.Message;
 			} catch (InvalidInitialInterestOnlyRepaymentCountException xxException) {
-				this.Result.Error = xxException.Message;
+				message = xxException.Message;
 				// ReSharper disable once CatchAllClause
 			} catch (Exception ex) {
+				Log.Alert("Failed to calculate Schedule (NL_Model.NlScheduleItems list) for customer {0}, err: {1}", model.CustomerID, ex);
+				message = string.Format("Failed to calculate Schedule (NL_Model.NlScheduleItems list) for customer {0}, err: {1}", model.CustomerID, ex.Message);
+			} finally {
+				// set result
 				this.Result = model;
-				this.Result.Error = string.Format("Failed to calculate Schedule (NL_Model.NlScheduleItems list) for customer {0}, err: {1}", model.CustomerID, ex);
+				this.Result.Error = message;
 			}
 
 		}//Execute

@@ -221,9 +221,6 @@
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.IntActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LongActionResult.datasource">
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </None>
     <None Include="Service References\EzServiceReference\ServiceClientProxy.EzServiceReference.LotteryActionResult.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>

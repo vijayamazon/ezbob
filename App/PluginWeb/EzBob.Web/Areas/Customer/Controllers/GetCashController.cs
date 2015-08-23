@@ -1,5 +1,6 @@
 ﻿namespace EzBob.Web.Areas.Customer.Controllers {
 	using System;
+	using System.Diagnostics;
 	using System.Linq;
 	using System.Reflection;
 	using System.Web.Mvc;
@@ -328,7 +329,7 @@
 			});
 
 
-			NL_LoanLegals loanLegals = new NL_LoanLegals {
+			NL_LoanLegals nlLoanLegals = new NL_LoanLegals {
 				Amount = loanAmount,
 				RepaymentPeriod = repaymentPeriod,
 				SignatureTime = now,
@@ -342,8 +343,9 @@
 				NotInBankruptcy = notInBankruptcy,
 			};
 
-			this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, loanLegals);
-			//el: TODO add LoanLegal for offer
+			var nlStrategyLegals =	this.m_oServiceClient.Instance.AddLoanLegals(this._context.UserId, this._context.Customer.Id, nlLoanLegals);
+
+			//_log.Debug("NL_LoanLegals: ID {0}, Error: {1}", nlStrategyLegals.Value, nlStrategyLegals.Error);
 
 			return Json(new { });
 

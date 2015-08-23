@@ -8,22 +8,22 @@
     [ServiceContract(SessionMode = SessionMode.Allowed)]
 	public interface IEzServiceNewLoan {
 		[OperationContract]
-		LongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
+		NLLongActionResult AddCashRequest(int userID, NL_CashRequests cashRequest);
 
 		[OperationContract]
-		LongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons);
+		NLLongActionResult AddDecision(int userID, int customerID, NL_Decisions decision, long? oldCashRequest, IEnumerable<NL_DecisionRejectReasons> decisionRejectReasons);
 
 		[OperationContract]
-		LongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null);
+		NLLongActionResult AddOffer(int userID, int customerID, NL_Offers offer, List<NL_OfferFees> fees = null);
 
 		[OperationContract]
 		NL_Offers GetLastOffer(int userID, int customerID);
 
 		[OperationContract]
-		LongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
+		NLLongActionResult AddLoanLegals(int userID, int customerID, NL_LoanLegals loanLegals);
 
 		[OperationContract]
-		LongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId);
+		NLLongActionResult AddLoanOptions(int userID, int customerID, NL_LoanOptions loanOptions, int? oldLoanId);
 
 		[OperationContract]
 		NLLongActionResult AddLoan(int? userID, int? customerID, NL_Model model);

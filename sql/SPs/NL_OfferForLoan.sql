@@ -49,7 +49,7 @@ BEGIN
 			o.BrokerSetupFeePercent, 
 			o.InterestOnlyRepaymentCount,			
 			0 as LoansCount	,
-			ll.Amount as AvailableAmount
+			o.Amount as AvailableAmount
 		into #offerforloan
 			FROM 
 				NL_LoanLegals ll 
@@ -72,7 +72,7 @@ BEGIN
 
 
 
-		if @LoansCount is not null begin
+		if @LoansCount > 0 begin
 						
 			declare @TakenAmount decimal;
 			declare @PaidPrincipal decimal;
@@ -86,6 +86,8 @@ BEGIN
 						inner join 	[dbo].[NL_LoanHistory] h on h.LoanID = l.LoanID
 						where l.OfferID =  @OfferID);
 
+
+			if @TakenAmount is null set @TakenAmount =0;
 
 			-- consider use Customer.CreditSum
 
@@ -102,11 +104,12 @@ BEGIN
 						inner join [dbo].[NL_PaymentStatuses] pstatus on pstatus.[PaymentStatusID] = p.PaymentStatusID and pstatus.PaymentStatus in ('Pending', 'Active')			
 					where l.OfferID = @OfferID);
 
+			if @PaidPrincipal is null set @PaidPrincipal =0;
+
 			update #offerforloan set LoansCount = @LoansCount, AvailableAmount = (@TakenAmount- @PaidPrincipal);
 		end; -- @LoansCount
 
 		select * from #offerforloan;
 	END;
-	
 
 END

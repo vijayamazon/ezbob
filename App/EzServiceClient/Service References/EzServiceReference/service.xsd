@@ -1113,7 +1113,7 @@
   <xs:element name="AddCashRequestResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q91="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddCashRequestResult" nillable="true" type="q91:LongActionResult" />
+        <xs:element xmlns:q91="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddCashRequestResult" nillable="true" type="q91:NLLongActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1131,7 +1131,7 @@
   <xs:element name="AddDecisionResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddDecisionResult" nillable="true" type="q94:LongActionResult" />
+        <xs:element xmlns:q94="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddDecisionResult" nillable="true" type="q94:NLLongActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1148,7 +1148,7 @@
   <xs:element name="AddOfferResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q97="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddOfferResult" nillable="true" type="q97:LongActionResult" />
+        <xs:element xmlns:q97="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddOfferResult" nillable="true" type="q97:NLLongActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1179,7 +1179,7 @@
   <xs:element name="AddLoanLegalsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q100="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanLegalsResult" nillable="true" type="q100:LongActionResult" />
+        <xs:element xmlns:q100="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanLegalsResult" nillable="true" type="q100:NLLongActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -1196,7 +1196,7 @@
   <xs:element name="AddLoanOptionsResponse">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q102="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanOptionsResult" nillable="true" type="q102:LongActionResult" />
+        <xs:element xmlns:q102="http://schemas.datacontract.org/2004/07/EzService" minOccurs="0" name="AddLoanOptionsResult" nillable="true" type="q102:NLLongActionResult" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

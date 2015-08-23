@@ -553,14 +553,14 @@
 			addDecisionStra.Execute();
 			long decisionID = addDecisionStra.DecisionID;
 
-			Log.Debug("Added NL decision: {0}", decisionID);
+			Log.Debug("Added NL decision: {0}, Error: {1}", decisionID, addDecisionStra.Error);
 
 			if (this.autoDecisionResponse.DecidedToApprove) {
 				List<NL_OfferFees> offerFees = new List<NL_OfferFees>();
 
 				if (this.autoDecisionResponse.SetupFee > 0) {
 					offerFees.Add(new NL_OfferFees {
-						LoanFeeTypeID = (int)FeeTypes.SetupFee,
+						LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
 						Percent = this.autoDecisionResponse.SetupFee,
 					});
 				} // if
@@ -574,7 +574,7 @@
 					DiscountPlanID = this.autoDecisionResponse.DiscountPlanIDToUse,
 					LoanSourceID = this.autoDecisionResponse.LoanSource.ID,
 					LoanTypeID = this.autoDecisionResponse.LoanTypeID,
-					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO some day...
+					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, 
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
 					BrokerSetupFeePercent = this.autoDecisionResponse.BrokerSetupFeePercent,
@@ -587,7 +587,7 @@
 
 				addOfferStrategy.Execute();
 				
-				Log.Debug("Added NL offer: {0}", addOfferStrategy.OfferID);
+				Log.Debug("Added NL offer: {0}, Error: {1}", addOfferStrategy.OfferID, addOfferStrategy.Error);
 			} // if
 		} // AddNLDecisionOffer
 
@@ -802,7 +802,7 @@
 				nlCashRequest.Execute();
 				this.nlCashRequestID = nlCashRequest.CashRequestID;
 
-				Log.Debug("Added NL CashRequest: {0}, OldCashRequestID: {1}", this.nlCashRequestID, this.cashRequestID);
+				Log.Debug("Added NL CashRequest: {0}, OldCashRequestID: {1}, Error: {2}", this.nlCashRequestID, this.cashRequestID, nlCashRequest.Error);
 			} // if
 
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {

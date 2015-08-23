@@ -732,7 +732,7 @@
 			);
 			addDecision.Execute();
 			Console.WriteLine(addDecision.DecisionID);
-
+			Console.WriteLine(addDecision.Error);
 		}
 
 

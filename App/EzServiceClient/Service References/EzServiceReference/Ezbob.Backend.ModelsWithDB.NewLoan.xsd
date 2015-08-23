@@ -97,11 +97,11 @@
       <xs:extension base="tns:AStringable">
         <xs:sequence>
           <xs:element minOccurs="0" name="AbsoluteAmount" nillable="true" type="xs:decimal" />
-          <xs:element minOccurs="0" name="DistributedPartPercent" type="xs:decimal" />
+          <xs:element minOccurs="0" name="DistributedPartPercent" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="LoanFeeTypeID" type="xs:int" />
           <xs:element minOccurs="0" name="OfferFeeID" type="xs:long" />
           <xs:element minOccurs="0" name="OfferID" type="xs:long" />
-          <xs:element minOccurs="0" name="OneTimePartPercent" type="xs:decimal" />
+          <xs:element minOccurs="0" name="OneTimePartPercent" nillable="true" type="xs:decimal" />
           <xs:element minOccurs="0" name="Percent" nillable="true" type="xs:decimal" />
         </xs:sequence>
       </xs:extension>
