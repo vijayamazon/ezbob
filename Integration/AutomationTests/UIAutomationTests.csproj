@@ -136,7 +136,7 @@
     <Compile Include="Core\Enums.cs" />
     <Compile Include="Core\Resources.cs" />
     <Compile Include="Core\TestBase.cs" />
-    <Compile Include="Tests\UITests.cs" />
+    <Compile Include="Tests\Application\OrangeMoney\CreateTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -150,7 +150,20 @@
     <Content Include="WebDrivers\chromedriver.exe" />
     <Content Include="WebDrivers\IEDriverServer.exe" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Tests\Application\Alibaba\" />
+    <Folder Include="Tests\Application\Broker\" />
+    <Folder Include="Tests\Application\UnderWriter\" />
+    <Folder Include="Tests\Automation\POC\" />
+    <Folder Include="Tests\Integration\CallCredit_CreditSafe\" />
+    <Folder Include="Tests\Integration\CustomerCommunication\" />
+    <Folder Include="Tests\Integration\Salesforce\" />
+    <Folder Include="Tests\Legacy\Everline\" />
+    <Folder Include="Tests\WorkFlow\Collection\" />
+    <Folder Include="Tests\WorkFlow\Loan\" />
+    <Folder Include="Tests\WorkFlow\Promotions\" />
+    <Folder Include="Tests\WorkFlow\Risk\" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="configs\BrandConfigs\BrandDefaultConfig.resx">
       <Generator>ResXFileCodeGenerator</Generator>
