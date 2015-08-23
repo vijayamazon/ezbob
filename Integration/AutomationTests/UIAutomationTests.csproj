@@ -97,40 +97,40 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="configs\BrandConfigs\BrandDefaultConfig.Designer.cs">
+    <Compile Include="configs\Brand\DefaultBrand.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>BrandDefaultConfig.resx</DependentUpon>
+      <DependentUpon>DefaultBrand.resx</DependentUpon>
     </Compile>
-    <Compile Include="configs\BrandConfigs\EverlineConfig.Designer.cs">
+    <Compile Include="configs\Brand\Everline.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EverlineConfig.resx</DependentUpon>
+      <DependentUpon>Everline.resx</DependentUpon>
     </Compile>
-    <Compile Include="configs\BrandConfigs\AlibabaConfig.Designer.cs">
-      <DependentUpon>AlibabaConfig.resx</DependentUpon>
+    <Compile Include="configs\Brand\Alibaba.Designer.cs">
+      <DependentUpon>Alibaba.resx</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="configs\BrandConfigs\EzbobConfig.Designer.cs">
+    <Compile Include="configs\Brand\Ezbob.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EzbobConfig.resx</DependentUpon>
+      <DependentUpon>Ezbob.resx</DependentUpon>
     </Compile>
-    <Compile Include="configs\EnviormentConfig\EnvDefaultConfig.Designer.cs">
+    <Compile Include="configs\Enviorment\DefaultEnviorment.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>EnvDefaultConfig.resx</DependentUpon>
+      <DependentUpon>DefaultEnviorment.resx</DependentUpon>
     </Compile>
-    <Compile Include="configs\EnviormentConfig\QAConfig.Designer.cs">
+    <Compile Include="configs\Enviorment\QA.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>QAConfig.resx</DependentUpon>
+      <DependentUpon>QA.resx</DependentUpon>
     </Compile>
-    <Compile Include="configs\EnviormentConfig\StagingConfig.Designer.cs">
+    <Compile Include="configs\Enviorment\Staging.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StagingConfig.resx</DependentUpon>
+      <DependentUpon>Staging.resx</DependentUpon>
     </Compile>
     <Compile Include="Core\BrowserWebDriver.cs" />
     <Compile Include="Core\Enums.cs" />
@@ -149,6 +149,7 @@
   <ItemGroup>
     <Content Include="WebDrivers\chromedriver.exe" />
     <Content Include="WebDrivers\IEDriverServer.exe" />
+    <Content Include="WebDrivers\wires.exe" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Tests\Application\Alibaba\" />
@@ -165,33 +166,33 @@
     <Folder Include="Tests\WorkFlow\Risk\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="configs\BrandConfigs\BrandDefaultConfig.resx">
+    <EmbeddedResource Include="configs\Brand\DefaultBrand.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>BrandDefaultConfig.Designer.cs</LastGenOutput>
+      <LastGenOutput>DefaultBrand.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="configs\BrandConfigs\EverlineConfig.resx">
+    <EmbeddedResource Include="configs\Brand\Everline.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EverlineConfig.Designer.cs</LastGenOutput>
+      <LastGenOutput>Everline.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="configs\BrandConfigs\AlibabaConfig.resx">
+    <EmbeddedResource Include="configs\Brand\Alibaba.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>AlibabaConfig.Designer.cs</LastGenOutput>
+      <LastGenOutput>Alibaba.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="configs\BrandConfigs\EzbobConfig.resx">
+    <EmbeddedResource Include="configs\Brand\Ezbob.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EzbobConfig.Designer.cs</LastGenOutput>
+      <LastGenOutput>Ezbob.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="configs\EnviormentConfig\EnvDefaultConfig.resx">
+    <EmbeddedResource Include="configs\Enviorment\DefaultEnviorment.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>EnvDefaultConfig.Designer.cs</LastGenOutput>
+      <LastGenOutput>DefaultEnviorment.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="configs\EnviormentConfig\QAConfig.resx">
+    <EmbeddedResource Include="configs\Enviorment\QA.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>QAConfig.Designer.cs</LastGenOutput>
+      <LastGenOutput>QA.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="configs\EnviormentConfig\StagingConfig.resx">
+    <EmbeddedResource Include="configs\Enviorment\Staging.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>StagingConfig.Designer.cs</LastGenOutput>
+      <LastGenOutput>Staging.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,38 +8,32 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class UITests : TestBase
-    {
+    public class UITests : TestBase {
 
 
         [Test]
         [Category("1")]
         public void MustSucseedTest() {
-            Assert.IsTrue( true);
+            Assert.IsTrue(true);
         }
 
         [Test]
         [Category("2")]
-        public void MustFailTest()
-        {
+        public void MustFailTest() {
             Assert.IsTrue(false);
         }
 
         public static AutomationEnums IsBrowserChrome(string caseId) {
-            return AutomationEnums.Chrome; 
+            return AutomationEnums.Chrome;
         }
 
         [Test]
         [Category("3")]
         public void CreateAccountTest() {
 
-            MethodBase method = MethodBase.GetCurrentMethod();
-            var category = ((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name;
+            this.ExecuteTest<object>(() => {
+                var url = EnvironmentConfig.GetString("WizardHost");
 
-            if (category != null)
-               this.ExecuteFaultHandledOperation<object>(ulong.Parse(category), () => {
-                    var url = EnvironmentConfig.GetString("WizardHost");
-                
                 Driver.Navigate()
                     .GoToUrl(url);
 
@@ -79,4 +73,5 @@
             });
         }
     }
+
 }

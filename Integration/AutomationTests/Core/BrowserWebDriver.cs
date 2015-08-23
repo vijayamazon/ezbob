@@ -5,6 +5,7 @@
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Firefox;
+    using OpenQA.Selenium.IE;
 
     public static class GetBrowserWebDriver
     {
@@ -19,13 +20,13 @@
         public static IWebDriver GetWebDriverForBrowser(AutomationEnums browser)
         {
             IWebDriver driver = null;
-            //var path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
+            var path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
             switch (browser)
             {
                 case AutomationEnums.Chrome:
                     if (ChromeDriver == null)
                     {
-                        ChromeDriver = new ChromeDriver(@"E:\WebDrivers");
+                        ChromeDriver = new ChromeDriver(path + @"\WebDrivers");
                     }
                     driver = ChromeDriver;
                     break;
@@ -41,7 +42,7 @@
                 case AutomationEnums.IE:
                     if (InternetExplorerDriver == null)
                     {
-                        InternetExplorerDriver = new ChromeDriver(@"E:\WebDrivers");
+                        InternetExplorerDriver = new InternetExplorerDriver(path + @"\WebDrivers");
                     }
                 driver =  InternetExplorerDriver;
                     break;
@@ -49,7 +50,7 @@
                 case AutomationEnums.Safari:
                     if (SafariDriver == null)
                     {
-                        SafariDriver = new ChromeDriver(@"E:\WebDrivers");
+                        SafariDriver = new ChromeDriver(path + @"E:\WebDrivers");
                     }
                     driver = SafariDriver;
                     break;

@@ -2,8 +2,11 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq.Expressions;
+    using System.Reflection;
     using System.Resources;
+    using NUnit.Framework;
     using OpenQA.Selenium;
 
     public class TestBase
@@ -12,21 +15,23 @@
         protected ResourceManager EnvironmentConfig { get; set; }
         protected ResourceManager BrandConfig { get; set; }
 
+        protected void ExecuteTest<T>(Func<T> codeToExecute) {
+            
+            MethodBase method = new StackFrame(1).GetMethod();
+            ulong caseID = ulong.Parse(((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name);
 
-        protected void ExecuteFaultHandledOperation<T>(ulong caseID, Func<T> codeToExecute)
-        {
             var browsers = GetBrowsers(caseID);
             var brands = GetBrands(caseID);
             var enviorments = GetEnviorments(caseID);
 
-            foreach (var br in browsers)
-            {
-                using (Driver = GetBrowserWebDriver.GetWebDriverForBrowser(br))
+            foreach (var br in browsers) {
+                Driver = GetBrowserWebDriver.GetWebDriverForBrowser(br);
+                foreach (var env in enviorments)
                 {
-                    foreach (var env in GetEnviorments(caseID)) {
                         EnvironmentConfig = Resources.GetEnvironmentResourceManager(env);
                         {
-                            foreach (var brand in GetBrands(caseID)) {
+                            foreach (var brand in brands)
+                            {
                                 BrandConfig = Resources.GetBrandResourceManager(brand);
                                 try {
                                     codeToExecute.Invoke();
@@ -38,8 +43,7 @@
                         }
                         
                     }
-
-                }
+                
             }
         }
 

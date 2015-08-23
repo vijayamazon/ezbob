@@ -1,8 +1,8 @@
 ﻿namespace UIAutomationTests.Core
 {
     using System.Resources;
-    using UIAutomationTests.configs.BrandConfigs;
-    using UIAutomationTests.configs.EnviormentConfig;
+    using UIAutomationTests.configs.Brand;
+    using UIAutomationTests.configs.Enviorment;
 
     class Resources
     {
@@ -12,11 +12,11 @@
             switch (resourceName)
             {
                 case Environment.QA:
-                    return QAConfig.ResourceManager;
+                    return QA.ResourceManager;
                 case Environment.Staging:
-                    return  StagingConfig.ResourceManager;
+                    return Staging.ResourceManager;
                 default:
-                    return  EnvDefaultConfig.ResourceManager;
+                    return DefaultEnviorment.ResourceManager;
             }
         }
 
@@ -25,11 +25,11 @@
             switch (resourceName)
             {
                 case Brand.Everline:
-                    return EverlineConfig.ResourceManager;
+                    return Everline.ResourceManager;
                 case Brand.Ezbob:
-                    return  EzbobConfig.ResourceManager;
+                    return Ezbob.ResourceManager;
                 default:
-                    return BrandDefaultConfig.ResourceManager;
+                    return DefaultBrand.ResourceManager;
             }
         }
     }

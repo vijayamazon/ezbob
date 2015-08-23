@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UIAutomationTests.configs.EnviormentConfig {
+namespace UIAutomationTests.configs.Enviorment {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace UIAutomationTests.configs.EnviormentConfig {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class QAConfig {
+    internal class QA {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal QAConfig() {
+        internal QA() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace UIAutomationTests.configs.EnviormentConfig {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UIAutomationTests.configs.EnviormentConfig.QAConfig", typeof(QAConfig).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UIAutomationTests.configs.Enviorment.QA", typeof(QA).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;

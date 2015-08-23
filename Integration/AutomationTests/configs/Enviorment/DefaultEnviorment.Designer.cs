@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UIAutomationTests.configs.BrandConfigs {
+namespace UIAutomationTests.configs.Enviorment {
     using System;
     
     
@@ -22,14 +22,14 @@ namespace UIAutomationTests.configs.BrandConfigs {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class BrandDefaultConfig {
+    internal class DefaultEnviorment {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
         private static global::System.Globalization.CultureInfo resourceCulture;
         
         [global::System.Diagnostics.CodeAnalysis.SuppressMessageAttribute("Microsoft.Performance", "CA1811:AvoidUncalledPrivateCode")]
-        internal BrandDefaultConfig() {
+        internal DefaultEnviorment() {
         }
         
         /// <summary>
@@ -39,7 +39,7 @@ namespace UIAutomationTests.configs.BrandConfigs {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UIAutomationTests.configs.BrandConfigs.BrandDefaultConfig", typeof(BrandDefaultConfig).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("UIAutomationTests.configs.Enviorment.DefaultEnviorment", typeof(DefaultEnviorment).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -57,6 +57,24 @@ namespace UIAutomationTests.configs.BrandConfigs {
             }
             set {
                 resourceCulture = value;
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://qa-uw.ezbob.com/Account/AdminLogOn.
+        /// </summary>
+        internal static string UnderWriterHost {
+            get {
+                return ResourceManager.GetString("UnderWriterHost", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to https://qa-app.ezbob.com/Customer/Wizard.
+        /// </summary>
+        internal static string WizardHost {
+            get {
+                return ResourceManager.GetString("WizardHost", resourceCulture);
             }
         }
     }
