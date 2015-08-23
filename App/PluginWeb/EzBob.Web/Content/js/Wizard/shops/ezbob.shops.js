@@ -5,7 +5,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		"class": "stores-view"
 	}, // attributes
 
-	isOffline: function() { return this.fromCustomer('IsOffline'); },
+	isOffline: function() { return true; /*todo  remove*/ },
 
 	isProfile: function() { return this.fromCustomer('IsProfile'); },
 
@@ -60,6 +60,13 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			isProfile: this.isProfile(),
 		});
 
+		this.yodleeUploadAccounts = new EzBob.YodleeUploadAccounts();
+		this.yodleeUploadAccountInfoView = new EzBob.CompanyFilesAccountInfoView({
+			model: this.yodleeUploadAccounts,
+			isBank: true,
+			isProfile: this.isProfile(),
+		});
+
 		this.payPalAccounts = new EzBob.PayPalAccounts(this.model.get("paypalAccounts"));
 		this.PayPalInfoView = new EzBob.PayPalInfoView({
 			model: this.payPalAccounts,
@@ -68,6 +75,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.companyFilesAccounts = new EzBob.CompanyFilesAccounts(this.model.get("companyUploadAccounts"));
 		this.companyFilesAccountInfoView = new EzBob.CompanyFilesAccountInfoView({
 			model: this.companyFilesAccounts,
+			isBank: false
 		});
 
 		var oAllCgVendors = EzBob.CgVendors.all();
@@ -84,7 +92,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			FreeAgent: { view: this.FreeAgentAccountInfoView },
 			Sage: { view: this.sageAccountInfoView },
 			CompanyFiles: { view: this.companyFilesAccountInfoView, isUpload: true },
-			YodleeUpload: { view: this.companyFilesAccountInfoView }
+			YodleeUpload: { view: this.yodleeUploadAccountInfoView }
 				
 		};
 
@@ -170,7 +178,8 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.link-accounts-form').removeClass('hide');
 	}, // showLinkAccountsForm
 
-	render: function() {
+	render: function () {
+
 		var i;
 		var grp;
 
@@ -198,7 +207,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 					this.isOffline() ? oMp.PriorityOffline : oMp.PriorityOnline,
 					oMp.Ribbon ? oMp.Ribbon : '',
 					this.isOffline() ? oMp.MandatoryOffline : oMp.MandatoryOnline,
-					this.stores[storeTypeName].isUpload || false);
+					this.stores[storeTypeName].isUpload || false, oMp.IsImage, false);
 				
 				if (storeTypeName === 'Yodlee') {
 					bankGroup = this.stores[storeTypeName].groupid;
@@ -209,8 +218,8 @@ EzBob.StoreInfoView = EzBob.View.extend({
 				}
 			} // if
 		} // for
-		this.setStore('YodleeUpload', 'Bank statements', bankGroup, true, 100, '', false, true);
-		this.setStore('HMRCUpload', 'Vat reports', hmrcGroup, true, 100, '', false, true);
+		this.setStore('YodleeUpload', 'Bank statements', bankGroup, true, 100, '', false, true, false, true);
+		this.setStore('HMRCUpload', 'Vat reports', hmrcGroup, true, 100, '', false, true, false, true);
 		
 		for (var name in this.stores) {
 			if (!this.stores.hasOwnProperty(name)) {
@@ -266,16 +275,12 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		relevantMpGroups = _.sortBy(relevantMpGroups, function(g) { return g[sPriorityField]; });
 
-		var bFirst = true;
-
 		for (i = 0; i < relevantMpGroups.length; i++) {
 			grp = relevantMpGroups[i];
 
 			var sGroupClass = 'first';
 
-			if (bFirst)
-				bFirst = false;
-			else
+			if (i>2)
 				sGroupClass = 'following';
 
 			var grpui = this.storeList.find('.marketplace-group-template').clone().removeClass('marketplace-group-template hide').addClass(sGroupClass).appendTo(accountsList);
@@ -297,8 +302,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			var oTarget = this.mpGroups[shop.groupid] && this.mpGroups[shop.groupid].ui ? this.mpGroups[shop.groupid].ui : accountsList;
 
 			var sBtnClass = this.isProfile() ? 'marketplace-button-profile' : this.extractBtnClass(oTarget);
-
-			shop.button.render().$el.addClass('marketplace-button ' + sBtnClass).appendTo(oTarget);
+			var button = shop.button.render();
+			button.$el.find('.marketplace-button').addClass(sBtnClass);
+			button.$el.appendTo(oTarget);
 		} // for
 
 		if (this.isOffline() && !this.isProfile())
@@ -331,7 +337,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		return this;
 	}, // render
 
-	setStore: function (name, description, group, active, priority, ribbon, mandatory, isUpload) {
+	setStore: function (name, description, group, active, priority, ribbon, mandatory, isUpload, isImage, hasOr) {
 		this.stores[name].active = active;
 		this.stores[name].priority = priority;
 		this.stores[name].ribbon = ribbon;
@@ -339,7 +345,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			name: name,
 			mpAccounts: this.model,
 			description: description,
-			isUpload: isUpload
+			isUpload: isUpload,
+			isImage: isImage,
+			hasOr: hasOr
 	});
 		this.stores[name].button.ribbon = '';
 		this.stores[name].mandatory = mandatory;
@@ -413,47 +421,26 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	showOrRemove: function() {
 		var sRemove, sShow;
 
-		var isOffline = this.isOffline();
 		var isProfile = this.isProfile();
 
 		$(this.storeList).find('.back-store').remove();
 		this.storeList.find('.marketplace-button.show-more').removeClass('hide').show();
+		
+		this.storeList.find('.importantnumber').text('£150,000');
 
-		if (isOffline) {
-			sShow = '.offline_entry_message';
-			sRemove = '.online_entry_message';
-
-			this.storeList.find('.importantnumber').text('£150,000');
-
-			if (isProfile) {
-				this.storeList.find('.marketplace-button.show-more').hide();
-				this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
-			} else if (this.isWhiteLabel()) {
-				this.storeList.find('.marketplace-button.show-more').hide();
-			} else {
-				this.storeList.find('.btn-showmore').show();
-			}
-		}
-		else {
-			sShow = '.online_entry_message';
-			sRemove = '.offline_entry_message';
-
+		if (isProfile) {
 			this.storeList.find('.marketplace-button.show-more').hide();
 			this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
-		} // if
-
-		if (this.isWhiteLabel() && !this.isProfile()) {
-			this.storeList.find('.group-title').hide();
+		} else if (this.isWhiteLabel()) {
+			this.storeList.find('.marketplace-button.show-more').hide();
+		} else {
+			this.storeList.find('.btn-showmore').show();
 		}
 		
-		this.storeList.find(sShow).show();
-		this.storeList.find(sRemove).remove();
-
 		if (isProfile) {
 			sShow = '.profile_message';
 			sRemove = '.wizard_message';
-		}
-		else {
+		} else {
 			sShow = '.wizard_message';
 			sRemove = '.profile_message';
 		} // if
@@ -643,7 +630,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	shopConnected: function(name) {
 		var self = this;
 
-		this.model.get('customer').safeFetch().done(function() {
+		this.model.get('customer').safeFetch().done(function () {
 			self.stores[name].button.update(self.fromCustomer('mpAccounts'));
 			// self.updateEarnedPoints();
 			self.render();

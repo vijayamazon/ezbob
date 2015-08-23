@@ -1,6 +1,6 @@
 ﻿@using System.Collections.Generic
-@using Ezbob.Backend.Models
 @using EzBob.Web.Infrastructure.Html
+
 @model dynamic
 @{ bool bIsWizard = (string)ViewContext.RouteData.Values["controller"] == "Wizard"; }
 
@@ -19,15 +19,9 @@
             {
                 <h2 class="form_start">Link more accounts</h2>
             }
-            <div style="display: none;" class="online_entry_message wizard_message">We base our loan decisions on the business information you provide.  Please let us have at least one of the following. The more you link or upload the better your chances of being accepted.</div>
-
-            <div style="display: none;" class="offline_entry_message wizard_message">
-				We base our loan decisions on the business information you provide.  Please let us have at least one of the following. The more you link or upload the better your chances of being accepted.
-            </div>
-
-            <div style="display: none;" class="offline_entry_message profile_message">Add more accounts to improve your <strong>@ViewBag.CustomerOrigin.Name</strong> funding.</div>
-
-            <div style="display: none;" class="online_entry_message profile_message">Add more accounts to improve your <strong>@ViewBag.CustomerOrigin.Name</strong> funding.</div>
+            <div style="display: none;" class="entry_message wizard_message">We base our loan decisions on the business information you provide.  Please let us have at least one of the following. The more you link or upload the better your chances of being accepted.</div>
+			
+            <div style="display: none;" class="entry_message profile_message">Add more accounts to improve your <strong>@ViewBag.CustomerOrigin.Name</strong> funding.</div>
 
             @if (bIsWizard)
             {
@@ -37,7 +31,7 @@
             <div class="accounts-list row-fluid"></div>
             
             <div class="marketplace-button show-more" style="width: 100% !important">
-                <a class="btn-showmore hide alignright" ui-event-control-id="link-account:showmore" data-current="more">
+                <a class="btn-showmore hide" ui-event-control-id="link-account:showmore" data-current="more">
                     <span class="caption">Show more account types</span><div class="rotate90">&laquo;</div>
                     <div class="onhover"><div class="onhover-cell">Show more data source connectors</div></div>
                 </a>
@@ -65,14 +59,6 @@
 					href: "#"),
 			})
             
-            <div style="display: none;" class="hmrc-why-question offline_entry_message wizard_message">
-                <div class="hmrc-question-sign"></div>
-                <div class="hmrc-why">
-                    Why do we need this?
-                    <br />
-                    We need your HMRC and/or your company's bank account data to properly evaluate your application.</div>
-            </div>
-
             <div class="marketplace-group-template marketplace-group hide">
                 <h3 class="group-title"></h3>
 				<p class="group-description"></p>

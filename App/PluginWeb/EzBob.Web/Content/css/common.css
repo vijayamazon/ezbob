@@ -464,6 +464,30 @@ div.shop-connected {
     vertical-align: middle;
 }
 
+.marketplace-button-wrapper {
+	position: relative;
+}
+
+.marketplace-button-wrapper .account-or{
+	background: url('images/accounts/account-or.png') no-repeat 0 0;
+	width: 55px;
+	height: 55px;
+	position: absolute;
+    top: 10px;
+    z-index: 2;
+	left: 28.5%;
+}
+
+.marketplace-button-wrapper .account-label,
+.marketplace-button-wrapper .account-label:active,
+.marketplace-button-wrapper .account-label:hover,
+.marketplace-button-wrapper .account-label:visited{
+	text-decoration: none;
+	font-family: 'Titillium Web Regular';
+	font-size: 22px;
+	color: #4d4d4d;
+}
+
 .source_labels {
     display: inline-block;
 }

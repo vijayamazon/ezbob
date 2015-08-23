@@ -194,6 +194,10 @@
       <Project>{aedbfbbd-ba7d-4582-afca-6ecf8af33c98}</Project>
       <Name>CommonLib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\CompanyFiles\CompanyFiles.csproj">
+      <Project>{80458A21-990F-46BA-BCBB-FB211B5BAAAC}</Project>
+      <Name>CompanyFiles</Name>
+    </ProjectReference>
     <ProjectReference Include="..\DatabaseLib\DatabaseLib.csproj">
       <Project>{fa67314a-0560-41d4-bc19-6524663e9d0d}</Project>
       <Name>DatabaseLib</Name>

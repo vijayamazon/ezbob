@@ -3,7 +3,6 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
-	using System.Web.Script.Serialization;
 	using Broker;
 	using CustomerRelations;
 	using Ezbob.Utils.Extensions;
@@ -584,6 +583,8 @@
 
 		public virtual IList<CustomerRelationState> CustomerRelationStates { get; set; }
 		public virtual IList<LandRegistry> LandRegistries { get; set; }
+
+		public virtual IList<MP_CompanyFilesMetaData> CompanyFiles { get; set; }
 
 		public virtual string FirstVisitTime { get; set; }
 

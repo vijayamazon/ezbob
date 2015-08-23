@@ -2,7 +2,7 @@ var EzBob = EzBob || {};
 
 EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 	template: '#store-button-template',
-
+	className: 'marketplace-button-wrapper',
 	initialize: function(options) {
 		this.name = options.name;
 		this.description = options.description;
@@ -10,6 +10,8 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 		this.shops = this.mpAccounts ? _.where(this.mpAccounts, { MpName: this.name }) : [];
 		this.shopClass = options.name.replace(' ', '');
 		this.isUpload = options.isUpload || false;
+		this.isImage = options.isImage;
+		this.hasOr = options.hasOr;
 		this.origin = options.mpAccounts.get('customer').get('Origin');
 	}, // initialize
 
@@ -19,26 +21,31 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 			shopClass: this.shopClass,
 			shopDescription: this.description,
 			isUpload: this.isUpload,
-			origin: this.origin
+			origin: this.origin,
+			isImage: this.isImage
 		};
 	}, // serializeData
 
 	onRender: function() {
 		var btn = this.$el.find('.marketplace-button-account-' + this.shopClass);
 
-		this.$el.removeClass('marketplace-button-full marketplace-button-empty');
+		this.$el.find('.marketplace-button').removeClass('marketplace-button-full marketplace-button-empty');
 
 		var sTitle = (this.shops.length ? 'Some' : 'No') + ' accounts linked. Click to link ';
 
+		if (this.hasOr) {
+			this.$el.find('.account-or').show();
+		}
+
 		if (this.shops.length) {
-			this.$el.addClass('marketplace-button-full');
+			this.$el.find('.marketplace-button').addClass('marketplace-button-full');
 			sTitle += 'more.';
 		} else {
-			this.$el.addClass('marketplace-button-empty');
+			this.$el.find('.marketplace-button').addClass('marketplace-button-empty');
 			sTitle += 'one.';
 		} // if
 
-		this.$el.attr('title', sTitle);
+		this.$el.find('.marketplace-button').attr('title', sTitle);
 
 		switch (this.shopClass) {
 		case 'eBay':
