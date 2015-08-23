@@ -50,7 +50,7 @@
 
         public List<Brand> GetBrands(ulong caseID)
         {
-            return new List<Brand>() { Brand.Ezbob , Brand.Everline  };
+            return new List<Brand>() { Brand.Ezbob  };
         }
 
         public List<Environment> GetEnviorments(ulong caseID)

@@ -1,1 +1,1 @@
-echo "##teamcity[setParameter name='env.INCLUDED_TESTS' value='c3']"
+echo "##teamcity[setParameter name='env.INCLUDED_TESTS' value='3']"

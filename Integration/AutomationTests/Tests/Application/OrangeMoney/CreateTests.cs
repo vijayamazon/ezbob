@@ -33,9 +33,8 @@
         [Category("3")]
         public void CreateAccountTest() {
 
-            //MethodBase method = MethodBase.GetCurrentMethod();
-            //var category = ((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name;
-            var category = "3";
+            MethodBase method = MethodBase.GetCurrentMethod();
+            var category = ((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name;
 
             if (category != null)
                this.ExecuteFaultHandledOperation<object>(ulong.Parse(category), () => {

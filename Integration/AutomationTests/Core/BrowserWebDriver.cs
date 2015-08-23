@@ -4,12 +4,12 @@
     using System.IO;
     using OpenQA.Selenium;
     using OpenQA.Selenium.Chrome;
+    using OpenQA.Selenium.Firefox;
 
     public static class GetBrowserWebDriver
     {
 
         public const int DriverTimeOut = 30;
-        public static string SiteRootUrl = "www.ezbob.com";
         public static IWebDriver ChromeDriver { get; set; }
         public static IWebDriver FirefoxDriver { get; set; }
         public static IWebDriver IEDriver { get; set; }
@@ -33,7 +33,7 @@
                 case AutomationEnums.Firefox:
                     if (FirefoxDriver == null)
                     {
-                        FirefoxDriver = new ChromeDriver(path + @"\WebDrivers");
+                        FirefoxDriver = new FirefoxDriver();
                     }
                 driver = FirefoxDriver;
                     break;
