@@ -19,13 +19,13 @@
         public static IWebDriver GetWebDriverForBrowser(AutomationEnums browser)
         {
             IWebDriver driver = null;
-            var path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
+            //var path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
             switch (browser)
             {
                 case AutomationEnums.Chrome:
                     if (ChromeDriver == null)
                     {
-                        ChromeDriver = new ChromeDriver(path + @"\WebDrivers");
+                        ChromeDriver = new ChromeDriver(@"E:\WebDrivers");
                     }
                     driver = ChromeDriver;
                     break;
@@ -41,7 +41,7 @@
                 case AutomationEnums.IE:
                     if (InternetExplorerDriver == null)
                     {
-                        InternetExplorerDriver = new ChromeDriver(path + @"\WebDrivers");
+                        InternetExplorerDriver = new ChromeDriver(@"E:\WebDrivers");
                     }
                 driver =  InternetExplorerDriver;
                     break;
@@ -49,7 +49,7 @@
                 case AutomationEnums.Safari:
                     if (SafariDriver == null)
                     {
-                        SafariDriver = new ChromeDriver(path + @"\WebDrivers");
+                        SafariDriver = new ChromeDriver(@"E:\WebDrivers");
                     }
                     driver = SafariDriver;
                     break;
