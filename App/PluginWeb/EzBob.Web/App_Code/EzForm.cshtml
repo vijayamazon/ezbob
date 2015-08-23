@@ -298,7 +298,7 @@ string formFieldID = "")
             @if (origin != CustomerOriginEnum.everline)
             {
                 <div class="attardi-button">
-              @ButtonTag(buttons)
+					@ButtonTag(buttons)
                 </div>
             }
             else
@@ -306,54 +306,71 @@ string formFieldID = "")
                 <label class="input-title">&nbsp;</label>
                 <div class="input-wrapper">
                     @ButtonTag(buttons)
-                  
                 </div>
             }
         </div>
 }
+
 @helper ButtonTag(List<EzButtonModel> buttons )
 {
 	foreach (var buttonProp in buttons) {
 		var identificator = new HtmlString(buttonProp.Id);
+		var uiEvent = new HtmlString(buttonProp.UiEventControlID);
+
 		switch (buttonProp.ButtonType) {
 			case EzButtonType.button:
-			<button class="@buttonProp.Cls"
-					@( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
-					@( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-					@( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-				@buttonProp.Caption
-			</button>
+				<button class="@buttonProp.Cls"
+						@if (!string.IsNullOrWhiteSpace(buttonProp.Id)) { @: id="@identificator"
+																																							   }
+						@( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+						@if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
+																																							   }
+				>
+					@buttonProp.Caption
+				</button>
 				break;
 			case EzButtonType.submit:
 			<input type="submit"
-				   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.Id)) { @: id="@identificator"
+				   				   																															   }
 				   value="@buttonProp.Caption"
 				   class="@buttonProp.Cls"
 				   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-				   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
+				   																																			   } 
+				   />
 				break;
 			case EzButtonType.input:
 			<input type="button"
-				   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.Id)) { @: id="@identificator"
+				   				   																															   }
 				   value="@buttonProp.Caption"
 				   class="@buttonProp.Cls"
 				   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-				   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
+																																				   			   }
+			 />
 				break;
 			case EzButtonType.link:
 			<a href="@buttonProp.Href"
-			   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+			   @if(!string.IsNullOrWhiteSpace(buttonProp.Id)) {
+					@:id ="@identificator"
+																																							   }
 			   value="@buttonProp.Caption"
 			   class="@buttonProp.Cls"
+			   @( !string.IsNullOrWhiteSpace(buttonProp.Target) ? "target=" + buttonProp.Target : "")
+			   @( !string.IsNullOrWhiteSpace(buttonProp.OnClick) ? "onclick=" + buttonProp.OnClick : "")
 			   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-			   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+			   @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) {
+				   @:ui-event-control-id="@uiEvent"
+			   }>
 				@buttonProp.Caption
 			</a>
 				break;
-		}
-	}
-
+		}//switch
+	}//foreach
 }
+
 @helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
     var identificator = new HtmlString(id);

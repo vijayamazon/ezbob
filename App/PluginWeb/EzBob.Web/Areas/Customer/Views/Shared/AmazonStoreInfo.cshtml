@@ -1,4 +1,5 @@
 ﻿@model dynamic
+@using System.Collections.Generic
 @using EzBob.Web.Infrastructure.Html
 @helper AmazonInfo()
 {
@@ -80,28 +81,24 @@
                 </li>
             </ol>
         </div>
-        <div class="control-group clearfix form_buttons_container">
-            <div class="attardi-button">
-	             @EzForm.WizardButton(
-					 new List<EzButtonModel>{
-						new EzButtonModel(
-							"amazon_continue_button", 
-							"Continue", 
-							cls: "connect-amazon button btn-green disabled ev-btn-org", 
-							uiEventControlID: "link-account:amazon_connect", 
-							buttonType: EzButtonType.link, 
-							href: "#Connect/amazon"), 
-						new EzButtonModel(
-							"amazon_back_button", 
-							"Back", 
-							cls: "back button btn-grey ev-btn-org", 
-							uiEventControlID: "link-account:amazon_back", 
-							buttonType: EzButtonType.link, 
-							href: "#")
-					 }, 
-					 origin: origin)
-            </div>
-        </div>
+	    @EzForm.WizardButton(
+			new List<EzButtonModel>{
+			new EzButtonModel(
+				"amazon_continue_button", 
+				"Continue", 
+				cls: "connect-amazon button btn-green disabled ev-btn-org", 
+				uiEventControlID: "link-account:amazon_connect", 
+				buttonType: EzButtonType.link, 
+				href: "#Connect/amazon"), 
+			new EzButtonModel(
+				"amazon_back_button", 
+				"Back", 
+				cls: "back button btn-grey ev-btn-org", 
+				uiEventControlID: "link-account:amazon_back", 
+				buttonType: EzButtonType.link, 
+				href: "#")
+			}, 
+			origin: origin)
     </div>
 }
 

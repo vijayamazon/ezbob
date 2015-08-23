@@ -696,3 +696,192 @@ hr.wizard-hr {
 	color: #d20002;
 }
 /**End Notifications**/
+
+
+/**MarketPlaces**/
+.marketplace-group {
+	clear: both;
+}
+
+.marketplace-button  {
+	float: left;
+	width: 31%;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	border: 2px solid #e28023;
+	height: 75px;
+	text-align: center;
+	color: #106565;
+	font-weight: 600;
+	-ms-opacity: 1;
+	opacity: 1;
+	cursor: pointer;
+	background-color: transparent;
+	text-decoration: none;
+	margin-right: 2%;
+	margin-bottom: 20px; 
+	background-color: white;
+	display: table;
+}
+
+.marketplace-button a,
+.marketplace-button a:hover,
+.marketplace-button a:active,
+.marketplace-button a:visited {
+	color: #106565 !important;
+	text-decoration: none;
+	font-size: 18pt;
+
+	-moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    height: 75px !important;
+    width: 100%;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+    outline-style: none;
+    overflow: hidden;
+}
+
+.marketplace-button .link-upload{
+	color: #666666;
+	margin-bottom: 5px;
+    font-size: 11pt;
+}
+
+.marketplace-button a div.onhover {
+    height: 75px;
+    width: 100%;
+    font-size: 22pt;
+    text-align: center;
+    position: absolute;
+    display: table;
+    top: 75px;
+    left: 0;
+    background-color: #8dc63f;
+    color: white;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    text-shadow: 5px 5px 12px #000000;
+    opacity: 0;
+    -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+    filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+}
+
+.BankContainer label,
+.SubBank label {
+    display: inline;
+    font-weight: normal;
+    margin-left: 5px;
+}
+
+.SubBank{
+	width: 100%;
+    overflow: hidden;
+}
+
+.BankContainer a.selected-bank {
+    background-color: #e8fcc6;
+}
+
+.BankContainer span {
+    display: inline-block;
+    background: url(images/yodlee/banks_sprite.png) no-repeat 0 0;
+    height: 40px;
+    vertical-align: middle;
+}
+
+    .BankContainer span.HSBC.off {
+        background-position: -406px -1px;
+        width: 153px;
+    }
+
+    .BankContainer span.HSBC.on {
+        background-position: -406px -1px;
+        width: 153px;
+    }
+
+    .BankContainer span.Barclays.off {
+        background-position: -746px -1px;
+        width: 177px;
+    }
+
+    .BankContainer span.Barclays.on {
+        background-position: -746px -1px;
+        width: 177px;
+    }
+
+    .BankContainer span.Lloyds.off {
+        background-position: -193px -1px;
+        width: 190px;
+    }
+
+    .BankContainer span.Lloyds.on {
+        background-position: -205px -1px;
+        width: 190px;
+    }
+
+    .BankContainer span.RBS.off {
+        background-position: -653px -1px;
+        width: 93px;
+    }
+
+    .BankContainer span.RBS.on {
+        background-position: -653px -1px;
+        width: 93px;
+    }
+
+    .BankContainer span.Santander.off {
+        background-position: 0 -1px;
+        width: 190px;
+    }
+
+    .BankContainer span.Santander.on {
+        background-position: 0 -1px;
+        width: 190px;
+    }
+
+    .BankContainer span.NatWest.off {
+        background-position: -928px -1px;
+        width: 165px;
+    }
+
+    .BankContainer span.NatWest.on {
+        background-position: -928px -1px;
+        width: 165px;
+    }
+
+    .BankContainer span.DAG.off {
+        background: url(images/yodlee/dag_off.png) no-repeat 0 0;
+        width: 40px;
+    }
+
+    .BankContainer span.DAG.on {
+        background: url(images/yodlee/dag_on.png) no-repeat 0 0;
+        width: 40px;
+    }
+
+    .BankContainer span.Halifax.off {
+        background-position: -562px -1px;
+        width: 88px;
+    }
+
+    .BankContainer span.Halifax.on {
+        background-position: -562px -1px;
+        width: 88px;
+    }
+
+    .BankContainer span.Nationwide.off {
+        background-position: -1098px -1px;
+        width: 180px;
+    }
+
+    .BankContainer span.Nationwide.on {
+        background-position: -1098px -1px;
+        width: 180px;
+    }
+
+/**End MarketPlaces**/

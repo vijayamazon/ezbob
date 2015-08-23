@@ -9,7 +9,7 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 		'change .SubBank': 'subBankSelectionChanged',
 		'click #yodleeLinkAccountBtn': 'linkAccountClicked',
 		'click #OtherYodleeBanks': 'OtherYodleeBanksClicked',
-		'change #OtherYodleeBanks': 'OtherYodleeBanksClicked'
+		'change #OtherYodleeBanks': 'OtherYodleeBanksClicked',
 	},
 	
 	initialize: function (options) {
@@ -31,7 +31,8 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 			EzBob.App.trigger('error', msg);
 			return that.trigger('back');
 		};
-		return window.YodleeAccountRetry = function () {
+
+		window.YodleeAccountRetry = function () {
 			that.attemptsLeft = (that.attemptsLeft || 5) - 1;
 			return {
 				url: that.$el.find('#yodleeContinueBtn').attr('href'),
@@ -45,6 +46,7 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 		if (this.isProfile) {
 			this.$el.find('.marketplace-button').addClass('marketplace-button-profile');
 		}
+
 		return this;
 	},
 	
@@ -88,8 +90,11 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 		if (this.$el.find('#yodleeLinkAccountBtn').hasClass('disabled')) {
 			return false;
 		}
-		return this.$el.find('.yodlee_help').colorbox({
-			inline: true
+
+		return $.colorbox({
+			href:"#yodlee_help",
+			inline: true,
+			open: true,
 		});
 	},
 	

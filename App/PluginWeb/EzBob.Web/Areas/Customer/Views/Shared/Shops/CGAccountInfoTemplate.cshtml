@@ -54,28 +54,24 @@
                         } // switch
                     }
 
-                    <div class="form_buttons_container">
-                        <div class="attardi-button">
-							@EzForm.WizardButton(
-								new List<EzButtonModel>{
-									new EzButtonModel(
-										vi.Name.ToLower() + "_link_account_button", 
-										"Link Account", 
-										cls: "button btn-green disabled connect-account ev-btn-org", 
-										uiEventControlID: "link-account:cg_connect", 
-										buttonType: EzButtonType.link, 
-										href: "#"),
-									new EzButtonModel(
-										vi.Name.ToLower() + "_back_button", 
-										"Back", 
-										cls: "back button btn-grey ev-btn-org", 
-										uiEventControlID: "link-account:cg_back", 
-										buttonType: EzButtonType.link, 
-										href: "#")
-								}, 
-								origin: origin)
-                        </div>
-                    </div>
+					@EzForm.WizardButton(
+						new List<EzButtonModel>{
+							new EzButtonModel(
+								vi.Name.ToLower() + "_link_account_button", 
+								"Link Account", 
+								cls: "button btn-green disabled connect-account ev-btn-org", 
+								uiEventControlID: "link-account:cg_connect", 
+								buttonType: EzButtonType.link, 
+								href: "#"),
+							new EzButtonModel(
+								vi.Name.ToLower() + "_back_button", 
+								"Back", 
+								cls: "back button btn-grey ev-btn-org", 
+								uiEventControlID: "link-account:cg_back", 
+								buttonType: EzButtonType.link, 
+								href: "#")
+						}, 
+						origin: origin)
 
                     @{ WriteLiteral(string.Join("", vi.ClientSide.LinkForm.Notes)); }
                 </div>

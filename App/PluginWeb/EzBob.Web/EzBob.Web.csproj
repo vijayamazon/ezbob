@@ -493,6 +493,7 @@
     <Content Include="Content\css\hmrc-manual-ui.css" />
     <Content Include="Content\css\hmrc-upload-ui.css" />
     <Content Include="Content\css\images\300x250.jpg" />
+    <Content Include="Content\css\images\accounts\account-or.png" />
     <Content Include="Content\css\images\accounts\amazon.png" />
     <Content Include="Content\css\images\accounts\bank.png" />
     <Content Include="Content\css\images\accounts\bigcommerce.png" />

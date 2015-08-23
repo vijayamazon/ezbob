@@ -1,4 +1,6 @@
-﻿@using EZBob.DatabaseLib.Model.Database
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
 	var origin = ViewBag.CustomerOrigin.GetOrigin();
@@ -55,11 +57,18 @@
 			<p>Please follow the instructions and click continue below to link your <%- shopClass %> account.</p>
 
 			<div class="help_image help_<%- shopClass %> help_<%- origin %>"></div>
-			<br>
-			<div class="buttons_container">
-				<a href="#" target="_blank" class="help-window-continue-link button btn-green pull-right" ui-event-control-id="link-account:help_popup_continue_<%- shopClass %>">Continue</a>
-			</div>
-			<div class="clear"></div>
+			
+			@EzForm.WizardButton(
+				new List<EzButtonModel>{
+					new EzButtonModel(
+						"<%-shopClass%>ContinueBtn",
+						"Continue",
+						cls: "help-window-continue-link button btn-green ev-btn-org",
+						uiEventControlID: "link-account:help_popup_continue_<%-shopClass%>",
+						buttonType: EzButtonType.link,
+						href:"#",
+						target: "_blank")
+					}, origin: origin)
 			<hr>
 			<div class="help_security"></div>
 		</div>
