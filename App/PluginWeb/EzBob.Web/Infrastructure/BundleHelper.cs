@@ -14,9 +14,8 @@
 			.Add("~/Content/css/paypoint-template.css")				
 			.MvcRender("~/Content/css/min/paypoint_#.css");
 		} // RenderPaypointTemplateCss
-        
-        public static MvcHtmlString RenderEverlineCustomerCss()
-        {
+
+        public static MvcHtmlString RenderEverlineCustomerCss() {
             return Bundle.Css()
                 //libs
                 .Add("~/Content/css/lib/normalize.css")
@@ -38,8 +37,8 @@
                 .Add("~/Content/css/Everlinecustomer.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
                 .MvcRender("~/Content/css/min/customereverline_#.css");
-
         }// RenderEverlineCustomerCss
+
 		public static MvcHtmlString RenderEzbobCustomerCss() {
 			return Bundle.Css()
                 //libs
