@@ -1017,6 +1017,7 @@ table.dashboard_sources {
     height: 100%;
     display: block;
     border: 0;
+	background: #fff;
 }
 
 #colorbox, #cboxContent, #cboxLoadedContent {
@@ -1042,10 +1043,6 @@ table.dashboard_sources {
 #cboxContent {
     margin-top: 0;
     overflow: visible;
-}
-
-.cboxIframe {
-    background: #fff;
 }
 
 #cboxError {

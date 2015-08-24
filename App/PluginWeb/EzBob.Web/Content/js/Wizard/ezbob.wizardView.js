@@ -115,7 +115,8 @@ EzBob.WizardView = EzBob.View.extend({
     }, // initialize
 
     events: {
-        'click .broker-finish-wizard-later button': 'brokerFinishWizardLater',
+    	'click .broker-finish-wizard-later button': 'brokerFinishWizardLater',
+    	'click #privacy_policy': 'privacyPolicyClicked'
     }, // events
 
     brokerFinishWizardLater: function (event) {
@@ -123,7 +124,17 @@ EzBob.WizardView = EzBob.View.extend({
         location.assign(window.gRootPath + 'Broker/BrokerHome/FinishWizardLater');
     }, // brokerFinishWizardLater
 
-    
+    privacyPolicyClicked: function() {
+    	var privacyPolicyLink = this.$el.find('#privacy_policy').attr('data-href');
+    	$.colorbox({
+		    href: privacyPolicyLink,
+		    iframe: true,
+		    width: '600px',
+		    maxWidth: '100%',
+		    height: '600px',
+		    maxHeight: '100%',
+	    });
+    },
 
     jumpTo: function (sLastSavedStepName, fCallback) {
         if (!this.stepsOrderByName.hasOwnProperty(sLastSavedStepName))
