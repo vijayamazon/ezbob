@@ -424,15 +424,13 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var isProfile = this.isProfile();
 
 		$(this.storeList).find('.back-store').remove();
-		this.storeList.find('.marketplace-button.show-more').removeClass('hide').show();
-		
 		this.storeList.find('.importantnumber').text('£150,000');
 
 		if (isProfile) {
-			this.storeList.find('.marketplace-button.show-more').hide();
+			this.storeList.find('.btn-showmore').hide();
 			this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		} else if (this.isWhiteLabel()) {
-			this.storeList.find('.marketplace-button.show-more').hide();
+			this.storeList.find('.btn-showmore').hide();
 		} else {
 			this.storeList.find('.btn-showmore').show();
 		}
@@ -464,13 +462,11 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var oBtn = this.storeList.find('.btn-showmore');
 
 		oBtn.data('current', 'more');
-		oBtn.find('.caption').text('Show more account types');
-		oBtn.find('.rotate90').html('&laquo;');
-		oBtn.find('.onhover-cell').text('Show more data source connectors');
-
+		oBtn.text('See more');
+		
 		this.storeList.find('.AddMoreRuleBottom').addClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
-		this.storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css('display', 'none').data(this.tableToBlock(), '');
+		this.storeList.find('.marketplace-button').not('.marketplace-button-less').css('display', 'none').data(this.tableToBlock(), '');
 
 		this.storeList.find('.link-accounts-optional').hide();
 	}, // showLessAccounts
@@ -479,13 +475,11 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		var oBtn = this.storeList.find('.btn-showmore');
 
 		oBtn.data('current', 'less');
-		oBtn.find('.caption').text('Show less account types');
-		oBtn.find('.rotate90').html('&raquo;');
-		oBtn.find('.onhover-cell').text('Show less data source connectors');
+		oBtn.text('See less');
 
 		this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
-		this.storeList.find('.marketplace-button').not('.show-more').css('display', 'table').data(this.tableToBlock(), '');
+		this.storeList.find('.marketplace-button').css('display', 'table').data(this.tableToBlock(), '');
 
 		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
 
