@@ -34,8 +34,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Core">
-      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\Core.dll</HintPath>
+    <Reference Include="Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AutomationInfra\TestRail\Core\bin\Debug\Core.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -87,14 +88,17 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestRailData">
-      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\TestRailData.dll</HintPath>
+    <Reference Include="TestRailData, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AutomationInfra\TestRail\TestRail\bin\Debug\TestRailData.dll</HintPath>
     </Reference>
-    <Reference Include="TestRailEngine">
-      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\TestRailEngine.dll</HintPath>
+    <Reference Include="TestRailEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AutomationInfra\TestRail\TestRailEngine\bin\Debug\TestRailEngine.dll</HintPath>
     </Reference>
-    <Reference Include="TestRailModels">
-      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\TestRailModels.dll</HintPath>
+    <Reference Include="TestRailModels, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\AutomationInfra\TestRail\TestRailModels\bin\Debug\TestRailModels.dll</HintPath>
     </Reference>
     <Reference Include="TestStack.Seleno, Version=0.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
