@@ -67,7 +67,7 @@ body .agreement-text {
     padding-left: 10%;
 }
 
-.profile-widgets .cunt-button .btn-continue{ display: none !important;}
+.profile-widgets #finish-wizard { display: none !important; }
 
 .personal-company-info-container {
 	width: 100%;

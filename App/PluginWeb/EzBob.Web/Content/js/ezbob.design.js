@@ -1248,11 +1248,13 @@ EzBob.validateLimitedCompanyDetailForm = function(el) {
 			LimitedCompanyName: { required: true, minlength: 2, maxlength: 255 },
 			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
 			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
+			LimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
 		},
 		messages: {
 			LimitedCompanyNumber: { regex: "Please enter a valid company number" },
 			CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
 			TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+			LimitedBusinessPhone: { regex: "Please enter a valid UK number" },
 		},
 		errorPlacement: EzBob.Validation.errorPlacement,
 		unhighlight: EzBob.Validation.unhighlightFS,
@@ -1270,10 +1272,12 @@ EzBob.validateNonLimitedCompanyDetailForm = function(el) {
 			NonLimitedTimeInBusiness: { required: true },
 			CapitalExpenditure: { required: true, defaultInvalidPounds: true },
 			TotalMonthlySalary: { required: true, defaultInvalidPounds: true, regex: "^(?!£ 0.00$)", autonumericMin: 0, autonumericMax: 1000000000 },
+			NonLimitedBusinessPhone: { required: true, regex: "^0[0-9]{10}$" }
 		},
 		messages: {
 			CapitalExpenditure: { defaultInvalidPounds: "This field is required" },
 			TotalMonthlySalary: { defaultInvalidPounds: "This field is required", regex: "This field is required" },
+			NonLimitedBusinessPhone: { regex: "Please enter a valid UK number" },
 		},
 
 		errorPlacement: EzBob.Validation.errorPlacement,

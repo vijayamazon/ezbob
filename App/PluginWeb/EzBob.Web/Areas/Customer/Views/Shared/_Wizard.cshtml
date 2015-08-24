@@ -20,7 +20,7 @@
 		</section>
         
         <aside class="customer-sidebar wizard">
-            @{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData)); }
+            @*@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml", new ViewDataDictionary(ViewData)); }*@
         </aside>
         
     </div>
@@ -119,7 +119,7 @@
         <p>It's quick and easy to apply for a business loan. We just need a few details before we can make a loan decision.</p>
         <p>
             To start the process we need you to first register to create a Customer Account. If you would like to know more about how we collect and use your data, please see our
-            <a href="@privacyPolicyLink" target="_blank">Privacy Policy</a>
+            <a href="#" id="privacy_policy" data-href="@privacyPolicyLink">Privacy Policy</a>
         </p>
     </div>
     <%}%>

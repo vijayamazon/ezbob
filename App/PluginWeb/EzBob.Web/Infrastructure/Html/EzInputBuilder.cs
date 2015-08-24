@@ -22,7 +22,9 @@ namespace EzBob.Web.Infrastructure.Html
         public string LabelClass { get; set; }
         public int TabIndex { get; set; }
         public int MaxLength { get; set; }
-        public bool IsDisabled { get; set; }
+		public int? Min { get; set; }
+		public int? Max { get; set; }
+		public bool IsDisabled { get; set; }
         public bool IsRequired { get; set; }
         public bool StatusIcon { get; set; }
         public bool ToHide { get; set; }
@@ -45,11 +47,13 @@ namespace EzBob.Web.Infrastructure.Html
             bool tohide = false,
             int   tabIndex = 0,
             int    maxLength = 0,
+			int? min = null,
+			int? max = null,
             string uiEventControlID = "",
             string autoCorrect = "",
             string autoCapitalize = "",
             string formFieldID = "",
-             EzButtonModel button = null
+            EzButtonModel button = null
             
             ) {
             Id = id;
@@ -71,10 +75,10 @@ namespace EzBob.Web.Infrastructure.Html
             ToHide = tohide;
             Name = name;
             LabelClass = labelClass;
+	        Min = min;
+	        Max = max;
         }
 
-
-
-
+	    
     }
 }

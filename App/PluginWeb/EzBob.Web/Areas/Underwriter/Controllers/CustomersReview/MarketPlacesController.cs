@@ -424,8 +424,7 @@
 			string finalUrl = yodleeMain.GetEditAccountUrl(securityInfo.ItemId, callback, yodleeAccount.Username, Encrypted.Decrypt(yodleeAccount.Password));
 			return Redirect(finalUrl);
 		} // TryRecheckYodlee
-
-		// TryRecheckYodlee
+		
 		[HttpPost]
 		public ActionResult UploadFile() {
 			Response.AddHeader("x-frame-options", "SAMEORIGIN");
@@ -477,7 +476,7 @@
 						continue;
 					} // if
 
-					m_oServiceClient.Instance.CompanyFilesUpload(customerId, file.FileName, content, file.ContentType);
+					m_oServiceClient.Instance.CompanyFilesUpload(customerId, file.FileName, content, file.ContentType, true);
 				}
 			}
 

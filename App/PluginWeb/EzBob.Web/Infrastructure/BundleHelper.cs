@@ -14,14 +14,7 @@
 			.Add("~/Content/css/paypoint-template.css")				
 			.MvcRender("~/Content/css/min/paypoint_#.css");
 		} // RenderPaypointTemplateCss
-        public static MvcHtmlString RenderCustomerCss()
-        {
-           return Bundle.Css()
-				//libs
-			
-		
-                .MvcRender("~/Content/css/min/customer_#.css");
-        }//RenderCustomerCss
+        
         public static MvcHtmlString RenderEverlineCustomerCss()
         {
             return Bundle.Css()
@@ -34,7 +27,8 @@
                 .Add("~/Content/css/lib/notifications.css")
                 .Add("~/Content/css/lib/coin-slider-styles.css")
                 .Add("~/Content/css/lib/chosen.css")
-				
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
                
                 //common
                 .Add("~/Content/css/profile-ny2015scratch.css")
@@ -42,8 +36,9 @@
                 .Add("~/Content/css/easter2015scratch.css")
                 //custom css
                 .Add("~/Content/css/Everlinecustomer.css")
+				.Add("~/Content/css/hmrc-upload-ui.css")
                 .MvcRender("~/Content/css/min/customereverline_#.css");
-                
+
         }// RenderEverlineCustomerCss
 		public static MvcHtmlString RenderEzbobCustomerCss() {
 			return Bundle.Css()
@@ -56,6 +51,9 @@
                 .Add("~/Content/css/lib/notifications.css")
                 .Add("~/Content/css/lib/coin-slider-styles.css")
                 .Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
+
 				//custom css
 				.Add("~/Content/css/common.css")
 				.Add("~/Content/css/customer.css")
@@ -177,7 +175,7 @@
 				.MvcRender("~/Content/css/min/print_combined_#.css");
 		} // RenderPrintCss
 
-		public static MvcHtmlString RenderBrokerCss() {
+		public static MvcHtmlString RenderEzbobBrokerCss() {
 			return Bundle.Css()
 			// libs
 				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
@@ -206,7 +204,32 @@
 				.Add("~/Content/css/easter2015scratch.css")
 
 			.MvcRender("~/Content/css/min/broker_#.css");
-		} // RenderBrokerCss
+		} // RenderEzbobBrokerCss
+
+		public static MvcHtmlString RenderEverlineBrokerCss() {
+			return Bundle.Css()
+				// libs
+				.Add("~/Content/css/lib/normalize.css")
+				.Add("~/Content/css/lib/jquery-ui-1.8.16.custom.css")
+				.Add("~/Content/css/lib/jquery.ui.1.8.16.ie.css")
+				.Add("~/Content/css/lib/dropzone.css")
+				.Add("~/Content/css/lib/font-awesome.min.css")
+				.Add("~/Content/css/lib/chosen.css")
+				.Add("~/Content/css/lib/notifications.css")
+				.Add("~/Content/css/lib/pe-icon-7-stroke.css")
+				.Add("~/Content/css/lib/pe-icon-7-helper.css")
+
+				// custom css
+				.Add("~/Content/css/Everlinecustomer.css")
+				.Add("~/Content/css/everline.css")
+				.Add("~/Content/css/broker.css")
+				.Add("~/Content/css/edit-experian-director-data.css")
+				.Add("~/Content/css/profile-ny2015scratch.css")
+				.Add("~/Content/css/valentine2015scratch.css")
+				.Add("~/Content/css/easter2015scratch.css")
+
+			.MvcRender("~/Content/css/min/broker_#.css");
+		} // RenderEverlineBrokerCss
 
 		public static MvcHtmlString RenderCommonJs() {
 			return Bundle.JavaScript()
@@ -481,6 +504,7 @@
 				.Add("~/Content/js/lib/date.interval.js")
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.js")
+				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrcUpload.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.js")
 				.Add("~/Content/js/Wizard/ezbob.wizard.shops.js")
@@ -538,6 +562,7 @@
 				.Add("~/Content/js/EzBob.DataTables.Helper.js")
 				.Add("~/Content/js/ezbob.hmrc.upload.ui.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrc.js")
+				.Add("~/Content/js/Wizard/shops/ezbob.shops.hmrcUpload.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.paypoint.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.companyFiles.js")
 				.Add("~/Content/js/Wizard/shops/ezbob.shops.js")

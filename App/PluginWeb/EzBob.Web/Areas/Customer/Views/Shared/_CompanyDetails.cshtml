@@ -1,142 +1,150 @@
-﻿@using EZBob.DatabaseLib.Model.Database
+﻿@using System
+@using System.Collections.Generic
+@using EzBob.CommonLib
+@using EZBob.DatabaseLib.Model.Database
 @using EzBob.Web
+@using EzBob.Web.Infrastructure.Html
 @model dynamic
 
 @{
 	var origin = ViewBag.CustomerOrigin.GetOrigin();
+
+	List<EzSelectOptionGroup> typeOfBusinessOptions = new List<EzSelectOptionGroup> {
+		new EzSelectOptionGroup {
+			Options = new List<EzSelectOption> {
+				new EzSelectOption("Limited", "Limited company", ""),
+				new EzSelectOption("LLP", "Limited liability partnership", ""),
+				new EzSelectOption("PShip3P", "Partnership (less than three)", ""),
+				new EzSelectOption("PShip", "Partnership (more than three)", ""),
+				new EzSelectOption("SoleTrader", "Sole trader (Inc.)", "NonAlibabaTypeOfBusiness"),
+				new EzSelectOption("Entrepreneur", "Sole trader (not Inc.)", "NonAlibabaTypeOfBusiness")
+			}
+		}
+	};
+
+	var timeInBusiness = new List<Tuple<string, string>>  {
+		new Tuple<string, string>("1", "1 year"),
+		new Tuple<string, string>("2", "2 years"),
+		new Tuple<string, string>("3", "3 years"),
+		new Tuple<string, string>("4", "4 years"),
+		new Tuple<string, string>("5", "5 years"),
+		new Tuple<string, string>("6", "6 years"),
+		new Tuple<string, string>("7", "7 years"),
+		new Tuple<string, string>("8", "8 years"),
+		new Tuple<string, string>("9", "9 years"),
+		new Tuple<string, string>("101", "10 years or more")
+		
+	};
 }
 
 <script id="company-data-template" type="text/template">
     <div class="row-fluid">
-        <h2 class="form_start">Company details</h2>
-
+		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");}
+        <h2 class="form_start">Business details</h2>
+		
         @using (Html.BeginForm("SaveCompany", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "CompanyDetailForm" })) {
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <span class="type-of-business-caption">Type of business</span>
-                    <select class="type-of-business-form_field" id="TypeOfBusiness" name="TypeOfBusiness" size="6" ui-event-control-id="personal-info:type_of_business" autofocus="autofocus">
-                        <option value="Limited">Limited company</option>
-                        <option value="LLP">Limited liability partnership</option>
-                        <option value="PShip3P">Partnership (less than three)</option>
-                        <option value="PShip">Partnership (more than three)</option>
-                        <option class="NonAlibabaTypeOfBusiness" value="SoleTrader">Sole trader (Inc.)</option>
-                        <option class="NonAlibabaTypeOfBusiness" value="Entrepreneur">Sole trader (not Inc.)</option>
-                    </select>
-                    <img id="TypeOfBusinessImage" class="field_status required" />
-                </div>
-            </div>
 
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <div class="oobts oobts-common oobts-offline oobts-selected" data-oobts="offline" ui-event-control-id="personal-info:i_am_offline"><i class="fa fa-check-square-o"></i>&nbsp;&nbsp;I am a small business</div>
-                    <div class="oobts oobts-common oobts-online" data-oobts="online" ui-event-control-id="personal-info:i_am_online"><i class="fa fa-square-o"></i>&nbsp;&nbsp;I am an online business</div>
-                </div>
-            </div>
+			<div class="after-business-name">
+				@EzForm.SelectWizard(new EzSelectModel("TypeOfBusiness", "Type of business",
+					typeOfBusinessOptions,
+					cls: "type-of-business-form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "personal-info:type_of_business",
+					autoFocus: true,
+					size: 6,
+					hasEmpty: false),
+					origin: origin)
 
-            <div class="after-business-type">
-                <div class="control-group form_field_container industry-type-div">
-                    <div class="controls">
-                        <label class="control-label attardi-input">
-                            <span>Industry type</span>
-                            <select id="IndustryType" name="IndustryType" class="select form_field" ui-event-control-id="personal-info:industry_type">
-                                <option selected="selected" value=""></option>
-                                <option value="0">Accommodation / food</option>
-                                <option value="1">Automotive</option>
-                                <option value="2">Business services</option>
-                                <option value="3">Construction</option>
-                                <option value="4">Construction services</option>
-                                <option value="5">Consumer services</option>
-                                <option value="6">Education</option>
-                                <option value="7">Food</option>
-                                <option value="8">Health & Beauty</option>
-                                <option value="9">Healthcare</option>
-                                <option value="10">Manufacturing</option>
-                                <option value="11">Online</option>
-                                <option value="12">Retail</option>
-                                <option value="13">Transportation</option>
-                                <option value="14">Wholesale</option>
-                                <option value="15">Other</option>
-                            </select>
-                            <img id="IndustryTypeImage" class="field_status required" />
-                        </label>
-                    </div>
-                </div>
-                <div class="after-financial-details">
-                    <div class="control-group form_field_container OverallTurnOver hide">
-                        <div class="controls cashControlls">
-                            <label class="attardi-input">
-                                <span>Total annual revenue</span>
-                                <input id="OverallTurnOver" name="OverallTurnOver" type="tel" class="cashInput form_field" ui-event-control-id="personal-info:overall_turnover" />
-                                <img id="OverallTurnOverImage" class="field_status required" />
-                            </label>
-                        </div>
-                    </div>
-                </div>
-                <div class="row-fluid company-full-details"></div>
+				@EzForm.SelectWizard(new EzSelectModel("IndustryType", "Industry type",
+					IndustryType.Other.ToTupleInt<IndustryType>(),
+					cls: "form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "personal-info:industry_type"),
+					origin: origin)
+			</div>
+			
+            <div class="after-financial-details">
+				@EzForm.InputTextWizard(new EzInputBuilder("OverallTurnOver", "Total annual revenue (sales)",
+					type: "tel",
+					cls: "cashInput form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "personal-info:overall_turnover"),
+					origin: origin)
             </div>
-        }
+            <div class="row-fluid company-full-details"></div>
+            
+		}
     </div>
-
-    <div class="form_buttons_container">
-        <div class="attardi-button">
-            <a href='#' class="btn-continue next button btn-green disabled" ui-event-control-id="personal-info:company_continue">Continue</a>
-        </div>
-    </div>
+	
+	@EzForm.WizardButton(new EzButtonModel("companyContinueBtn", "Continue",
+				cls: "btn-continue next button btn-green disabled ev-btn-org",
+				uiEventControlID: "personal-info:company_continue",
+				buttonType: EzButtonType.link,
+				href: "#"),
+				origin)
 </script>
 
 <script id="director-edit-template" type="text/template">
     <div>
-        <h2 class="form_section">Additional directors (optional)</h2>
-
+		<hr class="wizard-hr" />
+        <h2 class="form_section">Additional directors <span class="sub-h2">(optional)</span></h2>
         <div class="directorArea"></div>
-
-        <div class="add-director-container">
-            <div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
-            <input id="addDirector" class="button btn-green" type="button" value="Add" ui-event-control-id="personal-info:add_director" />
-        </div>
+		<hr class="wizard-hr" />
+		<div class="add-director-container form_field_container">
+			<div class="wizard-director-text">Adding the details of additional directors may improve the offer you receive.</div>
+			<div class="input-wrapper">
+				@EzForm.ButtonTag(new List<EzButtonModel>{
+					new EzButtonModel {
+						Id = "addDirector",
+						ButtonType = EzButtonType.input,
+						Caption = "Add director",
+						Cls = "button btn-green clean-btn",
+						UiEventControlID = "personal-info:add_director"
+					}
+				})
+			</div>
+		</div>
     </div>
 </script>
 
 <script id="employee-count-template" type="text/template">
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Current # of employees</span>
-                <input id="EmployeeCount" name="EmployeeCount" type="tel" class="form_field numeric" min="1" max="1000" ui-event-control-id="personal-info:employee_count" />
-                <img id="EmployeeCountImage" class="field_status required" />
-            </label>
-        </div>
-    </div>
-
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Total monthly salary expenditure (inc tax & national insurance)</span>
-                <input id="TotalMonthlySalary" name="TotalMonthlySalary" type="tel" class="form_field cashInput" ui-event-control-id="personal-info:total_monthly_salary" />
-                <img id="TotalMonthlySalaryImage" class="field_status required" />
-            </label>
-        </div>
-    </div>
+	
+	@EzForm.InputTextWizard(new EzInputBuilder("EmployeeCount", "Current # of employees",
+						type: "tel",
+						cls: "form_field numeric",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:employee_count", 
+						min : 1,
+						max: 1000),
+						origin: origin)
+	
+	@EzForm.InputTextWizard(new EzInputBuilder("TotalMonthlySalary", "Total monthly salary expenditure (inc tax & national insurance)",
+						type: "tel",
+						cls: "form_field cashInput",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:total_monthly_salary"),
+						origin: origin)
     
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Who files with the HMRC for your company?</span>
-                <select id="VatReporting" name="VatReporting" class="select form_field" ui-event-control-id="personal-info:vat-reporting">
-                    <option selected="selected" value=""></option>
-                    @Html.EnumToOptions(
+	
+	@EzForm.SelectWizard(new EzSelectModel("VatReporting", "Who files with the HMRC for your company?",
+					@Html.EnumToOptionsTuple(
 						VatReporting.VatOnlineMySelf,
 						VatReporting.AccountantOnline,
 						VatReporting.CompanyEmployee,
 						VatReporting.NotVatRegistered,
 						VatReporting.Other
-					)
-                </select>
-                <img id="VATReportingImage" class="field_status required" />
-            </label>
-        </div>
-    </div>
-
+					),
+					cls: "form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "personal-info:vat-reporting"),
+					origin: origin)
+	
     <div class="control-group form_read_and_accept">
         <div class="controls">
             <input id="DirectorCheck" name="DirectorCheck" type="checkbox" value="false" ui-event-control-id="personal-info:director_check" />
@@ -146,41 +154,33 @@
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Company name</span>
-                <input id="NonLimitedCompanyName" name="NonLimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:nonlimited_company_name" />
-                <img id="NonLimitedCompanyNameImage" class="field_status required" />
-            </label>
-        </div>
-    </div>
+	@EzForm.InputTextWizard(new EzInputBuilder("NonLimitedCompanyName", "Company name",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:nonlimited_company_name"),
+						origin: origin)
 
     @EzForm.AddressInput(this, "NonLimitedCompanyAddress", "Address", "nonlimited")
-    
-    <h2 class="financial-details">Financial details</h2>
 
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Time in business</span>
-                <select id="NonLimitedTimeInBusiness" name="NonLimitedTimeInBusiness" class="select form_field" ui-event-control-id="personal-info:nonlimited_time_in_business">
-                    <option selected="selected" value=""></option>
-                    <option value="1">1 year</option>
-                    <option value="2">2 years</option>
-                    <option value="3">3 years</option>
-                    <option value="4">4 years</option>
-                    <option value="5">5 years</option>
-                    <option value="6">6 years</option>
-                    <option value="7">7 years</option>
-                    <option value="8">8 years</option>
-                    <option value="9">9 years</option>
-                    <option value="101">More than 10 years</option>
-                </select>
-                <img id="NonLimitedTimeInBusinessImage" class="field_status required" />
-            </label>
-        </div>
-    </div>
+    <hr class="wizard-hr" />
+    <h2 class="financial-details">Financial details</h2>
+	
+	@EzForm.SelectWizard(new EzSelectModel("NonLimitedTimeInBusiness", "Time in business",
+					timeInBusiness,
+					cls: "form_field",
+					isRequired: true,
+					statusIcon: true,
+					uiEventControlID: "personal-info:nonlimited_time_in_business"),
+					origin: origin)
+	
+	@EzForm.InputTextWizard(new EzInputBuilder("NonLimitedBusinessPhone", "Main business phone number",
+						type: "tel",
+						cls: "form_field phonenumber",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:nonlimited_phone"),
+						origin: origin)
 
     <div class="employee-count"></div>
 
@@ -188,28 +188,32 @@
 </script>
 
 <script id="limitedinfo-template" type="text/template">
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Company registration number</span>
-                <input id="LimitedCompanyNumber" name="LimitedCompanyNumber" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_number" />
-                <img id="LimitedCompanyNumberImage" class="field_status required" />
-            </label>
-        </div>
-    </div>
+	
+	@EzForm.InputTextWizard(new EzInputBuilder("LimitedCompanyNumber", "Company registration number",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:limited_company_number"),
+						origin: origin)
 
-    <div class="control-group form_field_container">
-        <div class="controls">
-            <label class="control-label attardi-input">
-                <span>Company name</span>
-                <input id="LimitedCompanyName" name="LimitedCompanyName" type="text" class="form_field" ui-event-control-id="personal-info:limited_company_name" />
-                <img id="LimitedCompanyNameImage" class="field_status required" />
-            </label>
-        </div>
-    </div>
+	@EzForm.InputTextWizard(new EzInputBuilder("LimitedCompanyName", "Company name",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:limited_company_name"),
+						origin: origin)
+	
+	@EzForm.InputTextWizard(new EzInputBuilder("LimitedBusinessPhone", "Main business phone number",
+						type: "tel",
+						cls: "form_field phonenumber",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:limited_phone"),
+						origin: origin)
 
     @EzForm.AddressInput(this, "LimitedCompanyAddress", "Address", "limited")
     
+	<hr class="wizard-hr" />
     <h2 class="financial-details">Financial details</h2>
 
     <div class="employee-count"></div>
@@ -223,38 +227,35 @@
 
 <script id="oneDirector" type="text/template">
     <%_.each(directors, function(director, i){%>
+		<hr class="wizard-hr" />
         <div class="Directors">
             <div class="add-director-container">
-                <h1 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director #<%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button btn-green" ui-event-control-id="personal-info:remove_director">Remove</a></h1>
+                <h2 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director <%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button btn-green" ui-event-control-id="personal-info:remove_director">Remove</a></h2>
             </div>
             
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>First Name</span>
-                        <input class="form_field director_name_part" id="<%-preffix%>[<%=i%>].Name" name="<%-preffix%>[<%=i%>].Name" type="text" value="<%- director.Name %>" ui-event-control-id="personal-info:director_first_name" />
-                        <img id="<%-preffix%>[<%=i%>].NameImage" class="field_status required" />
-                    </label>
-                </div>
-            </div>
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>Middle initial</span>
-                        <input class="form_field director_name_part nonrequired alphaOnly" id="<%-preffix%>[<%=i%>].Middle" name="<%-preffix%>[<%=i%>].Middle" type="text" value="<%- director.Middle %>" ui-event-control-id="personal-info:director_middle_name" />
-                        <img id="<%-preffix%>[<%=i%>].MiddleImage" class="field_status" />
-                    </label>
-                </div>
-            </div>
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>Surname</span>
-                        <input class="form_field director_surname_part" id="<%-preffix%>[<%=i%>].Surname" name="<%-preffix%>[<%=i%>].Surname" type="text" value="<%- director.Surname %>" ui-event-control-id="personal-info:director_last_name" />
-                        <img id="<%-preffix%>[<%=i%>].SurnameImage" class="field_status required" />
-                    </label>
-                </div>
-            </div>
+			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Name", "First Name",
+						value: "<%- director.Name %>",
+						cls: "form_field director_name_part",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:director_first_name"),
+						origin: origin)
+			
+			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Middle", "Middle initial",
+						value: "<%- director.Middle %>",
+						cls: "form_field director_name_part nonrequired alphaOnly",
+						isRequired: false,
+						statusIcon: true,
+						uiEventControlID: "personal-info:director_middle_name"),
+						origin: origin)
+			
+			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Surname", "Surname",
+						value: "<%- director.Surname %>",
+						cls: "form_field director_surname_part",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:director_last_name"),
+						origin: origin)
 
             <div class="control-group form_field_container FormRadioCtrl">
                 <span>
@@ -265,27 +266,25 @@
             </div>
 
             @EzForm.DateInput(this, "<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
-
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>Email</span>
-                        <input class="form_field director_email" id="<%-preffix%>[<%=i%>].Email" name="<%-preffix%>[<%=i%>].Email" type="email" value="<%- director.Email %>" ui-event-control-id="personal-info:director_email" />
-                        <img id="<%-preffix%>[<%=i%>].EmailImage" class="field_status required" />
-                    </label>
-                </div>
-            </div>
-
-            <div class="control-group form_field_container">
-                <div class="controls">
-                    <label class="control-label attardi-input">
-                        <span>Best contact number</span>
-                        <input class="form_field director_phone phonenumber" id="<%-preffix%>[<%=i%>].Phone" name="<%-preffix%>[<%=i%>].Phone" type="tel" value="<%- director.Phone %>" ui-event-control-id="personal-info:director_phone" />
-                        <img id="<%-preffix%>[<%=i%>].PhoneImage" class="field_status required" />
-                    </label>
-                </div>
-            </div>
-
+			
+			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Email", "Email",
+						value: "<%- director.Email %>",
+						type: "email",
+						cls: "form_field director_email",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:director_email"),
+						origin: origin)
+			
+			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Phone", "Mobile number",
+						value: "<%- director.Phone %>",
+						type: "tel",
+						cls: "form_field director_phone phonenumber",
+						isRequired: true,
+						statusIcon: true,
+						uiEventControlID: "personal-info:director_phone"),
+						origin: origin)
+			
             <div class="director_address">
                 @EzForm.AddressInput(this, "<%-preffix%>Address<%=i%>", "Address", "director")
             </div>

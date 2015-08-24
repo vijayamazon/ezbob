@@ -1,0 +1,39 @@
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+<script id="YodleeUploadAccountInfoTemplate" type="text/template">
+	<div class="row-fluid">
+		<div class="wizard-top-notification">
+			<h2 class="form_start">Upload company files</h2>
+			Please upload the company documents like annual financial accounts, bank statements in CSV format or VAT returns.
+		</div>
+        <div class="control-group form_field_container">
+		    <form id="companyFilesUploadZone" class="dropzone" action="@Url.Action("BankUploadedFiles", "CompanyFilesMarketPlaces", new { Area = "Customer" })" ui-event-control-id="yodleeUpload:dropzone">
+			    <div class="dz-message dz-with-text">Drag or Click to upload the Company’s documents.</div>
+		    </form>
+        </div>
+		
+		@EzForm.WizardButton(
+			new List<EzButtonModel>{
+				new EzButtonModel(
+					"yodlee_upload_files_account_button",
+					"Upload files",
+					cls: "button btn-green disabled connect-account ev-btn-org",
+					uiEventControlID: "link-account:bank_statements",
+					buttonType: EzButtonType.link,
+					href: "#"),
+				new EzButtonModel(
+					"yodlee_upload_back_button",
+					"Back",
+					cls: "back button btn-grey ev-btn-org",
+					uiEventControlID: "link-account:bank_statements_back",
+					buttonType: EzButtonType.link,
+					href: "#")
+			},
+			origin: origin)
+		
+	</div>
+</script>

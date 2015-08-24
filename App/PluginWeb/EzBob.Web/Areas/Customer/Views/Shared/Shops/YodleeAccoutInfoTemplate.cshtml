@@ -1,4 +1,10 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
 <script id="YodleeAccoutInfoTemplate" type="text/template">
     <div class="row-fluid">
         <div class="wizard-top-notification">
@@ -45,12 +51,23 @@
             </div>
 
             <%}/*if*/%>
-            <div class="form_buttons_container">
-                <div class="attardi-button">
-                    <a href="#yodlee_help" class="button btn-green disabled yodlee_help" id="yodleeLinkAccountBtn" ui-event-control-id="link-account:yodlee_connect">Link account</a>
-                    <a href="#" class="back button btn-grey" ui-event-control-id="link-account:yodlee_back">Back</a>
-                </div>
-            </div>
+			
+			@EzForm.WizardButton(
+			new List<EzButtonModel>{
+				new EzButtonModel(
+					"yodleeLinkAccountBtn",
+					"Link account",
+					cls: "button btn-green disabled yodlee_help ev-btn-org",
+					uiEventControlID: "link-account:yodlee_connect",
+					buttonType: EzButtonType.button),
+				new EzButtonModel(
+					"yodlee_back_button",
+					"Back",
+					cls: "back button btn-grey ev-btn-org",
+					uiEventControlID: "link-account:yodlee_back",
+					buttonType: EzButtonType.link,
+					href:"#")
+			}, origin: origin)
 
             <div class="hide">
                 <div id="yodlee_help" class="help_window">
@@ -60,12 +77,19 @@
                         <br />
                         You will be redirected, this will take around 30 seconds.
                     </p>
-                    @*<div class="help_image help_<%- shopClass %>"></div>*@
-                    <br>
-                    <div class="alignright attardi-button" style="padding: 0 10px 0 0;">
-                        <a href="#" target="_blank" class="button btn-green pull-right" id="yodleeContinueBtn" onclick="$.colorbox.close();" ui-event-control-id="link-account:yodlee_continue_to_link">Continue</a>
-                    </div>
-                    <div class="clear"></div>
+					@EzForm.WizardButton(
+						new List<EzButtonModel>{
+							new EzButtonModel(
+								"yodleeContinueBtn",
+								"Continue",
+								cls: "button btn-green ev-btn-org",
+								uiEventControlID: "link-account:yodlee_continue_to_link",
+								buttonType: EzButtonType.link,
+								href:"#yodlee_help",
+								target: "_blank",
+								onClick:"$.colorbox.close();")
+							}, origin: origin)
+                    
                     <hr>
                     <div class="help_security"></div>
                 </div>

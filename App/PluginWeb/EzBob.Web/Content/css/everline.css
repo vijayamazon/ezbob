@@ -1,4 +1,11 @@
-﻿body {
+﻿@font-face {
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Open Sans'), local('OpenSans'), url(fonts/opensans.woff) format('woff');
+}
+
+body {
 	font-family: 'Open Sans',sans-serif;
 	font-size: 62.5%;
 }
@@ -9,7 +16,7 @@
 }
 
 .main-page-everline {
-	font-size: 16px;
+	font-size: 15px;
 	padding-bottom: 100px;
 }
 
@@ -24,7 +31,7 @@ nav {
 }
 
 .consent-dialog {
-    font-size: 11pt;
+    font-size: 11px;
     color: black;
 	overflow-y: auto;
 	max-height: 400px;

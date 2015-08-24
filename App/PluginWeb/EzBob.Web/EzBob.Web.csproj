@@ -494,6 +494,7 @@
     <Content Include="Content\css\hmrc-manual-ui.css" />
     <Content Include="Content\css\hmrc-upload-ui.css" />
     <Content Include="Content\css\images\300x250.jpg" />
+    <Content Include="Content\css\images\accounts\account-or.png" />
     <Content Include="Content\css\images\accounts\amazon.png" />
     <Content Include="Content\css\images\accounts\bank.png" />
     <Content Include="Content\css\images\accounts\bigcommerce.png" />
@@ -645,6 +646,8 @@
     <Content Include="Content\css\lib\flaty.css" />
     <Content Include="Content\css\lib\font-awesome.min.css" />
     <Content Include="Content\css\lib\fonts\fontawesome-webfont.svg" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.svg" />
+    <Content Include="Content\css\lib\pe-icon-7-helper.css" />
     <Content Include="Content\css\lib\images\chosen-sprite.png" />
     <Content Include="Content\css\lib\images\dataTables\back_disabled.png" />
     <Content Include="Content\css\lib\images\dataTables\back_enabled.png" />
@@ -685,6 +688,7 @@
     <Content Include="Content\css\lib\jquery.ui.1.8.16.ie.css" />
     <Content Include="Content\css\lib\normalize.css" />
     <Content Include="Content\css\lib\notifications.css" />
+    <Content Include="Content\css\lib\pe-icon-7-stroke.css" />
     <Content Include="Content\css\mobile.css" />
     <Content Include="Content\css\paypoint-template.css" />
     <Content Include="Content\css\Permission.css" />
@@ -702,6 +706,7 @@
     <Content Include="Content\everline\favicons\60x60.png" />
     <Content Include="Content\everline\favicons\76x76.png" />
     <Content Include="Content\everline\favicons\faviconeverline.ico" />
+    <Content Include="Content\everline\help-button.png" />
     <Content Include="Content\everline\help\help_ebay_everline.jpg" />
     <Content Include="Content\everline\help\help_freeagent_everline.jpg" />
     <Content Include="Content\everline\help\help_paypal_everline.jpg" />
@@ -892,6 +897,7 @@
     <Content Include="Content\js\Underwriter\profile\summary\ezbob.underwriter.summaryInfo.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
+    <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrcUpload.js" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\MarkAsPending.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditActAgreement.cshtml" />
@@ -938,6 +944,14 @@
     <Content Include="Areas\Underwriter\Views\SalesForce\SalesForce.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_PersonalInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_SecurityIcons.cshtml" />
+    <Content Include="Areas\Broker\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Broker\Views\Shared\_LayoutBroker.cshtml" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.eot" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.ttf" />
+    <Content Include="Content\css\lib\fonts\Pe-icon-7-stroke.woff" />
+    <Content Include="Areas\Customer\Views\Shared\QuickOffer.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\HMRCUploadAccountInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\Shops\YodleeUploadAccountInfoTemplate.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />
@@ -1440,7 +1454,6 @@
     <Content Include="Content\js\Wizard\yourInfo\ezbob.yourIno.consent.agreement.js" />
     <Content Include="Areas\Customer\Views\Shared\Shops\PayPointAccoutInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\EstimatesContainer.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_Bottom.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_StepsDashboard.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\ApplyForLoanTopTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\CGAccountInfoTemplate.cshtml" />
@@ -1483,7 +1496,6 @@
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RecheckYodleeCallback.cshtml" />
     <Content Include="Areas\Customer\Views\PacnetStatus\TradeTrackerConversion.cshtml" />
     <Content Include="Areas\Customer\Views\Profile\InviteFriendTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\EU.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\Zoopla.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />
@@ -1878,7 +1890,6 @@
     <Content Include="Areas\Customer\Views\Wizard\Index.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_SignUpTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\_CompanyDetails.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\SideBars\_SecurityStatement.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_ProfileTemplateMain.cshtml" />
     <Content Include="Areas\Customer\Views\PaymentAccounts\Error.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\BankAccountInstructions.cshtml" />
@@ -1980,7 +1991,6 @@
     <Content Include="Views\Home\ActivateStore.cshtml" />
     <Content Include="Views\Account\SimpleCaptcha.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
-    <Content Include="Views\Shared\_Truste.cshtml" />
     <Content Include="Views\Shared\_FavIcon.cshtml" />
     <None Include="Properties\PublishProfiles\EzBob.Release.pubxml" />
     <None Include="Properties\PublishProfiles\EzBob.Test.pubxml" />
@@ -1989,9 +1999,7 @@
     <Content Include="Views\Shared\_FrameKiller.cshtml" />
     <Content Include="Views\Account\Recaptcha.cshtml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Areas\Broker\Views\Shared\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

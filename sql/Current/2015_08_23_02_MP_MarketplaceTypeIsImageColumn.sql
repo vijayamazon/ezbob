@@ -1,0 +1,14 @@
+IF NOT EXISTS (SELECT * FROM syscolumns WHERE id=object_id('MP_MarketplaceType') AND name = 'IsImage')
+BEGIN
+	ALTER TABLE MP_MarketplaceType ADD IsImage BIT
+END
+GO
+
+UPDATE dbo.MP_MarketplaceType
+SET IsImage = 1
+GO
+
+UPDATE dbo.MP_MarketplaceType
+SET IsImage = 0
+WHERE InternalId IN ('107DE9EB-3E57-4C5B-A0B5-FFF445C4F2DF','AE85D6FC-DBDB-4E01-839A-D5BD055CBAEA','1C077670-6D6C-4CE9-BEBC-C1F9A9723908')
+GO

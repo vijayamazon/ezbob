@@ -2,13 +2,16 @@ var EzBob = EzBob || {};
 
 EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 	template: '#store-button-template',
-
+	className: 'marketplace-button-wrapper',
 	initialize: function(options) {
 		this.name = options.name;
 		this.description = options.description;
 		this.mpAccounts = options.mpAccounts.get('customer').get('mpAccounts');
 		this.shops = this.mpAccounts ? _.where(this.mpAccounts, { MpName: this.name }) : [];
 		this.shopClass = options.name.replace(' ', '');
+		this.isUpload = options.isUpload || false;
+		this.isImage = options.isImage;
+		this.hasOr = options.hasOr;
 		this.origin = options.mpAccounts.get('customer').get('Origin');
 	}, // initialize
 
@@ -17,26 +20,32 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 			name: this.name,
 			shopClass: this.shopClass,
 			shopDescription: this.description,
-			origin: this.origin
+			isUpload: this.isUpload,
+			origin: this.origin,
+			isImage: this.isImage
 		};
 	}, // serializeData
 
 	onRender: function() {
 		var btn = this.$el.find('.marketplace-button-account-' + this.shopClass);
 
-		this.$el.removeClass('marketplace-button-full marketplace-button-empty');
+		this.$el.find('.marketplace-button').removeClass('marketplace-button-full marketplace-button-empty');
 
 		var sTitle = (this.shops.length ? 'Some' : 'No') + ' accounts linked. Click to link ';
 
+		if (this.hasOr) {
+			this.$el.find('.account-or').show();
+		}
+
 		if (this.shops.length) {
-			this.$el.addClass('marketplace-button-full');
+			this.$el.find('.marketplace-button').addClass('marketplace-button-full');
 			sTitle += 'more.';
 		} else {
-			this.$el.addClass('marketplace-button-empty');
+			this.$el.find('.marketplace-button').addClass('marketplace-button-empty');
 			sTitle += 'one.';
 		} // if
 
-		this.$el.attr('title', sTitle);
+		this.$el.find('.marketplace-button').attr('title', sTitle);
 
 		switch (this.shopClass) {
 		case 'eBay':
@@ -102,7 +111,7 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 
 				$('.onhover', this).animate({ top: sTop, opacity: 1 });
 			},
-			function() { $('.onhover', this).animate({ top: '60px', opacity: 0 }); }
+			function() { $('.onhover', this).animate({ top: '75px', opacity: 0 }); }
 		);
 	}, // onRender
 

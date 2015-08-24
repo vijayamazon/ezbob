@@ -68,19 +68,24 @@
 <div style="display: none;" class="hide" id="wizard-step-sequence">@oDBHelper.WizardStepSequence</div>
 
 @section Js{
-    @{Html.RenderPartial("_Wizard", new ViewDataDictionary(ViewData));}
-    @{Html.RenderPartial("_SignUpTemplate");}
-	@{Html.RenderPartial("_PersonalInfoTemplate");}
-    @{Html.RenderPartial("_CompanyDetails");}
-    @{Html.RenderPartial("StoreInfoMain");}
-    @{Html.RenderPartial("StoreButton");}
-    @{Html.RenderPartial("AmazonStoreInfo");}
-    @{Html.RenderPartial("Shops/EKMAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");}
-    @{Html.RenderPartial("Shops/CGAccountInfoTemplate");}
-    @{Html.RenderPartial("Shops/HMRCAccountInfoTemplate");}
-    @{Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");}
+    @{
+		Html.RenderPartial("_Wizard", new ViewDataDictionary(ViewData));
+		Html.RenderPartial("_SignUpTemplate");
+		Html.RenderPartial("_PersonalInfoTemplate");
+		Html.RenderPartial("_CompanyDetails");
+		Html.RenderPartial("StoreInfoMain");
+		Html.RenderPartial("StoreButton");
+		Html.RenderPartial("AmazonStoreInfo");
+		Html.RenderPartial("Shops/EKMAccoutInfoTemplate");
+		Html.RenderPartial("Shops/PayPointAccoutInfoTemplate");
+		Html.RenderPartial("Shops/YodleeAccoutInfoTemplate");
+		Html.RenderPartial("Shops/CGAccountInfoTemplate");
+		Html.RenderPartial("Shops/HMRCAccountInfoTemplate");
+		Html.RenderPartial("Shops/HMRCUploadAccountInfoTemplate");
+		Html.RenderPartial("Shops/CompanyFilesAccountInfoTemplate");
+		Html.RenderPartial("Shops/YodleeUploadAccountInfoTemplate");
+	}
+
     @BundleHelper.RenderWizardJs()
     <script type="text/javascript">
         EzBob.Config.SessionTimeout = @CurrentValues.Instance.SessionTimeout.Value;

@@ -18,35 +18,41 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using Infrastructure;
 	using Code.MpUniq;
+	using CompanyFiles;
 	using log4net;
-	using NHibernate;
 	using ActionResult = System.Web.Mvc.ActionResult;
 
 	public class YodleeMarketPlacesController : Controller
 	{
 		private static readonly ILog Log = LogManager.GetLogger(typeof(YodleeMarketPlacesController));
-		private readonly IEzbobWorkplaceContext _context;
-		private readonly MarketPlaceRepository _mpTypes;
-		private readonly Customer _customer;
-		private readonly YodleeMpUniqChecker _mpChecker;
-		private readonly ServiceClient m_oServiceClient;
-	    private readonly ISession _session;
-		private readonly DatabaseDataHelper _helper;
+		private readonly IEzbobWorkplaceContext context;
+		private readonly MarketPlaceRepository mpTypes;
+		private readonly Customer customer;
+		private readonly YodleeMpUniqChecker mpChecker;
+		private readonly ServiceClient serviceClient;
+	    private readonly DatabaseDataHelper dbHelper;
+		private readonly YodleeBanksRepository yodleeBanksRepository;
+		private readonly YodleeAccountsRepository yodleeAccountsRepository;
+		private readonly CompanyFilesMetaDataRepository companyFilesMetaDataRepository;
 
 		public YodleeMarketPlacesController(
 			IEzbobWorkplaceContext context,
-			DatabaseDataHelper helper,
+			DatabaseDataHelper dbHelper,
 			MarketPlaceRepository mpTypes,
 			YodleeMpUniqChecker mpChecker,
-			ISession session)
+			YodleeBanksRepository yodleeBanksRepository,
+			YodleeAccountsRepository yodleeAccountsRepository, 
+			CompanyFilesMetaDataRepository companyFilesMetaDataRepository)
 		{
-			_context = context;
-			_helper = helper;
-			_mpTypes = mpTypes;
-			_customer = context.Customer;
-			_mpChecker = mpChecker;
-			m_oServiceClient = new ServiceClient();
-			_session = session;
+			this.context = context;
+			this.dbHelper = dbHelper;
+			this.mpTypes = mpTypes;
+			this.customer = context.Customer;
+			this.mpChecker = mpChecker;
+			this.serviceClient = new ServiceClient();
+			this.yodleeBanksRepository = yodleeBanksRepository;
+			this.yodleeAccountsRepository = yodleeAccountsRepository;
+			this.companyFilesMetaDataRepository = companyFilesMetaDataRepository;
 		}
 
 		[Ajax]
@@ -57,10 +63,33 @@
 			var oEsi = new YodleeServiceInfo();
 			var yodlees = new List<YodleeAccountModel>();
 
-			foreach (var marketplace in _customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId))
+			foreach (var marketplace in this.customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId && mp.DisplayName != "ParsedBank"))
 			{
-				yodlees.Add(YodleeAccountModel.ToModel(marketplace, new YodleeBanksRepository(_session)));
+				yodlees.Add(YodleeAccountModel.ToModel(marketplace, this.yodleeBanksRepository));
 			}
+			return Json(yodlees, JsonRequestBehavior.AllowGet);
+		}
+
+		[Ajax]
+		[HttpGet]
+		[ValidateJsonAntiForgeryToken]
+		public JsonResult UploadAccounts() {
+			var oEsi = new YodleeServiceInfo();
+			var yodlees = new List<YodleeAccountModel>();
+
+			foreach (var marketplace in this.customer.CustomerMarketPlaces.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId && mp.DisplayName != "ParsedBank")) {
+				yodlees.Add(YodleeAccountModel.ToModel(marketplace));
+			}
+
+			var companyFilesSI = new CompanyFilesServiceInfo();
+			bool hasCompanyFilesMp = this.customer.CustomerMarketPlaces.Any(mp => mp.Marketplace.InternalId == companyFilesSI.InternalId);
+			if (hasCompanyFilesMp) {
+				var companyFiles = this.companyFilesMetaDataRepository.GetBankStatementFiles(this.customer.Id)
+					.ToList();
+
+				yodlees.AddRange(companyFiles.Select(x => new YodleeAccountModel { displayName = x }));
+			}
+			
 			return Json(yodlees, JsonRequestBehavior.AllowGet);
 		}
 
@@ -79,9 +108,8 @@
 					}
 				}
 			}
-			var customer = _context.Customer;
-			var repository = new YodleeAccountsRepository(_session);
-			var yodleeAccount = repository.Search(customer.Id);
+			
+			var yodleeAccount = this.yodleeAccountsRepository.Search(this.customer.Id);
 
 			string decryptedPassword = Encrypted.Decrypt(yodleeAccount.Password);
 			string displayname;
@@ -90,7 +118,7 @@
 			var yodleeMain = new YodleeMain();
 			var oEsi = new YodleeServiceInfo();
 
-			var items = customer.CustomerMarketPlaces
+			var items = this.customer.CustomerMarketPlaces
 				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
 				.Select(mp => Serialized.Deserialize<YodleeSecurityInfo>(mp.SecurityData).ItemId).ToList();
 				
@@ -101,7 +129,7 @@
 				return View(new { error = "Failure linking account" });
 			}
 
-			int marketPlaceId = _mpTypes
+			int marketPlaceId = this.mpTypes
 				.GetAll()
 				.First(a => a.InternalId == oEsi.InternalId)
 				.Id;
@@ -117,13 +145,13 @@
 
 			var yodleeDatabaseMarketPlace = new YodleeDatabaseMarketPlace();
 
-			var marketPlace = _helper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace, securityData, customer);
+			var marketPlace = this.dbHelper.SaveOrUpdateCustomerMarketplace(displayname, yodleeDatabaseMarketPlace, securityData, this.customer);
 
 			Log.InfoFormat("Added or updated yodlee marketplace: {0}", marketPlace.Id);
-			
-			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, marketPlace.Id, true, _context.UserId);
 
-			return View(YodleeAccountModel.ToModel(marketPlace, new YodleeBanksRepository(_session)));
+			this.serviceClient.Instance.UpdateMarketplace(this.context.Customer.Id, marketPlace.Id, true, this.context.UserId);
+
+			return View(YodleeAccountModel.ToModel(marketPlace, this.yodleeBanksRepository));
 		}
 
 		[Transactional]
@@ -132,7 +160,7 @@
 			try
 			{
 				var oEsi = new YodleeServiceInfo();
-				_mpChecker.Check(oEsi.InternalId, _customer, csId);
+				this.mpChecker.Check(oEsi.InternalId, this.customer, csId);
 			}
 			catch (MarketPlaceAddedByThisCustomerException e)
 			{
@@ -141,13 +169,12 @@
 			}
 			
 			var yodleeMain = new YodleeMain();
-			var repository = new YodleeAccountsRepository(_session);
-			var yodleeAccount = repository.Search(_customer.Id);
+			var yodleeAccount = this.yodleeAccountsRepository.Search(this.customer.Id);
 			if (yodleeAccount == null)
 			{
-				var banksRepository = new YodleeBanksRepository(_session);
-				YodleeBanks bank = banksRepository.Search(csId);
-				yodleeAccount = YodleeAccountPool.GetAccount(_customer, bank);
+				
+				YodleeBanks bank = this.yodleeBanksRepository.Search(csId);
+				yodleeAccount = YodleeAccountPool.GetAccount(this.customer, bank);
 			}
 
 			var callback = Url.Action("YodleeCallback", "YodleeMarketPlaces", new { Area = "Customer" }, "https");
@@ -160,15 +187,12 @@
 		[Transactional]
 		public ActionResult RefreshYodlee(string displayName = null)
 		{
-			var customer = _context.Customer;
-			var repository = new YodleeAccountsRepository(_session);
-			var yodleeAccount = repository.Search(customer.Id);
-
+			var yodleeAccount = this.yodleeAccountsRepository.Search(this.customer.Id);
 			var yodleeMain = new YodleeMain();
 
 			var oEsi = new YodleeServiceInfo();
 
-			var yodlees = customer.CustomerMarketPlaces
+			var yodlees = this.customer.CustomerMarketPlaces
 				.Where(mp => mp.Marketplace.InternalId == oEsi.InternalId)
 				.ToList();
 
@@ -201,7 +225,7 @@
 				return View(new { error = "Error occured updating bank account" });
 			}
 
-			m_oServiceClient.Instance.UpdateMarketplace(_context.Customer.Id, id, true, _context.UserId);
+			this.serviceClient.Instance.UpdateMarketplace(this.context.Customer.Id, id, true, this.context.UserId);
 			return View(new {success = true});
 		}
 	}

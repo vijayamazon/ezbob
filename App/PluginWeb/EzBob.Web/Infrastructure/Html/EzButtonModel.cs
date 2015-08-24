@@ -14,6 +14,8 @@
 
 		public string Href { get; set; }
 		public int TabIndex { get; set; }
+		public string Target { get; set; }
+		public string OnClick { get; set; }
 
 		public EzButtonType ButtonType { get; set; }
 		public EzButtonModel() { }
@@ -23,7 +25,9 @@
 			string uiEventControlID = "",
 			int tabIndex = 0,
 			EzButtonType buttonType = EzButtonType.button,
-			string href = "") {
+			string href = "",
+			string target = "",
+			string onClick = "") {
 			Id = id;
 			Caption = caption;
 			Cls = cls;
@@ -31,6 +35,8 @@
 			ButtonType = buttonType;
 			TabIndex = tabIndex;
 			Href = href;
+			Target = target;
+			OnClick = onClick;
 		}//constructor
 	}//EzButtonModel
 }//ns

@@ -1,4 +1,10 @@
-﻿@model dynamic
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
 <script id="CompanyFilesAccountInfoTemplate" type="text/template">
 	<div class="row-fluid">
 		<div class="wizard-top-notification">
@@ -10,9 +16,24 @@
 			    <div class="dz-message dz-with-text">Drag or Click to upload the Company’s documents.</div>
 		    </form>
         </div>
-		<div class="form_buttons_container">
-			<a href="#" class="button btn-green disabled connect-account pull-right" ui-event-control-id="link-account:company_files">Upload files</a>
-			<a href="#" class="back button btn-grey pull-right" ui-event-control-id="link-account:company_files_back">Back</a>
-		</div>
+		
+		@EzForm.WizardButton(
+			new List<EzButtonModel>{
+				new EzButtonModel(
+					"company_files_upload_account_button",
+					"Upload files",
+					cls: "button btn-green disabled connect-account ev-btn-org",
+					uiEventControlID: "link-account:company_files",
+					buttonType: EzButtonType.link,
+					href: "#"),
+				new EzButtonModel(
+					"company_files_back_button",
+					"Back",
+					cls: "back button btn-grey ev-btn-org",
+					uiEventControlID: "link-account:company_files_back",
+					buttonType: EzButtonType.link,
+					href: "#")
+			},
+			origin: origin)
 	</div>
 </script>

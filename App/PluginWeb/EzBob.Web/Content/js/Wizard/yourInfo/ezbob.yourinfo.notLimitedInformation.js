@@ -49,7 +49,7 @@ EzBob.NonLimitedInformationView = EzBob.YourInformationStepViewBase.extend({
             model: this.model.get('CompanyAddress').reset(),
             name: "NonLimitedCompanyAddress",
             max: 1,
-            title: "Enter company postcode",
+            title: "Business postcode",
             uiEventControlIdPrefix: oAddressContainer.attr('data-ui-event-control-id-prefix'),
         });
         nonLimitedAddressView.render().$el.appendTo(oAddressContainer);

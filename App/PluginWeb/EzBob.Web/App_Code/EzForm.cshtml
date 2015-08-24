@@ -2,7 +2,6 @@
 @using System.Collections.Generic
 @using System.Web
 @using System.Web.WebPages
-@using ConfigManager
 @using EzBob.Web.Infrastructure.Html
 @using EZBob.DatabaseLib.Model.Database
 
@@ -95,29 +94,36 @@
     }
 
     <select @( !string.IsNullOrWhiteSpace(selectProp.Name) ? "name=" + selectProp.Name : "name=" + identificator)
-            id="@identificator"
-            class="@selectProp.Cls"
-            ui-event-control-id="@selectProp.UiEventControlID"
+			id="@identificator"
+			class="@selectProp.Cls"
+			ui-event-control-id="@selectProp.UiEventControlID"
+					@if (selectProp.Size > 1) { @: size="@selectProp.Size"
+					}
+			
 
             @( !string.IsNullOrWhiteSpace(selectProp.CustomAtts) ? selectProp.CustomAtts : "")
-            @if (selectProp.IsDisabled) { @: disabled="disabled"
+			@if (selectProp.IsDisabled) { @: disabled="disabled"
                                                 }
-            @if (selectProp.TabIndex > 0) { @: tabindex="@selectProp.TabIndex"
-                                                  }>
+			@if (selectProp.TabIndex > 0) { @: tabindex="@selectProp.TabIndex"
+                                                  }
+                        @if (selectProp.AutoFocus) { @: autofocus="autofocus"
+			}>
         @if (selectProp.Placeholder != null)
         {
             <option class="first-option" value="@selectProp.Placeholder.Item1"></option>
         }
         else
         {
-            <option value=""></option>
+            if (selectProp.HasEmpty) {
+                <option value=""></option>
+            }
         }
        
         @if (selectProp.ListItems.Count == 1)
         {
             foreach (var item in selectProp.ListItems[0].Options)
             {
-                <option value="@item.Value">@item.Text</option>
+				<option value="@item.Value">@item.Text</option>
             } // foreach
         }
         else
@@ -440,28 +446,35 @@ string formFieldID = "")
 
 @helper InputTextTag(EzInputBuilder inputProp, HtmlString identificator)
 {
-    var val = new HtmlString(inputProp.Value);
+	var val = new HtmlString(inputProp.Value);
     var name = new HtmlString(inputProp.Name);
-    <input type="@inputProp.Type"
-           @if (!string.IsNullOrWhiteSpace(inputProp.Name.ToString())) { @: name="@name"
-                                            } 
-           else { if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name="@identificator"
-                                     } }
+	<input type="@inputProp.Type"
+           @if (!string.IsNullOrWhiteSpace(inputProp.Name.ToString())) {
+               @: name="@name"
+           }  else {
+               if (!string.IsNullOrWhiteSpace(identificator.ToString())) {
+                   @: name="@identificator"
+               }
+           }
            @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: id="@identificator"
                                             	                                                                                                                        }
-           class="@inputProp.Cls"
-           value="@inputProp.Value"
-           @if (inputProp.IsDisabled) {  @: disabled="disabled"
+		   class="@inputProp.Cls"
+		   value="@val"
+		   @if (inputProp.IsDisabled) {  @: disabled="disabled"
                                                                                                                                                                         }
-           @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
+		   @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
                                                                                                                                                                         }
-           @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
+		   @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
                                                                                                                                                                         }
-           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
+		   @if (inputProp.Min.HasValue) { @: min="@inputProp.Min.Value"
+		   		                                                                                                                               }
+		   @if (inputProp.Max.HasValue) { @: max="@inputProp.Max.Value"
+		                                                                                                                                       }
+		   @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
                                                                                                                                                                         }
-           @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
+		   @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
                                                                                                                                                                         }
-           @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
+		   @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
                                                                                                                                                                         } />
 
 
@@ -580,49 +593,67 @@ string formFieldID = "")
             }
     </div>
 }
+
 @helper ButtonTag(List<EzButtonModel> buttons )
 {
 	foreach (var buttonProp in buttons) {
 		var identificator = new HtmlString(buttonProp.Id);
+		var uiEvent = new HtmlString(buttonProp.UiEventControlID);
+
 		switch (buttonProp.ButtonType) {
 			case EzButtonType.button:
                 <button class="@buttonProp.Cls"
-                        @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+						@if (!string.IsNullOrWhiteSpace(buttonProp.Id)) { @: id="@identificator"
+																																							   }
                         @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-                        @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+						@if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
+																																							   }
+				>
                     @buttonProp.Caption
                 </button>
 				break;
 			case EzButtonType.submit:
             <input type="submit"
-                   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.Id)) { @: id="@identificator"
+				   				   																															   }
                    value="@buttonProp.Caption"
                    class="@buttonProp.Cls"
                    @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
+				   																																			   } 
+				   />
 				break;
 			case EzButtonType.input:
             <input type="button"
-                   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.Id)) { @: id="@identificator"
+				   				   																															   }
                    value="@buttonProp.Caption"
                    class="@buttonProp.Cls"
                    @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+				   @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) { @: ui-event-control-id="@uiEvent"
+																																				   			   }
+			 />
 				break;
 			case EzButtonType.link:
             <a href="@buttonProp.Href"
-               @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+			   @if(!string.IsNullOrWhiteSpace(buttonProp.Id)) {
+					@:id ="@identificator"
+																																							   }
                value="@buttonProp.Caption"
                class="@buttonProp.Cls"
+			   @( !string.IsNullOrWhiteSpace(buttonProp.Target) ? "target=" + buttonProp.Target : "")
+			   @( !string.IsNullOrWhiteSpace(buttonProp.OnClick) ? "onclick=" + buttonProp.OnClick : "")
                @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+			   @if (!string.IsNullOrWhiteSpace(buttonProp.UiEventControlID)) {
+				   @:ui-event-control-id="@uiEvent"
+			   }>
                 @buttonProp.Caption
             </a>
 				break;
-		}
-	}
-
+		}//switch
+	}//foreach
 }
+
 
 
 @helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)

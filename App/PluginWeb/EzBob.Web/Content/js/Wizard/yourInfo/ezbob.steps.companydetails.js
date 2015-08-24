@@ -78,8 +78,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 	}, // submitForm
 
 	businessTypeSelected: function(evt) {
-		// this.$el.find('.after-business-type *').enable();
-
 		this.$el.find('.oobts').removeClass('oobts-selected');
 
 		this.$el.find('.oobts i').removeClass('fa-square-o fa-check-square-o').addClass('fa-square-o');
@@ -159,8 +157,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		else
 			this.CompanyView.$el.show();
 
-		// if (!this.curOobts) this.$el.find('.after-business-type *').disable();
-
 		return false;
 	}, // typeOfBusinessChanged
 
@@ -190,7 +186,6 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		this.$el.find('#TypeOfBusiness').val('Limited').change().attardi_labels('toggle');
 		this.$el.find('#TypeOfBusinessImage').field_status('set', 'ok');
 
-	    // if (!this.curOobts) this.$el.find('.after-business-type *').disable();
 	    if (this.model.get('IsAlibaba')) {
 	        this.$el.find('.NonAlibabaTypeOfBusiness').remove();
 	    }
