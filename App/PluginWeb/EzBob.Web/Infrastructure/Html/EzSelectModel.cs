@@ -11,15 +11,18 @@ namespace EzBob.Web.Infrastructure.Html
         public string Caption { get; set; }
 		public List<EzSelectOptionGroup> ListItems { get; set; }
         public string Cls { get; set; }
+        public string CustomAtts { get; set; }
         public bool  IsDisabled { get; set; }
         public bool IsRequired { get; set; }
         public bool StatusIcon { get; set; }
         public int TabIndex { get; set; }
         public string UiEventControlID { get; set; }
+	    public string Name { get; set; }
+        public  Tuple<string, string>   Placeholder { get; set; }
 
         public EzSelectModel() { }
 
-        public EzSelectModel(string id, 
+        public EzSelectModel(string id,
             string caption,
 			List<EzSelectOptionGroup> listItems, 
 			string cls = "" ,
@@ -27,7 +30,10 @@ namespace EzBob.Web.Infrastructure.Html
             bool isRequired = false,
             bool statusIcon = false,
             int tabIndex = 0,
-            string uiEventControlID = "")
+            string uiEventControlID = "",
+            string customAtts = "",
+            string name = "",
+            Tuple<string, string> placeholder = null )
         {
             Id = id;
             Caption = caption;
@@ -38,6 +44,9 @@ namespace EzBob.Web.Infrastructure.Html
             StatusIcon = statusIcon; 
             TabIndex = tabIndex;
             UiEventControlID = uiEventControlID;
+            CustomAtts = customAtts;
+            Name = name;
+            Placeholder = placeholder;
         }
 
 		public EzSelectModel(string id,
@@ -48,7 +57,11 @@ namespace EzBob.Web.Infrastructure.Html
 			bool isRequired = false,
 			bool statusIcon = false,
 			int tabIndex = 0,
-			string uiEventControlID = "") : this (id,
+            string customAtts = "",
+			string uiEventControlID = "",
+            string name = "",
+             Tuple<string, string> placeholder = null)
+            : this(id,
 			caption, 
 			new List<EzSelectOptionGroup> { 
 				new EzSelectOptionGroup { 
@@ -59,8 +72,11 @@ namespace EzBob.Web.Infrastructure.Html
 			isDisabled,
 			isRequired,
 			statusIcon, 
-			tabIndex, 
-			uiEventControlID) { }
+			tabIndex,
+            uiEventControlID,
+            customAtts,
+            name,
+            placeholder) { }
     }
 
 	public class EzSelectOption {
@@ -78,5 +94,7 @@ namespace EzBob.Web.Infrastructure.Html
 	public class EzSelectOptionGroup {
 		public List<EzSelectOption> Options { get; set; }
 		public string GroupTitle { get; set; }
+
+
 	}
 }

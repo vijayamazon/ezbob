@@ -7,13 +7,15 @@
 @using EZBob.DatabaseLib.Model.Database
 
 @*Renders select*@
-@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "") {
+@helper Select(string id, string caption, IEnumerable<string> values, string css = "", string placeHolder = "")
+{
     <div class="form-group">
         <label class="control-label" for="@id">@caption</label>
         <div class="controls">
             <select id="@id" name="@id" class="selectheight @css" data-placeholder="@placeHolder">
                 <option>-</option>
-                @foreach (var v in values) {
+                @foreach (var v in values)
+                {
                     <option value="@v">@v</option>
                 }
             </select>
@@ -46,7 +48,8 @@
 {
     var identificator = new HtmlString(selectProp.Id);
     <div class="form_field_container">
-        @if (origin != CustomerOriginEnum.everline) {
+        @if (origin != CustomerOriginEnum.everline)
+        {
             <label class="attardi-input">
                 <span>@selectProp.Caption</span>
                 @SelectTag(selectProp, identificator)
@@ -61,44 +64,240 @@
                     <span class="required">*</span>
                 }
             </label>
-        } else {
+        }
+        else
+        {
             <label class="input-title" for="@identificator">@selectProp.Caption</label>
-            <div class="input-wrapper">
-                <div class="select">
-                    @SelectTag(selectProp, identificator)
-                    <div class="error-wrap"></div>
-                </div>
+    <div class="input-wrapper attardi-input">
+        <div class="select ">
+          
+            @SelectTag(selectProp, identificator, origin)
+            <div class="error-wrap"></div>
+        </div>
 
-            </div>
+    </div>
         }
     </div>
 }
-@helper SelectTag(EzSelectModel selectProp, HtmlString identificator)
+@helper SelectTag(EzSelectModel selectProp, HtmlString identificator, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
-    <select name="@identificator"
+    if (origin == CustomerOriginEnum.everline)
+    {
+        if (selectProp.Placeholder != null)
+        {
+            <span>@selectProp.Placeholder.Item2</span>
+        }
+        else
+        {
+            <span>Please select</span>
+        }
+
+    }
+
+    <select @( !string.IsNullOrWhiteSpace(selectProp.Name) ? "name=" + selectProp.Name : "name=" + identificator)
             id="@identificator"
             class="@selectProp.Cls"
             ui-event-control-id="@selectProp.UiEventControlID"
+
+            @( !string.IsNullOrWhiteSpace(selectProp.CustomAtts) ? selectProp.CustomAtts : "")
             @if (selectProp.IsDisabled) { @: disabled="disabled"
-            }
+                                                }
             @if (selectProp.TabIndex > 0) { @: tabindex="@selectProp.TabIndex"
-            }
-	>
-        <option value=""></option>
-        @if (selectProp.ListItems.Count == 1) {
-            foreach (var item in selectProp.ListItems[0].Options) {
+                                                  }>
+        @if (selectProp.Placeholder != null)
+        {
+            <option class="first-option" value="@selectProp.Placeholder.Item1"></option>
+        }
+        else
+        {
+            <option value=""></option>
+        }
+       
+        @if (selectProp.ListItems.Count == 1)
+        {
+            foreach (var item in selectProp.ListItems[0].Options)
+            {
                 <option value="@item.Value">@item.Text</option>
-			} // foreach
-		} else {
-			foreach (var optionGroup in selectProp.ListItems) {
-				<optgroup label="@optionGroup.GroupTitle">
-					@foreach (var item in optionGroup.Options) {
-					<option value="@item.Value" class="@item.Cls">@item.Text</option>
-					}
-				</optgroup>
-			} 
-		}
-	</select>
+            } // foreach
+        }
+        else
+        {
+            foreach (var optionGroup in selectProp.ListItems)
+            {
+                <optgroup label="@optionGroup.GroupTitle">
+                    @foreach (var item in optionGroup.Options)
+                    {
+                        <option value="@item.Value" class="@item.Cls">@item.Text</option>
+                    }
+                </optgroup>
+            }
+        }
+    </select>
+}
+@helper DateInput(WebPageBase page, 
+string name, 
+string title, 
+bool required = true, 
+bool statusIcon = false, string css = "", 
+string uiEventControlID = "", 
+string hiddenFieldAuxClass = "",
+    string labelCss = "",
+    CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{
+    var years = new List<Tuple<string, String>>();
+    var minYear = 1900;
+    var maxYear = DateTime.Now.Year - 18;
+    for (var i = maxYear; i >= minYear; i--)
+    {
+        years.Add(new Tuple<string, string>("" + i, "" + i));
+    }
+
+    var days = new List<Tuple<string, String>>();
+    for (var i = 1; i <= 31; i++)
+    {
+
+        days.Add(new Tuple<string, string>("" + i, "" + i));
+    }
+   
+    var months = new List<Tuple<string, string>> {
+        new Tuple<string, string>("1", "Jan."),
+        new Tuple<string, string>("2", "Feb."),
+        new Tuple<string, string>("3", "Mar."),
+        new Tuple<string, string>("4", "Apr."),
+        new Tuple<string, string>("5", "May."),
+        new Tuple<string, string>("6", "Jun."),
+        new Tuple<string, string>("7", "Jul."),
+        new Tuple<string, string>("8", "Aug."),
+        new Tuple<string, string>("9", "Sep."),
+        new Tuple<string, string>("10", "Oct."),
+        new Tuple<string, string>("11", "Nov."),
+        new Tuple<string, string>("12", "Dec.")
+    };
+
+    var identificator = new HtmlString(name);
+
+    var validationClass = required ? "requiredDate" : "";
+    
+
+    if (string.IsNullOrWhiteSpace(hiddenFieldAuxClass))
+    {
+        hiddenFieldAuxClass = string.Empty;
+    }
+
+    var dayIdentificator = identificator + "Day";
+    var monthIdentificator = identificator + "Month";
+    var yearIdentificator = identificator + "Year";
+
+    var sDayUiEventControlID = "";
+    var sMonthUiEventControlID = "";
+    var sYearUiEventControlID = "";
+
+    if (!string.IsNullOrWhiteSpace(uiEventControlID))
+    {
+        sDayUiEventControlID = uiEventControlID + "_day";
+        sMonthUiEventControlID = uiEventControlID + "_month";
+        sYearUiEventControlID =uiEventControlID + "_year";
+    }
+    var dayplaceholder = new Tuple<string, string>("-", "DD");
+    var monthplaceholder = new Tuple<string, string>("-", "MM");
+    var yearplaceholder = new Tuple<string, string>("-", "YYYY");
+    var dayselect = new EzSelectModel(
+       dayIdentificator,
+       "",
+       cls: "selectheight form_field form_field_date" + css,
+       listItems: days,
+       customAtts: "empty_value=-",
+       uiEventControlID: sDayUiEventControlID,
+       name: "day",
+       placeholder: dayplaceholder);
+
+    var monthselect = new EzSelectModel(
+       monthIdentificator,
+       "",
+       cls: "selectheight form_field form_field_date" + css,
+       listItems: months,
+       customAtts: "empty_value=-",
+       uiEventControlID: sMonthUiEventControlID,
+        name: "month",
+        placeholder: monthplaceholder);
+
+    var yearselect = new EzSelectModel(
+        yearIdentificator,
+   "",
+   cls: "selectheight form_field form_field_date" + css,
+   listItems: years,
+   customAtts: "empty_value=-",
+   uiEventControlID: sYearUiEventControlID,
+    name: "year"
+    , placeholder: yearplaceholder);
+    
+    
+    var hidden = string.Format("<input id='{0}' class='{0} {1} hidden-field {2} ' style='display: none !important' name='{0}'/>", identificator, validationClass, hiddenFieldAuxClass);
+   
+      <div class="control-group form_field_container">
+        @if (origin == CustomerOriginEnum.everline)
+        {
+            <div class="form_field_container ezDateTime ">
+                <label class="input-title" >@title</label>
+                <div class="input-wrapper ">
+                    <div class="attardi-input select @labelCss">
+
+                        @SelectTag(dayselect, new HtmlString(dayIdentificator), origin)
+                    </div>
+                    <div class="select attardi-input @labelCss">
+                        @SelectTag(monthselect, new HtmlString(monthIdentificator), origin)
+                    </div>
+                    <div class="select attardi-input @labelCss">
+                        @SelectTag(yearselect, new HtmlString(yearIdentificator), origin)
+                    </div>
+                    
+                    @{ page.WriteLiteral(hidden); }
+                    <div class="error-wrap"></div>
+
+
+                </div>
+            </div>
+        }
+        else
+        {
+            <div class="fs16">@title</div>
+            <div class="controls ezDateTime">
+                <label class="attardi-input @labelCss">
+                    <span>Day</span>
+               
+                    
+
+                    @SelectTag(dayselect, new HtmlString(dayIdentificator))
+
+                </label>
+
+                <label class="attardi-input @labelCss">
+                    <span>Month</span>
+                 
+                    @SelectTag(monthselect, new HtmlString(monthIdentificator))
+                  
+                </label>
+
+                <label class="attardi-input @labelCss">
+                    <span>Year</span>
+                
+                    @SelectTag(yearselect, new HtmlString(yearIdentificator))
+                   </label>
+
+              
+                @{ page.WriteLiteral(hidden); }
+                @if (statusIcon)
+                {
+                    var sReq = required ? "required" : "";
+                    var sId = new HtmlString(name + "Image");
+                    page.WriteLiteral(string.Format("<img id='{0}' class='field_status {1}'/>", sId, sReq));
+
+                }
+            </div>
+        }
+
+      
+    </div>
 }
 
 @helper InputText(
@@ -131,17 +330,17 @@ string formFieldID = "")
                        class="@cls"
                        value="@val"
                        @if (isDisabled) {  @: disabled="disabled"
-                                                                     }
+                                                                                            }
                        @if (tabIndex > 0) { @: tabindex="@tabIndex"
-                                                                     }
+                                                                                            }
                        @if (maxLength > 0) { @: maxlength="@maxLength"
-                                                                     }
+                                                                                            }
                        @if (!string.IsNullOrWhiteSpace(autoCorrect)) { @: autocorrect="@autoCorrect"
-                                                                     }
+                                                                                            }
                        @if (!string.IsNullOrWhiteSpace(autoCapitalize)) { @: autocapitalize="@autoCapitalize"
-                                                                     }
+                                                                                            }
                        @if (!string.IsNullOrWhiteSpace(uiEventControlID)) { @: ui-event-control-id="@uiEventControlID"
-                                                                     } />
+                                                                                            } />
 
 
 
@@ -165,7 +364,7 @@ string formFieldID = "")
 }
 
 
-@helper InputTextWizard(EzInputBuilder inputProp, CustomerOriginEnum origin)
+@helper InputTextWizard(EzInputBuilder inputProp, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
     var identificator = new HtmlString(inputProp.Id);
     <div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "") class="form_field_container control-group @(inputProp.ToHide ? "hide" : "")">
@@ -182,15 +381,19 @@ string formFieldID = "")
                     }
                     <span>@inputProp.Caption</span>
                     @InputTextTag(inputProp, identificator)
-                    @if (inputProp.StatusIcon) {
-						var sId = identificator + "Image";
-						var sReq = inputProp.IsRequired ? "required" : "empty";
-						<img id="@sId" class="field_status @sReq" width="16" height="16" />
-					} else if (inputProp.IsRequired) {
+                   @if (inputProp.StatusIcon)
+                   {
+                       var sId = identificator + "Image";
+                       var sReq = inputProp.IsRequired ? "required" : "empty";
+                    <img id="@sId" class="field_status @sReq" width="16" height="16" />
+                   }
+                   else if (inputProp.IsRequired)
+                   {
                         <span class="required">*</span>
                     }
-                    @if (@inputProp.Button != null) {
-                        @ButtonTag(new List <EzButtonModel>{inputProp.Button})
+                    @if (@inputProp.Button != null)
+                    {
+                        @ButtonTag(new List<EzButtonModel> { inputProp.Button })
                     }
                 </label>
             </div>
@@ -216,90 +419,166 @@ string formFieldID = "")
     </div>
 }
 
-@helper InputTextArea(string id, string caption, string cls = "", CustomerOriginEnum origin = CustomerOriginEnum.ezbob) {
-	<div class="form_field_container control-group">
-		@if (origin != CustomerOriginEnum.everline) {
-			<textarea style="resize: vertical; height: 32px" disabled="disabled" id="@id" class="form_field"></textarea>
-		} else {
-		<div class="form_field_container control-group">
-			<label for="@id" class="input-title">@caption</label>
-			<div class="input-wrapper">
-				<textarea style="resize: vertical; height: 50px" disabled="disabled" id="@id" class="@cls"></textarea>
-			</div>
-		</div>
-		}
-	</div>
+@helper InputTextArea(string id, string caption, string cls = "", CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{
+    <div class="form_field_container control-group">
+        @if (origin != CustomerOriginEnum.everline)
+        {
+            <textarea style="resize: vertical; height: 32px" disabled="disabled" id="@id" class="form_field"></textarea>
+        }
+        else
+        {
+            <div class="form_field_container control-group">
+                <label for="@id" class="input-title">@caption</label>
+                <div class="input-wrapper">
+                    <textarea style="resize: vertical; height: 50px" disabled="disabled" id="@id" class="@cls"></textarea>
+                </div>
+            </div>
+        }
+    </div>
 }
 
 @helper InputTextTag(EzInputBuilder inputProp, HtmlString identificator)
 {
     var val = new HtmlString(inputProp.Value);
-
+    var name = new HtmlString(inputProp.Name);
     <input type="@inputProp.Type"
-           @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name = "@identificator"
-			                                                                                                                }
-	       @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: id="@identificator"
-	                                                                                                                        }
+           @if (!string.IsNullOrWhiteSpace(inputProp.Name.ToString())) { @: name="@name"
+                                            } 
+           else { if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: name="@identificator"
+                                     } }
+           @if (!string.IsNullOrWhiteSpace(identificator.ToString())) { @: id="@identificator"
+                                            	                                                                                                                        }
            class="@inputProp.Cls"
            value="@inputProp.Value"
            @if (inputProp.IsDisabled) {  @: disabled="disabled"
-                                                                                                                            }
+                                                                                                                                                                        }
            @if (inputProp.TabIndex > 0) { @: tabindex="@inputProp.TabIndex"
-                                                                                                                            }
+                                                                                                                                                                        }
            @if (inputProp.MaxLength > 0) { @: maxlength="@inputProp.MaxLength"
-                                                                                                                            }
+                                                                                                                                                                        }
            @if (!string.IsNullOrWhiteSpace(inputProp.AutoCorrect)) { @: autocorrect="@inputProp.AutoCorrect"
-                                                                                                                            }
+                                                                                                                                                                        }
            @if (!string.IsNullOrWhiteSpace(inputProp.AutoCapitalize)) { @: autocapitalize="@inputProp.AutoCapitalize"
-                                                                                                                            }
+                                                                                                                                                                        }
            @if (!string.IsNullOrWhiteSpace(inputProp.UiEventControlID)) { @: ui-event-control-id="@inputProp.UiEventControlID"
-                                                                                                                            } />
+                                                                                                                                                                        } />
 
 
 }
 @helper Captcha(string captchaType, string cls = "", string sId = "captcha", string uiEventControlID = "", int tabIndex = 0, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
-	<div class="form_field_container control-group control-group">
-		<div class="captcha">
 
-			<div class="captcha-wrap" id="@sId">
+    <div class="form_field_container control-group control-group">
+        <div class="captcha">
 
-			</div>
-			@EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown", 
-				cls: "form_field", 
-				isRequired: true, 
-				statusIcon: true, 
-				uiEventControlID: uiEventControlID, 
-				maxLength: 6, 
-				tabIndex: tabIndex), 
+            <div class="captcha-wrap" id="@sId">
+
+            </div>
+            @EzForm.InputTextWizard(new EzInputBuilder("CaptchaInputText", "Enter characters shown",
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				uiEventControlID: uiEventControlID,
+				maxLength: 6,
+				tabIndex: tabIndex),
 				origin: origin)
-		</div>
-	</div>
+        </div>
+    </div>
 }
+ @helper ClickableInputTag(EzInputBuilder inputButton, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{       var caption = new HtmlString(inputButton.Caption);
+    if (origin != CustomerOriginEnum.everline)
+    {
+        var identificator = new HtmlString(inputButton.Id);
+        @InputTextTag(inputButton, identificator);
+    <label class="@( !string.IsNullOrWhiteSpace(inputButton.LabelClass) ? inputButton.LabelClass : "")" for="@identificator">@caption</label>
+    }
+    else
+    {
+        <div class="click-wrap ">
+            <div class="click-input-wrap ">
+                @{
+        var identificator = new HtmlString(inputButton.Id);
+        @InputTextTag(inputButton, identificator);
+                }
+                <label class="fa @( inputButton.Type == "radio" ? "radio-btn" : "checkbox-btn")"  for="@identificator">
+                    <i class="fa @( inputButton.Type == "radio" ? "fa-circle" : "fa-check")"> </i>
 
+                </label>
+
+            </div>
+            
+            <label class="title @( !string.IsNullOrWhiteSpace(inputButton.LabelClass) ? inputButton.LabelClass : "") " for=" @identificator">@caption</label>
+        </div>
+    }
+}
+@helper ClickableInputWizard(EzClickInputModel inputProp, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+{
+
+    <div class="form_field_container">
+        @if (origin != CustomerOriginEnum.everline)
+        {
+
+            <div class="attardi-input @inputProp.InputWrapperClass">
+                @foreach (EzInputBuilder inputButton in inputProp.InputButtons)
+                {
+                    @ClickableInputTag(inputButton, origin);
+
+                }
+
+
+                @if (inputProp.StatusIcon)
+                {
+                    var sId = new HtmlString(inputProp.Name + "Image");
+
+                    var sReq = inputProp.IsRequired ? "required" : "empty";
+                    <img id="@sId" class="field_status @sReq @inputProp.ErrorImgClass" alt="" />
+                }
+            </div>
+        }
+        else
+        {
+            <label class="input-title" inputprop>@inputProp.Caption</label>
+
+            <div class="input-wrapper FormRadioCtrl">
+
+
+
+                    @foreach (EzInputBuilder inputButton in inputProp.InputButtons) {
+                        @ClickableInputTag(inputButton, origin);
+                    }
+
+
+                <label style="display:none;" class="error"></label>
+            </div>
+       }
+    </div>
+
+}
 @helper WizardButton(EzButtonModel button, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
     @WizardButton(new List<EzButtonModel> {button}, origin);
 }
 
 @helper WizardButton(List<EzButtonModel> buttons, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
-{       
-        <div class="form_buttons_container form_field_container">
-            @if (origin != CustomerOriginEnum.everline)
+{
+    <div class="form_buttons_container form_field_container">
+        @if (origin != CustomerOriginEnum.everline)
             {
-                <div class="attardi-button">
-              @ButtonTag(buttons)
-                </div>
+            <div class="attardi-button">
+                @ButtonTag(buttons)
+            </div>
             }
             else
             {
-                <label class="input-title">&nbsp;</label>
-                <div class="input-wrapper">
-                    @ButtonTag(buttons)
-                  
-                </div>
+            <label class="input-title">&nbsp;</label>
+            <div class="input-wrapper">
+                @ButtonTag(buttons)
+
+            </div>
             }
-        </div>
+    </div>
 }
 @helper ButtonTag(List<EzButtonModel> buttons )
 {
@@ -307,43 +586,45 @@ string formFieldID = "")
 		var identificator = new HtmlString(buttonProp.Id);
 		switch (buttonProp.ButtonType) {
 			case EzButtonType.button:
-			<button class="@buttonProp.Cls"
-					@( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
-					@( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-					@( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-				@buttonProp.Caption
-			</button>
+                <button class="@buttonProp.Cls"
+                        @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+                        @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+                        @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+                    @buttonProp.Caption
+                </button>
 				break;
 			case EzButtonType.submit:
-			<input type="submit"
-				   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
-				   value="@buttonProp.Caption"
-				   class="@buttonProp.Cls"
-				   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-				   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+            <input type="submit"
+                   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+                   value="@buttonProp.Caption"
+                   class="@buttonProp.Cls"
+                   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
 				break;
 			case EzButtonType.input:
-			<input type="button"
-				   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
-				   value="@buttonProp.Caption"
-				   class="@buttonProp.Cls"
-				   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-				   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
+            <input type="button"
+                   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+                   value="@buttonProp.Caption"
+                   class="@buttonProp.Cls"
+                   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+                   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "") />
 				break;
 			case EzButtonType.link:
-			<a href="@buttonProp.Href"
-			   @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
-			   value="@buttonProp.Caption"
-			   class="@buttonProp.Cls"
-			   @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
-			   @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
-				@buttonProp.Caption
-			</a>
+            <a href="@buttonProp.Href"
+               @( !string.IsNullOrWhiteSpace(@buttonProp.Id) ? "id=" + identificator : "")
+               value="@buttonProp.Caption"
+               class="@buttonProp.Cls"
+               @( buttonProp.TabIndex != 0 ? "tabindex=" + buttonProp.TabIndex : "")
+               @( !string.IsNullOrWhiteSpace(buttonProp.UiEventControlID) ? "ui-event-control-id=" + buttonProp.UiEventControlID : "")>
+                @buttonProp.Caption
+            </a>
 				break;
 		}
 	}
 
 }
+
+
 @helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
     var identificator = new HtmlString(id);
@@ -368,309 +649,22 @@ string formFieldID = "")
         <div class="controls">
             <label class="attardi-input">
                 <span>@caption</span>
-                <input 
-                    type="password" 
+                <input type="password"
                        name="@identificator"
                        id="@identificator"
                        class="@cls"
                        value="@val"
-                    @if (isDisabled)
-                    { 
-                        @:disabled="disabled"
-                                                                                                                                       }
-                    @if (!string.IsNullOrWhiteSpace(uiEventControlID))
-                    {
-                        @:ui-event-control-id="@uiEventControlID"
-                                                                                                                                                                                     }
-                    />
-                @if (statusIcon)
-                {
-                    var sId = identificator + "Image";
-                    var sReq = isRequired ? "required" : "";
-                    <img id="@sId" class="field_status @sReq"/>
-                }
-                else if (isRequired)
-                {
-                    <span class="required">*</span>
-                }
-            </label>
-        </div>
-    </div>
-}
-
-@helper InputTextCash(string id, string caption, string value, string cls = "")
-{
-    <div class="control-group">
-        <label for="@id" class="control-label">@caption (£)</label>
-        <div class="controls cashControlls">
-            <input id="@id" name="@id" type="text" value="@value" class="@cls cashInput" />
-        </div>
-    </div>
-}
-
-@helper InputTextReadOnly(string id, string caption, string value, string cls = "")
-{
-    <div class="control-group">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            <input id="@id" readonly="readonly" name="@id" type="text" value="@value" class="@cls" />
-        </div>
-    </div>
-}
-
-@helper InputTextSmallReadOnly(string id, string caption, string value)
-{
-    <div class="control-group">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            <input class="input-small" id="@id" name="@id" readonly="readonly" type="text" value="@value" />
-        </div>
-    </div>
-}
-
-@helper InputTextSmall(string id, string caption, string value, string divClass = "")
-{
-    <div class="control-group @divClass">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            <input class="input-small" id="@id" name="@id" type="text" value="@value" />
-        </div>
-    </div>
-}
-
-@helper TextArea(string id, string caption, string value, string css = "span9")
-{
-    <div class="control-group">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            <textarea id="@id" name="@id" rows="10" cols="300" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea>
-        </div>
-    </div>
-}
-
-@helper TextAreaSmall(string id, string caption, string value, string css = "")
-{
-    <div class="form-group">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            <textarea id="@id" name="@id" rows="5" cols="10" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;" >@value</textarea>
-        </div>
-    </div>
-}
-
-@helper TextAreaReadOnly(string id, string caption, string value, string css = "")
-{
-    <div class="control-group">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            <textarea id="@id" name="@id" rows="10" cols="28" readonly="readonly" class="@css">@value</textarea>
-        </div>
-    </div>
-}
-
-@helper DatePicker(string id, string date, string css = "span2")
-{
-    <div class="input-append date dp-inline" id="@id" data-date="@date" data-date-format="dd-mm-yyyy">
-        <input class="@css datepicker" size="16" type="text" value="@date" name="@id">
-        <span class="add-on"><i class="icon-white icon-th"></i></span>
-    </div>
-}
-
-@helper DatePickerInline(string id, string caption, string date, string css = "")
-{
-    <div class="control-group">
-        <label for="@id" class="control-label">@caption</label>
-        <div class="controls">
-            @DatePicker(id, date, css)
-        </div>
-    </div>
-}
-
-@helper Cell(params string[] arguments)
-{
-    <tr>
-        @foreach (var s in arguments)
-        {
-            <td>@s</td>
-        }
-    </tr>
-}
-
-@helper AddressInput(WebPageBase page, string name, string title, string sUiEventControlID, string css = "")
-{
-	sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;
-
-	var identificator = new HtmlString(name);
-	var input = string.Format("<div id={0} class=\"address-field\" data-ui-event-control-id-prefix=\"{1}\" data-title=\"{2}\" data-css=\"{3}\"></div>",
-		identificator, 
-		sUiEventControlID,
-		title,
-		css,
-		true,
-		true);
-		
-	<div>
-		@{page.WriteLiteral(input);}
-	</div>
-}
-
-@helper DateInput(WebPageBase page, string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null, bool statusIcon = false, string css = "", string uiEventControlID = "", string hiddenFieldAuxClass = "", string labelCss = "")
-{
-    var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
-    var validationClass = required ? "requiredDate" : "";
-    var identificator = new HtmlString(name);
-
-    if (string.IsNullOrWhiteSpace(hiddenFieldAuxClass))
-    {
-        hiddenFieldAuxClass = string.Empty;
-    }
-
-    var dayIdentificator = new HtmlString(identificator + "Day");
-    var monthIdentificator = new HtmlString(identificator + "Month");
-    var yearIdentificator = new HtmlString(identificator + "Year");
-
-    var sDayUiEventControlID = "";
-    var sMonthUiEventControlID = "";
-    var sYearUiEventControlID = "";
-
-    if (!string.IsNullOrWhiteSpace(uiEventControlID))
-    {
-        sDayUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_day";
-        sMonthUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_month";
-        sYearUiEventControlID = "ui-event-control-id=" + uiEventControlID + "_year";
-    }
-
-    var daySelect = string.Format("<select id='{0}' name='day' class='selectheight form_field form_field_date {1}' empty_value='-' {2}>", dayIdentificator, css, sDayUiEventControlID);
-    var monthSelect = string.Format("<select id='{0}' name='month' class='selectheight form_field form_field_date {1}' empty_value='-' {2}>", monthIdentificator, css, sMonthUiEventControlID);
-    var yearSelect = string.Format("<select id='{0}' name='year' class='selectheight form_field form_field_date {1}' empty_value='-' {2}>", yearIdentificator, css, sYearUiEventControlID);
-    const string endSelect = "</select>";
-    var hidden = string.Format("<input id='{0}' class='{0} {1} hidden-field {2} ' style='display: none !important' name='{0}'/>", identificator, validationClass, hiddenFieldAuxClass);
-
-    <div class="control-group form_field_container">
-        <div class="fs16">@title</div>
-        <div class="controls ezDateTime">
-            <label class="attardi-input @labelCss">
-                <span>Day</span>
-                @{ page.WriteLiteral(daySelect); }
-
-                <option value="-"></option>
-                @for (var i = 1; i <= 31; i++)
-                {
-                    <option
-                        @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
-                        {
-                            @:selected="selected"
-                                                                                                                                                                                                                            }
-                        value="@i"
-                        >@i</option>
-                }
-
-                @{ page.WriteLiteral(endSelect); }
-
-            </label>
-
-            <label class="attardi-input @labelCss">
-                <span>Month</span>
-                @{ page.WriteLiteral(monthSelect); }
-                <option value="-"></option>
-                @for (var i = 1; i <= 12; i++)
-                {
-                    <option
-                        @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
-                        {
-                            @:selected="selected"
-                                                                                                                                                                                                                            }
-                        value="@i"
-                        >@month[i - 1]</option>
-                }
-                @{ page.WriteLiteral(endSelect); }
-            </label>
-
-            <label class="attardi-input @labelCss">
-                <span>Year</span>
-                @{ page.WriteLiteral(yearSelect); }
-                <option value="-"></option>
-                @{
-                    var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
-                    var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
-                    for (var i = maxYear; i >= minYear; i--)
-                    {
-                        <option
-                            @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
-                            {
-                                @:selected="selected"
-                                                                                                                                                                                                                                                            }
-                            value="@i"
-                            >@i</option>
-                    }
-                }
-                @{ page.WriteLiteral(endSelect); }
-            </label>
-
-            @{ page.WriteLiteral(hidden); }
-
-            @if (statusIcon)
-            {
-                var sReq = required ? "required" : "";
-                var sId = new HtmlString(identificator + "Image");
-                page.WriteLiteral(string.Format("<img id='{0}' class='field_status {1}'/>", sId, sReq));
-
-            }
-        </div>
-    </div>
-}
-
-@helper DateInputUnderwriter(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null)
-{
-    var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." };
-    var validationClass = required ? "requiredDate" : "";
-    var identificator = new HtmlString(name);
-
-    <div class="form-group">
-        <label for="day" class="control-label">@title</label>
-        <div class="controls ezDateTime">
-            <select name="day" style="width: 33%;" class="form-control selectheight">
-                <option value="-">-</option>
-                @{ for (var i = 1; i <= 31; i++)
-                 {
-                    <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i)
-                            {
-                                   @:selected="selected"
-                                                                                                                                                                                                                                   }
-                        value="@i">@i</option>
-                 } }
-            </select>
-
-            <select name="month" style="width: 32%;" class="form-control selectheight">
-                <option value="-">-</option>
-                @{ for (var i = 1; i <= 12; i++)
-                 {
-                    <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i)
-                            {
-                                   @:selected="selected"
-                                                                                                                                                                                                                                   }
-                           value="@i">@month[i - 1]</option>
-                 }
-                }
-            </select>
-
-            <select name="year" style="width: 32%;" class="form-control selectheight">
-                <option value="-">-</option>
-                @{
-                    var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
-                    var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year;
-                    for (var i = minYear; i <= maxYear; i++)
-                    {
-                    <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i)
-                            {
-                                    @:selected="selected"
-                                                                                                                                                                                                                                                                }
-                            value="@i">@i</option>
+                       @if (isDisabled) {  @: disabled=" disabled"
+                                                                                                                                                                                     } @if (!string.IsNullOrWhiteSpace(uiEventControlID)) { @: ui-event-control-id="@uiEventControlID"
+                                                                                                                                                                                                                                   } /> @if (statusIcon) { var sId = identificator + "Image"; var sReq = isRequired ? "required" : ""; <img id="@sId" class="field_status @sReq" /> } else if (isRequired) { <span class="required">*</span> } </label> </div> </div> }  @helper InputTextCash(string id, string caption, string value, string cls = "") { <div class="control-group"> <label for="@id" class="control-label">@caption (£)</label> <div class="controls cashControlls"> <input id="@id" name="@id" type="text" value="@value" class="@cls cashInput" /> </div> </div> }  @helper InputTextReadOnly(string id, string caption, string value, string cls = "") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <input id="@id" readonly="readonly" name="@id" type="text" value="@value" class="@cls" /> </div> </div> }  @helper InputTextSmallReadOnly(string id, string caption, string value) { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <input class="input-small" id="@id" name="@id" readonly="readonly" type="text" value="@value" /> </div> </div> }  @helper InputTextSmall(string id, string caption, string value, string divClass = "") { <div class="control-group @divClass"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <input class="input-small" id="@id" name="@id" type="text" value="@value" /> </div> </div> }  @helper TextArea(string id, string caption, string value, string css = "span9") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <textarea id="@id" name="@id" rows="10" cols="300" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea> </div> </div> }  @helper TextAreaSmall(string id, string caption, string value, string css = "") { <div class="form-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <textarea id="@id" name="@id" rows="5" cols="10" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea> </div> </div> }  @helper TextAreaReadOnly(string id, string caption, string value, string css = "") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <textarea id="@id" name="@id" rows="10" cols="28" readonly="readonly" class="@css">@value</textarea> </div> </div> }  @helper DatePicker(string id, string date, string css = "span2") { <div class="input-append date dp-inline" id="@id" data-date="@date" data-date-format="dd-mm-yyyy"> <input class="@css datepicker" size="16" type="text" value="@date" name="@id"> <span class="add-on"><i class="icon-white icon-th"></i></span> </div> }  @helper DatePickerInline(string id, string caption, string date, string css = "") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> @DatePicker(id, date, css) </div> </div> }  @helper Cell(params string[] arguments) { <tr> @foreach (var s in arguments) { <td>@s</td> } </tr> }  @helper AddressInput(WebPageBase page, string name, string title, string sUiEventControlID, string css = "") { sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;  var identificator = new HtmlString(name); var input = string.Format("<div id={0} class=\"address-field\" data-ui-event-control-id-prefix=\"{1}\" data-title=\"{2}\" data-css=\"{3}\"></div>", identificator, sUiEventControlID, title, css, true, true);  <div> @{page.WriteLiteral(input);} </div> }    @helper DateInputUnderwriter(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null) { var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." }; var validationClass = required ? "requiredDate" : ""; var identificator = new HtmlString(name);  <div class="form-group"> <label for="day" class="control-label">@title</label> <div class="controls ezDateTime"> <select name="day" style="width: 33%;" class="form-control selectheight"> <option value="-">-</option> @{ for (var i = 1; i <= 31; i++) { <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i) { @: selected="selected"
+                                                                                                                                                                                                                                                                                      } value="@i"> @i </option> } } </select>  <select name="month" style="width: 32%;" class="form-control selectheight"> <option value="-">-</option> @{ for (var i = 1; i <= 12; i++) { <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i) { @: selected="selected"
+                                                                                                                                                                                                                                                                                      } value="@i"> @month[i - 1] </option> } } </select>  <select name="year" style="width: 32%;" class="form-control selectheight"> <option value="-">-</option> @{ var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year; var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year; for (var i = minYear; i <= maxYear; i++) { <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i) { @: selected="selected"
+                                                                                                                                                                                                                                                                                                                       } value="@i"> @i </option>
                     }
                 }
             </select>
 
-            <input  id='@identificator' class="@identificator @validationClass  hidden-field required" name="@identificator"/>
+            <input id='@identificator' class="@identificator @validationClass  hidden-field required" name="@identificator" />
         </div>
 
     </div>

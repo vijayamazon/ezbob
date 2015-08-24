@@ -231,6 +231,7 @@
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
     <Compile Include="Infrastructure\Html\EzButtonModel.cs" />
+    <Compile Include="Infrastructure\Html\EzClickInputModel.cs" />
     <Compile Include="Infrastructure\Html\EzInputBuilder.cs" />
     <Compile Include="Infrastructure\Html\EzSelectModel.cs" />
     <Compile Include="Infrastructure\UiCustomerOrigin.cs" />
