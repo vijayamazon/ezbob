@@ -3,11 +3,14 @@
     using System;
     using System.Collections.Generic;
     using System.Diagnostics;
+    using System.Linq;
     using System.Linq.Expressions;
     using System.Reflection;
     using System.Resources;
     using NUnit.Framework;
     using OpenQA.Selenium;
+    using TestRailModels.Automation;
+    using TestRailModels.TestRail;
 
     public class TestBase
     {
@@ -24,20 +27,20 @@
             var brands = GetBrands(caseID);
             var enviorments = GetEnviorments(caseID);
 
-            foreach (var br in browsers) {
-                Driver = GetBrowserWebDriver.GetWebDriverForBrowser(br);
-                foreach (var env in enviorments)
+            foreach (var browser in browsers) {
+                Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
+                foreach (var enviorment in enviorments)
                 {
-                        EnvironmentConfig = Resources.GetEnvironmentResourceManager(env);
+                        EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
                         {
                             foreach (var brand in brands)
                             {
                                 BrandConfig = Resources.GetBrandResourceManager(brand);
                                 try {
                                     codeToExecute.Invoke();
-                                    //Report Sucsess
-                                } catch (Exception) {
-                                    //Report fail
+                                    TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
+                                } catch (Exception ex) {
+                                    TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
                                 } 
                             }
                         }
@@ -47,19 +50,18 @@
             }
         }
 
-        public List<AutomationEnums> GetBrowsers(ulong caseID)
-        {
-            return new List<AutomationEnums>() {AutomationEnums.Firefox , AutomationEnums.Chrome};
+        public List<AutomationModels.Browser> GetBrowsers(ulong caseID) {
+            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).ToList();
         }
 
-        public List<Brand> GetBrands(ulong caseID)
+        public List<AutomationModels.Brand> GetBrands(ulong caseID)
         {
-            return new List<Brand>() { Brand.Ezbob  };
+            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Brand).ToList();
         }
 
-        public List<Environment> GetEnviorments(ulong caseID)
+        public List<AutomationModels.Environment> GetEnviorments(ulong caseID)
         {
-            return new List<Environment>() { Environment.QA, Environment.Staging };
+            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Environment).ToList();
         }
 
     }

@@ -3,30 +3,31 @@
     using System.Resources;
     using UIAutomationTests.configs.Brand;
     using UIAutomationTests.configs.Enviorment;
+    using TestRailModels .Automation;
 
     class Resources
     {
 
-        public static ResourceManager GetEnvironmentResourceManager(Environment resourceName)
+        public static ResourceManager GetEnvironmentResourceManager(AutomationModels.Environment env)
         {
-            switch (resourceName)
+            switch (env)
             {
-                case Environment.QA:
+                case AutomationModels.Environment.QA:
                     return QA.ResourceManager;
-                case Environment.Staging:
+                case AutomationModels.Environment.Staging:
                     return Staging.ResourceManager;
                 default:
                     return DefaultEnviorment.ResourceManager;
             }
         }
 
-        public static ResourceManager GetBrandResourceManager(Brand resourceName)
+        public static ResourceManager GetBrandResourceManager(AutomationModels.Brand brand)
         {
-            switch (resourceName)
+            switch (brand)
             {
-                case Brand.Everline:
+                case AutomationModels.Brand.Everline:
                     return Everline.ResourceManager;
-                case Brand.Ezbob:
+                case AutomationModels.Brand.Ezbob:
                     return Ezbob.ResourceManager;
                 default:
                     return DefaultBrand.ResourceManager;

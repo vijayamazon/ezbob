@@ -6,6 +6,7 @@
     using OpenQA.Selenium.Chrome;
     using OpenQA.Selenium.Firefox;
     using OpenQA.Selenium.IE;
+    using TestRailModels.Automation;
 
     public static class GetBrowserWebDriver
     {
@@ -17,13 +18,13 @@
         public static IWebDriver InternetExplorerDriver { get; set; }
         public static IWebDriver SafariDriver { get; set; }
 
-        public static IWebDriver GetWebDriverForBrowser(AutomationEnums browser)
+        public static IWebDriver GetWebDriverForBrowser(AutomationModels.Browser browser)
         {
             IWebDriver driver = null;
             var path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
             switch (browser)
             {
-                case AutomationEnums.Chrome:
+                case AutomationModels.Browser.Chrome:
                     if (ChromeDriver == null)
                     {
                         ChromeDriver = new ChromeDriver(path + @"\WebDrivers");
@@ -31,7 +32,7 @@
                     driver = ChromeDriver;
                     break;
 
-                case AutomationEnums.Firefox:
+                case AutomationModels.Browser.Firefox:
                     if (FirefoxDriver == null)
                     {
                         FirefoxProfile profile = new FirefoxProfile();
@@ -41,7 +42,7 @@
                 driver = FirefoxDriver;
                     break;
 
-                case AutomationEnums.IE:
+                case AutomationModels.Browser.IE:
                     if (InternetExplorerDriver == null)
                     {
                         InternetExplorerDriver = new InternetExplorerDriver(path + @"\WebDrivers");
@@ -49,7 +50,7 @@
                 driver =  InternetExplorerDriver;
                     break;
 
-                case AutomationEnums.Safari:
+                case AutomationModels.Browser.Safari:
                     if (SafariDriver == null)
                     {
                         SafariDriver = new ChromeDriver(path + @"E:\WebDrivers");

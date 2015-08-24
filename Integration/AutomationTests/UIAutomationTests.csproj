@@ -34,9 +34,16 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\Castle.Core.dll</HintPath>
     </Reference>
+    <Reference Include="Core">
+      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\Core.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>C:\Program Files (x86)\Microsoft Visual Studio 12.0\Blend\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,6 +87,15 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TestRailData">
+      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\TestRailData.dll</HintPath>
+    </Reference>
+    <Reference Include="TestRailEngine">
+      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\TestRailEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="TestRailModels">
+      <HintPath>C:\Users\Dor\Desktop\projects\workingAPI\TestRail\TestRailEngine\bin\Debug\TestRailModels.dll</HintPath>
+    </Reference>
     <Reference Include="TestStack.Seleno, Version=0.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\TestStack.Seleno.dll</HintPath>
@@ -133,10 +149,11 @@
       <DependentUpon>Staging.resx</DependentUpon>
     </Compile>
     <Compile Include="Core\BrowserWebDriver.cs" />
-    <Compile Include="Core\Enums.cs" />
     <Compile Include="Core\Resources.cs" />
     <Compile Include="Core\TestBase.cs" />
-    <Compile Include="Tests\Application\OrangeMoney\CreateTests.cs" />
+    <Compile Include="Core\TestRailRepository.cs" />
+    <Compile Include="Tests\Application\Alibaba\AlibabaTests.cs" />
+    <Compile Include="Tests\Application\OrangeMoney\OrangeMoneyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -152,7 +169,6 @@
     <Content Include="WebDrivers\wires.exe" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Tests\Application\Alibaba\" />
     <Folder Include="Tests\Application\Broker\" />
     <Folder Include="Tests\Application\UnderWriter\" />
     <Folder Include="Tests\Automation\POC\" />
