@@ -478,6 +478,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\EverlineCustomerProfile.css" />
     <Content Include="Content\css\Everlinecustomer.css" />
     <Content Include="Content\css\ezbob.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
