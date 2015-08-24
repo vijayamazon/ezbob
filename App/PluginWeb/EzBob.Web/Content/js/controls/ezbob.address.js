@@ -34,16 +34,28 @@ EzBob.Popup = Backbone.View.extend({
 				);
 			});
 		} // if
-
-		this.$el.dialog({
-			autoOpen: true,
-			title: 'Select address',
-			modal: true,
-			resizable: true,
-			width: 550,
-			height: 580,
-			closeOnEscape: true,
-		});
+		if (EzBob.Config.Origin == 'everline') {
+		    this.$el.dialog({
+		        autoOpen: true,
+		        title: 'Select address',
+		        modal: true,
+		        resizable: true,
+		        width: 570,
+		        height: 630,
+		        closeOnEscape: true,
+		    });
+		} else {
+		    this.$el.dialog({
+		        autoOpen: true,
+		        title: 'Select address',
+		        modal: true,
+		        resizable: true,
+		        width: 550,
+		        height: 580,
+		        closeOnEscape: true,
+		    });
+		}
+		
 
 		this.setDialogueButtons('init');
 
