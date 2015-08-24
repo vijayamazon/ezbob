@@ -12,7 +12,7 @@
 	line-height: 34px;
 	font-size: 14px;
 	font-weight: 600;
-	width: 240px;
+	width: 200px;
 	height: 40px;
 	cursor: pointer;
 	text-align: center;
@@ -78,7 +78,7 @@
 	opacity: 0.4;
 }
 .main-page-everline .profile-menu .navbar-inner {
-	padding: 20px;
+	padding: 10px 20px;
 	width: 1000px;
 	margin: 0 auto;
 	background-color: #28211f;
@@ -103,6 +103,10 @@
 	text-decoration: none;
 }
 
+.main-page-everline .profile-menu .customer-dashboard-main li.active a {
+	color: #e28023;
+	text-decoration: none;
+}
 
 .main-page-everline .profile-menu .customer-dashboard-main li.divider-vertical {
 	width: 30px;
@@ -132,11 +136,40 @@
 	text-align: left;
 }
 
-.main-page-everline .d-widgets,
 .main-page-everline .profile-headlines {
 	width: 1000px;
 	margin: 0 auto;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.main-page-everline .d-widgets {
+	border: 1px solid #28211f;
+	width: 1000px;
+	padding: 10px;
+	margin: 10px auto;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.main-page-everline .d-widgets h3,
+.main-page-everline .d-widgets dl,
+.main-page-everline .d-widgets dl dt,
+.main-page-everline .d-widgets dl dd {
+	display: inline-block;
+}
+
+.main-page-everline .d-widgets dl {
+	margin-left: 90px;
+}
+
+.main-page-everline .d-widgets dl dd {
+	margin-right: 40px;
+}
+
+.main-page-everline .d-widgets .ev-btn-org {
+	float: right;
+	margin-top: 15px;
 }
