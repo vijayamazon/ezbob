@@ -471,6 +471,8 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.AddMoreRuleBottom').addClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
 		this.storeList.find('.marketplace-button').not('.show-more, .marketplace-button-less').css('display', 'none').data(this.tableToBlock(), '');
+
+		this.storeList.find('.link-accounts-optional').hide();
 	}, // showLessAccounts
 
 	showMoreAccounts: function() {
@@ -484,6 +486,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
 		this.storeList.find('.marketplace-button').not('.show-more').css('display', 'table').data(this.tableToBlock(), '');
+
+		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
+
 	}, // showMoreAccounts
 
 	canContinue: function() {
