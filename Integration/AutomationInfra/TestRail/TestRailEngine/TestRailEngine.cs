@@ -41,6 +41,8 @@
             if (suiteId != null)
                 caseAtutomation.SuiteId = (ulong)suiteId;
             caseAtutomation.Dependencies = TestRailDependencies.GetDependencies(caseItem.ID);
+            if (runId != null)
+                caseAtutomation.RunId = (ulong)runId;
 
             if (configs != null)
             {
@@ -85,9 +87,9 @@
                                     if (entryItem.SuiteID != null)
                                     {
                                         var caseAtutomation = BildCaseAtutomation(caseItem,
-                                            configs,
-                                            entryItem.SuiteID,
-                                            runItem.ID);
+                                                                                    configs,
+                                                                                    entryItem.SuiteID,
+                                                                                    runItem.ID);
                                         caseAtutomationList.Add(caseAtutomation);
                                     }
                                 }

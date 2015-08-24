@@ -39,7 +39,7 @@
                 .Where(x => x.Brand == brand)
                 .FirstOrDefault(x => x.Environment == enviorment);
                 if (automationCase != null)
-                    TestRailManager.Instance.AddResult(automationCase.RunId, resultStatus, messege);
+                    TestRailManager.Instance.AddResultForCase(automationCase.RunId,caseID, resultStatus, messege);
         }
     }
 }
