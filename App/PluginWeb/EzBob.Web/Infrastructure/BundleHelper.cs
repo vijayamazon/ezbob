@@ -300,6 +300,7 @@
 				.Add("~/Content/js/ezbob.cgvendors.js")
 				.Add("~/Content/js/ezbob.serverlog.js")
 				.Add("~/Content/js/ezbob.strengthPassword.js")
+                .Add("~/Content/js/ezbob.sliders.js")
 
 				.AddString(GetDbStrings())
 				//.ForceRelease()

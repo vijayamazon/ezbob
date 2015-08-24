@@ -852,6 +852,7 @@
     <Content Include="Content\js\App\ezbob.iovation.js" />
     <Content Include="Content\js\Broker\broker.commission.view.js" />
     <Content Include="Content\js\Broker\broker.leaddetails.view.js" />
+    <Content Include="Content\js\ezbob.sliders.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\footer.min.js" />
@@ -952,6 +953,7 @@
     <Content Include="Areas\Customer\Views\Shared\QuickOffer.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\HMRCUploadAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\YodleeUploadAccountInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_Sliders.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

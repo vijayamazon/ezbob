@@ -31,6 +31,9 @@
 
 <script id="personinfo-template" type="text/template">
 	<div class="row-fluid">
+        <div>Sliders
+            <button class="show-sliders">Show sliders</button>
+        </div>
 		<h2 class="form_start">Personal details</h2>
 
 		@using (Html.BeginForm("Save", "CustomerDetails", new { Area = "Customer" }, FormMethod.Post, new { @class = "PersonalDetailsForm" })) {
