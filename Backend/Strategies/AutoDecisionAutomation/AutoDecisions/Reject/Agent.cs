@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.Linq;
+	using System.Text;
 	using AutomationCalculator.AutoDecision.AutoRejection;
 	using AutomationCalculator.Common;
 	using AutomationCalculator.ProcessHistory;
@@ -12,6 +13,7 @@
 	using AutomationCalculator.Turnover;
 	using ConfigManager;
 	using DbConstants;
+	using Ezbob.Backend.Extensions;
 	using Ezbob.Backend.ModelsWithDB.Experian;
 	using Ezbob.Backend.Strategies.AutoDecisionAutomation.AutoDecisions;
 	using Ezbob.Backend.Strategies.Experian;
@@ -155,7 +157,7 @@
 						foreach (int mpID in marketplaceIDs) {
 							List<MarketplaceTurnover> thisMp = h.Where(x => x.CustomerMarketPlace.Id == mpID).ToList();
 
-							hmrc.AddRange(LastUpdedEndHistoryTurnoversByMpType(
+							hmrc.AddRange(LastUpdatedEndHistoryTurnoversByMpType(
 								thisMp,
 								MpType.Hmrc,
 								calculationTime,
@@ -171,7 +173,7 @@
 						//	x.Distance
 						//));
 					} else if (mpType.Equals(MpType.Yodlee)) {
-						bank.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, MpType.Yodlee, calculationTime));
+						bank.AddRange(LastUpdatedEndHistoryTurnoversByMpType(h, MpType.Yodlee, calculationTime));
 						// bank.ForEach(x => Log.Info(
 						//	"bank: {0}, {1}, {2}, {3}",
 						//	x.TheMonth,
@@ -180,7 +182,7 @@
 						//	x.Distance
 						//));
 					} else if (mpType.Equals(MpType.Ebay)) {
-						ebay.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, MpType.Ebay, calculationTime));
+						ebay.AddRange(LastUpdatedEndHistoryTurnoversByMpType(h, MpType.Ebay, calculationTime));
 						//ebay.ForEach(x => Log.Info(
 						//	"ebay: {0}, {1}, {2}, {3}",
 						//	x.TheMonth,
@@ -189,7 +191,7 @@
 						//	x.Distance
 						//));
 					} else if (mpType.Equals(MpType.PayPal)) {
-						paypal.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, MpType.PayPal, calculationTime));
+						paypal.AddRange(LastUpdatedEndHistoryTurnoversByMpType(h, MpType.PayPal, calculationTime));
 						// paypal.ForEach(x => Log.Info(
 						//	"paypal: {0}, {1}, {2}, {3}",
 						//	x.TheMonth,
@@ -200,9 +202,9 @@
 					} else {
 						// isPayment
 						if (paymentAccounts.Contains(mpType))
-							accounting.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, mpType, calculationTime));
+							accounting.AddRange(LastUpdatedEndHistoryTurnoversByMpType(h, mpType, calculationTime));
 						else
-							ecommerce.AddRange(LastUpdedEndHistoryTurnoversByMpType(h, mpType, calculationTime));
+							ecommerce.AddRange(LastUpdatedEndHistoryTurnoversByMpType(h, mpType, calculationTime));
 					} // if
 				} // for each
 
@@ -623,17 +625,32 @@
 			return totalTurnover < 0 ? 0 : totalTurnover;
 		} // MaxQuarterTurnover
 
-		private static IEnumerable<FilteredAggregationResult> LastUpdedEndHistoryTurnoversByMpType(
+		private IEnumerable<FilteredAggregationResult> LastUpdatedEndHistoryTurnoversByMpType(
 			List<MarketplaceTurnover> inputList,
 			Guid type,
 			DateTime calculationTime,
 			DateTime? lastExistingDataTime = null
 		) {
+			Log.Debug(
+				"LastUpdatedEndHistoryTurnoversByMpType(type = '{0}', calculation time = '{1}', " +
+				"last existing data time = '{2}') started.",
+				type,
+				calculationTime.MomentStr(),
+				lastExistingDataTime.MomentStr()
+			);
+
 			List<MarketplaceTurnover> ofcurrentType =
 				inputList.Where(x => x.CustomerMarketPlace.Marketplace.InternalId == type).ToList();
 
-			if (ofcurrentType.Count < 1)
-				return null;
+			if (ofcurrentType.Count < 1) {
+				Log.Debug(
+					"LastUpdatedEndHistoryTurnoversByMpType returns empty result: " +
+					"no entries found in MarketplaceTurnover view with MP internal id '{0}'.",
+					type
+				);
+
+				return Enumerable.Empty<FilteredAggregationResult>();
+			} // if
 
 			// check type
 			List<MarketplaceTurnover> lastUpdated = ofcurrentType.Where(z =>
@@ -641,8 +658,15 @@
 				z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.HasValue
 			).ToList();
 
-			if (lastUpdated.Count < 1)
-				return null;
+			if (lastUpdated.Count < 1) {
+				Log.Debug(
+					"LastUpdatedEndHistoryTurnoversByMpType returns empty result: " +
+					"no entries found in MarketplaceTurnover view with proper value in UpdatingEnd field " +
+					"of CustomerMarketplaceUpdatingHistory linked table."
+				);
+
+				return Enumerable.Empty<FilteredAggregationResult>();
+			} // if
 
 			DateTime lastUpdateDate = lastUpdated.Max(z => z.CustomerMarketPlaceUpdatingHistory.UpdatingEnd.Value);
 
@@ -655,26 +679,41 @@
 
 			DateTime periodEnd = periodStart.AddMonths(11);
 
-			// Log.Info(
-				// "calculationTime: {2}, lastUpdateDate: {1}, yearAgo: {0}, yearAgoEnd: {3}",
-				// periodStart,
-				// lastUpdateDate,
-				// calculationTime,
-				// periodEnd
-			// );
+			Log.Debug(
+				"LastUpdatedEndHistoryTurnoversByMpType: " +
+				"calculationTime = '{0}', lastUpdateDate = '{1}', period start = '{2}', period end = '{3}'.",
+				calculationTime.MomentStr(),
+				lastUpdateDate.MomentStr(),
+				periodStart.MomentStr(),
+				periodEnd.MomentStr()
+			);
 
-			var histories = ofcurrentType.Where(z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd).ToList();
+			List<MarketplaceTurnover> histories =
+				ofcurrentType.Where(z => z.TheMonth >= periodStart && z.TheMonth <= periodEnd).ToList();
 
-			// histories.ForEach(x => Log.Info(
-				// " filtered: {0}, {1}, {2}, {3}",
-				// x.TheMonth,
-				// x.Turnover,
-				// x.CustomerMarketPlaceUpdatingHistory.Id,
-				// x.CustomerMarketPlace.Id
-			// ));
+			var os = new StringBuilder();
 
-			if (histories.Equals(null))
-				return null;
+			histories.ForEach(x => os.AppendFormat(
+				"\tMonth = {0}, turnover = {1}, MpHistoryID = {2}, MpID = {3}.\n",
+				x.TheMonth,
+				x.Turnover,
+				x.CustomerMarketPlaceUpdatingHistory.Id,
+				x.CustomerMarketPlace.Id
+			));
+
+			Log.Debug(
+				"LastUpdatedEndHistoryTurnoversByMpType: filtered MarketplaceTurnover entries are\n{0}",
+				histories.Count < 1 ? "\tnothing found.\n" : os.ToString()
+			);
+
+			if (histories.Count < 1) {
+				Log.Debug(
+					"LastUpdatedEndHistoryTurnoversByMpType returns empty result: " +
+					"no filtered entries found in MarketplaceTurnover."
+				);
+
+				return Enumerable.Empty<FilteredAggregationResult>();
+			} // if
 
 			var groups = histories.GroupBy(ag => new {
 				ag.CustomerMarketPlaceUpdatingHistory.CustomerMarketPlace.Id,
@@ -696,8 +735,23 @@
 				result.Add(far);
 			} // for each group
 
+			os.Clear();
+
+			result.ForEach(x => os.AppendFormat(
+				"\tMonth = {0}, Distance = {1}, Turnover = {2}, MpID = {3}.\n",
+				x.TheMonth,
+				x.Distance,
+				x.Turnover,
+				x.MpId
+			));
+
+			Log.Debug(
+				"LastUpdatedEndHistoryTurnoversByMpType: result entries are\n{0}",
+				result.Count < 1 ? "\tnothing found.\n" : os.ToString()
+			);
+
 			return result;
-		} // LastUpdedEndHistoryTurnoversByMpType
+		} // LastUpdatedEndHistoryTurnoversByMpType
 
 		private static decimal[] CalculateTTurnover(List<FilteredAggregationResult> list, int t1, int t3, int t6) {
 			decimal[] filltt = { 0, 0, 0, 0 };
