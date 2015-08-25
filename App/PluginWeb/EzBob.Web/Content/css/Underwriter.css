@@ -2304,3 +2304,27 @@ input[type="text"].err-field-black {
 input[type="text"].err-field-red {
     border-color: red;
 }
+.editloan-actions-region {
+    margin-bottom: 20px;
+}
+    
+.editloan-actions-region  span{
+
+    line-height:35px;
+}
+.editloan-actions-region button {
+   margin-left: 20px;
+}
+.editloan-actions-region .input-group {
+    margin-left: 10px;
+}
+
+.LoanFutureScheduleItemsDDL {
+    margin-left: 10px;
+    width: 200px;
+}
+
+.bin-text {
+     margin-left:10px; 
+}
+

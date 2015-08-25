@@ -230,8 +230,8 @@
 					isBroker,
 					phone);
 			} catch (Exception e) {
-				Log.ErrorFormat("Exception while trying to close customer relations follow up:{0}", e);
-				return Json(new { success = false, error = "Error saving new customer relations follow up." });
+				Log.ErrorFormat("Exception while trying to SendSms :{0}", e);
+				return Json(new { success = false, error = "Error Sending Sms." });
 			} // try
 		} // CloseFollowUp
 

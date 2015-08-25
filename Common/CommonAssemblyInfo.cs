@@ -1,5 +1,6 @@
 using System.Reflection;
 using System.Runtime.InteropServices;
+
 [assembly: AssemblyProduct("Ezbob WEB")]
 [assembly: AssemblyCompany("Orange Money Ezbob Ltd")]
 [assembly: AssemblyCopyright("Copyright (c) Orange Money Ezbob Ltd")]

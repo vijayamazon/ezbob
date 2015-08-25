@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>TestRail</id>
+    <version>1.0.0.8</version>
+    <title>TestRail Client</title>
+    <authors>TestRail Client Committers</authors>
+    <owners>TestRail Client Committers</owners>
+    <licenseUrl>http://www.apache.org/licenses/LICENSE-2.0.html</licenseUrl>
+    <projectUrl>https://github.com/zoosk/testrail-client</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>C# implementation of the TestRail API</description>
+    <releaseNotes>
+    ##1.0.0.8
+      - Fix Nuget spec file 
+    ##1.0.0.7
+      - Update dependencies for this package
+    ##1.0.0.6
+      - Bug 
+        - Result Status Enum for Untested had wrong ID
+      - Feature 
+        - Get Plan now populates complete run objects
+        - Get for Configs
+        - Ability to create a test plan with configs
+        - Config Ids added to plan entry 
+    ##1.0.0.5
+      - Update Json.net Nuget Package
+    </releaseNotes>
+    <copyright>Copyright 2013</copyright>
+  
+    <dependencies>
+      <dependency id="Newtonsoft.Json" version="6.0.6"/>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\TestRail\*.*" target=""/>
+    <file src="..\TestRail\Properties\*.*" target="Properties\"/>
+    <file src="..\TestRail\Types\*.*" target="Types\"/>
+    <file src="..\TestRail\bin\Release\TestRail.*" target="lib\net45\"/>
+  </files>
+</package>

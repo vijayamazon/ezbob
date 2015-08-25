@@ -98,7 +98,7 @@ EzBob.Profile.ProccessingMessageView = Backbone.View.extend({
         }
         
         if (state == 'bad' && !hasLoans && !hasChance) {
-        	message = '&nbsp;';
+        	message = 'You are welcome to check with us in the future when your credit status improves.';
             cls = 'blue';
         }
 

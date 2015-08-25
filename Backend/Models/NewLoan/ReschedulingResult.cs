@@ -33,12 +33,15 @@
 		[DataMember]
 		public string Error { get; set; }
 
+		[DataMember(EmitDefaultValue = true)]
+		public bool BlockAction { get; set; } // re-scheduling allowed or not
+
 		public override string ToString() {
 			StringBuilder sb = new StringBuilder(this.GetType().Name + ": ");
 			Type t = typeof(ReschedulingResult);
 			foreach (var prop in t.GetProperties()) {
 				if (prop.GetValue(this) != null)
-					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \n");
+					sb.Append(prop.Name).Append(": ").Append(prop.GetValue(this)).Append("; \t");
 			}
 			return sb.ToString();
 		}

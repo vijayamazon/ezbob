@@ -243,9 +243,11 @@
 			} // if
 
             // Data Sharing with Alibaba 0001 - end of step 3
-            this.serviceClient.Instance.DataSharing(customer.Id, ServiceClientProxy.EzServiceReference.AlibabaBusinessType.APPLICATION_WS_3, null);
+		    if (customer.IsAlibaba) {
+		        this.serviceClient.Instance.DataSharing(customer.Id, ServiceClientProxy.EzServiceReference.AlibabaBusinessType.APPLICATION_WS_3, null);
+		    }
 
-			return Json(new { });
+		    return Json(new { });
 		}
 
 		[Ajax]

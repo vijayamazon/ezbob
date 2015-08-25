@@ -38,6 +38,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\Microsoft.Web.Infrastructure.dll</HintPath>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=4.5.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\nunit.framework.dll</HintPath>
@@ -80,6 +84,18 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="TestRailCore">
+      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailCore.dll</HintPath>
+    </Reference>
+    <Reference Include="TestRailData">
+      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailData.dll</HintPath>
+    </Reference>
+    <Reference Include="TestRailEngine">
+      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailEngine.dll</HintPath>
+    </Reference>
+    <Reference Include="TestRailModels">
+      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailModels.dll</HintPath>
+    </Reference>
     <Reference Include="TestStack.Seleno, Version=0.8.2.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\TestStack.Seleno.dll</HintPath>
@@ -97,15 +113,103 @@
     <Compile Include="..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="BrowserHost.cs" />
-    <Compile Include="S1.Application.Orange Money\C3.CreateAccountTest.cs" />
+    <Compile Include="configs\Brand\DefaultBrand.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultBrand.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\Brand\Everline.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Everline.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\Brand\Alibaba.Designer.cs">
+      <DependentUpon>Alibaba.resx</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="configs\Brand\Ezbob.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ezbob.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\Enviorment\DefaultEnviorment.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DefaultEnviorment.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\Enviorment\QA.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>QA.resx</DependentUpon>
+    </Compile>
+    <Compile Include="configs\Enviorment\Staging.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Staging.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Core\BrowserWebDriver.cs" />
+    <Compile Include="Core\Resources.cs" />
+    <Compile Include="Core\TestBase.cs" />
+    <Compile Include="Core\TestRailRepository.cs" />
+    <Compile Include="Tests\Application\Alibaba\AlibabaTests.cs" />
+    <Compile Include="Tests\Application\OrangeMoney\OrangeMoneyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
+    <None Include="configs\Scripts\category-include.cmd" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="WebDrivers\chromedriver.exe" />
+    <Content Include="WebDrivers\IEDriverServer.exe" />
+    <Content Include="WebDrivers\wires.exe" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Tests\Application\Broker\" />
+    <Folder Include="Tests\Application\UnderWriter\" />
+    <Folder Include="Tests\Automation\POC\" />
+    <Folder Include="Tests\Integration\CallCredit_CreditSafe\" />
+    <Folder Include="Tests\Integration\CustomerCommunication\" />
+    <Folder Include="Tests\Integration\Salesforce\" />
+    <Folder Include="Tests\Legacy\Everline\" />
+    <Folder Include="Tests\WorkFlow\Collection\" />
+    <Folder Include="Tests\WorkFlow\Loan\" />
+    <Folder Include="Tests\WorkFlow\Promotions\" />
+    <Folder Include="Tests\WorkFlow\Risk\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="configs\Brand\DefaultBrand.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultBrand.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\Brand\Everline.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Everline.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\Brand\Alibaba.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Alibaba.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\Brand\Ezbob.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Ezbob.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\Enviorment\DefaultEnviorment.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>DefaultEnviorment.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\Enviorment\QA.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>QA.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="configs\Enviorment\Staging.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Staging.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
