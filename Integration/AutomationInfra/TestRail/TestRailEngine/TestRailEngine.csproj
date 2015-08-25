@@ -51,9 +51,9 @@
     <Compile Include="TestRailManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\RestRailCore.csproj">
+    <ProjectReference Include="..\Core\TestRailCore.csproj">
       <Project>{6FE9C95A-0677-4A7A-8465-1123410EF786}</Project>
-      <Name>RestRailCore</Name>
+      <Name>TestRailCore</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestRailModels\TestRailModels.csproj">
       <Project>{ef3f7377-5398-489e-bcd5-774f5d93e5a9}</Project>

@@ -45,7 +45,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Automation\AutomationModels.cs" />
-    <Compile Include="Automation\CaseAtutomation.cs" />
+    <Compile Include="Automation\AtutomationCaseRun.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestRail\Case.cs" />
     <Compile Include="TestRail\CaseField.cs" />
@@ -72,9 +72,9 @@
     <Compile Include="TestRail\User.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Core\RestRailCore.csproj">
+    <ProjectReference Include="..\Core\TestRailCore.csproj">
       <Project>{6fe9c95a-0677-4a7a-8465-1123410ef786}</Project>
-      <Name>RestRailCore</Name>
+      <Name>TestRailCore</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

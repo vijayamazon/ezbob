@@ -9,7 +9,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestRail", "TestRail", "{EA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TeamCity", "TeamCity", "{7305B3FE-419B-459D-BD35-5EA21DD5521D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestRailCore", "TestRail\Core\RestRailCore.csproj", "{6FE9C95A-0677-4A7A-8465-1123410EF786}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRailCore", "TestRail\Core\TestRailCore.csproj", "{6FE9C95A-0677-4A7A-8465-1123410EF786}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRailData", "TestRail\TestRail\TestRailData.csproj", "{68C04A3F-DA7C-4588-8AA8-11A01C13630B}"
 EndProject

@@ -34,10 +34,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\Castle.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\Lib\3rdparty\AutomationDlls\Core.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\Lib\3rdparty\AutomationSet4\Microsoft.Web.Infrastructure.dll</HintPath>
@@ -88,16 +84,16 @@
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="TestRailData, Version=1.0.0.8, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="TestRailCore">
+      <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailCore.dll</HintPath>
+    </Reference>
+    <Reference Include="TestRailData">
       <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailData.dll</HintPath>
     </Reference>
-    <Reference Include="TestRailEngine, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="TestRailEngine">
       <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailEngine.dll</HintPath>
     </Reference>
-    <Reference Include="TestRailModels, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="TestRailModels">
       <HintPath>..\..\Lib\3rdparty\AutomationDlls\TestRailModels.dll</HintPath>
     </Reference>
     <Reference Include="TestStack.Seleno, Version=0.8.2.0, Culture=neutral, processorArchitecture=MSIL">

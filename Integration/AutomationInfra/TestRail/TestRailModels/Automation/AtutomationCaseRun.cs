@@ -7,12 +7,6 @@
     [Serializable]
     public class AtutomationCaseRun 
     {
-        public AtutomationCaseRun() {
-            this.Browser = AutomationModels.Browser.None;
-            this.Brand = AutomationModels.Brand.None;
-            this.Environment = AutomationModels.Environment.None;
-        }
-
         public ulong RunId { get; set; }
         public Case CaseBase { get; set; }
         public ulong SuiteId { get; set; }        
