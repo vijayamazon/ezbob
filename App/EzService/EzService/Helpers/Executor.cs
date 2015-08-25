@@ -16,7 +16,7 @@ namespace EzService.Helpers {
     using log4net;
 
     //TODO: refactor
-    internal class Executor {
+    public class Executor {
 
         private readonly EzServiceInstanceRuntimeData data;
 
@@ -34,11 +34,11 @@ namespace EzService.Helpers {
             newInstancesAllowed = true;
         } // static constructor
 
-        public Executor(EzServiceInstanceRuntimeData oData) {
+        public Executor(EzServiceInstanceRuntimeData data) {
             if (!NewInstancesAllowed)
                 throw new FaultException("Cannot create " + InstanceName + " instance: new instances are disabled.");
 
-            this.data = oData;
+            this.data = data;
 
             Ezbob.Backend.Strategies.Library.Initialize(
                 ReferenceEquals(this.data, null) ? null : this.data.Env,
@@ -226,7 +226,7 @@ namespace EzService.Helpers {
             } // try
         } // Execute
 
-        private ActionMetaData ExecuteSync<T>(int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
+        protected ActionMetaData ExecuteSync<T>(int? nCustomerID, int? nUserID, params object[] args) where T : AStrategy {
             T oInstance;
             return ExecuteSync(out oInstance, nCustomerID, nUserID, args);
         } // ExecuteSync
@@ -241,7 +241,7 @@ namespace EzService.Helpers {
         /// <param name="nUserID">underwriterID, null-able</param>
         /// <param name="args">Strategy constructor parameters</param>
         /// <returns></returns>
-        private ActionMetaData ExecuteSync<T>(
+        protected ActionMetaData ExecuteSync<T>(
             out T oInstance,
             int? nCustomerID,
             int? nUserID,
@@ -253,12 +253,12 @@ namespace EzService.Helpers {
             });
         } // ExecuteSync
 
-        private ActionMetaData ExecuteSync<T>(ExecuteArguments args) where T : AStrategy {
+        protected ActionMetaData ExecuteSync<T>(ExecuteArguments args) where T : AStrategy {
             T oInstance;
             return ExecuteSync<T>(out oInstance, args);
         } // ExecuteSync
 
-        private ActionMetaData ExecuteSync<T>(out T oInstance, ExecuteArguments args) where T : AStrategy {
+        protected ActionMetaData ExecuteSync<T>(out T oInstance, ExecuteArguments args) where T : AStrategy {
             ActionMetaData amd = null;
 
             try {
@@ -467,6 +467,5 @@ namespace EzService.Helpers {
             ThreadContext.Properties["CustomerId"] = args.CustomerID;
             ThreadContext.Properties["StrategyType"] = args.StrategyType.Name;
         }
-
     }
 }
