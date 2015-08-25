@@ -1,4 +1,12 @@
-﻿.main-page-everline a,
+﻿/*
+*******************************************************************************
+*
+* Link (common profile elements).
+*
+*******************************************************************************
+*/
+
+.main-page-everline a,
 .main-page-everline a:visited {
 	text-decoration: none;
 	color: #e28023;
@@ -6,6 +14,14 @@
 	font-weight: 600;
 	font-size: 14px;
 }
+
+/*
+*******************************************************************************
+*
+* Primary button (common profile elements).
+*
+*******************************************************************************
+*/
 
 .main-page-everline .ev-btn-org {
 	margin-left: 5%;
@@ -43,6 +59,14 @@
 	color: white!important;
 }
 
+/*
+*******************************************************************************
+*
+* Secondary button (common profile elements).
+*
+*******************************************************************************
+*/
+
 .main-page-everline .ev-btn-secondary {
 	margin-left: 5%;
 	line-height: 34px;
@@ -77,6 +101,43 @@
 	-ms-opacity: 0.4;
 	opacity: 0.4;
 }
+
+/*
+*******************************************************************************
+*
+* Table (common profile elements).
+*
+*******************************************************************************
+*/
+
+.main-page-everline table th {
+	background-color: #e0e0e0;
+	color: #666666;
+	border: 1px solid white;
+	padding: 10px;
+	font-size: 14px;
+	text-align: left;
+	font-family: Open Sans!important;
+}
+
+.main-page-everline table td {
+	background-color: #f1f0f0;
+	color: #666666;
+	border: 1px solid white;
+	padding: 10px;
+	font-size: 14px;
+	text-align: left;
+	font-family: Open Sans!important;
+}
+
+/*
+*******************************************************************************
+*
+* Main profile menu.
+*
+*******************************************************************************
+*/
+
 .main-page-everline .profile-menu .navbar-inner {
 	padding: 10px 20px;
 	width: 1000px;
@@ -112,29 +173,27 @@
 	width: 30px;
 }
 
+/*
+*******************************************************************************
+*
+* Account activity page (list of loans).
+*
+*******************************************************************************
+*/
+
 .main-page-everline .profile-widgets {
 	width: 1000px;
 	margin: 0 auto;
 	padding: 20px 0;
 }
 
-.main-page-everline table th {
-	background-color: #e0e0e0;
-	color: #666666;
-	border: 1px solid white;
-	padding: 10px;
-	font-size: 14px;
-	text-align: left;
-}
-
-.main-page-everline table td {
-	background-color: #f1f0f0;
-	color: #666666;
-	border: 1px solid white;
-	padding: 10px;
-	font-size: 14px;
-	text-align: left;
-}
+/*
+*******************************************************************************
+*
+* Page title (above widgets row).
+*
+*******************************************************************************
+*/
 
 .main-page-everline .profile-headlines {
 	width: 1000px;
@@ -143,6 +202,14 @@
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
 }
+
+/*
+*******************************************************************************
+*
+* Widgets row (above main menu).
+*
+*******************************************************************************
+*/
 
 .main-page-everline .d-widgets {
 	border: 1px solid #28211f;
@@ -171,5 +238,48 @@
 
 .main-page-everline .d-widgets .ev-btn-org {
 	float: right;
-	margin-top: 15px;
+	margin-top: 10px;
+}
+
+/*
+*******************************************************************************
+*
+* Loan details page.
+*
+*******************************************************************************
+*/
+
+.main-page-everline #get-cash {
+	width: 1000px;
+	margin: 0 auto;
+	padding: 20px 0;
+}
+
+.main-page-everline #get-cash h1 {
+	font-family: Open Sans;
+	font-size: 24px;
+	color: #666666;
+	font-weight: bold;
+}
+
+.main-page-everline #get-cash h2 {
+	font-family: Open Sans;
+	font-size: 22px;
+	color: #8dc641;
+	font-weight: bold;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details {
+	vertical-align: top;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div.span4 {
+	display: inline-block;
+	width: 400px;
+	margin-right: 50px;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div.span1 {
+	display: inline-block;
+	width: 0;
 }

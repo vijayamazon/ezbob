@@ -46,6 +46,8 @@
 			if (this.finishWizardArgs != null) {
 				this.cashRequestOriginator = this.finishWizardArgs.CashRequestOriginator;
 				this.finishWizardArgs.DoMain = false;
+				this.overrideApprovedRejected =
+					this.finishWizardArgs.CashRequestOriginator != CashRequestOriginator.Approved;
 			} // if
 
 			this.wasMismatch = false;
@@ -59,6 +61,8 @@
 				DateTime.UtcNow.ToString("yyyy-MM-dd-HH-mm-ss", CultureInfo.InvariantCulture),
 				Guid.NewGuid().ToString("N")
 			);
+
+			this.nlExists = DB.ExecuteScalar<bool>("NL_Exists", CommandSpecies.StoredProcedure);
 
 			this.customerDetails = new CustomerDetails(customerID);
 
@@ -74,11 +78,6 @@
 		public int CustomerID {
 			get { return this.customerDetails.ID; }
 		} // CustomerID
-
-		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
-			this.overrideApprovedRejected = bOverrideApprovedRejected;
-			return this;
-		} // SetOverrideApprovedRejected
 
 		/// <exception cref="StrategyAlert">Should never happen.</exception>
 		public override void Execute() {
@@ -103,6 +102,17 @@
 
 			SendEmails();
 		} // Execute
+
+		private void SetCustomerIsUnderMainStrategy() {
+			if (!this.overrideApprovedRejected)
+				return;
+
+			DB.ExecuteNonQuery(
+				"MainStrategySetCustomerIsBeingProcessed",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", CustomerID)
+			);
+		} // SetCustomerIsUnderMainStrategy
 
 		private bool SkipEverything() {
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverything)
@@ -501,6 +511,7 @@
 
 			AddOldDecisionOffer(now); 
 
+			if (this.nlExists)
 			AddNLDecisionOffer(now); 
 
 			UpdateSalesForceOpportunity();
@@ -531,6 +542,9 @@
 		} // AddOldDecisionOffer
 
 		private void AddNLDecisionOffer(DateTime now) {
+			if (!this.nlExists)
+				return;
+			
 			if (!this.autoDecisionResponse.HasAutoDecided)
 				return;
 			
@@ -554,7 +568,7 @@
 
 				offerFees.Add(new NL_OfferFees {
 					LoanFeeTypeID = (int)FeeTypes.SetupFee,
-					Percent = this.autoDecisionResponse.SetupFee
+					Percent = this.autoDecisionResponse.SetupFee,
 				});
 
 				AddOffer addOfferStrategy = new AddOffer(new NL_Offers {
@@ -569,7 +583,7 @@
 					RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month, // TODO some day...
 					MonthlyInterestRate = this.autoDecisionResponse.InterestRate,
 					RepaymentCount = this.autoDecisionResponse.RepaymentPeriod,
-					BrokerSetupFeePercent = 0, // TODO BUG FILL IN AUTO REAPPROVE
+					BrokerSetupFeePercent = 0, // TODO: should be this.autoDecisionResponse.BrokerSetupFeePercent,
 					IsLoanTypeSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
 					IsRepaymentPeriodSelectionAllowed = this.autoDecisionResponse.IsCustomerRepaymentPeriodSelectionAllowed,
 					SendEmailNotification = !this.autoDecisionResponse.LoanOfferEmailSendingBannedNew,
@@ -751,11 +765,16 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
+				SetCustomerIsUnderMainStrategy();
+
+				if (this.nlExists) {
 				this.nlCashRequestID = DB.ExecuteScalar<int>(
 					"NL_CashRequestGetByOldID",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@OldCashRequestID", this.cashRequestID)
 				);
+			} // if
+
 				return;
 			} // if
 
@@ -780,17 +799,19 @@
 
 			this.cashRequestID.Value = sr["CashRequestID"];
 	
-			AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
-				CashRequestOriginID = (int)this.cashRequestOriginator.Value,
-				CustomerID = CustomerID,
-				OldCashRequestID = this.cashRequestID,
-				RequestTime = now,
-				UserID = UnderwriterID,
-			});
-			cashRequestStrategy.Execute();
-			this.nlCashRequestID = cashRequestStrategy.CashRequestID;
+			if (this.nlExists) {
+				AddCashRequest cashRequestStrategy = new AddCashRequest(new NL_CashRequests {
+					CashRequestOriginID = (int)this.cashRequestOriginator.Value,
+					CustomerID = CustomerID,
+					OldCashRequestID = this.cashRequestID,
+					RequestTime = now,
+					UserID = UnderwriterID,
+				});
+				cashRequestStrategy.Execute();
+				this.nlCashRequestID = cashRequestStrategy.CashRequestID;
 
-			Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
+				Log.Debug("Added NL CashRequest: {0}", this.nlCashRequestID);
+			} // if
 
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
 				decimal? lastLoanAmount = sr["LastLoanAmount"];
@@ -874,11 +895,9 @@
 			return mpus;
 		} // UpdateMarketplaces
 
-		// Inputs
 		private readonly FinishWizardArgs finishWizardArgs;
 		private readonly int avoidAutomaticDecision;
 
-		// Helpers
 		private readonly NewCreditLineOption newCreditLineOption;
 		private readonly AutoDecisionResponse autoDecisionResponse;
 
@@ -902,6 +921,7 @@
 
 		private readonly CashRequestOriginator? cashRequestOriginator;
 
+		private readonly bool nlExists;
 		private readonly string tag;
 		private bool wasMismatch;
 		private ABackdoorSimpleDetails backdoorSimpleDetails;
