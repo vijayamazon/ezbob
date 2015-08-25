@@ -91,10 +91,7 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
-	UPDATE Customer SET
-		CreditResult = 'WaitingForDecision'
-	WHERE
-		Id = @CustomerID
+	EXECUTE MainStrategySetCustomerIsBeingProcessed @CustomerID
 
 	------------------------------------------------------------------------------
 
