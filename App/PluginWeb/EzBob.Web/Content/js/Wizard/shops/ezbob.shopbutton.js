@@ -92,27 +92,14 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 			sTop = '2px';
 		else
 			sTop = 0;
-
+		
 		btn.hoverIntent(
 			function() {
-				var sTableToBlock = 'table-to-block-done';
-				var oEl = $(this);
-				var oDiv = oEl.parent();
-
-				if (!oDiv.data(sTableToBlock)) {
-					var sWidth = oDiv.width() + 'px';
-					oEl.css('width', sWidth);
-					oDiv.css({ width: sWidth, display: 'block', }).data(sTableToBlock, 'done');
-				} // if
-
-				// The purpose of code block from the beginning of the function to this point is to
-				// bypass an incorrect behaviour in Firefox/IE. Or maybe Firefox/IE behave according
-				// to standards while Chrome does not.
-
 				$('.onhover', this).animate({ top: sTop, opacity: 1 });
 			},
 			function() { $('.onhover', this).animate({ top: '75px', opacity: 0 }); }
 		);
+		
 	}, // onRender
 
 	isAddingAllowed: function() {

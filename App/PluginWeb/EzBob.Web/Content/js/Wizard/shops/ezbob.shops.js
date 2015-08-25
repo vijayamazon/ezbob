@@ -425,14 +425,16 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		$(this.storeList).find('.back-store').remove();
 		this.storeList.find('.importantnumber').text('£150,000');
+		var showMoreButton = this.storeList.find('.btn-showmore');
 
 		if (isProfile) {
-			this.storeList.find('.btn-showmore').hide();
+			showMoreButton.hide();
 			this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		} else if (this.isWhiteLabel()) {
-			this.storeList.find('.btn-showmore').hide();
+			showMoreButton.hide();
 		} else {
-			this.storeList.find('.btn-showmore').show();
+			showMoreButton.show();
+			showMoreButton.attr('data-current', 'more');
 		}
 		
 		if (isProfile) {
@@ -450,23 +452,21 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	toggleShowMoreAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		if (oBtn.data('current') === 'more')
+		if (oBtn.attr('data-current') === 'more')
 			this.showMoreAccounts();
 		else
 			this.showLessAccounts();
 	}, // toggleShowMoreAccounts
 
-	tableToBlock: function() { return 'table-to-block-done'; }, // tableToBlock
-
 	showLessAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		oBtn.data('current', 'more');
+		oBtn.attr('data-current', 'more');
 		oBtn.text('See more');
 		
 		this.storeList.find('.AddMoreRuleBottom').addClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').hide();
-		this.storeList.find('.marketplace-button').not('.marketplace-button-less').css('display', 'none').data(this.tableToBlock(), '');
+		this.storeList.find('.marketplace-button').not('.marketplace-button-less').css('display', 'none');
 
 		this.storeList.find('.link-accounts-optional').hide();
 	}, // showLessAccounts
@@ -474,12 +474,12 @@ EzBob.StoreInfoView = EzBob.View.extend({
 	showMoreAccounts: function() {
 		var oBtn = this.storeList.find('.btn-showmore');
 
-		oBtn.data('current', 'less');
+		oBtn.attr('data-current', 'less');
 		oBtn.text('See less');
 
 		this.storeList.find('.AddMoreRuleBottom').removeClass('hide');
 		this.storeList.find('.marketplace-button-more, .marketplace-group.following').show();
-		this.storeList.find('.marketplace-button').css('display', 'table').data(this.tableToBlock(), '');
+		this.storeList.find('.marketplace-button').css('display', 'inline-block');
 
 		this.storeList.find('.link-accounts-optional').show().insertBefore(this.storeList.find('.marketplace-group.following:first'));
 
