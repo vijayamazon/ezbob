@@ -56,9 +56,9 @@
       <Project>{7e526927-9849-4e6e-bbff-d0d780f81a05}</Project>
       <Name>Strategies</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
+    <ProjectReference Include="..\DAL\EzBobDAL.csproj">
       <Project>{aa6eb5fb-1ae9-495d-8456-8e159d766cd8}</Project>
-      <Name>DAL</Name>
+      <Name>EzBobDAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Models\Models.csproj">
       <Project>{CAD2D79B-6513-4101-9A76-53AB90F5C50D}</Project>

@@ -5,8 +5,8 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace PlayGround {
-    using DAL;
-    using DAL.ThirdParty;
+    using EzBobDAL;
+    using EzBobDAL.ThirdParty.Experian;
     using Models;
     using StructureMap;
 
