@@ -82,7 +82,7 @@ EzBob.Popup = Backbone.View.extend({
 		case 'init':
 			oButtons.push({
 				text: 'Cancel',
-				'class': 'button btn-grey',
+				'class': 'button btn-grey clean-btn',
 				click: function() { self.PostCodeBtnCancel(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-cancelled-early',
 			});
@@ -93,7 +93,7 @@ EzBob.Popup = Backbone.View.extend({
 		case 'selector':
 		    oButtons.push({
 		        text: 'Cancel',
-		        'class': 'button btn-grey',
+		        'class': 'button btn-grey clean-btn',
 		        click: function () { self.PostCodeBtnCancel(); },
 		        'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-cancelled',
 		    });
@@ -101,7 +101,7 @@ EzBob.Popup = Backbone.View.extend({
 		    if (sMode === 'selector') {
 				oButtons.push({
 					text: 'Not found',
-					'class': 'button btn-green',
+					'class': 'button btn-green ev-btn-org',
 					click: function() { self.PostCodeBtnNotFound(); },
 					'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-not-found',
 				});
@@ -110,9 +110,9 @@ EzBob.Popup = Backbone.View.extend({
 			
 
 			oButtons.push({
-				text: 'OK',
+				text: 'Confirm',
 				disabled: 'disabled',
-				'class': 'postCodeBtnOk button btn-green disabled',
+				'class': 'postCodeBtnOk button btn-green disabled ev-btn-org',
 				click: function() { self.PostCodeBtnOk(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-selected',
 			});
@@ -122,14 +122,14 @@ EzBob.Popup = Backbone.View.extend({
 		case 'manual-input':
 			oButtons.push({
 				text: 'Cancel',
-				'class': 'button btn-grey',
+				'class': 'button btn-grey clean-btn',
 				click: function() { self.PostCodeBtnCancel(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-manual-input-cancelled',
 			});
 
 			oButtons.push({
-				text: 'OK',
-				'class': 'postCodeBtnManualInputOk button btn-green disabled',
+				text: 'Confirm',
+				'class': 'postCodeBtnManualInputOk button btn-green disabled ev-btn-org',
 				disabled: 'disabled',
 				click: function() { self.PostCodeBtnManualInputOk(); },
 				'ui-event-control-id': this.uiEventControlIdPrefix + '-address-form:address-manual-input-selected',

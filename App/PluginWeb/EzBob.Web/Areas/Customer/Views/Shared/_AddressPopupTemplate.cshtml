@@ -1,4 +1,11 @@
-﻿<div id="address-popup">
+﻿@using EzBob.Web.Infrastructure.Html
+@model dynamic
+
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
+<div id="address-popup">
 	<input class="postCode" name="postCode" type="hidden" />
 
 	<div class="address-list-loading-block">
@@ -10,77 +17,54 @@
 	</div>
 
 	<div class="address-input-block hide">
-		Please enter the address manually
-		<br/><br/>
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Address line 1",
+			cls: "line1 form_field",
+			isRequired: true,
+			statusIcon: true,
+			uiEventControlID: "address-form:manual-input-line1"),
+			origin: origin)
 
-		<div class="control-group form_field_container">
-			<div class="controls">
-				<label class="attardi-input">
-					<span>Address line 1</span>
-					<input type="text" class="line1 form_field" ui-event-control-id="address-form:manual-input-line1" />
-					<img class="field_status required" />
-				</label>
-			</div>
-		</div>
-
-		<div class="control-group form_field_container">
-			<div class="controls">
-				<label class="attardi-input">
-					<span>Address line 2</span>
-					<input type="text" class="line2 form_field" ui-event-control-id="address-form:manual-input-line2" />
-					<img class="field_status" />
-				</label>
-			</div>
-		</div>
-
-		<div class="control-group form_field_container">
-			<div class="controls">
-				<label class="attardi-input">
-					<span>Address line 3</span>
-					<input type="text" class="line3 form_field" ui-event-control-id="address-form:manual-input-line3" />
-					<img class="field_status" />
-				</label>
-			</div>
-		</div>
-
-		<div class="control-group form_field_container">
-			<div class="controls">
-				<label class="attardi-input">
-					<span>Town</span>
-					<input type="text" class="town form_field" ui-event-control-id="address-form:manual-input-town" />
-					<img class="field_status required" />
-				</label>
-			</div>
-		</div>
-
-		<div class="control-group form_field_container">
-			<div class="controls">
-				<label class="attardi-input">
-					<span>Postcode</span>
-					<input type="text" disabled="disabled" readonly="" class="zipcode form_field" ui-event-control-id="address-form:manual-input-zipcode" />
-					<img class="field_status required" />
-				</label>
-			</div>
-		</div>
-
-		<div class="control-group form_field_container">
-			<div class="controls">
-				<label class="attardi-input">
-					<span>Country</span>
-					<input type="text" class="country form_field" ui-event-control-id="address-form:manual-input-country" />
-					<img class="field_status" />
-				</label>
-			</div>
-		</div>
-
-		<div class="control-group form_field_container">
-			<div class="controls">
-				<label class="attardi-input">
-					<span>P.O. box</span>
-					<input type="text" class="pobox form_field" ui-event-control-id="address-form:manual-input-pobox" />
-					<img class="field_status" />
-				</label>
-			</div>
-		</div>
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Address line 2",
+			cls: "line2 form_field",
+			isRequired: false,
+			statusIcon: true,
+			uiEventControlID: "address-form:manual-input-line2"),
+			origin: origin)
+		
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Address line 3",
+			cls: "line3 form_field",
+			isRequired: false,
+			statusIcon: true,
+			uiEventControlID: "address-form:manual-input-line3"),
+			origin: origin)
+		
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Town",
+			cls: "town form_field",
+			isRequired: true,
+			statusIcon: true,
+			uiEventControlID: "address-form:manual-input-town"),
+			origin: origin)
+		
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Postcode",
+			cls: "zipcode form_field",
+			isRequired: true,
+			statusIcon: true,
+			isDisabled:true,
+			uiEventControlID: "address-form:manual-input-zipcode"),
+			origin: origin)
+		
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "Country",
+			cls: "country form_field",
+			isRequired: false,
+			statusIcon: true,
+			uiEventControlID: "address-form:manual-input-country"),
+			origin: origin)
+		
+		@EzForm.InputTextWizard(new EzInputBuilder(null, "P.O. box",
+			cls: "pobox form_field",
+			isRequired: false,
+			statusIcon: true,
+			uiEventControlID: "address-form:manual-input-pobox"),
+			origin: origin)
 	</div>
 </div>

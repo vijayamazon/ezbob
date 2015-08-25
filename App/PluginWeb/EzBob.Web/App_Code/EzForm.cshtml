@@ -654,8 +654,6 @@ string formFieldID = "")
 	}//foreach
 }
 
-
-
 @helper InputTextUnderwriter(WebPageBase page, string id, string caption, string value, string cls = "", bool isDisabled = false)
 {
     var identificator = new HtmlString(id);
@@ -686,19 +684,120 @@ string formFieldID = "")
                        class="@cls"
                        value="@val"
                        @if (isDisabled) {  @: disabled=" disabled"
-                                                                                                                                                                                     } @if (!string.IsNullOrWhiteSpace(uiEventControlID)) { @: ui-event-control-id="@uiEventControlID"
-                                                                                                                                                                                                                                   } /> @if (statusIcon) { var sId = identificator + "Image"; var sReq = isRequired ? "required" : ""; <img id="@sId" class="field_status @sReq" /> } else if (isRequired) { <span class="required">*</span> } </label> </div> </div> }  @helper InputTextCash(string id, string caption, string value, string cls = "") { <div class="control-group"> <label for="@id" class="control-label">@caption (£)</label> <div class="controls cashControlls"> <input id="@id" name="@id" type="text" value="@value" class="@cls cashInput" /> </div> </div> }  @helper InputTextReadOnly(string id, string caption, string value, string cls = "") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <input id="@id" readonly="readonly" name="@id" type="text" value="@value" class="@cls" /> </div> </div> }  @helper InputTextSmallReadOnly(string id, string caption, string value) { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <input class="input-small" id="@id" name="@id" readonly="readonly" type="text" value="@value" /> </div> </div> }  @helper InputTextSmall(string id, string caption, string value, string divClass = "") { <div class="control-group @divClass"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <input class="input-small" id="@id" name="@id" type="text" value="@value" /> </div> </div> }  @helper TextArea(string id, string caption, string value, string css = "span9") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <textarea id="@id" name="@id" rows="10" cols="300" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea> </div> </div> }  @helper TextAreaSmall(string id, string caption, string value, string css = "") { <div class="form-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <textarea id="@id" name="@id" rows="5" cols="10" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea> </div> </div> }  @helper TextAreaReadOnly(string id, string caption, string value, string css = "") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> <textarea id="@id" name="@id" rows="10" cols="28" readonly="readonly" class="@css">@value</textarea> </div> </div> }  @helper DatePicker(string id, string date, string css = "span2") { <div class="input-append date dp-inline" id="@id" data-date="@date" data-date-format="dd-mm-yyyy"> <input class="@css datepicker" size="16" type="text" value="@date" name="@id"> <span class="add-on"><i class="icon-white icon-th"></i></span> </div> }  @helper DatePickerInline(string id, string caption, string date, string css = "") { <div class="control-group"> <label for="@id" class="control-label">@caption</label> <div class="controls"> @DatePicker(id, date, css) </div> </div> }  @helper Cell(params string[] arguments) { <tr> @foreach (var s in arguments) { <td>@s</td> } </tr> }  @helper AddressInput(WebPageBase page, string name, string title, string sUiEventControlID, string css = "") { sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;  var identificator = new HtmlString(name); var input = string.Format("<div id={0} class=\"address-field\" data-ui-event-control-id-prefix=\"{1}\" data-title=\"{2}\" data-css=\"{3}\"></div>", identificator, sUiEventControlID, title, css, true, true);  <div> @{page.WriteLiteral(input);} </div> }    @helper DateInputUnderwriter(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null) { var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." }; var validationClass = required ? "requiredDate" : ""; var identificator = new HtmlString(name);  <div class="form-group"> <label for="day" class="control-label">@title</label> <div class="controls ezDateTime"> <select name="day" style="width: 33%;" class="form-control selectheight"> <option value="-">-</option> @{ for (var i = 1; i <= 31; i++) { <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i) { @: selected="selected"
-                                                                                                                                                                                                                                                                                      } value="@i"> @i </option> } } </select>  <select name="month" style="width: 32%;" class="form-control selectheight"> <option value="-">-</option> @{ for (var i = 1; i <= 12; i++) { <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i) { @: selected="selected"
-                                                                                                                                                                                                                                                                                      } value="@i"> @month[i - 1] </option> } } </select>  <select name="year" style="width: 32%;" class="form-control selectheight"> <option value="-">-</option> @{ var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year; var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year; for (var i = minYear; i <= maxYear; i++) { <option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i) { @: selected="selected"
-                                                                                                                                                                                                                                                                                                                       } value="@i"> @i </option>
-                    }
-                }
-            </select>
+                        } @if (!string.IsNullOrWhiteSpace(uiEventControlID)) { @: ui-event-control-id="@uiEventControlID"
+                        } /> @if (statusIcon) { var sId = identificator + "Image"; var sReq = isRequired ? "required" : ""; <img id="@sId" class="field_status @sReq" /> 
+						} else if (isRequired) { 
+							<span class="required">*</span> 
+						} </label> </div> </div> 
+}  
 
-            <input id='@identificator' class="@identificator @validationClass  hidden-field required" name="@identificator" />
-        </div>
+@helper InputTextCash(string id, string caption, string value, string cls = "") { 
+	<div class="control-group"> <label for="@id" class="control-label">@caption (£)</label> <div class="controls cashControlls">
+		 <input id="@id" name="@id" type="text" value="@value" class="@cls cashInput" />
+	</div> </div> 
+}  
 
-    </div>
+@helper InputTextReadOnly(string id, string caption, string value, string cls = "") { 
+	<div class="control-group"> <label for="@id" class="control-label">@caption</label> 
+		<div class="controls">
+			<input id="@id" readonly="readonly" name="@id" type="text" value="@value" class="@cls" />
+		</div> 
+	</div> 
+} 
+
+@helper InputTextSmallReadOnly(string id, string caption, string value) { 
+	<div class="control-group"> <label for="@id" class="control-label">@caption</label>
+		<div class="controls"> <input class="input-small" id="@id" name="@id" readonly="readonly" type="text" value="@value" /></div> 
+	</div>
+} 
+
+@helper InputTextSmall(string id, string caption, string value, string divClass = "") {
+	<div class="control-group @divClass"> <label for="@id" class="control-label">@caption</label> 
+		<div class="controls"> <input class="input-small" id="@id" name="@id" type="text" value="@value" /></div> 
+	</div> 
+} 
+
+@helper TextArea(string id, string caption, string value, string css = "span9") { 
+	<div class="control-group"> <label for="@id" class="control-label">@caption</label>
+		<div class="controls">
+			<textarea id="@id" name="@id" rows="10" cols="300" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea>
+		</div> 
+	</div>
+}  
+
+@helper TextAreaSmall(string id, string caption, string value, string css = "") {
+	<div class="form-group"> <label for="@id" class="control-label">@caption</label> 
+		<div class="controls">
+			<textarea id="@id" name="@id" rows="5" cols="10" class="@css" style="-moz-resize: none; -ms-resize: none; -o-resize: none; resize: none;">@value</textarea>
+		</div> 
+	</div>
+}  
+
+@helper TextAreaReadOnly(string id, string caption, string value, string css = "") { 
+	<div class="control-group"> <label for="@id" class="control-label">@caption</label> 
+	<div class="controls"> <textarea id="@id" name="@id" rows="10" cols="28" readonly="readonly" class="@css">@value</textarea> 
+		</div> 
+	</div> 
+}  
+
+@helper DatePicker(string id, string date, string css = "span2") { 
+	<div class="input-append date dp-inline" id="@id" data-date="@date" data-date-format="dd-mm-yyyy">
+		 <input class="@css datepicker" size="16" type="text" value="@date" name="@id">
+	 <span class="add-on"><i class="icon-white icon-th"></i></span> 
+	</div> 
+	} 
+@helper DatePickerInline(string id, string caption, string date, string css = "") { 
+	<div class="control-group"> <label for="@id" class="control-label">@caption</label> 
+	<div class="controls"> @DatePicker(id, date, css) </div> </div> 
+	}  
+
+@helper Cell(params string[] arguments) { 
+	<tr> @foreach (var s in arguments) { 
+												   <td>@s</td>
+	} </tr> 
+	}  
+
+@helper AddressInput(WebPageBase page, string name, string title, string sUiEventControlID, string css = "") { 
+	sUiEventControlID = string.IsNullOrWhiteSpace(sUiEventControlID) ? string.Empty : sUiEventControlID;  
+	var identificator = new HtmlString(name);
+	var input = string.Format("<div id={0} class=\"address-field\" data-ui-event-control-id-prefix=\"{1}\" data-title=\"{2}\" data-css=\"{3}\"></div>", identificator, sUiEventControlID, title, css, true, true); 
+	 <div> @{page.WriteLiteral(input);} </div> 
+}    
+
+@helper DateInputUnderwriter(string name, string title, bool required = true, DateTime[] minMaxDefaultDate = null) {
+		  var month = new[] { "Jan.", "Feb.", "Mar.", "Apr.", "May.", "Jun.", "Jul.", "Aug.", "Sep.", "Oct.", "Nov.", "Dec." }; 
+		  var validationClass = required ? "requiredDate" : ""; var identificator = new HtmlString(name);  
+		  <div class="form-group"> <label for="day" class="control-label">@title</label> 
+			<div class="controls ezDateTime">
+				<select name="day" style="width: 33%;" class="form-control selectheight">
+					 <option value="-">-</option> 
+				  @{ for (var i = 1; i <= 31; i++) { 
+					<option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Day == i) { @: selected="selected"
+							} value="@i"> @i </option> } 
+					} 
+				</select>  
+			  
+				<select name="month" style="width: 32%;" class="form-control selectheight">
+					<option value="-">-</option>
+					@{ for (var i = 1; i <= 12; i++) { 
+						<option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Month == i) { @: selected="selected"
+							} value="@i"> @month[i - 1] </option> } 
+					}
+				</select>  
+			  
+				<select name="year" style="width: 32%;" class="form-control selectheight"> <option value="-">-</option> 
+				@{ 
+					var minYear = (minMaxDefaultDate == null) ? 1900 : minMaxDefaultDate[0].Year;
+					var maxYear = (minMaxDefaultDate == null) ? DateTime.Now.Year - 18 : minMaxDefaultDate[1].Year; 
+					for (var i = minYear; i <= maxYear; i++) { 
+						<option @if (minMaxDefaultDate != null && minMaxDefaultDate[2].Year == i) { @: selected="selected"
+								} value="@i"> @i </option>
+					}
+				}
+				</select>
+				<input id='@identificator' class="@identificator @validationClass  hidden-field required" name="@identificator" />
+			</div>
+		</div>
 }
 
 @helper SelectAdvanced(string id, string caption, Dictionary<string, string> values, string placeHolder = "", string css = "", int defVal = 0, string defStrVal = "")

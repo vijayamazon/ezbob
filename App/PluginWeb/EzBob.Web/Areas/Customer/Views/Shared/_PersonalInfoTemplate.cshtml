@@ -31,8 +31,15 @@
 
 <script id="personinfo-template" type="text/template">
 	<div class="row-fluid">
-        <div>Sliders
-            <button class="show-sliders">Show sliders</button>
+		@{ Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_SecurityIcons.cshtml");}
+        <div>
+			<h2>Requested loan summary</h2>
+			<div class="loan-summary-box-wrapper">
+				<div class="loan-summary-box"><div>Borrowing</div><div class="requested-loan-amount">&pound;9,000.00</div></div>
+				<div class="loan-summary-box"><div>Duration</div><div class="requested-loan-period">12 month</div></div>
+				<button class="button btn-green clean-btn show-sliders">Change loan details</button>
+			</div>
+			<hr class="wizard-hr" />
         </div>
 		<h2 class="form_start">Personal details</h2>
 
@@ -63,35 +70,35 @@
 			
 			<input type="hidden" name="Fullname" />
 
-
-
-              EzInputBuilder radio1 = new EzInputBuilder("FormRadioCtrl_M", "Male",
-                 value:"M",
-                 type:"radio",
+			EzInputBuilder radio1 = new EzInputBuilder("FormRadioCtrl_M", "Male",
+                value:"M",
+                type:"radio",
                 cls: "required",
 				isRequired: true,
 				statusIcon: true,
                 name: "Gender",
 				uiEventControlID: "personal-info:gender" );
-              EzInputBuilder radio2 = new EzInputBuilder("FormRadioCtrl_F", "Female",
-             value: "F",
-             type: "radio",
-            cls: "gender-margin",
-            isRequired: true,
-            statusIcon: true,
-            name: "Gender",
-            uiEventControlID: "personal-info:gender");
+            
+			EzInputBuilder radio2 = new EzInputBuilder("FormRadioCtrl_F", "Female",
+				value: "F",
+				type: "radio",
+				cls: "gender-margin",
+				isRequired: true,
+				statusIcon: true,
+				name: "Gender",
+				uiEventControlID: "personal-info:gender");
 
-              List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1,radio2 };
+            List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1,radio2 };
                  var buttonsmodel = new EzClickInputModel(
-                  name: "Gender",
-                 caption: "Gender ",
-                 errorImgClass: "field_status required personal-details-gender-image",
-                 inputWrapperClass: "FormRadioCtrl",
-		         isRequired: true,
-		         statusIcon: true,
-                 inputButtons: radios);
-                @EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+					 name: "Gender",
+					 caption: "Gender ",
+					 errorImgClass: "field_status required personal-details-gender-image",
+					 inputWrapperClass: "FormRadioCtrl",
+					 isRequired: true,
+					 statusIcon: true,
+					 inputButtons: radios);
+					 
+            @EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
 
     @EzForm.DateInput(this, "DateOfBirth", "Date of birth", required: true, statusIcon: true, uiEventControlID: "personal-info:birth_date", labelCss: "personal-details-birth-date",origin:origin)
 
@@ -169,7 +176,7 @@
     </div>
   }
 
-    @EzForm.WizardButton(new EzButtonModel("personInfoContinueBtn", "Continue",
+    @EzForm.WizardButton(new EzButtonModel("personInfoContinueBtn", "Next",
 				cls: "button btn-green ev-btn-org btn-continue disabled",
 				uiEventControlID: "personal-info:continue",
 				buttonType: EzButtonType.link,
