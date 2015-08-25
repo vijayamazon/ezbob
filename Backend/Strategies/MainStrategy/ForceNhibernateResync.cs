@@ -14,6 +14,17 @@
 			if (customer == null)
 				return;
 
+			foreach (MP_CustomerMarketPlace mp in customer.CustomerMarketPlaces) {
+				if (mp == null)
+					continue;
+
+				foreach (MP_CustomerMarketplaceUpdatingHistory h in mp.UpdatingHistory)
+					if (h != null)
+						session.Evict(h);
+
+				session.Evict(mp);
+			} // for each customer marketplace
+
 			session.Evict(customer);
 
 			MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
