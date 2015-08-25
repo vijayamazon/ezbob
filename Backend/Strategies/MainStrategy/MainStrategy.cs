@@ -46,6 +46,8 @@
 			if (this.finishWizardArgs != null) {
 				this.cashRequestOriginator = this.finishWizardArgs.CashRequestOriginator;
 				this.finishWizardArgs.DoMain = false;
+				this.overrideApprovedRejected =
+					this.finishWizardArgs.CashRequestOriginator != CashRequestOriginator.Approved;
 			} // if
 
 			this.wasMismatch = false;
@@ -77,11 +79,6 @@
 			get { return this.customerDetails.ID; }
 		} // CustomerID
 
-		public virtual MainStrategy SetOverrideApprovedRejected(bool bOverrideApprovedRejected) {
-			this.overrideApprovedRejected = bOverrideApprovedRejected;
-			return this;
-		} // SetOverrideApprovedRejected
-
 		/// <exception cref="StrategyAlert">Should never happen.</exception>
 		public override void Execute() {
 			ValidateInput();
@@ -105,6 +102,17 @@
 
 			SendEmails();
 		} // Execute
+
+		private void SetCustomerIsUnderMainStrategy() {
+			if (!this.overrideApprovedRejected)
+				return;
+
+			DB.ExecuteNonQuery(
+				"MainStrategySetCustomerIsBeingProcessed",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@CustomerID", CustomerID)
+			);
+		} // SetCustomerIsUnderMainStrategy
 
 		private bool SkipEverything() {
 			if (this.newCreditLineOption != NewCreditLineOption.SkipEverything)
@@ -757,6 +765,8 @@
 
 		private void CreateCashRequest() {
 			if (this.cashRequestID.HasValue) {
+				SetCustomerIsUnderMainStrategy();
+
 				if (this.nlExists) {
 					this.nlCashRequestID = DB.ExecuteScalar<int>(
 						"NL_CashRequestGetByOldID",
