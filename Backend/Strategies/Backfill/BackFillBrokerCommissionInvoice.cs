@@ -8,10 +8,14 @@
 		public override string Name { get { return "BackFilllBrokerCommissionInvoice"; } }
 
 		public override void Execute() {
-			DB.ForEachRowSafe(BackFillOneBrokerCommissionInvoice, "GetBrokerCommissionsForInvoiceBackFill", CommandSpecies.StoredProcedure);
-		}
+			DB.ForEachRowSafe(
+				BackFillOneBrokerCommissionInvoice,
+				"GetBrokerCommissionsForInvoiceBackFill",
+				CommandSpecies.StoredProcedure
+			);
+		} // Execute
 
-		private ActionResult BackFillOneBrokerCommissionInvoice(SafeReader sr, bool bRowSetStart) {
+		private void BackFillOneBrokerCommissionInvoice(SafeReader sr) {
 			try {
 				int loanBrokerCommissionID = sr["LoanBrokerCommissionID"];
 				int brokerID = sr["BrokerID"];
@@ -30,19 +34,26 @@
 						CommissionAmount = commissionAmount,
 						CommissionTime = commissionTime,
 						BrokerID = brokerID
-					});
+					}
+				);
 
 				brokerCommissionInvoice.Execute();
 
-				DB.ExecuteNonQuery("UpdateBrokerCommissionsInvoiceBackFill",
-					CommandSpecies.StoredProcedure, new QueryParameter("@LoanBrokerCommissionID", loanBrokerCommissionID));
+				DB.ExecuteNonQuery(
+					"UpdateBrokerCommissionsInvoiceBackFill",
+					CommandSpecies.StoredProcedure,
+					new QueryParameter("@LoanBrokerCommissionID", loanBrokerCommissionID)
+				);
 
 				Log.Info("Broker Invoice Backfill for broker {0} commission id {1}", brokerID, loanBrokerCommissionID);
 			} catch (Exception ex) {
-				Log.Error(ex, "Failed sending invoice to broker {0} loanBrokerCommissionID {1}", sr["BrokerID"], sr["LoanBrokerCommissionID"]);
-			}
-
-			return ActionResult.Continue;
-		}
-	}
-}
+				Log.Error(
+					ex,
+					"Failed sending invoice to broker {0} loanBrokerCommissionID {1}",
+					sr["BrokerID"],
+					sr["LoanBrokerCommissionID"]
+				);
+			} // try
+		} // BackFillOneBrokerCommissionInvoice
+	} // class BackFillBrokerCommissionInvoice
+} // namespace
