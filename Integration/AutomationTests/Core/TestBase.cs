@@ -51,17 +51,17 @@
         }
 
         public List<AutomationModels.Browser> GetBrowsers(ulong caseID) {
-            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).ToList();
+            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).Distinct().ToList();
         }
 
         public List<AutomationModels.Brand> GetBrands(ulong caseID)
         {
-            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Brand).ToList();
+            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Brand).Distinct().ToList();
         }
 
         public List<AutomationModels.Environment> GetEnviorments(ulong caseID)
         {
-            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Environment).ToList();
+            return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Environment).Distinct().ToList();
         }
 
     }
