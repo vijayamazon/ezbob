@@ -13,11 +13,13 @@ namespace EzBob.Web.Infrastructure.Html
         public string Value { get; set; }
         public string Type { get; set; }
         public string Cls { get; set; }
+        public string Name { get; set; }
         public string UiEventControlID { get; set; }
         public string AutoCorrect { get; set; }
         public string AutoCapitalize { get; set; }
         public string FormFieldID { get; set; }
         public string InnerMessage { get; set; }
+        public string LabelClass { get; set; }
         public int TabIndex { get; set; }
         public int MaxLength { get; set; }
 		public int? Min { get; set; }
@@ -36,6 +38,8 @@ namespace EzBob.Web.Infrastructure.Html
             string value = "",
             string type = "text",
             string cls = "",
+              string name = "",
+            string labelClass ="",
             string innerMessage = "",
             bool   isDisabled = false,
             bool   isRequired = false,
@@ -69,6 +73,8 @@ namespace EzBob.Web.Infrastructure.Html
             InnerMessage = innerMessage;
             Button = button;
             ToHide = tohide;
+            Name = name;
+            LabelClass = labelClass;
 	        Min = min;
 	        Max = max;
         }

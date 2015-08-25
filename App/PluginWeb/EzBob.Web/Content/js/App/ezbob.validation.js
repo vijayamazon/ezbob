@@ -119,7 +119,12 @@ EzBob.Validation.unhighlight = function (element) {
 
 EzBob.Validation.unhighlightFS = function (element) {
     if (EzBob.Config.Origin === 'everline') {
-        $(element).css('border-bottom', '2px solid #7ac143');
+        if ($(element).attr('id') === 'DateOfBirth') {
+            $('.form_field_date').css('border-bottom', '2px solid #7ac143');
+        } else {
+            $(element).css('border-bottom', '2px solid #7ac143');
+        }
+     
     } else {
        
         EzBob.Validation.unhighlight(element);
@@ -137,7 +142,12 @@ EzBob.Validation.unhighlightFS = function (element) {
 
 EzBob.Validation.highlightFS = function (element) {
     if (EzBob.Config.Origin == 'everline') {
-        $(element).css('border-bottom', '2px solid red');
+        if ($(element).attr('id') === 'DateOfBirth') {
+            $('.form_field_date').css('border-bottom', '2px solid red');
+        } else {
+            $(element).css('border-bottom', '2px solid red');
+        }
+     
     } else {
       
         var $el = $(element),

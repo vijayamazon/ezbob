@@ -107,7 +107,7 @@
             <dt>Next Payment:</dt>
             <dd class="next-due-amount"><%- EzBob.formatPounds(NextPayment) %> <i><%- EzBob.formatDate(NextPaymentDate) %></i></dd>
         </dl>
-        <button class="button btn-green" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
+        <button class="button btn-green ev-btn-org" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
     </script>
 
     <script id="d-lateLoan-template" type="text/template">
@@ -118,7 +118,7 @@
             <dt style="line-height: 14px;">Amount Past Due:</dt>
             <dd style="color: red;"><%- EzBob.formatPounds(TotalDue) %></dd>
         </dl>
-        <button class="button btn-green pay-late" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
+        <button class="button btn-green pay-late ev-btn-org" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
 
     </script>
 
@@ -131,7 +131,7 @@
             <dd class="offerValidFor"><%- countDown %> hrs</dd>
         </dl>
 
-        <button class="button btn-green get-cash" ui-event-control-id="dashboard:top-choose-amount">Choose Amount</button>
+        <button class="button btn-green get-cash ev-btn-org" ui-event-control-id="dashboard:top-choose-amount">Choose Amount</button>
     </script>
 
     <script id="d-getCash-template-late" type="text/template">
@@ -145,7 +145,7 @@
         <button rel="popover"
                 data-content="To get more cash, please pay your minimum amount due."
                 data-original-title="Get More Cash"
-                class="button btn-green disabled get-cash"
+                class="button btn-green disabled get-cash ev-btn-org"
                 ui-event-control-id="dashboard:get-more-cash">
             Get More Cash
         </button>
@@ -160,7 +160,7 @@
             <dt>Offer Valid:</dt>
             <dd class="dashes">---</dd>
         </dl>
-        <button href="#" class="button btn-green apply-for-loan refresh-account-help" ui-event-control-id="dashboard:request-cash">Request Cash</button>
+        <button href="#" class="button btn-green apply-for-loan refresh-account-help ev-btn-org" ui-event-control-id="dashboard:request-cash">Request Cash</button>
 
         <div class="hide">
             <div id="refresh-vat-return" class="hmrc-upload-ui help_window"></div>
@@ -174,7 +174,7 @@
 
                 <p></p>
 
-                <div><a href="#" class="button btn-green skip-refresh-accounts" ui-event-control-id="refresh-account:skip">Skip</a></div>
+                <div><a href="#" class="button btn-green skip-refresh-accounts ev-btn-org" ui-event-control-id="refresh-account:skip">Skip</a></div>
 
                 <p></p>
             </div>
@@ -188,7 +188,7 @@
                 <br>
                 <div class="pull-right" style="padding: 0 10px 0 0;">
                     <a href="#" class="button btn-grey" id="cancelYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee-cancel">Cancel</a>
-                    <a href="#" target="_blank" class="button btn-green" id="refreshYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee">Continue</a>
+                    <a href="#" target="_blank" class="button btn-green ev-btn-org" id="refreshYodleeBtn" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:yodlee">Continue</a>
                 </div>
                 <div class="clear"></div>
                 <hr>
@@ -205,7 +205,7 @@
 
                 <div class="form_buttons_container">
                     <div class="attardi-button">
-                        <a href="#" class="button btn-green pull-right" id="refreshEkmBtn" ui-event-control-id="refresh-account:ekm">Continue</a>
+                        <a href="#" class="button btn-green pull-right ev-btn-org" id="refreshEkmBtn" ui-event-control-id="refresh-account:ekm">Continue</a>
                         <a href="#" class="button btn-grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:ekm-cancel">Cancel</a>
                     </div>
                 </div>
@@ -224,7 +224,7 @@
 
                 <div class="form_buttons_container">
                     <div class="attardi-button">
-                        <a href="#" class="button btn-green pull-right" id="refreshHmrcBtn" ui-event-control-id="refresh-account:hmrc">Continue</a>
+                        <a href="#" class="button btn-green pull-right ev-btn-org" id="refreshHmrcBtn" ui-event-control-id="refresh-account:hmrc">Continue</a>
                         <a href="#" class="button btn-grey pull-right" onclick="$.colorbox.close();" ui-event-control-id="refresh-account:hmrc-cancel">Cancel</a>
                     </div>
                 </div>
@@ -275,7 +275,7 @@
             <dt>Offer Valid:</dt>
             <dd class="dashes">---</dd>
         </dl>
-        <button class="button btn-green choose-amount-wait disabled" ui-event-control-id="dashboard:choose-amount-wait">
+        <button class="button btn-green choose-amount-wait disabled ev-btn-org" ui-event-control-id="dashboard:choose-amount-wait">
             Choose Amount
         </button>
     </script>
@@ -288,7 +288,7 @@
             <dt>Offer Valid:</dt>
             <dd class="dashes">---</dd>
         </dl>
-        <button class="button btn-green apply-for-loan disabled" ui-event-control-id="dashboard:choose-amount-bad">
+        <button class="button btn-green apply-for-loan disabled ev-btn-org" ui-event-control-id="dashboard:choose-amount-bad">
             Choose Amount
         </button>
     </script>

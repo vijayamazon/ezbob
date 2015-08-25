@@ -1,0 +1,13 @@
+﻿@using EzBob.Web.Infrastructure
+@using EZBob.DatabaseLib.Model.Database
+@model dynamic
+@{
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+
+<script type="text/template" id="sliders-template">
+	<div>
+		sliders @origin
+	</div>
+</script>
+

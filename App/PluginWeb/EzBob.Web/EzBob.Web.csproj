@@ -231,6 +231,7 @@
     <Compile Include="Code\ReportGenerator\ReportHandler.cs" />
     <Compile Include="Infrastructure\Hmrc\HmrcManualAccountManager.cs" />
     <Compile Include="Infrastructure\Html\EzButtonModel.cs" />
+    <Compile Include="Infrastructure\Html\EzClickInputModel.cs" />
     <Compile Include="Infrastructure\Html\EzInputBuilder.cs" />
     <Compile Include="Infrastructure\Html\EzSelectModel.cs" />
     <Compile Include="Infrastructure\UiCustomerOrigin.cs" />
@@ -477,6 +478,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\EverlineCustomerProfile.css" />
     <Content Include="Content\css\Everlinecustomer.css" />
     <Content Include="Content\css\ezbob.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
@@ -851,6 +853,7 @@
     <Content Include="Content\js\App\ezbob.iovation.js" />
     <Content Include="Content\js\Broker\broker.commission.view.js" />
     <Content Include="Content\js\Broker\broker.leaddetails.view.js" />
+    <Content Include="Content\js\ezbob.sliders.js" />
     <Content Include="Content\js\controls\ezbob.BoundItemView.js" />
     <Content Include="Content\js\controls\ezbob.jqmodal.js" />
     <Content Include="Content\js\lib\footer.min.js" />
@@ -951,6 +954,7 @@
     <Content Include="Areas\Customer\Views\Shared\QuickOffer.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\HMRCUploadAccountInfoTemplate.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\Shops\YodleeUploadAccountInfoTemplate.cshtml" />
+    <Content Include="Areas\Customer\Views\Shared\_Sliders.cshtml" />
     <None Include="Content\img\customer-sidebar\icons-source\Metro_Icons_v1.1-0-for-alex.jpg" />
     <Content Include="Content\img\customer-sidebar\mobile.png" />
     <Content Include="Content\img\customer-sidebar\perks.png" />

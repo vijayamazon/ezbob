@@ -19,7 +19,8 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 			'focus select': 'inputChanged',
 			'focusout select': 'inputChanged',
 			'keyup select': 'inputChanged',
-			'click select': 'inputChanged'
+			'click select': 'inputChanged',
+            'click .show-sliders': 'showSlidersClicked'
 		}); // events
 
 		this.readyToProceed = false;
@@ -39,6 +40,12 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 		EzBob.App.jqmodal.show(consentAgreement);
 		return false;
 	}, // showConsent
+
+    showSlidersClicked: function() {
+        var slidersModel = new EzBob.SlidersModel();
+        var slidersView = new EzBob.SlidersView({ model: slidersModel });
+        EzBob.App.jqmodal.show(slidersView);
+    },
 
 	inputChanged: function(event) {
 		var el = event ? $(event.currentTarget) : null;
