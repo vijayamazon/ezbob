@@ -25,13 +25,11 @@
             return Ok();
         }
 
-        [AcceptVerbs("GET", "POST")]
-        public IHttpActionResult PrintAll(ulong id) {
-            AutomationFacade.TestRailEngine.PrintAll();
-            return Ok();
-        }
-
-
+        //[AcceptVerbs("GET", "POST")]
+        //public IHttpActionResult PrintAll(ulong id) {
+        //    AutomationFacade.TestRailEngine.PrintAll();
+        //    return Ok();
+        //}
 
 
     }

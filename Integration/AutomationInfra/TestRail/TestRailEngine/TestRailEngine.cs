@@ -49,7 +49,7 @@
             caseAtutomation.CaseBase = caseItem;
             if (suiteId != null)
                 caseAtutomation.SuiteId = (ulong)suiteId;
-            caseAtutomation.Dependencies = TestRailDependencies.GetDependencies(caseItem.ID);
+            caseAtutomation.IncludedIn = TestRailDependencies.GetDependencies(caseItem.ID);
             if (runId != null)
                 caseAtutomation.RunId = (ulong)runId;
 
@@ -72,16 +72,16 @@
             return caseAtutomation;
         }
 
-        public string PrintAll() {
-            var sb = new StringBuilder();
-            foreach (var key in TestRailManager.CasesRepository.Keys) {
-                sb.Append("123456123456123456123456 + " + key + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!123456123456");
-                foreach (var caseItem in TestRailManager.CasesRepository[key]) {
-                    sb.Append(string.Format(@"[Test][Category(""{0}"")]public void Dummy{0}(){{{{this.ExecuteTest<object>(() => {{Assert.IsTrue(false); return null;}});}}}}123456123456", caseItem.ID.ToString()));
-                }
-            }
-            return sb.ToString();
-        }
+        //public string PrintAll() {
+        //    var sb = new StringBuilder();
+        //    foreach (var key in TestRailManager.CasesRepository.Keys) {
+        //        sb.Append("123456123456123456123456 + " + key + "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!123456123456");
+        //        foreach (var caseItem in TestRailManager.CasesRepository[key]) {
+        //            sb.Append(string.Format(@"[Test][Category(""{0}"")]public void Dummy{0}(){{{{this.ExecuteTest<object>(() => {{Assert.IsTrue(false); return null;}});}}}}123456123456", caseItem.ID.ToString()));
+        //        }
+        //    }
+        //    return sb.ToString();
+        //}
 
 
         public List<AtutomationCaseRun> GetPlanAoutomationCases(ulong planId)

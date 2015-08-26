@@ -14,7 +14,7 @@
         public AutomationModels.Brand Brand { get; set; }
         public AutomationModels.Environment Environment { get; set; }
         public ResultStatus ResultStatus { get; set; }
-        public List<ulong> Dependencies { get; set; }
+        public List<ulong> IncludedIn { get; set; }
     }
 
     }

@@ -8,159 +8,159 @@
     {
         [Test]
         [Category("130")]
-        public void Dummy130() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy130() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("131")]
-        public void Dummy131() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy131() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("103")]
-        public void Dummy103() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy103() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("104")]
-        public void Dummy104() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy104() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("105")]
-        public void Dummy105() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy105() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("529")]
-        public void Dummy529() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy529() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("106")]
-        public void Dummy106() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy106() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("107")]
-        public void Dummy107() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy107() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("530")]
-        public void Dummy530() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy530() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("108")]
-        public void Dummy108() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy108() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("109")]
-        public void Dummy109() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy109() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("531")]
-        public void Dummy531() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy531() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("110")]
-        public void Dummy110() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy110() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("111")]
-        public void Dummy111() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy111() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("112")]
-        public void Dummy112() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy112() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("127")]
-        public void Dummy127() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy127() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("128")]
-        public void Dummy128() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy128() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("129")]
-        public void Dummy129() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy129() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("209")]
-        public void Dummy209() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy209() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("113")]
-        public void Dummy113() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy113() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("114")]
-        public void Dummy114() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy114() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("115")]
-        public void Dummy115() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy115() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("116")]
-        public void Dummy116() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy116() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("117")]
-        public void Dummy117() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy117() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("118")]
-        public void Dummy118() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy118() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("119")]
-        public void Dummy119() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy119() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("120")]
-        public void Dummy120() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy120() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("121")]
-        public void Dummy121() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy121() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("122")]
-        public void Dummy122() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy122() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("123")]
-        public void Dummy123() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy123() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("124")]
-        public void Dummy124() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy124() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("125")]
-        public void Dummy125() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy125() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("126")]
-        public void Dummy126() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy126() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("1684")]
-        public void Dummy1684() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy1684() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("1685")]
-        public void Dummy1685() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy1685() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("3146")]
-        public void Dummy3146() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy3146() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("3147")]
-        public void Dummy3147() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy3147() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("3148")]
-        public void Dummy3148() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy3148() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
         [Test]
         [Category("3149")]
-        public void Dummy3149() { { this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); } }
+        public void Dummy3149() { bool result = this.ExecuteTest<object>(() => { Assert.IsTrue(false); return null; }); Assert.IsTrue(result);}
 
     }
 

@@ -18,36 +18,53 @@
         protected ResourceManager EnvironmentConfig { get; set; }
         protected ResourceManager BrandConfig { get; set; }
 
-        protected void ExecuteTest<T>(Func<T> codeToExecute) {
+        protected bool ExecuteTest<T>(Func<T> codeToExecute) {
             
             MethodBase method = new StackFrame(1).GetMethod();
             ulong caseID = ulong.Parse(((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name);
 
-            var browsers = GetBrowsers(caseID);
-            var brands = GetBrands(caseID);
-            var enviorments = GetEnviorments(caseID);
+            List<AutomationModels.Browser> browsers = GetBrowsers(caseID);
+            List<AutomationModels.Brand> brands = GetBrands(caseID);
+            List<AutomationModels.Environment> enviorments = GetEnviorments(caseID);
+            bool IsPassedAllConfigs = true;
 
-            foreach (var browser in browsers) {
+            foreach (AutomationModels.Browser browser in browsers) {
                 Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
-                foreach (var enviorment in enviorments)
+                foreach (AutomationModels.Environment enviorment in enviorments)
                 {
                         EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
                         {
-                            foreach (var brand in brands)
+                            foreach (AutomationModels.Brand brand in brands)
                             {
                                 BrandConfig = Resources.GetBrandResourceManager(brand);
                                 try {
-                                    codeToExecute.Invoke();
-                                    TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
+                                    if (TestRailRepository.BlockedSet.Contains(caseID)) {
+                                        TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Blocked, "Automation is blocked depended test failed already");
+                                    } 
+                                    else {
+                                        codeToExecute.Invoke();
+                                        TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
+                                    }
                                 } catch (Exception ex) {
+                                    UpdateBlockedList(caseID);
                                     TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
-                                } 
+                                    IsPassedAllConfigs = false;
+                                }
                             }
                         }
                         
                     }
                 
             }
+            return IsPassedAllConfigs;
+        }
+
+        public void UpdateBlockedList(ulong caseID) {
+            AtutomationCaseRun caseDependency = TestRailRepository.PlanRepository.FirstOrDefault(x => x.CaseBase.ID == caseID);
+                                    if (caseDependency != null && caseDependency.IncludedIn != null)
+                                        if (caseDependency.IncludedIn.Count > 0) {
+                                            TestRailRepository.BlockedSet.AddAll(caseDependency.IncludedIn);
+                                        }
         }
 
         public List<AutomationModels.Browser> GetBrowsers(ulong caseID) {

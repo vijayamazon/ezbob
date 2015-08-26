@@ -74,7 +74,7 @@
                         var caseDependencies = GetDependencies(caseItem.CustomPreConds);
                         if (caseDependencies != null) {
                             foreach (var caseDependency in caseDependencies) {
-                                if (("c" + caseId.ToString()).Equals(caseDependency, StringComparison.CurrentCultureIgnoreCase)) {
+                                if (("[c" + caseId.ToString() + "]").Equals(caseDependency, StringComparison.CurrentCultureIgnoreCase)) {
                                     if (caseItem.ID != null)
                                         dependencies.Add((ulong)caseItem.ID);
                                 }
@@ -83,7 +83,7 @@
                                 var stepDependencies = GetDependencies(step.Description);
                                 if (stepDependencies != null) {
                                     foreach (var stepDependency in stepDependencies) {
-                                        if (("c" + caseId.ToString()).Equals(stepDependency, StringComparison.CurrentCultureIgnoreCase)) {
+                                        if (("[c" + caseId.ToString() + "]").Equals(stepDependency, StringComparison.CurrentCultureIgnoreCase)) {
                                             if (caseItem.ID != null)
                                                 dependencies.Add((ulong)caseItem.ID);
                                         }

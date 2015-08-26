@@ -51,7 +51,7 @@
 
             foreach (DirectoryInfo folder in sourceFolders)
             {
-                Directory.Move(folder.FullName, folderDest.FullName);
+                Directory.Move(folder.FullName, string.Format(@"{0}\{1}", folderDest.FullName, folder.Name));
             }
         }
 
@@ -70,7 +70,7 @@
         }
 
         public List<ulong?> GetRunCasesListIdsDistinct( List<AtutomationCaseRun> data ) {
-            return data.OrderBy(x => x.Dependencies.Count > 0).Select(x => x.CaseBase.ID).Distinct().ToList();
+            return data.OrderBy(x => x.IncludedIn.Count > 0).Select(x => x.CaseBase.ID).Distinct().ToList();
         }
     }
 }

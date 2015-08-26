@@ -21,7 +21,7 @@
         public static IWebDriver GetWebDriverForBrowser(AutomationModels.Browser browser)
         {
             IWebDriver driver = null;
-            var path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
+            string path = Directory.GetParent(Directory.GetParent(System.Environment.CurrentDirectory).FullName).FullName;
             switch (browser)
             {
                 case AutomationModels.Browser.Chrome:
