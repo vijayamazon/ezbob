@@ -153,7 +153,7 @@
     </Compile>
     <Compile Include="Core\BrowserWebDriver.cs" />
     <Compile Include="Core\Resources.cs" />
-    <Compile Include="Core\TestBase.cs" />
+    <Compile Include="Core\WebTestBase.cs" />
     <Compile Include="Core\TestRailRepository.cs" />
     <Compile Include="Tests\Application\Alibaba\AlibabaTests.cs" />
     <Compile Include="Tests\Application\Broker\BrokerTests.cs" />

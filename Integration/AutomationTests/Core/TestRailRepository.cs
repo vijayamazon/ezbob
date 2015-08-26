@@ -10,23 +10,26 @@
     using TestRailModels.TestRail;
     using TestStack.Seleno.Extensions;
 
-    class TestRailRepository {
+    class TestRailRepository
+    {
         private static List<AtutomationCaseRun> _PlanRepository;
         private static Set<ulong> _BlockedSet;
 
         public static Set<ulong> BlockedSet
         {
-            get { return _BlockedSet ?? (_BlockedSet = new HashedSet<ulong>());}
+            get { return _BlockedSet ?? (_BlockedSet = new HashedSet<ulong>()); }
         }
 
         public static List<AtutomationCaseRun> PlanRepository
         {
             get
             {
-                if (_PlanRepository == null) {
-                    DirectoryInfo  folder =new DirectoryInfo(@"E:\Jobs\JobsIn").GetDirectories().FirstOrDefault();
-                    if (folder != null) {
-                        using (Stream stream = File.Open(string.Format(@"{0}\data.bin",folder.FullName), FileMode.Open))
+                if (_PlanRepository == null)
+                {
+                    DirectoryInfo folder = new DirectoryInfo(@"E:\Jobs\JobsIn").GetDirectories().FirstOrDefault();
+                    if (folder != null)
+                    {
+                        using (Stream stream = File.Open(string.Format(@"{0}\data.bin", folder.FullName), FileMode.Open))
                         {
                             BinaryFormatter bin = new BinaryFormatter();
                             _PlanRepository = (List<AtutomationCaseRun>)bin.Deserialize(stream);
@@ -38,29 +41,31 @@
         }
 
         internal static void ReportTestRailResults(ulong caseID,
-                                                    AutomationModels.Browser  browser, 
+                                                    AutomationModels.Browser browser,
                                                     AutomationModels.Brand brand,
                                                     AutomationModels.Environment enviorment,
-                                                    TestRailModels.TestRail.ResultStatus resultStatus, 
-                                                    string messege) {
+                                                    TestRailModels.TestRail.ResultStatus resultStatus,
+                                                    string messege)
+        {
             AtutomationCaseRun automationCase = PlanRepository
                 .Where(x => x.CaseBase.ID == caseID)
                 .Where(x => x.Browser == browser)
                 .Where(x => x.Brand == brand)
                 .FirstOrDefault(x => x.Environment == enviorment);
-                if (automationCase != null)
-                    TestRailManager.Instance.AddResultForCase(automationCase.RunId,caseID, resultStatus, messege);
+            if (automationCase != null)
+                TestRailManager.Instance.AddResultForCase(automationCase.RunId, caseID, resultStatus, messege);
         }
 
-        internal static void ReportTestRailBlockedNotConfiguredResults(ulong caseID) {
+        internal static void ReportTestRailBlockedNotConfiguredResults(ulong caseID)
+        {
             var automationCases = PlanRepository
                 .Where(x => x.CaseBase.ID == caseID)
                 .Each(x => TestRailManager.Instance.AddResultForCase(x.RunId,
                                                                     caseID,
                                                                     ResultStatus.Blocked,
                                                                     "Could not find valid configiration for this run, make sure run has {browser, brand, enviorment}"));
-            }
-
         }
+
     }
 }
+
