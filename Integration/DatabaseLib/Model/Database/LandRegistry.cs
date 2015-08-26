@@ -32,8 +32,8 @@ namespace EZBob.DatabaseLib.Model.Database {
 			Map(x => x.TitleNumber).Length(20);
 			Map(x => x.RequestType).CustomType<LandRegistryRequestTypeType>();
 			Map(x => x.ResponseType).CustomType<LandRegistryResponseTypeType>();
-			Map(x => x.Request).CustomType("StringClob");
-			Map(x => x.Response).CustomType("StringClob");
+			Map(x => x.Request).CustomType("StringClob").LazyLoad();
+			Map(x => x.Response).CustomType("StringClob").LazyLoad();
 			Map(x => x.AttachmentPath).Length(300);
 			References(x => x.CustomerAddress, "AddressId");
 
@@ -51,7 +51,6 @@ namespace EZBob.DatabaseLib.Model.Database {
 }
 
 namespace EZBob.DatabaseLib.Repository {
-	using System;
 	using System.Collections.Generic;
 	using System.Linq;
 	using ApplicationMng.Repository;
@@ -68,25 +67,13 @@ namespace EZBob.DatabaseLib.Repository {
 		}
 
 		public LandRegistry GetRes(int customerId, string titleNumber) {
-			bool bIsEmptyTitleNumber = string.IsNullOrWhiteSpace(titleNumber);
-
-			Func<LandRegistry, bool> oIsMatch = x => {
-				if (x.Customer.Id != customerId)
-					return false;
-
-				if (!IsResRequest(x))
-					return false;
-
-				if (x.ResponseType != LandRegistryResponseType.Success)
-					return false;
-
-				if (bIsEmptyTitleNumber)
-					return true;
-
-				return x.TitleNumber == titleNumber;
-			};
-
-			return GetAll().Where(oIsMatch).OrderByDescending(x => x.InsertDate).FirstOrDefault();
+			return GetAll()
+				.Where(x => x.Customer.Id == customerId && 
+								  x.TitleNumber == titleNumber && 
+								 ((x.RequestType == LandRegistryRequestType.Res) || (x.RequestType == LandRegistryRequestType.ResPoll)) &&
+								 x.ResponseType == LandRegistryResponseType.Success)
+				.OrderByDescending(x => x.InsertDate)
+				.FirstOrDefault();
 		}
 
 		public List<LandRegistry> GetEnquiry(int customerId, string postCode) {
@@ -102,13 +89,11 @@ namespace EZBob.DatabaseLib.Repository {
 		}
 
 		public LandRegistry GetByTitleNumber(string titleNumber) {
-			return GetAll().Where(x => x.TitleNumber == titleNumber && IsResRequest(x)).OrderByDescending(x => x.InsertDate).FirstOrDefault();
-		}
-
-		private bool IsResRequest(LandRegistry x) {
-			return
-				(x.RequestType == LandRegistryRequestType.Res) ||
-				(x.RequestType == LandRegistryRequestType.ResPoll);
+			return GetAll()
+				.Where(x => x.TitleNumber == titleNumber && 
+					 ((x.RequestType == LandRegistryRequestType.Res) || (x.RequestType == LandRegistryRequestType.ResPoll)))
+				.OrderByDescending(x => x.InsertDate)
+				.FirstOrDefault();
 		}
 	}
 }
