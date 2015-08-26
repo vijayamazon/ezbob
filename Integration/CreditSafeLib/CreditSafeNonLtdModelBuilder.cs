@@ -61,95 +61,103 @@
                 TryRead(() => data.ExecutiveEmail = seniorexecutive.email, "BaseInfoExecutiveEmail");
             }, "BaseInfo");
 
-            foreach (var tel in baseInfo.telephonenumbers)
-            {
-                CreditSafeNonLtdBaseDataTel newTel = new CreditSafeNonLtdBaseDataTel();
-                TryRead(() => newTel.Telephone = tel.telephone, "TelTelephone");
-                TryRead(() =>
-                {
-                    if (tel.tpsregistered == "N")
-                        newTel.TpsRegistered = false;
-                    else
-                        newTel.TpsRegistered = true;
-                }, "TelTpsRegistered");
-                TryRead(() =>
-                {
-                    if (tel.main == "N")
-                        newTel.Main = false;
-                    else
-                        newTel.Main = true;
-                }, "TelMain");
-                data.Tels.Add(newTel);
-            }
-            foreach (var fax in baseInfo.faxnumbers)
-            {
-                CreditSafeNonLtdBaseDataFax newFax = new CreditSafeNonLtdBaseDataFax();
-                TryRead(() => newFax.Fax = fax.fax, "FaxFaxNumber");
-                TryRead(() =>
-                {
-                    if (fax.fpsregistered == "N")
-                        newFax.FpsRegistered = false;
-                    else
-                        newFax.FpsRegistered = true;
-                }, "FaxFpsRegistered");
-                TryRead(() =>
-                {
-                    if (fax.main == "N")
-                        newFax.Main = false;
-                    else
-                        newFax.Main = true;
-                }, "FaxMain");
-                data.Faxs.Add(newFax);
-            }
-            foreach (var rating in company.ratings)
-            {
-                CreditSafeNonLtdRatings newRating = new CreditSafeNonLtdRatings();
-                newRating.Date = TryReadDate(rating.date, "RatingsDate");
-                TryRead(() => newRating.Score = Convert.ToInt32(rating.score), "RatingsScore");
-                TryRead(() => newRating.Description = rating.description, "RatingsDescription");
-                data.Ratings.Add(newRating);
-            }
+            TryRead(() => {
+                foreach (var tel in baseInfo.telephonenumbers) {
+                    CreditSafeNonLtdBaseDataTel newTel = new CreditSafeNonLtdBaseDataTel();
+                    TryRead(() => newTel.Telephone = tel.telephone, "TelTelephone");
+                    TryRead(() => {
+                        if (tel.tpsregistered == "N")
+                            newTel.TpsRegistered = false;
+                        else
+                            newTel.TpsRegistered = true;
+                    }, "TelTpsRegistered");
+                    TryRead(() => {
+                        if (tel.main == "N")
+                            newTel.Main = false;
+                        else
+                            newTel.Main = true;
+                    }, "TelMain");
+                    data.Tels.Add(newTel);
+                }
+            }, "baseInfo.telephonenumbers");
 
-            foreach (var limit in company.limits)
-            {
-                CreditSafeNonLtdLimits newLimit = new CreditSafeNonLtdLimits();
-                TryRead(() => newLimit.Limit = Convert.ToInt32(limit.limit), "LimitLimit");
-                newLimit.Date = TryReadDate(limit.date, "LimitDate");
-                data.Limits.Add(newLimit);
-            }
-            foreach (var matched in company.matchedrecordofpayments)
-            {
-                CreditSafeNonLtdMatchedCCJ newMatched = new CreditSafeNonLtdMatchedCCJ();
-                TryRead(() => newMatched.CaseNr = matched.casenr, "MatchedCaseNr");
-                newMatched.CcjDate = TryReadDate(matched.ccjdate, "MatchedCcjDate");
-                newMatched.CcjDatePaid = TryReadDate(matched.ccjdatepaid, "MatchedCcjDatePaid");
-                TryRead(() => newMatched.Court = matched.court, "MatchedCourt");
-                TryRead(() => newMatched.CcjStatus = matched.ccjstatus, "MatchedCcjStatus");
-                TryRead(() => newMatched.CcjAmount = Convert.ToInt32(matched.ccjamount), "MatchedCcjAmount");
-                TryRead(() => newMatched.Against = matched.against, "MatchedAgainst");
-                TryRead(() => newMatched.Address = matched.address, "MatchedAddress");
-                data.MatchedCcj.Add(newMatched);
-            }
-            foreach (var possible in company.possiblematchedrecordofpayments)
-            {
-                CreditSafeNonLtdPossibleCCJ newPossible = new CreditSafeNonLtdPossibleCCJ();
-                TryRead(() => newPossible.CaseNr = possible.casenr, "PossibleCaseNr");
-                newPossible.CcjDate = TryReadDate(possible.ccjdate, "PossibleCcjDate");
-                newPossible.CcjDatePaid = TryReadDate(possible.ccjdatepaid, "PossibleCcjDatePaid");
-                TryRead(() => newPossible.Court = possible.court, "PossibleCourt");
-                TryRead(() => newPossible.CcjStatus = possible.ccjstatus, "PossibleCcjStatus");
-                TryRead(() => newPossible.CcjAmount = Convert.ToInt32(possible.ccjamount), "PossibleCcjAmount");
-                TryRead(() => newPossible.Against = possible.against, "PossibleAgainst");
-                TryRead(() => newPossible.Address = possible.address, "PossibleAddress");
-                data.PossibleCcj.Add(newPossible);
-            }
-            foreach (var events in company.events)
-            {
-                CreditSafeNonLtdEvents newEvent = new CreditSafeNonLtdEvents();
-                newEvent.Date = TryReadDate(events.date, "EventsDate");
-                TryRead(() => newEvent.Text = events.text, "EventsText");
-                data.Events.Add(newEvent);
-            }
+            TryRead(() => {
+                foreach (var fax in baseInfo.faxnumbers) {
+                    CreditSafeNonLtdBaseDataFax newFax = new CreditSafeNonLtdBaseDataFax();
+                    TryRead(() => newFax.Fax = fax.fax, "FaxFaxNumber");
+                    TryRead(() => {
+                        if (fax.fpsregistered == "N")
+                            newFax.FpsRegistered = false;
+                        else
+                            newFax.FpsRegistered = true;
+                    }, "FaxFpsRegistered");
+                    TryRead(() => {
+                        if (fax.main == "N")
+                            newFax.Main = false;
+                        else
+                            newFax.Main = true;
+                    }, "FaxMain");
+                    data.Faxs.Add(newFax);
+                }
+            }, "baseInfo.faxnumbers");
+
+            TryRead(() => {
+                foreach (var rating in company.ratings) {
+                    CreditSafeNonLtdRatings newRating = new CreditSafeNonLtdRatings();
+                    newRating.Date = TryReadDate(rating.date, "RatingsDate");
+                    TryRead(() => newRating.Score = Convert.ToInt32(rating.score), "RatingsScore");
+                    TryRead(() => newRating.Description = rating.description, "RatingsDescription");
+                    data.Ratings.Add(newRating);
+                }
+            }, "company.ratings");
+
+            TryRead(() => {
+                foreach (var limit in company.limits) {
+                    CreditSafeNonLtdLimits newLimit = new CreditSafeNonLtdLimits();
+                    TryRead(() => newLimit.Limit = Convert.ToInt32(limit.limit), "LimitLimit");
+                    newLimit.Date = TryReadDate(limit.date, "LimitDate");
+                    data.Limits.Add(newLimit);
+                }
+            }, "company.limits");
+
+            TryRead(() => {
+                foreach (var matched in company.matchedrecordofpayments) {
+                    CreditSafeNonLtdMatchedCCJ newMatched = new CreditSafeNonLtdMatchedCCJ();
+                    TryRead(() => newMatched.CaseNr = matched.casenr, "MatchedCaseNr");
+                    newMatched.CcjDate = TryReadDate(matched.ccjdate, "MatchedCcjDate");
+                    newMatched.CcjDatePaid = TryReadDate(matched.ccjdatepaid, "MatchedCcjDatePaid");
+                    TryRead(() => newMatched.Court = matched.court, "MatchedCourt");
+                    TryRead(() => newMatched.CcjStatus = matched.ccjstatus, "MatchedCcjStatus");
+                    TryRead(() => newMatched.CcjAmount = Convert.ToInt32(matched.ccjamount), "MatchedCcjAmount");
+                    TryRead(() => newMatched.Against = matched.against, "MatchedAgainst");
+                    TryRead(() => newMatched.Address = matched.address, "MatchedAddress");
+                    data.MatchedCcj.Add(newMatched);
+                }
+            }, "MatchedCCJ");
+
+            TryRead(() => {
+                foreach (var possible in company.possiblematchedrecordofpayments) {
+                    CreditSafeNonLtdPossibleCCJ newPossible = new CreditSafeNonLtdPossibleCCJ();
+                    TryRead(() => newPossible.CaseNr = possible.casenr, "PossibleCaseNr");
+                    newPossible.CcjDate = TryReadDate(possible.ccjdate, "PossibleCcjDate");
+                    newPossible.CcjDatePaid = TryReadDate(possible.ccjdatepaid, "PossibleCcjDatePaid");
+                    TryRead(() => newPossible.Court = possible.court, "PossibleCourt");
+                    TryRead(() => newPossible.CcjStatus = possible.ccjstatus, "PossibleCcjStatus");
+                    TryRead(() => newPossible.CcjAmount = Convert.ToInt32(possible.ccjamount), "PossibleCcjAmount");
+                    TryRead(() => newPossible.Against = possible.against, "PossibleAgainst");
+                    TryRead(() => newPossible.Address = possible.address, "PossibleAddress");
+                    data.PossibleCcj.Add(newPossible);
+                }
+            }, "PossibleCCJ");
+
+            TryRead(() => {
+                foreach (var events in company.events) {
+                    CreditSafeNonLtdEvents newEvent = new CreditSafeNonLtdEvents();
+                    newEvent.Date = TryReadDate(events.date, "EventsDate");
+                    TryRead(() => newEvent.Text = events.text, "EventsText");
+                    data.Events.Add(newEvent);
+                }
+            }, "company.events");
 
             if (HasParsingError)
             {
