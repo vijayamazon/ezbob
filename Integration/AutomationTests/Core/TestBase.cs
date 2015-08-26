@@ -38,8 +38,9 @@
                             {
                                 BrandConfig = Resources.GetBrandResourceManager(brand);
                                 try {
-                                    if (TestRailRepository.BlockedSet.Contains(caseID)) {
+                                    if (TestRailRepository.BlockedSet.Contains(caseID)) {                                        
                                         TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Blocked, "Automation is blocked depended test failed already");
+                                        IsPassedAllConfigs = false;
                                     } 
                                     else {
                                         codeToExecute.Invoke();
