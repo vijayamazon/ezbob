@@ -88,6 +88,10 @@
 				//custom css
 				.Add("~/Content/css/profile.css")
 				.Add("~/Content/css/EverlineCustomerProfile.css")
+				.Add("~/Content/css/EverlineCustomerProfileDirectors.css")
+				.Add("~/Content/css/EverlineCustomerProfileLoanDetails.css")
+				.Add("~/Content/css/EverlineCustomerProfilePaymentAccounts.css")
+				.Add("~/Content/css/EverlineCustomerProfileMainMenu.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");

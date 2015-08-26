@@ -9,13 +9,13 @@
 			 questionName = settings.SecurityQuestions.get(settings.SecurityQuestionId).get('Name');
 		%>
 
-		<div class="row">
-			<div class="span8">
+		<div class="row form_field_container">
+			<div class="span8 input-wrapper">
 				<div class="control-group">
 					<label class="control-label">Password</label>
 					<div class="controls">
 						<input type="text" readonly="readonly" value="**********" class="form_field" />
-						<a href="#" class="btn-details button btn-green edit-password" ui-event-control-id="setting:edit-password">Edit</a>
+						<a href="#" class="btn-details button btn-green edit-password ev-btn-org" ui-event-control-id="setting:edit-password">Edit</a>
 					</div>
 				</div>
 
@@ -23,7 +23,7 @@
 					<label class="control-label">Security Question</label>
 					<div class="controls">
 						<input type="text" readonly="readonly" class="security-answer form_field" value="<%- questionName %>" />
-						<a href="#" class="btn-details button btn-green edit-question" ui-event-control-id="settings:edit-question">Edit</a>
+						<a href="#" class="btn-details button btn-green edit-question ev-btn-org" ui-event-control-id="settings:edit-question">Edit</a>
 					</div>
 				</div>
 			</div>
@@ -32,8 +32,8 @@
 </script>
 
 <script id="settings-password-template" type="text/template">
-	<form id="change-password" action="" method="POST">
-		<fieldset>
+	<form id="change-password" action="" method="POST" class="form_field_container">
+		<fieldset class="input-wrapper">
 			<h2>Select your new password</h2>
 			<div class="span8">
 				<div class="control-group form_field_container">
@@ -65,8 +65,8 @@
 
 				<div class="form_buttons_container">
 					<div class="attardi-button">
-						<a href="#" class="btn-continue button btn-green submit" ui-event-control-id="settings:submit-password">Submit</a>
-						<a href="#" class="btn-back button btn-grey back" ui-event-control-id="settings:password-back">Back</a>
+						<a href="#" class="btn-continue button btn-green submit ev-btn-org" ui-event-control-id="settings:submit-password">Submit</a>
+						<a href="#" class="btn-back button btn-grey back ev-btn-org" ui-event-control-id="settings:password-back">Back</a>
 					</div>
 				</div>
 			</div>
@@ -75,8 +75,8 @@
 </script>
 
 <script id="settings-question-template" type="text/template">
-	<form class="changePassword">
-		<fieldset>
+	<form class="changePassword form_field_container">
+		<fieldset class="input-wrapper">
 			<h2>Security question</h2>
 
 			<div class="span8">
@@ -119,8 +119,8 @@
 
 				<div class="form_buttons_container">
 					<div class="attardi-button">
-						<a href="#" class="btn-continue button btn-green submit disabled" ui-event-control-id="settings:submit-question">Submit</a>
-						<a href="#" class="btn-back back button btn-grey" ui-event-control-id="settings:question-back">Back</a>
+						<a href="#" class="btn-continue button btn-green submit disabled ev-btn-org" ui-event-control-id="settings:submit-question">Submit</a>
+						<a href="#" class="btn-back back button btn-grey ev-btn-org" ui-event-control-id="settings:question-back">Back</a>
 					</div>
 				</div>
 			</div>

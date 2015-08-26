@@ -22,7 +22,7 @@
 					<td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
 					<td><%-EzBob.formatPoundsUK(loan.TotalBalance)%></td>
 					<td class="last" width="100">
-						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%> ev-btn-secondary" ui-event-control-id="dashboard:loan-details">Details</a>
+						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%> clean-btn" ui-event-control-id="dashboard:loan-details">Details</a>
 					</td>
 				</tr><%
 			});

@@ -480,6 +480,10 @@
     <Content Include="Content\css\everline.css" />
     <Content Include="Content\css\EverlineCustomerProfile.css" />
     <Content Include="Content\css\Everlinecustomer.css" />
+    <Content Include="Content\css\EverlineCustomerProfileMainMenu.css" />
+    <Content Include="Content\css\EverlineCustomerProfileDirectors.css" />
+    <Content Include="Content\css\EverlineCustomerProfilePaymentAccounts.css" />
+    <Content Include="Content\css\EverlineCustomerProfileLoanDetails.css" />
     <Content Include="Content\css\ezbob.css" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-black-webfont.svg" />
     <Content Include="Content\css\fonts\titillium-web\titilliumweb-bold-webfont.svg" />
