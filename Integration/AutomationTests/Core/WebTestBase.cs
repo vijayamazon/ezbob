@@ -29,7 +29,8 @@
             List<AutomationModels.Environment> enviorments = GetEnviorments(caseID);
             bool IsPassedAllConfigs = true;
 
-            if ((browsers.Count == 0) || (brands.Count == 0) || (enviorments.Count == 0))
+
+            if (!IsValidConfigured(browsers, brands, enviorments))
             {
                 TestRailRepository.ReportTestRailBlockedNotConfiguredResults(caseID);
                 IsPassedAllConfigs = false;
@@ -38,7 +39,7 @@
             {
                 foreach (AutomationModels.Browser browser in browsers)
                 {
-                    Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
+                   Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
                     foreach (AutomationModels.Environment enviorment in enviorments)
                     {
                         EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
@@ -71,8 +72,15 @@
                 }
             }
 
-
             return IsPassedAllConfigs;
+        }
+
+        public bool IsValidConfigured(List<AutomationModels.Browser> browsers,
+                                      List<AutomationModels.Brand> brands,
+                                      List<AutomationModels.Environment> enviorments) {
+            return ((browsers.Count == 1 && browsers.FirstOrDefault() == AutomationModels.Browser.None) ||
+                   (brands.Count == 1 && brands.FirstOrDefault() == AutomationModels.Brand.None) ||
+                   (enviorments.Count == 1 && enviorments.FirstOrDefault() == AutomationModels.Environment.None));
         }
 
         public void UpdateBlockedList(ulong caseID)
