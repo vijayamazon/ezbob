@@ -917,7 +917,7 @@
 		/// Finish Wizard strategy and customer is already approved/rejected
 		/// then customer's status should not change.
 		/// </summary>
-		private bool overrideApprovedRejected;
+		private readonly bool overrideApprovedRejected;
 
 		private readonly CashRequestOriginator? cashRequestOriginator;
 
