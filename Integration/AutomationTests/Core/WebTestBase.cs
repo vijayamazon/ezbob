@@ -30,7 +30,7 @@
             bool IsPassedAllConfigs = true;
 
 
-            if (!IsValidConfigured(browsers, brands, enviorments))
+            if (IsNotValidConfigured(browsers, brands, enviorments))
             {
                 TestRailRepository.ReportTestRailBlockedNotConfiguredResults(caseID);
                 IsPassedAllConfigs = false;
@@ -75,7 +75,7 @@
             return IsPassedAllConfigs;
         }
 
-        public bool IsValidConfigured(List<AutomationModels.Browser> browsers,
+        public bool IsNotValidConfigured(List<AutomationModels.Browser> browsers,
                                       List<AutomationModels.Brand> brands,
                                       List<AutomationModels.Environment> enviorments) {
             return ((browsers.Count == 1 && browsers.FirstOrDefault() == AutomationModels.Browser.None) ||
