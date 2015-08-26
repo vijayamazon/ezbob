@@ -137,6 +137,19 @@ namespace PacnetBalance {
 				fee.Add(value);
 				Logger.Info("Fee: {0}", value);
 			} // if
+
+			if (line.Contains("Commission")) {
+				string text = GetValue(line.Split(' '), "GBP");
+				decimal value;
+
+				if (!decimal.TryParse(text, out value)) {
+					Logger.Error("Error parsing Commission: {0}", text);
+					throw new PacNetBalanceException(string.Format("PacNet Error parsing Commission: {0}", text));
+				} // if
+
+				fee.Add(value);
+				Logger.Info("Fee: {0}", value);
+			} // if
 		} // HandleLine
 
 		/// <summary>

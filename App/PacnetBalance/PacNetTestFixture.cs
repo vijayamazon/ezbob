@@ -25,10 +25,10 @@
 
 		[Test]
 		public void TestParsing() {
-			string path = @"c:\ezbob\test-data\pacnet\pacnet20150113.pdf";
+			string path = @"c:\ezbob\test-data\pacnet\pacnet20150825.pdf";
 			byte[] data = System.IO.File.ReadAllBytes(path);
 			ParsePacNetText.ParsePdf(data);
-			//PacNetBalance.SavePacNetBalanceToDb();
+			PacNetBalance.SavePacNetBalanceToDb();
 		}
 	}
 }
