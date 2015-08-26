@@ -407,13 +407,9 @@ a, a:visited {
     background-color: white !important;
 }
 
-.form_field_container .input-wrapper .clean-btn{
-	float: left;
-    width: 42%;
-	margin-left: 5%;
-}
-
 .clean-btn,
+a.clean-btn,
+a.clean-btn:focus,
 .clean-btn:focus,
  .simpleCaptcha a,
 .ui-widget button.clean-btn, 
@@ -437,6 +433,12 @@ a, a:visited {
 	display: inline-block;
 }
 
+.form_field_container .input-wrapper .clean-btn{
+	float: left;
+    width: 42%;
+	margin-left: 5%;
+}
+
  .form_field_container .input-wrapper a.clean-btn, .simpleCaptcha a , .broker-captcha a {
     line-height: 42px;
 }
@@ -457,13 +459,10 @@ a, a:visited {
         margin-bottom: 20px;
     }
 
- .form_buttons_container .input-wrapper .ev-btn-org {
-	width: 42%;
-	display: inline;
-	float: right;
-    margin-left: 5%;
-}
 
+ 
+
+a.ev-btn-org,
 .ev-btn-org,
 .ui-widget button.ev-btn-org {
 	font-family: 'Open Sans', sans-serif;
@@ -487,6 +486,15 @@ a, a:visited {
     -moz-box-sizing: border-box;
     box-sizing: border-box;
     text-decoration: none;
+	display: inline-block;
+}
+
+.form_buttons_container .input-wrapper .ev-btn-org,
+.form_buttons_container .input-wrapper a.ev-btn-org {
+	width: 42%;
+	display: inline-block;
+	float: right;
+	margin-left: 5%;
 }
 
 .select {
@@ -1168,6 +1176,7 @@ hr.wizard-hr {
 #cboxContent {
     margin-top: 0;
     overflow: visible;
+	background-color: #eeeeee;
 }
 
 #cboxError {

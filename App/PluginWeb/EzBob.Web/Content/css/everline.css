@@ -278,6 +278,11 @@ footer.everline_footer {
 		font-family: Arial;
 	}
 
+.help_image {
+    width: 759px;
+    height: 543px;
+}
+
 .help_everline.help_eBay {
 	background: url(../everline/help/help_ebay_everline.jpg) no-repeat center 0;
 	background-size: contain;
