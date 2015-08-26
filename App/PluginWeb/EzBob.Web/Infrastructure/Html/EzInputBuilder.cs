@@ -13,6 +13,7 @@ namespace EzBob.Web.Infrastructure.Html
         public string Value { get; set; }
         public string Type { get; set; }
         public string Cls { get; set; }
+		public string WrapperCls { get; set; }
         public string Name { get; set; }
         public string UiEventControlID { get; set; }
         public string AutoCorrect { get; set; }
@@ -38,7 +39,8 @@ namespace EzBob.Web.Infrastructure.Html
             string value = "",
             string type = "text",
             string cls = "",
-              string name = "",
+			string wrapperCls = "",
+            string name = "",
             string labelClass ="",
             string innerMessage = "",
             bool   isDisabled = false,
@@ -61,6 +63,7 @@ namespace EzBob.Web.Infrastructure.Html
             Value = value;
             Type = type;
             Cls = cls;
+	        WrapperCls = wrapperCls;
             UiEventControlID = uiEventControlID;
             AutoCorrect = autoCorrect;
             AutoCapitalize = autoCapitalize;

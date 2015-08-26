@@ -1,5 +1,4 @@
-﻿@using System.Web.Helpers
-@using ConfigManager
+﻿@using ConfigManager
 @using EzBob.Web.Infrastructure
 @using EZBob.DatabaseLib.Model.Database
 
@@ -52,9 +51,9 @@
 	@{ Html.RenderPartial("../BrokerHome/ScratchCards"); }
 
 	<div id="hidden-container" class="hide" style="display: none !important;">
-		<div class="common-customer-sidebar">
+		@*<div class="common-customer-sidebar">
 			@{Html.RenderPartial("~/Areas/Customer/Views/Shared/SideBars/_Sidebar.cshtml");}
-		</div>
+		</div>*@
 
 		<div style="display: none;" class="hide" id="broker-sms-count"
 			 data-force-captcha="@Model.ForceCaptcha"

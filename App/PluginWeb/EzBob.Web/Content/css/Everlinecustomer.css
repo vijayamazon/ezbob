@@ -550,11 +550,11 @@ div.canDisabledAddress {
 
 /* Radio button & checkbox*/
 .click-wrap {
-    width: 20%;
     position: relative;
     height: 50px;
     float: left;
     margin-top: 8px;
+	display: inline-block;
 }
 
 .click-wrap .click-input-wrap {
@@ -705,7 +705,7 @@ div.canDisabledAddress {
 }
 
 .click-wrap .terms-conditions-checkbox-label {
-    width: 100%;
+    width: 50%;
     color: #494949;
     font-weight: 600;
     line-height: 16px;

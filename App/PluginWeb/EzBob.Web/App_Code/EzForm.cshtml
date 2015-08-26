@@ -372,57 +372,50 @@ string formFieldID = "")
 
 @helper InputTextWizard(EzInputBuilder inputProp, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
-    var identificator = new HtmlString(inputProp.Id);
-    <div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "") class="form_field_container control-group @(inputProp.ToHide ? "hide" : "")">
-        @if (origin != CustomerOriginEnum.everline)
-        {
+	var identificator = new HtmlString(inputProp.Id);
+	<div @( !string.IsNullOrWhiteSpace(inputProp.FormFieldID) ? "id=" + inputProp.FormFieldID : "")
+		 class="form_field_container @(inputProp.WrapperCls == "" ? "control-group" : inputProp.WrapperCls)"
+		 @if (inputProp.ToHide) { @: style="display: none;"
+		 		 }>
+		@if (origin != CustomerOriginEnum.everline) {
 
-            <div class="controls">
-                <label class="attardi-input">
-                    @if (!string.IsNullOrWhiteSpace(inputProp.InnerMessage))
-                    {
-                        <div class="inner-input-message-container">
-                            <label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
-                        </div>
-                    }
-                    <span>@inputProp.Caption</span>
-                    @InputTextTag(inputProp, identificator)
-                   @if (inputProp.StatusIcon)
-                   {
-                       var sId = identificator + "Image";
-                       var sReq = inputProp.IsRequired ? "required" : "empty";
-                    <img id="@sId" class="field_status @sReq" width="16" height="16" />
-                   }
-                   else if (inputProp.IsRequired)
-                   {
-                        <span class="required">*</span>
-                    }
-                    @if (@inputProp.Button != null)
-                    {
-                        @ButtonTag(new List<EzButtonModel> { inputProp.Button })
-                    }
-                </label>
-            </div>
-        }
-        else
-        {
+			<div class="controls">
+				<label class="attardi-input">
+					@if (!string.IsNullOrWhiteSpace(inputProp.InnerMessage)) {
+						<div class="inner-input-message-container">
+							<label id="codeSentLabel" class="inner-input-message">@inputProp.InnerMessage</label>
+						</div>
+					}
+					<span>@inputProp.Caption</span>
+					@InputTextTag(inputProp, identificator)
+					@if (inputProp.StatusIcon) {
+						var sId = identificator + "Image";
+						var sReq = inputProp.IsRequired ? "required" : "empty";
+						<img id="@sId" class="field_status @sReq" width="16" height="16" />
+					} else if (inputProp.IsRequired) {
+						<span class="required">*</span>
+					}
+					@if (@inputProp.Button != null) {
+						@ButtonTag(new List<EzButtonModel> { inputProp.Button })
+					}
+				</label>
+			</div>
+		} else {
 
-            <label class="input-title" for="@identificator">@inputProp.Caption</label>
-            <div class="input-wrapper">
-                @InputTextTag(inputProp, identificator)
-                @if (@inputProp.Button != null)
-                {
-                    @ButtonTag(new List<EzButtonModel> { inputProp.Button })
-                }
-                <div class="error-wrap"></div>
-            </div>
+			<label class="input-title" for="@identificator">@inputProp.Caption</label>
+			<div class="input-wrapper">
+				@InputTextTag(inputProp, identificator)
+				@if (@inputProp.Button != null) {
+					@ButtonTag(new List<EzButtonModel> { inputProp.Button })
+				}
+				<div class="error-wrap"></div>
+			</div>
 
-        }
-        @if (@inputProp.Type.Equals("password"))
-        {
-            <p id="message" class="help-block"></p>
-        }
-    </div>
+		}
+		@if (@inputProp.Type.Equals("password")) {
+			<p id="message" class="help-block"></p>
+		}
+	</div>
 }
 
 @helper InputTextArea(string id, string caption, string cls = "", CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
