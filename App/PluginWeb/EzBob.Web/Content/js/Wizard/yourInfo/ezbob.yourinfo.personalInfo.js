@@ -43,8 +43,9 @@ EzBob.PersonalInformationStepView = EzBob.YourInformationStepViewBase.extend({
 
     showSlidersClicked: function() {
         var slidersModel = new EzBob.SlidersModel();
-        var slidersView = new EzBob.SlidersView({ model: slidersModel });
-        EzBob.App.jqmodal.show(slidersView);
+        var slidersView = new EzBob.SlidersView({ model: slidersModel, el: $('.sliders-wrapper') });
+        slidersView.render();
+        //EzBob.App.jqmodal.show(slidersView);
     },
 
 	inputChanged: function(event) {

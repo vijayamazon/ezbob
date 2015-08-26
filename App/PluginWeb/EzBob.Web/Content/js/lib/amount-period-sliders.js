@@ -33,30 +33,46 @@ function InitAmountPeriodSliders(options)
 	}; // DisplayPeriod
 
 	function CreateSlider(oParent, sAreaName, oDefinitions, oLeftFunc, oTextFunc) {
-		$(oParent).append(
-			$('<div />').addClass(sAreaName + '-area')
-				.append($('<div />').addClass(sAreaName + '-min slider-label'))
-				.append($('<div />').addClass(sAreaName + '-max slider-label'))
-				.append($('<div />').addClass(sAreaName + '-tooltip'))
-				.append($('<div />').addClass(sAreaName + '-slider'))
-				.append($('<input />').addClass(sAreaName + '-textbox').attr('ui-event-control-id', 'loan-legal:' + sAreaName.toLowerCase()).val(oDefinitions.start))
+	    $(oParent).append(
+	        $('<div />').addClass(sAreaName + '-area')
+	        .append($('<h2 />').addClass(sAreaName + '-caption'))
+	        .append($('<div />').addClass(sAreaName + '-min slider-label'))
+	        .append($('<div />').addClass(sAreaName + '-max slider-label'))
+	        .append($('<div />').addClass(sAreaName + '-tooltip'))
+	        .append($('<div />').addClass(sAreaName + '-slider'))
+	        .append($('<input />').addClass(sAreaName + '-textbox').attr('ui-event-control-id', 'loan-legal:' + sAreaName.toLowerCase()).val(oDefinitions.start)).attr('type', 'text')
 		);
 
 		var oTooltip = $('.' + sAreaName + '-tooltip', oParent);
 		var oSlider = $('.' + sAreaName + '-slider', oParent);
 		var oTextbox = $('.' + sAreaName + '-textbox', oParent);
+		if (oDefinitions.caption) {
+		    $('.' + sAreaName + '-caption').text(oDefinitions.caption);
+		}
+		if (oDefinitions.hasbutton) {
+		    $('.' + sAreaName + '-textbox').wrap("<div class='slider-input'></div>");
+		    $('.' + sAreaName + '-area').find('.slider-input').prepend(($('<div />').addClass('minus-wrap').append($('<span />').addClass('minus icon-minus'))));
+		    if (sAreaName == 'period') {
+		       
+		        $('.' + sAreaName + '-area').find('.slider-input').append($('<span />').addClass('period-text').text('months'));
 
+		    }
+		    $('.' + sAreaName + '-area').find('.slider-input').append(($('<div />').addClass('plus-wrap').append($('<span />').addClass('plus icon-plus'))));
+		    $('.' + sAreaName + '-area').find('.' + sAreaName + '-slider').wrap($('<div />').addClass('slider-wrap'));
+		    $('.' + sAreaName + '-area').find('.slider-input').insertBefore($('.' + sAreaName + '-area').find('.slider-wrap'));
+		}
 		if (sAreaName == 'amount')
 			oTextbox.autoNumeric($.extend({}, EzBob.moneyFormatNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max }));
 		else
 			oTextbox.autoNumeric({ vMin: 1, vMax: 12, mDec: 0 });
 
-		oSlider.slider({
+		var s = oSlider.slider({
 			range: 'min',
 			min:   oDefinitions.min,
 			max:   oDefinitions.max,
 			value: oDefinitions.start,
-			step:  oDefinitions.step,
+			step: oDefinitions.step,
+			
 			animate: 'slow',
 			create: function() {
 				window.setTimeout(
@@ -108,8 +124,20 @@ function InitAmountPeriodSliders(options)
 			} // stop
 		}); // init slider
 
-		oTooltip.hide();
+		$('.' + sAreaName + '-area').find('.plus').click(function () {
 
+
+		    s.slider('value', s.slider('value') + s.slider("option", "step"));
+
+		});
+		$('.' + sAreaName + '-area').find('.minus').click(function () {
+
+
+		    s.slider('value', s.slider('value') - s.slider("option", "step"));
+
+		});
+		oTooltip.hide();
+		
 		$('.' + sAreaName + '-min', oParent).text(oTextFunc.call(null, oDefinitions.min));
 		$('.' + sAreaName + '-max', oParent).text(oTextFunc.call(null, oDefinitions.max));
 
