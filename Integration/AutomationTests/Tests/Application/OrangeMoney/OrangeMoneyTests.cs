@@ -8,7 +8,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class OrangeMoneyTests : TestBase
+    public class OrangeMoneyTests : WebTestBase
     {
 
         [Test]

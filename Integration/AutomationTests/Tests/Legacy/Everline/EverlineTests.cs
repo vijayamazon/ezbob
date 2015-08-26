@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class EverlineTests : TestBase
+    public class EverlineTests : WebTestBase
     {
         [Test]
         [Category("220")]

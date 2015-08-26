@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class LoanTests : TestBase
+    public class LoanTests : WebTestBase
     {
         [Test]
         [Category("4533")]

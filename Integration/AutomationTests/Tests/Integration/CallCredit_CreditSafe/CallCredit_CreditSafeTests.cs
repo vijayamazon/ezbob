@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class CallCredit_CreditSafeTests : TestBase
+    public class CallCredit_CreditSafeTests : WebTestBase
     {
         [Test]
         [Category("1681")]

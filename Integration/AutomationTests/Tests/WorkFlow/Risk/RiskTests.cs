@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class RiskTests : TestBase
+    public class RiskTests : WebTestBase
     {
 
         [Test]

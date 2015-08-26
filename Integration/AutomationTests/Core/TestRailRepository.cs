@@ -7,6 +7,8 @@
     using Iesi.Collections.Generic;
     using TestRailEngine;
     using TestRailModels.Automation;
+    using TestRailModels.TestRail;
+    using TestStack.Seleno.Extensions;
 
     class TestRailRepository {
         private static List<AtutomationCaseRun> _PlanRepository;
@@ -48,6 +50,17 @@
                 .FirstOrDefault(x => x.Environment == enviorment);
                 if (automationCase != null)
                     TestRailManager.Instance.AddResultForCase(automationCase.RunId,caseID, resultStatus, messege);
+        }
+
+        internal static void ReportTestRailBlockedNotConfiguredResults(ulong caseID) {
+            var automationCases = PlanRepository
+                .Where(x => x.CaseBase.ID == caseID)
+                .Each(x => TestRailManager.Instance.AddResultForCase(x.RunId,
+                                                                    caseID,
+                                                                    ResultStatus.Blocked,
+                                                                    "Could not find valid configiration for this run, make sure run has {browser, brand, enviorment}"));
+            }
+
         }
     }
 }

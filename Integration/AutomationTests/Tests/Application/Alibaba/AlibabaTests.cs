@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class AlibabaTests : TestBase {
+    public class AlibabaTests : WebTestBase {
         [Test]
         [Category("789")]
         public void Dummy789() {

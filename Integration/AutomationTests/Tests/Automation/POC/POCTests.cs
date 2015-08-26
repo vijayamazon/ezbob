@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class POCTests : TestBase
+    public class POCTests : WebTestBase
     {
         [Test]
         [Category("3212")]

@@ -3,7 +3,7 @@
     using NUnit.Framework;
     using UIAutomationTests.Core;
 
-    class BrokerTests : TestBase
+    class BrokerTests : WebTestBase
     {
         [Test]
         [Category("1202")]

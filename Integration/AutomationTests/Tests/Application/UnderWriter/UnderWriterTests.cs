@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class UnderWriterTests : TestBase
+    public class UnderWriterTests : WebTestBase
     {
         
     }

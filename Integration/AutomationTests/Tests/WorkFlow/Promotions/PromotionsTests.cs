@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class PromotionsTests : TestBase
+    public class PromotionsTests : WebTestBase
     {
         [Test]
         [Category("233")]

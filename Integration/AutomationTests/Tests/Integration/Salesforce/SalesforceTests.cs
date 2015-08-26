@@ -4,7 +4,7 @@
     using UIAutomationTests.Core;
 
     [TestFixture]
-    public class SalesforceTests : TestBase
+    public class SalesforceTests : WebTestBase
     {
 
         [Test]

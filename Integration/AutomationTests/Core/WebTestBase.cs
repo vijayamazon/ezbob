@@ -12,14 +12,15 @@
     using TestRailModels.Automation;
     using TestRailModels.TestRail;
 
-    public class TestBase
+    public class WebTestBase
     {
         protected IWebDriver Driver { get; set; }
         protected ResourceManager EnvironmentConfig { get; set; }
         protected ResourceManager BrandConfig { get; set; }
 
-        protected bool ExecuteTest<T>(Func<T> codeToExecute) {
-            
+        protected bool ExecuteTest<T>(Func<T> codeToExecute)
+        {
+
             MethodBase method = new StackFrame(1).GetMethod();
             ulong caseID = ulong.Parse(((CategoryAttribute)(method.GetCustomAttributes(typeof(CategoryAttribute), true)[0])).Name);
 
@@ -28,47 +29,64 @@
             List<AutomationModels.Environment> enviorments = GetEnviorments(caseID);
             bool IsPassedAllConfigs = true;
 
-            foreach (AutomationModels.Browser browser in browsers) {
-                Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
-                foreach (AutomationModels.Environment enviorment in enviorments)
+            if ((browsers.Count == 0) || (brands.Count == 0) || (enviorments.Count == 0))
+            {
+                TestRailRepository.ReportTestRailBlockedNotConfiguredResults(caseID);
+                IsPassedAllConfigs = false;
+            }
+            else
+            {
+                foreach (AutomationModels.Browser browser in browsers)
                 {
+                    Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
+                    foreach (AutomationModels.Environment enviorment in enviorments)
+                    {
                         EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
                         {
                             foreach (AutomationModels.Brand brand in brands)
                             {
                                 BrandConfig = Resources.GetBrandResourceManager(brand);
-                                try {
-                                    if (TestRailRepository.BlockedSet.Contains(caseID)) {                                        
+                                try
+                                {
+                                    if (TestRailRepository.BlockedSet.Contains(caseID))
+                                    {
                                         TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Blocked, "Automation is blocked depended test failed already");
                                         IsPassedAllConfigs = false;
-                                    } 
-                                    else {
+                                    }
+                                    else
+                                    {
                                         codeToExecute.Invoke();
                                         TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
                                     }
-                                } catch (Exception ex) {
+                                }
+                                catch (Exception ex)
+                                {
                                     UpdateBlockedList(caseID);
                                     TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
                                     IsPassedAllConfigs = false;
                                 }
                             }
                         }
-                        
                     }
-                
+                }
             }
+
+
             return IsPassedAllConfigs;
         }
 
-        public void UpdateBlockedList(ulong caseID) {
+        public void UpdateBlockedList(ulong caseID)
+        {
             AtutomationCaseRun caseDependency = TestRailRepository.PlanRepository.FirstOrDefault(x => x.CaseBase.ID == caseID);
-                                    if (caseDependency != null && caseDependency.IncludedIn != null)
-                                        if (caseDependency.IncludedIn.Count > 0) {
-                                            TestRailRepository.BlockedSet.AddAll(caseDependency.IncludedIn);
-                                        }
+            if (caseDependency != null && caseDependency.IncludedIn != null)
+                if (caseDependency.IncludedIn.Count > 0)
+                {
+                    TestRailRepository.BlockedSet.AddAll(caseDependency.IncludedIn);
+                }
         }
 
-        public List<AutomationModels.Browser> GetBrowsers(ulong caseID) {
+        public List<AutomationModels.Browser> GetBrowsers(ulong caseID)
+        {
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).Distinct().ToList();
         }
 
