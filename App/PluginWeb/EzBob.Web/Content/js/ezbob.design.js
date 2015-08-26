@@ -816,8 +816,11 @@ EzBob.ShowMessageEx = function(args) {
 }; // EzBob.ShowMessageEx
 
 EzBob.moneyFormat = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
+EzBob.moneyFormatUK = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '2', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormat1 = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£ ', mDec: '1', vMax: '999999999999999' };
+EzBob.moneyFormat1UK = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '£', mDec: '1', vMax: '999999999999999' };
 EzBob.moneyFormatNoDecimals = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£ ', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
+EzBob.moneyFormatNoDecimalsUK = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormatNoDecimalsNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
 EzBob.moneyFormatNoSign = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'F', aSign: '', mDec: '2', vMax: '999999999999999' };
 EzBob.moneyFormatAsInt = { 'aSep': ',', 'aDec': '.', 'aPad': true, 'mNum': 16, 'mRound': 'S', aSign: '£ ', mDec: '0', vMax: '999999999999999', vMin: '-999999999999999', 'aNeg': '-' };
@@ -842,16 +845,35 @@ EzBob.formatPoundsWidhDash = function(val) {
 	return EzBob.formatPounds(val);
 };
 
+EzBob.formatPoundsWidhDashUK = function(val) {
+	if (!val && val == 0) {
+		return '-';
+	}
+	return EzBob.formatPoundsUK(val);
+};
+
 EzBob.formatPounds = function(val) {
 	return EzBob.formatPoundsFormat(val, EzBob.moneyFormat);
+};
+
+EzBob.formatPoundsUK = function(val) {
+	return EzBob.formatPoundsFormat(val, EzBob.moneyFormatUK);
 };
 
 EzBob.formatPounds1 = function(val) {
 	return EzBob.formatPoundsFormat(val, EzBob.moneyFormat1);
 };
 
+EzBob.formatPounds1UK = function(val) {
+	return EzBob.formatPoundsFormat(val, EzBob.moneyFormat1UK);
+};
+
 EzBob.formatPoundsNoDecimals = function(val) {
 	return EzBob.formatPoundsFormat(Math.round(val), EzBob.moneyFormatNoDecimals);
+};
+
+EzBob.formatPoundsNoDecimalsUK = function(val) {
+	return EzBob.formatPoundsFormat(Math.round(val), EzBob.moneyFormatNoDecimalsUK);
 };
 
 EzBob.formatPoundsAsInt = function(val) {
@@ -969,6 +991,18 @@ EzBob.formatDate = function(date) {
 	return oMoment.format("MMM DD, YYYY");
 };
 
+EzBob.formatDateUK = function(date) {
+	if (!date)
+		return '';
+
+	var oMoment = moment.utc(date);
+
+	if (oMoment.year() === 1 && oMoment.months() === 0 && oMoment.date() === 1)
+		return '';
+
+	return oMoment.format("D MMM YYYY");
+};
+
 //formats date for user from utc asp.net date
 EzBob.formatDate2 = function(date) {
 	if (!date) return "";
@@ -1022,6 +1056,11 @@ EzBob.formatDateHuman = function(date) {
 EzBob.formatDateHumanFull = function(date) {
 	if (!date) return "";
 	return moment.utc(date).format("MMM D YYYY");
+};
+
+EzBob.formatDateHumanFullUK = function(date) {
+	if (!date) return "";
+	return moment.utc(date).format("D MMM YYYY");
 };
 
 EzBob.formatDateShortCard = function(date) {

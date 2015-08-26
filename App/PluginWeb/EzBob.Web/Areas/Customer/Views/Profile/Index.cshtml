@@ -101,23 +101,23 @@
 {
     <script id="d-payEarly-template" type="text/template">
         <h3>Loans</h3>
-        <dl>
-            <dt>Total Balance:</dt>
-            <dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
-            <dt>Next Payment:</dt>
-            <dd class="next-due-amount"><%- EzBob.formatPounds(NextPayment) %> <i><%- EzBob.formatDate(NextPaymentDate) %></i></dd>
-        </dl>
+		<dl>
+			<dt>Total Balance:</dt>
+			<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+			<dt>Next Payment:</dt>
+			<dd class="next-due-amount"><%- EzBob.formatPoundsUK(NextPayment) %> <i><%- EzBob.formatDate(NextPaymentDate) %></i></dd>
+		</dl>
         <button class="button btn-green ev-btn-org" ui-event-control-id="dashboard:top-pay-early">Pay <%- (IsEarly ? 'Early' : 'Now') %></button>
     </script>
 
     <script id="d-lateLoan-template" type="text/template">
         <h3>Loans</h3>
-        <dl>
-            <dt>Total Balance:</dt>
-            <dd><%- EzBob.formatPoundsNoDecimals(TotalBalance) %></dd>
-            <dt style="line-height: 14px;">Amount Past Due:</dt>
-            <dd style="color: red;"><%- EzBob.formatPounds(TotalDue) %></dd>
-        </dl>
+		<dl>
+			<dt>Total Balance:</dt>
+			<dd><%- EzBob.formatPoundsNoDecimalsUK(TotalBalance) %></dd>
+			<dt style="line-height: 14px;">Amount Past Due:</dt>
+			<dd style="color: red;"><%- EzBob.formatPoundsUK(TotalDue) %></dd>
+		</dl>
         <button class="button btn-green pay-late ev-btn-org" ui-event-control-id="dashboard:top-pay-now">Pay Now</button>
 
     </script>
@@ -126,7 +126,7 @@
         <h3>Cash</h3>
         <dl>
             <dt>Available Credit:</dt>
-            <dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimals(availableCredit) %></dd>
+            <dd><span class="UpToTextBlock">Up to</span> <%- EzBob.formatPoundsNoDecimalsUK(availableCredit) %></dd>
             <dt>Offer Valid for:</dt>
             <dd class="offerValidFor"><%- countDown %> hrs</dd>
         </dl>

@@ -35,7 +35,6 @@
                 .Add("~/Content/css/easter2015scratch.css")
                 //custom css
                 .Add("~/Content/css/Everlinecustomer.css")
-                .Add("~/Content/css/EverlineCustomerProfile.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
                 .MvcRender("~/Content/css/min/customereverline_#.css");
         }// RenderEverlineCustomerCss
@@ -88,6 +87,7 @@
 
 				//custom css
 				.Add("~/Content/css/profile.css")
+				.Add("~/Content/css/EverlineCustomerProfile.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
 				.Add("~/Content/css/edit-experian-director-data.css")
 				.MvcRender("~/Content/css/min/profile_combined_#.css");

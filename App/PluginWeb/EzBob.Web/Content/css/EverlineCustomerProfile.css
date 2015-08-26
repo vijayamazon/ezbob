@@ -28,11 +28,9 @@
 	line-height: 34px;
 	font-size: 14px;
 	font-weight: 600;
-	width: 200px;
-	height: 40px;
 	cursor: pointer;
 	text-align: center;
-	padding: 0 28px;
+	padding: 0 20px;
 	background-color: #e28023;
 	border-bottom: 2px solid #c86d14;
 	border-top: 2px solid #f39e4b;
@@ -140,7 +138,7 @@
 
 .main-page-everline .profile-menu .navbar-inner {
 	padding: 10px 20px;
-	width: 1000px;
+	width: 960px;
 	margin: 0 auto;
 	background-color: #28211f;
 	-webkit-box-sizing: border-box;
@@ -182,7 +180,7 @@
 */
 
 .main-page-everline .profile-widgets {
-	width: 1000px;
+	width: 960px;
 	margin: 0 auto;
 	padding: 20px 0;
 }
@@ -196,7 +194,7 @@
 */
 
 .main-page-everline .profile-headlines {
-	width: 1000px;
+	width: 960px;
 	margin: 0 auto;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
@@ -213,7 +211,7 @@
 
 .main-page-everline .d-widgets {
 	border: 1px solid #28211f;
-	width: 1000px;
+	width: 960px;
 	padding: 10px;
 	margin: 10px auto;
 	-webkit-box-sizing: border-box;
@@ -238,7 +236,7 @@
 
 .main-page-everline .d-widgets .ev-btn-org {
 	float: right;
-	margin-top: 10px;
+	margin-top: 7px;
 }
 
 /*
@@ -250,7 +248,7 @@
 */
 
 .main-page-everline #get-cash {
-	width: 1000px;
+	width: 960px;
 	margin: 0 auto;
 	padding: 20px 0;
 }
@@ -269,17 +267,42 @@
 	font-weight: bold;
 }
 
-.main-page-everline #get-cash .form-horizontal.loan-details {
+.main-page-everline #get-cash .form-horizontal {
+	border: 1px solid #28211f;
+	padding: 7px;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div {
 	vertical-align: top;
+	display: inline-block;
 }
 
 .main-page-everline #get-cash .form-horizontal.loan-details div.span4 {
-	display: inline-block;
 	width: 400px;
 	margin-right: 50px;
 }
 
 .main-page-everline #get-cash .form-horizontal.loan-details div.span1 {
-	display: inline-block;
-	width: 0;
+	width: 10px;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div dl dt {
+	float: left;
+	width: 30%;
+}
+
+.main-page-everline #get-cash .form-horizontal.loan-details div dl dd {
+	margin: 0 0 5px 32%;
+	border: 1px solid #28211f;
+	padding: 5px;
+	text-align: center;
+}
+
+.main-page-everline #get-cash .payment-schedule-table {
+	width: 100%;
+}
+
+.main-page-everline #get-cash .loan_apr_block {
+	font-weight: bold;
+	margin: 30px 0;
 }

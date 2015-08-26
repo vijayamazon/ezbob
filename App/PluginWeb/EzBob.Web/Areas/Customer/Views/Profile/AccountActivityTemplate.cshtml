@@ -17,10 +17,10 @@
 				var last = loans.length - 1 == i;
 				%><tr class="<%- last ? 'last' : '' %>">
 					<td class="first"><%- loan.RefNumber  %></td>
-					<td><%- EzBob.formatDate(loan.Date) %></td>
-					<td><%-EzBob.formatPounds(loan.LoanAmount)%></td>
+					<td><%- EzBob.formatDateUK(loan.Date) %></td>
+					<td><%-EzBob.formatPoundsUK(loan.LoanAmount)%></td>
 					<td class="status<%-loan.Status%>"><%-loan.StatusDescription%></td>
-					<td><%-EzBob.formatPounds(loan.TotalBalance)%></td>
+					<td><%-EzBob.formatPoundsUK(loan.TotalBalance)%></td>
 					<td class="last" width="100">
 						<a href="#LoanDetails/<%-loan.Id%>" class="btn-details button btn-green loanbtn-<%-loan.Status%> ev-btn-secondary" ui-event-control-id="dashboard:loan-details">Details</a>
 					</td>
