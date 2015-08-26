@@ -137,6 +137,11 @@
 
 		private ISalesForceAppClient GetSandboxDevClient() {
 			//Sandbox dev
+			/*
+			  yarons@ezbob.com.devsandbox
+			  yaron 1234
+			  xJ9i4J5ehbTLnKfFPglPkeU5J
+			 */
 			return ObjectFactory
 				.With("userName").EqualTo("techapi@ezbob.com.devsandbox")
 				.With("password").EqualTo("Ezca$h123")
