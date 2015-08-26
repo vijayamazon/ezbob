@@ -1406,7 +1406,6 @@
     <Content Include="Content\js\Profile\ApplyForLoan\ezbob.profile.PayPointCardSelectView.js" />
     <Content Include="Content\js\Profile\ezbob.profile.companyDirectorsView.js" />
     <Content Include="Content\js\Profile\ezbob.profile.Agreements.js" />
-    <Content Include="Content\js\Profile\ezbob.profile.inviteFriend.js" />
     <Content Include="Content\js\Profile\ezbob.profile.loanTaken.js" />
     <Content Include="Content\js\Profile\ezbob.profile.profileRouter.js" />
     <Content Include="Content\js\Profile\PayEarly\makeEarlyPaymentModel.js" />
@@ -1498,7 +1497,6 @@
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RefreshYodlee.cshtml" />
     <Content Include="Areas\Customer\Views\YodleeMarketPlaces\RecheckYodleeCallback.cshtml" />
     <Content Include="Areas\Customer\Views\PacnetStatus\TradeTrackerConversion.cshtml" />
-    <Content Include="Areas\Customer\Views\Profile\InviteFriendTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\CrossCheck\Zoopla.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\AutomationSettings\_CampaignSettings.cshtml" />
     <Content Include="Areas\Customer\Views\Shared\SideBars\_Sidebar.cshtml" />

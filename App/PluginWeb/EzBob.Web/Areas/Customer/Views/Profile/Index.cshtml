@@ -63,8 +63,6 @@
                     <li><a href="#YourDetails" ui-event-control-id="dashboard:tab-my-information">My Information</a></li>
                     <li class="divider-vertical"></li>
                     <li><a href="#Settings" ui-event-control-id="dashboard:tab-settings">Settings</a></li>
-                    <li class="divider-vertical"></li>
-                    <li><a href="#InviteFriend" ui-event-control-id="dashboard:tab-refer-a-friend">Refer A Friend</a></li>
                     @if (Model.Customer.Perks != null) {
                         <li class="divider-vertical"></li>
                         <li><a href="#Perks" ui-event-control-id="dashboard:tab-perks">Perks</a></li>
@@ -330,7 +328,6 @@
         Html.RenderPartial("SettingsTemplate");
         Html.RenderPartial("_YourInfo");
         Html.RenderPartial("StoreInfoMain");
-        Html.RenderPartial("InviteFriendTemplate");
         Html.RenderPartial("CompanyDirectorsTemplate");
         Html.RenderPartial("PerksTemplate");
         Html.RenderPartial("../Shared/Profile/_PayPointCardSelectViewTemplate");

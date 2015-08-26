@@ -593,7 +593,6 @@
 				.Add("~/Content/js/Profile/ezbob.profile.yourInfo.js")
 				.Add("~/Content/js/Profile/ezbob.profile.paypointSchedule.js")
 				.Add("~/Content/js/Profile/ezbob.profile.loanTaken.js")
-				.Add("~/Content/js/Profile/ezbob.profile.inviteFriend.js")
 				.Add("~/Content/js/Profile/ezbob.profile.perks.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.selectcard.js")
 				.Add("~/Content/js/ScratchCards/ezbob.scratchcard.ny2015.js")
