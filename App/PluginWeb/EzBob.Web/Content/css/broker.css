@@ -116,14 +116,6 @@ padding-top: 0;
     float: right;
 }
 
-.broker a,
-#broker-terms-and-conditions a,
-.section-dashboard tbody .grid-item-FirstName a,
-.section-dashboard tbody .grid-item-LastName a {
-    text-decoration: underline;
-    color: #428bca;
-}
-
 #broker-terms-and-conditions dd,
 #broker-terms-and-conditions ol,
 #broker-terms-and-conditions ul {
@@ -296,6 +288,12 @@ table.table th {
 	vertical-align: middle;
 }
 
+.form_read_and_accept_broker  {
+	width: 90%;
+    vertical-align: top;
+    white-space: inherit;
+}
+
 div.form_read_and_accept label {
     display: inline-block;
     width: 90%;
@@ -363,3 +361,6 @@ b, strong {
 div#broker-footer-placeholder {
 	height: 120px;
 }
+
+
+

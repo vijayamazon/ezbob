@@ -12,20 +12,24 @@
 		<div class="row-fluid broker-page-content main-page main-page-ezbob">
 			<div class="inner">
 				<section class="broker">
-					<div class="notifications"></div>
+					<div class="wizard-wrap">
+						<div class="wizard-inner-wrap">
+							<div class="notifications"></div>
 
-					@{
-						Html.RenderPartial("Signup");
-						Html.RenderPartial("Login");
-						Html.RenderPartial("Forgotten");
-						Html.RenderPartial("Dashboard");
-						Html.RenderPartial("AddCustomer");
-						Html.RenderPartial("AddBank");
-						Html.RenderPartial("LeadDetails");
-						Html.RenderPartial("CustomerDetails");
-						Html.RenderPartial("Forbidden");
-						Html.RenderPartial("RequestAcceptTerms");
-					}
+							@{
+								Html.RenderPartial("Signup");
+								Html.RenderPartial("Login");
+								Html.RenderPartial("Forgotten");
+								Html.RenderPartial("Dashboard");
+								Html.RenderPartial("AddCustomer");
+								Html.RenderPartial("AddBank");
+								Html.RenderPartial("LeadDetails");
+								Html.RenderPartial("CustomerDetails");
+								Html.RenderPartial("Forbidden");
+								Html.RenderPartial("RequestAcceptTerms");
+							}
+						</div>
+					</div>
 				</section>
 			</div>
 		</div>

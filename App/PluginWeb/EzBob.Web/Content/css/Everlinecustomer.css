@@ -416,7 +416,8 @@ a, a:visited {
 .clean-btn,
 .clean-btn:focus,
  .simpleCaptcha a,
-.ui-widget button.clean-btn {
+.ui-widget button.clean-btn, 
+.broker-captcha a {
 	padding: 0 28px;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -424,7 +425,7 @@ a, a:visited {
     border: 2px solid #e28023;
 	height: 48px;
     text-align: center;
-    color: #e28023;
+    color: #e28023 !important;
 	font-family: 'Open Sans', sans-serif;
 	font-size: 18px;
     font-weight: 600;
@@ -433,9 +434,10 @@ a, a:visited {
     cursor: pointer;
     background-color: transparent;
     text-decoration: none;
+	display: inline-block;
 }
 
- .form_field_container .input-wrapper a.clean-btn, .simpleCaptcha a {
+ .form_field_container .input-wrapper a.clean-btn, .simpleCaptcha a , .broker-captcha a {
     line-height: 42px;
 }
 
@@ -468,7 +470,7 @@ a, a:visited {
     line-height: 44px;
     font-size: 18px;
     font-weight: 600;
-    height: 50px;
+	height: 50px !important;
     cursor: pointer;
     text-align: center;
     padding: 0 28px;

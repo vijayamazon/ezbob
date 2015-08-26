@@ -5,254 +5,252 @@
 @{
 	var originModel = ViewBag.CustomerOrigin;
 	var origin = originModel.GetOrigin();
-	string privacyUrl = (originModel.FrontendSite + "/privacy-and-cookie") + (origin == CustomerOriginEnum.everline ? "-policy" : "s");
+	bool isEverline = origin == CustomerOriginEnum.everline;
+	string privacyUrl = (originModel.FrontendSite + "/privacy-and-cookie") + (isEverline ? "-policy" : "s");
 	string captchamode = CurrentValues.Instance.CaptchaMode;
 }
 
 <div class="page-section hide section-signup">
 	<section id="content">
-		<div class="wizard-wrap">
-			<div class="wizard-inner-wrap">
-				<form class="signup-form broker-form" novalidate="novalidate">
-					@{ int nSignupTabIdx = 1; }
 
-					<h2 class="form-start">Create broker account</h2>
+	<form class="signup-form broker-form" novalidate="novalidate">
+		@{ int nSignupTabIdx = 1; }
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"FirmName",
-							"Company Name",
-							type: "text",
-							cls: "form_field",
-							isRequired: true,
-							tabIndex: nSignupTabIdx++,
-							statusIcon: true,
-							uiEventControlID: "broker:signup-firm-name"),
-						origin: origin)
+		<h2 class="form-start">Create broker account</h2>
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"FirmRegNum",
-							"Company registration number",
-							type: "text",
-							cls: "form_field",
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-firm-regnum"),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"FirmName",
+				"Company Name",
+				type: "text",
+				cls: "form_field",
+				isRequired: true,
+				tabIndex: nSignupTabIdx++,
+				statusIcon: true,
+				uiEventControlID: "broker:signup-firm-name"),
+			origin: origin)
+
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"FirmRegNum",
+				"Company registration number",
+				type: "text",
+				cls: "form_field",
+				tabIndex: nSignupTabIdx++,
+				uiEventControlID: "broker:signup-firm-regnum"),
+			origin: origin)
 			
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"FirmWebSite",
-							"Company web site",
-							type: "url",
-							cls: "form_field",
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-firm-web-site"),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"FirmWebSite",
+				"Company web site",
+				type: "url",
+				cls: "form_field",
+				tabIndex: nSignupTabIdx++,
+				uiEventControlID: "broker:signup-firm-web-site"),
+			origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"ContactName",
-							"Contact person full name",
-							type: "text",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-contact-name"),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"ContactName",
+				"Contact person full name",
+				type: "text",
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				tabIndex: nSignupTabIdx++,
+				uiEventControlID: "broker:signup-contact-name"),
+			origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"ContactEmail",
-							"Contact person email",
-							type: "email",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							autoCorrect: "off",
-							autoCapitalize: "off",
-							uiEventControlID: "broker:signup-contact-email"),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"ContactEmail",
+				"Contact person email",
+				type: "email",
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				tabIndex: nSignupTabIdx++,
+				autoCorrect: "off",
+				autoCapitalize: "off",
+				uiEventControlID: "broker:signup-contact-email"),
+			origin: origin)
 
-				@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"ContactMobile",
-							"Contact person mobile phone",
-							type: "tel",
-							cls: "phonenumber form_field form_field_left_side",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							maxLength: 11,
-							uiEventControlID: "broker:signup-contact-mobile",
-							innerMessage: "Code sent",
-							button: new EzButtonModel(
-										"generateMobileCode",
-										"Send activation code",
-										"button btn-green form_field_right_side_signup_phone disabled",
-										"broker:signup-generate-mobile-code")),
-						origin: origin)
+	@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"ContactMobile",
+				"Contact person mobile phone",
+				type: "tel",
+				cls: "phonenumber form_field form_field_left_side",
+				isRequired: true,
+				statusIcon: true,
+				tabIndex: nSignupTabIdx++,
+				maxLength: 11,
+				uiEventControlID: "broker:signup-contact-mobile",
+				innerMessage: "Code sent",
+				button: new EzButtonModel(
+							"generateMobileCode",
+							"Send activation code",
+							"button btn-green form_field_right_side_signup_phone disabled",
+							"broker:signup-generate-mobile-code")),
+			origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"MobileCode",
-							"Mobile phone authentication code",
-							type: "tel",
-							cls: "phonenumbercode form_field_left_side form_field",
-							isRequired: true,
-							statusIcon: true,
-							tohide: true,
-							tabIndex: nSignupTabIdx++,
-							maxLength: 6,
-							uiEventControlID: "broker:signup-mobile-code",
-							button: new EzButtonModel(
-										"switchToCaptcha",
-										"Did not receive code",
-										"button btn-green form_field_right_side_signup_phone",
-										"broker:switch-to-captcha")),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"MobileCode",
+				"Mobile phone authentication code",
+				type: "tel",
+				cls: "phonenumbercode form_field_left_side form_field",
+				isRequired: true,
+				statusIcon: true,
+				tohide: true,
+				tabIndex: nSignupTabIdx++,
+				maxLength: 6,
+				uiEventControlID: "broker:signup-mobile-code",
+				button: new EzButtonModel(
+							"switchToCaptcha",
+							"Did not receive code",
+							"button btn-green form_field_right_side_signup_phone",
+							"broker:switch-to-captcha")),
+			origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"ContactOtherPhone",
-							"Contact person other phone number",
-							type: "tel",
-							cls: "phonenumber form_field",
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-contact-other-phone"),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"ContactOtherPhone",
+				"Contact person other phone number",
+				type: "tel",
+				cls: "phonenumber form_field",
+				tabIndex: nSignupTabIdx++,
+				uiEventControlID: "broker:signup-contact-other-phone"),
+			origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyAppCount",
-							"Number of applications per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							maxLength: 6,
-							uiEventControlID: "broker:signup-esitmated-monthly-application-count"),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"EstimatedMonthlyAppCount",
+				"Number of applications per month",
+				type: "tel",
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				tabIndex: nSignupTabIdx++,
+				maxLength: 6,
+				uiEventControlID: "broker:signup-esitmated-monthly-application-count"),
+			origin: origin)
 
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"EstimatedMonthlyClientAmount",
-							"Value of credit per month",
-							type: "tel",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-estimated-monthly-client-amount"),
-						origin: origin)
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"EstimatedMonthlyClientAmount",
+				"Value of credit per month",
+				type: "tel",
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				tabIndex: nSignupTabIdx++,
+				uiEventControlID: "broker:signup-estimated-monthly-client-amount"),
+			origin: origin)
 
-					<div class="control-group form_read_and_accept">
-						<div class="controls">
-							@{ EzInputBuilder checkbox1 = new EzInputBuilder(
-							  "FCARegistered",
-							  "FCA Registered",
-							  value: "false",
-							  type: "checkbox",
-							  tabIndex: nSignupTabIdx++,
-							  name: "FCARegistered",
-							  uiEventControlID: "broker:fca-registered"); }
-							@EzForm.ClickableInputTag(checkbox1, origin: origin)
+		<div class="control-group form_read_and_accept">
+			<div class="controls">
+				@{ EzInputBuilder checkbox1 = new EzInputBuilder(
+					"FCARegistered",
+					"FCA Registered",
+					value: "false",
+					type: "checkbox",
+					tabIndex: nSignupTabIdx++,
+					name: "FCARegistered",
+					uiEventControlID: "broker:fca-registered"); }
+				@EzForm.ClickableInputTag(checkbox1, origin: origin)
 
-						</div>
-					</div>
-
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"LicenseNumber",
-							"Licence number",
-							type: "text",
-							cls: "form_field",
-							wrapperCls: "license_number_field_container",
-							isRequired: true,
-							statusIcon: true,
-							tohide: true,
-							tabIndex: nSignupTabIdx++,
-							maxLength: 50,
-							uiEventControlID: "broker:signup-license-number"),
-						origin: origin)
-
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"Password",
-							"Create password",
-							type: "password",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-password"),
-						origin: origin)
-
-					@EzForm.InputTextWizard(
-						new EzInputBuilder(
-							"Password2",
-							"Confirm password",
-							type: "password",
-							cls: "form_field",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							uiEventControlID: "broker:signup-confirm-password"),
-						origin: origin)
-
-				<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0" />
-					<div id="CaptchaSection" class="form_field_container hide" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
-						@EzForm.Captcha(captchamode, uiEventControlID: "broker:captcha", tabIndex: nSignupTabIdx++, origin: origin, sId: "broker-captcha")
-					</div>
-
-					<div class="control-group form_read_and_accept">
-						<div class="controls">
-							@{ EzInputBuilder checkbox2 = new EzInputBuilder(
-							"AgreeToTerms",
-							String.Format("I have read and accept the {0} <a href='#' class='show-terms-and-conditions'>Terms &amp; Conditions</a>", origin),
-							value: "accepted-terms",
-							type: "checkbox",
-							isRequired: true,
-							statusIcon: true,
-							tabIndex: nSignupTabIdx++,
-							name: "AgreeToTerms",
-							uiEventControlID: "broker:signup-agree-to-terms"); }
-							@EzForm.ClickableInputTag(checkbox2, origin: origin)
-						</div>
-
-						<div class="controls">
-							@{ EzInputBuilder checkbox3 = new EzInputBuilder(
-								  "AgreeToPrivacyPolicy",
-								  String.Format("I have read and accept the {0} <a target='_blank' href='{1}'>Privacy Policy</a>", origin, privacyUrl),
-								  value: "accepted-privacy-policy",
-								  type: "checkbox",
-								  isRequired: true,
-								  statusIcon: true,
-								  tabIndex: nSignupTabIdx++,
-								  name: "AgreeToPrivacyPolicy",
-								  uiEventControlID: "broker:signup-agree-to-privacy-policy"); }
-							@EzForm.ClickableInputTag(checkbox3, origin: origin)
-						</div>
-					</div>
-					
-					@EzForm.WizardButton(
-						new EzButtonModel(
-							"SignupBrokerButton",
-							"Sign up",
-							"button btn-green disabled pull-right ev-btn-org",
-							"broker:signup-submit",
-							nSignupTabIdx++,
-							EzButtonType.submit),
-						origin: origin)
-
-				</form>
-
-				<aside class="customer-sidebar broker"></aside>
 			</div>
 		</div>
+
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"LicenseNumber",
+				"Licence number",
+				type: "text",
+				cls: "form_field",
+				wrapperCls: "license_number_field_container",
+				isRequired: true,
+				statusIcon: true,
+				tohide: true,
+				tabIndex: nSignupTabIdx++,
+				maxLength: 50,
+				uiEventControlID: "broker:signup-license-number"),
+			origin: origin)
+
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"Password",
+				"Create password",
+				type: "password",
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				tabIndex: nSignupTabIdx++,
+				uiEventControlID: "broker:signup-password"),
+			origin: origin)
+
+		@EzForm.InputTextWizard(
+			new EzInputBuilder(
+				"Password2",
+				"Confirm password",
+				type: "password",
+				cls: "form_field",
+				isRequired: true,
+				statusIcon: true,
+				tabIndex: nSignupTabIdx++,
+				uiEventControlID: "broker:signup-confirm-password"),
+			origin: origin)
+
+	<input type="hidden" name="IsCaptchaEnabled" id="SignupIsCaptchaEnabled" value="0" />
+		<div id="CaptchaSection" class="form_field_container hide broker-captcha" data-tab-index="@{ WriteLiteral(nSignupTabIdx++); }">
+			@EzForm.Captcha(captchamode, uiEventControlID: "broker:captcha", tabIndex: nSignupTabIdx++, origin: origin, sId: "broker-captcha")
+		</div>
+
+		<div class="control-group form_read_and_accept_broker">
+			<div class="controls">
+				@{ EzInputBuilder checkbox2 = new EzInputBuilder(
+					"AgreeToTerms",
+					String.Format("I have read and accept the {0} <a href='#' class='show-terms-and-conditions'>Terms &amp; Conditions</a>", origin),
+					value: "accepted-terms",
+					type: "checkbox",
+					isRequired: true,
+					statusIcon: true,
+					tabIndex: nSignupTabIdx++,
+					name: "AgreeToTerms",
+					uiEventControlID: "broker:signup-agree-to-terms"); }
+				@EzForm.ClickableInputTag(checkbox2, origin: origin)
+			</div>
+
+			<div class="controls">
+				@{ EzInputBuilder checkbox3 = new EzInputBuilder(
+					"AgreeToPrivacyPolicy",
+					String.Format("I have read and accept the {0} <a target='_blank' href='{1}'>Privacy Policy</a>", origin, privacyUrl),
+					value: "accepted-privacy-policy",
+					type: "checkbox",
+					isRequired: true,
+					statusIcon: true,
+					tabIndex: nSignupTabIdx++,
+					name: "AgreeToPrivacyPolicy",
+					uiEventControlID: "broker:signup-agree-to-privacy-policy"); }
+				@EzForm.ClickableInputTag(checkbox3, origin: origin)
+			</div>
+		</div>
+					
+		@EzForm.WizardButton(
+			new EzButtonModel(
+				"SignupBrokerButton",
+				"Sign up",
+				"button btn-green disabled pull-right ev-btn-org",
+				"broker:signup-submit",
+				nSignupTabIdx++,
+				EzButtonType.submit),
+			origin: origin)
+
+	</form>
+
+	<aside class="customer-sidebar broker"></aside>
 	</section>
 </div>
 
