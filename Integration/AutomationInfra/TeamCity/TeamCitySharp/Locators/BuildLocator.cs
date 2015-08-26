@@ -1,4 +1,4 @@
-﻿namespace TeamCity.Locators
+﻿namespace TeamCityModels.Locators
 {
     using System;
     using System.Collections.Generic;

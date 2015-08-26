@@ -1,4 +1,4 @@
-namespace TeamCity.DomainEntities
+namespace TeamCityModels.DomainEntities
 {
     public enum VcsRootField
     {

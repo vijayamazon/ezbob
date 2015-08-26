@@ -1,9 +1,9 @@
-﻿namespace TeamCity
+﻿namespace TeamCityData
 {
-    using TeamCity.ActionTypes;
-    using TeamCity.Connection;
+    using TeamCityModels.ActionTypes;
+    using TeamCityModels.Connection;
 
-    public class TeamCityClient : IClientConnection, ITeamCityClient
+    public class TeamCityData : IClientConnection, ITeamCityData
     {
         private readonly TeamCityCaller _caller;
         private IBuilds _builds;
@@ -16,7 +16,7 @@
         private IChanges _changes;
         private IBuildArtifacts _artifacts;
 
-        public TeamCityClient(string hostName, bool useSsl = false)
+        public TeamCityData(string hostName, bool useSsl = false)
         {
             this._caller = new TeamCityCaller(hostName, useSsl);
         }

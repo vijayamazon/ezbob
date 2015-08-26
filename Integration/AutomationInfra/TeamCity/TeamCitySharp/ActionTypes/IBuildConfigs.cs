@@ -1,10 +1,10 @@
-namespace TeamCity.ActionTypes
+namespace TeamCityModels.ActionTypes
 {
     using System;
     using System.Collections.Generic;
     using System.Xml;
-    using TeamCity.DomainEntities;
-    using TeamCity.Locators;
+    using TeamCityModels.DomainEntities;
+    using TeamCityModels.Locators;
 
     public interface IBuildConfigs
     {

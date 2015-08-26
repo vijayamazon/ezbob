@@ -1,4 +1,4 @@
-﻿namespace TeamCity.Connection
+﻿namespace TeamCityModels.Connection
 {
     using System;
     using System.Collections.Generic;

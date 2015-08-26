@@ -1,8 +1,8 @@
-namespace TeamCity.ActionTypes
+namespace TeamCityModels.ActionTypes
 {
     using System.Collections.Generic;
-    using TeamCity.DomainEntities;
-    using TeamCity.Locators;
+    using TeamCityModels.DomainEntities;
+    using TeamCityModels.Locators;
 
     public interface IVcsRoots
     {

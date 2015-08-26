@@ -1,0 +1,9 @@
+﻿ <appSettings>
+    <add key="AppTitle" value="MVC Web Access" />
+    <add key="DefaultWebpage" />
+    <add key="CustomCSS" />
+    <add key="TktsEmailTo" value="email@email.com" />
+    <add key="EmailFrom" value="email@email.com" />
+    <add key="EmailFromSMTP" value="mail.email.com" />
+    <add key="EmailFromPW" value="fakePassword" />
+  </appSettings>

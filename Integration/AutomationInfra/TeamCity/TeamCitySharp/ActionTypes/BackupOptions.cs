@@ -1,4 +1,4 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     public class BackupOptions
     {

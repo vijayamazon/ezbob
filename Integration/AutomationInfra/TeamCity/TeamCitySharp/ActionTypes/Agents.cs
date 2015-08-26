@@ -1,14 +1,14 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System.Collections.Generic;
-    using TeamCity.Connection;
-    using TeamCity.DomainEntities;
+    using TeamCityModels.Connection;
+    using TeamCityModels.DomainEntities;
 
-    internal class Agents : IAgents
+    public class Agents : IAgents
     {
         private readonly TeamCityCaller _caller;
 
-        internal Agents(TeamCityCaller caller)
+        public Agents(TeamCityCaller caller)
         {
             this._caller = caller;
         }

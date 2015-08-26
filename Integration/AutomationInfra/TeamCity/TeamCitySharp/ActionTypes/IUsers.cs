@@ -1,7 +1,7 @@
-namespace TeamCity.ActionTypes
+namespace TeamCityModels.ActionTypes
 {
     using System.Collections.Generic;
-    using TeamCity.DomainEntities;
+    using TeamCityModels.DomainEntities;
 
     public interface IUsers
     {

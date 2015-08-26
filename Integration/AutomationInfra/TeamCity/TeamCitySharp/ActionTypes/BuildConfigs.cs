@@ -1,19 +1,19 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System;
     using System.Collections.Generic;
     using System.IO;
     using System.Xml;
     using EasyHttp.Http;
-    using TeamCity.Connection;
-    using TeamCity.DomainEntities;
-    using TeamCity.Locators;
+    using TeamCityModels.Connection;
+    using TeamCityModels.DomainEntities;
+    using TeamCityModels.Locators;
 
-    internal class BuildConfigs : IBuildConfigs
+    public class BuildConfigs : IBuildConfigs
     {
         private readonly TeamCityCaller _caller;
 
-        internal BuildConfigs(TeamCityCaller caller)
+        public BuildConfigs(TeamCityCaller caller)
         {
             this._caller = caller;
         }

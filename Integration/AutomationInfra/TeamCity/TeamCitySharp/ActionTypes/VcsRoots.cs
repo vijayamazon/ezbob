@@ -1,17 +1,17 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System;
     using System.Collections.Generic;
     using EasyHttp.Http;
-    using TeamCity.Connection;
-    using TeamCity.DomainEntities;
-    using TeamCity.Locators;
+    using TeamCityModels.Connection;
+    using TeamCityModels.DomainEntities;
+    using TeamCityModels.Locators;
 
-    internal class VcsRoots: IVcsRoots
+    public class VcsRoots: IVcsRoots
     {
         private readonly TeamCityCaller _caller;
 
-        internal VcsRoots(TeamCityCaller caller)
+        public VcsRoots(TeamCityCaller caller)
         {
             this._caller = caller;
         }

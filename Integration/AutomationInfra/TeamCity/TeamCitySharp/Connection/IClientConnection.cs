@@ -1,6 +1,6 @@
-﻿namespace TeamCity.Connection
+﻿namespace TeamCityModels.Connection
 {
-    internal interface IClientConnection
+    public interface IClientConnection
     {
         void Connect(string userName, string password);
         void ConnectAsGuest();

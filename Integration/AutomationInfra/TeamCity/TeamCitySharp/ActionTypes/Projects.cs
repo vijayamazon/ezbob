@@ -1,15 +1,15 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System.Collections.Generic;
     using EasyHttp.Http;
-    using TeamCity.Connection;
-    using TeamCity.DomainEntities;
+    using TeamCityModels.Connection;
+    using TeamCityModels.DomainEntities;
 
-    internal class Projects : IProjects
+    public class Projects : IProjects
     {
         private readonly TeamCityCaller _caller;
 
-        internal Projects(TeamCityCaller caller)
+        public Projects(TeamCityCaller caller)
         {
             this._caller = caller;
         }

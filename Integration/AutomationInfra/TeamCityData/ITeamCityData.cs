@@ -1,8 +1,8 @@
-namespace TeamCity
+namespace TeamCityData
 {
-    using TeamCity.ActionTypes;
+    using TeamCityModels.ActionTypes;
 
-    public interface ITeamCityClient
+    public interface ITeamCityData
     {
         void Connect(string userName, string password);
         void ConnectAsGuest();

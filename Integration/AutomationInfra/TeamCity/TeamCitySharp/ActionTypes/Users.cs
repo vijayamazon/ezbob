@@ -1,16 +1,16 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System.Collections.Generic;
     using System.Net;
     using EasyHttp.Http;
-    using TeamCity.Connection;
-    using TeamCity.DomainEntities;
+    using TeamCityModels.Connection;
+    using TeamCityModels.DomainEntities;
 
-    internal class Users : IUsers
+    public class Users : IUsers
     {
         private readonly TeamCityCaller _caller;
 
-        internal Users(TeamCityCaller caller)
+        public Users(TeamCityCaller caller)
         {
             this._caller = caller;
         }

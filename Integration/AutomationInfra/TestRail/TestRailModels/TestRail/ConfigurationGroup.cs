@@ -1,7 +1,7 @@
 ﻿namespace TestRailModels.TestRail {
     using System.Collections.Generic;
-    using Core;
     using Newtonsoft.Json.Linq;
+    using TestRailCore;
 
     public class ConfigurationGroup
     {

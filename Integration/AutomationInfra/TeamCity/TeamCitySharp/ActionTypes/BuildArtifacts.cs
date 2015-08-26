@@ -1,4 +1,4 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System;
     using System.Collections.Generic;
@@ -6,9 +6,9 @@
     using System.IO;
     using System.Linq;
     using System.Xml;
-    using TeamCity.Connection;
+    using TeamCityModels.Connection;
 
-    internal class BuildArtifacts : IBuildArtifacts
+    public class BuildArtifacts : IBuildArtifacts
     {
         private readonly TeamCityCaller _caller;
 

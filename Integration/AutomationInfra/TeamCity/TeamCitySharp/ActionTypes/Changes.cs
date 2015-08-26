@@ -1,15 +1,15 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System.Collections.Generic;
     using System.Linq;
-    using TeamCity.Connection;
-    using TeamCity.DomainEntities;
+    using TeamCityModels.Connection;
+    using TeamCityModels.DomainEntities;
 
-    internal class Changes : IChanges
+    public class Changes : IChanges
     {
         private readonly TeamCityCaller _caller;
 
-        internal Changes(TeamCityCaller caller)
+        public Changes(TeamCityCaller caller)
         {
             this._caller = caller;
         }

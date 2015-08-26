@@ -153,8 +153,19 @@
     <Compile Include="Core\TestBase.cs" />
     <Compile Include="Core\TestRailRepository.cs" />
     <Compile Include="Tests\Application\Alibaba\AlibabaTests.cs" />
+    <Compile Include="Tests\Application\Broker\BrokerTests.cs" />
     <Compile Include="Tests\Application\OrangeMoney\OrangeMoneyTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tests\Application\UnderWriter\UnderWriterTests.cs" />
+    <Compile Include="Tests\Automation\POC\POCTests.cs" />
+    <Compile Include="Tests\Integration\CallCredit_CreditSafe\CallCredit_CreditSafeTests.cs" />
+    <Compile Include="Tests\Integration\CustomerCommunication\CustomerCommunicationTests.cs" />
+    <Compile Include="Tests\Integration\Salesforce\SalesforceTests.cs" />
+    <Compile Include="Tests\Legacy\Everline\EverlineTests.cs" />
+    <Compile Include="Tests\WorkFlow\Collection\CollectionTests.cs" />
+    <Compile Include="Tests\WorkFlow\Loan\LoanTests.cs" />
+    <Compile Include="Tests\WorkFlow\Promotions\PromotionsTests.cs" />
+    <Compile Include="Tests\WorkFlow\Risk\RiskTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -168,19 +179,7 @@
     <Content Include="WebDrivers\IEDriverServer.exe" />
     <Content Include="WebDrivers\wires.exe" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\Application\Broker\" />
-    <Folder Include="Tests\Application\UnderWriter\" />
-    <Folder Include="Tests\Automation\POC\" />
-    <Folder Include="Tests\Integration\CallCredit_CreditSafe\" />
-    <Folder Include="Tests\Integration\CustomerCommunication\" />
-    <Folder Include="Tests\Integration\Salesforce\" />
-    <Folder Include="Tests\Legacy\Everline\" />
-    <Folder Include="Tests\WorkFlow\Collection\" />
-    <Folder Include="Tests\WorkFlow\Loan\" />
-    <Folder Include="Tests\WorkFlow\Promotions\" />
-    <Folder Include="Tests\WorkFlow\Risk\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <EmbeddedResource Include="configs\Brand\DefaultBrand.resx">
       <Generator>ResXFileCodeGenerator</Generator>

@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\WebApiConfig.cs" />
+    <Compile Include="Facade\AutomationFacade.cs" />
     <Compile Include="Controllers\AutomationController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -85,6 +86,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Configs\AppSettings.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -97,9 +99,9 @@
     <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\TeamCity\TeamCitySharp\TeamCity.csproj">
-      <Project>{87598714-132f-478e-866e-8c1af3e83057}</Project>
-      <Name>TeamCity</Name>
+    <ProjectReference Include="..\TeamCityEngine\TeamCityEngine.csproj">
+      <Project>{3BEDEE07-4C88-4555-A960-C3E2E92A7078}</Project>
+      <Name>TeamCityEngine</Name>
     </ProjectReference>
     <ProjectReference Include="..\TestRail\TestRailEngine\TestRailEngine.csproj">
       <Project>{d880cf3a-2570-4a0d-84cc-67a33ae540f3}</Project>

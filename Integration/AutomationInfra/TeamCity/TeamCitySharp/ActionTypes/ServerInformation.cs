@@ -1,16 +1,16 @@
-﻿namespace TeamCity.ActionTypes
+﻿namespace TeamCityModels.ActionTypes
 {
     using System.Collections.Generic;
     using System.Text;
-    using TeamCity.Connection;
-    using TeamCity.DomainEntities;
+    using TeamCityModels.Connection;
+    using TeamCityModels.DomainEntities;
 
-    internal class ServerInformation : IServerInformation
+    public class ServerInformation : IServerInformation
     {
         private const string ServerUrlPrefix = "/app/rest/server";
         private readonly ITeamCityCaller _caller;
 
-        internal ServerInformation(ITeamCityCaller caller)
+        public ServerInformation(ITeamCityCaller caller)
         {
             this._caller = caller;
         }

@@ -1,8 +1,8 @@
 ﻿namespace TestRailModels.TestRail {
     using System;
     using System.Collections.Generic;
-    using Core;
     using Newtonsoft.Json.Linq;
+    using TestRailCore;
 
     /// <summary>stores information about a plan</summary>
     public class Plan

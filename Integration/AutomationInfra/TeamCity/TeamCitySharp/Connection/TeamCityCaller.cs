@@ -1,15 +1,15 @@
 ﻿using HttpException = EasyHttp.Infrastructure.HttpException;
 
-namespace TeamCity.Connection
+namespace TeamCityModels.Connection
 {
     using System;
     using System.IO;
     using System.Net;
     using System.Security.Authentication;
     using EasyHttp.Http;
-    using TeamCity.DomainEntities;
+    using TeamCityModels.DomainEntities;
 
-    internal class TeamCityCaller : ITeamCityCaller
+    public class TeamCityCaller : ITeamCityCaller
     {
         private readonly Credentials _configuration = new Credentials();
 

@@ -4,8 +4,8 @@
     using System.IO;
     using System.Net;
     using System.Text;
-    using Core;
     using Newtonsoft.Json.Linq;
+    using TestRailCore;
     using TestRailModels.TestRail;
 
     /// <summary>client used to access test case data in testrail</summary>

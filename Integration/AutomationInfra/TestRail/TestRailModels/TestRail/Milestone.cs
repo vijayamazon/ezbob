@@ -1,7 +1,7 @@
 ﻿namespace TestRailModels.TestRail {
     using System;
-    using Core;
     using Newtonsoft.Json.Linq;
+    using TestRailCore;
 
     /// <summary>stores information about a milestone</summary>
     public class Milestone

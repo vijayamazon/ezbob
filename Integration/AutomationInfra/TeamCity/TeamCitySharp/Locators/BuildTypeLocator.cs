@@ -1,4 +1,4 @@
-﻿namespace TeamCity.Locators
+﻿namespace TeamCityModels.Locators
 {
     public class BuildTypeLocator
     {

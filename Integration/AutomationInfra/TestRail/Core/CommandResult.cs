@@ -1,4 +1,4 @@
-﻿namespace Core
+﻿namespace TestRailCore
 {
     using System;
 
