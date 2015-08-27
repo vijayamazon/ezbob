@@ -64,7 +64,7 @@ function InitAmountPeriodSliders(options)
 		if (sAreaName == 'amount')
 			oTextbox.autoNumeric($.extend({}, EzBob.moneyFormatNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max }));
 		else
-			oTextbox.autoNumeric({ vMin: 1, vMax: 12, mDec: 0 });
+			oTextbox.autoNumeric({ vMin: oDefinitions.min, vMax: oDefinitions.max, mDec: 0 });
 
 		var s = oSlider.slider({
 			range: 'min',
