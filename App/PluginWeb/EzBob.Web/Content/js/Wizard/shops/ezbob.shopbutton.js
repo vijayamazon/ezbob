@@ -33,10 +33,6 @@ EzBob.StoreButtonView = Backbone.Marionette.ItemView.extend({
 
 		var sTitle = (this.shops.length ? 'Some' : 'No') + ' accounts linked. Click to link ';
 
-		if (this.hasOr) {
-			this.$el.find('.account-or').show();
-		}
-
 		if (this.shops.length) {
 			this.$el.find('.marketplace-button').addClass('marketplace-button-full');
 			sTitle += 'more.';

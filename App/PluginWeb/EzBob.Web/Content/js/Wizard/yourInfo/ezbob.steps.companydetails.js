@@ -125,20 +125,16 @@ EzBob.CompanyDetailsStepView = Backbone.View.extend({
 		var companyType = this.companyTypes[name];
 		if (!companyType) {
 			if (this.CompanyView) {
-				this.$el.find('.after-financial-details').html().insertAfter(this.$el.find('.industry-type-div'));
+				this.$el.find('.after-financial-details').insertAfter(this.$el.find('.after-industry-type'));
 				this.CompanyView.$el.remove();
 				this.CompanyView = null;
 			} // if
 
-			this.$el.find('.WebSiteTurnOver, .OverallTurnOver').addClass('hide');
-
 			return false;
 		} // if
 
-		this.$el.find('.WebSiteTurnOver, .OverallTurnOver').removeClass('hide');
-
 		if (this.CompanyView && this.CompanyView.ViewName !== companyType.Type) {
-			this.$el.find('.after-financial-details').insertAfter(this.$el.find('.industry-type-div'));
+			this.$el.find('.after-financial-details').insertAfter(this.$el.find('.after-industry-type'));
 			this.CompanyView.$el.remove();
 			this.CompanyView = null;
 		} // if

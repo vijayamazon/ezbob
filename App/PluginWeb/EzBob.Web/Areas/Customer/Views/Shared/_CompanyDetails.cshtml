@@ -35,6 +35,7 @@
 		new Tuple<string, string>("101", "10 years or more")
 		
 	};
+
 }
 
 <script id="company-data-template" type="text/template">
@@ -55,16 +56,16 @@
 					size: 6,
 					hasEmpty: false),
 					origin: origin)
-
-				@EzForm.SelectWizard(new EzSelectModel("IndustryType", "Industry type",
-					IndustryType.Other.ToTupleInt<IndustryType>(),
-					cls: "form_field",
-					isRequired: true,
-					statusIcon: true,
-					uiEventControlID: "personal-info:industry_type"),
-					origin: origin)
 			</div>
-			
+			<div class="after-industry-type">
+				@EzForm.SelectWizard(new EzSelectModel("IndustryType", "Industry type",
+							IndustryType.Other.ToTupleInt<IndustryType>(),
+							cls: "form_field",
+							isRequired: true,
+							statusIcon: true,
+							uiEventControlID: "personal-info:industry_type"),
+							origin: origin)
+			</div>
             <div class="after-financial-details">
 				@EzForm.InputTextWizard(new EzInputBuilder("OverallTurnOver", "Total annual revenue (sales)",
 					type: "tel",
@@ -154,7 +155,7 @@
 </script>
 
 <script id="nonlimitededinfo-template" type="text/template">
-	@EzForm.InputTextWizard(new EzInputBuilder("NonLimitedCompanyName", "Company name",
+	@EzForm.InputTextWizard(new EzInputBuilder("NonLimitedCompanyName", "Business name",
 						cls: "form_field",
 						isRequired: true,
 						statusIcon: true,
@@ -166,6 +167,7 @@
     <hr class="wizard-hr" />
     <h2 class="financial-details">Financial details</h2>
 	
+	<div class="after-financial-details"></div>
 	@EzForm.SelectWizard(new EzSelectModel("NonLimitedTimeInBusiness", "Time in business",
 					timeInBusiness,
 					cls: "form_field",
@@ -196,7 +198,7 @@
 						uiEventControlID: "personal-info:limited_company_number"),
 						origin: origin)
 
-	@EzForm.InputTextWizard(new EzInputBuilder("LimitedCompanyName", "Company name",
+	@EzForm.InputTextWizard(new EzInputBuilder("LimitedCompanyName", "Business name",
 						cls: "form_field",
 						isRequired: true,
 						statusIcon: true,
@@ -215,7 +217,7 @@
     
 	<hr class="wizard-hr" />
     <h2 class="financial-details">Financial details</h2>
-
+	<div class="after-financial-details"></div>
     <div class="employee-count"></div>
 
     <div class="directors"></div>
@@ -228,28 +230,28 @@
 <script id="oneDirector" type="text/template">
     <%_.each(directors, function(director, i){%>
 		<hr class="wizard-hr" />
-        <div class="Directors">
-            <div class="add-director-container">
-                <h2 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director <%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button btn-green" ui-event-control-id="personal-info:remove_director">Remove</a></h2>
-            </div>
-            
-			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Name", "First Name",
+	<div class="Directors">
+		<div class="add-director-container">
+			<h2 class="form_start" preffix="<%-preffix%>" seqno="<%=i%>">Director <%=i+1%><a style="float: right; margin-bottom: 7px" number="<%=i+1%>" href="#" class="removeDirector button btn-green" ui-event-control-id="personal-info:remove_director">Remove</a></h2>
+		</div>
+
+		@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Name", "First Name",
 						value: "<%- director.Name %>",
 						cls: "form_field director_name_part",
 						isRequired: true,
 						statusIcon: true,
 						uiEventControlID: "personal-info:director_first_name"),
 						origin: origin)
-			
-			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Middle", "Middle initial",
+
+		@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Middle", "Middle initial",
 						value: "<%- director.Middle %>",
 						cls: "form_field director_name_part nonrequired alphaOnly",
 						isRequired: false,
 						statusIcon: true,
 						uiEventControlID: "personal-info:director_middle_name"),
 						origin: origin)
-			
-			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Surname", "Surname",
+
+		@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Surname", "Surname",
 						value: "<%- director.Surname %>",
 						cls: "form_field director_surname_part",
 						isRequired: true,
@@ -257,17 +259,38 @@
 						uiEventControlID: "personal-info:director_last_name"),
 						origin: origin)
 
-            <div class="control-group form_field_container FormRadioCtrl">
-                <span>
-                    <input class="male-director-gender-margin" <%if(director.Gender == 'M'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="M" id="<%-preffix%>[<%=i%>].FormRadioCtrl_M" ui-event-control-id="personal-info:director_gender"><label for="<%-preffix%>[<%=i%>].GenderCtrl_M">Male</label>
-                    <input class="gender-margin" <%if(director.Gender == 'F'){%>checked="checked"<%}%> type="radio" name="<%-preffix%>[<%=i%>].Gender" value="F" id="<%-preffix%>[<%=i%>].FormRadioCtrl_F" ui-event-control-id="personal-info:director_gender"><label for="<%-preffix%>[<%=i%>].GenderCtrl_F">Female</label>
-                </span>
-                <img id="<%-preffix%>[<%=i%>].GenderImage" class="field_status required director_gender_image" />
-            </div>
+		
 
-            @EzForm.DateInput(this, "<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date", hiddenFieldAuxClass: "director_birth_date")
-			
-			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Email", "Email",
+		@EzForm.ClickableInputWizard(new EzClickInputModel(
+			name: "Gender",
+			caption: "Gender ",
+			errorImgClass: "field_status required director_gender_image",
+			inputWrapperClass: "FormRadioCtrl",
+			isRequired: true,
+			statusIcon: true,
+			inputButtons: new List<EzInputBuilder> { 
+				new EzInputBuilder("<%-preffix%>[<%=i%>].FormRadioCtrl_M", "Male",
+					value: "M",
+					type: "radio",
+					cls: "male-director-gender-margin",
+					isRequired: true,
+					statusIcon: true,
+					name: "<%-preffix%>[<%=i%>].Gender",
+					uiEventControlID: "personal-info:director_gender"),
+				new EzInputBuilder("<%-preffix%>[<%=i%>].FormRadioCtrl_F", "Female",
+					value: "F",
+					type: "radio",
+					cls: "gender-margin",
+					isRequired: true,
+					statusIcon: true,
+					name: "<%-preffix%>[<%=i%>].Gender",
+					uiEventControlID: "personal-info:director_gender") 
+			}),
+			origin: origin)
+
+				@EzForm.DateInput(this, "<%-preffix%>[<%=i%>].DateOfBirth", "Date of Birth", css: "director_date", required: true, statusIcon: true, uiEventControlID: "personal-info:director_birth_date", hiddenFieldAuxClass: "director_birth_date", origin: origin)
+
+				@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Email", "Email",
 						value: "<%- director.Email %>",
 						type: "email",
 						cls: "form_field director_email",
@@ -275,8 +298,8 @@
 						statusIcon: true,
 						uiEventControlID: "personal-info:director_email"),
 						origin: origin)
-			
-			@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Phone", "Mobile number",
+
+				@EzForm.InputTextWizard(new EzInputBuilder("<%-preffix%>[<%=i%>].Phone", "Mobile number",
 						value: "<%- director.Phone %>",
 						type: "tel",
 						cls: "form_field director_phone phonenumber",
@@ -284,19 +307,19 @@
 						statusIcon: true,
 						uiEventControlID: "personal-info:director_phone"),
 						origin: origin)
-			
-            <div class="director_address">
-                @EzForm.AddressInput(this, "<%-preffix%>Address<%=i%>", "Address", "director")
-            </div>
 
-            <input type="hidden" name="<%-preffix%>[<%=i%>].IsDirector" value="on" />
-            <input type="hidden" name="<%-preffix%>[<%=i%>].IsShareholder" value="off" />
+				<div class="director_address">
+					@EzForm.AddressInput(this, "<%-preffix%>Address<%=i%>", "Address", "director")
+				</div>
 
-            <input type="hidden" name="<%-preffix%>[<%=i%>].NameImage" value="<%- director.NameStatus %>" />
-            <input type="hidden" name="<%-preffix%>[<%=i%>].SurnameImage" value="<%- director.SurnameStatus %>" />
-            <input type="hidden" name="<%-preffix%>[<%=i%>].GenderImage" value="<%- director.GenderStatus %>" />
-            <input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirthImage" value="<%- director.DateOfBirthStatus %>" />
-        </div>
+				<input type="hidden" name="<%-preffix%>[<%=i%>].IsDirector" value="on" />
+				<input type="hidden" name="<%-preffix%>[<%=i%>].IsShareholder" value="off" />
+
+				<input type="hidden" name="<%-preffix%>[<%=i%>].NameImage" value="<%- director.NameStatus %>" />
+				<input type="hidden" name="<%-preffix%>[<%=i%>].SurnameImage" value="<%- director.SurnameStatus %>" />
+				<input type="hidden" name="<%-preffix%>[<%=i%>].GenderImage" value="<%- director.GenderStatus %>" />
+				<input type="hidden" name="<%-preffix%>[<%=i%>].DateOfBirthImage" value="<%- director.DateOfBirthStatus %>" />
+	</div>
     <%})%>
 </script>
 

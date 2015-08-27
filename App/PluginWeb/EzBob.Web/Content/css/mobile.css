@@ -146,9 +146,15 @@
             display: inline-block;
         }
     
-    .marketplace-button {
+    .marketplace-button-wrapper {
         width: 47%;
     }
+
+	.account-or {
+		width: 100%;
+		margin-bottom: 0;
+		margin-left: 20%;
+	}
 
     .hmrc-main-button {
         margin: 5px;

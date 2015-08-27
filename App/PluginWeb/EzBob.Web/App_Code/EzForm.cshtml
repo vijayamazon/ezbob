@@ -402,7 +402,11 @@ string formFieldID = "")
 			</div>
 		} else {
 
-			<label class="input-title" for="@identificator">@inputProp.Caption</label>
+			<label class="input-title"
+				   @if (true) {
+					   @: for="@identificator"
+				   }
+			>@inputProp.Caption</label>
 			<div class="input-wrapper">
 				@InputTextTag(inputProp, identificator)
 				@if (@inputProp.Button != null) {
@@ -492,30 +496,47 @@ string formFieldID = "")
         </div>
     </div>
 }
- @helper ClickableInputTag(EzInputBuilder inputButton, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
-{       var caption = new HtmlString(inputButton.Caption);
+ @helper ClickableInputTag(EzInputBuilder inputButton, CustomerOriginEnum origin = CustomerOriginEnum.ezbob) {
+	var caption = new HtmlString(inputButton.Caption);
+	var identificator = new HtmlString(inputButton.Id);
     if (origin != CustomerOriginEnum.everline)
     {
-        var identificator = new HtmlString(inputButton.Id);
         @InputTextTag(inputButton, identificator);
-    <label class="@( !string.IsNullOrWhiteSpace(inputButton.LabelClass) ? inputButton.LabelClass : "")" for="@identificator">@caption</label>
+		<label 
+			   @if (true) { 
+					@: class="@inputButton.LabelClass"
+			   }
+			   @if (true) {
+				   @: for="@identificator"
+			   }
+		>@caption="@identificator"></label>
     }
     else
     {
         <div class="click-wrap ">
             <div class="click-input-wrap ">
                 @{
-        var identificator = new HtmlString(inputButton.Id);
-        @InputTextTag(inputButton, identificator);
+					@InputTextTag(inputButton, identificator);
                 }
-                <label class="fa @( inputButton.Type == "radio" ? "radio-btn" : "checkbox-btn")"  for="@identificator">
+                <label 
+					   @if (true) {
+						   @: class="fa @( inputButton.Type == "radio" ? "radio-btn" : "checkbox-btn")" 
+					   }
+					   @if (true) {
+						   @: for="@identificator"
+					   }>
                     <i class="fa @( inputButton.Type == "radio" ? "fa-circle" : "fa-check")"> </i>
-
                 </label>
 
             </div>
-            
-            <label class="title @( !string.IsNullOrWhiteSpace(inputButton.LabelClass) ? inputButton.LabelClass : "") " for=" @identificator">@caption</label>
+            <label 
+				@if (true) {
+					@: class="title @inputButton.LabelClass"
+	   			}
+				@if (true) {
+					@: for="@identificator"
+				}
+			>@caption</label>
         </div>
     }
 }

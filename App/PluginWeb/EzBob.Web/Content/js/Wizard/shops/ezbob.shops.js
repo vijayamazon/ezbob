@@ -303,8 +303,14 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 			var sBtnClass = this.isProfile() ? 'marketplace-button-profile' : this.extractBtnClass(oTarget);
 			var button = shop.button.render();
+			
+			if (button.hasOr) {
+				$('<div class="account-or"></div>').appendTo(oTarget);
+			}
+
 			button.$el.find('.marketplace-button').addClass(sBtnClass);
 			button.$el.appendTo(oTarget);
+
 		} // for
 
 		if (this.isOffline() && !this.isProfile())
