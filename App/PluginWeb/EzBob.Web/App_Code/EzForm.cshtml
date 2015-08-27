@@ -583,28 +583,24 @@ string formFieldID = "")
     </div>
 
 }
-@helper WizardButton(EzButtonModel button, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+@helper WizardButton(EzButtonModel button, string wrapperClass = null, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
-    @WizardButton(new List<EzButtonModel> {button}, origin);
+    @WizardButton(new List<EzButtonModel> { button }, wrapperClass, origin);
 }
 
-@helper WizardButton(List<EzButtonModel> buttons, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
+@helper WizardButton(List<EzButtonModel> buttons, string wrapperClass = null, CustomerOriginEnum origin = CustomerOriginEnum.ezbob)
 {
     <div class="form_buttons_container form_field_container">
-        @if (origin != CustomerOriginEnum.everline)
-            {
+        @if (origin != CustomerOriginEnum.everline) {
             <div class="attardi-button">
                 @ButtonTag(buttons)
             </div>
-            }
-            else
-            {
+        } else {
             <label class="input-title">&nbsp;</label>
-            <div class="input-wrapper">
+            <div class="input-wrapper @wrapperClass">
                 @ButtonTag(buttons)
-
             </div>
-            }
+        }
     </div>
 }
 

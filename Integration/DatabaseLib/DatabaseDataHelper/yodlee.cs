@@ -9,53 +9,46 @@
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Model.Marketplaces.Yodlee;
-	using Newtonsoft.Json;
 	using StructureMap;
 	using YodleeExts;
 
 	public partial class DatabaseDataHelper {
-		public string YodleeBanks {
-			get {
-				if (m_sYodleeBanks == null) {
-					var banks = _yodleeBanksRepository.GetAll();
+		public YodleeBanksModel GetYodleeBanks() {
+			var banks = this.yodleeBanksRepository.GetAll();
 
-					var dict = new Dictionary<string, YodleeParentBankModel>();
-					var yodleeBanksModel = new YodleeBanksModel {
-						DropDownBanks = new List<YodleeSubBankModel>(),
+			var dict = new Dictionary<string, YodleeParentBankModel>();
+			var yodleeBanksModel = new YodleeBanksModel {
+				DropDownBanks = new List<YodleeSubBankModel>(),
+			};
+
+			foreach (var bank in banks) {
+				if (bank.Active && bank.Image) {
+					var sub = new YodleeSubBankModel {
+						csId = bank.ContentServiceId,
+						displayName = bank.Name
 					};
 
-					foreach (var bank in banks) {
-						if (bank.Active && bank.Image) {
-							var sub = new YodleeSubBankModel {
-								csId = bank.ContentServiceId,
-								displayName = bank.Name
-							};
+					if (!dict.ContainsKey(bank.ParentBank)) {
+						dict.Add(bank.ParentBank, new YodleeParentBankModel {
+							parentBankName = bank.ParentBank,
+							subBanks = new List<YodleeSubBankModel>()
+						});
+					} // if
 
-							if (!dict.ContainsKey(bank.ParentBank)) {
-								dict.Add(bank.ParentBank, new YodleeParentBankModel {
-									parentBankName = bank.ParentBank,
-									subBanks = new List<YodleeSubBankModel>()
-								});
-							} // if
-
-							dict[bank.ParentBank].subBanks.Add(sub);
-						} // if
-
-						if (bank.Active && !bank.Image) {
-							yodleeBanksModel.DropDownBanks.Add(new YodleeSubBankModel {
-								csId = bank.ContentServiceId,
-								displayName = bank.Name
-							});
-						} // if
-					} // for
-
-					yodleeBanksModel.ImageBanks = dict.Values.ToList();
-
-					m_sYodleeBanks = JsonConvert.SerializeObject(yodleeBanksModel);
+					dict[bank.ParentBank].subBanks.Add(sub);
 				} // if
 
-				return m_sYodleeBanks;
-			} // get
+				if (bank.Active && !bank.Image) {
+					yodleeBanksModel.DropDownBanks.Add(new YodleeSubBankModel {
+						csId = bank.ContentServiceId,
+						displayName = bank.Name
+					});
+				} // if
+			} // for
+
+			yodleeBanksModel.ImageBanks = dict.Values.ToList();
+
+			return yodleeBanksModel;
 		} // YodleeBalance
 
 		public void CalculateYodleeRunningBalance(
@@ -68,9 +61,9 @@
 			if (transactions.Count < 1)
 				return;
 
-			List<MP_YodleeGroup> yodleeGroupRepository = new YodleeGroupRepository(_session).GetAll().ToList();
+			List<MP_YodleeGroup> yodleeGroupRepository = new YodleeGroupRepository(this._session).GetAll().ToList();
 
-			List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
+			List<MP_YodleeGroupRuleMap> yodleeGroupRuleMapRepository = new YodleeGroupRuleMapRepository(this._session).GetAll().ToList();
 
 			var currDate = new DateTime();
 
@@ -91,7 +84,7 @@
 						double amount = 0;
 
 						if (oCurrentTransaction.transactionAmount.HasValue) {
-							amount = _CurrencyConvertor.ConvertToBaseCurrency(
+							amount = this._CurrencyConvertor.ConvertToBaseCurrency(
 								oCurrentTransaction.transactionAmountCurrency,
 								oCurrentTransaction.transactionAmount.Value,
 								oCurrentTransaction.postDate ?? oCurrentTransaction.transactionDate
@@ -122,16 +115,16 @@
 				nCurTransactionPosition++;
 			} // for
 
-			using (var tx = _session.BeginTransaction()) {
-				_session.SetBatchSize(1000);
+			using (var tx = this._session.BeginTransaction()) {
+				this._session.SetBatchSize(1000);
 				foreach (var trn in transactions) {
-					_session.SaveOrUpdate(trn);
+					this._session.SaveOrUpdate(trn);
 				}
 				tx.Commit();
 				_Log.InfoFormat("Finished saving categorization for mp {0} num of transactions {1}", mp.Id, transactions.Count);
 
 			}
-			_session.Flush();
+			this._session.Flush();
 		} // CalculateYodleeRunningBalance
 
 		public YodleeOrderDictionary GetAllYodleeOrdersData(
@@ -171,7 +164,7 @@
 
 					CalculateYodleeRunningBalance(mp,
 						item.srcElementId,
-						_CurrencyConvertor.ConvertToBaseCurrency(
+						this._CurrencyConvertor.ConvertToBaseCurrency(
 							currentBalanceCurrency,
 							currentBalance,
 							item.asOfDate
@@ -193,7 +186,7 @@
 
 				orders.Data.Add(bankData, bankTransactionsDataList);
 			} // for each order item
-			_session.Flush();
+			this._session.Flush();
 			return orders;
 		} // GetAllYodleeOrdersData
 
@@ -210,7 +203,7 @@
 
 		public int GetLastTransactionId() {
 			try {
-				var t = new YodleeTransactionRepository(_session);
+				var t = new YodleeTransactionRepository(this._session);
 				return t.GetAll()
 					.Max(x => x.Id);
 			} catch (Exception) {
@@ -253,8 +246,8 @@
 			Customer customer = databaseCustomerMarketPlace.Customer;
 			int customerId = customer.Id;
 			string customerSurName = customer.PersonalInfo == null ? "" : customer.PersonalInfo.Surname;
-			List<MP_YodleeGroup> yodleeGroups = new YodleeGroupRepository(_session).GetAll().ToList();
-			List<MP_YodleeGroupRuleMap> yodleeGroupRules = new YodleeGroupRuleMapRepository(_session).GetAll().ToList();
+			List<MP_YodleeGroup> yodleeGroups = new YodleeGroupRepository(this._session).GetAll().ToList();
+			List<MP_YodleeGroupRuleMap> yodleeGroupRules = new YodleeGroupRuleMapRepository(this._session).GetAll().ToList();
 			var directors = GetExperianDirectors(customer);
 
 			foreach (var item in ordersData.Data.Keys) {
@@ -339,7 +332,7 @@
 						hasDetails = bankTransaction.hasDetails,
 						transactionId = bankTransaction.transactionId,
 						transactionCategory =
-							_yodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(
+							this.yodleeTransactionCategoriesRepository.GetYodleeTransactionCategoryByCategoryId(
 								bankTransaction.transactionCategoryId),
 						classUpdationSource = bankTransaction.classUpdationSource,
 						lastCategorised = bankTransaction.lastCategorised,
@@ -369,12 +362,12 @@
 						description = bankTransaction.description,
 						categorizationKeyword = bankTransaction.categorizationKeyword,
 						ezbobCategory = CategorizeTransaction(
-						yodleeGroups, 
+						yodleeGroups,
 						yodleeGroupRules,
-						bankTransaction.description, 
+						bankTransaction.description,
 						bankTransaction.transactionBaseType,
 						transactionAmount != null ? (int)transactionAmount.Value : 0,
-						customerId, 
+						customerId,
 						customerSurName, directors)
 					};
 					mpOrderItem.OrderItemBankTransactions.Add(orderBankTransaction);
@@ -384,8 +377,8 @@
 			}
 
 			customerMarketPlace.YodleeOrders.Add(mpOrder);
-			_CustomerMarketplaceRepository.Update(customerMarketPlace);
-			_session.Flush();
+			this._CustomerMarketplaceRepository.Update(customerMarketPlace);
+			this._session.Flush();
 		} // StoreYodleeOrdersData
 
 		private MP_YodleeGroup CategorizeTransaction(
@@ -514,7 +507,7 @@
 				var oDate = (date != null && date.date.HasValue) ? date.date.Value : (DateTime?)null;
 
 				return (coin != null && coin.amount.HasValue)
-					? _CurrencyConvertor.ConvertToBaseCurrency(coin.currencyCode, coin.amount.Value, oDate)
+					? this._CurrencyConvertor.ConvertToBaseCurrency(coin.currencyCode, coin.amount.Value, oDate)
 					: null;
 			} catch {
 				return null;
@@ -522,7 +515,7 @@
 		} // CurrencyXchg
 
 		private List<string> GetExperianDirectors(Customer customer) {
-			var lastNames = m_oExperianDirectorRepository.GetCustomerDirectorsLastNames(customer.Id);
+			var lastNames = this.m_oExperianDirectorRepository.GetCustomerDirectorsLastNames(customer.Id);
 			var experianDirectors = new List<string>();
 
 			foreach (var lastName in lastNames) {
@@ -580,9 +573,8 @@
 			return transactions;
 		} // GetTransactions
 
-		private readonly YodleeBanksRepository _yodleeBanksRepository;
-		private readonly IMP_YodleeTransactionCategoriesRepository _yodleeTransactionCategoriesRepository;
-		private string m_sYodleeBanks;
+		private readonly YodleeBanksRepository yodleeBanksRepository;
+		private readonly IMP_YodleeTransactionCategoriesRepository yodleeTransactionCategoriesRepository;
 	} // class DatabaseDataHelper
 } // namespace
 

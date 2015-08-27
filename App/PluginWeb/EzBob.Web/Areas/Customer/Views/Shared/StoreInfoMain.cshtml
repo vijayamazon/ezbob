@@ -1,8 +1,12 @@
 ﻿@using System.Collections.Generic
 @using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 
 @model dynamic
-@{ bool bIsWizard = (string)ViewContext.RouteData.Values["controller"] == "Wizard"; }
+@{ 
+	bool bIsWizard = (string)ViewContext.RouteData.Values["controller"] == "Wizard";
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 <script id="store-info" type="text/template">
     <div>
@@ -67,7 +71,9 @@
 					buttonType: EzButtonType.link,
 					uiEventControlID: "link-account:showmore",
 					href: "#"),
-			})
+			}, 
+			wrapperClass: "show-more-wrapper",
+			origin: origin)
             
             <div class="marketplace-group-template marketplace-group hide">
                 <h3 class="group-title"></h3>

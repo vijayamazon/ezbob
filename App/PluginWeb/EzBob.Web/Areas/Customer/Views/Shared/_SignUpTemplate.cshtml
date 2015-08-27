@@ -55,7 +55,12 @@
                         @EzForm.Captcha(captchamode, uiEventControlID: "signup:captcha", origin: origin)
                     </div>
                 </div>
-                @EzForm.WizardButton(new EzButtonModel("signupSubmitButton", "Continue", cls: "button btn-green ev-btn-org continue disabled", tabIndex: 13, uiEventControlID: "signup:submit", buttonType: EzButtonType.submit), origin)
+                @EzForm.WizardButton(new EzButtonModel("signupSubmitButton", "Continue", 
+					cls: "button btn-green ev-btn-org continue disabled", 
+					tabIndex: 13, 
+					uiEventControlID: "signup:submit", 
+					buttonType: EzButtonType.submit), 
+					origin: origin)
                
 
                 <div class="hide">

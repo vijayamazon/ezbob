@@ -57,6 +57,7 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 		if (selectedId) {
 			this.$el.find("input[type='radio'][name='Bank']:checked").removeAttr('checked');
 			this.$el.find(".SubBank:not(.hide)").addClass('hide');
+			this.$el.find('a.selected-bank').parent().toggleClass('marketplace-button-full marketplace-button-empty');
 			this.$el.find("a.selected-bank").removeClass('selected-bank');
 			url = "" + window.gRootPath + "Customer/YodleeMarketPlaces/AttachYodlee?csId=" + selectedId + "&bankName=" + selectedName;
 			this.$el.find("#yodleeContinueBtn").attr("href", url);
@@ -101,17 +102,15 @@ EzBob.YodleeAccountInfoView = Backbone.Marionette.ItemView.extend({
 	parentBankSelected: function (evt) {
 		evt.preventDefault();
 		this.$el.find('#Bank_' + evt.currentTarget.id).click();
+		this.$el.find('a.selected-bank').parent().toggleClass('marketplace-button-full marketplace-button-empty');
 		this.$el.find('a.selected-bank').removeClass('selected-bank');
+		
 		$(evt.currentTarget).addClass('selected-bank');
+		$(evt.currentTarget).parent().toggleClass('marketplace-button-full marketplace-button-empty');
+
 		this.$el.find(".SubBank:not(.hide) option:selected").prop('selected', false);
 		this.$el.find("#OtherYodleeBanks option").eq(0).prop('selected', true);
 		this.$el.find("#OtherYodleeBanks").change();
-	},
-	
-	serializeData: function () {
-		return {
-			YodleeBanks: JSON.parse($('#yodlee-banks').text())
-		};
 	},
 	
 	back: function () {

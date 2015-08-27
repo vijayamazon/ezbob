@@ -449,6 +449,17 @@ a.clean-btn:focus,
     cursor: default;
 }
 
+.form_field_container .show-more-wrapper.input-wrapper{
+	width: 100%;
+}
+
+.form_field_container .input-wrapper .clean-btn.btn-showmore{
+	width: 31%;
+	margin: 0;
+	position: absolute;
+    left: 0;
+}
+
  .add-director-container.form_field_container .input-wrapper {
     float: right;
 }
@@ -899,9 +910,29 @@ hr.wizard-hr {
     clear: both;
 }
 
+.marketplace-button-wrapper {
+	width: 31%;
+    margin-right: 2%;
+    display: inline-block;
+    height: 75px;
+}
+
+.account-or {
+	background: url('../everline/or-circle.png') no-repeat 0 0;
+	width: 40px;
+	height: 40px;
+	z-index: 2;
+	display: inline-block;
+	margin-bottom: 17px;
+    margin-right: -1%;
+    margin-left: -3%;
+    background-size: contain;
+    position: relative;
+}
+
 .marketplace-button {
     float: left;
-    width: 31%;
+    width: 100%;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box;
@@ -915,12 +946,22 @@ hr.wizard-hr {
     cursor: pointer;
     background-color: transparent;
     text-decoration: none;
-    margin-right: 2%;
     margin-bottom: 20px;
     background-color: white;
-    display: table;
+    display: inline-block;
 }
 
+.marketplace-button:hover{
+	border: 2px solid #dc6e23;
+}
+
+.marketplace-button.marketplace-button-full{
+	border: 2px solid #8dc63f;
+}
+
+.marketplace-button.marketplace-button-full:hover{
+	border: 2px solid #619328;
+}
     .marketplace-button a,
     .marketplace-button a:hover,
     .marketplace-button a:active,
@@ -933,7 +974,6 @@ hr.wizard-hr {
         box-sizing: border-box;
         height: 75px !important;
         width: 100%;
-        display: table-cell;
         text-align: center;
         vertical-align: middle;
         outline-style: none;
@@ -943,6 +983,7 @@ hr.wizard-hr {
     .marketplace-button .link-upload {
         color: #666666;
         margin-bottom: 5px;
+		margin-top: 5px;
         font-size: 11px;
     }
 
@@ -952,7 +993,6 @@ hr.wizard-hr {
         font-size: 22px;
         text-align: center;
         position: absolute;
-        display: table;
         top: 75px;
         left: 0;
         background-color: #8dc63f;
@@ -971,6 +1011,12 @@ hr.wizard-hr {
         filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
     }
 
+.BankContainer .marketplace-button {
+	width: 31%;
+	margin-right: 2%;
+	height: 60px;
+}
+
 .BankContainer label,
 .SubBank label {
     display: inline;
@@ -983,15 +1029,11 @@ hr.wizard-hr {
     overflow: hidden;
 }
 
-.BankContainer a.selected-bank {
-    background-color: #e8fcc6;
-}
-
 .BankContainer span {
     display: inline-block;
     background: url(images/yodlee/banks_sprite.png) no-repeat 0 0;
     height: 40px;
-    vertical-align: middle;
+    margin-top: 8px;
 }
 
     .BankContainer span.HSBC.off {
@@ -2092,6 +2134,21 @@ hr.wizard-hr {
     padding: 0;
   }
 }
+
+@media screen and (max-width: 960px) {
+	.marketplace-button-wrapper, 
+	.form_field_container .input-wrapper .clean-btn.btn-showmore {
+		width: 47%;
+	}
+
+	.account-or {
+		width: 100%;
+		margin-left: 20%;
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+}
+
 .lzero .sliders {
   margin: 0;
   padding: 0;
@@ -2374,8 +2431,6 @@ hr.wizard-hr {
 .icon-minus:before {
     content: "\f068";
 }
-
-
  
 .clearfix:before, .clearfix:after {
     content: " ";
