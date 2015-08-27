@@ -1,14 +1,15 @@
 ﻿namespace Foam {
 	using System;
-	using System.Collections.Generic;
 	using System.Collections.Specialized;
 	using System.Configuration;
 	using System.Diagnostics;
 	using System.Globalization;
 	using System.Reflection;
+	using System.Threading;
 	using ConfigManager;
 	using Ezbob.Database;
 	using Ezbob.Logger;
+	using MailApi;
 
 	class Program {
 		static void Main(string[] args) {
@@ -20,6 +21,8 @@
 
 			db = new SqlConnection(env, log);
 
+			CurrentValues.Init(db, log);
+
 			var app = new Program();
 			app.Run();
 			app.Done();
@@ -30,17 +33,16 @@
 
 			this.readyToRock = false;
 
-			this.currentDate = null;
-			this.amountEmailSent = new SortedDictionary<decimal, EmailSent>();
-			this.emails = new List<string>();
+			this.mail = new Mail();
+			this.currentDate = DateTime.UtcNow.AddMonths(-1);
+			this.emails = null;
 			this.amountGranularity = 50000;
+			this.sleepTime = 5;
 
 			Init();
 		} // constructor
 
 		private void Init() {
-			this.emails.Clear();
-
 			var cfg = ConfigurationManager.GetSection("appConfig") as NameValueCollection;
 
 			if (cfg == null) {
@@ -56,17 +58,23 @@
 
 			val = cfg.Get("Emails");
 			if (!string.IsNullOrWhiteSpace(val))
-				this.emails.AddRange(val.Split(','));
+				this.emails = val;
 
-			if (this.emails.Count < 1) {
+			if (string.IsNullOrWhiteSpace(this.emails)) {
 				log.Alert("No email addresses configured for alerts.");
 				return;
 			} // if
 
+			val = cfg.Get("Sleep");
+			int sleep;
+			if (!string.IsNullOrWhiteSpace(val) && int.TryParse(val, out sleep) && (sleep > 0))
+				this.sleepTime = sleep;
+
 			log.Debug(
-				"Sending email to {0} on every issued/approved {1}.",
+				"Sending email to {0} on every issued/approved {1}. Sleeping for {2} minute(s) between checks.",
 				string.Join(", ", this.emails),
-				this.amountGranularity.ToString("C0", culture)
+				this.amountGranularity.ToString("C0", Culture),
+				this.sleepTime
 			);
 
 			this.readyToRock = true;
@@ -78,52 +86,116 @@
 				return;
 			} // if
 
-			// for (;;) {
+			for ( ; ; ) {
 				SetCurrentDate();
 
 				Amounts amounts = LoadAmounts();
 
-				foreach (var aes in this.amountEmailSent) {
-					decimal amount = aes.Key;
-					EmailSent emailSent = aes.Value;
+				if ((amounts.Approved > 0) && (watermarks.Approved <= amounts.Approved)) {
+					SendEmail("Approved", this.watermarks.Approved, amounts.Approved);
+					this.watermarks.MoveApproved(amounts.Approved);
+					log.Debug("New approved watermark is {0}.", this.watermarks.Approved.ToString("C0", Culture));
+				} // if
 
-					if (!emailSent.Approved && (amounts.Approved > 0) && (amount <= amounts.Approved)) {
-						SendEmail("Approved", amount);
-						emailSent.Approved = true;
-					} // if
-
-					if (!emailSent.Issued && (amounts.Issued > 0) && (amount <= amounts.Issued)) {
-						SendEmail("Issued", amount);
-						emailSent.Issued = true;
-					} // if
-				} // for each
+				if ((amounts.Issued > 0) && (watermarks.Issued <= amounts.Issued)) {
+					SendEmail("Issued", this.watermarks.Issued, amounts.Issued);
+					this.watermarks.MoveIssued(amounts.Issued);
+					log.Debug("New issued watermark is {0}.", this.watermarks.Issued.ToString("C0", Culture));
+				} // if
 
 				Sleep();
-			// } // for ever
+			} // for ever
 		} // Run
 
 		private void SetCurrentDate() {
 			DateTime localToday = TimeZoneInfo.ConvertTimeFromUtc(DateTime.UtcNow, tzUK).Date;
 
 			if (this.currentDate == localToday) {
-				log.Debug("Current date is still {0}.", this.currentDate.Value.ToString("d MMM yyyy", culture));
+				log.Debug("Current date is still {0}.", this.currentDate.ToString(DateFormat, Culture));
 				return;
 			} // if
 
+			log.Debug(
+				"Current date is changed from {0} to {1}.",
+				this.currentDate.ToString(DateFormat, Culture),
+				localToday.ToString(DateFormat, Culture)
+			);
+
 			this.currentDate = localToday;
+			this.watermarks = new Watermarks(this.amountGranularity);
 		} // SetCurrentDate
 
 		private Amounts LoadAmounts() {
-			// TODO
-			return new Amounts(0, 0);
+			DateTime utcFrom = TimeZoneInfo.ConvertTimeToUtc(this.currentDate, tzUK);
+			DateTime utcTo = TimeZoneInfo.ConvertTimeToUtc(this.currentDate.AddDays(1), tzUK);
+
+			decimal approved = 0;
+			decimal issued = 0;
+
+			db.ForEachRowSafe(
+				sr => {
+					string rowType = sr["RowType"];
+					decimal rowValue = sr["RowValue"];
+
+					switch (rowType) {
+					case "Approved":
+						approved = rowValue;
+						break;
+					case "Issued":
+						issued = rowValue;
+						break;
+					} // switch
+				},
+				"Foam_LoadAmounts",
+				CommandSpecies.StoredProcedure,
+				new QueryParameter("@DateFrom", utcFrom),
+				new QueryParameter("@DateTo", utcTo)
+			);
+
+			var result = new Amounts(approved, issued);
+
+			log.Debug("Amounts are: {0}.", result);
+
+			return result;
 		} // LoadAmounts
 
-		private void SendEmail(string action, decimal amount) {
-			// TODO
+		private void SendEmail(string action, decimal watermark, decimal amount) {
+			string text = string.Format(
+				"Total {0} today has reached {1} (exact amount {2}).",
+				action,
+				watermark.ToString("C0", Culture),
+				amount.ToString("C0", Culture)
+			);
+
+			string subject = string.Format("Money out alert: {0} reached {1}", action, watermark.ToString("C0", Culture));
+
+			this.mail.Send(
+				this.emails,
+				text,
+				null,
+				CurrentValues.Instance.MailSenderEmail,
+				"Money out Alerter",
+				subject
+			);
 		} // SetCurrentDate
 
 		private void Sleep() {
-			// TODO
+			const int heartbeatSeconds = 20;
+			const int minuteSleepCount = 60 / heartbeatSeconds;
+			const int sleepInterval = heartbeatSeconds * 1000;
+
+			log.Debug("Sleeping...");
+
+			for (int i = 1; i <= this.sleepTime; i++) {
+				for (int j = 0; j < minuteSleepCount; j++) {
+					Thread.Sleep(sleepInterval);
+					log.Debug("Sleeping heartbeat ({0}).", j + 1);
+				} // for j
+
+				log.Debug("{0} minute(s) out of {1} minute(s) to sleep passed.", i, this.sleepTime);
+			} // for minutes
+
+			log.Debug("Back to work.");
 		} // Sleep
 
 		private void Done() {
@@ -142,40 +214,20 @@
 			);
 		} // NotifyStartStop
 
-		private class Amounts {
-			public Amounts(decimal approved, decimal issued) {
-				Approved = approved;
-				Issued = issued;
-			} // constructor
-
-			public decimal Approved { get; private set; }
-			public decimal Issued { get; private set; }
-		} // class Amounts
-
-		private class EmailSent {
-			public EmailSent() {
-				Clear();
-			} // constructor
-
-			public void Clear() {
-				Approved = false;
-				Issued = false;
-			} // Clear
-
-			public bool Approved { get; set; }
-			public bool Issued { get; set; }
-		} // class EmailSent
-
-		private DateTime? currentDate;
-		private readonly SortedDictionary<decimal, EmailSent> amountEmailSent; 
+		private DateTime currentDate;
 
 		private decimal amountGranularity;
-		private readonly List<string> emails;
+		private readonly Mail mail;
+		private string emails;
+		private int sleepTime;
 		private bool readyToRock;
+		private Watermarks watermarks;
 
 		private static AConnection db;
 		private static ASafeLog log;
-		private static readonly CultureInfo culture = new CultureInfo("en-GB", false);
+		private const string DateFormat = "d MMM yyyy";
 		private static readonly TimeZoneInfo tzUK = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+
+		public static readonly CultureInfo Culture = new CultureInfo("en-GB", false);
 	} // class Program
 } // namespace
