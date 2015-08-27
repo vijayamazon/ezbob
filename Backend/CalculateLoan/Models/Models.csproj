@@ -42,6 +42,7 @@
     <Compile Include="..\..\..\Common\CommonAssemblyInfo.cs">
       <Link>Properties\CommonAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="DailyLoanStatus.cs" />
     <Compile Include="Exceptions\ALoanCalculatorModelException.cs" />
     <Compile Include="Exceptions\NegativeInterestOnlyRepaymentCountException.cs" />
     <Compile Include="Exceptions\ANegativeDecimalException.cs" />
@@ -54,7 +55,15 @@
     <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
     <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
+    <Compile Include="Helpers\BadPeriod.cs" />
+    <Compile Include="Helpers\InterestFreeze.cs" />
+    <Compile Include="Helpers\RepaidPrincipal.cs" />
+    <Compile Include="Helpers\Repayment.cs" />
+    <Compile Include="Helpers\Scheduled.cs" />
+    <Compile Include="Helpers\ScheduledItem.cs" />
+    <Compile Include="Helpers\ScheduledItemWithAmountDue.cs" />
     <Compile Include="Library.cs" />
+    <Compile Include="OneDayLoanStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -90,14 +99,16 @@
       <Project>{ef300f8a-f973-4bb8-987b-a9775e121af7}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\ModelsWithDB\Ezbob.Backend.ModelsWithDB.csproj">
+      <Project>{FA52D60A-3BE9-4938-B8D5-1E64E4FD80AC}</Project>
+      <Name>Ezbob.Backend.ModelsWithDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CalculateLoanExceptions\CalculateLoanExceptions.csproj">
       <Project>{9f39f6b0-980a-46ea-8977-416449be9c5c}</Project>
       <Name>CalculateLoanExceptions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Helpers\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

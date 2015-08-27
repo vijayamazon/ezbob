@@ -7,6 +7,7 @@
 	using Ezbob.Backend.CalculateLoan.LoanCalculator;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 	using NHibernate.Linq;
 
@@ -33,14 +34,18 @@
 		public NL_Model Result; // output
 
 		public override void Execute() {
-
 			
 			if (model.CustomerID == 0) {
 				this.Result.Error = NL_ExceptionCustomerNotFound.DefaultMessage;
 				return;
 			}
-			
-			var history = model.Histories.OrderBy(h => h.EventTime).LastOrDefault();
+
+			if (model.Loan == null) {
+				this.Result.Error = NL_ExceptionRequiredDataNotFound.Loan; 
+				return;
+			}
+
+			var history = model.Loan.LastHistory();
 
 			if (history == null) {
 				this.Result.Error = NL_ExceptionRequiredDataNotFound.LastHistory;
@@ -53,7 +58,7 @@
 			}
 
 			OfferForLoan dataForLoan = DB.FillFirst<OfferForLoan>(
-				"NL_OfferForLoan",
+				"NL_SignedOfferForLoan",
 				CommandSpecies.StoredProcedure,
 				new QueryParameter("CustomerID", model.CustomerID),
 				new QueryParameter("@Now", history.EventTime)
@@ -76,11 +81,11 @@
 				model.Loan.LoanStatusID = (int)NLLoanStatuses.Live;
 				model.Loan.LoanSourceID = dataForLoan.LoanSourceID;
 				// EzbobBankAccountID - TODO
-				model.Loan.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
 				model.Loan.Position = dataForLoan.LoansCount;
 				model.Loan.CreationTime = DateTime.UtcNow;
 
 				// from offer => history initial/re-scheduling data
+				history.InterestOnlyRepaymentCount = dataForLoan.InterestOnlyRepaymentCount;
 				history.Amount = dataForLoan.LoanLegalAmount;
 				history.RepaymentCount = dataForLoan.LoanLegalRepaymentPeriod;
 				history.RepaymentIntervalTypeID = dataForLoan.RepaymentIntervalTypeID;
@@ -95,21 +100,15 @@
 				};
 
 				// offer-fees
-				List<NL_OfferFees> offerFees = DB.Fill<NL_OfferFees>(
+				model.Offer.OfferFees = DB.Fill<NL_OfferFees>(
 					"NL_OfferFeesGet",
 					CommandSpecies.StoredProcedure,
 					new QueryParameter("@OfferID", dataForLoan.OfferID)
 					);
 
-				if (offerFees != null) {
-					foreach (NL_OfferFees offerFee in offerFees)
-						model.Fees.Add(new NLFeeItem {
-							OfferFee = offerFee
-						});
-				}
+				model.Offer.OfferFees.ForEach(ff => Log.Debug(ff));
 
-				model.Fees.ForEach(ff => Log.Debug(ff.OfferFee));
-
+				// discounts
 				if (dataForLoan.DiscountPlanID > 0) {
 					var discounts = DB.Fill<NL_DiscountPlanEntries>(
 						"NL_DiscountPlanEntriesGet",
@@ -121,7 +120,7 @@
 						model.DiscountPlan.Add(Decimal.Parse(dpe.InterestDiscount.ToString(CultureInfo.InvariantCulture)));
 					}
 
-					Log.Debug("Discounts"); model.DiscountPlan.ForEach(d=>Log.Debug(d));
+					//Log.Debug("Discounts"); model.DiscountPlan.ForEach(d=>Log.Debug(d));
 				}
 
 				// init calculator
@@ -131,21 +130,19 @@
 				}
 
 				// model should contain Schedule and Fees after this invocation
-				nlCalculator.CreateSchedule();
-
-				// update relevant history entry
-				model.Histories.Where(h => h.EventTime == history.EventTime).ForEach(h => h = history);
-
+				nlCalculator.CreateSchedule(); // create primary dates/p/r/f distribution of schedules (P/n) and setup/servicing fees
+				nlCalculator.CalculateSchedule(); // completing schedules with amounts due
+			
 				// set APR 
 				model.APR = nlCalculator.CalculateApr(history.EventTime);
 
-				Log.Debug("model.Loan: {0}, model.Offer: {1}", model.Loan, model.Offer);
-
-				Log.Debug("Schedule:===> "); model.Schedule.ForEach(s => Log.Debug(s.ScheduleItem));
-				Log.Debug("Offer Fees:===> "); model.Fees.ForEach(f => Log.Debug(f.OfferFee));
-				Log.Debug("Loan Fees:===> ");	model.Fees.ForEach(f => Log.Debug(f.Fee));
-				Log.Debug("Histories:===> "); model.Histories.ForEach(h => Log.Debug(h));
-				Log.Debug("APR: {0}", model.APR);
+				// debug
+				
+				Log.Debug("------------RESULT----------------Loan: {0}, Offer: {1}, APR: {2}\n", model.Loan, model.Offer, model.APR);
+				model.Loan.Histories.ForEach(h => Log.Debug(h));
+				history.Schedule.ForEach(s => Log.Debug(s));
+				model.Loan.Fees.ForEach(f => Log.Debug(f));
+				
 
 			} catch (NoInitialDataException noDataException) {
 				message = noDataException.Message;

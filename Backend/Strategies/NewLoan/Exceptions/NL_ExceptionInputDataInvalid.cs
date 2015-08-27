@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.Strategies.NewLoan {
+﻿namespace Ezbob.Backend.Strategies.NewLoan.Exceptions {
 	using System;
 
 	public class NL_ExceptionInputDataInvalid : Exception {

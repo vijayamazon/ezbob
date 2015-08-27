@@ -91,8 +91,8 @@
 		public NL_Model AddPayment(NL_Model nlModel) {
 			Console.WriteLine("========================!!!!!!!!!!!!ACCESSOR LONG!!!!!!!!!!!=============================");
 			var result = this.m_oServiceClient.Instance.AddPayment(nlModel);
-			Console.WriteLine("result====>" + result.Payment.PaymentID);
-			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);
+/*			Console.WriteLine("result====>" + result.Payment.PaymentID);
+			Console.WriteLine("result== PaypointTransactionID==>" + result.PaypointTransaction.PaypointTransactionID);*/
 			return result;
 		}
 	

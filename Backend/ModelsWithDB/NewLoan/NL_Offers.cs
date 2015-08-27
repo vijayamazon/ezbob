@@ -1,6 +1,8 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
+	using System.Collections.Generic;
 	using System.Runtime.Serialization;
+	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -70,6 +72,18 @@
 
 		[DataMember]
 		public bool IsAmountSelectionAllowed { get; set; }
+
+
+
+		// additions 
+		private List<NL_OfferFees> _offerFees = new List<NL_OfferFees>();
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_OfferFees> OfferFees {
+			get { return this._offerFees; }
+			set { this._offerFees = value; }
+		}
 
 	} // class NL_Offers
 } // ns

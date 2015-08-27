@@ -1,7 +1,8 @@
-﻿namespace Ezbob.Backend.CalculateLoan.Models.Helpers {
+﻿namespace Ezbob.Backend.CalculateLoan.Models {
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
+	using Ezbob.Backend.ModelsWithDB.NewLoan;
 
 	public class DailyLoanStatus {
 		public DailyLoanStatus() {
@@ -165,48 +166,43 @@
 			return string.Join("\n", result);
 		} // ToFormattedString
 
-		public void AddScheduleNotes(LoanCalculatorModel workingModel) {
-			if (workingModel == null)
+		public void AddScheduleNotes(NL_Model model) {
+			if (model == null)
 				return;
 
-			// TODO: revive
+			List<NL_LoanSchedules> activeSchedule = new List<NL_LoanSchedules>();
+			model.Loan.Histories.ForEach(h => activeSchedule.AddRange(h.ActiveSchedule()));
+			int activeScheduleCount = activeSchedule.Count;
+			int i = 0;
 
-			//for(int i = 0; i < workingModel.Schedule.Count; i++) {
-			//	var sp = workingModel.Schedule[i];
-
-			//	AddNote(
-			//		sp.Date,
-			//		i == workingModel.Schedule.Count - 1 ? "Last scheduled payment." : "Scheduled payment."
-			//	);
-			//} // for each
+			foreach (NL_LoanSchedules s in activeSchedule) {
+				AddNote(s.PlannedDate,i == activeScheduleCount - 1 ? "Last schedule." : "Schedule.");
+				i++;
+			}
 		} // AddScheduleNotes
 
-		public void AddPaymentNotes(LoanCalculatorModel workingModel) {
-			if (workingModel == null)
+		public void AddPaymentNotes(NL_Model model) {
+			if (model == null)
 				return;
 
-			for(int i = 0; i < workingModel.Repayments.Count; i++) {
-				var rp = workingModel.Repayments[i];
+			//for(int i = 0; i < workingModel.Repayments.Count; i++) {
+			//	var rp = workingModel.Repayments[i];
 
-				AddNote(
-					rp.Date,
-					"Repaid: " + rp.Amount.ToString("C2", Library.Instance.Culture)
-				);
-			} // for each
+			//	AddNote(
+			//		rp.Date,
+			//		"Repaid: " + rp.Amount.ToString("C2", Library.Instance.Culture)
+			//	);
+			//} // for each
 		} // AddPaymentNotes
 
-		public void AddFeeNotes(LoanCalculatorModel workingModel) {
-			if (workingModel == null)
+		public void AddFeeNotes(NL_Model model) {
+			if (model == null)
 				return;
+			
+			foreach (NL_LoanFees fee in model.Loan.Fees) {
+				AddNote(fee.AssignTime, "Fee assigned: " + fee.Amount.ToString("C2", Library.Instance.Culture));
+			}
 
-			for(int i = 0; i < workingModel.Fees.Count; i++) {
-				var fee = workingModel.Fees[i];
-
-				AddNote(
-					fee.AssignDate,
-					"Fee assigned: " + fee.Amount.ToString("C2", Library.Instance.Culture)
-				);
-			} // for each
 		} // AddFeeNotes
 
 		/// <summary>

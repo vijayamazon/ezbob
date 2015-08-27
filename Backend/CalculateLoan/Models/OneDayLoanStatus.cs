@@ -1,4 +1,4 @@
-﻿namespace Ezbob.Backend.CalculateLoan.Models.Helpers {
+﻿namespace Ezbob.Backend.CalculateLoan.Models {
 	using System;
 	using System.Globalization;
 	using Ezbob.Backend.Extensions;
@@ -97,14 +97,14 @@
 			get { return TotalEarnedInterest - TotalRepaidInterest; }
 		} // AccruedInterest
 
-		public void AddRepayment(Repayment rp) {
-			if (rp == null)
-				return;
+		//public void AddRepayment(Repayment rp) {
+		//	if (rp == null)
+		//		return;
 
-			RepaidPrincipal += rp.Principal;
-			RepaidInterest += rp.Interest;
-			RepaidFees += rp.Fees;
-		} // AddRepayment
+		//	RepaidPrincipal += rp.Principal;
+		//	RepaidInterest += rp.Interest;
+		//	RepaidFees += rp.Fees;
+		//} // AddRepayment
 
 		/// <summary>
 		/// Returns a string that represents the current object.
@@ -193,7 +193,7 @@
 		} // IsPaymentDay
 
 		private static CultureInfo Culture {
-			get { return Library.Instance.Culture; }
+			get { return Extensions.Library.Instance.Culture; }
 		} // Culture
 
 		private DateTime date;

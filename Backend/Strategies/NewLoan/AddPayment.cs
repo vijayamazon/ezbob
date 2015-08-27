@@ -2,8 +2,8 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Web;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
+	using Ezbob.Backend.Strategies.NewLoan.Exceptions;
 	using Ezbob.Database;
 	using MailApi;
 
@@ -12,8 +12,7 @@
 		public AddPayment(NL_Model nlModel) {
 
 			NLModel = nlModel;
-			Loader = new NL_Loader(NLModel);
-
+		
 			this.emailToAddress = "elinar@ezbob.com";
 			this.emailFromAddress = "elinar@ezbob.com";
 			this.emailFromName = "ezbob-system";
@@ -50,91 +49,91 @@
 				throw new NL_ExceptionInputDataInvalid(message);
 			}
 
-			if (NLModel.PaypointTransaction != null) {
+			//if (NLModel.PaypointTransaction != null) {
 
-				if (NLModel.PaypointTransactionStatus == null) {
-					message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus). Customer {0}", NLModel.CustomerID);
-					Log.Alert(message);
-					throw new NL_ExceptionInputDataInvalid(message);
-				}
+			//	if (NLModel.PaypointTransactionStatus == null) {
+			//		message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus). Customer {0}", NLModel.CustomerID);
+			//		Log.Alert(message);
+			//		throw new NL_ExceptionInputDataInvalid(message);
+			//	}
 
-				if (NLModel.PaypointTransaction.PaypointUniqueID == null) {
-					message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus.PaypointUniqueID). Customer {0}", NLModel.CustomerID);
-					Log.Alert(message);
-					throw new NL_ExceptionInputDataInvalid(message);
-				}
+			//	if (NLModel.PaypointTransaction.PaypointUniqueID == null) {
+			//		message = string.Format("Saving PaypointTransaction: Expected input data not found (NLModel initialized by: PaypointTransactionStatus.PaypointUniqueID). Customer {0}", NLModel.CustomerID);
+			//		Log.Alert(message);
+			//		throw new NL_ExceptionInputDataInvalid(message);
+			//	}
 
-				//	select ppc.Id from PayPointCard ppc where ppc.TransactionId = '6fc34f9a-422f-4643-b151-06a472bed9d7'
-				SafeReader sr = DB.GetFirst(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
+			//	//	select ppc.Id from PayPointCard ppc where ppc.TransactionId = '6fc34f9a-422f-4643-b151-06a472bed9d7'
+			//	SafeReader sr = DB.GetFirst(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
 
-				//Console.WriteLine(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
-				//Console.WriteLine("========================" + sr.IsEmpty);
-				//Console.WriteLine("========================" + sr.Count);
-				if (sr.IsEmpty) {
-					message = string.Format("Paypoint card for customer {0}, loanID {1}, PaypointUniqueID {2} not found", NLModel.CustomerID, NLModel.Loan.LoanID, NLModel.PaypointTransaction.PaypointUniqueID);
-					Log.Alert(message);
-					throw new NL_ExceptionRequiredDataNotFound(message);
-				}
+			//	//Console.WriteLine(string.Format("SELECT Id as PaypointCardID FROM PayPointCard WHERE TransactionId='{0}' and CustomerId={1}", NLModel.PaypointTransaction.PaypointUniqueID, NLModel.CustomerID));
+			//	//Console.WriteLine("========================" + sr.IsEmpty);
+			//	//Console.WriteLine("========================" + sr.Count);
+			//	if (sr.IsEmpty) {
+			//		message = string.Format("Paypoint card for customer {0}, loanID {1}, PaypointUniqueID {2} not found", NLModel.CustomerID, NLModel.Loan.LoanID, NLModel.PaypointTransaction.PaypointUniqueID);
+			//		Log.Alert(message);
+			//		throw new NL_ExceptionRequiredDataNotFound(message);
+			//	}
 
-				NLModel.PaypointTransaction.PaypointCardID = sr["PaypointCardID"];
+			//	NLModel.PaypointTransaction.PaypointCardID = sr["PaypointCardID"];
 
-				Console.WriteLine(NLModel.PaypointTransaction.ToString());
-			}
+			//	Console.WriteLine(NLModel.PaypointTransaction.ToString());
+			//}
 
-			ConnectionWrapper pconn = DB.GetPersistent();
+			//ConnectionWrapper pconn = DB.GetPersistent();
 
-			try {
+			//try {
 
-				NLModel.Payment.CreationTime = DateTime.UtcNow;
+			//	NLModel.Payment.CreationTime = DateTime.UtcNow;
 
-				Log.Debug(NLModel.Payment.ToString());
+			//	Log.Debug(NLModel.Payment.ToString());
 
-				pconn.BeginTransaction();
+			//	pconn.BeginTransaction();
 
-				// 1. save NL_Payments
-				NLModel.Payment.PaymentID = DB.ExecuteScalar<int>(pconn, "NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.Payment));
+			//	// 1. save NL_Payments
+			//	NLModel.Payment.PaymentID = DB.ExecuteScalar<int>(pconn, "NL_PaymentsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.Payment));
 
-				Log.Debug("NL_PaymentsSave: LoanID: {0}, paymentID: {1}", NLModel.Loan.LoanID, NLModel.Payment.PaymentID);
+			//	Log.Debug("NL_PaymentsSave: LoanID: {0}, paymentID: {1}", NLModel.Loan.LoanID, NLModel.Payment.PaymentID);
 
-				// 2. save NL_PaypointTransactions
-				if (NLModel.PaypointTransaction != null) {
+			//	// 2. save NL_PaypointTransactions
+			//	if (NLModel.PaypointTransaction != null) {
 
-					NLModel.PaypointTransaction.PaymentID = NLModel.Payment.PaymentID;
+			//		NLModel.PaypointTransaction.PaymentID = NLModel.Payment.PaymentID;
 
-					List<NL_PaypointTransactionStatuses> ppstatsues = NL_Loader.PaypointTransactionStatuses();
+			//		List<NL_PaypointTransactionStatuses> ppstatsues = NL_Loader.PaypointTransactionStatuses();
 
-					//ppstatsues.ForEach(s=> 		Console.WriteLine(s.TransactionStatus));
+			//		//ppstatsues.ForEach(s=> 		Console.WriteLine(s.TransactionStatus));
 
-					var ppTransactionStatus = ppstatsues.Find(s => s.TransactionStatus.StartsWith(NLModel.PaypointTransactionStatus)) ?? ppstatsues.Find(s => s.TransactionStatus.Equals("Unknown"));
+			//		var ppTransactionStatus = ppstatsues.Find(s => s.TransactionStatus.StartsWith(NLModel.PaypointTransactionStatus)) ?? ppstatsues.Find(s => s.TransactionStatus.Equals("Unknown"));
 
-					//Console.WriteLine("==================>" + ppTransactionStatus.TransactionStatus + "=" + ppTransactionStatus.PaypointTransactionStatusID);
+			//		//Console.WriteLine("==================>" + ppTransactionStatus.TransactionStatus + "=" + ppTransactionStatus.PaypointTransactionStatusID);
 
-					NLModel.PaypointTransaction.PaypointTransactionStatusID = ppTransactionStatus.PaypointTransactionStatusID;
+			//		NLModel.PaypointTransaction.PaypointTransactionStatusID = ppTransactionStatus.PaypointTransactionStatusID;
 
-					Log.Debug(NLModel.PaypointTransaction.ToString());
+			//		Log.Debug(NLModel.PaypointTransaction.ToString());
 
-					NLModel.PaypointTransaction.PaypointTransactionID = DB.ExecuteScalar<int>(pconn, "NL_PaypointTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.PaypointTransaction));
+			//		NLModel.PaypointTransaction.PaypointTransactionID = DB.ExecuteScalar<int>(pconn, "NL_PaypointTransactionsSave", CommandSpecies.StoredProcedure, DB.CreateTableParameter("Tbl", NLModel.PaypointTransaction));
 
-					Log.Debug("NL_PaypointTransactionsSave: LoanID: {0}, paymentID: {1}, PaypointTransactionID {2}", NLModel.Loan.LoanID, NLModel.Payment.PaymentID, NLModel.PaypointTransaction.PaypointTransactionID);
-				}
+			//		Log.Debug("NL_PaypointTransactionsSave: LoanID: {0}, paymentID: {1}, PaypointTransactionID {2}", NLModel.Loan.LoanID, NLModel.Payment.PaymentID, NLModel.PaypointTransaction.PaypointTransactionID);
+			//	}
 
-				pconn.Commit();
+			//	pconn.Commit();
 
-				AssignPaymentToLoan assignStrategy = new AssignPaymentToLoan(NLModel);
-				assignStrategy.Execute();
+			//	AssignPaymentToLoan assignStrategy = new AssignPaymentToLoan(NLModel);
+			//	assignStrategy.Execute();
 
-				// ReSharper disable once CatchAllClause
-			} catch (Exception ex) {
+			//	// ReSharper disable once CatchAllClause
+			//} catch (Exception ex) {
 
-				message = string.Format("Failed to write NL_Payment / NL_PaypointTransaction for customer {0}, LoanID {1}, err: {2}", NLModel.CustomerID, NLModel.Loan.LoanID, ex);
-				Log.Error(message);
+			//	message = string.Format("Failed to write NL_Payment / NL_PaypointTransaction for customer {0}, LoanID {1}, err: {2}", NLModel.CustomerID, NLModel.Loan.LoanID, ex);
+			//	Log.Error(message);
 
-				pconn.Rollback();
-				SendErrorMail(message);
+			//	pconn.Rollback();
+			//	SendErrorMail(message);
 
-				// ReSharper disable once ThrowFromCatchWithNoInnerException
-				throw new NL_ExceptionPaymentSave(message);
-			}
+			//	// ReSharper disable once ThrowFromCatchWithNoInnerException
+			//	throw new NL_ExceptionPaymentSave(message);
+			//}
 
 			/* 
 			* 3. strategy AssignPaymentToLoan: argument: NL_Model with Loan.LoanID; decimal amount; output: NL_Model containing list of fees/schedules that covered by the amount/payment
@@ -155,7 +154,7 @@
 				 + "<h3>Input data</h3>: {2} <br/>"
 				 + "<h3>Loan</h3>: {3} <br/>"
 				 + "<h3>NL_Payment</h3>: {4} <br/>"
-				 + "<h3>NL_PaypointTransaction</h3>: {5} <br/>"
+			//	 + "<h3>NL_PaypointTransaction</h3>: {5} <br/>"
 				 + "</p>",
 
 				NLModel.CustomerID
@@ -163,7 +162,8 @@
 				, HttpUtility.HtmlEncode(NLModel.ToString())
 				, HttpUtility.HtmlEncode(NLModel.Loan == null ? "no Loan specified" : NLModel.Loan.ToString())
 				, HttpUtility.HtmlEncode(NLModel.Payment == null ? "no Payment specified" : NLModel.Payment.ToString())
-				, HttpUtility.HtmlEncode(NLModel.PaypointTransaction == null ? "no PaypointTransaction specified" : NLModel.PaypointTransaction.ToString())
+				//, HttpUtility.HtmlEncode(NLModel.PaypointTransaction == null ? "no PaypointTransaction specified" : NLModel.PaypointTransaction.ToString())
+				
 			);
 
 			new Mail().Send(
@@ -178,7 +178,7 @@
 		} // SendErrorMail
 
 
-		public NL_Loader Loader { get; private set; }
+		
 		public NL_Model NLModel { get; private set; }
 
 		private readonly string emailToAddress;

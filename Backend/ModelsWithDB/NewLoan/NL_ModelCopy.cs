@@ -3,19 +3,16 @@
 	using System.Runtime.Serialization;
 
 	[DataContract]
-	public class NL_Model : AStringable {
+	public class NL_ModelCopy : AStringable {
 	
 		public NL_Model(int customerID) {
 			CustomerID = customerID;
 
-			Offer = new NL_Offers();
-			Loan = new NL_Loans();
-			DiscountPlan = new List<decimal>();
+			Schedule = new List<NLScheduleItem>();
+			Fees = new List<NLFeeItem>();
 			Agreements = new List<NLAgreementItem>();
-			FundTransfer = new NL_FundTransfers();
-			AgreementModel = string.Empty;
-			Payment = new NL_Payments();
-
+			Histories = new List<NL_LoanHistory>();
+			DiscountPlan = new List<decimal>();
 
 		} // constructor
 
@@ -41,6 +38,21 @@
 		public decimal? BrokerComissions { get; set; }
 
 		[DataMember]
+		public NL_PacnetTransactions PacnetTransaction { get; set; }
+
+		[DataMember]
+		public string PacnetTransactionStatus { get; set; }
+
+		[DataMember]
+		public List<NLScheduleItem> Schedule { get; set; }
+
+		[DataMember]
+		public List<NLFeeItem> Fees { get; set; }
+
+		[DataMember]
+		public List<NL_LoanHistory> Histories { get; set; }
+
+		[DataMember]
 		public List<decimal> DiscountPlan { get; set; }
 
 		[DataMember]
@@ -55,17 +67,16 @@
 		[DataMember]
 		public string CalculatorImplementation { get; set; }  // AloanCalculator BankLikeLoanCalculator/BankLikeLoanCalculator
 
-	
 
-	
+
 
 
 		[DataMember]
 		public NL_Payments Payment { get; set; }
-		//[DataMember]
-		//public NL_PaypointTransactions PaypointTransaction { get; set; }
-		//[DataMember]
-		//public string PaypointTransactionStatus { get; set; }
+		[DataMember]
+		public NL_PaypointTransactions PaypointTransaction { get; set; }
+		[DataMember]
+		public string PaypointTransactionStatus { get; set; }
 
 
 
@@ -96,5 +107,5 @@
 		protected override bool DisplayFieldInToString(string fieldName) {
 			return fieldName != "AgreementModel";
 		} // DisplayFieldInToString
-	} // class NL_Model
+	} // class NL_ModelCopy
 } // namespace

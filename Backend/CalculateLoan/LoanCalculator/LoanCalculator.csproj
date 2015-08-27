@@ -46,6 +46,7 @@
     <Compile Include="ALoanCalculator.cs" />
     <Compile Include="BankLikeLoanCalculator.cs" />
     <Compile Include="Exceptions\ALoanCalculatorException.cs" />
+    <Compile Include="Exceptions\NoLoanHistoryException.cs" />
     <Compile Include="Exceptions\InvalidInitialInterestOnlyRepaymentCountException.cs" />
     <Compile Include="Exceptions\InvalidInitialRepaymentCountException.cs" />
     <Compile Include="Exceptions\InvalidInitialInterestRateException.cs" />
@@ -61,9 +62,8 @@
     <Compile Include="Methods\AWithActualDailyLoanStatusMethod.cs" />
     <Compile Include="Methods\CalculateBalanceMethod.cs" />
     <Compile Include="Methods\CalculateEarnedInterestMethod.cs" />
-    <Compile Include="Methods\CalculatePlanMethod.cs" />
+    <Compile Include="Methods\CalculateScheduleMethod.cs" />
     <Compile Include="Methods\RescheduleToIntervalsMethod.cs" />
-    <Compile Include="Methods\CreateScheduleAndPlanMethod.cs" />
     <Compile Include="Methods\CreateScheduleMethod.cs" />
     <Compile Include="Methods\GetAmountToChargeForAutoChargerMethod.cs" />
     <Compile Include="Methods\GetAmountToChargeForDashboardMethod.cs" />

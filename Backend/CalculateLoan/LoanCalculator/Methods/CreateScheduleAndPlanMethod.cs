@@ -15,7 +15,7 @@
 			// create schedule
 			new CreateScheduleMethod(Calculator, this.loanModel).Execute();
 
-			var planMethod = new CalculatePlanMethod(Calculator, false);
+			//var planMethod = new CalculatePlanMethod(Calculator, false);
 
 			//List<Repayment> payments = method.Execute();
 

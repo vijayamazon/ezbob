@@ -1,9 +1,9 @@
-﻿namespace Ezbob.Backend.Strategies.NewLoan {
+﻿namespace Ezbob.Backend.Strategies.NewLoan.Exceptions {
 	using System;
-	
+
 	public class NL_ExceptionOfferNotValid : Exception {
 
-		public static string DefaultMessage = "Valid offer not found";
+		public static string DefaultMessage = "Valid signed offer not found";
 
 		public NL_ExceptionOfferNotValid() { }
 

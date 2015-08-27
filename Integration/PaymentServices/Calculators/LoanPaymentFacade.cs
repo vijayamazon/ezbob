@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Linq;
 	using ConfigManager;
+	using DbConstants;
 	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using EZBob.DatabaseLib.Model;
@@ -76,13 +77,14 @@
 				if (nlModel.Payment == null)
 					nlModel.Payment = new NL_Payments();
 		
-				nlModel.Payment.PaymentMethodID = this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod).Id; // [LoanTransactionMethod] 'Auto' ID 2
+				nlModel.Payment.PaymentMethodID = (int)NLLoanTransactionMethods.Manual; // this.loanTransactionMethodRepository.FindOrDefault(sManualPaymentMethod, otherMethod).Id; // [LoanTransactionMethod] 'Auto' ID 2
 				nlModel.Payment.PaymentTime = paymentTime;
 				//nlModel.Payment.IsActive = true; TODO check status here
 				nlModel.Payment.Amount = amount;
 				nlModel.Payment.Notes = description;
 
-				if (nlModel.PaypointTransaction == null)
+
+				/*if (nlModel.PaypointTransaction == null)
 					nlModel.PaypointTransaction = new NL_PaypointTransactions();
 
 				nlModel.PaypointTransaction.TransactionTime = paymentTime; //??
@@ -90,7 +92,7 @@
 				nlModel.PaypointTransaction.Notes = description;
 				nlModel.PaypointTransaction.PaypointUniqueID = transId;
 				nlModel.PaypointTransaction.IP = ip;
-				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); 
+				nlModel.PaypointTransactionStatus = LoanTransactionStatus.Done.ToString(); */
 	
 				//var nlPayment = ObjectFactory.GetInstance<IEzServiceAccessor>().AddPayment(nlModel);
 				

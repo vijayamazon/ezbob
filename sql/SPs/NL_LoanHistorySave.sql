@@ -18,7 +18,8 @@ CREATE TYPE NL_LoanHistoryList AS TABLE (
 	[InterestRate] [decimal](18, 6) NULL,	
 	[EventTime] [datetime] NOT NULL,		
 	[Description] NVARCHAR(MAX) NULL,
-	[AgreementModel] NVARCHAR(MAX) NULL
+	[AgreementModel] NVARCHAR(MAX) NULL,
+	[InterestOnlyRepaymentCount] INT NULL
 );
 GO
 
@@ -37,7 +38,8 @@ BEGIN
 	[InterestRate],	
 	[EventTime] ,
 	[Description]   ,	
-	[AgreementModel] 	
+	[AgreementModel] 	,
+	[InterestOnlyRepaymentCount] 
 	) SELECT
 		[LoanID] ,
 	[UserID]  ,
@@ -47,7 +49,8 @@ BEGIN
 	[InterestRate],	
 	[EventTime] ,
 	[Description]   ,	
-	[AgreementModel] 
+	[AgreementModel] ,
+	[InterestOnlyRepaymentCount] 
 	 
 	FROM @Tbl
 

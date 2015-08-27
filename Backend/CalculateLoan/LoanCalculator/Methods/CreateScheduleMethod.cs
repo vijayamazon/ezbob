@@ -1,6 +1,5 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
 	using System;
-	using System.Collections.Generic;
 	using System.Linq;
 	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
@@ -27,7 +26,8 @@
 		/// <exception cref="InvalidInitialInterestOnlyRepaymentCountException">Condition. </exception>
 		public virtual void Execute() {
 
-			NL_LoanHistory lastHistory = this.loanModel.Histories.OrderBy(h => h.EventTime).LastOrDefault();
+			//NL_LoanHistory lastHistory = this.loanModel.Histories.OrderBy(h => h.EventTime).LastOrDefault();
+			NL_LoanHistory lastHistory = this.loanModel.Loan.LastHistory();
 
 			if (lastHistory == null) {
 				throw new NoInitialDataException();
@@ -42,10 +42,13 @@
 			if (lastHistory.RepaymentCount < 1)
 				throw new InvalidInitialRepaymentCountException(lastHistory.RepaymentCount);
 
-			int interestOnlyRepaymentCount = this.loanModel.Loan.InterestOnlyRepaymentCount;
+			int interestOnlyRepaymentCount = lastHistory.InterestOnlyRepaymentCount;
 			if ((interestOnlyRepaymentCount < 0) || (interestOnlyRepaymentCount >= lastHistory.RepaymentCount)) {
 				throw new InvalidInitialInterestOnlyRepaymentCountException(interestOnlyRepaymentCount, lastHistory.RepaymentCount);
 			}
+
+			DateTime nowTime = DateTime.UtcNow;
+			lastHistory.Schedule.Clear();
 
 			this.repaymentIntervalType = (RepaymentIntervalTypes)lastHistory.RepaymentIntervalTypeID;
 			this.issuedTime = lastHistory.EventTime;
@@ -65,33 +68,32 @@
 				else if (i == interestOnlyRepaymentCount + 1)
 					principal = firstPayment;
 
-				this.loanModel.Schedule.Add(new NLScheduleItem() {
-					ScheduleItem = new NL_LoanSchedules() {
+				lastHistory.Schedule.Add(//new NLScheduleItem() {ScheduleItem = 
+					new NL_LoanSchedules() {
 						InterestRate = (i <= discountPayments) ? (lastHistory.InterestRate *= 1 + this.loanModel.DiscountPlan[i]) : lastHistory.InterestRate,
 						PlannedDate = AddRepaymentIntervals(i).Date,
 						Principal = principal,
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
 						Position = i
-					}
-				});
+						//}
+					});
 			} // for
 
+			if (lastHistory.Schedule == null) {
+				Log.Debug("No schedules defined");
+				return;
+			}
+
+			int schedulesCount = lastHistory.Schedule.Count;
+
 			// no fees defined
-			if (this.loanModel.Fees == null || this.loanModel.Fees.Count == 0) {
+			if (this.loanModel.Offer.OfferFees == null || this.loanModel.Offer.OfferFees.Count == 0) {
+				Log.Debug("No offer fees defined");
 				return;
 			}
 
 			// extract offer-fees
-			var offerFees = new List<NL_OfferFees>();
-			foreach (NLFeeItem f in this.loanModel.Fees) {
-				if (f != null)
-					offerFees.Add(f.OfferFee);
-			}
-			
-			if (offerFees.Count == 0) {
-				Log.Debug("No offer fees defined");
-				return;
-			}
+			var offerFees = this.loanModel.Offer.OfferFees;
 
 			// for now: only one-time or "spreaded" setup fees supported
 			// add full fees 2.0 support later
@@ -111,14 +113,15 @@
 				//Log.Debug("setupFeeAmount: {0}, brokerComissions: {1}", setupFeeAmount, model.BrokerComissions);
 				Log.Debug("setupFeeAmount: {0}", setupFeeAmount);
 
-				this.loanModel.Fees.Add(new NLFeeItem() {
-					Fee = new NL_LoanFees() {
+				this.loanModel.Loan.Fees.Add(
+					new NL_LoanFees() {
 						Amount = setupFeeAmount,
 						AssignTime = lastHistory.EventTime,
 						Notes = "setup fee one-part",
-						LoanFeeTypeID = (int)NLFeeTypes.SetupFee
-					}
-				});
+						LoanFeeTypeID = (int)NLFeeTypes.SetupFee,
+						CreatedTime = nowTime,
+						AssignedByUserID = 1
+					});
 			}
 
 			// servicing fees - distribute according to timing of schedule items
@@ -131,26 +134,20 @@
 
 				Log.Debug("servicingFeeAmount: {0}", servicingFeeAmount); // "spreaded" amount
 
-				// prevent schedules from previos histories 
-				List<NL_LoanSchedules> allSchedules= new List<NL_LoanSchedules>();
-				this.loanModel.Schedule.ForEach(s => allSchedules.Add((s.ScheduleItem)));
-
-				var	newlyCreatedSchedule = allSchedules.Where(s => s.PlannedDate >= lastHistory.EventTime).ToList();
-				int schedulesCount = newlyCreatedSchedule.Count;
-
 				decimal iFee = Math.Floor(servicingFeeAmount / schedulesCount);
 				decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
 
-				foreach (NL_LoanSchedules s in newlyCreatedSchedule) {
+				foreach (NL_LoanSchedules s in lastHistory.Schedule) {
 
-					this.loanModel.Fees.Add(new NLFeeItem() {
-						Fee = new NL_LoanFees() {
+					this.loanModel.Loan.Fees.Add(
+						new NL_LoanFees() {
 							Amount = (schedulesCount > 0) ? firstFee : iFee,
 							AssignTime = s.PlannedDate,
 							Notes = "spread (servicing) fee",
 							LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
-						}
-					});
+							CreatedTime = nowTime,
+							AssignedByUserID = 1
+						});
 
 					schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
 				}

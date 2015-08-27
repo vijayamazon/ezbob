@@ -18,9 +18,8 @@ CREATE TYPE NL_LoansList AS TABLE (
 	[Position] INT NOT NULL,	
 	[CreationTime] DATETIME NOT NULL,	
 	[Refnum] NVARCHAR(50) NULL,
-	[DateClosed] DATETIME NULL,	
-	[InterestOnlyRepaymentCount] INT NULL,
-	[OldLoanID] INT NOT NULL
+	[DateClosed] DATETIME NULL,		
+	[OldLoanID] INT NULL
 )
 GO
 	
@@ -40,7 +39,6 @@ BEGIN
 		[CreationTime],
 		[Refnum],
 		[DateClosed],
-		[InterestOnlyRepaymentCount],
 		[OldLoanID]
 	) SELECT
 		[OfferID],
@@ -52,7 +50,6 @@ BEGIN
 		[CreationTime],
 		[Refnum],
 		[DateClosed],
-		[InterestOnlyRepaymentCount],
 		[OldLoanID]
 	FROM @Tbl
 

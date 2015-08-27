@@ -1,6 +1,10 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
+	using System.Collections.Generic;
+	using System.Linq;
 	using System.Runtime.Serialization;
+	using DbConstants;
+	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
@@ -44,6 +48,27 @@
 		[Length(LengthType.MAX)]
 		[DataMember]
 		public string AgreementModel { get; set; }
+
+		[DataMember]
+		public int InterestOnlyRepaymentCount { get; set; }
+
+		// additions
+
+		private List<NL_LoanSchedules> _schedule = new List<NL_LoanSchedules>();
+
+		[DataMember]
+		[NonTraversable]
+		public List<NL_LoanSchedules> Schedule {
+			get { return this._schedule; }
+			set { this._schedule = value; }
+		}
+
+
+		// helpers
+		public List<NL_LoanSchedules> ActiveSchedule () {
+			return this._schedule.Where(s => (s.LoanScheduleStatusID != (int)NLScheduleStatuses.ClosedOnReschedule && s.LoanScheduleStatusID != (int)NLScheduleStatuses.DeletedOnReschedule)).ToList();
+		}
+
 
 		protected override bool DisplayFieldInToString(string fieldName) {
 			return fieldName != "AgreementModel";

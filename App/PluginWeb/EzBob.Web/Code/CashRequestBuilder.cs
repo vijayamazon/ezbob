@@ -130,7 +130,7 @@
 				CreatedTime = now,
 				StartTime = now,
 				EndTime = now.AddDays(1),
-				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
+				RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month,
 				LoanSourceID = loanSource.ID,
 				LoanTypeID = loanType.Id,
 				DiscountPlanID = discountPlan.Id,

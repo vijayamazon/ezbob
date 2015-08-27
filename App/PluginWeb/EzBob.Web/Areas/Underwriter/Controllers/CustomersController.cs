@@ -567,7 +567,7 @@
 					lastOffer.DecisionID = decision.Value;
 					lastOffer.LoanSourceID = oldCashRequest.LoanSource.ID;
 					lastOffer.LoanTypeID = oldCashRequest.LoanType.Id;
-					lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month;
+					lastOffer.RepaymentIntervalTypeID = (int)RepaymentIntervalTypes.Month;
 					lastOffer.StartTime = (DateTime)oldCashRequest.OfferStart;
 					lastOffer.EndTime = (DateTime)oldCashRequest.OfferValidUntil;
 					lastOffer.RepaymentCount = oldCashRequest.ApprovedRepaymentPeriod ?? 0;

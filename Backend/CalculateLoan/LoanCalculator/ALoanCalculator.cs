@@ -2,6 +2,7 @@
 	using System;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
+	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
 
@@ -42,15 +43,13 @@
 			new CreateScheduleMethod(this, WorkingModel).Execute();
 		} // CreateScheduleAndPlan
 
-
 		/// <summary>
-		/// Creates loan schedule by loan issue time, repayment count, repayment interval type and discount plan.
-		/// Also calculates loan plan.
-		/// Schedule is stored in the Schedule property of the last item of WorkingModel.LoanHistory
-		/// (i.e. WorkingModel.LoanHistory.Last() is overwritten).
 		/// </summary>
-		public virtual void CreateScheduleAndPlan() {
-			 new CreateScheduleAndPlanMethod(this, WorkingModel).Execute();
+		/// <exception cref="NoInitialDataException">Condition. </exception>
+		/// <exception cref="NoLoanHistoryException">Condition. </exception>
+		/// <exception cref="NoScheduleException">Condition. </exception>
+		public virtual void CalculateSchedule() {
+			new CalculateScheduleMethod(this, WorkingModel).Execute();
 		} // CreateScheduleAndPlan
 
 		/// <summary>

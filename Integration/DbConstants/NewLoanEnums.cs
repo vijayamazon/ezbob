@@ -4,18 +4,15 @@
 
 	// Numeric value: number of days in the interval, except Month (where it can vary).
 	public enum RepaymentIntervalTypes {
-		Month = 0,
-		Day = 1,
-		Week = 7,
-		TenDays = 10
-	} // enum RepaymentIntervalTypes
-
-	public enum RepaymentIntervalTypesId {
+		[Description("0")] // DB table id
 		Month = 1,
+		[Description("1")]
 		Day = 2,
+		[Description("7")]
 		Week = 3,
+		[Description("10")]
 		TenDays = 4
-	} // enum RepaymentIntervalTypesId
+	} // enum RepaymentIntervalTypes
 
 
 	public enum NLLoanStatuses {

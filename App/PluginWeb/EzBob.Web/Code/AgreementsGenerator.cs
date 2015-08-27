@@ -72,12 +72,14 @@
 
 				// NL  - preContract 
 				if (nlModel != null) {
-					nlModel.Agreements.Add(item: new NLAgreementItem() {
+					nlModel.Agreements.Add(new NLAgreementItem() {
 						Agreement = new NL_LoanAgreements() {
 							LoanAgreementTemplateID = preContractTemplate.Id,
 							FilePath = preContractAgreement.FilePath
 						},
-						TemplateModel = template
+						TemplateModel = template,
+						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, preContractAgreement.FilePath),
+						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, preContractAgreement.FilePath)
 					});
 				}
 
@@ -98,7 +100,9 @@
 							LoanAgreementTemplateID = contractTemplate.Id,
 							FilePath = contractAgreement.FilePath
 						},
-						TemplateModel = template
+						TemplateModel = template,
+						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, contractAgreement.FilePath),
+						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, contractAgreement.FilePath)
 					});
 				}
 
@@ -120,7 +124,9 @@
 							LoanAgreementTemplateID = quaranteeTemplate.Id,
 							FilePath = guaranteeAgreement.FilePath
 						},
-						TemplateModel = template
+						TemplateModel = template,
+						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, guaranteeAgreement.FilePath),
+						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, guaranteeAgreement.FilePath)
 					});
 				}
 
@@ -141,7 +147,9 @@
 							LoanAgreementTemplateID = agreementTemplate.Id,
 							FilePath = agreementAgreement.FilePath
 						},
-						TemplateModel = template
+						TemplateModel = template,
+						Path1 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath1, agreementAgreement.FilePath),
+						Path2 = Path.Combine(CurrentValues.Instance.NL_AgreementPdfLoanPath2, agreementAgreement.FilePath)
 					});
 				}
 			}

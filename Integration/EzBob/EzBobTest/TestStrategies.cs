@@ -763,100 +763,10 @@
 			Console.WriteLine("AAA");
 		}
 
-		[Test]
-		public void TestNL_AddLoan() {
-
-			const int customerID = 371; // 366;
-			const int oldLoanID = 1063; //1042;
-
-			LoanRepository loanRep = ObjectFactory.GetInstance<LoanRepository>();
-			Loan oldLoan = loanRep.Get(oldLoanID);
-			
-			ISession session = ObjectFactory.GetInstance<ISession>();
 	
-			NL_Model nlModel = new NL_Model(customerID);
-			nlModel.UserID = 354;
-			nlModel.CalculatorImplementation = new BankLikeLoanCalculator(nlModel).GetType().AssemblyQualifiedName;
-			nlModel.Loan = new NL_Loans();
-			nlModel.Loan.Refnum = oldLoan.RefNumber;
-			nlModel.Loan.OldLoanID = oldLoanID;
-
-			nlModel.FundTransfer = new NL_FundTransfers();
-			nlModel.FundTransfer.Amount = oldLoan.LoanAmount; // logic transaction - full amount
-			nlModel.FundTransfer.TransferTime = DateTime.UtcNow;
-			nlModel.FundTransfer.LoanTransactionMethodID = 1; // 'Pacnet'
-			
-			PacnetTransaction oldPacnetTransaction = EnumerableExtensions.First(oldLoan.PacnetTransactions) as PacnetTransaction;
-
-			if (oldPacnetTransaction != null) {
-				nlModel.PacnetTransaction = new NL_PacnetTransactions();
-				nlModel.PacnetTransaction.TransactionTime = oldPacnetTransaction.PostDate; 
-				nlModel.PacnetTransaction.StatusUpdatedTime = oldPacnetTransaction.PostDate; 
-				nlModel.PacnetTransaction.Amount = oldPacnetTransaction.Amount; 
-				nlModel.PacnetTransaction.Notes = oldPacnetTransaction.Description;
-				nlModel.PacnetTransaction.TrackingNumber = oldPacnetTransaction.TrackingNumber;
-				nlModel.PacnetTransactionStatus = oldPacnetTransaction.Status.ToString();
-			}
-
-			//AgreementsGenerator agreementsGenerator = new AgreementsGenerator(
-			//	builder: new AgreementsModelBuilder(), 
-			//	templates: new AgreementsTemplatesProvider(), 
-			//	helper: new DatabaseDataHelper(session));
-
-			//agreementsGenerator.RenderAgreements(oldLoan, false, nlModel); // now nlModel.Agreements should contain all must agreements data
-
-			this.m_oLog.Debug(nlModel.FundTransfer);
-			this.m_oLog.Debug(nlModel.PacnetTransaction);
-			this.m_oLog.Debug(nlModel.Loan);
-			this.m_oLog.Debug(nlModel.Agreements);
-
-			//var s = new AddLoan(nlModel);
-			//try {
-			//	s.Execute();
-			//} catch (Exception e) {
-			//	Console.WriteLine(e);
-			//}
-		}
 
 
-		[Test]
-		public void TestNL_AddPayment() {
-			int customerID = 369;
-			int loanID = 5;
-			decimal amount = 5;
-
-			NL_Model nlModel = new NL_Model(customerID);
-
-			nlModel.Loan = new NL_Loans() {
-				LoanID = loanID
-			};
-
-			nlModel.PaypointTransactionStatus = "Done";
-
-			nlModel.Payment = new NL_Payments() {
-				PaymentMethodID = (int)NLLoanTransactionMethods.SystemRepay, //2,
-				PaymentTime = DateTime.UtcNow,
-				PaymentStatusID = (int)NLPaymentStatuses.Active, //???
-				Amount = amount,
-				Notes = "system-repay"
-			};
-
-			nlModel.PaypointTransaction = new NL_PaypointTransactions() {
-				TransactionTime = DateTime.UtcNow,
-				Amount = amount,
-				Notes = "system-repay",
-				PaypointUniqueID = "4f0fce47-deb0-4667-bc65-f6edd3c978b5",
-				IP = "127.0.0.1",
-				PaypointTransactionStatusID = (int)NLPaypointTransactionStatuses.Done
-			};
-
-			var s = new AddPayment(nlModel);
-			try {
-				s.Execute();
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
-		}
+		
 
 		[Test]
 		public void TestMultipleLoanState() {
@@ -874,19 +784,7 @@
 		}
 
 
-		[Test]
-		public void TestLoanState() {
-			int loanID = 2151; // cust 329;   
-			//var s = new LoanState<Loan>(new Loan(), loanID, DateTime.UtcNow);
-			try {
-				//s.Execute();
-				//LoanCalculatorModel calculatorModel = s.CalcModel;
-				//Console.WriteLine(calculatorModel.ToString());
-			} catch (Exception e) {
-				Console.WriteLine(e);
-			}
-		}
-
+	
 
 		[Test]
 		public void TestRescheduleOUT() {

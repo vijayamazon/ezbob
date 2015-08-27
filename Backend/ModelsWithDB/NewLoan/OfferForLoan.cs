@@ -42,9 +42,6 @@
 		[DataMember]
 		public int InterestOnlyRepaymentCount { get; set; }
 
-		//[DataMember]
-		//public string DiscountPlan { get; set; }
-
 		[DataMember]
 		public int DiscountPlanID { get; set; }
 
@@ -53,5 +50,8 @@
 
 		[DataMember]
 		public decimal AvailableAmount { get; set; }
+
+		[DataMember]
+		public string ExistsRefnums { get; set; }
 	} // class OfferForLoan
 } // namespace

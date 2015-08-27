@@ -711,7 +711,7 @@
 			var offer = this.serviceClient.Instance.AddOffer(this._context.UserId, cr.Customer.Id, new NL_Offers {
 				DecisionID = decision.Value,
 				LoanTypeID = loanType,
-				RepaymentIntervalTypeID = (int)RepaymentIntervalTypesId.Month,
+				RepaymentIntervalTypeID = (int)DbConstants.RepaymentIntervalTypes.Month,
 				LoanSourceID = loanSource,
 				StartTime = FormattingUtils.ParseDateWithCurrentTime(offerStart),
 				EndTime = FormattingUtils.ParseDateWithCurrentTime(offerValidUntil),

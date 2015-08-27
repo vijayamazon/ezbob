@@ -1,9 +1,9 @@
-﻿namespace Ezbob.Backend.Strategies.NewLoan {
+﻿namespace Ezbob.Backend.Strategies.NewLoan.Exceptions {
 	using System;
 
 	public class NL_ExceptionLoanExists : Exception {
 
-
+		public static string DefaultMessage = "NL Loan exists.";
 
 		public NL_ExceptionLoanExists() { }
 
