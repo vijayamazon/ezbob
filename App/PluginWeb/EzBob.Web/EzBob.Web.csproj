@@ -718,6 +718,7 @@
     <Content Include="Content\everline\help\help_sage_everline.jpg" />
     <Content Include="Content\everline\or-circle.png" />
     <Content Include="Content\flash\ZeroClipboard.swf" />
+    <Content Include="Content\img\calc-amount-sign.png" />
     <Content Include="Content\img\basket-diamond-32.png" />
     <Content Include="Content\img\basket-gold-32.png" />
     <Content Include="Content\img\basket-platinum-32.png" />
@@ -726,6 +727,9 @@
     <Content Include="Content\img\button_question_icon.png" />
     <Content Include="Content\img\button_question_icon_active.png" />
     <Content Include="Content\img\button_question_icon_hover.png" />
+    <Content Include="Content\img\calc-calander-sign.png" />
+    <Content Include="Content\img\calc-handle-press.png" />
+    <Content Include="Content\img\calc-handle-up.png" />
     <Content Include="Content\img\calendar-late.png" />
     <Content Include="Content\img\check-min.png" />
     <Content Include="Content\img\businessguardianange.png" />

@@ -26,6 +26,9 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     },
     onRender: function () {
         console.log('this.model', this.model.get('amount'), this.model.get('term'));
+       
+        var amountCaption = (EzBob.Config.Origin === 'everline' ? "How much do you need?" : "Amount");
+        var periodCaption = (EzBob.Config.Origin === 'everline' ? "How long do you want it for?" : "Time");
         var self = this;
         InitAmountPeriodSliders({
             container: this.$('#calc-slider'),
@@ -34,7 +37,7 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
                 max: 120000,
                 start: this.model.get('amount'),
                 step: 1000,
-                caption: 'How much do you need?',
+                caption: amountCaption,
                 hasbutton : true
             },
 
@@ -44,7 +47,7 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
                 start: this.model.get('term'),
                 step: 1,
                 hide: false,
-                caption: 'How long do you want it for?',
+                caption: periodCaption,
                 hasbutton: true
             },
             callback: function(ignored, sEvent) {
