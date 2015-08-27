@@ -3,37 +3,38 @@
 	using Ezbob.Backend.Models;
 	using Ezbob.Backend.Strategies.MailStrategies.Broker;
 	using Ezbob.Database;
+	using Ezbob.Utils;
 
 	public class BackFillBrokerCommissionInvoice : AStrategy {
 		public override string Name { get { return "BackFilllBrokerCommissionInvoice"; } }
 
 		public override void Execute() {
-			DB.ForEachRowSafe(
-				BackFillOneBrokerCommissionInvoice,
+			var lst = DB.Fill<InvoiceData>(
 				"GetBrokerCommissionsForInvoiceBackFill",
 				CommandSpecies.StoredProcedure
 			);
+
+			Log.Debug("{0} invoices to backfill loaded.", lst.Count);
+
+			this.pc = new ProgressCounter("{0} invoices processed.", Log, 50);
+
+			foreach (var id in lst)
+				BackFillOneBrokerCommissionInvoice(id);
+
+			this.pc.Log();
 		} // Execute
 
-		private void BackFillOneBrokerCommissionInvoice(SafeReader sr) {
+		private void BackFillOneBrokerCommissionInvoice(InvoiceData id) {
 			try {
-				int loanBrokerCommissionID = sr["LoanBrokerCommissionID"];
-				int brokerID = sr["BrokerID"];
-				decimal commissionAmount = sr["CommissionAmount"];
-				DateTime commissionTime = sr["PaidDate"];
-				string sortCode = sr["SortCode"];
-				string bankAccount = sr["BankAccount"];
-				string customerName = sr["CustomerName"];
-
 				BrokerCommissionInvoice brokerCommissionInvoice = new BrokerCommissionInvoice(
 					new BrokerInvoiceCommissionModel {
-						BankAccount = bankAccount,
-						SortCode = sortCode,
-						InvoiceID = loanBrokerCommissionID,
-						CustomerName = customerName,
-						CommissionAmount = commissionAmount,
-						CommissionTime = commissionTime,
-						BrokerID = brokerID
+						BankAccount = id.BankAccount,
+						SortCode = id.SortCode,
+						InvoiceID = id.LoanBrokerCommissionID,
+						CustomerName = id.CustomerName,
+						CommissionAmount = id.CommissionAmount,
+						CommissionTime = id.PaidDate,
+						BrokerID = id.BrokerID,
 					}
 				);
 
@@ -42,18 +43,36 @@
 				DB.ExecuteNonQuery(
 					"UpdateBrokerCommissionsInvoiceBackFill",
 					CommandSpecies.StoredProcedure,
-					new QueryParameter("@LoanBrokerCommissionID", loanBrokerCommissionID)
+					new QueryParameter("@LoanBrokerCommissionID", id.LoanBrokerCommissionID)
 				);
 
-				Log.Info("Broker Invoice Backfill for broker {0} commission id {1}", brokerID, loanBrokerCommissionID);
+				Log.Info(
+					"Broker Invoice Backfill for broker {0} commission id {1}.",
+					id.BrokerID,
+					id.LoanBrokerCommissionID
+				);
 			} catch (Exception ex) {
 				Log.Error(
 					ex,
-					"Failed sending invoice to broker {0} loanBrokerCommissionID {1}",
-					sr["BrokerID"],
-					sr["LoanBrokerCommissionID"]
+					"Failed sending invoice to broker {0} commission id {1}.",
+					id.BrokerID,
+					id.LoanBrokerCommissionID
 				);
 			} // try
+
+			this.pc.Next();
 		} // BackFillOneBrokerCommissionInvoice
+
+		private ProgressCounter pc;
+
+		private class InvoiceData {
+			public int LoanBrokerCommissionID { get; set; }
+			public int BrokerID { get; set; }
+			public decimal CommissionAmount { get; set; }
+			public DateTime PaidDate { get; set; }
+			public string SortCode { get; set; }
+			public string BankAccount { get; set; }
+			public string CustomerName { get; set;}
+		} // class InvoiceData
 	} // class BackFillBrokerCommissionInvoice
 } // namespace
