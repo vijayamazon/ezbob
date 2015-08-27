@@ -1,7 +1,42 @@
-﻿.main-page-everline .directors-list {
+﻿.main-page-everline .directors-list,
+.main-page-everline .director {
 	width: 100%;
+	max-width: 100%;
 }
 
 .main-page-everline .add-director.ev-btn-org {
 	float: right;
+}
+
+.main-page-everline .add-company-director .field_status {
+	display: none;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director {
+	font-size: 15px;
+	font-weight: 600;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director input,
+.main-page-everline .form_field_container .input-wrapper .add-company-director select {
+	display: inline;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="checkbox"],
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="radio"] {
+	width: 32px;
+	height: 32px;
+	margin-left: 178px;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="text"],
+.main-page-everline .form_field_container .input-wrapper .add-company-director input[type="email"] {
+	width: 490px;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .attardi-input > span{
+	width: 210px;
+	text-align: right;
+	display: inline-block;
+	margin-right: 10px;
 }

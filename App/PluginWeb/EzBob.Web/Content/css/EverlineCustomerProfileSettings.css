@@ -1,0 +1,46 @@
+﻿.main-page-everline .form_field_container .input-wrapper {
+	width: 960px;
+	min-height: 50px;
+	display: block;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.main-page-everline .settings-form.form-horizontal .control-label {
+	float: left;
+	width: 160px;
+	padding-top: 20px;
+	text-align: left;
+}
+
+.main-page-everline .settings-form.form-horizontal .controls {
+	display: inline-block;
+	width: 800px;
+	margin-bottom: 20px;
+}
+
+.main-page-everline .settings-form.form-horizontal .controls input {
+	width: 490px;
+	display: inline;
+}
+
+.main-page-everline .settings-form.form-horizontal .controls a {
+	position: static;
+}
+
+.main-page-everline .changePassword fieldset,
+.main-page-everline #change-password fieldset {
+	border: 0;
+}
+
+.main-page-everline .changePassword .control-group.form_field_container,
+.main-page-everline #change-password .control-group.form_field_container {
+	margin: 0 2% 1% 10%;
+}
+
+.main-page-everline .changePassword .form_buttons_container,
+.main-page-everline #change-password .form_buttons_container {
+	text-align: right;
+}
