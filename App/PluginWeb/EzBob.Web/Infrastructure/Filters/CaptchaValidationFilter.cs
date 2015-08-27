@@ -27,7 +27,7 @@
 
 				bBrokerSignupSkipCaptcha =
 					(filterContext.ActionDescriptor.ActionName == "Signup") &&
-					(filterContext.ActionDescriptor.ControllerDescriptor.ControllerName == "BrokerHome") && (
+                    (filterContext.ActionDescriptor.ControllerDescriptor.ControllerName == "BrokerAccount") && (
 						!filterContext.ActionParameters.ContainsKey("IsCaptchaEnabled") ||
 						(filterContext.ActionParameters["IsCaptchaEnabled"].ToString() != "1")
 					);
