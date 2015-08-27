@@ -171,9 +171,11 @@
 			List<DirectorModel> limitedDirectors,
 			List<DirectorModel> nonLimitedDirectors,
 			CompanyEmployeeCountInfo companyEmployeeCountInfo,
-			CompanyInfo experianInfo
+			CompanyInfo experianInfo,
+			string promoCode
 		) {
 			var customer = this.context.Customer;
+			customer.PromoCode = promoCode;
 
 			TypeOfBusiness nBusinessType;
 			IndustryType eIndustryType;

@@ -553,15 +553,17 @@ a.ev-btn-org,
 	padding: 10px; 
 }
 
-
 div.canDisabledAddress {
     display: none;
+}
+
+div.company-full-details{
+	margin-bottom: 50px;
 }
 
 /* Radio button & checkbox*/
 .click-wrap {
     position: relative;
-    height: 50px;
     float: left;
     margin-top: 8px;
 	display: inline-block;
@@ -774,6 +776,7 @@ div.canDisabledAddress {
 hr.wizard-hr {
     background-color: #bfbfbf;
     margin-bottom: 20px;
+	clear: both;
 }
 
 .add-director-container {

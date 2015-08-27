@@ -76,7 +76,14 @@
 					origin: origin)
             </div>
             <div class="row-fluid company-full-details"></div>
-            
+
+			<hr class="wizard-hr" />
+			@EzForm.InputTextWizard(new EzInputBuilder("promoCode", "Promo code (optional)",
+					cls: "form_field",
+					isRequired: false,
+					statusIcon: true,
+					uiEventControlID: "personal-info:promo-code"),
+					origin: origin)
 		}
     </div>
 	
@@ -148,8 +155,16 @@
 	
     <div class="control-group form_read_and_accept">
         <div class="controls">
-            <input id="DirectorCheck" name="DirectorCheck" type="checkbox" value="false" ui-event-control-id="personal-info:director_check" />
-            <label for="DirectorCheck" class="editor-label-with-checkbox">I am the director of the company which I have listed in the application. I hereby state that I have the authority to complete the loan application.</label>
+			@{ EzInputBuilder checkbox1 = new EzInputBuilder("DirectorCheck", "I am the director of the company which I have listed in the application. I hereby state that I have the authority to complete the loan application.",
+						  value: "false",
+						  type: "checkbox",
+						  cls: "required",
+						  isRequired: true,
+						  statusIcon: true,
+						  name: "DirectorCheck",
+						  labelClass: "editor-label-with-checkbox",
+						  uiEventControlID: "personal-info:director_check"); }
+			@EzForm.ClickableInputTag(checkbox1, origin)
         </div>
     </div>
 </script>
@@ -186,7 +201,7 @@
 
     <div class="employee-count"></div>
 
-    <div class="directors"></div>
+    <div class="directors clear"></div>
 </script>
 
 <script id="limitedinfo-template" type="text/template">

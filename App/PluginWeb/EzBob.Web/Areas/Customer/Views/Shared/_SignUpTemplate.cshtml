@@ -40,12 +40,6 @@
                , tabIndex: 4, statusIcon: true, uiEventControlID: "signup:security_question"), origin: origin)
                 @EzForm.InputTextWizard(new EzInputBuilder("SecurityAnswer", "Secret answer", cls: "form_field", isRequired: true
  , statusIcon: true, uiEventControlID: "signup:security-answer", tabIndex: 5), origin: origin)
-              @*  @EzForm.InputTextWizard(new EzInputBuilder("promoCode", "Promotional code (optional)", cls: "form_field"
-         , statusIcon: true, uiEventControlID: "signup:promo-code"), origin: origin)*@
-               @* @EzForm.InputTextWizard(new EzInputBuilder("amount", "Requested loan amount", cls: "form_field", type: "tel", isRequired: true
-                 , statusIcon: true, uiEventControlID: "signup:requested-amount", tabIndex: 6), origin: origin)*@
-
-
 
                 <div id="twilioDiv" class="hide">
                     @EzForm.InputTextWizard(new EzInputBuilder("mobilePhone", "Mobile phone", cls: "phonenumber form_field_left_side form_field", type: "tel", isRequired: true
