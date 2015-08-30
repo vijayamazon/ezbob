@@ -416,9 +416,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		if (!this.quickOffer)
 			return false;
 
-		this.requestedAmount = this.fromCustomer('RequestedAmount');
+		this.requestedLoan = this.fromCustomer('RequestedLoan') || {};
 
-		if (!this.requestedAmount)
+		if (!this.requestedLoan || !this.requestedLoan.Amount)
 			return false;
 
 		return moment.utc().diff(moment.utc(this.quickOffer.ExpirationDate)) < 0;

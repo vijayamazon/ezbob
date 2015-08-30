@@ -182,11 +182,9 @@
 
 			customerModel.QuickOffer = BuildQuickOfferModel(customer);
 
-			CustomerRequestedLoan ra = customer.CustomerRequestedLoan.OrderBy(x => x.Created).LastOrDefault();
+			CustomerRequestedLoan ra = customer.CustomerRequestedLoan.OrderByDescending(x => x.Created).FirstOrDefault();
 
-			customerModel.RequestedAmount = ((ra == null) || (ra.Amount == null))
-				? 0
-				: (decimal)ra.Amount.Value;
+			customerModel.RequestedLoan = ra ?? new CustomerRequestedLoan();
 
 			customerModel.IsBrokerFill = customer.FilledByBroker;
 			customerModel.DefaultCardSelectionAllowed = customer.DefaultCardSelectionAllowed;

@@ -2,82 +2,61 @@
 @using EZBob.DatabaseLib.Model.Database
 @model dynamic
 @{
-    CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
+	CustomerOriginEnum origin = ViewBag.CustomerOrigin.GetOrigin();
 }
-
 <script type="text/template" id="sliders-template">
-    <section class="header-sliders sliders everline-sliders-processed" style="opacity: 1;">
-        <div class="blog-header">
-            <div class="overlay">
-            
-            </div>
-        </div>
-        <div class=" sliders-main">
-            <a href="/" class="close icon-remove"></a>
+	<section class="header-sliders sliders everline-sliders-processed" style="opacity: 1;">
+		<div class="blog-header">
+			<div class="overlay">
 
-            <form action="https://www.everline.com/" accept-charset="UTF-8" method="post" id="everline-sliders-form" class="c_col c_spn16 validate form-element-type-form form">
-                <div>
+			</div>
+		</div>
+		<div class=" sliders-main">
+			<a href="#" class="close icon-remove"></a>
+			<div class="c_col c_spn16 validate form-element-type-form form">
                     <div class="form-markup-wrapper calc-header">
-                        <h2>Get a quote now</h2>
+					<h2>Get a quote now</h2>
+					<p class="t-c f-19 desktop">
+						We like to make things as straightforward as possible.<br>Use the
+						sliders below to find out the total cost of your business loan.
+					</p>
+				</div>
+				<div id="calc-slider" class="slider-wrapper clearfix"></div>
 
-                        <p class="t-c f-19 desktop">
-                            We like to make things as straightforward as possible.<br>Use the
-                            sliders below to find out the total cost of your business loan.
-                        </p>
-                    </div>
-                    <div id="calc-slider" class="slider-wrapper clearfix">
-                        
-                    </div>
-                    
                     <div class="form-markup-wrapper clearfix summary-wrap">
-                        <div class="c_col c_spn_16 summary">
-                            <div class="c_col c_spn_3 ">
-                                <h3>Borrowing</h3>
-
-                                <p><span class="amount">£24,450.00</span></p>
-                            </div>
+					<div class="c_col c_spn_16 summary">
+						<div class="c_col c_spn_3 ">
+							<h3>Borrowing</h3>
+							<p><span class="amount"></span></p>
+						</div>
                             <span class="c_col c_spn_1"><span class="calc-equal"> + </span><i class="fa icon-plus"></i></span>
-
-                            <div class="c_col c_spn_3">
-                                <h3>Interest cost</h3>
-
-                                <p><span class="interest">£3,178.50</span></p>
-                            </div>
-                            <div class="c_col c_spn_7 summary_total">
+						<div class="c_col c_spn_3">
+							<h3>Interest cost</h3>
+							<p><span class="interest"></span></p>
+						</div>
+						<div class="c_col c_spn_7 summary_total">
                                 <h3 class="c_col c_spn9"><span class="calc-equal"> = </span>Total to repay</h3>
-
-                                <p class="c_col c_spn_7"><span class="total">£27,628.50</span></p>
-                            </div>
-                            <br class="clearfix">
-                        </div>
-                    </div>
-                    <div class="c_col c_spn_16 overview clearfix">
-                        <div class="form-markup-wrapper">
-                            <div class="c_col c_spn_10 pad_1"><p><span class="total-repay">total repayment*:</span> <span class="org"><span class="total">£27,628.50</span></span></p></div>
-                        </div>
-                        <a href="https://app.everline.com/Customer/Wizard" class="ui-widget button btn-green c_col c_spn_4 org-btn change-loan-details-btn">
-                            Change loan details
-                        </a>
-                    </div>
+							<p class="c_col c_spn_7"><span class="total"></span></p>
+						</div>
+						<br class="clearfix">
+					</div>
+				</div>
+				<div class="c_col c_spn_16 overview clearfix">
+					<div class="form-markup-wrapper">
+                            <div class="c_col c_spn_10 pad_1"><p><span class="total-repay">total repayment*:</span> <span class="org"><span class="total"></span></span></p></div>
+					</div>
+					<button id="changeLoanAmount" class="ui-widget button btn-green c_col c_spn_4 org-btn change-loan-details-btn" ui-event-control-id="requested-loan:change-loan-details">Change loan details</button>
+				</div>
                     <div class="c_col c_spn_16 t-c bottom-text">
-                        <div class="form-markup-wrapper small-text">
-                            *Actual loan amount is subject to status. Loan estimate based on <span class="interest-rate">2%</span> 
-                            interest charge per month.
-                        </div>
-                    </div>
-                    <input type="hidden" name="form_build_id" id="form-lGkKA3Ti0mQAZNcmwESkX-AMAWE508Z5Dfw8XMxFplQ" value="form-lGkKA3Ti0mQAZNcmwESkX-AMAWE508Z5Dfw8XMxFplQ" class="form-element-type-hidden">
-                    <input type="hidden" name="form_id" id="edit-everline-sliders-form" value="everline_sliders_form" class="form-element-type-hidden">
-
-                    <div class="form-markup-wrapper">
-                        <div class="form-markup-wrapper"></div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </section>
+					<div class="form-markup-wrapper small-text">
+						*Actual loan amount is subject to status. Loan estimate based on <span class="interest-rate">2%</span>
+						interest charge per month.
+					</div>
+				</div>
+				<div class="form-markup-wrapper">
+					<div class="form-markup-wrapper"></div>
+				</div>
+			</div>
+		</div>
+	</section>
 </script>
-
-<script>
-
-</script>
-

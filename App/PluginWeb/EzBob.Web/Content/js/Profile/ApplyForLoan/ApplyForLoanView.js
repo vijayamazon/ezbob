@@ -206,14 +206,16 @@ EzBob.Profile.ApplyForLoanView = Backbone.Marionette.ItemView.extend({
 						min: this.model.get('minCash'),
 						max: this.model.get('maxCash'),
 						start: this.model.get('maxCash'),
-						step: 100
+						step: 100,
+						uiEvent: 'loan-legal:'
 					},
 					period: {
 					    min: this.isLoanSourceCOSME ? 15 : 3,
 						max: this.isLoanSourceCOSME ? 15 : 12,
 						start: this.model.get('repaymentPeriod'),
 						step: 1,
-						hide: this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU
+						hide: this.isLoanTypeSelectionAllowed != 1 || this.isLoanSourceEU,
+						uiEvent: 'loan-legal:'
 					},
 					callback: function(ignored, sEvent) {
 						if (sEvent === 'change')

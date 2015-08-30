@@ -1,22 +1,23 @@
 ﻿var EzBob = EzBob || {};
 
 EzBob.SlidersModel = Backbone.Model.extend({
-    initialize: function () {
-        this.set('amount', 20000);
-        this.set('term', 15);
-	    this.set('interestRate', 0.02);
-    },
+	idAttribute: 'Id',
+	defaults: {
+		'Amount': 20000,
+		'Term': 15,
+		'InterestRate' : 0.02
+	},
+	urlRoot: window.gRootPath + 'Customer/CustomerRequestedLoan/RequestedLoan'
 });
 
 EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
-    template: '#sliders-template',
-
+	template: '#sliders-template',
     initialize: function () {
         this.model.on('change', this.render, this);
         return this;
     },
     events: {
-       
+    	'click #changeLoanAmount' : 'changeLoanAmount'
     },
     ui: {
     	'amount': '.amount',
@@ -25,51 +26,70 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 		'interestRate': '.interest-rate'
     },
     onRender: function () {
-        console.log('this.model', this.model.get('amount'), this.model.get('term'));
-       
-        var amountCaption = (EzBob.Config.Origin === 'everline' ? "How much do you need?" : "Amount");
-        var periodCaption = (EzBob.Config.Origin === 'everline' ? "How long do you want it for?" : "Time");
+	    console.log('render');
+        var amountCaption = (EzBob.Config.Origin === 'everline' ? 'How much do you need?' : 'Amount');
+        var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');
         var self = this;
         InitAmountPeriodSliders({
             container: this.$('#calc-slider'),
             amount: {
                 min: 1000,
                 max: 120000,
-                start: this.model.get('amount'),
+                start: this.model.get('Amount'),
                 step: 1000,
                 caption: amountCaption,
-                hasbutton : true
+                hasbutton: true,
+                uiEvent: 'requested-loan:'
             },
 
             period: {
                 min: 3,
                 max: 24,
-                start: this.model.get('term'),
+                start: this.model.get('Term'),
                 step: 1,
                 hide: false,
                 caption: periodCaption,
-                hasbutton: true
+                hasbutton: true,
+                uiEvent: 'requested-loan:'
             },
             callback: function(ignored, sEvent) {
                 if (sEvent === 'slide')
                     self.loanSelectionChanged();
             }
         });
-	    this.loanSelectionChanged();
+        this.loanSelectionChanged();
+
+
+        EzBob.UiAction.registerView(this);
         return this;
     },
 
-    loanSelectionChanged: function() {
-    	var currentRepaymentPeriod = this.$('#calc-slider .period-slider').slider('value');
+    changeLoanAmount: function(){
+    	var currentTerm = this.$('#calc-slider .period-slider').slider('value');
     	var currentAmount = this.$('#calc-slider .amount-slider').slider('value');
-	    var interestRate = this.model.get('interestRate');
-    	var calc = this.calcRepaymentsTable(currentRepaymentPeriod, currentAmount, interestRate);
+
+    	this.model.set({ 'Amount': currentAmount }, { silent: true });
+    	this.model.set({ 'Term': currentTerm }, { silent: true });
+
+	    var self = this;
+	    this.model.save().done(function () {
+		    self.trigger('requested-amount-changed');
+	    	//self.remove();
+
+	    });
+    },
+
+    loanSelectionChanged: function() {
+    	var currentTerm = this.$('#calc-slider .period-slider').slider('value');
+    	var currentAmount = this.$('#calc-slider .amount-slider').slider('value');
+	    var interestRate = this.model.get('InterestRate');
+	    var calc = this.calcRepaymentsTable(currentTerm, currentAmount, interestRate);
 
     	this.ui.amount.text(EzBob.formatPounds(calc.principal));
     	this.ui.interest.text(EzBob.formatPounds(calc.interest));
     	this.ui.total.text(EzBob.formatPounds(calc.total));
     	this.ui.interestRate.text(EzBob.formatPercents(calc.interestRate));
-    },
+	},
 
     calcRepaymentsTable: function(loan_period, loan_amount, interest_rate) {
     	var total_repayment = 0;
@@ -95,18 +115,10 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     	};
     },
 
-    jqoptions: function () {
-        return {
-            autoOpen: true,
-            title: 'Change requested loan amount',
-            modal: true,
-            resizable: true,
-            width: 940,
-            maxWidth: '100%',
-            height: 515,
-            closeOnEscape: true,
-        }
-    },
+    remove: function () {
+    	this.$el.empty().off(); /* off to unbind the events */
+    	return this;
+    }
 });
 
 

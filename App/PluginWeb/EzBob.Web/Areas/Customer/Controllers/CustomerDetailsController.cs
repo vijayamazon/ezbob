@@ -26,6 +26,31 @@
 	using ServiceClientProxy.EzServiceReference;
 
 	public class CustomerDetailsController : Controller {
+		public CustomerDetailsController(
+			IEzbobWorkplaceContext oContext,
+			DatabaseDataHelper oDatabaseHelper,
+			IPersonalInfoHistoryRepository oPersonalInfoHistoryRepository,
+			ISession oSession,
+			CashRequestBuilder oCashRequestBuilder,
+			DirectorRepository oDirectorRepository,
+			PropertyStatusRepository propertyStatusRepository,
+			CustomerPhoneRepository customerPhoneRepository,
+			CustomerAddressRepository customerAddressRepository,
+			CustomerRepository customerRepository
+		) {
+			this.context = oContext;
+			this.databaseHelper = oDatabaseHelper;
+			this.personalInfoHistoryRepository = oPersonalInfoHistoryRepository;
+			this.serviceClient = new ServiceClient();
+			this.session = oSession;
+			this.cashRequestBuilder = oCashRequestBuilder;
+			this.directorRepository = oDirectorRepository;
+			this.propertyStatusRepository = propertyStatusRepository;
+			this.customerPhoneRepository = customerPhoneRepository;
+			this.customerAddressRepository = customerAddressRepository;
+			this.customerRepository = customerRepository;
+		} // constructor
+
 		public static object AddDirectorToCustomer(DirectorModel director, Customer customer, ISession session, bool bFailOnDuplicate) {
 			if (customer.Company == null)
 				return new { error = "Customer doesn't have a company." };
@@ -69,31 +94,6 @@
 
 			return new { success = true };
 		} // AddDirectorToCustomer
-
-		public CustomerDetailsController(
-			IEzbobWorkplaceContext oContext,
-			DatabaseDataHelper oDatabaseHelper,
-			IPersonalInfoHistoryRepository oPersonalInfoHistoryRepository,
-			ISession oSession,
-			CashRequestBuilder oCashRequestBuilder,
-			DirectorRepository oDirectorRepository,
-			PropertyStatusRepository propertyStatusRepository,
-			CustomerPhoneRepository customerPhoneRepository,
-			CustomerAddressRepository customerAddressRepository,
-			CustomerRepository customerRepository
-		) {
-			this.context = oContext;
-			this.databaseHelper = oDatabaseHelper;
-			this.personalInfoHistoryRepository = oPersonalInfoHistoryRepository;
-			this.serviceClient = new ServiceClient();
-			this.session = oSession;
-			this.cashRequestBuilder = oCashRequestBuilder;
-			this.directorRepository = oDirectorRepository;
-			this.propertyStatusRepository = propertyStatusRepository;
-			this.customerPhoneRepository = customerPhoneRepository;
-			this.customerAddressRepository = customerAddressRepository;
-			this.customerRepository = customerRepository;
-		} // constructor
 
 		[HttpGet]
 		public System.Web.Mvc.ActionResult Dashboard() {
@@ -152,7 +152,7 @@
 
 			ms_oLog.Debug("Customer {1} ({0}): cash request created.", customer.Id, customer.PersonalInfo.Fullname);
 
-			m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
+			this.m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 
 			ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
@@ -363,7 +363,7 @@
 					{
 						otherPropertyAddress.AddressType = CustomerAddressType.OtherPropertyAddress;
 						otherPropertyAddress.Customer = customer;
-						customerAddressRepository.SaveOrUpdate(otherPropertyAddress);
+						this.customerAddressRepository.SaveOrUpdate(otherPropertyAddress);
 						customer.AddressInfo.OtherPropertiesAddresses.Add(otherPropertyAddress);
 					}
 				}
@@ -818,7 +818,7 @@
 				this.session.Flush();
 				ms_oLog.Debug("Customer {1} ({0}): wizard step has been updated to {2}", customer.Id, customer.PersonalInfo.Fullname, (int)WizardStepType.AllStep);
 
-				m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
+				this.m_oConcentAgreementHelper.Save(customer, DateTime.UtcNow);
 				ms_oLog.Debug("Customer {1} ({0}): consent agreement saved.", customer.Id, customer.PersonalInfo.Fullname);
 
 				customer.AddAlibabaDefaultBankAccount();
@@ -856,6 +856,7 @@
 		/// <param name="personalInfo">Customer's personal info.</param>
 		/// <param name="personalAddress">Customer's current address.</param>
 		/// <param name="prevPersonAddresses">Customer's previous address(es).</param>
+		/// <param name="otherPropertiesAddresses">Customer's other properties addresses</param>
 		/// <param name="dateOfBirth">Customer's date of birth in format d/M/yyyy.</param>
 		/// <remarks>
 		/// Passing a date is kinda tricky therefore external string parameter is used for
@@ -899,7 +900,7 @@
 				personalInfo.OverallTurnOver = customer.PersonalInfo.OverallTurnOver;
 				personalInfo.MobilePhoneVerified = customer.PersonalInfo.MobilePhoneVerified;
 			}
-			customer.PropertyStatus = propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatus);
+			customer.PropertyStatus = this.propertyStatusRepository.GetAll().FirstOrDefault(x => x.Id == personalInfo.PropertyStatus);
 
 			customer.PersonalInfo = personalInfo;
 
@@ -943,7 +944,7 @@
 				Phone = mobilePhone,
 				IsCurrent = true
 			};
-			customerPhoneRepository.SaveOrUpdate(customerMobilePhoneEntry);
+			this.customerPhoneRepository.SaveOrUpdate(customerMobilePhoneEntry);
 
 			var customerDaytimePhoneEntry = new CustomerPhone {
 				CustomerId = customerId,
@@ -951,7 +952,7 @@
 				Phone = daytimePhone,
 				IsCurrent = true
 			};
-			customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
+			this.customerPhoneRepository.SaveOrUpdate(customerDaytimePhoneEntry);
 		} // SavePhones
 
 		private void MakeAddress(

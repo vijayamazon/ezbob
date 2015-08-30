@@ -40,7 +40,7 @@ function InitAmountPeriodSliders(options)
 	        .append($('<div />').addClass(sAreaName + '-max slider-label'))
 	        .append($('<div />').addClass(sAreaName + '-tooltip'))
 	        .append($('<div />').addClass(sAreaName + '-slider'))
-	        .append($('<input />').addClass(sAreaName + '-textbox').attr('ui-event-control-id', 'loan-legal:' + sAreaName.toLowerCase()).val(oDefinitions.start)).attr('type', 'text')
+	        .append($('<input />').addClass(sAreaName + '-textbox').attr('ui-event-control-id', oDefinitions.uiEvent + sAreaName.toLowerCase()).val(oDefinitions.start)).attr('type', 'text')
 		);
 
 		var oTooltip = $('.' + sAreaName + '-tooltip', oParent);

@@ -257,11 +257,11 @@ EzBob.WizardView = EzBob.View.extend({
             }
 
             var personalInfo = this.customer.get('CustomerPersonalInfo');
-
+			var requestedLoan = this.customer.get('RequestedLoan') || {};
             EzBob.App.GA.trackPage(currStep.trackPage, currStep.documentTitle,
             {
-                Amount: this.customer.get('RequestedAmount') || '',
-                Length: '',
+            	Amount: requestedLoan.Amount || '',
+            	Length: requestedLoan.Term || '',
                 Gender: personalInfo ? personalInfo.GenderName || '' : '',
                 Age: personalInfo ? personalInfo.Age || '' : '',
                 Postcode: postcode,

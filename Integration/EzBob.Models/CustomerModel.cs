@@ -182,7 +182,7 @@ namespace EzBob.Models {
 
 		public QuickOfferModel QuickOffer { get; set; }
 
-		public decimal RequestedAmount { get; set; }
+		public CustomerRequestedLoan RequestedLoan { get; set; }
 
 		public string SortCode { get; set; }
 

@@ -1099,7 +1099,7 @@
 			m_oCustomers.Save(customer);
 
 			customer.CustomerRequestedLoan = new List<CustomerRequestedLoan> { new CustomerRequestedLoan {
-				Customer = customer,
+				CustomerId = customer.Id,
 				Amount = amount,
 				Created = DateTime.UtcNow,
 			}};
