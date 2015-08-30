@@ -23,7 +23,7 @@
         public ulong? AssignedToID { get; set; }
 
         /// <summary>true for including all test cases of the test suite, false for a custom case selection</summary>
-        public bool? IncludeAll { get; private set; }
+        public bool? IncludeAll { get; set; }
 
         /// <summary>an array of case IDs for the custom case selection</summary>
         public List<ulong> CaseIDs { get; set; }

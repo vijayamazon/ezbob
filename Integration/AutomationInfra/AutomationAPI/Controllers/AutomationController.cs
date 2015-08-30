@@ -25,6 +25,13 @@
             return Ok();
         }
 
+        [AcceptVerbs("GET", "POST")]
+        public IHttpActionResult CreateAutomationTestPlan(int id)
+        {
+            AutomationFacade.CreateAutomationTestPlan(id);
+            return Ok();
+        }
+
         //[AcceptVerbs("GET", "POST")]
         //public IHttpActionResult PrintAll(ulong id) {
         //    AutomationFacade.TestRailEngine.PrintAll();

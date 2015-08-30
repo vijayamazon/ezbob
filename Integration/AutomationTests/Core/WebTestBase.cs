@@ -2,6 +2,7 @@
 {
     using System;
     using System.Collections.Generic;
+    using System.Configuration;
     using System.Diagnostics;
     using System.Linq;
     using System.Linq.Expressions;
@@ -18,6 +19,19 @@
         protected ResourceManager EnvironmentConfig { get; set; }
         protected ResourceManager BrandConfig { get; set; }
 
+        private static bool? isDebugMode;
+        protected static bool IsDebugMode
+        {
+            get
+            {
+                if (isDebugMode == null)
+                {
+                    isDebugMode = Convert.ToBoolean(ConfigurationManager.AppSettings["isDebugMode"]);
+                }
+                return (bool)isDebugMode;
+            }
+        }
+
         protected bool ExecuteTest<T>(Func<T> codeToExecute)
         {
 
@@ -27,52 +41,51 @@
             List<AutomationModels.Browser> browsers = GetBrowsers(caseID);
             List<AutomationModels.Brand> brands = GetBrands(caseID);
             List<AutomationModels.Environment> enviorments = GetEnviorments(caseID);
-            bool IsPassedAllConfigs = true;
-
 
             if (IsNotValidConfigured(browsers, brands, enviorments))
             {
-                TestRailRepository.ReportTestRailBlockedNotConfiguredResults(caseID);
-                IsPassedAllConfigs = false;
+                if (!IsDebugMode) {
+                    TestRailRepository.ReportTestRailBlockedNotConfiguredResults(caseID);
+                }
+                return false;
             }
-            else
+
+            foreach (AutomationModels.Browser browser in browsers)
             {
-                foreach (AutomationModels.Browser browser in browsers)
+                Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
+                foreach (AutomationModels.Environment enviorment in enviorments)
                 {
-                   Driver = GetBrowserWebDriver.GetWebDriverForBrowser(browser);
-                    foreach (AutomationModels.Environment enviorment in enviorments)
+                    EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
                     {
-                        EnvironmentConfig = Resources.GetEnvironmentResourceManager(enviorment);
+                        foreach (AutomationModels.Brand brand in brands)
                         {
-                            foreach (AutomationModels.Brand brand in brands)
+                            BrandConfig = Resources.GetBrandResourceManager(brand);
+                            try
                             {
-                                BrandConfig = Resources.GetBrandResourceManager(brand);
-                                try
-                                {
-                                    if (TestRailRepository.BlockedSet.Contains(caseID))
-                                    {
+                                if (!IsDebugMode) {
+                                    if (TestRailRepository.BlockedSet.Contains(caseID)) {
                                         TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Blocked, "Automation is blocked depended test failed already");
-                                        IsPassedAllConfigs = false;
-                                    }
-                                    else
-                                    {
-                                        codeToExecute.Invoke();
-                                        TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
+                                        return false;
                                     }
                                 }
-                                catch (Exception ex)
-                                {
+
+                                codeToExecute.Invoke();
+                                if (!IsDebugMode) {
+                                    TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Passed, "Automation run passed");
+                                }
+                            }
+                            catch (Exception ex){
+                                if (!IsDebugMode) {
                                     UpdateBlockedList(caseID);
                                     TestRailRepository.ReportTestRailResults(caseID, browser, brand, enviorment, ResultStatus.Failed, ex.StackTrace);
-                                    IsPassedAllConfigs = false;
                                 }
+                                return false;
                             }
                         }
                     }
                 }
             }
-
-            return IsPassedAllConfigs;
+            return true;
         }
 
         public bool IsNotValidConfigured(List<AutomationModels.Browser> browsers,
@@ -95,18 +108,32 @@
 
         public List<AutomationModels.Browser> GetBrowsers(ulong caseID)
         {
+            if(IsDebugMode){
+                return new List<AutomationModels.Browser>() {
+                    AutomationModels.Browser.Firefox
+                };
+            }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Browser).Distinct().ToList();
         }
 
         public List<AutomationModels.Brand> GetBrands(ulong caseID)
         {
+            if(IsDebugMode){
+                return new List<AutomationModels.Brand>() {
+                    AutomationModels.Brand.Ezbob
+                };
+            }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Brand).Distinct().ToList();
         }
 
         public List<AutomationModels.Environment> GetEnviorments(ulong caseID)
         {
+            if (IsDebugMode){
+                return new List<AutomationModels.Environment>() {
+                    AutomationModels.Environment.QA
+                };
+            }
             return TestRailRepository.PlanRepository.Where(x => x.CaseBase.ID == caseID).Select(x => x.Environment).Distinct().ToList();
         }
-
     }
 }

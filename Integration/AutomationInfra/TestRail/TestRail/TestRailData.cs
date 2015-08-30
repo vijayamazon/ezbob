@@ -203,6 +203,7 @@
                 }
             }
 
+
             string uri = _CreateUri_(_CommandType_.add, _NODE_RUN_, projectID);
             Run r = new Run() {
                 SuiteID = suiteID,
@@ -318,15 +319,20 @@
         /// <param name="assignedToID">(optional)the ID of the user the test run should be assigned to</param>
         /// <param name="include_all">(optional)true for including all test cases of the test suite and false for a custom selection (default: true)</param>
         /// <returns></returns>
-        public CommandResult<ulong> AddPlanEntry(ulong planID, ulong suiteID, string name = null, ulong? assignedToID = null, List<ulong> caseIDs = null) {
+        public CommandResult<ulong> AddPlanEntry(ulong planID, ulong suiteID, string name = null, ulong? assignedToID = null, List<ulong> caseIDs = null, List<Run> runList= null)
+        {
             string uri = _CreateUri_(_CommandType_.add, _NODE_PLAN_ENTRY_, planID);
+            
             PlanEntry pe = new PlanEntry() {
                 AssignedToID = assignedToID,
                 SuiteID = suiteID,
                 Name = name,
-                CaseIDs = caseIDs
+                RunList = runList,
+                ConfigIDs = new List<ulong>() { 8, 7, 12, 14, 13, 5 }
             };
+
             JObject jsonParams = pe.GetJson();
+
             return _SendCommand(uri, jsonParams);
         }
 

@@ -72,5 +72,10 @@
         public List<ulong?> GetRunCasesListIdsDistinct( List<AtutomationCaseRun> data ) {
             return data.OrderBy(x => x.IncludedIn.Count > 0).Select(x => x.CaseBase.ID).Distinct().ToList();
         }
+
+        internal static void CreateAutomationTestPlan(int id) {
+            AutomationModels.Label plantype = (AutomationModels.Label)id;
+            TestRailEngine.CreateAutomationTestPlan(plantype);
+        }
     }
 }
