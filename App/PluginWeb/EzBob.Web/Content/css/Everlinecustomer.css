@@ -2026,6 +2026,9 @@ hr.wizard-hr {
     margin: 5px 0;
     width:100%;
   }
+  .total-repay {
+      display:block;
+  }
   .sliders .overview .form-markup-wrapper .c_spn_10 p {
     font-size:26px;
     text-align: center;
@@ -2158,6 +2161,9 @@ hr.wizard-hr {
 }
 .sliders .overview .c_spn_4 {
     margin: 0 0 10px;
+}
+.calc-equal {
+ display: none;   
 }
 @media screen and (max-width: 500px) {
     .sliders .summary .summary_total p {

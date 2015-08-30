@@ -61,7 +61,8 @@ function InitAmountPeriodSliders(options)
 		    $('.' + sAreaName + '-area').find('.slider-input').append(($('<div />').addClass('plus-wrap').append($('<span />').addClass('plus icon-plus'))));
 		    $('.' + sAreaName + '-area').find('.' + sAreaName + '-slider').wrap($('<div />').addClass('slider-wrap'));
 		    $('.' + sAreaName + '-area').find('.slider-input').insertBefore($('.' + sAreaName + '-area').find('.slider-wrap'));
-		    $('.' + sAreaName + '-area').find('.'+sAreaName + '-tooltip').insertAfter($('.' + sAreaName + '-area').find('.slider-wrap'));
+		  
+		   
 		}
 		if (sAreaName == 'amount')
 			oTextbox.autoNumeric($.extend({}, EzBob.moneyFormatNoDecimals, { vMin: oDefinitions.min, vMax: oDefinitions.max }));

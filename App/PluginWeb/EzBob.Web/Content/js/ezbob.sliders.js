@@ -51,7 +51,7 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
                 hasbutton: true
             },
             callback: function(ignored, sEvent) {
-                if (sEvent === 'change')
+                if (sEvent === 'slide')
                     self.loanSelectionChanged();
             }
         });

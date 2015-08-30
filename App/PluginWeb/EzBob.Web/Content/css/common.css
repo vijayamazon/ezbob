@@ -3385,14 +3385,15 @@ iframe[src^='https://finimpact'] {
  }
  .slider-wrapper  {
        background: #4d4d4d;
-    height: 160px;
+       min-height: 160px;
+    padding-bottom: 24px;
     width: 100%;
    
     box-sizing: border-box;
  }
  .sliders-container {
      max-width:780px;
-     height:130px;
+     min-height: 130px;
      border-radius:5px;
          box-sizing: border-box;
      background:#313131;
@@ -3405,7 +3406,7 @@ iframe[src^='https://finimpact'] {
     max-width: 766px;
     min-height: 58px;
     border-radius: 5px 5px 0 0;
-    background: #cdcdcd url('../img/calc-amount-sign.png') 3% 14px no-repeat;
+     background: #cdcdcd;
     box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
     margin: 0 auto;
     position: relative;
@@ -3414,7 +3415,8 @@ iframe[src^='https://finimpact'] {
  }
   .period-area {
     max-width: 766px;
-    height: 58px;
+   
+    min-height: 58px;
     border-radius: 0 0 5px 5px;
     background: #cdcdcd;
     box-shadow: 0 0.5px 0 0 #ffffff inset, 0 1px 2px 0 #B3B3B3;
@@ -3422,7 +3424,7 @@ iframe[src^='https://finimpact'] {
     position: relative;
     border-top: 1px solid #e8e8e8;
     top: 6px;
-    background: #cdcdcd url('../img/calc-calander-sign.png') 3% 14px no-repeat;
+   
  }
   .slider-label,.minus ,.plus,.slider-input {
       display:none;
@@ -3431,7 +3433,7 @@ iframe[src^='https://finimpact'] {
 
  .amount-tooltip,.period-tooltip{
    
-    display: block !important;
+ display: inline-block !important;
     opacity: 1 !important;
     margin-right: 4%;
     float: right;
@@ -3441,27 +3443,35 @@ iframe[src^='https://finimpact'] {
     font-size: 20px;
     text-shadow: 0px 1px 1px #FFFFFF;
     left: initial !important;
-
+    background: #cdcdcd;
   }
  .period-tooltip {
          margin-right: 2%;
  }
   .amount-caption,.period-caption {
-        font-family: 'Titillium Web Semi Bold';
-    position: absolute;
+       font-family: 'Titillium Web Semi Bold';
+    vertical-align: top;
     color: #4d4d4d;
     font-size: 20px;
     text-shadow: 0px 1px 1px #FFFFFF;
     left: 9%;
+    padding-left: 6%;
+    padding-top: 6px;
     margin: 0;
-    top: 7px; 
+    display: inline-block;
+    width: 13%;
   }
-   
+   .period-caption {
+        background: url('../img/calc-calander-sign.png') 7% 14px no-repeat;
+   }
+   .amount-caption {
+       background:  url('../img/calc-amount-sign.png') 7% 14px no-repeat;
+   }
   .slider-wrap {
-          width: 64%;
-    margin: 0 20%;
-    position: relative;
-    top: 19px;
+ width: 64%;
+   
+    display: inline-block;
+    margin-top: 19px;
   }
   .ui-corner-all {
       height:18px;
@@ -3500,9 +3510,26 @@ background: url('../img/calc-handle-up.png');
   background-image: -ms-linear-gradient( 90deg, rgb(77,145,8) 0%, rgb(103,193,11) 100%);
    box-shadow: 0px 2px 0px 0px rgba(255, 255, 255, 0.227), inset 0px 2px 2px 0px rgba(0, 0, 0, 0.145); 
   }
- /*calc bottom part */
+
+
+ /*calc header*/
+ p.r-c {
+     margin-top:10px;
+     margin-bottom:50px;
+ }
+ .form-markup-wrapper h2 {
+     margin:10px 0;
+ }
+ .calc-header {
+     max-width:780px;
+     margin:65px auto;
+ }
+ .form-markup-wrapper .col, .form-markup-wrapper .span {
+     margin:0;
+ }
+  /*calc bottom part */
  .summary-wrap{
-         height: 200px;
+        min-height: 80px;
     width: 100%;
     background: #383838;
     color: white;
@@ -3513,43 +3540,81 @@ background: url('../img/calc-handle-up.png');
      float:none;
      
  }
+ 
 
-
- .form-markup-wrapper .col, .form-markup-wrapper .span {
-     margin:0;
+ .overview .form-markup-wrapper ,.summary {
+     max-width: 780px;
+ margin:0 auto;  
+ box-sizing:border-box;  
  }
-  @media screen and (max-width: 760px) {
-      .amount-caption, .period-caption,.amount-tooltip {
-          font-size:16px;
-      }
-      .amount-tooltip,.period-tooltip {
-          font-size: 16px;
-         font-size: 15px;
-    margin-top: 16px;
-    margin-right: 2px;
-      }
-      .slider-wrapper {
-          padding:0 20px;
-     
-          /* height:20px;
-*/
-      }
-    .slider-wrap {
-        width: 64%;
-          margin: 0 21%;
-    }
-    .amount-area,.period-area {
-         background-position-x: 2.5%;
-    }
+ .overview .form-markup-wrapper {
+     display:inline-block;
     
+ }
+ .overview {
+        background: #383838;
+            padding-bottom: 25px;
+            text-align: center;
+ }
+ .summary {
+         padding-top: 25px;
+         text-align: center;
+ }
+
+.summary p,.overview .org {
+     display:inline-block;
+     font-family: Titillium Web Semi Bold;
+     font-size:22px;
+ }
+.summary h3{
+     display:inline-block;
+     font-family: 'Titillium Web Light';
+     font-size:22px;
+ }
+.summary .c_spn_3 ,.summary .c_spn_1 ,.summary_total {
+    display: inline-block;
+}
+.summary .fa.icon-plus {
+    
+     display:none;
+}
+.overview .total{
+     font-size:34px;
+     color:#50b20b;
+}
+
+.overview p {
+    font-size:34px;
+    color:white;
+}
+.calc-equal {
+    font-weight: bold;
+    font-size: 26px;
+   
+    color: white;
+}
+
+.summary  .amount,.summary .interest,.summary .total {
+      color:#50b20b;
+          font-size: 22px;
+    margin: 0 2px;
   }
-   @media screen and (max-width: 600px) { 
-            .amount-caption ,.period-caption {
-                 top: 6px;
-                font-size: 28px;
-                  position: relative;
-                  margin-left: 5px;
-            }  
-                     
-              
-                                         }
+.button.change-loan-details-btn {
+        font-size: 34px;
+    padding: 15px;
+    margin-left: 20px;
+       
+    font-size: 29px;
+    font-family: "Titillium Web Regular";
+}
+.bottom-text {
+    background-color: #4d4d4d;
+    color: white;
+}
+.bottom-text .small-text {
+       margin: 0 auto;
+    max-width: 780px;
+    padding: 15px;
+    font-size: 14px;
+}
+   

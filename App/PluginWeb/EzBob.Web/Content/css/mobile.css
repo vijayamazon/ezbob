@@ -1,24 +1,24 @@
 @media only screen and (min-width : 320px) and (max-width : 1000px) {
     #header {
-		width: 100%;
-		-moz-min-width: 100%;
-		-ms-min-width: 100%;
-		-o-min-width: 100%;
-		-webkit-min-width: 100%;
-		min-width: 100%;
+        width: 100%;
+        -moz-min-width: 100%;
+        -ms-min-width: 100%;
+        -o-min-width: 100%;
+        -webkit-min-width: 100%;
+        min-width: 100%;
         background-color: #fff;
-	}
+    }
 
-	.header-inner {
-		width: 100%;
-		-moz-min-width: 320px;
-		-ms-min-width: 320px;
-		-o-min-width: 320px;
-		-webkit-min-width: 320px;
-		min-width: 320px;
-	}
+    .header-inner {
+        width: 100%;
+        -moz-min-width: 320px;
+        -ms-min-width: 320px;
+        -o-min-width: 320px;
+        -webkit-min-width: 320px;
+        min-width: 320px;
+    }
 
-	ul#user-menu {
+    ul#user-menu {
         margin: 0;
         width: 180px;
         top: 0;
@@ -26,37 +26,37 @@
         line-height: inherit;
     }
 
-    ul#user-menu li {
-        margin: 0 0 0 15px; 
-    }
-    
+        ul#user-menu li {
+            margin: 0 0 0 15px;
+        }
+
     footer {
         display: none;
     }
 
     .inner {
-		-moz-min-width: 320px;
-		-ms-min-width: 320px;
-		-o-min-width: 320px;
-		-webkit-min-width: 320px;
-		min-width: 320px;
+        -moz-min-width: 320px;
+        -ms-min-width: 320px;
+        -o-min-width: 320px;
+        -webkit-min-width: 320px;
+        min-width: 320px;
         width: 100%;
         margin: 0 auto;
-	}
+    }
 
-	.broker-finish-wizard-later {
-		background: none;
-		-moz-min-width: 320px;
-		-ms-min-width: 320px;
-		-o-min-width: 320px;
-		-webkit-min-width: 320px;
-		min-width: 320px;
+    .broker-finish-wizard-later {
+        background: none;
+        -moz-min-width: 320px;
+        -ms-min-width: 320px;
+        -o-min-width: 320px;
+        -webkit-min-width: 320px;
+        min-width: 320px;
         width: 100%;
         margin: 0;
         border: none;
-	}
+    }
 
-	.broker-finish-inner {
+    .broker-finish-inner {
         border: 1px solid #E2E3E5;
         padding: 0;
     }
@@ -145,44 +145,46 @@
             width: 100%;
             display: inline-block;
         }
-    
+
     .marketplace-button-wrapper {
         width: 47%;
     }
 
-	.account-or {
-		width: 100%;
-		margin-bottom: 0;
-		margin-left: 20%;
-	}
+    .account-or {
+        width: 100%;
+        margin-bottom: 0;
+        margin-left: 20%;
+    }
 
     .hmrc-main-button {
         margin: 5px;
     }
+
     .help_window {
         width: 316px;
         padding: 0;
     }
+
     .help_image {
         width: 320px;
         height: 229px;
-     }
+    }
 
     .help_security {
         width: 320px;
         height: 25px;
     }
 
-	.help_everline_header {
-		width: 320px;
-		height: 65px;
-		margin: 0;
-	}
+    .help_everline_header {
+        width: 320px;
+        height: 65px;
+        margin: 0;
+    }
 
-	.help_everline_content {
-		margin-left: 15px;
-		margin-right: 15px;
-	}
+    .help_everline_content {
+        margin-left: 15px;
+        margin-right: 15px;
+    }
 
     .SubBank {
         width: 92%;
@@ -197,13 +199,13 @@
         min-height: 220px;
     }
 
-    .dropzone .dz-with-text {
-        width: 100%;
-        height: inherit;
-        margin: 0;
-        top: 0;
-        left: 0;
-    }
+        .dropzone .dz-with-text {
+            width: 100%;
+            height: inherit;
+            margin: 0;
+            top: 0;
+            left: 0;
+        }
 
     div.form_buttons_container {
         position: relative;
@@ -228,33 +230,33 @@
         }
 
     .wizard-steps {
-		-moz-min-width: 320px;
-		-ms-min-width: 320px;
-		-o-min-width: 320px;
-		-webkit-min-width: 320px;
-		min-width: 320px;
+        -moz-min-width: 320px;
+        -ms-min-width: 320px;
+        -o-min-width: 320px;
+        -webkit-min-width: 320px;
+        min-width: 320px;
         width: 100%;
-	}
+    }
 
-	ul.application_steps {
-		margin: 0 0 0 0;
+    ul.application_steps {
+        margin: 0 0 0 0;
         overflow: hidden;
         list-style: none;
-		-moz-min-width: 320px;
-		-ms-min-width: 320px;
-		-o-min-width: 320px;
-		-webkit-min-width: 320px;
-		min-width: 320px;
+        -moz-min-width: 320px;
+        -ms-min-width: 320px;
+        -o-min-width: 320px;
+        -webkit-min-width: 320px;
+        min-width: 320px;
         width: 100%;
-	}
+    }
 
-	ul.application_steps li .step_label {
-		width: 100%;
-		font-size: 0.8em;
-		text-align: left;
-	}
+        ul.application_steps li .step_label {
+            width: 100%;
+            font-size: 0.8em;
+            text-align: left;
+        }
 
-	.progress-line {
+    .progress-line {
         margin-left: 20px;
         top: 18px;
     }
@@ -264,18 +266,18 @@
         height: 47px;
     }
 
-    .progress-circle .inner-circle {
-        left: 3px;
-        top: 3px;
-        width: 40px;
-        height: 40px;
-    }
+        .progress-circle .inner-circle {
+            left: 3px;
+            top: 3px;
+            width: 40px;
+            height: 40px;
+        }
 
-    .progress-circle .percent {
-        vertical-align: middle;
-        line-height: 40px;
-        font-size: 25px;
-    }
+        .progress-circle .percent {
+            vertical-align: middle;
+            line-height: 40px;
+            font-size: 25px;
+        }
 
     .progress-line-current, .progress-line-complete {
         top: 21px;
@@ -289,21 +291,21 @@
         left: 0px;
     }
 
-	ul.application_steps li.last .progress-circle {
-		right: inherit ;
-	}
+    ul.application_steps li.last .progress-circle {
+        right: inherit;
+    }
 
-	ul.application_steps li.last .step_label {
-		top: 47px;
-		right: 0;
-		margin-left: 0;
-	}
-    
-    input[disabled], 
-    select[disabled], 
-    textarea[disabled], 
-    input[readonly], 
-    select[readonly], 
+    ul.application_steps li.last .step_label {
+        top: 47px;
+        right: 0;
+        margin-left: 0;
+    }
+
+    input[disabled],
+    select[disabled],
+    textarea[disabled],
+    input[readonly],
+    select[readonly],
     textarea[readonly] {
         background-color: #eee;
         border: 1px #ccc solid;
@@ -377,11 +379,10 @@
     }
 
 
-	.ui-dialog.ui-widget.ui-widget-content.ui-corner-all{
-		left: 0 !important;
-		width: auto !important;
-	}
-
+    .ui-dialog.ui-widget.ui-widget-content.ui-corner-all {
+        left: 0 !important;
+        width: auto !important;
+    }
 }
 
 @media only screen and (min-width : 320px) and (max-width : 500px) {
@@ -390,9 +391,60 @@
         color: inherit;
         width: 100%;
     }
+
     .header-info-left,
     .header-info-text,
     .header-info-right {
         background: none;
+    }
+}
+
+@media screen and (max-width: 650px) {
+    .amount-caption, .period-caption {
+        top: 6px;
+        font-size: 28px;
+        position: relative;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .amount-caption, .period-caption {
+        background-position: 5px 8px;
+        padding-left: 40px;
+        padding-top: 0;
+    }
+
+    .amount-area, .period-area {
+        padding: 10px 20px 30px;
+    }
+
+    .amount-tooltip, .period-tooltip {
+        display: block !important;
+        left: 72px;
+        float: none;
+        font-size: 50px;
+        text-align: center;
+    }
+
+    .slider-wrap {
+        display: block;
+        width: 100%;
+    }
+
+    .summary-wrap {
+        display: none;
+    }
+
+    .sliders-container {
+        padding-bottom: 14px;
+    }
+
+    .slider-wrapper {
+        padding: 15px 10px;
+    }
+
+    .calc-header {
+        margin: 20px 20px 0;
     }
 }
