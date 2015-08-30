@@ -108,7 +108,24 @@ BEGIN
 	-- Calculate requested amount
 	--
 	-----------------------------------------------------------
-
+	;WITH
+	crl_id AS (
+		SELECT
+			CustomerId,
+			MAX(Id) AS Id
+		FROM
+			CustomerRequestedLoan
+		GROUP BY
+			CustomerId
+	),
+	crl AS (
+		SELECT
+			c.CustomerId,
+			c.Amount AS Amount
+		FROM
+			crl_id d
+			INNER JOIN CustomerRequestedLoan c ON d.Id = c.Id
+	)
 	SELECT
 		'RequestedAmount' AS RowType,
 		CASE WHEN c.BrokerID IS NULL THEN c.ReferenceSource ELSE 'brk' END AS ReferenceSource,
@@ -117,7 +134,7 @@ BEGIN
 		SUM(ISNULL(crl.Amount, 0)) AS Amount
 	FROM
 		Customer c
-		INNER JOIN CustomerRequestedLoan crl ON c.Id = crl.CustomerId
+		INNER JOIN crl ON c.Id = crl.CustomerId
 	WHERE
 		c.IsTest = 0
 		AND

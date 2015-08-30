@@ -47,12 +47,30 @@ BEGIN
 		1,
 		3
 
+		
 	------------------------------------------------------------------------------
 	--
 	-- LIST OF ALL LOANS BY CUSTOMER AND SOURCE REF AND LOAN RANK (NEW/OLD)
 	--
 	------------------------------------------------------------------------------
-
+	;WITH
+	crl_id AS (
+		SELECT
+			CustomerId,
+			MAX(Id) AS Id
+		FROM
+			CustomerRequestedLoan
+		GROUP BY
+			CustomerId
+	),
+	crl AS (
+		SELECT
+			c.CustomerId,
+			c.Amount AS Amount
+		FROM
+			crl_id d
+			INNER JOIN CustomerRequestedLoan c ON d.Id = c.Id
+	)
 	SELECT
 		T.CustomerId,
 		T.LoanID,
@@ -65,7 +83,7 @@ BEGIN
 		T.SetupFee,
 		T.LoanNumber,
 		CASE
-			WHEN T.LoanNumber = 1 THEN R.Amount
+			WHEN T.LoanNumber = 1 THEN crl.Amount
 		END AS CustomerRequestedAmount,
 		C.ReferenceSource,
 		CASE
@@ -92,7 +110,7 @@ BEGIN
 		INNER JOIN Customer C ON T.CustomerId = C.Id
 		INNER JOIN LoanSource ls ON T.LoanSourceID = ls.LoanSourceID
 		LEFT JOIN CampaignSourceRef S ON S.CustomerId = T.CustomerId
-		LEFT JOIN CustomerRequestedLoan R ON R.CustomerId = T.CustomerId
+		LEFT JOIN crl on crl.CustomerId = C.Id
 	ORDER BY
 		1,
 		10
