@@ -2306,12 +2306,19 @@ hr.wizard-hr {
 }
 .sliders .close {
   color: #757575;
-  font-size: 3em;
+  font-size: 2em;
   text-decoration: none;
 }
+
 .sliders .close:active {
   color: #8dc641;
 }
+
+.sliders .cancel {
+  display: inline;
+  float: right;
+}
+
 .sliders .minus:before,
 .sliders .plus:before {
   color: #ef7f12;

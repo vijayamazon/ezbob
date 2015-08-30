@@ -17,7 +17,9 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
         return this;
     },
     events: {
-    	'click #changeLoanAmount' : 'changeLoanAmount'
+    	'click #changeLoanAmount': 'changeLoanAmount',
+    	'click .close': 'closeClicked',
+    	'click .cancel': 'closeClicked'
     },
     ui: {
     	'amount': '.amount',
@@ -26,7 +28,6 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 		'interestRate': '.interest-rate'
     },
     onRender: function () {
-	    console.log('render');
         var amountCaption = (EzBob.Config.Origin === 'everline' ? 'How much do you need?' : 'Amount');
         var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');
         var self = this;
@@ -59,7 +60,6 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
         });
         this.loanSelectionChanged();
 
-
         EzBob.UiAction.registerView(this);
         return this;
     },
@@ -74,9 +74,11 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
 	    var self = this;
 	    this.model.save().done(function () {
 		    self.trigger('requested-amount-changed');
-	    	//self.remove();
-
 	    });
+    },
+
+    closeClicked: function(){
+    	this.trigger('requested-amount-changed');
     },
 
     loanSelectionChanged: function() {
