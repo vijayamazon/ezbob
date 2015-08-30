@@ -107,66 +107,60 @@
 
         private static List<List<ulong>> GetPermutations() {
             var permutations = new List<List<ulong>>();
-            foreach (var br in new List<AutomationModels.Browser>(){AutomationModels.Browser.Firefox, AutomationModels.Browser.Chrome , AutomationModels.Browser.IE}){
-                foreach (var env in new List<AutomationModels.Environment>() {AutomationModels.Environment.Staging})
-                    foreach (var brand in new List<AutomationModels.Brand>() {AutomationModels.Brand.Everline, AutomationModels.Brand.Ezbob}) {
-                        permutations.Add(new List<ulong>() { (ulong)br, (ulong)env, (ulong)brand });
+            foreach (var br in new List<AutomationModels.Browser>() {
+                AutomationModels.Browser.Firefox,
+                AutomationModels.Browser.Chrome,
+                AutomationModels.Browser.IE
+            }) {
+                foreach (var env in new List<AutomationModels.Environment>() {
+                    AutomationModels.Environment.Staging
+                })
+                    foreach (var brand in new List<AutomationModels.Brand>() {
+                        AutomationModels.Brand.Everline,
+                        AutomationModels.Brand.Ezbob
+                    }) {
+                        permutations.Add(new List<ulong>() {
+                            (ulong)br,
+                            (ulong)env,
+                            (ulong)brand
+                        });
                     }
             }
             return permutations;
         }
 
-        public static void CreateAutomationTestPlan(AutomationModels.Label plantype) {
+        private static void BuildTestRailPlan(ulong projectId, Label label) {
+            ulong planId = TestRailManager.Instance.AddPlan(projectId, string.Format("Automation {0} plan {1}", DateTime.Now, label.ToString()), label.ToString()).Value;
+            
+            foreach (var key in TestRailManager.CasesRepository.Keys) {
+
+                var runList = new List<Run>();
+
+                foreach (var configList in GetPermutations()) {
+                    List<ulong> caseIds = TestRailManager.CasesRepository[key].Where(x => x.Labels.Contains(label))
+                        .Select(x => x.ID ?? 0)
+                        .ToList();
+
+                    if (caseIds.Count > 1) {
+                        Run run = new Run() {
+                            Name = key.ToString(),
+                            ConfigIDs = configList,
+                            CaseIDs = caseIds.ToHashSet(),
+                            IncludeAll = false
+                        };
+
+                        runList.Add(run);
+                    }
+                }
+
+                ulong planEntryId = TestRailManager.Instance.AddPlanEntry(planId, key, key.ToString(), 7, null, runList).Value;
+            }
+        }
+
+        public static void CreateAutomationTestPlan(Label label) {
             var ezbobProject = TestRailManager.Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
             if (ezbobProject != null) {
-                switch (plantype) {
-                case AutomationModels.Label.Regression: {
-                    ulong planId = TestRailManager.Instance.AddPlan(ezbobProject.ID, string.Format("Regression_{0}", DateTime.Now), "Regression plan").Value;
-                    
-                    foreach (var key in TestRailManager.CasesRepository.Keys) {
-                        
-                        var runList = new List<Run>();
-
-                        foreach (var configList in GetPermutations())
-                        {
-                            List<ulong> caseIds = TestRailManager.CasesRepository[key].Where(x => x.Labels.Contains(Label.Regression))
-                            .Select(x => x.ID ?? 0)
-                            .ToList();
-
-                            if (caseIds.Count > 1)
-                            {
-                                Run run = new Run()
-                                {
-                                    Name = key.ToString(),
-                                    ConfigIDs = configList,
-                                    CaseIDs = caseIds.ToHashSet(),
-                                    IncludeAll = false
-                                };
-
-                                runList.Add(run);
-                            }
-                        }
-
-                        ulong planEntryId = TestRailManager.Instance.AddPlanEntry(planId, key, key.ToString(), 7, null, runList).Value;
-                    }
-                }
-                    break;
-                case AutomationModels.Label.Sanity: {
-                    ulong planId = TestRailManager.Instance.AddPlan(ezbobProject.ID, string.Format("Sanity{0}", DateTime.Now), "Sanity plan")
-                        .Value;
-                    foreach (var key in TestRailManager.CasesRepository.Keys) {
-                        ulong planEntryId = TestRailManager.Instance.AddPlanEntry(planId, key)
-                            .Value;
-                        var caseIds = TestRailManager.CasesRepository[key].Where(x => x.Labels.Contains(Label.Sanity))
-                            .Select(x => x.ID ?? 0)
-                            .ToHashSet();
-                        //TestRailManager.Instance.AddRun(ezbobProject.ID, key, key.ToString(), key.ToString(), 1, 7, caseIds);
-                    }
-                }
-                    break;
-                }
-
-
+                BuildTestRailPlan(ezbobProject.ID, label);
             }
         }
     }
