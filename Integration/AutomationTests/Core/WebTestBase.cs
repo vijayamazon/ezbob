@@ -5,7 +5,6 @@
     using System.Configuration;
     using System.Diagnostics;
     using System.Linq;
-    using System.Linq.Expressions;
     using System.Reflection;
     using System.Resources;
     using NUnit.Framework;
@@ -28,7 +27,7 @@
                 {
                     isDebugMode = Convert.ToBoolean(ConfigurationManager.AppSettings["isDebugMode"]);
                 }
-                return (bool)isDebugMode;
+                return isDebugMode != null && (bool)isDebugMode;
             }
         }
 
