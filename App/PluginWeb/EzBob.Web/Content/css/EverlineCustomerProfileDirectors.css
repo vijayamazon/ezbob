@@ -26,7 +26,7 @@
 .main-page-everline .form_field_container .input-wrapper .add-company-director input[type="radio"] {
 	width: 32px;
 	height: 32px;
-	margin-left: 178px;
+	margin: 0 12px 10px 178px;
 }
 
 .main-page-everline .form_field_container .input-wrapper .add-company-director input[type="text"],
@@ -34,9 +34,49 @@
 	width: 490px;
 }
 
-.main-page-everline .form_field_container .input-wrapper .add-company-director .attardi-input > span{
+.main-page-everline .form_field_container .add-company-director .input-title {
+	width: 210px;
+	margin-right: 10px;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director div:not(.ezDateTime) > .attardi-input > span,
+.main-page-everline .form_field_container .add-company-director .fs16 {
 	width: 210px;
 	text-align: right;
 	display: inline-block;
 	margin-right: 10px;
+}
+
+.main-page-everline .form_field_container .add-company-director .fs16 {
+	vertical-align: top;
+}
+
+.main-page-everline .add-company-director .FormRadioCtrl > span > label:after {
+	content: "\A";
+	white-space: pre;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .form_field_left_side {
+	width: 200px!important;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime {
+	display: inline-block;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime > label {
+	display: inline-block;
+	margin-right: 10px;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime > label > span {
+	display: block;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .ezDateTime select {
+	float: none;
+}
+
+.main-page-everline .form_field_container .input-wrapper .add-company-director .form_buttons_container {
+	text-align: right;
 }

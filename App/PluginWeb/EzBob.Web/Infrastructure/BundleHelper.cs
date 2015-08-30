@@ -91,6 +91,7 @@
 				.Add("~/Content/css/EverlineCustomerProfileDirectors.css")
 				.Add("~/Content/css/EverlineCustomerProfileLoanDetails.css")
 				.Add("~/Content/css/EverlineCustomerProfilePaymentAccounts.css")
+				.Add("~/Content/css/EverlineCustomerProfileMyInformation.css")
 				.Add("~/Content/css/EverlineCustomerProfileMainMenu.css")
 				.Add("~/Content/css/EverlineCustomerProfileSettings.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
