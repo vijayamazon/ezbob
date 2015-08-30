@@ -34,7 +34,7 @@ namespace PaymentServices.Calculators
         }
 
         //installment всегда считается в конце дня
-        public LoanRepaymentScheduleCalculatorEvent(DateTime date, LoanScheduleItem loanScheduleItem, int priority = 0)
+		public LoanRepaymentScheduleCalculatorEvent(DateTime date, LoanScheduleItem loanScheduleItem, int priority = 0)
             : this(new DateTime(date.Year, date.Month, date.Day, 23, 59, 59), priority)
         {
             Installment = loanScheduleItem;

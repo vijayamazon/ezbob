@@ -143,7 +143,6 @@
 				history.Schedule.ForEach(s => Log.Debug(s));
 				model.Loan.Fees.ForEach(f => Log.Debug(f));
 				
-
 			} catch (NoInitialDataException noDataException) {
 				message = noDataException.Message;
 			} catch (InvalidInitialAmountException amountException) {

@@ -1,11 +1,14 @@
 ﻿namespace Ezbob.Backend.ModelsWithDB.NewLoan {
 	using System;
+	using System.Globalization;
 	using System.Runtime.Serialization;
+	using System.Text;
+	using DbConstants;
 	using Ezbob.Utils;
 	using Ezbob.Utils.dbutils;
 
 	[DataContract(IsReference = true)]
-	public class NL_LoanSchedules : AStringable {
+	public class NL_LoanSchedules  {
 		[PK(true)]
 		[DataMember]
 		public long LoanScheduleID { get; set; }
@@ -36,10 +39,10 @@
 
 
 		// additions
+		private decimal _balance;
 		private decimal _interest;
 		private decimal _feesAmount ;
 		private decimal _amountDue;
-		private decimal _balance;
 		private decimal _interestPaid ;
 		private decimal _feesPaid ;
 
@@ -83,6 +86,36 @@
 		public decimal Balance {
 			get { return this._balance; }
 			set { this._balance = value; }
+		}
+
+
+		public override string ToString() {
+			StringBuilder sb = new StringBuilder(GetType().Name + ": ");
+			Type t = typeof(NL_LoanSchedules);
+			CultureInfo cultureInfo = new CultureInfo("en-GB");
+			foreach (var prop in t.GetProperties()) {
+				var val = prop.GetValue(this);
+				if (val != null) {
+					string strVal = val.ToString();
+					if (prop.PropertyType == typeof(decimal)) {
+						decimal dval = (decimal)val;
+						switch (prop.Name) {
+						case "InterestRate":
+							strVal = dval.ToString("P4", cultureInfo);
+							break;
+						default:
+							strVal = dval.ToString("C2", cultureInfo);
+							break;
+						}
+					}
+
+					if (prop.Name == "LoanScheduleStatusID") 
+						strVal = Enum.GetName(typeof(NLScheduleStatuses), val);
+
+					sb.Append(prop.Name).Append(": ").Append(strVal) .Append("; \t");
+				}
+			}
+			return sb.ToString();
 		}
 
 	} // class NL_LoanSchedules

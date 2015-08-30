@@ -55,13 +55,6 @@
     <Compile Include="Exceptions\TooEarlyPrincipalRepaymentException.cs" />
     <Compile Include="Exceptions\WrongLoanHistoryOrderException.cs" />
     <Compile Include="Exceptions\WrongInstallmentOrderException.cs" />
-    <Compile Include="Helpers\BadPeriod.cs" />
-    <Compile Include="Helpers\InterestFreeze.cs" />
-    <Compile Include="Helpers\RepaidPrincipal.cs" />
-    <Compile Include="Helpers\Repayment.cs" />
-    <Compile Include="Helpers\Scheduled.cs" />
-    <Compile Include="Helpers\ScheduledItem.cs" />
-    <Compile Include="Helpers\ScheduledItemWithAmountDue.cs" />
     <Compile Include="Library.cs" />
     <Compile Include="OneDayLoanStatus.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -108,7 +101,9 @@
       <Name>CalculateLoanExceptions</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Helpers\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

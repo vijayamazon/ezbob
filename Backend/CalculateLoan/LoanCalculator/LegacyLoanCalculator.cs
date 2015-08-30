@@ -9,12 +9,9 @@
 
 		public override string Name { get { return "Legacy calculator"; } }
 
-		protected override decimal CalculateDailyInterestRate(
-			DateTime currentDate,
-			decimal monthlyInterestRate,
-			DateTime? periodStartDate = null,
-			DateTime? periodEndDate = null
-		) {
+		/// <exception cref="NoPeriodEndDateException">Condition. </exception>
+		public override decimal CalculateDailyInterestRate(decimal monthlyInterestRate, DateTime? periodEndDate = null) {
+
 			if (periodEndDate == null)
 				throw new NoPeriodEndDateException();
 
@@ -22,5 +19,6 @@
 
 			return monthlyInterestRate / DateTime.DaysInMonth(d.Year, d.Month);
 		} // CalculateDailyInterestRate
+
 	} // class LegacyLoanCalculator
 } // namespace

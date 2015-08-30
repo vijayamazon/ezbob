@@ -1,16 +1,6 @@
 ﻿namespace Ezbob.Backend.Strategies.NewLoan {
 	using System;
-	using System.Collections.Generic;
-	using System.Configuration;
-	using System.Linq;
-	using DbConstants;
-	using Ezbob.Backend.CalculateLoan.Models;
-	using Ezbob.Backend.Models;
-	using Ezbob.Backend.Models.NewLoan;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
-	using Ezbob.Database;
-	using EZBob.DatabaseLib.Model.Database.Loans;
-	using StructureMap;
 
 	/// <summary>
 	/// Transform Loan or NL_Model to LoanCalculatorModel

@@ -269,5 +269,10 @@
 		public static int DateDiffInWeeks(DateTime start, DateTime end) {
 			return (end.Subtract(start)).Days / 7;
 		} // DateDiffInWeeks
+
+		public static int DaysInMonth(DateTime date) {
+			return DateTime.DaysInMonth(date.Year, date.Month);
+		}
+
 	} // class MiscUtils
 } // namespace

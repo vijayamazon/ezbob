@@ -1,4 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator.Methods {
+	using System;
+	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Logger;
@@ -25,6 +27,11 @@
 		protected virtual ASafeLog Log {
 			get { return WriteToLog ? Library.Instance.Log : logStub; }
 		} // Log
+
+		
+
+
+		
 
 		private static readonly ASafeLog logStub = new SafeLog();
 	} // class AMethod

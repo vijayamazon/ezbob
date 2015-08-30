@@ -2,7 +2,6 @@
 	using System;
 	using System.Collections.Generic;
 	using System.Linq;
-	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.Models;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
@@ -52,34 +51,34 @@
 			DateTime prevTime = firstInterestDay; // firstHistory.EventTime;
 
 			//for (int i = 0; i < activeScheduleCount; i++) {
-			foreach (var scheduleItem in activeSchedule) {
+			//foreach (var scheduleItem in activeSchedule) {
 
-				//NL_LoanSchedules scheduleItem = activeSchedule[i];
+			//	//NL_LoanSchedules scheduleItem = activeSchedule[i];
 
-				// decrease "one day" loan status entries by schedule planned Principal to be paid at schedule planned Date
-				// decrease balance for time interval between schedule items ???
-				foreach (OneDayLoanStatus dailyStatus in DailyLoanStatus.Where(dd => dd.Date >= scheduleItem.PlannedDate)) {
-					if (dailyStatus.Date != scheduleItem.PlannedDate)
-						dailyStatus.OpenPrincipalForInterest -= scheduleItem.Principal;
+			//	// decrease "one day" loan status entries by schedule planned Principal to be paid at schedule planned Date
+			//	// decrease balance for time interval between schedule items ???
+			//	foreach (OneDayLoanStatus dailyStatus in DailyLoanStatus.Where(dd => dd.Date >= scheduleItem.PlannedDate)) {
+			//		if (dailyStatus.Date != scheduleItem.PlannedDate)
+			//			dailyStatus.OpenPrincipalForInterest -= scheduleItem.Principal;
 
-					dailyStatus.OpenPrincipalAfterRepayments -= scheduleItem.Principal;
-				} // for each
+			//		dailyStatus.OpenPrincipalAfterRepayments -= scheduleItem.Principal;
+			//	} // for each
 
-				DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
+			//	DateTime preScheduleEnd = prevTime; // This assignment is to prevent "access to modified closure" warning.
 
-				foreach (OneDayLoanStatus dailyStatus in DailyLoanStatus.Where(cls => preScheduleEnd < cls.Date && cls.Date <= scheduleItem.PlannedDate)) {
-					dailyStatus.DailyInterestRate = Calculator.GetDailyInterestRate(
-						dailyStatus.Date,
-						scheduleItem.InterestRate,
-						false, // considerBadPeriods
-						false, // considerFreezeInterestPeriod
-						preScheduleEnd,
-						scheduleItem.PlannedDate
-					);
-				} // for each
+			//	foreach (OneDayLoanStatus dailyStatus in DailyLoanStatus.Where(cls => preScheduleEnd < cls.Date && cls.Date <= scheduleItem.PlannedDate)) {
+			//		dailyStatus.DailyInterestRate = Calculator.GetDailyInterestRate(
+			//			dailyStatus.Date,
+			//			scheduleItem.InterestRate,
+			//			false, // considerBadPeriods
+			//			false, // considerFreezeInterestPeriod
+			//			preScheduleEnd,
+			//			scheduleItem.PlannedDate
+			//		);
+			//	} // for each
 
-				prevTime = scheduleItem.PlannedDate;
-			} // for each scheduled payment
+			//	prevTime = scheduleItem.PlannedDate;
+			//} // for each scheduled payment
 
 		
 			Log.Debug(DailyLoanStatus.ToFormattedString(""));

@@ -3,6 +3,7 @@
 	using System.Collections.Generic;
 	using System.Globalization;
 	using System.IO;
+	using System.Linq;
 	using System.Security;
 	using ConfigManager;
 	using DbConstants;
@@ -11,6 +12,7 @@
 	using Ezbob.Backend.ModelsWithDB.NewLoan;
 	using Ezbob.Backend.Strategies.NewLoan;
 	using Ezbob.Database;
+	using Ezbob.Utils;
 	using EzBob.Backend.Models;
 	using EZBob.DatabaseLib;
 	using EZBob.DatabaseLib.Model.Database;
@@ -83,34 +85,6 @@
 			//var stra = new AddLoanOptions(NL_options, null);
 			//stra.Execute();
 		}
-
-		//[Test]
-		//public void TestNL_CalculateLoanSchedule() {
-		//	NL_Model model = new NL_Model(374) {
-		//		UserID = 25852,
-		//		CalculatorImplementation = typeof(BankLikeLoanCalculator).AssemblyQualifiedName,
-		//	};
-		//	model.Loan.Histories.Add(new NL_LoanHistory() {
-		//		EventTime = DateTime.UtcNow
-		//	});
-		//	CalculateLoanSchedule strategy = new CalculateLoanSchedule(model);
-		//	strategy.Context.UserID = model.UserID;
-		//	try {
-
-		//		strategy.Execute();
-		//		NL_Model result = strategy.Result;
-
-		//		this.m_oLog.Debug(result.Error);
-		//		this.m_oLog.Debug(result.Loan);
-		//		this.m_oLog.Debug(result.Loan.LastHistory());
-		//		result.Loan.LastHistory().Schedule.ForEach(s => this.m_oLog.Debug(s));
-		//		result.Loan.Fees.ForEach(s => this.m_oLog.Debug(s));
-		//		this.m_oLog.Debug(result.APR);
-
-		//	} catch (Exception ex) {
-		//		Console.WriteLine(ex);
-		//	}
-		//}
 
 
 		[Test]
@@ -348,6 +322,70 @@
 				Console.WriteLine(e);
 			}
 		}
+
+
+		private int _daysInMonth = 0;
+		private const decimal InterestRate = 0.6m;
+
+
+		[Test]
+		public void CalcInterestRate() {
+			DateTime start = new DateTime(2015, 01, 01);
+			DateTime end = new DateTime(2015, 01, 15);
+			Console.WriteLine(GetInterestRate(start, end));
+		}
+
+		public decimal GetInterestRate(DateTime start, DateTime end) {
+			
+			//Console.WriteLine("-start: {0}, end: {1}", start, end);
+
+			var rate = 0m;
+
+			for (var start2 = start.AddMonths(1); start2 <= end; ) {
+
+				Console.WriteLine("---start: {0}, end: {1}", start, end);
+
+				if (start2.Year == end.Year && start2.Month == end.Month) {
+					start2 = end;
+				}
+
+				rate += GetInterestRateOneMonth(start, start2);
+				this._daysInMonth = MiscUtils. DaysInMonth(start2);
+				start = start2;
+				start2 = start2.AddMonths(1);
+			}
+
+			rate += GetInterestRateOneMonth(start, end);
+			return rate;
+		}
+
+		private decimal GetInterestRateOneMonth(DateTime start, DateTime end) {
+
+			TimeSpan span = (end.Date - start.Date);
+			decimal days = (decimal)Math.Floor(span.TotalDays);
+
+			Console.WriteLine("-------------start: {0}, end: {1}, days: {2}", start, end, days);
+
+			decimal nTotalInterest = 0;
+
+			List<NL_LoanInterestFreeze> activeFreezes = new List<NL_LoanInterestFreeze>();  //this._loan.InterestFreeze.Where(f => f.DeactivationDate == null).ToList();
+
+			if (activeFreezes.Count == 0) {
+				nTotalInterest = (this._daysInMonth==0) ? 0: (days * InterestRate / this._daysInMonth);
+				return nTotalInterest;
+			} 
+
+			decimal nCurrentInterestRate = InterestRate;
+
+			decimal nStdOneDayInterest = nCurrentInterestRate / this._daysInMonth;
+
+			for (DateTime oCurrent = start.Date; oCurrent < end.Date; oCurrent = oCurrent.AddDays(1)) {
+				var relevantFreeze = activeFreezes.FirstOrDefault(f => (f.StartDate >= oCurrent && oCurrent <= f.EndDate));
+				nTotalInterest += (relevantFreeze == null)?nStdOneDayInterest :(relevantFreeze.InterestRate / this._daysInMonth);
+			} 
+
+			return nTotalInterest;
+		} 
 
 
 	} // class TestNewLoan

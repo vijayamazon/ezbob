@@ -1,5 +1,6 @@
 ﻿namespace Ezbob.Backend.CalculateLoan.LoanCalculator {
 	using System;
+	using DbConstants;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Exceptions;
 	using Ezbob.Backend.CalculateLoan.LoanCalculator.Methods;
 	using Ezbob.Backend.CalculateLoan.Models.Exceptions;
@@ -134,47 +135,7 @@
 			return method.Execute();
 		} // CalculateApr
 
-		/// <summary>
-		/// Calculates interest rate for one day based on monthly interest rate.
-		/// Bad periods and interest freeze periods can be ignored (<paramref />).
-		/// </summary>
-		/// <param name="currentDate">Current date.</param>
-		/// <param name="monthlyInterestRate">Monthly interest rate.</param>
-		/// <param name="considerBadPeriods">True, to take in account bad periods,
-		/// or false, to ignore them.</param>
-		/// <param name="considerFreezeInterestPeriods">True, to take in account interest freeze periods,
-		/// or false, to ignore them.</param>
-		/// <param name="periodStartDate">Period start date (the first day of the period).</param>
-		/// <param name="periodEndDate">Period end date (the last day of the period).</param>
-		/// <returns>Daily interest rate.</returns>
-		internal decimal GetDailyInterestRate(
-			DateTime currentDate,
-			decimal monthlyInterestRate,
-			bool considerBadPeriods,
-			bool considerFreezeInterestPeriods,
-			DateTime? periodStartDate = null,
-			DateTime? periodEndDate = null
-		) {
-			// TODO: revive
-			return 0;
-			/*
-			if (considerBadPeriods && WorkingModel.BadPeriods.Any(bp => bp.Contains(currentDate)))
-				return 0;
-
-			if (considerFreezeInterestPeriods && (WorkingModel.FreezePeriods.Count > 0)) {
-				InterestFreeze interval = WorkingModel.FreezePeriods.First(i => i.Contains(currentDate));
-
-				var interest = (interval == null)
-					? CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate)
-					: interval.GetInterest(currentDate);
-
-				if (interest != null)
-					return (decimal)interest;
-			} // if
-
-			return CalculateDailyInterestRate(currentDate, monthlyInterestRate, periodStartDate, periodEndDate);
-			*/
-		} // GetDailyInterestRate
+		
 
 		protected ALoanCalculator(NL_Model model) {
 			if (model == null)
@@ -184,24 +145,30 @@
 			this.writeToLog = true;
 		} // constructor
 
+
+
+		public DateTime AddRepaymentIntervals(int periodCount, DateTime issuedTime, RepaymentIntervalTypes intervalType = RepaymentIntervalTypes.Month) {
+			return (intervalType == RepaymentIntervalTypes.Month)
+				? issuedTime.AddMonths(periodCount)
+				: issuedTime.AddDays(periodCount * (int)intervalType);
+		} // AddRepaymentIntervals
+
 		/// <summary>
-		/// Calculates interest rate for one day based on monthly interest rate.
-		/// Bad periods and interest freeze periods are ignored.
+		/// Calculates average daily interest rate (r'), based on monthlyInterestRate (r) and periodEndDate (for example, scheduleItem.PlannedDate)
 		/// </summary>
-		/// <param name="currentDate">Current date.</param>
-		/// <param name="monthlyInterestRate">Monthly interest rate.</param>
-		/// <param name="periodStartDate">Period start date (the first day of the period).</param>
-		/// <param name="periodEndDate">Period end date (the last day of the period).</param>
-		/// <returns>Daily interest rate.</returns>
-		protected abstract decimal CalculateDailyInterestRate(
-			DateTime currentDate,
-			decimal monthlyInterestRate,
-			DateTime? periodStartDate = null,
-			DateTime? periodEndDate = null
-		);
+		/// <param name="monthlyInterestRate"></param>
+		/// <param name="periodEndDate"></param>
+		/// <returns></returns>
+		public abstract decimal CalculateDailyInterestRate(decimal monthlyInterestRate, DateTime? periodEndDate = null);
+
+		// TODO
+		protected decimal CalculateDailyInterestForOpenPrincipal() {
+			return 0m;
+		} // GetDailyInterestForOpenPrincipal
 
 		protected static ASafeLog Log { get { return Library.Instance.Log; } }
 
 		private bool writeToLog ;
+
 	} // class ALoanCalculator
 } // namespace

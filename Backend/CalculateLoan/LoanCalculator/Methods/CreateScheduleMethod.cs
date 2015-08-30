@@ -50,13 +50,13 @@
 			DateTime nowTime = DateTime.UtcNow;
 			lastHistory.Schedule.Clear();
 
-			this.repaymentIntervalType = (RepaymentIntervalTypes)lastHistory.RepaymentIntervalTypeID;
-			this.issuedTime = lastHistory.EventTime;
+			RepaymentIntervalTypes intervalType = (RepaymentIntervalTypes)lastHistory.RepaymentIntervalTypeID;
 
 			int principalPayments = lastHistory.RepaymentCount - interestOnlyRepaymentCount;
 			decimal otherPayments = Math.Floor(lastHistory.Amount / principalPayments);
 			decimal firstPayment = lastHistory.Amount - otherPayments * (principalPayments - 1);
 			int discountPayments = this.loanModel.DiscountPlan.Count;
+			decimal balance = lastHistory.Amount;
 
 			// create Schedule - by initial or re-scheduling data (last history)
 			for (int i = 1; i <= lastHistory.RepaymentCount; i++) {
@@ -68,14 +68,26 @@
 				else if (i == interestOnlyRepaymentCount + 1)
 					principal = firstPayment;
 
-				lastHistory.Schedule.Add(//new NLScheduleItem() {ScheduleItem = 
+				balance -= principal;
+
+				decimal r = (i <= discountPayments) ? (lastHistory.InterestRate *= 1 + this.loanModel.DiscountPlan[i]) : lastHistory.InterestRate;
+
+				DateTime plannedDate = Calculator.AddRepaymentIntervals(i, lastHistory.EventTime, intervalType).Date;
+
+				decimal dailyInterestRate = Calculator.CalculateDailyInterestRate(r, plannedDate); // r'
+
+				decimal interest = balance * dailyInterestRate;
+
+				lastHistory.Schedule.Add(
 					new NL_LoanSchedules() {
-						InterestRate = (i <= discountPayments) ? (lastHistory.InterestRate *= 1 + this.loanModel.DiscountPlan[i]) : lastHistory.InterestRate,
-						PlannedDate = AddRepaymentIntervals(i).Date,
+						InterestRate = r,
+						PlannedDate = plannedDate,
 						Principal = principal,
 						LoanScheduleStatusID = (int)NLScheduleStatuses.StillToPay,
-						Position = i
-						//}
+						Position = i,
+						Balance = balance,
+						Interest = interest,
+						AmountDue = (interest + principal)
 					});
 			} // for
 
@@ -138,10 +150,10 @@
 				decimal firstFee = (servicingFeeAmount - iFee * (schedulesCount - 1));
 
 				foreach (NL_LoanSchedules s in lastHistory.Schedule) {
-
+					decimal feeAmount = (schedulesCount > 0) ? firstFee : iFee;
 					this.loanModel.Loan.Fees.Add(
 						new NL_LoanFees() {
-							Amount = (schedulesCount > 0) ? firstFee : iFee,
+							Amount = feeAmount,
 							AssignTime = s.PlannedDate,
 							Notes = "spread (servicing) fee",
 							LoanFeeTypeID = (int)NLFeeTypes.ServicingFee,
@@ -149,29 +161,20 @@
 							AssignedByUserID = 1
 						});
 
+					s.FeesAmount += feeAmount;
+					s.AmountDue += s.FeesAmount;
+
 					schedulesCount = 0; // reset count, because it used as firstFee/iFee flag
 				}
 			}
 		}
 
 
-		/// <summary>
-		/// Calculates date after requested number of periods have passed since loan issue date.
-		/// Periods length is determined from WorkingModel.RepaymentIntervalType.
-		/// </summary>
-		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		/// <param name="periodCount">A number of periods to add.</param>
-		/// <returns>Date after requested number of periods have been added to loan issue date.</returns>
-		private DateTime AddRepaymentIntervals(int periodCount) {
-			return this.repaymentIntervalType == RepaymentIntervalTypes.Month
-				? this.issuedTime.AddMonths(periodCount)
-				: this.issuedTime.AddDays(periodCount * (int)this.repaymentIntervalType);
-		} // AddRepaymentIntervals
 
 
 
-		private DateTime issuedTime;
-		private RepaymentIntervalTypes repaymentIntervalType;
+
+
 		private readonly NL_Model loanModel;
 
 
