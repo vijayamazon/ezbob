@@ -1,5 +1,75 @@
-﻿.main-page-everline .editYourInfoForm .personal-info fieldset {
+﻿.main-page-everline .editYourInfoForm .personal-info fieldset,
+.main-page-everline .editYourInfoForm .company-info fieldset {
 	border: 0;
+	min-width: 0;
+}
+
+.main-page-everline .editYourInfoForm .personal-info legend,
+.main-page-everline .editYourInfoForm .company-info legend {
+	margin: 0;
+	color: #8dc641;
+	text-align: left;
+	line-height: 30px;
+	font-weight: 400;
+	font-size: 22px;
+}
+
+.main-page-everline .editYourInfoForm .personal-info label,
+.main-page-everline .editYourInfoForm .company-info label {
+	text-align: right;
+	display: inline-block;
+	width: 100px;
+	padding-right: 5px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-weight: 600;
+	vertical-align: middle;
+}
+
+.main-page-everline .editYourInfoForm .personal-info div.control-group,
+.main-page-everline .editYourInfoForm .company-info div.control-group {
+	margin-bottom: 5px;
+}
+
+.main-page-everline .editYourInfoForm .personal-info div.controls,
+.main-page-everline .editYourInfoForm .company-info div.controls {
+	display: inline-block;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	outline: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.main-page-everline .editYourInfoForm .personal-info div.controls input,
+.main-page-everline .editYourInfoForm .company-info div.controls input {
+	border-radius: 0;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 2px solid #c7c7c7;
+	padding: 0 15px;
+	height: 50px;
+	background-color: #f6f6f6;
+	width: 320px;
+	font-size: 15px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
+.main-page-everline .editYourInfoForm .personal-info div.controls .addressEdit .addAddressContainer .input-title {
+	display: none;
+}
+
+.main-page-everline .editYourInfoForm .personal-info .address-selected .form_field_container .input-wrapper .form_field_left_side {
+	width: 320px!important;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 .main-page-everline .editYourInfoForm .form_buttons_container .ev-btn-org {
