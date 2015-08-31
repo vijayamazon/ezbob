@@ -24,11 +24,19 @@
 		} // Next
 
 		protected override bool IsValueEqualTo(AIntervalEdge<DateTime> other) {
-			return Value.CompareTo(other.Value) == 0;
+			return IsValueEqualTo(other.Value);
+		} // IsValueEqualTo
+
+		protected override bool IsValueEqualTo(DateTime other) {
+			return Value.CompareTo(other) == 0;
 		} // IsValueEqualTo
 
 		protected override bool IsValueLessThan(AIntervalEdge<DateTime> other) {
-			return Value.CompareTo(other.Value) < 0;
+			return IsValueLessThan(other.Value);
+		} // IsValueLessThan
+
+		protected override bool IsValueLessThan(DateTime other) {
+			return Value.CompareTo(other) < 0;
 		} // IsValueLessThan
 
 		protected override string ValueToString() {

@@ -2,7 +2,77 @@
 	using System;
 	using System.Globalization;
 
-	public abstract class AIntervalEdge<TFinite> : IComparable<AIntervalEdge<TFinite>>, IOrdinal<AIntervalEdge<TFinite>> where TFinite: IComparable<TFinite> {
+	public abstract class AIntervalEdge<TFinite> :
+		IComparable<AIntervalEdge<TFinite>>,
+		IOrdinal<AIntervalEdge<TFinite>>
+		where TFinite: IComparable<TFinite>
+	{
+		public static bool operator ==(AIntervalEdge<TFinite> a, TFinite b) {
+			if (ReferenceEquals(a, b))
+				return true;
+
+			if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+				return false;
+
+			return a.IsFinite && a.IsValueEqualTo(b);
+		} // operator ==
+
+		public static bool operator !=(AIntervalEdge<TFinite> a, TFinite b) {
+			return !(a == b);
+		} // operator !=
+
+		public static bool operator <(AIntervalEdge<TFinite> a, TFinite b) {
+			if (ReferenceEquals(a, b))
+				return false;
+
+			if (ReferenceEquals(a, null) || ReferenceEquals(b, null))
+				return false;
+
+			if (a.IsFinite)
+				return a.IsValueLessThan(b);
+
+			if (a.Type == EdgeType.NegativeInfinity)
+				return true;
+
+			return false;
+		} // operator <
+
+		public static bool operator <=(AIntervalEdge<TFinite> a, TFinite b) {
+			return (a == b) || (a < b);
+		} // operator <=
+
+		public static bool operator >=(AIntervalEdge<TFinite> a, TFinite b) {
+			return !(a < b);
+		} // operator >=
+
+		public static bool operator >(AIntervalEdge<TFinite> a, TFinite b) {
+			return !(a <= b);
+		} // operator >
+
+		public static bool operator ==(TFinite a, AIntervalEdge<TFinite> b) {
+			return b == a;
+		} // operator ==
+
+		public static bool operator !=(TFinite a, AIntervalEdge<TFinite> b) {
+			return !(a == b);
+		} // operator !=
+
+		public static bool operator <(TFinite a, AIntervalEdge<TFinite> b) {
+			return b > a;
+		} // operator <
+
+		public static bool operator <=(TFinite a, AIntervalEdge<TFinite> b) {
+			return (a == b) || (a < b);
+		} // operator <=
+
+		public static bool operator >=(TFinite a, AIntervalEdge<TFinite> b) {
+			return !(a < b);
+		} // operator >=
+
+		public static bool operator >(TFinite a, AIntervalEdge<TFinite> b) {
+			return !(a <= b);
+		} // operator >
+
 		public static bool operator ==(AIntervalEdge<TFinite> a, AIntervalEdge<TFinite> b) {
 			if (ReferenceEquals(a, b))
 				return true;
@@ -146,8 +216,10 @@
 		} // constructor
 
 		protected abstract bool IsValueEqualTo(AIntervalEdge<TFinite> other);
+		protected abstract bool IsValueEqualTo(TFinite other);
 
 		protected abstract bool IsValueLessThan(AIntervalEdge<TFinite> other);
+		protected abstract bool IsValueLessThan(TFinite other);
 
 		protected virtual string InfinityToString(bool bPositive, CultureInfo oCultureInfo) {
 			return (bPositive ? "+" : "-") + "inf";
