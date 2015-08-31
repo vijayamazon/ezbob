@@ -1594,9 +1594,12 @@ td.account-logo {
     -webkit-box-sizing: border-box;
     box-sizing: border-box;
     float: left;
-    margin-right: 17px;
-    width: 280px !important;
     overflow: hidden;
+}
+
+.BankContainer .marketplace-button-profile{
+	width: 31%;
+    margin-right: 2%;
 }
 
 .marketplace-group.first .marketplace-button-more-first {

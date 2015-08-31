@@ -43,3 +43,7 @@ body header + .inner {
 .wizard-steps {
 	margin-bottom: -60px;
 }
+
+.main-page.main-page-everline .PayPointHeader{
+	margin-top: 0;
+}
