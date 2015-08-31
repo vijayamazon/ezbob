@@ -65,7 +65,7 @@
 
 
 
-			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate());
+			PayPointFacade payPointFacade = new PayPointFacade(customer.MinOpenLoanDate(), customer.CustomerOrigin.Name);
 			if (customer.IsLoanTypeSelectionAllowed == 1) {
 				var oDBHelper = ObjectFactory.GetInstance<IDatabaseDataHelper>() as DatabaseDataHelper;
 				cr.RepaymentPeriod = repaymentPeriod;
@@ -163,7 +163,7 @@
 					return RedirectToAction("Error", "Paypoint", new { Area = "Customer" });
 				}
 
-				PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate());
+				PayPointFacade payPointFacade = new PayPointFacade(cus.MinOpenLoanDate(), cus.CustomerOrigin.Name);
 				if (!payPointFacade.CheckHash(hash, Request.Url)) {
 					_log.ErrorFormat("Paypoint callback is not authenticated for user {0}", _context.Customer.Id);
 					// continue to log paypoint transaction also for NL

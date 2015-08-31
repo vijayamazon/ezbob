@@ -15,7 +15,7 @@
 
 	
 
-	<base href="https://alibaba.ezbob.com" />
+	<base href="https://app.alibaba.com" />
 
 	<script type="text/javascript">
 		var EzBob = EzBob || {};
@@ -75,7 +75,7 @@
 
 	
 
-	<input name="__RequestVerificationToken" type="hidden" value="Gx2-YdX_t0U_O58eMyNno2ZgysmqxtWFeqgeYXKzdNE_gRfyY1FoqUqzGNWvoOqVlSk8DbTLW-WA3u5AB89D3uyCngOC8AWazc1nI3ecO6hIFjgZs6z8a0gP3c9BZR1aAhzkVbBE4nT81kyUjExtQ4s_nmzsZYTuOKeXEWH1HxQ1" />
+	<input name="__RequestVerificationToken" type="hidden" value="wdUPMunP7zEvMzxlcR_8lNZa7kvIntrnp-GVRKXqIpclI7guwdsFhyAtLxXVRMFRxNFHB6UXmyKvjN0OMXqWOrcjQULM6L6NqBL0XzpZLI17eBawDoDPZEQ9gJTNRbtoCrmqImB-DaREVTabGBldiEBh5TGOFC3MjJR5_2C7PMA1" />
 
 	<div id="wrapper">
 
@@ -293,9 +293,9 @@
 	</div>
 
 
-								<div id="amount-group" class="control-group" style="display: none">
-									<label class="control-label" for="amount">Amount</label>
-									<div class="controls">
+								<div id="amount-group" class="control-group form_field_container" style="display: none">
+									<label class="input-title control-label" for="amount">Amount</label>
+									<div class="controls input-wrapper attardi-input">
 										<label class="control-label" id="amount">${amount} ${currency:=GBP}</label>
 									</div>
 								</div>
@@ -553,6 +553,7 @@
 			}
 
 			var origin = decodeURIComponent(getCallbackValue('origin') || "ezbob");
+			EzBob.Config.Origin = origin;
 			var isTest = getOptionsValue().indexOf('test_status=true') != -1;
 
 			//set user email in top bar
@@ -586,6 +587,22 @@
 
 				return false;
 			});
+			
+			var validator = $('.paypont-form').validate({
+				rules: {
+					customer: { required: true, minlength: 2 },
+					card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
+					cv2: { required: true, minlength: 3 },
+					expiry: { required: true, validateCardMinExpiryDate: cardMinExpiryDate, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
+					card_type: { required: true }
+				},
+				messages: {
+					card_no: { digits: "Please enter a valid credit card number" }
+				},
+				errorPlacement: EzBob.Validation.errorPlacement,
+				unhighlight: EzBob.Validation.unhighlightFS,
+				highlight: EzBob.Validation.highlightFS
+			});
 
 			$('input[type="text"]').change(function (e) {
 				return inputChanged(validator);
@@ -607,24 +624,6 @@
 			});
 			$('select').click(function (e) {
 				return inputChanged(validator);
-			});
-
-			var validator = $('.paypont-form').validate({
-				rules: {
-					customer: { required: true, minlength: 2 },
-					card_no: { required: true, digits: true, maxlength: 16, minlength: 16 },
-					cv2: { required: true, minlength: 3 },
-					expiry: { required: true, validateCardMinExpiryDate: cardMinExpiryDate, regex: "^(0[1-9]|1[012])/\([0-9]{2})" },
-					card_type: { required: true }
-				},
-				messages: {
-					card_no: { digits: "Please enter a valid credit card number" }
-				},
-				errorPlacement: EzBob.Validation.errorPlacement,
-				unhighlight:
-                    EzBob.Validation.unhighlightFS,
-				highlight:
-                    EzBob.Validation.highlightFS
 			});
 
 			$.validator.addMethod(

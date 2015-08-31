@@ -228,7 +228,7 @@
 
 		public RedirectResult AddPayPoint() {
 			var oCustomer = m_oContext.Customer;
-            PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate());
+			PayPointFacade payPointFacade = new PayPointFacade(oCustomer.MinOpenLoanDate(), oCustomer.CustomerOrigin.Name);
             int payPointCardExpiryMonths = payPointFacade.PayPointAccount.CardExpiryMonths;
 			DateTime cardMinExpiryDate = DateTime.UtcNow.AddMonths(payPointCardExpiryMonths);
 			var callback = Url.Action("PayPointCallback", "Profile",
@@ -316,7 +316,7 @@
 
 			var cust = m_oContext.Customer;
 
-			PayPointFacade payPointFacade = new PayPointFacade(cust.MinOpenLoanDate());
+			PayPointFacade payPointFacade = new PayPointFacade(cust.MinOpenLoanDate(), cust.CustomerOrigin.Name);
 
 			if (!payPointFacade.CheckHash(hash, Request.Url)) {
 				ms_oLog.Debug("Failed to add debit card: failed to CheckHash(\n\t hash: '{0}',\n\t Url: '{1}'\n).", hash, Request.Url);

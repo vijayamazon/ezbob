@@ -1,8 +1,9 @@
 ﻿@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @model dynamic
 
 @{
-	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	var origin = ViewBag.CustomerOrigin == null ? CustomerOriginEnum.ezbob : ViewBag.CustomerOrigin.GetOrigin();
 }
 
 <div id="address-popup">
