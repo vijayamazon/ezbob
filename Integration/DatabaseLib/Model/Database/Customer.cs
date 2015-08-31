@@ -119,6 +119,7 @@
 		public decimal? OverallTurnOver{ get; set; }
 		public string IndustryType { get; set; }
 		public string VatReporting { get; set; }
+		public bool VatRegistered { get; set; }
 		public bool PartBusinessOnline { get; set; }
 		public bool DirectorCheck { get; set; }
 

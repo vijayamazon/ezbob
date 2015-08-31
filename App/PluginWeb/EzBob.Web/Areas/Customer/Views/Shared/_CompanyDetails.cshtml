@@ -137,21 +137,32 @@
 						statusIcon: true,
 						uiEventControlID: "personal-info:total_monthly_salary"),
 						origin: origin)
-    
-	
-	@EzForm.SelectWizard(new EzSelectModel("VatReporting", "Who files with the HMRC for your company?",
-					@Html.EnumToOptionsTuple(
-						VatReporting.VatOnlineMySelf,
-						VatReporting.AccountantOnline,
-						VatReporting.CompanyEmployee,
-						VatReporting.NotVatRegistered,
-						VatReporting.Other
-					),
-					cls: "form_field",
-					isRequired: true,
-					statusIcon: true,
-					uiEventControlID: "personal-info:vat-reporting"),
-					origin: origin)
+    				 
+            @EzForm.ClickableInputWizard(new EzClickInputModel(
+						name: "VatRegistered",
+						caption: "Are you VAT registered? ",
+						errorImgClass: "field_status required personal-details-gender-image",
+						inputWrapperClass: "FormRadioCtrl",
+						isRequired: true,
+						statusIcon: true,
+						inputButtons: new List<EzInputBuilder> { 
+							new EzInputBuilder("FormRadioCtrl_Yes", "Yes",
+								value:"true",
+								type:"radio",
+								cls: "required",
+								isRequired: true,
+								statusIcon: true,
+								name: "VatRegistered",
+								uiEventControlID: "personal-info:vat-registered" ), 
+							new EzInputBuilder("FormRadioCtrl_No", "No",
+								value: "false",
+								type: "radio",
+								cls: "gender-margin",
+								isRequired: true,
+								statusIcon: true,
+								name: "VatRegistered",
+								uiEventControlID: "personal-info:vat-registered") }), 
+						origin: origin)
 	
     <div class="control-group form_read_and_accept">
         <div class="controls">
@@ -206,10 +217,11 @@
 
 <script id="limitedinfo-template" type="text/template">
 	
-	@EzForm.InputTextWizard(new EzInputBuilder("LimitedCompanyNumber", "Company registration number",
+	@EzForm.InputTextWizard(new EzInputBuilder("LimitedCompanyNumber", "Business registration number",
 						cls: "form_field",
 						isRequired: true,
 						statusIcon: true,
+						maxLength: 8,
 						uiEventControlID: "personal-info:limited_company_number"),
 						origin: origin)
 

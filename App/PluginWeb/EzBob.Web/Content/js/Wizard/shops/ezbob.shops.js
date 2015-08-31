@@ -7,7 +7,15 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 	isOffline: function() { return true; /*todo  remove*/ },
 
-	isProfile: function() { return this.fromCustomer('IsProfile'); },
+	isProfile: function () { return this.fromCustomer('IsProfile'); },
+
+	isVatRegistered: function () {
+		var companyInfo = this.fromCustomer('CompanyInfo');
+		if (!companyInfo) {
+			return false;
+		}
+		return companyInfo.VatRegistered;
+	},
 
 	isWhiteLabel: function() {return this.fromCustomer('IsWhiteLabel'); },
 	
@@ -275,6 +283,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 		relevantMpGroups = _.sortBy(relevantMpGroups, function(g) { return g[sPriorityField]; });
 
+		var noVat = !this.isProfile() && !this.isVatRegistered();
 		for (i = 0; i < relevantMpGroups.length; i++) {
 			grp = relevantMpGroups[i];
 
@@ -283,11 +292,23 @@ EzBob.StoreInfoView = EzBob.View.extend({
 			if (i>2)
 				sGroupClass = 'following';
 
-			var grpui = this.storeList.find('.marketplace-group-template').clone().removeClass('marketplace-group-template hide').addClass(sGroupClass).appendTo(accountsList);
+			if(noVat && grp.Name == 'VAT') {
+				continue;
+			}
+
+			var grpui = this.storeList.find('.marketplace-group-template')
+				.clone()
+				.removeClass('marketplace-group-template hide')
+				.addClass(sGroupClass)
+				.addClass('marketplace-group-' + grp.Name)
+				.appendTo(accountsList);
 
 			grpui.find('.group-title').text(grp.DisplayName);
 			grpui.find('.group-description').html(grp.Description);
-			
+
+			if(noVat && grp.Name == 'Bank') {
+				grpui.find('.group-description').html('Securely link your business bank account or upload the last 12 months of bank statements.');
+			}
 			this.mpGroups[grp.Id].ui = grpui;
 		} // for
 
@@ -298,6 +319,9 @@ EzBob.StoreInfoView = EzBob.View.extend({
 
 			if (!shop.active)
 				continue;
+			if (noVat && (shop.button.shopClass == 'HMRC' || shop.button.shopClass == "HMRCUpload")) {
+				continue;
+			}
 
 			var oTarget = this.mpGroups[shop.groupid] && this.mpGroups[shop.groupid].ui ? this.mpGroups[shop.groupid].ui : accountsList;
 
@@ -424,7 +448,7 @@ EzBob.StoreInfoView = EzBob.View.extend({
 		return moment.utc().diff(moment.utc(this.quickOffer.ExpirationDate)) < 0;
 	}, // shouldShowQuickOffer
 
-	showOrRemove: function() {
+	showOrRemove: function () {
 		var sRemove, sShow;
 
 		var isProfile = this.isProfile();

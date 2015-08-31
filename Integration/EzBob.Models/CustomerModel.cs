@@ -33,6 +33,7 @@ namespace EzBob.Models {
 
 		public TypeOfBusiness TypeOfBusiness { get; set; }
 		public VatReporting? VatReporting { get; set; }
+		public bool VatRegistered { get; set; }
 		public string YearsInCompany { get; set; }
 		public static CompanyInfoMap FromCompany(Company company) {
 			if (company == null)
@@ -52,6 +53,7 @@ namespace EzBob.Models {
 				VatReporting = company.VatReporting,
 				Directors = company.Directors.Select(d => DirectorModel.FromDirector(d, new List<Director>(company.Directors))).ToList(),
 				ExperianRefNum = company.ExperianRefNum,
+				VatRegistered = company.VatRegistered
 			};
 		} // From Company
 	} // class CompanyInfoMap

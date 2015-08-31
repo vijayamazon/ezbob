@@ -191,7 +191,7 @@
 			new Transactional(() => {
 				sErrorMsg = ProcessCompanyInfoTemporary(
 					nBusinessType,
-					companyAdditionalInfo.VatReporting,
+					companyAdditionalInfo.VatRegistered,
 					limitedInfo,
 					nonLimitedInfo,
 					companyAdditionalInfo,
@@ -594,7 +594,7 @@
 
 		private string ProcessCompanyInfoTemporary(
 			TypeOfBusiness businessType,
-			string vat,
+			bool vatRegistered,
 			LimitedInfo limitedInfo,
 			NonLimitedInfo nonLimitedInfo,
 			CompanyAdditionalInfo companyAdditionalInfo,
@@ -677,7 +677,7 @@
 					}
 				};
 
-				companyData.VatReporting = vat != null ? (VatReporting?)Enum.Parse(typeof(VatReporting), vat) : null;
+				companyData.VatRegistered = vatRegistered;
 
 				string sErrorMsg = ProcessCompanyInfo(companyData, companyAddress, experianAddress, companyDirectors, companyEmployeeCount, experianInfo, customer);
 
@@ -719,6 +719,7 @@
 				RentMonthLeft = companyData.RentMonthLeft,
 				CapitalExpenditure = companyData.CapitalExpenditure,
 				VatReporting = companyData.VatReporting,
+				VatRegistered = companyData.VatRegistered
 			};
 
 			customer.Company = company;

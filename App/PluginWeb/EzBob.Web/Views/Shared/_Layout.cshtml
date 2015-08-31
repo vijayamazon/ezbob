@@ -57,6 +57,7 @@
         
 	} else if (ViewBag.CustomerOrigin.GetOrigin() == CustomerOriginEnum.alibaba) {
 		@BundleHelper.RenderAlibabaCss()
+		@BundleHelper.RenderEzbobCustomerCss()
 		@BundleHelper.RenderEzbobCss()
 	} else {
         @BundleHelper.RenderEzbobCustomerCss()
