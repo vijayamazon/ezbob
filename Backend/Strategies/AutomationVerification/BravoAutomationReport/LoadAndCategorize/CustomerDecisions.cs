@@ -62,6 +62,8 @@
 				this.cd = cd;
 			} // constructor
 
+			public bool Exists { get { return this.cd.AutoDecisions.Count > 0; } }
+
 			public AutoDecision First { get { return this.cd.AutoDecisions[0]; } }
 
 			public AutoDecision Current { get { return this.cd.CurrentAutoDecision; } }
