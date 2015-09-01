@@ -4,6 +4,16 @@
 	max-width: 100%;
 }
 
+.main-page-everline .add-company-director-container .form_field_container .input-wrapper {
+	width: 960px;
+	min-height: 50px;
+	display: block;
+	padding: 0;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+
 .main-page-everline .add-director.ev-btn-org {
 	float: right;
 }
@@ -80,3 +90,4 @@
 .main-page-everline .form_field_container .input-wrapper .add-company-director .form_buttons_container {
 	text-align: right;
 }
+

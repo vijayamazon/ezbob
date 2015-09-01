@@ -58,7 +58,7 @@ EzBob.Profile.CompanyDirectorsView = Backbone.Marionette.ItemView.extend({
 				name: director.Name + ' ' + director.Middle + ' ' + director.Surname,
 				email: director.Email,
 				phone: director.Phone,
-				birthDate: director.DateOfBirth,
+				birthDate: EzBob.DMYtoUK(director.DateOfBirth),
 				address: (bHasAddress ? director.DirectorAddress[0].FormattedAddress : ''),
 				isShareholder: director.IsShareholder,
 				isDirector: director.IsDirector,

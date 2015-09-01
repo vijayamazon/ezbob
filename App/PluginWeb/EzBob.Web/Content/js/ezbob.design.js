@@ -1003,6 +1003,30 @@ EzBob.formatDateUK = function(date) {
 	return oMoment.format("D MMM YYYY");
 };
 
+EzBob.DMYtoUK = function(date) {
+	if (!date)
+		return '';
+
+	var re = /^(\d+)\/(\d+)\/(\d+)$/;
+
+	var ary = re.exec(date);
+
+	if (!ary)
+		return date;
+
+	var obj = [
+		parseInt(ary[3], 10),
+		parseInt(ary[2], 10),
+		parseInt(ary[1], 10),
+	];
+
+	var oMoment = moment.utc(obj);
+
+	var result = oMoment.format('D MMM YYYY');
+
+	return result;
+}; // EzBob.formatDateUK
+
 //formats date for user from utc asp.net date
 EzBob.formatDate2 = function(date) {
 	if (!date) return "";

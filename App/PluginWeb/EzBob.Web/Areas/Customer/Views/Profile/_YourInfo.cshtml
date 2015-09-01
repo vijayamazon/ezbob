@@ -22,35 +22,40 @@
 	<div class="add-director-container" style="display: none;"></div>
 </script>
 
+@*
+	******************************************************************************
+	*
+	* In the template below DO NOT insert a line break between a <DIV that
+	* follows </LABEL> because that inserts redundant white space in parsed HTML.
+	*
+	******************************************************************************
+*@
+
 <script id="personal-info-template" type="text/template">
 	<fieldset>
 		<legend>Personal Information</legend>
 
 		<div class="control-group">
-			<label class="control-label">Name</label>
-			<div class="controls">
+			<label class="control-label">Name</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.FirstName%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:first-name" />
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Middle</label>
-			<div class="controls">
+			<label class="control-label">Middle</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.MiddleInitial%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:middle-name" />
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Surname</label>
-			<div class="controls">
+			<label class="control-label">Surname</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.Surname%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:last-name" />
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Date of birth</label>
-			<div class="controls">
-				<input type="text" value="<%-EzBob.formatDate(CustomerPersonalInfo.DateOfBirth)%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:birthdate" />
+			<label class="control-label">Date of birth</label><div class="controls">
+				<input type="text" value="<%-EzBob.formatDateUK(CustomerPersonalInfo.DateOfBirth)%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:birthdate" />
 			</div>
 		</div>
 
@@ -61,15 +66,13 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Time at address</label>
-			<div class="controls">
+			<label class="control-label">Time at address</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.TimeAtAddress%>  years" class="form_field" readonly="readonly" ui-event-control-id="my-information:time-at-address" />
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Property status</label>
-			<div class="controls">
+			<label class="control-label">Property status</label><div class="controls">
 				<input type="text" value="<%-PropertyStatus.Description%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:residential-status" />
 			</div>
 		</div>
@@ -81,30 +84,26 @@
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Daytime phone #</label>
-			<div class="controls">
+			<label class="control-label">Daytime phone #</label><div class="controls">
 				<input class="personEditInput phonenumber form_field" id="DayTimePhone" name="DayTimePhone" type="text" value="<%-CustomerPersonalInfo.DaytimePhone%>" readonly="readonly" ui-event-control-id="my-information:daytime-phone" />
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Mobile phone #</label>
-			<div class="controls">
+			<label class="control-label">Mobile phone #</label><div class="controls">
 				<input class="personEditInput phonenumber form_field" id="MobilePhone" name="MobilePhone" type="text" value="<%-CustomerPersonalInfo.MobilePhone%>" readonly="readonly" ui-event-control-id="my-information:mobile-phone" />
 			</div>
 		</div>
 
 		<div class="control-group">
-			<label class="control-label">Type of business</label>
-			<div class="controls">
+			<label class="control-label">Type of business</label><div class="controls">
 				<input type="text" value="<%-CustomerPersonalInfo.TypeOfBusinessName%>" class="form_field" readonly="readonly" ui-event-control-id="my-information:type-of-business" />
 			</div>
 		</div>
 
 		<% if (CustomerPersonalInfo.OverallTurnOver != null) {
 			%><div class="control-group">
-				<label for="OverallTurnOver" class="control-label">Total <b>estimated</b> sales</label>
-				<div class="controls cashControlls">
+				<label for="OverallTurnOver" class="control-label">Total <b>estimated</b> sales</label><div class="controls cashControlls">
 					<input id="OverallTurnOver" readonly="readonly" name="OverallTurnOver" type="text" value="<%-CustomerPersonalInfo.OverallTurnOver%>" class="cashInput personEditInput form_field" ui-event-control-id="my-information:overall-trunover" />
 				</div>
 			</div><%
@@ -112,16 +111,14 @@
 
 		if (CustomerPersonalInfo.WebSiteTurnOver != null) {
 			%><div class="control-group">
-				<label for="WebSiteTurnOver" class="control-label">Online estimated sales</label>
-				<div class="controls cashControlls">
+				<label for="WebSiteTurnOver" class="control-label">Online estimated sales</label><div class="controls cashControlls">
 					<input id="WebSiteTurnOver" readonly="readonly" name="WebSiteTurnOver" type="text" value="<%-CustomerPersonalInfo.WebSiteTurnOver%>" class="cashInput personEditInput form_field" ui-event-control-id="my-information:website-turnover" />
 				</div>
 			</div><%
 		} %>
 		@if (false /* DBConfigurationValues.Instance.DisplayEarnedPoints */) {
 			<div class="control-group">
-				<label class="control-label">Earned points</label>
-				<div class="controls">
+				<label class="control-label">Earned points</label><div class="controls">
 					<input type="text" value="<%- LoyaltyPoints %>" readonly="readonly" class="form_field" ui-event-control-id="my-information:loyalty-points" />
 				</div>
 			</div>
@@ -225,10 +222,10 @@
 		</div>
 		<div id="colapse<%-Id%>" class="accordion-body collapse">
 			<div class="accordion-inner">
-				<p>Name: <b><%-Name%> <%-Middle%> <%-Surname%></b></p>
-				<p>Date Of birth: <b><%-DateOfBirth%></b></p>
-				<p>Email: <b><%- Email %></b></p>
-				<p>Phone: <b><%- Phone %></b></p>
+				<p><span class="director-field-name">Name</span><b><%-Name%> <%-Middle%> <%-Surname%></b></p>
+				<p><span class="director-field-name">Date Of birth</span><b><%-EzBob.DMYtoUK(DateOfBirth)%></b></p>
+				<p><span class="director-field-name">Email</span><b><%- Email %></b></p>
+				<p><span class="director-field-name">Phone</span><b><%- Phone %></b></p>
 				<div class="addressEdit">
 					@EzForm.AddressInput(this, "DirectorAddress", "Address", "director")
 				</div>
