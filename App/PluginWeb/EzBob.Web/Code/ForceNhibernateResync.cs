@@ -1,4 +1,5 @@
 ﻿namespace EzBob.Web.Code {
+	using System;
 	using EZBob.DatabaseLib.Model.Database;
 	using EZBob.DatabaseLib.Model.Database.Repository;
 	using EZBob.DatabaseLib.Repository.Turnover;
@@ -14,12 +15,23 @@
 			if (customer == null)
 				return;
 
-			session.Evict(customer);
+			try {
+				session.Evict(customer);
+			} catch (Exception) {
+				// Silently ignore
+			} // try
 
 			MarketplaceTurnoverRepository mpTurnoverRep = ObjectFactory.GetInstance<MarketplaceTurnoverRepository>();
-			foreach (MarketplaceTurnover mpt in mpTurnoverRep.GetByCustomerId(customerID))
-				if (mpt != null)
-					session.Evict(mpt);
+
+			foreach (MarketplaceTurnover mpt in mpTurnoverRep.GetByCustomerId(customerID)) {
+				if (mpt != null) {
+					try {
+						session.Evict(mpt);
+					} catch (Exception) {
+						// Silently ignore
+					} // try
+				} // if
+			} // for
 		} // ForCustomer
 	} // class ForceNhibernateResync
 } // namespace

@@ -93,7 +93,7 @@
 
 			this.cashRequestID = sr["CashRequestID"];
 
-			ForceNhibernateResync.Do(this.customerID);
+			ForceNhibernateResync.ForCustomer(this.customerID);
 
 			Log.Debug(
 				"Executing silent reject for customer '{0}' using cash request '{1}'...",
