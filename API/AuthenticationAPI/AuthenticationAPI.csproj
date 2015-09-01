@@ -81,7 +81,7 @@
     <Compile Include="Test_AuthorizedAPI.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\TeamCity.AuthenticationAPI.pubxml" />
+    <None Include="Properties\PublishProfiles\TeamCityAuthenticationAPI.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
