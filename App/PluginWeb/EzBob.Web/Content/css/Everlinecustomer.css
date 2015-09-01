@@ -427,6 +427,7 @@ a.clean-btn:focus,
 	font-size: 18px;
     font-weight: 600;
     -ms-opacity: 1;
+    line-height:43px;
     opacity: 1;
     cursor: pointer;
     background-color: transparent;
@@ -1429,6 +1430,7 @@ hr.wizard-hr {
 .ui-dialog {
     background: #f1f0f0;
     border:none;
+    padding: 30px;
 }
 /*#address-popup{
 	overflow-y: auto;
@@ -1438,14 +1440,40 @@ hr.wizard-hr {
 .address-dialog-widget {
     overflow: auto !important;
 }
-
-.box-title.address-dialog-titlebar {
+.ui-dialog .ui-dialog-content {
+       padding-right: 0;
+}
+.ui-dialog-titlebar  {
     border:none;
         margin-bottom: 15px;
   font-size:15px;
-    padding-top: 30px;
-    padding-left: 30px;
+  
 }
+.ui-dialog .ui-dialog-titlebar {
+    border:none;
+}
+ .consent-dialog {
+     position:relative;
+    overflow-y: auto;
+    height: 390px;
+        background: white;
+  
+   padding:0 35px;
+}
+ .consent-dialog-wrapper {
+     border: 1px solid black;
+     position: relative;
+ }
+ .consent-dialog-wrapper:after {
+     background: white  url('../css/images/terms-corner.png');
+     width:25px;
+     height:23px;
+     position: absolute;
+         left: -1px;
+    top: -1px;
+     content: "";
+ }
+  
 .address-dialog-widget {
     padding:0 40px;
 }
@@ -1462,21 +1490,20 @@ ul.matchingAddressList {
 ul.matchingAddressList:focus {
     outline:none;
 }
-ul.matchingAddressList li {
+    ul.matchingAddressList li {
         font-size: 15px;
-            font-family: 'Open Sans', sans-serif;
-    color: #3a3a3a;
-    list-style: none;
-    padding: 10px 20px;
-  font-size: 2em;
-
+        font-family: 'Open Sans', sans-serif;
+        color: #3a3a3a;
+        list-style: none;
+        padding: 10px 20px;
+    }
 
 .sliders .cancel {
   display: inline;
   float: right;
 }
 
-}
+
 ul.matchingAddressList li:nth-child(odd) {
     background:white;
 }
@@ -1501,4 +1528,7 @@ height:40px !important;
 }
 .ui-dialog-buttonset .clean-btn {
     float:right;
+}
+.consent-modal-footer {
+        float: left;
 }

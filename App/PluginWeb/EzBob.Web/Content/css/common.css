@@ -1415,7 +1415,12 @@ DIV#upload-files-form {
 .upload-files-dialog .ui-dialog-titlebar-close {
     display: none;
 }
-
+.ui-dialog .ui-dialog-titlebar {
+    height:50px;
+}
+.ui-dialog .ui-dialog-content {
+    padding:0;
+}
 div.form_buttons_container {
     position: relative; 
     height: 38px;
@@ -2074,6 +2079,7 @@ ul.storelist li span {
 /*Post code */
 .address-dialog-widget {
     overflow: auto !important;
+    margin-top:28px;
 }
 
 .address-dialog-titlebar {
@@ -3402,6 +3408,7 @@ iframe[src^='https://finimpact'] {
      margin: 0 auto;
      margin-top: 15px;
      padding: 0 5px;
+         max-width: 780px;
  }
  .amount-area {
     min-height: 58px;
@@ -3598,21 +3605,50 @@ background: url('../img/calc-handle-up.png');
     margin: 0 2px;
   }
 .button.change-loan-details-btn {
-        font-size: 34px;
-    padding: 15px;
+     padding: 30px;
     margin-left: 20px;
-       
     font-size: 29px;
     font-family: "Titillium Web Regular";
+    line-height: 0px;
 }
 .bottom-text {
     background-color: #4d4d4d;
     color: white;
 }
 .bottom-text .small-text {
-       margin: 0 auto;
-    max-width: 780px;
+    display:inline-block;
     padding: 15px;
     font-size: 14px;
 }
    
+/**/
+
+.loan-summary-box {
+        display: inline-block;
+    padding: 10px;
+    font-family: 'Titillium Web Regular';
+    background-color: #e6e6e6;
+        font-size: 22px;
+    font-family: 'Titillium Web Regular';
+
+}
+.requested-loan-amount ,.requested-loan-period {
+        text-align: center;
+         font-family: 'Titillium Web Regular';
+     font-size:28px;
+}
+
+.show-sliders {
+    margin-left:30px;
+}
+.t-c .bottom-text-inner {
+        margin: 0 auto;
+    max-width: 780px;
+}
+.t-c .bottom-text-inner a {
+     color: #50b20b;
+    display: inline-block;
+    float: right; 
+    font-family: Titillium Web Semi Bold;
+    line-height: 46px;
+}

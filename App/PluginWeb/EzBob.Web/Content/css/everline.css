@@ -38,12 +38,6 @@ nav {
 	top: 0;
 }
 
-.consent-dialog {
-    font-size: 11px;
-    color: black;
-	overflow-y: auto;
-	max-height: 400px;
-}
 
 header.everline_header li, header.everline_header .desktop {
 	display: inline-block;

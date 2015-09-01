@@ -21,11 +21,11 @@ EzBob.ConsentAgreement = Backbone.Marionette.ItemView.extend({
 	jqoptions: function (){
 		return {
 			autoOpen: true,
-			title: 'Consent',
+			title: 'Terms and conditions',
 			modal: true,
 			resizable: true,
 			width: 600,
-			height: 515,
+			height: 'auto',
 			closeOnEscape: true,
 		}
 	},

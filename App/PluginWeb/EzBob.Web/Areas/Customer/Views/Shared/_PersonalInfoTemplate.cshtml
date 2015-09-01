@@ -185,14 +185,18 @@
 </script>
 
 <script id="consent-agreement-temlate" type="text/template">
-	<div id="consent-conent" class="modal-body consent-dialog">
-		@{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+    <div class="consent-dialog-wrapper">
 
-		<p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%></p>
-		<p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
-	</div>
-	<div style="margin-top: 20px;">
-		<a href="#" class="pull-right print print-link" ui-event-control-id="wizard:print_consent">Print</a>
-		<a style="margin-right: 20px;" class="pull-right download pdf-link" ui-event-control-id="wizard:download_consent">Download</a>
-	</div>
+        <div id="consent-conent" class="modal-body consent-dialog">
+            @{Html.RenderPartial("~/Areas/Customer/Views/Consent/Commercial.cshtml");}
+
+            <p><b>Agreed by:</b><%-firstName%> <%-middleInitial%> <%-surname%></p>
+            <p><b>Agreed on:</b> <%-EzBob.formatDate(date)%></p>
+        </div>
+
+    </div>
+    <div class="consent-modal-footer modal-footer" style="margin-top: 20px;">
+        <a href="#" class="pull-right print print-link clean-btn " ui-event-control-id="wizard:print_consent">Print</a>
+        <a style="margin-right: 20px;" class="pull-right download pdf-link clean-btn" ui-event-control-id="wizard:download_consent">Download</a>
+    </div>
 </script>

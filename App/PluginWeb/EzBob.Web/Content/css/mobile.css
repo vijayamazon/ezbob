@@ -447,4 +447,11 @@
     .calc-header {
         margin: 20px 20px 0;
     }
+    .t-c .bottom-text-inner a {
+    float: none;
+  
+    display: block;
+    text-align: center;
+    font-size: 33px;
+}
 }
