@@ -148,6 +148,7 @@
     <Compile Include="AutomationVerification\VerifyApproval.cs" />
     <Compile Include="AutomationVerification\VerifyReapproval.cs" />
     <Compile Include="Backfill\BackFillBrokerCommissionInvoice.cs" />
+    <Compile Include="Backfill\BackfillMedalForAll.cs" />
     <Compile Include="Broker\BrokerAddBank.cs" />
     <Compile Include="Broker\BrokerLoadLeadDetails.cs" />
     <Compile Include="Broker\BrokerTransferCommission.cs" />

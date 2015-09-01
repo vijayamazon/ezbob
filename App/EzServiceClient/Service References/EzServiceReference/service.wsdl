@@ -563,6 +563,12 @@
   <wsdl:message name="IEzService_RescheduleLoan_OutputMessage">
     <wsdl:part name="parameters" element="tns:RescheduleLoanResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
+    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_MarkSessionEnded_InputMessage">
     <wsdl:part name="parameters" element="tns:MarkSessionEnded" />
   </wsdl:message>
@@ -1025,6 +1031,12 @@
   <wsdl:message name="IEzService_BackfillLandRegistry2PropertyLink_OutputMessage">
     <wsdl:part name="parameters" element="tns:BackfillLandRegistry2PropertyLinkResponse" />
   </wsdl:message>
+  <wsdl:message name="IEzService_BackfillMedalForAll_InputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillMedalForAll" />
+  </wsdl:message>
+  <wsdl:message name="IEzService_BackfillMedalForAll_OutputMessage">
+    <wsdl:part name="parameters" element="tns:BackfillMedalForAllResponse" />
+  </wsdl:message>
   <wsdl:message name="IEzService_BackfillNonLimitedCompanies_InputMessage">
     <wsdl:part name="parameters" element="tns:BackfillNonLimitedCompanies" />
   </wsdl:message>
@@ -1463,12 +1475,6 @@
   <wsdl:message name="IEzService_LoanStatusAfterPayment_OutputMessage">
     <wsdl:part name="parameters" element="tns:LoanStatusAfterPaymentResponse" />
   </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_InputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdate" />
-  </wsdl:message>
-  <wsdl:message name="IEzService_MarketplaceInstantUpdate_OutputMessage">
-    <wsdl:part name="parameters" element="tns:MarketplaceInstantUpdateResponse" />
-  </wsdl:message>
   <wsdl:portType name="IEzServiceAdmin">
     <wsdl:operation name="Shutdown">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceAdmin/Shutdown" message="tns:IEzServiceAdmin_Shutdown_InputMessage" />
@@ -1788,6 +1794,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoan" message="tns:IEzService_RescheduleLoan_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzServiceNewLoan/RescheduleLoanResponse" message="tns:IEzService_RescheduleLoan_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarkSessionEnded" message="tns:IEzService_MarkSessionEnded_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarkSessionEndedResponse" message="tns:IEzService_MarkSessionEnded_OutputMessage" />
@@ -2096,6 +2106,10 @@
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLink" message="tns:IEzService_BackfillLandRegistry2PropertyLink_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillLandRegistry2PropertyLinkResponse" message="tns:IEzService_BackfillLandRegistry2PropertyLink_OutputMessage" />
     </wsdl:operation>
+    <wsdl:operation name="BackfillMedalForAll">
+      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillMedalForAll" message="tns:IEzService_BackfillMedalForAll_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillMedalForAllResponse" message="tns:IEzService_BackfillMedalForAll_OutputMessage" />
+    </wsdl:operation>
     <wsdl:operation name="BackfillNonLimitedCompanies">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/BackfillNonLimitedCompanies" message="tns:IEzService_BackfillNonLimitedCompanies_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/BackfillNonLimitedCompaniesResponse" message="tns:IEzService_BackfillNonLimitedCompanies_OutputMessage" />
@@ -2387,10 +2401,6 @@
     <wsdl:operation name="LoanStatusAfterPayment">
       <wsdl:input wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPayment" message="tns:IEzService_LoanStatusAfterPayment_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IEzService/LoanStatusAfterPaymentResponse" message="tns:IEzService_LoanStatusAfterPayment_OutputMessage" />
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <wsdl:input wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdate" message="tns:IEzService_MarketplaceInstantUpdate_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IEzService/MarketplaceInstantUpdateResponse" message="tns:IEzService_MarketplaceInstantUpdate_OutputMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="NetTcpBinding_IEzServiceAdmin" type="tns:IEzServiceAdmin">
@@ -3113,6 +3123,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="MarketplaceInstantUpdate">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="MarkSessionEnded">
       <soap12:operation soapAction="http://tempuri.org/IEzService/MarkSessionEnded" style="document" />
       <wsdl:input>
@@ -3806,6 +3825,15 @@
         <soap12:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="BackfillMedalForAll">
+      <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillMedalForAll" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
     <wsdl:operation name="BackfillNonLimitedCompanies">
       <soap12:operation soapAction="http://tempuri.org/IEzService/BackfillNonLimitedCompanies" style="document" />
       <wsdl:input>
@@ -4456,15 +4484,6 @@
     </wsdl:operation>
     <wsdl:operation name="LoanStatusAfterPayment">
       <soap12:operation soapAction="http://tempuri.org/IEzService/LoanStatusAfterPayment" style="document" />
-      <wsdl:input>
-        <soap12:body use="literal" />
-      </wsdl:input>
-      <wsdl:output>
-        <soap12:body use="literal" />
-      </wsdl:output>
-    </wsdl:operation>
-    <wsdl:operation name="MarketplaceInstantUpdate">
-      <soap12:operation soapAction="http://tempuri.org/IEzService/MarketplaceInstantUpdate" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -220,7 +220,7 @@
 				new QueryParameter("Type", type.ToString()));
 		}
 
-		public void StoreMedalVerification(MedalOutputModel model, string tag) {
+		public void StoreMedalVerification(MedalOutputModel model, string tag, long? cashRequestID) {
 			if (model.WeightsDict != null) {
 				if (!model.WeightsDict.ContainsKey(Parameter.BusinessScore))
 					model.WeightsDict[Parameter.BusinessScore] = new Weight();
@@ -316,7 +316,8 @@
 					new QueryParameter("CapOfferByCustomerScoresValue", model.CapOfferByCustomerScoresValue),
 					new QueryParameter("CapOfferByCustomerScoresTable", model.CapOfferByCustomerScoresTable),
 					new QueryParameter("Tag", tag),
-					new QueryParameter("MaxOfferedLoanAmount", model.MaxOfferedLoanAmount)
+					new QueryParameter("MaxOfferedLoanAmount", model.MaxOfferedLoanAmount),
+					new QueryParameter("CashRequestID", cashRequestID)
 				);
 			} else {
 				_db.ExecuteNonQuery("AV_StoreNewMedalError", CommandSpecies.StoredProcedure,

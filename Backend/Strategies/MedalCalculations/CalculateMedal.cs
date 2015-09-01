@@ -22,9 +22,13 @@
 			this.calculationTime = calculationTime;
 			this.quietMode = false;
 			WasMismatch = true;
+
+			CashRequestID = null; // TODO: pass it as constructor parameter
 		} // constructor
 
 		public virtual string Tag { get; set; }
+
+		public virtual long? CashRequestID { get; private set; }
 
 		public virtual bool QuietMode {
 			get { return this.quietMode; }
@@ -61,7 +65,8 @@
 				} // if
 
 				Log.Debug(
-					"customerId = {0}, " +
+					"customer id = {0}, " +
+					"cash request id = {12}, " +
 					"calc time = {1}, " +
 					"sr.IsEmpty = {2}, " +
 					"type of business = {3}, " +
@@ -84,7 +89,8 @@
 					this.numOfEbayAmazonPayPalMps,
 					this.earliestHmrcLastUpdateDate,
 					this.earliestYodleeLastUpdateDate,
-					Tag
+					Tag,
+					CashRequestID
 				);
 
 				// The first scenario (1) for checking medal type and getting medal value
@@ -115,7 +121,7 @@
 					Log.Debug("\n\nSecondary medal:\n{0}", result2.ToString());
 
 					if (this.doStoreMedal)
-						result2.SaveToDb(Tag, DB, Log);
+						result2.SaveToDb(CashRequestID, Tag, DB, Log);
 				} // if
 
 				if ((result1 != null) && result1.IsLike(result2)) {

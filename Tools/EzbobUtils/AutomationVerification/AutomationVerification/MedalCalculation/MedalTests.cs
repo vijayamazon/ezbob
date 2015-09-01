@@ -206,7 +206,7 @@
 
 			foreach (var customer in customers) {
 				var medal = medalChooser.GetMedal(customer.Key, customer.Value);
-				dbHelper.StoreMedalVerification(medal, null);
+				dbHelper.StoreMedalVerification(medal, null, null);
 			}
 		}
 

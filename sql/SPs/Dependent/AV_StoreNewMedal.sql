@@ -80,6 +80,7 @@ ALTER PROCEDURE AV_StoreNewMedal
 	,@CapOfferByCustomerScoresTable NVARCHAR(MAX)
 	,@Tag NVARCHAR(256)
 	,@MaxOfferedLoanAmount INT
+	,@CashRequestID BIGINT
 )
 AS
 BEGIN
@@ -169,6 +170,7 @@ BEGIN
 	,CapOfferByCustomerScoresTable
 	,TrailTagID
 	,MaxOfferedLoanAmount
+	,CashRequestID
 	) VALUES (
 	 @CustomerId
 	,@CalculationTime
@@ -245,6 +247,7 @@ BEGIN
 	,@CapOfferByCustomerScoresTable
 	,@TagID
 	,@MaxOfferedLoanAmount
+	,@CashRequestID
 	)
 END
 GO

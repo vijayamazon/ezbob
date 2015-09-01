@@ -144,7 +144,7 @@
 			if (doNext) { // Medal area
 				var verification = new AutomationCalculator.MedalCalculation.MedalChooser(DB, Log);
 				medal = verification.GetMedal(CustomerID, decisionTime);
-				medal.SaveToDb(this.tag, DB, Log);
+				medal.SaveToDb(cashRequestID, this.tag, DB, Log);
 			} // if; Medal area
 
 			int offeredCreditLine = medal == null

@@ -55,6 +55,9 @@
 		ActionMetaData BackfillLandRegistry2PropertyLink();
 
 		[OperationContract]
+		ActionMetaData BackfillMedalForAll();
+
+		[OperationContract]
 		ActionMetaData BackfillNonLimitedCompanies();
 
 		[OperationContract]

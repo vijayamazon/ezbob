@@ -21,6 +21,10 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
+		public ActionMetaData BackfillMedalForAll() {
+			return Execute<BackfillMedalForAll>(null, null);
+		} // BackfillMedalForAll
+
 		public ActionMetaData BackfillNonLimitedCompanies() {
 			BackfillNonLimitedCompanies instance;
 			return ExecuteSync(out instance, 0, 0);

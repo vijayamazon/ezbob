@@ -67,6 +67,7 @@
   <xs:element name="ReschedulingArgument" nillable="true" type="tns:ReschedulingArgument" />
   <xs:complexType name="ReschedulingResult">
     <xs:sequence>
+      <xs:element minOccurs="0" name="BlockAction" type="xs:boolean" />
       <xs:element minOccurs="0" name="DefaultPaymentPerInterval" type="xs:decimal" />
       <xs:element minOccurs="0" name="Error" nillable="true" type="xs:string" />
       <xs:element minOccurs="0" name="FirstPaymentInterest" nillable="true" type="xs:decimal" />

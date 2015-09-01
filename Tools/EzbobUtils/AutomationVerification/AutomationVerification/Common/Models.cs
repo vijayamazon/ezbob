@@ -53,9 +53,9 @@
 		public int ConsumerScore { get; set; }
 		public int BusinessScore { get; set; }
 
-		public void SaveToDb(string tag, AConnection db, ASafeLog log) {
+		public void SaveToDb(long? cashRequestID, string tag, AConnection db, ASafeLog log) {
 			var dbHelper = new DbHelper(db, log);
-			dbHelper.StoreMedalVerification(this, tag);
+			dbHelper.StoreMedalVerification(this, tag, cashRequestID);
 		} // SaveToDb
 
 		public override string ToString() {
