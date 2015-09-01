@@ -156,7 +156,7 @@
 				fraudChecker.Execute();
 			} // if
 
-			ForceNhibernateResync.Do(CustomerID);
+			ForceNhibernateResync.ForCustomer(CustomerID);
 
 			ProcessRejections();
 
