@@ -38,8 +38,10 @@ EzBob.Validation.addressErrorPlacement = function(el, model, nDirectorID, sTypeO
 	$el.on('focusout', function() {
 		if (addressListLength(model, nDirectorID, sTypeOfBusiness) === 0) {
 			var oButton = $el.find('.addAddress');
-
-			oButton.tooltip({ title: 'Please lookup your post code' });
+			if (EzBob.Config.Origin !== 'everline') {
+			    oButton.tooltip({ title: 'Please lookup your post code' });
+			}
+			
 
 			$el.hover(
 				function() { oButton.tooltip('show'); },
@@ -121,10 +123,14 @@ EzBob.Validation.unhighlightFS = function (element) {
     if (EzBob.Config.Origin === 'everline') {
         if ($(element).attr('id') === 'DateOfBirth') {
             $('.form_field_date').css('border-bottom', '2px solid #7ac143');
-        } else {
+        }
+        else if ($(element).attr('class') === 'address-field') {
+            $(element).find('.form_field_left_side:not(.addAddressInput)').css('border-bottom', '2px solid #7ac143');
+        }
+        else
+        {
             $(element).css('border-bottom', '2px solid #7ac143');
         }
-     
     } else {
        
         EzBob.Validation.unhighlight(element);
@@ -144,10 +150,12 @@ EzBob.Validation.highlightFS = function (element) {
     if (EzBob.Config.Origin == 'everline') {
         if ($(element).attr('id') === 'DateOfBirth') {
             $('.form_field_date').css('border-bottom', '2px solid red');
+        } else if ($(element).attr('class') === 'address-field') {
+            $(element).find('.form_field_left_side').css('border-bottom', '2px solid red');
         } else {
-            $(element).css('border-bottom', '2px solid red');
+        $(element).css('border-bottom', '2px solid red');
         }
-     
+
     } else {
       
         var $el = $(element),

@@ -35,6 +35,7 @@
                 .Add("~/Content/css/easter2015scratch.css")
                 //custom css
                 .Add("~/Content/css/Everlinecustomer.css")
+                .Add("~/Content/css/Everlineslider.css")
 				.Add("~/Content/css/hmrc-upload-ui.css")
                 .MvcRender("~/Content/css/min/customereverline_#.css");
         }// RenderEverlineCustomerCss

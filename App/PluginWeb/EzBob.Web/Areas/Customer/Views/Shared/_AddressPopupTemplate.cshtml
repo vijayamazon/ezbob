@@ -6,7 +6,7 @@
 	var origin = ViewBag.CustomerOrigin == null ? CustomerOriginEnum.ezbob : ViewBag.CustomerOrigin.GetOrigin();
 }
 
-<div id="address-popup">
+<div id="address-popup" >
 	<input class="postCode" name="postCode" type="hidden" />
 
 	<div class="address-list-loading-block">
@@ -47,7 +47,7 @@
 			origin: origin)
 		
 		@EzForm.InputTextWizard(new EzInputBuilder(null, "Postcode",
-			cls: "zipcode form_field",
+			cls: "zipcode form_field disabled",
 			isRequired: true,
 			statusIcon: true,
 			isDisabled:true,
