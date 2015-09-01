@@ -459,11 +459,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\connection-strings.xml">
-      <Link>connection-strings.xml</Link>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-      <SubType>Designer</SubType>
-    </None>
     <Content Include="connection-strings.xml" />
     <Content Include="Content\alibaba\alibaba_logo.png" />
     <Content Include="Content\alibaba\e-credit-line-logo.png" />
