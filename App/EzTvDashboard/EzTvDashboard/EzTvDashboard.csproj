@@ -236,7 +236,7 @@
     <Content Include="Views\Dashboard\Footer.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\TvDashboard.pubxml" />
+    <None Include="Properties\PublishProfiles\TeamCityEzTvDashboard.pubxml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
