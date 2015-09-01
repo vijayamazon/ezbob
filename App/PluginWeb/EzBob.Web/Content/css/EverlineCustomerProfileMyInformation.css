@@ -127,3 +127,64 @@
 .main-page-everline .editYourInfoForm .company-info .director-container .clean-btn {
 	display: none!important;
 }
+
+.main-page-everline .director-container .accordion-inner {
+	padding: 0;
+	margin: 0;
+}
+
+.main-page-everline .director-container .accordion-inner p {
+	padding: 0;
+	margin: 0 0 7px 0;
+	display: block;
+	min-height: 50px;
+	height: 50px;
+	line-height: 50px;
+}
+
+.main-page-everline .director-container .accordion-inner p span.director-field-name {
+	text-align: right;
+	width: 100px;
+	display: inline-block;
+	padding-right: 15px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	font-weight: 600;
+	vertical-align: middle;
+	line-height: normal;
+}
+
+.main-page-everline .director-container .accordion-inner p b {
+	font-weight: normal;
+	vertical-align: middle;
+	height: 50px;
+	min-height: 50px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	outline: none;
+	-webkit-box-shadow: none;
+	box-shadow: none;
+	border-radius: 0;
+	border-top: 0;
+	border-left: 0;
+	border-right: 0;
+	border-bottom: 2px solid #c7c7c7;
+	padding: 15px 15px 0 15px;
+	background-color: #f6f6f6;
+	width: 320px;
+	font-size: 15px;
+	line-height: 20px;
+	display: inline-block;
+}
+
+.main-page-everline .director-container .accordion-inner .form_field_container .input-wrapper {
+	padding: 0;
+	width: 320px;
+	display: inline-block;
+	min-height: 50px;
+}
+
+.main-page-everline .director-container .accordion-inner .form_field_container .input-wrapper .form_field_left_side {
+	width: 100% !important;
+}

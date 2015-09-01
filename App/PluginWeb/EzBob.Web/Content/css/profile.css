@@ -755,7 +755,7 @@ table.directors-list td.l {
 	margin-bottom: 20px;
 }
 
-.director-field-name:after {
+.main-page-ezbob .director-field-name:after {
 	content: ": ";
 }
 
