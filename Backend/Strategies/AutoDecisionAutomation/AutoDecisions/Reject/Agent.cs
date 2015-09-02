@@ -59,7 +59,7 @@
 
 		public bool HasApprovalChance { get; private set; }
 
-		public virtual bool MakeAndVerifyDecision(string tag = null, bool quiet = false) {
+		public virtual bool MakeAndVerifyDecision(string tag, bool quiet = false) {
 			Trail.SetTag(tag);
 
 			RunPrimary();

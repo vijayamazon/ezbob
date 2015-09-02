@@ -26,7 +26,7 @@
 			);
 		} // constructor
 
-		public bool MakeAndVerifyDecision(string tag = null) {
+		public bool MakeAndVerifyDecision(string tag) {
 			this.trail.SetTag(tag);
 
 			RunPrimary();

@@ -219,7 +219,7 @@
 		} // RunAutoReject
 
 		private MedalResult RunCalculateMedal() {
-			CalculateMedal instance = new CalculateMedal(CustomerID, DecisionTime, true, true) { Tag = Tag, };
+			CalculateMedal instance = new CalculateMedal(CustomerID, CashRequestID, DecisionTime, true, true) { Tag = Tag, };
 			instance.Execute();
 			return instance.Result;
 		} // RunCalculateMedal

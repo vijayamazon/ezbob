@@ -11,7 +11,7 @@
 		public DbHelper(AConnection db, ASafeLog log) {
 			_log = log;
 			_db = db;
-		}
+		} // constructor
 
 		public RejectionConfigs GetRejectionConfigs() {
 			RejectionConfigs consts = _db.FillFirst<RejectionConfigs>(
@@ -237,7 +237,9 @@
 				if (!model.WeightsDict.ContainsKey(Parameter.FreeCashFlow))
 					model.WeightsDict[Parameter.FreeCashFlow] = new Weight();
 
-				_db.ExecuteNonQuery("AV_StoreNewMedal", CommandSpecies.StoredProcedure,
+				_db.ExecuteNonQuery(
+					"AV_StoreNewMedal",
+					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", model.CustomerId),
 					new QueryParameter("CalculationTime", DateTime.UtcNow),
 					new QueryParameter("MedalType", model.MedalType.ToString()),
@@ -320,17 +322,22 @@
 					new QueryParameter("CashRequestID", cashRequestID)
 				);
 			} else {
-				_db.ExecuteNonQuery("AV_StoreNewMedalError", CommandSpecies.StoredProcedure,
+				_db.ExecuteNonQuery(
+					"AV_StoreNewMedalError",
+					CommandSpecies.StoredProcedure,
 					new QueryParameter("CustomerId", model.CustomerId),
 					new QueryParameter("CalculationTime", DateTime.UtcNow),
 					new QueryParameter("MedalType", model.MedalType.ToString()),
 					new QueryParameter("Medal", model.Medal.ToString()),
 					new QueryParameter("Error", model.Error),
-					new QueryParameter("NumOfHmrcMps", 0));
-			}
-		}
+					new QueryParameter("NumOfHmrcMps", 0),
+					new QueryParameter("CashRequestID", cashRequestID),
+					new QueryParameter("Tag", tag)
+				);
+			} // if
+		} // StoreMedalVerification
 
 		private static ASafeLog _log;
 		private static AConnection _db;
-	}
-}
+	} // class DbHelper
+} // namespace

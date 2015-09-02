@@ -247,7 +247,9 @@
 		} // UseBackdoorSimpleFlow
 
 		private void CalculateMedal(bool updateWasMismatch) {
-			var instance = new CalculateMedal(CustomerID, DateTime.UtcNow, false, true);
+			var instance = new CalculateMedal(CustomerID, this.cashRequestID, DateTime.UtcNow, false, true) {
+				Tag = this.tag,
+			};
 			instance.Execute();
 
 			if (instance.WasMismatch && updateWasMismatch)

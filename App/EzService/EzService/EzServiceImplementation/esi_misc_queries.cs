@@ -43,9 +43,9 @@
 			return ExecuteSync(out instance, 0, 0);
 		}
 
-		public ActionMetaData CalculateMedal(int underwriterId, int customerId) {
+		public ActionMetaData CalculateMedal(int underwriterId, int customerId, long? cashRequestID) {
 			CalculateMedal instance;
-			return ExecuteSync(out instance, customerId, underwriterId, customerId, DateTime.UtcNow, false, true);
+			return ExecuteSync(out instance, customerId, underwriterId, customerId, cashRequestID, DateTime.UtcNow, false, true);
 		}
 
 		public ActionMetaData CalculateOffer(int underwriterId, int customerId, int amount, bool hasLoans, EZBob.DatabaseLib.Model.Database.Medal medalClassification) {

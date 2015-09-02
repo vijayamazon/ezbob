@@ -4627,10 +4627,10 @@ namespace ServiceClientProxy.EzServiceReference {
         System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CaisUpdateAsync(int userId, int caisId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateMedal", ReplyAction="http://tempuri.org/IEzService/CalculateMedalResponse")]
-        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateMedal(int underwriterId, int customerId);
+        ServiceClientProxy.EzServiceReference.ActionMetaData CalculateMedal(int underwriterId, int customerId, System.Nullable<long> cashRequestID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateMedal", ReplyAction="http://tempuri.org/IEzService/CalculateMedalResponse")]
-        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId);
+        System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId, System.Nullable<long> cashRequestID);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IEzService/CalculateModelsAndAffordability", ReplyAction="http://tempuri.org/IEzService/CalculateModelsAndAffordabilityResponse")]
         ServiceClientProxy.EzServiceReference.MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, System.Nullable<System.DateTime> oHistory);
@@ -6338,12 +6338,12 @@ namespace ServiceClientProxy.EzServiceReference {
             return base.Channel.CaisUpdateAsync(userId, caisId);
         }
         
-        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateMedal(int underwriterId, int customerId) {
-            return base.Channel.CalculateMedal(underwriterId, customerId);
+        public ServiceClientProxy.EzServiceReference.ActionMetaData CalculateMedal(int underwriterId, int customerId, System.Nullable<long> cashRequestID) {
+            return base.Channel.CalculateMedal(underwriterId, customerId, cashRequestID);
         }
         
-        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId) {
-            return base.Channel.CalculateMedalAsync(underwriterId, customerId);
+        public System.Threading.Tasks.Task<ServiceClientProxy.EzServiceReference.ActionMetaData> CalculateMedalAsync(int underwriterId, int customerId, System.Nullable<long> cashRequestID) {
+            return base.Channel.CalculateMedalAsync(underwriterId, customerId, cashRequestID);
         }
         
         public ServiceClientProxy.EzServiceReference.MarketplacesActionResult CalculateModelsAndAffordability(int userId, int nCustomerID, System.Nullable<System.DateTime> oHistory) {

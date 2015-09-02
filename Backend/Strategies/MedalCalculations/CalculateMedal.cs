@@ -15,7 +15,13 @@
 
 		public MedalResult Result { get; private set; }
 
-		public CalculateMedal(int customerId, DateTime calculationTime, bool primaryOnly, bool doStoreMedal) {
+		public CalculateMedal(
+			int customerId,
+			long? cashRequestID,
+			DateTime calculationTime,
+			bool primaryOnly,
+			bool doStoreMedal
+		) {
 			this.doStoreMedal = doStoreMedal;
 			this.primaryOnly = primaryOnly;
 			this.customerId = customerId;
@@ -23,7 +29,7 @@
 			this.quietMode = false;
 			WasMismatch = true;
 
-			CashRequestID = null; // TODO: pass it as constructor parameter
+			CashRequestID = cashRequestID;
 		} // constructor
 
 		public virtual string Tag { get; set; }
@@ -62,6 +68,9 @@
 					this.numOfEbayAmazonPayPalMps = sr["NumOfEbayAmazonPayPalMps"];
 					this.earliestHmrcLastUpdateDate = sr["EarliestHmrcLastUpdateDate"];
 					this.earliestYodleeLastUpdateDate = sr["EarliestYodleeLastUpdateDate"];
+
+					if (CashRequestID == null)
+						CashRequestID = sr["LastCashRequestID"];
 				} // if
 
 				Log.Debug(
@@ -126,7 +135,7 @@
 
 				if ((result1 != null) && result1.IsLike(result2)) {
 					if (this.doStoreMedal)
-						result1.SaveToDb(Tag, DB, Log);
+						result1.SaveToDb(CashRequestID, Tag, DB);
 
 					Log.Debug("O6a-Ha! Match found in the 2 medal calculations of customer: {0}. {1}", this.customerId, Tag);
 
@@ -145,7 +154,7 @@
 				result1.Error = (result1.Error ?? string.Empty) + " Mismatch found in the 2 medal calculations";
 
 				if (this.doStoreMedal)
-					result1.SaveToDb(Tag, DB, Log);
+					result1.SaveToDb(CashRequestID, Tag, DB);
 
 				SendExplanationMail(result1, result2);
 

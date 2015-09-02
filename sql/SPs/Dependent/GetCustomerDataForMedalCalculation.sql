@@ -31,7 +31,8 @@ BEGIN
 		@ConsumerScore INT,
 		@EarliestHmrcLastUpdateDate DATETIME,
 		@EarliestYodleeLastUpdateDate DATETIME,
-		@RefNumber NVARCHAR(50)
+		@RefNumber NVARCHAR(50),
+		@LastCashRequestID BIGINT
 		
 	------------------------------------------------------------------------------
 
@@ -190,6 +191,20 @@ BEGIN
 
 	------------------------------------------------------------------------------
 
+	SELECT TOP 1
+		@LastCashRequestID = Id
+	FROM
+		CashRequests
+	WHERE
+		IdCustomer = @CustomerId
+		AND
+		CreationDate < @Now
+	ORDER BY
+		CreationDate DESC,
+		Id DESC
+
+	------------------------------------------------------------------------------
+
 	SELECT
 		@TypeOfBusiness AS TypeOfBusiness,
 		@NumOfHmrcMps AS NumOfHmrcMps,
@@ -198,6 +213,7 @@ BEGIN
 		@CompanyScore AS CompanyScore,
 		@ConsumerScore AS ConsumerScore,
 		@EarliestHmrcLastUpdateDate AS EarliestHmrcLastUpdateDate,
-		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate
+		@EarliestYodleeLastUpdateDate AS EarliestYodleeLastUpdateDate,
+		@LastCashRequestID AS LastCashRequestID
 END
 GO

@@ -63,7 +63,7 @@
 
 		[Test]
 		public void TestMedal() {
-			var x = new CalculateMedal(29486, DateTime.UtcNow, false, false);
+			var x = new CalculateMedal(29486, null, DateTime.UtcNow, false, false);
 			x.Execute();
 		} // TestMedal
 	} // class AlexTestStrategies
