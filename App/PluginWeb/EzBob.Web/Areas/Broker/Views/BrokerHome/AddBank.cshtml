@@ -1,53 +1,65 @@
-﻿@model dynamic
+﻿@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 <div class="page-section hide section-add-bank">
-    <div class="row-fluid">
-        <h2>Your Bank Details</h2>
-        <form id="bankAccount">
-            <div class="bank-account-instructions clearfix">
-                <div class="bank-account">
-                    <div class="control-group form_field_container">
-                        <div class="controls">
-                            <label class="attardi-input">
-                                <span>Account number</span>
-                                <input id="AccountNumber" name="AccountNumber" type="text" value="" autofocus="autofocus" class="AccountNumber form_field" maxlength="8" ui-event-control-id="broker:bank-details:account-number" />
-                                <img class="field_status required" id="AccountNumberImage" />
-                            </label>
-                        </div>
-                    </div>
+	<div class="row-fluid">
+		<section id="content">
+			<div class="wizard-wrap">
+				<h2>Your Bank Details</h2>
+				<form id="bankAccount">
+					<div class="bank-account-instructions clearfix">
+						<div class="bank-account">
+							
+							@EzForm.InputTextWizard(
+										new EzInputBuilder(
+											"AccountNumber",
+											"Account number",
+											type: "text",
+											 cls: "AccountNumber form_field",
+											isRequired: true,
+											statusIcon: true,
+											tabIndex: 1,
+											maxLength: 8,
+											 uiEventControlID: "broker:bank-details:account-number"),
+										origin: origin)
+							
+							<div class="control-group form_field_container" id="SortCode">
+								<div class="controls ezSortCode">
+									<label class="attardi-input">
+										<span>Sort Code</span>
+										<input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-1" />
+										<span></span>
+										<input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-2" />
+										<span></span>
+										<input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="broker:bank-details:sort-code-3" />
+										<img class="field_status required" id="SortCodeImage" />
+									</label>
+									<input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;" />
+								</div>
+							</div>
 
-                    <div class="control-group form_field_container" id="SortCode">
-                        <div class="controls ezSortCode">
-                            <label class="attardi-input">
-                                <span>Sort Code</span>
-                                <input class="form_field_look" id="SortCode1" nextserial="#SortCode2" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-1" />
-                                <span></span>
-                                <input class="form_field_look" id="SortCode2" nextserial="#SortCode3" type="text" maxlength="2" style="width: 32%;" ui-event-control-id="broker:bank-details:sort-code-2" />
-                                <span></span>
-                                <input class="form_field_look" id="SortCode3" type="text" maxlength="2" style="width: 31%;" ui-event-control-id="broker:bank-details:sort-code-3" />
-                                <img class="field_status required" id="SortCodeImage" />
-                            </label>
-                            <input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;" />
-                        </div>
-                    </div>
+							<div class="control-group">
+								<div class="controls">
+									<input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPersonal">Personal</label>
+									<input type="radio" name="bankAccountType" id="baBusiness" value="Business" ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPusiness">Business </label>
+								</div>
+							</div>
 
-                    <div class="control-group">
-                        <div class="controls">
-                            <input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPersonal">Personal</label>
-                            <input type="radio" name="bankAccountType" id="baBusiness" value="Business" ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPusiness">Business </label>
-                        </div>
-                    </div>
-
-                    <div class="form_buttons_container">
-                        <div class="attardi-button">
-                            <button type="submit" class="button btn-green connect-bank disabled pull-right" ui-event-control-id="broker:bank-details:continue">Continue</button>
-                            <button class="back button btn-grey pull-right" ui-event-control-id="broker:bank-details:back">Back</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-        <hr>
-        <div class="help_security"></div>
-    </div>
+							<div class="form_buttons_container">
+								<div class="attardi-button">
+									<button type="submit" class="button btn-green connect-bank disabled pull-right" ui-event-control-id="broker:bank-details:continue">Continue</button>
+									<button class="back button btn-grey pull-right" ui-event-control-id="broker:bank-details:back">Back</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</section>
+		<hr>
+		<div class="help_security"></div>
+	</div>
 </div>

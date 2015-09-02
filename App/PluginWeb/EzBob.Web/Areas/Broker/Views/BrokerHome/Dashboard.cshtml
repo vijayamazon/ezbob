@@ -1,5 +1,10 @@
 ﻿@using ConfigManager
 @using EzBob.Web.Infrastructure
+@using EzBob.Web.Infrastructure.Html
+
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 <div class="page-section hide section-dashboard">
 	<div id="commission-view">@{ Html.RenderPartial("Commission"); }</div>
 
@@ -207,47 +212,67 @@
 
 		<div class="value-group aka-table table-big box">
 			<div class="box-title aka-caption">Update password</div>
+				<div class="aka-row">
+					<div class="aka-column">
+						<section id="content">
+							<div class="wizard-wrap">
+								<form class="update-password-form broker-form" novalidate="novalidate">
+									@{ int nUpdatePassIdx = 1; }
 
-			<div class="aka-row">
-				<div class="aka-column">
-					<form class="update-password-form broker-form" novalidate="novalidate">
-						@{ int nUpdatePassIdx = 1; }
+									@EzForm.InputTextWizard(
+										new EzInputBuilder(
+											"OldPassword",
+											"Current password",
+											type: "password",
+											cls: "form_field",
+											isRequired: true,
+											statusIcon: true,
+											tabIndex: nUpdatePassIdx++,
+											uiEventControlID: "broker:update-old-password"),
+										origin: origin)
 
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Current password</span>
-								<input type="password" name="OldPassword" id="OldPassword" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-old-password" />
-								<img id="OldPasswordImage" class="field_status required" />
-							</label>
-						</div>
+									@EzForm.InputTextWizard(
+										new EzInputBuilder(
+											"NewPassword",
+											"New password",
+											type: "password",
+											cls: "form_field",
+											isRequired: true,
+											statusIcon: true,
+											tabIndex: nUpdatePassIdx++,
+											uiEventControlID: "broker:update-password"),
+										origin: origin)
 
-						<div id="strength-update-password-view" class="form_field_container">
-							<label class="attardi-input">
-								<span>New password</span>
-								<input type="password" name="NewPassword" id="NewPassword" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-password" />
-								<img id="NewPasswordImage" class="field_status required" />
-							</label>
-							<p id="message" class="help-block"></p>
-						</div>
+									@EzForm.InputTextWizard(
+										new EzInputBuilder(
+											"NewPassword2",
+											"Confirm password",
+											type: "password",
+											cls: "form_field",
+											isRequired: true,
+											statusIcon: true,
+											tabIndex: nUpdatePassIdx++,
+											uiEventControlID: "broker:update-confirm-password"),
+										origin: origin)
 
-						<div class="form_field_container">
-							<label class="attardi-input">
-								<span>Confirm password</span>
-								<input type="password" name="NewPassword2" id="NewPassword2" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" class="form_field" ui-event-control-id="broker:update-confirm-password" />
-								<img id="NewPassword2Image" class="field_status required" />
-							</label>
-						</div>
+									@EzForm.WizardButton(
+										new EzButtonModel(
+											"UpdatePassword",
+											"Update password",
+											cls: "button btn-green disabled pull-right btn-wide ev-btn-org",
+											tabIndex: nUpdatePassIdx++,
+											uiEventControlID: "broker:submit-update-password",
+											buttonType: EzButtonType.submit),
+										origin: origin)
 
-						<div class="form_buttons_container">
-							<div class="attardi-button">
-								<button type="submit" id="UpdatePassword" class="button btn-green disabled pull-right btn-wide" tabindex="@{ WriteLiteral(nUpdatePassIdx++); }" ui-event-control-id="broker:submit-update-password">Update password</button>
+								</form>
 							</div>
-						</div>
-					</form>
+						</section>
+					</div>
 				</div>
 			</div>
 		</div>
-	</div>
+
 
 	<div id="section-dashboard-terms-and-conditions">
 		<h2>Terms and conditions</h2>

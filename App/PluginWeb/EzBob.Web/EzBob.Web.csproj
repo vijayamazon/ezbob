@@ -479,6 +479,7 @@
     <Content Include="Content\css\customer.css" />
     <Content Include="Content\css\edit-experian-director-data.css" />
     <Content Include="Content\css\everline.css" />
+    <Content Include="Content\css\EverlineBroker.css" />
     <Content Include="Content\css\EverlineCustomerProfileMyInformation.css" />
     <Content Include="Content\css\EverlineCustomerProfileSettings.css" />
     <Content Include="Content\css\EverlineCustomerProfile.css" />
@@ -704,6 +705,7 @@
     <Content Include="Content\css\salesforce.css" />
     <Content Include="Content\css\alibaba.css" />
     <Content Include="Content\css\easter2015scratch.css" />
+    <Content Include="Content\css\StyleSheet1.css" />
     <Content Include="Content\css\valentine2015scratch.css" />
     <Content Include="Content\everline\circle_done.png" />
     <Content Include="Content\everline\circle_gray.png" />
