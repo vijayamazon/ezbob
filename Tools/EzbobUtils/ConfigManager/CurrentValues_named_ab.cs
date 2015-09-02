@@ -304,6 +304,10 @@
 			get { return this[Variables.AvailableFundsRefreshInterval]; }
 		}
 
+		public virtual VariableValue BackdoorSimpleAutoDecisionEnabled {
+			get { return this[Variables.BackdoorSimpleAutoDecisionEnabled]; }
+		}
+
 		public virtual VariableValue BankBasedApprovalBelowAverageRiskMaxBusinessScore {
 			get { return this[Variables.BankBasedApprovalBelowAverageRiskMaxBusinessScore]; }
 		}

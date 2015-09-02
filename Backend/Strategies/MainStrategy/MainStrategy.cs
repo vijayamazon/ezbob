@@ -219,9 +219,14 @@
 		} // BackdoorSimpleFlow
 
 		private bool UseBackdoorSimpleFlow() {
+			if (!CurrentValues.Instance.BackdoorSimpleAutoDecisionEnabled) {
+				Log.Debug("Not using back door simple flow: disabled by configuration (BackdoorSimpleAutoDecisionEnabled).");
+				return false;
+			} // if
+
 			if (this.cashRequestOriginator != CashRequestOriginator.FinishedWizard) {
 				Log.Debug(
-					"Not using back door simple flow for customer '{0}': originator is '{1}'.",
+					"Not using back door simple flow for customer '{0}': cash request originator is '{1}'.",
 					CustomerID,
 					this.cashRequestOriginator == null ? "-- null --" : this.cashRequestOriginator.Value.ToString()
 				);
@@ -230,7 +235,7 @@
 
 			if (!this.customerDetails.IsTest) {
 				Log.Debug(
-					"Not using back door simple flow for customer '{0}': not a text customer.",
+					"Not using back door simple flow for customer '{0}': not a test customer.",
 					CustomerID
 				);
 				return false;

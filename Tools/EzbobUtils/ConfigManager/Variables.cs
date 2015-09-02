@@ -91,6 +91,7 @@ namespace ConfigManager {
 		AutomaticTestCustomerMark,
 		AvailableFundsRefreshInterval,
 
+		BackdoorSimpleAutoDecisionEnabled,
 		BWABusinessCheck,
 		BankBasedApprovalBelowAverageRiskMaxBusinessScore,
 		BankBasedApprovalBelowAverageRiskMaxPersonalScore,
