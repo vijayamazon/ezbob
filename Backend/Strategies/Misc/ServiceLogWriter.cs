@@ -86,8 +86,13 @@
 						repoLog.SaveOrUpdate(oPackage.Out.ServiceLog);
 						break;
 					case ExperianServiceType.CreditSafeNonLtd:
-						var parseCreditSafeNonLtdData = new ParseCreditSafeNonLtd(oPackage.Out.ServiceLog.Id);
-						parseCreditSafeNonLtdData.Execute();
+				        try {
+				      	    var parseCreditSafeNonLtdData = new ParseCreditSafeNonLtd(oPackage.Out.ServiceLog.Id);
+						    parseCreditSafeNonLtdData.Execute();
+				        } catch (Exception e) {
+				            Log.Error("CreditSafeLtd/NonLtd failed for unexpected reason", e);
+				            throw;
+				        }
 						break;
 					case ExperianServiceType.CallCredit:
 						var parseCallCredit = new ParseCallCredit(oPackage.Out.ServiceLog.Id);
