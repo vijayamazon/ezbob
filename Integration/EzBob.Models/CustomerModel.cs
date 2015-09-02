@@ -131,6 +131,8 @@ namespace EzBob.Models {
 		public bool IsLoanDetailsFixed { get; set; }
 
 		public int IsLoanTypeSelectionAllowed { get; set; }
+		
+		public bool IsCustomerRepaymentPeriodSelectionAllowed { get; set; }
 
 		public bool? IsOffline { get; set; }
 
@@ -142,6 +144,8 @@ namespace EzBob.Models {
 		public int LastApprovedLoanTypeID { get; set; }
 
 		public int LastApprovedRepaymentPeriod { get; set; }
+		
+		public int LastRepaymentPeriod { get; set; }
 
 		public decimal LastPaymentFees { get; set; }
 

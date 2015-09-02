@@ -32,7 +32,8 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
         var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');
         var self = this;
         InitAmountPeriodSliders({
-            container: this.$('#calc-slider'),
+        	container: $('#calc-slider'),
+        	el: this.$el,
             amount: {
                 min: 1000,
                 max: 120000,
@@ -42,7 +43,6 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
                 hasbutton: true,
                 uiEvent: 'requested-loan:'
             },
-
             period: {
                 min: 3,
                 max: 24,
@@ -65,8 +65,8 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     },
 
     changeLoanAmount: function(){
-    	var currentTerm = this.$('#calc-slider .period-slider').slider('value');
-    	var currentAmount = this.$('#calc-slider .amount-slider').slider('value');
+    	var currentTerm = $('#calc-slider .period-slider').slider('value');
+    	var currentAmount = $('#calc-slider .amount-slider').slider('value');
 
     	this.model.set({ 'Amount': currentAmount }, { silent: true });
     	this.model.set({ 'Term': currentTerm }, { silent: true });
@@ -82,8 +82,8 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     },
 
     loanSelectionChanged: function() {
-    	var currentTerm = this.$('#calc-slider .period-slider').slider('value');
-    	var currentAmount = this.$('#calc-slider .amount-slider').slider('value');
+    	var currentTerm = $('#calc-slider .period-slider').slider('value');
+    	var currentAmount = $('#calc-slider .amount-slider').slider('value');
 	    var interestRate = this.model.get('InterestRate');
 	    var calc = this.calcRepaymentsTable(currentTerm, currentAmount, interestRate);
 
@@ -121,6 +121,51 @@ EzBob.SlidersView = Backbone.Marionette.ItemView.extend({
     	this.$el.empty().off(); /* off to unbind the events */
     	return this;
     }
+});
+
+EzBob.TakeLoanSlidersView = Backbone.Marionette.ItemView.extend({
+	template: '#sliders-template',
+	initialize: function () {
+		return this;
+	},
+	onRender: function () {
+		var amountCaption = (EzBob.Config.Origin === 'everline' ? 'How much do you need?' : 'Amount');
+		var periodCaption = (EzBob.Config.Origin === 'everline' ? 'How long do you want it for?' : 'Time');
+		var self = this;
+
+		InitAmountPeriodSliders({
+			container: this.$el.find('#calc-slider'),
+			el: this.$el,
+			amount: {
+				min: this.model.get('minCash'),
+				max: this.model.get('maxCash'),
+				start: this.model.get('maxCash'),
+				step: 100,
+				caption: amountCaption,
+				hasbutton: true,
+				uiEvent: 'loan-legal:'
+			},
+			period: {
+				min: this.model.get('isLoanSourceCOSME') ? 15 : 3,
+				max: this.model.get('isLoanSourceCOSME') ? this.model.get('approvedRepaymentPeriod') : 12,
+				start: this.model.get('repaymentPeriod'),
+				step: 1,
+				caption: periodCaption,
+				hasbutton: true,
+				hide: this.model.get('isCustomerRepaymentPeriodSelectionAllowed') == false,
+				uiEvent: 'loan-legal:'
+			},
+			callback: function(ignored, sEvent) {
+				if (sEvent === 'change')
+					EzBob.App.trigger('loanSelectionChanged');
+			} // callback
+		});
+
+		this.$el.find('.wizard-request-loan-section').remove();
+		this.$el.find('.calc-header').remove();
+		EzBob.UiAction.registerView(this);
+		return this;
+	},
 });
 
 

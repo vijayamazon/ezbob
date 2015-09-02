@@ -80,3 +80,7 @@
 	margin-top: 14px;
 	text-align: right;
 }
+
+.main-page-everline .dashboard-steps .progress-time{
+	display: block;
+}

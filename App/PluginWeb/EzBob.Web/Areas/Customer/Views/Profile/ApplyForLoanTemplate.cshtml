@@ -1,5 +1,9 @@
-﻿@model dynamic
-@{Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml"); }
+﻿@using System.Collections.Generic
+@using EzBob.Web.Infrastructure.Html
+@model dynamic
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
 
 <script id="apply-forloan-template" type="text/template">
 	<div class="loan-amount-header">
@@ -94,22 +98,34 @@
 			</div>
 
 			<div class="form_field_container"></div>
-
-			<div class="form_field_container sign-full-name hide">
-				<span>Signature:</span>
-				<label class="attardi-input">
-					<span>Type your full name</span>
-					<input type="text" name="signedName" id="signedName" class="form_field" ui-event-control-id="loan-legal:signed-name" />
-				</label>
-			</div>
+			
+			<span class="sign-full-name hide">Signature:</span>
+			@EzForm.InputTextWizard(new EzInputBuilder("signedName", "Type your full name", 
+				cls: "form_field", 
+				wrapperCls: "sign-full-name hide", 
+				isRequired: true, 
+				statusIcon: true, 
+				uiEventControlID: "loan-legal:signed-name"), 
+				origin: origin)
+			
             <input type="hidden" name="loanAmount" id="loanAmount" />
             <input type="hidden" name="repaymentPeriod" id="repaymentPeriod" />
 		</div>
-	    <div class="buttons_container">
-            <a class="btn-continue button btn-green submit <% if (!agree) { %>disabled<% } %>" href="url" ui-event-control-id="loan-legal:continue">Continue</a>
-            <a href="#" class="btn-back button btn-grey" ui-event-control-id="loan-legal:back">Back</a>
-        </div>
-	 }
+		
+		@EzForm.WizardButton(new List<EzButtonModel>{
+			new EzButtonModel(null, "Continue",
+				cls: "btn-continue button btn-green ev-btn-org submit",
+				uiEventControlID: "loan-legal:continue",
+				buttonType: EzButtonType.link,
+				href:"link"),
+			new EzButtonModel(null, "Back",
+				cls: "btn-back button btn-grey clean-btn",
+				uiEventControlID: "loan-legal:back",
+				buttonType: EzButtonType.link,
+				href:"#"),
+				
+		},origin: origin)
+	}
 </script>
 
 <script id="consumers-agreement-template" type="text/template">

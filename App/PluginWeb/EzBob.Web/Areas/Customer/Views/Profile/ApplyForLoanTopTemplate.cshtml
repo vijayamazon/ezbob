@@ -11,5 +11,9 @@
     </div>
 </script>
 
-@{Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");}
-@{Html.RenderPartial("ApplyForLoanTemplate"); }
+@{
+	Html.RenderPartial("~/Areas/Customer/Views/Shared/BankAccountInstructions.cshtml");
+	Html.RenderPartial("ApplyForLoanTemplate"); 
+	Html.RenderPartial("~/Views/Shared/_LoanScheduleTemplate.cshtml");
+	Html.RenderPartial("_Sliders");
+}

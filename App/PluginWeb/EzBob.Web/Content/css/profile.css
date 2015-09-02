@@ -186,6 +186,11 @@ body .statusLate {
     font-weight: normal;
 }
 
+.main-page-everline .loan-schedule {
+    margin-top: 0;
+    font-weight: inherit;
+}
+
 body .dashes {
     text-align: center;
     font-weight: bold;
@@ -759,3 +764,24 @@ table.directors-list td.l {
 	content: ": ";
 }
 
+.dashboard-steps .progress-time{
+	display: none;
+}
+
+div.sign-full-name{
+	display: inline-block;
+}
+span.sign-full-name {
+	margin-right: 1em;
+}
+
+.wizard-request-loan-section {
+	display: none;
+}
+
+.calc-header{
+	display: none;
+}
+.sliders-main .close{
+	display: none;
+}

@@ -14,6 +14,9 @@ EzBob.Profile.ApplyForLoanModel = Backbone.Model.extend({
 		loanType: 0,
 		repaymentPeriod: 0,
 		isLoanSourceEU: false,
+		approvedRepaymentPeriod: 0,
+		isCustomerRepaymentPeriodSelectionAllowed: false,
+		isLoanTypeSelectionAllowed: 0 
 	}, // defaults
 
 	validate: function(attrs) {

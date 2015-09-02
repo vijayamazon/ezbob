@@ -922,8 +922,9 @@
     line-height: 20px;
 }
 
+.main-page-everline #get-cash .sliders h2,
 .sliders h2 {
-    margin: 2px 0 27px;
+    margin: 2px 27px 27px;
     text-align: left;
     font-weight: 300;
     color: #494949;
@@ -1088,3 +1089,28 @@
   .sliders-wrapper {
           background: #f1f0f0;
   }
+
+.loan-schedule .rlc{
+	background: #f1f0f0;
+	padding: 20px;
+	margin-bottom: 20px;
+	font-size: 11px;
+}
+
+.loan-schedule .rlc .apr{
+	display: inline-block;
+}
+
+.loan-schedule .rlc .real-cost{
+	display: inline-block;
+    float: left;
+    margin-right: 10px;
+}
+
+.form-markup-wrapper.sliders {
+	margin-top: 0;
+}
+
+.form-element-type-form{
+	width: 100%;
+}
