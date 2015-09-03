@@ -106,7 +106,7 @@
                     loan.LoanAmount, 
                     loan.Repayments, 
                     loan.LoanType.Description,
-                    loan.CashRequest.DiscountPlan.ValuesStr,
+					loan.CashRequest.DiscountPlan == null ? "" : loan.CashRequest.DiscountPlan.ValuesStr,
                     loan.LoanSource.Name),
 				DateTime = loan.DateClosed ?? default(DateTime),
 				Status = loan.Status.ToString()
