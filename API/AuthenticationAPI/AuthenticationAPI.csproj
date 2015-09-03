@@ -41,7 +41,6 @@
   <ItemGroup>
     <Content Include="connection-strings.xml" />
     <Content Include="packages.config" />
-    <Content Include="Properties\PublishProfiles\TeamCityAuthenticationAPI.pubxml.user" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

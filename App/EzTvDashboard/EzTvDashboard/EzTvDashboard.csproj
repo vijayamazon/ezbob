@@ -174,7 +174,6 @@
     <Content Include="Content\js\_references.js" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
-    <Content Include="Properties\PublishProfiles\TeamCityEzTvDashboard.pubxml.user" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>

@@ -919,7 +919,6 @@
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrcUpload.js" />
-    <Content Include="Properties\PublishProfiles\TeamCityEzBobWeb.pubxml.user" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\MarkAsPending.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditActAgreement.cshtml" />
@@ -1958,7 +1957,6 @@
     <Content Include="Areas\Underwriter\Views\Shared\_LoanhistoryViewTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\PaymentAccounts\_PaymentAccountsTemplate.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_MedalCalculationTemplate.cshtml" />
-    <Content Include="Areas\Customer\Views\Shared\_SignUpButton.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\_Messages.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\DailyReport.cshtml" />
     <Content Include="Areas\Underwriter\Views\Reports\_LayoutDayReport.cshtml" />
