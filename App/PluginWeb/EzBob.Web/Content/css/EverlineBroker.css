@@ -46,7 +46,7 @@ h6{font-size:16px;}
 }
 
 .broker-form {
-    width: 90%;
+    width: 100%;
     line-height: 1.8em;
     margin-bottom: 1.5em;
 }
@@ -428,6 +428,47 @@ footer.everline_footer {
     display: table-cell;
     vertical-align: top;
 }
+
+.ui-widget {
+	font-size: 15px;
+}
+/*
+div.form_buttons_container{
+    float: right;
+    margin-left: 5px;
+
+	position: relative;
+	height: 70px;
+	width: 588px;
+	margin-bottom: 10px;
+	font-size: 16px;
+}
+*/
+
+div.form_buttons_container button,
+div.form_buttons_container input {
+    float: right;
+    margin-left: 5px;
+}
+
+div.form_field_container {
+    margin-bottom: 1.6em;
+}
+
+.form_buttons_container {
+    position: relative;
+}
+
+.wizard-wrap .back-to-list .button {
+	padding-right: 40px;
+}
+
+.broker-login-fields {
+	margin-top: 40px;
+}
+
+
+
 
 
 

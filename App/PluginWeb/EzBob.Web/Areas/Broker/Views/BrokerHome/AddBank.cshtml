@@ -12,7 +12,7 @@
 				<form id="bankAccount">
 					<div class="bank-account-instructions clearfix">
 						<div class="bank-account">
-							
+
 							@EzForm.InputTextWizard(
 										new EzInputBuilder(
 											"AccountNumber",
@@ -40,20 +40,54 @@
 									<input class="SortCodeSplit hidden-field" name="SortCode" id="SortCodeSplit" style="display: none !important;" />
 								</div>
 							</div>
+							
+							@{
+								EzInputBuilder radio1 = new EzInputBuilder("baPersonal", "Personal",
+									value: "Personal",
+									type: "radio",
+									cls: "for-radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "bankAccountType",
+									uiEventControlID: "broker:bank-details:account-type");
 
-							<div class="control-group">
-								<div class="controls">
-									<input type="radio" name="bankAccountType" id="baPersonal" value="Personal" checked ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPersonal">Personal</label>
-									<input type="radio" name="bankAccountType" id="baBusiness" value="Business" ui-event-control-id="broker:bank-details:account-type"><label class="for-radio" for="baPusiness">Business </label>
-								</div>
-							</div>
+								EzInputBuilder radio2 = new EzInputBuilder("baBusiness", "Business",
+									value: "Business",
+									type: "radio",
+									cls: "for-radio",
+									isRequired: true,
+									statusIcon: true,
+									name: "bankAccountType",
+									uiEventControlID: "broker:bank-details:account-type");
 
-							<div class="form_buttons_container">
-								<div class="attardi-button">
-									<button type="submit" class="button btn-green connect-bank disabled pull-right" ui-event-control-id="broker:bank-details:continue">Continue</button>
-									<button class="back button btn-grey pull-right" ui-event-control-id="broker:bank-details:back">Back</button>
-								</div>
-							</div>
+								List<EzInputBuilder> radios = new List<EzInputBuilder> { radio1, radio2 };
+								var buttonsmodel = new EzClickInputModel(
+									name: "bankAccountType",
+									caption: "",
+									inputWrapperClass: "FormRadioCtrl",
+									inputButtons: radios);
+
+								@EzForm.ClickableInputWizard(buttonsmodel, origin: origin)
+							}
+							
+							@EzForm.WizardButton(
+								new List<EzButtonModel>{
+								new EzButtonModel(
+									"broker_bank_details_continue_button",
+									"Continue",
+									cls: "button btn-green connect-bank disabled pull-right ev-btn-org",
+									uiEventControlID: "broker:bank-details:continue",
+									buttonType: EzButtonType.submit),
+								new EzButtonModel(
+									"broker_bank_details_back_button",
+									"Back",
+									cls: "back button btn-grey pull-right ev-btn-org",
+									uiEventControlID: "broker:bank-details:back",
+									buttonType: EzButtonType.link,
+									href: "#")
+								},
+								origin: origin)
+
 						</div>
 					</div>
 				</form>

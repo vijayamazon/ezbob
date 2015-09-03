@@ -1,32 +1,56 @@
-﻿<div class="page-section hide section-login">
-	<form class="login-form broker-form" novalidate="novalidate">
-		@{ int nLoginTabIdx = 1; }
-		<h2 class="form-start">Broker login</h2>
+﻿@using EzBob.Web.Infrastructure.Html
+@{
+	var origin = ViewBag.CustomerOrigin.GetOrigin();
+}
+<div class="page-section hide section-login">
+	<section id="content">
+		<div class="wizard-wrap">
+			<form class="login-form broker-form" novalidate="novalidate">
+				@{ int nLoginTabIdx = 1; }
+				<h2 class="form-start">Broker login</h2>
 
-		<a href="#" class="ForgottenPassword">Forgotten password</a> | <a href="#" class="Signup">Sign up</a>
+				<a href="#" class="ForgottenPassword">Forgotten password</a> | <a href="#" class="Signup">Sign up</a>
+				
+				<div class="broker-login-fields">
 
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Contact person email</span>
-				<input type="email" name="LoginEmail" id="LoginEmail" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" autocorrect="off" autocapitalize="off" ui-event-control-id="broker:login-email" />
-				<img id="LoginEmailImage" class="field_status required" />
-			</label>
+					@EzForm.InputTextWizard(
+					new EzInputBuilder(
+						"LoginEmail",
+						"Contact person email",
+						type: "email",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						tabIndex: nLoginTabIdx++,
+						uiEventControlID: "broker:login-email",
+						autoCorrect: "off",
+						autoCapitalize: "off"),
+					origin: origin)
+
+					@EzForm.InputTextWizard(
+					new EzInputBuilder(
+						"LoginPassword",
+						"Password",
+						type: "password",
+						cls: "form_field",
+						isRequired: true,
+						statusIcon: true,
+						tabIndex: nLoginTabIdx++,
+						uiEventControlID: "broker:login-password"),
+					origin: origin)
+				</div>
+
+				@EzForm.WizardButton(
+				new EzButtonModel(
+					"LoginBrokerButton",
+					"Login",
+					"button btn-green disabled pull-right ev-btn-org",
+					"broker:login-submit",
+					nLoginTabIdx++,
+					EzButtonType.submit),
+				origin: origin)
+			</form>
+			<aside class="customer-sidebar broker"></aside>
 		</div>
-
-		<div class="form_field_container">
-			<label class="attardi-input">
-				<span>Password</span>
-				<input type="password" name="LoginPassword" id="LoginPassword" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" class="form_field" ui-event-control-id="broker:login-password" />
-				<img id="LoginPasswordImage" class="field_status required" />
-			</label>
-		</div>
-
-		<div class="form_buttons_container">
-			<div class="attardi-button">
-				<button type="submit" id="LoginBrokerButton" class="button btn-green disabled pull-right" tabindex="@{ WriteLiteral(nLoginTabIdx++); }" ui-event-control-id="broker:login-submit">Login</button>
-			</div>
-		</div>
-	</form>
-
-	<aside class="customer-sidebar broker"></aside>
+	</section>
 </div>
