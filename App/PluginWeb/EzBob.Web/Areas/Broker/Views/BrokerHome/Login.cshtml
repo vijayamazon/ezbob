@@ -1,6 +1,8 @@
 ﻿@using EzBob.Web.Infrastructure.Html
+@using EZBob.DatabaseLib.Model.Database
 @{
 	var origin = ViewBag.CustomerOrigin.GetOrigin();
+	bool isEverline = origin == CustomerOriginEnum.everline;
 }
 <div class="page-section hide section-login">
 	<section id="content">
@@ -9,7 +11,10 @@
 				@{ int nLoginTabIdx = 1; }
 				<h2 class="form-start">Broker login</h2>
 
-				<a href="#" class="ForgottenPassword">Forgotten password</a> | <a href="#" class="Signup">Sign up</a>
+				@if (!isEverline) {
+					var verticalDevider = " | ";
+					<a href="#" class="ForgottenPassword">Forgotten password</a>@verticalDevider<a href="#" class="Signup">Sign up</a>
+				}
 				
 				<div class="broker-login-fields">
 
@@ -49,6 +54,10 @@
 					nLoginTabIdx++,
 					EzButtonType.submit),
 				origin: origin)
+				
+				@if (isEverline) {
+					<a href="#" class="ForgottenPassword">Forgotten password</a>
+				}
 			</form>
 			<aside class="customer-sidebar broker"></aside>
 		</div>

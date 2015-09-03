@@ -94,8 +94,10 @@
 							button: new EzButtonModel(
 										"generateMobileCode",
 										"Send activation code",
-										"button btn-green form_field_right_side_signup_phone disabled",
-										"broker:signup-generate-mobile-code")),
+										"button btn-green form_field_right_side_signup_phone disabled ev-btn-org",
+										"broker:signup-generate-mobile-code",
+										nSignupTabIdx++,
+										EzButtonType.input)),
 						origin: origin)
 
 					@EzForm.InputTextWizard(
@@ -110,11 +112,14 @@
 							tabIndex: nSignupTabIdx++,
 							maxLength: 6,
 							uiEventControlID: "broker:signup-mobile-code",
+							formFieldID: "mobileCodeDiv",
 							button: new EzButtonModel(
 										"switchToCaptcha",
 										"Did not receive code",
-										"button btn-green form_field_right_side_signup_phone",
-										"broker:switch-to-captcha")),
+										"button btn-green form_field_right_side_signup_phone ev-btn-org",
+										"broker:switch-to-captcha",
+										0,
+										EzButtonType.input)),
 						origin: origin)
 
 					@EzForm.InputTextWizard(

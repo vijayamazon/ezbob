@@ -40,7 +40,7 @@ h6{font-size:16px;}
 
 
 .form_read_and_accept_broker {
-	width: 90%;
+	width: 60%;
 	vertical-align: top;
 	white-space: inherit;
 }
@@ -464,7 +464,46 @@ div.form_field_container {
 }
 
 .broker-login-fields {
-	margin-top: 40px;
+	margin-top: 50px;
+}
+
+.header-wrapper {
+	width: 960px;
+    margin: 0 auto;
+}
+
+.back-to-list-container {
+    margin: 2em 0 1em 0;
+    text-align: right;
+}
+
+.ForgottenPassword {
+	float: right;
+    /*margin-top: 0;*/
+    margin-right: 105px;
+}
+
+.add_client_button
+ {
+	width: 100%;
+    float: left;
+    font-size: 15px;
+    font-weight: 600;
+    color: #494949;
+    text-align: left;
+    line-height: 42px;
+    display: inline-block;
+    padding-left: 283px;
+}
+
+.section-add-customer .wizard-wrap {
+	height: 500px;
+}
+
+
+.add_client_button button
+{
+	width: 220px;
 }
 
 

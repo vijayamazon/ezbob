@@ -534,12 +534,22 @@ a.ev-btn-org,
 	float: right;
 	margin-left: 5%;
 }
-	 .ev-btn-org.disabled,.ev-btn-org[disabled="disabled"],.clean-btn.disabled, .clean-btn[disabled="disabled"]{
-    -ms-opacity: 0.4;
-    opacity: 0.4;
-        
+.ev-btn-org.disabled, 
+.ev-btn-org[disabled], 
+.clean-btn.disabled, 
+.clean-btn[disabled] {
         cursor: not-allowed;
-}/*end buttons*/
+}
+
+.clean-btn.disabled,
+.clean-btn[disabled] {
+	background-color: #ffffff;
+}
+.ev-btn-org.disabled,
+.ev-btn-org[disabled] {
+	background-color: #e28023;
+}
+/*end buttons*/
 
 
 .select {
