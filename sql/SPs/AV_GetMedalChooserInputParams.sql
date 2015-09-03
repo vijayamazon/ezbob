@@ -28,94 +28,68 @@ BEGIN
 	DECLARE @LastBankUpdateDate DATETIME
 	DECLARE @TypeOfBusiness NVARCHAR(30)
 	DECLARE @CompanyRefNum NVARCHAR(30)
+	DECLARE @CompanyServiceLogID BIGINT
 	DECLARE @PersonalScore INT = 0
-	
+
 	----------------------------------------------------------------------------
+
 	SELECT
-		@TypeOfBusiness = c.TypeOfBusiness,
-		@CompanyRefNum = co.ExperianRefNum
+		@CompanyRefNum = CompanyRefNum,
+		@CompanyServiceLogID = ServiceLogID,
+		@TypeOfBusiness = TypeOfBusiness
 	FROM
-		Customer c
-		LEFT JOIN Company co ON c.CompanyId = co.Id
-	WHERE
-		c.Id = @CustomerId
-		
-		
+		dbo.udfGetCustomerHistoricalCompanyLogID(@CustomerID, @Now)
+
 	----------------------------------------------------------------------------
-	DECLARE @ServiceLogId BIGINT
-	EXEC GetExperianConsumerServiceLog @CustomerID, @ServiceLogId OUTPUT, @Now
-	
-	-- Minimal Consumer/Directors score
-	
-	DECLARE @ExperianConsumerDataID BIGINT
-	
-	SELECT
-		@ExperianConsumerDataID = e.Id
-	FROM
-		ExperianConsumerData e
-	WHERE
-		e.ServiceLogId = @ServiceLogId
-	
-	----------------------------------------------------------------------------
-	
+
 	SELECT
 		@PersonalScore = MIN(x.ExperianConsumerScore)
 	FROM	(
-		SELECT ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
-		FROM ExperianConsumerData d
-		INNER JOIN MP_ServiceLog l ON d.ServiceLogId = l.Id
-		WHERE d.Id = @ExperianConsumerDataID
-	
-		UNION
-	
-		SELECT ISNULL(d.MinScore, 0) AS ExperianConsumerScore
-		FROM CustomerAnalyticsDirector d
-		WHERE d.CustomerID = @CustomerId
-		AND d.IsActive = 1
+		SELECT
+			ISNULL(d.BureauScore, 0) AS ExperianConsumerScore
+		FROM
+			ExperianConsumerData d
+			INNER JOIN dbo.udfLoadCustomerAndDirectorsServiceLog(@CustomerId, @Now) l
+				ON d.Id = l.ExperianConsumerDataID
 	) x
+
 	----------------------------------------------------------------------------
 
 	IF @PersonalScore > 0
 		SET @HasPersonalScore = 1
+
 	----------------------------------------------------------------------------
-	IF @TypeOfBusiness = 'Limited' OR @TypeOfBusiness = 'LLP'
+	
+	IF @TypeOfBusiness IN ('Limited', 'LLP')
 		SET @IsLimited = 1
+
 	----------------------------------------------------------------------------
+
 	DECLARE @CompanyScore INT = 0	
 
 	IF @IsLimited = 1
 	BEGIN
-		SELECT TOP 1
-			@CompanyScore = cac.Score
+		SELECT
+			@CompanyScore = ISNULL(CommercialDelphiScore, 0)
 		FROM
-			CustomerAnalyticsCompany cac
+			ExperianLtd
 		WHERE
-			cac.CustomerID = @CustomerId
-			AND
-			cac.AnalyticsDate < @Now
-		ORDER BY
-			cac.AnalyticsDate DESC
-
-		IF @CompanyScore > 0 
-			SET @HasCompanyScore = 1
+			ServiceLogID = @CompanyServiceLogID
 	END
 	ELSE BEGIN 
-		SELECT TOP 1
+		SELECT
 			@CompanyScore = nl.CommercialDelphiScore
 		FROM
 			ExperianNonLimitedResults nl
-			INNER JOIN MP_ServiceLog l ON nl.ServiceLogId = l.Id
 		WHERE
-			nl.RefNumber = @CompanyRefNum
-			AND
-			l.InsertDate < @Now
-		ORDER BY
-			l.InsertDate DESC
-
-		IF @CompanyScore > 0
-			SET @HasCompanyScore = 1
+			nl.ServiceLogID = @CompanyServiceLogID
 	END
+
+	IF @CompanyScore > 0
+		SET @HasCompanyScore = 1
+
 	----------------------------------------------------------------------------
+
 	IF EXISTS (
 		SELECT *
 		FROM MP_CustomerMarketPlace m
@@ -129,6 +103,8 @@ BEGIN
 		SET @HasOnline = 1
 	END
 
+	----------------------------------------------------------------------------
+
 	IF EXISTS (
 		SELECT *
 		FROM MP_CustomerMarketPlace m
@@ -141,7 +117,9 @@ BEGIN
 	BEGIN
 		SET @HasBank = 1
 	END
+
 	----------------------------------------------------------------------------
+
 	IF EXISTS (
 		SELECT *
 		FROM MP_CustomerMarketPlace m
@@ -156,7 +134,9 @@ BEGIN
 	BEGIN
 		SET @HasHmrc = 1
 	END
+
 	----------------------------------------------------------------------------
+
 	SELECT
 		@LastHmrcUpdateDate = MIN(m.UpdatingEnd)
 	FROM
@@ -176,7 +156,9 @@ BEGIN
 		m.Created < @Now
 		AND
 		m.UpdatingEnd IS NOT NULL
+
 	----------------------------------------------------------------------------
+
 	SELECT
 		@LastBankUpdateDate = MIN(m.UpdatingEnd)
 	FROM
@@ -192,19 +174,25 @@ BEGIN
 		m.UpdatingEnd IS NOT NULL
 		AND
 		m.Created < @Now
+
 	----------------------------------------------------------------------------
+
 	DECLARE @MinApprovalAmount INT = (
 		SELECT CAST(Value AS INT)
 		FROM ConfigurationVariables
 		WHERE Name = 'MedalMinOffer'
 	)
+
 	----------------------------------------------------------------------------
+
 	DECLARE @MedalDaysOfMpRelevancy INT = (
 		SELECT CAST(Value AS INT)
 		FROM ConfigurationVariables
 		WHERE Name = 'MedalDaysOfMpRelevancy'
 	)
+
 	----------------------------------------------------------------------------
+
 	SELECT
 		@IsLimited AS IsLimited,
 		@HasOnline AS HasOnline,

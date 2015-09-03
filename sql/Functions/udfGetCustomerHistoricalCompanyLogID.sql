@@ -24,7 +24,7 @@ BEGIN
 		@TypeOfBusiness = co.TypeOfBusiness
 	FROM
 		Customer c
-		INNER JOIN Company co ON c.CompanyId = co.Id
+		LEFT JOIN Company co ON c.CompanyId = co.Id
 	WHERE
 		c.Id = @CustomerID
 
