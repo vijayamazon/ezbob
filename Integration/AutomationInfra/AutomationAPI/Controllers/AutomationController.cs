@@ -1,8 +1,11 @@
 ﻿namespace AutomationAPI.Controllers
 {
     using System.IO;
+    using System.Net.Http;
+    using System.Net.Http.Headers;
     using System.Web.Http;
     using AutomationAPI.Facade;
+    using Microsoft.Win32.SafeHandles;
 
     public class AutomationController : ApiController
     {
@@ -30,6 +33,19 @@
         {
             AutomationFacade.CreateAutomationTestPlan(id);
             return Ok();
+        }
+
+        [AcceptVerbs("GET", "POST")]
+        public HttpResponseMessage GetDependenciesReport() {
+            Stream stream = AutomationFacade.GetDependenciesReport();
+            var httpResponseMessage = new HttpResponseMessage();
+            httpResponseMessage.Content = new StreamContent(stream);
+            httpResponseMessage.Content.Headers.Add("Content-Type", "application/octet-stream");
+            httpResponseMessage.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileName = "DependenciesReport.csv"
+            };
+            return httpResponseMessage;
         }
 
         //[AcceptVerbs("GET", "POST")]

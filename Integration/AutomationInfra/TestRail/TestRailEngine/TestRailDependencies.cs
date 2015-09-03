@@ -7,7 +7,8 @@
     using System.Text.RegularExpressions;
 
     internal class TestRailDependencies {
-        public void PrintCasesDependency() {
+        public static Stream GetDependenciesReport()
+        {
             var ezbobProject = TestRailManager.Instance.Projects.FirstOrDefault(x => x.Name == "EZbob");
             var log = new StringBuilder();
             if (ezbobProject != null) {
@@ -49,7 +50,7 @@
                     }
                 }
             }
-            File.WriteAllText(@"E:\Dependency\log.csv", log.ToString());
+            return new MemoryStream(Encoding.UTF8.GetBytes(log.ToString()));
         }
 
         public static List<String> GetDependencies(string iText) {

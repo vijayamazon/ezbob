@@ -163,6 +163,10 @@
                 BuildTestRailPlan(ezbobProject.ID, label);
             }
         }
+
+        public static System.IO.Stream GetDependenciesReport() {
+            return TestRailDependencies.GetDependenciesReport();
+        }
     }
 }
 
