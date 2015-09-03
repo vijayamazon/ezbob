@@ -920,6 +920,7 @@
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.funding.js" />
     <Content Include="Content\js\Underwriter\Support\ezbob.underwriter.support.js" />
     <Content Include="Content\js\Wizard\shops\ezbob.shops.hmrcUpload.js" />
+    <Content Include="Properties\PublishProfiles\TeamCityEzBobWeb.pubxml.user" />
     <Content Include="Views\Shared\_Iovation.cshtml" />
     <Content Include="Areas\Underwriter\Views\Shared\CustomerRelations\MarkAsPending.cshtml" />
     <Content Include="Areas\Customer\Views\Agreement\AlibabaCreditActAgreement.cshtml" />
@@ -1649,6 +1650,7 @@
     <Content Include="Views\Account\CreatePassword.cshtml" />
     <Content Include="Views\Shared\_Header.cshtml" />
     <Content Include="Views\Shared\_Footer.cshtml" />
+    <None Include="Properties\PublishProfiles\TeamCityEzBobWeb.pubxml" />
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
@@ -2006,15 +2008,12 @@
     <Content Include="Content\img\ny2015scratch\titilliumweb-light-webfont.ttf" />
     <Content Include="Content\img\ny2015scratch\titilliumweb-extralight-webfont.eot" />
     <Content Include="Content\img\ny2015scratch\titilliumweb-extralight-webfont.ttf" />
-    <None Include="Properties\PublishProfiles\EzBob.Local.pubxml" />
     <Content Include="Views\Account\ForgotPassword.cshtml" />
     <Content Include="Views\Account\AdminLogOn.cshtml" />
     <Content Include="Views\Home\ActivateStore.cshtml" />
     <Content Include="Views\Account\SimpleCaptcha.cshtml" />
     <Content Include="Views\Error\NotFound.cshtml" />
     <Content Include="Views\Shared\_FavIcon.cshtml" />
-    <None Include="Properties\PublishProfiles\EzBob.Release.pubxml" />
-    <None Include="Properties\PublishProfiles\EzBob.Test.pubxml" />
     <Content Include="Views\PaypointTemplate\Index.cshtml" />
     <Content Include="Views\PaypointTemplate\DownloadPage.cshtml" />
     <Content Include="Views\Shared\_FrameKiller.cshtml" />

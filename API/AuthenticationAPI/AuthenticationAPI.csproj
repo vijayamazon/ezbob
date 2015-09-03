@@ -41,6 +41,7 @@
   <ItemGroup>
     <Content Include="connection-strings.xml" />
     <Content Include="packages.config" />
+    <Content Include="Properties\PublishProfiles\TeamCityAuthenticationAPI.pubxml.user" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -73,7 +74,7 @@
     <Compile Include="Test_AuthorizedAPI.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Properties\PublishProfiles\iisapi.pubxml" />
+    <None Include="Properties\PublishProfiles\TeamCityAuthenticationAPI.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
