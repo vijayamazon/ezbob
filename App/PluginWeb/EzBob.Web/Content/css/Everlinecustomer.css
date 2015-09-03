@@ -350,9 +350,9 @@ a, a:visited {
         position: relative;
     }
 
-select,
-input:not([type="button"]):not([type="submit"]):not([type='radio']):not([type='checkbox']),
-textarea {
+.form_field_container .input-wrapper select,
+.form_field_container .input-wrapper input:not([type="button"]):not([type="submit"]),
+.form_field_container .input-wrapper textarea {
     display: block;
     background: #ffffff;
     height: 50px;
@@ -382,7 +382,7 @@ textarea {
     border-radius: 0;
 }
 
-.form_field_container .input-wrapper select.type-of-business-form_field {
+			 .form_field_container .input-wrapper select.type-of-business-form_field {
     height: 148px;
     overflow-y: auto;
     padding: 10px;
